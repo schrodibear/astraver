@@ -1,4 +1,17 @@
 
+(****************************************************************************)
+(* booleans                                                                 *)
+(****************************************************************************)
+
+logic bool_and : bool, bool -> bool
+logic bool_or : bool, bool -> bool
+logic bool_xor : bool, bool -> bool
+
+(****************************************************************************)
+(* division and modulo                                                      *)
+(****************************************************************************)
+
+
 (*
 axiom div_int_euclid :
   forall i:int. forall j:int [i/j].
@@ -135,7 +148,7 @@ axiom select_store_eq:
   forall a: 'v [store(m,p1,a),p2].
     p1=p2 -> select(store(m,p1,a),p2) = a
 
-(*
+(* redundant
 axiom select_store:
   forall m: ('t,'v) memory. 
   forall p: 't pointer. 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.89 2008-07-03 14:34:11 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.90 2008-07-04 14:29:46 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -259,6 +259,7 @@ let begin_sub_theory fmt n th =
     fprintf fmt ": TYPE]"
   end;
   fprintf fmt ": THEORY@\nBEGIN@\n@\n";
+  fprintf fmt "  %s@\n" Options.pvs_preamble;
   import_last_theory fmt
     
 let end_theory fmt th =
@@ -285,7 +286,7 @@ let print_logic fmt id t =
     
 let print_axiom fmt id p =
   fprintf fmt "  @[%%%% Why axiom %s@]@\n" id;
-  fprintf fmt "  @[<hov 2>%s: AXIOM@ @[%a@]@]@\n@\n" id print_predicate p
+  fprintf fmt "  @[<hov 2>%s: LEMMA@ @[%a@]@]@\n@\n" id print_predicate p
     
 let print_predicate_def fmt id (bl,p) =
   fprintf fmt "  @[<hov 2>%s(@[%a@]) : bool =@ @[%a@]@]@\n@\n"

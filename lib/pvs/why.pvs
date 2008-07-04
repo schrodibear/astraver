@@ -2,7 +2,7 @@ why: THEORY
 BEGIN
 
   IMPORTING why_arrays, why_array_pred, why_int_array_pred
- 
+  
   unit: TYPE = int
   unit: unit = 0
 
@@ -10,8 +10,11 @@ BEGIN
   nzy : VAR nzint
 
   %% integer division and modulo
-  div(x, nzy) : int = floor(x / nzy)
-  mod(x, nzy) : int = x - nzy * div(x, nzy)
+
+  importing ints@div, ints@rem
+
+  % div(x, nzy) : int = div(x, nzy)
+  mod(x, nzy) : macro int = rem(x, nzy)
 
   %% well founded relations
   zwf(c) : [int, int -> bool] = (lambda x,y: c <= y and x < y)

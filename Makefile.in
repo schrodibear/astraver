@@ -108,10 +108,11 @@ VO8= lib/coq/WhyInt.vo lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo \
      @WHYFLOATS@ \
      lib/coq/caduceus_why.vo lib/coq/caduceus_tactics.vo \
      lib/coq/caduceus_lists.vo lib/coq/Caduceus.vo \
-     @JESSIELIBCOQ@
+     @JESSIELIBCOQ@ 
+
 V8FILES=$(VO8:.vo=.v)
 
-PVSFILES = lib/pvs/why.pvs
+PVSFILES = lib/pvs/why.pvs @JESSIELIBPVS@ 
 PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/rc.ml src/xml.ml \
@@ -163,7 +164,7 @@ else
 JCLIB=jc/jc.cmo
 endif
 
-all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST)
+all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST)
 
 opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.opt bin/krakatoa.opt
 
@@ -577,14 +578,25 @@ bin/cadlog.opt: c/cversion.cmx jc/jc_version.cmx \
 
 static:: $(STATICBINARY)
 
+########
+# COQ
+########
+
 coq-no:
 coq-yes: coq-@COQVER@
 coq-v7: $(VO7)
 coq-v8: $(VO8)
 
+########
+# PVS
+########
+
+pvs-no:
+pvs-yes: $(PVSFILES)
+
 include Version
 
-doc/version.tex src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version Makefile.in version.sh
+doc/version.tex src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version version.sh
 	LIBDIR=$(LIBDIR) ./version.sh
 
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
@@ -595,6 +607,9 @@ lib/coq-v7/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 
 lib/coq/jessie_why.v: lib/why/jessie.why $(BINARY)
 	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/jessie.why
+
+lib/pvs/jessie_why.pvs: lib/why/jessie.why $(BINARY)
+	WHYLIB=lib/why $(BINARY) --dir lib/pvs --pvs lib/why/jessie.why
 
 # bench
 
@@ -727,7 +742,7 @@ install-coq-v8:
 # 	cp -f $(VO8) $(V8FILES) $(LIBDIR)/why/coq
 
 install-pvs-no:
-install-pvs-yes:
+install-pvs-yes: $(PVSFILES)
 	mkdir -p $(PVSLIB)/why
 	cp $(PVSFILES) $(PVSLIB)/why
 

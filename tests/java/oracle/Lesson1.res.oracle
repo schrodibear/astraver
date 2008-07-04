@@ -460,10 +460,10 @@ coq/%.vo: coq/%.v
 pvs: pvs/Lesson1_why.pvs
 
 pvs/%_why.pvs: why/%.why
-	$(WHY) -pvs -dir pvs -pvs-preamble "importing jessie_why" $(JESSIELIBFILE) why/$*.why
+	$(WHY) -pvs -dir pvs -pvs-preamble "importing why@jessie_why" $(JESSIELIBFILE) why/$*.why
 
-pvs/caduceus_why.pvs:
-	$(WHY) -pvs -dir pvs $(JESSIELIBFILE)
+pvs/jessie_why.pvs:
+	$(WHY) -pvs -dir pvs -pvs-preamble "importing why@why" $(JESSIELIBFILE)
 
 isabelle: isabelle/Lesson1_why.thy
 
@@ -2082,6 +2082,12 @@ logic ite : bool, 'a1, 'a1 -> 'a1
 axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
 
 axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
+
+logic bool_and : bool, bool -> bool
+
+logic bool_or : bool, bool -> bool
+
+logic bool_xor : bool, bool -> bool
 
 axiom div_positive_by_positive:
   (forall a:int.
@@ -4671,11 +4677,11 @@ make[1]: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --why [...] why/Lesson1.why
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Lesson1_why.why           : ??..????...............#...............#..................#...............#............. (78/0/6/4/0)
+why/Lesson1_why.why           : ??..????....................#................#....#............#................#....#.. (76/0/6/6/0)
 total   :  88
-valid   :  78 ( 89%)
+valid   :  76 ( 86%)
 invalid :   0 (  0%)
 unknown :   6 (  7%)
-timeout :   4 (  5%)
+timeout :   6 (  7%)
 failure :   0 (  0%)
 make[1]: Leaving directory `/home/cmarche/recherche/why/tests/java'

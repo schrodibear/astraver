@@ -359,6 +359,7 @@ if test "$PVSC" = no ; then
     AC_MSG_WARN(Cannot find PVS.)
 else
     PVS=yes
+    JESSIELIBPVS=lib/pvs/jessie_why.pvs
     PVSLIB=`pvs -where`/lib
     if test "$PVSLIB" = /lib; then 
        AC_MSG_WARN(PVS found but pvs -where did not work)
@@ -422,6 +423,7 @@ AC_SUBST(COQVER)
 AC_SUBST(WHYLIBCOQ)
 AC_SUBST(WHYFLOATS)
 AC_SUBST(JESSIELIBCOQ)
+AC_SUBST(JESSIELIBPVS)
 
 AC_SUBST(PVS)
 AC_SUBST(PVSC)

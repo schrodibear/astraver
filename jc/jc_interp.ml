@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.293 2008-07-04 11:44:58 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.294 2008-07-04 14:29:46 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -194,6 +194,10 @@ let bin_op: expr_bin_op -> string = function
   | `Bbw_and, `Integer -> "bw_and"
   | `Bbw_or, `Integer -> "bw_or"
   | `Bbw_xor, `Integer -> "bw_xor"
+  | `Bbw_and, `Boolean -> "bool_and"
+  | `Bbw_or, `Boolean -> "bool_or"
+  | `Bbw_xor, `Boolean -> "bool_xor"
+      (* shift *)
   | `Bshift_left, `Integer -> "lsl"
   | `Blogical_shift_right, `Integer -> "lsr"
   | `Barith_shift_right, `Integer -> "asr"
@@ -321,8 +325,6 @@ let term_coerce ?(cast=false) loc tdest tsrc e =
 	    | LConst (Prim_int n) ->
 		LConst (Prim_real (n ^ ".0")) 
 	    | _ -> 
-		eprintf " e = %a@." Output.fprintf_term e;
-		assert false;
 		LApp("real_of_int",[e])
 	end
     | JCTnative Tinteger, JCTnative Treal -> 
@@ -437,8 +439,6 @@ let coerce ~no_int_overflow lab loc tdest tsrc orig e =
 	    | Cte (Prim_int n) ->
 		Cte (Prim_real (n ^ ".0")) 
 	    | _ -> 
-		eprintf " e = %a@." Output.fprintf_expr e;
-		assert false;
 		make_app "real_of_int" [e]
 	end
     | JCTnative Tinteger, JCTnative Treal -> 

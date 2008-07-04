@@ -2,6 +2,15 @@
    It can be modified; only the generated parts will be overwritten. *)
 Require Export Why.
 
+(*Why logic*) Definition bool_and : bool -> bool -> bool.
+Admitted.
+
+(*Why logic*) Definition bool_or : bool -> bool -> bool.
+Admitted.
+
+(*Why logic*) Definition bool_xor : bool -> bool -> bool.
+Admitted.
+
 (*Why axiom*) Lemma div_positive_by_positive :
   (forall (a:Z),
    (forall (b:Z), (0 <= a /\ 0 < b -> 0 <= ((Zdiv a b)) /\ ((Zdiv a b)) <= a))).

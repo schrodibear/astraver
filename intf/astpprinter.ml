@@ -40,16 +40,16 @@ let print_term fmt t =
   let rec print0 fmt t =
     print1 fmt t
   and print1 fmt = function
-    | Tapp (id, [a;b], _) when id == t_add_int ->
+    | Tapp (id, [a;b], _) when id == t_add_int || id == t_add_real ->
 	fprintf fmt "%a +@ %a" print1 a print2 b
-    | Tapp (id, [a;b], _) when id == t_sub_int ->
+    | Tapp (id, [a;b], _) when id == t_sub_int || id == t_sub_real ->
 	fprintf fmt "%a -@ %a" print1 a print2 b
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a;b], _) when id == t_mul_int ->
+    | Tapp (id, [a;b], _) when id == t_mul_int || id == t_mul_real ->
 	fprintf fmt "%a *@ %a" print2 a print3 b
-    | Tapp (id, [a;b], _) when id == t_div_int ->
+    | Tapp (id, [a;b], _) when id == t_div_int || id == t_div_real ->
 	fprintf fmt "@[%a /@ %a@]" print2 a print3 b
     | Tapp (id, [a;b], _) when id == t_mod_int ->
 	fprintf fmt "@[%a@ %%@ %a@]" print2 a print3 b

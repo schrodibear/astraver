@@ -273,6 +273,9 @@ public final strictfp class Math {
      * @return  the positive square root of <code>a</code>.
      *          If the argument is NaN or less than zero, the result is NaN.
      */
+    /*@ requires a >= 0.0;
+      @ ensures \result * \result == a;
+      @*/
     public static double sqrt(double a) {
 	return StrictMath.sqrt(a); // default impl. delegates to StrictMath
 				   // Note that hardware sqrt instructions

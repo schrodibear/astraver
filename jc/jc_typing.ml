@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.218 2008-07-04 11:44:58 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.219 2008-07-04 14:29:46 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -97,6 +97,11 @@ let find_struct_variant st =
 let is_real t =
   match t with
     | JCTnative Treal -> true
+    | _ -> false
+
+let is_boolean t =
+  match t with
+    | JCTnative Tboolean -> true
     | _ -> false
 
 let is_numeric t =
@@ -1248,9 +1253,31 @@ let make_bin_op loc (op: operational_op) e1 e2 =
            JCEbinary(coerce t1 t e1,
                      bin_op (operator_of_native t) op,
                      coerce t2 t e2))
-        else
+	else
           typing_error loc "unexpected types for -"
-    | `Bmul | `Bdiv | `Bmod | `Bbw_and | `Bbw_or | `Bbw_xor 
+    | `Bmul | `Bdiv | `Bmod ->
+        if is_numeric t1 && is_numeric t2 then
+          let t = lub_numeric_types t1 t2 in
+          (JCTnative t,dummy_region,
+           JCEbinary(coerce t1 t e1,
+                     bin_op (operator_of_native t) op,
+                     coerce t2 t e2))
+        else 
+	  typing_error loc "numeric types expected for multiplcative operators"
+    | `Bbw_and | `Bbw_or | `Bbw_xor ->
+        if is_numeric t1 && is_numeric t2 then
+          let t = lub_numeric_types t1 t2 in
+          (JCTnative t,dummy_region,
+           JCEbinary(coerce t1 t e1,
+                     bin_op (operator_of_native t) op,
+                     coerce t2 t e2))
+        else if is_boolean t1 && is_boolean t2 then
+          (boolean_type, dummy_region,
+           JCEbinary(e1,
+                     bin_op (operator_of_native Tboolean) op,
+                     e2))	  
+        else 
+	  typing_error loc "numeric types expected for bitwise operators"
     | `Blogical_shift_right | `Barith_shift_right | `Bshift_left as op  ->
         if is_numeric t1 && is_numeric t2 then
           let t = lub_numeric_types t1 t2 in
@@ -1258,7 +1285,8 @@ let make_bin_op loc (op: operational_op) e1 e2 =
            JCEbinary(coerce t1 t e1,
                      bin_op (operator_of_native t) op,
                      coerce t2 t e2))
-        else typing_error loc "numeric types expected for bitwaise operators"
+        else 
+	  typing_error loc "numeric types expected for shift operators"
 (*    | `Bland | `Blor as op -> 
         let t = match (t1, t2) with
           | JCTnative t1, JCTnative t2 ->

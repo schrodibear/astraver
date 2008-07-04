@@ -47,7 +47,7 @@ let pwd = Sys.getcwd ()
 let source = ref ""
 let tv_source = ref (GText.view ())
 
-let active = ref true
+let active = ref false
 let desactivate () = active := false
 let activate () = active := true
 let swap_active () = active := not !active
@@ -309,7 +309,7 @@ let print_all (tbuf:GText.buffer) s p =
        `BACKGROUND (get_bc "separator")] 
   in
   tbuf#insert ~tags:[mytag] ~iter:tbuf#end_iter 
-    "_                                                        _\n\n";
+    "---------------\n\n";
   let conclusion = 
     let print_predicate = 
       if is_active () 

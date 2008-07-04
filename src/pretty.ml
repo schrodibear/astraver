@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.27 2008-06-27 13:15:15 hubert Exp $ i*)
+(*i $Id: pretty.ml,v 1.28 2008-07-04 14:29:46 marche Exp $ i*)
 
 open Format
 open Pp
@@ -93,13 +93,13 @@ let rec term fmt = function
       fprintf fmt "%s.%se%s" i f e
   | Tvar id | Tderef id | Tapp (id, [], _) -> 
       ident fmt id
-  | Tapp (id, [t1; t2], _) when id == t_add_int ->
+  | Tapp (id, [t1; t2], _) when id == t_add_int || id == t_add_real ->
       fprintf fmt "(%a + %a)" term t1 term t2
-  | Tapp (id, [t1; t2], _) when id == t_sub_int ->
+  | Tapp (id, [t1; t2], _) when id == t_sub_int || id == t_sub_real ->
       fprintf fmt "(%a - %a)" term t1 term t2
-  | Tapp (id, [t1; t2], _) when id == t_mul_int ->
+  | Tapp (id, [t1; t2], _) when id == t_mul_int || id == t_mul_real ->
       fprintf fmt "(%a * %a)" term t1 term t2
-  | Tapp (id, [t1; t2], _) when id == t_div_int ->
+  | Tapp (id, [t1; t2], _) when id == t_div_int || id == t_div_real ->
       fprintf fmt "(%a / %a)" term t1 term t2
   | Tapp (id, [t1; t2], _) when id == t_mod_int ->
       fprintf fmt "(%a %% %a)" term t1 term t2
@@ -118,6 +118,13 @@ let int_relation_string id =
   else if id == t_ge_int then ">="
   else assert false
 
+let real_relation_string id =
+  if id == t_lt_real then "<" 
+  else if id == t_le_real then "<="
+  else if id == t_gt_real then ">"
+  else if id == t_ge_real then ">="
+  else assert false
+
 let rec predicate fmt = function
   | Pvar id | Papp (id, [], _) -> 
       ident fmt id
@@ -127,6 +134,8 @@ let rec predicate fmt = function
       fprintf fmt "(%a <> %a)" term t1 term t2
   | Papp (id, [t1; t2], _) when is_int_comparison id ->
       fprintf fmt "(%a %s %a)" term t1 (int_relation_string id) term t2
+  | Papp (id, [t1; t2], _) when is_real_comparison id ->
+      fprintf fmt "(%a %s %a)" term t1 (real_relation_string id) term t2
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
       fprintf fmt "@[((0 <= %a) and@ (%a < %a))@]" term b term a term b
   | Papp (id, [t], _) when id == well_founded ->
