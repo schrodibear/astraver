@@ -83,3 +83,8 @@ void m(int t[], int length) {
   }
 }
 
+/*
+Local Variables: 
+compile-command: "make muller.nosep"
+End: 
+*/

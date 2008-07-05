@@ -54,3 +54,8 @@ void bresenham() {
   }
 }
 
+/*
+Local Variables: 
+compile-command: "make bresenham.gui"
+End: 
+*/
