@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.57 2008-03-26 15:34:22 hubert Exp $ i*)
+(*i $Id: cmake.ml,v 1.58 2008-07-07 14:50:06 sboldo Exp $ i*)
 
 open Format
 open Pp
@@ -87,11 +87,11 @@ let generic f targets =
        fprintf fmt "pvs: pvs/%s_spec_why.pvs %a@\n@\n" 
 	 f (print_files pvs) targets;
 
-       fprintf fmt "pvs/%%_spec_why.pvs: why/%%_spec.why@\n";
-       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing why@@why\" $(CADULIB)/why/$(CADULIBFILE) why/$*_spec.why@\n@\n";
+       fprintf fmt "pvs/%s_spec_why.pvs: why/%s_spec.why@\n" f f;
+       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing why@@why\" $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why@\n@\n" f;
 
        fprintf fmt "pvs/%%_why.pvs: pvs/%s_spec_why.pvs why/%%.why@\n" f;
-       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing %s_spec_why\" $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f f;
+       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing %s_spec_why\" --lib-file ../caduceus/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f f;
 
        fprintf fmt "pvs/caduceus_why.pvs:@\n";
        fprintf fmt "\t$(WHY) -pvs -dir pvs $(CADULIB)/why/$(CADULIBFILE)@\n@\n";
