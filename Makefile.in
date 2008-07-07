@@ -625,8 +625,10 @@ bench:: $(BINARY) $(WHYVO)
 
 JCBENCHLOG=jessie-bench-`date +%d-%m-%y`.log
 
-jc-bench:: $(JESSIE) bin/cadlog.opt
-	(cd bench/jc; sh ./bench 2>&1) | bin/cadlog.opt -jc $(JCBENCHLOG)
+# Claude: does not work anymore, because someone modified bench/jc/bench 
+# GRRRRRRRRRRRR
+# jc-bench:: $(JESSIE) bin/cadlog.opt
+#	(cd bench/jc; sh ./bench 2>&1) | bin/cadlog.opt -jc $(JCBENCHLOG)
 
 jc-fast-bench:: $(JESSIE)
 	make -C bench/jc -f Makefile good.bench

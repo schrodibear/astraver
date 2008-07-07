@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.295 2008-07-07 11:32:54 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.296 2008-07-07 13:33:20 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1089,7 +1089,7 @@ let assigns before ef locs loc =
        let alloc = alloc_region_table_name(root,r) in
        make_and acc
 	 (let a = LPred("not_assigns",
-                [lvar before alloc; 
+                [lvar (* ~assigned: ? *) before alloc; 
                  lvar before v;
                  LVar v; make_union_loc p]) in
 	  LNamed(reg_loc loc,a))
@@ -1106,6 +1106,41 @@ let reads locs (fvi,r) =
   let p = try FieldOrVariantRegionMap.find (fvi,r) mems with Not_found -> [] in
   make_union_loc p
   
+let old_to_pre = function
+  | LabelOld -> LabelPre
+  | lab -> lab
+
+let old_to_pre_term =
+  Jc_iterators.map_term
+    (fun t -> match t#node with
+       | JCTold t' 
+       | JCTat(t',LabelOld) -> 
+	   new term_with 
+	     ~node:(JCTat(t',LabelPre)) t
+       | JCTderef(t',LabelOld,fi) ->
+	   new term_with 
+	     ~node:(JCTderef(t',LabelPre,fi)) t	   
+       | _ -> t)
+  
+let rec old_to_pre_lset lset =
+  match lset with
+    | JCLSvar _ -> lset
+    | JCLSderef(lset,lab,fi,region) ->
+	JCLSderef(old_to_pre_lset lset, old_to_pre lab, fi, region)
+    | JCLSrange(lset,t1,t2) ->
+	JCLSrange(old_to_pre_lset lset, 
+		  Option_misc.map old_to_pre_term t1,
+		  Option_misc.map old_to_pre_term t2)
+
+let rec old_to_pre_loc loc =
+  match loc with
+    | JCLvar _ -> loc
+    | JCLat(l,lab) -> 
+	JCLat(old_to_pre_loc l, old_to_pre lab)
+    | JCLderef(lset,lab,fi,region) ->
+	JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, region)
+
+
 
 let rec make_upd lab loc ~infunction ~threats fi e1 v =
   let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
@@ -1683,33 +1718,41 @@ and expr ~infunction ~threats e : expr =
         let inv = if Jc_options.trust_ai then inv else make_and inv free_inv in
 	(* loop assigns  *)
 	(* the assigns clause for the function is taken *)
-	(* TODO: add a loop_assigns annotation *)
+	(* TODO: add also a loop_assigns annotation *)
 
 	let loop_assigns = 
 	  let cur_behavior = get_current_behavior () in
 	  match get_current_spec () with
 	    | None -> assert false
 	    | Some s ->
+		List.fold_left
+		  (fun acc (loc,id,b) ->
+		     if true (* TODO id = cur_behavior *) then
+		       match b.jc_behavior_assigns with
+			 | None -> acc
+			 | Some(_loc,locs) -> 
+			     let l = List.map old_to_pre_loc locs in
+			     match acc with
+			       | None -> Some l
+			       | Some l' -> Some (l@l')
+		     else acc)
+		  None 
+		  s.jc_fun_behavior
+	in
+        let inv = 
+	  match loop_assigns with
+	    | None -> inv
+	    | _ ->
 		let f = match !current_function with
 		  | None -> assert false
 		  | Some f -> f
 		in
-		let ass =
-		  List.fold_left
-		    (fun acc (loc,id,b) ->
-		       if true (* TODO id = cur_behavior *) then
-			 match b.jc_behavior_assigns with
-			   | None -> acc
-			   | Some(_loc,a) -> a @ acc
-		       else acc)
-		    [] 
-		    s.jc_fun_behavior
-		in
-                (named_jc_assertion
-                   Loc.dummy_position
-                   (assigns LabelPre f.jc_fun_info_effects (Some ass) Loc.dummy_position))
+		make_and
+		  inv
+                  (named_jc_assertion
+                     Loc.dummy_position
+                     (assigns LabelPre f.jc_fun_info_effects loop_assigns Loc.dummy_position))
 	in
-        let inv = make_and inv loop_assigns in
 	(* loop body *) 
         let body = [expr s] in
         let body = 

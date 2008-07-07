@@ -415,6 +415,22 @@ predicate not_assigns
     forall p:'t pointer. 
       valid(a,p) and not in_pset(p,l) -> select(m2,p)=select(m1,p)
 
+axiom not_assigns_refl:
+  forall a: 't alloc_table. 
+  forall m: ('t,'v) memory.
+  forall l:'t pset.
+    not_assigns(a,m,m,l)
+
+axiom not_assigns_trans:
+  forall a: 't alloc_table. 
+  forall m1: ('t,'v) memory.
+  forall m2: ('t,'v) memory.
+  forall m3: ('t,'v) memory.
+  forall l:'t pset [not_assigns(a,m1,m2,l), not_assigns(a,m1,m3,l)] .
+    not_assigns(a,m1,m2,l) ->
+    not_assigns(a,m2,m3,l) ->
+    not_assigns(a,m1,m3,l) 
+
 logic full_separated : 't1 pointer, 't2 pointer -> prop
 
 axiom full_separated_shift1 :

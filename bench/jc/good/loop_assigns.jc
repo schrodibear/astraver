@@ -11,7 +11,7 @@ T[0..9] b;
 
 unit f()
   behavior default:
-     assigns a.i,(b+[0..9]).i;
+     assigns a.i,(b+[0..\old(a.i)]).i;
      ensures true;
 {
      a.i = 0;

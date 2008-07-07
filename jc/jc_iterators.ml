@@ -775,50 +775,47 @@ let rec map_term_in_assertion f a =
   in
   new assertion_with ~node:anode a
 
-(* Remarque de Romain :
- * C'est un copier-coller d'au-dessus ?
- * Ca devrait pas plutôt être "map_term_and_assertion" ? *)
-let rec map_term_in_assertion f a =
+let rec map_term_and_assertion fa ft a =
   let anode = match a#node with
     | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
     | JCArelation(t1,op,t2) -> 
-	JCArelation(map_term f t1,op,map_term f t2)
+	JCArelation(map_term ft t1,op,map_term ft t2)
     | JCAapp app ->
-	JCAapp { app with jc_app_args = List.map (map_term f) app.jc_app_args }
+	JCAapp { app with jc_app_args = List.map (map_term ft) app.jc_app_args }
     | JCAinstanceof(t1,lab,st) ->
-	JCAinstanceof(map_term f t1,lab,st)
+	JCAinstanceof(map_term ft t1,lab,st)
     | JCAbool_term t1 ->
-	JCAbool_term(map_term f t1)
+	JCAbool_term(map_term ft t1)
     | JCAmutable(t1,st,tag) ->
-	JCAmutable(map_term f t1,st,tag)
+	JCAmutable(map_term ft t1,st,tag)
     | JCAand al ->
-	JCAand(List.map (map_term_in_assertion f) al)
+	JCAand(List.map (map_term_and_assertion fa ft) al)
     | JCAor al ->
-	JCAor(List.map (map_term_in_assertion f) al)
+	JCAor(List.map (map_term_and_assertion fa ft) al)
     | JCAimplies(a1,a2) ->
 	JCAimplies
-	  (map_term_in_assertion f a1,map_term_in_assertion f a2)
+	  (map_term_and_assertion fa ft a1,map_term_and_assertion fa ft a2)
     | JCAiff(a1,a2) ->
 	JCAiff
-	  (map_term_in_assertion f a1,map_term_in_assertion f a2)
+	  (map_term_and_assertion fa ft a1,map_term_and_assertion fa ft a2)
     | JCAif(t1,a1,a2) ->
 	JCAif(
-	  map_term f t1,
-	  map_term_in_assertion f a1,
-	  map_term_in_assertion f a2)
+	  map_term ft t1,
+	  map_term_and_assertion fa ft a1,
+	  map_term_and_assertion fa ft a2)
     | JCAnot a1 ->
-	JCAnot(map_term_in_assertion f a1)
+	JCAnot(map_term_and_assertion fa ft a1)
     | JCAquantifier(q,vi,a1) ->
-	JCAquantifier(q,vi,map_term_in_assertion f a1)
+	JCAquantifier(q,vi,map_term_and_assertion fa ft a1)
     | JCAold a1 ->
-	JCAold(map_term_in_assertion f a1)
+	JCAold(map_term_and_assertion fa ft a1)
     | JCAat(a1,lab) ->
-	JCAat(map_term_in_assertion f a1,lab)
+	JCAat(map_term_and_assertion fa ft a1,lab)
     | JCAmatch(t, pal) ->
-	JCAmatch(map_term f t,
-		 List.map (fun (p, a) -> p, map_term_in_assertion f a) pal)
+	JCAmatch(map_term ft t,
+		 List.map (fun (p, a) -> p, map_term_and_assertion fa ft a) pal)
   in
-  new assertion_with ~node:anode a
+  fa (new assertion_with ~node:anode a)
 
 (*****************************************************************************)
 (* General iterators on patterns.                                            *)
