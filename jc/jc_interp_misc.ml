@@ -149,7 +149,13 @@ let get_current_behavior () =
   match !current_behavior with None -> assert false | Some behav -> behav
 let compatible_with_current_behavior = function
   | None -> true
-  | Some behav -> behav = get_current_behavior ()
+  | Some behav -> 
+      behav = get_current_behavior ()
+
+let current_spec : fun_spec option ref = ref None
+let set_current_spec s = current_spec := Some s
+let reset_current_spec () = current_spec := None
+let get_current_spec () = !current_spec
 
 let mutable_memory infunction (fi,r) =
   if Region.polymorphic r then

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.294 2008-07-04 14:29:46 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.295 2008-07-07 11:32:54 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -983,6 +983,130 @@ let read_allocs ~caller_writes ~callee_writes ~callee_reads ~regions =
        callee_writes.jc_effect_alloc_table)
     []
 
+(*******************************************************************************)
+(*                                  Locations                                  *)
+(*******************************************************************************)
+
+let rec pset ~global_assertion before loc = 
+  let fpset = pset ~global_assertion before in
+  match loc with
+    | JCLSderef(ls,lab,fi,r) ->
+        let m = memvar ~label_in_name:global_assertion lab (fi,r) in
+        LApp("pset_deref", [m;fpset ls])
+    | JCLSvar vi -> 
+        let m = lvar_info before vi in
+        LApp("pset_singleton", [m])
+    | JCLSrange(ls,None,None) ->
+        let ls = fpset ls in
+        LApp("pset_all", [ls])
+    | JCLSrange(ls,None,Some b) ->
+        let ls = fpset ls in
+        let b', lets = term ~global_assertion before before b in
+        assert (lets = []);
+        LApp("pset_range_left", 
+             [ls; 
+              term_coerce b#loc integer_type b#typ b'])
+    | JCLSrange(ls,Some a,None) ->
+        let ls = fpset ls in
+        let a', lets = term ~global_assertion before before a in
+        assert (lets = []);
+        LApp("pset_range_right", 
+             [ls; 
+              term_coerce a#loc integer_type a#typ a'])
+    | JCLSrange(ls,Some a,Some b) ->
+        let ls = fpset ls in
+        let a', lets1 = term ~global_assertion before before a in
+        let b', lets2 = term ~global_assertion before before b in
+        assert (lets1 = [] && lets2 = []);
+        LApp("pset_range", 
+             [ls; 
+              term_coerce a#loc integer_type a#typ a'; 
+              term_coerce b#loc integer_type b#typ b'])
+        
+let rec collect_locations ~global_assertion before (refs,mems) loc =
+  match loc with
+    | JCLderef(e,lab,fi,fr) -> 
+        let iloc = pset ~global_assertion lab e in
+        let fvi = 
+          if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
+        in
+        let l =
+          try
+            let l = FieldOrVariantRegionMap.find (fvi,location_set_region e) mems in
+            iloc::l
+          with Not_found -> [iloc]
+        in
+        (refs, FieldOrVariantRegionMap.add (fvi,location_set_region e) l mems)
+    | JCLvar vi -> 
+        let var = vi.jc_var_info_final_name in
+        (StringMap.add var true refs,mems)
+    | JCLat(loc,lab) ->
+        collect_locations ~global_assertion before (refs,mems) loc
+
+let rec make_union_loc = function
+  | [] -> LVar "pset_empty"
+  | [l] -> l
+  | l::r -> LApp("pset_union",[l;make_union_loc r])
+
+let assigns before ef locs loc =
+  match locs with
+    | None -> LTrue     
+    | Some locs ->
+  let refs = 
+    (* HeapVarSet.fold
+            (fun v m -> 
+               if Ceffect.is_alloc v then m 
+               else StringMap.add (heap_var_name v) (Reference false) m)
+            assigns.Ceffect.assigns_var 
+    *)
+    VarSet.fold
+      (fun v m -> StringMap.add v.jc_var_info_final_name false m)
+      ef.jc_writes.jc_effect_globals StringMap.empty
+  in
+  let mems = 
+    FieldOrVariantRegionMap.fold
+      (fun (fi,r) labels m -> 
+         FieldOrVariantRegionMap.add (fi,r) [] m)
+      ef.jc_writes.jc_effect_memories FieldOrVariantRegionMap.empty 
+  in
+  let refs,mems = 
+    List.fold_left (collect_locations ~global_assertion:false before) (refs,mems) locs
+  in
+  let a =
+    StringMap.fold
+      (fun v p acc -> 
+        if p then acc else
+          make_and acc (LPred("eq", [LVar v; lvar before v])))
+      refs LTrue
+  in
+  FieldOrVariantRegionMap.fold
+    (fun (fvi,r) p acc -> 
+       let v = field_or_variant_region_memory_name(fvi,r) in
+       let root = match fvi with 
+         | FVfield fi -> JCtag(fi.jc_field_info_root, [])
+         | FVvariant vi -> JCvariant vi
+       in
+       let alloc = alloc_region_table_name(root,r) in
+       make_and acc
+	 (let a = LPred("not_assigns",
+                [lvar before alloc; 
+                 lvar before v;
+                 LVar v; make_union_loc p]) in
+	  LNamed(reg_loc loc,a))
+    ) mems a
+
+let reads locs (fvi,r) =
+  let refs = StringMap.empty
+  in
+  let mems = FieldOrVariantRegionMap.empty 
+  in
+  let refs,mems = 
+    List.fold_left (collect_locations ~global_assertion:false LabelOld) (refs,mems) locs
+  in
+  let p = try FieldOrVariantRegionMap.find (fvi,r) mems with Not_found -> [] in
+  make_union_loc p
+  
+
 let rec make_upd lab loc ~infunction ~threats fi e1 v =
   let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
   let mem = Var(field_region_memory_name(fi,e1#region)) in
@@ -1549,6 +1673,7 @@ and expr ~infunction ~threats e : expr =
 			   ) inv
         in 
 	let inv = make_and_list inv in
+	(* free invariant: trusted or not *)
         let free_inv = named_assertion 
           ~global_assertion:false 
           LabelHere 
@@ -1556,12 +1681,43 @@ and expr ~infunction ~threats e : expr =
           la.jc_free_loop_invariant 
         in
         let inv = if Jc_options.trust_ai then inv else make_and inv free_inv in
+	(* loop assigns  *)
+	(* the assigns clause for the function is taken *)
+	(* TODO: add a loop_assigns annotation *)
+
+	let loop_assigns = 
+	  let cur_behavior = get_current_behavior () in
+	  match get_current_spec () with
+	    | None -> assert false
+	    | Some s ->
+		let f = match !current_function with
+		  | None -> assert false
+		  | Some f -> f
+		in
+		let ass =
+		  List.fold_left
+		    (fun acc (loc,id,b) ->
+		       if true (* TODO id = cur_behavior *) then
+			 match b.jc_behavior_assigns with
+			   | None -> acc
+			   | Some(_loc,a) -> a @ acc
+		       else acc)
+		    [] 
+		    s.jc_fun_behavior
+		in
+                (named_jc_assertion
+                   Loc.dummy_position
+                   (assigns LabelPre f.jc_fun_info_effects (Some ass) Loc.dummy_position))
+	in
+        let inv = make_and inv loop_assigns in
+	(* loop body *) 
         let body = [expr s] in
         let body = 
           if Jc_options.trust_ai then
             BlackBox (Annot_type (LTrue, unit_type, [], [], free_inv, [])) :: body 
           else body
         in
+	(* final generation, depending on presence of variant or not *)
         begin 
           match la.jc_loop_variant with
             | Some t when threats ->
@@ -1932,129 +2088,6 @@ let tr_struct st acc =
         Axiom(name, p)::acc
 
 (*******************************************************************************)
-(*                                  Locations                                  *)
-(*******************************************************************************)
-
-let rec pset ~global_assertion before loc = 
-  let fpset = pset ~global_assertion before in
-  match loc with
-    | JCLSderef(ls,lab,fi,r) ->
-        let m = memvar ~label_in_name:global_assertion lab (fi,r) in
-        LApp("pset_deref", [m;fpset ls])
-    | JCLSvar vi -> 
-        let m = lvar_info before vi in
-        LApp("pset_singleton", [m])
-    | JCLSrange(ls,None,None) ->
-        let ls = fpset ls in
-        LApp("pset_all", [ls])
-    | JCLSrange(ls,None,Some b) ->
-        let ls = fpset ls in
-        let b', lets = term ~global_assertion before before b in
-        assert (lets = []);
-        LApp("pset_range_left", 
-             [ls; 
-              term_coerce b#loc integer_type b#typ b'])
-    | JCLSrange(ls,Some a,None) ->
-        let ls = fpset ls in
-        let a', lets = term ~global_assertion before before a in
-        assert (lets = []);
-        LApp("pset_range_right", 
-             [ls; 
-              term_coerce a#loc integer_type a#typ a'])
-    | JCLSrange(ls,Some a,Some b) ->
-        let ls = fpset ls in
-        let a', lets1 = term ~global_assertion before before a in
-        let b', lets2 = term ~global_assertion before before b in
-        assert (lets1 = [] && lets2 = []);
-        LApp("pset_range", 
-             [ls; 
-              term_coerce a#loc integer_type a#typ a'; 
-              term_coerce b#loc integer_type b#typ b'])
-        
-let rec collect_locations ~global_assertion before (refs,mems) loc =
-  match loc with
-    | JCLderef(e,lab,fi,fr) -> 
-        let iloc = pset ~global_assertion lab e in
-        let fvi = 
-          if field_of_union fi then FVvariant (union_of_field fi) else FVfield fi
-        in
-        let l =
-          try
-            let l = FieldOrVariantRegionMap.find (fvi,location_set_region e) mems in
-            iloc::l
-          with Not_found -> [iloc]
-        in
-        (refs, FieldOrVariantRegionMap.add (fvi,location_set_region e) l mems)
-    | JCLvar vi -> 
-        let var = vi.jc_var_info_final_name in
-        (StringMap.add var true refs,mems)
-    | JCLat(loc,lab) ->
-        collect_locations ~global_assertion before (refs,mems) loc
-
-let rec make_union_loc = function
-  | [] -> LVar "pset_empty"
-  | [l] -> l
-  | l::r -> LApp("pset_union",[l;make_union_loc r])
-
-let assigns before ef locs loc =
-  match locs with
-    | None -> LTrue     
-    | Some locs ->
-  let refs = 
-    (* HeapVarSet.fold
-            (fun v m -> 
-               if Ceffect.is_alloc v then m 
-               else StringMap.add (heap_var_name v) (Reference false) m)
-            assigns.Ceffect.assigns_var 
-    *)
-    VarSet.fold
-      (fun v m -> StringMap.add v.jc_var_info_final_name false m)
-      ef.jc_writes.jc_effect_globals StringMap.empty
-  in
-  let mems = 
-    FieldOrVariantRegionMap.fold
-      (fun (fi,r) labels m -> 
-         FieldOrVariantRegionMap.add (fi,r) [] m)
-      ef.jc_writes.jc_effect_memories FieldOrVariantRegionMap.empty 
-  in
-  let refs,mems = 
-    List.fold_left (collect_locations ~global_assertion:false before) (refs,mems) locs
-  in
-  let a =
-    StringMap.fold
-      (fun v p acc -> 
-        if p then acc else
-          make_and acc (LPred("eq", [LVar v; lvar before v])))
-      refs LTrue
-  in
-  FieldOrVariantRegionMap.fold
-    (fun (fvi,r) p acc -> 
-       let v = field_or_variant_region_memory_name(fvi,r) in
-       let root = match fvi with 
-         | FVfield fi -> JCtag(fi.jc_field_info_root, [])
-         | FVvariant vi -> JCvariant vi
-       in
-       let alloc = alloc_region_table_name(root,r) in
-       make_and acc
-	 (let a = LPred("not_assigns",
-                [lvar before alloc; 
-                 lvar before v;
-                 LVar v; make_union_loc p]) in
-	  LNamed(reg_loc loc,a))
-    ) mems a
-
-let reads locs (fvi,r) =
-  let refs = StringMap.empty
-  in
-  let mems = FieldOrVariantRegionMap.empty 
-  in
-  let refs,mems = 
-    List.fold_left (collect_locations ~global_assertion:false LabelOld) (refs,mems) locs
-  in
-  let p = try FieldOrVariantRegionMap.find (fvi,r) mems with Not_found -> [] in
-  make_union_loc p
-  
-(*******************************************************************************)
 (*                                Logic functions                              *)
 (*******************************************************************************)
 
@@ -2279,10 +2312,12 @@ let interp_fun_params f write_mems read_mems annot_type =
                        acc))
           l annot_type
        
-let function_body f behav body =
-  set_current_behavior behav;
-  let e = expr ~infunction:f ~threats:(behav = "safety") body in
+let function_body f spec behavior_name body =
+  set_current_behavior behavior_name;
+  set_current_spec spec;
+  let e = expr ~infunction:f ~threats:(behavior_name = "safety") body in
   reset_current_behavior ();
+  reset_current_spec ();
   e
   
 let tr_fun f funloc spec body acc =
@@ -2669,7 +2704,7 @@ let tr_fun f funloc spec body acc =
               printf "Generating Why function %s@."
                 f.Jc_fenv.jc_fun_info_final_name;
               (* default behavior *)
-              let body_safety = function_body f "safety" body in
+              let body_safety = function_body f spec "safety" body in
               let tblock =
                 if !Jc_options.inv_sem = InvOwnership then
                   append
@@ -2746,7 +2781,7 @@ let tr_fun f funloc spec body acc =
                   let acc =
                     List.fold_right
                       (fun (id,b,e) acc ->
- 		          let body = function_body f id body in
+ 		          let body = function_body f spec id body in
                           let tblock =
                             if !Jc_options.inv_sem = InvOwnership then
                               append
