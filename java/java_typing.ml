@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.130 2008-07-04 14:29:46 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.131 2008-07-07 08:29:01 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1655,9 +1655,11 @@ and term env current_label e =
 	      | Super_access _ -> assert false (* TODO *)
 	  end
       | JPEif (_, _, _)-> assert false (* TODO *)
-      | JPEassign_array (_, _, _, _)-> assert false (* TODO *)
-      | JPEassign_field (_, _, _)-> assert false (* TODO *)
-      | JPEassign_name (_, _, _)-> assert false (* TODO *)
+      | JPEassign_array (_, _, _, _)
+      | JPEassign_field (_, _, _)
+      | JPEassign_name (_, _, _) ->
+	  typing_error e.java_pexpr_loc 
+	    "assignment not allowed in annotations"		
       | JPEincr (_, _)-> assert false (* TODO *)
       | JPEun (op, e1)-> 	 
 	  let te1 = termt e1 in 
