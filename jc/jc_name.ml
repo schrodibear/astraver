@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.15 2008-06-23 14:15:56 bardou Exp $ *)
+(* $Id: jc_name.ml,v 1.16 2008-07-07 15:33:03 marche Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -118,7 +118,7 @@ let alloc_param_name st = "alloc_" ^ st.jc_struct_info_name
 
 let alloc_one_param_name st = "alloc_one_" ^ st.jc_struct_info_name
 
-let jessie_return_variable = "jessie_returned_value"
+let jessie_return_variable = "return"
 let jessie_return_exception = "Return"
 
 let exception_name ei =

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.131 2008-07-07 08:29:01 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.132 2008-07-07 15:33:03 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -624,7 +624,13 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
   match op with
     | Bconcat -> assert false
     | Bgt | Blt | Bge | Ble | Beq | Bne ->
-	assert false (* TODO *)
+	begin
+	  try 
+	    let t = logic_binary_numeric_promotion t1 t2 in
+	    boolean_type,JTbin(e1,t,op,e2)
+	  with Not_found ->
+	    typing_error loc "numeric types expected for >,<,>= and <="
+	end
     | Basr | Blsr | Blsl ->
 	begin
 	  try
@@ -642,7 +648,10 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
 	  with Not_found -> int_expected loc t1
 	end
     | Bimpl | Bor | Band | Biff ->
-	assert false (* TODO *)
+	if is_boolean t1 && is_boolean t2 then
+	  boolean_type, JTbin (e1, Tboolean, op, e2)
+	else
+	  typing_error loc "booleans expected"
     | Bbwxor | Bbwor | Bbwand -> 	
 	if is_boolean t1 && is_boolean t2 then
 	  boolean_type, JTbin (e1, Tboolean, op, e2)
@@ -704,10 +713,13 @@ let make_predicate_bin_op loc op t1 e1 t2 e2 =
 	    let t = logic_binary_numeric_promotion t1 t2 in
 	    JAbin(e1,t,op,e2)
 	  with Not_found -> 
-	    if is_reference_type t1 && is_reference_type t2 then
-	      JAbin_obj(e1,op,e2)
+	    if is_boolean t1 && is_boolean t2 then
+	      JAbin(e1,Tboolean,op,e2)
 	    else
-	      typing_error loc "numeric or object types expected for == and !="
+	      if is_reference_type t1 && is_reference_type t2 then
+		JAbin_obj(e1,op,e2)
+	      else
+		typing_error loc "numeric, boolean or object types expected for == and !="
 	end
     | Basr|Blsr|Blsl|Bbwxor|Bbwor|Bbwand|Bimpl|Bor|Band|Biff ->
 	assert false (* TODO *)

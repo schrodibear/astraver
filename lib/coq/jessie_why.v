@@ -11,6 +11,14 @@ Admitted.
 (*Why logic*) Definition bool_xor : bool -> bool -> bool.
 Admitted.
 
+(*Why axiom*) Lemma bool_and_false :
+  (bool_and true false) = false /\ (bool_and false false) = false.
+Admitted.
+
+(*Why axiom*) Lemma false_bool_and :
+  (bool_and false true) = false /\ (bool_and false false) = false.
+Admitted.
+
 (*Why axiom*) Lemma div_positive_by_positive :
   (forall (a:Z),
    (forall (b:Z), (0 <= a /\ 0 < b -> 0 <= ((Zdiv a b)) /\ ((Zdiv a b)) <= a))).
@@ -71,7 +79,7 @@ Implicit Arguments offset_max.
 Admitted.
 Implicit Arguments offset_min.
 
-(*Why predicate*) Definition valid (A526:Set) (a:(alloc_table A526)) (p:(pointer A526))
+(*Why predicate*) Definition valid (A546:Set) (a:(alloc_table A546)) (p:(pointer A546))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 Implicit Arguments valid.
 
@@ -319,10 +327,27 @@ Admitted.
      ((in_pset p (pset_union s1 s2)) <-> (in_pset p s1) \/ (in_pset p s2))))).
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A572:Set) (A571:Set) (a:(alloc_table A571)) (m1:(memory A571 A572)) (m2:(memory A571 A572)) (l:(pset A571))
-  := (forall (p:(pointer A571)),
+(*Why predicate*) Definition not_assigns (A592:Set) (A591:Set) (a:(alloc_table A591)) (m1:(memory A591 A592)) (m2:(memory A591 A592)) (l:(pset A591))
+  := (forall (p:(pointer A591)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 Implicit Arguments not_assigns.
+
+(*Why axiom*) Lemma not_assigns_refl :
+  forall (A1:Set), forall (A2:Set),
+  (forall (a:(alloc_table A1)),
+   (forall (m:(memory A1 A2)), (forall (l:(pset A1)), (not_assigns a m m l)))).
+Admitted.
+
+(*Why axiom*) Lemma not_assigns_trans :
+  forall (A1:Set), forall (A2:Set),
+  (forall (a:(alloc_table A1)),
+   (forall (m1:(memory A1 A2)),
+    (forall (m2:(memory A1 A2)),
+     (forall (m3:(memory A1 A2)),
+      (forall (l:(pset A1)),
+       ((not_assigns a m1 m2 l) ->
+        ((not_assigns a m2 m3 l) -> (not_assigns a m1 m3 l)))))))).
+Admitted.
 
 (*Why logic*) Definition full_separated :
   forall (A1:Set), forall (A2:Set), (pointer A1) -> (pointer A2) -> Prop.
@@ -405,7 +430,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A587:Set) (a:(tag_table A587)) (p:(pointer A587)) (t:(tag_id A587))
+(*Why predicate*) Definition instanceof (A611:Set) (a:(tag_table A611)) (p:(pointer A611)) (t:(tag_id A611))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -432,8 +457,8 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition root_tag (A592:Set) (t:(tag_id A592))
-  := (parenttag t (@bottom_tag A592)).
+(*Why predicate*) Definition root_tag (A616:Set) (t:(tag_id A616))
+  := (parenttag t (@bottom_tag A616)).
 Implicit Arguments root_tag.
 
 (*Why axiom*) Lemma root_subtag :
@@ -445,7 +470,7 @@ Implicit Arguments root_tag.
       ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A594:Set) (tag_table:(tag_table A594)) (mutable:(memory A594 (tag_id A594))) (this:(pointer A594))
+(*Why predicate*) Definition fully_packed (A618:Set) (tag_table:(tag_table A618)) (mutable:(memory A618 (tag_id A618))) (this:(pointer A618))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 

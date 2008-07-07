@@ -304,12 +304,12 @@ let print_all (tbuf:GText.buffer) s p =
   let (_,concl) = p in
   let mytag = 
     tbuf#create_tag
-      [`UNDERLINE `DOUBLE;
+      [`UNDERLINE `SINGLE;
        `FOREGROUND (get_fc "separator"); 
        `BACKGROUND (get_bc "separator")] 
   in
   tbuf#insert ~tags:[mytag] ~iter:tbuf#end_iter 
-    "---------------\n\n";
+    "              \n\n";
   let conclusion = 
     let print_predicate = 
       if is_active () 

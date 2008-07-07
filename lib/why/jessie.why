@@ -7,6 +7,12 @@ logic bool_and : bool, bool -> bool
 logic bool_or : bool, bool -> bool
 logic bool_xor : bool, bool -> bool
 
+axiom bool_and_false :
+  forall b:bool. bool_and(b,false) = false
+
+axiom false_bool_and :
+  forall b:bool. bool_and(false,b) = false
+
 (****************************************************************************)
 (* division and modulo                                                      *)
 (****************************************************************************)

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.143 2008-07-03 14:34:10 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.144 2008-07-07 15:33:03 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -451,7 +451,7 @@ let lit l =
 let lun_op t op: [> Jc_ast.unary_op] =
   match op with
     | Unot -> `Unot
-    | Uminus when (t = Tinteger || t = Tint) -> `Uminus
+    | Uminus when (t = Tinteger || t = Tint || t = Treal) -> `Uminus
     | Uminus -> 
 	begin match t with
 	  | Tstring -> assert false 
@@ -463,14 +463,14 @@ let lun_op t op: [> Jc_ast.unary_op] =
 	  | Tfloat  -> assert false (* TODO *)
 	  | Tlong  -> assert false (* TODO *)
 	  | Tdouble  -> assert false (* TODO *)
-	  | Treal  -> assert false (* TODO *)
+	  | Treal  -> assert false (*  should never happen *)
 	  | Tunit -> assert false (* TODO *)
 	  | Tinteger -> assert false (* should never happen *)
 	end
     | Uplus -> assert false
     | Ucompl -> `Ubw_not
 	
-let lbin_op t op: [> Jc_ast.operational_op] =
+let lbin_op t op: [> Jc_ast.bin_op] =
   match op with
     | Bgt -> `Bgt
     | Bge -> `Bge
@@ -484,9 +484,10 @@ let lbin_op t op: [> Jc_ast.operational_op] =
     | Bbwxor -> `Bbw_xor
     | Bbwor -> `Bbw_or
     | Bbwand -> `Bbw_and
-    | Biff|Bimpl|Bor|Band ->
-        assert false
-        (* TODO (il suffit d'utiliser bin_op au lieu de operational_op) *)
+    | Biff -> `Biff
+    | Bimpl -> `Bimplies
+    | Bor -> `Blor
+    | Band -> `Bland
     | Bmod -> `Bmod
     | Bdiv -> `Bdiv
     | Bmul -> `Bmul

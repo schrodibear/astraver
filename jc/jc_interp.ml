@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.296 2008-07-07 13:33:20 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.297 2008-07-07 15:33:03 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -248,10 +248,10 @@ let term_bin_op: term_bin_op -> string = function
   | `Blogical_shift_right, `Integer -> "lsr"
   | `Barith_shift_right, `Integer -> "asr"
       (* logical *)
-  | `Blor, _ | `Bland, _ -> 
-      assert false (* should be handled before for laziness *)
+  | `Blor, `Boolean -> "bool_or"
+  | `Bland, `Boolean ->  "bool_and"
   | `Biff, _ | `Bimplies, _ -> 
-      assert false (* never in terms *)
+      assert false (* TODO *)
   | op, opty ->
       Jc_typing.typing_error Loc.dummy_position
         "Can't use operator %s with type %s in terms"
@@ -1721,7 +1721,7 @@ and expr ~infunction ~threats e : expr =
 	(* TODO: add also a loop_assigns annotation *)
 
 	let loop_assigns = 
-	  let cur_behavior = get_current_behavior () in
+	  let _cur_behavior = get_current_behavior () in
 	  match get_current_spec () with
 	    | None -> assert false
 	    | Some s ->
