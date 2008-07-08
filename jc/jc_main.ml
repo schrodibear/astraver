@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.110 2008-07-07 13:33:20 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.111 2008-07-08 16:16:37 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -312,6 +312,8 @@ let main () =
     let d_funs = 
       Hashtbl.fold 
 	(fun _ (f,loc,s,b) acc ->
+	   Jc_options.lprintf
+	     "Generation of Why function %s@." f.jc_fun_info_name;
 	   Jc_interp.tr_fun f loc s b acc)
 	Jc_typing.functions_table
 	d_axioms

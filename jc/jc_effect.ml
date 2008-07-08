@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.109 2008-07-04 13:12:43 bardou Exp $ *)
+(* $Id: jc_effect.ml,v 1.110 2008-07-08 16:16:37 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -150,6 +150,29 @@ let ef_assoc ?label_assoc ef assoc =
 	    StringRegionSet.add (a,r) acc
 	  end
       ) ef.jc_effect_alloc_table StringRegionSet.empty;
+    jc_effect_tag_table =
+      VariantMap.fold
+	(fun fvi labels acc ->
+	   let labels =
+	     match label_assoc with
+	       | None -> labels
+	       | Some a ->
+(*
+		   eprintf "label assoc:@.";
+*)
+		   LogicLabelSet.fold
+		     (fun lab acc ->
+			try
+			  let l = List.assoc lab a in
+(*
+			  eprintf " %a -> %a@." Jc_output.label lab Jc_output.label l;
+*)
+			  LogicLabelSet.add l acc
+			with Not_found -> LogicLabelSet.add lab acc (* assert false*))
+		     labels LogicLabelSet.empty
+	   in
+	   VariantMap.add fvi labels acc
+	) ef.jc_effect_tag_table VariantMap.empty;
   }
 
 let fef_reads ef =
