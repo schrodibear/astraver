@@ -534,7 +534,7 @@ bin/simplify2why.opt: $(SIMPLIFYTOWHYCMX)
 
 DPCMO = tools/cvcl_split.cmo tools/simplify_split.cmo tools/smtlib_split.cmo\
         tools/zenon_split.cmo tools/ergo_split.cmo tools/rv_split.cmo \
-        tools/calldp.cmo tools/dp.cmo
+        src/version.cmo tools/calldp.cmo tools/dp.cmo
 DPCMX = $(DPCMO:.cmo=.cmx)
 
 bin/dp.byte: $(DPCMO)
@@ -596,8 +596,8 @@ pvs-yes: $(PVSFILES)
 
 include Version
 
-doc/version.tex src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version version.sh
-	LIBDIR=$(LIBDIR) ./version.sh
+doc/version.tex src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version version.sh config.status
+	LIBDIR=$(LIBDIR) ERGOBIN=@ERGOBIN@ ./version.sh
 
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why

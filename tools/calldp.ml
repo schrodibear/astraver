@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.47 2008-06-30 11:31:40 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.48 2008-07-08 19:16:29 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -320,7 +320,7 @@ let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
 
 
 let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "ergo %s" f in
+  let cmd = sprintf "%s %s" Version.ergo_binary f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
   if c <> 0 then error c t cmd
   else 

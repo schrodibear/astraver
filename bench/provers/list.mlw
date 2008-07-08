@@ -13,6 +13,7 @@ logic tl : 'a list -> 'a list
 
 axiom hd_cons : forall x:'a. forall l:'a list. hd (cons(x,l)) = x
 axiom tl_cons : forall x:'a. forall l:'a list. tl (cons(x,l)) = l
+axiom hd_tl : forall l:'a list. l = cons(hd(l), tl(l))
 
 goal hd_tl_1 :
   forall x,y:int. hd(tl(cons(x, cons(y, nil)))) = y
@@ -94,16 +95,16 @@ axiom flatten_def_2 :
   forall x:'a list. forall l:'a list list. 
   flatten(cons(x,l)) = append(x,flatten(l))
 
-(* monomorph loops on this example *)
-(*
+(* note : monomorph loops on this example *)
+
 goal flatten_1 : flatten(cons(cons(1,nil), 
                               cons(cons(2,cons(3,nil)), 
 	                           nil))) = cons(1,cons(2,cons(3,nil)))
-*)
 
-(* poly goal *)
+(* poly goals *)
 
-goal poly_2 : forall l1:'a list. forall l2:'b list. length(l1) = length(l2)
+goal poly_2 : 
+  forall l1:'a list. length(cons(hd(l1),tl(l1))) = length(l1)
 
-goal poly_1 : forall l:'a list. length(l) = 0
+goal poly_1 : forall l:'a list. l=nil -> length(l) = 0
 

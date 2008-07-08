@@ -26,6 +26,9 @@ int binary_search1(int* t, int n, int v) {
   return -1;
 }
 
+
+
+
     
 /*
 Local Variables: 

@@ -157,7 +157,7 @@ let yicesSStrat = {
   pr_enc = SortedStratified;
   }
 let ergo = {
-  pr_name = "ergo";
+  pr_name = "alt-ergo";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Ergo;

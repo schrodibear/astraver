@@ -1,4 +1,5 @@
 
+  o configuration: detection of Alt-ergo executable name (ergo/alt-ergo)
   o jessie/why: reorganization of PVS output
   o krakatoa/jessie: version number, and CHANGES files are now those of why
   o krakatoa/jessie: added support for bitwise operator on booleans
