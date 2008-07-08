@@ -43,14 +43,6 @@ predicate Invariant(x:int, y:int, e:int) =
 
 axiom invariant_is_ok : forall x,y,e:int. Invariant(x,y,e) -> best(x,y)
 
-(*
-axiom closest :
-   forall a,b,c:int.
-   0 <= a ->
-   (abs (2 * a * b - 2 * c) <= a) ->
-   forall b':int. abs (a * b - c) <= abs (a * b' - c)
-*)
-
 let bresenham () =
   begin
     x := 0;
