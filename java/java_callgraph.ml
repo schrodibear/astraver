@@ -38,9 +38,7 @@ let rec term acc t =
     | JTat(t,_) -> term acc t
     | JTbin (t1,_,_,t2) -> term (term acc t1) t2
     | JTun (_,_,t1) -> term acc t1
-(*
     | JTif(t1,t2,t3) -> term (term (term acc t1) t2) t3
-*)
 (*
     | JTinstanceof(t,_)
     | JTunary (_,t) 
@@ -65,12 +63,8 @@ let rec assertion acc p =
   | JAand(p1,p2) | JAor(p1,p2) 
   | JAimpl (p1,p2) | JAiff(p1,p2) -> 
       assertion (assertion acc p1) p2
-(*
   | JAif(t1,p2,p3) -> 
       assertion (assertion (term acc t1) p2) p3
-  | JAnot p 
-  | JAold p 
-*)
   | JAquantifier (_,_,p) -> assertion acc p
   | JAbool_expr t | JAinstanceof (t, _, _) -> term acc t
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.144 2008-07-07 15:33:03 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.145 2008-07-09 10:31:59 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -613,8 +613,6 @@ let rec term t =
 	      | _ -> assert false
 	  end
       | JTarray_range _ -> assert false
-(*       | JTold t -> *)
-(*           mkold ~expr: (term t) () *)
       | JTat(t,lab) ->
           mkat
             ~expr: (term t)
@@ -632,6 +630,12 @@ let rec term t =
                     ()
 	      | _ -> assert false (* TODO *)
 	  end
+      | JTif(t1,t2,t3) ->
+	  mkif
+	    ~condition: (term t1)
+	    ~expr_then: (term t2)
+	    ~expr_else: (term t3)
+	    ()
   in
   let _ = tr_type t.java_term_loc t.java_term_type in
   new pexpr ~loc: t.java_term_loc t'#node
@@ -735,6 +739,7 @@ let rec assertion ?(reg=0) a =
           term t
       | JAinstanceof (t, lab, ty) ->
 	  let ty = tr_type Loc.dummy_position ty in
+	  begin
 	    match ty with
 	      | JCTpointer (JCtag(si, []), _, _) ->
                   mkinstanceof
@@ -742,6 +747,13 @@ let rec assertion ?(reg=0) a =
                     ~typ: si.jc_struct_info_name
                     ()
 	      | _ -> assert false
+	  end
+      | JAif(t,a1,a2) ->
+	  mkif
+	    ~condition: (term t)
+	    ~expr_then: (assertion a1)
+	    ~expr_else: (assertion a2)
+	    ()
   in
   new pexpr ~loc:a.java_assertion_loc a'#node
     
@@ -998,11 +1010,9 @@ let rec location_set logic_label t =
 		  end
 	      | _ -> assert false
 	  end
-(*
-      | JTold t -> assert false (* TODO *)
-*)
       | JTat _ -> assert false (* TODO, maybe change logic_label ? *)
       | JTcast(ty,t) -> assert false (* TODO *)
+      | JTif _ -> assert false (* TODO *)
 
 
 let location logic_label t =
@@ -1067,11 +1077,9 @@ let location logic_label t =
 		  end
 	      | _ -> assert false
 	  end
-(*
-      | JTold t -> assert false (* TODO *)
-*)
       | JTat _ -> assert false (* TODO, maybe change logic_label ? *)
       | JTcast(ty,t) -> assert false (* TODO *)
+      | JTif _ -> assert false (* TODO *)
   
 
 let un_op op: [> Jc_ast.unary_op] =

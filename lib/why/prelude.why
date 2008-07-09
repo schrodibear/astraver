@@ -100,6 +100,27 @@ parameter ge_real_ : x:real -> y:real -> {} bool {if result then x>=y else x<y}
 parameter eq_real_ : x:real -> y:real -> {} bool {if result then x=y else x<>y}
 parameter neq_real_: x:real -> y:real -> {} bool {if result then x<>y else x=y}
 
+(* boolean versions of the comparisons and the corresponding axioms *)
+logic lt_real_bool : real,real -> bool
+logic le_real_bool : real,real -> bool
+logic gt_real_bool : real,real -> bool
+logic ge_real_bool : real,real -> bool
+logic eq_real_bool : real,real -> bool
+logic neq_real_bool : real,real -> bool
+
+axiom lt_real_bool_axiom : 
+  forall x:real. forall y:real. lt_real_bool(x,y)=true <-> x<y
+axiom le_real_bool_axiom : 
+  forall x:real. forall y:real. le_real_bool(x,y)=true <-> x<=y
+axiom gt_real_bool_axiom : 
+  forall x:real. forall y:real. gt_real_bool(x,y)=true <-> x>y
+axiom ge_real_bool_axiom : 
+  forall x:real. forall y:real. ge_real_bool(x,y)=true <-> x>=y
+axiom eq_real_bool_axiom : 
+  forall x:real. forall y:real. eq_real_bool(x,y)=true <-> x=y
+axiom neq_real_bool_axiom : 
+  forall x:real. forall y:real. neq_real_bool(x,y)=true <-> x<>y
+
 (* if-then-else function symbol *)
 
 logic ite : bool,'a,'a -> 'a

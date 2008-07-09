@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.132 2008-07-07 15:33:03 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.133 2008-07-09 10:31:59 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1666,7 +1666,15 @@ and term env current_label e =
 		      
 	      | Super_access _ -> assert false (* TODO *)
 	  end
-      | JPEif (_, _, _)-> assert false (* TODO *)
+      | JPEif (e1, e2, e3)->
+	  let te1 = termt e1 in
+	  if is_boolean te1.java_term_type then	    
+	    let te2 = termt e2 in
+	    let te3 = termt e3 in
+	    (* TODO: check if compatible types *)
+	    te1.java_term_type,JTif(te1,te2,te3)
+	  else
+	    typing_error e1.java_pexpr_loc "boolean expected"
       | JPEassign_array (_, _, _, _)
       | JPEassign_field (_, _, _)
       | JPEassign_name (_, _, _) ->
@@ -1787,7 +1795,15 @@ and assertion env current_label e =
 	typing_error e.java_pexpr_loc 
 	  "method calls not allowed in assertion"	
     | JPEfield_access _-> assert false (* TODO *)
-    | JPEif (_, _, _)-> assert false (* TODO *)
+    | JPEif (e1, e2, e3)-> 
+	let te1 = termt e1 in
+	if is_boolean te1.java_term_type then	    
+	  let te2 = assertiont e2 in
+	  let te3 = assertiont e3 in
+	    (* TODO: check if compatible types *)
+	    JAif(te1,te2,te3)
+	  else
+	    typing_error e1.java_pexpr_loc "boolean expected"
     | JPEassign_array (_, _, _, _)
     | JPEassign_field (_, _, _)
     | JPEassign_name (_, _, _) -> 
@@ -2279,9 +2295,6 @@ let rec expr_of_term t =
   let n =
     match t.java_term_node with
       | JTvar vi -> JEvar vi
-(*
-      | JTold _ -> assert false (* TODO *)
-*)
       | JTat _ -> assert false (* TODO *)
       | JTfield_access(t, fi) -> 
 	  JEfield_access(expr_of_term t,fi)
@@ -2298,6 +2311,8 @@ let rec expr_of_term t =
       | JTun (t, op, e1) -> assert false (* TODO *)
       | JTlit _ -> assert false (* TODO *)
       | JTcast(ty,t) -> JEcast(ty,expr_of_term t)
+      | JTif(t1,t2,t3) -> 
+	  JEif(expr_of_term t1, expr_of_term t2, expr_of_term t3)
   in
   { java_expr_loc = t.java_term_loc;
     java_expr_type = !ty;

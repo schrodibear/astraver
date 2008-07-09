@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.297 2008-07-07 15:33:03 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.298 2008-07-09 10:32:00 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -227,12 +227,12 @@ let term_bin_op: term_bin_op -> string = function
   | `Beq, `Logic -> "eq"
   | `Bneq, `Logic -> "neq"
       (* real *)
-  | `Bgt, `Real -> "gt_real"
-  | `Blt, `Real -> "lt_real"
-  | `Bge, `Real -> "ge_real"
-  | `Ble, `Real -> "le_real"
-  | `Beq, `Real -> "eq_real"
-  | `Bneq, `Real -> "neq_real"
+  | `Bgt, `Real -> "gt_real_bool"
+  | `Blt, `Real -> "lt_real_bool"
+  | `Bge, `Real -> "ge_real_bool"
+  | `Ble, `Real -> "le_real_bool"
+  | `Beq, `Real -> "eq_real_bool"
+  | `Bneq, `Real -> "neq_real_bool"
   | `Badd, `Real -> "add_real"
   | `Bsub, `Real -> "sub_real"
   | `Bmul, `Real -> "mul_real"
@@ -547,7 +547,11 @@ let rec term ~global_assertion label oldlabel t =
         LApp("shift",[t1'; 
                       term_coerce t2#loc integer_type 
                         t2#typ t2']), lets1@lets2
-    | JCTif(t1,t2,t3) -> assert false (* TODO *)
+    | JCTif(t1,t2,t3) ->
+        let t1', lets1 = ft t1 in
+        let t2', lets2 = ft t2 in
+        let t3', lets3 = ft t3 in
+        TIf(t1', t2', t3'), lets1@lets2@lets3
     | JCTderef(t,lab,fi) -> 
         let t', lets = ft t in
         let mem = memvar ~label_in_name:global_assertion lab (fi,t#region) in

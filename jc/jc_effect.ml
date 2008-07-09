@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.110 2008-07-08 16:16:37 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.111 2008-07-09 10:32:00 marche Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -369,7 +369,8 @@ let rec term ef t =
         let ef = Option_misc.fold_left term ef a in
         let ef = Option_misc.fold_left term ef b in
         ef
-    | JCTif (_, _, _) -> assert false (* TODO *)
+    | JCTif (t1, t2, t3) -> 
+	term (term (term ef t1) t2) t3	
     | JCTcast (t1, label, st) ->
 	add_tag_effect label (term ef t1) (JCtag(st, []))
     | JCTrange_cast(t1,_) | JCTreal_cast(t1,_) ->  term ef t1

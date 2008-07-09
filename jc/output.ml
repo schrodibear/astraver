@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.32 2008-05-07 09:54:00 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.33 2008-07-09 10:32:00 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -58,7 +58,7 @@ type term =
   | LVar of string
   | LVarAtLabel of string * string     (*r x@L *)
   | Tnamed of string * term
-;;
+  | TIf of term * term * term
 
 let rec iter_term f t =
   match t with
@@ -67,7 +67,9 @@ let rec iter_term f t =
   | LVar(id) -> f id
   | LVarAtLabel(id,l) -> f id
   | Tnamed(_,t) -> iter_term f t
-;;
+  | TIf(t1,t2,t3) -> 
+      iter_term f t1; iter_term f t2; iter_term f t3
+
 
 let rec fprintf_term form t =
   match t with
@@ -88,6 +90,9 @@ let rec fprintf_term form t =
   | LVar(id) -> fprintf form "%s" id
   | LVarAtLabel(id,l) -> fprintf form "%s@@%s" id l
   | Tnamed(lab,t) -> fprintf form "(%s : %a)" lab fprintf_term t
+  | TIf(t1,t2,t3) -> 
+      fprintf form "@[<hv 1>(if %a@ then %a@ else %a)@]" 
+	fprintf_term t1 fprintf_term t2 fprintf_term t3
 
 type logic_type = 
     { logic_type_name : string;

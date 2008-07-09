@@ -1,4 +1,5 @@
 
+  o krakatoa/jessie: support for ( ? : ) operator in terms and propositions
   o configuration: detection of Alt-ergo executable name (ergo/alt-ergo)
   o jessie/why: reorganization of PVS output
   o krakatoa/jessie: version number, and CHANGES files are now those of why

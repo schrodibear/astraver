@@ -13,6 +13,16 @@ axiom bool_and_false :
 axiom false_bool_and :
   forall b:bool. bool_and(false,b) = false
 
+axiom bool_and_true :
+  forall b:bool. bool_and(b,true) = b
+
+axiom true_bool_and :
+  forall b:bool. bool_and(true,b) = b
+
+axiom bool_and_1 :
+  forall b1:bool. forall b2:bool.
+  bool_and(b1,b2) = true -> b1 = true and b2 = true
+
 (****************************************************************************)
 (* division and modulo                                                      *)
 (****************************************************************************)
