@@ -503,11 +503,6 @@ bin/gwhy.opt: $(GCMX)
 bin/gwhy.byte: $(GCMO)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma nums.cma graph.cma lablgtk.cma threads.cma gtkThread.cmo $^
 
-# regression tests
-
-regtests: bin/regtest.opt
-	time bin/regtest.opt 
-
 # tools
 bin/regtest.opt: tools/regtest.ml
 	$(OCAMLOPT) $(OFLAGS) -thread -o $@ unix.cmxa str.cmxa threads.cmxa $^
