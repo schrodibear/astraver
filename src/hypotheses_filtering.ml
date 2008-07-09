@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.56 2008-07-09 13:53:34 giorgetti Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.57 2008-07-09 15:06:51 giorgetti Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -44,8 +44,8 @@
    2) Variables of hypothesis are stored into a graph where 
    - a variable is represented by a vertex
    - a predicate linking some variables is represented by 
-   the complete graph with all the vertices corresponding to the
-   variables 
+   the complete graph with all the vertices 
+   corresponding to the variables 
    3) A breadth-first search algorithm, bounded by the constant pb
    computes the set of relevant predicates P
    4) A breadth-first search algorithm, bounded by the constant k
@@ -71,6 +71,7 @@ open Util
 open Graph.Graphviz
 open Graph.Path
 
+(* Strategies with constants *)
 type var_strat =
     AllVars
   | One
@@ -81,10 +82,13 @@ type var_strat =
 let prune_context = Options.prune_context
 let use_comparison_as_criteria_for_graph_construction =
   Options.pruning_hyp_CompInGraph
-let use_comparison_as_criteria_for_hypothesis_filtering = Options.pruning_hyp_CompInFiltering
-let keep_quantification_link_beween_vars = Options.pruning_hyp_LinkVarsQuantif
+let use_comparison_as_criteria_for_hypothesis_filtering = 
+	Options.pruning_hyp_CompInFiltering
+let keep_quantification_link_beween_vars = 
+	Options.pruning_hyp_LinkVarsQuantif
 (* Setup of comparison management *)
-let keep_single_comparison_representation = Options.pruning_hyp_keep_single_comparison_representation
+let keep_single_comparison_representation = 
+	Options.pruning_hyp_keep_single_comparison_representation
 let comparison_eqOnly = Options.pruning_hyp_comparison_eqOnly
 let suffixed_comparison = Options.pruning_hyp_suffixed_comparison
 let equalities_linked = Options.pruning_hyp_equalities_linked
@@ -568,14 +572,27 @@ basic strategy type
 ***********************
 **)
 
-(** An abstract clause only stores atomes number, the set of positive predicates symbols
+(** Abstract clauses. 
+
+An abstract clause only stores atome numbers,
+the set of positive predicates symbols
 and the set of negative symbols.
-Each predicate is represented as a string an the set of positive predicates
-is stored as a StringSet.t
+Each predicate is represented as a string.
+The set of positive predicates is stored as a StringSet.t
 **)
 module StringSet = Set.Make(struct type t = string let compare = compare end)
-type abstractClause = { num: int; pos : StringSet.t; neg : StringSet.t }
-module AbstractClauseSet = Set.Make(struct type t = abstractClause let compare = compare end)
+(* A type for Ident pairs *)
+type identPair = Pair of Ident.t * Ident.t
+(* A type for sets of ident pairs *)
+module IdentPairSet = Set.Make(struct type t = identPair let compare = compare end)
+(* Type of an abstract clause *)	
+type abstractClause = { 
+	num : int; 
+	pos : StringSet.t; 
+	neg : StringSet.t;
+	cmp : IdentPairSet.t }
+module AbstractClauseSet = Set.Make(
+	struct type t = abstractClause let compare = compare end)
 
 let display_cl cl =
   let display_set_pr =
@@ -835,29 +852,44 @@ let vSet = ref PdlSet.empty
 (** end of PdlSet **)
 
 
-(**
-   computes the arcs from p to q 
-   (~p,q) : p->q and ~q->~p
+(** Computes arcs from a pair of literals.
+    Let l1 and l2 be two literals.
+		l1 or l2 is memorized by the edges ~ l1 -> l2 and ~ l2 -> l1 
+		with ~ ~ p = p for each predicate p.
+		  
+		Warning: different from Table 1 from [CGS08] where p is v with
+		polarity lp and q is v' with polarity rp.
+		 
+    @param lp : positivity, left-hand-side polarity.
+		@param rp : positivity, right-hand-side polarity.
+		@param we : int, Weight to add.
+		@param v : string, left-hand-side name.
+		@param v' : string, right-hand-side name.
+		assigns !pdlg. 
 **)
 let add_edge lp rp we v v'=
-  (* reverse the left since it is given as a disjunction *)
+  (* reverse the left polarity since starts from a disjunction *)
   let lp = oposite lp in
+	(* Construction of vertices: *)
+	(*   type vertexLabel = { l: string; pol: positivity } *)
   let le = { l = v; pol = lp } in
   let re = { l = v'; pol = rp } in
   let lep = { l = v'; pol = oposite rp } in
   let rep = { l = v; pol = oposite lp } in
 
-  try
-  (* edge exists and weight is bigger *)
+  try    
     let (_, w, _) = PdlGraph.find_edge !pdlg le re in
+		(* edge already exists ... *)
     if w > we then
       begin
+				(* ... and its weight is bigger. Its weight is reduced. *)
         PdlGraph.remove_edge !pdlg le re;
         PdlGraph.add_edge_e !pdlg (le, we, re);
         PdlGraph.remove_edge !pdlg lep rep;
         PdlGraph.add_edge_e !pdlg (lep, we, rep);
       end
-  with Not_found ->
+  with Not_found -> 
+		(* New edge. Two arcs. *)
     PdlGraph.add_edge_e !pdlg (le, we, re);
     PdlGraph.add_edge_e !pdlg (lep, we, rep);
     vSet := PdlSet.add 
@@ -894,46 +926,75 @@ module DotPdlGraph = Graph.Graphviz.Dot(DisplayPdlGraph)
 updates the graph_of_predicates
 **)
 let update_pdlg acs =
-  let update_pdlg_c a_clause =
-    if (StringSet.cardinal (StringSet.union a_clause.pos a_clause.neg))
-    <= 1 then ()
-    else
-      begin
-        let nlab = a_clause.num - 1 in
-        let neg = ref a_clause.neg in
-        StringSet.iter
-          (fun n ->
-            (* dealing with (neg n or neg n') <-> n -> neg n' (or equivalentely n'->   *)
-            (* neg n)                                                                  *)
-                neg := StringSet.remove n !neg;
-                StringSet.iter (fun n' ->
-                        if not(n = n') then
-                          add_edge Neg Neg nlab n n'
-                  ) !neg;
-                (* dealing with (neg n or p) <-> n -> p (or equivalentely neg p -> neg n) *)
-                StringSet.iter (fun p ->
-                        if not(n = p) then
-                          add_edge Neg Pos nlab n p
-                  ) a_clause.pos
-          ) a_clause.neg;
-        let pos = ref a_clause.pos in
-        StringSet.iter
-          (fun p ->
-            (* dealing with (p or p') <-> neg p-> p' (or equivalentely neg p'-> p) *)
-                pos := StringSet.remove p !pos;
-                StringSet.iter (fun p' ->
-                        if not(p = p') then
-                          add_edge Pos Pos nlab p p'
-                  ) !pos
-          ) a_clause.pos
-      end
-  in
-  AbstractClauseSet.iter update_pdlg_c acs;
-  if debug then
-    begin
-      let oc = open_out "/tmp/gwhy_pdlg_graph.dot" in
-      DotPdlGraph.output_graph oc !pdlg
-    end
+	(** Updates the graph from one clause.
+	@param a_clause: Input abstract clause.
+	assigns !pdlg. **)
+	let update_pdlg_c a_clause =
+		if (StringSet.cardinal (StringSet.union a_clause.pos a_clause.neg))
+		<= 1 then ()
+		else
+			begin
+				(* Implements Table 1 from [CGS08]. n is p and n' is q. *)
+				let nlab = a_clause.num - 1 in
+				let neg = ref a_clause.neg in
+				StringSet.iter
+					(fun p ->
+						(* From (neg p or neg q) adds p -> neg q (or equivalently q -> *)
+						(* neg p).                                                     *)
+								neg := StringSet.remove p !neg;
+								StringSet.iter (fun q ->
+												if not(p = q) then
+													add_edge Neg Neg nlab p q
+									) !neg;
+								(* From (neg p or q) adds p -> q (or equivalently neg q -> *)
+								(* neg p)                                                  *)
+								StringSet.iter (fun q ->
+												if not(p = q) then
+													add_edge Neg Pos nlab p q
+									) a_clause.pos
+					) a_clause.neg;
+				let pos = ref a_clause.pos in
+				StringSet.iter
+					(fun p ->  (* p' is q in Table 1. *)
+						(* From (p or p') add neg p-> p' (or equivalently neg p'-> p) *)
+								pos := StringSet.remove p !pos;
+								StringSet.iter (fun p' ->
+												if not(p = p') then
+													add_edge Pos Pos nlab p p'
+									) !pos
+					) a_clause.pos;
+				(* Addition of arcs memorizing comparison predicates: *)
+				let cmps = ref a_clause.cmp in
+				IdentPairSet.iter
+					(fun ip ->  (* ip is a pair of functional symbols. *)
+								cmps := IdentPairSet.remove ip !cmps;
+								match ip with
+								| Pair(f1, f2) ->
+										begin
+											StringSet.iter
+												(fun p ->
+															add_edge Neg Pos nlab p (Ident.string f1);
+															add_edge Neg Pos nlab p (Ident.string f2);
+												) a_clause.neg;
+											(* Idem for positive literals *)
+											StringSet.iter
+												(fun p ->
+															add_edge Pos Pos nlab p (Ident.string f1);
+															add_edge Pos Pos nlab p (Ident.string f2);
+												) a_clause.pos;
+											(* Links between f1 and f2 *)
+											add_edge Neg Pos nlab (Ident.string f1) (Ident.string f2);
+											add_edge Neg Pos nlab (Ident.string f2) (Ident.string f1);
+										end
+					) a_clause.cmp
+			end
+	in
+	AbstractClauseSet.iter update_pdlg_c acs;
+	if debug then
+		begin
+			let oc = open_out "/tmp/gwhy_pdlg_graph.dot" in
+			DotPdlGraph.output_graph oc !pdlg
+		end
 
 let rec remove_percents s =
   try
@@ -952,14 +1013,20 @@ let remove_percent_from_stringset sts =
 let remove_percent_from_abstractclauseset cls =
   let r = ref AbstractClauseSet.empty in
   (AbstractClauseSet.iter
-      (fun cl -> r:= AbstractClauseSet.add { num = cl.num; neg = remove_percent_from_stringset cl.neg; pos = remove_percent_from_stringset cl.pos } !r)
+      (fun cl -> r:= AbstractClauseSet.add { 
+				num = cl.num; 
+				neg = remove_percent_from_stringset cl.neg; 
+				pos = remove_percent_from_stringset cl.pos;
+				cmp = IdentPairSet.empty } !r)
       cls);
   !r
 
-(** To take account comparison operators as predicates, we consider each operator suffixed by each of its closed identifier **)
+(** To take comparison operators into account, we consider each operator 
+    suffixed by each of its closed identifier **)
 (** @params i1 : ident of the comparison **)
 (** @params i2 : ident of the closed operator **)
 (** @result : string i1 suffixed by i2 **)
+(** assigns nothing; **)
 let get_suffixed_ident i1 i2 =
   (* let s= *)
   if suffixed_comparison then
@@ -1006,8 +1073,8 @@ let inv_comparison id =
   else assert false (* cases have to match with cases from comparison_to_consider *)
 
 (** @param id a comparison identifier **)
-(** @param ti a var or func identifier **)
-(** @return a string composed with id and ti **)
+(** @param ti a variable or function identifier **)
+(** @return a string composed of id and ti **)
 let get_positive_suffixed_ident id ti =
   if (is_negative_comparison id) && (keep_single_comparison_representation) then
     (get_suffixed_ident (inv_comparison id) ti)
@@ -1023,284 +1090,343 @@ let get_positive_ident id =
     (Ident.string id)
 
 let build_pred_graph decl =
-  let eq_link = ref AbstractClauseSet.empty in
-  let treated_suffixes = ref StringSet.empty in
-  let add_suffixed_depends compId appId =
-    if suffixed_comparison && not (StringSet.mem (Ident.string appId) !treated_suffixes) then
-      begin
-        if equalities_linked then
-          begin
-            (* Creation des liens =_f -> = et = -> =_f *)
-            eq_link:= AbstractClauseSet.add
-              ({ num = 1;
-                  neg = StringSet.singleton (get_positive_suffixed_ident compId appId);
-                  pos = StringSet.singleton (get_positive_ident compId) })
-              (AbstractClauseSet.add
-                  ({ num = 1;
-                      neg = StringSet.singleton (get_positive_ident compId);
-                      pos = StringSet.singleton (get_positive_suffixed_ident compId appId) })
-                  !eq_link)
-          end;
-        
-        if arith_tactic then
-          begin
-            (* Creation du trio lt_f / le_f / =_f *)
-            let eq =
-              if is_int_comparison compId then (StringSet.singleton (get_suffixed_ident t_eq_int appId))
-              else if is_real_comparison compId then (StringSet.singleton (get_suffixed_ident t_eq_real appId))
-              else (StringSet.singleton (get_suffixed_ident t_eq appId)) in
-            let lt =
-              if is_int_comparison compId then (StringSet.singleton (get_suffixed_ident t_lt_int appId))
-              else if is_real_comparison compId then (StringSet.singleton (get_suffixed_ident t_lt_real appId))
-              else (StringSet.singleton (get_suffixed_ident t_lt appId)) in
-            let le =
-              if is_int_comparison compId then (StringSet.singleton (get_suffixed_ident t_le_int appId))
-              else if is_real_comparison compId then (StringSet.singleton (get_suffixed_ident t_le_real appId))
-              else (StringSet.singleton (get_suffixed_ident t_le appId)) in
-            
-            let trio = ref AbstractClauseSet.empty in
-            trio := AbstractClauseSet.add { num = 1; neg = eq; pos = le } !trio;
-            trio := AbstractClauseSet.add { num = 2; neg = le; pos = eq } !trio;
-            trio := AbstractClauseSet.add { num = 2; neg = le; pos = lt } !trio;
-            trio := AbstractClauseSet.add { num = 1; neg = lt; pos = le } !trio;
-            
-            eq_link:= AbstractClauseSet.union !trio !eq_link
-          end;
-        
-        treated_suffixes:= StringSet.add (Ident.string appId) !treated_suffixes
-      end
-  in
-  
-  (* Construction of the Preds dependence graph suppose the clause cl is   *)
-  (* in nnf                                                                *)
-  (** @result : a set of clauses **)
-  let add_atom atome cl =
-    match atome with
-    | Pnot (Papp (id, l, i))
-    when not (is_comparison id or
-        is_int_comparison id or
-        is_real_comparison id) ->
-        begin
-          if debug then
-            begin
-            (* Format.printf "\nOperation non suffixee : %a\n"               *)
-            (* Util.print_predicate (Papp (id, l, i));                       *)
-            end;
-          AbstractClauseSet.singleton
-            { num = cl.num + 1;
-              pos = cl.pos;
-              neg = StringSet.add (Ident.string id) cl.neg }
-        end
-    
-    | Papp (id, l, i)
-    when not (is_comparison id or
-        is_int_comparison id or
-        is_real_comparison id) ->
-        AbstractClauseSet.singleton
-          { num = cl.num + 1;
-            neg = cl.neg;
-            pos = StringSet.add (Ident.string id) cl.pos }
-    | Pnot (Papp (id, [el1; el2], i))
-    when (comparison_to_consider id) ->
-        begin
-          match (el1, el2) with
-          | (Tapp(ti1, _, _), Tapp(ti2, _, _ )) ->
-              (add_suffixed_depends id ti1);
-              (add_suffixed_depends id ti2);
-              if (is_negative_comparison id) && (keep_single_comparison_representation) then
-                AbstractClauseSet.add
-                  { num = cl.num + 1;
-                    neg = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.neg);
-                    pos = cl.pos }
-                  (AbstractClauseSet.singleton
-                      { num = cl.num + 1;
-                        neg = cl.neg;
-                        pos = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.pos) } )
-              else
-                AbstractClauseSet.add
-                  { num = cl.num + 1;
-                    neg = cl.neg;
-                    pos = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.pos) }
-                  (AbstractClauseSet.singleton
-                      { num = cl.num + 1;
-                        neg = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.neg);
-                        pos = cl.pos } )
-          
-          | (Tapp(ti, _, _), _ )
-          | ( _, Tapp(ti, _, _)) ->
-              (add_suffixed_depends id ti);
-              if (is_negative_comparison id) && (keep_single_comparison_representation) then
-                AbstractClauseSet.add
-                  { num = cl.num + 1;
-                    neg = StringSet.add (get_positive_suffixed_ident id ti) cl.neg;
-                    pos = cl.pos }
-                  (AbstractClauseSet.singleton
-                      { num = cl.num + 1;
-                        neg = cl.neg;
-                        pos = StringSet.add (get_positive_suffixed_ident id ti) cl.pos } )
-              else
-                AbstractClauseSet.add
-                  { num = cl.num + 1;
-                    neg = StringSet.add (get_positive_suffixed_ident id ti) cl.neg;
-                    pos = cl.pos }
-                  (AbstractClauseSet.singleton
-                      { num = cl.num + 1;
-                        neg = StringSet.add (get_suffixed_ident id ti) cl.neg;
-                        pos = cl.pos })
-          
-          | ( _, _ ) ->
-              AbstractClauseSet.singleton
-                { num = cl.num + 1;
-                  neg = cl.neg;
-                  pos = cl.pos }
-        end
-    
-    | Papp (id, [el1; el2], i)
-    when (comparison_to_consider id) ->
-        begin
-          match (el1, el2) with
-          | (Tapp(ti1, _, _), Tapp(ti2, _, _ )) ->
-              (add_suffixed_depends id ti1);
-              (add_suffixed_depends id ti2);
-              if (is_negative_comparison id) && (keep_single_comparison_representation) then
-                AbstractClauseSet.add
-                  { num = cl.num + 2;
-                    neg = cl.neg;
-                    pos = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.pos) }
-                  (AbstractClauseSet.singleton
-                      { num = cl.num + 2;
-                        neg = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.neg);
-                        pos = cl.pos } )
-              
-              else
-                AbstractClauseSet.add
-                  { num = cl.num + 2;
-                    neg = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.neg);
-                    pos = cl.pos }
-                  (AbstractClauseSet.singleton
-                      { num = cl.num + 2;
-                        neg = cl.neg;
-                        pos = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.pos) } )
-          
-          | (Tapp(ti, _, _), _ )
-          | ( _, Tapp(ti, _, _)) ->
-              (add_suffixed_depends id ti);
-              if (is_negative_comparison id) && (keep_single_comparison_representation) then
-                AbstractClauseSet.add
-                  { num = cl.num + 2;
-                    neg = cl.neg;
-                    pos = StringSet.add (get_positive_suffixed_ident id ti) cl.pos }
-                  (AbstractClauseSet.singleton
-                      { num = cl.num + 2;
-                        neg = StringSet.add (get_positive_suffixed_ident id ti) cl.neg;
-                        pos = cl.pos } )
-              else
-                AbstractClauseSet.add
-                  { num = cl.num + 2;
-                    neg = StringSet.add (get_suffixed_ident id ti) cl.neg;
-                    pos = cl.pos }
-                  (AbstractClauseSet.singleton
-                      { num = cl.num + 2;
-                        neg = cl.neg;
-                        pos = StringSet.add (get_suffixed_ident id ti) cl.pos })
-          
-          | ( _, _ ) ->
-              AbstractClauseSet.singleton
-                { num = cl.num + 1;
-                  neg = cl.neg;
-                  pos = cl.pos }
-        end
-    | _ ->
-        AbstractClauseSet.singleton
-          { num = cl.num + 1;
-            neg = cl.neg;
-            pos = cl.pos }
-  
-  in
-  let rec get_abstract_clauses p =
-    let rec compute_clause p acs =
-      match p with
-      | Forall (_, _, _, _, _, p) -> compute_clause p acs
-      | Exists (_, _, _, p) -> compute_clause p acs
-      | Por (p1, p2) -> compute_clause p1 (compute_clause p2 acs)
-      | _ as p ->
-          let r = ref AbstractClauseSet.empty in
-          (AbstractClauseSet.iter
-              (fun ac -> r:= AbstractClauseSet.union (add_atom p ac) !r)
-              acs);
-          !r
-    (* AbstractClauseSet.fold_right (AbstractClauseSet.union (add_atom p)) *)
-    (* acs AbstractClauseSet.empty in                                      *)
-    in
-    match p with
-    | Forall (_, _, _, _, _, p) -> get_abstract_clauses p
-    | Exists (_, _, _, p) -> get_abstract_clauses p
-    | Pand (_, _, p1, p2) ->
-        AbstractClauseSet.union
-          (get_abstract_clauses p1)
-          (get_abstract_clauses p2)
-    | Papp(_) as p ->
-    (* AbstractClauseSet.singleton *)
-        (add_atom p { num = 0; pos = StringSet.empty; neg = StringSet.empty })
-    | Pnot(_) as p ->
-    (* AbstractClauseSet.singleton *)
-        (add_atom p { num = 0; pos = StringSet.empty; neg = StringSet.empty })
-    | Por (_) as p ->
-    (* AbstractClauseSet.singleton *)
-        (compute_clause
-            p (AbstractClauseSet.singleton { num = 0; pos = StringSet.empty; neg = StringSet.empty }))
-    | Pfalse ->
-    (* AbstractClauseSet.singleton *)
-        (add_atom Pfalse { num = 0; pos = StringSet.empty; neg = StringSet.empty })
-    | Ptrue ->
-    (* AbstractClauseSet.singleton *)
-        (add_atom Ptrue { num = 0; pos = StringSet.empty; neg = StringSet.empty })
-    | Pnamed(_, _)
-    | Pfpi (_, _, _)
-    | Forallb (_, _, _)
-    | Piff (_, _)
-    | Pif (_, _, _)
-    | Pimplies (_, _, _)
-    | Pvar _ -> assert false
-  in
-  let compute_pred_graph = function
-    | Dpredicate_def (loc, ident, def) ->
-        let bl, p = def.scheme_type in
-        let rootexp = (Papp (
-              Ident.create ident,
-              List.map (fun (i, _) -> Tvar i) bl, [])) in
-        let piff = Piff (rootexp, p) in
-        let pforall = List.fold_right
-            (fun (var, tvar) pred -> Forall(false, var, var, tvar,[], pred))
-            bl piff in
-        let p' = cnf pforall in
-        begin
-          context := (p', Dpredicate_def (loc, ident, def))::!context;
-          let cls = get_abstract_clauses p' in
-          let cls = AbstractClauseSet.union cls !eq_link in
-          if debug then
-            begin
-            (* Format.printf "%a" Util.print_predicate p; display_cl_set cls *)
-            end;
-          update_pdlg (remove_percent_from_abstractclauseset cls )
-        end
-    | Daxiom (loc, ident, ps) ->
-        let p = ps.scheme_type in
-        let p' = cnf p in
-        begin
-          context := (p', Daxiom (loc, ident, ps))::!context;
-          let cls = get_abstract_clauses p' in
-          let cls = AbstractClauseSet.union cls !eq_link in
-          if debug then
-            begin
-            (* Format.printf "%a" Util.print_predicate p; display_cl_set cls *)
-            end;
-          update_pdlg (remove_percent_from_abstractclauseset cls)
-        end
-    | a ->
-        context := (Ptrue, a)::!context;
-  in
-  Queue.iter compute_pred_graph decl
+	let eq_link = ref AbstractClauseSet.empty in
+	let treated_suffixes = ref StringSet.empty in
+	(* assigns eq_link. *)
+	let add_suffixed_depends compId appId =
+		if suffixed_comparison && not (StringSet.mem (Ident.string appId) !treated_suffixes) then
+			begin (* CGS08. 1. *)
+				if equalities_linked then
+					begin
+						(* Creation des liens =_f -> = et = -> =_f *)
+						eq_link:= AbstractClauseSet.add
+							({ num = 1;
+									neg = StringSet.singleton (get_positive_suffixed_ident compId appId);
+									pos = StringSet.singleton (get_positive_ident compId);
+									cmp = IdentPairSet.empty })
+							(AbstractClauseSet.add
+									({ num = 1;
+											neg = StringSet.singleton (get_positive_ident compId);
+											pos = StringSet.singleton
+													(get_positive_suffixed_ident compId appId);
+											cmp = IdentPairSet.empty })
+									!eq_link)
+					end;
+				
+				if arith_tactic then
+					begin
+						(* Creation du trio lt_f / le_f / =_f *)
+						let eq =
+							if is_int_comparison compId then (StringSet.singleton (get_suffixed_ident t_eq_int appId))
+							else if is_real_comparison compId then (StringSet.singleton (get_suffixed_ident t_eq_real appId))
+							else (StringSet.singleton (get_suffixed_ident t_eq appId)) in
+						let lt =
+							if is_int_comparison compId then (StringSet.singleton (get_suffixed_ident t_lt_int appId))
+							else if is_real_comparison compId then (StringSet.singleton (get_suffixed_ident t_lt_real appId))
+							else (StringSet.singleton (get_suffixed_ident t_lt appId)) in
+						let le =
+							if is_int_comparison compId then (StringSet.singleton (get_suffixed_ident t_le_int appId))
+							else if is_real_comparison compId then (StringSet.singleton (get_suffixed_ident t_le_real appId))
+							else (StringSet.singleton (get_suffixed_ident t_le appId)) in
+						
+						let trio = ref AbstractClauseSet.empty in
+						trio := AbstractClauseSet.add { num = 1; neg = eq; pos = le;
+								cmp = IdentPairSet.empty } !trio;
+						trio := AbstractClauseSet.add { num = 2; neg = le; pos = eq;
+								cmp = IdentPairSet.empty } !trio;
+						trio := AbstractClauseSet.add { num = 2; neg = le; pos = lt;
+								cmp = IdentPairSet.empty } !trio;
+						trio := AbstractClauseSet.add { num = 1; neg = lt; pos = le;
+								cmp = IdentPairSet.empty } !trio;
+						
+						eq_link:= AbstractClauseSet.union !trio !eq_link
+					end;
+				
+				treated_suffixes:= StringSet.add (Ident.string appId) !treated_suffixes
+			end
+	in
+	
+	(* Construction of the Preds dependence graph. Assumes that the clause   *)
+	(* cl is in nnf.                                                         *)
+	(** @result : a set of clauses. **)
+	let add_atom atome cl =
+		match atome with
+		| Pnot (Papp (id, l, i)) when not (is_comparison id or
+				is_int_comparison id or is_real_comparison id) ->
+				begin
+					if debug then
+						begin
+						(* Format.printf "\nOperation non suffixee : %a\n"             *)
+						(* Util.print_predicate (Papp (id, l, i));                     *)
+						end;
+					AbstractClauseSet.singleton
+						{ num = cl.num + 1;
+							pos = cl.pos;
+							neg = StringSet.add (Ident.string id) cl.neg;
+							cmp = IdentPairSet.empty }
+				end
+		
+		| Papp (id, l, i) when not (is_comparison id or
+				is_int_comparison id or is_real_comparison id) ->
+				AbstractClauseSet.singleton
+					{ num = cl.num + 1;
+						neg = cl.neg;
+						pos = StringSet.add (Ident.string id) cl.pos;
+						cmp = IdentPairSet.empty }
+		| Pnot (Papp (id, [el1; el2], i)) when (comparison_to_consider id) ->
+				begin
+					match (el1, el2) with
+					| (Tapp(ti1, _, _), Tapp(ti2, _, _ )) ->
+							(add_suffixed_depends id ti1);
+							(add_suffixed_depends id ti2);
+							(* Added for [CGS08] Sec. 4.3. *)
+							if suffixed_comparison then
+								AbstractClauseSet.singleton
+									{ num = cl.num + 1;
+										neg = cl.neg;
+										pos = cl.pos;
+										cmp = IdentPairSet.add (Pair(ti1, ti2)) cl.cmp }
+							else
+								(* End of "Added for [CGS08] Sec. 4.3" *)
+								if (is_negative_comparison id) && (keep_single_comparison_representation) then
+									AbstractClauseSet.add
+										{ num = cl.num + 1;
+											neg = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.neg);
+											pos = cl.pos;
+											cmp = IdentPairSet.empty }
+										(AbstractClauseSet.singleton
+												{ num = cl.num + 1;
+													neg = cl.neg;
+													pos = StringSet.add
+															(get_positive_suffixed_ident id ti1)
+															(StringSet.add (get_positive_suffixed_ident id ti2) cl.pos);
+													cmp = IdentPairSet.empty } )
+								else
+									AbstractClauseSet.add
+										{ num = cl.num + 1;
+											neg = cl.neg;
+											pos = StringSet.add
+													(get_suffixed_ident id ti1)
+													(StringSet.add (get_suffixed_ident id ti2) cl.pos);
+											cmp = IdentPairSet.empty }
+										(AbstractClauseSet.singleton
+												{ num = cl.num + 1;
+													neg = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.neg);
+													pos = cl.pos;
+													cmp = IdentPairSet.empty } )
+					
+					| (Tapp(ti, _, _), _ )
+					| ( _, Tapp(ti, _, _)) ->
+							(add_suffixed_depends id ti);
+							if (is_negative_comparison id) && (keep_single_comparison_representation) then
+								AbstractClauseSet.add
+									{ num = cl.num + 1;
+										neg = StringSet.add (get_positive_suffixed_ident id ti) cl.neg;
+										pos = cl.pos;
+										cmp = IdentPairSet.empty }
+									(AbstractClauseSet.singleton
+											{ num = cl.num + 1;
+												neg = cl.neg;
+												pos = StringSet.add (get_positive_suffixed_ident id ti) cl.pos;
+												cmp = IdentPairSet.empty } )
+							else
+								AbstractClauseSet.add
+									{ num = cl.num + 1;
+										neg = StringSet.add (get_positive_suffixed_ident id ti) cl.neg;
+										pos = cl.pos;
+										cmp = IdentPairSet.empty }
+									(AbstractClauseSet.singleton
+											{ num = cl.num + 1;
+												neg = StringSet.add (get_suffixed_ident id ti) cl.neg;
+												pos = cl.pos;
+												cmp = IdentPairSet.empty })
+					
+					| ( _, _ ) ->
+							AbstractClauseSet.singleton
+								{ num = cl.num + 1;
+									neg = cl.neg;
+									pos = cl.pos;
+									cmp = IdentPairSet.empty }
+				end
+		
+		| Papp (id, [el1; el2], i) when (comparison_to_consider id) ->
+				begin
+					match (el1, el2) with
+					| (Tapp(ti1, _, _), Tapp(ti2, _, _ )) ->
+							(add_suffixed_depends id ti1);
+							(add_suffixed_depends id ti2);
+							(* Added for [CGS08] Sec. 4.3 *)
+							if suffixed_comparison then
+								AbstractClauseSet.singleton
+									{ num = cl.num + 1;
+										neg = cl.neg;
+										pos = cl.pos;
+										cmp = IdentPairSet.add (Pair(ti1, ti2)) cl.cmp }
+							else
+								(* End of "Added for [CGS08] Sec. 4.3" *)
+								if (is_negative_comparison id) && (keep_single_comparison_representation) then
+									AbstractClauseSet.add
+										{ num = cl.num + 2;
+											neg = cl.neg;
+											pos = StringSet.add
+													(get_positive_suffixed_ident id ti1)
+													(StringSet.add (get_positive_suffixed_ident id ti2) cl.pos);
+											cmp = IdentPairSet.empty }
+										(AbstractClauseSet.singleton
+												{ num = cl.num + 2;
+													neg = StringSet.add (get_positive_suffixed_ident id ti1) (StringSet.add (get_positive_suffixed_ident id ti2) cl.neg);
+													pos = cl.pos;
+													cmp = IdentPairSet.empty } )
+								else
+									AbstractClauseSet.add
+										{ num = cl.num + 2;
+											neg = StringSet.add (get_suffixed_ident id ti1) (StringSet.add (get_suffixed_ident id ti2) cl.neg);
+											pos = cl.pos;
+											cmp = IdentPairSet.empty }
+										(AbstractClauseSet.singleton
+												{ num = cl.num + 2;
+													neg = cl.neg;
+													pos = StringSet.add
+															(get_suffixed_ident id ti1)
+															(StringSet.add (get_suffixed_ident id ti2) cl.pos);
+													cmp = IdentPairSet.empty } )
+					
+					| (Tapp(ti, _, _), _ )
+					| ( _, Tapp(ti, _, _)) ->
+							(add_suffixed_depends id ti);
+							if (is_negative_comparison id) && (keep_single_comparison_representation) then
+								AbstractClauseSet.add
+									{ num = cl.num + 2;
+										neg = cl.neg;
+										pos = StringSet.add (get_positive_suffixed_ident id ti) cl.pos;
+										cmp = IdentPairSet.empty }
+									(AbstractClauseSet.singleton
+											{ num = cl.num + 2;
+												neg = StringSet.add (get_positive_suffixed_ident id ti) cl.neg;
+												pos = cl.pos;
+												cmp = IdentPairSet.empty } )
+							else
+								AbstractClauseSet.add
+									{ num = cl.num + 2;
+										neg = StringSet.add (get_suffixed_ident id ti) cl.neg;
+										pos = cl.pos;
+										cmp = IdentPairSet.empty }
+									(AbstractClauseSet.singleton
+											{ num = cl.num + 2;
+												neg = cl.neg;
+												pos = StringSet.add (get_suffixed_ident id ti) cl.pos;
+												cmp = IdentPairSet.empty })
+					
+					| ( _, _ ) ->
+							AbstractClauseSet.singleton
+								{ num = cl.num + 1;
+									neg = cl.neg;
+									pos = cl.pos;
+									cmp = IdentPairSet.empty }
+				end
+		| _ ->
+				AbstractClauseSet.singleton
+					{ num = cl.num + 1;
+						neg = cl.neg;
+						pos = cl.pos;
+						cmp = IdentPairSet.empty }
+	
+	in
+	let rec get_abstract_clauses p =
+		let rec compute_clause p acs =
+			match p with
+			| Forall (_, _, _, _, _, p) -> compute_clause p acs
+			| Exists (_, _, _, p) -> compute_clause p acs
+			| Por (p1, p2) -> compute_clause p1 (compute_clause p2 acs)
+			| _ as p ->
+					let r = ref AbstractClauseSet.empty in
+					(AbstractClauseSet.iter
+							(fun ac -> r:= AbstractClauseSet.union (add_atom p ac) !r)
+							acs);
+					!r
+		(* AbstractClauseSet.fold_right (AbstractClauseSet.union (add_atom p)) *)
+		(* acs AbstractClauseSet.empty in                                      *)
+		in
+		match p with
+		| Forall (_, _, _, _, _, p) -> get_abstract_clauses p
+		| Exists (_, _, _, p) -> get_abstract_clauses p
+		| Pand (_, _, p1, p2) ->
+				AbstractClauseSet.union
+					(get_abstract_clauses p1)
+					(get_abstract_clauses p2)
+		| Papp(_) as p ->
+		(* AbstractClauseSet.singleton *)
+				(add_atom p { num = 0; pos = StringSet.empty; neg = StringSet.empty;
+							cmp = IdentPairSet.empty })
+		| Pnot(_) as p ->
+		(* AbstractClauseSet.singleton *)
+				(add_atom p { num = 0; pos = StringSet.empty; neg = StringSet.empty;
+							cmp = IdentPairSet.empty })
+		| Por (_) as p ->
+		(* AbstractClauseSet.singleton *)
+				(compute_clause
+						p (AbstractClauseSet.singleton {
+									num = 0;
+									pos = StringSet.empty;
+									neg = StringSet.empty;
+									cmp = IdentPairSet.empty }))
+		| Pfalse ->
+		(* AbstractClauseSet.singleton *)
+				(add_atom Pfalse { num = 0; pos = StringSet.empty; neg = StringSet.empty;
+							cmp = IdentPairSet.empty })
+		| Ptrue ->
+		(* AbstractClauseSet.singleton *)
+				(add_atom Ptrue { num = 0; pos = StringSet.empty; neg = StringSet.empty;
+							cmp = IdentPairSet.empty })
+		| Pnamed(_, _)
+		| Pfpi (_, _, _)
+		| Forallb (_, _, _)
+		| Piff (_, _)
+		| Pif (_, _, _)
+		| Pimplies (_, _, _)
+		| Pvar _ -> assert false
+	in
+	let compute_pred_graph = function
+		| Dpredicate_def (loc, ident, def) ->
+				let bl, p = def.scheme_type in
+				let rootexp = (Papp (
+							Ident.create ident,
+							List.map (fun (i, _) -> Tvar i) bl, [])) in
+				let piff = Piff (rootexp, p) in
+				let pforall = List.fold_right
+						(fun (var, tvar) pred -> Forall(false, var, var, tvar,[], pred))
+						bl piff in
+				let p' = cnf pforall in
+				begin
+					context := (p', Dpredicate_def (loc, ident, def))::!context;
+					let cls = get_abstract_clauses p' in
+					let cls = AbstractClauseSet.union cls !eq_link in
+					if debug then
+						begin
+						(* Format.printf "%a" Util.print_predicate p; display_cl_set   *)
+						(* cls                                                         *)
+						end;
+					update_pdlg (remove_percent_from_abstractclauseset cls )
+				end
+		| Daxiom (loc, ident, ps) ->
+		(* loc: , ident: , ps: *)
+				let p = ps.scheme_type in
+				let p' = cnf p in
+				begin
+					context := (p', Daxiom (loc, ident, ps))::!context;
+					let cls = get_abstract_clauses p' in
+					let cls = AbstractClauseSet.union cls !eq_link in
+					if debug then
+						begin
+						(* Format.printf "%a" Util.print_predicate p; display_cl_set   *)
+						(* cls                                                         *)
+						end;
+					update_pdlg (remove_percent_from_abstractclauseset cls)
+				end
+		| a ->
+				context := (Ptrue, a)::!context;
+	in
+	Queue.iter compute_pred_graph decl
 
 (** End of graph of predicates**)
 
@@ -1349,57 +1475,57 @@ end
 
 module Dij = Dijkstra(PdlGraph)(W)
 
-let compute_sequence_of_predicates concl_preds = 
-  (* compute the weight of the shortest path from 
-     the node elem and nodes of the conclusion*)
-  let max = ref 0 in 
-  let dij elem = 
-    let dij_and_comp v2 acc = 
-      try 
-	(* Dijkstra from elem to node v2 of the conclusion*)
-	let (_,d) = Dij.shortest_path !pdlg  elem v2 in
-	(*update max*)
-	max := if d > !max then d else !max ;
-	(* memorizing the sohortest path*)
-	if  (acc == (-1) ) || (d < acc) then 
-	  d
-	else
-	  acc
-      with Not_found->
-	(-1)  
-    in
-    PdlSet.fold  dij_and_comp concl_preds (-1)
-  in
-
-  let hash_lits : (int,'a) Hashtbl.t = Hashtbl.create 10 in 
-  (* adds into L[dij] the node elem  where dij is the dijkstra result.
-      If dij is -1, then we set L[max+1] *)
-  PdlSet.iter
-    (fun elem ->
-       let w = dij elem in
-       try 
-	 let l_i = Hashtbl.find hash_lits w in 
-	 if w != (-1) then 
-	   Hashtbl.replace hash_lits w (PdlSet.add elem l_i) 
-	 else
-	   Hashtbl.replace hash_lits (!max +1) (PdlSet.add elem l_i) 
-       with Not_found ->
-	   Hashtbl.add hash_lits w (PdlSet.singleton elem )
-    ) !vSet ;
-  
-    if debug then
-      begin
-	Format.printf "Liste of predicates \n";
-	for i = 0 to 10 do
-	  Format.printf "L[%d] is " i ;
-	  try 
-	    let l_i = Hashtbl.find hash_lits i in
-	    display_symb_of_pdl_set l_i
-	  with _ ->
-	    Format.printf " empty \n";
-	done; 
-      end;
-    hash_lits
+let compute_sequence_of_predicates concl_preds =
+	(* compute the weight of the shortest path from the node elem and nodes of *)
+	(* the conclusion                                                          *)
+	let max = ref 0 in
+	let dij elem =
+		let dij_and_comp v2 acc =
+			try
+			(* Dijkstra from elem to node v2 of the conclusion *)
+				let (_, d) = Dij.shortest_path !pdlg elem v2 in
+				(* update max *)
+				max := if d > !max then d else !max;
+				(* memorizing the shortest path *)
+				if (acc == (- 1)) || (d < acc) then
+					d
+				else
+					acc
+			with Not_found ->
+					(- 1)
+		in
+		PdlSet.fold dij_and_comp concl_preds (- 1)
+	in
+	
+	let hash_lits : (int,'a) Hashtbl.t = Hashtbl.create 10 in
+	(* adds into L[dij] the node elem where dij is the dijkstra result. If dij *)
+	(* is -1, then we set L[max+1]                                             *)
+	PdlSet.iter
+		(fun elem ->
+					let w = dij elem in
+					try
+						let l_i = Hashtbl.find hash_lits w in
+						if w != (- 1) then
+							Hashtbl.replace hash_lits w (PdlSet.add elem l_i)
+						else
+							Hashtbl.replace hash_lits (!max + 1) (PdlSet.add elem l_i)
+					with Not_found ->
+							Hashtbl.add hash_lits w (PdlSet.singleton elem )
+		) !vSet;
+	
+	if debug then
+		begin
+			Format.printf "List of predicates \n";
+			for i = 0 to 10 do
+				Format.printf "L[%d] is " i;
+				try
+					let l_i = Hashtbl.find hash_lits i in
+					display_symb_of_pdl_set l_i
+				with _ ->
+						Format.printf " empty \n";
+			done;
+		end;
+	hash_lits
 
 
 
@@ -1916,6 +2042,10 @@ let reset () =
   v_count := 0;
   hyp_count := 0
 
+(* Module entry point. *)
+(* @param q *)
+(* @param decl *)
+(* assigns ??? *)
 let reduce q decl =
   reset();
   
