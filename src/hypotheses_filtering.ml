@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.55 2008-06-13 12:31:04 giorgetti Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.56 2008-07-09 13:53:34 giorgetti Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -44,8 +44,8 @@
    2) Variables of hypothesis are stored into a graph where 
    - a variable is represented by a vertex
    - a predicate linking some variables is represented by 
-   the complete graph with all the vertices 
-   corresponding to the variables 
+   the complete graph with all the vertices corresponding to the
+   variables 
    3) A breadth-first search algorithm, bounded by the constant pb
    computes the set of relevant predicates P
    4) A breadth-first search algorithm, bounded by the constant k
