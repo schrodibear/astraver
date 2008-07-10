@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.90 2008-07-04 14:29:46 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.91 2008-07-10 11:57:17 sboldo Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -124,6 +124,13 @@ let print_term fmt t =
 	fprintf fmt "zwf_zero"
     | Tvar id ->
 	Ident.print fmt id
+    | Tapp (id, [a; Tapp (id', [b], _)], _) 
+      when id == t_pow_real && id' == t_real_of_int ->
+	fprintf fmt "(@[%a@ ^ %a@])" print3 a print3 b
+    | Tapp (id, [a;b], _) when id == t_pow_real ->
+	fprintf fmt "(@[%a@ ^ %a@])" print3 a print3 b
+    | Tapp (id, [a], _) when id == t_abs_real ->
+	fprintf fmt "(@[abs@ (%a) @])" print3 a
     | Tapp (id, [t], _) when id == t_neg_int || id == t_neg_real ->
 	fprintf fmt "-%a" print3 t
     | Tapp (id, [a; b; c], _) when id == if_then_else -> 
