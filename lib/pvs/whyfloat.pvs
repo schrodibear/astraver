@@ -82,7 +82,7 @@ BEGIN
                   d_to_exact(f1)*d_to_exact(f2),
                   d_to_model(f1)*d_to_model(f2))
 
-  div_double(m:mode,f1,f2:double | d_to_r(f2) /= 0 
+  div_double(m:mode,f1:double,f2:double | d_to_r(f2) /= 0 
           AND d_to_exact(f2) /= 0 AND d_to_model(f2) /= 0):double =
      r_to_d_aux(m)(d_to_r(f1)/d_to_r(f2), 
                   d_to_exact(f1)/d_to_exact(f2),
