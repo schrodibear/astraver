@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.16 2008-07-07 15:33:03 marche Exp $ *)
+(* $Id: jc_name.ml,v 1.17 2008-07-10 13:15:38 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -38,6 +38,7 @@ open Output
 let alloc_table_type_name = "alloc_table"
 let tag_table_type_name = "tag_table"
 let pointer_type_name = "pointer"
+let pset_type_name = "pset"
 let memory_type_name = "memory"
 let tag_id_type_name = "tag_id"
 

@@ -66,6 +66,12 @@ let raw_pointer_type ty =
     logic_type_args = [ty];
   }
 
+let raw_pset_type ty =
+  {
+    logic_type_name = pset_type_name;
+    logic_type_args = [ty];
+  }
+
 let pointer_type tov = raw_pointer_type (tag_or_variant_model_type tov)
 
 let tag_table_type tov = 
@@ -80,11 +86,14 @@ let tag_id_type tov =
     logic_type_args = [tag_or_variant_model_type tov];
   }
 
-let alloc_table_type tov =
+let raw_alloc_table_type ty =
   {
     logic_type_name = alloc_table_type_name;
-    logic_type_args = [tag_or_variant_model_type tov];
+    logic_type_args = [ty];
   }
+
+let alloc_table_type tov = 
+  raw_alloc_table_type (tag_or_variant_model_type tov)
 
 let tr_native_type t =
   match t with

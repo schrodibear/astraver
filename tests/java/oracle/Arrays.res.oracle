@@ -460,7 +460,7 @@ WHY=why --no-arrays  -split-user-conj -explain -locs Arrays.loc
 
 GWHY=gwhy-bin --no-arrays  -split-user-conj -explain -locs Arrays.loc
 
-JESSIELIBFILE=/usr/local/lib/jessie/why/jessie.why
+JESSIELIBFILE=/usr/local/share/frama-c/jessie/why/jessie.why
 
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
@@ -505,7 +505,7 @@ isabelle: isabelle/Arrays_why.thy
 
 isabelle/%_why.thy: why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILE) why/$*.why
-	cp -f /usr/local/lib/jessie/isabelle/jessie_why.thy isabelle/
+	cp -f /usr/local/share/frama-c/jessie/isabelle/jessie_why.thy isabelle/
 
 simplify: simplify/Arrays_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
@@ -965,34 +965,6 @@ logic Throwable_tag:  -> Object tag_id
 
 axiom Throwable_parenttag_Object : parenttag(Throwable_tag, Object_tag)
 
-predicate is_max(Object_alloc_table:Object alloc_table,
- intM_intP_at_L:(Object,
- int) memory,
- t:Object pointer,
- i:int,
- l:int) =
- (Non_null_intM(Object_alloc_table, t)
- and (le_int((0), i)
-     and (lt_int(i, l)
-         and (le_int(l, add_int(offset_max(Object_alloc_table, t), (1)))
-             and (forall j:int.
-                  ((le_int((0), j) and lt_int(j, l)) ->
-                   le_int(select(intM_intP_at_L, shift(t, j)),
-                   select(intM_intP_at_L, shift(t, i)))))))))
-
-axiom full_separated_is_max_intP :
- (forall tmp:Object pointer.
-  (forall tmpval:int.
-   (forall l:int.
-    (forall i:int.
-     (forall t:Object pointer.
-      (forall intM_intP_at_L:(Object,
-       int) memory.
-       (forall Object_alloc_table:Object alloc_table.
-        (full_separated(tmp, t) ->
-         (is_max(Object_alloc_table, intM_intP_at_L, t, i, l)
-         <-> is_max(Object_alloc_table, intM_intP_at_L, t, i, l))))))))))
-
 logic intM_tag:  -> Object tag_id
 
 axiom intM_parenttag_Object : parenttag(intM_tag, Object_tag)
@@ -1007,6 +979,21 @@ axiom interface_tags :
  (forall x:interface pointer.
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
+
+predicate is_max(Object_alloc_table:Object alloc_table,
+ intM_intP_at_L:(Object,
+ int) memory,
+ t:Object pointer,
+ i:int,
+ l:int) =
+ (Non_null_intM(Object_alloc_table, t)
+ and (le_int((0), i)
+     and (lt_int(i, l)
+         and (le_int(l, add_int(offset_max(Object_alloc_table, t), (1)))
+             and (forall j:int.
+                  ((le_int((0), j) and lt_int(j, l)) ->
+                   le_int(select(intM_intP_at_L, shift(t, j)),
+                   select(intM_intP_at_L, shift(t, i)))))))))
 
 predicate valid_struct_Object(p:Object pointer,
  a:int,
@@ -1800,7 +1787,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po51.why">
-      <location file = "why/Arrays.why" line = "617" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "604" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po52.why">
@@ -1998,7 +1985,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po98.why">
-      <location file = "why/Arrays.why" line = "791" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "778" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po99.why">
@@ -2167,7 +2154,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po9.why">
-      <location file = "why/Arrays.why" line = "436" begin = "32" end = "158"/>
+      <location file = "why/Arrays.why" line = "423" begin = "32" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po10.why">
@@ -2579,6 +2566,9 @@ logic pset_range_right : 'a1 pset, int -> 'a1 pset
 
 logic in_pset : 'a1 pointer, 'a1 pset -> prop
 
+predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
 axiom in_pset_singleton:
@@ -2847,28 +2837,6 @@ logic Throwable_tag :  -> Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
-predicate is_max(Object_alloc_table: Object alloc_table,
-  intM_intP_at_L: (Object, int) memory, t: Object pointer, i: int, l: int) =
-  (Non_null_intM(Object_alloc_table, t) and
-   ((0 <= i) and
-    ((i < l) and
-     ((l <= (offset_max(Object_alloc_table, t) + 1)) and
-      (forall j:int.
-        (((0 <= j) and (j < l)) -> (select(intM_intP_at_L, shift(t,
-         j)) <= select(intM_intP_at_L, shift(t, i)))))))))
-
-axiom full_separated_is_max_intP:
-  (forall tmp:Object pointer.
-    (forall tmpval:int.
-      (forall l:int.
-        (forall i:int.
-          (forall t:Object pointer.
-            (forall intM_intP_at_L:(Object, int) memory.
-              (forall Object_alloc_table:Object alloc_table.
-                (full_separated(tmp, t) ->
-                 (is_max(Object_alloc_table, intM_intP_at_L, t, i, l) <->
-                  is_max(Object_alloc_table, intM_intP_at_L, t, i, l))))))))))
-
 logic intM_tag :  -> Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
@@ -2883,6 +2851,16 @@ axiom interface_tags:
   (forall x:interface pointer.
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
+
+predicate is_max(Object_alloc_table: Object alloc_table,
+  intM_intP_at_L: (Object, int) memory, t: Object pointer, i: int, l: int) =
+  (Non_null_intM(Object_alloc_table, t) and
+   ((0 <= i) and
+    ((i < l) and
+     ((l <= (offset_max(Object_alloc_table, t) + 1)) and
+      (forall j:int.
+        (((0 <= j) and (j < l)) -> (select(intM_intP_at_L, shift(t,
+         j)) <= select(intM_intP_at_L, shift(t, i)))))))))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

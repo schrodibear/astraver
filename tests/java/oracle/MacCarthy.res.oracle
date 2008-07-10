@@ -159,7 +159,7 @@ end = 18
 
 [Object_equals]
 name = "Method equals"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 122
 begin = 19
 end = 25
@@ -190,7 +190,7 @@ end = 13
 
 [Object_notify]
 name = "Method notify"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 243
 begin = 29
 end = 35
@@ -211,63 +211,63 @@ end = -1
 
 [Object_wait_long_int]
 name = "Method wait"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 386
 begin = 22
 end = 26
 
 [Object_wait_long]
 name = "Method wait"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 333
 begin = 29
 end = 33
 
 [Object_hashCode]
 name = "Method hashCode"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 74
 begin = 22
 end = 30
 
 [Object_notifyAll]
 name = "Method notifyAll"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 267
 begin = 29
 end = 38
 
 [Object_toString]
 name = "Method toString"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 207
 begin = 18
 end = 26
 
 [Object_registerNatives]
 name = "Method registerNatives"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 22
 begin = 31
 end = 46
 
 [Object_clone]
 name = "Method clone"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 184
 begin = 28
 end = 33
 
 [Object_wait]
 name = "Method wait"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 430
 begin = 22
 end = 26
 
 [Object_finalize]
 name = "Method finalize"
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 481
 begin = 19
 end = 27
@@ -285,7 +285,7 @@ WHY=why --no-arrays  -split-user-conj -explain -locs MacCarthy.loc
 
 GWHY=gwhy-bin --no-arrays  -split-user-conj -explain -locs MacCarthy.loc
 
-JESSIELIBFILE=/usr/local/lib/jessie/why/jessie.why
+JESSIELIBFILE=/usr/local/share/frama-c/jessie/why/jessie.why
 
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
@@ -330,7 +330,7 @@ isabelle: isabelle/MacCarthy_why.thy
 
 isabelle/%_why.thy: why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILE) why/$*.why
-	cp -f /usr/local/lib/jessie/isabelle/jessie_why.thy isabelle/
+	cp -f /usr/local/share/frama-c/jessie/isabelle/jessie_why.thy isabelle/
 
 simplify: simplify/MacCarthy_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
@@ -384,13 +384,13 @@ clean:
 
 ========== file tests/java/MacCarthy.loc ==========
 [JC_40]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 430
 begin = 22
 end = 26
 
 [JC_41]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 481
 begin = 19
 end = 27
@@ -402,7 +402,7 @@ begin = -1
 end = -1
 
 [JC_43]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 481
 begin = 19
 end = 27
@@ -512,7 +512,7 @@ begin = -1
 end = -1
 
 [JC_11]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 22
 begin = 31
 end = 46
@@ -524,13 +524,13 @@ begin = -1
 end = -1
 
 [JC_13]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 22
 begin = 31
 end = 46
 
 [JC_14]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 74
 begin = 22
 end = 30
@@ -542,13 +542,13 @@ begin = -1
 end = -1
 
 [JC_16]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 74
 begin = 22
 end = 30
 
 [JC_17]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 122
 begin = 19
 end = 25
@@ -568,13 +568,13 @@ begin = -1
 end = -1
 
 [JC_19]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 122
 begin = 19
 end = 25
 
 [JC_20]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 184
 begin = 28
 end = 33
@@ -586,13 +586,13 @@ begin = -1
 end = -1
 
 [JC_22]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 184
 begin = 28
 end = 33
 
 [JC_23]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 207
 begin = 18
 end = 26
@@ -604,13 +604,13 @@ begin = -1
 end = -1
 
 [JC_25]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 207
 begin = 18
 end = 26
 
 [JC_26]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 243
 begin = 29
 end = 35
@@ -622,13 +622,13 @@ begin = -1
 end = -1
 
 [JC_28]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 243
 begin = 29
 end = 35
 
 [JC_29]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 267
 begin = 29
 end = 38
@@ -640,7 +640,7 @@ begin = -1
 end = -1
 
 [JC_31]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 267
 begin = 29
 end = 38
@@ -662,7 +662,7 @@ begin = 22
 end = 25
 
 [JC_32]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 333
 begin = 29
 end = 33
@@ -674,13 +674,13 @@ begin = -1
 end = -1
 
 [JC_34]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 333
 begin = 29
 end = 33
 
 [JC_35]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 386
 begin = 22
 end = 26
@@ -692,13 +692,13 @@ begin = -1
 end = -1
 
 [JC_37]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 386
 begin = 22
 end = 26
 
 [JC_38]
-file = "/usr/local/lib/krakatoa/java_api/java/lang/Object.java"
+file = "/usr/local/share/frama-c/krakatoa/java_api/java/lang/Object.java"
 line = 430
 begin = 22
 end = 26
@@ -1427,6 +1427,9 @@ logic pset_range_left : 'a1 pset, int -> 'a1 pset
 logic pset_range_right : 'a1 pset, int -> 'a1 pset
 
 logic in_pset : 'a1 pointer, 'a1 pset -> prop
+
+predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
 
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 

@@ -44,9 +44,9 @@ case $1 in
 	mycat $d/why/$b'_ctx'.why	
 	for i in $d/why/$b'_po'*.why; do mycat $i; done
 	echo "========== simplify execution =========="
-	DPOPT=-no-timings TIMEOUT=1 make --quiet -C $d -f $b.makefile simplify	
+	DPOPT=-no-timings TIMEOUT=10 make --quiet -C $d -f $b.makefile simplify	
 	echo "========== ergo execution =========="
-	DPOPT=-no-timings TIMEOUT=1 make --quiet -C $d -f $b.makefile ergo	
+	DPOPT=-no-timings TIMEOUT=10 make --quiet -C $d -f $b.makefile ergo	
 	;;
   *.c)
 	b=`basename $1 .c`

@@ -374,6 +374,10 @@ logic pset_range_right : 'z pset, int -> 'z pset (* l(a..) *)
 
 logic in_pset : 't pointer, 't pset -> prop
 
+predicate pset_disjoint(ps1:'t pset, ps2:'t pset) =
+  forall p:'t pointer.
+    not (in_pset(p,ps1) and in_pset(p,ps2))
+
 axiom in_pset_empty:
   forall p:'t pointer. not in_pset(p,pset_empty)
 

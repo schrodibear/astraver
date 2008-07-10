@@ -154,7 +154,7 @@ WHY=why --no-arrays  -split-user-conj -explain -locs NameConflicts.loc
 
 GWHY=gwhy-bin --no-arrays  -split-user-conj -explain -locs NameConflicts.loc
 
-JESSIELIBFILE=/usr/local/lib/jessie/why/jessie.why
+JESSIELIBFILE=/usr/local/share/frama-c/jessie/why/jessie.why
 
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
@@ -199,7 +199,7 @@ isabelle: isabelle/NameConflicts_why.thy
 
 isabelle/%_why.thy: why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILE) why/$*.why
-	cp -f /usr/local/lib/jessie/isabelle/jessie_why.thy isabelle/
+	cp -f /usr/local/share/frama-c/jessie/isabelle/jessie_why.thy isabelle/
 
 simplify: simplify/NameConflicts_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
@@ -1192,6 +1192,9 @@ logic pset_range_left : 'a1 pset, int -> 'a1 pset
 logic pset_range_right : 'a1 pset, int -> 'a1 pset
 
 logic in_pset : 'a1 pointer, 'a1 pset -> prop
+
+predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
 
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 

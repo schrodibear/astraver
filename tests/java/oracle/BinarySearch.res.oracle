@@ -278,7 +278,7 @@ WHY=why --no-arrays  -split-user-conj -explain -locs BinarySearch.loc
 
 GWHY=gwhy-bin --no-arrays  -split-user-conj -explain -locs BinarySearch.loc
 
-JESSIELIBFILE=/usr/local/lib/jessie/why/jessie.why
+JESSIELIBFILE=/usr/local/share/frama-c/jessie/why/jessie.why
 
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
@@ -323,7 +323,7 @@ isabelle: isabelle/BinarySearch_why.thy
 
 isabelle/%_why.thy: why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILE) why/$*.why
-	cp -f /usr/local/lib/jessie/isabelle/jessie_why.thy isabelle/
+	cp -f /usr/local/share/frama-c/jessie/isabelle/jessie_why.thy isabelle/
 
 simplify: simplify/BinarySearch_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
@@ -731,30 +731,6 @@ predicate eq_short(x:short,
  y:short) =
  eq_int(integer_of_short(x), integer_of_short(y))
 
-predicate is_sorted(Object_alloc_table:Object alloc_table,
- intM_intP_at_L:(Object,
- int32) memory,
- t:Object pointer) =
- (Non_null_intM(Object_alloc_table, t)
- and (forall i:int.
-      (forall j:int.
-       ((le_int((0), i)
-        and (le_int(i, j)
-            and lt_int(j, add_int(offset_max(Object_alloc_table, t), (1))))) ->
-        le_int(integer_of_int32(select(intM_intP_at_L, shift(t, i))),
-        integer_of_int32(select(intM_intP_at_L, shift(t, j))))))))
-
-axiom full_separated_is_sorted_intP :
- (forall tmp:Object pointer.
-  (forall tmpval:int32.
-   (forall t:Object pointer.
-    (forall intM_intP_at_L:(Object,
-     int32) memory.
-     (forall Object_alloc_table:Object alloc_table.
-      (full_separated(tmp, t) ->
-       (is_sorted(Object_alloc_table, intM_intP_at_L, t)
-       <-> is_sorted(Object_alloc_table, intM_intP_at_L, t))))))))
-
 logic int32_of_integer: int -> int32
 
 axiom int32_coerce :
@@ -781,6 +757,19 @@ axiom interface_tags :
  (forall x:interface pointer.
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
+
+predicate is_sorted(Object_alloc_table:Object alloc_table,
+ intM_intP_at_L:(Object,
+ int32) memory,
+ t:Object pointer) =
+ (Non_null_intM(Object_alloc_table, t)
+ and (forall i:int.
+      (forall j:int.
+       ((le_int((0), i)
+        and (le_int(i, j)
+            and lt_int(j, add_int(offset_max(Object_alloc_table, t), (1))))) ->
+        le_int(integer_of_int32(select(intM_intP_at_L, shift(t, i))),
+        integer_of_int32(select(intM_intP_at_L, shift(t, j))))))))
 
 logic long_of_integer: int -> long
 
@@ -1351,7 +1340,7 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "why/BinarySearch.why" line = "167" begin = "0" end = "206"/>
+      <location file = "why/BinarySearch.why" line = "156" begin = "0" end = "206"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -1362,7 +1351,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "why/BinarySearch.why" line = "629" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "618" begin = "49" end = "208"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
@@ -1878,6 +1867,9 @@ logic pset_range_right : 'a1 pset, int -> 'a1 pset
 
 logic in_pset : 'a1 pointer, 'a1 pset -> prop
 
+predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
 axiom in_pset_singleton:
@@ -2202,26 +2194,6 @@ logic integer_of_short : short -> int
 predicate eq_short(x: short, y: short) =
   (integer_of_short(x) = integer_of_short(y))
 
-predicate is_sorted(Object_alloc_table: Object alloc_table,
-  intM_intP_at_L: (Object, int32) memory, t: Object pointer) =
-  (Non_null_intM(Object_alloc_table, t) and
-   (forall i:int.
-     (forall j:int.
-       (((0 <= i) and
-         ((i <= j) and (j < (offset_max(Object_alloc_table, t) + 1)))) ->
-        (integer_of_int32(select(intM_intP_at_L, shift(t,
-        i))) <= integer_of_int32(select(intM_intP_at_L, shift(t, j))))))))
-
-axiom full_separated_is_sorted_intP:
-  (forall tmp:Object pointer.
-    (forall tmpval:int32.
-      (forall t:Object pointer.
-        (forall intM_intP_at_L:(Object, int32) memory.
-          (forall Object_alloc_table:Object alloc_table.
-            (full_separated(tmp, t) ->
-             (is_sorted(Object_alloc_table, intM_intP_at_L, t) <->
-              is_sorted(Object_alloc_table, intM_intP_at_L, t))))))))
-
 logic int32_of_integer : int -> int32
 
 axiom int32_coerce:
@@ -2248,6 +2220,16 @@ axiom interface_tags:
   (forall x:interface pointer.
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
+
+predicate is_sorted(Object_alloc_table: Object alloc_table,
+  intM_intP_at_L: (Object, int32) memory, t: Object pointer) =
+  (Non_null_intM(Object_alloc_table, t) and
+   (forall i:int.
+     (forall j:int.
+       (((0 <= i) and
+         ((i <= j) and (j < (offset_max(Object_alloc_table, t) + 1)))) ->
+        (integer_of_int32(select(intM_intP_at_L, shift(t,
+        i))) <= integer_of_int32(select(intM_intP_at_L, shift(t, j))))))))
 
 logic long_of_integer : int -> long
 
@@ -4698,21 +4680,21 @@ goal BinarySearch_binary_search2_ensures_correctness_po_8:
 why -simplify [...] why/BinarySearch.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/BinarySearch_why.sx  : ................?......................#...... (44/0/1/1/0)
+simplify/BinarySearch_why.sx  : ................?......................?...... (44/0/2/0/0)
 total   :  46
 valid   :  44 ( 96%)
 invalid :   0 (  0%)
-unknown :   1 (  2%)
-timeout :   1 (  2%)
+unknown :   2 (  4%)
+timeout :   0 (  0%)
 failure :   0 (  0%)
 ========== ergo execution ==========
 why --why [...] why/BinarySearch.why
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : .............................................. (46/0/0/0/0)
+why/BinarySearch_why.why      : ..........#........................##.....##.. (41/0/0/5/0)
 total   :  46
-valid   :  46 (100%)
+valid   :  41 ( 89%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   0 (  0%)
+timeout :   5 ( 11%)
 failure :   0 (  0%)

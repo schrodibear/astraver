@@ -336,7 +336,7 @@ WHY=why --no-arrays  -split-user-conj -explain -locs Creation.loc
 
 GWHY=gwhy-bin --no-arrays  -split-user-conj -explain -locs Creation.loc
 
-JESSIELIBFILE=/usr/local/lib/jessie/why/jessie.why
+JESSIELIBFILE=/usr/local/share/frama-c/jessie/why/jessie.why
 
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
@@ -381,7 +381,7 @@ isabelle: isabelle/Creation_why.thy
 
 isabelle/%_why.thy: why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILE) why/$*.why
-	cp -f /usr/local/lib/jessie/isabelle/jessie_why.thy isabelle/
+	cp -f /usr/local/share/frama-c/jessie/isabelle/jessie_why.thy isabelle/
 
 simplify: simplify/Creation_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
@@ -2247,6 +2247,9 @@ logic pset_range_right : 'a1 pset, int -> 'a1 pset
 
 logic in_pset : 'a1 pointer, 'a1 pset -> prop
 
+predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
 axiom in_pset_singleton:
@@ -3082,10 +3085,10 @@ failure :   0 (  0%)
 why --why [...] why/Creation.why
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Creation_why.why          : .......?......??. (14/0/3/0/0)
+why/Creation_why.why          : .......#......??. (14/0/2/1/0)
 total   :  17
 valid   :  14 ( 82%)
 invalid :   0 (  0%)
-unknown :   3 ( 18%)
-timeout :   0 (  0%)
+unknown :   2 ( 12%)
+timeout :   1 (  6%)
 failure :   0 (  0%)
