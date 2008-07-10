@@ -3,14 +3,14 @@
 /*  The Why platform for program certification                            */
 /*  Copyright (C) 2002-2008                                               */
 /*    Romain BARDOU                                                       */
-/*    Jean-François COUCHOT                                               */
+/*    Jean-FranÃ§ois COUCHOT                                               */
 /*    Mehdi DOGGUY                                                        */
-/*    Jean-Christophe FILLIÂTRE                                           */
+/*    Jean-Christophe FILLIÃ‚TRE                                           */
 /*    Thierry HUBERT                                                      */
-/*    Claude MARCHÉ                                                       */
+/*    Claude MARCHÃ‰                                                       */
 /*    Yannick MOY                                                         */
 /*    Christine PAULIN                                                    */
-/*    Yann RÉGIS-GIANAS                                                   */
+/*    Yann RÃ‰GIS-GIANAS                                                   */
 /*    Nicolas ROUSSET                                                     */
 /*    Xavier URBAIN                                                       */
 /*                                                                        */
@@ -29,28 +29,52 @@
 
 //@+ CheckArithOverflow = no
 
-class C {
 
-    int i;
+class NoCreditException extends Exception {
 
-    /* @ behavior normal:
-      @   assigns i;
-      @   ensures i == j;
-      @*/
-    C (int j) {
-	i = j;
-    }
-}
-
-
-class TestSuperConstructor extends C {
-
-    /* @ behavior normal:
-      @   assigns i;
-      @   ensures i == 12;
-      @*/
-    TestSuperConstructor() {
-	super (12);
-    }
+    public NoCreditException() { }
 
 }
+
+public class Purse {
+    
+    private int balance;
+    //@ invariant balance_non_negative: balance >= 0;
+
+    /*@ requires true;
+      @ assigns balance;
+      @ ensures balance == 0;
+      @*/
+    public Purse() {
+        balance = 0;
+    }
+
+    /*@ requires s >= 0;
+      @ assigns balance;
+      @ ensures balance == \old(balance) + s;
+      @*/
+    public void credit(int s) {
+        balance += s;
+    }
+
+    /*@ requires s >= 0;
+      @ assigns balance;
+      @ ensures s <= \old(balance) && balance == \old(balance) - s;
+      @ behavior amount_too_large:
+      @   assigns \nothing;
+      @   signals (NoCreditException) s > \old(balance) ;
+      @*/
+    public void withdraw(int s) throws NoCreditException {
+        if (balance >= s)
+            balance = balance - s;
+        else
+            throw new NoCreditException();
+    }
+
+    //@ ensures \result == balance;
+    public int getBalance() {
+        return balance;
+    }
+
+}
+

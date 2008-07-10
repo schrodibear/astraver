@@ -153,7 +153,7 @@ CPULIMIT=bin/cpulimit
 WHYOBFUSCATOR=bin/why-obfuscator.$(OCAMLBEST)
 WHYSTAT=bin/why-stat.$(OCAMLBEST)
 SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
-REGTEST=bin/regtest.$(OCAMLBEST)
+REGTEST=regtest.$(OCAMLBEST)
 
 TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
       $(SIMPLIFY2WHY) $(WHYSTAT) 
@@ -504,10 +504,10 @@ bin/gwhy.byte: $(GCMO)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma nums.cma graph.cma lablgtk.cma threads.cma gtkThread.cmo $^
 
 # tools
-bin/regtest.opt: tools/regtest.ml
+regtest.opt: tools/regtest.ml
 	$(OCAMLOPT) $(OFLAGS) -thread -o $@ unix.cmxa str.cmxa threads.cmxa $^
 
-bin/regtest.byte: tools/regtest.ml
+regtest.byte: tools/regtest.ml
 	$(OCAMLC) $(BFLAGS) -thread -o $@ unix.cma str.cma threads.cma $^
 
 bin/why2html.byte: tools/why2html.ml

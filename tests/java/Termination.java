@@ -29,28 +29,27 @@
 
 //@+ CheckArithOverflow = no
 
-class C {
+class Termination {
 
-    int i;
-
-    /* @ behavior normal:
-      @   assigns i;
-      @   ensures i == j;
-      @*/
-    C (int j) {
-	i = j;
+    void loop1(int n) { 
+	//@ decreases n;
+	while (n > 0) n--; 
     }
-}
 
+    void loop2(int n) { 
+	//@ decreases 100-n;
+	while (n < 100) n++; 
+    }
 
-class TestSuperConstructor extends C {
-
-    /* @ behavior normal:
-      @   assigns i;
-      @   ensures i == 12;
-      @*/
-    TestSuperConstructor() {
-	super (12);
+    //@ ensures \result == 0;
+    int loop3() {
+	int i = 100;
+	/*@ loop_invariant 0 <= i <= 100;
+	  @ decreases i;
+	  @*/
+	while (i > 0) i--;
+	return i;
     }
 
 }
+

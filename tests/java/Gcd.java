@@ -27,98 +27,104 @@
 /*                                                                        */
 /**************************************************************************/
 
+//@+ CheckArithOverflow = no
+
 /* complements for non-linear integer arithmetic */
 
-//@ lemma zero_right: \forall integer x; x*0 == 0;
-//@ lemma zero_left: \forall integer x; 0*x == 0;
-//@ lemma one_right: \forall integer x; x*1 == x;
-//@ lemma one_left: \forall integer x; 1*x == x;
-//@ lemma two_right: \forall integer x; x*2 == x+x;
-//@ lemma two_left: \forall integer x; 2*x == x+x;
-
 /*@ lemma distr_right: 
-  @   \forall integer x y z; x*(y+z) == (x*y)+(x*z);
+  @   \forall integer x y z; x*(y+z) == (x*y)+(x*z); 
   @*/
 
 /*@ lemma distr_left: 
   @   \forall integer x y z; (x+y)*z == (x*z)+(y*z);
   @*/
 
-/*@ lemma sqr_short_elim: 
-  @   \forall integer x; x*x <= 32760 ==> x <= 180;
+/*@ lemma distr_right_minus: 
+  @   \forall integer x y z; x*(y-z) == (x*y)-(x*z); 
   @*/
 
-/*@ lemma sqr_short_intro: 
-  @   \forall integer x; 0 <= x && x <= 181 ==> x*x <= 32761;
+/*@ lemma distr_left_minus: 
+  @   \forall integer x y z; (x-y)*z == (x*z)-(y*z);
   @*/
 
-/*@ lemma sqr_int_elim: 
-  @   \forall integer x; x*x <= 2147395599 ==> x <= 46339;
+/*@ lemma mul_comm: 
+  @   \forall integer x y; x*y == y*x; 
   @*/
 
-/*@ lemma sqr_int_intro: 
-  @   \forall integer x; 0 <= x && x <= 46340 ==> x*x <= 2147395600;
+/*@ lemma mul_assoc: 
+  @   \forall integer x y z; x*(y*z) == (x*y)*z; 
   @*/
 
+/*@ predicate divides(integer x, integer y) {
+  @   \exists integer q; y == q*x
+  @ }
+  @*/
 
-public class Lesson1 {
+/*@ lemma div_mod_property:
+  @  \forall integer x y; 
+  @    x >=0 && y > 0 ==> x%y  == x - y*(x/y);  
+  @*/
 
-    /*@ behavior result_ge_x:
-      @   ensures \result >= x; 
-      @ behavior result_ge_y:
-      @   ensures \result >= y; 
-      @ behavior result_is_lub:
-      @   ensures \forall integer z; z >= x && z >= y ==> z >= \result;
+/*@ lemma mod_property:
+  @  \forall integer x y; 
+  @    x >=0 && y > 0 ==> 0 <= x%y && x%y < y; 
+  @*/
+
+/*@ predicate isGcd(integer a, integer b, integer d) {
+  @   divides(d,a) && divides(d,b) && 
+  @     \forall integer z;
+  @     divides(z,a) && divides(z,b) ==> divides(z,d) }
+  @*/
+
+/*@ lemma gcd_zero :
+  @   \forall integer a; isGcd(a,0,a) ;
+  @*/
+
+/*@ lemma gcd_property :
+  @   \forall integer a b d q;
+  @      b > 0 && isGcd(b,a % b,d) ==> isGcd(a,b,d) ;
+  @*/
+
+class Gcd {
+
+    /*@ requires x >= 0 && y >= 0;
+      @ behavior resultIsGcd: 
+      @   ensures isGcd(x,y,\result) ;
+      @ behavior bezoutProperty:
+      @   ensures \exists integer a b; a*x+b*y == \result;
       @*/
-    public static int max(int x, int y) {
-	if (x>y) return x; else  return y; 
+    static int gcd(int x, int y) {
+        //@ ghost integer a = 1, b = 0, c = 0, d = 1;
+        /*@ loop_invariant 
+          @    x >= 0 && y >= 0 &&  
+	  @    (\forall integer d ;  isGcd(x,y,d) ==> 
+	  @        \at(isGcd(x,y,d),Pre)) && 
+          @    a*\at(x,Pre)+b*\at(y,Pre) == x && 
+          @    c*\at(x,Pre)+d*\at(y,Pre) == y ;
+          @ decreases y;
+          @*/
+        while (y > 0) {
+            int r = x % y;
+            //@ ghost integer q = x / y;
+            x = y;
+            y = r;
+            //@ ghost integer ta = a, tb = b;
+            //@ ghost a = c; 
+	    //@ ghost b = d;
+            //@ ghost c = ta - c * q;
+            //@ ghost d = tb - d * q;
+        }
+        return x;
     }
-    
-    /*@ requires x >= 0 && x <= 32760;
-      @ ensures \result >= 0 && \result * \result <= x 
-      @    && x < (\result + 1) * (\result + 1);
-      @*/
-    public static short short_sqrt(short x) {
-	short count = 0, sum = 1;
-    	/*@ loop_invariant 
-	  @   count >= 0 && x >= count*count &&
-          @   sum == (count+1)*(count+1) &&
-	  @   count <= 180 && sum <= 32761;
-	  @ decreases x - sum;
-	  @*/
-	while (sum <= x) { 
-	    count++;
-	    //@ assert (count*count)+2*count+1 == (count+1)*(count+1);
-	    sum += 2*count+1;
-	}
-	return count;
-    }   
-  
-    /*@ requires x >= 0 && x <= 2147395599;
-      @ behavior result_is_sqrt: 
-      @   ensures \result >= 0 && \result * \result <= x 
-      @      && x < (\result + 1) * (\result + 1) ;
-      @*/
-    public static int sqrt(int x) {
-	int count = 0, sum = 1;
-    	/*@ loop_invariant 
-	  @   count >= 0 && x >= count*count &&
-          @   sum == (count+1)*(count+1) &&
-	  @   count <= 46339 && sum <= 2147395600;
-	  @ decreases x - sum;
-	  @*/
-	while (sum <= x) {
-	    count++;
-	    //@ assert (count*count)+2*count+1 == (count+1)*(count+1);
-	    sum += 2*count+1;
-	}
-	return count;
-    }   
-  
+
 }
+
+
+
 
 /*
 Local Variables: 
-compile-command: "make Lesson1"
+compile-command: "make Gcd"
 End: 
 */
+

@@ -84,7 +84,7 @@ let () = Arg.parse
     "", Arg.Unit (fun () -> ()) ,"\nA test suite can be the name of a directory in ./tests or the path to a file.\n\nExamples:\nregtest\nregtest -diff \"echo diff\" -examine     # see again the list of tests that failed\nregtest misc                           # for a single test suite\nregtest tests/misc/alias.c             # for a single test\nregtest -examine tests/misc/alias.c    # to see the differences again\nregtest -v -j 1                        # to check the time taken by each test\n"
   ]
   make_test_suite
-  "usage: regtest [options] [names of test suites]"
+  "usage: ./regtest.opt [options] [names of test suites]"
 
 (* redefine config file if special configuration expected *)
 let dir_config_file = 
@@ -112,7 +112,7 @@ let make_result_file = gen_make_file result_dirname
 let make_oracle_file = gen_make_file oracle_dirname
 
 let toplevel_path =
-  make_toplevel_path (gen_make_file "bin" base_path "regtest.sh")
+  make_toplevel_path (gen_make_file "tests" base_path "regtest.sh")
 
 type execnow =
     {

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.298 2008-07-09 10:32:00 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.299 2008-07-10 09:29:21 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1145,9 +1145,40 @@ let rec old_to_pre_loc loc =
 	JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, region)
 
 
+(* translates the heap update `e1.f = e2' 
 
-let rec make_upd lab loc ~infunction ~threats fi e1 v =
+   essentially we want
+
+   let tmp1 = [e1] in
+   let tmp2 = [e2] in
+   f := upd(f,tmp1,tmp2)
+
+   special cases are considered to avoid statically known safety properties:
+   if e1 as the form p + i then we build
+
+   let tmpp = [p] in 
+   let tmpi = [i] in
+   let tmp1 = shift(tmpp, tmpi) in
+    // depending on type of p and value of i
+   ...
+   
+*)
+let rec make_upd lab loc ~infunction ~threats fi e1 e2 =
   let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
+  let tmpp = tmp_var_name () in
+  let tmpi = tmp_var_name () in
+  let tmp1 = tmp_var_name () in  
+  let tmp2 = tmp_var_name () in
+  (* we first handle e2 *)
+  let e2' = expr e2 in
+  let v = Var tmp2 in
+  let lets = 
+    [ (tmp2, coerce ~no_int_overflow:(not threats) 
+         e2#name_label e2#loc 
+         fi.jc_field_info_type 
+         e2#typ e2 e2') ]
+  in
+  (* we then go to e1 *)
   let mem = Var(field_region_memory_name(fi,e1#region)) in
   let alloc = 
     alloc_region_table_name (JCtag(fi.jc_field_info_root, []), e1#region)
@@ -1172,47 +1203,68 @@ let rec make_upd lab loc ~infunction ~threats fi e1 v =
       else make_app (logic_union_of_field fi) [v]
     else v
   in
-  if threats then
-    match destruct_pointer e1 with
-      | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
-          make_app "safe_upd_" 
-            [ mem ; expr e1; v ]
-      | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
-          make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_upd_" 
-            [ mem ; expr p; offset off;
-              Cte (Prim_int (Num.string_of_num rb)); v ]
-      | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
-          make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_upd_" 
-            [ mem ; expr p; offset off;
-              Cte (Prim_int (Num.string_of_num lb)); v ]
-      | p,off,Some lb,Some rb ->
-          make_guarded_app ~name:lab IndexBounds loc "bound_upd_" 
-            [ mem ; expr p; offset off; 
-              Cte (Prim_int (Num.string_of_num lb)); 
-              Cte (Prim_int (Num.string_of_num rb)); v ]
-      | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
-          make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_upd_" 
-            [ alloc; mem; expr p; offset off; v ]
-      | p,off,Some lb,None ->
-          make_guarded_app ~name:lab IndexBounds loc "lbound_upd_" 
-            [ alloc; mem; expr p; offset off;
-              Cte (Prim_int (Num.string_of_num lb)); v ]
-      | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
-          make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_upd_" 
-            [ alloc; mem; expr p; offset off; v ]
-      | p,off,None,Some rb ->
-          make_guarded_app ~name:lab IndexBounds loc "rbound_upd_" 
-            [ alloc; mem; expr p; offset off;
-              Cte (Prim_int (Num.string_of_num rb)); v ]
-      | p,Int_offset s,None,None when int_of_string s = 0 ->
-          make_guarded_app ~name:lab PointerDeref loc "upd_" 
-            [ alloc; mem ; expr p; v ]
-      | p,off,None,None ->
-          make_guarded_app ~name:lab PointerDeref loc "offset_upd_" 
-            [ alloc; mem ; expr p; offset off; v ]
-  else
-    make_app "safe_upd_"
-      [ mem ; expr e1 ; v ]
+  let lets, upd =
+    if threats then
+      let p,off,lb,rb = destruct_pointer e1 in
+      let p' = expr p in
+      let i' = offset off in
+      let letspi = [ (tmpp, p') ; (tmpi, i') ; 
+		     (tmp1, make_app "shift" [Var tmpp; Var tmpi])] 
+      in
+      match off,lb,rb with
+	| Int_offset s, Some lb, Some rb when bounded lb rb s ->
+            let e1' = expr e1 in	    
+	    (tmp1, e1') :: lets, 
+            make_app "safe_upd_" [ mem ; Var tmp1; v ]
+	| Int_offset s,Some lb,Some rb when lbounded lb s ->
+	    letspi @ lets, 
+            make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_upd_" 
+              [ mem ; Var tmpp; Var tmpi; 
+		Cte (Prim_int (Num.string_of_num rb)); v ]
+	| Int_offset s,Some lb,Some rb when rbounded rb s ->
+	    letspi @ lets, 
+            make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_upd_" 
+              [ mem ; Var tmpp; Var tmpi; 
+		Cte (Prim_int (Num.string_of_num lb)); v ]
+	| off,Some lb,Some rb ->
+	    letspi @ lets, 
+            make_guarded_app ~name:lab IndexBounds loc "bound_upd_" 
+              [ mem ; Var tmpp; Var tmpi;  
+		Cte (Prim_int (Num.string_of_num lb)); 
+		Cte (Prim_int (Num.string_of_num rb)); v ]
+	| Int_offset s,Some lb,None when lbounded lb s ->
+	    letspi @ lets, 
+            make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_upd_" 
+              [ alloc; mem; Var tmpp; Var tmpi; v ]
+	| off,Some lb,None ->
+	    letspi @ lets, 
+            make_guarded_app ~name:lab IndexBounds loc "lbound_upd_" 
+              [ alloc; mem; Var tmpp; Var tmpi;
+		Cte (Prim_int (Num.string_of_num lb)); v ]
+	| Int_offset s,None,Some rb when rbounded rb s ->
+	    letspi @ lets, 
+            make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_upd_" 
+              [ alloc; mem; Var tmpp; Var tmpi; v ]
+	| off,None,Some rb ->
+	    letspi @ lets, 
+            make_guarded_app ~name:lab IndexBounds loc "rbound_upd_" 
+              [ alloc; mem; Var tmpp; Var tmpi;
+		Cte (Prim_int (Num.string_of_num rb)); v ]
+	| Int_offset s,None,None when int_of_string s = 0 ->
+	    (tmp1, p') :: lets, 
+            make_guarded_app ~name:lab PointerDeref loc "upd_" 
+              [ alloc; mem ; Var tmp1; v ]
+	| off,None,None ->
+	    letspi @ lets, 
+            make_guarded_app ~name:lab PointerDeref loc "offset_upd_" 
+              [ alloc; mem ; Var tmpp; Var tmpi; v ]
+    else
+      let e1' = expr e1 in	    
+      (tmp1, e1') :: lets, 
+      make_app "safe_upd_"
+	[ mem ; Var tmp1 ; v ]
+  in
+  tmp1, tmp2, lets, upd
 
 and make_deref lab loc ~infunction ~threats fi e =
   let expr = expr ~infunction ~threats and offset = offset ~infunction ~threats in
@@ -1648,56 +1700,44 @@ and expr ~infunction ~threats e : expr =
 	  in
 	    if e#typ = Jc_pervasives.unit_type then ie else append ie (var vi)
     | JCEassign_heap (e1, fi, e2) -> 
-        let e1' = expr e1 in
-        let e2' = expr e2 in
-        let tmp1 = tmp_var_name () in
-        let tmp2 = tmp_var_name () in
-        let upd = make_upd ~infunction ~threats (lab()) e#loc
-          fi e1 (Var tmp2) 
+        let tmp1, tmp2, lets, upd = 
+	  make_upd ~infunction ~threats (lab()) e#loc fi e1 e2 
         in
 	let assign_heap_assert = fst 
 	  (type_assert ~infunction ~threats fi.jc_field_info_type e2 ([], []))
 	in
-	  assert (List.length assign_heap_assert = 1);
-	  let assign_heap_assert = List.hd assign_heap_assert in
-	  let upd =
-	    match assign_heap_assert with
-	      | None -> upd
-	      | Some (tmp, e, a) ->
-		  let upd = if not threats then upd else Assert (a, upd) in
-		    Let (tmp, e, upd)
-	  in	  
-	    (* Yannick: ignore variables to be able to refine update function used. *)      
-	    (*      let upd = make_upd ~threats fi (Var tmp1) (Var tmp2) in *)
-	    (* Claude: do not ignore variable tmp2, since it may involve a coercion. 
-	       Anyway, safety of the update do not depend on e2 *)
-          let upd = 
-	    if threats && !Jc_options.inv_sem = InvOwnership then
-              append (assert_mutable (LVar tmp1) fi) upd else upd 
-	  in
-	  let upd =
-	    if e#typ = Jc_pervasives.unit_type then upd else 
-	      let tmp1var = 
-		new expr ~typ:e1#typ ~region:e1#region
-		  (JCEvar(Jc_pervasives.var e1#typ tmp1)) 
-	      in
-		append upd
-		  (make_deref "" loc ~infunction ~threats:false fi tmp1var)
-	  in
-          let lets =
-            (make_lets
-               ([ (tmp1, e1') ; (tmp2, coerce ~no_int_overflow:(not threats) 
-                                   e2#name_label e2#loc 
-                                   fi.jc_field_info_type 
-                                   e2#typ e2 e2') ])
-               upd)
-          in
-            if !Jc_options.inv_sem = InvOwnership then
-              append lets (assume_field_invariants fi)
-            else
-              lets
-		(* if !Jc_options.inv_sem = Jc_options.InvOwnership then   
-		   (make_assume_field_assocs (fresh_program_point ()) fi)) *)
+	assert (List.length assign_heap_assert = 1);
+	let assign_heap_assert = List.hd assign_heap_assert in
+	let upd =
+	  match assign_heap_assert with
+	    | None -> upd
+	    | Some (tmp, e, a) ->
+		let upd = if not threats then upd else Assert (a, upd) in
+		Let (tmp, e, upd)
+	in	  
+	(* Yannick: ignore variables to be able to refine update function used. *)      
+	(* Claude: do not ignore variable tmp2, since it may involve a coercion. 
+	   Anyway, safety of the update do not depend on e2 *)
+        let upd = 
+	  if threats && !Jc_options.inv_sem = InvOwnership then
+            append (assert_mutable (LVar tmp1) fi) upd else upd 
+	in
+	let upd =
+	  if e#typ = Jc_pervasives.unit_type then upd else 
+	    let tmp1var = 
+	      new expr ~typ:e1#typ ~region:e1#region
+		(JCEvar(Jc_pervasives.var e1#typ tmp1)) 
+	    in
+	    append upd
+	      (make_deref "" loc ~infunction ~threats:false fi tmp1var)
+	in
+        let lets = make_lets lets upd in
+        if !Jc_options.inv_sem = InvOwnership then
+          append lets (assume_field_invariants fi)
+        else
+          lets
+	    (* if !Jc_options.inv_sem = Jc_options.InvOwnership then   
+	       (make_assume_field_assocs (fresh_program_point ()) fi)) *)
     | JCEblock l ->
         List.fold_right append (List.map expr l) Void
     | JCEloop (la, s) ->

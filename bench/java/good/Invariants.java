@@ -70,7 +70,6 @@ class C3 {
 
     void m() {
 	t = new Object();
-	// INDEPENDENT PROBLEM: assertion not prouved (add '<> null' in ths post of <new> in jessie.why ?)
 	//@ assert t != null; 
    }
 
