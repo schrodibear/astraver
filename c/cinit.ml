@@ -185,6 +185,8 @@ let split_decl e ((invs,inits) as acc) =
   match e.node with 
     | Tinvariant (_,p) -> (p :: invs, inits)
     | Tdecl (t, v, c) ->  (invs, e :: inits)
+	(* If a ghost is initialized, then its initialization is took account *)
+    | Tghost (vi, Some init) -> (invs, e :: inits) 
     | _ -> acc
 
 let split_decls d = List.fold_right split_decl d ([],[])
@@ -229,6 +231,39 @@ let rec pop_initializer loc t i =
     | (Ilist l)::l' -> 
 	let e,r = pop_initializer loc t l in e,r@l'
 
+
+(* Added by copying pop_initializer in order to take account ghosts initialization.
+   It seems that this function can be enhanced.
+*)
+let rec pop_term_initializer loc t i =
+  match i with  
+    | [] ->{ term_node = 
+	       (match t.ctype_node with
+		  | Tint _ | Tenum _-> Tconstant (IntConstant "0")
+		  | Tfloat _ -> Tconstant (RealConstant "0.0")
+		  | Tpointer _ -> let null = default_var_info "null" in       
+		    Cenv.set_var_type (Var_info null) t false;
+		    Clogic.Tvar (null)
+		  | _ -> assert false);
+	     term_type = t;
+	     term_loc  = loc
+	    },[]
+    | (Iexpr e)::l -> 
+	let term = e in
+	let term =
+	  { term with term_node = 
+	      if t.ctype_node <> term.term_type.ctype_node then
+		Tcast (t,term)
+	      else
+		term.term_node} in
+	term,l
+    | (Ilist [])::l -> pop_term_initializer loc t l
+    | (Ilist l)::l' -> 
+	let e,r = pop_term_initializer loc t l in e,r@l'
+
+
+
+
 let make_and p1 p2 = match p1.pred_node, p2.pred_node with
   | Ptrue, _ -> p2
   | _, Ptrue -> p1
@@ -243,6 +278,94 @@ let make_implies p1 p2 = match p2.pred_node with
 let make_forall q p = match p.pred_node with
   | Ptrue -> { p with pred_node = Ptrue }
   | _ -> { p with pred_node = Pforall (q, p) }
+
+
+
+
+let rec init_term loc t lvalue initializers =
+  match t.ctype_node with
+    | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
+	let x,l = pop_term_initializer loc t initializers in
+	({pred_node = Prel(lvalue,Eq,x);pred_loc = loc}, l)
+
+    | Tstruct n ->
+	begin match tag_type_definition n with
+	  | TTStructUnion (Tstruct (_), fl) ->
+	      List.fold_left 
+		(fun (acc,init)  f -> 
+		   let block, init' =
+		     init_term loc f.var_type 
+		       (in_struct lvalue f) init
+		   in ({ acc with pred_node = Pand (acc, block)},init'))
+		(dummy_pred Ptrue,initializers)  fl
+	  | _ ->
+	      assert false
+	end
+
+    | Tunion n ->
+	begin match tag_type_definition n with
+	  | TTStructUnion (Tunion (_), f::_) ->
+	      let block, init' =
+		init_term loc f.var_type 
+		  (noattr loc f.var_type (Tarrow(lvalue, f)))
+		  initializers
+	      in (block,init')
+	  | _ ->
+	      assert false
+	end
+    | Tarray (_,ty,Some t) ->
+	begin
+	  match initializers with
+	    | [] ->	
+		let i = default_var_info "counter" in
+		Cenv.set_var_type (Var_info i) c_int false;
+		let vari = { term_node = Clogic.Tvar i; 
+			     term_loc = Loc.dummy_position;
+			     term_type = c_int;
+			   } in
+		let ts = Cltyping.int_constant (Int64.to_string t) in
+		let ineq = make_and 
+			     (prel (Cltyping.zero, Le, vari))
+			     (prel (vari, Lt,ts)) in
+		let (b,init') = 
+		  match ty.ctype_node with 
+		    | Tstruct _ |  Tunion _ ->
+			init_term loc ty 
+			  (noattr loc ty 
+			     (Tbinop(lvalue,Badd,vari))) initializers
+		    | _ ->
+			init_term loc ty 
+			  (noattr loc ty (Tarrget(lvalue,vari))) initializers
+		  in
+		((make_forall [c_int,i] (make_implies ineq b)), init')
+	    | _ ->
+		let rec init_cells i (block,init) =
+		if i >= t then (block,init)
+		else
+		  let ts = Cltyping.int_constant (Int64.to_string i) in
+		  let (b,init') = 
+		    match ty.ctype_node with 
+		      | Tstruct _ |  Tunion _ ->
+			  init_term loc ty 
+			    (noattr loc ty 
+			       (Tbinop(lvalue,Badd,ts))) init
+		      | _ ->
+			  init_term loc ty 
+			    (noattr loc ty (Tarrget(lvalue,ts))) init
+		  in
+		  init_cells (Int64.add i Int64.one) 
+		    ({ block with pred_node = Pand (block,b)},init')
+		in	
+		init_cells Int64.zero (dummy_pred Ptrue,initializers)
+	end
+    | Tarray (_,ty,None) -> assert false
+    | Tfun (_, _) -> assert false
+    | Tvar _ -> assert false
+    | Tvoid -> dummy_pred Ptrue,initializers
+
+
+
+
 
 let rec init_expr loc t lvalue initializers =
   match t.ctype_node with
@@ -332,11 +455,26 @@ let rec assigns decl =
 	let declar,_ = 
 	  init_expr l t (noattr l t (Clogic.Tvar v)) [] in
 	{declar with pred_node = Pand (declar, assigns decl)}
+
     | {node = Tdecl(t, v, Some c) ; loc = l }:: decl ->
 	Coptions.lprintf "initialization of %s@." v.var_name;
 	let declar,_ = init_expr l t (noattr l t (Clogic.Tvar v)) [c] in
 	{declar with pred_node = Pand (declar, assigns decl) }
-    | _  -> assert false
+
+    | {node = Tghost (v,None); loc = l}::decl -> (* Added in order to take account ghosts initialization *)
+	Coptions.lprintf "initialization of %s@." v.var_name;
+	let t = v.var_type in
+	let declar,_ = 
+	  init_term l t (noattr l t (Clogic.Tvar v)) [] in
+	  {declar with pred_node = Pand (declar, assigns decl)}
+
+    | {node = Tghost(v, Some c) ; loc = l }:: decl -> (* Added in order to take account ghosts initialization *)
+	let t = v.var_type in
+	  Coptions.lprintf "initialization of %s@." v.var_name;
+	  let declar,_ = init_term l t (noattr l t (Clogic.Tvar v)) [c] in
+	    {declar with pred_node = Pand (declar, assigns decl) }
+
+     | _  -> assert false
 
 
 let invariants_initially_established_info =
@@ -345,6 +483,8 @@ let invariants_initially_established_info =
 let rec reorder l =
   match l with 
     | { node = Tdecl _ }as e ::l  -> let decl,other = reorder l in
+      e::decl,other
+    | { node = Tghost _ }as e ::l  -> let decl,other = reorder l in
       e::decl,other
     | e::l -> let decl,other = reorder l in
       decl,e::other
