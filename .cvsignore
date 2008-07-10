@@ -19,3 +19,4 @@ configure.lineno
 config.log
 a.out
 _build
+regtest.opt

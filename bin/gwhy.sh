@@ -17,7 +17,7 @@ case $1 in
 	jessie $b.jc || exit 1
 	make -f $b.makefile gui
 	;;
-  *.why)
+  *.mlw|*.why)
 	gwhy-bin -split-user-conj $1
 	;;
   *)

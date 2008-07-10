@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.ml,v 1.65 2008-04-15 07:50:19 regisgia Exp $ i*)
+(*i $Id: ident.ml,v 1.66 2008-07-10 13:59:49 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -211,7 +211,7 @@ let t_le_real_ = create "le_real_"
 let t_gt_real_ = create "gt_real_"
 let t_ge_real_ = create "ge_real_"
 
-let t_zwf_zero = create "%zwf_zero"
+let t_zwf_zero = create "zwf_zero"
 let result = create "result"
 let default = create "H"
 let farray = create "farray"

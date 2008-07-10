@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.152 2008-04-25 14:38:01 stoulsn Exp $ i*)
+(*i $Id: util.ml,v 1.153 2008-07-10 13:59:49 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -263,9 +263,17 @@ and occur_arrow id bl c = match bl with
   | (id', v) :: bl' -> 
       occur_type_v id v || (id <> id' && occur_arrow id bl' c)
 
+let quant_boolean_as_conj p =
+  not fast_wp &&
+  match p with
+    | Pif (Tvar id, _, _) -> id == Ident.result
+    | Pimplies (_, Pif (Tvar id1, _, _), Pif (Tvar id2, _, _)) -> 
+	id1 == Ident.result && id2 == Ident.result
+    | _ -> false
+
 let forall ?(is_wp=false) x v ?(triggers=[]) p = match v with
   (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
-  | PureType PTbool when not fast_wp ->
+  | PureType PTbool when quant_boolean_as_conj p ->
       let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
       let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
       Pand (true, true, simplify ptrue, simplify pfalse)

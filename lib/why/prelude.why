@@ -138,3 +138,6 @@ parameter any_bool : unit -> {} bool { true }
 parameter any_int : unit -> {} int { true }
 parameter any_real : unit -> {} real { true }
 
+(* Default well-founded ordering over integers *)
+
+predicate zwf_zero(a:int, b:int) = 0 <= b and a < b

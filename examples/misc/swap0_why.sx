@@ -28,12 +28,42 @@
  (FORALL (x y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y))))
 
 (BG_PUSH
+ ;; Why axiom lt_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (lt_real_bool x y) |@true|) (EQ (lt_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom le_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (le_real_bool x y) |@true|) (EQ (le_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom gt_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (gt_real_bool x y) |@true|) (EQ (gt_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom ge_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (ge_real_bool x y) |@true|) (EQ (ge_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom eq_real_bool_axiom
+ (FORALL (x y) (IFF (EQ (eq_real_bool x y) |@true|) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom neq_real_bool_axiom
+ (FORALL (x y) (IFF (EQ (neq_real_bool x y) |@true|) (NEQ x y))))
+
+(BG_PUSH
  ;; Why axiom ite_true
  (FORALL (x y) (EQ (ite |@true| x y) x)))
 
 (BG_PUSH
  ;; Why axiom ite_false
  (FORALL (x y) (EQ (ite |@false| x y) y)))
+
+(DEFPRED (zwf_zero a b) (AND (<= 0 b) (< a b)))
 
 (BG_PUSH
  ;; Why axiom access_update
@@ -49,8 +79,9 @@
  (FORALL (t v) (EQ (access (update t i v) j) (access t j))))))
 
 (DEFPRED (sorted_array t i j)
-  (FORALL (k)
-  (IMPLIES (AND (<= i k) (< k j)) (<= (access t k) (access t (+ k 1))))))
+  (FORALL (k1 k2)
+  (IMPLIES (AND (AND (<= i k1) (<= k1 k2)) (<= k2 j))
+  (<= (access t k1) (access t k2)))))
 
 (DEFPRED (exchange t1 t2 i j)
   (AND (EQ (array_length t1) (array_length t2))

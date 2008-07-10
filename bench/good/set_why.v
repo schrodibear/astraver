@@ -3,103 +3,48 @@
 
 Require Import Why.
 
-(* Why obligation from file "good/set.mlw", line 9, characters 52-62: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p_po_1 : 
+  forall (result: bool),
   forall (x: Z),
-  forall (HW_2: x = 0 /\ x <> 0),
-  2 = 1.
+  forall (HW_1: x = 0 /\ ((if result then x = 0 else x <> 0))),
+  (if result then 1 = 1 else 2 = 1).
 Proof.
-intuition.
+destruct result; intuition.
 Save.
 
 
-(* Why obligation from file "good/set.mlw", line 17, characters 16-22: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p2_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
   forall (y0: Z),
   forall (HW_2: y0 >= 0),
+  forall (result: bool),
   forall (x: Z),
-  forall (HW_3: x = y0 /\ x <> 0),
-  forall (y1: Z),
-  forall (HW_4: y1 = (y0 - 1)),
-  y1 >= 0.
+  forall (HW_3: x = y0 /\ ((if result then x <> 0 else x = 0))),
+  (if result then (forall (y:Z), (y = (y0 - 1) -> y >= 0 /\ (Zwf 0 y y0)))
+   else y0 = 0).
 Proof.
-intuition.
+destruct result; intuition.
 Save.
 
-(* Why obligation from file "good/set.mlw", line 17, characters 31-32: *)
-(*Why goal*) Lemma p2_po_2 : 
-  forall (y: Z),
-  forall (HW_1: y >= 0),
-  forall (y0: Z),
-  forall (HW_2: y0 >= 0),
-  forall (x: Z),
-  forall (HW_3: x = y0 /\ x <> 0),
-  forall (y1: Z),
-  forall (HW_4: y1 = (y0 - 1)),
-  (Zwf 0 y1 y0).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "good/set.mlw", line 20, characters 4-9: *)
-(*Why goal*) Lemma p2_po_3 : 
-  forall (y: Z),
-  forall (HW_1: y >= 0),
-  forall (y0: Z),
-  forall (HW_2: y0 >= 0),
-  forall (x: Z),
-  forall (HW_5: x = y0 /\ x = 0),
-  y0 = 0.
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "good/set.mlw", line 25, characters 16-22: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p3_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
   forall (y0: Z),
   forall (HW_2: y0 >= 0),
+  forall (result: bool),
   forall (x: Z),
-  forall (HW_3: x = y0 /\ x <> 0),
-  forall (y1: Z),
-  forall (HW_4: y1 = (y0 - 1)),
-  y1 >= 0.
+  forall (HW_3: x = y0 /\ ((if result then x <> 0 else x = 0))),
+  (if result then (forall (y:Z), (y = (y0 - 1) -> y >= 0 /\ (Zwf 0 y y0)))
+   else y0 = 0).
 Proof.
-intuition.
+destruct result; intuition.
 Save.
 
-(* Why obligation from file "good/set.mlw", line 25, characters 31-32: *)
-(*Why goal*) Lemma p3_po_2 : 
-  forall (y: Z),
-  forall (HW_1: y >= 0),
-  forall (y0: Z),
-  forall (HW_2: y0 >= 0),
-  forall (x: Z),
-  forall (HW_3: x = y0 /\ x <> 0),
-  forall (y1: Z),
-  forall (HW_4: y1 = (y0 - 1)),
-  (Zwf 0 y1 y0).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "good/set.mlw", line 28, characters 4-9: *)
-(*Why goal*) Lemma p3_po_3 : 
-  forall (y: Z),
-  forall (HW_1: y >= 0),
-  forall (y0: Z),
-  forall (HW_2: y0 >= 0),
-  forall (x: Z),
-  forall (HW_5: x = y0 /\ x = 0),
-  y0 = 0.
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "good/set.mlw", line 33, characters 16-22: *)
+(* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma p4_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 1),
@@ -107,40 +52,10 @@ Save.
   forall (HW_2: y0 >= 1),
   forall (y1: Z),
   forall (HW_3: y1 = (y0 - 1)),
+  forall (result: bool),
   forall (x: Z),
-  forall (HW_4: x = y1 /\ x <> 0),
-  y1 >= 1.
+  forall (HW_4: x = y1 /\ ((if result then x <> 0 else x = 0))),
+  (if result then y1 >= 1 /\ (Zwf 0 y1 y0) else y1 = 0).
 Proof.
-intuition.
+destruct result; intuition.
 Save.
-
-(* Why obligation from file "good/set.mlw", line 33, characters 31-32: *)
-(*Why goal*) Lemma p4_po_2 : 
-  forall (y: Z),
-  forall (HW_1: y >= 1),
-  forall (y0: Z),
-  forall (HW_2: y0 >= 1),
-  forall (y1: Z),
-  forall (HW_3: y1 = (y0 - 1)),
-  forall (x: Z),
-  forall (HW_4: x = y1 /\ x <> 0),
-  (Zwf 0 y1 y0).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "good/set.mlw", line 36, characters 4-9: *)
-(*Why goal*) Lemma p4_po_3 : 
-  forall (y: Z),
-  forall (HW_1: y >= 1),
-  forall (y0: Z),
-  forall (HW_2: y0 >= 1),
-  forall (y1: Z),
-  forall (HW_3: y1 = (y0 - 1)),
-  forall (x: Z),
-  forall (HW_5: x = y1 /\ x = 0),
-  y1 = 0.
-Proof.
-intuition.
-Save.
-

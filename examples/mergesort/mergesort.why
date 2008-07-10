@@ -18,3 +18,10 @@ let rec mergesort (a:int array) (l:int) (u:int) : unit =
     merge a l m u
   end
   { sorted_array(a, l, u) and sub_permut(l, u, a@, a) }
+
+
+(*
+Local Variables: 
+compile-command: "gwhy mergesort.why"
+End: 
+*)

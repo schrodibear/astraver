@@ -1,4 +1,9 @@
 
+  o WP: universal quantification forall b:bool. P(b) no more turned
+    into P(true) and P(false) when there is a possible size increasing
+  o SMT-lib output: fixed bug with variants (when -split-user-conj
+    not set); predicate zwf_zero added to prelude.why
+  o SMT-lib output: fixed bug with if_then_else
   o krakatoa/jessie: support for ( ? : ) operator in terms and propositions
   o configuration: detection of Alt-ergo executable name (ergo/alt-ergo)
   o jessie/why: reorganization of PVS output

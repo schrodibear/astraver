@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.50 2008-05-26 14:52:05 marche Exp $ i*)
+(*i $Id: smtlib.ml,v 1.51 2008-07-10 13:59:49 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -216,7 +216,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(implies@ %a@ %a)@]" print_predicate a print_predicate b
   | Pif (a, b, c) ->
       if (Options.get_types_encoding() = SortedStratified) then
-      fprintf fmt "@[(if_then_else@ (= %a (c_sort c_bool (bool2U c_Boolean_true)))@ %a@ %a)@]" 
+      fprintf fmt "@[(if_then_else@ (= %a c_Boolean_true)@ %a@ %a)@]" 
 	print_term a print_predicate b print_predicate c
       else
 	fprintf fmt "@[(if_then_else@ (= %a c_Boolean_true)@ %a@ %a)@]" 
