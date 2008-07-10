@@ -9,9 +9,11 @@ parameter merge :
 
 let rec mergesort (a:int array) (l:int) (u:int) : unit =
   { }
+  init:
   if l < u then begin
     let m = (l+u)/2 in
     mergesort a l m;
+    assert {sub_permut(l, u, a@init, a) };
     mergesort a (m+1) u;
     merge a l m u
   end
