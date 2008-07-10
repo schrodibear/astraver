@@ -1,8 +1,9 @@
 
 
-goal test : 
-  forall b:bool. b=true or b=false
+parameter x : int ref
 
-
-
+let f (b:bool) =
+ { true }
+ if b then x:=1 else x:=2
+ { x = 0 }
 
