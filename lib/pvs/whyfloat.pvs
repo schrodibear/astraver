@@ -65,40 +65,40 @@ BEGIN
            d_to_exact:=r1, d_to_model:= r2 #)
     endcases
 
-  r_to_d(m:mode)(r:real):double = r_to_d_aux(m)(r,r,r)
+  r_to_d(m:mode,r:real):double = r_to_d_aux(m)(r,r,r)
 
-  add_double(m:mode)(f1,f2:double):double =
+  add_double(m:mode,f1,f2:double):double =
      r_to_d_aux(m)(d_to_r(f1)+d_to_r(f2), 
                   d_to_exact(f1)+d_to_exact(f2),
                   d_to_model(f1)+d_to_model(f2))
 
-  sub_double(m:mode)(f1,f2:double):double =
+  sub_double(m:mode,f1,f2:double):double =
      r_to_d_aux(m)(d_to_r(f1)-d_to_r(f2), 
                   d_to_exact(f1)-d_to_exact(f2),
                   d_to_model(f1)-d_to_model(f2))
 
-  mul_double(m:mode)(f1,f2:double):double =
+  mul_double(m:mode,f1,f2:double):double =
      r_to_d_aux(m)(d_to_r(f1)*d_to_r(f2), 
                   d_to_exact(f1)*d_to_exact(f2),
                   d_to_model(f1)*d_to_model(f2))
 
-  div_double(m:mode)(f1,f2:double | d_to_r(f2) /= 0 
+  div_double(m:mode,f1,f2:double | d_to_r(f2) /= 0 
           AND d_to_exact(f2) /= 0 AND d_to_model(f2) /= 0):double =
      r_to_d_aux(m)(d_to_r(f1)/d_to_r(f2), 
                   d_to_exact(f1)/d_to_exact(f2),
                   d_to_model(f1)/d_to_model(f2))
 
-  sqrt_double(m:mode)(f1:double | d_to_r(f1) >= 0 
+  sqrt_double(m:mode,f1:double | d_to_r(f1) >= 0 
           AND d_to_exact(f1) >= 0 AND d_to_model(f1) >= 0):double =
      r_to_d_aux(m)(sqrt(d_to_r(f1)), 
                    sqrt(d_to_exact(f1)),
                    sqrt(d_to_model(f1)))
 
-  neg_double(m:mode)(f1:double):double =
+  neg_double(m:mode,f1:double):double =
       (# float:= Fopp(float(f1)),
          d_to_exact:=-d_to_exact(f1), d_to_model:= -d_to_model(f1) #) 
 
-  abs_double(m:mode)(f1:double):double =
+  abs_double(m:mode,f1:double):double =
       (# float:= Fabs(float(f1)),
          d_to_exact:=abs(d_to_exact(f1)), d_to_model:= abs(d_to_model(f1)) #) 
 
