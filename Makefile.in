@@ -112,7 +112,7 @@ VO8= lib/coq/WhyInt.vo lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo \
 
 V8FILES=$(VO8:.vo=.v)
 
-PVSFILES = lib/pvs/why.pvs @JESSIELIBPVS@ 
+PVSFILES = lib/pvs/why.pvs @JESSIELIBPVS@ lib/pvs/whyfloat.pvs
 PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/rc.ml src/xml.ml \
