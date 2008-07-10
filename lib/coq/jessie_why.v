@@ -19,6 +19,21 @@ Admitted.
   (bool_and false true) = false /\ (bool_and false false) = false.
 Admitted.
 
+(*Why axiom*) Lemma bool_and_true :
+  (bool_and true true) = true /\ (bool_and false true) = false.
+Admitted.
+
+(*Why axiom*) Lemma true_bool_and :
+  (bool_and true true) = true /\ (bool_and true false) = false.
+Admitted.
+
+(*Why axiom*) Lemma bool_and_1 :
+  ((((bool_and true true) = true -> true = true /\ true = true)) /\
+  (((bool_and true false) = true -> true = true /\ false = true))) /\
+  (((bool_and false true) = true -> false = true /\ true = true)) /\
+  (((bool_and false false) = true -> false = true /\ false = true)).
+Admitted.
+
 (*Why axiom*) Lemma div_positive_by_positive :
   (forall (a:Z),
    (forall (b:Z), (0 <= a /\ 0 < b -> 0 <= ((Zdiv a b)) /\ ((Zdiv a b)) <= a))).

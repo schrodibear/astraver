@@ -77,26 +77,26 @@ End:
 ========== file tests/java/Literals.jloc ==========
 [Literals_f]
 name = "Method f"
-file = "/home/cmarche/recherche/why/tests/java/Literals.java"
+file = "HOME/tests/java/Literals.java"
 line = 7
 begin = 8
 end = 9
 
 [cons_Literals]
 name = "Constructor of class Literals"
-file = "/home/cmarche/recherche/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [K_1]
-file = "/home/cmarche/recherche/why/tests/java/Literals.java"
+file = "HOME/tests/java/Literals.java"
 line = 5
 begin = 16
 end = 30
 
 [K_2]
-file = "/home/cmarche/recherche/why/tests/java/Literals.java"
+file = "HOME/tests/java/Literals.java"
 line = 8
 begin = 9
 end = 14
@@ -210,6 +210,89 @@ depend: coq/Literals_why.v
 
 clean:
 	rm -f coq/*.vo
+
+========== file tests/java/Literals.loc ==========
+[JC_1]
+file = "HOME/tests/java/Literals.jc"
+line = 38
+begin = 8
+end = 23
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/java/Literals.jc"
+line = 38
+begin = 8
+end = 23
+
+[JC_4]
+file = "HOME/tests/java/Literals.jc"
+line = 38
+begin = 8
+end = 23
+
+[JC_5]
+file = "HOME/tests/java/Literals.java"
+line = 7
+begin = 8
+end = 9
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_7]
+file = "HOME/tests/java/Literals.java"
+line = 7
+begin = 8
+end = 9
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_9]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[K_1]
+file = "HOME/tests/java/Literals.java"
+line = 5
+begin = 16
+end = 30
+
+[Literals_f_ensures_default]
+name = "Method f"
+behavior = "Behavior"
+file = "HOME/tests/java/Literals.java"
+line = 7
+begin = 8
+end = 9
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Literals_f_safety]
+name = "Method f"
+behavior = "Safety"
+file = "HOME/tests/java/Literals.java"
+line = 7
+begin = 8
+end = 9
 
 ========== file tests/java/why/Literals.why ==========
 type Object
@@ -633,16 +716,14 @@ let Literals_f_safety =
 
 
 ========== make project execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --project [...] why/Literals.why
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== file tests/java/why/Literals.wpr ==========
 <project name="Literals" context="why/Literals_ctx.why">
   <function name="Method f">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Behavior">
     <goal why_file="why/Literals_po1.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Literals.java" line = "5" begin = "16" end = "30"/>
+      <location file = "HOME/tests/java/Literals.java" line = "5" begin = "16" end = "30"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -793,18 +874,6 @@ axiom bool_and_false:
 
 axiom false_bool_and:
   ((bool_and(false, true) = false) and (bool_and(false, false) = false))
-
-axiom bool_and_true:
-  ((bool_and(true, true) = true) and (bool_and(false, true) = false))
-
-axiom true_bool_and:
-  ((bool_and(true, true) = true) and (bool_and(true, false) = false))
-
-axiom bool_and_1:
-  ((((bool_and(true, true) = true) -> ((true = true) and (true = true))) and
-    ((bool_and(true, false) = true) -> ((true = true) and (false = true)))) and
-   (((bool_and(false, true) = true) -> ((false = true) and (true = true))) and
-    ((bool_and(false, false) = true) -> ((false = true) and (false = true)))))
 
 axiom div_positive_by_positive:
   (forall a:int.
@@ -1382,7 +1451,6 @@ goal Literals_f_ensures_default_po_1:
   ("K_1": (integer_of_int32(return) = 13))
 
 ========== simplify execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why -simplify [...] why/Literals.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -1393,9 +1461,7 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== ergo execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --why [...] why/Literals.why
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -1406,4 +1472,3 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'

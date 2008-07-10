@@ -96,113 +96,113 @@ End:
 */
 ========== file tests/java/Termination.jloc ==========
 [K_10]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 20
 end = 33
 
 [K_11]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 48
 begin = 15
 end = 16
 
 [K_12]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 50
 begin = 15
 end = 18
 
 [K_13]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 50
 begin = 8
 end = 13
 
 [K_14]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 46
 begin = 9
 end = 12
 
 [cons_Termination]
 name = "Constructor of class Termination"
-file = "/home/cmarche/recherche/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [K_1]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 35
 begin = 5
 end = 17
 
 [K_2]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 35
 begin = 15
 end = 16
 
 [K_3]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 36
 begin = 15
 end = 18
 
 [K_4]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 36
 begin = 8
 end = 13
 
 [K_5]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 40
 begin = 5
 end = 21
 
 [K_6]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 40
 begin = 15
 end = 20
 
 [K_7]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 41
 begin = 17
 end = 20
 
 [K_8]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 41
 begin = 8
 end = 15
 
 [K_9]
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 44
 begin = 16
 end = 28
 
 [Termination_loop1]
 name = "Method loop1"
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 34
 begin = 9
 end = 14
 
 [Termination_loop2]
 name = "Method loop2"
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 39
 begin = 9
 end = 14
 
 [Termination_loop3]
 name = "Method loop3"
-file = "/home/cmarche/recherche/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 45
 begin = 8
 end = 13
@@ -318,6 +318,201 @@ depend: coq/Termination_why.v
 
 clean:
 	rm -f coq/*.vo
+
+========== file tests/java/Termination.loc ==========
+[K_10]
+file = "HOME/tests/java/Termination.java"
+line = 47
+begin = 20
+end = 33
+
+[K_11]
+file = "HOME/tests/java/Termination.java"
+line = 48
+begin = 15
+end = 16
+
+[Termination_loop1_safety]
+name = "Method loop1"
+behavior = "Safety"
+file = "HOME/tests/java/Termination.java"
+line = 34
+begin = 9
+end = 14
+
+[JC_1]
+file = "HOME/tests/java/Termination.jc"
+line = 28
+begin = 8
+end = 23
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/java/Termination.jc"
+line = 28
+begin = 8
+end = 23
+
+[JC_4]
+file = "HOME/tests/java/Termination.jc"
+line = 28
+begin = 8
+end = 23
+
+[JC_5]
+file = "HOME/tests/java/Termination.java"
+line = 34
+begin = 9
+end = 14
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Termination_loop3_ensures_default]
+name = "Method loop3"
+behavior = "Behavior"
+file = "HOME/tests/java/Termination.java"
+line = 45
+begin = 8
+end = 13
+
+[JC_7]
+file = "HOME/tests/java/Termination.java"
+line = 34
+begin = 9
+end = 14
+
+[JC_8]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_9]
+file = "HOME/tests/java/Termination.java"
+line = 39
+begin = 9
+end = 14
+
+[K_1]
+file = "HOME/tests/java/Termination.java"
+line = 35
+begin = 5
+end = 17
+
+[K_2]
+file = "HOME/tests/java/Termination.java"
+line = 35
+begin = 15
+end = 16
+
+[K_5]
+file = "HOME/tests/java/Termination.java"
+line = 40
+begin = 5
+end = 21
+
+[K_6]
+file = "HOME/tests/java/Termination.java"
+line = 40
+begin = 15
+end = 20
+
+[Termination_loop2_safety]
+name = "Method loop2"
+behavior = "Safety"
+file = "HOME/tests/java/Termination.java"
+line = 39
+begin = 9
+end = 14
+
+[K_9]
+file = "HOME/tests/java/Termination.java"
+line = 44
+begin = 16
+end = 28
+
+[JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_11]
+file = "HOME/tests/java/Termination.java"
+line = 39
+begin = 9
+end = 14
+
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_13]
+file = "HOME/tests/java/Termination.java"
+line = 45
+begin = 8
+end = 13
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_15]
+file = "HOME/tests/java/Termination.java"
+line = 45
+begin = 8
+end = 13
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_17]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[Termination_loop3_safety]
+name = "Method loop3"
+behavior = "Safety"
+file = "HOME/tests/java/Termination.java"
+line = 45
+begin = 8
+end = 13
+
+[JC_19]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/Termination.why ==========
 type Object
@@ -751,58 +946,56 @@ let Termination_loop3_safety =
 
 
 ========== make project execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --project [...] why/Termination.why
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== file tests/java/why/Termination.wpr ==========
 <project name="Termination" context="why/Termination_ctx.why">
   <function name="Method loop3">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Termination_po10.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Termination_po11.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Termination_po12.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po13.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po14.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "48" begin = "15" end = "16"/>
+      <location file = "HOME/tests/java/Termination.java" line = "48" begin = "15" end = "16"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po15.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "48" begin = "15" end = "16"/>
+      <location file = "HOME/tests/java/Termination.java" line = "48" begin = "15" end = "16"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Behavior">
     <goal why_file="why/Termination_po5.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Termination_po6.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Termination_po7.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po8.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po9.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "44" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/Termination.java" line = "44" begin = "16" end = "28"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -811,11 +1004,11 @@ make: Leaving directory `/home/cmarche/recherche/why/tests/java'
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Termination_po3.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "40" begin = "15" end = "20"/>
+      <location file = "HOME/tests/java/Termination.java" line = "40" begin = "15" end = "20"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po4.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "40" begin = "15" end = "20"/>
+      <location file = "HOME/tests/java/Termination.java" line = "40" begin = "15" end = "20"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -824,11 +1017,11 @@ make: Leaving directory `/home/cmarche/recherche/why/tests/java'
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Termination_po1.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "35" begin = "15" end = "16"/>
+      <location file = "HOME/tests/java/Termination.java" line = "35" begin = "15" end = "16"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po2.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/Termination.java" line = "35" begin = "15" end = "16"/>
+      <location file = "HOME/tests/java/Termination.java" line = "35" begin = "15" end = "16"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -979,18 +1172,6 @@ axiom bool_and_false:
 
 axiom false_bool_and:
   ((bool_and(false, true) = false) and (bool_and(false, false) = false))
-
-axiom bool_and_true:
-  ((bool_and(true, true) = true) and (bool_and(false, true) = false))
-
-axiom true_bool_and:
-  ((bool_and(true, true) = true) and (bool_and(true, false) = false))
-
-axiom bool_and_1:
-  ((((bool_and(true, true) = true) -> ((true = true) and (true = true))) and
-    ((bool_and(true, false) = true) -> ((true = true) and (false = true)))) and
-   (((bool_and(false, true) = true) -> ((false = true) and (true = true))) and
-    ((bool_and(false, false) = true) -> ((false = true) and (false = true)))))
 
 axiom div_positive_by_positive:
   (forall a:int.
@@ -1634,7 +1815,6 @@ goal Termination_loop3_ensures_default_po_5:
   ("K_9": (return = 0))
 
 ========== simplify execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why -simplify [...] why/Termination.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -1645,9 +1825,7 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== ergo execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --why [...] why/Termination.why
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -1658,4 +1836,3 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'

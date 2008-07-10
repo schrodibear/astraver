@@ -144,123 +144,123 @@ End:
 */
 ========== file tests/java/BinarySearch.jloc ==========
 [K_10]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 71
 begin = 18
 end = 23
 
 [BinarySearch_binary_search2]
 name = "Method binary_search2"
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 62
 begin = 15
 end = 29
 
 [K_11]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 71
 begin = 17
 end = 28
 
 [K_12]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 71
 begin = 13
 end = 28
 
 [K_13]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 70
 begin = 8
 end = 14
 
 [K_14]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 76
 begin = 8
 end = 10
 
 [K_15]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 63
 begin = 16
 end = 24
 
 [K_16]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 63
 begin = 16
 end = 28
 
 [K_17]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 63
 begin = 9
 end = 10
 
 [K_18]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 54
 begin = 10
 end = 117
 
 [K_1]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 59
 begin = 10
 end = 126
 
 [K_2]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 65
 begin = 7
 end = 112
 
 [K_3]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 68
 begin = 7
 end = 10
 
 [K_4]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 73
 begin = 28
 end = 33
 
 [K_5]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 73
 begin = 14
 end = 18
 
 [K_6]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 73
 begin = 14
 end = 22
 
 [K_7]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 72
 begin = 23
 end = 28
 
 [K_8]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 72
 begin = 9
 end = 13
 
 [K_9]
-file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java"
+file = "HOME/tests/java/BinarySearch.java"
 line = 72
 begin = 9
 end = 17
 
 [cons_BinarySearch]
 name = "Constructor of class BinarySearch"
-file = "/home/cmarche/recherche/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -374,6 +374,258 @@ depend: coq/BinarySearch_why.v
 
 clean:
 	rm -f coq/*.vo
+
+========== file tests/java/BinarySearch.loc ==========
+[K_10]
+kind = ArithOverflow
+file = "HOME/tests/java/BinarySearch.java"
+line = 71
+begin = 18
+end = 23
+
+[K_11]
+kind = ArithOverflow
+file = "HOME/tests/java/BinarySearch.java"
+line = 71
+begin = 17
+end = 28
+
+[K_12]
+kind = ArithOverflow
+file = "HOME/tests/java/BinarySearch.java"
+line = 71
+begin = 13
+end = 28
+
+[K_15]
+kind = UserCall
+file = "HOME/tests/java/BinarySearch.java"
+line = 63
+begin = 16
+end = 24
+
+[K_16]
+kind = ArithOverflow
+file = "HOME/tests/java/BinarySearch.java"
+line = 63
+begin = 16
+end = 28
+
+[BinarySearch_binary_search2_safety]
+name = "Method binary_search2"
+behavior = "Safety"
+file = "HOME/tests/java/BinarySearch.java"
+line = 62
+begin = 15
+end = 29
+
+[K_18]
+file = "HOME/tests/java/BinarySearch.java"
+line = 54
+begin = 10
+end = 117
+
+[JC_1]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 45
+begin = 8
+end = 21
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 45
+begin = 8
+end = 21
+
+[JC_4]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 45
+begin = 8
+end = 21
+
+[JC_5]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 50
+begin = 8
+end = 30
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_7]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 50
+begin = 8
+end = 30
+
+[JC_8]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 52
+begin = 10
+end = 18
+
+[JC_9]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 50
+begin = 8
+end = 30
+
+[K_1]
+file = "HOME/tests/java/BinarySearch.java"
+line = 59
+begin = 10
+end = 126
+
+[K_2]
+file = "HOME/tests/java/BinarySearch.java"
+line = 65
+begin = 7
+end = 112
+
+[K_3]
+file = "HOME/tests/java/BinarySearch.java"
+line = 68
+begin = 7
+end = 10
+
+[K_4]
+kind = ArithOverflow
+file = "HOME/tests/java/BinarySearch.java"
+line = 73
+begin = 28
+end = 33
+
+[K_5]
+kind = IndexBounds
+file = "HOME/tests/java/BinarySearch.java"
+line = 73
+begin = 14
+end = 18
+
+[K_7]
+kind = ArithOverflow
+file = "HOME/tests/java/BinarySearch.java"
+line = 72
+begin = 23
+end = 28
+
+[K_8]
+kind = IndexBounds
+file = "HOME/tests/java/BinarySearch.java"
+line = 72
+begin = 9
+end = 13
+
+[JC_10]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 57
+begin = 8
+end = 23
+
+[JC_11]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_12]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 57
+begin = 8
+end = 23
+
+[JC_13]
+file = "HOME/tests/java/BinarySearch.jc"
+line = 57
+begin = 8
+end = 23
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_15]
+file = "HOME/tests/java/BinarySearch.java"
+line = 62
+begin = 15
+end = 29
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_17]
+kind = DivByZero
+file = "HOME/tests/java/BinarySearch.jc"
+line = 110
+begin = 54
+end = 140
+
+[JC_18]
+kind = DivByZero
+file = "HOME/tests/java/BinarySearch.jc"
+line = 110
+begin = 54
+end = 140
+
+[JC_19]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_20]
+kind = DivByZero
+file = "HOME/tests/java/BinarySearch.jc"
+line = 110
+begin = 54
+end = 140
+
+[JC_21]
+kind = DivByZero
+file = "HOME/tests/java/BinarySearch.jc"
+line = 110
+begin = 54
+end = 140
+
+[JC_22]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_23]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_24]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[BinarySearch_binary_search2_ensures_correctness]
+name = "Method binary_search2"
+behavior = "Normal behavior `correctness'"
+file = "HOME/tests/java/BinarySearch.java"
+line = 62
+begin = 15
+end = 29
 
 ========== file tests/java/why/BinarySearch.why ==========
 type Object
@@ -1093,9 +1345,7 @@ let BinarySearch_binary_search2_safety =
 
 
 ========== make project execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --project [...] why/BinarySearch.why
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== file tests/java/why/BinarySearch.wpr ==========
 <project name="BinarySearch" context="why/BinarySearch_ctx.why">
   <lemma name="mean_property">
@@ -1116,197 +1366,197 @@ make: Leaving directory `/home/cmarche/recherche/why/tests/java'
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "63" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "63" begin = "16" end = "28"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po18.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "63" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "63" begin = "16" end = "28"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po19.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po20.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po21.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po22.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po23.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "71" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "18" end = "23"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po24.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "71" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "18" end = "23"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po25.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.jc" line = "110" begin = "54" end = "140"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "110" begin = "54" end = "140"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po26.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "71" begin = "17" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po27.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "71" begin = "17" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po28.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "71" begin = "13" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "13" end = "28"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po29.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "71" begin = "13" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "13" end = "28"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po30.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "72" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po31.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "72" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po32.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "72" begin = "23" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "23" end = "28"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po33.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "72" begin = "23" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "23" end = "28"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po34.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po35.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po36.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po37.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po38.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/BinarySearch_po39.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/BinarySearch_po40.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "73" begin = "28" end = "33"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "73" begin = "28" end = "33"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po41.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "73" begin = "28" end = "33"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "73" begin = "28" end = "33"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po42.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po43.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po44.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po45.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/BinarySearch_po46.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `correctness'">
     <goal why_file="why/BinarySearch_po2.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po3.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po4.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po5.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po6.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.jc" line = "110" begin = "54" end = "140"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "110" begin = "54" end = "140"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po7.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po8.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po9.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po10.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po11.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po12.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po13.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po14.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "59" begin = "10" end = "126"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "59" begin = "10" end = "126"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/BinarySearch_po15.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/BinarySearch.java" line = "59" begin = "10" end = "126"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "59" begin = "10" end = "126"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -1457,18 +1707,6 @@ axiom bool_and_false:
 
 axiom false_bool_and:
   ((bool_and(false, true) = false) and (bool_and(false, false) = false))
-
-axiom bool_and_true:
-  ((bool_and(true, true) = true) and (bool_and(false, true) = false))
-
-axiom true_bool_and:
-  ((bool_and(true, true) = true) and (bool_and(true, false) = false))
-
-axiom bool_and_1:
-  ((((bool_and(true, true) = true) -> ((true = true) and (true = true))) and
-    ((bool_and(true, false) = true) -> ((true = true) and (false = true)))) and
-   (((bool_and(false, true) = true) -> ((false = true) and (true = true))) and
-    ((bool_and(false, false) = true) -> ((false = true) and (false = true)))))
 
 axiom div_positive_by_positive:
   (forall a:int.
@@ -4445,20 +4683,17 @@ goal BinarySearch_binary_search2_ensures_correctness_po_8:
   ("K_2": (integer_of_int32(l0) <= k_0))
 
 ========== simplify execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why -simplify [...] why/BinarySearch.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/BinarySearch_why.sx  : ................?......................#...... (44/0/1/1/0)
+simplify/BinarySearch_why.sx  : ................?......................?...... (44/0/2/0/0)
 total   :  46
 valid   :  44 ( 96%)
 invalid :   0 (  0%)
-unknown :   1 (  2%)
-timeout :   1 (  2%)
+unknown :   2 (  4%)
+timeout :   0 (  0%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== ergo execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --why [...] why/BinarySearch.why
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -4469,4 +4704,3 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'

@@ -97,123 +97,123 @@ End:
 */
 ========== file tests/java/SideEffects.jloc ==========
 [K_10]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 14
 begin = 1
 end = 11
 
 [K_11]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 15
 begin = 12
 end = 57
 
 [K_12]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 15
 begin = 12
 end = 57
 
 [K_13]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 16
 begin = 3
 end = 6
 
 [K_14]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 16
 begin = 1
 end = 11
 
 [K_15]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 17
 begin = 12
 end = 57
 
 [K_16]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 17
 begin = 12
 end = 57
 
 [K_17]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 9
 begin = 9
 end = 10
 
 [K_18]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 6
 begin = 17
 end = 30
 
 [K_1]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 10
 begin = 3
 end = 6
 
 [K_2]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 10
 begin = 1
 end = 11
 
 [K_3]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 11
 begin = 12
 end = 31
 
 [K_4]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 11
 begin = 12
 end = 31
 
 [K_5]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 12
 begin = 3
 end = 6
 
 [K_6]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 12
 begin = 1
 end = 11
 
 [K_7]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 13
 begin = 12
 end = 44
 
 [K_8]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 13
 begin = 12
 end = 44
 
 [K_9]
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 14
 begin = 3
 end = 6
 
 [cons_SideEffects]
 name = "Constructor of class SideEffects"
-file = "/home/cmarche/recherche/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [SideEffects_m1]
 name = "Method m1"
-file = "/home/cmarche/recherche/why/tests/java/SideEffects.java"
+file = "HOME/tests/java/SideEffects.java"
 line = 8
 begin = 9
 end = 11
@@ -327,6 +327,181 @@ depend: coq/SideEffects_why.v
 
 clean:
 	rm -f coq/*.vo
+
+========== file tests/java/SideEffects.loc ==========
+[K_10]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.java"
+line = 14
+begin = 1
+end = 11
+
+[K_11]
+file = "HOME/tests/java/SideEffects.java"
+line = 15
+begin = 12
+end = 57
+
+[K_14]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.java"
+line = 16
+begin = 1
+end = 11
+
+[K_15]
+file = "HOME/tests/java/SideEffects.java"
+line = 17
+begin = 12
+end = 57
+
+[K_18]
+file = "HOME/tests/java/SideEffects.java"
+line = 6
+begin = 17
+end = 30
+
+[JC_1]
+file = "HOME/tests/java/SideEffects.jc"
+line = 35
+begin = 8
+end = 21
+
+[JC_2]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_3]
+file = "HOME/tests/java/SideEffects.jc"
+line = 35
+begin = 8
+end = 21
+
+[JC_4]
+file = "HOME/tests/java/SideEffects.jc"
+line = 35
+begin = 8
+end = 21
+
+[JC_5]
+file = "HOME/tests/java/SideEffects.jc"
+line = 40
+begin = 8
+end = 30
+
+[JC_6]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_7]
+file = "HOME/tests/java/SideEffects.jc"
+line = 40
+begin = 8
+end = 30
+
+[JC_8]
+file = "HOME/tests/java/SideEffects.jc"
+line = 42
+begin = 10
+end = 18
+
+[JC_9]
+file = "HOME/tests/java/SideEffects.jc"
+line = 40
+begin = 8
+end = 30
+
+[K_2]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.java"
+line = 10
+begin = 1
+end = 11
+
+[K_3]
+file = "HOME/tests/java/SideEffects.java"
+line = 11
+begin = 12
+end = 31
+
+[K_6]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.java"
+line = 12
+begin = 1
+end = 11
+
+[K_7]
+file = "HOME/tests/java/SideEffects.java"
+line = 13
+begin = 12
+end = 44
+
+[SideEffects_m1_safety]
+name = "Method m1"
+behavior = "Safety"
+file = "HOME/tests/java/SideEffects.java"
+line = 8
+begin = 9
+end = 11
+
+[JC_10]
+file = "HOME/tests/java/SideEffects.jc"
+line = 47
+begin = 8
+end = 23
+
+[JC_11]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_12]
+file = "HOME/tests/java/SideEffects.jc"
+line = 47
+begin = 8
+end = 23
+
+[JC_13]
+file = "HOME/tests/java/SideEffects.jc"
+line = 47
+begin = 8
+end = 23
+
+[JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_15]
+file = "HOME/tests/java/SideEffects.java"
+line = 8
+begin = 9
+end = 11
+
+[JC_16]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_17]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/SideEffects.why ==========
 type Object
@@ -711,94 +886,92 @@ let SideEffects_m1_safety =
 
 
 ========== make project execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --project [...] why/SideEffects.why
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== file tests/java/why/SideEffects.wpr ==========
 <project name="SideEffects" context="why/SideEffects_ctx.why">
   <function name="Method m1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/SideEffects_po1.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "10" begin = "1" end = "11"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "10" begin = "1" end = "11"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/SideEffects_po2.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "10" begin = "1" end = "11"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "10" begin = "1" end = "11"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/SideEffects_po3.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "11" begin = "12" end = "31"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "11" begin = "12" end = "31"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po4.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "11" begin = "12" end = "31"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "11" begin = "12" end = "31"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po5.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "12" begin = "1" end = "11"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "12" begin = "1" end = "11"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/SideEffects_po6.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "12" begin = "1" end = "11"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "12" begin = "1" end = "11"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/SideEffects_po7.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "13" begin = "12" end = "44"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "13" begin = "12" end = "44"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po8.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "13" begin = "12" end = "44"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "13" begin = "12" end = "44"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po9.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "13" begin = "12" end = "44"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "13" begin = "12" end = "44"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po10.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "14" begin = "1" end = "11"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "14" begin = "1" end = "11"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/SideEffects_po11.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "14" begin = "1" end = "11"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "14" begin = "1" end = "11"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/SideEffects_po12.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "15" begin = "12" end = "57"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "15" begin = "12" end = "57"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po13.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "15" begin = "12" end = "57"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "15" begin = "12" end = "57"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po14.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "15" begin = "12" end = "57"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "15" begin = "12" end = "57"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po15.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "15" begin = "12" end = "57"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "15" begin = "12" end = "57"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po16.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "17" begin = "12" end = "57"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "17" begin = "12" end = "57"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po17.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "17" begin = "12" end = "57"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "17" begin = "12" end = "57"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po18.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "17" begin = "12" end = "57"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "17" begin = "12" end = "57"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SideEffects_po19.why">
-      <location file = "/home/cmarche/recherche/why/tests/java/SideEffects.java" line = "17" begin = "12" end = "57"/>
+      <location file = "HOME/tests/java/SideEffects.java" line = "17" begin = "12" end = "57"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -949,18 +1122,6 @@ axiom bool_and_false:
 
 axiom false_bool_and:
   ((bool_and(false, true) = false) and (bool_and(false, false) = false))
-
-axiom bool_and_true:
-  ((bool_and(true, true) = true) and (bool_and(false, true) = false))
-
-axiom true_bool_and:
-  ((bool_and(true, true) = true) and (bool_and(true, false) = false))
-
-axiom bool_and_1:
-  ((((bool_and(true, true) = true) -> ((true = true) and (true = true))) and
-    ((bool_and(true, false) = true) -> ((true = true) and (false = true)))) and
-   (((bool_and(false, true) = true) -> ((false = true) and (true = true))) and
-    ((bool_and(false, false) = true) -> ((false = true) and (false = true)))))
 
 axiom div_positive_by_positive:
   (forall a:int.
@@ -1970,7 +2131,6 @@ goal SideEffects_m1_safety_po_9:
   ("K_7": (i0 = 2))
 
 ========== simplify execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why -simplify [...] why/SideEffects.why
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -1981,9 +2141,7 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
 ========== ergo execution ==========
-make: Entering directory `/home/cmarche/recherche/why/tests/java'
 why --why [...] why/SideEffects.why
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
@@ -1994,4 +2152,3 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
-make: Leaving directory `/home/cmarche/recherche/why/tests/java'
