@@ -14,15 +14,15 @@
 
 (* specification *)
 
-external logic N : int
-external logic f : int
+logic N : int
+logic f : int
 
-external logic found : int farray -> prop
-external logic m_invariant : int,int farray -> prop
-external logic n_invariant : int,int farray -> prop
-external logic i_invariant : int,int,int,int,int farray -> prop
-external logic j_invariant : int,int,int,int,int farray -> prop
-external logic termination : int,int,int,int,int,int farray -> prop
+logic found : int farray -> prop
+logic m_invariant : int,int farray -> prop
+logic n_invariant : int,int farray -> prop
+logic i_invariant : int,int,int,int,int farray -> prop
+logic j_invariant : int,int,int,int,int farray -> prop
+logic termination : int,int,int,int,int,int farray -> prop
 
 (* Implementation part *)
 
@@ -33,7 +33,7 @@ let find () =
   init:
   let m = ref 1 in let n = ref N in
   while !m < !n do
-    { invariant m_invariant(m,A) and n_invariant(n,A) and permut(A,A@init) 
+    { invariant m_invariant(m,A) and n_invariant(n,A) and permutation(A,A@init) 
              and 1 <= m and n <= N as Inv_mn
       variant n-m }
     let r = A[f] in let i = ref !m in let j = ref !n in 
@@ -43,7 +43,7 @@ let find () =
       	         and m_invariant(m,A) and n_invariant(n,A)
 		 and 0 <= j and i <= N+1
 		 and termination(i,j,m,n,r,A)
-      	       	 and permut(A,A@init) as Inv_ij
+      	       	 and permutation(A,A@init) as Inv_ij
           variant N+2+j-i }
         L:
 
@@ -84,4 +84,4 @@ let find () =
         begin n := f; m := f end
     end
   done
-  { found(A) and permut(A,A@) }
+  { found(A) and permutation(A,A@) }

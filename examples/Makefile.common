@@ -72,6 +72,9 @@ harvey: $(VO:_valid.vo=_why.rv)
 %.gui: %.mlw
 	$(GWHY) $<
 
+%.gui: %.why
+	$(GWHY) $<
+
 %.fastwp: %.mlw
 	$(GWHY) -fast-wp $<
 
