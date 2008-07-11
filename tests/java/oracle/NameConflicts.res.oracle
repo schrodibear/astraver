@@ -1011,29 +1011,26 @@ axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
 
 axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
 
+predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
+
 logic bool_and : bool, bool -> bool
 
 logic bool_or : bool, bool -> bool
 
 logic bool_xor : bool, bool -> bool
 
-axiom bool_and_false:
-  ((bool_and(true, false) = false) and (bool_and(false, false) = false))
+axiom bool_and_false: (forall b:bool. (bool_and(b, false) = false))
 
-axiom false_bool_and:
-  ((bool_and(false, true) = false) and (bool_and(false, false) = false))
+axiom false_bool_and: (forall b:bool. (bool_and(false, b) = false))
 
-axiom bool_and_true:
-  ((bool_and(true, true) = true) and (bool_and(false, true) = false))
+axiom bool_and_true: (forall b:bool. (bool_and(b, true) = b))
 
-axiom true_bool_and:
-  ((bool_and(true, true) = true) and (bool_and(true, false) = false))
+axiom true_bool_and: (forall b:bool. (bool_and(true, b) = b))
 
 axiom bool_and_1:
-  ((((bool_and(true, true) = true) -> ((true = true) and (true = true))) and
-    ((bool_and(true, false) = true) -> ((true = true) and (false = true)))) and
-   (((bool_and(false, true) = true) -> ((false = true) and (true = true))) and
-    ((bool_and(false, false) = true) -> ((false = true) and (false = true)))))
+  (forall b1:bool.
+    (forall b2:bool.
+      ((bool_and(b1, b2) = true) -> ((b1 = true) and (b2 = true)))))
 
 axiom div_positive_by_positive:
   (forall a:int.
@@ -1124,9 +1121,16 @@ axiom null_pointer:
 
 logic eq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
 
+logic neq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
+
 axiom eq_pointer_bool_def:
   (forall p1:'a1 pointer.
     (forall p2:'a1 pointer. ((eq_pointer_bool(p1, p2) = true) <-> (p1 = p2))))
+
+axiom neq_pointer_bool_def:
+  (forall p1:'a1 pointer.
+    (forall p2:'a1 pointer.
+      ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
 
 axiom sub_pointer_shift:
   (forall p:'a1 pointer.
@@ -1193,6 +1197,8 @@ logic pset_range_right : 'a1 pset, int -> 'a1 pset
 
 logic in_pset : 'a1 pointer, 'a1 pset -> prop
 
+logic valid_pset : 'a1 alloc_table, 'a1 pset -> prop
+
 predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
   (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
 
@@ -1251,6 +1257,40 @@ axiom in_pset_union:
       (forall s2:'a1 pset.
         (in_pset(p, pset_union(s1, s2)) <->
          (in_pset(p, s1) or in_pset(p, s2))))))
+
+axiom valid_pset_empty: (forall a:'a1 alloc_table. valid_pset(a, pset_empty))
+
+axiom valid_pset_singleton:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (valid_pset(a, pset_singleton(p)) <-> valid(a, p))))
+
+axiom valid_pset_deref:
+  (forall a:'a1 alloc_table.
+    (forall m:('a2, 'a1 pointer) memory.
+      (forall q:'a2 pset.
+        (valid_pset(a, pset_deref(m, q)) <->
+         (forall r:'a2 pointer.
+           (forall p:'a1 pointer.
+             ((in_pset(r, q) and (p = select(m, r))) -> valid(a, p))))))))
+
+axiom valid_pset_range:
+  (forall a:'a1 alloc_table.
+    (forall q:'a1 pset.
+      (forall c:int.
+        (forall d:int.
+          (valid_pset(a, pset_range(q, c, d)) <->
+           (forall i:int.
+             (forall r:'a1 pointer.
+               ((in_pset(r, q) and ((c <= i) and (i <= d))) -> valid(a,
+                shift(r, i))))))))))
+
+axiom valid_pset_union:
+  (forall a:'a1 alloc_table.
+    (forall s1:'a1 pset.
+      (forall s2:'a1 pset.
+        (valid_pset(a, pset_union(s1, s2)) <->
+         (valid_pset(a, s1) and valid_pset(a, s2))))))
 
 predicate not_assigns(a: 'a1 alloc_table, m1: ('a1, 'a2) memory, m2: ('a1,
   'a2) memory, l: 'a1 pset) =

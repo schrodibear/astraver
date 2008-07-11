@@ -90,7 +90,7 @@ Implicit Arguments offset_max.
 Admitted.
 Implicit Arguments offset_min.
 
-(*Why predicate*) Definition valid (A552:Set) (a:(alloc_table A552)) (p:(pointer A552))
+(*Why predicate*) Definition valid (A580:Set) (a:(alloc_table A580)) (p:(pointer A580))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 Implicit Arguments valid.
 
@@ -283,8 +283,13 @@ Implicit Arguments pset_range_right.
 Admitted.
 Implicit Arguments in_pset.
 
-(*Why predicate*) Definition pset_disjoint (A590:Set) (ps1:(pset A590)) (ps2:(pset A590))
-  := (forall (p:(pointer A590)), ~((in_pset p ps1) /\ (in_pset p ps2))).
+(*Why logic*) Definition valid_pset :
+  forall (A1:Set), (alloc_table A1) -> (pset A1) -> Prop.
+Admitted.
+Implicit Arguments valid_pset.
+
+(*Why predicate*) Definition pset_disjoint (A619:Set) (ps1:(pset A619)) (ps2:(pset A619))
+  := (forall (p:(pointer A619)), ~((in_pset p ps1) /\ (in_pset p ps2))).
 Implicit Arguments pset_disjoint.
 
 (*Why axiom*) Lemma in_pset_empty :
@@ -354,8 +359,52 @@ Admitted.
      ((in_pset p (pset_union s1 s2)) <-> (in_pset p s1) \/ (in_pset p s2))))).
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A601:Set) (A600:Set) (a:(alloc_table A600)) (m1:(memory A600 A601)) (m2:(memory A600 A601)) (l:(pset A600))
-  := (forall (p:(pointer A600)),
+(*Why axiom*) Lemma valid_pset_empty :
+  forall (A1:Set),
+  (forall (a:(alloc_table A1)), (valid_pset a (@pset_empty A1))).
+Admitted.
+
+(*Why axiom*) Lemma valid_pset_singleton :
+  forall (A1:Set),
+  (forall (a:(alloc_table A1)),
+   (forall (p:(pointer A1)),
+    ((valid_pset a (pset_singleton p)) <-> (valid a p)))).
+Admitted.
+
+(*Why axiom*) Lemma valid_pset_deref :
+  forall (A1:Set), forall (A2:Set),
+  (forall (a:(alloc_table A1)),
+   (forall (m:(memory A2 (pointer A1))),
+    (forall (q:(pset A2)),
+     ((valid_pset a (pset_deref m q)) <->
+      (forall (r:(pointer A2)),
+       (forall (p:(pointer A1)),
+        ((in_pset r q) /\ p = (select m r) -> (valid a p)))))))).
+Admitted.
+
+(*Why axiom*) Lemma valid_pset_range :
+  forall (A1:Set),
+  (forall (a:(alloc_table A1)),
+   (forall (q:(pset A1)),
+    (forall (c:Z),
+     (forall (d:Z),
+      ((valid_pset a (pset_range q c d)) <->
+       (forall (i:Z),
+        (forall (r:(pointer A1)),
+         ((in_pset r q) /\ c <= i /\ i <= d -> (valid a (shift r i)))))))))).
+Admitted.
+
+(*Why axiom*) Lemma valid_pset_union :
+  forall (A1:Set),
+  (forall (a:(alloc_table A1)),
+   (forall (s1:(pset A1)),
+    (forall (s2:(pset A1)),
+     ((valid_pset a (pset_union s1 s2)) <-> (valid_pset a s1) /\
+      (valid_pset a s2))))).
+Admitted.
+
+(*Why predicate*) Definition not_assigns (A636:Set) (A635:Set) (a:(alloc_table A635)) (m1:(memory A635 A636)) (m2:(memory A635 A636)) (l:(pset A635))
+  := (forall (p:(pointer A635)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 Implicit Arguments not_assigns.
 
@@ -457,7 +506,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A620:Set) (a:(tag_table A620)) (p:(pointer A620)) (t:(tag_id A620))
+(*Why predicate*) Definition instanceof (A655:Set) (a:(tag_table A655)) (p:(pointer A655)) (t:(tag_id A655))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -484,8 +533,8 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition root_tag (A625:Set) (t:(tag_id A625))
-  := (parenttag t (@bottom_tag A625)).
+(*Why predicate*) Definition root_tag (A660:Set) (t:(tag_id A660))
+  := (parenttag t (@bottom_tag A660)).
 Implicit Arguments root_tag.
 
 (*Why axiom*) Lemma root_subtag :
@@ -497,7 +546,7 @@ Implicit Arguments root_tag.
       ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A627:Set) (tag_table:(tag_table A627)) (mutable:(memory A627 (tag_id A627))) (this:(pointer A627))
+(*Why predicate*) Definition fully_packed (A662:Set) (tag_table:(tag_table A662)) (mutable:(memory A662 (tag_id A662))) (this:(pointer A662))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 

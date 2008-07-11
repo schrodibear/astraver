@@ -378,6 +378,7 @@ logic pset_range_left : 'z pset, int -> 'z pset (* l(..b) *)
 logic pset_range_right : 'z pset, int -> 'z pset (* l(a..) *)
 
 logic in_pset : 't pointer, 't pset -> prop
+logic valid_pset : 't alloc_table, 't pset -> prop
 
 predicate pset_disjoint(ps1:'t pset, ps2:'t pset) =
   forall p:'t pointer.
@@ -434,6 +435,36 @@ axiom in_pset_union:
   forall s1:'t pset.
   forall s2:'t pset.
     in_pset(p,pset_union(s1,s2)) <-> in_pset(p,s1) or in_pset(p,s2)
+
+axiom valid_pset_empty:
+  forall a:'t alloc_table. valid_pset(a,pset_empty)
+
+axiom valid_pset_singleton:
+  forall a:'t alloc_table. 
+  forall p:'t pointer. 
+    valid_pset(a,pset_singleton(p)) <-> valid(a,p)
+
+axiom valid_pset_deref:
+  forall a:'v alloc_table. 
+  forall m:('t,'v pointer) memory.
+  forall q:'t pset.
+    valid_pset(a,pset_deref(m,q)) <-> 
+      forall r:'t pointer. forall p:'v pointer. 
+        in_pset(r,q) and p = select(m,r) -> valid(a,p)
+
+axiom valid_pset_range:
+  forall a:'t alloc_table. 
+  forall q:'t pset.
+  forall c:int. forall d:int.
+    valid_pset(a,pset_range(q,c,d)) <-> 
+	forall i:int. forall r:'t pointer. 
+          in_pset(r,q) and c <= i and i <= d -> valid(a,shift(r,i))
+
+axiom valid_pset_union:
+  forall a:'t alloc_table. 
+  forall s1:'t pset.
+  forall s2:'t pset.
+    valid_pset(a,pset_union(s1,s2)) <-> valid_pset(a,s1) and valid_pset(a,s2)
  
 predicate not_assigns 
   (a:'t alloc_table, m1:('t,'v) memory, m2:('t,'v) memory, l:'t pset) =

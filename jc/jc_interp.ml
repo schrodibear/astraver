@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.302 2008-07-11 09:01:13 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.303 2008-07-11 13:17:03 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1054,6 +1054,15 @@ let rec collect_locations ~global_assertion before (refs,mems) loc =
         (StringMap.add var true refs,mems)
     | JCLat(loc,lab) ->
         collect_locations ~global_assertion before (refs,mems) loc
+
+let rec collect_pset_locations ~global_assertion loc =
+  match loc with
+    | JCLderef(e,lab,fi,fr) -> 
+        pset ~global_assertion lab e
+    | JCLvar vi -> 
+	LVar "pset_empty"
+    | JCLat(loc,lab) ->
+        collect_pset_locations ~global_assertion loc
 
 let rec make_union_loc = function
   | [] -> LVar "pset_empty"
@@ -2242,8 +2251,8 @@ let tr_logic_fun li ta acc =
 		| JCReads _r -> assert false (* cannot be recursive *)
 	      in
 	      let call = 
-		make_logic_pred_call ~label_in_name:true li
-		  (List.map (fun (name,_ty) -> LVar name) params) [] []
+		LPred(li.jc_logic_info_final_name, 
+		      List.map (fun (name,_ty) -> LVar name) params_reads)
 	      in
 	      LIff(call,body)
 	  | Some _ty ->
@@ -2256,8 +2265,8 @@ let tr_logic_fun li ta acc =
 		| JCReads _r -> assert false (* cannot be recursive *)
 	      in
 	      let call = 
-		make_logic_fun_call ~label_in_name:true li
-		  (List.map (fun (name,_ty) -> LVar name) params) [] []
+		LApp(li.jc_logic_info_final_name, 
+		     List.map (fun (name,_ty) -> LVar name) params_reads)
 	      in
 	      LPred("eq",[call;body])
 	in
@@ -2406,7 +2415,64 @@ let tr_logic_fun li ta acc =
 	     "no_assign_" ^ li.jc_logic_info_name ^ "_" ^ string_of_int count
 	   in
 	   count + 1, Axiom(name,a) :: acc
-      ) (0,acc) params_reads)
+      ) (0,acc) params_reads) (* memory_param_reads ? *)
+  in
+
+  (* alloc_extend axioms *)
+  let acc = match ta with JCAssertion _ | JCTerm _ -> acc | JCReads ps ->
+    let alloc_params_reads = 
+      Jc_interp_misc.alloc_logic_params ~label_in_name:true li
+    in
+    let params_names = List.map fst params_reads in
+    let normal_params = List.map (fun name -> LVar name) params_names in
+    snd (List.fold_left
+      (fun (count,acc) param ->
+	 let paramty = snd param in
+	 assert (is_alloc_table_type paramty);
+	 let exta = 
+	   LPred("alloc_extends",[LVar (fst param); LVar "tmpalloc"])
+	 in
+	 let ps = 
+	   List.map (collect_pset_locations ~global_assertion:true) ps 
+	 in
+	 let ps = make_union_loc ps in
+	 let valida =
+	   LPred("valid_pset",[LVar (fst param); ps])
+	 in
+	 let update_params = 
+           List.map (fun name ->
+		       if name = fst param then LVar "tmpalloc"
+		       else LVar name
+		    ) params_names
+	 in
+	 let a = 
+           match li.jc_logic_info_result_type with
+	     | None ->
+		 LImpl(
+                   make_and exta valida,
+                   LIff(
+		     LPred(li.jc_logic_info_final_name,normal_params),
+		     LPred(li.jc_logic_info_final_name,update_params)))
+	     | Some rety ->
+		 LImpl(
+                   make_and exta valida,
+                   LPred("eq",[
+			   LApp(li.jc_logic_info_final_name,normal_params);
+			   LApp(li.jc_logic_info_final_name,update_params)]))
+	 in
+	 let a = 
+           List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
+	 in
+	 let a = 
+	   LForall(
+	     "tmpalloc",paramty,
+	     a)
+	 in
+	 let name = 
+	   "alloc_extend_" ^ li.jc_logic_info_name ^ "_" ^ string_of_int count
+	 in
+	 count + 1, Axiom(name,a) :: acc
+      ) (0,acc) alloc_params_reads)
   in
 
   acc

@@ -95,6 +95,8 @@ let raw_alloc_table_type ty =
 let alloc_table_type tov = 
   raw_alloc_table_type (tag_or_variant_model_type tov)
 
+let is_alloc_table_type ty = ty.logic_type_name == alloc_table_type_name
+
 let tr_native_type t =
   match t with
     | Tunit -> "unit"
@@ -215,30 +217,33 @@ let memory_logic_params ~label_in_name ?region_assoc ?label_assoc li =
     li.jc_logic_info_effects.jc_effect_memories
     []
 
+let alloc_logic_params ~label_in_name ?region_assoc ?label_assoc li =
+  StringRegionSet.fold
+    (fun (a,r) acc ->
+       let r =
+	 match region_assoc with
+	   | Some assoc when Region.polymorphic r ->
+	       begin
+		 Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
+		 Jc_options.lprintf "r:%a@." Region.print r;
+		 try RegionList.assoc r assoc with Not_found -> assert false
+	       end
+	   | _ -> r
+       in
+       let st, _ = Hashtbl.find Jc_typing.structs_table a in
+       (alloc_region_table_name (JCtag(st, []), r),
+	alloc_table_type (JCtag(st, [])))::acc)
+    li.jc_logic_info_effects.jc_effect_alloc_table
+    []
+
 let logic_params ~label_in_name ?region_assoc ?label_assoc li =
-  let l = List.map snd
+  let mems = List.map snd
     (memory_logic_params ~label_in_name ?region_assoc ?label_assoc li)
   in
-  let l = 
-    StringRegionSet.fold
-      (fun (a,r) acc ->
-	 let r =
-	   match region_assoc with
-	     | Some assoc when Region.polymorphic r ->
-		 begin
-		   Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
-		   Jc_options.lprintf "r:%a@." Region.print r;
-		   try RegionList.assoc r assoc with Not_found -> assert false
-		 end
-	     | _ -> r
-	 in
-	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	 (alloc_region_table_name (JCtag(st, []), r),
-	  alloc_table_type (JCtag(st, [])))::acc)
-      li.jc_logic_info_effects.jc_effect_alloc_table
-      l	    
+  let allocs =
+    alloc_logic_params ~label_in_name ?region_assoc ?label_assoc li
   in
-  let l = 
+  let tags = 
     VariantMap.fold
       (fun v labs acc -> 
 	 let t = { logic_type_args = [variant_model_type v];
@@ -251,13 +256,16 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	      (name, t)::acc)
 	   labs acc)
       li.jc_logic_info_effects.jc_effect_tag_table
-      l	    
+      []
   in
-  VarSet.fold
-    (fun v acc -> 
-       (v.jc_var_info_final_name, tr_base_type v.jc_var_info_type) :: acc
-    ) li.jc_logic_info_effects.jc_effect_globals
-    l
+  let globs = 
+    VarSet.fold
+      (fun v acc -> 
+	 (v.jc_var_info_final_name, tr_base_type v.jc_var_info_type) :: acc
+      ) li.jc_logic_info_effects.jc_effect_globals
+      []
+  in
+  mems @ allocs @ tags @ globs
 
 let logic_params_call ~label_in_name li l region_assoc label_assoc =
   List.map 

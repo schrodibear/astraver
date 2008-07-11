@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.111 2008-07-08 16:16:37 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.112 2008-07-11 13:17:03 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -287,6 +287,7 @@ let main () =
     let d_lfuns = 
       Hashtbl.fold 
 	(fun _ (li, p) acc ->
+	   Jc_options.lprintf "Logic function %s@." li.jc_logic_info_name;
 	   Jc_interp.tr_logic_fun li p acc)
 	Jc_typing.logic_functions_table 
 	d
