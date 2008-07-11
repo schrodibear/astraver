@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.114 2008-05-28 14:53:34 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.115 2008-07-11 15:18:27 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -538,16 +538,20 @@ and expr_node loc ty t =
 	      NEvar (Var_info info)    
 	    with
 		Invalid_argument _ ->
-		  unsupported loc "pointer cast"
-	  end
 (*
-       | TEcast({Ctypes.ctype_node = Tpointer _}as ty, 
-	       {texpr_node = TEconstant (IntConstant "0")}) -> 
-	  let info = default_var_info "null" in 
-	  Cenv.set_var_type (Var_info info) ty false;
-	  NEvar (Var_info info)    
+		  unsupported loc "cast to pointer"
 *)
+		  NEcast (ty, expr e')
+	  end
       | TEcast (tctype ,texpr) -> NEcast (tctype, expr texpr)
+(*
+	  begin
+	    match texpr.texpr_type.Ctypes.ctype_node with
+	      | Tpointer _ ->
+		  unsupported loc "pointer-to-int cast"		  
+	      | _ -> NEcast (tctype, expr texpr)
+	  end
+*)
       | TEmalloc (tctype, texpr) -> NEmalloc (tctype, expr texpr)
 
 let nt_arrow loc valid ty e z f =
