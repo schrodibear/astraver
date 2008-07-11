@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.95 2008-07-02 08:04:15 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.96 2008-07-11 06:35:50 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -368,7 +368,7 @@ let normalize =
 	      | JCPEwhile(test,inv,var,body) ->
 		  normalize_while e#loc test inv var body
 	      | JCPEfor(inits,test,updates,inv,var,body) ->
-		  normalize_for e#loc inits test updates [None,inv] var body
+		  normalize_for e#loc inits test updates [[],inv] var body
 	      | JCPEbreak lab ->
 		  assert (lab = ""); (* TODO for Java *)
 		  mkthrow ~loc:e#loc ~exn:loop_exit ()

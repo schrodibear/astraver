@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.15 2008-02-26 10:16:36 moy Exp $ i*)
+(*i $Id: pp.mli,v 1.16 2008-07-11 06:35:50 moy Exp $ i*)
 
 open Format
 
@@ -59,6 +59,7 @@ val lbrace : formatter -> unit -> unit
 val rbrace : formatter -> unit -> unit
 val nothing : formatter -> unit -> unit
 val string : formatter -> string -> unit
+val constant_string : string -> formatter -> unit -> unit
 val hov : int -> formatter -> ('a -> unit) -> 'a -> unit
 
 val open_formatter : ?margin:int -> out_channel -> formatter

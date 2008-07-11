@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.300 2008-07-10 13:15:38 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.301 2008-07-11 06:35:50 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -511,12 +511,16 @@ let memvar ?assigned ?label_in_name label (fi,r) =
   else
     lvar ?assigned ?label_in_name LabelHere mem
 
+let relocate_label ~relocate truelab curlab =
+  if relocate && curlab = LabelHere then truelab else curlab
+
 (* Return (t, lets) where:
  * t is the Why term
  * lets is a list of (id, value), which should be binded
  * at the assertion level. *)
-let rec term ~global_assertion label oldlabel t =
-  let ft = term ~global_assertion label oldlabel in
+let rec term ~global_assertion ~relocate label oldlabel t =
+  let ft = term ~global_assertion ~relocate label oldlabel in
+  let rlab = relocate_label ~relocate label in
   let t', lets =
   match t#node with
     | JCTconst JCCnull -> LVar "null", []
@@ -552,9 +556,10 @@ let rec term ~global_assertion label oldlabel t =
         let t2', lets2 = ft t2 in
         let t3', lets3 = ft t3 in
         TIf(t1', t2', t3'), lets1@lets2@lets3
-    | JCTderef(t,lab,fi) -> 
+    | JCTderef(t,label,fi) -> 
+	let label = rlab label in
         let t', lets = ft t in
-        let mem = memvar ~label_in_name:global_assertion lab (fi,t#region) in
+        let mem = memvar ~label_in_name:global_assertion label (fi,t#region) in
         let deref = LApp("select",[mem; t']) in
         let deref =
           if field_of_union fi then
@@ -598,8 +603,8 @@ let rec term ~global_assertion label oldlabel t =
         in
         make_logic_fun_call ~label_in_name:global_assertion f args
           app.jc_app_region_assoc app.jc_app_label_assoc, lets
-    | JCTold(t) -> term ~global_assertion oldlabel oldlabel t
-    | JCTat(t,lab) -> term ~global_assertion lab oldlabel t
+    | JCTold(t) -> term ~global_assertion ~relocate oldlabel oldlabel t
+    | JCTat(t,lab) -> term ~global_assertion ~relocate lab oldlabel t
     | JCToffset(k,t,st) -> 
         let alloc = 
           alloc_region_table_name (JCtag(st, []), t#region)
@@ -611,11 +616,13 @@ let rec term ~global_assertion label oldlabel t =
         let t', lets = ft t in
         LApp(f,[LVar alloc; t']), lets
     | JCTinstanceof(t,label,ty) ->
+	let label = rlab label in
         let t', lets = ft t in
         let tag = tag_table_name (JCtag(ty, [])) in
         LApp("instanceof_bool",
              [lvar label tag; t';LVar (tag_name ty)]), lets
     | JCTcast(t,label,ty) ->
+	let label = rlab label in
         if struct_of_union ty then ft t else
           let t', lets = ft t in
           let tag = tag_table_name (JCtag(ty, [])) in
@@ -651,8 +658,8 @@ let rec term ~global_assertion label oldlabel t =
    else
      t'), lets
 
-let named_term ~global_assertion label oldlabel t =
-  let t', lets = term ~global_assertion label oldlabel t in
+let named_term ~global_assertion ~relocate label oldlabel t =
+  let t', lets = term ~global_assertion ~relocate label oldlabel t in
   match t' with
     | Tnamed _ -> t', lets
     | _ -> 
@@ -663,17 +670,17 @@ let named_term ~global_assertion label oldlabel t =
 (*                                  Assertions                                 *)
 (*******************************************************************************)
 
-let tag ~global_assertion label oldlabel = function
+let tag ~global_assertion ~relocate label oldlabel = function
   | JCTtag st -> LVar (tag_name st), []
   | JCTbottom -> LVar "bottom_tag", []
   | JCTtypeof(t, st) ->
-      let te, lets = term ~global_assertion label oldlabel t in
+      let te, lets = term ~global_assertion ~relocate label oldlabel t in
       make_typeof st te, lets
 
-let rec assertion ~global_assertion label oldlabel a =
-  let fa = assertion ~global_assertion label oldlabel 
-  and ft = term ~global_assertion label oldlabel
-  and ftag = tag ~global_assertion label oldlabel
+let rec assertion ~global_assertion ~relocate label oldlabel a =
+  let fa = assertion ~global_assertion ~relocate label oldlabel 
+  and ft = term ~global_assertion ~relocate label oldlabel
+  and ftag = tag ~global_assertion ~relocate label oldlabel
   in
   let a', lets =
     match a#node with
@@ -740,8 +747,8 @@ let rec assertion ~global_assertion label oldlabel a =
           LExists(v.jc_var_info_final_name,
                   tr_base_type v.jc_var_info_type,
                   fa p), []
-      | JCAold a -> assertion ~global_assertion oldlabel oldlabel a, []
-      | JCAat(a,lab) -> assertion ~global_assertion lab oldlabel a, []
+      | JCAold a -> assertion ~global_assertion ~relocate oldlabel oldlabel a, []
+      | JCAat(a,lab) -> assertion ~global_assertion ~relocate lab oldlabel a, []
       | JCAbool_term(t) ->
           let t', lets = ft t in
           LPred("eq",[t'; LConst(Prim_bool true)]), lets
@@ -799,8 +806,8 @@ let named_jc_assertion loc a =
           LNamed(n,a)
             
             
-let named_assertion ~global_assertion label oldlabel a =
-  let a' = assertion ~global_assertion label oldlabel a in
+let named_assertion ~global_assertion ~relocate label oldlabel a =
+  let a' = assertion ~global_assertion ~relocate label oldlabel a in
   named_jc_assertion a#loc a'
 
 let struct_alloc_arg a =
@@ -993,6 +1000,7 @@ let read_allocs ~caller_writes ~callee_writes ~callee_reads ~regions =
 
 let rec pset ~global_assertion before loc = 
   let fpset = pset ~global_assertion before in
+  let ft = term ~global_assertion ~relocate:false before before in
   match loc with
     | JCLSderef(ls,lab,fi,r) ->
         let m = memvar ~label_in_name:global_assertion lab (fi,r) in
@@ -1005,22 +1013,22 @@ let rec pset ~global_assertion before loc =
         LApp("pset_all", [ls])
     | JCLSrange(ls,None,Some b) ->
         let ls = fpset ls in
-        let b', lets = term ~global_assertion before before b in
+        let b', lets = ft b in
         assert (lets = []);
         LApp("pset_range_left", 
              [ls; 
               term_coerce b#loc integer_type b#typ b'])
     | JCLSrange(ls,Some a,None) ->
         let ls = fpset ls in
-        let a', lets = term ~global_assertion before before a in
+        let a', lets = ft a in
         assert (lets = []);
         LApp("pset_range_right", 
              [ls; 
               term_coerce a#loc integer_type a#typ a'])
     | JCLSrange(ls,Some a,Some b) ->
         let ls = fpset ls in
-        let a', lets1 = term ~global_assertion before before a in
-        let b', lets2 = term ~global_assertion before before b in
+        let a', lets1 = ft a in
+        let b', lets2 = ft b in
         assert (lets1 = [] && lets2 = []);
         LApp("pset_range", 
              [ls; 
@@ -1746,7 +1754,7 @@ and expr ~infunction ~threats e : expr =
 	in
 	let inv = List.map snd inv in
         let inv = List.map (named_assertion
-			      ~global_assertion:false
+			      ~global_assertion:false ~relocate:false
 			      LabelHere
 			      LabelPre
 			   ) inv
@@ -1754,7 +1762,7 @@ and expr ~infunction ~threats e : expr =
 	let inv = make_and_list inv in
 	(* free invariant: trusted or not *)
         let free_inv = named_assertion 
-          ~global_assertion:false 
+          ~global_assertion:false ~relocate:false
           LabelHere 
           LabelPre 
           la.jc_free_loop_invariant 
@@ -1809,7 +1817,7 @@ and expr ~infunction ~threats e : expr =
           match la.jc_loop_variant with
             | Some t when threats ->
                 let variant, lets = named_term
-                  ~global_assertion:false
+                  ~global_assertion:false ~relocate:false
                   LabelHere
                   LabelPre
                   t
@@ -1825,7 +1833,7 @@ and expr ~infunction ~threats e : expr =
     | JCEassert(behav,a) -> 
 	if compatible_with_current_behavior behav then
           Assert(named_assertion
-                   ~global_assertion:false
+                   ~global_assertion:false ~relocate:false
                    LabelHere
                    LabelPre
                    a,
@@ -2185,7 +2193,7 @@ let tr_logic_const vi init acc =
     match init with
       | None -> decl
       | Some(t,ty) ->
-          let t', lets = term ~global_assertion:true LabelHere LabelHere t in
+          let t', lets = term ~global_assertion:true ~relocate:false LabelHere LabelHere t in
           let vi_ty = vi.jc_var_info_type in
           let t_ty = t#typ in
           (* eprintf "logic const: max type = %a@." print_type ty; *)
@@ -2218,12 +2226,12 @@ let tr_logic_fun li ta acc =
     match li.jc_logic_info_result_type, ta with
         (* Predicate *)
       | None, JCAssertion a -> 
-          let a = assertion ~global_assertion:true LabelHere LabelHere a in
+          let a = assertion ~global_assertion:true ~relocate:false LabelHere LabelHere a in
             Predicate (false, li.jc_logic_info_final_name,params_reads, a) 
               (* Function *)
       | Some ty, JCTerm t -> 
           let ret = tr_base_type ty in
-          let t, lets = term ~global_assertion:true LabelHere LabelHere t in
+          let t, lets = term ~global_assertion:true ~relocate:false LabelHere LabelHere t in
           assert (lets = []);
           Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
       (* Logic *)
@@ -2470,18 +2478,32 @@ let function_body f spec behavior_name body =
   reset_current_behavior ();
   reset_current_spec ();
   e
+
+let assume_in_precondition behav pre =
+  match behav.jc_behavior_assumes with
+    | None -> pre
+    | Some assum ->
+	make_and (assertion ~global_assertion:false ~relocate:false
+		    LabelHere LabelHere assum) pre
+
+let assume_in_postcondition behav post =
+  match behav.jc_behavior_assumes with
+    | None -> post
+    | Some assum ->
+	make_impl (assertion ~global_assertion:false ~relocate:true
+		     LabelOld LabelOld assum) post
   
 let tr_fun f funloc spec body acc =
   let requires_param = 
     (named_assertion 
-       ~global_assertion:false 
+       ~global_assertion:false ~relocate:false 
        LabelHere 
        LabelHere 
        spec.jc_fun_requires) 
   in
   let free_requires = 
     (named_assertion 
-       ~global_assertion:false 
+       ~global_assertion:false ~relocate:false
        LabelHere 
        LabelHere 
        spec.jc_fun_free_requires)
@@ -2499,7 +2521,8 @@ let tr_fun f funloc spec body acc =
            (match vi.jc_var_info_type with
               | JCTpointer (tov, n1o, n2o) ->
                   let vit, lets = 
-                    term ~global_assertion:false LabelHere LabelHere
+                    term ~global_assertion:false ~relocate:false
+		      LabelHere LabelHere
                       (new term_var vi) 
                   in
                   begin match n1o, n2o with
@@ -2536,37 +2559,39 @@ let tr_fun f funloc spec body acc =
                    b.jc_behavior_ensures#name_label
                    Loc.gen_report_position b.jc_behavior_ensures#loc;
                  *)
-                 (named_assertion ~global_assertion:false LabelPost LabelOld 
+                 (named_assertion ~global_assertion:false ~relocate:false LabelPost LabelOld 
                     b.jc_behavior_ensures)              
              | Some (locassigns, a) ->
                  named_jc_assertion loc
                    (make_and
-                      (named_assertion ~global_assertion:false LabelPost LabelOld
+                      (named_assertion ~global_assertion:false ~relocate:false LabelPost LabelOld
                          b.jc_behavior_ensures)         
                       (named_jc_assertion
                          locassigns
                          (assigns LabelOld f.jc_fun_info_effects (Some a) funloc)))
          in
-         let a =
-           match b.jc_behavior_assumes with
-             | None -> post
-             | Some e -> 
-                 make_impl (assertion ~global_assertion:false LabelOld LabelOld e) post
-         in
+(*          let a = *)
+(*            match b.jc_behavior_assumes with *)
+(*              | None -> post *)
+(*              | Some e ->  *)
+(*                  make_impl (assertion ~global_assertion:false LabelOld LabelOld e) post *)
+(*          in *)
            match b.jc_behavior_throws with
              | None -> 
                  begin match id with
                    | "safety" ->
-                       ((id, b, a) :: safety, 
+		       assert (b.jc_behavior_assumes = None);
+                       ((id, b, post) :: safety, 
                         normal_inferred, normal, excep_inferred, excep)
                    | "inferred" -> 
+		       assert (b.jc_behavior_assumes = None);
                        (safety,
-                        (id, b, a) :: normal_inferred, 
-                        (if Jc_options.trust_ai then normal else (id, b, a) :: normal), 
+                        (id, b, post) :: normal_inferred, 
+                        (if Jc_options.trust_ai then normal else (id, b, post) :: normal), 
                         excep_inferred, excep)
                    | _ -> 
                        (safety, 
-                        normal_inferred, (id, b, a) :: normal, 
+                        normal_inferred, (id, b, post) :: normal, 
                         excep_inferred, excep)
                  end
              | Some ei ->
@@ -2576,13 +2601,16 @@ let tr_fun f funloc spec body acc =
                    with Not_found -> []
                  in
                    if id = "inferred" then 
-                     (safety, normal_inferred, normal, 
-                      ExceptionMap.add ei ((id, b, a) :: eb) excep_inferred, 
-                      if Jc_options.trust_ai then excep else 
-                        ExceptionMap.add ei ((id, b, a) :: eb) excep)
+		     begin
+		       assert (b.jc_behavior_assumes = None);
+                       (safety, normal_inferred, normal, 
+			ExceptionMap.add ei ((id, b, post) :: eb) excep_inferred, 
+			if Jc_options.trust_ai then excep else 
+                          ExceptionMap.add ei ((id, b, post) :: eb) excep)
+		     end
                    else
                      (safety, normal_inferred, normal, excep_inferred, 
-                      ExceptionMap.add ei ((id, b, a) :: eb) excep))
+                      ExceptionMap.add ei ((id, b, post) :: eb) excep))
       ([], [], [], ExceptionMap.empty, ExceptionMap.empty)
       spec.jc_fun_behavior
   in
@@ -2765,8 +2793,10 @@ let tr_fun f funloc spec body acc =
   in
   let normal_post =
     List.fold_right
-      (fun (_,_,e) acc -> make_and e acc)
-      normal_behaviors LTrue
+      (fun (_id,behav,post) acc -> 
+	 let post = assume_in_postcondition behav post in
+	 make_and post acc
+      ) normal_behaviors LTrue
   in
   let normal_post_inferred =
     List.fold_right
@@ -2785,7 +2815,10 @@ let tr_fun f funloc spec body acc =
     ExceptionMap.fold
       (fun ei l acc ->
          let p = 
-           List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
+           List.fold_right (fun (_id,behav,post) acc -> 
+			      let post = assume_in_postcondition behav post in
+			      make_and post acc
+			   ) l LTrue
          in (exception_name ei,p)::acc) 
       excep_behaviors_inferred []
   in
@@ -2889,7 +2922,7 @@ let tr_fun f funloc spec body acc =
               let tblock = 
                 if !return_void then
                   Try(append tblock (Raise(jessie_return_exception,None)),
-                      jessie_return_exception,None,Void)
+                     jessie_return_exception,None,Void)
                 else
                   let e = any_value f.jc_fun_info_result.jc_var_info_type in
                     Let_ref(jessie_return_variable,e,
@@ -2931,7 +2964,7 @@ let tr_fun f funloc spec body acc =
                     (* normal behaviors *)
                   let acc =
                     List.fold_right
-                      (fun (id,b,e) acc ->
+                      (fun (id,b,post) acc ->
  		          let body = function_body f spec id body in
                           let tblock =
                             if !Jc_options.inv_sem = InvOwnership then
@@ -2992,14 +3025,15 @@ let tr_fun f funloc spec body acc =
                            ~beh  
                            funloc 
                          in
+			 let pre = assume_in_precondition b requires in
                          let d =
                            Def(
                              newid,
                              Fun(
                                params,
-                               requires,
+                               pre,
                                tblock,
-                               e,
+                               post,
                                excep_posts_for_others None excep_behaviors
                              )
                            )
@@ -3030,10 +3064,11 @@ let tr_fun f funloc spec body acc =
                                 ~name:("function "^f.jc_fun_info_name)
                                 ~beh:("Exceptional behavior `"^id^"'")  
                                 funloc in
+			      let pre = assume_in_precondition b requires in
                               let d =
                                 Def(newid,
                                     Fun(params,
-                                        requires,
+                                        pre,
                                         tblock,
                                         LTrue,
                                         (exception_name ei,e) :: 
@@ -3058,7 +3093,7 @@ let tr_logic_type id acc = Type(id,[])::acc
 
 let tr_axiom id is_axiom p acc = 
   let ef = Jc_effect.assertion empty_effects p in
-  let a = assertion ~global_assertion:true LabelHere LabelHere p in
+  let a = assertion ~global_assertion:true ~relocate:false LabelHere LabelHere p in
   let a =
     FieldOrVariantRegionMap.fold 
       (fun (fi,r) labels a -> 

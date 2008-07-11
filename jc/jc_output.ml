@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.109 2008-07-02 10:13:06 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.110 2008-07-11 06:35:50 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -351,7 +351,9 @@ let rec expr fmt e =
 	    print_type vi.jc_var_info_type vi.jc_var_info_name expr e2
       | JCEassert(behav,a) -> 
 	  fprintf fmt "@\nassert %a%a;" 
-	    (print_option (fun fmt behav -> fprintf fmt "for %s: " behav))
+	    (print_list_delim 
+	       (constant_string "for ") (constant_string ": ") 
+	       comma string)
 	    behav
 	    assertion a
       | JCEblock l ->
@@ -384,7 +386,9 @@ let rec expr fmt e =
           fprintf fmt "@\n@[%a%a@\nwhile (true)%a@]"
 	  (print_list nothing 
 	     (fun fmt (behav,inv) -> fprintf fmt "@\ninvariant %a%a;"
-		(print_option (fun fmt behav -> fprintf fmt "for %s: " behav))
+		(print_list_delim 
+		   (constant_string "for ") (constant_string ": ") 
+		   comma string)
 		behav
 		assertion inv))
 	    la.jc_loop_invariant

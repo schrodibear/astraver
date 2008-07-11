@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.13 2008-07-02 10:13:06 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.14 2008-07-11 06:35:50 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -184,7 +184,9 @@ let rec pexpr fmt e =
 	fprintf fmt "@\n@[%a%a@\nwhile (%a)%a@]"
 	  (print_list nothing 
 	     (fun fmt (behav,inv) -> fprintf fmt "@\ninvariant %a%a;"
-		(print_option (fun fmt behav -> fprintf fmt "for %s: " behav))
+		(print_list_delim 
+		   (constant_string "for ") (constant_string ": ") 
+		   comma string)
 		behav
 		pexpr inv))
 	  invariant
@@ -206,7 +208,9 @@ let rec pexpr fmt e =
 	  ptype ty vi pexpr e
     | JCPEassert(behav,a)-> 
 	fprintf fmt "@\n(assert %a%a)" 
-	  (print_option (fun fmt behav -> fprintf fmt "for %s: " behav))
+	  (print_list_delim 
+	     (constant_string "for ") (constant_string ": ") 
+	     comma string)
 	  behav
 	  pexpr a
     | JCPEblock l -> block fmt l

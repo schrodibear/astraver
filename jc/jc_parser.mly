@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.100 2008-07-03 09:14:35 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.101 2008-07-11 06:35:50 moy Exp $ */
 
 %{
 
@@ -669,10 +669,10 @@ assignment_operator:
 expression: 
 | compound_expr
     { $1 }
-| ASSERT FOR IDENTIFIER COLON expression %prec FOR
-    { locate (JCPEassert(Some $3,$5)) }
+| ASSERT FOR identifier_list COLON expression %prec FOR
+    { locate (JCPEassert($3,$5)) }
 | ASSERT expression 
-    { locate (JCPEassert(None,$2)) }
+    { locate (JCPEassert([],$2)) }
 | iteration_expression 
     { $1 }
 | jump_expression 
@@ -891,10 +891,10 @@ iteration_expression:
 ;
 
 loop_invariant:
-| INVARIANT FOR IDENTIFIER COLON expression SEMICOLON %prec FOR
-    { (Some $3, $5) }
+| INVARIANT FOR identifier_list COLON expression SEMICOLON %prec FOR
+    { ($3, $5) }
 | INVARIANT expression SEMICOLON
-    { (None, $2) }
+    { ([], $2) }
 ;
 
 loop_invariant_list:

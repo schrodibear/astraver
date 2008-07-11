@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.220 2008-07-08 16:16:37 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.221 2008-07-11 06:35:50 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -562,14 +562,11 @@ let make_logic_bin_op loc (op: bin_op) e1 e2 =
 
 (** Check that used logic labels appear in the environment,
 and add the current [logic_label] to the node in [jc_nexpr_label].
-[env] is the list of pairs of valid labels and corresponding real labels.
-E.g., in an assume clause, [Here] is a valid label, that corresponds to real
-label [Old], since an assume is a part of the postcondition interpreted
-in the precondition.
-[logic_label] might be changed by the "\at" construction. *)
+[env] is the list of valid labels.
+However, [logic_label] might be changed by the "\at" construction. *)
 let rec type_logic_labels env logic_label e =
   let check e x =
-    if not (List.mem_assoc x env) then
+    if not (List.mem x env) then
       typing_error e#loc "label `%a' not found" Jc_output_misc.label x
   in
   let iter_subs ?(env=env) logic_label =
@@ -577,8 +574,7 @@ let rec type_logic_labels env logic_label e =
       (fun e -> ignore (type_logic_labels env logic_label e))
       (INExpr.subs e)
   in
-  e#set_logic_label 
-    (Option_misc.map (fun lab -> List.assoc lab env) logic_label);
+  e#set_logic_label logic_label;
   match e#node with
     | JCNEconst _ | JCNEvar _ | JCNEderef _ | JCNEbinary _
     | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _
@@ -610,7 +606,7 @@ let rec type_logic_labels env logic_label e =
           label_info_final_name = lab;
           times_used = 0;
         } in
-        let env = (LabelName lab,LabelName lab)::env in
+        let env = (LabelName lab)::env in
         iter_subs ~env logic_label;
         env
 let type_logic_labels env logic_label e =
@@ -1769,27 +1765,20 @@ let default_label l =
     | [l] -> Some l
     | _ -> None
 
-let pair_of_labels lab = lab,lab
-let labelHere = pair_of_labels LabelHere
-let labelOld = pair_of_labels LabelOld
-let labelPre = pair_of_labels LabelPre
-
 (** Apply [type_logic_labels] in all expressions of a normalized clause,
 with the correct label environment. *)
 let type_logic_labels_in_clause = function
   | JCCrequires e ->
-      type_logic_labels [labelHere] (Some LabelHere) e
+      type_logic_labels [LabelHere] (Some LabelHere) e
   | JCCbehavior(_, _, _, assumes, requires, assigns, ensures) ->
-      Option_misc.iter 
-	(type_logic_labels [LabelHere,LabelOld;labelOld] (Some LabelOld)) assumes;
-      Option_misc.iter 
-	(type_logic_labels [labelHere] (Some LabelHere)) requires;
+      Option_misc.iter (type_logic_labels [LabelOld] (Some LabelOld)) assumes;
+      Option_misc.iter (type_logic_labels [LabelHere] (Some LabelHere)) requires;
       Option_misc.iter
         (fun (_, x) ->
            List.iter
-             (type_logic_labels [labelOld; labelHere] (Some LabelHere)) x)
+             (type_logic_labels [LabelOld; LabelHere] (Some LabelHere)) x)
         assigns;
-      (type_logic_labels [labelOld; labelHere] (Some LabelHere)) ensures
+      (type_logic_labels [LabelOld; LabelHere] (Some LabelHere)) ensures
 
 (** Apply [type_logic_labels] in all expressions of a normalized declaration,
 with the correct label environment. *)
@@ -1798,23 +1787,20 @@ let type_logic_labels_in_decl d = match d#node with
       Option_misc.iter (type_logic_labels [] None) init
   | JCDfun(_, _, _, clauses, body) ->
       Option_misc.iter
-        (type_logic_labels [labelHere; labelPre] (Some LabelHere))
+        (type_logic_labels [LabelHere; LabelPre] (Some LabelHere))
         body;
       List.iter type_logic_labels_in_clause clauses
   | JCDtag(_, _, _, _, invs) ->
       List.iter
-        (fun (_, _, e) -> type_logic_labels [labelHere] (Some LabelHere) e) invs
+        (fun (_, _, e) -> type_logic_labels [LabelHere] (Some LabelHere) e) invs
   | JCDlemma(_, _, labels, body) ->
-      let labs = List.map pair_of_labels labels in
-      type_logic_labels labs (default_label labels) body
+      type_logic_labels labels (default_label labels) body
   | JCDlogic(_, _, labels, _, JCreads el) ->
-      let labs = List.map pair_of_labels labels in
-      List.iter (type_logic_labels labs (default_label labels)) el
+      List.iter (type_logic_labels labels (default_label labels)) el
   | JCDlogic(_, _, labels, _, JCexpr e) ->
-      let labs = List.map pair_of_labels labels in
-      type_logic_labels labs (default_label labels) e
+      type_logic_labels labels (default_label labels) e
   | JCDglobal_inv(_, body) ->
-      type_logic_labels [labelHere] (Some LabelHere) body
+      type_logic_labels [LabelHere] (Some LabelHere) body
   | JCDvariant_type _ | JCDunion_type _ | JCDenum_type _ | JCDlogic_type _
   | JCDexception _ | JCDinvariant_policy _ | JCDseparation_policy _
   | JCDannotation_policy _ | JCDabstract_domain _ | JCDint_model _ 

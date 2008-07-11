@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.ml,v 1.15 2008-02-26 10:16:36 moy Exp $ i*)
+(*i $Id: pp.ml,v 1.16 2008-07-11 06:35:50 moy Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -68,6 +68,7 @@ let lbrace fmt () = fprintf fmt "{"
 let rbrace fmt () = fprintf fmt "}"
 let nothing fmt () = ()
 let string fmt s = fprintf fmt "%s" s
+let constant_string s fmt () = string fmt s
 
 let hov n fmt f x = pp_open_hovbox fmt n; f x; pp_close_box fmt ()
 

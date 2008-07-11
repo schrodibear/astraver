@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.7 2008-07-02 08:04:15 moy Exp $ *)
+(* $Id: jc_constructors.ml,v 1.8 2008-07-11 06:35:50 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -318,7 +318,7 @@ either with (~expr1 AND ~expr2) OR ~list only."
   let mkmutable ~expr ~tag = mk ~node:(JCPEmutable(expr, tag))
   let mktag_equality ~tag1 ~tag2 = mk ~node:(JCPEtagequality(tag1, tag2))
   let mkmatch ~expr ~cases = mk ~node:(JCPEmatch(expr, cases))
-  let mkassert ~expr = mk ~node:(JCPEassert (None,expr))
+  let mkassert ~expr = mk ~node:(JCPEassert ([],expr))
   let mkwhile ?(condition = mkboolean ~value:true ())
       ?(invariant = []) ?variant ~body =
     mk ~node:(JCPEwhile(condition, invariant, variant, body))
