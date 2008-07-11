@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.154 2008-07-10 18:29:57 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.155 2008-07-11 12:07:15 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -40,542 +40,6 @@ open Env
 open Rename
 open Options
 
-
-
-(*s References mentioned by a predicate *)
-
-let is_reference env id =
-  (is_in_env env id) && (is_mutable (type_in_env env id))
-
-let predicate_now_refs env c =
-  Idset.filter (is_reference env) (predicate_vars c)
-
-let term_now_refs env c =
-  Idset.filter (is_reference env) (term_vars c)
-
-
-let labelled_reference env id =
-  if is_reference env id then
-    id
-  else if is_at id then
-    let uid,_ = Ident.un_at id in 
-    if is_reference env uid then uid else failwith "caught"
-  else
-    failwith "caught"
-
-let set_map_succeed f s = 
-  Idset.fold 
-    (fun x e -> try Idset.add (f x) e with Failure _ -> e) 
-    s Idset.empty
-
-let predicate_refs env c =
-  set_map_succeed (labelled_reference env) (predicate_vars c)
-
-let term_refs env c =
-  set_map_succeed (labelled_reference env) (term_vars c)
-
-let post_refs env q =
-  set_map_succeed (labelled_reference env) (apost_vars q)
-
-(*s Labels management *)
-
-let gen_change_label f c =
-  let ids = Idset.elements (predicate_vars c) in
-  let s = 
-    List.fold_left 
-      (fun s id -> 
-	 if is_at id then 
-	   try Idmap.add id (f (un_at id)) s with Failure _ -> s
-	 else s)
-      Idmap.empty ids
-  in
-  subst_in_predicate s c
-
-let erase_label l c =
-  gen_change_label 
-    (function (uid,l') when l = l' -> uid | _ -> failwith "caught") c
-
-let change_label l1 l2 c =
-  gen_change_label 
-    (function (uid,l) when l = l1 -> at_id uid l2 | _ -> failwith "caught") c
-
-let put_label_term env l t =
-  let ids = term_refs env t in
-  let s = 
-    Idset.fold (fun id s -> Idmap.add id (at_id id l) s) ids Idmap.empty 
-  in
-  subst_in_term s t
-
-let put_label_predicate env l p =
-  let ids = predicate_refs env p in
-  let s = 
-    Idset.fold (fun id s -> Idmap.add id (at_id id l) s) ids Idmap.empty 
-  in
-  subst_in_predicate s p
-
-let oldify env ef t =
-  let ids = term_refs env t in
-  let s =
-    Idset.fold 
-      (fun id s -> 
-	 if Effect.is_write ef id then Idmap.add id (at_id id "") s else s)
-      ids Idmap.empty
-  in
-  subst_in_term s t
-
-let type_c_subst_oldify env x t k =
-  let s = subst_one x t in 
-  let s_old = subst_one x (oldify env k.c_effect t) in
-  { c_result_name = k.c_result_name;
-    c_result_type = type_v_rsubst s k.c_result_type;
-    c_effect = k.c_effect;
-    c_pre = List.map (tsubst_in_predicate s) k.c_pre;
-    c_post = option_app (post_app (tsubst_in_predicate s_old)) k.c_post }
-
-(*s shortcuts for typing information *)
-
-let effect p = p.info.t_effect
-let post p = p.info.t_post
-let result_type p = p.info.t_result_type
-let result_name p = p.t_result_name
-
-let erase_exns ti = 
-  { ti with t_effect = Effect.erase_exns ti.t_effect }
-
-(*s [apply_pre] and [apply_post] instantiate pre- and post- conditions
-    according to a given renaming of variables (and a date that means
-    `before' in the case of the post-condition). *)
-
-let make_subst before ren env ids =
-  Idset.fold
-    (fun id s ->
-       if is_reference env id then
-	 Idmap.add id (current_var ren id) s
-       else if is_at id then
-	 let uid,d = un_at id in
-	 if is_reference env uid then begin
-	   let d' = match d, before with
-	     | "", None -> assert false
-	     | "", Some l -> l
-	     | _ -> d
-	   in
-	   Idmap.add id (var_at_date ren d' uid) s
-	 end else
-	   s
-       else
-	 s) 
-    ids Idmap.empty
-
-let apply_term ren env t =
-  let ids = term_vars t in
-  let s = make_subst None ren env ids in
-  subst_in_term s t
-
-let apply_assert ren env c =
-  let ids = predicate_vars c in
-  let s = make_subst None ren env ids in
-  subst_in_predicate s c
- 
-let a_apply_assert ren env c =
-  let ids = predicate_vars c.a_value in
-  let s = make_subst None ren env ids in
-  asst_app (subst_in_predicate s) c
- 
-let apply_post before ren env q =
-  let ids = post_vars q in
-  let s = make_subst (Some before) ren env ids in
-  post_app (subst_in_predicate s) q
-  
-let a_apply_post before ren env q =
-  let ids = apost_vars q in
-  let s = make_subst (Some before) ren env ids in
-  post_app (asst_app (subst_in_predicate s)) q
-  
-(*s [traverse_binder ren env bl] updates renaming [ren] and environment [env]
-    as we cross the binders [bl]. *)
-
-let rec traverse_binders env = function
-  | [] -> 
-      env
-  | (id, v) :: rem ->
-      traverse_binders (Env.add id v env) rem
-	  
-let initial_renaming env =
-  let ids = Env.fold_all (fun (id,_) l -> id::l) env [] in
-  update empty_ren "%init" ids
-
-
-(*s Occurrences *)
-
-let rec occur_term id = function
-  | Tvar id' | Tderef id' -> id = id'
-  | Tapp (_, l, _) -> List.exists (occur_term id) l
-  | Tconst _ -> false
-  | Tnamed(_,t) -> occur_term id t
-
-let rec occur_pattern id = function
-  | TPat t -> occur_term id t
-  | PPat p -> occur_predicate id p
-
-and occur_trigger id = List.exists (occur_pattern id)
-and occur_triggers id = List.exists (occur_trigger id)
-
-and occur_predicate id = function
-  | Pvar _ | Ptrue | Pfalse -> false
-  | Papp (_, l, _) -> List.exists (occur_term id) l
-  | Pif (a, b, c) -> 
-      occur_term id a || occur_predicate id b || occur_predicate id c
-  | Forallb (_, a, b) 
-  | Pimplies (_, a, b) 
-  | Pand (_, _, a, b) 
-  | Piff (a, b) 
-  | Por (a, b) -> occur_predicate id a || occur_predicate id b
-  | Pnot a -> occur_predicate id a
-  | Forall (_,_,_,_,tl,a) -> occur_triggers id tl || occur_predicate id a
-  | Exists (_,_,_,a) -> occur_predicate id a
-  | Pfpi (t,_,_) -> occur_term id t
-  | Pnamed (_, a) -> occur_predicate id a
-
-let occur_assertion id a = occur_predicate id a.a_value
-
-let gen_occur_post occur_assertion id = function 
-  | None -> 
-      false 
-  | Some (q,l) -> 
-      occur_assertion id q || 
-      List.exists (fun (_,a) -> occur_assertion id a) l
-
-let occur_post = gen_occur_post occur_assertion
-
-let rec occur_type_v id = function
-  | PureType _ | Ref _ -> false
-  | Arrow (bl, c) -> occur_arrow id bl c
-
-and occur_type_c id c =
-  occur_type_v id c.c_result_type ||
-  List.exists (occur_predicate id) c.c_pre ||
-  Effect.occur id c.c_effect ||
-  gen_occur_post occur_predicate id c.c_post 
-
-and occur_arrow id bl c = match bl with
-  | [] -> 
-      occur_type_c id c
-  | (id', v) :: bl' -> 
-      occur_type_v id v || (id <> id' && occur_arrow id bl' c)
-
-let quant_boolean_as_conj x p =
-  not fast_wp &&
-  match p with
-    | Pif (Tvar id, _, _) -> id == x
-    | Pimplies (_, Pif (Tvar id1, _, _), Pif (Tvar id2, _, _)) -> 
-	id1 == x && id2 == x
-    | _ -> false
-
-let forall ?(is_wp=false) x v ?(triggers=[]) p = match v with
-  (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
-  | PureType PTbool when quant_boolean_as_conj x p ->
-      let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
-      let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
-      Pand (true, true, simplify ptrue, simplify pfalse)
-  | _ ->
-      let n = Ident.bound x in
-      let s = subst_onev x n in
-      let p = subst_in_predicate s p in
-      let subst_in_pattern s = function
-	| TPat t -> TPat (subst_in_term s t)
-	| PPat p -> PPat (subst_in_predicate s p) in
-      let triggers = List.map (List.map (subst_in_pattern s)) triggers in
-      Forall (is_wp, x, n, mlize_type v, triggers, p)
-
-let pforall ?(is_wp=false) x v p =
-  if p = Ptrue then Ptrue else forall ~is_wp x v p
-
-let foralls ?(is_wp=false) =
-  List.fold_right
-    (fun (x,v) p -> if occur_predicate x p then forall ~is_wp x v p else p)
-
-let foralls_many ?(is_wp=false) bl p =
-  let l1,l2 = 
-    List.fold_right 
-      (fun ((x,v) as xv) (l1,l2) ->
-	if occur_predicate x p then 
-	  let n = Ident.bound x in xv::l1, n::l2
-	else
-	  l1,l2)
-      bl ([],[])
-  in
-  let s = subst_manyv (List.map fst l1) l2 in
-  let p = subst_in_predicate s p in
-  List.fold_right2 
-    (fun (x,v) n p -> Forall (is_wp, x, n, mlize_type v, [], p))
-    l1 l2 p
-
-let exists x v p =
-  let n = Ident.bound x in
-  let p = subst_in_predicate (subst_onev x n) p in
-  Exists (x, n, mlize_type v, p)
-
-let pexists x v p = 
-  if p = Ptrue then Ptrue else exists x v p
-
-let exists x v p = 
-  let n = Ident.bound x in
-  let p = subst_in_predicate (subst_onev x n) p in
-  Exists (x, n, mlize_type v, p)
-
-(* decomposing universal quantifiers, renaming variables on the fly *)
-
-let decomp_forall ?(ids=Idset.empty) p = 
-  let rec decomp bv = function
-    | Forall (_,id,n,pt,_,p) ->
-	decomp ((id,n,pt) :: bv) p
-    | p ->
-	let s,_,bv = 
-	  List.fold_left 
-	    (fun (s,ids,bv) (id,n,pt) -> 
-	      let id' = next_away id ids in
-	      let s = Idmap.add n id' s in
-	      let ids = Idset.add id' ids in
-	      s, ids, (id',pt) :: bv)
-	    (Idmap.empty, Idset.union ids (predicate_vars p), []) bv
-	in
-	bv, subst_in_predicate s p
-  in
-  decomp [] p
-
-
-(* misc. functions *)
-
-let deref_type = function
-  | Ref v -> v
-  | _ -> invalid_arg "deref_type"
-
-let dearray_type = function
-  | PureType (PTexternal ([pt], id)) when id == Ident.farray -> pt
-  | _ -> invalid_arg "dearray_type"
-
-let decomp_type_c c = 
-  ((c.c_result_name, c.c_result_type), c.c_effect, c.c_pre, c.c_post)
-
-let decomp_kappa c = 
-  ((c.t_result_name, c.t_result_type), c.t_effect, c.t_post)
-
-let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
-
-(* [decomp_boolean c] returns the specs R and S of a boolean expression *)
-
-let equality t1 t2 = Papp (t_eq, [t1; t2], [])
-let nequality t1 t2 = Papp (t_neq, [t1; t2], [])
-
-let tequality v t1 t2 = match v with
-  | PureType PTint -> Papp (t_eq_int, [t1; t2], [])
-  | PureType PTbool -> Papp (t_eq_bool, [t1; t2], [])
-  | PureType PTreal -> Papp (t_eq_real, [t1; t2], [])
-  | PureType PTunit -> Papp (t_eq_unit, [t1; t2], [])
-  | _ -> Papp (t_eq, [t1; t2], [])
-
-let distinct tl = 
-  let rec make acc = function
-    | [] | [_] -> 
-	acc
-    | t :: tl -> 
-	let p = List.fold_left (fun p t' -> pand (nequality t t') p) acc tl in
-	make p tl
-  in
-  make Ptrue tl
-
-let decomp_boolean ({ a_value = c }, _) =
-  (* q -> if result then q(true) else q(false) *)
-  let ctrue = tsubst_in_predicate (subst_one Ident.result ttrue) c in
-  let cfalse = tsubst_in_predicate (subst_one Ident.result tfalse) c in
-  simplify ctrue, simplify cfalse
-
-(*s [make_access env id c] Access in array id.
-    Constructs [t:(array s T)](access_g s T t c ?::(lt c s)). *)
-
-let add_ctx_vars =
-  List.fold_left 
-    (fun acc -> function Svar (id,_) -> Idset.add id acc | _ -> acc)
-
-
-
-
-
-
-
-
-
-
-
-
-(**
-   split : split predicate into a list of smaller predicates
-   @param ctx : list of already split hypothesis (empty at first call)
-   @param pol : polarity of the current predicate (1 at first call)
-   @param matched : predicate to split
-   @result l : l : list of split predicates 
-**)
-let rec split_one ctx pol = function
-  | Pimplies (i, Por(h1,h2), c) when pol > 0-> (* split(h1 \/ h2 -> c) ~~~> split(h1->c) U split(h2->) *)
-      let imp1=(split_one ctx pol (Pimplies (i, h1, c))) in 
-      let imp2=(split_one imp1 pol (Pimplies (i, h2, c))) in 
-      (*(List.append (List.append imp1 imp2) ctx)*)
-      imp2
-	
-  | Pimplies (i, a, c) when pol > 0->          (* split( h -> c) ~~~> U_c':split(c) {h->c'}  *)
-      let lc=split_one [] pol c in
-      List.fold_left (fun ct c' -> Pimplies(i,a,c')::ct)  ctx lc
-	
-  | Pand (_,_, a, b) when pol > 0->            (* split(c1 /\ c2)  ~~~> split(c1) U split(c2)  *)
-      let l1 = split_one ctx pol a in   
-      (split_one l1 pol b)
-	
-  | Forall (a, id, n, t, b, c) when pol>0 ->   (* split(forall x.c)  ~~~>  U_c':split(c) {forall x.c'}   *)
-      let lc'=split_one [] pol c in
-      List.fold_left (fun ct c' -> Forall (a, id, n, t, b, c')::ct)  ctx lc'
-	
-  | Exists (a, b, t, c) when pol>0 ->          (* split(exists x.c)  ~~~> U_c':split-(c) {exists x.c'} *)
-      let lc'=split_one [] (-pol) c in
-      List.fold_left (fun ct c' -> Exists (a, b, t, c')::ct)  ctx lc'
-	
-  | Por (a, b) when pol < 0->                  (* split-(c1 \/ c2)  ~~~> split-(c1) U split-(c2)  *)
-      let l1 = split_one ctx pol a in   
-      (split_one l1 pol b)
-	
-  | c ->                                       (* split(c)  ~~~> {c}  *)
-      c::ctx
-	  
-
-(**
-   split : split each predicate of a list into a smaller predicates
-   @param ctx : list of already split hypothesis
-   @param pol : polarity of the current predicate
-   @param matched : list of CC_context predicates to split
-   @result l : l : list of split hypothesis 
-**)
-let rec split ctx my_fresh_hyp =
-  function
-    | [] -> ctx
-    | Spred (h,p):: l -> split (List.fold_left (fun lp p -> Spred(my_fresh_hyp (),p)::lp ) ctx (split_one [] 1 p)) my_fresh_hyp l
-    | c :: l -> c :: (split (c::ctx) my_fresh_hyp l)
-
-
-
-(**
-   intro : split a predicate into a list of hypothesis and a goal
-   @param ctx : empty list
-   @param p : predicate to split
-   @param my_fresh_hyp : function that provide a fresh name of variable
-   @result (l,g) : l : list of hypothesis / g : goal
-**)
-let intros ctx p my_fresh_hyp split_res =   
-  (**
-     introb : split a predicate into a list of hypothesis and a goal
-     @param ctx : list of already split hypothesis
-     @param pol : polarity of the current predicate
-     @param matched : predicate
-     @result (l,g) : l : list of hypothesis / g : goal
-  **)
-  let rec introb ctx pol = function
-    | Forall (_, id, n, t, _, p) when pol>0 ->
-	let id' =  Ident.bound id  in
-	let sp  =  Misc.subst_onev  n  id' in
-	let pp  =  Misc.subst_in_predicate sp p in
-	introb (Svar (id', t) :: ctx) pol pp
-    | Pimplies (_, a, b) when pol > 0-> 
-	let h = my_fresh_hyp () in
-	let (l,p) = introb [] (-pol) a in 
-	let l' =  Spred(h, p)::ctx in 
-	introb (List.append l l') pol b
-    | Pand (_,_, a, b) when pol < 0-> 
-       let (l1,p1) = introb ctx pol a in
-       let h1 = my_fresh_hyp () in
-       let l' = Spred(h1, p1)::l1 in
-       let (l2,p2) = introb l' pol b in
-       l2, p2 
-    | Pnamed (_, p) ->
-	introb ctx pol p
-    | c -> 
-	 ctx, c 
-  in 
-  let l,g = introb ctx 1 p in 
-  if split_res then
-    (split [] my_fresh_hyp l ), g
-  else
-    List.rev l, g   
-
-
-
-let array_info env id =
-  let ty = type_in_env env id in
-  let v = dearray_type ty in
-  (*i let ty_elem = trad_ml_type_v ren env v in
-  let ty_array = trad_imp_type ren env ty in i*)
-  v
-
-let make_raw_access env (id,id') c =
-  let pt = array_info env id in
-  Tapp (Ident.access, [Tvar id'; c], [pt])
-
-let make_pre_access env id c =
-  let pt = array_info env id in
-  let c = unref_term c in
-  Pand (false, true, 
-	le_int (Tconst (ConstInt "0")) c, lt_int c (array_length id pt))
-      
-let make_raw_store env (id,id') c1 c2 =
-  let pt = array_info env id in
-  Tapp (Ident.store, [Tvar id'; c1; c2], [pt])
-
-(*s to build AST *)
-
-let make_lnode loc p env k = 
-  { desc = p; 
-    info = { t_loc = loc; t_env = env; t_label = label_name ();
-	     t_userlabel = "";
-	     t_result_name = k.c_result_name; t_result_type = k.c_result_type;
-	     t_effect = k.c_effect; 
-	     t_post = optpost_app (anonymous loc) k.c_post } }
-
-let make_var loc x t env =
-  make_lnode loc (Expression (Tvar x)) env (type_c_of_v t)
-
-let make_expression loc e t env =
-  make_lnode loc (Expression e) env (type_c_of_v t)
-    
-let make_annot_bool loc b env =
-  let k = type_c_of_v (PureType PTbool) in
-  let b = Tconst (ConstBool b) in
-  let q = equality (Tvar result) b in
-  make_lnode loc (Expression b) env { k with c_post = Some (q, []) }
-
-let make_void loc env = 
-  make_expression loc (Tconst ConstUnit) (PureType PTunit) env 
-
-let make_raise loc x v env =
-  let k = type_c_of_v v in
-  let ef = Effect.add_exn exit_exn Effect.bottom in
-  make_lnode loc (Raise (x, None)) env { k with c_effect = ef }
-
-let change_desc p d = { p with desc = d }
-
-let force_post env q e = match q with
-  | None -> 
-      e
-  | Some c ->
-      let c = force_post_loc e.info.t_loc c in
-      let ids = post_refs env c in
-      let ef = Effect.add_reads ids e.info.t_effect in
-      let i = { e.info with t_post = Some c; t_effect = ef } in
-      { e with info = i }
-
-let post_named c = 
-  { a_value = c; a_name = post_name (); 
-    a_loc = Loc.dummy_position; a_proof = None }
-
-let create_postval c = Some (post_named c)
-
-let create_post c = Some (post_named c, [])
 
 (*s Pretty printers (for debugging purposes) *)
 
@@ -961,6 +425,552 @@ let print_env fmt e =
   fold_all (fun (id, v) () -> fprintf fmt "%a:%a, " Ident.dbprint id 
 		print_type_v v) e ()
 
+
+
+(*s References mentioned by a predicate *)
+
+let is_reference env id =
+  (is_in_env env id) && (is_mutable (type_in_env env id))
+
+let predicate_now_refs env c =
+  Idset.filter (is_reference env) (predicate_vars c)
+
+let term_now_refs env c =
+  Idset.filter (is_reference env) (term_vars c)
+
+
+let labelled_reference env id =
+  if is_reference env id then
+    id
+  else if is_at id then
+    let uid,_ = Ident.un_at id in 
+    if is_reference env uid then uid else failwith "caught"
+  else
+    failwith "caught"
+
+let set_map_succeed f s = 
+  Idset.fold 
+    (fun x e -> try Idset.add (f x) e with Failure _ -> e) 
+    s Idset.empty
+
+let predicate_refs env c =
+  set_map_succeed (labelled_reference env) (predicate_vars c)
+
+let term_refs env c =
+  set_map_succeed (labelled_reference env) (term_vars c)
+
+let post_refs env q =
+  set_map_succeed (labelled_reference env) (apost_vars q)
+
+(*s Labels management *)
+
+let gen_change_label f c =
+  let ids = Idset.elements (predicate_vars c) in
+  let s = 
+    List.fold_left 
+      (fun s id -> 
+	 if is_at id then 
+	   try Idmap.add id (f (un_at id)) s with Failure _ -> s
+	 else s)
+      Idmap.empty ids
+  in
+  subst_in_predicate s c
+
+let erase_label l c =
+  gen_change_label 
+    (function (uid,l') when l = l' -> uid | _ -> failwith "caught") c
+
+let change_label l1 l2 c =
+  gen_change_label 
+    (function (uid,l) when l = l1 -> at_id uid l2 | _ -> failwith "caught") c
+
+let put_label_term env l t =
+  let ids = term_refs env t in
+  let s = 
+    Idset.fold (fun id s -> Idmap.add id (at_id id l) s) ids Idmap.empty 
+  in
+  subst_in_term s t
+
+let put_label_predicate env l p =
+  let ids = predicate_refs env p in
+  let s = 
+    Idset.fold (fun id s -> Idmap.add id (at_id id l) s) ids Idmap.empty 
+  in
+  subst_in_predicate s p
+
+let oldify env ef t =
+  let ids = term_refs env t in
+  let s =
+    Idset.fold 
+      (fun id s -> 
+	 if Effect.is_write ef id then Idmap.add id (at_id id "") s else s)
+      ids Idmap.empty
+  in
+  subst_in_term s t
+
+let type_c_subst_oldify env x t k =
+  let s = subst_one x t in 
+  let s_old = subst_one x (oldify env k.c_effect t) in
+  { c_result_name = k.c_result_name;
+    c_result_type = type_v_rsubst s k.c_result_type;
+    c_effect = k.c_effect;
+    c_pre = List.map (tsubst_in_predicate s) k.c_pre;
+    c_post = option_app (post_app (tsubst_in_predicate s_old)) k.c_post }
+
+(*s shortcuts for typing information *)
+
+let effect p = p.info.t_effect
+let post p = p.info.t_post
+let result_type p = p.info.t_result_type
+let result_name p = p.t_result_name
+
+let erase_exns ti = 
+  { ti with t_effect = Effect.erase_exns ti.t_effect }
+
+(*s [apply_pre] and [apply_post] instantiate pre- and post- conditions
+    according to a given renaming of variables (and a date that means
+    `before' in the case of the post-condition). *)
+
+let make_subst before ren env ids =
+  Idset.fold
+    (fun id s ->
+       if is_reference env id then
+	 Idmap.add id (current_var ren id) s
+       else if is_at id then
+	 let uid,d = un_at id in
+	 if is_reference env uid then begin
+	   let d' = match d, before with
+	     | "", None -> assert false
+	     | "", Some l -> l
+	     | _ -> d
+	   in
+	   Idmap.add id (var_at_date ren d' uid) s
+	 end else
+	   s
+       else
+	 s) 
+    ids Idmap.empty
+
+let apply_term ren env t =
+  let ids = term_vars t in
+  let s = make_subst None ren env ids in
+  subst_in_term s t
+
+let apply_assert ren env c =
+  let ids = predicate_vars c in
+  let s = make_subst None ren env ids in
+  subst_in_predicate s c
+ 
+let a_apply_assert ren env c =
+  let ids = predicate_vars c.a_value in
+  let s = make_subst None ren env ids in
+  asst_app (subst_in_predicate s) c
+ 
+let apply_post before ren env q =
+  let ids = post_vars q in
+  let s = make_subst (Some before) ren env ids in
+  post_app (subst_in_predicate s) q
+  
+let a_apply_post before ren env q =
+  let ids = apost_vars q in
+  let s = make_subst (Some before) ren env ids in
+  post_app (asst_app (subst_in_predicate s)) q
+  
+(*s [traverse_binder ren env bl] updates renaming [ren] and environment [env]
+    as we cross the binders [bl]. *)
+
+let rec traverse_binders env = function
+  | [] -> 
+      env
+  | (id, v) :: rem ->
+      traverse_binders (Env.add id v env) rem
+	  
+let initial_renaming env =
+  let ids = Env.fold_all (fun (id,_) l -> id::l) env [] in
+  update empty_ren "%init" ids
+
+
+(*s Occurrences *)
+
+let rec occur_term id = function
+  | Tvar id' | Tderef id' -> id = id'
+  | Tapp (_, l, _) -> List.exists (occur_term id) l
+  | Tconst _ -> false
+  | Tnamed(_,t) -> occur_term id t
+
+let rec occur_pattern id = function
+  | TPat t -> occur_term id t
+  | PPat p -> occur_predicate id p
+
+and occur_trigger id = List.exists (occur_pattern id)
+and occur_triggers id = List.exists (occur_trigger id)
+
+and occur_predicate id = function
+  | Pvar _ | Ptrue | Pfalse -> false
+  | Papp (_, l, _) -> List.exists (occur_term id) l
+  | Pif (a, b, c) -> 
+      occur_term id a || occur_predicate id b || occur_predicate id c
+  | Forallb (_, a, b) 
+  | Pimplies (_, a, b) 
+  | Pand (_, _, a, b) 
+  | Piff (a, b) 
+  | Por (a, b) -> occur_predicate id a || occur_predicate id b
+  | Pnot a -> occur_predicate id a
+  | Forall (_,_,_,_,tl,a) -> occur_triggers id tl || occur_predicate id a
+  | Exists (_,_,_,a) -> occur_predicate id a
+  | Pfpi (t,_,_) -> occur_term id t
+  | Pnamed (_, a) -> occur_predicate id a
+
+let occur_assertion id a = occur_predicate id a.a_value
+
+let gen_occur_post occur_assertion id = function 
+  | None -> 
+      false 
+  | Some (q,l) -> 
+      occur_assertion id q || 
+      List.exists (fun (_,a) -> occur_assertion id a) l
+
+let occur_post = gen_occur_post occur_assertion
+
+let rec occur_type_v id = function
+  | PureType _ | Ref _ -> false
+  | Arrow (bl, c) -> occur_arrow id bl c
+
+and occur_type_c id c =
+  occur_type_v id c.c_result_type ||
+  List.exists (occur_predicate id) c.c_pre ||
+  Effect.occur id c.c_effect ||
+  gen_occur_post occur_predicate id c.c_post 
+
+and occur_arrow id bl c = match bl with
+  | [] -> 
+      occur_type_c id c
+  | (id', v) :: bl' -> 
+      occur_type_v id v || (id <> id' && occur_arrow id bl' c)
+
+let rec noPnamed = function
+  | Pnamed(_, p) -> noPnamed p
+  | p -> p
+  
+let quant_boolean_as_conj x p =
+  not fast_wp &&
+  match p with
+    | Pif (Tvar id, _, _) -> id == x
+    | Pimplies(_, p1, p2) ->
+	begin
+	  match noPnamed p1, noPnamed p2 with
+	    | Pif (Tvar id1, _, _), Pif (Tvar id2, _, _) -> 
+		id1 == x && id2 == x
+	    | _ -> false
+	end
+    | _ -> false
+
+let forall ?(is_wp=false) x v ?(triggers=[]) p = match v with
+  (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
+  | PureType PTbool when quant_boolean_as_conj x p ->
+      let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
+      let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
+      Pand (true, true, simplify ptrue, simplify pfalse)
+  | _ ->
+      let n = Ident.bound x in
+      let s = subst_onev x n in
+      let p = subst_in_predicate s p in
+      let subst_in_pattern s = function
+	| TPat t -> TPat (subst_in_term s t)
+	| PPat p -> PPat (subst_in_predicate s p) in
+      let triggers = List.map (List.map (subst_in_pattern s)) triggers in
+      Forall (is_wp, x, n, mlize_type v, triggers, p)
+
+let pforall ?(is_wp=false) x v p =
+  if p = Ptrue then Ptrue else forall ~is_wp x v p
+
+let foralls ?(is_wp=false) =
+  List.fold_right
+    (fun (x,v) p -> if occur_predicate x p then forall ~is_wp x v p else p)
+
+let foralls_many ?(is_wp=false) bl p =
+  let l1,l2 = 
+    List.fold_right 
+      (fun ((x,v) as xv) (l1,l2) ->
+	if occur_predicate x p then 
+	  let n = Ident.bound x in xv::l1, n::l2
+	else
+	  l1,l2)
+      bl ([],[])
+  in
+  let s = subst_manyv (List.map fst l1) l2 in
+  let p = subst_in_predicate s p in
+  List.fold_right2 
+    (fun (x,v) n p -> Forall (is_wp, x, n, mlize_type v, [], p))
+    l1 l2 p
+
+let exists x v p =
+  let n = Ident.bound x in
+  let p = subst_in_predicate (subst_onev x n) p in
+  Exists (x, n, mlize_type v, p)
+
+let pexists x v p = 
+  if p = Ptrue then Ptrue else exists x v p
+
+let exists x v p = 
+  let n = Ident.bound x in
+  let p = subst_in_predicate (subst_onev x n) p in
+  Exists (x, n, mlize_type v, p)
+
+(* decomposing universal quantifiers, renaming variables on the fly *)
+
+let decomp_forall ?(ids=Idset.empty) p = 
+  let rec decomp bv = function
+    | Forall (_,id,n,pt,_,p) ->
+	decomp ((id,n,pt) :: bv) p
+    | p ->
+	let s,_,bv = 
+	  List.fold_left 
+	    (fun (s,ids,bv) (id,n,pt) -> 
+	      let id' = next_away id ids in
+	      let s = Idmap.add n id' s in
+	      let ids = Idset.add id' ids in
+	      s, ids, (id',pt) :: bv)
+	    (Idmap.empty, Idset.union ids (predicate_vars p), []) bv
+	in
+	bv, subst_in_predicate s p
+  in
+  decomp [] p
+
+
+(* misc. functions *)
+
+let deref_type = function
+  | Ref v -> v
+  | _ -> invalid_arg "deref_type"
+
+let dearray_type = function
+  | PureType (PTexternal ([pt], id)) when id == Ident.farray -> pt
+  | _ -> invalid_arg "dearray_type"
+
+let decomp_type_c c = 
+  ((c.c_result_name, c.c_result_type), c.c_effect, c.c_pre, c.c_post)
+
+let decomp_kappa c = 
+  ((c.t_result_name, c.t_result_type), c.t_effect, c.t_post)
+
+let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
+
+(* [decomp_boolean c] returns the specs R and S of a boolean expression *)
+
+let equality t1 t2 = Papp (t_eq, [t1; t2], [])
+let nequality t1 t2 = Papp (t_neq, [t1; t2], [])
+
+let tequality v t1 t2 = match v with
+  | PureType PTint -> Papp (t_eq_int, [t1; t2], [])
+  | PureType PTbool -> Papp (t_eq_bool, [t1; t2], [])
+  | PureType PTreal -> Papp (t_eq_real, [t1; t2], [])
+  | PureType PTunit -> Papp (t_eq_unit, [t1; t2], [])
+  | _ -> Papp (t_eq, [t1; t2], [])
+
+let distinct tl = 
+  let rec make acc = function
+    | [] | [_] -> 
+	acc
+    | t :: tl -> 
+	let p = List.fold_left (fun p t' -> pand (nequality t t') p) acc tl in
+	make p tl
+  in
+  make Ptrue tl
+
+let decomp_boolean ({ a_value = c }, _) =
+  (* q -> if result then q(true) else q(false) *)
+  let ctrue = tsubst_in_predicate (subst_one Ident.result ttrue) c in
+  let cfalse = tsubst_in_predicate (subst_one Ident.result tfalse) c in
+  simplify ctrue, simplify cfalse
+
+(*s [make_access env id c] Access in array id.
+    Constructs [t:(array s T)](access_g s T t c ?::(lt c s)). *)
+
+let add_ctx_vars =
+  List.fold_left 
+    (fun acc -> function Svar (id,_) -> Idset.add id acc | _ -> acc)
+
+
+
+
+
+
+
+
+
+
+
+
+(**
+   split : split predicate into a list of smaller predicates
+   @param ctx : list of already split hypothesis (empty at first call)
+   @param pol : polarity of the current predicate (1 at first call)
+   @param matched : predicate to split
+   @result l : l : list of split predicates 
+**)
+let rec split_one ctx pol = function
+  | Pimplies (i, Por(h1,h2), c) when pol > 0-> (* split(h1 \/ h2 -> c) ~~~> split(h1->c) U split(h2->) *)
+      let imp1=(split_one ctx pol (Pimplies (i, h1, c))) in 
+      let imp2=(split_one imp1 pol (Pimplies (i, h2, c))) in 
+      (*(List.append (List.append imp1 imp2) ctx)*)
+      imp2
+	
+  | Pimplies (i, a, c) when pol > 0->          (* split( h -> c) ~~~> U_c':split(c) {h->c'}  *)
+      let lc=split_one [] pol c in
+      List.fold_left (fun ct c' -> Pimplies(i,a,c')::ct)  ctx lc
+	
+  | Pand (_,_, a, b) when pol > 0->            (* split(c1 /\ c2)  ~~~> split(c1) U split(c2)  *)
+      let l1 = split_one ctx pol a in   
+      (split_one l1 pol b)
+	
+  | Forall (a, id, n, t, b, c) when pol>0 ->   (* split(forall x.c)  ~~~>  U_c':split(c) {forall x.c'}   *)
+      let lc'=split_one [] pol c in
+      List.fold_left (fun ct c' -> Forall (a, id, n, t, b, c')::ct)  ctx lc'
+	
+  | Exists (a, b, t, c) when pol>0 ->          (* split(exists x.c)  ~~~> U_c':split-(c) {exists x.c'} *)
+      let lc'=split_one [] (-pol) c in
+      List.fold_left (fun ct c' -> Exists (a, b, t, c')::ct)  ctx lc'
+	
+  | Por (a, b) when pol < 0->                  (* split-(c1 \/ c2)  ~~~> split-(c1) U split-(c2)  *)
+      let l1 = split_one ctx pol a in   
+      (split_one l1 pol b)
+	
+  | c ->                                       (* split(c)  ~~~> {c}  *)
+      c::ctx
+	  
+
+(**
+   split : split each predicate of a list into a smaller predicates
+   @param ctx : list of already split hypothesis
+   @param pol : polarity of the current predicate
+   @param matched : list of CC_context predicates to split
+   @result l : l : list of split hypothesis 
+**)
+let rec split ctx my_fresh_hyp =
+  function
+    | [] -> ctx
+    | Spred (h,p):: l -> split (List.fold_left (fun lp p -> Spred(my_fresh_hyp (),p)::lp ) ctx (split_one [] 1 p)) my_fresh_hyp l
+    | c :: l -> c :: (split (c::ctx) my_fresh_hyp l)
+
+
+
+(**
+   intro : split a predicate into a list of hypothesis and a goal
+   @param ctx : empty list
+   @param p : predicate to split
+   @param my_fresh_hyp : function that provide a fresh name of variable
+   @result (l,g) : l : list of hypothesis / g : goal
+**)
+let intros ctx p my_fresh_hyp split_res =   
+  (**
+     introb : split a predicate into a list of hypothesis and a goal
+     @param ctx : list of already split hypothesis
+     @param pol : polarity of the current predicate
+     @param matched : predicate
+     @result (l,g) : l : list of hypothesis / g : goal
+  **)
+  let rec introb ctx pol = function
+    | Forall (_, id, n, t, _, p) when pol>0 ->
+	let id' =  Ident.bound id  in
+	let sp  =  Misc.subst_onev  n  id' in
+	let pp  =  Misc.subst_in_predicate sp p in
+	introb (Svar (id', t) :: ctx) pol pp
+    | Pimplies (_, a, b) when pol > 0-> 
+	let h = my_fresh_hyp () in
+	let (l,p) = introb [] (-pol) a in 
+	let l' =  Spred(h, p)::ctx in 
+	introb (List.append l l') pol b
+    | Pand (_,_, a, b) when pol < 0-> 
+       let (l1,p1) = introb ctx pol a in
+       let h1 = my_fresh_hyp () in
+       let l' = Spred(h1, p1)::l1 in
+       let (l2,p2) = introb l' pol b in
+       l2, p2 
+    | Pnamed (_, p) ->
+	introb ctx pol p
+    | c -> 
+	 ctx, c 
+  in 
+  let l,g = introb ctx 1 p in 
+  if split_res then
+    (split [] my_fresh_hyp l ), g
+  else
+    List.rev l, g   
+
+
+
+let array_info env id =
+  let ty = type_in_env env id in
+  let v = dearray_type ty in
+  (*i let ty_elem = trad_ml_type_v ren env v in
+  let ty_array = trad_imp_type ren env ty in i*)
+  v
+
+let make_raw_access env (id,id') c =
+  let pt = array_info env id in
+  Tapp (Ident.access, [Tvar id'; c], [pt])
+
+let make_pre_access env id c =
+  let pt = array_info env id in
+  let c = unref_term c in
+  Pand (false, true, 
+	le_int (Tconst (ConstInt "0")) c, lt_int c (array_length id pt))
+      
+let make_raw_store env (id,id') c1 c2 =
+  let pt = array_info env id in
+  Tapp (Ident.store, [Tvar id'; c1; c2], [pt])
+
+(*s to build AST *)
+
+let make_lnode loc p env k = 
+  { desc = p; 
+    info = { t_loc = loc; t_env = env; t_label = label_name ();
+	     t_userlabel = "";
+	     t_result_name = k.c_result_name; t_result_type = k.c_result_type;
+	     t_effect = k.c_effect; 
+	     t_post = optpost_app (anonymous loc) k.c_post } }
+
+let make_var loc x t env =
+  make_lnode loc (Expression (Tvar x)) env (type_c_of_v t)
+
+let make_expression loc e t env =
+  make_lnode loc (Expression e) env (type_c_of_v t)
+    
+let make_annot_bool loc b env =
+  let k = type_c_of_v (PureType PTbool) in
+  let b = Tconst (ConstBool b) in
+  let q = equality (Tvar result) b in
+  make_lnode loc (Expression b) env { k with c_post = Some (q, []) }
+
+let make_void loc env = 
+  make_expression loc (Tconst ConstUnit) (PureType PTunit) env 
+
+let make_raise loc x v env =
+  let k = type_c_of_v v in
+  let ef = Effect.add_exn exit_exn Effect.bottom in
+  make_lnode loc (Raise (x, None)) env { k with c_effect = ef }
+
+let change_desc p d = { p with desc = d }
+
+let force_post env q e = match q with
+  | None -> 
+      e
+  | Some c ->
+      let c = force_post_loc e.info.t_loc c in
+      let ids = post_refs env c in
+      let ef = Effect.add_reads ids e.info.t_effect in
+      let i = { e.info with t_post = Some c; t_effect = ef } in
+      { e with info = i }
+
+let post_named c = 
+  { a_value = c; a_name = post_name (); 
+    a_loc = Loc.dummy_position; a_proof = None }
+
+let create_postval c = Some (post_named c)
+
+let create_post c = Some (post_named c, [])
+
 (*s For debugging purposes *)
 
 open Ptree
@@ -1030,6 +1040,7 @@ let print_decl fmt = function
       fprintf fmt "%atype %a" print_external e Ident.print id
 
 let print_pfile = print_list newline print_decl
+
 
 (*s explanation *)
 
