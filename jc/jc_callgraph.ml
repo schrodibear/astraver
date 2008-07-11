@@ -164,6 +164,17 @@ open Pp
 
 let compute_logic_components ltable =  
   let tab_comp = LogicCallComponents.scc_array ltable in
+  Array.iter 
+    (function
+       | [f] -> 
+	   if List.exists
+	     (fun g -> f.jc_logic_info_tag = g.jc_logic_info_tag)
+	     f.jc_logic_info_calls
+	   then 
+	     f.jc_logic_info_is_recursive <- true
+       | funs ->
+	   List.iter (fun f -> f.jc_logic_info_is_recursive <- true) funs
+    ) tab_comp;
   Jc_options.lprintf "***********************************\n";
   Jc_options.lprintf "Logic call graph: has %d components\n" 
     (Array.length tab_comp);

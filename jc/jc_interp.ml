@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.301 2008-07-11 06:35:50 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.302 2008-07-11 09:01:13 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -220,8 +220,8 @@ let term_bin_op: term_bin_op -> string = function
   | `Bdiv, `Integer -> "div_int"
   | `Bmod, `Integer -> "mod_int"
       (* pointer *)
-  | `Beq, `Pointer -> "eq_pointer"
-  | `Bneq, `Pointer -> "neq_pointer"
+  | `Beq, `Pointer -> "eq_pointer_bool"
+  | `Bneq, `Pointer -> "neq_pointer_bool"
   | `Bsub, `Pointer -> "sub_pointer"
       (* logic *)
   | `Beq, `Logic -> "eq"
@@ -2212,6 +2212,10 @@ let tr_logic_const vi init acc =
         ax::decl
 
 let tr_logic_fun li ta acc =
+  let fa = 
+    assertion ~global_assertion:true ~relocate:false LabelHere LabelHere
+  in
+  let ft = term ~global_assertion:true ~relocate:false LabelHere LabelHere in
   let params =
     List.map
       (fun vi ->
@@ -2222,29 +2226,69 @@ let tr_logic_fun li ta acc =
   let params_reads = 
     Jc_interp_misc.logic_params ~label_in_name:true li @ params 
   in
-  let decl =
-    match li.jc_logic_info_result_type, ta with
-        (* Predicate *)
-      | None, JCAssertion a -> 
-          let a = assertion ~global_assertion:true ~relocate:false LabelHere LabelHere a in
-            Predicate (false, li.jc_logic_info_final_name,params_reads, a) 
-              (* Function *)
-      | Some ty, JCTerm t -> 
-          let ret = tr_base_type ty in
-          let t, lets = term ~global_assertion:true ~relocate:false LabelHere LabelHere t in
-          assert (lets = []);
-          Function(false,li.jc_logic_info_final_name,params_reads, ret, t) 
-      (* Logic *)
-      | tyo, JCReads r ->
-          let ret = match tyo with
-            | None -> simple_logic_type "prop"
-            | Some ty -> tr_base_type ty
-          in
-          Logic(false, li.jc_logic_info_final_name, params_reads, ret)
-      (* Other *)
-      | _ -> assert false
-  in 
-  let acc = decl :: acc in
+  let acc =  
+    if li.jc_logic_info_is_recursive then
+      let ret = match li.jc_logic_info_result_type with
+	| None -> simple_logic_type "prop"
+	| Some ty -> tr_base_type ty
+      in
+      let decl = Logic(false,li.jc_logic_info_final_name,params_reads,ret) in
+      let defaxiom = 
+	let a = match li.jc_logic_info_result_type with
+	  | None ->
+	      let body = match ta with 
+		| JCAssertion a -> fa a
+		| JCTerm _t -> assert false (* not a predicate *)
+		| JCReads _r -> assert false (* cannot be recursive *)
+	      in
+	      let call = 
+		make_logic_pred_call ~label_in_name:true li
+		  (List.map (fun (name,_ty) -> LVar name) params) [] []
+	      in
+	      LIff(call,body)
+	  | Some _ty ->
+	      let body = match ta with 
+		| JCAssertion a -> assert false (* not a logic function *)
+		| JCTerm t -> 
+		    let t, lets = ft t in
+		    assert (lets = []);
+		    t
+		| JCReads _r -> assert false (* cannot be recursive *)
+	      in
+	      let call = 
+		make_logic_fun_call ~label_in_name:true li
+		  (List.map (fun (name,_ty) -> LVar name) params) [] []
+	      in
+	      LPred("eq",[call;body])
+	in
+	let a = 
+	  List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
+	in
+	let name = "recursive_" ^ li.jc_logic_info_name in
+	Axiom(name,a)
+      in
+      decl :: defaxiom :: acc 
+    else
+      let decl =
+	match li.jc_logic_info_result_type, ta with
+	  | None, JCAssertion a -> (* Predicate *)
+              let body = fa a in
+              Predicate(false,li.jc_logic_info_final_name,params_reads,body) 
+	  | Some ty, JCTerm t -> (* Function *)
+              let ret = tr_base_type ty in
+              let t, lets = ft t in
+              assert (lets = []);
+              Function(false,li.jc_logic_info_final_name,params_reads,ret,t) 
+	  | tyo, JCReads r -> (* Logic *)
+              let ret = match tyo with
+		| None -> simple_logic_type "prop"
+		| Some ty -> tr_base_type ty
+              in
+              Logic(false,li.jc_logic_info_final_name,params_reads,ret)
+	  | _ -> assert false (* Other *)
+      in 
+      decl :: acc 
+  in
 
   (* no_update axioms *)
   let acc = match ta with JCAssertion _ | JCTerm _ -> acc | JCReads pset ->

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.110 2008-07-03 14:34:11 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.111 2008-07-11 09:01:13 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -286,6 +286,7 @@ let empty_logic_info =
     jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = []; 
+    jc_logic_info_is_recursive = false;
     jc_logic_info_labels = [];
   }
 
@@ -302,6 +303,7 @@ let make_logic_fun name ty =
     jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = [];
+    jc_logic_info_is_recursive = false;
     jc_logic_info_labels = [];
   }
 
@@ -327,6 +329,7 @@ let make_rel name =
     jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
     jc_logic_info_calls = [];
+    jc_logic_info_is_recursive = false;
     jc_logic_info_labels = [];
   }
 

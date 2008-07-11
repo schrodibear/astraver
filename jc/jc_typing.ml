@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.222 2008-07-11 06:56:04 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.223 2008-07-11 09:01:13 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -493,10 +493,11 @@ let make_logic_bin_op loc (op: bin_op) e1 e2 =
           boolean_type,dummy_region,
           JCTbinary(term_coerce t1 t e1, logic_bin_op (operator_of_native t) op,
                      term_coerce t2 t e2)
-        else
-        if is_pointer_type t1 && is_pointer_type t2 && (comparable_types t1 t2) then
+        else if is_pointer_type t1 && is_pointer_type t2
+	  && (comparable_types t1 t2) 
+	then
           boolean_type,dummy_region,
-          JCTbinary(e1, logic_bin_op `Unit op, e2)
+          JCTbinary(e1,logic_bin_op `Pointer op,e2)
         else
           typing_error loc "numeric or pointer types expected for == and !="
     | `Badd ->
