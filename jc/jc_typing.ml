@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.221 2008-07-11 06:35:50 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.222 2008-07-11 06:56:04 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1771,7 +1771,7 @@ let type_logic_labels_in_clause = function
   | JCCrequires e ->
       type_logic_labels [LabelHere] (Some LabelHere) e
   | JCCbehavior(_, _, _, assumes, requires, assigns, ensures) ->
-      Option_misc.iter (type_logic_labels [LabelOld] (Some LabelOld)) assumes;
+      Option_misc.iter (type_logic_labels [LabelHere] (Some LabelHere)) assumes;
       Option_misc.iter (type_logic_labels [LabelHere] (Some LabelHere)) requires;
       Option_misc.iter
         (fun (_, x) ->
