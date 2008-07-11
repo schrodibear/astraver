@@ -877,7 +877,7 @@ A tool is provided to obfuscate some \why\ files. It is invoked as
 follows:
 \begin{center}
   \texttt{why-obfuscator} [\texttt{-o}
-  \textit{file}]á~á[\texttt{-prefix} \textit{p}]
+  \textit{file}]~[\texttt{-prefix} \textit{p}]
   files...
 \end{center}
 It produces a \why\ file equivalent to the set of \why\ files given as
@@ -1351,7 +1351,7 @@ Syntax of input files is given Figure~\ref{fig:input}.
       & $|$ & \nt{prog} \te{\{\{}\ \nt{postcondition} \te{\}\}} \\
       & $|$ & \te{fun} \nt{binders} \te{->} \nt{prog} \\
       & $|$ & \te{let} \nt{identifier} \nt{binders} \te{=} \nt{prog} 
-              \te{in}á\nt{prog} \\
+              \te{in} \nt{prog} \\
       & $|$ & \te{let} \te{rec} \nt{recfun} $[$ \te{in} \nt{prog} $]$ \\
       & $|$ & \nt{prog} \nt{prog} \\
       & $|$ & \te{raise} \nt{identifier} $[$ \te{:} \nt{value\_type} $]$ \\

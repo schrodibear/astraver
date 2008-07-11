@@ -51,17 +51,18 @@ else
 endif
 
 # where to install the binaries
+DESTDIR =
 prefix=@prefix@
 datarootdir=@datarootdir@
 exec_prefix=@exec_prefix@
-BINDIR=@bindir@
-LIBDIR=@libdir@
+BINDIR=$(DESTDIR)@bindir@
+LIBDIR=$(DESTDIR)@libdir@
 
 EXE=@EXE@
 STRIP=@STRIP@
 
 # where to install the man page
-MANDIR=@mandir@
+MANDIR=$(DESTDIR)@mandir@
 
 # other variables
 OCAMLC   = @OCAMLC@
@@ -732,11 +733,15 @@ install-coq-v7:
 	cp -f $(V7FILES) $(LIBDIR)/why/coq7
 	cp -f $(VO7) $(LIBDIR)/why/coq7
 install-coq-v8: 
-	mkdir -p $(COQLIB)/user-contrib
-	cp -f $(V8FILES) $(COQLIB)/user-contrib
-	cp -f $(VO8) $(COQLIB)/user-contrib
-# 	mkdir -p $(LIBDIR)/why/coq
-# 	cp -f $(VO8) $(V8FILES) $(LIBDIR)/why/coq
+	if test -w $(COQLIB) ; then \
+	 mkdir -p $(COQLIB)/user-contrib ; \
+	 cp -f $(V8FILES) $(COQLIB)/user-contrib ; \
+	 cp -f $(VO8) $(COQLIB)/user-contrib ; \
+	else \
+	echo "Cannot copy to Coq standard library. Add $(LIBDIR)/why/coq to Coq include path." ;\
+	mkdir -p $(LIBDIR)/why/coq ;\
+	cp -f $(VO8) $(V8FILES) $(LIBDIR)/why/coq ;\
+	fi
 
 install-pvs-no:
 install-pvs-yes: $(PVSFILES)

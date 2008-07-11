@@ -1,4 +1,4 @@
-HEVEA=hevea -charset ISO-8859-1
+HEVEA=hevea -fix
 
 all: main.pdf manual.ps caduceus.ps $(KFILES) krakatoa.pdf
 
@@ -45,7 +45,6 @@ manual.ps: manual.tex version.tex
 manual.html: manual.tex version.tex
 	rm -f manual.aux
 	$(HEVEA) manual.tex
-	$(HEVEA) manual.tex
 
 caduceus.ps: caduceus.tex version.tex
 	latex caduceus
@@ -57,7 +56,6 @@ caduceus.ps: caduceus.tex version.tex
 
 caduceus.html: caduceus.tex version.tex
 	rm -f caduceus.aux
-	$(HEVEA) caduceus.tex
 	$(HEVEA) caduceus.tex
 
 krakatoa.pdf: $(KFILES) krakatoa.tex version.tex
@@ -73,11 +71,9 @@ february2008.pdf: $(KFILES) version.tex
 krakatoa.html: krakatoa.tex version.tex
 	rm -f krakatoa.aux
 	$(HEVEA) krakatoa.tex
-	$(HEVEA) krakatoa.tex
 
 main.html: main.tex version.tex
 	rm -f main.aux
-	$(HEVEA) main.tex
 	$(HEVEA) main.tex
 
 
