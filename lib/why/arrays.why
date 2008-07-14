@@ -51,15 +51,15 @@ axiom permut_refl :
   forall t:'a farray. forall l,u:int. permut(t,t,l,u)
 
 axiom permut_sym :
-  forall t1,t2:int farray. forall l,u:int.
+  forall t1,t2:'a farray. forall l,u:int.
   permut(t1,t2,l,u) -> permut(t2,t1,l,u)
 
 axiom permut_trans :
-  forall t1,t2,t3:int farray. forall l,u:int.
+  forall t1,t2,t3:'a farray. forall l,u:int.
   permut(t1,t2,l,u) -> permut(t2,t3,l,u) -> permut(t1,t3,l,u)
 
 axiom permut_exchange :
-  forall a1,a2:int farray. forall l,u,i,j:int. 
+  forall a1,a2:'a farray. forall l,u,i,j:int. 
   l <= i <= u -> l <= j <= u -> exchange(a1,a2,i,j) -> permut(a1,a2,l,u)
 
 axiom exchange_upd :
@@ -67,7 +67,8 @@ axiom exchange_upd :
   exchange(a,update(update(a,i,a[j]),j,a[i]),i,j)
 
 axiom permut_weakening :
-  forall a1,a2:int farray. forall l1,r1,l2,r2:int.
+  forall a1,a2:'a farray. forall l1,r1,l2,r2:int.
+  (*forall x_,y_:'a farray [permut(a1,a2,l2,r2),permut(x_,y_,l1,r1)].*)
   l1 <= l2 <= r2 <= r1 -> permut(a1,a2,l2,r2) -> permut(a1,a2,l1,r1)
 
 axiom permut_eq :
@@ -86,6 +87,6 @@ axiom array_length_update :
   array_length(update(a,i,v)) = array_length(a)
 
 axiom permut_array_length :
-  forall a1,a2:int farray. forall l,u:int. 
+  forall a1,a2:'a farray. forall l,u:int. 
   permut(a1,a2,l,u) -> array_length(a1) = array_length(a2)
 
