@@ -1258,8 +1258,8 @@ let Arrays_arrayShift_ensures_default =
   try
    begin
      (let j_0 = ref (K_29:
-                    ((sub_int (let jessie_49 = t_2 in
-                              (K_28: (java_array_length_intM jessie_49)))) (1))) in
+                    ((sub_int (let jessie_50 = t_2 in
+                              (K_28: (java_array_length_intM jessie_50)))) (1))) in
      try
       while true do
       { invariant
@@ -1332,12 +1332,12 @@ let Arrays_arrayShift_safety =
   try
    begin
      (let j_0 = ref (K_29:
-                    ((sub_int (let jessie_38 = t_2 in
+                    ((sub_int (let jessie_39 = t_2 in
                               (assert
                               { ge_int(offset_max(Object_alloc_table,
-                                       jessie_38),
+                                       jessie_39),
                                 (-1)) };
-                              (K_28: (java_array_length_intM jessie_38))))) (1))) in
+                              (K_28: (java_array_length_intM jessie_39))))) (1))) in
      try
       while true do
       { invariant

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.305 2008-07-15 15:14:35 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.306 2008-07-15 15:58:09 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1707,25 +1707,26 @@ and expr ~infunction ~threats e : expr =
         in
         call
     | JCEassign_var (vi, e2) -> 
-        let e2' = expr e2 in
-        let n = vi.jc_var_info_final_name in
-        let ie = Assign (n, coerce ~no_int_overflow:(not threats) 
-			   e2#name_label e2#loc vi.jc_var_info_type 
-			   e2#typ e2 e2')
-	in
 	let assign_var_assert = fst 
 	  (type_assert ~infunction ~threats vi.jc_var_info_type e2 ([], []))
 	in
-	  assert (List.length assign_var_assert = 1);
-	  let assign_var_assert = List.hd assign_var_assert in
-	  let ie =
-	    match assign_var_assert with
-	      | None -> ie
-	      | Some (tmp, e, a) ->
-		  let ie = if not threats then ie else Assert (a, ie) in
-		    Let (tmp, e, ie)
-	  in
-	    if e#typ = Jc_pervasives.unit_type then ie else append ie (var vi)
+	assert (List.length assign_var_assert = 1);
+	let assign_var_assert = List.hd assign_var_assert in
+	let tmp_for_assert = match assign_var_assert with
+	  | None -> None
+	  | Some(tmp,e,a) -> if not threats then None else Some(tmp,e,a)
+	in
+	let ie = match tmp_for_assert with
+	  | None -> 
+              let e2' = expr e2 in
+	      coerce ~no_int_overflow:(not threats) 
+		e2#name_label e2#loc vi.jc_var_info_type 
+		e2#typ e2 e2'
+	  | Some(tmp,e,a) ->
+	      Let (tmp, e, Assert (a, Var tmp))
+	in
+	let ie = Assign (vi.jc_var_info_final_name, ie) in
+	if e#typ = Jc_pervasives.unit_type then ie else append ie (var vi)
     | JCEassign_heap (e1, fi, e2) -> 
         let tmp1, tmp2, lets, upd = 
 	  make_upd ~infunction ~threats (lab()) e#loc fi e1 e2 
@@ -1859,32 +1860,33 @@ and expr ~infunction ~threats e : expr =
 		 Void)
 	else Void
     | JCElet (vi, e, s) -> 
-        begin
-          let e' = match e with
-            | None -> 
-                any_value vi.jc_var_info_type
-            | Some e -> 
-		(* eprintf "decl of vi=%s@." vi.jc_var_info_name; *)
-                let e' = coerce ~no_int_overflow:(not threats) 
-                  (lab()) e#loc vi.jc_var_info_type e#typ 
-                  e (expr e)
-		in
-		let assign_var_assert = fst 
-		  (type_assert ~infunction ~threats vi.jc_var_info_type e ([], []))
-		in
-		  assert (List.length assign_var_assert = 1);
-		  let assign_var_assert = List.hd assign_var_assert in
-		    match assign_var_assert with
-		      | None -> e'
-		      | Some (tmp, e, a) ->
-			  let e' = if not threats then e' else Assert (a, e') in
-			    Let (tmp, e, e')
-          in
-            if vi.jc_var_info_assigned then 
-              Let_ref(vi.jc_var_info_final_name, e', expr s)
-            else 
-              Let(vi.jc_var_info_final_name, e', expr s)
-        end
+        let e' = match e with
+          | None -> 
+              any_value vi.jc_var_info_type
+          | Some e -> 
+	      (* eprintf "decl of vi=%s@." vi.jc_var_info_name; *)
+	      let assign_var_assert = fst 
+		(type_assert
+		   ~infunction ~threats vi.jc_var_info_type e ([], []))
+	      in
+	      assert (List.length assign_var_assert = 1);
+	      let assign_var_assert = List.hd assign_var_assert in
+	      let tmp_for_assert = match assign_var_assert with
+		| None -> None
+		| Some(tmp,e,a) -> if not threats then None else Some(tmp,e,a)
+	      in
+	      match tmp_for_assert with
+		| None -> 
+		    coerce ~no_int_overflow:(not threats) 
+		      (lab()) e#loc vi.jc_var_info_type e#typ 
+		      e (expr e)
+		| Some(tmp,e,a) ->
+		    Let (tmp, e, Assert( a, Var tmp))
+	in
+        if vi.jc_var_info_assigned then 
+	  Let_ref(vi.jc_var_info_final_name, e', expr s)
+        else 
+	  Let(vi.jc_var_info_final_name, e', expr s)
     | JCEreturn_void -> Raise(jessie_return_exception,None)     
     | JCEreturn (t,e) -> 
 	let return_type_asserts, _ = 

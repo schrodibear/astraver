@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.112 2008-07-11 13:17:03 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.113 2008-07-15 15:58:09 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -153,7 +153,7 @@ let main () =
 	       Jc_ai.code_function (f, loc, s, b) 
 	    ) Jc_typing.functions_table
       end;
-    
+
     (* phase 8: checking structure invariants *)
     begin
       match !Jc_options.inv_sem with
@@ -308,6 +308,7 @@ let main () =
 	Jc_invariants.make_global_invariants d_axioms
       else d_axioms
     in
+
     Jc_options.lprintf
       "production phase 4 : generation of Why functions@.";
     let d_funs = 

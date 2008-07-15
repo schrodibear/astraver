@@ -1121,9 +1121,9 @@ let BinarySearch_binary_search2_ensures_correctness =
   try
    begin
      (let l = ref (safe_int32_of_integer_ (K_17: (0))) in
-     (let u = ref (safe_int32_of_integer_ ((sub_int (let jessie_9 = t_0 in
+     (let u = ref (safe_int32_of_integer_ ((sub_int (let jessie_10 = t_0 in
                                                     (K_15:
-                                                    (java_array_length_intM jessie_9)))) (1))) in
+                                                    (java_array_length_intM jessie_10)))) (1))) in
      begin
        try
         while true do
@@ -1152,7 +1152,7 @@ let BinarySearch_binary_search2_ensures_correctness =
                                                                  (integer_of_int32 !l)) 
                                                                 (integer_of_int32 
                                                                  (safe_int32_of_integer_ 
-                                                                  (JC_20:
+                                                                  (JC_21:
                                                                   ((div_int_ 
                                                                     (integer_of_int32 
                                                                     (safe_int32_of_integer_ 
@@ -1231,13 +1231,13 @@ let BinarySearch_binary_search2_safety =
    begin
      (let l = ref (safe_int32_of_integer_ (K_17: (0))) in
      (let u = ref (K_16:
-                  (int32_of_integer_ ((sub_int (let jessie_3 = t_0 in
+                  (int32_of_integer_ ((sub_int (let jessie_4 = t_0 in
                                                (assert
                                                { ge_int(offset_max(Object_alloc_table,
-                                                        jessie_3),
+                                                        jessie_4),
                                                  (-1)) };
                                                (K_15:
-                                               (java_array_length_intM jessie_3))))) (1)))) in
+                                               (java_array_length_intM jessie_4))))) (1)))) in
      begin
        try
         while true do
@@ -1267,7 +1267,7 @@ let BinarySearch_binary_search2_safety =
                                                           (integer_of_int32 
                                                            (K_11:
                                                            (int32_of_integer_ 
-                                                            (JC_17:
+                                                            (JC_18:
                                                             ((div_int_ 
                                                               (integer_of_int32 
                                                                (K_10:
