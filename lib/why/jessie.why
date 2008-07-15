@@ -27,12 +27,12 @@ axiom bool_and_1 :
 (* division and modulo                                                      *)
 (****************************************************************************)
 
-
 (*
 axiom div_int_euclid :
   forall i:int. forall j:int [i/j].
     i>=0 and j>0 -> (i-j+1 <= j*(i/j) and j*(i/j) <= i)
 *)
+
 
 (* division *)
 

@@ -605,7 +605,7 @@ lib/coq/jessie_why.v: lib/why/jessie.why $(BINARY)
 	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/jessie.why
 
 lib/pvs/jessie_why.pvs: lib/why/jessie.why $(BINARY)
-	WHYLIB=lib/why $(BINARY) --dir lib/pvs --pvs lib/why/jessie.why
+	WHYLIB=lib/why $(BINARY) --dir lib/pvs --pvs --pvs-preamble "IMPORTING why" lib/why/jessie.why
 
 # bench
 

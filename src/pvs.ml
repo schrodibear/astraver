@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.91 2008-07-10 11:57:17 sboldo Exp $ i*)
+(*i $Id: pvs.ml,v 1.92 2008-07-15 15:11:07 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -49,6 +49,18 @@ let relation id =
   else if id == t_eq then "="
   else if id == t_neq then "/="
   else assert false
+
+let other_relation id =
+  match Ident.string id with
+    | "gt_int_bool" | "gt_real_bool" -> ">"
+    | "ge_int_bool" | "ge_real_bool" -> ">="
+    | "le_int_bool" | "le_real_bool" -> "<="
+    | "lt_int_bool" | "lt_real_bool" -> "<"
+    | "eq_int_bool" | "eq_real_bool" -> "="
+    | "neq_int_bool" | "neq_real_bool" -> "/="
+    | "bool_and" -> "AND"
+    | "bool_or" -> "OR"
+    | _ ->    raise Not_found
 
 let print_real fmt = function
   | "","0",_ | "0","",_ | "0","0",_ -> 
@@ -83,6 +95,14 @@ let print_term fmt t =
   let rec print0 fmt = function
     | Tapp (id, [a;b], _) when is_relation id ->
 	fprintf fmt "@[<hov 2>%a %s@ %a@]" print1 a (relation id) print1 b
+    | Tapp (id, [a;b], _) as t ->
+	begin
+	  try
+	    let op = other_relation id in
+	    fprintf fmt "@[<hov 2>%a %s@ %a@]" print1 a op print1 b
+	  with Not_found ->
+	    print1 fmt t
+	end
     | t -> 
 	print1 fmt t
   and print1 fmt = function
@@ -134,7 +154,7 @@ let print_term fmt t =
     | Tapp (id, [t], _) when id == t_neg_int || id == t_neg_real ->
 	fprintf fmt "-%a" print3 t
     | Tapp (id, [a; b; c], _) when id == if_then_else -> 
-	fprintf fmt "(@[if %a@ then %a@ else %a@])" print0 a print0 b print0 c
+	fprintf fmt "(@[IF %a@ THEN %a@ ELSE %a@ ENDIF@])" print0 a print0 b print0 c
     | Tapp (id, l, _) as t when is_relation id || is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [], i) -> 
