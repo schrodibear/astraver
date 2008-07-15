@@ -179,6 +179,13 @@ let mutable_memory infunction (fi,r) =
       infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
   else true
 
+let mutable_alloc_table infunction (root,r) =
+  let a = tag_or_variant_type_name root in
+  if Region.polymorphic r then
+    StringRegionSet.mem (a,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+  else true
+
 let mutable_fvmemory infunction (fvi,r) =
   if Region.polymorphic r then
     FieldOrVariantRegionMap.mem 

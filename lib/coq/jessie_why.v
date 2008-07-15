@@ -90,7 +90,7 @@ Implicit Arguments offset_max.
 Admitted.
 Implicit Arguments offset_min.
 
-(*Why predicate*) Definition valid (A580:Set) (a:(alloc_table A580)) (p:(pointer A580))
+(*Why predicate*) Definition valid (A596:Set) (a:(alloc_table A596)) (p:(pointer A596))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 Implicit Arguments valid.
 
@@ -288,8 +288,8 @@ Implicit Arguments in_pset.
 Admitted.
 Implicit Arguments valid_pset.
 
-(*Why predicate*) Definition pset_disjoint (A619:Set) (ps1:(pset A619)) (ps2:(pset A619))
-  := (forall (p:(pointer A619)), ~((in_pset p ps1) /\ (in_pset p ps2))).
+(*Why predicate*) Definition pset_disjoint (A635:Set) (ps1:(pset A635)) (ps2:(pset A635))
+  := (forall (p:(pointer A635)), ~((in_pset p ps1) /\ (in_pset p ps2))).
 Implicit Arguments pset_disjoint.
 
 (*Why axiom*) Lemma in_pset_empty :
@@ -403,8 +403,8 @@ Admitted.
       (valid_pset a s2))))).
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A636:Set) (A635:Set) (a:(alloc_table A635)) (m1:(memory A635 A636)) (m2:(memory A635 A636)) (l:(pset A635))
-  := (forall (p:(pointer A635)),
+(*Why predicate*) Definition not_assigns (A652:Set) (A651:Set) (a:(alloc_table A651)) (m1:(memory A651 A652)) (m2:(memory A651 A652)) (l:(pset A651))
+  := (forall (p:(pointer A651)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 Implicit Arguments not_assigns.
 
@@ -506,7 +506,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A655:Set) (a:(tag_table A655)) (p:(pointer A655)) (t:(tag_id A655))
+(*Why predicate*) Definition instanceof (A671:Set) (a:(tag_table A671)) (p:(pointer A671)) (t:(tag_id A671))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -533,8 +533,8 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition root_tag (A660:Set) (t:(tag_id A660))
-  := (parenttag t (@bottom_tag A660)).
+(*Why predicate*) Definition root_tag (A676:Set) (t:(tag_id A676))
+  := (parenttag t (@bottom_tag A676)).
 Implicit Arguments root_tag.
 
 (*Why axiom*) Lemma root_subtag :
@@ -546,7 +546,7 @@ Implicit Arguments root_tag.
       ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A662:Set) (tag_table:(tag_table A662)) (mutable:(memory A662 (tag_id A662))) (this:(pointer A662))
+(*Why predicate*) Definition fully_packed (A678:Set) (tag_table:(tag_table A678)) (mutable:(memory A678 (tag_id A678))) (this:(pointer A678))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 
@@ -619,17 +619,17 @@ Admitted.
 Admitted.
 Implicit Arguments alloc_extends.
 
-(*Why logic*) Definition alloc_extern :
-  forall (A1:Set), (alloc_table A1) -> (pointer A1) -> Prop.
-Admitted.
-Implicit Arguments alloc_extern.
+(*Why predicate*) Definition alloc_fresh (A680:Set) (a:(alloc_table A680)) (p:(pointer A680))
+  := ~(valid a p).
+Implicit Arguments alloc_fresh.
 
 (*Why axiom*) Lemma alloc_extends_offset_min :
   forall (A1:Set),
   (forall (a1:(alloc_table A1)),
    (forall (a2:(alloc_table A1)),
     ((alloc_extends a1 a2) ->
-     (forall (p:(pointer A1)), (offset_min a1 p) = (offset_min a2 p))))).
+     (forall (p:(pointer A1)),
+      ((valid a1 p) -> (offset_min a1 p) = (offset_min a2 p)))))).
 Admitted.
 
 (*Why axiom*) Lemma alloc_extends_offset_max :
@@ -637,15 +637,7 @@ Admitted.
   (forall (a1:(alloc_table A1)),
    (forall (a2:(alloc_table A1)),
     ((alloc_extends a1 a2) ->
-     (forall (p:(pointer A1)), (offset_max a1 p) = (offset_max a2 p))))).
-Admitted.
-
-(*Why axiom*) Lemma alloc_extern_def :
-  forall (A1:Set),
-  (forall (a:(alloc_table A1)),
-   (forall (p:(pointer A1)),
-    ((alloc_extern a p) ->
-     (forall (q:(pointer A1)),
-      ((offset_min a q) <= (offset_max a q) -> (full_separated p q)))))).
+     (forall (p:(pointer A1)),
+      ((valid a1 p) -> (offset_max a1 p) = (offset_max a2 p)))))).
 Admitted.
 

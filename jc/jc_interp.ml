@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.303 2008-07-11 13:17:03 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.304 2008-07-15 13:11:12 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -500,16 +500,27 @@ let var v =
 let lvar_info label v = 
   lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
 
+let mutable_var ?assigned ?label_in_name label v mut =
+  if mut then
+    lvar ?assigned ?label_in_name label v
+  else
+    lvar ?assigned ?label_in_name LabelHere v
+
 let memvar ?assigned ?label_in_name label (fi,r) =
   let mem = field_region_memory_name(fi,r) in
   let mut = match !current_function with
     | None -> true
     | Some infunction -> mutable_memory infunction (fi,r) 
   in
-  if mut then
-    lvar ?assigned ?label_in_name label mem
-  else
-    lvar ?assigned ?label_in_name LabelHere mem
+  mutable_var ?assigned ?label_in_name label mem mut
+
+let allocvar ?assigned ?label_in_name label (root,r) =
+  let alloc = alloc_region_table_name(root,r) in
+  let mut = match !current_function with
+    | None -> true
+    | Some infunction -> mutable_alloc_table infunction (root,r) 
+  in
+  mutable_var ?assigned ?label_in_name label alloc mut
 
 let relocate_label ~relocate truelab curlab =
   if relocate && curlab = LabelHere then truelab else curlab
@@ -1107,10 +1118,9 @@ let assigns before ef locs loc =
          | FVfield fi -> JCtag(fi.jc_field_info_root, [])
          | FVvariant vi -> JCvariant vi
        in
-       let alloc = alloc_region_table_name(root,r) in
        make_and acc
 	 (let a = LPred("not_assigns",
-                [lvar (* ~assigned: ? *) before alloc; 
+                [allocvar (* ~assigned: ? *) before (root,r); 
                  lvar before v;
                  LVar v; make_union_loc p]) in
 	  LNamed(reg_loc loc,a))
@@ -1383,17 +1393,17 @@ and type_assert ~infunction ~threats ty e (lets, params) =
     match ty with
       | JCTpointer (si, n1o, n2o) ->
 	  let tmp = tmp_var_name () in
-	  let alloc = alloc_table_name si in
+	  let alloc = allocvar LabelHere (si,e#region) in
 	  let offset_mina n = 
 	    LPred ("le_int",
 		   [LApp ("offset_min", 
-			  [LVar alloc; LVar tmp]);
+			  [alloc; LVar tmp]);
 		    LConst (Prim_int (Num.string_of_num n))]) 
 	  in
 	  let offset_maxa n =
 	    LPred ("ge_int",
 		   [LApp ("offset_max", 
-			  [LVar alloc; LVar tmp]);
+			  [alloc; LVar tmp]);
 		    LConst (Prim_int (Num.string_of_num n))])
 	  in
 	  begin match e#typ with
@@ -2106,8 +2116,8 @@ let tr_struct st acc =
         LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
         (* [alloc_extends(old(alloc),alloc)] *)
         LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
-        (* [alloc_extern(old(alloc),result)] *)
-        LPred("alloc_extern",[LVarAtLabel(alloc,"");LVar "result"])
+        (* [alloc_fresh(old(alloc),result)] *)
+        LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result"])
       ],
       (* no exceptional post *)
       [])
@@ -2151,8 +2161,8 @@ let tr_struct st acc =
         LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
         (* [alloc_extends(old(alloc),alloc)] *)
         LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
-        (* [alloc_extern(old(alloc),result)] *)
-        LPred("alloc_extern",[LVarAtLabel(alloc,"");LVar "result"])
+        (* [alloc_fresh(old(alloc),result)] *)
+        LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result"])
       ],
       (* no exceptional post *)
       [])
