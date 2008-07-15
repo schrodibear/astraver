@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.304 2008-07-15 13:11:12 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.305 2008-07-15 15:14:35 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1603,17 +1603,17 @@ and expr ~infunction ~threats e : expr =
                 begin match siz#node with 
                   | JCEconst(JCCinteger "1") ->
                       make_app (alloc_one_param_name st) 
-                        ([Void; Var alloc]
-                         @ (List.map (nvar $ alloc_region_table_name) roots)
+                        (Void
+                         :: (List.map (nvar $ alloc_region_table_name) roots)
                          @ (List.map (nvar $ field_region_memory_name) fields))
                   | _ ->
                       make_guarded_app 
                         ~name:(lab()) AllocSize loc
                         (alloc_param_name st)
-                        ([coerce ~no_int_overflow:(not threats) 
-                            siz#name_label siz#loc integer_type 
-                            siz#typ siz (expr siz); Var alloc]
-                         @ (List.map (nvar $ alloc_region_table_name) roots)
+                        (coerce ~no_int_overflow:(not threats) 
+                           siz#name_label siz#loc integer_type 
+                           siz#typ siz (expr siz)
+                         :: (List.map (nvar $ alloc_region_table_name) roots)
                          @ (List.map (nvar $ field_region_memory_name) fields))
                 end
         end
@@ -2134,7 +2134,7 @@ let tr_struct st acc =
       Prod_type(alloc_table_name a,Ref_type(Base_type(alloc_table_type a)),acc)
     ) all_tovs alloc_type
   in
-  let alloc_type = Prod_type(alloc,Ref_type(Base_type alloc_ty),alloc_type) in
+(*   let alloc_type = Prod_type(alloc,Ref_type(Base_type alloc_ty),alloc_type) in *)
   let alloc_type = Prod_type("tt",unit_type,alloc_type) in
   let acc = 
     Param(false,alloc_one_param_name st,alloc_type) :: acc
@@ -2179,7 +2179,7 @@ let tr_struct st acc =
       Prod_type(alloc_table_name a,Ref_type(Base_type(alloc_table_type a)),acc)
     ) all_tovs alloc_type
   in
-  let alloc_type = Prod_type(alloc,Ref_type(Base_type alloc_ty),alloc_type) in
+(*   let alloc_type = Prod_type(alloc,Ref_type(Base_type alloc_ty),alloc_type) in *)
   let alloc_type = Prod_type("n",Base_type why_integer_type,alloc_type) in
   let acc = 
     Param(false,alloc_param_name st,alloc_type) :: acc
