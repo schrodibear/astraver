@@ -622,47 +622,43 @@ parameter Switch_test2 :
 parameter alloc_Object :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   Object_alloc_table:Object alloc_table ref ->
-    { ge_int(n, (0))} Object pointer reads Object_alloc_table
-    writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
-      and (instanceof(Object_tag_table, result, Object_tag)
-          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-              and alloc_extern(Object_alloc_table@, result)))) }
+   { ge_int(n, (0))} Object pointer reads Object_alloc_table
+   writes Object_alloc_table,Object_tag_table
+   { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+     and (instanceof(Object_tag_table, result, Object_tag)
+         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+             and alloc_fresh(Object_alloc_table@, result)))) }
 
 parameter alloc_String :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   Object_alloc_table:Object alloc_table ref ->
-    { ge_int(n, (0))} Object pointer reads Object_alloc_table
-    writes Object_alloc_table,Object_tag_table
-    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
-      and (instanceof(Object_tag_table, result, String_tag)
-          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-              and alloc_extern(Object_alloc_table@, result)))) }
+   { ge_int(n, (0))} Object pointer reads Object_alloc_table
+   writes Object_alloc_table,Object_tag_table
+   { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+     and (instanceof(Object_tag_table, result, String_tag)
+         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+             and alloc_fresh(Object_alloc_table@, result)))) }
 
 parameter alloc_Switch :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   Object_alloc_table:Object alloc_table ref ->
-    { ge_int(n, (0))} Object pointer reads Object_alloc_table
-    writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Switch(result, (0), sub_int(n, (1)), Object_alloc_table)
-      and (instanceof(Object_tag_table, result, Switch_tag)
-          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-              and alloc_extern(Object_alloc_table@, result)))) }
+   { ge_int(n, (0))} Object pointer reads Object_alloc_table
+   writes Object_alloc_table,Object_tag_table
+   { (valid_struct_Switch(result, (0), sub_int(n, (1)), Object_alloc_table)
+     and (instanceof(Object_tag_table, result, Switch_tag)
+         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+             and alloc_fresh(Object_alloc_table@, result)))) }
 
 parameter alloc_Throwable :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   Object_alloc_table:Object alloc_table ref ->
-    { ge_int(n, (0))} Object pointer reads Object_alloc_table
-    writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
-       Object_alloc_table)
-      and (instanceof(Object_tag_table, result, Throwable_tag)
-          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-              and alloc_extern(Object_alloc_table@, result)))) }
+   { ge_int(n, (0))} Object pointer reads Object_alloc_table
+   writes Object_alloc_table,Object_tag_table
+   { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+      Object_alloc_table)
+     and (instanceof(Object_tag_table, result, Throwable_tag)
+         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+             and alloc_fresh(Object_alloc_table@, result)))) }
 
 parameter interface_alloc_table : interface alloc_table ref
 
@@ -671,69 +667,63 @@ parameter interface_tag_table : interface tag_table ref
 parameter alloc_interface :
  n:int ->
   interface_alloc_table:interface alloc_table ref ->
-   interface_alloc_table:interface alloc_table ref ->
-    { ge_int(n, (0))} interface pointer reads interface_alloc_table
-    writes interface_alloc_table,interface_tag_table
-    { (valid_struct_interface(result, (0), sub_int(n, (1)),
-       interface_alloc_table)
-      and (instanceof(interface_tag_table, result, interface_tag)
-          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
-              and alloc_extern(interface_alloc_table@, result)))) }
+   { ge_int(n, (0))} interface pointer reads interface_alloc_table
+   writes interface_alloc_table,interface_tag_table
+   { (valid_struct_interface(result, (0), sub_int(n, (1)),
+      interface_alloc_table)
+     and (instanceof(interface_tag_table, result, interface_tag)
+         and (alloc_extends(interface_alloc_table@, interface_alloc_table)
+             and alloc_fresh(interface_alloc_table@, result)))) }
 
 parameter alloc_one_Object :
  tt:unit ->
   Object_alloc_table:Object alloc_table ref ->
-   Object_alloc_table:Object alloc_table ref ->
-    { } Object pointer reads Object_alloc_table
-    writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Object(result, (0), (0), Object_alloc_table)
-      and (instanceof(Object_tag_table, result, Object_tag)
-          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-              and alloc_extern(Object_alloc_table@, result)))) }
+   { } Object pointer reads Object_alloc_table
+   writes Object_alloc_table,Object_tag_table
+   { (valid_struct_Object(result, (0), (0), Object_alloc_table)
+     and (instanceof(Object_tag_table, result, Object_tag)
+         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+             and alloc_fresh(Object_alloc_table@, result)))) }
 
 parameter alloc_one_String :
  tt:unit ->
   Object_alloc_table:Object alloc_table ref ->
-   Object_alloc_table:Object alloc_table ref ->
-    { } Object pointer reads Object_alloc_table
-    writes Object_alloc_table,Object_tag_table
-    { (valid_struct_String(result, (0), (0), Object_alloc_table)
-      and (instanceof(Object_tag_table, result, String_tag)
-          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-              and alloc_extern(Object_alloc_table@, result)))) }
+   { } Object pointer reads Object_alloc_table
+   writes Object_alloc_table,Object_tag_table
+   { (valid_struct_String(result, (0), (0), Object_alloc_table)
+     and (instanceof(Object_tag_table, result, String_tag)
+         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+             and alloc_fresh(Object_alloc_table@, result)))) }
 
 parameter alloc_one_Switch :
  tt:unit ->
   Object_alloc_table:Object alloc_table ref ->
-   Object_alloc_table:Object alloc_table ref ->
-    { } Object pointer reads Object_alloc_table
-    writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Switch(result, (0), (0), Object_alloc_table)
-      and (instanceof(Object_tag_table, result, Switch_tag)
-          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-              and alloc_extern(Object_alloc_table@, result)))) }
+   { } Object pointer reads Object_alloc_table
+   writes Object_alloc_table,Object_tag_table
+   { (valid_struct_Switch(result, (0), (0), Object_alloc_table)
+     and (instanceof(Object_tag_table, result, Switch_tag)
+         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+             and alloc_fresh(Object_alloc_table@, result)))) }
 
 parameter alloc_one_Throwable :
  tt:unit ->
   Object_alloc_table:Object alloc_table ref ->
-   Object_alloc_table:Object alloc_table ref ->
-    { } Object pointer reads Object_alloc_table
-    writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Throwable(result, (0), (0), Object_alloc_table)
-      and (instanceof(Object_tag_table, result, Throwable_tag)
-          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-              and alloc_extern(Object_alloc_table@, result)))) }
+   { } Object pointer reads Object_alloc_table
+   writes Object_alloc_table,Object_tag_table
+   { (valid_struct_Throwable(result, (0), (0), Object_alloc_table)
+     and (instanceof(Object_tag_table, result, Throwable_tag)
+         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+             and alloc_fresh(Object_alloc_table@, result)))) }
 
 parameter alloc_one_interface :
  tt:unit ->
   interface_alloc_table:interface alloc_table ref ->
-   interface_alloc_table:interface alloc_table ref ->
-    { } interface pointer reads interface_alloc_table
-    writes interface_alloc_table,interface_tag_table
-    { (valid_struct_interface(result, (0), (0), interface_alloc_table)
-      and (instanceof(interface_tag_table, result, interface_tag)
-          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
-              and alloc_extern(interface_alloc_table@, result)))) }
+   { } interface pointer reads interface_alloc_table
+   writes interface_alloc_table,interface_tag_table
+   { (valid_struct_interface(result, (0), (0), interface_alloc_table)
+     and (instanceof(interface_tag_table, result, interface_tag)
+         and (alloc_extends(interface_alloc_table@, interface_alloc_table)
+             and alloc_fresh(interface_alloc_table@, result)))) }
 
 parameter any_byte : unit -> { } byte { true }
 
@@ -1740,26 +1730,21 @@ axiom lsr_of_lsl_identity_on_positive:
 
 logic alloc_extends : 'a1 alloc_table, 'a1 alloc_table -> prop
 
-logic alloc_extern : 'a1 alloc_table, 'a1 pointer -> prop
+predicate alloc_fresh(a: 'a1 alloc_table, p: 'a1 pointer) = (not valid(a, p))
 
 axiom alloc_extends_offset_min:
   (forall a1:'a1 alloc_table.
     (forall a2:'a1 alloc_table [alloc_extends(a1, a2)].
       (alloc_extends(a1, a2) ->
-       (forall p:'a1 pointer. (offset_min(a1, p) = offset_min(a2, p))))))
+       (forall p:'a1 pointer.
+         (valid(a1, p) -> (offset_min(a1, p) = offset_min(a2, p)))))))
 
 axiom alloc_extends_offset_max:
   (forall a1:'a1 alloc_table.
     (forall a2:'a1 alloc_table [alloc_extends(a1, a2)].
       (alloc_extends(a1, a2) ->
-       (forall p:'a1 pointer. (offset_max(a1, p) = offset_max(a2, p))))))
-
-axiom alloc_extern_def:
-  (forall a:'a1 alloc_table.
-    (forall p:'a1 pointer [alloc_extern(a, p)].
-      (alloc_extern(a, p) ->
-       (forall q:'a1 pointer.
-         ((offset_min(a, q) <= offset_max(a, q)) -> full_separated(p, q))))))
+       (forall p:'a1 pointer.
+         (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
 
 type Object
 
