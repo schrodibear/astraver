@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.152 2008-05-28 13:51:26 marche Exp $ i*)
+(*i $Id: main.ml,v 1.153 2008-07-15 14:39:34 moy Exp $ i*)
 
 open Options
 open Ptree
@@ -335,6 +335,24 @@ let check_duplicate_params l =
   in
   loop l Ident.Idset.empty
 
+let check_duplicate_binders loc ty =
+  let rec check acc = function
+    | PVpure _ | PVref _ -> ()
+    | PVarrow (l, ty) ->
+	let rec loop l acc =
+	  match l with
+	    | [] -> acc
+	    | (x,_)::rem when x = Ident.anonymous ->
+		loop rem acc
+	    | (x,_)::rem ->
+		if Ident.Idset.mem x acc then
+		  raise_located loc (ClashParam x)
+		else loop rem (Ident.Idset.add x acc)
+	in
+	check (loop l acc) ty.pc_result_type
+  in
+  check Ident.Idset.empty ty
+
 let interp_decl ?(prelude=false) d = 
   let lab = Label.empty in
   match d with 
@@ -343,6 +361,7 @@ let interp_decl ?(prelude=false) d =
 	(try interp_program loc id p with Exit -> ())
     | Parameter (loc, ext, ids, v) ->
 	let env = Env.empty_progs () in
+	check_duplicate_binders loc v;
 	let v = Ltyping.type_v loc lab env v in
 	if ext && is_mutable v then raise_located loc MutableExternal;
 	let gv = Env.generalize_type_v v in
