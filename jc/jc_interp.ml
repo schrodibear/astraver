@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.306 2008-07-15 15:58:09 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.307 2008-07-15 15:58:56 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2047,7 +2047,7 @@ let make_valid_pred tov =
   Predicate(false, valid_pred_name tov, params, validity)
 
 let tr_struct st acc =
-  let alloc_ty = alloc_table_type (JCtag(st, [])) in
+(*   let alloc_ty = alloc_table_type (JCtag(st, [])) in *)
   let tagid_type = tag_id_type (JCtag(st, [])) in
   let ptr_type = pointer_type (JCtag(st, [])) in
 (*  let all_fields = embedded_struct_fields st in
