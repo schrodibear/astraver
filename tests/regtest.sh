@@ -24,15 +24,15 @@ case $1 in
 	echo "========== krakatoa execution =========="
 	rm -f $f.jc
 	rm -f $f.jloc
-	bin/krakatoa.opt $1 || exit 1
+	KRAKATOALIB=$DIR/lib bin/krakatoa.opt $1 || exit 1
 	mycat $f.jc 
 	mycatfilterdir $f.jloc
 	echo "========== jessie execution =========="
 	rm -f $f.makefile 
 	rm -f $d/why/$b.why
 	rm -f $f.loc
-	bin/jessie.opt -locs $f.jloc -why-opt -split-user-conj $f.jc || exit 2
-	mycat $f.makefile
+	JESSIELIB=$DIR/lib bin/jessie.opt -locs $f.jloc -why-opt -split-user-conj $f.jc || exit 2
+	mycatfilterdir $f.makefile
 	mycatfilterdir $f.loc
 	mycat $d/why/$b.why
 	echo "========== make project execution =========="
@@ -43,9 +43,15 @@ case $1 in
 	mycatfilterdir $d/why/$b.wpr	
 	mycat $d/why/$b'_ctx'.why	
 	for i in $d/why/$b'_po'*.why; do mycat $i; done
-	echo "========== simplify execution =========="
+	echo "========== generation of Simplify VC output =========="
+	make --quiet -C $d -f $b.makefile simplify/$b_why.sx	
+	mycat $d/simplify/$b_why.sx
+	echo "========== running Simplify =========="
 	DPOPT=-no-timings TIMEOUT=10 make --quiet -C $d -f $b.makefile simplify	
-	echo "========== ergo execution =========="
+	echo "========== generation of alt-ergo VC output =========="
+	make --quiet -C $d -f $b.makefile why/$b_why.why	
+	mycat $d/why/$b_why.why
+	echo "========== running alt-ergo =========="
 	DPOPT=-no-timings TIMEOUT=10 make --quiet -C $d -f $b.makefile ergo	
 	;;
   *.c)
