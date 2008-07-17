@@ -227,11 +227,12 @@ TIMEOUT ?= 10
 
 DP=dp $(DPOPT) -timeout $(TIMEOUT)
 
+export WHYLIB=/usr/local/lib/why
 WHY=why --no-arrays  -split-user-conj -explain -locs SideEffects.loc
 
 GWHY=gwhy-bin --no-arrays  -split-user-conj -explain -locs SideEffects.loc
 
-JESSIELIBFILE=/usr/local/share/frama-c/jessie/why/jessie.why
+JESSIELIBFILE=HOME/lib/why/jessie.why
 
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
@@ -276,7 +277,7 @@ isabelle: isabelle/SideEffects_why.thy
 
 isabelle/%_why.thy: why/%.why
 	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILE) why/$*.why
-	cp -f /usr/local/share/frama-c/jessie/isabelle/jessie_why.thy isabelle/
+	cp -f HOME/lib/isabelle/jessie_why.thy isabelle/
 
 simplify: simplify/SideEffects_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
@@ -1099,26 +1100,29 @@ axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
 
 axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
 
-predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
-
 logic bool_and : bool, bool -> bool
 
 logic bool_or : bool, bool -> bool
 
 logic bool_xor : bool, bool -> bool
 
-axiom bool_and_false: (forall b:bool. (bool_and(b, false) = false))
+axiom bool_and_false:
+  ((bool_and(true, false) = false) and (bool_and(false, false) = false))
 
-axiom false_bool_and: (forall b:bool. (bool_and(false, b) = false))
+axiom false_bool_and:
+  ((bool_and(false, true) = false) and (bool_and(false, false) = false))
 
-axiom bool_and_true: (forall b:bool. (bool_and(b, true) = b))
+axiom bool_and_true:
+  ((bool_and(true, true) = true) and (bool_and(false, true) = false))
 
-axiom true_bool_and: (forall b:bool. (bool_and(true, b) = b))
+axiom true_bool_and:
+  ((bool_and(true, true) = true) and (bool_and(true, false) = false))
 
 axiom bool_and_1:
-  (forall b1:bool.
-    (forall b2:bool.
-      ((bool_and(b1, b2) = true) -> ((b1 = true) and (b2 = true)))))
+  ((((bool_and(true, true) = true) -> ((true = true) and (true = true))) and
+    ((bool_and(true, false) = true) -> ((true = true) and (false = true)))) and
+   (((bool_and(false, true) = true) -> ((false = true) and (true = true))) and
+    ((bool_and(false, false) = true) -> ((false = true) and (false = true)))))
 
 axiom div_positive_by_positive:
   (forall a:int.
@@ -1173,8 +1177,6 @@ predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
-
 axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
 
 axiom shift_shift:
@@ -1205,7 +1207,7 @@ axiom null_not_valid: (forall a:'a1 alloc_table. (not valid(a, null)))
 
 axiom null_pointer:
   (forall a:'a1 alloc_table.
-    ((offset_min(a, null) <= 0) and (offset_max(a, null) <= (-2))))
+    ((offset_min(a, null) >= 0) and (offset_max(a, null) <= (-2))))
 
 logic eq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
 
@@ -1220,10 +1222,17 @@ axiom neq_pointer_bool_def:
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
 
+logic same_block : 'a1 pointer, 'a1 pointer -> prop
+
+axiom same_block_shift:
+  (forall p:'a1 pointer. (forall i:int. same_block(p, shift(p, i))))
+
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
 axiom sub_pointer_shift:
   (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, p)]. (p = shift(q, sub_pointer(p,
-      q)))))
+    (forall q:'a1 pointer [sub_pointer(p, p)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
 
 axiom sub_pointer_self:
   (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
@@ -1231,19 +1240,21 @@ axiom sub_pointer_self:
 axiom sub_pointer_zero:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer [sub_pointer(p, q)].
-      ((sub_pointer(p, q) = 0) -> (p = q))))
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
 
 axiom sub_pointer_shift_left:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(shift(p, i), q)]. (sub_pointer(shift(p, i),
-        q) = (sub_pointer(p, q) + i)))))
+      (forall i:int [sub_pointer(shift(p, i), q)].
+        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
+         q) + i))))))
 
 axiom sub_pointer_shift_right:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(p, shift(q, i))]. (sub_pointer(p, shift(q,
-        i)) = (sub_pointer(p, q) - i)))))
+      (forall i:int [sub_pointer(p, shift(q, i))].
+        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
+         q) - i))))))
 
 type ('t, 'v) memory
 
@@ -2168,8 +2179,947 @@ goal SideEffects_m1_safety_po_9:
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
   ("K_7": (i0 = 2))
 
-========== simplify execution ==========
+========== generation of Simplify VC output ==========
 why -simplify [...] why/SideEffects.why
+========== file tests/java/simplify/SideEffects_why.sx ==========
+
+;; DO NOT EDIT BELOW THIS LINE
+
+(BG_PUSH (NEQ |@true| |@false|))
+
+(BG_PUSH
+ ;; Why axiom bool_and_false
+ (AND (EQ (bool_and |@true| |@false|) |@false|)
+ (EQ (bool_and |@false| |@false|) |@false|)))
+
+(BG_PUSH
+ ;; Why axiom false_bool_and
+ (AND (EQ (bool_and |@false| |@true|) |@false|)
+ (EQ (bool_and |@false| |@false|) |@false|)))
+
+(BG_PUSH
+ ;; Why axiom bool_and_true
+ (AND (EQ (bool_and |@true| |@true|) |@true|)
+ (EQ (bool_and |@false| |@true|) |@false|)))
+
+(BG_PUSH
+ ;; Why axiom true_bool_and
+ (AND (EQ (bool_and |@true| |@true|) |@true|)
+ (EQ (bool_and |@true| |@false|) |@false|)))
+
+(BG_PUSH
+ ;; Why axiom bool_and_1
+ (AND
+ (AND
+ (IMPLIES (EQ (bool_and |@true| |@true|) |@true|)
+ (AND (EQ |@true| |@true|) (EQ |@true| |@true|)))
+ (IMPLIES (EQ (bool_and |@true| |@false|) |@true|)
+ (AND (EQ |@true| |@true|) (EQ |@false| |@true|))))
+ (AND
+ (IMPLIES (EQ (bool_and |@false| |@true|) |@true|)
+ (AND (EQ |@false| |@true|) (EQ |@true| |@true|)))
+ (IMPLIES (EQ (bool_and |@false| |@false|) |@true|)
+ (AND (EQ |@false| |@true|) (EQ |@false| |@true|))))))
+
+(BG_PUSH
+ ;; Why axiom div_positive_by_positive
+ (FORALL (a b)
+ (IMPLIES (AND (<= 0 a) (< 0 b))
+ (AND (<= 0 (int_div a b)) (<= (int_div a b) a)))))
+
+(BG_PUSH
+ ;; Why axiom div_negative_by_positive
+ (FORALL (a b)
+ (IMPLIES (AND (<= a 0) (< 0 b))
+ (AND (<= a (int_div a b)) (<= (int_div a b) 0)))))
+
+(BG_PUSH
+ ;; Why axiom div_positive_by_negative
+ (FORALL (a b)
+ (IMPLIES (AND (<= 0 a) (< b 0))
+ (AND (<= (- 0 a) (int_div a b)) (<= (int_div a b) 0)))))
+
+(BG_PUSH
+ ;; Why axiom div_negative_by_negative
+ (FORALL (a b)
+ (IMPLIES (AND (<= a 0) (< b 0))
+ (AND (<= 0 (int_div a b)) (<= (int_div a b) (- 0 a))))))
+
+(BG_PUSH
+ ;; Why axiom mod_positive_by_positive
+ (FORALL (a b)
+ (IMPLIES (AND (<= 0 a) (< 0 b))
+ (AND (<= 0 (int_mod a b)) (< (int_mod a b) b)))))
+
+(BG_PUSH
+ ;; Why axiom mod_negative_by_positive
+ (FORALL (a b)
+ (IMPLIES (AND (<= a 0) (< 0 b))
+ (AND (<= 0 (int_mod a b)) (< (int_mod a b) b)))))
+
+(BG_PUSH
+ ;; Why axiom mod_positive_by_negative
+ (FORALL (a b)
+ (IMPLIES (AND (<= 0 a) (< b 0))
+ (AND (< (- 0 b) (int_mod a b)) (<= (int_mod a b) 0)))))
+
+(BG_PUSH
+ ;; Why axiom mod_negative_by_negative
+ (FORALL (a b)
+ (IMPLIES (AND (<= a 0) (< b 0))
+ (AND (< (- 0 b) (int_mod a b)) (<= (int_mod a b) 0)))))
+
+(DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
+
+(BG_PUSH
+ ;; Why axiom shift_zero
+ (FORALL (p) (EQ (shift p 0) p)))
+
+(BG_PUSH
+ ;; Why axiom shift_shift
+ (FORALL (p i j) (EQ (shift (shift p i) j) (shift p (+ i j)))))
+
+(BG_PUSH
+ ;; Why axiom offset_max_shift
+ (FORALL (a p i) (EQ (offset_max a (shift p i)) (- (offset_max a p) i))))
+
+(BG_PUSH
+ ;; Why axiom offset_min_shift
+ (FORALL (a p i) (EQ (offset_min a (shift p i)) (- (offset_min a p) i))))
+
+(BG_PUSH
+ ;; Why axiom neq_shift
+ (FORALL (p i j) (IMPLIES (NEQ i j) (NEQ (shift p i) (shift p j))))
+
+ (FORALL (i j)
+ (IMPLIES (NEQ i j) (FORALL (p) (NEQ (shift p i) (shift p j))))))
+
+(BG_PUSH
+ ;; Why axiom null_not_valid
+ (FORALL (a) (NOT (valid a null))))
+
+(BG_PUSH
+ ;; Why axiom null_pointer
+ (FORALL (a)
+ (AND (>= (offset_min a null) 0) (<= (offset_max a null) (- 0 2)))))
+
+(BG_PUSH
+ ;; Why axiom eq_pointer_bool_def
+ (FORALL (p1 p2) (IFF (EQ (eq_pointer_bool p1 p2) |@true|) (EQ p1 p2))))
+
+(BG_PUSH
+ ;; Why axiom neq_pointer_bool_def
+ (FORALL (p1 p2) (IFF (EQ (neq_pointer_bool p1 p2) |@true|) (NEQ p1 p2))))
+
+(BG_PUSH
+ ;; Why axiom same_block_shift
+ (FORALL (p i) (EQ (same_block p (shift p i)) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift
+ (FORALL (p q)
+ (IMPLIES (EQ (same_block p q) |@true|) (EQ p (shift q (sub_pointer p q))))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_self
+ (FORALL (p) (EQ (sub_pointer p p) 0)))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_zero
+ (FORALL (p q)
+ (IMPLIES (EQ (same_block p q) |@true|)
+ (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q)))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift_left
+ (FORALL (p q i)
+ (IMPLIES (EQ (same_block p q) |@true|)
+ (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (same_block p q) |@true|)
+ (FORALL (i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift_right
+ (FORALL (p q i)
+ (IMPLIES (EQ (same_block p q) |@true|)
+ (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (same_block p q) |@true|)
+ (FORALL (i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))))
+
+(BG_PUSH
+ ;; Why axiom select_store_eq
+ (FORALL (m p1 p2 a)
+ (IMPLIES (EQ p1 p2) (EQ (select (|why__store| m p1 a) p2) a)))
+
+ (FORALL (p1 p2)
+ (IMPLIES (EQ p1 p2) (FORALL (m a) (EQ (select (|why__store| m p1 a) p2) a)))))
+
+(BG_PUSH
+ ;; Why axiom select_store_neq
+ (FORALL (m p1 p2 a)
+ (IMPLIES (NEQ p1 p2) (EQ (select (|why__store| m p1 a) p2) (select m p2))))
+
+ (FORALL (p1 p2)
+ (IMPLIES (NEQ p1 p2)
+ (FORALL (m a) (EQ (select (|why__store| m p1 a) p2) (select m p2))))))
+
+(DEFPRED (pset_disjoint ps1 ps2)
+  (FORALL (p)
+  (NOT (AND (EQ (in_pset p ps1) |@true|) (EQ (in_pset p ps2) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_empty
+ (FORALL (p) (NOT (EQ (in_pset p pset_empty) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_singleton
+ (FORALL (p q) (IFF (EQ (in_pset p (pset_singleton q)) |@true|) (EQ p q))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_deref
+ (FORALL (p m q)
+ (IFF (EQ (in_pset p (pset_deref m q)) |@true|)
+ (EXISTS (r) (AND (EQ (in_pset r q) |@true|) (EQ p (select m r)))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_all
+ (FORALL (p q)
+ (IFF (EQ (in_pset p (pset_all q)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_range
+ (FORALL (p q a b)
+ (IFF (EQ (in_pset p (pset_range q a b)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r)
+ (AND (<= a i)
+ (AND (<= i b) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i))))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_range_left
+ (FORALL (p q b)
+ (IFF (EQ (in_pset p (pset_range_left q b)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r)
+ (AND (<= i b) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i)))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_range_right
+ (FORALL (p q a)
+ (IFF (EQ (in_pset p (pset_range_right q a)) |@true|)
+ (EXISTS (i)
+ (EXISTS (r)
+ (AND (<= a i) (AND (EQ (in_pset r q) |@true|) (EQ p (shift r i)))))))))
+
+(BG_PUSH
+ ;; Why axiom in_pset_union
+ (FORALL (p s1 s2)
+ (IFF (EQ (in_pset p (pset_union s1 s2)) |@true|)
+ (OR (EQ (in_pset p s1) |@true|) (EQ (in_pset p s2) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_empty
+ (FORALL (a) (EQ (valid_pset a pset_empty) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_singleton
+ (FORALL (a p)
+ (IFF (EQ (valid_pset a (pset_singleton p)) |@true|) (valid a p))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_deref
+ (FORALL (a m q)
+ (IFF (EQ (valid_pset a (pset_deref m q)) |@true|)
+ (FORALL (r p)
+ (IMPLIES (AND (EQ (in_pset r q) |@true|) (EQ p (select m r))) (valid a p))))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_range
+ (FORALL (a q c d)
+ (IFF (EQ (valid_pset a (pset_range q c d)) |@true|)
+ (FORALL (i r)
+ (IMPLIES (AND (EQ (in_pset r q) |@true|) (AND (<= c i) (<= i d)))
+ (valid a (shift r i)))))))
+
+(BG_PUSH
+ ;; Why axiom valid_pset_union
+ (FORALL (a s1 s2)
+ (IFF (EQ (valid_pset a (pset_union s1 s2)) |@true|)
+ (AND (EQ (valid_pset a s1) |@true|) (EQ (valid_pset a s2) |@true|)))))
+
+(DEFPRED (not_assigns a m1 m2 l)
+  (FORALL (p)
+  (IMPLIES (AND (valid a p) (NOT (EQ (in_pset p l) |@true|)))
+  (EQ (select m2 p) (select m1 p)))))
+
+(BG_PUSH
+ ;; Why axiom not_assigns_refl
+ (FORALL (a m l) (not_assigns a m m l)))
+
+(BG_PUSH
+ ;; Why axiom not_assigns_trans
+ (FORALL (a m1 m2 m3 l)
+ (IMPLIES (not_assigns a m1 m2 l)
+ (IMPLIES (not_assigns a m2 m3 l) (not_assigns a m1 m3 l))))
+
+ (FORALL (a m1 m2 l)
+ (IMPLIES (not_assigns a m1 m2 l)
+ (FORALL (m3) (IMPLIES (not_assigns a m2 m3 l) (not_assigns a m1 m3 l))))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift1
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (EQ (full_separated p (shift q i)) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (FORALL (i) (EQ (full_separated p (shift q i)) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift2
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (EQ (full_separated (shift q i) p) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated p q) |@true|)
+ (FORALL (i) (EQ (full_separated (shift q i) p) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift3
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (EQ (full_separated (shift q i) p) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (FORALL (i) (EQ (full_separated (shift q i) p) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom full_separated_shift4
+ (FORALL (p q i)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (EQ (full_separated p (shift q i)) |@true|)))
+
+ (FORALL (p q)
+ (IMPLIES (EQ (full_separated q p) |@true|)
+ (FORALL (i) (EQ (full_separated p (shift q i)) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom subtag_bool_def
+ (FORALL (t1 t2)
+ (IFF (EQ (subtag_bool t1 t2) |@true|) (EQ (subtag t1 t2) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom subtag_refl
+ (FORALL (t) (EQ (subtag t t) |@true|)))
+
+(BG_PUSH
+ ;; Why axiom subtag_parent
+ (FORALL (t1 t2 t3)
+ (IMPLIES (EQ (subtag t1 t2) |@true|)
+ (IMPLIES (EQ (parenttag t2 t3) |@true|) (EQ (subtag t1 t3) |@true|))))
+
+ (FORALL (t1 t2)
+ (IMPLIES (EQ (subtag t1 t2) |@true|)
+ (FORALL (t3)
+ (IMPLIES (EQ (parenttag t2 t3) |@true|) (EQ (subtag t1 t3) |@true|))))))
+
+(DEFPRED (instanceof a p t) (EQ (subtag (typeof a p) t) |@true|))
+
+(BG_PUSH
+ ;; Why axiom downcast_instanceof
+ (FORALL (a p s) (IMPLIES (instanceof a p s) (EQ (downcast a p s) p))))
+
+(BG_PUSH
+ ;; Why axiom bottom_tag_axiom
+ (FORALL (t) (EQ (subtag t bottom_tag) |@true|)))
+
+(DEFPRED (root_tag t) (EQ (parenttag t bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom root_subtag
+ (FORALL (a b c)
+ (IMPLIES (root_tag a)
+ (IMPLIES (root_tag b)
+ (IMPLIES (NEQ a b)
+ (IMPLIES (EQ (subtag c a) |@true|) (NOT (EQ (subtag c b) |@true|)))))))
+
+ (FORALL (a)
+ (IMPLIES (root_tag a)
+ (FORALL (b)
+ (IMPLIES (root_tag b)
+ (IMPLIES (NEQ a b)
+ (FORALL (c)
+ (IMPLIES (EQ (subtag c a) |@true|) (NOT (EQ (subtag c b) |@true|))))))))))
+
+(DEFPRED (fully_packed tag_table mutable this)
+  (EQ (select mutable this) (typeof tag_table this)))
+
+(BG_PUSH
+ ;; Why axiom bw_and_not_null
+ (FORALL (a b) (IMPLIES (NEQ (bw_and a b) 0) (AND (NEQ a 0) (NEQ b 0)))))
+
+(BG_PUSH
+ ;; Why axiom lsl_left_positive_returns_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= 0 (lsl a b)))))
+
+(BG_PUSH
+ ;; Why axiom lsl_left_positive_monotone
+ (FORALL (a1 a2 b)
+ (IMPLIES (AND (<= 0 a1) (AND (<= a1 a2) (<= 0 b)))
+ (<= (lsl a1 b) (lsl a2 b)))))
+
+(BG_PUSH
+ ;; Why axiom lsr_left_positive_returns_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= 0 (lsr a b)))))
+
+(BG_PUSH
+ ;; Why axiom lsr_left_positive_decreases
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= (lsr a b) a))))
+
+(BG_PUSH
+ ;; Why axiom asr_positive_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= 0 (asr a b)))))
+
+(BG_PUSH
+ ;; Why axiom asr_decreases_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= (asr a b) a))))
+
+(BG_PUSH
+ ;; Why axiom asr_lsr_same_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (EQ (asr a b) (lsr a b)))))
+
+(BG_PUSH
+ ;; Why axiom lsl_of_lsr_decreases_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (<= (lsl (lsr a b) b) a))))
+
+(BG_PUSH
+ ;; Why axiom lsr_of_lsl_identity_on_positive
+ (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (EQ (lsr (lsl a b) b) a))))
+
+(DEFPRED (alloc_fresh a p) (NOT (valid a p)))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_offset_min
+ (FORALL (a1 a2)
+ (IMPLIES (EQ (alloc_extends a1 a2) |@true|)
+ (FORALL (p) (IMPLIES (valid a1 p) (EQ (offset_min a1 p) (offset_min a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_offset_max
+ (FORALL (a1 a2)
+ (IMPLIES (EQ (alloc_extends a1 a2) |@true|)
+ (FORALL (p) (IMPLIES (valid a1 p) (EQ (offset_max a1 p) (offset_max a2 p)))))))
+
+(DEFPRED (Non_null_Object Object_alloc_table x_0)
+  (EQ (offset_max Object_alloc_table x_0) 0))
+
+(DEFPRED (Non_null_intM Object_alloc_table x)
+  (>= (offset_max Object_alloc_table x) (- 0 1)))
+
+(BG_PUSH
+ ;; Why axiom Object_int
+ (EQ (int_of_tag Object_tag) 1))
+
+(BG_PUSH
+ ;; Why axiom Object_parenttag_bottom
+ (EQ (parenttag Object_tag bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom Object_tags
+ (FORALL (x Object_tag_table) (instanceof Object_tag_table x Object_tag)))
+
+(BG_PUSH
+ ;; Why axiom SideEffects_parenttag_Object
+ (EQ (parenttag SideEffects_tag Object_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom String_parenttag_Object
+ (EQ (parenttag String_tag Object_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom Throwable_parenttag_Object
+ (EQ (parenttag Throwable_tag Object_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom intM_parenttag_Object
+ (EQ (parenttag intM_tag Object_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom interface_int
+ (EQ (int_of_tag interface_tag) 1))
+
+(BG_PUSH
+ ;; Why axiom interface_parenttag_bottom
+ (EQ (parenttag interface_tag bottom_tag) |@true|))
+
+(BG_PUSH
+ ;; Why axiom interface_tags
+ (FORALL (x interface_tag_table)
+ (instanceof interface_tag_table x interface_tag)))
+
+(DEFPRED (valid_struct_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (valid_struct_SideEffects p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (valid_struct_String p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (valid_struct_Throwable p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (valid_struct_intM p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (valid_struct_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
+
+(DEFPRED (valid_variant_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (valid_variant_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
+
+;; SideEffects_m1_safety_po_1, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 10, characters 1-11
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i) (IMPLIES (EQ i (+ 0 1)) (<= 0 0)))))))
+
+;; SideEffects_m1_safety_po_2, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 10, characters 1-11
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1)) (<= 0 (offset_max Object_alloc_table t))))))))
+
+;; SideEffects_m1_safety_po_3, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 11, characters 12-31
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(EQ (select intM_intP0 (shift t 0)) 1)))))))))))
+
+;; SideEffects_m1_safety_po_4, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 11, characters 12-31
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1)) (EQ i 1)))))))))))
+
+;; SideEffects_m1_safety_po_5, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 12, characters 1-11
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0) (IMPLIES (EQ i0 (+ i 1)) (<= 0 i0))))))))))))))
+
+;; SideEffects_m1_safety_po_6, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 12, characters 1-11
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1)) (<= i0 (offset_max Object_alloc_table t)))))))))))))))
+
+;; SideEffects_m1_safety_po_7, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 13, characters 12-44
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(EQ (select intM_intP1 (shift t 0)) 1)))))))))))))))))
+
+;; SideEffects_m1_safety_po_8, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 13, characters 12-44
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(EQ (select intM_intP1 (shift t 2)) 2)))))))))))))))))
+
+;; SideEffects_m1_safety_po_9, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 13, characters 12-44
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2)) (EQ i0 2)))))))))))))))))
+
+;; SideEffects_m1_safety_po_10, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 14, characters 1-11
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
+         (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
+(FORALL (i1) (IMPLIES (EQ i1 (- i0 1)) (<= 0 i1))))))))))))))))))))
+
+;; SideEffects_m1_safety_po_11, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 14, characters 1-11
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
+         (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
+(FORALL (i1)
+(IMPLIES (EQ i1 (- i0 1)) (<= i1 (offset_max Object_alloc_table t)))))))))))))))))))))
+
+;; SideEffects_m1_safety_po_12, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 15, characters 12-57
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
+         (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
+(FORALL (i1)
+(IMPLIES (EQ i1 (- i0 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP2)
+(IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
+(EQ (select intM_intP2 (shift t 0)) 1)))))))))))))))))))))))
+
+;; SideEffects_m1_safety_po_13, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 15, characters 12-57
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
+         (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
+(FORALL (i1)
+(IMPLIES (EQ i1 (- i0 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP2)
+(IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
+(EQ (select intM_intP2 (shift t 2)) 2)))))))))))))))))))))))
+
+;; SideEffects_m1_safety_po_14, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 15, characters 12-57
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
+         (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
+(FORALL (i1)
+(IMPLIES (EQ i1 (- i0 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP2)
+(IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
+(EQ (select intM_intP2 (shift t 1)) 3)))))))))))))))))))))))
+
+;; SideEffects_m1_safety_po_15, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 15, characters 12-57
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
+         (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
+(FORALL (i1)
+(IMPLIES (EQ i1 (- i0 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP2)
+(IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3)) (EQ i1 1)))))))))))))))))))))))
+
+;; SideEffects_m1_safety_po_16, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 17, characters 12-57
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
+         (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
+(FORALL (i1)
+(IMPLIES (EQ i1 (- i0 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP2)
+(IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
+(IMPLIES (AND (EQ (select intM_intP2 (shift t 0)) 1)
+         (AND (EQ (select intM_intP2 (shift t 2)) 2)
+         (AND (EQ (select intM_intP2 (shift t 1)) 3) (EQ i1 1))))
+(FORALL (i2)
+(IMPLIES (EQ i2 (- i1 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP3)
+(IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4))
+(EQ (select intM_intP3 (shift t 0)) 1)))))))))))))))))))))))))))))
+
+;; SideEffects_m1_safety_po_17, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 17, characters 12-57
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
+         (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
+(FORALL (i1)
+(IMPLIES (EQ i1 (- i0 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP2)
+(IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
+(IMPLIES (AND (EQ (select intM_intP2 (shift t 0)) 1)
+         (AND (EQ (select intM_intP2 (shift t 2)) 2)
+         (AND (EQ (select intM_intP2 (shift t 1)) 3) (EQ i1 1))))
+(FORALL (i2)
+(IMPLIES (EQ i2 (- i1 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP3)
+(IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4))
+(EQ (select intM_intP3 (shift t 2)) 2)))))))))))))))))))))))))))))
+
+;; SideEffects_m1_safety_po_18, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 17, characters 12-57
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
+         (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
+(FORALL (i1)
+(IMPLIES (EQ i1 (- i0 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP2)
+(IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
+(IMPLIES (AND (EQ (select intM_intP2 (shift t 0)) 1)
+         (AND (EQ (select intM_intP2 (shift t 2)) 2)
+         (AND (EQ (select intM_intP2 (shift t 1)) 3) (EQ i1 1))))
+(FORALL (i2)
+(IMPLIES (EQ i2 (- i1 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP3)
+(IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4))
+(EQ (select intM_intP3 (shift t 1)) 4)))))))))))))))))))))))))))))
+
+;; SideEffects_m1_safety_po_19, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 17, characters 12-57
+(FORALL (this_0)
+(FORALL (t)
+(FORALL (Object_alloc_table)
+(FORALL (intM_intP)
+(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1))
+(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP0)
+(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
+(IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1))
+(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP1)
+(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
+(IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
+         (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
+(FORALL (i1)
+(IMPLIES (EQ i1 (- i0 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP2)
+(IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
+(IMPLIES (AND (EQ (select intM_intP2 (shift t 0)) 1)
+         (AND (EQ (select intM_intP2 (shift t 2)) 2)
+         (AND (EQ (select intM_intP2 (shift t 1)) 3) (EQ i1 1))))
+(FORALL (i2)
+(IMPLIES (EQ i2 (- i1 1))
+(IMPLIES (AND (<= 0 i1) (<= i1 (offset_max Object_alloc_table t)))
+(FORALL (intM_intP3)
+(IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4)) (EQ i2 0)))))))))))))))))))))))))))))
+
+========== running Simplify ==========
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 simplify/SideEffects_why.sx   : ................... (19/0/0/0/0)
@@ -2179,8 +3129,1203 @@ invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
-========== ergo execution ==========
+========== generation of alt-ergo VC output ==========
 why --why [...] why/SideEffects.why
+========== file tests/java/why/SideEffects_why.why ==========
+logic eq_bool : bool, bool -> prop
+
+logic neq_bool : bool, bool -> prop
+
+logic eq_unit : unit, unit -> prop
+
+logic neq_unit : unit, unit -> prop
+
+logic add_int : int, int -> int
+
+logic sub_int : int, int -> int
+
+logic mul_int : int, int -> int
+
+logic div_int : int, int -> int
+
+logic mod_int : int, int -> int
+
+logic neg_int : int -> int
+
+logic lt_int : int, int -> prop
+
+logic le_int : int, int -> prop
+
+logic gt_int : int, int -> prop
+
+logic ge_int : int, int -> prop
+
+logic eq_int : int, int -> prop
+
+logic neq_int : int, int -> prop
+
+logic lt_int_bool : int, int -> bool
+
+logic le_int_bool : int, int -> bool
+
+logic gt_int_bool : int, int -> bool
+
+logic ge_int_bool : int, int -> bool
+
+logic eq_int_bool : int, int -> bool
+
+logic neq_int_bool : int, int -> bool
+
+axiom lt_int_bool_axiom:
+  (forall x:int. (forall y:int. ((lt_int_bool(x, y) = true) <-> (x < y))))
+
+axiom le_int_bool_axiom:
+  (forall x:int. (forall y:int. ((le_int_bool(x, y) = true) <-> (x <= y))))
+
+axiom gt_int_bool_axiom:
+  (forall x:int. (forall y:int. ((gt_int_bool(x, y) = true) <-> (x > y))))
+
+axiom ge_int_bool_axiom:
+  (forall x:int. (forall y:int. ((ge_int_bool(x, y) = true) <-> (x >= y))))
+
+axiom eq_int_bool_axiom:
+  (forall x:int. (forall y:int. ((eq_int_bool(x, y) = true) <-> (x = y))))
+
+axiom neq_int_bool_axiom:
+  (forall x:int. (forall y:int. ((neq_int_bool(x, y) = true) <-> (x <> y))))
+
+logic add_real : real, real -> real
+
+logic sub_real : real, real -> real
+
+logic mul_real : real, real -> real
+
+logic div_real : real, real -> real
+
+logic pow_real : real, real -> real
+
+logic neg_real : real -> real
+
+logic abs_real : real -> real
+
+logic sqrt_real : real -> real
+
+logic real_of_int : int -> real
+
+logic int_of_real : real -> int
+
+logic lt_real : real, real -> prop
+
+logic le_real : real, real -> prop
+
+logic gt_real : real, real -> prop
+
+logic ge_real : real, real -> prop
+
+logic eq_real : real, real -> prop
+
+logic neq_real : real, real -> prop
+
+logic lt_real_bool : real, real -> bool
+
+logic le_real_bool : real, real -> bool
+
+logic gt_real_bool : real, real -> bool
+
+logic ge_real_bool : real, real -> bool
+
+logic eq_real_bool : real, real -> bool
+
+logic neq_real_bool : real, real -> bool
+
+axiom lt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((lt_real_bool(x, y) = true) <-> (x < y))))
+
+axiom le_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((le_real_bool(x, y) = true) <-> (x <= y))))
+
+axiom gt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((gt_real_bool(x, y) = true) <-> (x > y))))
+
+axiom ge_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((ge_real_bool(x, y) = true) <-> (x >= y))))
+
+axiom eq_real_bool_axiom:
+  (forall x:real. (forall y:real. ((eq_real_bool(x, y) = true) <-> (x = y))))
+
+axiom neq_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
+
+logic ite : bool, 'a1, 'a1 -> 'a1
+
+axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
+
+axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
+
+logic bool_and : bool, bool -> bool
+
+logic bool_or : bool, bool -> bool
+
+logic bool_xor : bool, bool -> bool
+
+axiom bool_and_false:
+  ((bool_and(true, false) = false) and (bool_and(false, false) = false))
+
+axiom false_bool_and:
+  ((bool_and(false, true) = false) and (bool_and(false, false) = false))
+
+axiom bool_and_true:
+  ((bool_and(true, true) = true) and (bool_and(false, true) = false))
+
+axiom true_bool_and:
+  ((bool_and(true, true) = true) and (bool_and(true, false) = false))
+
+axiom bool_and_1:
+  ((((bool_and(true, true) = true) -> ((true = true) and (true = true))) and
+    ((bool_and(true, false) = true) -> ((true = true) and (false = true)))) and
+   (((bool_and(false, true) = true) -> ((false = true) and (true = true))) and
+    ((bool_and(false, false) = true) -> ((false = true) and (false = true)))))
+
+axiom div_positive_by_positive:
+  (forall a:int.
+    (forall b:int.
+      (((0 <= a) and (0 < b)) -> ((0 <= (a / b)) and ((a / b) <= a)))))
+
+axiom div_negative_by_positive:
+  (forall a:int.
+    (forall b:int.
+      (((a <= 0) and (0 < b)) -> ((a <= (a / b)) and ((a / b) <= 0)))))
+
+axiom div_positive_by_negative:
+  (forall a:int.
+    (forall b:int.
+      (((0 <= a) and (b < 0)) -> (((-a) <= (a / b)) and ((a / b) <= 0)))))
+
+axiom div_negative_by_negative:
+  (forall a:int.
+    (forall b:int.
+      (((a <= 0) and (b < 0)) -> ((0 <= (a / b)) and ((a / b) <= (-a))))))
+
+axiom mod_positive_by_positive:
+  (forall a:int.
+    (forall b:int.
+      (((0 <= a) and (0 < b)) -> ((0 <= (a % b)) and ((a % b) < b)))))
+
+axiom mod_negative_by_positive:
+  (forall a:int.
+    (forall b:int.
+      (((a <= 0) and (0 < b)) -> ((0 <= (a % b)) and ((a % b) < b)))))
+
+axiom mod_positive_by_negative:
+  (forall a:int.
+    (forall b:int.
+      (((0 <= a) and (b < 0)) -> (((-b) < (a % b)) and ((a % b) <= 0)))))
+
+axiom mod_negative_by_negative:
+  (forall a:int.
+    (forall b:int.
+      (((a <= 0) and (b < 0)) -> (((-b) < (a % b)) and ((a % b) <= 0)))))
+
+type 't alloc_table
+
+type 't pointer
+
+logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
+
+logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
+
+predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
+  ((offset_min(a, p) <= 0) and (offset_max(a, p) >= 0))
+
+logic shift : 'a1 pointer, int -> 'a1 pointer
+
+axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
+
+axiom shift_shift:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [shift(shift(p, i), j)]. (shift(shift(p, i),
+        j) = shift(p, (i + j))))))
+
+axiom offset_max_shift:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (forall i:int. (offset_max(a, shift(p, i)) = (offset_max(a, p) - i)))))
+
+axiom offset_min_shift:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (forall i:int. (offset_min(a, shift(p, i)) = (offset_min(a, p) - i)))))
+
+axiom neq_shift:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [shift(p, i), shift(p, j)].
+        ((i <> j) -> (shift(p, i) <> shift(p, j))))))
+
+logic null :  -> 'a1 pointer
+
+axiom null_not_valid: (forall a:'a1 alloc_table. (not valid(a, null)))
+
+axiom null_pointer:
+  (forall a:'a1 alloc_table.
+    ((offset_min(a, null) >= 0) and (offset_max(a, null) <= (-2))))
+
+logic eq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
+
+logic neq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
+
+axiom eq_pointer_bool_def:
+  (forall p1:'a1 pointer.
+    (forall p2:'a1 pointer. ((eq_pointer_bool(p1, p2) = true) <-> (p1 = p2))))
+
+axiom neq_pointer_bool_def:
+  (forall p1:'a1 pointer.
+    (forall p2:'a1 pointer.
+      ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
+
+logic same_block : 'a1 pointer, 'a1 pointer -> prop
+
+axiom same_block_shift:
+  (forall p:'a1 pointer. (forall i:int. same_block(p, shift(p, i))))
+
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
+axiom sub_pointer_shift:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, p)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
+
+axiom sub_pointer_self:
+  (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
+
+axiom sub_pointer_zero:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
+
+axiom sub_pointer_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(shift(p, i), q)].
+        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
+         q) + i))))))
+
+axiom sub_pointer_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(p, shift(q, i))].
+        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
+         q) - i))))))
+
+type ('t, 'v) memory
+
+logic select : ('a2, 'a1) memory, 'a2 pointer -> 'a1
+
+logic store : ('a1, 'a2) memory, 'a1 pointer, 'a2 -> ('a1, 'a2) memory
+
+axiom select_store_eq:
+  (forall m:('a1, 'a2) memory.
+    (forall p1:'a1 pointer.
+      (forall p2:'a1 pointer.
+        (forall a:'a2 [store(m, p1, a), p2].
+          ((p1 = p2) -> (select(store(m, p1, a), p2) = a))))))
+
+axiom select_store_neq:
+  (forall m:('a1, 'a2) memory.
+    (forall p1:'a1 pointer.
+      (forall p2:'a1 pointer.
+        (forall a:'a2 [store(m, p1, a), p2].
+          ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
+
+type 't pset
+
+logic pset_empty :  -> 'a1 pset
+
+logic pset_singleton : 'a1 pointer -> 'a1 pset
+
+logic pset_deref : ('a2, 'a1 pointer) memory, 'a2 pset -> 'a1 pset
+
+logic pset_union : 'a1 pset, 'a1 pset -> 'a1 pset
+
+logic pset_all : 'a1 pset -> 'a1 pset
+
+logic pset_range : 'a1 pset, int, int -> 'a1 pset
+
+logic pset_range_left : 'a1 pset, int -> 'a1 pset
+
+logic pset_range_right : 'a1 pset, int -> 'a1 pset
+
+logic in_pset : 'a1 pointer, 'a1 pset -> prop
+
+logic valid_pset : 'a1 alloc_table, 'a1 pset -> prop
+
+predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
+axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
+
+axiom in_pset_singleton:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer. (in_pset(p, pset_singleton(q)) <-> (p = q))))
+
+axiom in_pset_deref:
+  (forall p:'a1 pointer.
+    (forall m:('a2, 'a1 pointer) memory.
+      (forall q:'a2 pset.
+        (in_pset(p, pset_deref(m, q)) <->
+         (exists r:'a2 pointer. (in_pset(r, q) and (p = select(m, r))))))))
+
+axiom in_pset_all:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (in_pset(p, pset_all(q)) <->
+       (exists i:int.
+         (exists r:'a1 pointer. (in_pset(r, q) and (p = shift(r, i))))))))
+
+axiom in_pset_range:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall a:int.
+        (forall b:int.
+          (in_pset(p, pset_range(q, a, b)) <->
+           (exists i:int.
+             (exists r:'a1 pointer.
+               ((a <= i) and
+                ((i <= b) and (in_pset(r, q) and (p = shift(r, i))))))))))))
+
+axiom in_pset_range_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall b:int.
+        (in_pset(p, pset_range_left(q, b)) <->
+         (exists i:int.
+           (exists r:'a1 pointer.
+             ((i <= b) and (in_pset(r, q) and (p = shift(r, i))))))))))
+
+axiom in_pset_range_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall a:int.
+        (in_pset(p, pset_range_right(q, a)) <->
+         (exists i:int.
+           (exists r:'a1 pointer.
+             ((a <= i) and (in_pset(r, q) and (p = shift(r, i))))))))))
+
+axiom in_pset_union:
+  (forall p:'a1 pointer.
+    (forall s1:'a1 pset.
+      (forall s2:'a1 pset.
+        (in_pset(p, pset_union(s1, s2)) <->
+         (in_pset(p, s1) or in_pset(p, s2))))))
+
+axiom valid_pset_empty: (forall a:'a1 alloc_table. valid_pset(a, pset_empty))
+
+axiom valid_pset_singleton:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (valid_pset(a, pset_singleton(p)) <-> valid(a, p))))
+
+axiom valid_pset_deref:
+  (forall a:'a1 alloc_table.
+    (forall m:('a2, 'a1 pointer) memory.
+      (forall q:'a2 pset.
+        (valid_pset(a, pset_deref(m, q)) <->
+         (forall r:'a2 pointer.
+           (forall p:'a1 pointer.
+             ((in_pset(r, q) and (p = select(m, r))) -> valid(a, p))))))))
+
+axiom valid_pset_range:
+  (forall a:'a1 alloc_table.
+    (forall q:'a1 pset.
+      (forall c:int.
+        (forall d:int.
+          (valid_pset(a, pset_range(q, c, d)) <->
+           (forall i:int.
+             (forall r:'a1 pointer.
+               ((in_pset(r, q) and ((c <= i) and (i <= d))) -> valid(a,
+                shift(r, i))))))))))
+
+axiom valid_pset_union:
+  (forall a:'a1 alloc_table.
+    (forall s1:'a1 pset.
+      (forall s2:'a1 pset.
+        (valid_pset(a, pset_union(s1, s2)) <->
+         (valid_pset(a, s1) and valid_pset(a, s2))))))
+
+predicate not_assigns(a: 'a1 alloc_table, m1: ('a1, 'a2) memory, m2: ('a1,
+  'a2) memory, l: 'a1 pset) =
+  (forall p:'a1 pointer.
+    ((valid(a, p) and (not in_pset(p, l))) -> (select(m2, p) = select(m1, p))))
+
+axiom not_assigns_refl:
+  (forall a:'a1 alloc_table.
+    (forall m:('a1, 'a2) memory.
+      (forall l:'a1 pset. not_assigns(a, m, m, l))))
+
+axiom not_assigns_trans:
+  (forall a:'a1 alloc_table.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory.
+          (forall l:'a1 pset [not_assigns(a, m1, m2, l), not_assigns(a, m1,
+            m3, l)].
+            (not_assigns(a, m1, m2, l) ->
+             (not_assigns(a, m2, m3, l) -> not_assigns(a, m1, m3, l))))))))
+
+logic full_separated : 'a1 pointer, 'a2 pointer -> prop
+
+axiom full_separated_shift1:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(p, q), shift(q, i)].
+        (full_separated(p, q) -> full_separated(p, shift(q, i))))))
+
+axiom full_separated_shift2:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(p, q), shift(q, i)].
+        (full_separated(p, q) -> full_separated(shift(q, i), p)))))
+
+axiom full_separated_shift3:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(q, p), shift(q, i)].
+        (full_separated(q, p) -> full_separated(shift(q, i), p)))))
+
+axiom full_separated_shift4:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(q, p), shift(q, i)].
+        (full_separated(q, p) -> full_separated(p, shift(q, i))))))
+
+type 't tag_table
+
+type 't tag_id
+
+logic int_of_tag : 'a1 tag_id -> int
+
+logic typeof : 'a1 tag_table, 'a1 pointer -> 'a1 tag_id
+
+logic parenttag : 'a1 tag_id, 'a1 tag_id -> prop
+
+logic subtag : 'a1 tag_id, 'a1 tag_id -> prop
+
+logic subtag_bool : 'a1 tag_id, 'a1 tag_id -> bool
+
+axiom subtag_bool_def:
+  (forall t1:'a1 tag_id.
+    (forall t2:'a1 tag_id. ((subtag_bool(t1, t2) = true) <-> subtag(t1, t2))))
+
+axiom subtag_refl: (forall t:'a1 tag_id. subtag(t, t))
+
+axiom subtag_parent:
+  (forall t1:'a1 tag_id.
+    (forall t2:'a1 tag_id.
+      (forall t3:'a1 tag_id.
+        (subtag(t1, t2) -> (parenttag(t2, t3) -> subtag(t1, t3))))))
+
+predicate instanceof(a: 'a1 tag_table, p: 'a1 pointer, t: 'a1 tag_id) =
+  subtag(typeof(a, p), t)
+
+logic downcast : 'a1 tag_table, 'a1 pointer, 'a1 tag_id -> 'a1 pointer
+
+axiom downcast_instanceof:
+  (forall a:'a1 tag_table.
+    (forall p:'a1 pointer.
+      (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
+
+logic bottom_tag :  -> 'a1 tag_id
+
+axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
+
+predicate root_tag(t: 'a1 tag_id) = parenttag(t, bottom_tag)
+
+axiom root_subtag:
+  (forall a:'a1 tag_id.
+    (forall b:'a1 tag_id.
+      (forall c:'a1 tag_id.
+        (root_tag(a) ->
+         (root_tag(b) -> ((a <> b) -> (subtag(c, a) -> (not subtag(c, b)))))))))
+
+predicate fully_packed(tag_table: 'a1 tag_table, mutable: ('a1,
+  'a1 tag_id) memory, this: 'a1 pointer) = (select(mutable,
+  this) = typeof(tag_table, this))
+
+logic bw_compl : int -> int
+
+logic bw_and : int, int -> int
+
+axiom bw_and_not_null:
+  (forall a:int.
+    (forall b:int. ((bw_and(a, b) <> 0) -> ((a <> 0) and (b <> 0)))))
+
+logic bw_xor : int, int -> int
+
+logic bw_or : int, int -> int
+
+logic lsl : int, int -> int
+
+axiom lsl_left_positive_returns_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= lsl(a, b)))))
+
+axiom lsl_left_positive_monotone:
+  (forall a1:int.
+    (forall a2:int.
+      (forall b:int.
+        (((0 <= a1) and ((a1 <= a2) and (0 <= b))) -> (lsl(a1, b) <= lsl(a2,
+         b))))))
+
+logic lsr : int, int -> int
+
+axiom lsr_left_positive_returns_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= lsr(a, b)))))
+
+axiom lsr_left_positive_decreases:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsr(a, b) <= a))))
+
+logic asr : int, int -> int
+
+axiom asr_positive_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= asr(a, b)))))
+
+axiom asr_decreases_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (asr(a, b) <= a))))
+
+axiom asr_lsr_same_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (asr(a, b) = lsr(a, b)))))
+
+axiom lsl_of_lsr_decreases_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsl(lsr(a, b), b) <= a))))
+
+axiom lsr_of_lsl_identity_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsr(lsl(a, b), b) = a))))
+
+logic alloc_extends : 'a1 alloc_table, 'a1 alloc_table -> prop
+
+predicate alloc_fresh(a: 'a1 alloc_table, p: 'a1 pointer) = (not valid(a, p))
+
+axiom alloc_extends_offset_min:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table [alloc_extends(a1, a2)].
+      (alloc_extends(a1, a2) ->
+       (forall p:'a1 pointer.
+         (valid(a1, p) -> (offset_min(a1, p) = offset_min(a2, p)))))))
+
+axiom alloc_extends_offset_max:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table [alloc_extends(a1, a2)].
+      (alloc_extends(a1, a2) ->
+       (forall p:'a1 pointer.
+         (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
+
+type Object
+
+type interface
+
+predicate Non_null_Object(Object_alloc_table: Object alloc_table,
+  x_0: Object pointer) = (offset_max(Object_alloc_table, x_0) = 0)
+
+predicate Non_null_intM(Object_alloc_table: Object alloc_table,
+  x: Object pointer) = (offset_max(Object_alloc_table, x) >= (-1))
+
+logic Object_tag :  -> Object tag_id
+
+axiom Object_int: (int_of_tag(Object_tag) = 1)
+
+axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
+
+axiom Object_tags:
+  (forall x:Object pointer.
+    (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
+      x, Object_tag)))
+
+logic SideEffects_tag :  -> Object tag_id
+
+axiom SideEffects_parenttag_Object: parenttag(SideEffects_tag, Object_tag)
+
+logic String_tag :  -> Object tag_id
+
+axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
+
+logic Throwable_tag :  -> Object tag_id
+
+axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
+
+logic intM_tag :  -> Object tag_id
+
+axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
+
+logic interface_tag :  -> interface tag_id
+
+axiom interface_int: (int_of_tag(interface_tag) = 1)
+
+axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
+
+axiom interface_tags:
+  (forall x:interface pointer.
+    (forall interface_tag_table:interface tag_table.
+      instanceof(interface_tag_table, x, interface_tag)))
+
+predicate valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate valid_struct_SideEffects(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_intM(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
+predicate valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate valid_variant_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate valid_variant_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+goal SideEffects_m1_safety_po_1:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  (0 <= 0)
+
+goal SideEffects_m1_safety_po_2:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  (0 <= offset_max(Object_alloc_table, t))
+
+goal SideEffects_m1_safety_po_3:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": (select(intM_intP0, shift(t, 0)) = 1))
+
+goal SideEffects_m1_safety_po_4:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": (i = 1))
+
+goal SideEffects_m1_safety_po_5:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  (0 <= i0)
+
+goal SideEffects_m1_safety_po_6:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  (i0 <= offset_max(Object_alloc_table, t))
+
+goal SideEffects_m1_safety_po_7:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7": (select(intM_intP1, shift(t, 0)) = 1))
+
+goal SideEffects_m1_safety_po_8:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7": (select(intM_intP1, shift(t, 2)) = 2))
+
+goal SideEffects_m1_safety_po_9:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7": (i0 = 2))
+
+goal SideEffects_m1_safety_po_10:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7":
+  ((select(intM_intP1, shift(t, 0)) = 1) and
+   ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
+  forall i1:int.
+  (i1 = (i0 - 1)) ->
+  (0 <= i1)
+
+goal SideEffects_m1_safety_po_11:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7":
+  ((select(intM_intP1, shift(t, 0)) = 1) and
+   ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
+  forall i1:int.
+  (i1 = (i0 - 1)) ->
+  (i1 <= offset_max(Object_alloc_table, t))
+
+goal SideEffects_m1_safety_po_12:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7":
+  ((select(intM_intP1, shift(t, 0)) = 1) and
+   ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
+  forall i1:int.
+  (i1 = (i0 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP2:(Object,
+  int) memory.
+  (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
+  ("K_11": (select(intM_intP2, shift(t, 0)) = 1))
+
+goal SideEffects_m1_safety_po_13:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7":
+  ((select(intM_intP1, shift(t, 0)) = 1) and
+   ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
+  forall i1:int.
+  (i1 = (i0 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP2:(Object,
+  int) memory.
+  (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
+  ("K_11": (select(intM_intP2, shift(t, 2)) = 2))
+
+goal SideEffects_m1_safety_po_14:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7":
+  ((select(intM_intP1, shift(t, 0)) = 1) and
+   ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
+  forall i1:int.
+  (i1 = (i0 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP2:(Object,
+  int) memory.
+  (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
+  ("K_11": (select(intM_intP2, shift(t, 1)) = 3))
+
+goal SideEffects_m1_safety_po_15:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7":
+  ((select(intM_intP1, shift(t, 0)) = 1) and
+   ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
+  forall i1:int.
+  (i1 = (i0 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP2:(Object,
+  int) memory.
+  (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
+  ("K_11": (i1 = 1))
+
+goal SideEffects_m1_safety_po_16:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7":
+  ((select(intM_intP1, shift(t, 0)) = 1) and
+   ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
+  forall i1:int.
+  (i1 = (i0 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP2:(Object,
+  int) memory.
+  (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
+  ("K_11":
+  ((select(intM_intP2, shift(t, 0)) = 1) and
+   ((select(intM_intP2, shift(t, 2)) = 2) and
+    ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
+  forall i2:int.
+  (i2 = (i1 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP3:(Object,
+  int) memory.
+  (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
+  ("K_15": (select(intM_intP3, shift(t, 0)) = 1))
+
+goal SideEffects_m1_safety_po_17:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7":
+  ((select(intM_intP1, shift(t, 0)) = 1) and
+   ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
+  forall i1:int.
+  (i1 = (i0 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP2:(Object,
+  int) memory.
+  (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
+  ("K_11":
+  ((select(intM_intP2, shift(t, 0)) = 1) and
+   ((select(intM_intP2, shift(t, 2)) = 2) and
+    ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
+  forall i2:int.
+  (i2 = (i1 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP3:(Object,
+  int) memory.
+  (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
+  ("K_15": (select(intM_intP3, shift(t, 2)) = 2))
+
+goal SideEffects_m1_safety_po_18:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7":
+  ((select(intM_intP1, shift(t, 0)) = 1) and
+   ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
+  forall i1:int.
+  (i1 = (i0 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP2:(Object,
+  int) memory.
+  (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
+  ("K_11":
+  ((select(intM_intP2, shift(t, 0)) = 1) and
+   ((select(intM_intP2, shift(t, 2)) = 2) and
+    ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
+  forall i2:int.
+  (i2 = (i1 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP3:(Object,
+  int) memory.
+  (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
+  ("K_15": (select(intM_intP3, shift(t, 1)) = 4))
+
+goal SideEffects_m1_safety_po_19:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  forall i0:int.
+  (i0 = (i + 1)) ->
+  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP1:(Object,
+  int) memory.
+  (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
+  ("K_7":
+  ((select(intM_intP1, shift(t, 0)) = 1) and
+   ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
+  forall i1:int.
+  (i1 = (i0 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP2:(Object,
+  int) memory.
+  (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
+  ("K_11":
+  ((select(intM_intP2, shift(t, 0)) = 1) and
+   ((select(intM_intP2, shift(t, 2)) = 2) and
+    ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
+  forall i2:int.
+  (i2 = (i1 - 1)) ->
+  ((0 <= i1) and (i1 <= offset_max(Object_alloc_table, t))) ->
+  forall intM_intP3:(Object,
+  int) memory.
+  (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
+  ("K_15": (i2 = 0))
+
+========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/SideEffects_why.why       : ................... (19/0/0/0/0)

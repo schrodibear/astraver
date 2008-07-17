@@ -44,13 +44,13 @@ case $1 in
 	mycat $d/why/$b'_ctx'.why	
 	for i in $d/why/$b'_po'*.why; do mycat $i; done
 	echo "========== generation of Simplify VC output =========="
-	make --quiet -C $d -f $b.makefile simplify/$b_why.sx	
-	mycat $d/simplify/$b_why.sx
+	make --quiet -C $d -f $b.makefile simplify/$b'_why'.sx	
+	mycat $d/simplify/$b'_why'.sx
 	echo "========== running Simplify =========="
 	DPOPT=-no-timings TIMEOUT=10 make --quiet -C $d -f $b.makefile simplify	
 	echo "========== generation of alt-ergo VC output =========="
-	make --quiet -C $d -f $b.makefile why/$b_why.why	
-	mycat $d/why/$b_why.why
+	make --quiet -C $d -f $b.makefile why/$b'_why'.why	
+	mycat $d/why/$b'_why'.why
 	echo "========== running alt-ergo =========="
 	DPOPT=-no-timings TIMEOUT=10 make --quiet -C $d -f $b.makefile ergo	
 	;;
