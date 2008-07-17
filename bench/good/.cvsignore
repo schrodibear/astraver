@@ -11,3 +11,4 @@ pvstc.el
 *.sx
 *.cvc
 gwhy.cache
+all_why.why complex_arg_1_why.why complex_arg_2_why.why exns_why.why loops_why.why oldify_why.why opaque_why.why poly_why.why po_why.why recfun_why.why return_why.why see_why.why set_why.why wpcalls_why.why
