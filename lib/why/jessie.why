@@ -108,9 +108,11 @@ axiom neq_pointer_bool_def :
 
 logic same_block : 't pointer, 't pointer -> prop
 
+(* make Simplify loop on bench/java/Arrays.java !!!
 axiom same_block_shift:
   forall p: 't pointer. forall i:int.
     same_block(p,shift(p,i))
+*)
 
 logic sub_pointer: 't pointer, 't pointer -> int
 
