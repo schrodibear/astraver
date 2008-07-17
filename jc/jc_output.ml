@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.110 2008-07-11 06:35:50 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.111 2008-07-17 14:14:24 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -356,6 +356,8 @@ let rec expr fmt e =
 	       comma string)
 	    behav
 	    assertion a
+      | JCEcontract(req,dec,behs,e) ->
+	  assert false (* TODO *)
       | JCEblock l ->
           block fmt l
       | JCEreturn_void ->

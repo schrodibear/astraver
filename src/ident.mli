@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.mli,v 1.57 2008-04-15 07:50:19 regisgia Exp $ i*)
+(*i $Id: ident.mli,v 1.58 2008-07-17 14:14:25 marche Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -96,6 +96,11 @@ val fun_id : t -> t
 
 (*s Some pre-defined identifiers. *)
 
+val t_and_bool : t 
+val t_or_bool : t
+val t_xor_bool : t
+val t_not_bool : t
+
 val anonymous : t
 val implicit : t
 val default_post : t
@@ -121,6 +126,11 @@ val t_neg_real : t
 val t_sqrt_real : t
 val t_abs_real : t
 val t_pow_real : t
+
+val t_max_int : t
+val t_min_int : t
+val t_max_real : t
+val t_min_real : t
 
 val t_div_real_ : t
 val t_div_int_ : t
@@ -156,6 +166,21 @@ val t_lt_real : t
 val t_le_real : t
 val t_gt_real : t
 val t_ge_real : t
+
+val t_lt_int_bool : t
+val t_le_int_bool : t
+val t_gt_int_bool : t
+val t_ge_int_bool : t
+
+val t_lt_real_bool : t
+val t_le_real_bool : t
+val t_gt_real_bool : t
+val t_ge_real_bool : t
+
+val t_eq_int_bool : t
+val t_eq_real_bool : t
+val t_neq_int_bool : t
+val t_neq_real_bool : t
 
 val t_eq_int_ : t
 val t_eq_bool_ : t

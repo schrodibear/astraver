@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.146 2008-07-11 06:35:50 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.147 2008-07-17 14:14:23 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1583,6 +1583,13 @@ let rec statement s =
                (Option_misc.fold (fun s acc -> List.map statement s) finally [])
                ())
             ()
+      | JSstatement_spec(req,dec,behs,s) ->
+	  assert false (* TODO *)
+	    (* JCEcontract(Option_misc.map assertion req,
+		      Option_misc.map term dec,
+		      List.map behavior behs,
+		      statement s)
+	    *)
   in new pexpr ~loc:s.java_statement_loc s'#node
 
 and statements l = List.map statement l

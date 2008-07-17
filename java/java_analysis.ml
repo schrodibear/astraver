@@ -152,6 +152,11 @@ let switch_label = function
   | Java_ast.Default -> ()
   | Java_ast.Case e -> expr e
   
+let behavior (id,assumes,throws,assigns,ensures) =
+  Option_misc.iter assertion assumes;
+  Option_misc.iter (fun (_,l) -> List.iter term l) assigns;
+  assertion ensures
+
 let rec statement s =
   match s.java_statement_node with
     | JSskip 
@@ -193,6 +198,11 @@ let rec statement s =
 	List.iter statement s;
 	List.iter (fun (_,s) -> List.iter statement s) catches;
 	Option_misc.iter (List.iter statement) finally
+    | JSstatement_spec(req,dec,behs,s) ->
+	Option_misc.iter assertion req;
+	Option_misc.iter term dec;
+	List.iter behavior behs;
+	statement s
 
 let param vi =
   match vi.java_var_info_type with

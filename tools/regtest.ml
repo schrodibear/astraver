@@ -40,7 +40,7 @@ let behavior = ref Run
 let verbosity = ref 0
 let use_byte = ref false
 let do_diffs = ref "diff -u"
-let n = ref 4    (* the level of parallelism *)
+let n = ref 2    (* the level of parallelism *)
 let suites = ref []
 (** options given to toplevel for all tests *)
 let additional_options = ref ""

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.92 2008-07-15 15:11:07 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.93 2008-07-17 14:14:25 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -41,34 +41,86 @@ open Format
 open Vcg
 open Pp
 
-let relation id =
-  if id == t_lt then "<" 
-  else if id == t_le then "<="
-  else if id == t_gt then ">"
-  else if id == t_ge then ">="
-  else if id == t_eq then "="
-  else if id == t_neq then "/="
-  else assert false
 
-let other_relation id =
-  match Ident.string id with
-    | "gt_int_bool" | "gt_real_bool" -> ">"
-    | "ge_int_bool" | "ge_real_bool" -> ">="
-    | "le_int_bool" | "le_real_bool" -> "<="
-    | "lt_int_bool" | "lt_real_bool" -> "<"
-    | "eq_int_bool" | "eq_real_bool" -> "="
-    | "neq_int_bool" | "neq_real_bool" -> "/="
-    | "bool_and" -> "AND"
-    | "bool_or" -> "OR"
-    | _ ->    raise Not_found
+let infix_table = ref Idmap.empty
+
+let () =
+  List.iter (fun (id,s) -> infix_table := Idmap.add id s !infix_table)
+    [ t_lt, "<" ;
+      t_le, "<=";
+      t_gt, ">";
+      t_ge, ">=";
+      t_eq, "=";
+      t_neq, "/=";
+      t_and_bool, "AND";
+      t_or_bool, "OR";
+      t_xor_bool, "/=" ;
+      t_gt_int_bool, ">";
+      t_gt_real_bool, ">";
+      t_ge_int_bool, ">=";
+      t_ge_real_bool, ">=";
+      t_le_int_bool, "<=";
+      t_le_real_bool, "<=";
+      t_lt_int_bool, "<";
+      t_lt_real_bool, "<";
+      t_eq_int_bool, "=";
+      t_eq_real_bool, "=";
+      t_neq_int_bool, "/=";
+      t_neq_real_bool, "/=";
+      t_lt_int, "<" ;
+      t_le_int, "<=";
+      t_gt_int, ">";
+      t_ge_int, ">=";
+      t_eq_int, "=";
+      t_neq_int, "/=";
+      t_lt_real, "<" ;
+      t_le_real, "<=";
+      t_gt_real, ">";
+      t_ge_real, ">=";
+      t_eq_real, "=";
+      t_neq_real, "/=";
+    ]
+
+let is_infix id = Idmap.mem id !infix_table
+	
+let infix id = 
+  try
+    Idmap.find id !infix_table
+  with Not_found -> assert false
+
+
+
+let prefix_table = ref Idmap.empty
+
+let () =
+  List.iter (fun (id,s) -> prefix_table := Idmap.add id s !prefix_table)
+    [ t_abs_real, "abs";
+      t_max_real, "max";
+      t_min_real, "min";
+      t_sqrt_real, "sqrt";
+    ]
+
+let is_prefix id = Idmap.mem id !prefix_table
+	
+let prefix id = 
+  try
+    Idmap.find id !prefix_table
+  with Not_found -> assert false
+
 
 let print_real fmt = function
   | "","0",_ | "0","",_ | "0","0",_ -> 
-      fprintf fmt "0"
+      fprintf fmt "0.0"
+  | "",f,"" -> 
+      fprintf fmt "0.%s" f
+  | i,"","" -> 
+      fprintf fmt "%s.0" i
+  | i,f,"" ->
+      fprintf fmt "%s.%s" i f      
   | i,f,e ->
-      let e = (if e = "" then 0 else int_of_string e) - String.length f in
+      let e = (int_of_string e) - String.length f in
       if e = 0 then
-	fprintf fmt "(%s%s :: real)" i f
+	fprintf fmt "%s%s" i f
       else if e > 0 then
 	fprintf fmt "(%s%s * 1%s)" i f (String.make e '0')
       else
@@ -93,16 +145,8 @@ and print_instance fmt = function
 
 let print_term fmt t = 
   let rec print0 fmt = function
-    | Tapp (id, [a;b], _) when is_relation id ->
-	fprintf fmt "@[<hov 2>%a %s@ %a@]" print1 a (relation id) print1 b
-    | Tapp (id, [a;b], _) as t ->
-	begin
-	  try
-	    let op = other_relation id in
-	    fprintf fmt "@[<hov 2>%a %s@ %a@]" print1 a op print1 b
-	  with Not_found ->
-	    print1 fmt t
-	end
+    | Tapp (id, [a;b], _) when is_infix id ->
+	fprintf fmt "@[<hov 2>(%a %s@ %a)@]" print1 a (infix id) print1 b
     | t -> 
 	print1 fmt t
   and print1 fmt = function
@@ -127,7 +171,7 @@ let print_term fmt t =
 	print3 fmt t
   and print3 fmt = function
     | Tconst (ConstInt n) -> 
-	fprintf fmt "(%s :: int)" n
+	fprintf fmt "%s" n
     | Tconst (ConstBool b) -> 
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
@@ -135,7 +179,7 @@ let print_term fmt t =
     | Tconst (ConstFloat f) -> 
 	print_real fmt f
     | Tapp (id, [t], _) when id == t_real_of_int ->
-	fprintf fmt "(%a :: real)" print3 t
+	fprintf fmt "%a" print3 t
     | Tderef _ ->
 	assert false
     | Tvar id when id == implicit ->
@@ -149,13 +193,18 @@ let print_term fmt t =
 	fprintf fmt "(@[%a@ ^ %a@])" print3 a print3 b
     | Tapp (id, [a;b], _) when id == t_pow_real ->
 	fprintf fmt "(@[%a@ ^ %a@])" print3 a print3 b
-    | Tapp (id, [a], _) when id == t_abs_real ->
-	fprintf fmt "(@[abs@ (%a) @])" print3 a
+    | Tapp (id, tl, i) when is_prefix id -> 
+	fprintf fmt "%s%a(@[%a@])" 
+	  (prefix id) print_instance (List.rev i) (print_list comma print0) tl
     | Tapp (id, [t], _) when id == t_neg_int || id == t_neg_real ->
 	fprintf fmt "-%a" print3 t
+    | Tapp (id, [t], _) when id == t_not_bool ->
+	fprintf fmt "(NOT(%a))" print3 t
     | Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	fprintf fmt "(@[IF %a@ THEN %a@ ELSE %a@ ENDIF@])" print0 a print0 b print0 c
-    | Tapp (id, l, _) as t when is_relation id || is_arith_binop id ->
+    | Tapp (id, l, _) as t when is_infix id ->
+	fprintf fmt "@[%a@]" print0 t
+    | Tapp (id, l, _) as t when is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [], i) -> 
 	fprintf fmt "%a%a" ident id print_instance (List.rev i)
@@ -169,20 +218,6 @@ let print_term fmt t =
 let print_logic_binder fmt (id,pt) =
   fprintf fmt "%s:%a" (Ident.string id) print_pure_type pt
 
-let infix_relation id =
-  if id == t_lt_int then "<" 
-  else if id == t_le_int then "<="
-  else if id == t_gt_int then ">"
-  else if id == t_ge_int then ">="
-  else if id == t_eq_int then "="
-  else if id == t_neq_int then "/="
-  else if id == t_lt_real then "<" 
-  else if id == t_le_real then "<="
-  else if id == t_gt_real then ">"
-  else if id == t_ge_real then ">="
-  else if id == t_eq_real then "="
-  else if id == t_neq_real then "/="
-  else assert false
 
 let print_predicate fmt p =
   let rec print0 fmt = function
@@ -221,7 +256,7 @@ let print_predicate fmt p =
 	fprintf fmt "zwf_zero(%a, %a)" print_term a print_term b
     | Papp (id, [a;b], _) when is_int_comparison id || is_real_comparison id ->
 	fprintf fmt "@[%a %s@ %a@]" 
-	  print_term a (infix_relation id) print_term b
+	  print_term a (infix id) print_term b
     | Papp (id, [a;b], _) when is_eq id ->
 	fprintf fmt "@[%a =@ %a@]" print_term a print_term b
     | Papp (id, [a;b], _) when is_neq id ->

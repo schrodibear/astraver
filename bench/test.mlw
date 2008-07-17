@@ -1,9 +1,11 @@
 
 
-parameter x : int ref
 
-let f (b:bool) =
- { true }
- if b then x:=1 else x:=2
- { x = 0 }
+goal test : 
+  forall x:real. 
+  max_real(x,x) = x and true = and_bool(true,le_real_bool(x,x))
 
+goal sqrt_36 : sqrt_real(36.0) = min_real(6.0,real_of_int(71))
+
+
+function f(x:int) : real = real_of_int(x)

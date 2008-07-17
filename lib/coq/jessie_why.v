@@ -2,34 +2,6 @@
    It can be modified; only the generated parts will be overwritten. *)
 Require Export Why.
 
-(*Why logic*) Definition bool_and : bool -> bool -> bool.
-Admitted.
-
-(*Why logic*) Definition bool_or : bool -> bool -> bool.
-Admitted.
-
-(*Why logic*) Definition bool_xor : bool -> bool -> bool.
-Admitted.
-
-(*Why axiom*) Lemma bool_and_false :
-  (forall (b:bool), (bool_and b false) = false).
-Admitted.
-
-(*Why axiom*) Lemma false_bool_and :
-  (forall (b:bool), (bool_and false b) = false).
-Admitted.
-
-(*Why axiom*) Lemma bool_and_true : (forall (b:bool), (bool_and b true) = b).
-Admitted.
-
-(*Why axiom*) Lemma true_bool_and : (forall (b:bool), (bool_and true b) = b).
-Admitted.
-
-(*Why axiom*) Lemma bool_and_1 :
-  (forall (b1:bool),
-   (forall (b2:bool), ((bool_and b1 b2) = true -> b1 = true /\ b2 = true))).
-Admitted.
-
 (*Why axiom*) Lemma div_positive_by_positive :
   (forall (a:Z),
    (forall (b:Z), (0 <= a /\ 0 < b -> 0 <= ((Zdiv a b)) /\ ((Zdiv a b)) <= a))).
@@ -90,7 +62,7 @@ Implicit Arguments offset_max.
 Admitted.
 Implicit Arguments offset_min.
 
-(*Why predicate*) Definition valid (A596:Set) (a:(alloc_table A596)) (p:(pointer A596))
+(*Why predicate*) Definition valid (A604:Set) (a:(alloc_table A604)) (p:(pointer A604))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 Implicit Arguments valid.
 
@@ -98,11 +70,6 @@ Implicit Arguments valid.
   forall (A1:Set), (pointer A1) -> Z -> (pointer A1).
 Admitted.
 Implicit Arguments shift.
-
-(*Why logic*) Definition sub_pointer :
-  forall (A1:Set), (pointer A1) -> (pointer A1) -> Z.
-Admitted.
-Implicit Arguments sub_pointer.
 
 (*Why axiom*) Lemma shift_zero :
   forall (A1:Set), (forall (p:(pointer A1)), (shift p 0) = p).
@@ -146,7 +113,7 @@ Admitted.
 
 (*Why axiom*) Lemma null_pointer :
   forall (A1:Set),
-  (forall (a:(alloc_table A1)), (offset_min a (@null A1)) <= 0 /\
+  (forall (a:(alloc_table A1)), (offset_min a (@null A1)) >= 0 /\
    (offset_max a (@null A1)) <= (Zopp 2)).
 Admitted.
 
@@ -173,10 +140,34 @@ Admitted.
     ((neq_pointer_bool p1 p2) = true <-> ~(p1 = p2)))).
 Admitted.
 
+(*Why logic*) Definition same_block :
+  forall (A1:Set), (pointer A1) -> (pointer A1) -> Prop.
+Admitted.
+Implicit Arguments same_block.
+
+(*Why axiom*) Lemma same_block_shift :
+  forall (A1:Set),
+  (forall (p:(pointer A1)), (forall (i:Z), (same_block p (shift p i)))).
+Admitted.
+
+(*Why logic*) Definition sub_pointer :
+  forall (A1:Set), (pointer A1) -> (pointer A1) -> Z.
+Admitted.
+Implicit Arguments sub_pointer.
+
+Set Contextual Implicit.
+Implicit Arguments null.
+Unset Contextual Implicit.
+
+Implicit Arguments eq_pointer_bool.
+
+Implicit Arguments neq_pointer_bool.
+
 (*Why axiom*) Lemma sub_pointer_shift :
   forall (A1:Set),
   (forall (p:(pointer A1)),
-   (forall (q:(pointer A1)), p = (shift q (sub_pointer p q)))).
+   (forall (q:(pointer A1)),
+    ((same_block p q) -> p = (shift q (sub_pointer p q))))).
 Admitted.
 
 (*Why axiom*) Lemma sub_pointer_self :
@@ -186,21 +177,26 @@ Admitted.
 (*Why axiom*) Lemma sub_pointer_zero :
   forall (A1:Set),
   (forall (p:(pointer A1)),
-   (forall (q:(pointer A1)), ((sub_pointer p q) = 0 -> p = q))).
+   (forall (q:(pointer A1)),
+    ((same_block p q) -> ((sub_pointer p q) = 0 -> p = q)))).
 Admitted.
 
 (*Why axiom*) Lemma sub_pointer_shift_left :
   forall (A1:Set),
   (forall (p:(pointer A1)),
    (forall (q:(pointer A1)),
-    (forall (i:Z), (sub_pointer (shift p i) q) = ((sub_pointer p q) + i)))).
+    (forall (i:Z),
+     ((same_block p q) -> (sub_pointer (shift p i) q) =
+      ((sub_pointer p q) + i))))).
 Admitted.
 
 (*Why axiom*) Lemma sub_pointer_shift_right :
   forall (A1:Set),
   (forall (p:(pointer A1)),
    (forall (q:(pointer A1)),
-    (forall (i:Z), (sub_pointer p (shift q i)) = ((sub_pointer p q) - i)))).
+    (forall (i:Z),
+     ((same_block p q) -> (sub_pointer p (shift q i)) =
+      ((sub_pointer p q) - i))))).
 Admitted.
 
 (*Why type*) Definition memory: Set -> Set ->Set.
@@ -288,8 +284,8 @@ Implicit Arguments in_pset.
 Admitted.
 Implicit Arguments valid_pset.
 
-(*Why predicate*) Definition pset_disjoint (A635:Set) (ps1:(pset A635)) (ps2:(pset A635))
-  := (forall (p:(pointer A635)), ~((in_pset p ps1) /\ (in_pset p ps2))).
+(*Why predicate*) Definition pset_disjoint (A645:Set) (ps1:(pset A645)) (ps2:(pset A645))
+  := (forall (p:(pointer A645)), ~((in_pset p ps1) /\ (in_pset p ps2))).
 Implicit Arguments pset_disjoint.
 
 (*Why axiom*) Lemma in_pset_empty :
@@ -403,8 +399,8 @@ Admitted.
       (valid_pset a s2))))).
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A652:Set) (A651:Set) (a:(alloc_table A651)) (m1:(memory A651 A652)) (m2:(memory A651 A652)) (l:(pset A651))
-  := (forall (p:(pointer A651)),
+(*Why predicate*) Definition not_assigns (A662:Set) (A661:Set) (a:(alloc_table A661)) (m1:(memory A661 A662)) (m2:(memory A661 A662)) (l:(pset A661))
+  := (forall (p:(pointer A661)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 Implicit Arguments not_assigns.
 
@@ -506,7 +502,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A671:Set) (a:(tag_table A671)) (p:(pointer A671)) (t:(tag_id A671))
+(*Why predicate*) Definition instanceof (A681:Set) (a:(tag_table A681)) (p:(pointer A681)) (t:(tag_id A681))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -533,8 +529,8 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition root_tag (A676:Set) (t:(tag_id A676))
-  := (parenttag t (@bottom_tag A676)).
+(*Why predicate*) Definition root_tag (A686:Set) (t:(tag_id A686))
+  := (parenttag t (@bottom_tag A686)).
 Implicit Arguments root_tag.
 
 (*Why axiom*) Lemma root_subtag :
@@ -546,7 +542,7 @@ Implicit Arguments root_tag.
       ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A678:Set) (tag_table:(tag_table A678)) (mutable:(memory A678 (tag_id A678))) (this:(pointer A678))
+(*Why predicate*) Definition fully_packed (A688:Set) (tag_table:(tag_table A688)) (mutable:(memory A688 (tag_id A688))) (this:(pointer A688))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 
@@ -619,7 +615,7 @@ Admitted.
 Admitted.
 Implicit Arguments alloc_extends.
 
-(*Why predicate*) Definition alloc_fresh (A680:Set) (a:(alloc_table A680)) (p:(pointer A680))
+(*Why predicate*) Definition alloc_fresh (A690:Set) (a:(alloc_table A690)) (p:(pointer A690))
   := ~(valid a p).
 Implicit Arguments alloc_fresh.
 

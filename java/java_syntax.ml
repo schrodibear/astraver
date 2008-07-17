@@ -50,13 +50,14 @@ let parse_annot loc s f =
     f Java_lexer.next_token lb
   with 
     | Parsing.Parse_error ->
-	Java_options.parsing_error (Java_lexer.loc lb) ""
+	Java_options.parsing_error (Java_lexer.loc lb) "parse error in annotation"
     | Java_options.Java_error (_,msg) ->
 	Java_options.parsing_error (Java_lexer.loc lb) "%s" msg
 
 let rec statement s =
   { s with java_pstatement_node = match s.java_pstatement_node with
       | JPSannot(loc,s) -> parse_annot loc s Java_parser.kml_statement_annot
+      | JPSstatement_spec _
       | JPSghost_local_decls _ | JPSghost_statement _ | JPSloop_annot _ 
       | JPSassert _ -> assert false
       | JPSsynchronized (e, s') -> JPSsynchronized(e, statements s')	

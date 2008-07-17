@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.132 2008-07-11 06:35:50 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.133 2008-07-17 14:14:24 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -453,6 +453,7 @@ type expr_node =
   | JCEfree of expr
   | JCElet of var_info * expr option * expr
   | JCEassert of string list * assertion
+  | JCEcontract of assertion option * term option * behavior list * expr
   | JCEblock of expr list
   | JCEloop of loop_annot * expr
   | JCEreturn_void 

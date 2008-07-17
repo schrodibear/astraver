@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.ml,v 1.66 2008-07-10 13:59:49 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.67 2008-07-17 14:14:25 marche Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -127,6 +127,11 @@ let fun_id x = create (string x ^ "_fun")
 
 (*s Pre-defined. *)
 
+let t_and_bool = create "and_bool"
+let t_or_bool = create "or_bool"
+let t_xor_bool = create "xor_bool"
+let t_not_bool = create "not_bool"
+
 let anonymous = create "_"
 let implicit = create "?"
 let default_post = create "%default_post"
@@ -141,6 +146,7 @@ let t_add_int = create "add_int"
 let t_sub_int = create "sub_int"
 let t_mul_int = create "mul_int"
 let t_div_int = create "div_int"
+let t_mod_int = create "mod_int"
 let t_neg_int = create "neg_int"
 
 let t_add_real = create "add_real"
@@ -148,11 +154,15 @@ let t_sub_real = create "sub_real"
 let t_mul_real = create "mul_real"
 let t_div_real = create "div_real"
 let t_neg_real = create "neg_real"
+
 let t_abs_real = create "abs_real"
 let t_pow_real = create "pow_real"
-
-let t_mod_int = create "mod_int"
 let t_sqrt_real = create "sqrt_real"
+
+let t_max_int = create "max_int"
+let t_min_int = create "min_int"
+let t_max_real = create "max_real"
+let t_min_real = create "min_real"
 
 let t_real_of_int = create "real_of_int"
 let t_int_of_real = create "int_of_real"
@@ -206,10 +216,25 @@ let t_le_int_ = create "le_int_"
 let t_gt_int_ = create "gt_int_"
 let t_ge_int_ = create "ge_int_"
 
+let t_lt_int_bool = create "lt_int_bool"
+let t_le_int_bool = create "le_int_bool"
+let t_gt_int_bool = create "gt_int_bool"
+let t_ge_int_bool = create "ge_int_bool"
+
 let t_lt_real_ = create "lt_real_"
 let t_le_real_ = create "le_real_"
 let t_gt_real_ = create "gt_real_"
 let t_ge_real_ = create "ge_real_"
+
+let t_lt_real_bool = create "lt_real_bool"
+let t_le_real_bool = create "le_real_bool"
+let t_gt_real_bool = create "gt_real_bool"
+let t_ge_real_bool = create "ge_real_bool"
+
+let t_eq_int_bool = create "t_eq_int_bool"
+let t_eq_real_bool = create "t_eq_real_bool"
+let t_neq_int_bool = create "t_neq_int_bool"
+let t_neq_real_bool = create "t_neq_real_bool"
 
 let t_zwf_zero = create "zwf_zero"
 let result = create "result"

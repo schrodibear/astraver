@@ -68,30 +68,6 @@ let rec assertion acc p =
   | JAquantifier (_,_,p) -> assertion acc p
   | JAbool_expr t | JAinstanceof (t, _, _) -> term acc t
 
-(*
-let spec s = 
-  begin
-  match s.requires with
-    | None -> []
-    | Some p -> 
-	predicate p
-  end @
-  begin
-  match s.assigns with
-    | None -> []
-    | Some l -> List.fold_left (fun acc t -> (term t) @acc)  [] l
-  end @
-  begin
-    match s.ensures with
-      | None -> []
-      | Some p -> predicate p
-  end @
-  begin
-    match s.decreases with
-      | None -> []
-      | Some (t,_) -> term t
-  end
-*)
 
 let rec expr acc e : 'a list = 
   match e.java_expr_node with
@@ -139,6 +115,15 @@ let loop_annot acc la =
   term (assertion acc la.java_loop_invariant) la.java_loop_variant
 *)
 
+let behavior acc (id,assumes,throws,assigns,ensures) =
+  let acc = Option_misc.fold_left assertion acc assumes in
+  let acc = 
+    match assigns with
+      | None -> acc
+      | Some(_,l) -> List.fold_left term acc l
+  in
+  assertion acc ensures
+  
 
 let rec statement acc s : ('a list * 'b list) = 
   match s.java_statement_node with  
@@ -204,6 +189,12 @@ let rec statement acc s : ('a list * 'b list) =
 	let (a,b)=acc in
 	statement (a,Option_misc.fold_left initialiser b init) s
     | JSskip -> acc
+    | JSstatement_spec(req,dec,behs,s) ->
+	let (a,b) = acc in
+	let a = Option_misc.fold_left assertion a req in
+	let a = Option_misc.fold_left term a dec in
+	let a = List.fold_left behavior a behs in
+	statement (a,b) s
 
 and statements acc l = List.fold_left statement acc l
 

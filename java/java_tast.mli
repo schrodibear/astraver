@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.37 2008-07-09 10:31:59 marche Exp $ *)
+(* $Id: java_tast.mli,v 1.38 2008-07-17 14:14:24 marche Exp $ *)
 
 open Java_env
 
@@ -136,6 +136,14 @@ type initialiser =
   | JIlist of initialiser list
 
 type 'a switch_label = 'a Java_ast.switch_label
+
+type behavior =
+    Java_ast.identifier * (* behavior name *)
+      assertion option * (* assumes *)
+      java_class_info option * (* throws *)
+      (Loc.position * term list) option * (* assigns *)
+      assertion (* ensures *)
+
 type statement =
   { java_statement_loc : Loc.position ;
     java_statement_node : statement_node }
@@ -160,16 +168,14 @@ and statement_node =
   | JSbreak of string option
   | JSthrow of expr
   | JStry of block * (java_var_info * block) list * block option
+  | JSstatement_spec of 
+      assertion option * term option * behavior list * statement
+	(*r requires, decreases, behaviors, statement *)
 (*
-  | JSvar_decl of variable_declaration
   | JPScontinue of identifier option
   | JPSlabel of identifier * pstatement
   | JPSdo of pstatement * pexpr
-  | JPSfor of pstatement list * pexpr * pstatement list * pstatement  
-  | JPSfor_decl of variable_declaration * pexpr * pstatement list * pstatement
   | JPSsynchronized of pexpr * block
-  | JPSannot of Lexing.position * string
-  | JPSloop_annot of pexpr * pexpr
 *)
 (*
   | Kml_annot_statement of jml_annotation_statement

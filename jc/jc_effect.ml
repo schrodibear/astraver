@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.111 2008-07-09 10:32:00 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.112 2008-07-17 14:14:24 marche Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -595,6 +595,8 @@ let rec expr ef e =
 	expr (Option_misc.fold_left expr ef e) s
     | JCEassert(_behav,a) -> 
 	{ ef with jc_reads = assertion ef.jc_reads a; }
+    | JCEcontract(req,dec,behs,e) ->
+	assert false (* TODO *)
     | JCEblock l -> List.fold_left expr ef l
     | JCEmatch(e, psl) ->
 	let pef = List.fold_left pattern empty_effects (List.map fst psl) in

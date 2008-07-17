@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.45 2008-05-23 07:26:11 marche Exp $
+$Id: java_parser.mly,v 1.46 2008-07-17 14:14:24 marche Exp $
 
 */
 
@@ -1180,6 +1180,9 @@ kml_statement_annot:
     { JPSghost_local_decls($2) }
 | GHOST expr SEMICOLON EOF
     { JPSghost_statement($2) }
+| requires /*decreases (conflict with loop decreases) */ 
+	assigns ensures behaviors EOF
+    { JPSstatement_spec($1,None,default_behavior $2 $3 $4) }
 ;
 
 decreases:

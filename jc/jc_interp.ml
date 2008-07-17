@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.307 2008-07-15 15:58:56 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.308 2008-07-17 14:14:24 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -419,7 +419,8 @@ let eval_integral_const e =
       | JCEinstanceof _ | JCEcast _ | JCEreal_cast _ | JCEoffset _ 
       | JCEalloc _ | JCEfree _ | JCEmatch _ |JCEunpack _ |JCEpack _
       | JCEthrow _ | JCEtry _ | JCEreturn _ | JCEloop _ | JCEblock _
-      | JCEassert _ | JCElet _ | JCEassign_heap _ | JCEassign_var _ | JCEapp _
+      | JCEcontract _ | JCEassert _ 
+      | JCElet _ | JCEassign_heap _ | JCEassign_var _ | JCEapp _
       | JCEreturn_void ->
           failwith "Not integral const"
   in
@@ -1859,6 +1860,8 @@ and expr ~infunction ~threats e : expr =
                    a,
 		 Void)
 	else Void
+    | JCEcontract(req,dec,behs,e) ->
+	assert false (* TODO *)
     | JCElet (vi, e, s) -> 
         let e' = match e with
           | None -> 
