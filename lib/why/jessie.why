@@ -79,7 +79,6 @@ predicate valid (a:'t alloc_table, p:'t pointer) =
   offset_min(a,p) <= 0 and offset_max(a,p) >= 0
 
 logic shift : 't pointer, int -> 't pointer
-logic sub_pointer: 't pointer, 't pointer -> int
 
 axiom shift_zero :
   forall p: 't pointer [shift(p,0)]. shift(p,0) = p
@@ -111,7 +110,7 @@ axiom null_not_valid : forall a : 't alloc_table. not valid(a, null)
 
 axiom null_pointer : 
   forall a : 't alloc_table.
-    offset_min(a, null) <= 0 and offset_max(a, null) <= -2
+    offset_min(a, null) >= 0 and offset_max(a, null) <= -2
 
 (* pointer comparison *)
 
@@ -131,25 +130,37 @@ axiom neq_pointer_bool_def :
   forall p1: 't pointer. forall p2: 't pointer.
     neq_pointer_bool(p1, p2) = true <-> p1 <> p2
 
+logic same_block : 't pointer, 't pointer -> prop
+
+axiom same_block_shift:
+  forall p: 't pointer. forall i:int.
+    same_block(p,shift(p,i))
+
+logic sub_pointer: 't pointer, 't pointer -> int
+
 axiom sub_pointer_shift :
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,p)]. 
-    p = shift(q,sub_pointer(p,q))
+    same_block(p,q) ->
+        p = shift(q,sub_pointer(p,q))
 
 axiom sub_pointer_self :
   forall p:'t pointer [sub_pointer(p,p)]. sub_pointer(p,p) = 0
 
 axiom sub_pointer_zero :
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
-    sub_pointer(p,q) = 0 -> p = q
+    same_block(p,q) ->
+      sub_pointer(p,q) = 0 -> p = q
 
 axiom sub_pointer_shift_left :
   forall p:'t pointer. forall q:'t pointer. 
     forall i:int [sub_pointer(shift(p,i),q)].
+      same_block(p,q) ->
       sub_pointer(shift(p,i),q) = sub_pointer(p,q) + i
 
 axiom sub_pointer_shift_right :
   forall p:'t pointer. forall q:'t pointer. 
     forall i:int [sub_pointer(p,shift(q,i))].
+    same_block(p,q) ->
     sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
 
 
