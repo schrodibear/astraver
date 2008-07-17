@@ -1,6 +1,6 @@
 assigns_range_right
 separation separation1 separation2 separation3 separation4 
-ifs sort 
+ifs sort fib
 all minusminus 
 array assigns loop_assigns not_assigns break continue goto
 call clash clash_alloc clash_redef  
