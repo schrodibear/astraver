@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.8 2008-07-11 06:35:50 moy Exp $ *)
+(* $Id: jc_constructors.ml,v 1.9 2008-07-18 08:36:07 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -418,6 +418,18 @@ module PDecl = struct
     | JCCbehavior(_, _, _, _, _, _, e) -> e
     | _ -> raise (Invalid_argument "behavior_ensures")
 end
+
+
+(******************************************************************************)
+(*                              nexpr constructors                            *)
+(******************************************************************************)
+
+module NExpr = struct
+  let mk ?loc ~node () = new nexpr ?loc node
+
+  let mkcast ~expr ~typ = mk ~node:(JCNEcast(expr, typ))
+end
+
 
 (*******************************************************************************)
 (*                               expr constructors                             *)

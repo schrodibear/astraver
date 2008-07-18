@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.308 2008-07-17 14:14:24 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.309 2008-07-18 08:36:07 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -327,6 +327,20 @@ let term_coerce ?(cast=false) loc tdest tsrc e =
 	    | _ -> 
 		LApp("real_of_int",[e])
 	end
+    | JCTnative Treal, JCTenum ri -> 
+	begin
+	  match e with
+	    | LConst (Prim_int n) ->
+		LConst (Prim_real (n ^ ".0")) 
+	    | _ -> 
+		let e' = LApp(logic_int_of_enum ri,[e]) in
+		let e =
+		  match e with
+		    | Tnamed(n,_) -> Tnamed(n,e')
+		    | _ -> e'
+		in
+		LApp("real_of_int",[e])
+	end
     | JCTnative Tinteger, JCTnative Treal -> 
 	LApp("int_of_real",[e])
     | JCTlogic t, JCTlogic u when t=u -> e
@@ -441,6 +455,14 @@ let coerce ~no_int_overflow lab loc tdest tsrc orig e =
 		Cte (Prim_real (n ^ ".0")) 
 	    | _ -> 
 		make_app "real_of_int" [e]
+	end
+    | JCTnative Treal, JCTenum ri -> 
+	begin
+	  match e with
+	    | Cte (Prim_int n) ->
+		Cte (Prim_real (n ^ ".0")) 
+	    | _ -> 
+		make_app "real_of_int" [make_app (logic_int_of_enum ri) [e]]
 	end
     | JCTnative Tinteger, JCTnative Treal -> 
 	make_app "int_of_real" [e]
@@ -1568,7 +1590,7 @@ and expr ~infunction ~threats e : expr =
         begin match rc with
           | Integer_to_real ->
               coerce ~no_int_overflow:(not threats)
-                (lab()) e#loc real_type integer_type e1 e1'
+                (lab()) e#loc real_type e1#typ e1 e1'
           | Real_to_integer ->
               coerce ~no_int_overflow:(not threats)
                 (lab()) e#loc integer_type real_type e1 e1'

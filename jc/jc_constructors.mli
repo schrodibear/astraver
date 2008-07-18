@@ -449,6 +449,11 @@ module PExpr :
 
   end
 
+module NExpr :
+  sig
+    val mkcast :
+      expr:Jc_ast.nexpr -> typ:string -> ?loc:Loc.position -> unit -> nexpr
+  end
 
 module PDecl :
   sig

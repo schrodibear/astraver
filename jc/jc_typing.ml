@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.223 2008-07-11 09:01:13 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.224 2008-07-18 08:36:07 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -727,9 +727,13 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	    typing_error e#loc "bad cast to real"
         else begin try
           let ri = Hashtbl.find enum_types_table t in
-          if is_numeric te1#typ then
+          if is_integer te1#typ then
             JCTenum ri, dummy_region, JCTrange_cast(te1, ri)
-          else
+          else if is_real te1#typ then
+	    let cast = NExpr.mkcast ~expr:e1 ~typ:"integer" () in
+	    let t = ft cast in
+	    JCTenum ri, te1#region, JCTrange_cast(t, ri)
+	  else
             typing_error e#loc "numeric type expected"
         with Not_found ->
           let st = find_struct_info e#loc t in
@@ -1469,8 +1473,12 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	    typing_error e#loc "bad cast to real"
         else begin try
           let ri = Hashtbl.find enum_types_table t in
-          if is_numeric te1#typ then
+          if is_integer te1#typ then
             JCTenum ri, te1#region, JCErange_cast(te1, ri)
+          else if is_real te1#typ then
+	    let cast = NExpr.mkcast ~expr:e1 ~typ:"integer" () in
+	    let e = fe cast in
+	    JCTenum ri, te1#region, JCErange_cast(e, ri)
           else
             typing_error e#loc "numeric type expected"
         with Not_found ->
