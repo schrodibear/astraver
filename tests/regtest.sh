@@ -31,7 +31,7 @@ case $1 in
 	rm -f $f.makefile 
 	rm -f $d/why/$b.why
 	rm -f $f.loc
-	JESSIELIB=$DIR/lib bin/jessie.opt -locs $f.jloc -why-opt -split-user-conj $f.jc || exit 2
+	JESSIELIB=$DIR/lib WHYLIB=$DIR/lib bin/jessie.opt -locs $f.jloc -why-opt -split-user-conj $f.jc || exit 2
 	mycatfilterdir $f.makefile
 	mycatfilterdir $f.loc
 	mycat $d/why/$b.why
@@ -39,20 +39,20 @@ case $1 in
 	rm -f $d/why/$b.wpr	
 	rm -f $d/why/$b'_ctx'.why	
 	rm -f $d/why/$b'_po'*.why
-	make --quiet -C $d -f $b.makefile project
+	WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile project
 	mycatfilterdir $d/why/$b.wpr	
 	mycat $d/why/$b'_ctx'.why	
 	for i in $d/why/$b'_po'*.why; do mycat $i; done
 	echo "========== generation of Simplify VC output =========="
-	make --quiet -C $d -f $b.makefile simplify/$b'_why'.sx	
+	WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify/$b'_why'.sx	
 	mycat $d/simplify/$b'_why'.sx
 	echo "========== running Simplify =========="
-	DPOPT=-no-timings TIMEOUT=10 make --quiet -C $d -f $b.makefile simplify	
+	DP="$DIR/bin/dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify	
 	echo "========== generation of alt-ergo VC output =========="
-	make --quiet -C $d -f $b.makefile why/$b'_why'.why	
+	WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile why/$b'_why'.why	
 	mycat $d/why/$b'_why'.why
 	echo "========== running alt-ergo =========="
-	DPOPT=-no-timings TIMEOUT=10 make --quiet -C $d -f $b.makefile ergo	
+	DP="$DIR/bin/dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile ergo	
 	;;
   *.c)
 	b=`basename $1 .c`

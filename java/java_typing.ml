@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.134 2008-07-17 14:14:24 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.135 2008-07-18 13:14:12 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -3171,7 +3171,7 @@ and statements env b =
               let decreases = 
                 Option_misc.map (term env (Some LabelHere)) decreases 
               in
-              let behs = List.map (behavior env [] []) behaviors in
+              let behs = List.map (behavior env env.env env.env) behaviors in
               begin
                 match rem with
                   | [] -> 

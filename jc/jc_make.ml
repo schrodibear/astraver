@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.28 2008-07-16 14:15:08 filliatr Exp $ i*)
+(*i $Id: jc_make.ml,v 1.29 2008-07-18 13:14:12 marche Exp $ i*)
 
 open Format
 open Pp
@@ -61,11 +61,13 @@ let generic full f targets =
        fprintf fmt 
        "# this makefile was automatically generated; do not edit @\n@\n";
        fprintf fmt "TIMEOUT ?= 10@\n@\n";	    
-       fprintf fmt "DP=dp $(DPOPT) -timeout $(TIMEOUT)@\n@\n";
-       fprintf fmt "export WHYLIB=%s@\n" Version.libdir;
-       fprintf fmt "WHY=why --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
-       fprintf fmt "GWHY=gwhy-bin --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
-       fprintf fmt "JESSIELIBFILE=%s@\n@\n" 
+       fprintf fmt "DP ?= dp -timeout $(TIMEOUT)@\n";
+       fprintf fmt "WHYEXEC ?= why@\n";
+       fprintf fmt "GWHYEXEC ?= gwhy-bin@\n";
+       fprintf fmt "export WHYLIB=%s@\n@\n" Version.libdir;
+       fprintf fmt "WHY=$(WHYEXEC) --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
+       fprintf fmt "GWHY=$(GWHYEXEC) --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
+       fprintf fmt "JESSIELIBFILE ?= %s@\n@\n" 
 	 (String.escaped (Filename.concat Jc_options.libdir 
 	    (Filename.concat "why" Jc_options.libfile)));
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.40 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.41 2008-07-18 13:14:13 marche Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -58,6 +58,10 @@ let spec =
     "-no-timings", Arg.Clear timings, "do not display timings";
     "-smt-solver", Arg.String set_smt_solver, "<solver>";
   ]
+
+let () = 
+  Calldp.cpulimit := 
+    Filename.concat (Filename.dirname Sys.argv.(0)) "cpulimit"
 
 let usage = "usage: dp [options] files.{why,rv,znn,cvc,cvc.all,sx,sx.all,smt,smt.all}"
 let () = Arg.parse spec (fun s -> Queue.push s files) usage 

@@ -27,10 +27,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.48 2008-07-08 19:16:29 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.49 2008-07-18 13:14:13 marche Exp $ i*)
 
 open Printf
-open Options
 
 
 type prover_result = 
@@ -40,7 +39,7 @@ type prover_result =
   | Timeout of float                       
   | ProverFailure of float * string        
 
-
+let cpulimit = ref "cpulimit"
 
 
 let remove_file ?(debug=false) f =
@@ -67,7 +66,7 @@ let timed_sys_command ~debug timeout cmd =
   let t0 = Unix.times () in
   if debug then Format.eprintf "command line: %s@." cmd;
   let out = Filename.temp_file "out" "" in
-  let cmd = sprintf "cpulimit %d %s > %s 2>&1" timeout cmd out in
+  let cmd = sprintf "%s %d %s > %s 2>&1" !cpulimit timeout cmd out in
   let ret = Sys.command cmd in
   let t1 = Unix.times () in
   let cpu_time = t1.Unix.tms_cutime -. t0.Unix.tms_cutime in

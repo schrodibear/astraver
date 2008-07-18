@@ -225,14 +225,16 @@ Generating Why function SideEffects_m1
 
 TIMEOUT ?= 10
 
-DP=dp $(DPOPT) -timeout $(TIMEOUT)
-
+DP ?= dp -timeout $(TIMEOUT)
+WHYEXEC ?= why
+GWHYEXEC ?= gwhy-bin
 export WHYLIB=/usr/local/lib/why
-WHY=why --no-arrays  -split-user-conj -explain -locs SideEffects.loc
 
-GWHY=gwhy-bin --no-arrays  -split-user-conj -explain -locs SideEffects.loc
+WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs SideEffects.loc
 
-JESSIELIBFILE=HOME/lib/why/jessie.why
+GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs SideEffects.loc
+
+JESSIELIBFILE ?= HOME/lib/why/jessie.why
 
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
@@ -967,13 +969,27 @@ text = ""/>
   </function>
 </project>
 ========== file tests/java/why/SideEffects_ctx.why ==========
+logic eq_unit : unit, unit -> prop
+
+logic neq_unit : unit, unit -> prop
+
 logic eq_bool : bool, bool -> prop
 
 logic neq_bool : bool, bool -> prop
 
-logic eq_unit : unit, unit -> prop
+logic and_bool : bool, bool -> bool
 
-logic neq_unit : unit, unit -> prop
+logic or_bool : bool, bool -> bool
+
+logic xor_bool : bool, bool -> bool
+
+logic not_bool : bool -> bool
+
+logic ite : bool, 'a1, 'a1 -> 'a1
+
+axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
+
+axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
 
 logic add_int : int, int -> int
 
@@ -1094,35 +1110,15 @@ axiom neq_real_bool_axiom:
   (forall x:real.
     (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
 
-logic ite : bool, 'a1, 'a1 -> 'a1
+logic max_int : int, int -> int
 
-axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
+logic min_int : int, int -> int
 
-axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
+logic max_real : real, real -> real
 
-logic bool_and : bool, bool -> bool
+logic min_real : real, real -> real
 
-logic bool_or : bool, bool -> bool
-
-logic bool_xor : bool, bool -> bool
-
-axiom bool_and_false:
-  ((bool_and(true, false) = false) and (bool_and(false, false) = false))
-
-axiom false_bool_and:
-  ((bool_and(false, true) = false) and (bool_and(false, false) = false))
-
-axiom bool_and_true:
-  ((bool_and(true, true) = true) and (bool_and(false, true) = false))
-
-axiom true_bool_and:
-  ((bool_and(true, true) = true) and (bool_and(true, false) = false))
-
-axiom bool_and_1:
-  ((((bool_and(true, true) = true) -> ((true = true) and (true = true))) and
-    ((bool_and(true, false) = true) -> ((true = true) and (false = true)))) and
-   (((bool_and(false, true) = true) -> ((false = true) and (true = true))) and
-    ((bool_and(false, false) = true) -> ((false = true) and (false = true)))))
+predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
 
 axiom div_positive_by_positive:
   (forall a:int.
@@ -1223,9 +1219,6 @@ axiom neq_pointer_bool_def:
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
 
 logic same_block : 'a1 pointer, 'a1 pointer -> prop
-
-axiom same_block_shift:
-  (forall p:'a1 pointer. (forall i:int. same_block(p, shift(p, i))))
 
 logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
@@ -2188,40 +2181,6 @@ why -simplify [...] why/SideEffects.why
 (BG_PUSH (NEQ |@true| |@false|))
 
 (BG_PUSH
- ;; Why axiom bool_and_false
- (AND (EQ (bool_and |@true| |@false|) |@false|)
- (EQ (bool_and |@false| |@false|) |@false|)))
-
-(BG_PUSH
- ;; Why axiom false_bool_and
- (AND (EQ (bool_and |@false| |@true|) |@false|)
- (EQ (bool_and |@false| |@false|) |@false|)))
-
-(BG_PUSH
- ;; Why axiom bool_and_true
- (AND (EQ (bool_and |@true| |@true|) |@true|)
- (EQ (bool_and |@false| |@true|) |@false|)))
-
-(BG_PUSH
- ;; Why axiom true_bool_and
- (AND (EQ (bool_and |@true| |@true|) |@true|)
- (EQ (bool_and |@true| |@false|) |@false|)))
-
-(BG_PUSH
- ;; Why axiom bool_and_1
- (AND
- (AND
- (IMPLIES (EQ (bool_and |@true| |@true|) |@true|)
- (AND (EQ |@true| |@true|) (EQ |@true| |@true|)))
- (IMPLIES (EQ (bool_and |@true| |@false|) |@true|)
- (AND (EQ |@true| |@true|) (EQ |@false| |@true|))))
- (AND
- (IMPLIES (EQ (bool_and |@false| |@true|) |@true|)
- (AND (EQ |@false| |@true|) (EQ |@true| |@true|)))
- (IMPLIES (EQ (bool_and |@false| |@false|) |@true|)
- (AND (EQ |@false| |@true|) (EQ |@false| |@true|))))))
-
-(BG_PUSH
  ;; Why axiom div_positive_by_positive
  (FORALL (a b)
  (IMPLIES (AND (<= 0 a) (< 0 b))
@@ -2310,10 +2269,6 @@ why -simplify [...] why/SideEffects.why
 (BG_PUSH
  ;; Why axiom neq_pointer_bool_def
  (FORALL (p1 p2) (IFF (EQ (neq_pointer_bool p1 p2) |@true|) (NEQ p1 p2))))
-
-(BG_PUSH
- ;; Why axiom same_block_shift
- (FORALL (p i) (EQ (same_block p (shift p i)) |@true|)))
 
 (BG_PUSH
  ;; Why axiom sub_pointer_shift
@@ -3132,13 +3087,27 @@ failure :   0 (  0%)
 ========== generation of alt-ergo VC output ==========
 why --why [...] why/SideEffects.why
 ========== file tests/java/why/SideEffects_why.why ==========
+logic eq_unit : unit, unit -> prop
+
+logic neq_unit : unit, unit -> prop
+
 logic eq_bool : bool, bool -> prop
 
 logic neq_bool : bool, bool -> prop
 
-logic eq_unit : unit, unit -> prop
+logic and_bool : bool, bool -> bool
 
-logic neq_unit : unit, unit -> prop
+logic or_bool : bool, bool -> bool
+
+logic xor_bool : bool, bool -> bool
+
+logic not_bool : bool -> bool
+
+logic ite : bool, 'a1, 'a1 -> 'a1
+
+axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
+
+axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
 
 logic add_int : int, int -> int
 
@@ -3259,35 +3228,15 @@ axiom neq_real_bool_axiom:
   (forall x:real.
     (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
 
-logic ite : bool, 'a1, 'a1 -> 'a1
+logic max_int : int, int -> int
 
-axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
+logic min_int : int, int -> int
 
-axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
+logic max_real : real, real -> real
 
-logic bool_and : bool, bool -> bool
+logic min_real : real, real -> real
 
-logic bool_or : bool, bool -> bool
-
-logic bool_xor : bool, bool -> bool
-
-axiom bool_and_false:
-  ((bool_and(true, false) = false) and (bool_and(false, false) = false))
-
-axiom false_bool_and:
-  ((bool_and(false, true) = false) and (bool_and(false, false) = false))
-
-axiom bool_and_true:
-  ((bool_and(true, true) = true) and (bool_and(false, true) = false))
-
-axiom true_bool_and:
-  ((bool_and(true, true) = true) and (bool_and(true, false) = false))
-
-axiom bool_and_1:
-  ((((bool_and(true, true) = true) -> ((true = true) and (true = true))) and
-    ((bool_and(true, false) = true) -> ((true = true) and (false = true)))) and
-   (((bool_and(false, true) = true) -> ((false = true) and (true = true))) and
-    ((bool_and(false, false) = true) -> ((false = true) and (false = true)))))
+predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
 
 axiom div_positive_by_positive:
   (forall a:int.
@@ -3388,9 +3337,6 @@ axiom neq_pointer_bool_def:
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
 
 logic same_block : 'a1 pointer, 'a1 pointer -> prop
-
-axiom same_block_shift:
-  (forall p:'a1 pointer. (forall i:int. same_block(p, shift(p, i))))
 
 logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
