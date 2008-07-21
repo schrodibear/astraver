@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.41 2008-07-18 13:14:13 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.42 2008-07-21 15:25:52 moy Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -60,8 +60,9 @@ let spec =
   ]
 
 let () = 
-  Calldp.cpulimit := 
-    Filename.concat (Filename.dirname Sys.argv.(0)) "cpulimit"
+  let d = Filename.dirname Sys.argv.(0) in
+  if not (Filename.is_relative d) then
+    Calldp.cpulimit := Filename.concat d "cpulimit"
 
 let usage = "usage: dp [options] files.{why,rv,znn,cvc,cvc.all,sx,sx.all,smt,smt.all}"
 let () = Arg.parse spec (fun s -> Queue.push s files) usage 
