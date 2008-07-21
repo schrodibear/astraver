@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.96 2008-07-11 06:35:50 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.97 2008-07-21 14:44:25 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -456,15 +456,20 @@ let goto_block loc el =
 	| _ -> e1::elr,labelr
   in
   let el,labels = label_block el in
-  List.fold_left (fun acc (lab,el) ->
+  let el = List.fold_left (fun acc (lab,el) ->
 		    let id = goto_exception_for_label lab in
-		    mktry ~loc
-                      ~expr:acc 
-		      ~catches:
-                      [mkcatch ~loc ~name:(tmp_var_name()) ~exn:id 
-			 ~body:(mkblock ~loc ~exprs:el ()) ()]
-                      ()
-		 ) (mkblock ~loc ~exprs:el ()) labels
+		    (* Throw expression in case of fall-through *)
+		    let throw = mkthrow ~loc ~exn:id () in
+		    [mktry ~loc
+                       ~expr:(mkblock ~loc ~exprs:(acc@[throw]) ())
+		       ~catches:
+                       [mkcatch ~loc ~name:(tmp_var_name()) ~exn:id 
+			  ~body:(mkblock ~loc ~exprs:el ()) ()]
+                       ()
+		    ]
+		 ) el labels
+  in
+  mkblock ~loc ~exprs:el ()
 
 let rec goto e lz =
   let loc = e#loc in
