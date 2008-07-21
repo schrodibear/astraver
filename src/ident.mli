@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.mli,v 1.58 2008-07-17 14:14:25 marche Exp $ i*)
+(*i $Id: ident.mli,v 1.59 2008-07-21 14:29:29 marche Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -96,10 +96,10 @@ val fun_id : t -> t
 
 (*s Some pre-defined identifiers. *)
 
-val t_and_bool : t 
-val t_or_bool : t
-val t_xor_bool : t
-val t_not_bool : t
+val t_bool_and : t 
+val t_bool_or : t
+val t_bool_xor : t
+val t_bool_not : t
 
 val anonymous : t
 val implicit : t

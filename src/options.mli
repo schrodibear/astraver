@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.89 2008-06-11 07:44:32 stoulsn Exp $ i*)
+(*i $Id: options.mli,v 1.90 2008-07-21 14:29:29 marche Exp $ i*)
 
 (*s General options *)
 
@@ -88,6 +88,8 @@ val pruning_hyp_polarized_preds : bool
 val prune_context : bool
 (* FIN de Heuristiques en test *)
 val modulo : bool
+
+val phantom_types : (string,unit) Hashtbl.t
 
 type expanding = All | Goal | NoExpanding
 val defExpanding : expanding

@@ -1165,13 +1165,27 @@ logic eq_bool : bool, bool -> prop
 
 logic neq_bool : bool, bool -> prop
 
-logic and_bool : bool, bool -> bool
+logic bool_and : bool, bool -> bool
 
-logic or_bool : bool, bool -> bool
+logic bool_or : bool, bool -> bool
 
-logic xor_bool : bool, bool -> bool
+logic bool_xor : bool, bool -> bool
 
-logic not_bool : bool -> bool
+logic bool_not : bool -> bool
+
+axiom bool_and_def:
+  (forall a:bool.
+    (forall b:bool.
+      ((bool_and(a, b) = true) <-> ((a = true) and (b = true)))))
+
+axiom bool_or_def:
+  (forall a:bool.
+    (forall b:bool. ((bool_or(a, b) = true) <-> ((a = true) or (b = true)))))
+
+axiom bool_xor_def:
+  (forall a:bool. (forall b:bool. ((bool_xor(a, b) = true) <-> (a <> b))))
+
+axiom bool_not_def: (forall a:bool. ((bool_not(a) = true) <-> (a = false)))
 
 logic ite : bool, 'a1, 'a1 -> 'a1
 
@@ -3613,13 +3627,27 @@ logic eq_bool : bool, bool -> prop
 
 logic neq_bool : bool, bool -> prop
 
-logic and_bool : bool, bool -> bool
+logic bool_and : bool, bool -> bool
 
-logic or_bool : bool, bool -> bool
+logic bool_or : bool, bool -> bool
 
-logic xor_bool : bool, bool -> bool
+logic bool_xor : bool, bool -> bool
 
-logic not_bool : bool -> bool
+logic bool_not : bool -> bool
+
+axiom bool_and_def:
+  (forall a:bool.
+    (forall b:bool.
+      ((bool_and(a, b) = true) <-> ((a = true) and (b = true)))))
+
+axiom bool_or_def:
+  (forall a:bool.
+    (forall b:bool. ((bool_or(a, b) = true) <-> ((a = true) or (b = true)))))
+
+axiom bool_xor_def:
+  (forall a:bool. (forall b:bool. ((bool_xor(a, b) = true) <-> (a <> b))))
+
+axiom bool_not_def: (forall a:bool. ((bool_not(a) = true) <-> (a = false)))
 
 logic ite : bool, 'a1, 'a1 -> 'a1
 

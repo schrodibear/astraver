@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.ml,v 1.67 2008-07-17 14:14:25 marche Exp $ i*)
+(*i $Id: ident.ml,v 1.68 2008-07-21 14:29:29 marche Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -127,10 +127,10 @@ let fun_id x = create (string x ^ "_fun")
 
 (*s Pre-defined. *)
 
-let t_and_bool = create "and_bool"
-let t_or_bool = create "or_bool"
-let t_xor_bool = create "xor_bool"
-let t_not_bool = create "not_bool"
+let t_bool_and = create "bool_and"
+let t_bool_or = create "bool_or"
+let t_bool_xor = create "bool_xor"
+let t_bool_not = create "bool_not"
 
 let anonymous = create "_"
 let implicit = create "?"

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.309 2008-07-18 08:36:07 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.310 2008-07-21 14:29:29 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -201,6 +201,10 @@ let bin_op: expr_bin_op -> string = function
   | `Bshift_left, `Integer -> "lsl"
   | `Blogical_shift_right, `Integer -> "lsr"
   | `Barith_shift_right, `Integer -> "asr"
+  | `Bland, _ -> assert false
+  | `Blor, _ -> assert false
+  | `Bconcat, _ -> "string_concat"
+  | op, (`Unit | `Logic as opty) 
   | op, opty ->
       Jc_typing.typing_error Loc.dummy_position
         "Can't use operator %s with type %s in expressions"
@@ -408,8 +412,7 @@ let eval_integral_const e =
             | `Uminus, `Integer -> minus_num v
             | `Uminus, (`Real | `Boolean | `Unit)
             | `Unot, _
-            | `Ubw_not, _ ->
-                failwith "Not integral const"
+            | `Ubw_not, _ -> raise Exit
           end
       | JCEbinary(e1,op,e2) ->
           let v1 = eval e1 in
@@ -423,22 +426,24 @@ let eval_integral_const e =
             | (`Badd | `Barith_shift_right | `Bbw_and | `Bbw_or | `Bbw_xor
               | `Bdiv | `Beq | `Bge | `Bgt | `Ble | `Blogical_shift_right
               | `Blt | `Bmod | `Bmul | `Bneq | `Bshift_left | `Bsub), _ ->
-                failwith "Not integral const"
-	    | `Bconcat, _ -> assert false (* TODO *)
+		raise Exit
+	    | `Bconcat, _ -> raise Exit
+	    | `Bland, _ -> raise Exit
+	    | `Blor, _ -> raise Exit
           end
       | JCEif(e1,e2,e3) ->
           (* TODO: write [eval_boolean_const] *)
-          failwith "Not integral const"
+          raise Exit
       | JCEconst _ | JCEvar _ | JCEshift _ | JCEderef _ 
       | JCEinstanceof _ | JCEcast _ | JCEreal_cast _ | JCEoffset _ 
       | JCEalloc _ | JCEfree _ | JCEmatch _ |JCEunpack _ |JCEpack _
       | JCEthrow _ | JCEtry _ | JCEreturn _ | JCEloop _ | JCEblock _
       | JCEcontract _ | JCEassert _ 
       | JCElet _ | JCEassign_heap _ | JCEassign_var _ | JCEapp _
-      | JCEreturn_void ->
-          failwith "Not integral const"
+      | JCEreturn_void -> raise Exit
+
   in
-  try Some(eval e) with Failure "Not integral const" -> None
+  try Some(eval e) with Exit -> None
 
 let rec fits_in_enum ri e = 
   match eval_integral_const e with
@@ -1508,16 +1513,30 @@ and expr ~infunction ~threats e : expr =
         let e1' = expr e1 in
         let e2' = expr e2 in
         make_app (bin_op op) [ e1'; e2']        
-(*    | JCEbinary(e1, (`Bland, _), e2) ->
-        (* lazy conjunction *)
+    | JCEbinary(e1, (`Bland,_), e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
-        And(e1',e2')    
-    | JCEbinary(e1,Blor,e2) ->
+	let ef1 = Jc_effect.expr empty_fun_effect e1 in
+	let ef2 = Jc_effect.expr ef1 e2 in
+	if Jc_effect.same_effects ef2.jc_writes empty_fun_effect.jc_writes &&
+	  ExceptionSet.is_empty ef2.jc_raises
+	then
+	  make_app "bool_and" [ e1'; e2'] 
+	else
+          (* lazy conjunction *)
+          And(e1',e2')    
+    | JCEbinary(e1,(`Blor,_),e2) ->
+        let e1' = expr e1 in
+        let e2' = expr e2 in
+	let ef1 = Jc_effect.expr empty_fun_effect e1 in
+	let ef2 = Jc_effect.expr ef1 e2 in
+	if Jc_effect.same_effects ef2.jc_writes empty_fun_effect.jc_writes &&
+	  ExceptionSet.is_empty ef2.jc_raises
+	then
+	  make_app "bool_or" [ e1'; e2'] 
+	else
         (* lazy disjunction *)
-        let e1' = expr e1 in
-        let e2' = expr e2 in
-        Or(e1',e2')     *)
+          Or(e1',e2')     
     | JCEbinary(e1, (_, #native_operator_type as op), e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in

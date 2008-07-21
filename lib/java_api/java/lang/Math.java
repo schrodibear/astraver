@@ -783,7 +783,7 @@ public final strictfp class Math {
      * @param   b   another argument.
      * @return  the larger of <code>a</code> and <code>b</code>.
      */
-    /*@ ensures \result == max_real(a,b);
+    /* @ ensures \result == \max_real(a,b);
       @*/
     public static double max(double a, double b) {
         if (a != a) return a;	// a is NaN

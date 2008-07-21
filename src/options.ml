@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.117 2008-06-11 07:44:32 stoulsn Exp $ i*)
+(*i $Id: options.ml,v 1.118 2008-07-21 14:29:29 marche Exp $ i*)
 
 open Format
 
@@ -80,6 +80,9 @@ let prune_context_ = ref false
 let prune_coarse_pred_comp_ = ref false
 (* FIN de Heuristiques en test *)
 let modulo_ = ref false 
+
+let phantom_types = Hashtbl.create 17
+
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
 let files_to_load_ = ref []
@@ -204,6 +207,7 @@ Typing/Annotations/VCG options:
   --total            total correctness
   --explain          outputs explanations for VCs in file.xpl
   --locs f           reads source locations from file f
+  --phantom <name>   declare <name> as a phantom type
 
 VC transformation options:
   --all-vc           outputs all verification conditions (no auto discharge)
@@ -520,6 +524,9 @@ let files =
 	explain_vc := true; parse args
     | ("-locs" | "--locs") :: s :: args ->
 	locs_files := s :: !locs_files;
+	parse args
+    | ("-phantom" | "--phantom") :: s :: args ->
+	Hashtbl.add phantom_types s ();
 	parse args
     | f :: args -> 
 	filesq := f :: !filesq; parse args

@@ -370,13 +370,13 @@ let update_toplevel_command command =
   let log_prefix = log_prefix command in
   let oracle_prefix = oracle_prefix command in
   let command_string =
-    "mv " ^
+    "cp " ^
       log_prefix ^ ".res.log " ^
       oracle_prefix ^ ".res.oracle"
   in
   ignore (launch command_string);
  let command_string =
-    "mv " ^
+    "cp " ^
       log_prefix ^ ".err.log " ^
       oracle_prefix ^ ".err.oracle"
   in
@@ -388,7 +388,7 @@ let update_command = function
 
 let update_log_files dir file =
   let command_string =
-    "mv " ^ make_result_file dir file ^ " " ^ make_oracle_file dir file
+    "cp " ^ make_result_file dir file ^ " " ^ make_oracle_file dir file
   in
   ignore (launch command_string)
 

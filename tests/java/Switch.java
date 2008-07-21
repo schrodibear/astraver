@@ -74,7 +74,7 @@ public class Switch {
 
 /*
 Local Variables: 
-compile-command: "make Switch.io"
+compile-command: "gwhy Switch.java"
 End: 
 */
 

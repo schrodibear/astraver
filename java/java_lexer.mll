@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.29 2008-04-22 06:53:45 nrousset Exp $
+$Id: java_lexer.mll,v 1.30 2008-07-21 14:29:29 marche Exp $
 
 ***************************************************************************)
 
@@ -174,6 +174,7 @@ $Id: java_lexer.mll,v 1.29 2008-04-22 06:53:45 nrousset Exp $
 	  "exists", BSEXISTS ;
 	  (* "fresh", BSFRESH ; *)
 	  "forall", BSFORALL ;
+	  "max_real", BSMAX_REAL ;
 	  "nothing", BSNOTHING;
 	  (*
 	  "fields_of", BSFIELDSOF;

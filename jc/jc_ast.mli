@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.133 2008-07-17 14:14:24 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.134 2008-07-21 14:29:29 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -98,7 +98,7 @@ type bitwise_op =
     [ `Bbw_and | `Bbw_or | `Bbw_xor 
     | `Bshift_left | `Blogical_shift_right | `Barith_shift_right ]
 
-type operational_op = [ comparison_op | arithmetic_op | bitwise_op | `Bconcat]
+type operational_op = [ comparison_op | arithmetic_op | bitwise_op | `Bconcat | `Bland | `Blor ]
 type bin_op = [ operational_op | logical_op ]
       
 type pre_unary_op = [ `Uprefix_inc | `Uprefix_dec ]

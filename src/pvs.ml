@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.93 2008-07-17 14:14:25 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.94 2008-07-21 14:29:29 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -52,9 +52,9 @@ let () =
       t_ge, ">=";
       t_eq, "=";
       t_neq, "/=";
-      t_and_bool, "AND";
-      t_or_bool, "OR";
-      t_xor_bool, "/=" ;
+      t_bool_and, "AND";
+      t_bool_or, "OR";
+      t_bool_xor, "/=" ;
       t_gt_int_bool, ">";
       t_gt_real_bool, ">";
       t_ge_int_bool, ">=";
@@ -128,6 +128,12 @@ let print_real fmt = function
 
 let ident = Ident.print
 
+let rec filter_phantom_type = function
+  | PTexternal (_, id) ->
+      not (Hashtbl.mem Options.phantom_types (Ident.string id))
+  | PTvar { type_val = Some t} -> filter_phantom_type t   
+  | _ -> true
+
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "int"
   | PTbool -> fprintf fmt "bool"
@@ -137,11 +143,13 @@ let rec print_pure_type fmt = function
       fprintf fmt "warray[%a]" print_pure_type pt
   | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
   | PTvar v -> fprintf fmt "A%d" v.tag
-  | PTexternal (i, id) -> fprintf fmt "%a%a" ident id print_instance i
+  | PTexternal (i, id) -> 
+      fprintf fmt "%a%a" ident id print_instance i
 
-and print_instance fmt = function
-  | [] -> ()
-  | i -> fprintf fmt "[%a]" (print_list comma print_pure_type) i
+and print_instance fmt l = 
+  match List.filter filter_phantom_type l with
+    | [] -> ()
+    | i -> fprintf fmt "[%a]" (print_list comma print_pure_type) i
 
 let print_term fmt t = 
   let rec print0 fmt = function
@@ -198,7 +206,7 @@ let print_term fmt t =
 	  (prefix id) print_instance (List.rev i) (print_list comma print0) tl
     | Tapp (id, [t], _) when id == t_neg_int || id == t_neg_real ->
 	fprintf fmt "-%a" print3 t
-    | Tapp (id, [t], _) when id == t_not_bool ->
+    | Tapp (id, [t], _) when id == t_bool_not ->
 	fprintf fmt "(NOT(%a))" print3 t
     | Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	fprintf fmt "(@[IF %a@ THEN %a@ ELSE %a@ ENDIF@])" print0 a print0 b print0 c
@@ -340,7 +348,7 @@ let print_logic_type fmt = function
 	(print_list comma print_pure_type) pl print_pure_type t
 
 let declare_type fmt id = 
-  fprintf fmt "  @[%s: NONEMPTY_TYPE;@]@\n@\n" id
+  fprintf fmt "  @[%s: TYPE+;@]@\n@\n" id
 
 let print_logic fmt id t = 
   fprintf fmt "  %%%% Why logic %s@\n" id;
@@ -348,7 +356,7 @@ let print_logic fmt id t =
     
 let print_axiom fmt id p =
   fprintf fmt "  @[%%%% Why axiom %s@]@\n" id;
-  fprintf fmt "  @[<hov 2>%s: LEMMA@ @[%a@]@]@\n@\n" id print_predicate p
+  fprintf fmt "  @[<hov 2>%s: AXIOM@ @[%a@]@]@\n@\n" id print_predicate p
     
 let print_predicate_def fmt id (bl,p) =
   fprintf fmt "  @[<hov 2>%s(@[%a@]) : bool =@ @[%a@]@]@\n@\n"
@@ -387,7 +395,7 @@ let print_goal fmt (loc, expl, id, s) =
     for i = !tvar_so_far + 1 to n do
       fprintf fmt "A%d" i; if i < n then fprintf fmt ", "
     done;
-    fprintf fmt ": NONEMPTY_TYPE;@\n@\n";
+    fprintf fmt ": TYPE+;@\n@\n";
     tvar_so_far := n
   end;
   let l,s = Env.specialize_sequent s in

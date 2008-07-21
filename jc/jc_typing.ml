@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.224 2008-07-18 08:36:07 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.225 2008-07-21 14:29:29 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1292,7 +1292,7 @@ let make_bin_op loc (op: operational_op) e1 e2 =
                      coerce t2 t e2))
         else 
 	  typing_error loc "numeric types expected for shift operators"
-(*    | `Bland | `Blor as op -> 
+    | `Bland | `Blor as op -> 
         let t = match (t1, t2) with
           | JCTnative t1, JCTnative t2 ->
               begin match (t1, t2) with
@@ -1303,9 +1303,7 @@ let make_bin_op loc (op: operational_op) e1 e2 =
         in
         (JCTnative t,
          dummy_region,
-         JCEbinary(e1, bin_op (operator_of_native t) op, e2))*)
-    (* not allowed as expression op *)
-(*    | `Bimplies | `Biff -> assert false*)
+         JCEbinary(e1, bin_op (operator_of_native t) op, e2))
     | `Bconcat -> assert false (* TODO *)
 
 let rec expr env e =
@@ -1334,26 +1332,33 @@ let rec expr env e =
         fi.jc_field_info_type,
         Region.make_field te1#region fi,
         JCEderef(te1, fi)
-    | JCNEbinary(e1, (#operational_op as op), e2) ->
-        make_bin_op e#loc op (fe e1) (fe e2)
     | JCNEbinary(e1, (#logical_op as op), e2) ->
         let te1 = fe e1 and te2 = fe e2 in
-	boolean_type, dummy_region, begin match op with
+	(* boolean_type, dummy_region,  *)
+	  begin match op with
 	  | `Bland ->
+	      (*
               JCEif(
                 te1,
                 te2,
                 new expr ~typ:boolean_type (JCEconst(JCCboolean false))
               )
+	      *)
+	      make_bin_op e#loc `Bland te1 te2
           | `Blor ->
-              JCEif(
+              (*
+		JCEif(
                 te1,
                 new expr ~typ:boolean_type (JCEconst(JCCboolean true)),
                 te2
               )
+	      *)
+	      make_bin_op e#loc `Blor te1 te2
 	  | `Bimplies | `Biff ->
 	      typing_error e#loc "unexpected operator in expression"
 	end
+    | JCNEbinary(e1, (#operational_op as op), e2) ->
+        make_bin_op e#loc op (fe e1) (fe e2)
     | JCNEunary(op, e1) ->
         make_unary_op e#loc op (fe e1)
     | JCNEapp(id, labs, args) -> 

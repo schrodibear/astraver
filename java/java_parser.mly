@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.46 2008-07-17 14:14:24 marche Exp $
+$Id: java_parser.mly,v 1.47 2008-07-21 14:29:29 marche Exp $
 
 */
 
@@ -138,6 +138,7 @@ $Id: java_parser.mly,v 1.46 2008-07-17 14:14:24 marche Exp $
 %token INVARIANT LOOP_INVARIANT DECREASES
 %token AXIOM LEMMA LOGIC TYPE PREDICATE READS
 %token BSFORALL BSEXISTS BSOLD BSAT BSRESULT BSNOTHING
+%token BSMAX_REAL
 %token NON_NULL NULLABLE
 
 /* Others symbols */
@@ -812,6 +813,8 @@ primary_no_new_array:
     { locate_expr (JPEold $3) }
 | BSAT LEFTPAR expr COMMA ident RIGHTPAR
     { locate_expr (JPEat($3,$5)) }
+| BSMAX_REAL  LEFTPAR expr COMMA expr RIGHTPAR
+    { locate_expr (JPEcall_name([loc_i 1,"\\max_real"],[$3;$5])) }
 ;
 
 array_access:

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.80 2008-02-20 14:34:26 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.81 2008-07-21 14:29:29 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -64,36 +64,58 @@ let defpred = Hashtbl.create 97
 
 (*s Pretty print *)
 
-let prefix id =
-  if id == t_lt then "<"
-  else if id == t_le then "<="
-  else if id == t_gt then ">"
-  else if id == t_ge then ">="
-  (* int cmp *)
-  else if id == t_lt_int then "<"
-  else if id == t_le_int then "<="
-  else if id == t_gt_int then ">"
-  else if id == t_ge_int then ">="
-  (* int ops *)
-  else if id == t_add_int then "+"
-  else if id == t_sub_int then "-"
-  else if id == t_mul_int then "*"
-  else if id == t_div_int then "int_div"
-  else if id == t_mod_int then "int_mod"
-  (* real ops *)
-  else if id == t_add_real then "add_real"
-  else if id == t_sub_real then "sub_real"
-  else if id == t_mul_real then "mul_real"
-  else if id == t_div_real then "div_real"
-  else if id == t_neg_real then "neg_real"
-  else if id == t_sqrt_real then "sqrt_real"
-  else if id == t_real_of_int then "real_of_int"
-  else if id == t_int_of_real then "int_of_real"
-  else if id == t_lt_real then "lt_real"
-  else if id == t_le_real then "le_real"
-  else if id == t_gt_real then "gt_real"
-  else if id == t_ge_real then "ge_real"
-  else (print_endline (Ident.string id); assert false)
+let prefix_table = ref Idmap.empty
+
+let () =
+  List.iter (fun (id,s) -> prefix_table := Idmap.add id s !prefix_table)
+    [ 
+      (* booleans ops *)
+      t_bool_and, "bool_and";
+      t_bool_or, "bool_or";
+      t_bool_xor, "bool_xor";
+      t_bool_not, "bool_not";
+      (* poly comps *)
+      t_lt, "<";
+      t_le, "<=";
+      t_gt, ">";
+      t_ge, ">=";
+      (* int cmp *)
+      t_lt_int, "<";
+      t_le_int, "<=";
+      t_gt_int, ">";
+      t_ge_int, ">=";
+      (* int ops *)
+      t_add_int, "+";
+      t_sub_int, "-";
+      t_mul_int, "*";
+      t_div_int, "int_div";
+      t_mod_int, "int_mod";
+      (* real ops *)
+      t_add_real, "real_add";
+      t_sub_real, "real_sub";
+      t_mul_real, "real_mul";
+      t_div_real, "real_div";
+      t_neg_real, "real_neg";
+      t_sqrt_real, "real_sqrt";
+      t_real_of_int, "real_of_int";
+      t_int_of_real, "int_of_real";
+      t_lt_real, "real_lt";
+      t_le_real, "real_le";
+      t_gt_real, "real_gt";
+      t_ge_real, "real_ge";
+      t_abs_real, "real_abs";
+      t_max_real, "real_max";
+      t_min_real, "real_min";
+      t_sqrt_real, "real_sqrt";
+    ]
+
+let is_prefix id = Idmap.mem id !prefix_table
+	
+let prefix id = 
+  try
+    Idmap.find id !prefix_table
+  with Not_found -> assert false
+
 
 let is_simplify_ident s =
   let is_simplify_char = function
@@ -152,7 +174,7 @@ let rec print_term fmt = function
 **)
   | Tapp (id, [t], _) when id == t_neg_int ->
       fprintf fmt "@[(- 0 %a)@]" print_term t
-  | Tapp (id, tl, _) when is_relation id || is_arith id ->
+  | Tapp (id, tl, _) when is_prefix id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, [], _) ->
       ident fmt id

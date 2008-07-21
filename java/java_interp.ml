@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.147 2008-07-17 14:14:23 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.148 2008-07-21 14:29:29 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1584,7 +1584,7 @@ let rec statement s =
                ())
             ()
       | JSstatement_spec(req,dec,behs,s) ->
-	  assert false (* TODO *)
+	    assert false (* TODO *)
 	    (* JCEcontract(Option_misc.map assertion req,
 		      Option_misc.map term dec,
 		      List.map behavior behs,
