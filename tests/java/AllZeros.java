@@ -36,7 +36,7 @@ class AllZeros {
 	/*@ loop_invariant 
 	  @  0 <= k <= t.length && 
 	  @  \forall integer i; 0 <= i < k ==> t[i] == 0;
-	  @ decreases t.length - k;
+	  @ loop_variant t.length - k;
 	  @*/
 	for (int k = 0; k < t.length; k++) 
 	    if (t[k] != 0) 

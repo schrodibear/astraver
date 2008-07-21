@@ -1,3 +1,50 @@
+========== file tests/java/AllZeros.java ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*  Copyright (C) 2002-2008                                               */
+/*    Romain BARDOU                                                       */
+/*    Jean-François COUCHOT                                               */
+/*    Mehdi DOGGUY                                                        */
+/*    Jean-Christophe FILLIÂTRE                                           */
+/*    Thierry HUBERT                                                      */
+/*    Claude MARCHÉ                                                       */
+/*    Yannick MOY                                                         */
+/*    Christine PAULIN                                                    */
+/*    Yann RÉGIS-GIANAS                                                   */
+/*    Nicolas ROUSSET                                                     */
+/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU General Public                   */
+/*  License version 2, as published by the Free Software Foundation.      */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/*  See the GNU General Public License version 2 for more details         */
+/*  (enclosed in the file GPL).                                           */
+/*                                                                        */
+/**************************************************************************/
+
+class AllZeros {
+
+    /*@ requires t != null;
+      @ ensures \result <==> \forall integer i; 0 <= i < t.length ==> t[i] == 0; 
+      @*/
+    static boolean all_zeros(int t[]) {
+	/*@ loop_invariant 
+	  @  0 <= k <= t.length && 
+	  @  \forall integer i; 0 <= i < k ==> t[i] == 0;
+	  @ loop_variant t.length - k;
+	  @*/
+	for (int k = 0; k < t.length; k++) 
+	    if (t[k] != 0) 
+		return false;
+	return true;
+    }
+}
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
@@ -134,8 +181,8 @@ end = 78
 [K_4]
 file = "HOME/tests/java/AllZeros.java"
 line = 39
-begin = 15
-end = 27
+begin = 18
+end = 30
 
 [K_5]
 file = "HOME/tests/java/AllZeros.java"
@@ -370,8 +417,8 @@ end = 78
 [K_4]
 file = "HOME/tests/java/AllZeros.java"
 line = 39
-begin = 15
-end = 27
+begin = 18
+end = 30
 
 [K_5]
 kind = IndexBounds
@@ -1104,11 +1151,11 @@ text = ""/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/AllZeros_po21.why">
-      <location file = "HOME/tests/java/AllZeros.java" line = "39" begin = "15" end = "27"/>
+      <location file = "HOME/tests/java/AllZeros.java" line = "39" begin = "18" end = "30"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/AllZeros_po22.why">
-      <location file = "HOME/tests/java/AllZeros.java" line = "39" begin = "15" end = "27"/>
+      <location file = "HOME/tests/java/AllZeros.java" line = "39" begin = "18" end = "30"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -3533,7 +3580,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 k0)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))))))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_11, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 39, characters 15-27
+;; AllZeros_all_zeros_safety_po_11, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 39, characters 18-30
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3569,7 +3616,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ k0 result2)
 (<= 0 (- (+ (offset_max Object_alloc_table t) 1) (integer_of_int32 k)))))))))))))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_12, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 39, characters 15-27
+;; AllZeros_all_zeros_safety_po_12, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 39, characters 18-30
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

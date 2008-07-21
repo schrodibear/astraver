@@ -55,7 +55,7 @@ public class Arrays {
         /*@ loop_invariant 
           @   1 <= i <= t.length && 0 <= r < t.length &&
           @   m == t[r] && (\forall integer j; 0 <= j < i ==> t[j] <= m);
-          @ decreases t.length-i;
+          @ loop_variant t.length-i;
           @*/
 	for (short i=1; i < t.length; i++) {
 	    if (t[i] > m) {
@@ -78,7 +78,7 @@ public class Arrays {
 	/*@ loop_invariant 
 	  @   1 <= i <= t.length && 0 <= r < t.length &&
           @   m == t[r] && is_max(t,r,i) ;
-	  @ decreases t.length-i;
+	  @ loop_variant t.length-i;
 	  @*/
 	for (int i=1; i < t.length; i++) {
 	    if (t[i] > m) {
@@ -101,7 +101,7 @@ public class Arrays {
 	  @     (0 <= j && 
           @     (\forall integer i; 0 <= i <= j ==> t[i] == \at(t[i],Pre)) &&
           @     (\forall integer i; j < i < t.length ==> t[i] == \at(t[i-1],Pre))));
-	  @ decreases j;
+	  @ loop_variant j;
 	  @*/
       for (int j = t.length-1 ; j > 0 ; j--) {
 	  t[j] = t[j-1];

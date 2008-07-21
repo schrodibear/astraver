@@ -21,6 +21,7 @@ case $1 in
         d=`dirname $1`
 	b=`basename $1 .java`
         f=$d/$b
+	mycat $f.java
 	echo "========== krakatoa execution =========="
 	rm -f $f.jc
 	rm -f $f.jloc

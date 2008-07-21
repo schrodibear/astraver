@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.47 2008-07-21 14:29:29 marche Exp $
+$Id: java_parser.mly,v 1.48 2008-07-21 15:31:27 marche Exp $
 
 */
 
@@ -134,11 +134,11 @@ $Id: java_parser.mly,v 1.47 2008-07-21 14:29:29 marche Exp $
 %token THROWS TRANSIENT TRUE VOID VOLATILE
 %token WHILE DO FOR IF SWITCH BREAK CONTINUE RETURN TRY SYNCHRONIZED THROW 
 
-%token REQUIRES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR ASSERT
-%token INVARIANT LOOP_INVARIANT DECREASES
+%token REQUIRES DECREASES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR ASSERT
+%token INVARIANT LOOP_INVARIANT LOOP_VARIANT 
 %token AXIOM LEMMA LOGIC TYPE PREDICATE READS
 %token BSFORALL BSEXISTS BSOLD BSAT BSRESULT BSNOTHING
-%token BSMAX_REAL
+%token BSREAL_MAX
 %token NON_NULL NULLABLE
 
 /* Others symbols */
@@ -813,8 +813,8 @@ primary_no_new_array:
     { locate_expr (JPEold $3) }
 | BSAT LEFTPAR expr COMMA ident RIGHTPAR
     { locate_expr (JPEat($3,$5)) }
-| BSMAX_REAL  LEFTPAR expr COMMA expr RIGHTPAR
-    { locate_expr (JPEcall_name([loc_i 1,"\\max_real"],[$3;$5])) }
+| BSREAL_MAX LEFTPAR expr COMMA expr RIGHTPAR
+    { locate_expr (JPEcall_name([loc_i 1,"\\real_max"],[$3;$5])) }
 ;
 
 array_access:
@@ -1089,7 +1089,7 @@ label_list_end:
 
 
 kml_field_decl:
-| requires decreases assigns ensures behaviors EOF
+| requires_opt decreases_opt assigns_opt ensures_opt behaviors EOF
     { JPFmethod_spec($1,$2,default_behavior $3 $4 $5) }
 | INVARIANT ident COLON expr SEMICOLON EOF
     { JPFinvariant($2,$4) } 
@@ -1110,14 +1110,14 @@ kml_modifier:
     { Nullable }
 ;
 
-requires:
+requires_opt:
 | /* $\varepsilon$ */
     { None }
 | REQUIRES expr SEMICOLON
     { Some $2 }
 ;
 
-ensures:
+ensures_opt:
 | /* $\varepsilon$ */
     { None }
 | ENSURES expr SEMICOLON
@@ -1132,12 +1132,12 @@ behaviors:
 ;
 
 behavior:
-| assumes assigns ENSURES expr SEMICOLON
+| assumes_opt assigns_opt ENSURES expr SEMICOLON
     { { java_pbehavior_assumes = $1;
 	java_pbehavior_assigns = $2;
 	java_pbehavior_throws = None;
 	java_pbehavior_ensures = $4 } }
-| assumes assigns SIGNALS LEFTPAR name ident_option RIGHTPAR expr SEMICOLON
+| assumes_opt assigns_opt SIGNALS LEFTPAR name ident_option RIGHTPAR expr SEMICOLON
     { { java_pbehavior_assumes = $1;
 	java_pbehavior_assigns = $2;
 	java_pbehavior_throws = Some($5,$6);
@@ -1153,7 +1153,7 @@ ident_option:
     { Some $1 }
 ;
  
-assumes:
+assumes_opt:
 | /* $\varepsilon$ */
     { None }
 | ASSUMES expr SEMICOLON
@@ -1161,7 +1161,7 @@ assumes:
 ;
 
 
-assigns:
+assigns_opt:
 | /* $\varepsilon$ */
     { None }
 | ASSIGNS BSNOTHING SEMICOLON
@@ -1170,10 +1170,17 @@ assigns:
     { Some (loc_i 2,$2) }
 ;
 
+decreases_opt:
+| /* $\varepsilon$ */
+    { None }
+| DECREASES expr SEMICOLON 
+    { Some $2 }
+
+
 kml_statement_annot:
-| LOOP_INVARIANT expr SEMICOLON decreases EOF
+| LOOP_INVARIANT expr SEMICOLON loop_variant_opt EOF
     { JPSloop_annot($2,$4) }
-| decreases EOF
+| loop_variant EOF
     { JPSloop_annot(locate_lit (Bool true),$1) }
 | ASSERT expr SEMICOLON EOF
     { JPSassert(None,$2) }
@@ -1183,16 +1190,21 @@ kml_statement_annot:
     { JPSghost_local_decls($2) }
 | GHOST expr SEMICOLON EOF
     { JPSghost_statement($2) }
-| requires /*decreases (conflict with loop decreases) */ 
-	assigns ensures behaviors EOF
-    { JPSstatement_spec($1,None,default_behavior $2 $3 $4) }
+| requires_opt decreases_opt assigns_opt ensures_opt behaviors EOF
+    { JPSstatement_spec($1,$2,default_behavior $3 $4 $5) }
 ;
 
-decreases:
+loop_variant_opt:
 | /* $\varepsilon$ */
     { None }
-| DECREASES expr SEMICOLON 
+| loop_variant
+    { $1 }
+;
+
+loop_variant:
+| LOOP_VARIANT expr SEMICOLON 
     { Some $2 }
+;
 
 
 /*

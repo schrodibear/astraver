@@ -1,4 +1,5 @@
 
+  o krakatoa: loop annotations: 'decreases' keyword replaced by 'loop_variant'
   o WP: universal quantification forall b:bool. P(b) no more turned
     into P(true) and P(false) when there is a possible size increasing
   o SMT-lib output: fixed bug with variants (when -split-user-conj

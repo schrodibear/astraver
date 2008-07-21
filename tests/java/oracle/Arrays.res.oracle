@@ -1,3 +1,124 @@
+========== file tests/java/Arrays.java ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*  Copyright (C) 2002-2008                                               */
+/*    Romain BARDOU                                                       */
+/*    Jean-François COUCHOT                                               */
+/*    Mehdi DOGGUY                                                        */
+/*    Jean-Christophe FILLIÂTRE                                           */
+/*    Thierry HUBERT                                                      */
+/*    Claude MARCHÉ                                                       */
+/*    Yannick MOY                                                         */
+/*    Christine PAULIN                                                    */
+/*    Yann RÉGIS-GIANAS                                                   */
+/*    Nicolas ROUSSET                                                     */
+/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU General Public                   */
+/*  License version 2, as published by the Free Software Foundation.      */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/*  See the GNU General Public License version 2 for more details         */
+/*  (enclosed in the file GPL).                                           */
+/*                                                                        */
+/**************************************************************************/
+
+
+//@+ CheckArithOverflow = no
+
+/* is_max(t,i,l) is true whenever t[i] is the maximum of t[0]..t[l-1]
+ * l is an integer and not an int, because used as t.length which 
+ * (in the logic) returns an integer and not an int 
+ */
+/*@ predicate is_max{L}(int[] t,int i,integer l) {
+  @   t != null && 0 <= i < l <= t.length &&
+  @   (\forall integer j; 0 <= j < l ==> t[j] <= t[i])
+  @ }
+  @*/
+
+public class Arrays {
+
+    /*@ requires t != null && 1 <= t.length <= 32767;
+      @ behavior max_found:
+      @   ensures 
+      @      0 <= \result < t.length && 
+      @      (\forall integer i; 
+      @           0 <= i < t.length ==> t[i] <= t[\result]);
+      @*/
+    public static short findMax(int[] t) {
+	int m = t[0];
+	short r = 0;
+        /*@ loop_invariant 
+          @   1 <= i <= t.length && 0 <= r < t.length &&
+          @   m == t[r] && (\forall integer j; 0 <= j < i ==> t[j] <= m);
+          @ loop_variant t.length-i;
+          @*/
+	for (short i=1; i < t.length; i++) {
+	    if (t[i] > m) {
+		r = i; 
+		m = t[i];
+	    }
+	}
+	return r;
+    }
+
+    /*@ requires t != null && t.length >= 1;
+      @ behavior max_found:
+      @  ensures 
+      @      0 <= \result < t.length && 
+      @      is_max(t,\result,t.length) ;
+      @*/
+    public static int findMax2(int[] t) {
+	int m = t[0];
+	int r = 0; 
+	/*@ loop_invariant 
+	  @   1 <= i <= t.length && 0 <= r < t.length &&
+          @   m == t[r] && is_max(t,r,i) ;
+	  @ loop_variant t.length-i;
+	  @*/
+	for (int i=1; i < t.length; i++) {
+	    if (t[i] > m) {
+		r = i; 
+		m = t[i];
+	    }
+	}
+	return r;
+    }
+
+
+    /*@ requires t != null ;
+      @ ensures 
+      @   \forall integer i; 0 < i < t.length ==> t[i] == \old(t[i-1]);
+      @*/
+    public static void arrayShift(int[] t) {
+	/*@ loop_invariant 
+	  @   j < t.length &&
+	  @   (t.length > 0 ==>
+	  @     (0 <= j && 
+          @     (\forall integer i; 0 <= i <= j ==> t[i] == \at(t[i],Pre)) &&
+          @     (\forall integer i; j < i < t.length ==> t[i] == \at(t[i-1],Pre))));
+	  @ loop_variant j;
+	  @*/
+      for (int j = t.length-1 ; j > 0 ; j--) {
+	  t[j] = t[j-1];
+	}
+    }
+
+
+}
+
+
+/*
+Local Variables: 
+compile-command: "make Arrays"
+End: 
+*/
+
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
@@ -247,8 +368,8 @@ end = 90
 [K_17]
 file = "HOME/tests/java/Arrays.java"
 line = 81
-begin = 15
-end = 25
+begin = 18
+end = 28
 
 [K_18]
 file = "HOME/tests/java/Arrays.java"
@@ -331,8 +452,8 @@ end = 70
 [K_4]
 file = "HOME/tests/java/Arrays.java"
 line = 58
-begin = 22
-end = 32
+begin = 25
+end = 35
 
 [K_28]
 file = "HOME/tests/java/Arrays.java"
@@ -385,8 +506,8 @@ end = 230
 [K_31]
 file = "HOME/tests/java/Arrays.java"
 line = 104
-begin = 15
-end = 16
+begin = 18
+end = 19
 
 [K_32]
 file = "HOME/tests/java/Arrays.java"
@@ -589,8 +710,8 @@ end = 90
 [K_17]
 file = "HOME/tests/java/Arrays.java"
 line = 81
-begin = 15
-end = 25
+begin = 18
+end = 28
 
 [K_18]
 kind = IndexBounds
@@ -717,8 +838,8 @@ end = 70
 [K_4]
 file = "HOME/tests/java/Arrays.java"
 line = 58
-begin = 22
-end = 32
+begin = 25
+end = 35
 
 [K_28]
 kind = UserCall
@@ -765,8 +886,8 @@ end = 230
 [K_31]
 file = "HOME/tests/java/Arrays.java"
 line = 104
-begin = 15
-end = 16
+begin = 18
+end = 19
 
 [K_33]
 kind = IndexBounds
@@ -1816,11 +1937,11 @@ text = ""/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po60.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "15" end = "25"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "18" end = "28"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po61.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "15" end = "25"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "18" end = "28"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po62.why">
@@ -1848,11 +1969,11 @@ text = ""/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po68.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "15" end = "25"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "18" end = "28"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po69.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "15" end = "25"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "18" end = "28"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2014,11 +2135,11 @@ text = ""/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po107.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "22" end = "32"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "25" end = "35"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po108.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "22" end = "32"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "25" end = "35"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po109.why">
@@ -2046,11 +2167,11 @@ text = ""/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po115.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "22" end = "32"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "25" end = "35"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po116.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "22" end = "32"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "25" end = "35"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2197,11 +2318,11 @@ text = ""/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po21.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "104" begin = "15" end = "16"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "104" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po22.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "104" begin = "15" end = "16"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "104" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -7784,7 +7905,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP1 (shift t_2 i_2))
 (select intM_intP (shift t_2 (- i_2 1)))))))))))))))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_13, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 104, characters 15-16
+;; Arrays_arrayShift_safety_po_13, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 104, characters 18-19
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7823,7 +7944,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result1 (select intM_intP1 (shift t_2 j_0)))
 (FORALL (j_0_0) (IMPLIES (EQ j_0_0 (- j_0 1)) (<= 0 j_0)))))))))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_14, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 104, characters 15-16
+;; Arrays_arrayShift_safety_po_14, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 104, characters 18-19
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8787,7 +8908,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (is_max intM_intP Object_alloc_table t_1 r0 i_3_0))))))))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_17, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 15-25
+;; Arrays_findMax2_safety_po_17, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8828,7 +8949,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= 0 (- (+ (offset_max Object_alloc_table t_1) 1) i_3)))))))))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_18, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 15-25
+;; Arrays_findMax2_safety_po_18, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9069,7 +9190,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (is_max intM_intP Object_alloc_table t_1 r i_3_0)))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_25, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 15-25
+;; Arrays_findMax2_safety_po_25, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9103,7 +9224,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= 0 (- (+ (offset_max Object_alloc_table t_1) 1) i_3))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_26, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 15-25
+;; Arrays_findMax2_safety_po_26, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10161,7 +10282,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 j_1) (< j_1 i_5_0))
 (<= (select intM_intP (shift t_0 j_1)) m_0_0))))))))))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_17, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 22-32
+;; Arrays_findMax_safety_po_17, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10205,7 +10326,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= 0 (- (+ (offset_max Object_alloc_table t_0) 1) i_5)))))))))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_18, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 22-32
+;; Arrays_findMax_safety_po_18, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10469,7 +10590,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 j_1) (< j_1 i_5_0))
 (<= (select intM_intP (shift t_0 j_1)) m_0)))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_25, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 22-32
+;; Arrays_findMax_safety_po_25, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10506,7 +10627,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= 0 (- (+ (offset_max Object_alloc_table t_0) 1) i_5))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_26, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 22-32
+;; Arrays_findMax_safety_po_26, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

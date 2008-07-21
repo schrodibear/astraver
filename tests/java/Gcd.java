@@ -101,7 +101,7 @@ class Gcd {
 	  @        \at(isGcd(x,y,d),Pre)) && 
           @    a*\at(x,Pre)+b*\at(y,Pre) == x && 
           @    c*\at(x,Pre)+d*\at(y,Pre) == y ;
-          @ decreases y;
+          @ loop_variant y;
           @*/
         while (y > 0) {
             int r = x % y;

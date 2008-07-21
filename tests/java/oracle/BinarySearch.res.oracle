@@ -1,7 +1,88 @@
+========== file tests/java/BinarySearch.java ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*  Copyright (C) 2002-2008                                               */
+/*    Romain BARDOU                                                       */
+/*    Jean-François COUCHOT                                               */
+/*    Mehdi DOGGUY                                                        */
+/*    Jean-Christophe FILLIÂTRE                                           */
+/*    Thierry HUBERT                                                      */
+/*    Claude MARCHÉ                                                       */
+/*    Yannick MOY                                                         */
+/*    Christine PAULIN                                                    */
+/*    Yann RÉGIS-GIANAS                                                   */
+/*    Nicolas ROUSSET                                                     */
+/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU General Public                   */
+/*  License version 2, as published by the Free Software Foundation.      */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/*  See the GNU General Public License version 2 for more details         */
+/*  (enclosed in the file GPL).                                           */
+/*                                                                        */
+/**************************************************************************/
+
+//@+ CheckArithOverflow = yes
+
+/*@ lemma mean_property : 
+  @   \forall integer x y; x <= y ==> x <= x+(y-x)/2 <= y; 
+  @*/
+
+/*@ predicate is_sorted{L}(int[] t) {
+  @   t != null && 
+  @   \forall integer i j; 
+  @     0 <= i && i <= j && j < t.length ==> t[i] <= t[j]
+  @ }
+  @*/
+
+
+class BinarySearch {
+
+    /* binary_search(t,v) search for element v in array t 
+       between index 0 and t.length-1
+       array t is assumed to be sorted in increasing order
+       returns an index i between 0 and t.length-1 where t[i] equals v, 
+       or -1 if no element in t is equal to v  
+    */
+    
+    /*@ requires 
+      @   t != null &&
+      @   \forall integer k1 k2; 
+      @       0 <= k1 <= k2 <= t.length-1 ==> t[k1] <= t[k2];
+      @ behavior correctness:
+      @ ensures
+      @   (\result >= 0 && t[\result] == v) ||
+      @   (\result == -1 && \forall integer k; 0 <= k < t.length ==> t[k] != v);
+      @*/
+    static int binary_search(int t[], int v) {
+	int l = 0, u = t.length - 1;
+	/*@ loop_invariant 
+	  @   0 <= l && u <= t.length - 1 && 
+	  @   \forall integer k; 0 <= k < t.length ==> t[k] == v ==> l <= k <= u;
+	  @ loop_variant 
+	  @   u-l ;
+	  @*/
+	while (l <= u ) {
+	    int m = l + (u - l) / 2;
+	    if (t[m] < v) l = m + 1;
+	    else if (t[m] > v) u = m - 1;
+	    else return m; 
+	}
+	return -1;
+    }
+
+}
+    
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
-Generating JC function BinarySearch_binary_search2 for method BinarySearch.binary_search2
+Generating JC function BinarySearch_binary_search for method BinarySearch.binary_search
 Generating JC function cons_BinarySearch for constructor BinarySearch
 Done.
 ========== file tests/java/BinarySearch.jc ==========
@@ -80,7 +161,7 @@ lemma mean_property{Here} :
   (\forall integer y;
     ((x <= y) ==> ((x <= (x + ((y - x) / 2))) && ((x + ((y - x) / 2)) <= y)))))
 
-int32 BinarySearch_binary_search2(intM[0..] t_0, int32 v)
+int32 BinarySearch_binary_search(intM[0..] t_0, int32 v)
   requires (K_18 : (Non_null_intM(t_0) &&
                      (\forall integer k1;
                        (\forall integer k2;
@@ -148,13 +229,6 @@ file = "HOME/tests/java/BinarySearch.java"
 line = 71
 begin = 18
 end = 23
-
-[BinarySearch_binary_search2]
-name = "Method binary_search2"
-file = "HOME/tests/java/BinarySearch.java"
-line = 62
-begin = 15
-end = 29
 
 [K_11]
 file = "HOME/tests/java/BinarySearch.java"
@@ -265,8 +339,15 @@ line = 0
 begin = -1
 end = -1
 
+[BinarySearch_binary_search]
+name = "Method binary_search"
+file = "HOME/tests/java/BinarySearch.java"
+line = 62
+begin = 15
+end = 28
+
 ========== jessie execution ==========
-Generating Why function BinarySearch_binary_search2
+Generating Why function BinarySearch_binary_search
 ========== file tests/java/BinarySearch.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -414,14 +495,6 @@ line = 63
 begin = 16
 end = 28
 
-[BinarySearch_binary_search2_safety]
-name = "Method binary_search2"
-behavior = "Safety"
-file = "HOME/tests/java/BinarySearch.java"
-line = 62
-begin = 15
-end = 29
-
 [K_18]
 file = "HOME/tests/java/BinarySearch.java"
 line = 54
@@ -562,7 +635,7 @@ end = -1
 file = "HOME/tests/java/BinarySearch.java"
 line = 62
 begin = 15
-end = 29
+end = 28
 
 [JC_16]
 file = "HOME/"
@@ -622,13 +695,21 @@ line = 0
 begin = -1
 end = -1
 
-[BinarySearch_binary_search2_ensures_correctness]
-name = "Method binary_search2"
+[BinarySearch_binary_search_ensures_correctness]
+name = "Method binary_search"
 behavior = "Normal behavior `correctness'"
 file = "HOME/tests/java/BinarySearch.java"
 line = 62
 begin = 15
-end = 29
+end = 28
+
+[BinarySearch_binary_search_safety]
+name = "Method binary_search"
+behavior = "Safety"
+file = "HOME/tests/java/BinarySearch.java"
+line = 62
+begin = 15
+end = 28
 
 ========== file tests/java/why/BinarySearch.why ==========
 type Object
@@ -870,7 +951,7 @@ parameter intM_intP : (Object, int32) memory ref
 
 parameter Object_tag_table : Object tag_table ref
 
-parameter BinarySearch_binary_search2 :
+parameter BinarySearch_binary_search :
  t_0:Object pointer ->
   v:int32 ->
    { (K_18:
@@ -1106,7 +1187,7 @@ parameter short_of_integer_ :
   { (le_int((-32768), x) and le_int(x, (32767)))} short
   { eq_int(integer_of_short(result), x) }
 
-let BinarySearch_binary_search2_ensures_correctness =
+let BinarySearch_binary_search_ensures_correctness =
  fun (t_0 : Object pointer) (v : int32) ->
   { (K_18:
     (Non_null_intM(Object_alloc_table, t_0)
@@ -1215,7 +1296,7 @@ let BinarySearch_binary_search2_ensures_correctness =
              neq_int(integer_of_int32(select(intM_intP, shift(t_0, k))),
              integer_of_int32(v))))))) }
 
-let BinarySearch_binary_search2_safety =
+let BinarySearch_binary_search_safety =
  fun (t_0 : Object pointer) (v : int32) ->
   { (K_18:
     (Non_null_intM(Object_alloc_table, t_0)
@@ -1338,7 +1419,7 @@ why --project [...] why/BinarySearch.why
   <function name="goal mean_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="Method binary_search2">
+  <function name="Method binary_search">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po16.why">
@@ -2345,7 +2426,7 @@ goal mean_property:
        ((x_4 <= (x_4 + ((y - x_4) / 2))) and ((x_4 + ((y - x_4) / 2)) <= y)))))
 
 ========== file tests/java/why/BinarySearch_po10.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_9:
+goal BinarySearch_binary_search_ensures_correctness_po_9:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -2405,7 +2486,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_9:
   ("K_2": (k_0 <= integer_of_int32(u)))
 
 ========== file tests/java/why/BinarySearch_po11.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_10:
+goal BinarySearch_binary_search_ensures_correctness_po_10:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -2465,7 +2546,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_10:
   t_0) + 1) - 1)))
 
 ========== file tests/java/why/BinarySearch_po12.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_11:
+goal BinarySearch_binary_search_ensures_correctness_po_11:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -2528,7 +2609,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_11:
   ("K_2": (integer_of_int32(l) <= k_0))
 
 ========== file tests/java/why/BinarySearch_po13.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_12:
+goal BinarySearch_binary_search_ensures_correctness_po_12:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -2591,7 +2672,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_12:
   ("K_2": (k_0 <= integer_of_int32(u0)))
 
 ========== file tests/java/why/BinarySearch_po14.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_13:
+goal BinarySearch_binary_search_ensures_correctness_po_13:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -2655,7 +2736,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_13:
        k))) <> integer_of_int32(v)))))))
 
 ========== file tests/java/why/BinarySearch_po15.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_14:
+goal BinarySearch_binary_search_ensures_correctness_po_14:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -2706,7 +2787,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_14:
        k))) <> integer_of_int32(v)))))))
 
 ========== file tests/java/why/BinarySearch_po16.why ==========
-goal BinarySearch_binary_search2_safety_po_1:
+goal BinarySearch_binary_search_safety_po_1:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -2725,7 +2806,7 @@ goal BinarySearch_binary_search2_safety_po_1:
   (offset_max(Object_alloc_table, t_0) >= (-1))
 
 ========== file tests/java/why/BinarySearch_po17.why ==========
-goal BinarySearch_binary_search2_safety_po_2:
+goal BinarySearch_binary_search_safety_po_2:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -2751,7 +2832,7 @@ goal BinarySearch_binary_search2_safety_po_2:
   ((-2147483648) <= (result0 - 1))
 
 ========== file tests/java/why/BinarySearch_po18.why ==========
-goal BinarySearch_binary_search2_safety_po_3:
+goal BinarySearch_binary_search_safety_po_3:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -2777,7 +2858,7 @@ goal BinarySearch_binary_search2_safety_po_3:
   ((result0 - 1) <= 2147483647)
 
 ========== file tests/java/why/BinarySearch_po19.why ==========
-goal BinarySearch_binary_search2_safety_po_4:
+goal BinarySearch_binary_search_safety_po_4:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -2806,7 +2887,7 @@ goal BinarySearch_binary_search2_safety_po_4:
   ("K_2": (0 <= integer_of_int32(result)))
 
 ========== file tests/java/why/BinarySearch_po2.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_1:
+goal BinarySearch_binary_search_ensures_correctness_po_1:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -2833,7 +2914,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_1:
   ("K_2": (0 <= integer_of_int32(result)))
 
 ========== file tests/java/why/BinarySearch_po20.why ==========
-goal BinarySearch_binary_search2_safety_po_5:
+goal BinarySearch_binary_search_safety_po_5:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -2863,7 +2944,7 @@ goal BinarySearch_binary_search2_safety_po_5:
   t_0) + 1) - 1)))
 
 ========== file tests/java/why/BinarySearch_po21.why ==========
-goal BinarySearch_binary_search2_safety_po_6:
+goal BinarySearch_binary_search_safety_po_6:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -2897,7 +2978,7 @@ goal BinarySearch_binary_search2_safety_po_6:
   ("K_2": (integer_of_int32(result) <= k_0))
 
 ========== file tests/java/why/BinarySearch_po22.why ==========
-goal BinarySearch_binary_search2_safety_po_7:
+goal BinarySearch_binary_search_safety_po_7:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -2931,7 +3012,7 @@ goal BinarySearch_binary_search2_safety_po_7:
   ("K_2": (k_0 <= integer_of_int32(result1)))
 
 ========== file tests/java/why/BinarySearch_po23.why ==========
-goal BinarySearch_binary_search2_safety_po_8:
+goal BinarySearch_binary_search_safety_po_8:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -2973,7 +3054,7 @@ goal BinarySearch_binary_search2_safety_po_8:
   ((-2147483648) <= (integer_of_int32(u) - integer_of_int32(l)))
 
 ========== file tests/java/why/BinarySearch_po24.why ==========
-goal BinarySearch_binary_search2_safety_po_9:
+goal BinarySearch_binary_search_safety_po_9:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3015,7 +3096,7 @@ goal BinarySearch_binary_search2_safety_po_9:
   ((integer_of_int32(u) - integer_of_int32(l)) <= 2147483647)
 
 ========== file tests/java/why/BinarySearch_po25.why ==========
-goal BinarySearch_binary_search2_safety_po_10:
+goal BinarySearch_binary_search_safety_po_10:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3061,7 +3142,7 @@ goal BinarySearch_binary_search2_safety_po_10:
   (2 <> 0)
 
 ========== file tests/java/why/BinarySearch_po26.why ==========
-goal BinarySearch_binary_search2_safety_po_11:
+goal BinarySearch_binary_search_safety_po_11:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3110,7 +3191,7 @@ goal BinarySearch_binary_search2_safety_po_11:
   ((-2147483648) <= result3)
 
 ========== file tests/java/why/BinarySearch_po27.why ==========
-goal BinarySearch_binary_search2_safety_po_12:
+goal BinarySearch_binary_search_safety_po_12:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3159,7 +3240,7 @@ goal BinarySearch_binary_search2_safety_po_12:
   (result3 <= 2147483647)
 
 ========== file tests/java/why/BinarySearch_po28.why ==========
-goal BinarySearch_binary_search2_safety_po_13:
+goal BinarySearch_binary_search_safety_po_13:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3211,7 +3292,7 @@ goal BinarySearch_binary_search2_safety_po_13:
   ((-2147483648) <= (integer_of_int32(l) + integer_of_int32(result4)))
 
 ========== file tests/java/why/BinarySearch_po29.why ==========
-goal BinarySearch_binary_search2_safety_po_14:
+goal BinarySearch_binary_search_safety_po_14:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3263,7 +3344,7 @@ goal BinarySearch_binary_search2_safety_po_14:
   ((integer_of_int32(l) + integer_of_int32(result4)) <= 2147483647)
 
 ========== file tests/java/why/BinarySearch_po3.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_2:
+goal BinarySearch_binary_search_ensures_correctness_po_2:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -3291,7 +3372,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_2:
   t_0) + 1) - 1)))
 
 ========== file tests/java/why/BinarySearch_po30.why ==========
-goal BinarySearch_binary_search2_safety_po_15:
+goal BinarySearch_binary_search_safety_po_15:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3347,7 +3428,7 @@ goal BinarySearch_binary_search2_safety_po_15:
   (0 <= integer_of_int32(result5))
 
 ========== file tests/java/why/BinarySearch_po31.why ==========
-goal BinarySearch_binary_search2_safety_po_16:
+goal BinarySearch_binary_search_safety_po_16:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3403,7 +3484,7 @@ goal BinarySearch_binary_search2_safety_po_16:
   (integer_of_int32(result5) <= offset_max(Object_alloc_table, t_0))
 
 ========== file tests/java/why/BinarySearch_po32.why ==========
-goal BinarySearch_binary_search2_safety_po_17:
+goal BinarySearch_binary_search_safety_po_17:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3464,7 +3545,7 @@ goal BinarySearch_binary_search2_safety_po_17:
   ((-2147483648) <= (integer_of_int32(result5) + 1))
 
 ========== file tests/java/why/BinarySearch_po33.why ==========
-goal BinarySearch_binary_search2_safety_po_18:
+goal BinarySearch_binary_search_safety_po_18:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3525,7 +3606,7 @@ goal BinarySearch_binary_search2_safety_po_18:
   ((integer_of_int32(result5) + 1) <= 2147483647)
 
 ========== file tests/java/why/BinarySearch_po34.why ==========
-goal BinarySearch_binary_search2_safety_po_19:
+goal BinarySearch_binary_search_safety_po_19:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3592,7 +3673,7 @@ goal BinarySearch_binary_search2_safety_po_19:
   ("K_2": (0 <= integer_of_int32(l0)))
 
 ========== file tests/java/why/BinarySearch_po35.why ==========
-goal BinarySearch_binary_search2_safety_po_20:
+goal BinarySearch_binary_search_safety_po_20:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3660,7 +3741,7 @@ goal BinarySearch_binary_search2_safety_po_20:
   t_0) + 1) - 1)))
 
 ========== file tests/java/why/BinarySearch_po36.why ==========
-goal BinarySearch_binary_search2_safety_po_21:
+goal BinarySearch_binary_search_safety_po_21:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3731,7 +3812,7 @@ goal BinarySearch_binary_search2_safety_po_21:
   ("K_2": (integer_of_int32(l0) <= k_0))
 
 ========== file tests/java/why/BinarySearch_po37.why ==========
-goal BinarySearch_binary_search2_safety_po_22:
+goal BinarySearch_binary_search_safety_po_22:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3802,7 +3883,7 @@ goal BinarySearch_binary_search2_safety_po_22:
   ("K_2": (k_0 <= integer_of_int32(u)))
 
 ========== file tests/java/why/BinarySearch_po38.why ==========
-goal BinarySearch_binary_search2_safety_po_23:
+goal BinarySearch_binary_search_safety_po_23:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3869,7 +3950,7 @@ goal BinarySearch_binary_search2_safety_po_23:
   (0 <= ("K_3": (integer_of_int32(u) - integer_of_int32(l))))
 
 ========== file tests/java/why/BinarySearch_po39.why ==========
-goal BinarySearch_binary_search2_safety_po_24:
+goal BinarySearch_binary_search_safety_po_24:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3937,7 +4018,7 @@ goal BinarySearch_binary_search2_safety_po_24:
                                                            (integer_of_int32(u) - integer_of_int32(l))))
 
 ========== file tests/java/why/BinarySearch_po4.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_3:
+goal BinarySearch_binary_search_ensures_correctness_po_3:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -3969,7 +4050,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_3:
   ("K_2": (integer_of_int32(result) <= k_0))
 
 ========== file tests/java/why/BinarySearch_po40.why ==========
-goal BinarySearch_binary_search2_safety_po_25:
+goal BinarySearch_binary_search_safety_po_25:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4035,7 +4116,7 @@ goal BinarySearch_binary_search2_safety_po_25:
   ((-2147483648) <= (integer_of_int32(result5) - 1))
 
 ========== file tests/java/why/BinarySearch_po41.why ==========
-goal BinarySearch_binary_search2_safety_po_26:
+goal BinarySearch_binary_search_safety_po_26:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4101,7 +4182,7 @@ goal BinarySearch_binary_search2_safety_po_26:
   ((integer_of_int32(result5) - 1) <= 2147483647)
 
 ========== file tests/java/why/BinarySearch_po42.why ==========
-goal BinarySearch_binary_search2_safety_po_27:
+goal BinarySearch_binary_search_safety_po_27:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4174,7 +4255,7 @@ goal BinarySearch_binary_search2_safety_po_27:
   t_0) + 1) - 1)))
 
 ========== file tests/java/why/BinarySearch_po43.why ==========
-goal BinarySearch_binary_search2_safety_po_28:
+goal BinarySearch_binary_search_safety_po_28:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4250,7 +4331,7 @@ goal BinarySearch_binary_search2_safety_po_28:
   ("K_2": (integer_of_int32(l) <= k_0))
 
 ========== file tests/java/why/BinarySearch_po44.why ==========
-goal BinarySearch_binary_search2_safety_po_29:
+goal BinarySearch_binary_search_safety_po_29:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4326,7 +4407,7 @@ goal BinarySearch_binary_search2_safety_po_29:
   ("K_2": (k_0 <= integer_of_int32(u0)))
 
 ========== file tests/java/why/BinarySearch_po45.why ==========
-goal BinarySearch_binary_search2_safety_po_30:
+goal BinarySearch_binary_search_safety_po_30:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4398,7 +4479,7 @@ goal BinarySearch_binary_search2_safety_po_30:
   (0 <= ("K_3": (integer_of_int32(u) - integer_of_int32(l))))
 
 ========== file tests/java/why/BinarySearch_po46.why ==========
-goal BinarySearch_binary_search2_safety_po_31:
+goal BinarySearch_binary_search_safety_po_31:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4471,7 +4552,7 @@ goal BinarySearch_binary_search2_safety_po_31:
                                                            (integer_of_int32(u) - integer_of_int32(l))))
 
 ========== file tests/java/why/BinarySearch_po5.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_4:
+goal BinarySearch_binary_search_ensures_correctness_po_4:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4503,7 +4584,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_4:
   ("K_2": (k_0 <= integer_of_int32(result1)))
 
 ========== file tests/java/why/BinarySearch_po6.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_5:
+goal BinarySearch_binary_search_ensures_correctness_po_5:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4545,7 +4626,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_5:
   (2 <> 0)
 
 ========== file tests/java/why/BinarySearch_po7.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_6:
+goal BinarySearch_binary_search_ensures_correctness_po_6:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4601,7 +4682,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_6:
   ("K_2": (0 <= integer_of_int32(l0)))
 
 ========== file tests/java/why/BinarySearch_po8.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_7:
+goal BinarySearch_binary_search_ensures_correctness_po_7:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -4658,7 +4739,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_7:
   t_0) + 1) - 1)))
 
 ========== file tests/java/why/BinarySearch_po9.why ==========
-goal BinarySearch_binary_search2_ensures_correctness_po_8:
+goal BinarySearch_binary_search_ensures_correctness_po_8:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -5287,7 +5368,7 @@ why -simplify [...] why/BinarySearch.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_1, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_1, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -5314,7 +5395,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result1) (- result0 1))
 (<= 0 (integer_of_int32 result)))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_2, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_2, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -5341,7 +5422,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result1) (- result0 1))
 (<= (integer_of_int32 result1) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_3, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_3, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5373,7 +5454,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 result) k_0))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_4, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_4, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5405,7 +5486,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 result1)))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_5, File "/home/cmarche/recherche/why/tests/java/BinarySearch.jc", line 110, characters 54-140
+;; BinarySearch_binary_search_ensures_correctness_po_5, File "/home/cmarche/recherche/why/tests/java/BinarySearch.jc", line 110, characters 54-140
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5449,7 +5530,7 @@ why -simplify [...] why/BinarySearch.why
          (- (integer_of_int32 u) (integer_of_int32 l)))
 (NEQ 2 0)))))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_6, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_6, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5507,7 +5588,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result7) (+ (integer_of_int32 result5) 1))
 (FORALL (l0) (IMPLIES (EQ l0 result7) (<= 0 (integer_of_int32 l0))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_7, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_7, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5567,7 +5648,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ l0 result7)
 (<= (integer_of_int32 u) (- (+ (offset_max Object_alloc_table t_0) 1) 1))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_8, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_8, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5631,7 +5712,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 l0) k_0))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_9, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_9, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5695,7 +5776,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 u)))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_10, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_10, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5759,7 +5840,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ u0 result8)
 (<= (integer_of_int32 u0) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_11, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_11, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5827,7 +5908,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 l) k_0)))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_12, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_correctness_po_12, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5895,7 +5976,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 u0))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_13, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 59, characters 10-126
+;; BinarySearch_binary_search_ensures_correctness_po_13, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 59, characters 10-126
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -5966,7 +6047,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
 (integer_of_int32 v)))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_ensures_correctness_po_14, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 59, characters 10-126
+;; BinarySearch_binary_search_ensures_correctness_po_14, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 59, characters 10-126
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6020,7 +6101,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
 (integer_of_int32 v))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_1, File "why/BinarySearch.why", line 606, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 606, characters 49-208
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -6039,7 +6120,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (>= (offset_max Object_alloc_table t_0) (- 0 1))))))))
 
-;; BinarySearch_binary_search2_safety_po_2, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 63, characters 16-28
+;; BinarySearch_binary_search_safety_po_2, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 63, characters 16-28
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -6065,7 +6146,7 @@ why -simplify [...] why/BinarySearch.why
          (EQ |@true| |@true|))))
 (<= (- 0 constant_too_large_2147483648) (- result0 1))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_3, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 63, characters 16-28
+;; BinarySearch_binary_search_safety_po_3, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 63, characters 16-28
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -6091,7 +6172,7 @@ why -simplify [...] why/BinarySearch.why
          (EQ |@true| |@true|))))
 (<= (- result0 1) constant_too_large_2147483647)))))))))))
 
-;; BinarySearch_binary_search2_safety_po_4, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_4, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -6121,7 +6202,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result1) (- result0 1))
 (<= 0 (integer_of_int32 result)))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_5, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_5, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -6151,7 +6232,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result1) (- result0 1))
 (<= (integer_of_int32 result1) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_6, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_6, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6186,7 +6267,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 result) k_0))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_7, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_7, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6221,7 +6302,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 result1)))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_8, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 18-23
+;; BinarySearch_binary_search_safety_po_8, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 18-23
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6266,7 +6347,7 @@ why -simplify [...] why/BinarySearch.why
 (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 u) (integer_of_int32
                                                                 l)))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_9, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 18-23
+;; BinarySearch_binary_search_safety_po_9, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 18-23
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6310,7 +6391,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (<= (integer_of_int32 l) (integer_of_int32 u))
 (<= (- (integer_of_int32 u) (integer_of_int32 l)) constant_too_large_2147483647)))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_10, File "/home/cmarche/recherche/why/tests/java/BinarySearch.jc", line 110, characters 54-140
+;; BinarySearch_binary_search_safety_po_10, File "/home/cmarche/recherche/why/tests/java/BinarySearch.jc", line 110, characters 54-140
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6361,7 +6442,7 @@ why -simplify [...] why/BinarySearch.why
          (- (integer_of_int32 u) (integer_of_int32 l)))
 (NEQ 2 0))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_11, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 17-28
+;; BinarySearch_binary_search_safety_po_11, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 17-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6415,7 +6496,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ result3 (int_div (integer_of_int32 result2) 2))
 (<= (- 0 constant_too_large_2147483648) result3)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_12, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 17-28
+;; BinarySearch_binary_search_safety_po_12, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 17-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6469,7 +6550,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ result3 (int_div (integer_of_int32 result2) 2))
 (<= result3 constant_too_large_2147483647)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_13, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 13-28
+;; BinarySearch_binary_search_safety_po_13, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 13-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6528,7 +6609,7 @@ why -simplify [...] why/BinarySearch.why
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l) (integer_of_int32
                                                                 result4))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_14, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 13-28
+;; BinarySearch_binary_search_safety_po_14, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 13-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6586,7 +6667,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result4) result3)
 (<= (+ (integer_of_int32 l) (integer_of_int32 result4)) constant_too_large_2147483647))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_15, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 9-13
+;; BinarySearch_binary_search_safety_po_15, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 9-13
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6651,7 +6732,7 @@ why -simplify [...] why/BinarySearch.why
          (+ (integer_of_int32 l) (integer_of_int32 result4)))
 (<= 0 (integer_of_int32 result5))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_16, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 9-13
+;; BinarySearch_binary_search_safety_po_16, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 9-13
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6716,7 +6797,7 @@ why -simplify [...] why/BinarySearch.why
          (+ (integer_of_int32 l) (integer_of_int32 result4)))
 (<= (integer_of_int32 result5) (offset_max Object_alloc_table t_0))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_17, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 23-28
+;; BinarySearch_binary_search_safety_po_17, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 23-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6787,7 +6868,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (< (integer_of_int32 result6) (integer_of_int32 v))
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result5) 1))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_18, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 23-28
+;; BinarySearch_binary_search_safety_po_18, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 23-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6858,7 +6939,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (< (integer_of_int32 result6) (integer_of_int32 v))
 (<= (+ (integer_of_int32 result5) 1) constant_too_large_2147483647)))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_19, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_19, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6935,7 +7016,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result7) (+ (integer_of_int32 result5) 1))
 (FORALL (l0) (IMPLIES (EQ l0 result7) (<= 0 (integer_of_int32 l0)))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_20, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_20, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7014,7 +7095,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ l0 result7)
 (<= (integer_of_int32 u) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_21, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_21, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7097,7 +7178,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 l0) k_0)))))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_22, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_22, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7180,7 +7261,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 u))))))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_23, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
+;; BinarySearch_binary_search_safety_po_23, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7259,7 +7340,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ l0 result7)
 (<= 0 (- (integer_of_int32 u) (integer_of_int32 l))))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_24, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
+;; BinarySearch_binary_search_safety_po_24, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7339,7 +7420,7 @@ why -simplify [...] why/BinarySearch.why
 (< (- (integer_of_int32 u) (integer_of_int32 l0)) (- (integer_of_int32 u) 
                                                   (integer_of_int32 l))))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_25, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 73, characters 28-33
+;; BinarySearch_binary_search_safety_po_25, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 73, characters 28-33
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7416,7 +7497,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (> (integer_of_int32 result7) (integer_of_int32 v))
 (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 result5) 1))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_26, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 73, characters 28-33
+;; BinarySearch_binary_search_safety_po_26, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 73, characters 28-33
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7493,7 +7574,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (> (integer_of_int32 result7) (integer_of_int32 v))
 (<= (- (integer_of_int32 result5) 1) constant_too_large_2147483647)))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_27, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_27, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7578,7 +7659,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ u0 result8)
 (<= (integer_of_int32 u0) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_28, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_28, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7667,7 +7748,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 l) k_0)))))))))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_29, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_safety_po_29, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7756,7 +7837,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 u0))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_30, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
+;; BinarySearch_binary_search_safety_po_30, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -7841,7 +7922,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ u0 result8)
 (<= 0 (- (integer_of_int32 u) (integer_of_int32 l))))))))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search2_safety_po_31, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
+;; BinarySearch_binary_search_safety_po_31, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -8740,7 +8821,7 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_1:
+goal BinarySearch_binary_search_ensures_correctness_po_1:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -8766,7 +8847,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_1:
   (integer_of_int32(result1) = (result0 - 1)) ->
   ("K_2": (0 <= integer_of_int32(result)))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_2:
+goal BinarySearch_binary_search_ensures_correctness_po_2:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -8793,7 +8874,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_2:
   ("K_2": (integer_of_int32(result1) <= ((offset_max(Object_alloc_table,
   t_0) + 1) - 1)))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_3:
+goal BinarySearch_binary_search_ensures_correctness_po_3:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -8824,7 +8905,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_3:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (integer_of_int32(result) <= k_0))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_4:
+goal BinarySearch_binary_search_ensures_correctness_po_4:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -8855,7 +8936,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_4:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (k_0 <= integer_of_int32(result1)))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_5:
+goal BinarySearch_binary_search_ensures_correctness_po_5:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -8896,7 +8977,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_5:
   (integer_of_int32(result2) = (integer_of_int32(u) - integer_of_int32(l))) ->
   (2 <> 0)
 
-goal BinarySearch_binary_search2_ensures_correctness_po_6:
+goal BinarySearch_binary_search_ensures_correctness_po_6:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -8951,7 +9032,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_6:
   (l0 = result7) ->
   ("K_2": (0 <= integer_of_int32(l0)))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_7:
+goal BinarySearch_binary_search_ensures_correctness_po_7:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9007,7 +9088,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_7:
   ("K_2": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
   t_0) + 1) - 1)))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_8:
+goal BinarySearch_binary_search_ensures_correctness_po_8:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9066,7 +9147,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_8:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (integer_of_int32(l0) <= k_0))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_9:
+goal BinarySearch_binary_search_ensures_correctness_po_9:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9125,7 +9206,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_9:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (k_0 <= integer_of_int32(u)))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_10:
+goal BinarySearch_binary_search_ensures_correctness_po_10:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9184,7 +9265,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_10:
   ("K_2": (integer_of_int32(u0) <= ((offset_max(Object_alloc_table,
   t_0) + 1) - 1)))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_11:
+goal BinarySearch_binary_search_ensures_correctness_po_11:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9246,7 +9327,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_11:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (integer_of_int32(l) <= k_0))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_12:
+goal BinarySearch_binary_search_ensures_correctness_po_12:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9308,7 +9389,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_12:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (k_0 <= integer_of_int32(u0)))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_13:
+goal BinarySearch_binary_search_ensures_correctness_po_13:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9371,7 +9452,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_13:
        (integer_of_int32(select(intM_intP, shift(t_0,
        k))) <> integer_of_int32(v)))))))
 
-goal BinarySearch_binary_search2_ensures_correctness_po_14:
+goal BinarySearch_binary_search_ensures_correctness_po_14:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9421,7 +9502,7 @@ goal BinarySearch_binary_search2_ensures_correctness_po_14:
        (integer_of_int32(select(intM_intP, shift(t_0,
        k))) <> integer_of_int32(v)))))))
 
-goal BinarySearch_binary_search2_safety_po_1:
+goal BinarySearch_binary_search_safety_po_1:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -9439,7 +9520,7 @@ goal BinarySearch_binary_search2_safety_po_1:
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1))
 
-goal BinarySearch_binary_search2_safety_po_2:
+goal BinarySearch_binary_search_safety_po_2:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -9464,7 +9545,7 @@ goal BinarySearch_binary_search2_safety_po_2:
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
   ((-2147483648) <= (result0 - 1))
 
-goal BinarySearch_binary_search2_safety_po_3:
+goal BinarySearch_binary_search_safety_po_3:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -9489,7 +9570,7 @@ goal BinarySearch_binary_search2_safety_po_3:
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
   ((result0 - 1) <= 2147483647)
 
-goal BinarySearch_binary_search2_safety_po_4:
+goal BinarySearch_binary_search_safety_po_4:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -9517,7 +9598,7 @@ goal BinarySearch_binary_search2_safety_po_4:
   (integer_of_int32(result1) = (result0 - 1)) ->
   ("K_2": (0 <= integer_of_int32(result)))
 
-goal BinarySearch_binary_search2_safety_po_5:
+goal BinarySearch_binary_search_safety_po_5:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
@@ -9546,7 +9627,7 @@ goal BinarySearch_binary_search2_safety_po_5:
   ("K_2": (integer_of_int32(result1) <= ((offset_max(Object_alloc_table,
   t_0) + 1) - 1)))
 
-goal BinarySearch_binary_search2_safety_po_6:
+goal BinarySearch_binary_search_safety_po_6:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9579,7 +9660,7 @@ goal BinarySearch_binary_search2_safety_po_6:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (integer_of_int32(result) <= k_0))
 
-goal BinarySearch_binary_search2_safety_po_7:
+goal BinarySearch_binary_search_safety_po_7:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9612,7 +9693,7 @@ goal BinarySearch_binary_search2_safety_po_7:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (k_0 <= integer_of_int32(result1)))
 
-goal BinarySearch_binary_search2_safety_po_8:
+goal BinarySearch_binary_search_safety_po_8:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9653,7 +9734,7 @@ goal BinarySearch_binary_search2_safety_po_8:
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   ((-2147483648) <= (integer_of_int32(u) - integer_of_int32(l)))
 
-goal BinarySearch_binary_search2_safety_po_9:
+goal BinarySearch_binary_search_safety_po_9:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9694,7 +9775,7 @@ goal BinarySearch_binary_search2_safety_po_9:
   (integer_of_int32(l) <= integer_of_int32(u)) ->
   ((integer_of_int32(u) - integer_of_int32(l)) <= 2147483647)
 
-goal BinarySearch_binary_search2_safety_po_10:
+goal BinarySearch_binary_search_safety_po_10:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9739,7 +9820,7 @@ goal BinarySearch_binary_search2_safety_po_10:
   (integer_of_int32(result2) = (integer_of_int32(u) - integer_of_int32(l))) ->
   (2 <> 0)
 
-goal BinarySearch_binary_search2_safety_po_11:
+goal BinarySearch_binary_search_safety_po_11:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9787,7 +9868,7 @@ goal BinarySearch_binary_search2_safety_po_11:
   (result3 = (integer_of_int32(result2) / 2)) ->
   ((-2147483648) <= result3)
 
-goal BinarySearch_binary_search2_safety_po_12:
+goal BinarySearch_binary_search_safety_po_12:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9835,7 +9916,7 @@ goal BinarySearch_binary_search2_safety_po_12:
   (result3 = (integer_of_int32(result2) / 2)) ->
   (result3 <= 2147483647)
 
-goal BinarySearch_binary_search2_safety_po_13:
+goal BinarySearch_binary_search_safety_po_13:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9886,7 +9967,7 @@ goal BinarySearch_binary_search2_safety_po_13:
   (integer_of_int32(result4) = result3) ->
   ((-2147483648) <= (integer_of_int32(l) + integer_of_int32(result4)))
 
-goal BinarySearch_binary_search2_safety_po_14:
+goal BinarySearch_binary_search_safety_po_14:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9937,7 +10018,7 @@ goal BinarySearch_binary_search2_safety_po_14:
   (integer_of_int32(result4) = result3) ->
   ((integer_of_int32(l) + integer_of_int32(result4)) <= 2147483647)
 
-goal BinarySearch_binary_search2_safety_po_15:
+goal BinarySearch_binary_search_safety_po_15:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -9992,7 +10073,7 @@ goal BinarySearch_binary_search2_safety_po_15:
   (integer_of_int32(result5) = (integer_of_int32(l) + integer_of_int32(result4))) ->
   (0 <= integer_of_int32(result5))
 
-goal BinarySearch_binary_search2_safety_po_16:
+goal BinarySearch_binary_search_safety_po_16:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10047,7 +10128,7 @@ goal BinarySearch_binary_search2_safety_po_16:
   (integer_of_int32(result5) = (integer_of_int32(l) + integer_of_int32(result4))) ->
   (integer_of_int32(result5) <= offset_max(Object_alloc_table, t_0))
 
-goal BinarySearch_binary_search2_safety_po_17:
+goal BinarySearch_binary_search_safety_po_17:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10107,7 +10188,7 @@ goal BinarySearch_binary_search2_safety_po_17:
   (integer_of_int32(result6) < integer_of_int32(v)) ->
   ((-2147483648) <= (integer_of_int32(result5) + 1))
 
-goal BinarySearch_binary_search2_safety_po_18:
+goal BinarySearch_binary_search_safety_po_18:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10167,7 +10248,7 @@ goal BinarySearch_binary_search2_safety_po_18:
   (integer_of_int32(result6) < integer_of_int32(v)) ->
   ((integer_of_int32(result5) + 1) <= 2147483647)
 
-goal BinarySearch_binary_search2_safety_po_19:
+goal BinarySearch_binary_search_safety_po_19:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10233,7 +10314,7 @@ goal BinarySearch_binary_search2_safety_po_19:
   (l0 = result7) ->
   ("K_2": (0 <= integer_of_int32(l0)))
 
-goal BinarySearch_binary_search2_safety_po_20:
+goal BinarySearch_binary_search_safety_po_20:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10300,7 +10381,7 @@ goal BinarySearch_binary_search2_safety_po_20:
   ("K_2": (integer_of_int32(u) <= ((offset_max(Object_alloc_table,
   t_0) + 1) - 1)))
 
-goal BinarySearch_binary_search2_safety_po_21:
+goal BinarySearch_binary_search_safety_po_21:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10370,7 +10451,7 @@ goal BinarySearch_binary_search2_safety_po_21:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (integer_of_int32(l0) <= k_0))
 
-goal BinarySearch_binary_search2_safety_po_22:
+goal BinarySearch_binary_search_safety_po_22:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10440,7 +10521,7 @@ goal BinarySearch_binary_search2_safety_po_22:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (k_0 <= integer_of_int32(u)))
 
-goal BinarySearch_binary_search2_safety_po_23:
+goal BinarySearch_binary_search_safety_po_23:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10506,7 +10587,7 @@ goal BinarySearch_binary_search2_safety_po_23:
   (l0 = result7) ->
   (0 <= ("K_3": (integer_of_int32(u) - integer_of_int32(l))))
 
-goal BinarySearch_binary_search2_safety_po_24:
+goal BinarySearch_binary_search_safety_po_24:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10573,7 +10654,7 @@ goal BinarySearch_binary_search2_safety_po_24:
   (("K_3": (integer_of_int32(u) - integer_of_int32(l0))) < ("K_3":
                                                            (integer_of_int32(u) - integer_of_int32(l))))
 
-goal BinarySearch_binary_search2_safety_po_25:
+goal BinarySearch_binary_search_safety_po_25:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10638,7 +10719,7 @@ goal BinarySearch_binary_search2_safety_po_25:
   (integer_of_int32(result7) > integer_of_int32(v)) ->
   ((-2147483648) <= (integer_of_int32(result5) - 1))
 
-goal BinarySearch_binary_search2_safety_po_26:
+goal BinarySearch_binary_search_safety_po_26:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10703,7 +10784,7 @@ goal BinarySearch_binary_search2_safety_po_26:
   (integer_of_int32(result7) > integer_of_int32(v)) ->
   ((integer_of_int32(result5) - 1) <= 2147483647)
 
-goal BinarySearch_binary_search2_safety_po_27:
+goal BinarySearch_binary_search_safety_po_27:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10775,7 +10856,7 @@ goal BinarySearch_binary_search2_safety_po_27:
   ("K_2": (integer_of_int32(u0) <= ((offset_max(Object_alloc_table,
   t_0) + 1) - 1)))
 
-goal BinarySearch_binary_search2_safety_po_28:
+goal BinarySearch_binary_search_safety_po_28:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10850,7 +10931,7 @@ goal BinarySearch_binary_search2_safety_po_28:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (integer_of_int32(l) <= k_0))
 
-goal BinarySearch_binary_search2_safety_po_29:
+goal BinarySearch_binary_search_safety_po_29:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10925,7 +11006,7 @@ goal BinarySearch_binary_search2_safety_po_29:
   k_0))) = integer_of_int32(v)) ->
   ("K_2": (k_0 <= integer_of_int32(u0)))
 
-goal BinarySearch_binary_search2_safety_po_30:
+goal BinarySearch_binary_search_safety_po_30:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.
@@ -10996,7 +11077,7 @@ goal BinarySearch_binary_search2_safety_po_30:
   (u0 = result8) ->
   (0 <= ("K_3": (integer_of_int32(u) - integer_of_int32(l))))
 
-goal BinarySearch_binary_search2_safety_po_31:
+goal BinarySearch_binary_search_safety_po_31:
   forall t_0:Object pointer.
   forall v:int32.
   forall Object_alloc_table:Object alloc_table.

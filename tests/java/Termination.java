@@ -32,12 +32,12 @@
 class Termination {
 
     void loop1(int n) { 
-	//@ decreases n;
+	//@ loop_variant n;
 	while (n > 0) n--; 
     }
 
     void loop2(int n) { 
-	//@ decreases 100-n;
+	//@ loop_variant 100-n;
 	while (n < 100) n++; 
     }
 
@@ -45,7 +45,7 @@ class Termination {
     int loop3() {
 	int i = 100;
 	/*@ loop_invariant 0 <= i <= 100;
-	  @ decreases i;
+	  @ loop_variant i;
 	  @*/
 	while (i > 0) i--;
 	return i;

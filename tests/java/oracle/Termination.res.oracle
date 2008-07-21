@@ -1,3 +1,59 @@
+========== file tests/java/Termination.java ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*  Copyright (C) 2002-2008                                               */
+/*    Romain BARDOU                                                       */
+/*    Jean-François COUCHOT                                               */
+/*    Mehdi DOGGUY                                                        */
+/*    Jean-Christophe FILLIÂTRE                                           */
+/*    Thierry HUBERT                                                      */
+/*    Claude MARCHÉ                                                       */
+/*    Yannick MOY                                                         */
+/*    Christine PAULIN                                                    */
+/*    Yann RÉGIS-GIANAS                                                   */
+/*    Nicolas ROUSSET                                                     */
+/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU General Public                   */
+/*  License version 2, as published by the Free Software Foundation.      */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/*  See the GNU General Public License version 2 for more details         */
+/*  (enclosed in the file GPL).                                           */
+/*                                                                        */
+/**************************************************************************/
+
+//@+ CheckArithOverflow = no
+
+class Termination {
+
+    void loop1(int n) { 
+	//@ loop_variant n;
+	while (n > 0) n--; 
+    }
+
+    void loop2(int n) { 
+	//@ loop_variant 100-n;
+	while (n < 100) n++; 
+    }
+
+    //@ ensures \result == 0;
+    int loop3() {
+	int i = 100;
+	/*@ loop_invariant 0 <= i <= 100;
+	  @ loop_variant i;
+	  @*/
+	while (i > 0) i--;
+	return i;
+    }
+
+}
+
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
@@ -104,8 +160,8 @@ end = 33
 [K_11]
 file = "HOME/tests/java/Termination.java"
 line = 48
-begin = 15
-end = 16
+begin = 18
+end = 19
 
 [K_12]
 file = "HOME/tests/java/Termination.java"
@@ -136,13 +192,13 @@ end = -1
 file = "HOME/tests/java/Termination.java"
 line = 35
 begin = 5
-end = 17
+end = 20
 
 [K_2]
 file = "HOME/tests/java/Termination.java"
 line = 35
-begin = 15
-end = 16
+begin = 18
+end = 19
 
 [K_3]
 file = "HOME/tests/java/Termination.java"
@@ -160,13 +216,13 @@ end = 13
 file = "HOME/tests/java/Termination.java"
 line = 40
 begin = 5
-end = 21
+end = 24
 
 [K_6]
 file = "HOME/tests/java/Termination.java"
 line = 40
-begin = 15
-end = 20
+begin = 18
+end = 23
 
 [K_7]
 file = "HOME/tests/java/Termination.java"
@@ -332,8 +388,8 @@ end = 33
 [K_11]
 file = "HOME/tests/java/Termination.java"
 line = 48
-begin = 15
-end = 16
+begin = 18
+end = 19
 
 [Termination_loop1_safety]
 name = "Method loop1"
@@ -409,25 +465,25 @@ end = 14
 file = "HOME/tests/java/Termination.java"
 line = 35
 begin = 5
-end = 17
+end = 20
 
 [K_2]
 file = "HOME/tests/java/Termination.java"
 line = 35
-begin = 15
-end = 16
+begin = 18
+end = 19
 
 [K_5]
 file = "HOME/tests/java/Termination.java"
 line = 40
 begin = 5
-end = 21
+end = 24
 
 [K_6]
 file = "HOME/tests/java/Termination.java"
 line = 40
-begin = 15
-end = 20
+begin = 18
+end = 23
 
 [Termination_loop2_safety]
 name = "Method loop2"
@@ -962,11 +1018,11 @@ why --project [...] why/Termination.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po14.why">
-      <location file = "HOME/tests/java/Termination.java" line = "48" begin = "15" end = "16"/>
+      <location file = "HOME/tests/java/Termination.java" line = "48" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po15.why">
-      <location file = "HOME/tests/java/Termination.java" line = "48" begin = "15" end = "16"/>
+      <location file = "HOME/tests/java/Termination.java" line = "48" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -997,11 +1053,11 @@ why --project [...] why/Termination.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Termination_po3.why">
-      <location file = "HOME/tests/java/Termination.java" line = "40" begin = "15" end = "20"/>
+      <location file = "HOME/tests/java/Termination.java" line = "40" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po4.why">
-      <location file = "HOME/tests/java/Termination.java" line = "40" begin = "15" end = "20"/>
+      <location file = "HOME/tests/java/Termination.java" line = "40" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1010,11 +1066,11 @@ why --project [...] why/Termination.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Termination_po1.why">
-      <location file = "HOME/tests/java/Termination.java" line = "35" begin = "15" end = "16"/>
+      <location file = "HOME/tests/java/Termination.java" line = "35" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po2.why">
-      <location file = "HOME/tests/java/Termination.java" line = "35" begin = "15" end = "16"/>
+      <location file = "HOME/tests/java/Termination.java" line = "35" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2339,7 +2395,7 @@ why -simplify [...] why/Termination.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; Termination_loop1_safety_po_1, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 35, characters 15-16
+;; Termination_loop1_safety_po_1, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 35, characters 18-19
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (valid_struct_Termination this_2 0 0 Object_alloc_table)
@@ -2350,7 +2406,7 @@ why -simplify [...] why/Termination.why
 (FORALL (mutable_n_1_0)
 (IMPLIES (EQ mutable_n_1_0 (- mutable_n_1 1)) (<= 0 mutable_n_1)))))))))
 
-;; Termination_loop1_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 35, characters 15-16
+;; Termination_loop1_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 35, characters 18-19
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (valid_struct_Termination this_2 0 0 Object_alloc_table)
@@ -2361,7 +2417,7 @@ why -simplify [...] why/Termination.why
 (FORALL (mutable_n_1_0)
 (IMPLIES (EQ mutable_n_1_0 (- mutable_n_1 1)) (< mutable_n_1_0 mutable_n_1)))))))))
 
-;; Termination_loop2_safety_po_1, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 40, characters 15-20
+;; Termination_loop2_safety_po_1, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 40, characters 18-23
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (valid_struct_Termination this_1 0 0 Object_alloc_table)
@@ -2373,7 +2429,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (EQ mutable_n_0_0_0 (+ mutable_n_0_0 1))
 (<= 0 (- 100 mutable_n_0_0))))))))))
 
-;; Termination_loop2_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 40, characters 15-20
+;; Termination_loop2_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 40, characters 18-23
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (valid_struct_Termination this_1 0 0 Object_alloc_table)
@@ -2458,7 +2514,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= i0 100)))))))))
 
-;; Termination_loop3_safety_po_5, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 48, characters 15-16
+;; Termination_loop3_safety_po_5, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 48, characters 18-19
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -2467,7 +2523,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i)))))))))
 
-;; Termination_loop3_safety_po_6, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 48, characters 15-16
+;; Termination_loop3_safety_po_6, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 48, characters 18-19
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (valid_struct_Termination this_0 0 0 Object_alloc_table)
