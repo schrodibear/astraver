@@ -84,7 +84,7 @@ public class Lesson1 {
 	  @   count >= 0 && x >= count*count &&
           @   sum == (count+1)*(count+1) &&
 	  @   count <= 180 && sum <= 32761;
-	  @ decreases x - sum;
+	  @ loop_variant x - sum;
 	  @*/
 	while (sum <= x) { 
 	    count++;
@@ -105,7 +105,7 @@ public class Lesson1 {
 	  @   count >= 0 && x >= count*count &&
           @   sum == (count+1)*(count+1) &&
 	  @   count <= 46339 && sum <= 2147395600;
-	  @ decreases x - sum;
+	  @ loop_variant x - sum;
 	  @*/
 	while (sum <= x) {
 	    count++;

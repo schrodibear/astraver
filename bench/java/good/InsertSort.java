@@ -8,7 +8,7 @@ public class InsertSort {
 		
 		int j;
 		j = i;
-		//@ loop_invariant (0<=j<=i); decreases j;
+		//@ loop_invariant (0<=j<=i); loop_variant j;
 		while (j > 0)
 		    t[j--] = 0;
 	}

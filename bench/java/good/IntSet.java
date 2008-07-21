@@ -57,7 +57,7 @@ public class IntSet {
 	  @   0 <= a <= b <= taille &&
 	  @   (\forall integer i; 0 <= i < a ==> t[i] < n) && 
 	  @   (\forall integer i; b <= i < taille ==> t[i] >= n) ; 
-	  @ decreases b-a;
+	  @ loop_variant b-a;
 	  @*/
 	while (a<b) {
 	    m = (a+b)/2;
@@ -141,7 +141,7 @@ public class IntSet {
 	  @   a-1 <= j <= b &&
 	  @   (\forall integer i; j < i <= b ==> dest[i+c-a] == \at(src[i],Pre)) &&
 	  @   (\forall integer i; c <= i <= j+c-a ==> dest[i] == \at(dest[i],Pre));
-	  @ decreases j;
+	  @ loop_variant j;
 	  @*/
 	for (int j = b; j >= a; j--) {
 	    dest[j+c-a] = src[j];

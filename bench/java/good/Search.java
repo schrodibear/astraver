@@ -54,7 +54,7 @@ public class Search {
 	  @   0 <= l && u <= t.length-1 &&
 	  @     \forall integer i; 
 	  @        0 <= i && i < t.length ==> t[i] == v ==> l <= i && i <= u;
-	  @ decreases u-l ;
+	  @ loop_variant u-l ;
 	  @*/
 	while (l <= u ) {
 	    int m = (l + u) / 2;

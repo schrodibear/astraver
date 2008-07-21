@@ -65,7 +65,7 @@ public class Muller {
 	  @    0 <= i && i <= t.length && 
 	  @    0 <= count && count <= i && 
 	  @    count == num_of_pos(0,i-1,t) ; 
-	  @ decreases t.length - i;
+	  @ loop_variant t.length - i;
 	  @*/
 	for (int i=0 ; i < t.length; i++) if (t[i] > 0) count++;
 	
@@ -76,7 +76,7 @@ public class Muller {
 	  @    0 <= i && i <= t.length && 
 	  @    0 <= count && count <= i && 
 	  @    count == num_of_pos(0,i-1,t);
-	  @ decreases t.length - i;
+	  @ loop_variant t.length - i;
 	  @*/
 	for (int i=0 ; i < t.length; i++) {
 	    if (t[i] > 0) u[count++] = t[i];

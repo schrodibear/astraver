@@ -112,7 +112,7 @@ public class IntSetModelField {
 	  @   0 <= a <= b <= size &&
 	  @   (\forall integer i; 0 <= i < a ==> t[i] < n) && 
 	  @   (\forall integer i; b <= i < size ==> t[i] >= n) ; 
-	  @ decreases b-a;
+	  @ loop_variant b-a;
 	  @*/
 	while (a<b) {
 	    m = (a+b)/2;
@@ -185,7 +185,7 @@ public class IntSetModelField {
 	  @   a-1 <= j <= b &&
 	  @   \forall integer i; j < i <= b ==> dest[i+c-a] == \old(src[i]) &&
 	  @   \forall integer i; c <= i <= j+c-a ==> dest[i] == \old(dest[i]);
-	  @ decreases j;
+	  @ loop_variant j;
 	  @*/
 	for (int j = b; j >= a; j--) {
 	    dest[j+c-a] = src[j];

@@ -93,7 +93,7 @@ class Trace {
     void m4(int x) { 
 	int y = x;
 	/*@ loop_invariant 0 <= y && y <= x;
-	  @ decreases y;
+	  @ loop_variant y;
 	  @*/
 	while (y > 0)
 	    {
@@ -111,7 +111,7 @@ class Trace {
     void m5(int x) {
 	int y = x;
 	/*@ loop_invariant y == x;
-	  @ decreases y;
+	  @ loop_variant y;
 	  @*/
 	while (y > 0) {
 	    y = y - 1;
