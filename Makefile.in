@@ -113,7 +113,7 @@ VO8= lib/coq/WhyInt.vo lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo \
 
 V8FILES=$(VO8:.vo=.v)
 
-PVSFILES = lib/pvs/why.pvs lib/pvs/jessie.pvs lib/pvs/whyfloat.pvs
+PVSFILES = lib/pvs/why.pvs lib/pvs/jessie.pvs lib/pvs/whyfloat.pvs 
 PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/rc.ml src/xml.ml \
@@ -748,6 +748,10 @@ install-pvs-no:
 install-pvs-yes: $(PVSFILES)
 	mkdir -p $(PVSLIB)/why
 	cp $(PVSFILES) $(PVSFILES:.pvs=.prf) $(PVSLIB)/why
+	cp lib/pvs/top.pvs lib/pvs/pvscontext.el $(PVSLIB)/why
+	@echo "======  Compiling PVS theories, this may take some time ======"
+	(cd $(PVSLIB)/why ; @PVSC@ -batch -l pvscontext.el -q -v 2 > top.out)
+	@echo "======  Done compiling PVS theories ======"
 
 install-mizar-no:
 install-mizar-yes:

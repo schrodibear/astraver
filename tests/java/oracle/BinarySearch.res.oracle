@@ -11158,10 +11158,10 @@ goal BinarySearch_binary_search_safety_po_31:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ........!.#........................##.....#... (41/0/0/4/1)
+why/BinarySearch_why.why      : .........#.........................##.....##.. (41/0/0/5/0)
 total   :  46
 valid   :  41 ( 89%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   4 (  9%)
-failure :   1 (  2%)
+timeout :   5 ( 11%)
+failure :   0 (  0%)

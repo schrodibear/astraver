@@ -495,10 +495,10 @@ coq/%.vo: coq/%.v
 pvs: pvs/Gcd_why.pvs
 
 pvs/%_why.pvs: why/%.why
-	$(WHY) -pvs -dir pvs -pvs-preamble "importing why@jessie_why" $(JESSIELIBFILE) why/$*.why
+	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@jessie" $(JESSIELIBFILE) why/$*.why
 
 pvs/jessie_why.pvs:
-	$(WHY) -pvs -dir pvs -pvs-preamble "importing why@why" $(JESSIELIBFILE)
+	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@why" $(JESSIELIBFILE)
 
 isabelle: isabelle/Gcd_why.thy
 
@@ -6094,10 +6094,10 @@ goal Gcd_gcd_safety_po_10:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ???????.??.......#........#........#.. (26/0/9/3/0)
+why/Gcd_why.why               : ???????.??.......?........?........?.. (26/0/12/0/0)
 total   :  38
 valid   :  26 ( 68%)
 invalid :   0 (  0%)
-unknown :   9 ( 24%)
-timeout :   3 (  8%)
+unknown :  12 ( 32%)
+timeout :   0 (  0%)
 failure :   0 (  0%)
