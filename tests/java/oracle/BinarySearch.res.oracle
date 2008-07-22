@@ -157,9 +157,11 @@ logic is_sorted{L}(intM[0..] t) =
 exception Throwable of Throwable[0..]
 
 lemma mean_property{Here} :
-(\forall integer x;
-  (\forall integer y;
-    ((x <= y) ==> ((x <= (x + ((y - x) / 2))) && ((x + ((y - x) / 2)) <= y)))))
+(\forall integer x_0;
+  (\forall integer y_0;
+    ((x_0 <= y_0) ==>
+      ((x_0 <= (x_0 + ((y_0 - x_0) / 2))) &&
+        ((x_0 + ((y_0 - x_0) / 2)) <= y_0)))))
 
 int32 BinarySearch_binary_search(intM[0..] t_0, int32 v)
   requires (K_18 : (Non_null_intM(t_0) &&
@@ -398,10 +400,10 @@ coq/%.vo: coq/%.v
 pvs: pvs/BinarySearch_why.pvs
 
 pvs/%_why.pvs: why/%.why
-	$(WHY) -pvs -dir pvs -pvs-preamble "importing why@jessie_why" $(JESSIELIBFILE) why/$*.why
+	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@jessie" $(JESSIELIBFILE) why/$*.why
 
 pvs/jessie_why.pvs:
-	$(WHY) -pvs -dir pvs -pvs-preamble "importing why@why" $(JESSIELIBFILE)
+	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@why" $(JESSIELIBFILE)
 
 isabelle: isabelle/BinarySearch_why.thy
 
@@ -646,14 +648,14 @@ end = -1
 [JC_17]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 110
+line = 112
 begin = 54
 end = 140
 
 [JC_18]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 110
+line = 112
 begin = 54
 end = 140
 
@@ -666,14 +668,14 @@ end = -1
 [JC_20]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 110
+line = 112
 begin = 54
 end = 140
 
 [JC_21]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 110
+line = 112
 begin = 54
 end = 140
 
@@ -868,18 +870,18 @@ axiom long_range :
   and le_int(integer_of_long(x), (9223372036854775807))))
 
 goal mean_property :
- (forall x_4:int.
-  (forall y:int.
-   (le_int(x_4, y) ->
-    (le_int(x_4, add_int(x_4, div_int(sub_int(y, x_4), (2))))
-    and le_int(add_int(x_4, div_int(sub_int(y, x_4), (2))), y)))))
+ (forall x_0_0:int.
+  (forall y_0:int.
+   (le_int(x_0_0, y_0) ->
+    (le_int(x_0_0, add_int(x_0_0, div_int(sub_int(y_0, x_0_0), (2))))
+    and le_int(add_int(x_0_0, div_int(sub_int(y_0, x_0_0), (2))), y_0)))))
 
 axiom mean_property_as_axiom :
- (forall x_4:int.
-  (forall y:int.
-   (le_int(x_4, y) ->
-    (le_int(x_4, add_int(x_4, div_int(sub_int(y, x_4), (2))))
-    and le_int(add_int(x_4, div_int(sub_int(y, x_4), (2))), y)))))
+ (forall x_0_0:int.
+  (forall y_0:int.
+   (le_int(x_0_0, y_0) ->
+    (le_int(x_0_0, add_int(x_0_0, div_int(sub_int(y_0, x_0_0), (2))))
+    and le_int(add_int(x_0_0, div_int(sub_int(y_0, x_0_0), (2))), y_0)))))
 
 logic short_of_integer: int -> short
 
@@ -1412,7 +1414,7 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "why/BinarySearch.why" line = "156" begin = "0" end = "206"/>
+      <location file = "why/BinarySearch.why" line = "156" begin = "0" end = "230"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -1463,7 +1465,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/BinarySearch_po25.why">
-      <location file = "HOME/tests/java/BinarySearch.jc" line = "110" begin = "54" end = "140"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "112" begin = "54" end = "140"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1580,7 +1582,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po6.why">
-      <location file = "HOME/tests/java/BinarySearch.jc" line = "110" begin = "54" end = "140"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "112" begin = "54" end = "140"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2366,10 +2368,11 @@ axiom long_range:
      (integer_of_long(x) <= 9223372036854775807)))
 
 axiom mean_property_as_axiom:
-  (forall x_4:int.
-    (forall y:int.
-      ((x_4 <= y) ->
-       ((x_4 <= (x_4 + ((y - x_4) / 2))) and ((x_4 + ((y - x_4) / 2)) <= y)))))
+  (forall x_0_0:int.
+    (forall y_0:int.
+      ((x_0_0 <= y_0) ->
+       ((x_0_0 <= (x_0_0 + ((y_0 - x_0_0) / 2))) and
+        ((x_0_0 + ((y_0 - x_0_0) / 2)) <= y_0)))))
 
 logic short_of_integer : int -> short
 
@@ -2420,10 +2423,11 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
 
 ========== file tests/java/why/BinarySearch_po1.why ==========
 goal mean_property:
-  (forall x_4:int.
-    (forall y:int.
-      ((x_4 <= y) ->
-       ((x_4 <= (x_4 + ((y - x_4) / 2))) and ((x_4 + ((y - x_4) / 2)) <= y)))))
+  (forall x_0_0:int.
+    (forall y_0:int.
+      ((x_0_0 <= y_0) ->
+       ((x_0_0 <= (x_0_0 + ((y_0 - x_0_0) / 2))) and
+        ((x_0_0 + ((y_0 - x_0_0) / 2)) <= y_0)))))
 
 ========== file tests/java/why/BinarySearch_po10.why ==========
 goal BinarySearch_binary_search_ensures_correctness_po_9:
@@ -5316,18 +5320,18 @@ why -simplify [...] why/BinarySearch.why
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
-;; mean_property, File "why/BinarySearch.why", line 156, characters 0-206
-(FORALL (x_4 y)
-(IMPLIES (<= x_4 y)
-(AND (<= x_4 (+ x_4 (int_div (- y x_4) 2)))
-(<= (+ x_4 (int_div (- y x_4) 2)) y))))
+;; mean_property, File "why/BinarySearch.why", line 156, characters 0-230
+(FORALL (x_0_0 y_0)
+(IMPLIES (<= x_0_0 y_0)
+(AND (<= x_0_0 (+ x_0_0 (int_div (- y_0 x_0_0) 2)))
+(<= (+ x_0_0 (int_div (- y_0 x_0_0) 2)) y_0))))
 
 (BG_PUSH
  ;; Why axiom mean_property_as_axiom
- (FORALL (x_4 y)
- (IMPLIES (<= x_4 y)
- (AND (<= x_4 (+ x_4 (int_div (- y x_4) 2)))
- (<= (+ x_4 (int_div (- y x_4) 2)) y)))))
+ (FORALL (x_0_0 y_0)
+ (IMPLIES (<= x_0_0 y_0)
+ (AND (<= x_0_0 (+ x_0_0 (int_div (- y_0 x_0_0) 2)))
+ (<= (+ x_0_0 (int_div (- y_0 x_0_0) 2)) y_0)))))
 
 (BG_PUSH
  ;; Why axiom short_coerce
@@ -5486,7 +5490,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 result1)))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_correctness_po_5, File "/home/cmarche/recherche/why/tests/java/BinarySearch.jc", line 110, characters 54-140
+;; BinarySearch_binary_search_ensures_correctness_po_5, File "/home/cmarche/recherche/why/tests/java/BinarySearch.jc", line 112, characters 54-140
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -6391,7 +6395,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (<= (integer_of_int32 l) (integer_of_int32 u))
 (<= (- (integer_of_int32 u) (integer_of_int32 l)) constant_too_large_2147483647)))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_10, File "/home/cmarche/recherche/why/tests/java/BinarySearch.jc", line 110, characters 54-140
+;; BinarySearch_binary_search_safety_po_10, File "/home/cmarche/recherche/why/tests/java/BinarySearch.jc", line 112, characters 54-140
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_alloc_table)
@@ -8763,16 +8767,18 @@ axiom long_range:
      (integer_of_long(x) <= 9223372036854775807)))
 
 goal mean_property:
-  (forall x_4:int.
-    (forall y:int.
-      ((x_4 <= y) ->
-       ((x_4 <= (x_4 + ((y - x_4) / 2))) and ((x_4 + ((y - x_4) / 2)) <= y)))))
+  (forall x_0_0:int.
+    (forall y_0:int.
+      ((x_0_0 <= y_0) ->
+       ((x_0_0 <= (x_0_0 + ((y_0 - x_0_0) / 2))) and
+        ((x_0_0 + ((y_0 - x_0_0) / 2)) <= y_0)))))
 
 axiom mean_property_as_axiom:
-  (forall x_4:int.
-    (forall y:int.
-      ((x_4 <= y) ->
-       ((x_4 <= (x_4 + ((y - x_4) / 2))) and ((x_4 + ((y - x_4) / 2)) <= y)))))
+  (forall x_0_0:int.
+    (forall y_0:int.
+      ((x_0_0 <= y_0) ->
+       ((x_0_0 <= (x_0_0 + ((y_0 - x_0_0) / 2))) and
+        ((x_0_0 + ((y_0 - x_0_0) / 2)) <= y_0)))))
 
 logic short_of_integer : int -> short
 
@@ -11152,10 +11158,10 @@ goal BinarySearch_binary_search_safety_po_31:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ..........#........................##.....#... (42/0/0/4/0)
+why/BinarySearch_why.why      : ........!.#........................##.....#... (41/0/0/4/1)
 total   :  46
-valid   :  42 ( 91%)
+valid   :  41 ( 89%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   4 (  9%)
-failure :   0 (  0%)
+failure :   1 (  2%)

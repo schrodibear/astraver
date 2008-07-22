@@ -1,4 +1,38 @@
-========== krakatoa execution ==========
+========== file tests/java/MacCarthy.java ==========
+
+
+/* McCarthy's ``91'' function. */
+
+//@+ CheckArithOverflow = no
+
+//@ logic integer max(integer x, integer y) ;
+
+/*@ axiom max_def :  
+  @   \forall integer x y ; 
+  @   (max(x,y) == x || max(x,y) == y) &&
+  @   max(x,y) >= x && max(x,y) >= y ;
+  @*/
+
+
+public class MacCarthy {
+
+    /*@ decreases max(0,101-n) ;
+      @ behavior less_than_101:
+      @   assumes n <= 100;
+      @   ensures \result == 91;
+      @ behavior greater_than_100:
+      @   assumes n >= 101;
+      @   ensures \result == n - 10;
+      @*/
+    public static int f91(int n) {
+	if (n <= 100) {
+	    return f91(f91(n + 11));
+	}
+	else
+	    return n - 10;
+    }
+
+}========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
 Generating JC function MacCarthy_f91 for method MacCarthy.f91
@@ -49,16 +83,16 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
-logic integer max{Here}(integer x, integer y) reads \nothing;
+logic integer max{Here}(integer x_0, integer y_0) reads \nothing;
 
 exception Throwable of Throwable[0..]
 
 axiom max_def{Here} :
-(\forall integer x_0;
-  (\forall integer y_0;
-    ((((max(x_0, y_0) == x_0) || (max(x_0, y_0) == y_0)) &&
-       (max(x_0, y_0) >= x_0)) &&
-      (max(x_0, y_0) >= y_0))))
+(\forall integer x_1;
+  (\forall integer y_1;
+    ((((max(x_1, y_1) == x_1) || (max(x_1, y_1) == y_1)) &&
+       (max(x_1, y_1) >= x_1)) &&
+      (max(x_1, y_1) >= y_1))))
 
 integer MacCarthy_f91(integer n)
   requires true;
@@ -324,10 +358,10 @@ coq/%.vo: coq/%.v
 pvs: pvs/MacCarthy_why.pvs
 
 pvs/%_why.pvs: why/%.why
-	$(WHY) -pvs -dir pvs -pvs-preamble "importing why@jessie_why" $(JESSIELIBFILE) why/$*.why
+	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@jessie" $(JESSIELIBFILE) why/$*.why
 
 pvs/jessie_why.pvs:
-	$(WHY) -pvs -dir pvs -pvs-preamble "importing why@why" $(JESSIELIBFILE)
+	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@why" $(JESSIELIBFILE)
 
 isabelle: isabelle/MacCarthy_why.thy
 
@@ -764,10 +798,10 @@ axiom interface_tags :
 logic max: int, int -> int
 
 axiom max_def :
- (forall x_0_0:int.
-  (forall y_0:int.
-   ((eq_int(max(x_0_0, y_0), x_0_0) or eq_int(max(x_0_0, y_0), y_0))
-   and (ge_int(max(x_0_0, y_0), x_0_0) and ge_int(max(x_0_0, y_0), y_0)))))
+ (forall x_1:int.
+  (forall y_1:int.
+   ((eq_int(max(x_1, y_1), x_1) or eq_int(max(x_1, y_1), y_1))
+   and (ge_int(max(x_1, y_1), x_1) and ge_int(max(x_1, y_1), y_1)))))
 
 predicate valid_struct_Object(p:Object pointer,
  a:int,
@@ -1753,10 +1787,10 @@ axiom interface_tags:
 logic max : int, int -> int
 
 axiom max_def:
-  (forall x_0_0:int.
-    (forall y_0:int.
-      (((max(x_0_0, y_0) = x_0_0) or (max(x_0_0, y_0) = y_0)) and
-       ((max(x_0_0, y_0) >= x_0_0) and (max(x_0_0, y_0) >= y_0)))))
+  (forall x_1:int.
+    (forall y_1:int.
+      (((max(x_1, y_1) = x_1) or (max(x_1, y_1) = y_1)) and
+       ((max(x_1, y_1) >= x_1) and (max(x_1, y_1) >= y_1)))))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -2286,9 +2320,9 @@ why -simplify [...] why/MacCarthy.why
 
 (BG_PUSH
  ;; Why axiom max_def
- (FORALL (x_0_0 y_0)
- (AND (OR (EQ (max x_0_0 y_0) x_0_0) (EQ (max x_0_0 y_0) y_0))
- (AND (>= (max x_0_0 y_0) x_0_0) (>= (max x_0_0 y_0) y_0)))))
+ (FORALL (x_1 y_1)
+ (AND (OR (EQ (max x_1 y_1) x_1) (EQ (max x_1 y_1) y_1))
+ (AND (>= (max x_1 y_1) x_1) (>= (max x_1 y_1) y_1)))))
 
 (DEFPRED (valid_struct_Object p a b Object_alloc_table)
   (AND (EQ (offset_min Object_alloc_table p) a)
@@ -3015,10 +3049,10 @@ axiom interface_tags:
 logic max : int, int -> int
 
 axiom max_def:
-  (forall x_0_0:int.
-    (forall y_0:int.
-      (((max(x_0_0, y_0) = x_0_0) or (max(x_0_0, y_0) = y_0)) and
-       ((max(x_0_0, y_0) >= x_0_0) and (max(x_0_0, y_0) >= y_0)))))
+  (forall x_1:int.
+    (forall y_1:int.
+      (((max(x_1, y_1) = x_1) or (max(x_1, y_1) = y_1)) and
+       ((max(x_1, y_1) >= x_1) and (max(x_1, y_1) >= y_1)))))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

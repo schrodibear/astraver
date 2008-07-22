@@ -1,3 +1,16 @@
+========== file tests/java/Literals.java ==========
+class Literals {
+
+    public static final int x = 0xbad;
+
+    /*@ ensures \result == 0xd;
+      @*/
+    int f() {
+	int x = 0xbad;
+	return 015;
+    }
+
+}
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
@@ -58,7 +71,7 @@ behavior default:
   ensures (K_1 : (\result == 0xd));
 {  
    {  
-      (var int32 x = (K_2 : 0xbad));
+      (var int32 x_0 = (K_2 : 0xbad));
       
       (return 015)
    }
@@ -680,7 +693,7 @@ let Literals_f_ensures_default =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let x_1 = (safe_int32_of_integer_ (K_2: (2989))) in
+     (let x_0_0 = (safe_int32_of_integer_ (K_2: (2989))) in
      begin   (return := (safe_int32_of_integer_ (13))); (raise Return) end);
     absurd 
    end
@@ -697,7 +710,7 @@ let Literals_f_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let x_1 = (safe_int32_of_integer_ (K_2: (2989))) in
+     (let x_0_0 = (safe_int32_of_integer_ (K_2: (2989))) in
      begin   (return := (safe_int32_of_integer_ (13))); (raise Return) end);
     absurd 
    end

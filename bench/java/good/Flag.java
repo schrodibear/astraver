@@ -60,7 +60,7 @@ class Flag {
     public boolean isMonochrome(int i, int j, int c) {
     	/*@ loop_invariant i <= k && 
 	  @   (\forall int l; i <= l && l < k ==> t[l]==c);
-    	  @ decreases j - k;
+    	  @ loop_variant j - k;
 	  @*/
 	for (int k = i; k < j; k++) if (t[k] != c) return false;
 	return true;
@@ -94,7 +94,7 @@ class Flag {
 	  @   is_monochrome(t,0,b,BLUE) &&
 	  @   is_monochrome(t,b,i,WHITE) &&
           @   is_monochrome(t,r,t.length,RED);
-	  @ decreases r - i; 
+	  @ loop_variant r - i; 
 	  @*/
 	while (i < r) {
 	    switch (t[i]) {

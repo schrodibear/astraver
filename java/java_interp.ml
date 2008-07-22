@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.148 2008-07-21 14:29:29 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.149 2008-07-22 09:29:20 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1759,6 +1759,7 @@ let tr_non_null_logic_fun () =
     ()
       
 let tr_logic_fun fi b acc =   
+  if b = Java_typing.JBuiltin then acc else
   let nfi = create_logic_fun Loc.dummy_position fi in
   let def_ =
     mklogic_def
@@ -1776,6 +1777,7 @@ let tr_logic_fun fi b acc =
     | Java_typing.JReads l ->
 	let logic_label = default_label fi.java_logic_info_labels in
         def_ ~reads:(List.map (location logic_label) l) ()
+    | Java_typing.JBuiltin -> assert false
   in (def::acc)
 
 let tr_field type_name acc fi =

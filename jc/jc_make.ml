@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.29 2008-07-18 13:14:12 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.30 2008-07-22 09:29:20 marche Exp $ i*)
 
 open Format
 open Pp
@@ -103,10 +103,10 @@ let generic full f targets =
        fprintf fmt "pvs: %a@\n@\n" (print_files pvs) targets;
 
        fprintf fmt "pvs/%%_why.pvs: why/%%.why@\n";
-       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing why@@jessie_why\" $(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"IMPORTING why@@jessie\" $(JESSIELIBFILE) why/$*.why@\n@\n";
 
        fprintf fmt "pvs/jessie_why.pvs:@\n";
-       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing why@@why\" $(JESSIELIBFILE)@\n@\n";
+       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"IMPORTING why@@why\" $(JESSIELIBFILE)@\n@\n";
        
        fprintf fmt "isabelle: %a@\n@\n" (print_files isabelle) targets;
 

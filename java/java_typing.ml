@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.135 2008-07-18 13:14:12 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.136 2008-07-22 09:29:20 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -292,59 +292,7 @@ let static_invariants_env = Hashtbl.create 97
 let static_invariants_table = Hashtbl.create 97
 
 
-(* variables *)
 
-module StringSet = Set.Make(String)
-
-(* used names (in order to rename identifiers when necessary) *)
-let used_names = Hashtbl.create 97
-
-let mark_as_used x = 
-  Hashtbl.add used_names x ()
-
-let () = 
-  List.iter mark_as_used 
-    (* Jessie reserved names *)
-    [ "tag"; "type" ; "end" ; "begin" ; "let" ; "in"]
-
-let is_used_name n = Hashtbl.mem used_names n
-
-let use_name ?local_names n = 
-  if is_used_name n then raise Exit; 
-  begin match local_names with 
-    | Some h -> if StringSet.mem n h then raise Exit 
-    | None -> () 
-  end;
-  mark_as_used n;
-  n
-
-let rec next_name ?local_names n i = 
-  let n_i = n ^ "_" ^ string_of_int i in
-  try use_name ?local_names n_i 
-  with Exit -> next_name ?local_names n (succ i)
-
-let get_unique_name ?local_names n = 
-  try use_name ?local_names n 
-  with Exit -> next_name ?local_names n 0
-
-let get_final_name id =
-  if id = "\\result" then id else
-    get_unique_name id
-
-
-let var_tag_counter = ref 0
-
-let new_var loc ty id =
-  incr var_tag_counter;
-  let vi = {
-    java_var_info_tag = !var_tag_counter;
-    java_var_info_name = id;
-    java_var_info_decl_loc = loc;
-    java_var_info_final_name = get_final_name id;
-    java_var_info_type = ty;
-    java_var_info_assigned = false;
-  }
-  in vi
 
 let rec var_type_and_id non_null ty id =
   match id with
@@ -547,11 +495,18 @@ type logic_body =
   | JAssertion of assertion
   | JTerm of term
   | JReads of term list
+  | JBuiltin
 
 let logics_table = Hashtbl.create 97
 let logics_env = Hashtbl.create 97
 
-let logic_tag_counter = ref 0
+let () =
+  List.iter 
+    (fun fi -> 
+       Hashtbl.add logics_env fi.java_logic_info_name fi;
+       Hashtbl.add logics_table fi.java_logic_info_tag (fi,JBuiltin)
+    )
+    [ (* real_max_fi *) ]
 
 (* JLS 5.1.1: Identity Conversion *)
 let rec is_identity_convertible tfrom tto =
@@ -587,15 +542,6 @@ let is_logic_widening_primitive_convertible tfrom tto =
     | Tdouble, Treal -> true
     | _ -> false
 
-let logic_info id ty labels pars =
-  incr logic_tag_counter;
-  { java_logic_info_tag = !logic_tag_counter;
-    java_logic_info_name = id;
-    java_logic_info_labels = labels;
-    java_logic_info_parameters = pars;
-    java_logic_info_result_type = ty;
-    java_logic_info_calls = [];
-  }
     
 let logic_unary_numeric_promotion t =
   match t with

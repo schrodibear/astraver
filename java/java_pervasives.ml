@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_pervasives.ml,v 1.16 2008-05-23 13:51:39 marche Exp $ *)
+(* $Id: java_pervasives.ml,v 1.17 2008-07-22 09:29:20 marche Exp $ *)
 
 (*** Utility functions ***)
 
@@ -111,6 +111,78 @@ let in_byte_range n = Num.le_num min_byte n && Num.le_num n max_byte
 let in_short_range n = Num.le_num min_short n && Num.le_num n max_short
 let in_char_range n = Num.le_num min_char n && Num.le_num n max_char
 
+(* variables *)
+
+module StringSet = Set.Make(String)
+
+(* used names (in order to rename identifiers when necessary) *)
+let used_names = Hashtbl.create 97
+
+let mark_as_used x = 
+  Hashtbl.add used_names x ()
+
+let () = 
+  List.iter mark_as_used 
+    (* Jessie reserved names *)
+    [ "tag"; "type" ; "end" ; "begin" ; "let" ; "in"]
+
+let is_used_name n = Hashtbl.mem used_names n
+
+let use_name ?local_names n = 
+  if is_used_name n then raise Exit; 
+  begin match local_names with 
+    | Some h -> if StringSet.mem n h then raise Exit 
+    | None -> () 
+  end;
+  mark_as_used n;
+  n
+
+let rec next_name ?local_names n i = 
+  let n_i = n ^ "_" ^ string_of_int i in
+  try use_name ?local_names n_i 
+  with Exit -> next_name ?local_names n (succ i)
+
+let get_unique_name ?local_names n = 
+  try use_name ?local_names n 
+  with Exit -> next_name ?local_names n 0
+
+let get_final_name id =
+  if id = "\\result" then id else
+    get_unique_name id
+
+
+let new_var =
+  let var_tag_counter = ref 0 in
+  fun loc ty id ->
+    incr var_tag_counter;
+    let vi = {
+      java_var_info_tag = !var_tag_counter;
+      java_var_info_name = id;
+      java_var_info_decl_loc = loc;
+      java_var_info_final_name = get_final_name id;
+      java_var_info_type = ty;
+      java_var_info_assigned = false;
+    }
+    in vi
+
+(* logic functions *)
+
+let logic_info = 
+  let logic_tag_counter = ref 0 in
+  fun id ty labels pars ->
+    incr logic_tag_counter;
+    { java_logic_info_tag = !logic_tag_counter;
+      java_logic_info_name = id;
+      java_logic_info_labels = labels;
+      java_logic_info_parameters = pars;
+      java_logic_info_result_type = ty;
+      java_logic_info_calls = [];
+    }
+
+let real_max_fi = 
+  let x = new_var Loc.dummy_position real_type "x" in
+  let y = new_var Loc.dummy_position real_type "y" in
+  logic_info "\\real_max" (Some real_type) [] [x;y] 
 
 (*
 Local Variables: 

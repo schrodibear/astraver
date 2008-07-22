@@ -84,6 +84,7 @@ type logic_body =
   | JAssertion of Java_tast.assertion
   | JTerm of Java_tast.term
   | JReads of Java_tast.term list
+  | JBuiltin
 
 val logic_types_table : (string, Java_env.logic_type_info) Hashtbl.t
 

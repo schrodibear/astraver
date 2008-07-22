@@ -204,6 +204,7 @@ let compute_logic_calls f t =
       | Java_typing.JTerm t -> term [] t 
       | Java_typing.JAssertion a -> assertion [] a 
       | Java_typing.JReads r -> List.fold_left term [] r 
+      | Java_typing.JBuiltin -> []
   in
   f.java_logic_info_calls <- calls
 

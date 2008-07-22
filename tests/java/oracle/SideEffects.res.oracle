@@ -1,3 +1,25 @@
+========== file tests/java/SideEffects.java ==========
+
+//@+ CheckArithOverflow = no
+
+class SideEffects {
+
+    /*@ requires t.length > 10;
+      @*/
+    void m1(int t[]) {
+	int i = 0;
+	t[i++] = 1;
+	//@ assert t[0] == 1 && i == 1;    
+	t[++i] = 2;
+	//@ assert t[0] == 1 && t[2] == 2 && i == 2;    
+	t[--i] = 3;
+	//@ assert t[0] == 1 && t[2] == 2 && t[1] == 3 && i == 1;    
+	t[i--] = 4;
+	//@ assert t[0] == 1 && t[2] == 2 && t[1] == 4 && i == 0;    
+    }
+
+}
+
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
@@ -270,10 +292,10 @@ coq/%.vo: coq/%.v
 pvs: pvs/SideEffects_why.pvs
 
 pvs/%_why.pvs: why/%.why
-	$(WHY) -pvs -dir pvs -pvs-preamble "importing why@jessie_why" $(JESSIELIBFILE) why/$*.why
+	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@jessie" $(JESSIELIBFILE) why/$*.why
 
 pvs/jessie_why.pvs:
-	$(WHY) -pvs -dir pvs -pvs-preamble "importing why@why" $(JESSIELIBFILE)
+	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@why" $(JESSIELIBFILE)
 
 isabelle: isabelle/SideEffects_why.thy
 
