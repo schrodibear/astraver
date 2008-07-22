@@ -747,7 +747,7 @@ install-coq-v8:
 install-pvs-no:
 install-pvs-yes: $(PVSFILES)
 	mkdir -p $(PVSLIB)/why
-	cp $(PVSFILES) $(PVSLIB)/why
+	cp $(PVSFILES) $(PVSFILES:.pvs=.prf) $(PVSLIB)/why
 
 install-mizar-no:
 install-mizar-yes:
