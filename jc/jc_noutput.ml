@@ -82,6 +82,7 @@ let rec expr fmt e =
 	     comma string)
 	  behav
 	  expr e1
+    | JCNEcontract _ -> assert false (* TODO *)
     | JCNEblock el ->
         out "{@ @[<hv 2>%a@]@ }" (print_list semi expr) el
     | JCNEloop(inv, Some e2, e3) ->

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.98 2008-07-23 12:13:54 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.99 2008-07-23 15:31:54 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -553,7 +553,11 @@ let rec expr e =
 	JCNEmatch(expr e,List.map (fun (pat,e) -> (pat,expr e)) pelist)  
     | JCPEblock elist -> JCNEblock(List.map expr elist)
     | JCPEassert(behav,e) -> JCNEassert(behav,expr e)
-    | JCPEcontract _ -> assert false (* TODO *)
+    | JCPEcontract(req,dec,behs,e) -> 
+	JCNEcontract(Option_misc.map expr req,
+		     Option_misc.map expr dec,
+		     List.map behavior behs,
+		     expr e)
     | JCPEwhile(_,inv,vareopt,e) ->
 	let inv = List.map (fun (behav,e) -> behav,expr e) inv in
 	JCNEloop(inv,Option_misc.map expr vareopt,expr e)
@@ -584,6 +588,13 @@ and tag_ tag =
   in
   new ptag ~loc:tag#loc tagnode
 
+and behavior (loc,id,idopt,e1opt,e2opt,asslist,e3) =
+  (loc,id,idopt,
+   Option_misc.map expr e1opt,
+   Option_misc.map expr e2opt,
+   Option_misc.map (fun (loc,elist) -> loc,List.map expr elist) asslist,
+   expr e3)
+
 let expr e =
   let e,_ = goto e (build_label_tree e) in
   let e = expr (normalize e) in
@@ -597,12 +608,8 @@ let expr e =
 (** From parsed clause to normalized clause *)
 let clause = function
   | JCCrequires e -> JCCrequires(expr e)
-  | JCCbehavior(loc,id,idopt,e1opt,e2opt,asslist,e3) ->
-      JCCbehavior(loc,id,idopt,
-		   Option_misc.map expr e1opt,
-		   Option_misc.map expr e2opt,
-		   Option_misc.map (fun (loc,elist) -> loc,List.map expr elist) asslist,
-		   expr e3)
+  | JCCbehavior b -> JCCbehavior(behavior b)
+
     
 (** From parsed reads-or-expr to normalized reads-or-expr *)
 let reads_or_expr = function

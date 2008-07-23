@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.225 2008-07-21 14:29:29 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.226 2008-07-23 15:31:54 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -582,7 +582,7 @@ let rec type_logic_labels env logic_label e =
     | JCNEif _ | JCNEoffset _ | JCNEalloc _ | JCNEfree _ | JCNElet _
     | JCNEassert _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
     | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEmatch _ | JCNEquantifier _
-    | JCNEmutable _ | JCNEtagequality _ | JCNErange _ ->
+    | JCNEmutable _ | JCNEtagequality _ | JCNErange _ | JCNEcontract _ ->
         iter_subs logic_label;
         env
     | JCNEapp(_, l, _) ->
@@ -847,7 +847,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     (* Not terms: *)
     | JCNEassign _ | JCNEalloc _ | JCNEfree _ | JCNEblock _ | JCNEassert _
     | JCNEloop _ | JCNEreturn _ | JCNEtry _ | JCNEthrow _ | JCNEpack _
-    | JCNEunpack _ | JCNEquantifier _ ->
+    | JCNEunpack _ | JCNEquantifier _ | JCNEcontract _ ->
         typing_error e#loc "construction not allowed in logic terms"
   in
   new term
@@ -1098,7 +1098,8 @@ different"
     (* Not assertions: *)
     | JCNEoffset _ | JCNErange _ | JCNEassign _ | JCNEalloc _ | JCNEfree _
     | JCNEassert _ | JCNEblock _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
-    | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEbinary _ | JCNEunary _ ->
+    | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEbinary _ | JCNEunary _ 
+    | JCNEcontract _ ->
         typing_error e#loc "construction not allowed in logic assertions"
   in
   new assertion
@@ -1130,6 +1131,136 @@ let loop_annot =
       jc_free_loop_invariant = free_invariant;
       jc_loop_variant = variant;
     }
+
+let rec location_set env e =
+  match e#node with
+    | JCNElabel(l,e) -> 
+        assert false (* TODO *)
+    | JCNEvar id ->
+        let vi =
+          try List.assoc id env with Not_found ->
+            try Hashtbl.find variables_env id with Not_found ->
+              typing_error e#loc "unbound identifier %s" id
+        in
+        begin match vi.jc_var_info_type with
+          | JCTpointer _ ->
+              vi.jc_var_info_type, vi.jc_var_info_region, JCLSvar vi
+          | _ -> assert false
+        end
+    | JCNEbinary(e, `Badd, i) ->
+        let ty,tr,te = location_set env e in
+        let ti = term env i in
+        begin
+          match ty, ti#typ with 
+            | JCTpointer(st,_,_), t2 when is_integer t2 ->
+                begin match ti#node with
+                  | JCTrange(t1,t2) -> ty,tr,JCLSrange(te,t1,t2)
+                  | _ -> ty,tr,JCLSrange(te,Some ti,Some ti)
+(* TODO ?
+                  | _ -> ty,tr,JCLSshift(te,ti)
+*)
+                end
+            | JCTpointer _, _ -> 
+                typing_error i#loc "integer expected, %a found"
+                  print_type ti#typ
+            | _ -> 
+                typing_error e#loc "pointer expected"
+        end
+    | JCNEbinary _ ->
+        assert false
+    | JCNEderef(ls, f) -> 
+        let t,tr,tls = location_set env ls in
+        let fi = find_field e#loc t f false in
+        let fr = Region.make_field tr fi in
+        fi.jc_field_info_type, fr, JCLSderef(tls, get_label e, fi, fr)   
+    | JCNErange _ | JCNEtagequality _| JCNEmutable _ | JCNEat _ | JCNEold _
+    | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
+    | JCNEtry _ |JCNEreturn _ | JCNEloop _ |JCNEblock _ | JCNEassert _
+    | JCNElet _ |JCNEfree _ | JCNEalloc _ | JCNEoffset _| JCNEif _ | JCNEcast _
+    | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _
+    | JCNEconst _ | JCNEcontract _ ->
+        typing_error e#loc "invalid memory location"
+
+let rec location env e =
+  match e#node with
+    | JCNElabel(l, e) ->
+        assert false (* TODO *)
+    | JCNEvar id ->
+        let vi =
+          try List.assoc id env with Not_found ->
+            try Hashtbl.find variables_env id with Not_found ->
+              typing_error e#loc "unbound identifier %s" id
+        in
+        vi.jc_var_info_type, vi.jc_var_info_region, JCLvar vi
+    | JCNEderef(ls, f) ->
+        let t, tr, tls = location_set env ls in
+        let fi = find_field e#loc t f false in
+        let fr = Region.make_field tr fi in
+        fi.jc_field_info_type, fr, JCLderef(tls, get_label e, fi, fr)
+    | JCNEat(e, lab) ->
+        let t, tr, tl = location env e in
+        t, tr, JCLat(tl, lab)
+    | JCNErange _ | JCNEtagequality _ | JCNEmutable _ | JCNEold _
+    | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
+    | JCNEtry _ | JCNEreturn _ | JCNEloop _ | JCNEblock _ | JCNEassert _
+    | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEif _ | JCNEcast _
+    | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _ | JCNEbinary _
+    | JCNEconst _ | JCNEcontract _ ->
+        typing_error e#loc "invalid memory location"
+
+let behavior env vi_result (loc, id, throws, assumes, requires, assigns, ensures) =
+  let throws,env_result = 
+    match throws with
+      | None -> None, (vi_result.jc_var_info_name,vi_result)::env 
+      | Some id -> 
+          try 
+            let ei = 
+              Hashtbl.find exceptions_table id#name 
+            in
+            let tei = match ei.jc_exception_info_type with
+              | Some tei -> tei
+              | None -> typing_error id#loc
+                  "exception without value"
+            in
+            let vi = var tei "\\result" in
+            vi.jc_var_info_final_name <- "result";
+            Some ei, (vi.jc_var_info_name,vi)::env 
+          with Not_found ->
+            typing_error id#loc 
+              "undeclared exception %s" id#name
+  in
+  let assumes = Option_misc.map (assertion env) assumes in
+  (*
+    let requires = Option_misc.map (assertion (Some "Here") env) requires in
+  *)
+  let assigns = 
+    Option_misc.map 
+      (fun (loc, l) -> 
+         (loc, List.map 
+            (fun a -> let _,_,tl = location env a in 
+             (match tl with
+                | JCLvar vi -> vi.jc_var_info_assigned <- true
+                | _ -> ());
+             tl) 
+            l)) 
+      assigns 
+  in
+  let b = {
+    jc_behavior_throws = throws;
+    jc_behavior_assumes = assumes;
+    (*
+      jc_behavior_requires = requires;
+    *)
+    jc_behavior_assigns = assigns;
+    jc_behavior_ensures = assertion env_result ensures }
+  in
+  (*
+    eprintf "lab,loc for ensures: \"%s\", %a@."
+    b.jc_behavior_ensures.jc_assertion_label
+    Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
+  *)
+  (loc,id,b)
+    
 
 let make_unary_op loc (op : Jc_ast.unary_op) e2 =
   let t2 = e2#typ in
@@ -1562,6 +1693,15 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     (* old statements *)
     | JCNEassert(behav,e1) ->
         unit_type, dummy_region, JCEassert(behav,assertion env e1)
+    | JCNEcontract(req,dec,behs,e) ->
+	assert false (* TODO *)
+	  (*
+	let requires = Option_misc.map (assertion env) req in
+	let decreases = Option_misc.map (term env) req in
+	let behs = List.map (behavior env vi_result) behs in
+	let e = expr env e in
+	JCEcontract(requires,decreases,behs,e)	
+	  *)
     | JCNEblock el ->
         (* No warning when a value is ignored. *)
         let tel = List.map fe el in
@@ -1698,81 +1838,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 (*                                  Declarations                               *)
 (*******************************************************************************)
 
-let rec location_set env e =
-  match e#node with
-    | JCNElabel(l,e) -> 
-        assert false (* TODO *)
-    | JCNEvar id ->
-        let vi =
-          try List.assoc id env with Not_found ->
-            try Hashtbl.find variables_env id with Not_found ->
-              typing_error e#loc "unbound identifier %s" id
-        in
-        begin match vi.jc_var_info_type with
-          | JCTpointer _ ->
-              vi.jc_var_info_type, vi.jc_var_info_region, JCLSvar vi
-          | _ -> assert false
-        end
-    | JCNEbinary(e, `Badd, i) ->
-        let ty,tr,te = location_set env e in
-        let ti = term env i in
-        begin
-          match ty, ti#typ with 
-            | JCTpointer(st,_,_), t2 when is_integer t2 ->
-                begin match ti#node with
-                  | JCTrange(t1,t2) -> ty,tr,JCLSrange(te,t1,t2)
-                  | _ -> ty,tr,JCLSrange(te,Some ti,Some ti)
-(* TODO ?
-                  | _ -> ty,tr,JCLSshift(te,ti)
-*)
-                end
-            | JCTpointer _, _ -> 
-                typing_error i#loc "integer expected, %a found"
-                  print_type ti#typ
-            | _ -> 
-                typing_error e#loc "pointer expected"
-        end
-    | JCNEbinary _ ->
-        assert false
-    | JCNEderef(ls, f) -> 
-        let t,tr,tls = location_set env ls in
-        let fi = find_field e#loc t f false in
-        let fr = Region.make_field tr fi in
-        fi.jc_field_info_type, fr, JCLSderef(tls, get_label e, fi, fr)   
-    | JCNErange _ | JCNEtagequality _| JCNEmutable _ | JCNEat _ | JCNEold _
-    | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
-    | JCNEtry _ |JCNEreturn _ | JCNEloop _ |JCNEblock _ | JCNEassert _
-    | JCNElet _ |JCNEfree _ | JCNEalloc _ | JCNEoffset _| JCNEif _ | JCNEcast _
-    | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _
-    | JCNEconst _ ->
-        assert false
 
-let rec location env e =
-  match e#node with
-    | JCNElabel(l, e) ->
-        assert false (* TODO *)
-    | JCNEvar id ->
-        let vi =
-          try List.assoc id env with Not_found ->
-            try Hashtbl.find variables_env id with Not_found ->
-              typing_error e#loc "unbound identifier %s" id
-        in
-        vi.jc_var_info_type, vi.jc_var_info_region, JCLvar vi
-    | JCNEderef(ls, f) ->
-        let t, tr, tls = location_set env ls in
-        let fi = find_field e#loc t f false in
-        let fr = Region.make_field tr fi in
-        fi.jc_field_info_type, fr, JCLderef(tls, get_label e, fi, fr)
-    | JCNEat(e, lab) ->
-        let t, tr, tl = location env e in
-        t, tr, JCLat(tl, lab)
-    | JCNErange _ | JCNEtagequality _ | JCNEmutable _ | JCNEold _
-    | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
-    | JCNEtry _ | JCNEreturn _ | JCNEloop _ | JCNEblock _ | JCNEassert _
-    | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEif _ | JCNEcast _
-    | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _ | JCNEbinary _
-    | JCNEconst _ ->
-        typing_error e#loc "invalid memory location"
 
 let default_label l =
   match l with
@@ -1826,65 +1892,14 @@ let type_logic_labels_in_decl d = match d#node with
 
 
 
-
-
 let clause env vi_result c acc =
   match c with
     | JCCrequires e ->
         { acc with 
           jc_fun_requires = 
             make_and (assertion env e) acc.jc_fun_requires; }
-    | JCCbehavior(loc, id, throws, assumes, requires, assigns, ensures) ->
-        let throws,env_result = 
-          match throws with
-            | None -> None, (vi_result.jc_var_info_name,vi_result)::env 
-            | Some id -> 
-                try 
-                  let ei = 
-                    Hashtbl.find exceptions_table id#name 
-                  in
-                  let tei = match ei.jc_exception_info_type with
-                    | Some tei -> tei
-                    | None -> typing_error id#loc
-                        "exception without value"
-                  in
-                  let vi = var tei "\\result" in
-                  vi.jc_var_info_final_name <- "result";
-                  Some ei, (vi.jc_var_info_name,vi)::env 
-                with Not_found ->
-                  typing_error id#loc 
-                    "undeclared exception %s" id#name
-        in
-        let assumes = Option_misc.map (assertion env) assumes in
-(*
-        let requires = Option_misc.map (assertion (Some "Here") env) requires in
-*)
-        let assigns = 
-          Option_misc.map 
-            (fun (loc, l) -> 
-              (loc, List.map 
-                 (fun a -> let _,_,tl = location env a in 
-                    (match tl with
-                      | JCLvar vi -> vi.jc_var_info_assigned <- true
-                      | _ -> ());
-                    tl) 
-                 l)) 
-            assigns 
-        in
-        let b = {
-          jc_behavior_throws = throws;
-          jc_behavior_assumes = assumes;
-(*
-          jc_behavior_requires = requires;
-*)
-          jc_behavior_assigns = assigns;
-          jc_behavior_ensures = assertion env_result ensures }
-        in
-(*
-        eprintf "lab,loc for ensures: \"%s\", %a@."
-          b.jc_behavior_ensures.jc_assertion_label
-          Loc.gen_report_position b.jc_behavior_ensures.jc_assertion_loc;
-*)
+    | JCCbehavior b ->
+	let (loc,id,b) = behavior env vi_result b in
         { acc with jc_fun_behavior = (loc,id,b)::acc.jc_fun_behavior }
           
 

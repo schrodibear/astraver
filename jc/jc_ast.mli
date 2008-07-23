@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.135 2008-07-23 12:13:53 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.136 2008-07-23 15:31:54 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -261,6 +261,9 @@ type nexpr_node =
   | JCNEfree of nexpr
   | JCNElet of ptype option * string * nexpr option * nexpr
   | JCNEassert of string list * nexpr
+  | JCNEcontract of 
+      nexpr option * nexpr option * nexpr pbehavior list * nexpr 
+	(* requires, decreases, behaviors, expression *)
   | JCNEblock of nexpr list
   | JCNEloop of (string list * nexpr) list * nexpr option * nexpr
       (*r invariant, variant, body *)

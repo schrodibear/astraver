@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.102 2008-07-23 12:13:54 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.103 2008-07-23 15:31:54 marche Exp $ */
 
 %{
 
@@ -655,10 +655,8 @@ expression:
     { locate (JCPEassert($3,$5)) }
 | ASSERT expression 
     { locate (JCPEassert([],$2)) }
-/* TODO
-| behavior expression
-    { locate (JCPEcontract(None,None,$1,$2)) } 
-*/
+| behavior compound_expr
+    { locate (JCPEcontract(None,None,[$1],$2)) } 
 | iteration_expression 
     { $1 }
 | jump_expression 

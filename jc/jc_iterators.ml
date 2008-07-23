@@ -252,6 +252,8 @@ module NExprAst = struct
       | JCNElet(_, _, Some e1, e2)
       | JCNErange(Some e1, Some e2) ->
           [e1; e2]
+      | JCNEcontract(_,_,_,e) -> 
+	  [e]
       | JCNEif(e1, e2, e3) ->
           [e1; e2; e3]
       | JCNEloop(inv, None, e2) ->
@@ -450,7 +452,7 @@ module PExprAst = struct
           [e1; e2]
       | JCPEif(e1, e2, e3) ->
 	  [e1; e2; e3]
-      | JCPEcontract _ -> assert false (* TODO *)
+      | JCPEcontract(_,_,_,e) -> [e]
       | JCPEwhile(e1,inv,None,e3) ->
 	  let e2list = List.map (fun (_behav,e) -> e) inv in
           e1 :: e2list @ [e3]
