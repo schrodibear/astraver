@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.310 2008-07-21 14:29:29 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.311 2008-07-23 12:13:54 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1516,6 +1516,7 @@ and expr ~infunction ~threats e : expr =
     | JCEbinary(e1, (`Bland,_), e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
+(*
 	let ef1 = Jc_effect.expr empty_fun_effect e1 in
 	let ef2 = Jc_effect.expr ef1 e2 in
 	if Jc_effect.same_effects ef2.jc_writes empty_fun_effect.jc_writes &&
@@ -1523,11 +1524,13 @@ and expr ~infunction ~threats e : expr =
 	then
 	  make_app "bool_and" [ e1'; e2'] 
 	else
+*)
           (* lazy conjunction *)
           And(e1',e2')    
     | JCEbinary(e1,(`Blor,_),e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
+(*
 	let ef1 = Jc_effect.expr empty_fun_effect e1 in
 	let ef2 = Jc_effect.expr ef1 e2 in
 	if Jc_effect.same_effects ef2.jc_writes empty_fun_effect.jc_writes &&
@@ -1535,6 +1538,7 @@ and expr ~infunction ~threats e : expr =
 	then
 	  make_app "bool_or" [ e1'; e2'] 
 	else
+*)
         (* lazy disjunction *)
           Or(e1',e2')     
     | JCEbinary(e1, (_, #native_operator_type as op), e2) ->

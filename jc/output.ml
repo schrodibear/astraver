@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.33 2008-07-09 10:32:00 marche Exp $ i*)
+(*i $Id: output.ml,v 1.34 2008-07-23 12:13:54 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -126,6 +126,11 @@ let rec unname a =
   match a with
     | LNamed(_,a) -> unname a
     | _ -> a
+
+let is_not_true a =
+  match unname a with
+    | LTrue -> false
+    | _ -> true
 
 let make_or a1 a2 =
   match (unname a1,unname a2) with
@@ -311,7 +316,7 @@ let rec fprintf_type anon form t =
     | Annot_type(p,t,reads,writes,q,signals) ->
 	begin
 	  fprintf form "@[@[<hv 2>{ "; 
-	  if p <> LTrue 
+	  if is_not_true p  
 	  then fprintf_assertion form p;
 	  fprintf form "}@]@ %a@ " (fprintf_type anon) t;
 	  begin

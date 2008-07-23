@@ -216,7 +216,6 @@ behavior correctness:
 }
 
 unit cons_BinarySearch(BinarySearch[0] this_0)
-  requires true;
 ;
 
 /*
@@ -1130,8 +1129,7 @@ parameter char_of_integer_ :
 
 parameter cons_BinarySearch :
  this_0:Object pointer ->
-  { (JC_22: (true = true))} unit reads Object_alloc_table,Object_tag_table
-  { true }
+  { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1140,7 +1138,7 @@ parameter int32_of_integer_ :
 
 parameter java_array_length_intM :
  x_2:Object pointer ->
-  { (JC_5: true)} int reads Object_alloc_table,Object_tag_table
+  { } int reads Object_alloc_table,Object_tag_table
   { (JC_9:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
@@ -1155,7 +1153,7 @@ parameter long_of_integer_ :
 
 parameter non_null_Object :
  x_3:Object pointer ->
-  { (JC_10: true)} bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table,Object_tag_table
   { (JC_13:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_3), (0))
@@ -1163,7 +1161,7 @@ parameter non_null_Object :
 
 parameter non_null_intM :
  x_1:Object pointer ->
-  { (JC_1: true)} bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table,Object_tag_table
   { (JC_4:
     (if result
      then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
@@ -1425,7 +1423,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "why/BinarySearch.why" line = "606" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "605" begin = "49" end = "208"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
@@ -2447,7 +2445,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_9:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2507,7 +2504,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_10:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2567,7 +2563,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_11:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2630,7 +2625,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_12:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2693,7 +2687,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_13:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2757,7 +2750,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_14:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2827,7 +2819,6 @@ goal BinarySearch_binary_search_safety_po_2:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2853,7 +2844,6 @@ goal BinarySearch_binary_search_safety_po_3:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2879,7 +2869,6 @@ goal BinarySearch_binary_search_safety_po_4:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2907,7 +2896,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_1:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2935,7 +2923,6 @@ goal BinarySearch_binary_search_safety_po_5:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -2966,7 +2953,6 @@ goal BinarySearch_binary_search_safety_po_6:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3000,7 +2986,6 @@ goal BinarySearch_binary_search_safety_po_7:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3034,7 +3019,6 @@ goal BinarySearch_binary_search_safety_po_8:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3076,7 +3060,6 @@ goal BinarySearch_binary_search_safety_po_9:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3118,7 +3101,6 @@ goal BinarySearch_binary_search_safety_po_10:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3164,7 +3146,6 @@ goal BinarySearch_binary_search_safety_po_11:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3213,7 +3194,6 @@ goal BinarySearch_binary_search_safety_po_12:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3262,7 +3242,6 @@ goal BinarySearch_binary_search_safety_po_13:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3314,7 +3293,6 @@ goal BinarySearch_binary_search_safety_po_14:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3364,7 +3342,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_2:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3394,7 +3371,6 @@ goal BinarySearch_binary_search_safety_po_15:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3450,7 +3426,6 @@ goal BinarySearch_binary_search_safety_po_16:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3506,7 +3481,6 @@ goal BinarySearch_binary_search_safety_po_17:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3567,7 +3541,6 @@ goal BinarySearch_binary_search_safety_po_18:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3628,7 +3601,6 @@ goal BinarySearch_binary_search_safety_po_19:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3695,7 +3667,6 @@ goal BinarySearch_binary_search_safety_po_20:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3763,7 +3734,6 @@ goal BinarySearch_binary_search_safety_po_21:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3834,7 +3804,6 @@ goal BinarySearch_binary_search_safety_po_22:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3905,7 +3874,6 @@ goal BinarySearch_binary_search_safety_po_23:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -3972,7 +3940,6 @@ goal BinarySearch_binary_search_safety_po_24:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4039,7 +4006,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_3:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4072,7 +4038,6 @@ goal BinarySearch_binary_search_safety_po_25:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4138,7 +4103,6 @@ goal BinarySearch_binary_search_safety_po_26:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4204,7 +4168,6 @@ goal BinarySearch_binary_search_safety_po_27:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4277,7 +4240,6 @@ goal BinarySearch_binary_search_safety_po_28:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4353,7 +4315,6 @@ goal BinarySearch_binary_search_safety_po_29:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4429,7 +4390,6 @@ goal BinarySearch_binary_search_safety_po_30:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4501,7 +4461,6 @@ goal BinarySearch_binary_search_safety_po_31:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4573,7 +4532,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_4:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4605,7 +4563,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_5:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4647,7 +4604,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_6:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4703,7 +4659,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_7:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4760,7 +4715,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_8:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -5389,7 +5343,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5397,7 +5350,7 @@ why -simplify [...] why/BinarySearch.why
          (EQ |@true| |@true|))))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1) (- result0 1))
-(<= 0 (integer_of_int32 result)))))))))))))
+(<= 0 (integer_of_int32 result))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_2, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -5416,7 +5369,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5424,7 +5376,7 @@ why -simplify [...] why/BinarySearch.why
          (EQ |@true| |@true|))))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1) (- result0 1))
-(<= (integer_of_int32 result1) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))
+(<= (integer_of_int32 result1) (- (+ (offset_max Object_alloc_table t_0) 1) 1))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_3, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -5444,7 +5396,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5456,7 +5407,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= (integer_of_int32 result) k_0))))))))))))))))
+(<= (integer_of_int32 result) k_0)))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_4, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -5476,7 +5427,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5488,7 +5438,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= k_0 (integer_of_int32 result1)))))))))))))))))
+(<= k_0 (integer_of_int32 result1))))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_5, File "/home/cmarche/recherche/why/tests/java/BinarySearch.jc", line 112, characters 54-140
 (FORALL (t_0)
@@ -5508,7 +5458,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5532,7 +5481,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result2)
 (IMPLIES (EQ (integer_of_int32 result2)
          (- (integer_of_int32 u) (integer_of_int32 l)))
-(NEQ 2 0)))))))))))))))))))
+(NEQ 2 0))))))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_6, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -5552,7 +5501,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5590,7 +5538,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (< (integer_of_int32 result6) (integer_of_int32 v))
 (FORALL (result7)
 (IMPLIES (EQ (integer_of_int32 result7) (+ (integer_of_int32 result5) 1))
-(FORALL (l0) (IMPLIES (EQ l0 result7) (<= 0 (integer_of_int32 l0))))))))))))))))))))))))))))))))))
+(FORALL (l0) (IMPLIES (EQ l0 result7) (<= 0 (integer_of_int32 l0)))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_7, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -5610,7 +5558,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5650,7 +5597,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result7) (+ (integer_of_int32 result5) 1))
 (FORALL (l0)
 (IMPLIES (EQ l0 result7)
-(<= (integer_of_int32 u) (- (+ (offset_max Object_alloc_table t_0) 1) 1))))))))))))))))))))))))))))))))))
+(<= (integer_of_int32 u) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_8, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -5670,7 +5617,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5714,7 +5660,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= (integer_of_int32 l0) k_0))))))))))))))))))))))))))))))))))))
+(<= (integer_of_int32 l0) k_0)))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_9, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -5734,7 +5680,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5778,7 +5723,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= k_0 (integer_of_int32 u)))))))))))))))))))))))))))))))))))))
+(<= k_0 (integer_of_int32 u))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_10, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -5798,7 +5743,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5842,7 +5786,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result8) (- (integer_of_int32 result5) 1))
 (FORALL (u0)
 (IMPLIES (EQ u0 result8)
-(<= (integer_of_int32 u0) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))))))))))))))))))))))))))
+(<= (integer_of_int32 u0) (- (+ (offset_max Object_alloc_table t_0) 1) 1))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_11, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -5862,7 +5806,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5910,7 +5853,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= (integer_of_int32 l) k_0)))))))))))))))))))))))))))))))))))))))
+(<= (integer_of_int32 l) k_0))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_12, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -5930,7 +5873,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -5978,7 +5920,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= k_0 (integer_of_int32 u0))))))))))))))))))))))))))))))))))))))))
+(<= k_0 (integer_of_int32 u0)))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_13, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 59, characters 10-126
 (FORALL (t_0)
@@ -5998,7 +5940,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6049,7 +5990,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (k)
 (IMPLIES (AND (<= 0 k) (< k (+ (offset_max Object_alloc_table t_0) 1)))
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
-(integer_of_int32 v)))))))))))))))))))))))))))))))))))))))
+(integer_of_int32 v))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_ensures_correctness_po_14, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 59, characters 10-126
 (FORALL (t_0)
@@ -6069,7 +6010,6 @@ why -simplify [...] why/BinarySearch.why
                                                                   t_0 k2)))))))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6103,9 +6043,9 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (k)
 (IMPLIES (AND (<= 0 k) (< k (+ (offset_max Object_alloc_table t_0) 1)))
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
-(integer_of_int32 v))))))))))))))))))))))))))
+(integer_of_int32 v)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 606, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 605, characters 49-208
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -6142,13 +6082,12 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
          (AND (EQ result0 (+ (offset_max Object_alloc_table t_0) 1))
          (EQ |@true| |@true|))))
-(<= (- 0 constant_too_large_2147483648) (- result0 1))))))))))))
+(<= (- 0 constant_too_large_2147483648) (- result0 1)))))))))))
 
 ;; BinarySearch_binary_search_safety_po_3, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 63, characters 16-28
 (FORALL (t_0)
@@ -6168,13 +6107,12 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
          (AND (EQ result0 (+ (offset_max Object_alloc_table t_0) 1))
          (EQ |@true| |@true|))))
-(<= (- result0 1) constant_too_large_2147483647)))))))))))
+(<= (- result0 1) constant_too_large_2147483647))))))))))
 
 ;; BinarySearch_binary_search_safety_po_4, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -6194,7 +6132,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6204,7 +6141,7 @@ why -simplify [...] why/BinarySearch.why
          (<= (- result0 1) constant_too_large_2147483647))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1) (- result0 1))
-(<= 0 (integer_of_int32 result)))))))))))))))
+(<= 0 (integer_of_int32 result))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_5, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -6224,7 +6161,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6234,7 +6170,7 @@ why -simplify [...] why/BinarySearch.why
          (<= (- result0 1) constant_too_large_2147483647))
 (FORALL (result1)
 (IMPLIES (EQ (integer_of_int32 result1) (- result0 1))
-(<= (integer_of_int32 result1) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))))
+(<= (integer_of_int32 result1) (- (+ (offset_max Object_alloc_table t_0) 1) 1))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_6, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -6255,7 +6191,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6269,7 +6204,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= (integer_of_int32 result) k_0))))))))))))))))))
+(<= (integer_of_int32 result) k_0)))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_7, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -6290,7 +6225,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6304,7 +6238,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= k_0 (integer_of_int32 result1)))))))))))))))))))
+(<= k_0 (integer_of_int32 result1))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_8, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 18-23
 (FORALL (t_0)
@@ -6325,7 +6259,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6349,7 +6282,7 @@ why -simplify [...] why/BinarySearch.why
          (AND (<= (integer_of_int32 l) k_0) (<= k_0 (integer_of_int32 u))))))))
 (IMPLIES (<= (integer_of_int32 l) (integer_of_int32 u))
 (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 u) (integer_of_int32
-                                                                l)))))))))))))))))))))
+                                                                l))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_9, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 18-23
 (FORALL (t_0)
@@ -6370,7 +6303,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6393,7 +6325,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
          (AND (<= (integer_of_int32 l) k_0) (<= k_0 (integer_of_int32 u))))))))
 (IMPLIES (<= (integer_of_int32 l) (integer_of_int32 u))
-(<= (- (integer_of_int32 u) (integer_of_int32 l)) constant_too_large_2147483647)))))))))))))))))))
+(<= (- (integer_of_int32 u) (integer_of_int32 l)) constant_too_large_2147483647))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_10, File "/home/cmarche/recherche/why/tests/java/BinarySearch.jc", line 112, characters 54-140
 (FORALL (t_0)
@@ -6414,7 +6346,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6444,7 +6375,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result2)
 (IMPLIES (EQ (integer_of_int32 result2)
          (- (integer_of_int32 u) (integer_of_int32 l)))
-(NEQ 2 0))))))))))))))))))))))
+(NEQ 2 0)))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_11, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 17-28
 (FORALL (t_0)
@@ -6465,7 +6396,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6498,7 +6428,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (NEQ 2 0)
 (FORALL (result3)
 (IMPLIES (EQ result3 (int_div (integer_of_int32 result2) 2))
-(<= (- 0 constant_too_large_2147483648) result3)))))))))))))))))))))))))
+(<= (- 0 constant_too_large_2147483648) result3))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_12, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 17-28
 (FORALL (t_0)
@@ -6519,7 +6449,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6552,7 +6481,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (NEQ 2 0)
 (FORALL (result3)
 (IMPLIES (EQ result3 (int_div (integer_of_int32 result2) 2))
-(<= result3 constant_too_large_2147483647)))))))))))))))))))))))))
+(<= result3 constant_too_large_2147483647))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_13, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 13-28
 (FORALL (t_0)
@@ -6573,7 +6502,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6611,7 +6539,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result4)
 (IMPLIES (EQ (integer_of_int32 result4) result3)
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l) (integer_of_int32
-                                                                result4))))))))))))))))))))))))))))))
+                                                                result4)))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_14, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 71, characters 13-28
 (FORALL (t_0)
@@ -6632,7 +6560,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6669,7 +6596,7 @@ why -simplify [...] why/BinarySearch.why
          (<= result3 constant_too_large_2147483647))
 (FORALL (result4)
 (IMPLIES (EQ (integer_of_int32 result4) result3)
-(<= (+ (integer_of_int32 l) (integer_of_int32 result4)) constant_too_large_2147483647))))))))))))))))))))))))))))
+(<= (+ (integer_of_int32 l) (integer_of_int32 result4)) constant_too_large_2147483647)))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_15, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 9-13
 (FORALL (t_0)
@@ -6690,7 +6617,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6734,7 +6660,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result5)
 (IMPLIES (EQ (integer_of_int32 result5)
          (+ (integer_of_int32 l) (integer_of_int32 result4)))
-(<= 0 (integer_of_int32 result5))))))))))))))))))))))))))))))))
+(<= 0 (integer_of_int32 result5)))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_16, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 9-13
 (FORALL (t_0)
@@ -6755,7 +6681,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6799,7 +6724,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result5)
 (IMPLIES (EQ (integer_of_int32 result5)
          (+ (integer_of_int32 l) (integer_of_int32 result4)))
-(<= (integer_of_int32 result5) (offset_max Object_alloc_table t_0))))))))))))))))))))))))))))))))
+(<= (integer_of_int32 result5) (offset_max Object_alloc_table t_0)))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_17, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 23-28
 (FORALL (t_0)
@@ -6820,7 +6745,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6870,7 +6794,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ result6
          (select intM_intP (shift t_0 (integer_of_int32 result5))))
 (IMPLIES (< (integer_of_int32 result6) (integer_of_int32 v))
-(<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result5) 1))))))))))))))))))))))))))))))))))))
+(<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result5) 1)))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_18, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 72, characters 23-28
 (FORALL (t_0)
@@ -6891,7 +6815,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -6941,7 +6864,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ result6
          (select intM_intP (shift t_0 (integer_of_int32 result5))))
 (IMPLIES (< (integer_of_int32 result6) (integer_of_int32 v))
-(<= (+ (integer_of_int32 result5) 1) constant_too_large_2147483647)))))))))))))))))))))))))))))))))))
+(<= (+ (integer_of_int32 result5) 1) constant_too_large_2147483647))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_19, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -6962,7 +6885,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7018,7 +6940,7 @@ why -simplify [...] why/BinarySearch.why
          (<= (+ (integer_of_int32 result5) 1) constant_too_large_2147483647))
 (FORALL (result7)
 (IMPLIES (EQ (integer_of_int32 result7) (+ (integer_of_int32 result5) 1))
-(FORALL (l0) (IMPLIES (EQ l0 result7) (<= 0 (integer_of_int32 l0)))))))))))))))))))))))))))))))))))))))))
+(FORALL (l0) (IMPLIES (EQ l0 result7) (<= 0 (integer_of_int32 l0))))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_20, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -7039,7 +6961,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7097,7 +7018,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result7) (+ (integer_of_int32 result5) 1))
 (FORALL (l0)
 (IMPLIES (EQ l0 result7)
-(<= (integer_of_int32 u) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))))))))))))))))))))))))))))))
+(<= (integer_of_int32 u) (- (+ (offset_max Object_alloc_table t_0) 1) 1))))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_21, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -7118,7 +7039,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7180,7 +7100,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= (integer_of_int32 l0) k_0)))))))))))))))))))))))))))))))))))))))))))
+(<= (integer_of_int32 l0) k_0))))))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_22, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -7201,7 +7121,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7263,7 +7182,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= k_0 (integer_of_int32 u))))))))))))))))))))))))))))))))))))))))))))
+(<= k_0 (integer_of_int32 u)))))))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_23, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
 (FORALL (t_0)
@@ -7284,7 +7203,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7342,7 +7260,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result7) (+ (integer_of_int32 result5) 1))
 (FORALL (l0)
 (IMPLIES (EQ l0 result7)
-(<= 0 (- (integer_of_int32 u) (integer_of_int32 l))))))))))))))))))))))))))))))))))))))))))
+(<= 0 (- (integer_of_int32 u) (integer_of_int32 l)))))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_24, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
 (FORALL (t_0)
@@ -7363,7 +7281,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7422,7 +7339,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (l0)
 (IMPLIES (EQ l0 result7)
 (< (- (integer_of_int32 u) (integer_of_int32 l0)) (- (integer_of_int32 u) 
-                                                  (integer_of_int32 l))))))))))))))))))))))))))))))))))))))))))
+                                                  (integer_of_int32 l)))))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_25, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 73, characters 28-33
 (FORALL (t_0)
@@ -7443,7 +7360,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7499,7 +7415,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ result7
          (select intM_intP (shift t_0 (integer_of_int32 result5))))
 (IMPLIES (> (integer_of_int32 result7) (integer_of_int32 v))
-(<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 result5) 1))))))))))))))))))))))))))))))))))))))))
+(<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 result5) 1)))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_26, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 73, characters 28-33
 (FORALL (t_0)
@@ -7520,7 +7436,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7576,7 +7491,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ result7
          (select intM_intP (shift t_0 (integer_of_int32 result5))))
 (IMPLIES (> (integer_of_int32 result7) (integer_of_int32 v))
-(<= (- (integer_of_int32 result5) 1) constant_too_large_2147483647)))))))))))))))))))))))))))))))))))))))
+(<= (- (integer_of_int32 result5) 1) constant_too_large_2147483647))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_27, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -7597,7 +7512,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7661,7 +7575,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result8) (- (integer_of_int32 result5) 1))
 (FORALL (u0)
 (IMPLIES (EQ u0 result8)
-(<= (integer_of_int32 u0) (- (+ (offset_max Object_alloc_table t_0) 1) 1)))))))))))))))))))))))))))))))))))))))))))))
+(<= (integer_of_int32 u0) (- (+ (offset_max Object_alloc_table t_0) 1) 1))))))))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_28, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -7682,7 +7596,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7750,7 +7663,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= (integer_of_int32 l) k_0)))))))))))))))))))))))))))))))))))))))))))))))
+(<= (integer_of_int32 l) k_0))))))))))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_29, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 65, characters 7-112
 (FORALL (t_0)
@@ -7771,7 +7684,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7839,7 +7751,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (AND (<= 0 k_0) (< k_0 (+ (offset_max Object_alloc_table t_0) 1)))
 (IMPLIES (EQ (integer_of_int32 (select intM_intP (shift t_0 k_0)))
          (integer_of_int32 v))
-(<= k_0 (integer_of_int32 u0))))))))))))))))))))))))))))))))))))))))))))))))
+(<= k_0 (integer_of_int32 u0)))))))))))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_30, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
 (FORALL (t_0)
@@ -7860,7 +7772,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -7924,7 +7835,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result8) (- (integer_of_int32 result5) 1))
 (FORALL (u0)
 (IMPLIES (EQ u0 result8)
-(<= 0 (- (integer_of_int32 u) (integer_of_int32 l))))))))))))))))))))))))))))))))))))))))))))))
+(<= 0 (- (integer_of_int32 u) (integer_of_int32 l)))))))))))))))))))))))))))))))))))))))))))))
 
 ;; BinarySearch_binary_search_safety_po_31, File "/home/cmarche/recherche/why/tests/java/BinarySearch.java", line 68, characters 7-10
 (FORALL (t_0)
@@ -7945,7 +7856,6 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_alloc_table t_0) (- 0 1))
-(IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8010,7 +7920,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (u0)
 (IMPLIES (EQ u0 result8)
 (< (- (integer_of_int32 u0) (integer_of_int32 l)) (- (integer_of_int32 u) 
-                                                  (integer_of_int32 l))))))))))))))))))))))))))))))))))))))))))))))
+                                                  (integer_of_int32 l)))))))))))))))))))))))))))))))))))))))))))))
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
@@ -8843,7 +8753,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_1:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -8869,7 +8778,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_2:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -8897,7 +8805,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_3:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -8928,7 +8835,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_4:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -8959,7 +8865,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_5:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9000,7 +8905,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_6:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9055,7 +8959,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_7:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9111,7 +9014,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_8:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9170,7 +9072,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_9:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9229,7 +9130,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_10:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9288,7 +9188,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_11:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9350,7 +9249,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_12:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9412,7 +9310,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_13:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9475,7 +9372,6 @@ goal BinarySearch_binary_search_ensures_correctness_po_14:
         k1))) <= integer_of_int32(select(intM_intP, shift(t_0, k2))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9543,7 +9439,6 @@ goal BinarySearch_binary_search_safety_po_2:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9568,7 +9463,6 @@ goal BinarySearch_binary_search_safety_po_3:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9593,7 +9487,6 @@ goal BinarySearch_binary_search_safety_po_4:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9621,7 +9514,6 @@ goal BinarySearch_binary_search_safety_po_5:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9651,7 +9543,6 @@ goal BinarySearch_binary_search_safety_po_6:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9684,7 +9575,6 @@ goal BinarySearch_binary_search_safety_po_7:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9717,7 +9607,6 @@ goal BinarySearch_binary_search_safety_po_8:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9758,7 +9647,6 @@ goal BinarySearch_binary_search_safety_po_9:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9799,7 +9687,6 @@ goal BinarySearch_binary_search_safety_po_10:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9844,7 +9731,6 @@ goal BinarySearch_binary_search_safety_po_11:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9892,7 +9778,6 @@ goal BinarySearch_binary_search_safety_po_12:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9940,7 +9825,6 @@ goal BinarySearch_binary_search_safety_po_13:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -9991,7 +9875,6 @@ goal BinarySearch_binary_search_safety_po_14:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10042,7 +9925,6 @@ goal BinarySearch_binary_search_safety_po_15:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10097,7 +9979,6 @@ goal BinarySearch_binary_search_safety_po_16:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10152,7 +10033,6 @@ goal BinarySearch_binary_search_safety_po_17:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10212,7 +10092,6 @@ goal BinarySearch_binary_search_safety_po_18:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10272,7 +10151,6 @@ goal BinarySearch_binary_search_safety_po_19:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10338,7 +10216,6 @@ goal BinarySearch_binary_search_safety_po_20:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10405,7 +10282,6 @@ goal BinarySearch_binary_search_safety_po_21:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10475,7 +10351,6 @@ goal BinarySearch_binary_search_safety_po_22:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10545,7 +10420,6 @@ goal BinarySearch_binary_search_safety_po_23:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10611,7 +10485,6 @@ goal BinarySearch_binary_search_safety_po_24:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10678,7 +10551,6 @@ goal BinarySearch_binary_search_safety_po_25:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10743,7 +10615,6 @@ goal BinarySearch_binary_search_safety_po_26:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10808,7 +10679,6 @@ goal BinarySearch_binary_search_safety_po_27:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10880,7 +10750,6 @@ goal BinarySearch_binary_search_safety_po_28:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -10955,7 +10824,6 @@ goal BinarySearch_binary_search_safety_po_29:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -11030,7 +10898,6 @@ goal BinarySearch_binary_search_safety_po_30:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -11101,7 +10968,6 @@ goal BinarySearch_binary_search_safety_po_31:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
-  ("JC_5": true) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and

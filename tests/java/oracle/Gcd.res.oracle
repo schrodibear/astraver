@@ -311,7 +311,6 @@ behavior bezoutProperty:
 }
 
 unit cons_Gcd(Gcd[0] this_0)
-  requires true;
 ;
 
 /*
@@ -1046,12 +1045,11 @@ parameter alloc_one_interface :
 
 parameter cons_Gcd :
  this_0:Object pointer ->
-  { (JC_10: (true = true))} unit reads Object_alloc_table,Object_tag_table
-  { true }
+  { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  { (JC_1: true)} bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table,Object_tag_table
   { (JC_4:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))

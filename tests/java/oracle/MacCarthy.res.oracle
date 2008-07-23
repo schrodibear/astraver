@@ -95,7 +95,6 @@ axiom max_def{Here} :
       (max(x_1, y_1) >= y_1))))
 
 integer MacCarthy_f91(integer n)
-  requires true;
 behavior less_than_101:
   assumes (n <= 100);
   ensures (K_1 : (\result == 91));
@@ -108,55 +107,42 @@ behavior greater_than_100:
 }
 
 unit cons_MacCarthy(MacCarthy[0] this_1)
-  requires true;
 ;
 
 unit Object_registerNatives()
-  requires true;
 ;
 
 integer Object_hashCode(Object[0] this_2)
-  requires true;
 ;
 
 boolean Object_equals(Object[0] this_3, Object[0..] obj)
-  requires true;
 ;
 
 Object[0..] Object_clone(Object[0] this_4)
-  requires true;
 ;
 
 String[0..] Object_toString(Object[0] this_5)
-  requires true;
 ;
 
 unit Object_notify(Object[0] this_6)
-  requires true;
 ;
 
 unit Object_notifyAll(Object[0] this_7)
-  requires true;
 ;
 
 unit Object_wait_long(Object[0] this_8, integer timeout)
-  requires true;
 ;
 
 unit Object_wait_long_int(Object[0] this_9, integer timeout_0, integer nanos)
-  requires true;
 ;
 
 unit Object_wait(Object[0] this_10)
-  requires true;
 ;
 
 unit Object_finalize(Object[0] this_11)
-  requires true;
 ;
 
 unit cons_Object(Object[0] this_12)
-  requires true;
 ;
 
 /*
@@ -851,7 +837,7 @@ predicate valid_variant_interface(p:interface pointer,
 
 parameter MacCarthy_f91 :
  n_1:int ->
-  { (JC_5: (true = true))} int
+  { } int
   { ((ge_int(n_1, (101)) -> (K_2: eq_int(result, sub_int(n_1, (10)))))
     and (le_int(n_1, (100)) -> (K_1: eq_int(result, (91))))) }
 
@@ -861,60 +847,47 @@ parameter Object_tag_table : Object tag_table ref
 
 parameter Object_clone :
  this_4:Object pointer ->
-  { (JC_20: (true = true))} Object pointer
-  reads Object_alloc_table,Object_tag_table { true }
+  { } Object pointer reads Object_alloc_table,Object_tag_table { true }
 
 parameter Object_equals :
  this_3:Object pointer ->
   obj:Object pointer ->
-   { (JC_17: (true = true))} bool reads Object_alloc_table,Object_tag_table
-   { true }
+   { } bool reads Object_alloc_table,Object_tag_table { true }
 
 parameter Object_finalize :
  this_11:Object pointer ->
-  { (JC_41: (true = true))} unit reads Object_alloc_table,Object_tag_table
-  { true }
+  { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter Object_hashCode :
  this_2:Object pointer ->
-  { (JC_14: (true = true))} int reads Object_alloc_table,Object_tag_table
-  { true }
+  { } int reads Object_alloc_table,Object_tag_table { true }
 
 parameter Object_notify :
  this_6:Object pointer ->
-  { (JC_26: (true = true))} unit reads Object_alloc_table,Object_tag_table
-  { true }
+  { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter Object_notifyAll :
  this_7:Object pointer ->
-  { (JC_29: (true = true))} unit reads Object_alloc_table,Object_tag_table
-  { true }
+  { } unit reads Object_alloc_table,Object_tag_table { true }
 
-parameter Object_registerNatives :
- tt:unit -> { (JC_11: (true = true))} unit { true }
+parameter Object_registerNatives : tt:unit -> { } unit { true }
 
 parameter Object_toString :
  this_5:Object pointer ->
-  { (JC_23: (true = true))} Object pointer
-  reads Object_alloc_table,Object_tag_table { true }
+  { } Object pointer reads Object_alloc_table,Object_tag_table { true }
 
 parameter Object_wait :
  this_10:Object pointer ->
-  { (JC_38: (true = true))} unit reads Object_alloc_table,Object_tag_table
-  { true }
+  { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter Object_wait_long :
  this_8:Object pointer ->
-  timeout:int ->
-   { (JC_32: (true = true))} unit reads Object_alloc_table,Object_tag_table
-   { true }
+  timeout:int -> { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter Object_wait_long_int :
  this_9:Object pointer ->
   timeout_0:int ->
-   nanos:int ->
-    { (JC_35: (true = true))} unit reads Object_alloc_table,Object_tag_table
-    { true }
+   nanos:int -> { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter alloc_MacCarthy :
  n:int ->
@@ -1025,17 +998,15 @@ parameter alloc_one_interface :
 
 parameter cons_MacCarthy :
  this_1:Object pointer ->
-  { (JC_8: (true = true))} unit reads Object_alloc_table,Object_tag_table
-  { true }
+  { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter cons_Object :
  this_12:Object pointer ->
-  { (JC_44: (true = true))} unit reads Object_alloc_table,Object_tag_table
-  { true }
+  { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  { (JC_1: true)} bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table,Object_tag_table
   { (JC_4:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
@@ -1043,7 +1014,7 @@ parameter non_null_Object :
 
 let MacCarthy_f91_ensures_greater_than_100 =
  fun (n_1 : int) ->
-  { (ge_int(n_1, (101)) and (JC_5: (true = true))) }
+  { ge_int(n_1, (101)) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1066,7 +1037,7 @@ let MacCarthy_f91_ensures_greater_than_100 =
 
 let MacCarthy_f91_ensures_less_than_101 =
  fun (n_1 : int) ->
-  { (le_int(n_1, (100)) and (JC_5: (true = true))) }
+  { le_int(n_1, (100)) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1089,7 +1060,7 @@ let MacCarthy_f91_ensures_less_than_101 =
 
 let MacCarthy_f91_safety =
  fun (n_1 : int) ->
-  { (JC_5: (true = true)) }
+  { (JC_6: true) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1827,13 +1798,11 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
 ========== file tests/java/why/MacCarthy_po1.why ==========
 goal MacCarthy_f91_ensures_greater_than_100_po_1:
   forall n_1:int.
-  ((n_1 >= 101) and ("JC_5": (true = true))) ->
+  (n_1 >= 101) ->
   (n_1 <= 100) ->
-  ("JC_5": (true = true)) ->
   forall result:int.
   ((((n_1 + 11) >= 101) -> ("K_2": (result = ((n_1 + 11) - 10)))) and
    (((n_1 + 11) <= 100) -> ("K_1": (result = 91)))) ->
-  ("JC_5": (true = true)) ->
   forall result0:int.
   (((result >= 101) -> ("K_2": (result0 = (result - 10)))) and
    ((result <= 100) -> ("K_1": (result0 = 91)))) ->
@@ -1844,7 +1813,7 @@ goal MacCarthy_f91_ensures_greater_than_100_po_1:
 ========== file tests/java/why/MacCarthy_po2.why ==========
 goal MacCarthy_f91_ensures_greater_than_100_po_2:
   forall n_1:int.
-  ((n_1 >= 101) and ("JC_5": (true = true))) ->
+  (n_1 >= 101) ->
   (n_1 > 100) ->
   forall return:int.
   (return = (n_1 - 10)) ->
@@ -1853,13 +1822,11 @@ goal MacCarthy_f91_ensures_greater_than_100_po_2:
 ========== file tests/java/why/MacCarthy_po3.why ==========
 goal MacCarthy_f91_ensures_less_than_101_po_1:
   forall n_1:int.
-  ((n_1 <= 100) and ("JC_5": (true = true))) ->
   (n_1 <= 100) ->
-  ("JC_5": (true = true)) ->
+  (n_1 <= 100) ->
   forall result:int.
   ((((n_1 + 11) >= 101) -> ("K_2": (result = ((n_1 + 11) - 10)))) and
    (((n_1 + 11) <= 100) -> ("K_1": (result = 91)))) ->
-  ("JC_5": (true = true)) ->
   forall result0:int.
   (((result >= 101) -> ("K_2": (result0 = (result - 10)))) and
    ((result <= 100) -> ("K_1": (result0 = 91)))) ->
@@ -1870,7 +1837,7 @@ goal MacCarthy_f91_ensures_less_than_101_po_1:
 ========== file tests/java/why/MacCarthy_po4.why ==========
 goal MacCarthy_f91_ensures_less_than_101_po_2:
   forall n_1:int.
-  ((n_1 <= 100) and ("JC_5": (true = true))) ->
+  (n_1 <= 100) ->
   (n_1 > 100) ->
   forall return:int.
   (return = (n_1 - 10)) ->
@@ -2351,41 +2318,37 @@ why -simplify [...] why/MacCarthy.why
 
 ;; MacCarthy_f91_ensures_greater_than_100_po_1, File "/home/cmarche/recherche/why/tests/java/MacCarthy.java", line 24, characters 18-35
 (FORALL (n_1)
-(IMPLIES (AND (>= n_1 101) (EQ |@true| |@true|))
+(IMPLIES (>= n_1 101)
 (IMPLIES (<= n_1 100)
-(IMPLIES (EQ |@true| |@true|)
 (FORALL (result)
 (IMPLIES (AND (IMPLIES (>= (+ n_1 11) 101) (EQ result (- (+ n_1 11) 10)))
          (IMPLIES (<= (+ n_1 11) 100) (EQ result 91)))
-(IMPLIES (EQ |@true| |@true|)
 (FORALL (result0)
 (IMPLIES (AND (IMPLIES (>= result 101) (EQ result0 (- result 10)))
          (IMPLIES (<= result 100) (EQ result0 91)))
-(FORALL (return) (IMPLIES (EQ return result0) (EQ return (- n_1 10)))))))))))))
+(FORALL (return) (IMPLIES (EQ return result0) (EQ return (- n_1 10)))))))))))
 
 ;; MacCarthy_f91_ensures_greater_than_100_po_2, File "/home/cmarche/recherche/why/tests/java/MacCarthy.java", line 24, characters 18-35
 (FORALL (n_1)
-(IMPLIES (AND (>= n_1 101) (EQ |@true| |@true|))
+(IMPLIES (>= n_1 101)
 (IMPLIES (> n_1 100)
 (FORALL (return) (IMPLIES (EQ return (- n_1 10)) (EQ return (- n_1 10)))))))
 
 ;; MacCarthy_f91_ensures_less_than_101_po_1, File "/home/cmarche/recherche/why/tests/java/MacCarthy.java", line 21, characters 18-31
 (FORALL (n_1)
-(IMPLIES (AND (<= n_1 100) (EQ |@true| |@true|))
 (IMPLIES (<= n_1 100)
-(IMPLIES (EQ |@true| |@true|)
+(IMPLIES (<= n_1 100)
 (FORALL (result)
 (IMPLIES (AND (IMPLIES (>= (+ n_1 11) 101) (EQ result (- (+ n_1 11) 10)))
          (IMPLIES (<= (+ n_1 11) 100) (EQ result 91)))
-(IMPLIES (EQ |@true| |@true|)
 (FORALL (result0)
 (IMPLIES (AND (IMPLIES (>= result 101) (EQ result0 (- result 10)))
          (IMPLIES (<= result 100) (EQ result0 91)))
-(FORALL (return) (IMPLIES (EQ return result0) (EQ return 91))))))))))))
+(FORALL (return) (IMPLIES (EQ return result0) (EQ return 91))))))))))
 
 ;; MacCarthy_f91_ensures_less_than_101_po_2, File "/home/cmarche/recherche/why/tests/java/MacCarthy.java", line 21, characters 18-31
 (FORALL (n_1)
-(IMPLIES (AND (<= n_1 100) (EQ |@true| |@true|))
+(IMPLIES (<= n_1 100)
 (IMPLIES (> n_1 100)
 (FORALL (return) (IMPLIES (EQ return (- n_1 10)) (EQ return 91))))))
 
@@ -3088,13 +3051,11 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
 
 goal MacCarthy_f91_ensures_greater_than_100_po_1:
   forall n_1:int.
-  ((n_1 >= 101) and ("JC_5": (true = true))) ->
+  (n_1 >= 101) ->
   (n_1 <= 100) ->
-  ("JC_5": (true = true)) ->
   forall result:int.
   ((((n_1 + 11) >= 101) -> ("K_2": (result = ((n_1 + 11) - 10)))) and
    (((n_1 + 11) <= 100) -> ("K_1": (result = 91)))) ->
-  ("JC_5": (true = true)) ->
   forall result0:int.
   (((result >= 101) -> ("K_2": (result0 = (result - 10)))) and
    ((result <= 100) -> ("K_1": (result0 = 91)))) ->
@@ -3104,7 +3065,7 @@ goal MacCarthy_f91_ensures_greater_than_100_po_1:
 
 goal MacCarthy_f91_ensures_greater_than_100_po_2:
   forall n_1:int.
-  ((n_1 >= 101) and ("JC_5": (true = true))) ->
+  (n_1 >= 101) ->
   (n_1 > 100) ->
   forall return:int.
   (return = (n_1 - 10)) ->
@@ -3112,13 +3073,11 @@ goal MacCarthy_f91_ensures_greater_than_100_po_2:
 
 goal MacCarthy_f91_ensures_less_than_101_po_1:
   forall n_1:int.
-  ((n_1 <= 100) and ("JC_5": (true = true))) ->
   (n_1 <= 100) ->
-  ("JC_5": (true = true)) ->
+  (n_1 <= 100) ->
   forall result:int.
   ((((n_1 + 11) >= 101) -> ("K_2": (result = ((n_1 + 11) - 10)))) and
    (((n_1 + 11) <= 100) -> ("K_1": (result = 91)))) ->
-  ("JC_5": (true = true)) ->
   forall result0:int.
   (((result >= 101) -> ("K_2": (result0 = (result - 10)))) and
    ((result <= 100) -> ("K_1": (result0 = 91)))) ->
@@ -3128,7 +3087,7 @@ goal MacCarthy_f91_ensures_less_than_101_po_1:
 
 goal MacCarthy_f91_ensures_less_than_101_po_2:
   forall n_1:int.
-  ((n_1 <= 100) and ("JC_5": (true = true))) ->
+  (n_1 <= 100) ->
   (n_1 > 100) ->
   forall return:int.
   (return = (n_1 - 10)) ->

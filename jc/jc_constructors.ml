@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.9 2008-07-18 08:36:07 moy Exp $ *)
+(* $Id: jc_constructors.ml,v 1.10 2008-07-23 12:13:54 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -346,6 +346,9 @@ either with (~expr1 AND ~expr2) OR ~list only."
   let mkiff = mkbinary ~op:`Biff
   let mkincr_heap ~expr ~field ?(op = `Upostfix_inc) =
     mkunary ~op ~expr:(mkderef ~expr ~field ())
+
+  let mkcontract ~requires ~decreases ~behaviors ~expr =
+    mk ~node:(JCPEcontract(requires, decreases, behaviors, expr))
 end
 
 module PDecl = struct
@@ -391,11 +394,17 @@ module PDecl = struct
   let mkabstract_domain_def ~value = mk ~node:(JCDabstract_domain value)
   let mkint_model_def ~value = mk ~node:(JCDint_model value)
 
-  let mkrequires expr = JCCrequires expr
   let mkbehavior ?(loc = Loc.dummy_position) ~name ?throws ?assumes ?requires
       ?assigns ?(ensures = mkboolean ~value:true ()) () =
-    JCCbehavior(loc, name, throws, assumes, requires, assigns, ensures)
-  let mkbehavior_with ?loc ?name ?throws ?assumes ?requires ?assigns ?ensures =
+    (loc, name, throws, assumes, requires, assigns, ensures)
+
+  let mkrequires_clause expr = JCCrequires expr
+
+  let mkbehavior_clause ?(loc = Loc.dummy_position) ~name ?throws ?assumes ?requires
+      ?assigns ?(ensures = mkboolean ~value:true ()) () =
+      JCCbehavior (mkbehavior ~loc ~name ?throws ?assumes ?requires ?assigns ~ensures ())
+
+  let mkbehavior_clause_with ?loc ?name ?throws ?assumes ?requires ?assigns ?ensures =
     function
       | JCCbehavior(loc', name', throws', assumes', requires', assigns',
                     ensures') ->

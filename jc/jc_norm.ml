@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.97 2008-07-21 14:44:25 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.98 2008-07-23 12:13:54 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -211,7 +211,7 @@ let duplicable =
        | JCPEquantifier _ | JCPEmutable _ | JCPEassign _ 
        | JCPEassign_op _ | JCPEif _ | JCPEwhile _ | JCPEblock _
        | JCPEapp _ | JCPEtry _ | JCPEmatch _ | JCPEfor _
-       | JCPEswitch _ ->
+       | JCPEswitch _ | JCPEcontract _ ->
 	   false
     ) true
 
@@ -553,6 +553,7 @@ let rec expr e =
 	JCNEmatch(expr e,List.map (fun (pat,e) -> (pat,expr e)) pelist)  
     | JCPEblock elist -> JCNEblock(List.map expr elist)
     | JCPEassert(behav,e) -> JCNEassert(behav,expr e)
+    | JCPEcontract _ -> assert false (* TODO *)
     | JCPEwhile(_,inv,vareopt,e) ->
 	let inv = List.map (fun (behav,e) -> behav,expr e) inv in
 	JCNEloop(inv,Option_misc.map expr vareopt,expr e)

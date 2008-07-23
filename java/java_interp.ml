@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.149 2008-07-22 09:29:20 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.150 2008-07-23 12:13:53 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -857,7 +857,7 @@ let array_types decls =
        let vie = mkvar ~name:(var_name vi) () in
        let result_var = mkvar ~name:"\\result" () in
        let spec = [
-         mkbehavior
+         mkbehavior_clause
            ~name: "non_null"
 	   ~assigns:(Loc.dummy_position,[])
            ~ensures:
@@ -880,7 +880,7 @@ let array_types decls =
        (* non_null fun & pred *)
        let non_null_fi = create_non_null_fun st in
        let non_null_spec = [
-         mkbehavior
+         mkbehavior_clause
            ~name: "normal"
            ~ensures:
            (mkif
@@ -1481,6 +1481,27 @@ let loop_annot inv dec =
   in
   invariant, variant
 
+let behavior (id,assumes,throws,assigns,ensures) =
+  mkbehavior
+    ~loc: (fst id)
+    ~name: (snd id)
+    ?throws:
+    (Option_misc.map
+       (fun ci -> exn_name (get_exception (JTYclass(false,ci))))
+       throws)
+    ?assigns:
+    (Option_misc.map
+       (fun (loc,a) ->
+          mkassigns
+            ~loc
+            ~locations:(List.map (location (Some LabelPre)) a)
+            ())
+       assigns)
+    ?assumes: (Option_misc.map assertion assumes)
+    ~ensures: (reg_assertion ensures)
+    ()
+
+
 let rec statement s =
   let s' =
     match s.java_statement_node with
@@ -1584,12 +1605,13 @@ let rec statement s =
                ())
             ()
       | JSstatement_spec(req,dec,behs,s) ->
-	    assert false (* TODO *)
-	    (* JCEcontract(Option_misc.map assertion req,
-		      Option_misc.map term dec,
-		      List.map behavior behs,
-		      statement s)
-	    *)
+	  mkcontract
+	    ~requires:(Option_misc.map assertion req)
+	    ~decreases:(Option_misc.map term dec)
+	    ~behaviors:(List.map behavior behs)
+	    ~expr:(statement s)
+	    ()
+
   in new pexpr ~loc:s.java_statement_loc s'#node
 
 and statements l = List.map statement l
@@ -1602,26 +1624,6 @@ and switch_case (labels, b) =
 and switch_label = function
   | Java_ast.Default -> None
   | Java_ast.Case e -> Some (expr e)
-
-let behavior (id,assumes,throws,assigns,ensures) =
-  mkbehavior
-    ~loc: (fst id)
-    ~name: (snd id)
-    ?throws:
-    (Option_misc.map
-       (fun ci -> exn_name (get_exception (JTYclass(false,ci))))
-       throws)
-    ?assigns:
-    (Option_misc.map
-       (fun (loc,a) ->
-          mkassigns
-            ~loc
-            ~locations:(List.map (location (Some LabelPre)) a)
-            ())
-       assigns)
-    ?assumes: (Option_misc.map assertion assumes)
-    ~ensures: (reg_assertion ensures)
-    ()
 
 let true_assertion = mkboolean ~value:true ()
 
@@ -1645,7 +1647,9 @@ let tr_method mi req behs b acc =
  	 vi.java_var_info_type) 
       mi.method_info_result 
   in
-  let behaviors = List.map behavior behs in
+  let behaviors = 
+    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs 
+  in
   let nfi = 
     create_fun Loc.dummy_position 
       mi.method_info_tag mi.method_info_result 
@@ -1657,9 +1661,7 @@ let tr_method mi req behs b acc =
       ~name:("Method " ^ mi.method_info_name)
       mi.method_info_loc
   in
-  let requires =
-    mkrequires (reg_assertion_option req)
-  in
+  let requires = mkrequires_clause (reg_assertion_option req) in
   let result_type = (* need the option monad... *)
     Option_misc.map
     ptype_of_type
@@ -1671,7 +1673,7 @@ let tr_method mi req behs b acc =
     ?result_type
     ~name: (new identifier nfi.jc_fun_info_name)
     ~params
-    ~clauses: (requires::behaviors)
+    ~clauses: (requires:: behaviors)
     ?body
     ()
   in def::acc
@@ -1717,8 +1719,10 @@ let tr_constr ci req behs b acc =
     (fun vi -> ptype_of_type vi.jc_var_info_type, var_name vi)
     (this :: params)
   in
-  let requires = mkrequires (reg_assertion_option req) in
-  let behaviors = List.map behavior behs in
+  let requires = mkrequires_clause (reg_assertion_option req) in
+  let behaviors = 
+    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs 
+  in
   let def = mkfun_def
     ~name: (new identifier nfi.jc_fun_info_name)
     ~params
@@ -1952,7 +1956,7 @@ let tr_class ci acc0 acc =
 	let offset_maxt = mkoffset_max ~expr:vit () in
 	let offset_maxa = mkeq ~expr1:offset_maxt ~expr2:zero () in
         let non_null_spec = [
-          mkbehavior
+          mkbehavior_clause
             ~name: "normal"
             ~ensures:
             (mkif
@@ -2032,7 +2036,7 @@ let tr_static_invariant (s, a) =
 
 (*
 Local Variables: 
-compile-command: "LC_ALL=C make -j -C .. bin/krakatoa.byte"
+compile-command: "LC_ALL=C make -j -C .. byte"
 End: 
 *)
 

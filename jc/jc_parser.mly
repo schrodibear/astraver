@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.101 2008-07-11 06:35:50 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.102 2008-07-23 12:13:54 marche Exp $ */
 
 %{
 
@@ -180,23 +180,11 @@
 file: 
 | decl file 
     { $1::$2 }
-/*
-| rec_decls file 
-    { $1::$2 }
-*/
 | tag_and_type_decl file
     { let tag, ty = $1 in tag::ty::$2 }
 | EOF 
     { [] }
 ;
-
-/*
-rec_decls:
-| function_rec_definitions %prec PRECTYPE
-    { locate (JCDrecfuns($1)) }
-| logic_rec_definitions %prec PRECTYPE
-    { locate (JCDrecfuns($1)) }
-*/
 
 decl: 
 | variable_definition
@@ -414,13 +402,14 @@ function_specification:
 spec_clause:
 | REQUIRES expression SEMICOLON
     { JCCrequires($2) }
-/*
-| ENSURES expression SEMICOLON
-    { JCCensures($2) }
-*/
+| behavior
+  { JCCbehavior $1 }
+;
+
+behavior:
 | BEHAVIOR ident_or_default COLON throws assumes requires assigns 
   ENSURES expression SEMICOLON
-    { JCCbehavior(loc_i 2,$2,$4,$5,$6,$7,$9) }
+    { (loc_i 2,$2,$4,$5,$6,$7,$9) }
 ;
 
 ident_or_default:
@@ -466,13 +455,6 @@ reads:
     { [] }
 ;
 
-/*
-function_rec_definitions:
-| function_definition AND function_rec_definitions %prec PRECTYPE
-    { $1::$3 }
-| function_definition AND function_definition %prec PRECTYPE
-    { $1::[$3] }
-*/
 
 function_definition: 
 | type_expr identifier parameters function_specification compound_expr
@@ -673,6 +655,10 @@ expression:
     { locate (JCPEassert($3,$5)) }
 | ASSERT expression 
     { locate (JCPEassert([],$2)) }
+/* TODO
+| behavior expression
+    { locate (JCPEcontract(None,None,$1,$2)) } 
+*/
 | iteration_expression 
     { $1 }
 | jump_expression 

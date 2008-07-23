@@ -447,6 +447,12 @@ module PExpr :
       field:string ->
       ?op:Jc_ast.pexpr_unary_op -> ?loc:Loc.position -> unit -> pexpr
 
+    val mkcontract : 
+      requires:Jc_ast.pexpr option ->
+      decreases:Jc_ast.pexpr option ->
+      behaviors:Jc_ast.pexpr Jc_ast.pbehavior list ->
+      expr:Jc_ast.pexpr -> ?loc:Loc.position -> unit -> pexpr
+
   end
 
 module NExpr :
@@ -554,9 +560,18 @@ module PDecl :
 
 *)
 
-    val mkrequires : 'a -> 'a Jc_ast.clause
-
     val mkbehavior :
+      ?loc:Loc.position ->
+      name:string ->
+      ?throws:Jc_ast.identifier ->
+      ?assumes:pexpr ->
+      ?requires:pexpr ->
+      ?assigns:Loc.position * pexpr list ->
+      ?ensures:pexpr -> unit -> pexpr Jc_ast.pbehavior
+
+    val mkrequires_clause : 'a -> 'a Jc_ast.clause
+
+    val mkbehavior_clause :
       ?loc:Loc.position ->
       name:string ->
       ?throws:Jc_ast.identifier ->

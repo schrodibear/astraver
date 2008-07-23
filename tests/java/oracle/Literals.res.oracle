@@ -66,7 +66,6 @@ logic int32 Literals_x =
 exception Throwable of Throwable[0..]
 
 int32 Literals_f(Literals[0] this_0)
-  requires true;
 behavior default:
   ensures (K_1 : (\result == 0xd));
 {  
@@ -78,7 +77,6 @@ behavior default:
 }
 
 unit cons_Literals(Literals[0] this_1)
-  requires true;
 ;
 
 /*
@@ -513,7 +511,7 @@ parameter Object_alloc_table : Object alloc_table ref
 
 parameter Literals_f :
  this_0:Object pointer ->
-  { (JC_5: (true = true))} int32 reads Object_alloc_table,Object_tag_table
+  { } int32 reads Object_alloc_table,Object_tag_table
   { (K_1: eq_int(integer_of_int32(result), (13))) }
 
 parameter alloc_Literals :
@@ -644,8 +642,7 @@ parameter char_of_integer_ :
 
 parameter cons_Literals :
  this_1:Object pointer ->
-  { (JC_8: (true = true))} unit reads Object_alloc_table,Object_tag_table
-  { true }
+  { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -659,7 +656,7 @@ parameter long_of_integer_ :
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  { (JC_1: true)} bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table,Object_tag_table
   { (JC_4:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
@@ -687,8 +684,7 @@ parameter short_of_integer_ :
 
 let Literals_f_ensures_default =
  fun (this_0 : Object pointer) ->
-  { (valid_struct_Literals(this_0, (0), (0), Object_alloc_table)
-    and (JC_5: (true = true))) }
+  { valid_struct_Literals(this_0, (0), (0), Object_alloc_table) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -704,8 +700,7 @@ let Literals_f_ensures_default =
 
 let Literals_f_safety =
  fun (this_0 : Object pointer) ->
-  { (valid_struct_Literals(this_0, (0), (0), Object_alloc_table)
-    and (JC_5: (true = true))) }
+  { valid_struct_Literals(this_0, (0), (0), Object_alloc_table) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1510,8 +1505,7 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
 goal Literals_f_ensures_default_po_1:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  (valid_struct_Literals(this_0, 0, 0, Object_alloc_table) and
-   ("JC_5": (true = true))) ->
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
   forall result:int32.
   (integer_of_int32(result) = 2989) ->
   forall result0:int32.
@@ -2064,8 +2058,7 @@ why -simplify [...] why/Literals.why
 ;; Literals_f_ensures_default_po_1, File "/home/cmarche/recherche/why/tests/java/Literals.java", line 5, characters 16-30
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
-(IMPLIES (AND (valid_struct_Literals this_0 0 0 Object_alloc_table)
-         (EQ |@true| |@true|))
+(IMPLIES (valid_struct_Literals this_0 0 0 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 2989)
 (FORALL (result0)
@@ -2860,8 +2853,7 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
 goal Literals_f_ensures_default_po_1:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  (valid_struct_Literals(this_0, 0, 0, Object_alloc_table) and
-   ("JC_5": (true = true))) ->
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
   forall result:int32.
   (integer_of_int32(result) = 2989) ->
   forall result0:int32.

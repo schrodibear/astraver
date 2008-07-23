@@ -108,7 +108,6 @@ unit SideEffects_m1(SideEffects[0] this_0, intM[0..] t)
 }
 
 unit cons_SideEffects(SideEffects[0] this_1)
-  requires true;
 ;
 
 /*
@@ -779,12 +778,11 @@ parameter alloc_one_interface :
 
 parameter cons_SideEffects :
  this_1:Object pointer ->
-  { (JC_16: (true = true))} unit reads Object_alloc_table,Object_tag_table
-  { true }
+  { } unit reads Object_alloc_table,Object_tag_table { true }
 
 parameter java_array_length_intM :
  x_2:Object pointer ->
-  { (JC_5: true)} int reads Object_alloc_table,Object_tag_table
+  { } int reads Object_alloc_table,Object_tag_table
   { (JC_9:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
@@ -794,7 +792,7 @@ parameter java_array_length_intM :
 
 parameter non_null_Object :
  x_3:Object pointer ->
-  { (JC_10: true)} bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table,Object_tag_table
   { (JC_13:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_3), (0))
@@ -802,7 +800,7 @@ parameter non_null_Object :
 
 parameter non_null_intM :
  x_1:Object pointer ->
-  { (JC_1: true)} bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table,Object_tag_table
   { (JC_4:
     (if result
      then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))

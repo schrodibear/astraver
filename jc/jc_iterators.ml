@@ -349,6 +349,8 @@ let replace_sub_pexpr e el =
 	JCPEblock el
     | JCPEassert(behav,_e) ->
 	let e1 = as1 el in JCPEassert(behav,e1)
+    | JCPEcontract(req,dec,behs,_e) ->
+	let e1 = as1 el in JCPEcontract(req,dec,behs,e1)
     | JCPEwhile(_test,inv1,var,_body) ->
 	let test,el = pop el in
 	let inv2,el = popn (List.length inv1) el in
@@ -448,6 +450,7 @@ module PExprAst = struct
           [e1; e2]
       | JCPEif(e1, e2, e3) ->
 	  [e1; e2; e3]
+      | JCPEcontract _ -> assert false (* TODO *)
       | JCPEwhile(e1,inv,None,e3) ->
 	  let e2list = List.map (fun (_behav,e) -> e) inv in
           e1 :: e2list @ [e3]

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.14 2008-07-11 06:35:50 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.15 2008-07-23 12:13:54 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -36,6 +36,11 @@ open Jc_pervasives
 open Jc_ast
 open Jc_output_misc
 open Pp
+
+let is_not_true (p : Jc_ast.pexpr) =
+  match p#node with
+    | JCPEconst (JCCboolean true) -> false
+    | _ -> true
 
 let bin_op = function
   | `Blt -> "<"
@@ -213,6 +218,14 @@ let rec pexpr fmt e =
 	     comma string)
 	  behav
 	  pexpr a
+    | JCPEcontract(req,dec,behs,e) -> 
+	fprintf fmt "@\n@[<v 2>( ";	
+	Option_misc.iter 
+	  (fun e -> if is_not_true e then
+	     fprintf fmt "requires %a;@\n" pexpr e) req;
+	Option_misc.iter (fprintf fmt "decreases %a;@\n" pexpr) dec;
+	List.iter (behavior fmt) behs;
+	fprintf fmt "@\n{ %a@ })@]" pexpr e 	
     | JCPEblock l -> block fmt l
     | JCPEswitch (e, csl) ->
 	fprintf fmt "@\n@[<v 2>switch (%a) {%a@]@\n}"
@@ -242,20 +255,23 @@ and case fmt (c,sl) =
   in
   fprintf fmt "%a%a" (print_list nothing onecase) c pexpr sl
 
+and behavior fmt (_loc,id,throws,assumes,requires,assigns,ensures) =
+  fprintf fmt "@\n@[<v 2>behavior %s:" id;
+  Option_misc.iter (fprintf fmt "@\nassumes %a;" pexpr) assumes;
+  Option_misc.iter (fprintf fmt "@\nrequires %a;" pexpr) requires;
+  Option_misc.iter 
+    (fun id -> fprintf fmt "@\nthrows %s;" id#name) throws;
+  Option_misc.iter 
+    (fun (_,locs) -> fprintf fmt "@\nassigns %a;" 
+       (print_list_or_default "\\nothing" comma pexpr) locs)
+    assigns;
+  fprintf fmt "@\nensures %a;@]" pexpr ensures
+
 let pclause fmt = function
   | JCCrequires e -> 
-      fprintf fmt "@\n@[<v 2>  requires @[%a@];@]" pexpr e
-  | JCCbehavior(_loc,id,throws,assumes,requires,assigns,ensures) ->
-      fprintf fmt "@\n@[<v 2>behavior %s:" id;
-      Option_misc.iter (fprintf fmt "@\nassumes %a;" pexpr) assumes;
-      Option_misc.iter (fprintf fmt "@\nrequires %a;" pexpr) requires;
-      Option_misc.iter 
-	(fun id -> fprintf fmt "@\nthrows %s;" id#name) throws;
-      Option_misc.iter 
-	(fun (_,locs) -> fprintf fmt "@\nassigns %a;" 
-	  (print_list_or_default "\\nothing" comma pexpr) locs)
-	assigns;
-      fprintf fmt "@\nensures %a;@]" pexpr ensures
+      if is_not_true e then
+	fprintf fmt "@\n@[<v 2>  requires @[%a@];@]" pexpr e
+  | JCCbehavior b -> behavior fmt b
 
 let param fmt (ty,vi) =
   fprintf fmt "%a %s" ptype ty vi
@@ -371,6 +387,6 @@ let rec pdecls fmt d =
 
 (*
 Local Variables: 
-compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte bin/krakatoa.byte"
+compile-command: "LC_ALL=C make -j -C .. byte"
 End: 
 *)

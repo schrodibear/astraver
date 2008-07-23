@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.134 2008-07-21 14:29:29 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.135 2008-07-23 12:13:53 marche Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -134,7 +134,12 @@ type ppattern_node =
 
 and ppattern = ppattern_node node_located
 
-type pexpr_node =
+type 'expr pbehavior = 
+    Loc.position * string * identifier option * 'expr option 
+    * 'expr option * (Loc.position * 'expr list) option * 'expr
+      (*r loc, name, throws, assumes,requires,assigns,ensures *)
+ 
+and pexpr_node =
   | JCPEconst of const
   | JCPElabel of string * pexpr
   | JCPEvar of string
@@ -162,11 +167,15 @@ type pexpr_node =
 (*  | JCPSskip *) (* -> JCPEconst JCCvoid *)
   | JCPEblock of pexpr list
   | JCPEassert of string list * pexpr
-  | JCPEwhile of pexpr * (string list * pexpr) list * pexpr option * pexpr
-      (*r condition, invariant, variant, body *)
-  | JCPEfor of pexpr list * pexpr * pexpr list * pexpr 
-      * pexpr option * pexpr
-      (*r inits, condition, updates, invariant, variant, body *)
+  | JCPEcontract of 
+      pexpr option * pexpr option * pexpr pbehavior list * pexpr 
+	(* requires, decreases, behaviors, expression *)
+  | JCPEwhile of 
+      pexpr * (string list * pexpr) list * pexpr option * pexpr
+	(*r condition, invariant, variant, body *)
+  | JCPEfor of 
+      pexpr list * pexpr * pexpr list * pexpr * pexpr option * pexpr
+	(*r inits, condition, updates, invariant, variant, body *)
   | JCPEreturn of pexpr
   | JCPEbreak of string
   | JCPEcontinue of string
@@ -188,13 +197,7 @@ and 'a ptag = 'a ptag_node node_located
 
 type 'expr clause =
   | JCCrequires of 'expr
-  | JCCbehavior of Loc.position * string 
-      * identifier option 
-      * 'expr option 
-      * 'expr option 
-      * (Loc.position * 'expr list) option 
-      * 'expr
-      (*r loc, name, throws, assumes,requires,assigns,ensures *)
+  | JCCbehavior of 'expr pbehavior
 
 type 'expr reads_or_expr =
   | JCreads of 'expr list
@@ -402,9 +405,6 @@ type behavior =
     { 
       jc_behavior_throws : exception_info option ;
       jc_behavior_assumes : assertion option ;
-(*
-      jc_behavior_requires : assertion option ;
-*)
       jc_behavior_assigns : (Loc.position * tlocation list) option ;
       mutable jc_behavior_ensures : assertion;
     }
