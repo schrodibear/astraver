@@ -2,3 +2,4 @@ gwhy.cache
 semantic.cache
 out
 queens.why.html
+*_why.* pvsbin .pvscontext gwhy.cache

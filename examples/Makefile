@@ -10,6 +10,9 @@ all:
 simplify:
 	for d in $(DIRS); do make -C $$d simplify; done
 
+ergo:
+	for d in $(DIRS); do make -C $$d ergo; done
+
 clean::
 	rm -f */*~ */*.vo
 

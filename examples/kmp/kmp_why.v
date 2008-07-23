@@ -16,7 +16,6 @@ Parameter A : Set.
 Axiom A_eq_dec : forall x y:A, {x = y} + {x <> y}.
 Definition A_eq_bool (x y:A) := bool_of_sumbool (A_eq_dec x y).
 
-(*Why*) Parameter M : Z.
 Axiom M_positive : (0 <= M)%Z.
 
 Proof.
@@ -213,27 +212,27 @@ absurd (0 < j)%Z; Omega'.
 Qed.
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(*Why logic*) Definition M : Z.
+Admitted.
+
+(* Why obligation from file "kmp.mlw", line 37, characters 6-18: *)
 (*Why goal*) Lemma initnext_po_1 : 
   forall (next: (array Z)),
   forall (p: (array A)),
   forall (HW_1: (array_length p) = M /\ (array_length next) = M),
   forall (HW_2: 1 < M),
-  0 <= 1 /\ 1 < (array_length next).
+  0 <= 1.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 37, characters 6-18: *)
 (*Why goal*) Lemma initnext_po_2 : 
   forall (next: (array Z)),
   forall (p: (array A)),
   forall (HW_1: (array_length p) = M /\ (array_length next) = M),
   forall (HW_2: 1 < M),
-  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
-  forall (next0: (array Z)),
-  forall (HW_4: next0 = (update next 1 0)),
-  (well_founded lexZ).
+  1 < (array_length next).
 Proof.
 (* FILL PROOF HERE *)
 Save.
@@ -247,16 +246,12 @@ Save.
   forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
   forall (next0: (array Z)),
   forall (HW_4: next0 = (update next 1 0)),
-  (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\ (match_ p (1 - 0) p 0 0) /\
-  (forall (z:Z),
-   ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
-  (forall (k:Z), (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
-  (array_length next0) = M.
+  (well_founded lexZ).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
 (*Why goal*) Lemma initnext_po_4 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -265,30 +260,12 @@ Save.
   forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
   forall (next0: (array Z)),
   forall (HW_4: next0 = (update next 1 0)),
-  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
-                (match_ p (1 - 0) p 0 0) /\
-                (forall (z:Z),
-                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
-                (array_length next0) = M),
-  forall (i: Z),
-  forall (j: Z),
-  forall (next1: (array Z)),
-  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
-                (match_ p (i - j) p 0 j) /\
-                (forall (z:Z),
-                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
-                (array_length next1) = M),
-  forall (HW_7: i < (M - 1)),
-  0 <= i /\ i < (array_length p).
+  0 <= 0.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
 (*Why goal*) Lemma initnext_po_5 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -297,33 +274,12 @@ Save.
   forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
   forall (next0: (array Z)),
   forall (HW_4: next0 = (update next 1 0)),
-  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
-                (match_ p (1 - 0) p 0 0) /\
-                (forall (z:Z),
-                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
-                (array_length next0) = M),
-  forall (i: Z),
-  forall (j: Z),
-  forall (next1: (array Z)),
-  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
-                (match_ p (i - j) p 0 j) /\
-                (forall (z:Z),
-                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
-                (array_length next1) = M),
-  forall (HW_7: i < (M - 1)),
-  forall (HW_8: 0 <= i /\ i < (array_length p)),
-  forall (result: A),
-  forall (HW_9: result = (access p i)),
-  0 <= j /\ j < (array_length p).
+  0 <= M.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
 (*Why goal*) Lemma initnext_po_6 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -332,41 +288,12 @@ Save.
   forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
   forall (next0: (array Z)),
   forall (HW_4: next0 = (update next 1 0)),
-  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
-                (match_ p (1 - 0) p 0 0) /\
-                (forall (z:Z),
-                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
-                (array_length next0) = M),
-  forall (i: Z),
-  forall (j: Z),
-  forall (next1: (array Z)),
-  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
-                (match_ p (i - j) p 0 j) /\
-                (forall (z:Z),
-                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
-                (array_length next1) = M),
-  forall (HW_7: i < (M - 1)),
-  forall (HW_8: 0 <= i /\ i < (array_length p)),
-  forall (result: A),
-  forall (HW_9: result = (access p i)),
-  forall (HW_10: 0 <= j /\ j < (array_length p)),
-  forall (result0: A),
-  forall (HW_11: result0 = (access p j)),
-  forall (HW_12: result = result0),
-  forall (i0: Z),
-  forall (HW_13: i0 = (i + 1)),
-  forall (j0: Z),
-  forall (HW_14: j0 = (j + 1)),
-  0 <= i0 /\ i0 < (array_length next1).
+  0 < 1.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
 (*Why goal*) Lemma initnext_po_7 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -375,49 +302,12 @@ Save.
   forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
   forall (next0: (array Z)),
   forall (HW_4: next0 = (update next 1 0)),
-  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
-                (match_ p (1 - 0) p 0 0) /\
-                (forall (z:Z),
-                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
-                (array_length next0) = M),
-  forall (i: Z),
-  forall (j: Z),
-  forall (next1: (array Z)),
-  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
-                (match_ p (i - j) p 0 j) /\
-                (forall (z:Z),
-                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
-                (array_length next1) = M),
-  forall (HW_7: i < (M - 1)),
-  forall (HW_8: 0 <= i /\ i < (array_length p)),
-  forall (result: A),
-  forall (HW_9: result = (access p i)),
-  forall (HW_10: 0 <= j /\ j < (array_length p)),
-  forall (result0: A),
-  forall (HW_11: result0 = (access p j)),
-  forall (HW_12: result = result0),
-  forall (i0: Z),
-  forall (HW_13: i0 = (i + 1)),
-  forall (j0: Z),
-  forall (HW_14: j0 = (j + 1)),
-  forall (HW_15: 0 <= i0 /\ i0 < (array_length next1)),
-  forall (next2: (array Z)),
-  forall (HW_16: next2 = (update next1 i0 j0)),
-  ((0 <= j0 /\ j0 <= M) /\ (j0 < i0 /\ i0 <= M) /\
-  (match_ p (i0 - j0) p 0 j0) /\
-  (forall (z:Z),
-   ((j0 + 1) < z /\ z < (i0 + 1) -> ~(match_ p (i0 + 1 - z) p 0 z))) /\
-  (forall (k:Z), (0 < k /\ k <= i0 -> (Next p k (access next2 k)))) /\
-  (array_length next2) = M) /\ (lexZ (pairZ (M - i0) j0) (pairZ (M - i) j)).
+  1 <= M.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
 (*Why goal*) Lemma initnext_po_8 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -426,40 +316,12 @@ Save.
   forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
   forall (next0: (array Z)),
   forall (HW_4: next0 = (update next 1 0)),
-  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
-                (match_ p (1 - 0) p 0 0) /\
-                (forall (z:Z),
-                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
-                (array_length next0) = M),
-  forall (i: Z),
-  forall (j: Z),
-  forall (next1: (array Z)),
-  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
-                (match_ p (i - j) p 0 j) /\
-                (forall (z:Z),
-                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
-                (array_length next1) = M),
-  forall (HW_7: i < (M - 1)),
-  forall (HW_8: 0 <= i /\ i < (array_length p)),
-  forall (result: A),
-  forall (HW_9: result = (access p i)),
-  forall (HW_10: 0 <= j /\ j < (array_length p)),
-  forall (result0: A),
-  forall (HW_11: result0 = (access p j)),
-  forall (HW_17: ~result = result0),
-  forall (HW_18: j = 0),
-  forall (i0: Z),
-  forall (HW_19: i0 = (i + 1)),
-  0 <= i0 /\ i0 < (array_length next1).
+  (match_ p (1 - 0) p 0 0).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
 (*Why goal*) Lemma initnext_po_9 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -468,47 +330,14 @@ Save.
   forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
   forall (next0: (array Z)),
   forall (HW_4: next0 = (update next 1 0)),
-  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
-                (match_ p (1 - 0) p 0 0) /\
-                (forall (z:Z),
-                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
-                (array_length next0) = M),
-  forall (i: Z),
-  forall (j: Z),
-  forall (next1: (array Z)),
-  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
-                (match_ p (i - j) p 0 j) /\
-                (forall (z:Z),
-                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
-                (array_length next1) = M),
-  forall (HW_7: i < (M - 1)),
-  forall (HW_8: 0 <= i /\ i < (array_length p)),
-  forall (result: A),
-  forall (HW_9: result = (access p i)),
-  forall (HW_10: 0 <= j /\ j < (array_length p)),
-  forall (result0: A),
-  forall (HW_11: result0 = (access p j)),
-  forall (HW_17: ~result = result0),
-  forall (HW_18: j = 0),
-  forall (i0: Z),
-  forall (HW_19: i0 = (i + 1)),
-  forall (HW_20: 0 <= i0 /\ i0 < (array_length next1)),
-  forall (next2: (array Z)),
-  forall (HW_21: next2 = (update next1 i0 0)),
-  ((0 <= j /\ j <= M) /\ (j < i0 /\ i0 <= M) /\ (match_ p (i0 - j) p 0 j) /\
-  (forall (z:Z),
-   ((j + 1) < z /\ z < (i0 + 1) -> ~(match_ p (i0 + 1 - z) p 0 z))) /\
-  (forall (k:Z), (0 < k /\ k <= i0 -> (Next p k (access next2 k)))) /\
-  (array_length next2) = M) /\ (lexZ (pairZ (M - i0) j) (pairZ (M - i) j)).
+  forall (z: Z),
+  forall (HW_5: (0 + 1) < z /\ z < (1 + 1)),
+  ~(match_ p (1 + 1 - z) p 0 z).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
 (*Why goal*) Lemma initnext_po_10 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -517,38 +346,14 @@ Save.
   forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
   forall (next0: (array Z)),
   forall (HW_4: next0 = (update next 1 0)),
-  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
-                (match_ p (1 - 0) p 0 0) /\
-                (forall (z:Z),
-                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
-                (array_length next0) = M),
-  forall (i: Z),
-  forall (j: Z),
-  forall (next1: (array Z)),
-  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
-                (match_ p (i - j) p 0 j) /\
-                (forall (z:Z),
-                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
-                (array_length next1) = M),
-  forall (HW_7: i < (M - 1)),
-  forall (HW_8: 0 <= i /\ i < (array_length p)),
-  forall (result: A),
-  forall (HW_9: result = (access p i)),
-  forall (HW_10: 0 <= j /\ j < (array_length p)),
-  forall (result0: A),
-  forall (HW_11: result0 = (access p j)),
-  forall (HW_17: ~result = result0),
-  forall (HW_22: j <> 0),
-  0 <= j /\ j < (array_length next1).
+  forall (k: Z),
+  forall (HW_6: 0 < k /\ k <= 1),
+  (Next p k (access next0 k)).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
 (*Why goal*) Lemma initnext_po_11 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -557,48 +362,12 @@ Save.
   forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
   forall (next0: (array Z)),
   forall (HW_4: next0 = (update next 1 0)),
-  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
-                (match_ p (1 - 0) p 0 0) /\
-                (forall (z:Z),
-                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
-                (array_length next0) = M),
-  forall (i: Z),
-  forall (j: Z),
-  forall (next1: (array Z)),
-  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
-                (match_ p (i - j) p 0 j) /\
-                (forall (z:Z),
-                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
-                (array_length next1) = M),
-  forall (HW_7: i < (M - 1)),
-  forall (HW_8: 0 <= i /\ i < (array_length p)),
-  forall (result: A),
-  forall (HW_9: result = (access p i)),
-  forall (HW_10: 0 <= j /\ j < (array_length p)),
-  forall (result0: A),
-  forall (HW_11: result0 = (access p j)),
-  forall (HW_17: ~result = result0),
-  forall (HW_22: j <> 0),
-  forall (HW_23: 0 <= j /\ j < (array_length next1)),
-  forall (result1: Z),
-  forall (HW_24: result1 = (access next1 j)),
-  forall (j0: Z),
-  forall (HW_25: j0 = result1),
-  ((0 <= j0 /\ j0 <= M) /\ (j0 < i /\ i <= M) /\
-  (match_ p (i - j0) p 0 j0) /\
-  (forall (z:Z),
-   ((j0 + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
-  (forall (k:Z), (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
-  (array_length next1) = M) /\ (lexZ (pairZ (M - i) j0) (pairZ (M - i) j)).
+  (array_length next0) = M.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 45, characters 22-27: *)
 (*Why goal*) Lemma initnext_po_12 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -607,43 +376,47 @@ Save.
   forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
   forall (next0: (array Z)),
   forall (HW_4: next0 = (update next 1 0)),
-  forall (HW_5: (0 <= 0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
-                (match_ p (1 - 0) p 0 0) /\
-                (forall (z:Z),
-                 ((0 + 1) < z /\ z < (1 + 1) -> ~(match_ p (1 + 1 - z) p 0 z))) /\
-                (forall (k:Z),
-                 (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
-                (array_length next0) = M),
   forall (i: Z),
   forall (j: Z),
   forall (next1: (array Z)),
-  forall (HW_6: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
                 (match_ p (i - j) p 0 j) /\
                 (forall (z:Z),
                  ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
                 (forall (k:Z),
                  (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
                 (array_length next1) = M),
-  forall (HW_26: i >= (M - 1)),
-  (array_length next1) = M /\
-  (forall (j:Z), (0 < j /\ j < M -> (Next p j (access next1 j)))).
+  forall (HW_8: i < (M - 1)),
+  0 <= i.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 45, characters 22-27: *)
 (*Why goal*) Lemma initnext_po_13 : 
   forall (next: (array Z)),
   forall (p: (array A)),
   forall (HW_1: (array_length p) = M /\ (array_length next) = M),
-  forall (HW_27: 1 >= M),
-  (array_length next) = M /\
-  (forall (j:Z), (0 < j /\ j < M -> (Next p j (access next j)))).
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  i < (array_length p).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(*Why*) Parameter N : Z.
 Axiom N_positive : (0 <= N)%Z.
 
 
@@ -814,14 +587,1886 @@ absurd (k <= N - M)%Z; Omega'.
 Qed.
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 45, characters 28-33: *)
+(*Why goal*) Lemma initnext_po_14 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  0 <= j.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 45, characters 28-33: *)
+(*Why goal*) Lemma initnext_po_15 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  j < (array_length p).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 46, characters 32-46: *)
+(*Why goal*) Lemma initnext_po_16 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  0 <= i0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 46, characters 32-46: *)
+(*Why goal*) Lemma initnext_po_17 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  i0 < (array_length next1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_18 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  forall (HW_16: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_17: next2 = (update next1 i0 j0)),
+  0 <= j0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_19 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  forall (HW_16: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_17: next2 = (update next1 i0 j0)),
+  j0 <= M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_20 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  forall (HW_16: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_17: next2 = (update next1 i0 j0)),
+  j0 < i0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_21 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  forall (HW_16: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_17: next2 = (update next1 i0 j0)),
+  i0 <= M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_22 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  forall (HW_16: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_17: next2 = (update next1 i0 j0)),
+  (match_ p (i0 - j0) p 0 j0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_23 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  forall (HW_16: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_17: next2 = (update next1 i0 j0)),
+  forall (z: Z),
+  forall (HW_18: (j0 + 1) < z /\ z < (i0 + 1)),
+  ~(match_ p (i0 + 1 - z) p 0 z).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_24 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  forall (HW_16: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_17: next2 = (update next1 i0 j0)),
+  forall (k: Z),
+  forall (HW_19: 0 < k /\ k <= i0),
+  (Next p k (access next2 k)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_25 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  forall (HW_16: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_17: next2 = (update next1 i0 j0)),
+  (array_length next2) = M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 44, characters 18-31: *)
+(*Why goal*) Lemma initnext_po_26 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_13: result = result0),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  forall (HW_16: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_17: next2 = (update next1 i0 j0)),
+  (lexZ (pairZ (M - i0) j0) (pairZ (M - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 48, characters 42-55: *)
+(*Why goal*) Lemma initnext_po_27 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_21: j = 0),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  0 <= i0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 48, characters 42-55: *)
+(*Why goal*) Lemma initnext_po_28 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_21: j = 0),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  i0 < (array_length next1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_29 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_21: j = 0),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  forall (HW_23: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_24: next2 = (update next1 i0 0)),
+  j <= M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_30 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_21: j = 0),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  forall (HW_23: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_24: next2 = (update next1 i0 0)),
+  j < i0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_31 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_21: j = 0),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  forall (HW_23: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_24: next2 = (update next1 i0 0)),
+  i0 <= M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_32 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_21: j = 0),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  forall (HW_23: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_24: next2 = (update next1 i0 0)),
+  (match_ p (i0 - j) p 0 j).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_33 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_21: j = 0),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  forall (HW_23: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_24: next2 = (update next1 i0 0)),
+  forall (z: Z),
+  forall (HW_25: (j + 1) < z /\ z < (i0 + 1)),
+  ~(match_ p (i0 + 1 - z) p 0 z).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_34 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_21: j = 0),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  forall (HW_23: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_24: next2 = (update next1 i0 0)),
+  forall (k: Z),
+  forall (HW_26: 0 < k /\ k <= i0),
+  (Next p k (access next2 k)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_35 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_21: j = 0),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  forall (HW_23: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_24: next2 = (update next1 i0 0)),
+  (array_length next2) = M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 44, characters 18-31: *)
+(*Why goal*) Lemma initnext_po_36 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_21: j = 0),
+  forall (i0: Z),
+  forall (HW_22: i0 = (i + 1)),
+  forall (HW_23: 0 <= i0 /\ i0 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (HW_24: next2 = (update next1 i0 0)),
+  (lexZ (pairZ (M - i0) j) (pairZ (M - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 48, characters 70-78: *)
+(*Why goal*) Lemma initnext_po_37 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_27: j <> 0),
+  j < (array_length next1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_38 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_27: j <> 0),
+  forall (HW_28: 0 <= j /\ j < (array_length next1)),
+  forall (result1: Z),
+  forall (HW_29: result1 = (access next1 j)),
+  forall (j0: Z),
+  forall (HW_30: j0 = result1),
+  0 <= j0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_39 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_27: j <> 0),
+  forall (HW_28: 0 <= j /\ j < (array_length next1)),
+  forall (result1: Z),
+  forall (HW_29: result1 = (access next1 j)),
+  forall (j0: Z),
+  forall (HW_30: j0 = result1),
+  j0 <= M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_40 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_27: j <> 0),
+  forall (HW_28: 0 <= j /\ j < (array_length next1)),
+  forall (result1: Z),
+  forall (HW_29: result1 = (access next1 j)),
+  forall (j0: Z),
+  forall (HW_30: j0 = result1),
+  j0 < i.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_41 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_27: j <> 0),
+  forall (HW_28: 0 <= j /\ j < (array_length next1)),
+  forall (result1: Z),
+  forall (HW_29: result1 = (access next1 j)),
+  forall (j0: Z),
+  forall (HW_30: j0 = result1),
+  i <= M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_42 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_27: j <> 0),
+  forall (HW_28: 0 <= j /\ j < (array_length next1)),
+  forall (result1: Z),
+  forall (HW_29: result1 = (access next1 j)),
+  forall (j0: Z),
+  forall (HW_30: j0 = result1),
+  (match_ p (i - j0) p 0 j0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_43 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_27: j <> 0),
+  forall (HW_28: 0 <= j /\ j < (array_length next1)),
+  forall (result1: Z),
+  forall (HW_29: result1 = (access next1 j)),
+  forall (j0: Z),
+  forall (HW_30: j0 = result1),
+  forall (z: Z),
+  forall (HW_31: (j0 + 1) < z /\ z < (i + 1)),
+  ~(match_ p (i + 1 - z) p 0 z).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_44 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_27: j <> 0),
+  forall (HW_28: 0 <= j /\ j < (array_length next1)),
+  forall (result1: Z),
+  forall (HW_29: result1 = (access next1 j)),
+  forall (j0: Z),
+  forall (HW_30: j0 = result1),
+  forall (k: Z),
+  forall (HW_32: 0 < k /\ k <= i),
+  (Next p k (access next1 k)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 39, characters 20-271: *)
+(*Why goal*) Lemma initnext_po_45 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_27: j <> 0),
+  forall (HW_28: 0 <= j /\ j < (array_length next1)),
+  forall (result1: Z),
+  forall (HW_29: result1 = (access next1 j)),
+  forall (j0: Z),
+  forall (HW_30: j0 = result1),
+  (array_length next1) = M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 44, characters 18-31: *)
+(*Why goal*) Lemma initnext_po_46 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_8: i < (M - 1)),
+  forall (HW_9: 0 <= i /\ i < (array_length p)),
+  forall (result: A),
+  forall (HW_10: result = (access p i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result0: A),
+  forall (HW_12: result0 = (access p j)),
+  forall (HW_20: ~result = result0),
+  forall (HW_27: j <> 0),
+  forall (HW_28: 0 <= j /\ j < (array_length next1)),
+  forall (result1: Z),
+  forall (HW_29: result1 = (access next1 j)),
+  forall (j0: Z),
+  forall (HW_30: j0 = result1),
+  (lexZ (pairZ (M - i) j0) (pairZ (M - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 51, characters 5-83: *)
+(*Why goal*) Lemma initnext_po_47 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_33: i >= (M - 1)),
+  (array_length next1) = M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 51, characters 5-83: *)
+(*Why goal*) Lemma initnext_po_48 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_2: 1 < M),
+  forall (HW_3: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (HW_4: next0 = (update next 1 0)),
+  forall (i: Z),
+  forall (j: Z),
+  forall (next1: (array Z)),
+  forall (HW_7: (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\
+                (match_ p (i - j) p 0 j) /\
+                (forall (z:Z),
+                 ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i -> (Next p k (access next1 k)))) /\
+                (array_length next1) = M),
+  forall (HW_33: i >= (M - 1)),
+  forall (j0: Z),
+  forall (HW_34: 0 < j0 /\ j0 < M),
+  (Next p j0 (access next1 j0)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 51, characters 5-83: *)
+(*Why goal*) Lemma initnext_po_49 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M),
+  forall (HW_35: 1 >= M),
+  forall (j: Z),
+  forall (HW_36: 0 < j /\ j < M),
+  (Next p j (access next j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Definition initnext_functional (* validation *)
+  : forall (u: unit), forall (next: (array Z)), forall (p: (array A)),
+    forall (_: (array_length p) = M /\ (array_length next) = M),
+    (sig_2 (array Z) unit
+     (fun (next0: (array Z)) (result: unit)  => ((array_length next0) = M /\
+      (forall (j:Z), (0 < j /\ j < M -> (Next p j (access next0 j)))))))
+  := (fun (u: unit) (next: (array Z)) (p: (array A)) (H_1: (array_length p) =
+          M /\ (array_length next) = M) =>
+        let (i1, next0, result) :=
+          let (i1, j1, next0, result) :=
+            let result :=
+              let (result0, Post1) := (lt_int_ 1 M) in
+              (exist_1 (fun (result1: bool) =>
+                        (if result1 then 1 < M else 1 >= M)) (result0) ((
+              if result0 then 1 < M else 1 >= M))) in
+            if result then
+              let (i1, j1, next0, result0) :=
+                let (next0, result0) :=
+                  let Pre1 := 0 <= 1 /\ 1 < (array_length next) in
+                  let (next0, result1, Post2) := (array_set 1 0 next) in
+                  (exist_2 (fun (next1: (array Z)) =>
+                            (fun (result2: unit) => next1 = (update next 1 0))) (
+                  next0) (result1) (next0 = (update next 1 0))) in
+                let (i1, j1, next1, result1) :=
+                  let (i1, j1, next1, result1) :=
+                    ((well_founded_induction) (prodZZ) (lexZ) ((well_founded lexZ)) ((
+                      fun (variant1: prodZZ) => forall (i1: Z),
+                      forall (j1: Z), forall (next1: (array Z)),
+                      forall (_: (0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <=
+                      M) /\ (match_ p (i1 - j1) p 0 j1) /\
+                      (forall (z:Z),
+                       ((j1 + 1) < z /\ z < (i1 + 1) ->
+                        ~(match_ p (i1 + 1 - z) p 0 z))) /\
+                      (forall (k:Z),
+                       (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+                      (array_length next1) = M),
+                      (tuple_4 Z Z (array Z) (EM unit unit)))) ((fun 
+                                                                   (variant1: prodZZ) (wf1: forall (variant2: prodZZ),
+                                                                   forall (Pre7: (
+                                                                   lexZ
+                                                                   variant2 variant1)),
+                                                                   forall (i1: Z),
+                                                                   forall (j1: Z),
+                                                                   forall (next1: (array Z)),
+                                                                   forall (_: (0 <=
+                                                                   j1 /\
+                                                                   j1 <=
+                                                                   M) /\
+                                                                   (j1 <
+                                                                   i1 /\
+                                                                   i1 <=
+                                                                   M) /\
+                                                                   (match_
+                                                                    p 
+                                                                    (i1 - j1) p 0 j1) /\
+                                                                   (forall (z:Z),
+                                                                    (
+                                                                    (j1 + 1) <
+                                                                    z /\ z <
+                                                                    (i1 + 1) ->
+                                                                    ~(
+                                                                    match_
+                                                                    p 
+                                                                    (i1 + 1 -
+                                                                    z) p 0 z))) /\
+                                                                   (forall (k:Z),
+                                                                    (
+                                                                    0 < k /\
+                                                                    k <=
+                                                                    i1 ->
+                                                                    (
+                                                                    Next
+                                                                    p k (
+                                                                    access
+                                                                    next1 k)))) /\
+                                                                   (array_length
+                                                                    next1) =
+                                                                   M),
+                                                                   (tuple_4
+                                                                    Z Z (array Z) (
+                                                                    EM
+                                                                    unit unit))) (i1: Z) (j1: Z) (next1: (array Z)) (Inv: (0 <=
+                                                                   j1 /\
+                                                                   j1 <=
+                                                                   M) /\
+                                                                   (j1 <
+                                                                   i1 /\
+                                                                   i1 <=
+                                                                   M) /\
+                                                                   (match_
+                                                                    p 
+                                                                    (i1 - j1) p 0 j1) /\
+                                                                   (forall (z:Z),
+                                                                    (
+                                                                    (j1 + 1) <
+                                                                    z /\ z <
+                                                                    (i1 + 1) ->
+                                                                    ~(
+                                                                    match_
+                                                                    p 
+                                                                    (i1 + 1 -
+                                                                    z) p 0 z))) /\
+                                                                   (forall (k:Z),
+                                                                    (
+                                                                    0 < k /\
+                                                                    k <=
+                                                                    i1 ->
+                                                                    (
+                                                                    Next
+                                                                    p k (
+                                                                    access
+                                                                    next1 k)))) /\
+                                                                   (array_length
+                                                                    next1) =
+                                                                   M) =>
+                                                                   let (i2,
+                                                                    j2,
+                                                                    next2,
+                                                                    result1) :=
+                                                                    let result1 :=
+                                                                    let (result2,
+                                                                    Post3) :=
+                                                                    (
+                                                                    lt_int_
+                                                                    i1 
+                                                                    (M - 1)) in
+                                                                    (exist_1 (
+                                                                    fun (result3: bool) =>
+                                                                    (
+                                                                    if result3
+                                                                    then i1 <
+                                                                    (M - 1)
+                                                                    else i1 >=
+                                                                    (M - 1))) (
+                                                                    result2) ((
+                                                                    if result2
+                                                                    then i1 <
+                                                                    (M - 1)
+                                                                    else i1 >=
+                                                                    (M - 1)))) in
+                                                                    if 
+                                                                    result1 then
+                                                                      
+                                                                    let (i2,
+                                                                    j2,
+                                                                    next2,
+                                                                    result2) :=
+                                                                    let result2 :=
+                                                                    let aux_1 :=
+                                                                    let Pre2 :=
+                                                                    0 <=
+                                                                    i1 /\
+                                                                    i1 <
+                                                                    (array_length
+                                                                    p) in
+                                                                    let (result3,
+                                                                    Post4) :=
+                                                                    (
+                                                                    array_get
+                                                                    i1 p) in
+                                                                    (exist_1 (
+                                                                    fun (result4: A) =>
+                                                                    result4 =
+                                                                    (
+                                                                    access
+                                                                    p i1)) (
+                                                                    result3) (
+                                                                    result3 =
+                                                                    (
+                                                                    access
+                                                                    p i1))) in
+                                                                    let result2 :=
+                                                                    let aux_2 :=
+                                                                    let Pre3 :=
+                                                                    0 <=
+                                                                    j1 /\
+                                                                    j1 <
+                                                                    (array_length
+                                                                    p) in
+                                                                    let (result3,
+                                                                    Post5) :=
+                                                                    (
+                                                                    array_get
+                                                                    j1 p) in
+                                                                    (exist_1 (
+                                                                    fun (result4: A) =>
+                                                                    result4 =
+                                                                    (
+                                                                    access
+                                                                    p j1)) (
+                                                                    result3) (
+                                                                    result3 =
+                                                                    (
+                                                                    access
+                                                                    p j1))) in
+                                                                    let result2 :=
+                                                                    let (result3,
+                                                                    Post6) :=
+                                                                    (
+                                                                    A_eq_bool
+                                                                    aux_1 aux_2) in
+                                                                    (exist_1 (
+                                                                    fun (result4: bool) =>
+                                                                    (
+                                                                    if result4
+                                                                    then 
+                                                                    aux_1 =
+                                                                    aux_2
+                                                                    else ~
+                                                                    aux_1 =
+                                                                    aux_2)) (
+                                                                    result3) ((
+                                                                    if result3
+                                                                    then 
+                                                                    aux_1 =
+                                                                    aux_2
+                                                                    else ~
+                                                                    aux_1 =
+                                                                    aux_2))) in
+                                                                    result2 in
+                                                                    result2 in
+                                                                    if 
+                                                                    result2 then
+                                                                      
+                                                                    let (i2,
+                                                                    j2,
+                                                                    next2,
+                                                                    result3) :=
+                                                                    let (i2,
+                                                                    result3) :=
+                                                                    let (i2,
+                                                                    result4,
+                                                                    Post7) :=
+                                                                    (
+                                                                    ref_set
+                                                                    (i1 + 1) i1) in
+                                                                    (exist_2 (
+                                                                    fun (i3: Z) =>
+                                                                    (
+                                                                    fun (result5: unit) =>
+                                                                    i3 =
+                                                                    (i1 + 1))) (
+                                                                    i2) (
+                                                                    result4) (
+                                                                    i2 =
+                                                                    (i1 + 1))) in
+                                                                    let (j2,
+                                                                    next2,
+                                                                    result4) :=
+                                                                    let (j2,
+                                                                    result4) :=
+                                                                    let (j2,
+                                                                    result5,
+                                                                    Post8) :=
+                                                                    (
+                                                                    ref_set
+                                                                    (j1 + 1) j1) in
+                                                                    (exist_2 (
+                                                                    fun (j3: Z) =>
+                                                                    (
+                                                                    fun (result6: unit) =>
+                                                                    j3 =
+                                                                    (j1 + 1))) (
+                                                                    j2) (
+                                                                    result5) (
+                                                                    j2 =
+                                                                    (j1 + 1))) in
+                                                                    let (next2,
+                                                                    result5) :=
+                                                                    let Pre4 :=
+                                                                    0 <=
+                                                                    i2 /\
+                                                                    i2 <
+                                                                    (array_length
+                                                                    next1) in
+                                                                    let (next2,
+                                                                    result6,
+                                                                    Post9) :=
+                                                                    (
+                                                                    array_set
+                                                                    i2 j2 next1) in
+                                                                    (exist_2 (
+                                                                    fun (next3: (array Z)) =>
+                                                                    (
+                                                                    fun (result7: unit) =>
+                                                                    next3 =
+                                                                    (
+                                                                    update
+                                                                    next1 i2 j2))) (
+                                                                    next2) (
+                                                                    result6) (
+                                                                    next2 =
+                                                                    (
+                                                                    update
+                                                                    next1 i2 j2))) in
+                                                                    (Build_tuple_3 (
+                                                                    j2) (
+                                                                    next2) (
+                                                                    result5)) in
+                                                                    (Build_tuple_4 (
+                                                                    i2) (
+                                                                    j2) (
+                                                                    next2) (
+                                                                    result4)) in
+                                                                    (Build_tuple_4 (
+                                                                    i2) (
+                                                                    j2) (
+                                                                    next2) (
+                                                                    result3))
+                                                                    else
+                                                                      
+                                                                    let (i2,
+                                                                    j2,
+                                                                    next2,
+                                                                    result3) :=
+                                                                    let result3 :=
+                                                                    let (result4,
+                                                                    Post10) :=
+                                                                    (
+                                                                    eq_int_
+                                                                    j1 0) in
+                                                                    (exist_1 (
+                                                                    fun (result5: bool) =>
+                                                                    (
+                                                                    if result5
+                                                                    then j1 =
+                                                                    0
+                                                                    else j1 <>
+                                                                    0)) (
+                                                                    result4) ((
+                                                                    if result4
+                                                                    then j1 =
+                                                                    0
+                                                                    else j1 <>
+                                                                    0))) in
+                                                                    if 
+                                                                    result3 then
+                                                                      
+                                                                    let (i2,
+                                                                    next2,
+                                                                    result4) :=
+                                                                    let (i2,
+                                                                    result4) :=
+                                                                    let (i2,
+                                                                    result5,
+                                                                    Post11) :=
+                                                                    (
+                                                                    ref_set
+                                                                    (i1 + 1) i1) in
+                                                                    (exist_2 (
+                                                                    fun (i3: Z) =>
+                                                                    (
+                                                                    fun (result6: unit) =>
+                                                                    i3 =
+                                                                    (i1 + 1))) (
+                                                                    i2) (
+                                                                    result5) (
+                                                                    i2 =
+                                                                    (i1 + 1))) in
+                                                                    let (next2,
+                                                                    result5) :=
+                                                                    let Pre5 :=
+                                                                    0 <=
+                                                                    i2 /\
+                                                                    i2 <
+                                                                    (array_length
+                                                                    next1) in
+                                                                    let (next2,
+                                                                    result6,
+                                                                    Post12) :=
+                                                                    (
+                                                                    array_set
+                                                                    i2 0 next1) in
+                                                                    (exist_2 (
+                                                                    fun (next3: (array Z)) =>
+                                                                    (
+                                                                    fun (result7: unit) =>
+                                                                    next3 =
+                                                                    (
+                                                                    update
+                                                                    next1 i2 0))) (
+                                                                    next2) (
+                                                                    result6) (
+                                                                    next2 =
+                                                                    (
+                                                                    update
+                                                                    next1 i2 0))) in
+                                                                    (Build_tuple_3 (
+                                                                    i2) (
+                                                                    next2) (
+                                                                    result5)) in
+                                                                    (Build_tuple_4 (
+                                                                    i2) (
+                                                                    j1) (
+                                                                    next2) (
+                                                                    result4))
+                                                                    else
+                                                                      
+                                                                    let (j2,
+                                                                    result4) :=
+                                                                    let aux_3 :=
+                                                                    let Pre6 :=
+                                                                    0 <=
+                                                                    j1 /\
+                                                                    j1 <
+                                                                    (array_length
+                                                                    next1) in
+                                                                    let (result5,
+                                                                    Post13) :=
+                                                                    (
+                                                                    array_get
+                                                                    j1 next1) in
+                                                                    (exist_1 (
+                                                                    fun (result6: Z) =>
+                                                                    result6 =
+                                                                    (
+                                                                    access
+                                                                    next1 j1)) (
+                                                                    result5) (
+                                                                    result5 =
+                                                                    (
+                                                                    access
+                                                                    next1 j1))) in
+                                                                    let (j2,
+                                                                    result4) :=
+                                                                    let (j2,
+                                                                    result5,
+                                                                    Post14) :=
+                                                                    (
+                                                                    ref_set
+                                                                    aux_3 j1) in
+                                                                    (exist_2 (
+                                                                    fun (j3: Z) =>
+                                                                    (
+                                                                    fun (result6: unit) =>
+                                                                    j3 =
+                                                                    aux_3)) (
+                                                                    j2) (
+                                                                    result5) (
+                                                                    j2 =
+                                                                    aux_3)) in
+                                                                    (Build_tuple_2 (
+                                                                    j2) (
+                                                                    result4)) in
+                                                                    (Build_tuple_4 (
+                                                                    i1) (
+                                                                    j2) (
+                                                                    next1) (
+                                                                    result4)) in
+                                                                    (Build_tuple_4 (
+                                                                    i2) (
+                                                                    j2) (
+                                                                    next2) (
+                                                                    result3)) in
+                                                                    (Build_tuple_4 (
+                                                                    i2) (
+                                                                    j2) (
+                                                                    next2) (
+                                                                    ((Val) (unit) (
+                                                                    result2))))
+                                                                    else
+                                                                      
+                                                                    let result2 :=
+                                                                    ((Exn) (unit) (
+                                                                    tt)) in
+                                                                    match 
+                                                                    result2 with
+                                                                    | (Val result2_0) =>
+                                                                    (Build_tuple_4 (
+                                                                    i1) (
+                                                                    j1) (
+                                                                    next1) (
+                                                                    ((Val) (unit) (
+                                                                    result2_0))))
+                                                                    | (Exn _) =>
+                                                                    (Build_tuple_4 (
+                                                                    i1) (
+                                                                    j1) (
+                                                                    next1) (
+                                                                    ((Exn) (unit) (
+                                                                    tt))))
+                                                                    end in
+                                                                   match 
+                                                                   result1 with
+                                                                   | (Val result1_0) =>
+                                                                    (((
+                                                                    wf1
+                                                                    (
+                                                                    pairZ
+                                                                    (M - i2) j2))) ((
+                                                                    lexZ
+                                                                    (
+                                                                    pairZ
+                                                                    (M - i2) j2) variant1)) (
+                                                                    i2) (
+                                                                    j2) (
+                                                                    next2) (
+                                                                    (
+                                                                    pairZ
+                                                                    (M - i2) j2) =
+                                                                    (
+                                                                    pairZ
+                                                                    (M - i2) j2)) ((0 <=
+                                                                    j2 /\
+                                                                    j2 <=
+                                                                    M) /\
+                                                                    (j2 <
+                                                                    i2 /\
+                                                                    i2 <=
+                                                                    M) /\
+                                                                    (match_
+                                                                    p 
+                                                                    (i2 - j2) p 0 j2) /\
+                                                                    (forall (z:Z),
+                                                                    ((j2 + 1) <
+                                                                    z /\ z <
+                                                                    (i2 + 1) ->
+                                                                    ~(
+                                                                    match_
+                                                                    p 
+                                                                    (i2 + 1 -
+                                                                    z) p 0 z))) /\
+                                                                    (forall (k:Z),
+                                                                    (0 < k /\
+                                                                    k <=
+                                                                    i2 ->
+                                                                    (Next
+                                                                    p k (
+                                                                    access
+                                                                    next2 k)))) /\
+                                                                    (array_length
+                                                                    next2) =
+                                                                    M))
+                                                                   | (Exn _) =>
+                                                                    (Build_tuple_4 (
+                                                                    i2) (
+                                                                    j2) (
+                                                                    next2) (
+                                                                    ((Exn) (unit) (
+                                                                    tt))))
+                                                                   end)) (
+                      (pairZ (M - 1) 0)) (1) (0) (next0) ((pairZ (M - 1) 0) =
+                                                          (pairZ (M - 1) 0)) ((0 <=
+                      0 /\ 0 <= M) /\ (0 < 1 /\ 1 <= M) /\
+                      (match_ p (1 - 0) p 0 0) /\
+                      (forall (z:Z),
+                       ((0 + 1) < z /\ z < (1 + 1) ->
+                        ~(match_ p (1 + 1 - z) p 0 z))) /\
+                      (forall (k:Z),
+                       (0 < k /\ k <= 1 -> (Next p k (access next0 k)))) /\
+                      (array_length next0) = M)) in
+                  match result1 with
+                  | (Val result1_0) =>
+                    (Build_tuple_4 (i1) (j1) (next1) (result1_0))
+                  | (Exn _) => (Build_tuple_4 (i1) (j1) (next1) (tt))
+                  end in
+                (Build_tuple_4 (i1) (j1) (next1) (result1)) in
+              (Build_tuple_4 (i1) (j1) (next0) (result0))
+            else
+              (Build_tuple_4 (1) (0) (next) (tt)) in
+          (Build_tuple_3 (i1) (next0) (result)) in
+        (Build_tuple_2 (next0) (result))).
+
+
+(*Why logic*) Definition N : Z.
+Admitted.
+
+(* Why obligation from file "kmp.mlw", line 72, characters 5-18: *)
 (*Why goal*) Lemma kmp_po_1 : 
   forall (a: (array A)),
   forall (next: (array Z)),
   forall (p: (array A)),
   forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
                 (array_length a) = N),
-  (array_length p) = M /\ (array_length next) = M.
+  (array_length next) = M.
 Proof.
 (* FILL PROOF HERE *)
 Save.
@@ -843,7 +2488,7 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
 (*Why goal*) Lemma kmp_po_3 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -855,13 +2500,12 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\ (match_ a (0 - 0) p 0 0) /\
-  (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M))).
+  0 <= 0.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
 (*Why goal*) Lemma kmp_po_4 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -873,22 +2517,12 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
-                (match_ a (0 - 0) p 0 0) /\
-                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
-  forall (i: Z),
-  forall (j: Z),
-  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
-                (match_ a (i - j) p 0 j) /\
-                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
-  forall (HW_6: j < M),
-  forall (HW_7: i < N),
-  0 <= i /\ i < (array_length a).
+  0 <= M.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
 (*Why goal*) Lemma kmp_po_5 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -900,25 +2534,12 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
-                (match_ a (0 - 0) p 0 0) /\
-                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
-  forall (i: Z),
-  forall (j: Z),
-  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
-                (match_ a (i - j) p 0 j) /\
-                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
-  forall (HW_6: j < M),
-  forall (HW_7: i < N),
-  forall (HW_8: 0 <= i /\ i < (array_length a)),
-  forall (result: A),
-  forall (HW_9: result = (access a i)),
-  0 <= j /\ j < (array_length p).
+  0 <= 0.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
 (*Why goal*) Lemma kmp_po_6 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -930,36 +2551,12 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
-                (match_ a (0 - 0) p 0 0) /\
-                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
-  forall (i: Z),
-  forall (j: Z),
-  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
-                (match_ a (i - j) p 0 j) /\
-                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
-  forall (HW_6: j < M),
-  forall (HW_7: i < N),
-  forall (HW_8: 0 <= i /\ i < (array_length a)),
-  forall (result: A),
-  forall (HW_9: result = (access a i)),
-  forall (HW_10: 0 <= j /\ j < (array_length p)),
-  forall (result0: A),
-  forall (HW_11: result0 = (access p j)),
-  forall (HW_12: result = result0),
-  forall (i0: Z),
-  forall (HW_13: i0 = (i + 1)),
-  forall (j0: Z),
-  forall (HW_14: j0 = (j + 1)),
-  ((0 <= j0 /\ j0 <= M) /\ (j0 <= i0 /\ i0 <= N) /\
-  (match_ a (i0 - j0) p 0 j0) /\
-  (forall (k:Z), (0 <= k /\ k < (i0 - j0) -> ~(match_ a k p 0 M)))) /\
-  (lexZ (pairZ (N - i0) j0) (pairZ (N - i) j)).
+  0 <= N.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
 (*Why goal*) Lemma kmp_po_7 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -971,34 +2568,12 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
-                (match_ a (0 - 0) p 0 0) /\
-                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
-  forall (i: Z),
-  forall (j: Z),
-  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
-                (match_ a (i - j) p 0 j) /\
-                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
-  forall (HW_6: j < M),
-  forall (HW_7: i < N),
-  forall (HW_8: 0 <= i /\ i < (array_length a)),
-  forall (result: A),
-  forall (HW_9: result = (access a i)),
-  forall (HW_10: 0 <= j /\ j < (array_length p)),
-  forall (result0: A),
-  forall (HW_11: result0 = (access p j)),
-  forall (HW_15: ~result = result0),
-  forall (HW_16: j = 0),
-  forall (i0: Z),
-  forall (HW_17: i0 = (i + 1)),
-  ((0 <= j /\ j <= M) /\ (j <= i0 /\ i0 <= N) /\ (match_ a (i0 - j) p 0 j) /\
-  (forall (k:Z), (0 <= k /\ k < (i0 - j) -> ~(match_ a k p 0 M)))) /\
-  (lexZ (pairZ (N - i0) j) (pairZ (N - i) j)).
+  (match_ a (0 - 0) p 0 0).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
 (*Why goal*) Lemma kmp_po_8 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -1010,30 +2585,14 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
-                (match_ a (0 - 0) p 0 0) /\
-                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
-  forall (i: Z),
-  forall (j: Z),
-  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
-                (match_ a (i - j) p 0 j) /\
-                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
-  forall (HW_6: j < M),
-  forall (HW_7: i < N),
-  forall (HW_8: 0 <= i /\ i < (array_length a)),
-  forall (result: A),
-  forall (HW_9: result = (access a i)),
-  forall (HW_10: 0 <= j /\ j < (array_length p)),
-  forall (result0: A),
-  forall (HW_11: result0 = (access p j)),
-  forall (HW_15: ~result = result0),
-  forall (HW_18: j <> 0),
-  0 <= j /\ j < (array_length next0).
+  forall (k: Z),
+  forall (HW_4: 0 <= k /\ k < (0 - 0)),
+  ~(match_ a k p 0 M).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 78, characters 20-25: *)
 (*Why goal*) Lemma kmp_po_9 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -1045,38 +2604,22 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
-                (match_ a (0 - 0) p 0 0) /\
-                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
   forall (i: Z),
   forall (j: Z),
   forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
                 (match_ a (i - j) p 0 j) /\
                 (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
-  forall (HW_6: j < M),
-  forall (HW_7: i < N),
-  forall (HW_8: 0 <= i /\ i < (array_length a)),
-  forall (result: A),
-  forall (HW_9: result = (access a i)),
-  forall (HW_10: 0 <= j /\ j < (array_length p)),
-  forall (result0: A),
-  forall (HW_11: result0 = (access p j)),
-  forall (HW_15: ~result = result0),
-  forall (HW_18: j <> 0),
-  forall (HW_19: 0 <= j /\ j < (array_length next0)),
-  forall (result1: Z),
-  forall (HW_20: result1 = (access next0 j)),
-  forall (j0: Z),
-  forall (HW_21: j0 = result1),
-  ((0 <= j0 /\ j0 <= M) /\ (j0 <= i /\ i <= N) /\
-  (match_ a (i - j0) p 0 j0) /\
-  (forall (k:Z), (0 <= k /\ k < (i - j0) -> ~(match_ a k p 0 M)))) /\
-  (lexZ (pairZ (N - i) j0) (pairZ (N - i) j)).
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  0 <= i.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 78, characters 20-25: *)
 (*Why goal*) Lemma kmp_po_10 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -1088,23 +2631,22 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
-                (match_ a (0 - 0) p 0 0) /\
-                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
   forall (i: Z),
   forall (j: Z),
   forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
                 (match_ a (i - j) p 0 j) /\
                 (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
-  forall (HW_6: j < M),
-  forall (HW_22: i >= N),
-  forall (HW_23: j = M),
-  (first_occur p a (i - M)).
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  i < (array_length a).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 78, characters 26-31: *)
 (*Why goal*) Lemma kmp_po_11 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -1116,23 +2658,25 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
-                (match_ a (0 - 0) p 0 0) /\
-                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
   forall (i: Z),
   forall (j: Z),
   forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
                 (match_ a (i - j) p 0 j) /\
                 (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
-  forall (HW_6: j < M),
-  forall (HW_22: i >= N),
-  forall (HW_24: j <> M),
-  (first_occur p a i).
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  0 <= j.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 78, characters 26-31: *)
 (*Why goal*) Lemma kmp_po_12 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -1144,22 +2688,25 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
-                (match_ a (0 - 0) p 0 0) /\
-                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
   forall (i: Z),
   forall (j: Z),
   forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
                 (match_ a (i - j) p 0 j) /\
                 (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
-  forall (HW_25: j >= M),
-  forall (HW_26: j = M),
-  (first_occur p a (i - M)).
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  j < (array_length p).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
 (*Why goal*) Lemma kmp_po_13 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -1171,18 +2718,1251 @@ Save.
   forall (HW_3: (array_length next0) = M /\
                 (forall (j:Z),
                  (0 < j /\ j < M -> (Next p j (access next0 j))))),
-  forall (HW_4: (0 <= 0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
-                (match_ a (0 - 0) p 0 0) /\
-                (forall (k:Z), (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M)))),
   forall (i: Z),
   forall (j: Z),
   forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
                 (match_ a (i - j) p 0 j) /\
                 (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
-  forall (HW_25: j >= M),
-  forall (HW_27: j <> M),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_13: result1 = result2),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  0 <= j0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_14 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_13: result1 = result2),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  j0 <= M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_15 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_13: result1 = result2),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  j0 <= i0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_16 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_13: result1 = result2),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  i0 <= N.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_17 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_13: result1 = result2),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  (match_ a (i0 - j0) p 0 j0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_18 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_13: result1 = result2),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  forall (k: Z),
+  forall (HW_16: 0 <= k /\ k < (i0 - j0)),
+  ~(match_ a k p 0 M).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 77, characters 16-29: *)
+(*Why goal*) Lemma kmp_po_19 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_13: result1 = result2),
+  forall (i0: Z),
+  forall (HW_14: i0 = (i + 1)),
+  forall (j0: Z),
+  forall (HW_15: j0 = (j + 1)),
+  (lexZ (pairZ (N - i0) j0) (pairZ (N - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_20 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_18: j = 0),
+  forall (i0: Z),
+  forall (HW_19: i0 = (i + 1)),
+  j <= M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_21 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_18: j = 0),
+  forall (i0: Z),
+  forall (HW_19: i0 = (i + 1)),
+  j <= i0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_22 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_18: j = 0),
+  forall (i0: Z),
+  forall (HW_19: i0 = (i + 1)),
+  i0 <= N.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_23 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_18: j = 0),
+  forall (i0: Z),
+  forall (HW_19: i0 = (i + 1)),
+  (match_ a (i0 - j) p 0 j).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_24 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_18: j = 0),
+  forall (i0: Z),
+  forall (HW_19: i0 = (i + 1)),
+  forall (k: Z),
+  forall (HW_20: 0 <= k /\ k < (i0 - j)),
+  ~(match_ a k p 0 M).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 77, characters 16-29: *)
+(*Why goal*) Lemma kmp_po_25 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_18: j = 0),
+  forall (i0: Z),
+  forall (HW_19: i0 = (i + 1)),
+  (lexZ (pairZ (N - i0) j) (pairZ (N - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 81, characters 43-51: *)
+(*Why goal*) Lemma kmp_po_26 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_21: j <> 0),
+  j < (array_length next0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_27 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_21: j <> 0),
+  forall (HW_22: 0 <= j /\ j < (array_length next0)),
+  forall (result3: Z),
+  forall (HW_23: result3 = (access next0 j)),
+  forall (j0: Z),
+  forall (HW_24: j0 = result3),
+  0 <= j0.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_28 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_21: j <> 0),
+  forall (HW_22: 0 <= j /\ j < (array_length next0)),
+  forall (result3: Z),
+  forall (HW_23: result3 = (access next0 j)),
+  forall (j0: Z),
+  forall (HW_24: j0 = result3),
+  j0 <= M.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_29 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_21: j <> 0),
+  forall (HW_22: 0 <= j /\ j < (array_length next0)),
+  forall (result3: Z),
+  forall (HW_23: result3 = (access next0 j)),
+  forall (j0: Z),
+  forall (HW_24: j0 = result3),
+  j0 <= i.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_30 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_21: j <> 0),
+  forall (HW_22: 0 <= j /\ j < (array_length next0)),
+  forall (result3: Z),
+  forall (HW_23: result3 = (access next0 j)),
+  forall (j0: Z),
+  forall (HW_24: j0 = result3),
+  i <= N.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_31 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_21: j <> 0),
+  forall (HW_22: 0 <= j /\ j < (array_length next0)),
+  forall (result3: Z),
+  forall (HW_23: result3 = (access next0 j)),
+  forall (j0: Z),
+  forall (HW_24: j0 = result3),
+  (match_ a (i - j0) p 0 j0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 74, characters 18-162: *)
+(*Why goal*) Lemma kmp_po_32 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_21: j <> 0),
+  forall (HW_22: 0 <= j /\ j < (array_length next0)),
+  forall (result3: Z),
+  forall (HW_23: result3 = (access next0 j)),
+  forall (j0: Z),
+  forall (HW_24: j0 = result3),
+  forall (k: Z),
+  forall (HW_25: 0 <= k /\ k < (i - j0)),
+  ~(match_ a k p 0 M).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 77, characters 16-29: *)
+(*Why goal*) Lemma kmp_po_33 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_8: result = true /\ result0 = true),
+  forall (HW_9: 0 <= i /\ i < (array_length a)),
+  forall (result1: A),
+  forall (HW_10: result1 = (access a i)),
+  forall (HW_11: 0 <= j /\ j < (array_length p)),
+  forall (result2: A),
+  forall (HW_12: result2 = (access p j)),
+  forall (HW_17: ~result1 = result2),
+  forall (HW_21: j <> 0),
+  forall (HW_22: 0 <= j /\ j < (array_length next0)),
+  forall (result3: Z),
+  forall (HW_23: result3 = (access next0 j)),
+  forall (j0: Z),
+  forall (HW_24: j0 = result3),
+  (lexZ (pairZ (N - i) j0) (pairZ (N - i) j)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 85, characters 4-29: *)
+(*Why goal*) Lemma kmp_po_34 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_26: result = false \/ result = true /\ result0 = false),
+  forall (HW_27: j = M),
+  (first_occur p a (i - M)).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "kmp.mlw", line 85, characters 4-29: *)
+(*Why goal*) Lemma kmp_po_35 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (HW_1: (array_length p) = M /\ (array_length next) = M /\
+                (array_length a) = N),
+  forall (HW_2: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (HW_3: (array_length next0) = M /\
+                (forall (j:Z),
+                 (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i: Z),
+  forall (j: Z),
+  forall (HW_5: (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\
+                (match_ a (i - j) p 0 j) /\
+                (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M)))),
+  forall (result: bool),
+  forall (HW_6: (if result then j < M else j >= M)),
+  forall (result0: bool),
+  forall (HW_7: (if result0 then i < N else i >= N)),
+  forall (HW_26: result = false \/ result = true /\ result0 = false),
+  forall (HW_28: j <> M),
   (first_occur p a i).
 Proof.
 (* FILL PROOF HERE *)
 Save.
+
+Definition kmp_functional (* validation *)
+  : forall (_: unit), forall (a: (array A)), forall (next: (array Z)),
+    forall (p: (array A)), forall (_: (array_length p) = M /\
+    (array_length next) = M /\ (array_length a) = N),
+    (sig_2 (array Z) Z
+     (fun (next0: (array Z)) (result: Z)  => ((first_occur p a result))))
+  := (fun (_: unit) (a: (array A)) (next: (array Z)) (p: (array A)) (H_1: (
+          array_length p) = M /\ (array_length next) = M /\
+          (array_length a) = N) =>
+        let (i1, next0, result) :=
+          let (i1, j1, next0, result) :=
+            let (next0, result) :=
+              let Pre1 := (array_length p) = M /\ (array_length next) = M in
+              let (next0, result0, Post1) := (initnext tt next p) in
+              (exist_2 (fun (next1: (array Z)) =>
+                        (fun (result1: unit) => (array_length next1) = M /\
+                         (forall (j:Z),
+                          (0 < j /\ j < M -> (Next p j (access next1 j)))))) (
+              next0) (result0) ((array_length next0) = M /\
+              (forall (j:Z), (0 < j /\ j < M -> (Next p j (access next0 j)))))) in
+            let (i1, j1, result0) :=
+              let (i1, j1, result0) :=
+                let (i1, j1, result0) :=
+                  ((well_founded_induction) (prodZZ) (lexZ) ((well_founded lexZ)) ((
+                    fun (variant1: prodZZ) => forall (i1: Z), forall (j1: Z),
+                    forall (_: (0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <=
+                    N) /\ (match_ a (i1 - j1) p 0 j1) /\
+                    (forall (k:Z),
+                     (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))),
+                    (tuple_3 Z Z (EM unit unit)))) ((fun (variant1: prodZZ) (wf1: forall (variant2: prodZZ),
+                                                         forall (Pre5: (
+                                                         lexZ
+                                                         variant2 variant1)),
+                                                         forall (i1: Z),
+                                                         forall (j1: Z),
+                                                         forall (_: (0 <=
+                                                         j1 /\ j1 <= M) /\
+                                                         (j1 <= i1 /\ i1 <=
+                                                         N) /\
+                                                         (match_
+                                                          a (i1 - j1) p 0 j1) /\
+                                                         (forall (k:Z),
+                                                          (0 <= k /\ k <
+                                                           (i1 - j1) ->
+                                                           ~(match_ a k p 0 M)))),
+                                                         (tuple_3
+                                                          Z Z (EM unit unit))) (i1: Z) (j1: Z) (Inv: (0 <=
+                                                         j1 /\ j1 <= M) /\
+                                                         (j1 <= i1 /\ i1 <=
+                                                         N) /\
+                                                         (match_
+                                                          a (i1 - j1) p 0 j1) /\
+                                                         (forall (k:Z),
+                                                          (0 <= k /\ k <
+                                                           (i1 - j1) ->
+                                                           ~(match_ a k p 0 M)))) =>
+                                                       let (i2, j2,
+                                                         result0) :=
+                                                         let result0 :=
+                                                           let aux_1 :=
+                                                             let (result1,
+                                                               Post4) :=
+                                                               (lt_int_ j1 M) in
+                                                             (exist_1 (
+                                                             fun (result2: bool) =>
+                                                             (if result2
+                                                              then j1 < M
+                                                              else j1 >= M)) (
+                                                             result1) ((
+                                                             if result1
+                                                             then j1 < M
+                                                             else j1 >= M))) in
+                                                           let result0 :=
+                                                             let aux_2 :=
+                                                               let (result1,
+                                                                 Post5) :=
+                                                                 (lt_int_
+                                                                  i1 N) in
+                                                               (exist_1 (
+                                                               fun (result2: bool) =>
+                                                               (if result2
+                                                                then i1 < N
+                                                                else i1 >= N)) (
+                                                               result1) ((
+                                                               if result1
+                                                               then i1 < N
+                                                               else i1 >= N))) in
+                                                             let result0 :=
+                                                               let (result1,
+                                                                 Post6) :=
+                                                                 (strict_bool_and_
+                                                                  aux_1 aux_2) in
+                                                               (exist_1 (
+                                                               fun (result2: bool) =>
+                                                               (if result2
+                                                                then 
+                                                                aux_1 = true /\
+                                                                aux_2 = true
+                                                                else 
+                                                                aux_1 = false \/
+                                                                aux_1 = true /\
+                                                                aux_2 = false)) (
+                                                               result1) ((
+                                                               if result1
+                                                               then aux_1 =
+                                                                    true /\
+                                                               aux_2 = true
+                                                               else aux_1 =
+                                                                    false \/
+                                                               aux_1 = true /\
+                                                               aux_2 = false))) in
+                                                             result0 in
+                                                           result0 in
+                                                         if result0 then
+                                                           let (i2, j2,
+                                                             result1) :=
+                                                             let result1 :=
+                                                               let aux_3 :=
+                                                                 let Pre2 :=
+                                                                   0 <= i1 /\
+                                                                   i1 <
+                                                                   (array_length
+                                                                    a) in
+                                                                 let (result2,
+                                                                   Post7) :=
+                                                                   (array_get
+                                                                    i1 a) in
+                                                                 (exist_1 (
+                                                                 fun (result3: A) =>
+                                                                 result3 =
+                                                                 (access a i1)) (
+                                                                 result2) (
+                                                                 result2 =
+                                                                 (access a i1))) in
+                                                               let result1 :=
+                                                                 let aux_4 :=
+                                                                   let Pre3 :=
+                                                                    0 <=
+                                                                    j1 /\
+                                                                    j1 <
+                                                                    (array_length
+                                                                    p) in
+                                                                   let (result2,
+                                                                    Post8) :=
+                                                                    (
+                                                                    array_get
+                                                                    j1 p) in
+                                                                   (exist_1 (
+                                                                   fun (result3: A) =>
+                                                                   result3 =
+                                                                   (access
+                                                                    p j1)) (
+                                                                   result2) (
+                                                                   result2 =
+                                                                   (access
+                                                                    p j1))) in
+                                                                 let result1 :=
+                                                                   let (result2,
+                                                                    Post9) :=
+                                                                    (
+                                                                    A_eq_bool
+                                                                    aux_3 aux_4) in
+                                                                   (exist_1 (
+                                                                   fun (result3: bool) =>
+                                                                   (if result3
+                                                                    then 
+                                                                    aux_3 =
+                                                                    aux_4
+                                                                    else ~
+                                                                    aux_3 =
+                                                                    aux_4)) (
+                                                                   result2) ((
+                                                                   if result2
+                                                                   then 
+                                                                   aux_3 =
+                                                                   aux_4
+                                                                   else ~
+                                                                   aux_3 =
+                                                                   aux_4))) in
+                                                                 result1 in
+                                                               result1 in
+                                                             if result1 then
+                                                               let (i2, j2,
+                                                                 result2) :=
+                                                                 let (i2,
+                                                                   result2) :=
+                                                                   let (i2,
+                                                                    result3,
+                                                                    Post10) :=
+                                                                    (
+                                                                    ref_set
+                                                                    (i1 + 1) i1) in
+                                                                   (exist_2 (
+                                                                   fun (i3: Z) =>
+                                                                   (fun (result4: unit) =>
+                                                                    i3 =
+                                                                    (i1 + 1))) (
+                                                                   i2) (
+                                                                   result3) (
+                                                                   i2 =
+                                                                   (i1 + 1))) in
+                                                                 let (j2,
+                                                                   result3) :=
+                                                                   let (j2,
+                                                                    result4,
+                                                                    Post11) :=
+                                                                    (
+                                                                    ref_set
+                                                                    (j1 + 1) j1) in
+                                                                   (exist_2 (
+                                                                   fun (j3: Z) =>
+                                                                   (fun (result5: unit) =>
+                                                                    j3 =
+                                                                    (j1 + 1))) (
+                                                                   j2) (
+                                                                   result4) (
+                                                                   j2 =
+                                                                   (j1 + 1))) in
+                                                                 (Build_tuple_3 (
+                                                                 i2) (
+                                                                 j2) (
+                                                                 result3)) in
+                                                               (Build_tuple_3 (
+                                                               i2) (j2) (
+                                                               result2))
+                                                             else
+                                                               let (i2, j2,
+                                                                 result2) :=
+                                                                 let result2 :=
+                                                                   let (result3,
+                                                                    Post12) :=
+                                                                    (
+                                                                    eq_int_
+                                                                    j1 0) in
+                                                                   (exist_1 (
+                                                                   fun (result4: bool) =>
+                                                                   (if result4
+                                                                    then j1 =
+                                                                    0
+                                                                    else j1 <>
+                                                                    0)) (
+                                                                   result3) ((
+                                                                   if result3
+                                                                   then j1 =
+                                                                   0
+                                                                   else j1 <>
+                                                                   0))) in
+                                                                 if result2 then
+                                                                   let (i2,
+                                                                    result3) :=
+                                                                    let (i2,
+                                                                    result4,
+                                                                    Post13) :=
+                                                                    (
+                                                                    ref_set
+                                                                    (i1 + 1) i1) in
+                                                                    (exist_2 (
+                                                                    fun (i3: Z) =>
+                                                                    (
+                                                                    fun (result5: unit) =>
+                                                                    i3 =
+                                                                    (i1 + 1))) (
+                                                                    i2) (
+                                                                    result4) (
+                                                                    i2 =
+                                                                    (i1 + 1))) in
+                                                                   (Build_tuple_3 (
+                                                                   i2) (
+                                                                   j1) (
+                                                                   result3))
+                                                                 else
+                                                                   let (j2,
+                                                                    result3) :=
+                                                                    let aux_5 :=
+                                                                    let Pre4 :=
+                                                                    0 <=
+                                                                    j1 /\
+                                                                    j1 <
+                                                                    (array_length
+                                                                    next0) in
+                                                                    let (result4,
+                                                                    Post14) :=
+                                                                    (
+                                                                    array_get
+                                                                    j1 next0) in
+                                                                    (exist_1 (
+                                                                    fun (result5: Z) =>
+                                                                    result5 =
+                                                                    (
+                                                                    access
+                                                                    next0 j1)) (
+                                                                    result4) (
+                                                                    result4 =
+                                                                    (
+                                                                    access
+                                                                    next0 j1))) in
+                                                                    let (j2,
+                                                                    result3) :=
+                                                                    let (j2,
+                                                                    result4,
+                                                                    Post15) :=
+                                                                    (
+                                                                    ref_set
+                                                                    aux_5 j1) in
+                                                                    (exist_2 (
+                                                                    fun (j3: Z) =>
+                                                                    (
+                                                                    fun (result5: unit) =>
+                                                                    j3 =
+                                                                    aux_5)) (
+                                                                    j2) (
+                                                                    result4) (
+                                                                    j2 =
+                                                                    aux_5)) in
+                                                                    (Build_tuple_2 (
+                                                                    j2) (
+                                                                    result3)) in
+                                                                   (Build_tuple_3 (
+                                                                   i1) (
+                                                                   j2) (
+                                                                   result3)) in
+                                                               (Build_tuple_3 (
+                                                               i2) (j2) (
+                                                               result2)) in
+                                                           (Build_tuple_3 (
+                                                           i2) (j2) (
+                                                           ((Val) (unit) (
+                                                             result1))))
+                                                         else
+                                                           let result1 :=
+                                                             ((Exn) (unit) (
+                                                               tt)) in
+                                                           match result1 with
+                                                           | (Val result1_0) =>
+                                                             (Build_tuple_3 (
+                                                             i1) (j1) (
+                                                             ((Val) (unit) (
+                                                               result1_0))))
+                                                           | (Exn _) =>
+                                                             (Build_tuple_3 (
+                                                             i1) (j1) (
+                                                             ((Exn) (unit) (
+                                                               tt))))
+                                                           end in
+                                                       match result0 with
+                                                       | (Val result0_0) =>
+                                                         (((wf1
+                                                            (pairZ
+                                                             (N - i2) j2))) ((
+                                                           lexZ
+                                                           (pairZ (N - i2) j2) variant1)) (
+                                                           i2) (j2) (
+                                                           (pairZ (N - i2) j2) =
+                                                           (pairZ (N - i2) j2)) ((0 <=
+                                                           j2 /\ j2 <= M) /\
+                                                           (j2 <= i2 /\ i2 <=
+                                                           N) /\
+                                                           (match_
+                                                            a (i2 - j2) p 0 j2) /\
+                                                           (forall (k:Z),
+                                                            (0 <= k /\ k <
+                                                             (i2 - j2) ->
+                                                             ~(match_
+                                                               a k p 0 M)))))
+                                                       | (Exn _) =>
+                                                         (Build_tuple_3 (
+                                                         i2) (j2) (((Exn) (unit) (
+                                                                    tt))))
+                                                       end)) ((pairZ
+                                                               (N - 0) 0)) (
+                    0) (0) ((pairZ (N - 0) 0) = (pairZ (N - 0) 0)) ((0 <=
+                    0 /\ 0 <= M) /\ (0 <= 0 /\ 0 <= N) /\
+                    (match_ a (0 - 0) p 0 0) /\
+                    (forall (k:Z),
+                     (0 <= k /\ k < (0 - 0) -> ~(match_ a k p 0 M))))) in
+                match result0 with
+                | (Val result0_0) => (Build_tuple_3 (i1) (j1) (result0_0))
+                | (Exn _) => (Build_tuple_3 (i1) (j1) (tt))
+                end in
+              let result1 :=
+                let result1 :=
+                  let (result2, Post16) := (eq_int_ j1 M) in
+                  (exist_1 (fun (result3: bool) =>
+                            (if result3 then j1 = M else j1 <> M)) (result2) ((
+                  if result2 then j1 = M else j1 <> M))) in
+                if result1 then
+                  (i1 - M)
+                else
+                  i1 in
+              (Build_tuple_3 (i1) (j1) (result1)) in
+            (Build_tuple_4 (i1) (j1) (next0) (result0)) in
+          (Build_tuple_3 (i1) (next0) (result)) in
+        (Build_tuple_2 (next0) (result))).
+
 

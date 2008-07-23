@@ -19,7 +19,7 @@
 logic n1 : int
 logic n2 : int
 
-external type A
+type A
 
 parameter w1 : A array
 parameter w2 : A array
@@ -34,15 +34,15 @@ parameter i,j,old : int ref
 
 (*s Auxiliary definitions for the program and its specification. *)
 
-external parameter test_char : a:A -> b:A -> {} bool { if result then a=b else not a=b }
+parameter test_char : a:A -> b:A -> {} bool { if result then a=b else not a=b }
 
-external parameter Zmin : int -> int -> int
+parameter Zmin : int -> int -> int
 
-external type word
+type word
 
-external logic min_suffix : A farray, A farray, int, int, int -> prop
-external logic word_of_array : int, A farray -> word
-external logic min_dist : word, word, int -> prop
+logic min_suffix : A farray, A farray, int, int, int -> prop
+logic word_of_array : int, A farray -> word
+logic min_dist : word, word, int -> prop
 
 (*s The program. *)
 

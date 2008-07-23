@@ -11,3 +11,4 @@ gwhy.cache
 arith_why.smt fib_why.smt flag_ax_why.smt flag_why.smt gcd_why.smt loop0_why.smt mac_carthy_why.smt max_why.smt peano_why.smt power_why.smt search_why.smt sqrt_dicho_why.smt sum_why.smt swap0_why.smt arith_why.cvc fib_why.cvc flag_ax_why.cvc flag_why.cvc gcd_why.cvc loop0_why.cvc mac_carthy_why.cvc max_why.cvc peano_why.cvc power_why.cvc search_why.cvc sqrt_dicho_why.cvc sum_why.cvc swap0_why.cvc fib_why.xpl
 pvsbin/
 pvsbin
+arith_why.why fib_why.why flag_ax_why.why flag_why.why gcd_why.why loop0_why.why mac_carthy_why.why max_why.why peano_why.why power_why.why search_why.why sqrt_dicho_why.why sum_why.why swap0_why.why

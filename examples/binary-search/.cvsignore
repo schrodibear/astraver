@@ -4,3 +4,4 @@
 
 *_valid.v
 *.pvs
+*_why.* pvsbin .pvscontext gwhy.cache

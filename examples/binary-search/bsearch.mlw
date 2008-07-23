@@ -1,9 +1,12 @@
 
-external logic v : int
+logic v : int
 
-external parameter mean : int -> int -> int
+function mean(x : int, y : int) : int = (x + y) / 2
 
-external logic In : int farray,int,int -> prop
+axiom mean : forall x,y:int. x <= y -> x <= mean(x,y) <= y
+
+predicate In(t : int farray, l : int, u : int) =
+   exists i:int. l <= i <= u and t[i] = v
 
 parameter t : int array
 

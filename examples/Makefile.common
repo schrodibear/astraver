@@ -1,7 +1,8 @@
 # Generated automatically from Makefile.common.in by configure.
 
-WHY=../../bin/why.opt
-GWHY=../../bin/gwhy.opt -split-user-conj
+WHYBIN=../../bin/why.opt 
+WHY=$(WHYBIN) -split-user-conj
+GWHY=../../bin/gwhy.opt
 CADUCEUS=../../bin/caduceus.opt
 # WHYOPTIONS=--coq-v8
 WHYOPTIONS=--coq-v8 --valid
@@ -20,10 +21,13 @@ zenon: $(VO:_valid.vo=_why.znn)
 cvcl: $(VO:_valid.vo=_why.cvc)
 	dp -timeout 10 $^  2>/dev/null
 
+ergo: $(VO:_valid.vo=_why.why)
+	dp -timeout 10 $^  2>/dev/null
+
 harvey: $(VO:_valid.vo=_why.rv)
 	dp -timeout 10 $^  2>/dev/null
 
-%_valid.v %_why.v: %.mlw $(WHY)
+%_valid.v %_why.v: %.mlw $(WHYBIN)
 	$(WHY) $(WHYOPTIONS) $<
 
 %_valid.v %_why.v: %.c $(CADUCEUS)
@@ -38,28 +42,31 @@ harvey: $(VO:_valid.vo=_why.rv)
 %.vo: %.v
 	coqc -I ../../lib/coq $(OPT) $<
 
-%_why.pvs: %.mlw $(WHY)
+%_why.pvs: %.mlw $(WHYBIN)
 	$(WHY) --pvs $<
 
-%_why.sx: %.mlw $(WHY)
+%_why.sx: %.mlw $(WHYBIN)
 	$(WHY) --simplify $<
 
-%_why.smt: %.mlw $(WHY)
+%_why.smt: %.mlw $(WHYBIN)
 	$(WHY) --smtlib --encoding mono $<
 
-%_why.znn: %.mlw $(WHY)
+%_why.znn: %.mlw $(WHYBIN)
 	$(WHY) --zenon $<
 
-%_why.cvc: %.mlw $(WHY)
+%_why.cvc: %.mlw $(WHYBIN)
 	$(WHY) --cvcl $<
 
-%_why.rv: %.mlw $(WHY)
+%_why.why: %.mlw $(WHYBIN)
+	$(WHY) --why $<
+
+%_why.rv: %.mlw $(WHYBIN)
 	$(WHY) --harvey $<
 
-%_why.miz: %.mlw $(WHY)
+%_why.miz: %.mlw $(WHYBIN)
 	$(WHY) --mizar $<
 
-%_why.miz: %.c $(WHY)
+%_why.miz: %.c $(WHYBIN)
 	$(WHY) --mizar $<
 
 %.ml: %.mlw
