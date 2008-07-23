@@ -536,11 +536,13 @@ expr:
 | simple_expr list1_simple_expr %prec prec_app
    { locate (app $1 $2) }
 | expr BARBAR expr
-   { let ptrue = locate (Sconst (ConstBool true)) in
-     locate (Sif ($1, ptrue, $3)) }
+   { locate (Slazy_or ($1, $3))
+     (* let ptrue = locate (Sconst (ConstBool true)) in
+     locate (Sif ($1, ptrue, $3)) *) }
 | expr AMPAMP expr
-   { let pf = locate (Sconst (ConstBool false)) in
-     locate (Sif ($1, $3, pf)) }
+   { locate (Slazy_and ($1, $3))
+     (* let pf = locate (Sconst (ConstBool false)) in
+     locate (Sif ($1, $3, pf)) *) }
 | NOT expr
    { let pf = locate (Sconst (ConstBool false)) in
      let pt = locate (Sconst (ConstBool true)) in

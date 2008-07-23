@@ -341,6 +341,10 @@ let rec program m fmt p =
       assert false
   | Sif (e1, e2, e3) ->
       fprintf fmt "(if %a then@ %a else@ %a)" progm e1 progm e2 progm e3
+  | Slazy_and (e1, e2) ->
+      fprintf fmt "(%a &&@ %a)" progm e1 progm e2
+  | Slazy_or (e1, e2) ->
+      fprintf fmt "(%a ||@ %a)" progm e1 progm e2
   | Sapp ({pdesc = Sapp ({ pdesc = Svar id }, e1)}, e2) when is_binop id ->
       fprintf fmt "(%a %s %a)" progm e1 (binop id) progm e2
   | Sapp ({ pdesc = Svar id }, e1) when id == t_neg ->

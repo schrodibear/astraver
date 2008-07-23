@@ -24,15 +24,24 @@ parameter eq_bool_ : x:bool -> y:bool -> {} bool {if result then x=y else x<>y}
 parameter neq_bool_: x:bool -> y:bool -> {} bool {if result then x<>y else x=y}
 
 logic bool_and : bool, bool -> bool
-logic bool_or : bool, bool -> bool
+logic bool_or  : bool, bool -> bool
 logic bool_xor : bool, bool -> bool
 logic bool_not : bool -> bool
 
-axiom bool_and_def: forall a, b: bool. bool_and(a,b) = true <-> a=true and b=true
-axiom bool_or_def: forall a, b: bool. bool_or(a,b) = true <-> a=true or b=true
-axiom bool_xor_def: forall a, b: bool. bool_xor(a,b) = true <-> a <> b
-axiom bool_not_def: forall a: bool. bool_not(a) = true <-> a=false
+axiom bool_and_def: forall a,b:bool. bool_and(a,b) = true <-> a=true and b=true
+axiom bool_or_def: forall a,b:bool. bool_or(a,b) = true <-> a=true or b=true
+axiom bool_xor_def: forall a,b:bool. bool_xor(a,b) = true <-> a <> b
+axiom bool_not_def: forall a:bool. bool_not(a) = true <-> a=false
 
+parameter strict_bool_and_ : 
+  b1:bool -> b2:bool ->  
+  {} bool { if result then b1=true and b2=true 
+                      else (b1=false or b1=true and b2=false) }
+
+parameter strict_or : 
+  b1:bool -> b2:bool -> 
+  {} bool { if result then b1=true or b1=false and b2=true 
+                      else b1=false and b2=false }
 
 (* if-then-else function symbol *)
 

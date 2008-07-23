@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.136 2008-04-10 14:43:57 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.137 2008-07-23 08:02:33 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -180,6 +180,11 @@ let gmake_node loc env userlabel l ?(post=None) p rt e =
 	     t_result_name = result; 
 	     t_result_type = rt; t_effect = e; t_post = post } }
 
+
+let bool_constant b loc env =
+  gmake_node loc env "" (label_name ()) (Expression (Tconst (ConstBool b)))
+    type_v_bool Effect.bottom
+
 let make_arrow_type lab bl k =
   let k = 
     let q = optpost_app (change_label lab "") k.c_post in
@@ -330,9 +335,6 @@ let check_array_type loc env id =
     | Not_found -> raise_located loc (UnboundArray id)
     | Invalid_argument _ -> raise_located loc (NotAnArray id)
       
-let check_no_effect loc ef =
-  if not (Effect.get_writes ef = []) then raise_located loc HasSideEffects
-
 let is_pure_type = function
   | PureType _ -> true
   | _ -> false
@@ -654,6 +656,24 @@ let rec typef ?(userlabel="") lab env expr =
       let ef = union3effects (effect t_b) (effect t_e1) (effect t_e2) in
       let v = type_v_sup loc t1 t2 in
       make_node toplabel (If (t_b, t_e1, t_e2)) v ef
+
+  | Slazy_and (e1, e2) ->
+      let t_e1 = typef lab env e1 in
+      expected_type e1.ploc (result_type t_e1) type_v_bool;
+      let t_e2 = typef lab env e2 in
+      expected_type e2.ploc (result_type t_e2) type_v_bool;
+      let ef = union (effect t_e1) (effect t_e2) in
+      let bool_false = bool_constant false loc env in
+      make_node toplabel (If (t_e1, t_e2, bool_false)) type_v_bool ef
+
+  | Slazy_or (e1, e2) ->
+      let t_e1 = typef lab env e1 in
+      expected_type e1.ploc (result_type t_e1) type_v_bool;
+      let t_e2 = typef lab env e2 in
+      expected_type e2.ploc (result_type t_e2) type_v_bool;
+      let ef = union (effect t_e1) (effect t_e2) in
+      let bool_true = bool_constant true loc env in
+      make_node toplabel (If (t_e1, bool_true, t_e2)) type_v_bool ef
 
   | Srec (f,bl,v,var,p,e) ->
       let loc_e = e.ploc in

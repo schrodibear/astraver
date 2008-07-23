@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.155 2008-07-11 12:07:15 marche Exp $ i*)
+(*i $Id: util.ml,v 1.156 2008-07-23 08:02:33 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -985,6 +985,10 @@ let rec print_ptree fmt p = match p.pdesc with
   | Sif (p1, p2, p3) ->
       fprintf fmt "@[<hv 2>if %a then@ %a else@ %a@]" 
 	print_ptree p1 print_ptree p2 print_ptree p3
+  | Slazy_and (p1, p2) ->
+      fprintf fmt "@[<hv 2>(%a &&@ %a)@]" print_ptree p1 print_ptree p2
+  | Slazy_or (p1, p2) ->
+      fprintf fmt "@[<hv 2>(%a ||@ %a)@]" print_ptree p1 print_ptree p2
   | Slam (bl, pre, p) ->
       fprintf fmt "@[<hov 2>fun <...> ->@ %a@]" print_ptree p
   | Sapp (p, a) ->

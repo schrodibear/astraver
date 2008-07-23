@@ -27,12 +27,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.28 2008-07-04 14:29:46 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.29 2008-07-23 08:02:33 filliatr Exp $ i*)
 
 open Format
 open Pp
 open Ident
 open Options
+open Misc
 open Logic
 open Logic_decl
 
@@ -162,12 +163,18 @@ let rec predicate fmt = function
       fprintf fmt "(@[%a or@ %a@])" predicate a predicate b
   | Pnot a ->
       fprintf fmt "(not %a)" predicate a
-  | Forall (_,_,b,v,tl,p) ->
+  | Forall (_,id,n,v,tl,p) ->
+      let id = next_away id (predicate_vars p) in
+      let s = subst_onev n id in
+      let p = subst_in_predicate s p in
+      let tl = List.map (List.map (subst_in_pattern s)) tl in
       fprintf fmt "@[<hov 2>(forall %a:%a%a.@ %a)@]"
-	ident b pure_type v print_triggers tl predicate p
-  | Exists (_,b,v,p) ->
+	ident id pure_type v print_triggers tl predicate p
+  | Exists (id,n,v,p) ->
+      let id = next_away id (predicate_vars p) in
+      let p = subst_in_predicate (subst_onev n id) p in
       fprintf fmt "@[<hov 2>(exists %a:%a.@ %a)@]" 
-	ident b pure_type v predicate p
+	ident id pure_type v predicate p
   | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
       fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
 	term t i1 f1 e1 i2 f2 e2
