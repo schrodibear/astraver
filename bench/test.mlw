@@ -3,14 +3,10 @@ logic D : int
 
 parameter vx,vy : int ref
 
-parameter strict_and : b1:bool -> b2:bool -> {} bool { if result then b1=true and b2=true else (b1=false or b1=true and b2=false) }
-
-parameter strict_or : b1:bool -> b2:bool -> {} bool { if result then b1=true or b1=false and b2=true else (b1=false and b2=false) }
-
 parameter sq : x:int -> {} int { result = x*x }
 
 let g () =
  { true }
- if !vx=0 && !vy=0 && sq !vx + sq !vy < sq D then 1 else 2
+ if !vx=0 && !vy=0 && sq !vx + sq !vy < sq D  then 1 else 2
  { result=1 -> vx=0 and vy=0 }
 

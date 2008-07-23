@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.137 2008-07-23 08:02:33 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.138 2008-07-23 08:59:33 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -349,6 +349,9 @@ let decompose_app e =
     | _ -> e, args
   in
   loop [] e
+
+let sapp loc e1 e2 = { pdesc = Sapp (e1, e2); ploc = loc }
+let svar loc v = { pdesc = Svar v; ploc = loc }
     
 (*s Saturation of postconditions: a postcondition must be set for
     any possibly raised exception *)
@@ -407,6 +410,21 @@ let without_exn_check f x =
     with e -> exn_check := true; raise e
   end else
     f x
+
+(*s Pure expressions. Used in [Slazy_and] and [Slazy_or] to decide
+    whether to use [strict_bool_and_] and [strict_bool_or_] or not. *)
+
+let rec is_pure_expr e = 
+  let ef = effect e in get_writes ef = [] && get_exns ef = [] &&
+  match e.desc with
+  | Var _ | Expression _ -> true
+  | If (e1, e2, e3) -> is_pure_expr e1 && is_pure_expr e2 && is_pure_expr e3
+  | LetIn (_, e1, e2) -> is_pure_expr e1 && is_pure_expr e2
+  | Label (_, e1) | Assertion (_, [], e1) -> is_pure_expr e1
+  | AppRef (e1, _, _) | AppTerm (e1, _, _) -> is_pure_expr e1
+  | Any _ | Rec _ | Lam _ | Try _ 
+  | Raise _ | Post _ | Assertion _ | LetRef _ 
+  | Loop _ | Seq _ | Absurd -> false
 
 (*s Typing programs. We infer here the type with effects. 
     [lab] is the set of labels, [env] the environment 
@@ -662,15 +680,23 @@ let rec typef ?(userlabel="") lab env expr =
       expected_type e1.ploc (result_type t_e1) type_v_bool;
       let t_e2 = typef lab env e2 in
       expected_type e2.ploc (result_type t_e2) type_v_bool;
-      let ef = union (effect t_e1) (effect t_e2) in
-      let bool_false = bool_constant false loc env in
-      make_node toplabel (If (t_e1, t_e2, bool_false)) type_v_bool ef
+      if is_pure_expr t_e1 && is_pure_expr t_e2 then
+	(* TODO:  improve *)
+	typef lab env (sapp loc (sapp loc (svar loc strict_bool_and_) e1) e2)
+      else
+	let ef = union (effect t_e1) (effect t_e2) in
+	let bool_false = bool_constant false loc env in
+	make_node toplabel (If (t_e1, t_e2, bool_false)) type_v_bool ef
 
   | Slazy_or (e1, e2) ->
       let t_e1 = typef lab env e1 in
       expected_type e1.ploc (result_type t_e1) type_v_bool;
       let t_e2 = typef lab env e2 in
       expected_type e2.ploc (result_type t_e2) type_v_bool;
+      if is_pure_expr t_e1 && is_pure_expr t_e2 then
+	(* TODO:  improve *)
+	typef lab env (sapp loc (sapp loc (svar loc strict_bool_or_) e1) e2)
+      else
       let ef = union (effect t_e1) (effect t_e2) in
       let bool_true = bool_constant true loc env in
       make_node toplabel (If (t_e1, bool_true, t_e2)) type_v_bool ef

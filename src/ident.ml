@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.ml,v 1.68 2008-07-21 14:29:29 marche Exp $ i*)
+(*i $Id: ident.ml,v 1.69 2008-07-23 08:59:33 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -346,3 +346,7 @@ let is_arith id =
 
 let is_simplify_arith id =
   is_int_arith id || id == t_lt_int || id == t_le_int || id == t_gt_int || id == t_ge_int
+
+let strict_bool_and_ = create "strict_bool_and_"
+let strict_bool_or_ = create "strict_bool_or_"
+

@@ -3,6 +3,6 @@ load_printer "ident.cmo"
 install_printer Ident.dbprint
 load_printer "effect.cmo"
 install_printer Effect.print
-set arguments -no-prelude -smtlib ../bug.why
+set arguments ../bench/test.mlw
 
 

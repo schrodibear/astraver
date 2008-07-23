@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.mli,v 1.59 2008-07-21 14:29:29 marche Exp $ i*)
+(*i $Id: ident.mli,v 1.60 2008-07-23 08:59:33 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -257,3 +257,6 @@ val is_arith_binop : t -> bool
 val is_arith : t -> bool
 
 val is_simplify_arith : t -> bool
+
+val strict_bool_and_ : t
+val strict_bool_or_ : t

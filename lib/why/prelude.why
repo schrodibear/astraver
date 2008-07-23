@@ -38,10 +38,10 @@ parameter strict_bool_and_ :
   {} bool { if result then b1=true and b2=true 
                       else (b1=false or b1=true and b2=false) }
 
-parameter strict_or : 
+parameter strict_bool_or_ : 
   b1:bool -> b2:bool -> 
   {} bool { if result then b1=true or b1=false and b2=true 
-                      else b1=false and b2=false }
+                      else (b1=false and b2=false) }
 
 (* if-then-else function symbol *)
 
