@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.111 2008-07-11 09:01:13 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.112 2008-07-24 15:28:43 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -850,6 +850,16 @@ let string_of_op_type = function
   | `Boolean -> "boolean"
   | `Pointer -> "pointer"
   | `Logic -> "<some logic type>"
+
+
+let builtin_logic_symbols =
+  [ Some real_type, "\\real_abs", "abs_real", [real_type] ;
+    Some real_type, "\\real_max", "real_max", [real_type; real_type] ;
+    Some real_type, "\\real_min", "real_min", [real_type; real_type] ;
+    Some integer_type, "\\int_max", "int_max", [integer_type; integer_type] ;
+    Some integer_type, "\\int_min", "int_min", [integer_type; integer_type] ;
+  ]
+
 
 (*
 Local Variables: 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.29 2008-06-10 13:43:10 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.30 2008-07-24 15:28:43 marche Exp $ i*)
 
 open Format
 open Jc_env
@@ -93,7 +93,7 @@ let locs_table = Hashtbl.create 97
 
 let version () = 
   Printf.printf "This is Jessie version %s, compiled on %s
-Copyright (c) 2006-2007 - Romain Bardou, Claude Marché, Yannick Moy, Nicolas Rousset
+Copyright (c) 2006-2008 - INRIA team-project ProVal
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Jc_version.version Jc_version.date;
   exit 0

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.151 2008-07-24 09:16:00 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.152 2008-07-24 15:28:43 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -366,7 +366,7 @@ let create_logic_fun loc fi =
 let () =
   List.iter
     (fun fi -> let _ = create_logic_fun Loc.dummy_position fi in ())
-    Java_typing.logic_builtins
+    !Java_typing.builtin_logic_symbols
 
 (*s program funs *)
 

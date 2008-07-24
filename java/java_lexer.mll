@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.31 2008-07-21 15:31:26 marche Exp $
+$Id: java_lexer.mll,v 1.32 2008-07-24 15:28:43 marche Exp $
 
 ***************************************************************************)
 
@@ -43,7 +43,7 @@ $Id: java_lexer.mll,v 1.31 2008-07-21 15:31:26 marche Exp $
   open Java_parser
   open Lexing
   open Java_ast
-
+    
   type location = position * position
 
   let loc lexbuf : location = 
@@ -171,22 +171,29 @@ $Id: java_lexer.mll,v 1.31 2008-07-21 15:31:26 marche Exp $
     let _ = 
       List.iter
 	(fun (s,t) -> Hashtbl.add table s t)
-	[ "at", BSAT;
-	  "exists", BSEXISTS ;
+	[ "\\at", BSAT;
+	  "\\exists", BSEXISTS ;
 	  (* "fresh", BSFRESH ; *)
-	  "forall", BSFORALL ;
-	  "real_max", BSREAL_MAX ;
-	  "nothing", BSNOTHING;
+	  "\\forall", BSFORALL ;
+	  "\\nothing", BSNOTHING;
 	  (*
 	  "fields_of", BSFIELDSOF;
           "not_conditionally_updated", BSNOTCONDITIONALLYUPDATED;
 	  *)
-	  "old", BSOLD;
-	  "result", BSRESULT;
+	  "\\old", BSOLD;
+	  "\\result", BSRESULT;
 	  (*"type", BSTYPE;
 	  "typeof", BSTYPEOF;
 	  "fpi", BSFPI; *)
 	]
+    in table
+
+  let builtins_table =
+    let table = Hashtbl.create 17 in
+    let _ = 
+      List.iter
+	(fun (ty,id,params) -> Hashtbl.add table id ())
+	Java_pervasives.builtin_logic_symbols
     in table
 
   let special_id lexbuf s =
@@ -194,7 +201,12 @@ $Id: java_lexer.mll,v 1.31 2008-07-21 15:31:26 marche Exp $
       Hashtbl.find special_kw_table s
     with
 	Not_found ->
-	  lex_error lexbuf ("unknown special keyword \\"^s)
+	  try
+	    let () = Hashtbl.find builtins_table s in
+	    ID s
+	  with
+	      Not_found ->
+		lex_error lexbuf ("unknown special keyword "^s)
 
 (*
 
@@ -303,7 +315,7 @@ rule token = parse
       { comment lexbuf; token lexbuf }
   | "//" ([^'\n''@'][^'\n']*)? '\n'
       { newline lexbuf; token lexbuf }
-  | "\\" (['A'-'Z''a'-'z''_']['A'-'Z''a'-'z''0'-'9''_']* as id)
+  | "\\" ['A'-'Z''a'-'z''_']['A'-'Z''a'-'z''0'-'9''_']* as id
       { special_id lexbuf id }
   | ['A'-'Z''a'-'z''_']['A'-'Z''a'-'z''0'-'9''_']* as id
       { id_or_kw id }

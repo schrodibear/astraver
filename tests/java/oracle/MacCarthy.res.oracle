@@ -83,16 +83,16 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
-logic integer max{Here}(integer x_0, integer y_0) reads \nothing;
+logic integer max{Here}(integer x, integer y) reads \nothing;
 
 exception Throwable of Throwable[0..]
 
 axiom max_def{Here} :
-(\forall integer x_1;
-  (\forall integer y_1;
-    ((((max(x_1, y_1) == x_1) || (max(x_1, y_1) == y_1)) &&
-       (max(x_1, y_1) >= x_1)) &&
-      (max(x_1, y_1) >= y_1))))
+(\forall integer x_0;
+  (\forall integer y_0;
+    ((((max(x_0, y_0) == x_0) || (max(x_0, y_0) == y_0)) &&
+       (max(x_0, y_0) >= x_0)) &&
+      (max(x_0, y_0) >= y_0))))
 
 integer MacCarthy_f91(integer n)
 behavior less_than_101:
@@ -784,10 +784,10 @@ axiom interface_tags :
 logic max: int, int -> int
 
 axiom max_def :
- (forall x_1:int.
-  (forall y_1:int.
-   ((eq_int(max(x_1, y_1), x_1) or eq_int(max(x_1, y_1), y_1))
-   and (ge_int(max(x_1, y_1), x_1) and ge_int(max(x_1, y_1), y_1)))))
+ (forall x_0_0:int.
+  (forall y_0:int.
+   ((eq_int(max(x_0_0, y_0), x_0_0) or eq_int(max(x_0_0, y_0), y_0))
+   and (ge_int(max(x_0_0, y_0), x_0_0) and ge_int(max(x_0_0, y_0), y_0)))))
 
 predicate valid_struct_Object(p:Object pointer,
  a:int,
@@ -1266,13 +1266,13 @@ axiom neq_real_bool_axiom:
   (forall x:real.
     (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
 
-logic max_int : int, int -> int
+logic int_max : int, int -> int
 
-logic min_int : int, int -> int
+logic int_min : int, int -> int
 
-logic max_real : real, real -> real
+logic real_max : real, real -> real
 
-logic min_real : real, real -> real
+logic real_min : real, real -> real
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
 
@@ -1758,10 +1758,10 @@ axiom interface_tags:
 logic max : int, int -> int
 
 axiom max_def:
-  (forall x_1:int.
-    (forall y_1:int.
-      (((max(x_1, y_1) = x_1) or (max(x_1, y_1) = y_1)) and
-       ((max(x_1, y_1) >= x_1) and (max(x_1, y_1) >= y_1)))))
+  (forall x_0_0:int.
+    (forall y_0:int.
+      (((max(x_0_0, y_0) = x_0_0) or (max(x_0_0, y_0) = y_0)) and
+       ((max(x_0_0, y_0) >= x_0_0) and (max(x_0_0, y_0) >= y_0)))))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -2287,9 +2287,9 @@ why -simplify [...] why/MacCarthy.why
 
 (BG_PUSH
  ;; Why axiom max_def
- (FORALL (x_1 y_1)
- (AND (OR (EQ (max x_1 y_1) x_1) (EQ (max x_1 y_1) y_1))
- (AND (>= (max x_1 y_1) x_1) (>= (max x_1 y_1) y_1)))))
+ (FORALL (x_0_0 y_0)
+ (AND (OR (EQ (max x_0_0 y_0) x_0_0) (EQ (max x_0_0 y_0) y_0))
+ (AND (>= (max x_0_0 y_0) x_0_0) (>= (max x_0_0 y_0) y_0)))))
 
 (DEFPRED (valid_struct_Object p a b Object_alloc_table)
   (AND (EQ (offset_min Object_alloc_table p) a)
@@ -2520,13 +2520,13 @@ axiom neq_real_bool_axiom:
   (forall x:real.
     (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
 
-logic max_int : int, int -> int
+logic int_max : int, int -> int
 
-logic min_int : int, int -> int
+logic int_min : int, int -> int
 
-logic max_real : real, real -> real
+logic real_max : real, real -> real
 
-logic min_real : real, real -> real
+logic real_min : real, real -> real
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
 
@@ -3012,10 +3012,10 @@ axiom interface_tags:
 logic max : int, int -> int
 
 axiom max_def:
-  (forall x_1:int.
-    (forall y_1:int.
-      (((max(x_1, y_1) = x_1) or (max(x_1, y_1) = y_1)) and
-       ((max(x_1, y_1) >= x_1) and (max(x_1, y_1) >= y_1)))))
+  (forall x_0_0:int.
+    (forall y_0:int.
+      (((max(x_0_0, y_0) = x_0_0) or (max(x_0_0, y_0) = y_0)) and
+       ((max(x_0_0, y_0) >= x_0_0) and (max(x_0_0, y_0) >= y_0)))))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

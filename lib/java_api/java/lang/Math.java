@@ -709,6 +709,8 @@ public final strictfp class Math {
      * @param   a   the argument whose absolute value is to be determined
      * @return  the absolute value of the argument.
      */
+    /*@ ensures \result == \real_abs(a);
+      @*/
     public static double abs(double a) {
         return (a <= 0.0D) ? 0.0D - a : a;
     }
@@ -724,6 +726,8 @@ public final strictfp class Math {
      * @return  the larger of <code>a</code> and <code>b</code>.
      * @see     java.lang.Long#MAX_VALUE
      */
+    /*@ ensures \result == \int_max(a,b);
+      @*/
     public static int max(int a, int b) {
 	return (a >= b) ? a : b;
     }
@@ -739,6 +743,8 @@ public final strictfp class Math {
      * @return  the larger of <code>a</code> and <code>b</code>.
      * @see     java.lang.Long#MAX_VALUE
      */
+    /*@ ensures \result == \int_max(a,b);
+      @*/
     public static long max(long a, long b) {
 	return (a >= b) ? a : b;
     }
@@ -760,6 +766,8 @@ public final strictfp class Math {
      * @param   b   another argument.
      * @return  the larger of <code>a</code> and <code>b</code>.
      */
+    /*@ ensures \result == \real_max(a,b);
+      @*/
     public static float max(float a, float b) {
         if (a != a) return a;	// a is NaN
 	if ((a == 0.0f) && (b == 0.0f)
@@ -805,6 +813,8 @@ public final strictfp class Math {
      * @return  the smaller of <code>a</code> and <code>b</code>.
      * @see     java.lang.Long#MIN_VALUE
      */
+    /*@ ensures \result == \int_min(a,b);
+      @*/
     public static int min(int a, int b) {
 	return (a <= b) ? a : b;
     }
@@ -820,6 +830,8 @@ public final strictfp class Math {
      * @return  the smaller of <code>a</code> and <code>b</code>.
      * @see     java.lang.Long#MIN_VALUE
      */
+    /*@ ensures \result == \int_min(a,b);
+      @*/
     public static long min(long a, long b) {
 	return (a <= b) ? a : b;
     }
@@ -838,6 +850,8 @@ public final strictfp class Math {
      * @param   b   another argument.
      * @return  the smaller of <code>a</code> and <code>b.</code>
      */
+    /*@ ensures \result == \real_min(a,b);
+      @*/
     public static float min(float a, float b) {
         if (a != a) return a;	// a is NaN
 	if ((a == 0.0f) && (b == 0.0f)
@@ -861,6 +875,8 @@ public final strictfp class Math {
      * @param   b   another argument.
      * @return  the smaller of <code>a</code> and <code>b</code>.
      */
+    /*@ ensures \result == \real_min(a,b);
+      @*/
     public static double min(double a, double b) {
         if (a != a) return a;	// a is NaN
 	if ((a == 0.0d) && (b == 0.0d)

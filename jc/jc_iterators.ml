@@ -96,8 +96,8 @@ let replace_sub_expr e el =
   in
   let enode = match e#node with
     | JCEconst _ | JCEvar _ | JCEassert _ | JCEreturn_void as enode -> enode
-    | JCEcontract(req,dec,behs,_e) ->
-	let e1 = as1 el in JCEcontract(req,dec,behs,e1)
+    | JCEcontract(req,dec,vi_result,behs,_e) ->
+	let e1 = as1 el in JCEcontract(req,dec,vi_result,behs,e1)
     | JCEbinary(_e1,bop,_e2) ->
 	let e1,e2 = as2 el in JCEbinary(e1,bop,e2) 
     | JCEshift(_e1,_e2) ->
@@ -189,8 +189,7 @@ module ExprAst = struct
       | JCEthrow(_, Some e)
       | JCEpack(_, e, _)
       | JCEunpack(_, e, _) 
-      | JCEcontract(_,_,_,e) ->
-          [e]
+      | JCEcontract(_,_,_,_,e) -> [e]
       | JCEbinary(e1, _, e2)
       | JCEassign_heap(e1, _, e2)
       | JCElet(_, Some e1, e2)

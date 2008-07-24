@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.18 2008-04-09 06:17:12 nrousset Exp $ i*)
+(*i $Id: java_options.ml,v 1.19 2008-07-24 15:28:43 marche Exp $ i*)
 
 open Format
 
@@ -99,7 +99,7 @@ let files () = List.rev !files_
 
 let version () = 
   Printf.printf "This is Krakatoa version %s, compiled on %s
-Copyright (c) 2006-2007 - ProVal INRIA project 
+Copyright (c) 2006-2008 - INRIA team-project ProVal
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Java_version.version Java_version.date;
   exit 0

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.311 2008-07-23 12:13:54 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.312 2008-07-24 15:28:43 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1905,8 +1905,18 @@ and expr ~infunction ~threats e : expr =
                    a,
 		 Void)
 	else Void
-    | JCEcontract(req,dec,behs,e) ->
-	assert false (* TODO *)
+    | JCEcontract(req,dec,vi_result,behs,e) ->
+	assert (req = None);
+	assert (dec = None);
+	begin match behs with
+	  | [loc,id,b] ->
+	      assert (b.jc_behavior_throws = None);
+	      assert (b.jc_behavior_assumes = None);
+	      assert (b.jc_behavior_assigns = None);
+	      Triple(true,LTrue,expr e,assertion ~global_assertion:false ~relocate:false LabelHere LabelOld b.jc_behavior_ensures,[])
+	  | _ -> assert false
+	end
+	
     | JCElet (vi, e, s) -> 
         let e' = match e with
           | None -> 

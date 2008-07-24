@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.112 2008-07-17 14:14:24 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.113 2008-07-24 15:28:43 marche Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -595,8 +595,13 @@ let rec expr ef e =
 	expr (Option_misc.fold_left expr ef e) s
     | JCEassert(_behav,a) -> 
 	{ ef with jc_reads = assertion ef.jc_reads a; }
-    | JCEcontract(req,dec,behs,e) ->
-	assert false (* TODO *)
+    | JCEcontract(req,dec,vi_result,behs,e) ->
+	let reads = ef.jc_reads in
+	let reads = Option_misc.fold_left assertion reads req in
+	let reads = Option_misc.fold_left term reads dec in
+	let ef = {ef with jc_reads = reads } in 
+	let ef = List.fold_left behavior ef behs in
+	expr ef e
     | JCEblock l -> List.fold_left expr ef l
     | JCEmatch(e, psl) ->
 	let pef = List.fold_left pattern empty_effects (List.map fst psl) in
@@ -611,8 +616,19 @@ and loop_annot ef la =
   | None -> ef
   | Some t -> term ef t
 
+and behavior ef (loc,id,b) =
+  let ef = 
+    Option_misc.fold_left 
+      (fun ef (_,l) -> List.fold_left location ef l) 
+      ef b.jc_behavior_assigns 
+  in
+  let reads = 
+    Option_misc.fold_left assertion ef.jc_reads b.jc_behavior_assumes 
+  in
+  {ef with jc_reads = assertion reads b.jc_behavior_ensures}
+
 (* Conservatively consider location is both read and written. *)
-let rec location ef l =
+and location ef l =
   match l with
     | JCLderef(t,lab,fi,r) ->
 	begin

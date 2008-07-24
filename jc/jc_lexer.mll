@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.61 2008-07-24 09:16:00 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.62 2008-07-24 15:28:43 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -66,6 +66,21 @@
 	  pos_bol = pos.pos_cnum - chars;
       }
 
+  let builtins_table =
+    let table = Hashtbl.create 17 in
+    let _ = 
+      List.iter
+	(fun (ty,id,whyid,params) -> Hashtbl.add table id ())
+	Jc_pervasives.builtin_logic_symbols
+    in table
+
+  let special_id lexbuf s =
+    try
+      let () = Hashtbl.find builtins_table s in
+      IDENTIFIER s
+    with
+	Not_found ->
+	  lex_error lexbuf ("unknown special symbol "^s)
 
   exception Dotdot of string
 
@@ -210,8 +225,7 @@ rule token = parse
   | "\\result"              { BSRESULT }
   | "\\typeeq"              { BSTYPEEQ }
   | "\\typeof"              { BSTYPEOF }
-  | "\\" ("real_max" as s)  { IDENTIFIER s }
-  | "\\" rL*                { lex_error lexbuf ("Illegal escape sequence " ^ lexeme lexbuf) }
+  | "\\" rL (rL | rD)* as s { special_id lexbuf s }
 (*
   | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*
         ("\"" ([^ '\010' '\013' '"' ] * as name) "\"")?

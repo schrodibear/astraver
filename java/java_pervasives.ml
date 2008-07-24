@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_pervasives.ml,v 1.17 2008-07-22 09:29:20 marche Exp $ *)
+(* $Id: java_pervasives.ml,v 1.18 2008-07-24 15:28:43 marche Exp $ *)
 
 (*** Utility functions ***)
 
@@ -179,10 +179,20 @@ let logic_info =
       java_logic_info_calls = [];
     }
 
+(*
 let real_max_fi = 
   let x = new_var Loc.dummy_position real_type "x" in
   let y = new_var Loc.dummy_position real_type "y" in
   logic_info "\\real_max" (Some real_type) [] [x;y] 
+*)
+
+let builtin_logic_symbols =
+  [ (Some real_type, "\\real_abs", [real_type]) ;
+    (Some real_type, "\\real_max", [real_type; real_type]) ;
+    (Some real_type, "\\real_min", [real_type; real_type]) ;
+    (Some integer_type, "\\int_max", [integer_type; integer_type]) ;
+    (Some integer_type, "\\int_min", [integer_type; integer_type]) ;
+  ]
 
 (*
 Local Variables: 

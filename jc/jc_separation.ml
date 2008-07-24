@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.21 2008-07-17 14:14:24 marche Exp $ *)
+(* $Id: jc_separation.ml,v 1.22 2008-07-24 15:28:43 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -228,7 +228,7 @@ let expr rresult e =
 	Region.unify rresult e#region
     | JCEassert(_behav,a) ->
 	assertion rresult a
-    | JCEcontract(req,dec,behs,e) -> 
+    | JCEcontract(req,dec,vi_result,behs,e) -> 
 	assert false (* TODO *)
     | JCEloop(la,_) ->
 	iter_term_and_assertion_in_loop_annot 

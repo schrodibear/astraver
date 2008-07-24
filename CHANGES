@@ -1,4 +1,7 @@
- 
+
+  o krakatoa/jessie: preliminary support for statement contracts
+  o krakatoa/jessie/why: new builtin logic symbols \int_max, \int_min, 
+    \real_max, \real_min 
   o Zenon: fixed syntax for Zenon 0.5.0 (missing $hyp)
   o WP: no more duplication of VCs when operators &&, || and not are
     applied to pure boolean expressions; command line option

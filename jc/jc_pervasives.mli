@@ -148,6 +148,11 @@ val pattern_vars : Jc_env.var_info Jc_envset.StringMap.t -> Jc_ast.pattern ->
 val string_of_op: [< bin_op | unary_op] -> string
 val string_of_op_type: [< operator_type] -> string
 
+(* builtin_logic_symbols *)
+
+val builtin_logic_symbols :
+  (Jc_env.jc_type option * string * string * Jc_env.jc_type list) list
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"

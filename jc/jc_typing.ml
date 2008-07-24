@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.227 2008-07-24 09:16:00 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.228 2008-07-24 15:28:43 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -582,9 +582,14 @@ let rec type_logic_labels env logic_label e =
     | JCNEif _ | JCNEoffset _ | JCNEalloc _ | JCNEfree _ | JCNElet _
     | JCNEassert _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
     | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEmatch _ | JCNEquantifier _
-    | JCNEmutable _ | JCNEtagequality _ | JCNErange _ | JCNEcontract _ ->
+    | JCNEmutable _ | JCNEtagequality _ | JCNErange _ -> 
         iter_subs logic_label;
         env
+    | JCNEcontract(req,dec,behs,e) ->
+	let _ = type_logic_labels_opt env (Some LabelHere) req in
+	let _ = type_logic_labels_opt env (Some LabelHere) dec in
+	List.iter (behavior_logic_labels env) behs;
+	type_logic_labels env None e
     | JCNEapp(_, l, _) ->
         List.iter (check e) l;
         iter_subs logic_label;
@@ -610,6 +615,25 @@ let rec type_logic_labels env logic_label e =
         let env = (LabelName lab)::env in
         iter_subs ~env logic_label;
         env
+
+and type_logic_labels_opt env logic_label e =
+  match e with
+    | None -> env
+    | Some e -> type_logic_labels env logic_label e
+	
+and behavior_logic_labels env 
+    (loc,id,throws,assumes,requires,assigns,ensures) =
+  let here = Some LabelHere in
+  let _ = type_logic_labels_opt env here assumes in
+  let _ = type_logic_labels_opt env here requires in
+  let env = LabelOld :: env in
+  Option_misc.iter
+    (fun (_,a) ->
+       List.iter (fun e -> ignore(type_logic_labels env here e)) a) assigns;
+  let _ = type_logic_labels env here ensures in
+  ()
+   
+
 let type_logic_labels env logic_label e =
   ignore (type_logic_labels env logic_label e)
 
@@ -1694,14 +1718,12 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEassert(behav,e1) ->
         unit_type, dummy_region, JCEassert(behav,assertion env e1)
     | JCNEcontract(req,dec,behs,e) ->
-	assert false (* TODO *)
-	  (*
 	let requires = Option_misc.map (assertion env) req in
 	let decreases = Option_misc.map (term env) req in
-	let behs = List.map (behavior env vi_result) behs in
 	let e = expr env e in
-	JCEcontract(requires,decreases,behs,e)	
-	  *)
+	let vi_result = var (e#typ) "\\result" in
+	let behs = List.map (behavior env vi_result) behs in
+	e#typ,e#region,JCEcontract(requires,decreases,vi_result,behs,e)	
     | JCNEblock el ->
         (* No warning when a value is ignored. *)
         let tel = List.map fe el in
@@ -2016,20 +2038,18 @@ let add_logic_fundecl (ty,id,labels,pl) =
     Hashtbl.replace logic_functions_env id pi;
     param_env, ty, pi
 
-let logic_builtins =
-  [ Some real_type, "real_max", [real_type ; real_type] ; ]
-
 let () =
   List.iter 
-    (fun (ty,x,pl) -> 
+    (fun (ty,x,whyid,pl) -> 
        let pi = make_rel x in
        let pl = List.map 
 	 (fun ty -> var ~formal:true ty "_") pl
        in
        pi.jc_logic_info_parameters <- pl;
        pi.jc_logic_info_result_type <- ty;
+       pi.jc_logic_info_final_name <- whyid;
        Hashtbl.add logic_functions_env x pi)
-    logic_builtins
+    Jc_pervasives.builtin_logic_symbols
 
 let add_logic_constdecl (ty, id) =
   try

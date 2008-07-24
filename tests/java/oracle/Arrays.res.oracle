@@ -2516,13 +2516,13 @@ axiom neq_real_bool_axiom:
   (forall x:real.
     (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
 
-logic max_int : int, int -> int
+logic int_max : int, int -> int
 
-logic min_int : int, int -> int
+logic int_min : int, int -> int
 
-logic max_real : real, real -> real
+logic real_max : real, real -> real
 
-logic min_real : real, real -> real
+logic real_min : real, real -> real
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
 
@@ -10657,13 +10657,13 @@ axiom neq_real_bool_axiom:
   (forall x:real.
     (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
 
-logic max_int : int, int -> int
+logic int_max : int, int -> int
 
-logic min_int : int, int -> int
+logic int_min : int, int -> int
 
-logic max_real : real, real -> real
+logic real_max : real, real -> real
 
-logic min_real : real, real -> real
+logic real_min : real, real -> real
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
 
