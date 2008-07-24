@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.226 2008-07-23 15:31:54 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.227 2008-07-24 09:16:00 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2015,6 +2015,21 @@ let add_logic_fundecl (ty,id,labels,pl) =
     pi.jc_logic_info_labels <- labels;
     Hashtbl.replace logic_functions_env id pi;
     param_env, ty, pi
+
+let logic_builtins =
+  [ Some real_type, "real_max", [real_type ; real_type] ; ]
+
+let () =
+  List.iter 
+    (fun (ty,x,pl) -> 
+       let pi = make_rel x in
+       let pl = List.map 
+	 (fun ty -> var ~formal:true ty "_") pl
+       in
+       pi.jc_logic_info_parameters <- pl;
+       pi.jc_logic_info_result_type <- ty;
+       Hashtbl.add logic_functions_env x pi)
+    logic_builtins
 
 let add_logic_constdecl (ty, id) =
   try

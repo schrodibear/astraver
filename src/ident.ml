@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.ml,v 1.70 2008-07-24 07:54:59 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.71 2008-07-24 09:16:00 marche Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -159,10 +159,10 @@ let t_abs_real = create "abs_real"
 let t_pow_real = create "pow_real"
 let t_sqrt_real = create "sqrt_real"
 
-let t_max_int = create "max_int"
-let t_min_int = create "min_int"
-let t_max_real = create "max_real"
-let t_min_real = create "min_real"
+let t_int_max = create "int_max"
+let t_int_min = create "int_min"
+let t_real_max = create "real_max"
+let t_real_min = create "real_min"
 
 let t_real_of_int = create "real_of_int"
 let t_int_of_real = create "int_of_real"

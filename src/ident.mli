@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.mli,v 1.61 2008-07-24 07:54:59 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.62 2008-07-24 09:16:00 marche Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -127,10 +127,10 @@ val t_sqrt_real : t
 val t_abs_real : t
 val t_pow_real : t
 
-val t_max_int : t
-val t_min_int : t
-val t_max_real : t
-val t_min_real : t
+val t_int_max : t
+val t_int_min : t
+val t_real_max : t
+val t_real_min : t
 
 val t_div_real_ : t
 val t_div_int_ : t

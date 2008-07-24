@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.81 2008-07-21 14:29:29 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.82 2008-07-24 09:16:00 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -104,8 +104,8 @@ let () =
       t_gt_real, "real_gt";
       t_ge_real, "real_ge";
       t_abs_real, "real_abs";
-      t_max_real, "real_max";
-      t_min_real, "real_min";
+      t_real_max, "real_max";
+      t_real_min, "real_min";
       t_sqrt_real, "real_sqrt";
     ]
 

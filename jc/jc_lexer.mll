@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_lexer.mll,v 1.60 2008-07-03 09:14:35 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.61 2008-07-24 09:16:00 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -210,6 +210,7 @@ rule token = parse
   | "\\result"              { BSRESULT }
   | "\\typeeq"              { BSTYPEEQ }
   | "\\typeof"              { BSTYPEOF }
+  | "\\" ("real_max" as s)  { IDENTIFIER s }
   | "\\" rL*                { lex_error lexbuf ("Illegal escape sequence " ^ lexeme lexbuf) }
 (*
   | "#" [' ' '\t']* (['0'-'9']+ as num) [' ' '\t']*

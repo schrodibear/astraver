@@ -91,6 +91,8 @@ val logic_types_table : (string, Java_env.logic_type_info) Hashtbl.t
 val logics_table : 
   (int,Java_env.java_logic_info * logic_body) Hashtbl.t
 
+val logic_builtins : Java_env.java_logic_info list
+
 exception Typing_error of Loc.position * string
 
 val catch_typing_errors : ('a -> 'b) -> 'a -> 'b

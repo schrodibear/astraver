@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.136 2008-07-22 09:29:20 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.137 2008-07-24 09:16:00 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -500,13 +500,16 @@ type logic_body =
 let logics_table = Hashtbl.create 97
 let logics_env = Hashtbl.create 97
 
+let logic_builtins =
+    [ real_max_fi ]
+
 let () =
   List.iter 
     (fun fi -> 
        Hashtbl.add logics_env fi.java_logic_info_name fi;
        Hashtbl.add logics_table fi.java_logic_info_tag (fi,JBuiltin)
     )
-    [ (* real_max_fi *) ]
+    logic_builtins
 
 (* JLS 5.1.1: Identity Conversion *)
 let rec is_identity_convertible tfrom tto =

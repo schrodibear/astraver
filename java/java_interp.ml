@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.150 2008-07-23 12:13:53 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.151 2008-07-24 09:16:00 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -362,6 +362,11 @@ let create_logic_fun loc fi =
     List.map tr_logic_label fi.java_logic_info_labels;
   Hashtbl.add logics_table fi.java_logic_info_tag nfi;
   nfi
+
+let () =
+  List.iter
+    (fun fi -> let _ = create_logic_fun Loc.dummy_position fi in ())
+    Java_typing.logic_builtins
 
 (*s program funs *)
 

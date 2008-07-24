@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.94 2008-07-21 14:29:29 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.95 2008-07-24 09:16:00 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -95,8 +95,8 @@ let prefix_table = ref Idmap.empty
 let () =
   List.iter (fun (id,s) -> prefix_table := Idmap.add id s !prefix_table)
     [ t_abs_real, "abs";
-      t_max_real, "max";
-      t_min_real, "min";
+      t_real_max, "max";
+      t_real_min, "min";
       t_sqrt_real, "sqrt";
     ]
 
