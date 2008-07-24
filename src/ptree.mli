@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ptree.mli,v 1.40 2008-07-23 08:02:33 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.41 2008-07-24 07:54:59 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -120,6 +120,7 @@ and t_desc =
   | Sif of t * t * t
   | Slazy_and of t * t
   | Slazy_or of t * t
+  | Snot of t
   | Sapp of t * t
   | Sletref of variable * t * t
   | Sletin of variable * t * t

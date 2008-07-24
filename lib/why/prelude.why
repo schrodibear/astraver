@@ -43,6 +43,9 @@ parameter strict_bool_or_ :
   {} bool { if result then b1=true or b1=false and b2=true 
                       else (b1=false and b2=false) }
 
+parameter bool_not_ : 
+  b:bool -> {} bool { if result then b=false else b=true }
+
 (* if-then-else function symbol *)
 
 logic ite : bool,'a,'a -> 'a

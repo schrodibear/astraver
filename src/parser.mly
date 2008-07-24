@@ -544,9 +544,10 @@ expr:
      (* let pf = locate (Sconst (ConstBool false)) in
      locate (Sif ($1, $3, pf)) *) }
 | NOT expr
-   { let pf = locate (Sconst (ConstBool false)) in
+   { locate (Snot $2)
+     (* let pf = locate (Sconst (ConstBool false)) in
      let pt = locate (Sconst (ConstBool true)) in
-     locate (Sif ($2, pf, pt)) }
+     locate (Sif ($2, pf, pt)) *) }
 | expr relation_id expr %prec prec_relation
    { bin_op $2 $1 $3 }
 | expr PLUS expr

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.156 2008-07-23 08:02:33 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.157 2008-07-24 07:54:59 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -652,9 +652,9 @@ let rec noPnamed = function
   | Pnamed(_, p) -> noPnamed p
   | p -> p
   
-let quant_boolean_as_conj x p =
+let quant_boolean_as_conj x p = 
   not fast_wp &&
-  match p with
+  match noPnamed p with
     | Pif (Tvar id, _, _) -> id == x
     | Pimplies(_, p1, p2) ->
 	begin
@@ -989,6 +989,8 @@ let rec print_ptree fmt p = match p.pdesc with
       fprintf fmt "@[<hv 2>(%a &&@ %a)@]" print_ptree p1 print_ptree p2
   | Slazy_or (p1, p2) ->
       fprintf fmt "@[<hv 2>(%a ||@ %a)@]" print_ptree p1 print_ptree p2
+  | Snot p1 ->
+      fprintf fmt "@[<hv 2>(not %a)@]" print_ptree p1
   | Slam (bl, pre, p) ->
       fprintf fmt "@[<hov 2>fun <...> ->@ %a@]" print_ptree p
   | Sapp (p, a) ->

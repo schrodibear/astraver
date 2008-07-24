@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.mli,v 1.60 2008-07-23 08:59:33 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.61 2008-07-24 07:54:59 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -260,3 +260,4 @@ val is_simplify_arith : t -> bool
 
 val strict_bool_and_ : t
 val strict_bool_or_ : t
+val bool_not_ : t

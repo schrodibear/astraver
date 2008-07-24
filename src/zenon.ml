@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.28 2008-02-18 11:06:36 moy Exp $ i*)
+(*i $Id: zenon.ml,v 1.29 2008-07-24 07:54:59 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -287,7 +287,7 @@ let print_logic fmt id t =
 
 let print_predicate_def fmt id (bl,p) =
   fprintf fmt "@[;; Why predicate %a@]@\n" idents id;
-  fprintf fmt "@[<hov 2>\"%a\" " idents id;
+  fprintf fmt "@[<hov 2>$hyp \"%a\" " idents id;
   List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " ident x) bl;
   fprintf fmt "(<=> (%a %a)@ %a)" 
     idents id
@@ -298,7 +298,7 @@ let print_predicate_def fmt id (bl,p) =
 
 let print_function_def fmt id (bl,t,e) =
   fprintf fmt "@[;; Why function %a@]@\n" idents id;
-  fprintf fmt "@[<hov 2>\"%a\" " idents id;
+  fprintf fmt "@[<hov 2>$hyp \"%a\" " idents id;
   List.iter (fun (x,_) -> fprintf fmt "(A. ((%a)@ " ident x) bl;
   fprintf fmt "(= (%a %a)@ %a)" 
     idents id
@@ -309,7 +309,7 @@ let print_function_def fmt id (bl,t,e) =
 
 let print_axiom fmt id p =
   fprintf fmt "@[;; Why axiom %s@]@\n" id;
-  fprintf fmt "@[<hov 2>\"%s\" %a@]@\n@\n" id print_predicate p
+  fprintf fmt "@[<hov 2>$hyp \"%s\" %a@]@\n@\n" id print_predicate p
 
 let print_obligation fmt loc expl o s = 
   fprintf fmt "@[;; %s, %a@]@\n" o Loc.gen_report_line loc;
@@ -337,11 +337,11 @@ let prelude fmt =
     fprintf fmt "
 ;; Zenon prelude
 
-\"why__prelude_1\" ; x+0=x
+$hyp \"why__prelude_1\" ; x+0=x
    (A. ((x \"INT\") (= (why__add_int x why__int_const_0) x)))
-\"why__prelude_2\" ; 0+x=x
+$hyp \"why__prelude_2\" ; 0+x=x
    (A. ((x \"INT\") (= (why__add_int why__int_const_0 x) x)))
-\"why__prelude_3\" ; x+y=y+x
+$hyp \"why__prelude_3\" ; x+y=y+x
    (A. ((x \"INT\") (A. ((y \"INT\") 
      (= (why__add_int x y) (why__add_int y x))))))
 

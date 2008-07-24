@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.118 2008-07-21 14:29:29 marche Exp $ i*)
+(*i $Id: options.ml,v 1.119 2008-07-24 07:54:59 filliatr Exp $ i*)
 
 open Format
 
@@ -56,6 +56,7 @@ let white_ = ref false
 let black_ = ref true
 let wbb_ = ref false
 let split_user_conj_ = ref false
+let split_bool_op_ = ref false
 let lvlmax_ = ref max_int
 let all_vc_ = ref false
 let prelude_ = ref true
@@ -202,6 +203,7 @@ Typing/Annotations/VCG options:
   --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)
   --split-user-conj  splits also user conjunctions in goals 
+  --split-bool-op    splits VCs for boolean operations &&, || and not
   --split n          splits conditions into several pieces up to n levels
   --partial          partial correctness
   --total            total correctness
@@ -426,6 +428,8 @@ let files =
         wbb_ := true; parse args
     | ("-split-user-conj" | "--split-user-conj") :: args ->
 	split_user_conj_ := true; parse args
+    | ("-split-bool-op" | "--split-bool-op") :: args ->
+	split_bool_op_ := true; parse args
     | ("-split" | "--split") :: n :: args ->
 	begin try lvlmax_ := int_of_string n with _ -> usage (); exit 1 end; 
 	parse args
@@ -570,6 +574,7 @@ let white = !white_
 let black = !black_
 let wbb = !wbb_
 let split_user_conj = !split_user_conj_
+let split_bool_op = !split_bool_op_
 let lvlmax = !lvlmax_
 let all_vc = !all_vc_
 let termination = !termination_

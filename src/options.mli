@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.90 2008-07-21 14:29:29 marche Exp $ i*)
+(*i $Id: options.mli,v 1.91 2008-07-24 07:54:59 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -67,6 +67,7 @@ val black : bool
 val white : bool
 val wbb : bool
 val split_user_conj : bool
+val split_bool_op : bool
 val lvlmax : int
 val all_vc : bool
 val eval_goals : bool

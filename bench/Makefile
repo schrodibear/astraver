@@ -43,7 +43,7 @@ harvey:
 
 simplify:
 	../bin/why.opt --simplify -d -V test.mlw
-	../bin/dp.opt test_why.sx
+	Simplify test_why.sx
 
 yices:
 	../bin/why.opt --smtlib --encoding sstrat test.mlw
@@ -128,7 +128,7 @@ gwhy:
 
 zenon:
 	../bin/why.opt -d -V --zenon test.mlw
-	zenon test_why.znn
+	timeout 10 zenon test_why.znn
 
 #rv-sat:
 #	../bin/why.opt -d -V --encoding mono --smtlib test.mlw

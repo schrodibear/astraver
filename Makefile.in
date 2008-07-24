@@ -617,8 +617,8 @@ WHYVO=lib/coq/Why.vo
 bench:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY)"
 	make -C bench fastwp.bench.ergo
-	make -C examples simplify
-	cd bench/provers; sh ./bench "../../$(BINARY)"
+	make -C examples ergo
+	#cd bench/provers; sh ./bench "../../$(BINARY)"
 
 JCBENCHLOG=jessie-bench-`date +%d-%m-%y`.log
 

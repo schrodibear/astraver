@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.138 2008-07-23 08:59:33 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.139 2008-07-24 07:54:59 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -97,7 +97,8 @@ let decomp_fun_type loc = function
       x, v, type_c_of_v (Arrow (bl, k))
   | Arrow ([], _) ->
       assert false
-  | _ -> 
+  | ty -> 
+      Format.eprintf "decomp_fun_type=%a@." print_type_v ty;
       raise_located loc AppNonFunction
 
 let expected_type loc t et =
@@ -210,6 +211,15 @@ let typing_info_of_type_c loc env l k =
     t_result_type = k.c_result_type;
     t_effect = k.c_effect;
     t_post = optpost_app (post_named loc) k.c_post }
+
+let assume loc env ef p =
+  let k = { c_result_name = result; c_result_type = type_v_unit;
+	    c_effect = ef; c_pre = []; c_post = Some (p,[]) } in
+  gmake_node loc env "" (label_name ()) (Any k) type_v_unit ef
+
+let seq loc env e1 e2 =
+  gmake_node loc env "" (label_name ()) (Seq (e1, e2)) (result_type e2)
+    (Effect.union (effect e1) (effect e2))
 
 (*s Typing variants. 
     Return the effect i.e. variables appearing in the variant. *)
@@ -350,8 +360,21 @@ let decompose_app e =
   in
   loop [] e
 
+let pdesc loc p = { pdesc = p; ploc = loc }
 let sapp loc e1 e2 = { pdesc = Sapp (e1, e2); ploc = loc }
 let svar loc v = { pdesc = Svar v; ploc = loc }
+let sassume loc p = 
+  let a = { pa_name = Anonymous; pa_value = p; pa_loc = loc } in
+  let k = { pc_result_name = result; pc_result_type = PVpure PPTunit;
+	    pc_effect = { pe_reads = []; pe_writes = []; pe_raises = [] };
+	    pc_pre = []; pc_post = Some (a, []) } in
+  { pdesc = Sany k; ploc = loc }
+let sletin loc v e1 e2 = { pdesc = Sletin (v, e1, e2); ploc = loc }
+let sseq loc e1 e2 = { pdesc = Sseq (e1, e2); ploc = loc }
+
+let ppinfix loc l1 i l2 = { pp_loc = loc; pp_desc = PPinfix (l1, i, l2) }
+let ppvar loc v = { pp_loc = loc; pp_desc = PPvar v }
+let ppconst loc c = { pp_loc = loc; pp_desc = PPconst c }
     
 (*s Saturation of postconditions: a postcondition must be set for
     any possibly raised exception *)
@@ -414,8 +437,11 @@ let without_exn_check f x =
 (*s Pure expressions. Used in [Slazy_and] and [Slazy_or] to decide
     whether to use [strict_bool_and_] and [strict_bool_or_] or not. *)
 
+let has_no_effect e = 
+  let ef = effect e in get_writes ef = [] && get_exns ef = []
+
 let rec is_pure_expr e = 
-  let ef = effect e in get_writes ef = [] && get_exns ef = [] &&
+  has_no_effect e &&
   match e.desc with
   | Var _ | Expression _ -> true
   | If (e1, e2, e3) -> is_pure_expr e1 && is_pure_expr e2 && is_pure_expr e3
@@ -680,9 +706,22 @@ let rec typef ?(userlabel="") lab env expr =
       expected_type e1.ploc (result_type t_e1) type_v_bool;
       let t_e2 = typef lab env e2 in
       expected_type e2.ploc (result_type t_e2) type_v_bool;
-      if is_pure_expr t_e1 && is_pure_expr t_e2 then
-	(* TODO:  improve *)
-	typef lab env (sapp loc (sapp loc (svar loc strict_bool_and_) e1) e2)
+      if not split_bool_op && is_pure_expr t_e2 then
+	(* we build strict_bool_and_(e1, e2)
+	   TODO:  avoid typing e1 and e2 twice *)
+	let d = sapp loc (sapp loc (svar loc strict_bool_and_) e1) e2 in
+	(* we build let v = e1 in strict_bool_and_ v1 (assume v1=true; e2)
+	let v = fresh_var () in
+	let p = 
+	  ppinfix loc (ppvar loc v) PPeq (ppconst loc (ConstBool true)) 
+	in
+	let d = 
+	  sletin loc v e1 
+	    (sapp loc (sapp loc (svar loc strict_bool_and_) (svar loc v)) 
+		(sseq loc (sassume loc p) e2))
+	in
+	*)
+	typef lab env d
       else
 	let ef = union (effect t_e1) (effect t_e2) in
 	let bool_false = bool_constant false loc env in
@@ -693,13 +732,27 @@ let rec typef ?(userlabel="") lab env expr =
       expected_type e1.ploc (result_type t_e1) type_v_bool;
       let t_e2 = typef lab env e2 in
       expected_type e2.ploc (result_type t_e2) type_v_bool;
-      if is_pure_expr t_e1 && is_pure_expr t_e2 then
-	(* TODO:  improve *)
-	typef lab env (sapp loc (sapp loc (svar loc strict_bool_or_) e1) e2)
+      if not split_bool_op && is_pure_expr t_e2 then
+	(* we build strict_bool_or_(e1, e2)
+	   TODO:  avoid typing e1 and e2 twice *)
+	let d = sapp loc (sapp loc (svar loc strict_bool_or_) e1) e2 in
+	typef lab env d
       else
-      let ef = union (effect t_e1) (effect t_e2) in
-      let bool_true = bool_constant true loc env in
-      make_node toplabel (If (t_e1, bool_true, t_e2)) type_v_bool ef
+	let ef = union (effect t_e1) (effect t_e2) in
+	let bool_true = bool_constant true loc env in
+	make_node toplabel (If (t_e1, bool_true, t_e2)) type_v_bool ef
+
+  | Snot e1 -> 
+      let t_e1 = typef lab env e1 in
+      expected_type e1.ploc (result_type t_e1) type_v_bool;
+      if not split_bool_op then
+	let d = sapp loc (svar loc bool_not_) e1 in
+	typef lab env d
+      else
+	let bool_false = bool_constant false loc env in
+	let bool_true = bool_constant true loc env in
+	let d = If (t_e1, bool_false, bool_true) in
+	make_node toplabel d type_v_bool (effect t_e1)
 
   | Srec (f,bl,v,var,p,e) ->
       let loc_e = e.ploc in

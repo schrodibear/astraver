@@ -1,6 +1,8 @@
  
-  o WP: no more duplication of VCs when && or || is applied to pure
-    boolean expressions
+  o Zenon: fixed syntax for Zenon 0.5.0 (missing $hyp)
+  o WP: no more duplication of VCs when operators &&, || and not are
+    applied to pure boolean expressions; command line option
+    -split-bool-op to revert to the old behavior
   o krakatoa: loop annotations: 'decreases' keyword replaced by 'loop_variant'
   o WP: universal quantification forall b:bool. P(b) no more turned
     into P(true) and P(false) when there is a possible size increasing
