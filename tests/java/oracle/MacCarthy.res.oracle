@@ -302,7 +302,7 @@ TIMEOUT ?= 10
 DP ?= dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
-export WHYLIB=/usr/local/lib/why
+export WHYLIB=WHYLIB
 
 WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs MacCarthy.loc
 
@@ -2316,7 +2316,7 @@ why -simplify [...] why/MacCarthy.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; MacCarthy_f91_ensures_greater_than_100_po_1, File "/home/cmarche/recherche/why/tests/java/MacCarthy.java", line 24, characters 18-35
+;; MacCarthy_f91_ensures_greater_than_100_po_1, File "HOME/tests/java/MacCarthy.java", line 24, characters 18-35
 (FORALL (n_1)
 (IMPLIES (>= n_1 101)
 (IMPLIES (<= n_1 100)
@@ -2328,13 +2328,13 @@ why -simplify [...] why/MacCarthy.why
          (IMPLIES (<= result 100) (EQ result0 91)))
 (FORALL (return) (IMPLIES (EQ return result0) (EQ return (- n_1 10)))))))))))
 
-;; MacCarthy_f91_ensures_greater_than_100_po_2, File "/home/cmarche/recherche/why/tests/java/MacCarthy.java", line 24, characters 18-35
+;; MacCarthy_f91_ensures_greater_than_100_po_2, File "HOME/tests/java/MacCarthy.java", line 24, characters 18-35
 (FORALL (n_1)
 (IMPLIES (>= n_1 101)
 (IMPLIES (> n_1 100)
 (FORALL (return) (IMPLIES (EQ return (- n_1 10)) (EQ return (- n_1 10)))))))
 
-;; MacCarthy_f91_ensures_less_than_101_po_1, File "/home/cmarche/recherche/why/tests/java/MacCarthy.java", line 21, characters 18-31
+;; MacCarthy_f91_ensures_less_than_101_po_1, File "HOME/tests/java/MacCarthy.java", line 21, characters 18-31
 (FORALL (n_1)
 (IMPLIES (<= n_1 100)
 (IMPLIES (<= n_1 100)
@@ -2346,7 +2346,7 @@ why -simplify [...] why/MacCarthy.why
          (IMPLIES (<= result 100) (EQ result0 91)))
 (FORALL (return) (IMPLIES (EQ return result0) (EQ return 91))))))))))
 
-;; MacCarthy_f91_ensures_less_than_101_po_2, File "/home/cmarche/recherche/why/tests/java/MacCarthy.java", line 21, characters 18-31
+;; MacCarthy_f91_ensures_less_than_101_po_2, File "HOME/tests/java/MacCarthy.java", line 21, characters 18-31
 (FORALL (n_1)
 (IMPLIES (<= n_1 100)
 (IMPLIES (> n_1 100)

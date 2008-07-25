@@ -1,6 +1,7 @@
 #!/bin/sh
 
 DIR=`pwd`
+LIBDIR=`grep "libdir" $DIR/src/version.ml | sed -e 's|[^"]*"\([^"]*\)"[^"]*|\1|g'`
 
 echofilename () {
   echo "========== file $1 =========="
@@ -13,7 +14,7 @@ mycat() {
 
 mycatfilterdir () {
   echofilename $1
-  sed -e "s|$DIR|HOME|g" $1
+  sed -e "s|$DIR|HOME|g" -e "s|$LIBDIR|WHYLIB|g" $1 
 }
 
 case $1 in
@@ -46,7 +47,7 @@ case $1 in
 	for i in $d/why/$b'_po'*.why; do mycat $i; done
 	echo "========== generation of Simplify VC output =========="
 	WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify/$b'_why'.sx	
-	mycat $d/simplify/$b'_why'.sx
+	mycatfilterdir $d/simplify/$b'_why'.sx
 	echo "========== running Simplify =========="
 	DP="$DIR/bin/dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify	
 	echo "========== generation of alt-ergo VC output =========="

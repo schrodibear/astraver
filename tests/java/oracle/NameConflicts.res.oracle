@@ -171,7 +171,7 @@ TIMEOUT ?= 10
 DP ?= dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
-export WHYLIB=/usr/local/lib/why
+export WHYLIB=WHYLIB
 
 WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs NameConflicts.loc
 
@@ -2204,7 +2204,7 @@ why -simplify [...] why/NameConflicts.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; NameConflicts_m_ensures_normal_po_1, File "/home/cmarche/recherche/why/tests/java/NameConflicts.java", line 11, characters 18-30
+;; NameConflicts_m_ensures_normal_po_1, File "HOME/tests/java/NameConflicts.java", line 11, characters 18-30
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_NameConflicts this_1 0 0 Object_alloc_table)

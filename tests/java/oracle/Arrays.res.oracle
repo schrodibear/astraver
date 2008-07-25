@@ -577,7 +577,7 @@ TIMEOUT ?= 10
 DP ?= dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
-export WHYLIB=/usr/local/lib/why
+export WHYLIB=WHYLIB
 
 WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs Arrays.loc
 
@@ -7238,7 +7238,7 @@ why -simplify [...] why/Arrays.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; Arrays_arrayShift_ensures_default_po_1, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_1, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM Object_alloc_table t_2)
@@ -7249,7 +7249,7 @@ why -simplify [...] why/Arrays.why
          (EQ |@true| |@true|))))
 (< (- result 1) (+ (offset_max Object_alloc_table t_2) 1)))))))
 
-;; Arrays_arrayShift_ensures_default_po_2, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_2, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM Object_alloc_table t_2)
@@ -7260,7 +7260,7 @@ why -simplify [...] why/Arrays.why
          (EQ |@true| |@true|))))
 (IMPLIES (> (+ (offset_max Object_alloc_table t_2) 1) 0) (<= 0 (- result 1))))))))
 
-;; Arrays_arrayShift_ensures_default_po_3, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_3, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7277,7 +7277,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP (shift t_2 i_2))
 (select intM_intP (shift t_2 (- i_2 1)))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_4, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_4, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7313,7 +7313,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ j_0_0 (- j_0 1))
 (< j_0_0 (+ (offset_max Object_alloc_table t_2) 1))))))))))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_5, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_5, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7349,7 +7349,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ j_0_0 (- j_0 1))
 (IMPLIES (> (+ (offset_max Object_alloc_table t_2) 1) 0) (<= 0 j_0_0))))))))))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_6, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_6, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7388,7 +7388,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (AND (<= 0 i_1) (<= i_1 j_0_0))
 (EQ (select intM_intP1 (shift t_2 i_1)) (select intM_intP (shift t_2 i_1))))))))))))))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_7, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_7, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7429,7 +7429,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP1 (shift t_2 i_2))
 (select intM_intP (shift t_2 (- i_2 1)))))))))))))))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_8, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 95, characters 10-70
+;; Arrays_arrayShift_ensures_default_po_8, File "HOME/tests/java/Arrays.java", line 95, characters 10-70
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7466,7 +7466,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (Non_null_intM Object_alloc_table t_2)
 (>= (offset_max Object_alloc_table t_2) (- 0 1)))))
 
-;; Arrays_arrayShift_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_safety_po_2, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM Object_alloc_table t_2)
@@ -7478,7 +7478,7 @@ why -simplify [...] why/Arrays.why
          (EQ |@true| |@true|))))
 (< (- result 1) (+ (offset_max Object_alloc_table t_2) 1))))))))
 
-;; Arrays_arrayShift_safety_po_3, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_safety_po_3, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM Object_alloc_table t_2)
@@ -7490,7 +7490,7 @@ why -simplify [...] why/Arrays.why
          (EQ |@true| |@true|))))
 (IMPLIES (> (+ (offset_max Object_alloc_table t_2) 1) 0) (<= 0 (- result 1)))))))))
 
-;; Arrays_arrayShift_safety_po_4, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_safety_po_4, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7508,7 +7508,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP (shift t_2 i_2))
 (select intM_intP (shift t_2 (- i_2 1))))))))))))))
 
-;; Arrays_arrayShift_safety_po_5, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 107, characters 10-16
+;; Arrays_arrayShift_safety_po_5, File "HOME/tests/java/Arrays.java", line 107, characters 10-16
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7536,7 +7536,7 @@ why -simplify [...] why/Arrays.why
          (select intM_intP (shift t_2 (- i_2 1))))))))))
 (IMPLIES (> j_0 0) (<= 0 (- j_0 1)))))))))))))
 
-;; Arrays_arrayShift_safety_po_6, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 107, characters 10-16
+;; Arrays_arrayShift_safety_po_6, File "HOME/tests/java/Arrays.java", line 107, characters 10-16
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7564,7 +7564,7 @@ why -simplify [...] why/Arrays.why
          (select intM_intP (shift t_2 (- i_2 1))))))))))
 (IMPLIES (> j_0 0) (<= (- j_0 1) (offset_max Object_alloc_table t_2)))))))))))))
 
-;; Arrays_arrayShift_safety_po_7, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 107, characters 3-16
+;; Arrays_arrayShift_safety_po_7, File "HOME/tests/java/Arrays.java", line 107, characters 3-16
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7596,7 +7596,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (result0)
 (IMPLIES (EQ result0 (select intM_intP0 (shift t_2 (- j_0 1)))) (<= 0 j_0)))))))))))))))
 
-;; Arrays_arrayShift_safety_po_8, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 107, characters 3-16
+;; Arrays_arrayShift_safety_po_8, File "HOME/tests/java/Arrays.java", line 107, characters 3-16
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7629,7 +7629,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result0 (select intM_intP0 (shift t_2 (- j_0 1))))
 (<= j_0 (offset_max Object_alloc_table t_2))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_9, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_safety_po_9, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7669,7 +7669,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ j_0_0 (- j_0 1))
 (< j_0_0 (+ (offset_max Object_alloc_table t_2) 1)))))))))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_10, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_safety_po_10, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7709,7 +7709,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ j_0_0 (- j_0 1))
 (IMPLIES (> (+ (offset_max Object_alloc_table t_2) 1) 0) (<= 0 j_0_0)))))))))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_11, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_safety_po_11, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7752,7 +7752,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (AND (<= 0 i_1) (<= i_1 j_0_0))
 (EQ (select intM_intP1 (shift t_2 i_1)) (select intM_intP (shift t_2 i_1)))))))))))))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_12, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_safety_po_12, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7797,7 +7797,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP1 (shift t_2 i_2))
 (select intM_intP (shift t_2 (- i_2 1))))))))))))))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_13, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 104, characters 18-19
+;; Arrays_arrayShift_safety_po_13, File "HOME/tests/java/Arrays.java", line 104, characters 18-19
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7835,7 +7835,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result1 (select intM_intP1 (shift t_2 j_0)))
 (FORALL (j_0_0) (IMPLIES (EQ j_0_0 (- j_0 1)) (<= 0 j_0))))))))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_14, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 104, characters 18-19
+;; Arrays_arrayShift_safety_po_14, File "HOME/tests/java/Arrays.java", line 104, characters 18-19
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7873,7 +7873,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result1 (select intM_intP1 (shift t_2 j_0)))
 (FORALL (j_0_0) (IMPLIES (EQ j_0_0 (- j_0 1)) (< j_0_0 j_0))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_1, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_1, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7882,7 +7882,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0))) (<= 1 1)))))))
 
-;; Arrays_findMax2_ensures_max_found_po_2, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_2, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7892,7 +7892,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (<= 1 (+ (offset_max Object_alloc_table t_1) 1))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_3, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_3, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7901,7 +7901,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0))) (<= 0 0)))))))
 
-;; Arrays_findMax2_ensures_max_found_po_4, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_4, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7911,7 +7911,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (< 0 (+ (offset_max Object_alloc_table t_1) 1))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_5, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_5, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7921,7 +7921,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (EQ result (select intM_intP (shift t_1 0)))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_6, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_6, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7931,7 +7931,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (is_max intM_intP Object_alloc_table t_1 0 1)))))))
 
-;; Arrays_findMax2_ensures_max_found_po_7, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_7, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7965,7 +7965,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ m0 result2)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 1 i_3_0)))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_8, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_8, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8001,7 +8001,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= i_3_0 (+ (offset_max Object_alloc_table t_1) 1))))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_9, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_9, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8035,7 +8035,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ m0 result2)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 r0)))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_10, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_10, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8071,7 +8071,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (< r0 (+ (offset_max Object_alloc_table t_1) 1))))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_11, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_11, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8106,7 +8106,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (i_3_0)
 (IMPLIES (EQ i_3_0 (+ i_3 1)) (EQ m0 (select intM_intP (shift t_1 r0)))))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_12, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_12, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8142,7 +8142,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (is_max intM_intP Object_alloc_table t_1 r0 i_3_0)))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_13, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_13, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8170,7 +8170,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (<= result1 m)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 1 i_3_0)))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_14, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_14, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8200,7 +8200,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= i_3_0 (+ (offset_max Object_alloc_table t_1) 1))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_15, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_15, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8228,7 +8228,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (<= result1 m)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 r)))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_16, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_16, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8258,7 +8258,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (< r (+ (offset_max Object_alloc_table t_1) 1))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_17, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_17, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8287,7 +8287,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (i_3_0)
 (IMPLIES (EQ i_3_0 (+ i_3 1)) (EQ m (select intM_intP (shift t_1 r)))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_18, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_max_found_po_18, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8317,7 +8317,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (is_max intM_intP Object_alloc_table t_1 r i_3_0)))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_19, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 72, characters 13-80
+;; Arrays_findMax2_ensures_max_found_po_19, File "HOME/tests/java/Arrays.java", line 72, characters 13-80
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8342,7 +8342,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (>= i_3 result0)
 (FORALL (return) (IMPLIES (EQ return r) (<= 0 return))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_20, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 72, characters 13-80
+;; Arrays_findMax2_ensures_max_found_po_20, File "HOME/tests/java/Arrays.java", line 72, characters 13-80
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8368,7 +8368,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (return)
 (IMPLIES (EQ return r) (< return (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_21, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 72, characters 13-80
+;; Arrays_findMax2_ensures_max_found_po_21, File "HOME/tests/java/Arrays.java", line 72, characters 13-80
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8397,14 +8397,14 @@ why -simplify [...] why/Arrays.why
 intM_intP Object_alloc_table t_1 return (+ (offset_max
                                            Object_alloc_table t_1) 1)))))))))))))))))
 
-;; Arrays_findMax2_safety_po_1, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 76, characters 9-13
+;; Arrays_findMax2_safety_po_1, File "HOME/tests/java/Arrays.java", line 76, characters 9-13
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (<= 0 (offset_max Object_alloc_table t_1)))))
 
-;; Arrays_findMax2_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_2, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8414,7 +8414,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0))) (<= 1 1))))))))
 
-;; Arrays_findMax2_safety_po_3, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_3, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8425,7 +8425,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (<= 1 (+ (offset_max Object_alloc_table t_1) 1)))))))))
 
-;; Arrays_findMax2_safety_po_4, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_4, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8435,7 +8435,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0))) (<= 0 0))))))))
 
-;; Arrays_findMax2_safety_po_5, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_5, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8446,7 +8446,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (< 0 (+ (offset_max Object_alloc_table t_1) 1)))))))))
 
-;; Arrays_findMax2_safety_po_6, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_6, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8457,7 +8457,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (EQ result (select intM_intP (shift t_1 0))))))))))
 
-;; Arrays_findMax2_safety_po_7, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_7, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8488,7 +8488,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (is_max intM_intP Object_alloc_table t_1 r i_3))))))
 (>= (offset_max Object_alloc_table t_1) (- 0 1)))))))))))))
 
-;; Arrays_findMax2_safety_po_9, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 84, characters 9-13
+;; Arrays_findMax2_safety_po_9, File "HOME/tests/java/Arrays.java", line 84, characters 9-13
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8514,7 +8514,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (EQ |@true| |@true|))))
 (IMPLIES (< i_3 result0) (<= 0 i_3))))))))))))))))
 
-;; Arrays_findMax2_safety_po_10, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 84, characters 9-13
+;; Arrays_findMax2_safety_po_10, File "HOME/tests/java/Arrays.java", line 84, characters 9-13
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8540,7 +8540,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (EQ |@true| |@true|))))
 (IMPLIES (< i_3 result0) (<= i_3 (offset_max Object_alloc_table t_1)))))))))))))))))
 
-;; Arrays_findMax2_safety_po_11, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_11, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8578,7 +8578,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ m0 result2)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 1 i_3_0)))))))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_12, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_12, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8618,7 +8618,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= i_3_0 (+ (offset_max Object_alloc_table t_1) 1))))))))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_13, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_13, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8656,7 +8656,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ m0 result2)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 r0)))))))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_14, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_14, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8696,7 +8696,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (< r0 (+ (offset_max Object_alloc_table t_1) 1))))))))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_15, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_15, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8735,7 +8735,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (i_3_0)
 (IMPLIES (EQ i_3_0 (+ i_3 1)) (EQ m0 (select intM_intP (shift t_1 r0)))))))))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_16, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_16, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8775,7 +8775,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (is_max intM_intP Object_alloc_table t_1 r0 i_3_0)))))))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_17, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 18-28
+;; Arrays_findMax2_safety_po_17, File "HOME/tests/java/Arrays.java", line 81, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8815,7 +8815,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= 0 (- (+ (offset_max Object_alloc_table t_1) 1) i_3))))))))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_18, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 18-28
+;; Arrays_findMax2_safety_po_18, File "HOME/tests/java/Arrays.java", line 81, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8856,7 +8856,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (< (- (+ (offset_max Object_alloc_table t_1) 1) i_3_0) (- (+ (offset_max
                                                              Object_alloc_table t_1) 1) i_3))))))))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_19, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_19, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8887,7 +8887,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (<= result1 m)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 1 i_3_0))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_20, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_20, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8920,7 +8920,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= i_3_0 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_21, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_21, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8951,7 +8951,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (<= result1 m)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 r))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_22, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_22, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8984,7 +8984,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (< r (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_23, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_23, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9016,7 +9016,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (i_3_0)
 (IMPLIES (EQ i_3_0 (+ i_3 1)) (EQ m (select intM_intP (shift t_1 r))))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_24, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_safety_po_24, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9049,7 +9049,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (is_max intM_intP Object_alloc_table t_1 r i_3_0))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_25, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 18-28
+;; Arrays_findMax2_safety_po_25, File "HOME/tests/java/Arrays.java", line 81, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9082,7 +9082,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= 0 (- (+ (offset_max Object_alloc_table t_1) 1) i_3)))))))))))))))))))))))
 
-;; Arrays_findMax2_safety_po_26, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 81, characters 18-28
+;; Arrays_findMax2_safety_po_26, File "HOME/tests/java/Arrays.java", line 81, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9116,7 +9116,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (< (- (+ (offset_max Object_alloc_table t_1) 1) i_3_0) (- (+ (offset_max
                                                              Object_alloc_table t_1) 1) i_3)))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_1, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_1, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9126,7 +9126,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_0 0))) (<= 1 1)))))))
 
-;; Arrays_findMax_ensures_max_found_po_2, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_2, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9137,7 +9137,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_0 0)))
 (<= 1 (+ (offset_max Object_alloc_table t_0) 1))))))))
 
-;; Arrays_findMax_ensures_max_found_po_3, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_3, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9147,7 +9147,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_0 0))) (<= 0 0)))))))
 
-;; Arrays_findMax_ensures_max_found_po_4, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_4, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9158,7 +9158,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_0 0)))
 (< 0 (+ (offset_max Object_alloc_table t_0) 1))))))))
 
-;; Arrays_findMax_ensures_max_found_po_5, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_5, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9169,7 +9169,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_0 0)))
 (EQ result (select intM_intP (shift t_0 0)))))))))
 
-;; Arrays_findMax_ensures_max_found_po_6, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_6, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9182,7 +9182,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 j_1) (< j_1 1))
 (<= (select intM_intP (shift t_0 j_1)) result)))))))))
 
-;; Arrays_findMax_ensures_max_found_po_7, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_7, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9219,7 +9219,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ m_0_0 result2)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 1 i_5_0)))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_8, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_8, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9258,7 +9258,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= i_5_0 (+ (offset_max Object_alloc_table t_0) 1))))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_9, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_9, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9295,7 +9295,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ m_0_0 result2)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 0 r_0_0)))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_10, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_10, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9334,7 +9334,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (< r_0_0 (+ (offset_max Object_alloc_table t_0) 1))))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_11, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_11, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9373,7 +9373,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (EQ m_0_0 (select intM_intP (shift t_0 r_0_0)))))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_12, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_12, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9414,7 +9414,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 j_1) (< j_1 i_5_0))
 (<= (select intM_intP (shift t_0 j_1)) m_0_0)))))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_13, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_13, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9445,7 +9445,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (<= result1 m_0)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 1 i_5_0)))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_14, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_14, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9478,7 +9478,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= i_5_0 (+ (offset_max Object_alloc_table t_0) 1))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_15, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_15, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9509,7 +9509,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (<= result1 m_0)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 0 r_0)))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_16, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_16, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9542,7 +9542,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (< r_0 (+ (offset_max Object_alloc_table t_0) 1))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_17, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_17, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9574,7 +9574,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (i_5_0)
 (IMPLIES (EQ i_5_0 (+ i_5 1)) (EQ m_0 (select intM_intP (shift t_0 r_0)))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_18, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_max_found_po_18, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9609,7 +9609,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 j_1) (< j_1 i_5_0))
 (<= (select intM_intP (shift t_0 j_1)) m_0)))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_19, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 48, characters 13-134
+;; Arrays_findMax_ensures_max_found_po_19, File "HOME/tests/java/Arrays.java", line 48, characters 13-134
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9637,7 +9637,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (>= i_5 result0)
 (FORALL (return) (IMPLIES (EQ return r_0) (<= 0 return))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_20, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 48, characters 13-134
+;; Arrays_findMax_ensures_max_found_po_20, File "HOME/tests/java/Arrays.java", line 48, characters 13-134
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9667,7 +9667,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ return r_0)
 (< return (+ (offset_max Object_alloc_table t_0) 1)))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_21, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 48, characters 13-134
+;; Arrays_findMax_ensures_max_found_po_21, File "HOME/tests/java/Arrays.java", line 48, characters 13-134
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9699,7 +9699,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 i_4) (< i_4 (+ (offset_max Object_alloc_table t_0) 1)))
 (<= (select intM_intP (shift t_0 i_4)) (select intM_intP (shift t_0 return))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_1, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 53, characters 9-13
+;; Arrays_findMax_safety_po_1, File "HOME/tests/java/Arrays.java", line 53, characters 9-13
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
@@ -9707,7 +9707,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (<= 0 (offset_max Object_alloc_table t_0)))))
 
-;; Arrays_findMax_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_2, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9718,7 +9718,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_0 0))) (<= 1 1))))))))
 
-;; Arrays_findMax_safety_po_3, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_3, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9730,7 +9730,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_0 0)))
 (<= 1 (+ (offset_max Object_alloc_table t_0) 1)))))))))
 
-;; Arrays_findMax_safety_po_4, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_4, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9741,7 +9741,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_0 0))) (<= 0 0))))))))
 
-;; Arrays_findMax_safety_po_5, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_5, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9753,7 +9753,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_0 0)))
 (< 0 (+ (offset_max Object_alloc_table t_0) 1)))))))))
 
-;; Arrays_findMax_safety_po_6, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_6, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9765,7 +9765,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_0 0)))
 (EQ result (select intM_intP (shift t_0 0))))))))))
 
-;; Arrays_findMax_safety_po_7, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_7, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9802,7 +9802,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (<= (select intM_intP (shift t_0 j_1)) m_0))))))))
 (>= (offset_max Object_alloc_table t_0) (- 0 1)))))))))))))
 
-;; Arrays_findMax_safety_po_9, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 61, characters 9-13
+;; Arrays_findMax_safety_po_9, File "HOME/tests/java/Arrays.java", line 61, characters 9-13
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9831,7 +9831,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (EQ |@true| |@true|))))
 (IMPLIES (< i_5 result0) (<= 0 i_5))))))))))))))))
 
-;; Arrays_findMax_safety_po_10, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 61, characters 9-13
+;; Arrays_findMax_safety_po_10, File "HOME/tests/java/Arrays.java", line 61, characters 9-13
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9860,7 +9860,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (EQ |@true| |@true|))))
 (IMPLIES (< i_5 result0) (<= i_5 (offset_max Object_alloc_table t_0)))))))))))))))))
 
-;; Arrays_findMax_safety_po_11, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_11, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9901,7 +9901,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ m_0_0 result2)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 1 i_5_0)))))))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_12, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_12, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9944,7 +9944,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= i_5_0 (+ (offset_max Object_alloc_table t_0) 1))))))))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_13, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_13, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9985,7 +9985,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ m_0_0 result2)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 0 r_0_0)))))))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_14, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_14, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10028,7 +10028,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (< r_0_0 (+ (offset_max Object_alloc_table t_0) 1))))))))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_15, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_15, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10071,7 +10071,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (EQ m_0_0 (select intM_intP (shift t_0 r_0_0)))))))))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_16, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_16, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10116,7 +10116,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 j_1) (< j_1 i_5_0))
 (<= (select intM_intP (shift t_0 j_1)) m_0_0)))))))))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_17, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 25-35
+;; Arrays_findMax_safety_po_17, File "HOME/tests/java/Arrays.java", line 58, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10159,7 +10159,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= 0 (- (+ (offset_max Object_alloc_table t_0) 1) i_5))))))))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_18, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 25-35
+;; Arrays_findMax_safety_po_18, File "HOME/tests/java/Arrays.java", line 58, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10203,7 +10203,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (< (- (+ (offset_max Object_alloc_table t_0) 1) i_5_0) (- (+ (offset_max
                                                              Object_alloc_table t_0) 1) i_5))))))))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_19, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_19, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10237,7 +10237,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (<= result1 m_0)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 1 i_5_0))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_20, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_20, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10273,7 +10273,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= i_5_0 (+ (offset_max Object_alloc_table t_0) 1)))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_21, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_21, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10307,7 +10307,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (<= result1 m_0)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 0 r_0))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_22, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_22, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10343,7 +10343,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (< r_0 (+ (offset_max Object_alloc_table t_0) 1)))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_23, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_23, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10378,7 +10378,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (i_5_0)
 (IMPLIES (EQ i_5_0 (+ i_5 1)) (EQ m_0 (select intM_intP (shift t_0 r_0))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_24, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_safety_po_24, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10416,7 +10416,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 j_1) (< j_1 i_5_0))
 (<= (select intM_intP (shift t_0 j_1)) m_0))))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_25, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 25-35
+;; Arrays_findMax_safety_po_25, File "HOME/tests/java/Arrays.java", line 58, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10452,7 +10452,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= 0 (- (+ (offset_max Object_alloc_table t_0) 1) i_5)))))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_26, File "/home/cmarche/recherche/why/tests/java/Arrays.java", line 58, characters 25-35
+;; Arrays_findMax_safety_po_26, File "HOME/tests/java/Arrays.java", line 58, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

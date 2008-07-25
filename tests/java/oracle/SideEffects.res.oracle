@@ -249,7 +249,7 @@ TIMEOUT ?= 10
 DP ?= dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
-export WHYLIB=/usr/local/lib/why
+export WHYLIB=WHYLIB
 
 WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs SideEffects.loc
 
@@ -2683,7 +2683,7 @@ why -simplify [...] why/SideEffects.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; SideEffects_m1_safety_po_1, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 10, characters 1-11
+;; SideEffects_m1_safety_po_1, File "HOME/tests/java/SideEffects.java", line 10, characters 1-11
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2691,7 +2691,7 @@ why -simplify [...] why/SideEffects.why
          (> (+ (offset_max Object_alloc_table t) 1) 10))
 (FORALL (i) (IMPLIES (EQ i (+ 0 1)) (<= 0 0)))))))
 
-;; SideEffects_m1_safety_po_2, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 10, characters 1-11
+;; SideEffects_m1_safety_po_2, File "HOME/tests/java/SideEffects.java", line 10, characters 1-11
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2700,7 +2700,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1)) (<= 0 (offset_max Object_alloc_table t))))))))
 
-;; SideEffects_m1_safety_po_3, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 11, characters 12-31
+;; SideEffects_m1_safety_po_3, File "HOME/tests/java/SideEffects.java", line 11, characters 12-31
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2714,7 +2714,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
 (EQ (select intM_intP0 (shift t 0)) 1)))))))))))
 
-;; SideEffects_m1_safety_po_4, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 11, characters 12-31
+;; SideEffects_m1_safety_po_4, File "HOME/tests/java/SideEffects.java", line 11, characters 12-31
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2727,7 +2727,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (intM_intP0)
 (IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1)) (EQ i 1)))))))))))
 
-;; SideEffects_m1_safety_po_5, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 12, characters 1-11
+;; SideEffects_m1_safety_po_5, File "HOME/tests/java/SideEffects.java", line 12, characters 1-11
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2742,7 +2742,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
 (FORALL (i0) (IMPLIES (EQ i0 (+ i 1)) (<= 0 i0))))))))))))))
 
-;; SideEffects_m1_safety_po_6, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 12, characters 1-11
+;; SideEffects_m1_safety_po_6, File "HOME/tests/java/SideEffects.java", line 12, characters 1-11
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2758,7 +2758,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1)) (<= i0 (offset_max Object_alloc_table t)))))))))))))))
 
-;; SideEffects_m1_safety_po_7, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 13, characters 12-44
+;; SideEffects_m1_safety_po_7, File "HOME/tests/java/SideEffects.java", line 13, characters 12-44
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2778,7 +2778,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
 (EQ (select intM_intP1 (shift t 0)) 1)))))))))))))))))
 
-;; SideEffects_m1_safety_po_8, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 13, characters 12-44
+;; SideEffects_m1_safety_po_8, File "HOME/tests/java/SideEffects.java", line 13, characters 12-44
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2798,7 +2798,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
 (EQ (select intM_intP1 (shift t 2)) 2)))))))))))))))))
 
-;; SideEffects_m1_safety_po_9, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 13, characters 12-44
+;; SideEffects_m1_safety_po_9, File "HOME/tests/java/SideEffects.java", line 13, characters 12-44
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2817,7 +2817,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (intM_intP1)
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2)) (EQ i0 2)))))))))))))))))
 
-;; SideEffects_m1_safety_po_10, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 14, characters 1-11
+;; SideEffects_m1_safety_po_10, File "HOME/tests/java/SideEffects.java", line 14, characters 1-11
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2839,7 +2839,7 @@ why -simplify [...] why/SideEffects.why
          (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
 (FORALL (i1) (IMPLIES (EQ i1 (- i0 1)) (<= 0 i1))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_11, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 14, characters 1-11
+;; SideEffects_m1_safety_po_11, File "HOME/tests/java/SideEffects.java", line 14, characters 1-11
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2862,7 +2862,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (i1)
 (IMPLIES (EQ i1 (- i0 1)) (<= i1 (offset_max Object_alloc_table t)))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_12, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 15, characters 12-57
+;; SideEffects_m1_safety_po_12, File "HOME/tests/java/SideEffects.java", line 15, characters 12-57
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2889,7 +2889,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
 (EQ (select intM_intP2 (shift t 0)) 1)))))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_13, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 15, characters 12-57
+;; SideEffects_m1_safety_po_13, File "HOME/tests/java/SideEffects.java", line 15, characters 12-57
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2916,7 +2916,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
 (EQ (select intM_intP2 (shift t 2)) 2)))))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_14, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 15, characters 12-57
+;; SideEffects_m1_safety_po_14, File "HOME/tests/java/SideEffects.java", line 15, characters 12-57
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2943,7 +2943,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
 (EQ (select intM_intP2 (shift t 1)) 3)))))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_15, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 15, characters 12-57
+;; SideEffects_m1_safety_po_15, File "HOME/tests/java/SideEffects.java", line 15, characters 12-57
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -2969,7 +2969,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (intM_intP2)
 (IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3)) (EQ i1 1)))))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_16, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 17, characters 12-57
+;; SideEffects_m1_safety_po_16, File "HOME/tests/java/SideEffects.java", line 17, characters 12-57
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -3004,7 +3004,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4))
 (EQ (select intM_intP3 (shift t 0)) 1)))))))))))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_17, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 17, characters 12-57
+;; SideEffects_m1_safety_po_17, File "HOME/tests/java/SideEffects.java", line 17, characters 12-57
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -3039,7 +3039,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4))
 (EQ (select intM_intP3 (shift t 2)) 2)))))))))))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_18, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 17, characters 12-57
+;; SideEffects_m1_safety_po_18, File "HOME/tests/java/SideEffects.java", line 17, characters 12-57
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -3074,7 +3074,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4))
 (EQ (select intM_intP3 (shift t 1)) 4)))))))))))))))))))))))))))))
 
-;; SideEffects_m1_safety_po_19, File "/home/cmarche/recherche/why/tests/java/SideEffects.java", line 17, characters 12-57
+;; SideEffects_m1_safety_po_19, File "HOME/tests/java/SideEffects.java", line 17, characters 12-57
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)

@@ -122,7 +122,7 @@ TIMEOUT ?= 10
 DP ?= dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
-export WHYLIB=/usr/local/lib/why
+export WHYLIB=WHYLIB
 
 WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs Literals.loc
 
@@ -2055,7 +2055,7 @@ why -simplify [...] why/Literals.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; Literals_f_ensures_default_po_1, File "/home/cmarche/recherche/why/tests/java/Literals.java", line 5, characters 16-30
+;; Literals_f_ensures_default_po_1, File "HOME/tests/java/Literals.java", line 5, characters 16-30
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Literals this_0 0 0 Object_alloc_table)

@@ -237,7 +237,7 @@ TIMEOUT ?= 10
 DP ?= dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
-export WHYLIB=/usr/local/lib/why
+export WHYLIB=WHYLIB
 
 WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs AllZeros.loc
 
@@ -3095,14 +3095,14 @@ why -simplify [...] why/AllZeros.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; AllZeros_all_zeros_ensures_default_po_1, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_ensures_default_po_1, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM Object_alloc_table t)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0) (<= 0 (integer_of_int32 result)))))))
 
-;; AllZeros_all_zeros_ensures_default_po_2, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_ensures_default_po_2, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM Object_alloc_table t)
@@ -3110,7 +3110,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (<= (integer_of_int32 result) (+ (offset_max Object_alloc_table t) 1)))))))
 
-;; AllZeros_all_zeros_ensures_default_po_3, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_ensures_default_po_3, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3121,7 +3121,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 result)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))
 
-;; AllZeros_all_zeros_ensures_default_po_4, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 33, characters 16-79
+;; AllZeros_all_zeros_ensures_default_po_4, File "HOME/tests/java/AllZeros.java", line 33, characters 16-79
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3151,7 +3151,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i) (< i (+ (offset_max Object_alloc_table t) 1)))
 (EQ (integer_of_int32 (select intM_intP (shift t i))) 0))))))))))))))))))))
 
-;; AllZeros_all_zeros_ensures_default_po_5, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 33, characters 16-79
+;; AllZeros_all_zeros_ensures_default_po_5, File "HOME/tests/java/AllZeros.java", line 33, characters 16-79
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3182,7 +3182,7 @@ why -simplify [...] why/AllZeros.why
          (EQ (integer_of_int32 (select intM_intP (shift t i))) 0)))
 (EQ return |@true|))))))))))))))))))
 
-;; AllZeros_all_zeros_ensures_default_po_6, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_ensures_default_po_6, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3209,7 +3209,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ (integer_of_int32 result2) (+ (integer_of_int32 k) 1))
 (FORALL (k0) (IMPLIES (EQ k0 result2) (<= 0 (integer_of_int32 k0))))))))))))))))))))
 
-;; AllZeros_all_zeros_ensures_default_po_7, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_ensures_default_po_7, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3238,7 +3238,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ k0 result2)
 (<= (integer_of_int32 k0) (+ (offset_max Object_alloc_table t) 1))))))))))))))))))))
 
-;; AllZeros_all_zeros_ensures_default_po_8, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_ensures_default_po_8, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3269,7 +3269,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 k0)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))))))))))))))
 
-;; AllZeros_all_zeros_ensures_default_po_9, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 33, characters 16-79
+;; AllZeros_all_zeros_ensures_default_po_9, File "HOME/tests/java/AllZeros.java", line 33, characters 16-79
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3296,7 +3296,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i) (< i (+ (offset_max Object_alloc_table t) 1)))
 (EQ (integer_of_int32 (select intM_intP (shift t i))) 0)))))))))))))))))
 
-;; AllZeros_all_zeros_ensures_default_po_10, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 33, characters 16-79
+;; AllZeros_all_zeros_ensures_default_po_10, File "HOME/tests/java/AllZeros.java", line 33, characters 16-79
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3324,14 +3324,14 @@ why -simplify [...] why/AllZeros.why
          (EQ (integer_of_int32 (select intM_intP (shift t i))) 0)))
 (EQ return |@true|)))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_1, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_safety_po_1, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM Object_alloc_table t)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0) (<= 0 (integer_of_int32 result)))))))
 
-;; AllZeros_all_zeros_safety_po_2, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_safety_po_2, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM Object_alloc_table t)
@@ -3339,7 +3339,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (<= (integer_of_int32 result) (+ (offset_max Object_alloc_table t) 1)))))))
 
-;; AllZeros_all_zeros_safety_po_3, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_safety_po_3, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3366,7 +3366,7 @@ why -simplify [...] why/AllZeros.why
          (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))
 (>= (offset_max Object_alloc_table t) (- 0 1))))))))))
 
-;; AllZeros_all_zeros_safety_po_5, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 42, characters 9-13
+;; AllZeros_all_zeros_safety_po_5, File "HOME/tests/java/AllZeros.java", line 42, characters 9-13
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3389,7 +3389,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (< (integer_of_int32 k) result0)
 (<= (integer_of_int32 k) (offset_max Object_alloc_table t))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_6, File "/home/cmarche/recherche/why/tests/java/AllZeros.jc", line 82, characters 68-72
+;; AllZeros_all_zeros_safety_po_6, File "HOME/tests/java/AllZeros.jc", line 82, characters 68-72
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3417,7 +3417,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ (integer_of_int32 result1) 0)
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 k) 1))))))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_7, File "/home/cmarche/recherche/why/tests/java/AllZeros.jc", line 82, characters 68-72
+;; AllZeros_all_zeros_safety_po_7, File "HOME/tests/java/AllZeros.jc", line 82, characters 68-72
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3445,7 +3445,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ (integer_of_int32 result1) 0)
 (<= (+ (integer_of_int32 k) 1) constant_too_large_2147483647)))))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_8, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_safety_po_8, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3478,7 +3478,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ (integer_of_int32 result2) (+ (integer_of_int32 k) 1))
 (FORALL (k0) (IMPLIES (EQ k0 result2) (<= 0 (integer_of_int32 k0)))))))))))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_9, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_safety_po_9, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3513,7 +3513,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ k0 result2)
 (<= (integer_of_int32 k0) (+ (offset_max Object_alloc_table t) 1)))))))))))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_10, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 37, characters 6-78
+;; AllZeros_all_zeros_safety_po_10, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3550,7 +3550,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 k0)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0))))))))))))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_11, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 39, characters 18-30
+;; AllZeros_all_zeros_safety_po_11, File "HOME/tests/java/AllZeros.java", line 39, characters 18-30
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -3585,7 +3585,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (EQ k0 result2)
 (<= 0 (- (+ (offset_max Object_alloc_table t) 1) (integer_of_int32 k))))))))))))))))))))))))
 
-;; AllZeros_all_zeros_safety_po_12, File "/home/cmarche/recherche/why/tests/java/AllZeros.java", line 39, characters 18-30
+;; AllZeros_all_zeros_safety_po_12, File "HOME/tests/java/AllZeros.java", line 39, characters 18-30
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

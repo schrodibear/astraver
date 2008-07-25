@@ -271,7 +271,7 @@ TIMEOUT ?= 10
 DP ?= dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
-export WHYLIB=/usr/local/lib/why
+export WHYLIB=WHYLIB
 
 WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs Termination.loc
 
@@ -2367,7 +2367,7 @@ why -simplify [...] why/Termination.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; Termination_loop1_safety_po_1, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 35, characters 18-19
+;; Termination_loop1_safety_po_1, File "HOME/tests/java/Termination.java", line 35, characters 18-19
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_2 0 0 Object_alloc_table)
@@ -2377,7 +2377,7 @@ why -simplify [...] why/Termination.why
 (FORALL (mutable_n_1_0)
 (IMPLIES (EQ mutable_n_1_0 (- mutable_n_1 1)) (<= 0 mutable_n_1)))))))))
 
-;; Termination_loop1_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 35, characters 18-19
+;; Termination_loop1_safety_po_2, File "HOME/tests/java/Termination.java", line 35, characters 18-19
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_2 0 0 Object_alloc_table)
@@ -2387,7 +2387,7 @@ why -simplify [...] why/Termination.why
 (FORALL (mutable_n_1_0)
 (IMPLIES (EQ mutable_n_1_0 (- mutable_n_1 1)) (< mutable_n_1_0 mutable_n_1)))))))))
 
-;; Termination_loop2_safety_po_1, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 40, characters 18-23
+;; Termination_loop2_safety_po_1, File "HOME/tests/java/Termination.java", line 40, characters 18-23
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_1 0 0 Object_alloc_table)
@@ -2398,7 +2398,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (EQ mutable_n_0_0_0 (+ mutable_n_0_0 1))
 (<= 0 (- 100 mutable_n_0_0))))))))))
 
-;; Termination_loop2_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 40, characters 18-23
+;; Termination_loop2_safety_po_2, File "HOME/tests/java/Termination.java", line 40, characters 18-23
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_1 0 0 Object_alloc_table)
@@ -2409,18 +2409,18 @@ why -simplify [...] why/Termination.why
 (IMPLIES (EQ mutable_n_0_0_0 (+ mutable_n_0_0 1))
 (< (- 100 mutable_n_0_0_0) (- 100 mutable_n_0_0))))))))))
 
-;; Termination_loop3_ensures_default_po_1, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_ensures_default_po_1, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table) (<= 0 100))))
 
-;; Termination_loop3_ensures_default_po_2, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_ensures_default_po_2, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
 (<= 100 100))))
 
-;; Termination_loop3_ensures_default_po_3, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_ensures_default_po_3, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -2428,7 +2428,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i0)))))))))
 
-;; Termination_loop3_ensures_default_po_4, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_ensures_default_po_4, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -2436,7 +2436,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= i0 100)))))))))
 
-;; Termination_loop3_ensures_default_po_5, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 44, characters 16-28
+;; Termination_loop3_ensures_default_po_5, File "HOME/tests/java/Termination.java", line 44, characters 16-28
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -2444,18 +2444,18 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (<= i 0) (FORALL (return) (IMPLIES (EQ return i) (EQ return 0)))))))))
 
-;; Termination_loop3_safety_po_1, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_safety_po_1, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table) (<= 0 100))))
 
-;; Termination_loop3_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_safety_po_2, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
 (<= 100 100))))
 
-;; Termination_loop3_safety_po_3, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_safety_po_3, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -2463,7 +2463,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i0)))))))))
 
-;; Termination_loop3_safety_po_4, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_safety_po_4, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -2471,7 +2471,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= i0 100)))))))))
 
-;; Termination_loop3_safety_po_5, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 48, characters 18-19
+;; Termination_loop3_safety_po_5, File "HOME/tests/java/Termination.java", line 48, characters 18-19
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -2479,7 +2479,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i)))))))))
 
-;; Termination_loop3_safety_po_6, File "/home/cmarche/recherche/why/tests/java/Termination.java", line 48, characters 18-19
+;; Termination_loop3_safety_po_6, File "HOME/tests/java/Termination.java", line 48, characters 18-19
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)

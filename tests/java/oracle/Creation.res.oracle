@@ -397,7 +397,7 @@ TIMEOUT ?= 10
 DP ?= dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
-export WHYLIB=/usr/local/lib/why
+export WHYLIB=WHYLIB
 
 WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs Creation.loc
 
@@ -3633,7 +3633,7 @@ why -simplify [...] why/Creation.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; Creation_test1_ensures_normal_po_1, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 31, characters 18-31
+;; Creation_test1_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 31, characters 18-31
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
@@ -3672,7 +3672,7 @@ why -simplify [...] why/Creation.why
          (alloc_fresh Object_alloc_table result))))
 (>= (offset_max Object_alloc_table0 result) 0)))))))
 
-;; Creation_test1_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 35, characters 8-20
+;; Creation_test1_safety_po_2, File "HOME/tests/java/Creation.java", line 35, characters 8-20
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
@@ -3696,7 +3696,7 @@ why -simplify [...] why/Creation.why
          (pset_singleton result)))
 (<= 0 (offset_max Object_alloc_table0 result))))))))))))))
 
-;; Creation_test2_ensures_normal_po_1, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 39, characters 18-30
+;; Creation_test2_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 39, characters 18-30
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
@@ -3731,7 +3731,7 @@ why -simplify [...] why/Creation.why
          (alloc_fresh Object_alloc_table result))))
 (>= (offset_max Object_alloc_table0 result) 0)))))))
 
-;; Creation_test2_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 43, characters 8-20
+;; Creation_test2_safety_po_2, File "HOME/tests/java/Creation.java", line 43, characters 8-20
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
@@ -3751,7 +3751,7 @@ why -simplify [...] why/Creation.why
          (pset_singleton result)))
 (<= 0 (offset_max Object_alloc_table0 result))))))))))))
 
-;; Creation_test3_ensures_normal_po_1, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 48, characters 18-31
+;; Creation_test3_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 48, characters 18-31
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
@@ -3779,7 +3779,7 @@ why -simplify [...] why/Creation.why
 (FORALL (return)
 (IMPLIES (EQ return result2) (EQ (integer_of_int32 return) 17))))))))))))))))))
 
-;; Creation_test3_ensures_normal_po_2, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 50, characters 22-27
+;; Creation_test3_ensures_normal_po_2, File "HOME/tests/java/Creation.java", line 50, characters 22-27
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
@@ -3822,7 +3822,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
          (alloc_fresh Object_alloc_table result))))
 (>= (offset_max Object_alloc_table0 result) 0)))))))
 
-;; Creation_test3_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 52, characters 8-20
+;; Creation_test3_safety_po_2, File "HOME/tests/java/Creation.java", line 52, characters 8-20
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
@@ -3848,7 +3848,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
          (pset_singleton result)))
 (<= 0 (offset_max Object_alloc_table0 result))))))))))))))))
 
-;; cons_Creation_ensures_normal_po_1, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 8, characters 18-38
+;; cons_Creation_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 8, characters 18-38
 (FORALL (this_2)
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
@@ -3864,7 +3864,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
          (pset_singleton this_2)))
 (EQ (integer_of_int32 (select Creation_simple_val0 this_2)) 0)))))))))
 
-;; cons_Creation_int_ensures_normal_po_1, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 16, characters 18-38
+;; cons_Creation_int_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 16, characters 18-38
 (FORALL (this_1)
 (FORALL (n_1)
 (FORALL (Creation_simple_val)
@@ -3878,7 +3878,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 (EQ (integer_of_int32 (select Creation_simple_val0 this_1))
 (integer_of_int32 n_1)))))))))))
 
-;; cons_Creation_int_ensures_normal_po_2, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 18, characters 4-12
+;; cons_Creation_int_ensures_normal_po_2, File "HOME/tests/java/Creation.java", line 18, characters 4-12
 (FORALL (this_1)
 (FORALL (n_1)
 (FORALL (Creation_simple_val)
@@ -3893,7 +3893,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 Object_alloc_table Creation_simple_val Creation_simple_val0 (pset_singleton
                                                             this_1)))))))))))
 
-;; cons_Creation_int_int_ensures_normal_po_1, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 24, characters 18-42
+;; cons_Creation_int_int_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 24, characters 18-42
 (FORALL (this_0)
 (FORALL (n_0_0)
 (FORALL (m)
@@ -3913,7 +3913,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 (pset_singleton
 (EQ (integer_of_int32 (select Creation_simple_val0 this_0))
 (+ (integer_of_int32 n_0_0) (integer_of_int32 m)))))))))))))
 
-;; cons_Creation_int_int_safety_po_1, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 27, characters 6-9
+;; cons_Creation_int_int_safety_po_1, File "HOME/tests/java/Creation.java", line 27, characters 6-9
 (FORALL (this_0)
 (FORALL (n_0_0)
 (FORALL (m)
@@ -3922,7 +3922,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 (pset_singleton
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 n_0_0) (integer_of_int32
                                                                     m))))))))
 
-;; cons_Creation_int_int_safety_po_2, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 27, characters 6-9
+;; cons_Creation_int_int_safety_po_2, File "HOME/tests/java/Creation.java", line 27, characters 6-9
 (FORALL (this_0)
 (FORALL (n_0_0)
 (FORALL (m)
@@ -3930,7 +3930,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 (pset_singleton
 (IMPLIES (valid_struct_Creation this_0 0 0 Object_alloc_table)
 (<= (+ (integer_of_int32 n_0_0) (integer_of_int32 m)) constant_too_large_2147483647))))))
 
-;; cons_TestSuperConstructor_ensures_normal_po_1, File "/home/cmarche/recherche/why/tests/java/Creation.java", line 62, characters 18-34
+;; cons_TestSuperConstructor_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 62, characters 18-34
 (FORALL (this_4)
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)

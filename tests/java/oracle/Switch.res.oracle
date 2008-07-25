@@ -246,7 +246,7 @@ TIMEOUT ?= 10
 DP ?= dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
-export WHYLIB=/usr/local/lib/why
+export WHYLIB=WHYLIB
 
 WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs Switch.loc
 
@@ -2866,7 +2866,7 @@ why -simplify [...] why/Switch.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; Switch_test1_ensures_normal_po_1, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_1, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_1) 1)
@@ -2882,7 +2882,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1))
 (EQ (integer_of_int32 return) 0)))))))))))
 
-;; Switch_test1_ensures_normal_po_2, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_2, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_1) 1)
@@ -2898,7 +2898,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1))))))))))))
 
-;; Switch_test1_ensures_normal_po_3, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_3, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_1) 1)
@@ -2914,7 +2914,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1))
 (EQ (integer_of_int32 return) 0))))))))))))
 
-;; Switch_test1_ensures_normal_po_4, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_4, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_1) 1)
@@ -2930,7 +2930,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1)))))))))))))
 
-;; Switch_test1_ensures_normal_po_5, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_5, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (FORALL (result)
@@ -2942,7 +2942,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1))
 (EQ (integer_of_int32 return) 0)))))))))
 
-;; Switch_test1_ensures_normal_po_6, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_6, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (FORALL (result)
@@ -2954,7 +2954,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1))))))))))
 
-;; Switch_test2_ensures_normal_po_1, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_1, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 1)
@@ -2970,7 +2970,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))
 (EQ (integer_of_int32 return) 1)))))))))))
 
-;; Switch_test2_ensures_normal_po_2, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_2, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 1)
@@ -2986,7 +2986,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))))))))))))
 
-;; Switch_test2_ensures_normal_po_3, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_3, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 1)
@@ -3002,7 +3002,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))
 (EQ (integer_of_int32 return) 0)))))))))))
 
-;; Switch_test2_ensures_normal_po_4, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_4, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 1)
@@ -3018,7 +3018,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))))))))))))
 
-;; Switch_test2_ensures_normal_po_5, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_5, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -3036,7 +3036,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))
 (EQ (integer_of_int32 return) 1))))))))))))
 
-;; Switch_test2_ensures_normal_po_6, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_6, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -3054,7 +3054,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7)))))))))))))
 
-;; Switch_test2_ensures_normal_po_7, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_7, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -3072,7 +3072,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))
 (EQ (integer_of_int32 return) 0))))))))))))
 
-;; Switch_test2_ensures_normal_po_8, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_8, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -3090,7 +3090,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1)))))))))))))
 
-;; Switch_test2_ensures_normal_po_9, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_9, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -3112,7 +3112,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))
 (EQ (integer_of_int32 return) 1)))))))))))))
 
-;; Switch_test2_ensures_normal_po_10, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_10, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -3134,7 +3134,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))))))))))))))
 
-;; Switch_test2_ensures_normal_po_11, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_11, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -3156,7 +3156,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))
 (EQ (integer_of_int32 return) 0)))))))))))))
 
-;; Switch_test2_ensures_normal_po_12, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_12, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -3178,7 +3178,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))))))))))))))
 
-;; Switch_test2_ensures_normal_po_13, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_13, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (FORALL (result)
@@ -3194,7 +3194,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))
 (EQ (integer_of_int32 return) 1))))))))))
 
-;; Switch_test2_ensures_normal_po_14, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_14, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (FORALL (result)
@@ -3210,7 +3210,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7)))))))))))
 
-;; Switch_test2_ensures_normal_po_15, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_15, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (FORALL (result)
@@ -3226,7 +3226,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))
 (EQ (integer_of_int32 return) 0))))))))))
 
-;; Switch_test2_ensures_normal_po_16, File "/home/cmarche/recherche/why/tests/java/Switch.java", line 51, characters 18-110
+;; Switch_test2_ensures_normal_po_16, File "HOME/tests/java/Switch.java", line 51, characters 18-110
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (FORALL (result)
