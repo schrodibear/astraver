@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.312 2008-07-24 15:28:43 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.313 2008-07-25 16:03:47 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1154,13 +1154,13 @@ let assigns before ef locs loc =
 	  LNamed(reg_loc loc,a))
     ) mems a
 
-let reads locs (fvi,r) =
+let reads ~global_assertion locs (fvi,r) =
   let refs = StringMap.empty
   in
   let mems = FieldOrVariantRegionMap.empty 
   in
   let refs,mems = 
-    List.fold_left (collect_locations ~global_assertion:false LabelOld) (refs,mems) locs
+    List.fold_left (collect_locations ~global_assertion LabelOld) (refs,mems) locs
   in
   let p = try FieldOrVariantRegionMap.find (fvi,r) mems with Not_found -> [] in
   make_union_loc p
@@ -2385,7 +2385,7 @@ let tr_logic_fun li ta acc =
 	       memory_params_reads
 	   in
 	   let zonety,basety = deconstruct_memory_type_args paramty in
-	   let pset = reads pset (fvi,r) in
+	   let pset = reads ~global_assertion:true pset (fvi,r) in
 	   let sepa = LNot(LPred("in_pset",[LVar "tmp";pset])) in
 	   let update_params = 
              List.map (fun name ->
@@ -2442,7 +2442,7 @@ let tr_logic_fun li ta acc =
 	       memory_params_reads
 	   in
 	   let zonety,basety = deconstruct_memory_type_args paramty in
-	   let pset = reads pset (fvi,r) in
+	   let pset = reads ~global_assertion:true pset (fvi,r) in
 	   let sepa = LPred("pset_disjoint",[LVar "tmp";pset]) in
 	   let upda = 
 	     LPred("not_assigns",[LVar "tmpalloc"; LVar (fst param);
