@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.19 2008-07-24 15:28:43 marche Exp $ i*)
+(*i $Id: java_options.ml,v 1.20 2008-07-25 15:16:48 marche Exp $ i*)
 
 open Format
 
@@ -78,6 +78,7 @@ let javacard = ref false
       
 let parse_only = ref false
 let type_only = ref false
+let abstract = ref ""
 let print_graph = ref false
 let debug = ref false
 let verbose = ref false
@@ -112,6 +113,8 @@ let _ =
 	  "  stops after parsing";
         "-type-only", Arg.Set type_only, 
 	  "  stops after typing";
+	"-abstract", Arg.String ((:=) abstract),
+	  " <file> stops after typing and output abstract view to <file>" ;
         "-print-call-graph", Arg.Set print_graph, 
 	  "  stops after call graph and print call graph";
         "-d", Arg.Set debug,

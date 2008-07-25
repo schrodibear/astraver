@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.62 2008-07-03 14:34:11 marche Exp $ *)
+(* $Id: java_main.ml,v 1.63 2008-07-25 15:16:48 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -49,6 +49,19 @@ let main () =
   Java_typing.type_specs p t;
   printf "Typing OK.@.";
   
+  if !Java_options.abstract <> "" then
+    begin
+      match astl with
+	| [a] ->
+	    Pp.print_in_file 
+	      (fun fmt -> Java_abstract.compilation_unit fmt a) 
+	      !Java_options.abstract;
+	    exit 0
+	| _ ->
+	    eprintf "cannot take %d files with option -abstract@." (List.length astl);
+	    Java_options.usage ()
+    end;
+
   (************)
   (* Analyses *)
   (************)

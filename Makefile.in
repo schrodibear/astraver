@@ -332,6 +332,7 @@ KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/jc_poutput.cmo jc/jc_output.cmo jc/jc_noutput.cmo jc/output.cmo \
 	java/java_version.cmo \
 	java/java_options.cmo java/java_pervasives.cmo \
+	java/java_abstract.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \
 	java/java_typing.cmo java/java_callgraph.cmo \
 	java/java_analysis.cmo java/java_interp.cmo \
