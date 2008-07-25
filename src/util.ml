@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.157 2008-07-24 07:54:59 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.158 2008-07-25 07:11:06 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -651,7 +651,10 @@ and occur_arrow id bl c = match bl with
 let rec noPnamed = function
   | Pnamed(_, p) -> noPnamed p
   | p -> p
-  
+
+(* [quant_boolean_as_conj] checks whether p is either (if result ...)
+   or (if result ... -> if result ...) i.e. if forall b. p(b) can be
+   simplified into p(true) and p(false) *)
 let quant_boolean_as_conj x p = 
   not fast_wp &&
   match noPnamed p with
@@ -665,21 +668,51 @@ let quant_boolean_as_conj x p =
 	end
     | _ -> false
 
+(* [mk_bool_forall x p] simplifies (forall x. (if x then pt else pf) -> q)
+   into q[x=true <- pt; x=false <- pf] when the only occurrences of x in p
+   are x=true or x=false *)
+let mk_bool_forall x p = match noPnamed p with
+  | Pimplies (_, p1, q) -> begin match noPnamed p1 with
+      | Pif (Tvar y, pt, pf) when y == x ->
+	  let rec subst = function
+	    | Papp (id, [Tvar y; c], _) as p when id == t_eq_bool && y == x ->
+		begin match c with
+		  | Tconst (ConstBool true) -> pt
+		  | Tconst (ConstBool false) -> pf
+		  | _ -> if occur_term x c then raise Exit; p
+		end
+	    | Papp (_, tl, _) as p ->
+		if List.exists (occur_term x) tl then raise Exit; p
+	    | Pif (t, _, _) | Pfpi (t, _, _) when occur_term x t -> 
+		raise Exit
+	    | p ->
+		map_predicate subst p
+	  in
+	  subst q
+      | _ -> raise Exit 
+    end
+  | _ -> raise Exit
+
+let mk_forall is_wp x v triggers p =
+  let n = Ident.bound x in
+  let s = subst_onev x n in
+  let p = subst_in_predicate s p in
+  let subst_in_pattern s = function
+    | TPat t -> TPat (subst_in_term s t)
+    | PPat p -> PPat (subst_in_predicate s p) in
+  let triggers = List.map (List.map (subst_in_pattern s)) triggers in
+  Forall (is_wp, x, n, mlize_type v, triggers, p)
+
 let forall ?(is_wp=false) x v ?(triggers=[]) p = match v with
   (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
   | PureType PTbool when quant_boolean_as_conj x p ->
       let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
       let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
       Pand (true, true, simplify ptrue, simplify pfalse)
+  | PureType PTbool ->
+      (try mk_bool_forall x p with Exit -> mk_forall is_wp x v triggers p)
   | _ ->
-      let n = Ident.bound x in
-      let s = subst_onev x n in
-      let p = subst_in_predicate s p in
-      let subst_in_pattern s = function
-	| TPat t -> TPat (subst_in_term s t)
-	| PPat p -> PPat (subst_in_predicate s p) in
-      let triggers = List.map (List.map (subst_in_pattern s)) triggers in
-      Forall (is_wp, x, n, mlize_type v, triggers, p)
+      mk_forall is_wp x v triggers p
 
 let pforall ?(is_wp=false) x v p =
   if p = Ptrue then Ptrue else forall ~is_wp x v p
