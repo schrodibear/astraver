@@ -66,6 +66,8 @@ DOCUMENTATION
 GWHY
 ====
 
+ - gwhy-bin: add a front-end with a file selector when no file is given
+
 BUGS
 ====
 
