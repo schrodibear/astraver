@@ -7,9 +7,6 @@ why2html.opt
 caduceus.byte
 caduceus.opt
 *.static
-dp.byte
-dp.opt
-cpulimit
 rv_merge.opt
 why-obfuscator.byte
 why-obfuscator.opt
@@ -33,3 +30,6 @@ java
 c
 _digests
 regtest.opt
+why-dp.opt
+why-dp.byte
+why-cpulimit
