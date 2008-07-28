@@ -1,4 +1,7 @@
 
+version 2.14, July 28th, 2008
+=============================
+  o tools `dp' and `cpulimit' renamed into `why-dp' and `why-cpulimit'
   o krakatoa/jessie: preliminary support for statement contracts
   o krakatoa/jessie/why: new builtin logic symbols \int_max, \int_min, 
     \real_max, \real_min 

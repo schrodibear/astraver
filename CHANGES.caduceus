@@ -1,6 +1,8 @@
 
 Note: These are the changes for Caduceus.
 
+version 2.14, July 28th, 2008
+=============================
  o bug fix: typing &e when e is a *non-modifiable* lvalue
 
 version 2.13, May 27th, 2008
