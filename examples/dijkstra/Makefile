@@ -1,3 +1,7 @@
+WHY=../../bin/why.opt
+VO=dijkstra_valid.vo
 
 dijkstra_why.v: dijkstra.why
-	../../bin/why.opt --coq -split-user-conj $^
+	$(WHY) --coq -split-user-conj $^
+
+include ../Makefile.common
