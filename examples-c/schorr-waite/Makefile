@@ -1,4 +1,7 @@
 
+check:
+	caduceus schorr_waite.c
+
 all: schorr_waite
 
 transparent.ps: transparent.dvi

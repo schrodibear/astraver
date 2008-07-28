@@ -193,11 +193,13 @@
  (AND (>= (max x y) x) (>= (max x y) y)))))
 
 ;; f91_po_1, File "mac_carthy.mlw", line 12, characters 10-22
-(FORALL (n)
-(IMPLIES (<= n 100)
-(AND (<= 0 (max 0 (- 101 n))) (< (max 0 (- 101 (+ n 11))) (max 0 (- 101 n))))))
+(FORALL (n) (IMPLIES (<= n 100) (<= 0 (max 0 (- 101 n)))))
 
-;; f91_po_2, File "mac_carthy.mlw", line 12, characters 5-23
+;; f91_po_2, File "mac_carthy.mlw", line 12, characters 10-22
+(FORALL (n)
+(IMPLIES (<= n 100) (< (max 0 (- 101 (+ n 11))) (max 0 (- 101 n)))))
+
+;; f91_po_3, File "mac_carthy.mlw", line 12, characters 5-23
 (FORALL (n)
 (IMPLIES (<= n 100)
 (IMPLIES (AND (<= 0 (max 0 (- 101 n)))
@@ -205,9 +207,19 @@
 (FORALL (result)
 (IMPLIES (OR (AND (<= (+ n 11) 100) (EQ result 91))
          (AND (>= (+ n 11) 101) (EQ result (- (+ n 11) 10))))
-(AND (<= 0 (max 0 (- 101 n))) (< (max 0 (- 101 result)) (max 0 (- 101 n)))))))))
+(<= 0 (max 0 (- 101 n))))))))
 
-;; f91_po_3, File "mac_carthy.mlw", line 15, characters 4-64
+;; f91_po_4, File "mac_carthy.mlw", line 12, characters 5-23
+(FORALL (n)
+(IMPLIES (<= n 100)
+(IMPLIES (AND (<= 0 (max 0 (- 101 n)))
+         (< (max 0 (- 101 (+ n 11))) (max 0 (- 101 n))))
+(FORALL (result)
+(IMPLIES (OR (AND (<= (+ n 11) 100) (EQ result 91))
+         (AND (>= (+ n 11) 101) (EQ result (- (+ n 11) 10))))
+(< (max 0 (- 101 result)) (max 0 (- 101 n))))))))
+
+;; f91_po_5, File "mac_carthy.mlw", line 15, characters 4-64
 (FORALL (n)
 (IMPLIES (<= n 100)
 (IMPLIES (AND (<= 0 (max 0 (- 101 n)))
@@ -222,7 +234,7 @@
          (AND (>= result 101) (EQ result0 (- result 10))))
 (OR (AND (<= n 100) (EQ result0 91)) (AND (>= n 101) (EQ result0 (- n 10))))))))))))
 
-;; f91_po_4, File "mac_carthy.mlw", line 15, characters 4-64
+;; f91_po_6, File "mac_carthy.mlw", line 15, characters 4-64
 (FORALL (n)
 (IMPLIES (> n 100)
 (OR (AND (<= n 100) (EQ (- n 10) 91))

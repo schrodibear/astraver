@@ -2,6 +2,7 @@
 WHY=../../bin/why.opt
 GWHY=../../bin/gwhy.opt
 OPT=--no-arrays
+VO=queens_valid.vo
 
 gwhy:
 	$(GWHY) $(OPT) queens.why
@@ -28,3 +29,4 @@ export:
 	make -C report export
 
 
+include ../Makefile.common

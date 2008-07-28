@@ -187,10 +187,23 @@
  (EQ (array_length a1) (array_length a2)))))
 
 ;; add1_po_1, File "peano.mlw", line 11, characters 17-53
-(FORALL (y)
-(FORALL (x) (IMPLIES (>= y 0) (AND (<= 0 y) (EQ x (+ x (- y y)))))))
+(FORALL (y) (IMPLIES (>= y 0) (<= 0 y)))
 
 ;; add1_po_2, File "peano.mlw", line 11, characters 17-53
+(FORALL (y) (FORALL (x) (IMPLIES (>= y 0) (EQ x (+ x (- y y))))))
+
+;; add1_po_3, File "peano.mlw", line 11, characters 17-53
+(FORALL (y)
+(FORALL (x)
+(IMPLIES (>= y 0)
+(FORALL (x0)
+(FORALL (z)
+(IMPLIES (AND (<= 0 z) (EQ x0 (+ x (- y z))))
+(IMPLIES (> z 0)
+(FORALL (x1)
+(IMPLIES (EQ x1 (+ x0 1)) (FORALL (z0) (IMPLIES (EQ z0 (- z 1)) (<= 0 z0))))))))))))
+
+;; add1_po_4, File "peano.mlw", line 11, characters 17-53
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (>= y 0)
@@ -200,10 +213,9 @@
 (IMPLIES (> z 0)
 (FORALL (x1)
 (IMPLIES (EQ x1 (+ x0 1))
-(FORALL (z0)
-(IMPLIES (EQ z0 (- z 1)) (AND (<= 0 z0) (EQ x1 (+ x (- y z0)))))))))))))))
+(FORALL (z0) (IMPLIES (EQ z0 (- z 1)) (EQ x1 (+ x (- y z0))))))))))))))
 
-;; add1_po_3, File "peano.mlw", line 12, characters 15-16
+;; add1_po_5, File "peano.mlw", line 12, characters 15-16
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (>= y 0)
@@ -212,10 +224,9 @@
 (IMPLIES (AND (<= 0 z) (EQ x0 (+ x (- y z))))
 (IMPLIES (> z 0)
 (FORALL (x1)
-(IMPLIES (EQ x1 (+ x0 1))
-(FORALL (z0) (IMPLIES (EQ z0 (- z 1)) (AND (<= 0 z) (< z0 z)))))))))))))
+(IMPLIES (EQ x1 (+ x0 1)) (FORALL (z0) (IMPLIES (EQ z0 (- z 1)) (< z0 z))))))))))))
 
-;; add1_po_4, File "peano.mlw", line 16, characters 4-14
+;; add1_po_6, File "peano.mlw", line 16, characters 4-14
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (>= y 0)
@@ -234,10 +245,15 @@
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (>= y 0)
-(IMPLIES (< 0 y)
-(FORALL (x0) (IMPLIES (EQ x0 (+ x 1)) (AND (<= 0 y) (< (- y 1) y))))))))
+(IMPLIES (< 0 y) (FORALL (x0) (IMPLIES (EQ x0 (+ x 1)) (<= 0 y)))))))
 
 ;; rec_add1_po_2, File "peano.mlw", line 26, characters 37-53
+(FORALL (y)
+(FORALL (x)
+(IMPLIES (>= y 0)
+(IMPLIES (< 0 y) (FORALL (x0) (IMPLIES (EQ x0 (+ x 1)) (< (- y 1) y)))))))
+
+;; rec_add1_po_3, File "peano.mlw", line 26, characters 37-53
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (>= y 0)
@@ -246,7 +262,7 @@
 (IMPLIES (EQ x0 (+ x 1))
 (IMPLIES (AND (<= 0 y) (< (- y 1) y)) (>= (- y 1) 0))))))))
 
-;; rec_add1_po_3, File "peano.mlw", line 27, characters 4-14
+;; rec_add1_po_4, File "peano.mlw", line 27, characters 4-14
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (>= y 0)
@@ -257,7 +273,7 @@
 (IMPLIES (>= (- y 1) 0)
 (FORALL (x1) (IMPLIES (EQ x1 (+ x0 (- y 1))) (EQ x1 (+ x y))))))))))))
 
-;; rec_add1_po_4, File "peano.mlw", line 27, characters 4-14
+;; rec_add1_po_5, File "peano.mlw", line 27, characters 4-14
 (FORALL (y)
 (FORALL (x) (IMPLIES (>= y 0) (IMPLIES (>= 0 y) (EQ x (+ x y))))))
 
@@ -270,13 +286,18 @@
 ;; mult1_po_1, File "peano.mlw", line 43, characters 19-53
 (FORALL (y)
 (FORALL (x)
-(IMPLIES (AND (>= x 0) (>= y 0))
-(FORALL (x0) (IMPLIES (EQ x0 0) (AND (<= 0 y) (EQ x0 (* x (- y y)))))))))
+(IMPLIES (AND (>= x 0) (>= y 0)) (FORALL (x0) (IMPLIES (EQ x0 0) (<= 0 y))))))
 
 ;; mult1_po_2, File "peano.mlw", line 43, characters 19-53
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (x0) (IMPLIES (EQ x0 0) (EQ x0 (* x (- y y))))))))
+
+;; mult1_po_3, File "peano.mlw", line 43, characters 19-53
+(FORALL (y)
+(FORALL (x)
+(IMPLIES (AND (>= x 0) (>= y 0))
 (FORALL (x0)
 (IMPLIES (EQ x0 0)
 (FORALL (x1)
@@ -285,11 +306,9 @@
 (IMPLIES (> z 0)
 (IMPLIES (>= x 0)
 (FORALL (x2)
-(IMPLIES (EQ x2 (+ x1 x))
-(FORALL (z0)
-(IMPLIES (EQ z0 (- z 1)) (AND (<= 0 z0) (EQ x2 (* x (- y z0))))))))))))))))))
+(IMPLIES (EQ x2 (+ x1 x)) (FORALL (z0) (IMPLIES (EQ z0 (- z 1)) (<= 0 z0)))))))))))))))
 
-;; mult1_po_3, File "peano.mlw", line 44, characters 17-18
+;; mult1_po_4, File "peano.mlw", line 43, characters 19-53
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -302,9 +321,23 @@
 (IMPLIES (>= x 0)
 (FORALL (x2)
 (IMPLIES (EQ x2 (+ x1 x))
-(FORALL (z0) (IMPLIES (EQ z0 (- z 1)) (AND (<= 0 z) (< z0 z))))))))))))))))
+(FORALL (z0) (IMPLIES (EQ z0 (- z 1)) (EQ x2 (* x (- y z0)))))))))))))))))
 
-;; mult1_po_4, File "peano.mlw", line 49, characters 4-14
+;; mult1_po_5, File "peano.mlw", line 44, characters 17-18
+(FORALL (y)
+(FORALL (x)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (x0)
+(IMPLIES (EQ x0 0)
+(FORALL (x1)
+(FORALL (z)
+(IMPLIES (AND (<= 0 z) (EQ x1 (* x (- y z))))
+(IMPLIES (> z 0)
+(IMPLIES (>= x 0)
+(FORALL (x2)
+(IMPLIES (EQ x2 (+ x1 x)) (FORALL (z0) (IMPLIES (EQ z0 (- z 1)) (< z0 z)))))))))))))))
+
+;; mult1_po_6, File "peano.mlw", line 49, characters 4-14
 (FORALL (y)
 (FORALL (x)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -316,9 +349,12 @@
 (IMPLIES (<= z 0) (EQ x1 (* x y)))))))))))
 
 ;; u2_po_1, File "peano.mlw", line 53, characters 30-39
-(AND (>= 4 0) (>= 6 0))
+(>= 4 0)
 
-;; u2_po_2, File "peano.mlw", line 53, characters 42-50
+;; u2_po_2, File "peano.mlw", line 53, characters 30-39
+(>= 6 0)
+
+;; u2_po_3, File "peano.mlw", line 53, characters 42-50
 (IMPLIES (AND (>= 4 0) (>= 6 0))
 (FORALL (r) (IMPLIES (EQ r (* 4 6)) (EQ r 24))))
 
@@ -329,18 +365,20 @@
 
 ;; mult2_po_2, File "peano.mlw", line 62, characters 32-45
 (FORALL (x)
-(FORALL (y)
-(IMPLIES (AND (>= x 0) (>= y 0))
-(IMPLIES (NEQ x 0) (AND (<= 0 x) (< (- x 1) x))))))
+(FORALL (y) (IMPLIES (AND (>= x 0) (>= y 0)) (IMPLIES (NEQ x 0) (<= 0 x)))))
 
 ;; mult2_po_3, File "peano.mlw", line 62, characters 32-45
 (FORALL (x)
 (FORALL (y)
-(IMPLIES (AND (>= x 0) (>= y 0))
-(IMPLIES (NEQ x 0)
-(IMPLIES (AND (<= 0 x) (< (- x 1) x)) (AND (>= (- x 1) 0) (>= y 0)))))))
+(IMPLIES (AND (>= x 0) (>= y 0)) (IMPLIES (NEQ x 0) (< (- x 1) x)))))
 
-;; mult2_po_4, File "peano.mlw", line 63, characters 3-13
+;; mult2_po_4, File "peano.mlw", line 62, characters 32-45
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(IMPLIES (NEQ x 0) (IMPLIES (AND (<= 0 x) (< (- x 1) x)) (>= (- x 1) 0))))))
+
+;; mult2_po_5, File "peano.mlw", line 63, characters 3-13
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -352,21 +390,26 @@
 (IMPLIES (>= y 0)
 (FORALL (result0) (IMPLIES (EQ result0 (+ y result)) (EQ result0 (* x y)))))))))))))
 
-;; mult2_po_5, File "peano.mlw", line 60, characters 53-63
+;; mult2_po_6, File "peano.mlw", line 60, characters 53-63
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
 (FORALL (a)
 (FORALL (b) (IMPLIES (>= a 0) (IMPLIES (EQ a 0) (EQ b (+ a b)))))))))
 
-;; mult2_po_6, File "peano.mlw", line 60, characters 33-49
+;; mult2_po_7, File "peano.mlw", line 60, characters 33-49
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
-(FORALL (a)
-(IMPLIES (>= a 0) (IMPLIES (NEQ a 0) (AND (<= 0 a) (< (- a 1) a))))))))
+(FORALL (a) (IMPLIES (>= a 0) (IMPLIES (NEQ a 0) (<= 0 a)))))))
 
-;; mult2_po_7, File "peano.mlw", line 60, characters 33-49
+;; mult2_po_8, File "peano.mlw", line 60, characters 33-49
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (a) (IMPLIES (>= a 0) (IMPLIES (NEQ a 0) (< (- a 1) a)))))))
+
+;; mult2_po_9, File "peano.mlw", line 60, characters 33-49
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -374,7 +417,7 @@
 (IMPLIES (>= a 0)
 (IMPLIES (NEQ a 0) (IMPLIES (AND (<= 0 a) (< (- a 1) a)) (>= (- a 1) 0))))))))
 
-;; mult2_po_8, File "peano.mlw", line 60, characters 53-63
+;; mult2_po_10, File "peano.mlw", line 60, characters 53-63
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))

@@ -209,25 +209,12 @@
  (AND (>= (max x y) x) (>= (max x y) y)))))
 
 ;; gcd1_po_1, File "gcd.mlw", line 25, characters 19-58
-(FORALL (a)
-(FORALL (b)
-(IMPLIES (AND (> a 0) (> b 0))
-(AND (< 0 a) (AND (< 0 b) (EQ (gcd a b) (gcd a b)))))))
+(FORALL (a) (FORALL (b) (IMPLIES (AND (> a 0) (> b 0)) (< 0 a))))
 
 ;; gcd1_po_2, File "gcd.mlw", line 25, characters 19-58
-(FORALL (a)
-(FORALL (b)
-(IMPLIES (AND (> a 0) (> b 0))
-(FORALL (x)
-(FORALL (y)
-(IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
-(IMPLIES (NEQ x y)
-(IMPLIES (> x y)
-(FORALL (x0)
-(IMPLIES (EQ x0 (- x y))
-(AND (< 0 x0) (AND (< 0 y) (EQ (gcd x0 y) (gcd a b))))))))))))))
+(FORALL (a) (FORALL (b) (IMPLIES (AND (> a 0) (> b 0)) (< 0 b))))
 
-;; gcd1_po_3, File "gcd.mlw", line 25, characters 68-76
+;; gcd1_po_3, File "gcd.mlw", line 25, characters 19-58
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
@@ -235,9 +222,7 @@
 (FORALL (y)
 (IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
 (IMPLIES (NEQ x y)
-(IMPLIES (> x y)
-(FORALL (x0)
-(IMPLIES (EQ x0 (- x y)) (AND (<= 0 (max x y)) (< (max x0 y) (max x y)))))))))))))
+(IMPLIES (> x y) (FORALL (x0) (IMPLIES (EQ x0 (- x y)) (< 0 x0)))))))))))
 
 ;; gcd1_po_4, File "gcd.mlw", line 25, characters 19-58
 (FORALL (a)
@@ -247,12 +232,51 @@
 (FORALL (y)
 (IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
 (IMPLIES (NEQ x y)
-(IMPLIES (<= x y)
-(FORALL (y0)
-(IMPLIES (EQ y0 (- y x))
-(AND (< 0 x) (AND (< 0 y0) (EQ (gcd x y0) (gcd a b))))))))))))))
+(IMPLIES (> x y) (FORALL (x0) (IMPLIES (EQ x0 (- x y)) (< 0 y)))))))))))
 
-;; gcd1_po_5, File "gcd.mlw", line 25, characters 68-76
+;; gcd1_po_5, File "gcd.mlw", line 25, characters 19-58
+(FORALL (a)
+(FORALL (b)
+(IMPLIES (AND (> a 0) (> b 0))
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
+(IMPLIES (NEQ x y)
+(IMPLIES (> x y)
+(FORALL (x0) (IMPLIES (EQ x0 (- x y)) (EQ (gcd x0 y) (gcd a b))))))))))))
+
+;; gcd1_po_6, File "gcd.mlw", line 25, characters 68-76
+(FORALL (a)
+(FORALL (b)
+(IMPLIES (AND (> a 0) (> b 0))
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
+(IMPLIES (NEQ x y)
+(IMPLIES (> x y) (FORALL (x0) (IMPLIES (EQ x0 (- x y)) (<= 0 (max x y))))))))))))
+
+;; gcd1_po_7, File "gcd.mlw", line 25, characters 68-76
+(FORALL (a)
+(FORALL (b)
+(IMPLIES (AND (> a 0) (> b 0))
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
+(IMPLIES (NEQ x y)
+(IMPLIES (> x y)
+(FORALL (x0) (IMPLIES (EQ x0 (- x y)) (< (max x0 y) (max x y))))))))))))
+
+;; gcd1_po_8, File "gcd.mlw", line 25, characters 19-58
+(FORALL (a)
+(FORALL (b)
+(IMPLIES (AND (> a 0) (> b 0))
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
+(IMPLIES (NEQ x y)
+(IMPLIES (<= x y) (FORALL (y0) (IMPLIES (EQ y0 (- y x)) (< 0 y0)))))))))))
+
+;; gcd1_po_9, File "gcd.mlw", line 25, characters 19-58
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
@@ -261,10 +285,30 @@
 (IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
 (IMPLIES (NEQ x y)
 (IMPLIES (<= x y)
-(FORALL (y0)
-(IMPLIES (EQ y0 (- y x)) (AND (<= 0 (max x y)) (< (max x y0) (max x y)))))))))))))
+(FORALL (y0) (IMPLIES (EQ y0 (- y x)) (EQ (gcd x y0) (gcd a b))))))))))))
 
-;; gcd1_po_6, File "gcd.mlw", line 33, characters 4-21
+;; gcd1_po_10, File "gcd.mlw", line 25, characters 68-76
+(FORALL (a)
+(FORALL (b)
+(IMPLIES (AND (> a 0) (> b 0))
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
+(IMPLIES (NEQ x y)
+(IMPLIES (<= x y) (FORALL (y0) (IMPLIES (EQ y0 (- y x)) (<= 0 (max x y))))))))))))
+
+;; gcd1_po_11, File "gcd.mlw", line 25, characters 68-76
+(FORALL (a)
+(FORALL (b)
+(IMPLIES (AND (> a 0) (> b 0))
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (< 0 x) (AND (< 0 y) (EQ (gcd x y) (gcd a b))))
+(IMPLIES (NEQ x y)
+(IMPLIES (<= x y)
+(FORALL (y0) (IMPLIES (EQ y0 (- y x)) (< (max x y0) (max x y))))))))))))
+
+;; gcd1_po_12, File "gcd.mlw", line 33, characters 4-21
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (> a 0) (> b 0))
@@ -282,12 +326,34 @@
  (FORALL (a b) (AND (<= 0 (int_mod a b)) (< (int_mod a b) b))))
 
 ;; gcd2_po_1, File "gcd.mlw", line 47, characters 19-60
-(FORALL (a)
-(FORALL (b)
-(IMPLIES (AND (>= a 0) (>= b 0))
-(AND (<= 0 a) (AND (<= 0 b) (EQ (gcd a b) (gcd a b)))))))
+(FORALL (a) (FORALL (b) (IMPLIES (AND (>= a 0) (>= b 0)) (<= 0 a))))
 
 ;; gcd2_po_2, File "gcd.mlw", line 47, characters 19-60
+(FORALL (a) (FORALL (b) (IMPLIES (AND (>= a 0) (>= b 0)) (<= 0 b))))
+
+;; gcd2_po_3, File "gcd.mlw", line 47, characters 19-60
+(FORALL (a)
+(FORALL (b)
+(IMPLIES (AND (>= a 0) (>= b 0))
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (<= 0 x) (AND (<= 0 y) (EQ (gcd x y) (gcd a b))))
+(IMPLIES (NEQ y 0)
+(FORALL (x0)
+(IMPLIES (EQ x0 y) (FORALL (y0) (IMPLIES (EQ y0 (int_mod x y)) (<= 0 x0))))))))))))
+
+;; gcd2_po_4, File "gcd.mlw", line 47, characters 19-60
+(FORALL (a)
+(FORALL (b)
+(IMPLIES (AND (>= a 0) (>= b 0))
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (<= 0 x) (AND (<= 0 y) (EQ (gcd x y) (gcd a b))))
+(IMPLIES (NEQ y 0)
+(FORALL (x0)
+(IMPLIES (EQ x0 y) (FORALL (y0) (IMPLIES (EQ y0 (int_mod x y)) (<= 0 y0))))))))))))
+
+;; gcd2_po_5, File "gcd.mlw", line 47, characters 19-60
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))
@@ -297,11 +363,9 @@
 (IMPLIES (NEQ y 0)
 (FORALL (x0)
 (IMPLIES (EQ x0 y)
-(FORALL (y0)
-(IMPLIES (EQ y0 (int_mod x y))
-(AND (<= 0 x0) (AND (<= 0 y0) (EQ (gcd x0 y0) (gcd a b)))))))))))))))
+(FORALL (y0) (IMPLIES (EQ y0 (int_mod x y)) (EQ (gcd x0 y0) (gcd a b)))))))))))))
 
-;; gcd2_po_3, File "gcd.mlw", line 47, characters 70-71
+;; gcd2_po_6, File "gcd.mlw", line 47, characters 70-71
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))
@@ -310,10 +374,20 @@
 (IMPLIES (AND (<= 0 x) (AND (<= 0 y) (EQ (gcd x y) (gcd a b))))
 (IMPLIES (NEQ y 0)
 (FORALL (x0)
-(IMPLIES (EQ x0 y)
-(FORALL (y0) (IMPLIES (EQ y0 (int_mod x y)) (AND (<= 0 y) (< y0 y)))))))))))))
+(IMPLIES (EQ x0 y) (FORALL (y0) (IMPLIES (EQ y0 (int_mod x y)) (<= 0 y))))))))))))
 
-;; gcd2_po_4, File "gcd.mlw", line 56, characters 4-21
+;; gcd2_po_7, File "gcd.mlw", line 47, characters 70-71
+(FORALL (a)
+(FORALL (b)
+(IMPLIES (AND (>= a 0) (>= b 0))
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (<= 0 x) (AND (<= 0 y) (EQ (gcd x y) (gcd a b))))
+(IMPLIES (NEQ y 0)
+(FORALL (x0)
+(IMPLIES (EQ x0 y) (FORALL (y0) (IMPLIES (EQ y0 (int_mod x y)) (< y0 y))))))))))))
+
+;; gcd2_po_8, File "gcd.mlw", line 56, characters 4-21
 (FORALL (a)
 (FORALL (b)
 (IMPLIES (AND (>= a 0) (>= b 0))

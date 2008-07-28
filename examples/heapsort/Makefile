@@ -9,7 +9,10 @@ $(V): $(ML) $(WHY)
 	$(WHY) $(WHYOPTIONS) $(ML)
 
 heapsort_why.sx: swap.mlw downheap.mlw heapsort.mlw $(WHYBIN)
-	$(WHY) --simplify $(ML)
+	$(WHY) --simplify $^
+
+swap.check downheap.check heapsort.check: swap.mlw downheap.mlw heapsort.mlw $(WHYBIN)
+	$(WHYBIN) -tc $^
 
 heapsort_why.why: swap.mlw downheap.mlw heapsort.mlw $(WHYBIN)
 	$(WHY) --why $^

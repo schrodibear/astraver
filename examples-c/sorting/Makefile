@@ -7,6 +7,9 @@ FILES = quicksort selection
 
 TODO = selection
 
+check:
+	for f in $(FILES); do caduceus $$f.c; done
+
 coq: $(FILES)
 
 allcoq:

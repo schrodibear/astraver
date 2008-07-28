@@ -202,24 +202,33 @@
 (FORALL (n) (IMPLIES (>= n 0) (IMPLIES (<= n 1) (EQ 1 (F n)))))
 
 ;; fib1_po_2, File "fib.mlw", line 23, characters 6-18
-(FORALL (n)
-(IMPLIES (>= n 0) (IMPLIES (> n 1) (AND (<= 0 n) (< (- n 1) n)))))
+(FORALL (n) (IMPLIES (>= n 0) (IMPLIES (> n 1) (<= 0 n))))
 
 ;; fib1_po_3, File "fib.mlw", line 23, characters 6-18
+(FORALL (n) (IMPLIES (>= n 0) (IMPLIES (> n 1) (< (- n 1) n))))
+
+;; fib1_po_4, File "fib.mlw", line 23, characters 6-18
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1) (IMPLIES (AND (<= 0 n) (< (- n 1) n)) (>= (- n 1) 0)))))
 
-;; fib1_po_4, File "fib.mlw", line 23, characters 23-35
+;; fib1_po_5, File "fib.mlw", line 23, characters 23-35
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
 (IMPLIES (AND (<= 0 n) (< (- n 1) n))
 (IMPLIES (>= (- n 1) 0)
-(FORALL (result)
-(IMPLIES (EQ result (F (- n 1))) (AND (<= 0 n) (< (- n 2) n)))))))))
+(FORALL (result) (IMPLIES (EQ result (F (- n 1))) (<= 0 n))))))))
 
-;; fib1_po_5, File "fib.mlw", line 23, characters 23-35
+;; fib1_po_6, File "fib.mlw", line 23, characters 23-35
+(FORALL (n)
+(IMPLIES (>= n 0)
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 n) (< (- n 1) n))
+(IMPLIES (>= (- n 1) 0)
+(FORALL (result) (IMPLIES (EQ result (F (- n 1))) (< (- n 2) n))))))))
+
+;; fib1_po_7, File "fib.mlw", line 23, characters 23-35
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
@@ -229,7 +238,7 @@
 (IMPLIES (EQ result (F (- n 1)))
 (IMPLIES (AND (<= 0 n) (< (- n 2) n)) (>= (- n 2) 0)))))))))
 
-;; fib1_po_6, File "fib.mlw", line 24, characters 4-17
+;; fib1_po_8, File "fib.mlw", line 24, characters 4-17
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 1)
@@ -258,7 +267,7 @@
 (FORALL (fx_1)
 (IMPLIES (AND (AND (<= 1 x) (<= x n))
          (AND (EQ fx (F x)) (EQ fx_1 (F (- x 1)))))
-(IMPLIES (NEQ x n) (AND (<= 0 (- n x)) (< (- n (+ x 1)) (- n x)))))))))
+(IMPLIES (NEQ x n) (<= 0 (- n x))))))))
 
 ;; fib2_aux_po_3, File "fib.mlw", line 33, characters 6-35
 (FORALL (n)
@@ -267,27 +276,78 @@
 (FORALL (fx_1)
 (IMPLIES (AND (AND (<= 1 x) (<= x n))
          (AND (EQ fx (F x)) (EQ fx_1 (F (- x 1)))))
+(IMPLIES (NEQ x n) (< (- n (+ x 1)) (- n x))))))))
+
+;; fib2_aux_po_4, File "fib.mlw", line 33, characters 6-35
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 1 x) (<= x n))
+         (AND (EQ fx (F x)) (EQ fx_1 (F (- x 1)))))
+(IMPLIES (NEQ x n)
+(IMPLIES (AND (<= 0 (- n x)) (< (- n (+ x 1)) (- n x))) (<= 1 (+ x 1)))))))))
+
+;; fib2_aux_po_5, File "fib.mlw", line 33, characters 6-35
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 1 x) (<= x n))
+         (AND (EQ fx (F x)) (EQ fx_1 (F (- x 1)))))
+(IMPLIES (NEQ x n)
+(IMPLIES (AND (<= 0 (- n x)) (< (- n (+ x 1)) (- n x))) (<= (+ x 1) n))))))))
+
+;; fib2_aux_po_6, File "fib.mlw", line 33, characters 6-35
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 1 x) (<= x n))
+         (AND (EQ fx (F x)) (EQ fx_1 (F (- x 1)))))
 (IMPLIES (NEQ x n)
 (IMPLIES (AND (<= 0 (- n x)) (< (- n (+ x 1)) (- n x)))
-(AND (AND (<= 1 (+ x 1)) (<= (+ x 1) n))
-(AND (EQ (+ fx fx_1) (F (+ x 1))) (EQ fx (F (- (+ x 1) 1))))))))))))
+(EQ (+ fx fx_1) (F (+ x 1))))))))))
+
+;; fib2_aux_po_7, File "fib.mlw", line 33, characters 6-35
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 1 x) (<= x n))
+         (AND (EQ fx (F x)) (EQ fx_1 (F (- x 1)))))
+(IMPLIES (NEQ x n)
+(IMPLIES (AND (<= 0 (- n x)) (< (- n (+ x 1)) (- n x)))
+(EQ fx (F (- (+ x 1) 1))))))))))
 
 ;; fib2_po_1, File "fib.mlw", line 39, characters 4-17
 (FORALL (n) (IMPLIES (>= n 0) (IMPLIES (<= n 1) (EQ 1 (F n)))))
 
 ;; fib2_po_2, File "fib.mlw", line 38, characters 26-42
-(FORALL (n)
-(IMPLIES (>= n 0)
-(IMPLIES (> n 1)
-(AND (AND (<= 1 1) (<= 1 n)) (AND (EQ 1 (F 1)) (EQ 1 (F (- 1 1))))))))
+(FORALL (n) (IMPLIES (>= n 0) (IMPLIES (> n 1) (<= 1 1))))
+
+;; fib2_po_3, File "fib.mlw", line 38, characters 26-42
+(FORALL (n) (IMPLIES (>= n 0) (IMPLIES (> n 1) (<= 1 n))))
+
+;; fib2_po_4, File "fib.mlw", line 38, characters 26-42
+(FORALL (n) (IMPLIES (>= n 0) (IMPLIES (> n 1) (EQ 1 (F 1)))))
+
+;; fib2_po_5, File "fib.mlw", line 38, characters 26-42
+(FORALL (n) (IMPLIES (>= n 0) (IMPLIES (> n 1) (EQ 1 (F (- 1 1))))))
 
 ;; fib2b_po_1, File "fib.mlw", line 49, characters 24-40
-(FORALL (n)
-(IMPLIES (> n 1)
-(AND (AND (<= 0 (- n 1)) (< (- n 1) n))
-(AND (EQ 1 (F (- n (- n 1)))) (EQ 1 (F (- (- n (- n 1)) 1)))))))
+(FORALL (n) (IMPLIES (> n 1) (<= 0 (- n 1))))
 
-;; fib2b_po_2, File "fib.mlw", line 47, characters 6-19
+;; fib2b_po_2, File "fib.mlw", line 49, characters 24-40
+(FORALL (n) (IMPLIES (> n 1) (< (- n 1) n)))
+
+;; fib2b_po_3, File "fib.mlw", line 49, characters 24-40
+(FORALL (n) (IMPLIES (> n 1) (EQ 1 (F (- n (- n 1))))))
+
+;; fib2b_po_4, File "fib.mlw", line 49, characters 24-40
+(FORALL (n) (IMPLIES (> n 1) (EQ 1 (F (- (- n (- n 1)) 1)))))
+
+;; fib2b_po_5, File "fib.mlw", line 47, characters 6-19
 (FORALL (n)
 (FORALL (x)
 (FORALL (fx)
@@ -296,16 +356,43 @@
          (AND (EQ fx (F (- n x))) (EQ fx_1 (F (- (- n x) 1)))))
 (IMPLIES (EQ x 0) (EQ fx (F n))))))))
 
-;; fib2b_po_3, File "fib.mlw", line 46, characters 26-51
+;; fib2b_po_6, File "fib.mlw", line 46, characters 26-51
 (FORALL (n)
 (FORALL (x)
 (FORALL (fx)
 (FORALL (fx_1)
 (IMPLIES (AND (AND (<= 0 x) (< x n))
          (AND (EQ fx (F (- n x))) (EQ fx_1 (F (- (- n x) 1)))))
-(IMPLIES (NEQ x 0) (AND (<= 0 x) (< (- x 1) x))))))))
+(IMPLIES (NEQ x 0) (<= 0 x)))))))
 
-;; fib2b_po_4, File "fib.mlw", line 46, characters 26-51
+;; fib2b_po_7, File "fib.mlw", line 46, characters 26-51
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 0 x) (< x n))
+         (AND (EQ fx (F (- n x))) (EQ fx_1 (F (- (- n x) 1)))))
+(IMPLIES (NEQ x 0) (< (- x 1) x)))))))
+
+;; fib2b_po_8, File "fib.mlw", line 46, characters 26-51
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 0 x) (< x n))
+         (AND (EQ fx (F (- n x))) (EQ fx_1 (F (- (- n x) 1)))))
+(IMPLIES (NEQ x 0) (IMPLIES (AND (<= 0 x) (< (- x 1) x)) (<= 0 (- x 1)))))))))
+
+;; fib2b_po_9, File "fib.mlw", line 46, characters 26-51
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 0 x) (< x n))
+         (AND (EQ fx (F (- n x))) (EQ fx_1 (F (- (- n x) 1)))))
+(IMPLIES (NEQ x 0) (IMPLIES (AND (<= 0 x) (< (- x 1) x)) (< (- x 1) n))))))))
+
+;; fib2b_po_10, File "fib.mlw", line 46, characters 26-51
 (FORALL (n)
 (FORALL (x)
 (FORALL (fx)
@@ -313,9 +400,17 @@
 (IMPLIES (AND (AND (<= 0 x) (< x n))
          (AND (EQ fx (F (- n x))) (EQ fx_1 (F (- (- n x) 1)))))
 (IMPLIES (NEQ x 0)
-(IMPLIES (AND (<= 0 x) (< (- x 1) x))
-(AND (AND (<= 0 (- x 1)) (< (- x 1) n))
-(AND (EQ (+ fx fx_1) (F (- n (- x 1)))) (EQ fx (F (- (- n (- x 1)) 1))))))))))))
+(IMPLIES (AND (<= 0 x) (< (- x 1) x)) (EQ (+ fx fx_1) (F (- n (- x 1)))))))))))
+
+;; fib2b_po_11, File "fib.mlw", line 46, characters 26-51
+(FORALL (n)
+(FORALL (x)
+(FORALL (fx)
+(FORALL (fx_1)
+(IMPLIES (AND (AND (<= 0 x) (< x n))
+         (AND (EQ fx (F (- n x))) (EQ fx_1 (F (- (- n x) 1)))))
+(IMPLIES (NEQ x 0)
+(IMPLIES (AND (<= 0 x) (< (- x 1) x)) (EQ fx (F (- (- n (- x 1)) 1))))))))))
 
 ;; fib2c_aux_po_1, File "fib.mlw", line 56, characters 4-67
 (FORALL (n)
@@ -328,8 +423,7 @@
 (IMPLIES (EQ fx (F x)) (IMPLIES (EQ fx_1 (F (- x 1))) (EQ fx (F (+ x n))))))))))))
 
 ;; fib2c_aux_po_2, File "fib.mlw", line 55, characters 24-52
-(FORALL (n)
-(IMPLIES (<= 0 n) (IMPLIES (NEQ n 0) (AND (<= 0 n) (< (- n 1) n)))))
+(FORALL (n) (IMPLIES (<= 0 n) (IMPLIES (NEQ n 0) (< (- n 1) n))))
 
 ;; fib2c_aux_po_3, File "fib.mlw", line 55, characters 24-52
 (FORALL (n)
@@ -373,12 +467,46 @@
 (EQ result (F n))))))))
 
 ;; fib3_po_1, File "fib.mlw", line 73, characters 18-57
-(FORALL (n)
-(IMPLIES (>= n 0)
-(IMPLIES (> n 0)
-(AND (AND (<= 1 1) (<= 1 n)) (AND (EQ 1 (F 1)) (EQ 1 (F (- 1 1))))))))
+(FORALL (n) (IMPLIES (>= n 0) (IMPLIES (> n 0) (<= 1 1))))
 
 ;; fib3_po_2, File "fib.mlw", line 73, characters 18-57
+(FORALL (n) (IMPLIES (>= n 0) (IMPLIES (> n 0) (<= 1 n))))
+
+;; fib3_po_3, File "fib.mlw", line 73, characters 18-57
+(FORALL (n) (IMPLIES (>= n 0) (IMPLIES (> n 0) (EQ 1 (F 1)))))
+
+;; fib3_po_4, File "fib.mlw", line 73, characters 18-57
+(FORALL (n) (IMPLIES (>= n 0) (IMPLIES (> n 0) (EQ 1 (F (- 1 1))))))
+
+;; fib3_po_5, File "fib.mlw", line 73, characters 18-57
+(FORALL (n)
+(IMPLIES (>= n 0)
+(IMPLIES (> n 0)
+(FORALL (k)
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (AND (<= 1 k) (<= k n)) (AND (EQ x (F k)) (EQ y (F (- k 1)))))
+(IMPLIES (< k n)
+(FORALL (y0)
+(IMPLIES (EQ y0 x)
+(FORALL (x0)
+(IMPLIES (EQ x0 (+ x y)) (FORALL (k0) (IMPLIES (EQ k0 (+ k 1)) (<= 1 k0)))))))))))))))
+
+;; fib3_po_6, File "fib.mlw", line 73, characters 18-57
+(FORALL (n)
+(IMPLIES (>= n 0)
+(IMPLIES (> n 0)
+(FORALL (k)
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (AND (<= 1 k) (<= k n)) (AND (EQ x (F k)) (EQ y (F (- k 1)))))
+(IMPLIES (< k n)
+(FORALL (y0)
+(IMPLIES (EQ y0 x)
+(FORALL (x0)
+(IMPLIES (EQ x0 (+ x y)) (FORALL (k0) (IMPLIES (EQ k0 (+ k 1)) (<= k0 n)))))))))))))))
+
+;; fib3_po_7, File "fib.mlw", line 73, characters 18-57
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 0)
@@ -391,11 +519,9 @@
 (IMPLIES (EQ y0 x)
 (FORALL (x0)
 (IMPLIES (EQ x0 (+ x y))
-(FORALL (k0)
-(IMPLIES (EQ k0 (+ k 1))
-(AND (AND (<= 1 k0) (<= k0 n)) (AND (EQ x0 (F k0)) (EQ y0 (F (- k0 1)))))))))))))))))))
+(FORALL (k0) (IMPLIES (EQ k0 (+ k 1)) (EQ x0 (F k0))))))))))))))))
 
-;; fib3_po_3, File "fib.mlw", line 73, characters 67-72
+;; fib3_po_8, File "fib.mlw", line 73, characters 18-57
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 0)
@@ -408,10 +534,39 @@
 (IMPLIES (EQ y0 x)
 (FORALL (x0)
 (IMPLIES (EQ x0 (+ x y))
-(FORALL (k0)
-(IMPLIES (EQ k0 (+ k 1)) (AND (<= 0 (- n k)) (< (- n k0) (- n k)))))))))))))))))
+(FORALL (k0) (IMPLIES (EQ k0 (+ k 1)) (EQ y0 (F (- k0 1)))))))))))))))))
 
-;; fib3_po_4, File "fib.mlw", line 83, characters 3-16
+;; fib3_po_9, File "fib.mlw", line 73, characters 67-72
+(FORALL (n)
+(IMPLIES (>= n 0)
+(IMPLIES (> n 0)
+(FORALL (k)
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (AND (<= 1 k) (<= k n)) (AND (EQ x (F k)) (EQ y (F (- k 1)))))
+(IMPLIES (< k n)
+(FORALL (y0)
+(IMPLIES (EQ y0 x)
+(FORALL (x0)
+(IMPLIES (EQ x0 (+ x y))
+(FORALL (k0) (IMPLIES (EQ k0 (+ k 1)) (<= 0 (- n k))))))))))))))))
+
+;; fib3_po_10, File "fib.mlw", line 73, characters 67-72
+(FORALL (n)
+(IMPLIES (>= n 0)
+(IMPLIES (> n 0)
+(FORALL (k)
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (AND (<= 1 k) (<= k n)) (AND (EQ x (F k)) (EQ y (F (- k 1)))))
+(IMPLIES (< k n)
+(FORALL (y0)
+(IMPLIES (EQ y0 x)
+(FORALL (x0)
+(IMPLIES (EQ x0 (+ x y))
+(FORALL (k0) (IMPLIES (EQ k0 (+ k 1)) (< (- n k0) (- n k))))))))))))))))
+
+;; fib3_po_11, File "fib.mlw", line 83, characters 3-16
 (FORALL (n)
 (IMPLIES (>= n 0)
 (IMPLIES (> n 0)
@@ -421,7 +576,7 @@
 (IMPLIES (AND (AND (<= 1 k) (<= k n)) (AND (EQ x (F k)) (EQ y (F (- k 1)))))
 (IMPLIES (>= k n) (EQ x (F n))))))))))
 
-;; fib3_po_5, File "fib.mlw", line 83, characters 3-16
+;; fib3_po_12, File "fib.mlw", line 83, characters 3-16
 (FORALL (n) (IMPLIES (>= n 0) (IMPLIES (<= n 0) (EQ 1 (F n)))))
 
 ;; fib4_po_1, File "fib.mlw", line 107, characters 4-17
@@ -433,53 +588,31 @@
 ;; fib4_po_2, File "fib.mlw", line 95, characters 5-14
 (FORALL (n)
 (FORALL (t)
-(IMPLIES (AND (<= 0 n) (< n (array_length t)))
-(IMPLIES (> n 1) (AND (<= 0 0) (< 0 (array_length t)))))))
+(IMPLIES (AND (<= 0 n) (< n (array_length t))) (IMPLIES (> n 1) (<= 0 0)))))
 
-;; fib4_po_3, File "fib.mlw", line 96, characters 5-14
+;; fib4_po_3, File "fib.mlw", line 95, characters 5-14
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1) (< 0 (array_length t))))))
+
+;; fib4_po_4, File "fib.mlw", line 96, characters 5-14
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
 (IMPLIES (> n 1)
 (IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
-(FORALL (t0)
-(IMPLIES (EQ t0 (update t 0 1)) (AND (<= 0 1) (< 1 (array_length t0))))))))))
+(FORALL (t0) (IMPLIES (EQ t0 (update t 0 1)) (<= 0 1))))))))
 
-;; fib4_po_4, File "fib.mlw", line 99, characters 19-131
+;; fib4_po_5, File "fib.mlw", line 96, characters 5-14
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
 (IMPLIES (> n 1)
 (IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
-(FORALL (t0)
-(IMPLIES (EQ t0 (update t 0 1))
-(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
-(FORALL (t1)
-(IMPLIES (EQ t1 (update t0 1 1))
-(AND (AND (<= 2 2) (<= 2 (+ n 1)))
-(AND (EQ (array_length t1) (array_length t))
-(FORALL (i) (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))))))))))))
+(FORALL (t0) (IMPLIES (EQ t0 (update t 0 1)) (< 1 (array_length t0)))))))))
 
-;; fib4_po_5, File "fib.mlw", line 102, characters 16-25
-(FORALL (n)
-(FORALL (t)
-(IMPLIES (AND (<= 0 n) (< n (array_length t)))
-(IMPLIES (> n 1)
-(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
-(FORALL (t0)
-(IMPLIES (EQ t0 (update t 0 1))
-(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
-(FORALL (t1)
-(IMPLIES (EQ t1 (update t0 1 1))
-(FORALL (k)
-(FORALL (t2)
-(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
-         (AND (EQ (array_length t2) (array_length t))
-         (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
-(IMPLIES (<= k n) (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))))))))))))))))
-
-;; fib4_po_6, File "fib.mlw", line 102, characters 28-37
+;; fib4_po_6, File "fib.mlw", line 99, characters 19-131
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -488,21 +621,9 @@
 (FORALL (t0)
 (IMPLIES (EQ t0 (update t 0 1))
 (IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
-(FORALL (t1)
-(IMPLIES (EQ t1 (update t0 1 1))
-(FORALL (k)
-(FORALL (t2)
-(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
-         (AND (EQ (array_length t2) (array_length t))
-         (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
-(IMPLIES (<= k n)
-(IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
-(FORALL (result)
-(IMPLIES (EQ result (access t2 (- k 1)))
-(AND (<= 0 (- k 2)) (< (- k 2) (array_length t2))))))))))))))))))))
+(FORALL (t1) (IMPLIES (EQ t1 (update t0 1 1)) (<= 2 2)))))))))))
 
-;; fib4_po_7, File "fib.mlw", line 102, characters 7-37
+;; fib4_po_7, File "fib.mlw", line 99, characters 19-131
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -511,22 +632,7 @@
 (FORALL (t0)
 (IMPLIES (EQ t0 (update t 0 1))
 (IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
-(FORALL (t1)
-(IMPLIES (EQ t1 (update t0 1 1))
-(FORALL (k)
-(FORALL (t2)
-(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
-         (AND (EQ (array_length t2) (array_length t))
-         (FORALL (i)
-         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
-(IMPLIES (<= k n)
-(IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
-(FORALL (result)
-(IMPLIES (EQ result (access t2 (- k 1)))
-(IMPLIES (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2)))
-(FORALL (result0)
-(IMPLIES (EQ result0 (access t2 (- k 2)))
-(AND (<= 0 k) (< k (array_length t2)))))))))))))))))))))))
+(FORALL (t1) (IMPLIES (EQ t1 (update t0 1 1)) (<= 2 (+ n 1))))))))))))
 
 ;; fib4_po_8, File "fib.mlw", line 99, characters 19-131
 (FORALL (n)
@@ -538,6 +644,219 @@
 (IMPLIES (EQ t0 (update t 0 1))
 (IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
 (FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1)) (EQ (array_length t1) (array_length t))))))))))))
+
+;; fib4_po_9, File "fib.mlw", line 99, characters 19-131
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (i) (IMPLIES (AND (<= 0 i) (< i 2)) (EQ (access t1 i) (F i))))))))))))))
+
+;; fib4_po_10, File "fib.mlw", line 102, characters 16-25
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (k)
+(FORALL (t2)
+(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
+         (AND (EQ (array_length t2) (array_length t))
+         (FORALL (i)
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
+(IMPLIES (<= k n) (<= 0 (- k 1))))))))))))))))
+
+;; fib4_po_11, File "fib.mlw", line 102, characters 16-25
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (k)
+(FORALL (t2)
+(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
+         (AND (EQ (array_length t2) (array_length t))
+         (FORALL (i)
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
+(IMPLIES (<= k n) (< (- k 1) (array_length t2))))))))))))))))
+
+;; fib4_po_12, File "fib.mlw", line 102, characters 28-37
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (k)
+(FORALL (t2)
+(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
+         (AND (EQ (array_length t2) (array_length t))
+         (FORALL (i)
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
+(IMPLIES (<= k n)
+(IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
+(FORALL (result) (IMPLIES (EQ result (access t2 (- k 1))) (<= 0 (- k 2)))))))))))))))))))
+
+;; fib4_po_13, File "fib.mlw", line 102, characters 28-37
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (k)
+(FORALL (t2)
+(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
+         (AND (EQ (array_length t2) (array_length t))
+         (FORALL (i)
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
+(IMPLIES (<= k n)
+(IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
+(FORALL (result)
+(IMPLIES (EQ result (access t2 (- k 1))) (< (- k 2) (array_length t2)))))))))))))))))))
+
+;; fib4_po_14, File "fib.mlw", line 102, characters 7-37
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (k)
+(FORALL (t2)
+(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
+         (AND (EQ (array_length t2) (array_length t))
+         (FORALL (i)
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
+(IMPLIES (<= k n)
+(IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
+(FORALL (result)
+(IMPLIES (EQ result (access t2 (- k 1)))
+(IMPLIES (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2)))
+(FORALL (result0) (IMPLIES (EQ result0 (access t2 (- k 2))) (<= 0 k)))))))))))))))))))))
+
+;; fib4_po_15, File "fib.mlw", line 102, characters 7-37
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (k)
+(FORALL (t2)
+(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
+         (AND (EQ (array_length t2) (array_length t))
+         (FORALL (i)
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
+(IMPLIES (<= k n)
+(IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
+(FORALL (result)
+(IMPLIES (EQ result (access t2 (- k 1)))
+(IMPLIES (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (access t2 (- k 2))) (< k (array_length t2))))))))))))))))))))))
+
+;; fib4_po_16, File "fib.mlw", line 99, characters 19-131
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (k)
+(FORALL (t2)
+(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
+         (AND (EQ (array_length t2) (array_length t))
+         (FORALL (i)
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
+(IMPLIES (<= k n)
+(IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
+(FORALL (result)
+(IMPLIES (EQ result (access t2 (- k 1)))
+(IMPLIES (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (access t2 (- k 2)))
+(IMPLIES (AND (<= 0 k) (< k (array_length t2)))
+(FORALL (t3)
+(IMPLIES (EQ t3 (update t2 k (+ result result0)))
+(FORALL (k0) (IMPLIES (EQ k0 (+ k 1)) (<= 2 k0))))))))))))))))))))))))))
+
+;; fib4_po_17, File "fib.mlw", line 99, characters 19-131
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (k)
+(FORALL (t2)
+(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
+         (AND (EQ (array_length t2) (array_length t))
+         (FORALL (i)
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
+(IMPLIES (<= k n)
+(IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
+(FORALL (result)
+(IMPLIES (EQ result (access t2 (- k 1)))
+(IMPLIES (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (access t2 (- k 2)))
+(IMPLIES (AND (<= 0 k) (< k (array_length t2)))
+(FORALL (t3)
+(IMPLIES (EQ t3 (update t2 k (+ result result0)))
+(FORALL (k0) (IMPLIES (EQ k0 (+ k 1)) (<= k0 (+ n 1)))))))))))))))))))))))))))
+
+;; fib4_po_18, File "fib.mlw", line 99, characters 19-131
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
 (IMPLIES (EQ t1 (update t0 1 1))
 (FORALL (k)
 (FORALL (t2)
@@ -556,12 +875,9 @@
 (FORALL (t3)
 (IMPLIES (EQ t3 (update t2 k (+ result result0)))
 (FORALL (k0)
-(IMPLIES (EQ k0 (+ k 1))
-(AND (AND (<= 2 k0) (<= k0 (+ n 1)))
-(AND (EQ (array_length t3) (array_length t))
-(FORALL (i) (IMPLIES (AND (<= 0 i) (< i k0)) (EQ (access t3 i) (F i)))))))))))))))))))))))))))))))
+(IMPLIES (EQ k0 (+ k 1)) (EQ (array_length t3) (array_length t)))))))))))))))))))))))))))
 
-;; fib4_po_9, File "fib.mlw", line 101, characters 17-24
+;; fib4_po_19, File "fib.mlw", line 99, characters 19-131
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -590,9 +906,9 @@
 (IMPLIES (EQ t3 (update t2 k (+ result result0)))
 (FORALL (k0)
 (IMPLIES (EQ k0 (+ k 1))
-(AND (<= 0 (- (+ n 1) k)) (< (- (+ n 1) k0) (- (+ n 1) k))))))))))))))))))))))))))))
+(FORALL (i) (IMPLIES (AND (<= 0 i) (< i k0)) (EQ (access t3 i) (F i)))))))))))))))))))))))))))))
 
-;; fib4_po_10, File "fib.mlw", line 105, characters 5-9
+;; fib4_po_20, File "fib.mlw", line 101, characters 17-24
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))
@@ -609,9 +925,67 @@
          (AND (EQ (array_length t2) (array_length t))
          (FORALL (i)
          (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
-(IMPLIES (> k n) (AND (<= 0 n) (< n (array_length t2)))))))))))))))))
+(IMPLIES (<= k n)
+(IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
+(FORALL (result)
+(IMPLIES (EQ result (access t2 (- k 1)))
+(IMPLIES (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (access t2 (- k 2)))
+(IMPLIES (AND (<= 0 k) (< k (array_length t2)))
+(FORALL (t3)
+(IMPLIES (EQ t3 (update t2 k (+ result result0)))
+(FORALL (k0) (IMPLIES (EQ k0 (+ k 1)) (<= 0 (- (+ n 1) k)))))))))))))))))))))))))))
 
-;; fib4_po_11, File "fib.mlw", line 107, characters 4-17
+;; fib4_po_21, File "fib.mlw", line 101, characters 17-24
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (k)
+(FORALL (t2)
+(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
+         (AND (EQ (array_length t2) (array_length t))
+         (FORALL (i)
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
+(IMPLIES (<= k n)
+(IMPLIES (AND (<= 0 (- k 1)) (< (- k 1) (array_length t2)))
+(FORALL (result)
+(IMPLIES (EQ result (access t2 (- k 1)))
+(IMPLIES (AND (<= 0 (- k 2)) (< (- k 2) (array_length t2)))
+(FORALL (result0)
+(IMPLIES (EQ result0 (access t2 (- k 2)))
+(IMPLIES (AND (<= 0 k) (< k (array_length t2)))
+(FORALL (t3)
+(IMPLIES (EQ t3 (update t2 k (+ result result0)))
+(FORALL (k0) (IMPLIES (EQ k0 (+ k 1)) (< (- (+ n 1) k0) (- (+ n 1) k)))))))))))))))))))))))))))
+
+;; fib4_po_22, File "fib.mlw", line 105, characters 5-9
+(FORALL (n)
+(FORALL (t)
+(IMPLIES (AND (<= 0 n) (< n (array_length t)))
+(IMPLIES (> n 1)
+(IMPLIES (AND (<= 0 0) (< 0 (array_length t)))
+(FORALL (t0)
+(IMPLIES (EQ t0 (update t 0 1))
+(IMPLIES (AND (<= 0 1) (< 1 (array_length t0)))
+(FORALL (t1)
+(IMPLIES (EQ t1 (update t0 1 1))
+(FORALL (k)
+(FORALL (t2)
+(IMPLIES (AND (AND (<= 2 k) (<= k (+ n 1)))
+         (AND (EQ (array_length t2) (array_length t))
+         (FORALL (i)
+         (IMPLIES (AND (<= 0 i) (< i k)) (EQ (access t2 i) (F i))))))
+(IMPLIES (> k n) (< n (array_length t2))))))))))))))))
+
+;; fib4_po_23, File "fib.mlw", line 107, characters 4-17
 (FORALL (n)
 (FORALL (t)
 (IMPLIES (AND (<= 0 n) (< n (array_length t)))

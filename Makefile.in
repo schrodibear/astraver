@@ -662,8 +662,10 @@ bench-tc:: $(BINARY) $(WHYVO)
 test:: $(BINARY) $(WHYVO)
 	$(BINARY) -d -V -coq bench/test.ml
 
+.PHONY: examples examples-c
+
 examples:: $(BINARY) $(WHYVO)
-	make -C examples
+	make -C examples check
 
 examples-c:: $(BINARY) $(CADUCEUS) $(WHYVO)
 	make -C examples-c

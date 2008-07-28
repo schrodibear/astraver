@@ -7,6 +7,9 @@ FILES = max abs swap search purse binary_search
 
 TODO = average
 
+check:
+	for f in $(FILES); do caduceus $$f.c; done
+
 coq: $(FILES)
 
 allcoq:

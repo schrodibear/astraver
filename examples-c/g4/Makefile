@@ -7,6 +7,9 @@ FILES = g4
 
 TODO = g4
 
+check:
+	for f in $(FILES); do caduceus $$f.c; done
+
 coq: $(FILES)
 
 allcoq:

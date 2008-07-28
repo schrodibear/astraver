@@ -27,50 +27,16 @@ Qed.
 
 Hint Resolve mean1 mean2 .
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma sqrt_po_1 : 
-  forall (x: Z),
-  forall (HW_1: x >= 0),
-  (0 * 0) <= x /\ x < ((x + 1) * (x + 1)) /\ 0 < (x + 1).
 Proof.
 intuition.
 ring ((x+1)*(x+1)).
 assert (0 <= x*x); auto with *.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma sqrt_po_2 : 
-  forall (x: Z),
-  forall (HW_1: x >= 0),
-  forall (HW_2: (0 * 0) <= x /\ x < ((x + 1) * (x + 1)) /\ 0 < (x + 1)),
-  forall (inf: Z),
-  forall (sup: Z),
-  forall (HW_3: (inf * inf) <= x /\ x < (sup * sup) /\ inf < sup),
-  forall (HW_4: (inf + 1) <> sup),
-  2 <> 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma sqrt_po_3 : 
-  forall (x: Z),
-  forall (HW_1: x >= 0),
-  forall (HW_2: (0 * 0) <= x /\ x < ((x + 1) * (x + 1)) /\ 0 < (x + 1)),
-  forall (inf: Z),
-  forall (sup: Z),
-  forall (HW_3: (inf * inf) <= x /\ x < (sup * sup) /\ inf < sup),
-  forall (HW_4: (inf + 1) <> sup),
-  forall (HW_5: 2 <> 0),
-  forall (result: Z),
-  forall (HW_6: result = ((Zdiv (inf + sup + 1) 2))),
-  forall (mil: Z),
-  forall (HW_7: mil = result),
-  forall (HW_8: x < (mil * mil)),
-  forall (sup0: Z),
-  forall (HW_9: sup0 = mil),
-  ((inf * inf) <= x /\ x < (sup0 * sup0) /\ inf < sup0) /\
-  (Zwf 0 (sup0 - inf) (sup - inf)).
 Proof.
 intuition.
 subst sup0; trivial.
@@ -90,25 +56,6 @@ apply mean2; omega.
 omega.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma sqrt_po_4 : 
-  forall (x: Z),
-  forall (HW_1: x >= 0),
-  forall (HW_2: (0 * 0) <= x /\ x < ((x + 1) * (x + 1)) /\ 0 < (x + 1)),
-  forall (inf: Z),
-  forall (sup: Z),
-  forall (HW_3: (inf * inf) <= x /\ x < (sup * sup) /\ inf < sup),
-  forall (HW_4: (inf + 1) <> sup),
-  forall (HW_5: 2 <> 0),
-  forall (result: Z),
-  forall (HW_6: result = ((Zdiv (inf + sup + 1) 2))),
-  forall (mil: Z),
-  forall (HW_7: mil = result),
-  forall (HW_10: x >= (mil * mil)),
-  forall (inf0: Z),
-  forall (HW_11: inf0 = mil),
-  ((inf0 * inf0) <= x /\ x < (sup * sup) /\ inf0 < sup) /\
-  (Zwf 0 (sup - inf0) (sup - inf)).
 Proof.
 intuition.
 subst; omega.
@@ -125,16 +72,6 @@ apply mean1; omega.
 omega.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma sqrt_po_5 : 
-  forall (x: Z),
-  forall (HW_1: x >= 0),
-  forall (HW_2: (0 * 0) <= x /\ x < ((x + 1) * (x + 1)) /\ 0 < (x + 1)),
-  forall (inf: Z),
-  forall (sup: Z),
-  forall (HW_3: (inf * inf) <= x /\ x < (sup * sup) /\ inf < sup),
-  forall (HW_12: (inf + 1) = sup),
-  (inf * inf) <= x /\ x < ((inf + 1) * (inf + 1)).
 Proof.
 intuition.
 subst sup; omega.

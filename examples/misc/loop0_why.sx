@@ -187,25 +187,33 @@
  (EQ (array_length a1) (array_length a2)))))
 
 ;; p_po_1, File "loop0.mlw", line 14, characters 16-32
-(FORALL (x) (IMPLIES (>= x 0) (AND (<= 0 x) (<= x x))))
+(FORALL (x) (IMPLIES (>= x 0) (<= 0 x)))
 
 ;; p_po_2, File "loop0.mlw", line 14, characters 16-32
+(FORALL (x) (IMPLIES (>= x 0) (<= x x)))
+
+;; p_po_3, File "loop0.mlw", line 14, characters 16-32
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (x0)
 (IMPLIES (AND (<= 0 x0) (<= x0 x))
-(IMPLIES (> x0 0)
-(FORALL (x1) (IMPLIES (EQ x1 (- x0 1)) (AND (<= 0 x1) (<= x1 x)))))))))
+(IMPLIES (> x0 0) (FORALL (x1) (IMPLIES (EQ x1 (- x0 1)) (<= 0 x1))))))))
 
-;; p_po_3, File "loop0.mlw", line 14, characters 42-43
+;; p_po_4, File "loop0.mlw", line 14, characters 16-32
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (x0)
 (IMPLIES (AND (<= 0 x0) (<= x0 x))
-(IMPLIES (> x0 0)
-(FORALL (x1) (IMPLIES (EQ x1 (- x0 1)) (AND (<= 0 x0) (< x1 x0)))))))))
+(IMPLIES (> x0 0) (FORALL (x1) (IMPLIES (EQ x1 (- x0 1)) (<= x1 x))))))))
 
-;; p_po_4, File "loop0.mlw", line 17, characters 4-9
+;; p_po_5, File "loop0.mlw", line 14, characters 42-43
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (x0)
+(IMPLIES (AND (<= 0 x0) (<= x0 x))
+(IMPLIES (> x0 0) (FORALL (x1) (IMPLIES (EQ x1 (- x0 1)) (< x1 x0))))))))
+
+;; p_po_6, File "loop0.mlw", line 17, characters 4-9
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (x0)

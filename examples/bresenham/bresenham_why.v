@@ -98,7 +98,14 @@ omega'.
 Save.
 
 
+(*Why axiom*) Lemma first_octant : 0 <= y2 /\ y2 <= x2.
+Admitted.
+
 (*Why logic*) Definition abs : Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma abs_def :
+  (forall (x:Z), x >= 0 /\ (abs x) = x \/ x <= 0 /\ (abs x) = (Zopp x)).
 Admitted.
 
 (*Why predicate*) Definition best  (x:Z) (y:Z)
@@ -107,4 +114,9 @@ Admitted.
 (*Why predicate*) Definition Invariant  (x:Z) (y:Z) (e:Z)
   := e = (2 * (x + 1) * y2 - (2 * y + 1) * x2) /\ (2 * (y2 - x2)) <= e /\
      e <= (2 * y2).
+
+(*Why axiom*) Lemma invariant_is_ok :
+  (forall (x:Z),
+   (forall (y:Z), (forall (e:Z), ((Invariant x y e) -> (best x y))))).
+Admitted.
 

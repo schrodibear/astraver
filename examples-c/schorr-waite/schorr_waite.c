@@ -47,7 +47,9 @@ typedef struct struct_node {
 /*
  * the complexity measure for termination
  */
-//@ 
+
+//@ type weight_type
+
 /*@ logic weight_type weight(node p, node t) 
   @   reads p->m,p->c,p->l,p->r
   @*/

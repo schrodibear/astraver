@@ -16,7 +16,7 @@ parameter partition :
   a : int array -> m:int -> n:int -> i:int ref -> j:int ref ->
   { m < n } 
   unit writes a,i,j
-  { m <= j and j < i and i <= n and sub_permut(m,n,a@,a) and
+  { m <= j and j < i and i <= n and permut(a@,a,m,n) and
     exists x:int.
       (forall r:int. m <= r <= j -> a[r] <= x) and
       (forall r:int. j < r < i -> a[r] = x) and
@@ -33,6 +33,6 @@ let rec find (a:int array) (m:int) (n:int) (k:int) : unit { variant n-m } =
     if k <= !j then find a m !j k;
     if !i <= k then find a !i n k
   end
-  { sub_permut(m,n,a@,a) and 
+  { permut(a@,a,m,n) and 
     (forall r:int. m <= r <= k -> a[r] <= a[k]) and
     (forall r:int. k <= r <= n -> a[k] <= a[r]) }

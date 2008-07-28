@@ -187,50 +187,21 @@
  (EQ (array_length a1) (array_length a2)))))
 
 ;; sqrt_po_1, File "sqrt_dicho.mlw", line 11, characters 16-68
-(FORALL (x)
-(IMPLIES (>= x 0)
-(AND (<= (* 0 0) x) (AND (< x (* (+ x 1) (+ x 1))) (< 0 (+ x 1))))))
+(FORALL (x) (IMPLIES (>= x 0) (<= (* 0 0) x)))
 
-;; sqrt_po_2, File "sqrt_dicho.mlw", line 15, characters 10-30
+;; sqrt_po_2, File "sqrt_dicho.mlw", line 11, characters 16-68
+(FORALL (x) (IMPLIES (>= x 0) (< x (* (+ x 1) (+ x 1)))))
+
+;; sqrt_po_3, File "sqrt_dicho.mlw", line 11, characters 16-68
+(FORALL (x) (IMPLIES (>= x 0) (< 0 (+ x 1))))
+
+;; sqrt_po_4, File "sqrt_dicho.mlw", line 15, characters 10-30
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
 (FORALL (sup)
 (IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
 (IMPLIES (NEQ (+ inf 1) sup) (NEQ 2 0)))))))
-
-;; sqrt_po_3, File "sqrt_dicho.mlw", line 11, characters 16-68
-(FORALL (x)
-(IMPLIES (>= x 0)
-(FORALL (inf)
-(FORALL (sup)
-(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
-(IMPLIES (NEQ (+ inf 1) sup)
-(IMPLIES (NEQ 2 0)
-(FORALL (result)
-(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
-(FORALL (mil)
-(IMPLIES (EQ mil result)
-(IMPLIES (< x (* mil mil))
-(FORALL (sup0)
-(IMPLIES (EQ sup0 mil)
-(AND (<= (* inf inf) x) (AND (< x (* sup0 sup0)) (< inf sup0)))))))))))))))))
-
-;; sqrt_po_4, File "sqrt_dicho.mlw", line 14, characters 16-25
-(FORALL (x)
-(IMPLIES (>= x 0)
-(FORALL (inf)
-(FORALL (sup)
-(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
-(IMPLIES (NEQ (+ inf 1) sup)
-(IMPLIES (NEQ 2 0)
-(FORALL (result)
-(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
-(FORALL (mil)
-(IMPLIES (EQ mil result)
-(IMPLIES (< x (* mil mil))
-(FORALL (sup0)
-(IMPLIES (EQ sup0 mil) (AND (<= 0 (- sup inf)) (< (- sup0 inf) (- sup inf)))))))))))))))))
 
 ;; sqrt_po_5, File "sqrt_dicho.mlw", line 11, characters 16-68
 (FORALL (x)
@@ -244,12 +215,55 @@
 (IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
 (FORALL (mil)
 (IMPLIES (EQ mil result)
-(IMPLIES (>= x (* mil mil))
-(FORALL (inf0)
-(IMPLIES (EQ inf0 mil)
-(AND (<= (* inf0 inf0) x) (AND (< x (* sup sup)) (< inf0 sup)))))))))))))))))
+(IMPLIES (< x (* mil mil))
+(FORALL (sup0) (IMPLIES (EQ sup0 mil) (< x (* sup0 sup0))))))))))))))))
 
-;; sqrt_po_6, File "sqrt_dicho.mlw", line 14, characters 16-25
+;; sqrt_po_6, File "sqrt_dicho.mlw", line 11, characters 16-68
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (inf)
+(FORALL (sup)
+(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
+(IMPLIES (NEQ (+ inf 1) sup)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
+(FORALL (mil)
+(IMPLIES (EQ mil result)
+(IMPLIES (< x (* mil mil))
+(FORALL (sup0) (IMPLIES (EQ sup0 mil) (< inf sup0)))))))))))))))
+
+;; sqrt_po_7, File "sqrt_dicho.mlw", line 14, characters 16-25
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (inf)
+(FORALL (sup)
+(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
+(IMPLIES (NEQ (+ inf 1) sup)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
+(FORALL (mil)
+(IMPLIES (EQ mil result)
+(IMPLIES (< x (* mil mil))
+(FORALL (sup0) (IMPLIES (EQ sup0 mil) (<= 0 (- sup inf))))))))))))))))
+
+;; sqrt_po_8, File "sqrt_dicho.mlw", line 14, characters 16-25
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (inf)
+(FORALL (sup)
+(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
+(IMPLIES (NEQ (+ inf 1) sup)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
+(FORALL (mil)
+(IMPLIES (EQ mil result)
+(IMPLIES (< x (* mil mil))
+(FORALL (sup0) (IMPLIES (EQ sup0 mil) (< (- sup0 inf) (- sup inf))))))))))))))))
+
+;; sqrt_po_9, File "sqrt_dicho.mlw", line 11, characters 16-68
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
@@ -262,15 +276,73 @@
 (FORALL (mil)
 (IMPLIES (EQ mil result)
 (IMPLIES (>= x (* mil mil))
-(FORALL (inf0)
-(IMPLIES (EQ inf0 mil) (AND (<= 0 (- sup inf)) (< (- sup inf0) (- sup inf)))))))))))))))))
+(FORALL (inf0) (IMPLIES (EQ inf0 mil) (<= (* inf0 inf0) x)))))))))))))))
 
-;; sqrt_po_7, File "sqrt_dicho.mlw", line 21, characters 4-52
+;; sqrt_po_10, File "sqrt_dicho.mlw", line 11, characters 16-68
 (FORALL (x)
 (IMPLIES (>= x 0)
 (FORALL (inf)
 (FORALL (sup)
 (IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
-(IMPLIES (EQ (+ inf 1) sup)
-(AND (<= (* inf inf) x) (< x (* (+ inf 1) (+ inf 1))))))))))
+(IMPLIES (NEQ (+ inf 1) sup)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
+(FORALL (mil)
+(IMPLIES (EQ mil result)
+(IMPLIES (>= x (* mil mil))
+(FORALL (inf0) (IMPLIES (EQ inf0 mil) (< x (* sup sup))))))))))))))))
+
+;; sqrt_po_11, File "sqrt_dicho.mlw", line 11, characters 16-68
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (inf)
+(FORALL (sup)
+(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
+(IMPLIES (NEQ (+ inf 1) sup)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
+(FORALL (mil)
+(IMPLIES (EQ mil result)
+(IMPLIES (>= x (* mil mil))
+(FORALL (inf0) (IMPLIES (EQ inf0 mil) (< inf0 sup)))))))))))))))
+
+;; sqrt_po_12, File "sqrt_dicho.mlw", line 14, characters 16-25
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (inf)
+(FORALL (sup)
+(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
+(IMPLIES (NEQ (+ inf 1) sup)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
+(FORALL (mil)
+(IMPLIES (EQ mil result)
+(IMPLIES (>= x (* mil mil))
+(FORALL (inf0) (IMPLIES (EQ inf0 mil) (<= 0 (- sup inf))))))))))))))))
+
+;; sqrt_po_13, File "sqrt_dicho.mlw", line 14, characters 16-25
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (inf)
+(FORALL (sup)
+(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
+(IMPLIES (NEQ (+ inf 1) sup)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div (+ (+ inf sup) 1) 2))
+(FORALL (mil)
+(IMPLIES (EQ mil result)
+(IMPLIES (>= x (* mil mil))
+(FORALL (inf0) (IMPLIES (EQ inf0 mil) (< (- sup inf0) (- sup inf))))))))))))))))
+
+;; sqrt_po_14, File "sqrt_dicho.mlw", line 21, characters 4-52
+(FORALL (x)
+(IMPLIES (>= x 0)
+(FORALL (inf)
+(FORALL (sup)
+(IMPLIES (AND (<= (* inf inf) x) (AND (< x (* sup sup)) (< inf sup)))
+(IMPLIES (EQ (+ inf 1) sup) (< x (* (+ inf 1) (+ inf 1)))))))))
 

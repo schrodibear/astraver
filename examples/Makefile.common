@@ -9,6 +9,8 @@ WHYOPTIONS=--coq-v8 --valid
 
 dp: simplify cvcl
 
+coq: $(VO:_valid.vo=_why.vo)
+
 simplify: $(VO:_valid.vo=_why.sx)
 	dp -timeout 10 $^  2>/dev/null
 
@@ -23,6 +25,10 @@ cvcl: $(VO:_valid.vo=_why.cvc)
 
 ergo: $(VO:_valid.vo=_why.why)
 	dp -timeout 10 $^  2>/dev/null
+
+.PHONY: check
+
+check: $(VO:_valid.vo=.check)
 
 harvey: $(VO:_valid.vo=_why.rv)
 	dp -timeout 10 $^  2>/dev/null
@@ -59,6 +65,15 @@ harvey: $(VO:_valid.vo=_why.rv)
 
 %_why.why: %.mlw $(WHYBIN)
 	$(WHY) --why $<
+
+%_why.why: %.why $(WHYBIN)
+	$(WHY) --why $<
+
+%.check: %.mlw $(WHYBIN)
+	$(WHYBIN) -tc $<
+
+%.check: %.why $(WHYBIN)
+	$(WHYBIN) -tc $<
 
 %_why.rv: %.mlw $(WHYBIN)
 	$(WHY) --harvey $<

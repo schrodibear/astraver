@@ -19,30 +19,10 @@ Definition max (x y:Z) : Z :=
   | right _ => x
   end.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma gcd1_po_1 : 
-  forall (a: Z),
-  forall (b: Z),
-  forall (HW_1: a > 0 /\ b > 0),
-  0 < a /\ 0 < b /\ (gcd a b) = (gcd a b).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma gcd1_po_2 : 
-  forall (a: Z),
-  forall (b: Z),
-  forall (HW_1: a > 0 /\ b > 0),
-  forall (HW_2: 0 < a /\ 0 < b /\ (gcd a b) = (gcd a b)),
-  forall (x: Z),
-  forall (y: Z),
-  forall (HW_3: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
-  forall (HW_4: x <> y),
-  forall (HW_5: x > y),
-  forall (x0: Z),
-  forall (HW_6: x0 = (x - y)),
-  (0 < x0 /\ 0 < y /\ (gcd x0 y) = (gcd a b)) /\ (Zwf 0 (max x0 y) (max x y)).
 Proof.
 intuition.
 subst.
@@ -51,20 +31,6 @@ unfold Zwf, max.
 case (Z_le_gt_dec x0 y); case (Z_le_gt_dec x y); intros; omega.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma gcd1_po_3 : 
-  forall (a: Z),
-  forall (b: Z),
-  forall (HW_1: a > 0 /\ b > 0),
-  forall (HW_2: 0 < a /\ 0 < b /\ (gcd a b) = (gcd a b)),
-  forall (x: Z),
-  forall (y: Z),
-  forall (HW_3: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
-  forall (HW_4: x <> y),
-  forall (HW_7: x <= y),
-  forall (y0: Z),
-  forall (HW_8: y0 = (y - x)),
-  (0 < x /\ 0 < y0 /\ (gcd x y0) = (gcd a b)) /\ (Zwf 0 (max x y0) (max x y)).
 Proof.
 intuition.
 subst.
@@ -75,51 +41,16 @@ assert (h: x <> y).
  case (Z_le_gt_dec x y0); case (Z_le_gt_dec x y); intros; omega.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma gcd1_po_4 : 
-  forall (a: Z),
-  forall (b: Z),
-  forall (HW_1: a > 0 /\ b > 0),
-  forall (HW_2: 0 < a /\ 0 < b /\ (gcd a b) = (gcd a b)),
-  forall (x: Z),
-  forall (y: Z),
-  forall (HW_3: 0 < x /\ 0 < y /\ (gcd x y) = (gcd a b)),
-  forall (HW_9: x = y),
-  x = (gcd a b).
 Proof.
 intuition; subst.
 transitivity (gcd y y); auto.
 Save.
 
-(*Why*) Parameter gcd1_valid :
-  forall (a: Z), forall (b: Z), forall (_: a > 0 /\ b > 0),
-  (sig_1 Z (fun (result: Z)  => (result = (gcd a b)))).
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma gcd2_po_1 : 
-  forall (a: Z),
-  forall (b: Z),
-  forall (HW_1: a >= 0 /\ b >= 0),
-  0 <= a /\ 0 <= b /\ (gcd a b) = (gcd a b).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma gcd2_po_2 : 
-  forall (a: Z),
-  forall (b: Z),
-  forall (HW_1: a >= 0 /\ b >= 0),
-  forall (HW_2: 0 <= a /\ 0 <= b /\ (gcd a b) = (gcd a b)),
-  forall (x: Z),
-  forall (y: Z),
-  forall (HW_3: 0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b)),
-  forall (HW_4: y <> 0),
-  forall (x0: Z),
-  forall (HW_5: x0 = y),
-  forall (y0: Z),
-  forall (HW_6: y0 = ((Zmod x y))),
-  (0 <= x0 /\ 0 <= y0 /\ (gcd x0 y0) = (gcd a b)) /\ (Zwf 0 y0 y).
 Proof.
 intuition.
 assert (h_y0: y <> 0).
@@ -138,23 +69,43 @@ assert (h1_y0: (y > 0)).
 generalize (Z_mod_lt x y h1_y0); omega.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma gcd2_po_3 : 
-  forall (a: Z),
-  forall (b: Z),
-  forall (HW_1: a >= 0 /\ b >= 0),
-  forall (HW_2: 0 <= a /\ 0 <= b /\ (gcd a b) = (gcd a b)),
-  forall (x: Z),
-  forall (y: Z),
-  forall (HW_3: 0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b)),
-  forall (HW_7: y = 0),
-  x = (gcd a b).
 Proof.
 intuition; subst.
 transitivity (gcd x 0); auto.
 Save.
 
-(*Why*) Parameter gcd2_valid :
-  forall (a: Z), forall (b: Z), forall (_: a >= 0 /\ b >= 0),
-  (sig_1 Z (fun (result: Z)  => (result = (gcd a b)))).
+
+(*Why logic*) Definition gcd : Z -> Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma gcd_asubb_b :
+  (forall (a:Z), (forall (b:Z), (gcd a b) = (gcd (a - b) b))).
+Admitted.
+
+(*Why axiom*) Lemma gcd_a_bsuba :
+  (forall (a:Z), (forall (b:Z), (gcd a b) = (gcd a (b - a)))).
+Admitted.
+
+(*Why axiom*) Lemma gcd_a_a : (forall (a:Z), (gcd a a) = a).
+Admitted.
+
+(*Why axiom*) Lemma gcd_a_0 : (forall (a:Z), (gcd a 0) = a).
+Admitted.
+
+(*Why logic*) Definition max : Z -> Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma max_def :
+  (forall (x:Z),
+   (forall (y:Z), ((max x y) = x \/ (max x y) = y) /\ (max x y) >= x /\
+    (max x y) >= y)).
+Admitted.
+
+(*Why axiom*) Lemma gcd_a_amodb :
+  (forall (a:Z), (forall (b:Z), (gcd a b) = (gcd b ((Zmod a b))))).
+Admitted.
+
+(*Why axiom*) Lemma mod_lt :
+  (forall (a:Z), (forall (b:Z), 0 <= ((Zmod a b)) /\ ((Zmod a b)) < b)).
+Admitted.
 

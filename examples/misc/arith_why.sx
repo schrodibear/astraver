@@ -188,8 +188,7 @@
 
 ;; mult_po_1, File "arith.mlw", line 12, characters 19-48
 (FORALL (x)
-(FORALL (y)
-(IMPLIES (AND (>= x 0) (>= y 0)) (AND (>= x 0) (EQ (+ 0 (* x y)) (* x y))))))
+(FORALL (y) (IMPLIES (AND (>= x 0) (>= y 0)) (EQ (+ 0 (* x y)) (* x y)))))
 
 ;; mult_po_2, File "arith.mlw", line 14, characters 12-18
 (FORALL (x)
@@ -219,11 +218,9 @@
 (FORALL (result)
 (IMPLIES (EQ result (int_div a 2))
 (FORALL (a0)
-(IMPLIES (EQ a0 result)
-(FORALL (b0)
-(IMPLIES (EQ b0 (* 2 b)) (AND (>= a0 0) (EQ (+ p0 (* a0 b0)) (* x y)))))))))))))))))))))
+(IMPLIES (EQ a0 result) (FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (>= a0 0)))))))))))))))))))
 
-;; mult_po_4, File "arith.mlw", line 12, characters 59-60
+;; mult_po_4, File "arith.mlw", line 12, characters 19-48
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -240,9 +237,45 @@
 (IMPLIES (EQ result (int_div a 2))
 (FORALL (a0)
 (IMPLIES (EQ a0 result)
-(FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (AND (<= 0 a) (< a0 a))))))))))))))))))))
+(FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (EQ (+ p0 (* a0 b0)) (* x y))))))))))))))))))))
 
-;; mult_po_5, File "arith.mlw", line 14, characters 12-18
+;; mult_po_5, File "arith.mlw", line 12, characters 59-60
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (a)
+(FORALL (b)
+(FORALL (p)
+(IMPLIES (AND (>= a 0) (EQ (+ p (* a b)) (* x y)))
+(IMPLIES (NEQ a 0)
+(IMPLIES (EQ (int_mod a 2) 1)
+(FORALL (p0)
+(IMPLIES (EQ p0 (+ p b))
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div a 2))
+(FORALL (a0)
+(IMPLIES (EQ a0 result) (FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (<= 0 a)))))))))))))))))))
+
+;; mult_po_6, File "arith.mlw", line 12, characters 59-60
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (a)
+(FORALL (b)
+(FORALL (p)
+(IMPLIES (AND (>= a 0) (EQ (+ p (* a b)) (* x y)))
+(IMPLIES (NEQ a 0)
+(IMPLIES (EQ (int_mod a 2) 1)
+(FORALL (p0)
+(IMPLIES (EQ p0 (+ p b))
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div a 2))
+(FORALL (a0)
+(IMPLIES (EQ a0 result) (FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (< a0 a)))))))))))))))))))
+
+;; mult_po_7, File "arith.mlw", line 14, characters 12-18
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -252,7 +285,23 @@
 (IMPLIES (AND (>= a 0) (EQ (+ p (* a b)) (* x y)))
 (IMPLIES (NEQ a 0) (IMPLIES (NEQ (int_mod a 2) 1) (NEQ 2 0))))))))))
 
-;; mult_po_6, File "arith.mlw", line 12, characters 19-48
+;; mult_po_8, File "arith.mlw", line 12, characters 19-48
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (a)
+(FORALL (b)
+(FORALL (p)
+(IMPLIES (AND (>= a 0) (EQ (+ p (* a b)) (* x y)))
+(IMPLIES (NEQ a 0)
+(IMPLIES (NEQ (int_mod a 2) 1)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div a 2))
+(FORALL (a0)
+(IMPLIES (EQ a0 result) (FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (>= a0 0)))))))))))))))))
+
+;; mult_po_9, File "arith.mlw", line 12, characters 19-48
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -267,10 +316,9 @@
 (IMPLIES (EQ result (int_div a 2))
 (FORALL (a0)
 (IMPLIES (EQ a0 result)
-(FORALL (b0)
-(IMPLIES (EQ b0 (* 2 b)) (AND (>= a0 0) (EQ (+ p (* a0 b0)) (* x y)))))))))))))))))))
+(FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (EQ (+ p (* a0 b0)) (* x y))))))))))))))))))
 
-;; mult_po_7, File "arith.mlw", line 12, characters 59-60
+;; mult_po_10, File "arith.mlw", line 12, characters 59-60
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))
@@ -284,10 +332,25 @@
 (FORALL (result)
 (IMPLIES (EQ result (int_div a 2))
 (FORALL (a0)
-(IMPLIES (EQ a0 result)
-(FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (AND (<= 0 a) (< a0 a))))))))))))))))))
+(IMPLIES (EQ a0 result) (FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (<= 0 a)))))))))))))))))
 
-;; mult_po_8, File "arith.mlw", line 19, characters 4-18
+;; mult_po_11, File "arith.mlw", line 12, characters 59-60
+(FORALL (x)
+(FORALL (y)
+(IMPLIES (AND (>= x 0) (>= y 0))
+(FORALL (a)
+(FORALL (b)
+(FORALL (p)
+(IMPLIES (AND (>= a 0) (EQ (+ p (* a b)) (* x y)))
+(IMPLIES (NEQ a 0)
+(IMPLIES (NEQ (int_mod a 2) 1)
+(IMPLIES (NEQ 2 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_div a 2))
+(FORALL (a0)
+(IMPLIES (EQ a0 result) (FORALL (b0) (IMPLIES (EQ b0 (* 2 b)) (< a0 a)))))))))))))))))
+
+;; mult_po_12, File "arith.mlw", line 19, characters 4-18
 (FORALL (x)
 (FORALL (y)
 (IMPLIES (AND (>= x 0) (>= y 0))

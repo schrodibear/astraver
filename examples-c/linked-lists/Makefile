@@ -5,6 +5,9 @@ EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
 FILES = swap reverse
 
+check:
+	for f in $(FILES); do caduceus $$f.c; done
+
 all: swap reverse
 
 reverse:

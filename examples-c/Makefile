@@ -1,6 +1,9 @@
 
 DIRS = tutorial sorting g4 linked-lists schorr-waite
 
+check:
+	for d in $(DIRS); do make -C $$d check; done
+
 all: 
 	for d in $(DIRS); do \
 		if make -C $$d coq; then \

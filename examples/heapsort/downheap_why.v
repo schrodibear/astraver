@@ -415,599 +415,6 @@ Require Import swap_why.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_1 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_2 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_3 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_8: result < result0),
-  (select_son t k n (2 * k + 1 + 1)).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_4 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_8: result < result0),
-  0 <= k /\ k < (array_length t).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_5 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_8: result < result0),
-  forall (HW_9: 0 <= k /\ k < (array_length t)),
-  forall (result1: Z),
-  forall (HW_10: result1 = (access t k)),
-  forall (HW_11: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result2: Z),
-  forall (HW_12: result2 = (access t (2 * k + 1 + 1))),
-  forall (HW_13: result1 < result2),
-  forall (HW_14: (0 <= k /\ k < (array_length t)) /\ 0 <= (2 * k + 1 + 1) /\
-                 (2 * k + 1 + 1) < (array_length t)),
-  forall (t0: (array Z)),
-  forall (HW_15: (exchange t0 t k (2 * k + 1 + 1))),
-  (Zwf 0 (n - (2 * k + 1 + 1)) (n - k)).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_6 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_8: result < result0),
-  forall (HW_9: 0 <= k /\ k < (array_length t)),
-  forall (result1: Z),
-  forall (HW_10: result1 = (access t k)),
-  forall (HW_11: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result2: Z),
-  forall (HW_12: result2 = (access t (2 * k + 1 + 1))),
-  forall (HW_13: result1 < result2),
-  forall (HW_14: (0 <= k /\ k < (array_length t)) /\ 0 <= (2 * k + 1 + 1) /\
-                 (2 * k + 1 + 1) < (array_length t)),
-  forall (t0: (array Z)),
-  forall (HW_15: (exchange t0 t k (2 * k + 1 + 1))),
-  forall (HW_16: (Zwf 0 (n - (2 * k + 1 + 1)) (n - k))),
-  (0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) <= n) /\ n < (array_length t0) /\
-  (forall (i:Z), ((2 * k + 1 + 1 + 1) <= i /\ i <= n -> (heap t0 n i))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_7 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_8: result < result0),
-  forall (HW_9: 0 <= k /\ k < (array_length t)),
-  forall (result1: Z),
-  forall (HW_10: result1 = (access t k)),
-  forall (HW_11: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result2: Z),
-  forall (HW_12: result2 = (access t (2 * k + 1 + 1))),
-  forall (HW_13: result1 < result2),
-  forall (HW_14: (0 <= k /\ k < (array_length t)) /\ 0 <= (2 * k + 1 + 1) /\
-                 (2 * k + 1 + 1) < (array_length t)),
-  forall (t0: (array Z)),
-  forall (HW_15: (exchange t0 t k (2 * k + 1 + 1))),
-  forall (HW_16: (Zwf 0 (n - (2 * k + 1 + 1)) (n - k))),
-  forall (HW_17: (0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) <= n) /\ n <
-                 (array_length t0) /\
-                 (forall (i:Z),
-                  ((2 * k + 1 + 1 + 1) <= i /\ i <= n -> (heap t0 n i)))),
-  forall (t1: (array Z)),
-  forall (HW_18: (permut t1 t0) /\
-                 (forall (i:Z),
-                  ((2 * k + 1 + 1) <= i /\ i <= n -> (heap t1 n i))) /\
-                 (forall (i:Z),
-                  (0 <= i /\ i < (2 * k + 1 + 1) \/ (2 * k + 1 + 1) < i /\
-                   i < (2 * (2 * k + 1 + 1) + 1) \/ n < i /\ i <
-                   (array_length t1) -> (access t1 i) = (access t0 i))) /\
-                 (forall (v:Z),
-                  ((inftree t0 n v (2 * k + 1 + 1)) ->
-                   (inftree t1 n v (2 * k + 1 + 1))))),
-  (permut t1 t) /\ (forall (i:Z), (k <= i /\ i <= n -> (heap t1 n i))) /\
-  (forall (i:Z),
-   (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/ n < i /\ i <
-    (array_length t1) -> (access t1 i) = (access t i))) /\
-  (forall (v:Z), ((inftree t n v k) -> (inftree t1 n v k))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_8 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_8: result < result0),
-  forall (HW_9: 0 <= k /\ k < (array_length t)),
-  forall (result1: Z),
-  forall (HW_10: result1 = (access t k)),
-  forall (HW_11: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result2: Z),
-  forall (HW_12: result2 = (access t (2 * k + 1 + 1))),
-  forall (HW_19: result1 >= result2),
-  (permut t t) /\ (forall (i:Z), (k <= i /\ i <= n -> (heap t n i))) /\
-  (forall (i:Z),
-   (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/ n < i /\ i <
-    (array_length t) -> (access t i) = (access t i))) /\
-  (forall (v:Z), ((inftree t n v k) -> (inftree t n v k))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_9 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_20: result >= result0),
-  (select_son t k n (2 * k + 1)).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_10 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_20: result >= result0),
-  0 <= k /\ k < (array_length t).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_11 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_20: result >= result0),
-  forall (HW_21: 0 <= k /\ k < (array_length t)),
-  forall (result1: Z),
-  forall (HW_22: result1 = (access t k)),
-  forall (HW_23: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result2: Z),
-  forall (HW_24: result2 = (access t (2 * k + 1))),
-  forall (HW_25: result1 < result2),
-  forall (HW_26: (0 <= k /\ k < (array_length t)) /\ 0 <= (2 * k + 1) /\
-                 (2 * k + 1) < (array_length t)),
-  forall (t0: (array Z)),
-  forall (HW_27: (exchange t0 t k (2 * k + 1))),
-  (Zwf 0 (n - (2 * k + 1)) (n - k)).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_12 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_20: result >= result0),
-  forall (HW_21: 0 <= k /\ k < (array_length t)),
-  forall (result1: Z),
-  forall (HW_22: result1 = (access t k)),
-  forall (HW_23: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result2: Z),
-  forall (HW_24: result2 = (access t (2 * k + 1))),
-  forall (HW_25: result1 < result2),
-  forall (HW_26: (0 <= k /\ k < (array_length t)) /\ 0 <= (2 * k + 1) /\
-                 (2 * k + 1) < (array_length t)),
-  forall (t0: (array Z)),
-  forall (HW_27: (exchange t0 t k (2 * k + 1))),
-  forall (HW_28: (Zwf 0 (n - (2 * k + 1)) (n - k))),
-  (0 <= (2 * k + 1) /\ (2 * k + 1) <= n) /\ n < (array_length t0) /\
-  (forall (i:Z), ((2 * k + 1 + 1) <= i /\ i <= n -> (heap t0 n i))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_13 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_20: result >= result0),
-  forall (HW_21: 0 <= k /\ k < (array_length t)),
-  forall (result1: Z),
-  forall (HW_22: result1 = (access t k)),
-  forall (HW_23: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result2: Z),
-  forall (HW_24: result2 = (access t (2 * k + 1))),
-  forall (HW_25: result1 < result2),
-  forall (HW_26: (0 <= k /\ k < (array_length t)) /\ 0 <= (2 * k + 1) /\
-                 (2 * k + 1) < (array_length t)),
-  forall (t0: (array Z)),
-  forall (HW_27: (exchange t0 t k (2 * k + 1))),
-  forall (HW_28: (Zwf 0 (n - (2 * k + 1)) (n - k))),
-  forall (HW_29: (0 <= (2 * k + 1) /\ (2 * k + 1) <= n) /\ n <
-                 (array_length t0) /\
-                 (forall (i:Z),
-                  ((2 * k + 1 + 1) <= i /\ i <= n -> (heap t0 n i)))),
-  forall (t1: (array Z)),
-  forall (HW_30: (permut t1 t0) /\
-                 (forall (i:Z), ((2 * k + 1) <= i /\ i <= n -> (heap t1 n i))) /\
-                 (forall (i:Z),
-                  (0 <= i /\ i < (2 * k + 1) \/ (2 * k + 1) < i /\ i <
-                   (2 * (2 * k + 1) + 1) \/ n < i /\ i < (array_length t1) ->
-                   (access t1 i) = (access t0 i))) /\
-                 (forall (v:Z),
-                  ((inftree t0 n v (2 * k + 1)) ->
-                   (inftree t1 n v (2 * k + 1))))),
-  (permut t1 t) /\ (forall (i:Z), (k <= i /\ i <= n -> (heap t1 n i))) /\
-  (forall (i:Z),
-   (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/ n < i /\ i <
-    (array_length t1) -> (access t1 i) = (access t i))) /\
-  (forall (v:Z), ((inftree t n v k) -> (inftree t1 n v k))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_14 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_3: (2 * k + 1 + 1) <= n),
-  forall (HW_4: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result: Z),
-  forall (HW_5: result = (access t (2 * k + 1))),
-  forall (HW_6: 0 <= (2 * k + 1 + 1) /\ (2 * k + 1 + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_7: result0 = (access t (2 * k + 1 + 1))),
-  forall (HW_20: result >= result0),
-  forall (HW_21: 0 <= k /\ k < (array_length t)),
-  forall (result1: Z),
-  forall (HW_22: result1 = (access t k)),
-  forall (HW_23: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result2: Z),
-  forall (HW_24: result2 = (access t (2 * k + 1))),
-  forall (HW_31: result1 >= result2),
-  (permut t t) /\ (forall (i:Z), (k <= i /\ i <= n -> (heap t n i))) /\
-  (forall (i:Z),
-   (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/ n < i /\ i <
-    (array_length t) -> (access t i) = (access t i))) /\
-  (forall (v:Z), ((inftree t n v k) -> (inftree t n v k))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_15 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_32: (2 * k + 1 + 1) > n),
-  (select_son t k n (2 * k + 1)).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_16 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_32: (2 * k + 1 + 1) > n),
-  0 <= k /\ k < (array_length t).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_17 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_32: (2 * k + 1 + 1) > n),
-  forall (HW_33: 0 <= k /\ k < (array_length t)),
-  forall (result: Z),
-  forall (HW_34: result = (access t k)),
-  0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_18 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_32: (2 * k + 1 + 1) > n),
-  forall (HW_33: 0 <= k /\ k < (array_length t)),
-  forall (result: Z),
-  forall (HW_34: result = (access t k)),
-  forall (HW_35: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_36: result0 = (access t (2 * k + 1))),
-  forall (HW_37: result < result0),
-  forall (HW_38: (0 <= k /\ k < (array_length t)) /\ 0 <= (2 * k + 1) /\
-                 (2 * k + 1) < (array_length t)),
-  forall (t0: (array Z)),
-  forall (HW_39: (exchange t0 t k (2 * k + 1))),
-  (Zwf 0 (n - (2 * k + 1)) (n - k)).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_19 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_32: (2 * k + 1 + 1) > n),
-  forall (HW_33: 0 <= k /\ k < (array_length t)),
-  forall (result: Z),
-  forall (HW_34: result = (access t k)),
-  forall (HW_35: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_36: result0 = (access t (2 * k + 1))),
-  forall (HW_37: result < result0),
-  forall (HW_38: (0 <= k /\ k < (array_length t)) /\ 0 <= (2 * k + 1) /\
-                 (2 * k + 1) < (array_length t)),
-  forall (t0: (array Z)),
-  forall (HW_39: (exchange t0 t k (2 * k + 1))),
-  forall (HW_40: (Zwf 0 (n - (2 * k + 1)) (n - k))),
-  (0 <= (2 * k + 1) /\ (2 * k + 1) <= n) /\ n < (array_length t0) /\
-  (forall (i:Z), ((2 * k + 1 + 1) <= i /\ i <= n -> (heap t0 n i))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_20 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_32: (2 * k + 1 + 1) > n),
-  forall (HW_33: 0 <= k /\ k < (array_length t)),
-  forall (result: Z),
-  forall (HW_34: result = (access t k)),
-  forall (HW_35: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_36: result0 = (access t (2 * k + 1))),
-  forall (HW_37: result < result0),
-  forall (HW_38: (0 <= k /\ k < (array_length t)) /\ 0 <= (2 * k + 1) /\
-                 (2 * k + 1) < (array_length t)),
-  forall (t0: (array Z)),
-  forall (HW_39: (exchange t0 t k (2 * k + 1))),
-  forall (HW_40: (Zwf 0 (n - (2 * k + 1)) (n - k))),
-  forall (HW_41: (0 <= (2 * k + 1) /\ (2 * k + 1) <= n) /\ n <
-                 (array_length t0) /\
-                 (forall (i:Z),
-                  ((2 * k + 1 + 1) <= i /\ i <= n -> (heap t0 n i)))),
-  forall (t1: (array Z)),
-  forall (HW_42: (permut t1 t0) /\
-                 (forall (i:Z), ((2 * k + 1) <= i /\ i <= n -> (heap t1 n i))) /\
-                 (forall (i:Z),
-                  (0 <= i /\ i < (2 * k + 1) \/ (2 * k + 1) < i /\ i <
-                   (2 * (2 * k + 1) + 1) \/ n < i /\ i < (array_length t1) ->
-                   (access t1 i) = (access t0 i))) /\
-                 (forall (v:Z),
-                  ((inftree t0 n v (2 * k + 1)) ->
-                   (inftree t1 n v (2 * k + 1))))),
-  (permut t1 t) /\ (forall (i:Z), (k <= i /\ i <= n -> (heap t1 n i))) /\
-  (forall (i:Z),
-   (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/ n < i /\ i <
-    (array_length t1) -> (access t1 i) = (access t i))) /\
-  (forall (v:Z), ((inftree t n v k) -> (inftree t1 n v k))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_21 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_2: (2 * k + 1) <= n),
-  forall (HW_32: (2 * k + 1 + 1) > n),
-  forall (HW_33: 0 <= k /\ k < (array_length t)),
-  forall (result: Z),
-  forall (HW_34: result = (access t k)),
-  forall (HW_35: 0 <= (2 * k + 1) /\ (2 * k + 1) < (array_length t)),
-  forall (result0: Z),
-  forall (HW_36: result0 = (access t (2 * k + 1))),
-  forall (HW_43: result >= result0),
-  (permut t t) /\ (forall (i:Z), (k <= i /\ i <= n -> (heap t n i))) /\
-  (forall (i:Z),
-   (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/ n < i /\ i <
-    (array_length t) -> (access t i) = (access t i))) /\
-  (forall (v:Z), ((inftree t n v k) -> (inftree t n v k))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma downheap_po_22 : 
-  forall (k: Z),
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (HW_1: (0 <= k /\ k <= n) /\ n < (array_length t) /\
-                (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  forall (HW_44: (2 * k + 1) > n),
-  (permut t t) /\ (forall (i:Z), (k <= i /\ i <= n -> (heap t n i))) /\
-  (forall (i:Z),
-   (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/ n < i /\ i <
-    (array_length t) -> (access t i) = (access t i))) /\
-  (forall (v:Z), ((inftree t n v k) -> (inftree t n v k))).
 Proof.
 (* FILL PROOF HERE *)
 Save.
@@ -1032,15 +439,120 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(*Why*) Parameter downheap_valid :
-  forall (k: Z), forall (n: Z), forall (t: (array Z)), forall (_: (0 <= k /\
-  k <= n) /\ n < (array_length t) /\
-  (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
-  (sig_2 (array Z) unit
-   (fun (t0: (array Z)) (result: unit)  => ((permut t0 t) /\
-    (forall (i:Z), (k <= i /\ i <= n -> (heap t0 n i))) /\
-    (forall (i:Z),
-     (0 <= i /\ i < k \/ k < i /\ i < (2 * k + 1) \/ n < i /\ i <
-      (array_length t0) -> (access t0 i) = (access t i))) /\
-    (forall (v:Z), ((inftree t n v k) -> (inftree t0 n v k)))))).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+
+(*Why predicate*) Definition select_son  (t:(array Z)) (k:Z) (n:Z) (j:Z)
+  := j = (2 * k + 1) /\
+     (((2 * k + 2) <= n -> (access t j) >= (access t (2 * k + 2)))) \/ j =
+     (2 * k + 2) /\ j <= n /\ (access t j) >= (access t (2 * k + 1)).
+
+(*Why logic*) Definition inftree : (array Z) -> Z -> Z -> Z -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma inftree_def :
+  (forall (a:(array Z)),
+   (forall (n:Z),
+    (forall (v:Z),
+     (forall (k:Z),
+      ((inftree a n v k) <-> (0 <= k /\ k <= n) /\ (access a k) <= v /\
+       (((2 * k + 1) <= n -> (inftree a n v (2 * k + 1)))) /\
+       (((2 * k + 2) <= n -> (inftree a n v (2 * k + 2))))))))).
+Admitted.
+
+(*Why logic*) Definition heap : (array Z) -> Z -> Z -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma heap_def :
+  (forall (a:(array Z)),
+   (forall (n:Z),
+    (forall (k:Z),
+     ((heap a n k) <-> (0 <= k /\ k <= n) /\
+      (((2 * k + 1) <= n -> (access a k) >= (access a (2 * k + 1)))) /\
+      (((2 * k + 1) <= n -> (heap a n (2 * k + 1)))) /\
+      (((2 * k + 2) <= n -> (access a k) >= (access a (2 * k + 2)))) /\
+      (((2 * k + 2) <= n -> (heap a n (2 * k + 2)))))))).
+Admitted.
 
