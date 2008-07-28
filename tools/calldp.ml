@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.49 2008-07-18 13:14:13 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.50 2008-07-28 08:01:05 filliatr Exp $ i*)
 
 open Printf
 
@@ -39,7 +39,7 @@ type prover_result =
   | Timeout of float                       
   | ProverFailure of float * string        
 
-let cpulimit = ref "cpulimit"
+let cpulimit = ref "why-cpulimit"
 
 
 let remove_file ?(debug=false) f =

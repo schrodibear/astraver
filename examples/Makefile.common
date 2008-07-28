@@ -6,32 +6,33 @@ GWHY=../../bin/gwhy.opt -split-user-conj
 CADUCEUS=../../bin/caduceus.opt
 # WHYOPTIONS=--coq-v8
 WHYOPTIONS=--coq-v8 --valid
+DP=why-dp
 
 dp: simplify cvcl
 
 coq: $(VO:_valid.vo=_why.vo)
 
 simplify: $(VO:_valid.vo=_why.sx)
-	dp -timeout 10 $^  2>/dev/null
+	$(DP) -timeout 10 $^  2>/dev/null
 
 yices: $(VO:_valid.vo=_why.smt)
-	dp -timeout 10 $^  2>/dev/null
+	$(DP) -timeout 10 $^  2>/dev/null
 
 zenon: $(VO:_valid.vo=_why.znn)
-	dp -timeout 10 $^ 2>/dev/null
+	$(DP) -timeout 10 $^ 2>/dev/null
 
 cvcl: $(VO:_valid.vo=_why.cvc)
-	dp -timeout 10 $^  2>/dev/null
+	$(DP) -timeout 10 $^  2>/dev/null
 
 ergo: $(VO:_valid.vo=_why.why)
-	dp -timeout 10 $^  2>/dev/null
+	$(DP) -timeout 10 $^  2>/dev/null
 
 .PHONY: check
 
 check: $(VO:_valid.vo=.check)
 
 harvey: $(VO:_valid.vo=_why.rv)
-	dp -timeout 10 $^  2>/dev/null
+	$(DP) -timeout 10 $^  2>/dev/null
 
 %_valid.v %_why.v: %.mlw $(WHYBIN)
 	$(WHY) $(WHYOPTIONS) $<

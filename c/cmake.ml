@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.58 2008-07-07 14:50:06 sboldo Exp $ i*)
+(*i $Id: cmake.ml,v 1.59 2008-07-28 08:01:05 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -107,12 +107,12 @@ let generic f targets =
 	 Coptions.libdir;
 
        fprintf fmt "simplify: %a@\n" (print_files simplify) targets;
-       fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (why-dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "simplify/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir  simplify $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "ergo: %a@\n" (print_files ergo) targets;
-       fprintf fmt "\t@@echo 'Running Ergo on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running Ergo on proof obligations' && (why-dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "why/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -why [...] why/$*.why' && $(WHY) -why -dir why $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
 
@@ -129,22 +129,22 @@ let generic f targets =
 
 
        fprintf fmt "cvcl: %a@\n@\n" (print_files cvcl) targets;
-       fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations' && (why-dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "cvcl/%%_why.cvc: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl --encoding sstrat -dir cvcl $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "harvey: %a@\n" (print_files harvey) targets;
-       fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && (why-dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "harvey/%%_why.rv: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "zenon: %a@\n" (print_files zenon) targets;
-       fprintf fmt "\t@@echo 'Running Zenon on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running Zenon on proof obligations' && (why-dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "zenon/%%_why.znn: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
-       fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (why-dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat -exp all   -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        

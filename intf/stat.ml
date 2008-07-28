@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.79 2008-06-06 08:18:23 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.80 2008-07-28 08:01:05 filliatr Exp $ i*)
 
 open Printf
 open Options
@@ -509,11 +509,13 @@ let main () =
   let accel_group = factory#accel_group in
   let file_menu = factory#add_submenu "_File" in
   let file_factory = new GMenu.factory file_menu ~accel_group in
+  (*
   let _ = 
     file_factory#add_image_item (*~stock:`REFRESH*) ~label:"_Refresh"
       ~key:GdkKeysyms._R () 
   in
   let _ = file_factory#add_separator () in
+  *)
   let _ = 
     file_factory#add_image_item ~key:GdkKeysyms._Q ~label:"_Quit" 
       ~callback:(fun () -> exit 0) () 

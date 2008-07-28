@@ -65,21 +65,21 @@ let launch_goal  prover context g =
     "why" [| "why"; "-no-prelude"; option; context; g.goal_file  |]
     Unix.stdin Unix.stdout Unix.stderr in
   let _ = Unix.wait() in
-  eprintf "dp %s -timeout 10 %s@." opt ((String.sub g.goal_file 0 
+  eprintf "why-dp %s -timeout 10 %s@." opt ((String.sub g.goal_file 0 
 	  (String.length g.goal_file  - 4))^"_why"^endoffile) ;
   let _ = 
     if opt = "" 
     then 
       Unix.create_process
-	"dp" 
-	[| "dp" ; "-timeout" ; "10" ; 
+	"why-dp" 
+	[| "why-dp" ; "-timeout" ; "10" ; 
 	   (String.sub g.goal_file 0 
 	      (String.length g.goal_file  - 4))^"_why"^endoffile  |]
 	Unix.stdin writeme Unix.stderr 
     else
       Unix.create_process
-	"dp" 
-	[| "dp" ; "-smt-solver" ; opt  ;"-timeout" ; "10" ; 
+	"why-dp" 
+	[| "why-dp" ; "-smt-solver" ; opt  ;"-timeout" ; "10" ; 
 	   (String.sub g.goal_file 0 
 	      (String.length g.goal_file  - 4))^"_why"^endoffile  |]
 	Unix.stdin writeme Unix.stderr 

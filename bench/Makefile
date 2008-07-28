@@ -39,7 +39,7 @@ c-pvs:
 harvey:
 	../bin/why.opt --harvey -d -V test.mlw
 	rm -f *.baf
-	../bin/dp.opt test_why.rv
+	../bin/why-dp.opt test_why.rv
 
 simplify:
 	../bin/why.opt --simplify -d -V test.mlw
@@ -47,21 +47,21 @@ simplify:
 
 yices:
 	../bin/why.opt --smtlib --encoding sstrat test.mlw
-	../bin/dp.opt test_why.smt
+	../bin/why-dp.opt test_why.smt
 
 ergo:
 	ergo test.mlw
 
 rv-sat:
 	../bin/why.opt --smtlib -d --encoding mono -V test.mlw
-	../bin/dp.opt test_why.smt
+	../bin/why-dp.opt test_why.smt
 cvcl:
 	../bin/why.opt --cvcl -d -V test.mlw
-	../bin/dp.opt test_why.cvc
+	../bin/why-dp.opt test_why.cvc
 
 cvc3:
 	../bin/why.opt --cvcl -d -V test.mlw
-	../bin/dp.opt test_why.cvc
+	../bin/why-dp.opt test_why.cvc
 
 mizar:
 	../bin/why.opt --mizar -d -V test.mlw
@@ -86,7 +86,7 @@ fastwp.simplify:
 	$(BWHY) --why -d -V --fast-wp --all-vc test.mlw
 	$(BWHY) --no-prelude -tc test_why.why
 	$(BWHY) --simplify --fast-wp --all-vc test.mlw
-	../bin/dp.opt -no-timings test_why.sx
+	../bin/why-dp.opt -no-timings test_why.sx
 
 fastwp.ergo:
 	$(BWHY) --why -d --fast-wp test.mlw
@@ -99,14 +99,14 @@ fastwp.bench.simplify:
 	for f in $(FASTWPBENCH) ; do \
 	  $(BWHY) --simplify --fast-wp good/$$f.mlw; \
 	done
-	dp -no-timings good/*_why.sx
+	why-dp -no-timings good/*_why.sx
 
 fastwp.bench.ergo:
 	rm -f good/*_why.sx
 	for f in $(FASTWPBENCH) ; do \
 	  $(WHY) --why --fast-wp good/$$f.mlw; \
 	done
-	dp -no-timings good/*_why.why
+	why-dp -no-timings good/*_why.why
 
 partial:
 	$(WHY) --coq-v8 -d -V --partial --valid --coq-tactic admit test.mlw

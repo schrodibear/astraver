@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.30 2008-07-22 09:29:20 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.31 2008-07-28 08:01:05 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -61,7 +61,7 @@ let generic full f targets =
        fprintf fmt 
        "# this makefile was automatically generated; do not edit @\n@\n";
        fprintf fmt "TIMEOUT ?= 10@\n@\n";	    
-       fprintf fmt "DP ?= dp -timeout $(TIMEOUT)@\n";
+       fprintf fmt "DP ?= why-dp -timeout $(TIMEOUT)@\n";
        fprintf fmt "WHYEXEC ?= why@\n";
        fprintf fmt "GWHYEXEC ?= gwhy-bin@\n";
        fprintf fmt "export WHYLIB=%s@\n@\n" Version.libdir;
