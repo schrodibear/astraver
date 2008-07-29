@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.313 2008-07-25 16:03:47 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.314 2008-07-29 17:31:40 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -175,7 +175,7 @@ let bin_op: expr_bin_op -> string = function
       (* pointer *)
   | `Beq, `Pointer -> "eq_pointer"
   | `Bneq, `Pointer -> "neq_pointer"
-  | `Bsub, `Pointer -> "sub_pointer" (* TODO: require same block *)
+  | `Bsub, `Pointer -> "sub_pointer_"
       (* real *)
   | `Bgt, `Real -> "gt_real_"
   | `Blt, `Real -> "lt_real_"
@@ -436,6 +436,7 @@ let eval_integral_const e =
           raise Exit
       | JCEconst _ | JCEvar _ | JCEshift _ | JCEderef _ 
       | JCEinstanceof _ | JCEcast _ | JCEreal_cast _ | JCEoffset _ 
+      | JCEaddress _ 
       | JCEalloc _ | JCEfree _ | JCEmatch _ |JCEunpack _ |JCEpack _
       | JCEthrow _ | JCEtry _ | JCEreturn _ | JCEloop _ | JCEblock _
       | JCEcontract _ | JCEassert _ 
@@ -654,6 +655,9 @@ let rec term ~global_assertion ~relocate label oldlabel t =
         in
         let t', lets = ft t in
         LApp(f,[LVar alloc; t']), lets
+    | JCTaddress t -> 
+        let t', lets = ft t in
+        LApp("address",[t']), lets
     | JCTinstanceof(t,label,ty) ->
 	let label = rlab label in
         let t', lets = ft t in
@@ -806,6 +810,10 @@ let rec assertion ~global_assertion ~relocate label oldlabel a =
           let t1', lets1 = ftag t1#node in
           let t2', lets2 = ftag t2#node in
           LPred("eq", [ t1'; t2' ]), lets1@lets2
+      | JCAsubtype(t1, t2, h) ->
+          let t1', lets1 = ftag t1#node in
+          let t2', lets2 = ftag t2#node in
+          LPred("subtag", [ t1'; t2' ]), lets1@lets2
       | JCAmatch(arg, pal) ->
           let arg', lets = ft arg in
           (* TODO: use a temporary variable for arg' *)
@@ -1566,11 +1574,6 @@ and expr ~infunction ~threats e : expr =
           [e1'; 
            coerce ~no_int_overflow:(not threats) 
              e2#name_label e2#loc integer_type e2#typ e2 e2']
-(*    | JCEsub_pointer(e1,e2) -> 
-        let e1' = expr e1 in
-        let e2' = expr e2 in
-        (* FIXME: need to check that are in the same block *)
-        make_app "sub_pointer" [ e1'; e2']*)
     | JCEoffset(k,e,st) -> 
         let alloc = 
           alloc_region_table_name (JCtag(st, []), e#region) in
@@ -1587,6 +1590,8 @@ and expr ~infunction ~threats e : expr =
           | Offset_max -> "offset_max"
         in
         make_app f [alloc; expr e] 
+    | JCEaddress e -> 
+        make_app "address" [expr e] 
     | JCEinstanceof(e,t) ->
         let e = expr e in
         let tag = tag_table_name (JCtag(t, [])) in
@@ -2176,8 +2181,9 @@ let tr_struct st acc =
         LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
         (* [alloc_extends(old(alloc),alloc)] *)
         LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
-        (* [alloc_fresh(old(alloc),result)] *)
-        LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result"])
+        (* [alloc_fresh(old(alloc),result,1)] *)
+        LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result";
+			     LConst(Prim_int "1")])
       ],
       (* no exceptional post *)
       [])
@@ -2221,8 +2227,8 @@ let tr_struct st acc =
         LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
         (* [alloc_extends(old(alloc),alloc)] *)
         LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
-        (* [alloc_fresh(old(alloc),result)] *)
-        LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result"])
+        (* [alloc_fresh(old(alloc),result,n)] *)
+        LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result";LVar "n"])
       ],
       (* no exceptional post *)
       [])

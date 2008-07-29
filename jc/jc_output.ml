@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.112 2008-07-24 15:28:43 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.113 2008-07-29 17:31:40 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -154,6 +154,8 @@ let rec term fmt t =
 	fprintf fmt "(%a <: %s)" term t si.jc_struct_info_name
     | JCToffset (k,t,_)->
 	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t
+    | JCTaddress t ->
+	fprintf fmt "@[\\address(%a)@]" term t
     | JCTold t -> fprintf fmt "@[\\old(%a)@]" term t
     | JCTat(t,lab) -> fprintf fmt "@[\\at(%a,%a)@]" term t label lab
 (*
@@ -259,6 +261,7 @@ let rec assertion fmt a =
     | JCAfalse -> fprintf fmt "false"
     | JCAmutable _ -> assert false (* TODO *)
     | JCAtagequality _ -> assert false (* TODO *)
+    | JCAsubtype _ -> assert false (* TODO *)
     | JCAmatch (t, pal) ->
 	fprintf fmt "@[<v 2>match %a with@ " term t;
 	List.iter
@@ -339,6 +342,8 @@ let rec expr fmt e =
 	  fprintf fmt "@[(%a ? %a : %a)@]" expr e1 expr e2 expr e3
       | JCEoffset(k,e, _) ->
 	  fprintf fmt "\\offset_m%a(%a)" offset_kind k expr e
+      | JCEaddress e ->
+	  fprintf fmt "\\address(%a)" expr e
       | JCEalloc(e, si) ->
 	  fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e
       | JCEfree e ->

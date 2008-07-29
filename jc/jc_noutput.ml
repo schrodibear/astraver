@@ -63,6 +63,8 @@ let rec expr fmt e =
         out "(TODO if)"
     | JCNEoffset(k, e1) ->
         out "(\\offset_m%a(%a))" offset_kind k expr e1
+    | JCNEaddress e1 ->
+        out "(\\address(%a))" expr e1
     | JCNEalloc(e1, id) ->
         out "(TODO alloc)"
     | JCNEfree e1 ->
@@ -142,6 +144,8 @@ let rec expr fmt e =
         out "(TODO mutable)"
     | JCNEtagequality(tag1, tag2) ->
         out "(TODO tagequality)"
+    | JCNEsubtype(tag1, tag2) ->
+        out "(TODO subtype)"
     | JCNErange(Some e1, Some e2) ->
         out "(%a .. %a)" expr e1 expr e2
     | JCNErange(Some e1, None) ->

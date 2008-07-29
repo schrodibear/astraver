@@ -169,26 +169,20 @@ class ['a] ptag :
   'a Jc_ast.ptag_node ->
   object method loc : Loc.position method node : 'a Jc_ast.ptag_node end
 
-(*
 class ['a] ptag_with :
   ?loc:Loc.position ->
   ?node:'a Jc_ast.ptag_node ->
   < loc : Loc.position; node : 'a Jc_ast.ptag_node; .. > -> ['a] ptag
-
-*)
-
 
 class tag :
   ?loc:Loc.position ->
   Jc_ast.tag_node ->
   object method loc : Loc.position method node : Jc_ast.tag_node end
 
-(*
 class tag_with :
   ?loc:Loc.position ->
   ?node:Jc_ast.tag_node ->
   < loc : Loc.position; node : Jc_ast.tag_node; .. > -> tag
-*)
 
 class ['a] decl :
   ?loc:Loc.position ->

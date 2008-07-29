@@ -268,7 +268,7 @@ Generating Why function Termination_loop3
 
 TIMEOUT ?= 10
 
-DP ?= dp -timeout $(TIMEOUT)
+DP ?= why-dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 export WHYLIB=WHYLIB
@@ -689,7 +689,7 @@ parameter alloc_Object :
    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
      and (instanceof(Object_tag_table, result, Object_tag)
          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result)))) }
+             and alloc_fresh(Object_alloc_table@, result, n)))) }
 
 parameter alloc_String :
  n:int ->
@@ -699,7 +699,7 @@ parameter alloc_String :
    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
      and (instanceof(Object_tag_table, result, String_tag)
          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result)))) }
+             and alloc_fresh(Object_alloc_table@, result, n)))) }
 
 parameter alloc_Termination :
  n:int ->
@@ -710,7 +710,7 @@ parameter alloc_Termination :
       Object_alloc_table)
      and (instanceof(Object_tag_table, result, Termination_tag)
          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result)))) }
+             and alloc_fresh(Object_alloc_table@, result, n)))) }
 
 parameter alloc_Throwable :
  n:int ->
@@ -721,7 +721,7 @@ parameter alloc_Throwable :
       Object_alloc_table)
      and (instanceof(Object_tag_table, result, Throwable_tag)
          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result)))) }
+             and alloc_fresh(Object_alloc_table@, result, n)))) }
 
 parameter interface_alloc_table : interface alloc_table ref
 
@@ -736,7 +736,7 @@ parameter alloc_interface :
       interface_alloc_table)
      and (instanceof(interface_tag_table, result, interface_tag)
          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
-             and alloc_fresh(interface_alloc_table@, result)))) }
+             and alloc_fresh(interface_alloc_table@, result, n)))) }
 
 parameter alloc_one_Object :
  tt:unit ->
@@ -746,7 +746,7 @@ parameter alloc_one_Object :
    { (valid_struct_Object(result, (0), (0), Object_alloc_table)
      and (instanceof(Object_tag_table, result, Object_tag)
          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result)))) }
+             and alloc_fresh(Object_alloc_table@, result, (1))))) }
 
 parameter alloc_one_String :
  tt:unit ->
@@ -756,7 +756,7 @@ parameter alloc_one_String :
    { (valid_struct_String(result, (0), (0), Object_alloc_table)
      and (instanceof(Object_tag_table, result, String_tag)
          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result)))) }
+             and alloc_fresh(Object_alloc_table@, result, (1))))) }
 
 parameter alloc_one_Termination :
  tt:unit ->
@@ -766,7 +766,7 @@ parameter alloc_one_Termination :
    { (valid_struct_Termination(result, (0), (0), Object_alloc_table)
      and (instanceof(Object_tag_table, result, Termination_tag)
          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result)))) }
+             and alloc_fresh(Object_alloc_table@, result, (1))))) }
 
 parameter alloc_one_Throwable :
  tt:unit ->
@@ -776,7 +776,7 @@ parameter alloc_one_Throwable :
    { (valid_struct_Throwable(result, (0), (0), Object_alloc_table)
      and (instanceof(Object_tag_table, result, Throwable_tag)
          and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result)))) }
+             and alloc_fresh(Object_alloc_table@, result, (1))))) }
 
 parameter alloc_one_interface :
  tt:unit ->
@@ -786,7 +786,7 @@ parameter alloc_one_interface :
    { (valid_struct_interface(result, (0), (0), interface_alloc_table)
      and (instanceof(interface_tag_table, result, interface_tag)
          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
-             and alloc_fresh(interface_alloc_table@, result)))) }
+             and alloc_fresh(interface_alloc_table@, result, (1))))) }
 
 parameter cons_Termination :
  this_3:Object pointer ->
@@ -1273,6 +1273,12 @@ type 't alloc_table
 
 type 't pointer
 
+type 't block
+
+logic base_block : 'a1 pointer -> 'a1 block
+
+logic address : 'a1 pointer -> int
+
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -1280,7 +1286,22 @@ logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
 predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
   ((offset_min(a, p) <= 0) and (offset_max(a, p) >= 0))
 
+predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
+  (base_block(p) = base_block(q))
+
 logic shift : 'a1 pointer, int -> 'a1 pointer
+
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
+logic null :  -> 'a1 pointer
+
+axiom address_injective:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
+
+axiom address_null: (address(null) = 0)
+
+axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
 
@@ -1306,8 +1327,6 @@ axiom neq_shift:
       (forall j:int [shift(p, i), shift(p, j)].
         ((i <> j) -> (shift(p, i) <> shift(p, j))))))
 
-logic null :  -> 'a1 pointer
-
 axiom null_not_valid: (forall a:'a1 alloc_table. (not valid(a, null)))
 
 axiom null_pointer:
@@ -1327,13 +1346,9 @@ axiom neq_pointer_bool_def:
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
 
-logic same_block : 'a1 pointer, 'a1 pointer -> prop
-
-logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
-
 axiom sub_pointer_shift:
   (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, p)].
+    (forall q:'a1 pointer [sub_pointer(p, q)].
       (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
 
 axiom sub_pointer_self:
@@ -1651,7 +1666,8 @@ axiom lsr_of_lsl_identity_on_positive:
 
 logic alloc_extends : 'a1 alloc_table, 'a1 alloc_table -> prop
 
-predicate alloc_fresh(a: 'a1 alloc_table, p: 'a1 pointer) = (not valid(a, p))
+predicate alloc_fresh(a: 'a1 alloc_table, p: 'a1 pointer, n: int) =
+  (forall i:int. (((0 <= i) and (i < n)) -> (not valid(a, shift(p, i)))))
 
 axiom alloc_extends_offset_min:
   (forall a1:'a1 alloc_table.
@@ -1666,6 +1682,27 @@ axiom alloc_extends_offset_max:
       (alloc_extends(a1, a2) ->
        (forall p:'a1 pointer.
          (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
+
+logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
+'a1 pset -> prop
+
+axiom alloc_extends_except_offset_min:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall l:'a1 pset [alloc_extends_except(a1, a2, l)].
+        (alloc_extends_except(a1, a2, l) ->
+         (forall p:'a1 pointer.
+           ((valid(a1, p) and (not in_pset(p, l))) -> (offset_min(a1,
+            p) = offset_min(a2, p))))))))
+
+axiom alloc_extends_except_offset_max:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall l:'a1 pset [alloc_extends_except(a1, a2, l)].
+        (alloc_extends_except(a1, a2, l) ->
+         (forall p:'a1 pointer.
+           ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
+            p) = offset_max(a2, p))))))))
 
 type Object
 
@@ -1958,6 +1995,20 @@ why -simplify [...] why/Termination.why
 
 (DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
 
+(DEFPRED (same_block p q) (EQ (base_block p) (base_block q)))
+
+(BG_PUSH
+ ;; Why axiom address_injective
+ (FORALL (p q) (IFF (EQ p q) (EQ (address p) (address q)))))
+
+(BG_PUSH
+ ;; Why axiom address_null
+ (EQ (address null) 0))
+
+(BG_PUSH
+ ;; Why axiom address_positive
+ (FORALL (p) (<= 0 (address p))))
+
 (BG_PUSH
  ;; Why axiom shift_zero
  (FORALL (p) (EQ (shift p 0) p)))
@@ -2000,8 +2051,7 @@ why -simplify [...] why/Termination.why
 
 (BG_PUSH
  ;; Why axiom sub_pointer_shift
- (FORALL (p q)
- (IMPLIES (EQ (same_block p q) |@true|) (EQ p (shift q (sub_pointer p q))))))
+ (FORALL (p q) (IMPLIES (same_block p q) (EQ p (shift q (sub_pointer p q))))))
 
 (BG_PUSH
  ;; Why axiom sub_pointer_self
@@ -2010,27 +2060,26 @@ why -simplify [...] why/Termination.why
 (BG_PUSH
  ;; Why axiom sub_pointer_zero
  (FORALL (p q)
- (IMPLIES (EQ (same_block p q) |@true|)
- (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q)))))
+ (IMPLIES (same_block p q) (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q)))))
 
 (BG_PUSH
  ;; Why axiom sub_pointer_shift_left
  (FORALL (p q i)
- (IMPLIES (EQ (same_block p q) |@true|)
+ (IMPLIES (same_block p q)
  (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
 
  (FORALL (p q)
- (IMPLIES (EQ (same_block p q) |@true|)
+ (IMPLIES (same_block p q)
  (FORALL (i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))))
 
 (BG_PUSH
  ;; Why axiom sub_pointer_shift_right
  (FORALL (p q i)
- (IMPLIES (EQ (same_block p q) |@true|)
+ (IMPLIES (same_block p q)
  (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
 
  (FORALL (p q)
- (IMPLIES (EQ (same_block p q) |@true|)
+ (IMPLIES (same_block p q)
  (FORALL (i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))))
 
 (BG_PUSH
@@ -2288,7 +2337,8 @@ why -simplify [...] why/Termination.why
  ;; Why axiom lsr_of_lsl_identity_on_positive
  (FORALL (a b) (IMPLIES (AND (<= 0 a) (<= 0 b)) (EQ (lsr (lsl a b) b) a))))
 
-(DEFPRED (alloc_fresh a p) (NOT (valid a p)))
+(DEFPRED (alloc_fresh a p n)
+  (FORALL (i) (IMPLIES (AND (<= 0 i) (< i n)) (NOT (valid a (shift p i))))))
 
 (BG_PUSH
  ;; Why axiom alloc_extends_offset_min
@@ -2301,6 +2351,22 @@ why -simplify [...] why/Termination.why
  (FORALL (a1 a2)
  (IMPLIES (EQ (alloc_extends a1 a2) |@true|)
  (FORALL (p) (IMPLIES (valid a1 p) (EQ (offset_max a1 p) (offset_max a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_except_offset_min
+ (FORALL (a1 a2 l)
+ (IMPLIES (EQ (alloc_extends_except a1 a2 l) |@true|)
+ (FORALL (p)
+ (IMPLIES (AND (valid a1 p) (NOT (EQ (in_pset p l) |@true|)))
+ (EQ (offset_min a1 p) (offset_min a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_except_offset_max
+ (FORALL (a1 a2 l)
+ (IMPLIES (EQ (alloc_extends_except a1 a2 l) |@true|)
+ (FORALL (p)
+ (IMPLIES (AND (valid a1 p) (NOT (EQ (in_pset p l) |@true|)))
+ (EQ (offset_max a1 p) (offset_max a2 p)))))))
 
 (DEFPRED (Non_null_Object Object_alloc_table x)
   (EQ (offset_max Object_alloc_table x) 0))
@@ -2709,6 +2775,12 @@ type 't alloc_table
 
 type 't pointer
 
+type 't block
+
+logic base_block : 'a1 pointer -> 'a1 block
+
+logic address : 'a1 pointer -> int
+
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -2716,7 +2788,22 @@ logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
 predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
   ((offset_min(a, p) <= 0) and (offset_max(a, p) >= 0))
 
+predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
+  (base_block(p) = base_block(q))
+
 logic shift : 'a1 pointer, int -> 'a1 pointer
+
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
+logic null :  -> 'a1 pointer
+
+axiom address_injective:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
+
+axiom address_null: (address(null) = 0)
+
+axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
 
@@ -2742,8 +2829,6 @@ axiom neq_shift:
       (forall j:int [shift(p, i), shift(p, j)].
         ((i <> j) -> (shift(p, i) <> shift(p, j))))))
 
-logic null :  -> 'a1 pointer
-
 axiom null_not_valid: (forall a:'a1 alloc_table. (not valid(a, null)))
 
 axiom null_pointer:
@@ -2763,13 +2848,9 @@ axiom neq_pointer_bool_def:
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
 
-logic same_block : 'a1 pointer, 'a1 pointer -> prop
-
-logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
-
 axiom sub_pointer_shift:
   (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, p)].
+    (forall q:'a1 pointer [sub_pointer(p, q)].
       (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
 
 axiom sub_pointer_self:
@@ -3087,7 +3168,8 @@ axiom lsr_of_lsl_identity_on_positive:
 
 logic alloc_extends : 'a1 alloc_table, 'a1 alloc_table -> prop
 
-predicate alloc_fresh(a: 'a1 alloc_table, p: 'a1 pointer) = (not valid(a, p))
+predicate alloc_fresh(a: 'a1 alloc_table, p: 'a1 pointer, n: int) =
+  (forall i:int. (((0 <= i) and (i < n)) -> (not valid(a, shift(p, i)))))
 
 axiom alloc_extends_offset_min:
   (forall a1:'a1 alloc_table.
@@ -3102,6 +3184,27 @@ axiom alloc_extends_offset_max:
       (alloc_extends(a1, a2) ->
        (forall p:'a1 pointer.
          (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
+
+logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
+'a1 pset -> prop
+
+axiom alloc_extends_except_offset_min:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall l:'a1 pset [alloc_extends_except(a1, a2, l)].
+        (alloc_extends_except(a1, a2, l) ->
+         (forall p:'a1 pointer.
+           ((valid(a1, p) and (not in_pset(p, l))) -> (offset_min(a1,
+            p) = offset_min(a2, p))))))))
+
+axiom alloc_extends_except_offset_max:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall l:'a1 pset [alloc_extends_except(a1, a2, l)].
+        (alloc_extends_except(a1, a2, l) ->
+         (forall p:'a1 pointer.
+           ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
+            p) = offset_max(a2, p))))))))
 
 type Object
 

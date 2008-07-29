@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.137 2008-07-24 15:28:43 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.138 2008-07-29 17:31:40 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -155,6 +155,7 @@ and pexpr_node =
   | JCPEold of pexpr
   | JCPEat of pexpr * logic_label
   | JCPEoffset of offset_kind * pexpr 
+  | JCPEaddress of pexpr 
   | JCPEif of pexpr * pexpr * pexpr
   | JCPElet of ptype option * string * pexpr option * pexpr
   | JCPEdecl of ptype * string * pexpr option
@@ -163,6 +164,7 @@ and pexpr_node =
   | JCPEfree of pexpr
   | JCPEmutable of pexpr * pexpr ptag
   | JCPEtagequality of pexpr ptag * pexpr ptag
+  | JCPEsubtype of pexpr ptag * pexpr ptag
   | JCPEmatch of pexpr * (ppattern * pexpr) list
 (*  | JCPSskip *) (* -> JCPEconst JCCvoid *)
   | JCPEblock of pexpr list
@@ -257,6 +259,7 @@ type nexpr_node =
   | JCNEcast of nexpr * string
   | JCNEif of nexpr * nexpr * nexpr
   | JCNEoffset of offset_kind * nexpr 
+  | JCNEaddress of nexpr 
   | JCNEalloc of nexpr * string
   | JCNEfree of nexpr
   | JCNElet of ptype option * string * nexpr option * nexpr
@@ -279,6 +282,7 @@ type nexpr_node =
   | JCNEat of nexpr * logic_label
   | JCNEmutable of nexpr * nexpr ptag
   | JCNEtagequality of nexpr ptag * nexpr ptag
+  | JCNEsubtype of nexpr ptag * nexpr ptag
   (* Locations only *)
   | JCNErange of nexpr option * nexpr option
 
@@ -332,6 +336,7 @@ and term_node =
   | JCTold of term
   | JCTat of term * logic_label
   | JCToffset of offset_kind * term * struct_info 
+  | JCTaddress of term
   | JCTinstanceof of term * logic_label * struct_info
   | JCTcast of term * logic_label * struct_info
   | JCTrange_cast of term * enum_info
@@ -386,6 +391,7 @@ type assertion_node =
   | JCAif of term * assertion * assertion
   | JCAmutable of term * struct_info * tag
   | JCAtagequality of tag * tag * string option
+  | JCAsubtype of tag * tag * string option
   | JCAmatch of term * (pattern * assertion) list
 
 and assertion = assertion_node c_assertion
@@ -452,6 +458,7 @@ type expr_node =
   | JCEreal_cast of expr * real_conversion
   | JCEif of expr * expr * expr
   | JCEoffset of offset_kind * expr * struct_info
+  | JCEaddress of expr
   | JCEalloc of expr * struct_info
   | JCEfree of expr
   | JCElet of var_info * expr option * expr

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.99 2008-07-23 15:31:54 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.100 2008-07-29 17:31:40 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -201,8 +201,8 @@ let duplicable =
   IPExpr.fold_left 
     (fun acc e -> acc && match e#node with
        | JCPEconst _ | JCPEvar _ | JCPErange _ | JCPEderef _
-       | JCPEunary _ | JCPEoffset _ | JCPEold _ | JCPEat _
-       | JCPEbinary _ | JCPEcast _ ->
+       | JCPEunary _ | JCPEoffset _ | JCPEaddress _ | JCPEold _ | JCPEat _
+       | JCPEbinary _ | JCPEcast _ | JCPEsubtype _ ->
 	   true
        | JCPEassert _ | JCPEthrow _ | JCPEreturn _ | JCPEtagequality _  
        | JCPEbreak _ | JCPEcontinue _  | JCPEgoto _  | JCPEdecl _
@@ -536,6 +536,7 @@ let rec expr e =
     | JCPEold e -> JCNEold(expr e)
     | JCPEat(e,lab) -> JCNEat(expr e,lab)
     | JCPEoffset(off,e) -> JCNEoffset(off,expr e)
+    | JCPEaddress e -> JCNEaddress (expr e)
     | JCPEif(e1,e2,e3) -> JCNEif(expr e1,expr e2,expr e3)
     | JCPElet(tyopt,id,e1,e2) -> 
 	JCNElet(tyopt,id,Option_misc.map expr e1,expr e2)
@@ -549,6 +550,7 @@ let rec expr e =
     | JCPEfree e -> JCNEfree(expr e)
     | JCPEmutable(e,tag) -> JCNEmutable(expr e,tag_ tag)
     | JCPEtagequality(tag1,tag2) -> JCNEtagequality(tag_ tag1,tag_ tag2)
+    | JCPEsubtype(tag1,tag2) -> JCNEsubtype(tag_ tag1,tag_ tag2)
     | JCPEmatch(e,pelist) ->
 	JCNEmatch(expr e,List.map (fun (pat,e) -> (pat,expr e)) pelist)  
     | JCPEblock elist -> JCNEblock(List.map expr elist)

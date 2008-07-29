@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.228 2008-07-24 15:28:43 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.229 2008-07-29 17:31:40 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -579,10 +579,11 @@ let rec type_logic_labels env logic_label e =
   match e#node with
     | JCNEconst _ | JCNEvar _ | JCNEderef _ | JCNEbinary _
     | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _
-    | JCNEif _ | JCNEoffset _ | JCNEalloc _ | JCNEfree _ | JCNElet _
+    | JCNEif _ | JCNEoffset _ | JCNEaddress _
+    | JCNEalloc _ | JCNEfree _ | JCNElet _
     | JCNEassert _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
     | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEmatch _ | JCNEquantifier _
-    | JCNEmutable _ | JCNEtagequality _ | JCNErange _ -> 
+    | JCNEmutable _ | JCNEtagequality _ | JCNEsubtype _ | JCNErange _ -> 
         iter_subs logic_label;
         env
     | JCNEcontract(req,dec,behs,e) ->
@@ -801,6 +802,17 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           | JCTtype_var _ ->
               typing_error e#loc "pointer expected"
         end        
+    | JCNEaddress e1 ->
+        let te1 = ft e1 in
+        begin match te1#typ with
+          | JCTpointer(JCtag(st, _), _, _) ->
+              integer_type, dummy_region, JCTaddress te1
+          | JCTpointer((JCvariant _ | JCunion _), _, _) ->
+              assert false (* TODO *)
+          | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
+          | JCTtype_var _ ->
+              typing_error e#loc "pointer expected"
+        end        
     | JCNElet(pty, id, Some e1, e2) ->
         let te1 = ft e1 in
         let ty = match pty with
@@ -848,7 +860,6 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         let te1 = ft e1 in
         te1#typ, te1#region, JCTat(te1, lab)
     | JCNEmutable(e, t) -> assert false (* TODO *)
-    | JCNEtagequality(t1, t2) -> assert false (* TODO *)
     | JCNErange(Some e1, Some e2) ->
         let e1 = ft e1 and e2 = ft e2 in
         let t1 = e1#typ and t2 = e2#typ in
@@ -871,7 +882,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     (* Not terms: *)
     | JCNEassign _ | JCNEalloc _ | JCNEfree _ | JCNEblock _ | JCNEassert _
     | JCNEloop _ | JCNEreturn _ | JCNEtry _ | JCNEthrow _ | JCNEpack _
-    | JCNEunpack _ | JCNEquantifier _ | JCNEcontract _ ->
+    | JCNEunpack _ | JCNEquantifier _ | JCNEcontract _ 
+    | JCNEtagequality _ | JCNEsubtype _ ->
         typing_error e#loc "construction not allowed in logic terms"
   in
   new term
@@ -1004,6 +1016,24 @@ let rec assertion env e =
   let ft = term env in
   let lab = ref "" in
   let label () = get_label e in
+  let struct_for_tags ttag1 ttag2 = 
+    match ttag1#node, ttag2#node with
+      | JCTbottom, JCTbottom -> None
+      | JCTbottom, JCTtag st
+      | JCTtag st, JCTbottom
+      | JCTbottom, JCTtypeof(_, st)
+      | JCTtypeof(_, st), JCTbottom -> Some (root_name st)
+      | JCTtag st1, JCTtag st2
+      | JCTtypeof(_, st1), JCTtag st2
+      | JCTtag st1, JCTtypeof(_, st2)
+      | JCTtypeof(_, st1), JCTtypeof(_, st2) ->
+          if st1.jc_struct_info_root != st2.jc_struct_info_root then
+            typing_error e#loc "the hierarchy %s and %s are different"
+              (root_name st1)
+              (root_name st2)
+          else
+            Some (root_name st1)
+  in
   let ta = match e#node with
     | JCNElabel(l, e) ->
         let te = fa e in
@@ -1093,25 +1123,13 @@ let rec assertion env e =
     | JCNEtagequality(tag1, tag2) ->
         let ttag1 = tag env "" tag1 in
         let ttag2 = tag env "" tag2 in
-        let st = match ttag1#node, ttag2#node with
-          | JCTbottom, JCTbottom -> None
-          | JCTbottom, JCTtag st
-          | JCTtag st, JCTbottom
-          | JCTbottom, JCTtypeof(_, st)
-          | JCTtypeof(_, st), JCTbottom -> Some (root_name st)
-          | JCTtag st1, JCTtag st2
-          | JCTtypeof(_, st1), JCTtag st2
-          | JCTtag st1, JCTtypeof(_, st2)
-          | JCTtypeof(_, st1), JCTtypeof(_, st2) ->
-              if st1.jc_struct_info_root != st2.jc_struct_info_root then
-                typing_error e#loc "the hierarchy %s and %s are \
-different"
-                  (root_name st1)
-                  (root_name st2)
-              else
-                Some (root_name st1)
-        in
+	let st = struct_for_tags ttag1 ttag2 in
         JCAtagequality(ttag1, ttag2, st)
+    | JCNEsubtype(tag1, tag2) ->
+        let ttag1 = tag env "" tag1 in
+        let ttag2 = tag env "" tag2 in
+	let st = struct_for_tags ttag1 ttag2 in
+        JCAsubtype(ttag1, ttag2, st)
     (* Boolean terms: *)
     | JCNEconst _ | JCNEvar _ | JCNEderef _ ->
         let t = ft e in
@@ -1120,7 +1138,8 @@ different"
           | _ -> typing_error e#loc "non boolean expression"
         end
     (* Not assertions: *)
-    | JCNEoffset _ | JCNErange _ | JCNEassign _ | JCNEalloc _ | JCNEfree _
+    | JCNEoffset _ | JCNEaddress _ 
+    | JCNErange _ | JCNEassign _ | JCNEalloc _ | JCNEfree _
     | JCNEassert _ | JCNEblock _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
     | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEbinary _ | JCNEunary _ 
     | JCNEcontract _ ->
@@ -1197,12 +1216,13 @@ let rec location_set env e =
         let fi = find_field e#loc t f false in
         let fr = Region.make_field tr fi in
         fi.jc_field_info_type, fr, JCLSderef(tls, get_label e, fi, fr)   
-    | JCNErange _ | JCNEtagequality _| JCNEmutable _ | JCNEat _ | JCNEold _
+    | JCNErange _ | JCNEtagequality _ | JCNEmutable _ | JCNEat _ | JCNEold _
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ |JCNEreturn _ | JCNEloop _ |JCNEblock _ | JCNEassert _
-    | JCNElet _ |JCNEfree _ | JCNEalloc _ | JCNEoffset _| JCNEif _ | JCNEcast _
+    | JCNElet _ |JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEaddress _ 
+    | JCNEif _ | JCNEcast _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _
-    | JCNEconst _ | JCNEcontract _ ->
+    | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ ->
         typing_error e#loc "invalid memory location"
 
 let rec location env e =
@@ -1227,9 +1247,10 @@ let rec location env e =
     | JCNErange _ | JCNEtagequality _ | JCNEmutable _ | JCNEold _
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ | JCNEreturn _ | JCNEloop _ | JCNEblock _ | JCNEassert _
-    | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEif _ | JCNEcast _
+    | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEaddress _ 
+    | JCNEif _ | JCNEcast _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _ | JCNEbinary _
-    | JCNEconst _ | JCNEcontract _ ->
+    | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ ->
         typing_error e#loc "invalid memory location"
 
 let behavior env vi_result (loc, id, throws, assumes, requires, assigns, ensures) =
@@ -1685,6 +1706,15 @@ used as an assertion, not as a term" pi.jc_logic_info_name
               assert false (* TODO *)
           | _ -> typing_error e#loc "pointer expected"
         end
+    | JCNEaddress e1 ->
+        let te1 = fe e1 in
+        begin match te1#typ with 
+          | JCTpointer(JCtag(st, _), _, _) ->
+              integer_type, dummy_region, JCEaddress te1
+          | JCTpointer((JCvariant _ | JCunion _), _, _) ->
+              assert false (* TODO *)
+          | _ -> typing_error e#loc "pointer expected"
+        end
     | JCNEalloc(e1, t) ->
         let st = find_struct_info e#loc t in
         let ty = JCTpointer(JCtag(st, []), Some zero, None) in
@@ -1846,7 +1876,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         rty, targ#region, JCEmatch(targ, List.rev tpel)
     (* logic only *)
     | JCNEquantifier _ | JCNEold _ | JCNEat _ | JCNEmutable _
-    | JCNEtagequality _ | JCNErange _ ->
+    | JCNEtagequality _ | JCNErange _ | JCNEsubtype _ ->
         typing_error e#loc "construction not allowed in expressions"
   in
   new expr

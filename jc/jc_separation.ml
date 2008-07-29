@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.22 2008-07-24 15:28:43 marche Exp $ *)
+(* $Id: jc_separation.ml,v 1.23 2008-07-29 17:31:40 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -110,7 +110,8 @@ let term rresult t =
 	Region.unify result_region t#region
     | JCTconst _ | JCTrange(None,None) | JCTbinary _ | JCTshift _
     | JCTrange _ | JCTunary _ | JCTderef _ | JCTold _ | JCTat _ | JCToffset _
-    | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTreal_cast _ ->
+    | JCTaddress _ | JCTinstanceof _ | JCTcast _ 
+    | JCTrange_cast _ | JCTreal_cast _ ->
 	()
   ) t
 
@@ -144,7 +145,7 @@ let assertion rresult a =
        | JCAtrue | JCAfalse | JCArelation _  | JCAtagequality _ 
        | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
        | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ | JCAmatch _
-       | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ ->
+       | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAsubtype _ ->
 	   ()
     ) a
 
@@ -160,7 +161,7 @@ let expr rresult e =
        | JCEmatch(_, []) ->
 	   ()
        | JCEconst _ | JCEvar _ | JCEshift _ | JCEunary _
-       | JCEderef _ | JCEoffset _ | JCEinstanceof _ | JCEcast _ 
+       | JCEderef _ | JCEoffset _ | JCEaddress _ | JCEinstanceof _ | JCEcast _ 
        | JCErange_cast _ | JCEreal_cast _ | JCEalloc _ | JCEfree _ 
        | JCElet(_,None,_) ->
 	   ()
@@ -305,6 +306,7 @@ let regionalize_assertion a assoc =
 	  new term_with ~node:tnode t
       | JCTconst _ | JCTvar _ | JCTshift _ 
       | JCTderef _ | JCTbinary _ | JCTunary _ | JCTold _ | JCTat _ | JCToffset _
+      | JCTaddress _ 
       | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ | JCTmatch _ | JCTrange _ ->
 	  t
     in

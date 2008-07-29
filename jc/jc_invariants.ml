@@ -275,7 +275,7 @@ let rec assertion this p =
     | JCAmutable _ ->
 	Jc_typing.typing_error p#loc
 	  "\\mutable is not allowed in structure invariant"
-    | JCAtagequality(t1, t2, _) ->
+    | JCAtagequality(t1, t2, _) | JCAsubtype(t1, t2, _) ->
 	tag this t1;
 	tag this t2
     | JCAmatch(t, pal) ->
@@ -326,7 +326,8 @@ let rec assertion_memories aux a = match a#node with
   | JCAbool_term t -> term_memories aux t
   | JCAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
   | JCAmutable(t, _, _) -> term_memories aux t
-  | JCAtagequality(t1, t2, _) -> tag_memories (tag_memories aux t2) t1
+  | JCAtagequality(t1, t2, _) | JCAsubtype(t1, t2, _) -> 
+      tag_memories (tag_memories aux t2) t1
   | JCAmatch(t, pal) ->
       term_memories (List.fold_left assertion_memories aux (List.map snd pal)) t
 

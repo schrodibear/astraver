@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.103 2008-07-23 15:31:54 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.104 2008-07-29 17:31:40 moy Exp $ */
 
 %{
 
@@ -101,8 +101,8 @@
 /* assigns assumes behavior ensures requires throws reads */
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
 
-/* \forall \exists \offset_max \offset_min \old \result \mutable \typeof \bottom \typeeq */
-%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSOLD BSAT 
+/* \forall \exists \offset_max \offset_min \address \old \result \mutable \typeof \bottom \typeeq */
+%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSADDRESS BSOLD BSAT 
 %token BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM BSTYPEEQ
 
 /* \nothing */
@@ -545,6 +545,8 @@ postfix_expression:
     { locate (JCPEoffset(Offset_max,$3)) }
 | BSOFFSET_MIN LPAR expression RPAR 
     { locate (JCPEoffset(Offset_min,$3)) }
+| BSADDRESS LPAR expression RPAR 
+    { locate (JCPEaddress($3)) }
 | postfix_expression DOT IDENTIFIER
     { locate (JCPEderef ($1, $3)) }
 | postfix_expression PLUSPLUS 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.112 2008-07-24 15:28:43 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.113 2008-07-29 17:31:40 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -394,7 +394,7 @@ let rec is_constant_term t =
     | JCTrange (None, None) (* CORRECT ? *)
     | JCTconst _ -> true
     | JCTvar _ | JCTshift _ | JCTderef _
-    | JCTapp _ | JCTold _ | JCTat _ | JCToffset _
+    | JCTapp _ | JCTold _ | JCTat _ | JCToffset _ | JCTaddress _
     | JCTinstanceof _ | JCTcast _ | JCTrange_cast _
     | JCTreal_cast _ | JCTif _ | JCTmatch _ -> false
     | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
@@ -411,6 +411,7 @@ let term_num t = match t#node with
   | JCTderef _ -> 17
   | JCTold _ -> 19
   | JCToffset _ -> 23
+  | JCTaddress _ -> 25
   | JCTinstanceof _ -> 31
   | JCTcast _ -> 37
   | JCTrange _ -> 41
@@ -440,7 +441,8 @@ let rec raw_term_compare t1 t2 =
   | JCTunary(op1,t11),JCTunary(op2,t21) ->
       let compop = Pervasives.compare op1 op2 in
       if compop = 0 then raw_term_compare t11 t21 else compop
-  | JCTold t11,JCTold t21 ->
+  | JCTold t11,JCTold t21
+  | JCTaddress t11,JCTaddress t21 ->
       raw_term_compare t11 t21
   | JCTderef(t11,_,fi1),JCTderef(t21,_,fi2) ->
       let compfi = 
@@ -527,6 +529,7 @@ let assertion_num a = match a#node with
   | JCAtagequality _ -> 51
   | JCAat _ -> 53
   | JCAmatch _ -> 59
+  | JCAsubtype _ -> 61
 
 (* Comparison based only on assertion structure, not locations. *)
 let rec raw_assertion_compare a1 a2 =
@@ -598,7 +601,7 @@ let rec is_numeric_term t =
   match t#node with
     | JCTconst _ -> true
     | JCTvar _ | JCTshift _ | JCTderef _
-    | JCToffset _ | JCTinstanceof _ | JCTrange _ -> false
+    | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTrange _ -> false
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
     | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _, _) 
     | JCTrange_cast (t, _) | JCTreal_cast (t, _) -> is_numeric_term t
@@ -631,6 +634,7 @@ let rec is_constant_assertion a =
     | JCAnot a | JCAquantifier (_, _, a) | JCAold a | JCAat(a,_)
 	-> is_constant_assertion a
     | JCAapp _ | JCAinstanceof _ | JCAmutable _ | JCAtagequality _
+    | JCAsubtype _
 	-> false
     | JCAbool_term t -> is_constant_term t
     | JCAif (t, a1, a2) ->

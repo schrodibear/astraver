@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.15 2008-07-23 12:13:54 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.16 2008-07-29 17:31:40 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -138,6 +138,8 @@ let rec pexpr fmt e =
 	fprintf fmt "(free(%a))" pexpr e 
     | JCPEoffset(k,e) ->
 	fprintf fmt "\\offset_m%a(%a)" offset_kind k pexpr e 
+    | JCPEaddress e ->
+	fprintf fmt "\\address(%a)" pexpr e 
     | JCPEinstanceof (e, si) ->
 	fprintf fmt "(%a <: %s)" pexpr e si
     | JCPEderef (e, fi) -> 
@@ -164,7 +166,10 @@ let rec pexpr fmt e =
 	  (print_list comma string) vil
 	  pexpr a
     | JCPEmutable _ -> assert false (* TODO *)
-    | JCPEtagequality _ -> assert false (* TODO *)
+    | JCPEtagequality(tag1,tag2) -> 
+	fprintf fmt "\\typeeq(%a,%a)" ptag tag1 ptag tag2
+    | JCPEsubtype(tag1,tag2) -> 
+	fprintf fmt "(%a <: %a)" ptag tag1 ptag tag2
     | JCPEreturn (e) ->
 	fprintf fmt "@\n(return %a)" pexpr e
     | JCPEunpack _ -> assert false (* TODO *) 
@@ -230,6 +235,12 @@ let rec pexpr fmt e =
     | JCPEswitch (e, csl) ->
 	fprintf fmt "@\n@[<v 2>switch (%a) {%a@]@\n}"
 	  pexpr e (print_list nothing case) csl
+
+and ptag fmt tag =
+  match tag#node with
+    | JCPTtag id -> string fmt id#name
+    | JCPTbottom -> string fmt "\\bottom"
+    | JCPTtypeof e -> fprintf fmt "\\typeof(%a)" pexpr e
 
 and handler fmt (ei,vio,s) =
   fprintf fmt "@\n@[<v 2>catch %s %s %a@]"

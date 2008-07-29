@@ -114,6 +114,8 @@ let replace_sub_expr e el =
 	JCEapp { call with jc_call_args = el }
     | JCEoffset(off,_e,st) ->
 	let e1 = as1 el in JCEoffset(off,e1,st)
+    | JCEaddress _e ->
+	let e1 = as1 el in JCEaddress e1
     | JCEinstanceof(_e,st) ->
 	let e1 = as1 el in JCEinstanceof(e1,st)
     | JCEcast(_e,st) ->
@@ -181,6 +183,7 @@ module ExprAst = struct
       | JCErange_cast(e, _)
       | JCEreal_cast(e, _)
       | JCEoffset(_, e, _)
+      | JCEaddress e
       | JCEalloc(e, _)
       | JCEfree e
       | JCElet(_, None, e)
@@ -216,21 +219,27 @@ let rec map_expr ?(before = fun x -> x) ?(after = fun x -> x) e =
 
 module NExprAst = struct
   type t = nexpr
+  let subtags tag = 
+    match tag#node with
+      | JCPTtag _ | JCPTbottom -> []
+      | JCPTtypeof e -> [e]
   let subs e =
     match e#node with
       | JCNEconst _
       | JCNEvar _
       | JCNEreturn None
       | JCNEthrow(_, None)
-      | JCNEtagequality _
       | JCNErange(None, None) ->
           []
+      | JCNEtagequality(tag1,tag2) | JCNEsubtype(tag1,tag2) ->
+	  subtags tag1 @ subtags tag2
       | JCNElabel(_, e)
       | JCNEderef(e, _)
       | JCNEunary(_, e)
       | JCNEinstanceof(e, _)
       | JCNEcast(e, _)
       | JCNEoffset(_, e)
+      | JCNEaddress e
       | JCNEalloc(e, _)
       | JCNEfree e
       | JCNElet(_, _, None, e)
@@ -292,9 +301,28 @@ let replace_sub_pexpr e el =
       e :: el1, el2
     else [],el
   in
+  let replace_sub_tag tag el =
+    let tag_node,el = match tag#node with
+      | JCPTtag _ | JCPTbottom as tag_node -> tag_node,el
+      | JCPTtypeof e -> 
+	  let e1,el = pop el in
+	  JCPTtypeof e1,el
+    in
+    new ptag_with ~node:tag_node tag,el
+  in
   let enode = match e#node with
-    | JCPEconst _ | JCPEvar _ | JCPEtagequality _ | JCPEbreak _
+    | JCPEconst _ | JCPEvar _ | JCPEbreak _
     | JCPEcontinue _ | JCPEgoto _ as enode -> enode
+    | JCPEtagequality(tag1,tag2) ->
+	let tag1,el = replace_sub_tag tag1 el in
+	let tag2,el = replace_sub_tag tag2 el in
+	assert (el == []);
+	JCPEtagequality(tag1,tag2)
+    | JCPEsubtype(tag1,tag2) ->
+	let tag1,el = replace_sub_tag tag1 el in
+	let tag2,el = replace_sub_tag tag2 el in
+	assert (el == []);
+	JCPEsubtype(tag1,tag2)
     | JCPElabel(lab,_e1) -> 
 	let e1 = as1 el in JCPElabel(lab,e1)
     | JCPEbinary(_e1,bop,_e2) ->
@@ -317,6 +345,8 @@ let replace_sub_pexpr e el =
 	let e1 = as1 el in JCPEat(e1,lab)
     | JCPEoffset(off,_e) ->
 	let e1 = as1 el in JCPEoffset(off,e1)
+    | JCPEaddress _e ->
+	let e1 = as1 el in JCPEaddress e1
     | JCPEinstanceof(_e,st) ->
 	let e1 = as1 el in JCPEinstanceof(e1,st)
     | JCPEcast(_e,st) ->
@@ -410,17 +440,22 @@ let replace_sub_pexpr e el =
 
 module PExprAst = struct
   type t = pexpr
+  let subtags tag = 
+    match tag#node with
+      | JCPTtag _ | JCPTbottom -> []
+      | JCPTtypeof e -> [e]
   let subs e =
     match e#node with
       | JCPEconst _
       | JCPEvar _
-      | JCPEtagequality _ 
       | JCPEbreak _
       | JCPEcontinue _ 
       | JCPEgoto _ 
       | JCPErange(None,None)
       | JCPEdecl(_,_,None) ->
           []
+      | JCPEtagequality(tag1,tag2) | JCPEsubtype(tag1,tag2) ->
+	  subtags tag1 @ subtags tag2
       | JCPEassert(_,e)
       | JCPElabel(_, e)
       | JCPEderef(e, _)
@@ -428,6 +463,7 @@ module PExprAst = struct
       | JCPEinstanceof(e, _)
       | JCPEcast(e, _)
       | JCPEoffset(_, e)
+      | JCPEaddress e
       | JCPEalloc(e, _)
       | JCPEfree e
       | JCPElet(_, _,None, e)
@@ -498,7 +534,7 @@ module TermAst = struct
       | JCTrange(Some t1,Some t2) ->
 	  [t1;t2]
       | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCTat(t1,_) 
-      | JCToffset(_,t1,_)
+      | JCToffset(_,t1,_) | JCTaddress t1
       | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_) | JCTrange_cast(t1,_) 
       | JCTreal_cast(t1,_) | JCTrange(Some t1,None)
       | JCTrange(None,Some t1) ->
@@ -521,6 +557,7 @@ let fold_sub_term it f acc t =
 	let acc = it f acc t1 in
 	it f acc t2
     | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCToffset(_,t1,_)
+    | JCTaddress t1
     | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_) | JCTrange_cast(t1,_) 
     | JCTreal_cast(t1,_) | JCTrange(Some t1,None)
     | JCTrange(None,Some t1) | JCTat(t1,_) ->
@@ -564,6 +601,8 @@ let rec map_term f t =
 	JCTat(map_term f t,lab)
     | JCToffset(off,t,st) ->
 	JCToffset(off,map_term f t,st)
+    | JCTaddress t ->
+	JCTaddress (map_term f t)
     | JCTinstanceof(t,lab,st) ->
 	JCTinstanceof(map_term f t,lab,st)
     | JCTcast(t,lab,st) ->
@@ -602,9 +641,17 @@ let raw_strict_sub_term subt t =
 (*****************************************************************************)
 
 let rec iter_term_and_assertion ft fa a =
+  let iter_tag tag = 
+    match tag#node with
+      | JCTtag _ | JCTbottom -> ()
+      | JCTtypeof(t,_st) -> ITerm.iter ft t
+  in
   fa a;
   match a#node with
-    | JCAtrue | JCAfalse | JCAtagequality _ -> ()
+    | JCAtrue | JCAfalse -> ()
+    | JCAtagequality(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
+	iter_tag tag1; 
+	iter_tag tag2
     | JCArelation(t1,_,t2) -> 
 	ITerm.iter ft t1;
 	ITerm.iter ft t2
@@ -646,7 +693,7 @@ let rec fold_assertion f acc a =
   let acc = f acc a in
   match a#node with
     | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAtagequality _ 
-    | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ -> 
+    | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ | JCAsubtype _ -> 
 	acc
     | JCAand al | JCAor al ->
 	List.fold_left (fold_assertion f) acc al
@@ -657,10 +704,18 @@ let rec fold_assertion f acc a =
 	fold_assertion f acc a1
     | JCAmatch(_, pal) ->
 	List.fold_left (fun acc (_, a) -> fold_assertion f acc a) acc pal
+	  
+let fold_term_in_tag f acc tag = 
+  match tag#node with
+    | JCTtag _ | JCTbottom -> acc
+    | JCTtypeof(t,_st) -> fold_term f acc t
 
 let rec fold_term_in_assertion f acc a =
   match a#node with
-    | JCAtrue | JCAfalse | JCAtagequality _ -> acc
+    | JCAtrue | JCAfalse -> acc
+    | JCAtagequality(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
+	let acc = fold_term_in_tag f acc tag1 in
+	fold_term_in_tag f acc tag2
     | JCArelation(t1,_,t2) -> 
 	let acc = fold_term f acc t1 in
 	fold_term f acc t2
@@ -686,7 +741,10 @@ let rec fold_term_in_assertion f acc a =
 
 let rec fold_term_and_assertion ft fa acc a =
   let acc = match a#node with
-    | JCAtrue | JCAfalse | JCAtagequality _ -> acc
+    | JCAtrue | JCAfalse -> acc
+    | JCAtagequality(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
+	let acc = fold_term_in_tag ft acc tag1 in
+	fold_term_in_tag ft acc tag2
     | JCArelation(t1,_,t2) -> 
 	let acc = fold_term ft acc t1 in
 	fold_term ft acc t2
@@ -715,7 +773,8 @@ let rec fold_term_and_assertion ft fa acc a =
 let rec map_assertion f a =
   let anode = match a#node with
     | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAtagequality _ 
-    | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ as anode -> 
+    | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
+    | JCAsubtype _ as anode -> 
 	anode
     | JCAand al ->
 	JCAand(List.map (map_assertion f) al)
@@ -740,9 +799,21 @@ let rec map_assertion f a =
   in
   f (new assertion_with ~node:anode a)
 
+let map_term_in_tag f tag = 
+  let tag_node = match tag#node with
+    | JCTtag _ | JCTbottom as tag_node -> tag_node
+    | JCTtypeof(t,st) -> 
+	JCTtypeof(map_term f t,st)
+  in
+  new tag_with ~node:tag_node tag
+
 let rec map_term_in_assertion f a =
   let anode = match a#node with
-    | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
+    | JCAtrue | JCAfalse as anode -> anode
+    | JCAtagequality(tag1,tag2,st) ->
+	JCAtagequality(map_term_in_tag f tag1,map_term_in_tag f tag2,st)
+    | JCAsubtype(tag1,tag2,st) ->
+	JCAsubtype(map_term_in_tag f tag1,map_term_in_tag f tag2,st)
     | JCArelation(t1,op,t2) -> 
 	JCArelation(map_term f t1,op,map_term f t2)
     | JCAapp app ->
@@ -784,7 +855,11 @@ let rec map_term_in_assertion f a =
 
 let rec map_term_and_assertion fa ft a =
   let anode = match a#node with
-    | JCAtrue | JCAfalse | JCAtagequality _ as anode -> anode
+    | JCAtrue | JCAfalse as anode -> anode
+    | JCAtagequality(tag1,tag2,st) ->
+	JCAtagequality(map_term_in_tag ft tag1,map_term_in_tag ft tag2,st)
+    | JCAsubtype(tag1,tag2,st) ->
+	JCAsubtype(map_term_in_tag ft tag1,map_term_in_tag ft tag2,st)
     | JCArelation(t1,op,t2) -> 
 	JCArelation(map_term ft t1,op,map_term ft t2)
     | JCAapp app ->

@@ -45,47 +45,76 @@ axiom mod_negative_by_negative:
 (*****************************************************************************)
 
 type 't alloc_table
-
 type 't pointer
+type 't block
 
-logic offset_max : 't alloc_table, 't pointer -> int
-logic offset_min : 't alloc_table, 't pointer -> int
+(* memory model *)
 
-predicate valid (a:'t alloc_table, p:'t pointer) = 
+logic base_block: 't pointer -> 't block
+logic address: 't pointer -> int
+logic offset_max: 't alloc_table, 't pointer -> int
+logic offset_min: 't alloc_table, 't pointer -> int
+
+(* shorcuts *)
+
+predicate valid(a:'t alloc_table, p:'t pointer) = 
   offset_min(a,p) <= 0 and offset_max(a,p) >= 0
 
-logic shift : 't pointer, int -> 't pointer
+predicate same_block(p: 't pointer, q:'t pointer) =
+  base_block(p) = base_block(q)
+
+(* pointer arithmetic *)
+
+logic shift: 't pointer, int -> 't pointer
+logic sub_pointer: 't pointer, 't pointer -> int
+
+parameter sub_pointer_ : p:'t pointer -> q:'t pointer -> 
+  { same_block(p,q) } int { result = sub_pointer(p,q) }
+
+(* null pointer*)
+
+logic null: 't pointer
+
+(* address *)
+
+axiom address_injective:
+  forall p:'t pointer. forall q:'t pointer.
+    p = q <-> address(p) = address(q)
+
+axiom address_null:
+  address(null) = 0
+
+axiom address_positive:
+  forall p:'t pointer. 0 <= address(p)
+
+(* shift *)
 
 axiom shift_zero :
-  forall p: 't pointer [shift(p,0)]. shift(p,0) = p
+  forall p:'t pointer [shift(p,0)]. shift(p,0) = p
 
 axiom shift_shift :
-  forall p: 't pointer. forall i:int. forall j:int [shift(shift(p,i),j)].
-  shift(shift(p,i),j) = shift(p,i+j)
+  forall p:'t pointer. forall i:int. forall j:int [shift(shift(p,i),j)].
+    shift(shift(p,i),j) = shift(p,i+j)
 
 axiom offset_max_shift :
- forall a:'t alloc_table.
-  forall p: 't pointer. forall i:int.
-	offset_max(a,shift(p,i)) = offset_max(a,p)-i
+  forall a:'t alloc_table. forall p: 't pointer. forall i:int.
+    offset_max(a,shift(p,i)) = offset_max(a,p)-i
 
 axiom offset_min_shift : 
- forall a:'t alloc_table.
-  forall p: 't pointer. forall i:int.
-	offset_min(a,shift(p,i)) = offset_min(a,p)-i
+  forall a:'t alloc_table. forall p: 't pointer. forall i:int.
+    offset_min(a,shift(p,i)) = offset_min(a,p)-i
 
 axiom neq_shift:
-  forall p: 't pointer. forall i:int. forall j:int [shift(p,i),shift(p,j)].
-  i <> j -> shift(p,i) <> shift(p,j) 
+  forall p:'t pointer. forall i:int. forall j:int [shift(p,i),shift(p,j)].
+    i <> j -> shift(p,i) <> shift(p,j) 
 
+(* null *)
 
-(* the null pointer *)
-
-logic null : 't pointer
-
-axiom null_not_valid : forall a : 't alloc_table. not valid(a, null)
+axiom null_not_valid : 
+  forall a:'t alloc_table. not valid(a, null)
 
 axiom null_pointer : 
-  forall a : 't alloc_table.
+  forall a:'t alloc_table.
     offset_min(a, null) >= 0 and offset_max(a, null) <= -2
 
 (* pointer comparison *)
@@ -106,20 +135,32 @@ axiom neq_pointer_bool_def :
   forall p1: 't pointer. forall p2: 't pointer.
     neq_pointer_bool(p1, p2) = true <-> p1 <> p2
 
-logic same_block : 't pointer, 't pointer -> prop
-
 (* make Simplify loop on bench/java/Arrays.java !!!
 axiom same_block_shift:
   forall p: 't pointer. forall i:int.
     same_block(p,shift(p,i))
 *)
 
-logic sub_pointer: 't pointer, 't pointer -> int
+(* make Simplify loop on Jessie test roux.c 
+axiom same_block_shift:
+  forall p: 't pointer. forall q:'t pointer. forall i:int
+  [same_block(p,shift(q,i))].
+    same_block(p,q) -> same_block(p,shift(q,i))
+*)
+
+
+(* make Simplify loop on Jessie test roux.c 
+axiom sub_pointer_same_block :
+  forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q),same_block(p,q)]. 
+    sub_pointer(p,q) = 0 -> same_block(p,q)
+*)
+
+(* sub_pointer *)
 
 axiom sub_pointer_shift :
-  forall p:'t pointer. forall q:'t pointer [sub_pointer(p,p)]. 
+  forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
     same_block(p,q) ->
-        p = shift(q,sub_pointer(p,q))
+      p = shift(q,sub_pointer(p,q))
 
 axiom sub_pointer_self :
   forall p:'t pointer [sub_pointer(p,p)]. sub_pointer(p,p) = 0
@@ -138,8 +179,8 @@ axiom sub_pointer_shift_left :
 axiom sub_pointer_shift_right :
   forall p:'t pointer. forall q:'t pointer. 
     forall i:int [sub_pointer(p,shift(q,i))].
-    same_block(p,q) ->
-    sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
+      same_block(p,q) ->
+        sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
 
 
 (*****************************************************************************)
@@ -675,7 +716,8 @@ axiom lsr_of_lsl_identity_on_positive:
 
 logic alloc_extends : 't alloc_table, 't alloc_table -> prop
 
-predicate alloc_fresh(a:'t alloc_table, p:'t pointer) = not valid(a,p)
+predicate alloc_fresh(a:'t alloc_table, p:'t pointer, n:int) = 
+  forall i:int. 0 <= i and i < n -> not valid(a,shift(p,i))
 
 axiom alloc_extends_offset_min : 
   forall a1:'t alloc_table. forall a2:'t alloc_table [alloc_extends(a1,a2)]. 
@@ -697,6 +739,22 @@ axiom alloc_fresh_def :
         valid_pset(a,q) -> not in_pset(p,q)
 *)
 
+logic alloc_extends_except : 't alloc_table, 't alloc_table, 't pset -> prop
+
+axiom alloc_extends_except_offset_min :
+ forall a1:'t alloc_table. forall a2:'t alloc_table. forall l:'t pset
+ [alloc_extends_except(a1,a2,l)].
+   alloc_extends_except(a1,a2,l) ->
+     forall p:'t pointer.
+       valid(a1,p) and not in_pset(p,l) -> offset_min(a1,p) = offset_min(a2,p)
+
+axiom alloc_extends_except_offset_max :
+ forall a1:'t alloc_table. forall a2:'t alloc_table. forall l:'t pset
+ [alloc_extends_except(a1,a2,l)].
+   alloc_extends_except(a1,a2,l) ->
+     forall p:'t pointer.
+       valid(a1,p) and not in_pset(p,l) -> offset_max(a1,p) = offset_max(a2,p)
+
 parameter alloc_parameter_ownership : 
   a:'t alloc_table ref -> mut:('t,'t tag_id) memory ref ->
   com:('t,bool) memory ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
@@ -704,7 +762,7 @@ parameter alloc_parameter_ownership :
   't pointer 
   reads mut, com
   writes a, at
-  { alloc_extends(a@,a) and alloc_fresh(a@,result)
+  { alloc_extends(a@,a) and alloc_fresh(a@,result,n)
     and offset_min(a,result) = 0 and offset_max(a,result) = n-1 
     and instanceof(at,result,s) and select(mut,result) = bottom_tag 
     and select(com,result) = false }
@@ -725,7 +783,7 @@ parameter alloc_parameter :
   { n > 0 }
   't pointer 
   writes a, at
-  { alloc_extends(a@,a) and alloc_fresh(a@,result)
+  { alloc_extends(a@,a) and alloc_fresh(a@,result,n)
     and offset_min(a,result) = 0 and offset_max(a,result) = n-1 
     and instanceof(at,result,s) }
 
@@ -734,7 +792,8 @@ parameter free_parameter :
   { offset_min(a,p) = 0 and offset_max(a,p) >= 0 }
   unit
   writes a
-  { offset_max(a,p) < offset_min(a,p) }
+  { alloc_extends_except(a@,a,pset_range(pset_singleton(p),0,offset_max(a,p)))
+    and offset_max(a,p) < offset_min(a,p) }
 
 
 (*****************************************************************************)

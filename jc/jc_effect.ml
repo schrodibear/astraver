@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.113 2008-07-24 15:28:43 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.114 2008-07-29 17:31:40 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -377,7 +377,8 @@ let rec term ef t =
     | JCTinstanceof (_, _, _) -> assert false (* TODO *)
     | JCTat (t1, lab) -> term ef t1
     | JCTold t1 -> term ef t1
-    | JCTunary (_, t1) -> term ef t1
+    | JCTunary (_, t1) 
+    | JCTaddress t1 -> term ef t1
     | JCTshift (t1, t2) 
     | JCTbinary (t1, _, t2) ->
 	term (term ef t1) t2
@@ -426,7 +427,7 @@ let rec assertion ef a =
 	     (tag ef ta
 		(Some (JCtag(st, []))))
 	     (JCtag(st, []))) t
-    | JCAtagequality (t1, t2, h) ->
+    | JCAtagequality (t1, t2, h) | JCAsubtype (t1, t2, h) ->
 	let h = match h with
 	  | None -> None
 	  | Some h -> Some (tov_of_name h)
@@ -461,7 +462,8 @@ let rec expr ef e =
 	else ef
     | JCErange_cast(e1,_)
     | JCEreal_cast(e1,_)
-    | JCEunary(_,e1) -> expr ef e1
+    | JCEunary(_,e1)
+    | JCEaddress e1 -> expr ef e1
     | JCEbinary(e1,op,e2) -> expr (expr ef e1) e2
     | JCEoffset(k,e,st) ->
 	add_alloc_reads (expr ef e)
