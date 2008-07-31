@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.113 2008-07-29 17:31:40 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.114 2008-07-31 15:22:39 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -439,8 +439,13 @@ let field fmt fi =
   fprintf fmt "@\n";
   if fi.jc_field_info_rep then
     fprintf fmt "rep ";
-  fprintf fmt "%a %s;" 
-    print_type fi.jc_field_info_type fi.jc_field_info_name
+  fprintf fmt "%a %s" 
+    print_type fi.jc_field_info_type fi.jc_field_info_name;
+  match fi.jc_field_info_bitsize with
+    | Some bitsize ->
+	fprintf fmt ": %d;" bitsize
+    | None -> 
+	fprintf fmt ";"
 
 let invariant fmt (id, vi, a) =
   fprintf fmt "@\n@[invariant %s(%s) =@ %a;@]"

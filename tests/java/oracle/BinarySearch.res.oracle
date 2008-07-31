@@ -725,6 +725,14 @@ type long
 
 type short
 
+type size16
+
+type size32
+
+type size64
+
+type size8
+
 logic BinarySearch_tag:  -> Object tag_id
 
 logic Object_tag:  -> Object tag_id
@@ -762,6 +770,40 @@ logic Throwable_tag:  -> Object tag_id
 
 axiom Throwable_parenttag_Object : parenttag(Throwable_tag, Object_tag)
 
+axiom bitvector_size16 :
+ (forall bv:size16 bitvector. eq_int(bitvector_size(bv), (16)))
+
+axiom bitvector_size32 :
+ (forall bv:size32 bitvector. eq_int(bitvector_size(bv), (32)))
+
+axiom bitvector_size64 :
+ (forall bv:size64 bitvector. eq_int(bitvector_size(bv), (64)))
+
+axiom bitvector_size8 :
+ (forall bv:size8 bitvector. eq_int(bitvector_size(bv), (8)))
+
+axiom bitvector_size_in_bytes16 :
+ (forall bv:size16 bitvector. eq_int(bitvector_size_in_bytes(bv), (2)))
+
+axiom bitvector_size_in_bytes32 :
+ (forall bv:size32 bitvector. eq_int(bitvector_size_in_bytes(bv), (4)))
+
+axiom bitvector_size_in_bytes64 :
+ (forall bv:size64 bitvector. eq_int(bitvector_size_in_bytes(bv), (8)))
+
+axiom bitvector_size_in_bytes8 :
+ (forall bv:size8 bitvector. eq_int(bitvector_size_in_bytes(bv), (1)))
+
+logic bitvector_to_byte: size8 bitvector -> byte
+
+logic bitvector_to_char: size16 bitvector -> char
+
+logic bitvector_to_int32: size32 bitvector -> int32
+
+logic bitvector_to_long: size64 bitvector -> long
+
+logic bitvector_to_short: size16 bitvector -> short
+
 logic integer_of_byte: byte -> int
 
 logic byte_of_integer: int -> byte
@@ -775,6 +817,8 @@ axiom byte_range :
  (forall x:byte.
   (le_int((-128), integer_of_byte(x)) and le_int(integer_of_byte(x), (127))))
 
+logic byte_to_bitvector: byte -> size8 bitvector
+
 logic integer_of_char: char -> int
 
 logic char_of_integer: int -> char
@@ -787,6 +831,8 @@ axiom char_coerce :
 axiom char_range :
  (forall x:char.
   (le_int((0), integer_of_char(x)) and le_int(integer_of_char(x), (65535))))
+
+logic char_to_bitvector: char -> size16 bitvector
 
 predicate eq_byte(x:byte,
  y:byte) =
@@ -825,6 +871,8 @@ axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
   and le_int(integer_of_int32(x), (2147483647))))
+
+logic int32_to_bitvector: int32 -> size32 bitvector
 
 logic intM_tag:  -> Object tag_id
 
@@ -866,6 +914,8 @@ axiom long_range :
   (le_int((-9223372036854775808), integer_of_long(x))
   and le_int(integer_of_long(x), (9223372036854775807))))
 
+logic long_to_bitvector: long -> size64 bitvector
+
 goal mean_property :
  (forall x_4:int.
   (forall y:int.
@@ -891,6 +941,8 @@ axiom short_range :
  (forall x:short.
   (le_int((-32768), integer_of_short(x))
   and le_int(integer_of_short(x), (32767))))
+
+logic short_to_bitvector: short -> size16 bitvector
 
 predicate valid_struct_Object(p:Object pointer,
  a:int,
@@ -1410,7 +1462,7 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "why/BinarySearch.why" line = "156" begin = "0" end = "206"/>
+      <location file = "why/BinarySearch.why" line = "206" begin = "0" end = "206"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -1421,7 +1473,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "why/BinarySearch.why" line = "605" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "657" begin = "49" end = "208"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
@@ -1951,6 +2003,41 @@ axiom select_store_neq:
         (forall a:'a2 [store(m, p1, a), p2].
           ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
 
+type 'size bitvector
+
+logic bitvector_size : 'a1 bitvector -> int
+
+logic bitvector_size_in_bytes : 'a1 bitvector -> int
+
+logic select_bytes : 'a1 bitvector, int, int -> 'a1 bitvector
+
+logic store_bytes : 'a1 bitvector, int, int, 'a2 bitvector -> 'a1 bitvector
+
+axiom select_store_eq_bytes:
+  (forall b:'a1 bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+              l)].
+              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
+                ((i = k) and (j = l))) ->
+               (select_bytes(store_bytes(b, i, j, a), k, l) = b))))))))
+
+axiom select_store_neq_bytes:
+  (forall b:'a1 bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+              l)].
+              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
+                ((l < i) or (j < k))) ->
+               (select_bytes(store_bytes(b, i, j, a), k, l) = select_bytes(b,
+               k, l)))))))))
+
 type 't pset
 
 logic pset_empty :  -> 'a1 pset
@@ -2276,6 +2363,14 @@ type long
 
 type short
 
+type size16
+
+type size32
+
+type size64
+
+type size8
+
 logic BinarySearch_tag :  -> Object tag_id
 
 logic Object_tag :  -> Object tag_id
@@ -2305,6 +2400,39 @@ logic Throwable_tag :  -> Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
+axiom bitvector_size16:
+  (forall bv:size16 bitvector. (bitvector_size(bv) = 16))
+
+axiom bitvector_size32:
+  (forall bv:size32 bitvector. (bitvector_size(bv) = 32))
+
+axiom bitvector_size64:
+  (forall bv:size64 bitvector. (bitvector_size(bv) = 64))
+
+axiom bitvector_size8: (forall bv:size8 bitvector. (bitvector_size(bv) = 8))
+
+axiom bitvector_size_in_bytes16:
+  (forall bv:size16 bitvector. (bitvector_size_in_bytes(bv) = 2))
+
+axiom bitvector_size_in_bytes32:
+  (forall bv:size32 bitvector. (bitvector_size_in_bytes(bv) = 4))
+
+axiom bitvector_size_in_bytes64:
+  (forall bv:size64 bitvector. (bitvector_size_in_bytes(bv) = 8))
+
+axiom bitvector_size_in_bytes8:
+  (forall bv:size8 bitvector. (bitvector_size_in_bytes(bv) = 1))
+
+logic bitvector_to_byte : size8 bitvector -> byte
+
+logic bitvector_to_char : size16 bitvector -> char
+
+logic bitvector_to_int32 : size32 bitvector -> int32
+
+logic bitvector_to_long : size64 bitvector -> long
+
+logic bitvector_to_short : size16 bitvector -> short
+
 logic integer_of_byte : byte -> int
 
 logic byte_of_integer : int -> byte
@@ -2318,6 +2446,8 @@ axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
 
+logic byte_to_bitvector : byte -> size8 bitvector
+
 logic integer_of_char : char -> int
 
 logic char_of_integer : int -> char
@@ -2329,6 +2459,8 @@ axiom char_coerce:
 axiom char_range:
   (forall x:char.
     ((0 <= integer_of_char(x)) and (integer_of_char(x) <= 65535)))
+
+logic char_to_bitvector : char -> size16 bitvector
 
 predicate eq_byte(x: byte, y: byte) =
   (integer_of_byte(x) = integer_of_byte(y))
@@ -2362,6 +2494,8 @@ axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
      (integer_of_int32(x) <= 2147483647)))
+
+logic int32_to_bitvector : int32 -> size32 bitvector
 
 logic intM_tag :  -> Object tag_id
 
@@ -2400,6 +2534,8 @@ axiom long_range:
     (((-9223372036854775808) <= integer_of_long(x)) and
      (integer_of_long(x) <= 9223372036854775807)))
 
+logic long_to_bitvector : long -> size64 bitvector
+
 axiom mean_property_as_axiom:
   (forall x_4:int.
     (forall y:int.
@@ -2416,6 +2552,8 @@ axiom short_coerce:
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
+
+logic short_to_bitvector : short -> size16 bitvector
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -4951,6 +5089,31 @@ why -simplify [...] why/BinarySearch.why
  (IMPLIES (NEQ p1 p2)
  (FORALL (m a) (EQ (select (|why__store| m p1 a) p2) (select m p2))))))
 
+(BG_PUSH
+ ;; Why axiom select_store_eq_bytes
+ (FORALL (b i j k l a)
+ (IMPLIES
+ (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (AND (EQ i k) (EQ j l)))
+ (EQ (select_bytes (store_bytes b i j a) k l) b)))
+
+ (FORALL (i j k l a)
+ (IMPLIES
+ (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (AND (EQ i k) (EQ j l)))
+ (FORALL (b) (EQ (select_bytes (store_bytes b i j a) k l) b)))))
+
+(BG_PUSH
+ ;; Why axiom select_store_neq_bytes
+ (FORALL (b i j k l a)
+ (IMPLIES
+ (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (OR (< l i) (< j k)))
+ (EQ (select_bytes (store_bytes b i j a) k l) (select_bytes b k l))))
+
+ (FORALL (i j k l a)
+ (IMPLIES
+ (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (OR (< l i) (< j k)))
+ (FORALL (b)
+ (EQ (select_bytes (store_bytes b i j a) k l) (select_bytes b k l))))))
+
 (DEFPRED (pset_disjoint ps1 ps2)
   (FORALL (p)
   (NOT (AND (EQ (in_pset p ps1) |@true|) (EQ (in_pset p ps2) |@true|)))))
@@ -5251,6 +5414,38 @@ why -simplify [...] why/BinarySearch.why
  (EQ (parenttag Throwable_tag Object_tag) |@true|))
 
 (BG_PUSH
+ ;; Why axiom bitvector_size16
+ (FORALL (bv) (EQ (bitvector_size bv) 16)))
+
+(BG_PUSH
+ ;; Why axiom bitvector_size32
+ (FORALL (bv) (EQ (bitvector_size bv) 32)))
+
+(BG_PUSH
+ ;; Why axiom bitvector_size64
+ (FORALL (bv) (EQ (bitvector_size bv) 64)))
+
+(BG_PUSH
+ ;; Why axiom bitvector_size8
+ (FORALL (bv) (EQ (bitvector_size bv) 8)))
+
+(BG_PUSH
+ ;; Why axiom bitvector_size_in_bytes16
+ (FORALL (bv) (EQ (bitvector_size_in_bytes bv) 2)))
+
+(BG_PUSH
+ ;; Why axiom bitvector_size_in_bytes32
+ (FORALL (bv) (EQ (bitvector_size_in_bytes bv) 4)))
+
+(BG_PUSH
+ ;; Why axiom bitvector_size_in_bytes64
+ (FORALL (bv) (EQ (bitvector_size_in_bytes bv) 8)))
+
+(BG_PUSH
+ ;; Why axiom bitvector_size_in_bytes8
+ (FORALL (bv) (EQ (bitvector_size_in_bytes bv) 1)))
+
+(BG_PUSH
  ;; Why axiom byte_coerce
  (FORALL (x)
  (IMPLIES (AND (<= (- 0 128) x) (<= x 127))
@@ -5336,7 +5531,7 @@ why -simplify [...] why/BinarySearch.why
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
-;; mean_property, File "why/BinarySearch.why", line 156, characters 0-206
+;; mean_property, File "why/BinarySearch.why", line 206, characters 0-206
 (FORALL (x_4 y)
 (IMPLIES (<= x_4 y)
 (AND (<= x_4 (+ x_4 (int_div (- y x_4) 2)))
@@ -6107,7 +6302,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
 (integer_of_int32 v)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 605, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 657, characters 49-208
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -8326,6 +8521,41 @@ axiom select_store_neq:
         (forall a:'a2 [store(m, p1, a), p2].
           ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
 
+type 'size bitvector
+
+logic bitvector_size : 'a1 bitvector -> int
+
+logic bitvector_size_in_bytes : 'a1 bitvector -> int
+
+logic select_bytes : 'a1 bitvector, int, int -> 'a1 bitvector
+
+logic store_bytes : 'a1 bitvector, int, int, 'a2 bitvector -> 'a1 bitvector
+
+axiom select_store_eq_bytes:
+  (forall b:'a1 bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+              l)].
+              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
+                ((i = k) and (j = l))) ->
+               (select_bytes(store_bytes(b, i, j, a), k, l) = b))))))))
+
+axiom select_store_neq_bytes:
+  (forall b:'a1 bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+              l)].
+              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
+                ((l < i) or (j < k))) ->
+               (select_bytes(store_bytes(b, i, j, a), k, l) = select_bytes(b,
+               k, l)))))))))
+
 type 't pset
 
 logic pset_empty :  -> 'a1 pset
@@ -8651,6 +8881,14 @@ type long
 
 type short
 
+type size16
+
+type size32
+
+type size64
+
+type size8
+
 logic BinarySearch_tag :  -> Object tag_id
 
 logic Object_tag :  -> Object tag_id
@@ -8680,6 +8918,39 @@ logic Throwable_tag :  -> Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
+axiom bitvector_size16:
+  (forall bv:size16 bitvector. (bitvector_size(bv) = 16))
+
+axiom bitvector_size32:
+  (forall bv:size32 bitvector. (bitvector_size(bv) = 32))
+
+axiom bitvector_size64:
+  (forall bv:size64 bitvector. (bitvector_size(bv) = 64))
+
+axiom bitvector_size8: (forall bv:size8 bitvector. (bitvector_size(bv) = 8))
+
+axiom bitvector_size_in_bytes16:
+  (forall bv:size16 bitvector. (bitvector_size_in_bytes(bv) = 2))
+
+axiom bitvector_size_in_bytes32:
+  (forall bv:size32 bitvector. (bitvector_size_in_bytes(bv) = 4))
+
+axiom bitvector_size_in_bytes64:
+  (forall bv:size64 bitvector. (bitvector_size_in_bytes(bv) = 8))
+
+axiom bitvector_size_in_bytes8:
+  (forall bv:size8 bitvector. (bitvector_size_in_bytes(bv) = 1))
+
+logic bitvector_to_byte : size8 bitvector -> byte
+
+logic bitvector_to_char : size16 bitvector -> char
+
+logic bitvector_to_int32 : size32 bitvector -> int32
+
+logic bitvector_to_long : size64 bitvector -> long
+
+logic bitvector_to_short : size16 bitvector -> short
+
 logic integer_of_byte : byte -> int
 
 logic byte_of_integer : int -> byte
@@ -8693,6 +8964,8 @@ axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
 
+logic byte_to_bitvector : byte -> size8 bitvector
+
 logic integer_of_char : char -> int
 
 logic char_of_integer : int -> char
@@ -8704,6 +8977,8 @@ axiom char_coerce:
 axiom char_range:
   (forall x:char.
     ((0 <= integer_of_char(x)) and (integer_of_char(x) <= 65535)))
+
+logic char_to_bitvector : char -> size16 bitvector
 
 predicate eq_byte(x: byte, y: byte) =
   (integer_of_byte(x) = integer_of_byte(y))
@@ -8737,6 +9012,8 @@ axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
      (integer_of_int32(x) <= 2147483647)))
+
+logic int32_to_bitvector : int32 -> size32 bitvector
 
 logic intM_tag :  -> Object tag_id
 
@@ -8775,6 +9052,8 @@ axiom long_range:
     (((-9223372036854775808) <= integer_of_long(x)) and
      (integer_of_long(x) <= 9223372036854775807)))
 
+logic long_to_bitvector : long -> size64 bitvector
+
 goal mean_property:
   (forall x_4:int.
     (forall y:int.
@@ -8797,6 +9076,8 @@ axiom short_coerce:
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
+
+logic short_to_bitvector : short -> size16 bitvector
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -11121,10 +11402,10 @@ goal BinarySearch_binary_search_safety_po_31:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ..........#........................##.....#... (42/0/0/4/0)
+why/BinarySearch_why.why      : ..........#........................##.....##.. (41/0/0/5/0)
 total   :  46
-valid   :  42 ( 91%)
+valid   :  41 ( 89%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   4 (  9%)
+timeout :   5 ( 11%)
 failure :   0 (  0%)

@@ -510,7 +510,7 @@ module PDecl :
       name:string ->
       ?params:string list ->
       ?super:string * Jc_ast.ptype list ->
-      ?fields:(bool * Jc_ast.ptype * string) list ->
+      ?fields:(bool * Jc_ast.ptype * string * int option) list ->
       ?invariants:(Jc_ast.identifier * string * 'a) list ->
       ?loc:Loc.position -> unit -> 'a Jc_ast.decl_node node_located
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.152 2008-07-24 15:28:43 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.153 2008-07-31 15:22:39 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -276,6 +276,7 @@ let create_field loc fi =
       jc_field_info_root = ci.jc_struct_info_root;
       jc_field_info_struct = ci;
       jc_field_info_rep = false;
+      jc_field_info_bitsize = None;
       (*
 	jc_field_info_final_name = vi.java_field_info_name;
 	jc_var_info_assigned = vi.java_var_info_assigned;
@@ -846,6 +847,7 @@ let array_types decls =
 	 jc_field_info_root = object_root;
 	 jc_field_info_struct = st;
 	 jc_field_info_rep = false;
+	 jc_field_info_bitsize = None;
        }
        in
        st.jc_struct_info_fields <- [fi];
@@ -918,7 +920,8 @@ let array_types decls =
           (List.map begin fun fi ->
              fi.jc_field_info_rep,
              ptype_of_type fi.jc_field_info_type,
-             fi_name fi
+             fi_name fi,
+	     None
            end st.jc_struct_info_fields)
           ()) :: acc,
        (mkfun_def
@@ -1982,7 +1985,8 @@ let tr_class ci acc0 acc =
     let fields = List.map begin function fi ->
       fi.jc_field_info_rep,
       ptype_of_type fi.jc_field_info_type,
-      fi_name fi
+      fi_name fi,
+      None
     end jc_fields in
     (mktag_def
        ~name: ci.class_info_name

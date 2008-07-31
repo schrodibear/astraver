@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.315 2008-07-31 08:33:11 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.316 2008-07-31 15:22:39 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -304,8 +304,21 @@ let mod_of_enum n = "mod_" ^ n.jc_enum_info_name ^ "_of_integer"
 let fun_any_enum n = "any_" ^ n.jc_enum_info_name
 let eq_of_enum n = "eq_" ^ n.jc_enum_info_name
 
-let logic_union_of_field fi = "union_of_" ^ fi.jc_field_info_name
-let logic_field_of_union fi = fi.jc_field_info_name ^ "_of_union"
+let logic_union_of_field fi = "bitvector_of_" ^ fi.jc_field_info_name
+let logic_field_of_union fi = fi.jc_field_info_name ^ "_of_bitvector"
+
+let has_equality_op = function
+  | JCTnative Tunit -> false
+  | JCTnative Tboolean -> true
+  | JCTnative Tinteger -> true
+  | JCTnative Treal -> true
+  | JCTnative Tstring -> true
+  | JCTlogic _s -> (* TODO *) false
+  | JCTenum _ei -> true
+  | JCTpointer _
+  | JCTnull ->  true
+  | JCTany -> false
+  | JCTtype_var _ -> false (* TODO ? *)
   
 let equality_op_for_type = function
   | JCTnative Tunit -> assert false
@@ -2091,17 +2104,20 @@ let make_valid_pred tov =
     in
     let fields_valid = match tov with
       | JCtag(st, _) ->
-          List.map
-            (function
-               | { jc_field_info_type =
-                     JCTpointer(ftov, Some fa, Some fb) } as fi ->
-                   make_valid_pred_app ftov
-                     (make_select_fi fi (LVar p))
-                     (const_of_num fa)
-                     (const_of_num fb)
-               | _ ->
-                   LTrue)
-            st.jc_struct_info_fields
+	  if (struct_variant st).jc_variant_info_is_union then
+	    [LTrue]
+	  else
+            List.map
+              (function
+		 | { jc_field_info_type =
+                       JCTpointer(ftov, Some fa, Some fb) } as fi ->
+                     make_valid_pred_app ftov
+                       (make_select_fi fi (LVar p))
+                       (const_of_num fa)
+                       (const_of_num fb)
+		 | _ ->
+                     LTrue)
+              st.jc_struct_info_fields
       | JCvariant _ | JCunion _ ->
           [LTrue]
     in
@@ -2139,21 +2155,26 @@ let tr_struct st acc =
   let acc = 
     if not vi.jc_variant_info_is_union then acc else
       if integral_union vi then acc else
-        let uty = simple_logic_type (union_memory_type_name (struct_variant st)) in
+	let size = struct_bitsize st in
+	let ssize = string_of_int size in
+	let sizety = size_type ssize in
+        let uty = bitvector_type sizety in
         List.fold_left
           (fun acc fi ->
-             Logic(false,logic_field_of_union fi,
-                   [("",uty)],tr_base_type fi.jc_field_info_type)
-             :: Logic(false,logic_union_of_field fi,
-                      [("",tr_base_type fi.jc_field_info_type)],uty)
-             :: Axiom((logic_field_of_union fi)^"_of_"^(logic_union_of_field fi),
-                      LForall("x",tr_base_type fi.jc_field_info_type,
-                              LPred(equality_op_for_type fi.jc_field_info_type,
-                                    [LApp(logic_field_of_union fi,
-                                          [LApp(logic_union_of_field fi, 
-                                                [LVar "x"])]);
-                                     LVar "x"]))) 
-             :: acc)
+	     if has_equality_op fi.jc_field_info_type then
+               Logic(false,logic_field_of_union fi,
+                     [("",uty)],tr_base_type fi.jc_field_info_type)
+               :: Logic(false,logic_union_of_field fi,
+			[("",tr_base_type fi.jc_field_info_type)],uty)
+               :: Axiom((logic_field_of_union fi)^"_of_"^(logic_union_of_field fi),
+			LForall("x",tr_base_type fi.jc_field_info_type,
+				LPred(equality_op_for_type fi.jc_field_info_type,
+                                      [LApp(logic_field_of_union fi,
+                                            [LApp(logic_union_of_field fi, 
+                                                  [LVar "x"])]);
+                                       LVar "x"])))
+               :: acc
+	     else acc)
           acc st.jc_struct_info_fields
   in
   (* declaration of the tag_id *)
@@ -3324,7 +3345,7 @@ let tr_enum_type ri (* to_int of_int *) acc =
   let name = ri.jc_enum_info_name in
   let min = Num.string_of_num ri.jc_enum_info_min in
   let max = Num.string_of_num ri.jc_enum_info_max in
-  let max_sub_min = Num.string_of_num (range_of_enum ri) in
+  let width = Num.string_of_num (range_of_enum ri) in
   let lt = simple_logic_type name in
   let in_bounds x =
     LAnd(LPred("le_int",[LConst(Prim_int min); x]),
@@ -3368,7 +3389,7 @@ let tr_enum_type ri (* to_int of_int *) acc =
               LPred("eq_int",[LApp(logic_int_of_enum ri,[LVar "x"]);
                              LApp(logic_int_of_enum ri,[LVar "y"])]))
   :: (if !Jc_options.int_model = IMmodulo then
-        let width = LConst (Prim_int max_sub_min) in
+        let width = LConst (Prim_int width) in
         let fmod t = LApp (mod_of_enum ri, [t]) in
         [Logic (false, mod_of_enum ri, 
                 ["x", simple_logic_type "int"], simple_logic_type "int");
@@ -3424,7 +3445,30 @@ let tr_enum_type ri (* to_int of_int *) acc =
                                      [LApp(logic_enum_of_int ri, 
                                            [LVar "x"])]) ; 
                                 LVar "x"]))))
-  :: acc
+  :: (if is_power_of_two (range_of_enum ri) then
+	let size = log2 (range_of_enum ri) in
+	let ssize = string_of_num size in
+	let sizety = size_type ssize in
+	Type(sizety.logic_type_name,[])
+	:: Axiom("bitvector_size" ^ ssize,
+		 LForall("bv",bitvector_type sizety,
+			 LPred("eq_int",
+			       [LApp("bitvector_size",[LVar "bv"]);
+				LConst(Prim_int ssize)])))
+	:: (if mod_num size eight =/ zero then
+	      let size_in_bytes = size // eight in
+	      let ssize_in_bytes = string_of_num size_in_bytes in
+	      [Axiom("bitvector_size_in_bytes" ^ ssize,
+		     LForall("bv",bitvector_type sizety,
+			     LPred("eq_int",
+				   [LApp("bitvector_size_in_bytes",[LVar "bv"]);
+				    LConst(Prim_int ssize_in_bytes)])))]
+	    else [])
+	@ Logic(false,name ^ "_to_bitvector",["",lt],bitvector_type sizety)
+	:: Logic(false,"bitvector_to_" ^ name,["",bitvector_type sizety],lt)
+	:: []
+      else [])
+  @ acc
 
 let tr_enum_type_pair ri1 ri2 acc =
   (* Information from first enum *)
@@ -3500,14 +3544,13 @@ let tr_alloc_table2 (a,r) acc =
 let tr_variant vi acc =
   let acc =
     if not vi.jc_variant_info_is_union then acc else
-      (* Declaration of abstract type for union if not integer *)
-      let acc = 
-        if integral_union vi then acc else
-          Type(union_memory_type_name vi,[]) :: acc 
-      in
       (* Declarations of field memories. *)
       if !Jc_options.separation_sem = SepRegions then acc else
-        let mem = union_memory_type vi in
+	let st = List.hd vi.jc_variant_info_roots in
+	let size = struct_bitsize st in
+	let ssize = string_of_int size in
+	let sizety = size_type ssize in
+        let mem = bitvector_type sizety in
         Param(false,
               union_memory_name vi,
               Ref_type(Base_type mem))::acc

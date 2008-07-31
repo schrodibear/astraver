@@ -189,8 +189,8 @@ axiom sub_pointer_shift_right :
 
 type ('t,'v) memory
 
-logic select : ('t,'v) memory, 't pointer -> 'v 
-logic store : ('t,'v) memory, 't pointer, 'v -> ('t,'v) memory
+logic select: ('t,'v) memory, 't pointer -> 'v 
+logic store: ('t,'v) memory, 't pointer, 'v -> ('t,'v) memory
 
 axiom select_store_eq:
   forall m: ('t,'v) memory. 
@@ -207,13 +207,42 @@ axiom select_store:
     select(store(m,p,a),p) = a
 *)
  
-axiom select_store_neq : 
+axiom select_store_neq: 
   forall m: ('t,'v) memory. 
   forall p1: 't pointer. 
   forall p2: 't pointer. 
   forall a: 'v [store(m,p1,a),p2] .
-      p1 <> p2 -> select(store(m,p1,a),p2) = select(m,p2)
+    p1 <> p2 -> select(store(m,p1,a),p2) = select(m,p2)
 
+
+(*****************************************************************************)
+(* bitvectors                                                                *)
+(*****************************************************************************)
+
+type 'size bitvector
+
+logic bitvector_size: 'size bitvector -> int
+logic bitvector_size_in_bytes: 'size bitvector -> int
+
+logic select_bytes: 'size bitvector, int, int -> 'size bitvector 
+logic store_bytes: 
+      'size1 bitvector, int, int, 'size2 bitvector -> 'size1 bitvector
+
+axiom select_store_eq_bytes:
+  forall b: 'size1 bitvector. 
+  forall i:int. forall j:int.
+  forall k:int. forall l:int.
+  forall a: 'size2 bitvector [select_bytes(store_bytes(b,i,j,a),k,l)].
+    bitvector_size_in_bytes(a) = j - i + 1 and i = k and j = l
+    -> select_bytes(store_bytes(b,i,j,a),k,l) = b
+
+axiom select_store_neq_bytes: 
+  forall b: 'size1 bitvector. 
+  forall i:int. forall j:int.
+  forall k:int. forall l:int.
+  forall a: 'size2 bitvector [select_bytes(store_bytes(b,i,j,a),k,l)].
+    bitvector_size_in_bytes(a) = j - i + 1 and (l < i or j < k)
+    -> select_bytes(store_bytes(b,i,j,a),k,l) = select_bytes(b,k,l)
 
 (*****************************************************************************)
 (* access and update side-effect functions                                   *)

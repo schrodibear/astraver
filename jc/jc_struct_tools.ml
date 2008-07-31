@@ -52,8 +52,9 @@ let rec all_memories select forbidden acc tov =
   Jc_options.lprintf "  all_memories(%s)@." (tag_or_variant_name tov);
   match tov with
     | JCtag(st, _) as tov ->
-	if StringSet.mem st.jc_struct_info_name forbidden then
-	  acc
+	if StringSet.mem st.jc_struct_info_name forbidden 
+	  || (struct_variant st).jc_variant_info_is_union then
+	    acc
 	else
 	  let fields = List.filter select (all_fields tov) in
 	  (* add the fields to our list *)

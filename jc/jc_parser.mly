@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.104 2008-07-29 17:31:40 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.105 2008-07-31 15:22:39 moy Exp $ */
 
 %{
 
@@ -286,9 +286,13 @@ field_declaration_list:
 
 field_declaration:
 | type_expr IDENTIFIER SEMICOLON
-    { (false, $1, $2) }
+    { (false, $1, $2, None) }
+| type_expr IDENTIFIER COLON int_constant SEMICOLON
+    { (false, $1, $2, Some (Num.int_of_num $4)) }
 | REP type_expr IDENTIFIER SEMICOLON
-    { (true, $2, $3) }
+    { (true, $2, $3, None) }
+| REP type_expr IDENTIFIER COLON int_constant SEMICOLON
+    { (true, $2, $3, Some (Num.int_of_num $5)) }
 ;
 
 invariant:

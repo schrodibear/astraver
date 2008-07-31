@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.113 2008-07-29 17:31:40 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.114 2008-07-31 15:22:39 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -36,8 +36,10 @@ open Jc_fenv
 open Jc_constructors
 open Jc_ast
 open Jc_region
+open Num
 
 let ( $ ) = fun f g x -> f(g x)
+let the o = match o with None -> assert false | Some x -> x
 
 exception Error of Loc.position * string
 
@@ -45,6 +47,21 @@ let error l =
   Format.kfprintf 
     (fun fmt -> raise (Error(l, flush_str_formatter()))) 
     str_formatter
+
+let zero = Num.Int 0
+let one = Num.Int 1
+let two = Num.Int 2
+let eight = Num.Int 8
+
+let rec is_power_of_two i =
+  if i <=/ zero then
+    false
+  else
+    i =/ one || mod_num i two =/ zero && is_power_of_two (i // two)
+
+let rec log2 i =
+  assert (i >/ zero);
+  if i =/ one then zero else one +/ log2 (i // two)
 
 let operator_of_native = function
   | Tunit -> `Unit
@@ -813,6 +830,22 @@ let integral_union vi =
 		      | [fi] -> integral_type fi.jc_field_info_type
 		      | _ -> false
 		 ) true vi.jc_variant_info_roots
+
+let struct_has_bytesize st =
+  List.fold_left 
+    (fun acc fi -> acc && 
+       match fi.jc_field_info_bitsize with None -> false | Some _ -> true)
+    true st.jc_struct_info_fields
+  
+let struct_bitsize st = 
+  List.fold_left (fun acc fi -> acc + the fi.jc_field_info_bitsize)
+    0 st.jc_struct_info_fields
+
+let struct_bytesize st = 
+  struct_bitsize st / 8
+
+let possible_struct_bytesize st = 
+  if struct_has_bytesize st then Some (struct_bytesize st) else None
 
 (* These are only used by error messages, so feel free to change the strings. *)
 let string_of_op = function

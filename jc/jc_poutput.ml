@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.16 2008-07-29 17:31:40 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.17 2008-07-31 15:22:39 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -287,12 +287,17 @@ let pclause fmt = function
 let param fmt (ty,vi) =
   fprintf fmt "%a %s" ptype ty vi
 
-let field fmt (rep,ty,fi) =
+let field fmt (rep,ty,fi,bitsize) =
   fprintf fmt "@\n";
   if rep then
     fprintf fmt "rep ";
-  fprintf fmt "%a %s;" 
-    ptype ty fi
+  fprintf fmt "%a %s" 
+    ptype ty fi;
+  match bitsize with
+    | Some bitsize ->
+	fprintf fmt ": %d;" bitsize
+    | None -> 
+	fprintf fmt ";"
 
 let invariant fmt (id, vi, a) =
   fprintf fmt "@\n@[<hv 2>invariant %s(%s) =@ %a;@]"

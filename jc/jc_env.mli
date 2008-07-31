@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.55 2008-06-23 14:15:56 bardou Exp $ *)
+(* $Id: jc_env.mli,v 1.56 2008-07-31 15:22:39 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tstring
 
@@ -94,6 +94,8 @@ and field_info =
       jc_field_info_root : struct_info;
         (* The root of the structure in which the field is defined *)
       jc_field_info_rep : bool; (* "rep" flag *)
+      jc_field_info_bitsize : int option;
+        (* Size of the field in bits, optional *)
     }
 
 type field_or_variant_info = 

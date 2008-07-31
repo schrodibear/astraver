@@ -1393,6 +1393,41 @@ axiom select_store_neq:
         (forall a:'a2 [store(m, p1, a), p2].
           ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
 
+type 'size bitvector
+
+logic bitvector_size : 'a1 bitvector -> int
+
+logic bitvector_size_in_bytes : 'a1 bitvector -> int
+
+logic select_bytes : 'a1 bitvector, int, int -> 'a1 bitvector
+
+logic store_bytes : 'a1 bitvector, int, int, 'a2 bitvector -> 'a1 bitvector
+
+axiom select_store_eq_bytes:
+  (forall b:'a1 bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+              l)].
+              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
+                ((i = k) and (j = l))) ->
+               (select_bytes(store_bytes(b, i, j, a), k, l) = b))))))))
+
+axiom select_store_neq_bytes:
+  (forall b:'a1 bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+              l)].
+              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
+                ((l < i) or (j < k))) ->
+               (select_bytes(store_bytes(b, i, j, a), k, l) = select_bytes(b,
+               k, l)))))))))
+
 type 't pset
 
 logic pset_empty :  -> 'a1 pset
@@ -2098,6 +2133,31 @@ why -simplify [...] why/Termination.why
  (FORALL (p1 p2)
  (IMPLIES (NEQ p1 p2)
  (FORALL (m a) (EQ (select (|why__store| m p1 a) p2) (select m p2))))))
+
+(BG_PUSH
+ ;; Why axiom select_store_eq_bytes
+ (FORALL (b i j k l a)
+ (IMPLIES
+ (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (AND (EQ i k) (EQ j l)))
+ (EQ (select_bytes (store_bytes b i j a) k l) b)))
+
+ (FORALL (i j k l a)
+ (IMPLIES
+ (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (AND (EQ i k) (EQ j l)))
+ (FORALL (b) (EQ (select_bytes (store_bytes b i j a) k l) b)))))
+
+(BG_PUSH
+ ;; Why axiom select_store_neq_bytes
+ (FORALL (b i j k l a)
+ (IMPLIES
+ (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (OR (< l i) (< j k)))
+ (EQ (select_bytes (store_bytes b i j a) k l) (select_bytes b k l))))
+
+ (FORALL (i j k l a)
+ (IMPLIES
+ (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (OR (< l i) (< j k)))
+ (FORALL (b)
+ (EQ (select_bytes (store_bytes b i j a) k l) (select_bytes b k l))))))
 
 (DEFPRED (pset_disjoint ps1 ps2)
   (FORALL (p)
@@ -2894,6 +2954,41 @@ axiom select_store_neq:
       (forall p2:'a1 pointer.
         (forall a:'a2 [store(m, p1, a), p2].
           ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
+
+type 'size bitvector
+
+logic bitvector_size : 'a1 bitvector -> int
+
+logic bitvector_size_in_bytes : 'a1 bitvector -> int
+
+logic select_bytes : 'a1 bitvector, int, int -> 'a1 bitvector
+
+logic store_bytes : 'a1 bitvector, int, int, 'a2 bitvector -> 'a1 bitvector
+
+axiom select_store_eq_bytes:
+  (forall b:'a1 bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+              l)].
+              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
+                ((i = k) and (j = l))) ->
+               (select_bytes(store_bytes(b, i, j, a), k, l) = b))))))))
+
+axiom select_store_neq_bytes:
+  (forall b:'a1 bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+              l)].
+              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
+                ((l < i) or (j < k))) ->
+               (select_bytes(store_bytes(b, i, j, a), k, l) = select_bytes(b,
+               k, l)))))))))
 
 type 't pset
 

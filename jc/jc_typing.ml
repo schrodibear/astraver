@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.230 2008-07-31 08:33:11 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.231 2008-07-31 15:22:39 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -80,6 +80,7 @@ let create_mutable_field st =
     jc_field_info_root = st.jc_struct_info_root;
     jc_field_info_struct = st;
     jc_field_info_rep = false;
+    jc_field_info_bitsize = None;
   } in
   Hashtbl.add committed_fields_table st.jc_struct_info_name fi
 
@@ -1964,8 +1965,7 @@ let param (t,id) =
 
 let assertion_true = new assertion JCAtrue
 
-let field st root (rep, t, id) =
-(*  Printf.printf "Adding %s in %s%!" id st.jc_struct_info_name;*)
+let field st root (rep, t, id, bitsize) =
   let ty = type_type t in
   incr field_tag_counter;
   let name = st.jc_struct_info_name ^ "_" ^ id in
@@ -1977,6 +1977,7 @@ let field st root (rep, t, id) =
     jc_field_info_root = root;
     jc_field_info_struct = st;
     jc_field_info_rep = rep or (not (is_pointer_type ty));
+    jc_field_info_bitsize = bitsize;
   } in
   fi
 

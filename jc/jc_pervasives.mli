@@ -34,6 +34,13 @@ val ( $ ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 
 val error: Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 
+val zero: Num.num
+val one: Num.num
+val two: Num.num
+val eight: Num.num
+val is_power_of_two: Num.num -> bool
+val log2: Num.num -> Num.num
+
 (* labels *)
 
 val label_var : ?label_in_name:bool -> ?label_assoc:(logic_label * logic_label) list -> Jc_env.logic_label -> string -> string
@@ -58,6 +65,11 @@ val struct_of_union: Jc_env.struct_info -> bool
 val field_of_union: Jc_env.field_info -> bool
 val union_of_field: Jc_env.field_info -> Jc_env.variant_info
 val integral_union: Jc_env.variant_info -> bool
+
+val struct_has_bytesize: Jc_env.struct_info -> bool
+val struct_bitsize: Jc_env.struct_info -> int
+val struct_bytesize: Jc_env.struct_info -> int
+val possible_struct_bytesize: Jc_env.struct_info -> int option
 
 (* constants *)
 

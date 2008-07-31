@@ -74,11 +74,11 @@ Implicit Arguments offset_max.
 Admitted.
 Implicit Arguments offset_min.
 
-(*Why predicate*) Definition valid (A640:Set) (a:(alloc_table A640)) (p:(pointer A640))
+(*Why predicate*) Definition valid (A666:Set) (a:(alloc_table A666)) (p:(pointer A666))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 Implicit Arguments valid.
 
-(*Why predicate*) Definition same_block (A641:Set) (p:(pointer A641)) (q:(pointer A641))
+(*Why predicate*) Definition same_block (A667:Set) (p:(pointer A667)) (q:(pointer A667))
   := (base_block p) = (base_block q).
 Implicit Arguments same_block.
 
@@ -97,10 +97,6 @@ Admitted.
 Set Contextual Implicit.
 Implicit Arguments null.
 Unset Contextual Implicit.
-
-Implicit Arguments valid.
-
-Implicit Arguments same_block.
 
 (*Why axiom*) Lemma address_injective :
   forall (A1:Set),
@@ -245,6 +241,54 @@ Admitted.
       (~(p1 = p2) -> (select (store m p1 a) p2) = (select m p2)))))).
 Admitted.
 
+(*Why type*) Definition bitvector: Set ->Set.
+Admitted.
+
+(*Why logic*) Definition bitvector_size :
+  forall (A1:Set), (bitvector A1) -> Z.
+Admitted.
+Implicit Arguments bitvector_size.
+
+(*Why logic*) Definition bitvector_size_in_bytes :
+  forall (A1:Set), (bitvector A1) -> Z.
+Admitted.
+Implicit Arguments bitvector_size_in_bytes.
+
+(*Why logic*) Definition select_bytes :
+  forall (A1:Set), (bitvector A1) -> Z -> Z -> (bitvector A1).
+Admitted.
+Implicit Arguments select_bytes.
+
+(*Why logic*) Definition store_bytes :
+  forall (A1:Set), forall (A2:Set), (bitvector A1) -> Z -> Z
+  -> (bitvector A2) -> (bitvector A1).
+Admitted.
+Implicit Arguments store_bytes.
+
+(*Why axiom*) Lemma select_store_eq_bytes :
+  forall (A1:Set), forall (A2:Set),
+  (forall (b:(bitvector A1)),
+   (forall (i:Z),
+    (forall (j:Z),
+     (forall (k:Z),
+      (forall (l:Z),
+       (forall (a:(bitvector A2)),
+        ((bitvector_size_in_bytes a) = (j - i + 1) /\ i = k /\ j = l ->
+         (select_bytes (store_bytes b i j a) k l) = b))))))).
+Admitted.
+
+(*Why axiom*) Lemma select_store_neq_bytes :
+  forall (A1:Set), forall (A2:Set),
+  (forall (b:(bitvector A1)),
+   (forall (i:Z),
+    (forall (j:Z),
+     (forall (k:Z),
+      (forall (l:Z),
+       (forall (a:(bitvector A2)),
+        ((bitvector_size_in_bytes a) = (j - i + 1) /\ (l < i \/ j < k) ->
+         (select_bytes (store_bytes b i j a) k l) = (select_bytes b k l)))))))).
+Admitted.
+
 (*Why type*) Definition pset: Set ->Set.
 Admitted.
 
@@ -299,8 +343,8 @@ Implicit Arguments in_pset.
 Admitted.
 Implicit Arguments valid_pset.
 
-(*Why predicate*) Definition pset_disjoint (A683:Set) (ps1:(pset A683)) (ps2:(pset A683))
-  := (forall (p:(pointer A683)), ~((in_pset p ps1) /\ (in_pset p ps2))).
+(*Why predicate*) Definition pset_disjoint (A718:Set) (ps1:(pset A718)) (ps2:(pset A718))
+  := (forall (p:(pointer A718)), ~((in_pset p ps1) /\ (in_pset p ps2))).
 Implicit Arguments pset_disjoint.
 
 (*Why axiom*) Lemma in_pset_empty :
@@ -414,8 +458,8 @@ Admitted.
       (valid_pset a s2))))).
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A700:Set) (A699:Set) (a:(alloc_table A699)) (m1:(memory A699 A700)) (m2:(memory A699 A700)) (l:(pset A699))
-  := (forall (p:(pointer A699)),
+(*Why predicate*) Definition not_assigns (A735:Set) (A734:Set) (a:(alloc_table A734)) (m1:(memory A734 A735)) (m2:(memory A734 A735)) (l:(pset A734))
+  := (forall (p:(pointer A734)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 Implicit Arguments not_assigns.
 
@@ -517,7 +561,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A719:Set) (a:(tag_table A719)) (p:(pointer A719)) (t:(tag_id A719))
+(*Why predicate*) Definition instanceof (A754:Set) (a:(tag_table A754)) (p:(pointer A754)) (t:(tag_id A754))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -544,8 +588,8 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition root_tag (A724:Set) (t:(tag_id A724))
-  := (parenttag t (@bottom_tag A724)).
+(*Why predicate*) Definition root_tag (A759:Set) (t:(tag_id A759))
+  := (parenttag t (@bottom_tag A759)).
 Implicit Arguments root_tag.
 
 (*Why axiom*) Lemma root_subtag :
@@ -557,7 +601,7 @@ Implicit Arguments root_tag.
       ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A726:Set) (tag_table:(tag_table A726)) (mutable:(memory A726 (tag_id A726))) (this:(pointer A726))
+(*Why predicate*) Definition fully_packed (A761:Set) (tag_table:(tag_table A761)) (mutable:(memory A761 (tag_id A761))) (this:(pointer A761))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 
@@ -630,7 +674,7 @@ Admitted.
 Admitted.
 Implicit Arguments alloc_extends.
 
-(*Why predicate*) Definition alloc_fresh (A728:Set) (a:(alloc_table A728)) (p:(pointer A728)) (n:Z)
+(*Why predicate*) Definition alloc_fresh (A763:Set) (a:(alloc_table A763)) (p:(pointer A763)) (n:Z)
   := (forall (i:Z), (0 <= i /\ i < n -> ~(valid a (shift p i)))).
 Implicit Arguments alloc_fresh.
 

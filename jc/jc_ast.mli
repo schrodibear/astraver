@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.138 2008-07-29 17:31:40 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.139 2008-07-31 15:22:39 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -213,7 +213,7 @@ type 'expr decl_node =
       string (* name of the tag *)
       * string list (* type parameters *)
       * (string * ptype list) option (* parent tag, applied type parameters *)
-      * (bool * ptype * string) list (* fields *)
+      * (bool * ptype * string * int option) list (* fields *)
       * (identifier * string * 'expr) list (* invariants *)
   | JCDvariant_type of string * identifier list
   | JCDunion_type of string * identifier list
