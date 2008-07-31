@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.229 2008-07-29 17:31:40 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.230 2008-07-31 08:33:11 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -141,8 +141,9 @@ let rec substruct st = function
       struct_variant st == ui
 
 let rec superstruct st = function
-  | (JCtag(st', _)) ->
-      substruct st' (JCtag(st,[]))
+  | JCtag(st', _) ->
+      let vi' = struct_variant st' in
+      not vi'.jc_variant_info_is_union && substruct st' (JCtag(st,[]))
   | JCvariant _vi ->
       false
   | JCunion _ui ->
