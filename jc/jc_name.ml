@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.18 2008-07-31 15:22:39 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.19 2008-07-31 16:17:31 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -42,7 +42,6 @@ let pset_type_name = "pset"
 let memory_type_name = "memory"
 let tag_id_type_name = "tag_id"
 let bitvector_type_name = "bitvector"
-let size_type_name = "size"
 
 let simple_logic_type s =
   { logic_type_name = s; logic_type_args = [] }

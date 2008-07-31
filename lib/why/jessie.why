@@ -219,66 +219,52 @@ axiom select_store_neq:
 (* bitvectors                                                                *)
 (*****************************************************************************)
 
-type 'size bitvector
+type bitvector
 
-logic bitvector_size: 'size bitvector -> int
-logic bitvector_size_in_bytes: 'size bitvector -> int
-
-logic select_bytes: 'size bitvector, int, int -> 'size bitvector 
-logic store_bytes: 
-      'size1 bitvector, int, int, 'size2 bitvector -> 'size1 bitvector
-logic concat_bytes: 'size1 bitvector, 'size2 bitvector -> 'size3 bitvector 
+logic select_bytes: bitvector, int, int -> bitvector 
+logic store_bytes: bitvector, int, int, bitvector -> bitvector
+logic concat_bytes: bitvector, bitvector -> bitvector 
 
 axiom select_store_eq_bytes:
-  forall b: 'size1 bitvector. 
+  forall b: bitvector. 
   forall i:int. forall j:int.
   forall k:int. forall l:int.
-  forall a: 'size2 bitvector [select_bytes(store_bytes(b,i,j,a),k,l)].
-    bitvector_size_in_bytes(a) = j - i + 1 and i = k and j = l
+  forall a: bitvector [select_bytes(store_bytes(b,i,j,a),k,l)].
+    i = k and j = l
     -> select_bytes(store_bytes(b,i,j,a),k,l) = b
 
 axiom select_store_neq_bytes: 
-  forall b: 'size1 bitvector. 
+  forall b: bitvector. 
   forall i:int. forall j:int.
   forall k:int. forall l:int.
-  forall a: 'size2 bitvector [select_bytes(store_bytes(b,i,j,a),k,l)].
-    bitvector_size_in_bytes(a) = j - i + 1 and (l < i or j < k)
+  forall a: bitvector [select_bytes(store_bytes(b,i,j,a),k,l)].
+    (l < i or j < k)
     -> select_bytes(store_bytes(b,i,j,a),k,l) = select_bytes(b,k,l)
 
-axiom concat_bytes_size:
-  forall a1: 'size2 bitvector.
-  forall a2: 'size3 bitvector [bitvector_size_in_bytes(concat_bytes(a1,a2))].
-    bitvector_size_in_bytes(concat_bytes(a1,a2)) =
-    bitvector_size_in_bytes(a1) + bitvector_size_in_bytes(a2)
-
 axiom concat_store_bytes_up:
-  forall b: 'size1 bitvector. 
+  forall b: bitvector. 
   forall i:int. forall j:int.
   forall k:int. forall l:int.
-  forall a1: 'size2 bitvector.
-  forall a2: 'size3 bitvector [store_bytes(store_bytes(b,i,j,a1),k,l,a2)].
-    bitvector_size_in_bytes(a1) = j - i + 1 and
-    bitvector_size_in_bytes(a2) = l - k + 1 and
+  forall a1: bitvector.
+  forall a2: bitvector [store_bytes(store_bytes(b,i,j,a1),k,l,a2)].
     j + 1 = k
     -> store_bytes(store_bytes(b,i,j,a1),k,l,a2) 
        = store_bytes(b,i,l,concat_bytes(a1,a2))
 
 axiom concat_store_bytes_down:
-  forall b: 'size1 bitvector. 
+  forall b: bitvector. 
   forall i:int. forall j:int.
   forall k:int. forall l:int.
-  forall a1: 'size2 bitvector.
-  forall a2: 'size3 bitvector [store_bytes(store_bytes(b,i,j,a1),k,l,a2)].
-    bitvector_size_in_bytes(a1) = j - i + 1 and
-    bitvector_size_in_bytes(a2) = l - k + 1 and
+  forall a1: bitvector.
+  forall a2: bitvector [store_bytes(store_bytes(b,i,j,a1),k,l,a2)].
     l + 1 = i
     -> store_bytes(store_bytes(b,i,j,a1),k,l,a2) 
        = store_bytes(b,k,j,concat_bytes(a2,a1))
 
 axiom concat_select_bytes:
-  forall b: 'size1 bitvector. 
+  forall b: bitvector. 
   forall i:int. forall j:int.
-  forall k:int. forall l:int 
+  forall k:int. forall l:int
   [concat_bytes(select_bytes(b,i,j),select_bytes(b,k,l))].
     j + 1 = k
     -> concat_bytes(select_bytes(b,i,j),select_bytes(b,k,l)) 

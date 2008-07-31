@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.316 2008-07-31 15:22:39 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.317 2008-07-31 16:17:31 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2155,10 +2155,7 @@ let tr_struct st acc =
   let acc = 
     if not vi.jc_variant_info_is_union then acc else
       if integral_union vi then acc else
-	let size = struct_bitsize st in
-	let ssize = string_of_int size in
-	let sizety = size_type ssize in
-        let uty = bitvector_type sizety in
+        let uty = bitvector_type in
         List.fold_left
           (fun acc fi ->
 	     if has_equality_op fi.jc_field_info_type then
@@ -3445,30 +3442,9 @@ let tr_enum_type ri (* to_int of_int *) acc =
                                      [LApp(logic_enum_of_int ri, 
                                            [LVar "x"])]) ; 
                                 LVar "x"]))))
-  :: (if is_power_of_two (range_of_enum ri) then
-	let size = log2 (range_of_enum ri) in
-	let ssize = string_of_num size in
-	let sizety = size_type ssize in
-	Type(sizety.logic_type_name,[])
-	:: Axiom("bitvector_size" ^ ssize,
-		 LForall("bv",bitvector_type sizety,
-			 LPred("eq_int",
-			       [LApp("bitvector_size",[LVar "bv"]);
-				LConst(Prim_int ssize)])))
-	:: (if mod_num size eight =/ zero then
-	      let size_in_bytes = size // eight in
-	      let ssize_in_bytes = string_of_num size_in_bytes in
-	      [Axiom("bitvector_size_in_bytes" ^ ssize,
-		     LForall("bv",bitvector_type sizety,
-			     LPred("eq_int",
-				   [LApp("bitvector_size_in_bytes",[LVar "bv"]);
-				    LConst(Prim_int ssize_in_bytes)])))]
-	    else [])
-	@ Logic(false,name ^ "_to_bitvector",["",lt],bitvector_type sizety)
-	:: Logic(false,"bitvector_to_" ^ name,["",bitvector_type sizety],lt)
-	:: []
-      else [])
-  @ acc
+  :: Logic(false,name ^ "_to_bitvector",["",lt],bitvector_type)
+  :: Logic(false,"bitvector_to_" ^ name,["",bitvector_type],lt)
+  :: acc
 
 let tr_enum_type_pair ri1 ri2 acc =
   (* Information from first enum *)
@@ -3546,11 +3522,7 @@ let tr_variant vi acc =
     if not vi.jc_variant_info_is_union then acc else
       (* Declarations of field memories. *)
       if !Jc_options.separation_sem = SepRegions then acc else
-	let st = List.hd vi.jc_variant_info_roots in
-	let size = struct_bitsize st in
-	let ssize = string_of_int size in
-	let sizety = size_type ssize in
-        let mem = bitvector_type sizety in
+        let mem = bitvector_type in
         Param(false,
               union_memory_name vi,
               Ref_type(Base_type mem))::acc

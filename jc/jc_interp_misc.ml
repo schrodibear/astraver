@@ -97,13 +97,7 @@ let alloc_table_type tov =
 
 let is_alloc_table_type ty = ty.logic_type_name == alloc_table_type_name
 
-let bitvector_type ty =
-  {
-    logic_type_name = bitvector_type_name;
-    logic_type_args = [ty];
-  }
-
-let size_type size = simple_logic_type (size_type_name ^ size)
+let bitvector_type = simple_logic_type bitvector_type_name
 
 let tr_native_type t =
   match t with
@@ -151,11 +145,7 @@ let union_memory_type vi =
     (variant_model_type vi)
     (if integral_union vi then why_integer_type 
      else 
-       let st = List.hd vi.jc_variant_info_roots in
-       let size = struct_bitsize st in
-       let ssize = string_of_int size in
-       let sizety = size_type ssize in
-       bitvector_type sizety)
+       bitvector_type)
 	
 let field_or_variant_memory_type fvi =
   match fvi with
