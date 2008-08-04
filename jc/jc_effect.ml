@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.115 2008-08-04 13:48:33 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.116 2008-08-04 16:30:56 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -356,7 +356,7 @@ let rec term ef t =
     | JCTderef (t, lab, fi) ->
 	let mc = 
 	  if Region.bitwise t#region then JCmem_bitvector
-	  else match term_access_union t fi with
+	  else match taccess_union t (Some fi) with
 	    | Some(t,_off) -> JCmem_union (the (union_type t#typ))
 	    | None -> JCmem_field fi
 	in
@@ -449,7 +449,7 @@ let rec expr ef e =
     | JCEderef (e, fi) -> 
 	let mc = 
 	  if Region.bitwise e#region then JCmem_bitvector
-	  else match access_union e fi with
+	  else match access_union e (Some fi) with
 	    | Some(e,_off) -> JCmem_union (the (union_type e#typ))
 	    | None -> JCmem_field fi
 	in
@@ -520,7 +520,7 @@ let rec expr ef e =
     | JCEassign_heap (e1, fi, e2) ->
 	let mc = 
 	  if Region.bitwise e1#region then JCmem_bitvector
-	  else match access_union e1 fi with
+	  else match access_union e1 (Some fi) with
 	    | Some(e1,_off) -> JCmem_union (the (union_type e1#typ))
 	    | None -> JCmem_field fi
 	in
@@ -644,7 +644,7 @@ and location ef l =
     | JCLderef(t,lab,fi,r) ->
 	let mc = 
 (* 	  if Region.bitwise t#region then JCmem_bitvector *)
-(* 	  else match tlocation_access_union t fi with *)
+(* 	  else match tlocation_access_union t (Some fi) with *)
 (* 	    | Some(t,_off) -> JCmem_union (the (union_type t#typ)) *)
 (* 	    | None ->  *)JCmem_field fi
 	in

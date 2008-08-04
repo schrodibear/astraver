@@ -45,7 +45,10 @@ val embedded_field: field_info -> bool
 val field_offset: field_info -> int
 
 (** Return the byte offset of a field, if any. *)
-val field_offset_bytes: field_info -> int option
+val field_offset_in_bytes: field_info -> int option
+
+(** Return the size in bytes of a structure. *)
+val struct_size_in_bytes: struct_info -> int
 
 (** Return all the fields of a structure or a variant.
 A variant has no field.

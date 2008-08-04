@@ -4,7 +4,7 @@
 (****************************************************************************)
 
 (*
-axiom div_int_euclid :
+axiom div_int_euclid:
   forall i:int. forall j:int [i/j].
     i>=0 and j>0 -> (i-j+1 <= j*(i/j) and j*(i/j) <= i)
 *)
@@ -68,7 +68,7 @@ predicate same_block(p: 't pointer, q:'t pointer) =
 logic shift: 't pointer, int -> 't pointer
 logic sub_pointer: 't pointer, 't pointer -> int
 
-parameter sub_pointer_ : p:'t pointer -> q:'t pointer -> 
+parameter sub_pointer_: p:'t pointer -> q:'t pointer -> 
   { same_block(p,q) } int { result = sub_pointer(p,q) }
 
 (* null pointer*)
@@ -89,18 +89,18 @@ axiom address_positive:
 
 (* shift *)
 
-axiom shift_zero :
+axiom shift_zero:
   forall p:'t pointer [shift(p,0)]. shift(p,0) = p
 
-axiom shift_shift :
+axiom shift_shift:
   forall p:'t pointer. forall i:int. forall j:int [shift(shift(p,i),j)].
     shift(shift(p,i),j) = shift(p,i+j)
 
-axiom offset_max_shift :
+axiom offset_max_shift:
   forall a:'t alloc_table. forall p: 't pointer. forall i:int.
     offset_max(a,shift(p,i)) = offset_max(a,p)-i
 
-axiom offset_min_shift : 
+axiom offset_min_shift: 
   forall a:'t alloc_table. forall p: 't pointer. forall i:int.
     offset_min(a,shift(p,i)) = offset_min(a,p)-i
 
@@ -110,28 +110,28 @@ axiom neq_shift:
 
 (* null *)
 
-axiom null_not_valid : 
+axiom null_not_valid: 
   forall a:'t alloc_table. not valid(a, null)
 
-axiom null_pointer : 
+axiom null_pointer: 
   forall a:'t alloc_table.
     offset_min(a, null) >= 0 and offset_max(a, null) <= -2
 
 (* pointer comparison *)
 
-parameter eq_pointer : 
+parameter eq_pointer: 
   p: 't pointer -> q: 't pointer -> {} bool { if result then p=q else p<>q }
-parameter neq_pointer : 
+parameter neq_pointer: 
   p: 't pointer -> q: 't pointer -> {} bool { if result then p<>q else p=q }
 
-logic eq_pointer_bool : 't pointer, 't pointer -> bool
-logic neq_pointer_bool : 't pointer, 't pointer -> bool
+logic eq_pointer_bool: 't pointer, 't pointer -> bool
+logic neq_pointer_bool: 't pointer, 't pointer -> bool
 
-axiom eq_pointer_bool_def :
+axiom eq_pointer_bool_def:
   forall p1: 't pointer. forall p2: 't pointer.
     eq_pointer_bool(p1, p2) = true <-> p1 = p2
 
-axiom neq_pointer_bool_def :
+axiom neq_pointer_bool_def:
   forall p1: 't pointer. forall p2: 't pointer.
     neq_pointer_bool(p1, p2) = true <-> p1 <> p2
 
@@ -150,33 +150,33 @@ axiom same_block_shift:
 
 
 (* make Simplify loop on Jessie test roux.c 
-axiom sub_pointer_same_block :
+axiom sub_pointer_same_block:
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q),same_block(p,q)]. 
     sub_pointer(p,q) = 0 -> same_block(p,q)
 *)
 
 (* sub_pointer *)
 
-axiom sub_pointer_shift :
+axiom sub_pointer_shift:
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
     same_block(p,q) ->
       p = shift(q,sub_pointer(p,q))
 
-axiom sub_pointer_self :
+axiom sub_pointer_self:
   forall p:'t pointer [sub_pointer(p,p)]. sub_pointer(p,p) = 0
 
-axiom sub_pointer_zero :
+axiom sub_pointer_zero:
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
     same_block(p,q) ->
       sub_pointer(p,q) = 0 -> p = q
 
-axiom sub_pointer_shift_left :
+axiom sub_pointer_shift_left:
   forall p:'t pointer. forall q:'t pointer. 
     forall i:int [sub_pointer(shift(p,i),q)].
       same_block(p,q) ->
       sub_pointer(shift(p,i),q) = sub_pointer(p,q) + i
 
-axiom sub_pointer_shift_right :
+axiom sub_pointer_shift_right:
   forall p:'t pointer. forall q:'t pointer. 
     forall i:int [sub_pointer(p,shift(q,i))].
       same_block(p,q) ->
@@ -216,73 +216,18 @@ axiom select_store_neq:
 
 
 (*****************************************************************************)
-(* bitvectors                                                                *)
-(*****************************************************************************)
-
-type bitvector
-
-logic select_bytes: bitvector, int, int -> bitvector 
-logic store_bytes: bitvector, int, int, bitvector -> bitvector
-logic concat_bytes: bitvector, bitvector -> bitvector 
-
-axiom select_store_eq_bytes:
-  forall b: bitvector. 
-  forall i:int. forall j:int.
-  forall k:int. forall l:int.
-  forall a: bitvector [select_bytes(store_bytes(b,i,j,a),k,l)].
-    i = k and j = l
-    -> select_bytes(store_bytes(b,i,j,a),k,l) = a
-
-axiom select_store_neq_bytes: 
-  forall b: bitvector. 
-  forall i:int. forall j:int.
-  forall k:int. forall l:int.
-  forall a: bitvector [select_bytes(store_bytes(b,i,j,a),k,l)].
-    (l < i or j < k)
-    -> select_bytes(store_bytes(b,i,j,a),k,l) = select_bytes(b,k,l)
-
-axiom concat_store_bytes_up:
-  forall b: bitvector. 
-  forall i:int. forall j:int.
-  forall k:int. forall l:int.
-  forall a1: bitvector.
-  forall a2: bitvector [store_bytes(store_bytes(b,i,j,a1),k,l,a2)].
-    j + 1 = k
-    -> store_bytes(store_bytes(b,i,j,a1),k,l,a2) 
-       = store_bytes(b,i,l,concat_bytes(a1,a2))
-
-axiom concat_store_bytes_down:
-  forall b: bitvector. 
-  forall i:int. forall j:int.
-  forall k:int. forall l:int.
-  forall a1: bitvector.
-  forall a2: bitvector [store_bytes(store_bytes(b,i,j,a1),k,l,a2)].
-    l + 1 = i
-    -> store_bytes(store_bytes(b,i,j,a1),k,l,a2) 
-       = store_bytes(b,k,j,concat_bytes(a2,a1))
-
-axiom concat_select_bytes:
-  forall b: bitvector. 
-  forall i:int. forall j:int.
-  forall k:int. forall l:int
-  [concat_bytes(select_bytes(b,i,j),select_bytes(b,k,l))].
-    j + 1 = k
-    -> concat_bytes(select_bytes(b,i,j),select_bytes(b,k,l)) 
-       = select_bytes(b,i,l)
-
-(*****************************************************************************)
 (* access and update side-effect functions                                   *)
 (*****************************************************************************)
 
 (* normal access *)
-parameter acc_ : 
+parameter acc_: 
   alloc:'t alloc_table -> m:('t,'v) memory -> p:'t pointer -> 
   { offset_min(alloc,p) <= 0 and 0 <= offset_max(alloc,p) }
   'v 
   { result = select(m,p) }
 
 (* offset access *)
-parameter offset_acc_ : 
+parameter offset_acc_: 
   alloc:'t alloc_table -> m:('t,'v) memory -> 
   p:'t pointer -> off:int ->
   { offset_min(alloc,p) <= off and off <= offset_max(alloc,p) }
@@ -290,68 +235,68 @@ parameter offset_acc_ :
   { result = select(m,shift(p,off)) }
 
 (* safe access *)
-parameter safe_acc_ : 
-  m : ('t,'v) memory -> p:'t pointer ->
+parameter safe_acc_: 
+  m: ('t,'v) memory -> p:'t pointer ->
   { }
   'v 
   { result = select(m,p) }
 
 (* bounded access *)
-parameter bound_acc_ : 
-  m : ('t,'v) memory -> p:'t pointer -> off:int -> lb:int -> rb:int -> 
+parameter bound_acc_: 
+  m: ('t,'v) memory -> p:'t pointer -> off:int -> lb:int -> rb:int -> 
   { lb <= off and off <= rb }
   'v 
   { result = select(m,shift(p,off)) }
 
 (* bounded access with safe left bound *)
-parameter lsafe_bound_acc_ : 
-  m : ('t,'v) memory -> p:'t pointer -> off:int -> rb:int -> 
+parameter lsafe_bound_acc_: 
+  m: ('t,'v) memory -> p:'t pointer -> off:int -> rb:int -> 
   { off <= rb }
   'v 
   { result = select(m,shift(p,off)) }
 
 (* bounded access with safe right bound *)
-parameter rsafe_bound_acc_ : 
-  m : ('t,'v) memory -> p:'t pointer -> off:int -> lb:int -> 
+parameter rsafe_bound_acc_: 
+  m: ('t,'v) memory -> p:'t pointer -> off:int -> lb:int -> 
   { lb <= off }
   'v 
   { result = select(m,shift(p,off)) }
 
 (* left bounded access *)
-parameter lbound_acc_ : 
-  alloc:'t alloc_table -> m : ('t,'v) memory -> p:'t pointer -> 
+parameter lbound_acc_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory -> p:'t pointer -> 
   off:int -> lb:int -> 
   { lb <= off and off <= offset_max(alloc,p) }
   'v 
   { result = select(m,shift(p,off)) }
 
 (* left bounded access with safe left bound *)
-parameter lsafe_lbound_acc_ : 
-  alloc:'t alloc_table -> m : ('t,'v) memory -> p:'t pointer -> 
+parameter lsafe_lbound_acc_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory -> p:'t pointer -> 
   off:int -> 
   { off <= offset_max(alloc,p) }
   'v 
   { result = select(m,shift(p,off)) }
 
 (* right bounded access *)
-parameter rbound_acc_ : 
-  alloc:'t alloc_table -> m : ('t,'v) memory -> p:'t pointer -> 
+parameter rbound_acc_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory -> p:'t pointer -> 
   off:int -> rb:int -> 
   { offset_min(alloc,p) <= off and off <= rb }
   'v 
   { result = select(m,shift(p,off)) }
 
 (* right bounded access with safe right bound *)
-parameter rsafe_rbound_acc_ : 
-  alloc:'t alloc_table -> m : ('t,'v) memory -> p:'t pointer -> 
+parameter rsafe_rbound_acc_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory -> p:'t pointer -> 
   off:int -> 
   { offset_min(alloc,p) <= off }
   'v 
   { result = select(m,shift(p,off)) }
 
 (* normal update *)
-parameter upd_ : 
-  alloc:'t alloc_table -> m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
+parameter upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer -> v:'v ->
   { offset_min(alloc,p) <= 0 and 0 <= offset_max(alloc,p) }
   (* and select(mutable,p) = true *)
   unit
@@ -360,8 +305,8 @@ parameter upd_ :
   { m = store(m@,p,v) }
 
 (* offset update *)
-parameter offset_upd_ : 
-  alloc:'t alloc_table -> m : ('t,'v) memory ref -> p:'t pointer ->
+parameter offset_upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer ->
    off:int -> v:'v ->
   { offset_min(alloc,p) <= off and off <= offset_max(alloc,p) }
   (* and select(mutable,p) = true *)
@@ -371,7 +316,7 @@ parameter offset_upd_ :
   { m = store(m@,shift(p,off),v) }
 
 (* safe update *)
-parameter safe_upd_ : m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
+parameter safe_upd_: m: ('t,'v) memory ref -> p:'t pointer -> v:'v ->
   { (* select(mutable,p) = true *) }
   unit
   reads m (* ,mutable *) 
@@ -379,8 +324,8 @@ parameter safe_upd_ : m : ('t,'v) memory ref -> p:'t pointer -> v:'v ->
   { m = store(m@,p,v) }
 
 (* bounded update *)
-parameter bound_upd_ : 
-  m : ('t,'v) memory ref -> p:'t pointer -> off:int -> lb:int -> rb:int -> 
+parameter bound_upd_: 
+  m: ('t,'v) memory ref -> p:'t pointer -> off:int -> lb:int -> rb:int -> 
   v:'v ->
   { lb <= off and off <= rb }
   unit
@@ -389,8 +334,8 @@ parameter bound_upd_ :
   { m = store(m@,shift(p,off),v) }
 
 (* bounded update with safe left bound *)
-parameter lsafe_bound_upd_ : 
-  m : ('t,'v) memory ref -> p:'t pointer -> off:int -> rb:int -> v:'v ->
+parameter lsafe_bound_upd_: 
+  m: ('t,'v) memory ref -> p:'t pointer -> off:int -> rb:int -> v:'v ->
   { off <= rb }
   unit
   reads m
@@ -398,8 +343,8 @@ parameter lsafe_bound_upd_ :
   { m = store(m@,shift(p,off),v) }
 
 (* bounded update with safe right bound *)
-parameter rsafe_bound_upd_ : 
-  m : ('t,'v) memory ref -> p:'t pointer -> off:int -> lb:int -> v:'v ->
+parameter rsafe_bound_upd_: 
+  m: ('t,'v) memory ref -> p:'t pointer -> off:int -> lb:int -> v:'v ->
   { lb <= off }
   unit
   reads m
@@ -407,8 +352,8 @@ parameter rsafe_bound_upd_ :
   { m = store(m@,shift(p,off),v) }
 
 (* left bounded update *)
-parameter lbound_upd_ : 
-  alloc:'t alloc_table -> m : ('t,'v) memory ref -> p:'t pointer -> 
+parameter lbound_upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer -> 
   off:int -> lb:int -> v:'v ->
   { lb <= off and off <= offset_max(alloc,p) }
   unit
@@ -417,8 +362,8 @@ parameter lbound_upd_ :
   { m = store(m@,shift(p,off),v) }
 
 (* left bounded update with safe left bound *)
-parameter lsafe_lbound_upd_ : 
-  alloc:'t alloc_table -> m : ('t,'v) memory ref -> p:'t pointer -> 
+parameter lsafe_lbound_upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer -> 
   off:int -> v:'v ->
   { off <= offset_max(alloc,p) }
   unit
@@ -427,8 +372,8 @@ parameter lsafe_lbound_upd_ :
   { m = store(m@,shift(p,off),v) }
 
 (* right bounded update *)
-parameter rbound_upd_ : 
-  alloc:'t alloc_table -> m : ('t,'v) memory ref -> p:'t pointer -> 
+parameter rbound_upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer -> 
   off:int -> rb:int -> v:'v ->
   { offset_min(alloc,p) <= off and off <= rb }
   unit
@@ -437,8 +382,8 @@ parameter rbound_upd_ :
   { m = store(m@,shift(p,off),v) }
 
 (* right bounded update with safe right bound *)
-parameter rsafe_rbound_upd_ : 
-  alloc:'t alloc_table -> m : ('t,'v) memory ref -> p:'t pointer -> 
+parameter rsafe_rbound_upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer -> 
   off:int -> v:'v ->
   { offset_min(alloc,p) <= off }
   unit
@@ -453,17 +398,17 @@ parameter rsafe_rbound_upd_ :
 
 type 't pset
 
-logic pset_empty : 't pset
-logic pset_singleton : 't pointer -> 't pset
-logic pset_deref : ('t,'v pointer) memory, 't pset -> 'v pset
-logic pset_union : 't pset, 't pset -> 't pset
-logic pset_all : 'z pset -> 'z pset (* l(..) *)
-logic pset_range : 't pset, int, int -> 't pset (* l(a..b) *)
-logic pset_range_left : 'z pset, int -> 'z pset (* l(..b) *)
-logic pset_range_right : 'z pset, int -> 'z pset (* l(a..) *)
+logic pset_empty: 't pset
+logic pset_singleton: 't pointer -> 't pset
+logic pset_deref: ('t,'v pointer) memory, 't pset -> 'v pset
+logic pset_union: 't pset, 't pset -> 't pset
+logic pset_all: 'z pset -> 'z pset (* l(..) *)
+logic pset_range: 't pset, int, int -> 't pset (* l(a..b) *)
+logic pset_range_left: 'z pset, int -> 'z pset (* l(..b) *)
+logic pset_range_right: 'z pset, int -> 'z pset (* l(a..) *)
 
-logic in_pset : 't pointer, 't pset -> prop
-logic valid_pset : 't alloc_table, 't pset -> prop
+logic in_pset: 't pointer, 't pset -> prop
+logic valid_pset: 't alloc_table, 't pset -> prop
 
 predicate pset_disjoint(ps1:'t pset, ps2:'t pset) =
   forall p:'t pointer.
@@ -572,25 +517,25 @@ axiom not_assigns_trans:
     not_assigns(a,m2,m3,l) ->
     not_assigns(a,m1,m3,l) 
 
-logic full_separated : 't1 pointer, 't2 pointer -> prop
+logic full_separated: 't1 pointer, 't2 pointer -> prop
 
-axiom full_separated_shift1 :
-  forall p: 'z pointer. forall q : 'z pointer.
+axiom full_separated_shift1:
+  forall p: 'z pointer. forall q: 'z pointer.
     forall i: int [full_separated(p,q),shift(q,i)].
       full_separated(p,q) -> full_separated(p,shift(q,i))
 
-axiom full_separated_shift2 :
-  forall p: 'z pointer. forall q : 'z pointer. 
+axiom full_separated_shift2:
+  forall p: 'z pointer. forall q: 'z pointer. 
     forall i: int [full_separated(p,q),shift(q,i)].
       full_separated(p,q) -> full_separated(shift(q,i),p)
 
-axiom full_separated_shift3 :
-  forall p: 'z pointer. forall q : 'z pointer. 
+axiom full_separated_shift3:
+  forall p: 'z pointer. forall q: 'z pointer. 
     forall i: int [full_separated(q,p),shift(q,i)].
       full_separated(q,p) -> full_separated(shift(q,i),p)
 
-axiom full_separated_shift4 :
-  forall p: 'z pointer. forall q : 'z pointer.
+axiom full_separated_shift4:
+  forall p: 'z pointer. forall q: 'z pointer.
     forall i: int [full_separated(q,p),shift(q,i)].
       full_separated(q,p) -> full_separated(p,shift(q,i))
 
@@ -647,21 +592,21 @@ axiom subtag_parent:
 predicate instanceof (a: 't tag_table, p: 't pointer, t: 't tag_id) =
   subtag(typeof(a, p), t)
 
-parameter instanceof_ : 
+parameter instanceof_: 
   a:'t tag_table -> p:'t pointer -> s:'t tag_id ->
   { } 
   bool 
   { if result then instanceof(a,p,s) else not instanceof(a,p,s) }
 
-logic downcast : 't tag_table, 't pointer, 't tag_id -> 't pointer
+logic downcast: 't tag_table, 't pointer, 't tag_id -> 't pointer
 
-axiom downcast_instanceof :
+axiom downcast_instanceof:
   forall a:'t tag_table.
   forall p:'t pointer.
   forall s:'t tag_id.
    instanceof(a,p,s) -> downcast(a,p,s)=p
 
-parameter downcast_ : 
+parameter downcast_: 
   a:'t tag_table -> p:'t pointer -> s:'t tag_id ->
   { instanceof(a,p,s) } 
   't pointer 
@@ -675,7 +620,7 @@ axiom bottom_tag_axiom:
 
 predicate root_tag(t: 't tag_id) = parenttag(t, bottom_tag)
 
-axiom root_subtag :
+axiom root_subtag:
   forall a: 't tag_id.
   forall b: 't tag_id.
   forall c: 't tag_id.
@@ -697,7 +642,7 @@ predicate fully_packed(
 (*****************************************************************************)
 
 (* already in Why
-parameter any_int : unit -> {} int {}
+parameter any_int: unit -> {} int {}
 *)
 
 parameter any_pointer: unit -> {} 'z pointer { true }
@@ -711,21 +656,21 @@ parameter any_alloc_table: unit -> {} 't alloc_table { true }
 (* bitwise operations                                                        *)
 (*****************************************************************************)
 
-logic bw_compl : int -> int
+logic bw_compl: int -> int
 
-logic bw_and : int,int -> int
+logic bw_and: int,int -> int
 
 (* Yannick: added for CVE-2003-0161-min-ok *)
 axiom bw_and_not_null:
   forall a:int. forall b:int. bw_and(a,b) <> 0 -> a <> 0 and b <> 0
 
-logic bw_xor : int,int -> int
+logic bw_xor: int,int -> int
 
-logic bw_or : int,int -> int
+logic bw_or: int,int -> int
 
 (* logical left shift *)
 
-logic lsl : int,int -> int
+logic lsl: int,int -> int
 
 axiom lsl_left_positive_returns_positive:
   forall a:int. forall b:int. 0 <= a and 0 <= b -> 0 <= lsl(a,b)
@@ -736,7 +681,7 @@ axiom lsl_left_positive_monotone:
 
 (* logical right shift *)
 
-logic lsr : int,int -> int
+logic lsr: int,int -> int
 
 axiom lsr_left_positive_returns_positive:
   forall a:int. forall b:int. 0 <= a and 0 <= b -> 0 <= lsr(a,b)
@@ -746,7 +691,7 @@ axiom lsr_left_positive_decreases:
 
 (* arithmetic right shift *)
 
-logic asr : int,int -> int
+logic asr: int,int -> int
 
 axiom asr_positive_on_positive:
   forall a:int. forall b:int. 0 <= a and 0 <= b -> 0 <= asr(a,b)
@@ -769,48 +714,48 @@ axiom lsr_of_lsl_identity_on_positive:
 (* dynamic allocation/deallocation                                           *)
 (*****************************************************************************)
 
-logic alloc_extends : 't alloc_table, 't alloc_table -> prop
+logic alloc_extends: 't alloc_table, 't alloc_table -> prop
 
 predicate alloc_fresh(a:'t alloc_table, p:'t pointer, n:int) = 
   forall i:int. 0 <= i and i < n -> not valid(a,shift(p,i))
 
-axiom alloc_extends_offset_min : 
+axiom alloc_extends_offset_min: 
   forall a1:'t alloc_table. forall a2:'t alloc_table [alloc_extends(a1,a2)]. 
     alloc_extends(a1,a2) -> 
       forall p:'t pointer. 
         valid(a1,p) -> offset_min(a1,p) = offset_min(a2,p)
 
-axiom alloc_extends_offset_max : 
+axiom alloc_extends_offset_max: 
   forall a1:'t alloc_table. forall a2:'t alloc_table [alloc_extends(a1,a2)]. 
     alloc_extends(a1,a2) -> 
       forall p:'t pointer.
         valid(a1,p) -> offset_max(a1,p) = offset_max(a2,p)
 
 (*
-axiom alloc_fresh_def :
+axiom alloc_fresh_def:
   forall a:'t alloc_table. forall p:'t pointer [alloc_fresh(a,p)]. 
     alloc_fresh(a,p) -> 
       forall q:'t pset.
         valid_pset(a,q) -> not in_pset(p,q)
 *)
 
-logic alloc_extends_except : 't alloc_table, 't alloc_table, 't pset -> prop
+logic alloc_extends_except: 't alloc_table, 't alloc_table, 't pset -> prop
 
-axiom alloc_extends_except_offset_min :
+axiom alloc_extends_except_offset_min:
  forall a1:'t alloc_table. forall a2:'t alloc_table. forall l:'t pset
  [alloc_extends_except(a1,a2,l)].
    alloc_extends_except(a1,a2,l) ->
      forall p:'t pointer.
        valid(a1,p) and not in_pset(p,l) -> offset_min(a1,p) = offset_min(a2,p)
 
-axiom alloc_extends_except_offset_max :
+axiom alloc_extends_except_offset_max:
  forall a1:'t alloc_table. forall a2:'t alloc_table. forall l:'t pset
  [alloc_extends_except(a1,a2,l)].
    alloc_extends_except(a1,a2,l) ->
      forall p:'t pointer.
        valid(a1,p) and not in_pset(p,l) -> offset_max(a1,p) = offset_max(a2,p)
 
-parameter alloc_parameter_ownership : 
+parameter alloc_parameter_ownership: 
   a:'t alloc_table ref -> mut:('t,'t tag_id) memory ref ->
   com:('t,bool) memory ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
   { n > 0 }
@@ -822,7 +767,7 @@ parameter alloc_parameter_ownership :
     and instanceof(at,result,s) and select(mut,result) = bottom_tag 
     and select(com,result) = false }
 
-parameter free_parameter_ownership : 
+parameter free_parameter_ownership: 
   a:'t alloc_table ref -> com:('t,bool) memory ref -> p:'t pointer -> 
   { offset_min(a,p) = 0 and offset_max(a,p) >= 0 
 	and select(com,p) = false }
@@ -833,7 +778,7 @@ parameter free_parameter_ownership :
 
 (* With -inv-sem <> ownership *)
 
-parameter alloc_parameter : 
+parameter alloc_parameter: 
   a:'t alloc_table ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
   { n > 0 }
   't pointer 
@@ -842,7 +787,7 @@ parameter alloc_parameter :
     and offset_min(a,result) = 0 and offset_max(a,result) = n-1 
     and instanceof(at,result,s) }
 
-parameter free_parameter : 
+parameter free_parameter: 
   a:'t alloc_table ref -> p:'t pointer -> 
   { offset_min(a,p) = 0 and offset_max(a,p) >= 0 }
   unit
@@ -856,3 +801,183 @@ parameter free_parameter :
 (*****************************************************************************)
 
 exception Return
+
+
+(*****************************************************************************)
+(* bitvectors                                                                *)
+(*****************************************************************************)
+
+type bitvector
+
+logic concat_bitvector: bitvector, bitvector -> bitvector 
+
+(* offsets in bytes *)
+ 
+logic byte_offset_min: 't alloc_table, 't pointer, int -> int
+logic byte_offset_max: 't alloc_table, 't pointer, int -> int
+
+axiom byte_offset_min_def:
+  forall a:'t alloc_table. forall p:'t pointer. forall s:int
+  [byte_offset_min(a,p,s)].
+    offset_min(a,p) <= s * byte_offset_min(a,p,s)
+
+axiom byte_offset_max_def:
+  forall a:'t alloc_table. forall p:'t pointer. forall s:int
+  [byte_offset_max(a,p,s)].
+    s * byte_offset_max(a,p,s) + s - 1 <= offset_max(a,p)
+
+(* encoding of unions *)
+
+logic select_union: bitvector, int, int -> bitvector 
+logic store_union: bitvector, int, int, bitvector -> bitvector
+
+axiom select_store_eq_union:
+  forall b: bitvector. 
+  forall i:int. forall j:int.
+  forall k:int. forall l:int.
+  forall a: bitvector [select_union(store_union(b,i,j,a),k,l)].
+    i = k and j = l
+    -> select_union(store_union(b,i,j,a),k,l) = a
+
+axiom select_store_neq_union: 
+  forall b: bitvector. 
+  forall i:int. forall j:int.
+  forall k:int. forall l:int.
+  forall a: bitvector [select_union(store_union(b,i,j,a),k,l)].
+    (l < i or j < k)
+    -> select_union(store_union(b,i,j,a),k,l) = select_union(b,k,l)
+
+axiom concat_store_union_up:
+  forall b: bitvector. 
+  forall i:int. forall j:int.
+  forall k:int. forall l:int.
+  forall a1: bitvector.
+  forall a2: bitvector [store_union(store_union(b,i,j,a1),k,l,a2)].
+    j + 1 = k
+    -> store_union(store_union(b,i,j,a1),k,l,a2) 
+       = store_union(b,i,l,concat_bitvector(a1,a2))
+
+axiom concat_store_union_down:
+  forall b: bitvector. 
+  forall i:int. forall j:int.
+  forall k:int. forall l:int.
+  forall a1: bitvector.
+  forall a2: bitvector [store_union(store_union(b,i,j,a1),k,l,a2)].
+    l + 1 = i
+    -> store_union(store_union(b,i,j,a1),k,l,a2) 
+       = store_union(b,k,j,concat_bitvector(a2,a1))
+
+axiom concat_select_union:
+  forall b: bitvector. 
+  forall i:int. forall j:int.
+  forall k:int. forall l:int
+  [concat_bitvector(select_union(b,i,j),select_union(b,k,l))].
+    j + 1 = k
+    -> concat_bitvector(select_union(b,i,j),select_union(b,k,l)) 
+       = select_union(b,i,l)
+
+(* encoding of byte-level accesses *)
+
+logic select_bytes: 
+      ('t,bitvector) memory, 't pointer, int, int -> bitvector 
+logic store_bytes: 
+      ('t,bitvector) memory, 't pointer, int, int, bitvector 
+      -> ('t,bitvector) memory
+
+axiom select_store_eq_bytes:
+  forall m:('t,bitvector) memory. 
+  forall p1:'t pointer. forall p2:'t pointer. 
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v:bitvector
+  [select_bytes(store_bytes(m,p1,o1,s1,v),p2,o2,s2)].
+    p1 = p2 and o1 = o2 and s1 = s2 
+    -> select_bytes(store_bytes(m,p1,o1,s1,v),p2,o2,s2) = v
+
+axiom select_store_neq_bytes: 
+  forall m:('t,bitvector) memory. 
+  forall p1:'t pointer. forall p2:'t pointer. 
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v:bitvector
+  [select_bytes(store_bytes(m,p1,o1,s1,v),p2,o2,s2)].
+    pset_disjoint(pset_range(pset_singleton(p1),o1,o1+s1),
+                  pset_range(pset_singleton(p2),o2,o2+s2))
+    -> select_bytes(store_bytes(m,p1,o1,s1,v),p2,o2,s2) 
+       = select_bytes(m,p2,o2,s2)
+
+axiom shift_store_bytes:
+  forall m:('t,bitvector) memory. 
+  forall p:'t pointer. 
+  forall i:int. forall o:int. forall s:int.
+  forall v:bitvector
+  [store_bytes(m,shift(p,i),o,s,v)].
+    store_bytes(m,shift(p,i),o,s,v) = store_bytes(m,p,o+i,s,v)
+
+axiom shift_select_bytes:
+  forall m:('t,bitvector) memory. 
+  forall p:'t pointer. 
+  forall i:int. forall o:int. forall s:int.
+  forall v:bitvector
+  [select_bytes(m,shift(p,i),o,s)].
+    select_bytes(m,shift(p,i),o,s) = select_bytes(m,p,o+i,s)
+
+axiom concat_store_bytes_up:
+  forall m:('t,bitvector) memory. 
+  forall p:'t pointer.
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v1:bitvector. forall v2:bitvector
+  [store_bytes(store_bytes(m,p,o1,s1,v1),p,o2,s2,v2)].
+    o1 + s1 = o2
+    -> store_bytes(store_bytes(m,p,o1,s1,v1),p,o2,s2,v2) 
+       = store_bytes(m,p,o1,s1+s2,concat_bitvector(v1,v2))
+
+axiom concat_store_bytes_down:
+  forall m:('t,bitvector) memory. 
+  forall p:'t pointer.
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v1:bitvector. forall v2:bitvector
+  [store_bytes(store_bytes(m,p,o1,s1,v1),p,o2,s2,v2)].
+    o2 + s2 = o1
+    -> store_bytes(store_bytes(m,p,o1,s1,v1),p,o2,s2,v2) 
+       = store_bytes(m,p,o2,s1+s2,concat_bitvector(v2,v1))
+
+axiom concat_select_bytes:
+  forall m:('t,bitvector) memory. 
+  forall p:'t pointer.
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int
+  [concat_bitvector(select_bytes(m,p,o1,s1),select_bytes(m,p,o2,s2))].
+    o1 + s1 = o2
+    -> concat_bitvector(select_bytes(m,p,o1,s1),select_bytes(m,p,o2,s2)) 
+       = select_bytes(m,p,o1,s1+s2)
+
+(* access and update side-effect functions *)
+
+parameter acc_bytes_: 
+  a:'t alloc_table -> m:('t,bitvector) memory -> p:'t pointer ->
+  o:int -> s:int ->
+  { offset_min(a,p) <= o and o + s <= offset_max(a,p) }
+  bitvector
+  { result = select_bytes(m,p,o,s) }
+
+parameter safe_acc_bytes_: 
+  m:('t,bitvector) memory -> p:'t pointer -> o:int -> s:int ->
+  { }
+  bitvector
+  { result = select_bytes(m,p,o,s) }
+
+parameter upd_bytes_: 
+  a:'t alloc_table -> m:('t,bitvector) memory ref -> p:'t pointer ->
+  o:int -> s:int -> v:bitvector ->
+  { offset_min(a,p) <= o and o + s <= offset_max(a,p) }
+  unit
+  reads m
+  writes m
+  { m = store_bytes(m@,p,o,s,v) }
+
+parameter safe_upd_bytes_: 
+  m:('t,bitvector) memory ref -> p:'t pointer -> 
+  o:int -> s:int -> v:bitvector ->
+  { }
+  unit
+  reads m
+  writes m
+  { m = store_bytes(m@,p,o,s,v) }

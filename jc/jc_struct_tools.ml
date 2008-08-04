@@ -75,9 +75,19 @@ let field_offset fi =
   assert (not counting);
   off
 
-let field_offset_bytes fi =
+let field_offset_in_bytes fi =
   let off = field_offset fi in
   if off mod 8 = 0 then Some(off/8) else None
+
+let struct_size st =
+  match List.rev st.jc_struct_info_fields with
+    | [] -> 0
+    | last_fi::_ -> field_offset last_fi + the last_fi.jc_field_info_bitsize
+
+let struct_size_in_bytes st =
+  let s = struct_size st in
+  assert (s mod 8 = 0);
+  s/8
 
 let rec all_fields acc = function
   | JCvariant vi | JCunion vi -> acc

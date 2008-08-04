@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.318 2008-08-04 13:48:33 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.319 2008-08-04 16:30:56 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -561,7 +561,7 @@ let memvar ?assigned ?label_in_name label (mc,r) =
   mutable_var ?assigned ?label_in_name label mem mut
 
 let allocvar ?assigned ?label_in_name label (ac,r) =
-  let alloc = alloc_region_table_name(ac,r) in
+  let alloc = alloc_table_name(ac,r) in
   let mut = match !current_function with
     | None -> true
     | Some infunction -> mutable_alloc_table infunction (ac,r) 
@@ -614,7 +614,7 @@ let rec term ~global_assertion ~relocate label oldlabel t =
         let t3', lets3 = ft t3 in
         TIf(t1', t2', t3'), lets1@lets2@lets3
     | JCTderef(t,label,fi) -> 
-	let deref, lets = match term_access_union t fi with
+	let deref, lets = match taccess_union t (Some fi) with
 	  | Some(t,off) ->
 	      (* Retrieve bitvector for access to union *)
 	      let vi = the (union_type t#typ) in
@@ -695,16 +695,25 @@ let rec term ~global_assertion ~relocate label oldlabel t =
     | JCTold(t) -> term ~global_assertion ~relocate oldlabel oldlabel t
     | JCTat(t,lab) -> term ~global_assertion ~relocate lab oldlabel t
     | JCToffset(k,t,st) -> 
-	let ac = JCalloc_struct (struct_variant st.jc_struct_info_root) in
-        let alloc = 
-          alloc_region_table_name (ac, t#region)
-        in
-        let f = match k with
-          | Offset_min -> "offset_min"
-          | Offset_max -> "offset_max"
-        in
-        let t', lets = ft t in
-        LApp(f,[LVar alloc; t']), lets
+	let ac = tderef_alloc_class t in
+        let alloc = alloc_table_name (ac,t#region) in
+	begin match ac with
+	  | JCalloc_struct _ | JCalloc_union _ ->
+              let f = match k with
+		| Offset_min -> "offset_min"
+		| Offset_max -> "offset_max"
+              in
+              let t', lets = ft t in
+              LApp(f,[LVar alloc; t']), lets
+	  | JCalloc_bitvector -> 
+              let f = match k with
+		| Offset_min -> "byte_offset_min"
+		| Offset_max -> "byte_offset_max"
+              in
+              let t', lets = ft t in
+	      let s = string_of_int (struct_size_in_bytes st) in
+              LApp(f,[LVar alloc; t'; LConst(Prim_int s)]), lets
+	end
     | JCTaddress t -> 
         let t', lets = ft t in
         LApp("address",[t']), lets
@@ -1034,7 +1043,7 @@ let write_allocs ~callee_writes ~regions =
             *)
            begin
 (*             assert(not(AllocList.mem (a,locr) acc));*)
-             (Var(alloc_region_table_name(a,locr)))::acc 
+             (Var(alloc_table_name(a,locr)))::acc 
            end
          with Not_found -> 
                     (* Local allocation table. 
@@ -1058,8 +1067,8 @@ let read_allocs ~caller_writes ~callee_writes ~callee_reads ~regions =
              if AllocSet.mem (a,locr) 
                caller_writes.jc_effect_alloc_table
              then
-               (Deref(alloc_region_table_name(a,locr)))::acc 
-             else (Var(alloc_region_table_name(a,locr)))::acc 
+               (Deref(alloc_table_name(a,locr)))::acc 
+             else (Var(alloc_table_name(a,locr)))::acc 
            else
              begin
                (* Check that we do not pass in argument a constant 
@@ -1073,8 +1082,8 @@ let read_allocs ~caller_writes ~callee_writes ~callee_reads ~regions =
                assert(not(AllocSet.mem (a,locr) fallocs));
                if AllocSet.mem (a,locr) 
                  callee_writes.jc_effect_alloc_table
-               then (Var(alloc_region_table_name(a,locr)))::acc 
-               else (Deref(alloc_region_table_name(a,locr)))::acc 
+               then (Var(alloc_table_name(a,locr)))::acc 
+               else (Deref(alloc_table_name(a,locr)))::acc 
              end
          with Not_found -> 
                     (* Local allocation table.
@@ -1251,13 +1260,6 @@ let rec old_to_pre_loc loc =
     | JCLderef(lset,lab,fi,region) ->
 	JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, region)
 
-let deref_class e fi =
-  if Region.bitwise e#region then
-    JCmem_bitvector
-  else match access_union e fi with 
-    | None -> JCmem_field fi
-    | Some(e,_off) -> JCmem_union (the (union_type e#typ))
-
 (* translates the heap update `e1.f = e2' 
 
    essentially we want
@@ -1287,7 +1289,7 @@ let rec make_upd_simple ?(bitwise=false) lab loc ~infunction ~threats fi e1 e2 =
   let e2' = expr e2 in
   let v = Var tmp2 in
   let lets = 
-    if of_union_type e1#typ then
+    if bitwise || of_union_type e1#typ then
       [ (tmp2, e2') ]
     else
       [ (tmp2, coerce ~no_int_overflow:(not threats) 
@@ -1296,11 +1298,11 @@ let rec make_upd_simple ?(bitwise=false) lab loc ~infunction ~threats fi e1 e2 =
            e2#typ e2 e2') ]
   in
   (* we then go to e1 *)
-  let mc = deref_class e1 fi in
+  let mc = deref_mem_class e1 fi in
   let mem = memory_name (mc,e1#region) in
   let mem = Var mem in
   let ac = alloc_class_of_mem_class mc in
-  let alloc = alloc_region_table_name (ac, e1#region) in
+  let alloc = alloc_table_name (ac, e1#region) in
   let alloc = 
     if Region.polymorphic e1#region then
       if AllocSet.mem (ac, e1#region)
@@ -1423,7 +1425,7 @@ and make_upd_union lab loc ~infunction ~threats off fi e1 e2 =
   in
   let off2 = off1 + (the fi.jc_field_info_bitsize/8) - 1 in
   let off1 = string_of_int off1 and off2 = string_of_int off2 in
-  let acc = make_app "store_bytes"
+  let acc = make_app "store_union"
 		 [deref; Cte(Prim_int off1); Cte(Prim_int off2); acc]
   in
   let lets = 
@@ -1463,7 +1465,7 @@ and make_upd_bitwise lab loc ~infunction ~threats fi e1 e2 =
     make_deref_simple ~bitwise:true lab loc ~infunction ~threats fi e1 
   in
   (* Retrieve subpart of bitvector for specific subfield *)
-  let off1 = the (field_offset_bytes fi) in
+  let off1 = the (field_offset_in_bytes fi) in
   let off2 = off1 + (the fi.jc_field_info_bitsize/8) - 1 in
   let off1 = string_of_int off1 and off2 = string_of_int off2 in
   let acc = make_app "store_bytes"
@@ -1480,7 +1482,7 @@ and make_upd_bitwise lab loc ~infunction ~threats fi e1 e2 =
 and make_upd lab loc ~infunction ~threats fi e1 e2 =
   if Region.bitwise e1#region then
     make_upd_bitwise lab loc ~infunction ~threats fi e1 e2
-  else match access_union e1 fi with
+  else match access_union e1 (Some fi) with
     | Some(e1,off) ->
   	make_upd_union lab loc ~infunction ~threats off fi e1 e2
     | None ->
@@ -1489,7 +1491,7 @@ and make_upd lab loc ~infunction ~threats fi e1 e2 =
 and make_deref_simple ?(bitwise=false) lab loc ~infunction ~threats fi e =
   let expr = expr ~infunction ~threats in
   let offset = offset ~infunction ~threats in
-  let mc = deref_class e fi in
+  let mc = deref_mem_class e fi in
   let mem = memory_name (mc,e#region) in
   let mem = 
     if Region.polymorphic e#region then
@@ -1500,7 +1502,7 @@ and make_deref_simple ?(bitwise=false) lab loc ~infunction ~threats fi e =
     else Deref mem
   in
   let ac = alloc_class_of_mem_class mc in
-  let alloc = alloc_region_table_name (ac,e#region) in
+  let alloc = alloc_table_name (ac,e#region) in
   let alloc = 
     if Region.polymorphic e#region then
       if AllocSet.mem (ac, e#region)
@@ -1578,7 +1580,7 @@ and make_deref_union lab loc ~infunction ~threats off fi e =
   in
   let off2 = off1 + (the fi.jc_field_info_bitsize/8) - 1 in
   let off1 = string_of_int off1 and off2 = string_of_int off2 in
-  let acc = make_app "select_bytes"
+  let acc = make_app "select_union"
 		 [deref; Cte(Prim_int off1); Cte(Prim_int off2)]
   in
   (* Convert bitvector into appropriate type *)
@@ -1592,7 +1594,7 @@ and make_deref_bitwise lab loc ~infunction ~threats fi e =
   let deref = 
     make_deref_simple ~bitwise:true lab loc ~infunction ~threats fi e in
   (* Retrieve subpart of bitvector for specific subfield *)
-  let off1 = the (field_offset_bytes fi) in
+  let off1 = the (field_offset_in_bytes fi) in
   let off2 = off1 + (the fi.jc_field_info_bitsize/8) - 1 in
   let off1 = string_of_int off1 and off2 = string_of_int off2 in
   let acc = make_app "select_bytes"
@@ -1607,7 +1609,7 @@ and make_deref_bitwise lab loc ~infunction ~threats fi e =
 and make_deref lab loc ~infunction ~threats fi e =
   if e#region.jc_reg_bitwise then
     make_deref_bitwise lab loc ~infunction ~threats fi e
-  else match access_union e fi with
+  else match access_union e (Some fi) with
     | Some(e,off) ->
   	make_deref_union lab loc ~infunction ~threats off fi e
     | None ->
@@ -1772,9 +1774,9 @@ and expr ~infunction ~threats e : expr =
            coerce ~no_int_overflow:(not threats) 
              e2#name_label e2#loc integer_type e2#typ e2 e2']
     | JCEoffset(k,e,st) -> 
-	let ac = JCalloc_struct (struct_variant st.jc_struct_info_root) in
+	let ac = JCalloc_struct (struct_variant st) in
         let alloc = 
-          alloc_region_table_name (ac, e#region) in
+          alloc_table_name (ac, e#region) in
         let alloc = 
           if Region.polymorphic e#region then
             if AllocSet.mem (ac, e#region)
@@ -1823,8 +1825,8 @@ and expr ~infunction ~threats e : expr =
     | JCEderef(e,fi) ->
   	make_deref (lab()) loc ~infunction ~threats fi e
     | JCEalloc (siz, st) ->
-	let ac = JCalloc_struct (struct_variant st.jc_struct_info_root) in
-        let alloc = alloc_region_table_name (ac, e#region) in
+	let ac = JCalloc_struct (struct_variant st) in
+        let alloc = alloc_table_name (ac, e#region) in
         let tag = tag_table_name (JCtag(st, [])) in
 (*      
         let fields = embedded_struct_fields st in
@@ -1854,7 +1856,7 @@ and expr ~infunction ~threats e : expr =
                   (coerce ~no_int_overflow:(not threats) 
                      siz#name_label siz#loc integer_type 
                      siz#typ siz (expr siz)
-                   :: (List.map (nvar $ alloc_region_table_name) allocs)
+                   :: (List.map (nvar $ alloc_table_name) allocs)
                    @ (List.map (nvar $ field_region_memory_name) fields))
         end
     | JCEfree e ->
@@ -1863,9 +1865,9 @@ and expr ~infunction ~threats e : expr =
           | JCTpointer(JCvariant vi, _, _) -> assert false (* TODO *)
           | _ -> assert false
         in      
-	let ac = JCalloc_struct (struct_variant st.jc_struct_info_root) in
+	let ac = JCalloc_struct (struct_variant st) in
         let alloc = 
-          alloc_region_table_name (ac, e#region) in
+          alloc_table_name (ac, e#region) in
         if !Jc_options.inv_sem = InvOwnership then
           let com = committed_name (JCtag(st, [])) in
           make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
@@ -3041,7 +3043,7 @@ let tr_fun f funloc spec body acc =
   let reads =
     AllocSet.fold
       (fun (a,r) acc -> 
-        let alloc = alloc_region_table_name(a,r) in
+        let alloc = alloc_table_name(a,r) in
         if Region.polymorphic r then
           if RegionList.mem r f.jc_fun_info_param_regions then
             if AllocSet.mem (a,r) 
@@ -3090,7 +3092,7 @@ let tr_fun f funloc spec body acc =
   let writes =
     AllocSet.fold
       (fun (a,r) acc ->
-        let alloc = alloc_region_table_name(a,r) in
+        let alloc = alloc_table_name(a,r) in
         if Region.polymorphic r then
           if RegionList.mem r f.jc_fun_info_param_regions then alloc::acc else acc
         else alloc::acc)
@@ -3150,7 +3152,7 @@ let tr_fun f funloc spec body acc =
     AllocSet.fold
       (fun (a,r) (param_acc,local_acc) ->
         if Region.polymorphic r then
-          let alloc = alloc_region_table_name(a,r),alloc_table_type a in
+          let alloc = alloc_table_name(a,r),alloc_table_type a in
           if RegionList.mem r f.jc_fun_info_param_regions then
             alloc::param_acc,local_acc
           else
@@ -3163,7 +3165,7 @@ let tr_fun f funloc spec body acc =
     AllocSet.fold
       (fun (a,r) (param_acc,local_acc) ->
 	 
-          let alloc = alloc_region_table_name(a,r),alloc_table_type a in
+          let alloc = alloc_table_name(a,r),alloc_table_type a in
         if Region.polymorphic r then
           if RegionList.mem r f.jc_fun_info_param_regions then
             alloc::param_acc,local_acc
@@ -3496,7 +3498,7 @@ let tr_axiom id is_axiom p acc =
   in
   let a =
     AllocSet.fold (fun (alloc,r) a -> 
-      LForall (alloc_region_table_name(alloc,r), alloc_table_type alloc, a)
+      LForall (alloc_table_name(alloc,r), alloc_table_type alloc, a)
     ) ef.jc_effect_alloc_table a 
   in
   let a =
@@ -3706,7 +3708,7 @@ let tr_memory (mc,r) acc =
 
 let tr_alloc_table (pc,r) acc =
   Param(
-    false,alloc_region_table_name(pc,r),
+    false,alloc_table_name(pc,r),
     Ref_type(Base_type(alloc_table_type pc))) :: acc
 
 (*******************************************************************************)

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.20 2008-08-04 13:48:33 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.21 2008-08-04 16:30:56 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -83,7 +83,7 @@ let tag_table_name = function
 let generic_alloc_table_name ac =
   (alloc_class_name ac) ^ "_alloc_table"
 
-let alloc_region_table_name (ac,r) = 
+let alloc_table_name (ac,r) = 
   if !Jc_common_options.separation_sem = SepRegions then 
     (alloc_class_name ac) ^ "_" ^ (Region.name r) ^ "_alloc_table"
   else
@@ -110,8 +110,8 @@ let union_region_memory_name (vi,r) =
 
 let bitvector_region_memory_name r = 
   if !Jc_common_options.separation_sem = SepRegions then 
-    bitvector_type_name ^ "_" ^ (Region.name r)
-  else bitvector_type_name
+    bitvector_type_name ^ "_" ^ (Region.name r)  ^ "_mem"
+  else bitvector_type_name ^ "_mem"
 
 let union_memory_type_name vi = 
   vi.jc_variant_info_name ^ "_union"

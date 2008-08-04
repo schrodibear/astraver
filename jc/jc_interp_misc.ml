@@ -152,12 +152,15 @@ let union_memory_type vi =
     (if integral_union vi then why_integer_type 
      else 
        bitvector_type)
+
+let bitvector_memory_type =
+  memory_type bitvector_type bitvector_type
 	
 let field_or_variant_memory_type mc =
   match mc with
     | JCmem_field fi -> field_memory_type fi
     | JCmem_union vi -> union_memory_type vi
-    | JCmem_bitvector -> bitvector_type
+    | JCmem_bitvector -> bitvector_memory_type
 
 let current_function = ref None
 let set_current_function f = current_function := Some f
@@ -240,7 +243,7 @@ let alloc_logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	       end
 	   | _ -> r
        in
-       (alloc_region_table_name (ac, r),
+       (alloc_table_name (ac, r),
 	alloc_table_type (ac))::acc)
     li.jc_logic_info_effects.jc_effect_alloc_table
     []
@@ -303,7 +306,7 @@ let logic_info_reads acc li =
   let acc =
     AllocSet.fold
       (fun (ac,r) acc ->
-	 StringSet.add (alloc_region_table_name (ac, r)) acc)
+	 StringSet.add (alloc_table_name (ac, r)) acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
@@ -329,7 +332,7 @@ let logic_params li l =
   in
   let l = 
     AllocSet.fold
-      (fun (a,r) acc -> (LVar(alloc_region_table_name(a,r))::acc))
+      (fun (a,r) acc -> (LVar(alloc_table_name(a,r))::acc))
       li.jc_logic_info_effects.jc_effect_alloc_table
       l
   in
@@ -402,7 +405,7 @@ let all_effects ef =
   let res =
     AllocSet.fold
       (fun (a,r) acc -> 
-	let alloc = alloc_region_table_name(a,r) in
+	let alloc = alloc_table_name(a,r) in
 	if Region.polymorphic r then
 (*	  if RegionList.mem r f.jc_fun_info_param_regions then
 	    if AllocSet.mem (a,r) 
@@ -575,9 +578,9 @@ let union_type = function
 let of_union_type ty =
   match union_type ty with Some _vi -> true | None -> false
 
-let access_union e fi = 
+let access_union e fi_opt = 
   let fieldoffbytes fi = 
-    match field_offset_bytes fi with
+    match field_offset_in_bytes fi with
       | None -> assert false
       | Some off -> Int_offset (string_of_int off) 
   in
@@ -600,19 +603,22 @@ let access_union e fi =
 	    Some (e,Int_offset "0")
 	  else None
   in
+  match fi_opt with
+    | None ->
+	access e
+    | Some fi ->
+	let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in
+	match access e with
+	  | Some(e,off) ->
+	      Some (e, add_offset off (fieldoffbytes fi))
+	  | None -> 
+	      if of_union_type e#typ then
+		Some (e, fieldoffbytes fi)
+	      else None
 
-  let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in
-  match access e with
-    | Some(e,off) ->
-	Some (e, add_offset off (fieldoffbytes fi))
-    | None -> 
-	if of_union_type e#typ then
-	  Some (e, fieldoffbytes fi)
-	else None
-
-let term_access_union t fi =
+let taccess_union t fi_opt =
   let fieldoffbytes fi = 
-    match field_offset_bytes fi with
+    match field_offset_in_bytes fi with
       | None -> assert false
       | Some off -> Int_offset (string_of_int off) 
   in
@@ -638,16 +644,41 @@ let term_access_union t fi =
 	  else None
   in
 
-  let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in
-  match access t with
-    | Some(t,off) ->
-	Some (t, add_offset off (fieldoffbytes fi))
-    | None -> 
-	if of_union_type t#typ then
-	  Some (t, fieldoffbytes fi)
-	else None
+  match fi_opt with
+    | None ->
+	access t
+    | Some fi ->
+	let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in
+	match access t with
+	  | Some(t,off) ->
+	      Some (t, add_offset off (fieldoffbytes fi))
+	  | None -> 
+	      if of_union_type t#typ then
+		Some (t, fieldoffbytes fi)
+	      else None
 
 let tlocation_access_union t fi = None (* TODO *)
+
+let common_deref_alloc_class access_union e =
+  if Region.bitwise e#region then
+    JCalloc_bitvector
+  else match access_union e None with 
+    | None -> JCalloc_struct (struct_variant (pointer_struct e#typ))
+    | Some(e,_off) -> JCalloc_union (the (union_type e#typ))
+
+let deref_alloc_class e =
+  common_deref_alloc_class access_union e
+  
+let tderef_alloc_class t =
+  common_deref_alloc_class taccess_union t
+
+let deref_mem_class e fi =
+  if Region.bitwise e#region then
+    JCmem_bitvector
+  else match access_union e (Some fi) with 
+    | None -> JCmem_field fi
+    | Some(e,_off) -> JCmem_union (the (union_type e#typ))
+
 
 (*
 Local Variables: 

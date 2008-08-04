@@ -366,7 +366,7 @@ let invariant_params acc li =
   let acc =
     AllocSet.fold
       (fun (ac,r) acc -> 
-	 (alloc_region_table_name (ac, r),
+	 (alloc_table_name (ac, r),
 	  alloc_table_type (ac))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
