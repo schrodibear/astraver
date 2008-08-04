@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.114 2008-07-31 15:22:39 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.115 2008-08-04 13:48:33 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -124,8 +124,8 @@ let rec print_type fmt t =
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
     | JCTlogic s -> fprintf fmt "%s" s
     | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
-    | JCTpointer(tov, ao, bo) ->
-        begin match tov with
+    | JCTpointer(pc, ao, bo) ->
+        begin match pc with
           | JCtag({ jc_struct_info_name = name }, [])
           | JCvariant { jc_variant_info_name = name }
 	  | JCunion { jc_variant_info_name = name } ->
@@ -284,9 +284,9 @@ let exception_info ty id =
 (* logic functions *)
 
 let empty_effects = 
-  { jc_effect_alloc_table = StringRegionSet.empty;
+  { jc_effect_alloc_table = AllocSet.empty;
     jc_effect_tag_table = VariantMap.empty;
-    jc_effect_memories = FieldOrVariantRegionMap.empty;
+    jc_effect_memories = MemoryMap.empty;
     jc_effect_globals = VarSet.empty;
     jc_effect_mutable = StringSet.empty;
     jc_effect_committed = StringSet.empty;
@@ -751,6 +751,12 @@ let field_bounds fi =
   match fi.jc_field_info_type with 
     | JCTpointer(_,Some a,Some b) -> a,b | _ -> assert false
 
+let pointer_struct = function
+  | JCTpointer(JCtag(st, []), _, _) -> st
+  | ty -> 
+      Format.printf "%a@." print_type ty;
+      assert false
+
 let map_elements map =
   StringMap.fold (fun _ i acc -> i::acc) map []
 
@@ -780,12 +786,12 @@ let struct_variant st =
 	(* don't use struct_variant before checking that every tag is used
          * in a type *)
 
-let tag_or_variant_variant = function
+let pointer_class_variant = function
   | JCtag(st, _) -> struct_variant st
   | JCvariant vi -> vi
   | JCunion vi -> vi
   
-let tag_or_variant_name = function
+let pointer_class_name = function
   | JCtag(st, _) -> "tag "^st.jc_struct_info_name
   | JCvariant vi -> "variant "^vi.jc_variant_info_name
   | JCunion vi -> "union "^vi.jc_variant_info_name

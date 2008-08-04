@@ -31,6 +31,7 @@ open Jc_ast
 open Jc_env
 
 val ( $ ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
+val the: 'a option -> 'a
 
 val error: Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 
@@ -103,13 +104,14 @@ val embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list
 *)
 val field_sinfo : Jc_env.field_info -> Jc_env.struct_info
 val field_bounds : Jc_env.field_info -> Num.num * Num.num
+val pointer_struct: jc_type -> struct_info
 (*val embedded_struct_roots : Jc_env.struct_info -> string list*)
 
 val root_name : Jc_env.struct_info -> string
 val field_root_name : Jc_env.field_info -> string
 val struct_variant : Jc_env.struct_info -> Jc_env.variant_info
-val tag_or_variant_variant : Jc_env.tag_or_variant -> Jc_env.variant_info
-val tag_or_variant_name : Jc_env.tag_or_variant -> string
+val pointer_class_variant : pointer_class -> Jc_env.variant_info
+val pointer_class_name : pointer_class -> string
 
 (* predefined functions *)
 

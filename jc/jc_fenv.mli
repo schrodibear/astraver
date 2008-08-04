@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.mli,v 1.33 2008-07-11 09:01:13 moy Exp $ *)
+(* $Id: jc_fenv.mli,v 1.34 2008-08-04 13:48:33 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -37,9 +37,9 @@ open Jc_region
    in [jc_effect.ml]. *)
 type effect =
     {
-      jc_effect_alloc_table : StringRegionSet.t;
+      jc_effect_alloc_table : AllocSet.t;
       jc_effect_tag_table : LogicLabelSet.t VariantMap.t;
-      jc_effect_memories : LogicLabelSet.t FieldOrVariantRegionMap.t;
+      jc_effect_memories : LogicLabelSet.t MemoryMap.t;
       jc_effect_globals : VarSet.t;
       jc_effect_mutable : StringSet.t;
       jc_effect_committed : StringSet.t;

@@ -323,14 +323,6 @@ type long
 
 type short
 
-type size16
-
-type size32
-
-type size64
-
-type size8
-
 logic Literals_tag:  -> Object tag_id
 
 logic Object_tag:  -> Object tag_id
@@ -370,39 +362,40 @@ logic Throwable_tag:  -> Object tag_id
 
 axiom Throwable_parenttag_Object : parenttag(Throwable_tag, Object_tag)
 
-axiom bitvector_size16 :
- (forall bv:size16 bitvector. eq_int(bitvector_size(bv), (16)))
+logic bitvector_of_byte: byte -> bitvector
 
-axiom bitvector_size32 :
- (forall bv:size32 bitvector. eq_int(bitvector_size(bv), (32)))
+logic byte_of_bitvector: bitvector -> byte
 
-axiom bitvector_size64 :
- (forall bv:size64 bitvector. eq_int(bitvector_size(bv), (64)))
+axiom bitvector_of_byte_of_byte_of_bitvector :
+ (forall x:bitvector. (bitvector_of_byte(byte_of_bitvector(x)) = x))
 
-axiom bitvector_size8 :
- (forall bv:size8 bitvector. eq_int(bitvector_size(bv), (8)))
+logic bitvector_of_char: char -> bitvector
 
-axiom bitvector_size_in_bytes16 :
- (forall bv:size16 bitvector. eq_int(bitvector_size_in_bytes(bv), (2)))
+logic char_of_bitvector: bitvector -> char
 
-axiom bitvector_size_in_bytes32 :
- (forall bv:size32 bitvector. eq_int(bitvector_size_in_bytes(bv), (4)))
+axiom bitvector_of_char_of_char_of_bitvector :
+ (forall x:bitvector. (bitvector_of_char(char_of_bitvector(x)) = x))
 
-axiom bitvector_size_in_bytes64 :
- (forall bv:size64 bitvector. eq_int(bitvector_size_in_bytes(bv), (8)))
+logic bitvector_of_int32: int32 -> bitvector
 
-axiom bitvector_size_in_bytes8 :
- (forall bv:size8 bitvector. eq_int(bitvector_size_in_bytes(bv), (1)))
+logic int32_of_bitvector: bitvector -> int32
 
-logic bitvector_to_byte: size8 bitvector -> byte
+axiom bitvector_of_int32_of_int32_of_bitvector :
+ (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
 
-logic bitvector_to_char: size16 bitvector -> char
+logic bitvector_of_long: long -> bitvector
 
-logic bitvector_to_int32: size32 bitvector -> int32
+logic long_of_bitvector: bitvector -> long
 
-logic bitvector_to_long: size64 bitvector -> long
+axiom bitvector_of_long_of_long_of_bitvector :
+ (forall x:bitvector. (bitvector_of_long(long_of_bitvector(x)) = x))
 
-logic bitvector_to_short: size16 bitvector -> short
+logic bitvector_of_short: short -> bitvector
+
+logic short_of_bitvector: bitvector -> short
+
+axiom bitvector_of_short_of_short_of_bitvector :
+ (forall x:bitvector. (bitvector_of_short(short_of_bitvector(x)) = x))
 
 logic integer_of_byte: byte -> int
 
@@ -413,11 +406,16 @@ axiom byte_coerce :
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_byte(byte_of_integer(x)), x)))
 
+predicate eq_byte(x:byte,
+ y:byte) =
+ eq_int(integer_of_byte(x), integer_of_byte(y))
+
+axiom byte_of_bitvector_of_bitvector_of_byte :
+ (forall x:byte. eq_byte(byte_of_bitvector(bitvector_of_byte(x)), x))
+
 axiom byte_range :
  (forall x:byte.
   (le_int((-128), integer_of_byte(x)) and le_int(integer_of_byte(x), (127))))
-
-logic byte_to_bitvector: byte -> size8 bitvector
 
 logic integer_of_char: char -> int
 
@@ -428,19 +426,16 @@ axiom char_coerce :
   ((le_int((0), x) and le_int(x, (65535))) ->
    eq_int(integer_of_char(char_of_integer(x)), x)))
 
-axiom char_range :
- (forall x:char.
-  (le_int((0), integer_of_char(x)) and le_int(integer_of_char(x), (65535))))
-
-logic char_to_bitvector: char -> size16 bitvector
-
-predicate eq_byte(x:byte,
- y:byte) =
- eq_int(integer_of_byte(x), integer_of_byte(y))
-
 predicate eq_char(x:char,
  y:char) =
  eq_int(integer_of_char(x), integer_of_char(y))
+
+axiom char_of_bitvector_of_bitvector_of_char :
+ (forall x:char. eq_char(char_of_bitvector(bitvector_of_char(x)), x))
+
+axiom char_range :
+ (forall x:char.
+  (le_int((0), integer_of_char(x)) and le_int(integer_of_char(x), (65535))))
 
 predicate eq_int32(x:int32,
  y:int32) =
@@ -465,12 +460,13 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_of_bitvector_of_bitvector_of_int32 :
+ (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
   and le_int(integer_of_int32(x), (2147483647))))
-
-logic int32_to_bitvector: int32 -> size32 bitvector
 
 logic interface_tag:  -> interface tag_id
 
@@ -490,12 +486,13 @@ axiom long_coerce :
   ((le_int((-9223372036854775808), x) and le_int(x, (9223372036854775807))) ->
    eq_int(integer_of_long(long_of_integer(x)), x)))
 
+axiom long_of_bitvector_of_bitvector_of_long :
+ (forall x:long. eq_long(long_of_bitvector(bitvector_of_long(x)), x))
+
 axiom long_range :
  (forall x:long.
   (le_int((-9223372036854775808), integer_of_long(x))
   and le_int(integer_of_long(x), (9223372036854775807))))
-
-logic long_to_bitvector: long -> size64 bitvector
 
 logic short_of_integer: int -> short
 
@@ -504,12 +501,13 @@ axiom short_coerce :
   ((le_int((-32768), x) and le_int(x, (32767))) ->
    eq_int(integer_of_short(short_of_integer(x)), x)))
 
+axiom short_of_bitvector_of_bitvector_of_short :
+ (forall x:short. eq_short(short_of_bitvector(bitvector_of_short(x)), x))
+
 axiom short_range :
  (forall x:short.
   (le_int((-32768), integer_of_short(x))
   and le_int(integer_of_short(x), (32767))))
-
-logic short_to_bitvector: short -> size16 bitvector
 
 predicate valid_struct_Object(p:Object pointer,
  a:int,
@@ -621,56 +619,6 @@ parameter alloc_interface :
      and (instanceof(interface_tag_table, result, interface_tag)
          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
              and alloc_fresh(interface_alloc_table@, result, n)))) }
-
-parameter alloc_one_Literals :
- tt:unit ->
-  Object_alloc_table:Object alloc_table ref ->
-   { } Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Literals(result, (0), (0), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Literals_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, (1))))) }
-
-parameter alloc_one_Object :
- tt:unit ->
-  Object_alloc_table:Object alloc_table ref ->
-   { } Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Object(result, (0), (0), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Object_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, (1))))) }
-
-parameter alloc_one_String :
- tt:unit ->
-  Object_alloc_table:Object alloc_table ref ->
-   { } Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_String(result, (0), (0), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, String_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, (1))))) }
-
-parameter alloc_one_Throwable :
- tt:unit ->
-  Object_alloc_table:Object alloc_table ref ->
-   { } Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Throwable(result, (0), (0), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Throwable_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, (1))))) }
-
-parameter alloc_one_interface :
- tt:unit ->
-  interface_alloc_table:interface alloc_table ref ->
-   { } interface pointer reads interface_alloc_table
-   writes interface_alloc_table,interface_tag_table
-   { (valid_struct_interface(result, (0), (0), interface_alloc_table)
-     and (instanceof(interface_tag_table, result, interface_tag)
-         and (alloc_extends(interface_alloc_table@, interface_alloc_table)
-             and alloc_fresh(interface_alloc_table@, result, (1))))) }
 
 parameter any_byte : unit -> { } byte { true }
 
@@ -1111,40 +1059,69 @@ axiom select_store_neq:
         (forall a:'a2 [store(m, p1, a), p2].
           ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
 
-type 'size bitvector
+type bitvector
 
-logic bitvector_size : 'a1 bitvector -> int
+logic select_bytes : bitvector, int, int -> bitvector
 
-logic bitvector_size_in_bytes : 'a1 bitvector -> int
+logic store_bytes : bitvector, int, int, bitvector -> bitvector
 
-logic select_bytes : 'a1 bitvector, int, int -> 'a1 bitvector
-
-logic store_bytes : 'a1 bitvector, int, int, 'a2 bitvector -> 'a1 bitvector
+logic concat_bytes : bitvector, bitvector -> bitvector
 
 axiom select_store_eq_bytes:
-  (forall b:'a1 bitvector.
+  (forall b:bitvector.
     (forall i:int.
       (forall j:int.
         (forall k:int.
           (forall l:int.
-            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+            (forall a:bitvector [select_bytes(store_bytes(b, i, j, a), k,
               l)].
-              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
-                ((i = k) and (j = l))) ->
-               (select_bytes(store_bytes(b, i, j, a), k, l) = b))))))))
+              (((i = k) and (j = l)) -> (select_bytes(store_bytes(b, i, j,
+               a), k, l) = a))))))))
 
 axiom select_store_neq_bytes:
-  (forall b:'a1 bitvector.
+  (forall b:bitvector.
     (forall i:int.
       (forall j:int.
         (forall k:int.
           (forall l:int.
-            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+            (forall a:bitvector [select_bytes(store_bytes(b, i, j, a), k,
               l)].
-              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
-                ((l < i) or (j < k))) ->
-               (select_bytes(store_bytes(b, i, j, a), k, l) = select_bytes(b,
-               k, l)))))))))
+              (((l < i) or (j < k)) -> (select_bytes(store_bytes(b, i, j, a),
+               k, l) = select_bytes(b, k, l)))))))))
+
+axiom concat_store_bytes_up:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a1:bitvector.
+              (forall a2:bitvector [store_bytes(store_bytes(b, i, j, a1), k,
+                l, a2)].
+                (((j + 1) = k) -> (store_bytes(store_bytes(b, i, j, a1), k,
+                 l, a2) = store_bytes(b, i, l, concat_bytes(a1, a2)))))))))))
+
+axiom concat_store_bytes_down:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a1:bitvector.
+              (forall a2:bitvector [store_bytes(store_bytes(b, i, j, a1), k,
+                l, a2)].
+                (((l + 1) = i) -> (store_bytes(store_bytes(b, i, j, a1), k,
+                 l, a2) = store_bytes(b, k, j, concat_bytes(a2, a1)))))))))))
+
+axiom concat_select_bytes:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int [concat_bytes(select_bytes(b, i, j), select_bytes(b,
+            k, l))].
+            (((j + 1) = k) -> (concat_bytes(select_bytes(b, i, j),
+             select_bytes(b, k, l)) = select_bytes(b, i, l))))))))
 
 type 't pset
 
@@ -1471,14 +1448,6 @@ type long
 
 type short
 
-type size16
-
-type size32
-
-type size64
-
-type size8
-
 logic Literals_tag :  -> Object tag_id
 
 logic Object_tag :  -> Object tag_id
@@ -1511,38 +1480,40 @@ logic Throwable_tag :  -> Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
-axiom bitvector_size16:
-  (forall bv:size16 bitvector. (bitvector_size(bv) = 16))
+logic bitvector_of_byte : byte -> bitvector
 
-axiom bitvector_size32:
-  (forall bv:size32 bitvector. (bitvector_size(bv) = 32))
+logic byte_of_bitvector : bitvector -> byte
 
-axiom bitvector_size64:
-  (forall bv:size64 bitvector. (bitvector_size(bv) = 64))
+axiom bitvector_of_byte_of_byte_of_bitvector:
+  (forall x:bitvector. (bitvector_of_byte(byte_of_bitvector(x)) = x))
 
-axiom bitvector_size8: (forall bv:size8 bitvector. (bitvector_size(bv) = 8))
+logic bitvector_of_char : char -> bitvector
 
-axiom bitvector_size_in_bytes16:
-  (forall bv:size16 bitvector. (bitvector_size_in_bytes(bv) = 2))
+logic char_of_bitvector : bitvector -> char
 
-axiom bitvector_size_in_bytes32:
-  (forall bv:size32 bitvector. (bitvector_size_in_bytes(bv) = 4))
+axiom bitvector_of_char_of_char_of_bitvector:
+  (forall x:bitvector. (bitvector_of_char(char_of_bitvector(x)) = x))
 
-axiom bitvector_size_in_bytes64:
-  (forall bv:size64 bitvector. (bitvector_size_in_bytes(bv) = 8))
+logic bitvector_of_int32 : int32 -> bitvector
 
-axiom bitvector_size_in_bytes8:
-  (forall bv:size8 bitvector. (bitvector_size_in_bytes(bv) = 1))
+logic int32_of_bitvector : bitvector -> int32
 
-logic bitvector_to_byte : size8 bitvector -> byte
+axiom bitvector_of_int32_of_int32_of_bitvector:
+  (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
 
-logic bitvector_to_char : size16 bitvector -> char
+logic bitvector_of_long : long -> bitvector
 
-logic bitvector_to_int32 : size32 bitvector -> int32
+logic long_of_bitvector : bitvector -> long
 
-logic bitvector_to_long : size64 bitvector -> long
+axiom bitvector_of_long_of_long_of_bitvector:
+  (forall x:bitvector. (bitvector_of_long(long_of_bitvector(x)) = x))
 
-logic bitvector_to_short : size16 bitvector -> short
+logic bitvector_of_short : short -> bitvector
+
+logic short_of_bitvector : bitvector -> short
+
+axiom bitvector_of_short_of_short_of_bitvector:
+  (forall x:bitvector. (bitvector_of_short(short_of_bitvector(x)) = x))
 
 logic integer_of_byte : byte -> int
 
@@ -1553,11 +1524,15 @@ axiom byte_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_byte(byte_of_integer(x)) = x)))
 
+predicate eq_byte(x: byte, y: byte) =
+  (integer_of_byte(x) = integer_of_byte(y))
+
+axiom byte_of_bitvector_of_bitvector_of_byte:
+  (forall x:byte. eq_byte(byte_of_bitvector(bitvector_of_byte(x)), x))
+
 axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
-
-logic byte_to_bitvector : byte -> size8 bitvector
 
 logic integer_of_char : char -> int
 
@@ -1567,17 +1542,15 @@ axiom char_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
 
+predicate eq_char(x: char, y: char) =
+  (integer_of_char(x) = integer_of_char(y))
+
+axiom char_of_bitvector_of_bitvector_of_char:
+  (forall x:char. eq_char(char_of_bitvector(bitvector_of_char(x)), x))
+
 axiom char_range:
   (forall x:char.
     ((0 <= integer_of_char(x)) and (integer_of_char(x) <= 65535)))
-
-logic char_to_bitvector : char -> size16 bitvector
-
-predicate eq_byte(x: byte, y: byte) =
-  (integer_of_byte(x) = integer_of_byte(y))
-
-predicate eq_char(x: char, y: char) =
-  (integer_of_char(x) = integer_of_char(y))
 
 predicate eq_int32(x: int32, y: int32) =
   (integer_of_int32(x) = integer_of_int32(y))
@@ -1599,12 +1572,13 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_of_bitvector_of_bitvector_of_int32:
+  (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
      (integer_of_int32(x) <= 2147483647)))
-
-logic int32_to_bitvector : int32 -> size32 bitvector
 
 logic interface_tag :  -> interface tag_id
 
@@ -1624,12 +1598,13 @@ axiom long_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_long(long_of_integer(x)) = x)))
 
+axiom long_of_bitvector_of_bitvector_of_long:
+  (forall x:long. eq_long(long_of_bitvector(bitvector_of_long(x)), x))
+
 axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
      (integer_of_long(x) <= 9223372036854775807)))
-
-logic long_to_bitvector : long -> size64 bitvector
 
 logic short_of_integer : int -> short
 
@@ -1638,11 +1613,12 @@ axiom short_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_short(short_of_integer(x)) = x)))
 
+axiom short_of_bitvector_of_bitvector_of_short:
+  (forall x:short. eq_short(short_of_bitvector(bitvector_of_short(x)), x))
+
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
-
-logic short_to_bitvector : short -> size16 bitvector
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -1854,27 +1830,62 @@ why -simplify [...] why/Literals.why
 (BG_PUSH
  ;; Why axiom select_store_eq_bytes
  (FORALL (b i j k l a)
- (IMPLIES
- (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (AND (EQ i k) (EQ j l)))
- (EQ (select_bytes (store_bytes b i j a) k l) b)))
+ (IMPLIES (AND (EQ i k) (EQ j l))
+ (EQ (select_bytes (store_bytes b i j a) k l) a)))
 
- (FORALL (i j k l a)
- (IMPLIES
- (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (AND (EQ i k) (EQ j l)))
- (FORALL (b) (EQ (select_bytes (store_bytes b i j a) k l) b)))))
+ (FORALL (i j k l)
+ (IMPLIES (AND (EQ i k) (EQ j l))
+ (FORALL (b a) (EQ (select_bytes (store_bytes b i j a) k l) a)))))
 
 (BG_PUSH
  ;; Why axiom select_store_neq_bytes
  (FORALL (b i j k l a)
- (IMPLIES
- (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (OR (< l i) (< j k)))
+ (IMPLIES (OR (< l i) (< j k))
  (EQ (select_bytes (store_bytes b i j a) k l) (select_bytes b k l))))
 
- (FORALL (i j k l a)
- (IMPLIES
- (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (OR (< l i) (< j k)))
- (FORALL (b)
+ (FORALL (i j k l)
+ (IMPLIES (OR (< l i) (< j k))
+ (FORALL (b a)
  (EQ (select_bytes (store_bytes b i j a) k l) (select_bytes b k l))))))
+
+(BG_PUSH
+ ;; Why axiom concat_store_bytes_up
+ (FORALL (b i j k l a1 a2)
+ (IMPLIES (EQ (+ j 1) k)
+ (EQ (store_bytes (store_bytes b i j a1) k l a2)
+ (store_bytes b i l (concat_bytes a1 a2)))))
+
+ (FORALL (j k)
+ (IMPLIES (EQ (+ j 1) k)
+ (FORALL (b i l a1 a2)
+ (EQ (store_bytes (store_bytes b i j a1) k l a2)
+ (store_bytes b i l (concat_bytes a1 a2)))))))
+
+(BG_PUSH
+ ;; Why axiom concat_store_bytes_down
+ (FORALL (b i j k l a1 a2)
+ (IMPLIES (EQ (+ l 1) i)
+ (EQ (store_bytes (store_bytes b i j a1) k l a2)
+ (store_bytes b k j (concat_bytes a2 a1)))))
+
+ (FORALL (i l)
+ (IMPLIES (EQ (+ l 1) i)
+ (FORALL (b j k a1 a2)
+ (EQ (store_bytes (store_bytes b i j a1) k l a2)
+ (store_bytes b k j (concat_bytes a2 a1)))))))
+
+(BG_PUSH
+ ;; Why axiom concat_select_bytes
+ (FORALL (b i j k l)
+ (IMPLIES (EQ (+ j 1) k)
+ (EQ (concat_bytes (select_bytes b i j) (select_bytes b k l))
+ (select_bytes b i l))))
+
+ (FORALL (j k)
+ (IMPLIES (EQ (+ j 1) k)
+ (FORALL (b i l)
+ (EQ (concat_bytes (select_bytes b i j) (select_bytes b k l))
+ (select_bytes b i l))))))
 
 (DEFPRED (pset_disjoint ps1 ps2)
   (FORALL (p)
@@ -2177,42 +2188,36 @@ why -simplify [...] why/Literals.why
  (EQ (parenttag Throwable_tag Object_tag) |@true|))
 
 (BG_PUSH
- ;; Why axiom bitvector_size16
- (FORALL (bv) (EQ (bitvector_size bv) 16)))
+ ;; Why axiom bitvector_of_byte_of_byte_of_bitvector
+ (FORALL (x) (EQ (bitvector_of_byte (byte_of_bitvector x)) x)))
 
 (BG_PUSH
- ;; Why axiom bitvector_size32
- (FORALL (bv) (EQ (bitvector_size bv) 32)))
+ ;; Why axiom bitvector_of_char_of_char_of_bitvector
+ (FORALL (x) (EQ (bitvector_of_char (char_of_bitvector x)) x)))
 
 (BG_PUSH
- ;; Why axiom bitvector_size64
- (FORALL (bv) (EQ (bitvector_size bv) 64)))
+ ;; Why axiom bitvector_of_int32_of_int32_of_bitvector
+ (FORALL (x) (EQ (bitvector_of_int32 (int32_of_bitvector x)) x)))
 
 (BG_PUSH
- ;; Why axiom bitvector_size8
- (FORALL (bv) (EQ (bitvector_size bv) 8)))
+ ;; Why axiom bitvector_of_long_of_long_of_bitvector
+ (FORALL (x) (EQ (bitvector_of_long (long_of_bitvector x)) x)))
 
 (BG_PUSH
- ;; Why axiom bitvector_size_in_bytes16
- (FORALL (bv) (EQ (bitvector_size_in_bytes bv) 2)))
-
-(BG_PUSH
- ;; Why axiom bitvector_size_in_bytes32
- (FORALL (bv) (EQ (bitvector_size_in_bytes bv) 4)))
-
-(BG_PUSH
- ;; Why axiom bitvector_size_in_bytes64
- (FORALL (bv) (EQ (bitvector_size_in_bytes bv) 8)))
-
-(BG_PUSH
- ;; Why axiom bitvector_size_in_bytes8
- (FORALL (bv) (EQ (bitvector_size_in_bytes bv) 1)))
+ ;; Why axiom bitvector_of_short_of_short_of_bitvector
+ (FORALL (x) (EQ (bitvector_of_short (short_of_bitvector x)) x)))
 
 (BG_PUSH
  ;; Why axiom byte_coerce
  (FORALL (x)
  (IMPLIES (AND (<= (- 0 128) x) (<= x 127))
  (EQ (integer_of_byte (byte_of_integer x)) x))))
+
+(DEFPRED (eq_byte x y) (EQ (integer_of_byte x) (integer_of_byte y)))
+
+(BG_PUSH
+ ;; Why axiom byte_of_bitvector_of_bitvector_of_byte
+ (FORALL (x) (eq_byte (byte_of_bitvector (bitvector_of_byte x)) x)))
 
 (BG_PUSH
  ;; Why axiom byte_range
@@ -2225,13 +2230,15 @@ why -simplify [...] why/Literals.why
  (IMPLIES (AND (<= 0 x) (<= x 65535))
  (EQ (integer_of_char (char_of_integer x)) x))))
 
+(DEFPRED (eq_char x y) (EQ (integer_of_char x) (integer_of_char y)))
+
+(BG_PUSH
+ ;; Why axiom char_of_bitvector_of_bitvector_of_char
+ (FORALL (x) (eq_char (char_of_bitvector (bitvector_of_char x)) x)))
+
 (BG_PUSH
  ;; Why axiom char_range
  (FORALL (x) (AND (<= 0 (integer_of_char x)) (<= (integer_of_char x) 65535))))
-
-(DEFPRED (eq_byte x y) (EQ (integer_of_byte x) (integer_of_byte y)))
-
-(DEFPRED (eq_char x y) (EQ (integer_of_char x) (integer_of_char y)))
 
 (DEFPRED (eq_int32 x y) (EQ (integer_of_int32 x) (integer_of_int32 y)))
 
@@ -2246,6 +2253,10 @@ why -simplify [...] why/Literals.why
  (AND (<= (- 0 constant_too_large_2147483648) x)
  (<= x constant_too_large_2147483647))
  (EQ (integer_of_int32 (int32_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom int32_of_bitvector_of_bitvector_of_int32
+ (FORALL (x) (eq_int32 (int32_of_bitvector (bitvector_of_int32 x)) x)))
 
 (BG_PUSH
  ;; Why axiom int32_range
@@ -2275,6 +2286,10 @@ why -simplify [...] why/Literals.why
  (EQ (integer_of_long (long_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom long_of_bitvector_of_bitvector_of_long
+ (FORALL (x) (eq_long (long_of_bitvector (bitvector_of_long x)) x)))
+
+(BG_PUSH
  ;; Why axiom long_range
  (FORALL (x)
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
@@ -2285,6 +2300,10 @@ why -simplify [...] why/Literals.why
  (FORALL (x)
  (IMPLIES (AND (<= (- 0 32768) x) (<= x 32767))
  (EQ (integer_of_short (short_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom short_of_bitvector_of_bitvector_of_short
+ (FORALL (x) (eq_short (short_of_bitvector (bitvector_of_short x)) x)))
 
 (BG_PUSH
  ;; Why axiom short_range
@@ -2669,40 +2688,69 @@ axiom select_store_neq:
         (forall a:'a2 [store(m, p1, a), p2].
           ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
 
-type 'size bitvector
+type bitvector
 
-logic bitvector_size : 'a1 bitvector -> int
+logic select_bytes : bitvector, int, int -> bitvector
 
-logic bitvector_size_in_bytes : 'a1 bitvector -> int
+logic store_bytes : bitvector, int, int, bitvector -> bitvector
 
-logic select_bytes : 'a1 bitvector, int, int -> 'a1 bitvector
-
-logic store_bytes : 'a1 bitvector, int, int, 'a2 bitvector -> 'a1 bitvector
+logic concat_bytes : bitvector, bitvector -> bitvector
 
 axiom select_store_eq_bytes:
-  (forall b:'a1 bitvector.
+  (forall b:bitvector.
     (forall i:int.
       (forall j:int.
         (forall k:int.
           (forall l:int.
-            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+            (forall a:bitvector [select_bytes(store_bytes(b, i, j, a), k,
               l)].
-              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
-                ((i = k) and (j = l))) ->
-               (select_bytes(store_bytes(b, i, j, a), k, l) = b))))))))
+              (((i = k) and (j = l)) -> (select_bytes(store_bytes(b, i, j,
+               a), k, l) = a))))))))
 
 axiom select_store_neq_bytes:
-  (forall b:'a1 bitvector.
+  (forall b:bitvector.
     (forall i:int.
       (forall j:int.
         (forall k:int.
           (forall l:int.
-            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+            (forall a:bitvector [select_bytes(store_bytes(b, i, j, a), k,
               l)].
-              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
-                ((l < i) or (j < k))) ->
-               (select_bytes(store_bytes(b, i, j, a), k, l) = select_bytes(b,
-               k, l)))))))))
+              (((l < i) or (j < k)) -> (select_bytes(store_bytes(b, i, j, a),
+               k, l) = select_bytes(b, k, l)))))))))
+
+axiom concat_store_bytes_up:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a1:bitvector.
+              (forall a2:bitvector [store_bytes(store_bytes(b, i, j, a1), k,
+                l, a2)].
+                (((j + 1) = k) -> (store_bytes(store_bytes(b, i, j, a1), k,
+                 l, a2) = store_bytes(b, i, l, concat_bytes(a1, a2)))))))))))
+
+axiom concat_store_bytes_down:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a1:bitvector.
+              (forall a2:bitvector [store_bytes(store_bytes(b, i, j, a1), k,
+                l, a2)].
+                (((l + 1) = i) -> (store_bytes(store_bytes(b, i, j, a1), k,
+                 l, a2) = store_bytes(b, k, j, concat_bytes(a2, a1)))))))))))
+
+axiom concat_select_bytes:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int [concat_bytes(select_bytes(b, i, j), select_bytes(b,
+            k, l))].
+            (((j + 1) = k) -> (concat_bytes(select_bytes(b, i, j),
+             select_bytes(b, k, l)) = select_bytes(b, i, l))))))))
 
 type 't pset
 
@@ -3029,14 +3077,6 @@ type long
 
 type short
 
-type size16
-
-type size32
-
-type size64
-
-type size8
-
 logic Literals_tag :  -> Object tag_id
 
 logic Object_tag :  -> Object tag_id
@@ -3069,38 +3109,40 @@ logic Throwable_tag :  -> Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
-axiom bitvector_size16:
-  (forall bv:size16 bitvector. (bitvector_size(bv) = 16))
+logic bitvector_of_byte : byte -> bitvector
 
-axiom bitvector_size32:
-  (forall bv:size32 bitvector. (bitvector_size(bv) = 32))
+logic byte_of_bitvector : bitvector -> byte
 
-axiom bitvector_size64:
-  (forall bv:size64 bitvector. (bitvector_size(bv) = 64))
+axiom bitvector_of_byte_of_byte_of_bitvector:
+  (forall x:bitvector. (bitvector_of_byte(byte_of_bitvector(x)) = x))
 
-axiom bitvector_size8: (forall bv:size8 bitvector. (bitvector_size(bv) = 8))
+logic bitvector_of_char : char -> bitvector
 
-axiom bitvector_size_in_bytes16:
-  (forall bv:size16 bitvector. (bitvector_size_in_bytes(bv) = 2))
+logic char_of_bitvector : bitvector -> char
 
-axiom bitvector_size_in_bytes32:
-  (forall bv:size32 bitvector. (bitvector_size_in_bytes(bv) = 4))
+axiom bitvector_of_char_of_char_of_bitvector:
+  (forall x:bitvector. (bitvector_of_char(char_of_bitvector(x)) = x))
 
-axiom bitvector_size_in_bytes64:
-  (forall bv:size64 bitvector. (bitvector_size_in_bytes(bv) = 8))
+logic bitvector_of_int32 : int32 -> bitvector
 
-axiom bitvector_size_in_bytes8:
-  (forall bv:size8 bitvector. (bitvector_size_in_bytes(bv) = 1))
+logic int32_of_bitvector : bitvector -> int32
 
-logic bitvector_to_byte : size8 bitvector -> byte
+axiom bitvector_of_int32_of_int32_of_bitvector:
+  (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
 
-logic bitvector_to_char : size16 bitvector -> char
+logic bitvector_of_long : long -> bitvector
 
-logic bitvector_to_int32 : size32 bitvector -> int32
+logic long_of_bitvector : bitvector -> long
 
-logic bitvector_to_long : size64 bitvector -> long
+axiom bitvector_of_long_of_long_of_bitvector:
+  (forall x:bitvector. (bitvector_of_long(long_of_bitvector(x)) = x))
 
-logic bitvector_to_short : size16 bitvector -> short
+logic bitvector_of_short : short -> bitvector
+
+logic short_of_bitvector : bitvector -> short
+
+axiom bitvector_of_short_of_short_of_bitvector:
+  (forall x:bitvector. (bitvector_of_short(short_of_bitvector(x)) = x))
 
 logic integer_of_byte : byte -> int
 
@@ -3111,11 +3153,15 @@ axiom byte_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_byte(byte_of_integer(x)) = x)))
 
+predicate eq_byte(x: byte, y: byte) =
+  (integer_of_byte(x) = integer_of_byte(y))
+
+axiom byte_of_bitvector_of_bitvector_of_byte:
+  (forall x:byte. eq_byte(byte_of_bitvector(bitvector_of_byte(x)), x))
+
 axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
-
-logic byte_to_bitvector : byte -> size8 bitvector
 
 logic integer_of_char : char -> int
 
@@ -3125,17 +3171,15 @@ axiom char_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
 
+predicate eq_char(x: char, y: char) =
+  (integer_of_char(x) = integer_of_char(y))
+
+axiom char_of_bitvector_of_bitvector_of_char:
+  (forall x:char. eq_char(char_of_bitvector(bitvector_of_char(x)), x))
+
 axiom char_range:
   (forall x:char.
     ((0 <= integer_of_char(x)) and (integer_of_char(x) <= 65535)))
-
-logic char_to_bitvector : char -> size16 bitvector
-
-predicate eq_byte(x: byte, y: byte) =
-  (integer_of_byte(x) = integer_of_byte(y))
-
-predicate eq_char(x: char, y: char) =
-  (integer_of_char(x) = integer_of_char(y))
 
 predicate eq_int32(x: int32, y: int32) =
   (integer_of_int32(x) = integer_of_int32(y))
@@ -3157,12 +3201,13 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_of_bitvector_of_bitvector_of_int32:
+  (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
      (integer_of_int32(x) <= 2147483647)))
-
-logic int32_to_bitvector : int32 -> size32 bitvector
 
 logic interface_tag :  -> interface tag_id
 
@@ -3182,12 +3227,13 @@ axiom long_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_long(long_of_integer(x)) = x)))
 
+axiom long_of_bitvector_of_bitvector_of_long:
+  (forall x:long. eq_long(long_of_bitvector(bitvector_of_long(x)), x))
+
 axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
      (integer_of_long(x) <= 9223372036854775807)))
-
-logic long_to_bitvector : long -> size64 bitvector
 
 logic short_of_integer : int -> short
 
@@ -3196,11 +3242,12 @@ axiom short_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_short(short_of_integer(x)) = x)))
 
+axiom short_of_bitvector_of_bitvector_of_short:
+  (forall x:short. eq_short(short_of_bitvector(bitvector_of_short(x)), x))
+
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
-
-logic short_to_bitvector : short -> size16 bitvector
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

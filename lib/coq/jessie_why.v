@@ -261,7 +261,7 @@ Admitted.
      (forall (k:Z),
       (forall (l:Z),
        (forall (a:bitvector),
-        (i = k /\ j = l -> (select_bytes (store_bytes b i j a) k l) = b))))))).
+        (i = k /\ j = l -> (select_bytes (store_bytes b i j a) k l) = a))))))).
 Admitted.
 
 (*Why axiom*) Lemma select_store_neq_bytes :

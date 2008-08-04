@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.22 2008-03-20 16:05:13 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.23 2008-08-04 13:48:33 moy Exp $ *)
 
 open Jc_env
 
@@ -163,21 +163,48 @@ module FieldMap = Map.Make(FieldOrd)
 
 module FieldTable = Hashtbl.Make(FieldOrd)
 
-module FieldOrVariantOrd = 
+module MemClass = 
 struct
-  type t = field_or_variant_info
+  type t = mem_class
   let equal fv1 fv2 = match fv1,fv2 with
-    | FVfield a1,FVfield a2 -> FieldOrd.equal a1 a2
-    | FVvariant b1,FVvariant b2 -> VariantOrd.equal b1 b2
+    | JCmem_field a1,JCmem_field a2 -> FieldOrd.equal a1 a2
+    | JCmem_union b1,JCmem_union b2 -> VariantOrd.equal b1 b2
+    | JCmem_bitvector,JCmem_bitvector -> true
     | _ -> false
   let compare fv1 fv2 = match fv1,fv2 with
-    | FVfield a1,FVfield a2 -> FieldOrd.compare a1 a2
-    | FVvariant b1,FVvariant b2 -> VariantOrd.compare b1 b2
-    | FVfield _,_ -> 1
-    | FVvariant _,_ -> -1
+    | JCmem_field a1,JCmem_field a2 -> FieldOrd.compare a1 a2
+    | JCmem_union b1,JCmem_union b2 -> VariantOrd.compare b1 b2
+    | JCmem_bitvector,JCmem_bitvector -> 0
+    | JCmem_field _,_ -> 1
+    | _,JCmem_field _ -> -1
+    | JCmem_union _,_ -> 1
+    | _,JCmem_union _ -> -1
   let hash = function
-    | FVfield a -> FieldOrd.hash a
-    | FVvariant b -> VariantOrd.hash b
+    | JCmem_field a -> FieldOrd.hash a
+    | JCmem_union b -> VariantOrd.hash b
+    | JCmem_bitvector -> 0
+end
+
+module AllocClass = 
+struct
+  type t = alloc_class
+  let equal fv1 fv2 = match fv1,fv2 with
+    | JCalloc_struct st1,JCalloc_struct st2 -> VariantOrd.equal st1 st2
+    | JCalloc_union b1,JCalloc_union b2 -> VariantOrd.equal b1 b2
+    | JCalloc_bitvector,JCalloc_bitvector -> true
+    | _ -> false
+  let compare fv1 fv2 = match fv1,fv2 with
+    | JCalloc_struct a1,JCalloc_struct a2 -> VariantOrd.compare a1 a2
+    | JCalloc_union b1,JCalloc_union b2 -> VariantOrd.compare b1 b2
+    | JCalloc_bitvector,JCalloc_bitvector -> 0
+    | JCalloc_struct _,_ -> 1
+    | _,JCalloc_struct _ -> -1
+    | JCalloc_union _,_ -> 1
+    | _,JCalloc_union _ -> -1
+  let hash = function
+    | JCalloc_struct a -> VariantOrd.hash a
+    | JCalloc_union b -> VariantOrd.hash b
+    | JCalloc_bitvector -> 0
 end
 
 module ExceptionOrd =   

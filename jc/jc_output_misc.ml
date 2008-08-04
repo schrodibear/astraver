@@ -83,6 +83,11 @@ let offset_kind fmt k =
     | Offset_max -> fprintf fmt "ax"
     | Offset_min -> fprintf fmt "in"
 
+let alloc_class fmt = function
+  | JCalloc_struct vi -> fprintf fmt "alloc-root(%s)" vi.jc_variant_info_name
+  | JCalloc_union vi -> fprintf fmt "alloc-union(%s)" vi.jc_variant_info_name
+  | JCalloc_bitvector -> fprintf fmt "alloc-bitvector"
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"

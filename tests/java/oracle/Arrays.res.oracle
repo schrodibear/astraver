@@ -1283,66 +1283,6 @@ parameter alloc_interface :
          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
              and alloc_fresh(interface_alloc_table@, result, n)))) }
 
-parameter alloc_one_Arrays :
- tt:unit ->
-  Object_alloc_table:Object alloc_table ref ->
-   { } Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Arrays(result, (0), (0), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Arrays_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, (1))))) }
-
-parameter alloc_one_Object :
- tt:unit ->
-  Object_alloc_table:Object alloc_table ref ->
-   { } Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Object(result, (0), (0), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Object_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, (1))))) }
-
-parameter alloc_one_String :
- tt:unit ->
-  Object_alloc_table:Object alloc_table ref ->
-   { } Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_String(result, (0), (0), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, String_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, (1))))) }
-
-parameter alloc_one_Throwable :
- tt:unit ->
-  Object_alloc_table:Object alloc_table ref ->
-   { } Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Throwable(result, (0), (0), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Throwable_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, (1))))) }
-
-parameter alloc_one_intM :
- tt:unit ->
-  Object_alloc_table:Object alloc_table ref ->
-   { } Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_intM(result, (0), (0), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, intM_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, (1))))) }
-
-parameter alloc_one_interface :
- tt:unit ->
-  interface_alloc_table:interface alloc_table ref ->
-   { } interface pointer reads interface_alloc_table
-   writes interface_alloc_table,interface_tag_table
-   { (valid_struct_interface(result, (0), (0), interface_alloc_table)
-     and (instanceof(interface_tag_table, result, interface_tag)
-         and (alloc_extends(interface_alloc_table@, interface_alloc_table)
-             and alloc_fresh(interface_alloc_table@, result, (1))))) }
-
 parameter cons_Arrays :
  this_0:Object pointer ->
   { } unit reads Object_alloc_table,Object_tag_table { true }
@@ -1897,7 +1837,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po51.why">
-      <location file = "why/Arrays.why" line = "591" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "531" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po52.why">
@@ -2095,7 +2035,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po98.why">
-      <location file = "why/Arrays.why" line = "765" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "705" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po99.why">
@@ -2264,7 +2204,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po9.why">
-      <location file = "why/Arrays.why" line = "410" begin = "32" end = "158"/>
+      <location file = "why/Arrays.why" line = "350" begin = "32" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po10.why">
@@ -2690,40 +2630,69 @@ axiom select_store_neq:
         (forall a:'a2 [store(m, p1, a), p2].
           ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
 
-type 'size bitvector
+type bitvector
 
-logic bitvector_size : 'a1 bitvector -> int
+logic select_bytes : bitvector, int, int -> bitvector
 
-logic bitvector_size_in_bytes : 'a1 bitvector -> int
+logic store_bytes : bitvector, int, int, bitvector -> bitvector
 
-logic select_bytes : 'a1 bitvector, int, int -> 'a1 bitvector
-
-logic store_bytes : 'a1 bitvector, int, int, 'a2 bitvector -> 'a1 bitvector
+logic concat_bytes : bitvector, bitvector -> bitvector
 
 axiom select_store_eq_bytes:
-  (forall b:'a1 bitvector.
+  (forall b:bitvector.
     (forall i:int.
       (forall j:int.
         (forall k:int.
           (forall l:int.
-            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+            (forall a:bitvector [select_bytes(store_bytes(b, i, j, a), k,
               l)].
-              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
-                ((i = k) and (j = l))) ->
-               (select_bytes(store_bytes(b, i, j, a), k, l) = b))))))))
+              (((i = k) and (j = l)) -> (select_bytes(store_bytes(b, i, j,
+               a), k, l) = a))))))))
 
 axiom select_store_neq_bytes:
-  (forall b:'a1 bitvector.
+  (forall b:bitvector.
     (forall i:int.
       (forall j:int.
         (forall k:int.
           (forall l:int.
-            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+            (forall a:bitvector [select_bytes(store_bytes(b, i, j, a), k,
               l)].
-              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
-                ((l < i) or (j < k))) ->
-               (select_bytes(store_bytes(b, i, j, a), k, l) = select_bytes(b,
-               k, l)))))))))
+              (((l < i) or (j < k)) -> (select_bytes(store_bytes(b, i, j, a),
+               k, l) = select_bytes(b, k, l)))))))))
+
+axiom concat_store_bytes_up:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a1:bitvector.
+              (forall a2:bitvector [store_bytes(store_bytes(b, i, j, a1), k,
+                l, a2)].
+                (((j + 1) = k) -> (store_bytes(store_bytes(b, i, j, a1), k,
+                 l, a2) = store_bytes(b, i, l, concat_bytes(a1, a2)))))))))))
+
+axiom concat_store_bytes_down:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a1:bitvector.
+              (forall a2:bitvector [store_bytes(store_bytes(b, i, j, a1), k,
+                l, a2)].
+                (((l + 1) = i) -> (store_bytes(store_bytes(b, i, j, a1), k,
+                 l, a2) = store_bytes(b, k, j, concat_bytes(a2, a1)))))))))))
+
+axiom concat_select_bytes:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int [concat_bytes(select_bytes(b, i, j), select_bytes(b,
+            k, l))].
+            (((j + 1) = k) -> (concat_bytes(select_bytes(b, i, j),
+             select_bytes(b, k, l)) = select_bytes(b, i, l))))))))
 
 type 't pset
 
@@ -6989,27 +6958,62 @@ why -simplify [...] why/Arrays.why
 (BG_PUSH
  ;; Why axiom select_store_eq_bytes
  (FORALL (b i j k l a)
- (IMPLIES
- (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (AND (EQ i k) (EQ j l)))
- (EQ (select_bytes (store_bytes b i j a) k l) b)))
+ (IMPLIES (AND (EQ i k) (EQ j l))
+ (EQ (select_bytes (store_bytes b i j a) k l) a)))
 
- (FORALL (i j k l a)
- (IMPLIES
- (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (AND (EQ i k) (EQ j l)))
- (FORALL (b) (EQ (select_bytes (store_bytes b i j a) k l) b)))))
+ (FORALL (i j k l)
+ (IMPLIES (AND (EQ i k) (EQ j l))
+ (FORALL (b a) (EQ (select_bytes (store_bytes b i j a) k l) a)))))
 
 (BG_PUSH
  ;; Why axiom select_store_neq_bytes
  (FORALL (b i j k l a)
- (IMPLIES
- (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (OR (< l i) (< j k)))
+ (IMPLIES (OR (< l i) (< j k))
  (EQ (select_bytes (store_bytes b i j a) k l) (select_bytes b k l))))
 
- (FORALL (i j k l a)
- (IMPLIES
- (AND (EQ (bitvector_size_in_bytes a) (+ (- j i) 1)) (OR (< l i) (< j k)))
- (FORALL (b)
+ (FORALL (i j k l)
+ (IMPLIES (OR (< l i) (< j k))
+ (FORALL (b a)
  (EQ (select_bytes (store_bytes b i j a) k l) (select_bytes b k l))))))
+
+(BG_PUSH
+ ;; Why axiom concat_store_bytes_up
+ (FORALL (b i j k l a1 a2)
+ (IMPLIES (EQ (+ j 1) k)
+ (EQ (store_bytes (store_bytes b i j a1) k l a2)
+ (store_bytes b i l (concat_bytes a1 a2)))))
+
+ (FORALL (j k)
+ (IMPLIES (EQ (+ j 1) k)
+ (FORALL (b i l a1 a2)
+ (EQ (store_bytes (store_bytes b i j a1) k l a2)
+ (store_bytes b i l (concat_bytes a1 a2)))))))
+
+(BG_PUSH
+ ;; Why axiom concat_store_bytes_down
+ (FORALL (b i j k l a1 a2)
+ (IMPLIES (EQ (+ l 1) i)
+ (EQ (store_bytes (store_bytes b i j a1) k l a2)
+ (store_bytes b k j (concat_bytes a2 a1)))))
+
+ (FORALL (i l)
+ (IMPLIES (EQ (+ l 1) i)
+ (FORALL (b j k a1 a2)
+ (EQ (store_bytes (store_bytes b i j a1) k l a2)
+ (store_bytes b k j (concat_bytes a2 a1)))))))
+
+(BG_PUSH
+ ;; Why axiom concat_select_bytes
+ (FORALL (b i j k l)
+ (IMPLIES (EQ (+ j 1) k)
+ (EQ (concat_bytes (select_bytes b i j) (select_bytes b k l))
+ (select_bytes b i l))))
+
+ (FORALL (j k)
+ (IMPLIES (EQ (+ j 1) k)
+ (FORALL (b i l)
+ (EQ (concat_bytes (select_bytes b i j) (select_bytes b k l))
+ (select_bytes b i l))))))
 
 (DEFPRED (pset_disjoint ps1 ps2)
   (FORALL (p)
@@ -7586,7 +7590,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP0 (shift t_2 i_0))
 (select intM_intP (shift t_2 (- i_0 1))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 410, characters 32-158
+;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 350, characters 32-158
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM Object_alloc_table t_2)
@@ -8594,7 +8598,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (is_max intM_intP Object_alloc_table t_1 0 1))))))))
 
-;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 591, characters 51-215
+;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 531, characters 51-215
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9905,7 +9909,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 j_1) (< j_1 1))
 (<= (select intM_intP (shift t_0 j_1)) result))))))))))
 
-;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 765, characters 51-215
+;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 705, characters 51-215
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10957,40 +10961,69 @@ axiom select_store_neq:
         (forall a:'a2 [store(m, p1, a), p2].
           ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
 
-type 'size bitvector
+type bitvector
 
-logic bitvector_size : 'a1 bitvector -> int
+logic select_bytes : bitvector, int, int -> bitvector
 
-logic bitvector_size_in_bytes : 'a1 bitvector -> int
+logic store_bytes : bitvector, int, int, bitvector -> bitvector
 
-logic select_bytes : 'a1 bitvector, int, int -> 'a1 bitvector
-
-logic store_bytes : 'a1 bitvector, int, int, 'a2 bitvector -> 'a1 bitvector
+logic concat_bytes : bitvector, bitvector -> bitvector
 
 axiom select_store_eq_bytes:
-  (forall b:'a1 bitvector.
+  (forall b:bitvector.
     (forall i:int.
       (forall j:int.
         (forall k:int.
           (forall l:int.
-            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+            (forall a:bitvector [select_bytes(store_bytes(b, i, j, a), k,
               l)].
-              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
-                ((i = k) and (j = l))) ->
-               (select_bytes(store_bytes(b, i, j, a), k, l) = b))))))))
+              (((i = k) and (j = l)) -> (select_bytes(store_bytes(b, i, j,
+               a), k, l) = a))))))))
 
 axiom select_store_neq_bytes:
-  (forall b:'a1 bitvector.
+  (forall b:bitvector.
     (forall i:int.
       (forall j:int.
         (forall k:int.
           (forall l:int.
-            (forall a:'a2 bitvector [select_bytes(store_bytes(b, i, j, a), k,
+            (forall a:bitvector [select_bytes(store_bytes(b, i, j, a), k,
               l)].
-              (((bitvector_size_in_bytes(a) = ((j - i) + 1)) and
-                ((l < i) or (j < k))) ->
-               (select_bytes(store_bytes(b, i, j, a), k, l) = select_bytes(b,
-               k, l)))))))))
+              (((l < i) or (j < k)) -> (select_bytes(store_bytes(b, i, j, a),
+               k, l) = select_bytes(b, k, l)))))))))
+
+axiom concat_store_bytes_up:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a1:bitvector.
+              (forall a2:bitvector [store_bytes(store_bytes(b, i, j, a1), k,
+                l, a2)].
+                (((j + 1) = k) -> (store_bytes(store_bytes(b, i, j, a1), k,
+                 l, a2) = store_bytes(b, i, l, concat_bytes(a1, a2)))))))))))
+
+axiom concat_store_bytes_down:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int.
+            (forall a1:bitvector.
+              (forall a2:bitvector [store_bytes(store_bytes(b, i, j, a1), k,
+                l, a2)].
+                (((l + 1) = i) -> (store_bytes(store_bytes(b, i, j, a1), k,
+                 l, a2) = store_bytes(b, k, j, concat_bytes(a2, a1)))))))))))
+
+axiom concat_select_bytes:
+  (forall b:bitvector.
+    (forall i:int.
+      (forall j:int.
+        (forall k:int.
+          (forall l:int [concat_bytes(select_bytes(b, i, j), select_bytes(b,
+            k, l))].
+            (((j + 1) = k) -> (concat_bytes(select_bytes(b, i, j),
+             select_bytes(b, k, l)) = select_bytes(b, i, l))))))))
 
 type 't pset
 

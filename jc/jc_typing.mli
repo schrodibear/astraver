@@ -38,7 +38,7 @@ val typing_error :
 
 val is_root_struct : struct_info -> bool
 
-val substruct : struct_info -> tag_or_variant -> bool
+val substruct : struct_info -> pointer_class -> bool
 
 val logic_type_table : (string,string) Hashtbl.t
   

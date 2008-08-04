@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.56 2008-07-31 15:22:39 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.57 2008-08-04 13:48:33 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tstring
 
@@ -46,12 +46,12 @@ type jc_type =
   | JCTnative of native_type
   | JCTlogic of string
   | JCTenum of enum_info
-  | JCTpointer of tag_or_variant * Num.num option * Num.num option
+  | JCTpointer of pointer_class * Num.num option * Num.num option
   | JCTnull
   | JCTany (* used when typing (if ... then raise E else ...): raise E is any *)
   | JCTtype_var of Jc_type_var.t
 
-and tag_or_variant =
+and pointer_class =
   | JCtag of struct_info * jc_type list (* struct_info, type parameters *)
   | JCvariant of variant_info
   | JCunion of variant_info
@@ -98,12 +98,10 @@ and field_info =
         (* Size of the field in bits, optional *)
     }
 
-type field_or_variant_info = 
-    FVfield of field_info | FVvariant of variant_info
-
 type region = 
     {
       mutable jc_reg_variable : bool;
+      mutable jc_reg_bitwise : bool;
       jc_reg_id : int;
       jc_reg_name : string;
       jc_reg_final_name : string;
@@ -141,6 +139,16 @@ type logic_label =
   | LabelPost
   | LabelPre
   | LabelOld
+
+type alloc_class =
+  | JCalloc_struct of variant_info
+  | JCalloc_union of variant_info
+  | JCalloc_bitvector
+
+type mem_class =
+  | JCmem_field of field_info 
+  | JCmem_union of variant_info
+  | JCmem_bitvector
 
 (*
 Local Variables: 

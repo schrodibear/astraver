@@ -1,7 +1,7 @@
 #!/bin/sh
 
 DIR=`pwd`
-LIBDIR=`grep "libdir" $DIR/src/version.ml | sed -e 's|[^"]*"\([^"]*\)"[^"]*|\1|g'`
+LIBDIR=`grep "libdir" $DIR/src/version.ml | sed -e 's|[^"]*"\([^"]*\)"[^"]*|\1|g' | head -n 1`
 
 echofilename () {
   echo "========== file $1 =========="

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.231 2008-07-31 15:22:39 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.232 2008-08-04 13:48:33 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -126,14 +126,14 @@ let lub_numeric_types t1 t2 =
     | _ -> Tinteger
 
 let rec substruct st = function
-  | (JCtag(st', _)) as tov ->
+  | (JCtag(st', _)) as pc ->
       if st == st' then true else
         let vi = struct_variant st and vi' = struct_variant st' in
         (vi == vi' && vi.jc_variant_info_is_union)
         || 
         begin match st.jc_struct_info_parent with
           | None -> false
-          | Some(p, []) -> substruct p tov
+          | Some(p, []) -> substruct p pc
           | Some(p, _) -> assert false (* TODO *)
         end
   | JCvariant vi ->
@@ -149,6 +149,11 @@ let rec superstruct st = function
       false
   | JCunion _ui ->
       false
+
+let same_hierarchy st1 st2 =
+  let vi1 = pointer_class_variant st1 in
+  let vi2 = pointer_class_variant st2 in
+  vi1 == vi2
 
 let subtype ?(allow_implicit_cast=true) t1 t2 =
   match t1,t2 with
@@ -168,8 +173,8 @@ let subtype ?(allow_implicit_cast=true) t1 t2 =
         allow_implicit_cast 
     | JCTlogic s1, JCTlogic s2 ->
         s1=s2
-    | JCTpointer(JCtag(s1, []), _, _), JCTpointer(tov, _, _) -> 
-        substruct s1 tov
+    | JCTpointer(JCtag(s1, []), _, _), JCTpointer(pc, _, _) -> 
+        substruct s1 pc
     | JCTpointer(JCvariant v1, _, _), JCTpointer(JCvariant v2, _, _) ->
         v1 == v2
     | JCTnull, (JCTnull | JCTpointer _) ->
@@ -191,11 +196,11 @@ let mintype loc t1 t2 =
         Jc_pervasives.integer_type
     | JCTlogic s1, JCTlogic s2 ->
         if s1=s2 then t1 else raise Not_found
-    | JCTpointer(JCtag(s1, []), _, _), JCTpointer(tov, _, _)
-        when substruct s1 tov ->
+    | JCTpointer(JCtag(s1, []), _, _), JCTpointer(pc, _, _)
+        when substruct s1 pc ->
         t2
-    | JCTpointer(tov, _, _), JCTpointer(JCtag(s1, []), _, _)
-        when substruct s1 tov ->
+    | JCTpointer(pc, _, _), JCTpointer(JCtag(s1, []), _, _)
+        when substruct s1 pc ->
         t1
     | JCTpointer(JCvariant v1, _, _), JCTpointer(JCvariant v2, _, _) ->
         if v1 == v2 then t1 else raise Not_found
@@ -220,8 +225,8 @@ let same_type_no_coercion t1 t2 =
     | JCTnative t1, JCTnative t2 -> t1=t2
     | JCTenum ei1, JCTenum ei2 -> ei1.jc_enum_info_name = ei2.jc_enum_info_name
     | JCTlogic s1, JCTlogic s2 -> s1=s2
-    | JCTpointer(tov1,_,_), JCTpointer(tov2,_,_) -> 
-        tag_or_variant_variant tov1 == tag_or_variant_variant tov2
+    | JCTpointer(pc1,_,_), JCTpointer(pc2,_,_) -> 
+        pointer_class_variant pc1 == pointer_class_variant pc2
     | JCTnull, JCTnull -> true
     | JCTnull, JCTpointer _
     | JCTpointer _, JCTnull -> true
@@ -234,8 +239,8 @@ let comparable_types t1 t2 =
     | JCTenum _, JCTnative Tinteger -> true
     | JCTnative Tinteger, JCTenum _ -> true
     | JCTlogic s1, JCTlogic s2 -> s1=s2
-    | JCTpointer(tov1,_,_), JCTpointer(tov2,_,_) -> 
-        tag_or_variant_variant tov1 == tag_or_variant_variant tov2
+    | JCTpointer(pc1,_,_), JCTpointer(pc2,_,_) -> 
+        pointer_class_variant pc1 == pointer_class_variant pc2
     | JCTnull, JCTnull -> true
     | JCTnull, JCTpointer _
     | JCTpointer _, JCTnull -> true
@@ -351,8 +356,8 @@ let rec pattern env vars pat ety =
   in
   let tpn, ty, newenv = match pat#node with
     | JCPPstruct(id, lpl) ->
-        let tov = match ety with
-          | JCTpointer(tov, _, _) -> tov
+        let pc = match ety with
+          | JCTpointer(pc, _, _) -> pc
           | JCTnative _ | JCTenum _ | JCTlogic _ | JCTnull | JCTany
           | JCTtype_var _ ->
               typing_error pat#loc
@@ -360,10 +365,10 @@ let rec pattern env vars pat ety =
         in
         (* tag *)
         let st = find_struct_info id#loc id#name in
-        if not (substruct st tov) then
+        if not (substruct st pc) then
           typing_error id#loc
             "tag %s is not a subtag of %s"
-            st.jc_struct_info_name (tag_or_variant_name tov);
+            st.jc_struct_info_name (pointer_class_name pc);
         (* fields *)
         let env, tlpl = List.fold_left
           (fun (env, acc) (l, p) ->
@@ -1024,7 +1029,7 @@ let rec assertion env e =
       | JCTbottom, JCTtag st
       | JCTtag st, JCTbottom
       | JCTbottom, JCTtypeof(_, st)
-      | JCTtypeof(_, st), JCTbottom -> Some (root_name st)
+      | JCTtypeof(_, st), JCTbottom -> Some st
       | JCTtag st1, JCTtag st2
       | JCTtypeof(_, st1), JCTtag st2
       | JCTtag st1, JCTtypeof(_, st2)
@@ -1034,7 +1039,7 @@ let rec assertion env e =
               (root_name st1)
               (root_name st2)
           else
-            Some (root_name st1)
+            Some st1.jc_struct_info_root
   in
   let ta = match e#node with
     | JCNElabel(l, e) ->
@@ -1676,8 +1681,14 @@ used as an assertion, not as a term" pi.jc_logic_info_name
                   (JCTpointer(JCtag(st, []), a, b),
                    te1#region,
                    JCEcast(te1, st))
-                else
+                else if same_hierarchy (JCtag(st, [])) st1 then
                   typing_error e#loc "invalid cast"
+		else
+		  (* bitwise cast *)
+                  (Region.make_bitwise te1#region;
+		   JCTpointer(JCtag(st, []), a, b),
+                   te1#region,
+                   JCEcast(te1, st))
             | _ ->
                 typing_error e#loc
                   "only structures or numeric types can be cast"

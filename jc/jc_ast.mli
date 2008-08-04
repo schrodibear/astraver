@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.139 2008-07-31 15:22:39 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.140 2008-08-04 13:48:33 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -390,8 +390,8 @@ type assertion_node =
   | JCAbool_term of term
   | JCAif of term * assertion * assertion
   | JCAmutable of term * struct_info * tag
-  | JCAtagequality of tag * tag * string option
-  | JCAsubtype of tag * tag * string option
+  | JCAtagequality of tag * tag * struct_info option
+  | JCAsubtype of tag * tag * struct_info option
   | JCAmatch of term * (pattern * assertion) list
 
 and assertion = assertion_node c_assertion

@@ -231,7 +231,7 @@ axiom select_store_eq_bytes:
   forall k:int. forall l:int.
   forall a: bitvector [select_bytes(store_bytes(b,i,j,a),k,l)].
     i = k and j = l
-    -> select_bytes(store_bytes(b,i,j,a),k,l) = b
+    -> select_bytes(store_bytes(b,i,j,a),k,l) = a
 
 axiom select_store_neq_bytes: 
   forall b: bitvector. 

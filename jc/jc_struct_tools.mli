@@ -29,21 +29,51 @@
 
 open Jc_env
 
+(** Convert class or memory to class of allocation. *)
+val alloc_class_of_mem_class: mem_class -> alloc_class
+
+(** Convert class or pointer to class of allocation. *)
+val alloc_class_of_pointer_class: pointer_class -> alloc_class
+
+(** Convert a class of allocation into the corresponding variant. *)
+val variant_of_alloc_class: alloc_class -> variant_info
+
+(** Return whether a field is embedded or not. *)
+val embedded_field: field_info -> bool
+
+(** Return the bit offset of a field. *)
+val field_offset: field_info -> int
+
+(** Return the byte offset of a field, if any. *)
+val field_offset_bytes: field_info -> int option
+
 (** Return all the fields of a structure or a variant.
 A variant has no field.
 A structure has its fields and the fields of its ancestors. *)
-val all_fields: tag_or_variant -> field_info list
+val all_fields: pointer_class -> field_info list
+
+(** Selects fully allocated fields. *)
+val fully_allocated: field_info -> bool
 
 (** Return all the memories used by a structure, i.e.: its fields,
 the fields of its ancestors, and recursively the fields of its fields.
 The "select" argument can be used to ignore specific fields. *)
-val all_memories: ?select:(field_info -> bool) -> tag_or_variant ->
+val all_memories: ?select:(field_info -> bool) -> pointer_class ->
   field_info list
 
 (** Return all the variants used by a structure, i.e.: the type of all
 pointers returned by all_memories. *)
-val all_types: ?select:(field_info -> bool) -> tag_or_variant ->
+val all_types: ?select:(field_info -> bool) -> pointer_class ->
   variant_info list
+
+(** Return all the classes of allocation used by a structure *)
+val all_allocs: 
+  ?select:(field_info -> bool) -> pointer_class -> alloc_class list
+
+(** Return all the variant info used by a structure *)
+val all_tags: 
+  ?select:(field_info -> bool) -> struct_info -> variant_info list
+
 
 (*
 Local Variables: 

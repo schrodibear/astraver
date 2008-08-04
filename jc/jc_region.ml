@@ -27,16 +27,37 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.14 2008-07-02 08:04:16 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.15 2008-08-04 13:48:33 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
 open Format
 open Pp
 
+let string_explode s = 
+  let rec next acc i = 
+    if i >= 0 then next (s.[i] :: acc) (i-1) else acc
+  in
+  next [] (String.length s - 1)
+
+let string_implode ls =
+  let s = String.create (List.length ls) in
+  ignore (List.fold_left (fun i c -> s.[i] <- c; i + 1) 0 ls);
+  s
+
+let filter_alphanumeric s =
+  let alphanum c = 
+    String.contains "abcdefghijklmnopqrstuvwxyz" c
+    || String.contains "ABCDEFGHIJKLMNOPQRSTUVWXYZ" c
+    || String.contains "0123456789" c
+    || c = '_'
+  in
+  string_implode (List.filter alphanum (string_explode s))
+
 let dummy_region = 
   {
     jc_reg_variable = false;
+    jc_reg_bitwise = false;
     jc_reg_id = 0;
     jc_reg_name = "dummy_region";
     jc_reg_final_name = "dummy_region";
@@ -132,10 +153,6 @@ end
 
 module RegionUF = UnionFind(InternalRegion)(RegionTable)
 
-module FieldOrVariantRegion = PairOrd(FieldOrVariantOrd)(InternalRegion)
-
-module StringRegion = PairOrd(String)(InternalRegion)
-
 (* Sets should be computed after unification takes place, so that operations
  * can maintain easily the invariant that only representative regions are used.
  *)
@@ -154,11 +171,6 @@ struct
     S.fold (fun (fi,r) acc -> S.add (fi,RegionUF.repr r) acc) s S.empty
 end
 
-module FieldOrVariantRegionSet = 
-  PairRegionSet(FieldOrVariantOrd)(FieldOrVariantRegion)
-
-module StringRegionSet = PairRegionSet(String)(StringRegion)
-
 (* Maps should be computed after unification takes place, so that operations
  * can maintain easily the invariant that only representative regions are used.
  *)
@@ -172,11 +184,6 @@ struct
   let remove (fi,r) s = M.remove (fi,RegionUF.repr r) s
   let mem (fi,r) s = M.mem (fi,RegionUF.repr r) s
 end
-
-module FieldOrVariantRegionMap = 
-  PairRegionMap(FieldOrVariantOrd)(FieldOrVariantRegion)
-
-module StringRegionMap = PairRegionMap(String)(StringRegion)
 
 let global_region_table : (InternalRegion.t FieldTable.t) RegionTable.t 
     = RegionTable.create 73
@@ -195,11 +202,13 @@ struct
   let next_count () = let tmp = !count in incr count; tmp
 
   let make_const ty name =
+    let name = filter_alphanumeric name in
     if !Jc_common_options.separation_sem = SepNone then dummy_region
     else if not(is_pointer_type ty) then dummy_region else
       let id = next_count () in
       {
 	jc_reg_variable = false;
+	jc_reg_bitwise = false;
 	jc_reg_id = id;
 	jc_reg_name = name;
 	jc_reg_final_name = name ^ "_" ^ (string_of_int id);
@@ -207,16 +216,23 @@ struct
       }
 
   let make_var ty name =
+    let name = filter_alphanumeric name in
     if !Jc_common_options.separation_sem = SepNone then dummy_region
     else if not(is_pointer_type ty) then dummy_region else
       let id = next_count () in
       {
 	jc_reg_variable = true;
+	jc_reg_bitwise = false;
 	jc_reg_id = id;
 	jc_reg_name = name;
 	jc_reg_final_name = name ^ "_" ^ (string_of_int id);
 	jc_reg_type = ty;
       }
+
+  let bitwise r = r.jc_reg_bitwise
+
+  let make_bitwise r =
+    r.jc_reg_bitwise <- true
 	
   let print fmt r =
     fprintf fmt "%s" r.jc_reg_final_name
@@ -233,6 +249,8 @@ struct
       let rep1 = RegionUF.repr r1 and rep2 = RegionUF.repr r2 in
       RegionUF.unify r1 r2;
       let rep = RegionUF.repr r1 in
+      if rep1.jc_reg_bitwise || rep2.jc_reg_bitwise then
+	make_bitwise rep;
       let t1 = 
 	try RegionTable.find global_region_table rep1 
 	with Not_found -> FieldTable.create 0 
@@ -284,6 +302,7 @@ struct
 
   let make_field r fi =
     let r = RegionUF.repr r in
+(*     assert (not r.jc_reg_bitwise); *)
     if !Jc_common_options.separation_sem = SepNone then dummy_region
     else if not(is_pointer_type fi.jc_field_info_type) then dummy_region else
       try 
@@ -368,17 +387,13 @@ struct
 
 end
 
-module FieldOrVariantRegionList =
-struct
+module Alloc = PairOrd(AllocClass)(InternalRegion)
 
-  let rec mem (fi,r) = function
-    | [] -> false
-    | (fi',r')::rest -> 
-	FieldOrVariantOrd.equal fi fi' && Region.equal r r' || mem (fi,r) rest
+module AllocSet = PairRegionSet(AllocClass)(Alloc)
 
-end
+module AllocMap = PairRegionMap(AllocClass)(Alloc)
 
-module StringRegionList =
+module AllocList =
 struct
 
   let rec mem (a,r) = function
@@ -387,6 +402,26 @@ struct
 	a = a' && Region.equal r r' || mem (a,r) rest
 
 end
+
+module Memory = PairOrd(MemClass)(InternalRegion)
+
+module MemorySet = 
+  PairRegionSet(MemClass)(Memory)
+
+module MemoryMap = 
+  PairRegionMap(MemClass)(Memory)
+
+module MemoryList =
+struct
+
+  let rec mem (fi,r) = function
+    | [] -> false
+    | (fi',r')::rest -> 
+	MemClass.equal fi fi' && Region.equal r r' || mem (fi,r) rest
+
+end
+
+
 
 (*
 Local Variables: 

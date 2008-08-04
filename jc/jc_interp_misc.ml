@@ -43,6 +43,7 @@ open Jc_env
 open Jc_fenv
 open Jc_region
 open Jc_name
+open Jc_struct_tools
 
 (* Why type which modelises a variant. *)
 let variant_model_type vi =
@@ -51,7 +52,7 @@ let variant_model_type vi =
 (* Why type which modelises a structure "root". *)
 let struct_model_type st = variant_model_type (struct_variant st)
 
-let tag_or_variant_model_type = function
+let pointer_class_model_type = function
   | JCtag(st, _) -> struct_model_type st
   | JCvariant vi -> variant_model_type vi
   | JCunion vi -> variant_model_type vi
@@ -72,18 +73,18 @@ let raw_pset_type ty =
     logic_type_args = [ty];
   }
 
-let pointer_type tov = raw_pointer_type (tag_or_variant_model_type tov)
+let pointer_type pc = raw_pointer_type (pointer_class_model_type pc)
 
-let tag_table_type tov = 
+let tag_table_type pc = 
   {
     logic_type_name = tag_table_type_name;
-    logic_type_args = [tag_or_variant_model_type tov];
+    logic_type_args = [pointer_class_model_type pc];
   }
 
-let tag_id_type tov = 
+let tag_id_type pc = 
   {
     logic_type_name = tag_id_type_name;
-    logic_type_args = [tag_or_variant_model_type tov];
+    logic_type_args = [pointer_class_model_type pc];
   }
 
 let raw_alloc_table_type ty =
@@ -92,12 +93,17 @@ let raw_alloc_table_type ty =
     logic_type_args = [ty];
   }
 
-let alloc_table_type tov = 
-  raw_alloc_table_type (tag_or_variant_model_type tov)
+let bitvector_type = simple_logic_type bitvector_type_name
+
+let alloc_class_type = function
+  | JCalloc_struct vi -> variant_model_type vi
+  | JCalloc_union vi -> variant_model_type vi
+  | JCalloc_bitvector -> bitvector_type
+
+let alloc_table_type ac = 
+  raw_alloc_table_type (alloc_class_type ac)
 
 let is_alloc_table_type ty = ty.logic_type_name == alloc_table_type_name
-
-let bitvector_type = simple_logic_type bitvector_type_name
 
 let tr_native_type t =
   match t with
@@ -147,10 +153,11 @@ let union_memory_type vi =
      else 
        bitvector_type)
 	
-let field_or_variant_memory_type fvi =
-  match fvi with
-    | FVfield fi -> field_memory_type fi
-    | FVvariant vi -> union_memory_type vi
+let field_or_variant_memory_type mc =
+  match mc with
+    | JCmem_field fi -> field_memory_type fi
+    | JCmem_union vi -> union_memory_type vi
+    | JCmem_bitvector -> bitvector_type
 
 let current_function = ref None
 let set_current_function f = current_function := Some f
@@ -170,35 +177,28 @@ let set_current_spec s = current_spec := Some s
 let reset_current_spec () = current_spec := None
 let get_current_spec () = !current_spec
 
-let mutable_memory infunction (fi,r) =
+let mutable_memory infunction (mc,r) =
   if Region.polymorphic r then
-    field_of_union fi && 
-      FieldOrVariantRegionMap.mem 
-      (FVvariant (union_of_field fi),r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-    || 
-      not (field_of_union fi) &&
-      FieldOrVariantRegionMap.mem (FVfield fi,r)
+    MemoryMap.mem (mc,r)
       infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
   else true
 
 let mutable_alloc_table infunction (root,r) =
-  let a = tag_or_variant_type_name root in
   if Region.polymorphic r then
-    StringRegionSet.mem (a,r)
+    AllocSet.mem (root,r)
       infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
   else true
 
-let mutable_fvmemory infunction (fvi,r) =
+let mutable_fvmemory infunction (mc,r) =
   if Region.polymorphic r then
-    FieldOrVariantRegionMap.mem 
-      (fvi,r)
+    MemoryMap.mem 
+      (mc,r)
       infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
   else true
 
 let memory_logic_params ~label_in_name ?region_assoc ?label_assoc li =
-  FieldOrVariantRegionMap.fold
-    (fun (fvi,r) labs acc ->
+  MemoryMap.fold
+    (fun (mc,r) labs acc ->
        let r =
 	 match region_assoc with 
 	   | Some region_assoc when Region.polymorphic r ->
@@ -209,10 +209,10 @@ let memory_logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	       end
 	   | _ -> r
        in
-       let name = field_or_variant_region_memory_name(fvi,r) in
+       let name = memory_name(mc,r) in
        let mut = match !current_function with
 	 | None -> true
-	 | Some infunction -> mutable_fvmemory infunction (fvi,r) 
+	 | Some infunction -> mutable_fvmemory infunction (mc,r) 
        in
        LogicLabelSet.fold
 	 (fun lab acc ->
@@ -222,14 +222,14 @@ let memory_logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	      else 
 		label_var ~label_in_name ?label_assoc LabelHere name 
 	    in
-	    ((fvi,r),(name, field_or_variant_memory_type fvi))::acc)
+	    ((mc,r),(name, field_or_variant_memory_type mc))::acc)
 	 labs acc)
     li.jc_logic_info_effects.jc_effect_memories
     []
 
 let alloc_logic_params ~label_in_name ?region_assoc ?label_assoc li =
-  StringRegionSet.fold
-    (fun (a,r) acc ->
+  AllocSet.fold
+    (fun (ac,r) acc ->
        let r =
 	 match region_assoc with
 	   | Some assoc when Region.polymorphic r ->
@@ -240,9 +240,8 @@ let alloc_logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	       end
 	   | _ -> r
        in
-       let st, _ = Hashtbl.find Jc_typing.structs_table a in
-       (alloc_region_table_name (JCtag(st, []), r),
-	alloc_table_type (JCtag(st, [])))::acc)
+       (alloc_region_table_name (ac, r),
+	alloc_table_type (ac))::acc)
     li.jc_logic_info_effects.jc_effect_alloc_table
     []
 
@@ -295,17 +294,16 @@ let make_logic_pred_call ~label_in_name li l region_assoc label_assoc =
 (* *)
 let logic_info_reads acc li = 
   let acc =
-    FieldOrVariantRegionMap.fold
-      (fun (fvi,r) _ acc -> 
-	 StringSet.add (field_or_variant_region_memory_name(fvi,r)) acc)
+    MemoryMap.fold
+      (fun (mc,r) _ acc -> 
+	 StringSet.add (memory_name(mc,r)) acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in
   let acc =
-    StringRegionSet.fold
-      (fun (a,r) acc ->
-	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	 StringSet.add (alloc_region_table_name (JCtag(st, []), r)) acc)
+    AllocSet.fold
+      (fun (ac,r) acc ->
+	 StringSet.add (alloc_region_table_name (ac, r)) acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
@@ -330,7 +328,7 @@ let logic_params li l =
       l	    
   in
   let l = 
-    StringRegionSet.fold
+    AllocSet.fold
       (fun (a,r) acc -> (LVar(alloc_region_table_name(a,r))::acc))
       li.jc_logic_info_effects.jc_effect_alloc_table
       l
@@ -359,20 +357,11 @@ let find_struct a =
 let find_variant a =
   Hashtbl.find Jc_typing.variants_table a
 
-let find_tag_or_variant a =
+let find_pointer_class a =
   try
     JCtag (find_struct a, []) (* TODO: fill parameters ? *)
   with Not_found ->
     JCvariant (find_variant a)
-
-let tag_table_name2 a =
-  tag_table_name (find_tag_or_variant a)
-
-let alloc_table_name2 a =
-  alloc_table_name (find_tag_or_variant a)
-
-let alloc_region_table_name2 (a, r) =
-  alloc_region_table_name (find_tag_or_variant a, r)
 
 let mutable_name2 a =
   mutable_name (JCtag (find_struct a, []))
@@ -389,9 +378,9 @@ let alloc_table_type2 a =
 (* fold all effects into a list *)
 let all_effects ef =
   let res =
-    FieldOrVariantRegionMap.fold
-      (fun (fvi,r) labels acc -> 
-	let mem = field_or_variant_region_memory_name(fvi,r) in
+    MemoryMap.fold
+      (fun (mc,r) labels acc -> 
+	let mem = memory_name(mc,r) in
 	if Region.polymorphic r then
 (*	  if RegionList.mem r f.jc_fun_info_param_regions then
 	    if FieldRegionMap.mem (fi,r) 
@@ -411,12 +400,12 @@ let all_effects ef =
       res
   in
   let res =
-    StringRegionSet.fold
+    AllocSet.fold
       (fun (a,r) acc -> 
-	let alloc = alloc_region_table_name2(a,r) in
+	let alloc = alloc_region_table_name(a,r) in
 	if Region.polymorphic r then
 (*	  if RegionList.mem r f.jc_fun_info_param_regions then
-	    if StringRegionSet.mem (a,r) 
+	    if AllocSet.mem (a,r) 
 	      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table 
 	    then alloc::acc 
 	    else acc
@@ -482,8 +471,8 @@ let make_select f this =
 let make_select_fi fi =
   make_select (LVar fi.jc_field_info_final_name)
 
-let make_select_committed tov =
-  make_select (LVar (committed_name tov))
+let make_select_committed pc =
+  make_select (LVar (committed_name pc))
 
 let make_typeof_vi vi x =
   LApp("typeof", [ LVar (tag_table_name_vi vi); x ])
@@ -500,11 +489,11 @@ let make_subtag_bool t u =
 let make_instanceof tt p st =
   LPred("instanceof", [ tt; p; LVar (tag_name st) ])
 
-let make_offset_min tov p =
-  LApp("offset_min", [LVar(alloc_table_name tov); p])
+let make_offset_min ac p =
+  LApp("offset_min", [LVar(generic_alloc_table_name ac); p])
 
-let make_offset_max tov p =
-  LApp("offset_max", [LVar(alloc_table_name tov); p])
+let make_offset_max ac p =
+  LApp("offset_max", [LVar(generic_alloc_table_name ac); p])
 
 let make_int_of_tag st =
   LApp("int_of_tag", [LVar(tag_name st)])
@@ -526,36 +515,19 @@ let any_value ty =
   | JCTlogic _ | JCTany -> assert false
   | JCTtype_var _ -> assert false (* TODO: need environment *)
 
-let tov_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
-
-let fully_allocated fi =
-  match fi.jc_field_info_type with
-    | JCTpointer(_, Some _, Some _) -> true
-    | JCTpointer(_, None, Some _)
-    | JCTpointer(_, Some _, None)
-    | JCTpointer(_, None, None)
-    | JCTnull
-    | JCTenum _
-    | JCTlogic _
-    | JCTnative _
-    | JCTany -> false
-    | JCTtype_var _ -> assert false (* TODO: need environment *)
+let pc_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
 
 (* see make_valid_pred in jc_interp.ml *)
-let make_valid_pred_app tov p a b =
+let make_valid_pred_app pc p a b =
   let allocs = List.map
-    (fun vi -> LVar(alloc_table_name (JCvariant vi)))
-    (Jc_struct_tools.all_types ~select:fully_allocated tov)
+    (fun ac -> LVar(generic_alloc_table_name ac))
+    (Jc_struct_tools.all_allocs ~select:fully_allocated pc)
   in
   let memories = List.map
     (fun fi -> LVar(field_memory_name fi))
-    (Jc_struct_tools.all_memories ~select:fully_allocated tov)
+    (Jc_struct_tools.all_memories ~select:fully_allocated pc)
   in
-  LPred(valid_pred_name tov, p::a::b::allocs@memories)
-
-let make_valid_one_pred_app tov p =
-  let zero = LConst(Prim_int "0") in
-  make_valid_pred_app tov p zero zero
+  LPred(valid_pred_name pc, p::a::b::allocs@memories)
 
 let const_of_num n = LConst(Prim_int(Num.string_of_num n))
 
@@ -579,6 +551,103 @@ let const c =
     | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
     | JCCboolean b -> Prim_bool b
     | JCCstring s -> assert false (* TODO *)
+
+
+(*****************************************************************************)
+(*                                  Unions                                   *)
+(*****************************************************************************)
+
+type shift_offset = Int_offset of string | Expr_offset of Jc_ast.expr 
+
+let add_offset off1 off2 = 
+  match off1,off2 with
+    | Int_offset i, Int_offset j -> 
+	let k = int_of_string i + int_of_string j in
+	Int_offset (string_of_int k)
+    | _ -> assert false (* TODO *)
+
+let union_type = function
+  | JCTpointer(pc,_,_) -> 
+      let vi = pointer_class_variant pc in
+      if vi.jc_variant_info_is_union then Some vi else None
+  | _ -> None
+
+let of_union_type ty =
+  match union_type ty with Some _vi -> true | None -> false
+
+let access_union e fi = 
+  let fieldoffbytes fi = 
+    match field_offset_bytes fi with
+      | None -> assert false
+      | Some off -> Int_offset (string_of_int off) 
+  in
+  (* Count offset in bytes before last field access in union *)
+  let rec access e = 
+    match e#node with
+      | JCEderef(e,fi) when embedded_field fi ->
+	  begin match access e with
+	    | Some(e,off) ->
+		Some (e, add_offset off (fieldoffbytes fi))
+	    | None -> 
+		if of_union_type e#typ then
+		  Some (e, fieldoffbytes fi)
+		else None
+	  end
+      | JCEshift(e1,e2) ->
+	  None (* assert false *) (* TODO *)
+      | _ ->	
+	  if of_union_type e#typ then
+	    Some (e,Int_offset "0")
+	  else None
+  in
+
+  let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in
+  match access e with
+    | Some(e,off) ->
+	Some (e, add_offset off (fieldoffbytes fi))
+    | None -> 
+	if of_union_type e#typ then
+	  Some (e, fieldoffbytes fi)
+	else None
+
+let term_access_union t fi =
+  let fieldoffbytes fi = 
+    match field_offset_bytes fi with
+      | None -> assert false
+      | Some off -> Int_offset (string_of_int off) 
+  in
+  (* Count offset in bytes before last field access in union *)
+  let rec access t = 
+    match t#node with
+      | JCTderef(t,_lab,fi) when embedded_field fi ->
+	  begin match access t with
+	    | Some(t,off) ->
+		Some (t, add_offset off (fieldoffbytes fi))
+	    | None -> 
+		if of_union_type t#typ then
+		  Some (t, fieldoffbytes fi)
+		else None
+	  end
+      | JCTshift(t1,t2) ->
+	  None
+(* 	  Format.printf "term %a@." Jc_output.term t; *)
+(* 	  assert false (\* TODO *\) *)
+      | _ ->	
+	  if of_union_type t#typ then
+	    Some (t,Int_offset "0")
+	  else None
+  in
+
+  let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in
+  match access t with
+    | Some(t,off) ->
+	Some (t, add_offset off (fieldoffbytes fi))
+    | None -> 
+	if of_union_type t#typ then
+	  Some (t, fieldoffbytes fi)
+	else None
+
+let tlocation_access_union t fi = None (* TODO *)
 
 (*
 Local Variables: 

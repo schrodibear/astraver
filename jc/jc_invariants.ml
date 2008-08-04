@@ -38,6 +38,7 @@ open Output
 open Jc_region
 open Jc_name
 open Jc_interp_misc
+open Jc_struct_tools
 
 (* other modifications for this extension can be found in:
      ast, typing, norm, interp: about pack / unpack, and mutable
@@ -86,11 +87,11 @@ let invariant_for_struct this st =
 let make_assume reads assume =
   BlackBox (Annot_type (LTrue, unit_type, reads, [], assume, []))
 
-let fully_packed tov e =
+let fully_packed pc e =
   LPred(
     fully_packed_name,
-    [ LVar (tag_table_name tov);
-      LVar (mutable_name tov);
+    [ LVar (tag_table_name pc);
+      LVar (mutable_name pc);
       e ])
 (*
 let type_structure = function
@@ -98,9 +99,9 @@ let type_structure = function
   | _ -> failwith "type_structure"
 *)
 
-let type_tov = function
-  | JCTpointer(tov, _, _) -> tov
-  | _ -> raise (Invalid_argument "type_tov")
+let type_pc = function
+  | JCTpointer(pc, _, _) -> pc
+  | _ -> raise (Invalid_argument "type_pc")
 
 let range_min = function
   | JCTpointer(_, x, _) -> x
@@ -196,7 +197,7 @@ let term this t =
     (fun t -> match t#node with
        | JCTapp app ->
 	   let id = app.jc_app_fun in
-	   if not (FieldOrVariantRegionMap.is_empty
+	   if not (MemoryMap.is_empty
 		     id.jc_logic_info_effects.jc_effect_memories) then
 	     Jc_typing.typing_error t#loc
 	       "this call is not allowed in structure invariant"
@@ -262,7 +263,7 @@ let rec assertion this p =
     | JCAquantifier(_,id, p) -> assertion this p
     | JCAapp app ->
 	let id = app.jc_app_fun in
-	if FieldOrVariantRegionMap.is_empty id.jc_logic_info_effects.jc_effect_memories
+	if MemoryMap.is_empty id.jc_logic_info_effects.jc_effect_memories
 	then List.iter (term this) app.jc_app_args
 	else
 	  Jc_typing.typing_error p#loc
@@ -356,18 +357,17 @@ let struct_inv_memories acc st =
 (* TODO: factorize using Jc_interp_misc.logic_params *)
 let invariant_params acc li =
   let acc =
-    FieldOrVariantRegionMap.fold
-      (fun (fvi,r) labels acc -> 
-	 (field_or_variant_region_memory_name(fvi,r), field_or_variant_memory_type fvi)::acc)
+    MemoryMap.fold
+      (fun (mc,r) labels acc -> 
+	 (memory_name(mc,r), field_or_variant_memory_type mc)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in
   let acc =
-    StringRegionSet.fold
-      (fun (a,r) acc -> 
-	 let st, _ = Hashtbl.find Jc_typing.structs_table a in
-	 (alloc_region_table_name (JCtag(st, []), r),
-	  alloc_table_type (JCtag(st, [])))::acc)
+    AllocSet.fold
+      (fun (ac,r) acc -> 
+	 (alloc_region_table_name (ac, r),
+	  alloc_table_type (ac))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
@@ -515,11 +515,11 @@ let make_assume_all_assocs pp params =
 (* mutable *)
 (***********)
 
-let mutable_memory_type tov =
-  memory_type (tag_or_variant_model_type tov) (tag_id_type tov)
+let mutable_memory_type pc =
+  memory_type (pointer_class_model_type pc) (tag_id_type pc)
 
-let committed_memory_type tov =
-  memory_type (tag_or_variant_model_type tov) (simple_logic_type "bool")
+let committed_memory_type pc =
+  memory_type (pointer_class_model_type pc) (simple_logic_type "bool")
 
 let mutable_declaration st acc =
   if st.jc_struct_info_parent = None then
@@ -689,19 +689,20 @@ let not_mutable_implies_fields_committed this st =
   let fields_pc = List.fold_left
     (fun acc fi ->
        match fi.jc_field_info_type with
-	 | JCTpointer(fi_tov, min, max) ->
+	 | JCTpointer(fi_pc, min, max) ->
 	     let n = fi.jc_field_info_final_name in
 	     let index = "jc_index" in
-	     let committed_name = committed_name fi_tov in
-	     let alloc = alloc_table_name fi_tov in
+	     let committed_name = committed_name fi_pc in
+	     let fi_ac = alloc_class_of_pointer_class fi_pc in
+	     let alloc = generic_alloc_table_name fi_ac in
 	     let params =
 	       [ n, field_memory_type fi;
-		 committed_name, committed_memory_type fi_tov;
-		 alloc, alloc_table_type fi_tov; ]
+		 committed_name, committed_memory_type fi_pc;
+		 alloc, alloc_table_type fi_ac; ]
 	     in
 	     let this_fi = make_select (LVar n) (LVar this) in
 	     let f = make_shift this_fi (LVar index) in
-	     let eq = make_eq (make_select_committed fi_tov f)
+	     let eq = make_eq (make_select_committed fi_pc f)
 	       (make_bool true)
 	     in
 	     let omin, omax = omin_omax (LVar alloc) this_fi min max in
@@ -790,13 +791,14 @@ let owner_unicity this root =
        try
 	 let name = fi.jc_field_info_final_name in
 	 Printf.printf "***** FIELD %s *****\n%!" name;
-	 let fi_tov = type_tov fi.jc_field_info_type in
-	 let committed_name = committed_name fi_tov in
+	 let fi_pc = type_pc fi.jc_field_info_type in
+	 let committed_name = committed_name fi_pc in
 	 let this_dot_f = make_select (LVar name) (LVar this) in
 	 let x_dot_f = make_select (LVar name) (LVar x_name) in
 
 	 (* indexes, ranges *)
-	 let alloc = alloc_table_name fi_tov in
+	 let fi_ac = alloc_class_of_pointer_class fi_pc in
+	 let alloc = generic_alloc_table_name fi_ac in
 	 let omin1, omax1 = omin_omax (LVar alloc) this_dot_f
 	   (range_min fi.jc_field_info_type)
 	   (range_max fi.jc_field_info_type)
@@ -837,11 +839,12 @@ let owner_unicity this root =
   (* params *)
   let params = List.map
     (fun fi ->
+       let ac = JCalloc_struct (struct_variant fi.jc_field_info_struct) in
        [ fi.jc_field_info_final_name, field_memory_type fi;
 	 committed_name (JCtag(fi.jc_field_info_root, [])),
 	 committed_memory_type (JCtag(fi.jc_field_info_root, []));
-	 alloc_table_name (JCtag(fi.jc_field_info_root, [])),
-	 alloc_table_type (JCtag(fi.jc_field_info_root, [])) ])
+	 generic_alloc_table_name ac,
+	 alloc_table_type ac ])
     reps
   in
   let params = List.flatten params in
@@ -992,25 +995,25 @@ let components st =
     (fun acc fi ->
        if fi.jc_field_info_rep then
 	 match fi.jc_field_info_type with
-	   | JCTpointer(tov, _, _) -> (fi, tov)::acc
+	   | JCTpointer(pc, _, _) -> (fi, pc)::acc
 	   | _ -> acc
        else acc)
     []
     st.jc_struct_info_fields
 
 let components_by_type st =
-  let compare_tovs s t =
-    compare (tag_or_variant_type_name s) (tag_or_variant_type_name t) in
+  let compare_pcs s t =
+    compare (pointer_class_type_name s) (pointer_class_type_name t) in
   let comps = components st in
   let comps =
     List.sort
-      (fun (_, s) (_, t) -> compare_tovs s t)
+      (fun (_, s) (_, t) -> compare_pcs s t)
       comps
   in
   let rec part prev acc = function
     | [] -> [prev, acc]
     | (fi, si)::tl ->
-	if compare_tovs si prev = 0 then
+	if compare_pcs si prev = 0 then
 	  part prev (fi::acc) tl
 	else
 	  (prev, acc)::(part si [fi] tl)
@@ -1026,7 +1029,8 @@ field of each component of "this" (in "fields") of the
 hierarchy "root" has been set to "value", and only them *)
 let hierarchy_committed_postcond this root fields value =
   let com = committed_name root in
-  let alloc = alloc_table_name root in
+  let ac = alloc_class_of_pointer_class root in
+  let alloc = generic_alloc_table_name ac in
   (* fields information and range *)
   let fields = List.map
     (fun fi ->
@@ -1055,11 +1059,11 @@ let hierarchy_committed_postcond this root fields value =
   (* new values for the fields in their ranges *)
   let com_values = List.map
     (fun (fi, this_fi, omin, omax) ->
-       let fi_tov = type_tov fi.jc_field_info_type in
+       let fi_pc = type_pc fi.jc_field_info_type in
        let index = "jc_index" in
        let range = make_range (LVar index) omin omax in
        let new_value = make_eq
-	 (make_select_committed fi_tov
+	 (make_select_committed fi_pc
 	    (make_shift this_fi (LVar index)))
 	 (LConst(Prim_bool value))
        in
@@ -1074,7 +1078,7 @@ let make_components_postcond this st reads writes committed =
   let comps = components_by_type st in
   let writes =
     List.fold_left
-      (fun acc (tov, _) -> StringSet.add (committed_name tov) acc)
+      (fun acc (pc, _) -> StringSet.add (committed_name pc) acc)
       writes
       comps
   in
@@ -1090,16 +1094,16 @@ let make_components_postcond this st reads writes committed =
   in
   let reads = StringSet.union reads writes in
   let reads = List.fold_left
-    (fun acc (tov, fields) -> StringSet.add
-       (alloc_table_name tov) acc)
+    (fun acc (pc, fields) -> StringSet.add
+       (generic_alloc_table_name (alloc_class_of_pointer_class pc)) acc)
     reads comps
   in
   let postcond =
     make_and_list
       (* for each hierarchy... *)
       (List.map
-	 (fun (tov, fields) -> hierarchy_committed_postcond
-	    this tov fields committed)
+	 (fun (pc, fields) -> hierarchy_committed_postcond
+	    this pc fields committed)
 	 comps)
   in
   postcond, reads, writes  
@@ -1126,14 +1130,15 @@ let make_components_precond this st reads =
        let this_field =
 	 LApp("shift", [ base_field; LVar index_name ])
        in
-       let fi_tov = type_tov fi.jc_field_info_type in
-       let alloc = alloc_table_name fi_tov in
-       let reads = StringSet.add (tag_table_name fi_tov) reads in
+       let fi_pc = type_pc fi.jc_field_info_type in
+       let fi_ac = alloc_class_of_pointer_class fi_pc in
+       let alloc = generic_alloc_table_name fi_ac in
+       let reads = StringSet.add (tag_table_name fi_pc) reads in
        let reads = StringSet.add alloc reads in
        let reads = StringSet.add mutable_name reads in
        (* pre-condition: forall i, valid(x.f+i) => fp(x.f+i) /\ not committed(x.f+i) *)
        let body = make_and
-	 (fully_packed fi_tov this_field)
+	 (fully_packed fi_pc this_field)
 	 (LPred(
 	    "eq",
 	    [ LApp("select", [LVar committed_name; this_field]);

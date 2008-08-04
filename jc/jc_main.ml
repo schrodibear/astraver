@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.113 2008-07-15 15:58:09 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.114 2008-08-04 13:48:33 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -211,29 +211,29 @@ let main () =
     Jc_options.lprintf
       "production phase 1.2.3: translate regions and memories@.";
     let d_memories,regions =
-      FieldOrVariantRegionSet.fold 
+      MemorySet.fold 
 	(fun (fi,r) (acc,regions) -> 
 	   let acc = 
 	     if RegionSet.mem r regions then acc else
 	       Jc_interp.tr_region r acc 
 	   in
 	   Jc_interp.tr_memory (fi,r) acc,RegionSet.add r regions)
-	(FieldOrVariantRegionSet.map_repr !Jc_effect.constant_memories_set)
+	(MemorySet.map_repr !Jc_effect.constant_memories_set)
 	(d_memories,RegionSet.singleton dummy_region)
     in	       	  
     Jc_options.lprintf
       "production phase 1.2.4: translate regions and allocation tables@.";
     let d_memories,_ =
-      let arts = StringRegionSet.map_repr
+      let arts = AllocSet.map_repr
 	!Jc_effect.alloc_region_table_set
       in
-      StringRegionSet.fold 
+      AllocSet.fold 
 	(fun (a,r) (acc,regions) -> 
 	   let acc = 
 	     if RegionSet.mem r regions then acc else
 	       Jc_interp.tr_region r acc 
 	   in
-	   Jc_interp.tr_alloc_table2 (a,r) acc, RegionSet.add r regions)
+	   Jc_interp.tr_alloc_table (a,r) acc, RegionSet.add r regions)
 	arts
 	(d_memories,regions)
     in	       	  
