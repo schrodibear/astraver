@@ -682,93 +682,95 @@ Admitted.
   bitvector -> bitvector -> bitvector.
 Admitted.
 
-(*Why logic*) Definition byte_offset_min :
+(*Why logic*) Definition offset_min_bytes :
   forall (A1:Set), (alloc_table A1) -> (pointer A1) -> Z -> Z.
 Admitted.
-Implicit Arguments byte_offset_min.
+Implicit Arguments offset_min_bytes.
 
-(*Why logic*) Definition byte_offset_max :
+(*Why logic*) Definition offset_max_bytes :
   forall (A1:Set), (alloc_table A1) -> (pointer A1) -> Z -> Z.
 Admitted.
-Implicit Arguments byte_offset_max.
+Implicit Arguments offset_max_bytes.
 
-(*Why axiom*) Lemma byte_offset_min_def :
+(*Why axiom*) Lemma offset_min_bytes_def :
   forall (A1:Set),
   (forall (a:(alloc_table A1)),
    (forall (p:(pointer A1)),
-    (forall (s:Z), (offset_min a p) <= (s * (byte_offset_min a p s))))).
+    (forall (s:Z), (offset_min a p) <= (s * (offset_min_bytes a p s))))).
 Admitted.
 
-(*Why axiom*) Lemma byte_offset_max_def :
+(*Why axiom*) Lemma offset_max_bytes_def :
   forall (A1:Set),
   (forall (a:(alloc_table A1)),
    (forall (p:(pointer A1)),
-    (forall (s:Z), (s * (byte_offset_max a p s) + s - 1) <= (offset_max a p)))).
+    (forall (s:Z), (s * (offset_max_bytes a p s) + s - 1) <= (offset_max a p)))).
 Admitted.
 
-(*Why logic*) Definition select_union : bitvector -> Z -> Z -> bitvector.
+(*Why logic*) Definition extract_bytes : bitvector -> Z -> Z -> bitvector.
 Admitted.
 
-(*Why logic*) Definition store_union :
+(*Why logic*) Definition replace_bytes :
   bitvector -> Z -> Z -> bitvector -> bitvector.
 Admitted.
 
 (*Why axiom*) Lemma select_store_eq_union :
-  (forall (b:bitvector),
-   (forall (i:Z),
-    (forall (j:Z),
-     (forall (k:Z),
-      (forall (l:Z),
-       (forall (a:bitvector),
-        (i = k /\ j = l -> (select_union (store_union b i j a) k l) = a))))))).
+  (forall (o1:Z),
+   (forall (s1:Z),
+    (forall (o2:Z),
+     (forall (s2:Z),
+      (forall (v1:bitvector),
+       (forall (v2:bitvector),
+        (o1 = o2 /\ s1 = s2 ->
+         (extract_bytes (replace_bytes v1 o1 s1 v2) o2 s2) = v2))))))).
 Admitted.
 
 (*Why axiom*) Lemma select_store_neq_union :
-  (forall (b:bitvector),
-   (forall (i:Z),
-    (forall (j:Z),
-     (forall (k:Z),
-      (forall (l:Z),
-       (forall (a:bitvector),
-        (l < i \/ j < k ->
-         (select_union (store_union b i j a) k l) = (select_union b k l)))))))).
+  (forall (o1:Z),
+   (forall (s1:Z),
+    (forall (o2:Z),
+     (forall (s2:Z),
+      (forall (v1:bitvector),
+       (forall (v2:bitvector),
+        ((o2 + s2) <= o1 \/ (o1 + s2) <= o2 ->
+         (extract_bytes (replace_bytes v1 o1 s1 v2) o2 s2) =
+         (extract_bytes v1 o2 s2)))))))).
 Admitted.
 
-(*Why axiom*) Lemma concat_store_union_up :
-  (forall (b:bitvector),
-   (forall (i:Z),
-    (forall (j:Z),
-     (forall (k:Z),
-      (forall (l:Z),
-       (forall (a1:bitvector),
-        (forall (a2:bitvector),
-         ((j + 1) = k ->
-          (store_union (store_union b i j a1) k l a2) =
-          (store_union b i l (concat_bitvector a1 a2)))))))))).
+(*Why axiom*) Lemma concat_replace_bytes_up :
+  (forall (o1:Z),
+   (forall (s1:Z),
+    (forall (o2:Z),
+     (forall (s2:Z),
+      (forall (v1:bitvector),
+       (forall (v2:bitvector),
+        (forall (v3:bitvector),
+         ((o1 + s1) = o2 ->
+          (replace_bytes (replace_bytes v1 o1 s1 v2) o2 s2 v3) =
+          (replace_bytes v1 o1 (s1 + s2) (concat_bitvector v2 v3)))))))))).
 Admitted.
 
-(*Why axiom*) Lemma concat_store_union_down :
-  (forall (b:bitvector),
-   (forall (i:Z),
-    (forall (j:Z),
-     (forall (k:Z),
-      (forall (l:Z),
-       (forall (a1:bitvector),
-        (forall (a2:bitvector),
-         ((l + 1) = i ->
-          (store_union (store_union b i j a1) k l a2) =
-          (store_union b k j (concat_bitvector a2 a1)))))))))).
+(*Why axiom*) Lemma concat_replace_bytes_down :
+  (forall (o1:Z),
+   (forall (s1:Z),
+    (forall (o2:Z),
+     (forall (s2:Z),
+      (forall (v1:bitvector),
+       (forall (v2:bitvector),
+        (forall (v3:bitvector),
+         ((o2 + s2) = o1 ->
+          (replace_bytes (replace_bytes v1 o1 s1 v2) o2 s2 v3) =
+          (replace_bytes v1 o2 (s1 + s2) (concat_bitvector v3 v2)))))))))).
 Admitted.
 
-(*Why axiom*) Lemma concat_select_union :
-  (forall (b:bitvector),
-   (forall (i:Z),
-    (forall (j:Z),
-     (forall (k:Z),
-      (forall (l:Z),
-       ((j + 1) = k ->
-        (concat_bitvector (select_union b i j) (select_union b k l)) =
-        (select_union b i l))))))).
+(*Why axiom*) Lemma concat_extract_bytes :
+  (forall (o1:Z),
+   (forall (s1:Z),
+    (forall (o2:Z),
+     (forall (s2:Z),
+      (forall (v:bitvector),
+       ((o1 + s1) = o2 ->
+        (concat_bitvector (extract_bytes v o1 s1) (extract_bytes v o2 s2)) =
+        (extract_bytes v o1 (s1 + s2)))))))).
 Admitted.
 
 (*Why logic*) Definition select_bytes :

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.319 2008-08-04 16:30:56 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.320 2008-08-05 08:39:47 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -707,8 +707,8 @@ let rec term ~global_assertion ~relocate label oldlabel t =
               LApp(f,[LVar alloc; t']), lets
 	  | JCalloc_bitvector -> 
               let f = match k with
-		| Offset_min -> "byte_offset_min"
-		| Offset_max -> "byte_offset_max"
+		| Offset_min -> "offset_min_bytes"
+		| Offset_max -> "offset_max_bytes"
               in
               let t', lets = ft t in
 	      let s = string_of_int (struct_size_in_bytes st) in
@@ -1260,6 +1260,26 @@ let rec old_to_pre_loc loc =
     | JCLderef(lset,lab,fi,region) ->
 	JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, region)
 
+let plain_memory_var (mc,r) = Var (memory_name (mc,r))
+let deref_memory_var (mc,r) = Deref (memory_name (mc,r))
+
+let memory_var ~infunction (mc,r) =
+  if Region.polymorphic r then
+    if MemoryMap.mem (mc,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+    then deref_memory_var (mc,r)
+    else plain_memory_var (mc,r)
+  else deref_memory_var (mc,r)
+
+let alloc_var ~infunction (ac,r) =
+  let alloc = alloc_table_name (ac,r) in
+  if Region.polymorphic r then
+    if AllocSet.mem (ac,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+    then Deref alloc
+    else Var alloc
+  else Deref alloc
+
 (* translates the heap update `e1.f = e2' 
 
    essentially we want
@@ -1419,14 +1439,14 @@ and make_upd_union lab loc ~infunction ~threats off fi e1 e2 =
   (* Retrieve bitvector for access to union *)
   let deref = make_deref_simple lab loc ~infunction ~threats fi e1 in
   (* Retrieve subpart of bitvector for specific subfield *)
-  let off1 = match off with
+  let off = match off with
     | Int_offset i -> int_of_string i
     | _ -> assert false (* TODO *)
   in
-  let off2 = off1 + (the fi.jc_field_info_bitsize/8) - 1 in
-  let off1 = string_of_int off1 and off2 = string_of_int off2 in
-  let acc = make_app "store_union"
-		 [deref; Cte(Prim_int off1); Cte(Prim_int off2); acc]
+  let size = the fi.jc_field_info_bitsize / 8 in
+  let off = string_of_int off and size = string_of_int size in
+  let acc = make_app "replace_bytes"
+		 [deref; Cte(Prim_int off); Cte(Prim_int size); acc]
   in
   let lets = 
     [ (tmp1,e1'); (tmp2, acc) ]
@@ -1436,59 +1456,56 @@ and make_upd_union lab loc ~infunction ~threats off fi e1 e2 =
   in
   tmp1, tmp2, lets @ lets', upd, deref
 
-and make_upd_bitwise lab loc ~infunction ~threats fi e1 e2 =
+and make_upd_bytes lab loc ~infunction ~threats fi e1 e2 =
   let expr = expr ~infunction ~threats in
   let tmp1 = tmp_var_name () in
   let tmp2 = tmp_var_name () in
-  (* we handle e1 and e2 *)
+  (* Handle [e1] and [e2] *)
   let e1' = expr e1 in
   let e2' = expr e2 in
-  (* Convert appropriate type into bitvector *)
-  let acc = 
+  (* Convert appropriate type into field type and then bitvector *)
+  let e2' = 
     coerce ~no_int_overflow:(not threats) 
-      e2#name_label e2#loc 
-      fi.jc_field_info_type 
-      e2#typ e2 e2'
+      e2#name_label e2#loc fi.jc_field_info_type e2#typ e2 e2'
   in
-  let acc = match fi.jc_field_info_type with
-    | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [acc]
+  let e2' = match fi.jc_field_info_type with
+    | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [e2']
     | ty -> 
 	assert false (* TODO *)
   in
   (* Define dummy variables *)
   let v1 = Jc_pervasives.var e1#typ tmp1 in
-  let v2 = Jc_pervasives.var Jc_pervasives.unit_type tmp2 in
   let e1 = new expr_with ~node:(JCEvar v1) e1 in
-  let e2 = new expr_with ~node:(JCEvar v2) e2 in
-  (* Retrieve bitvector for access to union *)
-  let deref = 
-    make_deref_simple ~bitwise:true lab loc ~infunction ~threats fi e1 
+  (* Store bitvector *)
+  let mem = plain_memory_var (JCmem_bitvector,e1#region) in
+  let alloc = alloc_var ~infunction (JCalloc_bitvector,e1#region) in
+  let off = the (field_offset_in_bytes fi) in
+  let size = the fi.jc_field_info_bitsize / 8 in
+  let off = string_of_int off and size = string_of_int size in
+  let upd = 
+    if threats then
+      make_guarded_app ~name:lab PointerDeref loc "upd_bytes_" 
+        [ alloc; mem; Var tmp1; Cte(Prim_int off); Cte(Prim_int size); 
+	  Var tmp2 ]
+    else
+      make_app "safe_upd_bytes_"
+	[ mem; Var tmp1; Cte(Prim_int off); Cte(Prim_int size); Var tmp2 ]
   in
-  (* Retrieve subpart of bitvector for specific subfield *)
-  let off1 = the (field_offset_in_bytes fi) in
-  let off2 = off1 + (the fi.jc_field_info_bitsize/8) - 1 in
-  let off1 = string_of_int off1 and off2 = string_of_int off2 in
-  let acc = make_app "store_bytes"
-		 [deref; Cte(Prim_int off1); Cte(Prim_int off2); acc]
-  in
-  let lets = 
-    [ (tmp1,e1'); (tmp2, acc) ]
-  in
-  let tmp1, tmp2, lets', upd, deref = 
-    make_upd_simple ~bitwise:true lab loc ~infunction ~threats fi e1 e2
-  in
-  tmp1, tmp2, lets @ lets', upd, deref
+  let lets = [ (tmp1,e1'); (tmp2,e2') ] in
+  (* Build updated value for reuse *)
+  let deref = make_deref_bytes lab loc ~infunction ~threats fi e1 in
+  tmp1, tmp2, lets, upd, deref
 
 and make_upd lab loc ~infunction ~threats fi e1 e2 =
   if Region.bitwise e1#region then
-    make_upd_bitwise lab loc ~infunction ~threats fi e1 e2
+    make_upd_bytes lab loc ~infunction ~threats fi e1 e2
   else match access_union e1 (Some fi) with
     | Some(e1,off) ->
   	make_upd_union lab loc ~infunction ~threats off fi e1 e2
     | None ->
   	make_upd_simple lab loc ~infunction ~threats fi e1 e2
 
-and make_deref_simple ?(bitwise=false) lab loc ~infunction ~threats fi e =
+and make_deref_simple lab loc ~infunction ~threats fi e =
   let expr = expr ~infunction ~threats in
   let offset = offset ~infunction ~threats in
   let mc = deref_mem_class e fi in
@@ -1574,41 +1591,45 @@ and make_deref_union lab loc ~infunction ~threats off fi e =
   (* Retrieve bitvector for access to union *)
   let deref = make_deref_simple lab loc ~infunction ~threats fi e in
   (* Retrieve subpart of bitvector for specific subfield *)
-  let off1 = match off with
+  let off = match off with
     | Int_offset i -> int_of_string i
     | _ -> assert false (* TODO *)
   in
-  let off2 = off1 + (the fi.jc_field_info_bitsize/8) - 1 in
-  let off1 = string_of_int off1 and off2 = string_of_int off2 in
-  let acc = make_app "select_union"
-		 [deref; Cte(Prim_int off1); Cte(Prim_int off2)]
+  let size = the fi.jc_field_info_bitsize / 8 in
+  let off = string_of_int off and size = string_of_int size in
+  let acc = 
+    make_app "extract_bytes" [deref; Cte(Prim_int off); Cte(Prim_int size)]
   in
   (* Convert bitvector into appropriate type *)
   match fi.jc_field_info_type with
     | JCTenum ri -> make_app (logic_enum_of_bitvector ri) [acc]
-    | ty -> 
-	assert false (* TODO *)
+    | ty -> assert false (* TODO *)
 
-and make_deref_bitwise lab loc ~infunction ~threats fi e =
-  (* Retrieve bitvector for access to union *)
+and make_deref_bytes lab loc ~infunction ~threats fi e =
+  let expr = expr ~infunction ~threats in
+  (* Retrieve bitvector *)
+  let mem = memory_var ~infunction (JCmem_bitvector,e#region) in
+  let alloc = alloc_var ~infunction (JCalloc_bitvector,e#region) in
+  let off = the (field_offset_in_bytes fi) in
+  let size = the fi.jc_field_info_bitsize / 8 in
+  let off = string_of_int off and size = string_of_int size in
   let deref = 
-    make_deref_simple ~bitwise:true lab loc ~infunction ~threats fi e in
-  (* Retrieve subpart of bitvector for specific subfield *)
-  let off1 = the (field_offset_in_bytes fi) in
-  let off2 = off1 + (the fi.jc_field_info_bitsize/8) - 1 in
-  let off1 = string_of_int off1 and off2 = string_of_int off2 in
-  let acc = make_app "select_bytes"
-		 [deref; Cte(Prim_int off1); Cte(Prim_int off2)]
+    if threats then
+      make_guarded_app ~name:lab PointerDeref loc "acc_bytes_" 
+        [ alloc; mem; expr e; Cte(Prim_int off); Cte(Prim_int size) ]
+    else
+      make_app "safe_acc_bytes_"
+	[ mem; expr e; Cte(Prim_int off); Cte(Prim_int size) ]
   in
   (* Convert bitvector into appropriate type *)
   match fi.jc_field_info_type with
-    | JCTenum ri -> make_app (logic_enum_of_bitvector ri) [acc]
+    | JCTenum ri -> make_app (logic_enum_of_bitvector ri) [deref]
     | ty -> 
 	assert false (* TODO *)
 
 and make_deref lab loc ~infunction ~threats fi e =
   if e#region.jc_reg_bitwise then
-    make_deref_bitwise lab loc ~infunction ~threats fi e
+    make_deref_bytes lab loc ~infunction ~threats fi e
   else match access_union e (Some fi) with
     | Some(e,off) ->
   	make_deref_union lab loc ~infunction ~threats off fi e
