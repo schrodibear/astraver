@@ -510,18 +510,46 @@ begin = 9
 end = 11
 
 [JC_16]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.jc"
+line = 60
+begin = 9
+end = 48
 
 [JC_17]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.jc"
+line = 63
+begin = 9
+end = 48
+
+[JC_18]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.jc"
+line = 67
+begin = 9
+end = 49
+
+[JC_19]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.jc"
+line = 72
+begin = 9
+end = 50
+
+[JC_20]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_18]
+[JC_21]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1

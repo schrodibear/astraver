@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.115 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.116 2008-08-06 22:59:00 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -63,7 +63,7 @@ let main () =
     (* phase 3: typing *)
     (* phase 3.1: type logic labels *)
     Jc_options.lprintf "Typing logic labels@.";
-    List.iter Jc_typing.type_logic_labels_in_decl ast;
+    List.iter Jc_typing.type_labels_in_decl ast;
 
     (* phase 3.1: type logic labels *)
     Jc_options.lprintf "Typing@.";

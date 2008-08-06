@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.11 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_constructors.ml,v 1.12 2008-08-06 22:59:00 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -45,16 +45,16 @@ object
   method typ: jc_type = typ
 end
 
-class logic_labeled ~logic_label =
+class labeled ~label =
 object
-  val mutable llab: logic_label option = logic_label
-  method logic_label = llab
-  method set_logic_label lab = llab <- lab
+  val mutable llab: label option = label
+  method label = llab
+  method set_label lab = llab <- lab
 end
 
-class name_labeled ~name_label =
+class marked ~mark =
 object
-  method name_label: string = name_label
+  method mark: string = mark
 end
 
 class regioned ~region =
@@ -91,17 +91,17 @@ class pexpr_with ?pos ?node e =
   let node = match node with None -> e#node | Some node -> node in
   pexpr ~pos node
 
-class nexpr ?(pos = Loc.dummy_position) ?logic_label node =
+class nexpr ?(pos = Loc.dummy_position) ?label node =
 object
-  inherit logic_labeled logic_label
+  inherit labeled label
   inherit [nexpr_node] node_positioned ~pos node
 end
 
 class nexpr_with ?pos ?node e =
   let pos = match pos with None -> e#pos | Some pos -> pos in
   let node = match node with None -> e#node | Some node -> node in
-  let llab = e#logic_label in
-  nexpr ~pos ~logic_label:llab node
+  let llab = e#label in
+  nexpr ~pos ~label:llab node
 
 class pattern ?(pos = Loc.dummy_position) ~typ node =
 object
@@ -115,68 +115,68 @@ class pattern_with ?pos ?node ?typ p =
   let typ = match typ with None -> p#typ | Some typ -> typ in
   pattern ~pos ~typ node
 
-class term ?(pos = Loc.dummy_position) ~typ ?(name_label="") ?logic_label ?region node =
+class term ?(pos = Loc.dummy_position) ~typ ?(mark="") ?label ?region node =
   let region = 
     match region with None -> dummy_region | Some region -> region 
   in
 object
   inherit typed typ
   inherit regioned region
-  inherit name_labeled name_label
-  inherit logic_labeled logic_label
+  inherit marked mark
+  inherit labeled label
   inherit [term_node] node_positioned ~pos node
 end
 
-class term_with ?pos ?typ ?name_label ?region ?node t =
+class term_with ?pos ?typ ?mark ?region ?node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
   let typ = match typ with None -> t#typ | Some typ -> typ in
-  let name_label = 
-    match name_label with None -> t#name_label | Some name_label -> name_label 
+  let mark = 
+    match mark with None -> t#mark | Some mark -> mark 
   in
-  let llab = t#logic_label in
+  let llab = t#label in
   let region = match region with None -> t#region | Some region -> region in
   let node = match node with None -> t#node | Some node -> node in
-  term ~pos ~typ ~name_label ?logic_label:llab ~region node
+  term ~pos ~typ ~mark ?label:llab ~region node
 
-class term_var ?(pos = Loc.dummy_position) ?(name_label="") v =
-  term ~pos ~typ:v.jc_var_info_type ~name_label ~region:v.jc_var_info_region
+class term_var ?(pos = Loc.dummy_position) ?(mark="") v =
+  term ~pos ~typ:v.jc_var_info_type ~mark ~region:v.jc_var_info_region
     (JCTvar v)
 
-class location ?(pos = Loc.dummy_position) ?logic_label ?region node =
+class location ?(pos = Loc.dummy_position) ?label ?region node =
   let region = 
     match region with None -> dummy_region | Some region -> region 
   in
 object
   inherit regioned region
-  inherit logic_labeled logic_label
+  inherit labeled label
   inherit [location_node] node_positioned ~pos node
 end
 
 class location_with ?pos ?region ?node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
-  let llab = t#logic_label in
+  let llab = t#label in
   let region = match region with None -> t#region | Some region -> region in
   let node = match node with None -> t#node | Some node -> node in
-  location ~pos ?logic_label:llab ~region node
+  location ~pos ?label:llab ~region node
 
-class location_set ?(pos = Loc.dummy_position) ?logic_label ?region node =
+class location_set ?(pos = Loc.dummy_position) ?label ?region node =
   let region = 
     match region with None -> dummy_region | Some region -> region 
   in
 object
   inherit regioned region
-  inherit logic_labeled logic_label
+  inherit labeled label
   inherit [location_set_node] node_positioned ~pos node
 end
 
 class location_set_with ?pos ?region ?node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
-  let llab = t#logic_label in
+  let llab = t#label in
   let region = match region with None -> t#region | Some region -> region in
   let node = match node with None -> t#node | Some node -> node in
-  location_set ~pos ?logic_label:llab ~region node
+  location_set ~pos ?label:llab ~region node
 
-class expr ?(pos = Loc.dummy_position) ~typ ?(name_label="") ?region
+class expr ?(pos = Loc.dummy_position) ~typ ?(mark="") ?region
   ?original_type node =
   let region = 
     match region with None -> dummy_region | Some region -> region 
@@ -184,17 +184,17 @@ class expr ?(pos = Loc.dummy_position) ~typ ?(name_label="") ?region
 object
   inherit typed typ
   inherit regioned region
-  inherit name_labeled name_label
+  inherit marked mark
   inherit [expr_node] node_positioned ~pos node
   method original_type = 
     match original_type with None -> typ | Some original_type -> original_type
 end
 
-class expr_with ?pos ?typ ?name_label ?region ?node ?original_type e =
+class expr_with ?pos ?typ ?mark ?region ?node ?original_type e =
   let pos = match pos with None -> e#pos | Some pos -> pos in
   let typ = match typ with None -> e#typ | Some typ -> typ in
-  let name_label = 
-    match name_label with None -> e#name_label | Some name_label -> name_label 
+  let mark = 
+    match mark with None -> e#mark | Some mark -> mark 
   in
   let region = match region with None -> e#region | Some region -> region in
   let node = match node with None -> e#node | Some node -> node in
@@ -202,23 +202,23 @@ class expr_with ?pos ?typ ?name_label ?region ?node ?original_type e =
     | None -> e#original_type
     | Some original_type -> original_type
   in
-  expr ~pos ~typ ~name_label ~region ~original_type node
+  expr ~pos ~typ ~mark ~region ~original_type node
 
-class assertion ?(name_label="") ?logic_label ?(pos = Loc.dummy_position) node =
+class assertion ?(mark="") ?label ?(pos = Loc.dummy_position) node =
 object
-  inherit name_labeled name_label
-  inherit logic_labeled logic_label
+  inherit marked mark
+  inherit labeled label
   inherit [assertion_node] node_positioned ~pos node
 end
 
-class assertion_with ?pos ?name_label ?node a =
+class assertion_with ?pos ?mark ?node a =
   let pos = match pos with None -> a#pos | Some pos -> pos in
-  let name_label = 
-    match name_label with None -> a#name_label | Some name_label -> name_label 
+  let mark = 
+    match mark with None -> a#mark | Some mark -> mark 
   in
-  let llab = a#logic_label in
+  let llab = a#label in
   let node = match node with None -> a#node | Some node -> node in
-  assertion ~pos ~name_label ?logic_label:llab node
+  assertion ~pos ~mark ?label:llab node
 
 class ['expr] ptag ?(pos = Loc.dummy_position) node =
 object
@@ -483,8 +483,8 @@ end
 (*******************************************************************************)
 
 module Expr = struct
-  let mk ?pos ~typ ?name_label ?region ?original_type ~node () =
-    new expr ?pos ~typ ?name_label ?region ?original_type node
+  let mk ?pos ~typ ?mark ?region ?original_type ~node () =
+    new expr ?pos ~typ ?mark ?region ?original_type node
 
   let mklet ~var ?init ~body =
     mk ~typ:var.jc_var_info_type ~node:(JCElet(var, init, body))
@@ -499,8 +499,8 @@ end
 (*******************************************************************************)
 
 module Term = struct
-  let mk ?pos ~typ ?name_label ?region ~node () =
-    new term ?pos ~typ ?name_label ?region node
+  let mk ?pos ~typ ?mark ?region ~node () =
+    new term ?pos ~typ ?mark ?region node
 
   let mkvar ~var = 
     mk ~typ:var.jc_var_info_type ~node:(JCTvar var)
@@ -511,10 +511,10 @@ end
 (*******************************************************************************)
 
 module Assertion = struct
-  let mk ?pos ?name_label ~node () =
-    new assertion ?pos ?name_label node
+  let mk ?pos ?mark ~node () =
+    new assertion ?pos ?mark node
 
-  let fake ?pos ?name_label ~value () = value
+  let fake ?pos ?mark ~value () = value
 
   let mktrue = mk ~node:JCAtrue
   let mkfalse = mk ~node:JCAfalse

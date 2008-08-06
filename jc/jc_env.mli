@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.57 2008-08-04 13:48:33 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.58 2008-08-06 22:59:00 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tstring
 
@@ -133,7 +133,7 @@ type label_info =
       mutable times_used : int;
     }
 
-type logic_label = 
+type label = 
   | LabelName of label_info
   | LabelHere
   | LabelPost

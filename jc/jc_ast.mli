@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.141 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.142 2008-08-06 22:59:00 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -43,15 +43,15 @@ object
   method typ: jc_type
 end
 
-class type logic_labeled =
+class type labeled =
 object
-  method logic_label: logic_label option
-  method set_logic_label: logic_label option -> unit
+  method label: label option
+  method set_label: label option -> unit
 end
 
-class type name_labeled =
+class type marked =
 object
-  method name_label: string
+  method mark: string
 end
 
 class type regioned =
@@ -146,14 +146,14 @@ and pexpr_node =
   | JCPEderef of pexpr * string
   | JCPEbinary of pexpr * bin_op * pexpr
   | JCPEunary of pexpr_unary_op * pexpr
-  | JCPEapp of string * logic_label list * pexpr list
+  | JCPEapp of string * label list * pexpr list
   | JCPEassign of pexpr * pexpr
   | JCPEassign_op of pexpr * bin_op * pexpr
   | JCPEinstanceof of pexpr * string
   | JCPEcast of pexpr * string
   | JCPEquantifier of quantifier * ptype * string list * pexpr
   | JCPEold of pexpr
-  | JCPEat of pexpr * logic_label
+  | JCPEat of pexpr * label
   | JCPEoffset of offset_kind * pexpr 
   | JCPEaddress of pexpr 
   | JCPEif of pexpr * pexpr * pexpr
@@ -219,11 +219,11 @@ type 'expr decl_node =
   | JCDunion_type of string * identifier list
   | JCDenum_type of string * Num.num * Num.num
   | JCDlogic_type of string 
-  | JCDlemma of string * bool * logic_label list * 'expr
+  | JCDlemma of string * bool * label list * 'expr
       (* 2nd arg is true if it is an axiom *)
   | JCDexception of string * ptype option
   (* logic functions and predicates (return type: None if predicate) *)
-  | JCDlogic of ptype option * string * logic_label list * (ptype * string) list 
+  | JCDlogic of ptype option * string * label list * (ptype * string) list 
       * 'expr reads_or_expr
   | JCDlogic_var of ptype * string * 'expr option
   (* global invariant *)
@@ -241,7 +241,7 @@ type pdecl = pexpr decl
 
 class type ['expr_node] c_nexpr =
 object
-  inherit logic_labeled
+  inherit labeled
   inherit ['expr_node] node_positioned
 end
 
@@ -253,7 +253,7 @@ type nexpr_node =
   | JCNEderef of nexpr * string
   | JCNEbinary of nexpr * bin_op * nexpr
   | JCNEunary of unary_op * nexpr
-  | JCNEapp of string * logic_label list * nexpr list
+  | JCNEapp of string * label list * nexpr list
   | JCNEassign of nexpr * nexpr
   | JCNEinstanceof of nexpr * string
   | JCNEcast of nexpr * string
@@ -279,7 +279,7 @@ type nexpr_node =
   (* Assertions only *)
   | JCNEquantifier of quantifier * ptype * string list * nexpr
   | JCNEold of nexpr
-  | JCNEat of nexpr * logic_label
+  | JCNEat of nexpr * label
   | JCNEmutable of nexpr * nexpr ptag
   | JCNEeqtype of nexpr ptag * nexpr ptag
   | JCNEsubtype of nexpr ptag * nexpr ptag
@@ -313,8 +313,8 @@ class type ['node] c_term =
 object
   inherit typed
   inherit regioned
-  inherit name_labeled
-  inherit logic_labeled
+  inherit marked
+  inherit labeled
   inherit ['node] node_positioned
 end
 
@@ -323,24 +323,24 @@ type app =
       jc_app_fun : logic_info;
       jc_app_args : term list;
       mutable jc_app_region_assoc : (region * region) list;
-      jc_app_label_assoc : (logic_label * logic_label) list;
+      jc_app_label_assoc : (label * label) list;
     }
 
 and term_node =
   | JCTconst of const
   | JCTvar of var_info
   | JCTshift of term * term
-  | JCTderef of term * logic_label * field_info
+  | JCTderef of term * label * field_info
   | JCTbinary of term * term_bin_op * term
   | JCTunary of term_unary_op * term
   | JCTapp of app
   | JCTold of term
-  | JCTat of term * logic_label
+  | JCTat of term * label
   | JCToffset of offset_kind * term * struct_info 
   | JCTaddress of term
-  | JCTinstanceof of term * logic_label * struct_info
-  | JCTcast of term * logic_label * struct_info
-  | JCTbitwise_cast of term * logic_label * struct_info
+  | JCTinstanceof of term * label * struct_info
+  | JCTcast of term * label * struct_info
+  | JCTbitwise_cast of term * label * struct_info
   | JCTrange_cast of term * enum_info
   | JCTreal_cast of term * real_conversion
   | JCTif of term * term * term
@@ -359,13 +359,13 @@ and tag_node =
 class type ['node] c_location =
 object
   inherit regioned
-  inherit logic_labeled
+  inherit labeled
   inherit ['node] node_positioned
 end
 
 type location_set_node = 
   | JCLSvar of var_info
-  | JCLSderef of location_set * logic_label * field_info * region
+  | JCLSderef of location_set * label * field_info * region
 (* TODO ?
   | JCLSshift of location_set * term 
 *)
@@ -373,8 +373,8 @@ type location_set_node =
 
 and location_node =
   | JCLvar of var_info
-  | JCLderef of location_set * logic_label * field_info * region
-  | JCLat of location * logic_label
+  | JCLderef of location_set * label * field_info * region
+  | JCLat of location * label
 
 and location_set = location_set_node c_location
 
@@ -382,8 +382,8 @@ and location = location_node c_location
 
 class type ['assertion_node] c_assertion =
 object
-  inherit name_labeled
-  inherit logic_labeled
+  inherit marked
+  inherit labeled
   inherit ['assertion_node] node_positioned
 end
 
@@ -399,8 +399,8 @@ type assertion_node =
   | JCAapp of app
   | JCAquantifier of quantifier * var_info * assertion
   | JCAold of assertion
-  | JCAat of assertion * logic_label
-  | JCAinstanceof of term * logic_label * struct_info
+  | JCAat of assertion * label
+  | JCAinstanceof of term * label * struct_info
   | JCAbool_term of term
   | JCAif of term * assertion * assertion
   | JCAmutable of term * struct_info * tag
@@ -449,7 +449,7 @@ class type ['node] c_expr =
 object
   inherit typed
   inherit regioned
-  inherit name_labeled
+  inherit marked
   inherit ['node] node_positioned
   method original_type: jc_type
 end
@@ -502,7 +502,7 @@ and call =
       jc_call_fun : callee;
       jc_call_args : expr list;
       mutable jc_call_region_assoc : (region * region) list;
-      jc_call_label_assoc : (logic_label * logic_label) list;
+      jc_call_label_assoc : (label * label) list;
     }
 
 (*

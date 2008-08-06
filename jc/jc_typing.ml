@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.233 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.234 2008-08-06 22:59:00 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -440,7 +440,7 @@ let term_coerce t1 t2 e =
 		new term
 		  ~typ:real_type
 		  ~region:e#region
-		  ~name_label:e#name_label
+		  ~mark:e#mark
 		  ~pos:e#pos
 		  (JCTconst(JCCreal (n^".0")))
 	    | _ ->
@@ -453,7 +453,7 @@ let term_coerce t1 t2 e =
 		new term
 		  ~typ:real_type
 		  ~region:e#region
-		  ~name_label:e#name_label
+		  ~mark:e#mark
 		  ~pos:e#pos
 		  (JCTapp app)
 	end
@@ -569,20 +569,20 @@ let make_logic_bin_op loc (op: bin_op) e1 e2 =
 
 
 (** Check that used logic labels appear in the environment,
-and add the current [logic_label] to the node in [jc_nexpr_label].
+and add the current [label] to the node in [jc_nexpr_label].
 [env] is the list of valid labels.
-However, [logic_label] might be changed by the "\at" construction. *)
-let rec type_logic_labels env logic_label e =
+However, [label] might be changed by the "\at" construction. *)
+let rec type_labels env label e =
   let check e x =
     if not (List.mem x env) then
       typing_error e#pos "label `%a' not found" Jc_output_misc.label x
   in
-  let iter_subs ?(env=env) logic_label =
+  let iter_subs ?(env=env) label =
     List.iter
-      (fun e -> ignore (type_logic_labels env logic_label e))
+      (fun e -> ignore (type_labels env label e))
       (INExpr.subs e)
   in
-  e#set_logic_label logic_label;
+  e#set_label label;
   match e#node with
     | JCNEconst _ | JCNEvar _ | JCNEderef _ | JCNEbinary _
     | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _
@@ -591,16 +591,16 @@ let rec type_logic_labels env logic_label e =
     | JCNEassert _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
     | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEmatch _ | JCNEquantifier _
     | JCNEmutable _ | JCNEeqtype _ | JCNEsubtype _ | JCNErange _ -> 
-        iter_subs logic_label;
+        iter_subs label;
         env
     | JCNEcontract(req,dec,behs,e) ->
-	let _ = type_logic_labels_opt env (Some LabelHere) req in
-	let _ = type_logic_labels_opt env (Some LabelHere) dec in
-	List.iter (behavior_logic_labels env) behs;
-	type_logic_labels env None e
+	let _ = type_labels_opt env (Some LabelHere) req in
+	let _ = type_labels_opt env (Some LabelHere) dec in
+	List.iter (behavior_labels env) behs;
+	type_labels env None e
     | JCNEapp(_, l, _) ->
         List.iter (check e) l;
-        iter_subs logic_label;
+        iter_subs label;
         env
     | JCNEold _ ->
         check e LabelOld;
@@ -612,7 +612,7 @@ let rec type_logic_labels env logic_label e =
         env
     | JCNEblock el ->
         List.fold_left
-          (fun env e -> type_logic_labels env logic_label e)
+          (fun env e -> type_labels env label e)
           env el
     | JCNElabel(lab, _) ->
         let lab = {
@@ -621,32 +621,32 @@ let rec type_logic_labels env logic_label e =
           times_used = 0;
         } in
         let env = (LabelName lab)::env in
-        iter_subs ~env logic_label;
+        iter_subs ~env label;
         env
 
-and type_logic_labels_opt env logic_label e =
+and type_labels_opt env label e =
   match e with
     | None -> env
-    | Some e -> type_logic_labels env logic_label e
+    | Some e -> type_labels env label e
 	
-and behavior_logic_labels env 
+and behavior_labels env 
     (loc,id,throws,assumes,requires,assigns,ensures) =
   let here = Some LabelHere in
-  let _ = type_logic_labels_opt env here assumes in
-  let _ = type_logic_labels_opt env here requires in
+  let _ = type_labels_opt env here assumes in
+  let _ = type_labels_opt env here requires in
   let env = LabelOld :: env in
   Option_misc.iter
     (fun (_,a) ->
-       List.iter (fun e -> ignore(type_logic_labels env here e)) a) assigns;
-  let _ = type_logic_labels env here ensures in
+       List.iter (fun e -> ignore(type_labels env here e)) a) assigns;
+  let _ = type_labels env here ensures in
   ()
    
 
-let type_logic_labels env logic_label e =
-  ignore (type_logic_labels env logic_label e)
+let type_labels env label e =
+  ignore (type_labels env label e)
 
 let get_label e =
-  match e#logic_label with
+  match e#label with
     | None -> typing_error e#pos "a memory state is needed here (\\at missing?)"
     | Some l -> l
 
@@ -739,7 +739,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
               | Some ty -> ty
 	    in
             let label_assoc = 
-	      label_assoc e#pos id e#logic_label pi.jc_logic_info_labels labs 
+	      label_assoc e#pos id e#label pi.jc_logic_info_labels labs 
 	    in
             let app = {
               jc_app_fun = pi;
@@ -917,8 +917,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
   new term
     ~typ: t
     ~region: tr
-    ~name_label: !lab
-    ?logic_label: e#logic_label
+    ~mark: !lab
+    ?label: e#label
     ~pos: e#pos
     te
 
@@ -927,8 +927,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 (******************************************************************************)
 
 (*
-let term label_env logic_label env e =
-  type_logic_labels label_env logic_label e;
+let term label_env label env e =
+  type_labels label_env label e;
   term env e
 *)
 
@@ -1098,7 +1098,7 @@ let rec assertion env e =
             typing_error e#pos "wrong number of arguments for %s" id
           in
 	  let label_assoc =
-		label_assoc e#pos id e#logic_label pi.jc_logic_info_labels labs
+		label_assoc e#pos id e#label pi.jc_logic_info_labels labs
 	      in
           let app = {
             jc_app_fun = pi;
@@ -1175,8 +1175,8 @@ let rec assertion env e =
         typing_error e#pos "construction not allowed in logic assertions"
   in
   new assertion
-    ~name_label: !lab
-    ?logic_label: e#logic_label
+    ~mark: !lab
+    ?label: e#label
     ~pos: e#pos
     ta
 
@@ -1259,7 +1259,7 @@ let rec location_set env e =
     new location_set
       ~pos: e#pos
       ~region: dummy_region (* TODO: change into real region *)
-      ?logic_label: e#logic_label
+      ?label: e#label
       locs_node
   in ty,r,locs
 
@@ -1295,7 +1295,7 @@ let rec location env e =
     new location
       ~pos: e#pos
       ~region: dummy_region (* TODO: change into real region *)
-      ?logic_label: e#logic_label
+      ?label: e#label
       loc_node
   in ty,r,loc
   
@@ -1657,7 +1657,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
               | Some ty -> ty
             in
             let label_assoc = 
-              match e#logic_label, pi.jc_logic_info_labels, labs with
+              match e#label, pi.jc_logic_info_labels, labs with
                 | Some l, [lf], [] -> [lf,l]
                 | _ ->
                     try
@@ -1951,7 +1951,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     ~pos: e#pos
     ~typ: ty
     ~region: region
-    ~name_label: !lab
+    ~mark: !lab
     typed_e
 
 (*******************************************************************************)
@@ -1965,42 +1965,42 @@ let default_label l =
     | [l] -> Some l
     | _ -> None
 
-(** Apply [type_logic_labels] in all expressions of a normalized clause,
+(** Apply [type_labels] in all expressions of a normalized clause,
 with the correct label environment. *)
-let type_logic_labels_in_clause = function
+let type_labels_in_clause = function
   | JCCrequires e ->
-      type_logic_labels [LabelHere] (Some LabelHere) e
+      type_labels [LabelHere] (Some LabelHere) e
   | JCCbehavior(_, _, _, assumes, requires, assigns, ensures) ->
-      Option_misc.iter (type_logic_labels [LabelHere] (Some LabelHere)) assumes;
-      Option_misc.iter (type_logic_labels [LabelHere] (Some LabelHere)) requires;
+      Option_misc.iter (type_labels [LabelHere] (Some LabelHere)) assumes;
+      Option_misc.iter (type_labels [LabelHere] (Some LabelHere)) requires;
       Option_misc.iter
         (fun (_, x) ->
            List.iter
-             (type_logic_labels [LabelOld; LabelHere] (Some LabelHere)) x)
+             (type_labels [LabelOld; LabelHere] (Some LabelHere)) x)
         assigns;
-      (type_logic_labels [LabelOld; LabelHere] (Some LabelHere)) ensures
+      (type_labels [LabelOld; LabelHere] (Some LabelHere)) ensures
 
-(** Apply [type_logic_labels] in all expressions of a normalized declaration,
+(** Apply [type_labels] in all expressions of a normalized declaration,
 with the correct label environment. *)
-let type_logic_labels_in_decl d = match d#node with
+let type_labels_in_decl d = match d#node with
   | JCDvar(_, _, init) ->
-      Option_misc.iter (type_logic_labels [] None) init
+      Option_misc.iter (type_labels [] None) init
   | JCDfun(_, _, _, clauses, body) ->
       Option_misc.iter
-        (type_logic_labels [LabelHere; LabelPre] (Some LabelHere))
+        (type_labels [LabelHere; LabelPre] (Some LabelHere))
         body;
-      List.iter type_logic_labels_in_clause clauses
+      List.iter type_labels_in_clause clauses
   | JCDtag(_, _, _, _, invs) ->
       List.iter
-        (fun (_, _, e) -> type_logic_labels [LabelHere] (Some LabelHere) e) invs
+        (fun (_, _, e) -> type_labels [LabelHere] (Some LabelHere) e) invs
   | JCDlemma(_, _, labels, body) ->
-      type_logic_labels labels (default_label labels) body
+      type_labels labels (default_label labels) body
   | JCDlogic(_, _, labels, _, JCreads el) ->
-      List.iter (type_logic_labels labels (default_label labels)) el
+      List.iter (type_labels labels (default_label labels)) el
   | JCDlogic(_, _, labels, _, JCexpr e) ->
-      type_logic_labels labels (default_label labels) e
+      type_labels labels (default_label labels) e
   | JCDglobal_inv(_, body) ->
-      type_logic_labels [LabelHere] (Some LabelHere) body
+      type_labels [LabelHere] (Some LabelHere) body
   | JCDvariant_type _ | JCDunion_type _ | JCDenum_type _ | JCDlogic_type _
   | JCDexception _ | JCDinvariant_policy _ | JCDseparation_policy _
   | JCDannotation_policy _ | JCDabstract_domain _ | JCDint_model _ 

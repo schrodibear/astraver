@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.125 2008-08-06 15:17:03 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.126 2008-08-06 22:59:00 moy Exp $ *)
 
 open Pp
 open Format
@@ -527,7 +527,7 @@ let reg_annot ?id ?kind ?name ~pos ~anchor a =
   Format.fprintf Format.str_formatter "%a" Jc_output.assertion a;
   let formula = Format.flush_str_formatter () in
   let lab = Output.reg_loc "G" ?id ?kind ?name ~formula loc in
-  new assertion_with ~name_label:lab a
+  new assertion_with ~mark:lab a
 
 
 (*****************************************************************************)
@@ -1698,7 +1698,7 @@ let collect_expr_targets e =
           in
 	  let reqa = regionalize_assertion reqa call.jc_call_region_assoc in
           conjuncts reqa
-      | JCEassert a when a#name_label = "hint" -> 
+      | JCEassert a when a#mark = "hint" -> 
 	  (* Hints are not to be proved by abstract interpretation, 
 	     only added to help it. *)
 	  []
@@ -2658,7 +2658,7 @@ and record_ai_invariants abs s =
 		      Loc.report_position s#pos
 		      Jc_output.assertion a;
 		  let a = 
-		    reg_annot ~pos:s#pos ~anchor:s#name_label a 
+		    reg_annot ~pos:s#pos ~anchor:s#mark a 
 		  in
 		    if Jc_options.trust_ai then la.jc_free_loop_invariant <- a else
 		      la.jc_loop_invariant <- make_and [la.jc_loop_invariant; a];
@@ -3538,7 +3538,7 @@ let rec wp_expr weakpre =
 		in
 		{ curposts with jc_post_normal = post; }
 	  end
-      | JCEassert a when a#name_label = "hint" -> 
+      | JCEassert a when a#mark = "hint" -> 
 	  (* Hints are not to be used in wp computation,
 	     only added to help it. *)
 	  curposts
@@ -3660,7 +3660,7 @@ let rec wp_expr weakpre =
 	  let loopposts = wp_expr weakpre target ls loopposts in
 	  let post = 
 	    match finalize_target 
-	      ~is_function_level:false ~pos:s#pos ~anchor:s#name_label
+	      ~is_function_level:false ~pos:s#pos ~anchor:s#mark
 	      loopposts target la.jc_loop_invariant
 	    with None -> None | Some infera ->
 	      target.jc_target_regular_invariant <- la.jc_loop_invariant;

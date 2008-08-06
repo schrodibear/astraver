@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.16 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.17 2008-08-06 22:59:00 moy Exp $ *)
 
 open Jc_env
 open Jc_stdlib
@@ -398,6 +398,22 @@ module AllocSet = PairRegionSet(AllocClass)(Alloc)
 module AllocMap = PairRegionMap(AllocClass)(Alloc)
 
 module AllocList =
+struct
+
+  let rec mem (a,r) = function
+    | [] -> false
+    | (a',r')::rest -> 
+	a = a' && Region.equal r r' || mem (a,r) rest
+
+end
+
+module Tag = PairOrd(VariantOrd)(InternalRegion)
+
+module TagSet = PairRegionSet(VariantOrd)(Tag)
+
+module TagMap = PairRegionMap(VariantOrd)(Tag)
+
+module TagList =
 struct
 
   let rec mem (a,r) = function

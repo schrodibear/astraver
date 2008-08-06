@@ -90,7 +90,7 @@ let make_assume reads assume =
 let fully_packed pc e =
   LPred(
     fully_packed_name,
-    [ LVar (tag_table_name pc);
+    [ LVar (generic_tag_table_name (pointer_class_variant pc));
       LVar (mutable_name pc);
       e ])
 (*
@@ -372,12 +372,12 @@ let invariant_params acc li =
       acc
   in
   let acc =
-    VariantMap.fold
-      (fun v labels acc -> 
+    TagMap.fold
+      (fun (v,r) labels acc -> 
 	 let t = { logic_type_args = [variant_model_type v];
 		   logic_type_name = "tag_table" }
 	 in
-	 (tag_table_name_vi v, t)::acc)
+	 (tag_table_name (v,r), t)::acc)
       li.jc_logic_info_effects.jc_effect_tag_table
       acc
   in
@@ -669,7 +669,7 @@ let not_mutable_implies_invariant this st (li, _) =
 
   (* params *)
   let params = (mutable_name, mutable_memory_type (JCtag(st, [])))::params in
-  let params = (tag_table_name (JCtag(st, [])),
+  let params = (generic_tag_table_name (struct_variant st),
                 tag_table_type (JCtag(st, [])))::params in
 
   params, impl
@@ -721,7 +721,7 @@ let not_mutable_implies_fields_committed this st =
 
   (* additional params *)
   let params = (mutable_name, mutable_memory_type (JCtag(st, [])))::params in
-  let params = (tag_table_name (JCtag(st, [])),
+  let params = (generic_tag_table_name (struct_variant st),
                 tag_table_type (JCtag(st, [])))::params in
 
   (* implies *)
@@ -735,7 +735,7 @@ let committed_implies_fully_packed this root =
   let committed_type = committed_memory_type root in
   let mutable_name = mutable_name root in
   let mutable_type = mutable_memory_type root in
-  let tag_table = tag_table_name root in
+  let tag_table = generic_tag_table_name (pointer_class_variant root) in
   let tag_table_type = tag_table_type root in
 
   (* this.committed = true *)
@@ -1133,7 +1133,7 @@ let make_components_precond this st reads =
        let fi_pc = type_pc fi.jc_field_info_type in
        let fi_ac = alloc_class_of_pointer_class fi_pc in
        let alloc = generic_alloc_table_name fi_ac in
-       let reads = StringSet.add (tag_table_name fi_pc) reads in
+       let reads = StringSet.add (generic_tag_table_name (pointer_class_variant fi_pc)) reads in
        let reads = StringSet.add alloc reads in
        let reads = StringSet.add mutable_name reads in
        (* pre-condition: forall i, valid(x.f+i) => fp(x.f+i) /\ not committed(x.f+i) *)
@@ -1423,7 +1423,7 @@ let code_function (fi, pos, fs, sl) vil =
 			     jc_app_label_assoc = [];
 			     jc_app_region_assoc = [] }
 		   in
-		   (new assertion ~name_label:(Jc_pervasives.new_label_name ())
+		   (new assertion ~mark:(Jc_pervasives.new_label_name ())
 ~pos (JCAapp a)) :: acc)
 		Jc_typing.global_invariants_table []
 	    in

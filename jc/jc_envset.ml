@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.24 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.25 2008-08-06 22:59:00 moy Exp $ *)
 
 open Jc_env
 open Jc_stdlib
@@ -223,8 +223,8 @@ module ExceptionSet = Set.Make(ExceptionOrd)
 module ExceptionMap = Map.Make(ExceptionOrd)
 
 module LogicLabelOrd =
-  struct type t = logic_label
-	 let compare = (Pervasives.compare : logic_label -> logic_label -> int)
+  struct type t = label
+	 let compare = (Pervasives.compare : label -> label -> int)
   end
 
 module LogicLabelSet = Set.Make(LogicLabelOrd)

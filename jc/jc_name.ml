@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.21 2008-08-04 16:30:56 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.22 2008-08-06 22:59:00 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -70,15 +70,14 @@ let axiom_int_of_tag_name st = st.jc_struct_info_name ^ "_int"
 
 let tag_name st = st.jc_struct_info_name ^ "_tag"
 
-let tag_table_name_vi vi =
+let generic_tag_table_name vi =
   (variant_type_name vi) ^ "_tag_table"
 
-let tag_table_name = function
-  | JCtag(st, _) -> tag_table_name_vi (struct_variant st)
-  | JCvariant vi | JCunion vi -> tag_table_name_vi vi
-
-(* let alloc_table_name pc = *)
-(*   (pointer_class_type_name pc) ^ "_alloc_table" *)
+let tag_table_name (vi,r) =
+  if !Jc_common_options.separation_sem = SepRegions then 
+    (variant_type_name vi) ^ "_" ^ (Region.name r) ^ "_tag_table"
+  else
+    (variant_type_name vi) ^ "_tag_table"
 
 let generic_alloc_table_name ac =
   (alloc_class_name ac) ^ "_alloc_table"

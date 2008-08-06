@@ -31,7 +31,7 @@ open Jc_env
 open Jc_fenv
 open Jc_ast
 
-val default_label : logic_label list -> logic_label option
+val default_label : label list -> label option
  
 val typing_error : 
     Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
@@ -70,7 +70,7 @@ val enum_conversion_logic_functions_table : (logic_info, string) Hashtbl.t
 *)
 
 val axioms_table : 
-  (string, bool * logic_label list * assertion) Hashtbl.t
+  (string, bool * label list * assertion) Hashtbl.t
 
 val global_invariants_table : 
   (logic_info, assertion) Hashtbl.t
@@ -90,7 +90,7 @@ val type_file : nexpr decl list -> unit
 
 val print_file : Format.formatter -> unit -> unit
 
-val type_logic_labels_in_decl : nexpr decl -> unit
+val type_labels_in_decl : nexpr decl -> unit
 
 (*
 Local Variables: 

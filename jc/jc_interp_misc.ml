@@ -165,6 +165,8 @@ let field_or_variant_memory_type mc =
 let current_function = ref None
 let set_current_function f = current_function := Some f
 let reset_current_function () = current_function := None
+let get_current_function () = 
+  match !current_function with None -> assert false | Some f -> f
 
 let current_behavior : string option ref = ref None
 let set_current_behavior behav = current_behavior := Some behav
@@ -174,6 +176,7 @@ let get_current_behavior () =
 let compatible_with_current_behavior = function
   | [] -> true
   | ls -> List.exists (fun behav -> behav = get_current_behavior ()) ls
+let safety_checking () = get_current_behavior () = "safety"
 
 let current_spec : fun_spec option ref = ref None
 let set_current_spec s = current_spec := Some s
@@ -256,12 +259,12 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
     alloc_logic_params ~label_in_name ?region_assoc ?label_assoc li
   in
   let tags = 
-    VariantMap.fold
-      (fun v labs acc -> 
+    TagMap.fold
+      (fun (v,r) labs acc -> 
 	 let t = { logic_type_args = [variant_model_type v];
 		   logic_type_name = "tag_table" }
 	 in
-	 let name = tag_table_name_vi v in
+	 let name = tag_table_name (v,r) in
 	 LogicLabelSet.fold
 	   (fun lab acc ->
 	      let name = label_var ~label_in_name ?label_assoc lab name in
@@ -310,8 +313,8 @@ let logic_info_reads acc li =
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
   in
-  VariantMap.fold
-    (fun v _ acc -> StringSet.add (tag_table_name_vi v) acc)
+  TagMap.fold
+    (fun v _ acc -> StringSet.add (tag_table_name v) acc)
     li.jc_logic_info_effects.jc_effect_tag_table
     acc
 (* *)
@@ -419,8 +422,8 @@ let all_effects ef =
       res
   in
   let res =
-    VariantMap.fold
-      (fun v _ acc -> (tag_table_name_vi v)::acc)
+    TagMap.fold
+      (fun v _ acc -> (tag_table_name v)::acc)
       ef.jc_effect_tag_table
       res
   in
@@ -477,11 +480,11 @@ let make_select_fi fi =
 let make_select_committed pc =
   make_select (LVar (committed_name pc))
 
-let make_typeof_vi vi x =
-  LApp("typeof", [ LVar (tag_table_name_vi vi); x ])
+let make_typeof_vi (vi,r) x =
+  LApp("typeof", [ LVar (tag_table_name (vi,r)); x ])
 
-let make_typeof st x =
-  make_typeof_vi (struct_variant st) x
+let make_typeof st r x =
+  make_typeof_vi (struct_variant st,r) x
 
 let make_subtag t u =
   LPred("subtag", [ t; u ])

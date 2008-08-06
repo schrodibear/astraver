@@ -2,15 +2,15 @@
 class positioned :
   pos:Loc.position option -> object method pos : Loc.position end
 class typed : typ:Jc_env.jc_type -> object method typ : Jc_env.jc_type end
-class logic_labeled :
-  logic_label:Jc_env.logic_label option ->
+class labeled :
+  label:Jc_env.label option ->
   object
-    val mutable llab : Jc_env.logic_label option
-    method logic_label : Jc_env.logic_label option
-    method set_logic_label : Jc_env.logic_label option -> unit
+    val mutable llab : Jc_env.label option
+    method label : Jc_env.label option
+    method set_label : Jc_env.label option -> unit
   end
-class name_labeled :
-  name_label:string -> object method name_label : string end
+class marked :
+  mark:string -> object method mark : string end
 class regioned :
   region:Jc_env.region ->
   object
@@ -46,21 +46,21 @@ class pexpr_with :
 
 class nexpr :
   ?pos:Loc.position ->
-  ?logic_label:Jc_env.logic_label ->
+  ?label:Jc_env.label ->
   Jc_ast.nexpr_node ->
   object
-    val mutable llab : Jc_env.logic_label option
+    val mutable llab : Jc_env.label option
     method pos : Loc.position
-    method logic_label : Jc_env.logic_label option
+    method label : Jc_env.label option
     method node : Jc_ast.nexpr_node
-    method set_logic_label : Jc_env.logic_label option -> unit
+    method set_label : Jc_env.label option -> unit
   end
 
 (*
 class nexpr_with :
   ?pos:Loc.position ->
   ?node:Jc_ast.nexpr_node ->
-  < pos : Loc.position; logic_label : Jc_env.logic_label;
+  < pos : Loc.position; label : Jc_env.label;
     node : Jc_ast.nexpr_node; .. > ->
   nexpr
 *)
@@ -89,39 +89,39 @@ class pattern_with :
 class term :
   ?pos:Loc.position ->
   typ:Jc_env.jc_type ->
-  ?name_label:string ->
-  ?logic_label:Jc_env.logic_label ->
+  ?mark:string ->
+  ?label:Jc_env.label ->
   ?region:Jc_env.region ->
   Jc_ast.term_node ->
   object
     val mutable r : Jc_env.region
     method pos : Loc.position
-    method name_label : string
+    method mark : string
     method node : Jc_ast.term_node
     method region : Jc_env.region
     method set_region : Jc_env.region -> unit
-    method logic_label : Jc_env.logic_label option
-    method set_logic_label : Jc_env.logic_label option -> unit
+    method label : Jc_env.label option
+    method set_label : Jc_env.label option -> unit
     method typ : Jc_env.jc_type
   end
 
 class term_with :
   ?pos:Loc.position ->
   ?typ:Jc_env.jc_type ->
-  ?name_label:string ->
+  ?mark:string ->
   ?region:Jc_env.region ->
   ?node:Jc_ast.term_node ->
-  < pos : Loc.position; name_label : string; node : Jc_ast.term_node;
-    logic_label: Jc_env.logic_label option; 
+  < pos : Loc.position; mark : string; node : Jc_ast.term_node;
+    label: Jc_env.label option; 
     region : Jc_env.region; typ : Jc_env.jc_type; .. > ->
   term
 
 class term_var :
-  ?pos:Loc.position -> ?name_label:string -> Jc_env.var_info -> term
+  ?pos:Loc.position -> ?mark:string -> Jc_env.var_info -> term
 
 class location :
   ?pos:Loc.position ->
-  ?logic_label:Jc_env.logic_label ->
+  ?label:Jc_env.label ->
   ?region:Jc_env.region ->
   Jc_ast.location_node ->
   object
@@ -130,8 +130,8 @@ class location :
     method node : Jc_ast.location_node
     method region : Jc_env.region
     method set_region : Jc_env.region -> unit
-    method logic_label : Jc_env.logic_label option
-    method set_logic_label : Jc_env.logic_label option -> unit
+    method label : Jc_env.label option
+    method set_label : Jc_env.label option -> unit
   end
 
 class location_with :
@@ -139,13 +139,13 @@ class location_with :
   ?region:Jc_env.region ->
   ?node:Jc_ast.location_node ->
   < pos : Loc.position; node : Jc_ast.location_node;
-    logic_label: Jc_env.logic_label option; 
+    label: Jc_env.label option; 
     region : Jc_env.region; .. > ->
   location
 
 class location_set :
   ?pos:Loc.position ->
-  ?logic_label:Jc_env.logic_label ->
+  ?label:Jc_env.label ->
   ?region:Jc_env.region ->
   Jc_ast.location_set_node ->
   object
@@ -154,8 +154,8 @@ class location_set :
     method node : Jc_ast.location_set_node
     method region : Jc_env.region
     method set_region : Jc_env.region -> unit
-    method logic_label : Jc_env.logic_label option
-    method set_logic_label : Jc_env.logic_label option -> unit
+    method label : Jc_env.label option
+    method set_label : Jc_env.label option -> unit
   end
 
 class location_set_with :
@@ -163,21 +163,21 @@ class location_set_with :
   ?region:Jc_env.region ->
   ?node:Jc_ast.location_set_node ->
   < pos : Loc.position; node : Jc_ast.location_set_node;
-    logic_label: Jc_env.logic_label option; 
+    label: Jc_env.label option; 
     region : Jc_env.region; .. > ->
   location_set
 
 class expr :
   ?pos:Loc.position ->
   typ:Jc_env.jc_type ->
-  ?name_label:string ->
+  ?mark:string ->
   ?region:Jc_env.region ->
   ?original_type:Jc_env.jc_type ->
   Jc_ast.expr_node ->
   object
     val mutable r : Jc_env.region
     method pos : Loc.position
-    method name_label : string
+    method mark : string
     method node : Jc_ast.expr_node
     method original_type : Jc_env.jc_type
     method region : Jc_env.region
@@ -187,36 +187,36 @@ class expr :
 class expr_with :
   ?pos:Loc.position ->
   ?typ:Jc_env.jc_type ->
-  ?name_label:string ->
+  ?mark:string ->
   ?region:Jc_env.region ->
   ?node:Jc_ast.expr_node ->
   ?original_type:Jc_env.jc_type ->
-  < pos : Loc.position; name_label : string; node : Jc_ast.expr_node;
+  < pos : Loc.position; mark : string; node : Jc_ast.expr_node;
     original_type : Jc_env.jc_type; region : Jc_env.region;
     typ : Jc_env.jc_type; .. > ->
   expr
 
 
 class assertion :
-  ?name_label:string ->
-  ?logic_label:Jc_env.logic_label ->
+  ?mark:string ->
+  ?label:Jc_env.label ->
   ?pos:Loc.position ->
   Jc_ast.assertion_node ->
   object
     method pos : Loc.position
-    method name_label : string
-    method logic_label : Jc_env.logic_label option
-    method set_logic_label : Jc_env.logic_label option -> unit
+    method mark : string
+    method label : Jc_env.label option
+    method set_label : Jc_env.label option -> unit
     method node : Jc_ast.assertion_node
   end
 
 
 class assertion_with :
   ?pos:Loc.position ->
-  ?name_label:string ->
+  ?mark:string ->
   ?node:Jc_ast.assertion_node ->
-  < pos : Loc.position; name_label : string; node : Jc_ast.assertion_node;
-    logic_label: Jc_env.logic_label option;
+  < pos : Loc.position; mark : string; node : Jc_ast.assertion_node;
+    label: Jc_env.label option;
     .. > ->
   assertion
 
@@ -323,7 +323,7 @@ module PExpr :
 
     val mkapp :
       fun_name:string ->
-      ?labels:Jc_env.logic_label list ->
+      ?labels:Jc_env.label list ->
       ?args:Jc_ast.pexpr list -> ?pos:Loc.position -> unit -> pexpr
 
     val mkassign :
@@ -359,7 +359,7 @@ module PExpr :
 
     val mkat :
       expr:Jc_ast.pexpr ->
-      label:Jc_env.logic_label -> ?pos:Loc.position -> unit -> pexpr
+      label:Jc_env.label -> ?pos:Loc.position -> unit -> pexpr
 
 (*
     val mkoffset :
@@ -528,7 +528,7 @@ module PDecl :
     val mklemma_def :
       name:string ->
       ?axiom:bool ->
-      ?labels:Jc_env.logic_label list ->
+      ?labels:Jc_env.label list ->
       body:'a ->
       ?pos:Loc.position -> unit -> 'a Jc_ast.decl_node node_positioned
 
@@ -541,7 +541,7 @@ module PDecl :
     val mklogic_def :
       ?typ:Jc_ast.ptype ->
       name:string ->
-      ?labels:Jc_env.logic_label list ->
+      ?labels:Jc_env.label list ->
       ?params:(Jc_ast.ptype * string) list ->
       ?reads:'a list ->
       ?body:'a ->
@@ -657,7 +657,7 @@ module Expr :
     val mk :
       ?pos:Loc.position ->
       typ:Jc_env.jc_type ->
-      ?name_label:string ->
+      ?mark:string ->
       ?region:Jc_env.region ->
       ?original_type:Jc_env.jc_type -> node:Jc_ast.expr_node -> unit -> expr
     val mklet :
@@ -665,12 +665,12 @@ module Expr :
       ?init:Jc_ast.expr ->
       body:Jc_ast.expr ->
       ?pos:Loc.position ->
-      ?name_label:string ->
+      ?mark:string ->
       ?region:Jc_env.region -> ?original_type:Jc_env.jc_type -> unit -> expr
     val mkvar :
       var:Jc_env.var_info ->
       ?pos:Loc.position ->
-      ?name_label:string ->
+      ?mark:string ->
       ?region:Jc_env.region -> ?original_type:Jc_env.jc_type -> unit -> expr
     val is_app : < node : Jc_ast.expr_node; .. > -> bool
   end
@@ -683,14 +683,14 @@ module Term :
     val mk :
       ?pos:Loc.position ->
       typ:Jc_env.jc_type ->
-      ?name_label:string ->
+      ?mark:string ->
       ?region:Jc_env.region -> node:Jc_ast.term_node -> unit -> term
 *)
 
     val mkvar :
       var:Jc_env.var_info ->
       ?pos:Loc.position ->
-      ?name_label:string -> ?region:Jc_env.region -> unit -> term
+      ?mark:string -> ?region:Jc_env.region -> unit -> term
   end
 
 module Assertion :
@@ -698,19 +698,19 @@ module Assertion :
 (*
     val mk :
       ?pos:Loc.position ->
-      ?name_label:string -> node:Jc_ast.assertion_node -> unit -> assertion
-    val fake : ?pos:'a -> ?name_label:'b -> value:'c -> unit -> 'c
+      ?mark:string -> node:Jc_ast.assertion_node -> unit -> assertion
+    val fake : ?pos:'a -> ?mark:'b -> value:'c -> unit -> 'c
 *)
 
-    val mktrue : ?pos:Loc.position -> ?name_label:string -> unit -> assertion
+    val mktrue : ?pos:Loc.position -> ?mark:string -> unit -> assertion
 
 (*
     val mkfalse :
-      ?pos:Loc.position -> ?name_label:string -> unit -> assertion
+      ?pos:Loc.position -> ?mark:string -> unit -> assertion
 *)
 
     val mkand :
       conjuncts:Jc_ast.assertion list ->
-      ?pos:Loc.position -> ?name_label:string -> unit -> assertion
+      ?pos:Loc.position -> ?mark:string -> unit -> assertion
 
   end

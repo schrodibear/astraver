@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.115 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.116 2008-08-06 22:59:00 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -50,8 +50,8 @@ type jc_decl =
       (* deprecated, all tag definitions of a file are mutually recursive *)
   | JCrec_fun_defs of jc_decl list
   | JCvar_def of jc_type * string * expr option
-  | JClemma_def of string * bool * logic_label list * assertion
-  | JClogic_fun_def of jc_type option * string * logic_label list 
+  | JClemma_def of string * bool * label list * assertion
+  | JClogic_fun_def of jc_type option * string * label list 
       * var_info list * term_or_assertion      
   | JCexception_def of string * exception_info
   | JCglobinv_def of string * assertion
@@ -132,9 +132,9 @@ let rec pattern fmt p =
 	fprintf fmt "%a" const c
 
 let rec term fmt t =
-  if t#name_label <> "" then
+  if t#mark <> "" then
     fprintf fmt "@[(%s : %a)@]" 
-      t#name_label term (new term_with ~name_label:"" t)
+      t#mark term (new term_with ~mark:"" t)
   else
   match t#node with
     | JCTvar vi -> fprintf fmt "%s" vi.jc_var_info_name
@@ -203,10 +203,10 @@ let rec term fmt t =
 let quantifier = Jc_poutput.quantifier
 
 let rec assertion fmt a =
-  if a#name_label <> "" then
+  if a#mark <> "" then
     fprintf fmt "@[(%s : %a)@]" 
-      (a#name_label) assertion
-      (new assertion_with ~name_label:"" a)
+      (a#mark) assertion
+      (new assertion_with ~mark:"" a)
   else
   match a#node with
     | JCAtrue -> fprintf fmt "true"
@@ -315,9 +315,9 @@ let call_bin_op _op =
   raise Not_found
 
 let rec expr fmt e =
-  if e#name_label <> "" then
+  if e#mark <> "" then
     fprintf fmt "@[(%s : %a)@]" 
-      e#name_label expr (new expr_with ~name_label:"" e)
+      e#mark expr (new expr_with ~mark:"" e)
   else
     match e#node with
       | JCEconst c -> const fmt c

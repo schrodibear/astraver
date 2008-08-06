@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.117 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.118 2008-08-06 22:59:00 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -49,11 +49,17 @@ let constant_memories = Hashtbl.create 17
 (* Constant allocation tables *)
 let constant_alloc_tables = Hashtbl.create 17
 
+(* Constant allocation tables *)
+let constant_tag_tables = Hashtbl.create 17
+
 let add_constant_memory (mc,r) =
   Hashtbl.add constant_memories (memory_name (mc,r)) (mc,r)
 
 let add_constant_alloc_table (ac,r) =
   Hashtbl.add constant_alloc_tables (alloc_table_name (ac,r)) (ac,r)
+
+let add_constant_tag_table (vi,r) =
+  Hashtbl.add constant_tag_tables (tag_table_name (vi,r)) (vi,r)
 
 (* Operations on effects *)
 
@@ -63,7 +69,7 @@ let ef_union ef1 ef2 =
       AllocMap.merge LogicLabelSet.union
 	ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table;
     jc_effect_tag_table = 
-      VariantMap.merge LogicLabelSet.union
+      TagMap.merge LogicLabelSet.union
 	ef1.jc_effect_tag_table ef2.jc_effect_tag_table;
     jc_effect_memories = 
       MemoryMap.merge LogicLabelSet.union
@@ -112,9 +118,16 @@ let ef_assoc ?label_assoc region_assoc ef =
 		   AllocMap.add (ac,r) labs acc 
 	  ) ef.jc_effect_alloc_table AllocMap.empty;
       jc_effect_tag_table =
-        VariantMap.fold 
-	  (fun vi labs acc -> VariantMap.add vi (transpose_labels labs) acc)
-	  ef.jc_effect_tag_table VariantMap.empty;
+        TagMap.fold 
+	  (fun (vi,r) labs acc -> 
+	     let labs = transpose_labels labs in
+	     match transpose_region r with
+	       | None -> acc
+	       | Some r ->
+		   if not (Region.polymorphic r) then
+		     add_constant_tag_table (vi,r);
+		   TagMap.add (vi,r) labs acc 
+	  ) ef.jc_effect_tag_table TagMap.empty;
       jc_effect_memories =
         MemoryMap.fold 
 	  (fun (mc,r) labs acc ->
@@ -135,7 +148,7 @@ let ef_assoc ?label_assoc region_assoc ef =
 let same_effects ef1 ef2 =
   let eq = LogicLabelSet.equal in
   AllocMap.equal eq ef1.jc_effect_alloc_table ef2.jc_effect_alloc_table
-  && VariantMap.equal eq ef1.jc_effect_tag_table ef2.jc_effect_tag_table
+  && TagMap.equal eq ef1.jc_effect_tag_table ef2.jc_effect_tag_table
   && MemoryMap.equal eq ef1.jc_effect_memories ef2.jc_effect_memories
   && VarMap.equal eq ef1.jc_effect_globals ef2.jc_effect_globals
   && StringSet.equal ef1.jc_effect_mutable ef2.jc_effect_mutable
@@ -178,11 +191,12 @@ let add_alloc_effect lab ef (ac, r) =
       AllocMap.add_merge LogicLabelSet.union 
 	(ac,r) labs ef.jc_effect_alloc_table }
 
-let add_tag_effect lab ef vi =
+let add_tag_effect lab ef (vi,r) =
+  if not (Region.polymorphic r) then add_constant_tag_table (vi,r);
   let labs = LogicLabelSet.singleton lab in
   { ef with jc_effect_tag_table = 
-      VariantMap.add_merge LogicLabelSet.union 
-	vi labs ef.jc_effect_tag_table }
+      TagMap.add_merge LogicLabelSet.union 
+	(vi,r) labs ef.jc_effect_tag_table }
 
 let add_memory_effect lab ef (mc,r) =
   if not (Region.polymorphic r) then add_constant_memory (mc,r);
@@ -210,8 +224,8 @@ let add_committed_effect ef pc =
 let add_alloc_reads lab fef (ac,r) =
   { fef with jc_reads = add_alloc_effect lab fef.jc_reads (ac,r) }
 
-let add_tag_reads lab fef vi =
-  { fef with jc_reads = add_tag_effect lab fef.jc_reads vi }
+let add_tag_reads lab fef (vi,r) =
+  { fef with jc_reads = add_tag_effect lab fef.jc_reads (vi,r) }
 
 let add_memory_reads lab fef (mc,r) =
   { fef with jc_reads = add_memory_effect lab fef.jc_reads (mc,r) }
@@ -235,8 +249,8 @@ let add_memory_alloc_reads lab fef (mc,r) =
 let add_alloc_writes lab fef (ac,r) =
   { fef with jc_writes = add_alloc_effect lab fef.jc_writes (ac,r) }
 
-let add_tag_writes lab fef vi =
-  { fef with jc_writes = add_tag_effect lab fef.jc_writes vi }
+let add_tag_writes lab fef (vi,r) =
+  { fef with jc_writes = add_tag_effect lab fef.jc_writes (vi,r) }
 
 let add_memory_writes lab fef (mc,r) =
   { fef with jc_writes = add_memory_effect lab fef.jc_writes (mc,r) }
@@ -270,7 +284,7 @@ let rec pattern ef (*label r*) p =
   let r = dummy_region in
   match p#node with
     | JCPstruct(st, fpl) ->
-	let ef = add_tag_effect (*label*)LabelHere ef (struct_variant st) in
+	let ef = add_tag_effect (*label*)LabelHere ef (struct_variant st,r) in
 	List.fold_left
 	  (fun ef (fi, pat) ->
 	     let mc = JCmem_field fi in
@@ -293,7 +307,7 @@ let rec pattern ef (*label r*) p =
 
 let rec single_term ef t =
   let lab = 
-    match t#logic_label with None -> LabelHere | Some lab -> lab
+    match t#label with None -> LabelHere | Some lab -> lab
   in
   match t#node with
     | JCTvar vi ->
@@ -320,10 +334,10 @@ let rec single_term ef t =
 	  | JCmem_field _ | JCmem_bitvector ->
 	      true, ef
 	end
-    | JCTcast(_t,lab,st)
-    | JCTinstanceof(_t,lab,st) ->
+    | JCTcast(t,lab,st)
+    | JCTinstanceof(t,lab,st) ->
 	true,
-	add_tag_effect lab ef (struct_variant st)
+	add_tag_effect lab ef (struct_variant st,t#region)
     | JCTmatch(t,ptl) ->
 	true,
 	List.fold_left pattern ef (List.map fst ptl)
@@ -335,19 +349,19 @@ let rec single_term ef t =
 and term ef t =
   fold_rec_term single_term ef t
 
-let tag ef lab t vi_opt =
+let tag ef lab t vi_opt r =
   match vi_opt with
     | None -> ef
-    | Some vi -> add_tag_effect lab ef vi
+    | Some vi -> add_tag_effect lab ef (vi,r)
 
 let single_assertion ef a =
   let lab = 
-    match a#logic_label with None -> LabelHere | Some lab -> lab
+    match a#label with None -> LabelHere | Some lab -> lab
   in
   match a#node with
     | JCAinstanceof(t,lab,st) -> 
 	true,
-	add_tag_effect lab ef (struct_variant st)
+	add_tag_effect lab ef (struct_variant st,t#region)
     | JCAapp app -> 
 	true,
 	ef_assoc ~label_assoc:app.jc_app_label_assoc 
@@ -356,22 +370,16 @@ let single_assertion ef a =
     | JCAmutable(t,st,ta) ->
 	true,
 	add_mutable_effect
-	  (tag ef lab ta
-	     (Some (struct_variant st)))
+	  (tag ef lab ta (* Yannick: really effect on tag here? *)
+	     (Some (struct_variant st)) t#region)
 	  (JCtag(st, []))
-    | JCAeqtype(t1,t2,st) | JCAsubtype(t1,t2,st) ->
-	let vi_opt = match st with
-	  | None -> None
-	  | Some st -> Some (struct_variant st)
-	in
-	true,
-	tag (tag ef lab t1 vi_opt) lab t2 vi_opt
     | JCAmatch(t,pal) ->
 	true,
 	List.fold_left pattern ef (List.map fst pal)
     | JCAtrue | JCAfalse | JCAif _ | JCAbool_term _ | JCAnot _
     | JCAold _ | JCAat _ | JCAquantifier _ | JCArelation _
-    | JCAand _ | JCAor _ | JCAiff _ | JCAimplies _ -> 
+    | JCAand _ | JCAor _ | JCAiff _ | JCAimplies _ 
+    | JCAeqtype _ | JCAsubtype _ ->
 	true, ef
 
 let assertion ef a =
@@ -384,7 +392,7 @@ let assertion ef a =
 
 let single_location ~in_assigns fef loc =
   let lab = 
-    match loc#logic_label with None -> LabelHere | Some lab -> lab
+    match loc#label with None -> LabelHere | Some lab -> lab
   in
   let fef = match loc#node with
     | JCLvar v ->
@@ -406,7 +414,7 @@ let single_location ~in_assigns fef loc =
 
 let single_location_set fef locs =
   let lab = 
-    match locs#logic_label with None -> LabelHere | Some lab -> lab
+    match locs#label with None -> LabelHere | Some lab -> lab
   in
   let fef = match locs#node with
     | JCLSvar v ->
@@ -489,8 +497,8 @@ let rec expr fef e =
        | JCEcast(e,st)
        | JCEinstanceof(e,st) -> 
 	   true,
-	   add_tag_reads LabelHere fef (struct_variant st)
-       | JCEalloc(_e,st) ->
+	   add_tag_reads LabelHere fef (struct_variant st,e#region)
+       | JCEalloc(_e1,st) ->
 	   let pc = JCtag(st,[]) in
 	   let fields = all_memories ~select:fully_alpositioned pc in
 	   let allocs = all_allocs ~select:fully_alpositioned pc in
@@ -508,7 +516,9 @@ let rec expr fef e =
 	       fef allocs
 	   in
 	   true,
-	   List.fold_left (add_tag_writes LabelHere) fef tags
+	   List.fold_left 
+	     (fun fef vi -> add_tag_writes LabelHere fef (vi,e#region))
+	     fef tags
        | JCEfree e ->
 	   let pc = pointer_class e#typ in
 	   let ac = alloc_class_of_pointer_class pc in
@@ -537,7 +547,8 @@ let rec expr fef e =
 			 => need mutable and tag_table (of field) as reads *)
 		      let fef = add_mutable_reads fef pc in
 		      let fef = 
-			add_tag_reads LabelHere fef (pointer_class_variant pc) 
+			add_tag_reads LabelHere fef 
+			  (pointer_class_variant pc,e#region) 
 		      in
 	              (* Modify field's "committed" field 
 			 => need committed (of field) as reads and writes *)
@@ -675,8 +686,8 @@ let print_memory fmt (mc,r) =
 let print_alloc_table fmt (ac,r) =
   fprintf fmt "(%a,%a)" Jc_output_misc.alloc_class ac Region.print r
 
-let print_tag_table fmt vi =
-  fprintf fmt "%s" vi.jc_variant_info_name
+let print_tag_table fmt (vi,r) =
+  fprintf fmt "(%s,%a)" vi.jc_variant_info_name Region.print r
 
 let print_global fmt v =
   fprintf fmt "%s" v.jc_var_info_name
@@ -693,7 +704,7 @@ let print_effect fmt ef =
     (print_list_assoc_label print_alloc_table)
     (AllocMap.elements ef.jc_effect_alloc_table)
     (print_list_assoc_label print_tag_table)
-    (VariantMap.elements ef.jc_effect_tag_table)
+    (TagMap.elements ef.jc_effect_tag_table)
     (print_list_assoc_label print_memory)
     (MemoryMap.elements ef.jc_effect_memories)
     (print_list_assoc_label print_global)
