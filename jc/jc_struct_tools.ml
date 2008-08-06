@@ -152,7 +152,7 @@ let all_types ?(select = fun _ -> true) pc =
   Jc_options.lprintf "  Found %n types.@." (List.length list);
   list
 
-let fully_alpositioned fi =
+let fully_allocated fi =
   match fi.jc_field_info_type with
     | JCTpointer(_, Some _, Some _) -> true
     | JCTpointer(_, None, Some _)

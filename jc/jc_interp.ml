@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.322 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.323 2008-08-06 23:46:09 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1818,18 +1818,19 @@ and expr e =
         let tag = tag_table_name (struct_variant st,e1#region) in
         (* always safe *)
         make_app "instanceof_" [Deref tag; e1'; Var(tag_name st)]
-    | JCEcast (e, si) ->
-        if struct_of_union si then expr e 
+    | JCEcast(e1,st) ->
+        if struct_of_union st then 
+	  expr e1 
 	else
           let tmp = tmp_var_name () in
-          let tag = tag_table_name (struct_variant si,e#region) in
+          let tag = tag_table_name (struct_variant st,e1#region) in
           let call = 
             make_guarded_app ~name:(mark()) DownCast pos "downcast_" 
-	      [Deref tag; Var tmp; Var (tag_name si)]
+	      [Deref tag; Var tmp; Var(tag_name st)]
           in
-          Let(tmp, expr e, call)
-    | JCEbitwise_cast(e,_ty) ->
-	expr e
+          Let(tmp,expr e1,call) (* Yannick: why a temporary here? *)
+    | JCEbitwise_cast(e1,_ty) ->
+	expr e1
     | JCErange_cast(e1,ri) ->
         let e1' = expr e1 in
         coerce ~check_int_overflow:(safety_checking())
@@ -1842,78 +1843,73 @@ and expr e =
                 (mark()) e#pos real_type e1#typ e1 e1'
           | Real_to_integer ->
               coerce ~check_int_overflow:(safety_checking())
-                (mark()) e#pos integer_type real_type e1 e1'
+                (mark()) e#pos integer_type e1#typ e1 e1'
         end
-    | JCEderef(e,fi) ->
-  	make_deref (mark()) pos fi e
-    | JCEalloc (siz, st) ->
-	let ac = JCalloc_struct (struct_variant st) in
-        let alloc = alloc_table_name (ac, e#region) in
-        let tag = tag_table_name (struct_variant st,e#region) in
-(*      
-        let fields = embedded_struct_fields st in
-        let fields = List.map (fun fi -> (fi,e#region)) fields in
-        let roots = embedded_struct_roots st in
-        let roots = List.map find_pointer_class roots in
-        let roots = List.map (fun a -> (a, e#region)) roots 
-*)
-        let fields = all_memories ~select:fully_alpositioned (JCtag(st, [])) in
-        let fields = List.map (fun fi -> (fi, e#region)) fields in
-        let allocs = all_allocs ~select:fully_alpositioned (JCtag(st,[])) in
-        let allocs = List.map (fun ac -> (ac, e#region)) allocs in
-        begin
-          match !Jc_options.inv_sem with
-            | InvOwnership ->
-                let mut = mutable_name (JCtag(st, [])) in
-                let com = committed_name (JCtag(st, [])) in
+    | JCEderef(e1,fi) ->
+  	make_deref (mark()) e#pos fi e1
+    | JCEalloc(e1,st) ->
+	let e1' = expr e1 in
+	let ac = deref_alloc_class e in
+        let alloc = alloc_table_var (ac,e#region) in
+	begin match ac with
+	  | JCalloc_struct vi ->
+              let tag = tag_table_var (vi,e#region) in
+	      let pc = JCtag(st,[]) in
+              let fields = all_memories ~select:fully_allocated pc in
+              let fields = List.map (fun fi -> (fi,e#region)) fields in
+              let allocs = all_allocs ~select:fully_allocated pc in
+              let allocs = List.map (fun ac -> (ac,e#region)) allocs in
+              if !Jc_options.inv_sem = InvOwnership then
+                let mut = mutable_name pc in
+                let com = committed_name pc in
                 make_app "alloc_parameter_ownership" 
-                  [Var alloc; Var mut; Var com; Var tag; Var (tag_name st); 
+                  [alloc; Var mut; Var com; tag; Var (tag_name st); 
                    coerce ~check_int_overflow:(safety_checking()) 
-                     siz#mark siz#pos integer_type 
-                     siz#typ siz (expr siz)]
-            | InvArguments | InvNone ->
+		     e1#mark e1#pos integer_type 
+		     e1#typ e1 e1']
+	      else
                 make_guarded_app 
-                  ~name:(mark()) AllocSize pos
+                  ~name:(mark()) AllocSize e#pos
                   (alloc_param_name st)
                   (coerce ~check_int_overflow:(safety_checking()) 
-                     siz#mark siz#pos integer_type 
-                     siz#typ siz (expr siz)
+		     e1#mark e1#pos integer_type 
+		     e1#typ e1 e1'
                    :: (List.map (nvar $ alloc_table_name) allocs)
                    @ (List.map (nvar $ field_region_memory_name) fields))
+	  | JCalloc_union vi -> assert false (* TODO *)
+	  | JCalloc_bitvector -> assert false (* TODO *)
         end
-    | JCEfree e ->
-        let st = match e#typ with
-          | JCTpointer(JCtag(st, []), _, _) -> st
-          | JCTpointer(JCvariant vi, _, _) -> assert false (* TODO *)
-          | _ -> assert false
-        in      
-	let ac = JCalloc_struct (struct_variant st) in
-        let alloc = 
-          alloc_table_name (ac, e#region) in
-        if !Jc_options.inv_sem = InvOwnership then
-          let com = committed_name (JCtag(st, [])) in
-          make_app "free_parameter_ownership" [Var alloc; Var com; expr e]
-        else
-          make_app "free_parameter" [Var alloc; expr e]
+    | JCEfree e1 ->
+	let e1' = expr e1 in
+	let ac = deref_alloc_class e1 in
+        let alloc = alloc_table_var (ac,e1#region) in
+	begin match ac with
+	  | JCalloc_struct vi ->
+              if !Jc_options.inv_sem = InvOwnership then
+		let pc = pointer_class e1#typ in
+		let com = committed_name pc in
+		make_app "free_parameter_ownership" 
+		  [alloc; Var com; e1']
+              else
+		make_app "free_parameter" [alloc; e1']
+	  | JCalloc_union vi -> assert false (* TODO *)
+	  | JCalloc_bitvector -> assert false (* TODO *)
+        end
     | JCEapp call ->
-        let params = match call.jc_call_fun with
-          | JClogic_fun f -> f.jc_logic_info_parameters
-          | JCfun f -> f.jc_fun_info_parameters
-        in
-        let l = call.jc_call_args in
-        let arg_types_asserts, el =
-          try match params with
-            | [] -> [], []
-            | p -> 
-		let tyl = List.map (fun p -> p.jc_var_info_type) p in
-		  List.fold_right2 
-		    (type_assert)
-		    tyl l ([],[])
-	  with Invalid_argument _ -> assert false
-        in
-        let write_mems, read_mems, write_allocs, read_allocs =
-          match call.jc_call_fun with
-            | JClogic_fun f ->
+	begin match call.jc_call_fun with
+          | JClogic_fun f -> 
+              let arg_types_asserts, args =
+		try match f.jc_logic_info_parameters with
+		  | [] -> [], []
+		  | params -> 
+		      let param_types = 
+			List.map (fun v -> v.jc_var_info_type) params 
+		      in
+		      List.fold_right2 type_assert
+			param_types call.jc_call_args ([],[])
+		with Invalid_argument _ -> assert false
+              in
+              let write_mems, read_mems, write_allocs, read_allocs =
                 [],
                 read_mems
                   ~caller_writes: infunction.jc_fun_info_effects.jc_writes
@@ -1926,7 +1922,47 @@ and expr e =
                   ~callee_reads: f.jc_logic_info_effects
                   ~callee_writes: empty_effects
                   ~regions: call.jc_call_region_assoc
-            | JCfun f ->
+              in
+              let call = 
+		make_logic_app f.jc_logic_info_final_name 
+		  (args @ write_allocs @ write_mems @ read_allocs @ read_mems)
+	      in
+              let arg_types_assert =
+		List.fold_right
+		  (fun opt acc -> 
+		     match opt with
+                       | None -> acc
+                       | Some(_tmp,_e,a) -> make_and a acc)
+		  arg_types_asserts LTrue
+              in
+              let call = 
+		if arg_types_assert = LTrue || not (safety_checking()) then 
+		  call
+		else
+		  Assert(arg_types_assert,call) 
+              in
+              let call =
+		List.fold_right
+		  (fun opt c -> 
+		     match opt with
+                       | None -> c
+                       | Some(tmp,e,_ass) -> Let(tmp,e,c))
+		  arg_types_asserts call
+              in
+              call
+          | JCfun f ->
+              let arg_types_asserts, args =
+		try match f.jc_fun_info_parameters with
+		  | [] -> [], []
+		  | params -> 
+		      let param_types = 
+			List.map (fun v -> v.jc_var_info_type) params 
+		      in
+		      List.fold_right2 type_assert
+			param_types call.jc_call_args ([],[])
+		with Invalid_argument _ -> assert false
+              in
+              let write_mems, read_mems, write_allocs, read_allocs =
                 write_mems
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
                   ~regions: call.jc_call_region_assoc,
@@ -1943,40 +1979,36 @@ and expr e =
                   ~callee_reads: f.jc_fun_info_effects.jc_reads
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
                   ~regions: call.jc_call_region_assoc
-        in
-        let el = el @ write_allocs @ write_mems @ read_allocs @ read_mems in
-        let name = match call.jc_call_fun with
-          | JCfun f -> f.jc_fun_info_final_name
-          | JClogic_fun f -> f.jc_logic_info_final_name
-        in
-        let call = 
-          match call.jc_call_fun with
-            | JClogic_fun f ->
-		make_logic_app name el
-            | JCfun f ->
-		make_guarded_app ~name:(mark()) UserCall pos name el 
-	in
-        let arg_types_assert =
-          List.fold_right
-            (fun opt acc -> 
-               match opt with
-                 | None -> acc
-                 | Some(tmp,e,a) -> make_and a acc)
-            arg_types_asserts LTrue
-        in
-        let call = 
-          if arg_types_assert = LTrue || not (safety_checking()) then call else
-            Assert (arg_types_assert, call) 
-        in
-        let call =
-          List.fold_right
-            (fun opt c -> 
-               match opt with
-                 | None -> c
-                 | Some(tmp,e,ass) -> Let(tmp,e,c))
-            arg_types_asserts call
-        in
-        call
+              in
+	      let call = 
+		make_guarded_app ~name:(mark()) UserCall 
+		  e#pos f.jc_fun_info_final_name
+		  (args @ write_allocs @ write_mems @ read_allocs @ read_mems) 
+	      in
+              let arg_types_assert =
+		List.fold_right
+		  (fun opt acc -> 
+		     match opt with
+                       | None -> acc
+                       | Some(_tmp,_e,a) -> make_and a acc)
+		  arg_types_asserts LTrue
+              in
+              let call = 
+		if arg_types_assert = LTrue || not (safety_checking()) then 
+		  call
+		else
+		  Assert (arg_types_assert, call) 
+              in
+              let call =
+		List.fold_right
+		  (fun opt c -> 
+		     match opt with
+                       | None -> c
+                       | Some(tmp,e,_ass) -> Let(tmp,e,c))
+		  arg_types_asserts call
+              in
+              call
+	end
     | JCEassign_var (vi, e2) -> 
 	let assign_var_assert = fst 
 	  (type_assert vi.jc_var_info_type e2 ([], []))
@@ -2274,7 +2306,7 @@ let make_valid_pred pc =
     let allocs = match pc with
       | JCvariant _vi | JCunion _vi -> [ac]
       | JCtag(st,_) -> 
-	  Jc_struct_tools.all_allocs ~select:fully_alpositioned (JCtag(st,[]))
+	  Jc_struct_tools.all_allocs ~select:fully_allocated (JCtag(st,[]))
     in
     let allocs = 
       List.map
@@ -2285,7 +2317,7 @@ let make_valid_pred pc =
       (fun fi ->
          field_memory_name fi,
          field_memory_type fi)
-      (Jc_struct_tools.all_memories ~select:fully_alpositioned pc)
+      (Jc_struct_tools.all_memories ~select:fully_allocated pc)
     in
     let p = p, pointer_type pc in
     let a = a, why_integer_type in
@@ -2335,8 +2367,8 @@ let tr_struct st acc =
 (*  let all_fields = embedded_struct_fields st in
   let all_roots = embedded_struct_roots st in
   let all_roots = List.map find_struct all_roots in*)
-  let all_fields = all_memories ~select:fully_alpositioned (JCtag(st, [])) in
-  let all_allocs = all_allocs ~select:fully_alpositioned (JCtag(st, [])) in
+  let all_fields = all_memories ~select:fully_allocated (JCtag(st, [])) in
+  let all_allocs = all_allocs ~select:fully_allocated (JCtag(st, [])) in
   let ac = JCalloc_struct (struct_variant st) in
   let alloc = generic_alloc_table_name ac in
   let tagtab = generic_tag_table_name (struct_variant st) in

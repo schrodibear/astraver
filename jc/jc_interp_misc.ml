@@ -527,11 +527,11 @@ let pc_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
 let make_valid_pred_app pc p a b =
   let allocs = List.map
     (fun ac -> LVar(generic_alloc_table_name ac))
-    (Jc_struct_tools.all_allocs ~select:fully_alpositioned pc)
+    (Jc_struct_tools.all_allocs ~select:fully_allocated pc)
   in
   let memories = List.map
     (fun fi -> LVar(field_memory_name fi))
-    (Jc_struct_tools.all_memories ~select:fully_alpositioned pc)
+    (Jc_struct_tools.all_memories ~select:fully_allocated pc)
   in
   LPred(valid_pred_name pc, p::a::b::allocs@memories)
 
@@ -581,6 +581,7 @@ let union_type = function
 let of_union_type ty =
   match union_type ty with Some _vi -> true | None -> false
 
+(* TODO: take JCEalloc into account *)
 let access_union e fi_opt = 
   let fieldoffbytes fi = 
     match field_offset_in_bytes fi with

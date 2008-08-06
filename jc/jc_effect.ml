@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.118 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.119 2008-08-06 23:46:09 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -500,9 +500,9 @@ let rec expr fef e =
 	   add_tag_reads LabelHere fef (struct_variant st,e#region)
        | JCEalloc(_e1,st) ->
 	   let pc = JCtag(st,[]) in
-	   let fields = all_memories ~select:fully_alpositioned pc in
-	   let allocs = all_allocs ~select:fully_alpositioned pc in
-	   let tags = all_tags ~select:fully_alpositioned pc in
+	   let fields = all_memories ~select:fully_allocated pc in
+	   let allocs = all_allocs ~select:fully_allocated pc in
+	   let tags = all_tags ~select:fully_allocated pc in
 	   let fef = 
 	     List.fold_left 
 	       (fun fef fi -> 
