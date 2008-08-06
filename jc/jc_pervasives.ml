@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.115 2008-08-04 13:48:33 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.116 2008-08-06 15:17:04 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -162,14 +162,15 @@ let num_of_constant loc c =
 let zero = Num.num_of_int 0
 let minus_one = Num.num_of_int (-1)
 
-let rec location_set_region = function
-  | JCLSvar vi -> vi.jc_var_info_region
-  | JCLSderef(_,_,_,r) -> r
-  | JCLSrange(ls,_,_) -> location_set_region ls
+let rec location_set_region locs = 
+  match locs#node with
+    | JCLSvar vi -> vi.jc_var_info_region
+    | JCLSderef(_,_,_,r) -> r
+    | JCLSrange(ls,_,_) -> location_set_region ls
 
-type tlocation =
+type location =
   | JCLvar of var_info
-  | JCLderef of tlocation_set * field_info * region
+  | JCLderef of location_set * field_info * region
 
 (* operators *)
 
@@ -284,10 +285,10 @@ let exception_info ty id =
 (* logic functions *)
 
 let empty_effects = 
-  { jc_effect_alloc_table = AllocSet.empty;
+  { jc_effect_alloc_table = AllocMap.empty;
     jc_effect_tag_table = VariantMap.empty;
     jc_effect_memories = MemoryMap.empty;
-    jc_effect_globals = VarSet.empty;
+    jc_effect_globals = VarMap.empty;
     jc_effect_mutable = StringSet.empty;
     jc_effect_committed = StringSet.empty;
   }
@@ -412,7 +413,7 @@ let rec is_constant_term t =
     | JCTconst _ -> true
     | JCTvar _ | JCTshift _ | JCTderef _
     | JCTapp _ | JCTold _ | JCTat _ | JCToffset _ | JCTaddress _
-    | JCTinstanceof _ | JCTcast _ | JCTrange_cast _
+    | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ | JCTrange_cast _
     | JCTreal_cast _ | JCTif _ | JCTmatch _ -> false
     | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
 	is_constant_term t1 && is_constant_term t2
@@ -431,6 +432,7 @@ let term_num t = match t#node with
   | JCTaddress _ -> 25
   | JCTinstanceof _ -> 31
   | JCTcast _ -> 37
+  | JCTbitwise_cast _ -> 39
   | JCTrange _ -> 41
   | JCTapp _ -> 43
   | JCTif _ -> 47
@@ -475,7 +477,8 @@ let rec raw_term_compare t1 t2 =
 	if compst = 0 then raw_term_compare t11 t21 else compst
       else compok
   | JCTinstanceof(t11,lab1,st1),JCTinstanceof(t21,lab2,st2) 
-  | JCTcast(t11,lab1,st1),JCTcast(t21,lab2,st2) ->
+  | JCTcast(t11,lab1,st1),JCTcast(t21,lab2,st2)
+  | JCTbitwise_cast(t11,lab1,st1),JCTbitwise_cast(t21,lab2,st2) ->
       let compst = 
 	Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
       in
@@ -543,7 +546,7 @@ let assertion_num a = match a#node with
   | JCAif _ -> 47
   (* ??? are these supposed to be prime numbers ? *)
   | JCAmutable _ -> 49
-  | JCAtagequality _ -> 51
+  | JCAeqtype _ -> 51
   | JCAat _ -> 53
   | JCAmatch _ -> 59
   | JCAsubtype _ -> 61
@@ -604,7 +607,7 @@ let rec raw_assertion_compare a1 a2 =
 	  let comptag = raw_tag_compare tag1 tag2 in
 	  if comptag = 0 then raw_term_compare t1 t2 else comptag
         else compst
-    | JCAtagequality(tag11,tag12,so1),JCAtagequality(tag21,tag22,so2) ->
+    | JCAeqtype(tag11,tag12,so1),JCAeqtype(tag21,tag22,so2) ->
         let compso = option_compare Pervasives.compare so1 so2 in
         if compso = 0 then
 	  let comptag = raw_tag_compare tag11 tag21 in
@@ -621,6 +624,7 @@ let rec is_numeric_term t =
     | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTrange _ -> false
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
     | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _, _) 
+    | JCTbitwise_cast (t, _, _) 
     | JCTrange_cast (t, _) | JCTreal_cast (t, _) -> is_numeric_term t
     | JCTapp _ -> false (* TODO ? *)
     | JCTif _ | JCTmatch _ -> false (* TODO ? *)
@@ -650,7 +654,7 @@ let rec is_constant_assertion a =
 	is_constant_assertion a1 && is_constant_assertion a2
     | JCAnot a | JCAquantifier (_, _, a) | JCAold a | JCAat(a,_)
 	-> is_constant_assertion a
-    | JCAapp _ | JCAinstanceof _ | JCAmutable _ | JCAtagequality _
+    | JCAapp _ | JCAinstanceof _ | JCAmutable _ | JCAeqtype _
     | JCAsubtype _
 	-> false
     | JCAbool_term t -> is_constant_term t
@@ -695,9 +699,9 @@ let rec skip_term_shifts t = match t#node with
   | JCTshift(t,_) -> skip_term_shifts t
   | _ -> t
 
-let rec skip_tloc_range t = match t with
+let rec skip_tloc_range locs = match locs#node with
   | JCLSrange(t,_,_) -> skip_tloc_range t
-  | _ -> t
+  | _ -> locs
 
 (* option *)
 
@@ -753,6 +757,12 @@ let field_bounds fi =
 
 let pointer_struct = function
   | JCTpointer(JCtag(st, []), _, _) -> st
+  | ty -> 
+      Format.printf "%a@." print_type ty;
+      assert false
+
+let pointer_class = function
+  | JCTpointer(pc, _, _) -> pc
   | ty -> 
       Format.printf "%a@." print_type ty;
       assert false

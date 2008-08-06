@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.34 2008-07-23 12:13:54 marche Exp $ i*)
+(*i $Id: output.ml,v 1.35 2008-08-06 15:17:04 moy Exp $ i*)
 
 open Lexing
 open Format
@@ -406,19 +406,21 @@ let make_and_expr a1 a2 =
     | (_,_) -> And(a1,a2)
 
 
-let make_app_rec f l = 
+let make_app_rec ~logic f l = 
   let rec make_rec accu = function
     | [] -> accu
     | e::r -> make_rec (App(accu,e)) r
   in
   match l with
-    | [] -> make_rec f [Void]
+    | [] -> if logic then make_rec f [] else make_rec f [Void]
     | l -> make_rec f l
 ;;
 
-let make_app id l = make_app_rec (Var id) l
+let make_app id l = make_app_rec ~logic:false (Var id) l
 
-let make_app_e = make_app_rec
+let make_logic_app id l = make_app_rec ~logic:true (Var id) l
+
+let make_app_e = make_app_rec ~logic:false
 
 let make_while cond inv var e =
   let body = 
@@ -828,19 +830,19 @@ type kind =
   | Unpack
 
 
-let locs_table : 
+let pos_table : 
     (string, (kind option * string option * string option * Loc.position)) 
     Hashtbl.t 
     = Hashtbl.create 97
 let name_counter = ref 0
-let reg_loc prefix ?id ?kind ?name ?formula loc =
+let reg_pos prefix ?id ?kind ?name ?formula pos =
   let id = match id with
     | None ->  
 	incr name_counter;
 	prefix ^ "_" ^ string_of_int !name_counter
     | Some n -> n
   in
-  Hashtbl.add locs_table id (kind,name,formula,loc);
+  Hashtbl.add pos_table id (kind,name,formula,pos);
   id
 
 let print_kind fmt k =
@@ -862,7 +864,7 @@ let abs_fname f =
     Filename.concat (Unix.getcwd ()) f 
   else f
 
-let print_locs fmt =
+let print_pos fmt =
   Hashtbl.iter 
     (fun id (kind,name,formula,(b,e)) ->
        fprintf fmt "[%s]@\n" id;
@@ -879,7 +881,7 @@ let print_locs fmt =
        fprintf fmt "line = %d@\n" l;
        fprintf fmt "begin = %d@\n" fc;
        fprintf fmt "end = %d@\n@\n" lc)
-    locs_table
+    pos_table
 
 (*
   Local Variables: 

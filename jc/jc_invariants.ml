@@ -159,24 +159,24 @@ let make_bool b = LConst(Prim_bool b)
 (************************************)
 
 (* Typing imposes non pointer fields to have the flag "rep" *)
-let field this loc fi =
+let field this pos fi =
   if not fi.jc_field_info_rep then
-    Jc_typing.typing_error loc "this term is not a rep field of %s"
+    Jc_typing.typing_error pos "this term is not a rep field of %s"
       this.jc_var_info_name
 
-(*let rec check_rep ?(must_deref=false) this loc t =
+(*let rec check_rep ?(must_deref=false) this pos t =
   match t.jc_term_node with
     | JCTvar vi when vi == this && not must_deref -> ()
     | JCTderef (t, lab, fi) ->
-	field fi this loc;
-	check_rep ~must_deref:false this loc t
+	field fi this pos;
+	check_rep ~must_deref:false this pos t
     | JCTcast (t, _, _) -> assert false (* TODO *)
     | JCTshift (t, _) ->
 	(* t must not be this, but might be a field of this if it is a table *)
 	(* (? TODO) *)
-	check_rep ~must_deref:true this loc t
+	check_rep ~must_deref:true this pos t
     | _ ->
-	Jc_typing.typing_error loc "this term is not a rep field of %s"
+	Jc_typing.typing_error pos "this term is not a rep field of %s"
 	  this.jc_var_info_name*)
 
 (* A pattern may hide some dereferencing. *)
@@ -184,7 +184,7 @@ let pattern this p =
   iter_pattern
     (fun p -> match p#node with
        | JCPstruct(_, fipl) ->
-	   List.iter (field this p#loc) (List.map fst fipl)
+	   List.iter (field this p#pos) (List.map fst fipl)
        | _ -> ())
     p
 
@@ -199,10 +199,10 @@ let term this t =
 	   let id = app.jc_app_fun in
 	   if not (MemoryMap.is_empty
 		     id.jc_logic_info_effects.jc_effect_memories) then
-	     Jc_typing.typing_error t#loc
+	     Jc_typing.typing_error t#pos
 	       "this call is not allowed in structure invariant"
        | JCTderef(_, _, fi) ->
-	   field this t#loc fi
+	   field this t#pos fi
        | JCTmatch(_, ptl) ->
 	   List.iter (pattern this) (List.map fst ptl)
        | _ -> ())
@@ -266,7 +266,7 @@ let rec assertion this p =
 	if MemoryMap.is_empty id.jc_logic_info_effects.jc_effect_memories
 	then List.iter (term this) app.jc_app_args
 	else
-	  Jc_typing.typing_error p#loc
+	  Jc_typing.typing_error p#pos
 	    "this call is not allowed in structure invariant"
     | JCAnot p -> assertion this p
     | JCAiff (p1, p2)
@@ -274,9 +274,9 @@ let rec assertion this p =
     | JCArelation (t1,_, t2) -> term this t1; term this t2
     | JCAand l | JCAor l -> List.iter (assertion this) l
     | JCAmutable _ ->
-	Jc_typing.typing_error p#loc
+	Jc_typing.typing_error p#pos
 	  "\\mutable is not allowed in structure invariant"
-    | JCAtagequality(t1, t2, _) | JCAsubtype(t1, t2, _) ->
+    | JCAeqtype(t1, t2, _) | JCAsubtype(t1, t2, _) ->
 	tag this t1;
 	tag this t2
     | JCAmatch(t, pal) ->
@@ -327,7 +327,7 @@ let rec assertion_memories aux a = match a#node with
   | JCAbool_term t -> term_memories aux t
   | JCAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
   | JCAmutable(t, _, _) -> term_memories aux t
-  | JCAtagequality(t1, t2, _) | JCAsubtype(t1, t2, _) -> 
+  | JCAeqtype(t1, t2, _) | JCAsubtype(t1, t2, _) -> 
       tag_memories (tag_memories aux t2) t1
   | JCAmatch(t, pal) ->
       term_memories (List.fold_left assertion_memories aux (List.map snd pal)) t
@@ -364,8 +364,8 @@ let invariant_params acc li =
       acc
   in
   let acc =
-    AllocSet.fold
-      (fun (ac,r) acc -> 
+    AllocMap.fold
+      (fun (ac,r) labs acc -> 
 	 (alloc_table_name (ac, r),
 	  alloc_table_type (ac))::acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
@@ -1374,11 +1374,11 @@ let tr_valid_inv st acc =
     LForall(id, ty, acc)) sem ((this, this_ty)::params) in
   Axiom(valid_inv_axiom_name st, sem)::acc*)
 
-let rec invariant_for_struct ?loc this si =
+let rec invariant_for_struct ?pos this si =
   let (_, invs) = 
     Hashtbl.find Jc_typing.structs_table si.jc_struct_info_name 
   in
-  let invs = Assertion.mkand ?loc
+  let invs = Assertion.mkand ?pos
     ~conjuncts:(List.map 
        (fun (li, _) -> 
 	  let a = { jc_app_fun = li;
@@ -1386,7 +1386,7 @@ let rec invariant_for_struct ?loc this si =
 		    jc_app_label_assoc = [];
 		    jc_app_region_assoc = [] }
 	  in
-	  new assertion ?loc (JCAapp a)) invs) 
+	  new assertion ?pos (JCAapp a)) invs) 
     ()
   in
     match si.jc_struct_info_parent with
@@ -1398,12 +1398,12 @@ let rec invariant_for_struct ?loc this si =
 		  new term_with ~typ:(JCTpointer (JCtag(si, []), a, b)) this
 	      | _ -> assert false (* never happen *)
 	  in
-	  Assertion.mkand ?loc
-	      ~conjuncts:[invs; (invariant_for_struct ?loc this si)]
+	  Assertion.mkand ?pos
+	      ~conjuncts:[invs; (invariant_for_struct ?pos this si)]
 	    ()
 	    
 
-let code_function (fi, loc, fs, sl) vil =
+let code_function (fi, pos, fs, sl) vil =
   begin
     match !Jc_common_options.inv_sem with
       | InvArguments ->
@@ -1424,11 +1424,11 @@ let code_function (fi, loc, fs, sl) vil =
 			     jc_app_region_assoc = [] }
 		   in
 		   (new assertion ~name_label:(Jc_pervasives.new_label_name ())
-~loc (JCAapp a)) :: acc)
+~pos (JCAapp a)) :: acc)
 		Jc_typing.global_invariants_table []
 	    in
 	    let global_invariants = 
-	      Assertion.mkand ~loc ~conjuncts:global_invariants ()
+	      Assertion.mkand ~pos ~conjuncts:global_invariants ()
 	    in
 	      (* Calculate invariants for each parameter. *)
 	    let invariants =
@@ -1436,20 +1436,20 @@ let code_function (fi, loc, fs, sl) vil =
 		(fun acc vi ->
 		   match vi.jc_var_info_type with
 		     | JCTpointer (JCtag(st, []), _, _) ->
-			 Assertion.mkand ~loc
+			 Assertion.mkand ~pos
 			   ~conjuncts:
-			   [acc; (invariant_for_struct ~loc
+			   [acc; (invariant_for_struct ~pos
 				    (Term.mkvar ~var:vi ()) st)]
 			   ()
 		     | _ -> acc)
 		(Assertion.mktrue ())
 		fi.jc_fun_info_parameters
 	    in
-	    Assertion.mkand ~loc ~conjuncts:[global_invariants; invariants] ()
+	    Assertion.mkand ~pos ~conjuncts:[global_invariants; invariants] ()
 	  in
 	    (* add invariants to the function precondition *)
 	  fs.jc_fun_requires <- 
-	    Assertion.mkand ~loc ~conjuncts:[fs.jc_fun_requires; invariants] ();
+	    Assertion.mkand ~pos ~conjuncts:[fs.jc_fun_requires; invariants] ();
 	    (* add invariants to the function postcondition *)
 	  if is_purely_exceptional_fun fs then () else
 	    let safety_exists = ref false in
@@ -1458,7 +1458,7 @@ let code_function (fi, loc, fs, sl) vil =
 	      (fun (_, s, b) ->
 		 if s = "safety" then safety_exists := true;
 		 b.jc_behavior_ensures <- 
-		   Assertion.mkand ~loc ~conjuncts:[b.jc_behavior_ensures; post] ())
+		   Assertion.mkand ~pos ~conjuncts:[b.jc_behavior_ensures; post] ())
 	      fs.jc_fun_behavior;
 	    (* add the 'safety' spec if it does not exist 
 	       (it could exist e.g. from Krakatoa) *)

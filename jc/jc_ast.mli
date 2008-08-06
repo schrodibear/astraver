@@ -27,15 +27,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.140 2008-08-04 13:48:33 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.141 2008-08-06 15:17:04 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
 open Jc_region
 
-class type located =
+class type positioned =
 object
-  method loc: Loc.position
+  method pos: Loc.position
 end
 
 class type typed =
@@ -70,13 +70,13 @@ type const =
 
 class type identifier = 
 object
-  inherit located
+  inherit positioned
   method name: string
 end
 
-class type ['a] node_located = 
+class type ['a] node_positioned = 
 object
-  inherit located
+  inherit positioned
   method node: 'a
 end
 
@@ -89,7 +89,7 @@ type ptype_node =
   | JCPTidentifier of string
   | JCPTpointer of string * ptype list * Num.num option * Num.num option
 
-and ptype = ptype_node node_located
+and ptype = ptype_node node_positioned
 
 type comparison_op = [ `Blt | `Bgt | `Ble | `Bge | `Beq | `Bneq ]
 type arithmetic_op = [ `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ]
@@ -132,7 +132,7 @@ type ppattern_node =
   | JCPPany
   | JCPPconst of const
 
-and ppattern = ppattern_node node_located
+and ppattern = ppattern_node node_positioned
 
 type 'expr pbehavior = 
     Loc.position * string * identifier option * 'expr option 
@@ -163,7 +163,7 @@ and pexpr_node =
   | JCPEalloc of pexpr * string
   | JCPEfree of pexpr
   | JCPEmutable of pexpr * pexpr ptag
-  | JCPEtagequality of pexpr ptag * pexpr ptag
+  | JCPEeqtype of pexpr ptag * pexpr ptag
   | JCPEsubtype of pexpr ptag * pexpr ptag
   | JCPEmatch of pexpr * (ppattern * pexpr) list
 (*  | JCPSskip *) (* -> JCPEconst JCCvoid *)
@@ -188,14 +188,14 @@ and pexpr_node =
   | JCPEunpack of pexpr * identifier option
   | JCPEswitch of pexpr * (pexpr option list * pexpr) list
 
-and pexpr = pexpr_node node_located
+and pexpr = pexpr_node node_positioned
 
 and 'a ptag_node =
   | JCPTtag of identifier
   | JCPTbottom
   | JCPTtypeof of 'a
 
-and 'a ptag = 'a ptag_node node_located
+and 'a ptag = 'a ptag_node node_positioned
 
 type 'expr clause =
   | JCCrequires of 'expr
@@ -235,14 +235,14 @@ type 'expr decl_node =
   | JCDabstract_domain of Jc_env.abstract_domain 
   | JCDint_model of Jc_env.int_model
 
-and 'expr decl = 'expr decl_node node_located
+and 'expr decl = 'expr decl_node node_positioned
 
 type pdecl = pexpr decl
 
 class type ['expr_node] c_nexpr =
 object
   inherit logic_labeled
-  inherit ['expr_node] node_located
+  inherit ['expr_node] node_positioned
 end
 
 (** Normalized expressions. Not typed yet, but without gotos. *)
@@ -281,7 +281,7 @@ type nexpr_node =
   | JCNEold of nexpr
   | JCNEat of nexpr * logic_label
   | JCNEmutable of nexpr * nexpr ptag
-  | JCNEtagequality of nexpr ptag * nexpr ptag
+  | JCNEeqtype of nexpr ptag * nexpr ptag
   | JCNEsubtype of nexpr ptag * nexpr ptag
   (* Locations only *)
   | JCNErange of nexpr option * nexpr option
@@ -296,7 +296,7 @@ and nexpr = nexpr_node c_nexpr
 class type ['pattern_node] c_pattern =
 object
   inherit typed
-  inherit ['pattern_node] node_located
+  inherit ['pattern_node] node_positioned
 end
 
 type pattern_node =
@@ -314,7 +314,8 @@ object
   inherit typed
   inherit regioned
   inherit name_labeled
-  inherit ['node] node_located
+  inherit logic_labeled
+  inherit ['node] node_positioned
 end
 
 type app = 
@@ -339,6 +340,7 @@ and term_node =
   | JCTaddress of term
   | JCTinstanceof of term * logic_label * struct_info
   | JCTcast of term * logic_label * struct_info
+  | JCTbitwise_cast of term * logic_label * struct_info
   | JCTrange_cast of term * enum_info
   | JCTreal_cast of term * real_conversion
   | JCTif of term * term * term
@@ -347,30 +349,42 @@ and term_node =
 
 and term = term_node c_term
 
-type tag = tag_node node_located
+type tag = tag_node node_positioned
 
 and tag_node =
   | JCTtag of struct_info
   | JCTbottom
   | JCTtypeof of term * struct_info
 
-type tlocation_set = 
-  | JCLSvar of var_info
-  | JCLSderef of tlocation_set * logic_label * field_info * region
-(* TODO ?
-  | JCLSshift of tlocation_set * term 
-*)
-  | JCLSrange of tlocation_set * term option * term option
+class type ['node] c_location =
+object
+  inherit regioned
+  inherit logic_labeled
+  inherit ['node] node_positioned
+end
 
-type tlocation =
+type location_set_node = 
+  | JCLSvar of var_info
+  | JCLSderef of location_set * logic_label * field_info * region
+(* TODO ?
+  | JCLSshift of location_set * term 
+*)
+  | JCLSrange of location_set * term option * term option
+
+and location_node =
   | JCLvar of var_info
-  | JCLderef of tlocation_set * logic_label * field_info * region
-  | JCLat of tlocation * logic_label
+  | JCLderef of location_set * logic_label * field_info * region
+  | JCLat of location * logic_label
+
+and location_set = location_set_node c_location
+
+and location = location_node c_location
 
 class type ['assertion_node] c_assertion =
 object
   inherit name_labeled
-  inherit ['assertion_node] node_located
+  inherit logic_labeled
+  inherit ['assertion_node] node_positioned
 end
 
 type assertion_node =
@@ -390,7 +404,7 @@ type assertion_node =
   | JCAbool_term of term
   | JCAif of term * assertion * assertion
   | JCAmutable of term * struct_info * tag
-  | JCAtagequality of tag * tag * struct_info option
+  | JCAeqtype of tag * tag * struct_info option
   | JCAsubtype of tag * tag * struct_info option
   | JCAmatch of term * (pattern * assertion) list
 
@@ -399,7 +413,7 @@ and assertion = assertion_node c_assertion
 type term_or_assertion =
   | JCAssertion of assertion
   | JCTerm of term
-  | JCReads of tlocation list
+  | JCReads of location list
 
 type loop_annot =
     {
@@ -414,7 +428,7 @@ type behavior =
     { 
       jc_behavior_throws : exception_info option ;
       jc_behavior_assumes : assertion option ;
-      jc_behavior_assigns : (Loc.position * tlocation list) option ;
+      jc_behavior_assigns : (Loc.position * location list) option ;
       mutable jc_behavior_ensures : assertion;
     }
 
@@ -436,7 +450,7 @@ object
   inherit typed
   inherit regioned
   inherit name_labeled
-  inherit ['node] node_located
+  inherit ['node] node_positioned
   method original_type: jc_type
 end
 
@@ -454,6 +468,7 @@ type expr_node =
   | JCEassign_heap of expr * field_info * expr
   | JCEinstanceof of expr * struct_info
   | JCEcast of expr * struct_info
+  | JCEbitwise_cast of expr * struct_info
   | JCErange_cast of expr * enum_info
   | JCEreal_cast of expr * real_conversion
   | JCEif of expr * expr * expr
@@ -514,7 +529,7 @@ type behavior =
 (*
       jc_behavior_requires : assertion option ;
 *)
-      jc_behavior_assigns : tlocation list option ;
+      jc_behavior_assigns : location list option ;
       jc_behavior_ensures : assertion;
     }
 *)

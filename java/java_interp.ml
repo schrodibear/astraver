@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.153 2008-07-31 15:22:39 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.154 2008-08-06 15:17:03 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -48,11 +48,11 @@ let exn_name e = new identifier e.jc_exception_info_name
 let var_name v = v.jc_var_info_name
 let fi_name f = f.jc_field_info_name
 
-let reg_loc ?id ?kind ?name loc = Output.reg_loc "K" ?id ?kind ?name loc
+let reg_pos ?id ?kind ?name pos = Output.reg_pos "K" ?id ?kind ?name pos
 
-let locate ?id ?kind ?name loc e =
-  let lab = reg_loc ?id ?kind ?name loc in
-  new pexpr ~loc (JCPElabel(lab,e))
+let locate ?id ?kind ?name pos e =
+  let lab = reg_pos ?id ?kind ?name pos in
+  new pexpr ~pos (JCPElabel(lab,e))
 
 (*s loop tags *)
 
@@ -218,15 +218,15 @@ let num_minus_one = Num.Int (-1)
 
 let array_struct_table = Hashtbl.create 17
       
-let rec get_array_struct loc t = 
+let rec get_array_struct pos t = 
   try
     (Hashtbl.find array_struct_table t: struct_info)
   with Not_found -> 
     eprintf "Array struct for type %a not found: %a@." 
-      Java_typing.print_type t Loc.report_position loc;
+      Java_typing.print_type t Loc.report_position pos;
     raise Not_found
 
-and tr_type loc t =
+and tr_type pos t =
   match t with
     | JTYbase t -> tr_base_type t	
     | JTYnull -> JCTnull
@@ -243,7 +243,7 @@ and tr_type loc t =
 *)
 	
     | JTYarray (non_null, t) ->
-	let st = get_array_struct loc t in
+	let st = get_array_struct pos t in
 	  JCTpointer (JCtag(st, []), Some num_zero, if non_null then Some num_minus_one else None)
     | JTYlogic i -> JCTlogic i
 
@@ -260,9 +260,9 @@ let get_field fi =
 	  fi.java_field_info_name;
 	assert false
 
-let create_field loc fi =
+let create_field pos fi =
   Java_options.lprintf "Creating JC field '%s'@." fi.java_field_info_name;
-  let ty = tr_type loc fi.java_field_info_type in
+  let ty = tr_type pos fi.java_field_info_type in
   let ci = 
     match fi.java_field_info_class_or_interface with
       | TypeClass ci -> get_class ci.class_info_name
@@ -313,8 +313,8 @@ let get_var vi =
 	;
 	raise Not_found
 
-let create_var ?(formal=false) loc vi =
-  let ty = tr_type loc vi.java_var_info_type in
+let create_var ?(formal=false) pos vi =
+  let ty = tr_type pos vi.java_var_info_type in
   let nvi = Jc_pervasives.var ~formal ty vi.java_var_info_final_name in
   nvi.jc_var_info_assigned <- vi.java_var_info_assigned;
   Hashtbl.add vi_table vi.java_var_info_tag nvi;
@@ -348,17 +348,17 @@ let tr_logic_label = function
 	times_used = 0;
       }
 
-let create_logic_fun loc fi =
+let create_logic_fun pos fi =
   let nfi =
     match fi.java_logic_info_result_type with
       | None ->
 	  Jc_pervasives.make_rel fi.java_logic_info_name 
       | Some t ->
 	  Jc_pervasives.make_logic_fun fi.java_logic_info_name 
-	    (tr_type loc t) 
+	    (tr_type pos t) 
   in
   nfi.jc_logic_info_parameters <-
-    List.map (create_var loc) fi.java_logic_info_parameters;
+    List.map (create_var pos) fi.java_logic_info_parameters;
   nfi.jc_logic_info_labels <- 
     List.map tr_logic_label fi.java_logic_info_labels;
   Hashtbl.add logics_table fi.java_logic_info_tag nfi;
@@ -373,15 +373,15 @@ let () =
 
 let funs_table = Hashtbl.create 97
 
-let get_fun loc tag =
+let get_fun pos tag =
   try
     Hashtbl.find funs_table tag
   with
       Not_found -> 
-	eprintf "Java_interp.get_fun->Not_found: %a@." Loc.report_position loc;
+	eprintf "Java_interp.get_fun->Not_found: %a@." Loc.report_position pos;
 	raise Not_found
 
-let create_fun loc tag result name params =
+let create_fun pos tag result name params =
   let nfi =
     match result with
       | None ->
@@ -389,10 +389,10 @@ let create_fun loc tag result name params =
 	    Jc_pervasives.unit_type
       | Some vi ->
 	  Jc_pervasives.make_fun_info name
-	    (tr_type loc vi.java_var_info_type) 
+	    (tr_type pos vi.java_var_info_type) 
   in
   nfi.jc_fun_info_parameters <-
-    List.map (fun (vi, _) -> create_var loc vi) params;
+    List.map (fun (vi, _) -> create_var pos vi) params;
   Hashtbl.add funs_table tag nfi;
   nfi
 
@@ -541,7 +541,7 @@ let create_non_null_pred si =
     Hashtbl.add non_null_preds si.jc_struct_info_name li;
     li
 (*
-let dummy_loc_term ty t =
+let dummy_pos_term ty t =
   new term ~typ:ty t
 
 let term_zero = 
@@ -559,8 +559,8 @@ let term_plus_one t =
 let zero = mkint ~value:0 ()
 let maxint = mkint ~valuestr:"2147483647" ()
 let plus_one e =
-  let loc = e#loc in
-  mkadd ~loc ~expr1:e ~expr2:(mkint ~loc ~value:1 ()) ()
+  let pos = e#pos in
+  mkadd ~pos ~expr1:e ~expr2:(mkint ~pos ~value:1 ()) ()
 
 let rec term t =
   let t' =
@@ -598,7 +598,7 @@ let rec term t =
 	      | JTYarray (_, ty) ->
 		  let _st = get_array_struct t.java_term_loc ty in
 		  let t = term t in
-		  plus_one (mkoffset_max ~loc:t#loc ~expr:t ())
+		  plus_one (mkoffset_max ~pos:t#pos ~expr:t ())
 	      | _ -> assert false
 	  end
       | JTarray_access(t1,t2) -> 
@@ -610,7 +610,7 @@ let rec term t =
                   mkderef
                     ~expr:
                     (mkshift
-                       ~loc: t.java_term_loc
+                       ~pos: t.java_term_loc
                        ~expr: t1'
                        ~offset: (term t2)
                        ())
@@ -644,7 +644,7 @@ let rec term t =
 	    ()
   in
   let _ = tr_type t.java_term_loc t.java_term_type in
-  new pexpr ~loc: t.java_term_loc t'#node
+  new pexpr ~pos: t.java_term_loc t'#node
 
 let quantifier = function
   | Forall -> Jc_ast.Forall
@@ -761,7 +761,7 @@ let rec assertion ?(reg=0) a =
 	    ~expr_else: (assertion a2)
 	    ()
   in
-  new pexpr ~loc:a.java_assertion_loc a'#node
+  new pexpr ~pos:a.java_assertion_loc a'#node
     
 (*let dummy_loc_assertion a =
   { jc_assertion_loc = Loc.dummy_position; 
@@ -769,8 +769,8 @@ let rec assertion ?(reg=0) a =
     jc_assertion_node = a }
 *)
 
-let create_static_var loc type_name fi =
-  let ty = tr_type loc fi.java_field_info_type in
+let create_static_var pos type_name fi =
+  let ty = tr_type pos fi.java_field_info_type in
   let name = type_name ^ "_" ^ fi.java_field_info_name in
   let vi = Jc_pervasives.var ~static:true ty name in
   Hashtbl.add static_fields_table fi.java_field_info_tag vi;
@@ -1129,14 +1129,14 @@ let incr_op op: [> pm_unary_op] =
     | Postincr -> `Upostfix_inc
     | Postdecr -> `Upostfix_dec
 
-let int_cast loc t e =
+let int_cast pos t e =
   if !Java_options.ignore_overflow ||
     match t with
       | JTYbase Tint -> false
       | _ -> true
   then e else
     mkcast
-      ~loc
+      ~pos
       ~expr: e
       ~typ: int_range.jc_enum_info_name
       ()
@@ -1168,7 +1168,7 @@ let rec expr ?(reg=false) e =
 		  let st = get_array_struct e1.java_expr_loc ty in
 		  let e1' = expr e1 in
 		  let shift = mkshift
-                    ~loc:e.java_expr_loc
+                    ~pos:e.java_expr_loc
                     ~expr:e1'
                     ~offset:(expr e2)
                     ()
@@ -1259,7 +1259,7 @@ let rec expr ?(reg=false) e =
 		  let e1' = expr e1 in
 		  let shift =
                     mkshift
-                      ~loc: e.java_expr_loc
+                      ~pos: e.java_expr_loc
                       ~expr: e1'
                       ~offset: (expr e2)
                       ()
@@ -1319,7 +1319,7 @@ let rec expr ?(reg=false) e =
 		  let e1' = expr e1 in
 		  let shift =
                     mkshift
-                      ~loc: e.java_expr_loc
+                      ~pos: e.java_expr_loc
                       ~expr: e1'
                       ~offset: (expr e2)
                       ()
@@ -1341,7 +1341,7 @@ let rec expr ?(reg=false) e =
 		  let e1' = expr e1 in
 		  let shift =
                     mkshift
-                      ~loc: e.java_expr_loc
+                      ~pos: e.java_expr_loc
                       ~expr: e1'
                       ~offset: (expr e2)
                       ()
@@ -1451,9 +1451,9 @@ let rec expr ?(reg=false) e =
 	  end
 
   in
-  let loc = e.java_expr_loc in
-  let e = new pexpr ~loc: e.java_expr_loc e'#node in
-  if !reg then locate loc e else e
+  let pos = e.java_expr_loc in
+  let e = new pexpr ~pos: e.java_expr_loc e'#node in
+  if !reg then locate pos e else e
 
 let initialiser e =
   match e with
@@ -1491,7 +1491,7 @@ let loop_annot inv dec =
 
 let behavior (id,assumes,throws,assigns,ensures) =
   mkbehavior
-    ~loc: (fst id)
+    ~pos: (fst id)
     ~name: (snd id)
     ?throws:
     (Option_misc.map
@@ -1499,9 +1499,9 @@ let behavior (id,assumes,throws,assigns,ensures) =
        throws)
     ?assigns:
     (Option_misc.map
-       (fun (loc,a) ->
+       (fun (pos,a) ->
           mkassigns
-            ~loc
+            ~pos
             ~locations:(List.map (location (Some LabelPre)) a)
             ())
        assigns)
@@ -1556,7 +1556,7 @@ let rec statement s =
             ~body: (statement body)
             ~invariant
             ?variant
-            ~loc: s.java_statement_loc
+            ~pos: s.java_statement_loc
             ()
       | JSfor_decl(decls,e,inv,dec,sl,body) ->
 	  let decls = List.map begin fun (vi, init) ->
@@ -1576,7 +1576,7 @@ let rec statement s =
                    ())
 	      decls
               (mkfor
-                 ~loc: s.java_statement_loc
+                 ~pos: s.java_statement_loc
                  ~condition: (expr e)
                  ~updates: (List.map expr sl)
                  ~invariant
@@ -1586,10 +1586,10 @@ let rec statement s =
 	  in mkblock ~exprs:[res] ()
       | JSexpr e -> expr e
       | JSassert(id,e) -> 
-	  let loc = e.java_assertion_loc in
+	  let pos = e.java_assertion_loc in
 	  let e' = reg_assertion e in
           let e = mkassert ~expr:e' () in
-	  locate ?id loc e
+	  locate ?id pos e
       | JSswitch(e,l) -> 
           mkswitch ~expr:(expr e) ~cases:(List.map switch_case l) ()
       | JStry(s1, catches, finally) ->
@@ -1620,7 +1620,7 @@ let rec statement s =
 	    ~expr:(statement s)
 	    ()
 
-  in new pexpr ~loc:s.java_statement_loc s'#node
+  in new pexpr ~pos:s.java_statement_loc s'#node
 
 and statements l = List.map statement l
 
@@ -1665,7 +1665,7 @@ let tr_method mi req behs b acc =
   in
   let body = Option_misc.map block b in
   let _ = 
-    reg_loc ~id:nfi.jc_fun_info_name 
+    reg_pos ~id:nfi.jc_fun_info_name 
       ~name:("Method " ^ mi.method_info_name)
       mi.method_info_loc
   in
@@ -1719,7 +1719,7 @@ let tr_constr ci req behs b acc =
     | _ -> Some (mkblock ~exprs:body ())
   in
   let _ = 
-    reg_loc ~id:nfi.jc_fun_info_name 
+    reg_pos ~id:nfi.jc_fun_info_name 
       ~name:("Constructor of class "^ci.constr_info_class.class_info_name)
       ci.constr_info_loc 
   in
@@ -1830,7 +1830,7 @@ let tr_field type_name acc fi =
 	    assert (List.length values = 1);
 	    (* evaluated constant expressions are translated *)
             let t = term (term_of_expr e) in
-	    Some (mkconst ~const:(get_value (List.hd values)) ~loc:t#loc ()),
+	    Some (mkconst ~const:(get_value (List.hd values)) ~pos:t#pos ()),
 	    None
 	| Some (JIlist il) ->
 	    let n = List.length il in

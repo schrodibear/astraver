@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.105 2008-07-31 15:22:39 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.106 2008-08-06 15:17:04 moy Exp $ */
 
 %{
 
@@ -39,11 +39,11 @@
   open Error
   open Jc_constructors
 
-  let loc () = (symbol_start_pos (), symbol_end_pos ())
-  let loc_i i = (rhs_start_pos i, rhs_end_pos i)
+  let pos () = (symbol_start_pos (), symbol_end_pos ())
+  let pos_i i = (rhs_start_pos i, rhs_end_pos i)
 
-  let locate n = new node_located ~loc:(loc ()) n
-  let locate_identifier n = new identifier ~loc:(loc ()) n
+  let locate n = new node_positioned ~pos:(pos ()) n
+  let locate_identifier n = new identifier ~pos:(pos ()) n
 
   let skip = locate (JCPEconst JCCvoid)
 
@@ -205,7 +205,7 @@ decl:
     { $1 }
 /*
 | error
-    { Jc_options.parsing_error (loc ()) "'type' or type expression expected" }
+    { Jc_options.parsing_error (pos ()) "'type' or type expression expected" }
 */
 ;
 
@@ -227,9 +227,9 @@ type_definition:
 
 int_constant:
 | CONSTANT 
-    { num_of_constant (loc_i 1)$1 }
+    { num_of_constant (pos_i 1)$1 }
 | MINUS CONSTANT
-    { Num.minus_num (num_of_constant (loc_i 2) $2) }
+    { Num.minus_num (num_of_constant (pos_i 2) $2) }
 ;
 
 variant_tag_list:
@@ -413,7 +413,7 @@ spec_clause:
 behavior:
 | BEHAVIOR ident_or_default COLON throws assumes requires assigns 
   ENSURES expression SEMICOLON
-    { (loc_i 2,$2,$4,$5,$6,$7,$9) }
+    { (pos_i 2,$2,$4,$5,$6,$7,$9) }
 ;
 
 ident_or_default:
@@ -445,9 +445,9 @@ assigns:
 | /* epsilon */
     { None }
 | ASSIGNS argument_expression_list SEMICOLON
-    { Some(loc_i 2,$2) }
+    { Some(pos_i 2,$2) }
 | ASSIGNS BSNOTHING SEMICOLON
-    { Some (loc_i 2,[]) }
+    { Some (pos_i 2,[]) }
 ;
 
 reads:
@@ -757,7 +757,7 @@ expression:
 | BSMUTABLE LPAR expression RPAR
     { locate (JCPEmutable($3, locate JCPTbottom)) }
 | BSTYPEEQ LPAR tag COMMA tag RPAR
-    { locate (JCPEtagequality($3, $5)) }
+    { locate (JCPEeqtype($3, $5)) }
 | MATCH expression WITH pattern_expression_list END
     { locate (JCPEmatch($2, $4)) }
 ;
@@ -956,10 +956,10 @@ exception_expression:
 logic_definition:
 /* constants def */
 | LOGIC type_expr IDENTIFIER EQ expression
-    { locate (JCDlogic_var($2, $3, Some $5)) }
+    { locate (JCDlogic(Some $2, $3, [], [], JCexpr $5)) }
 /* constants no def */
 | LOGIC type_expr IDENTIFIER 
-    { locate (JCDlogic_var($2, $3, None)) }
+    { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
 /* logic fun def */
 | LOGIC type_expr IDENTIFIER label_binders parameters EQ expression
     { locate (JCDlogic(Some $2, $3, $4, $5, JCexpr $7)) }

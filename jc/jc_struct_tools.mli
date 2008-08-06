@@ -55,8 +55,8 @@ A variant has no field.
 A structure has its fields and the fields of its ancestors. *)
 val all_fields: pointer_class -> field_info list
 
-(** Selects fully allocated fields. *)
-val fully_allocated: field_info -> bool
+(** Selects fully alpositioned fields. *)
+val fully_alpositioned: field_info -> bool
 
 (** Return all the memories used by a structure, i.e.: its fields,
 the fields of its ancestors, and recursively the fields of its fields.
@@ -75,7 +75,7 @@ val all_allocs:
 
 (** Return all the variant info used by a structure *)
 val all_tags: 
-  ?select:(field_info -> bool) -> struct_info -> variant_info list
+  ?select:(field_info -> bool) -> pointer_class -> variant_info list
 
 
 (*

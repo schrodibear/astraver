@@ -271,7 +271,7 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 # jessie
 JCCML_EXPORT = src/lib.ml src/rc.ml src/loc.ml src/pp.ml src/option_misc.ml \
 	jc/jc_type_var.ml jc/output.ml \
-	jc/jc_version.ml jc/jc_common_options.ml \
+	jc/jc_version.ml jc/jc_common_options.ml jc/jc_stdlib.ml \
 	jc/jc_envset.ml jc/jc_region.ml jc/jc_constructors.ml \
 	jc/jc_pervasives.ml jc/jc_iterators.ml \
 	jc/jc_output_misc.ml jc/jc_poutput.ml jc/jc_output.ml jc/jc_noutput.ml
@@ -324,7 +324,7 @@ bin/jessie.byte: $(JCCMO)
 # krakatoa
 # CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
 KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	jc/output.cmo jc/jc_type_var.cmo \
+	jc/output.cmo jc/jc_type_var.cmo jc/jc_stdlib.cmo \
 	jc/jc_envset.cmo jc/jc_common_options.cmo \
 	jc/jc_region.cmo jc/numconst.cmo jc/jc_constructors.cmo \
 	jc/jc_pervasives.cmo jc/jc_name.cmo \
@@ -357,7 +357,7 @@ JESSICACMO = ml/ml_misc.cmo ml/ml_options.cmo ml/ml_pervasives.cmo \
 JESSICACMI = ml/ml_options.cmi ml/ml_env.cmi ml/ml_pattern.cmi
 
 JESSICACMX = $(JESSICACMO:.cmo=.cmx)
-MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo \
+MLCMO = src/loc.cmo src/pp.cmo src/option_misc.cmo jc/jc_stdlib.cmo \
 	jc/jc_envset.cmo jc/jc_common_options.cmo \
 	jc/jc_region.cmo jc/numconst.cmo jc/jc_constructors.cmo \
 	jc/jc_pervasives.cmo jc/jc_name.cmo \

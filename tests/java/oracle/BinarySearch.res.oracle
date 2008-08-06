@@ -998,8 +998,6 @@ parameter Object_alloc_table : Object alloc_table ref
 
 parameter intM_intP : (Object, int32) memory ref
 
-parameter Object_tag_table : Object tag_table ref
-
 parameter BinarySearch_binary_search :
  t_0:Object pointer ->
   v:int32 ->
@@ -1014,7 +1012,7 @@ parameter BinarySearch_binary_search :
                     (1))))) ->
             le_int(integer_of_int32(select(intM_intP, shift(t_0, k1))),
             integer_of_int32(select(intM_intP, shift(t_0, k2)))))))))}
-   int32 reads Object_alloc_table,Object_tag_table,intM_intP
+   int32 reads Object_alloc_table,intM_intP
    { (K_1:
      ((ge_int(integer_of_int32(result), (0))
       and eq_int(integer_of_int32(select(intM_intP,
@@ -1027,6 +1025,8 @@ parameter BinarySearch_binary_search :
                   add_int(offset_max(Object_alloc_table, t_0), (1)))) ->
               neq_int(integer_of_int32(select(intM_intP, shift(t_0, k))),
               integer_of_int32(v))))))) }
+
+parameter Object_tag_table : Object tag_table ref
 
 parameter alloc_BinarySearch :
  n:int ->
@@ -1115,9 +1115,7 @@ parameter char_of_integer_ :
   { (le_int((0), x) and le_int(x, (65535)))} char
   { eq_int(integer_of_char(result), x) }
 
-parameter cons_BinarySearch :
- this_0:Object pointer ->
-  { } unit reads Object_alloc_table,Object_tag_table { true }
+parameter cons_BinarySearch : this_0:Object pointer -> { } unit { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1126,7 +1124,7 @@ parameter int32_of_integer_ :
 
 parameter java_array_length_intM :
  x_2:Object pointer ->
-  { } int reads Object_alloc_table,Object_tag_table
+  { } int reads Object_alloc_table
   { (JC_9:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
@@ -1141,7 +1139,7 @@ parameter long_of_integer_ :
 
 parameter non_null_Object :
  x_3:Object pointer ->
-  { } bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table
   { (JC_13:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_3), (0))
@@ -1149,7 +1147,7 @@ parameter non_null_Object :
 
 parameter non_null_intM :
  x_1:Object pointer ->
-  { } bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table
   { (JC_4:
     (if result
      then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
@@ -1411,7 +1409,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "why/BinarySearch.why" line = "595" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "593" begin = "49" end = "208"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
@@ -6516,7 +6514,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
 (integer_of_int32 v)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 595, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 593, characters 49-208
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

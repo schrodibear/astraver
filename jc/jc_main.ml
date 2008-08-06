@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.114 2008-08-04 13:48:33 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.115 2008-08-06 15:17:04 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -211,30 +211,29 @@ let main () =
     Jc_options.lprintf
       "production phase 1.2.3: translate regions and memories@.";
     let d_memories,regions =
-      MemorySet.fold 
-	(fun (fi,r) (acc,regions) -> 
+      Hashtbl.fold 
+	(fun _ (fi,r) (acc,regions) -> 
+	   let r = Region.representative r in
 	   let acc = 
 	     if RegionSet.mem r regions then acc else
 	       Jc_interp.tr_region r acc 
 	   in
 	   Jc_interp.tr_memory (fi,r) acc,RegionSet.add r regions)
-	(MemorySet.map_repr !Jc_effect.constant_memories_set)
+	Jc_effect.constant_memories
 	(d_memories,RegionSet.singleton dummy_region)
     in	       	  
     Jc_options.lprintf
       "production phase 1.2.4: translate regions and allocation tables@.";
     let d_memories,_ =
-      let arts = AllocSet.map_repr
-	!Jc_effect.alloc_region_table_set
-      in
-      AllocSet.fold 
-	(fun (a,r) (acc,regions) -> 
+      Hashtbl.fold 
+	(fun _ (a,r) (acc,regions) -> 
+	   let r = Region.representative r in
 	   let acc = 
 	     if RegionSet.mem r regions then acc else
 	       Jc_interp.tr_region r acc 
 	   in
 	   Jc_interp.tr_alloc_table (a,r) acc, RegionSet.add r regions)
-	arts
+	Jc_effect.constant_alloc_tables
 	(d_memories,regions)
     in	       	  
 
@@ -379,7 +378,7 @@ let main () =
     let cout_locs,fmt_locs = 
       Pp.open_file_and_formatter (Lib.file_subdir "." (filename ^ ".loc")) in
     Jc_interp.print_locs fmt_locs;
-    Output.print_locs fmt_locs; (* Generated annotations. *)
+    Output.print_pos fmt_locs; (* Generated annotations. *)
     Pp.close_file_and_formatter (cout_locs,fmt_locs);
     (* production phase 6.3 : produce makefile *)
     Jc_options.lprintf "production phase 6.3: produce makefile@.";

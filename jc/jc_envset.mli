@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.20 2008-08-04 13:48:33 moy Exp $ *)
+(* $Id: jc_envset.mli,v 1.21 2008-08-06 15:17:04 moy Exp $ *)
 
 module type OrderedHashedType =
 sig
@@ -38,6 +38,7 @@ sig
 end
 
 open Jc_env
+open Jc_stdlib
 
 module StringSet : Set.S with type elt = string
 
@@ -50,6 +51,8 @@ val is_pointer_type : Jc_env.jc_type -> bool
 val is_embedded_field : Jc_env.field_info -> bool
 
 module VarSet : Set.S with type elt = var_info
+
+module VarMap : Map.S with type key = var_info
 
 module StructSet : Set.S with type elt = struct_info
 

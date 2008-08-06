@@ -646,8 +646,7 @@ parameter SideEffects_m1 :
  this_0:Object pointer ->
   t:Object pointer ->
    { (K_18: gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10)))}
-   unit reads Object_alloc_table,Object_tag_table,intM_intP writes intM_intP
-   { true }
+   unit reads Object_alloc_table,intM_intP writes intM_intP { true }
 
 parameter alloc_Object :
  n:int ->
@@ -716,13 +715,11 @@ parameter alloc_interface :
          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
              and alloc_fresh(interface_alloc_table@, result, n)))) }
 
-parameter cons_SideEffects :
- this_1:Object pointer ->
-  { } unit reads Object_alloc_table,Object_tag_table { true }
+parameter cons_SideEffects : this_1:Object pointer -> { } unit { true }
 
 parameter java_array_length_intM :
  x_2:Object pointer ->
-  { } int reads Object_alloc_table,Object_tag_table
+  { } int reads Object_alloc_table
   { (JC_9:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
@@ -732,7 +729,7 @@ parameter java_array_length_intM :
 
 parameter non_null_Object :
  x_3:Object pointer ->
-  { } bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table
   { (JC_13:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_3), (0))
@@ -740,7 +737,7 @@ parameter non_null_Object :
 
 parameter non_null_intM :
  x_1:Object pointer ->
-  { } bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table
   { (JC_4:
     (if result
      then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))

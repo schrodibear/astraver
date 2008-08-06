@@ -669,17 +669,13 @@ parameter Object_alloc_table : Object alloc_table ref
 parameter Object_tag_table : Object tag_table ref
 
 parameter Termination_loop1 :
- this_2:Object pointer ->
-  n_1:int -> { } unit reads Object_alloc_table,Object_tag_table { true }
+ this_2:Object pointer -> n_1:int -> { } unit { true }
 
 parameter Termination_loop2 :
- this_1:Object pointer ->
-  n_0_0:int -> { } unit reads Object_alloc_table,Object_tag_table { true }
+ this_1:Object pointer -> n_0_0:int -> { } unit { true }
 
 parameter Termination_loop3 :
- this_0:Object pointer ->
-  { } int reads Object_alloc_table,Object_tag_table
-  { (K_9: eq_int(result, (0))) }
+ this_0:Object pointer -> { } int { (K_9: eq_int(result, (0))) }
 
 parameter alloc_Object :
  n:int ->
@@ -738,13 +734,11 @@ parameter alloc_interface :
          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
              and alloc_fresh(interface_alloc_table@, result, n)))) }
 
-parameter cons_Termination :
- this_3:Object pointer ->
-  { } unit reads Object_alloc_table,Object_tag_table { true }
+parameter cons_Termination : this_3:Object pointer -> { } unit { true }
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table
   { (JC_4:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))

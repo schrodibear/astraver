@@ -27,9 +27,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.23 2008-08-04 13:48:33 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.24 2008-08-06 15:17:04 moy Exp $ *)
 
 open Jc_env
+open Jc_stdlib
 
 module type OrderedHashedType =
 sig
@@ -111,12 +112,15 @@ let is_embedded_field fi =
     | JCTpointer(_,Some _,Some _) -> true
     | _ -> false
 
-module VarSet = 
-  Set.Make(struct type t = var_info
-		  let compare v1 v2 = 
-		    Pervasives.compare 
-		      v1.jc_var_info_tag v2.jc_var_info_tag
-	   end)
+module VarOrd = struct
+  type t = var_info
+  let compare v1 v2 = 
+    Pervasives.compare v1.jc_var_info_tag v2.jc_var_info_tag
+end
+
+module VarSet = Set.Make(VarOrd)
+
+module VarMap = Map.Make(VarOrd)
 
 module StructOrd =
   struct type t = struct_info

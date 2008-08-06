@@ -75,213 +75,6 @@ module Iterators(X: TAst): TIterators with type t = X.t = struct
 end
 
 (*****************************************************************************)
-(* General iterators on expressions.                                         *)
-(*****************************************************************************)
-
-let replace_sub_expr e el =
-  let as1 = function [e1] -> e1 | _ -> assert false in
-  let as2 = function [e1;e2] -> e1,e2 | _ -> assert false in
-  let as3 = function [e1;e2;e3] -> e1,e2,e3 | _ -> assert false in
-  let pop = function e1::r -> e1,r | _ -> assert false in
-  let popopt el = function 
-    | None -> None,el 
-    | Some _ -> let e1,r = pop el in Some e1,r
-  in
-  let rec popn n el = 
-    if n > 0 then 
-      let e,r = pop el in
-      let el1,el2 = popn (n-1) r in
-      e :: el1, el2
-    else [],el
-  in
-  let enode = match e#node with
-    | JCEconst _ | JCEvar _ | JCEassert _ | JCEreturn_void as enode -> enode
-    | JCEcontract(req,dec,vi_result,behs,_e) ->
-	let e1 = as1 el in JCEcontract(req,dec,vi_result,behs,e1)
-    | JCEbinary(_e1,bop,_e2) ->
-	let e1,e2 = as2 el in JCEbinary(e1,bop,e2) 
-    | JCEshift(_e1,_e2) ->
-	let e1,e2 = as2 el in JCEshift(e1,e2) 
-    | JCEunary(uop,_e1) ->
-	let e1 = as1 el in JCEunary(uop,e1)
-    | JCEassign_var(vi,_e2) ->
-	let e2 = as1 el in JCEassign_var(vi,e2)
-    | JCEassign_heap(_e1,fi,_e2) ->
-	let e1,e2 = as2 el in JCEassign_heap(e1,fi,e2)
-    | JCEderef(_e1,fi) ->
-	let e1 = as1 el in JCEderef(e1,fi)
-    | JCEapp call ->
-	JCEapp { call with jc_call_args = el }
-    | JCEoffset(off,_e,st) ->
-	let e1 = as1 el in JCEoffset(off,e1,st)
-    | JCEaddress _e ->
-	let e1 = as1 el in JCEaddress e1
-    | JCEinstanceof(_e,st) ->
-	let e1 = as1 el in JCEinstanceof(e1,st)
-    | JCEcast(_e,st) ->
-	let e1 = as1 el in JCEcast(e1,st)
-    | JCEreal_cast(_e,st) ->
-	let e1 = as1 el in JCEreal_cast(e1,st)
-    | JCErange_cast(_e,st) ->
-	let e1 = as1 el in JCErange_cast(e1,st)
-    | JCEif(_e1,_e2,_e3) ->
-	let e1,e2,e3 = as3 el in JCEif(e1,e2,e3)
-    | JCEmatch(_e1,ptl) ->
-	let e1,el = pop el in
-	let ptl = List.map2 (fun (p,_e) e -> p,e) ptl el in
-	JCEmatch(e1,ptl)
-    | JCElet(vi,eopt,_e) ->
-	let eopt,el = popopt el eopt in
-	let e1 = as1 el in JCElet(vi,eopt,e1)
-    | JCEalloc(_e,name) ->
-	let e1 = as1 el in JCEalloc(e1,name)
-    | JCEfree _e ->
-	let e1 = as1 el in JCEfree e1
-    | JCEblock elist ->
-	assert (List.length elist = List.length el);
-	JCEblock el
-    | JCEloop(annot,_body) ->
-	let body = as1 el in 
-	JCEloop(annot,body)
-    | JCEreturn(ty,_e) ->
-	let e1 = as1 el in JCEreturn(ty,e1)
-    | JCEtry(body,catches,finally) ->
-	let body,el = pop el in
-	let catches,el = 
-	  List.fold_left (fun (acc,el) (id,name,_e) -> 
-			    let e1,el = pop el in (id,name,e1)::acc,el
-			 ) ([],el) catches
-	in
-	let catches = List.rev catches in
-	let finally = as1 el in
-	JCEtry(body,catches,finally)
-    | JCEthrow(id,eopt) ->
-	let eopt,el = popopt el eopt in
-        JCEthrow(id,eopt)
-    | JCEpack(st1,_e,st2) ->
-	let e1 = as1 el in JCEpack(st1,e1,st2)
-    | JCEunpack(st1,_e,st2) ->
-	let e1 = as1 el in JCEunpack(st1,e1,st2)
-  in
-  new expr_with ~node:enode e
-
-module ExprAst = struct
-  type t = expr
-  let subs e =
-    match e#node with
-      | JCEconst _
-      | JCEvar _
-      | JCEassert _
-      | JCEreturn_void 
-      | JCEthrow(_, None) ->
-          []
-      | JCEderef(e, _)
-      | JCEunary(_, e)
-      | JCEassign_var(_, e)
-      | JCEinstanceof(e, _)
-      | JCEcast(e, _)
-      | JCErange_cast(e, _)
-      | JCEreal_cast(e, _)
-      | JCEoffset(_, e, _)
-      | JCEaddress e
-      | JCEalloc(e, _)
-      | JCEfree e
-      | JCElet(_, None, e)
-      | JCEloop(_, e)
-      | JCEreturn(_, e)
-      | JCEthrow(_, Some e)
-      | JCEpack(_, e, _)
-      | JCEunpack(_, e, _) 
-      | JCEcontract(_,_,_,_,e) -> [e]
-      | JCEbinary(e1, _, e2)
-      | JCEassign_heap(e1, _, e2)
-      | JCElet(_, Some e1, e2)
-      | JCEshift(e1, e2) ->
-          [e1; e2]
-      | JCEif(e1, e2, e3) ->
-          [e1; e2; e3]
-      | JCEblock el ->
-          el
-      | JCEapp call ->
-	  call.jc_call_args
-      | JCEtry(e1, l, e2) ->
-          e1 :: List.map (fun (_, _, e) -> e) l @ [ e2 ]
-      | JCEmatch(e, pel) ->
-          e :: List.map snd pel
-end
-
-module IExpr = Iterators(ExprAst)
-
-let rec map_expr ?(before = fun x -> x) ?(after = fun x -> x) e =
-  let e = before e in
-  let elist = List.map (map_expr ~before ~after) (ExprAst.subs e) in
-  after (replace_sub_expr e elist)
-
-module NExprAst = struct
-  type t = nexpr
-  let subtags tag = 
-    match tag#node with
-      | JCPTtag _ | JCPTbottom -> []
-      | JCPTtypeof e -> [e]
-  let subs e =
-    match e#node with
-      | JCNEconst _
-      | JCNEvar _
-      | JCNEreturn None
-      | JCNEthrow(_, None)
-      | JCNErange(None, None) ->
-          []
-      | JCNEtagequality(tag1,tag2) | JCNEsubtype(tag1,tag2) ->
-	  subtags tag1 @ subtags tag2
-      | JCNElabel(_, e)
-      | JCNEderef(e, _)
-      | JCNEunary(_, e)
-      | JCNEinstanceof(e, _)
-      | JCNEcast(e, _)
-      | JCNEoffset(_, e)
-      | JCNEaddress e
-      | JCNEalloc(e, _)
-      | JCNEfree e
-      | JCNElet(_, _, None, e)
-      | JCNEassert(_,e)
-      | JCNEreturn(Some e)
-      | JCNEthrow(_, Some e)
-      | JCNEpack(e, _)
-      | JCNEunpack(e, _)
-      | JCNEquantifier(_, _, _, e)
-      | JCNEold e
-      | JCNEat(e, _)
-      | JCNEmutable(e, _)
-      | JCNErange(Some e, None)
-      | JCNErange(None, Some e) ->
-          [e]
-      | JCNEbinary(e1, _, e2)
-      | JCNEassign(e1, e2)
-      | JCNElet(_, _, Some e1, e2)
-      | JCNErange(Some e1, Some e2) ->
-          [e1; e2]
-      | JCNEcontract(_,_,_,e) -> 
-	  [e]
-      | JCNEif(e1, e2, e3) ->
-          [e1; e2; e3]
-      | JCNEloop(inv, None, e2) ->
-	  let e1list = List.map (fun (_behav,e) -> e) inv in
-          e1list @ [e2]
-      | JCNEloop(inv, Some e2, e3) ->
-	  let e1list = List.map (fun (_behav,e) -> e) inv in
-          e1list @ [e2; e3]
-      | JCNEapp(_, _, el)
-      | JCNEblock el ->
-          el
-      | JCNEmatch(e, pel) ->
-          e :: List.map snd pel
-      | JCNEtry(e1, l, e2) ->
-          e1 :: List.map (fun (_, _, e) -> e) l @ [e2]
-end
-
-module INExpr = Iterators(NExprAst)
-
-(*****************************************************************************)
 (* General iterators on parsed expressions.                                  *)
 (*****************************************************************************)
 
@@ -313,11 +106,11 @@ let replace_sub_pexpr e el =
   let enode = match e#node with
     | JCPEconst _ | JCPEvar _ | JCPEbreak _
     | JCPEcontinue _ | JCPEgoto _ as enode -> enode
-    | JCPEtagequality(tag1,tag2) ->
+    | JCPEeqtype(tag1,tag2) ->
 	let tag1,el = replace_sub_tag tag1 el in
 	let tag2,el = replace_sub_tag tag2 el in
 	assert (el == []);
-	JCPEtagequality(tag1,tag2)
+	JCPEeqtype(tag1,tag2)
     | JCPEsubtype(tag1,tag2) ->
 	let tag1,el = replace_sub_tag tag1 el in
 	let tag2,el = replace_sub_tag tag2 el in
@@ -454,7 +247,7 @@ module PExprAst = struct
       | JCPErange(None,None)
       | JCPEdecl(_,_,None) ->
           []
-      | JCPEtagequality(tag1,tag2) | JCPEsubtype(tag1,tag2) ->
+      | JCPEeqtype(tag1,tag2) | JCPEsubtype(tag1,tag2) ->
 	  subtags tag1 @ subtags tag2
       | JCPEassert(_,e)
       | JCPElabel(_, e)
@@ -535,7 +328,8 @@ module TermAst = struct
 	  [t1;t2]
       | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCTat(t1,_) 
       | JCToffset(_,t1,_) | JCTaddress t1
-      | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_) | JCTrange_cast(t1,_) 
+      | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_) | JCTbitwise_cast(t1,_,_) 
+      | JCTrange_cast(t1,_) 
       | JCTreal_cast(t1,_) | JCTrange(Some t1,None)
       | JCTrange(None,Some t1) ->
 	  [t1]
@@ -550,28 +344,40 @@ end
 module ITerm = Iterators(TermAst)
 
 let fold_sub_term it f acc t =
+  let it = it f in
   match t#node with
-    | JCTconst _ | JCTvar _ | JCTrange(None,None) -> acc
-    | JCTbinary(t1,_,t2) | JCTshift(t1,t2)
-    | JCTrange(Some t1,Some t2) ->
-	let acc = it f acc t1 in
-	it f acc t2
-    | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCToffset(_,t1,_)
+    | JCTconst _ 
+    | JCTvar _ -> 
+	acc
+    | JCTbinary(t1,_,t2)
+    | JCTshift(t1,t2) ->
+	let acc = it acc t1 in
+	it acc t2
+    | JCTrange(t1_opt,t2_opt) ->
+	let acc = Option_misc.fold_left it acc t1_opt in
+	Option_misc.fold_left it acc t2_opt
+    | JCTunary(_,t1) 
+    | JCTderef(t1,_,_)
+    | JCTold t1
+    | JCToffset(_,t1,_)
     | JCTaddress t1
-    | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_) | JCTrange_cast(t1,_) 
-    | JCTreal_cast(t1,_) | JCTrange(Some t1,None)
-    | JCTrange(None,Some t1) | JCTat(t1,_) ->
-	it f acc t1
+    | JCTinstanceof(t1,_,_) 
+    | JCTcast(t1,_,_) 
+    | JCTbitwise_cast(t1,_,_) 
+    | JCTreal_cast(t1,_) 
+    | JCTrange_cast(t1,_) 
+    | JCTat(t1,_) ->
+	it acc t1
     | JCTapp app ->
 	let tl = app.jc_app_args in
-	List.fold_left (it f) acc tl
+	List.fold_left it acc tl
     | JCTif(t1,t2,t3) ->
-	let acc = it f acc t1 in
-	let acc = it f acc t2 in
-	it f acc t3
+	let acc = it acc t1 in
+	let acc = it acc t2 in
+	it acc t3
     | JCTmatch(t, ptl) ->
-	let acc = it f acc t in
-	List.fold_left (fun acc (_, t) -> it f acc t) acc ptl
+	let acc = it acc t in
+	List.fold_left (fun acc (_, t) -> it acc t) acc ptl
 
 let rec fold_term f acc t =
   let acc = f acc t in
@@ -607,6 +413,8 @@ let rec map_term f t =
 	JCTinstanceof(map_term f t,lab,st)
     | JCTcast(t,lab,st) ->
 	JCTcast(map_term f t,lab,st)
+    | JCTbitwise_cast(t,lab,st) ->
+	JCTbitwise_cast(map_term f t,lab,st)
     | JCTrange_cast(t,ei) ->
 	JCTrange_cast(map_term f t,ei)
     | JCTreal_cast(t,rc) ->
@@ -649,7 +457,7 @@ let rec iter_term_and_assertion ft fa a =
   fa a;
   match a#node with
     | JCAtrue | JCAfalse -> ()
-    | JCAtagequality(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
+    | JCAeqtype(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
 	iter_tag tag1; 
 	iter_tag tag2
     | JCArelation(t1,_,t2) -> 
@@ -692,7 +500,7 @@ let iter_term_and_assertion_in_fun_spec ft fa spec =
 let rec fold_assertion f acc a =
   let acc = f acc a in
   match a#node with
-    | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAtagequality _ 
+    | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAeqtype _ 
     | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ | JCAsubtype _ -> 
 	acc
     | JCAand al | JCAor al ->
@@ -705,15 +513,26 @@ let rec fold_assertion f acc a =
     | JCAmatch(_, pal) ->
 	List.fold_left (fun acc (_, a) -> fold_assertion f acc a) acc pal
 	  
-let fold_term_in_tag f acc tag = 
+(* let fold_term_in_tag f acc tag =  *)
+(*   match tag#node with *)
+(*     | JCTtag _ | JCTbottom -> acc *)
+(*     | JCTtypeof(t,_st) -> fold_term f acc t *)
+
+let fold_sub_term_in_tag it f acc tag = 
   match tag#node with
     | JCTtag _ | JCTbottom -> acc
-    | JCTtypeof(t,_st) -> fold_term f acc t
+    | JCTtypeof(t,_st) -> it f acc t
+
+let fold_term_in_tag f acc tag =
+  fold_sub_term_in_tag fold_term f acc tag
+
+let fold_rec_term_in_tag f acc tag =
+  fold_sub_term_in_tag fold_rec_term f acc tag
 
 let rec fold_term_in_assertion f acc a =
   match a#node with
     | JCAtrue | JCAfalse -> acc
-    | JCAtagequality(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
+    | JCAeqtype(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
 	let acc = fold_term_in_tag f acc tag1 in
 	fold_term_in_tag f acc tag2
     | JCArelation(t1,_,t2) -> 
@@ -739,40 +558,141 @@ let rec fold_term_in_assertion f acc a =
 	List.fold_left (fun acc (_, a) -> fold_term_in_assertion f acc a)
 	  acc pal
 
-let rec fold_term_and_assertion ft fa acc a =
-  let acc = match a#node with
+(* let rec fold_term_and_assertion ft fa acc a = *)
+(*   let acc = match a#node with *)
+(*     | JCAtrue | JCAfalse -> acc *)
+(*     | JCAeqtype(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) -> *)
+(* 	let acc = fold_term_in_tag ft acc tag1 in *)
+(* 	fold_term_in_tag ft acc tag2 *)
+(*     | JCArelation(t1,_,t2) ->  *)
+(* 	let acc = fold_term ft acc t1 in *)
+(* 	fold_term ft acc t2 *)
+(*     | JCAapp app -> *)
+(* 	List.fold_left (fold_term ft) acc app.jc_app_args *)
+(*     | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) -> *)
+(* 	fold_term ft acc t1 *)
+(*     | JCAand al | JCAor al -> *)
+(* 	List.fold_left (fold_term_and_assertion ft fa) acc al *)
+(*     | JCAimplies(a1,a2) | JCAiff(a1,a2) -> *)
+(* 	let acc = fold_term_and_assertion ft fa acc a1 in *)
+(* 	fold_term_and_assertion ft fa acc a2 *)
+(*     | JCAif(t1,a1,a2) -> *)
+(* 	let acc = fold_term ft acc t1 in *)
+(* 	let acc = fold_term_and_assertion ft fa acc a1 in *)
+(* 	fold_term_and_assertion ft fa acc a2 *)
+(*     | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) -> *)
+(* 	fold_term_and_assertion ft fa acc a1 *)
+(*     | JCAmatch(t, pal) -> *)
+(* 	let acc = fold_term ft acc t in *)
+(* 	List.fold_left (fun acc (_, a) -> fold_term_and_assertion ft fa acc a) *)
+(* 	  acc pal *)
+(*   in *)
+(*   fa acc a *)
+
+let rec fold_sub_term_and_assertion itt ita ft fa acc a =
+  match a#node with
     | JCAtrue | JCAfalse -> acc
-    | JCAtagequality(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
-	let acc = fold_term_in_tag ft acc tag1 in
-	fold_term_in_tag ft acc tag2
+    | JCAeqtype(tag1,tag2,_st) | JCAsubtype(tag1,tag2,_st) ->
+	let acc = fold_sub_term_in_tag itt ft acc tag1 in
+	fold_sub_term_in_tag itt ft acc tag2
     | JCArelation(t1,_,t2) -> 
-	let acc = fold_term ft acc t1 in
-	fold_term ft acc t2
+	let acc = itt ft acc t1 in
+	itt ft acc t2
     | JCAapp app ->
-	List.fold_left (fold_term ft) acc app.jc_app_args
+	List.fold_left (itt ft) acc app.jc_app_args
     | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
-	fold_term ft acc t1
+	itt ft acc t1
     | JCAand al | JCAor al ->
-	List.fold_left (fold_term_and_assertion ft fa) acc al
+	List.fold_left (ita ft fa) acc al
     | JCAimplies(a1,a2) | JCAiff(a1,a2) ->
-	let acc = fold_term_and_assertion ft fa acc a1 in
-	fold_term_and_assertion ft fa acc a2
+	let acc = ita ft fa acc a1 in
+	ita ft fa acc a2
     | JCAif(t1,a1,a2) ->
-	let acc = fold_term ft acc t1 in
-	let acc = fold_term_and_assertion ft fa acc a1 in
-	fold_term_and_assertion ft fa acc a2
+	let acc = itt ft acc t1 in
+	let acc = ita ft fa acc a1 in
+	ita ft fa acc a2
     | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
-	fold_term_and_assertion ft fa acc a1
+	ita ft fa acc a1
     | JCAmatch(t, pal) ->
-	let acc = fold_term ft acc t in
-	List.fold_left (fun acc (_, a) -> fold_term_and_assertion ft fa acc a)
+	let acc = itt ft acc t in
+	List.fold_left (fun acc (_, a) -> ita ft fa acc a)
 	  acc pal
+
+let rec fold_term_and_assertion ft fa acc a =
+  let acc = fa acc a in
+  fold_sub_term_and_assertion fold_term fold_term_and_assertion ft fa acc a
+
+let rec fold_rec_term_and_assertion ft fa acc a =
+  let cont,acc = fa acc a in
+  if cont then 
+    fold_sub_term_and_assertion 
+      fold_rec_term fold_rec_term_and_assertion ft fa acc a 
+  else acc
+
+let fold_sub_location_set itls fls acc locs =
+  let itls = itls fls in
+  match locs#node with
+    | JCLSvar _vi ->
+	acc
+    | JCLSderef(locs,_lab,_fi,_r) ->
+	itls acc locs
+    | JCLSrange(locs,t1_opt,t2_opt) ->
+	itls acc locs (* TODO: terms *)
+	  
+let rec fold_location_set fls acc locs =
+  let acc = fls acc locs in
+  fold_sub_location_set fold_location_set fls acc locs
+
+let rec fold_rec_location_set fls acc locs =
+  let cont,acc = fls acc locs in
+  if cont then 
+    fold_sub_location_set fold_rec_location_set fls acc locs 
+  else acc
+  
+let fold_sub_location itl itls fl fls acc loc =
+  let itl = itl fl fls and itls = itls fls in
+  match loc#node with
+    | JCLvar _vi ->
+	acc
+    | JCLderef(locs,_lab,_fi,_r) ->
+	itls acc locs
+    | JCLat(loc,_lab) ->
+	itl acc loc
+
+let rec fold_location fl fls acc loc =
+  let acc = fl acc loc in
+  fold_sub_location fold_location fold_sub_location_set fl fls acc loc
+
+let rec fold_rec_location fl fls acc loc =
+  let cont,acc = fl acc loc in
+  if cont then 
+    fold_sub_location fold_rec_location fold_rec_location_set fl fls acc loc 
+  else acc
+  
+let fold_sub_behavior itt ita itl itls ft fa fl fls acc b =
+  let ita = ita ft fa and itl = itl fl fls in
+  let acc = Option_misc.fold_left ita acc b.jc_behavior_assumes in
+  let acc =
+    Option_misc.fold_left
+      (fun acc (_,locs) -> List.fold_left itl acc locs)
+      acc b.jc_behavior_assigns
   in
-  fa acc a
+  ita acc b.jc_behavior_ensures
+
+let rec fold_behavior ft fa fl fls acc e =
+  fold_sub_behavior 
+    fold_term fold_term_and_assertion fold_location fold_location_set
+    ft fa fl fls acc e
+
+let rec fold_rec_behavior ft fa fl fls acc e =
+  fold_sub_behavior
+    fold_rec_term fold_rec_term_and_assertion fold_rec_location
+    fold_rec_location_set
+    ft fa fl fls acc e 
 
 let rec map_assertion f a =
   let anode = match a#node with
-    | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAtagequality _ 
+    | JCAtrue | JCAfalse | JCArelation _ | JCAapp _ | JCAeqtype _ 
     | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
     | JCAsubtype _ as anode -> 
 	anode
@@ -810,8 +730,8 @@ let map_term_in_tag f tag =
 let rec map_term_in_assertion f a =
   let anode = match a#node with
     | JCAtrue | JCAfalse as anode -> anode
-    | JCAtagequality(tag1,tag2,st) ->
-	JCAtagequality(map_term_in_tag f tag1,map_term_in_tag f tag2,st)
+    | JCAeqtype(tag1,tag2,st) ->
+	JCAeqtype(map_term_in_tag f tag1,map_term_in_tag f tag2,st)
     | JCAsubtype(tag1,tag2,st) ->
 	JCAsubtype(map_term_in_tag f tag1,map_term_in_tag f tag2,st)
     | JCArelation(t1,op,t2) -> 
@@ -856,8 +776,8 @@ let rec map_term_in_assertion f a =
 let rec map_term_and_assertion fa ft a =
   let anode = match a#node with
     | JCAtrue | JCAfalse as anode -> anode
-    | JCAtagequality(tag1,tag2,st) ->
-	JCAtagequality(map_term_in_tag ft tag1,map_term_in_tag ft tag2,st)
+    | JCAeqtype(tag1,tag2,st) ->
+	JCAeqtype(map_term_in_tag ft tag1,map_term_in_tag ft tag2,st)
     | JCAsubtype(tag1,tag2,st) ->
 	JCAsubtype(map_term_in_tag ft tag1,map_term_in_tag ft tag2,st)
     | JCArelation(t1,op,t2) -> 
@@ -930,6 +850,305 @@ let rec fold_pattern f acc p =
     | JCPvar _
     | JCPany
     | JCPconst _ -> ()
+
+(*****************************************************************************)
+(* General iterators on expressions.                                         *)
+(*****************************************************************************)
+
+let replace_sub_expr e el =
+  let as1 = function [e1] -> e1 | _ -> assert false in
+  let as2 = function [e1;e2] -> e1,e2 | _ -> assert false in
+  let as3 = function [e1;e2;e3] -> e1,e2,e3 | _ -> assert false in
+  let pop = function e1::r -> e1,r | _ -> assert false in
+  let popopt el = function 
+    | None -> None,el 
+    | Some _ -> let e1,r = pop el in Some e1,r
+  in
+  let rec popn n el = 
+    if n > 0 then 
+      let e,r = pop el in
+      let el1,el2 = popn (n-1) r in
+      e :: el1, el2
+    else [],el
+  in
+  let enode = match e#node with
+    | JCEconst _ | JCEvar _ | JCEassert _ | JCEreturn_void as enode -> enode
+    | JCEcontract(req,dec,vi_result,behs,_e) ->
+	let e1 = as1 el in JCEcontract(req,dec,vi_result,behs,e1)
+    | JCEbinary(_e1,bop,_e2) ->
+	let e1,e2 = as2 el in JCEbinary(e1,bop,e2) 
+    | JCEshift(_e1,_e2) ->
+	let e1,e2 = as2 el in JCEshift(e1,e2) 
+    | JCEunary(uop,_e1) ->
+	let e1 = as1 el in JCEunary(uop,e1)
+    | JCEassign_var(vi,_e2) ->
+	let e2 = as1 el in JCEassign_var(vi,e2)
+    | JCEassign_heap(_e1,fi,_e2) ->
+	let e1,e2 = as2 el in JCEassign_heap(e1,fi,e2)
+    | JCEderef(_e1,fi) ->
+	let e1 = as1 el in JCEderef(e1,fi)
+    | JCEapp call ->
+	JCEapp { call with jc_call_args = el }
+    | JCEoffset(off,_e,st) ->
+	let e1 = as1 el in JCEoffset(off,e1,st)
+    | JCEaddress _e ->
+	let e1 = as1 el in JCEaddress e1
+    | JCEinstanceof(_e,st) ->
+	let e1 = as1 el in JCEinstanceof(e1,st)
+    | JCEcast(_e,st) ->
+	let e1 = as1 el in JCEcast(e1,st)
+    | JCEbitwise_cast(_e,st) ->
+	let e1 = as1 el in JCEbitwise_cast(e1,st)
+    | JCEreal_cast(_e,st) ->
+	let e1 = as1 el in JCEreal_cast(e1,st)
+    | JCErange_cast(_e,st) ->
+	let e1 = as1 el in JCErange_cast(e1,st)
+    | JCEif(_e1,_e2,_e3) ->
+	let e1,e2,e3 = as3 el in JCEif(e1,e2,e3)
+    | JCEmatch(_e1,ptl) ->
+	let e1,el = pop el in
+	let ptl = List.map2 (fun (p,_e) e -> p,e) ptl el in
+	JCEmatch(e1,ptl)
+    | JCElet(vi,eopt,_e) ->
+	let eopt,el = popopt el eopt in
+	let e1 = as1 el in JCElet(vi,eopt,e1)
+    | JCEalloc(_e,name) ->
+	let e1 = as1 el in JCEalloc(e1,name)
+    | JCEfree _e ->
+	let e1 = as1 el in JCEfree e1
+    | JCEblock elist ->
+	assert (List.length elist = List.length el);
+	JCEblock el
+    | JCEloop(annot,_body) ->
+	let body = as1 el in 
+	JCEloop(annot,body)
+    | JCEreturn(ty,_e) ->
+	let e1 = as1 el in JCEreturn(ty,e1)
+    | JCEtry(body,catches,finally) ->
+	let body,el = pop el in
+	let catches,el = 
+	  List.fold_left (fun (acc,el) (id,name,_e) -> 
+			    let e1,el = pop el in (id,name,e1)::acc,el
+			 ) ([],el) catches
+	in
+	let catches = List.rev catches in
+	let finally = as1 el in
+	JCEtry(body,catches,finally)
+    | JCEthrow(id,eopt) ->
+	let eopt,el = popopt el eopt in
+        JCEthrow(id,eopt)
+    | JCEpack(st1,_e,st2) ->
+	let e1 = as1 el in JCEpack(st1,e1,st2)
+    | JCEunpack(st1,_e,st2) ->
+	let e1 = as1 el in JCEunpack(st1,e1,st2)
+  in
+  new expr_with ~node:enode e
+
+module ExprAst = struct
+  type t = expr
+  let subs e =
+    match e#node with
+      | JCEconst _
+      | JCEvar _
+      | JCEassert _
+      | JCEreturn_void 
+      | JCEthrow(_, None) ->
+          []
+      | JCEderef(e, _)
+      | JCEunary(_, e)
+      | JCEassign_var(_, e)
+      | JCEinstanceof(e, _)
+      | JCEcast(e, _)
+      | JCEbitwise_cast(e, _)
+      | JCErange_cast(e, _)
+      | JCEreal_cast(e, _)
+      | JCEoffset(_, e, _)
+      | JCEaddress e
+      | JCEalloc(e, _)
+      | JCEfree e
+      | JCElet(_, None, e)
+      | JCEloop(_, e)
+      | JCEreturn(_, e)
+      | JCEthrow(_, Some e)
+      | JCEpack(_, e, _)
+      | JCEunpack(_, e, _) 
+      | JCEcontract(_,_,_,_,e) -> [e]
+      | JCEbinary(e1, _, e2)
+      | JCEassign_heap(e1, _, e2)
+      | JCElet(_, Some e1, e2)
+      | JCEshift(e1, e2) ->
+          [e1; e2]
+      | JCEif(e1, e2, e3) ->
+          [e1; e2; e3]
+      | JCEblock el ->
+          el
+      | JCEapp call ->
+	  call.jc_call_args
+      | JCEtry(e1, l, e2) ->
+          e1 :: List.map (fun (_, _, e) -> e) l @ [ e2 ]
+      | JCEmatch(e, pel) ->
+          e :: List.map snd pel
+end
+
+module IExpr = Iterators(ExprAst)
+
+let rec map_expr ?(before = fun x -> x) ?(after = fun x -> x) e =
+  let e = before e in
+  let elist = List.map (map_expr ~before ~after) (ExprAst.subs e) in
+  after (replace_sub_expr e elist)
+
+let fold_sub_expr_and_term_and_assertion 
+    itt ita itl itls ite ft fa fl fls fe acc e =
+  let fold_sub_behavior = fold_sub_behavior itt ita itl itls ft fa fl fls in
+  let ite = ite ft fa fl fls fe and ita = ita ft fa and itt = itt ft in
+  match e#node with
+    | JCEconst _ 
+    | JCEvar _ 
+    | JCEreturn_void ->
+       acc
+    | JCEthrow(_exc,e1_opt) ->
+	Option_misc.fold_left ite acc e1_opt
+    | JCEbinary(e1,_,e2) 
+    | JCEshift(e1,e2)
+    | JCEassign_heap(e1,_,e2) ->
+	let acc = ite acc e1 in
+	ite acc e2
+    | JCEunary(_,e1)
+    | JCEderef(e1,_)
+    | JCEoffset(_,e1,_)
+    | JCEaddress e1
+    | JCEcast(e1,_)
+    | JCEbitwise_cast(e1,_) 
+    | JCErange_cast(e1,_) 
+    | JCEinstanceof(e1,_) 
+    | JCEreal_cast(e1,_)
+    | JCEunpack(_,e1,_)
+    | JCEpack(_,e1,_)
+    | JCEassign_var(_,e1) 
+    | JCEalloc(e1,_) 
+    | JCEfree e1 
+    | JCEreturn(_,e1) ->
+	ite acc e1
+    | JCElet(_,e1_opt,e2) ->
+	let acc = Option_misc.fold_left ite acc e1_opt in
+	ite acc e2
+    | JCEapp call ->
+	List.fold_left ite acc call.jc_call_args
+    | JCEif(e1,e2,e3) ->
+	let acc = ite acc e1 in
+	let acc = ite acc e2 in
+	ite acc e3
+    | JCEmatch(e, ptl) ->
+	let acc = ite acc e in
+	List.fold_left (fun acc (_, e) -> ite acc e) acc ptl
+    | JCEblock el ->
+	List.fold_left ite acc el
+    | JCEtry(e1,catches,finally) ->
+	let acc = ite acc e1 in
+	let acc = 
+	  List.fold_left (fun acc (_exc,_vi_opt,e) -> ite acc e) acc catches
+	in
+	ite acc finally
+    | JCEassert(_behav,a) ->
+	ita acc a
+    | JCEloop(la,e1) ->
+	let acc = ite acc e1 in
+	let acc = 
+	  List.fold_left 
+	    (fun acc (_behav,a) -> ita acc a) acc la.jc_loop_invariant
+	in
+	let acc = ita acc la.jc_free_loop_invariant in
+	Option_misc.fold_left itt acc la.jc_loop_variant
+    | JCEcontract(a_opt,t_opt,_v,behavs,e) ->
+	let acc = Option_misc.fold_left ita acc a_opt in
+	let acc = Option_misc.fold_left itt acc t_opt in
+	let acc = 
+	  List.fold_left 
+	    (fun acc (_loc,_name,behav) ->
+	       fold_sub_behavior acc behav
+	    ) acc behavs
+	in
+	ite acc e
+
+let rec fold_expr_and_term_and_assertion ft fa fl fls fe acc e =
+  let acc = fe acc e in
+  fold_sub_expr_and_term_and_assertion 
+    fold_term fold_term_and_assertion fold_location fold_location_set
+    fold_expr_and_term_and_assertion 
+    ft fa fl fls fe acc e
+
+let rec fold_rec_expr_and_term_and_assertion ft fa fl fls fe acc e =
+  let cont,acc = fe acc e in
+  if cont then 
+    fold_sub_expr_and_term_and_assertion
+      fold_rec_term fold_rec_term_and_assertion fold_rec_location
+      fold_rec_location_set fold_rec_expr_and_term_and_assertion 
+      ft fa fl fls fe acc e 
+  else acc
+
+module NExprAst = struct
+  type t = nexpr
+  let subtags tag = 
+    match tag#node with
+      | JCPTtag _ | JCPTbottom -> []
+      | JCPTtypeof e -> [e]
+  let subs e =
+    match e#node with
+      | JCNEconst _
+      | JCNEvar _
+      | JCNEreturn None
+      | JCNEthrow(_, None)
+      | JCNErange(None, None) ->
+          []
+      | JCNEeqtype(tag1,tag2) | JCNEsubtype(tag1,tag2) ->
+	  subtags tag1 @ subtags tag2
+      | JCNElabel(_, e)
+      | JCNEderef(e, _)
+      | JCNEunary(_, e)
+      | JCNEinstanceof(e, _)
+      | JCNEcast(e, _)
+      | JCNEoffset(_, e)
+      | JCNEaddress e
+      | JCNEalloc(e, _)
+      | JCNEfree e
+      | JCNElet(_, _, None, e)
+      | JCNEassert(_,e)
+      | JCNEreturn(Some e)
+      | JCNEthrow(_, Some e)
+      | JCNEpack(e, _)
+      | JCNEunpack(e, _)
+      | JCNEquantifier(_, _, _, e)
+      | JCNEold e
+      | JCNEat(e, _)
+      | JCNEmutable(e, _)
+      | JCNErange(Some e, None)
+      | JCNErange(None, Some e) ->
+          [e]
+      | JCNEbinary(e1, _, e2)
+      | JCNEassign(e1, e2)
+      | JCNElet(_, _, Some e1, e2)
+      | JCNErange(Some e1, Some e2) ->
+          [e1; e2]
+      | JCNEcontract(_,_,_,e) -> 
+	  [e]
+      | JCNEif(e1, e2, e3) ->
+          [e1; e2; e3]
+      | JCNEloop(inv, None, e2) ->
+	  let e1list = List.map (fun (_behav,e) -> e) inv in
+          e1list @ [e2]
+      | JCNEloop(inv, Some e2, e3) ->
+	  let e1list = List.map (fun (_behav,e) -> e) inv in
+          e1list @ [e2; e3]
+      | JCNEapp(_, _, el)
+      | JCNEblock el ->
+          el
+      | JCNEmatch(e, pel) ->
+          e :: List.map snd pel
+      | JCNEtry(e1, l, e2) ->
+          e1 :: List.map (fun (_, _, e) -> e) l @ [e2]
+end
+
+module INExpr = Iterators(NExprAst)
 
 (*
 Local Variables: 

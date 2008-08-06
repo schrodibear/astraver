@@ -88,6 +88,11 @@ let alloc_class fmt = function
   | JCalloc_union vi -> fprintf fmt "alloc-union(%s)" vi.jc_variant_info_name
   | JCalloc_bitvector -> fprintf fmt "alloc-bitvector"
 
+let memory_class fmt = function
+  | JCmem_field fi -> fprintf fmt "mem-field(%s)" fi.jc_field_info_name
+  | JCmem_union vi -> fprintf fmt "mem-union(%s)" vi.jc_variant_info_name
+  | JCmem_bitvector -> fprintf fmt "mem-bitvector"
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"

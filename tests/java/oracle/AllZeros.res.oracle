@@ -788,20 +788,20 @@ predicate valid_variant_interface(p:interface pointer,
 
 parameter Object_alloc_table : Object alloc_table ref
 
-parameter Object_tag_table : Object tag_table ref
-
 parameter intM_intP : (Object, int32) memory ref
 
 parameter AllZeros_all_zeros :
  t:Object pointer ->
   { (K_10: Non_null_intM(Object_alloc_table, t))} bool
-  reads Object_alloc_table,Object_tag_table,intM_intP
+  reads Object_alloc_table,intM_intP
   { (K_1:
     ((result = true)
     <-> (forall i:int.
          ((le_int((0), i)
           and lt_int(i, add_int(offset_max(Object_alloc_table, t), (1)))) ->
           eq_int(integer_of_int32(select(intM_intP, shift(t, i))), (0)))))) }
+
+parameter Object_tag_table : Object tag_table ref
 
 parameter alloc_AllZeros :
  n:int ->
@@ -889,9 +889,7 @@ parameter char_of_integer_ :
   { (le_int((0), x) and le_int(x, (65535)))} char
   { eq_int(integer_of_char(result), x) }
 
-parameter cons_AllZeros :
- this_0:Object pointer ->
-  { } unit reads Object_alloc_table,Object_tag_table { true }
+parameter cons_AllZeros : this_0:Object pointer -> { } unit { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -900,7 +898,7 @@ parameter int32_of_integer_ :
 
 parameter java_array_length_intM :
  x_2:Object pointer ->
-  { } int reads Object_alloc_table,Object_tag_table
+  { } int reads Object_alloc_table
   { (JC_9:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
@@ -915,7 +913,7 @@ parameter long_of_integer_ :
 
 parameter non_null_Object :
  x_3:Object pointer ->
-  { } bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table
   { (JC_13:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_3), (0))
@@ -923,7 +921,7 @@ parameter non_null_Object :
 
 parameter non_null_intM :
  x_1:Object pointer ->
-  { } bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table
   { (JC_4:
     (if result
      then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
@@ -1108,7 +1106,7 @@ why --project [...] why/AllZeros.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/AllZeros_po14.why">
-      <location file = "why/AllZeros.why" line = "515" begin = "65" end = "315"/>
+      <location file = "why/AllZeros.why" line = "513" begin = "65" end = "315"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/AllZeros_po15.why">
@@ -3825,7 +3823,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 result)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))
 
-;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 515, characters 65-315
+;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 513, characters 65-315
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

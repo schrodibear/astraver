@@ -97,7 +97,7 @@ val make_rel : string -> Jc_fenv.logic_info
 
 val make_logic_fun : string -> Jc_env.jc_type -> Jc_fenv.logic_info
 
-val location_set_region : Jc_ast.tlocation_set -> Jc_env.region
+val location_set_region : Jc_ast.location_set -> Jc_env.region
 (*
 val direct_embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list
 val embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list
@@ -105,6 +105,7 @@ val embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list
 val field_sinfo : Jc_env.field_info -> Jc_env.struct_info
 val field_bounds : Jc_env.field_info -> Num.num * Num.num
 val pointer_struct: jc_type -> struct_info
+val pointer_class: jc_type -> pointer_class
 (*val embedded_struct_roots : Jc_env.struct_info -> string list*)
 
 val root_name : Jc_env.struct_info -> string
@@ -138,7 +139,7 @@ val make_and : Jc_ast.assertion list -> Jc_ast.assertion
 
 val skip_term_shifts :  Jc_ast.term -> Jc_ast.term
 val skip_shifts : Jc_ast.expr -> Jc_ast.expr
-val skip_tloc_range : Jc_ast.tlocation_set -> Jc_ast.tlocation_set
+val skip_tloc_range : Jc_ast.location_set -> Jc_ast.location_set
 val is_true : Jc_ast.assertion -> bool
 
 val select_option : 'a option -> 'a -> 'a

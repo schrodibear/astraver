@@ -843,51 +843,33 @@ parameter MacCarthy_f91 :
 
 parameter Object_alloc_table : Object alloc_table ref
 
-parameter Object_tag_table : Object tag_table ref
-
-parameter Object_clone :
- this_4:Object pointer ->
-  { } Object pointer reads Object_alloc_table,Object_tag_table { true }
+parameter Object_clone : this_4:Object pointer -> { } Object pointer { true }
 
 parameter Object_equals :
- this_3:Object pointer ->
-  obj:Object pointer ->
-   { } bool reads Object_alloc_table,Object_tag_table { true }
+ this_3:Object pointer -> obj:Object pointer -> { } bool { true }
 
-parameter Object_finalize :
- this_11:Object pointer ->
-  { } unit reads Object_alloc_table,Object_tag_table { true }
+parameter Object_finalize : this_11:Object pointer -> { } unit { true }
 
-parameter Object_hashCode :
- this_2:Object pointer ->
-  { } int reads Object_alloc_table,Object_tag_table { true }
+parameter Object_hashCode : this_2:Object pointer -> { } int { true }
 
-parameter Object_notify :
- this_6:Object pointer ->
-  { } unit reads Object_alloc_table,Object_tag_table { true }
+parameter Object_notify : this_6:Object pointer -> { } unit { true }
 
-parameter Object_notifyAll :
- this_7:Object pointer ->
-  { } unit reads Object_alloc_table,Object_tag_table { true }
+parameter Object_notifyAll : this_7:Object pointer -> { } unit { true }
 
 parameter Object_registerNatives : tt:unit -> { } unit { true }
 
-parameter Object_toString :
- this_5:Object pointer ->
-  { } Object pointer reads Object_alloc_table,Object_tag_table { true }
+parameter Object_tag_table : Object tag_table ref
 
-parameter Object_wait :
- this_10:Object pointer ->
-  { } unit reads Object_alloc_table,Object_tag_table { true }
+parameter Object_toString :
+ this_5:Object pointer -> { } Object pointer { true }
+
+parameter Object_wait : this_10:Object pointer -> { } unit { true }
 
 parameter Object_wait_long :
- this_8:Object pointer ->
-  timeout:int -> { } unit reads Object_alloc_table,Object_tag_table { true }
+ this_8:Object pointer -> timeout:int -> { } unit { true }
 
 parameter Object_wait_long_int :
- this_9:Object pointer ->
-  timeout_0:int ->
-   nanos:int -> { } unit reads Object_alloc_table,Object_tag_table { true }
+ this_9:Object pointer -> timeout_0:int -> nanos:int -> { } unit { true }
 
 parameter alloc_MacCarthy :
  n:int ->
@@ -946,17 +928,13 @@ parameter alloc_interface :
          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
              and alloc_fresh(interface_alloc_table@, result, n)))) }
 
-parameter cons_MacCarthy :
- this_1:Object pointer ->
-  { } unit reads Object_alloc_table,Object_tag_table { true }
+parameter cons_MacCarthy : this_1:Object pointer -> { } unit { true }
 
-parameter cons_Object :
- this_12:Object pointer ->
-  { } unit reads Object_alloc_table,Object_tag_table { true }
+parameter cons_Object : this_12:Object pointer -> { } unit { true }
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table
   { (JC_4:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))

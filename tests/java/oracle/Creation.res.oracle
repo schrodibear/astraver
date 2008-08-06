@@ -1464,25 +1464,25 @@ predicate valid_variant_interface(p:interface pointer,
 
 parameter Creation_simple_val : (Object, int32) memory ref
 
-parameter Object_tag_table : Object tag_table ref
-
 parameter Object_alloc_table : Object alloc_table ref
+
+parameter Object_tag_table : Object tag_table ref
 
 parameter Creation_test1 :
  tt:unit ->
-  { } int32 reads Creation_simple_val,Object_alloc_table,Object_tag_table
+  { } int32 reads Creation_simple_val,Object_alloc_table
   writes Creation_simple_val,Object_alloc_table,Object_tag_table
   { (K_8: eq_int(integer_of_int32(result), (17))) }
 
 parameter Creation_test2 :
  tt:unit ->
-  { } int32 reads Creation_simple_val,Object_alloc_table,Object_tag_table
+  { } int32 reads Creation_simple_val,Object_alloc_table
   writes Creation_simple_val,Object_alloc_table,Object_tag_table
   { (K_11: eq_int(integer_of_int32(result), (0))) }
 
 parameter Creation_test3 :
  tt:unit ->
-  { } int32 reads Creation_simple_val,Object_alloc_table,Object_tag_table
+  { } int32 reads Creation_simple_val,Object_alloc_table
   writes Creation_simple_val,Object_alloc_table,Object_tag_table
   { (JC_58:
     ((K_14: eq_int(integer_of_int32(result), (17)))
@@ -1579,7 +1579,7 @@ parameter char_of_integer_ :
 
 parameter cons_Creation :
  this_2:Object pointer ->
-  { } unit reads Creation_simple_val,Object_alloc_table,Object_tag_table
+  { } unit reads Creation_simple_val,Object_alloc_table
   writes Creation_simple_val
   { (JC_14:
     ((K_4:
@@ -1591,7 +1591,7 @@ parameter cons_Creation :
 parameter cons_Creation_int :
  this_1:Object pointer ->
   n_1:int32 ->
-   { } unit reads Creation_simple_val,Object_alloc_table,Object_tag_table
+   { } unit reads Creation_simple_val,Object_alloc_table
    writes Creation_simple_val
    { (JC_9:
      ((K_2:
@@ -1605,7 +1605,7 @@ parameter cons_Creation_int_int :
  this_0:Object pointer ->
   n_0_0:int32 ->
    m:int32 ->
-    { } unit reads Creation_simple_val,Object_alloc_table,Object_tag_table
+    { } unit reads Creation_simple_val,Object_alloc_table
     writes Creation_simple_val
     { (JC_19:
       ((K_7:
@@ -1617,7 +1617,7 @@ parameter cons_Creation_int_int :
 
 parameter cons_TestSuperConstructor :
  this_4:Object pointer ->
-  { } unit reads Creation_simple_val,Object_alloc_table,Object_tag_table
+  { } unit reads Creation_simple_val,Object_alloc_table
   writes Creation_simple_val
   { (JC_77:
     ((K_18:
@@ -1638,7 +1638,7 @@ parameter long_of_integer_ :
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table,Object_tag_table
+  { } bool reads Object_alloc_table
   { (JC_4:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))

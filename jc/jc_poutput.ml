@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.17 2008-07-31 15:22:39 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.18 2008-08-06 15:17:04 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -166,7 +166,7 @@ let rec pexpr fmt e =
 	  (print_list comma string) vil
 	  pexpr a
     | JCPEmutable _ -> assert false (* TODO *)
-    | JCPEtagequality(tag1,tag2) -> 
+    | JCPEeqtype(tag1,tag2) -> 
 	fprintf fmt "\\typeeq(%a,%a)" ptag tag1 ptag tag2
     | JCPEsubtype(tag1,tag2) -> 
 	fprintf fmt "(%a <: %a)" ptag tag1 ptag tag2

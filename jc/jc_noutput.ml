@@ -142,8 +142,8 @@ let rec expr fmt e =
         out "\\at(%a,@ %a)" expr e1 label lab
     | JCNEmutable(e1, tag) ->
         out "(TODO mutable)"
-    | JCNEtagequality(tag1, tag2) ->
-        out "(TODO tagequality)"
+    | JCNEeqtype(tag1, tag2) ->
+        out "(TODO eqtype)"
     | JCNEsubtype(tag1, tag2) ->
         out "(TODO subtype)"
     | JCNErange(Some e1, Some e2) ->

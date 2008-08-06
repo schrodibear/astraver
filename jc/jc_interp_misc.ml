@@ -188,7 +188,7 @@ let mutable_memory infunction (mc,r) =
 
 let mutable_alloc_table infunction (root,r) =
   if Region.polymorphic r then
-    AllocSet.mem (root,r)
+    AllocMap.mem (root,r)
       infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
   else true
 
@@ -231,8 +231,8 @@ let memory_logic_params ~label_in_name ?region_assoc ?label_assoc li =
     []
 
 let alloc_logic_params ~label_in_name ?region_assoc ?label_assoc li =
-  AllocSet.fold
-    (fun (ac,r) acc ->
+  AllocMap.fold
+    (fun (ac,r) labs acc ->
        let r =
 	 match region_assoc with
 	   | Some assoc when Region.polymorphic r ->
@@ -271,8 +271,8 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
       []
   in
   let globs = 
-    VarSet.fold
-      (fun v acc -> 
+    VarMap.fold
+      (fun v labs acc -> 
 	 (v.jc_var_info_final_name, tr_base_type v.jc_var_info_type) :: acc
       ) li.jc_logic_info_effects.jc_effect_globals
       []
@@ -304,8 +304,8 @@ let logic_info_reads acc li =
       acc
   in
   let acc =
-    AllocSet.fold
-      (fun (ac,r) acc ->
+    AllocMap.fold
+      (fun (ac,r) labs acc ->
 	 StringSet.add (alloc_table_name (ac, r)) acc)
       li.jc_logic_info_effects.jc_effect_alloc_table
       acc
@@ -397,14 +397,14 @@ let all_effects ef =
       []
   in
   let res =
-    VarSet.fold
-      (fun v acc -> v.jc_var_info_final_name::acc)
+    VarMap.fold
+      (fun v labs acc -> v.jc_var_info_final_name::acc)
       ef.jc_effect_globals
       res
   in
   let res =
-    AllocSet.fold
-      (fun (a,r) acc -> 
+    AllocMap.fold
+      (fun (a,r) labs acc -> 
 	let alloc = alloc_table_name(a,r) in
 	if Region.polymorphic r then
 (*	  if RegionList.mem r f.jc_fun_info_param_regions then
@@ -524,11 +524,11 @@ let pc_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
 let make_valid_pred_app pc p a b =
   let allocs = List.map
     (fun ac -> LVar(generic_alloc_table_name ac))
-    (Jc_struct_tools.all_allocs ~select:fully_allocated pc)
+    (Jc_struct_tools.all_allocs ~select:fully_alpositioned pc)
   in
   let memories = List.map
     (fun fi -> LVar(field_memory_name fi))
-    (Jc_struct_tools.all_memories ~select:fully_allocated pc)
+    (Jc_struct_tools.all_memories ~select:fully_alpositioned pc)
   in
   LPred(valid_pred_name pc, p::a::b::allocs@memories)
 
@@ -607,7 +607,7 @@ let access_union e fi_opt =
     | None ->
 	access e
     | Some fi ->
-	let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in
+	(* let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in *)
 	match access e with
 	  | Some(e,off) ->
 	      Some (e, add_offset off (fieldoffbytes fi))
@@ -648,7 +648,7 @@ let taccess_union t fi_opt =
     | None ->
 	access t
     | Some fi ->
-	let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in
+(* 	let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in *)
 	match access t with
 	  | Some(t,off) ->
 	      Some (t, add_offset off (fieldoffbytes fi))
@@ -657,7 +657,10 @@ let taccess_union t fi_opt =
 		Some (t, fieldoffbytes fi)
 	      else None
 
-let tlocation_access_union t fi = None (* TODO *)
+let laccess_union t fi = None (* TODO *)
+
+let foreign_union e = [] (* TODO: subterms of union that are not in union *)
+let tforeign_union t = []
 
 let common_deref_alloc_class access_union e =
   if Region.bitwise e#region then
@@ -672,12 +675,24 @@ let deref_alloc_class e =
 let tderef_alloc_class t =
   common_deref_alloc_class taccess_union t
 
-let deref_mem_class e fi =
+let lderef_alloc_class locs =
+  common_deref_alloc_class laccess_union locs
+
+let common_deref_mem_class access_union e fi =
   if Region.bitwise e#region then
     JCmem_bitvector
   else match access_union e (Some fi) with 
     | None -> JCmem_field fi
     | Some(e,_off) -> JCmem_union (the (union_type e#typ))
+
+let deref_mem_class e fi =
+  common_deref_mem_class access_union e fi
+
+let tderef_mem_class t fi =
+  common_deref_mem_class taccess_union t fi
+
+let lderef_mem_class locs fi =
+  common_deref_mem_class laccess_union locs fi
 
 
 (*

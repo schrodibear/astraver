@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.100 2008-07-29 17:31:40 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.101 2008-08-06 15:17:04 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -76,19 +76,19 @@ let goto_exception_for_label lab =
 (**************************************************************************)
 
 (** Transform switch *)
-let normalize_switch loc e caselist =
+let normalize_switch pos e caselist =
   (* Give a temporary name to the switch expression, so that modifying
    * a variable on which this expression depends does not interfere 
    * with the control-flow, when its value is tested.
    *)
-  let eloc = e#loc in
+  let epos = e#pos in
   let tmpname = tmp_var_name () in
-  let tmpvar = mkvar ~loc:eloc ~name:tmpname () in
+  let tmpvar = mkvar ~pos:epos ~name:tmpname () in
   let has_default c = List.exists (fun c -> c = None) c in
   (* Test for case considered *)
   let test_one_case ~(neg:bool) c = 
     let op = if neg then `Bneq else `Beq in
-    mkbinary ~loc:eloc ~expr1:tmpvar ~op ~expr2:c ()
+    mkbinary ~pos:epos ~expr1:tmpvar ~op ~expr2:c ()
   in
   (* Collect negative tests for [default] case *)
   let all_neg_cases () = 
@@ -106,10 +106,10 @@ let normalize_switch loc e caselist =
   in
   let test_one_case_or_default = function
     | Some c -> test_one_case ~neg:false c
-    | None -> mkand ~loc:eloc ~list:(all_neg_cases ()) ()
+    | None -> mkand ~pos:epos ~list:(all_neg_cases ()) ()
   in
   let test_case_or_default c = 
-    mkor ~loc:eloc ~list:(List.map test_one_case_or_default c) ()
+    mkor ~pos:epos ~list:(List.map test_one_case_or_default c) ()
   in
   let rec cannot_fall_trough e = 
     match e#node with
@@ -132,23 +132,23 @@ let normalize_switch loc e caselist =
       if cannot_fall_trough e then
 	let nexte = start_fold_case next_cases in
 	let ife =
-          mkif ~loc:eloc ~condition:teste ~expr_then:e ~expr_else:nexte () in
+          mkif ~pos:epos ~condition:teste ~expr_then:e ~expr_else:nexte () in
 	List.rev (ife :: acc)
       else
-	let ife = mkif ~loc:eloc ~condition:teste ~expr_then:e () in
+	let ife = mkif ~pos:epos ~condition:teste ~expr_then:e () in
 	fold_case (current_c, ife :: acc) next_cases
   and start_fold_case caselist = 
     let iflist = fold_case ([],[]) caselist in
-    mkblock ~loc ~exprs:iflist ()
+    mkblock ~pos ~exprs:iflist ()
   in
   let iflist = fold_case ([],[]) caselist in
-  let switche = mkblock ~loc ~exprs:iflist () in
-  let catche = [mkcatch ~loc ~name:(tmp_var_name()) ~exn:loop_exit ()] in
-  let trye = mktry ~loc ~expr:switche ~catches:catche () in
+  let switche = mkblock ~pos ~exprs:iflist () in
+  let catche = [mkcatch ~pos ~name:(tmp_var_name()) ~exn:loop_exit ()] in
+  let trye = mktry ~pos ~expr:switche ~catches:catche () in
   mklet_nodecl ~var:tmpname ~init:e ~body:trye ()
 
 (** Transform while-loop *)
-let normalize_while loc test inv var body =
+let normalize_while pos test inv var body =
   let body = match test#node with
     | JCPEconst(JCCboolean true) -> body
 	(* Special case of an infinite loop [while(true)].
@@ -156,43 +156,43 @@ let normalize_while loc test inv var body =
 	 * for some assertions to be recognized as loop invariants
 	 * later on, in annotation inference. *)
     | _ ->
-	let exit_ = mkthrow ~loc ~exn:loop_exit () in
-	mkif ~loc ~condition:test ~expr_then:body ~expr_else:exit_ ()
+	let exit_ = mkthrow ~pos ~exn:loop_exit () in
+	mkif ~pos ~condition:test ~expr_then:body ~expr_else:exit_ ()
   in
-  mktry ~loc
+  mktry ~pos
     ~expr:
-    (mkwhile ~loc ~invariant:inv ?variant:var 
+    (mkwhile ~pos ~invariant:inv ?variant:var 
        ~body:
-       (mktry ~loc 
+       (mktry ~pos 
           ~expr:
-          (mkblock ~loc ~exprs:[body; mkthrow ~loc ~exn:loop_continue ()] ())
-	  ~catches: [mkcatch ~loc ~name:(tmp_var_name()) ~exn:loop_continue ()]
+          (mkblock ~pos ~exprs:[body; mkthrow ~pos ~exn:loop_continue ()] ())
+	  ~catches: [mkcatch ~pos ~name:(tmp_var_name()) ~exn:loop_continue ()]
           ())
        ())
     ~catches:
-    [mkcatch ~loc ~name:(tmp_var_name()) ~exn:loop_exit ()]
+    [mkcatch ~pos ~name:(tmp_var_name()) ~exn:loop_exit ()]
     ()
 
 (** Transform for-loop *)
-let normalize_for loc inits test updates inv var body =
-  mkblock ~loc
+let normalize_for pos inits test updates inv var body =
+  mkblock ~pos
     ~exprs:(inits 
-	    @ [mktry ~loc
+	    @ [mktry ~pos
                  ~expr:
-		 (mkwhile ~loc ~invariant:inv ?variant:var 
+		 (mkwhile ~pos ~invariant:inv ?variant:var 
                     ~body:
-		    (mktry ~loc 
+		    (mktry ~pos 
                        ~expr:
-		       (mkblock ~loc ~exprs:[
-			  mkif ~loc ~condition:test ~expr_then:body 
-                            ~expr_else:(mkthrow ~loc ~exn:loop_exit ()) ();
-			  mkthrow ~loc ~exn:loop_continue ()] ())
+		       (mkblock ~pos ~exprs:[
+			  mkif ~pos ~condition:test ~expr_then:body 
+                            ~expr_else:(mkthrow ~pos ~exn:loop_exit ()) ();
+			  mkthrow ~pos ~exn:loop_continue ()] ())
                        ~catches:
-		       [mkcatch ~loc ~name:(tmp_var_name()) ~exn:loop_continue
-                          ~body:(mkblock ~loc ~exprs:updates ()) ()] ())
+		       [mkcatch ~pos ~name:(tmp_var_name()) ~exn:loop_continue
+                          ~body:(mkblock ~pos ~exprs:updates ()) ()] ())
                     ())
                  ~catches:
-		 [mkcatch ~loc ~name:(tmp_var_name()) ~exn:loop_exit ()]
+		 [mkcatch ~pos ~name:(tmp_var_name()) ~exn:loop_exit ()]
                  ()
 	      ])
     ()
@@ -204,7 +204,7 @@ let duplicable =
        | JCPEunary _ | JCPEoffset _ | JCPEaddress _ | JCPEold _ | JCPEat _
        | JCPEbinary _ | JCPEcast _ | JCPEsubtype _ ->
 	   true
-       | JCPEassert _ | JCPEthrow _ | JCPEreturn _ | JCPEtagequality _  
+       | JCPEassert _ | JCPEthrow _ | JCPEreturn _ | JCPEeqtype _  
        | JCPEbreak _ | JCPEcontinue _  | JCPEgoto _  | JCPEdecl _
        | JCPElabel _ | JCPEinstanceof _ | JCPEalloc _ 
        | JCPEfree _ | JCPElet _ | JCPEpack _ | JCPEunpack _ 
@@ -216,33 +216,33 @@ let duplicable =
     ) true
 
 (** Transform assign-op *)
-let normalize_assign_op loc e1 op e2 =
+let normalize_assign_op pos e1 op e2 =
   if duplicable e1 then
     mkassign
-      ~loc
+      ~pos
       ~location:e1
-      ~value:(mkbinary ~loc ~expr1:e1 ~op ~expr2:e2 ())
+      ~value:(mkbinary ~pos ~expr1:e1 ~op ~expr2:e2 ())
       ()
   else
     match e1#node with
       | JCPEderef(e3,f) ->
 	  let tmpname = tmp_var_name () in
-	  let tmpvar = mkvar ~loc ~name:tmpname () in
-	  let e4 = mkderef ~loc ~expr:tmpvar ~field:f () in
+	  let tmpvar = mkvar ~pos ~name:tmpname () in
+	  let e4 = mkderef ~pos ~expr:tmpvar ~field:f () in
 	  mklet_nodecl
             ~var:tmpname
             ~init:e3
 	    ~body:
             (mkassign
-               ~loc
+               ~pos
                ~location:e4
-               ~value:(mkbinary ~loc ~expr1:e4 ~op ~expr2:e2 ())
+               ~value:(mkbinary ~pos ~expr1:e4 ~op ~expr2:e2 ())
                ())
             ()
-      | _ -> error loc "Not an lvalue in assignment"
+      | _ -> error pos "Not an lvalue in assignment"
 
 (** Transform unary increment and decrement *)
-let normalize_pmunary loc op e =
+let normalize_pmunary pos op e =
   let op_of_incdec = function
     | `Uprefix_inc | `Upostfix_inc -> `Badd 
     | `Uprefix_dec | `Upostfix_dec -> `Bsub
@@ -253,32 +253,32 @@ let normalize_pmunary loc op e =
       | `Uprefix_inc | `Uprefix_dec ->
 	  (* e = e +/- 1 } *)
 	  mkassign
-            ~loc
+            ~pos
             ~location: e
             ~value:
             (mkbinary
-               ~loc
+               ~pos
                ~expr1: e
                ~op: (op_of_incdec op)
-               ~expr2: (mkint ~loc ~value:1 ())
+               ~expr2: (mkint ~pos ~value:1 ())
                ())
             ()
       | `Upostfix_inc | `Upostfix_dec ->
 	  let tmpname = tmp_var_name () in
-	  let tmpvar = mkvar ~loc ~name:tmpname () in
+	  let tmpvar = mkvar ~pos ~name:tmpname () in
 	  (* let tmp = e in { e = tmp +/- 1; tmp } *)
 	  mklet_nodecl
             ~var: tmpname
             ~init: e
             ~body:
-	    (mkblock ~loc ~exprs:[
-	       mkassign ~loc ~location:e
+	    (mkblock ~pos ~exprs:[
+	       mkassign ~pos ~location:e
 		 ~value:
                  (mkbinary
-                    ~loc
+                    ~pos
                     ~expr1:tmpvar
                     ~op:(op_of_incdec op)
-                    ~expr2:(mkint ~loc ~value:1 ())
+                    ~expr2:(mkint ~pos ~value:1 ())
                     ())
                  ();
 	       tmpvar
@@ -291,34 +291,34 @@ let normalize_pmunary loc op e =
       match e#node with
 	| JCPEderef(e1,f) ->
 	    let tmpname = tmp_var_name () in
-	    let tmpvar = mkvar ~loc ~name:tmpname () in
-	    let e2 = mkderef ~loc ~expr:tmpvar ~field:f () in
+	    let tmpvar = mkvar ~pos ~name:tmpname () in
+	    let e2 = mkderef ~pos ~expr:tmpvar ~field:f () in
 	    mklet_nodecl ~var:tmpname ~init:e1 ~body:(on_duplicable e2) ()
-	| _ -> error loc "Not an lvalue in assignment"
+	| _ -> error pos "Not an lvalue in assignment"
 
 (** Transform local variable declarations *)
-let normalize_locvardecl loc elist = 
-  mkblock ~loc
+let normalize_locvardecl pos elist = 
+  mkblock ~pos
     ~exprs:
     (List.fold_right
        (fun e acc ->
 	  match e#node with
 	    | JCPEdecl(ty,name,initopt) ->
-		[mklet_nodecl ~loc:e#loc ~typ:ty ~var:name ?init:initopt
-                   ~body:(mkblock ~loc ~exprs:acc ()) ()]
+		[mklet_nodecl ~pos:e#pos ~typ:ty ~var:name ?init:initopt
+                   ~body:(mkblock ~pos ~exprs:acc ()) ()]
 	    | JCPElabel(lab, e1) ->
                 begin match e1#node with
                   | JCPEdecl(ty,name,initopt) ->
                       [mklabel
-                         ~loc:e#loc
-                         ~label:lab (*(mkskip e#loc);*)
+                         ~pos:e#pos
+                         ~label:lab (*(mkskip e#pos);*)
                          ~expr:
                          (mklet_nodecl
-                            ~loc: e#loc
+                            ~pos: e#pos
                             ~typ: ty
                             ~var: name
                             ?init: initopt
-                            ~body: (mkblock ~loc ~exprs:acc ())
+                            ~body: (mkblock ~pos ~exprs:acc ())
                             ())
                          ()]
                   | _ -> e::acc
@@ -328,12 +328,12 @@ let normalize_locvardecl loc elist =
     )
     ()
 
-let normalize_postaction loc elist =
+let normalize_postaction pos elist =
   let pre_of_post = function
     | `Upostfix_inc -> `Uprefix_inc
     | `Upostfix_dec -> `Uprefix_dec
   in
-  mkblock ~loc 
+  mkblock ~pos 
     ~exprs:
     (match List.rev elist with [] -> elist | last::elist' ->
        (* Only transform into pre increment/decrement those post increment/
@@ -355,28 +355,28 @@ let normalize =
   map_pexpr 
     ~before:(fun e -> match e#node with
 	       | JCPEblock elist ->
-		   normalize_postaction e#loc elist
+		   normalize_postaction e#pos elist
 	       | _ -> e
 	    )
     ~after:(fun e -> match e#node with
 	      | JCPEassign_op(e1,op,e2) -> 
-		  normalize_assign_op e#loc e1 op e2
+		  normalize_assign_op e#pos e1 op e2
 	      | JCPEunary(#pm_unary_op as op,e') -> 
-		  normalize_pmunary e#loc op e'
+		  normalize_pmunary e#pos op e'
 	      | JCPEswitch(e',caselist) -> 
-		  normalize_switch e#loc e' caselist
+		  normalize_switch e#pos e' caselist
 	      | JCPEwhile(test,inv,var,body) ->
-		  normalize_while e#loc test inv var body
+		  normalize_while e#pos test inv var body
 	      | JCPEfor(inits,test,updates,inv,var,body) ->
-		  normalize_for e#loc inits test updates [[],inv] var body
+		  normalize_for e#pos inits test updates [[],inv] var body
 	      | JCPEbreak lab ->
 		  assert (lab = ""); (* TODO for Java *)
-		  mkthrow ~loc:e#loc ~exn:loop_exit ()
+		  mkthrow ~pos:e#pos ~exn:loop_exit ()
 	      | JCPEcontinue lab ->
 		  assert (lab = ""); (* TODO for Java *)
-		  mkthrow ~loc:e#loc ~exn:loop_continue ()
+		  mkthrow ~pos:e#pos ~exn:loop_continue ()
 	      | JCPEblock elist ->
-		  normalize_locvardecl e#loc elist
+		  normalize_locvardecl e#pos elist
 	      | _ -> e
 	   )
 
@@ -428,7 +428,7 @@ let build_label_tree e : label_tree list =
 	  if in_label_upper_tree_list lab fwdacc then
 	    Hashtbl.add label_used lab ()
 	  else 
-	    error e#loc "unsupported goto";
+	    error e#pos "unsupported goto";
 	  acc,fwdacc
       | JCPElabel (lab, e) ->
 	  let l,fwdl = build_bwd e ([],fwdacc) in
@@ -444,14 +444,14 @@ let build_label_tree e : label_tree list =
   in
   fst (build_bwd e ([],[]))
 
-let goto_block loc el =
+let goto_block pos el =
   let rec label_block el = 
     match el with [] -> [],[] | e1::r ->
       let elr,labelr = label_block r in
       match e1#node with
 	| JCPElabel(lab,e2) when Hashtbl.mem label_used lab ->
-	    let e3 = mkblock ~loc ~exprs:(e2::elr) () in
-	    let e4 = mklabel ~loc ~label:lab ~expr:e3 () in
+	    let e3 = mkblock ~pos ~exprs:(e2::elr) () in
+	    let e4 = mklabel ~pos ~label:lab ~expr:e3 () in
 	    [],(lab,[e4])::labelr
 	| _ -> e1::elr,labelr
   in
@@ -459,20 +459,20 @@ let goto_block loc el =
   let el = List.fold_left (fun acc (lab,el) ->
 		    let id = goto_exception_for_label lab in
 		    (* Throw expression in case of fall-through *)
-		    let throw = mkthrow ~loc ~exn:id () in
-		    [mktry ~loc
-                       ~expr:(mkblock ~loc ~exprs:(acc@[throw]) ())
+		    let throw = mkthrow ~pos ~exn:id () in
+		    [mktry ~pos
+                       ~expr:(mkblock ~pos ~exprs:(acc@[throw]) ())
 		       ~catches:
-                       [mkcatch ~loc ~name:(tmp_var_name()) ~exn:id 
-			  ~body:(mkblock ~loc ~exprs:el ()) ()]
+                       [mkcatch ~pos ~name:(tmp_var_name()) ~exn:id 
+			  ~body:(mkblock ~pos ~exprs:el ()) ()]
                        ()
 		    ]
 		 ) el labels
   in
-  mkblock ~loc ~exprs:el ()
+  mkblock ~pos ~exprs:el ()
 
 let rec goto e lz =
-  let loc = e#loc in
+  let pos = e#pos in
   let enode,lz2 = match e#node with
     | JCPEgoto lab -> 
 	let id = goto_exception_for_label lab in
@@ -498,7 +498,7 @@ let rec goto e lz =
 			 ) ([],lz1) el
 	in
 	let el = List.rev el in
-	(goto_block loc el)#node, lz2
+	(goto_block pos el)#node, lz2
     | _ ->
 	let elist = IPExpr.subs e in
 	let lz1list,lz2 = match lz with
@@ -549,7 +549,7 @@ let rec expr e =
     | JCPEalloc(e,id) -> JCNEalloc(expr e,id)
     | JCPEfree e -> JCNEfree(expr e)
     | JCPEmutable(e,tag) -> JCNEmutable(expr e,tag_ tag)
-    | JCPEtagequality(tag1,tag2) -> JCNEtagequality(tag_ tag1,tag_ tag2)
+    | JCPEeqtype(tag1,tag2) -> JCNEeqtype(tag_ tag1,tag_ tag2)
     | JCPEsubtype(tag1,tag2) -> JCNEsubtype(tag_ tag1,tag_ tag2)
     | JCPEmatch(e,pelist) ->
 	JCNEmatch(expr e,List.map (fun (pat,e) -> (pat,expr e)) pelist)  
@@ -581,20 +581,20 @@ let rec expr e =
     | JCPEunpack(e,idopt) -> JCNEunpack(expr e,idopt)
     | JCPEswitch _ -> assert false
   in
-  new nexpr ~loc:e#loc enode
+  new nexpr ~pos:e#pos enode
 
 and tag_ tag = 
   let tagnode = match tag#node with
     | JCPTtypeof e -> JCPTtypeof (expr e)
     | JCPTtag _ | JCPTbottom as tagnode -> tagnode
   in
-  new ptag ~loc:tag#loc tagnode
+  new ptag ~pos:tag#pos tagnode
 
-and behavior (loc,id,idopt,e1opt,e2opt,asslist,e3) =
-  (loc,id,idopt,
+and behavior (pos,id,idopt,e1opt,e2opt,asslist,e3) =
+  (pos,id,idopt,
    Option_misc.map expr e1opt,
    Option_misc.map expr e2opt,
-   Option_misc.map (fun (loc,elist) -> loc,List.map expr elist) asslist,
+   Option_misc.map (fun (pos,elist) -> pos,List.map expr elist) asslist,
    expr e3)
 
 let expr e =
@@ -651,7 +651,7 @@ let decl d =
     | JCDannotation_policy x -> JCDannotation_policy x
     | JCDseparation_policy x -> JCDseparation_policy x
     | JCDinvariant_policy x -> JCDinvariant_policy x
-  in new decl ~loc:d#loc dnode
+  in new decl ~pos:d#pos dnode
 	  
 let decls dlist =
   let unit_type = new ptype (JCPTnative Tunit) in

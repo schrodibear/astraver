@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.114 2008-07-31 15:22:39 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.115 2008-08-06 15:17:04 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -144,7 +144,8 @@ let rec term fmt t =
 	fprintf fmt "@[(%s %a)@]" (unary_op op) term t1
     | JCTif (t1,t2,t3) -> 
 	fprintf fmt "@[(%a ? %a : %a)@]" term t1 term t2 term t3
-    | JCTcast (t, _, si) ->
+    | JCTcast (t, _, si)
+    | JCTbitwise_cast (t, _, si) ->
 	fprintf fmt "(%a :> %s)" term t si.jc_struct_info_name
     | JCTrange_cast (t, ei) ->
 	fprintf fmt "(%a :> %s)" term t ei.jc_enum_info_name
@@ -260,7 +261,7 @@ let rec assertion fmt a =
 	fprintf fmt ")@]"
     | JCAfalse -> fprintf fmt "false"
     | JCAmutable _ -> assert false (* TODO *)
-    | JCAtagequality _ -> assert false (* TODO *)
+    | JCAeqtype _ -> assert false (* TODO *)
     | JCAsubtype _ -> assert false (* TODO *)
     | JCAmatch (t, pal) ->
 	fprintf fmt "@[<v 2>match %a with@ " term t;
@@ -269,22 +270,24 @@ let rec assertion fmt a =
 	     pattern p assertion a) pal;
 	fprintf fmt "end@]"
 
-let rec location_set fmt = function
-  | JCLSvar vi-> 
-      fprintf fmt "%s" vi.jc_var_info_name
-  | JCLSderef (locset, _, fi, _) ->
-      fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
-  | JCLSrange (locset, t1, t2) ->
-      fprintf fmt "(%a + [%a..%a])" location_set locset 
-	(print_option term) t1 (print_option term) t2
+let rec location_set fmt locs = 
+  match locs#node with
+    | JCLSvar vi-> 
+	fprintf fmt "%s" vi.jc_var_info_name
+    | JCLSderef (locs, _, fi, _) ->
+	fprintf fmt "%a.%s" location_set locs fi.jc_field_info_name
+    | JCLSrange (locset, t1, t2) ->
+	fprintf fmt "(%a + [%a..%a])" location_set locset 
+	  (print_option term) t1 (print_option term) t2
 
-let rec location fmt = function
-  | JCLvar vi -> 
-      fprintf fmt "%s" vi.jc_var_info_name
-  | JCLderef (locset, _, fi,_) ->
-      fprintf fmt "%a.%s" location_set locset fi.jc_field_info_name
-  | JCLat (loc, lab) ->
-      fprintf fmt "\\at(%a,%a)" location loc label lab
+let rec location fmt loc = 
+  match loc#node with
+    | JCLvar vi -> 
+	fprintf fmt "%s" vi.jc_var_info_name
+    | JCLderef (locs, _, fi,_) ->
+	fprintf fmt "%a.%s" location_set locs fi.jc_field_info_name
+    | JCLat (loc, lab) ->
+	fprintf fmt "\\at(%a,%a)" location loc label lab
 
 let behavior fmt (_loc,id,b) =
   fprintf fmt "@\n@[<v 2>behavior %s:" id;
@@ -332,7 +335,8 @@ let rec expr fmt e =
 	  fprintf fmt "%a.%s = %a" expr e1 fi.jc_field_info_name expr e2
       | JCEinstanceof(e, si) ->
 	  fprintf fmt "(%a <: %s)" expr e si.jc_struct_info_name
-      | JCEcast(e, si) ->
+      | JCEcast(e, si)
+      | JCEbitwise_cast(e, si) ->
 	  fprintf fmt "(%a :> %s)" expr e si.jc_struct_info_name
       | JCErange_cast(e, ri) ->
 	  fprintf fmt "(%a :> %s)" expr e ri.jc_enum_info_name

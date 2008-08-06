@@ -27,9 +27,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.15 2008-08-04 13:48:33 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.16 2008-08-06 15:17:04 moy Exp $ *)
 
 open Jc_env
+open Jc_stdlib
 open Jc_envset
 open Format
 open Pp
@@ -183,6 +184,7 @@ struct
   let find (fi,r) s = M.find (fi,RegionUF.repr r) s
   let remove (fi,r) s = M.remove (fi,RegionUF.repr r) s
   let mem (fi,r) s = M.mem (fi,RegionUF.repr r) s
+  let add_merge f (k,r) v m = add_merge f (k,RegionUF.repr r) v m
 end
 
 let global_region_table : (InternalRegion.t FieldTable.t) RegionTable.t 
@@ -194,6 +196,8 @@ struct
   include InternalRegion
 
   let name r = (RegionUF.repr r).jc_reg_final_name
+
+  let representative = RegionUF.repr
 
   let polymorphic r = 
     let r = RegionUF.repr r in r.jc_reg_variable

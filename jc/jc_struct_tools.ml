@@ -152,7 +152,7 @@ let all_types ?(select = fun _ -> true) pc =
   Jc_options.lprintf "  Found %n types.@." (List.length list);
   list
 
-let fully_allocated fi =
+let fully_alpositioned fi =
   match fi.jc_field_info_type with
     | JCTpointer(_, Some _, Some _) -> true
     | JCTpointer(_, None, Some _)
@@ -171,7 +171,7 @@ let rec all_allocs select forbidden acc pc =
 	if StringSet.mem st.jc_struct_info_name forbidden then
 	  acc
 	else
-	  let ac = JCalloc_struct (struct_variant st.jc_struct_info_root) in
+	  let ac = JCalloc_struct (struct_variant st) in
 	  let forbidden = StringSet.add st.jc_struct_info_name forbidden in
 	  List.fold_left
 	    (all_allocs select forbidden)
@@ -206,14 +206,14 @@ let rec all_tags select forbidden acc pc =
 	    (StringMap.add vi.jc_variant_info_name vi acc)
 	    (fields_pointer_class (List.filter select (all_fields pc)))
     | JCvariant vi ->
-	acc
+	StringMap.add vi.jc_variant_info_name vi acc
     | JCunion vi ->
-	acc
+	StringMap.add vi.jc_variant_info_name vi acc
 
-let all_tags ?(select = fun _ -> true) st =
-  Jc_options.lprintf "all_tags(%s):@." st.jc_struct_info_name;
+let all_tags ?(select = fun _ -> true) pc =
+  Jc_options.lprintf "all_tags(%s):@." (pointer_class_name pc);
   let map = 
-    all_tags select StringSet.empty StringMap.empty (JCtag(st,[]))
+    all_tags select StringSet.empty StringMap.empty pc
   in
   let list = List.rev (StringMap.fold (fun _ ty acc -> ty::acc) map []) in
   Jc_options.lprintf "  Found %n tags.@." (List.length list);

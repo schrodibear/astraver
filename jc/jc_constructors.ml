@@ -27,17 +27,17 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.10 2008-07-23 12:13:54 marche Exp $ *)
+(* $Id: jc_constructors.ml,v 1.11 2008-08-06 15:17:04 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
 open Jc_region
 open Jc_ast 
 
-class located ~loc =
+class positioned ~pos =
 object
-  method loc: Loc.position = 
-    match loc with None -> Loc.dummy_position | Some loc -> loc 
+  method pos: Loc.position = 
+    match pos with None -> Loc.dummy_position | Some pos -> pos 
 end
 
 class typed ~typ =
@@ -64,58 +64,58 @@ object
   method set_region x = r <- x
 end
 
-class identifier ?loc name = 
+class identifier ?pos name = 
 object
-  inherit located loc
+  inherit positioned pos
   method name: string = name
 end
 
-class ['a] node_located ?loc node = 
+class ['a] node_positioned ?pos node = 
 object
-  inherit located loc
+  inherit positioned pos
   method node: 'a = node
 end
 
-class ptype ?(loc = Loc.dummy_position) node = 
+class ptype ?(pos = Loc.dummy_position) node = 
 object
-  inherit [ptype_node] node_located ~loc node
+  inherit [ptype_node] node_positioned ~pos node
 end
 
-class pexpr ?(loc = Loc.dummy_position) node =
+class pexpr ?(pos = Loc.dummy_position) node =
 object
-  inherit [pexpr_node] node_located ~loc node
+  inherit [pexpr_node] node_positioned ~pos node
 end
 
-class pexpr_with ?loc ?node e =
-  let loc = match loc with None -> e#loc | Some loc -> loc in
+class pexpr_with ?pos ?node e =
+  let pos = match pos with None -> e#pos | Some pos -> pos in
   let node = match node with None -> e#node | Some node -> node in
-  pexpr ~loc node
+  pexpr ~pos node
 
-class nexpr ?(loc = Loc.dummy_position) ?logic_label node =
+class nexpr ?(pos = Loc.dummy_position) ?logic_label node =
 object
   inherit logic_labeled logic_label
-  inherit [nexpr_node] node_located ~loc node
+  inherit [nexpr_node] node_positioned ~pos node
 end
 
-class nexpr_with ?loc ?node e =
-  let loc = match loc with None -> e#loc | Some loc -> loc in
+class nexpr_with ?pos ?node e =
+  let pos = match pos with None -> e#pos | Some pos -> pos in
   let node = match node with None -> e#node | Some node -> node in
   let llab = e#logic_label in
-  nexpr ~loc ~logic_label:llab node
+  nexpr ~pos ~logic_label:llab node
 
-class pattern ?(loc = Loc.dummy_position) ~typ node =
+class pattern ?(pos = Loc.dummy_position) ~typ node =
 object
   inherit typed typ
-  inherit [pattern_node] node_located ~loc node
+  inherit [pattern_node] node_positioned ~pos node
 end
 
-class pattern_with ?loc ?node ?typ p =
-  let loc = match loc with None -> p#loc | Some loc -> loc in
+class pattern_with ?pos ?node ?typ p =
+  let pos = match pos with None -> p#pos | Some pos -> pos in
   let node = match node with None -> p#node | Some node -> node in
   let typ = match typ with None -> p#typ | Some typ -> typ in
-  pattern ~loc ~typ node
+  pattern ~pos ~typ node
 
-class term ?(loc = Loc.dummy_position) ~typ ?(name_label="") ?region node =
+class term ?(pos = Loc.dummy_position) ~typ ?(name_label="") ?logic_label ?region node =
   let region = 
     match region with None -> dummy_region | Some region -> region 
   in
@@ -123,24 +123,60 @@ object
   inherit typed typ
   inherit regioned region
   inherit name_labeled name_label
-  inherit [term_node] node_located ~loc node
+  inherit logic_labeled logic_label
+  inherit [term_node] node_positioned ~pos node
 end
 
-class term_with ?loc ?typ ?name_label ?region ?node t =
-  let loc = match loc with None -> t#loc | Some loc -> loc in
+class term_with ?pos ?typ ?name_label ?region ?node t =
+  let pos = match pos with None -> t#pos | Some pos -> pos in
   let typ = match typ with None -> t#typ | Some typ -> typ in
   let name_label = 
     match name_label with None -> t#name_label | Some name_label -> name_label 
   in
+  let llab = t#logic_label in
   let region = match region with None -> t#region | Some region -> region in
   let node = match node with None -> t#node | Some node -> node in
-  term ~loc ~typ ~name_label ~region node
+  term ~pos ~typ ~name_label ?logic_label:llab ~region node
 
-class term_var ?(loc = Loc.dummy_position) ?(name_label="") v =
-  term ~loc ~typ:v.jc_var_info_type ~name_label ~region:v.jc_var_info_region
+class term_var ?(pos = Loc.dummy_position) ?(name_label="") v =
+  term ~pos ~typ:v.jc_var_info_type ~name_label ~region:v.jc_var_info_region
     (JCTvar v)
 
-class expr ?(loc = Loc.dummy_position) ~typ ?(name_label="") ?region
+class location ?(pos = Loc.dummy_position) ?logic_label ?region node =
+  let region = 
+    match region with None -> dummy_region | Some region -> region 
+  in
+object
+  inherit regioned region
+  inherit logic_labeled logic_label
+  inherit [location_node] node_positioned ~pos node
+end
+
+class location_with ?pos ?region ?node t =
+  let pos = match pos with None -> t#pos | Some pos -> pos in
+  let llab = t#logic_label in
+  let region = match region with None -> t#region | Some region -> region in
+  let node = match node with None -> t#node | Some node -> node in
+  location ~pos ?logic_label:llab ~region node
+
+class location_set ?(pos = Loc.dummy_position) ?logic_label ?region node =
+  let region = 
+    match region with None -> dummy_region | Some region -> region 
+  in
+object
+  inherit regioned region
+  inherit logic_labeled logic_label
+  inherit [location_set_node] node_positioned ~pos node
+end
+
+class location_set_with ?pos ?region ?node t =
+  let pos = match pos with None -> t#pos | Some pos -> pos in
+  let llab = t#logic_label in
+  let region = match region with None -> t#region | Some region -> region in
+  let node = match node with None -> t#node | Some node -> node in
+  location_set ~pos ?logic_label:llab ~region node
+
+class expr ?(pos = Loc.dummy_position) ~typ ?(name_label="") ?region
   ?original_type node =
   let region = 
     match region with None -> dummy_region | Some region -> region 
@@ -149,13 +185,13 @@ object
   inherit typed typ
   inherit regioned region
   inherit name_labeled name_label
-  inherit [expr_node] node_located ~loc node
+  inherit [expr_node] node_positioned ~pos node
   method original_type = 
     match original_type with None -> typ | Some original_type -> original_type
 end
 
-class expr_with ?loc ?typ ?name_label ?region ?node ?original_type e =
-  let loc = match loc with None -> e#loc | Some loc -> loc in
+class expr_with ?pos ?typ ?name_label ?region ?node ?original_type e =
+  let pos = match pos with None -> e#pos | Some pos -> pos in
   let typ = match typ with None -> e#typ | Some typ -> typ in
   let name_label = 
     match name_label with None -> e#name_label | Some name_label -> name_label 
@@ -166,51 +202,53 @@ class expr_with ?loc ?typ ?name_label ?region ?node ?original_type e =
     | None -> e#original_type
     | Some original_type -> original_type
   in
-  expr ~loc ~typ ~name_label ~region ~original_type node
+  expr ~pos ~typ ~name_label ~region ~original_type node
 
-class assertion ?(name_label="") ?(loc = Loc.dummy_position) node =
+class assertion ?(name_label="") ?logic_label ?(pos = Loc.dummy_position) node =
 object
   inherit name_labeled name_label
-  inherit [assertion_node] node_located ~loc node
+  inherit logic_labeled logic_label
+  inherit [assertion_node] node_positioned ~pos node
 end
 
-class assertion_with ?loc ?name_label ?node a =
-  let loc = match loc with None -> a#loc | Some loc -> loc in
+class assertion_with ?pos ?name_label ?node a =
+  let pos = match pos with None -> a#pos | Some pos -> pos in
   let name_label = 
     match name_label with None -> a#name_label | Some name_label -> name_label 
   in
+  let llab = a#logic_label in
   let node = match node with None -> a#node | Some node -> node in
-  assertion ~loc ~name_label node
+  assertion ~pos ~name_label ?logic_label:llab node
 
-class ['expr] ptag ?(loc = Loc.dummy_position) node =
+class ['expr] ptag ?(pos = Loc.dummy_position) node =
 object
-  inherit ['expr ptag_node] node_located ~loc node
+  inherit ['expr ptag_node] node_positioned ~pos node
 end
 
-class ['expr] ptag_with ?loc ?node t =
-  let loc = match loc with None -> t#loc | Some loc -> loc in
+class ['expr] ptag_with ?pos ?node t =
+  let pos = match pos with None -> t#pos | Some pos -> pos in
   let node = match node with None -> t#node | Some node -> node in
-  ['expr] ptag ~loc node
+  ['expr] ptag ~pos node
 
-class tag ?(loc = Loc.dummy_position) node =
+class tag ?(pos = Loc.dummy_position) node =
 object
-  inherit [tag_node] node_located ~loc node
+  inherit [tag_node] node_positioned ~pos node
 end
 
-class tag_with ?loc ?node t =
-  let loc = match loc with None -> t#loc | Some loc -> loc in
+class tag_with ?pos ?node t =
+  let pos = match pos with None -> t#pos | Some pos -> pos in
   let node = match node with None -> t#node | Some node -> node in
-  tag ~loc node
+  tag ~pos node
 
-class ['expr] decl ?(loc = Loc.dummy_position) node =
+class ['expr] decl ?(pos = Loc.dummy_position) node =
 object
-  inherit ['expr decl_node] node_located ~loc node
+  inherit ['expr decl_node] node_positioned ~pos node
 end
 
-class ['expr] decl_with ?loc ?node t =
-  let loc = match loc with None -> t#loc | Some loc -> loc in
+class ['expr] decl_with ?pos ?node t =
+  let pos = match pos with None -> t#pos | Some pos -> pos in
   let node = match node with None -> t#node | Some node -> node in
-  ['expr] decl ~loc node
+  ['expr] decl ~pos node
 
 (*******************************************************************************)
 (*                             constant constructors                           *)
@@ -244,7 +282,7 @@ let oo a b = match a with
   | Some a -> a
 
 module PExpr = struct
-  let mk ?loc ~node () = new pexpr ?loc node
+  let mk ?pos ~node () = new pexpr ?pos node
 
   let mkconst ~const = mk ~node:(JCPEconst const)
   let mkvoid = mkconst ~const:Const.mkvoid
@@ -254,14 +292,14 @@ module PExpr = struct
   let mkreal ?value ?valuestr = mkconst ~const:(Const.mkreal ?value ?valuestr ())
 
   let mkbinary ~expr1 ~op ~expr2 = mk ~node:(JCPEbinary(expr1, op, expr2))
-  let mkbinary_list ~default ~op ?expr1 ?expr2 ?list ?loc
+  let mkbinary_list ~default ~op ?expr1 ?expr2 ?list ?pos
       () =
     match expr1, expr2, list with
       | None, None, Some el ->
           List.fold_left
-            (fun expr2 expr1 -> mkbinary ?loc ~expr1 ~expr2 ~op ())
+            (fun expr2 expr1 -> mkbinary ?pos ~expr1 ~expr2 ~op ())
             default el
-      | Some expr1, Some expr2, None -> mkbinary ~expr1 ~op ~expr2 ?loc ()
+      | Some expr1, Some expr2, None -> mkbinary ~expr1 ~op ~expr2 ?pos ()
       | _ -> failwith "Jc_constructors.PExpr.mkbinary_list should be used \
 either with (~expr1 AND ~expr2) OR ~list only."
   let mkand = mkbinary_list ~default:(mkboolean ~value:true ()) ~op:`Bland
@@ -297,26 +335,26 @@ either with (~expr1 AND ~expr2) OR ~list only."
     mk ~node:(JCPEif(condition, expr_then, expr_else))
   let mkblock ~exprs = mk ~node:(JCPEblock exprs)
   let mkdecl ~typ ~var ?init = mk ~node:(JCPEdecl(typ, var, init))
-  let mklet ?typ ~var ?init ~body ?loc () =
+  let mklet ?typ ~var ?init ~body ?pos () =
     match typ with
-      | None -> mk ~node:(JCPElet(typ, var, init, body)) ?loc ()
+      | None -> mk ~node:(JCPElet(typ, var, init, body)) ?pos ()
       | Some typ ->
 	  mkblock ~exprs:[
-	    mkdecl ~typ ~var ?init ?loc ();
+	    mkdecl ~typ ~var ?init ?pos ();
 	    body
-	  ] ?loc ()
+	  ] ?pos ()
   let mklet_nodecl ?typ ~var ?init ~body =
     mk ~node:(JCPElet(typ, var, init, body))
-  let mkrange ?left ?right ?locations ?loc () =
-    let r = mk ~node:(JCPErange(left, right)) ?loc () in
+  let mkrange ?left ?right ?locations ?pos () =
+    let r = mk ~node:(JCPErange(left, right)) ?pos () in
     match locations with
       | None -> r
-      | Some l -> mkadd ~expr1:l ~expr2:r ?loc ()
+      | Some l -> mkadd ~expr1:l ~expr2:r ?pos ()
   let mkalloc ?(count = mkint ~value:1 ()) ~typ =
     mk ~node:(JCPEalloc(count, typ))
   let mkfree ~expr = mk ~node:(JCPEfree expr)
   let mkmutable ~expr ~tag = mk ~node:(JCPEmutable(expr, tag))
-  let mktag_equality ~tag1 ~tag2 = mk ~node:(JCPEtagequality(tag1, tag2))
+  let mktag_equality ~tag1 ~tag2 = mk ~node:(JCPEeqtype(tag1, tag2))
   let mkmatch ~expr ~cases = mk ~node:(JCPEmatch(expr, cases))
   let mkassert ~expr = mk ~node:(JCPEassert ([],expr))
   let mkwhile ?(condition = mkboolean ~value:true ())
@@ -336,8 +374,8 @@ either with (~expr1 AND ~expr2) OR ~list only."
   let mkunpack ~expr ?tag = mk ~node:(JCPEunpack(expr, tag))
   let mkswitch ~expr ?(cases = []) = mk ~node:(JCPEswitch(expr, cases))
 
-  let mkcatch ~exn ?(name = "") ?body ?loc () =
-    exn, name, (match body with None -> mkvoid ?loc () | Some body -> body)
+  let mkcatch ~exn ?(name = "") ?body ?pos () =
+    exn, name, (match body with None -> mkvoid ?pos () | Some body -> body)
 
   let mkshift ~expr ~offset = mkadd ~expr1:expr ~expr2:offset
   let mknot = mkunary ~op:`Unot
@@ -354,8 +392,8 @@ end
 module PDecl = struct
   open PExpr
 
-  let mk ?loc ~node () =
-    new node_located ?loc node
+  let mk ?pos ~node () =
+    new node_positioned ?pos node
   let mkfun_def ?(result_type = new ptype (JCPTnative Tunit)) ~name
       ?(params = []) ?(clauses = []) ?body =
     mk ~node:(JCDfun(result_type, name, params, clauses, body))
@@ -394,22 +432,22 @@ module PDecl = struct
   let mkabstract_domain_def ~value = mk ~node:(JCDabstract_domain value)
   let mkint_model_def ~value = mk ~node:(JCDint_model value)
 
-  let mkbehavior ?(loc = Loc.dummy_position) ~name ?throws ?assumes ?requires
+  let mkbehavior ?(pos = Loc.dummy_position) ~name ?throws ?assumes ?requires
       ?assigns ?(ensures = mkboolean ~value:true ()) () =
-    (loc, name, throws, assumes, requires, assigns, ensures)
+    (pos, name, throws, assumes, requires, assigns, ensures)
 
   let mkrequires_clause expr = JCCrequires expr
 
-  let mkbehavior_clause ?(loc = Loc.dummy_position) ~name ?throws ?assumes ?requires
+  let mkbehavior_clause ?(pos = Loc.dummy_position) ~name ?throws ?assumes ?requires
       ?assigns ?(ensures = mkboolean ~value:true ()) () =
-      JCCbehavior (mkbehavior ~loc ~name ?throws ?assumes ?requires ?assigns ~ensures ())
+      JCCbehavior (mkbehavior ~pos ~name ?throws ?assumes ?requires ?assigns ~ensures ())
 
-  let mkbehavior_clause_with ?loc ?name ?throws ?assumes ?requires ?assigns ?ensures =
+  let mkbehavior_clause_with ?pos ?name ?throws ?assumes ?requires ?assigns ?ensures =
     function
-      | JCCbehavior(loc', name', throws', assumes', requires', assigns',
+      | JCCbehavior(pos', name', throws', assumes', requires', assigns',
                     ensures') ->
           JCCbehavior(
-            oo loc loc',
+            oo pos pos',
             oo name name',
             oo throws throws',
             oo assumes assumes',
@@ -418,8 +456,8 @@ module PDecl = struct
             oo ensures ensures'
           )
       | _ -> raise (Invalid_argument "mkbehavior_with")
-  let mkassigns ?(loc = Loc.dummy_position) ?(locations = []) () =
-    loc, locations
+  let mkassigns ?(pos = Loc.dummy_position) ?(locations = []) () =
+    pos, locations
 
   let mktag_invariant ~name ~var ~body = name, var, body
 
@@ -434,7 +472,7 @@ end
 (******************************************************************************)
 
 module NExpr = struct
-  let mk ?loc ~node () = new nexpr ?loc node
+  let mk ?pos ~node () = new nexpr ?pos node
 
   let mkcast ~expr ~typ = mk ~node:(JCNEcast(expr, typ))
 end
@@ -445,8 +483,8 @@ end
 (*******************************************************************************)
 
 module Expr = struct
-  let mk ?loc ~typ ?name_label ?region ?original_type ~node () =
-    new expr ?loc ~typ ?name_label ?region ?original_type node
+  let mk ?pos ~typ ?name_label ?region ?original_type ~node () =
+    new expr ?pos ~typ ?name_label ?region ?original_type node
 
   let mklet ~var ?init ~body =
     mk ~typ:var.jc_var_info_type ~node:(JCElet(var, init, body))
@@ -461,8 +499,8 @@ end
 (*******************************************************************************)
 
 module Term = struct
-  let mk ?loc ~typ ?name_label ?region ~node () =
-    new term ?loc ~typ ?name_label ?region node
+  let mk ?pos ~typ ?name_label ?region ~node () =
+    new term ?pos ~typ ?name_label ?region node
 
   let mkvar ~var = 
     mk ~typ:var.jc_var_info_type ~node:(JCTvar var)
@@ -473,10 +511,10 @@ end
 (*******************************************************************************)
 
 module Assertion = struct
-  let mk ?loc ?name_label ~node () =
-    new assertion ?loc ?name_label node
+  let mk ?pos ?name_label ~node () =
+    new assertion ?pos ?name_label node
 
-  let fake ?loc ?name_label ~value () = value
+  let fake ?pos ?name_label ~value () = value
 
   let mktrue = mk ~node:JCAtrue
   let mkfalse = mk ~node:JCAfalse
