@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.323 2008-08-06 23:46:09 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.324 2008-08-07 12:32:30 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -44,6 +44,7 @@ open Jc_separation
 open Jc_interp_misc
 open Jc_struct_tools
 open Jc_pattern
+open Jc_stdlib
 
 open Num
 
@@ -416,6 +417,12 @@ let make_guarded_app ~name (k : kind) loc f l =
     | _ -> l
   in
   Label (lab, make_app f l)
+
+(* mark should be either mark from before or pos in Jessie *)
+
+let make_mark mark k pos e' =
+  let mark = reg_loc (* ~id:mark *) ~kind:k pos in
+  Label(mark,e')
 
 let eval_integral_const e =
   let rec eval e =
@@ -973,129 +980,117 @@ let rec make_lets l e =
 let return_void = ref false
 
 
-let write_mems ~callee_writes ~regions =
-  MemoryMap.fold
-    (fun (fi,distr) labels acc ->
-       if Region.polymorphic distr then
-         try 
-           let locr = RegionList.assoc distr regions in
-           (* Check that we do not pass a same memory twice as 
-            * a pointer.
-            *)
-           begin
-(*             assert(not(MemoryList.mem (fi,locr) acc));*)
-             (Var(memory_name (fi,locr)))::acc 
-           end
-         with Not_found -> 
-           (* Local memory. Not passed in argument by the caller. *)
-           acc
-       else acc)
-    callee_writes.jc_effect_memories
-    []
+let plain_memory_var (mc,r) = Var (memory_name (mc,r))
+let deref_memory_var (mc,r) = Deref (memory_name (mc,r))
 
-let read_mems ~caller_writes ~callee_reads ~callee_writes ~regions =
-  MemoryMap.fold
-    (fun (fi,distr) labels acc ->
-       if MemoryMap.mem (fi,distr)
-         callee_writes.jc_effect_memories then acc
+let memory_var (mc,r) =
+  let infunction = get_current_function () in
+  if Region.polymorphic r then
+    if MemoryMap.mem (mc,r) 
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+    then deref_memory_var (mc,r)
+    else plain_memory_var (mc,r)
+  else deref_memory_var (mc,r)
+
+let plain_alloc_table_var (ac,r) = Var (alloc_table_name (ac,r))
+let deref_alloc_table_var (ac,r) = Deref (alloc_table_name (ac,r))
+
+let alloc_table_var (ac,r) =
+  let infunction = get_current_function () in
+  if Region.polymorphic r then
+    if AllocMap.mem (ac,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+    then deref_alloc_table_var (ac,r)
+    else plain_alloc_table_var (ac,r)
+  else deref_alloc_table_var (ac,r)
+
+let plain_tag_table_var (vi,r) = Var (tag_table_name (vi,r))
+let deref_tag_table_var (vi,r) = Deref (tag_table_name (vi,r))
+
+let tag_table_var (vi,r) =
+  let infunction = get_current_function () in
+  if Region.polymorphic r then
+    if TagMap.mem (vi,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_table
+    then deref_tag_table_var (vi,r)
+    else plain_tag_table_var (vi,r)
+  else deref_tag_table_var (vi,r)
+
+let add_alloc_table_argument (ac,distr) region_assoc acc =
+  if Region.polymorphic distr then
+    (* Polymorphic distant region passed as argument *)
+    try 
+      let locr = RegionList.assoc distr region_assoc in
+      (alloc_table_var (ac,locr))::acc 
+    with Not_found -> acc
+      (* Local allocation table. Not passed in argument by the caller. *)
+  else acc
+
+let write_allocs ~callee_writes ~region_assoc =
+  AllocMap.fold
+    (fun (ac,distr) _labs acc ->
+       add_alloc_table_argument (ac,distr) region_assoc acc
+    ) callee_writes.jc_effect_alloc_table []
+
+let read_allocs ~caller_writes ~callee_writes ~callee_reads ~region_assoc =
+  AllocMap.fold
+    (fun (ac,distr) _labs acc ->
+       if AllocMap.mem (ac,distr) callee_writes.jc_effect_alloc_table then
+	 acc
        else
-         if Region.polymorphic distr then
-                  (* Distant region is polymorphic. It should be passed as
-                   * argument to the function. 
-                   *)
-           try 
-             let locr = RegionList.assoc distr regions in
-             if Region.polymorphic locr then
-               if MemoryMap.mem (fi,locr) 
-                 caller_writes.jc_effect_memories
-               then
-                 (Deref(memory_name(fi,locr)))::acc 
-               else (Var(memory_name(fi,locr)))::acc 
-             else begin
-               (* Check that we do not pass in argument a constant 
-                * memory that is also written directly by 
-                * the function called.
-                *)
-(*                assert(not(MemoryMap.mem (fi,locr) *)
-(*                             callee_reads.jc_effect_memories *)
-(*                          )); *)
-               assert(not(MemoryMap.mem (fi,locr)
-                            callee_writes.jc_effect_memories
-                         ));
-               if MemoryMap.mem (fi,locr) 
-                 caller_writes.jc_effect_memories
-               then (Var(memory_name(fi,locr)))::acc 
-               else (Deref(memory_name(fi,locr)))::acc 
-             end
-           with Not_found -> 
-             (* Local memory. Not passed in argument by the caller. *)
-             acc
-         else acc)
-    callee_reads.jc_effect_memories
-    []
+	 add_alloc_table_argument (ac,distr) region_assoc acc
+    ) callee_reads.jc_effect_alloc_table []
 
-let write_allocs ~callee_writes ~regions =
-  AllocMap.fold
-    (fun (a,distr) labs acc ->
-       if Region.polymorphic distr then
-         try 
-           let locr = RegionList.assoc distr regions in
-           (* Check that we do not pass a same allocation table 
-            * twice as a pointer.
-            *)
-           begin
-(*             assert(not(AllocList.mem (a,locr) acc));*)
-             (Var(alloc_table_name(a,locr)))::acc 
-           end
-         with Not_found -> 
-                    (* Local allocation table. 
-                     * Not passed in argument by the caller. 
-                     *)
-           acc
-       else acc)
-    callee_writes.jc_effect_alloc_table
-    []
+let add_tag_table_argument (vi,distr) region_assoc acc =
+  if Region.polymorphic distr then
+    (* Polymorphic distant region passed as argument *)
+    try 
+      let locr = RegionList.assoc distr region_assoc in
+      (tag_table_var (vi,locr))::acc 
+    with Not_found -> acc
+      (* Local tagation table. Not passed in argument by the caller. *)
+  else acc
 
-let read_allocs ~caller_writes ~callee_writes ~callee_reads ~regions =
-  AllocMap.fold
-    (fun (a,distr) labs acc ->
-       if Region.polymorphic distr then
-                  (* Distant region is polymorphic. It should be passed as
-                   * argument to the function. 
-                   *)
-         try 
-           let locr = RegionList.assoc distr regions in
-           if Region.polymorphic locr then
-             if AllocMap.mem (a,locr) 
-               caller_writes.jc_effect_alloc_table
-             then
-               (Deref(alloc_table_name(a,locr)))::acc 
-             else (Var(alloc_table_name(a,locr)))::acc 
-           else
-             begin
-               (* Check that we do not pass in argument a constant 
-                * allocation table that is also written directly
-                * by the function called.
-                *)
-               let fallocs = (* AllocSet.union *)
-(*                  callee_reads.jc_effect_alloc_table *)
-                 callee_writes.jc_effect_alloc_table
-               in
-               assert(not(AllocMap.mem (a,locr) fallocs));
-               if AllocMap.mem (a,locr) 
-                 callee_writes.jc_effect_alloc_table
-               then (Var(alloc_table_name(a,locr)))::acc 
-               else (Deref(alloc_table_name(a,locr)))::acc 
-             end
-         with Not_found -> 
-                    (* Local allocation table.
-                     * Not passed in argument by the caller. *)
-           acc
-       else acc)
-    (AllocMap.diff_merge LogicLabelSet.diff LogicLabelSet.is_empty
-       callee_reads.jc_effect_alloc_table
-       callee_writes.jc_effect_alloc_table)
-    []
+let write_tags ~callee_writes ~region_assoc =
+  TagMap.fold
+    (fun (vi,distr) _labs acc ->
+       add_tag_table_argument (vi,distr) region_assoc acc
+    ) callee_writes.jc_effect_tag_table []
+
+let read_tags ~caller_writes ~callee_writes ~callee_reads ~region_assoc =
+  TagMap.fold
+    (fun (vi,distr) _labs acc ->
+       if TagMap.mem (vi,distr) callee_writes.jc_effect_tag_table then
+	 acc
+       else
+	 add_tag_table_argument (vi,distr) region_assoc acc
+    ) callee_reads.jc_effect_tag_table []
+
+let add_memory_argument (mc,distr) region_assoc acc =
+  if Region.polymorphic distr then
+    (* Polymorphic distant region passed as argument *)
+    try 
+      let locr = RegionList.assoc distr region_assoc in
+      (memory_var (mc,locr))::acc 
+    with Not_found -> acc
+      (* Local memory. Not passed in argument by the caller. *)
+  else acc
+
+let write_mems ~callee_writes ~region_assoc =
+  MemoryMap.fold
+    (fun (mc,distr) _labs acc -> 
+       add_memory_argument (mc,distr) region_assoc acc
+    ) callee_writes.jc_effect_memories []
+
+let read_mems ~caller_writes ~callee_reads ~callee_writes ~region_assoc =
+  MemoryMap.fold
+    (fun (mc,distr) _labs acc ->
+       if MemoryMap.mem (mc,distr) callee_writes.jc_effect_memories then
+	 acc
+       else
+       add_memory_argument (mc,distr) region_assoc acc
+    ) callee_reads.jc_effect_memories []
+
 
 (*******************************************************************************)
 (*                                  Locations                                  *)
@@ -1270,37 +1265,6 @@ let rec old_to_pre_loc loc =
 	  ~node:(JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, region))
 	  loc
 
-let plain_memory_var (mc,r) = Var (memory_name (mc,r))
-let deref_memory_var (mc,r) = Deref (memory_name (mc,r))
-
-let memory_var (mc,r) =
-  let infunction = get_current_function () in
-  if Region.polymorphic r then
-    if MemoryMap.mem (mc,r) 
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-    then deref_memory_var (mc,r)
-    else plain_memory_var (mc,r)
-  else deref_memory_var (mc,r)
-
-let alloc_table_var (ac,r) =
-  let infunction = get_current_function () in
-  let alloc = alloc_table_name (ac,r) in
-  if Region.polymorphic r then
-    if AllocMap.mem (ac,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-    then Deref alloc
-    else Var alloc
-  else Deref alloc
-
-let tag_table_var (vi,r) =
-  let infunction = get_current_function () in
-  let tag = tag_table_name (vi,r) in
-  if Region.polymorphic r then
-    if TagMap.mem (vi,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_table
-    then Deref tag
-    else Var tag
-  else Deref tag
 
 (* translates the heap update `e1.f = e2' 
 
@@ -1660,7 +1624,7 @@ and offset = function
         e#mark e#pos integer_type e#typ e
         (expr e)
 
-and type_assert ty e (lets, params) =
+and list_type_assert ty e (lets, params) =
   let opt =
     match ty with
       | JCTpointer (si, n1o, n2o) ->
@@ -1735,10 +1699,28 @@ and type_assert ty e (lets, params) =
     | None -> None :: lets, e :: params
     | Some (tmp,a) -> Some (tmp, e, a) :: lets , (Var tmp) :: params
 
+and type_assert ty e =
+  List.as_singleton (fst (list_type_assert ty e ([], [])))
+
+and value_assigned mark pos ty e =
+  let assign_assert = type_assert ty e in
+  let tmp_for_assert = match assign_assert with
+    | None -> None
+    | Some(tmp,e',a) -> 
+	if not (safety_checking()) then None else Some(tmp,e',a)
+  in
+  match tmp_for_assert with
+    | None -> 
+	let e' = expr e in
+	coerce ~check_int_overflow:(safety_checking()) 
+	  mark e#pos ty e#typ e e'
+    | Some(tmp,e1',a) ->
+	Let(tmp,e1',make_mark mark IndexBounds pos (Assert(a,Var tmp)))
+
 and expr e =
   let infunction = get_current_function () in
   let pos = e#pos in
-  let mark = (* Only use mark once *)
+  let mark = (* Only use mark once *) (* TODO: change system !!!!! *)
     let used = ref false in fun () ->
       if !used then "" else (used := true; e#mark)
   in
@@ -1850,10 +1832,10 @@ and expr e =
     | JCEalloc(e1,st) ->
 	let e1' = expr e1 in
 	let ac = deref_alloc_class e in
-        let alloc = alloc_table_var (ac,e#region) in
+        let alloc = plain_alloc_table_var (ac,e#region) in
 	begin match ac with
 	  | JCalloc_struct vi ->
-              let tag = tag_table_var (vi,e#region) in
+              let tag = plain_tag_table_var (vi,e#region) in
 	      let pc = JCtag(st,[]) in
               let fields = all_memories ~select:fully_allocated pc in
               let fields = List.map (fun fi -> (fi,e#region)) fields in
@@ -1882,7 +1864,7 @@ and expr e =
     | JCEfree e1 ->
 	let e1' = expr e1 in
 	let ac = deref_alloc_class e1 in
-        let alloc = alloc_table_var (ac,e1#region) in
+        let alloc = plain_alloc_table_var (ac,e1#region) in
 	begin match ac with
 	  | JCalloc_struct vi ->
               if !Jc_options.inv_sem = InvOwnership then
@@ -1905,27 +1887,33 @@ and expr e =
 		      let param_types = 
 			List.map (fun v -> v.jc_var_info_type) params 
 		      in
-		      List.fold_right2 type_assert
+		      List.fold_right2 list_type_assert
 			param_types call.jc_call_args ([],[])
 		with Invalid_argument _ -> assert false
               in
-              let write_mems, read_mems, write_allocs, read_allocs =
-                [],
+              let write_allocs, write_tags, write_mems = [], [], [] in
+              let read_allocs, read_tags, read_mems =
+		read_allocs
+                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
+                  ~callee_reads: f.jc_logic_info_effects
+                  ~callee_writes: empty_effects
+                  ~region_assoc: call.jc_call_region_assoc,
+                read_tags
+                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
+                  ~callee_reads: f.jc_logic_info_effects
+                  ~callee_writes: empty_effects
+                  ~region_assoc: call.jc_call_region_assoc,
                 read_mems
                   ~caller_writes: infunction.jc_fun_info_effects.jc_writes
                   ~callee_reads: f.jc_logic_info_effects
                   ~callee_writes: empty_effects
-                  ~regions: call.jc_call_region_assoc,
-                [],
-                read_allocs
-                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
-                  ~callee_reads: f.jc_logic_info_effects
-                  ~callee_writes: empty_effects
-                  ~regions: call.jc_call_region_assoc
+                  ~region_assoc: call.jc_call_region_assoc
               in
               let call = 
 		make_logic_app f.jc_logic_info_final_name 
-		  (args @ write_allocs @ write_mems @ read_allocs @ read_mems)
+		  (args 
+		   @ write_allocs @ write_tags @ write_mems 
+		   @ read_allocs @ read_tags @ read_mems)
 	      in
               let arg_types_assert =
 		List.fold_right
@@ -1958,32 +1946,44 @@ and expr e =
 		      let param_types = 
 			List.map (fun v -> v.jc_var_info_type) params 
 		      in
-		      List.fold_right2 type_assert
+		      List.fold_right2 list_type_assert
 			param_types call.jc_call_args ([],[])
 		with Invalid_argument _ -> assert false
               in
-              let write_mems, read_mems, write_allocs, read_allocs =
+              let write_allocs, write_tags, write_mems =
+                write_allocs
+                  ~callee_writes: f.jc_fun_info_effects.jc_writes
+                  ~region_assoc: call.jc_call_region_assoc,
+                write_tags
+                  ~callee_writes: f.jc_fun_info_effects.jc_writes
+                  ~region_assoc: call.jc_call_region_assoc,
                 write_mems
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
-                  ~regions: call.jc_call_region_assoc,
-                read_mems
-                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
-                  ~callee_reads: f.jc_fun_info_effects.jc_reads
-                  ~callee_writes: f.jc_fun_info_effects.jc_writes
-                  ~regions: call.jc_call_region_assoc,
-                write_allocs
-                  ~regions: call.jc_call_region_assoc
-                  ~callee_writes: f.jc_fun_info_effects.jc_writes,
+                  ~region_assoc: call.jc_call_region_assoc
+	      in
+              let read_allocs, read_tags, read_mems =
                 read_allocs
                   ~caller_writes: infunction.jc_fun_info_effects.jc_writes
                   ~callee_reads: f.jc_fun_info_effects.jc_reads
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
-                  ~regions: call.jc_call_region_assoc
+                  ~region_assoc: call.jc_call_region_assoc,
+                read_tags
+                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
+                  ~callee_reads: f.jc_fun_info_effects.jc_reads
+                  ~callee_writes: f.jc_fun_info_effects.jc_writes
+                  ~region_assoc: call.jc_call_region_assoc,
+                read_mems
+                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
+                  ~callee_reads: f.jc_fun_info_effects.jc_reads
+                  ~callee_writes: f.jc_fun_info_effects.jc_writes
+                  ~region_assoc: call.jc_call_region_assoc
               in
 	      let call = 
 		make_guarded_app ~name:(mark()) UserCall 
 		  e#pos f.jc_fun_info_final_name
-		  (args @ write_allocs @ write_mems @ read_allocs @ read_mems) 
+		  (args 
+		   @ write_allocs @ write_tags @ write_mems 
+		   @ read_allocs @ read_tags @ read_mems)
 	      in
               let arg_types_assert =
 		List.fold_right
@@ -2009,66 +2009,93 @@ and expr e =
               in
               call
 	end
-    | JCEassign_var (vi, e2) -> 
-	let assign_var_assert = fst 
-	  (type_assert vi.jc_var_info_type e2 ([], []))
-	in
-	assert (List.length assign_var_assert = 1);
-	let assign_var_assert = List.hd assign_var_assert in
+    | JCEassign_var(v,e1) -> 
+	let assign_var_assert = type_assert v.jc_var_info_type e1 in
 	let tmp_for_assert = match assign_var_assert with
 	  | None -> None
-	  | Some(tmp,e,a) -> if not (safety_checking()) then None else Some(tmp,e,a)
+	  | Some(tmp,e,a) -> 
+	      if not (safety_checking()) then None else Some(tmp,e,a)
 	in
-	let ie = match tmp_for_assert with
+	let e' = match tmp_for_assert with
 	  | None -> 
-              let e2' = expr e2 in
+              let e1' = expr e1 in
 	      coerce ~check_int_overflow:(safety_checking()) 
-		e2#mark e2#pos vi.jc_var_info_type 
-		e2#typ e2 e2'
-	  | Some(tmp,e,a) ->
-	      Let (tmp, e, Assert (a, Var tmp))
+		e1#mark e1#pos v.jc_var_info_type e1#typ e1 e1'
+	  | Some(tmp,e1',a) ->
+	      Let(tmp,e1',Assert(a,Var tmp))
 	in
-	let ie = Assign (vi.jc_var_info_final_name, ie) in
-	if e#typ = Jc_pervasives.unit_type then ie else append ie (var vi)
-    | JCEassign_heap (e1, fi, e2) -> 
+	let e' = Assign(v.jc_var_info_final_name,e') in
+	if e#typ = Jc_pervasives.unit_type then e' else append e' (var v)
+    | JCEassign_heap(e1,fi,e2) -> 
         let tmp1, tmp2, lets, upd, deref = 
 	  make_upd (mark()) e#pos fi e1 e2 
         in
-	let assign_heap_assert = fst 
-	  (type_assert fi.jc_field_info_type e2 ([], []))
-	in
-	assert (List.length assign_heap_assert = 1);
-	let assign_heap_assert = List.hd assign_heap_assert in
-	let upd =
-	  match assign_heap_assert with
-	    | None -> upd
-	    | Some (tmp, e, a) ->
-		let upd = if not (safety_checking()) then upd else Assert (a, upd) in
-		Let (tmp, e, upd)
+	let assign_heap_assert = type_assert fi.jc_field_info_type e2 in
+	let upd = match assign_heap_assert with
+	  | None -> upd
+	  | Some(tmp,e2',a) ->
+	      let upd = 
+		if not (safety_checking()) then upd else Assert(a,upd) 
+	      in
+	      Let(tmp,e2',upd)
 	in	  
-	(* Yannick: ignore variables to be able to refine update function used. *)      
-	(* Claude: do not ignore variable tmp2, since it may involve a coercion. 
-	   Anyway, safety of the update do not depend on e2 *)
         let upd = 
 	  if (safety_checking()) && !Jc_options.inv_sem = InvOwnership then
-            append (assert_mutable (LVar tmp1) fi) upd else upd 
+            append (assert_mutable (LVar tmp1) fi) upd 
+	  else upd 
 	in
 	let upd =
-	  if e#typ = Jc_pervasives.unit_type then upd else 
-	    append upd deref
+	  if e#typ = Jc_pervasives.unit_type then upd else append upd deref
 	in
         let lets = make_lets lets upd in
         if !Jc_options.inv_sem = InvOwnership then
           append lets (assume_field_invariants fi)
-        else
-          lets
-	    (* if !Jc_options.inv_sem = Jc_options.InvOwnership then   
-	       (make_assume_field_assocs (fresh_program_point ()) fi)) *)
-    | JCEblock l ->
-        List.fold_right append (List.map expr l) Void
-    | JCEloop (la, s) ->
-	let inv = List.filter (compatible_with_current_behavior $ fst) 
-	  la.jc_loop_invariant
+        else lets
+    | JCEblock el ->
+        List.fold_right append (List.map expr el) Void
+    | JCElet(v,e1,e2) -> 
+        let e1' = match e1 with
+          | None -> 
+              any_value v.jc_var_info_type
+          | Some e1 -> 
+	      value_assigned e#mark e#pos v.jc_var_info_type e1
+	in
+	let e2' = expr e2 in
+        if v.jc_var_info_assigned then 
+	  Let_ref(v.jc_var_info_final_name,e1',e2')
+        else 
+	  Let(v.jc_var_info_final_name,e1',e2')
+    | JCEreturn_void -> Raise(jessie_return_exception,None)     
+    | JCEreturn(ty,e1) -> 
+	let return_assert = type_assert ty e1 in
+	let tmp_for_assert = match return_assert with
+	  | None -> None
+	  | Some(tmp,e,a) -> 
+	      if not (safety_checking()) then None else Some(tmp,e,a)
+	in
+	let e' = match tmp_for_assert with
+	  | None ->
+	      let e1' = expr e1 in
+	      coerce ~check_int_overflow:(safety_checking()) 
+		(mark()) e1#pos ty e1#typ e1 e1'
+	  | Some(tmp,e1',a) -> 
+	      Let(tmp,e1',Assert(a,Var tmp))  
+	in
+	let e' = Assign(jessie_return_variable,e') in
+	append e' (Raise(jessie_return_exception,None))
+    | JCEassert(b,a) -> 
+	if compatible_with_current_behavior b then
+          Assert(named_assertion
+                   ~global_assertion:false ~relocate:false
+                   LabelHere
+                   LabelPre
+                   a,
+		 Void)
+	else Void
+    | JCEloop(la,s) ->
+	let inv = 
+	  List.filter (compatible_with_current_behavior $ fst) 
+	    la.jc_loop_invariant
 	in
 	let inv = List.map snd inv in
         let inv = List.map (named_assertion
@@ -2145,15 +2172,6 @@ and expr e =
                 While(Cte(Prim_bool true), inv,
                       None, body)
         end
-    | JCEassert(behav,a) -> 
-	if compatible_with_current_behavior behav then
-          Assert(named_assertion
-                   ~global_assertion:false ~relocate:false
-                   LabelHere
-                   LabelPre
-                   a,
-		 Void)
-	else Void
     | JCEcontract(req,dec,vi_result,behs,e) ->
 	assert (req = None);
 	assert (dec = None);
@@ -2166,65 +2184,6 @@ and expr e =
 	  | _ -> assert false
 	end
 	
-    | JCElet (vi, e, s) -> 
-        let e' = match e with
-          | None -> 
-              any_value vi.jc_var_info_type
-          | Some e -> 
-	      (* eprintf "decl of vi=%s@." vi.jc_var_info_name; *)
-	      let assign_var_assert = fst 
-		(type_assert
-		   vi.jc_var_info_type e ([], []))
-	      in
-	      assert (List.length assign_var_assert = 1);
-	      let assign_var_assert = List.hd assign_var_assert in
-	      let tmp_for_assert = match assign_var_assert with
-		| None -> None
-		| Some(tmp,e,a) -> if not (safety_checking()) then None else Some(tmp,e,a)
-	      in
-	      match tmp_for_assert with
-		| None -> 
-		    coerce ~check_int_overflow:(safety_checking()) 
-		      (mark()) e#pos vi.jc_var_info_type e#typ 
-		      e (expr e)
-		| Some(tmp,e,a) ->
-		    Let (tmp, e, Assert( a, Var tmp))
-	in
-        if vi.jc_var_info_assigned then 
-	  Let_ref(vi.jc_var_info_final_name, e', expr s)
-        else 
-	  Let(vi.jc_var_info_final_name, e', expr s)
-    | JCEreturn_void -> Raise(jessie_return_exception,None)     
-    | JCEreturn (t,e) -> 
-	let return_type_asserts, _ = 
-	  type_assert infunction.jc_fun_info_result.jc_var_info_type e ([], []) in
-	let return_type_assert =
-	  List.fold_right
-	    (fun opt acc -> 
-	       match opt with
-		 | None -> acc
-		 | Some (_, _, a) -> make_and a acc)
-	    return_type_asserts LTrue
-	in
-	let assign = 
-	    Assign 
-	      (jessie_return_variable,
-	       coerce ~check_int_overflow:(safety_checking()) 
-		  (mark()) e#pos t e#typ e (expr e))
-	in
-	let assign = 
-	  if return_type_assert = LTrue || not (safety_checking()) then assign else
-	    Assert (return_type_assert, assign)
-	in
-	let assign =
-	  List.fold_right
-	    (fun opt assign -> 
-	       match opt with
-		 | None -> assign
-		 | Some (tmp, e, _) -> Let (tmp, e, assign))
-	    return_type_asserts assign
-	in
-	append assign (Raise (jessie_return_exception, None))
     | JCEunpack(st, e1, as_t) ->
         let e1 = expr e1 in 
         make_guarded_app ~name:(mark()) Unpack e#pos

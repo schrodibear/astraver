@@ -27,7 +27,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_stdlib.ml,v 1.1 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_stdlib.ml,v 1.2 2008-08-07 12:32:30 moy Exp $ *)
+
+module List = struct
+  include List
+    
+  let as_singleton = function
+    | [e] -> e
+    | _ -> failwith "as_singleton"
+end
 
 module Set = struct
 

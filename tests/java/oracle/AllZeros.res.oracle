@@ -989,13 +989,14 @@ let AllZeros_all_zeros_ensures_default =
         void)
         with
         Loop_continue_exc jessie_3 ->
-        (let jessie_13 = (let jessie_1 = !k in
+        (let jessie_13 = (K_7:
+                         (let jessie_1 = !k in
                          begin
                            (let jessie_12 = (k := (safe_int32_of_integer_ 
                                                    ((add_int (integer_of_int32 jessie_1)) (1)))) in
                            void);
                           jessie_1
-                         end) in
+                         end)) in
         void) end
       done
       with
@@ -1063,14 +1064,15 @@ let AllZeros_all_zeros_safety =
         void)
         with
         Loop_continue_exc jessie_3 ->
-        (let jessie_8 = (let jessie_1 = !k in
+        (let jessie_8 = (K_7:
+                        (let jessie_1 = !k in
                         begin
                           (let jessie_7 = (k := (JC_18:
                                                 (int32_of_integer_ ((add_int 
                                                                     (integer_of_int32 jessie_1)) (1))))) in
                           void);
                          jessie_1
-                        end) in
+                        end)) in
         void) end
       done
       with
@@ -1106,7 +1108,7 @@ why --project [...] why/AllZeros.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/AllZeros_po14.why">
-      <location file = "why/AllZeros.why" line = "513" begin = "65" end = "315"/>
+      <location file = "why/AllZeros.why" line = "514" begin = "65" end = "315"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/AllZeros_po15.why">
@@ -3823,7 +3825,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 result)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))
 
-;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 513, characters 65-315
+;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 514, characters 65-315
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

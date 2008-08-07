@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.119 2008-08-06 23:46:09 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.120 2008-08-07 12:32:30 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -697,10 +697,10 @@ let print_exception fmt exc =
 
 let print_effect fmt ef =
   fprintf fmt 
-"@[ reads alloc_table: %a@]@\n\
-@[ reads tag_table: %a@]@\n\
-@[ reads memories: %a@]@\n\
-@[ reads globals: %a@]@." 
+"@[@[ alloc_table: @[%a@]@]@\n\
+@[ tag_table: @[%a@]@]@\n\
+@[ memories: @[%a@]@]@\n\
+@[ globals: @[%a@]@]@]@." 
     (print_list_assoc_label print_alloc_table)
     (AllocMap.elements ef.jc_effect_alloc_table)
     (print_list_assoc_label print_tag_table)
@@ -752,7 +752,7 @@ let function_effects funs =
   List.iter
     (fun f ->
        Jc_options.lprintf
-	 "Effects for logic function %s:@\n\
+	 "Effects for function %s:@\n\
 @[ reads: %a@]@\n\
 @[ writes: %a@]@\n\
 @[ raises: %a@]@." 

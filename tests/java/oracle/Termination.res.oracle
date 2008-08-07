@@ -758,13 +758,14 @@ let Termination_loop1_safety =
         (let jessie_13 = begin
                            (if (K_4: ((gt_int_ !mutable_n_1) (0)))
                            then
-                            (let jessie_11 = (let jessie_1 = !mutable_n_1 in
+                            (let jessie_11 = (K_3:
+                                             (let jessie_1 = !mutable_n_1 in
                                              begin
                                                (let jessie_10 = (mutable_n_1 := 
                                                                  ((sub_int jessie_1) (1))) in
                                                void);
                                               jessie_1
-                                             end) in
+                                             end)) in
                             void)
                            else
                             (let jessie_12 = (raise (Loop_exit_exc void)) in
@@ -801,13 +802,14 @@ let Termination_loop2_safety =
         (let jessie_17 = begin
                            (if (K_8: ((lt_int_ !mutable_n_0_0) (100)))
                            then
-                            (let jessie_15 = (let jessie_4 = !mutable_n_0_0 in
+                            (let jessie_15 = (K_7:
+                                             (let jessie_4 = !mutable_n_0_0 in
                                              begin
                                                (let jessie_14 = (mutable_n_0_0 := 
                                                                  ((add_int jessie_4) (1))) in
                                                void);
                                               jessie_4
-                                             end) in
+                                             end)) in
                             void)
                            else
                             (let jessie_16 = (raise (Loop_exit_exc void)) in
@@ -845,13 +847,14 @@ let Termination_loop3_ensures_default =
           (let jessie_25 = begin
                              (if (K_13: ((gt_int_ !i) (0)))
                              then
-                              (let jessie_23 = (let jessie_7 = !i in
+                              (let jessie_23 = (K_12:
+                                               (let jessie_7 = !i in
                                                begin
                                                  (let jessie_22 = (i := 
                                                                    ((sub_int jessie_7) (1))) in
                                                  void);
                                                 jessie_7
-                                               end) in
+                                               end)) in
                               void)
                              else
                               (let jessie_24 = (raise (Loop_exit_exc void)) in
@@ -893,13 +896,14 @@ let Termination_loop3_safety =
           (let jessie_21 = begin
                              (if (K_13: ((gt_int_ !i) (0)))
                              then
-                              (let jessie_19 = (let jessie_7 = !i in
+                              (let jessie_19 = (K_12:
+                                               (let jessie_7 = !i in
                                                begin
                                                  (let jessie_18 = (i := 
                                                                    ((sub_int jessie_7) (1))) in
                                                  void);
                                                 jessie_7
-                                               end) in
+                                               end)) in
                               void)
                              else
                               (let jessie_20 = (raise (Loop_exit_exc void)) in
