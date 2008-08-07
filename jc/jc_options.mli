@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.28 2008-06-10 13:43:10 moy Exp $ *)
+(* $Id: jc_options.mli,v 1.29 2008-08-07 14:33:54 moy Exp $ *)
 
 
 
@@ -76,7 +76,7 @@ exception Jc_error of Loc.position * string
 
 val parsing_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
 
-val locs_table : 
+val pos_table : 
   (string, (string * int * int * int * Output.kind option * (string * Rc.rc_value) list)) 
      Hashtbl.t
 

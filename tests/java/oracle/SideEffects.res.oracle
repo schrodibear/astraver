@@ -353,38 +353,6 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/SideEffects.loc ==========
-[K_10]
-kind = IndexBounds
-file = "HOME/tests/java/SideEffects.java"
-line = 14
-begin = 1
-end = 11
-
-[K_11]
-file = "HOME/tests/java/SideEffects.java"
-line = 15
-begin = 12
-end = 57
-
-[K_14]
-kind = IndexBounds
-file = "HOME/tests/java/SideEffects.java"
-line = 16
-begin = 1
-end = 11
-
-[K_15]
-file = "HOME/tests/java/SideEffects.java"
-line = 17
-begin = 12
-end = 57
-
-[K_18]
-file = "HOME/tests/java/SideEffects.java"
-line = 6
-begin = 17
-end = 30
-
 [JC_1]
 file = "HOME/tests/java/SideEffects.jc"
 line = 35
@@ -439,32 +407,6 @@ line = 40
 begin = 8
 end = 30
 
-[K_2]
-kind = IndexBounds
-file = "HOME/tests/java/SideEffects.java"
-line = 10
-begin = 1
-end = 11
-
-[K_3]
-file = "HOME/tests/java/SideEffects.java"
-line = 11
-begin = 12
-end = 31
-
-[K_6]
-kind = IndexBounds
-file = "HOME/tests/java/SideEffects.java"
-line = 12
-begin = 1
-end = 11
-
-[K_7]
-file = "HOME/tests/java/SideEffects.java"
-line = 13
-begin = 12
-end = 44
-
 [SideEffects_m1_safety]
 name = "Method m1"
 behavior = "Safety"
@@ -498,58 +440,116 @@ begin = 8
 end = 23
 
 [JC_14]
+file = "HOME/tests/java/SideEffects.java"
+line = 6
+begin = 17
+end = 30
+
+[JC_15]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_15]
+[JC_16]
 file = "HOME/tests/java/SideEffects.java"
 line = 8
 begin = 9
 end = 11
 
-[JC_16]
+[JC_17]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.java"
+line = 10
+begin = 1
+end = 11
+
+[JC_18]
 kind = IndexBounds
 file = "HOME/tests/java/SideEffects.jc"
 line = 60
 begin = 9
 end = 48
 
-[JC_17]
+[JC_19]
+file = "HOME/tests/java/SideEffects.java"
+line = 11
+begin = 12
+end = 31
+
+[JC_20]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.java"
+line = 12
+begin = 1
+end = 11
+
+[JC_21]
 kind = IndexBounds
 file = "HOME/tests/java/SideEffects.jc"
 line = 63
 begin = 9
 end = 48
 
-[JC_18]
+[JC_22]
+file = "HOME/tests/java/SideEffects.java"
+line = 13
+begin = 12
+end = 44
+
+[JC_23]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.java"
+line = 14
+begin = 1
+end = 11
+
+[JC_24]
 kind = IndexBounds
 file = "HOME/tests/java/SideEffects.jc"
 line = 67
 begin = 9
 end = 49
 
-[JC_19]
+[JC_25]
+file = "HOME/tests/java/SideEffects.java"
+line = 15
+begin = 12
+end = 57
+
+[JC_26]
+kind = IndexBounds
+file = "HOME/tests/java/SideEffects.java"
+line = 16
+begin = 1
+end = 11
+
+[JC_27]
 kind = IndexBounds
 file = "HOME/tests/java/SideEffects.jc"
 line = 72
 begin = 9
 end = 50
 
-[JC_20]
+[JC_28]
+file = "HOME/tests/java/SideEffects.java"
+line = 17
+begin = 12
+end = 57
+
+[JC_29]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_21]
+[JC_30]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_22]
+[JC_31]
 file = "HOME/"
 line = 0
 begin = -1
@@ -673,7 +673,7 @@ parameter intM_intP : (Object, int) memory ref
 parameter SideEffects_m1 :
  this_0:Object pointer ->
   t:Object pointer ->
-   { (K_18: gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10)))}
+   { (JC_14: gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10)))}
    unit reads Object_alloc_table,intM_intP writes intM_intP { true }
 
 parameter alloc_Object :
@@ -774,7 +774,8 @@ parameter non_null_intM :
 let SideEffects_m1_safety =
  fun (this_0 : Object pointer) (t : Object pointer) ->
   { (valid_struct_SideEffects(this_0, (0), (0), Object_alloc_table)
-    and (K_18: gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10)))) }
+    and (JC_14:
+        gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10)))) }
   (init:
   try
    begin
@@ -790,12 +791,12 @@ let SideEffects_m1_safety =
                                        end)) in
                        (let jessie_5 = ((shift jessie_3) jessie_4) in
                        (let jessie_6 = (1) in
-                       (K_2:
+                       (JC_17:
                        ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_3) jessie_4) (0)) jessie_6)))))) in
        void);
       (K_4:
       (assert
-      { (K_3:
+      { (JC_19:
         (eq_int(select(intM_intP, shift(t, (0))), (1)) and eq_int(i, (1)))) };
       void));
       (let jessie_13 = (let jessie_9 = t in
@@ -805,12 +806,12 @@ let SideEffects_m1_safety =
                                         end) in
                        (let jessie_11 = ((shift jessie_9) jessie_10) in
                        (let jessie_12 = (2) in
-                       (K_6:
+                       (JC_20:
                        ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_9) jessie_10) (0)) jessie_12)))))) in
       void);
       (K_8:
       (assert
-      { (K_7:
+      { (JC_22:
         (eq_int(select(intM_intP, shift(t, (0))), (1))
         and (eq_int(select(intM_intP, shift(t, (2))), (2))
             and eq_int(i, (2))))) };
@@ -822,12 +823,12 @@ let SideEffects_m1_safety =
                                         end) in
                        (let jessie_16 = ((shift jessie_14) jessie_15) in
                        (let jessie_17 = (3) in
-                       (K_10:
+                       (JC_23:
                        ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_14) jessie_15) (0)) jessie_17)))))) in
       void);
       (K_12:
       (assert
-      { (K_11:
+      { (JC_25:
         (eq_int(select(intM_intP, shift(t, (0))), (1))
         and (eq_int(select(intM_intP, shift(t, (2))), (2))
             and (eq_int(select(intM_intP, shift(t, (1))), (3))
@@ -843,12 +844,12 @@ let SideEffects_m1_safety =
                                         end)) in
                        (let jessie_21 = ((shift jessie_19) jessie_20) in
                        (let jessie_22 = (4) in
-                       (K_14:
+                       (JC_26:
                        ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_19) jessie_20) (0)) jessie_22)))))) in
       void);
       (K_16:
       (assert
-      { (K_15:
+      { (JC_28:
         (eq_int(select(intM_intP, shift(t, (0))), (1))
         and (eq_int(select(intM_intP, shift(t, (2))), (2))
             and (eq_int(select(intM_intP, shift(t, (1))), (4))
@@ -1864,7 +1865,7 @@ goal SideEffects_m1_safety_po_1:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   (0 <= 0)
@@ -1877,21 +1878,21 @@ goal SideEffects_m1_safety_po_10:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -1906,21 +1907,21 @@ goal SideEffects_m1_safety_po_11:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -1935,21 +1936,21 @@ goal SideEffects_m1_safety_po_12:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -1958,7 +1959,7 @@ goal SideEffects_m1_safety_po_12:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11": (select(intM_intP2, shift(t, 0)) = 1))
+  ("JC_25": (select(intM_intP2, shift(t, 0)) = 1))
 
 ========== file tests/java/why/SideEffects_po13.why ==========
 goal SideEffects_m1_safety_po_13:
@@ -1968,21 +1969,21 @@ goal SideEffects_m1_safety_po_13:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -1991,7 +1992,7 @@ goal SideEffects_m1_safety_po_13:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11": (select(intM_intP2, shift(t, 2)) = 2))
+  ("JC_25": (select(intM_intP2, shift(t, 2)) = 2))
 
 ========== file tests/java/why/SideEffects_po14.why ==========
 goal SideEffects_m1_safety_po_14:
@@ -2001,21 +2002,21 @@ goal SideEffects_m1_safety_po_14:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -2024,7 +2025,7 @@ goal SideEffects_m1_safety_po_14:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11": (select(intM_intP2, shift(t, 1)) = 3))
+  ("JC_25": (select(intM_intP2, shift(t, 1)) = 3))
 
 ========== file tests/java/why/SideEffects_po15.why ==========
 goal SideEffects_m1_safety_po_15:
@@ -2034,21 +2035,21 @@ goal SideEffects_m1_safety_po_15:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -2057,7 +2058,7 @@ goal SideEffects_m1_safety_po_15:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11": (i1 = 1))
+  ("JC_25": (i1 = 1))
 
 ========== file tests/java/why/SideEffects_po16.why ==========
 goal SideEffects_m1_safety_po_16:
@@ -2067,21 +2068,21 @@ goal SideEffects_m1_safety_po_16:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -2090,7 +2091,7 @@ goal SideEffects_m1_safety_po_16:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11":
+  ("JC_25":
   ((select(intM_intP2, shift(t, 0)) = 1) and
    ((select(intM_intP2, shift(t, 2)) = 2) and
     ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
@@ -2100,7 +2101,7 @@ goal SideEffects_m1_safety_po_16:
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("K_15": (select(intM_intP3, shift(t, 0)) = 1))
+  ("JC_28": (select(intM_intP3, shift(t, 0)) = 1))
 
 ========== file tests/java/why/SideEffects_po17.why ==========
 goal SideEffects_m1_safety_po_17:
@@ -2110,21 +2111,21 @@ goal SideEffects_m1_safety_po_17:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -2133,7 +2134,7 @@ goal SideEffects_m1_safety_po_17:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11":
+  ("JC_25":
   ((select(intM_intP2, shift(t, 0)) = 1) and
    ((select(intM_intP2, shift(t, 2)) = 2) and
     ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
@@ -2143,7 +2144,7 @@ goal SideEffects_m1_safety_po_17:
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("K_15": (select(intM_intP3, shift(t, 2)) = 2))
+  ("JC_28": (select(intM_intP3, shift(t, 2)) = 2))
 
 ========== file tests/java/why/SideEffects_po18.why ==========
 goal SideEffects_m1_safety_po_18:
@@ -2153,21 +2154,21 @@ goal SideEffects_m1_safety_po_18:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -2176,7 +2177,7 @@ goal SideEffects_m1_safety_po_18:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11":
+  ("JC_25":
   ((select(intM_intP2, shift(t, 0)) = 1) and
    ((select(intM_intP2, shift(t, 2)) = 2) and
     ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
@@ -2186,7 +2187,7 @@ goal SideEffects_m1_safety_po_18:
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("K_15": (select(intM_intP3, shift(t, 1)) = 4))
+  ("JC_28": (select(intM_intP3, shift(t, 1)) = 4))
 
 ========== file tests/java/why/SideEffects_po19.why ==========
 goal SideEffects_m1_safety_po_19:
@@ -2196,21 +2197,21 @@ goal SideEffects_m1_safety_po_19:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -2219,7 +2220,7 @@ goal SideEffects_m1_safety_po_19:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11":
+  ("JC_25":
   ((select(intM_intP2, shift(t, 0)) = 1) and
    ((select(intM_intP2, shift(t, 2)) = 2) and
     ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
@@ -2229,7 +2230,7 @@ goal SideEffects_m1_safety_po_19:
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("K_15": (i2 = 0))
+  ("JC_28": (i2 = 0))
 
 ========== file tests/java/why/SideEffects_po2.why ==========
 goal SideEffects_m1_safety_po_2:
@@ -2237,7 +2238,7 @@ goal SideEffects_m1_safety_po_2:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   (0 <= offset_max(Object_alloc_table, t))
@@ -2250,14 +2251,14 @@ goal SideEffects_m1_safety_po_3:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": (select(intM_intP0, shift(t, 0)) = 1))
+  ("JC_19": (select(intM_intP0, shift(t, 0)) = 1))
 
 ========== file tests/java/why/SideEffects_po4.why ==========
 goal SideEffects_m1_safety_po_4:
@@ -2267,14 +2268,14 @@ goal SideEffects_m1_safety_po_4:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": (i = 1))
+  ("JC_19": (i = 1))
 
 ========== file tests/java/why/SideEffects_po5.why ==========
 goal SideEffects_m1_safety_po_5:
@@ -2284,14 +2285,14 @@ goal SideEffects_m1_safety_po_5:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   (0 <= i0)
@@ -2304,14 +2305,14 @@ goal SideEffects_m1_safety_po_6:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   (i0 <= offset_max(Object_alloc_table, t))
@@ -2324,21 +2325,21 @@ goal SideEffects_m1_safety_po_7:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7": (select(intM_intP1, shift(t, 0)) = 1))
+  ("JC_22": (select(intM_intP1, shift(t, 0)) = 1))
 
 ========== file tests/java/why/SideEffects_po8.why ==========
 goal SideEffects_m1_safety_po_8:
@@ -2348,21 +2349,21 @@ goal SideEffects_m1_safety_po_8:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7": (select(intM_intP1, shift(t, 2)) = 2))
+  ("JC_22": (select(intM_intP1, shift(t, 2)) = 2))
 
 ========== file tests/java/why/SideEffects_po9.why ==========
 goal SideEffects_m1_safety_po_9:
@@ -2372,21 +2373,21 @@ goal SideEffects_m1_safety_po_9:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7": (i0 = 2))
+  ("JC_22": (i0 = 2))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/SideEffects.why
@@ -4390,7 +4391,7 @@ goal SideEffects_m1_safety_po_1:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   (0 <= 0)
@@ -4400,7 +4401,7 @@ goal SideEffects_m1_safety_po_2:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   (0 <= offset_max(Object_alloc_table, t))
@@ -4412,14 +4413,14 @@ goal SideEffects_m1_safety_po_3:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": (select(intM_intP0, shift(t, 0)) = 1))
+  ("JC_19": (select(intM_intP0, shift(t, 0)) = 1))
 
 goal SideEffects_m1_safety_po_4:
   forall this_0:Object pointer.
@@ -4428,14 +4429,14 @@ goal SideEffects_m1_safety_po_4:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": (i = 1))
+  ("JC_19": (i = 1))
 
 goal SideEffects_m1_safety_po_5:
   forall this_0:Object pointer.
@@ -4444,14 +4445,14 @@ goal SideEffects_m1_safety_po_5:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   (0 <= i0)
@@ -4463,14 +4464,14 @@ goal SideEffects_m1_safety_po_6:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   (i0 <= offset_max(Object_alloc_table, t))
@@ -4482,21 +4483,21 @@ goal SideEffects_m1_safety_po_7:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7": (select(intM_intP1, shift(t, 0)) = 1))
+  ("JC_22": (select(intM_intP1, shift(t, 0)) = 1))
 
 goal SideEffects_m1_safety_po_8:
   forall this_0:Object pointer.
@@ -4505,21 +4506,21 @@ goal SideEffects_m1_safety_po_8:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7": (select(intM_intP1, shift(t, 2)) = 2))
+  ("JC_22": (select(intM_intP1, shift(t, 2)) = 2))
 
 goal SideEffects_m1_safety_po_9:
   forall this_0:Object pointer.
@@ -4528,21 +4529,21 @@ goal SideEffects_m1_safety_po_9:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7": (i0 = 2))
+  ("JC_22": (i0 = 2))
 
 goal SideEffects_m1_safety_po_10:
   forall this_0:Object pointer.
@@ -4551,21 +4552,21 @@ goal SideEffects_m1_safety_po_10:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -4579,21 +4580,21 @@ goal SideEffects_m1_safety_po_11:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -4607,21 +4608,21 @@ goal SideEffects_m1_safety_po_12:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -4630,7 +4631,7 @@ goal SideEffects_m1_safety_po_12:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11": (select(intM_intP2, shift(t, 0)) = 1))
+  ("JC_25": (select(intM_intP2, shift(t, 0)) = 1))
 
 goal SideEffects_m1_safety_po_13:
   forall this_0:Object pointer.
@@ -4639,21 +4640,21 @@ goal SideEffects_m1_safety_po_13:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -4662,7 +4663,7 @@ goal SideEffects_m1_safety_po_13:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11": (select(intM_intP2, shift(t, 2)) = 2))
+  ("JC_25": (select(intM_intP2, shift(t, 2)) = 2))
 
 goal SideEffects_m1_safety_po_14:
   forall this_0:Object pointer.
@@ -4671,21 +4672,21 @@ goal SideEffects_m1_safety_po_14:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -4694,7 +4695,7 @@ goal SideEffects_m1_safety_po_14:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11": (select(intM_intP2, shift(t, 1)) = 3))
+  ("JC_25": (select(intM_intP2, shift(t, 1)) = 3))
 
 goal SideEffects_m1_safety_po_15:
   forall this_0:Object pointer.
@@ -4703,21 +4704,21 @@ goal SideEffects_m1_safety_po_15:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -4726,7 +4727,7 @@ goal SideEffects_m1_safety_po_15:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11": (i1 = 1))
+  ("JC_25": (i1 = 1))
 
 goal SideEffects_m1_safety_po_16:
   forall this_0:Object pointer.
@@ -4735,21 +4736,21 @@ goal SideEffects_m1_safety_po_16:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -4758,7 +4759,7 @@ goal SideEffects_m1_safety_po_16:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11":
+  ("JC_25":
   ((select(intM_intP2, shift(t, 0)) = 1) and
    ((select(intM_intP2, shift(t, 2)) = 2) and
     ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
@@ -4768,7 +4769,7 @@ goal SideEffects_m1_safety_po_16:
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("K_15": (select(intM_intP3, shift(t, 0)) = 1))
+  ("JC_28": (select(intM_intP3, shift(t, 0)) = 1))
 
 goal SideEffects_m1_safety_po_17:
   forall this_0:Object pointer.
@@ -4777,21 +4778,21 @@ goal SideEffects_m1_safety_po_17:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -4800,7 +4801,7 @@ goal SideEffects_m1_safety_po_17:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11":
+  ("JC_25":
   ((select(intM_intP2, shift(t, 0)) = 1) and
    ((select(intM_intP2, shift(t, 2)) = 2) and
     ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
@@ -4810,7 +4811,7 @@ goal SideEffects_m1_safety_po_17:
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("K_15": (select(intM_intP3, shift(t, 2)) = 2))
+  ("JC_28": (select(intM_intP3, shift(t, 2)) = 2))
 
 goal SideEffects_m1_safety_po_18:
   forall this_0:Object pointer.
@@ -4819,21 +4820,21 @@ goal SideEffects_m1_safety_po_18:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -4842,7 +4843,7 @@ goal SideEffects_m1_safety_po_18:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11":
+  ("JC_25":
   ((select(intM_intP2, shift(t, 0)) = 1) and
    ((select(intM_intP2, shift(t, 2)) = 2) and
     ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
@@ -4852,7 +4853,7 @@ goal SideEffects_m1_safety_po_18:
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("K_15": (select(intM_intP3, shift(t, 1)) = 4))
+  ("JC_28": (select(intM_intP3, shift(t, 1)) = 4))
 
 goal SideEffects_m1_safety_po_19:
   forall this_0:Object pointer.
@@ -4861,21 +4862,21 @@ goal SideEffects_m1_safety_po_19:
   forall intM_intP:(Object,
   int) memory.
   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("K_18": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+   ("JC_14": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
   forall i:int.
   (i = (0 + 1)) ->
   ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("K_3": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
+  ("JC_19": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
   ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
-  ("K_7":
+  ("JC_22":
   ((select(intM_intP1, shift(t, 0)) = 1) and
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
@@ -4884,7 +4885,7 @@ goal SideEffects_m1_safety_po_19:
   forall intM_intP2:(Object,
   int) memory.
   (intM_intP2 = store(intM_intP1, shift(t, i1), 3)) ->
-  ("K_11":
+  ("JC_25":
   ((select(intM_intP2, shift(t, 0)) = 1) and
    ((select(intM_intP2, shift(t, 2)) = 2) and
     ((select(intM_intP2, shift(t, 1)) = 3) and (i1 = 1))))) ->
@@ -4894,7 +4895,7 @@ goal SideEffects_m1_safety_po_19:
   forall intM_intP3:(Object,
   int) memory.
   (intM_intP3 = store(intM_intP2, shift(t, i1), 4)) ->
-  ("K_15": (i2 = 0))
+  ("JC_28": (i2 = 0))
 
 ========== running alt-ergo ==========
 Running Ergo on proof obligations

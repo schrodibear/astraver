@@ -269,22 +269,16 @@ begin = 8
 end = 9
 
 [JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Literals.java"
+line = 5
+begin = 16
+end = 30
 
 [JC_9]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[K_1]
-file = "HOME/tests/java/Literals.java"
-line = 5
-begin = 16
-end = 30
 
 [Literals_f_ensures_default]
 name = "Method f"
@@ -295,6 +289,12 @@ begin = 8
 end = 9
 
 [JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_11]
 file = "HOME/"
 line = 0
 begin = -1
@@ -555,7 +555,7 @@ predicate valid_variant_interface(p:interface pointer,
 
 parameter Literals_f :
  this_0:Object pointer ->
-  { } int32 { (K_1: eq_int(integer_of_int32(result), (13))) }
+  { } int32 { (JC_8: eq_int(integer_of_int32(result), (13))) }
 
 parameter Object_alloc_table : Object alloc_table ref
 
@@ -691,7 +691,7 @@ let Literals_f_ensures_default =
    with
    Return ->
    !return end))
-  { (K_1: eq_int(integer_of_int32(result), (13))) }
+  { (JC_8: eq_int(integer_of_int32(result), (13))) }
 
 let Literals_f_safety =
  fun (this_0 : Object pointer) ->
@@ -1770,7 +1770,7 @@ goal Literals_f_ensures_default_po_1:
   (integer_of_int32(result0) = 13) ->
   forall return:int32.
   (return = result0) ->
-  ("K_1": (integer_of_int32(return) = 13))
+  ("JC_8": (integer_of_int32(return) = 13))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Literals.why
@@ -3601,7 +3601,7 @@ goal Literals_f_ensures_default_po_1:
   (integer_of_int32(result0) = 13) ->
   forall return:int32.
   (return = result0) ->
-  ("K_1": (integer_of_int32(return) = 13))
+  ("JC_8": (integer_of_int32(return) = 13))
 
 ========== running alt-ergo ==========
 Running Ergo on proof obligations

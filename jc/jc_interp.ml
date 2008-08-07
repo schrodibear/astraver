@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.324 2008-08-07 12:32:30 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.325 2008-08-07 14:33:54 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -48,68 +48,124 @@ open Jc_stdlib
 
 open Num
 
-(* locs table *)
 
+(******************************************************************************)
+(*                            source positioning                              *)
+(******************************************************************************)
 
-let locs_table = Hashtbl.create 97
+let pos_table = Hashtbl.create 97
 
 let abs_fname f =
   if Filename.is_relative f then
     Filename.concat (Unix.getcwd ()) f 
   else f
 
-let reg_loc ?id ?oldid ?kind ?name ?beh (b,e) =  
-  try 
-    (* If label already refered to in [Output.locs_table], do not reference it
-     * more. This is the case for generated annotations. 
-     *)
-    match id with None -> raise Not_found | Some id ->
-      ignore (Hashtbl.find Output.pos_table id);
-      id
-  with Not_found ->
+type source_ref = 
+    {
+      in_mark: string; 
+      pos: Loc.position 
+    }
 
-  let id,oldid = match id,oldid with
-    | None,_ -> Jc_pervasives.new_label_name (), oldid
-    | Some n, None -> n,Some n
-    | Some n, Some o -> n, Some o
+type gui_elem = 
+    {
+      out_mark: string; 
+      kind: kind option; 
+      name: string option; 
+      beh: string option 
+    }
+
+let reg_pos sce gui =
+  if gui.out_mark <> "" && Hashtbl.mem Output.pos_table gui.out_mark then
+    (* If GUI element already refered to in output table, do not 
+     * reference it twice. This is the case in particular for generated 
+     * annotations. *)
+    gui.out_mark
+  else
+    (* Generate a new mark if not fixed in GUI element *)
+    let mark = 
+      if gui.out_mark = "" then 
+	Jc_pervasives.new_label_name() 
+      else gui.out_mark
+    in
+    let (n,f,l,b,e,k) = 
+      if sce.in_mark <> "" && Hashtbl.mem Jc_options.pos_table sce.in_mark then
+	(* If source location present in input table, copy information to
+	 * output table. *)
+	let (f,l,b,e,k,o) = Hashtbl.find Jc_options.pos_table sce.in_mark in
+	let n =
+	  try match List.assoc "name" o with
+            | Rc.RCident s | Rc.RCstring s -> Some s
+            | _ -> raise Not_found
+	  with Not_found -> gui.name
+	in
+	(n,f,l,b,e,k)
+      else
+	(* By default, refer to the Jessie source file *)
+	let b,e = sce.pos in
+	let f = abs_fname b.Lexing.pos_fname in
+	let l = b.Lexing.pos_lnum in
+	let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
+	let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
+	(gui.name,f,l,fc,lc,None)
+    in
+    (* If present, always prefer new kind *)
+    let k = match gui.kind with None -> k | Some k -> Some k in
+    Hashtbl.replace pos_table mark (k,n,gui.beh,f,l,b,e);
+    mark
+
+let reg_check ?mark ?kind pos =
+  let sce = 
+    { in_mark = Option_misc.map_default (fun x -> x) "" mark; pos = pos; } 
   in
-(*
-  Format.eprintf "Jc_interp: reg_loc id = '%s'@." id;
-*)
-  let (name,f,l,b,e,kind2) = 
-    try
-      match oldid with
-        | None -> 
-            raise Not_found
-        | Some n -> 
-            let (f,l,b,e,k,o) = Hashtbl.find Jc_options.locs_table n in
-(*
-            Format.eprintf "Jc_interp: reg_loc id '%s' found@." oldid;
-*)
-            Jc_options.lprintf "keeping old location for id '%s'@." n;
-            let n =
-              try 
-                match List.assoc "name" o with
-                  | Rc.RCident s | Rc.RCstring s -> Some s
-                  | _ -> raise Not_found
-              with Not_found -> name
-            in
-            (n,f,l,b,e,k)
-    with Not_found ->
-(*
-      Format.eprintf "Jc_interp: reg_loc id '%s' not found@." id;
-*)
-      let f = abs_fname b.Lexing.pos_fname in
-      let l = b.Lexing.pos_lnum in
-      let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
-      let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
-      (name,f,l,fc,lc,None)
+  let gui = { out_mark = ""; kind = kind; name = None; beh = None; } in
+  reg_pos sce gui
+      
+let reg_decl ~in_mark ~out_mark ~name ~beh pos =
+  let sce = { in_mark = in_mark; pos = pos; } in
+  let gui =
+    { out_mark = out_mark; kind = None; name = Some name; beh = Some beh; } 
   in
-  let kind = match kind with None -> kind2 | _ -> kind in
-  Jc_options.lprintf "recording location for id '%s'@." id;
-  Hashtbl.replace locs_table id (kind,name,beh,f,l,b,e);
-  id
+  reg_pos sce gui
+
+let make_check ?mark ?kind pos e' =
+  let mark = reg_check ?mark ?kind pos in
+  Label(mark,e')
+
+
     
+(*   let id,oldid = match id,oldid with *)
+(*     | None,_ -> Jc_pervasives.new_label_name (), oldid *)
+(*     | Some n, None -> n,Some n *)
+(*     | Some n, Some o -> n, Some o *)
+(*   in *)
+(*   let (name,f,l,b,e,kind2) =  *)
+(*     try *)
+(*       match oldid with *)
+(*         | None ->  *)
+(*             raise Not_found *)
+(*         | Some n ->  *)
+(*             let (f,l,b,e,k,o) = Hashtbl.find Jc_options.pos_table n in *)
+(*             Jc_options.lprintf "keeping old location for id '%s'@." n; *)
+(*             let n = *)
+(*               try  *)
+(*                 match List.assoc "name" o with *)
+(*                   | Rc.RCident s | Rc.RCstring s -> Some s *)
+(*                   | _ -> raise Not_found *)
+(*               with Not_found -> name *)
+(*             in *)
+(*             (n,f,l,b,e,k) *)
+(*     with Not_found -> *)
+(*       let f = abs_fname b.Lexing.pos_fname in *)
+(*       let l = b.Lexing.pos_lnum in *)
+(*       let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in *)
+(*       let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in *)
+(*       (name,f,l,fc,lc,None) *)
+(*   in *)
+(*   let kind = match kind with None -> kind2 | _ -> kind in *)
+(*   Jc_options.lprintf "recording location for id '%s'@." id; *)
+(*   Hashtbl.replace pos_table id (kind,name,beh,f,l,b,e); *)
+(*   id *)
+
 let print_kind fmt k =
   fprintf fmt "%s"
     (match k with
@@ -138,7 +194,7 @@ let print_locs fmt =
        fprintf fmt "line = %d@\n" l;
        fprintf fmt "begin = %d@\n" b;
        fprintf fmt "end = %d@\n@\n" e)
-    locs_table
+    pos_table
 
 
 (*******************************************************************************)
@@ -403,8 +459,8 @@ let term_coerce ?(cast=false) loc tdest tsrc orig e =
 let make_guarded_app ~name (k : kind) loc f l =
   let lab =
     match name with
-      | "" -> reg_loc ~kind:k loc
-      | n -> reg_loc ~id:n ~kind:k loc
+      | "" -> reg_check ~kind:k loc
+      | n -> reg_check ~mark:n ~kind:k loc
   in
   let l = match l with
     | [Label(namelab,e)] when name = namelab ->
@@ -417,12 +473,6 @@ let make_guarded_app ~name (k : kind) loc f l =
     | _ -> l
   in
   Label (lab, make_app f l)
-
-(* mark should be either mark from before or pos in Jessie *)
-
-let make_mark mark k pos e' =
-  let mark = reg_loc (* ~id:mark *) ~kind:k pos in
-  Label(mark,e')
 
 let eval_integral_const e =
   let rec eval e =
@@ -765,7 +815,7 @@ let rec term ~global_assertion ~relocate label oldlabel t =
         ptl', lets1@lets2
   in
   (if t#mark <> "" then
-     Tnamed(reg_loc ~id:t#mark t#pos,t')
+     Tnamed(reg_check ~mark:t#mark t#pos,t')
    else
      t'), lets
 
@@ -774,7 +824,7 @@ let named_term ~global_assertion ~relocate label oldlabel t =
   match t' with
     | Tnamed _ -> t', lets
     | _ -> 
-        let n = reg_loc t#pos in
+        let n = reg_check ~mark:t#mark t#pos in
         Tnamed(n,t'), lets
 
 (*******************************************************************************)
@@ -895,7 +945,7 @@ let rec assertion ~global_assertion ~relocate label oldlabel a =
 (*
       eprintf "Assertion has label %s@." a#mark;
 *)
-      LNamed(reg_loc ~id:a#mark a#pos,a')
+      LNamed(reg_check ~mark:a#mark a#pos,a')
     end
   else
     begin
@@ -914,7 +964,7 @@ let named_jc_assertion loc a =
         *)
         a
     | _ -> 
-        let n = reg_loc loc in 
+        let n = reg_check loc in 
           (*
             eprintf "Registering new name %s for assertion@." n;
           *)
@@ -1209,7 +1259,7 @@ let assigns before ef locs loc =
                 [allocvar (* ~assigned: ? *) before (ac,r); 
                  lvar before v;
                  LVar v; make_union_loc p]) in
-	  LNamed(reg_loc loc,a))
+	  LNamed(reg_check loc,a))
     ) mems a
 
 let reads ~global_assertion locs (mc,r) =
@@ -1715,7 +1765,7 @@ and value_assigned mark pos ty e =
 	coerce ~check_int_overflow:(safety_checking()) 
 	  mark e#pos ty e#typ e e'
     | Some(tmp,e1',a) ->
-	Let(tmp,e1',make_mark mark IndexBounds pos (Assert(a,Var tmp)))
+	Let(tmp,e1',make_check ~mark ~kind:IndexBounds pos (Assert(a,Var tmp)))
 
 and expr e =
   let infunction = get_current_function () in
@@ -3360,11 +3410,12 @@ let tr_fun f funloc spec body acc =
                      Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
               in
               let newid = f.jc_fun_info_name ^ "_safety" in
-              let _ = reg_loc 
-                ~id:newid
-                ~oldid:f.jc_fun_info_name
+              let _ = reg_decl 
+                ~out_mark:newid
+                ~in_mark:f.jc_fun_info_name
                 ~name:("function " ^ f.jc_fun_info_name)
-                ~beh:"Safety" funloc 
+                ~beh:"Safety" 
+		funloc 
               in
               let acc = 
                 if is_purely_exceptional_fun spec then acc else
@@ -3441,9 +3492,9 @@ let tr_fun f funloc spec body acc =
                            if id="default" then "Behavior" else
                              "Normal behavior `"^id^"'"
                          in
-                         let _ = reg_loc 
-                           ~id:newid
-                           ~oldid:f.jc_fun_info_name
+                         let _ = reg_decl 
+                           ~out_mark:newid
+                           ~in_mark:f.jc_fun_info_name
                            ~name:("function "^f.jc_fun_info_name)
                            ~beh  
                            funloc 
@@ -3481,12 +3532,13 @@ let tr_fun f funloc spec body acc =
                               let newid = 
                                 f.jc_fun_info_name ^ "_exsures_" ^ id 
                               in
-                              let _ = reg_loc 
-                                ~id:newid
-                                ~oldid:f.jc_fun_info_name
+                              let _ = reg_decl 
+                                ~out_mark:newid
+                                ~in_mark:f.jc_fun_info_name
                                 ~name:("function "^f.jc_fun_info_name)
                                 ~beh:("Exceptional behavior `"^id^"'")  
-                                funloc in
+                                funloc 
+			      in
 			      let pre = assume_in_precondition b requires in
                               let d =
                                 Def(newid,

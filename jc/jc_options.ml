@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.30 2008-07-24 15:28:43 marche Exp $ i*)
+(*i $Id: jc_options.ml,v 1.31 2008-08-07 14:33:54 moy Exp $ i*)
 
 open Format
 open Jc_env
@@ -88,8 +88,8 @@ let files_ = ref []
 let add_file f = files_ := f :: !files_
 let files () = List.rev !files_
 
-let locs_files = ref []
-let locs_table = Hashtbl.create 97
+let pos_files = ref []
+let pos_table = Hashtbl.create 97
 
 let version () = 
   Printf.printf "This is Jessie version %s, compiled on %s
@@ -112,7 +112,7 @@ let _ =
 	  "  stops after call graph and print call graph";
         "-d", Arg.Set debug,
           "  debugging mode";
-	"-locs", Arg.String (fun f -> locs_files := f :: !locs_files),
+	"-locs", Arg.String (fun f -> pos_files := f :: !pos_files),
 	  "  <f> reads source locations from file f" ;
 
         "-why-opt", Arg.String add_why_opt,
@@ -190,7 +190,7 @@ let parsing_error l f =
        let s = if s="" then s else " ("^s^")" in
        raise (Jc_error(l, "syntax error" ^ s))) f
 
-(*s locs table *)
+(*s pos table *)
 
 let () =
   List.iter
@@ -210,9 +210,9 @@ let () =
 		     | _ -> (f,l,b,e,k,v::o))
 		("",0,0,0,None,[]) fs
 	    in
-	    Hashtbl.add locs_table id (f,l,b,e,k,o))
+	    Hashtbl.add pos_table id (f,l,b,e,k,o))
 	 l)
-    !locs_files
+    !pos_files
 
 let position_of_label name =
   let position f l c = {
@@ -222,7 +222,7 @@ let position_of_label name =
     Lexing.pos_cnum = c;
   } in
   try
-    let (f,l,b,e,_k,_o) = Hashtbl.find locs_table name in
+    let (f,l,b,e,_k,_o) = Hashtbl.find pos_table name in
     Some (position f l b, position f l e)
   with Not_found -> None
 
