@@ -572,14 +572,17 @@ let add_offset off1 off2 =
 	Int_offset (string_of_int k)
     | _ -> assert false (* TODO *)
 
-let union_type = function
+let possible_union_type = function
   | JCTpointer(pc,_,_) -> 
       let vi = pointer_class_variant pc in
       if vi.jc_variant_info_is_union then Some vi else None
   | _ -> None
 
+let union_type ty = 
+  match possible_union_type ty with Some vi -> vi | None -> assert false
+
 let of_union_type ty =
-  match union_type ty with Some _vi -> true | None -> false
+  match possible_union_type ty with Some _vi -> true | None -> false
 
 (* TODO: take JCEalloc into account *)
 let access_union e fi_opt = 
@@ -671,7 +674,7 @@ let common_deref_alloc_class access_union e =
     JCalloc_bitvector
   else match access_union e None with 
     | None -> JCalloc_struct (struct_variant (pointer_struct e#typ))
-    | Some(e,_off) -> JCalloc_union (the (union_type e#typ))
+    | Some(e,_off) -> JCalloc_union (union_type e#typ)
 
 let deref_alloc_class e =
   common_deref_alloc_class access_union e
@@ -687,7 +690,7 @@ let common_deref_mem_class access_union e fi =
     JCmem_bitvector
   else match access_union e (Some fi) with 
     | None -> JCmem_field fi
-    | Some(e,_off) -> JCmem_union (the (union_type e#typ))
+    | Some(e,_off) -> JCmem_union (union_type e#typ)
 
 let deref_mem_class e fi =
   common_deref_mem_class access_union e fi

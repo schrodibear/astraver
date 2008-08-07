@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.58 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.59 2008-08-07 16:24:17 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tstring
 
@@ -81,6 +81,7 @@ and variant_info =
       mutable jc_variant_info_roots : struct_info list;
 (*      jc_variant_info_open : bool;*)
       jc_variant_info_is_union : bool;
+      mutable jc_variant_info_union_size_in_bytes: int;
     }
 
 and field_info =

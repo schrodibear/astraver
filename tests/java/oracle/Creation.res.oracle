@@ -1937,12 +1937,13 @@ let cons_Creation_int_ensures_normal =
   (init:
   try
    begin
-     (let jessie_10 = (let jessie_8 = this_1 in
-                      (let jessie_9 = n_1 in
+     (let jessie_10 = (K_1:
+                      (let jessie_6 = n_1 in
+                      (let jessie_9 = this_1 in
                       begin
-                        (((safe_upd_ Creation_simple_val) jessie_8) jessie_9);
-                       ((safe_acc_ !Creation_simple_val) jessie_8)
-                      end)) in
+                        (((safe_upd_ Creation_simple_val) jessie_9) jessie_6);
+                       jessie_6
+                      end))) in
      void);
     (raise Return)
    end
@@ -2002,12 +2003,13 @@ let cons_Creation_int_safety =
   (init:
   try
    begin
-     (let jessie_5 = (let jessie_3 = this_1 in
-                     (let jessie_4 = n_1 in
+     (let jessie_5 = (K_1:
+                     (let jessie_1 = n_1 in
+                     (let jessie_4 = this_1 in
                      begin
-                       (((safe_upd_ Creation_simple_val) jessie_3) jessie_4);
-                      ((safe_acc_ !Creation_simple_val) jessie_3)
-                     end)) in
+                       (((safe_upd_ Creation_simple_val) jessie_4) jessie_1);
+                      jessie_1
+                     end))) in
      void);
     (raise Return)
    end
@@ -3423,8 +3425,6 @@ goal cons_Creation_int_ensures_normal_po_1:
   forall Creation_simple_val0:(Object,
   int32) memory.
   (Creation_simple_val0 = store(Creation_simple_val, this_1, n_1)) ->
-  forall result:int32.
-  (result = select(Creation_simple_val0, this_1)) ->
   ("JC_10":
   ("JC_9":
   ("JC_9": (integer_of_int32(select(Creation_simple_val0,
@@ -3441,8 +3441,6 @@ goal cons_Creation_int_ensures_normal_po_2:
   forall Creation_simple_val0:(Object,
   int32) memory.
   (Creation_simple_val0 = store(Creation_simple_val, this_1, n_1)) ->
-  forall result:int32.
-  (result = select(Creation_simple_val0, this_1)) ->
   ("JC_10":
   ("JC_8":
   ("JC_8": not_assigns(Object_alloc_table, Creation_simple_val,
@@ -4665,10 +4663,8 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 (FORALL (Creation_simple_val0)
 (IMPLIES (EQ Creation_simple_val0
          (|why__store| Creation_simple_val this_1 n_1))
-(FORALL (result)
-(IMPLIES (EQ result (select Creation_simple_val0 this_1))
 (EQ (integer_of_int32 (select Creation_simple_val0 this_1))
-(integer_of_int32 n_1)))))))))))
+(integer_of_int32 n_1)))))))))
 
 ;; cons_Creation_int_ensures_normal_po_2, File "HOME/tests/java/Creation.java", line 18, characters 4-12
 (FORALL (this_1)
@@ -4679,11 +4675,9 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 (FORALL (Creation_simple_val0)
 (IMPLIES (EQ Creation_simple_val0
          (|why__store| Creation_simple_val this_1 n_1))
-(FORALL (result)
-(IMPLIES (EQ result (select Creation_simple_val0 this_1))
 (not_assigns
 Object_alloc_table Creation_simple_val Creation_simple_val0 (pset_singleton
-                                                            this_1)))))))))))
+                                                            this_1)))))))))
 
 ;; cons_Creation_int_int_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 24, characters 18-42
 (FORALL (this_0)
@@ -6074,8 +6068,6 @@ goal cons_Creation_int_ensures_normal_po_1:
   forall Creation_simple_val0:(Object,
   int32) memory.
   (Creation_simple_val0 = store(Creation_simple_val, this_1, n_1)) ->
-  forall result:int32.
-  (result = select(Creation_simple_val0, this_1)) ->
   ("JC_10":
   ("JC_9":
   ("JC_9": (integer_of_int32(select(Creation_simple_val0,
@@ -6091,8 +6083,6 @@ goal cons_Creation_int_ensures_normal_po_2:
   forall Creation_simple_val0:(Object,
   int32) memory.
   (Creation_simple_val0 = store(Creation_simple_val, this_1, n_1)) ->
-  forall result:int32.
-  (result = select(Creation_simple_val0, this_1)) ->
   ("JC_10":
   ("JC_8":
   ("JC_8": not_assigns(Object_alloc_table, Creation_simple_val,

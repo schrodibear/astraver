@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.154 2008-08-06 15:17:03 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.155 2008-08-07 16:24:17 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -160,6 +160,7 @@ let rec object_variant = {
   jc_variant_info_name = "Object";
   jc_variant_info_roots = [ object_root ];
   jc_variant_info_is_union = false;
+  jc_variant_info_union_size_in_bytes = 0;
 }
 
 and object_root = {

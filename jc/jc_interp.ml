@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.325 2008-08-07 14:33:54 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.326 2008-08-07 16:24:17 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -456,18 +456,18 @@ let term_coerce ?(cast=false) loc tdest tsrc orig e =
            "can't coerce type %a to type %a" 
            print_type tsrc print_type tdest
            
-let make_guarded_app ~name (k : kind) loc f l =
+let make_guarded_app ~mark (k : kind) loc f l =
   let lab =
-    match name with
+    match mark with
       | "" -> reg_check ~kind:k loc
       | n -> reg_check ~mark:n ~kind:k loc
   in
   let l = match l with
-    | [Label(namelab,e)] when name = namelab ->
+    | [Label(namelab,e)] when mark = namelab ->
         (* YM: same label used twice. See with Claude for semantics of labels.
            Current patch: remove label in inner expression. *)
         [e]
-    | [App(f,Label(namelab,e))] when name = namelab ->
+    | [App(f,Label(namelab,e))] when mark = namelab ->
         (* Occurs on test [band.c] in FramaC *)
         [App(f,e)]
     | _ -> l
@@ -552,7 +552,7 @@ let coerce ~check_int_overflow lab loc tdest tsrc orig e =
         if not check_int_overflow || fits_in_enum ri1 orig then 
           make_app (safe_fun_enum_of_int ri1) [e']
         else
-          make_guarded_app ~name:lab ArithOverflow loc 
+          make_guarded_app ~mark:lab ArithOverflow loc 
             (fun_enum_of_int ri1) [e']
     | JCTnative Tinteger, JCTenum ri ->
         make_app (logic_int_of_enum ri) [e]
@@ -560,13 +560,13 @@ let coerce ~check_int_overflow lab loc tdest tsrc orig e =
         if not check_int_overflow || fits_in_enum ri orig then 
           make_app (safe_fun_enum_of_int ri) [e]
         else
-          make_guarded_app ~name:lab ArithOverflow loc (fun_enum_of_int ri) [e]
+          make_guarded_app ~mark:lab ArithOverflow loc (fun_enum_of_int ri) [e]
     | _ , JCTnull -> e
     | JCTpointer (JCvariant _, _, _), JCTpointer _ -> e
     | JCTpointer (st1,_,_), JCTpointer (JCtag(st2, _),_,_) 
         when Jc_typing.substruct st2 st1 -> e
     | JCTpointer (JCtag(st, _),_,_), _  -> 
-        make_guarded_app ~name:lab DownCast loc "downcast_" 
+        make_guarded_app ~mark:lab DownCast loc "downcast_" 
           [ Deref (tag_table_name (struct_variant st,orig#region)) ; e ;
             Var (tag_name st) ] 
     | JCTany, JCTany -> e
@@ -674,7 +674,7 @@ let rec term ~global_assertion ~relocate label oldlabel t =
 	let deref, lets = match taccess_union t (Some fi) with
 	  | Some(t,off) ->
 	      (* Retrieve bitvector for access to union *)
-	      let vi = the (union_type t#typ) in
+	      let vi = union_type t#typ in
 	      let label = rlab label in
               let t', lets = ft t in
               let mem = 
@@ -1316,208 +1316,152 @@ let rec old_to_pre_loc loc =
 	  loc
 
 
-(* translates the heap update `e1.f = e2' 
+(* Translate the heap update `e1.fi = tmp2' 
 
    essentially we want
 
    let tmp1 = [e1] in
-   let tmp2 = [e2] in
-   f := upd(f,tmp1,tmp2)
+   fi := upd(fi,tmp1,tmp2)
 
    special cases are considered to avoid statically known safety properties:
-   if e1 as the form p + i then we build
+   if e1 has the form p + i then we build
 
-   let tmpp = [p] in 
-   let tmpi = [i] in
+   let tmpp = p in 
+   let tmpi = i in
    let tmp1 = shift(tmpp, tmpi) in
     // depending on type of p and value of i
    ...
-   
 *)
-let rec make_upd_simple ?(bitwise=false) lab loc fi e1 e2 =
-  let infunction = get_current_function () in
+let rec make_upd_simple mark pos e1 fi tmp2 =
+  (* Temporary variables to avoid duplicating code *)
   let tmpp = tmp_var_name () in
   let tmpi = tmp_var_name () in
   let tmp1 = tmp_var_name () in  
-  let tmp2 = tmp_var_name () in
-  (* we first handle e2 *)
-  let e2' = expr e2 in
-  let v = Var tmp2 in
-  let lets = 
-    if bitwise || of_union_type e1#typ then
-      [ (tmp2, e2') ]
-    else
-      [ (tmp2, coerce ~check_int_overflow:(safety_checking())
-           e2#mark e2#pos 
-           fi.jc_field_info_type 
-           e2#typ e2 e2') ]
-  in
-  (* we then go to e1 *)
+  (* Define memory and allocation table *)
   let mc = deref_mem_class e1 fi in
-  let mem = memory_name (mc,e1#region) in
-  let mem = Var mem in
+  let mem = plain_memory_var (mc,e1#region) in
   let ac = alloc_class_of_mem_class mc in
-  let alloc = alloc_table_name (ac, e1#region) in
-  let alloc = 
-    if Region.polymorphic e1#region then
-      if AllocMap.mem (ac, e1#region)
-        infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-      then Deref alloc
-      else Var alloc
-    else Deref alloc
-  in
-(*   let v =  *)
-(*     if field_of_union fi then *)
-(*       (\* Translate back value of field type to union type *\) *)
-(*       if integral_union (union_of_field fi) then *)
-(*         (\* Type of union is integer, and type of field an integral type *\) *)
-(*         match fi.jc_field_info_type with *)
-(*           | JCTnative Tinteger -> v *)
-(*           | JCTenum ri -> make_app (logic_int_of_enum ri) [v] *)
-(*           | _ -> assert false *)
-(*       else make_app (logic_union_of_field fi) [v] *)
-(*     else v *)
-(*   in *)
-  let lets, upd =
-    if safety_checking() then
+  let alloc = alloc_table_var (ac,e1#region) in
+  let lets, e' =
+    if safety_checking () then
       let p,off,lb,rb = destruct_pointer e1 in
       let p' = expr p in
       let i' = offset off in
-      let letspi = [ (tmpp, p') ; (tmpi, i') ; 
-		     (tmp1, make_app "shift" [Var tmpp; Var tmpi])] 
+      let letspi = 
+	[ (tmpp,p') ; (tmpi,i') ; 
+	  (tmp1,make_app "shift" [Var tmpp; Var tmpi])] 
       in
       match off,lb,rb with
 	| Int_offset s, Some lb, Some rb when bounded lb rb s ->
             let e1' = expr e1 in	    
-	    (tmp1, e1') :: lets, 
-            make_app "safe_upd_" [ mem ; Var tmp1; v ]
+	    [ (tmp1, e1') ],
+            make_app "safe_upd_" [ mem; Var tmp1; Var tmp2 ]
 	| Int_offset s,Some lb,Some rb when lbounded lb s ->
-	    letspi @ lets, 
-            make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_upd_" 
+	    letspi, 
+            make_guarded_app ~mark IndexBounds pos "lsafe_bound_upd_" 
               [ mem ; Var tmpp; Var tmpi; 
-		Cte (Prim_int (Num.string_of_num rb)); v ]
+		Cte (Prim_int (Num.string_of_num rb)); Var tmp2 ]
 	| Int_offset s,Some lb,Some rb when rbounded rb s ->
-	    letspi @ lets, 
-            make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_upd_" 
+	    letspi, 
+            make_guarded_app ~mark IndexBounds pos "rsafe_bound_upd_" 
               [ mem ; Var tmpp; Var tmpi; 
-		Cte (Prim_int (Num.string_of_num lb)); v ]
+		Cte (Prim_int (Num.string_of_num lb)); Var tmp2 ]
 	| off,Some lb,Some rb ->
-	    letspi @ lets, 
-            make_guarded_app ~name:lab IndexBounds loc "bound_upd_" 
+	    letspi, 
+            make_guarded_app ~mark IndexBounds pos "bound_upd_" 
               [ mem ; Var tmpp; Var tmpi;  
 		Cte (Prim_int (Num.string_of_num lb)); 
-		Cte (Prim_int (Num.string_of_num rb)); v ]
+		Cte (Prim_int (Num.string_of_num rb)); Var tmp2 ]
 	| Int_offset s,Some lb,None when lbounded lb s ->
-	    letspi @ lets, 
-            make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_upd_" 
-              [ alloc; mem; Var tmpp; Var tmpi; v ]
+	    letspi, 
+            make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_" 
+              [ alloc; mem; Var tmpp; Var tmpi; Var tmp2 ]
 	| off,Some lb,None ->
-	    letspi @ lets, 
-            make_guarded_app ~name:lab IndexBounds loc "lbound_upd_" 
+	    letspi, 
+            make_guarded_app ~mark IndexBounds pos "lbound_upd_" 
               [ alloc; mem; Var tmpp; Var tmpi;
-		Cte (Prim_int (Num.string_of_num lb)); v ]
+		Cte (Prim_int (Num.string_of_num lb)); Var tmp2 ]
 	| Int_offset s,None,Some rb when rbounded rb s ->
-	    letspi @ lets, 
-            make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_upd_" 
-              [ alloc; mem; Var tmpp; Var tmpi; v ]
+	    letspi, 
+            make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_" 
+              [ alloc; mem; Var tmpp; Var tmpi; Var tmp2 ]
 	| off,None,Some rb ->
-	    letspi @ lets, 
-            make_guarded_app ~name:lab IndexBounds loc "rbound_upd_" 
+	    letspi, 
+            make_guarded_app ~mark IndexBounds pos "rbound_upd_" 
               [ alloc; mem; Var tmpp; Var tmpi;
-		Cte (Prim_int (Num.string_of_num rb)); v ]
+		Cte (Prim_int (Num.string_of_num rb)); Var tmp2 ]
 	| Int_offset s,None,None when int_of_string s = 0 ->
-	    (tmp1, p') :: lets, 
-            make_guarded_app ~name:lab PointerDeref loc "upd_" 
-              [ alloc; mem ; Var tmp1; v ]
+	    [ (tmp1, p') ], 
+            make_guarded_app ~mark PointerDeref pos "upd_" 
+              [ alloc; mem ; Var tmp1; Var tmp2 ]
 	| off,None,None ->
-	    letspi @ lets, 
-            make_guarded_app ~name:lab PointerDeref loc "offset_upd_" 
-              [ alloc; mem ; Var tmpp; Var tmpi; v ]
+	    letspi, 
+            make_guarded_app ~mark PointerDeref pos "offset_upd_" 
+              [ alloc; mem ; Var tmpp; Var tmpi; Var tmp2 ]
     else
       let e1' = expr e1 in	    
-      (tmp1, e1') :: lets, 
-      make_app "safe_upd_"
-	[ mem ; Var tmp1 ; v ]
+      [ (tmp1,e1') ],
+      make_app "safe_upd_" [ mem; Var tmp1; Var tmp2 ]
   in
-  (* return updated value if necessary *)
-  let tmp1var = 
-    new expr ~typ:e1#typ ~region:e1#region
-      (JCEvar(Jc_pervasives.var e1#typ tmp1)) 
-  in
-  let deref = make_deref "" loc fi tmp1var in
-  tmp1, tmp2, lets, upd, deref
+  tmp1, lets, e'
 
-and make_upd_union lab loc off fi e1 e2 =
-  let tmp1 = tmp_var_name () in
-  let tmp2 = tmp_var_name () in
-  (* we handle e1 and e2 *)
+and make_upd_union mark pos off e1 fi tmp2 =
   let e1' = expr e1 in
-  let e2' = expr e2 in
-  (* Convert appropriate type into bitvector *)
-  let acc = 
-    coerce ~check_int_overflow:(safety_checking()) 
-      e2#mark e2#pos 
-      fi.jc_field_info_type 
-      e2#typ e2 e2'
-  in
-  let acc = match fi.jc_field_info_type with
-    | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [acc]
-    | ty -> 
-	assert false (* TODO *)
-  in
-  (* Define dummy variables *)
-  let v1 = Jc_pervasives.var e1#typ tmp1 in
-  let v2 = Jc_pervasives.var Jc_pervasives.unit_type tmp2 in
-  let e1 = new expr_with ~node:(JCEvar v1) e1 in
-  let e2 = new expr_with ~node:(JCEvar v2) e2 in
-  (* Retrieve bitvector for access to union *)
-  let deref = make_deref_simple lab loc fi e1 in
-  (* Retrieve subpart of bitvector for specific subfield *)
-  let off = match off with
-    | Int_offset i -> int_of_string i
-    | _ -> assert false (* TODO *)
-  in
-  let size = the fi.jc_field_info_bitsize / 8 in
-  let off = string_of_int off and size = string_of_int size in
-  let acc = make_app "replace_bytes"
-		 [deref; Cte(Prim_int off); Cte(Prim_int size); acc]
-  in
-  let lets = 
-    [ (tmp1,e1'); (tmp2, acc) ]
-  in
-  let tmp1, tmp2, lets', upd, deref = 
-    make_upd_simple lab loc fi e1 e2
-  in
-  tmp1, tmp2, lets @ lets', upd, deref
-
-and make_upd_bytes lab loc fi e1 e2 =
-  let tmp1 = tmp_var_name () in
-  let tmp2 = tmp_var_name () in
-  (* Handle [e1] and [e2] *)
-  let e1' = expr e1 in
-  let e2' = expr e2 in
-  (* Convert appropriate type into field type and then bitvector *)
-  let e2' = 
-    coerce ~check_int_overflow:(safety_checking()) 
-      e2#mark e2#pos fi.jc_field_info_type e2#typ e2 e2'
-  in
+  (* Convert value assigned into bitvector *)
   let e2' = match fi.jc_field_info_type with
-    | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [e2']
-    | ty -> 
-	assert false (* TODO *)
+    | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [Var tmp2]
+    | _ty -> assert false (* TODO *)
   in
-  (* Define dummy variables *)
+  (* Temporary variables to avoid duplicating code *)
+  let tmp1 = tmp_var_name () in
+  let tmp2 = tmp_var_name () in
   let v1 = Jc_pervasives.var e1#typ tmp1 in
   let e1 = new expr_with ~node:(JCEvar v1) e1 in
-  (* Store bitvector *)
+  let size = the fi.jc_field_info_bitsize / 8 in
+  let union_size = 
+    (union_type e1#typ).jc_variant_info_union_size_in_bytes 
+  in
+  let e2' = 
+    if size = union_size then
+      (* TODO: deal with offset which should be null *)
+      e2'
+    else
+      (* Retrieve bitvector for access to union *)
+      let deref = make_deref_simple mark pos e1 fi in
+      (* Replace subpart of bitvector for specific subfield *)
+      let off = match off with
+	| Int_offset i -> int_of_string i
+	| _ -> assert false (* TODO *)
+      in
+      let off = string_of_int off and size = string_of_int size in
+      make_app "replace_bytes"
+	[ deref; Cte(Prim_int off); Cte(Prim_int size); e2' ]
+  in
+  let lets = [ (tmp1,e1'); (tmp2,e2') ] in
+  let tmp1, lets', e' = make_upd_simple mark pos e1 fi tmp2 in
+  tmp1, lets @ lets', e'
+
+and make_upd_bytes mark pos e1 fi tmp2 =
+  let e1' = expr e1 in
+  (* Convert value assigned into bitvector *)
+  let e2' = match fi.jc_field_info_type with
+    | JCTenum ri -> make_app (logic_bitvector_of_enum ri) [Var tmp2]
+    | _ty -> assert false (* TODO *)
+  in
+  (* Temporary variables to avoid duplicating code *)
+  let tmp1 = tmp_var_name () in
+  let v1 = Jc_pervasives.var e1#typ tmp1 in
+  let e1 = new expr_with ~node:(JCEvar v1) e1 in
+  (* Define memory and allocation table *)
   let mem = plain_memory_var (JCmem_bitvector,e1#region) in
   let alloc = alloc_table_var (JCalloc_bitvector,e1#region) in
+  (* Store bitvector *)
   let off = the (field_offset_in_bytes fi) in
   let size = the fi.jc_field_info_bitsize / 8 in
   let off = string_of_int off and size = string_of_int size in
-  let upd = 
-    if safety_checking() then
-      make_guarded_app ~name:lab PointerDeref loc "upd_bytes_" 
+  let e' = 
+    if safety_checking () then
+      make_guarded_app ~mark PointerDeref pos "upd_bytes_" 
         [ alloc; mem; Var tmp1; Cte(Prim_int off); Cte(Prim_int size); 
 	  Var tmp2 ]
     else
@@ -1525,103 +1469,76 @@ and make_upd_bytes lab loc fi e1 e2 =
 	[ mem; Var tmp1; Cte(Prim_int off); Cte(Prim_int size); Var tmp2 ]
   in
   let lets = [ (tmp1,e1'); (tmp2,e2') ] in
-  (* Build updated value for reuse *)
-  let deref = make_deref_bytes lab loc fi e1 in
-  tmp1, tmp2, lets, upd, deref
+  tmp1, lets, e'
 
-and make_upd lab loc fi e1 e2 =
-  if Region.bitwise e1#region then
-    make_upd_bytes lab loc fi e1 e2
+and make_upd mark pos e1 fi e2 =
+  (* Value assigned stored in temporary at that point *)
+  let v2 = match e2#node with JCEvar v2 -> v2 | _ -> assert false in
+  let tmp2 = v2.jc_var_info_name in
+  (* Dispatch depending on kind of memory *)
+  if Region.bitwise e1#region then make_upd_bytes mark pos e1 fi tmp2
   else match access_union e1 (Some fi) with
-    | Some(e1,off) ->
-  	make_upd_union lab loc off fi e1 e2
-    | None ->
-  	make_upd_simple lab loc fi e1 e2
+    | Some(e1,off) -> make_upd_union mark pos off e1 fi tmp2
+    | None -> make_upd_simple mark pos e1 fi tmp2
 
-and make_deref_simple lab loc fi e =
-  let infunction = get_current_function () in
+(* Translate the heap access `e.fi' 
+
+   special cases are considered to avoid statically known safety properties:
+   if e1 has the form p + i then we build an access that depends on the 
+   type of p and the value of i
+*)
+and make_deref_simple mark pos e fi =
+  (* Define memory and allocation table *)
   let mc = deref_mem_class e fi in
-  let mem = memory_name (mc,e#region) in
-  let mem = 
-    if Region.polymorphic e#region then
-      if MemoryMap.mem (mc,e#region)
-        infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-      then Deref mem
-      else Var mem
-    else Deref mem
-  in
+  let mem = memory_var (mc,e#region) in
   let ac = alloc_class_of_mem_class mc in
-  let alloc = alloc_table_name (ac,e#region) in
-  let alloc = 
-    if Region.polymorphic e#region then
-      if AllocMap.mem (ac, e#region)
-        infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-      then Deref alloc
-      else Var alloc
-    else Deref alloc
-  in
-  let deref = if safety_checking() then
-    match destruct_pointer e with
-      | _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
-          make_app "safe_acc_" 
-            [ mem ; expr e ]
-      | p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
-          make_guarded_app ~name:lab IndexBounds loc "lsafe_bound_acc_" 
-            [ mem ; expr p; offset off;
-              Cte (Prim_int (Num.string_of_num rb)) ]
-      | p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
-          make_guarded_app ~name:lab IndexBounds loc "rsafe_bound_acc_" 
-            [ mem ; expr p; offset off;
-              Cte (Prim_int (Num.string_of_num lb)) ]
-      | p,off,Some lb,Some rb ->
-          make_guarded_app ~name:lab IndexBounds loc "bound_acc_" 
-            [ mem ; expr p; offset off; 
-              Cte (Prim_int (Num.string_of_num lb)); 
-              Cte (Prim_int (Num.string_of_num rb)) ]
-      | p,(Int_offset s as off),Some lb,None when lbounded lb s ->
-          make_guarded_app ~name:lab IndexBounds loc "lsafe_lbound_acc_" 
-            [ alloc; mem; expr p; offset off ]
-      | p,off,Some lb,None ->
-          make_guarded_app ~name:lab IndexBounds loc "lbound_acc_" 
-            [ alloc; mem; expr p; offset off;
-              Cte (Prim_int (Num.string_of_num lb)) ]
-      | p,(Int_offset s as off),None,Some rb when rbounded rb s ->
-          make_guarded_app ~name:lab IndexBounds loc "rsafe_rbound_acc_" 
-            [ alloc; mem; expr p; offset off ]
-      | p,off,None,Some rb ->
-          make_guarded_app ~name:lab IndexBounds loc "rbound_acc_" 
-            [ alloc; mem; expr p; offset off;
-              Cte (Prim_int (Num.string_of_num rb)) ]
-      | p,Int_offset s,None,None when int_of_string s = 0 ->
-          make_guarded_app ~name:lab PointerDeref loc "acc_" 
-            [ alloc; mem ; expr p ]
-      | p,off,None,None ->
-          make_guarded_app ~name:lab PointerDeref loc "offset_acc_" 
-            [ alloc; mem ; expr p; offset off ]
-  else
-    make_app "safe_acc_"
-      [ mem ; 
-        (* coerce e#pos integer_type e#typ *) (expr e) ]
-  in
-(*   if field_of_union fi then *)
-(*     (\* Translate back access to union type to field type *\) *)
-(*     if integral_union (union_of_field fi) then *)
-(*       (\* Type of union is integer, and type of field an integral type *\) *)
-(*       match fi.jc_field_info_type with *)
-(*         | JCTnative Tinteger -> deref *)
-(*         | JCTenum ri -> *)
-(*             if not threats then  *)
-(*               make_app (safe_fun_enum_of_int ri) [deref] *)
-(*             else *)
-(*               make_guarded_app ~name:lab ArithOverflow loc  *)
-(*                 (fun_enum_of_int ri) [deref] *)
-(*         | _ -> assert false *)
-(*     else make_app (logic_field_of_union fi) [deref] *)
-(*   else *) deref
+  let alloc = alloc_table_var (ac,e#region) in
+  let e' = 
+    if safety_checking() then
+      match destruct_pointer e with
+	| _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
+            make_app "safe_acc_" 
+              [ mem ; expr e ]
+	| p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
+            make_guarded_app ~mark IndexBounds pos "lsafe_bound_acc_" 
+              [ mem ; expr p; offset off;
+		Cte (Prim_int (Num.string_of_num rb)) ]
+	| p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
+            make_guarded_app ~mark IndexBounds pos "rsafe_bound_acc_" 
+              [ mem ; expr p; offset off;
+		Cte (Prim_int (Num.string_of_num lb)) ]
+	| p,off,Some lb,Some rb ->
+            make_guarded_app ~mark IndexBounds pos "bound_acc_" 
+              [ mem ; expr p; offset off; 
+		Cte (Prim_int (Num.string_of_num lb)); 
+		Cte (Prim_int (Num.string_of_num rb)) ]
+	| p,(Int_offset s as off),Some lb,None when lbounded lb s ->
+            make_guarded_app ~mark IndexBounds pos "lsafe_lbound_acc_" 
+              [ alloc; mem; expr p; offset off ]
+	| p,off,Some lb,None ->
+            make_guarded_app ~mark IndexBounds pos "lbound_acc_" 
+              [ alloc; mem; expr p; offset off;
+		Cte (Prim_int (Num.string_of_num lb)) ]
+	| p,(Int_offset s as off),None,Some rb when rbounded rb s ->
+            make_guarded_app ~mark IndexBounds pos "rsafe_rbound_acc_" 
+              [ alloc; mem; expr p; offset off ]
+	| p,off,None,Some rb ->
+            make_guarded_app ~mark IndexBounds pos "rbound_acc_" 
+              [ alloc; mem; expr p; offset off;
+		Cte (Prim_int (Num.string_of_num rb)) ]
+	| p,Int_offset s,None,None when int_of_string s = 0 ->
+            make_guarded_app ~mark PointerDeref pos "acc_" 
+              [ alloc; mem ; expr p ]
+	| p,off,None,None ->
+            make_guarded_app ~mark PointerDeref pos "offset_acc_" 
+              [ alloc; mem ; expr p; offset off ]
+    else
+      make_app "safe_acc_" [ mem; expr e ]
+  in e'
 
-and make_deref_union lab loc off fi e =
-  (* Retrieve bitvector for access to union *)
-  let deref = make_deref_simple lab loc fi e in
+and make_deref_union mark pos off e fi =
+  (* Retrieve bitvector *)
+  let e' = make_deref_simple mark pos e fi in
   (* Retrieve subpart of bitvector for specific subfield *)
   let off = match off with
     | Int_offset i -> int_of_string i
@@ -1630,23 +1547,24 @@ and make_deref_union lab loc off fi e =
   let size = the fi.jc_field_info_bitsize / 8 in
   let off = string_of_int off and size = string_of_int size in
   let acc = 
-    make_app "extract_bytes" [deref; Cte(Prim_int off); Cte(Prim_int size)]
+    make_app "extract_bytes" [ e'; Cte(Prim_int off); Cte(Prim_int size) ]
   in
   (* Convert bitvector into appropriate type *)
   match fi.jc_field_info_type with
     | JCTenum ri -> make_app (logic_enum_of_bitvector ri) [acc]
     | ty -> assert false (* TODO *)
 
-and make_deref_bytes lab loc fi e =
-  (* Retrieve bitvector *)
+and make_deref_bytes mark pos e fi =
+  (* Define memory and allocation table *)
   let mem = memory_var (JCmem_bitvector,e#region) in
   let alloc = alloc_table_var (JCalloc_bitvector,e#region) in
+  (* Retrieve bitvector *)
   let off = the (field_offset_in_bytes fi) in
   let size = the fi.jc_field_info_bitsize / 8 in
   let off = string_of_int off and size = string_of_int size in
-  let deref = 
-    if safety_checking() then
-      make_guarded_app ~name:lab PointerDeref loc "acc_bytes_" 
+  let e' = 
+    if safety_checking () then
+      make_guarded_app mark PointerDeref pos "acc_bytes_" 
         [ alloc; mem; expr e; Cte(Prim_int off); Cte(Prim_int size) ]
     else
       make_app "safe_acc_bytes_"
@@ -1654,18 +1572,14 @@ and make_deref_bytes lab loc fi e =
   in
   (* Convert bitvector into appropriate type *)
   match fi.jc_field_info_type with
-    | JCTenum ri -> make_app (logic_enum_of_bitvector ri) [deref]
-    | ty -> 
-	assert false (* TODO *)
+    | JCTenum ri -> make_app (logic_enum_of_bitvector ri) [e']
+    | _ty -> assert false (* TODO *)
 
-and make_deref lab loc fi e =
-  if e#region.jc_reg_bitwise then
-    make_deref_bytes lab loc fi e
+and make_deref mark pos e fi =
+  if Region.bitwise e#region then make_deref_bytes mark pos e fi
   else match access_union e (Some fi) with
-    | Some(e,off) ->
-  	make_deref_union lab loc off fi e
-    | None ->
-  	make_deref_simple lab loc fi e
+    | Some(e,off) -> make_deref_union mark pos off e fi
+    | None -> make_deref_simple mark pos e fi
 
 and offset = function
   | Int_offset s -> Cte (Prim_int s)
@@ -1764,8 +1678,8 @@ and value_assigned mark pos ty e =
 	let e' = expr e in
 	coerce ~check_int_overflow:(safety_checking()) 
 	  mark e#pos ty e#typ e e'
-    | Some(tmp,e1',a) ->
-	Let(tmp,e1',make_check ~mark ~kind:IndexBounds pos (Assert(a,Var tmp)))
+    | Some(tmp,e',a) ->
+	Let(tmp,e',make_check ~mark ~kind:IndexBounds pos (Assert(a,Var tmp)))
 
 and expr e =
   let infunction = get_current_function () in
@@ -1805,7 +1719,7 @@ and expr e =
         let e2' = expr e2 in
         let ty = native_operator_type op in
         let mk = match fst op with
-          | `Bdiv | `Bmod -> make_guarded_app ~name:(mark()) DivByZero pos
+          | `Bdiv | `Bmod -> make_guarded_app ~mark:(mark()) DivByZero pos
           | _ -> make_app
 	in
         mk (bin_op op) 
@@ -1857,7 +1771,7 @@ and expr e =
           let tmp = tmp_var_name () in
           let tag = tag_table_name (struct_variant st,e1#region) in
           let call = 
-            make_guarded_app ~name:(mark()) DownCast pos "downcast_" 
+            make_guarded_app e#mark DownCast pos "downcast_" 
 	      [Deref tag; Var tmp; Var(tag_name st)]
           in
           Let(tmp,expr e1,call) (* Yannick: why a temporary here? *)
@@ -1878,7 +1792,7 @@ and expr e =
                 (mark()) e#pos integer_type e1#typ e1 e1'
         end
     | JCEderef(e1,fi) ->
-  	make_deref (mark()) e#pos fi e1
+  	make_deref (mark()) e#pos e1 fi
     | JCEalloc(e1,st) ->
 	let e1' = expr e1 in
 	let ac = deref_alloc_class e in
@@ -1900,8 +1814,8 @@ and expr e =
 		     e1#mark e1#pos integer_type 
 		     e1#typ e1 e1']
 	      else
-                make_guarded_app 
-                  ~name:(mark()) AllocSize e#pos
+                make_guarded_app e#mark
+                  AllocSize e#pos
                   (alloc_param_name st)
                   (coerce ~check_int_overflow:(safety_checking()) 
 		     e1#mark e1#pos integer_type 
@@ -2029,7 +1943,7 @@ and expr e =
                   ~region_assoc: call.jc_call_region_assoc
               in
 	      let call = 
-		make_guarded_app ~name:(mark()) UserCall 
+		make_guarded_app ~mark:(mark()) UserCall 
 		  e#pos f.jc_fun_info_final_name
 		  (args 
 		   @ write_allocs @ write_tags @ write_mems 
@@ -2060,47 +1974,32 @@ and expr e =
               call
 	end
     | JCEassign_var(v,e1) -> 
-	let assign_var_assert = type_assert v.jc_var_info_type e1 in
-	let tmp_for_assert = match assign_var_assert with
-	  | None -> None
-	  | Some(tmp,e,a) -> 
-	      if not (safety_checking()) then None else Some(tmp,e,a)
-	in
-	let e' = match tmp_for_assert with
-	  | None -> 
-              let e1' = expr e1 in
-	      coerce ~check_int_overflow:(safety_checking()) 
-		e1#mark e1#pos v.jc_var_info_type e1#typ e1 e1'
-	  | Some(tmp,e1',a) ->
-	      Let(tmp,e1',Assert(a,Var tmp))
-	in
-	let e' = Assign(v.jc_var_info_final_name,e') in
+	let e1' = value_assigned e#mark e#pos v.jc_var_info_type e1 in
+	let e' = Assign(v.jc_var_info_final_name,e1') in
 	if e#typ = Jc_pervasives.unit_type then e' else append e' (var v)
     | JCEassign_heap(e1,fi,e2) -> 
-        let tmp1, tmp2, lets, upd, deref = 
-	  make_upd (mark()) e#pos fi e1 e2 
-        in
-	let assign_heap_assert = type_assert fi.jc_field_info_type e2 in
-	let upd = match assign_heap_assert with
-	  | None -> upd
-	  | Some(tmp,e2',a) ->
-	      let upd = 
-		if not (safety_checking()) then upd else Assert(a,upd) 
-	      in
-	      Let(tmp,e2',upd)
-	in	  
-        let upd = 
+	let e2' = value_assigned e#mark e#pos fi.jc_field_info_type e2 in
+	(* Define temporary variable for value assigned *)
+	let tmp2 = tmp_var_name () in
+	let v2 = Jc_pervasives.var fi.jc_field_info_type tmp2 in
+	let e2 = 
+	  new expr_with ~typ:fi.jc_field_info_type ~node:(JCEvar v2) e2 
+	in
+	(* Translate assignment *)
+        let tmp1, lets, e' = make_upd e#mark e#pos e1 fi e2 in
+	let lets = (tmp2,e2') :: lets in
+        let e' = 
 	  if (safety_checking()) && !Jc_options.inv_sem = InvOwnership then
-            append (assert_mutable (LVar tmp1) fi) upd 
-	  else upd 
+            append (assert_mutable (LVar tmp1) fi) e' 
+	  else e' 
 	in
-	let upd =
-	  if e#typ = Jc_pervasives.unit_type then upd else append upd deref
+	let e' =
+	  if e#typ = Jc_pervasives.unit_type then e' else append e' (Var tmp2)
 	in
-        let lets = make_lets lets upd in
+        let e' = make_lets lets e' in
         if !Jc_options.inv_sem = InvOwnership then
-          append lets (assume_field_invariants fi)
-        else lets
+          append e' (assume_field_invariants fi)
+        else e'
     | JCEblock el ->
         List.fold_right append (List.map expr el) Void
     | JCElet(v,e1,e2) -> 
@@ -2236,11 +2135,11 @@ and expr e =
 	
     | JCEunpack(st, e1, as_t) ->
         let e1 = expr e1 in 
-        make_guarded_app ~name:(mark()) Unpack e#pos
+        make_guarded_app ~mark:(mark()) Unpack e#pos
           (unpack_name st) [e1; Var (tag_name as_t)]
     | JCEpack(st, e1, from_t) ->
         let e1 = expr e1 in 
-        make_guarded_app ~name:(mark()) Pack e#pos
+        make_guarded_app ~mark:(mark()) Pack e#pos
           (pack_name st) [e1; Var (tag_name from_t)]
     | JCEthrow (ei, Some e) -> 
         let e = expr e in

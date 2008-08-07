@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.234 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.235 2008-08-07 16:24:17 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -38,6 +38,7 @@ open Jc_ast
 open Format
 open Jc_region
 open Jc_iterators
+open Jc_struct_tools
 
 exception Typing_error of Loc.position * string
 
@@ -2467,7 +2468,8 @@ let type_variant d = match d#node with
         jc_variant_info_name = id;
         jc_variant_info_roots = [];
         jc_variant_info_is_union = 
-          match d#node with JCDvariant_type _ -> false | _ -> true;
+          (match d#node with JCDvariant_type _ -> false | _ -> true);
+	jc_variant_info_union_size_in_bytes = 0;
       } in
       Hashtbl.add variants_table id vi;
       (* tags *)
@@ -2495,6 +2497,13 @@ let type_variant d = match d#node with
                    prev.jc_variant_info_name)
         tags
       in
+      if vi.jc_variant_info_is_union then
+	let size = 
+	  List.fold_left 
+	    (fun size st -> max size (struct_size_in_bytes st)) 0 roots
+	in
+	vi.jc_variant_info_union_size_in_bytes <- size
+      else ();
       (* update the variant *)
       vi.jc_variant_info_roots <- roots
   | _ -> ()

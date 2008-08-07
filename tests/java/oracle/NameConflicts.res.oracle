@@ -845,12 +845,13 @@ let NameConflicts_setI_safety =
   (init:
   try
    begin
-     (let jessie_5 = (let jessie_3 = this_2 in
-                     (let jessie_4 = i in
+     (let jessie_5 = (K_1:
+                     (let jessie_1 = i in
+                     (let jessie_4 = this_2 in
                      begin
-                       (((safe_upd_ NameConflicts_i) jessie_3) jessie_4);
-                      ((safe_acc_ !NameConflicts_i) jessie_3)
-                     end)) in
+                       (((safe_upd_ NameConflicts_i) jessie_4) jessie_1);
+                      jessie_1
+                     end))) in
      void);
     (raise Return)
    end
