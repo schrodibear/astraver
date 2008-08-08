@@ -45,6 +45,151 @@ open Jc_region
 open Jc_name
 open Jc_struct_tools
 
+
+(******************************************************************************)
+(*                              environment                                   *)
+(******************************************************************************)
+
+let current_function = ref None
+let set_current_function f = current_function := Some f
+let reset_current_function () = current_function := None
+let get_current_function () = 
+  match !current_function with None -> assert false | Some f -> f
+
+let current_behavior : string option ref = ref None
+let set_current_behavior behav = current_behavior := Some behav
+let reset_current_behavior () = current_behavior := None
+let get_current_behavior () = 
+  match !current_behavior with None -> assert false | Some behav -> behav
+let compatible_with_current_behavior = function
+  | [] -> true
+  | ls -> List.exists (fun behav -> behav = get_current_behavior ()) ls
+let safety_checking () = get_current_behavior () = "safety"
+
+let current_spec : fun_spec option ref = ref None
+let set_current_spec s = current_spec := Some s
+let reset_current_spec () = current_spec := None
+let get_current_spec () = 
+  match !current_spec with None -> assert false | Some s -> s
+
+
+(******************************************************************************)
+(*                                 variables                                  *)
+(******************************************************************************)
+
+let lvar_name ~label_in_name ?label_assoc lab n =
+  let lab = match label_assoc with
+    | None -> lab 
+    | Some assoc -> try List.assoc lab assoc with Not_found -> lab
+  in	
+  if label_in_name then 
+    match lab with
+      | LabelHere -> n
+      | LabelOld -> assert false
+      | LabelPre -> n ^ "_at_Pre"
+      | LabelPost -> n ^ "_at_Post"
+      | LabelName lab -> n ^ "_at_" ^ lab.label_info_final_name
+  else n
+
+let lvar ~assigned ~label_in_name lab n =
+  let n = lvar_name ~label_in_name lab n in
+  if label_in_name then LVar n
+  else if assigned then
+    match lab with 
+      | LabelHere -> LVar n
+      | LabelOld -> LVarAtLabel(n,"")
+      | LabelPre -> LVarAtLabel(n,"init")
+      | LabelPost -> LVar n
+      | LabelName lab -> LVarAtLabel(n,lab.label_info_final_name)
+  else LVar n
+
+(* simple variables *)
+
+let plain_var n = Var n
+let deref_var n = Deref n
+
+let var v =
+  if v.jc_var_info_assigned 
+  then deref_var v.jc_var_info_final_name
+  else plain_var v.jc_var_info_final_name
+
+let tvar lab v = 
+  lvar ~assigned:v.jc_var_info_assigned ~label_in_name:false
+    lab v.jc_var_info_final_name
+
+(* model variables *)
+
+let mutable_memory infunction (mc,r) =
+  if Region.polymorphic r then
+    MemoryMap.mem (mc,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+  else true
+
+let mutable_alloc_table infunction (ac,r) =
+  if Region.polymorphic r then
+    AllocMap.mem (ac,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+  else true
+
+let mutable_tag_table infunction (vi,r) =
+  if Region.polymorphic r then
+    TagMap.mem (vi,r)
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_table
+  else true
+
+let plain_memory_var (mc,r) = Var (memory_name (mc,r))
+let deref_memory_var (mc,r) = Deref (memory_name (mc,r))
+
+let memory_var (mc,r) =
+  if mutable_memory (get_current_function ()) (mc,r) then
+    deref_memory_var (mc,r)
+  else plain_memory_var (mc,r)
+
+let tmemory_var ~label_in_name lab (mc,r) =
+  let mem = memory_name (mc,r) in
+  let assigned = match !current_function with
+    | None -> true
+    | Some infunction -> mutable_memory infunction (mc,r) 
+  in
+  lvar ~assigned ~label_in_name lab mem
+
+let plain_alloc_table_var (ac,r) = Var (alloc_table_name (ac,r))
+let deref_alloc_table_var (ac,r) = Deref (alloc_table_name (ac,r))
+
+let alloc_table_var (ac,r) =
+  if mutable_alloc_table (get_current_function ()) (ac,r) then
+    deref_alloc_table_var (ac,r)
+  else plain_alloc_table_var (ac,r)
+
+let talloc_table_var ~label_in_name lab (ac,r) =
+  let alloc = alloc_table_name (ac,r) in
+  let assigned = match !current_function with
+    | None -> true
+    | Some infunction -> mutable_alloc_table infunction (ac,r) 
+  in
+  lvar ~assigned ~label_in_name lab alloc
+
+let plain_tag_table_var (vi,r) = Var (tag_table_name (vi,r))
+let deref_tag_table_var (vi,r) = Deref (tag_table_name (vi,r))
+
+let tag_table_var (vi,r) =
+  if mutable_tag_table (get_current_function ()) (vi,r) then
+    deref_tag_table_var (vi,r)
+  else plain_tag_table_var (vi,r)
+
+let ttag_table_var ~label_in_name lab (vi,r) =
+  let tag = tag_table_name (vi,r) in
+  let assigned = match !current_function with
+    | None -> true
+    | Some infunction -> mutable_tag_table infunction (vi,r) 
+  in
+  lvar ~assigned ~label_in_name lab tag
+
+
+(******************************************************************************)
+(*                                   types                                    *)
+(******************************************************************************)
+
 (* Why type which modelises a variant. *)
 let variant_model_type vi =
   simple_logic_type (variant_type_name vi)
@@ -162,39 +307,6 @@ let field_or_variant_memory_type mc =
     | JCmem_union vi -> union_memory_type vi
     | JCmem_bitvector -> bitvector_memory_type
 
-let current_function = ref None
-let set_current_function f = current_function := Some f
-let reset_current_function () = current_function := None
-let get_current_function () = 
-  match !current_function with None -> assert false | Some f -> f
-
-let current_behavior : string option ref = ref None
-let set_current_behavior behav = current_behavior := Some behav
-let reset_current_behavior () = current_behavior := None
-let get_current_behavior () = 
-  match !current_behavior with None -> assert false | Some behav -> behav
-let compatible_with_current_behavior = function
-  | [] -> true
-  | ls -> List.exists (fun behav -> behav = get_current_behavior ()) ls
-let safety_checking () = get_current_behavior () = "safety"
-
-let current_spec : fun_spec option ref = ref None
-let set_current_spec s = current_spec := Some s
-let reset_current_spec () = current_spec := None
-let get_current_spec () = 
-  match !current_spec with None -> assert false | Some s -> s
-
-let mutable_memory infunction (mc,r) =
-  if Region.polymorphic r then
-    MemoryMap.mem (mc,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-  else true
-
-let mutable_alloc_table infunction (root,r) =
-  if Region.polymorphic r then
-    AllocMap.mem (root,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-  else true
 
 let mutable_fvmemory infunction (mc,r) =
   if Region.polymorphic r then
@@ -225,9 +337,9 @@ let memory_logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	 (fun lab acc ->
 	    let name = 
 	      if mut then 
-		label_var ~label_in_name ?label_assoc lab name 
+		lvar_name ~label_in_name ?label_assoc lab name 
 	      else 
-		label_var ~label_in_name ?label_assoc LabelHere name 
+		lvar_name ~label_in_name ?label_assoc LabelHere name 
 	    in
 	    ((mc,r),(name, field_or_variant_memory_type mc))::acc)
 	 labs acc)
@@ -268,7 +380,7 @@ let logic_params ~label_in_name ?region_assoc ?label_assoc li =
 	 let name = tag_table_name (v,r) in
 	 LogicLabelSet.fold
 	   (fun lab acc ->
-	      let name = label_var ~label_in_name ?label_assoc lab name in
+	      let name = lvar_name ~label_in_name ?label_assoc lab name in
 	      (name, t)::acc)
 	   labs acc)
       li.jc_logic_info_effects.jc_effect_tag_table

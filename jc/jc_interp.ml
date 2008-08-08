@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.327 2008-08-08 13:46:07 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.328 2008-08-08 15:47:38 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -580,50 +580,6 @@ let coerce ~check_int_overflow lab loc tdest tsrc orig e =
 (*                                    Terms                                    *)
 (*******************************************************************************)
 
-let lvar ?(assigned=true) ?(label_in_name=false) label v =
-  if label_in_name then
-    LVar(label_var label v)
-  else
-    if assigned then
-      match label with 
-        | LabelHere -> LVar v
-        | LabelOld -> LVarAtLabel(v,"")
-        | LabelPre -> LVarAtLabel(v,"init")
-        | LabelPost -> LVar v
-        | LabelName l -> LVarAtLabel(v,l.label_info_final_name)
-    else LVar v
-
-let nvar v = Var v
-
-let var v =
-  if v.jc_var_info_assigned 
-  then Deref v.jc_var_info_final_name
-  else Var v.jc_var_info_final_name
-
-let lvar_info label v = 
-  lvar ~assigned:v.jc_var_info_assigned label v.jc_var_info_final_name
-
-let mutable_var ?assigned ?label_in_name label v mut =
-  if mut then
-    lvar ?assigned ?label_in_name label v
-  else
-    lvar ?assigned ?label_in_name LabelHere v
-
-let memvar ?assigned ?label_in_name label (mc,r) =
-  let mem = memory_name(mc,r) in
-  let mut = match !current_function with
-    | None -> true
-    | Some infunction -> mutable_memory infunction (mc,r) 
-  in
-  mutable_var ?assigned ?label_in_name label mem mut
-
-let allocvar ?assigned ?label_in_name label (ac,r) =
-  let alloc = alloc_table_name(ac,r) in
-  let mut = match !current_function with
-    | None -> true
-    | Some infunction -> mutable_alloc_table infunction (ac,r) 
-  in
-  mutable_var ?assigned ?label_in_name label alloc mut
 
 let relocate_label ~relocate truelab curlab =
   if relocate && curlab = LabelHere then truelab else curlab
@@ -649,7 +605,7 @@ let rec term ~global_assertion ~relocate label oldlabel t =
   let rlab = relocate_label ~relocate label in
   let t' = match t#node with
     | JCTconst JCCnull -> LVar "null"
-    | JCTvar v -> lvar_info label v
+    | JCTvar v -> tvar label v
     | JCTconst c -> LConst(const c)
     | JCTunary(op,t1) ->
         let t1'= ft t1 in
@@ -701,7 +657,9 @@ let rec term ~global_assertion ~relocate label oldlabel t =
         let t1' = ft t1 in
         let tag = tag_table_name (struct_variant st,t1#region) in
         LApp("instanceof_bool",
-             [ lvar (rlab lab) tag; t1'; LVar (tag_name st) ])
+             [ lvar ~assigned:false ~label_in_name:global_assertion
+		 (rlab lab) tag; 
+	       t1'; LVar (tag_name st) ])
     | JCTcast(t1,lab,st) ->
         if struct_of_union st then 
 	  ft t1 
@@ -709,7 +667,8 @@ let rec term ~global_assertion ~relocate label oldlabel t =
           let t1' = ft t1 in
           let tag = tag_table_name (struct_variant st,t1#region) in
           LApp("downcast",
-               [ lvar ~label_in_name:global_assertion (rlab lab) tag; 
+               [ lvar ~assigned:false ~label_in_name:global_assertion
+		   (rlab lab) tag; 
 		 t1'; LVar (tag_name st) ])
     | JCTbitwise_cast(t1,_lab,_st) ->
 	ft t1
@@ -726,15 +685,25 @@ let rec term ~global_assertion ~relocate label oldlabel t =
           | Real_to_integer ->
               term_coerce t1#pos integer_type t1#typ t1 t1'
 	end
-    | JCTderef(t,label,fi) -> 
-	let deref = match taccess_union t (Some fi) with
-	  | Some(t,off) ->
+    | JCTderef(t1,lab,fi) -> 
+	(* Define memory *)
+	let mc = tderef_mem_class t1 fi in
+	begin match mc with
+	  | JCmem_field fi -> 
+              let t1' = ft t1 in
+              let mem = 
+		tmemory_var ~label_in_name:global_assertion (rlab lab)
+		  (JCmem_field fi,t1#region) in
+              LApp("select",[ mem; t1' ])
+	  | JCmem_union vi ->
+	      let t,off = match taccess_union t (Some fi) with
+		| Some(t,off) -> t,off | None -> assert false in
 	      (* Retrieve bitvector for access to union *)
 	      let vi = union_type t#typ in
 	      let label = rlab label in
               let t' = ft t in
               let mem = 
-		memvar ~label_in_name:global_assertion label 
+		tmemory_var ~label_in_name:global_assertion label 
 		  (JCmem_union vi,t#region) in
               let deref = LApp("select",[mem; t']) in
 	      (* Retrieve subpart of bitvector for specific subfield *)
@@ -749,33 +718,14 @@ let rec term ~global_assertion ~relocate label oldlabel t =
 		     [deref; LConst(Prim_int off1); LConst(Prim_int off2)])
 	      in
 	      (* Convert bitvector into appropriate type *)
-	      let deref = match fi.jc_field_info_type with
+	      begin match fi.jc_field_info_type with
 		| JCTenum ri -> LApp(logic_enum_of_bitvector ri,[acc])
 		| ty -> 
 		    assert false (* TODO *)
-	      in
-	      deref
-	  | None ->
-	      let label = rlab label in
-              let t' = ft t in
-              let mem = 
-		memvar ~label_in_name:global_assertion label 
-		  (JCmem_field fi,t#region) in
-              LApp("select",[mem; t'])
-	in
-(*         let deref = *)
-(*           if field_of_union fi then *)
-(*             (\* Translate back access to union type to field type *\) *)
-(*             if integral_union (union_of_field fi) then *)
-(*               (\* Type of union is integer, and type of field an integral type *\) *)
-(*               match fi.jc_field_info_type with *)
-(*                 | JCTnative Tinteger -> deref *)
-(*                 | JCTenum ri -> LApp(logic_enum_of_int ri,[deref]) *)
-(*                 | _ -> assert false *)
-(*             else LApp(logic_field_of_union fi,[deref]) *)
-(*           else deref *)
-(*         in *)
-        deref
+	      end
+	  | JCmem_bitvector ->
+	      (* TODO *) assert false
+	end
     | JCTapp app ->
         let f = app.jc_app_fun and l = app.jc_app_args in
         let args = List.fold_right
@@ -919,7 +869,7 @@ let rec assertion ~global_assertion ~relocate label oldlabel a =
       | JCAinstanceof(t,lab,ty) -> 
           let t' = ft t in
           let tag = tag_table_name (struct_variant ty,t#region) in
-	  let tag = label_var ~label_in_name:global_assertion lab tag in
+	  let tag = lvar_name ~label_in_name:global_assertion lab tag in
           LPred("instanceof", [LVar tag; t'; LVar (tag_name ty)])
       | JCAmutable(te, st, ta) ->
           let te' = ft te in
@@ -1034,42 +984,6 @@ let rec make_lets l e =
 let return_void = ref false
 
 
-let plain_memory_var (mc,r) = Var (memory_name (mc,r))
-let deref_memory_var (mc,r) = Deref (memory_name (mc,r))
-
-let memory_var (mc,r) =
-  let infunction = get_current_function () in
-  if Region.polymorphic r then
-    if MemoryMap.mem (mc,r) 
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-    then deref_memory_var (mc,r)
-    else plain_memory_var (mc,r)
-  else deref_memory_var (mc,r)
-
-let plain_alloc_table_var (ac,r) = Var (alloc_table_name (ac,r))
-let deref_alloc_table_var (ac,r) = Deref (alloc_table_name (ac,r))
-
-let alloc_table_var (ac,r) =
-  let infunction = get_current_function () in
-  if Region.polymorphic r then
-    if AllocMap.mem (ac,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-    then deref_alloc_table_var (ac,r)
-    else plain_alloc_table_var (ac,r)
-  else deref_alloc_table_var (ac,r)
-
-let plain_tag_table_var (vi,r) = Var (tag_table_name (vi,r))
-let deref_tag_table_var (vi,r) = Deref (tag_table_name (vi,r))
-
-let tag_table_var (vi,r) =
-  let infunction = get_current_function () in
-  if Region.polymorphic r then
-    if TagMap.mem (vi,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_table
-    then deref_tag_table_var (vi,r)
-    else plain_tag_table_var (vi,r)
-  else deref_tag_table_var (vi,r)
-
 let add_alloc_table_argument (ac,distr) region_assoc acc =
   if Region.polymorphic distr then
     (* Polymorphic distant region passed as argument *)
@@ -1155,11 +1069,11 @@ let rec pset ~global_assertion before loc =
   let ft = term ~global_assertion ~relocate:false before before in
   match loc#node with
     | JCLSderef(ls,lab,fi,r) ->
-        let m = memvar ~label_in_name:global_assertion lab 
+        let m = tmemory_var ~label_in_name:global_assertion lab 
 	  (JCmem_field fi,r) in
         LApp("pset_deref", [m;fpset ls])
     | JCLSvar vi -> 
-        let m = lvar_info before vi in
+        let m = tvar before vi in
         LApp("pset_singleton", [m])
     | JCLSrange(ls,None,None) ->
         let ls = fpset ls in
@@ -1248,7 +1162,7 @@ let assigns before ef locs loc =
     StringMap.fold
       (fun v p acc -> 
         if p then acc else
-          make_and acc (LPred("eq", [LVar v; lvar before v])))
+          make_and acc (LPred("eq", [LVar v; lvar ~assigned:true (* <<- CHANGE THIS *) ~label_in_name:false before v])))
       refs LTrue
   in
   MemoryMap.fold
@@ -1257,8 +1171,8 @@ let assigns before ef locs loc =
        let ac = alloc_class_of_mem_class mc in
        make_and acc
 	 (let a = LPred("not_assigns",
-                [allocvar (* ~assigned: ? *) before (ac,r); 
-                 lvar before v;
+                [talloc_table_var ~label_in_name:false before (ac,r); 
+                 lvar ~assigned:true (* <<- CHANGE THIS *) ~label_in_name:false before v;
                  LVar v; make_union_loc p]) in
 	  LNamed(reg_check loc,a))
     ) mems a
@@ -1595,7 +1509,9 @@ and list_type_assert ty e (lets, params) =
       | JCTpointer (si, n1o, n2o) ->
 	  let tmp = tmp_var_name () in
 	  let ac = alloc_class_of_pointer_class si in
-	  let alloc = allocvar LabelHere (ac,e#region) in
+	  let alloc = 
+	    talloc_table_var ~label_in_name:false LabelHere (ac,e#region) 
+	  in
 	  let offset_mina n = 
 	    LPred ("le_int",
 		   [LApp ("offset_min", 
@@ -1687,10 +1603,7 @@ and expr e =
   let e' = match e#node with
     | JCEconst JCCnull -> Var "null"
     | JCEconst c -> Cte(const c)
-    | JCEvar v ->
-        if v.jc_var_info_assigned 
-        then Deref v.jc_var_info_final_name
-        else Var v.jc_var_info_final_name
+    | JCEvar v -> var v
     | JCEunary(op,e1) ->
         let e1' = expr e1 in
         make_app (unary_op op) 
@@ -1817,8 +1730,8 @@ and expr e =
                   (coerce ~check_int_overflow:(safety_checking()) 
 		     e1#mark e1#pos integer_type 
 		     e1#typ e1 e1'
-                   :: (List.map (nvar $ alloc_table_name) allocs)
-                   @ (List.map (nvar $ field_region_memory_name) fields))
+                   :: (List.map (plain_var $ alloc_table_name) allocs)
+                   @ (List.map (plain_var $ field_region_memory_name) fields))
 	  | JCalloc_union vi -> assert false (* TODO *)
 	  | JCalloc_bitvector -> assert false (* TODO *)
         end
@@ -2136,7 +2049,10 @@ and expr e =
 	let tmp = tmp_var_name () in
 	Let(tmp,e',Void)
     else e'
-  in e'
+  in 
+  (* Ideally, only labels used in logical annotations should be kept *)
+  if e#mark = "" then e' else Label(e#mark,e')
+
 
 and expr_coerce ty e =
   coerce ~check_int_overflow:(safety_checking())
@@ -3412,7 +3328,7 @@ let tr_axiom id is_axiom p acc =
       (fun (fi,r) labels a -> 
          LogicLabelSet.fold
            (fun lab a ->
-              LForall (label_var lab (memory_name(fi,r)), 
+              LForall (lvar_name ~label_in_name:true lab (memory_name(fi,r)), 
                        field_or_variant_memory_type fi, a))
            labels a)
       ef.jc_effect_memories a 
@@ -3427,7 +3343,7 @@ let tr_axiom id is_axiom p acc =
       (fun (vi,r) labels a ->
          LogicLabelSet.fold
            (fun lab a ->
-              LForall(label_var lab (tag_table_name (vi,r)),
+              LForall(lvar_name ~label_in_name:true lab (tag_table_name (vi,r)),
 		      tag_table_type (JCvariant vi), a))
            labels a)
       ef.jc_effect_tag_table a

@@ -44,7 +44,6 @@ val log2: Num.num -> Num.num
 
 (* labels *)
 
-val label_var : ?label_in_name:bool -> ?label_assoc:(label * label) list -> Jc_env.label -> string -> string
 val new_label_name: unit -> string
 
 (* types *)

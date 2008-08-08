@@ -1017,15 +1017,17 @@ let MacCarthy_f91_ensures_greater_than_100 =
   (let return = ref (any_int void) in
   try
    begin
-     (if ((le_int_ n_1) (100))
+     (if (K_7: ((le_int_ n_1) (100)))
      then
       begin
-        (return := (JC_21:
-                   (MacCarthy_f91 (JC_20:
-                                  (MacCarthy_f91 ((add_int n_1) (11)))))));
+        (return := (K_6:
+                   (JC_21:
+                   (MacCarthy_f91 (K_5:
+                                  (JC_20:
+                                  (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
        (raise Return)
       end
-     else begin   (return := ((sub_int n_1) (10))); (raise Return) end);
+     else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);
     absurd 
    end
    with
@@ -1040,15 +1042,17 @@ let MacCarthy_f91_ensures_less_than_101 =
   (let return = ref (any_int void) in
   try
    begin
-     (if ((le_int_ n_1) (100))
+     (if (K_7: ((le_int_ n_1) (100)))
      then
       begin
-        (return := (JC_17:
-                   (MacCarthy_f91 (JC_16:
-                                  (MacCarthy_f91 ((add_int n_1) (11)))))));
+        (return := (K_6:
+                   (JC_17:
+                   (MacCarthy_f91 (K_5:
+                                  (JC_16:
+                                  (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
        (raise Return)
       end
-     else begin   (return := ((sub_int n_1) (10))); (raise Return) end);
+     else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);
     absurd 
    end
    with
@@ -1063,15 +1067,17 @@ let MacCarthy_f91_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (if ((le_int_ n_1) (100))
+     (if (K_7: ((le_int_ n_1) (100)))
      then
       begin
-        (return := (JC_13:
-                   (MacCarthy_f91 (JC_12:
-                                  (MacCarthy_f91 ((add_int n_1) (11)))))));
+        (return := (K_6:
+                   (JC_13:
+                   (MacCarthy_f91 (K_5:
+                                  (JC_12:
+                                  (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
        (raise Return)
       end
-     else begin   (return := ((sub_int n_1) (10))); (raise Return) end);
+     else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);
     absurd 
    end
    with

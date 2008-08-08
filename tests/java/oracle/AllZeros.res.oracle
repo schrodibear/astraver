@@ -967,7 +967,7 @@ let AllZeros_all_zeros_ensures_default =
   (let return = ref (any_bool void) in
   try
    begin
-     (let k = ref (safe_int32_of_integer_ (0)) in
+     (let k = ref (safe_int32_of_integer_ (K_2: (0))) in
      try
       while true do
       { invariant
@@ -982,13 +982,17 @@ let AllZeros_all_zeros_ensures_default =
          }
        try
         (let jessie_11 = begin
-                           (if ((lt_int_ (integer_of_int32 !k)) (let jessie_9 = t in
+                           (if (K_9:
+                               ((lt_int_ (integer_of_int32 !k)) (K_8:
+                                                                (let jessie_9 = t in
                                                                 (JC_27:
-                                                                (java_array_length_intM jessie_9))))
+                                                                (java_array_length_intM jessie_9))))))
                            then
-                            (if ((neq_int_ (integer_of_int32 ((safe_acc_ !intM_intP) 
+                            (if (K_6:
+                                ((neq_int_ (integer_of_int32 (K_5:
+                                                             ((safe_acc_ !intM_intP) 
                                                               ((shift t) 
-                                                               (integer_of_int32 !k))))) (0))
+                                                               (integer_of_int32 !k)))))) (0)))
                             then
                              begin   (return := false); (raise Return) end
                             else void)
@@ -1000,13 +1004,14 @@ let AllZeros_all_zeros_ensures_default =
         void)
         with
         Loop_continue_exc jessie_3 ->
-        (let jessie_13 = (let jessie_1 = !k in
+        (let jessie_13 = (K_7:
+                         (let jessie_1 = !k in
                          begin
                            (let jessie_12 = (k := (safe_int32_of_integer_ 
                                                    ((add_int (integer_of_int32 jessie_1)) (1)))) in
                            void);
                           jessie_1
-                         end) in
+                         end)) in
         void) end
       done
       with
@@ -1033,7 +1038,7 @@ let AllZeros_all_zeros_safety =
   (let return = ref (any_bool void) in
   try
    begin
-     (let k = ref (safe_int32_of_integer_ (0)) in
+     (let k = ref (safe_int32_of_integer_ (K_2: (0))) in
      try
       while true do
       { invariant
@@ -1050,18 +1055,22 @@ let AllZeros_all_zeros_safety =
                          integer_of_int32(k))) }
        try
         (let jessie_6 = begin
-                          (if ((lt_int_ (integer_of_int32 !k)) (let jessie_4 = t in
+                          (if (K_9:
+                              ((lt_int_ (integer_of_int32 !k)) (K_8:
+                                                               (let jessie_4 = t in
                                                                (assert
                                                                { ge_int(
                                                                  offset_max(Object_alloc_table,
                                                                  jessie_4),
                                                                  (-1)) };
                                                                (JC_20:
-                                                               (java_array_length_intM jessie_4)))))
+                                                               (java_array_length_intM jessie_4)))))))
                           then
-                           (if ((neq_int_ (integer_of_int32 (JC_21:
+                           (if (K_6:
+                               ((neq_int_ (integer_of_int32 (K_5:
+                                                            (JC_21:
                                                             (((((lbound_acc_ !Object_alloc_table) !intM_intP) t) 
-                                                              (integer_of_int32 !k)) (0))))) (0))
+                                                              (integer_of_int32 !k)) (0)))))) (0)))
                            then begin   (return := false); (raise Return) end
                            else void)
                           else
@@ -1072,14 +1081,15 @@ let AllZeros_all_zeros_safety =
         void)
         with
         Loop_continue_exc jessie_3 ->
-        (let jessie_8 = (let jessie_1 = !k in
+        (let jessie_8 = (K_7:
+                        (let jessie_1 = !k in
                         begin
                           (let jessie_7 = (k := (JC_23:
                                                 (int32_of_integer_ ((add_int 
                                                                     (integer_of_int32 jessie_1)) (1))))) in
                           void);
                          jessie_1
-                        end) in
+                        end)) in
         void) end
       done
       with
@@ -1115,7 +1125,7 @@ why --project [...] why/AllZeros.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/AllZeros_po14.why">
-      <location file = "why/AllZeros.why" line = "510" begin = "65" end = "315"/>
+      <location file = "why/AllZeros.why" line = "517" begin = "65" end = "315"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/AllZeros_po15.why">
@@ -3836,7 +3846,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 result)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))
 
-;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 510, characters 65-315
+;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 517, characters 65-315
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

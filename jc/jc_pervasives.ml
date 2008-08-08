@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.117 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.118 2008-08-08 15:47:38 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -76,29 +76,6 @@ let operator_of_type = function
   | JCTlogic _ -> `Logic
   | JCTany | JCTtype_var _ -> assert false (* TODO? *)
   | JCTnull | JCTpointer _ -> `Pointer
-
-let label_var ?(label_in_name=true) ?label_assoc lab name =
-  let label =
-    match label_assoc with
-      | None -> lab 
-      | Some a ->
-	  try List.assoc lab a
-	  with Not_found -> lab
-  in			
-  if label_in_name then 
-    match label with
-      | LabelHere -> name
-      | LabelPre -> name ^ "_at_Pre"
-      | LabelOld -> assert false (* name ^ "_at_Old" *)
-      | LabelPost -> name ^ "_at_Post"
-      | LabelName l -> name ^ "_at_" ^ l.label_info_final_name
-  else
-    match label with (* hack ?? *)
-      | LabelHere -> name
-      | LabelPost -> name
-      | LabelPre -> name ^ "@init"
-      | LabelOld -> name ^ "@"
-      | LabelName l -> name ^ "@" ^ l.label_info_final_name
 
 let new_label_name =
   let label_name_counter = ref 0 in function () ->

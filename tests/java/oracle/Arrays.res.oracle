@@ -1405,8 +1405,10 @@ let Arrays_arrayShift_ensures_default =
   (init:
   try
    begin
-     (let j_0 = ref ((sub_int (let jessie_50 = t_2 in
-                              (JC_59: (java_array_length_intM jessie_50)))) (1)) in
+     (let j_0 = ref (K_29:
+                    ((sub_int (K_28:
+                              (let jessie_50 = t_2 in
+                              (JC_59: (java_array_length_intM jessie_50))))) (1))) in
      try
       while true do
       { invariant
@@ -1429,16 +1431,19 @@ let Arrays_arrayShift_ensures_default =
          }
        try
         (let jessie_57 = begin
-                           (if ((gt_int_ !j_0) (0))
+                           (if (K_36: ((gt_int_ !j_0) (0)))
                            then
-                            (let jessie_55 = (let jessie_51 = ((safe_acc_ !intM_intP) 
+                            (let jessie_55 = (K_34:
+                                             (let jessie_51 = (K_33:
+                                                              ((safe_acc_ !intM_intP) 
                                                                ((shift t_2) 
-                                                                ((sub_int !j_0) (1)))) in
+                                                                (K_32:
+                                                                ((sub_int !j_0) (1)))))) in
                                              (let jessie_54 = ((shift t_2) !j_0) in
                                              begin
                                                (((safe_upd_ intM_intP) jessie_54) jessie_51);
                                               jessie_51
-                                             end)) in
+                                             end))) in
                             void)
                            else
                             (let jessie_56 = (raise (Loop_exit_exc void)) in
@@ -1448,12 +1453,13 @@ let Arrays_arrayShift_ensures_default =
         void)
         with
         Loop_continue_exc jessie_9 ->
-        (let jessie_59 = (let jessie_7 = !j_0 in
+        (let jessie_59 = (K_35:
+                         (let jessie_7 = !j_0 in
                          begin
                            (let jessie_58 = (j_0 := ((sub_int jessie_7) (1))) in
                            void);
                           jessie_7
-                         end) in
+                         end)) in
         void) end
       done
       with
@@ -1477,12 +1483,14 @@ let Arrays_arrayShift_safety =
   (init:
   try
    begin
-     (let j_0 = ref ((sub_int (let jessie_39 = t_2 in
+     (let j_0 = ref (K_29:
+                    ((sub_int (K_28:
+                              (let jessie_39 = t_2 in
                               (assert
                               { ge_int(offset_max(Object_alloc_table,
                                        jessie_39),
                                 (-1)) };
-                              (JC_51: (java_array_length_intM jessie_39))))) (1)) in
+                              (JC_51: (java_array_length_intM jessie_39)))))) (1))) in
      try
       while true do
       { invariant
@@ -1505,11 +1513,14 @@ let Arrays_arrayShift_safety =
         variant (JC_57 : j_0) }
        try
         (let jessie_46 = begin
-                           (if ((gt_int_ !j_0) (0))
+                           (if (K_36: ((gt_int_ !j_0) (0)))
                            then
-                            (let jessie_44 = (let jessie_40 = (JC_55:
+                            (let jessie_44 = (K_34:
+                                             (let jessie_40 = (K_33:
+                                                              (JC_55:
                                                               (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_2) 
-                                                                ((sub_int !j_0) (1))) (0))) in
+                                                                (K_32:
+                                                                ((sub_int !j_0) (1)))) (0)))) in
                                              (let jessie_41 = t_2 in
                                              (let jessie_42 = !j_0 in
                                              (let jessie_43 = ((shift jessie_41) jessie_42) in
@@ -1517,7 +1528,7 @@ let Arrays_arrayShift_safety =
                                                (JC_56:
                                                ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_41) jessie_42) (0)) jessie_40));
                                               jessie_40
-                                             end)))) in
+                                             end))))) in
                             void)
                            else
                             (let jessie_45 = (raise (Loop_exit_exc void)) in
@@ -1527,12 +1538,13 @@ let Arrays_arrayShift_safety =
         void)
         with
         Loop_continue_exc jessie_9 ->
-        (let jessie_48 = (let jessie_7 = !j_0 in
+        (let jessie_48 = (K_35:
+                         (let jessie_7 = !j_0 in
                          begin
                            (let jessie_47 = (j_0 := ((sub_int jessie_7) (1))) in
                            void);
                           jessie_7
-                         end) in
+                         end)) in
         void) end
       done
       with
@@ -1554,10 +1566,10 @@ let Arrays_findMax2_ensures_max_found =
   (let return = ref (any_int void) in
   try
    begin
-     (let m = ref ((safe_acc_ !intM_intP) ((shift t_1) (0))) in
-     (let r = ref (0) in
+     (let m = ref (K_25: ((safe_acc_ !intM_intP) ((shift t_1) (0)))) in
+     (let r = ref (K_24: (0)) in
      begin
-       (let i_3 = ref (1) in
+       (let i_3 = ref (K_15: (1)) in
        try
         while true do
         { invariant
@@ -1574,17 +1586,22 @@ let Arrays_findMax2_ensures_max_found =
            }
          try
           (let jessie_35 = begin
-                             (if ((lt_int_ !i_3) (let jessie_31 = t_1 in
+                             (if (K_23:
+                                 ((lt_int_ !i_3) (K_22:
+                                                 (let jessie_31 = t_1 in
                                                  (JC_45:
-                                                 (java_array_length_intM jessie_31))))
+                                                 (java_array_length_intM jessie_31))))))
                              then
-                              (if ((gt_int_ ((safe_acc_ !intM_intP) ((shift t_1) !i_3))) !m)
+                              (if (K_20:
+                                  ((gt_int_ (K_19:
+                                            ((safe_acc_ !intM_intP) ((shift t_1) !i_3)))) !m))
                               then
                                (let jessie_33 = begin
                                                   (let jessie_32 = (r := !i_3) in
                                                   void);
-                                                 (m := ((safe_acc_ !intM_intP) 
-                                                        ((shift t_1) !i_3)));
+                                                 (m := (K_18:
+                                                       ((safe_acc_ !intM_intP) 
+                                                        ((shift t_1) !i_3))));
                                                  !m
                                                 end in
                                void)
@@ -1597,12 +1614,13 @@ let Arrays_findMax2_ensures_max_found =
           void)
           with
           Loop_continue_exc jessie_6 ->
-          (let jessie_37 = (let jessie_4 = !i_3 in
+          (let jessie_37 = (K_21:
+                           (let jessie_4 = !i_3 in
                            begin
                              (let jessie_36 = (i_3 := ((add_int jessie_4) (1))) in
                              void);
                             jessie_4
-                           end) in
+                           end)) in
           void) end
         done
         with
@@ -1631,11 +1649,12 @@ let Arrays_findMax2_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (let m = ref (JC_35:
-                  ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) t_1) (0))) in
-     (let r = ref (0) in
+     (let m = ref (K_25:
+                  (JC_35:
+                  ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) t_1) (0)))) in
+     (let r = ref (K_24: (0)) in
      begin
-       (let i_3 = ref (1) in
+       (let i_3 = ref (K_15: (1)) in
        try
         while true do
         { invariant
@@ -1655,22 +1674,27 @@ let Arrays_findMax2_safety =
                            i_3)) }
          try
           (let jessie_28 = begin
-                             (if ((lt_int_ !i_3) (let jessie_24 = t_1 in
+                             (if (K_23:
+                                 ((lt_int_ !i_3) (K_22:
+                                                 (let jessie_24 = t_1 in
                                                  (assert
                                                  { ge_int(offset_max(Object_alloc_table,
                                                           jessie_24),
                                                    (-1)) };
                                                  (JC_38:
-                                                 (java_array_length_intM jessie_24)))))
+                                                 (java_array_length_intM jessie_24)))))))
                              then
-                              (if ((gt_int_ (JC_39:
-                                            (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_1) !i_3) (0)))) !m)
+                              (if (K_20:
+                                  ((gt_int_ (K_19:
+                                            (JC_39:
+                                            (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_1) !i_3) (0))))) !m))
                               then
                                (let jessie_26 = begin
                                                   (let jessie_25 = (r := !i_3) in
                                                   void);
-                                                 (m := (JC_41:
-                                                       (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_1) !i_3) (0))));
+                                                 (m := (K_18:
+                                                       (JC_41:
+                                                       (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_1) !i_3) (0)))));
                                                  !m
                                                 end in
                                void)
@@ -1683,12 +1707,13 @@ let Arrays_findMax2_safety =
           void)
           with
           Loop_continue_exc jessie_6 ->
-          (let jessie_30 = (let jessie_4 = !i_3 in
+          (let jessie_30 = (K_21:
+                           (let jessie_4 = !i_3 in
                            begin
                              (let jessie_29 = (i_3 := ((add_int jessie_4) (1))) in
                              void);
                             jessie_4
-                           end) in
+                           end)) in
           void) end
         done
         with
@@ -1715,10 +1740,10 @@ let Arrays_findMax_ensures_max_found =
   (let return = ref (any_int void) in
   try
    begin
-     (let m_0 = ref ((safe_acc_ !intM_intP) ((shift t_0) (0))) in
-     (let r_0 = ref (0) in
+     (let m_0 = ref (K_12: ((safe_acc_ !intM_intP) ((shift t_0) (0)))) in
+     (let r_0 = ref (K_11: (0)) in
      begin
-       (let i_5 = ref (1) in
+       (let i_5 = ref (K_2: (1)) in
        try
         while true do
         { invariant
@@ -1737,17 +1762,22 @@ let Arrays_findMax_ensures_max_found =
            }
          try
           (let jessie_21 = begin
-                             (if ((lt_int_ !i_5) (let jessie_17 = t_0 in
+                             (if (K_10:
+                                 ((lt_int_ !i_5) (K_9:
+                                                 (let jessie_17 = t_0 in
                                                  (JC_29:
-                                                 (java_array_length_intM jessie_17))))
+                                                 (java_array_length_intM jessie_17))))))
                              then
-                              (if ((gt_int_ ((safe_acc_ !intM_intP) ((shift t_0) !i_5))) !m_0)
+                              (if (K_7:
+                                  ((gt_int_ (K_6:
+                                            ((safe_acc_ !intM_intP) ((shift t_0) !i_5)))) !m_0))
                               then
                                (let jessie_19 = begin
                                                   (let jessie_18 = (r_0 := !i_5) in
                                                   void);
-                                                 (m_0 := ((safe_acc_ !intM_intP) 
-                                                          ((shift t_0) !i_5)));
+                                                 (m_0 := (K_5:
+                                                         ((safe_acc_ !intM_intP) 
+                                                          ((shift t_0) !i_5))));
                                                  !m_0
                                                 end in
                                void)
@@ -1760,12 +1790,13 @@ let Arrays_findMax_ensures_max_found =
           void)
           with
           Loop_continue_exc jessie_3 ->
-          (let jessie_23 = (let jessie_1 = !i_5 in
+          (let jessie_23 = (K_8:
+                           (let jessie_1 = !i_5 in
                            begin
                              (let jessie_22 = (i_5 := ((add_int jessie_1) (1))) in
                              void);
                             jessie_1
-                           end) in
+                           end)) in
           void) end
         done
         with
@@ -1800,11 +1831,12 @@ let Arrays_findMax_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (let m_0 = ref (JC_19:
-                    ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) t_0) (0))) in
-     (let r_0 = ref (0) in
+     (let m_0 = ref (K_12:
+                    (JC_19:
+                    ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) t_0) (0)))) in
+     (let r_0 = ref (K_11: (0)) in
      begin
-       (let i_5 = ref (1) in
+       (let i_5 = ref (K_2: (1)) in
        try
         while true do
         { invariant
@@ -1826,22 +1858,27 @@ let Arrays_findMax_safety =
                            i_5)) }
          try
           (let jessie_14 = begin
-                             (if ((lt_int_ !i_5) (let jessie_10 = t_0 in
+                             (if (K_10:
+                                 ((lt_int_ !i_5) (K_9:
+                                                 (let jessie_10 = t_0 in
                                                  (assert
                                                  { ge_int(offset_max(Object_alloc_table,
                                                           jessie_10),
                                                    (-1)) };
                                                  (JC_22:
-                                                 (java_array_length_intM jessie_10)))))
+                                                 (java_array_length_intM jessie_10)))))))
                              then
-                              (if ((gt_int_ (JC_23:
-                                            (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_0) !i_5) (0)))) !m_0)
+                              (if (K_7:
+                                  ((gt_int_ (K_6:
+                                            (JC_23:
+                                            (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_0) !i_5) (0))))) !m_0))
                               then
                                (let jessie_12 = begin
                                                   (let jessie_11 = (r_0 := !i_5) in
                                                   void);
-                                                 (m_0 := (JC_25:
-                                                         (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_0) !i_5) (0))));
+                                                 (m_0 := (K_5:
+                                                         (JC_25:
+                                                         (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_0) !i_5) (0)))));
                                                  !m_0
                                                 end in
                                void)
@@ -1854,12 +1891,13 @@ let Arrays_findMax_safety =
           void)
           with
           Loop_continue_exc jessie_3 ->
-          (let jessie_16 = (let jessie_1 = !i_5 in
+          (let jessie_16 = (K_8:
+                           (let jessie_1 = !i_5 in
                            begin
                              (let jessie_15 = (i_5 := ((add_int jessie_1) (1))) in
                              void);
                             jessie_1
-                           end) in
+                           end)) in
           void) end
         done
         with
@@ -1913,7 +1951,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po51.why">
-      <location file = "why/Arrays.why" line = "523" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "544" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po52.why">
@@ -2111,7 +2149,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po98.why">
-      <location file = "why/Arrays.why" line = "694" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "728" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po99.why">
@@ -2280,7 +2318,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po9.why">
-      <location file = "why/Arrays.why" line = "345" begin = "32" end = "158"/>
+      <location file = "why/Arrays.why" line = "353" begin = "32" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po10.why">
@@ -7843,7 +7881,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP0 (shift t_2 i_0))
 (select intM_intP (shift t_2 (- i_0 1))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 345, characters 32-158
+;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 353, characters 32-158
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM Object_alloc_table t_2)
@@ -8839,7 +8877,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (is_max intM_intP Object_alloc_table t_1 0 1))))))))
 
-;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 523, characters 51-215
+;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 544, characters 51-215
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10150,7 +10188,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 j_1) (< j_1 1))
 (<= (select intM_intP (shift t_0 j_1)) result))))))))))
 
-;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 694, characters 51-215
+;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 728, characters 51-215
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
