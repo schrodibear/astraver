@@ -1259,7 +1259,7 @@ let BinarySearch_binary_search_ensures_correctness =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let l = ref (safe_int32_of_integer_ (K_17: (0))) in
+     (let l = ref (safe_int32_of_integer_ (0)) in
      (let u = ref (safe_int32_of_integer_ ((sub_int (let jessie_10 = t_0 in
                                                     (JC_40:
                                                     (java_array_length_intM jessie_10)))) (1))) in
@@ -1284,8 +1284,7 @@ let BinarySearch_binary_search_ensures_correctness =
            }
          try
           (let jessie_14 = begin
-                             (if (K_13:
-                                 ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
+                             (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
                              then
                               (let m = (safe_int32_of_integer_ ((add_int 
                                                                  (integer_of_int32 !l)) 
@@ -1298,21 +1297,19 @@ let BinarySearch_binary_search_ensures_correctness =
                                                                     ((sub_int 
                                                                     (integer_of_int32 !u)) 
                                                                     (integer_of_int32 !l))))) (2))))))) in
-                              (if (K_9:
-                                  ((lt_int_ (integer_of_int32 ((safe_acc_ !intM_intP) 
+                              (if ((lt_int_ (integer_of_int32 ((safe_acc_ !intM_intP) 
                                                                ((shift t_0) 
                                                                 (integer_of_int32 m))))) 
-                                   (integer_of_int32 v)))
+                                   (integer_of_int32 v))
                               then
                                (let jessie_11 = (l := (safe_int32_of_integer_ 
                                                        ((add_int (integer_of_int32 m)) (1)))) in
                                void)
                               else
-                               (if (K_6:
-                                   ((gt_int_ (integer_of_int32 ((safe_acc_ !intM_intP) 
+                               (if ((gt_int_ (integer_of_int32 ((safe_acc_ !intM_intP) 
                                                                 ((shift t_0) 
                                                                  (integer_of_int32 m))))) 
-                                    (integer_of_int32 v)))
+                                    (integer_of_int32 v))
                                then
                                 (let jessie_12 = (u := (safe_int32_of_integer_ 
                                                         ((sub_int (integer_of_int32 m)) (1)))) in
@@ -1368,7 +1365,7 @@ let BinarySearch_binary_search_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let l = ref (safe_int32_of_integer_ (K_17: (0))) in
+     (let l = ref (safe_int32_of_integer_ (0)) in
      (let u = ref (JC_21:
                   (int32_of_integer_ ((sub_int (let jessie_4 = t_0 in
                                                (assert
@@ -1398,8 +1395,7 @@ let BinarySearch_binary_search_safety =
           variant (JC_38 : sub_int(integer_of_int32(u), integer_of_int32(l))) }
          try
           (let jessie_8 = begin
-                            (if (K_13:
-                                ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
+                            (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
                             then
                              (let m = (JC_31:
                                       (int32_of_integer_ ((add_int (integer_of_int32 !l)) 
@@ -1414,22 +1410,20 @@ let BinarySearch_binary_search_safety =
                                                                 ((sub_int 
                                                                   (integer_of_int32 !u)) 
                                                                  (integer_of_int32 !l)))))) (2))))))))) in
-                             (if (K_9:
-                                 ((lt_int_ (integer_of_int32 (JC_32:
+                             (if ((lt_int_ (integer_of_int32 (JC_32:
                                                              (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_0) 
                                                                (integer_of_int32 m)) (0))))) 
-                                  (integer_of_int32 v)))
+                                  (integer_of_int32 v))
                              then
                               (let jessie_5 = (l := (JC_34:
                                                     (int32_of_integer_ 
                                                      ((add_int (integer_of_int32 m)) (1))))) in
                               void)
                              else
-                              (if (K_6:
-                                  ((gt_int_ (integer_of_int32 (JC_35:
+                              (if ((gt_int_ (integer_of_int32 (JC_35:
                                                               (((((lbound_acc_ !Object_alloc_table) !intM_intP) t_0) 
                                                                 (integer_of_int32 m)) (0))))) 
-                                   (integer_of_int32 v)))
+                                   (integer_of_int32 v))
                               then
                                (let jessie_6 = (u := (JC_37:
                                                      (int32_of_integer_ 
@@ -1478,7 +1472,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "why/BinarySearch.why" line = "593" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "590" begin = "49" end = "208"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
@@ -6583,7 +6577,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
 (integer_of_int32 v)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 593, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 590, characters 49-208
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

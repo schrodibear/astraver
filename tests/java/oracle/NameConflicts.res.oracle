@@ -814,7 +814,7 @@ let NameConflicts_m_ensures_normal =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let result_0 = (safe_int32_of_integer_ (K_3: (0))) in
+     (let result_0 = (safe_int32_of_integer_ (0)) in
      begin   (return := (safe_int32_of_integer_ (0))); (raise Return) end);
     absurd 
    end
@@ -830,7 +830,7 @@ let NameConflicts_m_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let result_0 = (safe_int32_of_integer_ (K_3: (0))) in
+     (let result_0 = (safe_int32_of_integer_ (0)) in
      begin   (return := (safe_int32_of_integer_ (0))); (raise Return) end);
     absurd 
    end
@@ -845,13 +845,12 @@ let NameConflicts_setI_safety =
   (init:
   try
    begin
-     (let jessie_5 = (K_1:
-                     (let jessie_1 = i in
+     (let jessie_5 = (let jessie_1 = i in
                      (let jessie_4 = this_2 in
                      begin
                        (((safe_upd_ NameConflicts_i) jessie_4) jessie_1);
                       jessie_1
-                     end))) in
+                     end)) in
      void);
     (raise Return)
    end

@@ -1096,10 +1096,10 @@ let Gcd_gcd_ensures_bezoutProperty =
   (let return = ref (any_int void) in
   try
    begin
-     (let a_3 = ref (K_17: (1)) in
-     (let b_2 = ref (K_16: (0)) in
-     (let c = ref (K_15: (0)) in
-     (let d_1 = ref (K_14: (1)) in
+     (let a_3 = ref (1) in
+     (let b_2 = ref (0) in
+     (let c = ref (0) in
+     (let d_1 = ref (1) in
      begin
        try
         while true do
@@ -1119,7 +1119,7 @@ let Gcd_gcd_ensures_bezoutProperty =
            }
          try
           (let jessie_26 = begin
-                             (if (K_13: ((gt_int_ !mutable_y_8) (0)))
+                             (if ((gt_int_ !mutable_y_8) (0))
                              then
                               (let jessie_24 = (let r = (JC_26:
                                                         ((mod_int_ !mutable_x_8) !mutable_y_8)) in
@@ -1130,23 +1130,19 @@ let Gcd_gcd_ensures_bezoutProperty =
                                                  void);
                                                 (let jessie_20 = (mutable_y_8 := r) in
                                                 void);
-                                                (let ta = (K_10: !a_3) in
-                                                (let tb = (K_9: !b_2) in
+                                                (let ta = !a_3 in
+                                                (let tb = !b_2 in
                                                 begin
                                                   (let jessie_21 = (a_3 := !c) in
                                                   void);
                                                  (let jessie_22 = (b_2 := !d_1) in
                                                  void);
                                                  (let jessie_23 = (c := 
-                                                                   (K_6:
                                                                    ((sub_int ta) 
-                                                                    (K_5:
-                                                                    ((mul_int !c) q_1))))) in
+                                                                    ((mul_int !c) q_1))) in
                                                  void);
-                                                 (d_1 := (K_8:
-                                                         ((sub_int tb) 
-                                                          (K_7:
-                                                          ((mul_int !d_1) q_1)))));
+                                                 (d_1 := ((sub_int tb) 
+                                                          ((mul_int !d_1) q_1)));
                                                  !d_1
                                                 end))
                                                end)) in
@@ -1186,10 +1182,10 @@ let Gcd_gcd_ensures_resultIsGcd =
   (let return = ref (any_int void) in
   try
    begin
-     (let a_3 = ref (K_17: (1)) in
-     (let b_2 = ref (K_16: (0)) in
-     (let c = ref (K_15: (0)) in
-     (let d_1 = ref (K_14: (1)) in
+     (let a_3 = ref (1) in
+     (let b_2 = ref (0) in
+     (let c = ref (0) in
+     (let d_1 = ref (1) in
      begin
        try
         while true do
@@ -1209,7 +1205,7 @@ let Gcd_gcd_ensures_resultIsGcd =
            }
          try
           (let jessie_18 = begin
-                             (if (K_13: ((gt_int_ !mutable_y_8) (0)))
+                             (if ((gt_int_ !mutable_y_8) (0))
                              then
                               (let jessie_16 = (let r = (JC_20:
                                                         ((mod_int_ !mutable_x_8) !mutable_y_8)) in
@@ -1220,23 +1216,19 @@ let Gcd_gcd_ensures_resultIsGcd =
                                                  void);
                                                 (let jessie_12 = (mutable_y_8 := r) in
                                                 void);
-                                                (let ta = (K_10: !a_3) in
-                                                (let tb = (K_9: !b_2) in
+                                                (let ta = !a_3 in
+                                                (let tb = !b_2 in
                                                 begin
                                                   (let jessie_13 = (a_3 := !c) in
                                                   void);
                                                  (let jessie_14 = (b_2 := !d_1) in
                                                  void);
                                                  (let jessie_15 = (c := 
-                                                                   (K_6:
                                                                    ((sub_int ta) 
-                                                                    (K_5:
-                                                                    ((mul_int !c) q_1))))) in
+                                                                    ((mul_int !c) q_1))) in
                                                  void);
-                                                 (d_1 := (K_8:
-                                                         ((sub_int tb) 
-                                                          (K_7:
-                                                          ((mul_int !d_1) q_1)))));
+                                                 (d_1 := ((sub_int tb) 
+                                                          ((mul_int !d_1) q_1)));
                                                  !d_1
                                                 end))
                                                end)) in
@@ -1273,10 +1265,10 @@ let Gcd_gcd_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (let a_3 = ref (K_17: (1)) in
-     (let b_2 = ref (K_16: (0)) in
-     (let c = ref (K_15: (0)) in
-     (let d_1 = ref (K_14: (1)) in
+     (let a_3 = ref (1) in
+     (let b_2 = ref (0) in
+     (let c = ref (0) in
+     (let d_1 = ref (1) in
      begin
        try
         while true do
@@ -1296,7 +1288,7 @@ let Gcd_gcd_safety =
           variant (JC_16 : mutable_y_8) }
          try
           (let jessie_10 = begin
-                             (if (K_13: ((gt_int_ !mutable_y_8) (0)))
+                             (if ((gt_int_ !mutable_y_8) (0))
                              then
                               (let jessie_8 = (let r = (JC_13:
                                                        ((mod_int_ !mutable_x_8) !mutable_y_8)) in
@@ -1307,23 +1299,19 @@ let Gcd_gcd_safety =
                                                 void);
                                                (let jessie_4 = (mutable_y_8 := r) in
                                                void);
-                                               (let ta = (K_10: !a_3) in
-                                               (let tb = (K_9: !b_2) in
+                                               (let ta = !a_3 in
+                                               (let tb = !b_2 in
                                                begin
                                                  (let jessie_5 = (a_3 := !c) in
                                                  void);
                                                 (let jessie_6 = (b_2 := !d_1) in
                                                 void);
                                                 (let jessie_7 = (c := 
-                                                                 (K_6:
                                                                  ((sub_int ta) 
-                                                                  (K_5:
-                                                                  ((mul_int !c) q_1))))) in
+                                                                  ((mul_int !c) q_1))) in
                                                 void);
-                                                (d_1 := (K_8:
-                                                        ((sub_int tb) 
-                                                         (K_7:
-                                                         ((mul_int !d_1) q_1)))));
+                                                (d_1 := ((sub_int tb) 
+                                                         ((mul_int !d_1) q_1)));
                                                 !d_1
                                                end))
                                               end)) in

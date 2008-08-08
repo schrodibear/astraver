@@ -158,13 +158,13 @@ let pattern_list_term translate_body arg ty pbl default =
   List.fold_left
     (fun (accbody, acclets) (pat, body) ->
        let _, cond, vars = PatternTerm.pattern arg ty pat in
-       let body, lets1 = translate_body body in
+       let body = translate_body body in
        let body = make_if_term cond body accbody in
-       let lets2 = List.map
+       let lets = List.map
 	 (fun (n, ty) -> JCforall(n, tr_base_type ty))
 	 vars
        in
-       body, lets1@lets2)
+       body, lets)
     (default, [])
     (List.rev pbl)
 

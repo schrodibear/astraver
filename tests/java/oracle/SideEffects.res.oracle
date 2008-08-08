@@ -751,86 +751,74 @@ let SideEffects_m1_safety =
   (init:
   try
    begin
-     (let i = ref (K_17: (0)) in
+     (let i = ref (0) in
      begin
-       (K_2:
        (let jessie_8 = (let jessie_3 = (1) in
                        (let jessie_4 = t in
-                       (let jessie_5 = (K_1:
-                                       (let jessie_1 = !i in
+                       (let jessie_5 = (let jessie_1 = !i in
                                        begin
                                          (let jessie_7 = (i := ((add_int jessie_1) (1))) in
                                          void);
                                         jessie_1
-                                       end)) in
+                                       end) in
                        (let jessie_6 = ((shift jessie_4) jessie_5) in
                        (JC_17:
                        ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_4) jessie_5) (0)) jessie_3)))))) in
-       void));
-      (K_4:
+       void);
       (assert
       { (JC_18:
         (eq_int(select(intM_intP, shift(t, (0))), (1)) and eq_int(i, (1)))) };
-      void));
-      (K_6:
+      void);
       (let jessie_13 = (let jessie_9 = (2) in
                        (let jessie_10 = t in
-                       (let jessie_11 = (K_5:
-                                        begin
+                       (let jessie_11 = begin
                                           (i := ((add_int !i) (1))); !i
-                                        end) in
+                                        end in
                        (let jessie_12 = ((shift jessie_10) jessie_11) in
                        (JC_19:
                        ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_10) jessie_11) (0)) jessie_9)))))) in
-      void));
-      (K_8:
+      void);
       (assert
       { (JC_20:
         (eq_int(select(intM_intP, shift(t, (0))), (1))
         and (eq_int(select(intM_intP, shift(t, (2))), (2))
             and eq_int(i, (2))))) };
-      void));
-      (K_10:
+      void);
       (let jessie_18 = (let jessie_14 = (3) in
                        (let jessie_15 = t in
-                       (let jessie_16 = (K_9:
-                                        begin
+                       (let jessie_16 = begin
                                           (i := ((sub_int !i) (1))); !i
-                                        end) in
+                                        end in
                        (let jessie_17 = ((shift jessie_15) jessie_16) in
                        (JC_21:
                        ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_15) jessie_16) (0)) jessie_14)))))) in
-      void));
-      (K_12:
+      void);
       (assert
       { (JC_22:
         (eq_int(select(intM_intP, shift(t, (0))), (1))
         and (eq_int(select(intM_intP, shift(t, (2))), (2))
             and (eq_int(select(intM_intP, shift(t, (1))), (3))
                 and eq_int(i, (1)))))) };
-      void));
-      (K_14:
+      void);
       (let jessie_24 = (let jessie_19 = (4) in
                        (let jessie_20 = t in
-                       (let jessie_21 = (K_13:
-                                        (let jessie_2 = !i in
+                       (let jessie_21 = (let jessie_2 = !i in
                                         begin
                                           (let jessie_23 = (i := ((sub_int jessie_2) (1))) in
                                           void);
                                          jessie_2
-                                        end)) in
+                                        end) in
                        (let jessie_22 = ((shift jessie_20) jessie_21) in
                        (JC_23:
                        ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_20) jessie_21) (0)) jessie_19)))))) in
-      void));
-      (K_16:
+      void);
       (assert
       { (JC_24:
         (eq_int(select(intM_intP, shift(t, (0))), (1))
         and (eq_int(select(intM_intP, shift(t, (2))), (2))
             and (eq_int(select(intM_intP, shift(t, (1))), (4))
                 and eq_int(i, (0)))))) };
-      void))
+      void)
      end);
     (raise Return)
    end

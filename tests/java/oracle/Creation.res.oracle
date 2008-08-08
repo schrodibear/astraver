@@ -1755,12 +1755,11 @@ let Creation_test1_ensures_normal =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let t_1 = (K_10:
-                (let this = (JC_47:
+     (let t_1 = (let this = (JC_47:
                             ((alloc_Creation (1)) Object_alloc_table)) in
                 (let tt = (JC_49:
                           ((cons_Creation_int this) (safe_int32_of_integer_ (17)))) in
-                this))) in
+                this)) in
      begin
        (return := ((safe_acc_ !Creation_simple_val) t_1)); (raise Return)
      end);
@@ -1778,8 +1777,7 @@ let Creation_test1_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let t_1 = (K_10:
-                (let this = (let jessie_19 = (JC_36:
+     (let t_1 = (let this = (let jessie_19 = (JC_36:
                                              ((alloc_Creation (1)) Object_alloc_table)) in
                             (JC_37:
                             (assert
@@ -1789,7 +1787,7 @@ let Creation_test1_safety =
                             jessie_19))) in
                 (let tt = (JC_39:
                           ((cons_Creation_int this) (safe_int32_of_integer_ (17)))) in
-                this))) in
+                this)) in
      begin
        (return := (JC_41:
                   ((((lsafe_lbound_acc_ !Object_alloc_table) !Creation_simple_val) t_1) (0))));
@@ -1809,10 +1807,9 @@ let Creation_test2_ensures_normal =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let t_0 = (K_13:
-                (let this_3 = (JC_69:
+     (let t_0 = (let this_3 = (JC_69:
                               ((alloc_Creation (1)) Object_alloc_table)) in
-                (let tt_0 = (JC_71: (cons_Creation this_3)) in this_3))) in
+                (let tt_0 = (JC_71: (cons_Creation this_3)) in this_3)) in
      begin
        (return := ((safe_acc_ !Creation_simple_val) t_0)); (raise Return)
      end);
@@ -1830,8 +1827,7 @@ let Creation_test2_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let t_0 = (K_13:
-                (let this_3 = (let jessie_33 = (JC_58:
+     (let t_0 = (let this_3 = (let jessie_33 = (JC_58:
                                                ((alloc_Creation (1)) Object_alloc_table)) in
                               (JC_59:
                               (assert
@@ -1839,7 +1835,7 @@ let Creation_test2_safety =
                                        jessie_33),
                                 (0)) };
                               jessie_33))) in
-                (let tt_0 = (JC_61: (cons_Creation this_3)) in this_3))) in
+                (let tt_0 = (JC_61: (cons_Creation this_3)) in this_3)) in
      begin
        (return := (JC_63:
                   ((((lsafe_lbound_acc_ !Object_alloc_table) !Creation_simple_val) t_0) (0))));
@@ -1859,13 +1855,12 @@ let Creation_test3_ensures_normal =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let t = (K_16:
-              (let this_5 = (JC_93:
+     (let t = (let this_5 = (JC_93:
                             ((alloc_Creation (1)) Object_alloc_table)) in
               (let tt_1 = (JC_95:
                           (((cons_Creation_int_int this_5) (safe_int32_of_integer_ (10))) 
                            (safe_int32_of_integer_ (7)))) in
-              this_5))) in
+              this_5)) in
      begin
        (return := ((safe_acc_ !Creation_simple_val) t)); (raise Return)
      end);
@@ -1887,8 +1882,7 @@ let Creation_test3_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let t = (K_16:
-              (let this_5 = (let jessie_47 = (JC_82:
+     (let t = (let this_5 = (let jessie_47 = (JC_82:
                                              ((alloc_Creation (1)) Object_alloc_table)) in
                             (JC_83:
                             (assert
@@ -1899,7 +1893,7 @@ let Creation_test3_safety =
               (let tt_1 = (JC_85:
                           (((cons_Creation_int_int this_5) (safe_int32_of_integer_ (10))) 
                            (safe_int32_of_integer_ (7)))) in
-              this_5))) in
+              this_5)) in
      begin
        (return := (JC_87:
                   ((((lsafe_lbound_acc_ !Object_alloc_table) !Creation_simple_val) t) (0))));
@@ -1937,13 +1931,12 @@ let cons_Creation_int_ensures_normal =
   (init:
   try
    begin
-     (let jessie_10 = (K_1:
-                      (let jessie_6 = n_1 in
+     (let jessie_10 = (let jessie_6 = n_1 in
                       (let jessie_9 = this_1 in
                       begin
                         (((safe_upd_ Creation_simple_val) jessie_9) jessie_6);
                        jessie_6
-                      end))) in
+                      end)) in
      void);
     (raise Return)
    end
@@ -2003,13 +1996,12 @@ let cons_Creation_int_safety =
   (init:
   try
    begin
-     (let jessie_5 = (K_1:
-                     (let jessie_1 = n_1 in
+     (let jessie_5 = (let jessie_1 = n_1 in
                      (let jessie_4 = this_1 in
                      begin
                        (((safe_upd_ Creation_simple_val) jessie_4) jessie_1);
                       jessie_1
-                     end))) in
+                     end)) in
      void);
     (raise Return)
    end
@@ -2079,7 +2071,7 @@ why --project [...] why/Creation.why
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po15.why">
-      <location file = "why/Creation.why" line = "600" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "594" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po16.why">
@@ -2113,7 +2105,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po9.why">
-      <location file = "why/Creation.why" line = "543" begin = "32" end = "157"/>
+      <location file = "why/Creation.why" line = "539" begin = "32" end = "157"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po10.why">
@@ -2143,7 +2135,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po4.why">
-      <location file = "why/Creation.why" line = "491" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "489" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po5.why">
@@ -4428,7 +4420,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test1_safety_po_1, File "HOME/tests/java/Creation.jc", line 77, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test1_safety_po_2, File "why/Creation.why", line 491, characters 30-151
+;; Creation_test1_safety_po_2, File "why/Creation.why", line 489, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -4496,7 +4488,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 97, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 543, characters 32-157
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 539, characters 32-157
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -4597,7 +4589,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 ;; Creation_test3_safety_po_1, File "HOME/tests/java/Creation.jc", line 117, characters 57-72
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test3_safety_po_2, File "why/Creation.why", line 600, characters 30-151
+;; Creation_test3_safety_po_2, File "why/Creation.why", line 594, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)

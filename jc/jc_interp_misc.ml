@@ -181,7 +181,8 @@ let safety_checking () = get_current_behavior () = "safety"
 let current_spec : fun_spec option ref = ref None
 let set_current_spec s = current_spec := Some s
 let reset_current_spec () = current_spec := None
-let get_current_spec () = !current_spec
+let get_current_spec () = 
+  match !current_spec with None -> assert false | Some s -> s
 
 let mutable_memory infunction (mc,r) =
   if Region.polymorphic r then
@@ -540,14 +541,6 @@ let const_of_num n = LConst(Prim_int(Num.string_of_num n))
 type forall_or_let =
   | JCforall of string * Output.logic_type
   | JClet of string * Output.term
-
-let make_pred_binds binds body =
-  List.fold_left
-    (fun body bind ->
-       match bind with
-	 | JCforall(id, ty) -> LForall(id, ty, body)
-	 | JClet(id, value) -> LLet(id, value, body))
-    body (List.rev binds)
 
 let const c =
   match c with

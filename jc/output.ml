@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.35 2008-08-06 15:17:04 moy Exp $ i*)
+(*i $Id: output.ml,v 1.36 2008-08-08 13:46:07 moy Exp $ i*)
 
 open Lexing
 open Format
@@ -246,7 +246,8 @@ let rec fprintf_assertion form a =
       fprintf form "@[%s(%a" id fprintf_term t;
       List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
       fprintf form ")@]"
-  | LPred (id, []) -> assert false
+  | LPred (id, []) -> 
+      fprintf form "%s" id
   | LNamed (n, a) ->
       fprintf form "@[(%s:@ %a)@]" n fprintf_assertion a
 ;;
