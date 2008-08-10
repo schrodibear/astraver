@@ -567,12 +567,12 @@ exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
-predicate Non_null_Object(Object_alloc_table:Object alloc_table,
- x_0:Object pointer) =
+predicate Non_null_Object(x_0:Object pointer,
+ Object_alloc_table:Object alloc_table) =
  eq_int(offset_max(Object_alloc_table, x_0), (0))
 
-predicate Non_null_intM(Object_alloc_table:Object alloc_table,
- x:Object pointer) =
+predicate Non_null_intM(x:Object pointer,
+ Object_alloc_table:Object alloc_table) =
  ge_int(offset_max(Object_alloc_table, x), neg_int((1)))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
@@ -805,7 +805,7 @@ parameter intM_intP : (Object, int32) memory ref
 
 parameter AllZeros_all_zeros :
  t:Object pointer ->
-  { (JC_14: Non_null_intM(Object_alloc_table, t))} bool
+  { (JC_14: Non_null_intM(t, Object_alloc_table))} bool
   reads Object_alloc_table,intM_intP
   { (JC_17:
     ((result = true)
@@ -962,7 +962,7 @@ parameter short_of_integer_ :
 
 let AllZeros_all_zeros_ensures_default =
  fun (t : Object pointer) ->
-  { (JC_14: Non_null_intM(Object_alloc_table, t)) }
+  { (JC_14: Non_null_intM(t, Object_alloc_table)) }
   (init:
   (let return = ref (any_bool void) in
   try
@@ -1033,7 +1033,7 @@ let AllZeros_all_zeros_ensures_default =
 
 let AllZeros_all_zeros_safety =
  fun (t : Object pointer) ->
-  { (JC_14: Non_null_intM(Object_alloc_table, t)) }
+  { (JC_14: Non_null_intM(t, Object_alloc_table)) }
   (init:
   (let return = ref (any_bool void) in
   try
@@ -2047,11 +2047,13 @@ logic Object_tag :  -> Object tag_id
 
 axiom AllZeros_parenttag_Object: parenttag(AllZeros_tag, Object_tag)
 
-predicate Non_null_Object(Object_alloc_table: Object alloc_table,
-  x_0: Object pointer) = (offset_max(Object_alloc_table, x_0) = 0)
+predicate Non_null_Object(x_0: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x_0) = 0)
 
-predicate Non_null_intM(Object_alloc_table: Object alloc_table,
-  x: Object pointer) = (offset_max(Object_alloc_table, x) >= (-1))
+predicate Non_null_intM(x: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) >= (-1))
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -2256,7 +2258,7 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
 goal AllZeros_all_zeros_ensures_default_po_1:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   ("JC_25": (0 <= integer_of_int32(result)))
@@ -2267,7 +2269,7 @@ goal AllZeros_all_zeros_ensures_default_po_10:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2294,7 +2296,7 @@ goal AllZeros_all_zeros_ensures_default_po_10:
 goal AllZeros_all_zeros_safety_po_1:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   ("JC_18": (0 <= integer_of_int32(result)))
@@ -2303,7 +2305,7 @@ goal AllZeros_all_zeros_safety_po_1:
 goal AllZeros_all_zeros_safety_po_2:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   ("JC_18": (integer_of_int32(result) <= (offset_max(Object_alloc_table,
@@ -2315,7 +2317,7 @@ goal AllZeros_all_zeros_safety_po_3:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall i_0:int.
@@ -2328,7 +2330,7 @@ goal AllZeros_all_zeros_safety_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2346,7 +2348,7 @@ goal AllZeros_all_zeros_safety_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2371,7 +2373,7 @@ goal AllZeros_all_zeros_safety_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2401,7 +2403,7 @@ goal AllZeros_all_zeros_safety_po_7:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2431,7 +2433,7 @@ goal AllZeros_all_zeros_safety_po_8:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2467,7 +2469,7 @@ goal AllZeros_all_zeros_safety_po_9:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2502,7 +2504,7 @@ goal AllZeros_all_zeros_safety_po_9:
 goal AllZeros_all_zeros_ensures_default_po_2:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   ("JC_25": (integer_of_int32(result) <= (offset_max(Object_alloc_table,
@@ -2514,7 +2516,7 @@ goal AllZeros_all_zeros_safety_po_10:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2552,7 +2554,7 @@ goal AllZeros_all_zeros_safety_po_11:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2589,7 +2591,7 @@ goal AllZeros_all_zeros_safety_po_12:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2628,7 +2630,7 @@ goal AllZeros_all_zeros_ensures_default_po_3:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall i_0:int.
@@ -2641,7 +2643,7 @@ goal AllZeros_all_zeros_ensures_default_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2673,7 +2675,7 @@ goal AllZeros_all_zeros_ensures_default_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2705,7 +2707,7 @@ goal AllZeros_all_zeros_ensures_default_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2736,7 +2738,7 @@ goal AllZeros_all_zeros_ensures_default_po_7:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2768,7 +2770,7 @@ goal AllZeros_all_zeros_ensures_default_po_8:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -2801,7 +2803,7 @@ goal AllZeros_all_zeros_ensures_default_po_9:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -3410,10 +3412,10 @@ why -simplify [...] why/AllZeros.why
  ;; Why axiom AllZeros_parenttag_Object
  (EQ (parenttag AllZeros_tag Object_tag) |@true|))
 
-(DEFPRED (Non_null_Object Object_alloc_table x_0)
+(DEFPRED (Non_null_Object x_0 Object_alloc_table)
   (EQ (offset_max Object_alloc_table x_0) 0))
 
-(DEFPRED (Non_null_intM Object_alloc_table x)
+(DEFPRED (Non_null_intM x Object_alloc_table)
   (>= (offset_max Object_alloc_table x) (- 0 1)))
 
 (BG_PUSH
@@ -3594,14 +3596,14 @@ why -simplify [...] why/AllZeros.why
 ;; AllZeros_all_zeros_ensures_default_po_1, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0) (<= 0 (integer_of_int32 result)))))))
 
 ;; AllZeros_all_zeros_ensures_default_po_2, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (<= (integer_of_int32 result) (+ (offset_max Object_alloc_table t) 1)))))))
@@ -3610,7 +3612,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (i_0)
@@ -3621,7 +3623,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3651,7 +3653,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3682,7 +3684,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3709,7 +3711,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3738,7 +3740,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3769,7 +3771,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3796,7 +3798,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3823,14 +3825,14 @@ why -simplify [...] why/AllZeros.why
 ;; AllZeros_all_zeros_safety_po_1, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0) (<= 0 (integer_of_int32 result)))))))
 
 ;; AllZeros_all_zeros_safety_po_2, File "HOME/tests/java/AllZeros.java", line 37, characters 6-78
 (FORALL (t)
 (FORALL (Object_alloc_table)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (<= (integer_of_int32 result) (+ (offset_max Object_alloc_table t) 1)))))))
@@ -3839,7 +3841,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (i_0)
@@ -3850,7 +3852,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3866,7 +3868,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3889,7 +3891,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3917,7 +3919,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3945,7 +3947,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -3978,7 +3980,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -4013,7 +4015,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -4050,7 +4052,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -4085,7 +4087,7 @@ why -simplify [...] why/AllZeros.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t)
+(IMPLIES (Non_null_intM t Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (k)
@@ -4968,11 +4970,13 @@ logic Object_tag :  -> Object tag_id
 
 axiom AllZeros_parenttag_Object: parenttag(AllZeros_tag, Object_tag)
 
-predicate Non_null_Object(Object_alloc_table: Object alloc_table,
-  x_0: Object pointer) = (offset_max(Object_alloc_table, x_0) = 0)
+predicate Non_null_Object(x_0: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x_0) = 0)
 
-predicate Non_null_intM(Object_alloc_table: Object alloc_table,
-  x: Object pointer) = (offset_max(Object_alloc_table, x) >= (-1))
+predicate Non_null_intM(x: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) >= (-1))
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -5176,7 +5180,7 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
 goal AllZeros_all_zeros_ensures_default_po_1:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   ("JC_25": (0 <= integer_of_int32(result)))
@@ -5184,7 +5188,7 @@ goal AllZeros_all_zeros_ensures_default_po_1:
 goal AllZeros_all_zeros_ensures_default_po_2:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   ("JC_25": (integer_of_int32(result) <= (offset_max(Object_alloc_table,
@@ -5195,7 +5199,7 @@ goal AllZeros_all_zeros_ensures_default_po_3:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall i_0:int.
@@ -5207,7 +5211,7 @@ goal AllZeros_all_zeros_ensures_default_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5238,7 +5242,7 @@ goal AllZeros_all_zeros_ensures_default_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5269,7 +5273,7 @@ goal AllZeros_all_zeros_ensures_default_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5299,7 +5303,7 @@ goal AllZeros_all_zeros_ensures_default_po_7:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5330,7 +5334,7 @@ goal AllZeros_all_zeros_ensures_default_po_8:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5362,7 +5366,7 @@ goal AllZeros_all_zeros_ensures_default_po_9:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5390,7 +5394,7 @@ goal AllZeros_all_zeros_ensures_default_po_10:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5416,7 +5420,7 @@ goal AllZeros_all_zeros_ensures_default_po_10:
 goal AllZeros_all_zeros_safety_po_1:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   ("JC_18": (0 <= integer_of_int32(result)))
@@ -5424,7 +5428,7 @@ goal AllZeros_all_zeros_safety_po_1:
 goal AllZeros_all_zeros_safety_po_2:
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   ("JC_18": (integer_of_int32(result) <= (offset_max(Object_alloc_table,
@@ -5435,7 +5439,7 @@ goal AllZeros_all_zeros_safety_po_3:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall i_0:int.
@@ -5447,7 +5451,7 @@ goal AllZeros_all_zeros_safety_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5464,7 +5468,7 @@ goal AllZeros_all_zeros_safety_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5488,7 +5492,7 @@ goal AllZeros_all_zeros_safety_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5517,7 +5521,7 @@ goal AllZeros_all_zeros_safety_po_7:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5546,7 +5550,7 @@ goal AllZeros_all_zeros_safety_po_8:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5581,7 +5585,7 @@ goal AllZeros_all_zeros_safety_po_9:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5617,7 +5621,7 @@ goal AllZeros_all_zeros_safety_po_10:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5654,7 +5658,7 @@ goal AllZeros_all_zeros_safety_po_11:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
@@ -5690,7 +5694,7 @@ goal AllZeros_all_zeros_safety_po_12:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int32) memory.
-  ("JC_14": Non_null_intM(Object_alloc_table, t)) ->
+  ("JC_14": Non_null_intM(t, Object_alloc_table)) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.

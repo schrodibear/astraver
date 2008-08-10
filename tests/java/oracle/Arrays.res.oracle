@@ -1149,12 +1149,12 @@ exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
-predicate Non_null_Object(Object_alloc_table:Object alloc_table,
- x_0:Object pointer) =
+predicate Non_null_Object(x_0:Object pointer,
+ Object_alloc_table:Object alloc_table) =
  eq_int(offset_max(Object_alloc_table, x_0), (0))
 
-predicate Non_null_intM(Object_alloc_table:Object alloc_table,
- x:Object pointer) =
+predicate Non_null_intM(x:Object pointer,
+ Object_alloc_table:Object alloc_table) =
  ge_int(offset_max(Object_alloc_table, x), neg_int((1)))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
@@ -1191,16 +1191,16 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate is_max(intM_intP_at_L:(Object,
- int) memory,
- Object_alloc_table:Object alloc_table,
- t:Object pointer,
+predicate is_max(t:Object pointer,
  i:int,
- l:int) =
- (Non_null_intM(Object_alloc_table, t)
+ l:int,
+ Object_alloc_table_at_L:Object alloc_table,
+ intM_intP_at_L:(Object,
+ int) memory) =
+ (Non_null_intM(t, Object_alloc_table_at_L)
  and (le_int((0), i)
      and (lt_int(i, l)
-         and (le_int(l, add_int(offset_max(Object_alloc_table, t), (1)))
+         and (le_int(l, add_int(offset_max(Object_alloc_table_at_L, t), (1)))
              and (forall j:int.
                   ((le_int((0), j) and lt_int(j, l)) ->
                    le_int(select(intM_intP_at_L, shift(t, j)),
@@ -1264,7 +1264,7 @@ parameter intM_intP : (Object, int) memory ref
 
 parameter Arrays_arrayShift :
  t_2:Object pointer ->
-  { (JC_46: Non_null_intM(Object_alloc_table, t_2))} unit
+  { (JC_46: Non_null_intM(t_2, Object_alloc_table))} unit
   reads Object_alloc_table,intM_intP writes intM_intP
   { (JC_49:
     (forall i_0:int.
@@ -1276,7 +1276,7 @@ parameter Arrays_arrayShift :
 parameter Arrays_findMax :
  t_0:Object pointer ->
   { (JC_14:
-    (Non_null_intM(Object_alloc_table, t_0)
+    (Non_null_intM(t_0, Object_alloc_table)
     and (le_int((1), add_int(offset_max(Object_alloc_table, t_0), (1)))
         and le_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
             (32767)))))}
@@ -1294,14 +1294,15 @@ parameter Arrays_findMax :
 parameter Arrays_findMax2 :
  t_1:Object pointer ->
   { (JC_30:
-    (Non_null_intM(Object_alloc_table, t_1)
+    (Non_null_intM(t_1, Object_alloc_table)
     and ge_int(add_int(offset_max(Object_alloc_table, t_1), (1)), (1))))}
   int reads Object_alloc_table,intM_intP
   { (JC_33:
     (le_int((0), result)
     and (lt_int(result, add_int(offset_max(Object_alloc_table, t_1), (1)))
-        and is_max(intM_intP, Object_alloc_table, t_1, result,
-            add_int(offset_max(Object_alloc_table, t_1), (1)))))) }
+        and is_max(t_1, result,
+            add_int(offset_max(Object_alloc_table, t_1), (1)),
+            Object_alloc_table, intM_intP)))) }
 
 parameter Object_tag_table : Object tag_table ref
 
@@ -1401,7 +1402,7 @@ parameter non_null_intM :
 
 let Arrays_arrayShift_ensures_default =
  fun (t_2 : Object pointer) ->
-  { (JC_46: Non_null_intM(Object_alloc_table, t_2)) }
+  { (JC_46: Non_null_intM(t_2, Object_alloc_table)) }
   (init:
   try
    begin
@@ -1479,7 +1480,7 @@ let Arrays_arrayShift_ensures_default =
 
 let Arrays_arrayShift_safety =
  fun (t_2 : Object pointer) ->
-  { (JC_46: Non_null_intM(Object_alloc_table, t_2)) }
+  { (JC_46: Non_null_intM(t_2, Object_alloc_table)) }
   (init:
   try
    begin
@@ -1560,7 +1561,7 @@ let Arrays_arrayShift_safety =
 let Arrays_findMax2_ensures_max_found =
  fun (t_1 : Object pointer) ->
   { (JC_30:
-    (Non_null_intM(Object_alloc_table, t_1)
+    (Non_null_intM(t_1, Object_alloc_table)
     and ge_int(add_int(offset_max(Object_alloc_table, t_1), (1)), (1)))) }
   (init:
   (let return = ref (any_int void) in
@@ -1581,8 +1582,8 @@ let Arrays_findMax2_ensures_max_found =
                     and (lt_int(r,
                          add_int(offset_max(Object_alloc_table, t_1), (1)))
                         and (eq_int(m, select(intM_intP, shift(t_1, r)))
-                            and is_max(intM_intP, Object_alloc_table, t_1, r,
-                                i_3)))))))
+                            and is_max(t_1, r, i_3, Object_alloc_table,
+                                intM_intP)))))))
            }
          try
           (let jessie_35 = begin
@@ -1637,13 +1638,14 @@ let Arrays_findMax2_ensures_max_found =
   { (JC_33:
     (le_int((0), result)
     and (lt_int(result, add_int(offset_max(Object_alloc_table, t_1), (1)))
-        and is_max(intM_intP, Object_alloc_table, t_1, result,
-            add_int(offset_max(Object_alloc_table, t_1), (1)))))) }
+        and is_max(t_1, result,
+            add_int(offset_max(Object_alloc_table, t_1), (1)),
+            Object_alloc_table, intM_intP)))) }
 
 let Arrays_findMax2_safety =
  fun (t_1 : Object pointer) ->
   { (JC_30:
-    (Non_null_intM(Object_alloc_table, t_1)
+    (Non_null_intM(t_1, Object_alloc_table)
     and ge_int(add_int(offset_max(Object_alloc_table, t_1), (1)), (1)))) }
   (init:
   (let return = ref (any_int void) in
@@ -1666,8 +1668,8 @@ let Arrays_findMax2_safety =
                     and (lt_int(r,
                          add_int(offset_max(Object_alloc_table, t_1), (1)))
                         and (eq_int(m, select(intM_intP, shift(t_1, r)))
-                            and is_max(intM_intP, Object_alloc_table, t_1, r,
-                                i_3)))))))
+                            and is_max(t_1, r, i_3, Object_alloc_table,
+                                intM_intP)))))))
           variant (JC_42 : sub_int(add_int(offset_max(Object_alloc_table,
                                            t_1),
                                    (1)),
@@ -1732,7 +1734,7 @@ let Arrays_findMax2_safety =
 let Arrays_findMax_ensures_max_found =
  fun (t_0 : Object pointer) ->
   { (JC_14:
-    (Non_null_intM(Object_alloc_table, t_0)
+    (Non_null_intM(t_0, Object_alloc_table)
     and (le_int((1), add_int(offset_max(Object_alloc_table, t_0), (1)))
         and le_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
             (32767))))) }
@@ -1823,7 +1825,7 @@ let Arrays_findMax_ensures_max_found =
 let Arrays_findMax_safety =
  fun (t_0 : Object pointer) ->
   { (JC_14:
-    (Non_null_intM(Object_alloc_table, t_0)
+    (Non_null_intM(t_0, Object_alloc_table)
     and (le_int((1), add_int(offset_max(Object_alloc_table, t_0), (1)))
         and le_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
             (32767))))) }
@@ -1951,7 +1953,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po51.why">
-      <location file = "why/Arrays.why" line = "544" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "546" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po52.why">
@@ -2149,7 +2151,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po98.why">
-      <location file = "why/Arrays.why" line = "728" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "730" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po99.why">
@@ -2318,7 +2320,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po9.why">
-      <location file = "why/Arrays.why" line = "353" begin = "32" end = "158"/>
+      <location file = "why/Arrays.why" line = "354" begin = "32" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po10.why">
@@ -3243,11 +3245,13 @@ logic Object_tag :  -> Object tag_id
 
 axiom Arrays_parenttag_Object: parenttag(Arrays_tag, Object_tag)
 
-predicate Non_null_Object(Object_alloc_table: Object alloc_table,
-  x_0: Object pointer) = (offset_max(Object_alloc_table, x_0) = 0)
+predicate Non_null_Object(x_0: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x_0) = 0)
 
-predicate Non_null_intM(Object_alloc_table: Object alloc_table,
-  x: Object pointer) = (offset_max(Object_alloc_table, x) >= (-1))
+predicate Non_null_intM(x: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) >= (-1))
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -3281,13 +3285,13 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
-predicate is_max(intM_intP_at_L: (Object, int) memory,
-  Object_alloc_table: Object alloc_table, t: Object pointer, i: int,
-  l: int) =
-  (Non_null_intM(Object_alloc_table, t) and
+predicate is_max(t: Object pointer, i: int, l: int,
+  Object_alloc_table_at_L: Object alloc_table, intM_intP_at_L: (Object,
+  int) memory) =
+  (Non_null_intM(t, Object_alloc_table_at_L) and
    ((0 <= i) and
     ((i < l) and
-     ((l <= (offset_max(Object_alloc_table, t) + 1)) and
+     ((l <= (offset_max(Object_alloc_table_at_L, t) + 1)) and
       (forall j:int.
         (((0 <= j) and (j < l)) -> (select(intM_intP_at_L, shift(t,
          j)) <= select(intM_intP_at_L, shift(t, i)))))))))
@@ -3332,7 +3336,7 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
 goal Arrays_arrayShift_ensures_default_po_1:
   forall t_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -3344,7 +3348,7 @@ goal Arrays_arrayShift_ensures_default_po_1:
 goal Arrays_arrayShift_safety_po_2:
   forall t_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -3360,7 +3364,7 @@ goal Arrays_findMax_safety_po_10:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3394,7 +3398,7 @@ goal Arrays_findMax_safety_po_11:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3441,7 +3445,7 @@ goal Arrays_findMax_safety_po_12:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3488,7 +3492,7 @@ goal Arrays_findMax_safety_po_13:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3535,7 +3539,7 @@ goal Arrays_findMax_safety_po_14:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3582,7 +3586,7 @@ goal Arrays_findMax_safety_po_15:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3629,7 +3633,7 @@ goal Arrays_findMax_safety_po_16:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3678,7 +3682,7 @@ goal Arrays_findMax_safety_po_17:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3725,7 +3729,7 @@ goal Arrays_findMax_safety_po_18:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3774,7 +3778,7 @@ goal Arrays_findMax_safety_po_19:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3811,7 +3815,7 @@ goal Arrays_findMax_safety_po_19:
 goal Arrays_arrayShift_safety_po_3:
   forall t_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -3828,7 +3832,7 @@ goal Arrays_findMax_safety_po_20:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3868,7 +3872,7 @@ goal Arrays_findMax_safety_po_21:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3908,7 +3912,7 @@ goal Arrays_findMax_safety_po_22:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3948,7 +3952,7 @@ goal Arrays_findMax_safety_po_23:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -3988,7 +3992,7 @@ goal Arrays_findMax_safety_po_24:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -4030,7 +4034,7 @@ goal Arrays_findMax_safety_po_25:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -4070,7 +4074,7 @@ goal Arrays_findMax_safety_po_26:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -4111,7 +4115,7 @@ goal Arrays_arrayShift_safety_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4130,7 +4134,7 @@ goal Arrays_arrayShift_safety_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4160,7 +4164,7 @@ goal Arrays_arrayShift_safety_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4190,7 +4194,7 @@ goal Arrays_arrayShift_safety_po_7:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4223,7 +4227,7 @@ goal Arrays_arrayShift_safety_po_8:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4256,7 +4260,7 @@ goal Arrays_arrayShift_safety_po_9:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4295,7 +4299,7 @@ goal Arrays_arrayShift_safety_po_10:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4335,7 +4339,7 @@ goal Arrays_arrayShift_safety_po_11:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4376,7 +4380,7 @@ goal Arrays_arrayShift_safety_po_11:
 goal Arrays_arrayShift_ensures_default_po_2:
   forall t_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -4391,7 +4395,7 @@ goal Arrays_arrayShift_safety_po_12:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4434,7 +4438,7 @@ goal Arrays_arrayShift_safety_po_13:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4473,7 +4477,7 @@ goal Arrays_arrayShift_safety_po_14:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -4513,7 +4517,7 @@ goal Arrays_findMax2_ensures_max_found_po_1:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4526,7 +4530,7 @@ goal Arrays_findMax2_ensures_max_found_po_2:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4539,7 +4543,7 @@ goal Arrays_findMax2_ensures_max_found_po_3:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4552,7 +4556,7 @@ goal Arrays_findMax2_ensures_max_found_po_4:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4565,7 +4569,7 @@ goal Arrays_findMax2_ensures_max_found_po_5:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4578,11 +4582,11 @@ goal Arrays_findMax2_ensures_max_found_po_6:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
-  ("JC_43": is_max(intM_intP, Object_alloc_table, t_1, 0, 1))
+  ("JC_43": is_max(t_1, 0, 1, Object_alloc_table, intM_intP))
 
 ========== file tests/java/why/Arrays_po29.why ==========
 goal Arrays_findMax2_ensures_max_found_po_7:
@@ -4591,7 +4595,7 @@ goal Arrays_findMax2_ensures_max_found_po_7:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4603,8 +4607,8 @@ goal Arrays_findMax2_ensures_max_found_po_7:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4630,7 +4634,7 @@ goal Arrays_arrayShift_ensures_default_po_3:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -4649,7 +4653,7 @@ goal Arrays_findMax2_ensures_max_found_po_8:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4661,8 +4665,8 @@ goal Arrays_findMax2_ensures_max_found_po_8:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4689,7 +4693,7 @@ goal Arrays_findMax2_ensures_max_found_po_9:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4701,8 +4705,8 @@ goal Arrays_findMax2_ensures_max_found_po_9:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4729,7 +4733,7 @@ goal Arrays_findMax2_ensures_max_found_po_10:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4741,8 +4745,8 @@ goal Arrays_findMax2_ensures_max_found_po_10:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4769,7 +4773,7 @@ goal Arrays_findMax2_ensures_max_found_po_11:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4781,8 +4785,8 @@ goal Arrays_findMax2_ensures_max_found_po_11:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4809,7 +4813,7 @@ goal Arrays_findMax2_ensures_max_found_po_12:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4821,8 +4825,8 @@ goal Arrays_findMax2_ensures_max_found_po_12:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4840,7 +4844,7 @@ goal Arrays_findMax2_ensures_max_found_po_12:
   (m0 = result2) ->
   forall i_3_0:int.
   (i_3_0 = (i_3 + 1)) ->
-  ("JC_43": is_max(intM_intP, Object_alloc_table, t_1, r0, i_3_0))
+  ("JC_43": is_max(t_1, r0, i_3_0, Object_alloc_table, intM_intP))
 
 ========== file tests/java/why/Arrays_po35.why ==========
 goal Arrays_findMax2_ensures_max_found_po_13:
@@ -4849,7 +4853,7 @@ goal Arrays_findMax2_ensures_max_found_po_13:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4861,8 +4865,8 @@ goal Arrays_findMax2_ensures_max_found_po_13:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4883,7 +4887,7 @@ goal Arrays_findMax2_ensures_max_found_po_14:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4895,8 +4899,8 @@ goal Arrays_findMax2_ensures_max_found_po_14:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4917,7 +4921,7 @@ goal Arrays_findMax2_ensures_max_found_po_15:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4929,8 +4933,8 @@ goal Arrays_findMax2_ensures_max_found_po_15:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4951,7 +4955,7 @@ goal Arrays_findMax2_ensures_max_found_po_16:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4963,8 +4967,8 @@ goal Arrays_findMax2_ensures_max_found_po_16:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -4985,7 +4989,7 @@ goal Arrays_findMax2_ensures_max_found_po_17:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -4997,8 +5001,8 @@ goal Arrays_findMax2_ensures_max_found_po_17:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -5018,7 +5022,7 @@ goal Arrays_arrayShift_ensures_default_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -5055,7 +5059,7 @@ goal Arrays_findMax2_ensures_max_found_po_18:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -5067,8 +5071,8 @@ goal Arrays_findMax2_ensures_max_found_po_18:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -5080,7 +5084,7 @@ goal Arrays_findMax2_ensures_max_found_po_18:
   (result1 <= m) ->
   forall i_3_0:int.
   (i_3_0 = (i_3 + 1)) ->
-  ("JC_43": is_max(intM_intP, Object_alloc_table, t_1, r, i_3_0))
+  ("JC_43": is_max(t_1, r, i_3_0, Object_alloc_table, intM_intP))
 
 ========== file tests/java/why/Arrays_po41.why ==========
 goal Arrays_findMax2_ensures_max_found_po_19:
@@ -5089,7 +5093,7 @@ goal Arrays_findMax2_ensures_max_found_po_19:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -5101,8 +5105,8 @@ goal Arrays_findMax2_ensures_max_found_po_19:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -5120,7 +5124,7 @@ goal Arrays_findMax2_ensures_max_found_po_20:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -5132,8 +5136,8 @@ goal Arrays_findMax2_ensures_max_found_po_20:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -5151,7 +5155,7 @@ goal Arrays_findMax2_ensures_max_found_po_21:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -5163,8 +5167,8 @@ goal Arrays_findMax2_ensures_max_found_po_21:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -5173,15 +5177,15 @@ goal Arrays_findMax2_ensures_max_found_po_21:
   (i_3 >= result0) ->
   forall return:int.
   (return = r) ->
-  ("JC_33": is_max(intM_intP, Object_alloc_table, t_1, return,
-  (offset_max(Object_alloc_table, t_1) + 1)))
+  ("JC_33": is_max(t_1, return, (offset_max(Object_alloc_table, t_1) + 1),
+  Object_alloc_table, intM_intP))
 
 ========== file tests/java/why/Arrays_po44.why ==========
 goal Arrays_findMax2_safety_po_1:
   forall t_1:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1))
 
@@ -5192,7 +5196,7 @@ goal Arrays_findMax2_safety_po_2:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5206,7 +5210,7 @@ goal Arrays_findMax2_safety_po_3:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5220,7 +5224,7 @@ goal Arrays_findMax2_safety_po_4:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5234,7 +5238,7 @@ goal Arrays_findMax2_safety_po_5:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5248,7 +5252,7 @@ goal Arrays_findMax2_safety_po_6:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5261,7 +5265,7 @@ goal Arrays_arrayShift_ensures_default_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -5299,12 +5303,12 @@ goal Arrays_findMax2_safety_po_7:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
-  ("JC_36": is_max(intM_intP, Object_alloc_table, t_1, 0, 1))
+  ("JC_36": is_max(t_1, 0, 1, Object_alloc_table, intM_intP))
 
 ========== file tests/java/why/Arrays_po51.why ==========
 goal Arrays_findMax2_safety_po_8:
@@ -5313,7 +5317,7 @@ goal Arrays_findMax2_safety_po_8:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5326,8 +5330,8 @@ goal Arrays_findMax2_safety_po_8:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1))
 
 ========== file tests/java/why/Arrays_po52.why ==========
@@ -5337,7 +5341,7 @@ goal Arrays_findMax2_safety_po_9:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5350,8 +5354,8 @@ goal Arrays_findMax2_safety_po_9:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5368,7 +5372,7 @@ goal Arrays_findMax2_safety_po_10:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5381,8 +5385,8 @@ goal Arrays_findMax2_safety_po_10:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5399,7 +5403,7 @@ goal Arrays_findMax2_safety_po_11:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5412,8 +5416,8 @@ goal Arrays_findMax2_safety_po_11:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5443,7 +5447,7 @@ goal Arrays_findMax2_safety_po_12:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5456,8 +5460,8 @@ goal Arrays_findMax2_safety_po_12:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5487,7 +5491,7 @@ goal Arrays_findMax2_safety_po_13:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5500,8 +5504,8 @@ goal Arrays_findMax2_safety_po_13:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5531,7 +5535,7 @@ goal Arrays_findMax2_safety_po_14:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5544,8 +5548,8 @@ goal Arrays_findMax2_safety_po_14:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5575,7 +5579,7 @@ goal Arrays_findMax2_safety_po_15:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5588,8 +5592,8 @@ goal Arrays_findMax2_safety_po_15:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5619,7 +5623,7 @@ goal Arrays_findMax2_safety_po_16:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5632,8 +5636,8 @@ goal Arrays_findMax2_safety_po_16:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5654,7 +5658,7 @@ goal Arrays_findMax2_safety_po_16:
   (m0 = result2) ->
   forall i_3_0:int.
   (i_3_0 = (i_3 + 1)) ->
-  ("JC_36": is_max(intM_intP, Object_alloc_table, t_1, r0, i_3_0))
+  ("JC_36": is_max(t_1, r0, i_3_0, Object_alloc_table, intM_intP))
 
 ========== file tests/java/why/Arrays_po6.why ==========
 goal Arrays_arrayShift_ensures_default_po_6:
@@ -5662,7 +5666,7 @@ goal Arrays_arrayShift_ensures_default_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -5703,7 +5707,7 @@ goal Arrays_findMax2_safety_po_17:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5716,8 +5720,8 @@ goal Arrays_findMax2_safety_po_17:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5747,7 +5751,7 @@ goal Arrays_findMax2_safety_po_18:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5760,8 +5764,8 @@ goal Arrays_findMax2_safety_po_18:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5793,7 +5797,7 @@ goal Arrays_findMax2_safety_po_19:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5806,8 +5810,8 @@ goal Arrays_findMax2_safety_po_19:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5830,7 +5834,7 @@ goal Arrays_findMax2_safety_po_20:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5843,8 +5847,8 @@ goal Arrays_findMax2_safety_po_20:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5867,7 +5871,7 @@ goal Arrays_findMax2_safety_po_21:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5880,8 +5884,8 @@ goal Arrays_findMax2_safety_po_21:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5904,7 +5908,7 @@ goal Arrays_findMax2_safety_po_22:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5917,8 +5921,8 @@ goal Arrays_findMax2_safety_po_22:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5941,7 +5945,7 @@ goal Arrays_findMax2_safety_po_23:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5954,8 +5958,8 @@ goal Arrays_findMax2_safety_po_23:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -5978,7 +5982,7 @@ goal Arrays_findMax2_safety_po_24:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -5991,8 +5995,8 @@ goal Arrays_findMax2_safety_po_24:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -6006,7 +6010,7 @@ goal Arrays_findMax2_safety_po_24:
   (result1 <= m) ->
   forall i_3_0:int.
   (i_3_0 = (i_3 + 1)) ->
-  ("JC_36": is_max(intM_intP, Object_alloc_table, t_1, r, i_3_0))
+  ("JC_36": is_max(t_1, r, i_3_0, Object_alloc_table, intM_intP))
 
 ========== file tests/java/why/Arrays_po68.why ==========
 goal Arrays_findMax2_safety_po_25:
@@ -6015,7 +6019,7 @@ goal Arrays_findMax2_safety_po_25:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -6028,8 +6032,8 @@ goal Arrays_findMax2_safety_po_25:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -6052,7 +6056,7 @@ goal Arrays_findMax2_safety_po_26:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -6065,8 +6069,8 @@ goal Arrays_findMax2_safety_po_26:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -6090,7 +6094,7 @@ goal Arrays_arrayShift_ensures_default_po_7:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -6131,7 +6135,7 @@ goal Arrays_findMax_ensures_max_found_po_1:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6145,7 +6149,7 @@ goal Arrays_findMax_ensures_max_found_po_2:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6159,7 +6163,7 @@ goal Arrays_findMax_ensures_max_found_po_3:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6173,7 +6177,7 @@ goal Arrays_findMax_ensures_max_found_po_4:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6187,7 +6191,7 @@ goal Arrays_findMax_ensures_max_found_po_5:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6201,7 +6205,7 @@ goal Arrays_findMax_ensures_max_found_po_6:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6217,7 +6221,7 @@ goal Arrays_findMax_ensures_max_found_po_7:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6260,7 +6264,7 @@ goal Arrays_findMax_ensures_max_found_po_8:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6303,7 +6307,7 @@ goal Arrays_findMax_ensures_max_found_po_9:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6346,7 +6350,7 @@ goal Arrays_findMax_ensures_max_found_po_10:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6388,7 +6392,7 @@ goal Arrays_arrayShift_ensures_default_po_8:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -6421,7 +6425,7 @@ goal Arrays_findMax_ensures_max_found_po_11:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6464,7 +6468,7 @@ goal Arrays_findMax_ensures_max_found_po_12:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6509,7 +6513,7 @@ goal Arrays_findMax_ensures_max_found_po_13:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6546,7 +6550,7 @@ goal Arrays_findMax_ensures_max_found_po_14:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6583,7 +6587,7 @@ goal Arrays_findMax_ensures_max_found_po_15:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6620,7 +6624,7 @@ goal Arrays_findMax_ensures_max_found_po_16:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6657,7 +6661,7 @@ goal Arrays_findMax_ensures_max_found_po_17:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6694,7 +6698,7 @@ goal Arrays_findMax_ensures_max_found_po_18:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6733,7 +6737,7 @@ goal Arrays_findMax_ensures_max_found_po_19:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6767,7 +6771,7 @@ goal Arrays_findMax_ensures_max_found_po_20:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6798,7 +6802,7 @@ goal Arrays_findMax_ensures_max_found_po_20:
 goal Arrays_arrayShift_safety_po_1:
   forall t_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1))
 
 ========== file tests/java/why/Arrays_po90.why ==========
@@ -6808,7 +6812,7 @@ goal Arrays_findMax_ensures_max_found_po_21:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -6843,7 +6847,7 @@ goal Arrays_findMax_safety_po_1:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0))
@@ -6855,7 +6859,7 @@ goal Arrays_findMax_safety_po_2:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -6870,7 +6874,7 @@ goal Arrays_findMax_safety_po_3:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -6885,7 +6889,7 @@ goal Arrays_findMax_safety_po_4:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -6900,7 +6904,7 @@ goal Arrays_findMax_safety_po_5:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -6915,7 +6919,7 @@ goal Arrays_findMax_safety_po_6:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -6930,7 +6934,7 @@ goal Arrays_findMax_safety_po_7:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -6947,7 +6951,7 @@ goal Arrays_findMax_safety_po_8:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -6974,7 +6978,7 @@ goal Arrays_findMax_safety_po_9:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -7587,10 +7591,10 @@ why -simplify [...] why/Arrays.why
  ;; Why axiom Arrays_parenttag_Object
  (EQ (parenttag Arrays_tag Object_tag) |@true|))
 
-(DEFPRED (Non_null_Object Object_alloc_table x_0)
+(DEFPRED (Non_null_Object x_0 Object_alloc_table)
   (EQ (offset_max Object_alloc_table x_0) 0))
 
-(DEFPRED (Non_null_intM Object_alloc_table x)
+(DEFPRED (Non_null_intM x Object_alloc_table)
   (>= (offset_max Object_alloc_table x) (- 0 1)))
 
 (BG_PUSH
@@ -7630,11 +7634,11 @@ why -simplify [...] why/Arrays.why
  (FORALL (x interface_tag_table)
  (instanceof interface_tag_table x interface_tag)))
 
-(DEFPRED (is_max intM_intP_at_L Object_alloc_table t i l)
-  (AND (Non_null_intM Object_alloc_table t)
+(DEFPRED (is_max t i l Object_alloc_table_at_L intM_intP_at_L)
+  (AND (Non_null_intM t Object_alloc_table_at_L)
   (AND (<= 0 i)
   (AND (< i l)
-  (AND (<= l (+ (offset_max Object_alloc_table t) 1))
+  (AND (<= l (+ (offset_max Object_alloc_table_at_L t) 1))
   (FORALL (j)
   (IMPLIES (AND (<= 0 j) (< j l))
   (<= (select intM_intP_at_L (shift t j)) (select intM_intP_at_L (shift t i))))))))))
@@ -7670,7 +7674,7 @@ why -simplify [...] why/Arrays.why
 ;; Arrays_arrayShift_ensures_default_po_1, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
          (AND (>= result 0)
@@ -7681,7 +7685,7 @@ why -simplify [...] why/Arrays.why
 ;; Arrays_arrayShift_ensures_default_po_2, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
          (AND (>= result 0)
@@ -7693,7 +7697,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
          (AND (>= result 0)
@@ -7710,7 +7714,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
          (AND (>= result 0)
@@ -7744,7 +7748,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
          (AND (>= result 0)
@@ -7778,7 +7782,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
          (AND (>= result 0)
@@ -7815,7 +7819,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
          (AND (>= result 0)
@@ -7854,7 +7858,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
          (AND (>= result 0)
@@ -7881,16 +7885,16 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP0 (shift t_2 i_0))
 (select intM_intP (shift t_2 (- i_0 1))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 353, characters 32-158
+;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 354, characters 32-158
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (>= (offset_max Object_alloc_table t_2) (- 0 1)))))
 
 ;; Arrays_arrayShift_safety_po_2, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -7902,7 +7906,7 @@ why -simplify [...] why/Arrays.why
 ;; Arrays_arrayShift_safety_po_3, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -7915,7 +7919,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -7933,7 +7937,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -7961,7 +7965,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -7989,7 +7993,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -8021,7 +8025,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -8054,7 +8058,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -8092,7 +8096,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -8130,7 +8134,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -8171,7 +8175,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -8214,7 +8218,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -8250,7 +8254,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (Non_null_intM Object_alloc_table t_2)
+(IMPLIES (Non_null_intM t_2 Object_alloc_table)
 (IMPLIES (>= (offset_max Object_alloc_table t_2) (- 0 1))
 (FORALL (result)
 (IMPLIES (AND (<= result constant_too_large_2147483647)
@@ -8286,7 +8290,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0))) (<= 1 1)))))))
@@ -8295,7 +8299,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8305,7 +8309,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0))) (<= 0 0)))))))
@@ -8314,7 +8318,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8324,7 +8328,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8334,17 +8338,17 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
-(is_max intM_intP Object_alloc_table t_1 0 1)))))))
+(is_max t_1 0 1 Object_alloc_table intM_intP)))))))
 
 ;; Arrays_findMax2_ensures_max_found_po_7, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8356,7 +8360,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8378,7 +8382,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8390,7 +8394,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8414,7 +8418,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8426,7 +8430,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8448,7 +8452,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8460,7 +8464,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8484,7 +8488,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8496,7 +8500,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8519,7 +8523,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8531,7 +8535,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8549,13 +8553,13 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ m0 result2)
 (FORALL (i_3_0)
 (IMPLIES (EQ i_3_0 (+ i_3 1))
-(is_max intM_intP Object_alloc_table t_1 r0 i_3_0)))))))))))))))))))))))))
+(is_max t_1 r0 i_3_0 Object_alloc_table intM_intP)))))))))))))))))))))))))
 
 ;; Arrays_findMax2_ensures_max_found_po_13, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8567,7 +8571,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8583,7 +8587,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8595,7 +8599,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8613,7 +8617,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8625,7 +8629,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8641,7 +8645,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8653,7 +8657,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8671,7 +8675,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8683,7 +8687,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8700,7 +8704,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8712,7 +8716,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8724,13 +8728,13 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (<= result1 m)
 (FORALL (i_3_0)
 (IMPLIES (EQ i_3_0 (+ i_3 1))
-(is_max intM_intP Object_alloc_table t_1 r i_3_0)))))))))))))))))))
+(is_max t_1 r i_3_0 Object_alloc_table intM_intP)))))))))))))))))))
 
 ;; Arrays_findMax2_ensures_max_found_po_19, File "HOME/tests/java/Arrays.java", line 72, characters 13-80
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8742,7 +8746,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8755,7 +8759,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8767,7 +8771,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8781,7 +8785,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
@@ -8793,7 +8797,7 @@ why -simplify [...] why/Arrays.why
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
          (AND (>= result0 0)
@@ -8803,13 +8807,12 @@ why -simplify [...] why/Arrays.why
 (FORALL (return)
 (IMPLIES (EQ return r)
 (is_max
-intM_intP Object_alloc_table t_1 return (+ (offset_max
-                                           Object_alloc_table t_1) 1)))))))))))))))))
+t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_intP))))))))))))))))
 
 ;; Arrays_findMax2_safety_po_1, File "HOME/tests/java/Arrays.java", line 76, characters 9-13
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (<= 0 (offset_max Object_alloc_table t_1)))))
 
@@ -8817,7 +8820,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -8827,7 +8830,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -8838,7 +8841,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -8848,7 +8851,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -8859,7 +8862,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -8870,18 +8873,18 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
-(is_max intM_intP Object_alloc_table t_1 0 1))))))))
+(is_max t_1 0 1 Object_alloc_table intM_intP))))))))
 
-;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 544, characters 51-215
+;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 546, characters 51-215
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -8894,14 +8897,14 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (>= (offset_max Object_alloc_table t_1) (- 0 1)))))))))))))
 
 ;; Arrays_findMax2_safety_po_9, File "HOME/tests/java/Arrays.java", line 84, characters 9-13
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -8914,7 +8917,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -8927,7 +8930,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -8940,7 +8943,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -8953,7 +8956,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -8966,7 +8969,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -8991,7 +8994,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9004,7 +9007,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9031,7 +9034,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9044,7 +9047,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9069,7 +9072,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9082,7 +9085,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9109,7 +9112,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9122,7 +9125,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9148,7 +9151,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9161,7 +9164,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9182,13 +9185,13 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (EQ m0 result2)
 (FORALL (i_3_0)
 (IMPLIES (EQ i_3_0 (+ i_3 1))
-(is_max intM_intP Object_alloc_table t_1 r0 i_3_0)))))))))))))))))))))))))))))
+(is_max t_1 r0 i_3_0 Object_alloc_table intM_intP)))))))))))))))))))))))))))))
 
 ;; Arrays_findMax2_safety_po_17, File "HOME/tests/java/Arrays.java", line 81, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9201,7 +9204,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9228,7 +9231,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9241,7 +9244,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9269,7 +9272,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9282,7 +9285,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9300,7 +9303,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9313,7 +9316,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9333,7 +9336,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9346,7 +9349,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9364,7 +9367,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9377,7 +9380,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9397,7 +9400,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9410,7 +9413,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9429,7 +9432,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9442,7 +9445,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9456,13 +9459,13 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (<= result1 m)
 (FORALL (i_3_0)
 (IMPLIES (EQ i_3_0 (+ i_3 1))
-(is_max intM_intP Object_alloc_table t_1 r i_3_0))))))))))))))))))))))
+(is_max t_1 r i_3_0 Object_alloc_table intM_intP))))))))))))))))))))))
 
 ;; Arrays_findMax2_safety_po_25, File "HOME/tests/java/Arrays.java", line 81, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9475,7 +9478,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9495,7 +9498,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_1)
+(IMPLIES (AND (Non_null_intM t_1 Object_alloc_table)
          (>= (+ (offset_max Object_alloc_table t_1) 1) 1))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_1))
 (FORALL (result)
@@ -9508,7 +9511,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
          (AND (<= 0 r)
          (AND (< r (+ (offset_max Object_alloc_table t_1) 1))
          (AND (EQ m (select intM_intP (shift t_1 r)))
-         (is_max intM_intP Object_alloc_table t_1 r i_3))))))
+         (is_max t_1 r i_3 Object_alloc_table intM_intP))))))
 (IMPLIES (>= (offset_max Object_alloc_table t_1) (- 0 1))
 (FORALL (result0)
 (IMPLIES (AND (<= result0 constant_too_large_2147483647)
@@ -9529,7 +9532,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9539,7 +9542,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9550,7 +9553,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9560,7 +9563,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9571,7 +9574,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9582,7 +9585,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9595,7 +9598,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9632,7 +9635,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9671,7 +9674,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9708,7 +9711,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9747,7 +9750,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9786,7 +9789,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9827,7 +9830,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9858,7 +9861,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9891,7 +9894,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9922,7 +9925,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9955,7 +9958,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -9987,7 +9990,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -10022,7 +10025,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -10050,7 +10053,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -10080,7 +10083,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (FORALL (result)
@@ -10111,7 +10114,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 ;; Arrays_findMax_safety_po_1, File "HOME/tests/java/Arrays.java", line 53, characters 9-13
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (<= 0 (offset_max Object_alloc_table t_0)))))
@@ -10120,7 +10123,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10131,7 +10134,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10143,7 +10146,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10154,7 +10157,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10166,7 +10169,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10178,7 +10181,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10188,11 +10191,11 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (IMPLIES (AND (<= 0 j_1) (< j_1 1))
 (<= (select intM_intP (shift t_0 j_1)) result))))))))))
 
-;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 728, characters 51-215
+;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 730, characters 51-215
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10215,7 +10218,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10244,7 +10247,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10273,7 +10276,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10314,7 +10317,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10357,7 +10360,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10398,7 +10401,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10441,7 +10444,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10484,7 +10487,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10529,7 +10532,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10572,7 +10575,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10616,7 +10619,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10650,7 +10653,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10686,7 +10689,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10720,7 +10723,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10756,7 +10759,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10791,7 +10794,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10829,7 +10832,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -10865,7 +10868,7 @@ intM_intP Object_alloc_table t_1 return (+ (offset_max
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (AND (<= 1 (+ (offset_max Object_alloc_table t_0) 1))
          (<= (+ (offset_max Object_alloc_table t_0) 1) 32767)))
 (IMPLIES (<= 0 (offset_max Object_alloc_table t_0))
@@ -11739,11 +11742,13 @@ logic Object_tag :  -> Object tag_id
 
 axiom Arrays_parenttag_Object: parenttag(Arrays_tag, Object_tag)
 
-predicate Non_null_Object(Object_alloc_table: Object alloc_table,
-  x_0: Object pointer) = (offset_max(Object_alloc_table, x_0) = 0)
+predicate Non_null_Object(x_0: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x_0) = 0)
 
-predicate Non_null_intM(Object_alloc_table: Object alloc_table,
-  x: Object pointer) = (offset_max(Object_alloc_table, x) >= (-1))
+predicate Non_null_intM(x: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) >= (-1))
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -11777,13 +11782,13 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
-predicate is_max(intM_intP_at_L: (Object, int) memory,
-  Object_alloc_table: Object alloc_table, t: Object pointer, i: int,
-  l: int) =
-  (Non_null_intM(Object_alloc_table, t) and
+predicate is_max(t: Object pointer, i: int, l: int,
+  Object_alloc_table_at_L: Object alloc_table, intM_intP_at_L: (Object,
+  int) memory) =
+  (Non_null_intM(t, Object_alloc_table_at_L) and
    ((0 <= i) and
     ((i < l) and
-     ((l <= (offset_max(Object_alloc_table, t) + 1)) and
+     ((l <= (offset_max(Object_alloc_table_at_L, t) + 1)) and
       (forall j:int.
         (((0 <= j) and (j < l)) -> (select(intM_intP_at_L, shift(t,
          j)) <= select(intM_intP_at_L, shift(t, i)))))))))
@@ -11827,7 +11832,7 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
 goal Arrays_arrayShift_ensures_default_po_1:
   forall t_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -11838,7 +11843,7 @@ goal Arrays_arrayShift_ensures_default_po_1:
 goal Arrays_arrayShift_ensures_default_po_2:
   forall t_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -11852,7 +11857,7 @@ goal Arrays_arrayShift_ensures_default_po_3:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -11869,7 +11874,7 @@ goal Arrays_arrayShift_ensures_default_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -11904,7 +11909,7 @@ goal Arrays_arrayShift_ensures_default_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -11940,7 +11945,7 @@ goal Arrays_arrayShift_ensures_default_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -11979,7 +11984,7 @@ goal Arrays_arrayShift_ensures_default_po_7:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -12018,7 +12023,7 @@ goal Arrays_arrayShift_ensures_default_po_8:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
   ("JC_9":
   ((result <= 2147483647) and
@@ -12047,13 +12052,13 @@ goal Arrays_arrayShift_ensures_default_po_8:
 goal Arrays_arrayShift_safety_po_1:
   forall t_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1))
 
 goal Arrays_arrayShift_safety_po_2:
   forall t_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12065,7 +12070,7 @@ goal Arrays_arrayShift_safety_po_2:
 goal Arrays_arrayShift_safety_po_3:
   forall t_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12080,7 +12085,7 @@ goal Arrays_arrayShift_safety_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12098,7 +12103,7 @@ goal Arrays_arrayShift_safety_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12127,7 +12132,7 @@ goal Arrays_arrayShift_safety_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12156,7 +12161,7 @@ goal Arrays_arrayShift_safety_po_7:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12188,7 +12193,7 @@ goal Arrays_arrayShift_safety_po_8:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12220,7 +12225,7 @@ goal Arrays_arrayShift_safety_po_9:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12258,7 +12263,7 @@ goal Arrays_arrayShift_safety_po_10:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12297,7 +12302,7 @@ goal Arrays_arrayShift_safety_po_11:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12339,7 +12344,7 @@ goal Arrays_arrayShift_safety_po_12:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12381,7 +12386,7 @@ goal Arrays_arrayShift_safety_po_13:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12419,7 +12424,7 @@ goal Arrays_arrayShift_safety_po_14:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_46": Non_null_intM(Object_alloc_table, t_2)) ->
+  ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
   ("JC_9":
@@ -12458,7 +12463,7 @@ goal Arrays_findMax2_ensures_max_found_po_1:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12470,7 +12475,7 @@ goal Arrays_findMax2_ensures_max_found_po_2:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12482,7 +12487,7 @@ goal Arrays_findMax2_ensures_max_found_po_3:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12494,7 +12499,7 @@ goal Arrays_findMax2_ensures_max_found_po_4:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12506,7 +12511,7 @@ goal Arrays_findMax2_ensures_max_found_po_5:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12518,11 +12523,11 @@ goal Arrays_findMax2_ensures_max_found_po_6:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
-  ("JC_43": is_max(intM_intP, Object_alloc_table, t_1, 0, 1))
+  ("JC_43": is_max(t_1, 0, 1, Object_alloc_table, intM_intP))
 
 goal Arrays_findMax2_ensures_max_found_po_7:
   forall t_1:Object pointer.
@@ -12530,7 +12535,7 @@ goal Arrays_findMax2_ensures_max_found_po_7:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12542,8 +12547,8 @@ goal Arrays_findMax2_ensures_max_found_po_7:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12569,7 +12574,7 @@ goal Arrays_findMax2_ensures_max_found_po_8:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12581,8 +12586,8 @@ goal Arrays_findMax2_ensures_max_found_po_8:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12608,7 +12613,7 @@ goal Arrays_findMax2_ensures_max_found_po_9:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12620,8 +12625,8 @@ goal Arrays_findMax2_ensures_max_found_po_9:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12647,7 +12652,7 @@ goal Arrays_findMax2_ensures_max_found_po_10:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12659,8 +12664,8 @@ goal Arrays_findMax2_ensures_max_found_po_10:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12686,7 +12691,7 @@ goal Arrays_findMax2_ensures_max_found_po_11:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12698,8 +12703,8 @@ goal Arrays_findMax2_ensures_max_found_po_11:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12725,7 +12730,7 @@ goal Arrays_findMax2_ensures_max_found_po_12:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12737,8 +12742,8 @@ goal Arrays_findMax2_ensures_max_found_po_12:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12756,7 +12761,7 @@ goal Arrays_findMax2_ensures_max_found_po_12:
   (m0 = result2) ->
   forall i_3_0:int.
   (i_3_0 = (i_3 + 1)) ->
-  ("JC_43": is_max(intM_intP, Object_alloc_table, t_1, r0, i_3_0))
+  ("JC_43": is_max(t_1, r0, i_3_0, Object_alloc_table, intM_intP))
 
 goal Arrays_findMax2_ensures_max_found_po_13:
   forall t_1:Object pointer.
@@ -12764,7 +12769,7 @@ goal Arrays_findMax2_ensures_max_found_po_13:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12776,8 +12781,8 @@ goal Arrays_findMax2_ensures_max_found_po_13:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12797,7 +12802,7 @@ goal Arrays_findMax2_ensures_max_found_po_14:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12809,8 +12814,8 @@ goal Arrays_findMax2_ensures_max_found_po_14:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12830,7 +12835,7 @@ goal Arrays_findMax2_ensures_max_found_po_15:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12842,8 +12847,8 @@ goal Arrays_findMax2_ensures_max_found_po_15:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12863,7 +12868,7 @@ goal Arrays_findMax2_ensures_max_found_po_16:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12875,8 +12880,8 @@ goal Arrays_findMax2_ensures_max_found_po_16:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12896,7 +12901,7 @@ goal Arrays_findMax2_ensures_max_found_po_17:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12908,8 +12913,8 @@ goal Arrays_findMax2_ensures_max_found_po_17:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12929,7 +12934,7 @@ goal Arrays_findMax2_ensures_max_found_po_18:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12941,8 +12946,8 @@ goal Arrays_findMax2_ensures_max_found_po_18:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12954,7 +12959,7 @@ goal Arrays_findMax2_ensures_max_found_po_18:
   (result1 <= m) ->
   forall i_3_0:int.
   (i_3_0 = (i_3 + 1)) ->
-  ("JC_43": is_max(intM_intP, Object_alloc_table, t_1, r, i_3_0))
+  ("JC_43": is_max(t_1, r, i_3_0, Object_alloc_table, intM_intP))
 
 goal Arrays_findMax2_ensures_max_found_po_19:
   forall t_1:Object pointer.
@@ -12962,7 +12967,7 @@ goal Arrays_findMax2_ensures_max_found_po_19:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -12974,8 +12979,8 @@ goal Arrays_findMax2_ensures_max_found_po_19:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -12992,7 +12997,7 @@ goal Arrays_findMax2_ensures_max_found_po_20:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -13004,8 +13009,8 @@ goal Arrays_findMax2_ensures_max_found_po_20:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -13022,7 +13027,7 @@ goal Arrays_findMax2_ensures_max_found_po_21:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
@@ -13034,8 +13039,8 @@ goal Arrays_findMax2_ensures_max_found_po_21:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
   ("JC_9":
   ((result0 <= 2147483647) and
@@ -13044,14 +13049,14 @@ goal Arrays_findMax2_ensures_max_found_po_21:
   (i_3 >= result0) ->
   forall return:int.
   (return = r) ->
-  ("JC_33": is_max(intM_intP, Object_alloc_table, t_1, return,
-  (offset_max(Object_alloc_table, t_1) + 1)))
+  ("JC_33": is_max(t_1, return, (offset_max(Object_alloc_table, t_1) + 1),
+  Object_alloc_table, intM_intP))
 
 goal Arrays_findMax2_safety_po_1:
   forall t_1:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1))
 
@@ -13061,7 +13066,7 @@ goal Arrays_findMax2_safety_po_2:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13074,7 +13079,7 @@ goal Arrays_findMax2_safety_po_3:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13087,7 +13092,7 @@ goal Arrays_findMax2_safety_po_4:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13100,7 +13105,7 @@ goal Arrays_findMax2_safety_po_5:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13113,7 +13118,7 @@ goal Arrays_findMax2_safety_po_6:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13126,12 +13131,12 @@ goal Arrays_findMax2_safety_po_7:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
   (result = select(intM_intP, shift(t_1, 0))) ->
-  ("JC_36": is_max(intM_intP, Object_alloc_table, t_1, 0, 1))
+  ("JC_36": is_max(t_1, 0, 1, Object_alloc_table, intM_intP))
 
 goal Arrays_findMax2_safety_po_8:
   forall t_1:Object pointer.
@@ -13139,7 +13144,7 @@ goal Arrays_findMax2_safety_po_8:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13152,8 +13157,8 @@ goal Arrays_findMax2_safety_po_8:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1))
 
 goal Arrays_findMax2_safety_po_9:
@@ -13162,7 +13167,7 @@ goal Arrays_findMax2_safety_po_9:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13175,8 +13180,8 @@ goal Arrays_findMax2_safety_po_9:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13192,7 +13197,7 @@ goal Arrays_findMax2_safety_po_10:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13205,8 +13210,8 @@ goal Arrays_findMax2_safety_po_10:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13222,7 +13227,7 @@ goal Arrays_findMax2_safety_po_11:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13235,8 +13240,8 @@ goal Arrays_findMax2_safety_po_11:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13265,7 +13270,7 @@ goal Arrays_findMax2_safety_po_12:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13278,8 +13283,8 @@ goal Arrays_findMax2_safety_po_12:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13308,7 +13313,7 @@ goal Arrays_findMax2_safety_po_13:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13321,8 +13326,8 @@ goal Arrays_findMax2_safety_po_13:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13351,7 +13356,7 @@ goal Arrays_findMax2_safety_po_14:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13364,8 +13369,8 @@ goal Arrays_findMax2_safety_po_14:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13394,7 +13399,7 @@ goal Arrays_findMax2_safety_po_15:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13407,8 +13412,8 @@ goal Arrays_findMax2_safety_po_15:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13437,7 +13442,7 @@ goal Arrays_findMax2_safety_po_16:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13450,8 +13455,8 @@ goal Arrays_findMax2_safety_po_16:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13472,7 +13477,7 @@ goal Arrays_findMax2_safety_po_16:
   (m0 = result2) ->
   forall i_3_0:int.
   (i_3_0 = (i_3 + 1)) ->
-  ("JC_36": is_max(intM_intP, Object_alloc_table, t_1, r0, i_3_0))
+  ("JC_36": is_max(t_1, r0, i_3_0, Object_alloc_table, intM_intP))
 
 goal Arrays_findMax2_safety_po_17:
   forall t_1:Object pointer.
@@ -13480,7 +13485,7 @@ goal Arrays_findMax2_safety_po_17:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13493,8 +13498,8 @@ goal Arrays_findMax2_safety_po_17:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13523,7 +13528,7 @@ goal Arrays_findMax2_safety_po_18:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13536,8 +13541,8 @@ goal Arrays_findMax2_safety_po_18:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13568,7 +13573,7 @@ goal Arrays_findMax2_safety_po_19:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13581,8 +13586,8 @@ goal Arrays_findMax2_safety_po_19:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13604,7 +13609,7 @@ goal Arrays_findMax2_safety_po_20:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13617,8 +13622,8 @@ goal Arrays_findMax2_safety_po_20:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13640,7 +13645,7 @@ goal Arrays_findMax2_safety_po_21:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13653,8 +13658,8 @@ goal Arrays_findMax2_safety_po_21:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13676,7 +13681,7 @@ goal Arrays_findMax2_safety_po_22:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13689,8 +13694,8 @@ goal Arrays_findMax2_safety_po_22:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13712,7 +13717,7 @@ goal Arrays_findMax2_safety_po_23:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13725,8 +13730,8 @@ goal Arrays_findMax2_safety_po_23:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13748,7 +13753,7 @@ goal Arrays_findMax2_safety_po_24:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13761,8 +13766,8 @@ goal Arrays_findMax2_safety_po_24:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13776,7 +13781,7 @@ goal Arrays_findMax2_safety_po_24:
   (result1 <= m) ->
   forall i_3_0:int.
   (i_3_0 = (i_3 + 1)) ->
-  ("JC_36": is_max(intM_intP, Object_alloc_table, t_1, r, i_3_0))
+  ("JC_36": is_max(t_1, r, i_3_0, Object_alloc_table, intM_intP))
 
 goal Arrays_findMax2_safety_po_25:
   forall t_1:Object pointer.
@@ -13784,7 +13789,7 @@ goal Arrays_findMax2_safety_po_25:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13797,8 +13802,8 @@ goal Arrays_findMax2_safety_po_25:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13820,7 +13825,7 @@ goal Arrays_findMax2_safety_po_26:
   forall intM_intP:(Object,
   int) memory.
   ("JC_30":
-  (Non_null_intM(Object_alloc_table, t_1) and
+  (Non_null_intM(t_1, Object_alloc_table) and
    ((offset_max(Object_alloc_table, t_1) + 1) >= 1))) ->
   (0 <= offset_max(Object_alloc_table, t_1)) ->
   forall result:int.
@@ -13833,8 +13838,8 @@ goal Arrays_findMax2_safety_po_26:
    ((i_3 <= (offset_max(Object_alloc_table, t_1) + 1)) and
     ((0 <= r) and
      ((r < (offset_max(Object_alloc_table, t_1) + 1)) and
-      ((m = select(intM_intP, shift(t_1, r))) and is_max(intM_intP,
-       Object_alloc_table, t_1, r, i_3))))))) ->
+      ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
+       Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
   ("JC_9":
@@ -13858,7 +13863,7 @@ goal Arrays_findMax_ensures_max_found_po_1:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -13871,7 +13876,7 @@ goal Arrays_findMax_ensures_max_found_po_2:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -13884,7 +13889,7 @@ goal Arrays_findMax_ensures_max_found_po_3:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -13897,7 +13902,7 @@ goal Arrays_findMax_ensures_max_found_po_4:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -13910,7 +13915,7 @@ goal Arrays_findMax_ensures_max_found_po_5:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -13923,7 +13928,7 @@ goal Arrays_findMax_ensures_max_found_po_6:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -13938,7 +13943,7 @@ goal Arrays_findMax_ensures_max_found_po_7:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -13980,7 +13985,7 @@ goal Arrays_findMax_ensures_max_found_po_8:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14022,7 +14027,7 @@ goal Arrays_findMax_ensures_max_found_po_9:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14064,7 +14069,7 @@ goal Arrays_findMax_ensures_max_found_po_10:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14106,7 +14111,7 @@ goal Arrays_findMax_ensures_max_found_po_11:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14148,7 +14153,7 @@ goal Arrays_findMax_ensures_max_found_po_12:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14192,7 +14197,7 @@ goal Arrays_findMax_ensures_max_found_po_13:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14228,7 +14233,7 @@ goal Arrays_findMax_ensures_max_found_po_14:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14264,7 +14269,7 @@ goal Arrays_findMax_ensures_max_found_po_15:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14300,7 +14305,7 @@ goal Arrays_findMax_ensures_max_found_po_16:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14336,7 +14341,7 @@ goal Arrays_findMax_ensures_max_found_po_17:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14372,7 +14377,7 @@ goal Arrays_findMax_ensures_max_found_po_18:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14410,7 +14415,7 @@ goal Arrays_findMax_ensures_max_found_po_19:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14443,7 +14448,7 @@ goal Arrays_findMax_ensures_max_found_po_20:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14476,7 +14481,7 @@ goal Arrays_findMax_ensures_max_found_po_21:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   forall result:int.
@@ -14510,7 +14515,7 @@ goal Arrays_findMax_safety_po_1:
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0))
@@ -14521,7 +14526,7 @@ goal Arrays_findMax_safety_po_2:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14535,7 +14540,7 @@ goal Arrays_findMax_safety_po_3:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14549,7 +14554,7 @@ goal Arrays_findMax_safety_po_4:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14563,7 +14568,7 @@ goal Arrays_findMax_safety_po_5:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14577,7 +14582,7 @@ goal Arrays_findMax_safety_po_6:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14591,7 +14596,7 @@ goal Arrays_findMax_safety_po_7:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14607,7 +14612,7 @@ goal Arrays_findMax_safety_po_8:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14633,7 +14638,7 @@ goal Arrays_findMax_safety_po_9:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14666,7 +14671,7 @@ goal Arrays_findMax_safety_po_10:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14699,7 +14704,7 @@ goal Arrays_findMax_safety_po_11:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14745,7 +14750,7 @@ goal Arrays_findMax_safety_po_12:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14791,7 +14796,7 @@ goal Arrays_findMax_safety_po_13:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14837,7 +14842,7 @@ goal Arrays_findMax_safety_po_14:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14883,7 +14888,7 @@ goal Arrays_findMax_safety_po_15:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14929,7 +14934,7 @@ goal Arrays_findMax_safety_po_16:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -14977,7 +14982,7 @@ goal Arrays_findMax_safety_po_17:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -15023,7 +15028,7 @@ goal Arrays_findMax_safety_po_18:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -15071,7 +15076,7 @@ goal Arrays_findMax_safety_po_19:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -15110,7 +15115,7 @@ goal Arrays_findMax_safety_po_20:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -15149,7 +15154,7 @@ goal Arrays_findMax_safety_po_21:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -15188,7 +15193,7 @@ goal Arrays_findMax_safety_po_22:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -15227,7 +15232,7 @@ goal Arrays_findMax_safety_po_23:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -15266,7 +15271,7 @@ goal Arrays_findMax_safety_po_24:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -15307,7 +15312,7 @@ goal Arrays_findMax_safety_po_25:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->
@@ -15346,7 +15351,7 @@ goal Arrays_findMax_safety_po_26:
   forall intM_intP:(Object,
   int) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    ((1 <= (offset_max(Object_alloc_table, t_0) + 1)) and
     ((offset_max(Object_alloc_table, t_0) + 1) <= 32767)))) ->
   (0 <= offset_max(Object_alloc_table, t_0)) ->

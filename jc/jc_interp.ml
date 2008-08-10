@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.329 2008-08-10 00:00:54 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.330 2008-08-10 00:28:10 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -2191,62 +2191,61 @@ let tr_struct st acc =
         in
         Axiom(name, p)::acc
 
-(*******************************************************************************)
-(*                                Logic functions                              *)
-(*******************************************************************************)
+(******************************************************************************)
+(*                               Logic functions                              *)
+(******************************************************************************)
 
-let tr_logic_const vi init acc =
-  let decl =
-    Logic (false, vi.jc_var_info_final_name, [], tr_base_type vi.jc_var_info_type) :: acc
-  in
-    match init with
-      | None -> decl
-      | Some(t,ty) ->
-          let t' = term ~global_assertion:true ~relocate:false LabelHere LabelHere t in
-          let vi_ty = vi.jc_var_info_type in
-          let t_ty = t#typ in
-          (* eprintf "logic const: max type = %a@." print_type ty; *)
-          let pred =
-            LPred (
-              "eq",
-              [term_coerce Loc.dummy_position ty vi_ty t (LVar vi.jc_var_info_name); 
-               term_coerce t#pos ty t_ty t t'])
-          in
-        let ax =
-          Axiom(
-            vi.jc_var_info_final_name ^ "_value_axiom",
-            bind_pattern_lets pred
-          )
-        in
-        ax::decl
+(* let tr_logic_const vi init acc = *)
+(*   let decl = *)
+(*     Logic (false, vi.jc_var_info_final_name, [], tr_base_type vi.jc_var_info_type) :: acc *)
+(*   in *)
+(*     match init with *)
+(*       | None -> decl *)
+(*       | Some(t,ty) -> *)
+(*           let t' = term ~global_assertion:true ~relocate:false LabelHere LabelHere t in *)
+(*           let vi_ty = vi.jc_var_info_type in *)
+(*           let t_ty = t#typ in *)
+(*           (\* eprintf "logic const: max type = %a@." print_type ty; *\) *)
+(*           let pred = *)
+(*             LPred ( *)
+(*               "eq", *)
+(*               [term_coerce Loc.dummy_position ty vi_ty t (LVar vi.jc_var_info_name);  *)
+(*                term_coerce t#pos ty t_ty t t']) *)
+(*           in *)
+(*         let ax = *)
+(*           Axiom( *)
+(*             vi.jc_var_info_final_name ^ "_value_axiom", *)
+(*             bind_pattern_lets pred *)
+(*           ) *)
+(*         in *)
+(*         ax::decl *)
 
-let tr_logic_fun li ta acc =
+let tr_logic_fun f ta acc =
   let lab = 
-    match li.jc_logic_info_labels with [lab] -> lab | _ -> LabelHere
+    match f.jc_logic_info_labels with [lab] -> lab | _ -> LabelHere
   in
-  let fa = 
-    assertion ~global_assertion:true ~relocate:false lab lab
-  in
+  let fa = assertion ~global_assertion:true ~relocate:false lab lab in
   let ft = term ~global_assertion:true ~relocate:false lab lab in
   let params =
-    List.map
-      (fun vi ->
-         (vi.jc_var_info_final_name,
-           tr_base_type vi.jc_var_info_type))
-      li.jc_logic_info_parameters
+    List.map (tparam ~label_in_name:true lab) f.jc_logic_info_parameters
   in  
-  let params_reads = 
-    Jc_interp_misc.tmodel_parameters ~label_in_name:true li.jc_logic_info_effects @ params 
+  let model_params = 
+    tmodel_parameters ~label_in_name:true f.jc_logic_info_effects 
   in
+  let params = params @ model_params in
+
+  (* Function definition *)
   let acc =  
-    if li.jc_logic_info_is_recursive then
-      let ret = match li.jc_logic_info_result_type with
+    if f.jc_logic_info_is_recursive then
+      let result_ty' = match f.jc_logic_info_result_type with
 	| None -> simple_logic_type "prop"
 	| Some ty -> tr_base_type ty
       in
-      let decl = Logic(false,li.jc_logic_info_final_name,params_reads,ret) in
+      let decl = 
+	Logic(false, f.jc_logic_info_final_name, params, result_ty') 
+      in
       let defaxiom = 
-	let a = match li.jc_logic_info_result_type with
+	let a' = match f.jc_logic_info_result_type with
 	  | None ->
 	      let body = match ta with 
 		| JCAssertion a -> fa a
@@ -2254,8 +2253,8 @@ let tr_logic_fun li ta acc =
 		| JCReads _r -> assert false (* cannot be recursive *)
 	      in
 	      let call = 
-		LPred(li.jc_logic_info_final_name, 
-		      List.map (fun (name,_ty) -> LVar name) params_reads)
+		LPred(f.jc_logic_info_final_name, 
+		      List.map (fun (n,_ty') -> LVar n) params)
 	      in
 	      LIff(call,body)
 	  | Some ty ->
@@ -2267,35 +2266,35 @@ let tr_logic_fun li ta acc =
 		| JCReads _r -> assert false (* cannot be recursive *)
 	      in
 	      let call = 
-		LApp(li.jc_logic_info_final_name, 
-		     List.map (fun (name,_ty) -> LVar name) params_reads)
+		LApp(f.jc_logic_info_final_name, 
+		     List.map (fun (n,_ty) -> LVar n) params)
 	      in
-	      LPred("eq",[call;body])
+	      LPred("eq",[ call; body ]) (* Yannick: always proper equality? *)
 	in
-	let a = 
-	  List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
+	let a' = 
+	  List.fold_left (fun a' (n,ty') -> LForall(n,ty',a')) a' params
 	in
-	let name = "recursive_" ^ li.jc_logic_info_name in
-	Axiom(name,a)
+	let name = "recursive_" ^ f.jc_logic_info_name in
+	Axiom(name,a')
       in
       decl :: defaxiom :: acc 
     else
       let decl =
-	match li.jc_logic_info_result_type, ta with
+	match f.jc_logic_info_result_type, ta with
 	  | None, JCAssertion a -> (* Predicate *)
               let body = fa a in
-              Predicate(false,li.jc_logic_info_final_name,params_reads,body) 
+              Predicate(false, f.jc_logic_info_final_name, params, body) 
 	  | Some ty, JCTerm t -> (* Function *)
-              let ret = tr_base_type ty in
+              let ty' = tr_base_type ty in
               let t' = ft t in
 	      let t' = term_coerce t#pos ty t#typ t t' in
-              Function(false,li.jc_logic_info_final_name,params_reads,ret,t') 
-	  | tyo, JCReads r -> (* Logic *)
-              let ret = match tyo with
+              Function(false, f.jc_logic_info_final_name, params, ty', t') 
+	  | ty_opt, JCReads r -> (* Logic *)
+              let ty' = match ty_opt with
 		| None -> simple_logic_type "prop"
 		| Some ty -> tr_base_type ty
               in
-              Logic(false,li.jc_logic_info_final_name,params_reads,ret)
+              Logic(false, f.jc_logic_info_final_name, params, ty')
 	  | _ -> assert false (* Other *)
       in 
       decl :: acc 
@@ -2304,9 +2303,9 @@ let tr_logic_fun li ta acc =
   (* no_update axioms *)
   let acc = match ta with JCAssertion _ | JCTerm _ -> acc | JCReads pset ->
     let memory_params_reads = 
-      Jc_interp_misc.tmemory_detailed_params ~label_in_name:true li.jc_logic_info_effects
+      tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
     in
-    let params_names = List.map fst params_reads in
+    let params_names = List.map fst params in
     let normal_params = List.map (fun name -> LVar name) params_names in
     snd (List.fold_left
       (fun (count,acc) param ->
@@ -2327,22 +2326,22 @@ let tr_logic_fun li ta acc =
 		      ) params_names
 	   in
 	   let a = 
-             match li.jc_logic_info_result_type with
+             match f.jc_logic_info_result_type with
 	       | None ->
 		   LImpl(
                      sepa,
                      LIff(
-		       LPred(li.jc_logic_info_final_name,normal_params),
-		       LPred(li.jc_logic_info_final_name,update_params)))
+		       LPred(f.jc_logic_info_final_name,normal_params),
+		       LPred(f.jc_logic_info_final_name,update_params)))
 	       | Some rety ->
 		   LImpl(
                      sepa,
                      LPred("eq",[
-			     LApp(li.jc_logic_info_final_name,normal_params);
-			     LApp(li.jc_logic_info_final_name,update_params)]))
+			     LApp(f.jc_logic_info_final_name,normal_params);
+			     LApp(f.jc_logic_info_final_name,update_params)]))
 	   in
 	   let a = 
-             List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
+             List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params
 	   in
 	   let a = 
              LForall(
@@ -2352,18 +2351,18 @@ let tr_logic_fun li ta acc =
 		 a))
 	   in
 	   let name = 
-	     "no_update_" ^ li.jc_logic_info_name ^ "_" ^ string_of_int count
+	     "no_update_" ^ f.jc_logic_info_name ^ "_" ^ string_of_int count
 	   in
 	   count + 1, Axiom(name,a) :: acc
-      ) (0,acc) params_reads)
+      ) (0,acc) params)
   in
 
   (* no_assign axioms *)
   let acc = match ta with JCAssertion _ | JCTerm _ -> acc | JCReads pset ->
     let memory_params_reads = 
-      Jc_interp_misc.tmemory_detailed_params ~label_in_name:true li.jc_logic_info_effects
+      tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
     in
-    let params_names = List.map fst params_reads in
+    let params_names = List.map fst params in
     let normal_params = List.map (fun name -> LVar name) params_names in
     snd (List.fold_left
       (fun (count,acc) param ->
@@ -2387,22 +2386,22 @@ let tr_logic_fun li ta acc =
 		      ) params_names
 	   in
 	   let a = 
-             match li.jc_logic_info_result_type with
+             match f.jc_logic_info_result_type with
 	       | None ->
 		   LImpl(
                      make_and sepa upda,
                      LIff(
-		       LPred(li.jc_logic_info_final_name,normal_params),
-		       LPred(li.jc_logic_info_final_name,update_params)))
+		       LPred(f.jc_logic_info_final_name,normal_params),
+		       LPred(f.jc_logic_info_final_name,update_params)))
 	       | Some rety ->
 		   LImpl(
                      make_and sepa upda,
                      LPred("eq",[
-			     LApp(li.jc_logic_info_final_name,normal_params);
-			     LApp(li.jc_logic_info_final_name,update_params)]))
+			     LApp(f.jc_logic_info_final_name,normal_params);
+			     LApp(f.jc_logic_info_final_name,update_params)]))
 	   in
 	   let a = 
-             List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
+             List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params
 	   in
 	   let a = 
              LForall(
@@ -2414,18 +2413,18 @@ let tr_logic_fun li ta acc =
 		 a)))
 	   in
 	   let name = 
-	     "no_assign_" ^ li.jc_logic_info_name ^ "_" ^ string_of_int count
+	     "no_assign_" ^ f.jc_logic_info_name ^ "_" ^ string_of_int count
 	   in
 	   count + 1, Axiom(name,a) :: acc
-      ) (0,acc) params_reads) (* memory_param_reads ? *)
+      ) (0,acc) params) (* memory_param_reads ? *)
   in
 
   (* alloc_extend axioms *)
   let acc = match ta with JCAssertion _ | JCTerm _ -> acc | JCReads ps ->
     let alloc_params_reads = 
-      Jc_interp_misc.talloc_table_params ~label_in_name:true li.jc_logic_info_effects
+      Jc_interp_misc.talloc_table_params ~label_in_name:true f.jc_logic_info_effects
     in
-    let params_names = List.map fst params_reads in
+    let params_names = List.map fst params in
     let normal_params = List.map (fun name -> LVar name) params_names in
     snd (List.fold_left
       (fun (count,acc) param ->
@@ -2448,22 +2447,22 @@ let tr_logic_fun li ta acc =
 		    ) params_names
 	 in
 	 let a = 
-           match li.jc_logic_info_result_type with
+           match f.jc_logic_info_result_type with
 	     | None ->
 		 LImpl(
                    make_and exta valida,
                    LIff(
-		     LPred(li.jc_logic_info_final_name,normal_params),
-		     LPred(li.jc_logic_info_final_name,update_params)))
+		     LPred(f.jc_logic_info_final_name,normal_params),
+		     LPred(f.jc_logic_info_final_name,update_params)))
 	     | Some rety ->
 		 LImpl(
                    make_and exta valida,
                    LPred("eq",[
-			   LApp(li.jc_logic_info_final_name,normal_params);
-			   LApp(li.jc_logic_info_final_name,update_params)]))
+			   LApp(f.jc_logic_info_final_name,normal_params);
+			   LApp(f.jc_logic_info_final_name,update_params)]))
 	 in
 	 let a = 
-           List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params_reads
+           List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params
 	 in
 	 let a = 
 	   LForall(
@@ -2471,7 +2470,7 @@ let tr_logic_fun li ta acc =
 	     a)
 	 in
 	 let name = 
-	   "alloc_extend_" ^ li.jc_logic_info_name ^ "_" ^ string_of_int count
+	   "alloc_extend_" ^ f.jc_logic_info_name ^ "_" ^ string_of_int count
 	 in
 	 count + 1, Axiom(name,a) :: acc
       ) (0,acc) alloc_params_reads)

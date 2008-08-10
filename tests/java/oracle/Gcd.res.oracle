@@ -793,8 +793,8 @@ exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
-predicate Non_null_Object(Object_alloc_table:Object alloc_table,
- x:Object pointer) =
+predicate Non_null_Object(x:Object pointer,
+ Object_alloc_table:Object alloc_table) =
  eq_int(offset_max(Object_alloc_table, x), (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
@@ -2416,8 +2416,9 @@ logic Object_tag :  -> Object tag_id
 
 axiom Gcd_parenttag_Object: parenttag(Gcd_tag, Object_tag)
 
-predicate Non_null_Object(Object_alloc_table: Object alloc_table,
-  x: Object pointer) = (offset_max(Object_alloc_table, x) = 0)
+predicate Non_null_Object(x: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -4007,7 +4008,7 @@ why -simplify [...] why/Gcd.why
  ;; Why axiom Gcd_parenttag_Object
  (EQ (parenttag Gcd_tag Object_tag) |@true|))
 
-(DEFPRED (Non_null_Object Object_alloc_table x)
+(DEFPRED (Non_null_Object x Object_alloc_table)
   (EQ (offset_max Object_alloc_table x) 0))
 
 (BG_PUSH
@@ -5775,8 +5776,9 @@ logic Object_tag :  -> Object tag_id
 
 axiom Gcd_parenttag_Object: parenttag(Gcd_tag, Object_tag)
 
-predicate Non_null_Object(Object_alloc_table: Object alloc_table,
-  x: Object pointer) = (offset_max(Object_alloc_table, x) = 0)
+predicate Non_null_Object(x: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 

@@ -804,12 +804,12 @@ exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
-predicate Non_null_Object(Object_alloc_table:Object alloc_table,
- x_0:Object pointer) =
+predicate Non_null_Object(x_0:Object pointer,
+ Object_alloc_table:Object alloc_table) =
  eq_int(offset_max(Object_alloc_table, x_0), (0))
 
-predicate Non_null_intM(Object_alloc_table:Object alloc_table,
- x:Object pointer) =
+predicate Non_null_intM(x:Object pointer,
+ Object_alloc_table:Object alloc_table) =
  ge_int(offset_max(Object_alloc_table, x), neg_int((1)))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
@@ -954,16 +954,17 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
-predicate is_sorted(intM_intP_at_L:(Object,
- int32) memory,
- Object_alloc_table:Object alloc_table,
- t:Object pointer) =
- (Non_null_intM(Object_alloc_table, t)
+predicate is_sorted(t:Object pointer,
+ Object_alloc_table_at_L:Object alloc_table,
+ intM_intP_at_L:(Object,
+ int32) memory) =
+ (Non_null_intM(t, Object_alloc_table_at_L)
  and (forall i:int.
       (forall j:int.
        ((le_int((0), i)
         and (le_int(i, j)
-            and lt_int(j, add_int(offset_max(Object_alloc_table, t), (1))))) ->
+            and lt_int(j,
+                add_int(offset_max(Object_alloc_table_at_L, t), (1))))) ->
         le_int(integer_of_int32(select(intM_intP_at_L, shift(t, i))),
         integer_of_int32(select(intM_intP_at_L, shift(t, j))))))))
 
@@ -1071,7 +1072,7 @@ parameter BinarySearch_binary_search :
  t_0:Object pointer ->
   v:int32 ->
    { (JC_14:
-     (Non_null_intM(Object_alloc_table, t_0)
+     (Non_null_intM(t_0, Object_alloc_table)
      and (forall k1:int.
           (forall k2:int.
            ((le_int((0), k1)
@@ -1245,7 +1246,7 @@ parameter short_of_integer_ :
 let BinarySearch_binary_search_ensures_correctness =
  fun (t_0 : Object pointer) (v : int32) ->
   { (JC_14:
-    (Non_null_intM(Object_alloc_table, t_0)
+    (Non_null_intM(t_0, Object_alloc_table)
     and (forall k1:int.
          (forall k2:int.
           ((le_int((0), k1)
@@ -1363,7 +1364,7 @@ let BinarySearch_binary_search_ensures_correctness =
 let BinarySearch_binary_search_safety =
  fun (t_0 : Object pointer) (v : int32) ->
   { (JC_14:
-    (Non_null_intM(Object_alloc_table, t_0)
+    (Non_null_intM(t_0, Object_alloc_table)
     and (forall k1:int.
          (forall k2:int.
           ((le_int((0), k1)
@@ -1485,7 +1486,7 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "why/BinarySearch.why" line = "203" begin = "0" end = "206"/>
+      <location file = "why/BinarySearch.why" line = "204" begin = "0" end = "206"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -1496,7 +1497,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "why/BinarySearch.why" line = "604" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "605" begin = "49" end = "208"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
@@ -2535,11 +2536,13 @@ logic Object_tag :  -> Object tag_id
 
 axiom BinarySearch_parenttag_Object: parenttag(BinarySearch_tag, Object_tag)
 
-predicate Non_null_Object(Object_alloc_table: Object alloc_table,
-  x_0: Object pointer) = (offset_max(Object_alloc_table, x_0) = 0)
+predicate Non_null_Object(x_0: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x_0) = 0)
 
-predicate Non_null_intM(Object_alloc_table: Object alloc_table,
-  x: Object pointer) = (offset_max(Object_alloc_table, x) >= (-1))
+predicate Non_null_intM(x: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) >= (-1))
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -2675,13 +2678,14 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
-predicate is_sorted(intM_intP_at_L: (Object, int32) memory,
-  Object_alloc_table: Object alloc_table, t: Object pointer) =
-  (Non_null_intM(Object_alloc_table, t) and
+predicate is_sorted(t: Object pointer,
+  Object_alloc_table_at_L: Object alloc_table, intM_intP_at_L: (Object,
+  int32) memory) =
+  (Non_null_intM(t, Object_alloc_table_at_L) and
    (forall i:int.
      (forall j:int.
        (((0 <= i) and
-         ((i <= j) and (j < (offset_max(Object_alloc_table, t) + 1)))) ->
+         ((i <= j) and (j < (offset_max(Object_alloc_table_at_L, t) + 1)))) ->
         (integer_of_int32(select(intM_intP_at_L, shift(t,
         i))) <= integer_of_int32(select(intM_intP_at_L, shift(t, j))))))))
 
@@ -2771,7 +2775,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_9:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -2830,7 +2834,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_10:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -2889,7 +2893,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_11:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -2951,7 +2955,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_12:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3013,7 +3017,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_13:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3076,7 +3080,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_14:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3125,7 +3129,7 @@ goal BinarySearch_binary_search_safety_po_1:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3144,7 +3148,7 @@ goal BinarySearch_binary_search_safety_po_2:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3169,7 +3173,7 @@ goal BinarySearch_binary_search_safety_po_3:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3194,7 +3198,7 @@ goal BinarySearch_binary_search_safety_po_4:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3222,7 +3226,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_1:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3248,7 +3252,7 @@ goal BinarySearch_binary_search_safety_po_5:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3278,7 +3282,7 @@ goal BinarySearch_binary_search_safety_po_6:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3311,7 +3315,7 @@ goal BinarySearch_binary_search_safety_po_7:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3344,7 +3348,7 @@ goal BinarySearch_binary_search_safety_po_8:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3385,7 +3389,7 @@ goal BinarySearch_binary_search_safety_po_9:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3426,7 +3430,7 @@ goal BinarySearch_binary_search_safety_po_10:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3471,7 +3475,7 @@ goal BinarySearch_binary_search_safety_po_11:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3519,7 +3523,7 @@ goal BinarySearch_binary_search_safety_po_12:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3567,7 +3571,7 @@ goal BinarySearch_binary_search_safety_po_13:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3618,7 +3622,7 @@ goal BinarySearch_binary_search_safety_po_14:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3668,7 +3672,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_2:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3696,7 +3700,7 @@ goal BinarySearch_binary_search_safety_po_15:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3751,7 +3755,7 @@ goal BinarySearch_binary_search_safety_po_16:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3806,7 +3810,7 @@ goal BinarySearch_binary_search_safety_po_17:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3866,7 +3870,7 @@ goal BinarySearch_binary_search_safety_po_18:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3926,7 +3930,7 @@ goal BinarySearch_binary_search_safety_po_19:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -3992,7 +3996,7 @@ goal BinarySearch_binary_search_safety_po_20:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4059,7 +4063,7 @@ goal BinarySearch_binary_search_safety_po_21:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4129,7 +4133,7 @@ goal BinarySearch_binary_search_safety_po_22:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4199,7 +4203,7 @@ goal BinarySearch_binary_search_safety_po_23:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4265,7 +4269,7 @@ goal BinarySearch_binary_search_safety_po_24:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4332,7 +4336,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_3:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4363,7 +4367,7 @@ goal BinarySearch_binary_search_safety_po_25:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4428,7 +4432,7 @@ goal BinarySearch_binary_search_safety_po_26:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4493,7 +4497,7 @@ goal BinarySearch_binary_search_safety_po_27:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4565,7 +4569,7 @@ goal BinarySearch_binary_search_safety_po_28:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4640,7 +4644,7 @@ goal BinarySearch_binary_search_safety_po_29:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4715,7 +4719,7 @@ goal BinarySearch_binary_search_safety_po_30:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4786,7 +4790,7 @@ goal BinarySearch_binary_search_safety_po_31:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4858,7 +4862,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_4:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4889,7 +4893,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_5:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4930,7 +4934,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_6:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -4985,7 +4989,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_7:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -5041,7 +5045,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_8:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -5678,10 +5682,10 @@ why -simplify [...] why/BinarySearch.why
  ;; Why axiom BinarySearch_parenttag_Object
  (EQ (parenttag BinarySearch_tag Object_tag) |@true|))
 
-(DEFPRED (Non_null_Object Object_alloc_table x_0)
+(DEFPRED (Non_null_Object x_0 Object_alloc_table)
   (EQ (offset_max Object_alloc_table x_0) 0))
 
-(DEFPRED (Non_null_intM Object_alloc_table x)
+(DEFPRED (Non_null_intM x Object_alloc_table)
   (>= (offset_max Object_alloc_table x) (- 0 1)))
 
 (BG_PUSH
@@ -5798,11 +5802,12 @@ why -simplify [...] why/BinarySearch.why
  (FORALL (x interface_tag_table)
  (instanceof interface_tag_table x interface_tag)))
 
-(DEFPRED (is_sorted intM_intP_at_L Object_alloc_table t)
-  (AND (Non_null_intM Object_alloc_table t)
+(DEFPRED (is_sorted t Object_alloc_table_at_L intM_intP_at_L)
+  (AND (Non_null_intM t Object_alloc_table_at_L)
   (FORALL (i j)
   (IMPLIES
-  (AND (<= 0 i) (AND (<= i j) (< j (+ (offset_max Object_alloc_table t) 1))))
+  (AND (<= 0 i)
+  (AND (<= i j) (< j (+ (offset_max Object_alloc_table_at_L t) 1))))
   (<= (integer_of_int32 (select intM_intP_at_L (shift t i))) (integer_of_int32
                                                              (select
                                                              intM_intP_at_L 
@@ -5826,7 +5831,7 @@ why -simplify [...] why/BinarySearch.why
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
-;; mean_property, File "why/BinarySearch.why", line 203, characters 0-206
+;; mean_property, File "why/BinarySearch.why", line 204, characters 0-206
 (FORALL (x_4 y)
 (IMPLIES (<= x_4 y)
 (AND (<= x_4 (+ x_4 (int_div (- y x_4) 2)))
@@ -5886,7 +5891,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -5912,7 +5917,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -5939,7 +5944,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -5970,7 +5975,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6001,7 +6006,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6044,7 +6049,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6101,7 +6106,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6160,7 +6165,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6223,7 +6228,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6286,7 +6291,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6349,7 +6354,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6416,7 +6421,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6483,7 +6488,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6553,7 +6558,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6601,11 +6606,11 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
 (integer_of_int32 v)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 604, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 605, characters 49-208
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6624,7 +6629,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6649,7 +6654,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6674,7 +6679,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6703,7 +6708,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6733,7 +6738,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6767,7 +6772,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6801,7 +6806,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6845,7 +6850,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6888,7 +6893,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6938,7 +6943,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -6991,7 +6996,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7044,7 +7049,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7102,7 +7107,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7159,7 +7164,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7223,7 +7228,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7287,7 +7292,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7357,7 +7362,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7427,7 +7432,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7503,7 +7508,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7581,7 +7586,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7663,7 +7668,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7745,7 +7750,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7823,7 +7828,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7902,7 +7907,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -7978,7 +7983,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -8054,7 +8059,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -8138,7 +8143,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -8226,7 +8231,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -8314,7 +8319,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -8398,7 +8403,7 @@ why -simplify [...] why/BinarySearch.why
 (FORALL (v)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (Non_null_intM Object_alloc_table t_0)
+(IMPLIES (AND (Non_null_intM t_0 Object_alloc_table)
          (FORALL (k1 k2)
          (IMPLIES
          (AND (<= 0 k1)
@@ -9329,11 +9334,13 @@ logic Object_tag :  -> Object tag_id
 
 axiom BinarySearch_parenttag_Object: parenttag(BinarySearch_tag, Object_tag)
 
-predicate Non_null_Object(Object_alloc_table: Object alloc_table,
-  x_0: Object pointer) = (offset_max(Object_alloc_table, x_0) = 0)
+predicate Non_null_Object(x_0: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x_0) = 0)
 
-predicate Non_null_intM(Object_alloc_table: Object alloc_table,
-  x: Object pointer) = (offset_max(Object_alloc_table, x) >= (-1))
+predicate Non_null_intM(x: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) >= (-1))
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -9469,13 +9476,14 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
-predicate is_sorted(intM_intP_at_L: (Object, int32) memory,
-  Object_alloc_table: Object alloc_table, t: Object pointer) =
-  (Non_null_intM(Object_alloc_table, t) and
+predicate is_sorted(t: Object pointer,
+  Object_alloc_table_at_L: Object alloc_table, intM_intP_at_L: (Object,
+  int32) memory) =
+  (Non_null_intM(t, Object_alloc_table_at_L) and
    (forall i:int.
      (forall j:int.
        (((0 <= i) and
-         ((i <= j) and (j < (offset_max(Object_alloc_table, t) + 1)))) ->
+         ((i <= j) and (j < (offset_max(Object_alloc_table_at_L, t) + 1)))) ->
         (integer_of_int32(select(intM_intP_at_L, shift(t,
         i))) <= integer_of_int32(select(intM_intP_at_L, shift(t, j))))))))
 
@@ -9562,7 +9570,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_1:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -9587,7 +9595,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_2:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -9614,7 +9622,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_3:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -9644,7 +9652,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_4:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -9674,7 +9682,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_5:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -9714,7 +9722,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_6:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -9768,7 +9776,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_7:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -9823,7 +9831,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_8:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -9881,7 +9889,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_9:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -9939,7 +9947,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_10:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -9997,7 +10005,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_11:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10058,7 +10066,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_12:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10119,7 +10127,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_13:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10181,7 +10189,7 @@ goal BinarySearch_binary_search_ensures_correctness_po_14:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10229,7 +10237,7 @@ goal BinarySearch_binary_search_safety_po_1:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10247,7 +10255,7 @@ goal BinarySearch_binary_search_safety_po_2:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10271,7 +10279,7 @@ goal BinarySearch_binary_search_safety_po_3:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10295,7 +10303,7 @@ goal BinarySearch_binary_search_safety_po_4:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10322,7 +10330,7 @@ goal BinarySearch_binary_search_safety_po_5:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10351,7 +10359,7 @@ goal BinarySearch_binary_search_safety_po_6:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10383,7 +10391,7 @@ goal BinarySearch_binary_search_safety_po_7:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10415,7 +10423,7 @@ goal BinarySearch_binary_search_safety_po_8:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10455,7 +10463,7 @@ goal BinarySearch_binary_search_safety_po_9:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10495,7 +10503,7 @@ goal BinarySearch_binary_search_safety_po_10:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10539,7 +10547,7 @@ goal BinarySearch_binary_search_safety_po_11:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10586,7 +10594,7 @@ goal BinarySearch_binary_search_safety_po_12:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10633,7 +10641,7 @@ goal BinarySearch_binary_search_safety_po_13:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10683,7 +10691,7 @@ goal BinarySearch_binary_search_safety_po_14:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10733,7 +10741,7 @@ goal BinarySearch_binary_search_safety_po_15:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10787,7 +10795,7 @@ goal BinarySearch_binary_search_safety_po_16:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10841,7 +10849,7 @@ goal BinarySearch_binary_search_safety_po_17:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10900,7 +10908,7 @@ goal BinarySearch_binary_search_safety_po_18:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10959,7 +10967,7 @@ goal BinarySearch_binary_search_safety_po_19:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11024,7 +11032,7 @@ goal BinarySearch_binary_search_safety_po_20:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11090,7 +11098,7 @@ goal BinarySearch_binary_search_safety_po_21:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11159,7 +11167,7 @@ goal BinarySearch_binary_search_safety_po_22:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11228,7 +11236,7 @@ goal BinarySearch_binary_search_safety_po_23:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11293,7 +11301,7 @@ goal BinarySearch_binary_search_safety_po_24:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11359,7 +11367,7 @@ goal BinarySearch_binary_search_safety_po_25:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11423,7 +11431,7 @@ goal BinarySearch_binary_search_safety_po_26:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11487,7 +11495,7 @@ goal BinarySearch_binary_search_safety_po_27:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11558,7 +11566,7 @@ goal BinarySearch_binary_search_safety_po_28:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11632,7 +11640,7 @@ goal BinarySearch_binary_search_safety_po_29:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11706,7 +11714,7 @@ goal BinarySearch_binary_search_safety_po_30:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11776,7 +11784,7 @@ goal BinarySearch_binary_search_safety_po_31:
   forall intM_intP:(Object,
   int32) memory.
   ("JC_14":
-  (Non_null_intM(Object_alloc_table, t_0) and
+  (Non_null_intM(t_0, Object_alloc_table) and
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11843,10 +11851,10 @@ goal BinarySearch_binary_search_safety_po_31:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ..........#........................##.....##.. (41/0/0/5/0)
+why/BinarySearch_why.why      : ..........#........................##.....#... (42/0/0/4/0)
 total   :  46
-valid   :  41 ( 89%)
+valid   :  42 ( 91%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   5 ( 11%)
+timeout :   4 (  9%)
 failure :   0 (  0%)

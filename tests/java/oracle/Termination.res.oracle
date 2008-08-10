@@ -584,8 +584,8 @@ exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
-predicate Non_null_Object(Object_alloc_table:Object alloc_table,
- x:Object pointer) =
+predicate Non_null_Object(x:Object pointer,
+ Object_alloc_table:Object alloc_table) =
  eq_int(offset_max(Object_alloc_table, x), (0))
 
 logic Object_tag:  -> Object tag_id
@@ -1840,8 +1840,9 @@ type Object
 
 type interface
 
-predicate Non_null_Object(Object_alloc_table: Object alloc_table,
-  x: Object pointer) = (offset_max(Object_alloc_table, x) = 0)
+predicate Non_null_Object(x: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) = 0)
 
 logic Object_tag :  -> Object tag_id
 
@@ -2651,7 +2652,7 @@ why -simplify [...] why/Termination.why
  (EQ (concat_bitvector (select_bytes m p o1 s1) (select_bytes m p o2 s2))
  (select_bytes m p o1 (+ s1 s2)))))))
 
-(DEFPRED (Non_null_Object Object_alloc_table x)
+(DEFPRED (Non_null_Object x Object_alloc_table)
   (EQ (offset_max Object_alloc_table x) 0))
 
 (BG_PUSH
@@ -3671,8 +3672,9 @@ type Object
 
 type interface
 
-predicate Non_null_Object(Object_alloc_table: Object alloc_table,
-  x: Object pointer) = (offset_max(Object_alloc_table, x) = 0)
+predicate Non_null_Object(x: Object pointer,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) = 0)
 
 logic Object_tag :  -> Object tag_id
 

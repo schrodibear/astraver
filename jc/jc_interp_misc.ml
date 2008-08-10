@@ -228,6 +228,9 @@ let tvar ~label_in_name lab v =
   lvar ~constant:(not v.jc_var_info_assigned) ~label_in_name
     lab v.jc_var_info_final_name
 
+let tparam ~label_in_name lab v = 
+  tvar_name ~label_in_name lab v, tr_base_type v.jc_var_info_type 
+
 (* model variables *)
 
 let mutable_memory infunction (mc,r) =
@@ -502,9 +505,7 @@ let tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
        let labs = transpose_labels ?label_assoc labs in
        LogicLabelSet.fold
 	 (fun lab acc ->
-	    let param = 
-	      tvar_name ~label_in_name lab v, tr_base_type v.jc_var_info_type 
-	    in
+	    let param = tparam ~label_in_name lab v in
 	    (v, param) :: acc
 	 ) labs acc
     ) reads.jc_effect_globals []
@@ -534,7 +535,7 @@ let make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args =
       f.jc_logic_info_effects
   in
   let model_args = List.map (fun (n,_ty') -> LVar n) model_params in
-  model_args @ args
+  args @ model_args
 
 let make_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
   let args = 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.116 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.117 2008-08-10 00:28:10 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -273,14 +273,14 @@ let main () =
     let d = treat_enum_pairs d enumlist in
 
     (* production phase x.x : generation of Why logic constants *)
-    Jc_options.lprintf "Generation of Why logic constants@.";
-    let d =
-      Hashtbl.fold 
-	(fun _ (vi,init) acc ->
-	   Jc_interp.tr_logic_const vi init acc)
-	Jc_typing.logic_constants_table
-	d
-    in	       	  
+(*     Jc_options.lprintf "Generation of Why logic constants@."; *)
+(*     let d = *)
+(*       Hashtbl.fold  *)
+(* 	(fun _ (vi,init) acc -> *)
+(* 	   Jc_interp.tr_logic_const vi init acc) *)
+(* 	Jc_typing.logic_constants_table *)
+(* 	d *)
+(*     in	       	   *)
     (* production phase 2 : generation of Why logic functions *)
     Jc_options.lprintf "Generation of Why logic functions@.";
     let d_lfuns = 
