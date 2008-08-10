@@ -74,7 +74,7 @@ let invariant_for_struct this st =
     make_and_list
       (List.map 
 	 (fun (li, _) -> 
-	    make_logic_pred_call ~label_in_name:false li [this] [] []) invs)
+	    make_logic_pred_call ~label_in_name:false ~region_assoc:[] ~label_assoc:[] li [this]) invs)
   in
   let reads =
     List.fold_left
@@ -359,7 +359,7 @@ let invariant_params acc li =
   let acc =
     MemoryMap.fold
       (fun (mc,r) labels acc -> 
-	 (memory_name(mc,r), field_or_variant_memory_type mc)::acc)
+	 (memory_name(mc,r), memory_type mc)::acc)
       li.jc_logic_info_effects.jc_effect_memories
       acc
   in
@@ -516,10 +516,11 @@ let make_assume_all_assocs pp params =
 (***********)
 
 let mutable_memory_type pc =
-  memory_type (pointer_class_model_type pc) (tag_id_type pc)
+  raw_memory_type (pointer_class_model_type pc)
+    (tag_id_type (pointer_class_variant pc))
 
 let committed_memory_type pc =
-  memory_type (pointer_class_model_type pc) (simple_logic_type "bool")
+  raw_memory_type (pointer_class_model_type pc) (simple_logic_type "bool")
 
 let mutable_declaration st acc =
   if st.jc_struct_info_parent = None then
@@ -661,7 +662,7 @@ let not_mutable_implies_invariant this st (li, _) =
 
   (* invariant *)
   let invariant = 
-    make_logic_pred_call ~label_in_name:false li [LVar this] [] [] 
+    make_logic_pred_call ~label_in_name:false ~region_assoc:[] ~label_assoc:[] li [LVar this]
   in
 
   (* implies *)
@@ -670,7 +671,7 @@ let not_mutable_implies_invariant this st (li, _) =
   (* params *)
   let params = (mutable_name, mutable_memory_type (JCtag(st, [])))::params in
   let params = (generic_tag_table_name (struct_variant st),
-                tag_table_type (JCtag(st, [])))::params in
+                tag_table_type (struct_variant st))::params in
 
   params, impl
 
@@ -696,7 +697,7 @@ let not_mutable_implies_fields_committed this st =
 	     let fi_ac = alloc_class_of_pointer_class fi_pc in
 	     let alloc = generic_alloc_table_name fi_ac in
 	     let params =
-	       [ n, field_memory_type fi;
+	       [ n, memory_type (JCmem_field fi);
 		 committed_name, committed_memory_type fi_pc;
 		 alloc, alloc_table_type fi_ac; ]
 	     in
@@ -722,7 +723,7 @@ let not_mutable_implies_fields_committed this st =
   (* additional params *)
   let params = (mutable_name, mutable_memory_type (JCtag(st, [])))::params in
   let params = (generic_tag_table_name (struct_variant st),
-                tag_table_type (JCtag(st, [])))::params in
+                tag_table_type (struct_variant st))::params in
 
   (* implies *)
   let impl = LImpl(mutable_io, coms) in
@@ -736,7 +737,7 @@ let committed_implies_fully_packed this root =
   let mutable_name = mutable_name root in
   let mutable_type = mutable_memory_type root in
   let tag_table = generic_tag_table_name (pointer_class_variant root) in
-  let tag_table_type = tag_table_type root in
+  let tag_table_type = tag_table_type (pointer_class_variant root) in
 
   (* this.committed = true *)
   let com = LPred(
@@ -840,7 +841,7 @@ let owner_unicity this root =
   let params = List.map
     (fun fi ->
        let ac = JCalloc_struct (struct_variant fi.jc_field_info_struct) in
-       [ fi.jc_field_info_final_name, field_memory_type fi;
+       [ fi.jc_field_info_final_name, memory_type (JCmem_field fi);
 	 committed_name (JCtag(fi.jc_field_info_root, [])),
 	 committed_memory_type (JCtag(fi.jc_field_info_root, []));
 	 generic_alloc_table_name ac,
@@ -942,7 +943,7 @@ let assume_field_invariants fi =
     StringMap.empty
     invs
   in
-  assume_global_invariants (stringmap_elements hl)
+  assume_global_invariants (StringMap.values hl)
 
 (* Given the parameters of a function, assume all potentially useful
 forall this: st, not this.mutable => invariant *)
@@ -1161,7 +1162,7 @@ let pack_declaration st acc =
   let this = "this" in
   let this_type = pointer_type (JCtag(st, [])) in
   let tag = "tag" in
-  let tag_type = tag_id_type (JCtag(st, [])) in
+  let tag_type = tag_id_type (struct_variant st) in
   let mutable_name = mutable_name (JCtag(st, [])) in
   let inv, reads = invariant_for_struct (LVar this) st in
   let writes = StringSet.empty in
@@ -1223,7 +1224,7 @@ let unpack_declaration st acc =
   let this = "this" in
   let this_type = pointer_type (JCtag(st, [])) in
   let tag = "tag" in
-  let tag_type = tag_id_type (JCtag(st, [])) in
+  let tag_type = tag_id_type (struct_variant st) in
   let mutable_name = mutable_name (JCtag(st, [])) in
   let committed_name = committed_name (JCtag(st, [])) in
   let reads = StringSet.singleton mutable_name in

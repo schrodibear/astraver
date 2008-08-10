@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.120 2008-08-07 12:32:30 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.121 2008-08-10 00:00:54 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -86,31 +86,12 @@ let ef_union ef1 ef2 =
   }
 
 let ef_assoc ?label_assoc region_assoc ef =
-  let transpose_labels labs =
-    match label_assoc with
-      | None -> labs
-      | Some assoc ->
-	  LogicLabelSet.fold
-	    (fun lab acc ->
-	       try
-		 let lab = List.assoc lab assoc in
-		 LogicLabelSet.add lab acc
-	       with Not_found -> LogicLabelSet.add lab acc)
-	    labs LogicLabelSet.empty
-  in
-  let transpose_region r =
-    if Region.polymorphic r then
-      try Some (RegionList.assoc r region_assoc)
-      with Not_found -> None 
-	(* Local region not counted as effect for the caller *)
-    else Some r
-  in
   { ef with 
       jc_effect_alloc_table = 
         AllocMap.fold 
 	  (fun (ac,r) labs acc ->
-	     let labs = transpose_labels labs in
-	     match transpose_region r with
+	     let labs = transpose_labels ~label_assoc labs in
+	     match transpose_region (Some region_assoc) r with
 	       | None -> acc
 	       | Some r ->
 		   if not (Region.polymorphic r) then
@@ -120,8 +101,8 @@ let ef_assoc ?label_assoc region_assoc ef =
       jc_effect_tag_table =
         TagMap.fold 
 	  (fun (vi,r) labs acc -> 
-	     let labs = transpose_labels labs in
-	     match transpose_region r with
+	     let labs = transpose_labels ~label_assoc labs in
+	     match transpose_region (Some region_assoc) r with
 	       | None -> acc
 	       | Some r ->
 		   if not (Region.polymorphic r) then
@@ -131,8 +112,8 @@ let ef_assoc ?label_assoc region_assoc ef =
       jc_effect_memories =
         MemoryMap.fold 
 	  (fun (mc,r) labs acc ->
-	     let labs = transpose_labels labs in
-	     match transpose_region r with
+	     let labs = transpose_labels ~label_assoc labs in
+	     match transpose_region (Some region_assoc) r with
 	       | None -> acc
 	       | Some r ->
 		   if not (Region.polymorphic r) then 
@@ -141,8 +122,9 @@ let ef_assoc ?label_assoc region_assoc ef =
 	  ) ef.jc_effect_memories MemoryMap.empty;
       jc_effect_globals =
         VarMap.fold 
-	  (fun v labs acc -> VarMap.add v (transpose_labels labs) acc)
-	  ef.jc_effect_globals VarMap.empty;
+	  (fun v labs acc -> 
+	     VarMap.add v (transpose_labels ~label_assoc labs) acc
+	  ) ef.jc_effect_globals VarMap.empty;
   }
 
 let same_effects ef1 ef2 =

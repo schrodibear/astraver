@@ -74,15 +74,123 @@ let get_current_spec () =
 
 
 (******************************************************************************)
+(*                                   types                                    *)
+(******************************************************************************)
+
+(* basic model types *)
+
+let why_integer_type = simple_logic_type "int"
+
+let variant_model_type vi =
+  simple_logic_type (variant_type_name vi)
+
+let struct_model_type st = 
+  variant_model_type (struct_variant st)
+
+let pointer_class_model_type pc = 
+  variant_model_type (pointer_class_variant pc)
+
+let bitvector_type = simple_logic_type bitvector_type_name
+
+let alloc_class_type = function
+  | JCalloc_struct vi -> variant_model_type vi
+  | JCalloc_union vi -> variant_model_type vi
+  | JCalloc_bitvector -> bitvector_type
+
+let memory_class_type mc = 
+  alloc_class_type (alloc_class_of_mem_class mc)
+
+(* raw types *)
+
+let raw_pointer_type ty' =
+  { logic_type_name = pointer_type_name;
+    logic_type_args = [ty']; }
+
+let raw_pset_type ty' =
+  { logic_type_name = pset_type_name;
+    logic_type_args = [ty']; }
+
+let raw_alloc_table_type ty' =
+  { logic_type_name = alloc_table_type_name;
+    logic_type_args = [ty']; }
+
+let raw_tag_table_type ty' = 
+  { logic_type_name = tag_table_type_name;
+    logic_type_args = [ty']; }
+
+let raw_tag_id_type ty' = 
+  { logic_type_name = tag_id_type_name;
+    logic_type_args = [ty']; }
+
+let raw_memory_type ty1' ty2' =
+  { logic_type_name = memory_type_name;
+    logic_type_args = [ty1';ty2'] }
+
+(* translation *)
+
+let tr_native_type = function
+  | Tunit -> "unit"
+  | Tboolean -> "bool"
+  | Tinteger -> "int"
+  | Treal -> "real"
+  | Tstring -> "string"
+
+let tr_base_type = function
+  | JCTnative ty -> 
+      simple_logic_type (tr_native_type ty)
+  | JCTlogic s -> 
+      simple_logic_type s
+  | JCTenum ri -> 
+      simple_logic_type ri.jc_enum_info_name
+  | JCTpointer(pc, _, _) ->
+      raw_pointer_type (pointer_class_model_type pc)
+  | JCTnull | JCTany -> assert false
+  | JCTtype_var _ -> assert false (* TODO (need environment) *)
+
+let tr_type ty = Base_type (tr_base_type ty)
+
+(* model types *)
+
+let pointer_type pc = raw_pointer_type (pointer_class_model_type pc)
+
+let pset_type ac = raw_pset_type (alloc_class_type ac)
+
+let alloc_table_type ac = raw_alloc_table_type (alloc_class_type ac)
+
+let tag_table_type vi = raw_tag_table_type (variant_model_type vi)
+
+let tag_id_type vi = raw_tag_id_type (variant_model_type vi)
+
+let memory_type mc = 
+  let value_type = match mc with
+    | JCmem_field fi -> tr_base_type fi.jc_field_info_type
+    | JCmem_union _vi -> bitvector_type
+    | JCmem_bitvector -> bitvector_type
+  in
+  raw_memory_type (memory_class_type mc) value_type
+
+(* query model types *)
+
+let is_alloc_table_type ty' = ty'.logic_type_name = alloc_table_type_name
+
+let is_memory_type ty' = ty'.logic_type_name = memory_type_name
+
+let deconstruct_memory_type_args ty =
+  match ty.logic_type_args with [t;v] -> t,v | _ -> assert false
+
+	
+
+
+(******************************************************************************)
 (*                                 variables                                  *)
 (******************************************************************************)
 
-let lvar_name ~label_in_name ?label_assoc lab n =
+let lvar_name ~constant ~label_in_name ?label_assoc lab n =
   let lab = match label_assoc with
     | None -> lab 
     | Some assoc -> try List.assoc lab assoc with Not_found -> lab
   in	
-  if label_in_name then 
+  if label_in_name && not constant then 
     match lab with
       | LabelHere -> n
       | LabelOld -> assert false
@@ -91,17 +199,16 @@ let lvar_name ~label_in_name ?label_assoc lab n =
       | LabelName lab -> n ^ "_at_" ^ lab.label_info_final_name
   else n
 
-let lvar ~assigned ~label_in_name lab n =
-  let n = lvar_name ~label_in_name lab n in
-  if label_in_name then LVar n
-  else if assigned then
-    match lab with 
-      | LabelHere -> LVar n
-      | LabelOld -> LVarAtLabel(n,"")
-      | LabelPre -> LVarAtLabel(n,"init")
-      | LabelPost -> LVar n
-      | LabelName lab -> LVarAtLabel(n,lab.label_info_final_name)
-  else LVar n
+let lvar ~constant ~label_in_name lab n =
+  let n = lvar_name ~constant ~label_in_name lab n in
+  if label_in_name || constant then 
+    LVar n
+  else match lab with 
+    | LabelHere -> LVar n
+    | LabelOld -> LVarAtLabel(n,"")
+    | LabelPre -> LVarAtLabel(n,"init")
+    | LabelPost -> LVar n
+    | LabelName lab -> LVarAtLabel(n,lab.label_info_final_name)
 
 (* simple variables *)
 
@@ -113,8 +220,12 @@ let var v =
   then deref_var v.jc_var_info_final_name
   else plain_var v.jc_var_info_final_name
 
-let tvar lab v = 
-  lvar ~assigned:v.jc_var_info_assigned ~label_in_name:false
+let tvar_name ~label_in_name lab v = 
+  lvar_name ~constant:(not v.jc_var_info_assigned) ~label_in_name
+    lab v.jc_var_info_final_name
+
+let tvar ~label_in_name lab v = 
+  lvar ~constant:(not v.jc_var_info_assigned) ~label_in_name
     lab v.jc_var_info_final_name
 
 (* model variables *)
@@ -147,11 +258,21 @@ let memory_var (mc,r) =
 
 let tmemory_var ~label_in_name lab (mc,r) =
   let mem = memory_name (mc,r) in
-  let assigned = match !current_function with
-    | None -> true
-    | Some infunction -> mutable_memory infunction (mc,r) 
+  let constant = match !current_function with
+    | None -> false (* Variables at different labels should be different *)
+    | Some infunction -> not (mutable_memory infunction (mc,r))
   in
-  lvar ~assigned ~label_in_name lab mem
+  lvar ~constant ~label_in_name lab mem
+
+let tmemory_param ~label_in_name lab (mc,r) =
+  let mem = memory_name (mc,r) in
+  let constant = match !current_function with
+    | None -> false (* Variables at different labels should be different *)
+    | Some infunction -> not (mutable_memory infunction (mc,r))
+  in
+  let n = lvar_name ~constant ~label_in_name lab mem in
+  let ty' = memory_type mc in
+  n, ty'
 
 let plain_alloc_table_var (ac,r) = Var (alloc_table_name (ac,r))
 let deref_alloc_table_var (ac,r) = Deref (alloc_table_name (ac,r))
@@ -163,11 +284,21 @@ let alloc_table_var (ac,r) =
 
 let talloc_table_var ~label_in_name lab (ac,r) =
   let alloc = alloc_table_name (ac,r) in
-  let assigned = match !current_function with
-    | None -> true
-    | Some infunction -> mutable_alloc_table infunction (ac,r) 
+  let constant = match !current_function with
+    | None -> false (* Variables at different labels should be different *)
+    | Some infunction -> not (mutable_alloc_table infunction (ac,r))
   in
-  lvar ~assigned ~label_in_name lab alloc
+  lvar ~constant ~label_in_name lab alloc
+
+let talloc_table_param ~label_in_name lab (ac,r) =
+  let mem = alloc_table_name (ac,r) in
+  let constant = match !current_function with
+    | None -> false (* Variables at different labels should be different *)
+    | Some infunction -> not (mutable_alloc_table infunction (ac,r))
+  in
+  let n = lvar_name ~constant ~label_in_name lab mem in
+  let ty' = alloc_table_type ac in
+  n, ty'
 
 let plain_tag_table_var (vi,r) = Var (tag_table_name (vi,r))
 let deref_tag_table_var (vi,r) = Deref (tag_table_name (vi,r))
@@ -179,235 +310,243 @@ let tag_table_var (vi,r) =
 
 let ttag_table_var ~label_in_name lab (vi,r) =
   let tag = tag_table_name (vi,r) in
-  let assigned = match !current_function with
-    | None -> true
-    | Some infunction -> mutable_tag_table infunction (vi,r) 
+  let constant = match !current_function with
+    | None -> false (* Variables at different labels should be different *)
+    | Some infunction -> not (mutable_tag_table infunction (vi,r))
   in
-  lvar ~assigned ~label_in_name lab tag
+  lvar ~constant ~label_in_name lab tag
+
+let ttag_table_param ~label_in_name lab (vi,r) =
+  let mem = tag_table_name (vi,r) in
+  let constant = match !current_function with
+    | None -> false (* Variables at different labels should be different *)
+    | Some infunction -> not (mutable_tag_table infunction (vi,r))
+  in
+  let n = lvar_name ~constant ~label_in_name lab mem in
+  let ty' = tag_table_type vi in
+  n, ty'
 
 
 (******************************************************************************)
-(*                                   types                                    *)
+(*                               call arguments                               *)
 (******************************************************************************)
 
-(* Why type which modelises a variant. *)
-let variant_model_type vi =
-  simple_logic_type (variant_type_name vi)
+let add_alloc_table_argument (ac,distr) region_assoc acc =
+  if Region.polymorphic distr then
+    (* Polymorphic distant region passed as argument *)
+    try 
+      let locr = RegionList.assoc distr region_assoc in
+      (alloc_table_var (ac,locr))::acc 
+    with Not_found -> acc
+      (* Local allocation table. Not passed in argument by the caller. *)
+  else acc
 
-(* Why type which modelises a structure "root". *)
-let struct_model_type st = variant_model_type (struct_variant st)
+let write_allocs ~callee_writes ~region_assoc =
+  AllocMap.fold
+    (fun (ac,distr) _labs acc ->
+       add_alloc_table_argument (ac,distr) region_assoc acc
+    ) callee_writes.jc_effect_alloc_table []
 
-let pointer_class_model_type = function
-  | JCtag(st, _) -> struct_model_type st
-  | JCvariant vi -> variant_model_type vi
-  | JCunion vi -> variant_model_type vi
+let read_allocs ~caller_writes ~callee_writes ~callee_reads ~region_assoc =
+  AllocMap.fold
+    (fun (ac,distr) _labs acc ->
+       if AllocMap.mem (ac,distr) callee_writes.jc_effect_alloc_table then
+	 acc
+       else
+	 add_alloc_table_argument (ac,distr) region_assoc acc
+    ) callee_reads.jc_effect_alloc_table []
 
-let struct_model_type2 name =
-  let st, _ = Hashtbl.find Jc_typing.structs_table name in
-  struct_model_type st
+let add_tag_table_argument (vi,distr) region_assoc acc =
+  if Region.polymorphic distr then
+    (* Polymorphic distant region passed as argument *)
+    try 
+      let locr = RegionList.assoc distr region_assoc in
+      (tag_table_var (vi,locr))::acc 
+    with Not_found -> acc
+      (* Local tagation table. Not passed in argument by the caller. *)
+  else acc
 
-let raw_pointer_type ty =
-  {
-    logic_type_name = pointer_type_name;
-    logic_type_args = [ty];
-  }
+let write_tags ~callee_writes ~region_assoc =
+  TagMap.fold
+    (fun (vi,distr) _labs acc ->
+       add_tag_table_argument (vi,distr) region_assoc acc
+    ) callee_writes.jc_effect_tag_table []
 
-let raw_pset_type ty =
-  {
-    logic_type_name = pset_type_name;
-    logic_type_args = [ty];
-  }
+let read_tags ~caller_writes ~callee_writes ~callee_reads ~region_assoc =
+  TagMap.fold
+    (fun (vi,distr) _labs acc ->
+       if TagMap.mem (vi,distr) callee_writes.jc_effect_tag_table then
+	 acc
+       else
+	 add_tag_table_argument (vi,distr) region_assoc acc
+    ) callee_reads.jc_effect_tag_table []
 
-let pointer_type pc = raw_pointer_type (pointer_class_model_type pc)
+let add_memory_argument (mc,distr) region_assoc acc =
+  if Region.polymorphic distr then
+    (* Polymorphic distant region passed as argument *)
+    try 
+      let locr = RegionList.assoc distr region_assoc in
+      (memory_var (mc,locr))::acc 
+    with Not_found -> acc
+      (* Local memory. Not passed in argument by the caller. *)
+  else acc
 
-let tag_table_type pc = 
-  {
-    logic_type_name = tag_table_type_name;
-    logic_type_args = [pointer_class_model_type pc];
-  }
-
-let tag_id_type pc = 
-  {
-    logic_type_name = tag_id_type_name;
-    logic_type_args = [pointer_class_model_type pc];
-  }
-
-let raw_alloc_table_type ty =
-  {
-    logic_type_name = alloc_table_type_name;
-    logic_type_args = [ty];
-  }
-
-let bitvector_type = simple_logic_type bitvector_type_name
-
-let alloc_class_type = function
-  | JCalloc_struct vi -> variant_model_type vi
-  | JCalloc_union vi -> variant_model_type vi
-  | JCalloc_bitvector -> bitvector_type
-
-let alloc_table_type ac = 
-  raw_alloc_table_type (alloc_class_type ac)
-
-let is_alloc_table_type ty = ty.logic_type_name == alloc_table_type_name
-
-let tr_native_type t =
-  match t with
-    | Tunit -> "unit"
-    | Tboolean -> "bool"
-    | Tinteger -> "int"
-    | Treal -> "real"
-    | Tstring -> "string"
-
-let tr_base_type t =
-  match t with
-    | JCTnative t -> simple_logic_type (tr_native_type t)
-    | JCTlogic s -> simple_logic_type s
-    | JCTenum ri -> 
-	simple_logic_type ri.jc_enum_info_name
-    | JCTpointer (JCtag(st, _ (* TODO ? *)), _, _) ->
-	{ logic_type_name = pointer_type_name;
-	  logic_type_args = [struct_model_type st] }
-    | JCTpointer ((JCvariant vi | JCunion vi), _, _) ->
-	{ logic_type_name = pointer_type_name;
-	  logic_type_args = [variant_model_type vi] }
-    | JCTnull | JCTany -> assert false
-    | JCTtype_var _ -> assert false (* TODO (need environment) *)
-
-let why_integer_type = simple_logic_type "int"
-  
-let tr_type t = Base_type (tr_base_type t)
-
-let memory_type t v =
-  { logic_type_name = memory_type_name;
-    logic_type_args = [t;v] }
-
-let is_memory_type ty = ty.logic_type_name == memory_type_name
-
-let deconstruct_memory_type_args ty =
-  match ty.logic_type_args with [t;v] -> t,v | _ -> assert false
-
-let field_memory_type fi =
-  memory_type 
-    (struct_model_type fi.jc_field_info_root)
-    (tr_base_type fi.jc_field_info_type)
-
-let union_memory_type vi =
-  memory_type 
-    (variant_model_type vi)
-    (if integral_union vi then why_integer_type 
-     else 
-       bitvector_type)
-
-let bitvector_memory_type =
-  memory_type bitvector_type bitvector_type
-	
-let field_or_variant_memory_type mc =
-  match mc with
-    | JCmem_field fi -> field_memory_type fi
-    | JCmem_union vi -> union_memory_type vi
-    | JCmem_bitvector -> bitvector_memory_type
-
-
-let mutable_fvmemory infunction (mc,r) =
-  if Region.polymorphic r then
-    MemoryMap.mem 
-      (mc,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
-  else true
-
-let memory_logic_params ~label_in_name ?region_assoc ?label_assoc li =
+let write_mems ~callee_writes ~region_assoc =
   MemoryMap.fold
-    (fun (mc,r) labs acc ->
-       let r =
-	 match region_assoc with 
-	   | Some region_assoc when Region.polymorphic r ->
-	       begin
-		 Jc_options.lprintf "assoc:%a@." Region.print_assoc region_assoc;
-		 Jc_options.lprintf "r:%a@." Region.print r;
-		 try RegionList.assoc r region_assoc with Not_found -> assert false
-	       end
-	   | _ -> r
-       in
-       let name = memory_name(mc,r) in
-       let mut = match !current_function with
-	 | None -> true
-	 | Some infunction -> mutable_fvmemory infunction (mc,r) 
-       in
+    (fun (mc,distr) _labs acc -> 
+       add_memory_argument (mc,distr) region_assoc acc
+    ) callee_writes.jc_effect_memories []
+
+let read_mems ~caller_writes ~callee_reads ~callee_writes ~region_assoc =
+  MemoryMap.fold
+    (fun (mc,distr) _labs acc ->
+       if MemoryMap.mem (mc,distr) callee_writes.jc_effect_memories then
+	 acc
+       else
+       add_memory_argument (mc,distr) region_assoc acc
+    ) callee_reads.jc_effect_memories []
+
+let make_arguments
+    ~caller_writes ~callee_reads ~callee_writes ~region_assoc args =
+  let write_allocs = write_allocs ~callee_writes ~region_assoc in
+  let write_tags = write_tags ~callee_writes ~region_assoc in
+  let write_mems = write_mems ~callee_writes ~region_assoc in
+  let read_allocs = 
+    read_allocs ~caller_writes ~callee_reads ~callee_writes ~region_assoc
+  in
+  let read_tags = 
+    read_tags ~caller_writes ~callee_reads ~callee_writes ~region_assoc
+  in
+  let read_mems =
+    read_mems ~caller_writes ~callee_reads ~callee_writes ~region_assoc
+  in
+  args 
+  @ write_allocs @ write_tags @ write_mems 
+  @ read_allocs @ read_tags @ read_mems
+
+let transpose_labels ~label_assoc labs =
+  match label_assoc with
+    | None -> labs
+    | Some assoc ->
+	LogicLabelSet.fold
+	  (fun lab acc ->
+	     try
+	       let lab = List.assoc lab assoc in
+	       LogicLabelSet.add lab acc
+	     with Not_found -> LogicLabelSet.add lab acc)
+	  labs LogicLabelSet.empty
+
+let transpose_region ~region_assoc r =
+  match region_assoc with
+    | None -> Some r
+    | Some assoc ->
+	if Region.polymorphic r then
+	  try Some (RegionList.assoc r assoc)
+	  with Not_found -> None (* Local region *)
+	else Some r
+
+let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
+  MemoryMap.fold
+    (fun (mc,distr) labs acc ->
+       let labs = transpose_labels ?label_assoc labs in
+       let locr = the (transpose_region ?region_assoc distr) in
        LogicLabelSet.fold
 	 (fun lab acc ->
-	    let name = 
-	      if mut then 
-		lvar_name ~label_in_name ?label_assoc lab name 
-	      else 
-		lvar_name ~label_in_name ?label_assoc LabelHere name 
-	    in
-	    ((mc,r),(name, field_or_variant_memory_type mc))::acc)
-	 labs acc)
-    li.jc_logic_info_effects.jc_effect_memories
-    []
+	    let param = tmemory_param ~label_in_name lab (mc,locr) in
+	    ((mc,locr), param) :: acc
+	 ) labs acc
+    ) reads.jc_effect_memories []
 
-let alloc_logic_params ~label_in_name ?region_assoc ?label_assoc li =
+let tmemory_params ~label_in_name ?region_assoc ?label_assoc reads =
+  List.map snd 
+    (tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads)
+
+let talloc_table_detailed_params 
+    ~label_in_name ?region_assoc ?label_assoc reads =
   AllocMap.fold
-    (fun (ac,r) labs acc ->
-       let r =
-	 match region_assoc with
-	   | Some assoc when Region.polymorphic r ->
-	       begin
-		 Jc_options.lprintf "assoc:%a@." Region.print_assoc assoc;
-		 Jc_options.lprintf "r:%a@." Region.print r;
-		 try RegionList.assoc r assoc with Not_found -> assert false
-	       end
-	   | _ -> r
-       in
-       (alloc_table_name (ac, r),
-	alloc_table_type (ac))::acc)
-    li.jc_logic_info_effects.jc_effect_alloc_table
-    []
+    (fun (ac,distr) labs acc ->
+       let labs = transpose_labels ?label_assoc labs in
+       let locr = the (transpose_region ?region_assoc distr) in
+       LogicLabelSet.fold
+	 (fun lab acc ->
+	    let param = talloc_table_param ~label_in_name lab (ac,locr) in
+	    ((ac,locr), param) :: acc
+	 ) labs acc
+    ) reads.jc_effect_alloc_table []
 
-let logic_params ~label_in_name ?region_assoc ?label_assoc li =
-  let mems = List.map snd
-    (memory_logic_params ~label_in_name ?region_assoc ?label_assoc li)
-  in
+let talloc_table_params ~label_in_name ?region_assoc ?label_assoc reads =
+  List.map snd
+    (talloc_table_detailed_params 
+       ~label_in_name ?region_assoc ?label_assoc reads)
+
+let ttag_table_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
+  TagMap.fold
+    (fun (vi,distr) labs acc ->
+       let labs = transpose_labels ?label_assoc labs in
+       let locr = the (transpose_region ?region_assoc distr) in
+       LogicLabelSet.fold
+	 (fun lab acc ->
+	    let param = ttag_table_param ~label_in_name lab (vi,locr) in
+	    ((vi,locr), param) :: acc
+	 ) labs acc
+    ) reads.jc_effect_tag_table []
+
+let ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads =
+  List.map snd
+    (ttag_table_detailed_params 
+       ~label_in_name ?region_assoc ?label_assoc reads)
+
+let tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
+  VarMap.fold
+    (fun v labs acc ->
+       let labs = transpose_labels ?label_assoc labs in
+       LogicLabelSet.fold
+	 (fun lab acc ->
+	    let param = 
+	      tvar_name ~label_in_name lab v, tr_base_type v.jc_var_info_type 
+	    in
+	    (v, param) :: acc
+	 ) labs acc
+    ) reads.jc_effect_globals []
+
+let tglob_params ~label_in_name ?region_assoc ?label_assoc reads =
+  List.map snd
+    (tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads)
+
+let tmodel_parameters ~label_in_name ?region_assoc ?label_assoc reads =
   let allocs =
-    alloc_logic_params ~label_in_name ?region_assoc ?label_assoc li
+    talloc_table_params ~label_in_name ?region_assoc ?label_assoc reads
   in
   let tags = 
-    TagMap.fold
-      (fun (v,r) labs acc -> 
-	 let t = { logic_type_args = [variant_model_type v];
-		   logic_type_name = "tag_table" }
-	 in
-	 let name = tag_table_name (v,r) in
-	 LogicLabelSet.fold
-	   (fun lab acc ->
-	      let name = lvar_name ~label_in_name ?label_assoc lab name in
-	      (name, t)::acc)
-	   labs acc)
-      li.jc_logic_info_effects.jc_effect_tag_table
-      []
+    ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads
+  in
+  let mems = 
+    tmemory_params ~label_in_name ?region_assoc ?label_assoc reads 
   in
   let globs = 
-    VarMap.fold
-      (fun v labs acc -> 
-	 (v.jc_var_info_final_name, tr_base_type v.jc_var_info_type) :: acc
-      ) li.jc_logic_info_effects.jc_effect_globals
-      []
+    tglob_params ~label_in_name ?region_assoc ?label_assoc reads 
   in
-  mems @ allocs @ tags @ globs
+  allocs @ tags @ mems @ globs
 
-let logic_params_call ~label_in_name li l region_assoc label_assoc =
-  List.map 
-    (fun (id,t) -> LVar id)
-    (logic_params ~label_in_name ~region_assoc ~label_assoc li) @ l
+let make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args =
+  let model_params = 
+    tmodel_parameters ~label_in_name ~region_assoc ~label_assoc 
+      f.jc_logic_info_effects
+  in
+  let model_args = List.map (fun (n,_ty') -> LVar n) model_params in
+  model_args @ args
 
-let make_logic_fun_call ~label_in_name li l region_assoc label_assoc =
-  let params = logic_params_call ~label_in_name li l region_assoc label_assoc in
-  LApp(li.jc_logic_info_final_name,params)
+let make_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
+  let args = 
+    make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args 
+  in
+  LApp(f.jc_logic_info_final_name, args)
 
-let make_logic_pred_call ~label_in_name li l region_assoc label_assoc =
-  let params = logic_params_call ~label_in_name li l region_assoc label_assoc in 
-    LPred (li.jc_logic_info_final_name, params)
-
+let make_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f args =
+  let args = 
+    make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args
+  in 
+  LPred(f.jc_logic_info_final_name, args)
 
 
 (* *)
@@ -430,37 +569,6 @@ let logic_info_reads acc li =
     (fun v _ acc -> StringSet.add (tag_table_name v) acc)
     li.jc_logic_info_effects.jc_effect_tag_table
     acc
-(* *)
-
-
-(*
-
-(* same as in jc_interp.ml *)
-let tag_name st = st.jc_struct_info_name ^ "_tag"
-
-(* same as in jc_interp.ml *)
-let logic_params li l =
-  let l =
-    FieldRegionSet.fold
-      (fun (fi,r) acc -> (LVar(field_region_memory_name(fi,r)))::acc)
-      li.jc_logic_info_effects.jc_effect_memories
-      l	    
-  in
-  let l = 
-    AllocSet.fold
-      (fun (a,r) acc -> (LVar(alloc_table_name(a,r))::acc))
-      li.jc_logic_info_effects.jc_effect_alloc_table
-      l
-  in
-  StringSet.fold
-    (fun v acc -> (LVar (v ^ "_tag_table"))::acc)
-    li.jc_logic_info_effects.jc_effect_tag_table
-    l	    
-
-*)
-
-let stringmap_elements map =
-  StringMap.fold (fun _ i acc -> i::acc) map []
 
 (* The following functions should be eliminated eventually, but before,
  * effect.ml must be redone.
@@ -727,6 +835,15 @@ let access_union e fi_opt =
 	      if of_union_type e#typ then
 		Some (e, fieldoffbytes fi)
 	      else None
+
+let destruct_union_access e fi_opt = 
+  assert false (* TODO *)
+
+let tdestruct_union_access e fi_opt = 
+  assert false (* TODO *)
+
+let ldestruct_union_access e fi_opt = 
+  assert false (* TODO *)
 
 let taccess_union t fi_opt =
   let fieldoffbytes fi = 

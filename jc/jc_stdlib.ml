@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_stdlib.ml,v 1.2 2008-08-07 12:32:30 moy Exp $ *)
+(* $Id: jc_stdlib.ml,v 1.3 2008-08-10 00:00:54 moy Exp $ *)
 
 module List = struct
   include List
@@ -63,6 +63,7 @@ module Map = struct
     include Map.S
     val elements: 'a t -> (key * 'a) list
     val keys: 'a t -> key list
+    val values: 'a t -> 'a list
     val filter: (key -> 'a -> bool) -> 'a t -> 'a t
     val merge: ('a -> 'a -> 'a) -> 'a t -> 'a t -> 'a t
     val add_merge: ('a -> 'a -> 'a) -> key -> 'a -> 'a t -> 'a t
@@ -78,6 +79,9 @@ module Map = struct
 
     let keys m = 
       fold (fun k _v acc -> k :: acc) m []
+
+    let values m = 
+      fold (fun _k v acc -> v :: acc) m []
 
     let filter f m =
       fold (fun k v m ->
