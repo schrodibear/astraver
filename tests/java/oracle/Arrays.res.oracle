@@ -1264,6 +1264,16 @@ parameter intM_intP : (Object, int) memory ref
 
 parameter Arrays_arrayShift :
  t_2:Object pointer ->
+  { } unit reads Object_alloc_table,intM_intP writes intM_intP
+  { (JC_49:
+    (forall i_0:int.
+     ((lt_int((0), i_0)
+      and lt_int(i_0, add_int(offset_max(Object_alloc_table, t_2), (1)))) ->
+      eq_int(select(intM_intP, shift(t_2, i_0)),
+      select(intM_intP@, shift(t_2, sub_int(i_0, (1)))))))) }
+
+parameter Arrays_arrayShift_requires :
+ t_2:Object pointer ->
   { (JC_46: Non_null_intM(t_2, Object_alloc_table))} unit
   reads Object_alloc_table,intM_intP writes intM_intP
   { (JC_49:
@@ -1274,6 +1284,42 @@ parameter Arrays_arrayShift :
       select(intM_intP@, shift(t_2, sub_int(i_0, (1)))))))) }
 
 parameter Arrays_findMax :
+ t_0:Object pointer ->
+  { } int reads Object_alloc_table,intM_intP
+  { (JC_17:
+    (le_int((0), result)
+    and (lt_int(result, add_int(offset_max(Object_alloc_table, t_0), (1)))
+        and (forall i_4:int.
+             ((le_int((0), i_4)
+              and lt_int(i_4,
+                  add_int(offset_max(Object_alloc_table, t_0), (1)))) ->
+              le_int(select(intM_intP, shift(t_0, i_4)),
+              select(intM_intP, shift(t_0, result)))))))) }
+
+parameter Arrays_findMax2 :
+ t_1:Object pointer ->
+  { } int reads Object_alloc_table,intM_intP
+  { (JC_33:
+    (le_int((0), result)
+    and (lt_int(result, add_int(offset_max(Object_alloc_table, t_1), (1)))
+        and is_max(t_1, result,
+            add_int(offset_max(Object_alloc_table, t_1), (1)),
+            Object_alloc_table, intM_intP)))) }
+
+parameter Arrays_findMax2_requires :
+ t_1:Object pointer ->
+  { (JC_30:
+    (Non_null_intM(t_1, Object_alloc_table)
+    and ge_int(add_int(offset_max(Object_alloc_table, t_1), (1)), (1))))}
+  int reads Object_alloc_table,intM_intP
+  { (JC_33:
+    (le_int((0), result)
+    and (lt_int(result, add_int(offset_max(Object_alloc_table, t_1), (1)))
+        and is_max(t_1, result,
+            add_int(offset_max(Object_alloc_table, t_1), (1)),
+            Object_alloc_table, intM_intP)))) }
+
+parameter Arrays_findMax_requires :
  t_0:Object pointer ->
   { (JC_14:
     (Non_null_intM(t_0, Object_alloc_table)
@@ -1290,19 +1336,6 @@ parameter Arrays_findMax :
                   add_int(offset_max(Object_alloc_table, t_0), (1)))) ->
               le_int(select(intM_intP, shift(t_0, i_4)),
               select(intM_intP, shift(t_0, result)))))))) }
-
-parameter Arrays_findMax2 :
- t_1:Object pointer ->
-  { (JC_30:
-    (Non_null_intM(t_1, Object_alloc_table)
-    and ge_int(add_int(offset_max(Object_alloc_table, t_1), (1)), (1))))}
-  int reads Object_alloc_table,intM_intP
-  { (JC_33:
-    (le_int((0), result)
-    and (lt_int(result, add_int(offset_max(Object_alloc_table, t_1), (1)))
-        and is_max(t_1, result,
-            add_int(offset_max(Object_alloc_table, t_1), (1)),
-            Object_alloc_table, intM_intP)))) }
 
 parameter Object_tag_table : Object tag_table ref
 
@@ -1375,7 +1408,20 @@ parameter alloc_interface :
 parameter cons_Arrays :
  this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter cons_Arrays_requires :
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter java_array_length_intM :
+ x_2:Object pointer ->
+  { } int reads Object_alloc_table
+  { (JC_8:
+    (le_int(result, (2147483647))
+    and (ge_int(result, (0))
+        and (eq_int(result,
+             add_int(offset_max(Object_alloc_table, x_2), (1)))
+            and (true = true))))) }
+
+parameter java_array_length_intM_requires :
  x_2:Object pointer ->
   { } int reads Object_alloc_table
   { (JC_8:
@@ -1393,7 +1439,23 @@ parameter non_null_Object :
      then eq_int(offset_max(Object_alloc_table, x_3), (0))
      else (x_3 = null))) }
 
+parameter non_null_Object_requires :
+ x_3:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_13:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_3), (0))
+     else (x_3 = null))) }
+
 parameter non_null_intM :
+ x_1:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_4:
+    (if result
+     then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
+     else (x_1 = null))) }
+
+parameter non_null_intM_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_4:
@@ -1492,7 +1554,8 @@ let Arrays_arrayShift_safety =
                               { ge_int(offset_max(Object_alloc_table,
                                        jessie_39),
                                 (-1)) };
-                              (JC_51: (java_array_length_intM jessie_39)))))) (1))) in
+                              (JC_51:
+                              (java_array_length_intM_requires jessie_39)))))) (1))) in
      try
       while true do
       { invariant
@@ -1685,7 +1748,7 @@ let Arrays_findMax2_safety =
                                                           jessie_24),
                                                    (-1)) };
                                                  (JC_38:
-                                                 (java_array_length_intM jessie_24)))))))
+                                                 (java_array_length_intM_requires jessie_24)))))))
                              then
                               (if (K_20:
                                   ((gt_int_ (K_19:
@@ -1869,7 +1932,7 @@ let Arrays_findMax_safety =
                                                           jessie_10),
                                                    (-1)) };
                                                  (JC_22:
-                                                 (java_array_length_intM jessie_10)))))))
+                                                 (java_array_length_intM_requires jessie_10)))))))
                              then
                               (if (K_7:
                                   ((gt_int_ (K_6:
@@ -1954,7 +2017,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po51.why">
-      <location file = "why/Arrays.why" line = "547" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "610" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po52.why">
@@ -2152,7 +2215,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po98.why">
-      <location file = "why/Arrays.why" line = "731" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "794" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po99.why">
@@ -2321,7 +2384,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po9.why">
-      <location file = "why/Arrays.why" line = "355" begin = "32" end = "158"/>
+      <location file = "why/Arrays.why" line = "417" begin = "32" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po10.why">
@@ -7886,7 +7949,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP0 (shift t_2 i_0))
 (select intM_intP (shift t_2 (- i_0 1))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 355, characters 32-158
+;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 417, characters 32-158
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM t_2 Object_alloc_table)
@@ -8881,7 +8944,7 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (is_max t_1 0 1 Object_alloc_table intM_intP))))))))
 
-;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 547, characters 51-215
+;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 610, characters 51-215
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10192,7 +10255,7 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
 (IMPLIES (AND (<= 0 j_1) (< j_1 1))
 (<= (select intM_intP (shift t_0 j_1)) result))))))))))
 
-;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 731, characters 51-215
+;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 794, characters 51-215
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

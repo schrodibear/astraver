@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.331 2008-08-11 12:48:30 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.332 2008-08-11 13:17:55 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -1761,10 +1761,12 @@ and expr e =
                   ~region_assoc: call.jc_call_region_assoc
 		  args
 	      in
-	      let call = 
-		make_guarded_app e#mark UserCall 
-		  e#pos f.jc_fun_info_final_name args
+	      let fname = 
+		if safety_checking () then 
+		  f.jc_fun_info_final_name ^ "_requires"
+		else f.jc_fun_info_final_name
 	      in
+	      let call = make_guarded_app e#mark UserCall e#pos fname args in
               let arg_types_assert =
 		List.fold_right
 		  (fun opt acc -> 
@@ -2576,7 +2578,7 @@ let excep_posts_for_others eopt excep_posts =
          | None -> (exception_name ei, LTrue)::acc)
     excep_posts []
     
-let interp_fun_params f write_mems read_mems annot_type =
+let fun_parameters f write_mems read_mems annot_type =
   let annot_type = 
     if !Jc_options.separation_sem = SepNone then annot_type else
       List.fold_right (fun (name,ty) acc ->
@@ -2615,24 +2617,30 @@ let function_body f spec behavior_name body =
   reset_current_spec ();
   e
 
-let assume_in_precondition behav pre =
-  match behav.jc_behavior_assumes with
+let assume_in_precondition b pre =
+  match b.jc_behavior_assumes with
     | None -> pre
-    | Some assum ->
-	make_and (assertion ~global_assertion:false ~relocate:false
-		    LabelHere LabelHere assum) pre
+    | Some a ->
+	let a' = 
+	  assertion ~global_assertion:false ~relocate:false
+	    LabelHere LabelHere a
+	in
+	make_and a' pre
 
-let assume_in_postcondition behav post =
-  match behav.jc_behavior_assumes with
+let assume_in_postcondition b post =
+  match b.jc_behavior_assumes with
     | None -> post
-    | Some assum ->
-	make_impl (assertion ~global_assertion:false ~relocate:true
-		     LabelOld LabelOld assum) post
+    | Some a ->
+	let a' = 
+	  assertion ~global_assertion:false ~relocate:true LabelOld LabelOld a
+	in
+	make_impl a' post
   
 let tr_fun f funpos spec body acc =
 
   (* requirement for calling the function and extra requirement 
      for analyzing it *)
+
   let requires = 
     named_assertion LabelHere LabelHere spec.jc_fun_requires
   in
@@ -2670,6 +2678,7 @@ let tr_fun f funpos spec body acc =
      - (optional) 'safety' behavior (if Arguments Invariant Policy is selected)
      - (optional) 'inferred' behaviors (computed by analysis)
      - user defined behaviors *)
+
   let (safety_behavior,
        normal_behaviors_inferred, normal_behaviors, 
        excep_behaviors_inferred, excep_behaviors) =
@@ -2736,6 +2745,7 @@ let tr_fun f funpos spec body acc =
   in
 
   (* Effects, parameters and locals *)
+
   let writes = 
     write_effects 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
@@ -2791,73 +2801,75 @@ let tr_fun f funpos spec body acc =
   in
 
   (* Postcondition *)
+
+  let add_modif_postcondition f (_id,b,post) acc = 
+    make_and (f b post) acc 
+  in
+  let add_postcondition = add_modif_postcondition (fun _b post -> post) in
   let safety_post =
-    List.fold_right
-      (fun (_, _, e) acc -> make_and e acc)
-      safety_behavior LTrue
+    List.fold_right add_postcondition safety_behavior LTrue
   in
   let normal_post =
-    List.fold_right
-      (fun (_id,behav,post) acc -> 
-	 let post = assume_in_postcondition behav post in
-	 make_and post acc
-      ) normal_behaviors LTrue
+    List.fold_right 
+      (add_modif_postcondition assume_in_postcondition) normal_behaviors LTrue
   in
   let normal_post_inferred =
-    List.fold_right
-      (fun (_,_,e) acc -> make_and e acc)
-      normal_behaviors_inferred LTrue
+    List.fold_right add_postcondition normal_behaviors_inferred LTrue
   in
   let excep_posts =
     ExceptionMap.fold
-      (fun ei l acc ->
-         let p = 
-           List.fold_right (fun (_,_,e) acc -> make_and e acc) l LTrue
-         in (exception_name ei,p)::acc) 
-      excep_behaviors []
+      (fun exc bl acc ->
+         let a' = List.fold_right add_postcondition bl LTrue in
+         (exception_name exc, a') :: acc
+      ) excep_behaviors []
   in
   let excep_posts_inferred =
     ExceptionMap.fold
-      (fun ei l acc ->
-         let p = 
-           List.fold_right (fun (_id,behav,post) acc -> 
-			      let post = assume_in_postcondition behav post in
-			      make_and post acc
-			   ) l LTrue
-         in (exception_name ei,p)::acc) 
-      excep_behaviors_inferred []
+      (fun exc bl acc ->
+         let a' = 
+           List.fold_right 
+	     (add_modif_postcondition assume_in_postcondition) bl LTrue
+         in
+	 (exception_name exc, a') :: acc
+      ) excep_behaviors_inferred []
   in
-    (* DEBUG *)
-    (* Jc_options.lprintf "DEBUG: tr_fun 2@."; *)
-    (* why parameter for calling the function *)
+
+  (* Function type *)
+
   let ret_type = tr_type f.jc_fun_info_result.jc_var_info_type in
   let param_normal_post = 
     if is_purely_exceptional_fun spec then LFalse else
       make_and_list [safety_post; normal_post; normal_post_inferred] 
   in
   let param_excep_posts = excep_posts @ excep_posts_inferred in
-  let why_param = 
-    let annot_type =
+  let acc = 
+    let annot_type = (* function declaration with precondition *)
       Annot_type(requires, ret_type,
-                 reads,writes, param_normal_post, param_excep_posts)
+                 reads, writes, 
+		 param_normal_post, param_excep_posts)
     in
-    let fun_type = 
-      interp_fun_params f 
-        write_params
-        read_params 
-        annot_type 
-    in
-      Param (false, f.jc_fun_info_final_name, fun_type)
+    let fun_type = fun_parameters f write_params read_params annot_type in
+    Param(false, f.jc_fun_info_final_name ^ "_requires", fun_type) :: acc
   in
+  let acc = (* function declaration without precondition *)
+    let annot_type =
+      Annot_type(LTrue, ret_type,
+                 reads, writes, 
+		 param_normal_post, param_excep_posts)
+    in
+    let fun_type = fun_parameters f write_params read_params annot_type in
+    Param(false, f.jc_fun_info_final_name, fun_type) :: acc
+  in
+
+  (* Function body *)
+
   match body with
-    | None -> 
-        (* function was only declared *)
-        why_param :: acc
+    | None -> acc (* function was only declared *)
     | Some body ->
         if Jc_options.verify <> [] && 
-          not (List.mem f.Jc_fenv.jc_fun_info_name Jc_options.verify) 
+          not (List.mem f.jc_fun_info_name Jc_options.verify) 
         then 
-          why_param :: acc 
+          acc (* function is not in the list of function to verify *) 
         else
           (* why functions for each behaviors *)
             let write_mems = 
@@ -3051,7 +3063,7 @@ let tr_fun f funpos spec body acc =
                       user_excep_behaviors acc
                   in
                     acc 
-        in why_param::acc
+        in acc
 
 let tr_fun f funpos spec body acc =
   set_current_function f;

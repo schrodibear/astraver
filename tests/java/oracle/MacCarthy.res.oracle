@@ -911,9 +911,19 @@ parameter MacCarthy_f91 :
   { ((ge_int(n_1, (101)) -> (JC_9: eq_int(result, sub_int(n_1, (10)))))
     and (le_int(n_1, (100)) -> (JC_8: eq_int(result, (91))))) }
 
+parameter MacCarthy_f91_requires :
+ n_1:int ->
+  { } int
+  { ((ge_int(n_1, (101)) -> (JC_9: eq_int(result, sub_int(n_1, (10)))))
+    and (le_int(n_1, (100)) -> (JC_8: eq_int(result, (91))))) }
+
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_clone :
+ this_4:Object pointer ->
+  { } Object pointer reads Object_alloc_table { true }
+
+parameter Object_clone_requires :
  this_4:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
@@ -921,10 +931,20 @@ parameter Object_equals :
  this_3:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
+parameter Object_equals_requires :
+ this_3:Object pointer ->
+  obj:Object pointer -> { } bool reads Object_alloc_table { true }
+
 parameter Object_finalize :
  this_11:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter Object_finalize_requires :
+ this_11:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter Object_hashCode :
+ this_2:Object pointer -> { } int reads Object_alloc_table { true }
+
+parameter Object_hashCode_requires :
  this_2:Object pointer -> { } int reads Object_alloc_table { true }
 
 parameter Object_notify :
@@ -933,11 +953,23 @@ parameter Object_notify :
 parameter Object_notifyAll :
  this_7:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter Object_notifyAll_requires :
+ this_7:Object pointer -> { } unit reads Object_alloc_table { true }
+
+parameter Object_notify_requires :
+ this_6:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter Object_registerNatives : tt:unit -> { } unit { true }
+
+parameter Object_registerNatives_requires : tt:unit -> { } unit { true }
 
 parameter Object_tag_table : Object tag_table ref
 
 parameter Object_toString :
+ this_5:Object pointer ->
+  { } Object pointer reads Object_alloc_table { true }
+
+parameter Object_toString_requires :
  this_5:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
 
@@ -951,6 +983,17 @@ parameter Object_wait_long :
 parameter Object_wait_long_int :
  this_9:Object pointer ->
   timeout_0:int -> nanos:int -> { } unit reads Object_alloc_table { true }
+
+parameter Object_wait_long_int_requires :
+ this_9:Object pointer ->
+  timeout_0:int -> nanos:int -> { } unit reads Object_alloc_table { true }
+
+parameter Object_wait_long_requires :
+ this_8:Object pointer ->
+  timeout:int -> { } unit reads Object_alloc_table { true }
+
+parameter Object_wait_requires :
+ this_10:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter alloc_MacCarthy :
  n:int ->
@@ -1012,10 +1055,24 @@ parameter alloc_interface :
 parameter cons_MacCarthy :
  this_1:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter cons_MacCarthy_requires :
+ this_1:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter cons_Object :
  this_12:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter cons_Object_requires :
+ this_12:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter non_null_Object :
+ x_0:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_4:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
+
+parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_4:
@@ -1085,9 +1142,10 @@ let MacCarthy_f91_safety =
       begin
         (return := (K_6:
                    (JC_13:
-                   (MacCarthy_f91 (K_5:
-                                  (JC_12:
-                                  (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
+                   (MacCarthy_f91_requires (K_5:
+                                           (JC_12:
+                                           (MacCarthy_f91_requires (K_4:
+                                                                   ((add_int n_1) (11))))))))));
        (raise Return)
       end
      else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);

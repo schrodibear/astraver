@@ -1010,6 +1010,16 @@ predicate valid_variant_interface(p:interface pointer,
 parameter Gcd_gcd :
  x_8:int ->
   y_8:int ->
+   { } int
+   { ((JC_9:
+      (exists a_2:int.
+       (exists b_1:int.
+        eq_int(add_int(mul_int(a_2, x_8), mul_int(b_1, y_8)), result))))
+     and (JC_8: isGcd(x_8, y_8, result))) }
+
+parameter Gcd_gcd_requires :
+ x_8:int ->
+  y_8:int ->
    { (JC_5: (ge_int(x_8, (0)) and ge_int(y_8, (0))))} int
    { ((JC_9:
       (exists a_2:int.
@@ -1080,7 +1090,18 @@ parameter alloc_interface :
 parameter cons_Gcd :
  this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter cons_Gcd_requires :
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter non_null_Object :
+ x_0:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_4:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
+
+parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_4:

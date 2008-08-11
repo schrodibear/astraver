@@ -805,6 +805,16 @@ parameter intM_intP : (Object, int32) memory ref
 
 parameter AllZeros_all_zeros :
  t:Object pointer ->
+  { } bool reads Object_alloc_table,intM_intP
+  { (JC_17:
+    ((result = true)
+    <-> (forall i:int.
+         ((le_int((0), i)
+          and lt_int(i, add_int(offset_max(Object_alloc_table, t), (1)))) ->
+          eq_int(integer_of_int32(select(intM_intP, shift(t, i))), (0)))))) }
+
+parameter AllZeros_all_zeros_requires :
+ t:Object pointer ->
   { (JC_14: Non_null_intM(t, Object_alloc_table))} bool
   reads Object_alloc_table,intM_intP
   { (JC_17:
@@ -905,12 +915,25 @@ parameter char_of_integer_ :
 parameter cons_AllZeros :
  this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter cons_AllZeros_requires :
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
   { eq_int(integer_of_int32(result), x) }
 
 parameter java_array_length_intM :
+ x_2:Object pointer ->
+  { } int reads Object_alloc_table
+  { (JC_8:
+    (le_int(result, (2147483647))
+    and (ge_int(result, (0))
+        and (eq_int(result,
+             add_int(offset_max(Object_alloc_table, x_2), (1)))
+            and (true = true))))) }
+
+parameter java_array_length_intM_requires :
  x_2:Object pointer ->
   { } int reads Object_alloc_table
   { (JC_8:
@@ -933,7 +956,23 @@ parameter non_null_Object :
      then eq_int(offset_max(Object_alloc_table, x_3), (0))
      else (x_3 = null))) }
 
+parameter non_null_Object_requires :
+ x_3:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_13:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_3), (0))
+     else (x_3 = null))) }
+
 parameter non_null_intM :
+ x_1:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_4:
+    (if result
+     then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
+     else (x_1 = null))) }
+
+parameter non_null_intM_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_4:
@@ -1065,7 +1104,7 @@ let AllZeros_all_zeros_safety =
                                                                  jessie_4),
                                                                  (-1)) };
                                                                (JC_20:
-                                                               (java_array_length_intM jessie_4)))))))
+                                                               (java_array_length_intM_requires jessie_4)))))))
                           then
                            (if (K_6:
                                ((neq_int_ (integer_of_int32 (K_5:
@@ -1126,7 +1165,7 @@ why --project [...] why/AllZeros.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/AllZeros_po14.why">
-      <location file = "why/AllZeros.why" line = "518" begin = "65" end = "315"/>
+      <location file = "why/AllZeros.why" line = "557" begin = "65" end = "315"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/AllZeros_po15.why">
@@ -3849,7 +3888,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 result)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))
 
-;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 518, characters 65-315
+;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 557, characters 65-315
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

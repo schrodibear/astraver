@@ -739,7 +739,26 @@ parameter Switch_test1 :
      or eq_int(integer_of_int32(n_1), (1)))
     <-> eq_int(integer_of_int32(result), (0)))) }
 
+parameter Switch_test1_requires :
+ n_1:int32 ->
+  { } int32
+  { (JC_8:
+    ((eq_int(integer_of_int32(n_1), (0))
+     or eq_int(integer_of_int32(n_1), (1)))
+    <-> eq_int(integer_of_int32(result), (0)))) }
+
 parameter Switch_test2 :
+ n_0_0:int32 ->
+  { } int32
+  { (JC_13:
+    (((eq_int(integer_of_int32(n_0_0), (4))
+      or eq_int(integer_of_int32(n_0_0), (7)))
+     <-> eq_int(integer_of_int32(result), (1)))
+    and ((eq_int(integer_of_int32(n_0_0), (0))
+         or eq_int(integer_of_int32(n_0_0), (1)))
+        <-> eq_int(integer_of_int32(result), (0))))) }
+
+parameter Switch_test2_requires :
  n_0_0:int32 ->
   { } int32
   { (JC_13:
@@ -829,6 +848,9 @@ parameter char_of_integer_ :
 parameter cons_Switch :
  this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter cons_Switch_requires :
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -840,6 +862,14 @@ parameter long_of_integer_ :
   long { eq_int(integer_of_long(result), x) }
 
 parameter non_null_Object :
+ x_0:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_4:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
+
+parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_4:

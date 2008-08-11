@@ -678,11 +678,23 @@ parameter Termination_loop1 :
  this_2:Object pointer ->
   n_1:int -> { } unit reads Object_alloc_table { true }
 
+parameter Termination_loop1_requires :
+ this_2:Object pointer ->
+  n_1:int -> { } unit reads Object_alloc_table { true }
+
 parameter Termination_loop2 :
  this_1:Object pointer ->
   n_0_0:int -> { } unit reads Object_alloc_table { true }
 
+parameter Termination_loop2_requires :
+ this_1:Object pointer ->
+  n_0_0:int -> { } unit reads Object_alloc_table { true }
+
 parameter Termination_loop3 :
+ this_0:Object pointer ->
+  { } int reads Object_alloc_table { (JC_20: eq_int(result, (0))) }
+
+parameter Termination_loop3_requires :
  this_0:Object pointer ->
   { } int reads Object_alloc_table { (JC_20: eq_int(result, (0))) }
 
@@ -746,7 +758,18 @@ parameter alloc_interface :
 parameter cons_Termination :
  this_3:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter cons_Termination_requires :
+ this_3:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter non_null_Object :
+ x_0:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_4:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
+
+parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_4:

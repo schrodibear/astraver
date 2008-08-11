@@ -661,6 +661,10 @@ parameter NameConflicts_field_0 :
  this_0:Object pointer ->
   { } int32 reads NameConflicts_field,Object_alloc_table { true }
 
+parameter NameConflicts_field_0_requires :
+ this_0:Object pointer ->
+  { } int32 reads NameConflicts_field,Object_alloc_table { true }
+
 parameter NameConflicts_i : (Object, int32) memory ref
 
 parameter NameConflicts_m :
@@ -668,7 +672,17 @@ parameter NameConflicts_m :
   { } int32 reads Object_alloc_table
   { (JC_11: eq_int(integer_of_int32(result), (0))) }
 
+parameter NameConflicts_m_requires :
+ this_1:Object pointer ->
+  { } int32 reads Object_alloc_table
+  { (JC_11: eq_int(integer_of_int32(result), (0))) }
+
 parameter NameConflicts_setI :
+ this_2:Object pointer ->
+  i:int32 ->
+   { } unit reads Object_alloc_table writes NameConflicts_i { true }
+
+parameter NameConflicts_setI_requires :
  this_2:Object pointer ->
   i:int32 ->
    { } unit reads Object_alloc_table writes NameConflicts_i { true }
@@ -755,6 +769,9 @@ parameter char_of_integer_ :
 parameter cons_NameConflicts :
  this_3:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter cons_NameConflicts_requires :
+ this_3:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -766,6 +783,14 @@ parameter long_of_integer_ :
   long { eq_int(integer_of_long(result), x) }
 
 parameter non_null_Object :
+ x_0:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_4:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
+
+parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_4:

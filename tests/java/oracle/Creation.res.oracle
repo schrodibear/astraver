@@ -1558,13 +1558,35 @@ parameter Creation_test1 :
   writes Creation_simple_val,Object_alloc_table,Object_tag_table
   { (JC_31: eq_int(integer_of_int32(result), (17))) }
 
+parameter Creation_test1_requires :
+ tt:unit ->
+  { } int32 reads Creation_simple_val,Object_alloc_table
+  writes Creation_simple_val,Object_alloc_table,Object_tag_table
+  { (JC_31: eq_int(integer_of_int32(result), (17))) }
+
 parameter Creation_test2 :
  tt:unit ->
   { } int32 reads Creation_simple_val,Object_alloc_table
   writes Creation_simple_val,Object_alloc_table,Object_tag_table
   { (JC_53: eq_int(integer_of_int32(result), (0))) }
 
+parameter Creation_test2_requires :
+ tt:unit ->
+  { } int32 reads Creation_simple_val,Object_alloc_table
+  writes Creation_simple_val,Object_alloc_table,Object_tag_table
+  { (JC_53: eq_int(integer_of_int32(result), (0))) }
+
 parameter Creation_test3 :
+ tt:unit ->
+  { } int32 reads Creation_simple_val,Object_alloc_table
+  writes Creation_simple_val,Object_alloc_table,Object_tag_table
+  { (JC_77:
+    ((JC_75: eq_int(integer_of_int32(result), (17)))
+    and (JC_76:
+        not_assigns(Object_alloc_table@, Creation_simple_val@,
+        Creation_simple_val, pset_empty)))) }
+
+parameter Creation_test3_requires :
  tt:unit ->
   { } int32 reads Creation_simple_val,Object_alloc_table
   writes Creation_simple_val,Object_alloc_table,Object_tag_table
@@ -1699,7 +1721,56 @@ parameter cons_Creation_int_int :
           not_assigns(Object_alloc_table@, Creation_simple_val@,
           Creation_simple_val, pset_singleton(this_0))))) }
 
+parameter cons_Creation_int_int_requires :
+ this_0:Object pointer ->
+  n_0_0:int32 ->
+   m:int32 ->
+    { } unit reads Creation_simple_val,Object_alloc_table
+    writes Creation_simple_val
+    { (JC_24:
+      ((JC_22:
+       eq_int(integer_of_int32(select(Creation_simple_val, this_0)),
+       add_int(integer_of_int32(n_0_0), integer_of_int32(m))))
+      and (JC_23:
+          not_assigns(Object_alloc_table@, Creation_simple_val@,
+          Creation_simple_val, pset_singleton(this_0))))) }
+
+parameter cons_Creation_int_requires :
+ this_1:Object pointer ->
+  n_1:int32 ->
+   { } unit reads Creation_simple_val,Object_alloc_table
+   writes Creation_simple_val
+   { (JC_10:
+     ((JC_8:
+      eq_int(integer_of_int32(select(Creation_simple_val, this_1)),
+      integer_of_int32(n_1)))
+     and (JC_9:
+         not_assigns(Object_alloc_table@, Creation_simple_val@,
+         Creation_simple_val, pset_singleton(this_1))))) }
+
+parameter cons_Creation_requires :
+ this_2:Object pointer ->
+  { } unit reads Creation_simple_val,Object_alloc_table
+  writes Creation_simple_val
+  { (JC_16:
+    ((JC_14:
+     eq_int(integer_of_int32(select(Creation_simple_val, this_2)), (0)))
+    and (JC_15:
+        not_assigns(Object_alloc_table@, Creation_simple_val@,
+        Creation_simple_val, pset_singleton(this_2))))) }
+
 parameter cons_TestSuperConstructor :
+ this_4:Object pointer ->
+  { } unit reads Creation_simple_val,Object_alloc_table
+  writes Creation_simple_val
+  { (JC_101:
+    ((JC_99:
+     eq_int(integer_of_int32(select(Creation_simple_val, this_4)), (12)))
+    and (JC_100:
+        not_assigns(Object_alloc_table@, Creation_simple_val@,
+        Creation_simple_val, pset_singleton(this_4))))) }
+
+parameter cons_TestSuperConstructor_requires :
  this_4:Object pointer ->
   { } unit reads Creation_simple_val,Object_alloc_table
   writes Creation_simple_val
@@ -1721,6 +1792,14 @@ parameter long_of_integer_ :
   long { eq_int(integer_of_long(result), x) }
 
 parameter non_null_Object :
+ x_0:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_4:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
+
+parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_4:
@@ -1789,7 +1868,7 @@ let Creation_test1_safety =
                               (0)) };
                             jessie_19))) in
                 (let tt = (JC_39:
-                          ((cons_Creation_int this) (safe_int32_of_integer_ (17)))) in
+                          ((cons_Creation_int_requires this) (safe_int32_of_integer_ (17)))) in
                 this))) in
      begin
        (return := (K_9:
@@ -1842,7 +1921,8 @@ let Creation_test2_safety =
                                        jessie_33),
                                 (0)) };
                               jessie_33))) in
-                (let tt_0 = (JC_61: (cons_Creation this_3)) in this_3))) in
+                (let tt_0 = (JC_61: (cons_Creation_requires this_3)) in
+                this_3))) in
      begin
        (return := (K_12:
                   (JC_63:
@@ -1902,7 +1982,7 @@ let Creation_test3_safety =
                               (0)) };
                             jessie_47))) in
               (let tt_1 = (JC_85:
-                          (((cons_Creation_int_int this_5) (safe_int32_of_integer_ (10))) 
+                          (((cons_Creation_int_int_requires this_5) (safe_int32_of_integer_ (10))) 
                            (safe_int32_of_integer_ (7)))) in
               this_5))) in
      begin
@@ -1997,10 +2077,11 @@ let cons_Creation_int_int_safety =
    begin
      (K_6:
      (JC_26:
-     ((cons_Creation_int this_0) (K_5:
-                                 (JC_25:
-                                 (int32_of_integer_ ((add_int (integer_of_int32 n_0_0)) 
-                                                     (integer_of_int32 m))))))));
+     ((cons_Creation_int_requires this_0) (K_5:
+                                          (JC_25:
+                                          (int32_of_integer_ ((add_int 
+                                                               (integer_of_int32 n_0_0)) 
+                                                              (integer_of_int32 m))))))));
     (raise Return)
    end
    with
@@ -2036,7 +2117,8 @@ let cons_Creation_safety =
   try
    begin
      (K_3:
-     (JC_17: ((cons_Creation_int this_2) (safe_int32_of_integer_ (0)))));
+     (JC_17:
+     ((cons_Creation_int_requires this_2) (safe_int32_of_integer_ (0)))));
     (raise Return)
    end
    with
@@ -2071,7 +2153,8 @@ let cons_TestSuperConstructor_safety =
   try
    begin
      (K_17:
-     (JC_102: ((cons_Creation_int this_4) (safe_int32_of_integer_ (12)))));
+     (JC_102:
+     ((cons_Creation_int_requires this_4) (safe_int32_of_integer_ (12)))));
     (raise Return)
    end
    with
@@ -2093,7 +2176,7 @@ why --project [...] why/Creation.why
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po15.why">
-      <location file = "why/Creation.why" line = "605" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "685" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po16.why">
@@ -2127,7 +2210,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po9.why">
-      <location file = "why/Creation.why" line = "546" begin = "32" end = "157"/>
+      <location file = "why/Creation.why" line = "625" begin = "32" end = "157"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po10.why">
@@ -2157,7 +2240,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po4.why">
-      <location file = "why/Creation.why" line = "492" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "571" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po5.why">
@@ -4443,7 +4526,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test1_safety_po_1, File "HOME/tests/java/Creation.jc", line 77, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test1_safety_po_2, File "why/Creation.why", line 492, characters 30-151
+;; Creation_test1_safety_po_2, File "why/Creation.why", line 571, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -4511,7 +4594,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 97, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 546, characters 32-157
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 625, characters 32-157
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -4612,7 +4695,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 ;; Creation_test3_safety_po_1, File "HOME/tests/java/Creation.jc", line 117, characters 57-72
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test3_safety_po_2, File "why/Creation.why", line 605, characters 30-151
+;; Creation_test3_safety_po_2, File "why/Creation.why", line 685, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)

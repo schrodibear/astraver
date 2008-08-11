@@ -560,6 +560,11 @@ parameter Literals_f :
   { } int32 reads Object_alloc_table
   { (JC_8: eq_int(integer_of_int32(result), (13))) }
 
+parameter Literals_f_requires :
+ this_0:Object pointer ->
+  { } int32 reads Object_alloc_table
+  { (JC_8: eq_int(integer_of_int32(result), (13))) }
+
 parameter Object_tag_table : Object tag_table ref
 
 parameter alloc_Literals :
@@ -641,6 +646,9 @@ parameter char_of_integer_ :
 parameter cons_Literals :
  this_1:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter cons_Literals_requires :
+ this_1:Object pointer -> { } unit reads Object_alloc_table { true }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -652,6 +660,14 @@ parameter long_of_integer_ :
   long { eq_int(integer_of_long(result), x) }
 
 parameter non_null_Object :
+ x_0:Object pointer ->
+  { } bool reads Object_alloc_table
+  { (JC_4:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
+
+parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_4:
