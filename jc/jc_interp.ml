@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.330 2008-08-10 00:28:10 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.331 2008-08-11 12:48:30 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -200,6 +200,21 @@ let print_locs fmt =
 (*******************************************************************************)
 (*                                  Operators                                  *)
 (*******************************************************************************)
+
+(* see make_valid_pred in jc_interp.ml *)
+let make_valid_pred_app pc p a b =
+  let allocs = List.map
+    (fun ac -> LVar(generic_alloc_table_name ac))
+    (Jc_struct_tools.all_allocs ~select:fully_allocated pc)
+  in
+  let memories = List.map
+    (fun fi -> LVar(field_memory_name fi))
+    (Jc_struct_tools.all_memories ~select:fully_allocated pc)
+  in
+  LPred(valid_pred_name pc, p::a::b::allocs@memories)
+
+let const_of_num n = LConst(Prim_int(Num.string_of_num n))
+
 
 let native_operator_type op = match snd op with
   | `Unit -> Jc_pervasives.unit_type
@@ -1698,7 +1713,6 @@ and expr e =
               in
 	      let args = 
 		make_arguments 
-                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
                   ~callee_reads: f.jc_logic_info_effects
                   ~callee_writes: empty_effects
                   ~region_assoc: call.jc_call_region_assoc
@@ -1742,7 +1756,6 @@ and expr e =
               in
 	      let args = 
 		make_arguments 
-                  ~caller_writes: infunction.jc_fun_info_effects.jc_writes
                   ~callee_reads: f.jc_fun_info_effects.jc_reads
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
                   ~region_assoc: call.jc_call_region_assoc
@@ -2616,47 +2629,43 @@ let assume_in_postcondition behav post =
 	make_impl (assertion ~global_assertion:false ~relocate:true
 		     LabelOld LabelOld assum) post
   
-let tr_fun f funloc spec body acc =
-  let requires_param = 
+let tr_fun f funpos spec body acc =
+
+  (* requirement for calling the function and extra requirement 
+     for analyzing it *)
+  let requires = 
     named_assertion LabelHere LabelHere spec.jc_fun_requires
   in
   let free_requires = 
     named_assertion LabelHere LabelHere spec.jc_fun_free_requires
   in
-  let requires = make_and requires_param free_requires in
-  let requires_param = 
-    if !Jc_options.annotation_sem = AnnotNone || Jc_options.trust_ai then 
-      requires_param 
-    else requires 
-  in
-  let requires =
+  let extra_requires = make_and requires free_requires in
+  let requires = if Jc_options.trust_ai then requires else extra_requires in
+  let extra_requires =
     List.fold_left 
-      (fun acc vi ->
-         make_and
-           (match vi.jc_var_info_type with
-              | JCTpointer (pc, n1o, n2o) ->
-                  let vit = 
-                    term ~global_assertion:false ~relocate:false
-		      LabelHere LabelHere
-                      (new term_var vi) 
-                  in
-                  begin match n1o, n2o with
-                    | None, _ | _, None -> LTrue
-                    | Some n1, Some n2 ->
-                        let pred =
-                          make_valid_pred_app pc
-                            vit
-                            (const_of_num n1)
-                            (const_of_num n2)
-                        in
-                        bind_pattern_lets pred
-                  end
-              | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
-              | JCTtype_var _ -> LTrue)
-           acc)
-      requires
-      f.jc_fun_info_parameters
+      (fun acc v ->
+         let req = match v.jc_var_info_type with
+           | JCTpointer(pc,n1o,n2o) ->
+               let v' = 
+                 term ~global_assertion:false ~relocate:false
+		   LabelHere LabelHere (new term_var v) 
+               in
+               begin match n1o, n2o with
+                 | None, _ | _, None -> LTrue
+                 | Some n1, Some n2 ->
+                     let a' =
+                       make_valid_pred_app pc
+                         v' (const_of_num n1) (const_of_num n2)
+                     in
+                     bind_pattern_lets a'
+               end
+           | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
+           | JCTtype_var _ -> LTrue
+	 in
+	 make_and req acc
+      ) extra_requires f.jc_fun_info_parameters
   in
+
   (* partition behaviors as follows:
      - (optional) 'safety' behavior (if Arguments Invariant Policy is selected)
      - (optional) 'inferred' behaviors (computed by analysis)
@@ -2665,248 +2674,123 @@ let tr_fun f funloc spec body acc =
        normal_behaviors_inferred, normal_behaviors, 
        excep_behaviors_inferred, excep_behaviors) =
     List.fold_left
-      (fun (safety, normal_inferred, normal, excep_inferred, excep) (loc, id, b) ->
-         let post =
-           match b.jc_behavior_assigns with
-             | None ->
-                 (*
-                   eprintf "lab,loc for ensures: \"%s\", %a@."
-                   b.jc_behavior_ensures#mark
-                   Loc.gen_report_position b.jc_behavior_ensures#pos;
-                 *)
-                 named_assertion LabelPost LabelOld b.jc_behavior_ensures
-             | Some (locassigns, a) ->
-                 mark_assertion loc
-                   (make_and
-                      (named_assertion LabelPost LabelOld b.jc_behavior_ensures)
-                      (mark_assertion
-                         locassigns
-                         (assigns LabelOld f.jc_fun_info_effects (Some a) funloc)))
+      (fun (safety,normal_inferred,normal,excep_inferred,excep) (pos,id,b) ->
+	 let post = named_assertion LabelPost LabelOld b.jc_behavior_ensures in
+         let post = match b.jc_behavior_assigns with
+           | None -> post
+           | Some(assigns_pos,loclist) ->
+	       let assigns_post = 
+                 mark_assertion assigns_pos
+                   (assigns 
+		      LabelOld f.jc_fun_info_effects (Some loclist) funpos)
+	       in
+               mark_assertion pos (make_and post assigns_post)
          in
-(*          let a = *)
-(*            match b.jc_behavior_assumes with *)
-(*              | None -> post *)
-(*              | Some e ->  *)
-(*                  make_impl (assertion ~global_assertion:false LabelOld LabelOld e) post *)
-(*          in *)
-           match b.jc_behavior_throws with
-             | None -> 
-                 begin match id with
-                   | "safety" ->
-		       assert (b.jc_behavior_assumes = None);
-                       ((id, b, post) :: safety, 
-                        normal_inferred, normal, excep_inferred, excep)
-                   | "inferred" -> 
-		       assert (b.jc_behavior_assumes = None);
-                       (safety,
-                        (id, b, post) :: normal_inferred, 
-                        (if Jc_options.trust_ai then normal else (id, b, post) :: normal), 
-                        excep_inferred, excep)
-                   | _ -> 
-                       (safety, 
-                        normal_inferred, (id, b, post) :: normal, 
-                        excep_inferred, excep)
-                 end
-             | Some ei ->
-                 let eb =
-                   try
-                     ExceptionMap.find ei excep
-                   with Not_found -> []
-                 in
-                   if id = "inferred" then 
-		     begin
-		       assert (b.jc_behavior_assumes = None);
-                       (safety, normal_inferred, normal, 
-			ExceptionMap.add ei ((id, b, post) :: eb) excep_inferred, 
-			if Jc_options.trust_ai then excep else 
-                          ExceptionMap.add ei ((id, b, post) :: eb) excep)
-		     end
-                   else
-                     (safety, normal_inferred, normal, excep_inferred, 
-                      ExceptionMap.add ei ((id, b, post) :: eb) excep))
+	 let behav = (id,b,post) in
+         match b.jc_behavior_throws with
+           | None -> 
+               begin match id with
+                 | "safety" ->
+		     assert (b.jc_behavior_assumes = None);
+                     behav :: safety, 
+                     normal_inferred, normal, excep_inferred, excep
+                 | "inferred" -> 
+		     assert (b.jc_behavior_assumes = None);
+                     safety, behav :: normal_inferred, 
+                     (if Jc_options.trust_ai then normal else behav :: normal),
+                     excep_inferred, excep
+                 | _ -> 
+                     safety, normal_inferred, behav :: normal, 
+                     excep_inferred, excep
+               end
+           | Some exc ->
+               if id = "inferred" then 
+		 begin
+		   assert (b.jc_behavior_assumes = None);
+                   safety, normal_inferred, normal, 
+		   ExceptionMap.add_merge 
+		     List.append exc [behav] excep_inferred, 
+		   if Jc_options.trust_ai then excep else 
+                     ExceptionMap.add_merge List.append exc [behav] excep
+		 end
+               else
+                 safety, normal_inferred, normal, excep_inferred, 
+                 ExceptionMap.add_merge List.append exc [behav] excep)
       ([], [], [], ExceptionMap.empty, ExceptionMap.empty)
       spec.jc_fun_behavior
   in
   let user_excep_behaviors = excep_behaviors in
   let excep_behaviors = 
     ExceptionSet.fold
-      (fun ei acc -> 
-         if ExceptionMap.mem ei acc then acc else
+      (fun exc acc -> 
+         if ExceptionMap.mem exc acc then acc else
            let b = 
              { default_behavior with 
-                 jc_behavior_throws = Some ei; jc_behavior_ensures = (new assertion JCAtrue); } 
+                 jc_behavior_throws = Some exc; 
+		 jc_behavior_ensures = (new assertion JCAtrue); } 
            in
-             ExceptionMap.add ei [ei.jc_exception_info_name ^ "_b", b, LTrue] acc)
+           ExceptionMap.add 
+	     exc [exc.jc_exception_info_name ^ "_b", b, LTrue] acc)
       f.jc_fun_info_effects.jc_raises
       excep_behaviors
   in
-  let reads =
-    MemoryMap.fold
-      (fun (fi,r) labels acc -> 
-        let mem = memory_name(fi,r) in
-        if Region.polymorphic r then
-          if RegionList.mem r f.jc_fun_info_param_regions then
-            if MemoryMap.mem (fi,r) 
-              f.jc_fun_info_effects.jc_writes.jc_effect_memories 
-            then mem::acc 
-            else acc
-          else acc
-        else mem::acc)
-      f.jc_fun_info_effects.jc_reads.jc_effect_memories
-      []
-  in
-  let reads =
-    VarMap.fold
-      (fun v labs acc -> v.jc_var_info_final_name::acc)
-      f.jc_fun_info_effects.jc_reads.jc_effect_globals
-      reads
-  in
-  let reads =
-    AllocMap.fold
-      (fun (a,r) labs acc -> 
-        let alloc = alloc_table_name(a,r) in
-        if Region.polymorphic r then
-          if RegionList.mem r f.jc_fun_info_param_regions then
-            if AllocMap.mem (a,r) 
-              f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table 
-            then alloc::acc 
-            else acc
-          else acc
-        else alloc::acc)
-      f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table
-      reads
-  in
-  let reads =
-    TagMap.fold
-      (fun v labels acc -> (tag_table_name v)::acc)
-      f.jc_fun_info_effects.jc_reads.jc_effect_tag_table
-      reads
-  in
-  let reads =
-    StringSet.fold
-      (fun v acc -> (mutable_name2 v)::acc)
-      f.jc_fun_info_effects.jc_reads.jc_effect_mutable
-      reads
-  in
-  let reads =
-    StringSet.fold
-      (fun v acc -> (committed_name2 v)::acc)
-      f.jc_fun_info_effects.jc_reads.jc_effect_committed
-      reads
-  in
-  let writes =
-    MemoryMap.fold
-      (fun (fi,r) labels acc ->
-        let mem = memory_name(fi,r) in
-        if Region.polymorphic r then
-          if RegionList.mem r f.jc_fun_info_param_regions then mem::acc else acc
-        else mem::acc)
-      f.jc_fun_info_effects.jc_writes.jc_effect_memories
-      []
-  in
-  let writes =
-    VarMap.fold
-      (fun v labs acc -> v.jc_var_info_final_name::acc)
-      f.jc_fun_info_effects.jc_writes.jc_effect_globals
-      writes
-  in
-  let writes =
-    AllocMap.fold
-      (fun (a,r) labs acc ->
-        let alloc = alloc_table_name(a,r) in
-        if Region.polymorphic r then
-          if RegionList.mem r f.jc_fun_info_param_regions then alloc::acc else acc
-        else alloc::acc)
-      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-      writes
-  in
-  let writes =
-    TagMap.fold
-      (fun v labels acc -> (tag_table_name v)::acc)
-      f.jc_fun_info_effects.jc_writes.jc_effect_tag_table
-      writes
-  in
-  let writes =
-    StringSet.fold
-      (fun v acc -> (mutable_name2 v)::acc)
-      f.jc_fun_info_effects.jc_writes.jc_effect_mutable
-      writes
-  in
-  let writes =
-    StringSet.fold
-      (fun v acc -> (committed_name2 v)::acc)
-      f.jc_fun_info_effects.jc_writes.jc_effect_committed
-      writes
-  in
-  let param_write_mems,local_write_mems =
-    MemoryMap.fold
-      (fun (fi,r) labels (param_acc,local_acc) ->
-        if Region.polymorphic r then
-          let mem = memory_name(fi,r),
-            memory_type fi in
-          if RegionList.mem r f.jc_fun_info_param_regions then
-            mem::param_acc,local_acc
-          else
-            param_acc,mem::local_acc
-        else param_acc,local_acc)
-      f.jc_fun_info_effects.jc_writes.jc_effect_memories
-      ([],[])
-  in
-  let param_read_mems,local_read_mems =
-    MemoryMap.fold
-      (fun (fi,r) labels ((param_acc,local_acc) as acc) ->
-         if MemoryMap.mem (fi,r) 
-           f.jc_fun_info_effects.jc_writes.jc_effect_memories
-         then acc else
-           if Region.polymorphic r then
-          let mem = memory_name(fi,r),
-            memory_type fi in
-          if RegionList.mem r f.jc_fun_info_param_regions then
-            mem::param_acc,local_acc
-          else
-            param_acc,mem::local_acc
-        else param_acc,local_acc)
-      f.jc_fun_info_effects.jc_reads.jc_effect_memories
-      ([],[])
-  in
-  let param_write_allocs,local_write_allocs =
-    AllocMap.fold
-      (fun (a,r) labs (param_acc,local_acc) ->
-	 assert (Region.representative r == r);
-        if Region.polymorphic r then
-          let alloc = alloc_table_name(a,r),alloc_table_type a in
-          if RegionList.mem r f.jc_fun_info_param_regions then
-            alloc::param_acc,local_acc
-          else
-            param_acc,alloc::local_acc
-        else param_acc,local_acc)
-      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
-      ([],[])
-  in
-  let alr = 
-         (AllocMap.keys f.jc_fun_info_effects.jc_reads.jc_effect_alloc_table)
-  in
-  let alw = 
-         (AllocMap.keys f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table)
-  in
-  let al = 
-    AllocSet.diff (AllocSet.of_list alr) (AllocSet.of_list alw) in
 
-  let param_read_allocs,local_read_allocs =
-    AllocSet.fold
-      (fun (a,r) (param_acc,local_acc) ->
-	 assert (Region.representative r == r);
-         let alloc = alloc_table_name(a,r),alloc_table_type a in
-        if Region.polymorphic r then
-          if RegionList.mem r f.jc_fun_info_param_regions then
-            alloc::param_acc,local_acc
-          else
-            param_acc,alloc::local_acc
-        else
-	  param_acc,local_acc)
-      (al)
-      ([],[])
+  (* Effects, parameters and locals *)
+  let writes = 
+    write_effects 
+      ~callee_reads:f.jc_fun_info_effects.jc_reads
+      ~callee_writes:f.jc_fun_info_effects.jc_writes
+      ~region_list:f.jc_fun_info_param_regions
   in
+  let reads = 
+    read_effects 
+      ~callee_reads:f.jc_fun_info_effects.jc_reads
+      ~callee_writes:f.jc_fun_info_effects.jc_writes
+      ~region_list:f.jc_fun_info_param_regions
+  in
+  let write_params =
+    write_parameters 
+      ~callee_reads:f.jc_fun_info_effects.jc_reads
+      ~callee_writes:f.jc_fun_info_effects.jc_writes
+      ~region_list:f.jc_fun_info_param_regions
+      ?region_assoc:None
+  in
+  let read_params =
+    read_parameters 
+      ~callee_reads:f.jc_fun_info_effects.jc_reads
+      ~callee_writes:f.jc_fun_info_effects.jc_writes
+      ~region_list:f.jc_fun_info_param_regions
+      ?region_assoc:None
+  in
+  let write_locals =
+    write_locals 
+      ~callee_reads:f.jc_fun_info_effects.jc_reads
+      ~callee_writes:f.jc_fun_info_effects.jc_writes
+      ~region_list:f.jc_fun_info_param_regions
+      ?region_assoc:None
+  in
+  let read_locals =
+    read_locals 
+      ~callee_reads:f.jc_fun_info_effects.jc_reads
+      ~callee_writes:f.jc_fun_info_effects.jc_writes
+      ~region_list:f.jc_fun_info_param_regions
+      ?region_assoc:None
+  in
+  let define_locals e' =
+    let e' =
+      List.fold_left 
+	(fun acc (n,ty') -> Let(n,any_value' ty',acc)) 
+	e' read_locals
+    in
+    let e' =
+      List.fold_left 
+	(fun acc (n,ty') -> Let_ref(n,any_value' ty',acc)) 
+	e' write_locals
+    in
+    e'
+  in
+
+  (* Postcondition *)
   let safety_post =
     List.fold_right
       (fun (_, _, e) acc -> make_and e acc)
@@ -2954,13 +2838,13 @@ let tr_fun f funloc spec body acc =
   let param_excep_posts = excep_posts @ excep_posts_inferred in
   let why_param = 
     let annot_type =
-      Annot_type(requires_param, ret_type,
+      Annot_type(requires, ret_type,
                  reads,writes, param_normal_post, param_excep_posts)
     in
     let fun_type = 
       interp_fun_params f 
-        (param_write_allocs @ param_write_mems) 
-        (param_read_allocs @ param_read_mems) 
+        write_params
+        read_params 
         annot_type 
     in
       Param (false, f.jc_fun_info_final_name, fun_type)
@@ -2978,11 +2862,11 @@ let tr_fun f funloc spec body acc =
           (* why functions for each behaviors *)
             let write_mems = 
               List.map (fun (name,ty) -> name,Ref_type(Base_type ty)) 
-                (param_write_mems @ param_write_allocs)
+                write_params
             in
             let read_mems = 
               List.map (fun (name,ty) -> name,Base_type ty) 
-                (param_read_mems @ param_read_allocs)
+                read_params
             in
             let params = match f.jc_fun_info_parameters with
               | [] -> [(* "tt", unit_type *)]
@@ -3024,26 +2908,7 @@ let tr_fun f funloc spec body acc =
                 else
                   body_safety
               in
-              let tblock =
-                List.fold_left (fun acc (mem_name,_) ->
-                  Let(mem_name,App(Var "any_memory",Void),acc)
-                ) tblock local_read_mems
-              in
-              let tblock =
-                List.fold_left (fun acc (mem_name,_) ->
-                  Let_ref(mem_name,App(Var "any_memory",Void),acc)
-                ) tblock local_write_mems
-              in
-              let tblock =
-                List.fold_left (fun acc (alloc_name,_) ->
-                  Let(alloc_name,App(Var "any_alloc_table",Void),acc)
-                ) tblock local_read_allocs
-              in
-              let tblock =
-                List.fold_left (fun acc (alloc_name,_) ->
-                  Let_ref(alloc_name,App(Var "any_alloc_table",Void),acc)
-                ) tblock local_write_allocs
-              in
+              let tblock = define_locals tblock in
               let tblock = 
                 if !return_void then
                   Try(append tblock (Raise(jessie_return_exception,None)),
@@ -3067,7 +2932,7 @@ let tr_fun f funloc spec body acc =
                 ~in_mark:f.jc_fun_info_name
                 ~name:("function " ^ f.jc_fun_info_name)
                 ~beh:"Safety" 
-		funloc 
+		funpos 
               in
               let acc = 
                 if is_purely_exceptional_fun spec then acc else
@@ -3076,7 +2941,7 @@ let tr_fun f funloc spec body acc =
                     newid,
                     Fun(
                       params,
-                      requires,
+                      extra_requires,
                       tblock_safety,
                       safety_post,
                       excep_posts_for_others None excep_behaviors
@@ -3101,26 +2966,7 @@ let tr_fun f funloc spec body acc =
                             else
                               body
                           in
-                          let tblock =
-                            List.fold_left (fun acc (mem_name,_) ->
-                              Let(mem_name,App(Var "any_memory",Void),acc)
-                            ) tblock local_read_mems
-                          in
-                          let tblock =
-                            List.fold_left (fun acc (mem_name,_) ->
-                              Let_ref(mem_name,App(Var "any_memory",Void),acc)
-                            ) tblock local_write_mems
-                          in
-                          let tblock =
-                            List.fold_left (fun acc (alloc_name,_) ->
-                              Let(alloc_name,App(Var "any_alloc_table",Void),acc)
-                            ) tblock local_read_allocs
-                          in
-                          let tblock =
-                            List.fold_left (fun acc (alloc_name,_) ->
-                              Let_ref(alloc_name,App(Var "any_alloc_table",Void),acc)
-                            ) tblock local_write_allocs
-                          in
+			  let tblock = define_locals tblock in
                           let tblock = 
                             if !return_void then
                               Try(append tblock (Raise(jessie_return_exception,None)),
@@ -3149,9 +2995,9 @@ let tr_fun f funloc spec body acc =
                            ~in_mark:f.jc_fun_info_name
                            ~name:("function "^f.jc_fun_info_name)
                            ~beh  
-                           funloc 
+                           funpos 
                          in
-			 let pre = assume_in_precondition b requires in
+			 let pre = assume_in_precondition b extra_requires in
                          let d =
                            Def(
                              newid,
@@ -3189,9 +3035,9 @@ let tr_fun f funloc spec body acc =
                                 ~in_mark:f.jc_fun_info_name
                                 ~name:("function "^f.jc_fun_info_name)
                                 ~beh:("Exceptional behavior `"^id^"'")  
-                                funloc 
+                                funpos 
 			      in
-			      let pre = assume_in_precondition b requires in
+			      let pre = assume_in_precondition b extra_requires in
                               let d =
                                 Def(newid,
                                     Fun(params,
@@ -3207,9 +3053,9 @@ let tr_fun f funloc spec body acc =
                     acc 
         in why_param::acc
 
-let tr_fun f funloc spec body acc =
+let tr_fun f funpos spec body acc =
   set_current_function f;
-  let acc = tr_fun f funloc spec body acc in
+  let acc = tr_fun f funpos spec body acc in
   reset_current_function ();
   acc
 

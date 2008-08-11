@@ -651,6 +651,8 @@ parameter any_memory: unit -> {} ('t,'v) memory { true }
 
 parameter any_alloc_table: unit -> {} 't alloc_table { true }
 
+parameter any_tag_table: unit -> {} 't tag_table { true }
+
 
 (*****************************************************************************)
 (* bitwise operations                                                        *)

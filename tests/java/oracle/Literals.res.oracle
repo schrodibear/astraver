@@ -553,11 +553,12 @@ predicate valid_variant_interface(p:interface pointer,
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
+parameter Object_alloc_table : Object alloc_table ref
+
 parameter Literals_f :
  this_0:Object pointer ->
-  { } int32 { (JC_8: eq_int(integer_of_int32(result), (13))) }
-
-parameter Object_alloc_table : Object alloc_table ref
+  { } int32 reads Object_alloc_table
+  { (JC_8: eq_int(integer_of_int32(result), (13))) }
 
 parameter Object_tag_table : Object tag_table ref
 
@@ -637,7 +638,8 @@ parameter char_of_integer_ :
   { (le_int((0), x) and le_int(x, (65535)))} char
   { eq_int(integer_of_char(result), x) }
 
-parameter cons_Literals : this_1:Object pointer -> { } unit { true }
+parameter cons_Literals :
+ this_1:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter int32_of_integer_ :
  x:int ->

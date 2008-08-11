@@ -1077,7 +1077,8 @@ parameter alloc_interface :
          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
              and alloc_fresh(interface_alloc_table@, result, n)))) }
 
-parameter cons_Gcd : this_0:Object pointer -> { } unit { true }
+parameter cons_Gcd :
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter non_null_Object :
  x_0:Object pointer ->

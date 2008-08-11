@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.121 2008-08-10 00:00:54 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.122 2008-08-11 12:48:30 moy Exp $ *)
 
 open Jc_interp_misc
 open Jc_name
@@ -607,16 +607,15 @@ let spec fef s =
   let fef = { fef with jc_reads = assertion fef.jc_reads s.jc_fun_requires } in
   { fef with jc_reads = assertion fef.jc_reads s.jc_fun_free_requires }
 
-(* Yannick: why add effects for parameters? *)
-
-(* let parameter fef v = *)
-(*   match v.jc_var_info_type with *)
-(*     | JCTpointer(pc,_,_) -> *)
-(* 	let vi = pointer_class_variant pc in *)
-(* 	let ac = alloc_class_of_pointer_class pc in *)
-(* 	add_alloc_reads (add_tag_reads LabelOld ef vi) (ac,v.jc_var_info_region) *)
-(*     | _ -> ef *)
-	
+(* Type invariant added to precondition for pointer parameters with bounds.
+   Therefore, add allocation table to reads. *)
+let parameter fef v =
+  match v.jc_var_info_type with
+    | JCTpointer(pc,Some _i,Some _j) ->
+	let ac = alloc_class_of_pointer_class pc in
+	add_alloc_reads LabelOld fef (ac,v.jc_var_info_region)
+    | _ -> fef
+   
 (* computing the fixpoint *)
 
 let fixpoint_reached = ref false
@@ -647,7 +646,7 @@ let fun_effects fi =
   let fef = f.jc_fun_info_effects in
   let fef = spec fef s in
   let fef = Option_misc.fold_left expr fef e_opt in
-(*   let fef = List.fold_left parameter fef f.jc_fun_info_parameters in *)
+  let fef = List.fold_left parameter fef f.jc_fun_info_parameters in
   if same_feffects fef f.jc_fun_info_effects then () else
     (fixpoint_reached := false;
      f.jc_fun_info_effects <- fef)

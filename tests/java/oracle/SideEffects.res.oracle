@@ -397,15 +397,15 @@ end = 30
 
 [JC_8]
 file = "HOME/tests/java/SideEffects.jc"
-line = 42
-begin = 10
-end = 18
-
-[JC_9]
-file = "HOME/tests/java/SideEffects.jc"
 line = 40
 begin = 8
 end = 30
+
+[JC_9]
+file = "HOME/tests/java/SideEffects.jc"
+line = 42
+begin = 10
+end = 18
 
 [SideEffects_m1_safety]
 name = "Method m1"
@@ -715,12 +715,13 @@ parameter alloc_interface :
          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
              and alloc_fresh(interface_alloc_table@, result, n)))) }
 
-parameter cons_SideEffects : this_1:Object pointer -> { } unit { true }
+parameter cons_SideEffects :
+ this_1:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter java_array_length_intM :
  x_2:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_9:
+  { (JC_8:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and (eq_int(result,

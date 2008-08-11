@@ -665,7 +665,8 @@ parameter NameConflicts_i : (Object, int32) memory ref
 
 parameter NameConflicts_m :
  this_1:Object pointer ->
-  { } int32 { (JC_11: eq_int(integer_of_int32(result), (0))) }
+  { } int32 reads Object_alloc_table
+  { (JC_11: eq_int(integer_of_int32(result), (0))) }
 
 parameter NameConflicts_setI :
  this_2:Object pointer ->
@@ -751,7 +752,8 @@ parameter char_of_integer_ :
   { (le_int((0), x) and le_int(x, (65535)))} char
   { eq_int(integer_of_char(result), x) }
 
-parameter cons_NameConflicts : this_3:Object pointer -> { } unit { true }
+parameter cons_NameConflicts :
+ this_3:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter int32_of_integer_ :
  x:int ->

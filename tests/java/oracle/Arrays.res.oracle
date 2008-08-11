@@ -788,15 +788,15 @@ end = 30
 
 [JC_8]
 file = "HOME/tests/java/Arrays.jc"
-line = 42
-begin = 10
-end = 18
-
-[JC_9]
-file = "HOME/tests/java/Arrays.jc"
 line = 40
 begin = 8
 end = 30
+
+[JC_9]
+file = "HOME/tests/java/Arrays.jc"
+line = 42
+begin = 10
+end = 18
 
 [Arrays_arrayShift_safety]
 name = "Method arrayShift"
@@ -1372,12 +1372,13 @@ parameter alloc_interface :
          and (alloc_extends(interface_alloc_table@, interface_alloc_table)
              and alloc_fresh(interface_alloc_table@, result, n)))) }
 
-parameter cons_Arrays : this_0:Object pointer -> { } unit { true }
+parameter cons_Arrays :
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter java_array_length_intM :
  x_2:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_9:
+  { (JC_8:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and (eq_int(result,
@@ -1953,7 +1954,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po51.why">
-      <location file = "why/Arrays.why" line = "546" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "547" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po52.why">
@@ -2151,7 +2152,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po98.why">
-      <location file = "why/Arrays.why" line = "730" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "731" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po99.why">
@@ -2320,7 +2321,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po9.why">
-      <location file = "why/Arrays.why" line = "354" begin = "32" end = "158"/>
+      <location file = "why/Arrays.why" line = "355" begin = "32" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po10.why">
@@ -3338,7 +3339,7 @@ goal Arrays_arrayShift_ensures_default_po_1:
   forall Object_alloc_table:Object alloc_table.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -3351,7 +3352,7 @@ goal Arrays_arrayShift_safety_po_2:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -3384,7 +3385,7 @@ goal Arrays_findMax_safety_po_10:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3418,7 +3419,7 @@ goal Arrays_findMax_safety_po_11:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3465,7 +3466,7 @@ goal Arrays_findMax_safety_po_12:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3512,7 +3513,7 @@ goal Arrays_findMax_safety_po_13:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3559,7 +3560,7 @@ goal Arrays_findMax_safety_po_14:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3606,7 +3607,7 @@ goal Arrays_findMax_safety_po_15:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3653,7 +3654,7 @@ goal Arrays_findMax_safety_po_16:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3702,7 +3703,7 @@ goal Arrays_findMax_safety_po_17:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3749,7 +3750,7 @@ goal Arrays_findMax_safety_po_18:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3798,7 +3799,7 @@ goal Arrays_findMax_safety_po_19:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3818,7 +3819,7 @@ goal Arrays_arrayShift_safety_po_3:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -3852,7 +3853,7 @@ goal Arrays_findMax_safety_po_20:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3892,7 +3893,7 @@ goal Arrays_findMax_safety_po_21:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3932,7 +3933,7 @@ goal Arrays_findMax_safety_po_22:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -3972,7 +3973,7 @@ goal Arrays_findMax_safety_po_23:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -4012,7 +4013,7 @@ goal Arrays_findMax_safety_po_24:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -4054,7 +4055,7 @@ goal Arrays_findMax_safety_po_25:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -4094,7 +4095,7 @@ goal Arrays_findMax_safety_po_26:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -4118,7 +4119,7 @@ goal Arrays_arrayShift_safety_po_4:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4137,7 +4138,7 @@ goal Arrays_arrayShift_safety_po_5:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4167,7 +4168,7 @@ goal Arrays_arrayShift_safety_po_6:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4197,7 +4198,7 @@ goal Arrays_arrayShift_safety_po_7:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4230,7 +4231,7 @@ goal Arrays_arrayShift_safety_po_8:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4263,7 +4264,7 @@ goal Arrays_arrayShift_safety_po_9:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4302,7 +4303,7 @@ goal Arrays_arrayShift_safety_po_10:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4342,7 +4343,7 @@ goal Arrays_arrayShift_safety_po_11:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4382,7 +4383,7 @@ goal Arrays_arrayShift_ensures_default_po_2:
   forall Object_alloc_table:Object alloc_table.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4398,7 +4399,7 @@ goal Arrays_arrayShift_safety_po_12:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4441,7 +4442,7 @@ goal Arrays_arrayShift_safety_po_13:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4480,7 +4481,7 @@ goal Arrays_arrayShift_safety_po_14:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4610,7 +4611,7 @@ goal Arrays_findMax2_ensures_max_found_po_7:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -4636,7 +4637,7 @@ goal Arrays_arrayShift_ensures_default_po_3:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -4668,7 +4669,7 @@ goal Arrays_findMax2_ensures_max_found_po_8:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -4708,7 +4709,7 @@ goal Arrays_findMax2_ensures_max_found_po_9:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -4748,7 +4749,7 @@ goal Arrays_findMax2_ensures_max_found_po_10:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -4788,7 +4789,7 @@ goal Arrays_findMax2_ensures_max_found_po_11:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -4828,7 +4829,7 @@ goal Arrays_findMax2_ensures_max_found_po_12:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -4868,7 +4869,7 @@ goal Arrays_findMax2_ensures_max_found_po_13:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -4902,7 +4903,7 @@ goal Arrays_findMax2_ensures_max_found_po_14:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -4936,7 +4937,7 @@ goal Arrays_findMax2_ensures_max_found_po_15:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -4970,7 +4971,7 @@ goal Arrays_findMax2_ensures_max_found_po_16:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5004,7 +5005,7 @@ goal Arrays_findMax2_ensures_max_found_po_17:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5024,7 +5025,7 @@ goal Arrays_arrayShift_ensures_default_po_4:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -5074,7 +5075,7 @@ goal Arrays_findMax2_ensures_max_found_po_18:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5108,7 +5109,7 @@ goal Arrays_findMax2_ensures_max_found_po_19:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5139,7 +5140,7 @@ goal Arrays_findMax2_ensures_max_found_po_20:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5170,7 +5171,7 @@ goal Arrays_findMax2_ensures_max_found_po_21:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5267,7 +5268,7 @@ goal Arrays_arrayShift_ensures_default_po_5:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -5358,7 +5359,7 @@ goal Arrays_findMax2_safety_po_9:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5389,7 +5390,7 @@ goal Arrays_findMax2_safety_po_10:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5420,7 +5421,7 @@ goal Arrays_findMax2_safety_po_11:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5464,7 +5465,7 @@ goal Arrays_findMax2_safety_po_12:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5508,7 +5509,7 @@ goal Arrays_findMax2_safety_po_13:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5552,7 +5553,7 @@ goal Arrays_findMax2_safety_po_14:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5596,7 +5597,7 @@ goal Arrays_findMax2_safety_po_15:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5640,7 +5641,7 @@ goal Arrays_findMax2_safety_po_16:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5668,7 +5669,7 @@ goal Arrays_arrayShift_ensures_default_po_6:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -5724,7 +5725,7 @@ goal Arrays_findMax2_safety_po_17:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5768,7 +5769,7 @@ goal Arrays_findMax2_safety_po_18:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5814,7 +5815,7 @@ goal Arrays_findMax2_safety_po_19:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5851,7 +5852,7 @@ goal Arrays_findMax2_safety_po_20:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5888,7 +5889,7 @@ goal Arrays_findMax2_safety_po_21:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5925,7 +5926,7 @@ goal Arrays_findMax2_safety_po_22:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5962,7 +5963,7 @@ goal Arrays_findMax2_safety_po_23:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -5999,7 +6000,7 @@ goal Arrays_findMax2_safety_po_24:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -6036,7 +6037,7 @@ goal Arrays_findMax2_safety_po_25:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -6073,7 +6074,7 @@ goal Arrays_findMax2_safety_po_26:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -6096,7 +6097,7 @@ goal Arrays_arrayShift_ensures_default_po_7:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -6239,7 +6240,7 @@ goal Arrays_findMax_ensures_max_found_po_7:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6282,7 +6283,7 @@ goal Arrays_findMax_ensures_max_found_po_8:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6325,7 +6326,7 @@ goal Arrays_findMax_ensures_max_found_po_9:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6368,7 +6369,7 @@ goal Arrays_findMax_ensures_max_found_po_10:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6394,7 +6395,7 @@ goal Arrays_arrayShift_ensures_default_po_8:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -6443,7 +6444,7 @@ goal Arrays_findMax_ensures_max_found_po_11:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6486,7 +6487,7 @@ goal Arrays_findMax_ensures_max_found_po_12:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6531,7 +6532,7 @@ goal Arrays_findMax_ensures_max_found_po_13:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6568,7 +6569,7 @@ goal Arrays_findMax_ensures_max_found_po_14:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6605,7 +6606,7 @@ goal Arrays_findMax_ensures_max_found_po_15:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6642,7 +6643,7 @@ goal Arrays_findMax_ensures_max_found_po_16:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6679,7 +6680,7 @@ goal Arrays_findMax_ensures_max_found_po_17:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6716,7 +6717,7 @@ goal Arrays_findMax_ensures_max_found_po_18:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6755,7 +6756,7 @@ goal Arrays_findMax_ensures_max_found_po_19:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6789,7 +6790,7 @@ goal Arrays_findMax_ensures_max_found_po_20:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6830,7 +6831,7 @@ goal Arrays_findMax_ensures_max_found_po_21:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -6998,7 +6999,7 @@ goal Arrays_findMax_safety_po_9:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -7885,7 +7886,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP0 (shift t_2 i_0))
 (select intM_intP (shift t_2 (- i_0 1))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 354, characters 32-158
+;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 355, characters 32-158
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM t_2 Object_alloc_table)
@@ -8880,7 +8881,7 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (is_max t_1 0 1 Object_alloc_table intM_intP))))))))
 
-;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 546, characters 51-215
+;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 547, characters 51-215
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10191,7 +10192,7 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
 (IMPLIES (AND (<= 0 j_1) (< j_1 1))
 (<= (select intM_intP (shift t_0 j_1)) result))))))))))
 
-;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 730, characters 51-215
+;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 731, characters 51-215
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11834,7 +11835,7 @@ goal Arrays_arrayShift_ensures_default_po_1:
   forall Object_alloc_table:Object alloc_table.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -11845,7 +11846,7 @@ goal Arrays_arrayShift_ensures_default_po_2:
   forall Object_alloc_table:Object alloc_table.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -11859,7 +11860,7 @@ goal Arrays_arrayShift_ensures_default_po_3:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -11876,7 +11877,7 @@ goal Arrays_arrayShift_ensures_default_po_4:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -11911,7 +11912,7 @@ goal Arrays_arrayShift_ensures_default_po_5:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -11947,7 +11948,7 @@ goal Arrays_arrayShift_ensures_default_po_6:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -11986,7 +11987,7 @@ goal Arrays_arrayShift_ensures_default_po_7:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12025,7 +12026,7 @@ goal Arrays_arrayShift_ensures_default_po_8:
   int) memory.
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12061,7 +12062,7 @@ goal Arrays_arrayShift_safety_po_2:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12073,7 +12074,7 @@ goal Arrays_arrayShift_safety_po_3:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12088,7 +12089,7 @@ goal Arrays_arrayShift_safety_po_4:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12106,7 +12107,7 @@ goal Arrays_arrayShift_safety_po_5:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12135,7 +12136,7 @@ goal Arrays_arrayShift_safety_po_6:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12164,7 +12165,7 @@ goal Arrays_arrayShift_safety_po_7:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12196,7 +12197,7 @@ goal Arrays_arrayShift_safety_po_8:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12228,7 +12229,7 @@ goal Arrays_arrayShift_safety_po_9:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12266,7 +12267,7 @@ goal Arrays_arrayShift_safety_po_10:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12305,7 +12306,7 @@ goal Arrays_arrayShift_safety_po_11:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12347,7 +12348,7 @@ goal Arrays_arrayShift_safety_po_12:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12389,7 +12390,7 @@ goal Arrays_arrayShift_safety_po_13:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12427,7 +12428,7 @@ goal Arrays_arrayShift_safety_po_14:
   ("JC_46": Non_null_intM(t_2, Object_alloc_table)) ->
   (offset_max(Object_alloc_table, t_2) >= (-1)) ->
   forall result:int.
-  ("JC_9":
+  ("JC_8":
   ((result <= 2147483647) and
    ((result >= 0) and
     ((result = (offset_max(Object_alloc_table, t_2) + 1)) and (true = true))))) ->
@@ -12550,7 +12551,7 @@ goal Arrays_findMax2_ensures_max_found_po_7:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12589,7 +12590,7 @@ goal Arrays_findMax2_ensures_max_found_po_8:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12628,7 +12629,7 @@ goal Arrays_findMax2_ensures_max_found_po_9:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12667,7 +12668,7 @@ goal Arrays_findMax2_ensures_max_found_po_10:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12706,7 +12707,7 @@ goal Arrays_findMax2_ensures_max_found_po_11:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12745,7 +12746,7 @@ goal Arrays_findMax2_ensures_max_found_po_12:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12784,7 +12785,7 @@ goal Arrays_findMax2_ensures_max_found_po_13:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12817,7 +12818,7 @@ goal Arrays_findMax2_ensures_max_found_po_14:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12850,7 +12851,7 @@ goal Arrays_findMax2_ensures_max_found_po_15:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12883,7 +12884,7 @@ goal Arrays_findMax2_ensures_max_found_po_16:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12916,7 +12917,7 @@ goal Arrays_findMax2_ensures_max_found_po_17:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12949,7 +12950,7 @@ goal Arrays_findMax2_ensures_max_found_po_18:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -12982,7 +12983,7 @@ goal Arrays_findMax2_ensures_max_found_po_19:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13012,7 +13013,7 @@ goal Arrays_findMax2_ensures_max_found_po_20:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13042,7 +13043,7 @@ goal Arrays_findMax2_ensures_max_found_po_21:
       ((m = select(intM_intP, shift(t_1, r))) and is_max(t_1, r, i_3,
        Object_alloc_table, intM_intP))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13184,7 +13185,7 @@ goal Arrays_findMax2_safety_po_9:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13214,7 +13215,7 @@ goal Arrays_findMax2_safety_po_10:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13244,7 +13245,7 @@ goal Arrays_findMax2_safety_po_11:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13287,7 +13288,7 @@ goal Arrays_findMax2_safety_po_12:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13330,7 +13331,7 @@ goal Arrays_findMax2_safety_po_13:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13373,7 +13374,7 @@ goal Arrays_findMax2_safety_po_14:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13416,7 +13417,7 @@ goal Arrays_findMax2_safety_po_15:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13459,7 +13460,7 @@ goal Arrays_findMax2_safety_po_16:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13502,7 +13503,7 @@ goal Arrays_findMax2_safety_po_17:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13545,7 +13546,7 @@ goal Arrays_findMax2_safety_po_18:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13590,7 +13591,7 @@ goal Arrays_findMax2_safety_po_19:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13626,7 +13627,7 @@ goal Arrays_findMax2_safety_po_20:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13662,7 +13663,7 @@ goal Arrays_findMax2_safety_po_21:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13698,7 +13699,7 @@ goal Arrays_findMax2_safety_po_22:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13734,7 +13735,7 @@ goal Arrays_findMax2_safety_po_23:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13770,7 +13771,7 @@ goal Arrays_findMax2_safety_po_24:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13806,7 +13807,7 @@ goal Arrays_findMax2_safety_po_25:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13842,7 +13843,7 @@ goal Arrays_findMax2_safety_po_26:
        Object_alloc_table, intM_intP))))))) ->
   (offset_max(Object_alloc_table, t_1) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_1) + 1)) and (true = true))))) ->
@@ -13961,7 +13962,7 @@ goal Arrays_findMax_ensures_max_found_po_7:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14003,7 +14004,7 @@ goal Arrays_findMax_ensures_max_found_po_8:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14045,7 +14046,7 @@ goal Arrays_findMax_ensures_max_found_po_9:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14087,7 +14088,7 @@ goal Arrays_findMax_ensures_max_found_po_10:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14129,7 +14130,7 @@ goal Arrays_findMax_ensures_max_found_po_11:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14171,7 +14172,7 @@ goal Arrays_findMax_ensures_max_found_po_12:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14215,7 +14216,7 @@ goal Arrays_findMax_ensures_max_found_po_13:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14251,7 +14252,7 @@ goal Arrays_findMax_ensures_max_found_po_14:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14287,7 +14288,7 @@ goal Arrays_findMax_ensures_max_found_po_15:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14323,7 +14324,7 @@ goal Arrays_findMax_ensures_max_found_po_16:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14359,7 +14360,7 @@ goal Arrays_findMax_ensures_max_found_po_17:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14395,7 +14396,7 @@ goal Arrays_findMax_ensures_max_found_po_18:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14433,7 +14434,7 @@ goal Arrays_findMax_ensures_max_found_po_19:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14466,7 +14467,7 @@ goal Arrays_findMax_ensures_max_found_po_20:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14499,7 +14500,7 @@ goal Arrays_findMax_ensures_max_found_po_21:
          (((0 <= j_1) and (j_1 < i_5)) -> (select(intM_intP, shift(t_0,
           j_1)) <= m_0))))))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14658,7 +14659,7 @@ goal Arrays_findMax_safety_po_9:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14691,7 +14692,7 @@ goal Arrays_findMax_safety_po_10:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14724,7 +14725,7 @@ goal Arrays_findMax_safety_po_11:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14770,7 +14771,7 @@ goal Arrays_findMax_safety_po_12:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14816,7 +14817,7 @@ goal Arrays_findMax_safety_po_13:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14862,7 +14863,7 @@ goal Arrays_findMax_safety_po_14:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14908,7 +14909,7 @@ goal Arrays_findMax_safety_po_15:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -14954,7 +14955,7 @@ goal Arrays_findMax_safety_po_16:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -15002,7 +15003,7 @@ goal Arrays_findMax_safety_po_17:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -15048,7 +15049,7 @@ goal Arrays_findMax_safety_po_18:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -15096,7 +15097,7 @@ goal Arrays_findMax_safety_po_19:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -15135,7 +15136,7 @@ goal Arrays_findMax_safety_po_20:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -15174,7 +15175,7 @@ goal Arrays_findMax_safety_po_21:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -15213,7 +15214,7 @@ goal Arrays_findMax_safety_po_22:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -15252,7 +15253,7 @@ goal Arrays_findMax_safety_po_23:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -15291,7 +15292,7 @@ goal Arrays_findMax_safety_po_24:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -15332,7 +15333,7 @@ goal Arrays_findMax_safety_po_25:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
@@ -15371,7 +15372,7 @@ goal Arrays_findMax_safety_po_26:
           j_1)) <= m_0))))))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->

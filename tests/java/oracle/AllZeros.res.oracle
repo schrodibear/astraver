@@ -385,15 +385,15 @@ end = 30
 
 [JC_8]
 file = "HOME/tests/java/AllZeros.jc"
-line = 52
-begin = 10
-end = 18
-
-[JC_9]
-file = "HOME/tests/java/AllZeros.jc"
 line = 50
 begin = 8
 end = 30
+
+[JC_9]
+file = "HOME/tests/java/AllZeros.jc"
+line = 52
+begin = 10
+end = 18
 
 [AllZeros_all_zeros_ensures_default]
 name = "Method all_zeros"
@@ -902,7 +902,8 @@ parameter char_of_integer_ :
   { (le_int((0), x) and le_int(x, (65535)))} char
   { eq_int(integer_of_char(result), x) }
 
-parameter cons_AllZeros : this_0:Object pointer -> { } unit { true }
+parameter cons_AllZeros :
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -912,7 +913,7 @@ parameter int32_of_integer_ :
 parameter java_array_length_intM :
  x_2:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_9:
+  { (JC_8:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and (eq_int(result,
@@ -1125,7 +1126,7 @@ why --project [...] why/AllZeros.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/AllZeros_po14.why">
-      <location file = "why/AllZeros.why" line = "517" begin = "65" end = "315"/>
+      <location file = "why/AllZeros.why" line = "518" begin = "65" end = "315"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/AllZeros_po15.why">
@@ -2280,7 +2281,7 @@ goal AllZeros_all_zeros_ensures_default_po_10:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2360,7 +2361,7 @@ goal AllZeros_all_zeros_safety_po_5:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2385,7 +2386,7 @@ goal AllZeros_all_zeros_safety_po_6:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2415,7 +2416,7 @@ goal AllZeros_all_zeros_safety_po_7:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2445,7 +2446,7 @@ goal AllZeros_all_zeros_safety_po_8:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2481,7 +2482,7 @@ goal AllZeros_all_zeros_safety_po_9:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2528,7 +2529,7 @@ goal AllZeros_all_zeros_safety_po_10:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2566,7 +2567,7 @@ goal AllZeros_all_zeros_safety_po_11:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2603,7 +2604,7 @@ goal AllZeros_all_zeros_safety_po_12:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2654,7 +2655,7 @@ goal AllZeros_all_zeros_ensures_default_po_4:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2686,7 +2687,7 @@ goal AllZeros_all_zeros_ensures_default_po_5:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2718,7 +2719,7 @@ goal AllZeros_all_zeros_ensures_default_po_6:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2749,7 +2750,7 @@ goal AllZeros_all_zeros_ensures_default_po_7:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2781,7 +2782,7 @@ goal AllZeros_all_zeros_ensures_default_po_8:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -2814,7 +2815,7 @@ goal AllZeros_all_zeros_ensures_default_po_9:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -3848,7 +3849,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 result)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))
 
-;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 517, characters 65-315
+;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 518, characters 65-315
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -5222,7 +5223,7 @@ goal AllZeros_all_zeros_ensures_default_po_4:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5253,7 +5254,7 @@ goal AllZeros_all_zeros_ensures_default_po_5:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5284,7 +5285,7 @@ goal AllZeros_all_zeros_ensures_default_po_6:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5314,7 +5315,7 @@ goal AllZeros_all_zeros_ensures_default_po_7:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5345,7 +5346,7 @@ goal AllZeros_all_zeros_ensures_default_po_8:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5377,7 +5378,7 @@ goal AllZeros_all_zeros_ensures_default_po_9:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5405,7 +5406,7 @@ goal AllZeros_all_zeros_ensures_default_po_10:
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5480,7 +5481,7 @@ goal AllZeros_all_zeros_safety_po_5:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5504,7 +5505,7 @@ goal AllZeros_all_zeros_safety_po_6:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5533,7 +5534,7 @@ goal AllZeros_all_zeros_safety_po_7:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5562,7 +5563,7 @@ goal AllZeros_all_zeros_safety_po_8:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5597,7 +5598,7 @@ goal AllZeros_all_zeros_safety_po_9:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5633,7 +5634,7 @@ goal AllZeros_all_zeros_safety_po_10:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5670,7 +5671,7 @@ goal AllZeros_all_zeros_safety_po_11:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->
@@ -5706,7 +5707,7 @@ goal AllZeros_all_zeros_safety_po_12:
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0)))))) ->
   (offset_max(Object_alloc_table, t) >= (-1)) ->
   forall result0:int.
-  ("JC_9":
+  ("JC_8":
   ((result0 <= 2147483647) and
    ((result0 >= 0) and
     ((result0 = (offset_max(Object_alloc_table, t) + 1)) and (true = true))))) ->

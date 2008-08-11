@@ -401,16 +401,16 @@ begin = 22
 end = 27
 
 [JC_8]
-file = "HOME/tests/java/Switch.jc"
-line = 47
-begin = 10
-end = 18
-
-[JC_9]
 file = "HOME/tests/java/Switch.java"
 line = 34
 begin = 18
 end = 50
+
+[JC_9]
+file = "HOME/tests/java/Switch.jc"
+line = 47
+begin = 10
+end = 18
 
 [Switch_test1_safety]
 name = "Method test1"
@@ -439,16 +439,16 @@ begin = 22
 end = 27
 
 [JC_13]
-file = "HOME/tests/java/Switch.jc"
-line = 73
-begin = 10
-end = 18
-
-[JC_14]
 file = "HOME/tests/java/Switch.java"
 line = 51
 begin = 18
 end = 110
+
+[JC_14]
+file = "HOME/tests/java/Switch.jc"
+line = 73
+begin = 10
+end = 18
 
 [JC_15]
 file = "HOME/"
@@ -734,7 +734,7 @@ parameter Object_tag_table : Object tag_table ref
 parameter Switch_test1 :
  n_1:int32 ->
   { } int32
-  { (JC_9:
+  { (JC_8:
     ((eq_int(integer_of_int32(n_1), (0))
      or eq_int(integer_of_int32(n_1), (1)))
     <-> eq_int(integer_of_int32(result), (0)))) }
@@ -742,7 +742,7 @@ parameter Switch_test1 :
 parameter Switch_test2 :
  n_0_0:int32 ->
   { } int32
-  { (JC_14:
+  { (JC_13:
     (((eq_int(integer_of_int32(n_0_0), (4))
       or eq_int(integer_of_int32(n_0_0), (7)))
      <-> eq_int(integer_of_int32(result), (1)))
@@ -826,7 +826,8 @@ parameter char_of_integer_ :
   { (le_int((0), x) and le_int(x, (65535)))} char
   { eq_int(integer_of_char(result), x) }
 
-parameter cons_Switch : this_0:Object pointer -> { } unit { true }
+parameter cons_Switch :
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -905,7 +906,7 @@ let Switch_test1_ensures_normal =
    with
    Return ->
    !return end))
-  { (JC_9:
+  { (JC_8:
     ((eq_int(integer_of_int32(n_1), (0))
      or eq_int(integer_of_int32(n_1), (1)))
     <-> eq_int(integer_of_int32(result), (0)))) }
@@ -1002,7 +1003,7 @@ let Switch_test2_ensures_normal =
    with
    Return ->
    !return end))
-  { (JC_14:
+  { (JC_13:
     (((eq_int(integer_of_int32(n_0_0), (4))
       or eq_int(integer_of_int32(n_0_0), (7)))
      <-> eq_int(integer_of_int32(result), (1)))
@@ -2216,7 +2217,7 @@ goal Switch_test1_ensures_normal_po_1:
   forall return:int32.
   (return = r_0) ->
   ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)) ->
-  ("JC_9": (integer_of_int32(return) = 0))
+  ("JC_8": (integer_of_int32(return) = 0))
 
 ========== file tests/java/why/Switch_po10.why ==========
 goal Switch_test2_ensures_normal_po_4:
@@ -2233,7 +2234,7 @@ goal Switch_test2_ensures_normal_po_4:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
 
 ========== file tests/java/why/Switch_po11.why ==========
 goal Switch_test2_ensures_normal_po_5:
@@ -2252,7 +2253,7 @@ goal Switch_test2_ensures_normal_po_5:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)) ->
-  ("JC_14": (integer_of_int32(return) = 1))
+  ("JC_13": (integer_of_int32(return) = 1))
 
 ========== file tests/java/why/Switch_po12.why ==========
 goal Switch_test2_ensures_normal_po_6:
@@ -2271,7 +2272,7 @@ goal Switch_test2_ensures_normal_po_6:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 1) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
 
 ========== file tests/java/why/Switch_po13.why ==========
 goal Switch_test2_ensures_normal_po_7:
@@ -2290,7 +2291,7 @@ goal Switch_test2_ensures_normal_po_7:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)) ->
-  ("JC_14": (integer_of_int32(return) = 0))
+  ("JC_13": (integer_of_int32(return) = 0))
 
 ========== file tests/java/why/Switch_po14.why ==========
 goal Switch_test2_ensures_normal_po_8:
@@ -2309,7 +2310,7 @@ goal Switch_test2_ensures_normal_po_8:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
 
 ========== file tests/java/why/Switch_po15.why ==========
 goal Switch_test2_ensures_normal_po_9:
@@ -2332,7 +2333,7 @@ goal Switch_test2_ensures_normal_po_9:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)) ->
-  ("JC_14": (integer_of_int32(return) = 1))
+  ("JC_13": (integer_of_int32(return) = 1))
 
 ========== file tests/java/why/Switch_po16.why ==========
 goal Switch_test2_ensures_normal_po_10:
@@ -2355,7 +2356,7 @@ goal Switch_test2_ensures_normal_po_10:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 1) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
 
 ========== file tests/java/why/Switch_po17.why ==========
 goal Switch_test2_ensures_normal_po_11:
@@ -2378,7 +2379,7 @@ goal Switch_test2_ensures_normal_po_11:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)) ->
-  ("JC_14": (integer_of_int32(return) = 0))
+  ("JC_13": (integer_of_int32(return) = 0))
 
 ========== file tests/java/why/Switch_po18.why ==========
 goal Switch_test2_ensures_normal_po_12:
@@ -2401,7 +2402,7 @@ goal Switch_test2_ensures_normal_po_12:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
 
 ========== file tests/java/why/Switch_po19.why ==========
 goal Switch_test2_ensures_normal_po_13:
@@ -2417,7 +2418,7 @@ goal Switch_test2_ensures_normal_po_13:
   forall return:int32.
   (return = result) ->
   ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)) ->
-  ("JC_14": (integer_of_int32(return) = 1))
+  ("JC_13": (integer_of_int32(return) = 1))
 
 ========== file tests/java/why/Switch_po2.why ==========
 goal Switch_test1_ensures_normal_po_2:
@@ -2434,7 +2435,7 @@ goal Switch_test1_ensures_normal_po_2:
   forall return:int32.
   (return = r_0) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_9": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
+  ("JC_8": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
 
 ========== file tests/java/why/Switch_po20.why ==========
 goal Switch_test2_ensures_normal_po_14:
@@ -2450,7 +2451,7 @@ goal Switch_test2_ensures_normal_po_14:
   forall return:int32.
   (return = result) ->
   (integer_of_int32(return) = 1) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
 
 ========== file tests/java/why/Switch_po21.why ==========
 goal Switch_test2_ensures_normal_po_15:
@@ -2466,7 +2467,7 @@ goal Switch_test2_ensures_normal_po_15:
   forall return:int32.
   (return = result) ->
   ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)) ->
-  ("JC_14": (integer_of_int32(return) = 0))
+  ("JC_13": (integer_of_int32(return) = 0))
 
 ========== file tests/java/why/Switch_po22.why ==========
 goal Switch_test2_ensures_normal_po_16:
@@ -2482,7 +2483,7 @@ goal Switch_test2_ensures_normal_po_16:
   forall return:int32.
   (return = result) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
 
 ========== file tests/java/why/Switch_po3.why ==========
 goal Switch_test1_ensures_normal_po_3:
@@ -2498,7 +2499,7 @@ goal Switch_test1_ensures_normal_po_3:
   forall return:int32.
   (return = r_0) ->
   ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)) ->
-  ("JC_9": (integer_of_int32(return) = 0))
+  ("JC_8": (integer_of_int32(return) = 0))
 
 ========== file tests/java/why/Switch_po4.why ==========
 goal Switch_test1_ensures_normal_po_4:
@@ -2514,7 +2515,7 @@ goal Switch_test1_ensures_normal_po_4:
   forall return:int32.
   (return = r_0) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_9": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
+  ("JC_8": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
 
 ========== file tests/java/why/Switch_po5.why ==========
 goal Switch_test1_ensures_normal_po_5:
@@ -2527,7 +2528,7 @@ goal Switch_test1_ensures_normal_po_5:
   forall return:int32.
   (return = result) ->
   ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)) ->
-  ("JC_9": (integer_of_int32(return) = 0))
+  ("JC_8": (integer_of_int32(return) = 0))
 
 ========== file tests/java/why/Switch_po6.why ==========
 goal Switch_test1_ensures_normal_po_6:
@@ -2540,7 +2541,7 @@ goal Switch_test1_ensures_normal_po_6:
   forall return:int32.
   (return = result) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_9": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
+  ("JC_8": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
 
 ========== file tests/java/why/Switch_po7.why ==========
 goal Switch_test2_ensures_normal_po_1:
@@ -2557,7 +2558,7 @@ goal Switch_test2_ensures_normal_po_1:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)) ->
-  ("JC_14": (integer_of_int32(return) = 1))
+  ("JC_13": (integer_of_int32(return) = 1))
 
 ========== file tests/java/why/Switch_po8.why ==========
 goal Switch_test2_ensures_normal_po_2:
@@ -2574,7 +2575,7 @@ goal Switch_test2_ensures_normal_po_2:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 1) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
 
 ========== file tests/java/why/Switch_po9.why ==========
 goal Switch_test2_ensures_normal_po_3:
@@ -2591,7 +2592,7 @@ goal Switch_test2_ensures_normal_po_3:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)) ->
-  ("JC_14": (integer_of_int32(return) = 0))
+  ("JC_13": (integer_of_int32(return) = 0))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Switch.why
@@ -4786,7 +4787,7 @@ goal Switch_test1_ensures_normal_po_1:
   forall return:int32.
   (return = r_0) ->
   ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)) ->
-  ("JC_9": (integer_of_int32(return) = 0))
+  ("JC_8": (integer_of_int32(return) = 0))
 
 goal Switch_test1_ensures_normal_po_2:
   forall n_1:int32.
@@ -4802,7 +4803,7 @@ goal Switch_test1_ensures_normal_po_2:
   forall return:int32.
   (return = r_0) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_9": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
+  ("JC_8": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
 
 goal Switch_test1_ensures_normal_po_3:
   forall n_1:int32.
@@ -4817,7 +4818,7 @@ goal Switch_test1_ensures_normal_po_3:
   forall return:int32.
   (return = r_0) ->
   ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)) ->
-  ("JC_9": (integer_of_int32(return) = 0))
+  ("JC_8": (integer_of_int32(return) = 0))
 
 goal Switch_test1_ensures_normal_po_4:
   forall n_1:int32.
@@ -4832,7 +4833,7 @@ goal Switch_test1_ensures_normal_po_4:
   forall return:int32.
   (return = r_0) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_9": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
+  ("JC_8": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
 
 goal Switch_test1_ensures_normal_po_5:
   forall n_1:int32.
@@ -4844,7 +4845,7 @@ goal Switch_test1_ensures_normal_po_5:
   forall return:int32.
   (return = result) ->
   ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)) ->
-  ("JC_9": (integer_of_int32(return) = 0))
+  ("JC_8": (integer_of_int32(return) = 0))
 
 goal Switch_test1_ensures_normal_po_6:
   forall n_1:int32.
@@ -4856,7 +4857,7 @@ goal Switch_test1_ensures_normal_po_6:
   forall return:int32.
   (return = result) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_9": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
+  ("JC_8": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
 
 goal Switch_test2_ensures_normal_po_1:
   forall n_0_0:int32.
@@ -4872,7 +4873,7 @@ goal Switch_test2_ensures_normal_po_1:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)) ->
-  ("JC_14": (integer_of_int32(return) = 1))
+  ("JC_13": (integer_of_int32(return) = 1))
 
 goal Switch_test2_ensures_normal_po_2:
   forall n_0_0:int32.
@@ -4888,7 +4889,7 @@ goal Switch_test2_ensures_normal_po_2:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 1) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
 
 goal Switch_test2_ensures_normal_po_3:
   forall n_0_0:int32.
@@ -4904,7 +4905,7 @@ goal Switch_test2_ensures_normal_po_3:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)) ->
-  ("JC_14": (integer_of_int32(return) = 0))
+  ("JC_13": (integer_of_int32(return) = 0))
 
 goal Switch_test2_ensures_normal_po_4:
   forall n_0_0:int32.
@@ -4920,7 +4921,7 @@ goal Switch_test2_ensures_normal_po_4:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
 
 goal Switch_test2_ensures_normal_po_5:
   forall n_0_0:int32.
@@ -4938,7 +4939,7 @@ goal Switch_test2_ensures_normal_po_5:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)) ->
-  ("JC_14": (integer_of_int32(return) = 1))
+  ("JC_13": (integer_of_int32(return) = 1))
 
 goal Switch_test2_ensures_normal_po_6:
   forall n_0_0:int32.
@@ -4956,7 +4957,7 @@ goal Switch_test2_ensures_normal_po_6:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 1) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
 
 goal Switch_test2_ensures_normal_po_7:
   forall n_0_0:int32.
@@ -4974,7 +4975,7 @@ goal Switch_test2_ensures_normal_po_7:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)) ->
-  ("JC_14": (integer_of_int32(return) = 0))
+  ("JC_13": (integer_of_int32(return) = 0))
 
 goal Switch_test2_ensures_normal_po_8:
   forall n_0_0:int32.
@@ -4992,7 +4993,7 @@ goal Switch_test2_ensures_normal_po_8:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
 
 goal Switch_test2_ensures_normal_po_9:
   forall n_0_0:int32.
@@ -5014,7 +5015,7 @@ goal Switch_test2_ensures_normal_po_9:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)) ->
-  ("JC_14": (integer_of_int32(return) = 1))
+  ("JC_13": (integer_of_int32(return) = 1))
 
 goal Switch_test2_ensures_normal_po_10:
   forall n_0_0:int32.
@@ -5036,7 +5037,7 @@ goal Switch_test2_ensures_normal_po_10:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 1) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
 
 goal Switch_test2_ensures_normal_po_11:
   forall n_0_0:int32.
@@ -5058,7 +5059,7 @@ goal Switch_test2_ensures_normal_po_11:
   forall return:int32.
   (return = r) ->
   ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)) ->
-  ("JC_14": (integer_of_int32(return) = 0))
+  ("JC_13": (integer_of_int32(return) = 0))
 
 goal Switch_test2_ensures_normal_po_12:
   forall n_0_0:int32.
@@ -5080,7 +5081,7 @@ goal Switch_test2_ensures_normal_po_12:
   forall return:int32.
   (return = r) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
 
 goal Switch_test2_ensures_normal_po_13:
   forall n_0_0:int32.
@@ -5095,7 +5096,7 @@ goal Switch_test2_ensures_normal_po_13:
   forall return:int32.
   (return = result) ->
   ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)) ->
-  ("JC_14": (integer_of_int32(return) = 1))
+  ("JC_13": (integer_of_int32(return) = 1))
 
 goal Switch_test2_ensures_normal_po_14:
   forall n_0_0:int32.
@@ -5110,7 +5111,7 @@ goal Switch_test2_ensures_normal_po_14:
   forall return:int32.
   (return = result) ->
   (integer_of_int32(return) = 1) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)))
 
 goal Switch_test2_ensures_normal_po_15:
   forall n_0_0:int32.
@@ -5125,7 +5126,7 @@ goal Switch_test2_ensures_normal_po_15:
   forall return:int32.
   (return = result) ->
   ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)) ->
-  ("JC_14": (integer_of_int32(return) = 0))
+  ("JC_13": (integer_of_int32(return) = 0))
 
 goal Switch_test2_ensures_normal_po_16:
   forall n_0_0:int32.
@@ -5140,7 +5141,7 @@ goal Switch_test2_ensures_normal_po_16:
   forall return:int32.
   (return = result) ->
   (integer_of_int32(return) = 0) ->
-  ("JC_14": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
+  ("JC_13": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
 
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
