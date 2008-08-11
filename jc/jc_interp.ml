@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.332 2008-08-11 13:17:55 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.333 2008-08-11 15:33:37 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -125,7 +125,7 @@ let reg_decl ~in_mark ~out_mark ~name ~beh pos =
   let gui =
     { out_mark = out_mark; kind = None; name = Some name; beh = Some beh; } 
   in
-  reg_pos sce gui
+  ignore (reg_pos sce gui)
 
 let make_check ?mark ?kind pos e' =
   let mark = reg_check ?mark ?kind pos in
@@ -247,7 +247,8 @@ let bin_op: expr_bin_op -> string = function
       (* pointer *)
   | `Beq, `Pointer -> "eq_pointer"
   | `Bneq, `Pointer -> "neq_pointer"
-  | `Bsub, `Pointer -> "sub_pointer_"
+  | `Bsub, `Pointer -> 
+      if safety_checking () then "sub_pointer_" else "safe_sub_pointer_" 
       (* real *)
   | `Bgt, `Real -> "gt_real_"
   | `Blt, `Real -> "lt_real_"
@@ -581,7 +582,10 @@ let coerce ~check_int_overflow lab loc tdest tsrc orig e =
     | JCTpointer (st1,_,_), JCTpointer (JCtag(st2, _),_,_) 
         when Jc_typing.substruct st2 st1 -> e
     | JCTpointer (JCtag(st, _),_,_), _  -> 
-        make_guarded_app ~mark:lab DownCast loc "downcast_" 
+	let downcast_fun = 
+	  if safety_checking () then "downcast_" else "safe_downcast_"
+	in
+        make_guarded_app ~mark:lab DownCast loc downcast_fun
           [ Deref (tag_table_name (struct_variant st,orig#region)) ; e ;
             Var (tag_name st) ] 
     | JCTany, JCTany -> e
@@ -888,11 +892,11 @@ let rec assertion ~global_assertion ~relocate lab oldlab a =
 	  f args
     | JCAquantifier(Forall,v,a1) -> 
         LForall(v.jc_var_info_final_name,
-                tr_base_type v.jc_var_info_type,
+                tr_var_base_type v,
                 fa a1)
     | JCAquantifier(Exists,v,a1) -> 
         LExists(v.jc_var_info_final_name,
-                tr_base_type v.jc_var_info_type,
+                tr_var_base_type v,
                 fa a1)
     | JCAold a1 -> 
 	assertion ~global_assertion ~relocate oldlab oldlab a1
@@ -991,9 +995,6 @@ let rec make_lets l e =
   match l with
     | [] -> e
     | (tmp,a)::l -> Let(tmp,a,make_lets l e)
-
-let return_void = ref false
-
 
 (*******************************************************************************)
 (*                                  Locations                                  *)
@@ -1626,8 +1627,11 @@ and expr e =
           let e1' = expr e1 in
           let tmp = tmp_var_name () in
           let tag = tag_table_name (struct_variant st,e1#region) in
+	  let downcast_fun = 
+	    if safety_checking () then "downcast_" else "safe_downcast_"
+	  in
           let call = 
-            make_guarded_app e#mark DownCast e#pos "downcast_" 
+            make_guarded_app e#mark DownCast e#pos downcast_fun
 	      [ Deref tag; Var tmp; Var(tag_name st) ]
           in
           Let(tmp,e1',call) (* Yannick: why a temporary here? *)
@@ -1693,7 +1697,11 @@ and expr e =
 		make_app "free_parameter_ownership" 
 		  [alloc; Var com; e1']
               else
-		make_app "free_parameter" [alloc; e1']
+		let free_fun = 
+		  if safety_checking () then "free_parameter" 
+		  else "safe_free_parameter"
+		in
+		make_app free_fun [alloc; e1']
 	  | JCalloc_union vi -> assert false (* TODO *)
 	  | JCalloc_bitvector -> assert false (* TODO *)
         end
@@ -2145,7 +2153,7 @@ let tr_struct st acc =
 (*     Param(false,alloc_one_param_name st,alloc_type) :: acc *)
 (*   in *)
 
-  (* Allocation parameter. *)
+  (* Allocation parameter. *) (* TODO: version safe *)
   let alloc_type = 
     Annot_type(
       (* [n >= 0] *)
@@ -2558,64 +2566,49 @@ let tr_logic_fun f ta acc =
 (*         a) :: acc *)
 (*     ) li.jc_logic_info_effects.jc_effect_memories acc *)
 
-(*******************************************************************************)
-(*                                  Functions                                  *)
-(*******************************************************************************)
+(******************************************************************************)
+(*                                 Functions                                  *)
+(******************************************************************************)
 
-let parameter v =
-  let ty = 
-    if Region.bitwise v.jc_var_info_region then
-      Base_type (raw_pointer_type bitvector_type)
-    else tr_type v.jc_var_info_type
-  in
-  (v.jc_var_info_final_name,ty)
-    
-let excep_posts_for_others eopt excep_posts =
+let excep_posts_for_others exc_opt excep_behaviors =
   ExceptionMap.fold
-    (fun ei l acc ->
-       match eopt with 
-         | Some ei -> acc
-         | None -> (exception_name ei, LTrue)::acc)
-    excep_posts []
+    (fun exc bl acc ->
+       match exc_opt with 
+         | Some exc' -> 
+	     if exc.jc_exception_info_tag = exc'.jc_exception_info_tag then
+	       acc
+	     else
+	       (exception_name exc, LTrue) :: acc
+         | None -> (exception_name exc, LTrue) :: acc
+    ) excep_behaviors []
     
-let fun_parameters f write_mems read_mems annot_type =
-  let annot_type = 
-    if !Jc_options.separation_sem = SepNone then annot_type else
-      List.fold_right (fun (name,ty) acc ->
-        Prod_type(name,Base_type ty,acc)
-      ) read_mems annot_type
+let fun_parameters params write_params read_params =
+  let write_params = 
+    List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) write_params
   in
-  let annot_type = 
-    if !Jc_options.separation_sem = SepNone then annot_type else
-      List.fold_right (fun (name,ty) acc ->
-        Prod_type(name,Ref_type(Base_type ty),acc)
-      ) write_mems annot_type
+  let read_params = 
+    List.map (fun (n,ty') -> (n,Base_type ty')) read_params
   in
-  match f.jc_fun_info_parameters with
-    | [] ->
-	if read_mems = [] && write_mems = [] then
-          Prod_type("tt",unit_type, annot_type)
-	else annot_type
-    | l ->
-        List.fold_right
-          (fun v acc ->
-	     let ty = 
-	       if Region.bitwise v.jc_var_info_region then
-		 Base_type (raw_pointer_type bitvector_type)
-	       else tr_type v.jc_var_info_type
-	     in
-             Prod_type(v.jc_var_info_final_name,
-                       ty,
-                       acc))
-          l annot_type
+  let params = 
+    List.map (fun v -> let n,ty' = param v in (n, Base_type ty')) params
+  in
+  let params = params @ write_params @ read_params in
+  match params with
+    | [] -> [ ("tt", unit_type) ]
+    | _ -> params
+
+let annot_fun_parameters params write_params read_params annot_type =
+  let params = fun_parameters params write_params read_params in
+  List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
+    params annot_type
        
 let function_body f spec behavior_name body =
   set_current_behavior behavior_name;
   set_current_spec spec;
-  let e = expr body in
+  let e' = expr body in
   reset_current_behavior ();
   reset_current_spec ();
-  e
+  e'
 
 let assume_in_precondition b pre =
   match b.jc_behavior_assumes with
@@ -2836,7 +2829,7 @@ let tr_fun f funpos spec body acc =
 
   (* Function type *)
 
-  let ret_type = tr_type f.jc_fun_info_result.jc_var_info_type in
+  let ret_type = tr_var_type f.jc_fun_info_result in
   let param_normal_post = 
     if is_purely_exceptional_fun spec then LFalse else
       make_and_list [safety_post; normal_post; normal_post_inferred] 
@@ -2848,7 +2841,10 @@ let tr_fun f funpos spec body acc =
                  reads, writes, 
 		 param_normal_post, param_excep_posts)
     in
-    let fun_type = fun_parameters f write_params read_params annot_type in
+    let fun_type = 
+      annot_fun_parameters 
+	f.jc_fun_info_parameters write_params read_params annot_type 
+    in
     Param(false, f.jc_fun_info_final_name ^ "_requires", fun_type) :: acc
   in
   let acc = (* function declaration without precondition *)
@@ -2857,7 +2853,10 @@ let tr_fun f funpos spec body acc =
                  reads, writes, 
 		 param_normal_post, param_excep_posts)
     in
-    let fun_type = fun_parameters f write_params read_params annot_type in
+    let fun_type = 
+      annot_fun_parameters 
+	f.jc_fun_info_parameters write_params read_params annot_type 
+    in
     Param(false, f.jc_fun_info_final_name, fun_type) :: acc
   in
 
@@ -2869,201 +2868,143 @@ let tr_fun f funpos spec body acc =
         if Jc_options.verify <> [] && 
           not (List.mem f.jc_fun_info_name Jc_options.verify) 
         then 
-          acc (* function is not in the list of function to verify *) 
+          acc (* function is not in the list of functions to verify *) 
         else
-          (* why functions for each behaviors *)
-            let write_mems = 
-              List.map (fun (name,ty) -> name,Ref_type(Base_type ty)) 
-                write_params
-            in
-            let read_mems = 
-              List.map (fun (name,ty) -> name,Base_type ty) 
-                read_params
-            in
-            let params = match f.jc_fun_info_parameters with
-              | [] -> [(* "tt", unit_type *)]
-              | l -> List.map parameter l
-            in
-            let params = params @ write_mems @ read_mems in
-            let params = match params with
-              | [] -> [ "tt", unit_type ]
-              | _ -> params
-            in
-              (* rename formals just before body is treated *)
-             let list_of_refs =
-              List.fold_right
-                (fun id bl ->
-                   if id.jc_var_info_assigned
-                   then 
-                     let n = id.jc_var_info_final_name in
-                     let newn = "mutable_" ^ n in
-                       id.jc_var_info_final_name <- newn;
-                       (newn, n) :: bl
-                   else bl) 
-                f.jc_fun_info_parameters [] 
-            in
-              return_void := 
-                (match f.jc_fun_info_result.jc_var_info_type with
-                   | JCTnative Tunit -> true
-                   | _ -> false);               
-              printf "Generating Why function %s@."
-                f.Jc_fenv.jc_fun_info_final_name;
-              (* default behavior *)
-              let body_safety = function_body f spec "safety" body in
-              let tblock =
-                if !Jc_options.inv_sem = InvOwnership then
-                  append
-                    (* (make_assume_all_assocs (fresh_program_point ()) 
-                       f.jc_fun_info_parameters)*)
-                    (assume_all_invariants f.jc_fun_info_parameters)
-                    body_safety
-                else
-                  body_safety
-              in
-              let tblock = define_locals tblock in
-              let tblock = 
-                if !return_void then
-                  Try(append tblock (Raise(jessie_return_exception,None)),
-                     jessie_return_exception,None,Void)
-                else
-                  let e = any_value f.jc_fun_info_result.jc_var_info_type in
-                    Let_ref(jessie_return_variable,e,
-                            Try(append tblock Absurd,
-                                jessie_return_exception,None,
-                                Deref(jessie_return_variable)))
-              in
-              let tblock = make_label "init" tblock in
-              let tblock_safety =
-                List.fold_right
-                  (fun (mut_id,id) bl ->
-                     Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-              in
-              let newid = f.jc_fun_info_name ^ "_safety" in
-              let _ = reg_decl 
-                ~out_mark:newid
-                ~in_mark:f.jc_fun_info_name
-                ~name:("function " ^ f.jc_fun_info_name)
-                ~beh:"Safety" 
-		funpos 
-              in
-              let acc = 
-                if is_purely_exceptional_fun spec then acc else
-                  if Jc_options.verify_invariants_only then acc else
-                  Def(
-                    newid,
-                    Fun(
-                      params,
-                      extra_requires,
-                      tblock_safety,
-                      safety_post,
-                      excep_posts_for_others None excep_behaviors
-                    ))::acc
-              in
-                (* user behaviors *)
-              let acc = 
-                if spec.jc_fun_behavior = [] then
-                  acc
-                else
-                    (* normal behaviors *)
-                  let acc =
-                    List.fold_right
-                      (fun (id,b,post) acc ->
- 		          let body = function_body f spec id body in
-                          let tblock =
-                            if !Jc_options.inv_sem = InvOwnership then
-                              append
-                                (*      (make_assume_all_assocs (fresh_program_point ()) f.jc_fun_info_parameters)*)
-                                (assume_all_invariants f.jc_fun_info_parameters)
-                                body
-                            else
-                              body
-                          in
-			  let tblock = define_locals tblock in
-                          let tblock = 
-                            if !return_void then
-                              Try(append tblock (Raise(jessie_return_exception,None)),
-                                  jessie_return_exception,None,Void)
-                            else
-                              let e = any_value f.jc_fun_info_result.jc_var_info_type in
-                                Let_ref(jessie_return_variable,e,
-                                        Try(append tblock Absurd,
-                                            jessie_return_exception,None,
-                                            Deref(jessie_return_variable)))
-                          in
-                          let tblock = make_label "init" tblock in
-                          let tblock =
-                            List.fold_right
-                              (fun (mut_id,id) bl ->
-                                 Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-                          in
+          let () = 
+	    printf "Generating Why function %s@." f.jc_fun_info_final_name 
+	  in
 
-                         let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
-                         let beh = 
-                           if id="default" then "Behavior" else
-                             "Normal behavior `"^id^"'"
-                         in
-                         let _ = reg_decl 
-                           ~out_mark:newid
-                           ~in_mark:f.jc_fun_info_name
-                           ~name:("function "^f.jc_fun_info_name)
-                           ~beh  
-                           funpos 
-                         in
-			 let pre = assume_in_precondition b extra_requires in
-                         let d =
-                           Def(
-                             newid,
-                             Fun(
-                               params,
-                               pre,
-                               tblock,
-                               post,
-                               excep_posts_for_others None excep_behaviors
-                             )
-                           )
-                         in d::acc)
-                      normal_behaviors acc
-                  in 
-                    (* redefine [tblock] for use in exception functions *)
-                    (* CLAUDE: pourquoi ??????
-                       let tblock = make_label "init" tblock in
-                       let tblock =
-                       List.fold_right
-                       (fun (mut_id,id) bl ->
-                       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock 
-                       in
-                    *)
-                    (* exceptional behaviors *)
-                  let acc =
-                    ExceptionMap.fold
-                      (fun ei l acc ->
-                         List.fold_right
-                           (fun (id,b,e) acc ->
-                              let newid = 
-                                f.jc_fun_info_name ^ "_exsures_" ^ id 
-                              in
-                              let _ = reg_decl 
-                                ~out_mark:newid
-                                ~in_mark:f.jc_fun_info_name
-                                ~name:("function "^f.jc_fun_info_name)
-                                ~beh:("Exceptional behavior `"^id^"'")  
-                                funpos 
-			      in
-			      let pre = assume_in_precondition b extra_requires in
-                              let d =
-                                Def(newid,
-                                    Fun(params,
-                                        pre,
-                                        tblock,
-                                        LTrue,
-                                        (exception_name ei,e) :: 
-                                          excep_posts_for_others (Some ei) excep_behaviors)) in
-                                d::acc)
-                           l acc)
-                      user_excep_behaviors acc
-                  in
-                    acc 
-        in acc
+	  (* parameters *)
+	  let params = 
+	    fun_parameters f.jc_fun_info_parameters write_params read_params 
+	  in
+
+	  (* rename formals after parameters are computed and 
+	     before body is treated *)
+	  let list_of_refs =
+	    List.fold_right
+	      (fun id bl ->
+		 if id.jc_var_info_assigned
+		 then 
+		   let n = id.jc_var_info_final_name in
+		   let newn = "mutable_" ^ n in
+		   id.jc_var_info_final_name <- newn;
+		   (newn, n) :: bl
+		 else bl) 
+	      f.jc_fun_info_parameters [] 
+	  in
+
+	  let wrap_body body =
+	    let body =
+	      if !Jc_options.inv_sem = InvOwnership then
+		append (assume_all_invariants f.jc_fun_info_parameters) body
+	      else body
+	    in
+	    let body = define_locals body in
+	    let body = match f.jc_fun_info_result.jc_var_info_type with
+	      | JCTnative Tunit -> 
+		  Try(append body (Raise(jessie_return_exception,None)),
+		      jessie_return_exception, None, Void)
+	      | _ ->
+		  let e' = any_value f.jc_fun_info_result.jc_var_info_type in
+		  Let_ref(jessie_return_variable, e',
+			  Try(append body Absurd,
+			      jessie_return_exception, None,
+			      Deref jessie_return_variable))
+	    in
+	    let body = make_label "init" body in
+	    let body =
+	      List.fold_right
+		(fun (mut_id,id) e' -> Let_ref(mut_id, plain_var id, e')) 
+		list_of_refs body 
+	    in
+	    body
+	  in
+
+          (* default behavior *)
+          let safety_body = function_body f spec "safety" body in
+          let safety_body = wrap_body safety_body in
+          let newid = f.jc_fun_info_name ^ "_safety" in
+          reg_decl 
+            ~out_mark:newid
+            ~in_mark:f.jc_fun_info_name
+            ~name:("function " ^ f.jc_fun_info_name)
+            ~beh:"Safety" 
+	    funpos;
+          let acc = 
+            if is_purely_exceptional_fun spec then acc else
+              if Jc_options.verify_invariants_only then acc else
+                Def(
+                  newid,
+                  Fun(
+                    params,
+                    extra_requires,
+                    safety_body,
+                    safety_post,
+                    excep_posts_for_others None excep_behaviors))
+		:: acc
+          in
+
+          (* user behaviors *)
+          if spec.jc_fun_behavior = [] then acc else
+
+            (* normal behaviors *)
+            let acc =
+              List.fold_right
+                (fun (id,b,post) acc ->
+ 		   let normal_body = function_body f spec id body in
+                   let normal_body = wrap_body normal_body in
+                   let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
+                   let beh = 
+                     if id="default" then "Behavior" else
+                       "Normal behavior `"^id^"'"
+                   in
+                   reg_decl 
+                     ~out_mark:newid
+                     ~in_mark:f.jc_fun_info_name
+                     ~name:("function " ^ f.jc_fun_info_name)
+                     ~beh  
+                     funpos;
+                   Def(
+                     newid,
+                     Fun(
+                       params,
+                       assume_in_precondition b extra_requires,
+                       normal_body,
+                       post,
+                       excep_posts_for_others None excep_behaviors))
+		     :: acc
+                ) normal_behaviors acc
+            in 
+
+            (* exceptional behaviors *)
+            let acc =
+              ExceptionMap.fold
+                (fun exc bl acc ->
+                   List.fold_right
+                     (fun (id,b,post) acc ->
+ 			let except_body = function_body f spec id body in
+			let except_body = wrap_body except_body in
+                        let newid = f.jc_fun_info_name ^ "_exsures_" ^ id in
+                        reg_decl 
+                          ~out_mark:newid
+                          ~in_mark:f.jc_fun_info_name
+                          ~name:("function " ^ f.jc_fun_info_name)
+                          ~beh:("Exceptional behavior `" ^ id ^ "'")  
+                          funpos;
+                        Def(newid,
+                            Fun(
+			      params,
+                              assume_in_precondition b extra_requires,
+                              except_body,
+                              LTrue,
+                              (exception_name exc, post) :: 
+                                excep_posts_for_others (Some exc) excep_behaviors))
+                        :: acc
+		     ) bl acc
+		) user_excep_behaviors acc
+            in
+            acc 
 
 let tr_fun f funpos spec body acc =
   set_current_function f;
@@ -3071,7 +3012,12 @@ let tr_fun f funpos spec body acc =
   reset_current_function ();
   acc
 
-let tr_logic_type id acc = Type(id,[])::acc
+
+(******************************************************************************)
+(*                               Logic entities                               *)
+(******************************************************************************)
+
+let tr_logic_type id acc = Type(id,[]) :: acc
 
 let tr_axiom id is_axiom p acc = 
   let ef = Jc_effect.assertion empty_effects p in
@@ -3088,8 +3034,8 @@ let tr_axiom id is_axiom p acc =
   in
   let a =
     AllocMap.fold (fun (alloc,r) labs a -> 
-      LForall (alloc_table_name(alloc,r), alloc_table_type alloc, a)
-    ) ef.jc_effect_alloc_table a 
+		     LForall (alloc_table_name(alloc,r), alloc_table_type alloc, a)
+		  ) ef.jc_effect_alloc_table a 
   in
   let a =
     TagMap.fold
@@ -3282,7 +3228,7 @@ let tr_enum_type_pair ri1 ri2 acc =
 
 let tr_variable vi e acc =
   if vi.jc_var_info_assigned then
-    let t = Ref_type(tr_type vi.jc_var_info_type) in
+    let t = Ref_type(tr_var_type vi) in
       Param(false,vi.jc_var_info_final_name,t)::acc
   else
     let t = tr_base_type vi.jc_var_info_type in

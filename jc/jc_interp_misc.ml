@@ -162,7 +162,7 @@ let tr_native_type = function
   | Treal -> "real"
   | Tstring -> "string"
 
-let tr_base_type = function
+let tr_base_type ?region = function
   | JCTnative ty -> 
       simple_logic_type (tr_native_type ty)
   | JCTlogic s -> 
@@ -170,11 +170,25 @@ let tr_base_type = function
   | JCTenum ri -> 
       simple_logic_type ri.jc_enum_info_name
   | JCTpointer(pc, _, _) ->
-      raw_pointer_type (pointer_class_model_type pc)
+      let elemty' = match region with 
+	| None -> pointer_class_model_type pc
+	| Some r ->
+	    if Region.bitwise (the region) then bitvector_type
+	    else
+	      (* TODO: see what to do with unions *)
+	      pointer_class_model_type pc
+      in
+      raw_pointer_type elemty'
   | JCTnull | JCTany -> assert false
   | JCTtype_var _ -> assert false (* TODO (need environment) *)
 
-let tr_type ty = Base_type (tr_base_type ty)
+let tr_type ~region ty = Base_type (tr_base_type ~region ty)
+
+let tr_var_base_type v = 
+  tr_base_type ~region:v.jc_var_info_region v.jc_var_info_type
+
+let tr_var_type v = 
+  tr_type ~region:v.jc_var_info_region v.jc_var_info_type
 
 (* model types *)
 
@@ -206,8 +220,6 @@ let is_memory_type ty' = ty'.logic_type_name = memory_type_name
 
 let deconstruct_memory_type_args ty =
   match ty.logic_type_args with [t;v] -> t,v | _ -> assert false
-
-	
 
 
 (******************************************************************************)
@@ -254,7 +266,8 @@ let var v =
   else plain_var v.jc_var_info_final_name
 
 let param v = 
-  plain_var v.jc_var_info_final_name, tr_base_type v.jc_var_info_type 
+  v.jc_var_info_final_name, 
+  tr_base_type ~region:v.jc_var_info_region v.jc_var_info_type 
 
 let tvar_name ~label_in_name lab v = 
   lvar_name ~constant:(not v.jc_var_info_assigned) ~label_in_name
@@ -539,11 +552,15 @@ let read_memories ~mode ~callee_writes ~callee_reads ~region_assoc =
 
 let write_globals ~callee_writes =
   VarMap.fold
-    (fun v _labs acc -> param v :: acc) callee_writes.jc_effect_globals []
+    (fun v _labs acc -> 
+       let n,ty' = param v in (plain_var n,ty') :: acc
+    ) callee_writes.jc_effect_globals []
 
 let read_globals ~callee_reads =
   VarMap.fold
-    (fun v _labs acc -> param v :: acc) callee_reads.jc_effect_globals []
+    (fun v _labs acc -> 
+       let n,ty' = param v in (plain_var n,ty') :: acc
+    ) callee_reads.jc_effect_globals []
 
 (* Yannick: change this to avoid recovering the real type from its name
    in mutable and committed effects *)
