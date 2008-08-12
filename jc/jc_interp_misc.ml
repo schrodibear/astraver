@@ -222,6 +222,47 @@ let deconstruct_memory_type_args ty =
   match ty.logic_type_args with [t;v] -> t,v | _ -> assert false
 
 
+let logic_enum_of_int ri = ri.jc_enum_info_name ^ "_of_integer"
+let safe_fun_enum_of_int ri = "safe_" ^ ri.jc_enum_info_name ^ "_of_integer_"
+(* Yannick: why have both logic_enum_of_int and safe_fun_enum_of_int? *)
+let fun_enum_of_int ri = ri.jc_enum_info_name ^ "_of_integer_"
+let logic_int_of_enum ri = "integer_of_" ^ ri.jc_enum_info_name
+let mod_of_enum ri = "mod_" ^ ri.jc_enum_info_name ^ "_of_integer"
+let fun_any_enum ri = "any_" ^ ri.jc_enum_info_name
+let eq_of_enum ri = "eq_" ^ ri.jc_enum_info_name
+
+let logic_bitvector_of_enum ri = "bitvector_of_" ^ ri.jc_enum_info_name
+let logic_enum_of_bitvector ri = ri.jc_enum_info_name  ^ "_of_bitvector"
+
+let logic_union_of_field fi = "bitvector_of_" ^ fi.jc_field_info_name
+let logic_field_of_union fi = fi.jc_field_info_name ^ "_of_bitvector"
+
+
+let any_value = function
+  | JCTnative ty -> 
+      begin match ty with
+	| Tunit -> Void
+	| Tboolean -> App(Var "any_bool", Void)
+	| Tinteger -> App(Var "any_int", Void)
+	| Treal -> App(Var "any_real", Void)
+	| Tstring -> App(Var "any_string", Void)
+      end
+  | JCTnull 
+  | JCTpointer _ -> App(Var "any_pointer", Void)
+  | JCTenum ri -> App (Var(fun_any_enum ri), Void)
+  | JCTlogic _ | JCTany -> assert false
+  | JCTtype_var _ -> assert false (* TODO: need environment *)
+
+let any_value' ty' =
+  let anyfun = 
+    if is_alloc_table_type ty' then "any_alloc_table"
+    else if is_tag_table_type ty' then "any_tag_table"
+    else if is_memory_type ty' then "any_memory"
+    else assert false
+  in
+  App(Var anyfun,Void)
+
+
 (******************************************************************************)
 (*                                 variables                                  *)
 (******************************************************************************)
@@ -980,31 +1021,6 @@ let make_offset_max ac p =
 let make_int_of_tag st =
   LApp("int_of_tag", [LVar(tag_name st)])
 
-let any_value ty = 
-  match ty with
-  | JCTnative t -> 
-      begin match t with
-	| Tunit -> Void
-	| Tboolean -> App (Var "any_bool", Void)
-	| Tinteger -> App (Var "any_int", Void)
-	| Treal -> App (Var "any_real", Void)
-	| Tstring -> App (Var "any_string", Void)
-      end
-  | JCTnull 
-  | JCTpointer _ -> App (Var "any_pointer", Void)
-  | JCTenum ri -> 
-      App (Var ("any_" ^ ri.jc_enum_info_name), Void)
-  | JCTlogic _ | JCTany -> assert false
-  | JCTtype_var _ -> assert false (* TODO: need environment *)
-
-let any_value' ty' =
-  let anyfun = 
-    if is_alloc_table_type ty' then "any_alloc_table"
-    else if is_tag_table_type ty' then "any_tag_table"
-    else if is_memory_type ty' then "any_memory"
-    else assert false
-  in
-  App(Var anyfun,Void)
 
 
 let pc_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
