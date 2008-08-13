@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.16 2008-07-11 06:35:50 moy Exp $ i*)
+(*i $Id: pp.mli,v 1.17 2008-08-13 14:10:53 moy Exp $ i*)
 
 open Format
 
@@ -52,6 +52,7 @@ val space : formatter -> unit -> unit
 val alt : formatter -> unit -> unit
 val newline : formatter -> unit -> unit
 val comma : formatter -> unit -> unit
+val simple_comma : formatter -> unit -> unit
 val semi : formatter -> unit -> unit
 val underscore : formatter -> unit -> unit
 val arrow : formatter -> unit -> unit

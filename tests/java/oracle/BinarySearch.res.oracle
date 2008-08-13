@@ -970,8 +970,7 @@ axiom interface_tags :
 
 predicate is_sorted(t:Object pointer,
  Object_alloc_table_at_L:Object alloc_table,
- intM_intP_at_L:(Object,
- int32) memory) =
+ intM_intP_at_L:(Object, int32) memory) =
  (Non_null_intM(t, Object_alloc_table_at_L)
  and (forall i:int.
       (forall j:int.
@@ -1548,7 +1547,7 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "why/BinarySearch.why" line = "204" begin = "0" end = "206"/>
+      <location file = "why/BinarySearch.why" line = "203" begin = "0" end = "206"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -1559,7 +1558,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "why/BinarySearch.why" line = "653" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "652" begin = "49" end = "208"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
@@ -5893,7 +5892,7 @@ why -simplify [...] why/BinarySearch.why
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
-;; mean_property, File "why/BinarySearch.why", line 204, characters 0-206
+;; mean_property, File "why/BinarySearch.why", line 203, characters 0-206
 (FORALL (x_4 y)
 (IMPLIES (<= x_4 y)
 (AND (<= x_4 (+ x_4 (int_div (- y x_4) 2)))
@@ -6668,7 +6667,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
 (integer_of_int32 v)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 653, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 652, characters 49-208
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

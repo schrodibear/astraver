@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.36 2008-08-08 13:46:07 moy Exp $ i*)
+(*i $Id: output.ml,v 1.37 2008-08-13 14:10:53 moy Exp $ i*)
 
 open Lexing
 open Format
@@ -197,7 +197,7 @@ let rec fprintf_logic_type form t =
 	fprintf form "%a %s" fprintf_logic_type x t.logic_type_name
     | l ->
 	fprintf form "(%a) %s" 
-	  (print_list comma fprintf_logic_type) l
+	  (print_list simple_comma fprintf_logic_type) l
 	  t.logic_type_name
 
 let rec fprintf_assertion form a =

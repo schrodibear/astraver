@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.336 2008-08-13 13:24:01 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.337 2008-08-13 14:10:53 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -718,6 +718,8 @@ let rec term ~global_assertion ~relocate lab oldlab t =
      Tnamed(reg_check ~mark:t#mark t#pos,t')
    else
      t')
+
+let () = ref_term := term
 
 let named_term lab oldlab t =
   let t' = term ~global_assertion:false ~relocate:false lab oldlab t in

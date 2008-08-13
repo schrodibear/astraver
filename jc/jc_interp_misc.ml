@@ -572,21 +572,23 @@ let lderef_mem_class locs fi =
 (*                           locations and separation                         *)
 (******************************************************************************)
 
+let ref_term :
+    (global_assertion:bool -> relocate:bool -> label -> label -> Jc_fenv.term
+      -> Output.term) ref 
+    = ref (fun ~global_assertion ~relocate _ _ _ -> assert false)
+
 let rec location ~global_assertion lab loc = 
   let flocs = location_set ~global_assertion lab in
   match loc#node with
-    | JCLvar v ->
-	LApp("pset_singleton",[ tvar ~label_in_name:global_assertion lab v ])
-    | JCLderef(locs,lab,fi,r) ->
-	let mc = lderef_mem_class locs fi in
-        let mem = 
-	  tmemory_var ~label_in_name:global_assertion lab (mc,locs#region) 
-	in
-	LApp("pset_deref",[ mem; flocs locs ])
+    | JCLvar _v ->
+	LVar "pset_empty"
+    | JCLderef(locs,_lab,_fi,_r) ->
+	flocs locs
     | _ -> assert false (* TODO *)
 
 and location_set ~global_assertion lab locs = 
   let flocs = location_set ~global_assertion lab in
+  let ft = !ref_term ~global_assertion ~relocate:false lab lab in
   match locs#node with
     | JCLSvar v ->
 	LApp("pset_singleton",[ tvar ~label_in_name:global_assertion lab v ])
@@ -596,7 +598,14 @@ and location_set ~global_assertion lab locs =
 	  tmemory_var ~label_in_name:global_assertion lab (mc,locs#region) 
 	in
 	LApp("pset_deref",[ mem; flocs locs ])
-    | _ -> assert false (* TODO *)
+    | JCLSrange(locs,Some t1,Some t2) ->
+	LApp("pset_range",[ flocs locs; ft t1; ft t2 ])
+    | JCLSrange(locs,None,Some t2) ->
+	LApp("pset_range_left",[ flocs locs; ft t2 ])
+    | JCLSrange(locs,Some t1,None) ->
+	LApp("pset_range_right",[ flocs locs; ft t1 ])
+    | JCLSrange(locs,None,None) ->
+	LApp("pset_all",[ flocs locs ])
 
 let rec location_list' = function
   | [] -> LVar "pset_empty"
@@ -610,6 +619,35 @@ let separation_condition loclist loclist' =
   LPred("pset_disjoint",[ pset; pset' ])
 
 type memory_effect = RawMemory of Memory.t | PreciseMemory of Location.t
+
+let term_of_expr e =
+  let rec term e = 
+    let tnode = match e#node with
+      | JCEconst c -> JCTconst c
+      | JCEvar vi -> JCTvar vi
+      | JCEbinary (e1, (bop,opty), e2) -> 
+	  JCTbinary (term e1, ((bop :> bin_op),opty), term e2)
+      | JCEunary (uop, e1) -> JCTunary (uop, term e1)
+      | JCEshift (e1, e2) -> JCTshift (term e1, term e2)
+      | JCEderef (e1, fi) -> JCTderef (term e1, LabelHere, fi)
+      | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, LabelHere, st)
+      | JCEcast (e1, st) -> JCTcast (term e1, LabelHere, st)
+      | JCErange_cast(e1,_) | JCEreal_cast(e1,_) -> 
+	  (* range does not modify term value *)
+	  (term e1)#node 
+      | JCEif (e1, e2, e3) -> JCTif (term e1, term e2, term e3)
+      | JCEoffset (off, e1, st) -> JCToffset (off, term e1, st)
+      | JCEalloc (e, _) -> (* Note: \offset_max(t) = length(t) - 1 *)
+	  JCTbinary (term e, (`Bsub,`Integer), new term ~typ:integer_type (JCTconst (JCCinteger "1")) )
+      | JCEfree _ -> failwith "Not a term"
+      | _ -> failwith "Not a term"
+(*       | JCEmatch (e, pel) -> *)
+(* 	  let ptl = List.map (fun (p, e) -> (p, term_of_expr e)) pel in *)
+(* 	    JCTmatch (term_of_expr e, ptl) *)
+    in
+      new term ~typ:e#typ ~region:e#region tnode 
+  in
+    try Some (term e) with Failure _ -> None
 
 let rec location_of_expr e = 
   try
@@ -629,6 +667,9 @@ and location_set_of_expr e =
 	JCLSvar v
     | JCEderef(e1,fi) ->
 	JCLSderef(location_set_of_expr e1, LabelHere, fi, e#region)
+    | JCEshift(e1,e2) ->
+	let t2_opt = term_of_expr e2 in
+	JCLSrange(location_set_of_expr e1, t2_opt, t2_opt)
     | _ -> failwith "No location for expr"
   in
   new location_set_with ~node:locs_node e
@@ -671,13 +712,10 @@ let transpose_labels ~label_assoc labs =
 	  labs LogicLabelSet.empty
 
 let transpose_region ~region_assoc r =
-(*   match region_assoc with *)
-(*     | None -> Some r *)
-(*     | Some assoc -> *)
-	if Region.polymorphic r then
-	  try Some (RegionList.assoc r region_assoc)
-	  with Not_found -> None (* Local region *)
-	else Some r
+  if Region.polymorphic r then
+    try Some (RegionList.assoc r region_assoc)
+    with Not_found -> None (* Local region *)
+  else Some r
 
 let rec transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) =
   match transpose_region ~region_assoc rdist with
@@ -1176,6 +1214,10 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc ~param_assoc =
 	~callee_reads ~callee_writes ~region_assoc ~param_assoc
 	rw_inter_names writes reads
   in
+  (* TODO: rewrite postcondition to assert it after the call, when 
+     there is an interference. see, e.g., example [separation.c] in Jessie 
+     tests.
+  *)
   (* TODO: Check if there are duplicates between writes *)
   req, (List.map (fst $ snd) writes), (List.map (fst $ snd) reads)
   

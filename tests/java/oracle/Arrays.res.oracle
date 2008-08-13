@@ -1223,8 +1223,7 @@ predicate is_max(t:Object pointer,
  i:int,
  l:int,
  Object_alloc_table_at_L:Object alloc_table,
- intM_intP_at_L:(Object,
- int) memory) =
+ intM_intP_at_L:(Object, int) memory) =
  (Non_null_intM(t, Object_alloc_table_at_L)
  and (le_int((0), i)
      and (lt_int(i, l)
@@ -2048,7 +2047,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po51.why">
-      <location file = "why/Arrays.why" line = "612" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "611" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po52.why">
@@ -2246,7 +2245,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po98.why">
-      <location file = "why/Arrays.why" line = "797" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "796" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po99.why">
@@ -2415,7 +2414,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po9.why">
-      <location file = "why/Arrays.why" line = "418" begin = "32" end = "158"/>
+      <location file = "why/Arrays.why" line = "417" begin = "32" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po10.why">
@@ -7980,7 +7979,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP0 (shift t_2 i_0))
 (select intM_intP (shift t_2 (- i_0 1))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 418, characters 32-158
+;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 417, characters 32-158
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM t_2 Object_alloc_table)
@@ -8975,7 +8974,7 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (is_max t_1 0 1 Object_alloc_table intM_intP))))))))
 
-;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 612, characters 51-215
+;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 611, characters 51-215
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10286,7 +10285,7 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
 (IMPLIES (AND (<= 0 j_1) (< j_1 1))
 (<= (select intM_intP (shift t_0 j_1)) result))))))))))
 
-;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 797, characters 51-215
+;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 796, characters 51-215
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
