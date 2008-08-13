@@ -27,6 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Jc_stdlib
 open Jc_env
 open Jc_envset
 open Jc_region
@@ -34,6 +35,7 @@ open Jc_ast
 open Jc_fenv
 
 open Jc_name
+open Jc_constructors
 open Jc_pervasives
 open Jc_struct_tools
 
@@ -567,6 +569,239 @@ let lderef_mem_class locs fi =
 
 
 (******************************************************************************)
+(*                           locations and separation                         *)
+(******************************************************************************)
+
+let rec location ~global_assertion lab loc = 
+  let flocs = location_set ~global_assertion lab in
+  match loc#node with
+    | JCLvar v ->
+	LApp("pset_singleton",[ tvar ~label_in_name:global_assertion lab v ])
+    | JCLderef(locs,lab,fi,r) ->
+	let mc = lderef_mem_class locs fi in
+        let mem = 
+	  tmemory_var ~label_in_name:global_assertion lab (mc,locs#region) 
+	in
+	LApp("pset_deref",[ mem; flocs locs ])
+    | _ -> assert false (* TODO *)
+
+and location_set ~global_assertion lab locs = 
+  let flocs = location_set ~global_assertion lab in
+  match locs#node with
+    | JCLSvar v ->
+	LApp("pset_singleton",[ tvar ~label_in_name:global_assertion lab v ])
+    | JCLSderef(locs,lab,fi,r) ->
+	let mc = lderef_mem_class locs fi in
+        let mem = 
+	  tmemory_var ~label_in_name:global_assertion lab (mc,locs#region) 
+	in
+	LApp("pset_deref",[ mem; flocs locs ])
+    | _ -> assert false (* TODO *)
+
+let rec location_list' = function
+  | [] -> LVar "pset_empty"
+  | [e'] -> e'
+  | e' :: el' -> LApp("pset_union",[ e'; location_list' el' ])
+
+let separation_condition loclist loclist' =
+  let floc = location ~global_assertion:false LabelHere in
+  let pset = location_list' (List.map floc loclist) in
+  let pset' = location_list' (List.map floc loclist') in
+  LPred("pset_disjoint",[ pset; pset' ])
+
+type memory_effect = RawMemory of Memory.t | PreciseMemory of Location.t
+
+let rec location_of_expr e = 
+  try
+    let loc_node = match e#node with
+      | JCEvar v -> 
+	  JCLvar v
+      | JCEderef(e1,fi) ->
+	  JCLderef(location_set_of_expr e1, LabelHere, fi, e#region)
+      | _ -> failwith "No location for expr"
+    in
+    Some(new location_with ~node:loc_node e)
+  with Failure "No location for expr" -> None
+
+and location_set_of_expr e =
+  let locs_node = match e#node with
+    | JCEvar v -> 
+	JCLSvar v
+    | JCEderef(e1,fi) ->
+	JCLSderef(location_set_of_expr e1, LabelHere, fi, e#region)
+    | _ -> failwith "No location for expr"
+  in
+  new location_set_with ~node:locs_node e
+
+let location_set_of_expr e =
+  try Some(location_set_of_expr e) with Failure "No location for expr" -> None
+
+let rec location_of_term t = 
+  try
+    let loc_node = match t#node with
+      | JCTvar v -> 
+	  JCLvar v
+      | JCTderef(t1,lab,fi) ->
+	  JCLderef(location_set_of_term t1, LabelHere, fi, t#region)
+      | _ -> failwith "No location for term"
+    in
+    Some(new location_with ~node:loc_node t)
+  with Failure "No location for term" -> None
+
+and location_set_of_term t =
+  let locs_node = match t#node with
+    | JCTvar v -> 
+	JCLSvar v
+    | JCTderef(t1,lab,fi) ->
+	JCLSderef(location_set_of_term t1, LabelHere, fi, t#region)
+    | _ -> failwith "No location for term"
+  in
+  new location_set_with ~node:locs_node t
+
+let transpose_labels ~label_assoc labs =
+  match label_assoc with
+    | None -> labs
+    | Some assoc ->
+	LogicLabelSet.fold
+	  (fun lab acc ->
+	     try
+	       let lab = List.assoc lab assoc in
+	       LogicLabelSet.add lab acc
+	     with Not_found -> LogicLabelSet.add lab acc)
+	  labs LogicLabelSet.empty
+
+let transpose_region ~region_assoc r =
+(*   match region_assoc with *)
+(*     | None -> Some r *)
+(*     | Some assoc -> *)
+	if Region.polymorphic r then
+	  try Some (RegionList.assoc r region_assoc)
+	  with Not_found -> None (* Local region *)
+	else Some r
+
+let rec transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) =
+  match transpose_region ~region_assoc rdist with
+    | None -> None
+    | Some rloc ->
+	try
+	  let node = match loc#node with
+	    | JCLvar v ->
+		if v.jc_var_info_static then
+		  JCLvar v
+		else
+		  begin match List.mem_assoc_eq VarOrd.equal v param_assoc with
+		    | None -> (* Local variable *)
+			failwith "Cannot transpose location"
+		    | Some e -> 
+			match location_of_expr e with
+			  | None -> failwith "Cannot transpose location"
+			  | Some loc' -> loc'#node
+		  end
+	    | JCLderef(locs,lab,fi,r) ->
+		let locs = 
+		  transpose_location_set ~region_assoc ~param_assoc locs
+		in
+		JCLderef(locs,lab,fi,r) (* TODO: remove useless lab & r *)
+	    | _ -> assert false (* TODO *)
+	  in
+	  let loc = new location_with ~region:rloc ~node loc in
+	  Some(PreciseMemory(loc,(mc,rloc)))
+	with Failure "Cannot transpose location" ->
+	  Some(RawMemory(mc,rloc))
+
+and transpose_location_set ~region_assoc ~param_assoc locs =
+  match transpose_region ~region_assoc locs#region with
+    | None -> failwith "Cannot transpose location"
+    | Some rloc ->
+	let node = match locs#node with
+	  | JCLSvar v ->
+	      if v.jc_var_info_static then
+		JCLSvar v
+	      else
+		begin match List.mem_assoc_eq VarOrd.equal v param_assoc with
+		  | None -> (* Local variable *)
+		      failwith "Cannot transpose location"
+		  | Some e -> 
+		      match location_set_of_expr e with
+			| None -> failwith "Cannot transpose location"
+			| Some locs' -> locs'#node
+	      end
+	  | JCLSderef(locs',lab,fi,r) ->
+	      let locs' = 
+		transpose_location_set ~region_assoc ~param_assoc locs'
+	      in
+	      JCLSderef(locs',lab,fi,r) (* TODO: remove useless lab & r *)
+	  | _ -> assert false (* TODO *)
+	in
+	new location_set_with ~region:rloc ~node locs
+
+let transpose_location_set ~region_assoc ~param_assoc locs w=
+  try Some(transpose_location_set ~region_assoc ~param_assoc locs)
+  with Failure "Cannot transpose location" -> None
+
+
+let transpose_location_list
+    ~region_assoc ~param_assoc rw_raw_mems rw_precise_mems (mc,distr) =
+  let loclist =
+    if MemorySet.mem (mc,distr) rw_raw_mems then
+      assert false (* TODO: paremeters *)
+    else
+      LocationSet.to_list
+	(LocationSet.filter
+	   (fun (_loc,(_mc,r)) -> Region.equal r distr)
+	   rw_precise_mems)
+  in
+  List.fold_left
+    (fun acc (loc,(mc,rdist)) ->
+       match transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) with
+	 | None -> acc
+	 | Some(RawMemory(mc,rloc)) -> assert false
+	 | Some(PreciseMemory(loc,(mc,rloc))) ->
+	     loc :: acc
+    ) [] loclist
+
+let write_read_separation_condition 
+    ~callee_reads ~callee_writes ~region_assoc ~param_assoc 
+    inter_names writes reads =
+  List.fold_left
+    (fun acc ((mc,distr),(v,_ty')) ->
+       let n = var_name' v in
+       if StringSet.mem n inter_names then
+	 (* There is a read/write interference on this memory *)
+	 List.fold_left 
+	   (fun acc ((mc',distr'),(v',_ty')) ->
+	      let n' = var_name' v' in
+	      if n = n' then
+		let rw_raw_mems =
+		  MemorySet.of_list
+		    (MemoryMap.keys callee_reads.jc_effect_raw_memories
+		     @ MemoryMap.keys callee_writes.jc_effect_raw_memories)
+		in
+		let rw_precise_mems =
+		  LocationSet.of_list
+		    (LocationMap.keys callee_reads.jc_effect_precise_memories
+		     @ 
+		     LocationMap.keys callee_writes.jc_effect_precise_memories)
+		in
+		let loclist =
+		  transpose_location_list ~region_assoc ~param_assoc
+		    rw_raw_mems rw_precise_mems (mc,distr)
+		in
+		let loclist' =
+		  transpose_location_list ~region_assoc ~param_assoc
+		    rw_raw_mems rw_precise_mems (mc',distr')
+		in
+		assert (loclist <> []);
+		assert (loclist' <> []);
+		let req = separation_condition loclist loclist' in
+		make_and req acc
+	      else acc
+	   ) acc writes
+       else acc
+    ) LTrue reads
+
+
+(******************************************************************************)
 (*                               call arguments                               *)
 (******************************************************************************)
 
@@ -898,83 +1133,6 @@ let read_effects ~callee_reads ~callee_writes ~region_list =
   in
   List.map (var_name' $ fst) vars'
 
-let rec location ~global_assertion lab loc = 
-  let flocs = location_set ~global_assertion lab in
-  match loc#node with
-    | JCLvar v ->
-	LApp("pset_singleton",[ tvar ~label_in_name:global_assertion lab v ])
-    | JCLderef(locs,lab,fi,r) ->
-	let mc = lderef_mem_class locs fi in
-        let mem = 
-	  tmemory_var ~label_in_name:global_assertion lab (mc,locs#region) 
-	in
-	LApp("pset_deref",[ mem; flocs locs ])
-    | _ -> assert false (* TODO *)
-
-and location_set ~global_assertion lab locs = 
-  let flocs = location_set ~global_assertion lab in
-  match locs#node with
-    | JCLSvar v ->
-	LApp("pset_singleton",[ tvar ~label_in_name:global_assertion lab v ])
-    | JCLSderef(locs,lab,fi,r) ->
-	let mc = lderef_mem_class locs fi in
-        let mem = 
-	  tmemory_var ~label_in_name:global_assertion lab (mc,locs#region) 
-	in
-	LApp("pset_deref",[ mem; flocs locs ])
-    | _ -> assert false (* TODO *)
-
-let rec location_list' = function
-  | [] -> LVar "pset_empty"
-  | [e'] -> e'
-  | e' :: el' -> LApp("pset_union",[ e'; location_list' el' ])
-
-let separation_condition loclist loclist' =
-  let floc = location ~global_assertion:false LabelHere in
-  let pset = location_list' (List.map floc loclist) in
-  let pset' = location_list' (List.map floc loclist') in
-  LPred("pset_disjoint",[ pset; pset' ])
-
-let write_read_separation_condition 
-    ~callee_reads ~callee_writes inter_names writes reads =
-  List.fold_left
-    (fun acc ((mc,distr),(v,_ty')) ->
-       let n = var_name' v in
-       if StringSet.mem n inter_names then
-	 (* There is a read/write interference on this memory *)
-	 List.fold_left 
-	   (fun acc ((mc',distr'),(v',_ty')) ->
-	      let n' = var_name' v' in
-	      if n = n' then
-		let loclist =
-		  if MemoryMap.mem
-		    (mc,distr) callee_reads.jc_effect_raw_memories then
-		      assert false (* TODO: paremeters *)
-		  else
-		    List.map fst
-		      (LocationMap.to_list
-			 (LocationMap.filter
-			    (fun loc _labs -> Region.equal loc#region distr)
-			    callee_reads.jc_effect_precise_memories))
-		in
-		let loclist' =
-		  if MemoryMap.mem
-		    (mc',distr') callee_reads.jc_effect_raw_memories then
-		      assert false (* TODO: paremeters *)
-		  else
-		    List.map fst
-		      (LocationMap.to_list
-			 (LocationMap.filter
-			    (fun loc _labs -> Region.equal loc#region distr')
-			    callee_reads.jc_effect_precise_memories))
-		in
-		let req = separation_condition loclist loclist' in
-		make_and req acc
-	      else acc
-	   ) acc writes
-       else acc
-    ) LTrue reads
-
 let alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = 
     alloc_table_writes ~mode:MParam ~callee_writes ~region_assoc
@@ -995,7 +1153,7 @@ let tag_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   in
   (List.map fst writes), (List.map fst reads)
 
-let memory_arguments ~callee_reads ~callee_writes ~region_assoc =
+let memory_arguments ~callee_reads ~callee_writes ~region_assoc ~param_assoc =
   let writes = 
     memory_detailed_writes ~mode:MParam ~callee_writes ~region_assoc
   in
@@ -1014,7 +1172,8 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc =
     if StringSet.is_empty rw_inter_names then
       LTrue (* no read/write interference *)
     else
-      write_read_separation_condition ~callee_reads ~callee_writes 
+      write_read_separation_condition 
+	~callee_reads ~callee_writes ~region_assoc ~param_assoc
 	rw_inter_names writes reads
   in
   (* TODO: Check if there are duplicates between writes *)
@@ -1025,7 +1184,8 @@ let global_arguments ~callee_reads ~callee_writes ~region_assoc =
   let reads = global_reads ~callee_reads in
   (List.map fst writes), (List.map fst reads)
 
-let make_arguments ~callee_reads ~callee_writes ~region_assoc args =
+let make_arguments 
+    ~callee_reads ~callee_writes ~region_assoc ~param_assoc args =
   let write_allocs, read_allocs = 
     alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in
@@ -1033,7 +1193,7 @@ let make_arguments ~callee_reads ~callee_writes ~region_assoc args =
     tag_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in
   let req_mems, write_mems, read_mems = 
-    memory_arguments ~callee_reads ~callee_writes ~region_assoc
+    memory_arguments ~callee_reads ~callee_writes ~region_assoc ~param_assoc
   in
   let write_globs, read_globs = 
     global_arguments ~callee_reads ~callee_writes ~region_assoc
@@ -1047,32 +1207,14 @@ let make_arguments ~callee_reads ~callee_writes ~region_assoc args =
   in
   req_mems, args
 
-let transpose_labels ~label_assoc labs =
-  match label_assoc with
-    | None -> labs
-    | Some assoc ->
-	LogicLabelSet.fold
-	  (fun lab acc ->
-	     try
-	       let lab = List.assoc lab assoc in
-	       LogicLabelSet.add lab acc
-	     with Not_found -> LogicLabelSet.add lab acc)
-	  labs LogicLabelSet.empty
-
-let transpose_region ~region_assoc r =
-  match region_assoc with
-    | None -> Some r
-    | Some assoc ->
-	if Region.polymorphic r then
-	  try Some (RegionList.assoc r assoc)
-	  with Not_found -> None (* MLocal region *)
-	else Some r
-
 let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
   MemoryMap.fold
     (fun (mc,distr) labs acc ->
        let labs = transpose_labels ?label_assoc labs in
-       let locr = the (transpose_region ?region_assoc distr) in
+       let locr = match region_assoc with
+	 | None -> distr
+	 | Some region_assoc -> the (transpose_region ~region_assoc distr) 
+       in
        LogicLabelSet.fold
 	 (fun lab acc ->
 	    let param = tmemory_param ~label_in_name lab (mc,locr) in
@@ -1089,7 +1231,10 @@ let talloc_table_detailed_params
   AllocMap.fold
     (fun (ac,distr) labs acc ->
        let labs = transpose_labels ?label_assoc labs in
-       let locr = the (transpose_region ?region_assoc distr) in
+       let locr = match region_assoc with
+	 | None -> distr
+	 | Some region_assoc -> the (transpose_region ~region_assoc distr) 
+       in
        LogicLabelSet.fold
 	 (fun lab acc ->
 	    let param = talloc_table_param ~label_in_name lab (ac,locr) in
@@ -1106,7 +1251,10 @@ let ttag_table_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
   TagMap.fold
     (fun (vi,distr) labs acc ->
        let labs = transpose_labels ?label_assoc labs in
-       let locr = the (transpose_region ?region_assoc distr) in
+       let locr = match region_assoc with
+	 | None -> distr
+	 | Some region_assoc -> the (transpose_region ~region_assoc distr) 
+       in
        LogicLabelSet.fold
 	 (fun lab acc ->
 	    let param = ttag_table_param ~label_in_name lab (vi,locr) in

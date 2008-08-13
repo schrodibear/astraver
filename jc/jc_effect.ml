@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.123 2008-08-13 09:31:14 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.124 2008-08-13 13:24:01 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -79,14 +79,17 @@ let print_list_assoc_label pr fmt ls =
 	    (LogicLabelSet.elements labs))
     ) ls
 
-let print_memory fmt (mc,r) =
-  fprintf fmt "(%a,%a)" Jc_output_misc.memory_class mc Region.print r
-
 let print_alloc_table fmt (ac,r) =
   fprintf fmt "(%a,%a)" Jc_output_misc.alloc_class ac Region.print r
 
 let print_tag_table fmt (vi,r) =
   fprintf fmt "(%s,%a)" vi.jc_variant_info_name Region.print r
+
+let print_memory fmt (mc,r) =
+  fprintf fmt "(%a,%a)" Jc_output_misc.memory_class mc Region.print r
+
+let print_location fmt (loc,(mc,r)) =
+  fprintf fmt "(%a,%a)" Jc_output.location loc print_memory (mc,r)
 
 let print_global fmt v =
   fprintf fmt "%s" v.jc_var_info_name
@@ -110,7 +113,7 @@ let print_effect fmt ef =
     (MemoryMap.elements ef.jc_effect_memories)
     (print_list_assoc_label print_memory)
     (MemoryMap.elements ef.jc_effect_raw_memories)
-    (print_list_assoc_label Jc_output.location)
+    (print_list_assoc_label print_location)
     (LocationMap.elements ef.jc_effect_precise_memories)
     (print_list_assoc_label print_global)
     (VarMap.elements ef.jc_effect_globals)
@@ -145,13 +148,13 @@ let ef_union ef1 ef2 =
 	ef1.jc_effect_committed ef2.jc_effect_committed;
   }
 
-let ef_assoc ?label_assoc region_assoc ef =
+let ef_assoc ?label_assoc ~region_assoc ef =
   { ef with 
       jc_effect_alloc_tables = 
         AllocMap.fold 
 	  (fun (ac,r) labs acc ->
 	     let labs = transpose_labels ~label_assoc labs in
-	     match transpose_region (Some region_assoc) r with
+	     match transpose_region ~region_assoc r with
 	       | None -> acc
 	       | Some r ->
 		   if not (Region.polymorphic r) then
@@ -162,7 +165,7 @@ let ef_assoc ?label_assoc region_assoc ef =
         TagMap.fold 
 	  (fun (vi,r) labs acc -> 
 	     let labs = transpose_labels ~label_assoc labs in
-	     match transpose_region (Some region_assoc) r with
+	     match transpose_region ~region_assoc r with
 	       | None -> acc
 	       | Some r ->
 		   if not (Region.polymorphic r) then
@@ -173,7 +176,7 @@ let ef_assoc ?label_assoc region_assoc ef =
         MemoryMap.fold 
 	  (fun (mc,r) labs acc ->
 	     let labs = transpose_labels ~label_assoc labs in
-	     match transpose_region (Some region_assoc) r with
+	     match transpose_region ~region_assoc r with
 	       | None -> acc
 	       | Some r ->
 		   if not (Region.polymorphic r) then 
@@ -184,7 +187,7 @@ let ef_assoc ?label_assoc region_assoc ef =
         MemoryMap.fold 
 	  (fun (mc,r) labs acc ->
 	     let labs = transpose_labels ~label_assoc labs in
-	     match transpose_region (Some region_assoc) r with
+	     match transpose_region ~region_assoc r with
 	       | None -> acc
 	       | Some r ->
 		   if not (Region.polymorphic r) then 
@@ -226,10 +229,10 @@ let fef_union fef1 fef2 =
     jc_raises = ExceptionSet.union fef1.jc_raises fef2.jc_raises;
   }
 
-let fef_assoc region_assoc fef =
+let fef_assoc ~region_assoc fef =
   { 
-    jc_reads = ef_assoc region_assoc fef.jc_reads;
-    jc_writes = ef_assoc region_assoc fef.jc_writes;
+    jc_reads = ef_assoc ~region_assoc fef.jc_reads;
+    jc_writes = ef_assoc ~region_assoc fef.jc_writes;
     jc_raises = fef.jc_raises;
   }
 
@@ -267,11 +270,11 @@ let add_memory_effect lab ef (mc,r) =
 	    MemoryMap.add_merge LogicLabelSet.union 
 	      (mc,r) labs ef.jc_effect_raw_memories }
 
-let add_precise_memory_effect lab ef loc =
+let add_precise_memory_effect lab ef (loc,(mc,r)) =
   let labs = LogicLabelSet.singleton lab in
   { ef with jc_effect_precise_memories = 
       LocationMap.add_merge LogicLabelSet.union 
-	loc labs ef.jc_effect_precise_memories }
+	(loc,(mc,r)) labs ef.jc_effect_precise_memories }
 
 let add_global_effect lab ef v =
   let labs = LogicLabelSet.singleton lab in
@@ -298,8 +301,9 @@ let add_tag_reads lab fef (vi,r) =
 let add_memory_reads lab fef (mc,r) =
   { fef with jc_reads = add_memory_effect lab fef.jc_reads (mc,r) }
 
-let add_precise_memory_reads lab fef loc =
-  { fef with jc_reads = add_precise_memory_effect lab fef.jc_reads loc }
+let add_precise_memory_reads lab fef (loc,(mc,r)) =
+  { fef with jc_reads = 
+      add_precise_memory_effect lab fef.jc_reads (loc,(mc,r)) }
 
 let add_global_reads lab fef v =
   { fef with jc_reads = add_global_effect lab fef.jc_reads v }
@@ -321,8 +325,9 @@ let add_tag_writes lab fef (vi,r) =
 let add_memory_writes lab fef (mc,r) =
   { fef with jc_writes = add_memory_effect lab fef.jc_writes (mc,r) }
 
-let add_precise_memory_writes lab fef loc =
-  { fef with jc_writes = add_precise_memory_effect lab fef.jc_writes loc }
+let add_precise_memory_writes lab fef (loc,(mc,r)) =
+  { fef with jc_writes = 
+      add_precise_memory_effect lab fef.jc_writes (loc,(mc,r)) }
 
 let add_global_writes lab fef vi =
   { fef with jc_writes = add_global_effect lab fef.jc_writes vi }
@@ -368,50 +373,6 @@ let rec pattern ef (*label r*) p =
 (******************************************************************************)
 (*                             immutable locations                            *)
 (******************************************************************************)
-
-let rec location_of_expr e = 
-  try
-    let loc_node = match e#node with
-      | JCEvar v -> 
-	  JCLvar v
-      | JCEderef(e1,fi) ->
-	  JCLderef(location_set_of_expr e1, LabelHere, fi, e1#region)
-      | _ -> failwith "No location for expr"
-    in
-    Some(new location_with ~node:loc_node e)
-  with Failure "No location for expr" -> None
-
-and location_set_of_expr e =
-  let locs_node = match e#node with
-    | JCEvar v -> 
-	JCLSvar v
-    | JCEderef(e1,fi) ->
-	JCLSderef(location_set_of_expr e1, LabelHere, fi, e1#region)
-    | _ -> failwith "No location for expr"
-  in
-  new location_set_with ~node:locs_node e
-
-let rec location_of_term t = 
-  try
-    let loc_node = match t#node with
-      | JCTvar v -> 
-	  JCLvar v
-      | JCTderef(t1,lab,fi) ->
-	  JCLderef(location_set_of_term t1, LabelHere, fi, t1#region)
-      | _ -> failwith "No location for term"
-    in
-    Some(new location_with ~node:loc_node t)
-  with Failure "No location for term" -> None
-
-and location_set_of_term t =
-  let locs_node = match t#node with
-    | JCTvar v -> 
-	JCLSvar v
-    | JCTderef(t1,lab,fi) ->
-	JCLSderef(location_set_of_term t1, LabelHere, fi, t1#region)
-    | _ -> failwith "No location for term"
-  in
-  new location_set_with ~node:locs_node t
 
 (* last location can be mutated *)
 let rec immutable_location fef loc =
@@ -506,20 +467,21 @@ let rec single_term ef t =
     | JCTapp app -> 
 	let ef_app = 
 	  ef_assoc ~label_assoc:app.jc_app_label_assoc 
-	    app.jc_app_region_assoc 
+	    ~region_assoc:app.jc_app_region_assoc 
 	    app.jc_app_fun.jc_logic_info_effects 
 	in
 	true,
 	ef_union ef_app ef
     | JCTderef(t1,lab,fi) ->
 	let mc = tderef_mem_class t1 fi in
+	let mem = mc, t1#region in
 	begin match term_immutable_location t with
 	  | Some loc ->
-	      let ef = add_precise_memory_effect lab ef loc in
+	      let ef = add_precise_memory_effect lab ef (loc,mem) in
 	      (* TODO: treat union *)
 	      true, ef
 	  | None ->
-	      let ef = add_memory_effect lab ef (mc,t1#region) in
+	      let ef = add_memory_effect lab ef mem in
 	      begin match mc with
 		| JCmem_union _vi -> 
 		    false, (* do not call on sub-terms of union *)
@@ -559,7 +521,7 @@ let single_assertion ef a =
     | JCAapp app -> 
 	let ef_app = 
 	  ef_assoc ~label_assoc:app.jc_app_label_assoc 
-	    app.jc_app_region_assoc 
+	    ~region_assoc:app.jc_app_region_assoc 
 	    app.jc_app_fun.jc_logic_info_effects 
 	in
 	true,
@@ -665,24 +627,28 @@ let rec expr fef e =
 	     | JClogic_fun f -> 
 		 fef_reads 
 		   (ef_assoc ~label_assoc:app.jc_call_label_assoc 
-		      app.jc_call_region_assoc
+		      ~region_assoc:app.jc_call_region_assoc
 		      f.jc_logic_info_effects)
 	     | JCfun f -> 
-		 fef_assoc app.jc_call_region_assoc f.jc_fun_info_effects 
+		 fef_assoc 
+		   ~region_assoc:app.jc_call_region_assoc f.jc_fun_info_effects 
 	   in
 	   true,
 	   fef_union fef_call fef
        | JCEderef(e1,fi) -> 
 	   let mc = deref_mem_class e1 fi in
 	   let ac = alloc_class_of_mem_class mc in
+	   let mem = mc, e1#region in
 	   begin match expr_immutable_location e with
 	     | Some loc ->
-		 let fef = add_precise_memory_reads LabelHere fef loc in
+		 let fef = 
+		   add_precise_memory_reads LabelHere fef (loc,mem) 
+		 in
 		 let fef = add_alloc_reads LabelHere fef (ac,e1#region) in
 		 (* TODO: treat union *)
 		 true, fef
 	     | None ->
-		 let fef = add_memory_reads LabelHere fef (mc,e1#region) in
+		 let fef = add_memory_reads LabelHere fef mem in
 		 let fef = add_alloc_reads LabelHere fef (ac,e1#region) in
 		 begin match mc with
 		   | JCmem_union _vi -> 
@@ -696,15 +662,18 @@ let rec expr fef e =
 	   let mc = deref_mem_class e1 fi in
 	   let ac = alloc_class_of_mem_class mc in
 	   let deref = new expr_with ~node:(JCEderef(e1,fi)) e in
+	   let mem = mc, e1#region in
 	   begin match expr_immutable_location deref with
 	     | Some loc ->
-		 let fef = add_precise_memory_writes LabelHere fef loc in
+		 let fef = 
+		   add_precise_memory_writes LabelHere fef (loc,mem)
+		 in
 		 (* allocation table is read *)
 		 let fef = add_alloc_reads LabelHere fef (ac,e1#region) in
 		 (* TODO: treat union *)
 		 true, fef
 	     | None ->
-		 let fef = add_memory_writes LabelHere fef (mc,e1#region) in
+		 let fef = add_memory_writes LabelHere fef mem in
 		 (* allocation table is read *)
 		 let fef = add_alloc_reads LabelHere fef (ac,e1#region) in
 		 begin match mc with

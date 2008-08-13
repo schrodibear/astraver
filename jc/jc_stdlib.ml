@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_stdlib.ml,v 1.5 2008-08-13 09:31:14 moy Exp $ *)
+(* $Id: jc_stdlib.ml,v 1.6 2008-08-13 13:24:01 moy Exp $ *)
 
 module List = struct
   include List
@@ -37,6 +37,15 @@ module List = struct
   let as_singleton = function
     | [e] -> e
     | _ -> failwith "as_singleton"
+
+  let mem_assoc_eq f k l =
+    fold_left (fun v_opt (k',v') -> 
+		 match v_opt with
+		   | None ->
+		       if f k k' then Some v' else None
+		   | Some v -> Some v
+	      ) None l
+
 end
 
 module Set = struct
@@ -46,6 +55,7 @@ module Set = struct
   module type S = sig
     include Set.S
     val of_list: elt list -> t
+    val to_list: t -> elt list
   end
 
   module Make(Ord : OrderedType) : S with type elt = Ord.t = struct
@@ -53,6 +63,9 @@ module Set = struct
 
     let of_list ls =
       List.fold_left (fun s e -> add e s) empty ls
+
+    let to_list s =
+      fold (fun e acc -> e :: acc) s []
 
   end
 end

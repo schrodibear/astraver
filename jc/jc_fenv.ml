@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.ml,v 1.1 2008-08-13 09:31:14 moy Exp $ *)
+(* $Id: jc_fenv.ml,v 1.2 2008-08-13 13:24:01 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -35,7 +35,7 @@ open Jc_envset
 open Jc_region
 open Jc_ast
 
-module rec Location
+module rec LocationOrd
   : Map.OrderedType with type t = Effect.logic_info location =
 struct
   type t = Effect.logic_info location
@@ -47,6 +47,12 @@ struct
       | _,_ -> 0
 	  (* TODO: complete def of Location *)
 end
+
+and Location
+  : Map.OrderedType with type t = Effect.logic_info location * Memory.t =
+  PairOrd(LocationOrd)(Memory)
+
+and LocationSet : Set.S with type elt = Location.t = Set.Make(Location)
 
 and LocationMap : Map.S with type key = Location.t = Map.Make(Location)
 

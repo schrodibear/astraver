@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.26 2008-08-13 09:31:14 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.27 2008-08-13 13:24:01 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -116,6 +116,8 @@ module VarOrd = struct
   type t = var_info
   let compare v1 v2 = 
     Pervasives.compare v1.jc_var_info_tag v2.jc_var_info_tag
+  let equal v1 v2 = v1.jc_var_info_tag = v2.jc_var_info_tag
+  let hash v = Hashtbl.hash v.jc_var_info_tag
 end
 
 module VarSet = Set.Make(VarOrd)

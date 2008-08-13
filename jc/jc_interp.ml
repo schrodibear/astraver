@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.335 2008-08-13 09:31:14 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.336 2008-08-13 13:24:01 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1614,11 +1614,16 @@ and expr e =
 			param_types call.jc_call_args ([],[])
 		with Invalid_argument _ -> assert false
               in
+	      let param_assoc = 
+		List.map2 (fun param arg -> param,arg) 
+		  f.jc_logic_info_parameters call.jc_call_args
+	      in
 	      let req, args = 
 		make_arguments 
                   ~callee_reads: f.jc_logic_info_effects
                   ~callee_writes: empty_effects
                   ~region_assoc: call.jc_call_region_assoc
+		  ~param_assoc
 		  args
 	      in
 	      assert (req = LTrue);
@@ -1658,11 +1663,16 @@ and expr e =
 			param_types call.jc_call_args ([],[])
 		with Invalid_argument _ -> assert false
               in
+	      let param_assoc = 
+		List.map2 (fun param arg -> param,arg) 
+		  f.jc_fun_info_parameters call.jc_call_args
+	      in
 	      let req, args = 
 		make_arguments 
                   ~callee_reads: f.jc_fun_info_effects.jc_reads
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
                   ~region_assoc: call.jc_call_region_assoc
+		  ~param_assoc
 		  args
 	      in
 	      let fname = 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.23 2008-08-13 09:31:14 moy Exp $ *)
+(* $Id: jc_envset.mli,v 1.24 2008-08-13 13:24:01 moy Exp $ *)
 
 module type OrderedHashedType =
 sig
@@ -50,7 +50,7 @@ val is_pointer_type : Jc_env.jc_type -> bool
 
 val is_embedded_field : Jc_env.field_info -> bool
 
-module VarOrd : Map.OrderedType with type t = var_info
+module VarOrd : OrderedHashedType with type t = var_info
 
 module VarSet : Set.S with type elt = var_info
 
