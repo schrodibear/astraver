@@ -27,10 +27,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.142 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.143 2008-08-13 09:31:14 moy Exp $ *)
 
+open Jc_stdlib
 open Jc_env
-open Jc_fenv
 open Jc_region
 
 class type positioned =
@@ -318,43 +318,43 @@ object
   inherit ['node] node_positioned
 end
 
-type app = 
+type 'li app = 
     {
-      jc_app_fun : logic_info;
-      jc_app_args : term list;
+      jc_app_fun : 'li;
+      jc_app_args : 'li term list;
       mutable jc_app_region_assoc : (region * region) list;
       jc_app_label_assoc : (label * label) list;
     }
 
-and term_node =
+and 'li term_node =
   | JCTconst of const
   | JCTvar of var_info
-  | JCTshift of term * term
-  | JCTderef of term * label * field_info
-  | JCTbinary of term * term_bin_op * term
-  | JCTunary of term_unary_op * term
-  | JCTapp of app
-  | JCTold of term
-  | JCTat of term * label
-  | JCToffset of offset_kind * term * struct_info 
-  | JCTaddress of term
-  | JCTinstanceof of term * label * struct_info
-  | JCTcast of term * label * struct_info
-  | JCTbitwise_cast of term * label * struct_info
-  | JCTrange_cast of term * enum_info
-  | JCTreal_cast of term * real_conversion
-  | JCTif of term * term * term
-  | JCTrange of term option * term option
-  | JCTmatch of term * (pattern * term) list
+  | JCTshift of 'li term * 'li term
+  | JCTderef of 'li term * label * field_info
+  | JCTbinary of 'li term * term_bin_op * 'li term
+  | JCTunary of term_unary_op * 'li term
+  | JCTapp of 'li app
+  | JCTold of 'li term
+  | JCTat of 'li term * label
+  | JCToffset of offset_kind * 'li term * struct_info 
+  | JCTaddress of 'li term
+  | JCTinstanceof of 'li term * label * struct_info
+  | JCTcast of 'li term * label * struct_info
+  | JCTbitwise_cast of 'li term * label * struct_info
+  | JCTrange_cast of 'li term * enum_info
+  | JCTreal_cast of 'li term * real_conversion
+  | JCTif of 'li term * 'li term * 'li term
+  | JCTrange of 'li term option * 'li term option
+  | JCTmatch of 'li term * (pattern * 'li term) list
 
-and term = term_node c_term
+and 'li term = 'li term_node c_term
 
-type tag = tag_node node_positioned
+type 'li tag = 'li tag_node node_positioned
 
-and tag_node =
+and 'li tag_node =
   | JCTtag of struct_info
   | JCTbottom
-  | JCTtypeof of term * struct_info
+  | JCTtypeof of 'li term * struct_info
 
 class type ['node] c_location =
 object
@@ -363,22 +363,22 @@ object
   inherit ['node] node_positioned
 end
 
-type location_set_node = 
+type 'li location_set_node = 
   | JCLSvar of var_info
-  | JCLSderef of location_set * label * field_info * region
+  | JCLSderef of 'li location_set * label * field_info * region
 (* TODO ?
   | JCLSshift of location_set * term 
 *)
-  | JCLSrange of location_set * term option * term option
+  | JCLSrange of 'li location_set * 'li term option * 'li term option
 
-and location_node =
+and 'li location_node =
   | JCLvar of var_info
-  | JCLderef of location_set * label * field_info * region
-  | JCLat of location * label
+  | JCLderef of 'li location_set * label * field_info * region
+  | JCLat of 'li location * label
 
-and location_set = location_set_node c_location
+and 'li location_set = 'li location_set_node c_location
 
-and location = location_node c_location
+and 'li location = 'li location_node c_location
 
 class type ['assertion_node] c_assertion =
 object
@@ -387,57 +387,57 @@ object
   inherit ['assertion_node] node_positioned
 end
 
-type assertion_node =
+type 'li assertion_node =
   | JCAtrue
   | JCAfalse
-  | JCArelation of term * pred_rel_op * term
-  | JCAand of assertion list
-  | JCAor of assertion list
-  | JCAimplies of assertion * assertion
-  | JCAiff of assertion * assertion
-  | JCAnot of assertion
-  | JCAapp of app
-  | JCAquantifier of quantifier * var_info * assertion
-  | JCAold of assertion
-  | JCAat of assertion * label
-  | JCAinstanceof of term * label * struct_info
-  | JCAbool_term of term
-  | JCAif of term * assertion * assertion
-  | JCAmutable of term * struct_info * tag
-  | JCAeqtype of tag * tag * struct_info option
-  | JCAsubtype of tag * tag * struct_info option
-  | JCAmatch of term * (pattern * assertion) list
+  | JCArelation of 'li term * pred_rel_op * 'li term
+  | JCAand of 'li assertion list
+  | JCAor of 'li assertion list
+  | JCAimplies of 'li assertion * 'li assertion
+  | JCAiff of 'li assertion * 'li assertion
+  | JCAnot of 'li assertion
+  | JCAapp of 'li app
+  | JCAquantifier of quantifier * var_info * 'li assertion
+  | JCAold of 'li assertion
+  | JCAat of 'li assertion * label
+  | JCAinstanceof of 'li term * label * struct_info
+  | JCAbool_term of 'li term
+  | JCAif of 'li term * 'li assertion * 'li assertion
+  | JCAmutable of 'li term * struct_info * 'li tag
+  | JCAeqtype of 'li tag * 'li tag * struct_info option
+  | JCAsubtype of 'li tag * 'li tag * struct_info option
+  | JCAmatch of 'li term * (pattern * 'li assertion) list
 
-and assertion = assertion_node c_assertion
+and 'li assertion = 'li assertion_node c_assertion
 
-type term_or_assertion =
-  | JCAssertion of assertion
-  | JCTerm of term
-  | JCReads of location list
+type 'li term_or_assertion =
+  | JCAssertion of 'li assertion
+  | JCTerm of 'li term
+  | JCReads of 'li location list
 
-type loop_annot =
+type 'li loop_annot =
     {
       jc_loop_tag : int;
-      mutable jc_loop_invariant : (string list * assertion) list;
-      mutable jc_free_loop_invariant : assertion;
-      jc_loop_variant : term option;
+      mutable jc_loop_invariant : (string list * 'li assertion) list;
+      mutable jc_free_loop_invariant : 'li assertion;
+      jc_loop_variant : 'li term option;
     }
 
 
-type behavior =
+type 'li behavior =
     { 
       jc_behavior_throws : exception_info option ;
-      jc_behavior_assumes : assertion option ;
-      jc_behavior_assigns : (Loc.position * location list) option ;
-      mutable jc_behavior_ensures : assertion;
+      jc_behavior_assumes : 'li assertion option ;
+      jc_behavior_assigns : (Loc.position * 'li location list) option ;
+      mutable jc_behavior_ensures : 'li assertion;
     }
 
-type fun_spec =
+type 'li fun_spec =
     {
-      mutable jc_fun_requires : assertion;
+      mutable jc_fun_requires : 'li assertion;
       (* free precondition : used to prove the fun correctness, but not checked at call locations *)
-      mutable jc_fun_free_requires : assertion; 
-      mutable jc_fun_behavior : (Loc.position * string * behavior) list;
+      mutable jc_fun_free_requires : 'li assertion; 
+      mutable jc_fun_behavior : (Loc.position * string * 'li behavior) list;
     }
 
 
@@ -457,50 +457,50 @@ end
 (* application, increment and assignment are statements.
    special assignment with operation disappears.
  *)
-type expr_node =
+type ('li,'fi) expr_node =
   | JCEconst of const
   | JCEvar of var_info
-  | JCEderef of expr * field_info
-  | JCEbinary of expr * expr_bin_op * expr
-  | JCEunary of expr_unary_op * expr
-  | JCEapp of call
-  | JCEassign_var of var_info * expr
-  | JCEassign_heap of expr * field_info * expr
-  | JCEinstanceof of expr * struct_info
-  | JCEcast of expr * struct_info
-  | JCEbitwise_cast of expr * struct_info
-  | JCErange_cast of expr * enum_info
-  | JCEreal_cast of expr * real_conversion
-  | JCEif of expr * expr * expr
-  | JCEoffset of offset_kind * expr * struct_info
-  | JCEaddress of expr
-  | JCEalloc of expr * struct_info
-  | JCEfree of expr
-  | JCElet of var_info * expr option * expr
-  | JCEassert of string list * assertion
-  | JCEcontract of assertion option * term option * var_info * 
-      (Loc.position * string * behavior)
- list * expr
-  | JCEblock of expr list
-  | JCEloop of loop_annot * expr
+  | JCEderef of ('li,'fi) expr * field_info
+  | JCEbinary of ('li,'fi) expr * expr_bin_op * ('li,'fi) expr
+  | JCEunary of expr_unary_op * ('li,'fi) expr
+  | JCEapp of ('li,'fi) call
+  | JCEassign_var of var_info * ('li,'fi) expr
+  | JCEassign_heap of ('li,'fi) expr * field_info * ('li,'fi) expr
+  | JCEinstanceof of ('li,'fi) expr * struct_info
+  | JCEcast of ('li,'fi) expr * struct_info
+  | JCEbitwise_cast of ('li,'fi) expr * struct_info
+  | JCErange_cast of ('li,'fi) expr * enum_info
+  | JCEreal_cast of ('li,'fi) expr * real_conversion
+  | JCEif of ('li,'fi) expr * ('li,'fi) expr * ('li,'fi) expr
+  | JCEoffset of offset_kind * ('li,'fi) expr * struct_info
+  | JCEaddress of ('li,'fi) expr
+  | JCEalloc of ('li,'fi) expr * struct_info
+  | JCEfree of ('li,'fi) expr
+  | JCElet of var_info * ('li,'fi) expr option * ('li,'fi) expr
+  | JCEassert of string list * 'li assertion
+  | JCEcontract of 'li assertion option * 'li term option * var_info * 
+      (Loc.position * string * 'li behavior) list * ('li,'fi) expr
+  | JCEblock of ('li,'fi) expr list
+  | JCEloop of 'li loop_annot * ('li,'fi) expr
   | JCEreturn_void 
-  | JCEreturn of jc_type * expr (*r expected return type *) 
-  | JCEtry of expr 
-      * (exception_info * var_info option * expr) list * expr
-  | JCEthrow of exception_info * expr option
-  | JCEpack of struct_info * expr * struct_info
-  | JCEunpack of struct_info * expr * struct_info
-  | JCEmatch of expr * (pattern * expr) list
-  | JCEshift of expr * expr
+  | JCEreturn of jc_type * ('li,'fi) expr (*r expected return type *) 
+  | JCEtry of ('li,'fi) expr 
+      * (exception_info * var_info option * ('li,'fi) expr) list * ('li,'fi) expr
+  | JCEthrow of exception_info * ('li,'fi) expr option
+  | JCEpack of struct_info * ('li,'fi) expr * struct_info
+  | JCEunpack of struct_info * ('li,'fi) expr * struct_info
+  | JCEmatch of ('li,'fi) expr * (pattern * ('li,'fi) expr) list
+  | JCEshift of ('li,'fi) expr * ('li,'fi) expr
       
-and expr = expr_node c_expr
+and ('li,'fi) expr = ('li,'fi) expr_node c_expr
 
-and callee = JClogic_fun of logic_info | JCfun of fun_info
+and ('li,'fi) callee = 
+    JClogic_fun of 'li | JCfun of 'fi
 
-and call = 
+and ('li,'fi) call = 
     {
-      jc_call_fun : callee;
-      jc_call_args : expr list;
+      jc_call_fun : ('li,'fi) callee;
+      jc_call_args : ('li,'fi) expr list;
       mutable jc_call_region_assoc : (region * region) list;
       jc_call_label_assoc : (label * label) list;
     }

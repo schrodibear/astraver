@@ -27,23 +27,17 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Output
-
-(*
 open Jc_env
-open Jc_ast
-open Jc_pervasives
-open Jc_iterators
-*)
-
-open Jc_ast
-open Jc_pervasives
 open Jc_envset
-open Jc_env
-open Jc_fenv
 open Jc_region
+open Jc_ast
+open Jc_fenv
+
 open Jc_name
+open Jc_pervasives
 open Jc_struct_tools
+
+open Output
 
 (* The following functions should be eliminated eventually, but before,
  * effect.ml must be redone.
@@ -332,13 +326,13 @@ let mutable_memory infunction (mc,r) =
 let mutable_alloc_table infunction (ac,r) =
   if Region.polymorphic r then
     AllocMap.mem (ac,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_table
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_tables
   else true
 
 let mutable_tag_table infunction (vi,r) =
   if Region.polymorphic r then
     TagMap.mem (vi,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_table
+      infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_tables
   else true
 
 let plain_memory_var (mc,r) = Var (memory_name (mc,r))
@@ -420,632 +414,11 @@ let ttag_table_param ~label_in_name lab (vi,r) =
   n, ty'
 
 
-(******************************************************************************)
-(*                               call arguments                               *)
-(******************************************************************************)
-
-type param_or_effect_mode = MParam | MLocal | MEffect
-
-let add_alloc_table_argument ~mode ~no_deref (ac,distr) region_assoc acc =
-  let allocvar = if no_deref then plain_alloc_table_var else alloc_table_var in
-  let ty' = alloc_table_type ac in
-  if Region.polymorphic distr then
-    try 
-      (* Polymorphic allocation table. Both passed in argument by the caller, 
-	 and counted as effect. *)
-      let locr = RegionList.assoc distr region_assoc in
-      match mode with
-	| MParam | MEffect -> (allocvar (ac,locr), ty') :: acc 
-	| MLocal -> acc
-    with Not_found -> 
-      (* MLocal allocation table. Neither passed in argument by the caller, 
-	 nor counted as effect. *)
-      match mode with
-	| MParam | MEffect -> acc
-	| MLocal -> (allocvar (ac,distr), ty') :: acc 
-  else 
-    (* Constant allocation table. Not passed in argument by the caller, 
-       but counted as effect. *)
-    match mode with
-      | MParam | MLocal -> acc
-      | MEffect -> (allocvar (ac,distr), ty') :: acc 
-
-let write_alloc_tables ~mode ~callee_writes ~region_assoc =
-  AllocMap.fold
-    (fun (ac,distr) _labs acc ->
-       add_alloc_table_argument 
-	 ~mode ~no_deref:true (ac,distr) region_assoc acc
-    ) callee_writes.jc_effect_alloc_table []
-
-let read_alloc_tables ~mode ~callee_writes ~callee_reads ~region_assoc =
-  AllocMap.fold
-    (fun (ac,distr) _labs acc ->
-       if AllocMap.mem (ac,distr) callee_writes.jc_effect_alloc_table then
-	 (* Allocation table is written, thus it is already taken care of
-	    as a parameter. *)
-	 match mode with
-	   | MParam | MLocal -> acc
-	   | MEffect ->
-	       add_alloc_table_argument 
-		 ~mode ~no_deref:false (ac,distr) region_assoc acc
-       else if mutable_alloc_table (get_current_function ()) (ac,distr) then
-	 add_alloc_table_argument 
-	   ~mode ~no_deref:false (ac,distr) region_assoc acc
-       else
-	 (* Allocation table is immutable, thus it is not passed by
-	    reference. As such, it cannot be counted in effects. *)
-	 match mode with
-	   | MParam | MLocal ->
-	       add_alloc_table_argument 
-		 ~mode ~no_deref:false (ac,distr) region_assoc acc
-	   | MEffect -> acc
-    ) callee_reads.jc_effect_alloc_table []
-
-let add_tag_table_argument ~mode ~no_deref (vi,distr) region_assoc acc =
-  let tagvar = if no_deref then plain_tag_table_var else tag_table_var in
-  let ty' = tag_table_type vi in
-  if Region.polymorphic distr then
-    try 
-      (* Polymorphic tag table. Both passed in argument by the caller, 
-	 and counted as effect. *)
-      let locr = RegionList.assoc distr region_assoc in
-      match mode with
-	| MParam | MEffect -> (tagvar (vi,locr), ty') :: acc
-	| MLocal -> acc
-    with Not_found -> 
-      (* MLocal tag table. Neither passed in argument by the caller, 
-	 nor counted as effect. *)
-      match mode with
-	| MParam | MEffect -> acc
-	| MLocal -> (tagvar (vi,distr), ty') :: acc 
-  else 
-    (* Constant tag table. Not passed in argument by the caller, 
-       but counted as effect. *)
-    match mode with
-      | MParam | MLocal -> acc
-      | MEffect -> (tagvar (vi,distr), ty') :: acc 
-
-let write_tag_tables ~mode ~callee_writes ~region_assoc =
-  TagMap.fold
-    (fun (vi,distr) _labs acc ->
-       add_tag_table_argument 
-	 ~mode ~no_deref:true (vi,distr) region_assoc acc
-    ) callee_writes.jc_effect_tag_table []
-
-let read_tag_tables ~mode ~callee_writes ~callee_reads ~region_assoc =
-  TagMap.fold
-    (fun (vi,distr) _labs acc ->
-       if TagMap.mem (vi,distr) callee_writes.jc_effect_tag_table then
-	 (* Tag table is written, thus it is already taken care of
-	    as a parameter. *)
-	 match mode with
-	   | MParam | MLocal -> acc
-	   | MEffect ->
-	       add_tag_table_argument 
-		 ~mode ~no_deref:false (vi,distr) region_assoc acc
-       else if mutable_tag_table (get_current_function ()) (vi,distr) then
-	 add_tag_table_argument 
-	   ~mode ~no_deref:false (vi,distr) region_assoc acc
-       else
-	 (* Tag table is immutable, thus it is not passed by
-	    reference. As such, it cannot be counted in effects. *)
-	 match mode with
-	   | MParam | MLocal ->
-	       add_tag_table_argument 
-		 ~mode ~no_deref:false (vi,distr) region_assoc acc
-	   | MEffect -> acc
-    ) callee_reads.jc_effect_tag_table []
-
-let add_memory_argument ~mode ~no_deref (mc,distr) region_assoc acc =
-  let memvar = if no_deref then plain_memory_var else memory_var in
-  let ty' = memory_type mc in
-  if Region.polymorphic distr then
-    try 
-      (* Polymorphic memory. Both passed in argument by the caller, 
-	 and counted as effect. *)
-      let locr = RegionList.assoc distr region_assoc in
-      match mode with
-	| MParam | MEffect -> (memvar (mc,locr), ty') :: acc
-	| MLocal -> acc
-    with Not_found -> 
-      (* MLocal memory. Neither passed in argument by the caller, 
-	 nor counted as effect. *)
-      match mode with
-	| MParam | MEffect -> acc
-	| MLocal -> (memvar (mc,distr), ty') :: acc 
-  else 
-    (* Constant memory. Not passed in argument by the caller, 
-       but counted as effect. *)
-    match mode with
-      | MParam | MLocal -> acc
-      | MEffect -> (memvar (mc,distr), ty') :: acc 
-
-let write_memories ~mode ~callee_writes ~region_assoc =
-  MemoryMap.fold
-    (fun (mc,distr) _labs acc -> 
-       add_memory_argument 
-	 ~mode ~no_deref:true (mc,distr) region_assoc acc
-    ) callee_writes.jc_effect_memories []
-
-let read_memories ~mode ~callee_writes ~callee_reads ~region_assoc =
-  MemoryMap.fold
-    (fun (mc,distr) _labs acc ->
-       if MemoryMap.mem (mc,distr) callee_writes.jc_effect_memories then
-	 (* Memory is written, thus it is already taken care of
-	    as a parameter. *)
-	 match mode with
-	   | MParam | MLocal -> acc
-	   | MEffect ->
-	       add_memory_argument 
-		 ~mode ~no_deref:false (mc,distr) region_assoc acc
-       else if mutable_memory (get_current_function ()) (mc,distr) then
-	 add_memory_argument 
-	   ~mode ~no_deref:false (mc,distr) region_assoc acc
-       else
-	 (* Memory is immutable, thus it is not passed by
-	    reference. As such, it cannot be counted in effects. *)
-	 match mode with
-	   | MParam | MLocal ->
-	       add_memory_argument 
-		 ~mode ~no_deref:false (mc,distr) region_assoc acc
-	   | MEffect -> acc
-    ) callee_reads.jc_effect_memories []
-
-let write_globals ~callee_writes =
-  VarMap.fold
-    (fun v _labs acc -> 
-       let n,ty' = param v in (plain_var n,ty') :: acc
-    ) callee_writes.jc_effect_globals []
-
-let read_globals ~callee_reads =
-  VarMap.fold
-    (fun v _labs acc -> 
-       let n,ty' = param v in (plain_var n,ty') :: acc
-    ) callee_reads.jc_effect_globals []
-
-(* Yannick: change this to avoid recovering the real type from its name
-   in mutable and committed effects *)
-
-let write_mutable callee_writes =
-  StringSet.fold
-    (fun v acc -> (mutable_name2 v)::acc) callee_writes.jc_effect_mutable []
-
-let read_mutable callee_reads =
-  StringSet.fold
-    (fun v acc -> (mutable_name2 v)::acc) callee_reads.jc_effect_mutable []
-
-let write_committed callee_writes =
-  StringSet.fold
-    (fun v acc -> (committed_name2 v)::acc) callee_writes.jc_effect_committed []
-
-let read_committed callee_reads =
-  StringSet.fold
-    (fun v acc -> (committed_name2 v)::acc) callee_reads.jc_effect_committed []
-
-let write_model_parameters ~mode ~callee_reads ~callee_writes ~region_assoc =
-  let write_allocs = 
-    write_alloc_tables ~mode ~callee_writes ~region_assoc 
-  in
-  let write_tags = 
-    write_tag_tables ~mode ~callee_writes ~region_assoc 
-  in
-  let write_mems = 
-    write_memories ~mode ~callee_writes ~region_assoc 
-  in
-  let write_globs = match mode with
-    | MParam | MLocal -> []
-    | MEffect -> write_globals ~callee_writes
-  in
-  write_allocs @ write_tags @ write_mems @ write_globs
-
-let write_parameters ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' = 
-    write_model_parameters 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
-
-let write_arguments ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' = 
-    write_model_parameters 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map fst vars'
-
-let write_locals ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' =
-    write_model_parameters 
-      ~mode:MLocal ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
-
-let write_effects ~callee_reads ~callee_writes ~region_list =
-  let region_assoc = List.map (fun r -> (r,r)) region_list in
-  let vars' = 
-    write_model_parameters 
-      ~mode:MEffect ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map (function (Var n,_ty') -> n | _ -> assert false) vars'
-
-let read_model_parameters ~mode ~callee_reads ~callee_writes ~region_assoc =
-  let read_allocs = 
-    read_alloc_tables ~mode ~callee_reads ~callee_writes ~region_assoc 
-  in
-  let read_tags = 
-    read_tag_tables ~mode ~callee_reads ~callee_writes ~region_assoc 
-  in
-  let read_mems =
-    read_memories ~mode ~callee_reads ~callee_writes ~region_assoc 
-  in
-  let read_globs = match mode with
-    | MParam | MLocal -> []
-    | MEffect -> read_globals ~callee_reads
-  in
-  read_allocs @ read_tags @ read_mems @ read_globs
-
-let read_parameters ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' = 
-    read_model_parameters 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
-
-let read_arguments ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' = 
-    read_model_parameters 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map fst vars'
-
-let read_locals ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' =
-    read_model_parameters 
-      ~mode:MLocal ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
-
-let read_effects ~callee_reads ~callee_writes ~region_list =
-  let region_assoc = List.map (fun r -> (r,r)) region_list in
-  let vars' = 
-    read_model_parameters 
-      ~mode:MEffect ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map (var_name' $ fst) vars'
-
-let make_arguments ~callee_reads ~callee_writes ~region_assoc args =
-  let writes = 
-    write_arguments 
-      ~callee_reads ~callee_writes ~region_assoc ?region_list:None 
-  in
-  let reads = 
-    read_arguments 
-      ~callee_reads ~callee_writes ~region_assoc ?region_list:None 
-  in
-  args @ writes @ reads
-
-let transpose_labels ~label_assoc labs =
-  match label_assoc with
-    | None -> labs
-    | Some assoc ->
-	LogicLabelSet.fold
-	  (fun lab acc ->
-	     try
-	       let lab = List.assoc lab assoc in
-	       LogicLabelSet.add lab acc
-	     with Not_found -> LogicLabelSet.add lab acc)
-	  labs LogicLabelSet.empty
-
-let transpose_region ~region_assoc r =
-  match region_assoc with
-    | None -> Some r
-    | Some assoc ->
-	if Region.polymorphic r then
-	  try Some (RegionList.assoc r assoc)
-	  with Not_found -> None (* MLocal region *)
-	else Some r
-
-let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
-  MemoryMap.fold
-    (fun (mc,distr) labs acc ->
-       let labs = transpose_labels ?label_assoc labs in
-       let locr = the (transpose_region ?region_assoc distr) in
-       LogicLabelSet.fold
-	 (fun lab acc ->
-	    let param = tmemory_param ~label_in_name lab (mc,locr) in
-	    ((mc,locr), param) :: acc
-	 ) labs acc
-    ) reads.jc_effect_memories []
-
-let tmemory_params ~label_in_name ?region_assoc ?label_assoc reads =
-  List.map snd 
-    (tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads)
-
-let talloc_table_detailed_params 
-    ~label_in_name ?region_assoc ?label_assoc reads =
-  AllocMap.fold
-    (fun (ac,distr) labs acc ->
-       let labs = transpose_labels ?label_assoc labs in
-       let locr = the (transpose_region ?region_assoc distr) in
-       LogicLabelSet.fold
-	 (fun lab acc ->
-	    let param = talloc_table_param ~label_in_name lab (ac,locr) in
-	    ((ac,locr), param) :: acc
-	 ) labs acc
-    ) reads.jc_effect_alloc_table []
-
-let talloc_table_params ~label_in_name ?region_assoc ?label_assoc reads =
-  List.map snd
-    (talloc_table_detailed_params 
-       ~label_in_name ?region_assoc ?label_assoc reads)
-
-let ttag_table_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
-  TagMap.fold
-    (fun (vi,distr) labs acc ->
-       let labs = transpose_labels ?label_assoc labs in
-       let locr = the (transpose_region ?region_assoc distr) in
-       LogicLabelSet.fold
-	 (fun lab acc ->
-	    let param = ttag_table_param ~label_in_name lab (vi,locr) in
-	    ((vi,locr), param) :: acc
-	 ) labs acc
-    ) reads.jc_effect_tag_table []
-
-let ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads =
-  List.map snd
-    (ttag_table_detailed_params 
-       ~label_in_name ?region_assoc ?label_assoc reads)
-
-let tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
-  VarMap.fold
-    (fun v labs acc ->
-       let labs = transpose_labels ?label_assoc labs in
-       LogicLabelSet.fold
-	 (fun lab acc ->
-	    let param = tparam ~label_in_name lab v in
-	    (v, param) :: acc
-	 ) labs acc
-    ) reads.jc_effect_globals []
-
-let tglob_params ~label_in_name ?region_assoc ?label_assoc reads =
-  List.map snd
-    (tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads)
-
-let tmodel_parameters ~label_in_name ?region_assoc ?label_assoc reads =
-  let allocs =
-    talloc_table_params ~label_in_name ?region_assoc ?label_assoc reads
-  in
-  let tags = 
-    ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads
-  in
-  let mems = 
-    tmemory_params ~label_in_name ?region_assoc ?label_assoc reads 
-  in
-  let globs = 
-    tglob_params ~label_in_name ?region_assoc ?label_assoc reads 
-  in
-  allocs @ tags @ mems @ globs
-
-let make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args =
-  let model_params = 
-    tmodel_parameters ~label_in_name ~region_assoc ~label_assoc 
-      f.jc_logic_info_effects
-  in
-  let model_args = List.map (fun (n,_ty') -> LVar n) model_params in
-  args @ model_args
-
-let make_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
-  let args = 
-    make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args 
-  in
-  LApp(f.jc_logic_info_final_name, args)
-
-let make_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f args =
-  let args = 
-    make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args
-  in 
-  LPred(f.jc_logic_info_final_name, args)
-
-
-(* *)
-let logic_info_reads acc li = 
-  let acc =
-    MemoryMap.fold
-      (fun (mc,r) _ acc -> 
-	 StringSet.add (memory_name(mc,r)) acc)
-      li.jc_logic_info_effects.jc_effect_memories
-      acc
-  in
-  let acc =
-    AllocMap.fold
-      (fun (ac,r) labs acc ->
-	 StringSet.add (alloc_table_name (ac, r)) acc)
-      li.jc_logic_info_effects.jc_effect_alloc_table
-      acc
-  in
-  TagMap.fold
-    (fun v _ acc -> StringSet.add (tag_table_name v) acc)
-    li.jc_logic_info_effects.jc_effect_tag_table
-    acc
-
-
-(* fold all effects into a list *)
-let all_effects ef =
-  let res =
-    MemoryMap.fold
-      (fun (mc,r) labels acc -> 
-	let mem = memory_name(mc,r) in
-	if Region.polymorphic r then
-(*	  if RegionList.mem r f.jc_fun_info_param_regions then
-	    if FieldRegionMap.mem (fi,r) 
-	      f.jc_fun_info_effects.jc_writes.jc_effect_memories 
-	    then mem::acc 
-	    else acc
-	  else acc*)
-	  assert false (* TODO *)
-	else mem::acc)
-      ef.jc_effect_memories
-      []
-  in
-  let res =
-    VarMap.fold
-      (fun v labs acc -> v.jc_var_info_final_name::acc)
-      ef.jc_effect_globals
-      res
-  in
-  let res =
-    AllocMap.fold
-      (fun (a,r) labs acc -> 
-	let alloc = alloc_table_name(a,r) in
-	if Region.polymorphic r then
-(*	  if RegionList.mem r f.jc_fun_info_param_regions then
-	    if AllocSet.mem (a,r) 
-	      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_table 
-	    then alloc::acc 
-	    else acc
-	  else acc*)
-	  assert false (* TODO *)
-	else alloc::acc)
-      ef.jc_effect_alloc_table
-      res
-  in
-  let res =
-    TagMap.fold
-      (fun v _ acc -> (tag_table_name v)::acc)
-      ef.jc_effect_tag_table
-      res
-  in
-  let res =
-    StringSet.fold
-      (fun v acc -> (mutable_name2 v)::acc)
-      ef.jc_effect_mutable
-      res
-  in
-  let res =
-    StringSet.fold
-      (fun v acc -> (committed_name2 v)::acc)
-      ef.jc_effect_committed
-      res
-  in
-  res
-
-(* functions to make Why expressions *)
-
-let make_if_term cond a b =
-  LApp("ite", [ cond; a; b ])
-
-let make_eq_term ty a b =
-  let eq = match ty with
-    | JCTpointer _ | JCTnull -> "eq_pointer_bool"
-    | JCTenum _ | JCTlogic _ | JCTany -> assert false
-    | JCTnative Tunit -> "eq_unit_bool"
-    | JCTnative Tboolean -> "eq_bool_bool"
-    | JCTnative Tinteger -> "eq_int_bool"
-    | JCTnative Treal -> "eq_real_bool"
-    | JCTnative Tstring -> "eq_string_bool"
-    | JCTtype_var _ -> assert false (* TODO: need environment *)
-  in
-  LApp(eq, [a; b])
-
-let make_and_term a b =
-  make_if_term a b (LConst(Prim_bool false))
-
-let make_or_term a b =
-  make_if_term a (LConst(Prim_bool true)) b
-
-let make_not_term a =
-  make_if_term a (LConst(Prim_bool false)) (LConst(Prim_bool true))
-
-let make_eq a b =
-  LPred("eq", [ a; b ])
-
-let make_select f this =
-  LApp("select", [ f; this ])
-
-let make_select_fi fi =
-  make_select (LVar fi.jc_field_info_final_name)
-
-let make_select_committed pc =
-  make_select (LVar (committed_name pc))
-
-let make_typeof_vi (vi,r) x =
-  LApp("typeof", [ LVar (tag_table_name (vi,r)); x ])
-
-let make_typeof st r x =
-  make_typeof_vi (struct_variant st,r) x
-
-let make_subtag t u =
-  LPred("subtag", [ t; u ])
-
-let make_subtag_bool t u =
-  LApp("subtag_bool", [ t; u ])
-
-let make_instanceof tt p st =
-  LPred("instanceof", [ tt; p; LVar (tag_name st) ])
-
-let make_offset_min ac p =
-  LApp("offset_min", [LVar(generic_alloc_table_name ac); p])
-
-let make_offset_max ac p =
-  LApp("offset_max", [LVar(generic_alloc_table_name ac); p])
-
-let make_int_of_tag st =
-  LApp("int_of_tag", [LVar(tag_name st)])
-
-
-
-let pc_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
-
-
-let const c =
-  match c with
-    | JCCvoid -> Prim_void
-    | JCCnull -> assert false
-    | JCCreal s -> Prim_real s
-    | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
-    | JCCboolean b -> Prim_bool b
-    | JCCstring s -> assert false (* TODO *)
-
-type forall_or_let =
-  | JCforall of string * Output.logic_type
-  | JClet of string * Output.term
-
-
-
 (*****************************************************************************)
 (*                                  Unions                                   *)
 (*****************************************************************************)
 
-type shift_offset = Int_offset of string | Expr_offset of Jc_ast.expr 
+type shift_offset = Int_offset of string | Expr_offset of Jc_fenv.expr 
 
 let add_offset off1 off2 = 
   match off1,off2 with
@@ -1191,6 +564,776 @@ let tderef_mem_class t fi =
 
 let lderef_mem_class locs fi =
   common_deref_mem_class laccess_union locs fi
+
+
+(******************************************************************************)
+(*                               call arguments                               *)
+(******************************************************************************)
+
+type param_or_effect_mode = MParam | MLocal | MEffect
+
+let add_alloc_table_argument ~mode ~no_deref (ac,distr) region_assoc acc =
+  let allocvar = if no_deref then plain_alloc_table_var else alloc_table_var in
+  let ty' = alloc_table_type ac in
+  if Region.polymorphic distr then
+    try 
+      (* Polymorphic allocation table. Both passed in argument by the caller, 
+	 and counted as effect. *)
+      let locr = RegionList.assoc distr region_assoc in
+      match mode with
+	| MParam | MEffect -> (allocvar (ac,locr), ty') :: acc 
+	| MLocal -> acc
+    with Not_found -> 
+      (* MLocal allocation table. Neither passed in argument by the caller, 
+	 nor counted as effect. *)
+      match mode with
+	| MParam | MEffect -> acc
+	| MLocal -> (allocvar (ac,distr), ty') :: acc 
+  else 
+    (* Constant allocation table. Not passed in argument by the caller, 
+       but counted as effect. *)
+    match mode with
+      | MParam | MLocal -> acc
+      | MEffect -> (allocvar (ac,distr), ty') :: acc 
+
+let alloc_table_writes ~mode ~callee_writes ~region_assoc =
+  AllocMap.fold
+    (fun (ac,distr) _labs acc ->
+       add_alloc_table_argument 
+	 ~mode ~no_deref:true (ac,distr) region_assoc acc
+    ) callee_writes.jc_effect_alloc_tables []
+
+let alloc_table_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
+  AllocMap.fold
+    (fun (ac,distr) _labs acc ->
+       if AllocMap.mem (ac,distr) callee_writes.jc_effect_alloc_tables then
+	 (* Allocation table is written, thus it is already taken care of
+	    as a parameter. *)
+	 match mode with
+	   | MParam | MLocal -> acc
+	   | MEffect ->
+	       add_alloc_table_argument 
+		 ~mode ~no_deref:false (ac,distr) region_assoc acc
+       else if mutable_alloc_table (get_current_function ()) (ac,distr) then
+	 add_alloc_table_argument 
+	   ~mode ~no_deref:false (ac,distr) region_assoc acc
+       else
+	 (* Allocation table is immutable, thus it is not passed by
+	    reference. As such, it cannot be counted in effects. *)
+	 match mode with
+	   | MParam | MLocal ->
+	       add_alloc_table_argument 
+		 ~mode ~no_deref:false (ac,distr) region_assoc acc
+	   | MEffect -> acc
+    ) callee_reads.jc_effect_alloc_tables []
+
+let add_tag_table_argument ~mode ~no_deref (vi,distr) region_assoc acc =
+  let tagvar = if no_deref then plain_tag_table_var else tag_table_var in
+  let ty' = tag_table_type vi in
+  if Region.polymorphic distr then
+    try 
+      (* Polymorphic tag table. Both passed in argument by the caller, 
+	 and counted as effect. *)
+      let locr = RegionList.assoc distr region_assoc in
+      match mode with
+	| MParam | MEffect -> (tagvar (vi,locr), ty') :: acc
+	| MLocal -> acc
+    with Not_found -> 
+      (* MLocal tag table. Neither passed in argument by the caller, 
+	 nor counted as effect. *)
+      match mode with
+	| MParam | MEffect -> acc
+	| MLocal -> (tagvar (vi,distr), ty') :: acc 
+  else 
+    (* Constant tag table. Not passed in argument by the caller, 
+       but counted as effect. *)
+    match mode with
+      | MParam | MLocal -> acc
+      | MEffect -> (tagvar (vi,distr), ty') :: acc 
+
+let tag_table_writes ~mode ~callee_writes ~region_assoc =
+  TagMap.fold
+    (fun (vi,distr) _labs acc ->
+       add_tag_table_argument 
+	 ~mode ~no_deref:true (vi,distr) region_assoc acc
+    ) callee_writes.jc_effect_tag_tables []
+
+let tag_table_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
+  TagMap.fold
+    (fun (vi,distr) _labs acc ->
+       if TagMap.mem (vi,distr) callee_writes.jc_effect_tag_tables then
+	 (* Tag table is written, thus it is already taken care of
+	    as a parameter. *)
+	 match mode with
+	   | MParam | MLocal -> acc
+	   | MEffect ->
+	       add_tag_table_argument 
+		 ~mode ~no_deref:false (vi,distr) region_assoc acc
+       else if mutable_tag_table (get_current_function ()) (vi,distr) then
+	 add_tag_table_argument 
+	   ~mode ~no_deref:false (vi,distr) region_assoc acc
+       else
+	 (* Tag table is immutable, thus it is not passed by
+	    reference. As such, it cannot be counted in effects. *)
+	 match mode with
+	   | MParam | MLocal ->
+	       add_tag_table_argument 
+		 ~mode ~no_deref:false (vi,distr) region_assoc acc
+	   | MEffect -> acc
+    ) callee_reads.jc_effect_tag_tables []
+
+let add_memory_argument ~mode ~no_deref (mc,distr as mem) region_assoc acc =
+  let memvar = if no_deref then plain_memory_var else memory_var in
+  let ty' = memory_type mc in
+  if Region.polymorphic distr then
+    try 
+      (* Polymorphic memory. Both passed in argument by the caller, 
+	 and counted as effect. *)
+      let locr = RegionList.assoc distr region_assoc in
+      match mode with
+	| MParam | MEffect -> (mem, (memvar (mc,locr), ty')) :: acc
+	| MLocal -> acc
+    with Not_found -> 
+      (* MLocal memory. Neither passed in argument by the caller, 
+	 nor counted as effect. *)
+      match mode with
+	| MParam | MEffect -> acc
+	| MLocal -> (mem, (memvar (mc,distr), ty')) :: acc 
+  else 
+    (* Constant memory. Not passed in argument by the caller, 
+       but counted as effect. *)
+    match mode with
+      | MParam | MLocal -> acc
+      | MEffect -> (mem, (memvar (mc,distr), ty')) :: acc 
+
+let memory_detailed_writes ~mode ~callee_writes ~region_assoc =
+  MemoryMap.fold
+    (fun (mc,distr) _labs acc -> 
+       add_memory_argument 
+	 ~mode ~no_deref:true (mc,distr) region_assoc acc
+    ) callee_writes.jc_effect_memories []
+
+let memory_writes ~mode ~callee_writes ~region_assoc =
+  List.map snd 
+    (memory_detailed_writes ~mode ~callee_writes ~region_assoc)
+
+let memory_detailed_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
+  MemoryMap.fold
+    (fun (mc,distr) _labs acc ->
+       if MemoryMap.mem (mc,distr) callee_writes.jc_effect_memories then
+	 (* Memory is written, thus it is already taken care of
+	    as a parameter. *)
+	 match mode with
+	   | MParam | MLocal -> acc
+	   | MEffect ->
+	       add_memory_argument 
+		 ~mode ~no_deref:false (mc,distr) region_assoc acc
+       else if mutable_memory (get_current_function ()) (mc,distr) then
+	 add_memory_argument 
+	   ~mode ~no_deref:false (mc,distr) region_assoc acc
+       else
+	 (* Memory is immutable, thus it is not passed by
+	    reference. As such, it cannot be counted in effects. *)
+	 match mode with
+	   | MParam | MLocal ->
+	       add_memory_argument 
+		 ~mode ~no_deref:false (mc,distr) region_assoc acc
+	   | MEffect -> acc
+    ) callee_reads.jc_effect_memories []
+
+let memory_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
+  List.map snd 
+    (memory_detailed_reads ~mode ~callee_writes ~callee_reads ~region_assoc)
+
+let global_writes ~callee_writes =
+  VarMap.fold
+    (fun v _labs acc -> 
+       let n,ty' = param v in (plain_var n,ty') :: acc
+    ) callee_writes.jc_effect_globals []
+
+let global_reads ~callee_reads =
+  VarMap.fold
+    (fun v _labs acc -> 
+       let n,ty' = param v in (plain_var n,ty') :: acc
+    ) callee_reads.jc_effect_globals []
+
+(* Yannick: change this to avoid recovering the real type from its name
+   in mutable and committed effects *)
+
+let write_mutable callee_writes =
+  StringSet.fold
+    (fun v acc -> (mutable_name2 v)::acc) callee_writes.jc_effect_mutable []
+
+let read_mutable callee_reads =
+  StringSet.fold
+    (fun v acc -> (mutable_name2 v)::acc) callee_reads.jc_effect_mutable []
+
+let write_committed callee_writes =
+  StringSet.fold
+    (fun v acc -> (committed_name2 v)::acc) callee_writes.jc_effect_committed []
+
+let read_committed callee_reads =
+  StringSet.fold
+    (fun v acc -> (committed_name2 v)::acc) callee_reads.jc_effect_committed []
+
+let write_model_parameters ~mode ~callee_reads ~callee_writes ~region_assoc =
+  let write_allocs = 
+    alloc_table_writes ~mode ~callee_writes ~region_assoc 
+  in
+  let write_tags = 
+    tag_table_writes ~mode ~callee_writes ~region_assoc 
+  in
+  let write_mems = 
+    memory_writes ~mode ~callee_writes ~region_assoc 
+  in
+  let write_globs = match mode with
+    | MParam | MLocal -> []
+    | MEffect -> global_writes ~callee_writes
+  in
+  (* TODO: add mutable and committed effects *)
+  write_allocs @ write_tags @ write_mems @ write_globs
+
+let write_parameters ?region_assoc ?region_list ~callee_reads ~callee_writes =
+  let region_assoc = match region_assoc,region_list with
+    | Some region_assoc, None -> region_assoc
+    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
+    | _ -> assert false
+  in
+  let vars' = 
+    write_model_parameters 
+      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
+  in
+  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+
+let write_arguments ?region_assoc ?region_list ~callee_reads ~callee_writes =
+  let region_assoc = match region_assoc,region_list with
+    | Some region_assoc, None -> region_assoc
+    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
+    | _ -> assert false
+  in
+  let vars' = 
+    write_model_parameters 
+      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
+  in
+  List.map fst vars'
+
+let write_locals ?region_assoc ?region_list ~callee_reads ~callee_writes =
+  let region_assoc = match region_assoc,region_list with
+    | Some region_assoc, None -> region_assoc
+    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
+    | _ -> assert false
+  in
+  let vars' =
+    write_model_parameters 
+      ~mode:MLocal ~callee_reads ~callee_writes ~region_assoc
+  in
+  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+
+let write_effects ~callee_reads ~callee_writes ~region_list =
+  let region_assoc = List.map (fun r -> (r,r)) region_list in
+  let vars' = 
+    write_model_parameters 
+      ~mode:MEffect ~callee_reads ~callee_writes ~region_assoc
+  in
+  List.map (function (Var n,_ty') -> n | _ -> assert false) vars'
+
+let read_model_parameters ~mode ~callee_reads ~callee_writes ~region_assoc =
+  let read_allocs = 
+    alloc_table_reads ~mode ~callee_reads ~callee_writes ~region_assoc 
+  in
+  let read_tags = 
+    tag_table_reads ~mode ~callee_reads ~callee_writes ~region_assoc 
+  in
+  let read_mems =
+    memory_reads ~mode ~callee_reads ~callee_writes ~region_assoc 
+  in
+  let read_globs = match mode with
+    | MParam | MLocal -> []
+    | MEffect -> global_reads ~callee_reads
+  in
+  (* TODO: add mutable and committed effects *)
+  read_allocs @ read_tags @ read_mems @ read_globs
+
+let read_parameters ?region_assoc ?region_list ~callee_reads ~callee_writes =
+  let region_assoc = match region_assoc,region_list with
+    | Some region_assoc, None -> region_assoc
+    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
+    | _ -> assert false
+  in
+  let vars' = 
+    read_model_parameters 
+      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
+  in
+  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+
+let read_arguments ?region_assoc ?region_list ~callee_reads ~callee_writes =
+  let region_assoc = match region_assoc,region_list with
+    | Some region_assoc, None -> region_assoc
+    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
+    | _ -> assert false
+  in
+  let vars' = 
+    read_model_parameters 
+      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
+  in
+  List.map fst vars'
+
+let read_locals ?region_assoc ?region_list ~callee_reads ~callee_writes =
+  let region_assoc = match region_assoc,region_list with
+    | Some region_assoc, None -> region_assoc
+    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
+    | _ -> assert false
+  in
+  let vars' =
+    read_model_parameters 
+      ~mode:MLocal ~callee_reads ~callee_writes ~region_assoc
+  in
+  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+
+let read_effects ~callee_reads ~callee_writes ~region_list =
+  let region_assoc = List.map (fun r -> (r,r)) region_list in
+  let vars' = 
+    read_model_parameters 
+      ~mode:MEffect ~callee_reads ~callee_writes ~region_assoc
+  in
+  List.map (var_name' $ fst) vars'
+
+let rec location ~global_assertion lab loc = 
+  let flocs = location_set ~global_assertion lab in
+  match loc#node with
+    | JCLvar v ->
+	LApp("pset_singleton",[ tvar ~label_in_name:global_assertion lab v ])
+    | JCLderef(locs,lab,fi,r) ->
+	let mc = lderef_mem_class locs fi in
+        let mem = 
+	  tmemory_var ~label_in_name:global_assertion lab (mc,locs#region) 
+	in
+	LApp("pset_deref",[ mem; flocs locs ])
+    | _ -> assert false (* TODO *)
+
+and location_set ~global_assertion lab locs = 
+  let flocs = location_set ~global_assertion lab in
+  match locs#node with
+    | JCLSvar v ->
+	LApp("pset_singleton",[ tvar ~label_in_name:global_assertion lab v ])
+    | JCLSderef(locs,lab,fi,r) ->
+	let mc = lderef_mem_class locs fi in
+        let mem = 
+	  tmemory_var ~label_in_name:global_assertion lab (mc,locs#region) 
+	in
+	LApp("pset_deref",[ mem; flocs locs ])
+    | _ -> assert false (* TODO *)
+
+let rec location_list' = function
+  | [] -> LVar "pset_empty"
+  | [e'] -> e'
+  | e' :: el' -> LApp("pset_union",[ e'; location_list' el' ])
+
+let separation_condition loclist loclist' =
+  let floc = location ~global_assertion:false LabelHere in
+  let pset = location_list' (List.map floc loclist) in
+  let pset' = location_list' (List.map floc loclist') in
+  LPred("pset_disjoint",[ pset; pset' ])
+
+let write_read_separation_condition 
+    ~callee_reads ~callee_writes inter_names writes reads =
+  List.fold_left
+    (fun acc ((mc,distr),(v,_ty')) ->
+       let n = var_name' v in
+       if StringSet.mem n inter_names then
+	 (* There is a read/write interference on this memory *)
+	 List.fold_left 
+	   (fun acc ((mc',distr'),(v',_ty')) ->
+	      let n' = var_name' v' in
+	      if n = n' then
+		let loclist =
+		  if MemoryMap.mem
+		    (mc,distr) callee_reads.jc_effect_raw_memories then
+		      assert false (* TODO: paremeters *)
+		  else
+		    List.map fst
+		      (LocationMap.to_list
+			 (LocationMap.filter
+			    (fun loc _labs -> Region.equal loc#region distr)
+			    callee_reads.jc_effect_precise_memories))
+		in
+		let loclist' =
+		  if MemoryMap.mem
+		    (mc',distr') callee_reads.jc_effect_raw_memories then
+		      assert false (* TODO: paremeters *)
+		  else
+		    List.map fst
+		      (LocationMap.to_list
+			 (LocationMap.filter
+			    (fun loc _labs -> Region.equal loc#region distr')
+			    callee_reads.jc_effect_precise_memories))
+		in
+		let req = separation_condition loclist loclist' in
+		make_and req acc
+	      else acc
+	   ) acc writes
+       else acc
+    ) LTrue reads
+
+let alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc =
+  let writes = 
+    alloc_table_writes ~mode:MParam ~callee_writes ~region_assoc
+  in
+  let reads = 
+    alloc_table_reads 
+      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
+  in
+  (List.map fst writes), (List.map fst reads)
+
+let tag_table_arguments ~callee_reads ~callee_writes ~region_assoc =
+  let writes = 
+    tag_table_writes ~mode:MParam ~callee_writes ~region_assoc
+  in
+  let reads = 
+    tag_table_reads 
+      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
+  in
+  (List.map fst writes), (List.map fst reads)
+
+let memory_arguments ~callee_reads ~callee_writes ~region_assoc =
+  let writes = 
+    memory_detailed_writes ~mode:MParam ~callee_writes ~region_assoc
+  in
+  let reads = 
+    memory_detailed_reads 
+      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
+  in
+  (* Check if there are duplicates between reads and writes *)
+  let write_names = List.map (var_name' $ fst $ snd) writes in
+  let read_names = List.map (var_name' $ fst $ snd) reads in
+  let rw_inter_names = 
+    StringSet.inter 
+      (StringSet.of_list write_names) (StringSet.of_list read_names) 
+  in
+  let req =
+    if StringSet.is_empty rw_inter_names then
+      LTrue (* no read/write interference *)
+    else
+      write_read_separation_condition ~callee_reads ~callee_writes 
+	rw_inter_names writes reads
+  in
+  (* TODO: Check if there are duplicates between writes *)
+  req, (List.map (fst $ snd) writes), (List.map (fst $ snd) reads)
+  
+let global_arguments ~callee_reads ~callee_writes ~region_assoc =
+  let writes = global_writes ~callee_writes in
+  let reads = global_reads ~callee_reads in
+  (List.map fst writes), (List.map fst reads)
+
+let make_arguments ~callee_reads ~callee_writes ~region_assoc args =
+  let write_allocs, read_allocs = 
+    alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc
+  in
+  let write_tags, read_tags = 
+    tag_table_arguments ~callee_reads ~callee_writes ~region_assoc
+  in
+  let req_mems, write_mems, read_mems = 
+    memory_arguments ~callee_reads ~callee_writes ~region_assoc
+  in
+  let write_globs, read_globs = 
+    global_arguments ~callee_reads ~callee_writes ~region_assoc
+  in
+  (* Return complete list of arguments *)
+  (* TODO: add mutable and committed effects *)
+  let args =
+    args
+    @ write_allocs @ write_tags @ write_mems @ write_globs
+    @ read_allocs @ read_tags @ read_mems @ read_globs
+  in
+  req_mems, args
+
+let transpose_labels ~label_assoc labs =
+  match label_assoc with
+    | None -> labs
+    | Some assoc ->
+	LogicLabelSet.fold
+	  (fun lab acc ->
+	     try
+	       let lab = List.assoc lab assoc in
+	       LogicLabelSet.add lab acc
+	     with Not_found -> LogicLabelSet.add lab acc)
+	  labs LogicLabelSet.empty
+
+let transpose_region ~region_assoc r =
+  match region_assoc with
+    | None -> Some r
+    | Some assoc ->
+	if Region.polymorphic r then
+	  try Some (RegionList.assoc r assoc)
+	  with Not_found -> None (* MLocal region *)
+	else Some r
+
+let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
+  MemoryMap.fold
+    (fun (mc,distr) labs acc ->
+       let labs = transpose_labels ?label_assoc labs in
+       let locr = the (transpose_region ?region_assoc distr) in
+       LogicLabelSet.fold
+	 (fun lab acc ->
+	    let param = tmemory_param ~label_in_name lab (mc,locr) in
+	    ((mc,locr), param) :: acc
+	 ) labs acc
+    ) reads.jc_effect_memories []
+
+let tmemory_params ~label_in_name ?region_assoc ?label_assoc reads =
+  List.map snd 
+    (tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads)
+
+let talloc_table_detailed_params 
+    ~label_in_name ?region_assoc ?label_assoc reads =
+  AllocMap.fold
+    (fun (ac,distr) labs acc ->
+       let labs = transpose_labels ?label_assoc labs in
+       let locr = the (transpose_region ?region_assoc distr) in
+       LogicLabelSet.fold
+	 (fun lab acc ->
+	    let param = talloc_table_param ~label_in_name lab (ac,locr) in
+	    ((ac,locr), param) :: acc
+	 ) labs acc
+    ) reads.jc_effect_alloc_tables []
+
+let talloc_table_params ~label_in_name ?region_assoc ?label_assoc reads =
+  List.map snd
+    (talloc_table_detailed_params 
+       ~label_in_name ?region_assoc ?label_assoc reads)
+
+let ttag_table_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
+  TagMap.fold
+    (fun (vi,distr) labs acc ->
+       let labs = transpose_labels ?label_assoc labs in
+       let locr = the (transpose_region ?region_assoc distr) in
+       LogicLabelSet.fold
+	 (fun lab acc ->
+	    let param = ttag_table_param ~label_in_name lab (vi,locr) in
+	    ((vi,locr), param) :: acc
+	 ) labs acc
+    ) reads.jc_effect_tag_tables []
+
+let ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads =
+  List.map snd
+    (ttag_table_detailed_params 
+       ~label_in_name ?region_assoc ?label_assoc reads)
+
+let tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
+  VarMap.fold
+    (fun v labs acc ->
+       let labs = transpose_labels ?label_assoc labs in
+       LogicLabelSet.fold
+	 (fun lab acc ->
+	    let param = tparam ~label_in_name lab v in
+	    (v, param) :: acc
+	 ) labs acc
+    ) reads.jc_effect_globals []
+
+let tglob_params ~label_in_name ?region_assoc ?label_assoc reads =
+  List.map snd
+    (tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads)
+
+let tmodel_parameters ~label_in_name ?region_assoc ?label_assoc reads =
+  let allocs =
+    talloc_table_params ~label_in_name ?region_assoc ?label_assoc reads
+  in
+  let tags = 
+    ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads
+  in
+  let mems = 
+    tmemory_params ~label_in_name ?region_assoc ?label_assoc reads 
+  in
+  let globs = 
+    tglob_params ~label_in_name ?region_assoc ?label_assoc reads 
+  in
+  allocs @ tags @ mems @ globs
+
+let make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args =
+  let model_params = 
+    tmodel_parameters ~label_in_name ~region_assoc ~label_assoc 
+      f.jc_logic_info_effects
+  in
+  let model_args = List.map (fun (n,_ty') -> LVar n) model_params in
+  args @ model_args
+
+let make_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
+  let args = 
+    make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args 
+  in
+  LApp(f.jc_logic_info_final_name, args)
+
+let make_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f args =
+  let args = 
+    make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args
+  in 
+  LPred(f.jc_logic_info_final_name, args)
+
+
+(* *)
+let logic_info_reads acc li = 
+  let acc =
+    MemoryMap.fold
+      (fun (mc,r) _ acc -> 
+	 StringSet.add (memory_name(mc,r)) acc)
+      li.jc_logic_info_effects.jc_effect_memories
+      acc
+  in
+  let acc =
+    AllocMap.fold
+      (fun (ac,r) labs acc ->
+	 StringSet.add (alloc_table_name (ac, r)) acc)
+      li.jc_logic_info_effects.jc_effect_alloc_tables
+      acc
+  in
+  TagMap.fold
+    (fun v _ acc -> StringSet.add (tag_table_name v) acc)
+    li.jc_logic_info_effects.jc_effect_tag_tables
+    acc
+
+
+(* fold all effects into a list *)
+let all_effects ef =
+  let res =
+    MemoryMap.fold
+      (fun (mc,r) labels acc -> 
+	let mem = memory_name(mc,r) in
+	if Region.polymorphic r then
+(*	  if RegionList.mem r f.jc_fun_info_param_regions then
+	    if FieldRegionMap.mem (fi,r) 
+	      f.jc_fun_info_effects.jc_writes.jc_effect_memories 
+	    then mem::acc 
+	    else acc
+	  else acc*)
+	  assert false (* TODO *)
+	else mem::acc)
+      ef.jc_effect_memories
+      []
+  in
+  let res =
+    VarMap.fold
+      (fun v labs acc -> v.jc_var_info_final_name::acc)
+      ef.jc_effect_globals
+      res
+  in
+  let res =
+    AllocMap.fold
+      (fun (a,r) labs acc -> 
+	let alloc = alloc_table_name(a,r) in
+	if Region.polymorphic r then
+(*	  if RegionList.mem r f.jc_fun_info_param_regions then
+	    if AllocSet.mem (a,r) 
+	      f.jc_fun_info_effects.jc_writes.jc_effect_alloc_tables 
+	    then alloc::acc 
+	    else acc
+	  else acc*)
+	  assert false (* TODO *)
+	else alloc::acc)
+      ef.jc_effect_alloc_tables
+      res
+  in
+  let res =
+    TagMap.fold
+      (fun v _ acc -> (tag_table_name v)::acc)
+      ef.jc_effect_tag_tables
+      res
+  in
+  let res =
+    StringSet.fold
+      (fun v acc -> (mutable_name2 v)::acc)
+      ef.jc_effect_mutable
+      res
+  in
+  let res =
+    StringSet.fold
+      (fun v acc -> (committed_name2 v)::acc)
+      ef.jc_effect_committed
+      res
+  in
+  res
+
+(* functions to make Why expressions *)
+
+let make_if_term cond a b =
+  LApp("ite", [ cond; a; b ])
+
+let make_eq_term ty a b =
+  let eq = match ty with
+    | JCTpointer _ | JCTnull -> "eq_pointer_bool"
+    | JCTenum _ | JCTlogic _ | JCTany -> assert false
+    | JCTnative Tunit -> "eq_unit_bool"
+    | JCTnative Tboolean -> "eq_bool_bool"
+    | JCTnative Tinteger -> "eq_int_bool"
+    | JCTnative Treal -> "eq_real_bool"
+    | JCTnative Tstring -> "eq_string_bool"
+    | JCTtype_var _ -> assert false (* TODO: need environment *)
+  in
+  LApp(eq, [a; b])
+
+let make_and_term a b =
+  make_if_term a b (LConst(Prim_bool false))
+
+let make_or_term a b =
+  make_if_term a (LConst(Prim_bool true)) b
+
+let make_not_term a =
+  make_if_term a (LConst(Prim_bool false)) (LConst(Prim_bool true))
+
+let make_eq a b =
+  LPred("eq", [ a; b ])
+
+let make_select f this =
+  LApp("select", [ f; this ])
+
+let make_select_fi fi =
+  make_select (LVar fi.jc_field_info_final_name)
+
+let make_select_committed pc =
+  make_select (LVar (committed_name pc))
+
+let make_typeof_vi (vi,r) x =
+  LApp("typeof", [ LVar (tag_table_name (vi,r)); x ])
+
+let make_typeof st r x =
+  make_typeof_vi (struct_variant st,r) x
+
+let make_subtag t u =
+  LPred("subtag", [ t; u ])
+
+let make_subtag_bool t u =
+  LApp("subtag_bool", [ t; u ])
+
+let make_instanceof tt p st =
+  LPred("instanceof", [ tt; p; LVar (tag_name st) ])
+
+let make_offset_min ac p =
+  LApp("offset_min", [LVar(generic_alloc_table_name ac); p])
+
+let make_offset_max ac p =
+  LApp("offset_max", [LVar(generic_alloc_table_name ac); p])
+
+let make_int_of_tag st =
+  LApp("int_of_tag", [LVar(tag_name st)])
+
+
+
+let pc_of_name name = JCtag (find_struct name, []) (* TODO: parameters *)
+
+
+let const c =
+  match c with
+    | JCCvoid -> Prim_void
+    | JCCnull -> assert false
+    | JCCreal s -> Prim_real s
+    | JCCinteger s -> Prim_int (Num.string_of_num (Numconst.integer s))
+    | JCCboolean b -> Prim_bool b
+    | JCCstring s -> assert false (* TODO *)
+
+type forall_or_let =
+  | JCforall of string * Output.logic_type
+  | JClet of string * Output.term
+
+
 
 
 (*

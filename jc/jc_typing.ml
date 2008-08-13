@@ -27,18 +27,20 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.235 2008-08-07 16:24:17 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.236 2008-08-13 09:31:14 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
-open Jc_fenv
-open Jc_pervasives
-open Jc_constructors
-open Jc_ast
-open Format
 open Jc_region
+open Jc_ast
+open Jc_fenv
+
+open Jc_constructors
+open Jc_pervasives
 open Jc_iterators
 open Jc_struct_tools
+
+open Format
 
 exception Typing_error of Loc.position * string
 
@@ -1259,7 +1261,7 @@ let rec location_set env e =
   let locs = 
     new location_set
       ~pos: e#pos
-      ~region: dummy_region (* TODO: change into real region *)
+      ~region:r
       ?label: e#label
       locs_node
   in ty,r,locs
@@ -1295,7 +1297,7 @@ let rec location env e =
   let loc = 
     new location
       ~pos: e#pos
-      ~region: dummy_region (* TODO: change into real region *)
+      ~region:r
       ?label: e#label
       loc_node
   in ty,r,loc

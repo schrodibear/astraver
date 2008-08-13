@@ -27,24 +27,25 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.334 2008-08-12 00:33:35 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.335 2008-08-13 09:31:14 moy Exp $ *)
 
+open Jc_stdlib
 open Jc_env
 open Jc_envset
-open Jc_fenv
-open Jc_pervasives
-open Jc_constructors
-open Jc_ast
-open Jc_invariants
-open Output
-open Jc_name
 open Jc_region
+open Jc_ast
+open Jc_fenv
+
+open Jc_name
+open Jc_constructors
+open Jc_pervasives
+open Jc_invariants
 open Jc_separation
 open Jc_interp_misc
 open Jc_struct_tools
 open Jc_pattern
-open Jc_stdlib
 
+open Output
 open Format
 open Num
 
@@ -930,11 +931,6 @@ let rec collect_pset_locations ~global_assertion loc =
     | JCLat(loc,lab) ->
         collect_pset_locations ~global_assertion loc
 
-let rec make_union_loc = function
-  | [] -> LVar "pset_empty"
-  | [l] -> l
-  | l::r -> LApp("pset_union",[l;make_union_loc r])
-
 let assigns before ef locs loc =
   match locs with
     | None -> LTrue     
@@ -974,7 +970,7 @@ let assigns before ef locs loc =
 	 (let a = LPred("not_assigns",
                 [talloc_table_var ~label_in_name:false before (ac,r); 
                  lvar ~constant:false (* <<- CHANGE THIS *) ~label_in_name:false before v;
-                 LVar v; make_union_loc p]) in
+                 LVar v; location_list' p]) in
 	  LNamed(reg_check loc,a))
     ) mems a
 
@@ -987,7 +983,7 @@ let reads ~global_assertion locs (mc,r) =
     List.fold_left (collect_locations ~global_assertion LabelOld) (refs,mems) locs
   in
   let p = try MemoryMap.find (mc,r) mems with Not_found -> [] in
-  make_union_loc p
+  location_list' p
 
 
 (******************************************************************************)
@@ -1560,8 +1556,8 @@ and expr e =
 	  | JCalloc_struct vi ->
               let tag = plain_tag_table_var (vi,e#region) in
 	      let pc = JCtag(st,[]) in
-              let fields = all_memories ~select:fully_allocated pc in
-              let fields = List.map (fun fi -> (fi,e#region)) fields in
+              let mems = all_memories ~select:fully_allocated pc in
+              let mems = List.map (fun fi -> (JCmem_field fi,e#region)) mems in
               let allocs = all_allocs ~select:fully_allocated pc in
               let allocs = List.map (fun ac -> (ac,e#region)) allocs in
               if !Jc_options.inv_sem = InvOwnership then
@@ -1580,7 +1576,7 @@ and expr e =
 		     e1#mark e1#pos integer_type 
 		     e1#typ e1 e1'
                    :: (List.map plain_alloc_table_var allocs)
-                   @ (List.map (plain_var $ field_region_memory_name) fields))
+                   @ (List.map plain_memory_var mems))
 	  | JCalloc_union vi -> assert false (* TODO *)
 	  | JCalloc_bitvector -> assert false (* TODO *)
         end
@@ -1618,13 +1614,14 @@ and expr e =
 			param_types call.jc_call_args ([],[])
 		with Invalid_argument _ -> assert false
               in
-	      let args = 
+	      let req, args = 
 		make_arguments 
                   ~callee_reads: f.jc_logic_info_effects
                   ~callee_writes: empty_effects
                   ~region_assoc: call.jc_call_region_assoc
 		  args
 	      in
+	      assert (req = LTrue);
               let call = make_logic_app f.jc_logic_info_final_name args in
               let arg_types_assert =
 		List.fold_right
@@ -1661,7 +1658,7 @@ and expr e =
 			param_types call.jc_call_args ([],[])
 		with Invalid_argument _ -> assert false
               in
-	      let args = 
+	      let req, args = 
 		make_arguments 
                   ~callee_reads: f.jc_fun_info_effects.jc_reads
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
@@ -1674,6 +1671,13 @@ and expr e =
 		else f.jc_fun_info_final_name
 	      in
 	      let call = make_guarded_app e#mark UserCall e#pos fname args in
+	      let call = 
+		if req = LTrue || not (safety_checking()) then 
+		  call
+		else
+		  make_check ~mark:e#mark (* ~kind:Separation *) e#pos 
+		    (Assert(req,call))
+	      in
               let arg_types_assert =
 		List.fold_right
 		  (fun opt acc -> 
@@ -1686,8 +1690,10 @@ and expr e =
 		if arg_types_assert = LTrue || not (safety_checking()) then 
 		  call
 		else
-		  Assert (arg_types_assert, call) 
+		  make_check ~mark:e#mark ~kind:IndexBounds e#pos 
+		    (Assert(arg_types_assert,call))
               in
+	      
               let call =
 		List.fold_right
 		  (fun opt c -> 
@@ -2377,7 +2383,7 @@ let tr_logic_fun f ta acc =
 	 let ps = 
 	   List.map (collect_pset_locations ~global_assertion:true) ps 
 	 in
-	 let ps = make_union_loc ps in
+	 let ps = location_list' ps in
 	 let valida =
 	   LPred("valid_pset",[LVar (fst param); ps])
 	 in
@@ -2938,37 +2944,17 @@ let tr_fun f funpos spec body acc =
 
 let tr_logic_type id acc = Type(id,[]) :: acc
 
-let tr_axiom id is_axiom p acc = 
-  let ef = Jc_effect.assertion empty_effects p in
-  let a = assertion ~global_assertion:true ~relocate:false LabelHere LabelHere p in
-  let a =
-    MemoryMap.fold 
-      (fun (fi,r) labels a -> 
-         LogicLabelSet.fold
-           (fun lab a ->
-              LForall (lvar_name ~constant:false (* <<- CHANGE *)~label_in_name:true lab (memory_name(fi,r)), 
-                       memory_type fi, a))
-           labels a)
-      ef.jc_effect_memories a 
+let tr_axiom id is_axiom a acc =
+  let ef = Jc_effect.assertion empty_effects a in
+  let a' = 
+    assertion ~global_assertion:true ~relocate:false LabelHere LabelHere a
   in
-  let a =
-    AllocMap.fold (fun (alloc,r) labs a -> 
-		     LForall (alloc_table_name(alloc,r), alloc_table_type alloc, a)
-		  ) ef.jc_effect_alloc_table a 
-  in
-  let a =
-    TagMap.fold
-      (fun (vi,r) labels a ->
-         LogicLabelSet.fold
-           (fun lab a ->
-              LForall(lvar_name ~constant:false (* <<- CHANGE *)~label_in_name:true lab (tag_table_name (vi,r)),
-		      tag_table_type vi, a))
-           labels a)
-      ef.jc_effect_tag_table a
-  in
-  (* How to add quantification on other effects (alloc) without knowing 
-   * their type ? *)
-  if is_axiom then Axiom(id,a)::acc else Goal(id,a)::Axiom(id ^ "_as_axiom",a)::acc
+  let params = tmodel_parameters ~label_in_name:true ef in
+  let a' = List.fold_right (fun (n,ty') a' -> LForall(n,ty',a')) params a' in
+  if is_axiom then 
+    Axiom(id,a') :: acc 
+  else 
+    Goal(id,a') :: Axiom(id ^ "_as_axiom",a') :: acc
 
 let tr_exception ei acc =
   Jc_options.lprintf "producing exception '%s'@." ei.jc_exception_info_name;

@@ -368,7 +368,7 @@ let invariant_params acc li =
       (fun (ac,r) labs acc -> 
 	 (alloc_table_name (ac, r),
 	  alloc_table_type (ac))::acc)
-      li.jc_logic_info_effects.jc_effect_alloc_table
+      li.jc_logic_info_effects.jc_effect_alloc_tables
       acc
   in
   let acc =
@@ -378,7 +378,7 @@ let invariant_params acc li =
 		   logic_type_name = "tag_table" }
 	 in
 	 (tag_table_name (v,r), t)::acc)
-      li.jc_logic_info_effects.jc_effect_tag_table
+      li.jc_logic_info_effects.jc_effect_tag_tables
       acc
   in
     acc

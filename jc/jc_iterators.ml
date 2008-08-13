@@ -33,6 +33,7 @@ open Jc_envset
 open Jc_fenv
 open Jc_constructors
 open Jc_ast
+open Jc_fenv
 open Jc_pervasives
 
 module type TAst = sig

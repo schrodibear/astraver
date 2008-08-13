@@ -27,15 +27,17 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.118 2008-08-08 15:47:38 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.119 2008-08-13 09:31:14 moy Exp $ *)
 
-open Format
 open Jc_env
 open Jc_envset
-open Jc_fenv
-open Jc_constructors
-open Jc_ast
 open Jc_region
+open Jc_ast
+open Jc_fenv
+
+open Jc_constructors
+
+open Format
 open Num
 
 let ( $ ) = fun f g x -> f(g x)
@@ -262,8 +264,10 @@ let exception_info ty id =
 (* logic functions *)
 
 let empty_effects = 
-  { jc_effect_alloc_table = AllocMap.empty;
-    jc_effect_tag_table = TagMap.empty;
+  { jc_effect_alloc_tables = AllocMap.empty;
+    jc_effect_tag_tables = TagMap.empty;
+    jc_effect_raw_memories = MemoryMap.empty;
+    jc_effect_precise_memories = LocationMap.empty;
     jc_effect_memories = MemoryMap.empty;
     jc_effect_globals = VarMap.empty;
     jc_effect_mutable = StringSet.empty;

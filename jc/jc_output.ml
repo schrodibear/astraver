@@ -27,15 +27,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.116 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.117 2008-08-13 09:31:14 moy Exp $ *)
 
 open Format
 open Jc_env
+open Jc_ast
 open Jc_fenv
 open Jc_pervasives
 open Jc_constructors
 open Jc_output_misc
-open Jc_ast
 open Pp
 
 type jc_decl =

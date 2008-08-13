@@ -28,8 +28,8 @@
 (**************************************************************************)
 
 open Jc_env
-open Jc_fenv
 open Jc_ast
+open Jc_fenv
 
 val default_label : label list -> label option
  

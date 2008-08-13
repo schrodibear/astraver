@@ -27,10 +27,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.25 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.26 2008-08-13 09:31:14 moy Exp $ *)
 
-open Jc_env
 open Jc_stdlib
+open Jc_env
 
 module type OrderedHashedType =
 sig
@@ -228,6 +228,7 @@ module LogicLabelOrd =
   end
 
 module LogicLabelSet = Set.Make(LogicLabelOrd)
+
 
 (*
 Local Variables: 

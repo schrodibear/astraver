@@ -27,12 +27,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.12 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_constructors.ml,v 1.13 2008-08-13 09:31:14 moy Exp $ *)
 
 open Jc_env
-open Jc_fenv
 open Jc_region
 open Jc_ast 
+open Jc_fenv
 
 class positioned ~pos =
 object
@@ -152,12 +152,11 @@ object
   inherit [location_node] node_positioned ~pos node
 end
 
-class location_with ?pos ?region ?node t =
+(* ignore argument's label *)
+class location_with ?pos ?label ?region ~node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
-  let llab = t#label in
   let region = match region with None -> t#region | Some region -> region in
-  let node = match node with None -> t#node | Some node -> node in
-  location ~pos ?label:llab ~region node
+  location ~pos ?label ~region node
 
 class location_set ?(pos = Loc.dummy_position) ?label ?region node =
   let region = 
@@ -169,12 +168,11 @@ object
   inherit [location_set_node] node_positioned ~pos node
 end
 
-class location_set_with ?pos ?region ?node t =
+(* ignore argument's label *)
+class location_set_with ?pos ?label ?region ~node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
-  let llab = t#label in
   let region = match region with None -> t#region | Some region -> region in
-  let node = match node with None -> t#node | Some node -> node in
-  location_set ~pos ?label:llab ~region node
+  location_set ~pos ?label ~region node
 
 class expr ?(pos = Loc.dummy_position) ~typ ?(mark="") ?region
   ?original_type node =

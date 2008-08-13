@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_stdlib.ml,v 1.4 2008-08-11 12:48:30 moy Exp $ *)
+(* $Id: jc_stdlib.ml,v 1.5 2008-08-13 09:31:14 moy Exp $ *)
 
 module List = struct
   include List
@@ -66,8 +66,10 @@ module Map = struct
     val elements: 'a t -> (key * 'a) list
     val keys: 'a t -> key list
     val values: 'a t -> 'a list
+    val to_list: 'a t -> (key * 'a) list
     val filter: (key -> 'a -> bool) -> 'a t -> 'a t
     val find_or_default: key -> 'a -> 'a t -> 'a
+    val find_or_none: key -> 'a t -> 'a option
     val merge: ('a -> 'a -> 'a) -> 'a t -> 'a t -> 'a t
     val add_merge: ('a -> 'a -> 'a) -> key -> 'a -> 'a t -> 'a t
     val diff_merge: ('a -> 'a -> 'a) -> ('a -> bool) -> 'a t -> 'a t -> 'a t
@@ -86,6 +88,9 @@ module Map = struct
     let values m = 
       fold (fun _k v acc -> v :: acc) m []
 
+    let to_list m =
+      fold (fun k v acc -> (k,v) :: acc) m []
+
     let filter f m =
       fold (fun k v m ->
 	      if f k v then add k v m else m
@@ -93,6 +98,9 @@ module Map = struct
 
     let find_or_default k v m =
       try find k m with Not_found -> v
+
+    let find_or_none k m =
+      try Some(find k m) with Not_found -> None
 
     let merge f m1 m2 =
       fold (fun k v1 m ->

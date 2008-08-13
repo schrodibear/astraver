@@ -27,8 +27,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-open Jc_ast
 open Jc_env
+open Jc_ast
+open Jc_fenv
 
 val ( $ ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 val the: 'a option -> 'a
@@ -74,8 +75,8 @@ val possible_struct_bytesize: Jc_env.struct_info -> int option
 (* constants *)
 
 val zero: Num.num
-val num_of_constant : 'a -> Jc_ast.const -> Num.num
-val const : Jc_ast.const -> Jc_env.jc_type * Jc_env.region * Jc_ast.const
+val num_of_constant : 'a -> const -> Num.num
+val const : const -> Jc_env.jc_type * Jc_env.region * const
 
 (* environment infos *)
 
@@ -96,7 +97,7 @@ val make_rel : string -> Jc_fenv.logic_info
 
 val make_logic_fun : string -> Jc_env.jc_type -> Jc_fenv.logic_info
 
-val location_set_region : Jc_ast.location_set -> Jc_env.region
+val location_set_region : location_set -> Jc_env.region
 (*
 val direct_embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list
 val embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list
@@ -115,46 +116,46 @@ val pointer_class_name : pointer_class -> string
 
 (* predefined functions *)
 
-val true_assertion : Jc_ast.assertion
+val true_assertion : assertion
 val any_string : Jc_fenv.logic_info
 val real_of_integer : Jc_fenv.logic_info
 val real_of_integer_ : Jc_fenv.fun_info
 val full_separated : Jc_fenv.logic_info
 
-val default_behavior : Jc_ast.behavior
+val default_behavior : behavior
 
 val empty_fun_effect : Jc_fenv.fun_effect
 val empty_effects : Jc_fenv.effect
 
 (* terms *)
 
-val raw_term_equal : Jc_ast.term -> Jc_ast.term -> bool
-val raw_term_compare : Jc_ast.term -> Jc_ast.term -> int
+val raw_term_equal : term -> term -> bool
+val raw_term_compare : term -> term -> int
 
 (* assertions *)
 
-val raw_assertion_equal : Jc_ast.assertion -> Jc_ast.assertion -> bool
-val make_and : Jc_ast.assertion list -> Jc_ast.assertion
+val raw_assertion_equal : assertion -> assertion -> bool
+val make_and : assertion list -> assertion
 
-val skip_term_shifts :  Jc_ast.term -> Jc_ast.term
-val skip_shifts : Jc_ast.expr -> Jc_ast.expr
-val skip_tloc_range : Jc_ast.location_set -> Jc_ast.location_set
-val is_true : Jc_ast.assertion -> bool
+val skip_term_shifts :  term -> term
+val skip_shifts : expr -> expr
+val skip_tloc_range : location_set -> location_set
+val is_true : assertion -> bool
 
 val select_option : 'a option -> 'a -> 'a
 val apply_option: ('a -> 'b) -> 'a option -> 'b option
-val is_constant_assertion : Jc_ast.assertion -> bool
+val is_constant_assertion : assertion -> bool
 
 (* fun specs *)
 
-val contains_normal_behavior : Jc_ast.fun_spec -> bool
-val contains_exceptional_behavior : Jc_ast.fun_spec -> bool
-val is_purely_exceptional_fun : Jc_ast.fun_spec -> bool
+val contains_normal_behavior : fun_spec -> bool
+val contains_exceptional_behavior : fun_spec -> bool
+val is_purely_exceptional_fun : fun_spec -> bool
 
 (* patterns *)
 
 (** The set of variables bound by a pattern. *)
-val pattern_vars : Jc_env.var_info Jc_envset.StringMap.t -> Jc_ast.pattern ->
+val pattern_vars : Jc_env.var_info Jc_envset.StringMap.t -> pattern ->
   Jc_env.var_info Jc_envset.StringMap.t
 
 (* operators *)
