@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.337 2008-08-13 14:10:53 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.338 2008-08-13 16:36:27 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1620,16 +1620,17 @@ and expr e =
 		List.map2 (fun param arg -> param,arg) 
 		  f.jc_logic_info_parameters call.jc_call_args
 	      in
-	      let req, args = 
+	      let pre, fname, args = 
 		make_arguments 
                   ~callee_reads: f.jc_logic_info_effects
                   ~callee_writes: empty_effects
                   ~region_assoc: call.jc_call_region_assoc
 		  ~param_assoc
-		  args
+		  f.jc_logic_info_final_name args
 	      in
-	      assert (req = LTrue);
-              let call = make_logic_app f.jc_logic_info_final_name args in
+	      assert (pre = LTrue);
+	      assert (fname = f.jc_logic_info_final_name);
+              let call = make_logic_app fname args in
               let arg_types_assert =
 		List.fold_right
 		  (fun opt acc -> 
@@ -1669,26 +1670,26 @@ and expr e =
 		List.map2 (fun param arg -> param,arg) 
 		  f.jc_fun_info_parameters call.jc_call_args
 	      in
-	      let req, args = 
-		make_arguments 
-                  ~callee_reads: f.jc_fun_info_effects.jc_reads
-                  ~callee_writes: f.jc_fun_info_effects.jc_writes
-                  ~region_assoc: call.jc_call_region_assoc
-		  ~param_assoc
-		  args
-	      in
 	      let fname = 
 		if safety_checking () then 
 		  f.jc_fun_info_final_name ^ "_requires"
 		else f.jc_fun_info_final_name
 	      in
+	      let pre, fname, args = 
+		make_arguments 
+                  ~callee_reads: f.jc_fun_info_effects.jc_reads
+                  ~callee_writes: f.jc_fun_info_effects.jc_writes
+                  ~region_assoc: call.jc_call_region_assoc
+		  ~param_assoc
+		  fname args
+	      in
 	      let call = make_guarded_app e#mark UserCall e#pos fname args in
 	      let call = 
-		if req = LTrue || not (safety_checking()) then 
+		if pre = LTrue || not (safety_checking()) then 
 		  call
 		else
 		  make_check ~mark:e#mark (* ~kind:Separation *) e#pos 
-		    (Assert(req,call))
+		    (Assert(pre,call))
 	      in
               let arg_types_assert =
 		List.fold_right
@@ -2565,6 +2566,8 @@ let assume_in_postcondition b post =
 	  assertion ~global_assertion:false ~relocate:true LabelOld LabelOld a
 	in
 	make_impl a' post
+
+let function_prototypes = Hashtbl.create 0 
   
 let tr_fun f funpos spec body acc =
 
@@ -2782,7 +2785,9 @@ let tr_fun f funpos spec body acc =
       annot_fun_parameters 
 	f.jc_fun_info_parameters write_params read_params annot_type 
     in
-    Param(false, f.jc_fun_info_final_name ^ "_requires", fun_type) :: acc
+    let newid = f.jc_fun_info_final_name ^ "_requires" in
+    Hashtbl.add function_prototypes newid fun_type;
+    Param(false, newid, fun_type) :: acc
   in
   let acc = (* function declaration without precondition *)
     let annot_type =
@@ -2794,7 +2799,9 @@ let tr_fun f funpos spec body acc =
       annot_fun_parameters 
 	f.jc_fun_info_parameters write_params read_params annot_type 
     in
-    Param(false, f.jc_fun_info_final_name, fun_type) :: acc
+    let newid = f.jc_fun_info_final_name in
+    Hashtbl.add function_prototypes newid fun_type;
+    Param(false, newid, fun_type) :: acc
   in
 
   (* Function body *)
@@ -2949,6 +2956,64 @@ let tr_fun f funpos spec body acc =
   reset_current_function ();
   acc
 
+let tr_specialized_fun n fname param_name_assoc acc =
+  
+  let rec modif_why_type = function
+    | Prod_type(n,t1,t2) ->
+	if StringMap.mem n param_name_assoc then
+	  modif_why_type t2
+	else Prod_type(n,t1,modif_why_type t2)
+    | Base_type b -> Base_type b
+    | Ref_type(t) -> Ref_type (modif_why_type t)
+    | Annot_type (pre,t,reads,writes,post,signals) ->
+	Annot_type (modif_assertion pre, modif_why_type t,
+		    modif_namelist reads,
+		    modif_namelist writes,
+		    modif_assertion post, 
+		    List.map (fun (x,a) -> (x,modif_assertion a)) signals)
+
+  and modif_assertion a = 
+    match a with
+      | LTrue 
+      | LFalse -> a
+      | LAnd(a1,a2) -> LAnd(modif_assertion a1,modif_assertion a2)
+      | LOr(a1,a2) -> LOr(modif_assertion a1,modif_assertion a2)
+      | LIff(a1,a2) -> LIff(modif_assertion a1,modif_assertion a2)
+      | LNot(a1) -> LNot(modif_assertion a1)
+      | LImpl(a1,a2) -> LImpl(modif_assertion a1,modif_assertion a2)
+      | LIf(t,a1,a2) -> LIf(modif_term t,modif_assertion a1,modif_assertion a2)
+      | LLet(id,t,a) -> LLet(id,modif_term t,modif_assertion a)
+      | LForall(id,t,a) -> LForall(id,t,modif_assertion a)
+      | LExists(id,t,a) -> LExists(id,t,modif_assertion a)
+      | LPred(id,l) -> LPred(id,List.map modif_term l)
+      | LNamed (n, a) -> LNamed (n, modif_assertion a)
+      
+  and modif_term t =
+    match t with
+      | LConst(c) -> t
+      | LApp(id,l) -> LApp(id,List.map modif_term l)
+      | LVar(id) -> 
+	  let id = StringMap.find_or_default id id param_name_assoc in
+	  LVar id
+      | LVarAtLabel(id,l) -> 
+	  let id = StringMap.find_or_default id id param_name_assoc in
+	  LVarAtLabel(id,l)
+      | Tnamed(n,t) -> Tnamed(n,modif_term t)
+      | TIf(t1,t2,t3) -> 
+	  TIf(modif_term t1,modif_term t2,modif_term t3)
+
+  and modif_namelist names =
+    fst (List.fold_right 
+	   (fun id (acc,set) -> 
+	      let id = StringMap.find_or_default id id param_name_assoc in
+	      id :: acc, StringSet.add id set
+	   ) names ([],StringSet.empty))
+  in
+
+  let fun_type = Hashtbl.find function_prototypes fname in
+  let new_fun_type = modif_why_type fun_type in
+  Param(false, n, new_fun_type) :: acc
+
 
 (******************************************************************************)
 (*                               Logic entities                               *)
@@ -2956,10 +3021,11 @@ let tr_fun f funpos spec body acc =
 
 let tr_logic_type id acc = Type(id,[]) :: acc
 
-let tr_axiom id is_axiom a acc =
+let tr_axiom id is_axiom labels a acc =
+  let lab = match labels with [lab] -> lab | _ -> LabelHere in
   let ef = Jc_effect.assertion empty_effects a in
   let a' = 
-    assertion ~global_assertion:true ~relocate:false LabelHere LabelHere a
+    assertion ~global_assertion:true ~relocate:false lab lab a
   in
   let params = tmodel_parameters ~label_in_name:true ef in
   let a' = List.fold_right (fun (n,ty') a' -> LForall(n,ty',a')) params a' in

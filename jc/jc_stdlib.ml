@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_stdlib.ml,v 1.6 2008-08-13 13:24:01 moy Exp $ *)
+(* $Id: jc_stdlib.ml,v 1.7 2008-08-13 16:36:27 moy Exp $ *)
 
 module List = struct
   include List
@@ -45,6 +45,15 @@ module List = struct
 		       if f k k' then Some v' else None
 		   | Some v -> Some v
 	      ) None l
+
+  let all_pairs l =
+    let rec aux acc = function
+      | e :: l ->
+	  let acc = fold_left (fun acc e' -> (e,e') :: acc) acc l in
+	  aux acc l
+      | [] -> acc
+    in
+    aux [] l
 
 end
 

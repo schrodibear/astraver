@@ -831,12 +831,58 @@ let write_read_separation_condition
 		in
 		assert (loclist <> []);
 		assert (loclist' <> []);
-		let req = separation_condition loclist loclist' in
-		make_and req acc
+		let pre = separation_condition loclist loclist' in
+		make_and pre acc
 	      else acc
 	   ) acc writes
        else acc
     ) LTrue reads
+
+let print_memory fmt (mc,r) =
+  Format.fprintf fmt "(%a,%a)" Jc_output_misc.memory_class mc Region.print r
+
+let write_write_separation_condition 
+    ~callee_reads ~callee_writes ~region_assoc ~param_assoc
+    ww_inter_names writes reads =
+  let writes = 
+    List.filter 
+      (fun ((mc,distr),(v,_ty)) -> 
+	 let n = var_name' v in
+	 StringSet.mem n ww_inter_names
+      ) writes 
+  in
+  let write_pairs = List.all_pairs writes in
+  List.fold_left
+    (fun acc (((mc,distr),(v,_ty)), ((mc',distr'),(v',_ty'))) ->
+       let n = var_name' v in
+       let n' = var_name' v' in
+       if n = n' then
+	 (* There is a write/write interference on this memory *)
+	 let rw_raw_mems =
+	   MemorySet.of_list
+	     (MemoryMap.keys callee_reads.jc_effect_raw_memories
+	      @ MemoryMap.keys callee_writes.jc_effect_raw_memories)
+	 in
+	 let rw_precise_mems =
+	   LocationSet.of_list
+	     (LocationMap.keys callee_reads.jc_effect_precise_memories
+	      @ 
+	      LocationMap.keys callee_writes.jc_effect_precise_memories)
+	 in
+	 let loclist =
+	   transpose_location_list ~region_assoc ~param_assoc
+	     rw_raw_mems rw_precise_mems (mc,distr)
+	 in
+	 let loclist' =
+	   transpose_location_list ~region_assoc ~param_assoc
+	     rw_raw_mems rw_precise_mems (mc',distr')
+	 in
+	 assert (loclist <> []);
+	 assert (loclist' <> []);
+	 let pre = separation_condition loclist loclist' in
+	 make_and pre acc
+       else acc
+    ) LTrue write_pairs
 
 
 (******************************************************************************)
@@ -1191,7 +1237,10 @@ let tag_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   in
   (List.map fst writes), (List.map fst reads)
 
-let memory_arguments ~callee_reads ~callee_writes ~region_assoc ~param_assoc =
+let specialized_functions = Hashtbl.create 0 
+
+let memory_arguments 
+    ~callee_reads ~callee_writes ~region_assoc ~param_assoc fname =
   let writes = 
     memory_detailed_writes ~mode:MParam ~callee_writes ~region_assoc
   in
@@ -1206,7 +1255,7 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc ~param_assoc =
     StringSet.inter 
       (StringSet.of_list write_names) (StringSet.of_list read_names) 
   in
-  let req =
+  let rw_pre =
     if StringSet.is_empty rw_inter_names then
       LTrue (* no read/write interference *)
     else
@@ -1218,8 +1267,59 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc ~param_assoc =
      there is an interference. see, e.g., example [separation.c] in Jessie 
      tests.
   *)
-  (* TODO: Check if there are duplicates between writes *)
-  req, (List.map (fst $ snd) writes), (List.map (fst $ snd) reads)
+  (* Check if there are duplicates between writes *)
+  let ww_inter_names = 
+    snd (List.fold_left 
+	   (fun (first_occur,next_occur) n ->
+	      if StringSet.mem n first_occur then
+		first_occur, StringSet.add n next_occur
+	      else StringSet.add n first_occur, next_occur
+	   ) (StringSet.empty,StringSet.empty) write_names)
+  in
+  let ww_pre =
+    if StringSet.is_empty ww_inter_names then
+      LTrue (* no write/write interference *)
+    else
+      write_write_separation_condition 
+	~callee_reads ~callee_writes ~region_assoc ~param_assoc
+	ww_inter_names writes reads
+  in
+  let pre = make_and rw_pre ww_pre in
+  if pre = LTrue then 
+    let writes = List.map (fst $ snd) writes in
+    let reads = List.map (fst $ snd) reads in
+    LTrue, fname, writes, reads
+  else 
+    (* Presence of interferences. Function must be specialized. *)
+    let new_fname = unique_name (fname ^ "_specialized") in
+    let writes, name_assoc, already_used_names = 
+      List.fold_right 
+	(fun ((mc,distr),(v,_ty)) (acc,name_assoc,already_used_names) ->
+	   let n = var_name' v in
+	   if StringMap.mem n already_used_names then
+	     let ndest = StringMap.find n already_used_names in
+	     let nsrc = memory_name (mc,distr) in
+	     acc, StringMap.add nsrc ndest name_assoc, already_used_names
+	   else
+	     let ndest = memory_name (mc,distr) in
+	     v :: acc, name_assoc, StringMap.add n ndest already_used_names
+	) writes ([], StringMap.empty, StringMap.empty)
+    in
+    let reads, name_assoc, _ = 
+      List.fold_right 
+	(fun ((mc,distr),(v,_ty)) (acc,name_assoc,already_used_names) ->
+	   let n = var_name' v in
+	   if StringMap.mem n already_used_names then
+	     let ndest = StringMap.find n already_used_names in
+	     let nsrc = memory_name (mc,distr) in
+	     acc, StringMap.add nsrc ndest name_assoc, already_used_names
+	   else
+	     let ndest = memory_name (mc,distr) in
+	     v :: acc, name_assoc, StringMap.add n ndest already_used_names
+	) reads ([], name_assoc, already_used_names)
+    in
+    Hashtbl.add specialized_functions new_fname (fname,name_assoc);
+    pre, new_fname, writes, reads
   
 let global_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = global_writes ~callee_writes in
@@ -1227,15 +1327,16 @@ let global_arguments ~callee_reads ~callee_writes ~region_assoc =
   (List.map fst writes), (List.map fst reads)
 
 let make_arguments 
-    ~callee_reads ~callee_writes ~region_assoc ~param_assoc args =
+    ~callee_reads ~callee_writes ~region_assoc ~param_assoc fname args =
   let write_allocs, read_allocs = 
     alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in
   let write_tags, read_tags = 
     tag_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in
-  let req_mems, write_mems, read_mems = 
-    memory_arguments ~callee_reads ~callee_writes ~region_assoc ~param_assoc
+  let pre_mems, fname, write_mems, read_mems = 
+    memory_arguments 
+      ~callee_reads ~callee_writes ~region_assoc ~param_assoc fname
   in
   let write_globs, read_globs = 
     global_arguments ~callee_reads ~callee_writes ~region_assoc
@@ -1247,7 +1348,7 @@ let make_arguments
     @ write_allocs @ write_tags @ write_mems @ write_globs
     @ read_allocs @ read_tags @ read_mems @ read_globs
   in
-  req_mems, args
+  pre_mems, fname, args
 
 let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
   MemoryMap.fold

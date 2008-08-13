@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.22 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.23 2008-08-13 16:36:27 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -159,6 +159,18 @@ let unpack_name st =
   "unpack_"^(root_name st)
 
 let fully_packed_name = "fully_packed"
+
+let unique_name =
+  let unique_names = Hashtbl.create 127 in
+  function s ->
+    try
+      let s = if s = "" then "unnamed" else s in
+      let count = Hashtbl.find unique_names s in
+      incr count;
+      s ^ "_" ^ (string_of_int !count)
+    with Not_found ->
+      Hashtbl.add unique_names s (ref 0); s
+
 
 (*
 Local Variables: 

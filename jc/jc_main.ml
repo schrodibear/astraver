@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.117 2008-08-10 00:28:10 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.118 2008-08-13 16:36:27 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
@@ -296,7 +296,7 @@ let main () =
     let d_axioms = 
       Hashtbl.fold 
 	(fun id (is_axiom,labels,p) acc ->
-	   Jc_interp.tr_axiom id is_axiom (* labels *) p acc)
+	   Jc_interp.tr_axiom id is_axiom labels p acc)
 	Jc_typing.axioms_table
 	d_lfuns
     in	       
@@ -318,6 +318,13 @@ let main () =
 	   Jc_interp.tr_fun f loc s b acc)
 	Jc_typing.functions_table
 	d_axioms
+    in
+    let d_funs =
+      Hashtbl.fold 
+	(fun n (fname,param_name_assoc) acc ->
+	   Jc_interp.tr_specialized_fun n fname param_name_assoc acc)
+	Jc_interp_misc.specialized_functions
+	d_funs
     in
     let d_inv =
       if !Jc_options.inv_sem = InvOwnership then
