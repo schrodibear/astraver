@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.124 2008-08-13 13:24:01 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.125 2008-08-14 11:14:20 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -386,7 +386,7 @@ and immutable_location_set fef locs =
   match locs#node with
     | JCLSvar v -> not v.jc_var_info_assigned
     | JCLSderef(locs,lab,fi,r) ->
-	let mc = lderef_mem_class locs fi in
+	let mc = lderef_mem_class ~type_safe:false locs fi in
 	immutable_location_set fef locs 
 	&& not (MemoryMap.mem (mc,locs#region) fef.jc_writes.jc_effect_memories)
     | _ -> false
@@ -473,7 +473,7 @@ let rec single_term ef t =
 	true,
 	ef_union ef_app ef
     | JCTderef(t1,lab,fi) ->
-	let mc = tderef_mem_class t1 fi in
+	let mc = tderef_mem_class ~type_safe:false t1 fi in
 	let mem = mc, t1#region in
 	begin match term_immutable_location t with
 	  | Some loc ->
@@ -562,7 +562,7 @@ let single_location ~in_assigns fef loc =
 	    add_global_reads lab fef v
 	else fef
     | JCLderef(locs,lab,fi,r) ->
-	let mc = lderef_mem_class locs fi in
+	let mc = lderef_mem_class ~type_safe:false locs fi in
 	if in_assigns then
 	  add_memory_writes lab fef (mc,locs#region)
 	else
@@ -581,7 +581,7 @@ let single_location_set fef locs =
 	  add_global_reads lab fef v
 	else fef
     | JCLSderef(locs,lab,fi,r) ->
-	let mc = lderef_mem_class locs fi in
+	let mc = lderef_mem_class ~type_safe:false locs fi in
 	add_memory_reads lab fef (mc,locs#region)
     | JCLSrange(locs,_t1_opt,_t2_opt) ->
 	fef

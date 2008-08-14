@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.24 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.25 2008-08-14 11:14:20 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -167,7 +167,7 @@ let expr rresult e =
        | JCElet(_,None,_) ->
 	   ()
        | JCElet(vi,Some e,_) | JCEassign_var(vi,e) ->
-	Region.unify vi.jc_var_info_region e#region
+	   Region.unify vi.jc_var_info_region e#region
     | JCEassign_heap(e1,fi,e2) ->
 	let fr = Region.make_field e1#region fi in
 	Region.unify fr e2#region

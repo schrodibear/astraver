@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.18 2008-08-13 09:31:14 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.19 2008-08-14 11:14:20 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -234,11 +234,6 @@ struct
 	jc_reg_type = ty;
       }
 
-  let bitwise r = r.jc_reg_bitwise
-
-  let make_bitwise r =
-    r.jc_reg_bitwise <- true
-	
   let print fmt r =
     fprintf fmt "%s" r.jc_reg_final_name
 
@@ -246,6 +241,16 @@ struct
     fprintf fmt "%a" (print_list comma 
       (fun fmt (r1,r2) -> fprintf fmt "%a->%a" print r1 print r2)) assocl
 
+  let bitwise r = (RegionUF.repr r).jc_reg_bitwise
+
+  let make_bitwise r =
+    if !Jc_common_options.separation_sem = SepNone then 
+      (* Potentially all pointers may be aliased *)
+      (assert (is_dummy_region r);
+       r.jc_reg_bitwise <- true)
+    else
+      r.jc_reg_bitwise <- true
+	
   let equal r1 r2 =
     InternalRegion.equal (RegionUF.repr r1) (RegionUF.repr r2)
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.338 2008-08-13 16:36:27 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.339 2008-08-14 11:14:20 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -323,7 +323,7 @@ let pred_bin_op: pred_bin_op -> string = function
 (*                                 Coercions                                  *)
 (******************************************************************************)
 
-let term_coerce ~global_assertion lab ?(cast=false) pos ty_dst ty_src e e' =
+let term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src e e' =
   match ty_dst, ty_src with
       (* identity *)
     | JCTnative t, JCTnative u when t = u -> e'
@@ -530,9 +530,9 @@ let bind_pattern_lets body =
   pattern_lets := [];
   binds
 
-let rec term ~global_assertion ~relocate lab oldlab t =
-  let ft = term ~global_assertion ~relocate lab oldlab in
-  let term_coerce = term_coerce ~global_assertion lab in
+let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
+  let ft = term ~type_safe ~global_assertion ~relocate lab oldlab in
+  let term_coerce = term_coerce ~type_safe ~global_assertion lab in
   let t' = match t#node with
     | JCTconst JCCnull -> LVar "null"
     | JCTvar v -> tvar ~label_in_name:global_assertion lab v
@@ -562,7 +562,7 @@ let rec term ~global_assertion ~relocate lab oldlab t =
         let t3' = ft t3 in
         TIf(t1', t2', t3')
     | JCToffset(k,t1,st) -> 
-	let ac = tderef_alloc_class t1 in
+	let ac = tderef_alloc_class ~type_safe t1 in
         let alloc = 
 	  talloc_table_var ~label_in_name:global_assertion lab (ac,t1#region) 
 	in
@@ -618,7 +618,7 @@ let rec term ~global_assertion ~relocate lab oldlab t =
               term_coerce t1#pos integer_type t1#typ t1 t1'
 	end
     | JCTderef(t1,lab,fi) -> 
-	let mc = tderef_mem_class t1 fi in
+	let mc = tderef_mem_class ~type_safe t1 fi in
 	begin match mc with
 	  | JCmem_field fi' -> 
 	      assert (fi.jc_field_info_tag = fi'.jc_field_info_tag);
@@ -700,10 +700,10 @@ let rec term ~global_assertion ~relocate lab oldlab t =
 	  f args
     | JCTold t1 -> 
 	let lab = if relocate && oldlab = LabelHere then lab else oldlab in
-	term ~global_assertion ~relocate lab oldlab t1
+	term ~type_safe ~global_assertion ~relocate lab oldlab t1
     | JCTat(t1,lab') -> 
 	let lab = if relocate && lab' = LabelHere then lab else lab' in
-	term ~global_assertion ~relocate lab oldlab t1
+	term ~type_safe ~global_assertion ~relocate lab oldlab t1
     | JCTrange(t1,t2) -> assert false (* TODO ? *)
     | JCTmatch(t, ptl) ->
         let t' = ft t in
@@ -721,8 +721,8 @@ let rec term ~global_assertion ~relocate lab oldlab t =
 
 let () = ref_term := term
 
-let named_term lab oldlab t =
-  let t' = term ~global_assertion:false ~relocate:false lab oldlab t in
+let named_term ~type_safe ~global_assertion ~relocate lab oldlab t =
+  let t' = term ~type_safe ~global_assertion ~relocate lab oldlab t in
   match t' with
     | Tnamed _ -> t'
     | _ -> 
@@ -734,19 +734,19 @@ let named_term lab oldlab t =
 (*                                assertions                                  *)
 (******************************************************************************)
 
-let tag ~global_assertion ~relocate lab oldlab tag= 
+let tag ~type_safe ~global_assertion ~relocate lab oldlab tag= 
   match tag#node with
     | JCTtag st -> LVar (tag_name st)
     | JCTbottom -> LVar "bottom_tag"
     | JCTtypeof(t,st) ->
-	let t' = term ~global_assertion ~relocate lab oldlab t in
+	let t' = term ~type_safe ~global_assertion ~relocate lab oldlab t in
 	make_typeof st t#region t'
 
-let rec assertion ~global_assertion ~relocate lab oldlab a =
-  let fa = assertion ~global_assertion ~relocate lab oldlab in
-  let ft = term ~global_assertion ~relocate lab oldlab in
-  let ftag = tag ~global_assertion ~relocate lab oldlab in
-  let term_coerce = term_coerce ~global_assertion lab in
+let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
+  let fa = assertion ~type_safe ~global_assertion ~relocate lab oldlab in
+  let ft = term ~type_safe ~global_assertion ~relocate lab oldlab in
+  let ftag = tag ~type_safe ~global_assertion ~relocate lab oldlab in
+  let term_coerce = term_coerce ~type_safe ~global_assertion lab in
   let a' = match a#node with
     | JCAtrue -> LTrue
     | JCAfalse -> LFalse
@@ -814,10 +814,10 @@ let rec assertion ~global_assertion ~relocate lab oldlab a =
                 fa a1)
     | JCAold a1 -> 
 	let lab = if relocate && oldlab = LabelHere then lab else oldlab in
-	assertion ~global_assertion ~relocate lab oldlab a1
+	assertion ~type_safe ~global_assertion ~relocate lab oldlab a1
     | JCAat(a1,lab') -> 
 	let lab = if relocate && lab' = LabelHere then lab else lab' in
-	assertion ~global_assertion ~relocate lab oldlab a1
+	assertion ~type_safe ~global_assertion ~relocate lab oldlab a1
     | JCAbool_term t1 ->
         let t1' = ft t1 in
         LPred("eq",[ t1'; LConst(Prim_bool true) ])
@@ -856,9 +856,9 @@ let mark_assertion pos a' =
     | LNamed _ -> a'
     | _ -> LNamed(reg_check pos, a')
             
-let named_assertion lab oldlab a =
+let named_assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
   let a' = 
-    assertion ~global_assertion:false ~relocate:false lab oldlab a 
+    assertion ~type_safe ~global_assertion ~relocate lab oldlab a 
   in
   mark_assertion a#pos a'
 
@@ -867,10 +867,10 @@ let named_assertion lab oldlab a =
 (*                                  Locations                                 *)
 (******************************************************************************)
 
-let rec pset ~global_assertion before loc = 
-  let fpset = pset ~global_assertion before in
-  let ft = term ~global_assertion ~relocate:false before before in
-  let term_coerce = term_coerce ~global_assertion before in
+let rec pset ~type_safe ~global_assertion before loc = 
+  let fpset = pset ~type_safe ~global_assertion before in
+  let ft = term ~type_safe ~global_assertion ~relocate:false before before in
+  let term_coerce = term_coerce ~type_safe ~global_assertion before in
   match loc#node with
     | JCLSderef(ls,lab,fi,r) ->
         let m = tmemory_var ~label_in_name:global_assertion lab 
@@ -903,10 +903,10 @@ let rec pset ~global_assertion before loc =
               term_coerce a#pos integer_type a#typ a a'; 
               term_coerce b#pos integer_type b#typ b b'])
         
-let rec collect_locations ~global_assertion before (refs,mems) loc =
+let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
   match loc#node with
     | JCLderef(e,lab,fi,fr) -> 
-        let iloc = pset ~global_assertion lab e in
+        let iloc = pset ~type_safe ~global_assertion lab e in
         let mc = 
 (*           if field_of_union fi then FVvariant (union_of_field fi) else *)
 	  JCmem_field fi
@@ -922,16 +922,16 @@ let rec collect_locations ~global_assertion before (refs,mems) loc =
         let var = vi.jc_var_info_final_name in
         (StringMap.add var true refs,mems)
     | JCLat(loc,lab) ->
-        collect_locations ~global_assertion before (refs,mems) loc
+        collect_locations ~type_safe ~global_assertion before (refs,mems) loc
 
-let rec collect_pset_locations ~global_assertion loc =
+let rec collect_pset_locations ~type_safe ~global_assertion loc =
   match loc#node with
     | JCLderef(e,lab,fi,fr) -> 
-        pset ~global_assertion lab e
+        pset ~type_safe ~global_assertion lab e
     | JCLvar vi -> 
 	LVar "pset_empty"
     | JCLat(loc,lab) ->
-        collect_pset_locations ~global_assertion loc
+        collect_pset_locations ~type_safe ~global_assertion loc
 
 let assigns before ef locs loc =
   match locs with
@@ -955,7 +955,7 @@ let assigns before ef locs loc =
       ef.jc_writes.jc_effect_memories MemoryMap.empty 
   in
   let refs,mems = 
-    List.fold_left (collect_locations ~global_assertion:false before) (refs,mems) locs
+    List.fold_left (collect_locations ~type_safe:false ~global_assertion:false before) (refs,mems) locs
   in
   let a =
     StringMap.fold
@@ -976,13 +976,13 @@ let assigns before ef locs loc =
 	  LNamed(reg_check loc,a))
     ) mems a
 
-let reads ~global_assertion locs (mc,r) =
+let reads ~type_safe ~global_assertion locs (mc,r) =
   let refs = StringMap.empty
   in
   let mems = MemoryMap.empty 
   in
   let refs,mems = 
-    List.fold_left (collect_locations ~global_assertion LabelOld) (refs,mems) locs
+    List.fold_left (collect_locations ~type_safe ~global_assertion LabelOld) (refs,mems) locs
   in
   let p = try MemoryMap.find (mc,r) mems with Not_found -> [] in
   location_list' p
@@ -1223,7 +1223,7 @@ and make_upd mark pos e1 fi e2 =
   (* Value assigned stored in temporary at that point *)
   let v2 = match e2#node with JCEvar v2 -> v2 | _ -> assert false in
   let tmp2 = v2.jc_var_info_name in
-  (* Dispatch depending on kind of memory *)
+  (* Dispatch depending on kind of memory *) 
   let mc = deref_mem_class e1 fi in
   match mc with
     | JCmem_field _fi -> 
@@ -1773,18 +1773,25 @@ and expr e =
           (pack_name st) [ e1'; Var (tag_name from_st) ]
     | JCEassert(b,a) -> 
 	if compatible_with_current_behavior b then
-          Assert(named_assertion LabelHere LabelPre a,Void)
+          Assert(named_assertion 
+		   ~type_safe:false ~global_assertion:false ~relocate:false
+		   LabelHere LabelPre a,Void)
 	else Void
     | JCEloop(la,e1) ->
 	let inv = 
 	  List.filter (compatible_with_current_behavior $ fst) 
 	    la.jc_loop_invariant
 	in
-        let inv = List.map (named_assertion LabelHere LabelPre $ snd) inv in
+        let inv = 
+	  List.map (named_assertion 
+		      ~type_safe:false ~global_assertion:false ~relocate:false
+		      LabelHere LabelPre $ snd) inv in
 	let inv = make_and_list inv in
 	(* free invariant: trusted or not *)
         let free_inv = 
-	  named_assertion LabelHere LabelPre la.jc_free_loop_invariant 
+	  named_assertion 
+	    ~type_safe:false ~global_assertion:false ~relocate:false
+	    LabelHere LabelPre la.jc_free_loop_invariant 
         in
         let inv = if Jc_options.trust_ai then inv else make_and inv free_inv in
 	(* loop assigns  *)
@@ -1824,9 +1831,13 @@ and expr e =
 	(* final generation, depending on presence of variant or not *)
         begin match la.jc_loop_variant with
           | Some t when safety_checking () ->
-              let variant = named_term LabelHere LabelPre t in
+              let variant = 
+		named_term 
+		  ~type_safe:false ~global_assertion:false ~relocate:false
+		  LabelHere LabelPre t 
+	      in
 	      let variant = 
-		term_coerce ~global_assertion:false LabelHere
+		term_coerce ~type_safe:false ~global_assertion:false LabelHere
 		  t#pos integer_type t#typ t variant 
 	      in
               While(Cte(Prim_bool true), inv, Some (variant,None), body)
@@ -1842,7 +1853,8 @@ and expr e =
 	      assert (b.jc_behavior_assumes = None);
 	      assert (b.jc_behavior_assigns = None);
 	      let a = 
-		assertion ~global_assertion:false ~relocate:false 
+		assertion 
+		  ~type_safe:false ~global_assertion:false ~relocate:false 
 		  LabelHere LabelOld b.jc_behavior_ensures
 	      in
 	      Triple(true,LTrue,expr e,a,[])
@@ -2161,7 +2173,7 @@ let tr_struct st acc =
 (*     match init with *)
 (*       | None -> decl *)
 (*       | Some(t,ty) -> *)
-(*           let t' = term ~global_assertion:true ~relocate:false LabelHere LabelHere t in *)
+(*           let t' = term ~type_safe ~global_assertion:true ~relocate:false LabelHere LabelHere t in *)
 (*           let vi_ty = vi.jc_var_info_type in *)
 (*           let t_ty = t#typ in *)
 (*           (\* eprintf "logic const: max type = %a@." print_type ty; *\) *)
@@ -2183,9 +2195,13 @@ let tr_logic_fun f ta acc =
   let lab = 
     match f.jc_logic_info_labels with [lab] -> lab | _ -> LabelHere
   in
-  let fa = assertion ~global_assertion:true ~relocate:false lab lab in
-  let ft = term ~global_assertion:true ~relocate:false lab lab in
-  let term_coerce = term_coerce ~global_assertion:true lab in
+  let fa = 
+    assertion ~type_safe:true ~global_assertion:true ~relocate:false lab lab 
+  in
+  let ft =
+    term ~type_safe:true ~global_assertion:true ~relocate:false lab lab 
+  in
+  let term_coerce = term_coerce ~type_safe:true ~global_assertion:true lab in
   let params =
     List.map (tparam ~label_in_name:true lab) f.jc_logic_info_parameters
   in  
@@ -2276,7 +2292,9 @@ let tr_logic_fun f ta acc =
 	       memory_params_reads
 	   in
 	   let zonety,basety = deconstruct_memory_type_args paramty in
-	   let pset = reads ~global_assertion:true pset (mc,r) in
+	   let pset = 
+	     reads ~type_safe:true ~global_assertion:true pset (mc,r) 
+	   in
 	   let sepa = LNot(LPred("in_pset",[LVar "tmp";pset])) in
 	   let update_params = 
              List.map (fun name ->
@@ -2333,7 +2351,9 @@ let tr_logic_fun f ta acc =
 	       memory_params_reads
 	   in
 	   let zonety,basety = deconstruct_memory_type_args paramty in
-	   let pset = reads ~global_assertion:true pset (mc,r) in
+	   let pset = 
+	     reads ~type_safe:true ~global_assertion:true pset (mc,r) 
+	   in
 	   let sepa = LPred("pset_disjoint",[LVar "tmp";pset]) in
 	   let upda = 
 	     LPred("not_assigns",[LVar "tmpalloc"; LVar (fst param);
@@ -2382,7 +2402,7 @@ let tr_logic_fun f ta acc =
   (* alloc_extend axioms *)
   let acc = match ta with JCAssertion _ | JCTerm _ -> acc | JCReads ps ->
     let alloc_params_reads = 
-      Jc_interp_misc.talloc_table_params ~label_in_name:true f.jc_logic_info_effects
+      talloc_table_params ~label_in_name:true f.jc_logic_info_effects
     in
     let params_names = List.map fst params in
     let normal_params = List.map (fun name -> LVar name) params_names in
@@ -2394,7 +2414,8 @@ let tr_logic_fun f ta acc =
 	   LPred("alloc_extends",[LVar (fst param); LVar "tmpalloc"])
 	 in
 	 let ps = 
-	   List.map (collect_pset_locations ~global_assertion:true) ps 
+	   List.map 
+	     (collect_pset_locations ~type_safe:true ~global_assertion:true) ps
 	 in
 	 let ps = location_list' ps in
 	 let valida =
@@ -2520,7 +2541,7 @@ let excep_posts_for_others exc_opt excep_behaviors =
          | None -> (exception_name exc, LTrue) :: acc
     ) excep_behaviors []
     
-let fun_parameters params write_params read_params =
+let fun_parameters ~type_safe params write_params read_params =
   let write_params = 
     List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) write_params
   in
@@ -2528,7 +2549,10 @@ let fun_parameters params write_params read_params =
     List.map (fun (n,ty') -> (n,Base_type ty')) read_params
   in
   let params = 
-    List.map (fun v -> let n,ty' = param v in (n, Base_type ty')) params
+    List.map (fun v ->
+		let n,ty' = param ~type_safe v in
+		(n, Base_type ty')
+	     ) params
   in
   let params = params @ write_params @ read_params in
   match params with
@@ -2536,7 +2560,7 @@ let fun_parameters params write_params read_params =
     | _ -> params
 
 let annot_fun_parameters params write_params read_params annot_type =
-  let params = fun_parameters params write_params read_params in
+  let params = fun_parameters ~type_safe:true params write_params read_params in
   List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
     params annot_type
        
@@ -2553,7 +2577,7 @@ let assume_in_precondition b pre =
     | None -> pre
     | Some a ->
 	let a' = 
-	  assertion ~global_assertion:false ~relocate:false
+	  assertion ~type_safe:false ~global_assertion:false ~relocate:false
 	    LabelHere LabelHere a
 	in
 	make_and a' pre
@@ -2563,7 +2587,8 @@ let assume_in_postcondition b post =
     | None -> post
     | Some a ->
 	let a' = 
-	  assertion ~global_assertion:false ~relocate:true LabelOld LabelOld a
+	  assertion ~type_safe:false ~global_assertion:false ~relocate:true 
+	    LabelOld LabelOld a
 	in
 	make_impl a' post
 
@@ -2571,24 +2596,40 @@ let function_prototypes = Hashtbl.create 0
   
 let tr_fun f funpos spec body acc =
 
-  (* requirement for calling the function and extra requirement 
-     for analyzing it *)
+  (* precondition for calling the function and extra one for analyzing it *)
 
-  let requires = 
-    named_assertion LabelHere LabelHere spec.jc_fun_requires
+  let external_requires = 
+    named_assertion ~type_safe:true ~global_assertion:false ~relocate:false
+      LabelHere LabelHere spec.jc_fun_requires
+  in
+  let external_requires = 
+    if Jc_options.trust_ai then 
+      external_requires
+    else
+      let free_requires = 
+	named_assertion ~type_safe:true ~global_assertion:false ~relocate:false
+	  LabelHere LabelHere spec.jc_fun_free_requires
+      in 
+      make_and external_requires free_requires
+  in
+
+  let internal_requires = 
+    named_assertion ~type_safe:false ~global_assertion:false ~relocate:false
+      LabelHere LabelHere spec.jc_fun_requires
   in
   let free_requires = 
-    named_assertion LabelHere LabelHere spec.jc_fun_free_requires
+    named_assertion ~type_safe:false ~global_assertion:false ~relocate:false 
+      LabelHere LabelHere spec.jc_fun_free_requires
   in
-  let extra_requires = make_and requires free_requires in
-  let requires = if Jc_options.trust_ai then requires else extra_requires in
-  let extra_requires =
+  let internal_requires = make_and internal_requires free_requires in
+  let internal_requires =
     List.fold_left 
       (fun acc v ->
          let req = match v.jc_var_info_type with
            | JCTpointer(pc,n1o,n2o) ->
+	       (* TODO: what about bitwise? *)
                let v' = 
-                 term ~global_assertion:false ~relocate:false
+                 term ~type_safe:false ~global_assertion:false ~relocate:false
 		   LabelHere LabelHere (new term_var v) 
                in
                begin match n1o, n2o with
@@ -2604,7 +2645,7 @@ let tr_fun f funpos spec body acc =
            | JCTtype_var _ -> LTrue
 	 in
 	 make_and req acc
-      ) extra_requires f.jc_fun_info_parameters
+      ) internal_requires f.jc_fun_info_parameters
   in
 
   (* partition behaviors as follows:
@@ -2617,7 +2658,11 @@ let tr_fun f funpos spec body acc =
        excep_behaviors_inferred, excep_behaviors) =
     List.fold_left
       (fun (safety,normal_inferred,normal,excep_inferred,excep) (pos,id,b) ->
-	 let post = named_assertion LabelPost LabelOld b.jc_behavior_ensures in
+	 let post = 
+	   named_assertion 
+	     ~type_safe:false ~global_assertion:false ~relocate:false 
+	     LabelPost LabelOld b.jc_behavior_ensures 
+	 in
          let post = match b.jc_behavior_assigns with
            | None -> post
            | Some(assigns_pos,loclist) ->
@@ -2684,40 +2729,60 @@ let tr_fun f funpos spec body acc =
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
+      ~params:f.jc_fun_info_parameters
   in
   let reads = 
     read_effects 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
+      ~params:f.jc_fun_info_parameters
   in
-  let write_params =
+  let external_write_params =
     write_parameters 
+      ~type_safe:true
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ?region_assoc:None
+      ~params:f.jc_fun_info_parameters
   in
-  let read_params =
-    read_parameters 
+  let internal_write_params =
+    write_parameters 
+      ~type_safe:false
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ?region_assoc:None
+      ~params:f.jc_fun_info_parameters
+  in
+  let external_read_params =
+    read_parameters 
+      ~type_safe:true
+      ~callee_reads:f.jc_fun_info_effects.jc_reads
+      ~callee_writes:f.jc_fun_info_effects.jc_writes
+      ~region_list:f.jc_fun_info_param_regions
+      ~params:f.jc_fun_info_parameters
+  in
+  let internal_read_params =
+    read_parameters 
+      ~type_safe:false
+      ~callee_reads:f.jc_fun_info_effects.jc_reads
+      ~callee_writes:f.jc_fun_info_effects.jc_writes
+      ~region_list:f.jc_fun_info_param_regions
+      ~params:f.jc_fun_info_parameters
   in
   let write_locals =
     write_locals 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ?region_assoc:None
+      ~params:f.jc_fun_info_parameters
   in
   let read_locals =
     read_locals 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ?region_assoc:None
+      ~params:f.jc_fun_info_parameters
   in
   let define_locals e' =
     let e' =
@@ -2777,13 +2842,13 @@ let tr_fun f funpos spec body acc =
   let param_excep_posts = excep_posts @ excep_posts_inferred in
   let acc = 
     let annot_type = (* function declaration with precondition *)
-      Annot_type(requires, ret_type,
+      Annot_type(external_requires, ret_type,
                  reads, writes, 
 		 param_normal_post, param_excep_posts)
     in
     let fun_type = 
-      annot_fun_parameters 
-	f.jc_fun_info_parameters write_params read_params annot_type 
+      annot_fun_parameters f.jc_fun_info_parameters 
+	external_write_params external_read_params annot_type 
     in
     let newid = f.jc_fun_info_final_name ^ "_requires" in
     Hashtbl.add function_prototypes newid fun_type;
@@ -2796,8 +2861,8 @@ let tr_fun f funpos spec body acc =
 		 param_normal_post, param_excep_posts)
     in
     let fun_type = 
-      annot_fun_parameters 
-	f.jc_fun_info_parameters write_params read_params annot_type 
+      annot_fun_parameters f.jc_fun_info_parameters 
+	external_write_params external_read_params annot_type 
     in
     let newid = f.jc_fun_info_final_name in
     Hashtbl.add function_prototypes newid fun_type;
@@ -2820,7 +2885,8 @@ let tr_fun f funpos spec body acc =
 
 	  (* parameters *)
 	  let params = 
-	    fun_parameters f.jc_fun_info_parameters write_params read_params 
+	    fun_parameters ~type_safe:false f.jc_fun_info_parameters 
+	      internal_write_params internal_read_params 
 	  in
 
 	  (* rename formals after parameters are computed and 
@@ -2882,7 +2948,7 @@ let tr_fun f funpos spec body acc =
                   newid,
                   Fun(
                     params,
-                    extra_requires,
+                    internal_requires,
                     safety_body,
                     safety_post,
                     excep_posts_for_others None excep_behaviors))
@@ -2913,7 +2979,7 @@ let tr_fun f funpos spec body acc =
                      newid,
                      Fun(
                        params,
-                       assume_in_precondition b extra_requires,
+                       assume_in_precondition b internal_requires,
                        normal_body,
                        post,
                        excep_posts_for_others None excep_behaviors))
@@ -2939,7 +3005,7 @@ let tr_fun f funpos spec body acc =
                         Def(newid,
                             Fun(
 			      params,
-                              assume_in_precondition b extra_requires,
+                              assume_in_precondition b internal_requires,
                               except_body,
                               LTrue,
                               (exception_name exc, post) :: 
@@ -3025,7 +3091,7 @@ let tr_axiom id is_axiom labels a acc =
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
   let ef = Jc_effect.assertion empty_effects a in
   let a' = 
-    assertion ~global_assertion:true ~relocate:false lab lab a
+    assertion ~type_safe:true ~global_assertion:true ~relocate:false lab lab a
   in
   let params = tmodel_parameters ~label_in_name:true ef in
   let a' = List.fold_right (fun (n,ty') a' -> LForall(n,ty',a')) params a' in

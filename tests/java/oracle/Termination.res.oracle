@@ -402,22 +402,22 @@ begin = 8
 end = 23
 
 [JC_4]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_5]
 file = "HOME/tests/java/Termination.jc"
 line = 28
 begin = 8
 end = 23
 
-[JC_5]
-file = "HOME/tests/java/Termination.java"
-line = 34
-begin = 9
-end = 14
-
 [JC_6]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Termination.jc"
+line = 28
+begin = 8
+end = 23
 
 [Termination_loop3_ensures_default]
 name = "Method loop3"
@@ -434,16 +434,16 @@ begin = 9
 end = 14
 
 [JC_8]
-file = "HOME/tests/java/Termination.java"
-line = 35
-begin = 5
-end = 20
-
-[JC_9]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_9]
+file = "HOME/tests/java/Termination.java"
+line = 34
+begin = 9
+end = 14
 
 [Termination_loop2_safety]
 name = "Method loop2"
@@ -454,52 +454,52 @@ begin = 9
 end = 14
 
 [JC_10]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_11]
+file = "HOME/tests/java/Termination.java"
+line = 34
+begin = 9
+end = 14
+
+[JC_12]
+file = "HOME/tests/java/Termination.java"
+line = 35
+begin = 5
+end = 20
+
+[JC_13]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_14]
 file = "HOME/tests/java/Termination.java"
 line = 35
 begin = 18
 end = 19
 
-[JC_11]
-file = "HOME/tests/java/Termination.java"
-line = 39
-begin = 9
-end = 14
-
-[JC_12]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_13]
-file = "HOME/tests/java/Termination.java"
-line = 39
-begin = 9
-end = 14
-
-[JC_14]
-file = "HOME/tests/java/Termination.java"
-line = 40
-begin = 5
-end = 24
-
 [JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Termination.java"
+line = 39
+begin = 9
+end = 14
 
 [JC_16]
-file = "HOME/tests/java/Termination.java"
-line = 40
-begin = 18
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_17]
 file = "HOME/tests/java/Termination.java"
-line = 45
-begin = 8
-end = 13
+line = 39
+begin = 9
+end = 14
 
 [Termination_loop3_safety]
 name = "Method loop3"
@@ -517,45 +517,45 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/Termination.java"
+line = 39
+begin = 9
+end = 14
+
+[JC_20]
+file = "HOME/tests/java/Termination.java"
+line = 40
+begin = 5
+end = 24
+
+[JC_21]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_22]
+file = "HOME/tests/java/Termination.java"
+line = 40
+begin = 18
+end = 23
+
+[JC_23]
+file = "HOME/tests/java/Termination.java"
 line = 45
 begin = 8
 end = 13
 
-[JC_20]
-file = "HOME/tests/java/Termination.java"
-line = 44
-begin = 16
-end = 28
-
-[JC_21]
-file = "HOME/tests/java/Termination.java"
-line = 47
-begin = 20
-end = 33
-
-[JC_22]
+[JC_24]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_23]
-file = "HOME/tests/java/Termination.java"
-line = 48
-begin = 18
-end = 19
-
-[JC_24]
-file = "HOME/tests/java/Termination.java"
-line = 47
-begin = 20
-end = 33
 
 [JC_25]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Termination.java"
+line = 45
+begin = 8
+end = 13
 
 [JC_26]
 file = "HOME/"
@@ -564,12 +564,72 @@ begin = -1
 end = -1
 
 [JC_27]
+file = "HOME/tests/java/Termination.java"
+line = 45
+begin = 8
+end = 13
+
+[JC_28]
+file = "HOME/tests/java/Termination.java"
+line = 44
+begin = 16
+end = 28
+
+[JC_29]
+file = "HOME/tests/java/Termination.java"
+line = 47
+begin = 20
+end = 33
+
+[JC_30]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_28]
+[JC_31]
+file = "HOME/tests/java/Termination.java"
+line = 48
+begin = 18
+end = 19
+
+[JC_32]
+file = "HOME/tests/java/Termination.java"
+line = 47
+begin = 20
+end = 33
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_35]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_36]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_37]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_38]
 file = "HOME/"
 line = 0
 begin = -1
@@ -692,11 +752,11 @@ parameter Termination_loop2_requires :
 
 parameter Termination_loop3 :
  this_0:Object pointer ->
-  { } int reads Object_alloc_table { (JC_20: eq_int(result, (0))) }
+  { } int reads Object_alloc_table { (JC_28: eq_int(result, (0))) }
 
 parameter Termination_loop3_requires :
  this_0:Object pointer ->
-  { } int reads Object_alloc_table { (JC_20: eq_int(result, (0))) }
+  { } int reads Object_alloc_table { (JC_28: eq_int(result, (0))) }
 
 parameter alloc_Object :
  n:int ->
@@ -764,7 +824,7 @@ parameter cons_Termination_requires :
 parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_4:
+  { (JC_6:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
@@ -772,7 +832,7 @@ parameter non_null_Object :
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_4:
+  { (JC_6:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
@@ -786,7 +846,7 @@ let Termination_loop1_safety =
    begin
      try
       while true do
-      { invariant (JC_8: (true = true)) variant (JC_10 : mutable_n_1) }
+      { invariant (JC_12: (true = true)) variant (JC_14 : mutable_n_1) }
        try
         (let jessie_13 = begin
                            (if (K_4: ((gt_int_ !mutable_n_1) (0)))
@@ -829,8 +889,8 @@ let Termination_loop2_safety =
    begin
      try
       while true do
-      { invariant (JC_14: (true = true))
-        variant (JC_16 : sub_int((100), mutable_n_0_0)) }
+      { invariant (JC_20: (true = true))
+        variant (JC_22 : sub_int((100), mutable_n_0_0)) }
        try
         (let jessie_17 = begin
                            (if (K_8: ((lt_int_ !mutable_n_0_0) (100)))
@@ -875,7 +935,7 @@ let Termination_loop3_ensures_default =
      begin
        try
         while true do
-        { invariant (JC_24: (le_int((0), i) and le_int(i, (100))))  }
+        { invariant (JC_32: (le_int((0), i) and le_int(i, (100))))  }
          try
           (let jessie_25 = begin
                              (if (K_13: ((gt_int_ !i) (0)))
@@ -910,7 +970,7 @@ let Termination_loop3_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_20: eq_int(result, (0))) }
+  { (JC_28: eq_int(result, (0))) }
 
 let Termination_loop3_safety =
  fun (this_0 : Object pointer) ->
@@ -923,8 +983,8 @@ let Termination_loop3_safety =
      begin
        try
         while true do
-        { invariant (JC_21: (le_int((0), i) and le_int(i, (100))))
-          variant (JC_23 : i) }
+        { invariant (JC_29: (le_int((0), i) and le_int(i, (100))))
+          variant (JC_31 : i) }
          try
           (let jessie_21 = begin
                              (if (K_13: ((gt_int_ !i) (0)))
@@ -1943,25 +2003,25 @@ goal Termination_loop1_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
   forall mutable_n_1:int.
-  ("JC_8": (true = true)) ->
+  ("JC_12": (true = true)) ->
   (mutable_n_1 > 0) ->
   forall mutable_n_1_0:int.
   (mutable_n_1_0 = (mutable_n_1 - 1)) ->
-  (0 <= ("JC_10": mutable_n_1))
+  (0 <= ("JC_14": mutable_n_1))
 
 ========== file tests/java/why/Termination_po10.why ==========
 goal Termination_loop3_safety_po_1:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_21": (0 <= 100))
+  ("JC_29": (0 <= 100))
 
 ========== file tests/java/why/Termination_po11.why ==========
 goal Termination_loop3_safety_po_2:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_21": (100 <= 100))
+  ("JC_29": (100 <= 100))
 
 ========== file tests/java/why/Termination_po12.why ==========
 goal Termination_loop3_safety_po_3:
@@ -1969,11 +2029,11 @@ goal Termination_loop3_safety_po_3:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_21": ((0 <= i) and (i <= 100))) ->
+  ("JC_29": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_21": (0 <= i0))
+  ("JC_29": (0 <= i0))
 
 ========== file tests/java/why/Termination_po13.why ==========
 goal Termination_loop3_safety_po_4:
@@ -1981,11 +2041,11 @@ goal Termination_loop3_safety_po_4:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_21": ((0 <= i) and (i <= 100))) ->
+  ("JC_29": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_21": (i0 <= 100))
+  ("JC_29": (i0 <= 100))
 
 ========== file tests/java/why/Termination_po14.why ==========
 goal Termination_loop3_safety_po_5:
@@ -1993,11 +2053,11 @@ goal Termination_loop3_safety_po_5:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_21": ((0 <= i) and (i <= 100))) ->
+  ("JC_29": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  (0 <= ("JC_23": i))
+  (0 <= ("JC_31": i))
 
 ========== file tests/java/why/Termination_po15.why ==========
 goal Termination_loop3_safety_po_6:
@@ -2005,11 +2065,11 @@ goal Termination_loop3_safety_po_6:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_21": ((0 <= i) and (i <= 100))) ->
+  ("JC_29": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  (("JC_23": i0) < ("JC_23": i))
+  (("JC_31": i0) < ("JC_31": i))
 
 ========== file tests/java/why/Termination_po2.why ==========
 goal Termination_loop1_safety_po_2:
@@ -2017,11 +2077,11 @@ goal Termination_loop1_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
   forall mutable_n_1:int.
-  ("JC_8": (true = true)) ->
+  ("JC_12": (true = true)) ->
   (mutable_n_1 > 0) ->
   forall mutable_n_1_0:int.
   (mutable_n_1_0 = (mutable_n_1 - 1)) ->
-  (("JC_10": mutable_n_1_0) < ("JC_10": mutable_n_1))
+  (("JC_14": mutable_n_1_0) < ("JC_14": mutable_n_1))
 
 ========== file tests/java/why/Termination_po3.why ==========
 goal Termination_loop2_safety_po_1:
@@ -2029,11 +2089,11 @@ goal Termination_loop2_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_1, 0, 0, Object_alloc_table) ->
   forall mutable_n_0_0:int.
-  ("JC_14": (true = true)) ->
+  ("JC_20": (true = true)) ->
   (mutable_n_0_0 < 100) ->
   forall mutable_n_0_0_0:int.
   (mutable_n_0_0_0 = (mutable_n_0_0 + 1)) ->
-  (0 <= ("JC_16": (100 - mutable_n_0_0)))
+  (0 <= ("JC_22": (100 - mutable_n_0_0)))
 
 ========== file tests/java/why/Termination_po4.why ==========
 goal Termination_loop2_safety_po_2:
@@ -2041,25 +2101,25 @@ goal Termination_loop2_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_1, 0, 0, Object_alloc_table) ->
   forall mutable_n_0_0:int.
-  ("JC_14": (true = true)) ->
+  ("JC_20": (true = true)) ->
   (mutable_n_0_0 < 100) ->
   forall mutable_n_0_0_0:int.
   (mutable_n_0_0_0 = (mutable_n_0_0 + 1)) ->
-  (("JC_16": (100 - mutable_n_0_0_0)) < ("JC_16": (100 - mutable_n_0_0)))
+  (("JC_22": (100 - mutable_n_0_0_0)) < ("JC_22": (100 - mutable_n_0_0)))
 
 ========== file tests/java/why/Termination_po5.why ==========
 goal Termination_loop3_ensures_default_po_1:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_24": (0 <= 100))
+  ("JC_32": (0 <= 100))
 
 ========== file tests/java/why/Termination_po6.why ==========
 goal Termination_loop3_ensures_default_po_2:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_24": (100 <= 100))
+  ("JC_32": (100 <= 100))
 
 ========== file tests/java/why/Termination_po7.why ==========
 goal Termination_loop3_ensures_default_po_3:
@@ -2067,11 +2127,11 @@ goal Termination_loop3_ensures_default_po_3:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_24": ((0 <= i) and (i <= 100))) ->
+  ("JC_32": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_24": (0 <= i0))
+  ("JC_32": (0 <= i0))
 
 ========== file tests/java/why/Termination_po8.why ==========
 goal Termination_loop3_ensures_default_po_4:
@@ -2079,11 +2139,11 @@ goal Termination_loop3_ensures_default_po_4:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_24": ((0 <= i) and (i <= 100))) ->
+  ("JC_32": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_24": (i0 <= 100))
+  ("JC_32": (i0 <= 100))
 
 ========== file tests/java/why/Termination_po9.why ==========
 goal Termination_loop3_ensures_default_po_5:
@@ -2091,11 +2151,11 @@ goal Termination_loop3_ensures_default_po_5:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_24": ((0 <= i) and (i <= 100))) ->
+  ("JC_32": ((0 <= i) and (i <= 100))) ->
   (i <= 0) ->
   forall return:int.
   (return = i) ->
-  ("JC_20": (return = 0))
+  ("JC_28": (return = 0))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Termination.why
@@ -3774,145 +3834,145 @@ goal Termination_loop1_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
   forall mutable_n_1:int.
-  ("JC_8": (true = true)) ->
+  ("JC_12": (true = true)) ->
   (mutable_n_1 > 0) ->
   forall mutable_n_1_0:int.
   (mutable_n_1_0 = (mutable_n_1 - 1)) ->
-  (0 <= ("JC_10": mutable_n_1))
+  (0 <= ("JC_14": mutable_n_1))
 
 goal Termination_loop1_safety_po_2:
   forall this_2:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
   forall mutable_n_1:int.
-  ("JC_8": (true = true)) ->
+  ("JC_12": (true = true)) ->
   (mutable_n_1 > 0) ->
   forall mutable_n_1_0:int.
   (mutable_n_1_0 = (mutable_n_1 - 1)) ->
-  (("JC_10": mutable_n_1_0) < ("JC_10": mutable_n_1))
+  (("JC_14": mutable_n_1_0) < ("JC_14": mutable_n_1))
 
 goal Termination_loop2_safety_po_1:
   forall this_1:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_1, 0, 0, Object_alloc_table) ->
   forall mutable_n_0_0:int.
-  ("JC_14": (true = true)) ->
+  ("JC_20": (true = true)) ->
   (mutable_n_0_0 < 100) ->
   forall mutable_n_0_0_0:int.
   (mutable_n_0_0_0 = (mutable_n_0_0 + 1)) ->
-  (0 <= ("JC_16": (100 - mutable_n_0_0)))
+  (0 <= ("JC_22": (100 - mutable_n_0_0)))
 
 goal Termination_loop2_safety_po_2:
   forall this_1:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_1, 0, 0, Object_alloc_table) ->
   forall mutable_n_0_0:int.
-  ("JC_14": (true = true)) ->
+  ("JC_20": (true = true)) ->
   (mutable_n_0_0 < 100) ->
   forall mutable_n_0_0_0:int.
   (mutable_n_0_0_0 = (mutable_n_0_0 + 1)) ->
-  (("JC_16": (100 - mutable_n_0_0_0)) < ("JC_16": (100 - mutable_n_0_0)))
+  (("JC_22": (100 - mutable_n_0_0_0)) < ("JC_22": (100 - mutable_n_0_0)))
 
 goal Termination_loop3_ensures_default_po_1:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_24": (0 <= 100))
+  ("JC_32": (0 <= 100))
 
 goal Termination_loop3_ensures_default_po_2:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_24": (100 <= 100))
+  ("JC_32": (100 <= 100))
 
 goal Termination_loop3_ensures_default_po_3:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_24": ((0 <= i) and (i <= 100))) ->
+  ("JC_32": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_24": (0 <= i0))
+  ("JC_32": (0 <= i0))
 
 goal Termination_loop3_ensures_default_po_4:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_24": ((0 <= i) and (i <= 100))) ->
+  ("JC_32": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_24": (i0 <= 100))
+  ("JC_32": (i0 <= 100))
 
 goal Termination_loop3_ensures_default_po_5:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_24": ((0 <= i) and (i <= 100))) ->
+  ("JC_32": ((0 <= i) and (i <= 100))) ->
   (i <= 0) ->
   forall return:int.
   (return = i) ->
-  ("JC_20": (return = 0))
+  ("JC_28": (return = 0))
 
 goal Termination_loop3_safety_po_1:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_21": (0 <= 100))
+  ("JC_29": (0 <= 100))
 
 goal Termination_loop3_safety_po_2:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_21": (100 <= 100))
+  ("JC_29": (100 <= 100))
 
 goal Termination_loop3_safety_po_3:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_21": ((0 <= i) and (i <= 100))) ->
+  ("JC_29": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_21": (0 <= i0))
+  ("JC_29": (0 <= i0))
 
 goal Termination_loop3_safety_po_4:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_21": ((0 <= i) and (i <= 100))) ->
+  ("JC_29": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_21": (i0 <= 100))
+  ("JC_29": (i0 <= 100))
 
 goal Termination_loop3_safety_po_5:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_21": ((0 <= i) and (i <= 100))) ->
+  ("JC_29": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  (0 <= ("JC_23": i))
+  (0 <= ("JC_31": i))
 
 goal Termination_loop3_safety_po_6:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_21": ((0 <= i) and (i <= 100))) ->
+  ("JC_29": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  (("JC_23": i0) < ("JC_23": i))
+  (("JC_31": i0) < ("JC_31": i))
 
 ========== running alt-ergo ==========
 Running Ergo on proof obligations

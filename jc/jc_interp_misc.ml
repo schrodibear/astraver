@@ -279,6 +279,9 @@ let lvar_name ~constant ~label_in_name ?label_assoc lab n =
 
 let lvar ~constant ~label_in_name lab n =
   let n = lvar_name ~constant ~label_in_name lab n in
+  (* Yannick: comment [constant] so that we output labels even on constant 
+     variables. This should work only after I have committed the 
+     corresponding patch in Why. *)
   if label_in_name || constant then 
     LVar n
   else match lab with 
@@ -302,9 +305,12 @@ let var v =
   then deref_var v.jc_var_info_final_name
   else plain_var v.jc_var_info_final_name
 
-let param v = 
+let param ~type_safe v = 
   v.jc_var_info_final_name, 
-  tr_base_type ~region:v.jc_var_info_region v.jc_var_info_type 
+  if type_safe then
+    tr_base_type v.jc_var_info_type 
+  else
+    tr_base_type ~region:v.jc_var_info_region v.jc_var_info_type 
 
 let tvar_name ~label_in_name lab v = 
   lvar_name ~constant:(not v.jc_var_info_assigned) ~label_in_name
@@ -535,50 +541,49 @@ let laccess_union t fi = None (* TODO *)
 let foreign_union e = [] (* TODO: subterms of union that are not in union *)
 let tforeign_union t = []
 
-let common_deref_alloc_class access_union e =
-  if Region.bitwise e#region then
+let common_deref_alloc_class ~type_safe access_union e =
+  if not type_safe && Region.bitwise e#region then
     JCalloc_bitvector
   else match access_union e None with 
     | None -> JCalloc_struct (struct_variant (pointer_struct e#typ))
     | Some(e,_off) -> JCalloc_union (union_type e#typ)
 
 let deref_alloc_class e =
-  common_deref_alloc_class access_union e
+  common_deref_alloc_class ~type_safe:false access_union e
   
-let tderef_alloc_class t =
-  common_deref_alloc_class taccess_union t
+let tderef_alloc_class ~type_safe t =
+  common_deref_alloc_class ~type_safe taccess_union t
 
-let lderef_alloc_class locs =
-  common_deref_alloc_class laccess_union locs
+let lderef_alloc_class ~type_safe locs =
+  common_deref_alloc_class ~type_safe laccess_union locs
 
-let common_deref_mem_class access_union e fi =
-  if Region.bitwise e#region then
+let common_deref_mem_class ~type_safe access_union e fi =
+  if not type_safe && Region.bitwise e#region then
     JCmem_bitvector
   else match access_union e (Some fi) with 
     | None -> JCmem_field fi
     | Some(e,_off) -> JCmem_union (union_type e#typ)
 
 let deref_mem_class e fi =
-  common_deref_mem_class access_union e fi
+  common_deref_mem_class ~type_safe:false access_union e fi
 
-let tderef_mem_class t fi =
-  common_deref_mem_class taccess_union t fi
+let tderef_mem_class ~type_safe t fi =
+  common_deref_mem_class ~type_safe taccess_union t fi
 
-let lderef_mem_class locs fi =
-  common_deref_mem_class laccess_union locs fi
+let lderef_mem_class ~type_safe locs fi =
+  common_deref_mem_class ~type_safe laccess_union locs fi
 
 
 (******************************************************************************)
 (*                           locations and separation                         *)
 (******************************************************************************)
 
-let ref_term :
-    (global_assertion:bool -> relocate:bool -> label -> label -> Jc_fenv.term
-      -> Output.term) ref 
-    = ref (fun ~global_assertion ~relocate _ _ _ -> assert false)
+let ref_term : (type_safe:bool -> global_assertion:bool -> relocate:bool 
+		 -> label -> label -> Jc_fenv.term -> Output.term) ref 
+    = ref (fun ~type_safe ~global_assertion ~relocate _ _ _ -> assert false)
 
-let rec location ~global_assertion lab loc = 
-  let flocs = location_set ~global_assertion lab in
+let rec location ~type_safe ~global_assertion lab loc = 
+  let flocs = location_set ~type_safe ~global_assertion lab in
   match loc#node with
     | JCLvar _v ->
 	LVar "pset_empty"
@@ -586,14 +591,14 @@ let rec location ~global_assertion lab loc =
 	flocs locs
     | _ -> assert false (* TODO *)
 
-and location_set ~global_assertion lab locs = 
-  let flocs = location_set ~global_assertion lab in
-  let ft = !ref_term ~global_assertion ~relocate:false lab lab in
+and location_set ~type_safe ~global_assertion lab locs = 
+  let flocs = location_set ~type_safe ~global_assertion lab in
+  let ft = !ref_term ~type_safe ~global_assertion ~relocate:false lab lab in
   match locs#node with
     | JCLSvar v ->
 	LApp("pset_singleton",[ tvar ~label_in_name:global_assertion lab v ])
     | JCLSderef(locs,lab,fi,r) ->
-	let mc = lderef_mem_class locs fi in
+	let mc = lderef_mem_class ~type_safe locs fi in
         let mem = 
 	  tmemory_var ~label_in_name:global_assertion lab (mc,locs#region) 
 	in
@@ -613,7 +618,7 @@ let rec location_list' = function
   | e' :: el' -> LApp("pset_union",[ e'; location_list' el' ])
 
 let separation_condition loclist loclist' =
-  let floc = location ~global_assertion:false LabelHere in
+  let floc = location ~type_safe:false ~global_assertion:false LabelHere in
   let pset = location_list' (List.map floc loclist) in
   let pset' = location_list' (List.map floc loclist') in
   LPred("pset_disjoint",[ pset; pset' ])
@@ -777,7 +782,6 @@ let transpose_location_set ~region_assoc ~param_assoc locs w=
   try Some(transpose_location_set ~region_assoc ~param_assoc locs)
   with Failure "Cannot transpose location" -> None
 
-
 let transpose_location_list
     ~region_assoc ~param_assoc rw_raw_mems rw_precise_mems (mc,distr) =
   let loclist =
@@ -838,9 +842,6 @@ let write_read_separation_condition
        else acc
     ) LTrue reads
 
-let print_memory fmt (mc,r) =
-  Format.fprintf fmt "(%a,%a)" Jc_output_misc.memory_class mc Region.print r
-
 let write_write_separation_condition 
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc
     ww_inter_names writes reads =
@@ -883,6 +884,61 @@ let write_write_separation_condition
 	 make_and pre acc
        else acc
     ) LTrue write_pairs
+
+
+(******************************************************************************)
+(*                                  effects                                   *)
+(******************************************************************************)
+
+let rec all_possible_memory_effects acc r ty =
+  match ty with
+    | JCTpointer(pc,_,_) ->
+	begin match pc with
+	  | JCunion _ | JCvariant _ -> acc (* TODO *)
+	  | JCtag(st,_) ->
+	      List.fold_left 
+		(fun acc fi ->
+		   let mc = JCmem_field fi in
+		   let mem = mc,r in
+		   if MemorySet.mem mem acc then 
+		     acc
+		   else
+		     all_possible_memory_effects 
+		       (MemorySet.add mem acc) r fi.jc_field_info_type
+		) acc st.jc_struct_info_fields
+	end
+    | JCTnative _
+    | JCTnull 
+    | JCTenum _
+    | JCTlogic _
+    | JCTany -> acc
+    | JCTtype_var _ -> assert false (* TODO: need environment *)
+
+
+let rewrite_effects ~type_safe ~params ef =
+  let all_mems = 
+    List.fold_left 
+      (fun acc v ->
+	 all_possible_memory_effects acc v.jc_var_info_region v.jc_var_info_type
+      ) MemorySet.empty params
+  in
+  if not type_safe then ef else
+    { ef with
+	jc_effect_memories = 
+	MemoryMap.fold 
+	  (fun (mc,r) labs acc ->
+	     match mc with
+	       | JCmem_field _ | JCmem_union _ -> 
+		   MemoryMap.add (mc,r) labs acc
+	       | JCmem_bitvector ->
+		   MemorySet.fold 
+		     (fun (mc',r') acc ->
+			if Region.equal r r' then 
+			  MemoryMap.add (mc',r') labs acc
+			else acc
+		     ) all_mems acc
+	  ) ef.jc_effect_memories MemoryMap.empty
+    }
 
 
 (******************************************************************************)
@@ -1067,13 +1123,15 @@ let memory_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
 let global_writes ~callee_writes =
   VarMap.fold
     (fun v _labs acc -> 
-       let n,ty' = param v in (plain_var n,ty') :: acc
+       let n,ty' = param ~type_safe:false v in 
+       (plain_var n,ty') :: acc
     ) callee_writes.jc_effect_globals []
 
 let global_reads ~callee_reads =
   VarMap.fold
     (fun v _labs acc -> 
-       let n,ty' = param v in (plain_var n,ty') :: acc
+       let n,ty' = param ~type_safe:false v in
+       (plain_var n,ty') :: acc
     ) callee_reads.jc_effect_globals []
 
 (* Yannick: change this to avoid recovering the real type from its name
@@ -1095,7 +1153,9 @@ let read_committed callee_reads =
   StringSet.fold
     (fun v acc -> (committed_name2 v)::acc) callee_reads.jc_effect_committed []
 
-let write_model_parameters ~mode ~callee_reads ~callee_writes ~region_assoc =
+let write_model_parameters 
+    ~type_safe ~mode ~callee_reads ~callee_writes ~region_assoc ~params =
+  let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
   let write_allocs = 
     alloc_table_writes ~mode ~callee_writes ~region_assoc 
   in
@@ -1112,51 +1172,35 @@ let write_model_parameters ~mode ~callee_reads ~callee_writes ~region_assoc =
   (* TODO: add mutable and committed effects *)
   write_allocs @ write_tags @ write_mems @ write_globs
 
-let write_parameters ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' = 
-    write_model_parameters 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
-
-let write_arguments ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' = 
-    write_model_parameters 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map fst vars'
-
-let write_locals ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' =
-    write_model_parameters 
-      ~mode:MLocal ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
-
-let write_effects ~callee_reads ~callee_writes ~region_list =
+let write_parameters 
+    ~type_safe ~region_list ~callee_reads ~callee_writes ~params =
   let region_assoc = List.map (fun r -> (r,r)) region_list in
   let vars' = 
-    write_model_parameters 
-      ~mode:MEffect ~callee_reads ~callee_writes ~region_assoc
+    write_model_parameters ~type_safe ~mode:MParam
+      ~callee_reads ~callee_writes ~region_assoc ~params
+  in
+  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+
+let write_locals ~region_list ~callee_reads ~callee_writes ~params =
+  let region_assoc = List.map (fun r -> (r,r)) region_list in
+  let vars' =
+    write_model_parameters ~type_safe:false ~mode:MLocal 
+      ~callee_reads ~callee_writes ~region_assoc ~params
+  in
+  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+
+let write_effects ~callee_reads ~callee_writes ~region_list ~params =
+  let region_assoc = List.map (fun r -> (r,r)) region_list in
+  let vars' = 
+    write_model_parameters ~type_safe:true ~mode:MEffect
+      ~callee_reads ~callee_writes ~region_assoc ~params
   in
   List.map (function (Var n,_ty') -> n | _ -> assert false) vars'
 
-let read_model_parameters ~mode ~callee_reads ~callee_writes ~region_assoc =
+let read_model_parameters 
+    ~type_safe ~mode ~callee_reads ~callee_writes ~region_assoc ~params =
+  let callee_reads = rewrite_effects ~type_safe ~params callee_reads in
+  let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
   let read_allocs = 
     alloc_table_reads ~mode ~callee_reads ~callee_writes ~region_assoc 
   in
@@ -1173,47 +1217,28 @@ let read_model_parameters ~mode ~callee_reads ~callee_writes ~region_assoc =
   (* TODO: add mutable and committed effects *)
   read_allocs @ read_tags @ read_mems @ read_globs
 
-let read_parameters ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' = 
-    read_model_parameters 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
-
-let read_arguments ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' = 
-    read_model_parameters 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map fst vars'
-
-let read_locals ?region_assoc ?region_list ~callee_reads ~callee_writes =
-  let region_assoc = match region_assoc,region_list with
-    | Some region_assoc, None -> region_assoc
-    | None, Some region_list -> List.map (fun r -> (r,r)) region_list
-    | _ -> assert false
-  in
-  let vars' =
-    read_model_parameters 
-      ~mode:MLocal ~callee_reads ~callee_writes ~region_assoc
-  in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
-
-let read_effects ~callee_reads ~callee_writes ~region_list =
+let read_parameters 
+    ~type_safe ~region_list ~callee_reads ~callee_writes ~params =
   let region_assoc = List.map (fun r -> (r,r)) region_list in
   let vars' = 
-    read_model_parameters 
-      ~mode:MEffect ~callee_reads ~callee_writes ~region_assoc
+    read_model_parameters ~type_safe ~mode:MParam
+      ~callee_reads ~callee_writes ~region_assoc ~params
+  in
+  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+
+let read_locals ~region_list ~callee_reads ~callee_writes ~params =
+  let region_assoc = List.map (fun r -> (r,r)) region_list in
+  let vars' =
+    read_model_parameters ~type_safe:false ~mode:MLocal
+      ~callee_reads ~callee_writes ~region_assoc ~params
+  in
+  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+
+let read_effects ~callee_reads ~callee_writes ~region_list ~params =
+  let region_assoc = List.map (fun r -> (r,r)) region_list in
+  let vars' = 
+    read_model_parameters ~type_safe:true ~mode:MEffect
+      ~callee_reads ~callee_writes ~region_assoc ~params
   in
   List.map (var_name' $ fst) vars'
 
