@@ -1088,14 +1088,14 @@ predicate valid_variant_interface(p:interface pointer,
 parameter MacCarthy_f91 :
  n_1:int ->
   { } int
-  { ((ge_int(n_1, (101)) -> (JC_13: eq_int(result, sub_int(n_1, (10)))))
-    and (le_int(n_1, (100)) -> (JC_12: eq_int(result, (91))))) }
+  { ((ge_int(n_1@, (101)) -> (JC_13: eq_int(result, sub_int(n_1, (10)))))
+    and (le_int(n_1@, (100)) -> (JC_12: eq_int(result, (91))))) }
 
 parameter MacCarthy_f91_requires :
  n_1:int ->
   { } int
-  { ((ge_int(n_1, (101)) -> (JC_13: eq_int(result, sub_int(n_1, (10)))))
-    and (le_int(n_1, (100)) -> (JC_12: eq_int(result, (91))))) }
+  { ((ge_int(n_1@, (101)) -> (JC_13: eq_int(result, sub_int(n_1, (10)))))
+    and (le_int(n_1@, (100)) -> (JC_12: eq_int(result, (91))))) }
 
 parameter Object_alloc_table : Object alloc_table ref
 

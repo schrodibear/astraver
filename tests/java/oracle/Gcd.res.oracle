@@ -1167,7 +1167,7 @@ let Gcd_gcd_ensures_bezoutProperty =
             and (ge_int(mutable_y_8, (0))
                 and ((forall d_2:int.
                       (isGcd(mutable_x_8, mutable_y_8, d_2) ->
-                       isGcd(mutable_x_8@init, mutable_y_8@init, d_2)))
+                       isGcd(mutable_x_8@init, mutable_y_8@init, d_2@init)))
                     and (eq_int(add_int(mul_int(a_3, mutable_x_8@init),
                                 mul_int(b_2, mutable_y_8@init)),
                          mutable_x_8)
@@ -1259,7 +1259,7 @@ let Gcd_gcd_ensures_resultIsGcd =
             and (ge_int(mutable_y_8, (0))
                 and ((forall d_2:int.
                       (isGcd(mutable_x_8, mutable_y_8, d_2) ->
-                       isGcd(mutable_x_8@init, mutable_y_8@init, d_2)))
+                       isGcd(mutable_x_8@init, mutable_y_8@init, d_2@init)))
                     and (eq_int(add_int(mul_int(a_3, mutable_x_8@init),
                                 mul_int(b_2, mutable_y_8@init)),
                          mutable_x_8)
@@ -1348,7 +1348,7 @@ let Gcd_gcd_safety =
             and (ge_int(mutable_y_8, (0))
                 and ((forall d_2:int.
                       (isGcd(mutable_x_8, mutable_y_8, d_2) ->
-                       isGcd(mutable_x_8@init, mutable_y_8@init, d_2)))
+                       isGcd(mutable_x_8@init, mutable_y_8@init, d_2@init)))
                     and (eq_int(add_int(mul_int(a_3, mutable_x_8@init),
                                 mul_int(b_2, mutable_y_8@init)),
                          mutable_x_8)

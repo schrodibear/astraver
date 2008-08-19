@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.70 2008-04-15 08:12:50 regisgia Exp $ i*)
+(*i $Id: ltyping.ml,v 1.71 2008-08-19 11:47:39 moy Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -326,14 +326,16 @@ and type_if lab env a b c =
     | _ -> raise_located a.pp_loc ShouldBeBoolean
 
 and type_tvar loc lab env x = 
-  let xu = 
+  let x,xu = 
     if is_at x then begin
       let xu,l = un_at x in
-      if not (is_reference env xu) then raise_located loc (NotAReference xu);
       if not (Label.mem l lab) then raise_located loc (UnboundLabel l);
-      xu
+      if not (is_reference env xu) then 
+	xu,xu
+      else 
+	x,xu
     end else 
-      x
+      x,x
   in
   try 
     let t = find_logic xu env in Tvar x, t

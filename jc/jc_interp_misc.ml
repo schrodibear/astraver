@@ -279,10 +279,7 @@ let lvar_name ~constant ~label_in_name ?label_assoc lab n =
 
 let lvar ~constant ~label_in_name lab n =
   let n = lvar_name ~constant ~label_in_name lab n in
-  (* Yannick: comment [constant] so that we output labels even on constant 
-     variables. This should work only after I have committed the 
-     corresponding patch in Why. *)
-  if label_in_name || constant then 
+  if label_in_name then 
     LVar n
   else match lab with 
     | LabelHere -> LVar n

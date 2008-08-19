@@ -1381,7 +1381,7 @@ parameter Arrays_arrayShift :
      ((lt_int((0), i_0)
       and lt_int(i_0, add_int(offset_max(Object_alloc_table, t_2), (1)))) ->
       eq_int(select(intM_intP, shift(t_2, i_0)),
-      select(intM_intP@, shift(t_2, sub_int(i_0, (1)))))))) }
+      select(intM_intP@, shift(t_2@, sub_int(i_0@, (1)))))))) }
 
 parameter Arrays_arrayShift_requires :
  t_2:Object pointer ->
@@ -1392,7 +1392,7 @@ parameter Arrays_arrayShift_requires :
      ((lt_int((0), i_0)
       and lt_int(i_0, add_int(offset_max(Object_alloc_table, t_2), (1)))) ->
       eq_int(select(intM_intP, shift(t_2, i_0)),
-      select(intM_intP@, shift(t_2, sub_int(i_0, (1)))))))) }
+      select(intM_intP@, shift(t_2@, sub_int(i_0@, (1)))))))) }
 
 parameter Arrays_findMax :
  t_0:Object pointer ->
@@ -1594,7 +1594,7 @@ let Arrays_arrayShift_ensures_default =
                and ((forall i_1:int.
                      ((le_int((0), i_1) and le_int(i_1, j_0)) ->
                       eq_int(select(intM_intP, shift(t_2, i_1)),
-                      select(intM_intP@init, shift(t_2, i_1)))))
+                      select(intM_intP@init, shift(t_2@init, i_1@init)))))
                    and (forall i_2:int.
                         ((lt_int(j_0, i_2)
                          and lt_int(i_2,
@@ -1602,7 +1602,7 @@ let Arrays_arrayShift_ensures_default =
                              (1)))) ->
                          eq_int(select(intM_intP, shift(t_2, i_2)),
                          select(intM_intP@init,
-                         shift(t_2, sub_int(i_2, (1))))))))))))
+                         shift(t_2@init, sub_int(i_2@init, (1))))))))))))
          }
        try
         (let jessie_57 = begin
@@ -1650,7 +1650,7 @@ let Arrays_arrayShift_ensures_default =
      ((lt_int((0), i_0)
       and lt_int(i_0, add_int(offset_max(Object_alloc_table, t_2), (1)))) ->
       eq_int(select(intM_intP, shift(t_2, i_0)),
-      select(intM_intP@, shift(t_2, sub_int(i_0, (1)))))))) }
+      select(intM_intP@, shift(t_2@, sub_int(i_0@, (1)))))))) }
 
 let Arrays_arrayShift_safety =
  fun (t_2 : Object pointer) ->
@@ -1678,7 +1678,7 @@ let Arrays_arrayShift_safety =
                and ((forall i_1:int.
                      ((le_int((0), i_1) and le_int(i_1, j_0)) ->
                       eq_int(select(intM_intP, shift(t_2, i_1)),
-                      select(intM_intP@init, shift(t_2, i_1)))))
+                      select(intM_intP@init, shift(t_2@init, i_1@init)))))
                    and (forall i_2:int.
                         ((lt_int(j_0, i_2)
                          and lt_int(i_2,
@@ -1686,7 +1686,7 @@ let Arrays_arrayShift_safety =
                              (1)))) ->
                          eq_int(select(intM_intP, shift(t_2, i_2)),
                          select(intM_intP@init,
-                         shift(t_2, sub_int(i_2, (1))))))))))))
+                         shift(t_2@init, sub_int(i_2@init, (1))))))))))))
         variant (JC_73 : j_0) }
        try
         (let jessie_46 = begin
