@@ -955,7 +955,7 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	lib/*.png \
 	atp/cooper.ml atp/fol.ml atp/formulas.ml atp/intro.ml atp/lib.ml \
 	atp/LICENSE.txt atp/Makefile atp/Mk_ml_file atp/prop.ml \
-	atp/qelim.ml atp/Quotexpander.ml atp/skolem.ml \
+	atp/qelim.ml atp/skolem.ml \
 	ocamlgraph/configure.in ocamlgraph/configure ocamlgraph/.depend \
 	ocamlgraph/Makefile.in ocamlgraph/META.in ocamlgraph/*/*.ml*
 

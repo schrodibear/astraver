@@ -25,17 +25,17 @@ MLFILES = lib.ml intro.ml formulas.ml prop.ml propexamples.ml           \
 
 # The default is to build a bytecode executable
 
-bytecode: example.ml atp.cmo; ocamlc -pp "camlp4o ./Quotexpander.cmo" -o example nums.cma atp.cmo example.ml
+bytecode: example.ml atp.cmo; ocamlc -o example nums.cma atp.cmo example.ml
 
 # Alternatively, produce native code
 
-compiled: example.ml atp.cmx; ocamlopt -pp "camlp4o ./Quotexpander.cmo" -o example nums.cmxa atp.cmx example.ml
+compiled: example.ml atp.cmx; ocamlopt -o example nums.cmxa atp.cmx example.ml
 
 # Make the appropriate object for the main body of code
 
-atp.cmx: Quotexpander.cmo atp.ml; ocamlopt -pp "camlp4o ./Quotexpander.cmo" -w ax -c atp.ml
+atp.cmx: atp.ml; ocamlopt -w ax -c atp.ml
 
-atp.cmo: Quotexpander.cmo atp.ml; ocamlc -pp "camlp4o ./Quotexpander.cmo" -w ax -c atp.ml
+atp.cmo: atp.ml; ocamlc -w ax -c atp.ml
 
 # Make the camlp4 quotation expander
 

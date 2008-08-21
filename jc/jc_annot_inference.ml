@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.126 2008-08-06 22:59:00 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.127 2008-08-21 22:03:45 moy Exp $ *)
 
 open Pp
 open Format
@@ -116,7 +116,7 @@ let struct_of_term t =
   match t#typ with
     | JCTpointer(st,_,_) -> 
 	begin match st with 
-	  | JCtag st -> st
+	  | JCtag(st,_) -> st
 	  | JCvariant _ -> assert false (* TODO *)
 	  | JCunion _ -> assert false (* TODO *)
  	end
@@ -129,7 +129,7 @@ let rec nb_conj_atoms a = match a#node with
   | JCAtrue | JCAfalse | JCArelation _ | JCAapp _  
   | JCAimplies _ | JCAiff _ | JCAquantifier _ | JCAinstanceof _ 
   | JCAbool_term _ | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAmatch _
-  | JCAor _ | JCAnot _ | JCAold _ | JCAat _ -> 1
+  | JCAor _ | JCAnot _ | JCAold _ | JCAat _ | JCAsubtype _ -> 1
       
 let rec conjuncts a = match a#node with
   | JCAand al -> List.flatten(List.map conjuncts al)
@@ -177,7 +177,7 @@ let is_integral_type = function
 	| Tinteger -> true
       end
   | JCTenum _ -> true
-  | JCTpointer _ | JCTlogic _ | JCTnull | JCTany -> false
+  | JCTpointer _ | JCTlogic _ | JCTnull | JCTany | JCTtype_var _ -> false
 
 let equality_operator_for_type ty = 
   `Beq, operator_of_type ty
@@ -261,6 +261,7 @@ let rec term_name =
 	    | `Bshift_left -> "shiftleft"		
 	    | `Blogical_shift_right -> "logicalshiftright"
 	    | `Barith_shift_right -> "arithshiftright"
+	    | `Bconcat -> "concat"
 	  in
 	  term_name t1 ^ "_" ^ bop_name ^ "_" ^ (term_name t2)
       | JCTunary((uop,_),t1) ->
@@ -289,9 +290,11 @@ let rec term_name =
 	  "offset_max_" ^ (term_name t)
       | JCToffset(Offset_min,t,st) ->
 	  "offset_min_" ^ (term_name t)
+      | JCTaddress(t) ->
+	  "address_" ^ (term_name t)
       | JCTinstanceof(t,_,st) ->
 	  (term_name t) ^ "_instanceof_" ^ st.jc_struct_info_name
-      | JCTcast(t,_,st) ->
+      | JCTcast(t,_,st) | JCTbitwise_cast(t,_,st) ->
 	  (term_name t) ^ "_cast_" ^ st.jc_struct_info_name
       | JCTrange_cast(t,ei) ->
 	  (term_name t) ^ "_cast_" ^ ei.jc_enum_info_name
@@ -361,7 +364,7 @@ let rec destruct_pointer t =
 	      let offt = new term ~typ:integer_type tnode in
 	      topt,Some offt
 	end
-    | JCTcast(t,_,_) | JCTrange_cast(t,_) | JCTreal_cast(t,_) -> 
+    | JCTcast(t,_,_) | JCTbitwise_cast(t,_,_) | JCTrange_cast(t,_) | JCTreal_cast(t,_) -> 
         (* Pointer arithmetic in Jessie is not related to the size of 
 	 * the underlying type, like in C. This makes it possible to commute
 	 * cast and arithmetic.
@@ -371,7 +374,7 @@ let rec destruct_pointer t =
         (* Not supported yet. *)
         assert false
     | JCTconst _ | JCTbinary _ 
-    | JCTunary _ | JCToffset _ | JCTinstanceof _ -> 
+    | JCTunary _ | JCToffset _ | JCTinstanceof _ | JCTaddress _ -> 
         (* Not of a pointer type. *)
         assert false
 
@@ -510,9 +513,9 @@ let print_modified_vars fmt posts =
 let reg_annot ?id ?kind ?name ~pos ~anchor a = 
   let (f,l,b,e) =
     try
-      let (f,l,b,e,_,_) = Hashtbl.find Jc_options.locs_table anchor in
+      let (f,l,b,e,_,_) = Hashtbl.find Jc_options.pos_table anchor in
       (f,l,b,e)
-    with Not_found -> Loc.extract loc
+    with Not_found -> Loc.extract pos
   in
   let pos = Lexing.dummy_pos in
   let pos = { pos with 
@@ -526,7 +529,7 @@ let reg_annot ?id ?kind ?name ~pos ~anchor a =
   in
   Format.fprintf Format.str_formatter "%a" Jc_output.assertion a;
   let formula = Format.flush_str_formatter () in
-  let lab = Output.reg_loc "G" ?id ?kind ?name ~formula loc in
+  let lab = Output.reg_pos "G" ?id ?kind ?name ~formula loc in
   new assertion_with ~mark:lab a
 
 
@@ -707,7 +710,7 @@ let rec replace_term_in_assertion srct targett a =
 	JCAif(term t,asrt a1,asrt a2)
     | JCAmutable(t,st,tag) ->
 	JCAmutable(term t,st,tag)
-    | JCAtrue | JCAfalse | JCAeqtype _ as anode -> anode
+    | JCAtrue | JCAfalse | JCAeqtype _ | JCAsubtype _ as anode -> anode
     | JCAmatch _ -> assert false (* TODO *)
   in
   new assertion_with ~node:anode a
@@ -747,7 +750,7 @@ let rec replace_vi_in_assertion srcvi targett a =
 	JCAif (term t, asrt a1, asrt a2)
     | JCAmutable (t, st, tag) ->
 	JCAmutable (term t, st, tag)
-    | JCAtrue | JCAfalse | JCAeqtype _ as anode -> anode
+    | JCAtrue | JCAfalse | JCAeqtype _ | JCAsubtype _ as anode -> anode
     | JCAmatch _ -> assert false (* TODO *)
   in
   new assertion_with ~node:anode a
@@ -770,8 +773,10 @@ let rec switch_vis_in_term srcvi targetvi t =
     | JCTold t -> JCTold (term t)
     | JCTat (t, lab) -> JCTat (term t, lab)
     | JCToffset (ok, t, si) -> JCToffset (ok, term t, si)
+    | JCTaddress (t) -> JCTaddress (term t)
     | JCTinstanceof (t, lab, si) -> JCTinstanceof (term t, lab, si)
     | JCTcast (t, lab, si) -> JCTcast (term t, lab, si)
+    | JCTbitwise_cast (t, lab, si) -> JCTbitwise_cast (term t, lab, si)
     | JCTrange_cast (t, si) -> JCTrange_cast (term t, si)
     | JCTreal_cast (t, si) -> JCTreal_cast (term t, si)
     | JCTif (t1, t2, t3) -> JCTif (term t1, term t2, term t3)
@@ -801,7 +806,7 @@ let rec switch_vis_in_assertion srcvi targetvi a =
     | JCAbool_term t -> JCAbool_term (term t)
     | JCAif (t, a1, a2) -> JCAif (term t, asrt a1, asrt a2)
     | JCAmutable (t, st, tag) -> JCAmutable (term t, st, tag)
-    | JCAtrue | JCAfalse | JCAeqtype _ as anode -> anode
+    | JCAtrue | JCAfalse | JCAeqtype _ | JCAsubtype _ as anode -> anode
     | JCAmatch _ -> assert false (* TODO *)
   in
     new assertion_with ~node:anode a
@@ -840,12 +845,12 @@ end = struct
 	    | Tboolean | Tinteger -> true
 	  end
       | JCTenum _ -> true
-      | JCTpointer _ | JCTlogic _ | JCTnull | JCTany -> false
+      | JCTpointer _ | JCTlogic _ | JCTnull | JCTany | JCTtype_var _ -> false
 
   let has_offset_min_variable t =
     match t#typ with
       | JCTpointer _ -> true
-      | JCTnative _ | JCTenum _ | JCTlogic _ | JCTnull | JCTany -> false
+      | JCTnative _ | JCTenum _ | JCTlogic _ | JCTnull | JCTany | JCTtype_var _ -> false
 
   let has_offset_max_variable = has_offset_min_variable
 
@@ -1028,7 +1033,7 @@ let rec not_asrt a =
 	a#node
     | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAapp _ 
     | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-    | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAmatch _ ->
+    | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ ->
 	JCAnot a
   in
   new assertion_with ~node:anode a
@@ -1130,8 +1135,8 @@ let rec linearize t =
 	end
     | JCTapp _ -> (TermMap.add t 1 TermMap.empty,0)
     | JCTshift _ | JCTinstanceof _
-    | JCTmatch _
-    | JCTold _ | JCTat _ | JCTcast _  | JCTrange_cast _ | JCTreal_cast _ 
+    | JCTmatch _ 
+    | JCTold _ | JCTat _ | JCTcast _ | JCTbitwise_cast _  | JCTrange_cast _ | JCTreal_cast _ | JCTaddress _
     | JCTrange _ | JCTif _ -> 
 	failwith "Not linear"
 
@@ -1241,8 +1246,8 @@ let rec zero_bounds_term t =
 		auto_bounds t
 	  end
     | JCTconst _ | JCTvar _ | JCTderef _ | JCToffset _
-    | JCTapp _ | JCTshift _ | JCTinstanceof _
-    | JCTold _ | JCTat _ | JCTcast _  | JCTrange_cast _ | JCTreal_cast _
+    | JCTapp _ | JCTshift _ | JCTinstanceof _ | JCTaddress _
+    | JCTold _ | JCTat _ | JCTcast _ | JCTbitwise_cast _  | JCTrange_cast _ | JCTreal_cast _
     | JCTrange _ | JCTif _ | JCTmatch _ ->
 	auto_bounds t
 	  
@@ -1427,7 +1432,7 @@ let rec linstr_of_assertion env a =
 	end
     | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAapp _ 
     | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-    | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAmatch _ -> env, Dnf.true_
+    | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> env, Dnf.true_
 	
 let unique_linstr_of_assertion env a =
   match snd (linstr_of_assertion env a) with
@@ -1599,14 +1604,14 @@ let presentify a =
 	  end
       | JCAtrue | JCAfalse | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _
       | JCAapp _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAmatch _ -> a
+      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> a
  in
   linasrt_of_assertion a
 
 let mkinvariant mgr absval =
-  if Abstract1.is_top mgr absval = Manager.True then
+  if Abstract1.is_top mgr absval then
     new assertion JCAtrue    
-  else if Abstract1.is_bottom mgr absval = Manager.True then
+  else if Abstract1.is_bottom mgr absval then
     new assertion JCAfalse
   else
     let linconsarr = Abstract1.to_lincons_array mgr absval in
@@ -1698,11 +1703,11 @@ let collect_expr_targets e =
           in
 	  let reqa = regionalize_assertion reqa call.jc_call_region_assoc in
           conjuncts reqa
-      | JCEassert a when a#mark = "hint" -> 
+      | JCEassert(_, a) when a#mark = "hint" -> 
 	  (* Hints are not to be proved by abstract interpretation, 
 	     only added to help it. *)
 	  []
-      | JCEassert a -> 
+      | JCEassert(_, a) -> 
 	  (* Consider separately each conjunct in a conjunction. *)
 	  conjuncts a
       | JCEassign_heap (e1, fi, _e2) ->
@@ -1712,8 +1717,10 @@ let collect_expr_targets e =
       | JCElet _ | JCEassign_var _ 
       | JCEpack _ | JCEunpack _ | JCEshift _ | JCEmatch _ | JCEfree _ 
       | JCEalloc _ | JCEoffset _ | JCEreal_cast _ | JCEinstanceof _ 
-      | JCEunary _ | JCEvar _ | JCEconst _ | JCEcast _ | JCEbinary _ ->
+      | JCEunary _ | JCEvar _ | JCEconst _ | JCEcast _ | JCEbinary _ 
+      | JCEbitwise_cast _ | JCEaddress _ ->
 	  []
+      | JCEcontract _ -> assert false (* TODO *)
     in
     let asrts = List.map normalize_assertion asrts in
     List.map (target_of_assertion e e#pos) asrts
@@ -1806,7 +1813,7 @@ let rec test_assertion mgr pre a =
 	    end
       | JCAimplies _ | JCAiff _
       | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAmatch _ -> env,Dnf.true_
+      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> env,Dnf.true_
   in
   let env, dnf = extract_environment_and_dnf env a in
   Abstract1.change_environment_with mgr pre env false;
@@ -1894,7 +1901,7 @@ let assign_expr mgr pre t e =
       | Some te ->
 	  let constr_vars = List.filter 
 	    (fun va -> 
-	       not (Abstract1.is_variable_unconstrained mgr pre va = Manager.True)
+	       not (Abstract1.is_variable_unconstrained mgr pre va)
 	    ) integer_vars
 	  in
 	    List.iter 
@@ -2063,7 +2070,7 @@ let is_eq mgr val1 val2 =
   let env = Environment.lce (Abstract1.env val1) (Abstract1.env val2) in
   Abstract1.change_environment_with mgr val1 env false;
   Abstract1.change_environment_with mgr val2 env false;
-  Abstract1.is_eq mgr val1 val2 = Manager.True
+  Abstract1.is_eq mgr val1 val2 
 
 let eq_abstract_value mgr absval1 absval2 =
   is_eq mgr absval1.jc_absval_regular absval2.jc_absval_regular
@@ -2343,7 +2350,7 @@ and intern_ai_expr iaio abs curinvs s =
 	      let dereft = new term ~typ:fi.jc_field_info_type (JCTderef(t1,LabelHere,fi)) in
 	      assign_expr mgr pre dereft e2
 	end
-    | JCEassert a ->
+    | JCEassert(_, a) ->
 	test_assertion mgr pre a
     | JCEblock sl ->
 	List.iter (ai_expr iaio abs curinvs) sl
@@ -2490,10 +2497,13 @@ and intern_ai_expr iaio abs curinvs s =
 	ai_call iaio abs curinvs None s
     | JCEshift _ | JCEfree _ | JCEalloc _ | JCEoffset _ | JCEreal_cast _
     | JCErange_cast _ | JCEcast _ | JCEinstanceof _ | JCEunary _ 
-    | JCEbinary _ | JCEderef _ | JCEvar _ | JCEconst _ -> 
+    | JCEbinary _ | JCEderef _ | JCEvar _ | JCEconst _ | JCEbitwise_cast _
+    | JCEaddress _ -> 
 	let elist = IExpr.subs s in
 	List.iter (ai_expr iaio abs curinvs) elist
 	  (* TODO *)
+    | JCEcontract _ -> assert false (* TODO *)
+
   end;
 (*   let normal = curinvs.jc_absinv_normal in *)
 (*   let prop = normal.jc_absval_propagated in *)
@@ -2610,8 +2620,8 @@ and ai_call iaio abs curinvs vio e =
     begin
       let fi_writes = fi.jc_fun_info_effects.jc_writes.jc_effect_globals in
       let vars_writes = 
-	VarSet.fold
-	  (fun vi acc -> Vai.all_variables (new term_var vi) @ acc)
+	VarMap.fold
+	  (fun vi _labs acc -> Vai.all_variables (new term_var vi) @ acc)
 	  fi_writes [] 
       in
       Abstract1.forget_array_with mgr pre (Array.of_list vars_writes) false;
@@ -2645,9 +2655,9 @@ and record_ai_invariants abs s =
 	    let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
 	    let loopinv = loopinvs.jc_absinv_normal.jc_absval_regular in
 	      (* Abstract1.minimize mgr loopinv; NOT IMPLEMENTED IN APRON*)
-	      if Abstract1.is_top mgr loopinv = Manager.True then ()
-	      else if Abstract1.is_bottom mgr loopinv = Manager.True then
-		la.jc_loop_invariant <- new assertion JCAfalse
+	      if Abstract1.is_top mgr loopinv then ()
+	      else if Abstract1.is_bottom mgr loopinv then
+		la.jc_loop_invariant <- [[],new assertion JCAfalse]
 	      else
 		let a = mkinvariant mgr loopinv in
 		  nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a;
@@ -2661,7 +2671,7 @@ and record_ai_invariants abs s =
 		    reg_annot ~pos:s#pos ~anchor:s#mark a 
 		  in
 		    if Jc_options.trust_ai then la.jc_free_loop_invariant <- a else
-		      la.jc_loop_invariant <- make_and [la.jc_loop_invariant; a];
+		      la.jc_loop_invariant <- [[],make_and (a :: List.map snd la.jc_loop_invariant) ];
 		    record_ai_invariants abs ls
 	  with Not_found -> () end
     | JCEassign_var _ | JCEassign_heap _ | JCEassert _ 
@@ -2669,8 +2679,9 @@ and record_ai_invariants abs s =
     | JCEapp _ -> ()
     | JCEshift _ | JCEfree _ | JCEalloc _ | JCEoffset _ | JCEreal_cast _
     | JCErange_cast _ | JCEcast _ | JCEinstanceof _ | JCEunary _ 
-    | JCEbinary _ | JCEderef _ | JCEvar _ | JCEconst _ -> 
+    | JCEbinary _ | JCEderef _ | JCEvar _ | JCEconst _ | JCEbitwise_cast _ | JCEaddress _ -> 
 	() (* TODO *)
+    | JCEcontract _ -> assert false (* TODO *)
 
 
 and ai_function mgr iaio targets (fi, loc, fs, sl) =
@@ -2981,7 +2992,7 @@ let rec atp_of_term t =
     | JCTvar _ | JCTderef _ | JCTapp _ ->
 	Atp.Var (Vwp.variable t)
     | JCTshift _ | JCTold _ | JCTat _ | JCTmatch _ 
-    | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTreal_cast _
+    | JCTinstanceof _ | JCTcast _ | JCTrange_cast _ | JCTbitwise_cast _ | JCTreal_cast _ | JCTaddress _
     | JCTif _ | JCTrange _ ->
         failwith "Atp alien"
 (*	assert false*)
@@ -3065,7 +3076,7 @@ let rec atp_of_asrt a =
 	in
 	quant f vars
     | JCAapp _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
-    | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAmatch _ ->
+    | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAmatch _ | JCAsubtype _ ->
 	failwith "Atp alien"
   end with Failure "Atp alien" -> 
     (* If alien appears in negative position, say in left-hand side of
@@ -3206,7 +3217,7 @@ let contradictory =
 	  let dnf = Dnf.make_and cstrs in
 	  let absval = Abstract1.top mgr env in
 	  Dnf.test mgr absval dnf;
-	  Abstract1.is_bottom mgr absval = Manager.True
+	  Abstract1.is_bottom mgr absval
 	with Parser.Error _ | Failure _ -> false
       ) true disjuncts
     in
@@ -3259,9 +3270,9 @@ let simplify =
 	    Dnf.test mgr absval dnf;
 	    if Jc_options.debug then
 	      printf "abstract conjunct : %a@." Abstract1.print absval;
-	    if (Abstract1.is_top mgr absval = Manager.True) then
+	    if (Abstract1.is_top mgr absval) then
 	      failwith "Incorrect overapproximation";
-	    if Abstract1.is_bottom mgr absval = Manager.True then
+	    if Abstract1.is_bottom mgr absval then
 	      abstractl, otherl
 	    else
 	      absval :: abstractl, otherl
@@ -3272,10 +3283,10 @@ let simplify =
       let abstract_disjuncts =
 	List.fold_right (fun absval acc ->
 	  let acc = List.filter
-	    (fun av -> not (Abstract1.is_leq mgr av absval = Manager.True)) acc
+	    (fun av -> not (Abstract1.is_leq mgr av absval)) acc
 	  in
 	  if List.exists
-	    (fun av -> Abstract1.is_leq mgr absval av = Manager.True) acc then acc
+	    (fun av -> Abstract1.is_leq mgr absval av) acc then acc
 	  else absval :: acc
 	) abstract_disjuncts []
       in
@@ -3538,11 +3549,11 @@ let rec wp_expr weakpre =
 		in
 		{ curposts with jc_post_normal = post; }
 	  end
-      | JCEassert a when a#mark = "hint" -> 
+      | JCEassert(_,a) when a#mark = "hint" -> 
 	  (* Hints are not to be used in wp computation,
 	     only added to help it. *)
 	  curposts
-      | JCEassert a1 ->
+      | JCEassert(_, a1) ->
 	  let f = atp_of_asrt a1 in
 	  let fvars = Atp.fv f in
 	  let varsets = List.map Vwp.term fvars in
@@ -3661,9 +3672,9 @@ let rec wp_expr weakpre =
 	  let post = 
 	    match finalize_target 
 	      ~is_function_level:false ~pos:s#pos ~anchor:s#mark
-	      loopposts target la.jc_loop_invariant
+	      loopposts target (make_and (List.map snd la.jc_loop_invariant))
 	    with None -> None | Some infera ->
-	      target.jc_target_regular_invariant <- la.jc_loop_invariant;
+	      target.jc_target_regular_invariant <- (make_and (List.map snd la.jc_loop_invariant));
 	      target.jc_target_assertion <- infera;
 	      begin try
 		let a = Hashtbl.find weakpre.jc_weakpre_loop_invariants
@@ -3727,7 +3738,7 @@ let rec record_wp_invariants weakpre s =
 	let loop_invariants = weakpre.jc_weakpre_loop_invariants in
 	begin try
 	  let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
-	  la.jc_loop_invariant <- make_and [la.jc_loop_invariant; loopinvs]
+	  la.jc_loop_invariant <- [[],make_and (loopinvs :: List.map snd la.jc_loop_invariant)]
 	with Not_found -> () end
     | JCEassign_var _ | JCEassign_heap _ | JCEassert _ 
     | JCEreturn_void | JCEreturn _ | JCEthrow _ | JCEpack _ | JCEunpack _ 
@@ -3735,7 +3746,7 @@ let rec record_wp_invariants weakpre s =
 	()
     | _ -> assert false (* TODO *)
 
-let wp_function targets (fi,loc,fs,sl) =
+let wp_function targets (fi,pos,fs,sl) =
   if debug then printf "[wp_function]@.";
   let weakpre = {
     jc_weakpre_loop_invariants = Hashtbl.create 0;
@@ -3867,14 +3878,14 @@ let rec backprop_expr target s curpost =
 	let curpost = backprop_expr target ls curpost in
 	begin
           match curpost with None -> () | Some propa ->
-	    if not (contradictory propa la.jc_loop_invariant) then
+	    if not (contradictory propa (make_and (List.map snd la.jc_loop_invariant))) then
               begin
                 if Jc_options.verbose then
                   printf 
 	            "%a@[<v 2>Back-propagating loop invariant@\n%a@]@."
                     Loc.report_position s#pos
                     Jc_output.assertion propa;
-	        la.jc_loop_invariant <- make_and [propa;la.jc_loop_invariant]
+	        la.jc_loop_invariant <- [[],make_and (propa :: List.map snd la.jc_loop_invariant)]
               end
 	end;
 	None
@@ -3989,7 +4000,7 @@ let code_function = function
 (* Interprocedural analysis.                                                 *)
 (*****************************************************************************)
 
-let rec record_ai_inter_annotations mgr iai fi loc fs sl =
+let rec record_ai_inter_annotations mgr iai fi pos fs sl =
   let env = Environment.make [||] [||] in
     inspected_functions := fi.jc_fun_info_tag :: !inspected_functions;
     (* record inferred precondition for [fi] *)
@@ -4038,7 +4049,7 @@ let rec record_ai_inter_annotations mgr iai fi loc fs sl =
 	([], []) exceptional in
     let excabsl = List.map (fun va -> keep_extern mgr fi va) excabsl in
     let excabsl = List.map
-      (fun va -> if Abstract1.is_bottom mgr va = Manager.True then
+      (fun va -> if Abstract1.is_bottom mgr va then
 	 Abstract1.top mgr env else va) excabsl in
     let excal = List.map (mkinvariant mgr) excabsl in
       
@@ -4090,7 +4101,7 @@ let rec record_ai_inter_annotations mgr iai fi loc fs sl =
 	     | None -> ()
 	     | Some b ->
 		 if not (List.mem fi.jc_fun_info_tag !inspected_functions) then
-		   record_ai_inter_annotations mgr iai fi loc fs b)
+		   record_ai_inter_annotations mgr iai fi pos fs b)
 	  fi.jc_fun_info_calls
 	  
 	  

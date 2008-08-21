@@ -337,7 +337,9 @@ let rec formsubst subfn fm =    (* WRONG! *)
   | Forall(x,p) -> Forall(x,formsubst (undefine x subfn) p)
   | Exists(x,p) -> Exists(x,formsubst (undefine x subfn) p);;
 
+START_INTERACTIVE;;
 formsubst ("y" := Var "x") <<forall x. x = y>>;;
+END_INTERACTIVE;;
 
 (* ------------------------------------------------------------------------- *)
 (* Variant function and examples.                                            *)
