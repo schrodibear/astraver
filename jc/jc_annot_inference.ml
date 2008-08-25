@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.127 2008-08-21 22:03:45 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.128 2008-08-25 08:30:50 moy Exp $ *)
 
 open Pp
 open Format
@@ -964,34 +964,25 @@ module Dnf = struct
     let env = Abstract1.env pre in
       if is_false dnf then
 	(* Make [pre] be the bottom abstract value. *)
-	let bot = Abstract1.bottom mgr env in
-	  Abstract1.meet_with mgr pre bot
+	Abstract1.bottom mgr env
       else if is_true dnf then
-	()
+	pre
       else
-	let test_conj copy_pre conj =
+	let test_conj conj =
 	  let lincons =
 	    try Parser.lincons1_of_lstring env conj
 	    with Parser.Error msg -> printf "%s@." msg; assert false
 	  in
-	    Abstract1.meet_lincons_array_with mgr copy_pre lincons;
+	  let res = Abstract1.meet_lincons_array mgr pre lincons in
 	    if debug then printf "[Dnf.test_conj] %a@." print [conj];
-	    if debug then printf "[Dnf.test_conj] %a@." Abstract1.print copy_pre
+	      res
 	in
 	  (* Test each disjunct separately and then join them. *)
-	let copy_array = 
-	  Array.init (num_disjuncts dnf)
-	    (fun i -> if i = 0 then pre else Abstract1.copy mgr pre)
-	in
-	let copy_list = Array.to_list copy_array in
-	  List.iter2 test_conj copy_list dnf;
-	  begin match copy_list with
-	    | first::rest ->
-		assert (first == pre);
-		List.iter (fun absval -> Abstract1.join_with mgr pre absval) rest
-	    | _ -> assert false
-	  end
-	    
+	let copy_list = List.map test_conj dnf in
+	match copy_list with
+	  | pre :: rest ->
+	      List.fold_left (Abstract1.join mgr) pre rest
+	  | _ -> assert false
 end
 
 let assertion_of_dnf dnf = 
@@ -1752,8 +1743,19 @@ let set_equivalent_terms t1 t2 =
 (*****************************************************************************)
 (* Performing abstract interpretation.                                       *)
 (*****************************************************************************)
-    
-let rec test_assertion mgr pre a =
+
+let apply_to_current_invariant ?(propagated=false) f curinvs =
+  let normal = curinvs.jc_absinv_normal in
+  if propagated then
+    let prop = normal.jc_absval_propagated in
+    { curinvs with jc_absinv_normal = 
+	{ normal with jc_absval_propagated = f prop } }
+  else
+    let pre = normal.jc_absval_regular in
+    { curinvs with jc_absinv_normal = 
+	{ normal with jc_absval_regular = f pre } }
+      
+let simple_test_assertion mgr a pre =
   let env = Abstract1.env pre in
   let rec extract_environment_and_dnf env a =
     match a#node with
@@ -1816,18 +1818,18 @@ let rec test_assertion mgr pre a =
       | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> env,Dnf.true_
   in
   let env, dnf = extract_environment_and_dnf env a in
-  Abstract1.change_environment_with mgr pre env false;
+  let pre = Abstract1.change_environment mgr pre env false in
   Dnf.test mgr pre dnf
-    
-let test_expr ~(neg:bool) mgr pre e =
+
+let test_expr ~(neg:bool) mgr e pre =
   try 
     let a = asrt_of_expr e in
     let a = if neg then not_asrt a else a in
-    test_assertion mgr pre a
-  with Failure "Not an assertion" -> ()
+    simple_test_assertion mgr a pre 
+  with Failure "Not an assertion" -> pre
 
 (* Assigns expression [e] to abstract variable [va] in abstract value [pre]. *)
-let assign_variable mgr pre va e =
+let assign_variable mgr va e pre =
   let env0 = Abstract1.env pre in
   let env = 
     if Environment.mem_var env0 va then env0 
@@ -1841,24 +1843,27 @@ let assign_variable mgr pre va e =
 	    try Parser.linexpr1_of_string env str
 	    with Parser.Error msg -> printf "%s@." msg; assert false
 	  in
-	    Abstract1.change_environment_with mgr pre env false;
-	    Abstract1.assign_linexpr_with mgr pre va lin None
+	  let pre = Abstract1.change_environment mgr pre env false in
+	  Abstract1.assign_linexpr mgr pre va lin None
       | None ->
 	  if debug then printf "[assign_variable] no str@.";
 	  (* Try over-approximate treatment of assignment. *)
-	  if Environment.mem_var env0 va then
-	    Abstract1.forget_array_with mgr pre [|va|] false;
+	  let pre =
+	    if Environment.mem_var env0 va then
+	      Abstract1.forget_array mgr pre [|va|] false
+	    else pre
+	  in
 	  match term_of_expr e with
 	    | Some te ->
 		(* Assignment treated as an equality test. *)
 		let t = Vai.term va in
 		let a = new assertion(JCArelation(t,(`Beq,`Integer),te)) in
-		  test_assertion mgr pre a
+		simple_test_assertion mgr a pre
 	    | None ->
 		(* Assignment treated as a forget operation. *)
-		()
+		pre
 
-let assign_offset_variable mgr pre va ok e =
+let assign_offset_variable mgr va ok e pre =
   let env0 = Abstract1.env pre in
   let env = 
     if Environment.mem_var env0 va then env0 
@@ -1866,7 +1871,7 @@ let assign_offset_variable mgr pre va ok e =
   in
   let forget_vars = [] in
   let forget_vars = Array.of_list forget_vars in
-  Abstract1.forget_array_with mgr pre forget_vars false;
+  let pre = Abstract1.forget_array mgr pre forget_vars false in
   match offset_linstr_of_expr env ok e with
     | Some(env,str) ->
 	(* Assignment can be treated precisely. *)
@@ -1874,14 +1879,15 @@ let assign_offset_variable mgr pre va ok e =
 	  try Parser.linexpr1_of_string env str
 	  with Parser.Error msg -> printf "%s@." msg; assert false
 	in
-	Abstract1.change_environment_with mgr pre env false;
-	Abstract1.assign_linexpr_with mgr pre va lin None
+	let pre = Abstract1.change_environment mgr pre env false in
+	Abstract1.assign_linexpr mgr pre va lin None
     | None ->
 	(* Assignment treated as a forget operation. *)
 	if Environment.mem_var env0 va then
-	  Abstract1.forget_array_with mgr pre [|va|] false
-	    
-let assign_expr mgr pre t e =
+	  Abstract1.forget_array mgr pre [|va|] false
+	else pre
+
+let assign_expr mgr t e pre =
   (* Choice: terms that depend on the term assigned to are removed from
      the abstract value -before- treating the assignment. *)
   let env = Abstract1.env pre in
@@ -1893,28 +1899,29 @@ let assign_expr mgr pre t e =
     ) integer_vars
   in
   let forget_vars = Array.of_list forget_vars in
-    Abstract1.forget_array_with mgr pre forget_vars false;
+  let pre = Abstract1.forget_array mgr pre forget_vars false in
     (* Propagate knowledge on abstract variables on the rhs of the assignment
        to equivalent abstract variables on the lhs. *)
-    begin match term_of_expr e with
-      | None -> ()
+  let pre = match term_of_expr e with
+      | None -> pre
       | Some te ->
 	  let constr_vars = List.filter 
 	    (fun va -> 
 	       not (Abstract1.is_variable_unconstrained mgr pre va)
 	    ) integer_vars
 	  in
-	    List.iter 
-	      (fun va' ->
+	    List.fold_left 
+	      (fun pre va' ->
 		 let t' = Vai.term va' in
 		   if raw_strict_sub_term te t' then 
 		     let lhst = 
 		       replace_term_in_term ~source:te ~target:t t' 
 		     in
 		     let a = new assertion (JCArelation (lhst, (`Beq,`Integer), t')) in
-		       test_assertion mgr pre a
-	      ) constr_vars
-    end;
+		       simple_test_assertion mgr a pre
+		   else pre
+	      ) pre constr_vars
+  in
     (* special case: t1 : pointer = t2 : pointer *)
     begin
       try 
@@ -1927,20 +1934,29 @@ let assign_expr mgr pre t e =
       with _ -> () 
     end;
     (* Assign abstract variables. *)
+  let pre = 
     if Vai.has_variable t then
-      assign_variable mgr pre (Vai.variable t) e;
+      assign_variable mgr (Vai.variable t) e pre 
+    else pre
+  in
+  let pre = 
     if Vai.has_offset_min_variable t then
       begin
 	let va = Vai.offset_min_variable t in
-	  assign_offset_variable mgr pre va Offset_min_kind e
-      end;
+	assign_offset_variable mgr va Offset_min_kind e pre 
+      end
+    else pre
+  in
+  let pre = 
     if Vai.has_offset_max_variable t then
       begin
 	let va = Vai.offset_max_variable t in
-	  assign_offset_variable mgr pre va Offset_max_kind e
+	assign_offset_variable mgr va Offset_max_kind e pre
       end
-	
-let assign_heap mgr pre r fi =
+    else pre
+  in pre
+
+let assign_heap mgr r fi pre =
   if debug then 
     printf "[assign_heap]%a@." Region.print r;
   if !Jc_options.separation_sem = SepRegions then
@@ -1974,23 +1990,45 @@ let assign_heap mgr pre r fi =
     ) integer_vars
   in
   let forget_vars = Array.of_list forget_vars in
-  Abstract1.forget_array_with mgr pre forget_vars false
+  Abstract1.forget_array mgr pre forget_vars false
+
+let test_assertion ?propagated mgr a curinvs =
+  apply_to_current_invariant ?propagated (simple_test_assertion mgr a) curinvs
+    
+let test_expr ~(neg:bool) mgr e curinvs =
+  apply_to_current_invariant (test_expr ~neg mgr e) curinvs
+
+let assign_variable mgr va e curinvs =
+  apply_to_current_invariant (assign_variable mgr va e) curinvs
+
+let assign_offset_variable mgr va ok e curinvs =
+  apply_to_current_invariant (assign_offset_variable mgr va ok e) curinvs
+
+let assign_expr mgr t e curinvs =
+  apply_to_current_invariant (assign_expr mgr t e) curinvs
+	
+let assign_heap mgr r fi curinvs =
+  apply_to_current_invariant (assign_heap mgr r fi) curinvs 
 
 let meet mgr val1 val2 =
   let env = Environment.lce (Abstract1.env val1) (Abstract1.env val2) in
-  Abstract1.change_environment_with mgr val1 env false;
-  Abstract1.change_environment_with mgr val2 env false;
-  Abstract1.meet_with mgr val1 val2
+  let val1 = Abstract1.change_environment mgr val1 env false in
+  let val2 = Abstract1.change_environment mgr val2 env false in
+  Abstract1.meet mgr val1 val2
 
 let join mgr val1 val2 =
   let env = Environment.lce (Abstract1.env val1) (Abstract1.env val2) in
-  Abstract1.change_environment_with mgr val1 env false;
-  Abstract1.change_environment_with mgr val2 env false;
-  Abstract1.join_with mgr val1 val2
+  let val1 = Abstract1.change_environment mgr val1 env false in
+  let val2 = Abstract1.change_environment mgr val2 env false in
+  Abstract1.join mgr val1 val2
 
 let join_abstract_value mgr pair1 pair2 =
-  join mgr pair1.jc_absval_regular pair2.jc_absval_regular;
-  join mgr pair1.jc_absval_propagated pair2.jc_absval_propagated
+  {
+    jc_absval_regular =
+      join mgr pair1.jc_absval_regular pair2.jc_absval_regular;
+    jc_absval_propagated =
+      join mgr pair1.jc_absval_propagated pair2.jc_absval_propagated
+  }
 
 let join_invariants mgr invs1 invs2 =
   if Jc_options.debug then
@@ -2002,7 +2040,7 @@ let join_invariants mgr invs1 invs2 =
 	(fun (ei, post1) acc ->
 	   try
 	     let post2 = List.assoc ei postexcl2 in
-	       join_abstract_value mgr post1 post2;
+	     let post1 = join_abstract_value mgr post1 post2 in
 	       (ei, post1) :: acc
 	   with Not_found -> (ei, post1) :: acc
 	) postexcl1 []
@@ -2013,27 +2051,34 @@ let join_invariants mgr invs1 invs2 =
 	   else (ei, post2) :: acc
 	) postexcl2 join1
   in
-    assert (invs1.jc_absinv_return == invs2.jc_absinv_return);
-    join_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
-    invs1.jc_absinv_exceptional <-
-      join_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional
+  assert (invs1.jc_absinv_return == invs2.jc_absinv_return);
+  { 
+    jc_absinv_normal =
+      join_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
+    jc_absinv_exceptional =
+      join_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional;
+    jc_absinv_return =
+      invs1.jc_absinv_return
+  }
 
 (* Returns the widened value as there is no destructive version of [widening]
  * in [Abstract1]. *)
 let widening mgr val1 val2 =
   let env = Environment.lce (Abstract1.env val1) (Abstract1.env val2) in
-  Abstract1.change_environment_with mgr val1 env false;
-  Abstract1.change_environment_with mgr val2 env false;
+  let val1 = Abstract1.change_environment mgr val1 env false in
+  let val2 = Abstract1.change_environment mgr val2 env false in
   (* Join before widening so that arguments are in increasing order. *)
-  Abstract1.join_with mgr val2 val1;
+  let val2 = Abstract1.join mgr val2 val1 in
   (* Perform widening between values in increasing order. *)
   Abstract1.widening mgr val1 val2 
 
 let widening_abstract_value mgr pair1 pair2 =
-  pair1.jc_absval_regular <-
-    widening mgr pair1.jc_absval_regular pair2.jc_absval_regular;
-  pair1.jc_absval_propagated <-
-    widening mgr pair1.jc_absval_propagated pair2.jc_absval_propagated
+  {
+    jc_absval_regular =
+      widening mgr pair1.jc_absval_regular pair2.jc_absval_regular;
+    jc_absval_propagated =
+      widening mgr pair1.jc_absval_propagated pair2.jc_absval_propagated
+  }
 
 let widen_invariants mgr invs1 invs2 =
   if Jc_options.debug then
@@ -2043,7 +2088,7 @@ let widen_invariants mgr invs1 invs2 =
     let widen1 = List.fold_right (fun (ei,post1) acc ->
       try
 	let post2 = List.assoc ei postexcl2 in
-	widening_abstract_value mgr post1 post2;
+	let post1 = widening_abstract_value mgr post1 post2 in
 	(ei, post1) :: acc
       with Not_found -> (ei,post1) :: acc
     ) postexcl1 []
@@ -2054,22 +2099,30 @@ let widen_invariants mgr invs1 invs2 =
     ) postexcl2 widen1
   in
   assert (invs1.jc_absinv_return == invs2.jc_absinv_return);
-  widening_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
-  invs1.jc_absinv_exceptional <-
-    widen_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional
+  {
+    jc_absinv_normal =
+      widening_abstract_value mgr invs1.jc_absinv_normal invs2.jc_absinv_normal;
+    jc_absinv_exceptional =
+      widen_exclists invs1.jc_absinv_exceptional invs2.jc_absinv_exceptional;
+    jc_absinv_return =
+      invs1.jc_absinv_return
+  }    
 
 let empty mgr val1 =
-  let bot = Abstract1.bottom mgr (Abstract1.env val1) in
-  Abstract1.meet_with mgr val1 bot
+  Abstract1.bottom mgr (Abstract1.env val1)
 
 let empty_abstract_value mgr pair1 =
-  empty mgr pair1.jc_absval_regular;
-  empty mgr pair1.jc_absval_propagated
+  { 
+    jc_absval_regular = 
+      empty mgr pair1.jc_absval_regular;
+    jc_absval_propagated =
+      empty mgr pair1.jc_absval_propagated
+  }
 
-let is_eq mgr val1 val2 =
+let is_eq mgr val1 val2 = (* TODO: compare env ? *)
   let env = Environment.lce (Abstract1.env val1) (Abstract1.env val2) in
-  Abstract1.change_environment_with mgr val1 env false;
-  Abstract1.change_environment_with mgr val2 env false;
+  let val1 = Abstract1.change_environment mgr val1 env false in
+  let val2 = Abstract1.change_environment mgr val2 env false in
   Abstract1.is_eq mgr val1 val2 
 
 let eq_abstract_value mgr absval1 absval2 =
@@ -2108,16 +2161,26 @@ let copy_invariants mgr invs = {
 let forget mgr val1 vls =
   let vls = List.filter (Environment.mem_var (Abstract1.env val1)) vls in
   let varr = Array.of_list vls in
-  Abstract1.forget_array_with mgr val1 varr false
+  Abstract1.forget_array mgr val1 varr false
 
 let forget_abstract_value mgr absval vls =
-  forget mgr absval.jc_absval_regular vls;
-  forget mgr absval.jc_absval_propagated vls
+  {
+    jc_absval_regular =
+      forget mgr absval.jc_absval_regular vls;
+    jc_absval_propagated =
+      forget mgr absval.jc_absval_propagated vls
+  }
 
 let forget_invariants mgr invs vls =
-  forget_abstract_value mgr invs.jc_absinv_normal vls;
-  List.iter (fun (ei,post) -> forget_abstract_value mgr post vls)
-    invs.jc_absinv_exceptional
+  {
+    jc_absinv_normal =
+      forget_abstract_value mgr invs.jc_absinv_normal vls;
+    jc_absinv_exceptional =
+      List.map (fun (ei,post) -> (ei,forget_abstract_value mgr post vls))
+	invs.jc_absinv_exceptional;
+    jc_absinv_return =
+      invs.jc_absinv_return
+  }
 
 let bottom_abstract_value mgr env =
   { 
@@ -2171,9 +2234,9 @@ let keep_extern mgr fi post =
   in
   let env = try Environment.make (Array.of_list integer_vars) [||] 
   with Failure msg -> printf "%s@." msg; assert false in
-    Abstract1.change_environment_with mgr post env false;
+  let post = Abstract1.change_environment mgr post env false in
     let lincons = Parser.lincons1_of_lstring env strl in
-      meet mgr post (Abstract1.of_lincons_array mgr env lincons);
+    let post = meet mgr post (Abstract1.of_lincons_array mgr env lincons) in
     let term_has_local_var t =
       fold_term 
 	(fun acc t -> match t#node with
@@ -2191,85 +2254,88 @@ let keep_extern mgr fi post =
       in
     let extern_vars = Array.of_list extern_vars in
     let extern_env = Environment.make extern_vars [||] in
-      Abstract1.change_environment_with mgr post extern_env false;
-      post
+    Abstract1.change_environment mgr post extern_env false
 
 
 let rec ai_inter_function_call mgr iai abs pre fi loc fs sl el =
-  let formal_vars =
-    List.fold_left2
-      (fun (acc) vi e ->
-	 let t = new term_var vi in
-	 let acc = if Vai.has_variable t then
-	   let va = Vai.variable t in
-	     assign_variable mgr pre va e;
-	     va :: acc else acc in
-	 let acc = if Vai.has_offset_min_variable t then
-	   let va = Vai.offset_min_variable t in
-	     assign_offset_variable mgr pre va Offset_min_kind e;
-	     va :: acc else acc in
-	 let acc = if Vai.has_offset_max_variable t then
-	   let va = Vai.offset_max_variable t in
-	     assign_offset_variable mgr pre va Offset_max_kind e;
-	     va :: acc else acc in
-           acc)
-      [] fi.jc_fun_info_parameters el
-  in
-  let formal_vars = List.filter (fun v -> not (Environment.mem_var (Abstract1.env pre) v)) formal_vars in
-  let formal_vars = Array.of_list formal_vars in
-  let env = try Environment.add (Abstract1.env pre) formal_vars [||] with _ -> assert false in
-  let pre = keep_extern mgr fi pre in
-  let pre = try Abstract1.change_environment mgr pre env false with _ -> assert false in
-  let function_pre = 
-    try Hashtbl.find iai.jc_interai_function_preconditions fi.jc_fun_info_tag 
-    with Not_found -> Abstract1.bottom mgr (Abstract1.env pre) 
-  in
-    begin
-      let old_pre = Abstract1.copy mgr function_pre in
-      let function_pre, fixpoint_reached = 
-	if fi.jc_fun_info_is_recursive then
-	  let num = 
-	    try Hashtbl.find iai.jc_interai_function_nb_iterations fi.jc_fun_info_tag
-	    with Not_found -> 0
-	  in
-	    Hashtbl.replace iai.jc_interai_function_nb_iterations fi.jc_fun_info_tag 
-	      (num + 1);
-	    if num < abs.jc_absint_widening_threshold then
-	      begin
-		join mgr function_pre pre;
-		if num = 0 then 
-		  Hashtbl.replace iai.jc_interai_function_init_pre 
-		    fi.jc_fun_info_tag function_pre;
-		function_pre, false
-	      end
-	    else
-	      begin
-		let copy_pre = Abstract1.copy mgr pre in
-		let function_pre = widening mgr function_pre copy_pre in
-		  if is_eq mgr old_pre function_pre then
-		    begin
-		      let init_pre = 
-			Hashtbl.find iai.jc_interai_function_init_pre fi.jc_fun_info_tag in
-			join mgr function_pre init_pre;			  
-			(* Hashtbl.replace iai.jc_interai_function_preconditions fi.jc_fun_info_tag function_pre;*)
-			function_pre, true
-		    end
-		  else
-		      function_pre, false
-	      end
-	else
-	  begin
-	    join mgr function_pre pre;
-	    function_pre, false;
-	  end
-      in
-      let pre_has_changed = not (is_eq mgr old_pre function_pre) in
-	if pre_has_changed then
-	  Hashtbl.replace iai.jc_interai_function_preconditions fi.jc_fun_info_tag function_pre;
-	let inspected = List.mem fi.jc_fun_info_tag !inspected_functions in
-	  if not inspected || pre_has_changed then
-	    ai_function mgr (Some iai) [] (fi, loc, fs, sl);
-    end
+  assert false
+(*   let pre,formal_vars = *)
+(*     List.fold_left2 *)
+(*       (fun (pre,acc) vi e -> *)
+(* 	 let t = new term_var vi in *)
+(* 	 let pre,acc = if Vai.has_variable t then *)
+(* 	   let va = Vai.variable t in *)
+(* 	   assign_variable mgr va e pre, *)
+(* 	   va :: acc else pre,acc  *)
+(* 	 in *)
+(* 	 let pre,acc = if Vai.has_offset_min_variable t then *)
+(* 	   let va = Vai.offset_min_variable t in *)
+(* 	     assign_offset_variable mgr va Offset_min_kind e pre, *)
+(* 	     va :: acc else pre,acc  *)
+(* 	 in *)
+(* 	 let pre,acc = if Vai.has_offset_max_variable t then *)
+(* 	   let va = Vai.offset_max_variable t in *)
+(* 	     assign_offset_variable mgr va Offset_max_kind e pre, *)
+(* 	   va :: acc else pre,acc  *)
+(* 	 in *)
+(*          pre,acc) *)
+(*       (pre,[]) fi.jc_fun_info_parameters el *)
+(*   in *)
+(*   let formal_vars = List.filter (fun v -> not (Environment.mem_var (Abstract1.env pre) v)) formal_vars in *)
+(*   let formal_vars = Array.of_list formal_vars in *)
+(*   let env = try Environment.add (Abstract1.env pre) formal_vars [||] with _ -> assert false in *)
+(*   let pre = keep_extern mgr fi pre in *)
+(*   let pre = try Abstract1.change_environment mgr pre env false with _ -> assert false in *)
+(*   let function_pre =  *)
+(*     try Hashtbl.find iai.jc_interai_function_preconditions fi.jc_fun_info_tag  *)
+(*     with Not_found -> Abstract1.bottom mgr (Abstract1.env pre)  *)
+(*   in *)
+(*     begin *)
+(*       let old_pre = Abstract1.copy mgr function_pre in *)
+(*       let function_pre, fixpoint_reached =  *)
+(* 	if fi.jc_fun_info_is_recursive then *)
+(* 	  let num =  *)
+(* 	    try Hashtbl.find iai.jc_interai_function_nb_iterations fi.jc_fun_info_tag *)
+(* 	    with Not_found -> 0 *)
+(* 	  in *)
+(* 	    Hashtbl.replace iai.jc_interai_function_nb_iterations fi.jc_fun_info_tag  *)
+(* 	      (num + 1); *)
+(* 	    if num < abs.jc_absint_widening_threshold then *)
+(* 	      begin *)
+(* 		let function_pre = join mgr function_pre pre in *)
+(* 		if num = 0 then  *)
+(* 		  Hashtbl.replace iai.jc_interai_function_init_pre  *)
+(* 		    fi.jc_fun_info_tag function_pre; *)
+(* 		function_pre, false *)
+(* 	      end *)
+(* 	    else *)
+(* 	      begin *)
+(* 		let copy_pre = Abstract1.copy mgr pre in *)
+(* 		let function_pre = widening mgr function_pre copy_pre in *)
+(* 		  if is_eq mgr old_pre function_pre then *)
+(* 		    begin *)
+(* 		      let init_pre =  *)
+(* 			Hashtbl.find iai.jc_interai_function_init_pre fi.jc_fun_info_tag in *)
+(* 		      let function_pre = join mgr function_pre init_pre in *)
+(* 			(\* Hashtbl.replace iai.jc_interai_function_preconditions fi.jc_fun_info_tag function_pre;*\) *)
+(* 			function_pre, true *)
+(* 		    end *)
+(* 		  else *)
+(* 		      function_pre, false *)
+(* 	      end *)
+(* 	else *)
+(* 	  begin *)
+(* 	    let function_pre = join mgr function_pre pre in *)
+(* 	    function_pre, false; *)
+(* 	  end *)
+(*       in *)
+(*       let pre_has_changed = not (is_eq mgr old_pre function_pre) in *)
+(* 	if pre_has_changed then *)
+(* 	  Hashtbl.replace iai.jc_interai_function_preconditions fi.jc_fun_info_tag function_pre; *)
+(* 	let inspected = List.mem fi.jc_fun_info_tag !inspected_functions in *)
+(* 	  if not inspected || pre_has_changed then *)
+(* 	    ai_function mgr (Some iai) [] (fi, loc, fs, sl); *)
+(*     end *)
       
 and find_target_assertions targets s =
   List.fold_left 
@@ -2308,7 +2374,7 @@ and ai_expr iaio abs curinvs s =
  * modify the initial value of invariants for the loop considered, so that 
  * narrowing is possible.
  *)
-and intern_ai_expr iaio abs curinvs s =
+and intern_ai_expr iaio abs curinvs (e as s) =
   let mgr = abs.jc_absint_manager in
   (* Define common shortcuts. *)
   let normal = curinvs.jc_absinv_normal in
@@ -2317,91 +2383,96 @@ and intern_ai_expr iaio abs curinvs s =
   let postexcl = curinvs.jc_absinv_exceptional in
   let postret = curinvs.jc_absinv_return in
   (* Record invariant at assertion points. *)
-  let targets = find_target_assertions abs.jc_absint_target_assertions s in
+  let targets = find_target_assertions abs.jc_absint_target_assertions e in
   List.iter
     (fun target ->
       target.jc_target_regular_invariant <- mkinvariant mgr pre;
       target.jc_target_propagated_invariant <- mkinvariant mgr prop
     ) targets;
   (* Apply appropriate transition function. *)
-  begin match s#node with
+  begin match e#node with
     | JCElet (vi, None, s) ->
 	ai_expr iaio abs curinvs s
     | JCElet (vi, Some e, s) when Expr.is_app e ->
-	ai_call iaio abs curinvs (Some vi) e;
+	let curinvs = ai_call iaio abs curinvs (Some vi) e in
 	ai_expr iaio abs curinvs s
     | JCElet (vi, Some e, s) ->
-	ai_expr iaio abs curinvs e;
-	assign_expr mgr pre (new term_var vi) e;
-	ai_expr iaio abs curinvs s;
+	let curinvs = ai_expr iaio abs curinvs e in
+	let curinvs = assign_expr mgr (new term_var vi) e curinvs in
+	let curinvs = ai_expr iaio abs curinvs s in
         (* To keep information on variable [vi], declaration should be turned
 	   into assignment before analysis. *)
         forget_invariants mgr curinvs (Vai.all_variables (new term_var vi))
     | JCEassign_var (vi, e) ->
-	ai_expr iaio abs curinvs e;
-	assign_expr mgr pre (new term_var vi) e; (* TODO : le probleme est la (l est supprimé de l'env)*)
+	let curinvs = ai_expr iaio abs curinvs e in
+	assign_expr mgr (new term_var vi) e curinvs (* TODO : le probleme est la (l est supprimé de l'env)*)
     | JCEassign_heap (e1, fi, e2) ->
-	ai_expr iaio abs curinvs e1;
-	ai_expr iaio abs curinvs e2;
-	assign_heap mgr pre e1#region fi;
+	let curinvs = ai_expr iaio abs curinvs e1 in
+	let curinvs = ai_expr iaio abs curinvs e2 in
+	let curinvs = assign_heap mgr e1#region fi curinvs in
 	begin match term_of_expr e1 with
-	  | None -> () (* TODO *)
+	  | None -> curinvs (* TODO *)
 	  | Some t1 ->
 	      let dereft = new term ~typ:fi.jc_field_info_type (JCTderef(t1,LabelHere,fi)) in
-	      assign_expr mgr pre dereft e2
+	      assign_expr mgr dereft e2 curinvs 
 	end
     | JCEassert(_, a) ->
-	test_assertion mgr pre a
+	test_assertion mgr a curinvs
     | JCEblock sl ->
-	List.iter (ai_expr iaio abs curinvs) sl
+	List.fold_left (ai_expr iaio abs) curinvs sl
     | JCEmatch _ -> assert false (* TODO *)
     | JCEif (e, ts, fs) ->
-	ai_expr iaio abs curinvs e;
+	let curinvs = ai_expr iaio abs curinvs e in
 	let asrts = collect_expr_asserts e in 
-	  List.iter (test_assertion mgr prop) asrts;
-	  let copyinvs = copy_invariants mgr curinvs in
+	let curinvs = 
+	  List.fold_right (test_assertion ~propagated:true mgr) asrts curinvs 
+	in
 	    (* Treat "then" branch. *)
-	      test_expr ~neg:false mgr pre e;
-	    ai_expr iaio abs curinvs ts;
+	let copyinvs = test_expr ~neg:false mgr e curinvs in
+	let copyinvs = ai_expr iaio abs copyinvs ts in
 	    (* Treat "else" branch. *)
-	    let copy_pre = copyinvs.jc_absinv_normal.jc_absval_regular in
-	      test_expr ~neg:true mgr copy_pre e;
-	      ai_expr iaio abs copyinvs fs;
+	let curinvs = test_expr ~neg:true mgr e curinvs in
+	let curinvs = ai_expr iaio abs curinvs fs in
 	      (* Join both branches. *)
-	      join_invariants mgr curinvs copyinvs;
+	join_invariants mgr curinvs copyinvs
     | JCEreturn_void ->
-	join_abstract_value mgr !postret normal;
-	empty_abstract_value mgr normal
+	postret := join_abstract_value mgr !postret normal;
+	{ curinvs with jc_absinv_normal =
+	    empty_abstract_value mgr normal }
     | JCEreturn (t, e) ->
-	ai_expr iaio abs curinvs e;
+	let curinvs = ai_expr iaio abs curinvs e in
 	let asrts = collect_expr_asserts e in
-	  List.iter (test_assertion mgr prop) asrts;
+	let curinvs = 
+	  List.fold_right (test_assertion ~propagated:true mgr) asrts curinvs
+	in
 	  let result_vi = abs.jc_absint_function.jc_fun_info_result in
 	  let result_vit = new term_var result_vi in
-	    assign_expr mgr pre result_vit e;
-	    join_abstract_value mgr !postret normal;
-	    empty_abstract_value mgr normal;
+	  let curinvs = assign_expr mgr result_vit e curinvs in
+	  postret := join_abstract_value mgr !postret normal;
+	  { curinvs with jc_absinv_normal =
+	      empty_abstract_value mgr normal }
     | JCEthrow (ei, eopt) ->
-	begin match eopt with
-	  | None -> ()
+	let curinvs = match eopt with
+	  | None -> curinvs
 	  | Some e ->
-	      ai_expr iaio abs curinvs e;
+	      let curinvs = ai_expr iaio abs curinvs e in
 	      let asrts = collect_expr_asserts e in
-		List.iter (test_assertion mgr prop) asrts
-	end;
+	      List.fold_right (test_assertion ~propagated:true mgr) asrts curinvs 
+	in
 	(* TODO: add thrown value as abstract variable. *)
-	begin 
+	let normal =
 	  try join_abstract_value mgr normal (List.assoc ei postexcl)
-	  with Not_found -> () 
-	end;
+	  with Not_found -> normal
+	in
 	let copy_normal = copy_abstract_value mgr normal in
 	let postexcl = (ei, copy_normal) :: (List.remove_assoc ei postexcl) in
-	  curinvs.jc_absinv_exceptional <- postexcl;
-	  empty_abstract_value mgr normal;
+	let curinvs = { curinvs with jc_absinv_exceptional = postexcl } in
+	{ curinvs with jc_absinv_normal =
+	    empty_abstract_value mgr normal }
     | JCEpack _ | JCEunpack _ ->
-	()
+	curinvs
     | JCEtry(s,hl,fs) ->
-	ai_expr iaio abs curinvs s;
+	let curinvs = ai_expr iaio abs curinvs s in
 	let postexcl = curinvs.jc_absinv_exceptional in
 	(* Filter out exceptions present in [hl]. *)
 	let curpostexcl =
@@ -2409,10 +2480,10 @@ and intern_ai_expr iaio abs curinvs s =
 	    not (List.exists (fun (ej,_,_) ->
 	      ei.jc_exception_info_tag = ej.jc_exception_info_tag) hl)) postexcl
 	in
-	curinvs.jc_absinv_exceptional <- curpostexcl;
+	let curinvs = { curinvs with jc_absinv_exceptional  = curpostexcl } in
 	(* Consider each handler in turn. *)
-	List.iter 
-	  (fun (ei,_,s) ->
+	let curinvs = List.fold_left 
+	  (fun curinvs (ei,_,s) ->
 	    try
 	      let postexc = List.assoc ei postexcl in
 	      let excinvs = {
@@ -2420,16 +2491,17 @@ and intern_ai_expr iaio abs curinvs s =
 		jc_absinv_exceptional = [];
 		jc_absinv_return = postret;
 	      } in
-	      ai_expr iaio abs excinvs s;
-		join_invariants mgr curinvs excinvs;
-	    with Not_found -> ()
-	  ) hl;
+	      let excinvs = ai_expr iaio abs excinvs s in
+	      join_invariants mgr curinvs excinvs
+	    with Not_found -> curinvs
+	  ) curinvs hl
+	in
 	(* BAD: ai_expr abs curinvs fs *)
 	begin match fs#node with 
-	  | JCEblock [] -> ()
-	  | JCEconst JCCvoid -> ()
+	  | JCEblock [] -> curinvs
+	  | JCEconst JCCvoid -> curinvs
 	  | JCEblock [s] when s#node = JCEblock [] 
-	      || s#node = JCEconst JCCvoid -> ()
+	      || s#node = JCEconst JCCvoid -> curinvs
 	  | _ -> assert false (* TODO: apply finally stmt to all paths. *)
 	end
     | JCEloop (la, ls) ->
@@ -2444,52 +2516,59 @@ and intern_ai_expr iaio abs curinvs s =
 	  if num < abs.jc_absint_widening_threshold then
 	    let nextinvs = copy_invariants mgr curinvs in
 	      (* Perform one step of propagation through the loop body. *)
-	      ai_expr iaio abs nextinvs ls;
-	      join_invariants mgr curinvs nextinvs;
-	      (* Perform fixpoint computation on the loop. *)
-	      intern_ai_expr iaio abs curinvs s
+	    let nextinvs = ai_expr iaio abs nextinvs ls in
+	    let curinvs = join_invariants mgr curinvs nextinvs in
+	    (* Perform fixpoint computation on the loop. *)
+	    intern_ai_expr iaio abs curinvs s
 	  else
 	    begin try
 	      let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
 	      let wideninvs = copy_invariants mgr loopinvs in
-		widen_invariants mgr wideninvs curinvs;
-		if eq_invariants mgr loopinvs wideninvs then
+	      let wideninvs = widen_invariants mgr wideninvs curinvs in
+	      if eq_invariants mgr loopinvs wideninvs then
 		  begin 
 		    (* Fixpoint reached through widening. Perform narrowing now. *)
 		    let initinvs = 
 		      Hashtbl.find loop_initial_invariants la.jc_loop_tag in
 		      wideninvs.jc_absinv_exceptional <- [];
 		      (* TODO: be more precise on return too. *)
-		      ai_expr iaio abs wideninvs ls;
-		      join_invariants mgr wideninvs initinvs;
+		    let wideninvs = ai_expr iaio abs wideninvs ls in
+		    let wideninvs = join_invariants mgr wideninvs initinvs in
 		      Hashtbl.replace 
 			loop_invariants la.jc_loop_tag (copy_invariants mgr wideninvs);
 		      wideninvs.jc_absinv_exceptional <- initinvs.jc_absinv_exceptional;
 		      (* TODO: be more precise on return too. *)
-		      ai_expr iaio abs wideninvs ls;
+		      let wideninvs = ai_expr iaio abs wideninvs ls in
 		      (* This is an infinite loop, whose only exit is through return or
 			 throwing exceptions. *)
-		      empty_abstract_value mgr normal;
-		      curinvs.jc_absinv_exceptional <- wideninvs.jc_absinv_exceptional;
+		      let curinvs = 
+			{ curinvs with jc_absinv_normal =
+			    empty_abstract_value mgr normal }
+		      in
+		      { curinvs with jc_absinv_exceptional = wideninvs.jc_absinv_exceptional }
 		  end
 		else
 		  begin
 		    Hashtbl.replace 
 		      loop_invariants la.jc_loop_tag (copy_invariants mgr wideninvs);
 		    (* Perform one step of propagation through the loop body. *)
-		    ai_expr iaio abs wideninvs ls;
+		    let wideninvs = ai_expr iaio abs wideninvs ls in
 		    (* Perform fixpoint computation on the loop. *)
-		    intern_ai_expr iaio abs wideninvs s;
+		    let wideninvs = intern_ai_expr iaio abs wideninvs s in
 		    (* Propagate changes to [curinvs]. *)
-		    empty_abstract_value mgr normal;
-		    join_abstract_value mgr normal wideninvs.jc_absinv_normal;
-		    curinvs.jc_absinv_exceptional <- wideninvs.jc_absinv_exceptional
+		    let curinvs = 
+			{ curinvs with jc_absinv_normal =
+			    empty_abstract_value mgr normal } 
+		    in
+		    let normal = join_abstract_value mgr normal wideninvs.jc_absinv_normal in
+		    { curinvs with jc_absinv_normal = normal;
+			jc_absinv_exceptional = wideninvs.jc_absinv_exceptional }
 		  end
 	    with Not_found ->
 	      Hashtbl.replace 
 		loop_invariants la.jc_loop_tag (copy_invariants mgr curinvs);
 	      (* Perform one step of propagation through the loop body. *)
-	      ai_expr iaio abs curinvs ls;
+	      let curinvs = ai_expr iaio abs curinvs ls in
 	      (* Perform fixpoint computation on the loop. *)
 	      intern_ai_expr iaio abs curinvs s
 	    end
@@ -2500,16 +2579,16 @@ and intern_ai_expr iaio abs curinvs s =
     | JCEbinary _ | JCEderef _ | JCEvar _ | JCEconst _ | JCEbitwise_cast _
     | JCEaddress _ -> 
 	let elist = IExpr.subs s in
-	List.iter (ai_expr iaio abs curinvs) elist
+	List.fold_left (ai_expr iaio abs) curinvs elist
 	  (* TODO *)
     | JCEcontract _ -> assert false (* TODO *)
 
-  end;
+  end
 (*   let normal = curinvs.jc_absinv_normal in *)
 (*   let prop = normal.jc_absval_propagated in *)
 (*   let asrts = collect_expr_asserts s in *)
 (*     List.iter (test_assertion mgr prop) asrts *)
-()
+
 
 and ai_call iaio abs curinvs vio e =
   let mgr = abs.jc_absint_manager in
@@ -2520,7 +2599,7 @@ and ai_call iaio abs curinvs vio e =
   let call = match e#node with JCEapp call -> call | _ -> assert false in
   let fi = match call.jc_call_fun with JCfun f -> f | _ -> assert false in
   let el = call.jc_call_args in
-  List.iter (ai_expr iaio abs curinvs) el;
+  let curinvs = List.fold_left (ai_expr iaio abs) curinvs el in
   let _, loc, fs, slo = 
     Hashtbl.find Jc_typing.functions_table fi.jc_fun_info_tag 
   in
@@ -2609,13 +2688,14 @@ and ai_call iaio abs curinvs vio e =
       (fun (ei, a) -> 
 	 let copy_normal = copy_abstract_value mgr normal in
 	 let copy_pre = copy_normal.jc_absval_regular in
-	 test_assertion mgr copy_pre normal_behavior;
+	 let copy_pre = simple_test_assertion mgr normal_behavior  copy_pre in
+	 let copy_normal = { copy_normal with jc_absval_regular = copy_pre } in
 	 ei, copy_normal)
       exceptional_behaviors
   in
-  curinvs.jc_absinv_exceptional <- postexcl;
+  let curinvs = { curinvs with jc_absinv_exceptional = postexcl } in
   if (is_purely_exceptional_fun fs) then
-    empty_abstract_value mgr normal
+    { curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
   else
     begin
       let fi_writes = fi.jc_fun_info_effects.jc_writes.jc_effect_globals in
@@ -2624,8 +2704,9 @@ and ai_call iaio abs curinvs vio e =
 	  (fun vi _labs acc -> Vai.all_variables (new term_var vi) @ acc)
 	  fi_writes [] 
       in
-      Abstract1.forget_array_with mgr pre (Array.of_list vars_writes) false;
-      test_assertion mgr pre normal_behavior
+      let f pre = Abstract1.forget_array mgr pre (Array.of_list vars_writes) false in
+      let curinvs = apply_to_current_invariant f curinvs in
+      test_assertion mgr normal_behavior curinvs 
 	(* To keep information on variable [vi], declaration should be turned
 	 * into assignment before analysis.
 	 *)
@@ -2737,16 +2818,19 @@ and ai_function mgr iaio targets (fi, loc, fs, sl) =
 
     (* Take the function precondition as init pre *)
     let initpre = top_abstract_value mgr env in
-    test_assertion mgr initpre.jc_absval_regular fs.jc_fun_free_requires;
+    let initpre = { initpre with jc_absval_regular =
+	simple_test_assertion mgr fs.jc_fun_free_requires initpre.jc_absval_regular } in
 
     (* Add the currently inferred pre for [fi] in pre *)
-    (match iaio with
-      | None -> ()
+    let initpre = match iaio with
+      | None -> initpre
       | Some iai ->
 	  let inferred_pre =
 	    try Hashtbl.find iai.jc_interai_function_preconditions fi.jc_fun_info_tag 
 	    with Not_found -> Abstract1.top mgr env (* for main function *) in
-	  meet mgr initpre.jc_absval_regular inferred_pre);
+	  { initpre with jc_absval_regular =
+	      meet mgr initpre.jc_absval_regular inferred_pre }
+    in
 
     pointer_terms_table := Hashtbl.create 0;
 
@@ -2756,7 +2840,7 @@ and ai_function mgr iaio targets (fi, loc, fs, sl) =
       jc_absinv_exceptional = [];
       jc_absinv_return = ref (bottom_abstract_value mgr env);
     } in
-     (ai_expr iaio abs invs) sl;
+    let invs = (ai_expr iaio abs invs) sl in
       (match iaio with
 	 | None ->  (record_ai_invariants abs) sl 
 	 | Some iai -> 
@@ -2771,9 +2855,12 @@ and ai_function mgr iaio targets (fi, loc, fs, sl) =
 	) targets;
       
       let initpre = top_abstract_value mgr env in
-	test_assertion mgr initpre.jc_absval_regular fs.jc_fun_free_requires;
-	(match iaio with
-	   | None -> ()
+      let initpre = { initpre with jc_absval_regular =
+	  simple_test_assertion mgr fs.jc_fun_free_requires initpre.jc_absval_regular }
+      in
+      let initpre =
+	match iaio with
+	   | None -> initpre
 	   | Some iai -> (* Interprocedural analysis *) 
 	       inspected_functions := fi.jc_fun_info_tag :: !inspected_functions;
 	       incr nb_nodes;
@@ -2782,8 +2869,10 @@ and ai_function mgr iaio targets (fi, loc, fs, sl) =
 		 let inferred_pre = 
 		   Hashtbl.find iai.jc_interai_function_preconditions fi.jc_fun_info_tag
 		 in
-		   initpre.jc_absval_regular <- Abstract1.copy mgr inferred_pre
-	       with Not_found -> ());
+		 { initpre with jc_absval_regular =
+		     Abstract1.copy mgr inferred_pre }
+	       with Not_found -> initpre
+	 in
 	pointer_terms_table := Hashtbl.create 0;
 
 	(* Annotation inference on the function body. *)
@@ -2792,7 +2881,7 @@ and ai_function mgr iaio targets (fi, loc, fs, sl) =
 	  jc_absinv_exceptional = [];
 	  jc_absinv_return = ref (bottom_abstract_value mgr env);
 	} in
-	  ai_expr iaio abs invs sl;
+	let invs = ai_expr iaio abs invs sl in
 	  (match iaio with
 	     | None -> record_ai_invariants abs sl 
 	     | Some iai -> 
@@ -2830,7 +2919,8 @@ and ai_function mgr iaio targets (fi, loc, fs, sl) =
 	  
 	  (* Update the return postcondition for procedure with no last return. *)
 	  if return_type = JCTnative Tunit then
-	    join_abstract_value mgr !(invs.jc_absinv_return) invs.jc_absinv_normal;
+	    invs.jc_absinv_return := 
+	      join_abstract_value mgr !(invs.jc_absinv_return) invs.jc_absinv_normal;
 	  (* record the inferred postcondition *)
 	  match iaio with 
 	    | None -> ()
@@ -3216,7 +3306,7 @@ let contradictory =
 	  let cstrs = List.map snd cstrs in
 	  let dnf = Dnf.make_and cstrs in
 	  let absval = Abstract1.top mgr env in
-	  Dnf.test mgr absval dnf;
+	  let absval = Dnf.test mgr absval dnf in
 	  Abstract1.is_bottom mgr absval
 	with Parser.Error _ | Failure _ -> false
       ) true disjuncts
@@ -3267,7 +3357,7 @@ let simplify =
 	    (* 	      (Pp.print_list (fun fmt () -> printf " /\\ ")  *)
 	    (* 		 (fun fmt s -> print_string s)) *)
 	    (* 	      cstrs; *)
-	    Dnf.test mgr absval dnf;
+	    let absval = Dnf.test mgr absval dnf in
 	    if Jc_options.debug then
 	      printf "abstract conjunct : %a@." Abstract1.print absval;
 	    if (Abstract1.is_top mgr absval) then

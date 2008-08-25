@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.339 2008-08-14 11:14:20 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.340 2008-08-25 08:30:50 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -585,14 +585,16 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
 	end
     | JCTaddress t1 -> 
         LApp("address",[ ft t1 ])
-    | JCTinstanceof(t1,lab,st) ->
+    | JCTinstanceof(t1,lab',st) ->
+      let lab = if relocate && lab' = LabelHere then lab else lab' in
         let t1' = ft t1 in
 	let tag = 
 	  ttag_table_var ~label_in_name:global_assertion lab
 	    (struct_variant st,t1#region) 
 	in
         LApp("instanceof_bool",[ tag; t1'; LVar (tag_name st) ])
-    | JCTcast(t1,lab,st) ->
+    | JCTcast(t1,lab',st) ->
+      let lab = if relocate && lab' = LabelHere then lab else lab' in
         if struct_of_union st then 
 	  ft t1 
 	else
@@ -617,7 +619,8 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
           | Real_to_integer ->
               term_coerce t1#pos integer_type t1#typ t1 t1'
 	end
-    | JCTderef(t1,lab,fi) -> 
+    | JCTderef(t1,lab',fi) -> 
+	let lab = if relocate && lab' = LabelHere then lab else lab' in
 	let mc = tderef_mem_class ~type_safe t1 fi in
 	begin match mc with
 	  | JCmem_field fi' -> 
@@ -821,7 +824,8 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
     | JCAbool_term t1 ->
         let t1' = ft t1 in
         LPred("eq",[ t1'; LConst(Prim_bool true) ])
-    | JCAinstanceof(t1,lab,st) -> 
+    | JCAinstanceof(t1,lab',st) -> 
+	let lab = if relocate && lab' = LabelHere then lab else lab' in
         let t1' = ft t1 in
 	let tag = 
 	  ttag_table_var ~label_in_name:global_assertion lab
@@ -1626,6 +1630,7 @@ and expr e =
                   ~callee_writes: empty_effects
                   ~region_assoc: call.jc_call_region_assoc
 		  ~param_assoc
+		  ~with_globals:true
 		  f.jc_logic_info_final_name args
 	      in
 	      assert (pre = LTrue);
@@ -1681,6 +1686,7 @@ and expr e =
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
                   ~region_assoc: call.jc_call_region_assoc
 		  ~param_assoc
+		  ~with_globals:false
 		  fname args
 	      in
 	      let call = make_guarded_app e#mark UserCall e#pos fname args in

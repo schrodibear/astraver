@@ -1349,7 +1349,8 @@ let global_arguments ~callee_reads ~callee_writes ~region_assoc =
   (List.map fst writes), (List.map fst reads)
 
 let make_arguments 
-    ~callee_reads ~callee_writes ~region_assoc ~param_assoc fname args =
+    ~callee_reads ~callee_writes ~region_assoc ~param_assoc 
+    ~with_globals fname args =
   let write_allocs, read_allocs = 
     alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in
@@ -1361,7 +1362,10 @@ let make_arguments
       ~callee_reads ~callee_writes ~region_assoc ~param_assoc fname
   in
   let write_globs, read_globs = 
-    global_arguments ~callee_reads ~callee_writes ~region_assoc
+    if with_globals then
+      global_arguments ~callee_reads ~callee_writes ~region_assoc
+    else
+      [], []
   in
   (* Return complete list of arguments *)
   (* TODO: add mutable and committed effects *)
