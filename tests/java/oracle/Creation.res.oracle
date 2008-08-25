@@ -1692,72 +1692,145 @@ parameter Creation_test3_requires :
         not_assigns(Object_alloc_table@, Creation_simple_val@,
         Creation_simple_val, pset_empty)))) }
 
-parameter alloc_Creation :
+parameter alloc_struct_Creation :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   { ge_int(n, (0))} Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Creation(result, (0), sub_int(n, (1)), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Creation_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, n)))) }
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (valid_struct_Creation(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Creation_tag)))) }
 
-parameter alloc_Object :
+parameter alloc_struct_Creation_requires :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   { ge_int(n, (0))} Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Object_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, n)))) }
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (valid_struct_Creation(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Creation_tag)))) }
 
-parameter alloc_String :
+parameter alloc_struct_Object :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   { ge_int(n, (0))} Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, String_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, n)))) }
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Object_tag)))) }
 
-parameter alloc_TestSuperConstructor :
+parameter alloc_struct_Object_requires :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   { ge_int(n, (0))} Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_TestSuperConstructor(result, (0), sub_int(n, (1)),
-      Object_alloc_table)
-     and (instanceof(Object_tag_table, result, TestSuperConstructor_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, n)))) }
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Object_tag)))) }
 
-parameter alloc_Throwable :
+parameter alloc_struct_String :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   { ge_int(n, (0))} Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
-      Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Throwable_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, n)))) }
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, String_tag)))) }
+
+parameter alloc_struct_String_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, String_tag)))) }
+
+parameter alloc_struct_TestSuperConstructor :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (valid_struct_TestSuperConstructor(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result,
+                  TestSuperConstructor_tag)))) }
+
+parameter alloc_struct_TestSuperConstructor_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (valid_struct_TestSuperConstructor(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result,
+                  TestSuperConstructor_tag)))) }
+
+parameter alloc_struct_Throwable :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Throwable_tag)))) }
+
+parameter alloc_struct_Throwable_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Throwable_tag)))) }
 
 parameter interface_alloc_table : interface alloc_table ref
 
 parameter interface_tag_table : interface tag_table ref
 
-parameter alloc_interface :
+parameter alloc_struct_interface :
  n:int ->
   interface_alloc_table:interface alloc_table ref ->
-   { ge_int(n, (0))} interface pointer reads interface_alloc_table
-   writes interface_alloc_table,interface_tag_table
-   { (valid_struct_interface(result, (0), sub_int(n, (1)),
-      interface_alloc_table)
-     and (instanceof(interface_tag_table, result, interface_tag)
-         and (alloc_extends(interface_alloc_table@, interface_alloc_table)
-             and alloc_fresh(interface_alloc_table@, result, n)))) }
+   interface_tag_table:interface tag_table ref ->
+    { } interface pointer writes interface_alloc_table,interface_tag_table
+    { (valid_struct_interface(result, (0), sub_int(n, (1)),
+       interface_alloc_table)
+      and (alloc_extends(interface_alloc_table@, interface_alloc_table)
+          and (alloc_fresh(interface_alloc_table@, result, n)
+              and instanceof(interface_tag_table, result, interface_tag)))) }
+
+parameter alloc_struct_interface_requires :
+ n:int ->
+  interface_alloc_table:interface alloc_table ref ->
+   interface_tag_table:interface tag_table ref ->
+    { ge_int(n, (0))} interface pointer
+    writes interface_alloc_table,interface_tag_table
+    { (valid_struct_interface(result, (0), sub_int(n, (1)),
+       interface_alloc_table)
+      and (alloc_extends(interface_alloc_table@, interface_alloc_table)
+          and (alloc_fresh(interface_alloc_table@, result, n)
+              and instanceof(interface_tag_table, result, interface_tag)))) }
 
 parameter any_byte : unit -> { } byte { true }
 
@@ -1932,7 +2005,7 @@ let Creation_test1_ensures_normal =
    begin
      (let t_1 = (K_10:
                 (let this = (JC_57:
-                            ((alloc_Creation (1)) Object_alloc_table)) in
+                            (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
                 (let tt = (JC_59:
                           ((cons_Creation_int this) (safe_int32_of_integer_ (17)))) in
                 this))) in
@@ -1956,7 +2029,7 @@ let Creation_test1_safety =
    begin
      (let t_1 = (K_10:
                 (let this = (let jessie_19 = (JC_46:
-                                             ((alloc_Creation (1)) Object_alloc_table)) in
+                                             (((alloc_struct_Creation_requires (1)) Object_alloc_table) Object_tag_table)) in
                             (JC_47:
                             (assert
                             { ge_int(offset_max(Object_alloc_table,
@@ -1988,7 +2061,7 @@ let Creation_test2_ensures_normal =
    begin
      (let t_0 = (K_13:
                 (let this_3 = (JC_81:
-                              ((alloc_Creation (1)) Object_alloc_table)) in
+                              (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
                 (let tt_0 = (JC_83: (cons_Creation this_3)) in this_3))) in
      begin
        (return := (K_12: ((safe_acc_ !Creation_simple_val) t_0)));
@@ -2010,7 +2083,7 @@ let Creation_test2_safety =
    begin
      (let t_0 = (K_13:
                 (let this_3 = (let jessie_33 = (JC_70:
-                                               ((alloc_Creation (1)) Object_alloc_table)) in
+                                               (((alloc_struct_Creation_requires (1)) Object_alloc_table) Object_tag_table)) in
                               (JC_71:
                               (assert
                               { ge_int(offset_max(Object_alloc_table,
@@ -2041,7 +2114,7 @@ let Creation_test3_ensures_normal =
    begin
      (let t = (K_16:
               (let this_5 = (JC_107:
-                            ((alloc_Creation (1)) Object_alloc_table)) in
+                            (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
               (let tt_1 = (JC_109:
                           (((cons_Creation_int_int this_5) (safe_int32_of_integer_ (10))) 
                            (safe_int32_of_integer_ (7)))) in
@@ -2070,7 +2143,7 @@ let Creation_test3_safety =
    begin
      (let t = (K_16:
               (let this_5 = (let jessie_47 = (JC_96:
-                                             ((alloc_Creation (1)) Object_alloc_table)) in
+                                             (((alloc_struct_Creation_requires (1)) Object_alloc_table) Object_tag_table)) in
                             (JC_97:
                             (assert
                             { ge_int(offset_max(Object_alloc_table,
@@ -2266,32 +2339,27 @@ why --project [...] why/Creation.why
   <function name="Method test3">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/Creation_po14.why">
-      <location file = "HOME/tests/java/Creation.jc" line = "117" begin = "57" end = "72"/>
-      <explain kind = "Pre"
-text = ""/>
-    </goal>
-    <goal why_file="why/Creation_po15.why">
-      <location file = "why/Creation.why" line = "685" begin = "30" end = "151"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/Creation_po16.why">
-      <location file = "HOME/tests/java/Creation.java" line = "52" begin = "8" end = "20"/>
-      <explain kind = "Pre"
-text = ""/>
-    </goal>
-    </behavior>
-    <behavior name="Normal behavior `normal'">
     <goal why_file="why/Creation_po11.why">
       <location file = "HOME/tests/java/Creation.jc" line = "117" begin = "57" end = "72"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po12.why">
+      <location file = "why/Creation.why" line = "758" begin = "30" end = "151"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/Creation_po13.why">
+      <location file = "HOME/tests/java/Creation.java" line = "52" begin = "8" end = "20"/>
+      <explain kind = "Pre"
+text = ""/>
+    </goal>
+    </behavior>
+    <behavior name="Normal behavior `normal'">
+    <goal why_file="why/Creation_po9.why">
       <location file = "HOME/tests/java/Creation.java" line = "48" begin = "18" end = "31"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/Creation_po13.why">
+    <goal why_file="why/Creation_po10.why">
       <location file = "HOME/tests/java/Creation.java" line = "50" begin = "22" end = "27"/>
       <explain kind = "Post"/>
     </goal>
@@ -2300,28 +2368,23 @@ text = ""/>
   <function name="Method test2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/Creation_po8.why">
-      <location file = "HOME/tests/java/Creation.jc" line = "97" begin = "59" end = "74"/>
-      <explain kind = "Pre"
-text = ""/>
-    </goal>
-    <goal why_file="why/Creation_po9.why">
-      <location file = "why/Creation.why" line = "625" begin = "32" end = "157"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/Creation_po10.why">
-      <location file = "HOME/tests/java/Creation.java" line = "43" begin = "8" end = "20"/>
-      <explain kind = "Pre"
-text = ""/>
-    </goal>
-    </behavior>
-    <behavior name="Normal behavior `normal'">
     <goal why_file="why/Creation_po6.why">
       <location file = "HOME/tests/java/Creation.jc" line = "97" begin = "59" end = "74"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po7.why">
+      <location file = "why/Creation.why" line = "698" begin = "32" end = "157"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/Creation_po8.why">
+      <location file = "HOME/tests/java/Creation.java" line = "43" begin = "8" end = "20"/>
+      <explain kind = "Pre"
+text = ""/>
+    </goal>
+    </behavior>
+    <behavior name="Normal behavior `normal'">
+    <goal why_file="why/Creation_po5.why">
       <location file = "HOME/tests/java/Creation.java" line = "39" begin = "18" end = "30"/>
       <explain kind = "Post"/>
     </goal>
@@ -2330,16 +2393,16 @@ text = ""/>
   <function name="Method test1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/Creation_po3.why">
+    <goal why_file="why/Creation_po2.why">
       <location file = "HOME/tests/java/Creation.jc" line = "77" begin = "59" end = "74"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/Creation_po4.why">
-      <location file = "why/Creation.why" line = "571" begin = "30" end = "151"/>
+    <goal why_file="why/Creation_po3.why">
+      <location file = "why/Creation.why" line = "644" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/Creation_po5.why">
+    <goal why_file="why/Creation_po4.why">
       <location file = "HOME/tests/java/Creation.java" line = "35" begin = "8" end = "20"/>
       <explain kind = "Pre"
 text = ""/>
@@ -2347,11 +2410,6 @@ text = ""/>
     </behavior>
     <behavior name="Normal behavior `normal'">
     <goal why_file="why/Creation_po1.why">
-      <location file = "HOME/tests/java/Creation.jc" line = "77" begin = "59" end = "74"/>
-      <explain kind = "Pre"
-text = ""/>
-    </goal>
-    <goal why_file="why/Creation_po2.why">
       <location file = "HOME/tests/java/Creation.java" line = "31" begin = "18" end = "31"/>
       <explain kind = "Post"/>
     </goal>
@@ -2360,7 +2418,7 @@ text = ""/>
   <function name="Constructor of class TestSuperConstructor">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Normal behavior `normal'">
-    <goal why_file="why/Creation_po23.why">
+    <goal why_file="why/Creation_po20.why">
       <location file = "HOME/tests/java/Creation.java" line = "62" begin = "18" end = "34"/>
       <explain kind = "Post"/>
     </goal>
@@ -2369,31 +2427,31 @@ text = ""/>
   <function name="Constructor of class Creation">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/Creation_po21.why">
+    <goal why_file="why/Creation_po18.why">
       <location file = "HOME/tests/java/Creation.java" line = "27" begin = "6" end = "9"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
-    <goal why_file="why/Creation_po22.why">
+    <goal why_file="why/Creation_po19.why">
       <location file = "HOME/tests/java/Creation.java" line = "27" begin = "6" end = "9"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `normal'">
-    <goal why_file="why/Creation_po17.why">
+    <goal why_file="why/Creation_po14.why">
       <location file = "HOME/tests/java/Creation.java" line = "8" begin = "18" end = "38"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/Creation_po18.why">
+    <goal why_file="why/Creation_po15.why">
       <location file = "HOME/tests/java/Creation.java" line = "16" begin = "18" end = "38"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/Creation_po19.why">
+    <goal why_file="why/Creation_po16.why">
       <location file = "HOME/tests/java/Creation.java" line = "18" begin = "4" end = "12"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/Creation_po20.why">
+    <goal why_file="why/Creation_po17.why">
       <location file = "HOME/tests/java/Creation.java" line = "24" begin = "18" end = "42"/>
       <explain kind = "Post"/>
     </goal>
@@ -3445,82 +3503,45 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
 
 ========== file tests/java/why/Creation_po1.why ==========
 goal Creation_test1_ensures_normal_po_1:
-  ("JC_39": true) ->
-  (1 >= 0)
-
-========== file tests/java/why/Creation_po10.why ==========
-goal Creation_test2_safety_po_3:
   forall Creation_simple_val:(Object,
   int32) memory.
   forall Object_alloc_table:Object alloc_table.
-  ("JC_63": true) ->
-  (1 >= 0) ->
+  ("JC_39": true) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
-  (offset_max(Object_alloc_table0, result) >= 0) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
+  forall result0:int32.
+  (integer_of_int32(result0) = 17) ->
   forall Creation_simple_val0:(Object,
   int32) memory.
-  ("JC_22":
-  (("JC_20": (integer_of_int32(select(Creation_simple_val0, result)) = 0)) and
-   ("JC_21": not_assigns(Object_alloc_table0, Creation_simple_val,
+  ("JC_14":
+  (("JC_12": (integer_of_int32(select(Creation_simple_val0,
+   result)) = integer_of_int32(result0))) and
+   ("JC_13": not_assigns(Object_alloc_table0, Creation_simple_val,
    Creation_simple_val0, pset_singleton(result))))) ->
-  (0 <= offset_max(Object_alloc_table0, result))
+  forall result1:int32.
+  (result1 = select(Creation_simple_val0, result)) ->
+  forall return:int32.
+  (return = result1) ->
+  ("JC_41": (integer_of_int32(return) = 17))
 
-========== file tests/java/why/Creation_po11.why ==========
-goal Creation_test3_ensures_normal_po_1:
-  ("JC_87": true) ->
-  (1 >= 0)
-
-========== file tests/java/why/Creation_po12.why ==========
+========== file tests/java/why/Creation_po10.why ==========
 goal Creation_test3_ensures_normal_po_2:
   forall Creation_simple_val:(Object,
   int32) memory.
   forall Object_alloc_table:Object alloc_table.
   ("JC_87": true) ->
-  (1 >= 0) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 10) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = 7) ->
-  forall Creation_simple_val0:(Object,
-  int32) memory.
-  ("JC_32":
-  (("JC_30": (integer_of_int32(select(Creation_simple_val0,
-   result)) = (integer_of_int32(result0) + integer_of_int32(result1)))) and
-   ("JC_31": not_assigns(Object_alloc_table0, Creation_simple_val,
-   Creation_simple_val0, pset_singleton(result))))) ->
-  forall result2:int32.
-  (result2 = select(Creation_simple_val0, result)) ->
-  forall return:int32.
-  (return = result2) ->
-  ("JC_91": ("JC_89": ("JC_89": (integer_of_int32(return) = 17))))
-
-========== file tests/java/why/Creation_po13.why ==========
-goal Creation_test3_ensures_normal_po_3:
-  forall Creation_simple_val:(Object,
-  int32) memory.
-  forall Object_alloc_table:Object alloc_table.
-  ("JC_87": true) ->
-  (1 >= 0) ->
-  forall result:Object pointer.
-  forall Object_alloc_table0:Object alloc_table.
-  forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   forall result0:int32.
   (integer_of_int32(result0) = 10) ->
   forall result1:int32.
@@ -3541,12 +3562,12 @@ goal Creation_test3_ensures_normal_po_3:
   ("JC_90": not_assigns(Object_alloc_table, Creation_simple_val,
   Creation_simple_val0, pset_empty))))
 
-========== file tests/java/why/Creation_po14.why ==========
+========== file tests/java/why/Creation_po11.why ==========
 goal Creation_test3_safety_po_1:
   ("JC_87": true) ->
   (1 >= 0)
 
-========== file tests/java/why/Creation_po15.why ==========
+========== file tests/java/why/Creation_po12.why ==========
 goal Creation_test3_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   ("JC_87": true) ->
@@ -3555,12 +3576,12 @@ goal Creation_test3_safety_po_2:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0)
 
-========== file tests/java/why/Creation_po16.why ==========
+========== file tests/java/why/Creation_po13.why ==========
 goal Creation_test3_safety_po_3:
   forall Creation_simple_val:(Object,
   int32) memory.
@@ -3571,9 +3592,9 @@ goal Creation_test3_safety_po_3:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0) ->
   forall result0:int32.
   (integer_of_int32(result0) = 10) ->
@@ -3588,7 +3609,7 @@ goal Creation_test3_safety_po_3:
    Creation_simple_val0, pset_singleton(result))))) ->
   (0 <= offset_max(Object_alloc_table0, result))
 
-========== file tests/java/why/Creation_po17.why ==========
+========== file tests/java/why/Creation_po14.why ==========
 goal cons_Creation_ensures_normal_po_1:
   forall this_2:Object pointer.
   forall Creation_simple_val:(Object,
@@ -3608,7 +3629,7 @@ goal cons_Creation_ensures_normal_po_1:
   ("JC_20":
   ("JC_20": (integer_of_int32(select(Creation_simple_val0, this_2)) = 0))))
 
-========== file tests/java/why/Creation_po18.why ==========
+========== file tests/java/why/Creation_po15.why ==========
 goal cons_Creation_int_ensures_normal_po_1:
   forall this_1:Object pointer.
   forall n_1:int32.
@@ -3624,7 +3645,7 @@ goal cons_Creation_int_ensures_normal_po_1:
   ("JC_12": (integer_of_int32(select(Creation_simple_val0,
   this_1)) = integer_of_int32(n_1)))))
 
-========== file tests/java/why/Creation_po19.why ==========
+========== file tests/java/why/Creation_po16.why ==========
 goal cons_Creation_int_ensures_normal_po_2:
   forall this_1:Object pointer.
   forall n_1:int32.
@@ -3640,36 +3661,7 @@ goal cons_Creation_int_ensures_normal_po_2:
   ("JC_13": not_assigns(Object_alloc_table, Creation_simple_val,
   Creation_simple_val0, pset_singleton(this_1)))))
 
-========== file tests/java/why/Creation_po2.why ==========
-goal Creation_test1_ensures_normal_po_2:
-  forall Creation_simple_val:(Object,
-  int32) memory.
-  forall Object_alloc_table:Object alloc_table.
-  ("JC_39": true) ->
-  (1 >= 0) ->
-  forall result:Object pointer.
-  forall Object_alloc_table0:Object alloc_table.
-  forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 17) ->
-  forall Creation_simple_val0:(Object,
-  int32) memory.
-  ("JC_14":
-  (("JC_12": (integer_of_int32(select(Creation_simple_val0,
-   result)) = integer_of_int32(result0))) and
-   ("JC_13": not_assigns(Object_alloc_table0, Creation_simple_val,
-   Creation_simple_val0, pset_singleton(result))))) ->
-  forall result1:int32.
-  (result1 = select(Creation_simple_val0, result)) ->
-  forall return:int32.
-  (return = result1) ->
-  ("JC_41": (integer_of_int32(return) = 17))
-
-========== file tests/java/why/Creation_po20.why ==========
+========== file tests/java/why/Creation_po17.why ==========
 goal cons_Creation_int_int_ensures_normal_po_1:
   forall this_0:Object pointer.
   forall n_0_0:int32.
@@ -3692,7 +3684,7 @@ goal cons_Creation_int_int_ensures_normal_po_1:
   ("JC_30": (integer_of_int32(select(Creation_simple_val0,
   this_0)) = (integer_of_int32(n_0_0) + integer_of_int32(m))))))
 
-========== file tests/java/why/Creation_po21.why ==========
+========== file tests/java/why/Creation_po18.why ==========
 goal cons_Creation_int_int_safety_po_1:
   forall this_0:Object pointer.
   forall n_0_0:int32.
@@ -3701,7 +3693,7 @@ goal cons_Creation_int_int_safety_po_1:
   valid_struct_Creation(this_0, 0, 0, Object_alloc_table) ->
   ((-2147483648) <= (integer_of_int32(n_0_0) + integer_of_int32(m)))
 
-========== file tests/java/why/Creation_po22.why ==========
+========== file tests/java/why/Creation_po19.why ==========
 goal cons_Creation_int_int_safety_po_2:
   forall this_0:Object pointer.
   forall n_0_0:int32.
@@ -3710,7 +3702,12 @@ goal cons_Creation_int_int_safety_po_2:
   valid_struct_Creation(this_0, 0, 0, Object_alloc_table) ->
   ((integer_of_int32(n_0_0) + integer_of_int32(m)) <= 2147483647)
 
-========== file tests/java/why/Creation_po23.why ==========
+========== file tests/java/why/Creation_po2.why ==========
+goal Creation_test1_safety_po_1:
+  ("JC_39": true) ->
+  (1 >= 0)
+
+========== file tests/java/why/Creation_po20.why ==========
 goal cons_TestSuperConstructor_ensures_normal_po_1:
   forall this_4:Object pointer.
   forall Creation_simple_val:(Object,
@@ -3731,11 +3728,6 @@ goal cons_TestSuperConstructor_ensures_normal_po_1:
   ("JC_115": (integer_of_int32(select(Creation_simple_val0, this_4)) = 12))))
 
 ========== file tests/java/why/Creation_po3.why ==========
-goal Creation_test1_safety_po_1:
-  ("JC_39": true) ->
-  (1 >= 0)
-
-========== file tests/java/why/Creation_po4.why ==========
 goal Creation_test1_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   ("JC_39": true) ->
@@ -3744,12 +3736,12 @@ goal Creation_test1_safety_po_2:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0)
 
-========== file tests/java/why/Creation_po5.why ==========
+========== file tests/java/why/Creation_po4.why ==========
 goal Creation_test1_safety_po_3:
   forall Creation_simple_val:(Object,
   int32) memory.
@@ -3760,9 +3752,9 @@ goal Creation_test1_safety_po_3:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0) ->
   forall result0:int32.
   (integer_of_int32(result0) = 17) ->
@@ -3775,25 +3767,19 @@ goal Creation_test1_safety_po_3:
    Creation_simple_val0, pset_singleton(result))))) ->
   (0 <= offset_max(Object_alloc_table0, result))
 
-========== file tests/java/why/Creation_po6.why ==========
+========== file tests/java/why/Creation_po5.why ==========
 goal Creation_test2_ensures_normal_po_1:
-  ("JC_63": true) ->
-  (1 >= 0)
-
-========== file tests/java/why/Creation_po7.why ==========
-goal Creation_test2_ensures_normal_po_2:
   forall Creation_simple_val:(Object,
   int32) memory.
   forall Object_alloc_table:Object alloc_table.
   ("JC_63": true) ->
-  (1 >= 0) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   forall Creation_simple_val0:(Object,
   int32) memory.
   ("JC_22":
@@ -3806,12 +3792,12 @@ goal Creation_test2_ensures_normal_po_2:
   (return = result0) ->
   ("JC_65": (integer_of_int32(return) = 0))
 
-========== file tests/java/why/Creation_po8.why ==========
+========== file tests/java/why/Creation_po6.why ==========
 goal Creation_test2_safety_po_1:
   ("JC_63": true) ->
   (1 >= 0)
 
-========== file tests/java/why/Creation_po9.why ==========
+========== file tests/java/why/Creation_po7.why ==========
 goal Creation_test2_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   ("JC_63": true) ->
@@ -3820,10 +3806,63 @@ goal Creation_test2_safety_po_2:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0)
+
+========== file tests/java/why/Creation_po8.why ==========
+goal Creation_test2_safety_po_3:
+  forall Creation_simple_val:(Object,
+  int32) memory.
+  forall Object_alloc_table:Object alloc_table.
+  ("JC_63": true) ->
+  (1 >= 0) ->
+  forall result:Object pointer.
+  forall Object_alloc_table0:Object alloc_table.
+  forall Object_tag_table:Object tag_table.
+  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
+  (offset_max(Object_alloc_table0, result) >= 0) ->
+  forall Creation_simple_val0:(Object,
+  int32) memory.
+  ("JC_22":
+  (("JC_20": (integer_of_int32(select(Creation_simple_val0, result)) = 0)) and
+   ("JC_21": not_assigns(Object_alloc_table0, Creation_simple_val,
+   Creation_simple_val0, pset_singleton(result))))) ->
+  (0 <= offset_max(Object_alloc_table0, result))
+
+========== file tests/java/why/Creation_po9.why ==========
+goal Creation_test3_ensures_normal_po_1:
+  forall Creation_simple_val:(Object,
+  int32) memory.
+  forall Object_alloc_table:Object alloc_table.
+  ("JC_87": true) ->
+  forall result:Object pointer.
+  forall Object_alloc_table0:Object alloc_table.
+  forall Object_tag_table:Object tag_table.
+  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
+  forall result0:int32.
+  (integer_of_int32(result0) = 10) ->
+  forall result1:int32.
+  (integer_of_int32(result1) = 7) ->
+  forall Creation_simple_val0:(Object,
+  int32) memory.
+  ("JC_32":
+  (("JC_30": (integer_of_int32(select(Creation_simple_val0,
+   result)) = (integer_of_int32(result0) + integer_of_int32(result1)))) and
+   ("JC_31": not_assigns(Object_alloc_table0, Creation_simple_val,
+   Creation_simple_val0, pset_singleton(result))))) ->
+  forall result2:int32.
+  (result2 = select(Creation_simple_val0, result)) ->
+  forall return:int32.
+  (return = result2) ->
+  ("JC_91": ("JC_89": ("JC_89": (integer_of_int32(return) = 17))))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Creation.why
@@ -4589,22 +4628,18 @@ why -simplify [...] why/Creation.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; Creation_test1_ensures_normal_po_1, File "HOME/tests/java/Creation.jc", line 77, characters 59-74
-(IMPLIES TRUE (>= 1 0))
-
-;; Creation_test1_ensures_normal_po_2, File "HOME/tests/java/Creation.java", line 31, characters 18-31
+;; Creation_test1_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 31, characters 18-31
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
-(IMPLIES (>= 1 0)
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
 (IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
-         (AND (instanceof Object_tag_table result Creation_tag)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (alloc_fresh Object_alloc_table result 1))))
+         (AND (alloc_fresh Object_alloc_table result 1)
+         (instanceof Object_tag_table result Creation_tag))))
 (FORALL (result0)
 (IMPLIES (EQ (integer_of_int32 result0) 17)
 (FORALL (Creation_simple_val0)
@@ -4617,12 +4652,12 @@ why -simplify [...] why/Creation.why
 (FORALL (result1)
 (IMPLIES (EQ result1 (select Creation_simple_val0 result))
 (FORALL (return)
-(IMPLIES (EQ return result1) (EQ (integer_of_int32 return) 17)))))))))))))))))
+(IMPLIES (EQ return result1) (EQ (integer_of_int32 return) 17))))))))))))))))
 
 ;; Creation_test1_safety_po_1, File "HOME/tests/java/Creation.jc", line 77, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test1_safety_po_2, File "why/Creation.why", line 571, characters 30-151
+;; Creation_test1_safety_po_2, File "why/Creation.why", line 644, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -4630,10 +4665,10 @@ why -simplify [...] why/Creation.why
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
 (IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
-         (AND (instanceof Object_tag_table result Creation_tag)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (alloc_fresh Object_alloc_table result 1))))
+         (AND (alloc_fresh Object_alloc_table result 1)
+         (instanceof Object_tag_table result Creation_tag))))
 (>= (offset_max Object_alloc_table0 result) 0))))))))
 
 ;; Creation_test1_safety_po_3, File "HOME/tests/java/Creation.java", line 35, characters 8-20
@@ -4645,10 +4680,10 @@ why -simplify [...] why/Creation.why
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
 (IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
-         (AND (instanceof Object_tag_table result Creation_tag)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (alloc_fresh Object_alloc_table result 1))))
+         (AND (alloc_fresh Object_alloc_table result 1)
+         (instanceof Object_tag_table result Creation_tag))))
 (IMPLIES (>= (offset_max Object_alloc_table0 result) 0)
 (FORALL (result0)
 (IMPLIES (EQ (integer_of_int32 result0) 17)
@@ -4661,22 +4696,18 @@ why -simplify [...] why/Creation.why
          (pset_singleton result)))
 (<= 0 (offset_max Object_alloc_table0 result)))))))))))))))
 
-;; Creation_test2_ensures_normal_po_1, File "HOME/tests/java/Creation.jc", line 97, characters 59-74
-(IMPLIES TRUE (>= 1 0))
-
-;; Creation_test2_ensures_normal_po_2, File "HOME/tests/java/Creation.java", line 39, characters 18-30
+;; Creation_test2_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 39, characters 18-30
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
-(IMPLIES (>= 1 0)
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
 (IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
-         (AND (instanceof Object_tag_table result Creation_tag)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (alloc_fresh Object_alloc_table result 1))))
+         (AND (alloc_fresh Object_alloc_table result 1)
+         (instanceof Object_tag_table result Creation_tag))))
 (FORALL (Creation_simple_val0)
 (IMPLIES (AND (EQ (integer_of_int32 (select Creation_simple_val0 result)) 0)
          (not_assigns
@@ -4685,12 +4716,12 @@ why -simplify [...] why/Creation.why
 (FORALL (result0)
 (IMPLIES (EQ result0 (select Creation_simple_val0 result))
 (FORALL (return)
-(IMPLIES (EQ return result0) (EQ (integer_of_int32 return) 0)))))))))))))))
+(IMPLIES (EQ return result0) (EQ (integer_of_int32 return) 0))))))))))))))
 
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 97, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 625, characters 32-157
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 698, characters 32-157
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -4698,10 +4729,10 @@ why -simplify [...] why/Creation.why
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
 (IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
-         (AND (instanceof Object_tag_table result Creation_tag)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (alloc_fresh Object_alloc_table result 1))))
+         (AND (alloc_fresh Object_alloc_table result 1)
+         (instanceof Object_tag_table result Creation_tag))))
 (>= (offset_max Object_alloc_table0 result) 0))))))))
 
 ;; Creation_test2_safety_po_3, File "HOME/tests/java/Creation.java", line 43, characters 8-20
@@ -4713,10 +4744,10 @@ why -simplify [...] why/Creation.why
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
 (IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
-         (AND (instanceof Object_tag_table result Creation_tag)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (alloc_fresh Object_alloc_table result 1))))
+         (AND (alloc_fresh Object_alloc_table result 1)
+         (instanceof Object_tag_table result Creation_tag))))
 (IMPLIES (>= (offset_max Object_alloc_table0 result) 0)
 (FORALL (Creation_simple_val0)
 (IMPLIES (AND (EQ (integer_of_int32 (select Creation_simple_val0 result)) 0)
@@ -4725,22 +4756,18 @@ why -simplify [...] why/Creation.why
          (pset_singleton result)))
 (<= 0 (offset_max Object_alloc_table0 result)))))))))))))
 
-;; Creation_test3_ensures_normal_po_1, File "HOME/tests/java/Creation.jc", line 117, characters 57-72
-(IMPLIES TRUE (>= 1 0))
-
-;; Creation_test3_ensures_normal_po_2, File "HOME/tests/java/Creation.java", line 48, characters 18-31
+;; Creation_test3_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 48, characters 18-31
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
-(IMPLIES (>= 1 0)
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
 (IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
-         (AND (instanceof Object_tag_table result Creation_tag)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (alloc_fresh Object_alloc_table result 1))))
+         (AND (alloc_fresh Object_alloc_table result 1)
+         (instanceof Object_tag_table result Creation_tag))))
 (FORALL (result0)
 (IMPLIES (EQ (integer_of_int32 result0) 10)
 (FORALL (result1)
@@ -4755,21 +4782,20 @@ why -simplify [...] why/Creation.why
 (FORALL (result2)
 (IMPLIES (EQ result2 (select Creation_simple_val0 result))
 (FORALL (return)
-(IMPLIES (EQ return result2) (EQ (integer_of_int32 return) 17)))))))))))))))))))
+(IMPLIES (EQ return result2) (EQ (integer_of_int32 return) 17))))))))))))))))))
 
-;; Creation_test3_ensures_normal_po_3, File "HOME/tests/java/Creation.java", line 50, characters 22-27
+;; Creation_test3_ensures_normal_po_2, File "HOME/tests/java/Creation.java", line 50, characters 22-27
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
-(IMPLIES (>= 1 0)
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
 (IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
-         (AND (instanceof Object_tag_table result Creation_tag)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (alloc_fresh Object_alloc_table result 1))))
+         (AND (alloc_fresh Object_alloc_table result 1)
+         (instanceof Object_tag_table result Creation_tag))))
 (FORALL (result0)
 (IMPLIES (EQ (integer_of_int32 result0) 10)
 (FORALL (result1)
@@ -4786,12 +4812,12 @@ why -simplify [...] why/Creation.why
 (FORALL (return)
 (IMPLIES (EQ return result2)
 (not_assigns
-Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty)))))))))))))))))))
+Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))))))))))
 
 ;; Creation_test3_safety_po_1, File "HOME/tests/java/Creation.jc", line 117, characters 57-72
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test3_safety_po_2, File "why/Creation.why", line 685, characters 30-151
+;; Creation_test3_safety_po_2, File "why/Creation.why", line 758, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -4799,10 +4825,10 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
 (IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
-         (AND (instanceof Object_tag_table result Creation_tag)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (alloc_fresh Object_alloc_table result 1))))
+         (AND (alloc_fresh Object_alloc_table result 1)
+         (instanceof Object_tag_table result Creation_tag))))
 (>= (offset_max Object_alloc_table0 result) 0))))))))
 
 ;; Creation_test3_safety_po_3, File "HOME/tests/java/Creation.java", line 52, characters 8-20
@@ -4814,10 +4840,10 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
 (IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
-         (AND (instanceof Object_tag_table result Creation_tag)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (alloc_fresh Object_alloc_table result 1))))
+         (AND (alloc_fresh Object_alloc_table result 1)
+         (instanceof Object_tag_table result Creation_tag))))
 (IMPLIES (>= (offset_max Object_alloc_table0 result) 0)
 (FORALL (result0)
 (IMPLIES (EQ (integer_of_int32 result0) 10)
@@ -4929,11 +4955,11 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 (pset_singleton
 ========== running Simplify ==========
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/Creation_why.sx      : ............?.......??. (20/0/3/0/0)
-total   :  23
-valid   :  20 ( 87%)
+simplify/Creation_why.sx      : .........?.......??. (17/0/3/0/0)
+total   :  20
+valid   :  17 ( 85%)
 invalid :   0 (  0%)
-unknown :   3 ( 13%)
+unknown :   3 ( 15%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
 ========== generation of alt-ergo VC output ==========
@@ -5982,22 +6008,17 @@ predicate valid_variant_interface(p: interface pointer, a: int, b: int,
    (offset_max(interface_alloc_table, p) = b))
 
 goal Creation_test1_ensures_normal_po_1:
-  ("JC_39": true) ->
-  (1 >= 0)
-
-goal Creation_test1_ensures_normal_po_2:
   forall Creation_simple_val:(Object,
   int32) memory.
   forall Object_alloc_table:Object alloc_table.
   ("JC_39": true) ->
-  (1 >= 0) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   forall result0:int32.
   (integer_of_int32(result0) = 17) ->
   forall Creation_simple_val0:(Object,
@@ -6025,9 +6046,9 @@ goal Creation_test1_safety_po_2:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0)
 
 goal Creation_test1_safety_po_3:
@@ -6040,9 +6061,9 @@ goal Creation_test1_safety_po_3:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0) ->
   forall result0:int32.
   (integer_of_int32(result0) = 17) ->
@@ -6056,22 +6077,17 @@ goal Creation_test1_safety_po_3:
   (0 <= offset_max(Object_alloc_table0, result))
 
 goal Creation_test2_ensures_normal_po_1:
-  ("JC_63": true) ->
-  (1 >= 0)
-
-goal Creation_test2_ensures_normal_po_2:
   forall Creation_simple_val:(Object,
   int32) memory.
   forall Object_alloc_table:Object alloc_table.
   ("JC_63": true) ->
-  (1 >= 0) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   forall Creation_simple_val0:(Object,
   int32) memory.
   ("JC_22":
@@ -6096,9 +6112,9 @@ goal Creation_test2_safety_po_2:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0)
 
 goal Creation_test2_safety_po_3:
@@ -6111,9 +6127,9 @@ goal Creation_test2_safety_po_3:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0) ->
   forall Creation_simple_val0:(Object,
   int32) memory.
@@ -6124,22 +6140,17 @@ goal Creation_test2_safety_po_3:
   (0 <= offset_max(Object_alloc_table0, result))
 
 goal Creation_test3_ensures_normal_po_1:
-  ("JC_87": true) ->
-  (1 >= 0)
-
-goal Creation_test3_ensures_normal_po_2:
   forall Creation_simple_val:(Object,
   int32) memory.
   forall Object_alloc_table:Object alloc_table.
   ("JC_87": true) ->
-  (1 >= 0) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   forall result0:int32.
   (integer_of_int32(result0) = 10) ->
   forall result1:int32.
@@ -6157,19 +6168,18 @@ goal Creation_test3_ensures_normal_po_2:
   (return = result2) ->
   ("JC_91": ("JC_89": ("JC_89": (integer_of_int32(return) = 17))))
 
-goal Creation_test3_ensures_normal_po_3:
+goal Creation_test3_ensures_normal_po_2:
   forall Creation_simple_val:(Object,
   int32) memory.
   forall Object_alloc_table:Object alloc_table.
   ("JC_87": true) ->
-  (1 >= 0) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   forall result0:int32.
   (integer_of_int32(result0) = 10) ->
   forall result1:int32.
@@ -6202,9 +6212,9 @@ goal Creation_test3_safety_po_2:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0)
 
 goal Creation_test3_safety_po_3:
@@ -6217,9 +6227,9 @@ goal Creation_test3_safety_po_3:
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
   (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (instanceof(Object_tag_table, result, Creation_tag) and
-    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-     alloc_fresh(Object_alloc_table, result, 1)))) ->
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= 0) ->
   forall result0:int32.
   (integer_of_int32(result0) = 10) ->
@@ -6343,10 +6353,10 @@ goal cons_TestSuperConstructor_ensures_normal_po_1:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Creation_why.why          : ............#.......??. (20/0/2/1/0)
-total   :  23
-valid   :  20 ( 87%)
+why/Creation_why.why          : .........#.......??. (17/0/2/1/0)
+total   :  20
+valid   :  17 ( 85%)
 invalid :   0 (  0%)
-unknown :   2 (  9%)
-timeout :   1 (  4%)
+unknown :   2 ( 10%)
+timeout :   1 (  5%)
 failure :   0 (  0%)

@@ -103,6 +103,7 @@ let get_current_spec () =
 (* basic model types *)
 
 let why_integer_type = simple_logic_type "int"
+let why_unit_type = simple_logic_type "unit"
 
 let variant_model_type vi =
   simple_logic_type (variant_type_name vi)
@@ -149,6 +150,15 @@ let raw_memory_type ty1' ty2' =
   { logic_type_name = memory_type_name;
     logic_type_args = [ty1';ty2'] }
 
+(* pointer model types *)
+
+let pointer_type ac pc = 
+  match ac with
+    | JCalloc_struct _ | JCalloc_union _ ->
+	raw_pointer_type (pointer_class_model_type pc)
+    | JCalloc_bitvector ->
+	raw_pointer_type why_unit_type
+
 (* translation *)
 
 let tr_native_type = function
@@ -166,15 +176,14 @@ let tr_base_type ?region = function
   | JCTenum ri -> 
       simple_logic_type ri.jc_enum_info_name
   | JCTpointer(pc, _, _) ->
-      let elemty' = match region with 
-	| None -> pointer_class_model_type pc
+      let ac = match region with 
+	| None -> 
+	    alloc_class_of_pointer_class pc
 	| Some r ->
-	    if Region.bitwise (the region) then bitvector_type
-	    else
-	      (* TODO: see what to do with unions *)
-	      pointer_class_model_type pc
+	    if Region.bitwise (the region) then JCalloc_bitvector
+	    else alloc_class_of_pointer_class pc
       in
-      raw_pointer_type elemty'
+      pointer_type ac pc
   | JCTnull | JCTany -> assert false
   | JCTtype_var _ -> assert false (* TODO (need environment) *)
 
@@ -187,8 +196,6 @@ let tr_var_type v =
   tr_type ~region:v.jc_var_info_region v.jc_var_info_type
 
 (* model types *)
-
-let pointer_type pc = raw_pointer_type (pointer_class_model_type pc)
 
 let pset_type ac = raw_pset_type (alloc_class_type ac)
 
@@ -343,8 +350,10 @@ let mutable_tag_table infunction (vi,r) =
 let plain_memory_var (mc,r) = Var (memory_name (mc,r))
 let deref_memory_var (mc,r) = Deref (memory_name (mc,r))
 
-let memory_var (mc,r) =
-  if mutable_memory (get_current_function ()) (mc,r) then
+let memory_var ?(test_current_function=false) (mc,r) =
+  if test_current_function && !current_function = None then
+    plain_memory_var (mc,r)
+  else if mutable_memory (get_current_function ()) (mc,r) then
     deref_memory_var (mc,r)
   else plain_memory_var (mc,r)
 
@@ -1055,7 +1064,10 @@ let tag_table_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
     ) callee_reads.jc_effect_tag_tables []
 
 let add_memory_argument ~mode ~no_deref (mc,distr as mem) region_assoc acc =
-  let memvar = if no_deref then plain_memory_var else memory_var in
+  let memvar = 
+    if no_deref then plain_memory_var 
+    else memory_var ~test_current_function:false
+  in
   let ty' = memory_type mc in
   if Region.polymorphic distr then
     try 

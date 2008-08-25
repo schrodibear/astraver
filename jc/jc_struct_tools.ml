@@ -38,7 +38,9 @@ let alloc_class_of_mem_class = function
   | JCmem_bitvector -> JCalloc_bitvector
 
 let alloc_class_of_pointer_class = function
-  | JCtag(st,_) -> JCalloc_struct (struct_variant st)
+  | JCtag(st,_) -> 
+      if struct_of_union st then JCalloc_union (struct_variant st)
+      else JCalloc_struct (struct_variant st)
   | JCvariant vi -> JCalloc_struct vi
   | JCunion vi -> JCalloc_union vi
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.340 2008-08-25 08:30:50 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.341 2008-08-25 16:20:00 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -320,6 +320,319 @@ let pred_bin_op: pred_bin_op -> string = function
 
 
 (******************************************************************************)
+(*                                   types                                    *)
+(******************************************************************************)
+
+let has_equality_op = function
+  | JCTnative Tunit -> false
+  | JCTnative Tboolean -> true
+  | JCTnative Tinteger -> true
+  | JCTnative Treal -> true
+  | JCTnative Tstring -> true
+  | JCTlogic _s -> (* TODO *) false
+  | JCTenum _ei -> true
+  | JCTpointer _
+  | JCTnull ->  true
+  | JCTany -> false
+  | JCTtype_var _ -> false (* TODO ? *)
+  
+let equality_op_for_type = function
+  | JCTnative Tunit -> assert false
+  | JCTnative Tboolean -> "eq_bool"
+  | JCTnative Tinteger -> "eq_int"
+  | JCTnative Treal -> "eq_real"
+  | JCTnative Tstring -> "eq"
+  | JCTlogic s -> (* TODO *) assert false
+  | JCTenum ei -> eq_of_enum ei
+  | JCTpointer _
+  | JCTnull ->  "eq"
+  | JCTany -> assert false
+  | JCTtype_var _ -> assert false (* TODO ? *)
+
+
+(******************************************************************************)
+(*                                 Structures                                 *)
+(******************************************************************************)
+
+let const_of_num n = LConst(Prim_int(Num.string_of_num n))
+
+(* Validity *)
+
+let make_valid_pred_app ac pc p a b =
+  let all_allocs = match ac with
+    | JCalloc_struct st -> all_allocs ~select:fully_allocated pc
+    | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
+  in
+  let allocs = 
+    List.map (fun ac -> LVar(generic_alloc_table_name ac)) all_allocs
+  in
+  let all_mems = match ac with
+    | JCalloc_struct st -> all_memories ~select:fully_allocated pc
+    | JCalloc_union _ | JCalloc_bitvector -> []
+  in
+  let mems = List.map (fun fi -> LVar(field_memory_name fi)) all_mems in
+  LPred(valid_pred_name ac pc, p :: a :: b :: allocs @ mems)
+
+(*
+If T is a structure:
+   valid_T(p, a, b, allocs ...) =
+     if T is root:
+       offset_min(alloc_i, p) == a &&
+       offset_max(alloc_i, p) == b
+     else if S is the direct superclass of T:
+       valid_S(p, a, b, allocs ...)
+     and for all field (T'[a'..b'] f) of p,
+       valid_T'(p.f, a', b', allocs ...)
+If T is a variant, then we only have the condition on offset_min and max.
+*)
+let make_valid_pred ac pc =
+  let p = "p" in
+  let a = "a" in
+  let b = "b" in
+  let params =
+    let all_allocs = match ac with
+      | JCalloc_struct st -> all_allocs ~select:fully_allocated pc
+      | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
+    in
+    let allocs = 
+      List.map (fun ac -> generic_alloc_table_name ac,alloc_table_type ac) 
+	all_allocs
+    in
+    let all_mems = match ac with
+      | JCalloc_struct st -> all_memories ~select:fully_allocated pc
+      | JCalloc_union _ | JCalloc_bitvector -> []
+    in
+    let mems = 
+      List.map (fun fi -> field_memory_name fi,memory_type (JCmem_field fi))
+	all_mems
+    in
+    let p = p, pointer_type ac pc in
+    let a = a, why_integer_type in
+    let b = b, why_integer_type in
+    p :: a :: b :: allocs @ mems
+  in
+  let validity =
+    let omin, omax, super_valid = match pc with
+      | JCtag ({ jc_struct_info_parent = Some(st, pp) }, _) ->
+          LTrue,
+          LTrue,
+          make_valid_pred_app ac (JCtag(st, pp)) (LVar p) (LVar a) (LVar b)
+      | JCtag ({ jc_struct_info_parent = None }, _)
+      | JCvariant _ 
+      | JCunion _ ->
+          make_eq (make_offset_min ac (LVar p)) (LVar a),
+          make_eq (make_offset_max ac (LVar p)) (LVar b),
+          LTrue
+    in
+    let fields_valid = match ac with
+      | JCalloc_struct _ ->
+	  begin match pc with
+	    | JCtag(st,_) ->
+		List.map
+		  (function
+		     | { jc_field_info_type =
+			   JCTpointer(fpc, Some fa, Some fb) } as fi ->
+			 make_valid_pred_app ac fpc
+			   (make_select_fi fi (LVar p))
+			   (const_of_num fa)
+			   (const_of_num fb)
+		     | _ ->
+			 LTrue)
+		  st.jc_struct_info_fields
+	    | JCvariant _ | JCunion _ -> [ LTrue ]
+	  end
+      | JCalloc_union _ | JCalloc_bitvector -> [ LTrue ]
+    in
+    make_and_list (omin::omax::super_valid::fields_valid)
+  in
+  Predicate(false, valid_pred_name ac pc, params, validity)
+
+(* Allocation *)
+
+let alloc_write_parameters (ac,r) pc =
+  let all_allocs = match ac with
+    | JCalloc_struct st -> all_allocs ~select:fully_allocated pc
+    | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
+  in
+  let allocs = 
+    List.map (fun ac -> plain_alloc_table_var (ac,r), alloc_table_type ac)
+      all_allocs
+  in
+  let all_tags = match ac with
+    | JCalloc_struct vi -> [ vi ]
+    | JCalloc_union _ | JCalloc_bitvector -> []
+  in
+  let tags = 
+    List.map (fun vi -> plain_tag_table_var (vi,r), tag_table_type vi)
+      all_tags
+  in
+  allocs @ tags
+
+let alloc_read_parameters (ac,r) pc =
+  let all_mems = match ac with
+    | JCalloc_struct st -> all_memories ~select:fully_allocated pc
+    | JCalloc_union _ | JCalloc_bitvector -> []
+  in
+  let mems = 
+    List.map 
+      (fun fi -> 
+	 let mc = JCmem_field fi in 
+	 memory_var ~test_current_function:true (mc,r), memory_type mc)
+      all_mems 
+  in
+  mems
+
+let alloc_arguments (ac,r) pc = 
+  let writes = alloc_write_parameters (ac,r) pc in
+  let reads = alloc_read_parameters (ac,r) pc in
+  List.map fst writes @ List.map fst reads
+  
+let make_alloc_param ~check_size ac pc =
+  let n = "n" in
+  let alloc = generic_alloc_table_name ac in
+  (* parameters and effects *)
+  let writes = alloc_write_parameters (ac,dummy_region) pc in
+  let write_effects = 
+    List.map (function (Var n,ty') -> n | _ -> assert false) writes
+  in
+  let write_params = 
+    List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) writes
+  in
+  let reads = alloc_read_parameters (ac,dummy_region) pc in
+  let read_params = 
+    List.map (fun (n,ty') -> (n,Base_type ty')) reads
+  in
+  let params = [ (Var n,Base_type why_integer_type) ] in
+  let params = params @ write_params @ read_params in
+  let params = 
+    List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) params
+  in
+  (* precondition *)
+  let pre =
+    if check_size then LPred("ge_int",[LVar n;LConst(Prim_int "0")]) 
+    else LTrue
+  in
+  (* postcondition *)
+  let instanceof_post = match ac with
+    | JCalloc_struct _ ->
+	begin match pc with
+	  | JCtag(st,_) ->
+	      let tag = generic_tag_table_name (struct_variant st) in
+              (* [instanceof(tagtab,result,tag_st)] *)
+              [ LPred("instanceof",[LVar tag;LVar "result";LVar(tag_name st)]) ]
+	  | JCvariant _ | JCunion _ -> []
+	end
+    | JCalloc_union _ | JCalloc_bitvector -> []
+  in
+  let alloc_type = 
+    Annot_type(
+      (* [n >= 0] *)
+      pre,
+      (* argument pointer type *)
+      Base_type(pointer_type ac pc),
+      (* reads and writes *)
+      [], write_effects,
+      (* normal post *)
+      make_and_list (
+	[
+          (* [valid_st(result,0,n-1,alloc...)] *)
+          make_valid_pred_app ac pc
+            (LVar "result")
+            (LConst(Prim_int "0"))
+            (LApp("sub_int",[LVar n; LConst(Prim_int "1")]));
+          (* [alloc_extends(old(alloc),alloc)] *)
+          LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
+          (* [alloc_fresh(old(alloc),result,n)] *)
+          LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result";LVar n])
+	] 
+	@ instanceof_post ),
+      (* no exceptional post *)
+      [])
+  in
+  let alloc_type = 
+    List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
+      params alloc_type
+  in
+  let name = alloc_param_name ~check_size ac pc in
+  Param(false,name,alloc_type)
+
+let tr_struct st acc =
+  let tagid_type = tag_id_type (struct_variant st) in
+    (* Declarations of field memories. *)
+  let acc =
+    if !Jc_options.separation_sem = SepRegions then acc else
+      if (struct_variant st).jc_variant_info_is_union then acc else
+        List.fold_left
+          (fun acc fi ->
+             let mem = memory_type (JCmem_field fi) in
+             Param(
+               false,
+               field_memory_name fi,
+               Ref_type(Base_type mem))::acc)
+          acc st.jc_struct_info_fields
+  in
+  (* Declarations of translation functions for union *)
+  let vi = struct_variant st in
+  let acc = 
+    if not vi.jc_variant_info_is_union then acc else
+      if integral_union vi then acc else
+        let uty = bitvector_type in
+        List.fold_left
+          (fun acc fi ->
+	     if has_equality_op fi.jc_field_info_type then
+               Logic(false,logic_field_of_union fi,
+                     [("",uty)],tr_base_type fi.jc_field_info_type)
+               :: Logic(false,logic_union_of_field fi,
+			[("",tr_base_type fi.jc_field_info_type)],uty)
+               :: Axiom((logic_field_of_union fi)^"_of_"^(logic_union_of_field fi),
+			LForall("x",tr_base_type fi.jc_field_info_type,
+				LPred(equality_op_for_type fi.jc_field_info_type,
+                                      [LApp(logic_field_of_union fi,
+                                            [LApp(logic_union_of_field fi, 
+                                                  [LVar "x"])]);
+                                       LVar "x"])))
+               :: acc
+	     else acc)
+          acc st.jc_struct_info_fields
+  in
+  (* declaration of the tag_id *)
+  let acc =
+    Logic(false,tag_name st,[],tagid_type)::acc
+  in
+
+  let pc = JCtag(st,[]) in
+  let ac = alloc_class_of_pointer_class pc in
+  let acc = make_valid_pred ac pc :: acc in
+
+  (* Allocation parameter *)
+  let acc = 
+    if struct_of_union st then acc 
+    else 
+      let pc = JCtag(st,[]) in
+      let ac = alloc_class_of_pointer_class pc in
+      make_alloc_param ~check_size:true ac pc 
+      :: make_alloc_param ~check_size:false ac pc 
+      :: acc
+  in
+
+  match st.jc_struct_info_parent with
+    | None ->
+        (* axiom for parenttag *)
+        let name = st.jc_struct_info_name ^ "_parenttag_bottom" in
+        let p = LPred("parenttag", [ LVar (tag_name st); LVar "bottom_tag" ]) in
+        Axiom(name, p)::acc
+    | Some(p, _) ->
+        (* axiom for parenttag *)
+        let name =
+          st.jc_struct_info_name ^ "_parenttag_" ^ p.jc_struct_info_name
+        in
+        let p =
+          LPred("parenttag", [ LVar (tag_name st); LVar (tag_name p) ])
+        in
+        Axiom(name, p)::acc
+
+
+(******************************************************************************)
 (*                                 Coercions                                  *)
 (******************************************************************************)
 
@@ -477,37 +790,6 @@ let coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
         Jc_typing.typing_error pos
           "can't coerce type %a to type %a" 
           print_type ty_src print_type ty_dst
-
-
-(******************************************************************************)
-(*                                   types                                    *)
-(******************************************************************************)
-
-let has_equality_op = function
-  | JCTnative Tunit -> false
-  | JCTnative Tboolean -> true
-  | JCTnative Tinteger -> true
-  | JCTnative Treal -> true
-  | JCTnative Tstring -> true
-  | JCTlogic _s -> (* TODO *) false
-  | JCTenum _ei -> true
-  | JCTpointer _
-  | JCTnull ->  true
-  | JCTany -> false
-  | JCTtype_var _ -> false (* TODO ? *)
-  
-let equality_op_for_type = function
-  | JCTnative Tunit -> assert false
-  | JCTnative Tboolean -> "eq_bool"
-  | JCTnative Tinteger -> "eq_int"
-  | JCTnative Treal -> "eq_real"
-  | JCTnative Tstring -> "eq"
-  | JCTlogic s -> (* TODO *) assert false
-  | JCTenum ei -> eq_of_enum ei
-  | JCTpointer _
-  | JCTnull ->  "eq"
-  | JCTany -> assert false
-  | JCTtype_var _ -> assert false (* TODO ? *)
 
 
 (******************************************************************************)
@@ -1558,34 +1840,25 @@ and expr e =
 	let e1' = expr e1 in
 	let ac = deref_alloc_class e in
         let alloc = plain_alloc_table_var (ac,e#region) in
-	begin match ac with
-	  | JCalloc_struct vi ->
-              let tag = plain_tag_table_var (vi,e#region) in
-	      let pc = JCtag(st,[]) in
-              let mems = all_memories ~select:fully_allocated pc in
-              let mems = List.map (fun fi -> (JCmem_field fi,e#region)) mems in
-              let allocs = all_allocs ~select:fully_allocated pc in
-              let allocs = List.map (fun ac -> (ac,e#region)) allocs in
-              if !Jc_options.inv_sem = InvOwnership then
-                let mut = mutable_name pc in
-                let com = committed_name pc in
-                make_app "alloc_parameter_ownership" 
-                  [alloc; Var mut; Var com; tag; Var (tag_name st); 
-                   coerce ~check_int_overflow:(safety_checking()) 
-		     e1#mark e1#pos integer_type 
-		     e1#typ e1 e1']
-	      else
-                make_guarded_app e#mark
-                  AllocSize e#pos
-                  (alloc_param_name st)
-                  (coerce ~check_int_overflow:(safety_checking()) 
-		     e1#mark e1#pos integer_type 
-		     e1#typ e1 e1'
-                   :: (List.map plain_alloc_table_var allocs)
-                   @ (List.map plain_memory_var mems))
-	  | JCalloc_union vi -> assert false (* TODO *)
-	  | JCalloc_bitvector -> assert false (* TODO *)
-        end
+	let pc = JCtag(st,[]) in
+	let args = alloc_arguments (ac,e#region) pc in
+        if !Jc_options.inv_sem = InvOwnership then
+          let tag = plain_tag_table_var (struct_variant st,e#region) in
+          let mut = mutable_name pc in
+          let com = committed_name pc in
+          make_app "alloc_parameter_ownership" 
+            [alloc; Var mut; Var com; tag; Var (tag_name st); 
+             coerce ~check_int_overflow:(safety_checking()) 
+	       e1#mark e1#pos integer_type 
+	       e1#typ e1 e1']
+	else
+          make_guarded_app e#mark
+            AllocSize e#pos
+            (alloc_param_name ~check_size:(safety_checking()) ac pc)
+            (coerce ~check_int_overflow:(safety_checking()) 
+	       e1#mark e1#pos integer_type 
+	       e1#typ e1 e1'
+             :: args)
     | JCEfree e1 ->
 	let e1' = expr e1 in
 	let ac = deref_alloc_class e1 in
@@ -1912,260 +2185,6 @@ and expr_coerce ty e =
   coerce ~check_int_overflow:(safety_checking())
     e#mark e#pos ty
     e#typ e (expr e)
-
-
-(******************************************************************************)
-(*                                 Structures                                 *)
-(******************************************************************************)
-
-let const_of_num n = LConst(Prim_int(Num.string_of_num n))
-
-(* see make_valid_pred in jc_interp.ml *)
-let make_valid_pred_app pc p a b =
-  let allocs = List.map
-    (fun ac -> LVar(generic_alloc_table_name ac))
-    (Jc_struct_tools.all_allocs ~select:fully_allocated pc)
-  in
-  let memories = List.map
-    (fun fi -> LVar(field_memory_name fi))
-    (Jc_struct_tools.all_memories ~select:fully_allocated pc)
-  in
-  LPred(valid_pred_name pc, p::a::b::allocs@memories)
-
-(*
-If T is a structure:
-   valid_T(p, a, b, allocs ...) =
-     if T is root:
-       offset_min(alloc_i, p) == a &&
-       offset_max(alloc_i, p) == b
-     else if S is the direct superclass of T:
-       valid_S(p, a, b, allocs ...)
-     and for all field (T'[a'..b'] f) of p,
-       valid_T'(p.f, a', b', allocs ...)
-If T is a variant, then we only have the condition on offset_min and max.
-*)
-let make_valid_pred pc =
-  let p = "p" in
-  let a = "a" in
-  let b = "b" in
-  let ac = alloc_class_of_pointer_class pc in
-  let params =
-    let allocs = match pc with
-      | JCvariant _vi | JCunion _vi -> [ac]
-      | JCtag(st,_) -> 
-	  Jc_struct_tools.all_allocs ~select:fully_allocated (JCtag(st,[]))
-    in
-    let allocs = 
-      List.map
-	(fun ac -> generic_alloc_table_name ac,alloc_table_type ac) 
-	allocs
-    in
-    let memories = List.map
-      (fun fi ->
-         field_memory_name fi,
-         memory_type (JCmem_field fi))
-      (Jc_struct_tools.all_memories ~select:fully_allocated pc)
-    in
-    let p = p, pointer_type pc in
-    let a = a, why_integer_type in
-    let b = b, why_integer_type in
-      p::a::b::allocs@memories
-  in
-  let validity =
-    let omin, omax, super_valid = match pc with
-      | JCtag ({ jc_struct_info_parent = Some(st, pp) }, _) ->
-          LTrue,
-          LTrue,
-          make_valid_pred_app (JCtag(st, pp)) (LVar p) (LVar a) (LVar b)
-      | JCtag ({ jc_struct_info_parent = None }, _)
-      | JCvariant _ 
-      | JCunion _ ->
-          make_eq (make_offset_min ac (LVar p)) (LVar a),
-          make_eq (make_offset_max ac (LVar p)) (LVar b),
-          LTrue
-    in
-    let fields_valid = match pc with
-      | JCtag(st, _) ->
-	  if (struct_variant st).jc_variant_info_is_union then
-	    [LTrue]
-	  else
-            List.map
-              (function
-		 | { jc_field_info_type =
-                       JCTpointer(fpc, Some fa, Some fb) } as fi ->
-                     make_valid_pred_app fpc
-                       (make_select_fi fi (LVar p))
-                       (const_of_num fa)
-                       (const_of_num fb)
-		 | _ ->
-                     LTrue)
-              st.jc_struct_info_fields
-      | JCvariant _ | JCunion _ ->
-          [LTrue]
-    in
-    make_and_list (omin::omax::super_valid::fields_valid)
-  in
-  Predicate(false, valid_pred_name pc, params, validity)
-
-let tr_struct st acc =
-(*   let alloc_ty = alloc_table_type (JCtag(st, [])) in *)
-  let tagid_type = tag_id_type (struct_variant st) in
-  let ptr_type = pointer_type (JCtag(st, [])) in
-(*  let all_fields = embedded_struct_fields st in
-  let all_roots = embedded_struct_roots st in
-  let all_roots = List.map find_struct all_roots in*)
-  let all_fields = all_memories ~select:fully_allocated (JCtag(st, [])) in
-  let all_allocs = all_allocs ~select:fully_allocated (JCtag(st, [])) in
-  let ac = JCalloc_struct (struct_variant st) in
-  let alloc = generic_alloc_table_name ac in
-  let tagtab = generic_tag_table_name (struct_variant st) in
-    (* Declarations of field memories. *)
-  let acc =
-    if !Jc_options.separation_sem = SepRegions then acc else
-      if (struct_variant st).jc_variant_info_is_union then acc else
-        List.fold_left
-          (fun acc fi ->
-             let mem = memory_type (JCmem_field fi) in
-             Param(
-               false,
-               field_memory_name fi,
-               Ref_type(Base_type mem))::acc)
-          acc st.jc_struct_info_fields
-  in
-  (* Declarations of translation functions for union *)
-  let vi = struct_variant st in
-  let acc = 
-    if not vi.jc_variant_info_is_union then acc else
-      if integral_union vi then acc else
-        let uty = bitvector_type in
-        List.fold_left
-          (fun acc fi ->
-	     if has_equality_op fi.jc_field_info_type then
-               Logic(false,logic_field_of_union fi,
-                     [("",uty)],tr_base_type fi.jc_field_info_type)
-               :: Logic(false,logic_union_of_field fi,
-			[("",tr_base_type fi.jc_field_info_type)],uty)
-               :: Axiom((logic_field_of_union fi)^"_of_"^(logic_union_of_field fi),
-			LForall("x",tr_base_type fi.jc_field_info_type,
-				LPred(equality_op_for_type fi.jc_field_info_type,
-                                      [LApp(logic_field_of_union fi,
-                                            [LApp(logic_union_of_field fi, 
-                                                  [LVar "x"])]);
-                                       LVar "x"])))
-               :: acc
-	     else acc)
-          acc st.jc_struct_info_fields
-  in
-  (* declaration of the tag_id *)
-  let acc =
-    Logic(false,tag_name st,[],tagid_type)::acc
-  in
-
-  let acc = (make_valid_pred (JCtag(st, []))) :: acc in
-
-(*   (\* Allocation of one element parameter. *\) *)
-(*   let alloc_type =  *)
-(*     Annot_type( *)
-(*       (\* no pre *\) *)
-(*       LTrue, *)
-(*       (\* [st_root pointer] *\) *)
-(*       Base_type ptr_type, *)
-(*       (\* [reads all_fields writes alloc,tagtab] *\) *)
-(*       (List.map alloc_table_name all_pcs *)
-(*         @ List.map (fun fi -> fi.jc_field_info_final_name) all_fields),[alloc;tagtab], *)
-(*       (\* normal post *\) *)
-(*       make_and_list [ *)
-(*         (\* [valid_one_st(result,alloc...)] *\) *)
-(*         make_valid_one_pred_app (JCtag(st, [])) (LVar "result"); *)
-(*         (\* [instanceof(tagtab,result,tag_st)] *\) *)
-(*         LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]); *)
-(*         (\* [alloc_extends(old(alloc),alloc)] *\) *)
-(*         LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]); *)
-(*         (\* [alloc_fresh(old(alloc),result,1)] *\) *)
-(*         LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result"; *)
-(* 			     LConst(Prim_int "1")]) *)
-(*       ], *)
-(*       (\* no exceptional post *\) *)
-(*       []) *)
-(*   in *)
-(*   let alloc_type = *)
-(*     List.fold_right (fun fi acc -> *)
-(*       Prod_type(field_memory_name fi, *)
-(*                 Ref_type(Base_type(field_memory_type fi)), *)
-(*                 acc) *)
-(*     ) all_fields alloc_type  *)
-(*   in *)
-(*   let alloc_type = *)
-(*     List.fold_right (fun a acc -> *)
-(*       Prod_type(alloc_table_name a,Ref_type(Base_type(alloc_table_type a)),acc) *)
-(*     ) all_pcs alloc_type *)
-(*   in *)
-(* (\*   let alloc_type = Prod_type(alloc,Ref_type(Base_type alloc_ty),alloc_type) in *\) *)
-(*   let alloc_type = Prod_type("tt",unit_type,alloc_type) in *)
-(*   let acc =  *)
-(*     Param(false,alloc_one_param_name st,alloc_type) :: acc *)
-(*   in *)
-
-  (* Allocation parameter. *) (* TODO: version safe *)
-  let alloc_type = 
-    Annot_type(
-      (* [n >= 0] *)
-      LPred("ge_int",[LVar "n";LConst(Prim_int "0")]),
-      (* [st_root pointer] *)
-      Base_type ptr_type,
-      (* [reads all_fields; writes alloc,tagtab] *)
-      (List.map generic_alloc_table_name all_allocs
-        @ List.map (fun fi -> fi.jc_field_info_final_name) all_fields), [alloc; tagtab],
-      (* normal post *)
-      make_and_list [
-        (* [valid_st(result,0,n-1,alloc...)] *)
-        make_valid_pred_app (JCtag(st, []))
-          (LVar "result")
-          (LConst(Prim_int "0"))
-          (LApp("sub_int",[LVar "n"; LConst(Prim_int "1")]));
-        (* [instanceof(tagtab,result,tag_st)] *)
-        LPred("instanceof",[LVar tagtab;LVar "result";LVar(tag_name st)]);
-        (* [alloc_extends(old(alloc),alloc)] *)
-        LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
-        (* [alloc_fresh(old(alloc),result,n)] *)
-        LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result";LVar "n"])
-      ],
-      (* no exceptional post *)
-      [])
-  in
-  let alloc_type =
-    List.fold_right (fun fi acc ->
-      Prod_type(field_memory_name fi,
-                Ref_type(Base_type(memory_type (JCmem_field fi))),
-                acc)
-    ) all_fields alloc_type
-  in
-  let alloc_type =
-    List.fold_right (fun a acc ->
-      Prod_type(generic_alloc_table_name a,Ref_type(Base_type(alloc_table_type a)),acc)
-    ) all_allocs alloc_type
-  in
-(*   let alloc_type = Prod_type(alloc,Ref_type(Base_type alloc_ty),alloc_type) in *)
-  let alloc_type = Prod_type("n",Base_type why_integer_type,alloc_type) in
-  let acc = 
-    Param(false,alloc_param_name st,alloc_type) :: acc
-  in
-
-  match st.jc_struct_info_parent with
-    | None ->
-        (* axiom for parenttag *)
-        let name = st.jc_struct_info_name ^ "_parenttag_bottom" in
-        let p = LPred("parenttag", [ LVar (tag_name st); LVar "bottom_tag" ]) in
-        Axiom(name, p)::acc
-    | Some(p, _) ->
-        (* axiom for parenttag *)
-        let name =
-          st.jc_struct_info_name ^ "_parenttag_" ^ p.jc_struct_info_name
-        in
-        let p =
-          LPred("parenttag", [ LVar (tag_name st); LVar (tag_name p) ])
-        in
-        Axiom(name, p)::acc
 
 
 (******************************************************************************)
@@ -2641,8 +2660,9 @@ let tr_fun f funpos spec body acc =
                begin match n1o, n2o with
                  | None, _ | _, None -> LTrue
                  | Some n1, Some n2 ->
+		     let ac = alloc_class_of_pointer_class pc in
                      let a' =
-                       make_valid_pred_app pc
+                       make_valid_pred_app ac pc
                          v' (const_of_num n1) (const_of_num n2)
                      in
                      bind_pattern_lets a'
@@ -3308,14 +3328,25 @@ let tr_alloc_table (pc,r) acc =
 (******************************************************************************)
 
 let tr_variant vi acc =
+  let pc = 
+    if vi.jc_variant_info_is_union then JCunion vi 
+    else JCvariant vi 
+  in
+  let ac = alloc_class_of_pointer_class pc in
   let acc =
     if not vi.jc_variant_info_is_union then acc else
       (* Declarations of field memories. *)
-      if !Jc_options.separation_sem = SepRegions then acc else
-        let mem = bitvector_type in
-        Param(false,
-              union_memory_name vi,
-              Ref_type(Base_type mem))::acc
+      let acc = 
+	if !Jc_options.separation_sem = SepRegions then acc else
+          let mem = bitvector_type in
+          Param(false,
+		union_memory_name vi,
+		Ref_type(Base_type mem))::acc
+      in
+      (* Allocation parameter *)
+      make_alloc_param ~check_size:true ac pc 
+      :: make_alloc_param ~check_size:false ac pc 
+      :: acc
   in
   let tag_table =
     Param(
@@ -3346,7 +3377,7 @@ let tr_variant vi acc =
       variant_axiom_on_tags_name vi,
       LForall(
         v,
-        pointer_type (JCvariant vi),
+        pointer_type ac pc,
         LForall(
           tag_table,
           tag_table_type vi,
@@ -3371,7 +3402,7 @@ let tr_variant vi acc =
     vi.jc_variant_info_roots
   in
   let acc = type_def::alloc_table::tag_table::axiom_variant_has_tag::acc in
-  (make_valid_pred (JCvariant vi)) :: acc
+  (make_valid_pred ac pc) :: acc
 
 (*
   Local Variables: 

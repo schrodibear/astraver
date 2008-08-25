@@ -812,7 +812,7 @@ parameter free_parameter:
   { offset_min(a,p) = 0 and offset_max(a,p) >= 0 }
   unit
   writes a
-  { alloc_extends_except(a@,a,pset_range(pset_singleton(p),0,offset_max(a,p)))
+  { alloc_extends_except(a@,a,pset_range(pset_singleton(p),0,offset_max(a@,p)))
     and offset_max(a,p) < offset_min(a,p) }
 
 parameter safe_free_parameter: 
@@ -820,7 +820,7 @@ parameter safe_free_parameter:
   { }
   unit
   writes a
-  { alloc_extends_except(a@,a,pset_range(pset_singleton(p),0,offset_max(a,p)))
+  { alloc_extends_except(a@,a,pset_range(pset_singleton(p),0,offset_max(a@,p)))
     and offset_max(a,p) < offset_min(a,p) }
 
 

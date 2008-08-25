@@ -780,7 +780,9 @@ let owner_unicity this root =
 
   (* x name and type *)
   let x_name = this^"_2" in
-  let x_type = pointer_type (JCtag(root, [])) in
+  let pc = JCtag(root, []) in
+  let ac = alloc_class_of_pointer_class pc in
+  let x_type = pointer_type ac pc in
 
   (* shift indexes *)
   let index1 = "jc_index" in
@@ -855,7 +857,9 @@ let owner_unicity this root =
 let make_hierarchy_global_invariant acc root =
   (* this *)
   let this = "this" in
-  let this_ty = pointer_type (JCtag(root, [])) in
+  let pc = JCtag(root, []) in
+  let ac = alloc_class_of_pointer_class pc in
+  let this_ty = pointer_type ac pc in
 
   (* not mutable => invariant, and their parameters *)
   let structs = hierarchy_structures root in
@@ -1160,7 +1164,9 @@ let make_components_precond this st reads =
 
 let pack_declaration st acc =
   let this = "this" in
-  let this_type = pointer_type (JCtag(st, [])) in
+  let pc = JCtag(st, []) in
+  let ac = alloc_class_of_pointer_class pc in
+  let this_type = pointer_type ac pc in
   let tag = "tag" in
   let tag_type = tag_id_type (struct_variant st) in
   let mutable_name = mutable_name (JCtag(st, [])) in
@@ -1222,7 +1228,9 @@ let pack_declaration st acc =
 (* Unlike Boogie, Jessie has "unpack to S" instead of "unpack from T" *)
 let unpack_declaration st acc =
   let this = "this" in
-  let this_type = pointer_type (JCtag(st, [])) in
+  let pc = JCtag(st, []) in
+  let ac = alloc_class_of_pointer_class pc in
+  let this_type = pointer_type ac pc in
   let tag = "tag" in
   let tag_type = tag_id_type (struct_variant st) in
   let mutable_name = mutable_name (JCtag(st, [])) in

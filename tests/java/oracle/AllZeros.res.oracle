@@ -893,71 +893,141 @@ parameter AllZeros_all_zeros_requires :
 
 parameter Object_tag_table : Object tag_table ref
 
-parameter alloc_AllZeros :
+parameter alloc_struct_AllZeros :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   { ge_int(n, (0))} Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_AllZeros(result, (0), sub_int(n, (1)), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, AllZeros_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, n)))) }
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (valid_struct_AllZeros(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, AllZeros_tag)))) }
 
-parameter alloc_Object :
+parameter alloc_struct_AllZeros_requires :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   { ge_int(n, (0))} Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Object_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, n)))) }
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (valid_struct_AllZeros(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, AllZeros_tag)))) }
 
-parameter alloc_String :
+parameter alloc_struct_Object :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   { ge_int(n, (0))} Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, String_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, n)))) }
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Object_tag)))) }
 
-parameter alloc_Throwable :
+parameter alloc_struct_Object_requires :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   { ge_int(n, (0))} Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
-      Object_alloc_table)
-     and (instanceof(Object_tag_table, result, Throwable_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, n)))) }
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Object_tag)))) }
 
-parameter alloc_intM :
+parameter alloc_struct_String :
  n:int ->
   Object_alloc_table:Object alloc_table ref ->
-   { ge_int(n, (0))} Object pointer reads Object_alloc_table
-   writes Object_alloc_table,Object_tag_table
-   { (valid_struct_intM(result, (0), sub_int(n, (1)), Object_alloc_table)
-     and (instanceof(Object_tag_table, result, intM_tag)
-         and (alloc_extends(Object_alloc_table@, Object_alloc_table)
-             and alloc_fresh(Object_alloc_table@, result, n)))) }
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, String_tag)))) }
+
+parameter alloc_struct_String_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, String_tag)))) }
+
+parameter alloc_struct_Throwable :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Throwable_tag)))) }
+
+parameter alloc_struct_Throwable_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Throwable_tag)))) }
+
+parameter alloc_struct_intM :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (valid_struct_intM(result, (0), sub_int(n, (1)), Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, intM_tag)))) }
+
+parameter alloc_struct_intM_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (valid_struct_intM(result, (0), sub_int(n, (1)), Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, intM_tag)))) }
 
 parameter interface_alloc_table : interface alloc_table ref
 
 parameter interface_tag_table : interface tag_table ref
 
-parameter alloc_interface :
+parameter alloc_struct_interface :
  n:int ->
   interface_alloc_table:interface alloc_table ref ->
-   { ge_int(n, (0))} interface pointer reads interface_alloc_table
-   writes interface_alloc_table,interface_tag_table
-   { (valid_struct_interface(result, (0), sub_int(n, (1)),
-      interface_alloc_table)
-     and (instanceof(interface_tag_table, result, interface_tag)
-         and (alloc_extends(interface_alloc_table@, interface_alloc_table)
-             and alloc_fresh(interface_alloc_table@, result, n)))) }
+   interface_tag_table:interface tag_table ref ->
+    { } interface pointer writes interface_alloc_table,interface_tag_table
+    { (valid_struct_interface(result, (0), sub_int(n, (1)),
+       interface_alloc_table)
+      and (alloc_extends(interface_alloc_table@, interface_alloc_table)
+          and (alloc_fresh(interface_alloc_table@, result, n)
+              and instanceof(interface_tag_table, result, interface_tag)))) }
+
+parameter alloc_struct_interface_requires :
+ n:int ->
+  interface_alloc_table:interface alloc_table ref ->
+   interface_tag_table:interface tag_table ref ->
+    { ge_int(n, (0))} interface pointer
+    writes interface_alloc_table,interface_tag_table
+    { (valid_struct_interface(result, (0), sub_int(n, (1)),
+       interface_alloc_table)
+      and (alloc_extends(interface_alloc_table@, interface_alloc_table)
+          and (alloc_fresh(interface_alloc_table@, result, n)
+              and instanceof(interface_tag_table, result, interface_tag)))) }
 
 parameter any_byte : unit -> { } byte { true }
 
@@ -1233,7 +1303,7 @@ why --project [...] why/AllZeros.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/AllZeros_po14.why">
-      <location file = "why/AllZeros.why" line = "558" begin = "65" end = "315"/>
+      <location file = "why/AllZeros.why" line = "628" begin = "65" end = "315"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/AllZeros_po15.why">
@@ -3956,7 +4026,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 result)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))
 
-;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 558, characters 65-315
+;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 628, characters 65-315
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

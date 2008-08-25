@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.23 2008-08-13 16:36:27 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.24 2008-08-25 16:20:00 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -74,7 +74,8 @@ let generic_tag_table_name vi =
   (variant_type_name vi) ^ "_tag_table"
 
 let tag_table_name (vi,r) =
-  if !Jc_common_options.separation_sem = SepRegions then 
+  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
+  then 
     (variant_type_name vi) ^ "_" ^ (Region.name r) ^ "_tag_table"
   else
     (variant_type_name vi) ^ "_tag_table"
@@ -83,7 +84,8 @@ let generic_alloc_table_name ac =
   (alloc_class_name ac) ^ "_alloc_table"
 
 let alloc_table_name (ac,r) = 
-  if !Jc_common_options.separation_sem = SepRegions then 
+  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
+  then 
     (alloc_class_name ac) ^ "_" ^ (Region.name r) ^ "_alloc_table"
   else
     (alloc_class_name ac) ^ "_alloc_table"
@@ -95,7 +97,8 @@ let field_memory_name fi =
     fi.jc_field_info_final_name
 
 let field_region_memory_name (fi,r) = 
-  if !Jc_common_options.separation_sem = SepRegions then 
+  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
+  then 
     (field_memory_name fi) ^ "_" ^ (Region.name r)
   else field_memory_name fi
 
@@ -103,7 +106,8 @@ let union_memory_name vi =
   vi.jc_variant_info_name ^ "_fields"
 
 let union_region_memory_name (vi,r) = 
-  if !Jc_common_options.separation_sem = SepRegions then 
+  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
+  then 
     (union_memory_name vi) ^ "_" ^ (Region.name r)
   else union_memory_name vi
 
@@ -121,18 +125,29 @@ let memory_name (mc,r) =
     | JCmem_union vi -> union_region_memory_name (vi,r)
     | JCmem_bitvector -> bitvector_region_memory_name r
 
-let valid_pred_name = function
-  | JCtag(st, _) -> "valid_struct_" ^ st.jc_struct_info_name
-  | JCvariant vi -> "valid_variant_" ^ vi.jc_variant_info_name
-  | JCunion vi -> "valid_union_" ^ vi.jc_variant_info_name
-(*
-let valid_one_pred_name = function
-  | JCtag st -> "valid_one_" ^ st.jc_struct_info_name
-  | JCvariant vi -> "valid_one_" ^ vi.jc_variant_info_name
-*)
-let alloc_param_name st = "alloc_" ^ st.jc_struct_info_name
+let valid_pred_name ac pc = 
+  match ac with
+    | JCalloc_struct _ ->
+	begin match pc with
+	  | JCtag(st, _) -> "valid_struct_" ^ st.jc_struct_info_name
+	  | JCvariant vi -> "valid_variant_" ^ vi.jc_variant_info_name
+	  | JCunion _vi -> assert false
+	end
+    | JCalloc_union vi -> "valid_union_" ^ vi.jc_variant_info_name
+    | JCalloc_bitvector -> "valid_bitvector"
 
-let alloc_one_param_name st = "alloc_one_" ^ st.jc_struct_info_name
+let alloc_param_name ~check_size ac pc = 
+  let n = match ac with
+    | JCalloc_struct _ ->
+	begin match pc with
+	  | JCtag(st, _) -> "alloc_struct_" ^ st.jc_struct_info_name
+	  | JCvariant _vi -> assert false
+	  | JCunion _vi -> assert false
+	end
+    | JCalloc_union vi -> "alloc_union_" ^ vi.jc_variant_info_name
+    | JCalloc_bitvector -> "alloc_bitvector"
+  in
+  if check_size then n ^ "_requires" else n
 
 let jessie_return_variable = "return"
 let jessie_return_exception = "Return"
