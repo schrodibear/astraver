@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.125 2008-08-14 11:14:20 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.126 2008-08-25 23:12:08 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -690,25 +690,35 @@ let rec expr fef e =
 	   add_tag_reads LabelHere fef (struct_variant st,e#region)
        | JCEalloc(_e1,st) ->
 	   let pc = JCtag(st,[]) in
-	   let fields = all_memories ~select:fully_allocated pc in
-	   let allocs = all_allocs ~select:fully_allocated pc in
-	   let tags = all_tags ~select:fully_allocated pc in
+	   let ac = deref_alloc_class e in
+	   let all_allocs = match ac with
+	     | JCalloc_struct st -> all_allocs ~select:fully_allocated pc
+	     | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
+	   in
+	   let all_mems = match ac with
+	     | JCalloc_struct st -> all_memories ~select:fully_allocated pc
+	     | JCalloc_union _ | JCalloc_bitvector -> []
+	   in
+	   let all_tags = match ac with
+	     | JCalloc_struct st -> all_tags ~select:fully_allocated pc
+	     | JCalloc_union _ | JCalloc_bitvector -> [ struct_variant st ]
+	   in
 	   let fef = 
 	     List.fold_left 
 	       (fun fef fi -> 
 		  let mc = JCmem_field fi in
 		  add_memory_writes LabelHere fef (mc,e#region)
-	       ) fef fields
+	       ) fef all_mems
 	   in
 	   let fef = 
 	     List.fold_left
 	       (fun fef ac -> add_alloc_writes LabelHere fef (ac,e#region))
-	       fef allocs
+	       fef all_allocs
 	   in
 	   true,
 	   List.fold_left 
 	     (fun fef vi -> add_tag_writes LabelHere fef (vi,e#region))
-	     fef tags
+	     fef all_tags
        | JCEfree e ->
 	   let pc = pointer_class e#typ in
 	   let ac = alloc_class_of_pointer_class pc in

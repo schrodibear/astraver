@@ -997,6 +997,38 @@ axiom mul_comm_as_axiom :
  (forall x_3:int.
   (forall y_3:int. eq_int(mul_int(x_3, y_3), mul_int(y_3, x_3))))
 
+predicate valid_bitvector_struct_Object(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Gcd(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_String(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_Throwable(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_interface(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
 predicate valid_struct_Object(p:Object pointer,
  a:int,
  b:int,
@@ -1066,6 +1098,96 @@ parameter Gcd_gcd_requires :
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_tag_table : Object tag_table ref
+
+parameter alloc_bitvector_struct_Gcd :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Gcd(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Gcd_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Gcd(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Object :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Object_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_String :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_String_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Throwable :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Throwable_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_interface :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_interface_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter alloc_struct_Gcd :
  n:int ->
@@ -2621,6 +2743,28 @@ axiom mul_assoc_as_axiom:
 
 axiom mul_comm_as_axiom:
   (forall x_3:int. (forall y_3:int. ((x_3 * y_3) = (y_3 * x_3))))
+
+predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Gcd(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -4254,6 +4398,23 @@ why -simplify [...] why/Gcd.why
 (BG_PUSH
  ;; Why axiom mul_comm_as_axiom
  (FORALL (x_3 y_3) (EQ (* x_3 y_3) (* y_3 x_3))))
+
+(DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
+  (AND (EQ (offset_min bitvector_alloc_table p) a)
+  (EQ (offset_max bitvector_alloc_table p) b)))
+
+(DEFPRED (valid_bitvector_struct_Gcd p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
+
+(DEFPRED (valid_bitvector_struct_String p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
+
+(DEFPRED (valid_bitvector_struct_Throwable p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
+
+(DEFPRED (valid_bitvector_struct_interface p a b bitvector_alloc_table)
+  (AND (EQ (offset_min bitvector_alloc_table p) a)
+  (EQ (offset_max bitvector_alloc_table p) b)))
 
 (DEFPRED (valid_struct_Object p a b Object_alloc_table)
   (AND (EQ (offset_min Object_alloc_table p) a)
@@ -6033,6 +6194,28 @@ goal mul_comm:
 
 axiom mul_comm_as_axiom:
   (forall x_3:int. (forall y_3:int. ((x_3 * y_3) = (y_3 * x_3))))
+
+predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Gcd(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

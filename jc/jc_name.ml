@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.24 2008-08-25 16:20:00 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.25 2008-08-25 23:12:08 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -126,26 +126,24 @@ let memory_name (mc,r) =
     | JCmem_bitvector -> bitvector_region_memory_name r
 
 let valid_pred_name ac pc = 
-  match ac with
-    | JCalloc_struct _ ->
-	begin match pc with
-	  | JCtag(st, _) -> "valid_struct_" ^ st.jc_struct_info_name
-	  | JCvariant vi -> "valid_variant_" ^ vi.jc_variant_info_name
-	  | JCunion _vi -> assert false
-	end
-    | JCalloc_union vi -> "valid_union_" ^ vi.jc_variant_info_name
+  let prefix = match ac with
+    | JCalloc_struct _ | JCalloc_union _ -> "valid"
     | JCalloc_bitvector -> "valid_bitvector"
+  in
+  match pc with
+    | JCtag(st, _) -> prefix ^ "_struct_" ^ st.jc_struct_info_name
+    | JCvariant vi -> prefix ^ "_variant_" ^ vi.jc_variant_info_name
+    | JCunion vi -> prefix ^ "_union_" ^ vi.jc_variant_info_name
 
 let alloc_param_name ~check_size ac pc = 
-  let n = match ac with
-    | JCalloc_struct _ ->
-	begin match pc with
-	  | JCtag(st, _) -> "alloc_struct_" ^ st.jc_struct_info_name
-	  | JCvariant _vi -> assert false
-	  | JCunion _vi -> assert false
-	end
-    | JCalloc_union vi -> "alloc_union_" ^ vi.jc_variant_info_name
+  let prefix = match ac with
+    | JCalloc_struct _ | JCalloc_union _ -> "alloc"
     | JCalloc_bitvector -> "alloc_bitvector"
+  in
+  let n = match pc with
+    | JCtag(st, _) -> prefix ^ "_struct_" ^ st.jc_struct_info_name
+    | JCvariant _vi -> assert false
+    | JCunion vi -> prefix ^ "_union_" ^ vi.jc_variant_info_name
   in
   if check_size then n ^ "_requires" else n
 

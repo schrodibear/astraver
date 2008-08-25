@@ -1590,6 +1590,44 @@ axiom short_range :
   (le_int((-32768), integer_of_short(x))
   and le_int(integer_of_short(x), (32767))))
 
+predicate valid_bitvector_struct_Object(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Creation(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_String(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_TestSuperConstructor(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Creation(p, a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_Throwable(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_interface(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
 predicate valid_struct_Object(p:Object pointer,
  a:int,
  b:int,
@@ -1691,6 +1729,114 @@ parameter Creation_test3_requires :
     and (JC_90:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
         Creation_simple_val, pset_empty)))) }
+
+parameter alloc_bitvector_struct_Creation :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Creation(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Creation_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Creation(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Object :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Object_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_String :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_String_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_TestSuperConstructor :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_TestSuperConstructor(result, (0),
+      sub_int(n, (1)), bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_TestSuperConstructor_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_TestSuperConstructor(result, (0),
+      sub_int(n, (1)), bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Throwable :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Throwable_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_interface :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_interface_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter alloc_struct_Creation :
  n:int ->
@@ -2345,7 +2491,7 @@ why --project [...] why/Creation.why
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po12.why">
-      <location file = "why/Creation.why" line = "758" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "904" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po13.why">
@@ -2374,7 +2520,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po7.why">
-      <location file = "why/Creation.why" line = "698" begin = "32" end = "157"/>
+      <location file = "why/Creation.why" line = "844" begin = "32" end = "157"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po8.why">
@@ -2399,7 +2545,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po3.why">
-      <location file = "why/Creation.why" line = "644" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "790" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po4.why">
@@ -3464,6 +3610,32 @@ axiom short_of_bitvector_of_bitvector_of_short:
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
+
+predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Creation(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_TestSuperConstructor(p: unit pointer,
+  a: int, b: int, bitvector_alloc_table: unit alloc_table) =
+  valid_bitvector_struct_Creation(p, a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -4600,6 +4772,26 @@ why -simplify [...] why/Creation.why
  (FORALL (x)
  (AND (<= (- 0 32768) (integer_of_short x)) (<= (integer_of_short x) 32767))))
 
+(DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
+  (AND (EQ (offset_min bitvector_alloc_table p) a)
+  (EQ (offset_max bitvector_alloc_table p) b)))
+
+(DEFPRED (valid_bitvector_struct_Creation p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
+
+(DEFPRED (valid_bitvector_struct_String p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
+
+(DEFPRED (valid_bitvector_struct_TestSuperConstructor p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Creation p a b bitvector_alloc_table))
+
+(DEFPRED (valid_bitvector_struct_Throwable p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
+
+(DEFPRED (valid_bitvector_struct_interface p a b bitvector_alloc_table)
+  (AND (EQ (offset_min bitvector_alloc_table p) a)
+  (EQ (offset_max bitvector_alloc_table p) b)))
+
 (DEFPRED (valid_struct_Object p a b Object_alloc_table)
   (AND (EQ (offset_min Object_alloc_table p) a)
   (EQ (offset_max Object_alloc_table p) b)))
@@ -4657,7 +4849,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test1_safety_po_1, File "HOME/tests/java/Creation.jc", line 77, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test1_safety_po_2, File "why/Creation.why", line 644, characters 30-151
+;; Creation_test1_safety_po_2, File "why/Creation.why", line 790, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -4721,7 +4913,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 97, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 698, characters 32-157
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 844, characters 32-157
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -4817,7 +5009,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 ;; Creation_test3_safety_po_1, File "HOME/tests/java/Creation.jc", line 117, characters 57-72
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test3_safety_po_2, File "why/Creation.why", line 758, characters 30-151
+;; Creation_test3_safety_po_2, File "why/Creation.why", line 904, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -5970,6 +6162,32 @@ axiom short_of_bitvector_of_bitvector_of_short:
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
+
+predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Creation(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_TestSuperConstructor(p: unit pointer,
+  a: int, b: int, bitvector_alloc_table: unit alloc_table) =
+  valid_bitvector_struct_Creation(p, a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
+
+predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

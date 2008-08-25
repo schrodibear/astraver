@@ -119,7 +119,7 @@ let bitvector_type = simple_logic_type bitvector_type_name
 let alloc_class_type = function
   | JCalloc_struct vi -> variant_model_type vi
   | JCalloc_union vi -> variant_model_type vi
-  | JCalloc_bitvector -> bitvector_type
+  | JCalloc_bitvector -> why_unit_type
 
 let memory_class_type mc = 
   alloc_class_type (alloc_class_of_mem_class mc)
@@ -432,7 +432,26 @@ let ttag_table_param ~label_in_name lab (vi,r) =
 (*                                  Unions                                   *)
 (*****************************************************************************)
 
-type shift_offset = Int_offset of string | Expr_offset of Jc_fenv.expr 
+type shift_offset = 
+  | Int_offset of string
+  | Expr_offset of Jc_fenv.expr 
+  | Term_offset of Jc_fenv.term 
+
+let offset_of_expr e =
+  match e#node with
+    | JCEconst (JCCinteger s) -> Int_offset s
+    | _ -> Expr_offset e
+
+let offset_of_term t =
+  match t#node with
+    | JCTconst (JCCinteger s) -> Int_offset s
+    | _ -> Term_offset t
+
+let mult_offset i off =
+  match off with
+    | Int_offset j -> Int_offset (string_of_int (i * (int_of_string j)))
+    | Expr_offset _ -> assert false (* TODO *)
+    | Term_offset _ -> assert false (* TODO *)
 
 let add_offset off1 off2 = 
   match off1,off2 with
@@ -454,7 +473,7 @@ let of_union_type ty =
   match possible_union_type ty with Some _vi -> true | None -> false
 
 (* TODO: take JCEalloc into account *)
-let access_union e fi_opt = 
+let possible_union_access e fi_opt = 
   let fieldoffbytes fi = 
     match field_offset_in_bytes fi with
       | None -> assert false
@@ -473,7 +492,14 @@ let access_union e fi_opt =
 		else None
 	  end
       | JCEshift(e1,e2) ->
-	  None (* assert false *) (* TODO *)
+	  begin match access e1 with
+	    | Some(e,off1) ->
+		let off2 = offset_of_expr e2 in
+		let siz = struct_size_in_bytes (pointer_struct e1#typ) in
+		let off2 = mult_offset siz off2 in
+		Some (e, add_offset off1 off2)
+	    | None -> None
+	  end
       | _ ->	
 	  if of_union_type e#typ then
 	    Some (e,Int_offset "0")
@@ -493,15 +519,9 @@ let access_union e fi_opt =
 	      else None
 
 let destruct_union_access e fi_opt = 
-  assert false (* TODO *)
+  the (possible_union_access e fi_opt)
 
-let tdestruct_union_access e fi_opt = 
-  assert false (* TODO *)
-
-let ldestruct_union_access e fi_opt = 
-  assert false (* TODO *)
-
-let taccess_union t fi_opt =
+let tpossible_union_access t fi_opt =
   let fieldoffbytes fi = 
     match field_offset_in_bytes fi with
       | None -> assert false
@@ -520,9 +540,14 @@ let taccess_union t fi_opt =
 		else None
 	  end
       | JCTshift(t1,t2) ->
-	  None
-(* 	  Format.printf "term %a@." Jc_output.term t; *)
-(* 	  assert false (\* TODO *\) *)
+	  begin match access t1 with
+	    | Some(t3,off1) ->
+		let off2 = offset_of_term t2 in
+		let siz = struct_size_in_bytes (pointer_struct t1#typ) in
+		let off2 = mult_offset siz off2 in
+		Some (t3, add_offset off1 off2)
+	    | None -> None
+	  end
       | _ ->	
 	  if of_union_type t#typ then
 	    Some (t,Int_offset "0")
@@ -542,42 +567,48 @@ let taccess_union t fi_opt =
 		Some (t, fieldoffbytes fi)
 	      else None
 
-let laccess_union t fi = None (* TODO *)
+let tdestruct_union_access t fi_opt = 
+  the (tpossible_union_access t fi_opt)
+
+let lpossible_union_access t fi = None (* TODO *)
+
+let ldestruct_union_access loc fi_opt = 
+  the (lpossible_union_access loc fi_opt)
 
 let foreign_union e = [] (* TODO: subterms of union that are not in union *)
 let tforeign_union t = []
 
-let common_deref_alloc_class ~type_safe access_union e =
+let common_deref_alloc_class ~type_safe union_access e =
   if not type_safe && Region.bitwise e#region then
     JCalloc_bitvector
-  else match access_union e None with 
+  else match union_access e None with 
     | None -> JCalloc_struct (struct_variant (pointer_struct e#typ))
     | Some(e,_off) -> JCalloc_union (union_type e#typ)
 
 let deref_alloc_class e =
-  common_deref_alloc_class ~type_safe:false access_union e
+  common_deref_alloc_class ~type_safe:false possible_union_access e
   
 let tderef_alloc_class ~type_safe t =
-  common_deref_alloc_class ~type_safe taccess_union t
+  common_deref_alloc_class ~type_safe tpossible_union_access t
 
 let lderef_alloc_class ~type_safe locs =
-  common_deref_alloc_class ~type_safe laccess_union locs
+  common_deref_alloc_class ~type_safe lpossible_union_access locs
 
-let common_deref_mem_class ~type_safe access_union e fi =
+let common_deref_mem_class ~type_safe union_access e fi =
   if not type_safe && Region.bitwise e#region then
     JCmem_bitvector
-  else match access_union e (Some fi) with 
+  else match union_access e (Some fi) with 
     | None -> JCmem_field fi
     | Some(e,_off) -> JCmem_union (union_type e#typ)
 
 let deref_mem_class e fi =
-  common_deref_mem_class ~type_safe:false access_union e fi
+  common_deref_mem_class ~type_safe:false possible_union_access e fi
 
 let tderef_mem_class ~type_safe t fi =
-  common_deref_mem_class ~type_safe taccess_union t fi
+  common_deref_mem_class ~type_safe tpossible_union_access t fi
 
 let lderef_mem_class ~type_safe locs fi =
-  common_deref_mem_class ~type_safe laccess_union locs fi
+  common_deref_mem_class ~type_safe lpossible_union_access locs fi
 
 
 (******************************************************************************)

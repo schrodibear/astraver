@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.341 2008-08-25 16:20:00 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.342 2008-08-25 23:12:08 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -360,14 +360,14 @@ let const_of_num n = LConst(Prim_int(Num.string_of_num n))
 
 let make_valid_pred_app ac pc p a b =
   let all_allocs = match ac with
-    | JCalloc_struct st -> all_allocs ~select:fully_allocated pc
+    | JCalloc_struct _ -> all_allocs ~select:fully_allocated pc
     | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
   in
   let allocs = 
     List.map (fun ac -> LVar(generic_alloc_table_name ac)) all_allocs
   in
   let all_mems = match ac with
-    | JCalloc_struct st -> all_memories ~select:fully_allocated pc
+    | JCalloc_struct _ -> all_memories ~select:fully_allocated pc
     | JCalloc_union _ | JCalloc_bitvector -> []
   in
   let mems = List.map (fun fi -> LVar(field_memory_name fi)) all_mems in
@@ -391,7 +391,7 @@ let make_valid_pred ac pc =
   let b = "b" in
   let params =
     let all_allocs = match ac with
-      | JCalloc_struct st -> all_allocs ~select:fully_allocated pc
+      | JCalloc_struct _ -> all_allocs ~select:fully_allocated pc
       | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
     in
     let allocs = 
@@ -399,7 +399,7 @@ let make_valid_pred ac pc =
 	all_allocs
     in
     let all_mems = match ac with
-      | JCalloc_struct st -> all_memories ~select:fully_allocated pc
+      | JCalloc_struct _ -> all_memories ~select:fully_allocated pc
       | JCalloc_union _ | JCalloc_bitvector -> []
     in
     let mems = 
@@ -600,18 +600,19 @@ let tr_struct st acc =
     Logic(false,tag_name st,[],tagid_type)::acc
   in
 
-  let pc = JCtag(st,[]) in
-  let ac = alloc_class_of_pointer_class pc in
-  let acc = make_valid_pred ac pc :: acc in
-
-  (* Allocation parameter *)
   let acc = 
     if struct_of_union st then acc 
     else 
       let pc = JCtag(st,[]) in
       let ac = alloc_class_of_pointer_class pc in
-      make_alloc_param ~check_size:true ac pc 
+      (* Validity parameters *)
+      make_valid_pred ac pc 
+      :: make_valid_pred JCalloc_bitvector pc 
+      (* Allocation parameters *)
+      :: make_alloc_param ~check_size:true ac pc 
       :: make_alloc_param ~check_size:false ac pc 
+      :: make_alloc_param ~check_size:true JCalloc_bitvector pc 
+      :: make_alloc_param ~check_size:false JCalloc_bitvector pc 
       :: acc
   in
 
@@ -1632,6 +1633,7 @@ and offset = function
       coerce ~check_int_overflow:(safety_checking())
         e#mark e#pos integer_type e#typ e
         (expr e)
+  | Term_offset _ -> assert false
 
 and list_type_assert ty e (lets, params) =
   let opt =
@@ -1863,22 +1865,17 @@ and expr e =
 	let e1' = expr e1 in
 	let ac = deref_alloc_class e1 in
         let alloc = plain_alloc_table_var (ac,e1#region) in
-	begin match ac with
-	  | JCalloc_struct vi ->
-              if !Jc_options.inv_sem = InvOwnership then
-		let pc = pointer_class e1#typ in
-		let com = committed_name pc in
-		make_app "free_parameter_ownership" 
-		  [alloc; Var com; e1']
-              else
-		let free_fun = 
-		  if safety_checking () then "free_parameter" 
-		  else "safe_free_parameter"
-		in
-		make_app free_fun [alloc; e1']
-	  | JCalloc_union vi -> assert false (* TODO *)
-	  | JCalloc_bitvector -> assert false (* TODO *)
-        end
+        if !Jc_options.inv_sem = InvOwnership then
+	  let pc = pointer_class e1#typ in
+	  let com = committed_name pc in
+	  make_app "free_parameter_ownership" 
+	    [alloc; Var com; e1']
+        else
+	  let free_fun = 
+	    if safety_checking () then "free_parameter" 
+	    else "safe_free_parameter"
+	  in
+	  make_app free_fun [alloc; e1']
     | JCEapp call ->
 	begin match call.jc_call_fun with
           | JClogic_fun f -> 
@@ -3334,7 +3331,9 @@ let tr_variant vi acc =
   in
   let ac = alloc_class_of_pointer_class pc in
   let acc =
-    if not vi.jc_variant_info_is_union then acc else
+    if not vi.jc_variant_info_is_union then
+      (make_valid_pred ac pc) :: acc 
+    else
       (* Declarations of field memories. *)
       let acc = 
 	if !Jc_options.separation_sem = SepRegions then acc else
@@ -3343,9 +3342,14 @@ let tr_variant vi acc =
 		union_memory_name vi,
 		Ref_type(Base_type mem))::acc
       in
+      (* Validity parameters *)
+      make_valid_pred ac pc 
+      :: make_valid_pred JCalloc_bitvector pc 
       (* Allocation parameter *)
-      make_alloc_param ~check_size:true ac pc 
+      :: make_alloc_param ~check_size:true ac pc 
       :: make_alloc_param ~check_size:false ac pc 
+      :: make_alloc_param ~check_size:true JCalloc_bitvector pc 
+      :: make_alloc_param ~check_size:false JCalloc_bitvector pc 
       :: acc
   in
   let tag_table =
@@ -3402,7 +3406,7 @@ let tr_variant vi acc =
     vi.jc_variant_info_roots
   in
   let acc = type_def::alloc_table::tag_table::axiom_variant_has_tag::acc in
-  (make_valid_pred ac pc) :: acc
+  acc
 
 (*
   Local Variables: 
