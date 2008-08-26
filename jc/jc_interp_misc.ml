@@ -472,7 +472,6 @@ let union_type ty =
 let of_union_type ty =
   match possible_union_type ty with Some _vi -> true | None -> false
 
-(* TODO: take JCEalloc into account *)
 let possible_union_access e fi_opt = 
   let fieldoffbytes fi = 
     match field_offset_in_bytes fi with
@@ -500,6 +499,10 @@ let possible_union_access e fi_opt =
 		Some (e, add_offset off1 off2)
 	    | None -> None
 	  end
+      | JCEalloc(_e1,st) ->
+	  if struct_of_union st then
+	    Some(e,Int_offset "0")
+	  else None
       | _ ->	
 	  if of_union_type e#typ then
 	    Some (e,Int_offset "0")

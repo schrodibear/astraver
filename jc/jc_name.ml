@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.25 2008-08-25 23:12:08 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.26 2008-08-26 11:10:26 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -131,7 +131,11 @@ let valid_pred_name ac pc =
     | JCalloc_bitvector -> "valid_bitvector"
   in
   match pc with
-    | JCtag(st, _) -> prefix ^ "_struct_" ^ st.jc_struct_info_name
+    | JCtag(st, _) -> 
+	if struct_of_union st then
+	  prefix ^ "_union_" ^ (struct_variant st).jc_variant_info_name
+	else
+	  prefix ^ "_struct_" ^ st.jc_struct_info_name
     | JCvariant vi -> prefix ^ "_variant_" ^ vi.jc_variant_info_name
     | JCunion vi -> prefix ^ "_union_" ^ vi.jc_variant_info_name
 
@@ -141,7 +145,11 @@ let alloc_param_name ~check_size ac pc =
     | JCalloc_bitvector -> "alloc_bitvector"
   in
   let n = match pc with
-    | JCtag(st, _) -> prefix ^ "_struct_" ^ st.jc_struct_info_name
+    | JCtag(st, _) -> 
+	if struct_of_union st then
+	  prefix ^ "_union_" ^ (struct_variant st).jc_variant_info_name
+	else
+	  prefix ^ "_struct_" ^ st.jc_struct_info_name
     | JCvariant _vi -> assert false
     | JCunion vi -> prefix ^ "_union_" ^ vi.jc_variant_info_name
   in

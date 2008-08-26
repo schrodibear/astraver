@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.19 2008-08-14 11:14:20 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.20 2008-08-26 11:10:26 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -244,6 +244,7 @@ struct
   let bitwise r = (RegionUF.repr r).jc_reg_bitwise
 
   let make_bitwise r =
+    let r = RegionUF.repr r in
     if !Jc_common_options.separation_sem = SepNone then 
       (* Potentially all pointers may be aliased *)
       (assert (is_dummy_region r);
