@@ -27,9 +27,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Jc_stdlib
 open Jc_env
 open Jc_ast
 open Jc_fenv
+
 open Jc_pervasives
 open Jc_iterators
 

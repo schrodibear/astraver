@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_stdlib.ml,v 1.7 2008-08-13 16:36:27 moy Exp $ *)
+(* $Id: jc_stdlib.ml,v 1.8 2008-08-28 13:57:41 moy Exp $ *)
 
 module List = struct
   include List
@@ -160,6 +160,58 @@ module Map = struct
 	   ) m1 empty
 	
   end
+end
+
+module StdHashtbl = Hashtbl
+
+module Hashtbl = struct
+
+  module type HashedType = Hashtbl.HashedType
+
+  module type S = sig 
+    include Hashtbl.S
+    val keys: 'a t -> key list
+    val values: 'a t -> 'a list
+    val choose: 'a t -> (key * 'a) option
+  end
+
+  module type Std = sig
+    type ('a, 'b) t
+    val create : int -> ('a, 'b) t
+    val clear : ('a, 'b) t -> unit
+    val add : ('a, 'b) t -> 'a -> 'b -> unit
+    val copy : ('a, 'b) t -> ('a, 'b) t
+    val find : ('a, 'b) t -> 'a -> 'b
+    val find_all : ('a, 'b) t -> 'a -> 'b list
+    val mem : ('a, 'b) t -> 'a -> bool
+    val remove : ('a, 'b) t -> 'a -> unit
+    val replace : ('a, 'b) t -> 'a -> 'b -> unit
+    val iter : ('a -> 'b -> unit) -> ('a, 'b) t -> unit
+    val fold : ('a -> 'b -> 'c -> 'c) -> ('a, 'b) t -> 'c -> 'c
+    val length : ('a, 'b) t -> int
+    val hash : 'a -> int
+    val hash_param : int -> int -> 'a -> int
+  end
+
+  include (Hashtbl : Std)
+
+  module Make(H : HashedType) : S with type key = H.t = struct
+    include Hashtbl.Make(H)
+
+    let keys t = 
+      fold (fun k _v acc -> k :: acc) t []
+
+    let values t = 
+      fold (fun _k v acc -> v :: acc) t []
+
+    let choose t =
+      let p = ref None in
+      begin try
+	iter (fun k v -> p := Some(k,v); failwith "Hashtbl.choose") t
+      with Failure "Hashtbl.choose" -> () end;
+      !p
+  end
+
 end
 
 (*

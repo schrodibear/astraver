@@ -27,8 +27,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.236 2008-08-13 09:31:14 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.237 2008-08-28 13:57:41 moy Exp $ *)
 
+open Jc_stdlib
 open Jc_env
 open Jc_envset
 open Jc_region

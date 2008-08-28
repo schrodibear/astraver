@@ -27,8 +27,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.29 2008-08-07 14:33:54 moy Exp $ *)
+(* $Id: jc_options.mli,v 1.30 2008-08-28 13:57:41 moy Exp $ *)
 
+open Jc_stdlib
 
 
 (*s environment variables *)

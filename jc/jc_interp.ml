@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.342 2008-08-25 23:12:08 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.343 2008-08-28 13:57:41 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -39,10 +39,10 @@ open Jc_fenv
 open Jc_name
 open Jc_constructors
 open Jc_pervasives
-open Jc_invariants
 open Jc_separation
 open Jc_interp_misc
 open Jc_struct_tools
+open Jc_invariants
 open Jc_pattern
 
 open Output
@@ -76,7 +76,7 @@ type gui_elem =
     }
 
 let reg_pos sce gui =
-  if gui.out_mark <> "" && Hashtbl.mem Output.pos_table gui.out_mark then
+  if gui.out_mark <> "" && StdHashtbl.mem Output.pos_table gui.out_mark then
     (* If GUI element already refered to in output table, do not 
      * reference it twice. This is the case in particular for generated 
      * annotations. *)
@@ -1220,7 +1220,7 @@ let rec collect_pset_locations ~type_safe ~global_assertion loc =
     | JCLat(loc,lab) ->
         collect_pset_locations ~type_safe ~global_assertion loc
 
-let assigns before ef locs loc =
+let assigns ~type_safe before ef locs loc =
   match locs with
     | None -> LTrue     
     | Some locs ->
@@ -1242,7 +1242,7 @@ let assigns before ef locs loc =
       ef.jc_writes.jc_effect_memories MemoryMap.empty 
   in
   let refs,mems = 
-    List.fold_left (collect_locations ~type_safe:false ~global_assertion:false before) (refs,mems) locs
+    List.fold_left (collect_locations ~type_safe ~global_assertion:false before) (refs,mems) locs
   in
   let a =
     StringMap.fold
@@ -2091,8 +2091,8 @@ and expr e =
 	  | None -> inv
 	  | _ ->
 	      let ass =
-		assigns LabelPre infunction.jc_fun_info_effects
-		  loop_assigns e#pos
+		assigns ~type_safe:false 
+		  LabelPre infunction.jc_fun_info_effects loop_assigns e#pos
 	      in
 	      make_and inv (mark_assertion e#pos ass)
 	in
@@ -2594,6 +2594,7 @@ let function_body f spec behavior_name body =
   reset_current_spec ();
   e'
 
+(* Only used for internal function, hence type-safe parameter set to false *)
 let assume_in_precondition b pre =
   match b.jc_behavior_assumes with
     | None -> pre
@@ -2604,12 +2605,13 @@ let assume_in_precondition b pre =
 	in
 	make_and a' pre
 
+(* Only used for external prototype, hence type-safe parameter set to true *)
 let assume_in_postcondition b post =
   match b.jc_behavior_assumes with
     | None -> post
     | Some a ->
 	let a' = 
-	  assertion ~type_safe:false ~global_assertion:false ~relocate:true 
+	  assertion ~type_safe:true ~global_assertion:false ~relocate:true 
 	    LabelOld LabelOld a
 	in
 	make_impl a' post
@@ -2681,22 +2683,26 @@ let tr_fun f funpos spec body acc =
        excep_behaviors_inferred, excep_behaviors) =
     List.fold_left
       (fun (safety,normal_inferred,normal,excep_inferred,excep) (pos,id,b) ->
-	 let post = 
-	   named_assertion 
-	     ~type_safe:false ~global_assertion:false ~relocate:false 
-	     LabelPost LabelOld b.jc_behavior_ensures 
+	 let make_post ~type_safe =
+	   let post = 
+	     named_assertion 
+	       ~type_safe ~global_assertion:false ~relocate:false 
+	       LabelPost LabelOld b.jc_behavior_ensures 
+	   in
+           let post = match b.jc_behavior_assigns with
+             | None -> post
+             | Some(assigns_pos,loclist) ->
+		 let assigns_post = 
+                   mark_assertion assigns_pos
+                     (assigns ~type_safe
+			LabelOld f.jc_fun_info_effects (Some loclist) funpos)
+		 in
+		 mark_assertion pos (make_and post assigns_post)
+	   in post
 	 in
-         let post = match b.jc_behavior_assigns with
-           | None -> post
-           | Some(assigns_pos,loclist) ->
-	       let assigns_post = 
-                 mark_assertion assigns_pos
-                   (assigns 
-		      LabelOld f.jc_fun_info_effects (Some loclist) funpos)
-	       in
-               mark_assertion pos (make_and post assigns_post)
-         in
-	 let behav = (id,b,post) in
+	 let internal_post = make_post ~type_safe:false in
+	 let external_post = make_post ~type_safe:true in
+	 let behav = (id,b,internal_post,external_post) in
          match b.jc_behavior_throws with
            | None -> 
                begin match id with
@@ -2740,7 +2746,7 @@ let tr_fun f funpos spec body acc =
 		 jc_behavior_ensures = (new assertion JCAtrue); } 
            in
            ExceptionMap.add 
-	     exc [exc.jc_exception_info_name ^ "_b", b, LTrue] acc)
+	     exc [exc.jc_exception_info_name ^ "_b", b, LTrue, LTrue] acc)
       f.jc_fun_info_effects.jc_raises
       excep_behaviors
   in
@@ -2823,24 +2829,35 @@ let tr_fun f funpos spec body acc =
 
   (* Postcondition *)
 
-  let add_modif_postcondition f (_id,b,post) acc = 
+  let add_modif_postcondition 
+      ~internal f (_id,b,internal_post,external_post) acc = 
+    let post = if internal then internal_post else external_post in
     make_and (f b post) acc 
   in
-  let add_postcondition = add_modif_postcondition (fun _b post -> post) in
-  let safety_post =
-    List.fold_right add_postcondition safety_behavior LTrue
+  let add_postcondition ~internal = 
+    add_modif_postcondition ~internal (fun _b post -> post) 
+  in
+  let internal_safety_post =
+    List.fold_right (add_postcondition ~internal:true) safety_behavior LTrue
+  in
+  let external_safety_post =
+    List.fold_right (add_postcondition ~internal:false) safety_behavior LTrue
   in
   let normal_post =
     List.fold_right 
-      (add_modif_postcondition assume_in_postcondition) normal_behaviors LTrue
+      (add_modif_postcondition ~internal:false assume_in_postcondition) 
+      normal_behaviors LTrue
   in
   let normal_post_inferred =
-    List.fold_right add_postcondition normal_behaviors_inferred LTrue
+    List.fold_right (add_postcondition ~internal:false)
+      normal_behaviors_inferred LTrue
   in
   let excep_posts =
     ExceptionMap.fold
       (fun exc bl acc ->
-         let a' = List.fold_right add_postcondition bl LTrue in
+         let a' = 
+	   List.fold_right (add_postcondition ~internal:false) bl LTrue 
+	 in
          (exception_name exc, a') :: acc
       ) excep_behaviors []
   in
@@ -2849,7 +2866,8 @@ let tr_fun f funpos spec body acc =
       (fun exc bl acc ->
          let a' = 
            List.fold_right 
-	     (add_modif_postcondition assume_in_postcondition) bl LTrue
+	     (add_modif_postcondition ~internal:false assume_in_postcondition)
+	     bl LTrue
          in
 	 (exception_name exc, a') :: acc
       ) excep_behaviors_inferred []
@@ -2860,7 +2878,7 @@ let tr_fun f funpos spec body acc =
   let ret_type = tr_var_type f.jc_fun_info_result in
   let param_normal_post = 
     if is_purely_exceptional_fun spec then LFalse else
-      make_and_list [safety_post; normal_post; normal_post_inferred] 
+      make_and_list [external_safety_post; normal_post; normal_post_inferred] 
   in
   let param_excep_posts = excep_posts @ excep_posts_inferred in
   let acc = 
@@ -2973,7 +2991,7 @@ let tr_fun f funpos spec body acc =
                     params,
                     internal_requires,
                     safety_body,
-                    safety_post,
+                    internal_safety_post,
                     excep_posts_for_others None excep_behaviors))
 		:: acc
           in
@@ -2984,7 +3002,7 @@ let tr_fun f funpos spec body acc =
             (* normal behaviors *)
             let acc =
               List.fold_right
-                (fun (id,b,post) acc ->
+                (fun (id,b,internal_post,_) acc ->
  		   let normal_body = function_body f spec id body in
                    let normal_body = wrap_body normal_body in
                    let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
@@ -3004,7 +3022,7 @@ let tr_fun f funpos spec body acc =
                        params,
                        assume_in_precondition b internal_requires,
                        normal_body,
-                       post,
+                       internal_post,
                        excep_posts_for_others None excep_behaviors))
 		     :: acc
                 ) normal_behaviors acc
@@ -3015,7 +3033,7 @@ let tr_fun f funpos spec body acc =
               ExceptionMap.fold
                 (fun exc bl acc ->
                    List.fold_right
-                     (fun (id,b,post) acc ->
+                     (fun (id,b,internal_post,_) acc ->
  			let except_body = function_body f spec id body in
 			let except_body = wrap_body except_body in
                         let newid = f.jc_fun_info_name ^ "_exsures_" ^ id in
@@ -3031,7 +3049,7 @@ let tr_fun f funpos spec body acc =
                               assume_in_precondition b internal_requires,
                               except_body,
                               LTrue,
-                              (exception_name exc, post) :: 
+                              (exception_name exc, internal_post) :: 
                                 excep_posts_for_others (Some exc) excep_behaviors))
                         :: acc
 		     ) bl acc

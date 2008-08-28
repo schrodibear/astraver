@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.20 2008-08-26 11:10:26 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.21 2008-08-28 13:57:41 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -243,25 +243,32 @@ struct
 
   let bitwise r = (RegionUF.repr r).jc_reg_bitwise
 
-  let make_bitwise r =
-    let r = RegionUF.repr r in
-    if !Jc_common_options.separation_sem = SepNone then 
-      (* Potentially all pointers may be aliased *)
-      (assert (is_dummy_region r);
-       r.jc_reg_bitwise <- true)
-    else
-      r.jc_reg_bitwise <- true
-	
   let equal r1 r2 =
     InternalRegion.equal (RegionUF.repr r1) (RegionUF.repr r2)
 
-  let rec unify ?(poly=true) r1 r2 = 
+  let rec make_bitwise r =
+    if bitwise r then () else
+      let rep = RegionUF.repr r in
+      if !Jc_common_options.separation_sem = SepNone then 
+	(* Potentially all pointers may be aliased *)
+	(assert (is_dummy_region rep);
+	 rep.jc_reg_bitwise <- true)
+      else
+	rep.jc_reg_bitwise <- true;
+      try 
+	let t = RegionTable.find global_region_table rep in
+	begin match FieldTable.choose t with
+	  | Some(_,r1) ->
+	      make_bitwise r1;
+	      FieldTable.iter (fun _fi ri -> unify r1 ri) t
+	  | None -> ()
+	end
+      with Not_found -> ()
+	
+  and unify ?(poly=true) r1 r2 = 
     if equal r1 r2 then () else
       let rep1 = RegionUF.repr r1 and rep2 = RegionUF.repr r2 in
       RegionUF.unify r1 r2;
-      let rep = RegionUF.repr r1 in
-      if rep1.jc_reg_bitwise || rep2.jc_reg_bitwise then
-	make_bitwise rep;
       let t1 = 
 	try RegionTable.find global_region_table rep1 
 	with Not_found -> FieldTable.create 0 
@@ -308,6 +315,10 @@ struct
 	  with Not_found -> 
 	    if not poly then mkconst r2
 	) t2;
+      (* Recursively make region bitwise if necessary *)
+      let rep = RegionUF.repr r1 in
+      if rep1.jc_reg_bitwise || rep2.jc_reg_bitwise then
+	make_bitwise rep;
       (* Update with correct field table *)
       RegionTable.replace global_region_table rep t2
 

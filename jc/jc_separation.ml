@@ -27,17 +27,20 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.25 2008-08-14 11:14:20 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.26 2008-08-28 13:57:41 moy Exp $ *)
 
+open Jc_stdlib
 open Jc_env
 open Jc_envset
-open Jc_fenv
-open Jc_constructors
-open Jc_ast
-open Format
-open Jc_iterators
 open Jc_region
+open Jc_ast
+open Jc_fenv
+
+open Jc_constructors
 open Jc_pervasives
+open Jc_iterators
+
+open Format
 open Pp
 
 let current_logic_component = ref None

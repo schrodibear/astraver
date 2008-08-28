@@ -27,8 +27,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.31 2008-08-07 14:33:54 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.32 2008-08-28 13:57:41 moy Exp $ i*)
 
+open Jc_stdlib
 open Format
 open Jc_env
 open Jc_common_options

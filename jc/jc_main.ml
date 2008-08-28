@@ -27,12 +27,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.118 2008-08-13 16:36:27 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.119 2008-08-28 13:57:41 moy Exp $ *)
 
+open Jc_stdlib
 open Jc_env
-open Jc_fenv
 open Jc_region
 open Jc_ast
+open Jc_fenv
+
 open Format
 
 let parse_file f = 

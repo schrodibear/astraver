@@ -27,18 +27,21 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Jc_stdlib
 open Jc_env
 open Jc_envset
-open Jc_fenv
-open Jc_constructors
+open Jc_region
 open Jc_ast
+open Jc_fenv
+
+open Jc_name
+open Jc_constructors
 open Jc_pervasives
 open Jc_iterators
-open Output
-open Jc_region
-open Jc_name
 open Jc_interp_misc
 open Jc_struct_tools
+
+open Output
 
 (* other modifications for this extension can be found in:
      ast, typing, norm, interp: about pack / unpack, and mutable

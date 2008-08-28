@@ -28,8 +28,9 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.126 2008-08-25 23:12:08 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.127 2008-08-28 13:57:41 moy Exp $ *)
 
+open Jc_stdlib
 open Jc_env
 open Jc_envset
 open Jc_region
@@ -461,7 +462,7 @@ let rec single_term ef t =
 	  add_global_effect lab ef vi
 	else ef
     | JCToffset(_k,t,st) ->
-        let ac = JCalloc_struct (struct_variant st) in
+        let ac = tderef_alloc_class ~type_safe:false t in
 	true,
 	add_alloc_effect lab ef (ac,t#region)
     | JCTapp app -> 
@@ -619,7 +620,7 @@ let rec expr fef e =
 	     add_global_writes LabelHere fef v
 	   else fef
        | JCEoffset(_k,e,st) ->
-	   let ac = JCalloc_struct (struct_variant st) in
+	   let ac = deref_alloc_class e in
 	   true,
 	   add_alloc_reads LabelHere fef (ac,e#region)
        | JCEapp app -> 
