@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.21 2008-08-28 13:57:41 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.22 2008-08-28 16:40:01 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -373,6 +373,7 @@ struct
     | [] -> false
     | r1::ls -> Region.equal r r1 || mem r ls
 
+  (* Do not duplicate the bitwise field of regions *)
   let duplicate rls =
     let assocl = 
       List.fold_left (fun acc r ->

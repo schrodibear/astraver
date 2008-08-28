@@ -987,7 +987,8 @@ let rewrite_effects ~type_safe ~params ef =
 
 type param_or_effect_mode = MParam | MLocal | MEffect
 
-let add_alloc_table_argument ~mode ~no_deref (ac,distr) region_assoc acc =
+let add_alloc_table_argument 
+    ~mode ~type_safe ~no_deref (ac,distr) region_assoc acc =
   let allocvar = if no_deref then plain_alloc_table_var else alloc_table_var in
   let ty' = alloc_table_type ac in
   if Region.polymorphic distr then
@@ -995,9 +996,22 @@ let add_alloc_table_argument ~mode ~no_deref (ac,distr) region_assoc acc =
       (* Polymorphic allocation table. Both passed in argument by the caller, 
 	 and counted as effect. *)
       let locr = RegionList.assoc distr region_assoc in
-      match mode with
-	| MParam | MEffect -> (allocvar (ac,locr), ty') :: acc 
-	| MLocal -> acc
+      if not type_safe && Region.bitwise locr then
+	(* Bitwise allocation table in the caller. Translate the allocation 
+	   class and accumulate it only if not already present. *)
+	let locac = JCalloc_bitvector in
+	let locty' = alloc_table_type locac in
+	let v1' = allocvar (locac,locr) in
+	if List.exists 
+	  (fun (v2',_ty') -> var_name' v1' = var_name' v2') acc then acc
+	else
+	  match mode with
+	    | MParam | MEffect -> (v1', locty') :: acc 
+	    | MLocal -> acc
+      else
+	match mode with
+	  | MParam | MEffect -> (allocvar (ac,locr), ty') :: acc 
+	  | MLocal -> acc
     with Not_found -> 
       (* MLocal allocation table. Neither passed in argument by the caller, 
 	 nor counted as effect. *)
@@ -1011,14 +1025,15 @@ let add_alloc_table_argument ~mode ~no_deref (ac,distr) region_assoc acc =
       | MParam | MLocal -> acc
       | MEffect -> (allocvar (ac,distr), ty') :: acc 
 
-let alloc_table_writes ~mode ~callee_writes ~region_assoc =
+let alloc_table_writes ~mode ~type_safe ~callee_writes ~region_assoc =
   AllocMap.fold
     (fun (ac,distr) _labs acc ->
        add_alloc_table_argument 
-	 ~mode ~no_deref:true (ac,distr) region_assoc acc
+	 ~mode ~type_safe ~no_deref:true (ac,distr) region_assoc acc
     ) callee_writes.jc_effect_alloc_tables []
 
-let alloc_table_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
+let alloc_table_reads 
+    ~mode ~type_safe ~callee_writes ~callee_reads ~region_assoc =
   AllocMap.fold
     (fun (ac,distr) _labs acc ->
        if AllocMap.mem (ac,distr) callee_writes.jc_effect_alloc_tables then
@@ -1028,17 +1043,17 @@ let alloc_table_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
 	   | MParam | MLocal -> acc
 	   | MEffect ->
 	       add_alloc_table_argument 
-		 ~mode ~no_deref:false (ac,distr) region_assoc acc
+		 ~mode ~type_safe ~no_deref:false (ac,distr) region_assoc acc
        else if mutable_alloc_table (get_current_function ()) (ac,distr) then
 	 add_alloc_table_argument 
-	   ~mode ~no_deref:false (ac,distr) region_assoc acc
+	   ~mode ~type_safe ~no_deref:false (ac,distr) region_assoc acc
        else
 	 (* Allocation table is immutable, thus it is not passed by
 	    reference. As such, it cannot be counted in effects. *)
 	 match mode with
 	   | MParam | MLocal ->
 	       add_alloc_table_argument 
-		 ~mode ~no_deref:false (ac,distr) region_assoc acc
+		 ~mode ~type_safe ~no_deref:false (ac,distr) region_assoc acc
 	   | MEffect -> acc
     ) callee_reads.jc_effect_alloc_tables []
 
@@ -1097,7 +1112,8 @@ let tag_table_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
 	   | MEffect -> acc
     ) callee_reads.jc_effect_tag_tables []
 
-let add_memory_argument ~mode ~no_deref (mc,distr as mem) region_assoc acc =
+let add_memory_argument 
+    ~mode ~type_safe ~no_deref (mc,distr as mem) region_assoc acc =
   let memvar = 
     if no_deref then plain_memory_var 
     else memory_var ~test_current_function:false
@@ -1108,9 +1124,22 @@ let add_memory_argument ~mode ~no_deref (mc,distr as mem) region_assoc acc =
       (* Polymorphic memory. Both passed in argument by the caller, 
 	 and counted as effect. *)
       let locr = RegionList.assoc distr region_assoc in
-      match mode with
-	| MParam | MEffect -> (mem, (memvar (mc,locr), ty')) :: acc
-	| MLocal -> acc
+      if not type_safe && Region.bitwise locr then
+	(* Bitwise memory in the caller. Translate the memory class 
+	   and accumulate it only if not already present. *)
+	let locmc = JCmem_bitvector in
+	let locty' = memory_type locmc in
+	let v1' = memvar (locmc,locr) in
+	if List.exists 
+	  (fun (_mem, (v2',_ty')) -> var_name' v1' = var_name' v2') acc then acc
+	else
+	  match mode with
+	    | MParam | MEffect -> (mem, (v1', locty')) :: acc
+	    | MLocal -> acc
+      else
+	match mode with
+	  | MParam | MEffect -> (mem, (memvar (mc,locr), ty')) :: acc
+	  | MLocal -> acc
     with Not_found -> 
       (* MLocal memory. Neither passed in argument by the caller, 
 	 nor counted as effect. *)
@@ -1124,18 +1153,19 @@ let add_memory_argument ~mode ~no_deref (mc,distr as mem) region_assoc acc =
       | MParam | MLocal -> acc
       | MEffect -> (mem, (memvar (mc,distr), ty')) :: acc 
 
-let memory_detailed_writes ~mode ~callee_writes ~region_assoc =
+let memory_detailed_writes ~mode ~type_safe ~callee_writes ~region_assoc =
   MemoryMap.fold
     (fun (mc,distr) _labs acc -> 
        add_memory_argument 
-	 ~mode ~no_deref:true (mc,distr) region_assoc acc
+	 ~mode ~type_safe ~no_deref:true (mc,distr) region_assoc acc
     ) callee_writes.jc_effect_memories []
 
-let memory_writes ~mode ~callee_writes ~region_assoc =
+let memory_writes ~mode ~type_safe ~callee_writes ~region_assoc =
   List.map snd 
-    (memory_detailed_writes ~mode ~callee_writes ~region_assoc)
+    (memory_detailed_writes ~mode ~type_safe ~callee_writes ~region_assoc)
 
-let memory_detailed_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
+let memory_detailed_reads
+    ~mode ~type_safe ~callee_writes ~callee_reads ~region_assoc =
   MemoryMap.fold
     (fun (mc,distr) _labs acc ->
        if MemoryMap.mem (mc,distr) callee_writes.jc_effect_memories then
@@ -1145,23 +1175,24 @@ let memory_detailed_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
 	   | MParam | MLocal -> acc
 	   | MEffect ->
 	       add_memory_argument 
-		 ~mode ~no_deref:false (mc,distr) region_assoc acc
+		 ~mode ~type_safe ~no_deref:false (mc,distr) region_assoc acc
        else if mutable_memory (get_current_function ()) (mc,distr) then
 	 add_memory_argument 
-	   ~mode ~no_deref:false (mc,distr) region_assoc acc
+	   ~mode ~type_safe ~no_deref:false (mc,distr) region_assoc acc
        else
 	 (* Memory is immutable, thus it is not passed by
 	    reference. As such, it cannot be counted in effects. *)
 	 match mode with
 	   | MParam | MLocal ->
 	       add_memory_argument 
-		 ~mode ~no_deref:false (mc,distr) region_assoc acc
+		 ~mode ~type_safe ~no_deref:false (mc,distr) region_assoc acc
 	   | MEffect -> acc
     ) callee_reads.jc_effect_memories []
 
-let memory_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
+let memory_reads ~mode ~type_safe ~callee_writes ~callee_reads ~region_assoc =
   List.map snd 
-    (memory_detailed_reads ~mode ~callee_writes ~callee_reads ~region_assoc)
+    (memory_detailed_reads
+       ~mode ~type_safe ~callee_writes ~callee_reads ~region_assoc)
 
 let global_writes ~callee_writes =
   VarMap.fold
@@ -1200,13 +1231,13 @@ let write_model_parameters
     ~type_safe ~mode ~callee_reads ~callee_writes ~region_assoc ~params =
   let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
   let write_allocs = 
-    alloc_table_writes ~mode ~callee_writes ~region_assoc 
+    alloc_table_writes ~mode ~type_safe ~callee_writes ~region_assoc 
   in
   let write_tags = 
     tag_table_writes ~mode ~callee_writes ~region_assoc 
   in
   let write_mems = 
-    memory_writes ~mode ~callee_writes ~region_assoc 
+    memory_writes ~mode ~type_safe ~callee_writes ~region_assoc 
   in
   let write_globs = match mode with
     | MParam | MLocal -> []
@@ -1245,13 +1276,14 @@ let read_model_parameters
   let callee_reads = rewrite_effects ~type_safe ~params callee_reads in
   let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
   let read_allocs = 
-    alloc_table_reads ~mode ~callee_reads ~callee_writes ~region_assoc 
+    alloc_table_reads 
+      ~mode ~type_safe ~callee_reads ~callee_writes ~region_assoc 
   in
   let read_tags = 
     tag_table_reads ~mode ~callee_reads ~callee_writes ~region_assoc 
   in
   let read_mems =
-    memory_reads ~mode ~callee_reads ~callee_writes ~region_assoc 
+    memory_reads ~mode ~type_safe ~callee_reads ~callee_writes ~region_assoc 
   in
   let read_globs = match mode with
     | MParam | MLocal -> []
@@ -1287,11 +1319,12 @@ let read_effects ~callee_reads ~callee_writes ~region_list ~params =
 
 let alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = 
-    alloc_table_writes ~mode:MParam ~callee_writes ~region_assoc
+    alloc_table_writes 
+      ~mode:MParam ~type_safe:false ~callee_writes ~region_assoc
   in
   let reads = 
     alloc_table_reads 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
+      ~mode:MParam ~type_safe:false ~callee_reads ~callee_writes ~region_assoc
   in
   (List.map fst writes), (List.map fst reads)
 
@@ -1310,11 +1343,12 @@ let specialized_functions = Hashtbl.create 0
 let memory_arguments 
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc fname =
   let writes = 
-    memory_detailed_writes ~mode:MParam ~callee_writes ~region_assoc
+    memory_detailed_writes
+      ~mode:MParam ~type_safe:false ~callee_writes ~region_assoc
   in
   let reads = 
     memory_detailed_reads 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
+      ~mode:MParam ~type_safe:false ~callee_reads ~callee_writes ~region_assoc
   in
   (* Check if there are duplicates between reads and writes *)
   let write_names = List.map (var_name' $ fst $ snd) writes in
@@ -1397,6 +1431,9 @@ let global_arguments ~callee_reads ~callee_writes ~region_assoc =
 let make_arguments 
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc 
     ~with_globals fname args =
+
+  Format.printf "make arguments %a@." (Pp.print_list Pp.comma (fun fmt (r1,r2) -> Format.printf "(%a,%a)" Region.print r1 Region.print r2)) region_assoc;
+
   let write_allocs, read_allocs = 
     alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in

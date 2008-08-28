@@ -263,16 +263,16 @@ begin = 8
 end = 23
 
 [JC_7]
-file = "HOME/tests/java/Literals.java"
-line = 7
+file = "HOME/tests/java/Literals.jc"
+line = 38
 begin = 8
-end = 9
+end = 23
 
 [JC_8]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Literals.jc"
+line = 38
+begin = 8
+end = 23
 
 [JC_9]
 file = "HOME/tests/java/Literals.java"
@@ -301,22 +301,16 @@ begin = 8
 end = 9
 
 [JC_12]
-file = "HOME/tests/java/Literals.java"
-line = 5
-begin = 16
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_14]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Literals.java"
+line = 7
+begin = 8
+end = 9
 
 [Literals_f_safety]
 name = "Method f"
@@ -326,19 +320,55 @@ line = 7
 begin = 8
 end = 9
 
+[JC_14]
+file = "HOME/tests/java/Literals.java"
+line = 7
+begin = 8
+end = 9
+
 [JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Literals.java"
+line = 5
+begin = 16
+end = 30
 
 [JC_16]
+file = "HOME/tests/java/Literals.java"
+line = 5
+begin = 16
+end = 30
+
+[JC_17]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_17]
+[JC_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_19]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_21]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
@@ -626,12 +656,12 @@ parameter Object_alloc_table : Object alloc_table ref
 parameter Literals_f :
  this_0:Object pointer ->
   { } int32 reads Object_alloc_table
-  { (JC_12: eq_int(integer_of_int32(result), (13))) }
+  { (JC_16: eq_int(integer_of_int32(result), (13))) }
 
 parameter Literals_f_requires :
  this_0:Object pointer ->
   { } int32 reads Object_alloc_table
-  { (JC_12: eq_int(integer_of_int32(result), (13))) }
+  { (JC_16: eq_int(integer_of_int32(result), (13))) }
 
 parameter Object_tag_table : Object tag_table ref
 
@@ -879,7 +909,7 @@ parameter long_of_integer_ :
 parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_6:
+  { (JC_8:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
@@ -887,7 +917,7 @@ parameter non_null_Object :
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_6:
+  { (JC_8:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
@@ -926,7 +956,7 @@ let Literals_f_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_12: eq_int(integer_of_int32(result), (13))) }
+  { (JC_15: eq_int(integer_of_int32(result), (13))) }
 
 let Literals_f_safety =
  fun (this_0 : Object pointer) ->
@@ -2028,7 +2058,7 @@ goal Literals_f_ensures_default_po_1:
   (integer_of_int32(result0) = 13) ->
   forall return:int32.
   (return = result0) ->
-  ("JC_12": (integer_of_int32(return) = 13))
+  ("JC_15": (integer_of_int32(return) = 13))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Literals.why
@@ -3899,15 +3929,15 @@ goal Literals_f_ensures_default_po_1:
   (integer_of_int32(result0) = 13) ->
   forall return:int32.
   (return = result0) ->
-  ("JC_12": (integer_of_int32(return) = 13))
+  ("JC_15": (integer_of_int32(return) = 13))
 
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Literals_why.why          : ! (0/0/0/0/1)
+why/Literals_why.why          : . (1/0/0/0/0)
 total   :   1
-valid   :   0 (  0%)
+valid   :   1 (100%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
-failure :   1 (100%)
+failure :   0 (  0%)

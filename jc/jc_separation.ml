@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.26 2008-08-28 13:57:41 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.27 2008-08-28 16:40:01 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -65,58 +65,58 @@ let in_current_component f1 =
 
 let term rresult t =
   ITerm.iter (fun t -> match t#node with
-    | JCTvar vi ->	
-	if vi.jc_var_info_name = "\\result" then 
-	  Region.unify rresult vi.jc_var_info_region
-    | JCTbinary(t1,(_,`Pointer),t2) | JCTif(_,t1,t2) ->
-	Region.unify t1#region t2#region
-    | JCTmatch(_, (_, t1)::rem) ->
-	List.iter
-	  (fun (_, t2) -> Region.unify t1#region t2#region)
-	  rem
-    | JCTmatch(_, []) ->
-	()
-    | JCTapp app ->
-	let li = app.jc_app_fun in
-	let param_regions,result_region =
-	  if in_current_logic_component li then
-	    (* No generalization here, plain unification *)
-	    List.map (fun vi -> vi.jc_var_info_region) 
-	      li.jc_logic_info_parameters,
-	    li.jc_logic_info_result_region 
-	  else
-	    (* Apply generalization before unification *)
-	    let regions = li.jc_logic_info_param_regions in
-	    let assoc = RegionList.duplicate regions in
-	    app.jc_app_region_assoc <- assoc;
-	    let param_regions = 
-	      List.map (fun vi -> 
-			  if is_dummy_region vi.jc_var_info_region then dummy_region else
-			    try RegionList.assoc vi.jc_var_info_region assoc
-			    with Not_found -> assert false)
-		li.jc_logic_info_parameters
-	    in
-	    let result_region = 
-	      try RegionList.assoc li.jc_logic_info_result_region assoc
-	      with Not_found -> assert false
-	    in
-	    param_regions,result_region
-	in
-	let arg_regions = 
-	  List.map (fun t -> t#region) app.jc_app_args
-	in
-	Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
-	Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
-	List.iter2 Region.unify param_regions arg_regions;
-	Jc_options.lprintf "param:%a@." Region.print result_region;
-	Jc_options.lprintf "arg:%a@." Region.print t#region;
-	Region.unify result_region t#region
-    | JCTconst _ | JCTrange(None,None) | JCTbinary _ | JCTshift _
-    | JCTrange _ | JCTunary _ | JCTderef _ | JCTold _ | JCTat _ | JCToffset _
-    | JCTaddress _ | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ 
-    | JCTrange_cast _ | JCTreal_cast _ ->
-	()
-  ) t
+		| JCTvar vi ->	
+		    if vi.jc_var_info_name = "\\result" then 
+		      Region.unify rresult vi.jc_var_info_region
+		| JCTbinary(t1,(_,`Pointer),t2) | JCTif(_,t1,t2) ->
+		    Region.unify t1#region t2#region
+		| JCTmatch(_, (_, t1)::rem) ->
+		    List.iter
+		      (fun (_, t2) -> Region.unify t1#region t2#region)
+		      rem
+		| JCTmatch(_, []) ->
+		    ()
+		| JCTapp app ->
+		    let li = app.jc_app_fun in
+		    let param_regions,result_region =
+		      if in_current_logic_component li then
+			(* No generalization here, plain unification *)
+			List.map (fun vi -> vi.jc_var_info_region) 
+			  li.jc_logic_info_parameters,
+		      li.jc_logic_info_result_region 
+		      else
+			(* Apply generalization before unification *)
+			let regions = li.jc_logic_info_param_regions in
+			let assoc = RegionList.duplicate regions in
+			app.jc_app_region_assoc <- assoc;
+			let param_regions = 
+			  List.map (fun vi -> 
+				      if is_dummy_region vi.jc_var_info_region then dummy_region else
+					try RegionList.assoc vi.jc_var_info_region assoc
+					with Not_found -> assert false)
+			    li.jc_logic_info_parameters
+			in
+			let result_region = 
+			  try RegionList.assoc li.jc_logic_info_result_region assoc
+			  with Not_found -> assert false
+			in
+			param_regions,result_region
+		    in
+		    let arg_regions = 
+		      List.map (fun t -> t#region) app.jc_app_args
+		    in
+		    Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
+		    Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
+		    List.iter2 Region.unify param_regions arg_regions;
+		    Jc_options.lprintf "param:%a@." Region.print result_region;
+		    Jc_options.lprintf "arg:%a@." Region.print t#region;
+		    Region.unify result_region t#region
+		| JCTconst _ | JCTrange(None,None) | JCTbinary _ | JCTshift _
+		| JCTrange _ | JCTunary _ | JCTderef _ | JCTold _ | JCTat _ | JCToffset _
+		| JCTaddress _ | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ 
+		| JCTrange_cast _ | JCTreal_cast _ ->
+		    ()
+	     ) t
 
 let assertion rresult a =
   iter_term_and_assertion (term rresult) 
