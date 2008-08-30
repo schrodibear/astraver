@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.23 2008-08-30 01:02:56 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.24 2008-08-30 17:19:30 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -143,8 +143,6 @@ end
 
 module RegionTable = Hashtbl.Make(InternalRegion)
 
-module RegionSet = Set.Make(InternalRegion)
-
 module PairOrd(A : Set.OrderedType)(B : Set.OrderedType) =
 struct
   type t = A.t * B.t
@@ -155,6 +153,18 @@ end
 
 module RegionUF = UnionFind(InternalRegion)(RegionTable)
 
+module RegionSet = struct 
+  module S = Set.Make(InternalRegion)
+  let empty = S.empty
+  let mem r s = S.mem (RegionUF.repr r) s
+  let add r s = S.add (RegionUF.repr r) s
+  let of_list ls =
+    List.fold_left (fun s e -> add e s) empty ls
+  let to_list s =
+    S.fold (fun e acc -> e :: acc) s []
+  let singleton = S.singleton
+end
+
 (* Sets should be computed after unification takes place, so that operations
  * can maintain easily the invariant that only representative regions are used.
  *)
@@ -162,13 +172,18 @@ module PairRegionSet
   (T : sig type t end)(P : Set.OrderedType with type t = T.t * region) = 
 struct
   module S = Set.Make(P)
-  include S
+  let empty = S.empty
   let mem (fi,r) s = S.mem (fi,RegionUF.repr r) s
   let add (fi,r) s = S.add (fi,RegionUF.repr r) s
   let singleton (fi,r) = S.singleton (fi,RegionUF.repr r)
   let remove (fi,r) s = S.remove (fi,RegionUF.repr r) s
   let split (fi,r) s = S.split (fi,RegionUF.repr r) s
     (* Added w.r.t. standard Set. *)
+  let of_list ls =
+    List.fold_left (fun s e -> add e s) empty ls
+  let to_list s =
+    S.fold (fun e acc -> e :: acc) s []
+  let fold = S.fold
   let map_repr s = 
     S.fold (fun (fi,r) acc -> S.add (fi,RegionUF.repr r) acc) s S.empty
   let find_region r s =
@@ -468,6 +483,10 @@ struct
 	MemClass.equal fi fi' && Region.equal r r' || mem (fi,r) rest
 
 end
+
+module Pointer = PairOrd(PointerClass)(InternalRegion)
+
+module PointerSet = PairRegionSet(PointerClass)(Pointer)
 
 
 

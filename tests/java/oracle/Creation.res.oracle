@@ -2320,30 +2320,30 @@ parameter short_of_integer_ :
 parameter struct_Creation_of_bitvector :
  Creation_simple_val:(Object, int32) memory ref ->
   bitvector_alloc_table:unit alloc_table ->
-   bitvector_mem:(unit, bitvector) memory ->
+   bitvector:(unit, bitvector) memory ->
     { } unit writes Creation_simple_val { true }
 
 parameter struct_Object_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_String_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_TestSuperConstructor_of_bitvector :
  Creation_simple_val:(Object, int32) memory ref ->
   bitvector_alloc_table:unit alloc_table ->
-   bitvector_mem:(unit, bitvector) memory ->
+   bitvector:(unit, bitvector) memory ->
     { } unit writes Creation_simple_val { true }
 
 parameter struct_Throwable_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_interface_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 let Creation_test1_ensures_normal =
  fun (tt : unit) ->

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.25 2008-08-30 01:02:56 moy Exp $ *)
+(* $Id: jc_envset.mli,v 1.26 2008-08-30 17:19:29 moy Exp $ *)
 
 module type OrderedHashedType =
 sig
@@ -85,6 +85,8 @@ module MemClass : OrderedHashedType with type t = mem_class
 module MemClassSet : Set.S with type elt = mem_class
 
 module AllocClass : OrderedHashedType with type t = alloc_class
+
+module PointerClass : OrderedHashedType with type t = pointer_class
 
 module LogicLabelSet : Set.S with type elt = label
 

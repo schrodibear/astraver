@@ -1659,29 +1659,28 @@ parameter short_of_integer_ :
 
 parameter struct_BinarySearch_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_Object_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_String_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_Throwable_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_intM_of_bitvector :
  intM_intP:(Object, int32) memory ref ->
   bitvector_alloc_table:unit alloc_table ->
-   bitvector_mem:(unit, bitvector) memory ->
-    { } unit writes intM_intP { true }
+   bitvector:(unit, bitvector) memory -> { } unit writes intM_intP { true }
 
 parameter struct_interface_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 let BinarySearch_binary_search_ensures_correctness =
  fun (t_0 : Object pointer) (v : int32) ->
@@ -1938,7 +1937,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "why/BinarySearch.why" line = "912" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "911" begin = "49" end = "208"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
@@ -7131,7 +7130,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
 (integer_of_int32 v)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 912, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 911, characters 49-208
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -12424,10 +12423,10 @@ goal BinarySearch_binary_search_safety_po_31:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ..........#........................##.....##.. (41/0/0/5/0)
+why/BinarySearch_why.why      : ..........#........................##.....#... (42/0/0/4/0)
 total   :  46
-valid   :  41 ( 89%)
+valid   :  42 ( 91%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   5 ( 11%)
+timeout :   4 (  9%)
 failure :   0 (  0%)

@@ -1893,29 +1893,28 @@ parameter non_null_intM_requires :
 
 parameter struct_Arrays_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_Object_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_String_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_Throwable_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_intM_of_bitvector :
  intM_intP:(Object, int) memory ref ->
   bitvector_alloc_table:unit alloc_table ->
-   bitvector_mem:(unit, bitvector) memory ->
-    { } unit writes intM_intP { true }
+   bitvector:(unit, bitvector) memory -> { } unit writes intM_intP { true }
 
 parameter struct_interface_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 let Arrays_arrayShift_ensures_default =
  fun (t_2 : Object pointer) ->
@@ -2474,7 +2473,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po51.why">
-      <location file = "why/Arrays.why" line = "870" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "869" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po52.why">
@@ -2672,7 +2671,7 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po98.why">
-      <location file = "why/Arrays.why" line = "1055" begin = "51" end = "215"/>
+      <location file = "why/Arrays.why" line = "1054" begin = "51" end = "215"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po99.why">
@@ -2841,7 +2840,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po9.why">
-      <location file = "why/Arrays.why" line = "676" begin = "32" end = "158"/>
+      <location file = "why/Arrays.why" line = "675" begin = "32" end = "158"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po10.why">
@@ -8490,7 +8489,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP0 (shift t_2 i_0))
 (select intM_intP (shift t_2 (- i_0 1))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 676, characters 32-158
+;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 675, characters 32-158
 (FORALL (t_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (Non_null_intM t_2 Object_alloc_table)
@@ -9485,7 +9484,7 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
 (IMPLIES (EQ result (select intM_intP (shift t_1 0)))
 (is_max t_1 0 1 Object_alloc_table intM_intP))))))))
 
-;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 870, characters 51-215
+;; Arrays_findMax2_safety_po_8, File "why/Arrays.why", line 869, characters 51-215
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10796,7 +10795,7 @@ t_1 return (+ (offset_max Object_alloc_table t_1) 1) Object_alloc_table intM_int
 (IMPLIES (AND (<= 0 j_1) (< j_1 1))
 (<= (select intM_intP (shift t_0 j_1)) result))))))))))
 
-;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 1055, characters 51-215
+;; Arrays_findMax_safety_po_8, File "why/Arrays.why", line 1054, characters 51-215
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

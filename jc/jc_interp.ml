@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.344 2008-08-30 01:02:56 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.345 2008-08-30 17:19:29 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -354,312 +354,6 @@ let equality_op_for_type = function
 (******************************************************************************)
 (*                                 Structures                                 *)
 (******************************************************************************)
-
-let const_of_num n = LConst(Prim_int(Num.string_of_num n))
-
-(* Validity *)
-
-let make_valid_pred_app ac pc p a b =
-  let all_allocs = match ac with
-    | JCalloc_struct _ -> all_allocs ~select:fully_allocated pc
-    | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
-  in
-  let allocs = 
-    List.map (fun ac -> LVar(generic_alloc_table_name ac)) all_allocs
-  in
-  let all_mems = match ac with
-    | JCalloc_struct _ -> all_memories ~select:fully_allocated pc
-    | JCalloc_union _ | JCalloc_bitvector -> []
-  in
-  let mems = List.map (fun mc -> LVar(generic_memory_name mc)) all_mems in
-  LPred(valid_pred_name ac pc, p :: a :: b :: allocs @ mems)
-
-(*
-If T is a structure:
-   valid_T(p, a, b, allocs ...) =
-     if T is root:
-       offset_min(alloc_i, p) == a &&
-       offset_max(alloc_i, p) == b
-     else if S is the direct superclass of T:
-       valid_S(p, a, b, allocs ...)
-     and for all field (T'[a'..b'] f) of p,
-       valid_T'(p.f, a', b', allocs ...)
-If T is a variant, then we only have the condition on offset_min and max.
-*)
-let make_valid_pred ac pc =
-  let p = "p" in
-  let a = "a" in
-  let b = "b" in
-  let params =
-    let all_allocs = match ac with
-      | JCalloc_struct _ -> all_allocs ~select:fully_allocated pc
-      | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
-    in
-    let allocs = 
-      List.map (fun ac -> generic_alloc_table_name ac,alloc_table_type ac) 
-	all_allocs
-    in
-    let all_mems = match ac with
-      | JCalloc_struct _ -> all_memories ~select:fully_allocated pc
-      | JCalloc_union _ | JCalloc_bitvector -> []
-    in
-    let mems = 
-      List.map (fun mc -> generic_memory_name mc,memory_type mc) all_mems
-    in
-    let p = p, pointer_type ac pc in
-    let a = a, why_integer_type in
-    let b = b, why_integer_type in
-    p :: a :: b :: allocs @ mems
-  in
-  let validity =
-    let omin, omax, super_valid = match pc with
-      | JCtag ({ jc_struct_info_parent = Some(st, pp) }, _) ->
-          LTrue,
-          LTrue,
-          make_valid_pred_app ac (JCtag(st, pp)) (LVar p) (LVar a) (LVar b)
-      | JCtag ({ jc_struct_info_parent = None }, _)
-      | JCvariant _ 
-      | JCunion _ ->
-          make_eq (make_offset_min ac (LVar p)) (LVar a),
-          make_eq (make_offset_max ac (LVar p)) (LVar b),
-          LTrue
-    in
-    let fields_valid = match ac with
-      | JCalloc_struct _ ->
-	  begin match pc with
-	    | JCtag(st,_) ->
-		List.map
-		  (function
-		     | { jc_field_info_type =
-			   JCTpointer(fpc, Some fa, Some fb) } as fi ->
-			 make_valid_pred_app ac fpc
-			   (make_select_fi fi (LVar p))
-			   (const_of_num fa)
-			   (const_of_num fb)
-		     | _ ->
-			 LTrue)
-		  st.jc_struct_info_fields
-	    | JCvariant _ | JCunion _ -> [ LTrue ]
-	  end
-      | JCalloc_union _ | JCalloc_bitvector -> [ LTrue ]
-    in
-    make_and_list (omin::omax::super_valid::fields_valid)
-  in
-  Predicate(false, valid_pred_name ac pc, params, validity)
-
-(* Allocation *)
-
-let alloc_write_parameters (ac,r) pc =
-  let all_allocs = match ac with
-    | JCalloc_struct st -> all_allocs ~select:fully_allocated pc
-    | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
-  in
-  let allocs = 
-    List.map (fun ac -> plain_alloc_table_var (ac,r), alloc_table_type ac)
-      all_allocs
-  in
-  let all_tags = match ac with
-    | JCalloc_struct vi -> [ vi ]
-    | JCalloc_union _ | JCalloc_bitvector -> []
-  in
-  let tags = 
-    List.map (fun vi -> plain_tag_table_var (vi,r), tag_table_type vi)
-      all_tags
-  in
-  allocs @ tags
-
-let alloc_read_parameters (ac,r) pc =
-  let all_mems = match ac with
-    | JCalloc_struct st -> all_memories ~select:fully_allocated pc
-    | JCalloc_union _ | JCalloc_bitvector -> []
-  in
-  let mems = 
-    List.map 
-      (fun mc -> 
-	 memory_var ~test_current_function:true (mc,r), memory_type mc)
-      all_mems 
-  in
-  mems
-
-let alloc_arguments (ac,r) pc = 
-  let writes = alloc_write_parameters (ac,r) pc in
-  let reads = alloc_read_parameters (ac,r) pc in
-  List.map fst writes @ List.map fst reads
-  
-let make_alloc_param ~check_size ac pc =
-  let n = "n" in
-  let alloc = generic_alloc_table_name ac in
-  (* parameters and effects *)
-  let writes = alloc_write_parameters (ac,dummy_region) pc in
-  let write_effects = 
-    List.map (function (Var n,ty') -> n | _ -> assert false) writes
-  in
-  let write_params = 
-    List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) writes
-  in
-  let reads = alloc_read_parameters (ac,dummy_region) pc in
-  let read_params = 
-    List.map (fun (n,ty') -> (n,Base_type ty')) reads
-  in
-  let params = [ (Var n,Base_type why_integer_type) ] in
-  let params = params @ write_params @ read_params in
-  let params = 
-    List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) params
-  in
-  (* precondition *)
-  let pre =
-    if check_size then LPred("ge_int",[LVar n;LConst(Prim_int "0")]) 
-    else LTrue
-  in
-  (* postcondition *)
-  let instanceof_post = match ac with
-    | JCalloc_struct _ ->
-	begin match pc with
-	  | JCtag(st,_) ->
-	      let tag = generic_tag_table_name (struct_variant st) in
-              (* [instanceof(tagtab,result,tag_st)] *)
-              [ LPred("instanceof",[LVar tag;LVar "result";LVar(tag_name st)]) ]
-	  | JCvariant _ | JCunion _ -> []
-	end
-    | JCalloc_union _ | JCalloc_bitvector -> []
-  in
-  let alloc_type = 
-    Annot_type(
-      (* [n >= 0] *)
-      pre,
-      (* argument pointer type *)
-      Base_type(pointer_type ac pc),
-      (* reads and writes *)
-      [], write_effects,
-      (* normal post *)
-      make_and_list (
-	[
-          (* [valid_st(result,0,n-1,alloc...)] *)
-          make_valid_pred_app ac pc
-            (LVar "result")
-            (LConst(Prim_int "0"))
-            (LApp("sub_int",[LVar n; LConst(Prim_int "1")]));
-          (* [alloc_extends(old(alloc),alloc)] *)
-          LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
-          (* [alloc_fresh(old(alloc),result,n)] *)
-          LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result";LVar n])
-	] 
-	@ instanceof_post ),
-      (* no exceptional post *)
-      [])
-  in
-  let alloc_type = 
-    List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
-      params alloc_type
-  in
-  let name = alloc_param_name ~check_size ac pc in
-  Param(false,name,alloc_type)
-
-(* Conversion to and from bitvector *)
-
-let ofbit_read_parameters r pc =
-  let ac = JCalloc_bitvector in
-  let mc = JCmem_bitvector in
-  let bv_alloc = 
-    alloc_table_var ~test_current_function:true (ac,r), alloc_table_type ac 
-  in
-  let bv_mem = memory_var ~test_current_function:true (mc,r), memory_type mc in
-  [ bv_alloc; bv_mem ]
-
-let ofbit_write_parameters pc =
-  let all_mems = all_memories pc in
-  let mems = 
-    List.map 
-      (fun mc -> plain_memory_var (mc,dummy_region), memory_type mc) all_mems 
-  in
-  mems
-
-let make_of_bitvector_app fi e' =
-  (* Convert bitvector into appropriate type *)
-  match fi.jc_field_info_type with
-    | JCTenum ri -> LApp(logic_enum_of_bitvector ri,[e'])
-    | _ty -> assert false (* TODO *)
-
-let make_conversion_params pc =
-  let p = "p" in
-  let bv_alloc = generic_alloc_table_name JCalloc_bitvector in
-  let bv_mem = generic_memory_name JCmem_bitvector in
-  let ac = alloc_class_of_pointer_class pc in
-  let alloc = generic_alloc_table_name ac in
-
-  (* parameters and effects *)
-  let writes = ofbit_write_parameters pc in
-  let write_effects = 
-    List.map (function (Var n,ty') -> n | _ -> assert false) writes
-  in
-  let write_params = 
-    List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) writes
-  in
-  let reads = ofbit_read_parameters dummy_region pc in
-  let read_params = 
-    List.map (fun (n,ty') -> (n,Base_type ty')) reads
-  in
-  let params = write_params @ read_params in
-  let params = 
-    List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) params
-  in
-
-  let post = match pc with
-    | JCtag(st,_) ->
-	if struct_has_size st then
-	  let fields = all_fields pc in
-	  let post,_ = 
-	    List.fold_left 
-	      (fun (acc,i) fi ->
-		 let pi = p ^ (string_of_int i) in
-		 let mc = JCmem_field fi in
-		 let ac = alloc_class_of_mem_class mc in
-		 let mem = 
-		   tmemory_var ~label_in_name:true LabelHere
-		     (mc,dummy_region) 
-		 in
-		 let off = the (field_offset_in_bytes fi) in
-		 let size = the fi.jc_field_info_bitsize / 8 in
-		 let off = string_of_int off and size = string_of_int size in
-		 let posti = 
-		   make_eq_pred fi.jc_field_info_type
-		     (LApp("select",[ mem; LVar pi ]))
-		     (make_of_bitvector_app fi 
-			(LApp("select_bytes",
-			      [ LVar bv_mem; 
-				LApp("pointer_address",[ LVar pi ]);
-				LConst(Prim_int off); LConst(Prim_int size) ])))
-		 in
-		 let ty' = pointer_type ac pc in (* Correct pc *)
-		 let posti = LForall(pi,ty',posti) in
-		 make_and acc posti, i+1
-	      ) (LTrue,0) fields
-	  in post
-	else LTrue
-    | JCunion _ | JCvariant _ -> assert false (* TODO *)
-  in
-
-  (* Conversion from bitvector *)
-  let annot_type = 
-    Annot_type(
-      LTrue,
-      Base_type why_unit_type,
-      (* reads and writes *)
-      [], write_effects,
-      (* normal post *)
-      post,
-      (* no exceptional post *)
-      [])
-  in
-  let annot_type = 
-    List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
-      params annot_type
-  in
-  let name = of_bitvector_param_name pc in
-  let ofbit_param = Param(false,name,annot_type) in
-
-  [ ofbit_param ]
-  
 
 let tr_struct st acc =
   let tagid_type = tag_id_type (struct_variant st) in
@@ -2000,7 +1694,7 @@ and expr e =
 		List.map2 (fun param arg -> param,arg) 
 		  f.jc_logic_info_parameters call.jc_call_args
 	      in
-	      let pre, fname, args = 
+	      let pre, fname, locals, prolog, args = 
 		make_arguments 
                   ~callee_reads: f.jc_logic_info_effects
                   ~callee_writes: empty_effects
@@ -2034,7 +1728,7 @@ and expr e =
                        | Some(tmp,e,_ass) -> Let(tmp,e,c))
 		  arg_types_asserts call
               in
-              call
+              define_locals ~writes:locals (append prolog call)
           | JCfun f ->
               let arg_types_asserts, args =
 		try match f.jc_fun_info_parameters with
@@ -2069,7 +1763,7 @@ and expr e =
 		  f.jc_fun_info_final_name ^ "_requires"
 		else f.jc_fun_info_final_name
 	      in
-	      let pre, fname, args = 
+	      let pre, fname, locals, prolog, args = 
 		make_arguments 
                   ~callee_reads: f.jc_fun_info_effects.jc_reads
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
@@ -2101,7 +1795,6 @@ and expr e =
 		  make_check ~mark:e#mark ~kind:IndexBounds e#pos 
 		    (Assert(arg_types_assert,call))
               in
-	      
               let call =
 		List.fold_right
 		  (fun opt c -> 
@@ -2110,7 +1803,7 @@ and expr e =
                        | Some(tmp,e,_ass) -> Let(tmp,e,c))
 		  arg_types_asserts call
               in
-              call
+              define_locals ~writes:locals (append prolog call)
 	end
     | JCEassign_var(v,e1) -> 
 	let e1' = value_assigned e#mark e#pos v.jc_var_info_type e1 in
@@ -2933,17 +2626,7 @@ let tr_fun f funpos spec body acc =
       ~params:f.jc_fun_info_parameters
   in
   let define_locals e' =
-    let e' =
-      List.fold_left 
-	(fun acc (n,ty') -> Let(n,any_value' ty',acc)) 
-	e' internal_read_locals
-    in
-    let e' =
-      List.fold_left 
-	(fun acc (n,ty') -> Let_ref(n,any_value' ty',acc)) 
-	e' internal_write_locals
-    in
-    e'
+    define_locals ~reads:internal_read_locals ~writes:internal_write_locals e'
   in
 
   (* Postcondition *)

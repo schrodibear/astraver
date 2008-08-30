@@ -1364,29 +1364,28 @@ parameter short_of_integer_ :
 
 parameter struct_AllZeros_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_Object_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_String_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_Throwable_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_intM_of_bitvector :
  intM_intP:(Object, int32) memory ref ->
   bitvector_alloc_table:unit alloc_table ->
-   bitvector_mem:(unit, bitvector) memory ->
-    { } unit writes intM_intP { true }
+   bitvector:(unit, bitvector) memory -> { } unit writes intM_intP { true }
 
 parameter struct_interface_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 let AllZeros_all_zeros_ensures_default =
  fun (t : Object pointer) ->
@@ -1554,7 +1553,7 @@ why --project [...] why/AllZeros.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/AllZeros_po14.why">
-      <location file = "why/AllZeros.why" line = "819" begin = "65" end = "315"/>
+      <location file = "why/AllZeros.why" line = "818" begin = "65" end = "315"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/AllZeros_po15.why">
@@ -4361,7 +4360,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 result)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))
 
-;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 819, characters 65-315
+;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 818, characters 65-315
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

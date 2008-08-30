@@ -1381,23 +1381,23 @@ parameter non_null_Object_requires :
 
 parameter struct_Gcd_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_Object_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_String_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_Throwable_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 parameter struct_interface_of_bitvector :
  bitvector_alloc_table:unit alloc_table ->
-  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+  bitvector:(unit, bitvector) memory -> { } unit { true }
 
 let Gcd_gcd_ensures_bezoutProperty =
  fun (x_8 : int) (y_8 : int) ->

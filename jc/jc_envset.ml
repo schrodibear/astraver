@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.28 2008-08-30 01:02:56 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.29 2008-08-30 17:19:29 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -213,6 +213,29 @@ struct
     | JCalloc_struct a -> VariantOrd.hash a
     | JCalloc_union b -> VariantOrd.hash b
     | JCalloc_bitvector -> 0
+end
+
+(* TODO: take into account type parameters *)
+module PointerClass = 
+struct
+  type t = pointer_class
+  let equal fv1 fv2 = match fv1,fv2 with
+    | JCtag(st1,_),JCtag(st2,_) -> StructOrd.equal st1 st2
+    | JCunion vi1,JCunion vi2 -> VariantOrd.equal vi1 vi2
+    | JCvariant vi1,JCvariant vi2 -> VariantOrd.equal vi1 vi2
+    | _ -> false
+  let compare fv1 fv2 = match fv1,fv2 with
+    | JCtag(a1,_),JCtag(a2,_) -> StructOrd.compare a1 a2
+    | JCunion b1,JCunion b2 -> VariantOrd.compare b1 b2
+    | JCvariant b1,JCvariant b2 -> VariantOrd.compare b1 b2
+    | JCtag _,_ -> 1
+    | _,JCtag _ -> -1
+    | JCunion _,_ -> 1
+    | _,JCunion _ -> -1
+  let hash = function
+    | JCtag(a,_) -> StructOrd.hash a
+    | JCunion b -> VariantOrd.hash b
+    | JCvariant b -> VariantOrd.hash b
 end
 
 module ExceptionOrd =   

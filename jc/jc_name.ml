@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.27 2008-08-30 01:02:56 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.28 2008-08-30 17:19:30 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -122,8 +122,8 @@ let union_region_memory_name (vi,r) =
 let bitvector_region_memory_name r = 
   if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
   then 
-    bitvector_type_name ^ "_" ^ (Region.name r)  ^ "_mem"
-  else bitvector_type_name ^ "_mem"
+    bitvector_type_name ^ "_" ^ (Region.name r)
+  else bitvector_type_name
 
 let union_memory_type_name vi = 
   vi.jc_variant_info_name ^ "_union"
