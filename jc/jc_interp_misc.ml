@@ -1021,12 +1021,17 @@ let ofbit_read_parameters r pc =
   [ bv_alloc; bv_mem ]
 
 let ofbit_write_parameters r pc =
+  let all_allocs = all_allocs pc in
+  let allocs = 
+    List.map 
+      (fun ac -> plain_alloc_table_var (ac,r), alloc_table_type ac) all_allocs 
+  in
   let all_mems = all_memories pc in
   let mems = 
     List.map 
       (fun mc -> plain_memory_var (mc,r), memory_type mc) all_mems 
   in
-  mems
+  allocs @ mems
 
 let make_ofbit_param_app r pc =
   let writes = ofbit_write_parameters r pc in
@@ -1127,106 +1132,150 @@ let make_conversion_params pc =
 (*                               call arguments                               *)
 (******************************************************************************)
 
-type param_or_effect_mode = MParam | MLocal | MEffect
+type param_mode = [ `MAppParam | `MFunParam ]
+type param_or_effect_mode = [ param_mode | `MEffect ]
+type param_or_local_mode = [ param_mode | `MLocal ]
+type param_or_effect_or_local_mode = [ param_or_effect_mode | `MLocal ]
 
 let add_alloc_table_argument 
-    ~mode ~type_safe ~no_deref (ac,distr) ~region_assoc ~region_mem_assoc acc =
+    ~mode ~type_safe ~no_deref (ac,distr as alloc)
+    ~region_assoc ~region_mem_assoc acc =
   let allocvar = 
     if no_deref then plain_alloc_table_var 
     else alloc_table_var ~test_current_function:false
   in
   let ty' = alloc_table_type ac in
-  let entry_list =
-    if Region.polymorphic distr then
-      try 
-	(* Polymorphic allocation table. Both passed in argument by the caller, 
-	   and counted as effect. *)
-	let locr = RegionList.assoc distr region_assoc in
-	match mode with
-	  | MParam | MEffect -> 
-	      if Region.bitwise locr then
-		if type_safe then
-(* 		  (\* Translate bitwise allocation table into typed ones *\) *)
-(* 		  try  *)
-(* 		    let mems = MemorySet.find_region locr region_mem_assoc in *)
-(* 		    List.map *)
-(* 		      (fun (mc,_r) -> *)
-(* 			 let ac = alloc_class_of_mem_class mc in *)
-(* 			 let ty' = alloc_table_type ac in *)
-(* 			 (allocvar (ac,locr), ty') *)
-(* 		      ) (MemorySet.elements mems) *)
-(* 		  with Not_found ->  *)
-(* 		    (\* No possible effect on caller types *\) *)
-(* 		    [] *)
-		  [ (allocvar (ac,locr), ty') ]
-		else
-		  (* Bitwise allocation table in the caller. 
-		     Translate the allocation class. *)
-		  let ac = JCalloc_bitvector in
-		  let ty' = alloc_table_type ac in
-		  [ (allocvar (ac,locr), ty') ]
-	      else
-		[ (allocvar (ac,locr), ty') ]
-	  | MLocal -> []
-      with Not_found -> 
-	(* MLocal allocation table. Neither passed in argument by the caller, 
-	   nor counted as effect. *)
-	match mode with
-	  | MParam | MEffect -> []
-	  | MLocal -> [ (allocvar (ac,distr), ty') ]
-    else 
-      (* Constant allocation table. Not passed in argument by the caller, 
-	 but counted as effect. *)
+  if Region.polymorphic distr then
+    try 
+      (* Polymorphic allocation table. Both passed in argument by the caller, 
+	 and counted as effect. *)
+      let locr = RegionList.assoc distr region_assoc in
       match mode with
-	| MParam | MLocal -> []
-	| MEffect -> [ (allocvar (ac,distr), ty') ]
+	| `MAppParam ->
+	    if Region.bitwise locr then
+	      (* Anticipate generation of local ref from bitwise *)
+	      ((alloc,locr), (deref_alloc_table_var (ac,locr), ty')) :: acc
+	    else
+	      ((alloc,locr), (allocvar (ac,locr), ty')) :: acc
+	| `MFunParam | `MEffect -> 
+	    if Region.bitwise locr && not type_safe then
+	      (* Bitwise allocation table in the caller. 
+		 Translate the allocation class. *)
+	      let ac = JCalloc_bitvector in
+	      let ty' = alloc_table_type ac in
+	      ((alloc,locr), (allocvar (ac,locr), ty')) :: acc
+	    else
+	      ((alloc,locr), (allocvar (ac,locr), ty')) :: acc
+	| `MLocal -> acc
+    with Not_found -> 
+      (* MLocal allocation table. Neither passed in argument by the caller, 
+	 nor counted as effect. *)
+      match mode with
+	| #param_or_effect_mode -> acc
+	| `MLocal -> ((alloc,distr), (allocvar (ac,distr), ty')) :: acc
+  else 
+    (* Constant allocation table. Not passed in argument by the caller, 
+       but counted as effect. *)
+    match mode with
+      | #param_or_local_mode -> acc
+      | `MEffect -> ((alloc,distr), (allocvar (ac,distr), ty')) :: acc
+
+let translate_external_alloc_tables ~no_deref ~region_mem_assoc allocs =
+  let allocvar = 
+    if no_deref then plain_alloc_table_var 
+    else alloc_table_var ~test_current_function:false
+  in
+  (* Translate bitwise allocation table into typed ones *)
+  let allocs =
+    List.fold_left
+      (fun acc ((alloc,locr),(v',ty') as entry) ->
+	 if Region.bitwise locr then
+	   try
+	     let mems = MemorySet.find_region locr region_mem_assoc in
+	     let allocs = 
+	       List.map
+		 (fun (mc,_r) ->
+		    let ac = alloc_class_of_mem_class mc in
+		    let ty' = alloc_table_type ac in
+		    ((alloc,locr), (allocvar (ac,locr), ty'))
+		 ) (MemorySet.elements mems)
+	     in allocs @ acc
+	   with Not_found ->
+	     (* No possible effect on caller types *)
+	     []
+	 else entry :: acc
+      ) [] allocs
   in
   List.fold_left 
-    (fun acc (v1',ty' as entry) ->
+    (fun acc ((alloc,locr),(v1',ty') as entry) ->
        (* Accumulate entry only if not already present *)
        if List.exists 
-	 (fun (v2',_ty') -> var_name' v1' = var_name' v2') acc then acc
-       else
-	 entry :: acc
-    ) acc entry_list
+	 (fun ((alloc',locr'),(v2',_ty')) -> var_name' v1' = var_name' v2') acc
+       then acc
+       else entry :: acc
+    ) [] allocs
+
+let alloc_table_detailed_writes
+    ~mode ~type_safe ~callee_writes ~region_assoc ~region_mem_assoc =
+  let writes =
+    AllocMap.fold
+      (fun (ac,distr) _labs acc ->
+	 add_alloc_table_argument 
+	   ~mode ~type_safe ~no_deref:true (ac,distr) 
+	   ~region_assoc ~region_mem_assoc acc
+      ) callee_writes.jc_effect_alloc_tables []
+  in
+  if type_safe && mode = `MFunParam then
+    translate_external_alloc_tables ~no_deref:true ~region_mem_assoc writes
+  else writes
 
 let alloc_table_writes
     ~mode ~type_safe ~callee_writes ~region_assoc ~region_mem_assoc =
-  AllocMap.fold
-    (fun (ac,distr) _labs acc ->
-       add_alloc_table_argument 
-	 ~mode ~type_safe ~no_deref:true (ac,distr) 
-	 ~region_assoc ~region_mem_assoc acc
-    ) callee_writes.jc_effect_alloc_tables []
+  List.map snd 
+    (alloc_table_detailed_writes
+       ~mode ~type_safe ~callee_writes ~region_assoc ~region_mem_assoc)
+
+let alloc_table_detailed_reads 
+    ~mode ~type_safe ~callee_writes ~callee_reads 
+    ~region_assoc ~region_mem_assoc =
+  let reads =
+    AllocMap.fold
+      (fun (ac,distr) _labs acc ->
+	 if AllocMap.mem (ac,distr) callee_writes.jc_effect_alloc_tables then
+	   (* Allocation table is written, thus it is already taken care of
+	      as a parameter. *)
+	   match mode with
+	     | #param_or_local_mode -> acc
+	     | `MEffect ->
+		 add_alloc_table_argument 
+		   ~mode ~type_safe ~no_deref:false (ac,distr) 
+		   ~region_assoc ~region_mem_assoc acc
+	 else if mutable_alloc_table (get_current_function ()) (ac,distr) then
+	   add_alloc_table_argument 
+	     ~mode ~type_safe ~no_deref:false (ac,distr)
+	     ~region_assoc ~region_mem_assoc acc
+	 else
+	   (* Allocation table is immutable, thus it is not passed by
+	      reference. As such, it cannot be counted in effects. *)
+	   match mode with
+	     | #param_or_local_mode ->
+		 add_alloc_table_argument 
+		   ~mode ~type_safe ~no_deref:false (ac,distr) 
+		   ~region_assoc ~region_mem_assoc acc
+	     | `MEffect -> acc
+      ) callee_reads.jc_effect_alloc_tables []
+  in
+  if type_safe && mode = `MFunParam then
+    translate_external_alloc_tables ~no_deref:false ~region_mem_assoc reads
+  else reads
 
 let alloc_table_reads 
     ~mode ~type_safe ~callee_writes ~callee_reads 
     ~region_assoc ~region_mem_assoc =
-  AllocMap.fold
-    (fun (ac,distr) _labs acc ->
-       if AllocMap.mem (ac,distr) callee_writes.jc_effect_alloc_tables then
-	 (* Allocation table is written, thus it is already taken care of
-	    as a parameter. *)
-	 match mode with
-	   | MParam | MLocal -> acc
-	   | MEffect ->
-	       add_alloc_table_argument 
-		 ~mode ~type_safe ~no_deref:false (ac,distr) 
-		 ~region_assoc ~region_mem_assoc acc
-       else if mutable_alloc_table (get_current_function ()) (ac,distr) then
-	 add_alloc_table_argument 
-	   ~mode ~type_safe ~no_deref:false (ac,distr)
-	   ~region_assoc ~region_mem_assoc acc
-       else
-	 (* Allocation table is immutable, thus it is not passed by
-	    reference. As such, it cannot be counted in effects. *)
-	 match mode with
-	   | MParam | MLocal ->
-	       add_alloc_table_argument 
-		 ~mode ~type_safe ~no_deref:false (ac,distr) 
-		 ~region_assoc ~region_mem_assoc acc
-	   | MEffect -> acc
-    ) callee_reads.jc_effect_alloc_tables []
+  List.map snd
+    (alloc_table_detailed_reads 
+       ~mode ~type_safe ~callee_writes ~callee_reads 
+       ~region_assoc ~region_mem_assoc)
 
 let add_tag_table_argument ~mode ~no_deref (vi,distr) region_assoc acc =
   let tagvar = if no_deref then plain_tag_table_var else tag_table_var in
@@ -1237,20 +1286,20 @@ let add_tag_table_argument ~mode ~no_deref (vi,distr) region_assoc acc =
 	 and counted as effect. *)
       let locr = RegionList.assoc distr region_assoc in
       match mode with
-	| MParam | MEffect -> (tagvar (vi,locr), ty') :: acc
-	| MLocal -> acc
+	| #param_or_effect_mode -> (tagvar (vi,locr), ty') :: acc
+	| `MLocal -> acc
     with Not_found -> 
       (* MLocal tag table. Neither passed in argument by the caller, 
 	 nor counted as effect. *)
       match mode with
-	| MParam | MEffect -> acc
-	| MLocal -> (tagvar (vi,distr), ty') :: acc 
+	| #param_or_effect_mode -> acc
+	| `MLocal -> (tagvar (vi,distr), ty') :: acc 
   else 
     (* Constant tag table. Not passed in argument by the caller, 
        but counted as effect. *)
     match mode with
-      | MParam | MLocal -> acc
-      | MEffect -> (tagvar (vi,distr), ty') :: acc 
+      | #param_or_local_mode -> acc
+      | `MEffect -> (tagvar (vi,distr), ty') :: acc 
 
 let tag_table_writes ~mode ~callee_writes ~region_assoc =
   TagMap.fold
@@ -1266,8 +1315,8 @@ let tag_table_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
 	 (* Tag table is written, thus it is already taken care of
 	    as a parameter. *)
 	 match mode with
-	   | MParam | MLocal -> acc
-	   | MEffect ->
+	   | #param_or_local_mode -> acc
+	   | `MEffect ->
 	       add_tag_table_argument 
 		 ~mode ~no_deref:false (vi,distr) region_assoc acc
        else if mutable_tag_table (get_current_function ()) (vi,distr) then
@@ -1277,10 +1326,10 @@ let tag_table_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
 	 (* Tag table is immutable, thus it is not passed by
 	    reference. As such, it cannot be counted in effects. *)
 	 match mode with
-	   | MParam | MLocal ->
+	   | #param_or_local_mode ->
 	       add_tag_table_argument 
 		 ~mode ~no_deref:false (vi,distr) region_assoc acc
-	   | MEffect -> acc
+	   | `MEffect -> acc
     ) callee_reads.jc_effect_tag_tables []
 
 let add_memory_argument 
@@ -1305,24 +1354,24 @@ let add_memory_argument
 	  (fun (_mem, (v2',_ty')) -> var_name' v1' = var_name' v2') acc then acc
 	else
 	  match mode with
-	    | MParam | MEffect -> ((mem,locr), (v1', locty')) :: acc
-	    | MLocal -> acc
+	    | #param_or_effect_mode -> ((mem,locr), (v1', locty')) :: acc
+	    | `MLocal -> acc
       else
 	match mode with
-	  | MParam | MEffect -> ((mem,locr), (memvar (mc,locr), ty')) :: acc
-	  | MLocal -> acc
+	  | #param_or_effect_mode -> ((mem,locr), (memvar (mc,locr), ty')) :: acc
+	  | `MLocal -> acc
     with Not_found -> 
       (* MLocal memory. Neither passed in argument by the caller, 
 	 nor counted as effect. *)
       match mode with
-	| MParam | MEffect -> acc
-	| MLocal -> ((mem,distr), (memvar (mc,distr), ty')) :: acc 
+	| #param_or_effect_mode -> acc
+	| `MLocal -> ((mem,distr), (memvar (mc,distr), ty')) :: acc 
   else 
     (* Constant memory. Not passed in argument by the caller, 
        but counted as effect. *)
     match mode with
-      | MParam | MLocal -> acc
-      | MEffect -> ((mem,distr), (memvar (mc,distr), ty')) :: acc 
+      | #param_or_local_mode -> acc
+      | `MEffect -> ((mem,distr), (memvar (mc,distr), ty')) :: acc 
 
 let memory_detailed_writes ~mode ~type_safe ~callee_writes ~region_assoc =
   MemoryMap.fold
@@ -1343,8 +1392,8 @@ let memory_detailed_reads
 	 (* Memory is written, thus it is already taken care of
 	    as a parameter. *)
 	 match mode with
-	   | MParam | MLocal -> acc
-	   | MEffect ->
+	   | #param_or_local_mode -> acc
+	   | `MEffect ->
 	       add_memory_argument 
 		 ~mode ~type_safe ~no_deref:false (mc,distr) region_assoc acc
        else if mutable_memory (get_current_function ()) (mc,distr) then
@@ -1354,10 +1403,10 @@ let memory_detailed_reads
 	 (* Memory is immutable, thus it is not passed by
 	    reference. As such, it cannot be counted in effects. *)
 	 match mode with
-	   | MParam | MLocal ->
+	   | #param_or_local_mode ->
 	       add_memory_argument 
 		 ~mode ~type_safe ~no_deref:false (mc,distr) region_assoc acc
-	   | MEffect -> acc
+	   | `MEffect -> acc
     ) callee_reads.jc_effect_memories []
 
 let memory_reads ~mode ~type_safe ~callee_writes ~callee_reads ~region_assoc =
@@ -1433,8 +1482,8 @@ let write_model_parameters
     memory_writes ~mode ~type_safe ~callee_writes ~region_assoc 
   in
   let write_globs = match mode with
-    | MParam | MLocal -> []
-    | MEffect -> global_writes ~callee_writes
+    | #param_or_local_mode -> []
+    | `MEffect -> global_writes ~callee_writes
   in
   (* TODO: add mutable and committed effects *)
   write_allocs @ write_tags @ write_mems @ write_globs
@@ -1442,21 +1491,21 @@ let write_model_parameters
 let write_parameters 
     ~type_safe ~region_list ~callee_reads ~callee_writes ~params =
   let vars' = 
-    write_model_parameters ~type_safe ~mode:MParam
+    write_model_parameters ~type_safe ~mode:`MFunParam
       ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
 
 let write_locals ~region_list ~callee_reads ~callee_writes ~params =
   let vars' =
-    write_model_parameters ~type_safe:false ~mode:MLocal 
+    write_model_parameters ~type_safe:false ~mode:`MLocal 
       ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
 
 let write_effects ~callee_reads ~callee_writes ~region_list ~params =
   let vars' = 
-    write_model_parameters ~type_safe:true ~mode:MEffect
+    write_model_parameters ~type_safe:true ~mode:`MEffect
       ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (function (Var n,_ty') -> n | _ -> assert false) vars'
@@ -1479,8 +1528,8 @@ let read_model_parameters
     memory_reads ~mode ~type_safe ~callee_reads ~callee_writes ~region_assoc 
   in
   let read_globs = match mode with
-    | MParam | MLocal -> []
-    | MEffect -> global_reads ~callee_reads
+    | #param_or_local_mode -> []
+    | `MEffect -> global_reads ~callee_reads
   in
   (* TODO: add mutable and committed effects *)
   read_allocs @ read_tags @ read_mems @ read_globs
@@ -1488,21 +1537,21 @@ let read_model_parameters
 let read_parameters 
     ~type_safe ~region_list ~callee_reads ~callee_writes ~params =
   let vars' = 
-    read_model_parameters ~type_safe ~mode:MParam
+    read_model_parameters ~type_safe ~mode:`MFunParam
       ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
 
 let read_locals ~region_list ~callee_reads ~callee_writes ~params =
   let vars' =
-    read_model_parameters ~type_safe:false ~mode:MLocal
+    read_model_parameters ~type_safe:false ~mode:`MLocal
       ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
 
 let read_effects ~callee_reads ~callee_writes ~region_list ~params =
   let vars' = 
-    read_model_parameters ~type_safe:true ~mode:MEffect
+    read_model_parameters ~type_safe:true ~mode:`MEffect
       ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (var_name' $ fst) vars'
@@ -1510,23 +1559,23 @@ let read_effects ~callee_reads ~callee_writes ~region_list ~params =
 let alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = 
     alloc_table_writes 
-      ~mode:MParam ~type_safe:true ~callee_writes 
+      ~mode:`MAppParam ~type_safe:true ~callee_writes 
       ~region_assoc ~region_mem_assoc:MemorySet.empty
   in
   let reads = 
     alloc_table_reads 
-      ~mode:MParam ~type_safe:true ~callee_reads ~callee_writes 
+      ~mode:`MAppParam ~type_safe:true ~callee_reads ~callee_writes 
       ~region_assoc ~region_mem_assoc:MemorySet.empty
   in
   (List.map fst writes), (List.map fst reads)
 
 let tag_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = 
-    tag_table_writes ~mode:MParam ~callee_writes ~region_assoc
+    tag_table_writes ~mode:`MAppParam ~callee_writes ~region_assoc
   in
   let reads = 
     tag_table_reads 
-      ~mode:MParam ~callee_reads ~callee_writes ~region_assoc
+      ~mode:`MAppParam ~callee_reads ~callee_writes ~region_assoc
   in
   (List.map fst writes), (List.map fst reads)
 
@@ -1536,11 +1585,11 @@ let memory_arguments
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc fname =
   let writes = 
     memory_detailed_writes
-      ~mode:MParam ~type_safe:true ~callee_writes ~region_assoc
+      ~mode:`MAppParam ~type_safe:true ~callee_writes ~region_assoc
   in
   let reads = 
     memory_detailed_reads 
-      ~mode:MParam ~type_safe:true ~callee_reads ~callee_writes ~region_assoc
+      ~mode:`MAppParam ~type_safe:true ~callee_reads ~callee_writes ~region_assoc
   in
   (* Identify bitwise memories and generate appropriate typed ones *)
   let regions = 
