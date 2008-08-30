@@ -50,6 +50,9 @@ val field_offset_in_bytes: field_info -> int option
 (** Return the size in bytes of a structure. *)
 val struct_size_in_bytes: struct_info -> int
 
+(** Return whether the structure has a size. *)
+val struct_has_size: struct_info -> bool
+
 (** Return all the fields of a structure or a variant.
 A variant has no field.
 A structure has its fields and the fields of its ancestors. *)
@@ -61,8 +64,8 @@ val fully_allocated: field_info -> bool
 (** Return all the memories used by a structure, i.e.: its fields,
 the fields of its ancestors, and recursively the fields of its fields.
 The "select" argument can be used to ignore specific fields. *)
-val all_memories: ?select:(field_info -> bool) -> pointer_class ->
-  field_info list
+val all_memories: 
+  ?select:(field_info -> bool) -> pointer_class -> mem_class list
 
 (** Return all the variants used by a structure, i.e.: the type of all
 pointers returned by all_memories. *)

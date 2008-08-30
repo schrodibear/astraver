@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.119 2008-08-13 09:31:14 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.120 2008-08-30 01:02:56 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -782,11 +782,6 @@ let pointer_class_variant = function
   | JCvariant vi -> vi
   | JCunion vi -> vi
   
-let pointer_class_name = function
-  | JCtag(st, _) -> "tag "^st.jc_struct_info_name
-  | JCvariant vi -> "variant "^vi.jc_variant_info_name
-  | JCunion vi -> "union "^vi.jc_variant_info_name
-
 let rec pattern_vars acc pat =
   match pat#node with
     | JCPstruct(_, fpl) ->

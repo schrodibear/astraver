@@ -93,6 +93,11 @@ let memory_class fmt = function
   | JCmem_union vi -> fprintf fmt "mem-union(%s)" vi.jc_variant_info_name
   | JCmem_bitvector -> fprintf fmt "mem-bitvector"
 
+let pointer_class = function
+  | JCtag(st, _) -> "tag "^st.jc_struct_info_name
+  | JCvariant vi -> "variant "^vi.jc_variant_info_name
+  | JCunion vi -> "union "^vi.jc_variant_info_name
+
 (*
 Local Variables: 
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"

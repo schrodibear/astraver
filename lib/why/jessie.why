@@ -51,6 +51,7 @@ type 't block
 (* memory model *)
 
 logic base_block: 't pointer -> 't block
+logic pointer_address: 't pointer -> unit pointer
 logic address: 't pointer -> int
 logic offset_max: 't alloc_table, 't pointer -> int
 logic offset_min: 't alloc_table, 't pointer -> int

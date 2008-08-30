@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.343 2008-08-28 13:57:41 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.344 2008-08-30 01:02:56 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -40,8 +40,9 @@ open Jc_name
 open Jc_constructors
 open Jc_pervasives
 open Jc_separation
-open Jc_interp_misc
 open Jc_struct_tools
+open Jc_effect
+open Jc_interp_misc
 open Jc_invariants
 open Jc_pattern
 
@@ -370,7 +371,7 @@ let make_valid_pred_app ac pc p a b =
     | JCalloc_struct _ -> all_memories ~select:fully_allocated pc
     | JCalloc_union _ | JCalloc_bitvector -> []
   in
-  let mems = List.map (fun fi -> LVar(field_memory_name fi)) all_mems in
+  let mems = List.map (fun mc -> LVar(generic_memory_name mc)) all_mems in
   LPred(valid_pred_name ac pc, p :: a :: b :: allocs @ mems)
 
 (*
@@ -403,8 +404,7 @@ let make_valid_pred ac pc =
       | JCalloc_union _ | JCalloc_bitvector -> []
     in
     let mems = 
-      List.map (fun fi -> field_memory_name fi,memory_type (JCmem_field fi))
-	all_mems
+      List.map (fun mc -> generic_memory_name mc,memory_type mc) all_mems
     in
     let p = p, pointer_type ac pc in
     let a = a, why_integer_type in
@@ -475,8 +475,7 @@ let alloc_read_parameters (ac,r) pc =
   in
   let mems = 
     List.map 
-      (fun fi -> 
-	 let mc = JCmem_field fi in 
+      (fun mc -> 
 	 memory_var ~test_current_function:true (mc,r), memory_type mc)
       all_mems 
   in
@@ -556,6 +555,112 @@ let make_alloc_param ~check_size ac pc =
   let name = alloc_param_name ~check_size ac pc in
   Param(false,name,alloc_type)
 
+(* Conversion to and from bitvector *)
+
+let ofbit_read_parameters r pc =
+  let ac = JCalloc_bitvector in
+  let mc = JCmem_bitvector in
+  let bv_alloc = 
+    alloc_table_var ~test_current_function:true (ac,r), alloc_table_type ac 
+  in
+  let bv_mem = memory_var ~test_current_function:true (mc,r), memory_type mc in
+  [ bv_alloc; bv_mem ]
+
+let ofbit_write_parameters pc =
+  let all_mems = all_memories pc in
+  let mems = 
+    List.map 
+      (fun mc -> plain_memory_var (mc,dummy_region), memory_type mc) all_mems 
+  in
+  mems
+
+let make_of_bitvector_app fi e' =
+  (* Convert bitvector into appropriate type *)
+  match fi.jc_field_info_type with
+    | JCTenum ri -> LApp(logic_enum_of_bitvector ri,[e'])
+    | _ty -> assert false (* TODO *)
+
+let make_conversion_params pc =
+  let p = "p" in
+  let bv_alloc = generic_alloc_table_name JCalloc_bitvector in
+  let bv_mem = generic_memory_name JCmem_bitvector in
+  let ac = alloc_class_of_pointer_class pc in
+  let alloc = generic_alloc_table_name ac in
+
+  (* parameters and effects *)
+  let writes = ofbit_write_parameters pc in
+  let write_effects = 
+    List.map (function (Var n,ty') -> n | _ -> assert false) writes
+  in
+  let write_params = 
+    List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) writes
+  in
+  let reads = ofbit_read_parameters dummy_region pc in
+  let read_params = 
+    List.map (fun (n,ty') -> (n,Base_type ty')) reads
+  in
+  let params = write_params @ read_params in
+  let params = 
+    List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) params
+  in
+
+  let post = match pc with
+    | JCtag(st,_) ->
+	if struct_has_size st then
+	  let fields = all_fields pc in
+	  let post,_ = 
+	    List.fold_left 
+	      (fun (acc,i) fi ->
+		 let pi = p ^ (string_of_int i) in
+		 let mc = JCmem_field fi in
+		 let ac = alloc_class_of_mem_class mc in
+		 let mem = 
+		   tmemory_var ~label_in_name:true LabelHere
+		     (mc,dummy_region) 
+		 in
+		 let off = the (field_offset_in_bytes fi) in
+		 let size = the fi.jc_field_info_bitsize / 8 in
+		 let off = string_of_int off and size = string_of_int size in
+		 let posti = 
+		   make_eq_pred fi.jc_field_info_type
+		     (LApp("select",[ mem; LVar pi ]))
+		     (make_of_bitvector_app fi 
+			(LApp("select_bytes",
+			      [ LVar bv_mem; 
+				LApp("pointer_address",[ LVar pi ]);
+				LConst(Prim_int off); LConst(Prim_int size) ])))
+		 in
+		 let ty' = pointer_type ac pc in (* Correct pc *)
+		 let posti = LForall(pi,ty',posti) in
+		 make_and acc posti, i+1
+	      ) (LTrue,0) fields
+	  in post
+	else LTrue
+    | JCunion _ | JCvariant _ -> assert false (* TODO *)
+  in
+
+  (* Conversion from bitvector *)
+  let annot_type = 
+    Annot_type(
+      LTrue,
+      Base_type why_unit_type,
+      (* reads and writes *)
+      [], write_effects,
+      (* normal post *)
+      post,
+      (* no exceptional post *)
+      [])
+  in
+  let annot_type = 
+    List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
+      params annot_type
+  in
+  let name = of_bitvector_param_name pc in
+  let ofbit_param = Param(false,name,annot_type) in
+
+  [ ofbit_param ]
+  
+
 let tr_struct st acc =
   let tagid_type = tag_id_type (struct_variant st) in
     (* Declarations of field memories. *)
@@ -613,7 +718,8 @@ let tr_struct st acc =
       :: make_alloc_param ~check_size:false ac pc 
       :: make_alloc_param ~check_size:true JCalloc_bitvector pc 
       :: make_alloc_param ~check_size:false JCalloc_bitvector pc 
-      :: acc
+      :: make_conversion_params pc
+      @ acc
   in
 
   match st.jc_struct_info_parent with
@@ -1941,6 +2047,19 @@ and expr e =
 			param_types call.jc_call_args ([],[])
 		with Invalid_argument _ -> assert false
               in
+	      let args = 
+		List.fold_right2 
+		  (fun e e' acc ->
+		     let e' =
+		       if is_pointer_type e#typ && Region.bitwise e#region then
+			 let st = pointer_struct e#typ in
+			 let vi = struct_variant st in
+			 make_app (of_pointer_address_name vi) [ e' ]
+		       else e'
+		     in
+		     e' :: acc
+		  ) call.jc_call_args args []
+	      in
 	      let param_assoc = 
 		List.map2 (fun param arg -> param,arg) 
 		  f.jc_fun_info_parameters call.jc_call_args
@@ -2753,14 +2872,14 @@ let tr_fun f funpos spec body acc =
 
   (* Effects, parameters and locals *)
 
-  let writes = 
+  let external_write_effects = 
     write_effects 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
       ~params:f.jc_fun_info_parameters
   in
-  let reads = 
+  let external_read_effects = 
     read_effects 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
@@ -2799,14 +2918,14 @@ let tr_fun f funpos spec body acc =
       ~region_list:f.jc_fun_info_param_regions
       ~params:f.jc_fun_info_parameters
   in
-  let write_locals =
+  let internal_write_locals =
     write_locals 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
       ~params:f.jc_fun_info_parameters
   in
-  let read_locals =
+  let internal_read_locals =
     read_locals 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
@@ -2817,12 +2936,12 @@ let tr_fun f funpos spec body acc =
     let e' =
       List.fold_left 
 	(fun acc (n,ty') -> Let(n,any_value' ty',acc)) 
-	e' read_locals
+	e' internal_read_locals
     in
     let e' =
       List.fold_left 
 	(fun acc (n,ty') -> Let_ref(n,any_value' ty',acc)) 
-	e' write_locals
+	e' internal_write_locals
     in
     e'
   in
@@ -2884,7 +3003,7 @@ let tr_fun f funpos spec body acc =
   let acc = 
     let annot_type = (* function declaration with precondition *)
       Annot_type(external_requires, ret_type,
-                 reads, writes, 
+                 external_read_effects, external_write_effects, 
 		 param_normal_post, param_excep_posts)
     in
     let fun_type = 
@@ -2898,7 +3017,7 @@ let tr_fun f funpos spec body acc =
   let acc = (* function declaration without precondition *)
     let annot_type =
       Annot_type(LTrue, ret_type,
-                 reads, writes, 
+                 external_read_effects, external_write_effects, 
 		 param_normal_post, param_excep_posts)
     in
     let fun_type = 
@@ -3370,6 +3489,30 @@ let tr_variant vi acc =
       :: make_alloc_param ~check_size:false JCalloc_bitvector pc 
       :: acc
   in
+  let of_ptr_addr =
+    Logic(false, of_pointer_address_name vi,
+	  [ ("",raw_pointer_type why_unit_type) ], pointer_type ac pc)
+  in
+  let addr_axiom =
+    let p = "p" in
+    Axiom("pointer_addr_of_" ^ (of_pointer_address_name vi),
+	  LForall(p, raw_pointer_type why_unit_type,
+		  make_eq_pred (JCTpointer(pc,None,None))
+		    (LVar p)
+		    (LApp("pointer_address",
+			  [ LApp(of_pointer_address_name vi,
+				 [ LVar p ])]))))
+  in
+  let rev_addr_axiom =
+    let p = "p" in
+    Axiom((of_pointer_address_name vi) ^ "_of_pointer_addr",
+	  LForall(p, pointer_type ac pc,
+		  make_eq_pred (JCTpointer(pc,None,None))
+		    (LVar p)
+		    (LApp(of_pointer_address_name vi,
+			  [ LApp("pointer_address",
+				 [ LVar p ])]))))
+  in
   let tag_table =
     Param(
       false,
@@ -3423,7 +3566,11 @@ let tr_variant vi acc =
     (acc, 1)
     vi.jc_variant_info_roots
   in
-  let acc = type_def::alloc_table::tag_table::axiom_variant_has_tag::acc in
+  let acc = 
+    type_def::alloc_table::tag_table::axiom_variant_has_tag
+    :: of_ptr_addr :: addr_axiom :: rev_addr_axiom
+    :: acc 
+  in
   acc
 
 (*

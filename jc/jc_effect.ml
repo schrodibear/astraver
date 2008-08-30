@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.127 2008-08-28 13:57:41 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.128 2008-08-30 01:02:56 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -42,7 +42,6 @@ open Jc_constructors
 open Jc_pervasives
 open Jc_iterators
 open Jc_struct_tools
-open Jc_interp_misc
 
 open Format
 open Pp
@@ -67,6 +66,26 @@ let add_constant_alloc_table (ac,r) =
 
 let add_constant_tag_table (vi,r) =
   Hashtbl.add constant_tag_tables (tag_table_name (vi,r)) (vi,r)
+
+(* Transposition for calls *)
+
+let transpose_labels ~label_assoc labs =
+  match label_assoc with
+    | None -> labs
+    | Some assoc ->
+	LogicLabelSet.fold
+	  (fun lab acc ->
+	     try
+	       let lab = List.assoc lab assoc in
+	       LogicLabelSet.add lab acc
+	     with Not_found -> LogicLabelSet.add lab acc)
+	  labs LogicLabelSet.empty
+
+let transpose_region ~region_assoc r =
+  if Region.polymorphic r then
+    try Some (RegionList.assoc r region_assoc)
+    with Not_found -> None (* Local region *)
+  else Some r
 
 (* Printing effects *)
 
@@ -344,6 +363,191 @@ let add_committed_writes fef pc =
 let add_exception_effect fef exc =
   { fef with jc_raises = ExceptionSet.add exc fef.jc_raises }
   
+(*****************************************************************************)
+(*                                  Unions                                   *)
+(*****************************************************************************)
+
+type shift_offset = 
+  | Int_offset of string
+  | Expr_offset of Jc_fenv.expr 
+  | Term_offset of Jc_fenv.term 
+
+let offset_of_expr e =
+  match e#node with
+    | JCEconst (JCCinteger s) -> Int_offset s
+    | _ -> Expr_offset e
+
+let offset_of_term t =
+  match t#node with
+    | JCTconst (JCCinteger s) -> Int_offset s
+    | _ -> Term_offset t
+
+let mult_offset i off =
+  match off with
+    | Int_offset j -> Int_offset (string_of_int (i * (int_of_string j)))
+    | Expr_offset _ -> assert false (* TODO *)
+    | Term_offset _ -> assert false (* TODO *)
+
+let add_offset off1 off2 = 
+  match off1,off2 with
+    | Int_offset i, Int_offset j -> 
+	let k = int_of_string i + int_of_string j in
+	Int_offset (string_of_int k)
+    | _ -> assert false (* TODO *)
+
+let possible_union_type = function
+  | JCTpointer(pc,_,_) -> 
+      let vi = pointer_class_variant pc in
+      if vi.jc_variant_info_is_union then Some vi else None
+  | _ -> None
+
+let union_type ty = 
+  match possible_union_type ty with Some vi -> vi | None -> assert false
+
+let of_union_type ty =
+  match possible_union_type ty with Some _vi -> true | None -> false
+
+let possible_union_access e fi_opt = 
+  let fieldoffbytes fi = 
+    match field_offset_in_bytes fi with
+      | None -> assert false
+      | Some off -> Int_offset (string_of_int off) 
+  in
+  (* Count offset in bytes before last field access in union *)
+  let rec access e = 
+    match e#node with
+      | JCEderef(e,fi) when embedded_field fi ->
+	  begin match access e with
+	    | Some(e,off) ->
+		Some (e, add_offset off (fieldoffbytes fi))
+	    | None -> 
+		if of_union_type e#typ then
+		  Some (e, fieldoffbytes fi)
+		else None
+	  end
+      | JCEshift(e1,e2) ->
+	  begin match access e1 with
+	    | Some(e,off1) ->
+		let off2 = offset_of_expr e2 in
+		let siz = struct_size_in_bytes (pointer_struct e1#typ) in
+		let off2 = mult_offset siz off2 in
+		Some (e, add_offset off1 off2)
+	    | None -> None
+	  end
+      | JCEalloc(_e1,st) ->
+	  if struct_of_union st then
+	    Some(e,Int_offset "0")
+	  else None
+      | _ ->	
+	  if of_union_type e#typ then
+	    Some (e,Int_offset "0")
+	  else None
+  in
+  match fi_opt with
+    | None ->
+	access e
+    | Some fi ->
+	(* let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in *)
+	match access e with
+	  | Some(e,off) ->
+	      Some (e, add_offset off (fieldoffbytes fi))
+	  | None -> 
+	      if of_union_type e#typ then
+		Some (e, fieldoffbytes fi)
+	      else None
+
+let destruct_union_access e fi_opt = 
+  the (possible_union_access e fi_opt)
+
+let tpossible_union_access t fi_opt =
+  let fieldoffbytes fi = 
+    match field_offset_in_bytes fi with
+      | None -> assert false
+      | Some off -> Int_offset (string_of_int off) 
+  in
+  (* Count offset in bytes before last field access in union *)
+  let rec access t = 
+    match t#node with
+      | JCTderef(t,_lab,fi) when embedded_field fi ->
+	  begin match access t with
+	    | Some(t,off) ->
+		Some (t, add_offset off (fieldoffbytes fi))
+	    | None -> 
+		if of_union_type t#typ then
+		  Some (t, fieldoffbytes fi)
+		else None
+	  end
+      | JCTshift(t1,t2) ->
+	  begin match access t1 with
+	    | Some(t3,off1) ->
+		let off2 = offset_of_term t2 in
+		let siz = struct_size_in_bytes (pointer_struct t1#typ) in
+		let off2 = mult_offset siz off2 in
+		Some (t3, add_offset off1 off2)
+	    | None -> None
+	  end
+      | _ ->	
+	  if of_union_type t#typ then
+	    Some (t,Int_offset "0")
+	  else None
+  in
+
+  match fi_opt with
+    | None ->
+	access t
+    | Some fi ->
+(* 	let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in *)
+	match access t with
+	  | Some(t,off) ->
+	      Some (t, add_offset off (fieldoffbytes fi))
+	  | None -> 
+	      if of_union_type t#typ then
+		Some (t, fieldoffbytes fi)
+	      else None
+
+let tdestruct_union_access t fi_opt = 
+  the (tpossible_union_access t fi_opt)
+
+let lpossible_union_access t fi = None (* TODO *)
+
+let ldestruct_union_access loc fi_opt = 
+  the (lpossible_union_access loc fi_opt)
+
+let foreign_union e = [] (* TODO: subterms of union that are not in union *)
+let tforeign_union t = []
+
+let common_deref_alloc_class ~type_safe union_access e =
+  if not type_safe && Region.bitwise e#region then
+    JCalloc_bitvector
+  else match union_access e None with 
+    | None -> JCalloc_struct (struct_variant (pointer_struct e#typ))
+    | Some(e,_off) -> JCalloc_union (union_type e#typ)
+
+let deref_alloc_class e =
+  common_deref_alloc_class ~type_safe:false possible_union_access e
+  
+let tderef_alloc_class ~type_safe t =
+  common_deref_alloc_class ~type_safe tpossible_union_access t
+
+let lderef_alloc_class ~type_safe locs =
+  common_deref_alloc_class ~type_safe lpossible_union_access locs
+
+let common_deref_mem_class ~type_safe union_access e fi =
+  if not type_safe && Region.bitwise e#region then
+    JCmem_bitvector
+  else match union_access e (Some fi) with 
+    | None -> JCmem_field fi
+    | Some(e,_off) -> JCmem_union (union_type e#typ)
+
+let deref_mem_class e fi =
+  common_deref_mem_class ~type_safe:false possible_union_access e fi
+
+let tderef_mem_class ~type_safe t fi =
+  common_deref_mem_class ~type_safe tpossible_union_access t fi
+
+let lderef_mem_class ~type_safe locs fi =
+  common_deref_mem_class ~type_safe lpossible_union_access locs fi
+
 
 (******************************************************************************)
 (*                                  patterns                                  *)
@@ -372,8 +576,98 @@ let rec pattern ef (*label r*) p =
 
 
 (******************************************************************************)
+(*                              environment                                   *)
+(******************************************************************************)
+
+let current_function = ref None
+let set_current_function f = current_function := Some f
+let reset_current_function () = current_function := None
+let get_current_function () = 
+  match !current_function with None -> assert false | Some f -> f
+
+(******************************************************************************)
 (*                             immutable locations                            *)
 (******************************************************************************)
+
+let term_of_expr e =
+  let rec term e = 
+    let tnode = match e#node with
+      | JCEconst c -> JCTconst c
+      | JCEvar vi -> JCTvar vi
+      | JCEbinary (e1, (bop,opty), e2) -> 
+	  JCTbinary (term e1, ((bop :> bin_op),opty), term e2)
+      | JCEunary (uop, e1) -> JCTunary (uop, term e1)
+      | JCEshift (e1, e2) -> JCTshift (term e1, term e2)
+      | JCEderef (e1, fi) -> JCTderef (term e1, LabelHere, fi)
+      | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, LabelHere, st)
+      | JCEcast (e1, st) -> JCTcast (term e1, LabelHere, st)
+      | JCErange_cast(e1,_) | JCEreal_cast(e1,_) -> 
+	  (* range does not modify term value *)
+	  (term e1)#node 
+      | JCEif (e1, e2, e3) -> JCTif (term e1, term e2, term e3)
+      | JCEoffset (off, e1, st) -> JCToffset (off, term e1, st)
+      | JCEalloc (e, _) -> (* Note: \offset_max(t) = length(t) - 1 *)
+	  JCTbinary (term e, (`Bsub,`Integer), new term ~typ:integer_type (JCTconst (JCCinteger "1")) )
+      | JCEfree _ -> failwith "Not a term"
+      | _ -> failwith "Not a term"
+(*       | JCEmatch (e, pel) -> *)
+(* 	  let ptl = List.map (fun (p, e) -> (p, term_of_expr e)) pel in *)
+(* 	    JCTmatch (term_of_expr e, ptl) *)
+    in
+      new term ~typ:e#typ ~region:e#region tnode 
+  in
+    try Some (term e) with Failure _ -> None
+
+let rec location_of_expr e = 
+  try
+    let loc_node = match e#node with
+      | JCEvar v -> 
+	  JCLvar v
+      | JCEderef(e1,fi) ->
+	  JCLderef(location_set_of_expr e1, LabelHere, fi, e#region)
+      | _ -> failwith "No location for expr"
+    in
+    Some(new location_with ~node:loc_node e)
+  with Failure "No location for expr" -> None
+
+and location_set_of_expr e =
+  let locs_node = match e#node with
+    | JCEvar v -> 
+	JCLSvar v
+    | JCEderef(e1,fi) ->
+	JCLSderef(location_set_of_expr e1, LabelHere, fi, e#region)
+    | JCEshift(e1,e2) ->
+	let t2_opt = term_of_expr e2 in
+	JCLSrange(location_set_of_expr e1, t2_opt, t2_opt)
+    | _ -> failwith "No location for expr"
+  in
+  new location_set_with ~node:locs_node e
+
+let location_set_of_expr e =
+  try Some(location_set_of_expr e) with Failure "No location for expr" -> None
+
+let rec location_of_term t = 
+  try
+    let loc_node = match t#node with
+      | JCTvar v -> 
+	  JCLvar v
+      | JCTderef(t1,lab,fi) ->
+	  JCLderef(location_set_of_term t1, LabelHere, fi, t#region)
+      | _ -> failwith "No location for term"
+    in
+    Some(new location_with ~node:loc_node t)
+  with Failure "No location for term" -> None
+
+and location_set_of_term t =
+  let locs_node = match t#node with
+    | JCTvar v -> 
+	JCLSvar v
+    | JCTderef(t1,lab,fi) ->
+	JCLSderef(location_set_of_term t1, LabelHere, fi, t#region)
+    | _ -> failwith "No location for term"
+  in
+  new location_set_with ~node:locs_node t
+
 
 (* last location can be mutated *)
 let rec immutable_location fef loc =
@@ -706,8 +1000,7 @@ let rec expr fef e =
 	   in
 	   let fef = 
 	     List.fold_left 
-	       (fun fef fi -> 
-		  let mc = JCmem_field fi in
+	       (fun fef mc -> 
 		  add_memory_writes LabelHere fef (mc,e#region)
 	       ) fef all_mems
 	   in
@@ -834,9 +1127,12 @@ let parameter fef v =
 	let ac = alloc_class_of_pointer_class pc in
 	add_alloc_reads LabelOld fef (ac,v.jc_var_info_region)
     | _ -> fef
-   
-(* computing the fixpoint *)
 
+
+(******************************************************************************)
+(*                                 fix-point                                  *)
+(******************************************************************************)
+   
 let fixpoint_reached = ref false
 
 let logic_fun_effects f = 

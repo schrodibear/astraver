@@ -871,6 +871,12 @@ predicate Non_null_Object(x:Object pointer,
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
+logic Object_of_pointer_address: unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr :
+ (forall p:Object pointer.
+  (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom : parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags :
@@ -992,6 +998,12 @@ logic interface_tag:  -> interface tag_id
 
 axiom interface_int : (int_of_tag(interface_tag) = (1))
 
+logic interface_of_pointer_address: unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr :
+ (forall p:interface pointer.
+  (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom : parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags :
@@ -1032,6 +1044,13 @@ goal mul_comm :
 axiom mul_comm_as_axiom :
  (forall x_3:int.
   (forall y_3:int. eq_int(mul_int(x_3, y_3), mul_int(y_3, x_3))))
+
+axiom pointer_addr_of_Object_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(interface_of_pointer_address(p))))
 
 predicate valid_bitvector_struct_Object(p:unit pointer,
  a:int,
@@ -1360,6 +1379,26 @@ parameter non_null_Object_requires :
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
+parameter struct_Gcd_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_Object_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_String_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_Throwable_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_interface_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
 let Gcd_gcd_ensures_bezoutProperty =
  fun (x_8 : int) (y_8 : int) ->
   { (JC_11: (ge_int(x_8, (0)) and ge_int(y_8, (0)))) }
@@ -1638,70 +1677,70 @@ why --project [...] why/Gcd.why
   <lemma name="distr_left">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po1.why">
-      <location file = "why/Gcd.why" line = "38" begin = "0" end = "178"/>
+      <location file = "why/Gcd.why" line = "44" begin = "0" end = "178"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_left_minus">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po2.why">
-      <location file = "why/Gcd.why" line = "52" begin = "0" end = "178"/>
+      <location file = "why/Gcd.why" line = "58" begin = "0" end = "178"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_right">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po3.why">
-      <location file = "why/Gcd.why" line = "66" begin = "0" end = "161"/>
+      <location file = "why/Gcd.why" line = "72" begin = "0" end = "161"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_right_minus">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po4.why">
-      <location file = "why/Gcd.why" line = "80" begin = "0" end = "179"/>
+      <location file = "why/Gcd.why" line = "86" begin = "0" end = "179"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="div_mod_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po5.why">
-      <location file = "why/Gcd.why" line = "94" begin = "0" end = "187"/>
+      <location file = "why/Gcd.why" line = "100" begin = "0" end = "187"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="gcd_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po6.why">
-      <location file = "why/Gcd.why" line = "118" begin = "0" end = "196"/>
+      <location file = "why/Gcd.why" line = "124" begin = "0" end = "196"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="gcd_zero">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po7.why">
-      <location file = "why/Gcd.why" line = "134" begin = "0" end = "54"/>
+      <location file = "why/Gcd.why" line = "140" begin = "0" end = "54"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mod_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po8.why">
-      <location file = "why/Gcd.why" line = "149" begin = "0" end = "178"/>
+      <location file = "why/Gcd.why" line = "161" begin = "0" end = "178"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mul_assoc">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po9.why">
-      <location file = "why/Gcd.why" line = "161" begin = "0" end = "163"/>
+      <location file = "why/Gcd.why" line = "173" begin = "0" end = "163"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mul_comm">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po10.why">
-      <location file = "why/Gcd.why" line = "175" begin = "0" end = "99"/>
+      <location file = "why/Gcd.why" line = "187" begin = "0" end = "99"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -2073,6 +2112,8 @@ type 't pointer
 type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
+
+logic pointer_address : 'a1 pointer -> unit pointer
 
 logic address : 'a1 pointer -> int
 
@@ -2695,6 +2736,12 @@ predicate Non_null_Object(x: Object pointer,
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
+logic Object_of_pointer_address : unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr:
+  (forall p:Object pointer.
+    (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags:
@@ -2759,6 +2806,12 @@ logic interface_tag :  -> interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
+logic interface_of_pointer_address : unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr:
+  (forall p:interface pointer.
+    (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags:
@@ -2779,6 +2832,14 @@ axiom mul_assoc_as_axiom:
 
 axiom mul_comm_as_axiom:
   (forall x_3:int. (forall y_3:int. ((x_3 * y_3) = (y_3 * x_3))))
+
+axiom pointer_addr_of_Object_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(interface_of_pointer_address(p))))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
@@ -4311,6 +4372,10 @@ why -simplify [...] why/Gcd.why
  (EQ (int_of_tag Object_tag) 1))
 
 (BG_PUSH
+ ;; Why axiom Object_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (Object_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
  ;; Why axiom Object_parenttag_bottom
  (EQ (parenttag Object_tag bottom_tag) |@true|))
 
@@ -4326,7 +4391,7 @@ why -simplify [...] why/Gcd.why
  ;; Why axiom Throwable_parenttag_Object
  (EQ (parenttag Throwable_tag Object_tag) |@true|))
 
-;; distr_left, File "why/Gcd.why", line 38, characters 0-178
+;; distr_left, File "why/Gcd.why", line 44, characters 0-178
 (FORALL (x_0_0 y_0 z_0)
 (EQ (* (+ x_0_0 y_0) z_0) (+ (* x_0_0 z_0) (* y_0 z_0))))
 
@@ -4335,28 +4400,28 @@ why -simplify [...] why/Gcd.why
  (FORALL (x_0_0 y_0 z_0)
  (EQ (* (+ x_0_0 y_0) z_0) (+ (* x_0_0 z_0) (* y_0 z_0)))))
 
-;; distr_left_minus, File "why/Gcd.why", line 52, characters 0-178
+;; distr_left_minus, File "why/Gcd.why", line 58, characters 0-178
 (FORALL (x_2 y_2 z_2) (EQ (* (- x_2 y_2) z_2) (- (* x_2 z_2) (* y_2 z_2))))
 
 (BG_PUSH
  ;; Why axiom distr_left_minus_as_axiom
  (FORALL (x_2 y_2 z_2) (EQ (* (- x_2 y_2) z_2) (- (* x_2 z_2) (* y_2 z_2)))))
 
-;; distr_right, File "why/Gcd.why", line 66, characters 0-161
+;; distr_right, File "why/Gcd.why", line 72, characters 0-161
 (FORALL (x_4 y z) (EQ (* x_4 (+ y z)) (+ (* x_4 y) (* x_4 z))))
 
 (BG_PUSH
  ;; Why axiom distr_right_as_axiom
  (FORALL (x_4 y z) (EQ (* x_4 (+ y z)) (+ (* x_4 y) (* x_4 z)))))
 
-;; distr_right_minus, File "why/Gcd.why", line 80, characters 0-179
+;; distr_right_minus, File "why/Gcd.why", line 86, characters 0-179
 (FORALL (x_1 y_1 z_1) (EQ (* x_1 (- y_1 z_1)) (- (* x_1 y_1) (* x_1 z_1))))
 
 (BG_PUSH
  ;; Why axiom distr_right_minus_as_axiom
  (FORALL (x_1 y_1 z_1) (EQ (* x_1 (- y_1 z_1)) (- (* x_1 y_1) (* x_1 z_1)))))
 
-;; div_mod_property, File "why/Gcd.why", line 94, characters 0-187
+;; div_mod_property, File "why/Gcd.why", line 100, characters 0-187
 (FORALL (x_6 y_6)
 (IMPLIES (AND (>= x_6 0) (> y_6 0))
 (EQ (int_mod x_6 y_6) (- x_6 (* y_6 (int_div x_6 y_6))))))
@@ -4375,7 +4440,7 @@ why -simplify [...] why/Gcd.why
   (FORALL (z_4)
   (IMPLIES (AND (divides z_4 a) (divides z_4 b)) (divides z_4 d))))))
 
-;; gcd_property, File "why/Gcd.why", line 118, characters 0-196
+;; gcd_property, File "why/Gcd.why", line 124, characters 0-196
 (FORALL (a_1 b_0 d_0 q_0)
 (IMPLIES (AND (> b_0 0) (isGcd b_0 (int_mod a_1 b_0) d_0))
 (isGcd a_1 b_0 d_0)))
@@ -4390,7 +4455,7 @@ why -simplify [...] why/Gcd.why
  (IMPLIES (AND (> b_0 0) (isGcd b_0 (int_mod a_1 b_0) d_0))
  (FORALL (q_0) (isGcd a_1 b_0 d_0)))))
 
-;; gcd_zero, File "why/Gcd.why", line 134, characters 0-54
+;; gcd_zero, File "why/Gcd.why", line 140, characters 0-54
 (FORALL (a_0) (isGcd a_0 0 a_0))
 
 (BG_PUSH
@@ -4402,6 +4467,10 @@ why -simplify [...] why/Gcd.why
  (EQ (int_of_tag interface_tag) 1))
 
 (BG_PUSH
+ ;; Why axiom interface_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (interface_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
  ;; Why axiom interface_parenttag_bottom
  (EQ (parenttag interface_tag bottom_tag) |@true|))
 
@@ -4410,7 +4479,7 @@ why -simplify [...] why/Gcd.why
  (FORALL (x interface_tag_table)
  (instanceof interface_tag_table x interface_tag)))
 
-;; mod_property, File "why/Gcd.why", line 149, characters 0-178
+;; mod_property, File "why/Gcd.why", line 161, characters 0-178
 (FORALL (x_7 y_7)
 (IMPLIES (AND (>= x_7 0) (> y_7 0))
 (AND (<= 0 (int_mod x_7 y_7)) (< (int_mod x_7 y_7) y_7))))
@@ -4421,19 +4490,27 @@ why -simplify [...] why/Gcd.why
  (IMPLIES (AND (>= x_7 0) (> y_7 0))
  (AND (<= 0 (int_mod x_7 y_7)) (< (int_mod x_7 y_7) y_7)))))
 
-;; mul_assoc, File "why/Gcd.why", line 161, characters 0-163
+;; mul_assoc, File "why/Gcd.why", line 173, characters 0-163
 (FORALL (x_4_0 y_4 z_3) (EQ (* x_4_0 (* y_4 z_3)) (* (* x_4_0 y_4) z_3)))
 
 (BG_PUSH
  ;; Why axiom mul_assoc_as_axiom
  (FORALL (x_4_0 y_4 z_3) (EQ (* x_4_0 (* y_4 z_3)) (* (* x_4_0 y_4) z_3))))
 
-;; mul_comm, File "why/Gcd.why", line 175, characters 0-99
+;; mul_comm, File "why/Gcd.why", line 187, characters 0-99
 (FORALL (x_3 y_3) (EQ (* x_3 y_3) (* y_3 x_3)))
 
 (BG_PUSH
  ;; Why axiom mul_comm_as_axiom
  (FORALL (x_3 y_3) (EQ (* x_3 y_3) (* y_3 x_3))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_Object_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (Object_of_pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_interface_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (interface_of_pointer_address p)))))
 
 (DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
   (AND (EQ (offset_min bitvector_alloc_table p) a)
@@ -5473,6 +5550,8 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
+logic pointer_address : 'a1 pointer -> unit pointer
+
 logic address : 'a1 pointer -> int
 
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
@@ -6094,6 +6173,12 @@ predicate Non_null_Object(x: Object pointer,
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
+logic Object_of_pointer_address : unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr:
+  (forall p:Object pointer.
+    (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags:
@@ -6196,6 +6281,12 @@ logic interface_tag :  -> interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
+logic interface_of_pointer_address : unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr:
+  (forall p:interface pointer.
+    (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags:
@@ -6230,6 +6321,14 @@ goal mul_comm:
 
 axiom mul_comm_as_axiom:
   (forall x_3:int. (forall y_3:int. ((x_3 * y_3) = (y_3 * x_3))))
+
+axiom pointer_addr_of_Object_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(interface_of_pointer_address(p))))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =

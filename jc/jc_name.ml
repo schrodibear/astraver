@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.26 2008-08-26 11:10:26 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.27 2008-08-30 01:02:56 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -60,6 +60,11 @@ let alloc_class_name = function
   | JCalloc_union vi -> variant_type_name vi
   | JCalloc_bitvector -> bitvector_type_name
 
+let memory_class_name = function
+  | JCmem_field fi -> fi.jc_field_info_final_name
+  | JCmem_union vi -> variant_type_name vi
+  | JCmem_bitvector -> bitvector_type_name
+
 let variant_alloc_table_name vi = vi.jc_variant_info_name ^ "_alloc_table"
 
 let variant_tag_table_name vi = vi.jc_variant_info_name ^ "_tag_table"
@@ -69,6 +74,9 @@ let variant_axiom_on_tags_name vi = vi.jc_variant_info_name ^ "_tags"
 let axiom_int_of_tag_name st = st.jc_struct_info_name ^ "_int"
 
 let tag_name st = st.jc_struct_info_name ^ "_tag"
+
+let of_pointer_address_name vi = 
+  vi.jc_variant_info_name ^ "_of_pointer_address"
 
 let generic_tag_table_name vi =
   (variant_type_name vi) ^ "_tag_table"
@@ -112,12 +120,16 @@ let union_region_memory_name (vi,r) =
   else union_memory_name vi
 
 let bitvector_region_memory_name r = 
-  if !Jc_common_options.separation_sem = SepRegions then 
+  if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
+  then 
     bitvector_type_name ^ "_" ^ (Region.name r)  ^ "_mem"
   else bitvector_type_name ^ "_mem"
 
 let union_memory_type_name vi = 
   vi.jc_variant_info_name ^ "_union"
+
+let generic_memory_name mc =
+  memory_class_name mc
 
 let memory_name (mc,r) =
   match mc with
@@ -125,35 +137,35 @@ let memory_name (mc,r) =
     | JCmem_union vi -> union_region_memory_name (vi,r)
     | JCmem_bitvector -> bitvector_region_memory_name r
 
+let pointer_class_name = function
+  | JCtag(st, _) -> 
+      if struct_of_union st then
+	"union_" ^ (struct_variant st).jc_variant_info_name
+      else
+	"struct_" ^ st.jc_struct_info_name
+  | JCvariant vi -> "variant_" ^ vi.jc_variant_info_name
+  | JCunion vi -> "union_" ^ vi.jc_variant_info_name
+
 let valid_pred_name ac pc = 
   let prefix = match ac with
     | JCalloc_struct _ | JCalloc_union _ -> "valid"
     | JCalloc_bitvector -> "valid_bitvector"
   in
-  match pc with
-    | JCtag(st, _) -> 
-	if struct_of_union st then
-	  prefix ^ "_union_" ^ (struct_variant st).jc_variant_info_name
-	else
-	  prefix ^ "_struct_" ^ st.jc_struct_info_name
-    | JCvariant vi -> prefix ^ "_variant_" ^ vi.jc_variant_info_name
-    | JCunion vi -> prefix ^ "_union_" ^ vi.jc_variant_info_name
+  prefix ^ "_" ^ (pointer_class_name pc)
 
 let alloc_param_name ~check_size ac pc = 
   let prefix = match ac with
     | JCalloc_struct _ | JCalloc_union _ -> "alloc"
     | JCalloc_bitvector -> "alloc_bitvector"
   in
-  let n = match pc with
-    | JCtag(st, _) -> 
-	if struct_of_union st then
-	  prefix ^ "_union_" ^ (struct_variant st).jc_variant_info_name
-	else
-	  prefix ^ "_struct_" ^ st.jc_struct_info_name
-    | JCvariant _vi -> assert false
-    | JCunion vi -> prefix ^ "_union_" ^ vi.jc_variant_info_name
-  in
+  let n = prefix ^ "_" ^ (pointer_class_name pc) in
   if check_size then n ^ "_requires" else n
+
+let of_bitvector_param_name pc = 
+  (pointer_class_name pc) ^ "_of_bitvector"
+
+let to_bitvector_param_name pc = 
+  (pointer_class_name pc) ^ "_to_bitvector"
 
 let jessie_return_variable = "return"
 let jessie_return_exception = "Return"

@@ -38,8 +38,10 @@ open Jc_name
 open Jc_constructors
 open Jc_pervasives
 open Jc_struct_tools
+open Jc_effect
 
 open Output
+open Pp
 
 (* The following functions should be eliminated eventually, but before,
  * effect.ml must be redone.
@@ -72,12 +74,6 @@ let committed_name2 a =
 (******************************************************************************)
 (*                              environment                                   *)
 (******************************************************************************)
-
-let current_function = ref None
-let set_current_function f = current_function := Some f
-let reset_current_function () = current_function := None
-let get_current_function () = 
-  match !current_function with None -> assert false | Some f -> f
 
 let current_behavior : string option ref = ref None
 let set_current_behavior behav = current_behavior := Some behav
@@ -241,6 +237,7 @@ let logic_union_of_field fi = "bitvector_of_" ^ fi.jc_field_info_name
 let logic_field_of_union fi = fi.jc_field_info_name ^ "_of_bitvector"
 
 
+
 let any_value = function
   | JCTnative ty -> 
       begin match ty with
@@ -378,8 +375,10 @@ let tmemory_param ~label_in_name lab (mc,r) =
 let plain_alloc_table_var (ac,r) = Var (alloc_table_name (ac,r))
 let deref_alloc_table_var (ac,r) = Deref (alloc_table_name (ac,r))
 
-let alloc_table_var (ac,r) =
-  if mutable_alloc_table (get_current_function ()) (ac,r) then
+let alloc_table_var ?(test_current_function=false) (ac,r) =
+  if test_current_function && !current_function = None then
+    plain_alloc_table_var (ac,r)
+  else if mutable_alloc_table (get_current_function ()) (ac,r) then
     deref_alloc_table_var (ac,r)
   else plain_alloc_table_var (ac,r)
 
@@ -426,192 +425,6 @@ let ttag_table_param ~label_in_name lab (vi,r) =
   let n = lvar_name ~constant ~label_in_name lab mem in
   let ty' = tag_table_type vi in
   n, ty'
-
-
-(*****************************************************************************)
-(*                                  Unions                                   *)
-(*****************************************************************************)
-
-type shift_offset = 
-  | Int_offset of string
-  | Expr_offset of Jc_fenv.expr 
-  | Term_offset of Jc_fenv.term 
-
-let offset_of_expr e =
-  match e#node with
-    | JCEconst (JCCinteger s) -> Int_offset s
-    | _ -> Expr_offset e
-
-let offset_of_term t =
-  match t#node with
-    | JCTconst (JCCinteger s) -> Int_offset s
-    | _ -> Term_offset t
-
-let mult_offset i off =
-  match off with
-    | Int_offset j -> Int_offset (string_of_int (i * (int_of_string j)))
-    | Expr_offset _ -> assert false (* TODO *)
-    | Term_offset _ -> assert false (* TODO *)
-
-let add_offset off1 off2 = 
-  match off1,off2 with
-    | Int_offset i, Int_offset j -> 
-	let k = int_of_string i + int_of_string j in
-	Int_offset (string_of_int k)
-    | _ -> assert false (* TODO *)
-
-let possible_union_type = function
-  | JCTpointer(pc,_,_) -> 
-      let vi = pointer_class_variant pc in
-      if vi.jc_variant_info_is_union then Some vi else None
-  | _ -> None
-
-let union_type ty = 
-  match possible_union_type ty with Some vi -> vi | None -> assert false
-
-let of_union_type ty =
-  match possible_union_type ty with Some _vi -> true | None -> false
-
-let possible_union_access e fi_opt = 
-  let fieldoffbytes fi = 
-    match field_offset_in_bytes fi with
-      | None -> assert false
-      | Some off -> Int_offset (string_of_int off) 
-  in
-  (* Count offset in bytes before last field access in union *)
-  let rec access e = 
-    match e#node with
-      | JCEderef(e,fi) when embedded_field fi ->
-	  begin match access e with
-	    | Some(e,off) ->
-		Some (e, add_offset off (fieldoffbytes fi))
-	    | None -> 
-		if of_union_type e#typ then
-		  Some (e, fieldoffbytes fi)
-		else None
-	  end
-      | JCEshift(e1,e2) ->
-	  begin match access e1 with
-	    | Some(e,off1) ->
-		let off2 = offset_of_expr e2 in
-		let siz = struct_size_in_bytes (pointer_struct e1#typ) in
-		let off2 = mult_offset siz off2 in
-		Some (e, add_offset off1 off2)
-	    | None -> None
-	  end
-      | JCEalloc(_e1,st) ->
-	  if struct_of_union st then
-	    Some(e,Int_offset "0")
-	  else None
-      | _ ->	
-	  if of_union_type e#typ then
-	    Some (e,Int_offset "0")
-	  else None
-  in
-  match fi_opt with
-    | None ->
-	access e
-    | Some fi ->
-	(* let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in *)
-	match access e with
-	  | Some(e,off) ->
-	      Some (e, add_offset off (fieldoffbytes fi))
-	  | None -> 
-	      if of_union_type e#typ then
-		Some (e, fieldoffbytes fi)
-	      else None
-
-let destruct_union_access e fi_opt = 
-  the (possible_union_access e fi_opt)
-
-let tpossible_union_access t fi_opt =
-  let fieldoffbytes fi = 
-    match field_offset_in_bytes fi with
-      | None -> assert false
-      | Some off -> Int_offset (string_of_int off) 
-  in
-  (* Count offset in bytes before last field access in union *)
-  let rec access t = 
-    match t#node with
-      | JCTderef(t,_lab,fi) when embedded_field fi ->
-	  begin match access t with
-	    | Some(t,off) ->
-		Some (t, add_offset off (fieldoffbytes fi))
-	    | None -> 
-		if of_union_type t#typ then
-		  Some (t, fieldoffbytes fi)
-		else None
-	  end
-      | JCTshift(t1,t2) ->
-	  begin match access t1 with
-	    | Some(t3,off1) ->
-		let off2 = offset_of_term t2 in
-		let siz = struct_size_in_bytes (pointer_struct t1#typ) in
-		let off2 = mult_offset siz off2 in
-		Some (t3, add_offset off1 off2)
-	    | None -> None
-	  end
-      | _ ->	
-	  if of_union_type t#typ then
-	    Some (t,Int_offset "0")
-	  else None
-  in
-
-  match fi_opt with
-    | None ->
-	access t
-    | Some fi ->
-(* 	let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in *)
-	match access t with
-	  | Some(t,off) ->
-	      Some (t, add_offset off (fieldoffbytes fi))
-	  | None -> 
-	      if of_union_type t#typ then
-		Some (t, fieldoffbytes fi)
-	      else None
-
-let tdestruct_union_access t fi_opt = 
-  the (tpossible_union_access t fi_opt)
-
-let lpossible_union_access t fi = None (* TODO *)
-
-let ldestruct_union_access loc fi_opt = 
-  the (lpossible_union_access loc fi_opt)
-
-let foreign_union e = [] (* TODO: subterms of union that are not in union *)
-let tforeign_union t = []
-
-let common_deref_alloc_class ~type_safe union_access e =
-  if not type_safe && Region.bitwise e#region then
-    JCalloc_bitvector
-  else match union_access e None with 
-    | None -> JCalloc_struct (struct_variant (pointer_struct e#typ))
-    | Some(e,_off) -> JCalloc_union (union_type e#typ)
-
-let deref_alloc_class e =
-  common_deref_alloc_class ~type_safe:false possible_union_access e
-  
-let tderef_alloc_class ~type_safe t =
-  common_deref_alloc_class ~type_safe tpossible_union_access t
-
-let lderef_alloc_class ~type_safe locs =
-  common_deref_alloc_class ~type_safe lpossible_union_access locs
-
-let common_deref_mem_class ~type_safe union_access e fi =
-  if not type_safe && Region.bitwise e#region then
-    JCmem_bitvector
-  else match union_access e (Some fi) with 
-    | None -> JCmem_field fi
-    | Some(e,_off) -> JCmem_union (union_type e#typ)
-
-let deref_mem_class e fi =
-  common_deref_mem_class ~type_safe:false possible_union_access e fi
-
-let tderef_mem_class ~type_safe t fi =
-  common_deref_mem_class ~type_safe tpossible_union_access t fi
-
-let lderef_mem_class ~type_safe locs fi =
-  common_deref_mem_class ~type_safe lpossible_union_access locs fi
 
 
 (******************************************************************************)
@@ -664,103 +477,6 @@ let separation_condition loclist loclist' =
   LPred("pset_disjoint",[ pset; pset' ])
 
 type memory_effect = RawMemory of Memory.t | PreciseMemory of Location.t
-
-let term_of_expr e =
-  let rec term e = 
-    let tnode = match e#node with
-      | JCEconst c -> JCTconst c
-      | JCEvar vi -> JCTvar vi
-      | JCEbinary (e1, (bop,opty), e2) -> 
-	  JCTbinary (term e1, ((bop :> bin_op),opty), term e2)
-      | JCEunary (uop, e1) -> JCTunary (uop, term e1)
-      | JCEshift (e1, e2) -> JCTshift (term e1, term e2)
-      | JCEderef (e1, fi) -> JCTderef (term e1, LabelHere, fi)
-      | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, LabelHere, st)
-      | JCEcast (e1, st) -> JCTcast (term e1, LabelHere, st)
-      | JCErange_cast(e1,_) | JCEreal_cast(e1,_) -> 
-	  (* range does not modify term value *)
-	  (term e1)#node 
-      | JCEif (e1, e2, e3) -> JCTif (term e1, term e2, term e3)
-      | JCEoffset (off, e1, st) -> JCToffset (off, term e1, st)
-      | JCEalloc (e, _) -> (* Note: \offset_max(t) = length(t) - 1 *)
-	  JCTbinary (term e, (`Bsub,`Integer), new term ~typ:integer_type (JCTconst (JCCinteger "1")) )
-      | JCEfree _ -> failwith "Not a term"
-      | _ -> failwith "Not a term"
-(*       | JCEmatch (e, pel) -> *)
-(* 	  let ptl = List.map (fun (p, e) -> (p, term_of_expr e)) pel in *)
-(* 	    JCTmatch (term_of_expr e, ptl) *)
-    in
-      new term ~typ:e#typ ~region:e#region tnode 
-  in
-    try Some (term e) with Failure _ -> None
-
-let rec location_of_expr e = 
-  try
-    let loc_node = match e#node with
-      | JCEvar v -> 
-	  JCLvar v
-      | JCEderef(e1,fi) ->
-	  JCLderef(location_set_of_expr e1, LabelHere, fi, e#region)
-      | _ -> failwith "No location for expr"
-    in
-    Some(new location_with ~node:loc_node e)
-  with Failure "No location for expr" -> None
-
-and location_set_of_expr e =
-  let locs_node = match e#node with
-    | JCEvar v -> 
-	JCLSvar v
-    | JCEderef(e1,fi) ->
-	JCLSderef(location_set_of_expr e1, LabelHere, fi, e#region)
-    | JCEshift(e1,e2) ->
-	let t2_opt = term_of_expr e2 in
-	JCLSrange(location_set_of_expr e1, t2_opt, t2_opt)
-    | _ -> failwith "No location for expr"
-  in
-  new location_set_with ~node:locs_node e
-
-let location_set_of_expr e =
-  try Some(location_set_of_expr e) with Failure "No location for expr" -> None
-
-let rec location_of_term t = 
-  try
-    let loc_node = match t#node with
-      | JCTvar v -> 
-	  JCLvar v
-      | JCTderef(t1,lab,fi) ->
-	  JCLderef(location_set_of_term t1, LabelHere, fi, t#region)
-      | _ -> failwith "No location for term"
-    in
-    Some(new location_with ~node:loc_node t)
-  with Failure "No location for term" -> None
-
-and location_set_of_term t =
-  let locs_node = match t#node with
-    | JCTvar v -> 
-	JCLSvar v
-    | JCTderef(t1,lab,fi) ->
-	JCLSderef(location_set_of_term t1, LabelHere, fi, t#region)
-    | _ -> failwith "No location for term"
-  in
-  new location_set_with ~node:locs_node t
-
-let transpose_labels ~label_assoc labs =
-  match label_assoc with
-    | None -> labs
-    | Some assoc ->
-	LogicLabelSet.fold
-	  (fun lab acc ->
-	     try
-	       let lab = List.assoc lab assoc in
-	       LogicLabelSet.add lab acc
-	     with Not_found -> LogicLabelSet.add lab acc)
-	  labs LogicLabelSet.empty
-
-let transpose_region ~region_assoc r =
-  if Region.polymorphic r then
-    try Some (RegionList.assoc r region_assoc)
-    with Not_found -> None (* Local region *)
-  else Some r
 
 let rec transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) =
   match transpose_region ~region_assoc rdist with
@@ -988,52 +704,77 @@ let rewrite_effects ~type_safe ~params ef =
 type param_or_effect_mode = MParam | MLocal | MEffect
 
 let add_alloc_table_argument 
-    ~mode ~type_safe ~no_deref (ac,distr) region_assoc acc =
-  let allocvar = if no_deref then plain_alloc_table_var else alloc_table_var in
+    ~mode ~type_safe ~no_deref (ac,distr) ~region_assoc ~region_mem_assoc acc =
+  let allocvar = 
+    if no_deref then plain_alloc_table_var 
+    else alloc_table_var ~test_current_function:false
+  in
   let ty' = alloc_table_type ac in
-  if Region.polymorphic distr then
-    try 
-      (* Polymorphic allocation table. Both passed in argument by the caller, 
-	 and counted as effect. *)
-      let locr = RegionList.assoc distr region_assoc in
-      if not type_safe && Region.bitwise locr then
-	(* Bitwise allocation table in the caller. Translate the allocation 
-	   class and accumulate it only if not already present. *)
-	let locac = JCalloc_bitvector in
-	let locty' = alloc_table_type locac in
-	let v1' = allocvar (locac,locr) in
-	if List.exists 
-	  (fun (v2',_ty') -> var_name' v1' = var_name' v2') acc then acc
-	else
-	  match mode with
-	    | MParam | MEffect -> (v1', locty') :: acc 
-	    | MLocal -> acc
-      else
+  let entry_list =
+    if Region.polymorphic distr then
+      try 
+	(* Polymorphic allocation table. Both passed in argument by the caller, 
+	   and counted as effect. *)
+	let locr = RegionList.assoc distr region_assoc in
 	match mode with
-	  | MParam | MEffect -> (allocvar (ac,locr), ty') :: acc 
-	  | MLocal -> acc
-    with Not_found -> 
-      (* MLocal allocation table. Neither passed in argument by the caller, 
-	 nor counted as effect. *)
+	  | MParam | MEffect -> 
+	      if Region.bitwise locr then
+		if type_safe then
+		  (* Translate bitwise allocation table into typed ones *)
+		  try 
+		    let mems = MemorySet.find_region locr region_mem_assoc in
+		    List.map
+		      (fun (mc,_r) ->
+			 let ac = alloc_class_of_mem_class mc in
+			 let ty' = alloc_table_type ac in
+			 (allocvar (ac,locr), ty')
+		      ) (MemorySet.elements mems)
+		  with Not_found -> 
+		    (* No possible effect on caller types *)
+		    []
+		else
+		  (* Bitwise allocation table in the caller. 
+		     Translate the allocation class. *)
+		  let ac = JCalloc_bitvector in
+		  let ty' = alloc_table_type ac in
+		  [ (allocvar (ac,locr), ty') ]
+	      else
+		[ (allocvar (ac,locr), ty') ]
+	  | MLocal -> []
+      with Not_found -> 
+	(* MLocal allocation table. Neither passed in argument by the caller, 
+	   nor counted as effect. *)
+	match mode with
+	  | MParam | MEffect -> []
+	  | MLocal -> [ (allocvar (ac,distr), ty') ]
+    else 
+      (* Constant allocation table. Not passed in argument by the caller, 
+	 but counted as effect. *)
       match mode with
-	| MParam | MEffect -> acc
-	| MLocal -> (allocvar (ac,distr), ty') :: acc 
-  else 
-    (* Constant allocation table. Not passed in argument by the caller, 
-       but counted as effect. *)
-    match mode with
-      | MParam | MLocal -> acc
-      | MEffect -> (allocvar (ac,distr), ty') :: acc 
+	| MParam | MLocal -> []
+	| MEffect -> [ (allocvar (ac,distr), ty') ]
+  in
+  List.fold_left 
+    (fun acc (v1',ty' as entry) ->
+       (* Accumulate entry only if not already present *)
+       if List.exists 
+	 (fun (v2',_ty') -> var_name' v1' = var_name' v2') acc then acc
+       else
+	 entry :: acc
+    ) acc entry_list
 
-let alloc_table_writes ~mode ~type_safe ~callee_writes ~region_assoc =
+let alloc_table_writes
+    ~mode ~type_safe ~callee_writes ~region_assoc ~region_mem_assoc =
   AllocMap.fold
     (fun (ac,distr) _labs acc ->
        add_alloc_table_argument 
-	 ~mode ~type_safe ~no_deref:true (ac,distr) region_assoc acc
+	 ~mode ~type_safe ~no_deref:true (ac,distr) 
+	 ~region_assoc ~region_mem_assoc acc
     ) callee_writes.jc_effect_alloc_tables []
 
 let alloc_table_reads 
-    ~mode ~type_safe ~callee_writes ~callee_reads ~region_assoc =
+    ~mode ~type_safe ~callee_writes ~callee_reads 
+    ~region_assoc ~region_mem_assoc =
   AllocMap.fold
     (fun (ac,distr) _labs acc ->
        if AllocMap.mem (ac,distr) callee_writes.jc_effect_alloc_tables then
@@ -1043,17 +784,20 @@ let alloc_table_reads
 	   | MParam | MLocal -> acc
 	   | MEffect ->
 	       add_alloc_table_argument 
-		 ~mode ~type_safe ~no_deref:false (ac,distr) region_assoc acc
+		 ~mode ~type_safe ~no_deref:false (ac,distr) 
+		 ~region_assoc ~region_mem_assoc acc
        else if mutable_alloc_table (get_current_function ()) (ac,distr) then
 	 add_alloc_table_argument 
-	   ~mode ~type_safe ~no_deref:false (ac,distr) region_assoc acc
+	   ~mode ~type_safe ~no_deref:false (ac,distr)
+	   ~region_assoc ~region_mem_assoc acc
        else
 	 (* Allocation table is immutable, thus it is not passed by
 	    reference. As such, it cannot be counted in effects. *)
 	 match mode with
 	   | MParam | MLocal ->
 	       add_alloc_table_argument 
-		 ~mode ~type_safe ~no_deref:false (ac,distr) region_assoc acc
+		 ~mode ~type_safe ~no_deref:false (ac,distr) 
+		 ~region_assoc ~region_mem_assoc acc
 	   | MEffect -> acc
     ) callee_reads.jc_effect_alloc_tables []
 
@@ -1227,11 +971,33 @@ let read_committed callee_reads =
   StringSet.fold
     (fun v acc -> (committed_name2 v)::acc) callee_reads.jc_effect_committed []
 
+let make_region_assoc ~region_list =
+  List.map (fun r -> (r,r)) region_list 
+
+(* TODO: complete for recusrive *)
+let make_region_mem_assoc ~params =
+  let rec aux acc r ty =
+    if Region.bitwise r then
+      match ty with
+	| JCTpointer(pc,_,_) ->
+	    let all_mems = all_memories pc in
+	    List.fold_left (fun acc mc -> MemorySet.add (mc,r) acc) acc all_mems
+	| JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany -> acc
+	| JCTtype_var _ -> assert false
+    else acc
+  in
+  List.fold_left 
+    (fun acc v -> aux acc v.jc_var_info_region v.jc_var_info_type) 
+    MemorySet.empty params
+
 let write_model_parameters 
-    ~type_safe ~mode ~callee_reads ~callee_writes ~region_assoc ~params =
+    ~type_safe ~mode ~callee_reads ~callee_writes ~region_list ~params =
+  let region_assoc = make_region_assoc ~region_list in
+  let region_mem_assoc = make_region_mem_assoc ~params in
   let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
   let write_allocs = 
-    alloc_table_writes ~mode ~type_safe ~callee_writes ~region_assoc 
+    alloc_table_writes ~mode ~type_safe ~callee_writes
+      ~region_assoc ~region_mem_assoc
   in
   let write_tags = 
     tag_table_writes ~mode ~callee_writes ~region_assoc 
@@ -1248,36 +1014,36 @@ let write_model_parameters
 
 let write_parameters 
     ~type_safe ~region_list ~callee_reads ~callee_writes ~params =
-  let region_assoc = List.map (fun r -> (r,r)) region_list in
   let vars' = 
     write_model_parameters ~type_safe ~mode:MParam
-      ~callee_reads ~callee_writes ~region_assoc ~params
+      ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
 
 let write_locals ~region_list ~callee_reads ~callee_writes ~params =
-  let region_assoc = List.map (fun r -> (r,r)) region_list in
   let vars' =
     write_model_parameters ~type_safe:false ~mode:MLocal 
-      ~callee_reads ~callee_writes ~region_assoc ~params
+      ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
 
 let write_effects ~callee_reads ~callee_writes ~region_list ~params =
-  let region_assoc = List.map (fun r -> (r,r)) region_list in
   let vars' = 
     write_model_parameters ~type_safe:true ~mode:MEffect
-      ~callee_reads ~callee_writes ~region_assoc ~params
+      ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (function (Var n,_ty') -> n | _ -> assert false) vars'
 
 let read_model_parameters 
-    ~type_safe ~mode ~callee_reads ~callee_writes ~region_assoc ~params =
+    ~type_safe ~mode ~callee_reads ~callee_writes ~region_list ~params =
+  let region_assoc = make_region_assoc ~region_list in
+  let region_mem_assoc = make_region_mem_assoc ~params in
   let callee_reads = rewrite_effects ~type_safe ~params callee_reads in
   let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
   let read_allocs = 
     alloc_table_reads 
-      ~mode ~type_safe ~callee_reads ~callee_writes ~region_assoc 
+      ~mode ~type_safe ~callee_reads ~callee_writes 
+      ~region_assoc ~region_mem_assoc
   in
   let read_tags = 
     tag_table_reads ~mode ~callee_reads ~callee_writes ~region_assoc 
@@ -1294,37 +1060,36 @@ let read_model_parameters
 
 let read_parameters 
     ~type_safe ~region_list ~callee_reads ~callee_writes ~params =
-  let region_assoc = List.map (fun r -> (r,r)) region_list in
   let vars' = 
     read_model_parameters ~type_safe ~mode:MParam
-      ~callee_reads ~callee_writes ~region_assoc ~params
+      ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
 
 let read_locals ~region_list ~callee_reads ~callee_writes ~params =
-  let region_assoc = List.map (fun r -> (r,r)) region_list in
   let vars' =
     read_model_parameters ~type_safe:false ~mode:MLocal
-      ~callee_reads ~callee_writes ~region_assoc ~params
+      ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
 
 let read_effects ~callee_reads ~callee_writes ~region_list ~params =
-  let region_assoc = List.map (fun r -> (r,r)) region_list in
   let vars' = 
     read_model_parameters ~type_safe:true ~mode:MEffect
-      ~callee_reads ~callee_writes ~region_assoc ~params
+      ~callee_reads ~callee_writes ~region_list ~params
   in
   List.map (var_name' $ fst) vars'
 
 let alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = 
     alloc_table_writes 
-      ~mode:MParam ~type_safe:false ~callee_writes ~region_assoc
+      ~mode:MParam ~type_safe:false ~callee_writes 
+      ~region_assoc ~region_mem_assoc:MemorySet.empty
   in
   let reads = 
     alloc_table_reads 
-      ~mode:MParam ~type_safe:false ~callee_reads ~callee_writes ~region_assoc
+      ~mode:MParam ~type_safe:false ~callee_reads ~callee_writes 
+      ~region_assoc ~region_mem_assoc:MemorySet.empty
   in
   (List.map fst writes), (List.map fst reads)
 
@@ -1431,9 +1196,6 @@ let global_arguments ~callee_reads ~callee_writes ~region_assoc =
 let make_arguments 
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc 
     ~with_globals fname args =
-
-  Format.printf "make arguments %a@." (Pp.print_list Pp.comma (fun fmt (r1,r2) -> Format.printf "(%a,%a)" Region.print r1 Region.print r2)) region_assoc;
-
   let write_allocs, read_allocs = 
     alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in
@@ -1670,6 +1432,20 @@ let make_eq_term ty a b =
   in
   LApp(eq, [a; b])
 
+let make_eq_pred ty a b =
+  let eq = match ty with
+    | JCTpointer _ | JCTnull -> "eq"
+    | JCTenum ri -> eq_of_enum ri
+    | JCTlogic _ | JCTany -> assert false
+    | JCTnative Tunit -> "eq_unit"
+    | JCTnative Tboolean -> "eq_bool"
+    | JCTnative Tinteger -> "eq_int"
+    | JCTnative Treal -> "eq_real"
+    | JCTnative Tstring -> "eq_string"
+    | JCTtype_var _ -> assert false (* TODO: need environment *)
+  in
+  LPred(eq, [a; b])
+
 let make_and_term a b =
   make_if_term a b (LConst(Prim_bool false))
 
@@ -1686,7 +1462,7 @@ let make_select f this =
   LApp("select", [ f; this ])
 
 let make_select_fi fi =
-  make_select (LVar fi.jc_field_info_final_name)
+  make_select (LVar (field_memory_name fi))
 
 let make_select_committed pc =
   make_select (LVar (committed_name pc))

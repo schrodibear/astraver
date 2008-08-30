@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.24 2008-08-13 13:24:01 moy Exp $ *)
+(* $Id: jc_envset.mli,v 1.25 2008-08-30 01:02:56 moy Exp $ *)
 
 module type OrderedHashedType =
 sig
@@ -81,6 +81,8 @@ module FieldMap : Map.S with type key = field_info
 module FieldTable : Hashtbl.S with type key = field_info
 
 module MemClass : OrderedHashedType with type t = mem_class
+
+module MemClassSet : Set.S with type elt = mem_class
 
 module AllocClass : OrderedHashedType with type t = alloc_class
 

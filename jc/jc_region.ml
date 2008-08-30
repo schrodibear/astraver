@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.22 2008-08-28 16:40:01 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.23 2008-08-30 01:02:56 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -171,6 +171,9 @@ struct
     (* Added w.r.t. standard Set. *)
   let map_repr s = 
     S.fold (fun (fi,r) acc -> S.add (fi,RegionUF.repr r) acc) s S.empty
+  let find_region r s =
+    S.filter (fun (_fi,r') -> 
+		InternalRegion.equal (RegionUF.repr r) (RegionUF.repr r')) s
 end
 
 (* Maps should be computed after unification takes place, so that operations
@@ -368,6 +371,12 @@ struct
 	| [] -> raise Not_found
 	| (r1,r2)::ls -> 
 	    if Region.equal r r1 then RegionUF.repr r2 else assoc r ls
+
+  let rec assoc' r assocl = 
+    match assocl with
+      | [] -> raise Not_found
+      | (r1,v)::ls -> 
+	  if Region.equal r r1 then v else assoc' r ls
 	    
   let rec mem r = function
     | [] -> false

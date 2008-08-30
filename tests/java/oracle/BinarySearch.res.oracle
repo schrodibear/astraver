@@ -347,10 +347,6 @@ end = 28
 
 ========== jessie execution ==========
 Generating Why function BinarySearch_binary_search
-make arguments 
-make arguments 
-make arguments 
-make arguments 
 ========== file tests/java/BinarySearch.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -952,6 +948,12 @@ predicate Non_null_intM(x:Object pointer,
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
+logic Object_of_pointer_address: unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr :
+ (forall p:Object pointer.
+  (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom : parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags :
@@ -1085,6 +1087,12 @@ logic interface_tag:  -> interface tag_id
 
 axiom interface_int : (int_of_tag(interface_tag) = (1))
 
+logic interface_of_pointer_address: unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr :
+ (forall p:interface pointer.
+  (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom : parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags :
@@ -1133,6 +1141,13 @@ axiom mean_property_as_axiom :
    (le_int(x_4, y) ->
     (le_int(x_4, add_int(x_4, div_int(sub_int(y, x_4), (2))))
     and le_int(add_int(x_4, div_int(sub_int(y, x_4), (2))), y)))))
+
+axiom pointer_addr_of_Object_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(interface_of_pointer_address(p))))
 
 logic short_of_integer: int -> short
 
@@ -1642,6 +1657,32 @@ parameter short_of_integer_ :
   { (le_int((-32768), x) and le_int(x, (32767)))} short
   { eq_int(integer_of_short(result), x) }
 
+parameter struct_BinarySearch_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_Object_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_String_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_Throwable_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_intM_of_bitvector :
+ intM_intP:(Object, int32) memory ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   bitvector_mem:(unit, bitvector) memory ->
+    { } unit writes intM_intP { true }
+
+parameter struct_interface_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
 let BinarySearch_binary_search_ensures_correctness =
  fun (t_0 : Object pointer) (v : int32) ->
   { (JC_29:
@@ -1886,7 +1927,7 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "why/BinarySearch.why" line = "203" begin = "0" end = "206"/>
+      <location file = "why/BinarySearch.why" line = "215" begin = "0" end = "206"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -1897,7 +1938,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "why/BinarySearch.why" line = "867" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "912" begin = "49" end = "208"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
@@ -2310,6 +2351,8 @@ type 't pointer
 type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
+
+logic pointer_address : 'a1 pointer -> unit pointer
 
 logic address : 'a1 pointer -> int
 
@@ -2946,6 +2989,12 @@ predicate Non_null_intM(x: Object pointer,
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
+logic Object_of_pointer_address : unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr:
+  (forall p:Object pointer.
+    (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags:
@@ -3071,6 +3120,12 @@ logic interface_tag :  -> interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
+logic interface_of_pointer_address : unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr:
+  (forall p:interface pointer.
+    (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags:
@@ -3109,6 +3164,14 @@ axiom mean_property_as_axiom:
     (forall y:int.
       ((x_4 <= y) ->
        ((x_4 <= (x_4 + ((y - x_4) / 2))) and ((x_4 + ((y - x_4) / 2)) <= y)))))
+
+axiom pointer_addr_of_Object_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(interface_of_pointer_address(p))))
 
 logic short_of_integer : int -> short
 
@@ -6119,6 +6182,10 @@ why -simplify [...] why/BinarySearch.why
  (EQ (int_of_tag Object_tag) 1))
 
 (BG_PUSH
+ ;; Why axiom Object_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (Object_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
  ;; Why axiom Object_parenttag_bottom
  (EQ (parenttag Object_tag bottom_tag) |@true|))
 
@@ -6220,6 +6287,10 @@ why -simplify [...] why/BinarySearch.why
  (EQ (int_of_tag interface_tag) 1))
 
 (BG_PUSH
+ ;; Why axiom interface_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (interface_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
  ;; Why axiom interface_parenttag_bottom
  (EQ (parenttag interface_tag bottom_tag) |@true|))
 
@@ -6257,7 +6328,7 @@ why -simplify [...] why/BinarySearch.why
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
-;; mean_property, File "why/BinarySearch.why", line 203, characters 0-206
+;; mean_property, File "why/BinarySearch.why", line 215, characters 0-206
 (FORALL (x_4 y)
 (IMPLIES (<= x_4 y)
 (AND (<= x_4 (+ x_4 (int_div (- y x_4) 2)))
@@ -6269,6 +6340,14 @@ why -simplify [...] why/BinarySearch.why
  (IMPLIES (<= x_4 y)
  (AND (<= x_4 (+ x_4 (int_div (- y x_4) 2)))
  (<= (+ x_4 (int_div (- y x_4) 2)) y)))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_Object_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (Object_of_pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_interface_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (interface_of_pointer_address p)))))
 
 (BG_PUSH
  ;; Why axiom short_coerce
@@ -7052,7 +7131,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
 (integer_of_int32 v)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 867, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 912, characters 49-208
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9155,6 +9234,8 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
+logic pointer_address : 'a1 pointer -> unit pointer
+
 logic address : 'a1 pointer -> int
 
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
@@ -9790,6 +9871,12 @@ predicate Non_null_intM(x: Object pointer,
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
+logic Object_of_pointer_address : unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr:
+  (forall p:Object pointer.
+    (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags:
@@ -9915,6 +10002,12 @@ logic interface_tag :  -> interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
+logic interface_of_pointer_address : unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr:
+  (forall p:interface pointer.
+    (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags:
@@ -9959,6 +10052,14 @@ axiom mean_property_as_axiom:
     (forall y:int.
       ((x_4 <= y) ->
        ((x_4 <= (x_4 + ((y - x_4) / 2))) and ((x_4 + ((y - x_4) / 2)) <= y)))))
+
+axiom pointer_addr_of_Object_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(interface_of_pointer_address(p))))
 
 logic short_of_integer : int -> short
 
@@ -12323,10 +12424,10 @@ goal BinarySearch_binary_search_safety_po_31:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ..........#........................##.....#... (42/0/0/4/0)
+why/BinarySearch_why.why      : ..........#........................##.....##.. (41/0/0/5/0)
 total   :  46
-valid   :  42 ( 91%)
+valid   :  41 ( 89%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   4 (  9%)
+timeout :   5 ( 11%)
 failure :   0 (  0%)

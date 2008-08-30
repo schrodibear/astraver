@@ -384,41 +384,11 @@ end = 12
 ========== jessie execution ==========
 Generating Why function cons_Creation_int
 Generating Why function cons_Creation
-make arguments 
-make arguments 
 Generating Why function cons_Creation_int_int
-make arguments 
-make arguments 
 Generating Why function Creation_test1
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
 Generating Why function Creation_test2
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
 Generating Why function Creation_test3
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
 Generating Why function cons_TestSuperConstructor
-make arguments 
-make arguments 
 ========== file tests/java/Creation.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -1605,6 +1575,12 @@ predicate Non_null_Object(x:Object pointer,
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
+logic Object_of_pointer_address: unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr :
+ (forall p:Object pointer.
+  (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom : parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags :
@@ -1739,6 +1715,12 @@ logic interface_tag:  -> interface tag_id
 
 axiom interface_int : (int_of_tag(interface_tag) = (1))
 
+logic interface_of_pointer_address: unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr :
+ (forall p:interface pointer.
+  (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom : parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags :
@@ -1760,6 +1742,13 @@ axiom long_range :
  (forall x:long.
   (le_int((-9223372036854775808), integer_of_long(x))
   and le_int(integer_of_long(x), (9223372036854775807))))
+
+axiom pointer_addr_of_Object_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(interface_of_pointer_address(p))))
 
 logic short_of_integer: int -> short
 
@@ -2328,6 +2317,34 @@ parameter short_of_integer_ :
   { (le_int((-32768), x) and le_int(x, (32767)))} short
   { eq_int(integer_of_short(result), x) }
 
+parameter struct_Creation_of_bitvector :
+ Creation_simple_val:(Object, int32) memory ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   bitvector_mem:(unit, bitvector) memory ->
+    { } unit writes Creation_simple_val { true }
+
+parameter struct_Object_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_String_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_TestSuperConstructor_of_bitvector :
+ Creation_simple_val:(Object, int32) memory ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   bitvector_mem:(unit, bitvector) memory ->
+    { } unit writes Creation_simple_val { true }
+
+parameter struct_Throwable_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_interface_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
 let Creation_test1_ensures_normal =
  fun (tt : unit) ->
   { (JC_53: true) }
@@ -2677,7 +2694,7 @@ why --project [...] why/Creation.why
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po12.why">
-      <location file = "why/Creation.why" line = "904" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "951" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po13.why">
@@ -2706,7 +2723,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po7.why">
-      <location file = "why/Creation.why" line = "844" begin = "32" end = "157"/>
+      <location file = "why/Creation.why" line = "891" begin = "32" end = "157"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po8.why">
@@ -2731,7 +2748,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po3.why">
-      <location file = "why/Creation.why" line = "790" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "837" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po4.why">
@@ -3003,6 +3020,8 @@ type 't pointer
 type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
+
+logic pointer_address : 'a1 pointer -> unit pointer
 
 logic address : 'a1 pointer -> int
 
@@ -3635,6 +3654,12 @@ predicate Non_null_Object(x: Object pointer,
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
+logic Object_of_pointer_address : unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr:
+  (forall p:Object pointer.
+    (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags:
@@ -3761,6 +3786,12 @@ logic interface_tag :  -> interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
+logic interface_of_pointer_address : unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr:
+  (forall p:interface pointer.
+    (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags:
@@ -3782,6 +3813,14 @@ axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
      (integer_of_long(x) <= 9223372036854775807)))
+
+axiom pointer_addr_of_Object_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(interface_of_pointer_address(p))))
 
 logic short_of_integer : int -> short
 
@@ -4816,6 +4855,10 @@ why -simplify [...] why/Creation.why
  (EQ (int_of_tag Object_tag) 1))
 
 (BG_PUSH
+ ;; Why axiom Object_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (Object_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
  ;; Why axiom Object_parenttag_bottom
  (EQ (parenttag Object_tag bottom_tag) |@true|))
 
@@ -4917,6 +4960,10 @@ why -simplify [...] why/Creation.why
  (EQ (int_of_tag interface_tag) 1))
 
 (BG_PUSH
+ ;; Why axiom interface_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (interface_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
  ;; Why axiom interface_parenttag_bottom
  (EQ (parenttag interface_tag bottom_tag) |@true|))
 
@@ -4942,6 +4989,14 @@ why -simplify [...] why/Creation.why
  (FORALL (x)
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_Object_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (Object_of_pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_interface_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (interface_of_pointer_address p)))))
 
 (BG_PUSH
  ;; Why axiom short_coerce
@@ -5035,7 +5090,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test1_safety_po_1, File "HOME/tests/java/Creation.jc", line 77, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test1_safety_po_2, File "why/Creation.why", line 790, characters 30-151
+;; Creation_test1_safety_po_2, File "why/Creation.why", line 837, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -5099,7 +5154,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 97, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 844, characters 32-157
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 891, characters 32-157
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -5195,7 +5250,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 ;; Creation_test3_safety_po_1, File "HOME/tests/java/Creation.jc", line 117, characters 57-72
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test3_safety_po_2, File "why/Creation.why", line 904, characters 30-151
+;; Creation_test3_safety_po_2, File "why/Creation.why", line 951, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -5555,6 +5610,8 @@ type 't pointer
 type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
+
+logic pointer_address : 'a1 pointer -> unit pointer
 
 logic address : 'a1 pointer -> int
 
@@ -6187,6 +6244,12 @@ predicate Non_null_Object(x: Object pointer,
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
+logic Object_of_pointer_address : unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr:
+  (forall p:Object pointer.
+    (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags:
@@ -6313,6 +6376,12 @@ logic interface_tag :  -> interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
+logic interface_of_pointer_address : unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr:
+  (forall p:interface pointer.
+    (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags:
@@ -6334,6 +6403,14 @@ axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
      (integer_of_long(x) <= 9223372036854775807)))
+
+axiom pointer_addr_of_Object_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(interface_of_pointer_address(p))))
 
 logic short_of_integer : int -> short
 

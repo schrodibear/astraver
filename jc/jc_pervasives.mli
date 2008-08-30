@@ -112,7 +112,6 @@ val root_name : Jc_env.struct_info -> string
 val field_root_name : Jc_env.field_info -> string
 val struct_variant : Jc_env.struct_info -> Jc_env.variant_info
 val pointer_class_variant : pointer_class -> Jc_env.variant_info
-val pointer_class_name : pointer_class -> string
 
 (* predefined functions *)
 

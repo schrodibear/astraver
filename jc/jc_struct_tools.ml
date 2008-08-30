@@ -61,6 +61,10 @@ let embedded_field fi =
     | JCTpointer(_fpc, Some _fa, Some _fb) -> true
     | _ -> false
 
+(* TODO !!!!!!!!!!!!!
+   add fields of parent 
+*)
+
 let field_offset fi =
   let st = fi.jc_field_info_struct in
   let off,counting = 
@@ -80,6 +84,20 @@ let field_offset fi =
 let field_offset_in_bytes fi =
   let off = field_offset fi in
   if off mod 8 = 0 then Some(off/8) else None
+
+let struct_fields st =
+  let rec aux acc st =
+    let acc = st.jc_struct_info_fields @ acc in
+    match st.jc_struct_info_parent with
+      | None -> acc
+      | Some(st',_) -> aux acc st'
+  in
+  aux [] st
+
+let struct_has_size st =
+  not (List.exists 
+	 (fun fi -> fi.jc_field_info_bitsize = None) 
+	 (struct_fields st))
 
 let struct_size st =
   match List.rev st.jc_struct_info_fields with
@@ -101,19 +119,20 @@ let rec all_fields acc = function
 let all_fields = all_fields []
 
 let rec all_memories select forbidden acc pc =
-  Jc_options.lprintf "  all_memories(%s)@." (pointer_class_name pc);
   match pc with
-    | JCtag(st, _) as pc ->
-	if StringSet.mem st.jc_struct_info_name forbidden 
-	  || (struct_variant st).jc_variant_info_is_union then
-	    acc
+    | JCtag(st,_) as pc ->
+	if StringSet.mem st.jc_struct_info_name forbidden then
+	  acc
+	else if struct_of_union st then
+	  all_memories select forbidden acc (JCunion (struct_variant st))
 	else
 	  let fields = List.filter select (all_fields pc) in
+	  let mems = List.map (fun fi -> JCmem_field fi) fields in
 	  (* add the fields to our list *)
-	  let acc = List.fold_left
-	    (fun acc fi -> StringMap.add (field_memory_name fi) fi acc)
-	    acc
-	    fields
+	  let acc = 
+	    List.fold_left
+	      (fun acc mc -> StringMap.add (memory_class_name mc) mc acc)
+	      acc mems
 	  in
 	  (* continue recursively on the fields *)
 	  let forbidden = StringSet.add st.jc_struct_info_name forbidden in
@@ -121,18 +140,21 @@ let rec all_memories select forbidden acc pc =
 	    (all_memories select forbidden)
 	    acc
 	    (fields_pointer_class fields)
-    | JCvariant vi | JCunion vi ->
+    | JCvariant vi ->
 	acc
+    | JCunion vi ->
+	let mc = JCmem_union vi in
+	StringMap.add (memory_class_name mc) mc acc
 
 let all_memories ?(select = fun _ -> true) pc =
-  Jc_options.lprintf "all_memories(%s):@." (pointer_class_name pc);
+  Jc_options.lprintf "all_memories(%s):@." (Jc_output_misc.pointer_class pc);
   let map = all_memories select StringSet.empty StringMap.empty pc in
   let list = List.rev (StringMap.fold (fun _ ty acc -> ty::acc) map []) in
   Jc_options.lprintf "  Found %n memories.@." (List.length list);
   list
 
 let rec all_types select forbidden acc pc =
-  Jc_options.lprintf "  all_types(%s)@." (pointer_class_name pc);
+  Jc_options.lprintf "  all_types(%s)@." (Jc_output_misc.pointer_class pc);
   match pc with
     | JCtag(st, _) as pc ->
 	if StringSet.mem st.jc_struct_info_name forbidden then
@@ -148,7 +170,7 @@ let rec all_types select forbidden acc pc =
 	StringMap.add vi.jc_variant_info_name vi acc
 
 let all_types ?(select = fun _ -> true) pc =
-  Jc_options.lprintf "all_types(%s):@." (pointer_class_name pc);
+  Jc_options.lprintf "all_types(%s):@." (Jc_output_misc.pointer_class pc);
   let map = all_types select StringSet.empty StringMap.empty pc in
   let list = List.rev (StringMap.fold (fun _ ty acc -> ty::acc) map []) in
   Jc_options.lprintf "  Found %n types.@." (List.length list);
@@ -172,6 +194,8 @@ let rec all_allocs select forbidden acc pc =
     | JCtag(st,_) as pc ->
 	if StringSet.mem st.jc_struct_info_name forbidden then
 	  acc
+	else if struct_of_union st then
+	  all_allocs select forbidden acc (JCunion (struct_variant st))
 	else
 	  let ac = JCalloc_struct (struct_variant st) in
 	  let forbidden = StringSet.add st.jc_struct_info_name forbidden in
@@ -187,7 +211,7 @@ let rec all_allocs select forbidden acc pc =
 	StringMap.add (alloc_class_name ac) ac acc
 
 let all_allocs ?(select = fun _ -> true) pc =
-  Jc_options.lprintf "all_allocs(%s):@." (pointer_class_name pc);
+  Jc_options.lprintf "all_allocs(%s):@." (Jc_output_misc.pointer_class pc);
   let map = 
     all_allocs select StringSet.empty StringMap.empty pc
   in
@@ -213,7 +237,7 @@ let rec all_tags select forbidden acc pc =
 	StringMap.add vi.jc_variant_info_name vi acc
 
 let all_tags ?(select = fun _ -> true) pc =
-  Jc_options.lprintf "all_tags(%s):@." (pointer_class_name pc);
+  Jc_options.lprintf "all_tags(%s):@." (Jc_output_misc.pointer_class pc);
   let map = 
     all_tags select StringSet.empty StringMap.empty pc
   in

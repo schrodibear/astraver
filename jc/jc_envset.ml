@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.27 2008-08-13 13:24:01 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.28 2008-08-30 01:02:56 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -190,6 +190,8 @@ struct
     | JCmem_union b -> VariantOrd.hash b
     | JCmem_bitvector -> 0
 end
+
+module MemClassSet = Set.Make(MemClass)
 
 module AllocClass = 
 struct

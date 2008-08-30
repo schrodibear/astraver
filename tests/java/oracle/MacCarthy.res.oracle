@@ -294,18 +294,6 @@ end = 27
 
 ========== jessie execution ==========
 Generating Why function MacCarthy_f91
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
-make arguments 
 ========== file tests/java/MacCarthy.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -1123,6 +1111,12 @@ predicate Non_null_Object(x:Object pointer,
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
+logic Object_of_pointer_address: unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr :
+ (forall p:Object pointer.
+  (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom : parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags :
@@ -1144,6 +1138,12 @@ logic interface_tag:  -> interface tag_id
 
 axiom interface_int : (int_of_tag(interface_tag) = (1))
 
+logic interface_of_pointer_address: unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr :
+ (forall p:interface pointer.
+  (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom : parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags :
@@ -1158,6 +1158,13 @@ axiom max_def :
   (forall y_0:int.
    ((eq_int(max(x_0_0, y_0), x_0_0) or eq_int(max(x_0_0, y_0), y_0))
    and (ge_int(max(x_0_0, y_0), x_0_0) and ge_int(max(x_0_0, y_0), y_0)))))
+
+axiom pointer_addr_of_Object_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(interface_of_pointer_address(p))))
 
 predicate valid_bitvector_struct_Object(p:unit pointer,
  a:int,
@@ -1560,6 +1567,26 @@ parameter non_null_Object_requires :
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
 
+parameter struct_MacCarthy_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_Object_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_String_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_Throwable_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_interface_of_bitvector :
+ bitvector_alloc_table:unit alloc_table ->
+  bitvector_mem:(unit, bitvector) memory -> { } unit { true }
+
 let MacCarthy_f91_ensures_greater_than_100 =
  fun (n_1 : int) ->
   { ge_int(n_1, (101)) }
@@ -1878,6 +1905,8 @@ type 't pointer
 type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
+
+logic pointer_address : 'a1 pointer -> unit pointer
 
 logic address : 'a1 pointer -> int
 
@@ -2500,6 +2529,12 @@ predicate Non_null_Object(x: Object pointer,
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
+logic Object_of_pointer_address : unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr:
+  (forall p:Object pointer.
+    (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags:
@@ -2519,6 +2554,12 @@ logic interface_tag :  -> interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
+logic interface_of_pointer_address : unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr:
+  (forall p:interface pointer.
+    (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags:
@@ -2533,6 +2574,14 @@ axiom max_def:
     (forall y_0:int.
       (((max(x_0_0, y_0) = x_0_0) or (max(x_0_0, y_0) = y_0)) and
        ((max(x_0_0, y_0) >= x_0_0) and (max(x_0_0, y_0) >= y_0)))))
+
+axiom pointer_addr_of_Object_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(interface_of_pointer_address(p))))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
@@ -3230,6 +3279,10 @@ why -simplify [...] why/MacCarthy.why
  (EQ (int_of_tag Object_tag) 1))
 
 (BG_PUSH
+ ;; Why axiom Object_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (Object_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
  ;; Why axiom Object_parenttag_bottom
  (EQ (parenttag Object_tag bottom_tag) |@true|))
 
@@ -3250,6 +3303,10 @@ why -simplify [...] why/MacCarthy.why
  (EQ (int_of_tag interface_tag) 1))
 
 (BG_PUSH
+ ;; Why axiom interface_of_pointer_address_of_pointer_addr
+ (FORALL (p) (EQ p (interface_of_pointer_address (pointer_address p)))))
+
+(BG_PUSH
  ;; Why axiom interface_parenttag_bottom
  (EQ (parenttag interface_tag bottom_tag) |@true|))
 
@@ -3263,6 +3320,14 @@ why -simplify [...] why/MacCarthy.why
  (FORALL (x_0_0 y_0)
  (AND (OR (EQ (max x_0_0 y_0) x_0_0) (EQ (max x_0_0 y_0) y_0))
  (AND (>= (max x_0_0 y_0) x_0_0) (>= (max x_0_0 y_0) y_0)))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_Object_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (Object_of_pointer_address p)))))
+
+(BG_PUSH
+ ;; Why axiom pointer_addr_of_interface_of_pointer_address
+ (FORALL (p) (EQ p (pointer_address (interface_of_pointer_address p)))))
 
 (DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
   (AND (EQ (offset_min bitvector_alloc_table p) a)
@@ -3567,6 +3632,8 @@ type 't pointer
 type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
+
+logic pointer_address : 'a1 pointer -> unit pointer
 
 logic address : 'a1 pointer -> int
 
@@ -4189,6 +4256,12 @@ predicate Non_null_Object(x: Object pointer,
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
+logic Object_of_pointer_address : unit pointer -> Object pointer
+
+axiom Object_of_pointer_address_of_pointer_addr:
+  (forall p:Object pointer.
+    (p = Object_of_pointer_address(pointer_address(p))))
+
 axiom Object_parenttag_bottom: parenttag(Object_tag, bottom_tag)
 
 axiom Object_tags:
@@ -4208,6 +4281,12 @@ logic interface_tag :  -> interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
+logic interface_of_pointer_address : unit pointer -> interface pointer
+
+axiom interface_of_pointer_address_of_pointer_addr:
+  (forall p:interface pointer.
+    (p = interface_of_pointer_address(pointer_address(p))))
+
 axiom interface_parenttag_bottom: parenttag(interface_tag, bottom_tag)
 
 axiom interface_tags:
@@ -4222,6 +4301,14 @@ axiom max_def:
     (forall y_0:int.
       (((max(x_0_0, y_0) = x_0_0) or (max(x_0_0, y_0) = y_0)) and
        ((max(x_0_0, y_0) >= x_0_0) and (max(x_0_0, y_0) >= y_0)))))
+
+axiom pointer_addr_of_Object_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(Object_of_pointer_address(p))))
+
+axiom pointer_addr_of_interface_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(interface_of_pointer_address(p))))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =

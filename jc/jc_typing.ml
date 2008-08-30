@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.237 2008-08-28 13:57:41 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.238 2008-08-30 01:02:56 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -372,7 +372,7 @@ let rec pattern env vars pat ety =
         if not (substruct st pc) then
           typing_error id#pos
             "tag %s is not a subtag of %s"
-            st.jc_struct_info_name (pointer_class_name pc);
+            st.jc_struct_info_name (Jc_output_misc.pointer_class pc);
         (* fields *)
         let env, tlpl = List.fold_left
           (fun (env, acc) (l, p) ->
