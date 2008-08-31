@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.25 2008-08-30 22:31:35 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.26 2008-08-31 08:24:39 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -179,6 +179,7 @@ struct
   let remove (fi,r) s = S.remove (fi,RegionUF.repr r) s
   let split (fi,r) s = S.split (fi,RegionUF.repr r) s
   let elements = S.elements
+  let exists = S.exists
     (* Added w.r.t. standard Set. *)
   let of_list ls =
     List.fold_left (fun s e -> add e s) empty ls

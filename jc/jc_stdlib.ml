@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_stdlib.ml,v 1.8 2008-08-28 13:57:41 moy Exp $ *)
+(* $Id: jc_stdlib.ml,v 1.9 2008-08-31 08:24:39 moy Exp $ *)
 
 module List = struct
   include List
@@ -89,6 +89,7 @@ module Map = struct
     val keys: 'a t -> key list
     val values: 'a t -> 'a list
     val to_list: 'a t -> (key * 'a) list
+    val exists: (key -> 'a -> bool) -> 'a t -> bool
     val filter: (key -> 'a -> bool) -> 'a t -> 'a t
     val find_or_default: key -> 'a -> 'a t -> 'a
     val find_or_none: key -> 'a t -> 'a option
@@ -112,6 +113,9 @@ module Map = struct
 
     let to_list m =
       fold (fun k v acc -> (k,v) :: acc) m []
+
+    let exists f m =
+      fold (fun k v b -> b || f k v) m false
 
     let filter f m =
       fold (fun k v m ->

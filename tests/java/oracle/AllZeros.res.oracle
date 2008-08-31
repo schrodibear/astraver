@@ -1366,25 +1366,37 @@ parameter struct_AllZeros_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_Object_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_String_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_Throwable_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_intM_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
@@ -1397,7 +1409,10 @@ parameter struct_interface_of_bitvector :
  interface_alloc_table:interface alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes interface_alloc_table { true }
+    { } unit writes interface_alloc_table
+    { (forall p:interface pointer.
+       eq_int(offset_max(interface_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 let AllZeros_all_zeros_ensures_default =
  fun (t : Object pointer) ->
@@ -1565,7 +1580,7 @@ why --project [...] why/AllZeros.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/AllZeros_po14.why">
-      <location file = "why/AllZeros.why" line = "830" begin = "65" end = "315"/>
+      <location file = "why/AllZeros.why" line = "845" begin = "65" end = "315"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/AllZeros_po15.why">
@@ -4372,7 +4387,7 @@ why -simplify [...] why/AllZeros.why
 (IMPLIES (AND (<= 0 i_0) (< i_0 (integer_of_int32 result)))
 (EQ (integer_of_int32 (select intM_intP (shift t i_0))) 0)))))))))
 
-;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 830, characters 65-315
+;; AllZeros_all_zeros_safety_po_4, File "why/AllZeros.why", line 845, characters 65-315
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)

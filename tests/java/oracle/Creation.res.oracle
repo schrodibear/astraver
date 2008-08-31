@@ -2328,13 +2328,19 @@ parameter struct_Object_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_String_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_TestSuperConstructor_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
@@ -2347,13 +2353,19 @@ parameter struct_Throwable_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_interface_of_bitvector :
  interface_alloc_table:interface alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes interface_alloc_table { true }
+    { } unit writes interface_alloc_table
+    { (forall p:interface pointer.
+       eq_int(offset_max(interface_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 let Creation_test1_ensures_normal =
  fun (tt : unit) ->
@@ -2704,7 +2716,7 @@ why --project [...] why/Creation.why
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po12.why">
-      <location file = "why/Creation.why" line = "961" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "973" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po13.why">
@@ -2733,7 +2745,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po7.why">
-      <location file = "why/Creation.why" line = "901" begin = "32" end = "157"/>
+      <location file = "why/Creation.why" line = "913" begin = "32" end = "157"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po8.why">
@@ -2758,7 +2770,7 @@ text = ""/>
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po3.why">
-      <location file = "why/Creation.why" line = "847" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "859" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po4.why">
@@ -5100,7 +5112,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test1_safety_po_1, File "HOME/tests/java/Creation.jc", line 77, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test1_safety_po_2, File "why/Creation.why", line 847, characters 30-151
+;; Creation_test1_safety_po_2, File "why/Creation.why", line 859, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -5164,7 +5176,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 97, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 901, characters 32-157
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 913, characters 32-157
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -5260,7 +5272,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 ;; Creation_test3_safety_po_1, File "HOME/tests/java/Creation.jc", line 117, characters 57-72
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test3_safety_po_2, File "why/Creation.why", line 961, characters 30-151
+;; Creation_test3_safety_po_2, File "why/Creation.why", line 973, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)

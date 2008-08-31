@@ -418,25 +418,40 @@ let tparam ~label_in_name lab v =
   tvar_name ~label_in_name lab v, tr_base_type v.jc_var_info_type 
 
 let local_of_parameter (v',ty') = (var_name' v',ty')
+let effect_of_parameter (v',_ty') = var_name' v'
+let wparam_of_parameter (v',ty') = (v',Ref_type(Base_type ty'))
+let rparam_of_parameter (v',ty') = (v',Base_type ty')
 
 (* model variables *)
 
 let mutable_memory infunction (mc,r) =
   if Region.polymorphic r then
-    MemoryMap.mem (mc,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+    if Region.bitwise r then
+      MemoryMap.exists (fun (_mc',r') _labs -> Region.equal r r')
+	infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
+    else
+      MemoryMap.mem (mc,r)
+	infunction.jc_fun_info_effects.jc_writes.jc_effect_memories
   else true
 
 let mutable_alloc_table infunction (ac,r) =
   if Region.polymorphic r then
-    AllocMap.mem (ac,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_tables
+    if Region.bitwise r then
+      AllocMap.exists (fun (_ac',r') _labs -> Region.equal r r')
+	infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_tables
+    else
+      AllocMap.mem (ac,r)
+	infunction.jc_fun_info_effects.jc_writes.jc_effect_alloc_tables
   else true
 
 let mutable_tag_table infunction (vi,r) =
   if Region.polymorphic r then
-    TagMap.mem (vi,r)
-      infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_tables
+    if Region.bitwise r then
+      TagMap.exists (fun (_vi',r') _labs -> Region.equal r r')
+	infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_tables
+    else
+      TagMap.mem (vi,r)
+	infunction.jc_fun_info_effects.jc_writes.jc_effect_tag_tables
   else true
 
 let plain_memory_var (mc,r) = Var (memory_name (mc,r))
@@ -1013,31 +1028,49 @@ let make_alloc_param ~check_size ac pc =
 
 let ofbit_read_parameters r pc =
   let ac = JCalloc_bitvector in
+  let alloc =
+    (alloc_table_var ~test_current_function:true (ac,r), 
+     alloc_table_type ac) 
+  in
   let mc = JCmem_bitvector in
-  let bv_alloc = 
-    alloc_table_var ~test_current_function:true (ac,r), alloc_table_type ac 
+  let mem = 
+    (memory_var ~test_current_function:true (mc,r), memory_type mc)
   in
-  let bv_mem = memory_var ~test_current_function:true (mc,r), memory_type mc in
-  [ bv_alloc; bv_mem ]
-
+  [ alloc; mem ]
+	
 let ofbit_write_parameters r pc =
-  let all_allocs = all_allocs pc in
-  let allocs = 
-    List.map 
-      (fun ac -> plain_alloc_table_var (ac,r), alloc_table_type ac) all_allocs 
-  in
-  let all_mems = all_memories pc in
-  let mems = 
-    List.map 
-      (fun mc -> plain_memory_var (mc,r), memory_type mc) all_mems 
-  in
-  allocs @ mems
+  match pc with
+    | JCtag _ ->
+	let ac = alloc_class_of_pointer_class pc in
+	let alloc = (plain_alloc_table_var (ac,r), alloc_table_type ac) in
+	let all_mems = all_memories pc in
+	let mems = 
+	  List.map 
+	    (fun mc -> plain_memory_var (mc,r), memory_type mc) all_mems 
+	in
+	alloc :: mems
+    | JCvariant vi ->
+	let ac = JCalloc_struct vi in
+	[ (plain_alloc_table_var (ac,r), alloc_table_type ac) ]
+    | JCunion vi ->
+	let ac = JCalloc_struct vi in
+	let alloc = (plain_alloc_table_var (ac,r), alloc_table_type ac) in
+	let mc = JCmem_union vi in
+	let mem = (plain_memory_var (mc,r), memory_type mc) in
+	[ alloc; mem ]
 
 let make_ofbit_param_app r pc =
   let writes = ofbit_write_parameters r pc in
   let reads = ofbit_read_parameters r pc in
   let args = List.map fst writes @ List.map fst reads in
-  let app = make_app (of_bitvector_param_name pc) args in
+  let app = match pc with
+    | JCtag _ ->
+	make_app (of_bitvector_param_name pc) args 
+    | JCvariant _ ->
+	Void
+    | JCunion _ ->
+	assert false (* TODO *)
+  in
   let locals = List.map local_of_parameter writes in
   locals, app
 
@@ -1049,33 +1082,39 @@ let make_of_bitvector_app fi e' =
 
 let make_conversion_params pc =
   let p = "p" in
-  let bv_alloc = generic_alloc_table_name JCalloc_bitvector in
   let bv_mem = generic_memory_name JCmem_bitvector in
-  let ac = alloc_class_of_pointer_class pc in
-  let alloc = generic_alloc_table_name ac in
+  let bv_alloc = generic_alloc_table_name JCalloc_bitvector in
+
+  (* Conversion from bitvector *)
 
   (* parameters and effects *)
   let writes = ofbit_write_parameters dummy_region pc in
-  let write_effects = 
-    List.map (function (Var n,ty') -> n | _ -> assert false) writes
-  in
-  let write_params = 
-    List.map (fun (n,ty') -> (n,Ref_type(Base_type ty'))) writes
-  in
+  let write_effects = List.map effect_of_parameter writes in
+  let write_params = List.map wparam_of_parameter writes in
   let reads = ofbit_read_parameters dummy_region pc in
-  let read_params = 
-    List.map (fun (n,ty') -> (n,Base_type ty')) reads
-  in
+  let read_params = List.map rparam_of_parameter reads in
   let params = write_params @ read_params in
-  let params = 
-    List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) params
-  in
-
+  let params = List.map local_of_parameter params in
+  (* postcondition *)
   let post = match pc with
     | JCtag(st,_) ->
 	if struct_has_size st then
+	  let post_alloc =
+	    let ac = alloc_class_of_pointer_class pc in
+	    let alloc = generic_alloc_table_name ac in
+	    let s = string_of_int (struct_size_in_bytes st) in
+	    let post = 
+	      make_eq_pred integer_type
+		(LApp("offset_max",[ LVar alloc; LVar p ]))
+		(LApp("offset_max_bytes",[ LVar bv_alloc; 
+					   LApp("pointer_address",[ LVar p ]);
+					   LConst(Prim_int s)]))
+	    in
+	    let ty' = pointer_type ac pc in
+	    LForall(p,ty',post)
+	  in
 	  let fields = all_fields pc in
-	  let post,_ = 
+	  let post_mem,_ = 
 	    List.fold_left 
 	      (fun (acc,i) fi ->
 		 let pi = p ^ (string_of_int i) in
@@ -1101,12 +1140,12 @@ let make_conversion_params pc =
 		 let posti = LForall(pi,ty',posti) in
 		 make_and acc posti, i+1
 	      ) (LTrue,0) fields
-	  in post
+	  in
+	  make_and post_alloc post_mem
 	else LTrue
     | JCunion _ | JCvariant _ -> assert false (* TODO *)
   in
-
-  (* Conversion from bitvector *)
+  (* type *)
   let annot_type = 
     Annot_type(
       LTrue,
@@ -1137,9 +1176,19 @@ type param_or_effect_mode = [ param_mode | `MEffect ]
 type param_or_local_mode = [ param_mode | `MLocal ]
 type param_or_effect_or_local_mode = [ param_or_effect_mode | `MLocal ]
 
+let remove_duplicates ~already_used entries =
+  fst (List.fold_left 
+	 (fun (acc,already_used) entry ->
+	    (* Accumulate entry only if not already present *)
+	    let n = var_name' (fst (snd entry)) in
+	    if StringSet.mem n already_used then
+	      acc, already_used
+	    else
+	      entry :: acc, StringSet.add n already_used
+	 ) ([],already_used) entries)
+
 let add_alloc_table_argument 
-    ~mode ~type_safe ~no_deref (ac,distr as alloc)
-    ~region_assoc ~region_mem_assoc acc =
+    ~mode ~type_safe ~no_deref (ac,distr as alloc) ~region_assoc acc =
   let allocvar = 
     if no_deref then plain_alloc_table_var 
     else alloc_table_var ~test_current_function:false
@@ -1152,7 +1201,7 @@ let add_alloc_table_argument
       let locr = RegionList.assoc distr region_assoc in
       match mode with
 	| `MAppParam ->
-	    if Region.bitwise locr then
+	    if Region.bitwise locr && not no_deref then
 	      (* Anticipate generation of local ref from bitwise *)
 	      ((alloc,locr), (deref_alloc_table_var (ac,locr), ty')) :: acc
 	    else
@@ -1180,16 +1229,18 @@ let add_alloc_table_argument
       | #param_or_local_mode -> acc
       | `MEffect -> ((alloc,distr), (allocvar (ac,distr), ty')) :: acc
 
-let translate_external_alloc_tables ~no_deref ~region_mem_assoc allocs =
+let translate_external_alloc_tables ~no_deref ~region_mem_assoc ~already_used
+    allocs =
+  let already_used = StringSet.of_list already_used in
   let allocvar = 
     if no_deref then plain_alloc_table_var 
     else alloc_table_var ~test_current_function:false
   in
-  (* Translate bitwise allocation table into typed ones *)
   let allocs =
     List.fold_left
       (fun acc ((alloc,locr),(v',ty') as entry) ->
 	 if Region.bitwise locr then
+	   (* Translate bitwise allocation table into typed ones *)
 	   try
 	     let mems = MemorySet.find_region locr region_mem_assoc in
 	     let allocs = 
@@ -1202,42 +1253,38 @@ let translate_external_alloc_tables ~no_deref ~region_mem_assoc allocs =
 	     in allocs @ acc
 	   with Not_found ->
 	     (* No possible effect on caller types *)
-	     []
+	     acc
 	 else entry :: acc
       ) [] allocs
   in
-  List.fold_left 
-    (fun acc ((alloc,locr),(v1',ty') as entry) ->
-       (* Accumulate entry only if not already present *)
-       if List.exists 
-	 (fun ((alloc',locr'),(v2',_ty')) -> var_name' v1' = var_name' v2') acc
-       then acc
-       else entry :: acc
-    ) [] allocs
+  remove_duplicates ~already_used allocs
 
-let alloc_table_detailed_writes
-    ~mode ~type_safe ~callee_writes ~region_assoc ~region_mem_assoc =
+let alloc_table_detailed_writes ~mode ~type_safe ~callee_writes ~region_assoc
+    ~region_mem_assoc =
   let writes =
     AllocMap.fold
       (fun (ac,distr) _labs acc ->
 	 add_alloc_table_argument 
-	   ~mode ~type_safe ~no_deref:true (ac,distr) 
-	   ~region_assoc ~region_mem_assoc acc
+	   ~mode ~type_safe ~no_deref:true (ac,distr) ~region_assoc acc
       ) callee_writes.jc_effect_alloc_tables []
   in
-  if type_safe && mode = `MFunParam then
-    translate_external_alloc_tables ~no_deref:true ~region_mem_assoc writes
-  else writes
+  if type_safe then
+    match mode with
+      | `MFunParam | `MEffect ->
+	  translate_external_alloc_tables ~no_deref:true ~region_mem_assoc
+	    ~already_used:[] writes
+      | `MAppParam | `MLocal -> writes
+  else 
+    remove_duplicates ~already_used:StringSet.empty writes
 
-let alloc_table_writes
-    ~mode ~type_safe ~callee_writes ~region_assoc ~region_mem_assoc =
+let alloc_table_writes ~mode ~type_safe ~callee_writes ~region_assoc
+    ~region_mem_assoc =
   List.map snd 
-    (alloc_table_detailed_writes
-       ~mode ~type_safe ~callee_writes ~region_assoc ~region_mem_assoc)
+    (alloc_table_detailed_writes ~mode ~type_safe ~callee_writes ~region_assoc
+       ~region_mem_assoc)
 
-let alloc_table_detailed_reads 
-    ~mode ~type_safe ~callee_writes ~callee_reads 
-    ~region_assoc ~region_mem_assoc =
+let alloc_table_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads 
+    ~region_assoc ~region_mem_assoc ~already_used =
   let reads =
     AllocMap.fold
       (fun (ac,distr) _labs acc ->
@@ -1248,34 +1295,35 @@ let alloc_table_detailed_reads
 	     | #param_or_local_mode -> acc
 	     | `MEffect ->
 		 add_alloc_table_argument 
-		   ~mode ~type_safe ~no_deref:false (ac,distr) 
-		   ~region_assoc ~region_mem_assoc acc
+		   ~mode ~type_safe ~no_deref:false (ac,distr) ~region_assoc acc
 	 else if mutable_alloc_table (get_current_function ()) (ac,distr) then
 	   add_alloc_table_argument 
-	     ~mode ~type_safe ~no_deref:false (ac,distr)
-	     ~region_assoc ~region_mem_assoc acc
+	     ~mode ~type_safe ~no_deref:false (ac,distr) ~region_assoc acc
 	 else
 	   (* Allocation table is immutable, thus it is not passed by
 	      reference. As such, it cannot be counted in effects. *)
 	   match mode with
 	     | #param_or_local_mode ->
 		 add_alloc_table_argument 
-		   ~mode ~type_safe ~no_deref:false (ac,distr) 
-		   ~region_assoc ~region_mem_assoc acc
+		   ~mode ~type_safe ~no_deref:false (ac,distr) ~region_assoc acc
 	     | `MEffect -> acc
       ) callee_reads.jc_effect_alloc_tables []
   in
-  if type_safe && mode = `MFunParam then
-    translate_external_alloc_tables ~no_deref:false ~region_mem_assoc reads
-  else reads
+  if type_safe then
+    match mode with
+      | `MFunParam | `MEffect ->
+	  translate_external_alloc_tables ~no_deref:false ~region_mem_assoc
+	    ~already_used reads
+      | `MAppParam | `MLocal -> reads
+  else 
+    let already_used = StringSet.of_list already_used in
+    remove_duplicates ~already_used reads
 
-let alloc_table_reads 
-    ~mode ~type_safe ~callee_writes ~callee_reads 
-    ~region_assoc ~region_mem_assoc =
+let alloc_table_reads ~mode ~type_safe ~callee_writes ~callee_reads 
+    ~region_assoc ~region_mem_assoc ~already_used =
   List.map snd
-    (alloc_table_detailed_reads 
-       ~mode ~type_safe ~callee_writes ~callee_reads 
-       ~region_assoc ~region_mem_assoc)
+    (alloc_table_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads 
+       ~region_assoc ~region_mem_assoc ~already_used)
 
 let add_tag_table_argument ~mode ~no_deref (vi,distr) region_assoc acc =
   let tagvar = if no_deref then plain_tag_table_var else tag_table_var in
@@ -1333,7 +1381,7 @@ let tag_table_reads ~mode ~callee_writes ~callee_reads ~region_assoc =
     ) callee_reads.jc_effect_tag_tables []
 
 let add_memory_argument 
-    ~mode ~type_safe ~no_deref (mc,distr as mem) region_assoc acc =
+    ~mode ~type_safe ~no_deref (mc,distr as mem) ~region_assoc acc =
   let memvar = 
     if no_deref then plain_memory_var 
     else memory_var ~test_current_function:false
@@ -1344,22 +1392,23 @@ let add_memory_argument
       (* Polymorphic memory. Both passed in argument by the caller, 
 	 and counted as effect. *)
       let locr = RegionList.assoc distr region_assoc in
-      if not type_safe && Region.bitwise locr then
-	(* Bitwise memory in the caller. Translate the memory class 
-	   and accumulate it only if not already present. *)
-	let locmc = JCmem_bitvector in
-	let locty' = memory_type locmc in
-	let v1' = memvar (locmc,locr) in
-	if List.exists 
-	  (fun (_mem, (v2',_ty')) -> var_name' v1' = var_name' v2') acc then acc
-	else
-	  match mode with
-	    | #param_or_effect_mode -> ((mem,locr), (v1', locty')) :: acc
-	    | `MLocal -> acc
-      else
-	match mode with
-	  | #param_or_effect_mode -> ((mem,locr), (memvar (mc,locr), ty')) :: acc
-	  | `MLocal -> acc
+      match mode with
+	| `MAppParam ->
+	    if Region.bitwise locr && not no_deref then
+	      (* Anticipate generation of local ref from bitwise *)
+	      ((mem,locr), (deref_memory_var (mc,locr), ty')) :: acc
+	    else
+	      ((mem,locr), (memvar (mc,locr), ty')) :: acc
+	| `MFunParam | `MEffect -> 
+	    if Region.bitwise locr && not type_safe then
+	      (* Bitwise memory in the caller. 
+		 Translate the memory class. *)
+	      let mc = JCmem_bitvector in
+	      let ty' = memory_type mc in
+	      ((mem,locr), (memvar (mc,locr), ty')) :: acc
+	    else
+	      ((mem,locr), (memvar (mc,locr), ty')) :: acc
+	| `MLocal -> acc
     with Not_found -> 
       (* MLocal memory. Neither passed in argument by the caller, 
 	 nor counted as effect. *)
@@ -1373,47 +1422,100 @@ let add_memory_argument
       | #param_or_local_mode -> acc
       | `MEffect -> ((mem,distr), (memvar (mc,distr), ty')) :: acc 
 
-let memory_detailed_writes ~mode ~type_safe ~callee_writes ~region_assoc =
-  MemoryMap.fold
-    (fun (mc,distr) _labs acc -> 
-       add_memory_argument 
-	 ~mode ~type_safe ~no_deref:true (mc,distr) region_assoc acc
-    ) callee_writes.jc_effect_memories []
+let translate_external_memories ~no_deref ~region_mem_assoc ~already_used mems =
+  let already_used = StringSet.of_list already_used in
+  let memvar = 
+    if no_deref then plain_memory_var 
+    else memory_var ~test_current_function:false
+  in
+  let mems =
+    List.fold_left
+      (fun acc ((mem,locr),(v',ty') as entry) ->
+	 if Region.bitwise locr then
+	   try
+	     (* Translate bitwise memories into typed ones *)
+	     let mems = MemorySet.find_region locr region_mem_assoc in
+	     let mems = 
+	       List.map
+		 (fun (mc,_r) ->
+		    let ty' = memory_type mc in
+		    ((mem,locr), (memvar (mc,locr), ty'))
+		 ) (MemorySet.elements mems)
+	     in mems @ acc
+	   with Not_found ->
+	     (* No possible effect on caller types *)
+	     acc
+	 else entry :: acc
+      ) [] mems
+  in
+  remove_duplicates ~already_used mems
 
-let memory_writes ~mode ~type_safe ~callee_writes ~region_assoc =
-  List.map snd 
-    (memory_detailed_writes ~mode ~type_safe ~callee_writes ~region_assoc)
-
-let memory_detailed_reads
-    ~mode ~type_safe ~callee_writes ~callee_reads ~region_assoc =
-  MemoryMap.fold
-    (fun (mc,distr) _labs acc ->
-       if MemoryMap.mem (mc,distr) callee_writes.jc_effect_memories then
-	 (* Memory is written, thus it is already taken care of
-	    as a parameter. *)
-	 match mode with
-	   | #param_or_local_mode -> acc
-	   | `MEffect ->
-	       add_memory_argument 
-		 ~mode ~type_safe ~no_deref:false (mc,distr) region_assoc acc
-       else if mutable_memory (get_current_function ()) (mc,distr) then
+let memory_detailed_writes
+    ~mode ~type_safe ~callee_writes ~region_assoc ~region_mem_assoc =
+  let writes =
+    MemoryMap.fold
+      (fun (mc,distr) _labs acc -> 
 	 add_memory_argument 
-	   ~mode ~type_safe ~no_deref:false (mc,distr) region_assoc acc
-       else
-	 (* Memory is immutable, thus it is not passed by
-	    reference. As such, it cannot be counted in effects. *)
-	 match mode with
-	   | #param_or_local_mode ->
-	       add_memory_argument 
-		 ~mode ~type_safe ~no_deref:false (mc,distr) region_assoc acc
-	   | `MEffect -> acc
-    ) callee_reads.jc_effect_memories []
+	   ~mode ~type_safe ~no_deref:true (mc,distr) ~region_assoc acc
+      ) callee_writes.jc_effect_memories []
+  in
+  if type_safe then
+    match mode with
+      | `MFunParam | `MEffect ->
+	  translate_external_memories ~no_deref:true ~region_mem_assoc 
+	    ~already_used:[] writes
+      | `MAppParam | `MLocal -> writes
+  else 
+    remove_duplicates ~already_used:StringSet.empty writes
 
-let memory_reads ~mode ~type_safe ~callee_writes ~callee_reads ~region_assoc =
+let memory_writes
+    ~mode ~type_safe ~callee_writes ~region_assoc ~region_mem_assoc =
   List.map snd 
-    (memory_detailed_reads
-       ~mode ~type_safe ~callee_writes ~callee_reads ~region_assoc)
+    (memory_detailed_writes ~mode ~type_safe ~callee_writes 
+       ~region_assoc ~region_mem_assoc)
 
+let memory_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads 
+    ~region_assoc ~region_mem_assoc ~already_used =
+  let reads =
+    MemoryMap.fold
+      (fun (mc,distr) _labs acc ->
+	 if MemoryMap.mem (mc,distr) callee_writes.jc_effect_memories then
+	   (* Memory is written, thus it is already taken care of
+	      as a parameter. *)
+	   match mode with
+	     | #param_or_local_mode -> acc
+	     | `MEffect ->
+		 add_memory_argument 
+		   ~mode ~type_safe ~no_deref:false (mc,distr) ~region_assoc acc
+	 else if mutable_memory (get_current_function ()) (mc,distr) then
+	   add_memory_argument 
+	     ~mode ~type_safe ~no_deref:false (mc,distr) ~region_assoc acc
+	 else
+	   (* Memory is immutable, thus it is not passed by
+	      reference. As such, it cannot be counted in effects. *)
+	   match mode with
+	     | #param_or_local_mode ->
+		 add_memory_argument 
+		   ~mode ~type_safe ~no_deref:false (mc,distr) ~region_assoc acc
+	     | `MEffect -> acc
+      ) callee_reads.jc_effect_memories []
+  in
+  if type_safe then
+    match mode with
+      | `MFunParam | `MEffect ->
+	  translate_external_memories ~no_deref:false ~region_mem_assoc 
+	    ~already_used reads
+      | `MAppParam | `MLocal -> reads
+  else
+    let already_used = StringSet.of_list already_used in
+    remove_duplicates ~already_used reads
+
+let memory_reads ~mode ~type_safe ~callee_writes ~callee_reads 
+    ~region_assoc ~region_mem_assoc ~already_used =
+  List.map snd 
+    (memory_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads 
+       ~region_assoc ~region_mem_assoc ~already_used)
+    
 let global_writes ~callee_writes =
   VarMap.fold
     (fun v _labs acc -> 
@@ -1479,7 +1581,8 @@ let write_model_parameters
     tag_table_writes ~mode ~callee_writes ~region_assoc 
   in
   let write_mems = 
-    memory_writes ~mode ~type_safe ~callee_writes ~region_assoc 
+    memory_writes ~mode ~type_safe ~callee_writes 
+      ~region_assoc ~region_mem_assoc
   in
   let write_globs = match mode with
     | #param_or_local_mode -> []
@@ -1510,22 +1613,22 @@ let write_effects ~callee_reads ~callee_writes ~region_list ~params =
   in
   List.map (function (Var n,_ty') -> n | _ -> assert false) vars'
 
-let read_model_parameters 
-    ~type_safe ~mode ~callee_reads ~callee_writes ~region_list ~params =
+let read_model_parameters ~type_safe ~mode ~callee_reads ~callee_writes
+    ~region_list ~params ~already_used =
   let region_assoc = make_region_assoc ~region_list in
   let region_mem_assoc = make_region_mem_assoc ~params in
   let callee_reads = rewrite_effects ~type_safe ~params callee_reads in
   let callee_writes = rewrite_effects ~type_safe ~params callee_writes in
   let read_allocs = 
-    alloc_table_reads 
-      ~mode ~type_safe ~callee_reads ~callee_writes 
-      ~region_assoc ~region_mem_assoc
+    alloc_table_reads ~mode ~type_safe ~callee_reads ~callee_writes 
+      ~region_assoc ~region_mem_assoc ~already_used
   in
   let read_tags = 
     tag_table_reads ~mode ~callee_reads ~callee_writes ~region_assoc 
   in
   let read_mems =
-    memory_reads ~mode ~type_safe ~callee_reads ~callee_writes ~region_assoc 
+    memory_reads ~mode ~type_safe ~callee_reads ~callee_writes 
+      ~region_assoc ~region_mem_assoc ~already_used
   in
   let read_globs = match mode with
     | #param_or_local_mode -> []
@@ -1535,39 +1638,50 @@ let read_model_parameters
   read_allocs @ read_tags @ read_mems @ read_globs
 
 let read_parameters 
-    ~type_safe ~region_list ~callee_reads ~callee_writes ~params =
+    ~type_safe ~region_list ~callee_reads ~callee_writes ~params ~already_used =
   let vars' = 
     read_model_parameters ~type_safe ~mode:`MFunParam
-      ~callee_reads ~callee_writes ~region_list ~params
+      ~callee_reads ~callee_writes ~region_list ~params ~already_used
   in
   List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
 
 let read_locals ~region_list ~callee_reads ~callee_writes ~params =
   let vars' =
     read_model_parameters ~type_safe:false ~mode:`MLocal
-      ~callee_reads ~callee_writes ~region_list ~params
+      ~callee_reads ~callee_writes ~region_list ~params ~already_used:[]
   in
   List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
 
 let read_effects ~callee_reads ~callee_writes ~region_list ~params =
   let vars' = 
     read_model_parameters ~type_safe:true ~mode:`MEffect
-      ~callee_reads ~callee_writes ~region_list ~params
+      ~callee_reads ~callee_writes ~region_list ~params ~already_used:[]
   in
   List.map (var_name' $ fst) vars'
 
 let alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = 
-    alloc_table_writes 
+    alloc_table_detailed_writes 
       ~mode:`MAppParam ~type_safe:true ~callee_writes 
       ~region_assoc ~region_mem_assoc:MemorySet.empty
   in
   let reads = 
-    alloc_table_reads 
+    alloc_table_detailed_reads 
       ~mode:`MAppParam ~type_safe:true ~callee_reads ~callee_writes 
-      ~region_assoc ~region_mem_assoc:MemorySet.empty
+      ~region_assoc ~region_mem_assoc:MemorySet.empty ~already_used:[]
   in
-  (List.map fst writes), (List.map fst reads)
+  let pointers = 
+    List.map 
+      (fun (((ac,distr),locr),(v',ty')) ->
+	 let pc = match ac with
+	   | JCalloc_struct vi -> JCvariant vi
+	   | JCalloc_union vi -> JCunion vi
+	   | JCalloc_bitvector -> assert false
+	 in
+	 (pc,locr)
+      ) (writes @ reads) 
+  in
+  pointers, (List.map (fst $ snd) writes), (List.map (fst $ snd) reads)
 
 let tag_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = 
@@ -1585,14 +1699,15 @@ let memory_arguments
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc fname =
   let writes = 
     memory_detailed_writes
-      ~mode:`MAppParam ~type_safe:true ~callee_writes ~region_assoc
+      ~mode:`MAppParam ~type_safe:true ~callee_writes 
+      ~region_assoc ~region_mem_assoc:MemorySet.empty
   in
   let reads = 
     memory_detailed_reads 
-      ~mode:`MAppParam ~type_safe:true ~callee_reads ~callee_writes ~region_assoc
+      ~mode:`MAppParam ~type_safe:true ~callee_reads ~callee_writes 
+      ~region_assoc ~region_mem_assoc:MemorySet.empty ~already_used:[]
   in
-  (* Identify bitwise memories and generate appropriate typed ones *)
-  let regions = 
+  let pointers = 
     List.map 
       (fun (((mc,distr),locr),(v',ty')) ->
 	 let pc = match mc with
@@ -1603,17 +1718,6 @@ let memory_arguments
 	 (pc,locr)
       ) (writes @ reads) 
   in
-  let bw_regions = 
-    PointerSet.of_list (List.filter (Region.bitwise $ snd) regions) 
-  in
-  let locals,prolog = 
-    List.fold_left 
-      (fun (acc,e') (pc,r) -> 
-	 let locals,app = make_ofbit_param_app r pc in
-	 locals @ acc, append app e'
-      ) ([],Void) (PointerSet.to_list bw_regions) 
-  in
-
   let remove_local effects =
     List.map (fun ((mem,locr),(v',ty')) -> (mem,(v',ty'))) effects
   in
@@ -1658,7 +1762,7 @@ let memory_arguments
   if pre = LTrue then 
     let writes = List.map (fst $ snd) writes in
     let reads = List.map (fst $ snd) reads in
-    LTrue, fname, locals, prolog, writes, reads
+    LTrue, fname, pointers, writes, reads
   else 
     (* Presence of interferences. Function must be specialized. *)
     let new_fname = unique_name (fname ^ "_specialized") in
@@ -1689,23 +1793,48 @@ let memory_arguments
 	) reads' ([], name_assoc, already_used_names)
     in
     Hashtbl.add specialized_functions new_fname (fname,name_assoc);
-    pre, new_fname, locals, prolog, writes, reads
+    pre, new_fname, pointers, writes, reads
   
 let global_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = global_writes ~callee_writes in
   let reads = global_reads ~callee_reads in
   (List.map fst writes), (List.map fst reads)
 
+(* Identify bitwise arguments and generate appropriate typed ones *)
+let make_bitwise_arguments pointers =
+  let bw_pointers = 
+    PointerSet.of_list (List.filter (Region.bitwise $ snd) pointers)
+  in
+  let locals,prolog = 
+    List.fold_left 
+      (fun (acc,e') (pc,r) -> 
+	 let locals,app = make_ofbit_param_app r pc in
+	 locals @ acc, append app e'
+      ) ([],Void) (PointerSet.to_list bw_pointers) 
+  in
+  let locals =
+    fst (List.fold_left 
+	   (fun (acc,already_used) entry ->
+	      (* Accumulate entry only if not already present *)
+	      let n = fst entry in
+	      if StringSet.mem n already_used then
+		acc, already_used
+	      else
+		entry :: acc, StringSet.add n already_used
+	   ) ([],StringSet.empty) locals)
+  in
+  locals,prolog  
+
 let make_arguments 
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc 
     ~with_globals fname args =
-  let write_allocs, read_allocs = 
+  let alloc_pointers, write_allocs, read_allocs = 
     alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in
   let write_tags, read_tags = 
     tag_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in
-  let pre_mems, fname, locals, prolog, write_mems, read_mems = 
+  let pre_mems, fname, mem_pointers, write_mems, read_mems = 
     memory_arguments 
       ~callee_reads ~callee_writes ~region_assoc ~param_assoc fname
   in
@@ -1714,6 +1843,9 @@ let make_arguments
       global_arguments ~callee_reads ~callee_writes ~region_assoc
     else
       [], []
+  in
+  let locals, prolog =
+    make_bitwise_arguments (alloc_pointers @ mem_pointers)
   in
   (* Return complete list of arguments *)
   (* TODO: add mutable and committed effects *)

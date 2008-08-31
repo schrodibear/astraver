@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.345 2008-08-30 17:19:29 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.346 2008-08-31 08:24:39 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2602,6 +2602,7 @@ let tr_fun f funpos spec body acc =
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
       ~params:f.jc_fun_info_parameters
+      ~already_used:(List.map fst external_write_params)
   in
   let internal_read_params =
     read_parameters 
@@ -2610,6 +2611,7 @@ let tr_fun f funpos spec body acc =
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
       ~params:f.jc_fun_info_parameters
+      ~already_used:(List.map fst internal_write_params)
   in
   let internal_write_locals =
     write_locals 

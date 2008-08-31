@@ -965,31 +965,46 @@ parameter struct_Literals_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_Object_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_String_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_Throwable_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table { true }
+    { } unit writes Object_alloc_table
+    { (forall p:Object pointer.
+       eq_int(offset_max(Object_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 parameter struct_interface_of_bitvector :
  interface_alloc_table:interface alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
    bitvector:(unit, bitvector) memory ->
-    { } unit writes interface_alloc_table { true }
+    { } unit writes interface_alloc_table
+    { (forall p:interface pointer.
+       eq_int(offset_max(interface_alloc_table, p),
+       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
 
 let Literals_f_ensures_default =
  fun (this_0 : Object pointer) ->
