@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.347 2008-09-01 09:13:48 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.348 2008-09-01 15:00:15 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2033,12 +2033,12 @@ let tr_logic_fun f ta acc =
     match f.jc_logic_info_labels with [lab] -> lab | _ -> LabelHere
   in
   let fa = 
-    assertion ~type_safe:true ~global_assertion:true ~relocate:false lab lab 
+    assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab 
   in
   let ft =
-    term ~type_safe:true ~global_assertion:true ~relocate:false lab lab 
+    term ~type_safe:false ~global_assertion:true ~relocate:false lab lab 
   in
-  let term_coerce = term_coerce ~type_safe:true ~global_assertion:true lab in
+  let term_coerce = term_coerce ~type_safe:false ~global_assertion:true lab in
   let params =
     List.map (tparam ~label_in_name:true lab) f.jc_logic_info_parameters
   in  
@@ -2130,7 +2130,7 @@ let tr_logic_fun f ta acc =
 	   in
 	   let zonety,basety = deconstruct_memory_type_args paramty in
 	   let pset = 
-	     reads ~type_safe:true ~global_assertion:true pset (mc,r) 
+	     reads ~type_safe:false ~global_assertion:true pset (mc,r) 
 	   in
 	   let sepa = LNot(LPred("in_pset",[LVar "tmp";pset])) in
 	   let update_params = 
@@ -2189,7 +2189,7 @@ let tr_logic_fun f ta acc =
 	   in
 	   let zonety,basety = deconstruct_memory_type_args paramty in
 	   let pset = 
-	     reads ~type_safe:true ~global_assertion:true pset (mc,r) 
+	     reads ~type_safe:false ~global_assertion:true pset (mc,r) 
 	   in
 	   let sepa = LPred("pset_disjoint",[LVar "tmp";pset]) in
 	   let upda = 
@@ -2252,7 +2252,7 @@ let tr_logic_fun f ta acc =
 	 in
 	 let ps = 
 	   List.map 
-	     (collect_pset_locations ~type_safe:true ~global_assertion:true) ps
+	     (collect_pset_locations ~type_safe:false ~global_assertion:true) ps
 	 in
 	 let ps = location_list' ps in
 	 let valida =
@@ -2939,7 +2939,7 @@ let tr_axiom id is_axiom labels a acc =
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
   let ef = Jc_effect.assertion empty_effects a in
   let a' = 
-    assertion ~type_safe:true ~global_assertion:true ~relocate:false lab lab a
+    assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab a
   in
   let params = tmodel_parameters ~label_in_name:true ef in
   let a' = List.fold_right (fun (n,ty') a' -> LForall(n,ty',a')) params a' in

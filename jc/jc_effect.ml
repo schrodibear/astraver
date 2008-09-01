@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.128 2008-08-30 01:02:56 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.129 2008-09-01 15:00:15 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1202,6 +1202,8 @@ let function_effects funs =
   (* Compute precise effects *)
   current_mode := MPrecise;
   iterate ();
+  (* Reset mode to raw effects for individual calls *)
+  current_mode := MApprox;
 
   Jc_options.lprintf "Effects: fixpoint reached@.";
 
