@@ -79,11 +79,11 @@ Implicit Arguments offset_max.
 Admitted.
 Implicit Arguments offset_min.
 
-(*Why predicate*) Definition valid (A746:Set) (a:(alloc_table A746)) (p:(pointer A746))
+(*Why predicate*) Definition valid (A750:Set) (a:(alloc_table A750)) (p:(pointer A750))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 Implicit Arguments valid.
 
-(*Why predicate*) Definition same_block (A747:Set) (p:(pointer A747)) (q:(pointer A747))
+(*Why predicate*) Definition same_block (A751:Set) (p:(pointer A751)) (q:(pointer A751))
   := (base_block p) = (base_block q).
 Implicit Arguments same_block.
 
@@ -300,8 +300,8 @@ Implicit Arguments in_pset.
 Admitted.
 Implicit Arguments valid_pset.
 
-(*Why predicate*) Definition pset_disjoint (A789:Set) (ps1:(pset A789)) (ps2:(pset A789))
-  := (forall (p:(pointer A789)), ~((in_pset p ps1) /\ (in_pset p ps2))).
+(*Why predicate*) Definition pset_disjoint (A793:Set) (ps1:(pset A793)) (ps2:(pset A793))
+  := (forall (p:(pointer A793)), ~((in_pset p ps1) /\ (in_pset p ps2))).
 Implicit Arguments pset_disjoint.
 
 (*Why axiom*) Lemma in_pset_empty :
@@ -415,8 +415,8 @@ Admitted.
       (valid_pset a s2))))).
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A806:Set) (A805:Set) (a:(alloc_table A805)) (m1:(memory A805 A806)) (m2:(memory A805 A806)) (l:(pset A805))
-  := (forall (p:(pointer A805)),
+(*Why predicate*) Definition not_assigns (A810:Set) (A809:Set) (a:(alloc_table A809)) (m1:(memory A809 A810)) (m2:(memory A809 A810)) (l:(pset A809))
+  := (forall (p:(pointer A809)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 Implicit Arguments not_assigns.
 
@@ -518,7 +518,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A825:Set) (a:(tag_table A825)) (p:(pointer A825)) (t:(tag_id A825))
+(*Why predicate*) Definition instanceof (A829:Set) (a:(tag_table A829)) (p:(pointer A829)) (t:(tag_id A829))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -545,8 +545,8 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition root_tag (A830:Set) (t:(tag_id A830))
-  := (parenttag t (@bottom_tag A830)).
+(*Why predicate*) Definition root_tag (A834:Set) (t:(tag_id A834))
+  := (parenttag t (@bottom_tag A834)).
 Implicit Arguments root_tag.
 
 (*Why axiom*) Lemma root_subtag :
@@ -558,7 +558,7 @@ Implicit Arguments root_tag.
       ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A832:Set) (tag_table:(tag_table A832)) (mutable:(memory A832 (tag_id A832))) (this:(pointer A832))
+(*Why predicate*) Definition fully_packed (A836:Set) (tag_table:(tag_table A836)) (mutable:(memory A836 (tag_id A836))) (this:(pointer A836))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 
@@ -631,7 +631,7 @@ Admitted.
 Admitted.
 Implicit Arguments alloc_extends.
 
-(*Why predicate*) Definition alloc_fresh (A834:Set) (a:(alloc_table A834)) (p:(pointer A834)) (n:Z)
+(*Why predicate*) Definition alloc_fresh (A838:Set) (a:(alloc_table A838)) (p:(pointer A838)) (n:Z)
   := (forall (i:Z), (0 <= i /\ i < n -> ~(valid a (shift p i)))).
 Implicit Arguments alloc_fresh.
 
@@ -701,14 +701,18 @@ Implicit Arguments offset_max_bytes.
   forall (A1:Set),
   (forall (a:(alloc_table A1)),
    (forall (p:(pointer A1)),
-    (forall (s:Z), (offset_min a p) <= (s * (offset_min_bytes a p s))))).
+    (forall (s:Z),
+     (0 < s -> (offset_min a p) <= (s * (offset_min_bytes a p s)) /\
+      (s * (offset_min_bytes a p s) - s) < (offset_min a p))))).
 Admitted.
 
 (*Why axiom*) Lemma offset_max_bytes_def :
   forall (A1:Set),
   (forall (a:(alloc_table A1)),
    (forall (p:(pointer A1)),
-    (forall (s:Z), (s * (offset_max_bytes a p s) + s - 1) <= (offset_max a p)))).
+    (forall (s:Z),
+     (0 < s -> (s * (offset_max_bytes a p s) + s - 1) <= (offset_max a p) /\
+      (offset_max a p) < (s * (offset_max_bytes a p s) + s + s - 1))))).
 Admitted.
 
 (*Why logic*) Definition extract_bytes : bitvector -> Z -> Z -> bitvector.

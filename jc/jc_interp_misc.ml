@@ -1026,46 +1026,91 @@ let make_alloc_param ~check_size ac pc =
 
 (* Conversion to and from bitvector *)
 
-let ofbit_read_parameters r pc =
+let make_param ~name ~writes ~reads ~pre ~post ~return_type =
+  (* parameters and effects *)
+  let write_effects = List.map effect_of_parameter writes in
+  let write_params = List.map wparam_of_parameter writes in
+  let read_params = List.map rparam_of_parameter reads in
+  let params = write_params @ read_params in
+  let params = List.map local_of_parameter params in
+  (* type *)
+  let annot_type = 
+    Annot_type(
+      pre,
+      Base_type return_type,
+      (* reads and writes *)
+      [], write_effects,
+      (* normal post *)
+      post,
+      (* no exceptional post *)
+      [])
+  in
+  let annot_type = 
+    List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
+      params annot_type
+  in
+  Param(false,name,annot_type)
+
+let conv_bw_alloc_parameters ~deref r pc =
   let ac = JCalloc_bitvector in
-  let alloc =
-    (alloc_table_var ~test_current_function:true (ac,r), 
-     alloc_table_type ac) 
+  let allocv = 
+    if deref then
+      alloc_table_var ~test_current_function:true (ac,r)
+    else
+      plain_alloc_table_var (ac,r)
   in
+  let alloc = (allocv, alloc_table_type ac) in
+  [ alloc ]
+
+let conv_bw_mem_parameters ~deref r pc =
   let mc = JCmem_bitvector in
-  let mem = 
-    (memory_var ~test_current_function:true (mc,r), memory_type mc)
+  let memv = 
+    if deref then
+      memory_var ~test_current_function:true (mc,r)
+    else 
+      plain_memory_var (mc,r)
   in
-  [ alloc; mem ]
-	
-let ofbit_write_parameters r pc =
+  let mem = (memv, memory_type mc) in
+  [ mem ]
+
+let conv_typ_alloc_parameters r pc =
   match pc with
     | JCtag _ ->
 	let ac = alloc_class_of_pointer_class pc in
 	let alloc = (plain_alloc_table_var (ac,r), alloc_table_type ac) in
-	let all_mems = all_memories pc in
-	let mems = 
-	  List.map 
-	    (fun mc -> plain_memory_var (mc,r), memory_type mc) all_mems 
-	in
-	alloc :: mems
+	[ alloc ]
     | JCvariant vi ->
 	let ac = JCalloc_struct vi in
 	[ (plain_alloc_table_var (ac,r), alloc_table_type ac) ]
     | JCunion vi ->
 	let ac = JCalloc_struct vi in
 	let alloc = (plain_alloc_table_var (ac,r), alloc_table_type ac) in
-	let mc = JCmem_union vi in
-	let mem = (plain_memory_var (mc,r), memory_type mc) in
-	[ alloc; mem ]
+	[ alloc ]
 
-let make_ofbit_param_app r pc =
-  let writes = ofbit_write_parameters r pc in
-  let reads = ofbit_read_parameters r pc in
+let conv_typ_mem_parameters ~deref r pc =
+  let memvar = if deref then deref_memory_var else plain_memory_var in
+  match pc with
+    | JCtag _ ->
+	let all_mems = all_memories pc in
+	let mems = 
+	  List.map 
+	    (fun mc -> memvar (mc,r), memory_type mc) all_mems 
+	in
+	mems
+    | JCvariant vi ->
+	[]
+    | JCunion vi ->
+	let mc = JCmem_union vi in
+	let mem = (memvar (mc,r), memory_type mc) in
+	[ mem ]
+
+let make_ofbit_alloc_param_app r pc =
+  let writes = conv_typ_alloc_parameters r pc in
+  let reads = conv_bw_alloc_parameters ~deref:true r pc in
   let args = List.map fst writes @ List.map fst reads in
   let app = match pc with
     | JCtag _ ->
-	make_app (of_bitvector_param_name pc) args 
+	make_app (alloc_of_bitvector_param_name pc) args 
     | JCvariant _ ->
 	Void
     | JCunion _ ->
@@ -1073,6 +1118,49 @@ let make_ofbit_param_app r pc =
   in
   let locals = List.map local_of_parameter writes in
   locals, app
+
+let make_ofbit_mem_param_app r pc =
+  let writes = conv_typ_mem_parameters ~deref:false r pc in
+  let reads = conv_bw_mem_parameters ~deref:true r pc in
+  let args = List.map fst writes @ List.map fst reads in
+  let app = match pc with
+    | JCtag _ ->
+	make_app (mem_of_bitvector_param_name pc) args 
+    | JCvariant _ ->
+	Void
+    | JCunion _ ->
+	assert false (* TODO *)
+  in
+  let locals = List.map local_of_parameter writes in
+  locals, app
+
+let make_tobit_alloc_param_app r pc =
+  let writes = conv_bw_alloc_parameters ~deref:false r pc in
+  let reads = conv_typ_alloc_parameters r pc in
+  let args = List.map fst writes @ List.map fst reads in
+  let app = match pc with
+    | JCtag _ ->
+	make_app (alloc_to_bitvector_param_name pc) args 
+    | JCvariant _ ->
+	Void
+    | JCunion _ ->
+	assert false (* TODO *)
+  in
+  app
+
+let make_tobit_mem_param_app r pc =
+  let writes = conv_bw_mem_parameters ~deref:false r pc in
+  let reads = conv_typ_mem_parameters ~deref:true r pc in
+  let args = List.map fst writes @ List.map fst reads in
+  let app = match pc with
+    | JCtag _ ->
+	make_app (mem_to_bitvector_param_name pc) args 
+    | JCvariant _ ->
+	Void
+    | JCunion _ ->
+	assert false (* TODO *)
+  in
+  app
 
 let make_of_bitvector_app fi e' =
   (* Convert bitvector into appropriate type *)
@@ -1085,25 +1173,22 @@ let make_conversion_params pc =
   let bv_mem = generic_memory_name JCmem_bitvector in
   let bv_alloc = generic_alloc_table_name JCalloc_bitvector in
 
-  (* Conversion from bitvector *)
-
-  (* parameters and effects *)
-  let writes = ofbit_write_parameters dummy_region pc in
-  let write_effects = List.map effect_of_parameter writes in
-  let write_params = List.map wparam_of_parameter writes in
-  let reads = ofbit_read_parameters dummy_region pc in
-  let read_params = List.map rparam_of_parameter reads in
-  let params = write_params @ read_params in
-  let params = List.map local_of_parameter params in
   (* postcondition *)
-  let post = match pc with
+  let post_alloc = match pc with
     | JCtag(st,_) ->
 	if struct_has_size st then
 	  let post_alloc =
 	    let ac = alloc_class_of_pointer_class pc in
 	    let alloc = generic_alloc_table_name ac in
 	    let s = string_of_int (struct_size_in_bytes st) in
-	    let post = 
+	    let post_min = 
+	      make_eq_pred integer_type
+		(LApp("offset_min",[ LVar alloc; LVar p ]))
+		(LApp("offset_min_bytes",[ LVar bv_alloc; 
+					   LApp("pointer_address",[ LVar p ]);
+					   LConst(Prim_int s)]))
+	    in
+	    let post_max = 
 	      make_eq_pred integer_type
 		(LApp("offset_max",[ LVar alloc; LVar p ]))
 		(LApp("offset_max_bytes",[ LVar bv_alloc; 
@@ -1111,8 +1196,16 @@ let make_conversion_params pc =
 					   LConst(Prim_int s)]))
 	    in
 	    let ty' = pointer_type ac pc in
+	    let post = make_and post_min post_max in
 	    LForall(p,ty',post)
 	  in
+	  post_alloc
+	else LTrue
+    | JCunion _ | JCvariant _ -> assert false (* TODO *)
+  in
+  let post_mem = match pc with
+    | JCtag(st,_) ->
+	if struct_has_size st then
 	  let fields = all_fields pc in
 	  let post_mem,_ = 
 	    List.fold_left 
@@ -1141,30 +1234,46 @@ let make_conversion_params pc =
 		 make_and acc posti, i+1
 	      ) (LTrue,0) fields
 	  in
-	  make_and post_alloc post_mem
+	  post_mem
 	else LTrue
     | JCunion _ | JCvariant _ -> assert false (* TODO *)
   in
-  (* type *)
-  let annot_type = 
-    Annot_type(
-      LTrue,
-      Base_type why_unit_type,
-      (* reads and writes *)
-      [], write_effects,
-      (* normal post *)
-      post,
-      (* no exceptional post *)
-      [])
-  in
-  let annot_type = 
-    List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
-      params annot_type
-  in
-  let name = of_bitvector_param_name pc in
-  let ofbit_param = Param(false,name,annot_type) in
 
-  [ ofbit_param ]
+  (* Conversion from bitvector *)
+  let writes = conv_typ_alloc_parameters dummy_region pc in
+  let reads = conv_bw_alloc_parameters ~deref:true dummy_region pc in
+  let name = alloc_of_bitvector_param_name pc in
+  let alloc_ofbit_param = 
+    make_param ~name ~writes ~reads ~pre:LTrue ~post:post_alloc 
+      ~return_type:why_unit_type
+  in
+
+  let writes = conv_typ_mem_parameters ~deref:false dummy_region pc in
+  let reads = conv_bw_mem_parameters ~deref:true dummy_region pc in
+  let name = mem_of_bitvector_param_name pc in
+  let mem_ofbit_param = 
+    make_param ~name ~writes ~reads ~pre:LTrue ~post:post_mem
+      ~return_type:why_unit_type
+  in
+
+  (* Conversion to bitvector *)
+  let writes = conv_bw_alloc_parameters ~deref:false dummy_region pc in
+  let reads = conv_typ_alloc_parameters dummy_region pc in
+  let name = alloc_to_bitvector_param_name pc in
+  let alloc_tobit_param = 
+    make_param ~name ~writes ~reads ~pre:LTrue ~post:post_alloc
+      ~return_type:why_unit_type
+  in
+
+  let writes = conv_bw_mem_parameters ~deref:false dummy_region pc in
+  let reads = conv_typ_mem_parameters ~deref:true dummy_region pc in
+  let name = mem_to_bitvector_param_name pc in
+  let mem_tobit_param = 
+    make_param ~name ~writes ~reads ~pre:LTrue ~post:post_mem
+      ~return_type:why_unit_type
+  in
+
+  [ alloc_ofbit_param; mem_ofbit_param; alloc_tobit_param; mem_tobit_param ]
   
 
 (******************************************************************************)
@@ -1670,18 +1779,20 @@ let alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc =
       ~mode:`MAppParam ~type_safe:true ~callee_reads ~callee_writes 
       ~region_assoc ~region_mem_assoc:MemorySet.empty ~already_used:[]
   in
-  let pointers = 
-    List.map 
-      (fun (((ac,distr),locr),(v',ty')) ->
-	 let pc = match ac with
-	   | JCalloc_struct vi -> JCvariant vi
-	   | JCalloc_union vi -> JCunion vi
-	   | JCalloc_bitvector -> assert false
-	 in
-	 (pc,locr)
-      ) (writes @ reads) 
+  let pointer_of_parameter = function 
+      (((ac,distr),locr),(v',ty')) ->
+	let pc = match ac with
+	  | JCalloc_struct vi -> JCvariant vi
+	  | JCalloc_union vi -> JCunion vi
+	  | JCalloc_bitvector -> assert false
+	in
+	(pc,locr)
   in
-  pointers, (List.map (fst $ snd) writes), (List.map (fst $ snd) reads)
+  let wpointers = List.map pointer_of_parameter writes in
+  let rpointers = List.map pointer_of_parameter reads in
+  let write_arguments = List.map (fst $ snd) writes in
+  let read_arguments = List.map (fst $ snd) reads in
+  wpointers, rpointers, write_arguments, read_arguments
 
 let tag_table_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = 
@@ -1707,17 +1818,17 @@ let memory_arguments
       ~mode:`MAppParam ~type_safe:true ~callee_reads ~callee_writes 
       ~region_assoc ~region_mem_assoc:MemorySet.empty ~already_used:[]
   in
-  let pointers = 
-    List.map 
-      (fun (((mc,distr),locr),(v',ty')) ->
-	 let pc = match mc with
-	   | JCmem_field fi -> JCtag(fi.jc_field_info_struct,[])
-	   | JCmem_union vi -> JCunion vi
-	   | JCmem_bitvector -> assert false
-	 in
-	 (pc,locr)
-      ) (writes @ reads) 
+  let pointer_of_parameter = function
+      (((mc,distr),locr),(v',ty')) ->
+	let pc = match mc with
+	  | JCmem_field fi -> JCtag(fi.jc_field_info_struct,[])
+	  | JCmem_union vi -> JCunion vi
+	  | JCmem_bitvector -> assert false
+	in
+	(pc,locr)
   in
+  let wpointers = List.map pointer_of_parameter writes in
+  let rpointers = List.map pointer_of_parameter reads in
   let remove_local effects =
     List.map (fun ((mem,locr),(v',ty')) -> (mem,(v',ty'))) effects
   in
@@ -1762,7 +1873,7 @@ let memory_arguments
   if pre = LTrue then 
     let writes = List.map (fst $ snd) writes in
     let reads = List.map (fst $ snd) reads in
-    LTrue, fname, pointers, writes, reads
+    LTrue, fname, wpointers, rpointers, writes, reads
   else 
     (* Presence of interferences. Function must be specialized. *)
     let new_fname = unique_name (fname ^ "_specialized") in
@@ -1793,7 +1904,7 @@ let memory_arguments
 	) reads' ([], name_assoc, already_used_names)
     in
     Hashtbl.add specialized_functions new_fname (fname,name_assoc);
-    pre, new_fname, pointers, writes, reads
+    pre, new_fname, wpointers, rpointers, writes, reads
   
 let global_arguments ~callee_reads ~callee_writes ~region_assoc =
   let writes = global_writes ~callee_writes in
@@ -1801,16 +1912,53 @@ let global_arguments ~callee_reads ~callee_writes ~region_assoc =
   (List.map fst writes), (List.map fst reads)
 
 (* Identify bitwise arguments and generate appropriate typed ones *)
-let make_bitwise_arguments pointers =
-  let bw_pointers = 
+let make_bitwise_arguments alloc_wpointers alloc_rpointers
+    mem_wpointers mem_rpointers =
+  let bw_pointers pointers = 
     PointerSet.of_list (List.filter (Region.bitwise $ snd) pointers)
   in
-  let locals,prolog = 
+  let bw_alloc_wpointers = bw_pointers alloc_wpointers in
+  let bw_alloc_rpointers = bw_pointers alloc_rpointers in
+  let bw_alloc_pointers = 
+    PointerSet.union bw_alloc_wpointers bw_alloc_rpointers
+  in
+  let bw_mem_wpointers = bw_pointers mem_wpointers in
+  let bw_mem_rpointers = bw_pointers mem_rpointers in
+  let bw_mem_pointers = 
+    PointerSet.union bw_mem_wpointers bw_mem_rpointers
+  in
+  let bw_pointers = 
+    PointerSet.union bw_alloc_pointers bw_mem_pointers
+  in
+  
+  let locals,prolog,epilog = 
     List.fold_left 
-      (fun (acc,e') (pc,r) -> 
-	 let locals,app = make_ofbit_param_app r pc in
-	 locals @ acc, append app e'
-      ) ([],Void) (PointerSet.to_list bw_pointers) 
+      (fun (acc,pro,epi) (pc,r as pointer) -> 
+	 let alloc_locals,alloc_ofapp = 
+	   if PointerSet.mem_region r bw_alloc_pointers then
+	     make_ofbit_alloc_param_app r pc 
+	   else [], Void
+	 in
+	 let mem_locals,mem_ofapp = 
+	   if PointerSet.mem pointer bw_mem_pointers then
+	     make_ofbit_mem_param_app r pc 
+	   else [], Void
+	 in
+	 let alloc_toapp = 
+	   if PointerSet.mem_region r bw_alloc_wpointers then
+	     make_tobit_alloc_param_app r pc 
+	   else Void
+	 in
+	 let mem_toapp = 
+	   if PointerSet.mem pointer bw_mem_wpointers then
+	     make_tobit_mem_param_app r pc 
+	   else Void
+	 in
+	 let locals = alloc_locals @ mem_locals in
+	 let ofapp = append alloc_ofapp mem_ofapp in
+	 let toapp = append alloc_toapp mem_toapp in
+	 locals @ acc, append ofapp pro, append toapp epi
+      ) ([],Void,Void) (PointerSet.to_list bw_pointers) 
   in
   let locals =
     fst (List.fold_left 
@@ -1823,18 +1971,18 @@ let make_bitwise_arguments pointers =
 		entry :: acc, StringSet.add n already_used
 	   ) ([],StringSet.empty) locals)
   in
-  locals,prolog  
+  locals,prolog,epilog  
 
 let make_arguments 
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc 
     ~with_globals fname args =
-  let alloc_pointers, write_allocs, read_allocs = 
+  let alloc_wpointers, alloc_rpointers, write_allocs, read_allocs = 
     alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in
   let write_tags, read_tags = 
     tag_table_arguments ~callee_reads ~callee_writes ~region_assoc
   in
-  let pre_mems, fname, mem_pointers, write_mems, read_mems = 
+  let pre_mems, fname, mem_wpointers, mem_rpointers, write_mems, read_mems = 
     memory_arguments 
       ~callee_reads ~callee_writes ~region_assoc ~param_assoc fname
   in
@@ -1844,8 +1992,9 @@ let make_arguments
     else
       [], []
   in
-  let locals, prolog =
-    make_bitwise_arguments (alloc_pointers @ mem_pointers)
+  let locals, prolog, epilog =
+    make_bitwise_arguments alloc_wpointers alloc_rpointers
+      mem_wpointers mem_rpointers
   in
   (* Return complete list of arguments *)
   (* TODO: add mutable and committed effects *)
@@ -1854,7 +2003,7 @@ let make_arguments
     @ write_allocs @ write_tags @ write_mems @ write_globs
     @ read_allocs @ read_tags @ read_mems @ read_globs
   in
-  pre_mems, fname, locals, prolog, args
+  pre_mems, fname, locals, prolog, epilog, args
 
 let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
   MemoryMap.fold

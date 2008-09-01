@@ -848,12 +848,16 @@ logic offset_max_bytes: 't alloc_table, 't pointer, int -> int
 axiom offset_min_bytes_def:
   forall a:'t alloc_table. forall p:'t pointer. forall s:int
   [offset_min_bytes(a,p,s)].
-    offset_min(a,p) <= s * offset_min_bytes(a,p,s)
+    0 < s ->
+      offset_min(a,p) <= s * offset_min_bytes(a,p,s)
+      and s * offset_min_bytes(a,p,s) - s < offset_min(a,p)
 
 axiom offset_max_bytes_def:
   forall a:'t alloc_table. forall p:'t pointer. forall s:int
   [offset_max_bytes(a,p,s)].
-    s * offset_max_bytes(a,p,s) + s - 1 <= offset_max(a,p)
+    0 < s ->
+      s * offset_max_bytes(a,p,s) + s - 1 <= offset_max(a,p)
+      and offset_max(a,p) < s * offset_max_bytes(a,p,s) + s + s - 1
 
 (* encoding of unions *)
 

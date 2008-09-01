@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.346 2008-08-31 08:24:39 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.347 2008-09-01 09:13:48 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1569,6 +1569,7 @@ and expr e =
            coerce ~check_int_overflow:(safety_checking()) 
              e2#mark e2#pos ty e2#typ e2 e2'] 
     | JCEshift(e1,e2) -> 
+	(* TODO: bitwise !!!!!!!!!!!!!!!!!!!!! *)
         let e1' = expr e1 in
         let e2' = expr e2 in
         make_app "shift" 
@@ -1694,7 +1695,7 @@ and expr e =
 		List.map2 (fun param arg -> param,arg) 
 		  f.jc_logic_info_parameters call.jc_call_args
 	      in
-	      let pre, fname, locals, prolog, args = 
+	      let pre, fname, locals, prolog, epilog, args = 
 		make_arguments 
                   ~callee_reads: f.jc_logic_info_effects
                   ~callee_writes: empty_effects
@@ -1728,7 +1729,8 @@ and expr e =
                        | Some(tmp,e,_ass) -> Let(tmp,e,c))
 		  arg_types_asserts call
               in
-              define_locals ~writes:locals (append prolog call)
+              define_locals ~writes:locals 
+		(append (append prolog call) epilog)
           | JCfun f ->
               let arg_types_asserts, args =
 		try match f.jc_fun_info_parameters with
@@ -1763,7 +1765,7 @@ and expr e =
 		  f.jc_fun_info_final_name ^ "_requires"
 		else f.jc_fun_info_final_name
 	      in
-	      let pre, fname, locals, prolog, args = 
+	      let pre, fname, locals, prolog, epilog, args = 
 		make_arguments 
                   ~callee_reads: f.jc_fun_info_effects.jc_reads
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
@@ -1803,7 +1805,8 @@ and expr e =
                        | Some(tmp,e,_ass) -> Let(tmp,e,c))
 		  arg_types_asserts call
               in
-              define_locals ~writes:locals (append prolog call)
+              define_locals ~writes:locals 
+		(append (append prolog call) epilog)
 	end
     | JCEassign_var(v,e1) -> 
 	let e1' = value_assigned e#mark e#pos v.jc_var_info_type e1 in

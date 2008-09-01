@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.28 2008-08-30 17:19:30 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.29 2008-09-01 09:13:48 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -161,11 +161,17 @@ let alloc_param_name ~check_size ac pc =
   let n = prefix ^ "_" ^ (pointer_class_name pc) in
   if check_size then n ^ "_requires" else n
 
-let of_bitvector_param_name pc = 
-  (pointer_class_name pc) ^ "_of_bitvector"
+let alloc_of_bitvector_param_name pc = 
+  (pointer_class_name pc) ^ "_alloc_of_bitvector"
 
-let to_bitvector_param_name pc = 
-  (pointer_class_name pc) ^ "_to_bitvector"
+let mem_of_bitvector_param_name pc = 
+  (pointer_class_name pc) ^ "_mem_of_bitvector"
+
+let alloc_to_bitvector_param_name pc = 
+  (pointer_class_name pc) ^ "_alloc_to_bitvector"
+
+let mem_to_bitvector_param_name pc = 
+  (pointer_class_name pc) ^ "_mem_to_bitvector"
 
 let jessie_return_variable = "return"
 let jessie_return_exception = "Return"

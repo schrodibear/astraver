@@ -1126,57 +1126,153 @@ parameter non_null_intM_requires :
      then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
      else (x_1 = null))) }
 
-parameter struct_Object_of_bitvector :
+parameter struct_Object_alloc_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
-   bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table
-    { (forall p:Object pointer.
-       eq_int(offset_max(Object_alloc_table, p),
-       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
+   { } unit writes Object_alloc_table
+   { (forall p:Object pointer.
+      (eq_int(offset_min(Object_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(Object_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
 
-parameter struct_SideEffects_of_bitvector :
+parameter struct_Object_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  Object_alloc_table:Object alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:Object pointer.
+      (eq_int(offset_min(Object_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(Object_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_Object_mem_of_bitvector :
+ bitvector:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_Object_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
+
+parameter struct_SideEffects_alloc_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
-   bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table
-    { (forall p:Object pointer.
-       eq_int(offset_max(Object_alloc_table, p),
-       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
+   { } unit writes Object_alloc_table
+   { (forall p:Object pointer.
+      (eq_int(offset_min(Object_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(Object_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
 
-parameter struct_String_of_bitvector :
+parameter struct_SideEffects_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  Object_alloc_table:Object alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:Object pointer.
+      (eq_int(offset_min(Object_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(Object_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_SideEffects_mem_of_bitvector :
+ bitvector:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_SideEffects_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
+
+parameter struct_String_alloc_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
-   bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table
-    { (forall p:Object pointer.
-       eq_int(offset_max(Object_alloc_table, p),
-       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
+   { } unit writes Object_alloc_table
+   { (forall p:Object pointer.
+      (eq_int(offset_min(Object_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(Object_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
 
-parameter struct_Throwable_of_bitvector :
+parameter struct_String_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  Object_alloc_table:Object alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:Object pointer.
+      (eq_int(offset_min(Object_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(Object_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_String_mem_of_bitvector :
+ bitvector:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_String_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
+
+parameter struct_Throwable_alloc_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
-   bitvector:(unit, bitvector) memory ->
-    { } unit writes Object_alloc_table
-    { (forall p:Object pointer.
-       eq_int(offset_max(Object_alloc_table, p),
-       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
+   { } unit writes Object_alloc_table
+   { (forall p:Object pointer.
+      (eq_int(offset_min(Object_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(Object_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
 
-parameter struct_intM_of_bitvector :
+parameter struct_Throwable_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  Object_alloc_table:Object alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:Object pointer.
+      (eq_int(offset_min(Object_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(Object_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_Throwable_mem_of_bitvector :
+ bitvector:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_Throwable_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
+
+parameter struct_intM_alloc_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
-  intM_intP:(Object, int) memory ref ->
-   bitvector_alloc_table:unit alloc_table ->
-    bitvector:(unit, bitvector) memory ->
-     { } unit writes Object_alloc_table,intM_intP { true }
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes Object_alloc_table { true }
 
-parameter struct_interface_of_bitvector :
+parameter struct_intM_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  Object_alloc_table:Object alloc_table ->
+   { } unit writes bitvector_alloc_table { true }
+
+parameter struct_intM_mem_of_bitvector :
+ intM_intP:(Object, int) memory ref ->
+  bitvector:(unit, bitvector) memory -> { } unit writes intM_intP { true }
+
+parameter struct_intM_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  intM_intP:(Object, int) memory -> { } unit writes bitvector { true }
+
+parameter struct_interface_alloc_of_bitvector :
  interface_alloc_table:interface alloc_table ref ->
   bitvector_alloc_table:unit alloc_table ->
-   bitvector:(unit, bitvector) memory ->
-    { } unit writes interface_alloc_table
-    { (forall p:interface pointer.
-       eq_int(offset_max(interface_alloc_table, p),
-       offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0)))) }
+   { } unit writes interface_alloc_table
+   { (forall p:interface pointer.
+      (eq_int(offset_min(interface_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(interface_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_interface_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  interface_alloc_table:interface alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:interface pointer.
+      (eq_int(offset_min(interface_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(interface_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_interface_mem_of_bitvector :
+ bitvector:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_interface_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
 
 let SideEffects_m1_safety =
  fun (this_0 : Object pointer) (t : Object pointer) ->
@@ -2021,14 +2117,19 @@ logic offset_max_bytes : 'a1 alloc_table, 'a1 pointer, int -> int
 axiom offset_min_bytes_def:
   (forall a:'a1 alloc_table.
     (forall p:'a1 pointer.
-      (forall s:int [offset_min_bytes(a, p, s)]. (offset_min(a,
-        p) <= (s * offset_min_bytes(a, p, s))))))
+      (forall s:int [offset_min_bytes(a, p, s)].
+        ((0 < s) ->
+         ((offset_min(a, p) <= (s * offset_min_bytes(a, p, s))) and
+          (((s * offset_min_bytes(a, p, s)) - s) < offset_min(a, p)))))))
 
 axiom offset_max_bytes_def:
   (forall a:'a1 alloc_table.
     (forall p:'a1 pointer.
-      (forall s:int [offset_max_bytes(a, p, s)]. ((((s * offset_max_bytes(a,
-        p, s)) + s) - 1) <= offset_max(a, p)))))
+      (forall s:int [offset_max_bytes(a, p, s)].
+        ((0 < s) ->
+         (((((s * offset_max_bytes(a, p, s)) + s) - 1) <= offset_max(a,
+          p)) and (offset_max(a, p) < ((((s * offset_max_bytes(a, p,
+          s)) + s) + s) - 1)))))))
 
 logic extract_bytes : bitvector, int, int -> bitvector
 
@@ -3283,12 +3384,29 @@ why -simplify [...] why/SideEffects.why
 
 (BG_PUSH
  ;; Why axiom offset_min_bytes_def
- (FORALL (a p s) (<= (offset_min a p) (* s (offset_min_bytes a p s)))))
+ (FORALL (a p s)
+ (IMPLIES (< 0 s)
+ (AND (<= (offset_min a p) (* s (offset_min_bytes a p s)))
+ (< (- (* s (offset_min_bytes a p s)) s) (offset_min a p)))))
+
+ (FORALL (s)
+ (IMPLIES (< 0 s)
+ (FORALL (a p)
+ (AND (<= (offset_min a p) (* s (offset_min_bytes a p s)))
+ (< (- (* s (offset_min_bytes a p s)) s) (offset_min a p)))))))
 
 (BG_PUSH
  ;; Why axiom offset_max_bytes_def
  (FORALL (a p s)
- (<= (- (+ (* s (offset_max_bytes a p s)) s) 1) (offset_max a p))))
+ (IMPLIES (< 0 s)
+ (AND (<= (- (+ (* s (offset_max_bytes a p s)) s) 1) (offset_max a p))
+ (< (offset_max a p) (- (+ (+ (* s (offset_max_bytes a p s)) s) s) 1)))))
+
+ (FORALL (s)
+ (IMPLIES (< 0 s)
+ (FORALL (a p)
+ (AND (<= (- (+ (* s (offset_max_bytes a p s)) s) 1) (offset_max a p))
+ (< (offset_max a p) (- (+ (+ (* s (offset_max_bytes a p s)) s) s) 1)))))))
 
 (BG_PUSH
  ;; Why axiom select_store_eq_union
@@ -4634,14 +4752,19 @@ logic offset_max_bytes : 'a1 alloc_table, 'a1 pointer, int -> int
 axiom offset_min_bytes_def:
   (forall a:'a1 alloc_table.
     (forall p:'a1 pointer.
-      (forall s:int [offset_min_bytes(a, p, s)]. (offset_min(a,
-        p) <= (s * offset_min_bytes(a, p, s))))))
+      (forall s:int [offset_min_bytes(a, p, s)].
+        ((0 < s) ->
+         ((offset_min(a, p) <= (s * offset_min_bytes(a, p, s))) and
+          (((s * offset_min_bytes(a, p, s)) - s) < offset_min(a, p)))))))
 
 axiom offset_max_bytes_def:
   (forall a:'a1 alloc_table.
     (forall p:'a1 pointer.
-      (forall s:int [offset_max_bytes(a, p, s)]. ((((s * offset_max_bytes(a,
-        p, s)) + s) - 1) <= offset_max(a, p)))))
+      (forall s:int [offset_max_bytes(a, p, s)].
+        ((0 < s) ->
+         (((((s * offset_max_bytes(a, p, s)) + s) - 1) <= offset_max(a,
+          p)) and (offset_max(a, p) < ((((s * offset_max_bytes(a, p,
+          s)) + s) + s) - 1)))))))
 
 logic extract_bytes : bitvector, int, int -> bitvector
 

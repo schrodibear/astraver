@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.26 2008-08-31 08:24:39 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.27 2008-09-01 09:13:48 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -180,6 +180,7 @@ struct
   let split (fi,r) s = S.split (fi,RegionUF.repr r) s
   let elements = S.elements
   let exists = S.exists
+  let union = S.fold add
     (* Added w.r.t. standard Set. *)
   let of_list ls =
     List.fold_left (fun s e -> add e s) empty ls
@@ -190,6 +191,9 @@ struct
     S.fold (fun (fi,r) acc -> S.add (fi,RegionUF.repr r) acc) s S.empty
   let find_region r s =
     S.filter (fun (_fi,r') -> 
+		InternalRegion.equal (RegionUF.repr r) (RegionUF.repr r')) s
+  let mem_region r s =
+    S.exists (fun (_fi,r') -> 
 		InternalRegion.equal (RegionUF.repr r) (RegionUF.repr r')) s
 end
 
