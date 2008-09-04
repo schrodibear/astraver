@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.mli,v 1.17 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: ctyping.mli,v 1.18 2008-09-04 08:55:38 marche Exp $ i*)
 
 (* Typing C programs *)
 val tezero : Cast.texpr
@@ -41,6 +41,8 @@ val eval_const_expr_noerror : Cast.texpr -> int64
 
 val int_teconstant : string -> Cast.texpr
 
+(*
 val float_constant_type : string -> string * Ctypes.cfloat
+*)
 
 val coerce : Ctypes.ctype -> Cast.texpr -> Cast.texpr

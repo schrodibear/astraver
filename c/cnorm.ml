@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.115 2008-07-11 15:18:27 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.116 2008-09-04 08:55:38 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -209,7 +209,7 @@ let rec type_why e =
     | NEcast ({Ctypes.ctype_node = Tint ik}, _) -> 
 	why_type_for_int_kind ik
     | NEconstant (RealConstant x) -> 
-	let _,fk = Ctyping.float_constant_type x in 
+	let _,fk = Ctypes.float_constant_type ~in_logic:false x in 
 	why_type_for_float_kind fk
     | NEstring_literal s ->  Pointer (make_zone false)
     | NEseq (e1,e2) -> 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.156 2008-06-05 15:14:26 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.157 2008-09-04 08:55:38 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -301,14 +301,6 @@ let conversion e1 e2 =
 	coerce ty e1, coerce ty e2, ty
     | _ -> assert false
 
-let float_constant_type s =
-  let n = String.length s in
-  assert (n >= 1);
-  match s.[n-1] with
-    | 'f' | 'F' -> String.sub s 0 (n-1), Float
-    | 'l' | 'L' -> String.sub s 0 (n-1), LongDouble
-    | _ -> s, Double
-
 let has_suffix ~suf s =
   let nsuf = String.length suf in
   let n = String.length s  in
@@ -503,7 +495,7 @@ and type_expr_node loc env = function
       TEconstant c, noattr (Tint ik)
   | CEconstant (RealConstant s) ->
       use_floats := true;
-      let s,fk = float_constant_type s in
+      let s,fk = float_constant_type ~in_logic:false s in
       TEunary (Ufloat_conversion,
 	       { texpr_node = TEconstant (RealConstant s);
 		 texpr_loc = loc; texpr_type = c_real }), 

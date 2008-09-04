@@ -33,6 +33,11 @@ int f1(void) {
 }
 
 int f2(void){
-  int i =0xFFFF0000;
+  int i = 0xFFFF0000;
   return i;
+}
+
+//@ ensures \result == 0.1f 
+float f3() {
+  return 0.1f;
 }

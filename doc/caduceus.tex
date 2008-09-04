@@ -1061,9 +1061,6 @@ for instance~\cite{KR88}).
 Within annotations the lexical conventions are the same as C ones,
 except that:
 \begin{itemize}
-\item comments are enclosed by \texttt{(*} and \texttt{*)} (so that
-  you can put comments inside annotations without messing traditional
-  C compilers)
 \item the set of keywords is different: \par
   \begin{center}
   \begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
@@ -1081,6 +1078,11 @@ except that:
   \verb!\base_addr! & \verb!\nothing!
   \end{tabular}
   \end{center}
+\item single-line comments (i.e. using \verb|//|) are allowed in
+  annotations, so that you can put comments inside annotations without
+  messing traditional C compilers. Note that former syntax for
+  comments in annotations using \texttt{(*} and \texttt{*)} is not
+  available anymore.
 \end{itemize}
 
 \subsection{Syntax}

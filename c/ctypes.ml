@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctypes.ml,v 1.26 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: ctypes.ml,v 1.27 2008-09-04 08:55:38 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -136,3 +136,13 @@ let is_pointer ty =
   match ty.ctype_node with
     | Tarray _ | Tpointer _ -> true
     | _ -> false
+
+
+let float_constant_type ~in_logic s =
+  let n = String.length s in
+  assert (n >= 1);
+  match s.[n-1] with
+    | 'f' | 'F' -> String.sub s 0 (n-1), Float
+    | 'l' | 'L' -> String.sub s 0 (n-1), LongDouble
+    | _ -> s, if in_logic then Real else Double
+

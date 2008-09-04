@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.125 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.126 2008-09-04 08:55:38 marche Exp $ i*)
 
 open Coptions
 open Format
@@ -183,9 +183,17 @@ let rec type_term env t =
 and type_term_node loc env = function
   | PLconstant (IntConstant _ as c) -> 
       Tconstant c, c_exact_int
-  | PLconstant (RealConstant _ as c) ->
+  | PLconstant (RealConstant s) ->
       use_floats := true;
-      Tconstant c, c_real
+      let s,fk = float_constant_type ~in_logic:true s in
+      begin match fk with
+	| Ctypes.Real -> Tconstant (RealConstant s), c_real
+	| _ ->
+	    Tunop (Ufloat_conversion,
+		     { term_node = Tconstant (RealConstant s);
+		       term_loc = loc; term_type = c_real }), 
+	    c_float fk	      
+      end
   | PLvar x ->
       let info = 
 	try Env.find x.var_name env with Not_found -> 
