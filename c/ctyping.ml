@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.157 2008-09-04 08:55:38 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.158 2008-09-05 13:21:01 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -84,7 +84,7 @@ let rec sizeof loc =
     | Tfloat Double -> of_int 8
     | Tfloat LongDouble -> of_int 12
     | Tfloat Real -> assert false
-    | Tvar x -> assert false (* should be expansed *)
+    | Tvar _x -> assert false (* should be expansed *)
     | Tarray (_,ty, Some e) -> 
 	mul e (sizeof ty)
     | Tarray (_,ty, None) -> if field then of_int 0 else of_int 1

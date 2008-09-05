@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: info.ml,v 1.48 2008-05-28 14:53:34 marche Exp $ i*)
+(*i $Id: info.ml,v 1.49 2008-09-05 13:21:01 marche Exp $ i*)
 
 open Ctypes
 open Creport
@@ -81,7 +81,7 @@ let rec same_why_type wt1 wt2 =
 
 let rec same_why_type_no_zone wt1 wt2 =
   match wt1, wt2 with
-    | Pointer z1, Pointer z2 -> true
+    | Pointer _z1, Pointer _z2 -> true
     | Memory (a1,_), Memory (a2,_) ->
 	same_why_type_no_zone a1 a2
     | Int, Int -> true

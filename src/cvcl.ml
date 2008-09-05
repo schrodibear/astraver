@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl.ml,v 1.54 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: cvcl.ml,v 1.55 2008-09-05 13:21:01 marche Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -148,7 +148,7 @@ let rec print_predicate fmt = function
       fprintf fmt "%a" Ident.print id
   | Papp (id, tl, _) when id == t_distinct ->
       fprintf fmt "@[(%a)@]" print_predicate (Util.distinct tl)
-  | Papp (id, [t], _) when id == well_founded ->
+  | Papp (id, [_t], _) when id == well_founded ->
       fprintf fmt "TRUE %% was well_founded@\n"
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(%a =@ %a)@]" print_term a print_term b
@@ -186,7 +186,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(EXISTS (%a:%a):@ %a)@]" 
 	Ident.print id' print_pure_type t print_predicate p'
   | Pfpi _ ->
-      failwith "fpi not supported with Simplify"
+      failwith "fpi not supported with CVCL"
   | Pnamed (_, p) -> (* TODO: print name *)
       print_predicate fmt p
 
@@ -252,7 +252,7 @@ let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
   fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
 
-let print_obligation fmt loc expl o s = 
+let print_obligation fmt loc _expl o s = 
   fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.gen_report_line loc;
   fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s
 (*;
@@ -266,12 +266,12 @@ let iter = Encoding.iter
 let reset () = Encoding.reset ()
 
 let output_elem fmt = function
-  | Dtype (loc, [], id) -> declare_type fmt id
+  | Dtype (_loc, [], id) -> declare_type fmt id
   | Dtype _ -> assert false
-  | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
-  | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
-  | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
-  | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
+  | Dlogic (_loc, id, t) -> print_logic fmt id t.scheme_type
+  | Dpredicate_def (_loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dfunction_def (_loc, id, d) -> print_function_def fmt id d.scheme_type
+  | Daxiom (_loc, id, p) -> print_axiom fmt id p.scheme_type
   | Dgoal (loc, expl, id, s) -> print_obligation fmt loc expl id s.Env.scheme_type
 
 let prelude_done = ref false

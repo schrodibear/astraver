@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.81 2008-08-19 12:06:15 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.82 2008-09-05 13:21:01 marche Exp $ i*)
 
 open Printf
 open Options
@@ -129,8 +129,8 @@ let enlarge_font () =
 let reduce_font () =
   decr Colors.font_size; change_font ()
 
-let display_info = ref (function s -> failwith "not ready")
-let flash_info = ref (function s -> failwith "not ready")
+let display_info = ref (function _s -> failwith "not ready")
+let flash_info = ref (function _s -> failwith "not ready")
 
 let cache_check = ref (GButton.toggle_button ())
 let hard_proof_check = ref (GButton.toggle_button ())
@@ -164,7 +164,7 @@ module View = struct
     ~renderer:(renderer, ["text", Model.name]) () 
  
 
-  let add_columns ~(view : GTree.view) ~model =
+  let add_columns ~(view : GTree.view) ~_model =
     (* let renderer = GTree.cell_renderer_text [`XALIGN 0.] in *)
     let icon_renderer = GTree.cell_renderer_pixbuf [ `STOCK_SIZE `BUTTON ] in
     let _n : int = view#append_column first_col in
@@ -188,7 +188,7 @@ let update_buffer tv =
 
 open Logic_decl
 
-let show_xpl (loc,xpl) (tv:GText.view) =
+let show_xpl (loc,xpl) (_tv:GText.view) =
   match loc with
     | (s,l,b,e) ->
 	let loc = 
@@ -265,7 +265,7 @@ let update_statistics (model:GTree.tree_store) row f children =
   let name =
     if f="" then "User goals" else
     try
-      let (id,beh,(f,l,b,e)) = Hashtbl.find Util.program_locs f in
+      let (id,beh,(_f,_l,_b,_e)) = Hashtbl.find Util.program_locs f in
       beh ^ " of " ^ id
     with Not_found -> "unknown function " ^ f
   in
@@ -332,7 +332,7 @@ let try_proof oblig =
 (* 
  * run a prover on an obligation and update the model 
  *)
-let run_prover_child p (view:GTree.view) (model:GTree.tree_store) 
+let run_prover_child p (_view:GTree.view) (model:GTree.tree_store) 
                      o bench alone = 
   let column_p = p.Model.pr_icon in
   let (_, _, oblig, seq) = o in
@@ -582,7 +582,7 @@ let main () =
   *)
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
-  let vc_provers = View.add_columns ~view ~model in
+  let vc_provers = View.add_columns ~view ~_model:model in
   
   (* cache and view menu *)
   let _ = configuration_factory#add_separator () in
@@ -916,7 +916,7 @@ let main () =
    *)
   let _ =
     files_combo#entry#event#connect#after#focus_in ~callback:
-      begin fun ev -> 
+      begin fun _ev -> 
 	Pprinter.move_to_source None;
 	Pprinter.reset_last_file (); (* ?? pourquoi ?? *)
 	false
@@ -998,7 +998,7 @@ let main () =
     load_cache "gwhy.cache";
     if not (Cache.is_empty ()) then 
       Hashtbl.iter 
-	(fun s (_,_,o,seq) -> 
+	(fun _s (_,_,o,seq) -> 
 	   let cleaned = Cache.clean seq in
 	   if in_cache cleaned then begin 
 	     let row = Hashtbl.find Model.orows o in

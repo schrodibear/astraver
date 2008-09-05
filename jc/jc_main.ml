@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.119 2008-08-28 13:57:41 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.120 2008-09-05 13:21:01 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -92,7 +92,7 @@ let main () =
       (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
       Jc_typing.logic_functions_table;
     Hashtbl.iter 
-      (fun _ (f,loc,s,b) -> 
+      (fun _ (f,_loc,s,b) -> 
 	 Option_misc.iter (Jc_callgraph.compute_calls f s) b)
       Jc_typing.functions_table;
     let logic_components = 

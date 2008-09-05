@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.154 2008-07-28 07:59:22 regisgia Exp $ i*)
+(*i $Id: main.ml,v 1.155 2008-09-05 13:21:01 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -79,7 +79,7 @@ let store_decl_into_a_queue d  =
 (** push the declarations  in the corresponding 
     prover and stores them (or their expansed version) into 
     declarationQueue **)
-let push_decl vloc d = 
+let push_decl _vloc d = 
   add_loc d;
   if (not pruning) && (Options.pruning_hyp_v = -1) then
     begin 
@@ -139,7 +139,7 @@ let push_validation id tt v =
 
 let is_pure_type_scheme s = is_pure_type_v s.scheme_type
 
-let push_parameter id v tv = match prover () with
+let push_parameter id _v tv = match prover () with
   | Coq _ -> 
       if valid then Coq.push_parameter id tv
   | Pvs | HolLight | Isabelle | Hol4 | Mizar
@@ -287,7 +287,7 @@ let interp_program loc id p =
     let ren = initial_renaming env in
     let tt = Monad.trad_type_c ren env c in
     let ren = initial_renaming env in
-    let cc = Red.red (Mlize.trad p ren) in
+    let _cc = Red.red (Mlize.trad p ren) in
       Coq.push_parameter (ids ^ "_valid") tt;
 (*      Coq.push_program (ids ^ "_functional") tt cc; *)
     (*** TODO
@@ -353,7 +353,7 @@ let check_duplicate_binders loc ty =
   in
   check Ident.Idset.empty ty
 
-let interp_decl ?(prelude=false) d = 
+let interp_decl ?(_prelude=false) d = 
   let lab = Label.empty in
   match d with 
     | Program (loc,id, p) ->
@@ -481,15 +481,15 @@ let interp_decl ?(prelude=false) d =
 	    
 (*s Prelude *)
 
-let load_file ?(prelude=false) f =
+let load_file ?(_prelude=false) f =
   let c = open_in f in
   let p = Lexer.parse_file (Lexing.from_channel c) in
-  List.iter (interp_decl ~prelude) p;
+  List.iter (interp_decl ~_prelude) p;
   close_in c
 
 let load_prelude () =
   try
-    List.iter (load_file ~prelude:true) lib_files_to_load;
+    List.iter (load_file ~_prelude:true) lib_files_to_load;
     begin match prover () with
       | Simplify when no_simplify_prelude -> Simplify.reset ()
       | _ -> ()

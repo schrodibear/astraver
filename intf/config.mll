@@ -103,7 +103,7 @@
     output_string out_channel " predicate, lpredicate, pr_hilight, separator, ";
     output_string out_channel "hypothesis, conclusion, hilight, cc_type} \n";
     List.iter
-      (fun {key=k; name=n; fc=f; bc=b} -> output_string out_channel 
+      (fun {key=k; name=_n; fc=f; bc=b} -> output_string out_channel 
 	 ("color_" ^ k ^ " = \"" ^ f ^ "\" \"" ^ b ^ "\" \n"))
       (get_all_colors ());
     try close_out out_channel; None
@@ -117,7 +117,7 @@
       ~message_type:`INFO ~buttons:GWindow.Buttons.ok
       ~title:"Saving preferences" ~allow_grow:false
       ~modal:true ~resizable:false ()
-    in ignore(w#connect#response ~callback:(fun t -> w#destroy ()));
+    in ignore(w#connect#response ~callback:(fun _t -> w#destroy ()));
     ignore(w#show ())
     
 
@@ -255,7 +255,7 @@ and string = parse
 		~message_type:`ERROR ~buttons:GWindow.Buttons.ok
 		~title:"Saving preferences" ~allow_grow:false
 		~modal:true ~resizable:false ()
-	      in ignore(w#connect#response ~callback:(fun t -> w#destroy ()));
+	      in ignore(w#connect#response ~callback:(fun _t -> w#destroy ()));
 	      ignore(w#show ())
       end;
       close_in in_channel;

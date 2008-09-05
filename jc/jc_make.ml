@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.31 2008-07-28 08:01:05 filliatr Exp $ i*)
+(*i $Id: jc_make.ml,v 1.32 2008-09-05 13:21:01 marche Exp $ i*)
 
 open Format
 open Pp
@@ -118,7 +118,7 @@ let generic full f targets =
        fprintf fmt "simplify: %a@\n" (print_files simplify) targets;
        fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && ($(DP) $^)@\n@\n";
        fprintf fmt "simplify/%%_why.sx: why/%%.why@\n";
-       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(JESSIELIBFILE) why/$*.why@\n@\n";
+       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILE) why/$*.why@\n@\n";
        
        fprintf fmt "ergo: %a@\n" (print_files ergo) targets;
        fprintf fmt "\t@@echo 'Running Ergo on proof obligations' && ($(DP) $^)@\n@\n";

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.82 2008-07-24 09:16:00 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.83 2008-09-05 13:21:01 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -49,7 +49,9 @@ type elem =
 
 let queue = Queue.create ()
 
-let reset () = Queue.clear queue; Encoding.reset ()
+let reset () = 
+  Queue.clear queue; 
+  Encoding.reset ()
 
 let decl_to_elem = function
   | Dgoal (loc, expl, id, s) -> Queue.add (Oblig (loc, expl,id, s)) queue
@@ -181,7 +183,7 @@ let rec print_term fmt = function
   | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	ident id (print_list space print_term) tl
-  | Tnamed (n, t) ->
+  | Tnamed (_n, t) ->
       (*fprintf fmt "@[;;%s@\n%a@]" n pp p*) 
       print_term fmt t
 
@@ -233,7 +235,7 @@ let rec print_predicate pos fmt p =
       ident fmt id
   | Papp (id, tl, _) when id == t_distinct ->
       fprintf fmt "@[(DISTINCT@ %a)@]" print_terms tl
-  | Papp (id, [t], _) when id == well_founded ->
+  | Papp (id, [_t], _) when id == well_founded ->
       fprintf fmt "TRUE ; was well_founded@\n"
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(EQ %a@ %a)@]" print_term a print_term b
@@ -286,13 +288,13 @@ let rec print_predicate pos fmt p =
       let bv,p = Util.decomp_forall p in
       let var fmt (x,_) = ident fmt x in
       fprintf fmt "@[(FORALL (%a)@ %a)@]" (print_list space var) bv pp p
-  | Exists (id,n,t,p) -> 
+  | Exists (id,n,_t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(EXISTS (%a)@ %a)@]" ident id' pp p'
   | Pfpi _ ->
       failwith "fpi not supported with Simplify"
-  | Pnamed (n, p) ->
+  | Pnamed (_n, p) ->
       (*fprintf fmt "@[;;%s@\n%a@]" n pp p*) 
       pp fmt p
   (** BUG Simplify
@@ -321,7 +323,7 @@ let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
 	print_predicate false fmt concl
-    | Svar (id, v) :: hyps -> 
+    | Svar (id, _v) :: hyps -> 
 	fprintf fmt "@[(FORALL (%a)@ %a)@]" ident id print_seq hyps
     | Spred (_,p) :: hyps -> 
 	fprintf fmt "@[(IMPLIES %a@ %a)@]" 
@@ -384,7 +386,7 @@ let idents_plus_prefix fmt s  =
       fprintf fmt "|%s|" s
 
 let print_function fmt id p =
-  let (bl,pt,e) = p.Env.scheme_type in
+  let (bl,_pt,e) = p.Env.scheme_type in
   match bl with 
     [] -> 
       fprintf fmt "@[(BG_PUSH@\n ;; Why function %s@\n" id;
@@ -398,7 +400,7 @@ let print_function fmt id p =
 	print_term e
 
 let print_elem fmt = function
-  | Oblig (loc, expl, id, s) -> print_obligation fmt loc id s
+  | Oblig (loc, _expl, id, s) -> print_obligation fmt loc id s
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate fmt id p
   | FunctionDef (id, f) -> print_function fmt id f
@@ -407,7 +409,7 @@ let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in
   let file = out_file (fwe ^ "_why.sx") in
   do_not_edit_below ~file
-    ~before:(fun fmt -> ())
+    ~before:(fun _fmt -> ())
     ~sep
     ~after:(fun fmt -> 
    Encoding.iter decl_to_elem;

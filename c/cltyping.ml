@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.126 2008-09-04 08:55:38 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.127 2008-09-05 13:21:01 marche Exp $ i*)
 
 open Coptions
 open Format
@@ -416,8 +416,7 @@ and type_term_node loc env = function
 	 let t = Env.find "result" env in 
 	 begin match t with
 	   | Var_info v -> Clogic.Tvar v, v.var_type
-	   | Fun_info f -> 
-               error loc ("result is a function")
+	   | Fun_info _f -> error loc ("result is a function")
 	 end
        with Not_found -> error loc "\\result meaningless")
   | PLnull ->

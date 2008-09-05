@@ -242,7 +242,7 @@ let add_provers l =
 
 let affiche () = 
   Hashtbl.iter
-    (fun p s -> print_endline p.pr_name)
+    (fun p _s -> print_endline p.pr_name)
     provers_s
 
 let select_prover p = 
@@ -254,7 +254,7 @@ let deselect_prover p =
 
 let get_provers_s () = 
   Hashtbl.fold 
-    (fun k v acc -> k::acc)
+    (fun k _v acc -> k::acc)
     provers_s
     []
   

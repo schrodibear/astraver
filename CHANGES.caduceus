@@ -1,8 +1,10 @@
 
 Note: These are the changes for Caduceus.
 
- o float constants in annotations: suffixes f or l are interpreted as
-   rounding to float or longdouble
+ o bug fix: 'simplify' entry of the generated makefile was ignoring
+   prelude axioms 
+ o float constants in annotations: suffixes f or l
+   are interpreted as rounding to float or longdouble
 
 version 2.14, July 28th, 2008
 =============================

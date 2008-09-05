@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.59 2008-07-28 08:01:05 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.60 2008-09-05 13:21:01 marche Exp $ i*)
 
 open Format
 open Pp
@@ -109,7 +109,7 @@ let generic f targets =
        fprintf fmt "simplify: %a@\n" (print_files simplify) targets;
        fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (why-dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "simplify/%%_why.sx: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir  simplify $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir  simplify $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "ergo: %a@\n" (print_files ergo) targets;
        fprintf fmt "\t@@echo 'Running Ergo on proof obligations' && (why-dp -timeout $(TIMEOUT) $^)@\n@\n";

@@ -65,8 +65,8 @@ STRIP=@STRIP@
 MANDIR=$(DESTDIR)@mandir@
 
 # other variables
-OCAMLC   = @OCAMLC@
-OCAMLOPT = @OCAMLOPT@
+OCAMLC   = @OCAMLC@ 
+OCAMLOPT = @OCAMLOPT@ 
 OCAMLDEP = @OCAMLDEP@
 OCAMLLEX = @OCAMLLEX@
 OCAMLYACC= @OCAMLYACC@
@@ -76,9 +76,9 @@ OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
 INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I ml
-BFLAGS   = -w Aelyz -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
+BFLAGS   = -w Ael -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 # no -warn-error because some do not compile all files (e.g. those linked to APRON)
-OFLAGS   = -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
+OFLAGS   = -w Ael -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 
 LCFLAGS = -L/usr/lib -L/usr/local/lib/ocaml
 
