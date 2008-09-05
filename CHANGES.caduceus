@@ -1,6 +1,8 @@
 
 Note: These are the changes for Caduceus.
 
+ o avoid assertion failures as much as possible in case of: union
+   declarations, string literals, function pointers, pointer casts
  o bug fix: 'simplify' entry of the generated makefile was ignoring
    prelude axioms 
  o float constants in annotations: suffixes f or l

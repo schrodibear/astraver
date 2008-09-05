@@ -110,7 +110,7 @@
 	  loop st' s
       | Sstorage st' :: s when st' = st ->
 	  warning "duplicate storage class"; loop st s
-      | Sstorage st' :: _ ->
+      | Sstorage _st' :: _ ->
 	  error "multiple storage class"
       | _ :: s -> 
 	  loop st s
@@ -125,7 +125,7 @@
 	  (match so with 
 	     | None -> loop (Some b') sp
 	     | Some b when b = b' -> warning "duplicate (un)signed"; loop so sp
-	     | Some b -> error "both signed and unsigned")
+	     | Some _b -> error "both signed and unsigned")
       | _ :: sp -> 
 	  loop so sp
     in

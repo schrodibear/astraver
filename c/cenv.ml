@@ -334,7 +334,7 @@ let rec type_type_why ?name ty zone_is_var =
     | Tarray (_,ty,_)  
     | Tpointer (_,ty) -> 
 	begin match ty.ctype_node with 
-	  | Tstruct s -> 
+	  | Tstruct _s -> 
 	      let z = make_zone ?name zone_is_var in
 	      Pointer z
 	  | _ ->
@@ -354,10 +354,10 @@ let rec type_type_why ?name ty zone_is_var =
 	    else
 	      (Format.eprintf "Undefined type %s@." v; assert false)
 	end
-    | Tunion s -> 
+    | Tunion _s -> 
 	let z = make_zone ?name zone_is_var in
 	Pointer z
-    | Tstruct s -> 
+    | Tstruct _s -> 
 	let z = make_zone ?name zone_is_var in
 	Pointer z
 
@@ -483,7 +483,7 @@ module Env = struct
     in
     find env.tags
 
-  let find_tag_type loc env tyn = 
+  let find_tag_type _loc env tyn = 
     let tt = match tyn with
       | Tstruct (n) | Tunion (n) | Tenum (n) ->
           (try
@@ -577,7 +577,7 @@ let find_field ~tag:n ~field:x =
     Hashtbl.add fields_t (n,x) f; f
 
 let declare_fields tyn fl = match tyn with
-  | Tstruct n | Tunion n ->
+  | Tstruct _n | Tunion _n ->
       List.iter 
 	(fun (t,v) -> set_var_type (Var_info v) t false)
 	fl
@@ -590,7 +590,7 @@ let not_struct t = match t.ctype_node with
 
 let update_fields_type () =
   Hashtbl.iter
-    (fun (n,_) x ->
+    (fun (_n,_) x ->
        if x.var_is_referenced && not_struct x.var_type then
 	 begin
 	   Coptions.lprintf "field %s is now a pointer@." x.var_name;

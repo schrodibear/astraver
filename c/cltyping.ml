@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cltyping.ml,v 1.127 2008-09-05 13:21:01 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.128 2008-09-05 15:46:35 marche Exp $ i*)
 
 open Coptions
 open Format
@@ -424,18 +424,17 @@ and type_term_node loc env = function
       Cenv.set_var_type (Var_info info) (c_void_star Not_valid) false;
       Clogic.Tvar info, (c_void_star Not_valid)
   | PLcast (ty, t) ->
+      let tty = type_logic_type loc env ty in
       let t = type_term env t in
       let tt = t.term_type in
-      begin match ty, tt.ctype_node with
-	| LTvoid, Tvoid -> 
+      begin match tty.ctype_node, tt.ctype_node with
+	| Tvoid, Tvoid -> 
 	    t.term_node, tt
-	| (LTchar _ | LTshort _ | LTint _ | LTlong _ | LTlonglong _ | LTinteger
-	  | LTfloat | LTdouble | LTlongdouble | LTreal), 
+	| (Tint _ | Tfloat _ | Tenum _), 
 	  (Tenum _ | Tint _ | Tfloat _) -> 
-	    let t = coerce (type_logic_type loc env ty) t in
-	    t.term_node, t.term_type
+	    let t = coerce tty t in t.term_node, t.term_type
 	| _ -> 
-	    warning loc "ignored cast in annotation"; t.term_node, tt
+	    Tcast(tty, t) , tty
       end
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ | PLseparated _ 
   | PLexists _ | PLforall _ | PLimplies _ | PLiff _ | PLfalse

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ctyping.ml,v 1.158 2008-09-05 13:21:01 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.159 2008-09-05 15:46:36 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -87,7 +87,7 @@ let rec sizeof loc =
     | Tvar _x -> assert false (* should be expansed *)
     | Tarray (_,ty, Some e) -> 
 	mul e (sizeof ty)
-    | Tarray (_,ty, None) -> if field then of_int 0 else of_int 1
+    | Tarray (_,_ty, None) -> if field then of_int 0 else of_int 1
     | Tpointer _ -> of_int 4
     | Tstruct n ->
 	(match tag_type_definition n with
@@ -126,11 +126,11 @@ and eval_const_expr_noerror (e : texpr) = match e.texpr_node with
       Int64.mul (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)
   | TEbinary (t1, Cast.Bdiv_int _, t2) -> 
       Int64.div (eval_const_expr_noerror t1)  (eval_const_expr_noerror t2)  
-  | TEbinary (t1, Cast.Bdiv_float _, t2) -> 
+  | TEbinary (_t1, Cast.Bdiv_float _, _t2) -> 
       invalid_arg "not a constant expression 2"
   | TEcast (_, e) -> eval_const_expr_noerror e
   | TEunary (Uint_conversion, e) -> eval_const_expr_noerror e
-  | TEsizeof (t,n) -> n
+  | TEsizeof (_t,n) -> n
   | TEvar (Var_info v) ->
       if e.texpr_type.Ctypes.ctype_const 
       then v.enum_constant_value
@@ -348,7 +348,7 @@ let warn_for_read_only loc e =
       Loc.report_position Coptions.log loc;
       fprintf Coptions.log "Variable %s is assigned@." x.var_name;
       set_assigned x
-  | TEvar (Fun_info f) ->
+  | TEvar (Fun_info _f) ->
       warning loc ("function assignment (ignored)")
   | _ when e.texpr_type.ctype_const ->
       warning loc "assigment of read-only location"
@@ -464,14 +464,14 @@ and type_type_node ?(ghost=false) ?(parameters=false) loc env ty =
       let fl = enum_fields Int64.zero fl in
       Env.set_enum_type loc env (Tenum x) fl 
   | CTfun (pl, tyn) ->
-      let pl = List.map (fun (ty,x) -> type_type loc env ty) pl in
+      let pl = List.map (fun (ty,_x) -> type_type loc env ty) pl in
       let pl = match pl with
 	| [{ctype_node = Tvoid}] -> []
 	| _ -> pl
       in
       Tfun (pl, type_type loc env tyn)
 
-and type_integer loc env = function
+and type_integer _loc env = function
   | Cast.Char -> Char
   | Cast.Short -> Short
   | Cast.Int -> Int 
@@ -806,7 +806,7 @@ and type_expr_node loc env = function
 		  when compatible_type e.texpr_type t 
 		    || (pointer_type t && is_null e) ->
 		  check_args (i+1) (coerce t e :: el') (el, tl)
-	      | e :: _, _ :: _ ->
+	      | _e :: _, _ :: _ ->
 		  error loc "incompatible type for argument %d" i
 	      | [], _ :: _ ->
 		  error loc "too few arguments"
@@ -932,7 +932,7 @@ let rec type_initializer loc env ty = function
 	     (match tag_type_definition n with
 		| TTIncomplete -> 
 		    error loc "initializer but incomplete type"
-		| TTStructUnion (Tstruct n, fl) -> 
+		| TTStructUnion (Tstruct _n, fl) -> 
 		    Ilist (type_struct_initializer loc env fl el)
 		| _ -> 
 		    assert false)
@@ -967,7 +967,7 @@ let array_size_from_initializer loc ty i = match ty.ctype_node, i with
       let s = of_int (List.length l) in
       { ty with ctype_node = Tarray (Valid(Int64.zero,s),ety, Some s) }
 
-  | Tarray (_,ety, None), None -> error loc "array size missing"  
+  | Tarray (_,_ety, None), None -> error loc "array size missing"  
 
   | Tarray (_,ety, None), Some (Iexpr e) ->
       (* since string literals in initializers are no longer transformed
@@ -1038,7 +1038,7 @@ let rec build_label_tree st acc : label_tree list =
     | CSgoto _
     | CSreturn _
     | CSannot _ -> acc
-    | CSif (e, s1, s2) ->
+    | CSif (_e, s1, s2) ->
 	let l1 = build_label_tree s1 [] in
 	let l2 = build_label_tree s2 [] in
 	(LabelBlock l1) :: (LabelBlock l2) :: acc
@@ -1308,7 +1308,7 @@ let type_spec_decl loc = function
       Taxiom (id, type_predicate (Env.empty ()) p)
   | LDinvariant (id, p) -> 
       Tinvariant (id, type_predicate (Env.empty ()) p)
-  | LDlogic (id, ty, labels, pl, ll) ->
+  | LDlogic (id, ty, _labels, pl, ll) ->
       let ty = type_logic_type loc (Env.empty ()) ty in
       let pl,env' = type_logic_parameters loc (Env.empty ()) pl in
       id.logic_args <- List.map fst pl;
@@ -1316,7 +1316,7 @@ let type_spec_decl loc = function
       let ll = List.map (type_location env') ll in
       Cenv.add_logic id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function (pl, ty, ll))
-  | LDlogic_def (id, ty, labels, pl, t) ->
+  | LDlogic_def (id, ty, _labels, pl, t) ->
       let ty = type_logic_type loc (Env.empty ()) ty in
       let pl,env' = type_logic_parameters loc (Env.empty ()) pl in
       id.logic_args <- List.map fst pl;
@@ -1453,7 +1453,7 @@ let type_decl d = match d.node with
 		    try
 		      set_const_value info (eval_const_expr_noerror e)
 		    with
-			Invalid_argument msg -> ()	
+			Invalid_argument _msg -> ()	
 		  end
 	      | _ ->
 		  ()

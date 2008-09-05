@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cnorm.ml,v 1.116 2008-09-04 08:55:38 marche Exp $ i*)
+(*i $Id: cnorm.ml,v 1.117 2008-09-05 15:46:35 marche Exp $ i*)
 
 open Creport
 open Cconst
@@ -211,12 +211,12 @@ let rec type_why e =
     | NEconstant (RealConstant x) -> 
 	let _,fk = Ctypes.float_constant_type ~in_logic:false x in 
 	why_type_for_float_kind fk
-    | NEstring_literal s ->  Pointer (make_zone false)
-    | NEseq (e1,e2) -> 
+    | NEstring_literal _s ->  Pointer (make_zone false)
+    | NEseq (_e1,e2) -> 
 	type_why e2 
-    | NEassign (l,e) -> 
+    | NEassign (_l,e) -> 
 	type_why e
-    | NEassign_op (l,op,e) -> 
+    | NEassign_op (_l,_op,e) -> 
 	type_why e
     | NEbinary (e, Badd_pointer_int, _) -> type_why e
     | NEbinary (_, op, _) -> why_type_op op
@@ -251,6 +251,7 @@ let find_zone e =
 let rec type_why_for_term t = 
   match t.nterm_node with
     | NTconstant (IntConstant _) -> Info.Int     
+    | NTstring_literal _s -> Pointer (make_zone true)
     | NTconstant (RealConstant _)
     | NTunop ((Clogic.Usqrt_real | Clogic.Uabs_real 
 	      |Clogic.Uround_error | Clogic.Utotal_error
@@ -291,18 +292,28 @@ let rec type_why_for_term t =
 	  | Pointer z -> Addr z
 	  | _ -> assert false
 	end  
-    | NToffset t -> Info.Int
-    | NTblock_length t -> Info.Int
+    | NToffset _t -> Info.Int
+    | NTblock_length _t -> Info.Int
     | NTarrlen _ -> Info.Int
     | NTstrlen _ -> Info.Int
     | NTmin _ | NTmax _ | NTminint _ | NTmaxint _ -> Info.Int
     | NTcast (ty,t) -> 
+(*
+	Format.eprintf "why type for term: cast@.";
+*)
  	let tw = type_why_for_term t in
-	begin match ty.Ctypes.ctype_node, tw with
-	  | Tpointer _, Info.Pointer _ -> tw
-	  | Tpointer _, _ -> Info.Pointer (make_zone true)
-	  | _ -> tw
-	end
+	let tw =
+	  begin match ty.Ctypes.ctype_node, tw with
+	    | Tpointer _, Info.Pointer _ -> tw
+	    | Tpointer _, _ -> Info.Pointer (make_zone true)
+	    | Tint _, _ -> Info.Int
+	    | _ -> assert false
+	  end
+	in
+(*
+	Format.eprintf " type : %a@." Output.fprintf_logic_type (output_why_type tw);
+*)
+	tw
    | NTrange (_,_,_,z,f) ->
 	begin
 	  let z = repr z in
@@ -394,7 +405,7 @@ and expr_node loc ty t =
       | TEdot (lvalue,var_info) ->
 	  begin    
 	    match lvalue.Cast.texpr_node with
-	      | TEunary(Ustar, e) -> 
+	      | TEunary(Ustar, _e) -> 
 		  dot_translate (expr lvalue) var_info ty loc
 	      | TEarrget (e1, e2) -> 
 		  let a = 
@@ -480,7 +491,7 @@ and expr_node loc ty t =
 	     | TEdot(lvalue,var_info)->
 		 begin    
 		   match lvalue.Cast.texpr_node with
-		     | TEunary(Ustar, e) ->  
+		     | TEunary(Ustar, _e) ->  
 			 let t' = (expr lvalue) in
 			 let zone = find_zone t' in
 			 let () = type_why_new_zone zone var_info in 
@@ -523,7 +534,7 @@ and expr_node loc ty t =
 		   ncall_zones_assoc = [] }
       | TEcond (texpr1, texpr2, texpr3) ->
 	  NEcond ((expr texpr1), (expr texpr2), (expr texpr3))
-      | TEsizeof (tctype,n) ->
+      | TEsizeof (_tctype,n) ->
 	  NEconstant (IntConstant (Int64.to_string n))
       | TEcast({Ctypes.ctype_node = Tpointer _}as ty, e') ->
 	  begin
@@ -554,7 +565,7 @@ and expr_node loc ty t =
 *)
       | TEmalloc (tctype, texpr) -> NEmalloc (tctype, expr texpr)
 
-let nt_arrow loc valid ty e z f =
+let nt_arrow loc _valid ty e z f =
   let () = type_why_new_zone z f in
   NTarrow ({nterm_node = e;
 	    nterm_type = ty;
@@ -599,6 +610,7 @@ let dot_translate t' var_info ty loc =
 let rec term_node loc t ty =
   match t with
   | Tconstant constant -> NTconstant constant
+  | Tstring_literal s -> NTstring_literal s
   | Tvar var_info -> 
       let t' = NTvar var_info in
       if var_requires_indirection var_info then
@@ -627,7 +639,7 @@ let rec term_node loc t ty =
 	| Tdot(t,f) ->  
 	    begin    
 	      match t.term_node with
-		| Tunop (Clogic.Ustar, e) -> 
+		| Tunop (Clogic.Ustar, _e) -> 
 		    dot_translate (term t) f ty loc
 		| Tarrget (e1, e2) -> 
 		    let a = 
@@ -669,7 +681,7 @@ let rec term_node loc t ty =
   | Tdot (t', var_info) ->
       begin    
 	match t'.term_node with
-	  | Tunop (Clogic.Ustar, e) -> dot_translate (term t') var_info ty loc
+	  | Tunop (Clogic.Ustar, _e) -> dot_translate (term t') var_info ty loc
 	  | Tarrget (e1, e2) -> 
 	      let a = 
 		{ t' with 
@@ -799,7 +811,7 @@ and predicate_node = function
     | Pbound_separated (t1,t2,t3,t4) -> 
 	NPbound_separated (term t1, term t2, term t3, term t4)
     | Pfull_separated (t1,t2) -> NPfull_separated (term t1, term t2)
-    | Pfullseparated (t1,t2) ->
+    | Pfullseparated (_t1,_t2) ->
 	assert false (* TODO *)
     | Pvalid (t) -> NPvalid (term t) 
     | Pvalid_index (t1 , t2) -> NPvalid_index (term t1 , term t2) 
@@ -1036,7 +1048,7 @@ let rec init_expr loc t lvalue initializers =
 	in
 	let initializers = List.map expand_initializer initializers in
 	init_cells Int64.zero ([],initializers)
-    | Tarray (_,ty,None) -> assert false
+    | Tarray (_,_ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Ctypes.Tvar _ -> assert false
     | Tvoid -> assert false
@@ -1047,6 +1059,7 @@ let rec texpr_of_term (t : tterm) : texpr =
     begin
       match t.term_node with 
 	| Tconstant c ->  TEconstant c
+	| Tstring_literal s -> TEstring_literal s
 	| Tvar v -> TEvar (Var_info v)
 	| Tapp _ -> error t.term_loc 
 	      "logic function can't be used with ghost variables"
@@ -1101,7 +1114,7 @@ let rec texpr_of_term (t : tterm) : texpr =
 	      (texpr_of_term t1,texpr_of_term t2,texpr_of_term t3)
 	| Told t -> error t.term_loc 
 	      "old can't be used here"
-	| Tat (t , s)-> error t.term_loc 
+	| Tat (t , _s)-> error t.term_loc 
 	      "@ can't be used here"
 	| Tbase_addr t -> error t.term_loc 
 	      "base_addr can't be used here"
@@ -1136,6 +1149,7 @@ let rec expr_of_term (t : nterm) : nexpr =
     begin
       match t.nterm_node with 
 	| NTconstant c ->  NEconstant c
+	| NTstring_literal s -> NEstring_literal s
 	| NTvar v -> NEvar (Var_info v)
 	| NTapp _ -> error t.nterm_loc 
 	      "logic function can't be used with ghost variables"
@@ -1190,7 +1204,7 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      (expr_of_term t1,expr_of_term t2,expr_of_term t3)
 	| NTold t -> error t.nterm_loc 
 	      "old can't be used here"
-	| NTat (t , s)-> error t.nterm_loc 
+	| NTat (t , _s)-> error t.nterm_loc 
 	      "@ can't be used here"
 	| NTbase_addr t -> error t.nterm_loc 
 	      "base_addr can't be used here"
@@ -1200,7 +1214,7 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      "block_length can't be used here"
 	| NTarrlen t -> error t.nterm_loc 
 	    "arrlen can't be used here"
-	| NTstrlen (t,z,v) -> error t.nterm_loc 
+	| NTstrlen (t,_z,_v) -> error t.nterm_loc 
 	    "strlen can't be used here"
 	| NTmin _ -> error t.nterm_loc 
 	    "min can't be used here"
@@ -1333,9 +1347,9 @@ and statement s =
   | TSswitch (texpr, tstatement) -> 
       let (used_cases,s) = st_switch tstatement in
       NSswitch(expr texpr, used_cases, s) 
-  | TScase (texpr, tstatement) -> 
+  | TScase (_texpr, _tstatement) -> 
       unsupported s.st_loc "misplaced case statement"
-  | TSdefault tstatement -> assert false
+  | TSdefault _tstatement -> assert false
   | TSgoto(status,l) -> NSgoto(status,l)
   | TSassert p -> NSassert (predicate p)
   | TSassume p -> NSassume (predicate p)
@@ -1357,7 +1371,7 @@ and statement s =
 and local_decl s l l2 = 
   match l with 
     | [] -> NSblock (List.map statement l2)
-    | {node = Tdecl (t,v,init); loc = l}::decl -> 
+    | {node = Tdecl (_t,v,init); loc = l}::decl -> 
 	if var_is_referenced_or_struct_or_union v then
 	  set_var_type (Var_info v) 
 	    (c_array_size (Valid(Int64.zero,Int64.one)) 
@@ -1376,7 +1390,7 @@ and local_decl s l l2 =
 				 copyattr s declar)
 		      | _ -> assert false
 		    end
-		| Tarray (_,_, Some length) ->
+		| Tarray (_,_, Some _length) ->
 		    let lvalue = noattr l v.var_type (TEvar (Var_info v)) in
 		    let declar,_ = 
 		      without_dereference v
@@ -1399,7 +1413,7 @@ and local_decl s l l2 =
 
 let add_c_function spec ty f sta loc =
   try 
-    let (spec2,ty2,f2,sta2,loc2) = 
+    let (spec2,_ty2,_f2,sta2,_loc2) = 
       find_c_fun f.fun_name 
     in
     let spec = 

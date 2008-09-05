@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: clogic.mli,v 1.69 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: clogic.mli,v 1.70 2008-09-05 15:46:35 marche Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -134,6 +134,7 @@ type 'ctype term = {
 
 and 'ctype term_node =
   | Tconstant of constant
+  | Tstring_literal of string
   | Tvar of Info.var_info
   | Tapp of Info.logic_info * 'ctype term list
   | Tunop of term_unop * 'ctype term
@@ -231,6 +232,7 @@ type 'ctype nterm = {
 
 and 'ctype nterm_node =
   | NTconstant of constant
+  | NTstring_literal of string
   | NTvar of Info.var_info
   | NTapp of 'ctype napp
   | NTunop of term_unop * 'ctype nterm

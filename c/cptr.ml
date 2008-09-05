@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cptr.ml,v 1.24 2008-02-05 12:10:47 marche Exp $ *)
+(* $Id: cptr.ml,v 1.25 2008-09-05 15:46:35 marche Exp $ *)
 
 (* TO DO:
 
@@ -750,31 +750,31 @@ end = struct
       List.filter (fun s -> not (s.nst_node = NSnop)) sl
     in
     try let new_s = match s.nst_node with
-      | NSexpr e -> 
+      | NSexpr _e -> 
 	  assert (List.length sub_nodes = 1);
 	  let new_e = list1 sub_nodes in
 	  let new_e = get_e new_e in
 	  statement_expr_or_nop new_e
-      | NSif (e,s1,s2) ->
+      | NSif (_e,_s1,_s2) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_e,new_s1,new_s2 = list3 sub_nodes in
 	  let new_e,new_s1,new_s2 
 	    = get_e new_e,get_s new_s1,get_s new_s2 in
 	  let new_e = simplify_expr new_e in
 	  NSif (new_e,new_s1,new_s2)
-      | NSwhile (annot,e,s1) ->
+      | NSwhile (_annot,_e,_s1) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_e,new_s1,new_a = list3 sub_nodes in
 	  let new_e,new_s1,new_a = get_e new_e,get_s new_s1,get_annot new_a in
 	  let new_e = simplify_expr new_e in
 	  NSwhile (new_a,new_e,new_s1)
-      | NSdowhile (annot,s1,e) ->
+      | NSdowhile (_annot,_s1,_e) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_s1,new_e,new_a = list3 sub_nodes in
 	  let new_s1,new_e,new_a = get_s new_s1,get_e new_e,get_annot new_a in
 	  let new_e = simplify_expr new_e in
 	  NSdowhile (new_a,new_s1,new_e)
-      | NSfor (annot,einit,etest,eincr,s1) ->
+      | NSfor (_annot,_einit,_etest,_eincr,_s1) ->
 	  assert (List.length sub_nodes = 5);
 	  let new_einit,new_etest,new_eincr,new_s1,new_a = list5 sub_nodes in
 	  let new_einit,new_etest,new_eincr,new_s1,new_a
@@ -784,16 +784,16 @@ end = struct
 	  let new_etest = simplify_expr new_etest in
 	  let new_eincr = simplify_expr_under_stat new_eincr in
 	  NSfor (new_a,new_einit,new_etest,new_eincr,new_s1)
-      | NSblock sl ->
+      | NSblock _sl ->
 	  let new_sl = filter_nop (List.map get_s sub_nodes) in
 	  NSblock new_sl
-      | NSreturn (Some e) -> 
+      | NSreturn (Some _e) -> 
 	  assert (List.length sub_nodes = 1);
 	  let new_e = list1 sub_nodes in
 	  let new_e = get_e new_e in
 	  let new_e = simplify_expr new_e in
 	  NSreturn (Some new_e)
-      | NSdecl (typ,var,Some cinit,s1) ->
+      | NSdecl (typ,var,Some cinit,_s1) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_e,new_s1 = list2 sub_nodes in
 	  let new_e = get_e new_e in
@@ -824,7 +824,7 @@ end = struct
 		   The variable [var] is not used anymore in the new
 		   program. We can safely eliminate it. *)
 		match cinit with
-		  | Iexpr e ->
+		  | Iexpr _e ->
 		      (* keep the offset initialization *)
 		      let new_typ = new_var.var_type in
 		      let new_cinit = decode_decl_list rhs_expr in
@@ -854,7 +854,7 @@ end = struct
 		  (* always keep the pointer declaration *)
 		  NSdecl (typ,var,None,block_stat)
 	  end
-      | NSswitch (e,c,cases) -> 
+      | NSswitch (_e,c,cases) -> 
 	  let new_e = List.hd sub_nodes in
 	  let new_cases = List.tl sub_nodes in
 	  let new_e = get_e new_e in
@@ -879,7 +879,7 @@ end = struct
   let change_sub_components_in_expr node sub_nodes =
     let e = get_e node in
     try let new_e = match e.nexpr_node with
-      | NEbinary (e1,op,e2) ->
+      | NEbinary (_e1,op,_e2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_e1,new_e2 = list2 sub_nodes in
 	  let new_e1,new_e2 = get_e new_e1,get_e new_e2 in
@@ -993,7 +993,7 @@ end = struct
   let change_sub_components_in_term node sub_nodes =
     let t = get_t node in
     try let new_t = match t.nterm_node with
-      | NTbinop (t1,op,t2) ->
+      | NTbinop (_t1,op,_t2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_t1,new_t2 = list2 sub_nodes in
 	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
@@ -1021,7 +1021,7 @@ end = struct
 		end
 	    | _ -> NTbinop (new_t1,op,new_t2)
 	  end
-      | NTrange (t1,t2opt,t3opt,zone,info) ->
+      | NTrange (_t1,_t2opt,_t3opt,zone,info) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_t1,new_t2,new_t3 = list3 sub_nodes in
 	  let new_t1 = get_t new_t1 in
@@ -1057,7 +1057,8 @@ end = struct
 	    | _ ->
 		NTrange (new_t1,new_t2,new_t3,zone,info)
 	  end
-      | NTconstant _ | NTvar _ | NTapp _ | NTunop _ | NTarrow _ | NTold _
+      | NTconstant _ | NTstring_literal _
+      | NTvar _ | NTapp _ | NTunop _ | NTarrow _ | NTold _
       | NTat _ | NTbase_addr _ | NToffset _ | NTblock_length _ | NTarrlen _
       | NTstrlen _ | NTcast _ | NTif _ | NTmin _ | NTmax _ 
       | NTminint _ | NTmaxint _
@@ -1071,7 +1072,7 @@ end = struct
   let change_sub_components_in_pred node sub_nodes =
     let p = get_p node in
     try let new_p = match p.npred_node with
-      | NPrel (t1,rel,t2) ->
+      | NPrel (_t1,rel,_t2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_t1,new_t2 = list2 sub_nodes in
 	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
@@ -1400,7 +1401,7 @@ end = struct
 	(VarSet.cardinal set) msg;
       if not (VarSet.is_empty set) then 
 	Coptions.lprintf "[format] %a@." 
-	  (fun fmt -> (VarSet.iter (Coptions.lprintf "%a " ILVar.pretty))) set
+	  (fun _fmt -> (VarSet.iter (Coptions.lprintf "%a " ILVar.pretty))) set
     in
     let add_to_table rep_var var =
       let var_set =
@@ -1957,7 +1958,7 @@ end = struct
 		(new_rhs_node,new_rhs_node_addon)
 
 	    else if PtrLattice.is_offset lhs_val then
-	      let (new_lhs_var,offset_lhs_var) =
+	      let (_new_lhs_var,offset_lhs_var) =
 		PtrLattice.get_offset lhs_val in
 	      store_offset_var params offset_lhs_var;
 	      (* right-hand side can only be another variable or

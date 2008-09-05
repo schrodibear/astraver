@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmain.ml,v 1.101 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.102 2008-09-05 15:46:35 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -71,13 +71,17 @@ let main () =
   (* separation *)  
   lprintf "starting separation of variables.@.";
   List.iter (fun (_,p) -> Cseparation.file p)  nfiles;
+  lprintf "starting separation of initializers.@.";
   Cseparation.funct [Cinit.invariants_initially_established_info]; 
+  lprintf "starting separation of functions.@.";
   Array.iter (fun l -> 
 		Cseparation.funct l ) 
     tab_comp;  
   (* typing predicates *)  
+  lprintf "computing typing predicates.@.";
   let nfiles = on_all_files Invariant.add_predicates nfiles in
   if print_norm then begin
+    lprintf "on user request, printing the normalized C code.@.";
     let print_fun = ref true in
     List.iter 
       (fun (f,p) -> 

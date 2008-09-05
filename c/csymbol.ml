@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: csymbol.ml,v 1.11 2008-02-05 12:10:47 marche Exp $ *)
+(* $Id: csymbol.ml,v 1.12 2008-09-05 15:46:36 marche Exp $ *)
 
 (* TO DO:
 
@@ -280,7 +280,7 @@ struct
 	  | IPnot_null_char_pointed (t1,t2) -> IPnull_char_pointed (t1,t2)
 	end
 
-  let rewrite_pred_wrt_var p v noccur = p	
+  let rewrite_pred_wrt_var p _v _noccur = p	
 
   let rec collect_predicate_vars p = match p with
     | IPfalse | IPtrue | IPany -> 
@@ -427,7 +427,7 @@ struct
     let plist = S.fold (fun e l -> e::l) pset [] in
     match plist with 
       | [] -> failwith "[make_conjunct] expecting non-empty list"
-      | p :: prest as plist -> make_sub {p with npred_node=NPtrue} plist 
+      | p :: _prest as plist -> make_sub {p with npred_node=NPtrue} plist 
 
   let subtract p1 p2 =
     let p1list = get_conjuncts p1 in

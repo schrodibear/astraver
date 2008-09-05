@@ -49,16 +49,16 @@ let rec term_of_expr (e:texpr)  =
        match e.texpr_node with
 	 | TEnop ->  assert false
 	 | TEconstant c -> Tconstant c
-	 | TEstring_literal s -> assert false (*TODO*)
+	 | TEstring_literal s -> Tstring_literal s
 	 | TEvar (Var_info v) -> 
 	     Clogic.Tvar v 
-	 | TEvar (Fun_info f) -> assert false (*TODO*)
+	 | TEvar (Fun_info _f) -> assert false (*TODO*)
 	 | TEdot (e, v) -> Tdot (term_of_expr e, v)
 	 | TEarrow (e, v) -> Tarrow (term_of_expr e, v)
 	 | TEarrget (e1, e2) -> Tarrget (term_of_expr e1, term_of_expr e2)
-	 | TEseq (e1, e2) -> assert false
-	 | TEassign (e1, e2) -> assert false (*TODO*)
-	 | TEassign_op (e1, b, e2) -> assert false (*TODO*)
+	 | TEseq (_e1, _e2) -> assert false
+	 | TEassign (_e1, _e2) -> assert false (*TODO*)
+	 | TEassign_op (_e1, _b, _e2) -> assert false (*TODO*)
 	 | TEunary (Cast.Uplus, e) -> Tunop (Clogic.Uplus, term_of_expr e)
 	 | TEunary (Cast.Uminus, e) -> Tunop (Clogic.Uminus, term_of_expr e)
 	 | TEunary (Cast.Unot, e) -> Tunop (Clogic.Unot,term_of_expr e) 
@@ -102,13 +102,13 @@ let rec term_of_expr (e:texpr)  =
 	 | TEbinary (e1, (Cast.Bbw_and | Cast.Bbw_or | Cast.Bbw_xor |
 			  Cast.Bshift_left | Cast.Bshift_right as op), e2) -> 
 	     Tbinop (term_of_expr e1, binop op, term_of_expr e2)
-	 | TEbinary (e1, Blt, e2) | TEbinary (e1, Bgt, e2) ->
+	 | TEbinary (_e1, Blt, _e2) | TEbinary (_e1, Bgt, _e2) ->
 	     assert false
-	 | TEbinary (e1, Ble, e2) | TEbinary (e1, Bge, e2)->
+	 | TEbinary (_e1, Ble, _e2) | TEbinary (_e1, Bge, _e2)->
 	     assert false 
-	 | TEbinary (e1, Beq, e2) | TEbinary (e1, Bneq, e2) ->
+	 | TEbinary (_e1, Beq, _e2) | TEbinary (_e1, Bneq, _e2) ->
 	     assert false
-	 | TEbinary (e1, Band, e2) | TEbinary (e1, Bor, e2)->
+	 | TEbinary (_e1, Band, _e2) | TEbinary (_e1, Bor, _e2)->
 	     assert false 
 	 | TEbinary (e1, Blt_int, e2) ->
 	     if (Ctyping.eval_const_expr e1 < Ctyping.eval_const_expr e2) 
@@ -146,19 +146,19 @@ let rec term_of_expr (e:texpr)  =
 	       Tconstant (IntConstant "1")
 	     else 
 	       Tconstant (IntConstant "0")
-	 | TEbinary (e1, Blt_float _, e2) | TEbinary (e1, Bgt_float _, e2)->
+	 | TEbinary (_e1, Blt_float _, _e2) | TEbinary (_e1, Bgt_float _, _e2)->
 	     assert false 
-	 | TEbinary (e1, Ble_float _, e2) | TEbinary (e1, Bge_float _, e2)->
+	 | TEbinary (_e1, Ble_float _, _e2) | TEbinary (_e1, Bge_float _, _e2)->
 	     assert false 
-	 | TEbinary (e1, Beq_float _, e2) | TEbinary (e1, Bneq_float _, e2) ->
+	 | TEbinary (_e1, Beq_float _, _e2) | TEbinary (_e1, Bneq_float _, _e2) ->
 	     assert false
-	 | TEbinary (e1, Blt_pointer, e2) | TEbinary (e1, Bgt_pointer, e2) ->
+	 | TEbinary (_e1, Blt_pointer, _e2) | TEbinary (_e1, Bgt_pointer, _e2) ->
 	     assert false
-	 | TEbinary (e1, Ble_pointer, e2) | TEbinary (e1, Bge_pointer, e2) ->
+	 | TEbinary (_e1, Ble_pointer, _e2) | TEbinary (_e1, Bge_pointer, _e2) ->
 	     assert false
-	 | TEbinary (e1, Beq_pointer, e2) | TEbinary (e1, Bneq_pointer, e2) ->
+	 | TEbinary (_e1, Beq_pointer, _e2) | TEbinary (_e1, Bneq_pointer, _e2) ->
 	     assert false
-	 | TEcall (e, l) -> assert false
+	 | TEcall (_e, _l) -> assert false
 	 | TEcond (e1,e2,e3) -> 
 	     Tif (term_of_expr e1, term_of_expr e2, term_of_expr e3)
 	 | TEcast ({ctype_node = Tint _},
@@ -184,9 +184,9 @@ let in_struct v1 v =
 let split_decl e ((invs,inits) as acc) = 
   match e.node with 
     | Tinvariant (_,p) -> (p :: invs, inits)
-    | Tdecl (t, v, c) ->  (invs, e :: inits)
+    | Tdecl (_t, _v, _c) ->  (invs, e :: inits)
 	(* If a ghost is initialized, then its initialization is took account *)
-    | Tghost (vi, Some init) -> (invs, e :: inits) 
+    | Tghost (_vi, Some _init) -> (invs, e :: inits) 
     | _ -> acc
 
 let split_decls d = List.fold_right split_decl d ([],[])
@@ -358,7 +358,7 @@ let rec init_term loc t lvalue initializers =
 		in	
 		init_cells Int64.zero (dummy_pred Ptrue,initializers)
 	end
-    | Tarray (_,ty,None) -> assert false
+    | Tarray (_,_ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Tvar _ -> assert false
     | Tvoid -> dummy_pred Ptrue,initializers
@@ -441,7 +441,7 @@ let rec init_expr loc t lvalue initializers =
 		in	
 		init_cells Int64.zero (dummy_pred Ptrue,initializers)
 	end
-    | Tarray (_,ty,None) -> assert false
+    | Tarray (_,_ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Tvar _ -> assert false
     | Tvoid -> dummy_pred Ptrue,initializers

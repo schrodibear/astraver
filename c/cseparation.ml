@@ -121,7 +121,7 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
   and valid_for (t : Cast.nterm) = match t.nterm_type.Ctypes.ctype_node with
     | Tstruct n ->
  	valid_fields true n t
-    | Tarray (_, ty, None) ->
+    | Tarray (_, _ty, None) ->
 	error loc "array size missing in `%s'" name    
     | Tarray (Not_valid,_,_) -> assert false
     | Tarray (Valid(i,j), ty, Some s) ->
@@ -134,12 +134,12 @@ let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
 	in		   
 	begin match ty.Ctypes.ctype_node with
 	  | Tstruct n ->	      
-	      let vti t i = valid_fields false n t in
+	      let vti t _i = valid_fields false n t in
 	      make_and valid_form (make_forall_range loc t s vti)
 	  | _ ->
 	      make_and valid_form
 		(make_forall_range loc t s 
-		   (fun t i -> valid_for 
+		   (fun t _i -> valid_for 
 			(indirection loc ty t)))
 	end
     | _ -> 
@@ -213,15 +213,15 @@ let rec tab_struct mark loc v1 v2 s ty n n1 n2=
 		 else p)
 	      nptrue l)
     (make_forall_range loc v2 s 
-       (fun t i -> 
+       (fun t _i -> 
 	  local_separation mark loc n1 v1 (n2^"[i]") (indirection loc ty t)))
 
 and local_separation  mark loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
-    | Tarray (_,ty, None), _ ->
+    | Tarray (_,_ty, None), _ ->
 	error loc "array size missing in `%s'" n1
-    | _, Tarray (_,ty, None) ->
+    | _, Tarray (_,_ty, None) ->
 	error loc "array size missing in `%s'" n2
     | Tstruct n , Tarray (_,ty,Some s) -> 
 	tab_struct  mark loc v1 v2 s ty n n1 n2
@@ -236,10 +236,10 @@ and local_separation  mark loc n1 v1 n2 v2 =
 	     nptrue)
 	  (make_and 
 	     (make_forall_range loc v1 s1 
-		(fun t i -> local_separation mark loc (n1^"[i]") 
+		(fun t _i -> local_separation mark loc (n1^"[i]") 
 		     (indirection loc ty1 t) n2 v2))
 	     (make_forall_range loc v2 s2  
-		(fun t i -> local_separation true loc n1 v1 (n2^"[j]")
+		(fun t _i -> local_separation true loc n1 v1 (n2^"[j]")
 		     (indirection loc ty2 t))))
      | _, _ -> nptrue
 
@@ -270,15 +270,15 @@ let rec full_tab_struct mark loc v1 v2 s ty n n1 n2=
 		 else p)
 	      nptrue l)
     (make_forall_range loc v2 s 
-       (fun t i -> 
+       (fun t _i -> 
 	  full_local_separation mark loc n1 v1 (n2^"[i]") (indirection loc ty t)))
 
 and full_local_separation  mark loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
-    | Tarray (_,ty, None), _ ->
+    | Tarray (_,_ty, None), _ ->
 	error loc "array size missing in `%s'" n1
-    | _, Tarray (_,ty, None) ->
+    | _, Tarray (_,_ty, None) ->
 	error loc "array size missing in `%s'" n2
     | Tstruct n , Tarray (_,ty,Some s) -> 
 	full_tab_struct  mark loc v1 v2 s ty n n1 n2
@@ -293,19 +293,19 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	     nptrue)
 	  (make_and 
 	     (make_forall_range loc v1 s1 
-		(fun t i -> full_local_separation mark loc (n1^"[i]") 
+		(fun t _i -> full_local_separation mark loc (n1^"[i]") 
 		     (indirection loc ty1 t) n2 v2))
 	     (make_forall_range loc v2 s2  
-		(fun t i -> full_local_separation true loc n1 v1 (n2^"[j]")
+		(fun t _i -> full_local_separation true loc n1 v1 (n2^"[j]")
 		     (indirection loc ty2 t))))
-    | Tpointer (_,ty1) , Tpointer (_,ty2) ->
+    | Tpointer (_,_ty1) , Tpointer (_,_ty2) ->
 	if full_compatible_type v1.nterm_type v2.nterm_type
 	then
 	  (not_alias loc v1 v2)
 	else
 	  nptrue
-    | Tarray (_,ty2,Some s2) ,  Tpointer (_,ty1)
-    | Tpointer (_,ty1), Tarray (_,ty2,Some s2) ->
+    | Tarray (_,ty2,Some s2) ,  Tpointer (_,_ty1)
+    | Tpointer (_,_ty1), Tarray (_,ty2,Some s2) ->
 	make_and
 	  (if full_compatible_type v1.nterm_type v2.nterm_type
 	   then
@@ -313,9 +313,9 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	   else
 	     nptrue)
 	  (make_forall_range loc v2 s2  
-	     (fun t i -> full_local_separation true loc n1 v1 (n2^"[j]")
+	     (fun t _i -> full_local_separation true loc n1 v1 (n2^"[j]")
 		(indirection loc ty2 t)))
-    | Tstruct n, Tpointer (_,ty)  ->
+    | Tstruct n, Tpointer (_,_ty)  ->
 	 let l = begin
 	   match  tag_type_definition n with
 	     | TTStructUnion ((Tstruct _),fl) ->
@@ -327,7 +327,7 @@ and full_local_separation  mark loc n1 v1 n2 v2 =
 	       make_and p (full_local_separation mark loc n2 v2 n1 
 			     (in_struct v1 t)))
 	    nptrue l)
-    |  Tpointer (_,ty), Tstruct n ->
+    |  Tpointer (_,_ty), Tstruct n ->
 	 let l = begin
 	   match  tag_type_definition n with
 	     | TTStructUnion ((Tstruct _),fl) ->
@@ -397,6 +397,11 @@ let rec rehash z1 z2 =
   Hashtbl.add type_why_table z2 t
     
 and unifier_type_why tw1 tw2 =
+(*
+  Format.eprintf " call unifier_type_why:@.";
+  Format.eprintf "  tw1 = %a@." Output.fprintf_logic_type (output_why_type tw1);
+  Format.eprintf "  tw2 = %a@." Output.fprintf_logic_type (output_why_type tw2);
+*)
   match tw1,tw2 with
     | Pointer z1 , Pointer z2 -> unifier_zone z1 z2     
     | Addr z1 , Addr z2 -> unifier_zone z1 z2
@@ -440,7 +445,7 @@ and unifier_zone z1 z2 =
     end
 
 let loc_name loc =
-  let (f,l,fc,lc) = Loc.extract loc in
+  let (_f,l,fc,lc) = Loc.extract loc in
   Format.sprintf "line %d, characters %d-%d" l fc lc
 
 let unifier_type_why ?(var_name="?") tw1 tw2 =
@@ -474,6 +479,7 @@ let copyhash z za assoc =
 let rec term tyf t =
   match t.nterm_node with
     | NTconstant _ -> () 
+    | NTstring_literal _ -> ()
     | NTvar v -> 
 	if v.var_name = "result" then 
 	    unifier_type_why ~var_name:v.var_name v.var_why_type tyf
@@ -528,13 +534,13 @@ let rec term tyf t =
   | NTblock_length t 
   | NTarrlen t 
   | NTstrlen (t,_,_)
-  | NTcast (_,t) 
   | NTrange (t,None,None,_,_) -> term tyf t
   | NTrange (t1,Some t2,None,_,_) | NTrange (t1,None,Some t2,_,_) -> 
       term tyf t1; term tyf t2
   | NTminint _ | NTmaxint _ ->
       ()
   | NTrange (t1,Some t2,Some t3,_,_) -> term tyf t1; term tyf t2; term tyf t3
+  | NTcast (_,t) -> term tyf t
 
 let rec predicate tyf p =
   match p.npred_node with
@@ -572,7 +578,10 @@ let rec predicate tyf p =
 	   unifier_type_why ~var_name:v.var_name ty (type_why_for_term e)) li l
       with Invalid_argument _ -> assert false
       end
-  | NPrel (t1,op,t2) ->      
+  | NPrel (t1,_op,t2) ->      
+(*
+      Format.eprintf "unify args for rel op '%s'@." (Cprint.relation op);
+*)
       term tyf t1; 
       term tyf t2;
       unifier_type_why ~var_name:(loc_name t1.nterm_loc) (type_why_for_term t1)
@@ -605,7 +614,7 @@ let rec calcul_zones expr =
     | NEvar _ -> ()
     | NEarrow (e,_,_) -> calcul_zones e
     | NEseq (e1,e2) -> calcul_zones e1; calcul_zones e2
-    | NEassign_op (lv,_,e) -> () (* no 2 pointers here *)
+    | NEassign_op (_lv,_,_e) -> () (* no 2 pointers here *)
     | NEassign (lv,e) -> calcul_zones lv; calcul_zones e;
 (*
 	Format.eprintf "lv = %a, e = %a@."
@@ -626,37 +635,39 @@ let rec calcul_zones expr =
     | NEbinary (e1,_,e2) -> calcul_zones e1; calcul_zones e2
     | NEcall ({ncall_fun = e;ncall_args = l} as call) -> 
 	List.iter calcul_zones l;
-	let f = match e.nexpr_node with 
-	  | NEvar (Fun_info f) -> f
-	  | _  -> assert false 
-	in
-	let assoc = List.map (fun z ->(z,make_zone true)) f.args_zones in
-	call.ncall_zones_assoc <- assoc;
-	List.iter (fun (x,y) ->
-		     let x = repr x  in
-		     copyhash x y assoc) assoc ;
-	let arg_types =
-	  List.map 
-	    (fun v ->
-	       let t =
-	       match v.var_why_type with
-		 | Pointer z as ty -> 
-		     begin
-		       try
-			 let z = repr z in
-			 Pointer (assoc_zone z assoc)
-		       with
-			   Not_found -> ty
-		     end
-		 | ty -> ty in v,t)
-	    f.args 
-	in
 	begin
-	  try List.iter2 (fun (v,ty) e -> unifier_type_why ~var_name:v.var_name ty 
-			(type_why e))
-	  arg_types l
-	with Invalid_argument _ -> 
-	   warning expr.nexpr_loc "Call to variable args function"
+	  match e.nexpr_node with 
+	    | NEvar (Fun_info f) -> 
+		let assoc = List.map (fun z ->(z,make_zone true)) f.args_zones in
+		call.ncall_zones_assoc <- assoc;
+		List.iter (fun (x,y) ->
+			     let x = repr x  in
+			     copyhash x y assoc) assoc ;
+		let arg_types =
+		  List.map 
+		    (fun v ->
+		       let t =
+			 match v.var_why_type with
+			   | Pointer z as ty -> 
+			       begin
+				 try
+				   let z = repr z in
+				   Pointer (assoc_zone z assoc)
+				 with
+				     Not_found -> ty
+			       end
+			   | ty -> ty in v,t)
+		    f.args 
+		in
+		begin
+		  try List.iter2 (fun (v,ty) e -> unifier_type_why ~var_name:v.var_name ty 
+				    (type_why e))
+		    arg_types l
+		  with Invalid_argument _ -> 
+		    warning expr.nexpr_loc "ignoring variable args function in separation analysis"
+		end
+	    | _  -> 
+		warning expr.nexpr_loc "ignoring function pointer in separation analysis"
 	end
     | NEcond (e1,e2,e3)->  calcul_zones e1; calcul_zones e2; calcul_zones e3
     | NEcast (_,e) -> calcul_zones e
@@ -667,13 +678,22 @@ let rec c_initializer ty tw init =
     | Iexpr e -> 
 	calcul_zones e; 
 	let twe = type_why e in
-	unifier_type_why ~var_name:(loc_name e.nexpr_loc) tw twe
+(*
+	Format.eprintf "unify why types for initializer@.";
+	Format.eprintf " type v = %a@." Output.fprintf_logic_type (output_why_type tw)
+;
+	Format.eprintf " type expr = %a@." Output.fprintf_logic_type (output_why_type twe);
+*)
+	unifier_type_why ~var_name:(loc_name e.nexpr_loc) tw twe;
+(*
+	Format.eprintf "unify why types for initializer done@."
+*)
     | Ilist l -> 
 	match ty.ctype_node with  
 	  | Tstruct tag  ->
 	      begin
 		match tag_type_definition tag with
-		  | TTStructUnion(ty,fields) ->
+		  | TTStructUnion(_ty,fields) ->
 		      begin
 			try List.iter2
 			(fun f v ->
@@ -740,10 +760,10 @@ let rec statement twf st =
     | NSreturn (Some e) -> calcul_zones e ;
 	unifier_type_why ~var_name:(loc_name e.nexpr_loc) twf (type_why e)
     | NSlabel (_,st) -> statement twf st
-    | NSswitch (e1, e2, l) -> calcul_zones e1;
-	List.iter (fun (x, y) -> List.iter (statement twf) y) l
+    | NSswitch (e1, _e2, l) -> calcul_zones e1;
+	List.iter (fun (_x, y) -> List.iter (statement twf) y) l
     | NSspec (sp,st) -> spec twf sp; statement twf st
-    | NSdecl (_, v, None, st) -> statement twf st
+    | NSdecl (_, _v, None, st) -> statement twf st
     | NSdecl (_, v, Some i, st) -> 
 	c_initializer v.var_type v.var_why_type i;
 	statement twf st 
@@ -808,7 +828,7 @@ let global_decl e =
 	if f.args_zones = [] then f.args_zones <- collect_zones f.args f.type_why_fun
 *)
 
-let c_fun_poly fun_name (_, _, f, _,_) =
+let c_fun_poly _fun_name (_, _, f, _,_) =
   if f.args_zones = [] then 
     begin
       let l = collect_zones f.args f.type_why_fun in
@@ -819,7 +839,7 @@ let c_fun_poly fun_name (_, _, f, _,_) =
       f.args_zones <- l
     end
 
-let c_fun_separation fun_name (sp, _, f, st,_) =
+let c_fun_separation _fun_name (sp, _, f, st,_) =
   spec f.type_why_fun sp;
   begin
     match st with

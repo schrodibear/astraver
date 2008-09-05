@@ -33,6 +33,7 @@ open Cast
 let rec term t =
   match t.term_node with
     | Tconstant _
+    | Tstring_literal _ 
     | Tvar _ 
     | Tminint _ 
     | Tmaxint _ ->  []
@@ -115,7 +116,7 @@ let rec expr e =
     | TEconstant _ -> []
     | TEstring_literal _ -> []
     | TEvar (Info.Fun_info f ) -> [f]    
-    | TEvar (Info.Var_info f ) -> []
+    | TEvar (Info.Var_info _f ) -> []
     | TEdot (e, _) -> expr e
     | TEarrow (e, _) -> expr e
     | TEarrget (e1, e2) -> (expr e1)@(expr e2)
@@ -168,8 +169,8 @@ let rec statement s =
 
 let make_graph e = 
   match e with    
-  | Tfundef (s, t, f, st) -> 
-      let (a,b) = statement st in
+  | Tfundef (_s, _t, f, st) -> 
+      let (a,_b) = statement st in
       f.Info.graph <- a;
       (*f.Info.logic_calls <- (spec s)@b *)
   | _ -> ()
@@ -190,13 +191,13 @@ module G = struct
     let hash f = f.fun_tag 
     let equal f1 f2 = f1.fun_tag == f2.fun_tag
   end
-  let iter_vertex iter files =
+  let iter_vertex iter _files =
     (*let iter_fun  e = 
       match e with    
 	| Tfundef (s, t, f, _)  -> iter f
 	| _ -> () in*)
       Cenv.iter_sym 
-	(fun n x -> match x with
+	(fun _n x -> match x with
 	   | Var_info _ -> () 
 	   | Fun_info f -> iter f) 
     (*List.iter (fun (_,file) ->List.iter (fun d -> iter_fun d.node) file) files*)

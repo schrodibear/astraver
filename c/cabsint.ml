@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: cabsint.ml,v 1.26 2008-02-05 12:10:47 marche Exp $ *)
+(* $Id: cabsint.ml,v 1.27 2008-09-05 15:46:35 marche Exp $ *)
 
 (* TO DO:
 
@@ -207,7 +207,7 @@ end
 module Make_LatticeFromSemiLattice (L : SEMI_LATTICE) =
 struct
   include L
-  let meet x y = failwith "Semi-lattice does not implement meet"
+  let meet _x _y = failwith "Semi-lattice does not implement meet"
 end
 
 module Make_PairSemiLattice (L1 : SEMI_LATTICE with type dim_t = unit)
@@ -309,7 +309,7 @@ struct
 
   let union_map m1 pw = match pw with
     | PWempty -> PWmap m1
-    | PWmap m2 -> 
+    | PWmap _m2 -> 
 	(* union all elements of [m1] in [m2] *)
 	VMap.fold union m1 pw
     | PWall -> PWall
@@ -318,7 +318,7 @@ struct
   let join ?(backward=false) pw1 pw2 = match pw1,pw2 with
     | PWempty,pw | pw,PWempty -> pw
     | PWall,_ | _,PWall -> PWall
-    | PWmap m1,PWmap m2 -> 
+    | PWmap _m1,PWmap m2 -> 
 	(* union all elements of [m2] in [m1] *)
 	union_map m2 pw1
     
@@ -372,7 +372,7 @@ struct
 
   let intersect_map m1 pw = match pw with
     | PWempty -> PWempty
-    | PWmap m2 -> 
+    | PWmap _m2 -> 
 	(* intersect all elements of [m1] in [m2] *)
 	VMap.fold (intersect pw) m1 PWempty
     | PWall -> PWmap m1
@@ -381,7 +381,7 @@ struct
   let meet pw1 pw2 = match pw1,pw2 with
     | PWempty,_ | _,PWempty -> PWempty
     | PWall,pw | pw,PWall -> pw
-    | PWmap m1,PWmap m2 -> 
+    | PWmap _m1,PWmap m2 -> 
 	(* intersect all elements of [m2] in [m1] *)
 	intersect_map m2 pw1
 end
@@ -828,7 +828,7 @@ module Make_DataFlowAnalysis
 	  if debug_more then Coptions.lprintf 
 	    "[propagate] node has %i successor(s)@." (List.length next_nodes);
 	  if debug_more then Coptions.lprintf 
-	    "[propagate] %a@." (fun fmt -> List.iter 
+	    "[propagate] %a@." (fun _fmt -> List.iter 
 				(Coptions.lprintf "%a " Node.pretty))
 	    next_nodes;
 	  List.iter (fun nx_node ->
@@ -1584,21 +1584,21 @@ end = struct
 	    | NSassume _ -> Format.fprintf fmt "NSassume"
 	    | NSlogic_label _ -> Format.fprintf fmt "NSlogic_label"
 	    | NSexpr e -> Format.fprintf fmt "NSexpr(%a)" Cprint.nexpr e 
-	    | NSif (e,s1,s2) -> Format.fprintf fmt "NSif"
-	    | NSwhile (annot,e,s1) -> Format.fprintf fmt "NSwhile"
-	    | NSdowhile (annot,s1,e) -> Format.fprintf fmt "NSdowhile"
-	    | NSfor (annot,einit,etest,eincr,s1) -> Format.fprintf fmt "NSfor"
-	    | NSblock sl -> Format.fprintf fmt "NSblock"
+	    | NSif (_e,_s1,_s2) -> Format.fprintf fmt "NSif"
+	    | NSwhile (_annot,_e,_s1) -> Format.fprintf fmt "NSwhile"
+	    | NSdowhile (_annot,_s1,_e) -> Format.fprintf fmt "NSdowhile"
+	    | NSfor (_annot,_einit,_etest,_eincr,_s1) -> Format.fprintf fmt "NSfor"
+	    | NSblock _sl -> Format.fprintf fmt "NSblock"
 	    | NSreturn None -> Format.fprintf fmt "NSreturn"
-	    | NSreturn (Some e) -> Format.fprintf fmt "NSreturn" 
+	    | NSreturn (Some _e) -> Format.fprintf fmt "NSreturn" 
 	    | NSbreak -> Format.fprintf fmt "NSbreak"
 	    | NScontinue -> Format.fprintf fmt "NScontinue" 
 	    | NSgoto _ -> Format.fprintf fmt "NSgoto"
-	    | NSlabel (str,s1) -> Format.fprintf fmt "NSlabel"
-	    | NSspec (spec,s1) -> Format.fprintf fmt "NSspec"
-	    | NSdecl (typ,var,None,s1) -> Format.fprintf fmt "NSdecl"
-	    | NSdecl (typ,var,Some cinit,s1) -> Format.fprintf fmt "NSdecl"
-	    | NSswitch (e,c,cases) -> Format.fprintf fmt "NSswitch" 
+	    | NSlabel (_str,_s1) -> Format.fprintf fmt "NSlabel"
+	    | NSspec (_spec,_s1) -> Format.fprintf fmt "NSspec"
+	    | NSdecl (_typ,_var,None,_s1) -> Format.fprintf fmt "NSdecl"
+	    | NSdecl (_typ,_var,Some _cinit,_s1) -> Format.fprintf fmt "NSdecl"
+	    | NSswitch (_e,_c,_cases) -> Format.fprintf fmt "NSswitch" 
 	  end
       | Ndecl _ -> Format.fprintf fmt "Ndecl"
       | Nspec _ -> Format.fprintf fmt "Nspec"
@@ -1678,14 +1678,14 @@ end = struct
     let iter_pre f analysis =
       iter (fun node v -> match v with
 	      | Fst v -> f node v
-	      | Snd v -> ()
-	      | Both (v1,v2) -> f node v1
+	      | Snd _v -> ()
+	      | Both (v1,_v2) -> f node v1
 	   ) analysis
     let iter_post f analysis =
       iter (fun node v -> match v with
-	      | Fst v -> ()
+	      | Fst _v -> ()
 	      | Snd v -> f node v
-	      | Both (v1,v2) -> f node v2
+	      | Both (_v1,v2) -> f node v2
 	   ) analysis
 	
     let fold_both f analysis init =
@@ -1697,14 +1697,14 @@ end = struct
     let fold_pre f analysis init =
       fold (fun node v acc -> match v with
 	      | Fst v -> f node v acc
-	      | Snd v -> acc
-	      | Both (v1,v2) -> f node v1 acc
+	      | Snd _v -> acc
+	      | Both (v1,_v2) -> f node v1 acc
 	   ) analysis init
     let fold_post f analysis init =
       fold (fun node v acc -> match v with
-	      | Fst v -> acc
+	      | Fst _v -> acc
 	      | Snd v -> f node v acc
-	      | Both (v1,v2) -> f node v2 acc
+	      | Both (_v1,v2) -> f node v2 acc
 	   ) analysis init
   end
 
@@ -2169,7 +2169,7 @@ end = struct
       | Some (var,_) -> if var_is_local var then Some var else None
     
   let sub_expr_is_assign e = match e.nexpr_node with
-    | NEincr (_,e1) | NEassign (e1,_) | NEassign_op (e1,_,_) -> true
+    | NEincr (_,_e1) | NEassign (_e1,_) | NEassign_op (_e1,_,_) -> true
     | _ -> false      
 	  
   let expr_is_assign node = 
@@ -2478,7 +2478,7 @@ end = struct
     in
     match vl with
       | [] -> ()
-      | a::r -> add_down_edge v a; add_same_edges vl
+      | a::_r -> add_down_edge v a; add_same_edges vl
 
   (* add structural edges: a [StructuralDown] edge from [v] to the first
      node in the list [vl], and [StructuralSame] edges between successive
@@ -2630,41 +2630,41 @@ end = struct
 	  let new_p1 = list1 sub_nodes in
 	  let new_p1 = get_p new_p1 in
 	  NSassume new_p1	  
-      | NSexpr e -> 
+      | NSexpr _e -> 
 	  assert (List.length sub_nodes = 1);
 	  let new_e = list1 sub_nodes in
 	  let new_e = get_e new_e in
 	  NSexpr new_e
-      | NSif (e,s1,s2) ->
+      | NSif (_e,_s1,_s2) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_e,new_s1,new_s2 = list3 sub_nodes in
 	  let new_e,new_s1,new_s2 
 	    = get_e new_e,get_s new_s1,get_s new_s2 in
 	  NSif (new_e,new_s1,new_s2)
-      | NSwhile (annot,e,s1) ->
+      | NSwhile (_annot,_e,_s1) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_e,new_s1,new_a = list3 sub_nodes in
 	  let new_e,new_s1,new_a = get_e new_e,get_s new_s1,get_annot new_a in
 	  NSwhile (new_a,new_e,new_s1)
-      | NSdowhile (annot,s1,e) ->
+      | NSdowhile (_annot,_s1,_e) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_s1,new_e,new_a = list3 sub_nodes in
 	  let new_s1,new_e,new_a = get_s new_s1,get_e new_e,get_annot new_a in
 	  NSdowhile (new_a,new_s1,new_e)
-      | NSfor (annot,einit,etest,eincr,s1) ->
+      | NSfor (_annot,_einit,_etest,_eincr,_s1) ->
 	  assert (List.length sub_nodes = 5);
 	  let new_einit,new_etest,new_eincr,new_s1,new_a = list5 sub_nodes in
 	  let new_einit,new_etest,new_eincr,new_s1,new_a
 	    = get_e new_einit,get_e new_etest,
 	    get_e new_eincr,get_s new_s1,get_annot new_a in
 	  NSfor (new_a,new_einit,new_etest,new_eincr,new_s1)
-      | NSblock sl ->
+      | NSblock _sl ->
 	  let new_sl = List.map get_s sub_nodes in
 	  NSblock new_sl
       | NSreturn None ->
 	  assert (List.length sub_nodes = 0);
 	  s.nst_node
-      | NSreturn (Some e) -> 
+      | NSreturn (Some _e) -> 
 	  assert (List.length sub_nodes = 1);
 	  let new_e = list1 sub_nodes in
 	  let new_e = get_e new_e in
@@ -2672,22 +2672,22 @@ end = struct
       | NSbreak | NScontinue | NSgoto _ -> 
 	  assert (List.length sub_nodes = 0);
 	  s.nst_node
-      | NSlabel (str,s1) ->
+      | NSlabel (str,_s1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_s = list1 sub_nodes in
 	  let new_s = get_s new_s in
 	  NSlabel (str,new_s)
-      | NSspec (spec,s1) ->
+      | NSspec (_spec,_s1) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_s,new_spc = list2 sub_nodes in
 	  let new_s,new_spc = get_s new_s,get_spec new_spc in
 	  NSspec (new_spc,new_s)
-      | NSdecl (typ,var,None,s1) ->
+      | NSdecl (typ,var,None,_s1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_s = list1 sub_nodes in
 	  let new_s = get_s new_s in
 	  NSdecl (typ,var,None,new_s)
-      | NSdecl (typ,var,Some cinit,s1) ->
+      | NSdecl (typ,var,Some _cinit,_s1) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_e,new_s1 = list2 sub_nodes in
 	  let new_e = get_e new_e in
@@ -2702,7 +2702,7 @@ end = struct
 	  assert (ILVar.equal var new_var);
 	  let new_cinit = decode_decl_list rhs_expr in
 	  NSdecl (typ,var,Some new_cinit,new_s1)
-      | NSswitch (e,c,cases) -> 
+      | NSswitch (_e,c,cases) -> 
 	  let new_e = List.hd sub_nodes in
 	  let new_cases = List.tl sub_nodes in
 	  let new_e = get_e new_e in
@@ -2723,47 +2723,47 @@ end = struct
       | NEnop | NEconstant _ | NEstring_literal _ | NEvar _ ->
 	  assert (List.length sub_nodes = 0);
 	  e.nexpr_node
-      | NEarrow (e1,zone,var) ->
+      | NEarrow (_e1,zone,var) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_e = list1 sub_nodes in
 	  let new_e = get_e new_e in
 	  NEarrow (new_e,zone,var)
-      | NEunary (op,e1) ->
+      | NEunary (op,_e1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_e = list1 sub_nodes in
 	  let new_e = get_e new_e in
 	  NEunary (op,new_e)
-      | NEincr (op,e1) ->
+      | NEincr (op,_e1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_e = list1 sub_nodes in
 	  let new_e = get_e new_e in
 	  NEincr (op,new_e)
-      | NEcast (typ,e1) ->
+      | NEcast (typ,_e1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_e = list1 sub_nodes in
 	  let new_e = get_e new_e in
 	  NEcast (typ,new_e)
-      | NEmalloc (typ,e1) ->
+      | NEmalloc (typ,_e1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_e = list1 sub_nodes in
 	  let new_e = get_e new_e in
 	  NEmalloc (typ,new_e)
-      | NEseq (e1,e2) ->
+      | NEseq (_e1,_e2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_e1,new_e2 = list2 sub_nodes in
 	  let new_e1,new_e2 = get_e new_e1,get_e new_e2 in
 	  NEseq (new_e1,new_e2)
-      | NEassign (e1,e2) ->
+      | NEassign (_e1,_e2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_e1,new_e2 = list2 sub_nodes in
 	  let new_e1,new_e2 = get_e new_e1,get_e new_e2 in
 	  NEassign (new_e1,new_e2)
-      | NEassign_op (e1,op,e2) ->
+      | NEassign_op (_e1,op,_e2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_e1,new_e2 = list2 sub_nodes in
 	  let new_e1,new_e2 = get_e new_e1,get_e new_e2 in
 	  NEassign_op (new_e1,op,new_e2)
-      | NEbinary (e1,op,e2) ->
+      | NEbinary (_e1,op,_e2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_e1,new_e2 = list2 sub_nodes in
 	  let new_e1,new_e2 = get_e new_e1,get_e new_e2 in
@@ -2774,7 +2774,7 @@ end = struct
 	  let new_f = get_e new_f in
 	  let new_args = List.map get_e new_args in
 	  NEcall { c with ncall_fun = new_f; ncall_args = new_args }
-      | NEcond (e1,e2,e3) ->
+      | NEcond (_e1,_e2,_e3) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_e1,new_e2,new_e3 = list3 sub_nodes in
 	  let new_e1,new_e2,new_e3 
@@ -2787,85 +2787,86 @@ end = struct
   let change_sub_components_in_term node sub_nodes =
     let t = get_t node in
     let new_t = match t.nterm_node with
-      | NTconstant _ | NTvar _ | NTminint _ | NTmaxint _ -> 
+      | NTconstant _ | NTstring_literal _ 
+      | NTvar _ | NTminint _ | NTmaxint _ -> 
 	  assert (List.length sub_nodes = 0);
 	  t.nterm_node
       | NTapp a ->
 	  let new_args = sub_nodes in
 	  let new_args = List.map get_t new_args in
 	  NTapp { a with napp_args = new_args }
-      | NTunop (op,t1) ->
+      | NTunop (op,_t1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTunop (op,new_t)
-      | NTarrow (t1,zone,var) ->
+      | NTarrow (_t1,zone,var) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTarrow (new_t,zone,var)
-      | NTold t1 ->
+      | NTold _t1 ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTold new_t
-      | NTat (t1,label) ->
+      | NTat (_t1,label) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTat (new_t,label)
-      | NTbase_addr t1 ->
+      | NTbase_addr _t1 ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTbase_addr new_t
-      | NToffset t1 ->
+      | NToffset _t1 ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NToffset new_t
-      | NTblock_length t1 ->
+      | NTblock_length _t1 ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTblock_length new_t
-      | NTarrlen t1 ->
+      | NTarrlen _t1 ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTarrlen new_t
-      | NTstrlen (t1,zone,var) ->
+      | NTstrlen (_t1,zone,var) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTstrlen (new_t,zone,var)
-      | NTmin (t1,t2) ->
+      | NTmin (_t1,_t2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_t1,new_t2 = list2 sub_nodes in
 	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
 	  NTmin (new_t1,new_t2)
-      | NTmax (t1,t2) ->
+      | NTmax (_t1,_t2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_t1,new_t2 = list2 sub_nodes in
 	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
 	  NTmax (new_t1,new_t2)
-      | NTcast (typ,t1) ->
+      | NTcast (typ,_t1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NTcast (typ,new_t)
-      | NTbinop (t1,op,t2) ->
+      | NTbinop (_t1,op,_t2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_t1,new_t2 = list2 sub_nodes in
 	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
 	  NTbinop (new_t1,op,new_t2)
-      | NTif (t1,t2,t3) ->
+      | NTif (_t1,_t2,_t3) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_t1,new_t2,new_t3 = list3 sub_nodes in
 	  let new_t1,new_t2,new_t3 
 	    = get_t new_t1,get_t new_t2,get_t new_t3 in
 	  NTif (new_t1,new_t2,new_t3)
-      | NTrange (t1,t2opt,t3opt,zone,info) ->
+      | NTrange (_t1,_t2opt,_t3opt,zone,info) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_t1,new_t2,new_t3 = list3 sub_nodes in
 	  let new_t1 = get_t new_t1 in
@@ -2894,99 +2895,99 @@ end = struct
 	  let new_args = sub_nodes in
 	  let new_args = List.map get_t new_args in
 	  NPapp { a with napp_args = new_args }
-      | NPrel (t1,rel,t2) ->
+      | NPrel (_t1,rel,_t2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_t1,new_t2 = list2 sub_nodes in
 	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
 	  NPrel (new_t1,rel,new_t2)
-      | NPvalid_index (t1,t2) ->
+      | NPvalid_index (_t1,_t2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_t1,new_t2 = list2 sub_nodes in
 	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
 	  NPvalid_index (new_t1,new_t2)
-      | NPand (p1,p2) ->
+      | NPand (_p1,_p2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_p1,new_p2 = list2 sub_nodes in
 	  let new_p1,new_p2 = get_p new_p1,get_p new_p2 in
 	  NPand (new_p1,new_p2)		
-      | NPor (p1,p2) ->
+      | NPor (_p1,_p2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_p1,new_p2 = list2 sub_nodes in
 	  let new_p1,new_p2 = get_p new_p1,get_p new_p2 in
 	  NPor (new_p1,new_p2)		
-      | NPimplies (p1,p2) ->
+      | NPimplies (_p1,_p2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_p1,new_p2 = list2 sub_nodes in
 	  let new_p1,new_p2 = get_p new_p1,get_p new_p2 in
 	  NPimplies (new_p1,new_p2)		
-      | NPiff (p1,p2) ->
+      | NPiff (_p1,_p2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_p1,new_p2 = list2 sub_nodes in
 	  let new_p1,new_p2 = get_p new_p1,get_p new_p2 in
 	  NPiff (new_p1,new_p2)		
-      | NPnot p1 ->
+      | NPnot _p1 ->
 	  assert (List.length sub_nodes = 1);
 	  let new_p1 = list1 sub_nodes in
 	  let new_p1 = get_p new_p1 in
 	  NPnot new_p1
-      | NPforall (q,p1) ->
+      | NPforall (q,_p1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_p1 = list1 sub_nodes in
 	  let new_p1 = get_p new_p1 in
 	  NPforall (q,new_p1)
-      | NPexists (q,p1) ->
+      | NPexists (q,_p1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_p1 = list1 sub_nodes in
 	  let new_p1 = get_p new_p1 in
 	  NPexists (q,new_p1)
-      | NPold p1 ->
+      | NPold _p1 ->
 	  assert (List.length sub_nodes = 1);
 	  let new_p1 = list1 sub_nodes in
 	  let new_p1 = get_p new_p1 in
 	  NPold new_p1
-      | NPat (p1,label) ->
+      | NPat (_p1,label) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_p1 = list1 sub_nodes in
 	  let new_p1 = get_p new_p1 in
 	  NPat (new_p1,label)
-      | NPnamed (name,p1) ->
+      | NPnamed (name,_p1) ->
 	  assert (List.length sub_nodes = 1);
 	  let new_p1 = list1 sub_nodes in
 	  let new_p1 = get_p new_p1 in
 	  NPnamed (name,new_p1)
-      | NPif (t1,p2,p3) ->
+      | NPif (_t1,_p2,_p3) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_t1,new_p2,new_p3 = list3 sub_nodes in
 	  let new_t1,new_p2,new_p3
 	    = get_t new_t1,get_p new_p2,get_p new_p3 in
 	  NPif (new_t1,new_p2,new_p3)		
-      | NPvalid t1 ->
+      | NPvalid _t1 ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NPvalid new_t
-      | NPfresh t1 ->
+      | NPfresh _t1 ->
 	  assert (List.length sub_nodes = 1);
 	  let new_t = list1 sub_nodes in
 	  let new_t = get_t new_t in
 	  NPfresh new_t
-      | NPvalid_range (t1,t2,t3) ->
+      | NPvalid_range (_t1,_t2,_t3) ->
 	  assert (List.length sub_nodes = 3);
 	  let new_t1,new_t2,new_t3 = list3 sub_nodes in
 	  let new_t1,new_t2,new_t3 
 	    = get_t new_t1,get_t new_t2,get_t new_t3 in
 	  NPvalid_range (new_t1,new_t2,new_t3)
-      | NPseparated (t1,t2) ->
+      | NPseparated (_t1,_t2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_t1,new_t2 = list2 sub_nodes in
 	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
 	  NPseparated (new_t1,new_t2)
-      | NPfull_separated (t1,t2) ->
+      | NPfull_separated (_t1,_t2) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_t1,new_t2 = list2 sub_nodes in
 	  let new_t1,new_t2 = get_t new_t1,get_t new_t2 in
 	  NPfull_separated (new_t1,new_t2)
-      | NPbound_separated (t1,t2,t3,t4) ->
+      | NPbound_separated (_t1,_t2,_t3,_t4) ->
 	  assert (List.length sub_nodes = 2);
 	  let new_t1,new_t2,new_t3,new_t4 = list4 sub_nodes in
 	  let new_t1,new_t2,new_t3,new_t4 =
@@ -3106,7 +3107,7 @@ end = struct
 	  let d = get_decl node in
 	  let new_d =
 	    match d.s with
-	      | Some s ->
+	      | Some _s ->
 		  let new_s,new_spec = list2 sub_nodes in
 		  let new_s,new_spec = get_s new_s,get_spec new_spec in
 		  { d with s = Some new_s; spec = new_spec }
@@ -3138,7 +3139,8 @@ end = struct
     let tnode = create_node (Nterm t) in
     begin
       match t.nterm_node with
-	| NTconstant _ | NTvar _ | NTminint _ | NTmaxint _ -> ()
+	| NTconstant _ | NTstring_literal _ 
+	| NTvar _ | NTminint _ | NTmaxint _ -> ()
 	| NTapp a ->
 	    let args_nodes = List.map from_term a.napp_args in
 	    (* logic *) add_logedge tnode args_nodes
@@ -3476,7 +3478,7 @@ end = struct
 	        e1node,e2node
 	    in
 	    (* struct *) add_stedge enode [e1node; e2node]
-	| NEassign_op (e1,op,e2) ->
+	| NEassign_op (_e1,_op,_e2) ->
 	    assert false (* expression should have been modified above *)
 	| NEbinary (e1,Band,e2) when is_test ->
 	    (* do not take [neg_test] into account, already done *)
@@ -3914,7 +3916,7 @@ end = struct
 	      { base_expr with nexpr_node = NEvar (Var_info var) } in
 	    let encoded_expr = match cinit with
 	      | Iexpr e -> e
-	      | Ilist il -> encode_decl_list cinit in
+	      | Ilist _il -> encode_decl_list cinit in
 	    let explicit_assign = NEassign (var_expr,encoded_expr) in
 	    let explicit_assign = 
 	      { base_expr with nexpr_node = explicit_assign } in

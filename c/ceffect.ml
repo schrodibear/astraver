@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ceffect.ml,v 1.168 2008-05-28 14:53:34 marche Exp $ i*)
+(*i $Id: ceffect.ml,v 1.169 2008-09-05 15:46:35 marche Exp $ i*)
 
 open Cast
 open Cnorm
@@ -129,7 +129,7 @@ let union = ZoneSet.union
 (* static variables *)
 
 
-let add_var v (ty : Info.why_type) s =
+let add_var v (_ty : Info.why_type) s =
   let info = declare_heap_var v v.var_unique_name in
   HeapVarSet.add info s
 
@@ -223,10 +223,10 @@ let reads_add_alloc e =
 let assigns_add_var v ty e = { e with reads_var = add_var v ty e.reads_var;
 				 assigns_var = add_var v ty e.assigns_var }
 
-let reads_add_under_pointer v ty e = 
+let reads_add_under_pointer v _ty e = 
   { e with reads_under_pointer = HeapVarSet.add v e.reads_under_pointer }
 
-let assigns_add_under_pointer v ty e = 
+let assigns_add_under_pointer v _ty e = 
   { e with assigns_under_pointer = HeapVarSet.add v e.assigns_under_pointer }
 
 let assigns_add_field_var v ty e = 
@@ -302,6 +302,7 @@ let rec term t = match t.nterm_node with
 	  {ef_empty with reads = reads; reads_var = id.logic_heap_args; }
 	  tl  
   | NTconstant _ -> ef_empty
+  | NTstring_literal _ -> ef_empty
   | NTminint _ | NTmaxint _ -> ef_empty
   | NTcast (_, t) -> term t
   | NTrange (t1, t2, t3, z, f) ->
@@ -330,7 +331,7 @@ let rec assign_location t = match t.nterm_node with
       then
 	{ ef_empty with assigns_var = add_var v (Cnorm.type_why_for_term t) HeapVarSet.empty } 
       else ef_empty
-  | NTarrow (t1,z,f) -> 
+  | NTarrow (t1,_z,f) -> 
       let ef = 
 	(assigns_add_field_var f (Cnorm.type_why_for_term t1) (term t1))
       in
@@ -358,10 +359,11 @@ let rec assign_location t = match t.nterm_node with
   | NTif (_, _, _)  
   | NTbinop (_, _, _)  
   | NTapp _  
-  | NTconstant _  
+  | NTconstant _
+  | NTstring_literal _  
   | NTcast (_, _) -> 
       error t.nterm_loc "invalid location"
-  | NTrange (t1, t2, t3, z, f) ->
+  | NTrange (t1, t2, t3, _z, f) ->
       let ef = 
 	(assigns_add_field_var f (Cnorm.type_why_for_term t1)
 	   (ef_union (term t1) (ef_union (term_option t2) (term_option t3))))
@@ -498,14 +500,14 @@ let intersect_only_alloc e1 e2 =
 
 let weak_invariants_for hvs =
   Hashtbl.fold
-    (fun name (_,e) acc ->
+    (fun _name (_,e) acc ->
         if intersect_only_alloc e hvs then acc
        else ef_union e acc) 
     weak_invariants ef_empty
 
 let strong_invariants_for hvs =
   Hashtbl.fold
-    (fun s (_,_,e) acc -> 
+    (fun _s (_,_,e) acc -> 
        if HeapVarSet.subset e.reads_var hvs.reads_var &&
 	 ZoneSet.subset e.reads hvs.reads 
        then ef_union e acc
@@ -515,10 +517,10 @@ let strong_invariants_for hvs =
 
 let logic_type ls =
   match ls with
-    | Clogic.NPredicate_reads(args,locs) -> locations locs
-    | Clogic.NPredicate_def(args,pred) -> predicate pred
-    | Clogic.NFunction(args,ret,locs) -> locations locs
-    | Clogic.NFunction_def(args,ret,t) -> term t
+    | Clogic.NPredicate_reads(_args,locs) -> locations locs
+    | Clogic.NPredicate_def(_args,pred) -> predicate pred
+    | Clogic.NFunction(_args,_ret,locs) -> locations locs
+    | Clogic.NFunction_def(_args,_ret,t) -> term t
 
 
 let option f = function None -> empty | Some x -> f x
@@ -554,7 +556,7 @@ let rec expr ?(with_local=false) e = match e.nexpr_node with
       if with_local || v.var_is_static 
       then reads_add_var v (type_why e) ef_empty
       else ef_empty
-  | NEvar (Fun_info v) ->
+  | NEvar (Fun_info _v) ->
       ef_empty
   | NEarrow (e1,z, f) ->
       let z = repr z in
@@ -571,7 +573,7 @@ let rec expr ?(with_local=false) e = match e.nexpr_node with
       ef_union (assign_expr ~with_local lv)
 	(expr ~with_local e)
   | NEunary (Ustar , _ ) -> assert false
-  | NEunary (Uamp, e) -> assert false (* address_expr e *)
+  | NEunary (Uamp, _e) -> assert false (* address_expr e *)
   | NEunary 
       (( Uplus | Uminus | Unot | Utilde 
        | Ufloat_of_int | Uint_of_float 
@@ -635,7 +637,7 @@ and assign_expr ?(with_local=false) e = match e.nexpr_node with
   | NEvar (Fun_info _) ->
       ef_empty
   | NEunary (Ustar,_) -> assert false
-  | NEarrow (e1,z, f) ->
+  | NEarrow (e1,_z, f) ->
       let ef = assigns_add_field_var f (type_why e1)
 	  (expr ~with_local e1) in
       let ef = ef_union ef (assign_under_pointer e1) in
@@ -715,9 +717,9 @@ let rec statement ?(with_local=false) s = match s.nst_node with
       expr ~with_local e
   | NSlabel (_, s) ->
       statement ~with_local s
-  | NSswitch (e, used_cases, case_list) -> 
+  | NSswitch (e, _used_cases, case_list) -> 
       List.fold_left
-	(fun ef (cases,bl) ->
+	(fun ef (_cases,bl) ->
 	   List.fold_left 
 	     (fun ef i -> ef_union ef (statement ~with_local i))
 	     ef bl)
@@ -775,18 +777,19 @@ and ctype_node = function
 let global_var = ref [] 
 
 let invariant_for_global loc v =
-  assert (not (List.mem v !global_var));
-  let form =
-    List.fold_left 
-      (fun p x ->
-	 ("separation_" ^ (ctype v.var_type) ^ "_" ^ (ctype x.var_type),
-	   "separation_"^v.var_name^"_"^x.var_name,
-	  Cseparation.separation loc v x,
-	  HeapVarSet.add v (HeapVarSet.singleton x)) :: p) 
-      [] !global_var 
-  in 
-  global_var := v::!global_var;
-  form
+  if List.mem v !global_var then []
+  else
+    let form =
+      List.fold_left 
+	(fun p x ->
+	   ("separation_" ^ (ctype v.var_type) ^ "_" ^ (ctype x.var_type),
+	    "separation_"^v.var_name^"_"^x.var_name,
+	    Cseparation.separation loc v x,
+	    HeapVarSet.add v (HeapVarSet.singleton x)) :: p) 
+	[] !global_var 
+    in 
+    global_var := v::!global_var;
+    form
     
 let not_a_constant_value loc = error loc "is not a constant value"
 
@@ -1005,7 +1008,7 @@ let rec invariant_for_constant loc t lvalue initializers =
 	    init_cells (Int64.add i Int64.one) (npand (block,b),init')
 	in
 	init_cells Int64.zero (nptrue,initializers)
-    | Tarray (_,ty,None) -> assert false
+    | Tarray (_,_ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Tvar _ -> assert false
     | Tvoid -> nptrue,initializers 
@@ -1022,7 +1025,7 @@ let rec has_constant_values ty = match ty.Ctypes.ctype_node with
   | Tarray (_,ty', _) -> has_constant_values ty'
   | Tunion _ | Tfun _ | Tvar _ -> false
 
-let diff loc x y = 
+let diff _loc x y = 
   nprel ( x, Neq,  y)
 	  
 let rec validity x ty size =
@@ -1104,7 +1107,7 @@ let decl d =
 	  match ty.Ctypes.ctype_node with
 	    | Tvoid -> ()
 	    | Tint _| Tfloat _ | Tpointer _ | Tenum _ -> ()
-	    | Tvar s -> ()
+	    | Tvar _s -> ()
 	    | Tfun _ -> ()
 	    | Tunion _ -> ()
 	    | Tarray (_,_,None) -> 
@@ -1141,10 +1144,10 @@ let decl d =
 	  add_strong_invariant id pre 
 	    {ef_empty with reads_var = (HeapVarSet.singleton v)}
 	end;
-    | Ndecl(ty,v,init) -> () (* nothing to do for extern var *)	
-    | Naxiom(id,p) -> () (* TODO *)
-    | Ntypedef(ctype,id) -> () 
-    | Ntypedecl(ctype) -> ()
+    | Ndecl(_ty,_v,_init) -> () (* nothing to do for extern var *)	
+    | Naxiom(_id,_p) -> () (* TODO *)
+    | Ntypedef(_ctype,_id) -> () 
+    | Ntypedecl(_ctype) -> ()
     | Ntype _ -> ()
 
 let file l = List.iter decl l
@@ -1245,12 +1248,12 @@ let functions fun_list  =
   List.iter decl fun_list (*dl*);
   !fixpoint
     
-let effect  nfiles fun_list =
+let effect  _nfiles fun_list =
   while not (functions [Cinit.invariants_initially_established_info]) 
   do 
     Queue.clear warnings
   done;
-  List.iter (fun f ->
+  List.iter (fun _f ->
 	       while not (functions fun_list) 
 	       do 
 		 Queue.clear warnings

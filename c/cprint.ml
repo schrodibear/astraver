@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cprint.ml,v 1.50 2008-02-05 12:10:47 marche Exp $ i*)
+(*i $Id: cprint.ml,v 1.51 2008-09-05 15:46:35 marche Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -39,7 +39,7 @@ open Info
 open Pp
 open Cutil
 
-let declare_struct fmt s (_,fields) =
+let declare_struct fmt s (_,_fields) =
   fprintf fmt "@[<hov 2>struct %s {@\n" s;
   begin match Cenv.tag_type_definition s with
     | Cenv.TTStructUnion(_,fields) ->
@@ -84,6 +84,7 @@ let term_binop = function
 let rec nterm fmt t = match t.nterm_node with
   | NTconstant (IntConstant s | RealConstant s) ->
       fprintf fmt "%s" s
+  | NTstring_literal s -> fprintf fmt "\"%s\"" s
   | NTvar x ->
       fprintf fmt "%s" x.var_unique_name
   | NTapp {napp_pred = li; napp_args = tl;} ->
@@ -160,7 +161,7 @@ let rec npredicate fmt p = match p.npred_node with
 	 inside a boolean formula, with the relational operator morally
 	 binding tighter than any boolean operator. *)
       fprintf fmt "@[%a %s %a@]" nterm t1 (relation rel) nterm t2
-  | NPand (p1, p2) ->
+  | NPand (_p1, _p2) ->
       (* improved printing for range inequalities, e.g. 0 <= i < 100 *)
       nconjunct fmt p
   | NPor (p1, p2) ->
@@ -353,7 +354,7 @@ and nconjunct fmt p =
   let list_conjuncts,name_map =
     List.fold_left 
       (fun (cl,m) p -> match p.npred_node with
-         | NPrel (t1,rel,t2) ->
+         | NPrel (t1,_rel,t2) ->
 	     begin match search_and_combine p t1 (* left = *)true m with
 	       | (Some cp),new_m ->
 		   (* [p] combined, do not search with [t2] *)
@@ -568,7 +569,7 @@ let rec nstatement fmt s = match s.nst_node with
       fprintf fmt "%s: %a" l.label_info_name nstatement s
   | NSgoto (status, l) ->
       fprintf fmt "goto(%s) %s" (ngoto_status status) l.label_info_name 
-  | NSswitch (e, m, l) ->
+  | NSswitch (e, _m, l) ->
       fprintf fmt "@[switch (%a) {@\n    @[%a@]@\n}@]"
 	nexpr e (print_list newline ncase) l
   | NSassert p ->
@@ -651,7 +652,7 @@ let nfile fmt p =
 
 let nfunctions fmt =
   Hashtbl.iter
-    (fun f (s, ty, fi, st,_) -> 
+    (fun _f (s, ty, fi, st,_) -> 
        match st with
 	 | Some st ->
 	     fprintf fmt "%a%a %s(@[%a@])@\n%a@\n" spec s ctype ty fi.fun_name
