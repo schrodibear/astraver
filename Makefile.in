@@ -76,9 +76,9 @@ OCAMLVERSION = @OCAMLVERSION@
 CAMLP4   = @CAMLP4O@
 
 INCLUDES = -I src -I jc -I c -I java -I intf -I tools -I mix -I ml
-BFLAGS   = -w Ael -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
+BFLAGS   = -w Aelz -dtypes -g $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 # no -warn-error because some do not compile all files (e.g. those linked to APRON)
-OFLAGS   = -w Ael -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
+OFLAGS   = -w Aelz -dtypes $(INCLUDES) @INCLUDEGTK2@ -I +threads @OCAMLGRAPHLIB@ 
 
 LCFLAGS = -L/usr/lib -L/usr/local/lib/ocaml
 
@@ -135,8 +135,8 @@ GENERATED = src/version.ml src/rc.ml src/xml.ml \
 	    tools/zenon_split.ml tools/ergo_split.ml \
 	    tools/simplify_lexer.ml tools/simplify_parser.mli \
 	    tools/simplify_parser.ml \
-	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml \
-	    c/cint.ml
+	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml 
+
 
 # main targets
 ##############

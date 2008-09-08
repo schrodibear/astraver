@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.260 2008-09-04 08:55:38 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.261 2008-09-08 15:31:18 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -332,6 +332,7 @@ let rec interp_term label old_label t =
 			 with _ -> c))
     | NTconstant (RealConstant c) ->
 	LConst(Prim_real c)
+    | NTstring_literal _ -> unsupported t.nterm_loc "string literal"
     | NTvar id ->
 	let n = id.var_unique_name in
 	if id.var_is_assigned && not id.var_is_a_formal_param then
