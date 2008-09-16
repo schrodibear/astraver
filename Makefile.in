@@ -858,6 +858,9 @@ doc/main.html: doc/main.tex doc/version.tex
 .mli.cmi:
 	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) $(ATPLIB) -c $(BFLAGS) $<
 
+.ml.cmi:
+	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) $(ATPLIB) -c $(BFLAGS) $<
+
 .ml.cmo:
 	$(if $(QUIET),@echo 'Ocamlc   $<' &&) $(OCAMLC) $(APRONLIB) $(ATPLIB) -c $(BFLAGS) $<
 
@@ -1051,16 +1054,17 @@ configure: configure.in
 ##################
 
 clean::
-	rm -f src/*.cm[iox] src/*.o src/*~
-	rm -f c/*.cm[iox] c/*.o c/*~
-	rm -f intf/*.cm[iox] intf/*.o intf/*~
-	rm -f tools/*.cm[iox] tools/*.o tools/*~
-	rm -f jc/*.cm[iox] jc/*.o jc/*~
-	rm -f java/*.cm[iox] java/*.o java/*~
-	rm -f ml/*.cm[iox] ml/*.o ml/*~
-	rm -f ml/parsing/*.cm[iox] ml/parsing/*.o ml/parsing/*~
-	rm -f ml/utils/*.cm[iox] ml/utils/*.o ml/utils/*~
-	rm -f ml/typing/*.cm[iox] ml/typing/*.o ml/typing/*~
+	rm -f src/*.cm[iox] src/*.o src/*~ src/*.annot src/*.output
+	rm -f c/*.cm[iox] c/*.o c/*~ c/*.annot c/*.output
+	rm -f intf/*.cm[iox] intf/*.o intf/*~ intf/*.annot
+	rm -f tools/*.cm[iox] tools/*.o tools/*~ tools/*.annot
+	rm -f jc/*.cm[iox] jc/*.o jc/*~ jc/*.annot jc/*.output
+	rm -f java/*.cm[iox] java/*.o java/*~ java/*.annot java/*.output
+	rm -f ml/*.cm[iox] ml/*.o ml/*~ ml/*.annot
+	rm -f ml/parsing/*.cm[iox] ml/parsing/*.o ml/parsing/*~ \
+		ml/parsing/*.annot ml/parsing/*.output
+	rm -f ml/utils/*.cm[iox] ml/utils/*.o ml/utils/*~ ml/utils/*.annot
+	rm -f ml/typing/*.cm[iox] ml/typing/*.o ml/typing/*~ ml/typing/*.annot
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f bin/caduceus.opt bin/caduceus.byte
 	rm -f bin/jessie.opt bin/jessie.byte
@@ -1085,10 +1089,13 @@ coq-clean::
 	rm -f lib/coq*/*.vo examples/*/*.vo
 	rm .depend.coq
 
-.depend depend:: $(GENERATED)
-	rm -f .depend
-	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml mix/*.mli mix/*.ml ml/*.ml ml/*.mli > .depend
-	$(OCAMLDEP) -slash $(MLINCLUDES) ml/parsing/*.ml ml/parsing/*.mli ml/typing/*.ml ml/typing/*.mli ml/utils/*.ml ml/utils/*.mli >> .depend
+.PHONY: depend
+.depend depend: $(GENERATED)
+	if test "$(FRAMAC)" != "yes"; then \
+	  rm -f .depend; \
+	  $(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml mix/*.mli mix/*.ml ml/*.ml ml/*.mli > .depend; \
+	  $(OCAMLDEP) -slash $(MLINCLUDES) ml/parsing/*.ml ml/parsing/*.mli ml/typing/*.ml ml/typing/*.mli ml/utils/*.ml ml/utils/*.mli >> .depend; \
+	fi
 
 .depend.coq: #lib/coq*/*.v
 	if test @COQ@ = yes; then \
