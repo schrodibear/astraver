@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.349 2008-09-17 15:28:57 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.350 2008-09-17 17:09:38 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2970,6 +2970,26 @@ let tr_exception ei acc =
   in
   Exception(exception_name ei, typ) :: acc
 
+let tr_native_type nty acc =
+  let lt = tr_base_type (JCTnative nty) in
+  Logic(false,logic_bitvector_of_native nty,["",lt],bitvector_type)
+  :: Logic(false,logic_native_of_bitvector nty,["",bitvector_type],lt)
+  :: Axiom((logic_native_of_bitvector nty)^"_of_"^(logic_bitvector_of_native nty),
+	   LForall("x",lt,
+		   LPred(equality_op_for_type (JCTnative nty),
+                         [LApp(logic_native_of_bitvector nty,
+                               [LApp(logic_bitvector_of_native nty, 
+                                     [LVar "x"])]);
+                          LVar "x"])))
+  :: Axiom((logic_bitvector_of_native nty)^"_of_"^(logic_native_of_bitvector nty),
+	   LForall("x",bitvector_type,
+		   LPred("eq", (* TODO: equality for bitvectors ? *)
+                         [LApp(logic_bitvector_of_native nty,
+                               [LApp(logic_native_of_bitvector nty, 
+                                     [LVar "x"])]);
+                          LVar "x"])))
+  :: acc
+
 let range_of_enum ri = 
   Num.add_num (Num.sub_num ri.jc_enum_info_max ri.jc_enum_info_min) (Num.Int 1)
 
@@ -3215,6 +3235,26 @@ let tr_variant vi acc =
 			  [ LApp("pointer_address",
 				 [ LVar p ])]))))
   in
+  let lt = tr_base_type (JCTpointer(pc,None,None)) in
+  let conv = 
+    [Logic(false,logic_bitvector_of_variant vi,["",lt],bitvector_type);
+     Logic(false,logic_variant_of_bitvector vi,["",bitvector_type],lt);
+     Axiom((logic_variant_of_bitvector vi)^"_of_"^(logic_bitvector_of_variant vi),
+	   LForall("x",lt,
+		   LPred(equality_op_for_type (JCTpointer (pc,None,None)),
+                         [LApp(logic_variant_of_bitvector vi,
+			       [LApp(logic_bitvector_of_variant vi, 
+                                     [LVar "x"])]);
+                          LVar "x"])));
+     Axiom((logic_bitvector_of_variant vi)^"_of_"^(logic_variant_of_bitvector vi),
+	   LForall("x",bitvector_type,
+		   LPred("eq", (* TODO: equality for bitvectors ? *)
+                         [LApp(logic_bitvector_of_variant vi,
+			       [LApp(logic_variant_of_bitvector vi, 
+                                       [LVar "x"])]);
+                          LVar "x"])))
+    ]
+  in
   let tag_table =
     Param(
       false,
@@ -3271,7 +3311,7 @@ let tr_variant vi acc =
   let acc = 
     type_def::alloc_table::tag_table::axiom_variant_has_tag
     :: of_ptr_addr :: addr_axiom :: rev_addr_axiom
-    :: acc 
+    :: conv @ acc 
   in
   acc
 

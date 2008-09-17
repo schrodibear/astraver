@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.120 2008-09-05 13:21:01 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.121 2008-09-17 17:09:38 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -273,6 +273,12 @@ let main () =
 	  treat_enum_pairs acc rest
     in
     let d = treat_enum_pairs d enumlist in
+
+    (* production phase x.x : generation of conversion functions *)
+    let d = 
+      List.fold_right Jc_interp.tr_native_type 
+	[ Tboolean; Tinteger; Treal ] d
+    in
 
     (* production phase x.x : generation of Why logic constants *)
 (*     Jc_options.lprintf "Generation of Why logic constants@."; *)

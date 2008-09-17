@@ -81,6 +81,19 @@ let eq_of_enum ri = "eq_" ^ ri.jc_enum_info_name
 let logic_bitvector_of_enum ri = "bitvector_of_" ^ ri.jc_enum_info_name
 let logic_enum_of_bitvector ri = ri.jc_enum_info_name  ^ "_of_bitvector"
 
+let native_name = function
+  | Tunit -> "unit"
+  | Tboolean -> "boolean"
+  | Tinteger -> "integer"
+  | Treal -> "real"
+  | Tstring -> "string"
+
+let logic_bitvector_of_native nty = "bitvector_of_" ^ (native_name nty)
+let logic_native_of_bitvector nty = (native_name nty) ^ "_of_bitvector"
+
+let logic_bitvector_of_variant vi = "bitvector_of_" ^ vi.jc_variant_info_name
+let logic_variant_of_bitvector vi = vi.jc_variant_info_name ^ "_of_bitvector"
+
 let logic_union_of_field fi = "bitvector_of_" ^ fi.jc_field_info_name
 let logic_field_of_union fi = fi.jc_field_info_name ^ "_of_bitvector"
 
@@ -1166,6 +1179,9 @@ let make_of_bitvector_app fi e' =
   (* Convert bitvector into appropriate type *)
   match fi.jc_field_info_type with
     | JCTenum ri -> LApp(logic_enum_of_bitvector ri,[e'])
+    | JCTnative nty -> LApp(logic_native_of_bitvector nty,[e'])
+    | JCTpointer(pc,_,_) -> 
+	LApp(logic_variant_of_bitvector (pointer_class_variant pc),[e'])
     | _ty -> assert false (* TODO *)
 
 let make_conversion_params pc =
