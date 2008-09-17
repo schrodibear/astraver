@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.143 2008-08-13 09:31:14 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.144 2008-09-17 15:28:57 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -168,7 +168,8 @@ and pexpr_node =
   | JCPEmatch of pexpr * (ppattern * pexpr) list
 (*  | JCPSskip *) (* -> JCPEconst JCCvoid *)
   | JCPEblock of pexpr list
-  | JCPEassert of string list * pexpr
+  | JCPEassert of string list * bool * pexpr
+      (* 2nd arg is true if it is an assertion, false if it is an assumption *)
   | JCPEcontract of 
       pexpr option * pexpr option * pexpr pbehavior list * pexpr 
 	(* requires, decreases, behaviors, expression *)
@@ -263,7 +264,7 @@ type nexpr_node =
   | JCNEalloc of nexpr * string
   | JCNEfree of nexpr
   | JCNElet of ptype option * string * nexpr option * nexpr
-  | JCNEassert of string list * nexpr
+  | JCNEassert of string list * bool * nexpr
   | JCNEcontract of 
       nexpr option * nexpr option * nexpr pbehavior list * nexpr 
 	(* requires, decreases, behaviors, expression *)
@@ -477,7 +478,7 @@ type ('li,'fi) expr_node =
   | JCEalloc of ('li,'fi) expr * struct_info
   | JCEfree of ('li,'fi) expr
   | JCElet of var_info * ('li,'fi) expr option * ('li,'fi) expr
-  | JCEassert of string list * 'li assertion
+  | JCEassert of string list * bool * 'li assertion
   | JCEcontract of 'li assertion option * 'li term option * var_info * 
       (Loc.position * string * 'li behavior) list * ('li,'fi) expr
   | JCEblock of ('li,'fi) expr list

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.348 2008-09-01 15:00:15 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.349 2008-09-17 15:28:57 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -197,8 +197,10 @@ let bin_op: expr_bin_op -> string = function
   | `Badd, `Integer -> "add_int"
   | `Bsub, `Integer -> "sub_int"
   | `Bmul, `Integer -> "mul_int"
-  | `Bdiv, `Integer -> "div_int_"
-  | `Bmod, `Integer -> "mod_int_"
+  | `Bdiv, `Integer -> 
+      if safety_checking () then "div_int_" else "div_int" 
+  | `Bmod, `Integer -> 
+      if safety_checking () then "mod_int_" else "mod_int"
       (* pointer *)
   | `Beq, `Pointer -> "eq_pointer"
   | `Bneq, `Pointer -> "neq_pointer"
@@ -214,7 +216,8 @@ let bin_op: expr_bin_op -> string = function
   | `Badd, `Real -> "add_real"
   | `Bsub, `Real -> "sub_real"
   | `Bmul, `Real -> "mul_real"
-  | `Bdiv, `Real -> "div_real_"
+  | `Bdiv, `Real -> 
+      if safety_checking () then "div_real_" else "div_real"
       (* bool *)
   | `Beq, `Boolean -> "eq_bool_"
   | `Bneq, `Boolean -> "neq_bool_"
@@ -1862,12 +1865,16 @@ and expr e =
         let e1' = expr e1 in 
         make_guarded_app e#mark Pack e#pos
           (pack_name st) [ e1'; Var (tag_name from_st) ]
-    | JCEassert(b,a) -> 
-	if compatible_with_current_behavior b then
-          Assert(named_assertion 
-		   ~type_safe:false ~global_assertion:false ~relocate:false
-		   LabelHere LabelPre a,Void)
-	else Void
+    | JCEassert(b,asrt,a) -> 
+	let a' = 
+	  named_assertion 
+	    ~type_safe:false ~global_assertion:false ~relocate:false
+	    LabelHere LabelPre a
+	in
+	if asrt && compatible_with_current_behavior b then
+          Assert(a',Void)
+	else 
+	  BlackBox(Annot_type(LTrue, unit_type, [], [], a', []))
     | JCEloop(la,e1) ->
 	let inv = 
 	  List.filter (compatible_with_current_behavior $ fst) 
@@ -2779,29 +2786,31 @@ let tr_fun f funpos spec body acc =
 	    body
 	  in
 
-          (* default behavior *)
-          let safety_body = function_body f spec "safety" body in
-          let safety_body = wrap_body safety_body in
-          let newid = f.jc_fun_info_name ^ "_safety" in
-          reg_decl 
-            ~out_mark:newid
-            ~in_mark:f.jc_fun_info_name
-            ~name:("function " ^ f.jc_fun_info_name)
-            ~beh:"Safety" 
-	    funpos;
-          let acc = 
-            if is_purely_exceptional_fun spec then acc else
-              if Jc_options.verify_invariants_only then acc else
-                Def(
-                  newid,
-                  Fun(
-                    params,
-                    internal_requires,
-                    safety_body,
-                    internal_safety_post,
-                    excep_posts_for_others None excep_behaviors))
-		:: acc
-          in
+          (* safety behavior *)
+	  let acc = 
+	    if Jc_options.verify_behavior "safety" then
+              let safety_body = function_body f spec "safety" body in
+              let safety_body = wrap_body safety_body in
+              let newid = f.jc_fun_info_name ^ "_safety" in
+              reg_decl 
+		~out_mark:newid
+		~in_mark:f.jc_fun_info_name
+		~name:("function " ^ f.jc_fun_info_name)
+		~beh:"Safety" 
+		funpos;
+              if is_purely_exceptional_fun spec then acc else
+		if Jc_options.verify_invariants_only then acc else
+                  Def(
+                    newid,
+                    Fun(
+                      params,
+                      internal_requires,
+                      safety_body,
+                      internal_safety_post,
+                      excep_posts_for_others None excep_behaviors))
+		  :: acc
+	    else acc
+	  in
 
           (* user behaviors *)
           if spec.jc_fun_behavior = [] then acc else
@@ -2810,28 +2819,30 @@ let tr_fun f funpos spec body acc =
             let acc =
               List.fold_right
                 (fun (id,b,internal_post,_) acc ->
- 		   let normal_body = function_body f spec id body in
-                   let normal_body = wrap_body normal_body in
-                   let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
-                   let beh = 
-                     if id="default" then "Behavior" else
-                       "Normal behavior `"^id^"'"
-                   in
-                   reg_decl 
-                     ~out_mark:newid
-                     ~in_mark:f.jc_fun_info_name
-                     ~name:("function " ^ f.jc_fun_info_name)
-                     ~beh  
-                     funpos;
-                   Def(
-                     newid,
-                     Fun(
-                       params,
-                       assume_in_precondition b internal_requires,
-                       normal_body,
-                       internal_post,
-                       excep_posts_for_others None excep_behaviors))
+		   if Jc_options.verify_behavior id then
+ 		     let normal_body = function_body f spec id body in
+                     let normal_body = wrap_body normal_body in
+                     let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
+                     let beh = 
+                       if id="default" then "Behavior" else
+			 "Normal behavior `"^id^"'"
+                     in
+                     reg_decl 
+                       ~out_mark:newid
+                       ~in_mark:f.jc_fun_info_name
+                       ~name:("function " ^ f.jc_fun_info_name)
+                       ~beh  
+                       funpos;
+                     Def(
+                       newid,
+                       Fun(
+			 params,
+			 assume_in_precondition b internal_requires,
+			 normal_body,
+			 internal_post,
+			 excep_posts_for_others None excep_behaviors))
 		     :: acc
+		   else acc
                 ) normal_behaviors acc
             in 
 
@@ -2841,24 +2852,27 @@ let tr_fun f funpos spec body acc =
                 (fun exc bl acc ->
                    List.fold_right
                      (fun (id,b,internal_post,_) acc ->
- 			let except_body = function_body f spec id body in
-			let except_body = wrap_body except_body in
-                        let newid = f.jc_fun_info_name ^ "_exsures_" ^ id in
-                        reg_decl 
-                          ~out_mark:newid
-                          ~in_mark:f.jc_fun_info_name
-                          ~name:("function " ^ f.jc_fun_info_name)
-                          ~beh:("Exceptional behavior `" ^ id ^ "'")  
-                          funpos;
-                        Def(newid,
-                            Fun(
-			      params,
-                              assume_in_precondition b internal_requires,
-                              except_body,
-                              LTrue,
-                              (exception_name exc, internal_post) :: 
-                                excep_posts_for_others (Some exc) excep_behaviors))
-                        :: acc
+			if Jc_options.verify_behavior id then
+ 			  let except_body = function_body f spec id body in
+			  let except_body = wrap_body except_body in
+                          let newid = f.jc_fun_info_name ^ "_exsures_" ^ id in
+                          reg_decl 
+                            ~out_mark:newid
+                            ~in_mark:f.jc_fun_info_name
+                            ~name:("function " ^ f.jc_fun_info_name)
+                            ~beh:("Exceptional behavior `" ^ id ^ "'")  
+                            funpos;
+                          Def(newid,
+                              Fun(
+				params,
+				assume_in_precondition b internal_requires,
+				except_body,
+				LTrue,
+				(exception_name exc, internal_post) :: 
+                                  excep_posts_for_others (Some exc) 
+				  excep_behaviors))
+                          :: acc
+			else acc
 		     ) bl acc
 		) user_excep_behaviors acc
             in

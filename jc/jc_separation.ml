@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.27 2008-08-28 16:40:01 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.28 2008-09-17 15:28:57 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -231,7 +231,7 @@ let expr rresult e =
 	Region.unify result_region e#region
     | JCEreturn(ty,e) ->
 	Region.unify rresult e#region
-    | JCEassert(_behav,a) ->
+    | JCEassert(_behav,_asrt,a) ->
 	assertion rresult a
     | JCEcontract(req,dec,vi_result,behs,e) -> 
 	assert false (* TODO *)

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.128 2008-08-25 08:30:50 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.129 2008-09-17 15:28:57 moy Exp $ *)
 
 open Pp
 open Format
@@ -4009,82 +4009,85 @@ let backprop_function targets (fi,fs,sl) =
 (* Main function.                                                            *)
 (*****************************************************************************)
 
-let code_function = function
-  | fi,loc,fs,None -> ()
-  | fi,loc,fs,Some sl ->
-      let wp_filter canda =
-        (* Only propagate candidate assertions for targets if Atp can make 
-	 * sense of them.
-	 *)
-	(* TODO : make sure ident on common logic formulas. *)
-(*         raw_assertion_equal canda (asrt_of_atp(atp_of_asrt canda)) *)
-	true
-      in
-      begin match !Jc_options.annotation_sem with
-	| AnnotNone -> ()
-	| AnnotInvariants | AnnotWeakPre | AnnotStrongPre ->
-(* 	    let targets = collect_immediate_targets [] sl in *)
-(* 	    backprop_function targets (fi,fs,sl); *)
-	    let targets = collect_targets wp_filter [] sl in
-	    begin match !Jc_options.ai_domain with
-	      | AbsNone ->
-		  ()
-	      | AbsBox -> 
-		  let mgr = Box.manager_alloc () in
-		  ai_function mgr None targets (fi,loc,fs,sl)
-	      | AbsOct -> 
-		  let mgr = Oct.manager_alloc () in
-		  ai_function mgr None targets (fi,loc,fs,sl)
-	      | AbsPol -> 
-		  let mgr = Polka.manager_alloc_strict () in
-		  ai_function mgr None targets (fi,loc,fs,sl)
-	    end;
-	    begin match !Jc_options.annotation_sem with 
-	      | AnnotNone -> assert false
-	      | AnnotInvariants	-> ()
-	      | AnnotWeakPre | AnnotStrongPre ->
- 		  let targets = 
-		    List.fold_right (fun target acc ->
-		      target.jc_target_regular_invariant <- 
-			simplify target.jc_target_regular_invariant (new assertion JCAtrue);
-		      (* Build the most precise invariant known at the current 
-		       * assertion point: it is the conjunction of the regular 
-		       * invariant (from forward abstract interpretation) and 
-		       * the propagated invariant (from propagated assertions).
-		       *)
-		      let inv = 
-			make_and [target.jc_target_regular_invariant;
-			target.jc_target_propagated_invariant]
-		      in
-		      (* Check whether the target assertion is a consequence of 
-		       * the most precise invariant. 
-		       *)
-		      let impl = 
-			new assertion(JCAimplies(inv,target.jc_target_assertion)) 
-		      in
-		      if tautology impl then 
-			begin
-			  if debug then
-			    printf "%a[code_function] proof of %a discharged@." 
-			      Loc.report_position target.jc_target_location
-			      Jc_output.assertion target.jc_target_assertion;
-			  acc 
-			end
-		      else 
-			begin
-			  if debug then
-			    printf "%a[code_function] precondition needed for %a@." 
-			      Loc.report_position target.jc_target_location
-			      Jc_output.assertion target.jc_target_assertion;
-			  (* Adding target to the list. *)
-			  target :: acc
-			end
+let code_function (fi,pos,fs,body_opt) =
+  match body_opt with None -> () | Some sl ->
+    let wp_filter canda =
+      (* Only propagate candidate assertions for targets if Atp can make 
+       * sense of them.
+       *)
+      (* TODO : make sure ident on common logic formulas. *)
+      (*         raw_assertion_equal canda (asrt_of_atp(atp_of_asrt canda)) *)
+      true
+    in
+    begin match !Jc_options.annotation_sem with
+      | AnnotNone -> ()
+      | AnnotInvariants | AnnotWeakPre | AnnotStrongPre ->
+	  (* 	    let targets = collect_immediate_targets [] sl in *)
+	  (* 	    backprop_function targets (fi,fs,sl); *)
+	  (* Collect checks *)
+	  let targets = collect_targets wp_filter [] sl in
+	  (* Generate invariants by forward abstract interpretation *)
+	  begin match !Jc_options.ai_domain with
+	    | AbsNone ->
+		()
+	    | AbsBox -> 
+		let mgr = Box.manager_alloc () in
+		ai_function mgr None targets (fi,pos,fs,sl)
+	    | AbsOct -> 
+		let mgr = Oct.manager_alloc () in
+		ai_function mgr None targets (fi,pos,fs,sl)
+	    | AbsPol -> 
+		let mgr = Polka.manager_alloc_strict () in
+		ai_function mgr None targets (fi,pos,fs,sl)
+	  end;
+	  (* Generate invariants by forward abstract interpretation *)
+	  begin match !Jc_options.annotation_sem with 
+	    | AnnotNone -> assert false
+	    | AnnotInvariants	-> ()
+	    | AnnotWeakPre | AnnotStrongPre ->
+ 		let targets = 
+		  List.fold_right 
+		    (fun target acc ->
+		       target.jc_target_regular_invariant <- 
+			 simplify target.jc_target_regular_invariant (new assertion JCAtrue);
+		       (* Build the most precise invariant known at the current 
+			* assertion point: it is the conjunction of the regular 
+			* invariant (from forward abstract interpretation) and 
+			* the propagated invariant (from propagated assertions).
+			*)
+		       let inv = 
+			 make_and [target.jc_target_regular_invariant;
+				   target.jc_target_propagated_invariant]
+		       in
+		       (* Check whether the target assertion is a consequence of 
+			* the most precise invariant. 
+			*)
+		       let impl = 
+			 new assertion(JCAimplies(inv,target.jc_target_assertion)) 
+		       in
+		       if tautology impl then 
+			 begin
+			   if debug then
+			     printf "%a[code_function] proof of %a discharged@." 
+			       Loc.report_position target.jc_target_location
+			       Jc_output.assertion target.jc_target_assertion;
+			   acc 
+			 end
+		       else 
+			 begin
+			   if debug then
+			     printf "%a[code_function] precondition needed for %a@." 
+			       Loc.report_position target.jc_target_location
+			       Jc_output.assertion target.jc_target_assertion;
+			   (* Adding target to the list. *)
+			   target :: acc
+			 end
 		    ) targets []
-		  in
-		  wp_function targets (fi,loc,fs,sl)
-	    end
-      end
-	
+		in
+		wp_function targets (fi,pos,fs,sl)
+	  end
+    end
+      
 
 (*****************************************************************************)
 (* Interprocedural analysis.                                                 *)

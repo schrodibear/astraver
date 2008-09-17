@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.30 2008-08-28 13:57:41 moy Exp $ *)
+(* $Id: jc_options.mli,v 1.31 2008-09-17 15:28:57 moy Exp $ *)
 
 open Jc_stdlib
 
@@ -50,6 +50,7 @@ val why_opt : string
 val verify_all_offsets : bool
 val verify_invariants_only : bool
 val verify : string list
+val behavior : string
 
 val interprocedural : bool
 val main : string
@@ -64,6 +65,8 @@ val ai_domain : Jc_env.abstract_domain ref
 val int_model : Jc_env.int_model ref
 val trust_ai : bool
 val fast_ai : bool
+
+val verify_behavior: string -> bool
 
 (*s The log file *)
 

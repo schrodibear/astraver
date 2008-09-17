@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.18 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.19 2008-09-17 15:28:57 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -216,8 +216,9 @@ let rec pexpr fmt e =
     | JCPEdecl (ty,vi, Some e)-> 
 	fprintf fmt "@\n(var %a %s = %a)" 
 	  ptype ty vi pexpr e
-    | JCPEassert(behav,a)-> 
-	fprintf fmt "@\n(assert %a%a)" 
+    | JCPEassert(behav,asrt,a)-> 
+	fprintf fmt "@\n(%s %a%a)" 
+	  (if asrt then "assert" else "assume")
 	  (print_list_delim 
 	     (constant_string "for ") (constant_string ": ") 
 	     comma string)

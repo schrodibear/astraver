@@ -179,7 +179,7 @@ simplify: simplify/Literals_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
 
 simplify/%_why.sx: why/%.why
-	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(JESSIELIBFILE) why/$*.why
+	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILE) why/$*.why
 
 ergo: why/Literals_why.why
 	@echo 'Running Ergo on proof obligations' && ($(DP) $^)
@@ -2243,6 +2243,86 @@ why -simplify [...] why/Literals.why
 ;; DO NOT EDIT BELOW THIS LINE
 
 (BG_PUSH (NEQ |@true| |@false|))
+
+(BG_PUSH
+ ;; Why axiom bool_and_def
+ (FORALL (a b)
+ (IFF (EQ (bool_and a b) |@true|) (AND (EQ a |@true|) (EQ b |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom bool_or_def
+ (FORALL (a b)
+ (IFF (EQ (bool_or a b) |@true|) (OR (EQ a |@true|) (EQ b |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom bool_xor_def
+ (FORALL (a b) (IFF (EQ (bool_xor a b) |@true|) (NEQ a b))))
+
+(BG_PUSH
+ ;; Why axiom bool_not_def
+ (FORALL (a) (IFF (EQ (bool_not a) |@true|) (EQ a |@false|))))
+
+(BG_PUSH
+ ;; Why axiom ite_true
+ (FORALL (x y) (EQ (ite |@true| x y) x)))
+
+(BG_PUSH
+ ;; Why axiom ite_false
+ (FORALL (x y) (EQ (ite |@false| x y) y)))
+
+(BG_PUSH
+ ;; Why axiom lt_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (lt_int_bool x y) |@true|) (< x y))))
+
+(BG_PUSH
+ ;; Why axiom le_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (le_int_bool x y) |@true|) (<= x y))))
+
+(BG_PUSH
+ ;; Why axiom gt_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (gt_int_bool x y) |@true|) (> x y))))
+
+(BG_PUSH
+ ;; Why axiom ge_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (ge_int_bool x y) |@true|) (>= x y))))
+
+(BG_PUSH
+ ;; Why axiom eq_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (eq_int_bool x y) |@true|) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom neq_int_bool_axiom
+ (FORALL (x y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y))))
+
+(BG_PUSH
+ ;; Why axiom lt_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (lt_real_bool x y) |@true|) (EQ (lt_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom le_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (le_real_bool x y) |@true|) (EQ (le_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom gt_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (gt_real_bool x y) |@true|) (EQ (gt_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom ge_real_bool_axiom
+ (FORALL (x y)
+ (IFF (EQ (ge_real_bool x y) |@true|) (EQ (ge_real x y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom eq_real_bool_axiom
+ (FORALL (x y) (IFF (EQ (eq_real_bool x y) |@true|) (EQ x y))))
+
+(BG_PUSH
+ ;; Why axiom neq_real_bool_axiom
+ (FORALL (x y) (IFF (EQ (neq_real_bool x y) |@true|) (NEQ x y))))
+
+(DEFPRED (zwf_zero a b) (AND (<= 0 b) (< a b)))
 
 (BG_PUSH
  ;; Why axiom div_positive_by_positive

@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.106 2008-08-06 15:17:04 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.107 2008-09-17 15:28:57 moy Exp $ */
 
 %{
 
@@ -90,7 +90,7 @@
 %token EXCEPTION OF THROW TRY CATCH FINALLY NEW FREE LET IN VAR
 
 /* pack unpack assert */
-%token PACK UNPACK ASSERT
+%token PACK UNPACK ASSERT ASSUME
 
 /* type invariant logic with variant and axiom tag */
 %token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM LEMMA TAG MATCH
@@ -148,7 +148,7 @@
 
 /* precedences on expressions  */
 
-%nonassoc RETURN ASSERT THROW precwhile
+%nonassoc RETURN ASSERT ASSUME THROW precwhile
 %nonassoc COLON
 %nonassoc PRECFORALL 
 /* <=> */
@@ -658,9 +658,13 @@ expression:
 | compound_expr
     { $1 }
 | ASSERT FOR identifier_list COLON expression %prec FOR
-    { locate (JCPEassert($3,$5)) }
+    { locate (JCPEassert($3,true,$5)) }
 | ASSERT expression 
-    { locate (JCPEassert([],$2)) }
+    { locate (JCPEassert([],true,$2)) }
+| ASSUME FOR identifier_list COLON expression %prec FOR
+    { locate (JCPEassert($3,false,$5)) }
+| ASSUME expression 
+    { locate (JCPEassert([],false,$2)) }
 | behavior compound_expr
     { locate (JCPEcontract(None,None,[$1],$2)) } 
 | iteration_expression 

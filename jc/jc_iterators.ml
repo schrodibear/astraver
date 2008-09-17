@@ -172,8 +172,8 @@ let replace_sub_pexpr e el =
     | JCPEblock elist ->
 	assert (List.length elist = List.length el);
 	JCPEblock el
-    | JCPEassert(behav,_e) ->
-	let e1 = as1 el in JCPEassert(behav,e1)
+    | JCPEassert(behav,asrt,_e) ->
+	let e1 = as1 el in JCPEassert(behav,asrt,e1)
     | JCPEcontract(req,dec,behs,_e) ->
 	let e1 = as1 el in JCPEcontract(req,dec,behs,e1)
     | JCPEwhile(_test,inv1,var,_body) ->
@@ -250,7 +250,7 @@ module PExprAst = struct
           []
       | JCPEeqtype(tag1,tag2) | JCPEsubtype(tag1,tag2) ->
 	  subtags tag1 @ subtags tag2
-      | JCPEassert(_,e)
+      | JCPEassert(_,_,e)
       | JCPElabel(_, e)
       | JCPEderef(e, _)
       | JCPEunary(_, e)
@@ -1050,7 +1050,7 @@ let fold_sub_expr_and_term_and_assertion
 	  List.fold_left (fun acc (_exc,_vi_opt,e) -> ite acc e) acc catches
 	in
 	ite acc finally
-    | JCEassert(_behav,a) ->
+    | JCEassert(_behav,_asrt,a) ->
 	ita acc a
     | JCEloop(la,e1) ->
 	let acc = ite acc e1 in
@@ -1113,7 +1113,7 @@ module NExprAst = struct
       | JCNEalloc(e, _)
       | JCNEfree e
       | JCNElet(_, _, None, e)
-      | JCNEassert(_,e)
+      | JCNEassert(_,_,e)
       | JCNEreturn(Some e)
       | JCNEthrow(_, Some e)
       | JCNEpack(e, _)

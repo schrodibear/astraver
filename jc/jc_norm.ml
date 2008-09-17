@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.101 2008-08-06 15:17:04 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.102 2008-09-17 15:28:57 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -554,7 +554,7 @@ let rec expr e =
     | JCPEmatch(e,pelist) ->
 	JCNEmatch(expr e,List.map (fun (pat,e) -> (pat,expr e)) pelist)  
     | JCPEblock elist -> JCNEblock(List.map expr elist)
-    | JCPEassert(behav,e) -> JCNEassert(behav,expr e)
+    | JCPEassert(behav,asrt,e) -> JCNEassert(behav,asrt,expr e)
     | JCPEcontract(req,dec,behs,e) -> 
 	JCNEcontract(Option_misc.map expr req,
 		     Option_misc.map expr dec,

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.238 2008-08-30 01:02:56 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.239 2008-09-17 15:28:57 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1817,8 +1817,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         te2#region,
         JCElet(vi, te1o, te2)
     (* old statements *)
-    | JCNEassert(behav,e1) ->
-        unit_type, dummy_region, JCEassert(behav,assertion env e1)
+    | JCNEassert(behav,asrt,e1) ->
+        unit_type, dummy_region, JCEassert(behav,asrt,assertion env e1)
     | JCNEcontract(req,dec,behs,e) ->
 	let requires = Option_misc.map (assertion env) req in
 	let decreases = Option_misc.map (term env) req in

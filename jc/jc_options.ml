@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.32 2008-08-28 13:57:41 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.33 2008-09-17 15:28:57 moy Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -74,6 +74,7 @@ let why_opt = ref ""
 let verify_all_offsets = ref false
 let verify_invariants_only = ref false
 let verify = ref []
+let behavior = ref ""
 
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
@@ -115,6 +116,8 @@ let _ =
           "  debugging mode";
 	"-locs", Arg.String (fun f -> pos_files := f :: !pos_files),
 	  "  <f> reads source locations from file f" ;
+        "-behavior", Arg.String (fun s -> behavior := s), 
+	  "  verify only specified behavior (safety, default or user-defined behavior)";
 
         "-why-opt", Arg.String add_why_opt,
 	  "  <why options>  passes options to Why";
@@ -180,6 +183,10 @@ let verify_invariants_only = !verify_invariants_only
 let verify = !verify
 let interprocedural = !interprocedural
 let main = !main
+let behavior = !behavior
+
+let verify_behavior s = 
+  behavior = "" || behavior = s
 
 (*s error handling *)
 
