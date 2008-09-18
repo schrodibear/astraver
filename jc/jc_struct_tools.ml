@@ -49,6 +49,8 @@ let variant_of_alloc_class = function
   | JCalloc_union vi -> vi
   | JCalloc_bitvector -> assert false (* no variant *)
 
+let variant_of_mem_class = variant_of_alloc_class $ alloc_class_of_mem_class
+
 (* keep the pointers only and return their pointer_class *)
 let fields_pointer_class = List.flatten $
   (List.map
@@ -84,6 +86,16 @@ let field_offset fi =
 let field_offset_in_bytes fi =
   let off = field_offset fi in
   if off mod 8 = 0 then Some(off/8) else None
+
+let field_type_has_bitvector_representation fi =
+  match fi.jc_field_info_type with
+    | JCTenum _ 
+    | JCTpointer _ -> true
+    | JCTnative _
+    | JCTlogic _
+    | JCTnull
+    | JCTany
+    | JCTtype_var _ -> false
 
 let struct_fields st =
   let rec aux acc st =

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.351 2008-09-18 13:20:40 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.352 2008-09-18 16:16:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1183,7 +1183,7 @@ let rec make_upd_simple mark pos e1 fi tmp2 =
   let tmpi = tmp_var_name () in
   let tmp1 = tmp_var_name () in  
   (* Define memory and allocation table *)
-  let mc = deref_mem_class e1 fi in
+  let mc = deref_mem_class ~type_safe:false e1 fi in
   let mem = plain_memory_var (mc,e1#region) in
   let ac = alloc_class_of_mem_class mc in
   let alloc = alloc_table_var (ac,e1#region) in
@@ -1321,7 +1321,7 @@ and make_upd mark pos e1 fi e2 =
   let v2 = match e2#node with JCEvar v2 -> v2 | _ -> assert false in
   let tmp2 = v2.jc_var_info_name in
   (* Dispatch depending on kind of memory *) 
-  let mc = deref_mem_class e1 fi in
+  let mc = deref_mem_class ~type_safe:false e1 fi in
   match mc with
     | JCmem_field _fi -> 
 	make_upd_simple mark pos e1 fi tmp2
@@ -1339,7 +1339,7 @@ and make_upd mark pos e1 fi e2 =
 *)
 and make_deref_simple mark pos e fi =
   (* Define memory and allocation table *)
-  let mc = deref_mem_class e fi in
+  let mc = deref_mem_class ~type_safe:false e fi in
   let mem = memory_var (mc,e#region) in
   let ac = alloc_class_of_mem_class mc in
   let alloc = alloc_table_var (ac,e#region) in
@@ -1427,7 +1427,7 @@ and make_deref_bytes mark pos e fi =
 
 and make_deref mark pos e1 fi =
   (* Dispatch depending on kind of memory *)
-  let mc = deref_mem_class e1 fi in
+  let mc = deref_mem_class ~type_safe:false e1 fi in
   match mc with
     | JCmem_field _fi -> 
 	make_deref_simple mark pos e1 fi
@@ -1592,7 +1592,7 @@ and expr e =
         let e3' = expr e3 in
         If(e1',e2',e3')
     | JCEoffset(k,e1,st) -> 
-	let ac = deref_alloc_class e1 in
+	let ac = deref_alloc_class ~type_safe:false e1 in
         let alloc = alloc_table_var (ac,e1#region) in
 	begin match ac with
 	  | JCalloc_struct _ | JCalloc_union _ ->
@@ -1651,7 +1651,7 @@ and expr e =
   	make_deref e#mark e#pos e1 fi
     | JCEalloc(e1,st) ->
 	let e1' = expr e1 in
-	let ac = deref_alloc_class e in
+	let ac = deref_alloc_class ~type_safe:false e in
         let alloc = plain_alloc_table_var (ac,e#region) in
 	let pc = JCtag(st,[]) in
 	let args = alloc_arguments (ac,e#region) pc in
@@ -1674,7 +1674,7 @@ and expr e =
              :: args)
     | JCEfree e1 ->
 	let e1' = expr e1 in
-	let ac = deref_alloc_class e1 in
+	let ac = deref_alloc_class ~type_safe:false e1 in
         let alloc = plain_alloc_table_var (ac,e1#region) in
         if !Jc_options.inv_sem = InvOwnership then
 	  let pc = pointer_class e1#typ in
@@ -2999,25 +2999,25 @@ let tr_exception ei acc =
   in
   Exception(exception_name ei, typ) :: acc
 
-let tr_native_type nty acc =
-  let lt = tr_base_type (JCTnative nty) in
-  Logic(false,logic_bitvector_of_native nty,["",lt],bitvector_type)
-  :: Logic(false,logic_native_of_bitvector nty,["",bitvector_type],lt)
-  :: Axiom((logic_native_of_bitvector nty)^"_of_"^(logic_bitvector_of_native nty),
-	   LForall("x",lt,
-		   LPred(equality_op_for_type (JCTnative nty),
-                         [LApp(logic_native_of_bitvector nty,
-                               [LApp(logic_bitvector_of_native nty, 
-                                     [LVar "x"])]);
-                          LVar "x"])))
-  :: Axiom((logic_bitvector_of_native nty)^"_of_"^(logic_native_of_bitvector nty),
-	   LForall("x",bitvector_type,
-		   LPred("eq", (* TODO: equality for bitvectors ? *)
-                         [LApp(logic_bitvector_of_native nty,
-                               [LApp(logic_native_of_bitvector nty, 
-                                     [LVar "x"])]);
-                          LVar "x"])))
-  :: acc
+(* let tr_native_type nty acc = *)
+(*   let lt = tr_base_type (JCTnative nty) in *)
+(*   Logic(false,logic_bitvector_of_native nty,["",lt],bitvector_type) *)
+(*   :: Logic(false,logic_native_of_bitvector nty,["",bitvector_type],lt) *)
+(*   :: Axiom((logic_native_of_bitvector nty)^"_of_"^(logic_bitvector_of_native nty), *)
+(* 	   LForall("x",lt, *)
+(* 		   LPred(equality_op_for_type (JCTnative nty), *)
+(*                          [LApp(logic_native_of_bitvector nty, *)
+(*                                [LApp(logic_bitvector_of_native nty,  *)
+(*                                      [LVar "x"])]); *)
+(*                           LVar "x"]))) *)
+(*   :: Axiom((logic_bitvector_of_native nty)^"_of_"^(logic_native_of_bitvector nty), *)
+(* 	   LForall("x",bitvector_type, *)
+(* 		   LPred("eq", (\* TODO: equality for bitvectors ? *\) *)
+(*                          [LApp(logic_bitvector_of_native nty, *)
+(*                                [LApp(logic_native_of_bitvector nty,  *)
+(*                                      [LVar "x"])]); *)
+(*                           LVar "x"]))) *)
+(*   :: acc *)
 
 let range_of_enum ri = 
   Num.add_num (Num.sub_num ri.jc_enum_info_max ri.jc_enum_info_min) (Num.Int 1)

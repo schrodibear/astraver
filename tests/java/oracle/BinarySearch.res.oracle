@@ -975,13 +975,6 @@ axiom Throwable_parenttag_Object : parenttag(Throwable_tag, Object_tag)
 axiom bitvector_of_Object_of_Object_of_bitvector :
  (forall x:bitvector. (bitvector_of_Object(Object_of_bitvector(x)) = x))
 
-logic bitvector_of_boolean: bool -> bitvector
-
-logic boolean_of_bitvector: bitvector -> bool
-
-axiom bitvector_of_boolean_of_boolean_of_bitvector :
- (forall x:bitvector. (bitvector_of_boolean(boolean_of_bitvector(x)) = x))
-
 logic bitvector_of_byte: byte -> bitvector
 
 logic byte_of_bitvector: bitvector -> byte
@@ -1003,13 +996,6 @@ logic int32_of_bitvector: bitvector -> int32
 axiom bitvector_of_int32_of_int32_of_bitvector :
  (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
 
-logic bitvector_of_integer: int -> bitvector
-
-logic integer_of_bitvector: bitvector -> int
-
-axiom bitvector_of_integer_of_integer_of_bitvector :
- (forall x:bitvector. (bitvector_of_integer(integer_of_bitvector(x)) = x))
-
 logic bitvector_of_interface: interface pointer -> bitvector
 
 logic interface_of_bitvector: bitvector -> interface pointer
@@ -1025,22 +1011,12 @@ logic long_of_bitvector: bitvector -> long
 axiom bitvector_of_long_of_long_of_bitvector :
  (forall x:bitvector. (bitvector_of_long(long_of_bitvector(x)) = x))
 
-logic bitvector_of_real: real -> bitvector
-
-logic real_of_bitvector: bitvector -> real
-
-axiom bitvector_of_real_of_real_of_bitvector :
- (forall x:bitvector. (bitvector_of_real(real_of_bitvector(x)) = x))
-
 logic bitvector_of_short: short -> bitvector
 
 logic short_of_bitvector: bitvector -> short
 
 axiom bitvector_of_short_of_short_of_bitvector :
  (forall x:bitvector. (bitvector_of_short(short_of_bitvector(x)) = x))
-
-axiom boolean_of_bitvector_of_bitvector_of_boolean :
- (forall x:bool. eq_bool(boolean_of_bitvector(bitvector_of_boolean(x)), x))
 
 logic integer_of_byte: byte -> int
 
@@ -1119,9 +1095,6 @@ logic intM_tag:  -> Object tag_id
 
 axiom intM_parenttag_Object : parenttag(intM_tag, Object_tag)
 
-axiom integer_of_bitvector_of_bitvector_of_integer :
- (forall x:int. eq_int(integer_of_bitvector(bitvector_of_integer(x)), x))
-
 logic interface_tag:  -> interface tag_id
 
 axiom interface_int : (int_of_tag(interface_tag) = (1))
@@ -1191,9 +1164,6 @@ axiom pointer_addr_of_Object_of_pointer_address :
 axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
-
-axiom real_of_bitvector_of_bitvector_of_real :
- (forall x:real. eq_real(real_of_bitvector(bitvector_of_real(x)), x))
 
 logic short_of_integer: int -> short
 
@@ -2102,7 +2072,7 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "why/BinarySearch.why" line = "264" begin = "0" end = "206"/>
+      <location file = "why/BinarySearch.why" line = "237" begin = "0" end = "206"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -2113,7 +2083,7 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po4.why">
-      <location file = "why/BinarySearch.why" line = "1090" begin = "49" end = "208"/>
+      <location file = "why/BinarySearch.why" line = "1060" begin = "49" end = "208"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po5.why">
@@ -3092,13 +3062,6 @@ axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 axiom bitvector_of_Object_of_Object_of_bitvector:
   (forall x:bitvector. (bitvector_of_Object(Object_of_bitvector(x)) = x))
 
-logic bitvector_of_boolean : bool -> bitvector
-
-logic boolean_of_bitvector : bitvector -> bool
-
-axiom bitvector_of_boolean_of_boolean_of_bitvector:
-  (forall x:bitvector. (bitvector_of_boolean(boolean_of_bitvector(x)) = x))
-
 logic bitvector_of_byte : byte -> bitvector
 
 logic byte_of_bitvector : bitvector -> byte
@@ -3120,13 +3083,6 @@ logic int32_of_bitvector : bitvector -> int32
 axiom bitvector_of_int32_of_int32_of_bitvector:
   (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
 
-logic bitvector_of_integer : int -> bitvector
-
-logic integer_of_bitvector : bitvector -> int
-
-axiom bitvector_of_integer_of_integer_of_bitvector:
-  (forall x:bitvector. (bitvector_of_integer(integer_of_bitvector(x)) = x))
-
 logic bitvector_of_interface : interface pointer -> bitvector
 
 logic interface_of_bitvector : bitvector -> interface pointer
@@ -3142,22 +3098,12 @@ logic long_of_bitvector : bitvector -> long
 axiom bitvector_of_long_of_long_of_bitvector:
   (forall x:bitvector. (bitvector_of_long(long_of_bitvector(x)) = x))
 
-logic bitvector_of_real : real -> bitvector
-
-logic real_of_bitvector : bitvector -> real
-
-axiom bitvector_of_real_of_real_of_bitvector:
-  (forall x:bitvector. (bitvector_of_real(real_of_bitvector(x)) = x))
-
 logic bitvector_of_short : short -> bitvector
 
 logic short_of_bitvector : bitvector -> short
 
 axiom bitvector_of_short_of_short_of_bitvector:
   (forall x:bitvector. (bitvector_of_short(short_of_bitvector(x)) = x))
-
-axiom boolean_of_bitvector_of_bitvector_of_boolean:
-  (forall x:bool. (boolean_of_bitvector(bitvector_of_boolean(x)) = x))
 
 logic integer_of_byte : byte -> int
 
@@ -3230,9 +3176,6 @@ logic intM_tag :  -> Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-axiom integer_of_bitvector_of_bitvector_of_integer:
-  (forall x:int. (integer_of_bitvector(bitvector_of_integer(x)) = x))
-
 logic interface_tag :  -> interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
@@ -3293,9 +3236,6 @@ axiom pointer_addr_of_Object_of_pointer_address:
 axiom pointer_addr_of_interface_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(interface_of_pointer_address(p))))
-
-axiom real_of_bitvector_of_bitvector_of_real:
-  (forall x:real. (real_of_bitvector(bitvector_of_real(x)) = x))
 
 logic short_of_integer : int -> short
 
@@ -4981,10 +4921,6 @@ why -simplify [...] why/BinarySearch.why
  (FORALL (x) (EQ (bitvector_of_Object (Object_of_bitvector x)) x)))
 
 (BG_PUSH
- ;; Why axiom bitvector_of_boolean_of_boolean_of_bitvector
- (FORALL (x) (EQ (bitvector_of_boolean (boolean_of_bitvector x)) x)))
-
-(BG_PUSH
  ;; Why axiom bitvector_of_byte_of_byte_of_bitvector
  (FORALL (x) (EQ (bitvector_of_byte (byte_of_bitvector x)) x)))
 
@@ -4997,10 +4933,6 @@ why -simplify [...] why/BinarySearch.why
  (FORALL (x) (EQ (bitvector_of_int32 (int32_of_bitvector x)) x)))
 
 (BG_PUSH
- ;; Why axiom bitvector_of_integer_of_integer_of_bitvector
- (FORALL (x) (EQ (bitvector_of_integer (integer_of_bitvector x)) x)))
-
-(BG_PUSH
  ;; Why axiom bitvector_of_interface_of_interface_of_bitvector
  (FORALL (x) (EQ (bitvector_of_interface (interface_of_bitvector x)) x)))
 
@@ -5009,16 +4941,8 @@ why -simplify [...] why/BinarySearch.why
  (FORALL (x) (EQ (bitvector_of_long (long_of_bitvector x)) x)))
 
 (BG_PUSH
- ;; Why axiom bitvector_of_real_of_real_of_bitvector
- (FORALL (x) (EQ (bitvector_of_real (real_of_bitvector x)) x)))
-
-(BG_PUSH
  ;; Why axiom bitvector_of_short_of_short_of_bitvector
  (FORALL (x) (EQ (bitvector_of_short (short_of_bitvector x)) x)))
-
-(BG_PUSH
- ;; Why axiom boolean_of_bitvector_of_bitvector_of_boolean
- (FORALL (x) (EQ (boolean_of_bitvector (bitvector_of_boolean x)) x)))
 
 (BG_PUSH
  ;; Why axiom byte_coerce
@@ -5082,10 +5006,6 @@ why -simplify [...] why/BinarySearch.why
  (EQ (parenttag intM_tag Object_tag) |@true|))
 
 (BG_PUSH
- ;; Why axiom integer_of_bitvector_of_bitvector_of_integer
- (FORALL (x) (EQ (integer_of_bitvector (bitvector_of_integer x)) x)))
-
-(BG_PUSH
  ;; Why axiom interface_int
  (EQ (int_of_tag interface_tag) 1))
 
@@ -5135,7 +5055,7 @@ why -simplify [...] why/BinarySearch.why
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
-;; mean_property, File "why/BinarySearch.why", line 264, characters 0-206
+;; mean_property, File "why/BinarySearch.why", line 237, characters 0-206
 (FORALL (x_4 y)
 (IMPLIES (<= x_4 y)
 (AND (<= x_4 (+ x_4 (int_div (- y x_4) 2)))
@@ -5155,10 +5075,6 @@ why -simplify [...] why/BinarySearch.why
 (BG_PUSH
  ;; Why axiom pointer_addr_of_interface_of_pointer_address
  (FORALL (p) (EQ p (pointer_address (interface_of_pointer_address p)))))
-
-(BG_PUSH
- ;; Why axiom real_of_bitvector_of_bitvector_of_real
- (FORALL (x) (EQ (real_of_bitvector (bitvector_of_real x)) x)))
 
 (BG_PUSH
  ;; Why axiom short_coerce
@@ -5346,7 +5262,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP (shift t_0 k)))
 (integer_of_int32 v))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 1090, characters 49-208
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 1060, characters 49-208
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -7106,13 +7022,6 @@ axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 axiom bitvector_of_Object_of_Object_of_bitvector:
   (forall x:bitvector. (bitvector_of_Object(Object_of_bitvector(x)) = x))
 
-logic bitvector_of_boolean : bool -> bitvector
-
-logic boolean_of_bitvector : bitvector -> bool
-
-axiom bitvector_of_boolean_of_boolean_of_bitvector:
-  (forall x:bitvector. (bitvector_of_boolean(boolean_of_bitvector(x)) = x))
-
 logic bitvector_of_byte : byte -> bitvector
 
 logic byte_of_bitvector : bitvector -> byte
@@ -7134,13 +7043,6 @@ logic int32_of_bitvector : bitvector -> int32
 axiom bitvector_of_int32_of_int32_of_bitvector:
   (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
 
-logic bitvector_of_integer : int -> bitvector
-
-logic integer_of_bitvector : bitvector -> int
-
-axiom bitvector_of_integer_of_integer_of_bitvector:
-  (forall x:bitvector. (bitvector_of_integer(integer_of_bitvector(x)) = x))
-
 logic bitvector_of_interface : interface pointer -> bitvector
 
 logic interface_of_bitvector : bitvector -> interface pointer
@@ -7156,22 +7058,12 @@ logic long_of_bitvector : bitvector -> long
 axiom bitvector_of_long_of_long_of_bitvector:
   (forall x:bitvector. (bitvector_of_long(long_of_bitvector(x)) = x))
 
-logic bitvector_of_real : real -> bitvector
-
-logic real_of_bitvector : bitvector -> real
-
-axiom bitvector_of_real_of_real_of_bitvector:
-  (forall x:bitvector. (bitvector_of_real(real_of_bitvector(x)) = x))
-
 logic bitvector_of_short : short -> bitvector
 
 logic short_of_bitvector : bitvector -> short
 
 axiom bitvector_of_short_of_short_of_bitvector:
   (forall x:bitvector. (bitvector_of_short(short_of_bitvector(x)) = x))
-
-axiom boolean_of_bitvector_of_bitvector_of_boolean:
-  (forall x:bool. (boolean_of_bitvector(bitvector_of_boolean(x)) = x))
 
 logic integer_of_byte : byte -> int
 
@@ -7244,9 +7136,6 @@ logic intM_tag :  -> Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-axiom integer_of_bitvector_of_bitvector_of_integer:
-  (forall x:int. (integer_of_bitvector(bitvector_of_integer(x)) = x))
-
 logic interface_tag :  -> interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
@@ -7313,9 +7202,6 @@ axiom pointer_addr_of_Object_of_pointer_address:
 axiom pointer_addr_of_interface_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(interface_of_pointer_address(p))))
-
-axiom real_of_bitvector_of_bitvector_of_real:
-  (forall x:real. (real_of_bitvector(bitvector_of_real(x)) = x))
 
 logic short_of_integer : int -> short
 

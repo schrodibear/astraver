@@ -719,20 +719,6 @@ axiom Throwable_parenttag_Object : parenttag(Throwable_tag, Object_tag)
 axiom bitvector_of_Object_of_Object_of_bitvector :
  (forall x:bitvector. (bitvector_of_Object(Object_of_bitvector(x)) = x))
 
-logic bitvector_of_boolean: bool -> bitvector
-
-logic boolean_of_bitvector: bitvector -> bool
-
-axiom bitvector_of_boolean_of_boolean_of_bitvector :
- (forall x:bitvector. (bitvector_of_boolean(boolean_of_bitvector(x)) = x))
-
-logic bitvector_of_integer: int -> bitvector
-
-logic integer_of_bitvector: bitvector -> int
-
-axiom bitvector_of_integer_of_integer_of_bitvector :
- (forall x:bitvector. (bitvector_of_integer(integer_of_bitvector(x)) = x))
-
 logic bitvector_of_interface: interface pointer -> bitvector
 
 logic interface_of_bitvector: bitvector -> interface pointer
@@ -740,19 +726,6 @@ logic interface_of_bitvector: bitvector -> interface pointer
 axiom bitvector_of_interface_of_interface_of_bitvector :
  (forall x:bitvector.
   (bitvector_of_interface(interface_of_bitvector(x)) = x))
-
-logic bitvector_of_real: real -> bitvector
-
-logic real_of_bitvector: bitvector -> real
-
-axiom bitvector_of_real_of_real_of_bitvector :
- (forall x:bitvector. (bitvector_of_real(real_of_bitvector(x)) = x))
-
-axiom boolean_of_bitvector_of_bitvector_of_boolean :
- (forall x:bool. eq_bool(boolean_of_bitvector(bitvector_of_boolean(x)), x))
-
-axiom integer_of_bitvector_of_bitvector_of_integer :
- (forall x:int. eq_int(integer_of_bitvector(bitvector_of_integer(x)), x))
 
 logic interface_tag:  -> interface tag_id
 
@@ -781,9 +754,6 @@ axiom pointer_addr_of_Object_of_pointer_address :
 axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
-
-axiom real_of_bitvector_of_bitvector_of_real :
- (forall x:real. eq_real(real_of_bitvector(bitvector_of_real(x)), x))
 
 predicate valid_bitvector_struct_Object(p:unit pointer,
  a:int,
@@ -2363,20 +2333,6 @@ axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 axiom bitvector_of_Object_of_Object_of_bitvector:
   (forall x:bitvector. (bitvector_of_Object(Object_of_bitvector(x)) = x))
 
-logic bitvector_of_boolean : bool -> bitvector
-
-logic boolean_of_bitvector : bitvector -> bool
-
-axiom bitvector_of_boolean_of_boolean_of_bitvector:
-  (forall x:bitvector. (bitvector_of_boolean(boolean_of_bitvector(x)) = x))
-
-logic bitvector_of_integer : int -> bitvector
-
-logic integer_of_bitvector : bitvector -> int
-
-axiom bitvector_of_integer_of_integer_of_bitvector:
-  (forall x:bitvector. (bitvector_of_integer(integer_of_bitvector(x)) = x))
-
 logic bitvector_of_interface : interface pointer -> bitvector
 
 logic interface_of_bitvector : bitvector -> interface pointer
@@ -2384,19 +2340,6 @@ logic interface_of_bitvector : bitvector -> interface pointer
 axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
-
-logic bitvector_of_real : real -> bitvector
-
-logic real_of_bitvector : bitvector -> real
-
-axiom bitvector_of_real_of_real_of_bitvector:
-  (forall x:bitvector. (bitvector_of_real(real_of_bitvector(x)) = x))
-
-axiom boolean_of_bitvector_of_bitvector_of_boolean:
-  (forall x:bool. (boolean_of_bitvector(bitvector_of_boolean(x)) = x))
-
-axiom integer_of_bitvector_of_bitvector_of_integer:
-  (forall x:int. (integer_of_bitvector(bitvector_of_integer(x)) = x))
 
 logic interface_tag :  -> interface tag_id
 
@@ -2426,9 +2369,6 @@ axiom pointer_addr_of_Object_of_pointer_address:
 axiom pointer_addr_of_interface_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(interface_of_pointer_address(p))))
-
-axiom real_of_bitvector_of_bitvector_of_real:
-  (forall x:real. (real_of_bitvector(bitvector_of_real(x)) = x))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
@@ -3277,28 +3217,8 @@ why -simplify [...] why/Termination.why
  (FORALL (x) (EQ (bitvector_of_Object (Object_of_bitvector x)) x)))
 
 (BG_PUSH
- ;; Why axiom bitvector_of_boolean_of_boolean_of_bitvector
- (FORALL (x) (EQ (bitvector_of_boolean (boolean_of_bitvector x)) x)))
-
-(BG_PUSH
- ;; Why axiom bitvector_of_integer_of_integer_of_bitvector
- (FORALL (x) (EQ (bitvector_of_integer (integer_of_bitvector x)) x)))
-
-(BG_PUSH
  ;; Why axiom bitvector_of_interface_of_interface_of_bitvector
  (FORALL (x) (EQ (bitvector_of_interface (interface_of_bitvector x)) x)))
-
-(BG_PUSH
- ;; Why axiom bitvector_of_real_of_real_of_bitvector
- (FORALL (x) (EQ (bitvector_of_real (real_of_bitvector x)) x)))
-
-(BG_PUSH
- ;; Why axiom boolean_of_bitvector_of_bitvector_of_boolean
- (FORALL (x) (EQ (boolean_of_bitvector (bitvector_of_boolean x)) x)))
-
-(BG_PUSH
- ;; Why axiom integer_of_bitvector_of_bitvector_of_integer
- (FORALL (x) (EQ (integer_of_bitvector (bitvector_of_integer x)) x)))
 
 (BG_PUSH
  ;; Why axiom interface_int
@@ -3328,10 +3248,6 @@ why -simplify [...] why/Termination.why
 (BG_PUSH
  ;; Why axiom pointer_addr_of_interface_of_pointer_address
  (FORALL (p) (EQ p (pointer_address (interface_of_pointer_address p)))))
-
-(BG_PUSH
- ;; Why axiom real_of_bitvector_of_bitvector_of_real
- (FORALL (x) (EQ (real_of_bitvector (bitvector_of_real x)) x)))
 
 (DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
   (AND (EQ (offset_min bitvector_alloc_table p) a)
@@ -4312,20 +4228,6 @@ axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 axiom bitvector_of_Object_of_Object_of_bitvector:
   (forall x:bitvector. (bitvector_of_Object(Object_of_bitvector(x)) = x))
 
-logic bitvector_of_boolean : bool -> bitvector
-
-logic boolean_of_bitvector : bitvector -> bool
-
-axiom bitvector_of_boolean_of_boolean_of_bitvector:
-  (forall x:bitvector. (bitvector_of_boolean(boolean_of_bitvector(x)) = x))
-
-logic bitvector_of_integer : int -> bitvector
-
-logic integer_of_bitvector : bitvector -> int
-
-axiom bitvector_of_integer_of_integer_of_bitvector:
-  (forall x:bitvector. (bitvector_of_integer(integer_of_bitvector(x)) = x))
-
 logic bitvector_of_interface : interface pointer -> bitvector
 
 logic interface_of_bitvector : bitvector -> interface pointer
@@ -4333,19 +4235,6 @@ logic interface_of_bitvector : bitvector -> interface pointer
 axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
-
-logic bitvector_of_real : real -> bitvector
-
-logic real_of_bitvector : bitvector -> real
-
-axiom bitvector_of_real_of_real_of_bitvector:
-  (forall x:bitvector. (bitvector_of_real(real_of_bitvector(x)) = x))
-
-axiom boolean_of_bitvector_of_bitvector_of_boolean:
-  (forall x:bool. (boolean_of_bitvector(bitvector_of_boolean(x)) = x))
-
-axiom integer_of_bitvector_of_bitvector_of_integer:
-  (forall x:int. (integer_of_bitvector(bitvector_of_integer(x)) = x))
 
 logic interface_tag :  -> interface tag_id
 
@@ -4375,9 +4264,6 @@ axiom pointer_addr_of_Object_of_pointer_address:
 axiom pointer_addr_of_interface_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(interface_of_pointer_address(p))))
-
-axiom real_of_bitvector_of_bitvector_of_real:
-  (forall x:real. (real_of_bitvector(bitvector_of_real(x)) = x))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =

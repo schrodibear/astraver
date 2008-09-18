@@ -38,6 +38,8 @@ val alloc_class_of_pointer_class: pointer_class -> alloc_class
 (** Convert a class of allocation into the corresponding variant. *)
 val variant_of_alloc_class: alloc_class -> variant_info
 
+val variant_of_mem_class: mem_class -> variant_info
+
 (** Return whether a field is embedded or not. *)
 val embedded_field: field_info -> bool
 
@@ -46,6 +48,8 @@ val field_offset: field_info -> int
 
 (** Return the byte offset of a field, if any. *)
 val field_offset_in_bytes: field_info -> int option
+
+val field_type_has_bitvector_representation: field_info -> bool
 
 (** Return the size in bytes of a structure. *)
 val struct_size_in_bytes: struct_info -> int
