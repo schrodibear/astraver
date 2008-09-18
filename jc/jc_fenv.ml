@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.ml,v 1.2 2008-08-13 13:24:01 moy Exp $ *)
+(* $Id: jc_fenv.ml,v 1.3 2008-09-18 13:20:40 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -66,6 +66,7 @@ sig
 	jc_effect_precise_memories: LogicLabelSet.t LocationMap.t;
 	jc_effect_memories: LogicLabelSet.t MemoryMap.t;
 	jc_effect_globals: LogicLabelSet.t VarMap.t;
+	jc_effect_locals: LogicLabelSet.t VarMap.t;
 	jc_effect_mutable: StringSet.t;
 	jc_effect_committed: StringSet.t;
       }
@@ -116,6 +117,7 @@ struct
 	jc_effect_precise_memories: LogicLabelSet.t LocationMap.t;
 	jc_effect_memories: LogicLabelSet.t MemoryMap.t;
 	jc_effect_globals: LogicLabelSet.t VarMap.t;
+	jc_effect_locals: LogicLabelSet.t VarMap.t;
 	jc_effect_mutable: StringSet.t;
 	jc_effect_committed: StringSet.t;
       }

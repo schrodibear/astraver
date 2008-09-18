@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.129 2008-09-01 15:00:15 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.130 2008-09-18 13:20:40 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -111,7 +111,7 @@ let print_memory fmt (mc,r) =
 let print_location fmt (loc,(mc,r)) =
   fprintf fmt "(%a,%a)" Jc_output.location loc print_memory (mc,r)
 
-let print_global fmt v =
+let print_variable fmt v =
   fprintf fmt "%s" v.jc_var_info_name
 
 let print_exception fmt exc =
@@ -124,7 +124,8 @@ let print_effect fmt ef =
 @[ memories: @[%a@]@]@\n\
 @[ raw memories: @[%a@]@]@\n\
 @[ precise memories: @[%a@]@]@\n\
-@[ globals: @[%a@]@]@]@." 
+@[ globals: @[%a@]@]@\n\
+@[ locals: @[%a@]@]@]@." 
     (print_list_assoc_label print_alloc_table)
     (AllocMap.elements ef.jc_effect_alloc_tables)
     (print_list_assoc_label print_tag_table)
@@ -135,8 +136,10 @@ let print_effect fmt ef =
     (MemoryMap.elements ef.jc_effect_raw_memories)
     (print_list_assoc_label print_location)
     (LocationMap.elements ef.jc_effect_precise_memories)
-    (print_list_assoc_label print_global)
+    (print_list_assoc_label print_variable)
     (VarMap.elements ef.jc_effect_globals)
+    (print_list_assoc_label print_variable)
+    (VarMap.elements ef.jc_effect_locals)
 
 (* Operations on effects *)
 
@@ -160,6 +163,9 @@ let ef_union ef1 ef2 =
     jc_effect_globals = 
       VarMap.merge LogicLabelSet.union 
 	ef1.jc_effect_globals ef2.jc_effect_globals;
+    jc_effect_locals = 
+      VarMap.merge LogicLabelSet.union 
+	ef1.jc_effect_locals ef2.jc_effect_locals;
     jc_effect_mutable =
       StringSet.union
 	ef1.jc_effect_mutable ef2.jc_effect_mutable;
@@ -219,6 +225,7 @@ let ef_assoc ?label_assoc ~region_assoc ef =
 	  (fun v labs acc -> 
 	     VarMap.add v (transpose_labels ~label_assoc labs) acc
 	  ) ef.jc_effect_globals VarMap.empty;
+      jc_effect_locals = VarMap.empty;
   }
 
 let same_effects ef1 ef2 =
@@ -230,6 +237,7 @@ let same_effects ef1 ef2 =
     ef1.jc_effect_precise_memories ef2.jc_effect_precise_memories
   && MemoryMap.equal eq ef1.jc_effect_memories ef2.jc_effect_memories
   && VarMap.equal eq ef1.jc_effect_globals ef2.jc_effect_globals
+  && VarMap.equal eq ef1.jc_effect_locals ef2.jc_effect_locals
   && StringSet.equal ef1.jc_effect_mutable ef2.jc_effect_mutable
   && StringSet.equal ef1.jc_effect_committed ef2.jc_effect_committed
     
@@ -299,8 +307,12 @@ let add_precise_memory_effect lab ef (loc,(mc,r)) =
 let add_global_effect lab ef v =
   let labs = LogicLabelSet.singleton lab in
   { ef with jc_effect_globals = 
-      VarMap.add_merge LogicLabelSet.union 
-	v labs ef.jc_effect_globals } 
+      VarMap.add_merge LogicLabelSet.union v labs ef.jc_effect_globals } 
+
+let add_local_effect lab ef v =
+  let labs = LogicLabelSet.singleton lab in
+  { ef with jc_effect_locals = 
+      VarMap.add_merge LogicLabelSet.union v labs ef.jc_effect_locals } 
 
 let add_mutable_effect ef pc =
   { ef with jc_effect_mutable = StringSet.add
@@ -328,6 +340,9 @@ let add_precise_memory_reads lab fef (loc,(mc,r)) =
 let add_global_reads lab fef v =
   { fef with jc_reads = add_global_effect lab fef.jc_reads v }
 
+let add_local_reads lab fef v =
+  { fef with jc_reads = add_local_effect lab fef.jc_reads v }
+
 let add_mutable_reads fef pc =
   { fef with jc_reads = add_mutable_effect fef.jc_reads pc }
 
@@ -351,6 +366,9 @@ let add_precise_memory_writes lab fef (loc,(mc,r)) =
 
 let add_global_writes lab fef vi =
   { fef with jc_writes = add_global_effect lab fef.jc_writes vi }
+
+let add_local_writes lab fef vi =
+  { fef with jc_writes = add_local_effect lab fef.jc_writes vi }
 
 let add_mutable_writes fef pc =
   { fef with jc_writes = add_mutable_effect fef.jc_writes pc }
@@ -754,6 +772,8 @@ let rec single_term ef t =
 	true,
 	if vi.jc_var_info_static then
 	  add_global_effect lab ef vi
+	else if vi.jc_var_info_assigned then
+	  add_local_effect lab ef vi
 	else ef
     | JCToffset(_k,t,st) ->
         let ac = tderef_alloc_class ~type_safe:false t in
@@ -907,11 +927,15 @@ let rec expr fef e =
 	   true,
 	   if v.jc_var_info_static then
 	     add_global_reads LabelHere fef v
+	   else if v.jc_var_info_assigned then
+	     add_local_reads LabelHere fef v
 	   else fef
        | JCEassign_var(v,_e) -> 
 	   true,
 	   if v.jc_var_info_static then
 	     add_global_writes LabelHere fef v
+	   else if v.jc_var_info_assigned then
+	     add_local_writes LabelHere fef v
 	   else fef
        | JCEoffset(_k,e,st) ->
 	   let ac = deref_alloc_class e in

@@ -2554,7 +2554,7 @@ let Creation_test1_safety =
                               (0)) };
                             jessie_19))) in
                 (let tt = (JC_65:
-                          ((cons_Creation_int_requires this) (safe_int32_of_integer_ (17)))) in
+                          ((cons_Creation_int this) (safe_int32_of_integer_ (17)))) in
                 this))) in
      begin
        (return := (K_9:
@@ -2607,8 +2607,7 @@ let Creation_test2_safety =
                                        jessie_33),
                                 (0)) };
                               jessie_33))) in
-                (let tt_0 = (JC_91: (cons_Creation_requires this_3)) in
-                this_3))) in
+                (let tt_0 = (JC_91: (cons_Creation this_3)) in this_3))) in
      begin
        (return := (K_12:
                   (JC_93:
@@ -2668,7 +2667,7 @@ let Creation_test3_safety =
                               (0)) };
                             jessie_47))) in
               (let tt_1 = (JC_121:
-                          (((cons_Creation_int_int_requires this_5) (safe_int32_of_integer_ (10))) 
+                          (((cons_Creation_int_int this_5) (safe_int32_of_integer_ (10))) 
                            (safe_int32_of_integer_ (7)))) in
               this_5))) in
      begin
@@ -2763,11 +2762,10 @@ let cons_Creation_int_int_safety =
    begin
      (K_6:
      (JC_48:
-     ((cons_Creation_int_requires this_0) (K_5:
-                                          (JC_47:
-                                          (int32_of_integer_ ((add_int 
-                                                               (integer_of_int32 n_0_0)) 
-                                                              (integer_of_int32 m))))))));
+     ((cons_Creation_int this_0) (K_5:
+                                 (JC_47:
+                                 (int32_of_integer_ ((add_int (integer_of_int32 n_0_0)) 
+                                                     (integer_of_int32 m))))))));
     (raise Return)
    end
    with
@@ -2803,8 +2801,7 @@ let cons_Creation_safety =
   try
    begin
      (K_3:
-     (JC_33:
-     ((cons_Creation_int_requires this_2) (safe_int32_of_integer_ (0)))));
+     (JC_33: ((cons_Creation_int this_2) (safe_int32_of_integer_ (0)))));
     (raise Return)
    end
    with
@@ -2839,8 +2836,7 @@ let cons_TestSuperConstructor_safety =
   try
    begin
      (K_17:
-     (JC_144:
-     ((cons_Creation_int_requires this_4) (safe_int32_of_integer_ (12)))));
+     (JC_144: ((cons_Creation_int this_4) (safe_int32_of_integer_ (12)))));
     (raise Return)
    end
    with
@@ -2862,7 +2858,7 @@ why --project [...] why/Creation.why
 text = ""/>
     </goal>
     <goal why_file="why/Creation_po12.why">
-      <location file = "why/Creation.why" line = "1119" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "1118" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po13.why">
@@ -5613,7 +5609,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 ;; Creation_test3_safety_po_1, File "HOME/tests/java/Creation.jc", line 117, characters 57-72
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test3_safety_po_2, File "why/Creation.why", line 1119, characters 30-151
+;; Creation_test3_safety_po_2, File "why/Creation.why", line 1118, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)

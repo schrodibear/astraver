@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.120 2008-08-30 01:02:56 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.121 2008-09-18 13:20:40 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -270,6 +270,7 @@ let empty_effects =
     jc_effect_precise_memories = LocationMap.empty;
     jc_effect_memories = MemoryMap.empty;
     jc_effect_globals = VarMap.empty;
+    jc_effect_locals = VarMap.empty;
     jc_effect_mutable = StringSet.empty;
     jc_effect_committed = StringSet.empty;
   }

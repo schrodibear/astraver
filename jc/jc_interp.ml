@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.350 2008-09-17 17:09:38 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.351 2008-09-18 13:20:40 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1154,6 +1154,13 @@ let rec old_to_pre_loc loc =
 	  ~node:(JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, region))
 	  loc
 
+let assumption al a' =
+  let ef = List.fold_left Jc_effect.assertion empty_effects al in
+  let read_effects = 
+    local_read_effects ~callee_reads:ef ~callee_writes:empty_effects
+  in
+  BlackBox(Annot_type(LTrue, unit_type, read_effects, [], a', []))
+
 (* Translate the heap update `e1.fi = tmp2' 
 
    essentially we want
@@ -1764,7 +1771,7 @@ and expr e =
 		  f.jc_fun_info_parameters call.jc_call_args
 	      in
 	      let fname = 
-		if safety_checking () then 
+		if default_checking () then 
 		  f.jc_fun_info_final_name ^ "_requires"
 		else f.jc_fun_info_final_name
 	      in
@@ -1779,7 +1786,7 @@ and expr e =
 	      in
 	      let call = make_guarded_app e#mark UserCall e#pos fname args in
 	      let call = 
-		if pre = LTrue || not (safety_checking()) then 
+		if pre = LTrue || not (default_checking()) then 
 		  call
 		else
 		  make_check ~mark:e#mark (* ~kind:Separation *) e#pos 
@@ -1871,34 +1878,55 @@ and expr e =
 	    ~type_safe:false ~global_assertion:false ~relocate:false
 	    LabelHere LabelPre a
 	in
-	if asrt && compatible_with_current_behavior b then
+	if asrt && assert_in_current_behavior b then
           Assert(a',Void)
-	else 
-	  BlackBox(Annot_type(LTrue, unit_type, [], [], a', []))
+	else if assume_in_current_behavior b then
+	  assumption [ a ] a'
+	else
+	  Void
     | JCEloop(la,e1) ->
 	let inv = 
-	  List.filter (compatible_with_current_behavior $ fst) 
-	    la.jc_loop_invariant
+	  List.map snd 
+	    (List.filter 
+	       (assert_in_current_behavior $ fst) la.jc_loop_invariant)
 	in
-        let inv = 
-	  List.map (named_assertion 
-		      ~type_safe:false ~global_assertion:false ~relocate:false
-		      LabelHere LabelPre $ snd) inv in
-	let inv = make_and_list inv in
+	let assume_inv = 
+	  List.map snd 
+	    (List.filter
+	       (assume_in_current_behavior $ fst) la.jc_loop_invariant)
+	in
+        let inv' = 
+	  make_and_list 
+	    (List.map 
+	       (named_assertion 
+		  ~type_safe:false ~global_assertion:false ~relocate:false
+		  LabelHere LabelPre) inv) 
+	in
+        let assume_inv' = 
+	  make_and_list 
+	    (List.map 
+	       (named_assertion 
+		  ~type_safe:false ~global_assertion:false ~relocate:false
+		  LabelHere LabelPre) assume_inv) 
+	in
 	(* free invariant: trusted or not *)
-        let free_inv = 
+	let free_inv = la.jc_free_loop_invariant in
+        let free_inv' = 
 	  named_assertion 
 	    ~type_safe:false ~global_assertion:false ~relocate:false
-	    LabelHere LabelPre la.jc_free_loop_invariant 
+	    LabelHere LabelPre free_inv
         in
-        let inv = if Jc_options.trust_ai then inv else make_and inv free_inv in
+        let inv' = 
+	  if Jc_options.trust_ai then inv' else make_and inv' free_inv' 
+	in
 	(* loop assigns  *)
 	(* By default, the assigns clause for the function is taken *)
 	(* TODO: add also a loop_assigns annotation *)
 	let loop_assigns = 
 	  List.fold_left
 	    (fun acc (pos,id,b) ->
-	       if safety_checking () || id = get_current_behavior () then
+	       if safety_checking () || default_checking () 
+		 || id = get_current_behavior () then
 		 match b.jc_behavior_assigns with
 		   | None -> acc
 		   | Some(_pos,loclist) -> 
@@ -1909,26 +1937,27 @@ and expr e =
 	       else acc
 	    ) None (get_current_spec ()).jc_fun_behavior
 	in
-        let inv = match loop_assigns with
-	  | None -> inv
+        let inv' = match loop_assigns with
+	  | None -> inv'
 	  | _ ->
 	      let ass =
 		assigns ~type_safe:false 
 		  LabelPre infunction.jc_fun_info_effects loop_assigns e#pos
 	      in
-	      make_and inv (mark_assertion e#pos ass)
+	      make_and inv' (mark_assertion e#pos ass)
 	in
 	(* loop body *) 
         let body = expr e1 in
-        let body = 
+	let add_assume s =
+          let s = append (assumption assume_inv assume_inv') s in
           if Jc_options.trust_ai then
-            [ BlackBox(Annot_type(LTrue, unit_type, [], [], free_inv, []));
-	      body ]
-          else [ body ]
+            append (assumption [ free_inv ] free_inv') s
+          else s
         in
+	let body = [ add_assume body ] in
 	(* final generation, depending on presence of variant or not *)
         begin match la.jc_loop_variant with
-          | Some t when safety_checking () ->
+          | Some t when default_checking () ->
               let variant = 
 		named_term 
 		  ~type_safe:false ~global_assertion:false ~relocate:false
@@ -1938,9 +1967,9 @@ and expr e =
 		term_coerce ~type_safe:false ~global_assertion:false LabelHere
 		  t#pos integer_type t#typ t variant 
 	      in
-              While(Cte(Prim_bool true), inv, Some (variant,None), body)
+              While(Cte(Prim_bool true), inv', Some (variant,None), body)
           | _ ->
-              While(Cte(Prim_bool true), inv, None, body)
+              While(Cte(Prim_bool true), inv', None, body)
         end
     | JCEcontract(req,dec,vi_result,behs,e) ->
 	assert (req = None);
