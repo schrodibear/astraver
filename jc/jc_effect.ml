@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.131 2008-09-18 16:16:52 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.132 2008-09-19 07:29:40 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -848,10 +848,11 @@ let rec single_term ef t =
   match t#node with
     | JCTvar vi ->
 	true,
-	if vi.jc_var_info_static then
-	  add_global_effect lab ef vi
-	else if vi.jc_var_info_assigned then
-	  add_local_effect lab ef vi
+	if vi.jc_var_info_assigned then
+	  if vi.jc_var_info_static then
+	    add_global_effect lab ef vi
+	  else 
+	    add_local_effect lab ef vi
 	else ef
     | JCToffset(_k,t,st) ->
         let ac = tderef_alloc_class ~type_safe:true t in
@@ -958,11 +959,13 @@ let single_location ~in_assigns fef loc =
   in
   let fef = match loc#node with
     | JCLvar v ->
-	if v.jc_var_info_static then
-	  if in_assigns then
-	    add_global_writes lab fef v
-	  else
-	    add_global_reads lab fef v
+	if v.jc_var_info_assigned then
+	  if v.jc_var_info_static then
+	    if in_assigns then
+	      add_global_writes lab fef v
+	    else
+	      add_global_reads lab fef v
+	  else fef
 	else fef
     | JCLderef(locs,lab,fi,r) ->
 	let mc = lderef_mem_class ~type_safe:true locs fi in
@@ -980,8 +983,10 @@ let single_location_set fef locs =
   in
   let fef = match locs#node with
     | JCLSvar v ->
-	if v.jc_var_info_static then
-	  add_global_reads lab fef v
+	if v.jc_var_info_assigned then
+	  if v.jc_var_info_static then
+	    add_global_reads lab fef v
+	  else fef
 	else fef
     | JCLSderef(locs,lab,fi,r) ->
 	let mc = lderef_mem_class ~type_safe:true locs fi in
@@ -1013,17 +1018,19 @@ let rec expr fef e =
     (fun (fef : fun_effect) e -> match e#node with
        | JCEvar v ->
 	   true,
-	   if v.jc_var_info_static then
-	     add_global_reads LabelHere fef v
-	   else if v.jc_var_info_assigned then
-	     add_local_reads LabelHere fef v
+	   if v.jc_var_info_assigned then
+	     if v.jc_var_info_static then
+	       add_global_reads LabelHere fef v
+	     else 
+	       add_local_reads LabelHere fef v
 	   else fef
        | JCEassign_var(v,_e) -> 
 	   true,
-	   if v.jc_var_info_static then
-	     add_global_writes LabelHere fef v
-	   else if v.jc_var_info_assigned then
-	     add_local_writes LabelHere fef v
+	   if v.jc_var_info_assigned then
+	     if v.jc_var_info_static then
+	       add_global_writes LabelHere fef v
+	     else 
+	       add_local_writes LabelHere fef v
 	   else fef
        | JCEoffset(_k,e,st) ->
 	   let ac = deref_alloc_class ~type_safe:true e in
