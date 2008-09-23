@@ -724,9 +724,11 @@ install-lib: $(JCLIB)
 	mkdir -p $(LIBDIR)/caduceus/harvey
 	cp -f lib/harvey/caduceus_why.rv $(LIBDIR)/caduceus/harvey
 	mkdir -p $(LIBDIR)/krakatoa
-	cd lib; cp -r java_api $(LIBDIR)/krakatoa
+	cd lib; cp -r java_api $(LIBDIR)/krakatoa 
 	cd lib; cp -r javacard_api $(LIBDIR)/krakatoa
 	cp -f lib/why-logo-*.png $(LIBDIR)/why
+#	remove CVS directories
+	find $(LIBDIR)/krakatoa -name CVS | xargs $(RM) -r
 
 install-man:
 	mkdir -p $(MANDIR)/man1
