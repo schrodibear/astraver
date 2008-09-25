@@ -363,6 +363,8 @@ GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs BinarySearch.loc
 
 JESSIELIBFILE ?= HOME/lib/why/jessie.why
 
+COQDEP = coqdep
+
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
 all: simplify/BinarySearch_why.sx

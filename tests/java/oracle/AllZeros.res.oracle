@@ -245,6 +245,8 @@ GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs AllZeros.loc
 
 JESSIELIBFILE ?= HOME/lib/why/jessie.why
 
+COQDEP = coqdep
+
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
 all: simplify/AllZeros_why.sx

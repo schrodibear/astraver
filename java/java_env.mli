@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.38 2008-05-23 13:51:39 marche Exp $ *)
+(* $Id: java_env.mli,v 1.39 2008-09-25 15:04:24 marche Exp $ *)
 
 (*s types and environments *)
 
@@ -179,9 +179,11 @@ and java_type_info =
 
 (*s literals, shared between ASTs and typed ASTs *)
 
+type float_suffix = [`Single |`Double |`Real]
+
 type literal =
     | Integer of string
-    | Float of string
+    | Float of string * float_suffix
     | Bool of bool
     | String of string
     | Char of string

@@ -202,6 +202,7 @@ class Class implements java.io.Serializable {
      * @see 	  java.lang.ClassLoader
      * @since 	  1.2
      */
+    /*KML
     public static Class forName(String name, boolean initialize,
 				ClassLoader loader)
         throws ClassNotFoundException
@@ -218,11 +219,15 @@ class Class implements java.io.Serializable {
 	}
 	return forName0(name, initialize, loader);
     }
+    */
 
     /** Called after security checks have been made. */
+    /*KML
     private static native Class forName0(String name, boolean initialize,
 					 ClassLoader loader)
 	throws ClassNotFoundException;
+
+    */
 
     /**
      * Creates a new instance of the class represented by this <tt>Class</tt>
@@ -312,8 +317,8 @@ class Class implements java.io.Serializable {
             return null;
         }
     }
-    private volatile transient Constructor cachedConstructor;
-    private volatile transient Class       newInstanceCallerCache;
+    //KML private volatile transient Constructor cachedConstructor;
+    //KML private volatile transient Class       newInstanceCallerCache;
 
 
     /**
@@ -512,6 +517,7 @@ class Class implements java.io.Serializable {
      * @see SecurityManager#checkPermission
      * @see java.lang.RuntimePermission
      */
+    /*KML
     public ClassLoader getClassLoader() {
         ClassLoader cl = getClassLoader0();
         if (cl == null)
@@ -525,9 +531,10 @@ class Class implements java.io.Serializable {
         }
         return cl;
     }
+    */
 
     // Package-private to allow ClassLoader access
-    native ClassLoader getClassLoader0();
+    //KML native ClassLoader getClassLoader0();
 
 
     /**
@@ -559,9 +566,11 @@ class Class implements java.io.Serializable {
      * @return the package of the class, or null if no package
      *         information is available from the archive or codebase.
      */
-    public Package getPackage() {
+    /*KML
+      public Package getPackage() {
         return Package.getPackage(this);
     }
+    */
 
 
     /**
@@ -781,6 +790,8 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+
+    /*KML
     public Field[] getFields() throws SecurityException {
 	// be very careful not to change the stack depth of this
 	// checkMemberAccess call for security reasons 
@@ -788,6 +799,7 @@ class Class implements java.io.Serializable {
         checkMemberAccess(Member.PUBLIC, ClassLoader.getCallerClassLoader());
         return copyFields(privateGetPublicFields(null));
     }
+    */
 
 
     /**
@@ -824,6 +836,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Method[] getMethods() throws SecurityException {
 	// be very careful not to change the stack depth of this
 	// checkMemberAccess call for security reasons 
@@ -831,7 +844,7 @@ class Class implements java.io.Serializable {
         checkMemberAccess(Member.PUBLIC, ClassLoader.getCallerClassLoader());
         return copyMethods(privateGetPublicMethods());
     }
-
+    */
 
     /**
      * Returns an array containing <code>Constructor</code> objects reflecting
@@ -857,6 +870,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Constructor[] getConstructors() throws SecurityException {
 	// be very careful not to change the stack depth of this
 	// checkMemberAccess call for security reasons 
@@ -864,6 +878,7 @@ class Class implements java.io.Serializable {
         checkMemberAccess(Member.PUBLIC, ClassLoader.getCallerClassLoader());
         return copyConstructors(privateGetDeclaredConstructors(true));
     }
+    */
 
 
     /**
@@ -908,6 +923,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Field getField(String name)
         throws NoSuchFieldException, SecurityException {
 	// be very careful not to change the stack depth of this
@@ -920,6 +936,7 @@ class Class implements java.io.Serializable {
         }
         return field;
     }
+    */
 
 
     /**
@@ -975,6 +992,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Method getMethod(String name, Class[] parameterTypes)
         throws NoSuchMethodException, SecurityException {
 	// be very careful not to change the stack depth of this
@@ -987,7 +1005,7 @@ class Class implements java.io.Serializable {
         }
         return method;
     }
-
+    */
 
     /**
      * Returns a <code>Constructor</code> object that reflects the specified
@@ -1018,6 +1036,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Constructor getConstructor(Class[] parameterTypes)
         throws NoSuchMethodException, SecurityException {
 	// be very careful not to change the stack depth of this
@@ -1026,6 +1045,7 @@ class Class implements java.io.Serializable {
         checkMemberAccess(Member.PUBLIC, ClassLoader.getCallerClassLoader());
         return getConstructor0(parameterTypes, Member.PUBLIC);
     }
+    */
 
 
     /**
@@ -1090,6 +1110,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Field[] getDeclaredFields() throws SecurityException {
 	// be very careful not to change the stack depth of this
 	// checkMemberAccess call for security reasons 
@@ -1097,6 +1118,8 @@ class Class implements java.io.Serializable {
         checkMemberAccess(Member.DECLARED, ClassLoader.getCallerClassLoader());
         return copyFields(privateGetDeclaredFields(false));
     }
+    */
+
 
 
     /**
@@ -1131,6 +1154,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Method[] getDeclaredMethods() throws SecurityException {
 	// be very careful not to change the stack depth of this
 	// checkMemberAccess call for security reasons 
@@ -1138,6 +1162,7 @@ class Class implements java.io.Serializable {
         checkMemberAccess(Member.DECLARED, ClassLoader.getCallerClassLoader());
         return copyMethods(privateGetDeclaredMethods(false));
     }
+    */
 
 
     /**
@@ -1169,6 +1194,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Constructor[] getDeclaredConstructors() throws SecurityException {
 	// be very careful not to change the stack depth of this
 	// checkMemberAccess call for security reasons 
@@ -1176,6 +1202,7 @@ class Class implements java.io.Serializable {
         checkMemberAccess(Member.DECLARED, ClassLoader.getCallerClassLoader());
         return copyConstructors(privateGetDeclaredConstructors(false));
     }
+    */
 
 
     /**
@@ -1205,6 +1232,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Field getDeclaredField(String name)
         throws NoSuchFieldException, SecurityException {
 	// be very careful not to change the stack depth of this
@@ -1217,7 +1245,7 @@ class Class implements java.io.Serializable {
         }
         return field;
     }
-
+    */
 
     /**
      * Returns a <code>Method</code> object that reflects the specified
@@ -1253,6 +1281,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Method getDeclaredMethod(String name, Class[] parameterTypes)
         throws NoSuchMethodException, SecurityException {
 	// be very careful not to change the stack depth of this
@@ -1265,7 +1294,7 @@ class Class implements java.io.Serializable {
         }
         return method;
     }
-
+    */
 
     /**
      * Returns a <code>Constructor</code> object that reflects the specified
@@ -1292,6 +1321,7 @@ class Class implements java.io.Serializable {
      * @see       SecurityManager#checkPackageAccess(String)
      * @since JDK1.1
      */
+    /*KML
     public Constructor getDeclaredConstructor(Class[] parameterTypes)
         throws NoSuchMethodException, SecurityException {
 	// be very careful not to change the stack depth of this
@@ -1300,6 +1330,7 @@ class Class implements java.io.Serializable {
         checkMemberAccess(Member.DECLARED, ClassLoader.getCallerClassLoader());
         return getConstructor0(parameterTypes, Member.DECLARED);
     }
+    */
 
 
     /**
@@ -1321,6 +1352,7 @@ class Class implements java.io.Serializable {
      * @see         java.lang.ClassLoader
      * @since JDK1.1
      */
+    /*KML
     public InputStream getResourceAsStream(String name) {
         name = resolveName(name);
         ClassLoader cl = getClassLoader0();
@@ -1330,6 +1362,7 @@ class Class implements java.io.Serializable {
         }
         return cl.getResourceAsStream(name);
     }
+    */
 
 
     /**
@@ -1350,6 +1383,7 @@ class Class implements java.io.Serializable {
      * @see         java.lang.ClassLoader
      * @since JDK1.1
      */
+    /*KML
     public java.net.URL getResource(String name) {
         name = resolveName(name);
         ClassLoader cl = getClassLoader0();
@@ -1359,11 +1393,12 @@ class Class implements java.io.Serializable {
         }
         return cl.getResource(name);
     }
+    */
 
 
 
     /** protection domain returned when the internal domain is null */
-    private static java.security.ProtectionDomain allPermDomain;
+    //KML private static java.security.ProtectionDomain allPermDomain;
 
 
     /**
@@ -1386,6 +1421,7 @@ class Class implements java.io.Serializable {
      * @see java.lang.RuntimePermission
      * @since 1.2
      */
+    /*KML
     public java.security.ProtectionDomain getProtectionDomain() {
         SecurityManager sm = System.getSecurityManager();
         if (sm != null) {
@@ -1404,19 +1440,20 @@ class Class implements java.io.Serializable {
         }
         return pd;
     }
+    */
 
 
     /**
      * Returns the ProtectionDomain of this class.
      */
-    private native java.security.ProtectionDomain getProtectionDomain0();
+    //KML private native java.security.ProtectionDomain getProtectionDomain0();
 
 
     /**
      * Set the ProtectionDomain for this class. Called by
      * ClassLoader.defineClass.
      */
-    native void setProtectionDomain0(java.security.ProtectionDomain pd);
+    //KML native void setProtectionDomain0(java.security.ProtectionDomain pd);
 
 
     /*
@@ -1437,6 +1474,7 @@ class Class implements java.io.Serializable {
      * <p> Default policy: allow all clients access with normal Java access
      * control.
      */
+    /*KML
     private void checkMemberAccess(int which, ClassLoader ccl) {
         SecurityManager s = System.getSecurityManager();
         if (s != null) {
@@ -1452,6 +1490,7 @@ class Class implements java.io.Serializable {
 	    }
 	}
     }
+    */
 
     /**
      * Add a package name prefix if the name is not absolute Remove leading "/"
@@ -1483,6 +1522,7 @@ class Class implements java.io.Serializable {
      */
 
     // Caches for certain reflective results
+    /*KML
     private static boolean useCaches = true;
     private volatile transient SoftReference declaredFields;
     private volatile transient SoftReference publicFields;
@@ -1493,6 +1533,7 @@ class Class implements java.io.Serializable {
     // Intermediate results for getFields and getMethods
     private volatile transient SoftReference declaredPublicFields;
     private volatile transient SoftReference declaredPublicMethods;
+    */
 
     //
     //
@@ -1503,6 +1544,7 @@ class Class implements java.io.Serializable {
     // Returns an array of "root" fields. These Field objects must NOT
     // be propagated to the outside world, but must instead be copied
     // via ReflectionFactory.copyField.
+    /*KML
     private Field[] privateGetDeclaredFields(boolean publicOnly) {
         checkInitted();
         Field[] res = null;
@@ -1529,10 +1571,12 @@ class Class implements java.io.Serializable {
         }
         return res;
     }
+    */
 
     // Returns an array of "root" fields. These Field objects must NOT
     // be propagated to the outside world, but must instead be copied
     // via ReflectionFactory.copyField.
+    /*KML
     private Field[] privateGetPublicFields(Set traversedInterfaces) {
         checkInitted();
         Field[] res = null;
@@ -1579,13 +1623,15 @@ class Class implements java.io.Serializable {
         }
         return res;
     }
+    */
 
+    /*KML
     private static void addAll(Collection c, Field[] o) {
         for (int i = 0; i < o.length; i++) {
             c.add(o[i]);
         }
     }
-
+    */
 
     //
     //
@@ -1596,7 +1642,8 @@ class Class implements java.io.Serializable {
     // Returns an array of "root" constructors. These Constructor
     // objects must NOT be propagated to the outside world, but must
     // instead be copied via ReflectionFactory.copyConstructor.
-    private Constructor[] privateGetDeclaredConstructors(boolean publicOnly) {
+    /*KML
+      private Constructor[] privateGetDeclaredConstructors(boolean publicOnly) {
         checkInitted();
         Constructor[] res = null;
         if (useCaches) {
@@ -1626,6 +1673,7 @@ class Class implements java.io.Serializable {
         }
         return res;
     }
+    */
 
     //
     //
@@ -1636,7 +1684,8 @@ class Class implements java.io.Serializable {
     // Returns an array of "root" methods. These Method objects must NOT
     // be propagated to the outside world, but must instead be copied
     // via ReflectionFactory.copyMethod.
-    private Method[] privateGetDeclaredMethods(boolean publicOnly) {
+    /*KML
+      private Method[] privateGetDeclaredMethods(boolean publicOnly) {
         checkInitted();
         Method[] res = null;
         if (useCaches) {
@@ -1662,6 +1711,7 @@ class Class implements java.io.Serializable {
         }
         return res;
     }
+    */
 
     static class MethodArray {
         private Method[] methods;
@@ -1761,7 +1811,8 @@ class Class implements java.io.Serializable {
     // Returns an array of "root" methods. These Method objects must NOT
     // be propagated to the outside world, but must instead be copied
     // via ReflectionFactory.copyMethod.
-    private Method[] privateGetPublicMethods() {
+    /*KML
+      private Method[] privateGetPublicMethods() {
         checkInitted();
         Method[] res = null;
         if (useCaches) {
@@ -1820,12 +1871,14 @@ class Class implements java.io.Serializable {
         }
         return res;
     }
+    */
 
 
     //
     // Helpers for fetchers of one field, method, or constructor
     //
 
+    /*KML
     private Field searchFields(Field[] fields, String name) {
         String internedName = name.intern();
         for (int i = 0; i < fields.length; i++) {
@@ -1835,7 +1888,9 @@ class Class implements java.io.Serializable {
         }
         return null;
     }
+    */
 
+    /*KML
     private Field getField0(String name) throws NoSuchFieldException {
         // Note: the intent is that the search algorithm this routine
         // uses be equivalent to the ordering imposed by
@@ -1868,7 +1923,9 @@ class Class implements java.io.Serializable {
         }
         return null;
     }
+    */
 
+    /*KML
     private static Method searchMethods(Method[] methods,
                                         String name,
                                         Class[] parameterTypes)
@@ -1886,6 +1943,7 @@ class Class implements java.io.Serializable {
 
 	return (res == null ? res : getReflectionFactory().copyMethod(res));
     }
+    *.
   
 
     private Method getMethod0(String name, Class[] parameterTypes) {
@@ -2031,8 +2089,10 @@ class Class implements java.io.Serializable {
      *
      * @see java.io.ObjectStreamClass
      */
-    private static final ObjectStreamField[] serialPersistentFields = 
+    /*KML
+      private static final ObjectStreamField[] serialPersistentFields = 
         ObjectStreamClass.NO_FIELDS;
+    */
 
 
     /**
@@ -2079,6 +2139,7 @@ class Class implements java.io.Serializable {
     private static native boolean desiredAssertionStatus0(Class clazz);
 
     // Fetches the factory for reflective objects
+    /*KML
     private static ReflectionFactory getReflectionFactory() {
         if (reflectionFactory == null) {
             reflectionFactory =  (ReflectionFactory)
@@ -2087,7 +2148,8 @@ class Class implements java.io.Serializable {
         }
         return reflectionFactory;
     }
-    private static ReflectionFactory reflectionFactory;
+    */
+    //KML private static ReflectionFactory reflectionFactory;
 
     // To be able to query system properties as soon as they're available
     private static boolean initted = false;

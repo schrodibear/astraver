@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.64 2008-09-05 13:21:01 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.65 2008-09-25 15:04:24 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -133,6 +133,13 @@
 		| _ -> lex_error lexbuf ("unknown int model " ^ v)
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
+
+  let float_suffix = function
+    | None -> `Real
+    | Some('f' | 'F') -> `Single
+    | Some('d' | 'D') -> `Double
+    | _ -> assert false
+
 }
 
 let space = [' ' '\t' '\012' '\r']
@@ -248,9 +255,12 @@ rule token = parse
   | rD+ rIS?                { CONSTANT (JCCinteger (lexeme lexbuf)) }
   | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (JCCinteger (lexeme lexbuf)) }
 
-  | rD+ rE rFS?             { CONSTANT (JCCreal (lexeme lexbuf)) }
-  | rD* "." rD+ (rE)? rFS?  { CONSTANT (JCCreal (lexeme lexbuf)) }
-  | rD+ "." rD* (rE)? rFS?  { CONSTANT (JCCreal (lexeme lexbuf)) }
+  | (rD+ rE) as pre (rFS as suf)? 
+      { CONSTANT (JCCreal (pre,float_suffix suf)) }
+  | (rD* "." rD+ (rE)?) as pre (rFS as suf)? 
+      { CONSTANT (JCCreal (pre,float_suffix suf)) }
+  | (rD+ "." rD* (rE)?) as pre (rFS as suf)?  
+      { CONSTANT (JCCreal (pre,float_suffix suf)) }
 
       (* trick to deal with intervals like 0..10 *)
 

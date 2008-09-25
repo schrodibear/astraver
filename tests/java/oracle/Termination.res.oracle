@@ -279,6 +279,8 @@ GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs Termination.loc
 
 JESSIELIBFILE ?= HOME/lib/why/jessie.why
 
+COQDEP = coqdep
+
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
 all: simplify/Termination_why.sx

@@ -405,6 +405,8 @@ GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs Creation.loc
 
 JESSIELIBFILE ?= HOME/lib/why/jessie.why
 
+COQDEP = coqdep
+
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
 all: simplify/Creation_why.sx

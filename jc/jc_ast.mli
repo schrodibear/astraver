@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.144 2008-09-17 15:28:57 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.145 2008-09-25 15:04:24 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -60,12 +60,14 @@ object
   method set_region: region -> unit
 end
 
+type float_suffix = [ `Double | `Single | `Real ]
+
 type const =
   | JCCvoid
   | JCCnull
   | JCCboolean of bool
   | JCCinteger of string
-  | JCCreal of string
+  | JCCreal of string * float_suffix
   | JCCstring of string
 
 class type identifier = 

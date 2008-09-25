@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.155 2008-08-07 16:24:17 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.156 2008-09-25 15:04:24 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -450,7 +450,7 @@ let any_string_decl =
 let lit l =
   match l with
   | Integer s | Char s -> JCCinteger s
-  | Float s -> JCCreal s
+  | Float(s,suf) -> JCCreal(s,suf)
   | Bool b -> JCCboolean b
   | String s -> JCCstring s
   | Null  -> JCCnull

@@ -44,7 +44,7 @@ public final class Integer extends Number implements Comparable {
      *
      * @since   JDK1.1
      */
-    public static final Class	TYPE = Class.getPrimitiveClass("int");
+    //KML public static final Class	TYPE = Class.getPrimitiveClass("int");
 
     /**
      * All possible chars for representing a number as a String
@@ -436,6 +436,7 @@ public final class Integer extends Number implements Comparable {
             throw new NumberFormatException("null");
         }
 
+	/*KML
 	if (radix < Character.MIN_RADIX) {
 	    throw new NumberFormatException("radix " + radix +
 					    " less than Character.MIN_RADIX");
@@ -445,6 +446,7 @@ public final class Integer extends Number implements Comparable {
 	    throw new NumberFormatException("radix " + radix +
 					    " greater than Character.MAX_RADIX");
 	}
+	*/
 
 	int result = 0;
 	boolean negative = false;
@@ -813,7 +815,8 @@ public final class Integer extends Number implements Comparable {
      * @see java.lang.Integer#decode
      */
     public static Integer getInteger(String nm, Integer val) {
-	String v = null;
+	/*KML
+	  String v = null;
         try {
             v = System.getProperty(nm);
         } catch (IllegalArgumentException e) {
@@ -825,6 +828,7 @@ public final class Integer extends Number implements Comparable {
 	    } catch (NumberFormatException e) {
 	    }
 	}
+	*/
 	return val;
     }
 

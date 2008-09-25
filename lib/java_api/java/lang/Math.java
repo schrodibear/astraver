@@ -98,7 +98,7 @@ public final strictfp class Math {
      * @return  the sine of the argument.
      */
     public static double sin(double a) {
-	return StrictMath.sin(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.sin(a); // default impl. delegates to StrictMath
     }
     
     /**
@@ -113,7 +113,7 @@ public final strictfp class Math {
      * @return  the cosine of the argument.
      */
     public static double cos(double a) {
-	return StrictMath.cos(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.cos(a); // default impl. delegates to StrictMath
     }
    
     /**
@@ -130,7 +130,7 @@ public final strictfp class Math {
      * @return  the tangent of the argument.
      */
     public static double tan(double a) {
-	return StrictMath.tan(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.tan(a); // default impl. delegates to StrictMath
     }
 
     /**
@@ -148,7 +148,7 @@ public final strictfp class Math {
      * @return  the arc sine of the argument.
      */
     public static double asin(double a) {
-	return StrictMath.asin(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.asin(a); // default impl. delegates to StrictMath
     }
 
     /**
@@ -164,7 +164,7 @@ public final strictfp class Math {
      * @return  the arc cosine of the argument.
      */
     public static double acos(double a) {
-	return StrictMath.acos(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.acos(a); // default impl. delegates to StrictMath
     }
 
     /**
@@ -181,7 +181,7 @@ public final strictfp class Math {
      * @return  the arc tangent of the argument.
      */
     public static double atan(double a) {
-	return StrictMath.atan(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.atan(a); // default impl. delegates to StrictMath
     }
 
     /**
@@ -231,7 +231,7 @@ public final strictfp class Math {
      *          where <i>e</i> is the base of the natural logarithms.
      */
     public static double exp(double a) {
-	return StrictMath.exp(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.exp(a); // default impl. delegates to StrictMath
     }
 
     /**
@@ -252,7 +252,7 @@ public final strictfp class Math {
      *          <code>a</code>.
      */
     public static double log(double a) {
-	return StrictMath.log(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.log(a); // default impl. delegates to StrictMath
     }
 
     /**
@@ -277,11 +277,13 @@ public final strictfp class Math {
       @ ensures \result * \result == a;
       @*/
     public static double sqrt(double a) {
+	/*KML
 	return StrictMath.sqrt(a); // default impl. delegates to StrictMath
 				   // Note that hardware sqrt instructions
 				   // frequently can be directly used by JITs
 				   // and should be much faster than doing
 				   // Math.sqrt in software.
+				   */
     }
 
     /**
@@ -307,7 +309,7 @@ public final strictfp class Math {
      *          <code>f2</code>.
      */
     public static double IEEEremainder(double f1, double f2) {
-        return StrictMath.IEEEremainder(f1, f2); // delegate to StrictMath
+        //KML return StrictMath.IEEEremainder(f1, f2); // delegate to StrictMath
     }
 
     /**
@@ -330,7 +332,7 @@ public final strictfp class Math {
      *          and is equal to a mathematical integer. 
      */
     public static double ceil(double a) {
-	return StrictMath.ceil(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.ceil(a); // default impl. delegates to StrictMath
     }
 
     /**
@@ -349,7 +351,7 @@ public final strictfp class Math {
      *          and is equal to a mathematical integer. 
      */
     public static double floor(double a) {
-	return StrictMath.floor(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.floor(a); // default impl. delegates to StrictMath
     }
 
     /**
@@ -368,7 +370,7 @@ public final strictfp class Math {
      *          equal to a mathematical integer.
      */
     public static double rint(double a) {
-	return StrictMath.rint(a); // default impl. delegates to StrictMath
+	//KML return StrictMath.rint(a); // default impl. delegates to StrictMath
     }
 
     /**
@@ -423,7 +425,7 @@ public final strictfp class Math {
      *          (<i>x</i>,&nbsp;<i>y</i>) in Cartesian coordinates.
      */
     public static double atan2(double y, double x) {
-	return StrictMath.atan2(y, x); // default impl. delegates to StrictMath
+	//KML return StrictMath.atan2(y, x); // default impl. delegates to StrictMath
     }
 
     /**
@@ -550,7 +552,7 @@ public final strictfp class Math {
      * @return  the value <code>a<sup>b</sup></code>.
      */
     public static double pow(double a, double b) {
-	return StrictMath.pow(a, b); // default impl. delegates to StrictMath
+	//KML return StrictMath.pow(a, b); // default impl. delegates to StrictMath
     }
 
     /**
@@ -609,8 +611,10 @@ public final strictfp class Math {
     //KML private static Random randomNumberGenerator;
 
     private static synchronized void initRNG() {
-        if (randomNumberGenerator == null) 
+        /*KML
+	  if (randomNumberGenerator == null) 
             randomNumberGenerator = new Random();
+	*/
     }
 
     /**
@@ -635,8 +639,11 @@ public final strictfp class Math {
      * @see     java.util.Random#nextDouble()
      */
     public static double random() {
-        if (randomNumberGenerator == null) initRNG();
-        return randomNumberGenerator.nextDouble();
+        /*KML
+	  if (randomNumberGenerator == null) initRNG();
+	  return randomNumberGenerator.nextDouble();
+	*/
+
     }
 
     /**
@@ -749,8 +756,8 @@ public final strictfp class Math {
 	return (a >= b) ? a : b;
     }
 
-    private static long negativeZeroFloatBits = Float.floatToIntBits(-0.0f);
-    private static long negativeZeroDoubleBits = Double.doubleToLongBits(-0.0d);
+    //KML private static long negativeZeroFloatBits = Float.floatToIntBits(-0.0f);
+    //KML private static long negativeZeroDoubleBits = Double.doubleToLongBits(-0.0d);
 
     /**
      * Returns the greater of two <code>float</code> values.  That is,
@@ -770,10 +777,12 @@ public final strictfp class Math {
       @*/
     public static float max(float a, float b) {
         if (a != a) return a;	// a is NaN
-	if ((a == 0.0f) && (b == 0.0f)
+	/*KML
+	  if ((a == 0.0f) && (b == 0.0f)
 	    && (Float.floatToIntBits(a) == negativeZeroFloatBits)) {
 	    return b;
 	}
+	*/
 	return (a >= b) ? a : b;
     }
 
@@ -795,10 +804,12 @@ public final strictfp class Math {
       @*/
     public static double max(double a, double b) {
         if (a != a) return a;	// a is NaN
-	if ((a == 0.0d) && (b == 0.0d)
+	/*KML
+	  if ((a == 0.0d) && (b == 0.0d)
 	    && (Double.doubleToLongBits(a) == negativeZeroDoubleBits)) {
 	    return b;
 	}
+	*/
 	return (a >= b) ? a : b;
     }
 
@@ -854,10 +865,12 @@ public final strictfp class Math {
       @*/
     public static float min(float a, float b) {
         if (a != a) return a;	// a is NaN
-	if ((a == 0.0f) && (b == 0.0f)
+	/*KML
+	  if ((a == 0.0f) && (b == 0.0f)
 	    && (Float.floatToIntBits(b) == negativeZeroFloatBits)) {
 	    return b;
 	}
+	*/
 	return (a <= b) ? a : b;
     }
 
@@ -879,10 +892,12 @@ public final strictfp class Math {
       @*/
     public static double min(double a, double b) {
         if (a != a) return a;	// a is NaN
-	if ((a == 0.0d) && (b == 0.0d)
+	/*KML
+	  if ((a == 0.0d) && (b == 0.0d)
 	    && (Double.doubleToLongBits(b) == negativeZeroDoubleBits)) {
 	    return b;
 	}
+	*/
 	return (a <= b) ? a : b;
     }
 

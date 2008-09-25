@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.32 2008-07-24 15:28:43 marche Exp $
+$Id: java_lexer.mll,v 1.33 2008-09-25 15:04:24 marche Exp $
 
 ***************************************************************************)
 
@@ -315,9 +315,9 @@ rule token = parse
       { comment lexbuf; token lexbuf }
   | "//" ([^'\n''@'][^'\n']*)? '\n'
       { newline lexbuf; token lexbuf }
-  | "\\" ['A'-'Z''a'-'z''_']['A'-'Z''a'-'z''0'-'9''_']* as id
+  | "\\" rL (rL | rD)* as id
       { special_id lexbuf id }
-  | ['A'-'Z''a'-'z''_']['A'-'Z''a'-'z''0'-'9''_']* as id
+  | rL (rL | rD)* as id
       { id_or_kw id }
   | ';'
       { SEMICOLON }
@@ -418,7 +418,7 @@ rule token = parse
 
       (* hexadecimal constants *)
 
-  | '0'['x''X']['0'-'9' 'A'-'F' 'a'-'f']+['l''L']? as n 
+  | '0'['x''X']rH+['l''L']? as n 
     { INTCONSTANT n }
 
       (* trick to deal with intervals like 0..10 *)
@@ -427,14 +427,14 @@ rule token = parse
 
       (* floating-point constants *)
 
-  | rD+ '.' rD* (['e''E']['-''+']?rD+)? ['f''F''d''D'] ?
-      { REALCONSTANT (lexeme lexbuf) }
+  | (rD+ '.' rD* (['e''E']['-''+']?rD+)?) as pre (['f''F''d''D'] as suf) ?
+      { REALCONSTANT (pre,suf) }
 
-  | '.' rD+ (['e''E']['-''+']?rD+)? ['f''F''d''D'] ?
-      { REALCONSTANT (lexeme lexbuf) }
+  | ('.' rD+ (['e''E']['-''+']?rD+)?) as pre (['f''F''d''D'] as suf) ?
+      { REALCONSTANT (pre,suf) }
 
-  | rD+ ['e''E'] ['-''+']?rD+ ['f''F''d''D'] ?
-      { REALCONSTANT (lexeme lexbuf) }
+  | (rD+ ['e''E'] ['-''+']?rD+) as pre (['f''F''d''D'] as suf) ?
+      { REALCONSTANT (pre,suf) }
 
       (* character constants *)
 
@@ -453,8 +453,7 @@ rule token = parse
   | "'\\" ['0'-'7'] "'" as s
       { CHARACTER s }
 
-  | "'\\u" ['0'-'9''A'-'F'] ['0'-'9''A'-'F'] 
-      ['0'-'9''A'-'F'] ['0'-'9''A'-'F'] "'" as s
+  | "'\\u" rH rH rH rH "'" as s
       { CHARACTER s }
 
   | '('

@@ -33,8 +33,8 @@ public class Object {
      *          runtime class of the object.
      */
     /*KML
-      public final native Class getClass();
-      KML*/
+    public final native Class getClass();
+    */
 
     /**
      * Returns a hash code value for the object. This method is 
@@ -205,7 +205,7 @@ public class Object {
      * @return  a string representation of the object.
      */
     public String toString() {
-	return getClass().getName() + "@" + Integer.toHexString(hashCode());
+	//KML return getClass().getName() + "@" + Integer.toHexString(hashCode());
     }
 
     /**

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.32 2008-09-05 13:21:01 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.33 2008-09-25 15:04:24 marche Exp $ i*)
 
 open Format
 open Pp
@@ -70,6 +70,7 @@ let generic full f targets =
        fprintf fmt "JESSIELIBFILE ?= %s@\n@\n" 
 	 (String.escaped (Filename.concat Jc_options.libdir 
 	    (Filename.concat "why" Jc_options.libfile)));
+       fprintf fmt "COQDEP = coqdep@\n@\n";
 
        fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib zenon@\n@\n";
        fprintf fmt "all: %a@\n@\n" 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: numconst.mll,v 1.4 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: numconst.mll,v 1.5 2008-09-25 15:04:24 marche Exp $ i*)
 
 (* evaluation of integer literals *)
 
@@ -169,8 +169,10 @@ and eval_char = parse
   | "\\" (['0'-'9'] ['0'-'9']? ['0'-'9']? as s) "'" 
       { invalid_arg ("digits '" ^ s ^ "' in octal constant") }
   | "\\x" (rH rH? as s) "'" { num_of_int (int_of_string ("0x" ^ s)) }
+  | "\\u" (rH rH rH rH as s) "'" { num_of_int (int_of_string ("0x" ^ s)) }
   | (_ as c) "'" { num_of_int (Char.code c) }
-
+  | [^'\'']* as s "'"  
+      { invalid_arg ("cannot evaluate char constant '" ^ s ^"'") }
 
 {
 
@@ -186,4 +188,5 @@ and eval_char = parse
       | Invalid msg -> error loc "invalid constant: %s" msg
 *)
 
+    
 }

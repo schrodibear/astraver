@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.138 2008-07-24 15:28:43 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.139 2008-09-25 15:04:24 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -915,8 +915,7 @@ and classify_name
                                 | Subpackage pi -> PackageName pi 
                                 | Type ti -> assert false 
                                 | File f -> 
-                                    eprintf "Internal error: got file %s in place of a package@." f;
-                                    assert false
+                                    typing_error loc "Internal error: got file %s in place of a package@." f
                             with Not_found ->
                               (* otherwise look for a logic type 
                                  of that name *)
@@ -1356,17 +1355,22 @@ and check_if_interface_complete ii =
       ii.interface_info_incomplete <- false;    
     end;
 
+and lookup_implemented_interfaces l id =
+  match l with
+    | [] -> raise Not_found
+    | [ii] -> lookup_interface_field ii id
+    | ii::l -> 
+	try
+	  lookup_interface_field ii id
+	with Not_found -> lookup_implemented_interfaces l id
+  
 and lookup_interface_field ii id =
   check_if_interface_complete ii;
   try
     list_assoc_name (fun fi -> fi.java_field_info_name) 
       id ii.interface_info_fields
   with
-      Not_found ->
-        match ii.interface_info_extends with
-          | [] -> raise Not_found
-          | [ii] -> lookup_interface_field ii id
-          | _ -> assert false (* TODO *)
+      Not_found -> lookup_implemented_interfaces ii.interface_info_extends id
 
 and check_if_class_complete ci =
   if ci.class_info_incomplete then
@@ -1389,11 +1393,7 @@ and lookup_class_field ci id =
             | None -> raise Not_found
             | Some ci -> lookup_class_field ci id
         with
-            Not_found ->
-              match ci.class_info_implements with
-                | [] -> raise Not_found
-                | [ii] -> lookup_interface_field ii id
-                | _ -> assert false (* TODO *)
+            Not_found -> lookup_implemented_interfaces ci.class_info_implements id
               
               
 and lookup_field ti id =
@@ -1474,7 +1474,13 @@ and term env current_label e =
               | Char s -> assert false (* TODO *)
               | String s -> logic_string_type,l
               | Bool b -> boolean_type,l
-              | Float s -> real_type,l
+              | Float(s,suf) -> 
+		  begin
+		    match suf with
+		      | `Real -> real_type,l
+		      | `Single -> float_type,l
+		      | `Double -> double_type,l
+		  end
               | Null -> null_type,l
           in
           ty,(JTlit l)
@@ -1956,7 +1962,7 @@ let rec eval_const_expression const e =
             | Bool false -> Num.Int 0
             | Bool true -> Num.Int 1
             | String _ -> raise Not_found (* TODO *)
-            | Char _ -> raise Not_found (* TODO *) 
+            | Char s ->  Numconst.integer s
             | Null -> raise Not_found (* TODO *)
         end
     | JEcast (ty, e) ->
@@ -2453,7 +2459,12 @@ let rec expr ~ghost env e =
               | Integer s | Char s -> int_type, l
               | String s -> logic_string_type, l
               | Bool b -> boolean_type, l
-              | Float s -> double_type, l
+              | Float(s,suf) -> 
+		  begin
+		    match suf with
+		      | `Single -> float_type,l
+		      | `Double | `Real -> double_type, l
+		  end
               | Null -> null_type, l
           in t, (JElit l)
       | JPEname n -> 
@@ -2866,11 +2877,17 @@ let rec type_initializer ~ghost env ty i =
   match ty, i with
     | _, Simple_initializer e ->
         let te = expr ~ghost env e in   
-          if is_assignment_convertible ~const:true ~ghost te.java_expr_type te ty 
-          then JIexpr te
-          else
-            typing_error e.java_pexpr_loc "type %a expected, got %a"
-              print_type ty print_type te.java_expr_type
+        begin
+	  try
+	    if is_assignment_convertible ~const:true ~ghost te.java_expr_type te ty 
+            then JIexpr te
+            else
+              typing_error e.java_pexpr_loc "type %a expected, got %a"
+		print_type ty print_type te.java_expr_type
+	  with Not_found -> 
+              typing_error e.java_pexpr_loc "type %a expected, got %a"
+		print_type ty print_type te.java_expr_type
+	end
     | JTYarray (_, t), Array_initializer vil ->
         let il =
           List.map

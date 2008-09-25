@@ -254,6 +254,8 @@ GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs Switch.loc
 
 JESSIELIBFILE ?= HOME/lib/why/jessie.why
 
+COQDEP = coqdep
+
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
 all: simplify/Switch_why.sx

@@ -679,6 +679,15 @@ db debug: bin/why.byte src/logic.cmo
 #src/logic.ml: src/logic.mli
 #	cp -f $^ $@
 
+# java APIs
+#################
+
+java_api:
+	(cd lib/java_api ; for i in java/lang/*.java; do \
+		mkdir -p `dirname ../distr_java_api/$$i` ; \
+		echo "Generating $$i" ; \
+		KRAKATOALIB=.. ../../$(KRAKATOA) -abstract ../distr_java_api/$$i $$i || break ; done)
+
 # installation
 ##############
 

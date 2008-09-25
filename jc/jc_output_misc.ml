@@ -34,10 +34,15 @@ let string_of_int_model p =
     | IMbounded -> "bounded"
     | IMmodulo -> "modulo"
 
+let float_suffix fmt = function
+  | `Single -> fprintf fmt "f"
+  | `Double -> fprintf fmt "d"
+  | `Real -> fprintf fmt ""
+
 let const fmt c =
   match c with
     | JCCinteger s -> fprintf fmt "%s" s
-    | JCCreal s -> fprintf fmt "%s" s
+    | JCCreal(s,suf) -> fprintf fmt "%s%a" s float_suffix suf
     | JCCboolean b -> fprintf fmt "%B" b
     | JCCnull -> fprintf fmt "null"
     | JCCvoid -> fprintf fmt "()"

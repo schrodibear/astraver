@@ -4,6 +4,15 @@ open Pp
 open Java_env
 open Java_ast
 
+let ident fmt (_,id) = fprintf fmt "%s" id
+
+let rec qualified_ident fmt qid =
+  match qid with
+    | [id] -> fprintf fmt "%a" ident id
+    | id::l -> fprintf fmt "%a.%a" ident id qualified_ident l
+    | [] -> assert false
+
+
 let base_type fmt b =
   match b with
     | Tshort -> fprintf fmt "short"
@@ -20,12 +29,12 @@ let base_type fmt b =
 let modifier fmt m =
   match m with
   | Static -> fprintf fmt "static "
-  | Final -> assert false (* TODO *)
-  | Public -> assert false (* TODO *)
-  | Private -> assert false (* TODO *)
-  | Protected -> assert false (* TODO *)
-  | Native -> assert false (* TODO *)
-  | Synchronized -> assert false (* TODO *)
+  | Final -> fprintf fmt "final "
+  | Public -> fprintf fmt "public "
+  | Private -> fprintf fmt "private "
+  | Protected -> fprintf fmt "protected "
+  | Native -> fprintf fmt "native "
+  | Synchronized -> fprintf fmt "synchronized "
   | Abstract -> assert false (* TODO *)
   | Transient (* "threadsafe" ? *) -> assert false (* TODO *)
   | Volatile-> assert false (* TODO *)
@@ -36,46 +45,43 @@ let modifier fmt m =
   | Nullable -> assert false (* TODO *)
   | Annot_modifier(loc,id) -> assert false (* TODO *)
 
+let modifiers fmt = List.iter (modifier fmt)
+
 let type_expr fmt t =
   match t with
     | Base_type b -> base_type fmt b
-    | Type_name id -> assert false (* TODO *)
+    | Type_name id -> fprintf fmt "%a" qualified_ident id;
     | Array_type_expr typ ->  assert false (* TODO *)
+
+let float_suffix fmt = function
+  | `Single -> fprintf fmt "f"
+  | `Double -> fprintf fmt "d"
+  | `Real -> ()
 
 let literal fmt l =
   match l with
     | Null -> fprintf fmt "null"
-    | _ -> assert false (* TODO *)
-(*
-    | Integer of string
-    | Float of string
-    | Bool of bool
-    | String of string
-    | Char of string
-*)
+    | Integer s -> assert false (* TODO *)
+    | Float(s,suf) -> fprintf fmt "%s%a" s float_suffix suf
+    | Bool b -> assert false (* TODO *)
+    | String s -> assert false (* TODO *)
+    | Char s -> assert false (* TODO *)
 
 let bin_op fmt op =
   match op with
     | Badd -> fprintf fmt "+"
-(*
-    | Bsub | Bmul | Bdiv | Bmod 
-    | Band | Bor | Bimpl | Biff
-    | Bbwand | Bbwor | Bbwxor
-    | Blsl | Blsr | Basr
-    | Beq 
-*)
+    | Bsub | Bmul | Bdiv | Bmod -> assert false (* TODO *)
+    | Band | Bor | Bimpl | Biff -> assert false (* TODO *)
+    | Bbwand | Bbwor | Bbwxor -> assert false (* TODO *)
+    | Blsl | Blsr | Basr -> assert false (* TODO *)
+    | Beq -> assert false (* TODO *)
     | Bne -> fprintf fmt "!="
-	(*
-| Bgt | Blt | Ble | Bge
-    | Bconcat (* + for Strings *)
-*)
-    | _ -> assert false (* TODO *)
+    | Bgt -> fprintf fmt ">"
+    | Blt -> fprintf fmt "<"
+    | Ble -> fprintf fmt "<="
+    | Bge -> fprintf fmt ">="
+    | Bconcat -> assert false (* TODO *) (* + for Strings *)
 
-let rec qualified_ident fmt qid =
-  match qid with
-    | [(_,id)] -> fprintf fmt "%s" id
-    | (_,id)::l -> fprintf fmt "%s.%a" id qualified_ident l
-    | [] -> assert false
 
 let rec expr fmt e =
   match e.java_pexpr_node with
@@ -116,15 +122,15 @@ let rec expr fmt e =
 
 let rec param fmt p =
   match p with
-    | Simple_parameter(modifier, typ, (loc,id)) ->
-	fprintf fmt "%a %s" type_expr typ id
+    | Simple_parameter(modifier, typ, id) ->
+	fprintf fmt "%a %a" type_expr typ ident id
     | Array_parameter p -> 
 	fprintf fmt "%a[]" param p
 
 let method_declarator fmt d =
   match d with
-    | Simple_method_declarator((_,id),params) ->
-	fprintf fmt "%s(%a);@\n@\n" id (print_list comma param) params
+    | Simple_method_declarator(id,params) ->
+	fprintf fmt "%a(@[%a@]);@\n@\n" ident id (print_list comma param) params
     | Array_method_declarator md ->
 	assert false (* TODO *)
 
@@ -136,13 +142,57 @@ let method_declaration fmt md =
     method_declarator : method_declarator ;
     method_throws : qualified_ident list ;
   *)
-  List.iter (modifier fmt) md.method_modifiers;
+  modifiers fmt md.method_modifiers;
   begin
     match md.method_return_type with
       | None -> fprintf fmt "void "
       | Some t -> fprintf fmt "%a " type_expr t;
   end;
+  assert (md.method_throws = []);
   method_declarator fmt md.method_declarator
+  
+let constructor_declaration fmt cd =
+  (* constr_modifiers : modifiers ;
+     constr_name : identifier ;
+     constr_parameters : parameter list ;
+     constr_throws : qualified_ident list 
+  *)
+  modifiers fmt cd.constr_modifiers;
+  assert (cd.constr_throws = []);
+  fprintf fmt "%a(%a);@\n@\n" ident cd.constr_name 
+    (print_list comma param) cd.constr_parameters
+  
+let rec variable_id fmt = function 
+    | Simple_id(id) ->
+	fprintf fmt "%a" ident id
+    | Array_id vd -> 
+	fprintf fmt "%a[]" variable_id vd
+
+let rec initialize fmt = function
+  | Simple_initializer e -> expr fmt e
+  | Array_initializer l -> assert false (* TODO *)
+      
+
+let variable_declarator ~is_final fmt vd =
+  fprintf fmt "%a" variable_id vd.variable_id;
+  match vd.variable_initializer with
+    | Some init when is_final ->
+	fprintf fmt " = %a" initialize init
+    | _ -> ()
+
+let variable_declaration fmt vd =
+  (*
+     variable_modifiers : modifiers ;
+    variable_type : type_expr ;
+    variable_decls : variable_declarator list 
+  *)
+  modifiers fmt vd.variable_modifiers;
+  fprintf fmt "%a " type_expr vd.variable_type;
+  let is_final = List.mem Final vd.variable_modifiers in
+  List.iter (variable_declarator ~is_final fmt) vd.variable_decls;
+  fprintf fmt ";@\n@\n"
+
+  
   
 
 let field_declaration fmt f =
@@ -166,25 +216,47 @@ let field_declaration fmt f =
 	fprintf fmt "@[/*@@";
 	print_option (fun fmt e -> fprintf fmt " requires %a;@\n  @@" expr e) fmt req;
 	(* TODO *)
-	fprintf fmt "*/@\n@]";	
-    | _ -> assert false (* TODO *)
+	fprintf fmt "*/@\n@]"
+    | JPFinterface _ -> assert false (* TODO *)
+    | JPFclass _ -> assert false (* TODO *)
+    | JPFstatic_invariant (_, _) -> assert false (* TODO *)
+    | JPFinvariant (_, _) -> assert false (* TODO *)
+    | JPFannot (_, _) -> assert false (* TODO *)
+    | JPFstatic_initializer block -> ()	
+    | JPFvariable vd -> variable_declaration fmt vd
+    | JPFconstructor(cd, _invoke, _block) -> 
+	constructor_declaration fmt cd
 
 let class_declaration fmt cd =
-(*
-  class_modifiers : modifiers;
-  class_name : identifier;
-  class_extends : qualified_ident option;
-  class_implements : qualified_ident list;
-  class_fields : field_declaration list
-*)
-  fprintf fmt "@[class %s {@\n@\n  @[<v 0>" (snd cd.class_name);
+  fprintf fmt "@[%a class %a " 
+    modifiers cd.class_modifiers ident cd.class_name;
+  begin
+    match cd.class_extends with
+      | None -> ()
+      | Some id -> fprintf fmt "extends %a " qualified_ident id
+  end;
+  assert (cd.class_implements = []);
+  fprintf fmt "{@\n@\n  @[<v 0>";
   List.iter (field_declaration fmt) cd.class_fields;
+  fprintf fmt "@]@\n}@\n@]"
+
+let interface_declaration fmt id =
+  (*
+    { interface_modifiers : modifiers;
+    interface_name : identifier;
+    interface_extends : qualified_ident list;
+    interface_members : field_declaration list
+  *)
+  fprintf fmt "@[%a interface %a {@\n@\n  @[<v 0>" 
+    modifiers id.interface_modifiers ident id.interface_name;
+  assert (id.interface_extends = []);
+  List.iter (field_declaration fmt) id.interface_members;
   fprintf fmt "@]@\n}@\n@]"
 
 let type_declaration fmt d =
   match d with
     | JPTclass cd -> class_declaration fmt cd
-    | JPTinterface interface_declaration -> assert false
+    | JPTinterface id -> interface_declaration fmt id
     | JPTannot _ -> assert false
     | JPTlemma (id,is_axiom,labels,p) -> assert false
     | JPTlogic_type_decl id -> assert false

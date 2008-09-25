@@ -257,6 +257,8 @@ GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs SideEffects.loc
 
 JESSIELIBFILE ?= HOME/lib/why/jessie.why
 
+COQDEP = coqdep
+
 .PHONY: all coq pvs simplify cvcl harvey smtlib zenon
 
 all: simplify/SideEffects_why.sx

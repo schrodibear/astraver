@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.49 2008-07-24 15:28:43 marche Exp $
+$Id: java_parser.mly,v 1.50 2008-09-25 15:04:24 marche Exp $
 
 */
 
@@ -89,6 +89,11 @@ $Id: java_parser.mly,v 1.49 2008-07-24 15:28:43 marche Exp $
     | "Old" -> LabelOld
     | _ -> LabelName s
 
+  let float_of_suf = function
+    | None -> `Real
+    | Some('f' | 'F') -> `Single
+    | Some('d' | 'D') -> `Double
+    | _ -> assert false
 %}
 
 /*s Start symbols */
@@ -116,7 +121,7 @@ $Id: java_parser.mly,v 1.49 2008-07-24 15:28:43 marche Exp $
 
 %token <string> ID 
 %token <string> INTCONSTANT
-%token <string> REALCONSTANT
+%token <string * char option> REALCONSTANT
 %token <string> STRING
 %token <string> CHARACTER
 %token TRUE FALSE NULL THIS 
@@ -771,7 +776,7 @@ primary_no_new_array:
 | INTCONSTANT                    
     { locate_lit (Integer $1) }
 | REALCONSTANT                    
-    { locate_lit (Float $1) }
+    { let x,suf = $1 in locate_lit (Float(x,float_of_suf suf)) }
 | TRUE                       
     { locate_lit (Bool true) }
 | FALSE                      
