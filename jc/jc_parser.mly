@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.108 2008-09-25 15:04:24 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.109 2008-09-26 09:11:51 moy Exp $ */
 
 %{
 
@@ -102,9 +102,9 @@
 /* assigns assumes behavior ensures requires throws reads */
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
 
-/* \forall \exists \offset_max \offset_min \address \old \result \mutable \typeof \bottom \typeeq */
+/* \forall \exists \offset_max \offset_min \address \old \result \mutable \typeof \bottom \typeeq \absolute_address */
 %token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSADDRESS BSOLD BSAT 
-%token BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM BSTYPEEQ
+%token BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM BSTYPEEQ BSABSOLUTE_ADDRESS
 
 /* \nothing */
 %token BSNOTHING
@@ -223,7 +223,9 @@ type_definition:
 | TYPE IDENTIFIER EQ LSQUARE variant_tag_list RSQUARE
     { locate (JCDvariant_type($2, $5)) }
 | TYPE IDENTIFIER EQ LSQUARE union_tag_list RSQUARE
-    { locate (JCDunion_type($2, $5)) }
+    { locate (JCDunion_type($2,false,$5)) }
+| TYPE IDENTIFIER EQ LSQUARE discr_union_tag_list RSQUARE
+    { locate (JCDunion_type($2,true,$5)) }
 ;
 
 int_constant:
@@ -244,6 +246,13 @@ union_tag_list:
 | identifier AMP union_tag_list
     { $1::$3 }
 | identifier AMP identifier
+    { [ $1; $3 ] }
+;
+
+discr_union_tag_list:
+| identifier HAT discr_union_tag_list
+    { $1::$3 }
+| identifier HAT identifier
     { [ $1; $3 ] }
 ;
 
@@ -551,7 +560,9 @@ postfix_expression:
 | BSOFFSET_MIN LPAR expression RPAR 
     { locate (JCPEoffset(Offset_min,$3)) }
 | BSADDRESS LPAR expression RPAR 
-    { locate (JCPEaddress($3)) }
+    { locate (JCPEaddress(false,$3)) }
+| BSABSOLUTE_ADDRESS LPAR expression RPAR 
+    { locate (JCPEaddress(true,$3)) }
 | postfix_expression DOT IDENTIFIER
     { locate (JCPEderef ($1, $3)) }
 | postfix_expression PLUSPLUS 

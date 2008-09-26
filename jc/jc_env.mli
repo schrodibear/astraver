@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.59 2008-08-07 16:24:17 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.60 2008-09-26 09:11:51 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tstring
 
@@ -42,6 +42,8 @@ type abstract_domain = AbsNone | AbsBox | AbsOct | AbsPol
 
 type int_model = IMbounded | IMmodulo
 
+type root_kind = Rvariant | RplainUnion | RdiscrUnion
+
 type jc_type =
   | JCTnative of native_type
   | JCTlogic of string
@@ -53,8 +55,7 @@ type jc_type =
 
 and pointer_class =
   | JCtag of struct_info * jc_type list (* struct_info, type parameters *)
-  | JCvariant of variant_info
-  | JCunion of variant_info
+  | JCroot of root_info
 
 and enum_info =
     { 
@@ -70,18 +71,18 @@ and struct_info =
       mutable jc_struct_info_parent : (struct_info * jc_type list) option;
       mutable jc_struct_info_root : struct_info;
       mutable jc_struct_info_fields : field_info list;
-      mutable jc_struct_info_variant : variant_info option;
+      mutable jc_struct_info_variant : root_info option;
         (* only valid for root structures *)
     }
 
-and variant_info =
+and root_info =
     {
-      jc_variant_info_name : string;
-(*      mutable jc_variant_info_tags : struct_info list;*)
-      mutable jc_variant_info_roots : struct_info list;
-(*      jc_variant_info_open : bool;*)
-      jc_variant_info_is_union : bool;
-      mutable jc_variant_info_union_size_in_bytes: int;
+      jc_root_info_name : string;
+(*      mutable jc_root_info_tags : struct_info list;*)
+      mutable jc_root_info_roots : struct_info list;
+(*      jc_root_info_open : bool;*)
+      jc_root_info_kind : root_kind;
+      mutable jc_root_info_union_size_in_bytes: int;
     }
 
 and field_info =
@@ -142,13 +143,13 @@ type label =
   | LabelOld
 
 type alloc_class =
-  | JCalloc_struct of variant_info
-  | JCalloc_union of variant_info
+  | JCalloc_root of root_info
   | JCalloc_bitvector
 
 type mem_class =
   | JCmem_field of field_info 
-  | JCmem_union of variant_info
+  | JCmem_discr_union of field_info
+  | JCmem_plain_union of root_info
   | JCmem_bitvector
 
 (*

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.121 2008-09-18 13:20:40 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.122 2008-09-26 09:11:51 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -106,8 +106,7 @@ let rec print_type fmt t =
     | JCTpointer(pc, ao, bo) ->
         begin match pc with
           | JCtag({ jc_struct_info_name = name }, [])
-          | JCvariant { jc_variant_info_name = name }
-	  | JCunion { jc_variant_info_name = name } ->
+          | JCroot { jc_root_info_name = name } ->
               fprintf fmt "%s" name
           | JCtag({ jc_struct_info_name = name }, params) ->
               fprintf fmt "%s<%a>" name
@@ -442,9 +441,13 @@ let rec raw_term_compare t1 t2 =
   | JCTunary(op1,t11),JCTunary(op2,t21) ->
       let compop = Pervasives.compare op1 op2 in
       if compop = 0 then raw_term_compare t11 t21 else compop
-  | JCTold t11,JCTold t21
-  | JCTaddress t11,JCTaddress t21 ->
+  | JCTold t11,JCTold t21 ->
       raw_term_compare t11 t21
+  | JCTaddress(absolute1,t11),JCTaddress(absolute2,t21) ->
+      let compabs = Pervasives.compare absolute1 absolute2 in
+      if compabs = 0 then
+	raw_term_compare t11 t21
+      else compabs
   | JCTderef(t11,_,fi1),JCTderef(t21,_,fi2) ->
       let compfi = 
 	Pervasives.compare fi1.jc_field_info_tag fi2.jc_field_info_tag
@@ -780,8 +783,7 @@ let struct_variant st =
 
 let pointer_class_variant = function
   | JCtag(st, _) -> struct_variant st
-  | JCvariant vi -> vi
-  | JCunion vi -> vi
+  | JCroot vi -> vi
   
 let rec pattern_vars acc pat =
   match pat#node with
@@ -798,8 +800,18 @@ let rec pattern_vars acc pat =
     | JCPany | JCPconst _ ->
 	acc
 
+let root_is_plain_union rt = rt.jc_root_info_kind = RplainUnion
+let root_is_discr_union rt = rt.jc_root_info_kind = RdiscrUnion
+let root_is_union rt = root_is_plain_union rt || root_is_discr_union rt
+
+let struct_of_plain_union st =
+  let vi = struct_variant st in vi.jc_root_info_kind = RplainUnion
+
+let struct_of_discr_union st =
+  let vi = struct_variant st in vi.jc_root_info_kind = RdiscrUnion
+
 let struct_of_union st =
-  (struct_variant st).jc_variant_info_is_union 
+  let vi = struct_variant st in root_is_union vi
   
 let field_of_union fi =
   struct_of_union fi.jc_field_info_struct 
@@ -807,7 +819,7 @@ let field_of_union fi =
 let union_of_field fi =
   let st = fi.jc_field_info_struct in
   let vi = struct_variant st in
-  assert vi.jc_variant_info_is_union;
+  assert (root_is_union vi);
   vi
 
 let integral_type = function
@@ -817,12 +829,12 @@ let integral_type = function
   | JCTtype_var _ -> false
 
 let integral_union vi =
-  assert vi.jc_variant_info_is_union;
+  assert (root_is_union vi);
   List.fold_left (fun acc st -> acc &&
 		    match st.jc_struct_info_fields with
 		      | [fi] -> integral_type fi.jc_field_info_type
 		      | _ -> false
-		 ) true vi.jc_variant_info_roots
+		 ) true vi.jc_root_info_roots
 
 let struct_has_bytesize st =
   List.fold_left 

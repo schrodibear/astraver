@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.240 2008-09-25 15:04:24 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.241 2008-09-26 09:11:51 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -133,25 +133,21 @@ let rec substruct st = function
   | (JCtag(st', _)) as pc ->
       if st == st' then true else
         let vi = struct_variant st and vi' = struct_variant st' in
-        (vi == vi' && vi.jc_variant_info_is_union)
+        (vi == vi' && (root_is_union vi))
         || 
         begin match st.jc_struct_info_parent with
           | None -> false
           | Some(p, []) -> substruct p pc
           | Some(p, _) -> assert false (* TODO *)
         end
-  | JCvariant vi ->
+  | JCroot vi ->
       struct_variant st == vi
-  | JCunion ui ->
-      struct_variant st == ui
 
 let rec superstruct st = function
   | JCtag(st', _) ->
       let vi' = struct_variant st' in
-      not vi'.jc_variant_info_is_union && substruct st' (JCtag(st,[]))
-  | JCvariant _vi ->
-      false
-  | JCunion _ui ->
+      not (root_is_union vi') && substruct st' (JCtag(st,[]))
+  | JCroot _vi ->
       false
 
 let same_hierarchy st1 st2 =
@@ -179,7 +175,7 @@ let subtype ?(allow_implicit_cast=true) t1 t2 =
         s1=s2
     | JCTpointer(JCtag(s1, []), _, _), JCTpointer(pc, _, _) -> 
         substruct s1 pc
-    | JCTpointer(JCvariant v1, _, _), JCTpointer(JCvariant v2, _, _) ->
+    | JCTpointer(JCroot v1, _, _), JCTpointer(JCroot v2, _, _) ->
         v1 == v2
     | JCTnull, (JCTnull | JCTpointer _) ->
         true
@@ -206,7 +202,7 @@ let mintype loc t1 t2 =
     | JCTpointer(pc, _, _), JCTpointer(JCtag(s1, []), _, _)
         when substruct s1 pc ->
         t1
-    | JCTpointer(JCvariant v1, _, _), JCTpointer(JCvariant v2, _, _) ->
+    | JCTpointer(JCroot v1, _, _), JCTpointer(JCroot v2, _, _) ->
         if v1 == v2 then t1 else raise Not_found
     | JCTnull, JCTnull -> JCTnull
     | JCTnull, JCTpointer _ -> t2
@@ -287,8 +283,7 @@ let find_field_struct loc st allow_mutable f =
 let find_field loc ty f allow_mutable =
   match ty with
     | JCTpointer(JCtag(st, _), _, _) -> find_field_struct loc st allow_mutable f
-    | JCTpointer(JCvariant _, _, _)
-    | JCTpointer(JCunion _, _, _)
+    | JCTpointer(JCroot _, _, _)
     | JCTnative _ 
     | JCTenum _
     | JCTlogic _
@@ -313,7 +308,7 @@ let type_type t =
         with Not_found ->
           try
             let vi = Hashtbl.find variants_table id in
-            JCTpointer(JCvariant vi, a, b)
+            JCTpointer(JCroot vi, a, b)
           with Not_found ->
             typing_error t#pos "unknown type or tag: %s" id
         end
@@ -806,7 +801,13 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		   JCTpointer(JCtag(st, []), a, b),
                    te1#region,
                    JCTbitwise_cast(te1, label(), st))
-            | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
+	    | JCTnull ->
+		(* bitwise cast *)
+                (Region.make_bitwise te1#region;
+		 JCTpointer(JCtag(st,[]),None,None),
+                 te1#region,
+                 JCTbitwise_cast(te1, label(), st))
+            | JCTnative _ | JCTlogic _ | JCTenum _ | JCTany
             | JCTtype_var _ ->
                 typing_error e#pos "only structures can be cast"
         end
@@ -828,18 +829,24 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         begin match te1#typ with
           | JCTpointer(JCtag(st, _), _, _) ->
               integer_type, dummy_region, JCToffset(k, te1, st)
-          | JCTpointer((JCvariant _ | JCunion _), _, _) ->
+          | JCTpointer(JCroot _, _, _) ->
               assert false (* TODO *)
           | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
           | JCTtype_var _ ->
               typing_error e#pos "pointer expected"
         end        
-    | JCNEaddress e1 ->
+    | JCNEaddress(true,e1) ->
+        let te1 = ft e1 in
+        if is_integer te1#typ then
+	  JCTnull, dummy_region, JCTaddress(true,te1)
+	else
+          typing_error e#pos "integer expected"
+    | JCNEaddress(false,e1) ->
         let te1 = ft e1 in
         begin match te1#typ with
           | JCTpointer(JCtag(st, _), _, _) ->
-              integer_type, dummy_region, JCTaddress te1
-          | JCTpointer((JCvariant _ | JCunion _), _, _) ->
+              integer_type, dummy_region, JCTaddress(false,te1)
+          | JCTpointer(JCroot _, _, _) ->
               assert false (* TODO *)
           | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
           | JCTtype_var _ ->
@@ -1774,16 +1781,22 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         begin match te1#typ with 
           | JCTpointer(JCtag(st, _), _, _) ->
               integer_type, dummy_region, JCEoffset(k, te1, st)
-          | JCTpointer((JCvariant _ | JCunion _), _, _) ->
+          | JCTpointer(JCroot _, _, _) ->
               assert false (* TODO *)
           | _ -> typing_error e#pos "pointer expected"
         end
-    | JCNEaddress e1 ->
+    | JCNEaddress(true,e1) ->
+        let te1 = fe e1 in
+	if is_integer  te1#typ then
+          JCTnull, dummy_region, JCEaddress(true,te1)
+	else 
+	  typing_error e#pos "integer expected"
+    | JCNEaddress(false,e1) ->
         let te1 = fe e1 in
         begin match te1#typ with 
           | JCTpointer(JCtag(st, _), _, _) ->
-              integer_type, dummy_region, JCEaddress te1
-          | JCTpointer((JCvariant _ | JCunion _), _, _) ->
+              integer_type, dummy_region, JCEaddress(false,te1)
+          | JCTpointer(JCroot _, _, _) ->
               assert false (* TODO *)
           | _ -> typing_error e#pos "pointer expected"
         end
@@ -2200,7 +2213,7 @@ let type_range_of_term ty t =
 (*        Jc_pervasives.make_and [mincstr; maxcstr] *)
 (*        else
           Jc_pervasives.make_and [instanceofcstr; mincstr; maxcstr] *)
-    | JCTpointer (JCvariant vi, _, _) ->
+    | JCTpointer (JCroot vi, _, _) ->
         assert false (* TODO, but need to change JCToffset before *)
     | _ -> true_assertion
 
@@ -2228,8 +2241,8 @@ let type_range_of_term ty t =
         Hashtbl.replace structs_table id (struct_info, [])
     | JCPDvarianttype(id, _) ->
         Hashtbl.replace variants_table id {
-          jc_variant_info_name = id;
-          jc_variant_info_roots = [];
+          jc_root_info_name = id;
+          jc_root_info_roots = [];
         }
     | JCPDvar _
     | JCPDfun _
@@ -2319,7 +2332,7 @@ of an invariant policy";
         Hashtbl.replace structs_table id (struct_info, invariants)
 
     | JCDvariant_type(id, tags) -> ()
-    | JCDunion_type(id, tags) -> ()
+    | JCDunion_type(id,_discr,tags) -> ()
 
 (*    | JCDrectypes(pdecls) ->
         (* first pass: adding structure names *)
@@ -2465,14 +2478,19 @@ let fixpoint_struct_info_roots () =
   !modified
 
 let type_variant d = match d#node with
-  | JCDvariant_type(id, tags) | JCDunion_type(id, tags) ->
+  | JCDvariant_type(id, tags) | JCDunion_type(id,_,tags) ->
       (* declare the variant *)
       let vi = {
-        jc_variant_info_name = id;
-        jc_variant_info_roots = [];
-        jc_variant_info_is_union = 
-          (match d#node with JCDvariant_type _ -> false | _ -> true);
-	jc_variant_info_union_size_in_bytes = 0;
+        jc_root_info_name = id;
+        jc_root_info_roots = [];
+        jc_root_info_kind = 
+	  (match d#node with 
+	     | JCDvariant_type _ -> Rvariant
+	     | JCDunion_type(_,true,_) -> RdiscrUnion
+	     | JCDunion_type(_,false,_) -> RplainUnion
+	     | _ -> assert false
+	  );
+	jc_root_info_union_size_in_bytes = 0;
       } in
       Hashtbl.add variants_table id vi;
       (* tags *)
@@ -2497,18 +2515,18 @@ let type_variant d = match d#node with
                  st
              | Some prev -> typing_error tag#pos
                  "tag %s is already used by type %s" tag#name
-                   prev.jc_variant_info_name)
+                   prev.jc_root_info_name)
         tags
       in
-      if vi.jc_variant_info_is_union then
+      if root_is_union vi then
 	let size = 
 	  List.fold_left 
 	    (fun size st -> max size (struct_size_in_bytes st)) 0 roots
 	in
-	vi.jc_variant_info_union_size_in_bytes <- size
+	vi.jc_root_info_union_size_in_bytes <- size
       else ();
       (* update the variant *)
-      vi.jc_variant_info_roots <- roots
+      vi.jc_root_info_roots <- roots
   | _ -> ()
 
 let declare_tag_fields d = match d#node with
@@ -2617,7 +2635,7 @@ let print_file fmt () =
       (fun name vinfo f ->
         let tags =
           List.map (fun sinfo -> sinfo.jc_struct_info_name)
-            vinfo.jc_variant_info_roots
+            vinfo.jc_root_info_roots
         in
         Jc_output.JCvariant_type_def (name,tags)
         :: f

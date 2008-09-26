@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.145 2008-09-25 15:04:24 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.146 2008-09-26 09:11:51 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -157,7 +157,9 @@ and pexpr_node =
   | JCPEold of pexpr
   | JCPEat of pexpr * label
   | JCPEoffset of offset_kind * pexpr 
-  | JCPEaddress of pexpr 
+  | JCPEaddress of bool * pexpr 
+      (* flag is true for an absolute address, with integer argument,
+	 and false for a pointer address, with pointer argument *)
   | JCPEif of pexpr * pexpr * pexpr
   | JCPElet of ptype option * string * pexpr option * pexpr
   | JCPEdecl of ptype * string * pexpr option
@@ -219,7 +221,8 @@ type 'expr decl_node =
       * (bool * ptype * string * int option) list (* fields *)
       * (identifier * string * 'expr) list (* invariants *)
   | JCDvariant_type of string * identifier list
-  | JCDunion_type of string * identifier list
+  | JCDunion_type of string * bool * identifier list
+      (* name, discriminated, structure names *)
   | JCDenum_type of string * Num.num * Num.num
   | JCDlogic_type of string 
   | JCDlemma of string * bool * label list * 'expr
@@ -262,7 +265,7 @@ type nexpr_node =
   | JCNEcast of nexpr * string
   | JCNEif of nexpr * nexpr * nexpr
   | JCNEoffset of offset_kind * nexpr 
-  | JCNEaddress of nexpr 
+  | JCNEaddress of bool * nexpr 
   | JCNEalloc of nexpr * string
   | JCNEfree of nexpr
   | JCNElet of ptype option * string * nexpr option * nexpr
@@ -340,7 +343,7 @@ and 'li term_node =
   | JCTold of 'li term
   | JCTat of 'li term * label
   | JCToffset of offset_kind * 'li term * struct_info 
-  | JCTaddress of 'li term
+  | JCTaddress of bool * 'li term
   | JCTinstanceof of 'li term * label * struct_info
   | JCTcast of 'li term * label * struct_info
   | JCTbitwise_cast of 'li term * label * struct_info
@@ -476,7 +479,7 @@ type ('li,'fi) expr_node =
   | JCEreal_cast of ('li,'fi) expr * real_conversion
   | JCEif of ('li,'fi) expr * ('li,'fi) expr * ('li,'fi) expr
   | JCEoffset of offset_kind * ('li,'fi) expr * struct_info
-  | JCEaddress of ('li,'fi) expr
+  | JCEaddress of bool * ('li,'fi) expr
   | JCEalloc of ('li,'fi) expr * struct_info
   | JCEfree of ('li,'fi) expr
   | JCElet of var_info * ('li,'fi) expr option * ('li,'fi) expr

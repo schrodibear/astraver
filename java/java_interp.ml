@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.156 2008-09-25 15:04:24 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.157 2008-09-26 09:11:51 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -157,10 +157,10 @@ let tr_base_type t =
 (*s class types *)
 
 let rec object_variant = {
-  jc_variant_info_name = "Object";
-  jc_variant_info_roots = [ object_root ];
-  jc_variant_info_is_union = false;
-  jc_variant_info_union_size_in_bytes = 0;
+  jc_root_info_name = "Object";
+  jc_root_info_roots = [ object_root ];
+  jc_root_info_kind = Rvariant;
+  jc_root_info_union_size_in_bytes = 0;
 }
 
 and object_root = {
@@ -656,8 +656,8 @@ let ptype_node_of_type = function
   | JCTlogic s -> JCPTidentifier s
   | JCTenum e -> JCPTidentifier e.jc_enum_info_name
   | JCTpointer(JCtag(st, _), l, r) -> JCPTpointer(st.jc_struct_info_name,[], l, r)
-  | JCTpointer((JCvariant v | JCunion v), l, r) ->
-      JCPTpointer(v.jc_variant_info_name,[], l, r)
+  | JCTpointer(JCroot v, l, r) ->
+      JCPTpointer(v.jc_root_info_name,[], l, r)
   | JCTnull
   | JCTany | JCTtype_var _ -> assert false
 let ptype_of_type t = new ptype (ptype_node_of_type t)

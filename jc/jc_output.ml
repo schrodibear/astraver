@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.118 2008-09-17 15:28:57 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.119 2008-09-26 09:11:51 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -155,8 +155,10 @@ let rec term fmt t =
 	fprintf fmt "(%a <: %s)" term t si.jc_struct_info_name
     | JCToffset (k,t,_)->
 	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t
-    | JCTaddress t ->
-	fprintf fmt "@[\\address(%a)@]" term t
+    | JCTaddress(absolute,t) ->
+	fprintf fmt "@[\\%aaddress(%a)@]" 
+	  (fun fmt b -> if b then string fmt "absolute_" else ()) absolute
+	  term t
     | JCTold t -> fprintf fmt "@[\\old(%a)@]" term t
     | JCTat(t,lab) -> fprintf fmt "@[\\at(%a,%a)@]" term t label lab
 (*
@@ -346,8 +348,10 @@ let rec expr fmt e =
 	  fprintf fmt "@[(%a ? %a : %a)@]" expr e1 expr e2 expr e3
       | JCEoffset(k,e, _) ->
 	  fprintf fmt "\\offset_m%a(%a)" offset_kind k expr e
-      | JCEaddress e ->
-	  fprintf fmt "\\address(%a)" expr e
+      | JCEaddress(absolute,e) ->
+	  fprintf fmt "\\%aaddress(%a)" 
+	    (fun fmt b -> if b then string fmt "absolute_" else ()) absolute
+	    expr e
       | JCEalloc(e, si) ->
 	  fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e
       | JCEfree e ->

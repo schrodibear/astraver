@@ -61,7 +61,7 @@ let find_pointer_class a =
   try
     JCtag (find_struct a, []) (* TODO: fill parameters ? *)
   with Not_found ->
-    JCvariant (find_variant a)
+    JCroot (find_variant a)
 
 let mutable_name2 a =
   mutable_name (JCtag (find_struct a, []))
@@ -91,8 +91,8 @@ let native_name = function
 (* let logic_bitvector_of_native nty = "bitvector_of_" ^ (native_name nty) *)
 (* let logic_native_of_bitvector nty = (native_name nty) ^ "_of_bitvector" *)
 
-let logic_bitvector_of_variant vi = "bitvector_of_" ^ vi.jc_variant_info_name
-let logic_variant_of_bitvector vi = vi.jc_variant_info_name ^ "_of_bitvector"
+let logic_bitvector_of_variant vi = "bitvector_of_" ^ vi.jc_root_info_name
+let logic_variant_of_bitvector vi = vi.jc_root_info_name ^ "_of_bitvector"
 
 let logic_union_of_field fi = "bitvector_of_" ^ fi.jc_field_info_name
 let logic_field_of_union fi = fi.jc_field_info_name ^ "_of_bitvector"
@@ -245,20 +245,19 @@ let get_current_spec () =
 let why_integer_type = simple_logic_type "int"
 let why_unit_type = simple_logic_type "unit"
 
-let variant_model_type vi =
-  simple_logic_type (variant_type_name vi)
+let root_model_type vi =
+  simple_logic_type (root_type_name vi)
 
 let struct_model_type st = 
-  variant_model_type (struct_variant st)
+  root_model_type (struct_variant st)
 
 let pointer_class_model_type pc = 
-  variant_model_type (pointer_class_variant pc)
+  root_model_type (pointer_class_variant pc)
 
 let bitvector_type = simple_logic_type bitvector_type_name
 
 let alloc_class_type = function
-  | JCalloc_struct vi -> variant_model_type vi
-  | JCalloc_union vi -> variant_model_type vi
+  | JCalloc_root vi -> root_model_type vi
   | JCalloc_bitvector -> why_unit_type
 
 let memory_class_type mc = 
@@ -294,7 +293,7 @@ let raw_memory_type ty1' ty2' =
 
 let pointer_type ac pc = 
   match ac with
-    | JCalloc_struct _ | JCalloc_union _ ->
+    | JCalloc_root _ ->
 	raw_pointer_type (pointer_class_model_type pc)
     | JCalloc_bitvector ->
 	raw_pointer_type why_unit_type
@@ -341,14 +340,15 @@ let pset_type ac = raw_pset_type (alloc_class_type ac)
 
 let alloc_table_type ac = raw_alloc_table_type (alloc_class_type ac)
 
-let tag_table_type vi = raw_tag_table_type (variant_model_type vi)
+let tag_table_type vi = raw_tag_table_type (root_model_type vi)
 
-let tag_id_type vi = raw_tag_id_type (variant_model_type vi)
+let tag_id_type vi = raw_tag_id_type (root_model_type vi)
 
 let memory_type mc = 
   let value_type = match mc with
-    | JCmem_field fi -> tr_base_type fi.jc_field_info_type
-    | JCmem_union _vi -> bitvector_type
+    | JCmem_field fi 
+    | JCmem_discr_union fi -> tr_base_type fi.jc_field_info_type
+    | JCmem_plain_union _ 
     | JCmem_bitvector -> bitvector_type
   in
   raw_memory_type (memory_class_type mc) value_type
@@ -778,7 +778,7 @@ let rec all_possible_memory_effects acc r ty =
   match ty with
     | JCTpointer(pc,_,_) ->
 	begin match pc with
-	  | JCunion _ | JCvariant _ -> acc (* TODO *)
+	  | JCroot _ -> acc (* TODO *)
 	  | JCtag(st,_) ->
 	      List.fold_left 
 		(fun acc fi ->
@@ -812,7 +812,7 @@ let rewrite_effects ~type_safe ~params ef =
 	MemoryMap.fold 
 	  (fun (mc,r) labs acc ->
 	     match mc with
-	       | JCmem_field _ | JCmem_union _ -> 
+	       | JCmem_field _ | JCmem_discr_union _ | JCmem_plain_union _ -> 
 		   MemoryMap.add (mc,r) labs acc
 	       | JCmem_bitvector ->
 		   MemorySet.fold 
@@ -846,19 +846,27 @@ let define_locals ?(reads=[]) ?(writes=[]) e' =
 
 (* Validity *)
 
-let make_valid_pred_app ac pc p a b =
+let make_valid_pred_app (ac,r) pc p a b =
   let all_allocs = match ac with
-    | JCalloc_struct _ -> all_allocs ~select:fully_allocated pc
-    | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
+    | JCalloc_bitvector -> [ ac ]
+    | JCalloc_root rt -> 
+	match rt.jc_root_info_kind with
+	  | Rvariant -> all_allocs ~select:fully_allocated pc
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> [ ac ]
   in
   let allocs = 
-    List.map (fun ac -> LVar(generic_alloc_table_name ac)) all_allocs
+    List.map (fun ac -> LVar(alloc_table_name (ac,r))) all_allocs
   in
   let all_mems = match ac with
-    | JCalloc_struct _ -> all_memories ~select:fully_allocated pc
-    | JCalloc_union _ | JCalloc_bitvector -> []
+    | JCalloc_bitvector -> []
+    | JCalloc_root rt -> 
+	match rt.jc_root_info_kind with
+	  | Rvariant -> all_memories ~select:fully_allocated pc
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> []
   in
-  let mems = List.map (fun mc -> LVar(generic_memory_name mc)) all_mems in
+  let mems = List.map (fun mc -> LVar(memory_name (mc,r))) all_mems in
   LPred(valid_pred_name ac pc, p :: a :: b :: allocs @ mems)
 
 (*
@@ -879,16 +887,24 @@ let make_valid_pred ac pc =
   let b = "b" in
   let params =
     let all_allocs = match ac with
-      | JCalloc_struct _ -> all_allocs ~select:fully_allocated pc
-      | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
+      | JCalloc_bitvector -> [ ac ]
+      | JCalloc_root rt ->
+	  match rt.jc_root_info_kind with
+	    | Rvariant -> all_allocs ~select:fully_allocated pc
+	    | RdiscrUnion -> assert false (* TODO *)
+	    | RplainUnion -> [ ac ]
     in
     let allocs = 
       List.map (fun ac -> generic_alloc_table_name ac,alloc_table_type ac) 
 	all_allocs
     in
     let all_mems = match ac with
-      | JCalloc_struct _ -> all_memories ~select:fully_allocated pc
-      | JCalloc_union _ | JCalloc_bitvector -> []
+      | JCalloc_bitvector -> []
+      | JCalloc_root rt ->
+	  match rt.jc_root_info_kind with
+	    | Rvariant -> all_memories ~select:fully_allocated pc
+	    | RdiscrUnion -> assert false (* TODO *)
+	    | RplainUnion -> []
     in
     let mems = 
       List.map (fun mc -> generic_memory_name mc,memory_type mc) all_mems
@@ -903,32 +919,36 @@ let make_valid_pred ac pc =
       | JCtag ({ jc_struct_info_parent = Some(st, pp) }, _) ->
           LTrue,
           LTrue,
-          make_valid_pred_app ac (JCtag(st, pp)) (LVar p) (LVar a) (LVar b)
+          make_valid_pred_app 
+	    (ac,dummy_region) (JCtag(st, pp)) (LVar p) (LVar a) (LVar b)
       | JCtag ({ jc_struct_info_parent = None }, _)
-      | JCvariant _ 
-      | JCunion _ ->
+      | JCroot _ ->
           make_eq (make_offset_min ac (LVar p)) (LVar a),
           make_eq (make_offset_max ac (LVar p)) (LVar b),
           LTrue
     in
     let fields_valid = match ac with
-      | JCalloc_struct _ ->
-	  begin match pc with
-	    | JCtag(st,_) ->
-		List.map
-		  (function
-		     | { jc_field_info_type =
-			   JCTpointer(fpc, Some fa, Some fb) } as fi ->
-			 make_valid_pred_app ac fpc
-			   (make_select_fi fi (LVar p))
-			   (const_of_num fa)
-			   (const_of_num fb)
-		     | _ ->
-			 LTrue)
-		  st.jc_struct_info_fields
-	    | JCvariant _ | JCunion _ -> [ LTrue ]
-	  end
-      | JCalloc_union _ | JCalloc_bitvector -> [ LTrue ]
+      | JCalloc_bitvector -> [ LTrue ]
+      | JCalloc_root rt ->
+	  match rt.jc_root_info_kind with
+	    | Rvariant ->
+		begin match pc with
+		  | JCtag(st,_) ->
+		      List.map
+			(function
+			   | { jc_field_info_type =
+				 JCTpointer(fpc, Some fa, Some fb) } as fi ->
+			       make_valid_pred_app (ac,dummy_region) fpc
+				 (make_select_fi fi (LVar p))
+				 (const_of_num fa)
+				 (const_of_num fb)
+			   | _ ->
+			       LTrue)
+			st.jc_struct_info_fields
+		  | JCroot _ -> [ LTrue ]
+		end
+	    | RdiscrUnion -> assert false (* TODO *)
+	    | RplainUnion -> [ LTrue ]
     in
     make_and_list (omin::omax::super_valid::fields_valid)
   in
@@ -938,16 +958,24 @@ let make_valid_pred ac pc =
 
 let alloc_write_parameters (ac,r) pc =
   let all_allocs = match ac with
-    | JCalloc_struct st -> all_allocs ~select:fully_allocated pc
-    | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
+    | JCalloc_bitvector -> [ ac ]
+    | JCalloc_root rt ->
+	match rt.jc_root_info_kind with
+	  | Rvariant -> all_allocs ~select:fully_allocated pc
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> [ ac ]
   in
   let allocs = 
     List.map (fun ac -> plain_alloc_table_var (ac,r), alloc_table_type ac)
       all_allocs
   in
   let all_tags = match ac with
-    | JCalloc_struct vi -> [ vi ]
-    | JCalloc_union _ | JCalloc_bitvector -> []
+    | JCalloc_bitvector -> []
+    | JCalloc_root rt ->
+	match rt.jc_root_info_kind with
+	  | Rvariant -> [ rt ]
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> []
   in
   let tags = 
     List.map (fun vi -> plain_tag_table_var (vi,r), tag_table_type vi)
@@ -957,8 +985,12 @@ let alloc_write_parameters (ac,r) pc =
 
 let alloc_read_parameters (ac,r) pc =
   let all_mems = match ac with
-    | JCalloc_struct st -> all_memories ~select:fully_allocated pc
-    | JCalloc_union _ | JCalloc_bitvector -> []
+    | JCalloc_bitvector -> []
+    | JCalloc_root rt ->
+	match rt.jc_root_info_kind with
+	  | Rvariant -> all_memories ~select:fully_allocated pc
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> []
   in
   let mems = 
     List.map 
@@ -1000,15 +1032,19 @@ let make_alloc_param ~check_size ac pc =
   in
   (* postcondition *)
   let instanceof_post = match ac with
-    | JCalloc_struct _ ->
-	begin match pc with
-	  | JCtag(st,_) ->
-	      let tag = generic_tag_table_name (struct_variant st) in
-              (* [instanceof(tagtab,result,tag_st)] *)
-              [ LPred("instanceof",[LVar tag;LVar "result";LVar(tag_name st)]) ]
-	  | JCvariant _ | JCunion _ -> []
-	end
-    | JCalloc_union _ | JCalloc_bitvector -> []
+    | JCalloc_bitvector -> []
+    | JCalloc_root rt ->
+	match rt.jc_root_info_kind with
+	  | Rvariant ->
+	      begin match pc with
+		| JCtag(st,_) ->
+		    let tag = generic_tag_table_name (struct_variant st) in
+		    (* [instanceof(tagtab,result,tag_st)] *)
+		    [ LPred("instanceof",[LVar tag;LVar "result";LVar(tag_name st)]) ]
+		| JCroot _ -> []
+	      end
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> []
   in
   let alloc_type = 
     Annot_type(
@@ -1022,7 +1058,7 @@ let make_alloc_param ~check_size ac pc =
       make_and_list (
 	[
           (* [valid_st(result,0,n-1,alloc...)] *)
-          make_valid_pred_app ac pc
+          make_valid_pred_app (ac,dummy_region) pc
             (LVar "result")
             (LConst(Prim_int "0"))
             (LApp("sub_int",[LVar n; LConst(Prim_int "1")]));
@@ -1097,11 +1133,8 @@ let conv_typ_alloc_parameters r pc =
 	let ac = alloc_class_of_pointer_class pc in
 	let alloc = (plain_alloc_table_var (ac,r), alloc_table_type ac) in
 	[ alloc ]
-    | JCvariant vi ->
-	let ac = JCalloc_struct vi in
-	[ (plain_alloc_table_var (ac,r), alloc_table_type ac) ]
-    | JCunion vi ->
-	let ac = JCalloc_struct vi in
+    | JCroot vi ->
+	let ac = JCalloc_root vi in
 	let alloc = (plain_alloc_table_var (ac,r), alloc_table_type ac) in
 	[ alloc ]
 
@@ -1115,12 +1148,14 @@ let conv_typ_mem_parameters ~deref r pc =
 	    (fun mc -> memvar (mc,r), memory_type mc) all_mems 
 	in
 	mems
-    | JCvariant vi ->
-	[]
-    | JCunion vi ->
-	let mc = JCmem_union vi in
-	let mem = (memvar (mc,r), memory_type mc) in
-	[ mem ]
+    | JCroot rt ->
+	match rt.jc_root_info_kind with
+	  | Rvariant -> []
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> 
+	      let mc = JCmem_plain_union rt in
+	      let mem = (memvar (mc,r), memory_type mc) in
+	      [ mem ]
 
 let make_ofbit_alloc_param_app r pc =
   let writes = conv_typ_alloc_parameters r pc in
@@ -1129,10 +1164,11 @@ let make_ofbit_alloc_param_app r pc =
   let app = match pc with
     | JCtag _ ->
 	make_app (alloc_of_bitvector_param_name pc) args 
-    | JCvariant _ ->
-	Void
-    | JCunion _ ->
-	assert false (* TODO *)
+    | JCroot rt ->
+	match rt.jc_root_info_kind with
+	  | Rvariant -> Void
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> assert false (* TODO *)
   in
   let locals = List.map local_of_parameter writes in
   locals, app
@@ -1144,10 +1180,11 @@ let make_ofbit_mem_param_app r pc =
   let app = match pc with
     | JCtag _ ->
 	make_app (mem_of_bitvector_param_name pc) args 
-    | JCvariant _ ->
-	Void
-    | JCunion _ ->
-	assert false (* TODO *)
+    | JCroot rt ->
+	match rt.jc_root_info_kind with
+	  | Rvariant -> Void
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> assert false (* TODO *)
   in
   let locals = List.map local_of_parameter writes in
   locals, app
@@ -1159,10 +1196,11 @@ let make_tobit_alloc_param_app r pc =
   let app = match pc with
     | JCtag _ ->
 	make_app (alloc_to_bitvector_param_name pc) args 
-    | JCvariant _ ->
-	Void
-    | JCunion _ ->
-	assert false (* TODO *)
+    | JCroot rt ->
+	match rt.jc_root_info_kind with
+	  | Rvariant -> Void
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> assert false (* TODO *)
   in
   app
 
@@ -1173,10 +1211,11 @@ let make_tobit_mem_param_app r pc =
   let app = match pc with
     | JCtag _ ->
 	make_app (mem_to_bitvector_param_name pc) args 
-    | JCvariant _ ->
-	Void
-    | JCunion _ ->
-	assert false (* TODO *)
+    | JCroot rt ->
+	match rt.jc_root_info_kind with
+	  | Rvariant -> Void
+	  | RdiscrUnion -> assert false (* TODO *)
+	  | RplainUnion -> assert false (* TODO *)
   in
   app
 
@@ -1222,7 +1261,7 @@ let make_conversion_params pc =
 	  in
 	  post_alloc
 	else LTrue
-    | JCunion _ | JCvariant _ -> assert false (* TODO *)
+    | JCroot _ -> assert false (* TODO *)
   in
   let post_mem = match pc with
     | JCtag(st,_) ->
@@ -1259,7 +1298,7 @@ let make_conversion_params pc =
 	  in
 	  post_mem
 	else LTrue
-    | JCunion _ | JCvariant _ -> assert false (* TODO *)
+    | JCroot _ -> assert false (* TODO *)
   in
 
   (* Conversion from bitvector *)
@@ -1860,8 +1899,7 @@ let alloc_table_arguments ~callee_reads ~callee_writes ~region_assoc
   let pointer_of_parameter = function 
       (((ac,distr),locr),(v',ty')) ->
 	let pc = match ac with
-	  | JCalloc_struct vi -> JCvariant vi
-	  | JCalloc_union vi -> JCunion vi
+	  | JCalloc_root vi -> JCroot vi
 	  | JCalloc_bitvector -> assert false
 	in
 	(pc,locr)
@@ -1900,7 +1938,8 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc
       (((mc,distr),locr),(v',ty')) ->
 	let pc = match mc with
 	  | JCmem_field fi -> JCtag(fi.jc_field_info_struct,[])
-	  | JCmem_union vi -> JCunion vi
+	  | JCmem_discr_union fi -> assert false (* TODO *)
+	  | JCmem_plain_union vi -> JCroot vi
 	  | JCmem_bitvector -> assert false
 	in
 	(pc,locr)

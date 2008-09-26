@@ -63,9 +63,14 @@ val string_of_native: Jc_env.native_type -> string
 val print_type : Format.formatter -> Jc_env.jc_type -> unit
 
 val struct_of_union: Jc_env.struct_info -> bool
+val struct_of_plain_union : Jc_env.struct_info -> bool
+val struct_of_discr_union : Jc_env.struct_info -> bool
 val field_of_union: Jc_env.field_info -> bool
-val union_of_field: Jc_env.field_info -> Jc_env.variant_info
-val integral_union: Jc_env.variant_info -> bool
+val union_of_field: Jc_env.field_info -> Jc_env.root_info
+val integral_union: Jc_env.root_info -> bool
+val root_is_plain_union : Jc_env.root_info -> bool
+val root_is_discr_union : Jc_env.root_info -> bool
+val root_is_union : Jc_env.root_info -> bool
 
 val struct_has_bytesize: Jc_env.struct_info -> bool
 val struct_bitsize: Jc_env.struct_info -> int
@@ -110,8 +115,8 @@ val pointer_class: jc_type -> pointer_class
 
 val root_name : Jc_env.struct_info -> string
 val field_root_name : Jc_env.field_info -> string
-val struct_variant : Jc_env.struct_info -> Jc_env.variant_info
-val pointer_class_variant : pointer_class -> Jc_env.variant_info
+val struct_variant : Jc_env.struct_info -> Jc_env.root_info
+val pointer_class_variant : pointer_class -> Jc_env.root_info
 
 (* predefined functions *)
 

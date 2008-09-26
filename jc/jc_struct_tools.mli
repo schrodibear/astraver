@@ -36,9 +36,9 @@ val alloc_class_of_mem_class: mem_class -> alloc_class
 val alloc_class_of_pointer_class: pointer_class -> alloc_class
 
 (** Convert a class of allocation into the corresponding variant. *)
-val variant_of_alloc_class: alloc_class -> variant_info
+val variant_of_alloc_class: alloc_class -> root_info
 
-val variant_of_mem_class: mem_class -> variant_info
+val variant_of_mem_class: mem_class -> root_info
 
 (** Return whether a field is embedded or not. *)
 val embedded_field: field_info -> bool
@@ -74,7 +74,7 @@ val all_memories:
 (** Return all the variants used by a structure, i.e.: the type of all
 pointers returned by all_memories. *)
 val all_types: ?select:(field_info -> bool) -> pointer_class ->
-  variant_info list
+  root_info list
 
 (** Return all the classes of allocation used by a structure *)
 val all_allocs: 
@@ -82,7 +82,7 @@ val all_allocs:
 
 (** Return all the variant info used by a structure *)
 val all_tags: 
-  ?select:(field_info -> bool) -> pointer_class -> variant_info list
+  ?select:(field_info -> bool) -> pointer_class -> root_info list
 
 
 (*

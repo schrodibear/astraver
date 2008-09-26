@@ -377,7 +377,7 @@ let invariant_params acc li =
   let acc =
     TagMap.fold
       (fun (v,r) labels acc -> 
-	 let t = { logic_type_args = [variant_model_type v];
+	 let t = { logic_type_args = [root_model_type v];
 		   logic_type_name = "tag_table" }
 	 in
 	 (tag_table_name (v,r), t)::acc)
@@ -406,8 +406,8 @@ let function_structures params =
        match vi.jc_var_info_type with
 	 | JCTpointer(JCtag(st, _), _, _) ->
 	     all_structures st acc
-	 | JCTpointer(JCvariant vi, _, _) ->
-	     List.fold_right all_structures vi.jc_variant_info_roots acc
+	 | JCTpointer(JCroot vi, _, _) ->
+	     List.fold_right all_structures vi.jc_root_info_roots acc
 	 | _ -> acc)
     StringSet.empty
     params
@@ -845,7 +845,7 @@ let owner_unicity this root =
   (* params *)
   let params = List.map
     (fun fi ->
-       let ac = JCalloc_struct (struct_variant fi.jc_field_info_struct) in
+       let ac = JCalloc_root (struct_variant fi.jc_field_info_struct) in
        [ fi.jc_field_info_final_name, memory_type (JCmem_field fi);
 	 committed_name (JCtag(fi.jc_field_info_root, [])),
 	 committed_memory_type (JCtag(fi.jc_field_info_root, []));

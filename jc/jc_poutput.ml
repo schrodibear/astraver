@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.19 2008-09-17 15:28:57 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.20 2008-09-26 09:11:51 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -138,8 +138,10 @@ let rec pexpr fmt e =
 	fprintf fmt "(free(%a))" pexpr e 
     | JCPEoffset(k,e) ->
 	fprintf fmt "\\offset_m%a(%a)" offset_kind k pexpr e 
-    | JCPEaddress e ->
-	fprintf fmt "\\address(%a)" pexpr e 
+    | JCPEaddress(absolute,e) ->
+	fprintf fmt "\\%aaddress(%a)" 
+	  (fun fmt b -> if b then string fmt "absolute_" else ()) absolute
+	  pexpr e 
     | JCPEinstanceof (e, si) ->
 	fprintf fmt "(%a <: %s)" pexpr e si
     | JCPEderef (e, fi) -> 
@@ -341,10 +343,11 @@ let rec pdecl fmt d =
 	  (fun fmt tag -> fprintf fmt "%s" tag#name)
 	  fmt tags;
 	fprintf fmt "]@]@."
-    | JCDunion_type(id, tags) ->
+    | JCDunion_type(id,discriminated,tags) ->
 	fprintf fmt "@\n@[type %s = [" id;
 	print_list
-	  (fun fmt () -> fprintf fmt " & ")
+	  (fun fmt () -> fprintf fmt " %c " 
+	     (if discriminated then '^' else '&'))
 	  (fun fmt tag -> fprintf fmt "%s" tag#name)
 	  fmt tags;
 	fprintf fmt "]@]@."

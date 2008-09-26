@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.65 2008-09-25 15:04:24 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.66 2008-09-26 09:11:51 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -230,6 +230,7 @@ rule token = parse
   | "\\offset_max"          { BSOFFSET_MAX }
   | "\\offset_min"          { BSOFFSET_MIN }
   | "\\address"             { BSADDRESS }
+  | "\\absolute_address"    { BSABSOLUTE_ADDRESS }
   | "\\old"                 { BSOLD }
   | "\\result"              { BSRESULT }
   | "\\typeeq"              { BSTYPEEQ }

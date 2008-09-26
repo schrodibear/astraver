@@ -858,6 +858,20 @@ predicate valid_bitvector_struct_interface(p:unit pointer,
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
+predicate valid_root_Object(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) = a)
+ and (offset_max(Object_alloc_table, p) = b))
+
+predicate valid_root_interface(p:interface pointer,
+ a:int,
+ b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) = a)
+ and (offset_max(interface_alloc_table, p) = b))
+
 predicate valid_struct_Object(p:Object pointer,
  a:int,
  b:int,
@@ -884,20 +898,6 @@ predicate valid_struct_Throwable(p:Object pointer,
  valid_struct_Object(p, a, b, Object_alloc_table)
 
 predicate valid_struct_interface(p:interface pointer,
- a:int,
- b:int,
- interface_alloc_table:interface alloc_table) =
- ((offset_min(interface_alloc_table, p) = a)
- and (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_variant_Object(p:Object pointer,
- a:int,
- b:int,
- Object_alloc_table:Object alloc_table) =
- ((offset_min(Object_alloc_table, p) = a)
- and (offset_max(Object_alloc_table, p) = b))
-
-predicate valid_variant_interface(p:interface pointer,
  a:int,
  b:int,
  interface_alloc_table:interface alloc_table) =
@@ -1868,6 +1868,8 @@ logic base_block : 'a1 pointer -> 'a1 block
 
 logic pointer_address : 'a1 pointer -> unit pointer
 
+logic absolute_address : int -> unit pointer
+
 logic address : 'a1 pointer -> int
 
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
@@ -2726,6 +2728,16 @@ predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
+predicate valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) = a) and
@@ -2744,16 +2756,6 @@ predicate valid_struct_Throwable(p: Object pointer, a: int, b: int,
   Object_alloc_table)
 
 predicate valid_struct_interface(p: interface pointer, a: int, b: int,
-  interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_variant_Object(p: Object pointer, a: int, b: int,
-  Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
-
-predicate valid_variant_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
@@ -4028,6 +4030,14 @@ why -simplify [...] why/Switch.why
   (AND (EQ (offset_min bitvector_alloc_table p) a)
   (EQ (offset_max bitvector_alloc_table p) b)))
 
+(DEFPRED (valid_root_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (valid_root_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
+
 (DEFPRED (valid_struct_Object p a b Object_alloc_table)
   (AND (EQ (offset_min Object_alloc_table p) a)
   (EQ (offset_max Object_alloc_table p) b)))
@@ -4042,14 +4052,6 @@ why -simplify [...] why/Switch.why
   (valid_struct_Object p a b Object_alloc_table))
 
 (DEFPRED (valid_struct_interface p a b interface_alloc_table)
-  (AND (EQ (offset_min interface_alloc_table p) a)
-  (EQ (offset_max interface_alloc_table p) b)))
-
-(DEFPRED (valid_variant_Object p a b Object_alloc_table)
-  (AND (EQ (offset_min Object_alloc_table p) a)
-  (EQ (offset_max Object_alloc_table p) b)))
-
-(DEFPRED (valid_variant_interface p a b interface_alloc_table)
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
@@ -4656,6 +4658,8 @@ type 't block
 logic base_block : 'a1 pointer -> 'a1 block
 
 logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
 
 logic address : 'a1 pointer -> int
 
@@ -5515,6 +5519,16 @@ predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
+predicate valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) = a) and
@@ -5533,16 +5547,6 @@ predicate valid_struct_Throwable(p: Object pointer, a: int, b: int,
   Object_alloc_table)
 
 predicate valid_struct_interface(p: interface pointer, a: int, b: int,
-  interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_variant_Object(p: Object pointer, a: int, b: int,
-  Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
-
-predicate valid_variant_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))

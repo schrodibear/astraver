@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.132 2008-09-19 07:29:40 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.133 2008-09-26 09:11:51 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -157,7 +157,7 @@ let print_alloc_table fmt (ac,r) =
   fprintf fmt "(%a,%a)" Jc_output_misc.alloc_class ac Region.print r
 
 let print_tag_table fmt (vi,r) =
-  fprintf fmt "(%s,%a)" vi.jc_variant_info_name Region.print r
+  fprintf fmt "(%s,%a)" vi.jc_root_info_name Region.print r
 
 let print_memory fmt (mc,r) =
   fprintf fmt "(%a,%a)" Jc_output_misc.memory_class mc Region.print r
@@ -494,7 +494,7 @@ let add_offset off1 off2 =
 let possible_union_type = function
   | JCTpointer(pc,_,_) -> 
       let vi = pointer_class_variant pc in
-      if vi.jc_variant_info_is_union then Some vi else None
+      if (root_is_union vi) then Some vi else None
   | _ -> None
 
 let union_type ty = 
@@ -616,8 +616,8 @@ let common_deref_alloc_class ~type_safe union_access e =
   if not type_safe && Region.bitwise e#region then
     JCalloc_bitvector
   else match union_access e None with 
-    | None -> JCalloc_struct (struct_variant (pointer_struct e#typ))
-    | Some(e,_off) -> JCalloc_union (union_type e#typ)
+    | None -> JCalloc_root (struct_variant (pointer_struct e#typ))
+    | Some(e,_off) -> JCalloc_root (union_type e#typ)
 
 let deref_alloc_class ~type_safe e =
   common_deref_alloc_class ~type_safe possible_union_access e
@@ -633,7 +633,10 @@ let common_deref_mem_class ~type_safe union_access e fi =
     JCmem_bitvector
   else match union_access e (Some fi) with 
     | None -> JCmem_field fi
-    | Some(e,_off) -> JCmem_union (union_type e#typ)
+    | Some(e,_off) -> 
+	let rt = union_type e#typ in
+	if root_is_plain_union rt then JCmem_plain_union rt
+	else JCmem_discr_union fi
 
 let deref_mem_class ~type_safe e fi =
   common_deref_mem_class ~type_safe possible_union_access e fi
@@ -882,9 +885,10 @@ let rec single_term ef t =
 	  | None ->
 	      let ef = add_memory_effect lab ef mem in
 	      begin match mc with
-		| JCmem_union _vi -> 
+		| JCmem_plain_union _vi -> 
 		    false, (* do not call on sub-terms of union *)
 		    List.fold_left term ef (tforeign_union t1)
+		| JCmem_discr_union _ -> assert false (* TODO *)
 		| JCmem_field _ | JCmem_bitvector ->
 		    true, ef
 	      end
@@ -1074,9 +1078,10 @@ let rec expr fef e =
 		 let fef = add_memory_reads LabelHere fef mem in
 		 let fef = add_alloc_reads LabelHere fef (ac,e1#region) in
 		 begin match mc with
-		   | JCmem_union _vi -> 
+		   | JCmem_plain_union _vi -> 
 		       false, (* do not call on sub-expressions of union *)
 		       List.fold_left expr fef (foreign_union e1)
+		   | JCmem_discr_union _ -> assert false (* TODO *)
 		   | JCmem_field _ | JCmem_bitvector ->
 		       true, fef
 		 end
@@ -1100,9 +1105,10 @@ let rec expr fef e =
 		 (* allocation table is read *)
 		 let fef = add_alloc_reads LabelHere fef (ac,e1#region) in
 		 begin match mc with
-		   | JCmem_union _vi -> 
+		   | JCmem_plain_union _vi -> 
 		       false, (* do not call on sub-expressions of union *)
 		       List.fold_left expr fef (foreign_union e1)
+		   | JCmem_discr_union _ -> assert false (* TODO *)
 		   | JCmem_field _ | JCmem_bitvector ->
 		       true, fef
 		 end
@@ -1115,16 +1121,28 @@ let rec expr fef e =
 	   let pc = JCtag(st,[]) in
 	   let ac = deref_alloc_class ~type_safe:true e in
 	   let all_allocs = match ac with
-	     | JCalloc_struct st -> all_allocs ~select:fully_allocated pc
-	     | JCalloc_union _ | JCalloc_bitvector -> [ ac ]
+	     | JCalloc_bitvector -> [ ac ]
+	     | JCalloc_root rt ->
+		 match rt.jc_root_info_kind with
+		   | Rvariant -> all_allocs ~select:fully_allocated pc
+		   | RdiscrUnion -> assert false (* TODO *)
+		   | RplainUnion -> [ ac ]
 	   in
 	   let all_mems = match ac with
-	     | JCalloc_struct st -> all_memories ~select:fully_allocated pc
-	     | JCalloc_union _ | JCalloc_bitvector -> []
+	     | JCalloc_bitvector -> []
+	     | JCalloc_root rt -> 
+		 match rt.jc_root_info_kind with
+		   | Rvariant -> all_memories ~select:fully_allocated pc
+		   | RdiscrUnion -> assert false (* TODO *)
+		   | RplainUnion -> []
 	   in
 	   let all_tags = match ac with
-	     | JCalloc_struct st -> all_tags ~select:fully_allocated pc
-	     | JCalloc_union _ | JCalloc_bitvector -> [ struct_variant st ]
+	     | JCalloc_bitvector -> [ struct_variant st ]
+	     | JCalloc_root rt ->
+		 match rt.jc_root_info_kind with
+		   | Rvariant -> all_tags ~select:fully_allocated pc
+		   | RdiscrUnion -> assert false (* TODO *)
+		   | RplainUnion -> [ struct_variant st ]
 	   in
 	   let fef = 
 	     List.fold_left 

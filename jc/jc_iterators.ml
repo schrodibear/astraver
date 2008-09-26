@@ -139,8 +139,8 @@ let replace_sub_pexpr e el =
 	let e1 = as1 el in JCPEat(e1,lab)
     | JCPEoffset(off,_e) ->
 	let e1 = as1 el in JCPEoffset(off,e1)
-    | JCPEaddress _e ->
-	let e1 = as1 el in JCPEaddress e1
+    | JCPEaddress(absolute,_e) ->
+	let e1 = as1 el in JCPEaddress(absolute,e1)
     | JCPEinstanceof(_e,st) ->
 	let e1 = as1 el in JCPEinstanceof(e1,st)
     | JCPEcast(_e,st) ->
@@ -257,7 +257,7 @@ module PExprAst = struct
       | JCPEinstanceof(e, _)
       | JCPEcast(e, _)
       | JCPEoffset(_, e)
-      | JCPEaddress e
+      | JCPEaddress(_,e)
       | JCPEalloc(e, _)
       | JCPEfree e
       | JCPElet(_, _,None, e)
@@ -328,7 +328,7 @@ module TermAst = struct
       | JCTrange(Some t1,Some t2) ->
 	  [t1;t2]
       | JCTunary(_,t1) | JCTderef(t1,_,_) | JCTold t1 | JCTat(t1,_) 
-      | JCToffset(_,t1,_) | JCTaddress t1
+      | JCToffset(_,t1,_) | JCTaddress(_,t1)
       | JCTinstanceof(t1,_,_) | JCTcast(t1,_,_) | JCTbitwise_cast(t1,_,_) 
       | JCTrange_cast(t1,_) 
       | JCTreal_cast(t1,_) | JCTrange(Some t1,None)
@@ -361,7 +361,7 @@ let fold_sub_term it f acc t =
     | JCTderef(t1,_,_)
     | JCTold t1
     | JCToffset(_,t1,_)
-    | JCTaddress t1
+    | JCTaddress(_,t1)
     | JCTinstanceof(t1,_,_) 
     | JCTcast(t1,_,_) 
     | JCTbitwise_cast(t1,_,_) 
@@ -408,8 +408,8 @@ let rec map_term f t =
 	JCTat(map_term f t,lab)
     | JCToffset(off,t,st) ->
 	JCToffset(off,map_term f t,st)
-    | JCTaddress t ->
-	JCTaddress (map_term f t)
+    | JCTaddress(absolute,t) ->
+	JCTaddress (absolute,map_term f t)
     | JCTinstanceof(t,lab,st) ->
 	JCTinstanceof(map_term f t,lab,st)
     | JCTcast(t,lab,st) ->
@@ -892,8 +892,8 @@ let replace_sub_expr e el =
 	JCEapp { call with jc_call_args = el }
     | JCEoffset(off,_e,st) ->
 	let e1 = as1 el in JCEoffset(off,e1,st)
-    | JCEaddress _e ->
-	let e1 = as1 el in JCEaddress e1
+    | JCEaddress(absolute,_e) ->
+	let e1 = as1 el in JCEaddress(absolute,e1)
     | JCEinstanceof(_e,st) ->
 	let e1 = as1 el in JCEinstanceof(e1,st)
     | JCEcast(_e,st) ->
@@ -964,7 +964,7 @@ module ExprAst = struct
       | JCErange_cast(e, _)
       | JCEreal_cast(e, _)
       | JCEoffset(_, e, _)
-      | JCEaddress e
+      | JCEaddress(_,e)
       | JCEalloc(e, _)
       | JCEfree e
       | JCElet(_, None, e)
@@ -1017,7 +1017,7 @@ let fold_sub_expr_and_term_and_assertion
     | JCEunary(_,e1)
     | JCEderef(e1,_)
     | JCEoffset(_,e1,_)
-    | JCEaddress e1
+    | JCEaddress(_,e1)
     | JCEcast(e1,_)
     | JCEbitwise_cast(e1,_) 
     | JCErange_cast(e1,_) 
@@ -1109,7 +1109,7 @@ module NExprAst = struct
       | JCNEinstanceof(e, _)
       | JCNEcast(e, _)
       | JCNEoffset(_, e)
-      | JCNEaddress e
+      | JCNEaddress(_,e)
       | JCNEalloc(e, _)
       | JCNEfree e
       | JCNElet(_, _, None, e)

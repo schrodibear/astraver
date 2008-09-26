@@ -65,6 +65,9 @@ Implicit Arguments base_block.
 Admitted.
 Implicit Arguments pointer_address.
 
+(*Why logic*) Definition absolute_address : Z -> (pointer unit).
+Admitted.
+
 (*Why logic*) Definition address : forall (A1:Set), (pointer A1) -> Z.
 Admitted.
 Implicit Arguments address.

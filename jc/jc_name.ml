@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.29 2008-09-01 09:13:48 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.30 2008-09-26 09:11:51 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -46,47 +46,46 @@ let bitvector_type_name = "bitvector"
 let simple_logic_type s =
   { logic_type_name = s; logic_type_args = [] }
 
-let variant_type_name vi = vi.jc_variant_info_name
+let root_type_name vi = vi.jc_root_info_name
 
-let struct_type_name st = variant_type_name (struct_variant st)
+let struct_type_name st = root_type_name (struct_variant st)
 
 let pointer_class_type_name = function
   | JCtag(st, _) -> struct_type_name st
-  | JCvariant vi -> variant_type_name vi
-  | JCunion vi -> variant_type_name vi
+  | JCroot vi -> root_type_name vi
 
 let alloc_class_name = function
-  | JCalloc_struct vi -> variant_type_name vi
-  | JCalloc_union vi -> variant_type_name vi
+  | JCalloc_root vi -> root_type_name vi
   | JCalloc_bitvector -> bitvector_type_name
 
 let memory_class_name = function
   | JCmem_field fi -> fi.jc_field_info_final_name
-  | JCmem_union vi -> variant_type_name vi
+  | JCmem_discr_union fi -> fi.jc_field_info_final_name
+  | JCmem_plain_union vi -> root_type_name vi
   | JCmem_bitvector -> bitvector_type_name
 
-let variant_alloc_table_name vi = vi.jc_variant_info_name ^ "_alloc_table"
+let variant_alloc_table_name vi = vi.jc_root_info_name ^ "_alloc_table"
 
-let variant_tag_table_name vi = vi.jc_variant_info_name ^ "_tag_table"
+let variant_tag_table_name vi = vi.jc_root_info_name ^ "_tag_table"
 
-let variant_axiom_on_tags_name vi = vi.jc_variant_info_name ^ "_tags"
+let variant_axiom_on_tags_name vi = vi.jc_root_info_name ^ "_tags"
 
 let axiom_int_of_tag_name st = st.jc_struct_info_name ^ "_int"
 
 let tag_name st = st.jc_struct_info_name ^ "_tag"
 
 let of_pointer_address_name vi = 
-  vi.jc_variant_info_name ^ "_of_pointer_address"
+  vi.jc_root_info_name ^ "_of_pointer_address"
 
 let generic_tag_table_name vi =
-  (variant_type_name vi) ^ "_tag_table"
+  (root_type_name vi) ^ "_tag_table"
 
 let tag_table_name (vi,r) =
   if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
   then 
-    (variant_type_name vi) ^ "_" ^ (Region.name r) ^ "_tag_table"
+    (root_type_name vi) ^ "_" ^ (Region.name r) ^ "_tag_table"
   else
-    (variant_type_name vi) ^ "_tag_table"
+    (root_type_name vi) ^ "_tag_table"
 
 let generic_alloc_table_name ac =
   (alloc_class_name ac) ^ "_alloc_table"
@@ -100,7 +99,7 @@ let alloc_table_name (ac,r) =
 
 let field_memory_name fi = 
   if field_of_union fi then
-    (union_of_field fi).jc_variant_info_name ^ "_fields"
+    (union_of_field fi).jc_root_info_name ^ "_fields"
   else
     fi.jc_field_info_final_name
 
@@ -111,7 +110,7 @@ let field_region_memory_name (fi,r) =
   else field_memory_name fi
 
 let union_memory_name vi =
-  vi.jc_variant_info_name ^ "_fields"
+  vi.jc_root_info_name ^ "_fields"
 
 let union_region_memory_name (vi,r) = 
   if !Jc_common_options.separation_sem = SepRegions && not (is_dummy_region r) 
@@ -126,7 +125,7 @@ let bitvector_region_memory_name r =
   else bitvector_type_name
 
 let union_memory_type_name vi = 
-  vi.jc_variant_info_name ^ "_union"
+  vi.jc_root_info_name ^ "_union"
 
 let generic_memory_name mc =
   memory_class_name mc
@@ -134,28 +133,28 @@ let generic_memory_name mc =
 let memory_name (mc,r) =
   match mc with
     | JCmem_field fi -> field_region_memory_name (fi,r)
-    | JCmem_union vi -> union_region_memory_name (vi,r)
+    | JCmem_discr_union fi -> field_region_memory_name (fi,r)
+    | JCmem_plain_union vi -> union_region_memory_name (vi,r)
     | JCmem_bitvector -> bitvector_region_memory_name r
 
 let pointer_class_name = function
   | JCtag(st, _) -> 
       if struct_of_union st then
-	"union_" ^ (struct_variant st).jc_variant_info_name
+	"root_" ^ (struct_variant st).jc_root_info_name
       else
 	"struct_" ^ st.jc_struct_info_name
-  | JCvariant vi -> "variant_" ^ vi.jc_variant_info_name
-  | JCunion vi -> "union_" ^ vi.jc_variant_info_name
+  | JCroot vi -> "root_" ^ vi.jc_root_info_name
 
 let valid_pred_name ac pc = 
   let prefix = match ac with
-    | JCalloc_struct _ | JCalloc_union _ -> "valid"
+    | JCalloc_root _ -> "valid"
     | JCalloc_bitvector -> "valid_bitvector"
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 
 let alloc_param_name ~check_size ac pc = 
   let prefix = match ac with
-    | JCalloc_struct _ | JCalloc_union _ -> "alloc"
+    | JCalloc_root _ -> "alloc"
     | JCalloc_bitvector -> "alloc_bitvector"
   in
   let n = prefix ^ "_" ^ (pointer_class_name pc) in

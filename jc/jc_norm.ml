@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.102 2008-09-17 15:28:57 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.103 2008-09-26 09:11:51 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -536,7 +536,7 @@ let rec expr e =
     | JCPEold e -> JCNEold(expr e)
     | JCPEat(e,lab) -> JCNEat(expr e,lab)
     | JCPEoffset(off,e) -> JCNEoffset(off,expr e)
-    | JCPEaddress e -> JCNEaddress (expr e)
+    | JCPEaddress(absolute,e) -> JCNEaddress(absolute,expr e)
     | JCPEif(e1,e2,e3) -> JCNEif(expr e1,expr e2,expr e3)
     | JCPElet(tyopt,id,e1,e2) -> 
 	JCNElet(tyopt,id,Option_misc.map expr e1,expr e2)
@@ -627,8 +627,8 @@ let decl d =
 	JCDenum_type(id,min,max)
     | JCDvariant_type(id, tags) ->
 	JCDvariant_type(id, tags)
-    | JCDunion_type(id, tags) ->
-	JCDunion_type(id, tags)
+    | JCDunion_type(id,discr,tags) ->
+	JCDunion_type(id,discr,tags)
     | JCDtag (id, params, extends, fields, invs) ->
 	JCDtag (id, params, extends, fields, 
 		List.map (fun (id,name,e) -> id,name,expr e) invs)

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.29 2008-08-30 17:19:29 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.30 2008-09-26 09:11:51 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -140,13 +140,13 @@ module StructSet = Set.Make(StructOrd)
 module StructMap = Map.Make(StructOrd)
 
 module VariantOrd = struct
-  type t = variant_info
+  type t = root_info
   let compare v1 v2 = 
-    Pervasives.compare v1.jc_variant_info_name v2.jc_variant_info_name
+    Pervasives.compare v1.jc_root_info_name v2.jc_root_info_name
   let equal v1 v2 =
-    v1.jc_variant_info_name = v2.jc_variant_info_name
+    v1.jc_root_info_name = v2.jc_root_info_name
   let hash v =
-    Hashtbl.hash v.jc_variant_info_name 
+    Hashtbl.hash v.jc_root_info_name 
 end
 
 module VariantSet = Set.Make(VariantOrd)
@@ -174,20 +174,25 @@ struct
   type t = mem_class
   let equal fv1 fv2 = match fv1,fv2 with
     | JCmem_field a1,JCmem_field a2 -> FieldOrd.equal a1 a2
-    | JCmem_union b1,JCmem_union b2 -> VariantOrd.equal b1 b2
+    | JCmem_discr_union a1,JCmem_discr_union a2 -> FieldOrd.equal a1 a2
+    | JCmem_plain_union b1,JCmem_plain_union b2 -> VariantOrd.equal b1 b2
     | JCmem_bitvector,JCmem_bitvector -> true
     | _ -> false
   let compare fv1 fv2 = match fv1,fv2 with
     | JCmem_field a1,JCmem_field a2 -> FieldOrd.compare a1 a2
-    | JCmem_union b1,JCmem_union b2 -> VariantOrd.compare b1 b2
+    | JCmem_discr_union a1,JCmem_discr_union a2 -> FieldOrd.compare a1 a2
+    | JCmem_plain_union b1,JCmem_plain_union b2 -> VariantOrd.compare b1 b2
     | JCmem_bitvector,JCmem_bitvector -> 0
     | JCmem_field _,_ -> 1
     | _,JCmem_field _ -> -1
-    | JCmem_union _,_ -> 1
-    | _,JCmem_union _ -> -1
+    | JCmem_discr_union _,_ -> 1
+    | _,JCmem_discr_union _ -> -1
+    | JCmem_plain_union _,_ -> 1
+    | _,JCmem_plain_union _ -> -1
   let hash = function
     | JCmem_field a -> FieldOrd.hash a
-    | JCmem_union b -> VariantOrd.hash b
+    | JCmem_discr_union a -> FieldOrd.hash a
+    | JCmem_plain_union b -> VariantOrd.hash b
     | JCmem_bitvector -> 0
 end
 
@@ -197,21 +202,16 @@ module AllocClass =
 struct
   type t = alloc_class
   let equal fv1 fv2 = match fv1,fv2 with
-    | JCalloc_struct st1,JCalloc_struct st2 -> VariantOrd.equal st1 st2
-    | JCalloc_union b1,JCalloc_union b2 -> VariantOrd.equal b1 b2
+    | JCalloc_root st1,JCalloc_root st2 -> VariantOrd.equal st1 st2
     | JCalloc_bitvector,JCalloc_bitvector -> true
     | _ -> false
   let compare fv1 fv2 = match fv1,fv2 with
-    | JCalloc_struct a1,JCalloc_struct a2 -> VariantOrd.compare a1 a2
-    | JCalloc_union b1,JCalloc_union b2 -> VariantOrd.compare b1 b2
+    | JCalloc_root a1,JCalloc_root a2 -> VariantOrd.compare a1 a2
     | JCalloc_bitvector,JCalloc_bitvector -> 0
-    | JCalloc_struct _,_ -> 1
-    | _,JCalloc_struct _ -> -1
-    | JCalloc_union _,_ -> 1
-    | _,JCalloc_union _ -> -1
+    | JCalloc_root _,_ -> 1
+    | _,JCalloc_root _ -> -1
   let hash = function
-    | JCalloc_struct a -> VariantOrd.hash a
-    | JCalloc_union b -> VariantOrd.hash b
+    | JCalloc_root a -> VariantOrd.hash a
     | JCalloc_bitvector -> 0
 end
 
@@ -221,21 +221,16 @@ struct
   type t = pointer_class
   let equal fv1 fv2 = match fv1,fv2 with
     | JCtag(st1,_),JCtag(st2,_) -> StructOrd.equal st1 st2
-    | JCunion vi1,JCunion vi2 -> VariantOrd.equal vi1 vi2
-    | JCvariant vi1,JCvariant vi2 -> VariantOrd.equal vi1 vi2
+    | JCroot vi1,JCroot vi2 -> VariantOrd.equal vi1 vi2
     | _ -> false
   let compare fv1 fv2 = match fv1,fv2 with
     | JCtag(a1,_),JCtag(a2,_) -> StructOrd.compare a1 a2
-    | JCunion b1,JCunion b2 -> VariantOrd.compare b1 b2
-    | JCvariant b1,JCvariant b2 -> VariantOrd.compare b1 b2
+    | JCroot b1,JCroot b2 -> VariantOrd.compare b1 b2
     | JCtag _,_ -> 1
     | _,JCtag _ -> -1
-    | JCunion _,_ -> 1
-    | _,JCunion _ -> -1
   let hash = function
     | JCtag(a,_) -> StructOrd.hash a
-    | JCunion b -> VariantOrd.hash b
-    | JCvariant b -> VariantOrd.hash b
+    | JCroot b -> VariantOrd.hash b
 end
 
 module ExceptionOrd =   
