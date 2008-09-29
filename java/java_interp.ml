@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.157 2008-09-26 09:11:51 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.158 2008-09-29 09:34:55 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -158,7 +158,7 @@ let tr_base_type t =
 
 let rec object_variant = {
   jc_root_info_name = "Object";
-  jc_root_info_roots = [ object_root ];
+  jc_root_info_hroots = [ object_root ];
   jc_root_info_kind = Rvariant;
   jc_root_info_union_size_in_bytes = 0;
 }
@@ -167,9 +167,9 @@ and object_root = {
   jc_struct_info_params = [];
   jc_struct_info_name = "Object";
   jc_struct_info_parent = None;
-  jc_struct_info_root = object_root;
+  jc_struct_info_hroot = object_root;
   jc_struct_info_fields = [];
-  jc_struct_info_variant = Some object_variant;
+  jc_struct_info_root = Some object_variant;
 }
 
 let get_class name =
@@ -177,9 +177,9 @@ let get_class name =
   jc_struct_info_params = [];
     jc_struct_info_name = name;
     jc_struct_info_parent = None;
-    jc_struct_info_root = object_root;
+    jc_struct_info_hroot = object_root;
     jc_struct_info_fields = [];
-    jc_struct_info_variant = Some object_variant;
+    jc_struct_info_root = Some object_variant;
   }
 
 (*
@@ -207,9 +207,9 @@ let st_interface =
     jc_struct_info_params = [];
     jc_struct_info_name = "Object/*interface*/";
     jc_struct_info_parent = None;
-    jc_struct_info_root = object_root ; (* a la place de interface_root; *)
+    jc_struct_info_hroot = object_root ; (* a la place de interface_root; *)
     jc_struct_info_fields = [];
-    jc_struct_info_variant = Some object_variant;
+    jc_struct_info_root = Some object_variant;
   }
 
 (*s array types *)
@@ -274,7 +274,7 @@ let create_field pos fi =
       jc_field_info_final_name = fi.java_field_info_name;
       jc_field_info_tag  = fi.java_field_info_tag;
       jc_field_info_type = ty;
-      jc_field_info_root = ci.jc_struct_info_root;
+      jc_field_info_hroot = ci.jc_struct_info_hroot;
       jc_field_info_struct = ci;
       jc_field_info_rep = false;
       jc_field_info_bitsize = None;
@@ -835,9 +835,9 @@ let array_types decls =
          jc_struct_info_params = [];
 	 jc_struct_info_name = s;
 	 jc_struct_info_parent = None;
-	 jc_struct_info_root = object_root;
+	 jc_struct_info_hroot = object_root;
 	 jc_struct_info_fields = [];
-	 jc_struct_info_variant = Some object_variant;
+	 jc_struct_info_root = Some object_variant;
        }
        in
        let fi = { 
@@ -845,7 +845,7 @@ let array_types decls =
 	 jc_field_info_final_name = f;
 	 jc_field_info_tag = 0 (* TODO *);
 	 jc_field_info_type = tr_type Loc.dummy_position t;
-	 jc_field_info_root = object_root;
+	 jc_field_info_hroot = object_root;
 	 jc_field_info_struct = st;
 	 jc_field_info_rep = false;
 	 jc_field_info_bitsize = None;

@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.133 2008-09-26 09:11:51 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.134 2008-09-29 09:34:55 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -478,30 +478,89 @@ let offset_of_term t =
     | JCTconst (JCCinteger s) -> Int_offset s
     | _ -> Term_offset t
 
+let offset_of_field fi = 
+  match field_offset_in_bytes fi with
+    | None -> assert false
+    | Some off -> Int_offset (string_of_int off) 
+
 let mult_offset i off =
   match off with
     | Int_offset j -> Int_offset (string_of_int (i * (int_of_string j)))
-    | Expr_offset _ -> assert false (* TODO *)
-    | Term_offset _ -> assert false (* TODO *)
+    | Expr_offset e -> 
+	let ie = Expr.mkint ~value:i ()  in
+	let mule = 
+	  Expr.mkbinary 
+	    ~expr1:ie ~op:(`Bmul,`Integer) ~expr2:e ~typ:integer_type ()
+	in
+	Expr_offset mule
+    | Term_offset t ->
+	let it = Term.mkint ~value:i ()  in
+	let mult = 
+	  Term.mkbinary 
+	    ~term1:it ~op:(`Bmul,`Integer) ~term2:t ~typ:integer_type ()
+	in
+	Term_offset mult
 
 let add_offset off1 off2 = 
   match off1,off2 with
     | Int_offset i, Int_offset j -> 
 	let k = int_of_string i + int_of_string j in
 	Int_offset (string_of_int k)
-    | _ -> assert false (* TODO *)
+    | Expr_offset e1, Expr_offset e2 ->
+	let adde = 
+	  Expr.mkbinary 
+	    ~expr1:e1 ~op:(`Badd,`Integer) ~expr2:e2 ~typ:integer_type ()
+	in
+	Expr_offset adde
+    | Expr_offset e, Int_offset i
+    | Int_offset i, Expr_offset e ->
+	let ie = Expr.mkint ~valuestr:i ()  in
+	let adde = 
+	  Expr.mkbinary 
+	    ~expr1:ie ~op:(`Badd,`Integer) ~expr2:e ~typ:integer_type ()
+	in
+	Expr_offset adde
+    | Term_offset t1, Term_offset t2 ->
+	let addt = 
+	  Term.mkbinary 
+	    ~term1:t1 ~op:(`Badd,`Integer) ~term2:t2 ~typ:integer_type ()
+	in
+	Term_offset addt
+    | Term_offset t, Int_offset i
+    | Int_offset i, Term_offset t ->
+	let it = Term.mkint ~valuestr:i ()  in
+	let addt = 
+	  Term.mkbinary 
+	    ~term1:it ~op:(`Badd,`Integer) ~term2:t ~typ:integer_type ()
+	in
+	Term_offset addt
+    | Expr_offset _, Term_offset _
+    | Term_offset _, Expr_offset _ -> assert false
 
 let possible_union_type = function
   | JCTpointer(pc,_,_) -> 
-      let vi = pointer_class_variant pc in
-      if (root_is_union vi) then Some vi else None
+      let rt = pointer_class_root pc in
+      if root_is_union rt then Some rt else None
   | _ -> None
 
 let union_type ty = 
-  match possible_union_type ty with Some vi -> vi | None -> assert false
+  match possible_union_type ty with Some rt -> rt | None -> assert false
 
-let of_union_type ty =
-  match possible_union_type ty with Some _vi -> true | None -> false
+let type_is_union ty =
+  match possible_union_type ty with Some _rt -> true | None -> false
+
+let overlapping_union_memories fi =
+  let st = fi.jc_field_info_struct in
+  let rt = struct_root st in
+  let stlist = 
+    List.filter
+      (fun st' -> not (st.jc_struct_info_name = st'.jc_struct_info_name))
+      rt.jc_root_info_hroots
+  in
+  let mems = 
+    List.flatten (List.map (fun st -> all_memories (JCtag(st,[]))) stlist)
+  in
+  MemClassSet.to_list (MemClassSet.of_list mems)
 
 let possible_union_access e fi_opt = 
   let fieldoffbytes fi = 
@@ -517,7 +576,7 @@ let possible_union_access e fi_opt =
 	    | Some(e,off) ->
 		Some (e, add_offset off (fieldoffbytes fi))
 	    | None -> 
-		if of_union_type e#typ then
+		if type_is_union e#typ then
 		  Some (e, fieldoffbytes fi)
 		else None
 	  end
@@ -535,22 +594,50 @@ let possible_union_access e fi_opt =
 	    Some(e,Int_offset "0")
 	  else None
       | _ ->	
-	  if of_union_type e#typ then
+	  if type_is_union e#typ then
 	    Some (e,Int_offset "0")
 	  else None
   in
   match fi_opt with
-    | None ->
-	access e
+    | None -> access e
     | Some fi ->
-	(* let fieldoff fi = Int_offset (string_of_int (field_offset fi)) in *)
 	match access e with
-	  | Some(e,off) ->
-	      Some (e, add_offset off (fieldoffbytes fi))
+	  | Some(e,off) -> Some (e, add_offset off (fieldoffbytes fi))
 	  | None -> 
-	      if of_union_type e#typ then
-		Some (e, fieldoffbytes fi)
-	      else None
+	      if type_is_union e#typ then Some (e, fieldoffbytes fi) else None
+
+(* Optionally returns a triple of
+   1) a prefix [ue] of type union
+   2) the field of the union [ue] accessed
+   3) the offset from the address of [ue] to the final field
+*)
+let possible_union_deref e fi = 
+  let rec access e fi = 
+    match e#node with
+      | JCEderef(e1,fi1) when embedded_field fi1 ->
+	  begin match access e1 fi1 with
+	    | Some(e2,fi2,off) ->
+		Some(e2,fi2,add_offset off (offset_of_field fi))
+	    | None -> 
+		if type_is_union e1#typ then 
+		  Some(e1,fi,offset_of_field fi)
+		else None
+	  end
+      | JCEshift(e1,e2) ->
+	  begin match access e1 fi with
+	    | Some(e2,fi2,off1) ->
+		let off2 = offset_of_expr e2 in
+		let siz = struct_size_in_bytes (pointer_struct e1#typ) in
+		let off2 = mult_offset siz off2 in
+		Some(e2,fi2,add_offset off1 off2)
+	    | None -> None
+	  end
+      | _ -> None
+  in
+  match access e fi with
+    | Some(e1,fi1,off) -> Some(e1,fi1,add_offset off (offset_of_field fi))
+    | None -> 
+	if type_is_union e#typ then Some(e,fi,offset_of_field fi) else None
 
 let destruct_union_access e fi_opt = 
   the (possible_union_access e fi_opt)
@@ -569,7 +656,7 @@ let tpossible_union_access t fi_opt =
 	    | Some(t,off) ->
 		Some (t, add_offset off (fieldoffbytes fi))
 	    | None -> 
-		if of_union_type t#typ then
+		if type_is_union t#typ then
 		  Some (t, fieldoffbytes fi)
 		else None
 	  end
@@ -583,7 +670,7 @@ let tpossible_union_access t fi_opt =
 	    | None -> None
 	  end
       | _ ->	
-	  if of_union_type t#typ then
+	  if type_is_union t#typ then
 	    Some (t,Int_offset "0")
 	  else None
   in
@@ -597,14 +684,44 @@ let tpossible_union_access t fi_opt =
 	  | Some(t,off) ->
 	      Some (t, add_offset off (fieldoffbytes fi))
 	  | None -> 
-	      if of_union_type t#typ then
+	      if type_is_union t#typ then
 		Some (t, fieldoffbytes fi)
 	      else None
+
+let tpossible_union_deref t fi = 
+  let rec access t fi = 
+    match t#node with
+      | JCTderef(t1,_lab,fi1) when embedded_field fi1 ->
+	  begin match access t1 fi1 with
+	    | Some(t2,fi2,off) ->
+		Some(t2,fi2,add_offset off (offset_of_field fi))
+	    | None -> 
+		if type_is_union t1#typ then 
+		  Some(t1,fi,offset_of_field fi)
+		else None
+	  end
+      | JCTshift(t1,t2) ->
+	  begin match access t1 fi with
+	    | Some(t2,fi2,off1) ->
+		let off2 = offset_of_term t2 in
+		let siz = struct_size_in_bytes (pointer_struct t1#typ) in
+		let off2 = mult_offset siz off2 in
+		Some(t2,fi2,add_offset off1 off2)
+	    | None -> None
+	  end
+      | _ -> None
+  in
+  match access t fi with
+    | Some(t1,fi1,off) -> Some(t1,fi1,add_offset off (offset_of_field fi))
+    | None -> 
+	if type_is_union t#typ then Some(t,fi,offset_of_field fi) else None
 
 let tdestruct_union_access t fi_opt = 
   the (tpossible_union_access t fi_opt)
 
 let lpossible_union_access t fi = None (* TODO *)
+
+let lpossible_union_deref t fi = None (* TODO *)
 
 let ldestruct_union_access loc fi_opt = 
   the (lpossible_union_access loc fi_opt)
@@ -616,7 +733,7 @@ let common_deref_alloc_class ~type_safe union_access e =
   if not type_safe && Region.bitwise e#region then
     JCalloc_bitvector
   else match union_access e None with 
-    | None -> JCalloc_root (struct_variant (pointer_struct e#typ))
+    | None -> JCalloc_root (struct_root (pointer_struct e#typ))
     | Some(e,_off) -> JCalloc_root (union_type e#typ)
 
 let deref_alloc_class ~type_safe e =
@@ -628,24 +745,26 @@ let tderef_alloc_class ~type_safe t =
 let lderef_alloc_class ~type_safe locs =
   common_deref_alloc_class ~type_safe lpossible_union_access locs
 
-let common_deref_mem_class ~type_safe union_access e fi =
+let common_deref_mem_class ~type_safe union_deref e fi =
   if not type_safe && Region.bitwise e#region then
-    JCmem_bitvector
-  else match union_access e (Some fi) with 
-    | None -> JCmem_field fi
-    | Some(e,_off) -> 
-	let rt = union_type e#typ in
-	if root_is_plain_union rt then JCmem_plain_union rt
-	else JCmem_discr_union fi
+    JCmem_bitvector, None
+  else match union_deref e fi with 
+    | None -> 
+	assert (not (root_is_union (struct_root fi.jc_field_info_struct)));
+	JCmem_field fi, None
+    | Some(e1,fi1,_off) -> 
+	let rt = union_type e1#typ in
+	if root_is_plain_union rt then JCmem_plain_union rt, Some fi1 
+	else JCmem_field fi, Some fi1
 
 let deref_mem_class ~type_safe e fi =
-  common_deref_mem_class ~type_safe possible_union_access e fi
+  common_deref_mem_class ~type_safe possible_union_deref e fi
 
 let tderef_mem_class ~type_safe t fi =
-  common_deref_mem_class ~type_safe tpossible_union_access t fi
+  common_deref_mem_class ~type_safe tpossible_union_deref t fi
 
 let lderef_mem_class ~type_safe locs fi =
-  common_deref_mem_class ~type_safe lpossible_union_access locs fi
+  common_deref_mem_class ~type_safe lpossible_union_deref locs fi
 
 
 (******************************************************************************)
@@ -657,7 +776,7 @@ let rec pattern ef (*label r*) p =
   let r = dummy_region in
   match p#node with
     | JCPstruct(st, fpl) ->
-	let ef = add_tag_effect (*label*)LabelHere ef (struct_variant st,r) in
+	let ef = add_tag_effect (*label*)LabelHere ef (struct_root st,r) in
 	List.fold_left
 	  (fun ef (fi, pat) ->
 	     let mc = JCmem_field fi in
@@ -780,7 +899,7 @@ and immutable_location_set fef locs =
   match locs#node with
     | JCLSvar v -> not v.jc_var_info_assigned
     | JCLSderef(locs,lab,fi,r) ->
-	let mc = lderef_mem_class ~type_safe:true locs fi in
+	let mc,_fi_opt = lderef_mem_class ~type_safe:true locs fi in
 	immutable_location_set fef locs 
 	&& not (MemoryMap.mem (mc,locs#region) fef.jc_writes.jc_effect_memories)
     | _ -> false
@@ -875,7 +994,7 @@ let rec single_term ef t =
 	true,
 	ef_union ef_app ef
     | JCTderef(t1,lab,fi) ->
-	let mc = tderef_mem_class ~type_safe:true t1 fi in
+	let mc,ufi_opt = tderef_mem_class ~type_safe:true t1 fi in
 	let mem = mc, t1#region in
 	begin match term_immutable_location t with
 	  | Some loc ->
@@ -884,19 +1003,24 @@ let rec single_term ef t =
 	      true, ef
 	  | None ->
 	      let ef = add_memory_effect lab ef mem in
-	      begin match mc with
-		| JCmem_plain_union _vi -> 
+	      begin match mc,ufi_opt with
+		| JCmem_plain_union _vi, _ -> 
 		    false, (* do not call on sub-terms of union *)
 		    List.fold_left term ef (tforeign_union t1)
-		| JCmem_discr_union _ -> assert false (* TODO *)
-		| JCmem_field _ | JCmem_bitvector ->
+		| JCmem_field fi, Some ufi ->
+		    let mems = overlapping_union_memories ufi in
+		    true,
+		    List.fold_left 
+		      (fun ef mc -> add_memory_effect lab ef (mc,t1#region))
+		      ef mems
+		| JCmem_field _, None | JCmem_bitvector, _ ->
 		    true, ef
 	      end
 	end
     | JCTcast(t,lab,st)
     | JCTinstanceof(t,lab,st) ->
 	true,
-	add_tag_effect lab ef (struct_variant st,t#region)
+	add_tag_effect lab ef (struct_root st,t#region)
     | JCTmatch(t,ptl) ->
 	true,
 	List.fold_left pattern ef (List.map fst ptl)
@@ -920,7 +1044,7 @@ let single_assertion ef a =
   match a#node with
     | JCAinstanceof(t,lab,st) -> 
 	true,
-	add_tag_effect lab ef (struct_variant st,t#region)
+	add_tag_effect lab ef (struct_root st,t#region)
     | JCAapp app -> 
 	let region_mem_assoc = 
 	  make_region_mem_assoc app.jc_app_fun.jc_logic_info_parameters
@@ -938,7 +1062,7 @@ let single_assertion ef a =
 	true,
 	add_mutable_effect
 	  (tag ef lab ta (* Yannick: really effect on tag here? *)
-	     (Some (struct_variant st)) t#region)
+	     (Some (struct_root st)) t#region)
 	  (JCtag(st, []))
     | JCAmatch(t,pal) ->
 	true,
@@ -972,7 +1096,7 @@ let single_location ~in_assigns fef loc =
 	  else fef
 	else fef
     | JCLderef(locs,lab,fi,r) ->
-	let mc = lderef_mem_class ~type_safe:true locs fi in
+	let mc,_fi_opt = lderef_mem_class ~type_safe:true locs fi in
 	if in_assigns then
 	  add_memory_writes lab fef (mc,locs#region)
 	else
@@ -993,7 +1117,7 @@ let single_location_set fef locs =
 	  else fef
 	else fef
     | JCLSderef(locs,lab,fi,r) ->
-	let mc = lderef_mem_class ~type_safe:true locs fi in
+	let mc,_fi_opt = lderef_mem_class ~type_safe:true locs fi in
 	add_memory_reads lab fef (mc,locs#region)
     | JCLSrange(locs,_t1_opt,_t2_opt) ->
 	fef
@@ -1063,7 +1187,7 @@ let rec expr fef e =
 	   true,
 	   fef_union fef_call fef
        | JCEderef(e1,fi) -> 
-	   let mc = deref_mem_class ~type_safe:true e1 fi in
+	   let mc,ufi_opt = deref_mem_class ~type_safe:true e1 fi in
 	   let ac = alloc_class_of_mem_class mc in
 	   let mem = mc, e1#region in
 	   begin match expr_immutable_location e with
@@ -1077,17 +1201,23 @@ let rec expr fef e =
 	     | None ->
 		 let fef = add_memory_reads LabelHere fef mem in
 		 let fef = add_alloc_reads LabelHere fef (ac,e1#region) in
-		 begin match mc with
-		   | JCmem_plain_union _vi -> 
+		 begin match mc,ufi_opt with
+		   | JCmem_plain_union _vi, _ -> 
 		       false, (* do not call on sub-expressions of union *)
 		       List.fold_left expr fef (foreign_union e1)
-		   | JCmem_discr_union _ -> assert false (* TODO *)
-		   | JCmem_field _ | JCmem_bitvector ->
+		   | JCmem_field fi, Some ufi ->
+		       let mems = overlapping_union_memories ufi in
+		       true,
+		       List.fold_left 
+			 (fun fef mc -> 
+			    add_memory_reads LabelHere fef (mc,e1#region))
+			 fef mems
+		   | JCmem_field _, None | JCmem_bitvector, _ ->
 		       true, fef
 		 end
 	   end
        | JCEassign_heap(e1,fi,_e2) ->
-	   let mc = deref_mem_class ~type_safe:true e1 fi in
+	   let mc,ufi_opt = deref_mem_class ~type_safe:true e1 fi in
 	   let ac = alloc_class_of_mem_class mc in
 	   let deref = new expr_with ~node:(JCEderef(e1,fi)) e in
 	   let mem = mc, e1#region in
@@ -1104,19 +1234,25 @@ let rec expr fef e =
 		 let fef = add_memory_writes LabelHere fef mem in
 		 (* allocation table is read *)
 		 let fef = add_alloc_reads LabelHere fef (ac,e1#region) in
-		 begin match mc with
-		   | JCmem_plain_union _vi -> 
+		 begin match mc,ufi_opt with
+		   | JCmem_plain_union _vi, _ -> 
 		       false, (* do not call on sub-expressions of union *)
 		       List.fold_left expr fef (foreign_union e1)
-		   | JCmem_discr_union _ -> assert false (* TODO *)
-		   | JCmem_field _ | JCmem_bitvector ->
+		   | JCmem_field fi, Some ufi ->
+		       let mems = overlapping_union_memories ufi in
+		       true,
+		       List.fold_left 
+			 (fun fef mc -> 
+			    add_memory_writes LabelHere fef (mc,e1#region))
+			 fef mems
+		   | JCmem_field _, None | JCmem_bitvector, _ ->
 		       true, fef
 		 end
 	   end
        | JCEcast(e,st)
        | JCEinstanceof(e,st) -> 
 	   true,
-	   add_tag_reads LabelHere fef (struct_variant st,e#region)
+	   add_tag_reads LabelHere fef (struct_root st,e#region)
        | JCEalloc(_e1,st) ->
 	   let pc = JCtag(st,[]) in
 	   let ac = deref_alloc_class ~type_safe:true e in
@@ -1137,12 +1273,12 @@ let rec expr fef e =
 		   | RplainUnion -> []
 	   in
 	   let all_tags = match ac with
-	     | JCalloc_bitvector -> [ struct_variant st ]
+	     | JCalloc_bitvector -> [ struct_root st ]
 	     | JCalloc_root rt ->
 		 match rt.jc_root_info_kind with
 		   | Rvariant -> all_tags ~select:fully_allocated pc
 		   | RdiscrUnion -> assert false (* TODO *)
-		   | RplainUnion -> [ struct_variant st ]
+		   | RplainUnion -> [ struct_root st ]
 	   in
 	   let fef = 
 	     List.fold_left 
@@ -1188,7 +1324,7 @@ let rec expr fef e =
 		      let fef = add_mutable_reads fef pc in
 		      let fef = 
 			add_tag_reads LabelHere fef 
-			  (pointer_class_variant pc,e#region) 
+			  (pointer_class_root pc,e#region) 
 		      in
 	              (* Modify field's "committed" field 
 			 => need committed (of field) as reads and writes *)

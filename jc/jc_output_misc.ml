@@ -94,8 +94,6 @@ let alloc_class fmt = function
 
 let memory_class fmt = function
   | JCmem_field fi -> fprintf fmt "mem-field(%s)" fi.jc_field_info_name
-  | JCmem_discr_union fi -> 
-      fprintf fmt "mem-discr-union(%s)" fi.jc_field_info_name
   | JCmem_plain_union vi -> 
       fprintf fmt "mem-plain-union(%s)" vi.jc_root_info_name
   | JCmem_bitvector -> fprintf fmt "mem-bitvector"

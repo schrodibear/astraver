@@ -387,16 +387,16 @@ begin = -1
 end = -1
 
 [JC_5]
-file = "HOME/tests/java/Fibonacci.jc"
-line = 30
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_6]
-file = "HOME/tests/java/Fibonacci.jc"
-line = 30
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_7]
 file = "HOME/tests/java/Fibonacci.jc"
@@ -411,16 +411,16 @@ begin = 8
 end = 23
 
 [JC_9]
-file = "HOME/tests/java/Fibonacci.java"
-line = 26
-begin = 17
-end = 22
+file = "HOME/tests/java/Fibonacci.jc"
+line = 30
+begin = 8
+end = 23
 
 [JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.jc"
+line = 30
+begin = 8
+end = 23
 
 [JC_11]
 file = "HOME/tests/java/Fibonacci.java"
@@ -436,9 +436,9 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/java/Fibonacci.java"
-line = 29
-begin = 16
-end = 19
+line = 26
+begin = 17
+end = 22
 
 [Fibonacci_Fib_safety]
 name = "Method Fib"
@@ -449,34 +449,34 @@ begin = 16
 end = 19
 
 [JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_15]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
 begin = 16
 end = 19
 
-[JC_15]
-file = "HOME/tests/java/Fibonacci.java"
-line = 27
-begin = 16
-end = 27
-
 [JC_16]
 file = "HOME/tests/java/Fibonacci.java"
-line = 27
+line = 29
 begin = 16
-end = 27
+end = 19
 
 [JC_17]
 file = "HOME/tests/java/Fibonacci.java"
-line = 36
-begin = 20
-end = 56
+line = 27
+begin = 16
+end = 27
 
 [JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.java"
+line = 27
+begin = 16
+end = 27
 
 [JC_19]
 file = "HOME/tests/java/Fibonacci.java"
@@ -491,10 +491,10 @@ begin = -1
 end = -1
 
 [JC_21]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.java"
+line = 36
+begin = 20
+end = 56
 
 [JC_22]
 file = "HOME/"
@@ -521,6 +521,30 @@ begin = -1
 end = -1
 
 [JC_26]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_27]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_28]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_29]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_30]
 file = "HOME/"
 line = 0
 begin = -1
@@ -724,13 +748,13 @@ parameter Fibonacci_n : (Object, int) memory ref
 parameter Fibonacci_Fib :
  this_0:Object pointer ->
   { } int reads Fibonacci_n,Fibonacci_x,Object_alloc_table writes Fibonacci_x
-  { (JC_16: isfib(select(Fibonacci_n, this_0), select(Fibonacci_x, this_0))) }
+  { (JC_18: isfib(select(Fibonacci_n, this_0), select(Fibonacci_x, this_0))) }
 
 parameter Fibonacci_Fib_requires :
  this_0:Object pointer ->
-  { (JC_9: gt_int(select(Fibonacci_n, this_0), (0)))} int
+  { (JC_11: gt_int(select(Fibonacci_n, this_0), (0)))} int
   reads Fibonacci_n,Fibonacci_x,Object_alloc_table writes Fibonacci_x
-  { (JC_16: isfib(select(Fibonacci_n, this_0), select(Fibonacci_x, this_0))) }
+  { (JC_18: isfib(select(Fibonacci_n, this_0), select(Fibonacci_x, this_0))) }
 
 parameter Object_tag_table : Object tag_table ref
 
@@ -948,7 +972,7 @@ parameter cons_Fibonacci_requires :
 parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_8:
+  { (JC_10:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
@@ -956,7 +980,7 @@ parameter non_null_Object :
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_8:
+  { (JC_10:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
@@ -1089,7 +1113,7 @@ parameter struct_interface_mem_to_bitvector :
 let Fibonacci_Fib_ensures_default =
  fun (this_0 : Object pointer) ->
   { (valid_struct_Fibonacci(this_0, (0), (0), Object_alloc_table)
-    and (JC_11: gt_int(select(Fibonacci_n, this_0), (0)))) }
+    and (JC_13: gt_int(select(Fibonacci_n, this_0), (0)))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1106,7 +1130,7 @@ let Fibonacci_Fib_ensures_default =
       try
        while true do
        { invariant
-           (JC_19:
+           (JC_21:
            (le_int(i, select(Fibonacci_n, this_0))
            and (isfib(i, select(Fibonacci_x, this_0))
                and isfib(sub_int(i, (1)), y))))
@@ -1162,12 +1186,12 @@ let Fibonacci_Fib_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_15: isfib(select(Fibonacci_n, this_0), select(Fibonacci_x, this_0))) }
+  { (JC_17: isfib(select(Fibonacci_n, this_0), select(Fibonacci_x, this_0))) }
 
 let Fibonacci_Fib_safety =
  fun (this_0 : Object pointer) ->
   { (valid_struct_Fibonacci(this_0, (0), (0), Object_alloc_table)
-    and (JC_11: gt_int(select(Fibonacci_n, this_0), (0)))) }
+    and (JC_13: gt_int(select(Fibonacci_n, this_0), (0)))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1183,10 +1207,10 @@ let Fibonacci_Fib_safety =
        void));
       try
        while true do
-       { invariant (JC_18: true)  }
+       { invariant (JC_20: true)  }
         begin
           [ { } unit reads Fibonacci_n,Fibonacci_x,i,y
-            { (JC_17:
+            { (JC_19:
               (le_int(i, select(Fibonacci_n, this_0))
               and (isfib(i, select(Fibonacci_x, this_0))
                   and isfib(sub_int(i, (1)), y)))) } ];
@@ -2268,11 +2292,11 @@ goal Fibonacci_Fib_ensures_default_po_1:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
-  ("JC_19": (1 <= select(Fibonacci_n, this_0)))
+  ("JC_21": (1 <= select(Fibonacci_n, this_0)))
 
 ========== file tests/java/why/Fibonacci_po2.why ==========
 goal Fibonacci_Fib_ensures_default_po_2:
@@ -2282,11 +2306,11 @@ goal Fibonacci_Fib_ensures_default_po_2:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
-  ("JC_19": isfib(1, select(Fibonacci_x0, this_0)))
+  ("JC_21": isfib(1, select(Fibonacci_x0, this_0)))
 
 ========== file tests/java/why/Fibonacci_po3.why ==========
 goal Fibonacci_Fib_ensures_default_po_3:
@@ -2296,11 +2320,11 @@ goal Fibonacci_Fib_ensures_default_po_3:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
-  ("JC_19": isfib((1 - 1), 0))
+  ("JC_21": isfib((1 - 1), 0))
 
 ========== file tests/java/why/Fibonacci_po4.why ==========
 goal Fibonacci_Fib_ensures_default_po_4:
@@ -2310,7 +2334,7 @@ goal Fibonacci_Fib_ensures_default_po_4:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
@@ -2318,7 +2342,7 @@ goal Fibonacci_Fib_ensures_default_po_4:
   int) memory.
   forall i:int.
   forall y:int.
-  ("JC_19":
+  ("JC_21":
   ((i <= select(Fibonacci_n, this_0)) and
    (isfib(i, select(Fibonacci_x1, this_0)) and isfib((i - 1), y)))) ->
   forall result:int.
@@ -2337,7 +2361,7 @@ goal Fibonacci_Fib_ensures_default_po_4:
   (Fibonacci_x2 = store(Fibonacci_x1, this_0, (result1 + aux))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_19": (i0 <= select(Fibonacci_n, this_0)))
+  ("JC_21": (i0 <= select(Fibonacci_n, this_0)))
 
 ========== file tests/java/why/Fibonacci_po5.why ==========
 goal Fibonacci_Fib_ensures_default_po_5:
@@ -2347,7 +2371,7 @@ goal Fibonacci_Fib_ensures_default_po_5:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
@@ -2355,7 +2379,7 @@ goal Fibonacci_Fib_ensures_default_po_5:
   int) memory.
   forall i:int.
   forall y:int.
-  ("JC_19":
+  ("JC_21":
   ((i <= select(Fibonacci_n, this_0)) and
    (isfib(i, select(Fibonacci_x1, this_0)) and isfib((i - 1), y)))) ->
   forall result:int.
@@ -2374,7 +2398,7 @@ goal Fibonacci_Fib_ensures_default_po_5:
   (Fibonacci_x2 = store(Fibonacci_x1, this_0, (result1 + aux))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_19": isfib(i0, select(Fibonacci_x2, this_0)))
+  ("JC_21": isfib(i0, select(Fibonacci_x2, this_0)))
 
 ========== file tests/java/why/Fibonacci_po6.why ==========
 goal Fibonacci_Fib_ensures_default_po_6:
@@ -2384,7 +2408,7 @@ goal Fibonacci_Fib_ensures_default_po_6:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
@@ -2392,7 +2416,7 @@ goal Fibonacci_Fib_ensures_default_po_6:
   int) memory.
   forall i:int.
   forall y:int.
-  ("JC_19":
+  ("JC_21":
   ((i <= select(Fibonacci_n, this_0)) and
    (isfib(i, select(Fibonacci_x1, this_0)) and isfib((i - 1), y)))) ->
   forall result:int.
@@ -2411,7 +2435,7 @@ goal Fibonacci_Fib_ensures_default_po_6:
   (Fibonacci_x2 = store(Fibonacci_x1, this_0, (result1 + aux))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_19": isfib((i0 - 1), y0))
+  ("JC_21": isfib((i0 - 1), y0))
 
 ========== file tests/java/why/Fibonacci_po7.why ==========
 goal Fibonacci_Fib_ensures_default_po_7:
@@ -2421,7 +2445,7 @@ goal Fibonacci_Fib_ensures_default_po_7:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
@@ -2429,7 +2453,7 @@ goal Fibonacci_Fib_ensures_default_po_7:
   int) memory.
   forall i:int.
   forall y:int.
-  ("JC_19":
+  ("JC_21":
   ((i <= select(Fibonacci_n, this_0)) and
    (isfib(i, select(Fibonacci_x1, this_0)) and isfib((i - 1), y)))) ->
   forall result:int.
@@ -2439,7 +2463,7 @@ goal Fibonacci_Fib_ensures_default_po_7:
   (result0 = select(Fibonacci_x1, this_0)) ->
   forall return:int.
   (return = result0) ->
-  ("JC_15": isfib(select(Fibonacci_n, this_0), select(Fibonacci_x1, this_0)))
+  ("JC_17": isfib(select(Fibonacci_n, this_0), select(Fibonacci_x1, this_0)))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Fibonacci.why
@@ -4403,11 +4427,11 @@ goal Fibonacci_Fib_ensures_default_po_1:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
-  ("JC_19": (1 <= select(Fibonacci_n, this_0)))
+  ("JC_21": (1 <= select(Fibonacci_n, this_0)))
 
 goal Fibonacci_Fib_ensures_default_po_2:
   forall this_0:Object pointer.
@@ -4416,11 +4440,11 @@ goal Fibonacci_Fib_ensures_default_po_2:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
-  ("JC_19": isfib(1, select(Fibonacci_x0, this_0)))
+  ("JC_21": isfib(1, select(Fibonacci_x0, this_0)))
 
 goal Fibonacci_Fib_ensures_default_po_3:
   forall this_0:Object pointer.
@@ -4429,11 +4453,11 @@ goal Fibonacci_Fib_ensures_default_po_3:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
-  ("JC_19": isfib((1 - 1), 0))
+  ("JC_21": isfib((1 - 1), 0))
 
 goal Fibonacci_Fib_ensures_default_po_4:
   forall this_0:Object pointer.
@@ -4442,7 +4466,7 @@ goal Fibonacci_Fib_ensures_default_po_4:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
@@ -4450,7 +4474,7 @@ goal Fibonacci_Fib_ensures_default_po_4:
   int) memory.
   forall i:int.
   forall y:int.
-  ("JC_19":
+  ("JC_21":
   ((i <= select(Fibonacci_n, this_0)) and
    (isfib(i, select(Fibonacci_x1, this_0)) and isfib((i - 1), y)))) ->
   forall result:int.
@@ -4469,7 +4493,7 @@ goal Fibonacci_Fib_ensures_default_po_4:
   (Fibonacci_x2 = store(Fibonacci_x1, this_0, (result1 + aux))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_19": (i0 <= select(Fibonacci_n, this_0)))
+  ("JC_21": (i0 <= select(Fibonacci_n, this_0)))
 
 goal Fibonacci_Fib_ensures_default_po_5:
   forall this_0:Object pointer.
@@ -4478,7 +4502,7 @@ goal Fibonacci_Fib_ensures_default_po_5:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
@@ -4486,7 +4510,7 @@ goal Fibonacci_Fib_ensures_default_po_5:
   int) memory.
   forall i:int.
   forall y:int.
-  ("JC_19":
+  ("JC_21":
   ((i <= select(Fibonacci_n, this_0)) and
    (isfib(i, select(Fibonacci_x1, this_0)) and isfib((i - 1), y)))) ->
   forall result:int.
@@ -4505,7 +4529,7 @@ goal Fibonacci_Fib_ensures_default_po_5:
   (Fibonacci_x2 = store(Fibonacci_x1, this_0, (result1 + aux))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_19": isfib(i0, select(Fibonacci_x2, this_0)))
+  ("JC_21": isfib(i0, select(Fibonacci_x2, this_0)))
 
 goal Fibonacci_Fib_ensures_default_po_6:
   forall this_0:Object pointer.
@@ -4514,7 +4538,7 @@ goal Fibonacci_Fib_ensures_default_po_6:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
@@ -4522,7 +4546,7 @@ goal Fibonacci_Fib_ensures_default_po_6:
   int) memory.
   forall i:int.
   forall y:int.
-  ("JC_19":
+  ("JC_21":
   ((i <= select(Fibonacci_n, this_0)) and
    (isfib(i, select(Fibonacci_x1, this_0)) and isfib((i - 1), y)))) ->
   forall result:int.
@@ -4541,7 +4565,7 @@ goal Fibonacci_Fib_ensures_default_po_6:
   (Fibonacci_x2 = store(Fibonacci_x1, this_0, (result1 + aux))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_19": isfib((i0 - 1), y0))
+  ("JC_21": isfib((i0 - 1), y0))
 
 goal Fibonacci_Fib_ensures_default_po_7:
   forall this_0:Object pointer.
@@ -4550,7 +4574,7 @@ goal Fibonacci_Fib_ensures_default_po_7:
   int) memory.
   forall Object_alloc_table:Object alloc_table.
   (valid_struct_Fibonacci(this_0, 0, 0, Object_alloc_table) and
-   ("JC_11": (select(Fibonacci_n, this_0) > 0))) ->
+   ("JC_13": (select(Fibonacci_n, this_0) > 0))) ->
   forall Fibonacci_x0:(Object,
   int) memory.
   (Fibonacci_x0 = store(Fibonacci_x, this_0, 1)) ->
@@ -4558,7 +4582,7 @@ goal Fibonacci_Fib_ensures_default_po_7:
   int) memory.
   forall i:int.
   forall y:int.
-  ("JC_19":
+  ("JC_21":
   ((i <= select(Fibonacci_n, this_0)) and
    (isfib(i, select(Fibonacci_x1, this_0)) and isfib((i - 1), y)))) ->
   forall result:int.
@@ -4568,7 +4592,7 @@ goal Fibonacci_Fib_ensures_default_po_7:
   (result0 = select(Fibonacci_x1, this_0)) ->
   forall return:int.
   (return = result0) ->
-  ("JC_15": isfib(select(Fibonacci_n, this_0), select(Fibonacci_x1, this_0)))
+  ("JC_17": isfib(select(Fibonacci_n, this_0), select(Fibonacci_x1, this_0)))
 
 ========== running alt-ergo ==========
 Running Ergo on proof obligations

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.60 2008-09-26 09:11:51 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.61 2008-09-29 09:34:55 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tstring
 
@@ -69,9 +69,9 @@ and struct_info =
               jc_struct_info_params : Jc_type_var.t list;
               jc_struct_info_name : string;
       mutable jc_struct_info_parent : (struct_info * jc_type list) option;
-      mutable jc_struct_info_root : struct_info;
+      mutable jc_struct_info_hroot : struct_info;
       mutable jc_struct_info_fields : field_info list;
-      mutable jc_struct_info_variant : root_info option;
+      mutable jc_struct_info_root : root_info option;
         (* only valid for root structures *)
     }
 
@@ -79,7 +79,7 @@ and root_info =
     {
       jc_root_info_name : string;
 (*      mutable jc_root_info_tags : struct_info list;*)
-      mutable jc_root_info_roots : struct_info list;
+      mutable jc_root_info_hroots : struct_info list;
 (*      jc_root_info_open : bool;*)
       jc_root_info_kind : root_kind;
       mutable jc_root_info_union_size_in_bytes: int;
@@ -93,7 +93,7 @@ and field_info =
       jc_field_info_type : jc_type;
       jc_field_info_struct: struct_info;
         (* The structure in which the field is defined *)
-      jc_field_info_root : struct_info;
+      jc_field_info_hroot : struct_info;
         (* The root of the structure in which the field is defined *)
       jc_field_info_rep : bool; (* "rep" flag *)
       jc_field_info_bitsize : int option;
@@ -148,7 +148,6 @@ type alloc_class =
 
 type mem_class =
   | JCmem_field of field_info 
-  | JCmem_discr_union of field_info
   | JCmem_plain_union of root_info
   | JCmem_bitvector
 

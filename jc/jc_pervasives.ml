@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.122 2008-09-26 09:11:51 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.123 2008-09-29 09:34:55 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -85,10 +85,10 @@ let new_label_name =
     "JC_" ^ string_of_int !label_name_counter
 
 let root_name st =
-  st.jc_struct_info_root.jc_struct_info_name
+  st.jc_struct_info_hroot.jc_struct_info_name
 
 let field_root_name fi =
-  fi.jc_field_info_root.jc_struct_info_name
+  fi.jc_field_info_hroot.jc_struct_info_name
 
 let string_of_native t =
   match t with
@@ -770,19 +770,19 @@ let embedded_struct_roots st =
   in
   StringSet.elements roots
 *)
-let struct_variant st =
-  match st.jc_struct_info_root.jc_struct_info_variant with
+let struct_root st =
+  match st.jc_struct_info_hroot.jc_struct_info_root with
     | Some vi -> vi
     | None ->
 	raise (Invalid_argument
-		 ("struct_variant in jc_pervasives.ml ("
+		 ("struct_root in jc_pervasives.ml ("
 		  ^st.jc_struct_info_name^", "
-		  ^st.jc_struct_info_root.jc_struct_info_name^")"))
-	(* don't use struct_variant before checking that every tag is used
+		  ^st.jc_struct_info_hroot.jc_struct_info_name^")"))
+	(* don't use struct_root before checking that every tag is used
          * in a type *)
 
-let pointer_class_variant = function
-  | JCtag(st, _) -> struct_variant st
+let pointer_class_root = function
+  | JCtag(st, _) -> struct_root st
   | JCroot vi -> vi
   
 let rec pattern_vars acc pat =
@@ -805,20 +805,17 @@ let root_is_discr_union rt = rt.jc_root_info_kind = RdiscrUnion
 let root_is_union rt = root_is_plain_union rt || root_is_discr_union rt
 
 let struct_of_plain_union st =
-  let vi = struct_variant st in vi.jc_root_info_kind = RplainUnion
+  let vi = struct_root st in vi.jc_root_info_kind = RplainUnion
 
 let struct_of_discr_union st =
-  let vi = struct_variant st in vi.jc_root_info_kind = RdiscrUnion
+  let vi = struct_root st in vi.jc_root_info_kind = RdiscrUnion
 
 let struct_of_union st =
-  let vi = struct_variant st in root_is_union vi
+  let vi = struct_root st in root_is_union vi
   
-let field_of_union fi =
-  struct_of_union fi.jc_field_info_struct 
-
 let union_of_field fi =
   let st = fi.jc_field_info_struct in
-  let vi = struct_variant st in
+  let vi = struct_root st in
   assert (root_is_union vi);
   vi
 
@@ -834,7 +831,7 @@ let integral_union vi =
 		    match st.jc_struct_info_fields with
 		      | [fi] -> integral_type fi.jc_field_info_type
 		      | _ -> false
-		 ) true vi.jc_root_info_roots
+		 ) true vi.jc_root_info_hroots
 
 let struct_has_bytesize st =
   List.fold_left 

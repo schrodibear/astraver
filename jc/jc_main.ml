@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.122 2008-09-18 16:16:52 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.123 2008-09-29 09:34:55 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -197,8 +197,8 @@ let main () =
       "production phase 1.2.2: translate variants@.";
     let d_memories =
       Hashtbl.fold
-	(fun _ -> Jc_interp.tr_variant)
-	Jc_typing.variants_table
+	(fun _ -> Jc_interp.tr_root)
+	Jc_typing.roots_table
 	d_memories
     in
     Jc_options.lprintf

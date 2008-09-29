@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.30 2008-09-26 09:11:51 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.31 2008-09-29 09:34:55 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -174,24 +174,19 @@ struct
   type t = mem_class
   let equal fv1 fv2 = match fv1,fv2 with
     | JCmem_field a1,JCmem_field a2 -> FieldOrd.equal a1 a2
-    | JCmem_discr_union a1,JCmem_discr_union a2 -> FieldOrd.equal a1 a2
     | JCmem_plain_union b1,JCmem_plain_union b2 -> VariantOrd.equal b1 b2
     | JCmem_bitvector,JCmem_bitvector -> true
     | _ -> false
   let compare fv1 fv2 = match fv1,fv2 with
     | JCmem_field a1,JCmem_field a2 -> FieldOrd.compare a1 a2
-    | JCmem_discr_union a1,JCmem_discr_union a2 -> FieldOrd.compare a1 a2
     | JCmem_plain_union b1,JCmem_plain_union b2 -> VariantOrd.compare b1 b2
     | JCmem_bitvector,JCmem_bitvector -> 0
     | JCmem_field _,_ -> 1
     | _,JCmem_field _ -> -1
-    | JCmem_discr_union _,_ -> 1
-    | _,JCmem_discr_union _ -> -1
     | JCmem_plain_union _,_ -> 1
     | _,JCmem_plain_union _ -> -1
   let hash = function
     | JCmem_field a -> FieldOrd.hash a
-    | JCmem_discr_union a -> FieldOrd.hash a
     | JCmem_plain_union b -> VariantOrd.hash b
     | JCmem_bitvector -> 0
 end

@@ -277,6 +277,36 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/NameConflicts.loc ==========
+[JC_40]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_41]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_43]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_1]
 file = "HOME/tests/java/NameConflicts.jc"
 line = 40
@@ -302,16 +332,16 @@ begin = -1
 end = -1
 
 [JC_5]
-file = "HOME/tests/java/NameConflicts.jc"
-line = 40
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_6]
-file = "HOME/tests/java/NameConflicts.jc"
-line = 40
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_7]
 file = "HOME/tests/java/NameConflicts.jc"
@@ -334,16 +364,16 @@ begin = 8
 end = 23
 
 [JC_9]
-file = "HOME/tests/java/NameConflicts.java"
-line = 6
-begin = 9
-end = 13
+file = "HOME/tests/java/NameConflicts.jc"
+line = 40
+begin = 8
+end = 23
 
 [JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/NameConflicts.jc"
+line = 40
+begin = 8
+end = 23
 
 [JC_11]
 file = "HOME/tests/java/NameConflicts.java"
@@ -364,16 +394,24 @@ begin = 9
 end = 13
 
 [JC_14]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_15]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[NameConflicts_setI_ensures_default]
+name = "Method setI"
+behavior = "Behavior"
 file = "HOME/tests/java/NameConflicts.java"
 line = 6
 begin = 9
 end = 13
-
-[JC_15]
-file = "HOME/tests/java/NameConflicts.java"
-line = 13
-begin = 8
-end = 9
 
 [JC_16]
 file = "HOME/"
@@ -383,15 +421,15 @@ end = -1
 
 [JC_17]
 file = "HOME/tests/java/NameConflicts.java"
-line = 13
-begin = 8
-end = 9
+line = 6
+begin = 9
+end = 13
 
 [JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/NameConflicts.java"
+line = 6
+begin = 9
+end = 13
 
 [JC_19]
 file = "HOME/tests/java/NameConflicts.java"
@@ -400,28 +438,28 @@ begin = 8
 end = 9
 
 [JC_20]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_21]
 file = "HOME/tests/java/NameConflicts.java"
 line = 13
 begin = 8
 end = 9
 
-[JC_21]
-file = "HOME/tests/java/NameConflicts.java"
-line = 11
-begin = 18
-end = 30
-
 [JC_22]
-file = "HOME/tests/java/NameConflicts.java"
-line = 11
-begin = 18
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_23]
-file = "HOME/tests/java/NameConflicts.java"
-line = 20
-begin = 8
-end = 13
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_24]
 file = "HOME/"
@@ -431,37 +469,53 @@ end = -1
 
 [JC_25]
 file = "HOME/tests/java/NameConflicts.java"
-line = 20
+line = 13
 begin = 8
-end = 13
+end = 9
 
 [JC_26]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/NameConflicts.java"
+line = 13
+begin = 8
+end = 9
 
 [JC_27]
 file = "HOME/tests/java/NameConflicts.java"
-line = 20
-begin = 8
-end = 13
+line = 11
+begin = 18
+end = 30
 
 [JC_28]
+file = "HOME/tests/java/NameConflicts.java"
+line = 11
+begin = 18
+end = 30
+
+[JC_29]
 file = "HOME/tests/java/NameConflicts.java"
 line = 20
 begin = 8
 end = 13
 
-[JC_29]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[NameConflicts_m_ensures_default]
+name = "Method m"
+behavior = "Behavior"
+file = "HOME/tests/java/NameConflicts.java"
+line = 13
+begin = 8
+end = 9
 
 [NameConflicts_field_safety]
 name = "Method field"
 behavior = "Safety"
+file = "HOME/tests/java/NameConflicts.java"
+line = 20
+begin = 8
+end = 13
+
+[NameConflicts_field_ensures_default]
+name = "Method field"
+behavior = "Behavior"
 file = "HOME/tests/java/NameConflicts.java"
 line = 20
 begin = 8
@@ -474,10 +528,10 @@ begin = -1
 end = -1
 
 [JC_31]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/NameConflicts.java"
+line = 20
+begin = 8
+end = 13
 
 [NameConflicts_m_safety]
 name = "Method m"
@@ -500,6 +554,36 @@ begin = -1
 end = -1
 
 [JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_35]
+file = "HOME/tests/java/NameConflicts.java"
+line = 20
+begin = 8
+end = 13
+
+[JC_36]
+file = "HOME/tests/java/NameConflicts.java"
+line = 20
+begin = 8
+end = 13
+
+[JC_37]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_38]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_39]
 file = "HOME/"
 line = 0
 begin = -1
@@ -847,12 +931,12 @@ parameter NameConflicts_i : (Object, int32) memory ref
 parameter NameConflicts_m :
  this_1:Object pointer ->
   { } int32 reads Object_alloc_table
-  { (JC_22: eq_int(integer_of_int32(result), (0))) }
+  { (JC_28: eq_int(integer_of_int32(result), (0))) }
 
 parameter NameConflicts_m_requires :
  this_1:Object pointer ->
   { } int32 reads Object_alloc_table
-  { (JC_22: eq_int(integer_of_int32(result), (0))) }
+  { (JC_28: eq_int(integer_of_int32(result), (0))) }
 
 parameter NameConflicts_setI :
  this_2:Object pointer ->
@@ -1110,7 +1194,7 @@ parameter long_of_integer_ :
 parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_8:
+  { (JC_10:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
@@ -1118,7 +1202,7 @@ parameter non_null_Object :
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_8:
+  { (JC_10:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
@@ -1269,6 +1353,22 @@ parameter struct_interface_mem_of_bitvector :
 parameter struct_interface_mem_to_bitvector :
  bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
 
+let NameConflicts_field_ensures_default =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_NameConflicts(this_0, (0), (0), Object_alloc_table) }
+  (init:
+  (let return = ref (any_int32 void) in
+  try
+   begin
+     (return := (K_4: ((safe_acc_ !NameConflicts_field) this_0)));
+    (raise Return);
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { (JC_33: true) }
+
 let NameConflicts_field_safety =
  fun (this_0 : Object pointer) ->
   { valid_struct_NameConflicts(this_0, (0), (0), Object_alloc_table) }
@@ -1285,6 +1385,22 @@ let NameConflicts_field_safety =
    !return end))
   { true }
 
+let NameConflicts_m_ensures_default =
+ fun (this_1 : Object pointer) ->
+  { valid_struct_NameConflicts(this_1, (0), (0), Object_alloc_table) }
+  (init:
+  (let return = ref (any_int32 void) in
+  try
+   begin
+     (let result_0 = (safe_int32_of_integer_ (K_3: (0))) in
+     begin   (return := (safe_int32_of_integer_ (0))); (raise Return) end);
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { (JC_23: true) }
+
 let NameConflicts_m_ensures_normal =
  fun (this_1 : Object pointer) ->
   { valid_struct_NameConflicts(this_1, (0), (0), Object_alloc_table) }
@@ -1299,7 +1415,7 @@ let NameConflicts_m_ensures_normal =
    with
    Return ->
    !return end))
-  { (JC_21: eq_int(integer_of_int32(result), (0))) }
+  { (JC_27: eq_int(integer_of_int32(result), (0))) }
 
 let NameConflicts_m_safety =
  fun (this_1 : Object pointer) ->
@@ -1316,6 +1432,27 @@ let NameConflicts_m_safety =
    Return ->
    !return end))
   { true }
+
+let NameConflicts_setI_ensures_default =
+ fun (this_2 : Object pointer) (i : int32) ->
+  { valid_struct_NameConflicts(this_2, (0), (0), Object_alloc_table) }
+  (init:
+  try
+   begin
+     (let jessie_10 = (K_1:
+                      (let jessie_6 = i in
+                      (let jessie_9 = this_2 in
+                      begin
+                        (((safe_upd_ NameConflicts_i) jessie_9) jessie_6);
+                       jessie_6
+                      end))) in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { (JC_15: true) }
 
 let NameConflicts_setI_safety =
  fun (this_2 : Object pointer) (i : int32) ->
@@ -2479,7 +2616,7 @@ goal NameConflicts_m_ensures_normal_po_1:
   (integer_of_int32(result0) = 0) ->
   forall return:int32.
   (return = result0) ->
-  ("JC_21": (integer_of_int32(return) = 0))
+  ("JC_27": (integer_of_int32(return) = 0))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/NameConflicts.why
@@ -4526,7 +4663,7 @@ goal NameConflicts_m_ensures_normal_po_1:
   (integer_of_int32(result0) = 0) ->
   forall return:int32.
   (return = result0) ->
-  ("JC_21": (integer_of_int32(return) = 0))
+  ("JC_27": (integer_of_int32(return) = 0))
 
 ========== running alt-ergo ==========
 Running Ergo on proof obligations

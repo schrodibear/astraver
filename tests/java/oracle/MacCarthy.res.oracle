@@ -409,16 +409,16 @@ clean:
 
 ========== file tests/java/MacCarthy.loc ==========
 [JC_90]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_91]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_92]
 file = "HOME/"
@@ -434,45 +434,45 @@ end = -1
 
 [JC_93]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
+line = 243
+begin = 29
+end = 35
 
 [JC_41]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[JC_94]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_42]
+[JC_94]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+line = 243
+begin = 29
+end = 35
+
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_95]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
+line = 267
+begin = 29
+end = 38
 
 [JC_43]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_96]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_44]
 file = "HOME/"
@@ -482,15 +482,15 @@ end = -1
 
 [JC_97]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+line = 267
+begin = 29
+end = 38
 
 [JC_45]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_98]
 file = "HOME/"
@@ -517,16 +517,16 @@ begin = -1
 end = -1
 
 [JC_99]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_47]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+line = 22
+begin = 31
+end = 46
 
 [JC_2]
 file = "HOME/"
@@ -536,15 +536,15 @@ end = -1
 
 [JC_101]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+line = 267
+begin = 29
+end = 38
 
 [JC_48]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_3]
 file = "HOME/tests/java/MacCarthy.jc"
@@ -554,15 +554,15 @@ end = 23
 
 [JC_102]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+line = 267
+begin = 29
+end = 38
 
 [JC_49]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+line = 22
+begin = 31
+end = 46
 
 [JC_4]
 file = "HOME/"
@@ -571,16 +571,16 @@ begin = -1
 end = -1
 
 [JC_103]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
+[JC_5]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_5]
-file = "HOME/tests/java/MacCarthy.jc"
-line = 28
-begin = 8
-end = 23
 
 [JC_104]
 file = "HOME/"
@@ -589,16 +589,16 @@ begin = -1
 end = -1
 
 [JC_6]
-file = "HOME/tests/java/MacCarthy.jc"
-line = 28
-begin = 8
-end = 23
-
-[JC_105]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_105]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
 
 [JC_7]
 file = "HOME/tests/java/MacCarthy.jc"
@@ -625,16 +625,22 @@ begin = -1
 end = -1
 
 [JC_9]
-file = "HOME/tests/java/MacCarthy.java"
-line = 26
-begin = 22
-end = 25
+file = "HOME/tests/java/MacCarthy.jc"
+line = 28
+begin = 8
+end = 23
 
 [JC_108]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_109]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
 
 [JC_50]
 file = "HOME/"
@@ -643,10 +649,10 @@ begin = -1
 end = -1
 
 [JC_51]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_52]
 file = "HOME/"
@@ -656,21 +662,21 @@ end = -1
 
 [JC_53]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+line = 22
+begin = 31
+end = 46
 
 [JC_54]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+line = 22
+begin = 31
+end = 46
 
 [JC_55]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+line = 74
+begin = 22
+end = 30
 
 [JC_56]
 file = "HOME/"
@@ -678,11 +684,23 @@ line = 0
 begin = -1
 end = -1
 
+[JC_110]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 333
+begin = 29
+end = 33
+
 [JC_57]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+line = 74
+begin = 22
+end = 30
+
+[JC_111]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
 
 [JC_58]
 file = "HOME/"
@@ -690,41 +708,89 @@ line = 0
 begin = -1
 end = -1
 
+[JC_112]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_59]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_113]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+line = 386
+begin = 22
+end = 26
+
+[JC_114]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_115]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_116]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_117]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[JC_118]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 386
+begin = 22
+end = 26
+
+[JC_119]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
 
 [JC_60]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_61]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+line = 74
+begin = 22
+end = 30
 
 [JC_62]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 74
+begin = 22
+end = 30
 
 [JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/MacCarthy.jc"
+line = 28
+begin = 8
+end = 23
 
 [JC_63]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+line = 122
+begin = 19
+end = 25
 
 [JC_11]
 file = "HOME/tests/java/MacCarthy.java"
@@ -746,9 +812,9 @@ end = -1
 
 [JC_65]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+line = 122
+begin = 19
+end = 25
 
 [JC_13]
 file = "HOME/tests/java/MacCarthy.java"
@@ -757,28 +823,40 @@ begin = 22
 end = 25
 
 [JC_66]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_14]
-file = "HOME/tests/java/MacCarthy.java"
-line = 26
-begin = 22
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_120]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_67]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_15]
-file = "HOME/tests/java/MacCarthy.java"
-line = 21
-begin = 18
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_121]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
 
 [JC_68]
 file = "HOME/"
@@ -787,16 +865,22 @@ begin = -1
 end = -1
 
 [JC_16]
-file = "HOME/tests/java/MacCarthy.java"
-line = 21
-begin = 18
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_122]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_69]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
+line = 122
+begin = 19
+end = 25
 
 [MacCarthy_f91_ensures_greater_than_100]
 name = "Method f91"
@@ -808,60 +892,107 @@ end = 25
 
 [JC_17]
 file = "HOME/tests/java/MacCarthy.java"
-line = 24
-begin = 18
-end = 35
+line = 26
+begin = 22
+end = 25
 
-[JC_18]
-file = "HOME/tests/java/MacCarthy.java"
-line = 24
-begin = 18
-end = 35
-
-[JC_19]
-kind = UserCall
-file = "HOME/tests/java/MacCarthy.java"
-line = 28
-begin = 16
-end = 27
-
-[JC_70]
+[JC_123]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_18]
+file = "HOME/tests/java/MacCarthy.java"
+line = 26
+begin = 22
+end = 25
+
+[JC_124]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_19]
+file = "HOME/tests/java/MacCarthy.java"
+line = 21
+begin = 18
+end = 31
+
+[JC_125]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_126]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 430
+begin = 22
+end = 26
+
+[JC_127]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[JC_128]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_129]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[MacCarthy_f91_ensures_default]
+name = "Method f91"
+behavior = "Behavior"
+file = "HOME/tests/java/MacCarthy.java"
+line = 26
+begin = 22
+end = 25
+
+[JC_70]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 122
+begin = 19
+end = 25
+
 [JC_71]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
+line = 184
+begin = 28
+end = 33
 
 [JC_72]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_20]
-kind = UserCall
 file = "HOME/tests/java/MacCarthy.java"
-line = 28
-begin = 12
-end = 28
+line = 21
+begin = 18
+end = 31
 
 [JC_73]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
+line = 184
+begin = 28
+end = 33
 
 [JC_21]
-kind = UserCall
 file = "HOME/tests/java/MacCarthy.java"
-line = 28
-begin = 16
-end = 27
+line = 24
+begin = 18
+end = 35
 
 [JC_74]
 file = "HOME/"
@@ -870,17 +1001,16 @@ begin = -1
 end = -1
 
 [JC_22]
-kind = UserCall
 file = "HOME/tests/java/MacCarthy.java"
-line = 28
-begin = 12
-end = 28
+line = 24
+begin = 18
+end = 35
 
 [JC_75]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_23]
 kind = UserCall
@@ -902,11 +1032,17 @@ line = 28
 begin = 12
 end = 28
 
+[JC_130]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_77]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
+line = 184
+begin = 28
+end = 33
 
 [JC_25]
 kind = UserCall
@@ -915,11 +1051,17 @@ line = 28
 begin = 16
 end = 27
 
+[JC_131]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_78]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
+line = 184
+begin = 28
+end = 33
 
 [JC_26]
 kind = UserCall
@@ -928,17 +1070,29 @@ line = 28
 begin = 12
 end = 28
 
+[JC_132]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_79]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
+line = 207
+begin = 18
+end = 26
 
 [JC_27]
 kind = UserCall
 file = "HOME/tests/java/MacCarthy.java"
 line = 28
 begin = 16
+end = 27
+
+[JC_133]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
 end = 27
 
 [JC_28]
@@ -948,12 +1102,48 @@ line = 28
 begin = 12
 end = 28
 
+[JC_134]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
 [JC_29]
 kind = UserCall
 file = "HOME/tests/java/MacCarthy.java"
 line = 28
 begin = 16
 end = 27
+
+[JC_135]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_136]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_137]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_138]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_139]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_80]
 file = "HOME/"
@@ -963,9 +1153,9 @@ end = -1
 
 [JC_81]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
+line = 207
+begin = 18
+end = 26
 
 [JC_82]
 file = "HOME/"
@@ -981,12 +1171,6 @@ begin = 12
 end = 28
 
 [JC_83]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[JC_31]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1000,6 +1184,13 @@ line = 26
 begin = 22
 end = 25
 
+[JC_31]
+kind = UserCall
+file = "HOME/tests/java/MacCarthy.java"
+line = 28
+begin = 16
+end = 27
+
 [MacCarthy_f91_safety]
 name = "Method f91"
 behavior = "Safety"
@@ -1009,36 +1200,45 @@ begin = 22
 end = 25
 
 [JC_84]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
-
-[JC_32]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_32]
+kind = UserCall
+file = "HOME/tests/java/MacCarthy.java"
+line = 28
+begin = 12
+end = 28
 
 [JC_85]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
+line = 207
+begin = 18
 end = 26
 
 [JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/MacCarthy.java"
+line = 28
+begin = 16
+end = 27
 
 [JC_86]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 207
+begin = 18
+end = 26
 
 [JC_34]
+kind = UserCall
+file = "HOME/tests/java/MacCarthy.java"
+line = 28
+begin = 12
+end = 28
+
+[JC_140]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1046,11 +1246,18 @@ end = -1
 
 [JC_87]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+line = 243
+begin = 29
+end = 35
 
 [JC_35]
+kind = UserCall
+file = "HOME/tests/java/MacCarthy.java"
+line = 28
+begin = 16
+end = 27
+
+[JC_141]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1063,6 +1270,13 @@ begin = -1
 end = -1
 
 [JC_36]
+kind = UserCall
+file = "HOME/tests/java/MacCarthy.java"
+line = 28
+begin = 12
+end = 28
+
+[JC_142]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1070,27 +1284,29 @@ end = -1
 
 [JC_89]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+line = 243
+begin = 29
+end = 35
 
 [JC_37]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+kind = UserCall
+file = "HOME/tests/java/MacCarthy.java"
+line = 28
+begin = 16
+end = 27
 
 [JC_38]
+kind = UserCall
+file = "HOME/tests/java/MacCarthy.java"
+line = 28
+begin = 12
+end = 28
+
+[JC_39]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_39]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
 
 ========== file tests/java/why/MacCarthy.why ==========
 type Object
@@ -1271,14 +1487,14 @@ predicate valid_struct_interface(p:interface pointer,
 parameter MacCarthy_f91 :
  n_1:int ->
   { } int
-  { ((ge_int(n_1@, (101)) -> (JC_18: eq_int(result, sub_int(n_1, (10)))))
-    and (le_int(n_1@, (100)) -> (JC_16: eq_int(result, (91))))) }
+  { ((ge_int(n_1@, (101)) -> (JC_22: eq_int(result, sub_int(n_1, (10)))))
+    and (le_int(n_1@, (100)) -> (JC_20: eq_int(result, (91))))) }
 
 parameter MacCarthy_f91_requires :
  n_1:int ->
   { } int
-  { ((ge_int(n_1@, (101)) -> (JC_18: eq_int(result, sub_int(n_1, (10)))))
-    and (le_int(n_1@, (100)) -> (JC_16: eq_int(result, (91))))) }
+  { ((ge_int(n_1@, (101)) -> (JC_22: eq_int(result, sub_int(n_1, (10)))))
+    and (le_int(n_1@, (100)) -> (JC_20: eq_int(result, (91))))) }
 
 parameter Object_alloc_table : Object alloc_table ref
 
@@ -1578,7 +1794,7 @@ parameter cons_Object_requires :
 parameter non_null_Object :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_8:
+  { (JC_10:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
@@ -1586,7 +1802,7 @@ parameter non_null_Object :
 parameter non_null_Object_requires :
  x_0:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_8:
+  { (JC_10:
     (if result
      then eq_int(offset_max(Object_alloc_table, x_0), (0))
      else (x_0 = null))) }
@@ -1721,6 +1937,32 @@ parameter struct_interface_mem_of_bitvector :
 parameter struct_interface_mem_to_bitvector :
  bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
 
+let MacCarthy_f91_ensures_default =
+ fun (n_1 : int) ->
+  { (JC_14: true) }
+  (init:
+  (let return = ref (any_int void) in
+  try
+   begin
+     (if (K_7: ((le_int_ n_1) (100)))
+     then
+      begin
+        (return := (K_6:
+                   (JC_30:
+                   (MacCarthy_f91_requires (K_5:
+                                           (JC_29:
+                                           (MacCarthy_f91_requires (K_4:
+                                                                   ((add_int n_1) (11))))))))));
+       (raise Return)
+      end
+     else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { (JC_15: true) }
+
 let MacCarthy_f91_ensures_greater_than_100 =
  fun (n_1 : int) ->
   { ge_int(n_1, (101)) }
@@ -1732,9 +1974,9 @@ let MacCarthy_f91_ensures_greater_than_100 =
      then
       begin
         (return := (K_6:
-                   (JC_30:
+                   (JC_38:
                    (MacCarthy_f91 (K_5:
-                                  (JC_29:
+                                  (JC_37:
                                   (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
        (raise Return)
       end
@@ -1744,7 +1986,7 @@ let MacCarthy_f91_ensures_greater_than_100 =
    with
    Return ->
    !return end))
-  { (JC_17: eq_int(result, sub_int(n_1, (10)))) }
+  { (JC_21: eq_int(result, sub_int(n_1, (10)))) }
 
 let MacCarthy_f91_ensures_less_than_101 =
  fun (n_1 : int) ->
@@ -1757,9 +1999,9 @@ let MacCarthy_f91_ensures_less_than_101 =
      then
       begin
         (return := (K_6:
-                   (JC_26:
+                   (JC_34:
                    (MacCarthy_f91 (K_5:
-                                  (JC_25:
+                                  (JC_33:
                                   (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
        (raise Return)
       end
@@ -1769,11 +2011,11 @@ let MacCarthy_f91_ensures_less_than_101 =
    with
    Return ->
    !return end))
-  { (JC_15: eq_int(result, (91))) }
+  { (JC_19: eq_int(result, (91))) }
 
 let MacCarthy_f91_safety =
  fun (n_1 : int) ->
-  { (JC_12: true) }
+  { (JC_14: true) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1782,9 +2024,9 @@ let MacCarthy_f91_safety =
      then
       begin
         (return := (K_6:
-                   (JC_22:
+                   (JC_26:
                    (MacCarthy_f91 (K_5:
-                                  (JC_21:
+                                  (JC_25:
                                   (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
        (raise Return)
       end
@@ -2806,14 +3048,14 @@ goal MacCarthy_f91_ensures_greater_than_100_po_1:
   (n_1 >= 101) ->
   (n_1 <= 100) ->
   forall result:int.
-  ((((n_1 + 11) >= 101) -> ("JC_18": (result = ((n_1 + 11) - 10)))) and
-   (((n_1 + 11) <= 100) -> ("JC_16": (result = 91)))) ->
+  ((((n_1 + 11) >= 101) -> ("JC_22": (result = ((n_1 + 11) - 10)))) and
+   (((n_1 + 11) <= 100) -> ("JC_20": (result = 91)))) ->
   forall result0:int.
-  (((result >= 101) -> ("JC_18": (result0 = (result - 10)))) and
-   ((result <= 100) -> ("JC_16": (result0 = 91)))) ->
+  (((result >= 101) -> ("JC_22": (result0 = (result - 10)))) and
+   ((result <= 100) -> ("JC_20": (result0 = 91)))) ->
   forall return:int.
   (return = result0) ->
-  ("JC_17": (return = (n_1 - 10)))
+  ("JC_21": (return = (n_1 - 10)))
 
 ========== file tests/java/why/MacCarthy_po2.why ==========
 goal MacCarthy_f91_ensures_greater_than_100_po_2:
@@ -2822,7 +3064,7 @@ goal MacCarthy_f91_ensures_greater_than_100_po_2:
   (n_1 > 100) ->
   forall return:int.
   (return = (n_1 - 10)) ->
-  ("JC_17": (return = (n_1 - 10)))
+  ("JC_21": (return = (n_1 - 10)))
 
 ========== file tests/java/why/MacCarthy_po3.why ==========
 goal MacCarthy_f91_ensures_less_than_101_po_1:
@@ -2830,14 +3072,14 @@ goal MacCarthy_f91_ensures_less_than_101_po_1:
   (n_1 <= 100) ->
   (n_1 <= 100) ->
   forall result:int.
-  ((((n_1 + 11) >= 101) -> ("JC_18": (result = ((n_1 + 11) - 10)))) and
-   (((n_1 + 11) <= 100) -> ("JC_16": (result = 91)))) ->
+  ((((n_1 + 11) >= 101) -> ("JC_22": (result = ((n_1 + 11) - 10)))) and
+   (((n_1 + 11) <= 100) -> ("JC_20": (result = 91)))) ->
   forall result0:int.
-  (((result >= 101) -> ("JC_18": (result0 = (result - 10)))) and
-   ((result <= 100) -> ("JC_16": (result0 = 91)))) ->
+  (((result >= 101) -> ("JC_22": (result0 = (result - 10)))) and
+   ((result <= 100) -> ("JC_20": (result0 = 91)))) ->
   forall return:int.
   (return = result0) ->
-  ("JC_15": (return = 91))
+  ("JC_19": (return = 91))
 
 ========== file tests/java/why/MacCarthy_po4.why ==========
 goal MacCarthy_f91_ensures_less_than_101_po_2:
@@ -2846,7 +3088,7 @@ goal MacCarthy_f91_ensures_less_than_101_po_2:
   (n_1 > 100) ->
   forall return:int.
   (return = (n_1 - 10)) ->
-  ("JC_15": (return = 91))
+  ("JC_19": (return = 91))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/MacCarthy.why
@@ -4675,14 +4917,14 @@ goal MacCarthy_f91_ensures_greater_than_100_po_1:
   (n_1 >= 101) ->
   (n_1 <= 100) ->
   forall result:int.
-  ((((n_1 + 11) >= 101) -> ("JC_18": (result = ((n_1 + 11) - 10)))) and
-   (((n_1 + 11) <= 100) -> ("JC_16": (result = 91)))) ->
+  ((((n_1 + 11) >= 101) -> ("JC_22": (result = ((n_1 + 11) - 10)))) and
+   (((n_1 + 11) <= 100) -> ("JC_20": (result = 91)))) ->
   forall result0:int.
-  (((result >= 101) -> ("JC_18": (result0 = (result - 10)))) and
-   ((result <= 100) -> ("JC_16": (result0 = 91)))) ->
+  (((result >= 101) -> ("JC_22": (result0 = (result - 10)))) and
+   ((result <= 100) -> ("JC_20": (result0 = 91)))) ->
   forall return:int.
   (return = result0) ->
-  ("JC_17": (return = (n_1 - 10)))
+  ("JC_21": (return = (n_1 - 10)))
 
 goal MacCarthy_f91_ensures_greater_than_100_po_2:
   forall n_1:int.
@@ -4690,21 +4932,21 @@ goal MacCarthy_f91_ensures_greater_than_100_po_2:
   (n_1 > 100) ->
   forall return:int.
   (return = (n_1 - 10)) ->
-  ("JC_17": (return = (n_1 - 10)))
+  ("JC_21": (return = (n_1 - 10)))
 
 goal MacCarthy_f91_ensures_less_than_101_po_1:
   forall n_1:int.
   (n_1 <= 100) ->
   (n_1 <= 100) ->
   forall result:int.
-  ((((n_1 + 11) >= 101) -> ("JC_18": (result = ((n_1 + 11) - 10)))) and
-   (((n_1 + 11) <= 100) -> ("JC_16": (result = 91)))) ->
+  ((((n_1 + 11) >= 101) -> ("JC_22": (result = ((n_1 + 11) - 10)))) and
+   (((n_1 + 11) <= 100) -> ("JC_20": (result = 91)))) ->
   forall result0:int.
-  (((result >= 101) -> ("JC_18": (result0 = (result - 10)))) and
-   ((result <= 100) -> ("JC_16": (result0 = 91)))) ->
+  (((result >= 101) -> ("JC_22": (result0 = (result - 10)))) and
+   ((result <= 100) -> ("JC_20": (result0 = 91)))) ->
   forall return:int.
   (return = result0) ->
-  ("JC_15": (return = 91))
+  ("JC_19": (return = 91))
 
 goal MacCarthy_f91_ensures_less_than_101_po_2:
   forall n_1:int.
@@ -4712,7 +4954,7 @@ goal MacCarthy_f91_ensures_less_than_101_po_2:
   (n_1 > 100) ->
   forall return:int.
   (return = (n_1 - 10)) ->
-  ("JC_15": (return = 91))
+  ("JC_19": (return = 91))
 
 ========== running alt-ergo ==========
 Running Ergo on proof obligations

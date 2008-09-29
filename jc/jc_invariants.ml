@@ -93,7 +93,7 @@ let make_assume reads assume =
 let fully_packed pc e =
   LPred(
     fully_packed_name,
-    [ LVar (generic_tag_table_name (pointer_class_variant pc));
+    [ LVar (generic_tag_table_name (pointer_class_root pc));
       LVar (mutable_name pc);
       e ])
 (*
@@ -407,7 +407,7 @@ let function_structures params =
 	 | JCTpointer(JCtag(st, _), _, _) ->
 	     all_structures st acc
 	 | JCTpointer(JCroot vi, _, _) ->
-	     List.fold_right all_structures vi.jc_root_info_roots acc
+	     List.fold_right all_structures vi.jc_root_info_hroots acc
 	 | _ -> acc)
     StringSet.empty
     params
@@ -426,7 +426,7 @@ let hierarchy_structures h =
 let hierarchies () =
   let h = Hashtbl.fold
     (fun _ (st, _) acc ->
-       StringMap.add (root_name st) st.jc_struct_info_root acc)
+       StringMap.add (root_name st) st.jc_struct_info_hroot acc)
     Jc_typing.structs_table
     StringMap.empty
   in
@@ -520,7 +520,7 @@ let make_assume_all_assocs pp params =
 
 let mutable_memory_type pc =
   raw_memory_type (pointer_class_model_type pc)
-    (tag_id_type (pointer_class_variant pc))
+    (tag_id_type (pointer_class_root pc))
 
 let committed_memory_type pc =
   raw_memory_type (pointer_class_model_type pc) (simple_logic_type "bool")
@@ -554,7 +554,7 @@ let assert_mutable e fi =
     begin
       let st = fi.jc_field_info_struct in
       let mutable_name = mutable_name (JCtag(st, [])) in
-      (*let committed_name = committed_name st.jc_struct_info_root in*)
+      (*let committed_name = committed_name st.jc_struct_info_hroot in*)
       let e_mutable = LApp("select", [LVar mutable_name; e]) in
       (*let e_committed = LApp("select", [LVar committed_name; e]) in*)
       let parent_tag = match st.jc_struct_info_parent with
@@ -585,14 +585,14 @@ let assert_mutable e fi =
   let this = "this" in
   let this_ty =
     { logic_type_name = "pointer";
-      logic_type_args = [simple_logic_type st.jc_struct_info_root] } in
+      logic_type_args = [simple_logic_type st.jc_struct_info_hroot] } in
 
   (* program point *)
   let pp = "program_point" in
   let pp_ty = simple_logic_type "int" in
 
   (* assoc memories with program point => not this.mutable => this.invariant *)
-  let mutable_ty = mutable_memory_type st.jc_struct_info_root in
+  let mutable_ty = mutable_memory_type st.jc_struct_info_hroot in
   let mutable_is_false =
     LPred(
       "eq",
@@ -673,8 +673,8 @@ let not_mutable_implies_invariant this st (li, _) =
 
   (* params *)
   let params = (mutable_name, mutable_memory_type (JCtag(st, [])))::params in
-  let params = (generic_tag_table_name (struct_variant st),
-                tag_table_type (struct_variant st))::params in
+  let params = (generic_tag_table_name (struct_root st),
+                tag_table_type (struct_root st))::params in
 
   params, impl
 
@@ -725,8 +725,8 @@ let not_mutable_implies_fields_committed this st =
 
   (* additional params *)
   let params = (mutable_name, mutable_memory_type (JCtag(st, [])))::params in
-  let params = (generic_tag_table_name (struct_variant st),
-                tag_table_type (struct_variant st))::params in
+  let params = (generic_tag_table_name (struct_root st),
+                tag_table_type (struct_root st))::params in
 
   (* implies *)
   let impl = LImpl(mutable_io, coms) in
@@ -739,8 +739,8 @@ let committed_implies_fully_packed this root =
   let committed_type = committed_memory_type root in
   let mutable_name = mutable_name root in
   let mutable_type = mutable_memory_type root in
-  let tag_table = generic_tag_table_name (pointer_class_variant root) in
-  let tag_table_type = tag_table_type (pointer_class_variant root) in
+  let tag_table = generic_tag_table_name (pointer_class_root root) in
+  let tag_table_type = tag_table_type (pointer_class_root root) in
 
   (* this.committed = true *)
   let com = LPred(
@@ -845,10 +845,10 @@ let owner_unicity this root =
   (* params *)
   let params = List.map
     (fun fi ->
-       let ac = JCalloc_root (struct_variant fi.jc_field_info_struct) in
+       let ac = JCalloc_root (struct_root fi.jc_field_info_struct) in
        [ fi.jc_field_info_final_name, memory_type (JCmem_field fi);
-	 committed_name (JCtag(fi.jc_field_info_root, [])),
-	 committed_memory_type (JCtag(fi.jc_field_info_root, []));
+	 committed_name (JCtag(fi.jc_field_info_hroot, [])),
+	 committed_memory_type (JCtag(fi.jc_field_info_hroot, []));
 	 generic_alloc_table_name ac,
 	 alloc_table_type ac ])
     reps
@@ -946,7 +946,7 @@ let assume_field_invariants fi =
   (* keep hierarchies only once *)
   let hl = List.fold_left
     (fun acc (st, _) ->
-       StringMap.add (root_name st) st.jc_struct_info_root acc)
+       StringMap.add (root_name st) st.jc_struct_info_hroot acc)
     StringMap.empty
     invs
   in
@@ -1141,7 +1141,7 @@ let make_components_precond this st reads =
        let fi_pc = type_pc fi.jc_field_info_type in
        let fi_ac = alloc_class_of_pointer_class fi_pc in
        let alloc = generic_alloc_table_name fi_ac in
-       let reads = StringSet.add (generic_tag_table_name (pointer_class_variant fi_pc)) reads in
+       let reads = StringSet.add (generic_tag_table_name (pointer_class_root fi_pc)) reads in
        let reads = StringSet.add alloc reads in
        let reads = StringSet.add mutable_name reads in
        (* pre-condition: forall i, valid(x.f+i) => fp(x.f+i) /\ not committed(x.f+i) *)
@@ -1171,7 +1171,7 @@ let pack_declaration st acc =
   let ac = alloc_class_of_pointer_class pc in
   let this_type = pointer_type ac pc in
   let tag = "tag" in
-  let tag_type = tag_id_type (struct_variant st) in
+  let tag_type = tag_id_type (struct_root st) in
   let mutable_name = mutable_name (JCtag(st, [])) in
   let inv, reads = invariant_for_struct (LVar this) st in
   let writes = StringSet.empty in
@@ -1235,7 +1235,7 @@ let unpack_declaration st acc =
   let ac = alloc_class_of_pointer_class pc in
   let this_type = pointer_type ac pc in
   let tag = "tag" in
-  let tag_type = tag_id_type (struct_variant st) in
+  let tag_type = tag_id_type (struct_root st) in
   let mutable_name = mutable_name (JCtag(st, [])) in
   let committed_name = committed_name (JCtag(st, [])) in
   let reads = StringSet.singleton mutable_name in
@@ -1347,7 +1347,7 @@ let tr_valid_inv st acc =
   let valid_inv_type = simple_logic_type "prop" in
   let vi_this = "???",
     { logic_type_name = "pointer" ;
-      logic_type_args = [simple_logic_type st.jc_struct_info_root] } in
+      logic_type_args = [simple_logic_type st.jc_struct_info_hroot] } in
   let logic = Logic(false, valid_inv_name st, vi_this::params,
     valid_inv_type) in
   let acc = logic::acc in
@@ -1357,7 +1357,7 @@ let tr_valid_inv st acc =
   let this_var = LVar this in
   let this_ty =
     { logic_type_name = "pointer";
-      logic_type_args = [simple_logic_type st.jc_struct_info_root] } in
+      logic_type_args = [simple_logic_type st.jc_struct_info_hroot] } in
   let fields_valid_inv = List.map (fun (_, fi) ->
     match fi.jc_field_info_type with
     | JCTpointer(st, _, _) ->

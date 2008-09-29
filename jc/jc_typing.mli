@@ -59,7 +59,7 @@ val variables_table :
 val structs_table : 
   (string, (struct_info * (logic_info * assertion) list)) Hashtbl.t
 
-val variants_table :
+val roots_table :
   (string, root_info) Hashtbl.t
 
 val enum_types_table : 
@@ -85,7 +85,7 @@ val coerce : jc_type -> native_type -> expr -> expr
 
 val type_range_of_term : jc_type -> term -> assertion
 
-val find_struct_variant : Jc_env.struct_info -> Jc_env.root_info
+val find_struct_root : Jc_env.struct_info -> Jc_env.root_info
 
 val type_file : nexpr decl list -> unit
 

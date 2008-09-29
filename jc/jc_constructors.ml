@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.15 2008-09-25 15:04:24 marche Exp $ *)
+(* $Id: jc_constructors.ml,v 1.16 2008-09-29 09:34:55 moy Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -484,6 +484,10 @@ module Expr = struct
   let mk ?pos ~typ ?mark ?region ?original_type ~node () =
     new expr ?pos ~typ ?mark ?region ?original_type node
 
+  let mkconst ~const = mk ~typ:(JCTnative Tinteger) ~node:(JCEconst const)
+  let mkint ?value ?valuestr = mkconst ~const:(Const.mkint ?value ?valuestr ())
+  let mkbinary ~expr1 ~op ~expr2 = mk ~node:(JCEbinary(expr1, op, expr2))
+
   let mklet ~var ?init ~body =
     mk ~typ:var.jc_var_info_type ~node:(JCElet(var, init, body))
   let mkvar ~var = 
@@ -499,6 +503,10 @@ end
 module Term = struct
   let mk ?pos ~typ ?mark ?region ~node () =
     new term ?pos ~typ ?mark ?region node
+
+  let mkconst ~const = mk ~typ:(JCTnative Tinteger) ~node:(JCTconst const)
+  let mkint ?value ?valuestr = mkconst ~const:(Const.mkint ?value ?valuestr ())
+  let mkbinary ~term1 ~op ~term2 = mk ~node:(JCTbinary(term1, op, term2))
 
   let mkvar ~var = 
     mk ~typ:var.jc_var_info_type ~node:(JCTvar var)

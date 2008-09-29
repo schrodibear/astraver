@@ -33,14 +33,12 @@ open Jc_env
 open Jc_envset
 
 let alloc_class_of_mem_class = function
-  | JCmem_field fi -> JCalloc_root (struct_variant fi.jc_field_info_struct)
-  | JCmem_discr_union fi -> 
-      JCalloc_root (struct_variant fi.jc_field_info_struct)
+  | JCmem_field fi -> JCalloc_root (struct_root fi.jc_field_info_struct)
   | JCmem_plain_union vi -> JCalloc_root vi
   | JCmem_bitvector -> JCalloc_bitvector
 
 let alloc_class_of_pointer_class = function
-  | JCtag(st,_) -> JCalloc_root (struct_variant st)
+  | JCtag(st,_) -> JCalloc_root (struct_root st)
   | JCroot vi -> JCalloc_root vi
 
 let variant_of_alloc_class = function
@@ -133,8 +131,6 @@ let rec all_memories select forbidden acc pc =
     | JCtag(st,_) as pc ->
 	if StringSet.mem st.jc_struct_info_name forbidden then
 	  acc
-	else if struct_of_plain_union st then
-	  all_memories select forbidden acc (JCroot (struct_variant st))
 	else
 	  let fields = List.filter select (all_fields pc) in
 	  let mems = List.map (fun fi -> JCmem_field fi) fields in
@@ -147,16 +143,16 @@ let rec all_memories select forbidden acc pc =
 	  (* continue recursively on the fields *)
 	  let forbidden = StringSet.add st.jc_struct_info_name forbidden in
 	  List.fold_left
-	    (all_memories select forbidden)
-	    acc
-	    (fields_pointer_class fields)
-    | JCroot vi ->
-	match vi.jc_root_info_kind with
+	    (all_memories select forbidden) acc (fields_pointer_class fields)
+    | JCroot rt ->
+	match rt.jc_root_info_kind with
 	  | Rvariant -> acc
 	  | RdiscrUnion ->
-	      assert false (* TODO *)
+	      List.fold_left
+		(all_memories select forbidden) acc
+		(List.map (fun st -> JCtag(st,[])) rt.jc_root_info_hroots)
 	  | RplainUnion ->
-	      let mc = JCmem_plain_union vi in
+	      let mc = JCmem_plain_union rt in
 	      StringMap.add (memory_class_name mc) mc acc
 
 let all_memories ?(select = fun _ -> true) pc =
@@ -173,7 +169,7 @@ let rec all_types select forbidden acc pc =
 	if StringSet.mem st.jc_struct_info_name forbidden then
 	  acc
 	else
-	  let vi = struct_variant st in
+	  let vi = struct_root st in
 	  let forbidden = StringSet.add st.jc_struct_info_name forbidden in
 	  List.fold_left
 	    (all_types select forbidden)
@@ -207,18 +203,23 @@ let rec all_allocs select forbidden acc pc =
     | JCtag(st,_) as pc ->
 	if StringSet.mem st.jc_struct_info_name forbidden then
 	  acc
-	else if struct_of_union st then
-	  all_allocs select forbidden acc (JCroot (struct_variant st))
 	else
-	  let ac = JCalloc_root (struct_variant st) in
+	  let ac = JCalloc_root (struct_root st) in
 	  let forbidden = StringSet.add st.jc_struct_info_name forbidden in
 	  List.fold_left
 	    (all_allocs select forbidden)
 	    (StringMap.add (alloc_class_name ac) ac acc)
 	    (fields_pointer_class (List.filter select (all_fields pc)))
-    | JCroot vi ->
-	let ac = JCalloc_root vi in
-	StringMap.add (alloc_class_name ac) ac acc
+    | JCroot rt ->
+	let ac = JCalloc_root rt in
+	let acc = StringMap.add (alloc_class_name ac) ac acc in
+	match rt.jc_root_info_kind with
+	  | Rvariant 
+	  | RplainUnion -> acc
+	  | RdiscrUnion -> 
+	      List.fold_left
+		(all_allocs select forbidden) acc
+		(List.map (fun st -> JCtag(st,[])) rt.jc_root_info_hroots)
 
 let all_allocs ?(select = fun _ -> true) pc =
   Jc_options.lprintf "all_allocs(%s):@." (Jc_output_misc.pointer_class pc);
@@ -235,7 +236,7 @@ let rec all_tags select forbidden acc pc =
 	if StringSet.mem st.jc_struct_info_name forbidden then
 	  acc
 	else
-	  let vi = struct_variant st in
+	  let vi = struct_root st in
 	  let forbidden = StringSet.add st.jc_struct_info_name forbidden in
 	  List.fold_left
 	    (all_tags select forbidden)

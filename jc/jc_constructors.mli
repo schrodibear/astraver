@@ -663,6 +663,22 @@ module Expr :
       ?mark:string ->
       ?region:region ->
       ?original_type:jc_type -> node:expr_node -> unit -> expr
+    val mkint :
+      ?value: int ->
+      ?valuestr:string ->
+      ?pos:Loc.position ->
+      ?mark:string ->
+      ?region:region ->
+      ?original_type:jc_type -> unit -> expr
+    val mkbinary :
+      expr1:expr ->
+      op:expr_bin_op ->
+      expr2:expr -> 
+      ?pos:Loc.position ->
+      typ:jc_type ->
+      ?mark:string ->
+      ?region:region ->
+      ?original_type:jc_type -> unit -> expr
     val mklet :
       var:var_info ->
       ?init:expr ->
@@ -690,6 +706,20 @@ module Term :
       ?region:region -> node:term_node -> unit -> term
 *)
 
+    val mkint :
+      ?value: int ->
+      ?valuestr:string ->
+      ?pos:Loc.position ->
+      ?mark:string ->
+      ?region:region -> unit -> term
+    val mkbinary :
+      term1:term ->
+      op:term_bin_op ->
+      term2:term -> 
+      ?pos:Loc.position ->
+      typ:jc_type ->
+      ?mark:string ->
+      ?region:region -> unit -> term
     val mkvar :
       var:var_info ->
       ?pos:Loc.position ->

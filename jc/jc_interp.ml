@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.353 2008-09-26 09:11:51 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.354 2008-09-29 09:34:55 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -49,7 +49,7 @@ open Jc_pattern
 open Output
 open Format
 open Num
-
+open Pp
 
 (******************************************************************************)
 (*                            source positioning                              *)
@@ -359,7 +359,7 @@ let equality_op_for_type = function
 (******************************************************************************)
 
 let tr_struct st acc =
-  let tagid_type = tag_id_type (struct_variant st) in
+  let tagid_type = tag_id_type (struct_root st) in
     (* Declarations of field memories. *)
   let acc =
     if !Jc_options.separation_sem = SepRegions then acc else
@@ -374,7 +374,7 @@ let tr_struct st acc =
           acc st.jc_struct_info_fields
   in
   (* Declarations of translation functions for union *)
-  let vi = struct_variant st in
+  let vi = struct_root st in
   let acc = 
     if not (root_is_union vi) then acc else
       if integral_union vi then acc else
@@ -403,7 +403,7 @@ let tr_struct st acc =
   in
 
   let acc = 
-    if struct_of_plain_union st then acc 
+    if struct_of_union st then acc 
     else 
       let pc = JCtag(st,[]) in
       let ac = alloc_class_of_pointer_class pc in
@@ -482,7 +482,7 @@ let term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src
     | JCTpointer(JCtag(st1,_),_,_), JCTpointer _ -> 
 	let tag = 
 	  ttag_table_var ~label_in_name:global_assertion lab
-	    (struct_variant st1,e#region)
+	    (struct_root st1,e#region)
 	in
         LApp("downcast", [ tag; e'; LVar (tag_name st1) ])
     |  _ -> 
@@ -587,7 +587,7 @@ let coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	let downcast_fun = 
 	  if safety_checking () then "downcast_" else "safe_downcast_"
 	in
-	let tag = tag_table_var(struct_variant st1,e#region) in
+	let tag = tag_table_var(struct_root st1,e#region) in
         make_guarded_app ~mark DownCast pos downcast_fun
           [ tag; e'; Var(tag_name st1) ] 
     | _ -> 
@@ -678,7 +678,7 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
         let t1' = ft t1 in
 	let tag = 
 	  ttag_table_var ~label_in_name:global_assertion lab
-	    (struct_variant st,t1#region) 
+	    (struct_root st,t1#region) 
 	in
         LApp("instanceof_bool",[ tag; t1'; LVar (tag_name st) ])
     | JCTcast(t1,lab',st) ->
@@ -689,14 +689,14 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
           let t1' = ft t1 in
 	  let tag = 
 	    ttag_table_var ~label_in_name:global_assertion lab
-	      (struct_variant st,t1#region) 
+	      (struct_root st,t1#region) 
 	  in
           LApp("downcast",[ tag; t1'; LVar (tag_name st) ])
     | JCTbitwise_cast(t1,_lab,_st) ->
 	ft t1
     | JCTrange_cast(t1,ri) -> 
-        eprintf "range_cast in term: from %a to %a@." 
-          print_type t1#typ print_type (JCTenum ri);
+(*         eprintf "range_cast in term: from %a to %a@."  *)
+(*           print_type t1#typ print_type (JCTenum ri); *)
         let t1' = ft t1 in
         term_coerce ~cast:true t1#pos (JCTenum ri) t1#typ t1 t1' 
     | JCTreal_cast(t1,rc) ->
@@ -709,7 +709,7 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
 	end
     | JCTderef(t1,lab',fi) -> 
 	let lab = if relocate && lab' = LabelHere then lab else lab' in
-	let mc = tderef_mem_class ~type_safe t1 fi in
+	let mc,_ufi_opt = tderef_mem_class ~type_safe t1 fi in
 	begin match mc with
 	  | JCmem_field fi' -> 
 	      assert (fi.jc_field_info_tag = fi'.jc_field_info_tag);
@@ -719,7 +719,6 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
 		  (JCmem_field fi,t1#region) 
 	      in
               LApp("select",[ mem; t1' ])
-	  | JCmem_discr_union vi -> assert false (* TODO *)
 	  | JCmem_plain_union vi ->
 	      let t1,off = tdestruct_union_access t1 (Some fi) in
 	      (* Retrieve bitvector *)
@@ -918,7 +917,7 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
         let t1' = ft t1 in
 	let tag = 
 	  ttag_table_var ~label_in_name:global_assertion lab
-	    (struct_variant st,t1#region) 
+	    (struct_root st,t1#region) 
 	in
         LPred("instanceof",[ tag; t1'; LVar (tag_name st) ])
     | JCAmutable(te, st, ta) ->
@@ -1188,7 +1187,7 @@ let rec make_upd_simple mark pos e1 fi tmp2 =
   let tmpi = tmp_var_name () in
   let tmp1 = tmp_var_name () in  
   (* Define memory and allocation table *)
-  let mc = deref_mem_class ~type_safe:false e1 fi in
+  let mc,_ufi_opt = deref_mem_class ~type_safe:false e1 fi in
   let mem = plain_memory_var (mc,e1#region) in
   let ac = alloc_class_of_mem_class mc in
   let alloc = alloc_table_var (ac,e1#region) in
@@ -1326,15 +1325,31 @@ and make_upd mark pos e1 fi e2 =
   let v2 = match e2#node with JCEvar v2 -> v2 | _ -> assert false in
   let tmp2 = v2.jc_var_info_name in
   (* Dispatch depending on kind of memory *) 
-  let mc = deref_mem_class ~type_safe:false e1 fi in
-  match mc with
-    | JCmem_field _fi -> 
+  let mc,ufi_opt = deref_mem_class ~type_safe:false e1 fi in
+  match mc,ufi_opt with
+    | JCmem_field fi', None -> 
+	assert (fi.jc_field_info_tag = fi'.jc_field_info_tag);
 	make_upd_simple mark pos e1 fi tmp2
-    | JCmem_discr_union vi -> assert false (* TODO *)
-    | JCmem_plain_union _vi ->
+    | JCmem_field fi', Some ufi ->
+	assert (fi.jc_field_info_tag = fi'.jc_field_info_tag);
+        let tmp1, lets, e1' = make_upd_simple mark pos e1 fi tmp2 in
+	let mems = overlapping_union_memories ufi in
+	let ef = 
+	  List.fold_left 
+	    (fun ef mc -> add_memory_effect LabelHere ef (mc,e1#region)) 
+	    empty_effects mems 
+	in
+	let write_effects = 
+	  local_write_effects ~callee_reads:empty_effects ~callee_writes:ef
+	in
+	let e2' = 
+	  BlackBox(Annot_type(LTrue, unit_type, [], write_effects, LTrue, [])) 
+	in
+	tmp1, lets, append e1' e2'
+    | JCmem_plain_union _vi, _ ->
 	let e1,off = destruct_union_access e1 (Some fi) in
 	make_upd_union mark pos off e1 fi tmp2
-    | JCmem_bitvector -> 
+    | JCmem_bitvector, _ -> 
 	make_upd_bytes mark pos e1 fi tmp2
 
 (* Translate the heap access `e.fi' 
@@ -1345,7 +1360,7 @@ and make_upd mark pos e1 fi e2 =
 *)
 and make_deref_simple mark pos e fi =
   (* Define memory and allocation table *)
-  let mc = deref_mem_class ~type_safe:false e fi in
+  let mc,_ufi_opt = deref_mem_class ~type_safe:false e fi in
   let mem = memory_var (mc,e#region) in
   let ac = alloc_class_of_mem_class mc in
   let alloc = alloc_table_var (ac,e#region) in
@@ -1433,11 +1448,10 @@ and make_deref_bytes mark pos e fi =
 
 and make_deref mark pos e1 fi =
   (* Dispatch depending on kind of memory *)
-  let mc = deref_mem_class ~type_safe:false e1 fi in
+  let mc,_uif_opt = deref_mem_class ~type_safe:false e1 fi in
   match mc with
-    | JCmem_field _fi -> 
+    | JCmem_field _ ->
 	make_deref_simple mark pos e1 fi
-    | JCmem_discr_union vi -> assert false (* TODO *)
     | JCmem_plain_union _vi ->
 	let e1,off = destruct_union_access e1 (Some fi) in
 	make_deref_union mark pos off e1 fi
@@ -1622,7 +1636,7 @@ and expr e =
         make_app "address" [ expr e1 ] 
     | JCEinstanceof(e1,st) ->
         let e1' = expr e1 in
-        let tag = tag_table_var (struct_variant st,e1#region) in
+        let tag = tag_table_var (struct_root st,e1#region) in
         (* always safe *)
         make_app "instanceof_" [ tag; e1'; Var(tag_name st) ]
     | JCEcast(e1,st) ->
@@ -1631,7 +1645,7 @@ and expr e =
 	else
           let e1' = expr e1 in
           let tmp = tmp_var_name () in
-          let tag = tag_table_var (struct_variant st,e1#region) in
+          let tag = tag_table_var (struct_root st,e1#region) in
 	  let downcast_fun = 
 	    if safety_checking () then "downcast_" else "safe_downcast_"
 	  in
@@ -1665,7 +1679,7 @@ and expr e =
 	let pc = JCtag(st,[]) in
 	let args = alloc_arguments (ac,e#region) pc in
         if !Jc_options.inv_sem = InvOwnership then
-          let tag = plain_tag_table_var (struct_variant st,e#region) in
+          let tag = plain_tag_table_var (struct_root st,e#region) in
           let mut = mutable_name pc in
           let com = committed_name pc in
           make_app "alloc_parameter_ownership" 
@@ -1768,7 +1782,7 @@ and expr e =
 		     let e' =
 		       if is_pointer_type e#typ && Region.bitwise e#region then
 			 let st = pointer_struct e#typ in
-			 let vi = struct_variant st in
+			 let vi = struct_root st in
 			 make_app (of_pointer_address_name vi) [ e' ]
 		       else e'
 		     in
@@ -2012,8 +2026,9 @@ and expr e =
              ExceptionSet.remove ei excs)
           else
             begin
-              eprintf "Warning: exception %s cannot be thrown@."
-                ei.jc_exception_info_name;
+(* YMo: too many questions about warning due to generated Jessie *)	      
+(*               eprintf "Warning: exception %s cannot be thrown@." *)
+(*                 ei.jc_exception_info_name; *)
               (s,excs)
             end
         in
@@ -2538,6 +2553,22 @@ let tr_fun f funpos spec body acc =
      - (optional) 'inferred' behaviors (computed by analysis)
      - user defined behaviors *)
 
+  let behaviors =
+    if List.exists 
+      (fun (_pos,id,b) -> 
+	 id = "default" && b.jc_behavior_assumes = None
+      ) spec.jc_fun_behavior 
+    then
+      spec.jc_fun_behavior
+    else
+      let b = { 
+	jc_behavior_throws = None;
+	jc_behavior_assumes = None;
+	jc_behavior_assigns = None;
+	jc_behavior_ensures = Assertion.mktrue (); }
+      in
+      (funpos,"default",b) :: spec.jc_fun_behavior
+  in
   let (safety_behavior,
        normal_behaviors_inferred, normal_behaviors, 
        excep_behaviors_inferred, excep_behaviors) =
@@ -2594,7 +2625,7 @@ let tr_fun f funpos spec body acc =
                  safety, normal_inferred, normal, excep_inferred, 
                  ExceptionMap.add_merge List.append exc [behav] excep)
       ([], [], [], ExceptionMap.empty, ExceptionMap.empty)
-      spec.jc_fun_behavior
+      behaviors
   in
   let user_excep_behaviors = excep_behaviors in
   let excep_behaviors = 
@@ -3219,24 +3250,20 @@ let tr_alloc_table (pc,r) acc =
 
 
 (******************************************************************************)
-(*                                  Variants                                  *)
+(*                                  Roots                                     *)
 (******************************************************************************)
 
-let tr_variant vi acc =
-  let pc = JCroot vi 
-  in
+let tr_root rt acc =
+  let pc = JCroot rt in
   let ac = alloc_class_of_pointer_class pc in
   let acc =
-    if not (root_is_union vi) then
-      (make_valid_pred ac pc) :: acc 
-    else
+    if root_is_union rt then
       (* Declarations of field memories. *)
       let acc = 
-	if !Jc_options.separation_sem = SepRegions then acc else
-          let mem = bitvector_type in
-          Param(false,
-		union_memory_name vi,
-		Ref_type(Base_type mem))::acc
+	if root_is_plain_union rt 
+	  && !Jc_options.separation_sem = SepRegions then acc else
+            let mem = bitvector_type in
+            Param(false,union_memory_name rt,Ref_type(Base_type mem)) :: acc
       in
       (* Validity parameters *)
       make_valid_pred ac pc 
@@ -3247,47 +3274,49 @@ let tr_variant vi acc =
       :: make_alloc_param ~check_size:true JCalloc_bitvector pc 
       :: make_alloc_param ~check_size:false JCalloc_bitvector pc 
       :: acc
+    else
+      make_valid_pred ac pc :: acc 
   in
   let of_ptr_addr =
-    Logic(false, of_pointer_address_name vi,
+    Logic(false, of_pointer_address_name rt,
 	  [ ("",raw_pointer_type why_unit_type) ], pointer_type ac pc)
   in
   let addr_axiom =
     let p = "p" in
-    Axiom("pointer_addr_of_" ^ (of_pointer_address_name vi),
+    Axiom("pointer_addr_of_" ^ (of_pointer_address_name rt),
 	  LForall(p, raw_pointer_type why_unit_type,
 		  make_eq_pred (JCTpointer(pc,None,None))
 		    (LVar p)
 		    (LApp("pointer_address",
-			  [ LApp(of_pointer_address_name vi,
+			  [ LApp(of_pointer_address_name rt,
 				 [ LVar p ])]))))
   in
   let rev_addr_axiom =
     let p = "p" in
-    Axiom((of_pointer_address_name vi) ^ "_of_pointer_addr",
+    Axiom((of_pointer_address_name rt) ^ "_of_pointer_addr",
 	  LForall(p, pointer_type ac pc,
 		  make_eq_pred (JCTpointer(pc,None,None))
 		    (LVar p)
-		    (LApp(of_pointer_address_name vi,
+		    (LApp(of_pointer_address_name rt,
 			  [ LApp("pointer_address",
 				 [ LVar p ])]))))
   in
   let lt = tr_base_type (JCTpointer(pc,None,None)) in
   let conv = 
-    [Logic(false,logic_bitvector_of_variant vi,["",lt],bitvector_type);
-     Logic(false,logic_variant_of_bitvector vi,["",bitvector_type],lt);
-     Axiom((logic_variant_of_bitvector vi)^"_of_"^(logic_bitvector_of_variant vi),
+    [Logic(false,logic_bitvector_of_variant rt,["",lt],bitvector_type);
+     Logic(false,logic_variant_of_bitvector rt,["",bitvector_type],lt);
+     Axiom((logic_variant_of_bitvector rt)^"_of_"^(logic_bitvector_of_variant rt),
 	   LForall("x",lt,
 		   LPred(equality_op_for_type (JCTpointer (pc,None,None)),
-                         [LApp(logic_variant_of_bitvector vi,
-			       [LApp(logic_bitvector_of_variant vi, 
+                         [LApp(logic_variant_of_bitvector rt,
+			       [LApp(logic_bitvector_of_variant rt, 
                                      [LVar "x"])]);
                           LVar "x"])));
-     Axiom((logic_bitvector_of_variant vi)^"_of_"^(logic_variant_of_bitvector vi),
+     Axiom((logic_bitvector_of_variant rt)^"_of_"^(logic_variant_of_bitvector rt),
 	   LForall("x",bitvector_type,
 		   LPred("eq", (* TODO: equality for bitvectors ? *)
-                         [LApp(logic_bitvector_of_variant vi,
-			       [LApp(logic_variant_of_bitvector vi, 
+                         [LApp(logic_bitvector_of_variant rt,
+			       [LApp(logic_variant_of_bitvector rt, 
                                        [LVar "x"])]);
                           LVar "x"])))
     ]
@@ -3295,40 +3324,40 @@ let tr_variant vi acc =
   let tag_table =
     Param(
       false,
-      variant_tag_table_name vi,
+      variant_tag_table_name rt,
       Ref_type(
         Base_type {
           logic_type_name = tag_table_type_name;
-          logic_type_args = [root_model_type vi];
+          logic_type_args = [root_model_type rt];
         }))
   in
   let alloc_table =
     Param(
       false,
-      variant_alloc_table_name vi,
+      variant_alloc_table_name rt,
       Ref_type(
         Base_type {
           logic_type_name = alloc_table_type_name;
-          logic_type_args = [root_model_type vi];
+          logic_type_args = [root_model_type rt];
         }))
   in
-  let type_def = Type(root_type_name vi, []) in
+  let type_def = Type(root_type_name rt, []) in
   (* Axiom: the variant can only have the given tags *)
   let axiom_variant_has_tag =
     let v = "x" in
-    let tag_table = generic_tag_table_name vi in
+    let tag_table = generic_tag_table_name rt in
     Axiom(
-      variant_axiom_on_tags_name vi,
+      variant_axiom_on_tags_name rt,
       LForall(
         v,
         pointer_type ac pc,
         LForall(
           tag_table,
-          tag_table_type vi,
+          tag_table_type rt,
           make_or_list
             (List.map
                (make_instanceof (LVar tag_table) (LVar v))
-               vi.jc_root_info_roots)
+               rt.jc_root_info_hroots)
       )))
   in
   (* Axioms: int_of_tag(T1) = 1, ... *)
@@ -3343,7 +3372,7 @@ let tr_variant vi acc =
          )
        in axiom::acc, index+1)
     (acc, 1)
-    vi.jc_root_info_roots
+    rt.jc_root_info_hroots
   in
   let acc = 
     type_def::alloc_table::tag_table::axiom_variant_has_tag

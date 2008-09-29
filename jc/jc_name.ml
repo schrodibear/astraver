@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.30 2008-09-26 09:11:51 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.31 2008-09-29 09:34:55 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -48,7 +48,7 @@ let simple_logic_type s =
 
 let root_type_name vi = vi.jc_root_info_name
 
-let struct_type_name st = root_type_name (struct_variant st)
+let struct_type_name st = root_type_name (struct_root st)
 
 let pointer_class_type_name = function
   | JCtag(st, _) -> struct_type_name st
@@ -60,7 +60,6 @@ let alloc_class_name = function
 
 let memory_class_name = function
   | JCmem_field fi -> fi.jc_field_info_final_name
-  | JCmem_discr_union fi -> fi.jc_field_info_final_name
   | JCmem_plain_union vi -> root_type_name vi
   | JCmem_bitvector -> bitvector_type_name
 
@@ -98,8 +97,9 @@ let alloc_table_name (ac,r) =
     (alloc_class_name ac) ^ "_alloc_table"
 
 let field_memory_name fi = 
-  if field_of_union fi then
-    (union_of_field fi).jc_root_info_name ^ "_fields"
+  let rt = struct_root fi.jc_field_info_struct in
+  if root_is_plain_union rt then
+    rt.jc_root_info_name ^ "_fields"
   else
     fi.jc_field_info_final_name
 
@@ -133,14 +133,13 @@ let generic_memory_name mc =
 let memory_name (mc,r) =
   match mc with
     | JCmem_field fi -> field_region_memory_name (fi,r)
-    | JCmem_discr_union fi -> field_region_memory_name (fi,r)
     | JCmem_plain_union vi -> union_region_memory_name (vi,r)
     | JCmem_bitvector -> bitvector_region_memory_name r
 
 let pointer_class_name = function
   | JCtag(st, _) -> 
       if struct_of_union st then
-	"root_" ^ (struct_variant st).jc_root_info_name
+	"root_" ^ (struct_root st).jc_root_info_name
       else
 	"struct_" ^ st.jc_struct_info_name
   | JCroot vi -> "root_" ^ vi.jc_root_info_name
