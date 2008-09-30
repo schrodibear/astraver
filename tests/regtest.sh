@@ -49,12 +49,12 @@ case $1 in
 	WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify/$b'_why'.sx	
 	mycatfilterdir $d/simplify/$b'_why'.sx
 	echo "========== running Simplify =========="
-	DP="$DIR/bin/dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify	
+	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify	
 	echo "========== generation of alt-ergo VC output =========="
 	WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile why/$b'_why'.why	
 	mycat $d/why/$b'_why'.why
 	echo "========== running alt-ergo =========="
-	DP="$DIR/bin/dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile ergo	
+	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile ergo	
 	;;
   *.c)
 	b=`basename $1 .c`

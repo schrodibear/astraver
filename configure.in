@@ -353,17 +353,17 @@ else
 fi
 
 # Alt-ergo
-AC_CHECK_PROG(ALTERGO,alt-ergo,alt-ergo,no)
-if test "$ALTERGO" = no ; then
-   AC_CHECK_PROG(ERGO,ergo,ergo,no)
-   if test "$ERGO" = no ; then
-     ERGOBIN=alt-ergo
-   else
-     ERGOBIN=ergo
-   fi
-else
-   ERGOBIN=alt-ergo
-fi
+dnl AC_CHECK_PROG(ALTERGO,alt-ergo,alt-ergo,no)
+dnl if test "$ALTERGO" = no ; then
+dnl    AC_CHECK_PROG(ERGO,ergo,ergo,no)
+dnl    if test "$ERGO" = no ; then
+dnl      ERGOBIN=alt-ergo
+dnl    else
+dnl      ERGOBIN=ergo
+dnl    fi
+dnl else
+dnl    ERGOBIN=alt-ergo
+dnl fi
 
 # PVS
 AC_PATH_PROG(PVSC,pvs,no)
@@ -436,7 +436,7 @@ AC_SUBST(WHYLIBCOQ)
 AC_SUBST(WHYFLOATS)
 AC_SUBST(JESSIELIBCOQ)
 
-AC_SUBST(ERGOBIN)
+# AC_SUBST(ERGOBIN)
 
 AC_SUBST(PVS)
 AC_SUBST(PVSC)
@@ -476,7 +476,7 @@ if test "$COQ" = "yes" ; then
    echo "    Lib                 : $COQLIB" 
    echo "    Floats              : ${WHYFLOATS:-no}"
 fi
-echo "Alt-ergo binary         : $ERGOBIN"
+# echo "Alt-ergo binary         : $ERGOBIN"
 echo "PVS support             : $PVS"
 if test "$PVS" = "yes" ; then
    echo "    Bin                 : $PVSC"

@@ -142,6 +142,7 @@ GENERATED = src/version.ml src/rc.ml src/xml.ml \
 ##############
 
 BINARY=bin/why.$(OCAMLBEST)
+WHYCONFIG=bin/why-config.$(OCAMLBEST)
 CADUCEUS=bin/caduceus.$(OCAMLBEST)
 JESSIE=bin/jessie.$(OCAMLBEST)
 KRAKATOA=bin/krakatoa.$(OCAMLBEST)
@@ -165,7 +166,7 @@ else
 JCLIB=jc/jc.cmo
 endif
 
-all: $(BINARY) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST)
+all: $(BINARY) $(WHYCONFIG) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST)
 
 opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.opt bin/krakatoa.opt
 
@@ -182,8 +183,21 @@ check: $(BINARY) $(PRELUDE)
 	WHYLIB=lib/why $(BINARY) --no-arrays -tc lib/why/arrays.why
 	WHYLIB=lib/why $(BINARY) -tc lib/why/floats.why
 
+# why-config
+WHYCONFIGCMO = src/rc.cmo src/version.cmo tools/dpConfig.cmo tools/whyConfig.cmo
+WHYCONFIGCMX = $(WHYCONFIGCMO:.cmo=.cmx)
+
+bin/why-config.opt: $(WHYCONFIGCMX)
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
+	$(STRIP) $@
+
+bin/why-config.byte: $(WHYCONFIGCMO)
+	# $(if $(QUIET),@echo 'Linking  $@' &&) 
+	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
+
+
 # why
-CMO = src/lib.cmo src/rc.cmo \
+CMO = src/lib.cmo src/rc.cmo tools/dpConfig.cmo \
       src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
 	   src/ident.cmo src/float_lexer.cmo  \
 	   src/effect.cmo src/pp.cmo src/option_misc.cmo src/misc.cmo 	\
@@ -534,7 +548,8 @@ bin/simplify2why.opt: $(SIMPLIFYTOWHYCMX)
 
 DPCMO = tools/cvcl_split.cmo tools/simplify_split.cmo tools/smtlib_split.cmo\
         tools/zenon_split.cmo tools/ergo_split.cmo tools/rv_split.cmo \
-        src/version.cmo tools/calldp.cmo tools/dp.cmo
+        src/rc.cmo tools/dpConfig.cmo src/version.cmo \
+	tools/calldp.cmo tools/dp.cmo
 DPCMX = $(DPCMO:.cmo=.cmx)
 
 bin/why-dp.byte: $(DPCMO)
@@ -597,7 +612,7 @@ pvs-yes: $(PVSFILES)
 include Version
 
 doc/version.tex src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version version.sh config.status
-	LIBDIR=$(LIBDIR) ERGOBIN=@ERGOBIN@ ./version.sh
+	LIBDIR=$(LIBDIR) ./version.sh
 
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why
@@ -693,9 +708,10 @@ java_api:
 
 install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@ 
 
-install-binary: $(BINARY) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@ $(WHYSTAT) $(WHYOBFUSCATOR) 
+install-binary: $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@ $(WHYSTAT) $(WHYOBFUSCATOR) 
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
+	cp -f $(WHYCONFIG) $(BINDIR)/why-config$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
 	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
 	cp -f $(KRAKATOA) $(BINDIR)/krakatoa$(EXE)
@@ -775,8 +791,9 @@ install-mizar-yes:
 	cp lib/mizar/why.miz @MIZARLIB@/mml
 	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
 
-local-install: $(BINARY) $(CADUCEUS) $(JESSIE) bin/gwhy.$(OCAMLBEST) byte bin/gwhy.byte 
+local-install: $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) bin/gwhy.$(OCAMLBEST) byte bin/gwhy.byte 
 	cp $(BINARY) $$HOME/bin/why
+	cp $(WHYCONFIG) $$HOME/bin/why
 	cp $(CADUCEUS) $$HOME/bin/caduceus
 	cp $(JESSIE) $$HOME/bin/jessie
 	if test -f bin/gwhy.$(OCAMLBEST); then \
@@ -1026,7 +1043,7 @@ BINARYNAME = $(NAME)-$(OSTYPE)
 
 linux: binary
 
-BINARYFILES = $(FILES) bin/why.opt bin/caduceus.opt \
+BINARYFILES = $(FILES) bin/why.opt bin/why-config.opt bin/caduceus.opt \
 	bin/krakatoa.opt bin/jessie.opt
 # README INSTALL COPYING GPL $(VO7) $(VO8) \
 # 	bin/why.static bin/caduceus.static \

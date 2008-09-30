@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.27 2008-07-08 19:16:29 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.28 2008-09-30 15:55:51 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -141,7 +141,9 @@ let prover_name = function
   | Zenon -> "Zenon"
   | Rvsat -> "rv-sat"
   | Yices -> "Yices"
-  | Ergo -> Version.ergo_binary
+  | Ergo -> 
+      DpConfig.alt_ergo.DpConfig.name ^ " " ^ 
+      DpConfig.alt_ergo.DpConfig.version
   | Cvc3 -> "CVC3"
   | Graph -> "Graph"
   | Z3 -> "Z3"

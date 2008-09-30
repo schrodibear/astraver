@@ -2096,7 +2096,7 @@ why --project [...] why/Gcd.why
     <goal why_file="why/Gcd_po22.why">
       <location file = "HOME/tests/java/Gcd.java" line = "107" begin = "20" end = "25"/>
       <explain kind = "Pre"
-text = ""/>
+text = "DivByZero"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `resultIsGcd'">
@@ -6144,10 +6144,10 @@ goal Gcd_gcd_safety_po_1:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ???????.??.......#.... (12/0/9/1/0)
+why/Gcd_why.why               : ???????.??.......?.... (12/0/10/0/0)
 total   :  22
 valid   :  12 ( 55%)
 invalid :   0 (  0%)
-unknown :   9 ( 41%)
-timeout :   1 (  5%)
+unknown :  10 ( 45%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

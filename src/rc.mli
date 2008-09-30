@@ -34,7 +34,6 @@ type rc_value =
   | RCfloat of float
   | RCstring of string
   | RCident of string
-  | RCkind of Output.kind
 
 val from_file : string -> (string * (string * rc_value) list) list
 

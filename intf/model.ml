@@ -33,7 +33,7 @@ open Options
 exception No_such_prover
 
 type prover = {
-  pr_name : string;
+  pr_info : DpConfig.prover;
   pr_result : int GTree.column;
   pr_icon : GtkStock.id GTree.column;
   pr_id : Dispatcher.prover;
@@ -50,13 +50,14 @@ let result = cols#add int
 let first_row = ref None
     
 let simplify = {
-  pr_name = "Simplify";
+  pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Simplify;
   pr_enc = NoEncoding;
   }
 
+(*
 let graph = {
   pr_name = "Graph";
   pr_result = cols#add int;
@@ -64,35 +65,38 @@ let graph = {
   pr_id = Dispatcher.Graph;
   pr_enc = NoEncoding;
   }
+*)
 
 let simplify_pred = {
-  pr_name = "Simplify(P)";
+  pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Simplify;
   pr_enc = Predicates;
   }
 let simplify_strat = {
-  pr_name = "Simplify(S)";
+  pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Simplify;
   pr_enc = Stratified;
   }
 let simplify_sstrat = {
-  pr_name = "Simplify(SS)";
+  pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Simplify;
   pr_enc = SortedStratified;
   }
 let simplify_rec = {
-  pr_name = "Simplify(R)";
+  pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Simplify;
   pr_enc = Recursive;
   }
+
+(*
 let zenon = {
   pr_name = "Zenon";
   pr_result = cols#add int;
@@ -142,43 +146,44 @@ let rvsat = {
   pr_id = Dispatcher.Rvsat;
   pr_enc = SortedStratified;
   }
+*)
 let yices = {
-  pr_name = "Yices(mono)";
+  pr_info = DpConfig.yices;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Yices;
   pr_enc = Monomorph;
   }
 let yicesSStrat = {
-  pr_name = "Yices(SS)";
+  pr_info = DpConfig.yices;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Yices;
   pr_enc = SortedStratified;
   }
 let ergo = {
-  pr_name = "alt-ergo";
+  pr_info = DpConfig.alt_ergo;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Ergo;
   pr_enc = NoEncoding;
   }
 let ergoSS = {
-  pr_name = "ergo(SS)";
+  pr_info = DpConfig.alt_ergo;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Ergo;
   pr_enc = SortedStratified;
   }
 let cvc3 = {
-  pr_name = "CVC3";
+  pr_info = DpConfig.cvc3;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Cvc3;
   pr_enc = SortedStratified;
   }
 let z3SS = {
-  pr_name = "Z3(SS)";
+  pr_info = DpConfig.z3;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Z3;
@@ -186,10 +191,10 @@ let z3SS = {
   }
 
 let provers = [
-  ergo; (*ergoSS;*) simplify; z3SS ; yicesSStrat; cvc3; graph; 
-  (*simplify_sstrat;*) simplify_strat; yices; rvsat; 
-  zenon; (*zenon_pred; zenon_strat; zenon_rec;*)
-  harvey; cvcl]
+  ergo; (*ergoSS;*) simplify; z3SS ; yicesSStrat; cvc3; (* graph; *)
+  (*simplify_sstrat;*) simplify_strat; yices; (* rvsat; *)
+  (* zenon; zenon_pred; zenon_strat; zenon_rec;*)
+  (* harvey; cvcl *)]
 let provers_selected = ref provers
 let provers_s = Hashtbl.create 17
 let get_provers () = !provers_selected
@@ -204,15 +209,33 @@ let get_default_prover () = !default_prover
 let set_prover p = 
   if List.mem p !provers_selected 
   then default_prover := p
-let print_prover p = p.pr_name
+
+let print_prover p = 
+  let n = p.pr_info.DpConfig.name in
+  match p.pr_enc with
+    | NoEncoding -> n
+    | SortedStratified -> n ^ "(SS)"
+    | Monomorph -> n ^ "(mono)"
+    | Recursive -> n ^ "(rec)"
+    | Stratified -> n ^ "(Strat)"
+    | Predicates -> n ^ "(pred)"
+
+let prover_name_version_enc p = 
+  let n = p.pr_info.DpConfig.name ^ " " ^ p.pr_info.DpConfig.version in
+  match p.pr_enc with
+    | NoEncoding -> n
+    | SortedStratified -> n ^ "(SS)"
+    | Monomorph -> n ^ "(mono)"
+    | Recursive -> n ^ "(rec)"
+    | Stratified -> n ^ "(Strat)"
+    | Predicates -> n ^ "(pred)"
+	 
 let get_prover s = 
   let rec next = function
     | [] -> 
 	raise No_such_prover
     | p' :: r -> 
-	if (String.lowercase p'.pr_name) = (String.lowercase s) 
-	then p' 
-	else next r
+	if print_prover p' = s then p' else next r
   in next !provers_selected
 
 let update_prover_s () = 
@@ -228,7 +251,9 @@ let add_provers l =
   assert (List.length l > 0);
   provers_selected := 
     List.rev (List.fold_left
-      (fun prs pr -> if List.mem pr.pr_name l then pr::prs else prs)
+      (fun prs pr -> 
+	 let n = print_prover pr in
+	 if List.mem n l then pr::prs else prs)
       []
       provers);
   if !provers_selected = [] then 
@@ -242,7 +267,7 @@ let add_provers l =
 
 let affiche () = 
   Hashtbl.iter
-    (fun p _s -> print_endline p.pr_name)
+    (fun p _s -> print_endline (print_prover p))
     provers_s
 
 let select_prover p = 

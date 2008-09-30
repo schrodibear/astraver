@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.82 2008-09-05 13:21:01 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.83 2008-09-30 15:55:51 marche Exp $ i*)
 
 open Printf
 open Options
@@ -171,7 +171,7 @@ module View = struct
     List.map
       (fun p ->
 	 let vc = 
-	   GTree.view_column ~title:p.pr_name 
+	   GTree.view_column ~title:(prover_name_version_enc p) 
 	     ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) ()
 	 in
 	 vc#set_clickable true;
@@ -355,7 +355,7 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
       in
       let get_result = function
 	| Calldp.Valid _ -> 
-	    Cache.add seq p.Model.pr_name;
+	    Cache.add seq (Model.print_prover p);
 	    model#set ~row ~column:column_p `YES ; 1
 	| Calldp.Timeout _ -> 
 	    model#set ~row ~column:column_p `CUT; 0
@@ -634,7 +634,7 @@ let main () =
     List.iter
       (fun p -> 
 	 let m = configuration_factory#add_check_item 
-	   ~active:(List.mem p (Model.get_provers ())) p.Model.pr_name
+	   ~active:(List.mem p (Model.get_provers ())) (Model.print_prover p)
 	 in 
 	 ignore(m#connect#toggled  
 		  ~callback:(fun () -> 
@@ -734,22 +734,23 @@ let main () =
   (* menus for povers *)
   let _ = proof_factory#add_separator ()  in
   let select_prover p = 
-    (try !flash_info (p.Model.pr_name ^" selected for default mode !")
+    (try !flash_info ((Model.print_prover p) ^" selected for default mode !")
     with _ -> ());
     Model.set_prover p
   in
   let provers_m = 
-    let name = (Model.get_default_prover ()).Model.pr_name
+    let name = Model.print_prover (Model.get_default_prover ())
     and pp = List.hd (Model.get_provers ()) in
-    let fm = proof_factory#add_radio_item ~active:(name = pp.Model.pr_name) 
-      pp.Model.pr_name in
+    let n = Model.print_prover pp in
+    let fm = proof_factory#add_radio_item ~active:(name = n) n in
     ignore(fm#connect#toggled  
 	     ~callback:(fun () -> select_prover pp));
     let group = fm#group in
     (pp, fm) :: List.map
       (fun p -> 
+	 let n = Model.print_prover p in
 	 let m = proof_factory#add_radio_item 
-	   ~active:(name = p.Model.pr_name) ~group p.Model.pr_name 
+	   ~active:(name = n) ~group n 
 	 in 
 	 ignore(m#connect#toggled  
 		  ~callback:(fun () -> select_prover p));
@@ -970,7 +971,7 @@ let main () =
 		     Hashtbl.iter
 		       (fun p m -> 
 			  Buffer.add_string buffer 
-			    (p.Model.pr_name ^ ": \n" ^ m ^" \n\n"))
+			    (Model.print_prover p ^ ": \n" ^ m ^" \n\n"))
 		       failed_with;
 		     let tbuf = GText.buffer () in
 		     tv2#set_buffer tbuf;
@@ -1040,6 +1041,13 @@ let main () =
 
 (* Main *)
 let _ = 
+  begin
+    try
+      DpConfig.load_rc_file ()
+    with Not_found ->
+      print_endline "Why config file not found, please run why-config first.";
+      exit 1
+  end;
 (*
   if not is_caduceus then Pprinter.desactivate ();
 *)

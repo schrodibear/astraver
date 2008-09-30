@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.43 2008-07-28 08:01:05 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.44 2008-09-30 15:55:51 marche Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -204,7 +204,15 @@ let print_time fmt f =
       let m = m mod 60 in
       fprintf fmt "%d h %02d m %02d sec" h m s  
 
+
 let main () = 
+  begin
+    try
+      DpConfig.load_rc_file ()
+    with Not_found ->
+      print_endline "Why config file not found, please run why-config first.";
+      exit 1
+  end;
   if Queue.is_empty files then begin Arg.usage spec usage; exit 1 end;
   let wctime0 = Unix.gettimeofday() in
   if not !batch then printf "(. = valid * = invalid ? = unknown # = timeout ! = failure)@."; 
@@ -246,8 +254,6 @@ unknown VCs:
     !tmaxinvalid
       (!tunknown /. float !nunknown)
     !tmaxunknown;
-
-
   try Sys.remove "out" with _ -> ()
-
+    
 let () = Printexc.catch main ()

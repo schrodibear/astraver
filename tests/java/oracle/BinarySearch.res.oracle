@@ -2317,77 +2317,77 @@ why --project [...] why/BinarySearch.why
     <goal why_file="why/BinarySearch_po20.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "63" begin = "16" end = "28"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po21.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "63" begin = "16" end = "28"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po22.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "18" end = "23"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po23.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "18" end = "23"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po24.why">
       <location file = "HOME/tests/java/BinarySearch.jc" line = "110" begin = "54" end = "140"/>
       <explain kind = "Pre"
-text = ""/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/BinarySearch_po25.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "17" end = "28"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po26.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "17" end = "28"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po27.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "13" end = "28"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po28.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "13" end = "28"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po29.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "9" end = "13"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     <goal why_file="why/BinarySearch_po30.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "9" end = "13"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     <goal why_file="why/BinarySearch_po31.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "23" end = "28"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po32.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "23" end = "28"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po33.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "73" begin = "28" end = "33"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po34.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "73" begin = "28" end = "33"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `correctness'">
@@ -10643,10 +10643,10 @@ goal BinarySearch_binary_search_safety_po_16:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : .............#.................... (33/0/0/1/0)
+why/BinarySearch_why.why      : .................................. (34/0/0/0/0)
 total   :  34
-valid   :  33 ( 97%)
+valid   :  34 (100%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   1 (  3%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

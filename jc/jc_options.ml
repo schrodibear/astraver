@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.33 2008-09-17 15:28:57 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.34 2008-09-30 15:55:51 marche Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -200,6 +200,18 @@ let parsing_error l f =
 
 (*s pos table *)
 
+let kind_of_ident = function
+  | "ArithOverflow" -> Output.ArithOverflow
+  | "DownCast" -> Output.DownCast
+  | "IndexBounds" -> Output.IndexBounds
+  | "PointerDeref" -> Output.PointerDeref
+  | "UserCall" -> Output.UserCall
+  | "DivByZero" -> Output.DivByZero
+  | "AllocSize" -> Output.AllocSize
+  | "Pack" ->  Output.Pack
+  | "Unpack" -> Output.Unpack
+  | _ -> raise Not_found
+
 let () =
   List.iter
     (fun f -> 
@@ -214,7 +226,13 @@ let () =
 		     | "line", Rc.RCint l -> (f,l,b,e,k,o)
 		     | "begin", Rc.RCint b -> (f,l,b,e,k,o)
 		     | "end", Rc.RCint e -> (f,l,b,e,k,o)
-		     | "kind", Rc.RCkind k -> (f,l,b,e,Some k,o)
+		     | "kind", Rc.RCident s -> 
+			 let k =
+			   try
+			     Some (kind_of_ident s)
+			   with Not_found -> None
+			 in
+			 (f,l,b,e,k,o)
 		     | _ -> (f,l,b,e,k,v::o))
 		("",0,0,0,None,[]) fs
 	    in

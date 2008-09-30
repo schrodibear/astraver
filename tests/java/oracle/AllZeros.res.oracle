@@ -1750,17 +1750,17 @@ why --project [...] why/AllZeros.why
     <goal why_file="why/AllZeros_po14.why">
       <location file = "HOME/tests/java/AllZeros.java" line = "42" begin = "9" end = "13"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     <goal why_file="why/AllZeros_po15.why">
       <location file = "HOME/tests/java/AllZeros.jc" line = "82" begin = "68" end = "72"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/AllZeros_po16.why">
       <location file = "HOME/tests/java/AllZeros.jc" line = "82" begin = "68" end = "72"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Behavior">

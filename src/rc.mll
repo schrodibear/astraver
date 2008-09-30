@@ -37,19 +37,6 @@ type rc_value =
   | RCfloat of float
   | RCstring of string
   | RCident of string
-  | RCkind of Output.kind
-
-let kind_of_ident = function
-  | "ArithOverflow" -> RCkind Output.ArithOverflow
-  | "DownCast" -> RCkind Output.DownCast
-  | "IndexBounds" -> RCkind Output.IndexBounds
-  | "PointerDeref" -> RCkind Output.PointerDeref
-  | "UserCall" -> RCkind Output.UserCall
-  | "DivByZero" -> RCkind Output.DivByZero
-  | "AllocSize" -> RCkind Output.AllocSize
-  | "Pack" -> RCkind Output.Pack
-  | "Unpack" -> RCkind Output.Unpack
-  | id -> RCident id
 
 let buf = Buffer.create 17
 
@@ -71,7 +58,7 @@ let push_record () =
 let space = [' ' '\t' '\r' '\n']+
 let digit = ['0'-'9']
 let letter = ['a'-'z' 'A'-'Z']
-let ident = (letter | digit | '_') + 
+let ident = (letter | '_') (letter | digit | '_' | '-') * 
 let sign = '-' | '+' 
 let integer = sign? digit+
 let mantissa = ['e''E'] sign? digit+
@@ -110,7 +97,7 @@ and value key = parse
       { push_field key (RCbool false);
         record lexbuf }
   | ident as id
-      { push_field key (kind_of_ident id);
+      { push_field key (RCident (*kind_of_ident*) id);
         record lexbuf }
   | _ as c
       { failwith ("Rc: invalid value starting with " ^ String.make 1 c) }
@@ -144,10 +131,13 @@ and string_val key = parse
   let from_file f =
       let c = 
 	try open_in f 
-	with Sys_error _ -> 
+	with Sys_error _ -> raise Not_found
+(*
 	  Format.eprintf "Cannot open file %s@." f;
 	  exit 1
+*)
       in
+      current := [];
       let lb = from_channel c in
       record lb;
       close_in c;

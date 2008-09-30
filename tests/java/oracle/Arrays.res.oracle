@@ -2909,7 +2909,7 @@ why --project [...] why/Arrays.why
     <goal why_file="why/Arrays_po41.why">
       <location file = "HOME/tests/java/Arrays.java" line = "76" begin = "9" end = "13"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po42.why">
       <location file = "why/Arrays.why" line = "1107" begin = "52" end = "218"/>
@@ -2918,12 +2918,12 @@ text = ""/>
     <goal why_file="why/Arrays_po43.why">
       <location file = "HOME/tests/java/Arrays.java" line = "84" begin = "9" end = "13"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po44.why">
       <location file = "HOME/tests/java/Arrays.java" line = "84" begin = "9" end = "13"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `max_found'">
@@ -3037,7 +3037,7 @@ text = ""/>
     <goal why_file="why/Arrays_po70.why">
       <location file = "HOME/tests/java/Arrays.java" line = "53" begin = "9" end = "13"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po71.why">
       <location file = "why/Arrays.why" line = "1388" begin = "52" end = "218"/>
@@ -3046,12 +3046,12 @@ text = ""/>
     <goal why_file="why/Arrays_po72.why">
       <location file = "HOME/tests/java/Arrays.java" line = "61" begin = "9" end = "13"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po73.why">
       <location file = "HOME/tests/java/Arrays.java" line = "61" begin = "9" end = "13"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `max_found'">
@@ -3169,22 +3169,22 @@ text = ""/>
     <goal why_file="why/Arrays_po12.why">
       <location file = "HOME/tests/java/Arrays.java" line = "107" begin = "10" end = "16"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po13.why">
       <location file = "HOME/tests/java/Arrays.java" line = "107" begin = "10" end = "16"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po14.why">
       <location file = "HOME/tests/java/Arrays.java" line = "107" begin = "3" end = "16"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po15.why">
       <location file = "HOME/tests/java/Arrays.java" line = "107" begin = "3" end = "16"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     </behavior>
     <behavior name="Behavior">

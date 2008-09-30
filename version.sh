@@ -12,7 +12,6 @@ echo "let coqversion = \""v8"\"" > $WHYVF
 echo "let version = \""$VERSION"\"" >> $WHYVF
 echo "let date = \""`date`"\"" >> $WHYVF
 echo "let libdir = \""$LIBDIR/why"\"" >> $WHYVF
-echo "let ergo_binary = \""$ERGOBIN"\"" >> $WHYVF
 
 # Jessie
 JESSIEVF=jc/jc_version.ml

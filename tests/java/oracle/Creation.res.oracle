@@ -3288,7 +3288,7 @@ why --project [...] why/Creation.why
     <goal why_file="why/Creation_po10.why">
       <location file = "HOME/tests/java/Creation.jc" line = "117" begin = "57" end = "72"/>
       <explain kind = "Pre"
-text = ""/>
+text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po11.why">
       <location file = "why/Creation.why" line = "1148" begin = "30" end = "151"/>
@@ -3297,7 +3297,7 @@ text = ""/>
     <goal why_file="why/Creation_po12.why">
       <location file = "HOME/tests/java/Creation.java" line = "52" begin = "8" end = "20"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `normal'">
@@ -3313,7 +3313,7 @@ text = ""/>
     <goal why_file="why/Creation_po6.why">
       <location file = "HOME/tests/java/Creation.jc" line = "97" begin = "59" end = "74"/>
       <explain kind = "Pre"
-text = ""/>
+text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po7.why">
       <location file = "why/Creation.why" line = "1068" begin = "32" end = "157"/>
@@ -3322,7 +3322,7 @@ text = ""/>
     <goal why_file="why/Creation_po8.why">
       <location file = "HOME/tests/java/Creation.java" line = "43" begin = "8" end = "20"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `normal'">
@@ -3338,7 +3338,7 @@ text = ""/>
     <goal why_file="why/Creation_po2.why">
       <location file = "HOME/tests/java/Creation.jc" line = "77" begin = "59" end = "74"/>
       <explain kind = "Pre"
-text = ""/>
+text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po3.why">
       <location file = "why/Creation.why" line = "991" begin = "30" end = "151"/>
@@ -3347,7 +3347,7 @@ text = ""/>
     <goal why_file="why/Creation_po4.why">
       <location file = "HOME/tests/java/Creation.java" line = "35" begin = "8" end = "20"/>
       <explain kind = "Pre"
-text = ""/>
+text = "IndexBounds"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `normal'">
@@ -3372,12 +3372,12 @@ text = ""/>
     <goal why_file="why/Creation_po17.why">
       <location file = "HOME/tests/java/Creation.java" line = "27" begin = "6" end = "9"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Creation_po18.why">
       <location file = "HOME/tests/java/Creation.java" line = "27" begin = "6" end = "9"/>
       <explain kind = "Pre"
-text = ""/>
+text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `normal'">

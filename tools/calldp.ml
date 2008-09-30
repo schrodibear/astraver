@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.50 2008-07-28 08:01:05 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.51 2008-09-30 15:55:51 marche Exp $ i*)
 
 open Printf
 
@@ -267,9 +267,20 @@ let cvc3 ?(debug=false) ?(timeout=30) ~filename:f () =
     remove_file ~debug out;
     r
 
+(*
+let gen_prover ?(debug=false) ?(timeout=30) ~filename:f prover_decls =
+  let cmd = prover_decls.prover_command ^ " " ^ f in
+  let t,c,out = timed_sys_command ~debug timeout cmd in
+*)
+  
+
 let z3 ?(debug=false) ?(timeout=30) ~filename:f () =
+(*
+  gen_prover ~debug
+*)
   let cmd = sprintf "z3 -smt %s" f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
+(*
   if c <> 0 then 
     if c==1 && 
       Sys.command (sprintf "grep -q -w 'feature not supported' %s" out) = 0 then
@@ -277,6 +288,7 @@ let z3 ?(debug=false) ?(timeout=30) ~filename:f () =
     else	
       error c t cmd
   else 
+*)
     let r = 
       if Sys.command (sprintf "grep -q -w unsat %s" out) = 0 then
 	Valid t
@@ -319,7 +331,7 @@ let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
 
 
 let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "%s %s" Version.ergo_binary f in
+  let cmd = sprintf "%s %s" DpConfig.alt_ergo.DpConfig.command f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
   if c <> 0 then error c t cmd
   else 
