@@ -413,7 +413,7 @@ apply RND_ClosestUp_correct; [auto with zarith| auto with zarith|
   apply pdGivesBound].
 Qed.
 
-Theorem zero_no_round: forall (m:mode), ((d_to_r (r_to_d m (IZR 1))=1))%R.
+Theorem zero_no_round: forall (m:mode), ((d_to_r (r_to_d m (IZR 0))=0))%R.
 intros.
 rewrite small_int_no_round; auto with real zarith.
 Qed.
@@ -428,5 +428,17 @@ intros.
 rewrite small_int_no_round; auto with real zarith.
 Qed.
 
+Theorem zero_rounded_in_zero: forall (r:R), (r=0)%R ->
+ (FtoRradix (RND_EvenClosest bdouble radix 53 r)=0)%R.
+intros; rewrite <- zero_no_round with nearest_even.
+rewrite H; unfold d_to_r, r_to_d; simpl; auto.
+Qed.
 
-Hint Resolve psGreaterThanOne psGivesBound pdGreaterThanOne pdGivesBound  EvenClosestRoundedModeP RND_EvenClosest_correct RND_EvenClosest_canonic  (FcanonicBound radix) (zero_no_round nearest_even) (one_no_round nearest_even) (two_no_round nearest_even).
+Theorem one_rounded_in_one: forall (r:R), (r=1)%R ->
+ (FtoRradix (RND_EvenClosest bdouble radix 53 r)=1)%R.
+intros; rewrite <- one_no_round with nearest_even.
+rewrite H; unfold d_to_r, r_to_d; simpl; auto.
+Qed.
+
+
+Hint Resolve psGreaterThanOne psGivesBound pdGreaterThanOne pdGivesBound  EvenClosestRoundedModeP RND_EvenClosest_correct RND_EvenClosest_canonic  (FcanonicBound radix) (zero_no_round nearest_even) (one_no_round nearest_even) (two_no_round nearest_even) zero_rounded_in_zero one_rounded_in_one.
