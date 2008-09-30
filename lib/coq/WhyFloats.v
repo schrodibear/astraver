@@ -440,5 +440,22 @@ intros; rewrite <- one_no_round with nearest_even.
 rewrite H; unfold d_to_r, r_to_d; simpl; auto.
 Qed.
 
+Theorem max_single_pos: (0 < max_single)%R.
+unfold max_single.
+apply Rle_lt_trans with (0*powerRZ radix 127)%R;[right; ring|apply Rmult_lt_compat_r; auto with real zarith].
+apply Rplus_lt_reg_r with (powerRZ radix (-23)); ring_simplify.
+apply Rlt_le_trans with (powerRZ radix 1); auto with real zarith.
+apply Rlt_powerRZ; unfold radix; simpl; auto with real zarith.
+Qed.
 
-Hint Resolve psGreaterThanOne psGivesBound pdGreaterThanOne pdGivesBound  EvenClosestRoundedModeP RND_EvenClosest_correct RND_EvenClosest_canonic  (FcanonicBound radix) (zero_no_round nearest_even) (one_no_round nearest_even) (two_no_round nearest_even) zero_rounded_in_zero one_rounded_in_one.
+
+Theorem max_double_pos: (0 < max_double)%R.
+unfold max_double.
+apply Rle_lt_trans with (0*powerRZ radix 1023)%R;[right; ring|apply Rmult_lt_compat_r; auto with real zarith].
+apply Rplus_lt_reg_r with (powerRZ radix (-52)); ring_simplify.
+apply Rlt_le_trans with (powerRZ radix 1); auto with real zarith.
+apply Rlt_powerRZ; unfold radix; simpl; auto with real zarith.
+Qed.
+
+
+Hint Resolve psGreaterThanOne psGivesBound pdGreaterThanOne pdGivesBound  EvenClosestRoundedModeP RND_EvenClosest_correct RND_EvenClosest_canonic  (FcanonicBound radix) (zero_no_round nearest_even) (one_no_round nearest_even) (two_no_round nearest_even) zero_rounded_in_zero one_rounded_in_one max_single_pos max_double_pos.
