@@ -57,15 +57,13 @@ let simplify = {
   pr_enc = NoEncoding;
   }
 
-(*
 let graph = {
-  pr_name = "Graph";
+  pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_id = Dispatcher.Graph;
   pr_enc = NoEncoding;
   }
-*)
 
 let simplify_pred = {
   pr_info = DpConfig.simplify;
@@ -191,7 +189,7 @@ let z3SS = {
   }
 
 let provers = [
-  ergo; (*ergoSS;*) simplify; z3SS ; yicesSStrat; cvc3; (* graph; *)
+  ergo; (*ergoSS;*) graph; simplify; z3SS ; yicesSStrat; cvc3; 
   (*simplify_sstrat;*) simplify_strat; yices; (* rvsat; *)
   (* zenon; zenon_pred; zenon_strat; zenon_rec;*)
   (* harvey; cvcl *)]
@@ -210,25 +208,22 @@ let set_prover p =
   if List.mem p !provers_selected 
   then default_prover := p
 
-let print_prover p = 
-  let n = p.pr_info.DpConfig.name in
+let enc_name n p =
   match p.pr_enc with
-    | NoEncoding -> n
+    | NoEncoding -> 
+	if p.pr_id = Dispatcher.Graph then n ^ "(Graph)"
+	else n 
     | SortedStratified -> n ^ "(SS)"
     | Monomorph -> n ^ "(mono)"
     | Recursive -> n ^ "(rec)"
     | Stratified -> n ^ "(Strat)"
     | Predicates -> n ^ "(pred)"
 
+let print_prover p = 
+  enc_name p.pr_info.DpConfig.name p
+
 let prover_name_version_enc p = 
-  let n = p.pr_info.DpConfig.name ^ " " ^ p.pr_info.DpConfig.version in
-  match p.pr_enc with
-    | NoEncoding -> n
-    | SortedStratified -> n ^ "(SS)"
-    | Monomorph -> n ^ "(mono)"
-    | Recursive -> n ^ "(rec)"
-    | Stratified -> n ^ "(Strat)"
-    | Predicates -> n ^ "(pred)"
+  enc_name (p.pr_info.DpConfig.name ^ " " ^ p.pr_info.DpConfig.version) p
 	 
 let get_prover s = 
   let rec next = function
