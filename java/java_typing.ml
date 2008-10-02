@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.139 2008-09-25 15:04:24 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.140 2008-10-02 12:05:24 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -2320,6 +2320,9 @@ let method_signature mi =
   in
   t :: List.map (fun (vi, _) -> vi.java_var_info_type) mi.method_info_parameters
 
+let constr_signature ci =
+  List.map (fun (vi, _) -> vi.java_var_info_type) ci.constr_info_parameters
+
 let rec compare_signatures acc s1 s2 =
   match s1,s2 with
     | [],[] -> acc
@@ -2337,28 +2340,28 @@ let rec compare_signatures acc s1 s2 =
               if acc <= 0 then -1 else raise Not_found
             else raise Not_found
     
-let rec filter_maximally_specific_signature mi acc =
+let rec filter_maximally_specific_signature get_sig mi acc =
   match acc with
     | [] -> [mi]
     | mi' :: rem ->
-        let s1 = method_signature mi in
-        let s2 = method_signature mi' in
+        let s1 = get_sig mi in
+        let s2 = get_sig mi' in
         try
           let c = compare_signatures 0 s1 s2 in
           if c = 0 then mi :: acc else
             if c > 0 then (* mi more specific than mi' *)
-              filter_maximally_specific_signature mi rem
+              filter_maximally_specific_signature get_sig mi rem
             else (* mi' more specific than mi *)
               acc             
         with Not_found -> (* incomparable signatures *)
-          mi' :: (filter_maximally_specific_signature mi rem)
+          mi' :: (filter_maximally_specific_signature get_sig mi rem)
 
-let rec get_maximally_specific_signatures acc meths =
+let rec get_maximally_specific_signatures get_sig acc meths =
   match meths with
     | [] -> acc
     | mi::rem ->
-        let acc' = filter_maximally_specific_signature mi acc in
-        get_maximally_specific_signatures acc' rem
+        let acc' = filter_maximally_specific_signature get_sig mi acc in
+        get_maximally_specific_signatures get_sig acc' rem
 
 let lookup_method ti (loc,id) arg_types = 
   let rec collect_methods_from_interface acc ii =
@@ -2417,7 +2420,7 @@ let lookup_method ti (loc,id) arg_types =
                        mi.method_info_parameters)
           meths;
 *)
-        let meths = get_maximally_specific_signatures [] meths in
+        let meths = get_maximally_specific_signatures method_signature [] meths in
 (*
         eprintf "maximally specific calls:@.";
         List.iter (fun mi ->
@@ -2434,7 +2437,7 @@ let lookup_method ti (loc,id) arg_types =
           | _ ->        
               typing_error loc "ambiguity in overloading/overriding"
 
-let lookup_constructor ci arg_types = 
+let lookup_constructor loc ci arg_types = 
   let rec collect_constructors_from_class acc ci =
     check_if_class_complete ci;
     List.fold_left
@@ -2447,7 +2450,15 @@ let lookup_constructor ci arg_types =
   let constructors = collect_constructors_from_class [] ci in
     match constructors with
       | [ci] -> ci
-      | _ -> assert false (* TODO *)
+      | _ -> 
+          let constrs = get_maximally_specific_signatures constr_signature [] constructors in
+          match constrs with
+          | [] -> assert false
+          | [ci] -> ci
+          | _ ->        
+              typing_error loc "ambiguity in overloading/overriding"
+	  
+	
           
 let rec expr ~ghost env e =
   let exprt = expr ~ghost env in
@@ -2542,7 +2553,9 @@ let rec expr ~ghost env e =
 (*
                   eprintf "looking up constructor in class %s@." ci.class_info_name;
 *)
-                  let constr = lookup_constructor ci arg_types in
+		  
+                  let constr = lookup_constructor (fst (List.hd n)) 
+		    ci arg_types in
                   JTYclass (true, ci), JEnew_object(constr,args)
               | _ ->
                   typing_error (fst (List.hd n))
@@ -3371,7 +3384,7 @@ let type_constr_spec_and_body ?(dobody=true)
       | Invoke_this el -> 
           let tel = List.map (expr ~ghost:false env) el in
           let arg_types = List.map (fun te -> te.java_expr_type) tel in
-          let this_ci = lookup_constructor ci.constr_info_class arg_types in
+          let this_ci = lookup_constructor Loc.dummy_position ci.constr_info_class arg_types in
           let this_call_s =
             make_statement_no_loc 
               (JSexpr (
@@ -3397,7 +3410,7 @@ let type_constr_spec_and_body ?(dobody=true)
               | Some ci -> ci
           in
           let arg_types = List.map (fun te -> te.java_expr_type) tel in
-          let super_ci = lookup_constructor super_class_info arg_types in
+          let super_ci = lookup_constructor Loc.dummy_position super_class_info arg_types in
           let super_call_s =
             make_statement_no_loc 
               (JSexpr (
