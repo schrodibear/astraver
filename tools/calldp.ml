@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.51 2008-09-30 15:55:51 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.52 2008-10-02 12:05:57 marche Exp $ i*)
 
 open Printf
 
@@ -77,6 +77,62 @@ let error c t cmd =
   if c = 152 then Timeout t 
   else ProverFailure (t,"command failed: " ^ cmd) 
 
+let grep re str =
+  try
+    let _ = Str.search_forward re str 0 in true
+  with Not_found -> false
+
+let gen_prover_call ?(debug=false) ?(timeout=30) ~filename:f p =
+  let cmd = p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ f in
+  let t,c,out = timed_sys_command ~debug timeout cmd in
+  if c<>0 then
+    error c t cmd
+  else
+    let res = file_contents out in
+    let r =
+      let valid_re =
+	match p.DpConfig.valid_cregexp with
+	  | None ->
+	      let r = Str.regexp p.DpConfig.valid_regexp in
+	      p.DpConfig.valid_cregexp <- Some r;
+	      r
+	  | Some r -> r
+      in
+      if grep valid_re res then
+	Valid t
+      else
+	let undecided_re =
+	  match p.DpConfig.undecided_cregexp with
+	    | None ->
+		let r = Str.regexp p.DpConfig.undecided_regexp in
+		p.DpConfig.undecided_cregexp <- Some r;
+		r
+	    | Some r -> r
+	in
+	if grep undecided_re res then
+	  CannotDecide(t, None)
+	else
+	  ProverFailure(t,"prover command " ^ cmd ^ " produced unrecognized answer: " ^ out)
+    in
+    remove_file ~debug out;
+    r
+
+let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
+  gen_prover_call ~debug ~timeout ~filename:f DpConfig.alt_ergo
+	        
+let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
+  gen_prover_call ~debug ~timeout ~filename:f DpConfig.simplify
+
+let z3 ?(debug=false) ?(timeout=10) ~filename:f () =
+  gen_prover_call ~debug ~timeout ~filename:f DpConfig.z3
+
+let yices ?(debug=false) ?(timeout=10) ~filename:f () =
+  gen_prover_call ~debug ~timeout ~filename:f DpConfig.yices
+
+let cvc3 ?(debug=false) ?(timeout=10) ~filename:f () =
+  gen_prover_call ~debug ~timeout ~filename:f DpConfig.cvc3
+
+
 let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "cvcl < %s" f in
   let t,c,out = timed_sys_command debug timeout cmd in
@@ -97,6 +153,7 @@ let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
     remove_file ~debug out;
     r
 
+(*
 let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "Simplify %s" f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
@@ -113,6 +170,7 @@ let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
     in
     remove_file ~debug out;
     r
+*)
 
 
 (**
@@ -220,6 +278,7 @@ let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
     (*remove_file ~debug out;*)
     r
 
+(*
 let yices ?(debug=false) ?(timeout=30) ~filename:f () =
   let cmd = sprintf "yices  -pc 0 -smt < %s" f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
@@ -241,7 +300,9 @@ let yices ?(debug=false) ?(timeout=30) ~filename:f () =
     in
     remove_file ~debug out;
     r
+*)
 
+(*
 let cvc3 ?(debug=false) ?(timeout=30) ~filename:f () =
   let cmd = 
     sprintf "cvc3 -lang smt < %s" f 
@@ -266,18 +327,10 @@ let cvc3 ?(debug=false) ?(timeout=30) ~filename:f () =
     in
     remove_file ~debug out;
     r
+*)
 
 (*
-let gen_prover ?(debug=false) ?(timeout=30) ~filename:f prover_decls =
-  let cmd = prover_decls.prover_command ^ " " ^ f in
-  let t,c,out = timed_sys_command ~debug timeout cmd in
-*)
-  
-
 let z3 ?(debug=false) ?(timeout=30) ~filename:f () =
-(*
-  gen_prover ~debug
-*)
   let cmd = sprintf "z3 -smt %s" f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
 (*
@@ -300,6 +353,7 @@ let z3 ?(debug=false) ?(timeout=30) ~filename:f () =
     in
     remove_file ~debug out;
     r
+*)
 
 let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "rvc %s" f in
@@ -329,28 +383,6 @@ let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
   end
  
 
-
-let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "%s %s" DpConfig.alt_ergo.DpConfig.command f in
-  let t,c,out = timed_sys_command ~debug timeout cmd in
-  if c <> 0 then error c t cmd
-  else 
-    let r =
-      if Sys.command (sprintf "grep -q -w Valid %s" out) = 0 then
-	Valid t
-      else if Sys.command (sprintf "grep -q -w \"I don't know\" %s" out) = 0
-      then
-	CannotDecide (t, None)
-      else if Sys.command (sprintf "grep -q -w \"Invalid\" %s" out) = 0
-      then
-	(* ergo 0.6 never really say 'invalid' *)
-	CannotDecide (t,None)
-      else
-	ProverFailure(t,"command failed: " ^ cmd)
-    in
-    remove_file ~debug out;
-    r
-    
 
 
 

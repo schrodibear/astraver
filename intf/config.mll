@@ -77,7 +77,7 @@
     output_string out_channel "# Parameters \n";
     List.iter 
       (fun (k,v) -> output_string out_channel (k^ " = \""^ v ^ "\"\n"))
-      [("prover", Model.print_prover (Model.get_default_prover ()));
+      [("prover", Model.prover_id (Model.get_default_prover ()));
        ("cache", string_of_bool (Cache.is_enabled ()));
        ("timeout", string_of_int (Tools.get_timeout ()));
        ("hard_proof", string_of_bool (Cache.hard_proof ()));
@@ -86,7 +86,7 @@
     output_string out_channel "# It must be contain at least one prover. Otherwise, all valid provers will be selected.\n";
     output_string out_channel "provers = ";
     List.iter 
-      (fun p -> output_string out_channel ("\""^(Model.print_prover p)^"\" "))
+      (fun p -> output_string out_channel ("\""^(Model.prover_id p)^"\" "))
       (Model.get_provers_s ());
 
 

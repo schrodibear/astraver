@@ -44,3 +44,4 @@ class AllZeros {
 	return true;
     }
 }
+

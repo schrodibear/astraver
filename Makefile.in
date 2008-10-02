@@ -553,10 +553,10 @@ DPCMO = tools/cvcl_split.cmo tools/simplify_split.cmo tools/smtlib_split.cmo\
 DPCMX = $(DPCMO:.cmo=.cmx)
 
 bin/why-dp.byte: $(DPCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ unix.cma $^
+	$(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma $^
 
 bin/why-dp.opt: $(DPCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 
 bin/why-cpulimit: tools/cpulimit.c
 	$(CC) -o $@ $^

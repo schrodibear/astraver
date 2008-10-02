@@ -4,7 +4,9 @@ case $1 in
   *.java)
 	b=`basename $1 .java`
 	krakatoa $1 || exit 1
+	echo "krakatoa on $b.java done"
 	jessie -locs $b.jloc -why-opt -split-user-conj $b.jc || exit 2
+	echo "jessie done"
 	make -f $b.makefile gui
 	;;
   *.c)

@@ -8,13 +8,14 @@ type prover =
     version_switch : string;
     version_regexp : string;
     mutable command : string;
+    command_switches : string;
 (*
     correct_exit_codes : int list;
 *)
     valid_regexp : string;
-    valid_cregexp : Str.regexp option;
+    mutable valid_cregexp : Str.regexp option;
     undecided_regexp : string;
-    undecided_cregexp : Str.regexp option;
+    mutable undecided_cregexp : Str.regexp option;
 (*
     invalid_regexp : string;
     invalid_cregexp : Str.regexp option;
@@ -28,6 +29,7 @@ let alt_ergo =
     version_switch = "-version";
     version_regexp = "Ergo \\([^ ]*\\)";
     command = "alt-ergo";
+    command_switches = "";
 (*
     correct_exit_codes = [0];
 *)
@@ -48,6 +50,7 @@ let simplify =
     version_switch = "-version";
     version_regexp = "Simplify version \\([^ ,]+\\)";
     command = "Simplify";
+    command_switches = "";
 (*
     correct_exit_codes = [0];
 *)
@@ -64,6 +67,7 @@ let z3 =
     version_switch = "-version";
     version_regexp = "Z3 version \\([^ \r]+\\)";
     command = "z3";
+    command_switches = "-smt";
 (*
 "wine /home/cmarche/.wine/drive_c/Program\ Files/Microsoft\ Research/Z3-1.3.6/bin/z3.exe";
     
@@ -89,6 +93,7 @@ let yices =
     version_switch = "--version";
     version_regexp = "\\([^ ]+\\)";
     command = "yices";
+    command_switches = "-pc 0 -smt < ";
     valid_regexp = "\\bunsat\\b";
     valid_cregexp = None;
     undecided_regexp = "\\bunknown\\b\\|\\bsat\\b";
@@ -102,6 +107,7 @@ let cvc3 =
     version_switch = "-version";
     version_regexp = "This is CVC3 version \\([^ ]+\\)";
     command = "cvc3";
+    command_switches = "-lang smt < ";
     valid_regexp = "\\bunsat\\b";
     valid_cregexp = None;
     undecided_regexp = "\\bunknown\\b\\|\\bsat\\b";
@@ -112,7 +118,7 @@ let cvc3 =
 let prover_list = 
   [
     alt_ergo, ["ergo"] ;
-    simplify, [] ;
+    simplify, ["simplify"] ;
     z3, [] ;
     yices, [] ;
     cvc3, [] ;

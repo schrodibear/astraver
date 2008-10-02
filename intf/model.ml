@@ -36,6 +36,7 @@ type prover = {
   pr_info : DpConfig.prover;
   pr_result : int GTree.column;
   pr_icon : GtkStock.id GTree.column;
+  mutable pr_viewcol : GTree.view_column option;
   pr_id : Dispatcher.prover;
   pr_enc : Options.encoding;
 }
@@ -53,6 +54,7 @@ let simplify = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Simplify;
   pr_enc = NoEncoding;
   }
@@ -61,6 +63,7 @@ let graph = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Graph;
   pr_enc = NoEncoding;
   }
@@ -69,6 +72,7 @@ let simplify_pred = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Simplify;
   pr_enc = Predicates;
   }
@@ -76,6 +80,7 @@ let simplify_strat = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Simplify;
   pr_enc = Stratified;
   }
@@ -83,6 +88,7 @@ let simplify_sstrat = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Simplify;
   pr_enc = SortedStratified;
   }
@@ -90,6 +96,7 @@ let simplify_rec = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Simplify;
   pr_enc = Recursive;
   }
@@ -149,6 +156,7 @@ let yices = {
   pr_info = DpConfig.yices;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Yices;
   pr_enc = Monomorph;
   }
@@ -156,6 +164,7 @@ let yicesSStrat = {
   pr_info = DpConfig.yices;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Yices;
   pr_enc = SortedStratified;
   }
@@ -163,6 +172,7 @@ let ergo = {
   pr_info = DpConfig.alt_ergo;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Ergo;
   pr_enc = NoEncoding;
   }
@@ -170,6 +180,7 @@ let ergoSS = {
   pr_info = DpConfig.alt_ergo;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Ergo;
   pr_enc = SortedStratified;
   }
@@ -177,6 +188,7 @@ let cvc3 = {
   pr_info = DpConfig.cvc3;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Cvc3;
   pr_enc = SortedStratified;
   }
@@ -184,6 +196,7 @@ let z3SS = {
   pr_info = DpConfig.z3;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
   pr_id = Dispatcher.Z3;
   pr_enc = SortedStratified;
   }
@@ -208,29 +221,33 @@ let set_prover p =
   if List.mem p !provers_selected 
   then default_prover := p
 
-let enc_name n p =
+let enc_name ~nl n p =
+  let nl x = if nl then "\n" ^ x else x in 
   match p.pr_enc with
     | NoEncoding -> 
-	if p.pr_id = Dispatcher.Graph then n ^ "(Graph)"
-	else n 
-    | SortedStratified -> n ^ "(SS)"
-    | Monomorph -> n ^ "(mono)"
-    | Recursive -> n ^ "(rec)"
-    | Stratified -> n ^ "(Strat)"
-    | Predicates -> n ^ "(pred)"
+	if p.pr_id = Dispatcher.Graph then n ^ nl "(Graph)"
+	else n ^ nl "" 
+    | SortedStratified -> n ^ nl "(SS)"
+    | Monomorph -> n ^ nl "(mono)"
+    | Recursive -> n ^ nl "(rec)"
+    | Stratified -> n ^ nl "(Strat)"
+    | Predicates -> n ^ nl "(pred)"
 
-let print_prover p = 
-  enc_name p.pr_info.DpConfig.name p
+let prover_id p = 
+  enc_name ~nl:false p.pr_info.DpConfig.name p
 
-let prover_name_version_enc p = 
-  enc_name (p.pr_info.DpConfig.name ^ " " ^ p.pr_info.DpConfig.version) p
+let prover_name_with_version_and_enc p = 
+  let v = p.pr_info.DpConfig.version in
+  let n = p.pr_info.DpConfig.name in
+  let n = if v <> "" then n ^ "\n" ^ v else n ^ "\n(uninstalled)" in
+  enc_name ~nl:true n p
 	 
 let get_prover s = 
   let rec next = function
     | [] -> 
 	raise No_such_prover
     | p' :: r -> 
-	if print_prover p' = s then p' else next r
+	if prover_id p' = s then p' else next r
   in next !provers_selected
 
 let update_prover_s () = 
@@ -247,7 +264,7 @@ let add_provers l =
   provers_selected := 
     List.rev (List.fold_left
       (fun prs pr -> 
-	 let n = print_prover pr in
+	 let n = prover_id pr in
 	 if List.mem n l then pr::prs else prs)
       []
       provers);
@@ -260,10 +277,12 @@ let add_provers l =
     (fun p -> Hashtbl.add provers_s p "")
     !provers_selected
 
+(*
 let affiche () = 
   Hashtbl.iter
     (fun p _s -> print_endline (print_prover p))
     provers_s
+*)
 
 let select_prover p = 
   if not (Hashtbl.mem provers_s p) then

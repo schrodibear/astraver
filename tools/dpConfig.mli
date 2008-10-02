@@ -8,13 +8,14 @@ type prover =
     version_switch : string;
     version_regexp : string;
     mutable command : string;
+    command_switches : string;
 (*
     correct_exit_codes : int list;
 *)
     valid_regexp : string;
-    valid_cregexp : Str.regexp option;
+    mutable valid_cregexp : Str.regexp option;
     undecided_regexp : string;
-    undecided_cregexp : Str.regexp option;
+    mutable undecided_cregexp : Str.regexp option;
 (*
     invalid_regexp : string;
     invalid_cregexp : Str.regexp option;
