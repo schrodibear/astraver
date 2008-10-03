@@ -33,7 +33,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.33 2008-09-25 15:04:24 marche Exp $
+$Id: java_lexer.mll,v 1.34 2008-10-03 14:18:42 marche Exp $
 
 ***************************************************************************)
 
@@ -281,6 +281,13 @@ i*)
 	      | "all" -> Java_env.NonNullAll
 	      | "alllocal" -> Java_env.NonNullAllLocal
 	      | _ -> lex_error lexbuf ("unknown nonnull policy " ^ v)
+	  end  
+      | "MinimalClassHierarchy" ->
+	  begin
+	    match String.lowercase v with	  
+	      | "yes" -> Java_options.minimal_class_hierarchy := true
+	      | "no" -> Java_options.minimal_class_hierarchy := false
+	      | _ -> lex_error lexbuf "yes or no expected"
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 

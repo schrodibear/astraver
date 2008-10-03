@@ -71,7 +71,7 @@ let field_offset fi =
 			if fi.jc_field_info_tag = fi'.jc_field_info_tag then
 			  off,false
 			else
-			  off + the fi'.jc_field_info_bitsize, counting
+			  off + assert false (* the fi'.jc_field_info_bitsize *), counting
 		      else
 			off,counting
 		   ) (0,true) st.jc_struct_info_fields
@@ -110,7 +110,7 @@ let struct_has_size st =
 let struct_size st =
   match List.rev st.jc_struct_info_fields with
     | [] -> 0
-    | last_fi::_ -> field_offset last_fi + the last_fi.jc_field_info_bitsize
+    | last_fi::_ -> field_offset last_fi + assert false (* the last_fi.jc_field_info_bitsize *)
 
 let struct_size_in_bytes st =
   let s = struct_size st in

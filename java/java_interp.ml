@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.159 2008-10-03 13:47:19 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.160 2008-10-03 14:18:42 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -939,17 +939,18 @@ let array_types decls =
             ~clauses: non_null_spec
             ()) :: decls)
     Java_analysis.array_struct_table
-    ([], [
-       mktag_def ~name:"interface" ();
-       mkvariant_type_def
-         ~name:"interface"
-         ~tags:[ new identifier "interface" ]
-         ();
-       mkvariant_type_def
-         ~name:"Object"
-         ~tags:[ new identifier "Object" ]
-         ();
-     ], decls)
+    ([], 
+     ((mktag_def ~name:"interface" ()) ::
+	(mkvariant_type_def
+           ~name:"interface"
+           ~tags:[ new identifier "interface" ]
+           ())
+      ::if !Java_options.minimal_class_hierarchy then [] 
+      else [ mkvariant_type_def
+               ~name:"Object"
+               ~tags:[ new identifier "Object" ]
+               () ]
+     ), decls)
     
 
 (*****************
@@ -1199,7 +1200,8 @@ let rec expr ?(reg=false) e =
             mknot
               ~expr:
               (mkapp
-                 (* Romain: pourquoi non_null_fun et pas null_fun ? *)
+                 (* Romain: pourquoi non_null_fun et pas null_fun ? 
+		    Claude: parce que mknot au-dessus *)
                  ~fun_name: (non_null_fun st).jc_fun_info_name
                  ~args: [e]
                  ())
@@ -1214,12 +1216,9 @@ let rec expr ?(reg=false) e =
 	      | JTYarray (_,t) -> get_array_struct e1.java_expr_loc t
 	      | _ -> assert false
             in
-            mknot
-              ~expr:
-              (mkapp
-                 ~fun_name: (non_null_fun st).jc_fun_info_name
-                 ~args: [e]
-                 ())
+            mkapp
+              ~fun_name: (non_null_fun st).jc_fun_info_name
+              ~args: [e]
               ()
 	  end
       | JEbin (e1, op, e2) ->
@@ -1938,11 +1937,14 @@ let tr_class ci acc0 acc =
   in
   let super =
     let superclass = Option_misc.map (fun ci -> ci.class_info_name, [])
-      ci.class_info_extends in
-      match superclass with 
-	| None -> if ci.class_info_name = "Object" then None
+      ci.class_info_extends 
+    in
+    match superclass with 
+      | None -> 
+	  if ci.class_info_name = "Object" 
+	  then None
           else Some ("Object", [])
-	| _ -> superclass
+      | _ -> superclass
   in
   let acc = List.fold_left (tr_field ci.class_info_name) acc static_fields in
     (* create exceptions if subclass of Exception *)
@@ -1991,9 +1993,15 @@ let tr_class ci acc0 acc =
     end jc_fields in
     (mktag_def
        ~name: ci.class_info_name
-       ?super
+       ?super:(if !Java_options.minimal_class_hierarchy then None else super)
        ~fields
-       ())::acc0, acc
+       ())::
+      (if !Java_options.minimal_class_hierarchy then
+	 (mkvariant_type_def
+            ~name:ci.class_info_name
+            ~tags:[ new identifier ci.class_info_name ]
+            ())::acc0 else acc0)
+      , acc
 	
 (* interfaces *)
 

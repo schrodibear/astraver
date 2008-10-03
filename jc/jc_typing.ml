@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.243 2008-10-03 13:47:20 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.244 2008-10-03 14:18:43 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -691,7 +691,9 @@ let rec term env e =
             jc_app_label_assoc = [];
           } in
 	  let ty = 
-	    the pi.jc_logic_info_result_type (* check it is a function *)
+	    match pi.jc_logic_info_result_type with
+	      | Some t -> t
+	      | None -> assert false (* check it is a function *)
 	  in
 	  ty, Region.make_var ty pi.jc_logic_info_name, JCTapp app
 	end
@@ -1570,7 +1572,9 @@ let rec expr env e =
             jc_call_label_assoc = [];
           } in
 	  let ty = 
-	    the pi.jc_logic_info_result_type (* check it is a function *)
+	    match pi.jc_logic_info_result_type with
+	      | Some r -> r
+	      | None -> assert false (* check it is a function *)
 	  in
 	  ty, Region.make_var ty pi.jc_logic_info_name, JCEapp app
 	end

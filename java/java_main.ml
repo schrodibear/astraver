@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.64 2008-08-06 15:17:03 moy Exp $ *)
+(* $Id: java_main.ml,v 1.65 2008-10-03 14:18:42 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -263,7 +263,7 @@ let main () =
   (* production phase 5 : produce Jessie file *)
   let decls = 
     (mkinvariant_policy_def ~value:!Java_options.inv_sem ())
-    :: (mkseparation_policy_def ~value:Jc_env.SepNone ()) (*regions:bug*)
+    :: (mkseparation_policy_def ~value:Jc_env.SepRegions ()) 
     :: (mkannotation_policy_def ~value:!Java_options.annotation_sem ())
     :: (mkabstract_domain_def ~value:!Java_options.ai_domain ())
     :: List.rev decls

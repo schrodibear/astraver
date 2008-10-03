@@ -1,4 +1,5 @@
 //@+ CheckArithOverflow = no
+// @+ MinimalClassHierarchy = yes
 
 import java.util.HashMapIntegerInteger;
 import java.util.HashMapIntegerLong;
@@ -106,7 +107,7 @@ class FibMemo {
 	Integer m = new Integer(n);
 	Integer x = memo_int.get(m);
 	if (! (x == null)) return x.intValue();
-	x = new Integer(fib(n-1) + fib(n-2));
+	x = new Integer(fib_int(n-1) + fib_int(n-2));
 	memo_int.put(m,x); return x.intValue();
     }
 

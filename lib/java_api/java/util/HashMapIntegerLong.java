@@ -21,6 +21,7 @@ class HashMapIntegerLong {
       @ assigns \nothing;
       @ behavior key_found:
       @   ensures \result != null ==>
+      @    containsKey(this.hashmap_model,x) &&
       @    \result == access(this.hashmap_model,x) ;
       @ behavior null_found:
       @   assumes containsKey(this.hashmap_model,x);

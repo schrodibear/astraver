@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.354 2008-09-29 09:34:55 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.355 2008-10-03 14:18:42 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -733,7 +733,11 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
 		| Int_offset i -> int_of_string i
 		| _ -> assert false (* TODO *)
 	      in
-	      let size = the fi.jc_field_info_bitsize / 8 in
+	      let size = 
+		match fi.jc_field_info_bitsize with
+		  | Some x -> x / 8 
+		  | None -> assert false
+	      in
 	      let off = string_of_int off and size = string_of_int size in
 	      let e' = 
 		LApp("extract_bytes",
@@ -751,8 +755,16 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
 		tmemory_var ~label_in_name:global_assertion lab
 		  (JCmem_bitvector,t1#region) 
 	      in
-	      let off = the (field_offset_in_bytes fi) in
-	      let size = the fi.jc_field_info_bitsize / 8 in
+	      let off =
+		match field_offset_in_bytes fi with
+		  | Some x -> x
+		  | None -> assert false
+	      in
+	      let size = 
+		match fi.jc_field_info_bitsize with
+		  | Some x -> x / 8 
+		  | None -> assert false
+	      in
 	      let off = string_of_int off and size = string_of_int size in
 	      let e' = 
 		LApp("select_bytes",
@@ -1266,7 +1278,11 @@ and make_upd_union mark pos off e1 fi tmp2 =
   let tmp2 = tmp_var_name () in
   let v1 = Jc_pervasives.var e1#typ tmp1 in
   let e1 = new expr_with ~node:(JCEvar v1) e1 in
-  let size = the fi.jc_field_info_bitsize / 8 in
+  let size = 
+    match fi.jc_field_info_bitsize with
+      | Some x -> x / 8 
+      | None -> assert false
+  in
   let union_size = 
     (union_type e1#typ).jc_root_info_union_size_in_bytes 
   in
@@ -1305,8 +1321,16 @@ and make_upd_bytes mark pos e1 fi tmp2 =
   let mem = plain_memory_var (JCmem_bitvector,e1#region) in
   let alloc = alloc_table_var (JCalloc_bitvector,e1#region) in
   (* Store bitvector *)
-  let off = the (field_offset_in_bytes fi) in
-  let size = the fi.jc_field_info_bitsize / 8 in
+  let off = 
+    match field_offset_in_bytes fi with
+      | Some x -> x
+      | None -> assert false
+  in
+  let size = 
+    match fi.jc_field_info_bitsize with
+      | Some x ->  x / 8 
+      | None -> assert false
+  in
   let off = string_of_int off and size = string_of_int size in
   let e' = 
     if safety_checking () then
@@ -1415,7 +1439,11 @@ and make_deref_union mark pos off e fi =
     | Int_offset i -> int_of_string i
     | _ -> assert false (* TODO *)
   in
-  let size = the fi.jc_field_info_bitsize / 8 in
+  let size = 
+    match fi.jc_field_info_bitsize with
+      | Some x -> x / 8 
+      | None -> assert false
+  in
   let off = string_of_int off and size = string_of_int size in
   let e' = 
     make_app "extract_bytes" [ e'; Cte(Prim_int off); Cte(Prim_int size) ]
@@ -1430,8 +1458,16 @@ and make_deref_bytes mark pos e fi =
   let mem = memory_var (JCmem_bitvector,e#region) in
   let alloc = alloc_table_var (JCalloc_bitvector,e#region) in
   (* Retrieve bitvector *)
-  let off = the (field_offset_in_bytes fi) in
-  let size = the fi.jc_field_info_bitsize / 8 in
+  let off = 
+    match field_offset_in_bytes fi with
+      | Some x -> x
+      | None -> assert false
+  in
+  let size = 
+    match fi.jc_field_info_bitsize with
+      | Some x ->  x / 8
+      | None -> assert false
+  in
   let off = string_of_int off and size = string_of_int size in
   let e' = 
     if safety_checking () then

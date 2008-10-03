@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.124 2008-10-03 13:47:20 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.125 2008-10-03 14:18:42 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -41,7 +41,6 @@ open Format
 open Num
 
 let ( $ ) = fun f g x -> f(g x)
-let the o = match o with None -> assert false | Some x -> x
 
 exception Error of Loc.position * string
 
@@ -840,7 +839,11 @@ let struct_has_bytesize st =
     true st.jc_struct_info_fields
   
 let struct_bitsize st = 
-  List.fold_left (fun acc fi -> acc + the fi.jc_field_info_bitsize)
+  List.fold_left 
+    (fun acc fi -> 
+       match fi.jc_field_info_bitsize with
+	 | Some x -> acc + x
+	 | None -> assert false)
     0 st.jc_struct_info_fields
 
 let struct_bytesize st = 

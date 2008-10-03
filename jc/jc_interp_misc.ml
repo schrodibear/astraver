@@ -319,7 +319,7 @@ let tr_base_type ?region = function
 	| None -> 
 	    alloc_class_of_pointer_class pc
 	| Some r ->
-	    if Region.bitwise (the region) then JCalloc_bitvector
+	    if Region.bitwise r then JCalloc_bitvector
 	    else alloc_class_of_pointer_class pc
       in
       pointer_type ac pc
@@ -1288,8 +1288,16 @@ let make_conversion_params pc =
 		     tmemory_var ~label_in_name:true LabelHere
 		       (mc,dummy_region) 
 		   in
-		   let off = the (field_offset_in_bytes fi) in
-		   let size = the fi.jc_field_info_bitsize / 8 in
+		   let off = 
+		     match field_offset_in_bytes fi with
+		       | Some x -> x
+		       | None ->  assert false
+		   in
+		   let size = 
+		     match fi.jc_field_info_bitsize with
+		       | Some x -> x / 8 
+		       | None -> assert false
+		   in
 		   let off = string_of_int off and size = string_of_int size in
 		   let posti = 
 		     make_eq_pred fi.jc_field_info_type
@@ -2164,7 +2172,10 @@ let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
        let labs = transpose_labels ?label_assoc labs in
        let locr = match region_assoc with
 	 | None -> distr
-	 | Some region_assoc -> the (transpose_region ~region_assoc distr) 
+	 | Some region_assoc -> 
+	     match transpose_region ~region_assoc distr with
+	       | Some r -> r
+	       | None -> assert false 
        in
        LogicLabelSet.fold
 	 (fun lab acc ->
@@ -2184,7 +2195,10 @@ let talloc_table_detailed_params
        let labs = transpose_labels ?label_assoc labs in
        let locr = match region_assoc with
 	 | None -> distr
-	 | Some region_assoc -> the (transpose_region ~region_assoc distr) 
+	 | Some region_assoc -> 
+	     match transpose_region ~region_assoc distr with
+	       | Some r -> r
+	       | None -> assert false
        in
        LogicLabelSet.fold
 	 (fun lab acc ->
@@ -2204,7 +2218,10 @@ let ttag_table_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
        let labs = transpose_labels ?label_assoc labs in
        let locr = match region_assoc with
 	 | None -> distr
-	 | Some region_assoc -> the (transpose_region ~region_assoc distr) 
+	 | Some region_assoc -> 
+	     match transpose_region ~region_assoc distr with
+	       | Some r -> r
+	       | None -> assert false
        in
        LogicLabelSet.fold
 	 (fun lab acc ->

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.140 2008-10-02 12:05:24 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.141 2008-10-03 14:18:42 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -2448,11 +2448,15 @@ let lookup_constructor loc ci arg_types =
       acc ci.class_info_constructors
   in
   let constructors = collect_constructors_from_class [] ci in
-    match constructors with
-      | [ci] -> ci
-      | _ -> 
-          let constrs = get_maximally_specific_signatures constr_signature [] constructors in
-          match constrs with
+  match constructors with
+    | [] -> 
+        typing_error loc "Cannot find constructor @['%a(%a)'@]" 
+	  print_type_name  (TypeClass ci)
+          (Pp.print_list Pp.comma print_type) arg_types
+    | [ci] -> ci
+    | _ -> 
+        let constrs = get_maximally_specific_signatures constr_signature [] constructors in
+        match constrs with
           | [] -> assert false
           | [ci] -> ci
           | _ ->        

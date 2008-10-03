@@ -32,7 +32,6 @@ open Jc_ast
 open Jc_fenv
 
 val ( $ ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
-val the: 'a option -> 'a
 
 val error: Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.20 2008-07-25 15:16:48 marche Exp $ i*)
+(*i $Id: java_options.ml,v 1.21 2008-10-03 14:18:42 marche Exp $ i*)
 
 open Format
 
@@ -86,6 +86,7 @@ let werror = ref false
 let why_opt = ref ""
 let ignore_overflow = ref false
 let nonnull_sem = ref Java_env.NonNullNone
+let minimal_class_hierarchy = ref false
 
 (* Jessie options *)
 let inv_sem = ref Jc_env.InvArguments
@@ -137,7 +138,7 @@ let _ =
 	     | "fields" -> nonnull_sem := Java_env.NonNullFields
 	     | "all" -> nonnull_sem := Java_env.NonNullAll
 	     | s -> raise (Arg.Bad ("Unknown nonnull_sem: " ^ s))),
-	"  <kind> nonnull-by-default semantics: none (default), fields, all"
+	"  <kind> nonnull-by-default semantics: none (default), fields, all";
       ]
       add_file usage
 

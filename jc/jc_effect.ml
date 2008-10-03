@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.134 2008-09-29 09:34:55 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.135 2008-10-03 14:18:42 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -640,7 +640,9 @@ let possible_union_deref e fi =
 	if type_is_union e#typ then Some(e,fi,offset_of_field fi) else None
 
 let destruct_union_access e fi_opt = 
-  the (possible_union_access e fi_opt)
+  match possible_union_access e fi_opt with
+    | Some x -> x
+    | None -> assert false
 
 let tpossible_union_access t fi_opt =
   let fieldoffbytes fi = 
@@ -717,14 +719,18 @@ let tpossible_union_deref t fi =
 	if type_is_union t#typ then Some(t,fi,offset_of_field fi) else None
 
 let tdestruct_union_access t fi_opt = 
-  the (tpossible_union_access t fi_opt)
+  match tpossible_union_access t fi_opt with
+    | Some x -> x
+    | None -> assert false
 
 let lpossible_union_access t fi = None (* TODO *)
 
 let lpossible_union_deref t fi = None (* TODO *)
 
 let ldestruct_union_access loc fi_opt = 
-  the (lpossible_union_access loc fi_opt)
+  match lpossible_union_access loc fi_opt with
+    | Some x -> x
+    | None -> assert false
 
 let foreign_union e = [] (* TODO: subterms of union that are not in union *)
 let tforeign_union t = []
