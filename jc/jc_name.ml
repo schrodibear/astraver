@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.31 2008-09-29 09:34:55 moy Exp $ *)
+(* $Id: jc_name.ml,v 1.32 2008-10-03 13:47:20 moy Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -158,6 +158,12 @@ let alloc_param_name ~check_size ac pc =
   in
   let n = prefix ^ "_" ^ (pointer_class_name pc) in
   if check_size then n ^ "_requires" else n
+
+let alloc_bitvector_logic_name pc =
+  (pointer_class_name pc) ^ "_alloc_bitvector"
+
+let mem_bitvector_logic_name pc =
+  (pointer_class_name pc) ^ "_mem_bitvector"
 
 let alloc_of_bitvector_param_name pc = 
   (pointer_class_name pc) ^ "_alloc_of_bitvector"

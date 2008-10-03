@@ -97,7 +97,7 @@ val exception_info :
 
 val make_fun_info : string -> Jc_env.jc_type -> Jc_fenv.fun_info
 
-val make_rel : string -> Jc_fenv.logic_info
+val make_pred : string -> Jc_fenv.logic_info
 
 val make_logic_fun : string -> Jc_env.jc_type -> Jc_fenv.logic_info
 

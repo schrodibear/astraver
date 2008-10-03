@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.242 2008-09-29 09:34:55 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.243 2008-10-03 13:47:20 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2149,9 +2149,11 @@ let add_logic_fundecl (ty,id,labels,pl) =
   with Not_found ->
     let param_env = List.map param pl in
     let ty = Option_misc.map type_type ty in
-    let pi = make_rel id in
+    let pi = match ty with 
+      | None -> make_pred id
+      | Some ty -> make_logic_fun id ty
+    in
     pi.jc_logic_info_parameters <- List.map snd param_env;
-    pi.jc_logic_info_result_type <- ty;
     pi.jc_logic_info_labels <- labels;
     Hashtbl.replace logic_functions_env id pi;
     param_env, ty, pi
@@ -2159,12 +2161,14 @@ let add_logic_fundecl (ty,id,labels,pl) =
 let () =
   List.iter 
     (fun (ty,x,whyid,pl) -> 
-       let pi = make_rel x in
+       let pi = match ty with 
+	 | None -> make_pred x
+	 | Some ty -> make_logic_fun x ty
+       in
        let pl = List.map 
 	 (fun ty -> var ~formal:true ty "_") pl
        in
        pi.jc_logic_info_parameters <- pl;
-       pi.jc_logic_info_result_type <- ty;
        pi.jc_logic_info_final_name <- whyid;
        Hashtbl.add logic_functions_env x pi)
     Jc_pervasives.builtin_logic_symbols
@@ -2320,7 +2324,7 @@ of an invariant policy";
                  var (JCTpointer (JCtag(struct_info, []), Some zero,
                                   Some zero)) x in
                let p = assertion [(x, vi)] e in
-               let pi = make_rel id#name in
+               let pi = make_pred id#name in
                pi.jc_logic_info_parameters <- [vi];
                pi.jc_logic_info_labels <- [LabelHere];
                eprintf "generating logic fun %s with one default label@."
@@ -2371,7 +2375,7 @@ of an invariant policy";
         Hashtbl.add axioms_table id (is_axiom,labels,te)
     | JCDglobal_inv(id, e) ->
         let a = assertion [] e in
-        let li = make_rel id in
+        let li = make_pred id in
           if !Jc_common_options.inv_sem = InvArguments then 
             Hashtbl.replace logic_functions_table 
               li.jc_logic_info_tag (li, JCAssertion a);

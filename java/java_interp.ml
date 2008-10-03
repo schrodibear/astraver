@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.158 2008-09-29 09:34:55 moy Exp $ *)
+(* $Id: java_interp.ml,v 1.159 2008-10-03 13:47:19 moy Exp $ *)
 
 open Format
 open Jc_output
@@ -353,7 +353,7 @@ let create_logic_fun pos fi =
   let nfi =
     match fi.java_logic_info_result_type with
       | None ->
-	  Jc_pervasives.make_rel fi.java_logic_info_name 
+	  Jc_pervasives.make_pred fi.java_logic_info_name 
       | Some t ->
 	  Jc_pervasives.make_logic_fun fi.java_logic_info_name 
 	    (tr_type pos t) 
@@ -536,7 +536,7 @@ let create_non_null_fun si =
 
 let create_non_null_pred si =
   let li = 
-    Jc_pervasives.make_rel 
+    Jc_pervasives.make_pred 
       ("Non_null_" ^ si.jc_struct_info_name)
   in
     Hashtbl.add non_null_preds si.jc_struct_info_name li;

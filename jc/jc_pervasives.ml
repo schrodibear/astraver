@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.123 2008-09-29 09:34:55 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.124 2008-10-03 13:47:20 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -317,7 +317,7 @@ let full_separated = make_logic_fun "full_separated" null_type
 
 (* logic predicates *)
 
-let make_rel name =
+let make_pred name =
   incr logic_fun_tag_counter;
   { jc_logic_info_tag = !logic_fun_tag_counter;
     jc_logic_info_name = name;

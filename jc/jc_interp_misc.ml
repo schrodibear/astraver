@@ -1127,6 +1127,16 @@ let conv_bw_mem_parameters ~deref r pc =
   let mem = (memv, memory_type mc) in
   [ mem ]
 
+(* let conv_bw_mem_tparameters r pc = *)
+(*   let mc = JCmem_bitvector in *)
+(*   let memv = tmemory_var ~label_in_name:global_assertion lab (mc,locs#region)  *)
+(* tmemory_var ~test_current_function:true (mc,r) *)
+(*     else  *)
+(*       plain_memory_var (mc,r) *)
+(*   in *)
+(*   let mem = (memv, memory_type mc) in *)
+(*   [ mem ] *)
+
 let conv_typ_alloc_parameters r pc =
   match pc with
     | JCtag _ ->
@@ -1300,6 +1310,12 @@ let make_conversion_params pc =
 	else LTrue
     | JCroot _ -> assert false (* TODO *)
   in
+
+  (* Invariant linking typed and byte views *)
+
+(*   let mem_logic = *)
+(*     Logic(false, mem_bitvector_logic_name pc, params, result_ty')  *)
+(*   in *)
 
   (* Conversion from bitvector *)
   let writes = conv_typ_alloc_parameters dummy_region pc in
