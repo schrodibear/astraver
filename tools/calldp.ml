@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.52 2008-10-02 12:05:57 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.53 2008-10-03 15:48:22 marche Exp $ i*)
 
 open Printf
 
@@ -85,8 +85,7 @@ let grep re str =
 let gen_prover_call ?(debug=false) ?(timeout=30) ~filename:f p =
   let cmd = p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
-  if c<>0 then
-    error c t cmd
+  if c = 152 then Timeout t
   else
     let res = file_contents out in
     let r =

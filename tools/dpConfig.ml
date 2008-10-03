@@ -96,7 +96,7 @@ let yices =
     command_switches = "-pc 0 -smt < ";
     valid_regexp = "\\bunsat\\b";
     valid_cregexp = None;
-    undecided_regexp = "\\bunknown\\b\\|\\bsat\\b";
+    undecided_regexp = "\\bunknown\\b\\|\\bsat\\b\\|feature not supported: non linear problem";
     undecided_cregexp = None;
   }
 
