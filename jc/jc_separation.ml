@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.28 2008-09-17 15:28:57 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.29 2008-10-05 16:43:47 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -249,7 +249,11 @@ let logic_function f =
   in
   let rresult = f.jc_logic_info_result_region in
   begin match ta with
-    | JCTerm t -> term rresult t
+    | JCTerm t -> 
+	begin 
+	  term rresult t;
+	  Region.unify rresult t#region 
+	end
     | JCAssertion a -> assertion rresult a
     | JCReads r -> () (* TODO *)
   end

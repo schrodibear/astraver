@@ -32,7 +32,7 @@ Generating JC function cons_NameConflicts for constructor NameConflicts
 Done.
 ========== file tests/java/NameConflicts.jc ==========
 # InvariantPolicy = Arguments
-# SeparationPolicy = None
+# SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = None
 
@@ -624,8 +624,8 @@ axiom NameConflicts_parenttag_Object :
  parenttag(NameConflicts_tag, Object_tag)
 
 predicate Non_null_Object(x:Object pointer,
- Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x), (0))
+ Object_x_1_alloc_table:Object alloc_table) =
+ eq_int(offset_max(Object_x_1_alloc_table, x), (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -914,39 +914,41 @@ predicate valid_struct_interface(p:interface pointer,
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-parameter NameConflicts_field : (Object, int32) memory ref
-
-parameter Object_alloc_table : Object alloc_table ref
-
 parameter NameConflicts_field_0 :
  this_0:Object pointer ->
-  { } int32 reads NameConflicts_field,Object_alloc_table { true }
+  Object_this_0_5_alloc_table:Object alloc_table ->
+   NameConflicts_field_this_0_5:(Object, int32) memory -> { } int32 { true }
 
 parameter NameConflicts_field_0_requires :
  this_0:Object pointer ->
-  { } int32 reads NameConflicts_field,Object_alloc_table { true }
-
-parameter NameConflicts_i : (Object, int32) memory ref
+  Object_this_0_5_alloc_table:Object alloc_table ->
+   NameConflicts_field_this_0_5:(Object, int32) memory -> { } int32 { true }
 
 parameter NameConflicts_m :
  this_1:Object pointer ->
-  { } int32 reads Object_alloc_table
-  { (JC_28: eq_int(integer_of_int32(result), (0))) }
+  Object_this_1_4_alloc_table:Object alloc_table ->
+   { } int32 { (JC_28: eq_int(integer_of_int32(result), (0))) }
 
 parameter NameConflicts_m_requires :
  this_1:Object pointer ->
-  { } int32 reads Object_alloc_table
-  { (JC_28: eq_int(integer_of_int32(result), (0))) }
+  Object_this_1_4_alloc_table:Object alloc_table ->
+   { } int32 { (JC_28: eq_int(integer_of_int32(result), (0))) }
 
 parameter NameConflicts_setI :
  this_2:Object pointer ->
   i:int32 ->
-   { } unit reads Object_alloc_table writes NameConflicts_i { true }
+   NameConflicts_i_this_2_3:(Object, int32) memory ref ->
+    Object_this_2_3_alloc_table:Object alloc_table ->
+     { } unit writes NameConflicts_i_this_2_3 { true }
 
 parameter NameConflicts_setI_requires :
  this_2:Object pointer ->
   i:int32 ->
-   { } unit reads Object_alloc_table writes NameConflicts_i { true }
+   NameConflicts_i_this_2_3:(Object, int32) memory ref ->
+    Object_this_2_3_alloc_table:Object alloc_table ->
+     { } unit writes NameConflicts_i_this_2_3 { true }
+
+parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_tag_table : Object tag_table ref
 
@@ -1176,10 +1178,12 @@ parameter char_of_integer_ :
   { eq_int(integer_of_char(result), x) }
 
 parameter cons_NameConflicts :
- this_3:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_3:Object pointer ->
+  Object_this_3_6_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter cons_NameConflicts_requires :
- this_3:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_3:Object pointer ->
+  Object_this_3_6_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1193,19 +1197,21 @@ parameter long_of_integer_ :
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table
-  { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+  Object_x_2_alloc_table:Object alloc_table ->
+   { } bool
+   { (JC_10:
+     (if result
+      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
+      else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table
-  { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+  Object_x_2_alloc_table:Object alloc_table ->
+   { } bool
+   { (JC_10:
+     (if result
+      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
+      else (x_0 = null))) }
 
 parameter safe_byte_of_integer_ :
  x:int -> { } byte { eq_int(integer_of_byte(result), x) }
@@ -1354,13 +1360,13 @@ parameter struct_interface_mem_to_bitvector :
  bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
 
 let NameConflicts_field_ensures_default =
- fun (this_0 : Object pointer) ->
-  { valid_struct_NameConflicts(this_0, (0), (0), Object_alloc_table) }
+ fun (this_0 : Object pointer) (Object_this_0_5_alloc_table : Object alloc_table) (NameConflicts_field_this_0_5 : (Object, int32) memory) ->
+  { valid_struct_NameConflicts(this_0, (0), (0), Object_this_0_5_alloc_table) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
-     (return := (K_4: ((safe_acc_ !NameConflicts_field) this_0)));
+     (return := (K_4: ((safe_acc_ NameConflicts_field_this_0_5) this_0)));
     (raise Return);
     absurd 
    end
@@ -1370,13 +1376,13 @@ let NameConflicts_field_ensures_default =
   { (JC_33: true) }
 
 let NameConflicts_field_safety =
- fun (this_0 : Object pointer) ->
-  { valid_struct_NameConflicts(this_0, (0), (0), Object_alloc_table) }
+ fun (this_0 : Object pointer) (Object_this_0_5_alloc_table : Object alloc_table) (NameConflicts_field_this_0_5 : (Object, int32) memory) ->
+  { valid_struct_NameConflicts(this_0, (0), (0), Object_this_0_5_alloc_table) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
-     (return := (K_4: ((safe_acc_ !NameConflicts_field) this_0)));
+     (return := (K_4: ((safe_acc_ NameConflicts_field_this_0_5) this_0)));
     (raise Return);
     absurd 
    end
@@ -1386,8 +1392,8 @@ let NameConflicts_field_safety =
   { true }
 
 let NameConflicts_m_ensures_default =
- fun (this_1 : Object pointer) ->
-  { valid_struct_NameConflicts(this_1, (0), (0), Object_alloc_table) }
+ fun (this_1 : Object pointer) (Object_this_1_4_alloc_table : Object alloc_table) ->
+  { valid_struct_NameConflicts(this_1, (0), (0), Object_this_1_4_alloc_table) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1402,8 +1408,8 @@ let NameConflicts_m_ensures_default =
   { (JC_23: true) }
 
 let NameConflicts_m_ensures_normal =
- fun (this_1 : Object pointer) ->
-  { valid_struct_NameConflicts(this_1, (0), (0), Object_alloc_table) }
+ fun (this_1 : Object pointer) (Object_this_1_4_alloc_table : Object alloc_table) ->
+  { valid_struct_NameConflicts(this_1, (0), (0), Object_this_1_4_alloc_table) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1418,8 +1424,8 @@ let NameConflicts_m_ensures_normal =
   { (JC_27: eq_int(integer_of_int32(result), (0))) }
 
 let NameConflicts_m_safety =
- fun (this_1 : Object pointer) ->
-  { valid_struct_NameConflicts(this_1, (0), (0), Object_alloc_table) }
+ fun (this_1 : Object pointer) (Object_this_1_4_alloc_table : Object alloc_table) ->
+  { valid_struct_NameConflicts(this_1, (0), (0), Object_this_1_4_alloc_table) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1434,8 +1440,8 @@ let NameConflicts_m_safety =
   { true }
 
 let NameConflicts_setI_ensures_default =
- fun (this_2 : Object pointer) (i : int32) ->
-  { valid_struct_NameConflicts(this_2, (0), (0), Object_alloc_table) }
+ fun (this_2 : Object pointer) (i : int32) (NameConflicts_i_this_2_3 : (Object, int32) memory ref) (Object_this_2_3_alloc_table : Object alloc_table) ->
+  { valid_struct_NameConflicts(this_2, (0), (0), Object_this_2_3_alloc_table) }
   (init:
   try
    begin
@@ -1443,7 +1449,7 @@ let NameConflicts_setI_ensures_default =
                       (let jessie_6 = i in
                       (let jessie_9 = this_2 in
                       begin
-                        (((safe_upd_ NameConflicts_i) jessie_9) jessie_6);
+                        (((safe_upd_ NameConflicts_i_this_2_3) jessie_9) jessie_6);
                        jessie_6
                       end))) in
      void);
@@ -1455,8 +1461,8 @@ let NameConflicts_setI_ensures_default =
   { (JC_15: true) }
 
 let NameConflicts_setI_safety =
- fun (this_2 : Object pointer) (i : int32) ->
-  { valid_struct_NameConflicts(this_2, (0), (0), Object_alloc_table) }
+ fun (this_2 : Object pointer) (i : int32) (NameConflicts_i_this_2_3 : (Object, int32) memory ref) (Object_this_2_3_alloc_table : Object alloc_table) ->
+  { valid_struct_NameConflicts(this_2, (0), (0), Object_this_2_3_alloc_table) }
   (init:
   try
    begin
@@ -1464,7 +1470,7 @@ let NameConflicts_setI_safety =
                      (let jessie_1 = i in
                      (let jessie_4 = this_2 in
                      begin
-                       (((safe_upd_ NameConflicts_i) jessie_4) jessie_1);
+                       (((safe_upd_ NameConflicts_i_this_2_3) jessie_4) jessie_1);
                       jessie_1
                      end))) in
      void);
@@ -2346,8 +2352,8 @@ axiom NameConflicts_parenttag_Object: parenttag(NameConflicts_tag,
   Object_tag)
 
 predicate Non_null_Object(x: Object pointer,
-  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  Object_x_1_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_1_alloc_table, x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -2608,8 +2614,8 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 ========== file tests/java/why/NameConflicts_po1.why ==========
 goal NameConflicts_m_ensures_normal_po_1:
   forall this_1:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_NameConflicts(this_1, 0, 0, Object_alloc_table) ->
+  forall Object_this_1_4_alloc_table:Object alloc_table.
+  valid_struct_NameConflicts(this_1, 0, 0, Object_this_1_4_alloc_table) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int32.
@@ -3301,8 +3307,8 @@ why -simplify [...] why/NameConflicts.why
  ;; Why axiom NameConflicts_parenttag_Object
  (EQ (parenttag NameConflicts_tag Object_tag) |@true|))
 
-(DEFPRED (Non_null_Object x Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x) 0))
+(DEFPRED (Non_null_Object x Object_x_1_alloc_table)
+  (EQ (offset_max Object_x_1_alloc_table x) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -3523,8 +3529,8 @@ why -simplify [...] why/NameConflicts.why
 
 ;; NameConflicts_m_ensures_normal_po_1, File "HOME/tests/java/NameConflicts.java", line 11, characters 18-30
 (FORALL (this_1)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_NameConflicts this_1 0 0 Object_alloc_table)
+(FORALL (Object_this_1_4_alloc_table)
+(IMPLIES (valid_struct_NameConflicts this_1 0 0 Object_this_1_4_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -4394,8 +4400,8 @@ axiom NameConflicts_parenttag_Object: parenttag(NameConflicts_tag,
   Object_tag)
 
 predicate Non_null_Object(x: Object pointer,
-  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  Object_x_1_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_1_alloc_table, x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -4655,8 +4661,8 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 
 goal NameConflicts_m_ensures_normal_po_1:
   forall this_1:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_NameConflicts(this_1, 0, 0, Object_alloc_table) ->
+  forall Object_this_1_4_alloc_table:Object alloc_table.
+  valid_struct_NameConflicts(this_1, 0, 0, Object_this_1_4_alloc_table) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int32.

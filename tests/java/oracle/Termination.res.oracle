@@ -64,7 +64,7 @@ Generating JC function cons_Termination for constructor Termination
 Done.
 ========== file tests/java/Termination.jc ==========
 # InvariantPolicy = Arguments
-# SeparationPolicy = None
+# SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = None
 
@@ -777,8 +777,8 @@ exception Loop_continue_exc of unit
 exception Loop_exit_exc of unit
 
 predicate Non_null_Object(x:Object pointer,
- Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x), (0))
+ Object_x_1_alloc_table:Object alloc_table) =
+ eq_int(offset_max(Object_x_1_alloc_table, x), (0))
 
 logic Object_tag:  -> Object tag_id
 
@@ -941,27 +941,33 @@ parameter Object_tag_table : Object tag_table ref
 
 parameter Termination_loop1 :
  this_2:Object pointer ->
-  n_1:int -> { } unit reads Object_alloc_table { true }
+  n_1:int ->
+   Object_this_2_3_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Termination_loop1_requires :
  this_2:Object pointer ->
-  n_1:int -> { } unit reads Object_alloc_table { true }
+  n_1:int ->
+   Object_this_2_3_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Termination_loop2 :
  this_1:Object pointer ->
-  n_0_0:int -> { } unit reads Object_alloc_table { true }
+  n_0_0:int ->
+   Object_this_1_4_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Termination_loop2_requires :
  this_1:Object pointer ->
-  n_0_0:int -> { } unit reads Object_alloc_table { true }
+  n_0_0:int ->
+   Object_this_1_4_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Termination_loop3 :
  this_0:Object pointer ->
-  { } int reads Object_alloc_table { (JC_44: eq_int(result, (0))) }
+  Object_this_0_5_alloc_table:Object alloc_table ->
+   { } int { (JC_44: eq_int(result, (0))) }
 
 parameter Termination_loop3_requires :
  this_0:Object pointer ->
-  { } int reads Object_alloc_table { (JC_44: eq_int(result, (0))) }
+  Object_this_0_5_alloc_table:Object alloc_table ->
+   { } int { (JC_44: eq_int(result, (0))) }
 
 parameter alloc_bitvector_struct_Object :
  n:int ->
@@ -1169,26 +1175,30 @@ parameter alloc_struct_interface_requires :
               and instanceof(interface_tag_table, result, interface_tag)))) }
 
 parameter cons_Termination :
- this_3:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_3:Object pointer ->
+  Object_this_3_6_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter cons_Termination_requires :
- this_3:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_3:Object pointer ->
+  Object_this_3_6_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table
-  { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+  Object_x_2_alloc_table:Object alloc_table ->
+   { } bool
+   { (JC_10:
+     (if result
+      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
+      else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table
-  { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+  Object_x_2_alloc_table:Object alloc_table ->
+   { } bool
+   { (JC_10:
+     (if result
+      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
+      else (x_0 = null))) }
 
 parameter struct_Object_alloc_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
@@ -1321,8 +1331,8 @@ parameter struct_interface_mem_to_bitvector :
  bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
 
 let Termination_loop1_ensures_default =
- fun (this_2 : Object pointer) (n_1 : int) ->
-  { valid_struct_Termination(this_2, (0), (0), Object_alloc_table) }
+ fun (this_2 : Object pointer) (n_1 : int) (Object_this_2_3_alloc_table : Object alloc_table) ->
+  { valid_struct_Termination(this_2, (0), (0), Object_this_2_3_alloc_table) }
   (let mutable_n_1 = ref n_1 in
   (init:
   try
@@ -1367,8 +1377,8 @@ let Termination_loop1_ensures_default =
   { (JC_15: true) }
 
 let Termination_loop1_safety =
- fun (this_2 : Object pointer) (n_1 : int) ->
-  { valid_struct_Termination(this_2, (0), (0), Object_alloc_table) }
+ fun (this_2 : Object pointer) (n_1 : int) (Object_this_2_3_alloc_table : Object alloc_table) ->
+  { valid_struct_Termination(this_2, (0), (0), Object_this_2_3_alloc_table) }
   (let mutable_n_1 = ref n_1 in
   (init:
   try
@@ -1413,8 +1423,8 @@ let Termination_loop1_safety =
   { true }
 
 let Termination_loop2_ensures_default =
- fun (this_1 : Object pointer) (n_0_0 : int) ->
-  { valid_struct_Termination(this_1, (0), (0), Object_alloc_table) }
+ fun (this_1 : Object pointer) (n_0_0 : int) (Object_this_1_4_alloc_table : Object alloc_table) ->
+  { valid_struct_Termination(this_1, (0), (0), Object_this_1_4_alloc_table) }
   (let mutable_n_0_0 = ref n_0_0 in
   (init:
   try
@@ -1460,8 +1470,8 @@ let Termination_loop2_ensures_default =
   { (JC_28: true) }
 
 let Termination_loop2_safety =
- fun (this_1 : Object pointer) (n_0_0 : int) ->
-  { valid_struct_Termination(this_1, (0), (0), Object_alloc_table) }
+ fun (this_1 : Object pointer) (n_0_0 : int) (Object_this_1_4_alloc_table : Object alloc_table) ->
+  { valid_struct_Termination(this_1, (0), (0), Object_this_1_4_alloc_table) }
   (let mutable_n_0_0 = ref n_0_0 in
   (init:
   try
@@ -1506,8 +1516,8 @@ let Termination_loop2_safety =
   { true }
 
 let Termination_loop3_ensures_default =
- fun (this_0 : Object pointer) ->
-  { valid_struct_Termination(this_0, (0), (0), Object_alloc_table) }
+ fun (this_0 : Object pointer) (Object_this_0_5_alloc_table : Object alloc_table) ->
+  { valid_struct_Termination(this_0, (0), (0), Object_this_0_5_alloc_table) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1558,8 +1568,8 @@ let Termination_loop3_ensures_default =
   { (JC_43: eq_int(result, (0))) }
 
 let Termination_loop3_safety =
- fun (this_0 : Object pointer) ->
-  { valid_struct_Termination(this_0, (0), (0), Object_alloc_table) }
+ fun (this_0 : Object pointer) (Object_this_0_5_alloc_table : Object alloc_table) ->
+  { valid_struct_Termination(this_0, (0), (0), Object_this_0_5_alloc_table) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -2507,8 +2517,8 @@ type Object
 type interface
 
 predicate Non_null_Object(x: Object pointer,
-  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  Object_x_1_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_1_alloc_table, x) = 0)
 
 logic Object_tag :  -> Object tag_id
 
@@ -2644,8 +2654,8 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 ========== file tests/java/why/Termination_po1.why ==========
 goal Termination_loop1_ensures_default_po_1:
   forall this_2:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
+  forall Object_this_2_3_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_2, 0, 0, Object_this_2_3_alloc_table) ->
   forall mutable_n_1:int.
   ("JC_21": (true = true)) ->
   (mutable_n_1 > 0) ->
@@ -2656,8 +2666,8 @@ goal Termination_loop1_ensures_default_po_1:
 ========== file tests/java/why/Termination_po10.why ==========
 goal Termination_loop3_ensures_default_po_6:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   forall i:int.
   ("JC_47": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
@@ -2668,8 +2678,8 @@ goal Termination_loop3_ensures_default_po_6:
 ========== file tests/java/why/Termination_po11.why ==========
 goal Termination_loop3_ensures_default_po_7:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   forall i:int.
   ("JC_47": ((0 <= i) and (i <= 100))) ->
   (i <= 0) ->
@@ -2680,8 +2690,8 @@ goal Termination_loop3_ensures_default_po_7:
 ========== file tests/java/why/Termination_po2.why ==========
 goal Termination_loop1_ensures_default_po_2:
   forall this_2:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
+  forall Object_this_2_3_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_2, 0, 0, Object_this_2_3_alloc_table) ->
   forall mutable_n_1:int.
   ("JC_21": (true = true)) ->
   (mutable_n_1 > 0) ->
@@ -2692,8 +2702,8 @@ goal Termination_loop1_ensures_default_po_2:
 ========== file tests/java/why/Termination_po3.why ==========
 goal Termination_loop2_ensures_default_po_1:
   forall this_1:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_1, 0, 0, Object_alloc_table) ->
+  forall Object_this_1_4_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_1, 0, 0, Object_this_1_4_alloc_table) ->
   forall mutable_n_0_0:int.
   ("JC_34": (true = true)) ->
   (mutable_n_0_0 < 100) ->
@@ -2704,8 +2714,8 @@ goal Termination_loop2_ensures_default_po_1:
 ========== file tests/java/why/Termination_po4.why ==========
 goal Termination_loop2_ensures_default_po_2:
   forall this_1:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_1, 0, 0, Object_alloc_table) ->
+  forall Object_this_1_4_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_1, 0, 0, Object_this_1_4_alloc_table) ->
   forall mutable_n_0_0:int.
   ("JC_34": (true = true)) ->
   (mutable_n_0_0 < 100) ->
@@ -2716,22 +2726,22 @@ goal Termination_loop2_ensures_default_po_2:
 ========== file tests/java/why/Termination_po5.why ==========
 goal Termination_loop3_ensures_default_po_1:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   ("JC_47": (0 <= 100))
 
 ========== file tests/java/why/Termination_po6.why ==========
 goal Termination_loop3_ensures_default_po_2:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   ("JC_47": (100 <= 100))
 
 ========== file tests/java/why/Termination_po7.why ==========
 goal Termination_loop3_ensures_default_po_3:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   forall i:int.
   ("JC_47": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
@@ -2742,8 +2752,8 @@ goal Termination_loop3_ensures_default_po_3:
 ========== file tests/java/why/Termination_po8.why ==========
 goal Termination_loop3_ensures_default_po_4:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   forall i:int.
   ("JC_47": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
@@ -2754,8 +2764,8 @@ goal Termination_loop3_ensures_default_po_4:
 ========== file tests/java/why/Termination_po9.why ==========
 goal Termination_loop3_ensures_default_po_5:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   forall i:int.
   ("JC_47": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
@@ -3442,8 +3452,8 @@ why -simplify [...] why/Termination.why
  (EQ (concat_bitvector (select_bytes m p o1 s1) (select_bytes m p o2 s2))
  (select_bytes m p o1 (+ s1 s2)))))))
 
-(DEFPRED (Non_null_Object x Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x) 0))
+(DEFPRED (Non_null_Object x Object_x_1_alloc_table)
+  (EQ (offset_max Object_x_1_alloc_table x) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -3558,8 +3568,8 @@ why -simplify [...] why/Termination.why
 
 ;; Termination_loop1_ensures_default_po_1, File "HOME/tests/java/Termination.java", line 35, characters 18-19
 (FORALL (this_2)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_2 0 0 Object_alloc_table)
+(FORALL (Object_this_2_3_alloc_table)
+(IMPLIES (valid_struct_Termination this_2 0 0 Object_this_2_3_alloc_table)
 (FORALL (mutable_n_1)
 (IMPLIES (EQ |@true| |@true|)
 (IMPLIES (> mutable_n_1 0)
@@ -3568,8 +3578,8 @@ why -simplify [...] why/Termination.why
 
 ;; Termination_loop1_ensures_default_po_2, File "HOME/tests/java/Termination.java", line 35, characters 18-19
 (FORALL (this_2)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_2 0 0 Object_alloc_table)
+(FORALL (Object_this_2_3_alloc_table)
+(IMPLIES (valid_struct_Termination this_2 0 0 Object_this_2_3_alloc_table)
 (FORALL (mutable_n_1)
 (IMPLIES (EQ |@true| |@true|)
 (IMPLIES (> mutable_n_1 0)
@@ -3578,8 +3588,8 @@ why -simplify [...] why/Termination.why
 
 ;; Termination_loop2_ensures_default_po_1, File "HOME/tests/java/Termination.java", line 40, characters 18-23
 (FORALL (this_1)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_1 0 0 Object_alloc_table)
+(FORALL (Object_this_1_4_alloc_table)
+(IMPLIES (valid_struct_Termination this_1 0 0 Object_this_1_4_alloc_table)
 (FORALL (mutable_n_0_0)
 (IMPLIES (EQ |@true| |@true|)
 (IMPLIES (< mutable_n_0_0 100)
@@ -3589,8 +3599,8 @@ why -simplify [...] why/Termination.why
 
 ;; Termination_loop2_ensures_default_po_2, File "HOME/tests/java/Termination.java", line 40, characters 18-23
 (FORALL (this_1)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_1 0 0 Object_alloc_table)
+(FORALL (Object_this_1_4_alloc_table)
+(IMPLIES (valid_struct_Termination this_1 0 0 Object_this_1_4_alloc_table)
 (FORALL (mutable_n_0_0)
 (IMPLIES (EQ |@true| |@true|)
 (IMPLIES (< mutable_n_0_0 100)
@@ -3600,51 +3610,52 @@ why -simplify [...] why/Termination.why
 
 ;; Termination_loop3_ensures_default_po_1, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table) (<= 0 100))))
+(FORALL (Object_this_0_5_alloc_table)
+(IMPLIES (valid_struct_Termination this_0 0 0 Object_this_0_5_alloc_table)
+(<= 0 100))))
 
 ;; Termination_loop3_ensures_default_po_2, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
+(FORALL (Object_this_0_5_alloc_table)
+(IMPLIES (valid_struct_Termination this_0 0 0 Object_this_0_5_alloc_table)
 (<= 100 100))))
 
 ;; Termination_loop3_ensures_default_po_3, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
+(FORALL (Object_this_0_5_alloc_table)
+(IMPLIES (valid_struct_Termination this_0 0 0 Object_this_0_5_alloc_table)
 (FORALL (i)
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i0)))))))))
 
 ;; Termination_loop3_ensures_default_po_4, File "HOME/tests/java/Termination.java", line 47, characters 20-33
 (FORALL (this_0)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
+(FORALL (Object_this_0_5_alloc_table)
+(IMPLIES (valid_struct_Termination this_0 0 0 Object_this_0_5_alloc_table)
 (FORALL (i)
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= i0 100)))))))))
 
 ;; Termination_loop3_ensures_default_po_5, File "HOME/tests/java/Termination.java", line 48, characters 18-19
 (FORALL (this_0)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
+(FORALL (Object_this_0_5_alloc_table)
+(IMPLIES (valid_struct_Termination this_0 0 0 Object_this_0_5_alloc_table)
 (FORALL (i)
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i)))))))))
 
 ;; Termination_loop3_ensures_default_po_6, File "HOME/tests/java/Termination.java", line 48, characters 18-19
 (FORALL (this_0)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
+(FORALL (Object_this_0_5_alloc_table)
+(IMPLIES (valid_struct_Termination this_0 0 0 Object_this_0_5_alloc_table)
 (FORALL (i)
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (< i0 i)))))))))
 
 ;; Termination_loop3_ensures_default_po_7, File "HOME/tests/java/Termination.java", line 44, characters 16-28
 (FORALL (this_0)
-(FORALL (Object_alloc_table)
-(IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
+(FORALL (Object_this_0_5_alloc_table)
+(IMPLIES (valid_struct_Termination this_0 0 0 Object_this_0_5_alloc_table)
 (FORALL (i)
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (<= i 0) (FORALL (return) (IMPLIES (EQ return i) (EQ return 0)))))))))
@@ -4494,8 +4505,8 @@ type Object
 type interface
 
 predicate Non_null_Object(x: Object pointer,
-  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  Object_x_1_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_1_alloc_table, x) = 0)
 
 logic Object_tag :  -> Object tag_id
 
@@ -4630,8 +4641,8 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 
 goal Termination_loop1_ensures_default_po_1:
   forall this_2:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
+  forall Object_this_2_3_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_2, 0, 0, Object_this_2_3_alloc_table) ->
   forall mutable_n_1:int.
   ("JC_21": (true = true)) ->
   (mutable_n_1 > 0) ->
@@ -4641,8 +4652,8 @@ goal Termination_loop1_ensures_default_po_1:
 
 goal Termination_loop1_ensures_default_po_2:
   forall this_2:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
+  forall Object_this_2_3_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_2, 0, 0, Object_this_2_3_alloc_table) ->
   forall mutable_n_1:int.
   ("JC_21": (true = true)) ->
   (mutable_n_1 > 0) ->
@@ -4652,8 +4663,8 @@ goal Termination_loop1_ensures_default_po_2:
 
 goal Termination_loop2_ensures_default_po_1:
   forall this_1:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_1, 0, 0, Object_alloc_table) ->
+  forall Object_this_1_4_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_1, 0, 0, Object_this_1_4_alloc_table) ->
   forall mutable_n_0_0:int.
   ("JC_34": (true = true)) ->
   (mutable_n_0_0 < 100) ->
@@ -4663,8 +4674,8 @@ goal Termination_loop2_ensures_default_po_1:
 
 goal Termination_loop2_ensures_default_po_2:
   forall this_1:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_1, 0, 0, Object_alloc_table) ->
+  forall Object_this_1_4_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_1, 0, 0, Object_this_1_4_alloc_table) ->
   forall mutable_n_0_0:int.
   ("JC_34": (true = true)) ->
   (mutable_n_0_0 < 100) ->
@@ -4674,20 +4685,20 @@ goal Termination_loop2_ensures_default_po_2:
 
 goal Termination_loop3_ensures_default_po_1:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   ("JC_47": (0 <= 100))
 
 goal Termination_loop3_ensures_default_po_2:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   ("JC_47": (100 <= 100))
 
 goal Termination_loop3_ensures_default_po_3:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   forall i:int.
   ("JC_47": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
@@ -4697,8 +4708,8 @@ goal Termination_loop3_ensures_default_po_3:
 
 goal Termination_loop3_ensures_default_po_4:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   forall i:int.
   ("JC_47": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
@@ -4708,8 +4719,8 @@ goal Termination_loop3_ensures_default_po_4:
 
 goal Termination_loop3_ensures_default_po_5:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   forall i:int.
   ("JC_47": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
@@ -4719,8 +4730,8 @@ goal Termination_loop3_ensures_default_po_5:
 
 goal Termination_loop3_ensures_default_po_6:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   forall i:int.
   ("JC_47": ((0 <= i) and (i <= 100))) ->
   (i > 0) ->
@@ -4730,8 +4741,8 @@ goal Termination_loop3_ensures_default_po_6:
 
 goal Termination_loop3_ensures_default_po_7:
   forall this_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
+  forall Object_this_0_5_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_0, 0, 0, Object_this_0_5_alloc_table) ->
   forall i:int.
   ("JC_47": ((0 <= i) and (i <= 100))) ->
   (i <= 0) ->

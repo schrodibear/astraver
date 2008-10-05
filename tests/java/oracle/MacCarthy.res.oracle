@@ -52,7 +52,7 @@ Generating JC function cons_Object for constructor Object
 Done.
 ========== file tests/java/MacCarthy.jc ==========
 # InvariantPolicy = Arguments
-# SeparationPolicy = None
+# SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = None
 
@@ -1324,8 +1324,8 @@ logic Object_tag:  -> Object tag_id
 axiom MacCarthy_parenttag_Object : parenttag(MacCarthy_tag, Object_tag)
 
 predicate Non_null_Object(x:Object pointer,
- Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x), (0))
+ Object_x_1_alloc_table:Object alloc_table) =
+ eq_int(offset_max(Object_x_1_alloc_table, x), (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -1500,43 +1500,55 @@ parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_clone :
  this_4:Object pointer ->
-  { } Object pointer reads Object_alloc_table { true }
+  Object_this_4_7_alloc_table:Object alloc_table ->
+   { } Object pointer { true }
 
 parameter Object_clone_requires :
  this_4:Object pointer ->
-  { } Object pointer reads Object_alloc_table { true }
+  Object_this_4_7_alloc_table:Object alloc_table ->
+   { } Object pointer { true }
 
 parameter Object_equals :
  this_3:Object pointer ->
-  obj:Object pointer -> { } bool reads Object_alloc_table { true }
+  obj:Object pointer ->
+   Object_this_3_5_alloc_table:Object alloc_table -> { } bool { true }
 
 parameter Object_equals_requires :
  this_3:Object pointer ->
-  obj:Object pointer -> { } bool reads Object_alloc_table { true }
+  obj:Object pointer ->
+   Object_this_3_5_alloc_table:Object alloc_table -> { } bool { true }
 
 parameter Object_finalize :
- this_11:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_11:Object pointer ->
+  Object_this_11_18_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_finalize_requires :
- this_11:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_11:Object pointer ->
+  Object_this_11_18_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_hashCode :
- this_2:Object pointer -> { } int reads Object_alloc_table { true }
+ this_2:Object pointer ->
+  Object_this_2_4_alloc_table:Object alloc_table -> { } int { true }
 
 parameter Object_hashCode_requires :
- this_2:Object pointer -> { } int reads Object_alloc_table { true }
+ this_2:Object pointer ->
+  Object_this_2_4_alloc_table:Object alloc_table -> { } int { true }
 
 parameter Object_notify :
- this_6:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_6:Object pointer ->
+  Object_this_6_13_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_notifyAll :
- this_7:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_7:Object pointer ->
+  Object_this_7_14_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_notifyAll_requires :
- this_7:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_7:Object pointer ->
+  Object_this_7_14_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_notify_requires :
- this_6:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_6:Object pointer ->
+  Object_this_6_13_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_registerNatives : tt:unit -> { } unit { true }
 
@@ -1546,33 +1558,43 @@ parameter Object_tag_table : Object tag_table ref
 
 parameter Object_toString :
  this_5:Object pointer ->
-  { } Object pointer reads Object_alloc_table { true }
+  Object_this_5_10_alloc_table:Object alloc_table ->
+   { } Object pointer { true }
 
 parameter Object_toString_requires :
  this_5:Object pointer ->
-  { } Object pointer reads Object_alloc_table { true }
+  Object_this_5_10_alloc_table:Object alloc_table ->
+   { } Object pointer { true }
 
 parameter Object_wait :
- this_10:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_10:Object pointer ->
+  Object_this_10_17_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_wait_long :
  this_8:Object pointer ->
-  timeout:int -> { } unit reads Object_alloc_table { true }
+  timeout:int ->
+   Object_this_8_15_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_wait_long_int :
  this_9:Object pointer ->
-  timeout_0:int -> nanos:int -> { } unit reads Object_alloc_table { true }
+  timeout_0:int ->
+   nanos:int ->
+    Object_this_9_16_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_wait_long_int_requires :
  this_9:Object pointer ->
-  timeout_0:int -> nanos:int -> { } unit reads Object_alloc_table { true }
+  timeout_0:int ->
+   nanos:int ->
+    Object_this_9_16_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_wait_long_requires :
  this_8:Object pointer ->
-  timeout:int -> { } unit reads Object_alloc_table { true }
+  timeout:int ->
+   Object_this_8_15_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter Object_wait_requires :
- this_10:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_10:Object pointer ->
+  Object_this_10_17_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter alloc_bitvector_struct_MacCarthy :
  n:int ->
@@ -1780,32 +1802,38 @@ parameter alloc_struct_interface_requires :
               and instanceof(interface_tag_table, result, interface_tag)))) }
 
 parameter cons_MacCarthy :
- this_1:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_1:Object pointer ->
+  Object_this_1_3_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter cons_MacCarthy_requires :
- this_1:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_1:Object pointer ->
+  Object_this_1_3_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter cons_Object :
- this_12:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_12:Object pointer ->
+  Object_this_12_19_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter cons_Object_requires :
- this_12:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_12:Object pointer ->
+  Object_this_12_19_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table
-  { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+  Object_x_2_alloc_table:Object alloc_table ->
+   { } bool
+   { (JC_10:
+     (if result
+      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
+      else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table
-  { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+  Object_x_2_alloc_table:Object alloc_table ->
+   { } bool
+   { (JC_10:
+     (if result
+      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
+      else (x_0 = null))) }
 
 parameter struct_MacCarthy_alloc_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
@@ -2906,8 +2934,8 @@ logic Object_tag :  -> Object tag_id
 axiom MacCarthy_parenttag_Object: parenttag(MacCarthy_tag, Object_tag)
 
 predicate Non_null_Object(x: Object pointer,
-  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  Object_x_1_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_1_alloc_table, x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -3773,8 +3801,8 @@ why -simplify [...] why/MacCarthy.why
  ;; Why axiom MacCarthy_parenttag_Object
  (EQ (parenttag MacCarthy_tag Object_tag) |@true|))
 
-(DEFPRED (Non_null_Object x Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x) 0))
+(DEFPRED (Non_null_Object x Object_x_1_alloc_table)
+  (EQ (offset_max Object_x_1_alloc_table x) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -4776,8 +4804,8 @@ logic Object_tag :  -> Object tag_id
 axiom MacCarthy_parenttag_Object: parenttag(MacCarthy_tag, Object_tag)
 
 predicate Non_null_Object(x: Object pointer,
-  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  Object_x_1_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_1_alloc_table, x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 

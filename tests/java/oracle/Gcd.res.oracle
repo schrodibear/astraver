@@ -137,7 +137,7 @@ Generating JC function cons_Gcd for constructor Gcd
 Done.
 ========== file tests/java/Gcd.jc ==========
 # InvariantPolicy = Arguments
-# SeparationPolicy = None
+# SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = None
 
@@ -952,8 +952,8 @@ exception Loop_continue_exc of unit
 exception Loop_exit_exc of unit
 
 predicate Non_null_Object(x:Object pointer,
- Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x), (0))
+ Object_x_1_alloc_table:Object alloc_table) =
+ eq_int(offset_max(Object_x_1_alloc_table, x), (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -1466,26 +1466,30 @@ parameter alloc_struct_interface_requires :
               and instanceof(interface_tag_table, result, interface_tag)))) }
 
 parameter cons_Gcd :
- this_0:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_0:Object pointer ->
+  Object_this_0_3_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter cons_Gcd_requires :
- this_0:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_0:Object pointer ->
+  Object_this_0_3_alloc_table:Object alloc_table -> { } unit { true }
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table
-  { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+  Object_x_2_alloc_table:Object alloc_table ->
+   { } bool
+   { (JC_10:
+     (if result
+      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
+      else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
-  { } bool reads Object_alloc_table
-  { (JC_10:
-    (if result
-     then eq_int(offset_max(Object_alloc_table, x_0), (0))
-     else (x_0 = null))) }
+  Object_x_2_alloc_table:Object alloc_table ->
+   { } bool
+   { (JC_10:
+     (if result
+      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
+      else (x_0 = null))) }
 
 parameter struct_Gcd_alloc_of_bitvector :
  Object_alloc_table:Object alloc_table ref ->
@@ -2990,8 +2994,8 @@ logic Object_tag :  -> Object tag_id
 axiom Gcd_parenttag_Object: parenttag(Gcd_tag, Object_tag)
 
 predicate Non_null_Object(x: Object pointer,
-  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  Object_x_1_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_1_alloc_table, x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -4240,8 +4244,8 @@ why -simplify [...] why/Gcd.why
  ;; Why axiom Gcd_parenttag_Object
  (EQ (parenttag Gcd_tag Object_tag) |@true|))
 
-(DEFPRED (Non_null_Object x Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x) 0))
+(DEFPRED (Non_null_Object x Object_x_1_alloc_table)
+  (EQ (offset_max Object_x_1_alloc_table x) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -5596,8 +5600,8 @@ logic Object_tag :  -> Object tag_id
 axiom Gcd_parenttag_Object: parenttag(Gcd_tag, Object_tag)
 
 predicate Non_null_Object(x: Object pointer,
-  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x) = 0)
+  Object_x_1_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_1_alloc_table, x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -6144,10 +6148,10 @@ goal Gcd_gcd_safety_po_1:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ???????.??.......?.... (12/0/10/0/0)
+why/Gcd_why.why               : ???????.??.......#.... (12/0/9/1/0)
 total   :  22
 valid   :  12 ( 55%)
 invalid :   0 (  0%)
-unknown :  10 ( 45%)
-timeout :   0 (  0%)
+unknown :   9 ( 41%)
+timeout :   1 (  5%)
 failure :   0 (  0%)
