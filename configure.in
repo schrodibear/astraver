@@ -311,13 +311,6 @@ else
     COQVERSION=`coqc -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
 
     case $COQVERSION in
-#      7.3.1)
-#  	AC_MSG_RESULT($COQVERSION)
-#  	COQC7=$COQC
-#  	COQVER=v7
-#  	WHYLIBCOQ=lib/coq-v7
-#  	cp -f lib/coq-v7/WhyCoq73.v lib/coq-v7/WhyCoqCompat.v;;
-#    7.3.1*|7.4*)
     7.4*)
 	AC_MSG_RESULT($COQVERSION)
 	COQC7=$COQC
@@ -332,7 +325,7 @@ else
 	WHYLIBCOQ=lib/coq
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
 	case $COQVERSION in
-	8.1*|trunk)
+	8.1*|8.2*|trunk)
 	  JESSIELIBCOQ=lib/coq/jessie_why.vo
 	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
 	*)
@@ -340,12 +333,22 @@ else
 	  cp -f lib/coq/WhyCoq8.v lib/coq/WhyCoqCompat.v;;
         esac
 	AC_MSG_CHECKING(Coq floating-point library)
-	if test -f $COQLIB/user-contrib/AllFloat.vo; then
-	  AC_MSG_RESULT(yes)
-	  WHYFLOATS=lib/coq/WhyFloats.vo
-	else
-	  AC_MSG_RESULT(no)
-	fi;;
+ 	case $COQVERSION in
+	   8.1*|8.2*|trunk)
+ 	      if test -f $COQLIB/user-contrib/AllFloat.vo; then
+	        AC_MSG_RESULT(yes)
+	  	WHYFLOATS=lib/coq/WhyFloats.vo
+		COQFLOATSMSG=yes
+	      else
+	        AC_MSG_RESULT(no)
+	        COQFLOATSMSG="no (Coq library AllFloat.vo not found)"
+	      fi
+	      ;;
+	   *)
+	      COQFLOATSMSG="no (requires Coq version >= 8.1)"
+	      ;;
+           esac
+	;;
     *)
 	COQ=no
 	AC_MSG_WARN(You need Coq 7.4 or later; Coq discarded);;
@@ -474,7 +477,7 @@ if test "$COQ" = "yes" ; then
       echo "                        : (Jessie Coq proofs disabled, requires >= 8.1)"
    fi
    echo "    Lib                 : $COQLIB" 
-   echo "    Floats              : ${WHYFLOATS:-no}"
+   echo "    Floats              : $COQFLOATSMSG"
 fi
 # echo "Alt-ergo binary         : $ERGOBIN"
 echo "PVS support             : $PVS"

@@ -1,5 +1,6 @@
 
- o Jessie bug fix: 'simplify' entry of the generated makefile was ignoring
+  o Coq support for floats requires Coq version 8.1 at least
+  o Jessie bug fix: 'simplify' entry of the generated makefile was ignoring
    prelude axioms 
 
 version 2.14, July 28th, 2008
