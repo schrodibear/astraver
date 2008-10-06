@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.135 2008-10-03 14:18:42 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.136 2008-10-06 09:16:28 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1087,6 +1087,14 @@ let assertion ef a =
 (*                                locations                                   *)
 (******************************************************************************)
 
+let single_term fef t = 
+  let cont,ef = single_term fef.jc_reads t in
+  cont,{ fef with jc_reads = ef }
+
+let single_assertion fef a = 
+  let cont,ef = single_assertion fef.jc_reads a in
+  cont,{ fef with jc_reads = ef }
+
 let single_location ~in_assigns fef loc =
   let lab = 
     match loc#label with None -> LabelHere | Some lab -> lab
@@ -1130,21 +1138,13 @@ let single_location_set fef locs =
   in true, fef
 
 let location ~in_assigns fef loc =
-  fold_rec_location 
+  fold_rec_location single_term
     (single_location ~in_assigns) single_location_set fef loc
 
 
 (******************************************************************************)
 (*                                expressions                                 *)
 (******************************************************************************)
-
-let single_term fef t = 
-  let cont,ef = single_term fef.jc_reads t in
-  cont,{ fef with jc_reads = ef }
-
-let single_assertion fef a = 
-  let cont,ef = single_assertion fef.jc_reads a in
-  cont,{ fef with jc_reads = ef }
 
 let rec expr fef e =
   fold_rec_expr_and_term_and_assertion single_term single_assertion

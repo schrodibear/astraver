@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.29 2008-10-05 16:43:47 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.30 2008-10-06 09:16:29 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -243,6 +243,11 @@ let expr rresult e =
 	()
   ) e
 
+let location rresult loc =
+  let fold_unit f () = f in
+  fold_location 
+    (fold_unit (term rresult)) (fold_unit ignore) (fold_unit ignore) () loc
+
 let logic_function f =
   let (f, ta) = 
     Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag 
@@ -255,7 +260,7 @@ let logic_function f =
 	  Region.unify rresult t#region 
 	end
     | JCAssertion a -> assertion rresult a
-    | JCReads r -> () (* TODO *)
+    | JCReads r -> List.iter (location rresult) r
   end
 
 let generalize_logic_function f =

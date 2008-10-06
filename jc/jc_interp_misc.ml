@@ -2175,7 +2175,7 @@ let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
 	 | Some region_assoc -> 
 	     match transpose_region ~region_assoc distr with
 	       | Some r -> r
-	       | None -> assert false 
+	       | None -> failwith "Unexpected internal region in logic"
        in
        LogicLabelSet.fold
 	 (fun lab acc ->
@@ -2198,7 +2198,7 @@ let talloc_table_detailed_params
 	 | Some region_assoc -> 
 	     match transpose_region ~region_assoc distr with
 	       | Some r -> r
-	       | None -> assert false
+	       | None -> failwith "Unexpected internal region in logic"
        in
        LogicLabelSet.fold
 	 (fun lab acc ->
@@ -2221,7 +2221,7 @@ let ttag_table_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
 	 | Some region_assoc -> 
 	     match transpose_region ~region_assoc distr with
 	       | Some r -> r
-	       | None -> assert false
+	       | None -> failwith "Unexpected internal region in logic"
        in
        LogicLabelSet.fold
 	 (fun lab acc ->

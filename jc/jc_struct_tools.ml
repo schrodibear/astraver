@@ -110,7 +110,10 @@ let struct_has_size st =
 let struct_size st =
   match List.rev st.jc_struct_info_fields with
     | [] -> 0
-    | last_fi::_ -> field_offset last_fi + assert false (* the last_fi.jc_field_info_bitsize *)
+    | last_fi::_ -> 
+	match last_fi.jc_field_info_bitsize with
+	  | None -> assert false
+	  | Some fi_siz -> field_offset last_fi + fi_siz
 
 let struct_size_in_bytes st =
   let s = struct_size st in

@@ -630,28 +630,30 @@ let rec fold_rec_term_and_assertion ft fa acc a =
       fold_rec_term fold_rec_term_and_assertion ft fa acc a 
   else acc
 
-let fold_sub_location_set itls fls acc locs =
-  let itls = itls fls in
+let fold_sub_location_set itt itls ft fls acc locs =
+  let itt = itt ft and itls = itls ft fls in
   match locs#node with
     | JCLSvar _vi ->
 	acc
     | JCLSderef(locs,_lab,_fi,_r) ->
 	itls acc locs
     | JCLSrange(locs,t1_opt,t2_opt) ->
-	itls acc locs (* TODO: terms *)
-	  
-let rec fold_location_set fls acc locs =
-  let acc = fls acc locs in
-  fold_sub_location_set fold_location_set fls acc locs
+	let acc = itls acc locs in
+	let acc = Option_misc.fold_left itt acc t1_opt in
+	Option_misc.fold_left itt acc t2_opt 
 
-let rec fold_rec_location_set fls acc locs =
+let rec fold_location_set ft fls acc locs =
+  let acc = fls acc locs in
+  fold_sub_location_set fold_term fold_location_set ft fls acc locs
+
+let rec fold_rec_location_set ft fls acc locs =
   let cont,acc = fls acc locs in
   if cont then 
-    fold_sub_location_set fold_rec_location_set fls acc locs 
+    fold_sub_location_set fold_rec_term fold_rec_location_set ft fls acc locs 
   else acc
   
-let fold_sub_location itl itls fl fls acc loc =
-  let itl = itl fl fls and itls = itls fls in
+let fold_sub_location itl itls ft fl fls acc loc =
+  let itl = itl ft fl fls and itls = itls ft fls in
   match loc#node with
     | JCLvar _vi ->
 	acc
@@ -660,18 +662,18 @@ let fold_sub_location itl itls fl fls acc loc =
     | JCLat(loc,_lab) ->
 	itl acc loc
 
-let rec fold_location fl fls acc loc =
+let rec fold_location ft fl fls acc loc =
   let acc = fl acc loc in
-  fold_sub_location fold_location fold_sub_location_set fl fls acc loc
+  fold_sub_location fold_location fold_location_set ft fl fls acc loc
 
-let rec fold_rec_location fl fls acc loc =
+let rec fold_rec_location ft fl fls acc loc =
   let cont,acc = fl acc loc in
   if cont then 
-    fold_sub_location fold_rec_location fold_rec_location_set fl fls acc loc 
+    fold_sub_location fold_rec_location fold_rec_location_set ft fl fls acc loc 
   else acc
   
 let fold_sub_behavior itt ita itl itls ft fa fl fls acc b =
-  let ita = ita ft fa and itl = itl fl fls in
+  let ita = ita ft fa and itl = itl ft fl fls in
   let acc = Option_misc.fold_left ita acc b.jc_behavior_assumes in
   let acc =
     Option_misc.fold_left

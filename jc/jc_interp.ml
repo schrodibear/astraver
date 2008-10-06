@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.355 2008-10-03 14:18:42 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.356 2008-10-06 09:16:28 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2125,6 +2125,10 @@ and expr_coerce ty e =
 (*         ax::decl *)
 
 let tr_logic_fun f ta acc =
+
+  if Jc_options.debug then
+    Format.printf "[interp] logic function %s@." f.jc_logic_info_final_name;
+
   let lab = 
     match f.jc_logic_info_labels with [lab] -> lab | _ -> LabelHere
   in
