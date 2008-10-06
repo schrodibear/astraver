@@ -27,20 +27,23 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.129 2008-09-17 15:28:57 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.130 2008-10-06 12:16:04 moy Exp $ *)
+
+open Jc_stdlib
+open Jc_env
+open Jc_envset
+open Jc_region
+open Jc_ast
+open Jc_fenv
+
+open Jc_options
+open Jc_constructors
+open Jc_pervasives
+open Jc_separation
+open Jc_iterators
 
 open Pp
 open Format
-open Jc_constructors
-open Jc_ast
-open Jc_env
-open Jc_envset
-open Jc_fenv
-open Jc_options
-open Jc_pervasives
-open Jc_iterators
-open Jc_region
-open Jc_separation
 
 open Apron
 open Coeff
@@ -117,8 +120,7 @@ let struct_of_term t =
     | JCTpointer(st,_,_) -> 
 	begin match st with 
 	  | JCtag(st,_) -> st
-	  | JCvariant _ -> assert false (* TODO *)
-	  | JCunion _ -> assert false (* TODO *)
+	  | JCroot _ -> assert false (* TODO *)
  	end
     | _ -> 
       if debug then printf "[struct_of_term] %a@." Jc_output.term t;
@@ -234,7 +236,7 @@ let rec term_name =
 	    | JCCboolean b -> if b then "true" else "false"
 	    | JCCvoid -> "void"
 	    | JCCnull -> "null" 
-	    | JCCreal s -> filter_alphanumeric s
+	    | JCCreal(s,_) -> filter_alphanumeric s
 	    | JCCstring _ -> "string"
 	  end
       | JCTvar vi -> filter_alphanumeric vi.jc_var_info_final_name
@@ -290,7 +292,7 @@ let rec term_name =
 	  "offset_max_" ^ (term_name t)
       | JCToffset(Offset_min,t,st) ->
 	  "offset_min_" ^ (term_name t)
-      | JCTaddress(t) ->
+      | JCTaddress(_,t) ->
 	  "address_" ^ (term_name t)
       | JCTinstanceof(t,_,st) ->
 	  (term_name t) ^ "_instanceof_" ^ st.jc_struct_info_name
@@ -773,7 +775,7 @@ let rec switch_vis_in_term srcvi targetvi t =
     | JCTold t -> JCTold (term t)
     | JCTat (t, lab) -> JCTat (term t, lab)
     | JCToffset (ok, t, si) -> JCToffset (ok, term t, si)
-    | JCTaddress (t) -> JCTaddress (term t)
+    | JCTaddress (b,t) -> JCTaddress (b,term t)
     | JCTinstanceof (t, lab, si) -> JCTinstanceof (term t, lab, si)
     | JCTcast (t, lab, si) -> JCTcast (term t, lab, si)
     | JCTbitwise_cast (t, lab, si) -> JCTbitwise_cast (term t, lab, si)
@@ -1694,11 +1696,11 @@ let collect_expr_targets e =
           in
 	  let reqa = regionalize_assertion reqa call.jc_call_region_assoc in
           conjuncts reqa
-      | JCEassert(_, a) when a#mark = "hint" -> 
+      | JCEassert(_,_, a) when a#mark = "hint" -> 
 	  (* Hints are not to be proved by abstract interpretation, 
 	     only added to help it. *)
 	  []
-      | JCEassert(_, a) -> 
+      | JCEassert(_,_, a) -> 
 	  (* Consider separately each conjunct in a conjunction. *)
 	  conjuncts a
       | JCEassign_heap (e1, fi, _e2) ->
@@ -2416,7 +2418,7 @@ and intern_ai_expr iaio abs curinvs (e as s) =
 	      let dereft = new term ~typ:fi.jc_field_info_type (JCTderef(t1,LabelHere,fi)) in
 	      assign_expr mgr dereft e2 curinvs 
 	end
-    | JCEassert(_, a) ->
+    | JCEassert(_,_, a) ->
 	test_assertion mgr a curinvs
     | JCEblock sl ->
 	List.fold_left (ai_expr iaio abs) curinvs sl
@@ -2840,7 +2842,7 @@ and ai_function mgr iaio targets (fi, loc, fs, sl) =
       jc_absinv_exceptional = [];
       jc_absinv_return = ref (bottom_abstract_value mgr env);
     } in
-    let invs = (ai_expr iaio abs invs) sl in
+    let _ = (ai_expr iaio abs invs) sl in
       (match iaio with
 	 | None ->  (record_ai_invariants abs) sl 
 	 | Some iai -> 
@@ -3639,11 +3641,11 @@ let rec wp_expr weakpre =
 		in
 		{ curposts with jc_post_normal = post; }
 	  end
-      | JCEassert(_,a) when a#mark = "hint" -> 
+      | JCEassert(_,_,a) when a#mark = "hint" -> 
 	  (* Hints are not to be used in wp computation,
 	     only added to help it. *)
 	  curposts
-      | JCEassert(_, a1) ->
+      | JCEassert(_,_, a1) ->
 	  let f = atp_of_asrt a1 in
 	  let fvars = Atp.fv f in
 	  let varsets = List.map Vwp.term fvars in
