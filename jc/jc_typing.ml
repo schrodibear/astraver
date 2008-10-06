@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.244 2008-10-03 14:18:43 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.245 2008-10-06 11:12:53 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -925,7 +925,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEloop _ | JCNEreturn _ | JCNEtry _ | JCNEthrow _ | JCNEpack _
     | JCNEunpack _ | JCNEquantifier _ | JCNEcontract _ 
     | JCNEeqtype _ | JCNEsubtype _ ->
-        typing_error e#pos "construction not allowed in logic terms"
+	typing_error e#pos "construction %a not allowed in logic terms"
+	  Jc_noutput.expr e
   in
   new term
     ~typ: t
