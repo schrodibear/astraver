@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.61 2008-09-29 09:34:55 moy Exp $ *)
+(* $Id: jc_env.mli,v 1.62 2008-10-06 16:51:24 moy Exp $ *)
 
 type native_type = Tunit | Tboolean | Tinteger | Treal | Tstring
 
@@ -36,7 +36,7 @@ type inv_sem = InvNone | InvOwnership | InvArguments
 type separation_sem = SepNone | SepRegions
 
 type annotation_sem = 
-    AnnotNone | AnnotInvariants | AnnotWeakPre | AnnotStrongPre
+    AnnotNone | AnnotInvariants | AnnotElimPre | AnnotStrongPre | AnnotWeakPre
 
 type abstract_domain = AbsNone | AbsBox | AbsOct | AbsPol
 

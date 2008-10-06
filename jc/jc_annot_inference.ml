@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.130 2008-10-06 12:16:04 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.131 2008-10-06 16:51:24 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -575,9 +575,10 @@ let term_of_expr e =
       | JCEderef (e1, fi) -> JCTderef (term e1, LabelHere, fi)
       | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, LabelHere, st)
       | JCEcast (e1, st) -> JCTcast (term e1, LabelHere, st)
-      | JCErange_cast(e1,_) | JCEreal_cast(e1,_) -> 
+      | JCErange_cast(e1,ri) -> JCTrange_cast(term e1,ri)
+      | JCEreal_cast(e1,f) -> JCTreal_cast(term e1,f)
 	  (* range does not modify term value *)
-	  (term e1)#node 
+(* 	  (term e1)#node  *) (* but it modifies its type !!! *)
       | JCEif (e1, e2, e3) -> JCTif (term e1, term e2, term e3)
       | JCEoffset (off, e1, st) -> JCToffset (off, term e1, st)
       | JCEalloc (e, _) -> (* Note: \offset_max(t) = length(t) - 1 *)
@@ -3431,17 +3432,17 @@ let quantif_eliminate qf finv =
 	let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
 	simplify (asrt_of_atp q) finv
 
+let collect_free_vars = 
+  fold_term_and_assertion 
+    (fun acc t -> match t#node with
+       | JCTvar vi -> VarSet.add vi acc
+       | _ -> acc) 
+    (fun acc a -> match a#node with
+       | JCAquantifier(_,vi,a) -> VarSet.remove vi acc
+       | _ -> acc)
+    VarSet.empty
+
 let initialize_target curposts target =
-  let collect_free_vars = 
-    fold_term_and_assertion 
-      (fun acc t -> match t#node with
-	| JCTvar vi -> VarSet.add vi acc
-	| _ -> acc) 
-      (fun acc a -> match a#node with
-	| JCAquantifier(_,vi,a) -> VarSet.remove vi acc
-	| _ -> acc)
-      VarSet.empty
-  in
   let collect_sub_terms = 
     fold_term_in_assertion (fun acc t -> match t#node with
       | JCTvar _ | JCTbinary(_,((`Badd,`Integer) | (`Bsub,`Integer)),_)
@@ -3852,7 +3853,22 @@ let wp_function targets (fi,pos,fs,sl) =
       jc_post_inflexion_vars = ref VarSet.empty;
     } in
     let initposts = push_modified_vars initposts in
-    let posts = wp_expr weakpre target sl initposts in
+    let posts = match !Jc_options.annotation_sem with
+      | AnnotNone | AnnotInvariants -> assert false
+      | AnnotElimPre ->
+	  let vs1 = collect_free_vars target.jc_target_regular_invariant in
+	  let vs2 = collect_free_vars target.jc_target_assertion in
+	  let vs = VarSet.union vs1 vs2 in
+	  let qvs = 
+	    VarSet.filter
+	      (fun v -> not v.jc_var_info_formal || v.jc_var_info_assigned) vs 
+	  in
+	  let curposts = add_modified_vars initposts qvs in
+	  let inita = initialize_target curposts target in
+	  { curposts with jc_post_normal = Some inita; }
+      | AnnotWeakPre | AnnotStrongPre ->
+	  wp_expr weakpre target sl initposts 
+    in
 (*     let init_req = fs.jc_fun_requires in  *)
     match finalize_target ~is_function_level:true ~pos ~anchor:fi.jc_fun_info_name
       posts target init_req
@@ -4023,7 +4039,7 @@ let code_function (fi,pos,fs,body_opt) =
     in
     begin match !Jc_options.annotation_sem with
       | AnnotNone -> ()
-      | AnnotInvariants | AnnotWeakPre | AnnotStrongPre ->
+      | AnnotInvariants | AnnotElimPre | AnnotWeakPre | AnnotStrongPre ->
 	  (* 	    let targets = collect_immediate_targets [] sl in *)
 	  (* 	    backprop_function targets (fi,fs,sl); *)
 	  (* Collect checks *)
@@ -4046,7 +4062,7 @@ let code_function (fi,pos,fs,body_opt) =
 	  begin match !Jc_options.annotation_sem with 
 	    | AnnotNone -> assert false
 	    | AnnotInvariants	-> ()
-	    | AnnotWeakPre | AnnotStrongPre ->
+	    | AnnotElimPre | AnnotWeakPre | AnnotStrongPre ->
  		let targets = 
 		  List.fold_right 
 		    (fun target acc ->

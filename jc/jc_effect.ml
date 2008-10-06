@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.136 2008-10-06 09:16:28 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.137 2008-10-06 16:51:24 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1460,6 +1460,9 @@ let fun_effects f =
   reset_current_function ()
 
 let logic_effects funs =
+
+  List.iter (fun f -> f.jc_logic_info_effects <- empty_effects) funs;
+
   fixpoint_reached := false;
   while not !fixpoint_reached do
     fixpoint_reached := true;
@@ -1474,6 +1477,8 @@ let logic_effects funs =
     ) funs
     
 let function_effects funs =
+
+  List.iter (fun f -> f.jc_fun_info_effects <- empty_fun_effect) funs;
 
   let iterate () =
     fixpoint_reached := false;

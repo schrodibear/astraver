@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.119 2008-09-26 09:11:51 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.120 2008-10-06 16:51:24 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -489,9 +489,10 @@ let string_of_annotation_policy p =
   match p with
     | Jc_env.AnnotNone -> "None"
     | Jc_env.AnnotInvariants -> "Invariants"
-    | Jc_env.AnnotWeakPre -> "WeakPre"
+    | Jc_env.AnnotElimPre -> "ElimPre"
     | Jc_env.AnnotStrongPre -> "StrongPre"
-
+    | Jc_env.AnnotWeakPre -> "WeakPre"
+ 
 let string_of_abstract_domain p =
   match p with
     | Jc_env.AbsNone -> "None"

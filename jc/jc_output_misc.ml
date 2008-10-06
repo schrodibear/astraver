@@ -19,9 +19,10 @@ let string_of_annotation_policy p =
   match p with
     | AnnotNone -> "None"
     | AnnotInvariants -> "Invariants"
-    | AnnotWeakPre -> "WeakPre"
+    | AnnotElimPre -> "ElimPre"
     | AnnotStrongPre -> "StrongPre"
-
+    | AnnotWeakPre -> "WeakPre"
+ 
 let string_of_abstract_domain p =
   match p with
     | AbsNone -> "None"

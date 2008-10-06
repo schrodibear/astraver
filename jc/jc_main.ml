@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.123 2008-09-29 09:34:55 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.124 2008-10-06 16:51:24 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -155,6 +155,25 @@ let main () =
 	       Jc_ai.code_function (f, loc, s, b) 
 	    ) Jc_typing.functions_table
       end;
+
+    (* phase 5: re-computation of regions *)
+    if !Jc_options.separation_sem = SepRegions then begin
+      Jc_options.lprintf "Computation of regions@.";
+      (* Analyze logic functions before axioms, so that parameter 
+       * regions are known before a function is applied. 
+       *)
+      Array.iter Jc_separation.logic_component logic_components;
+      Hashtbl.iter Jc_separation.axiom Jc_typing.axioms_table;
+      Array.iter Jc_separation.code_component components
+    end;
+
+    (* phase ?: re-computation of effects *)
+    Jc_options.lprintf
+      "\nstarting computation of effects of logic functions.@.";
+    Array.iter Jc_effect.logic_effects logic_components;
+    Jc_options.lprintf
+      "\nstarting computation of effects of functions.@.";
+    Array.iter Jc_effect.function_effects components;
 
     (* phase 8: checking structure invariants *)
     begin

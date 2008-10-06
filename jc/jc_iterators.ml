@@ -486,6 +486,7 @@ let rec iter_term_and_assertion ft fa a =
 let iter_term_and_assertion_in_loop_annot ft fa la =
   List.iter (fun (_behav,inv) ->
 	       iter_term_and_assertion ft fa inv) la.jc_loop_invariant;
+  iter_term_and_assertion ft fa la.jc_free_loop_invariant;
   Option_misc.iter (ITerm.iter ft) la.jc_loop_variant
 
 let iter_term_and_assertion_in_behavior ft fa bv =
