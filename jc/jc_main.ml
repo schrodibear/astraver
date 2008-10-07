@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.124 2008-10-06 16:51:24 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.125 2008-10-07 16:07:21 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -46,6 +46,25 @@ let parse_file f =
     | Jc_lexer.Lexical_error(l,s) ->
 	eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
 	exit 1
+
+let compute_regions logic_components components =
+  if !Jc_options.separation_sem = SepRegions then begin
+    Jc_options.lprintf "Computation of regions@.";
+    (* Analyze logic functions before axioms, so that parameter 
+     * regions are known before a function is applied. 
+     *)
+    Array.iter Jc_separation.logic_component logic_components;
+    Hashtbl.iter Jc_separation.axiom Jc_typing.axioms_table;
+    Array.iter Jc_separation.code_component components
+  end
+
+let compute_effects logic_components components =
+  Jc_options.lprintf
+    "\nstarting computation of effects of logic functions.@.";
+  Array.iter Jc_effect.logic_effects logic_components;
+  Jc_options.lprintf
+    "\nstarting computation of effects of functions.@.";
+  Array.iter Jc_effect.function_effects components
 
 let main () =
   let files = Jc_options.files () in try match files with [file] ->
@@ -103,24 +122,8 @@ let main () =
       Jc_callgraph.compute_components Jc_typing.functions_table
     in
     
-    (* phase 5: computation of regions *)
-    if !Jc_options.separation_sem = SepRegions then begin
-      Jc_options.lprintf "Computation of regions@.";
-      (* Analyze logic functions before axioms, so that parameter 
-       * regions are known before a function is applied. 
-       *)
-      Array.iter Jc_separation.logic_component logic_components;
-      Hashtbl.iter Jc_separation.axiom Jc_typing.axioms_table;
-      Array.iter Jc_separation.code_component components
-    end;
-
-    (* phase 6: computation of effects *)
-    Jc_options.lprintf
-      "\nstarting computation of effects of logic functions.@.";
-    Array.iter Jc_effect.logic_effects logic_components;
-    Jc_options.lprintf
-      "\nstarting computation of effects of functions.@.";
-    Array.iter Jc_effect.function_effects components;
+    compute_regions logic_components components;
+    compute_effects logic_components components;
     
     (* (optional) phase 7: inference of annotations *)
     if !Jc_options.annotation_sem <> AnnotNone then
@@ -153,27 +156,11 @@ let main () =
 	  Hashtbl.iter 
 	    (fun _ (f, loc, s, b) -> 
 	       Jc_ai.code_function (f, loc, s, b) 
-	    ) Jc_typing.functions_table
+	    ) Jc_typing.functions_table;
+
+	compute_regions logic_components components;
+	compute_effects logic_components components
       end;
-
-    (* phase 5: re-computation of regions *)
-    if !Jc_options.separation_sem = SepRegions then begin
-      Jc_options.lprintf "Computation of regions@.";
-      (* Analyze logic functions before axioms, so that parameter 
-       * regions are known before a function is applied. 
-       *)
-      Array.iter Jc_separation.logic_component logic_components;
-      Hashtbl.iter Jc_separation.axiom Jc_typing.axioms_table;
-      Array.iter Jc_separation.code_component components
-    end;
-
-    (* phase ?: re-computation of effects *)
-    Jc_options.lprintf
-      "\nstarting computation of effects of logic functions.@.";
-    Array.iter Jc_effect.logic_effects logic_components;
-    Jc_options.lprintf
-      "\nstarting computation of effects of functions.@.";
-    Array.iter Jc_effect.function_effects components;
 
     (* phase 8: checking structure invariants *)
     begin
@@ -427,13 +414,13 @@ let main () =
     | Jc_options.Jc_error(l,s) ->
 	eprintf "%a: %s@." Loc.gen_report_position l s;
 	exit 1
-    | Assert_failure(f,l,c) as exn ->  
- 	eprintf "%a:@." Loc.gen_report_line (f,l,c,c); 
- 	raise exn 
+(*     | Assert_failure(f,l,c) as exn ->   *)
+(*  	eprintf "%a:@." Loc.gen_report_line (f,l,c,c);  *)
+(*  	raise exn  *)
 	  
 let _ = 
   Sys.catch_break true;
-  Printexc.catch main ()
+  if Jc_options.debug then main () else Printexc.catch main ()
 
   
 (*

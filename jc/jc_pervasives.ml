@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.126 2008-10-07 15:54:20 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.127 2008-10-07 16:07:21 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -196,17 +196,6 @@ let tempvar_count = ref 0
 (* let reset_tmp_var () = tempvar_count := 0 *)
 let tmp_var_name () = 
   incr tempvar_count; "jessie_" ^ string_of_int !tempvar_count
-
-(* constants *)
-
-let const c =
-  match c with
-    | JCCvoid -> unit_type,dummy_region,c
-    | JCCinteger _ -> integer_type,dummy_region,c
-    | JCCreal _ -> real_type,dummy_region,c
-    | JCCboolean _ -> boolean_type, dummy_region, c
-    | JCCnull -> null_type,Region.make_var JCTnull "null",c
-    | JCCstring _ -> string_type,dummy_region,c
 
 (* variables *)
 

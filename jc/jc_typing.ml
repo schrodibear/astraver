@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.246 2008-10-07 15:54:20 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.247 2008-10-07 16:07:21 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -218,7 +218,7 @@ let mintype loc t1 t2 =
 
 let unit_expr e =
   if e#typ = unit_type then e else 
-    new expr_with ~typ:unit_type ~original_type:e#typ e
+    new expr_with ~typ:unit_type ~region:dummy_region ~original_type:e#typ e
 
 let same_type_no_coercion t1 t2 = 
   match t1,t2 with
@@ -330,6 +330,18 @@ let bin_op (t: [< operator_type]) (op: [< bin_op]) = op, t
 (******************************************************************************)
 (*                                  Patterns                                  *)
 (******************************************************************************)
+
+(* constants *)
+
+let const c =
+  match c with
+    | JCCvoid -> unit_type,dummy_region,c
+    | JCCinteger _ -> integer_type,dummy_region,c
+    | JCCreal _ -> real_type,dummy_region,c
+    | JCCboolean _ -> boolean_type, dummy_region, c
+    | JCCnull -> null_type,Region.make_var JCTnull "null",c
+    | JCCstring _ -> string_type,dummy_region,c
+
 
 let valid_pointer_type st =
   JCTpointer(st, Some (Num.num_of_int 0), Some (Num.num_of_int 0))
@@ -1778,7 +1790,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
                 te2#typ
                 te3#typ
               in
-              t, te1#region, JCEif(te1, te2, te3)
+              t, te2#region, JCEif(te1, te2, te3)
           | _ -> typing_error e1#pos "boolean expression expected"
         end
     | JCNEoffset(k, e1) ->

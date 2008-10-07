@@ -55,6 +55,7 @@ val integer_type : Jc_env.jc_type
 val boolean_type : Jc_env.jc_type
 val real_type : Jc_env.jc_type
 val unit_type : Jc_env.jc_type
+val null_type : Jc_env.jc_type
 val string_type : Jc_env.jc_type
 val any_type: jc_type
 
@@ -79,7 +80,6 @@ val possible_struct_bytesize: Jc_env.struct_info -> int option
 
 val zero: Num.num
 val num_of_constant : 'a -> const -> Num.num
-val const : const -> Jc_env.jc_type * Jc_env.region * const
 
 (* environment infos *)
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.133 2008-10-07 12:12:20 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.134 2008-10-07 16:07:21 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -85,6 +85,169 @@ let nb_fun_post = ref 0
 let nb_fun_excep_post = ref 0
 
 
+(*****************************************************************************)
+(* Replacing variables in terms and assertions.                              *)
+(*****************************************************************************)
+
+let rec mem_term_in_assertion t a =
+  fold_term_in_assertion (fun acc t' -> acc || raw_term_equal t t') false a
+
+let rec mem_any_term_in_assertion tset a =
+  fold_term_in_assertion (fun acc t -> acc || TermSet.mem t tset) false a
+
+let rec replace_term_in_term ~source ~target t = 
+  map_term (fun t -> if raw_term_equal source t then target else t) t
+    
+let rec replace_term_in_assertion srct targett a = 
+  let term = replace_term_in_term ~source:srct ~target:targett in
+  let asrt = replace_term_in_assertion srct targett in
+  let anode = match a#node with
+    | JCArelation(t1,bop,t2) ->
+	JCArelation(term t1,bop,term t2)
+    | JCAnot a -> 
+	JCAnot (asrt a)
+    | JCAand al ->
+	JCAand(List.map asrt al)
+    | JCAor al ->
+	JCAor(List.map asrt al)
+    | JCAimplies(a1,a2) ->
+	JCAimplies(asrt a1,asrt a2)
+    | JCAiff(a1,a2) ->
+	JCAiff(asrt a1,asrt a2)
+    | JCAapp app ->
+	JCAapp { app with jc_app_args = List.map term app.jc_app_args }
+    | JCAquantifier(qt,vi,a) ->
+	JCAquantifier(qt,vi,asrt a)
+    | JCAold a ->
+	JCAold(asrt a)      
+    | JCAat(a,lab) ->
+	JCAat(asrt a,lab)      
+    | JCAinstanceof(t,lab,st) ->
+	JCAinstanceof(term t,lab,st)
+    | JCAbool_term t ->
+	JCAbool_term(term t)
+    | JCAif(t,a1,a2) ->
+	JCAif(term t,asrt a1,asrt a2)
+    | JCAmutable(t,st,tag) ->
+	JCAmutable(term t,st,tag)
+    | JCAtrue | JCAfalse | JCAeqtype _ | JCAsubtype _ as anode -> anode
+    | JCAmatch _ -> assert false (* TODO *)
+  in
+  new assertion_with ~node:anode a
+
+
+let rec replace_vi_in_assertion srcvi targett a = 
+  let term = replace_term_in_term 
+    ~source:(new term ~typ:srcvi.jc_var_info_type (JCTvar srcvi)) 
+    ~target:targett in
+  let asrt = replace_vi_in_assertion srcvi targett in
+  let anode = match a#node with
+    | JCArelation (t1, bop, t2) ->
+	JCArelation (term t1, bop, term t2)
+    | JCAnot a -> 
+	JCAnot (asrt a)
+    | JCAand al ->
+	JCAand (List.map asrt al)
+    | JCAor al ->
+	JCAor (List.map asrt al)
+    | JCAimplies (a1, a2) ->
+	JCAimplies (asrt a1, asrt a2)
+    | JCAiff (a1, a2) ->
+	JCAiff (asrt a1, asrt a2)
+    | JCAapp app ->
+	JCAapp { app with jc_app_args = List.map term app.jc_app_args }
+    | JCAquantifier (qt, vi, a) ->
+	JCAquantifier (qt, vi, asrt a)
+    | JCAold a ->
+	JCAold (asrt a)      
+    | JCAat(a,lab) ->
+	JCAat (asrt a,lab)      
+    | JCAinstanceof (t, lab, st) ->
+	JCAinstanceof (term t, lab, st)
+    | JCAbool_term t ->
+	JCAbool_term (term t)
+    | JCAif (t, a1, a2) ->
+	JCAif (term t, asrt a1, asrt a2)
+    | JCAmutable (t, st, tag) ->
+	JCAmutable (term t, st, tag)
+    | JCAtrue | JCAfalse | JCAeqtype _ | JCAsubtype _ as anode -> anode
+    | JCAmatch _ -> assert false (* TODO *)
+  in
+  new assertion_with ~node:anode a
+
+let unfolding_of_app app =
+  let f = app.jc_app_fun in
+  let _, term_or_assertion = 
+    try Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag
+    with Not_found -> assert false 
+  in
+  match term_or_assertion with
+    | JCAssertion a ->
+	let a = 
+	  List.fold_left2 (fun a vi t -> replace_vi_in_assertion vi t a)
+	    a f.jc_logic_info_parameters app.jc_app_args
+	in
+	Some a
+    | _ -> None
+
+
+(* comparison by name (vs. comparison by tag in 'replace_term_in_term' ) *)
+let rec switch_vis_in_term srcvi targetvi t =
+  let term = switch_vis_in_term srcvi targetvi in
+  let node = match t#node with
+    | JCTconst c -> JCTconst c
+    | JCTvar vi -> 
+	if vi.jc_var_info_name = srcvi.jc_var_info_name then
+	  JCTvar targetvi else JCTvar vi
+    | JCTshift (t1, t2) -> JCTshift (term t1, term t2)
+    | JCTderef (t, lab, fi) -> JCTderef (term t, lab, fi)
+    | JCTbinary (t1, bop, t2) -> JCTbinary (term t1, bop, term t2)
+    | JCTunary (op, t) -> JCTunary (op, term t)
+    | JCTapp app -> let tl = app.jc_app_args in
+      JCTapp { app with jc_app_args = List.map term tl; }
+    | JCTold t -> JCTold (term t)
+    | JCTat (t, lab) -> JCTat (term t, lab)
+    | JCToffset (ok, t, si) -> JCToffset (ok, term t, si)
+    | JCTaddress (b,t) -> JCTaddress (b,term t)
+    | JCTinstanceof (t, lab, si) -> JCTinstanceof (term t, lab, si)
+    | JCTcast (t, lab, si) -> JCTcast (term t, lab, si)
+    | JCTbitwise_cast (t, lab, si) -> JCTbitwise_cast (term t, lab, si)
+    | JCTrange_cast (t, si) -> JCTrange_cast (term t, si)
+    | JCTreal_cast (t, si) -> JCTreal_cast (term t, si)
+    | JCTif (t1, t2, t3) -> JCTif (term t1, term t2, term t3)
+    | JCTrange (to1, to2) -> JCTrange (Option_misc.map term to1, Option_misc.map term to2)
+    | JCTmatch _ -> assert false (* TODO *)
+  in
+  new term_with ~node t
+    
+let rec switch_vis_in_assertion srcvi targetvi a = 
+  let term = switch_vis_in_term srcvi targetvi in
+  let asrt = switch_vis_in_assertion srcvi targetvi in
+  let anode = match a#node with
+    | JCArelation (t1, bop, t2) -> JCArelation (term t1, bop, term t2)
+    | JCAnot a -> JCAnot (asrt a)
+    | JCAand al -> JCAand (List.map asrt al)
+    | JCAor al -> JCAor (List.map asrt al)
+    | JCAimplies (a1, a2) -> JCAimplies (asrt a1, asrt a2)
+    | JCAiff (a1, a2) -> JCAiff (asrt a1, asrt a2)
+    | JCAapp app -> JCAapp { app with jc_app_args = List.map term app.jc_app_args }
+    | JCAquantifier (qt, vi, a) -> 
+	assert (vi.jc_var_info_name <> srcvi.jc_var_info_name);
+	assert (vi.jc_var_info_name <> targetvi.jc_var_info_name);
+	JCAquantifier (qt, vi, asrt a)
+    | JCAold a -> JCAold (asrt a)      
+    | JCAat (a, lab) -> JCAat (asrt a, lab)      
+    | JCAinstanceof (t, lab, st) -> JCAinstanceof (term t, lab, st)
+    | JCAbool_term t -> JCAbool_term (term t)
+    | JCAif (t, a1, a2) -> JCAif (term t, asrt a1, asrt a2)
+    | JCAmutable (t, st, tag) -> JCAmutable (term t, st, tag)
+    | JCAtrue | JCAfalse | JCAeqtype _ | JCAsubtype _ as anode -> anode
+    | JCAmatch _ -> assert false (* TODO *)
+  in
+  new assertion_with ~node:anode a
+    
+
+
 (* Utility functions *)
 
 let normalize_expr e =
@@ -135,7 +298,12 @@ let rec nb_conj_atoms a = match a#node with
       
 let rec conjuncts a = match a#node with
   | JCAand al -> List.flatten(List.map conjuncts al)
-  | _ -> [a]
+  | JCAapp app ->
+      begin match unfolding_of_app app with
+	| Some a -> conjuncts a
+	| None -> [ a ]
+      end
+  | _ -> [ a ]
 
 let rec disjuncts a = match a#node with
   | JCAor al -> List.flatten(List.map disjuncts al)
@@ -665,153 +833,6 @@ let rec asrt_of_expr e =
 
 let raw_asrt_of_expr = asrt_of_expr
 
-
-(*****************************************************************************)
-(* Replacing variables in terms and assertions.                              *)
-(*****************************************************************************)
-
-let rec mem_term_in_assertion t a =
-  fold_term_in_assertion (fun acc t' -> acc || raw_term_equal t t') false a
-
-let rec mem_any_term_in_assertion tset a =
-  fold_term_in_assertion (fun acc t -> acc || TermSet.mem t tset) false a
-
-let rec replace_term_in_term ~source ~target t = 
-  map_term (fun t -> if raw_term_equal source t then target else t) t
-    
-let rec replace_term_in_assertion srct targett a = 
-  let term = replace_term_in_term ~source:srct ~target:targett in
-  let asrt = replace_term_in_assertion srct targett in
-  let anode = match a#node with
-    | JCArelation(t1,bop,t2) ->
-	JCArelation(term t1,bop,term t2)
-    | JCAnot a -> 
-	JCAnot (asrt a)
-    | JCAand al ->
-	JCAand(List.map asrt al)
-    | JCAor al ->
-	JCAor(List.map asrt al)
-    | JCAimplies(a1,a2) ->
-	JCAimplies(asrt a1,asrt a2)
-    | JCAiff(a1,a2) ->
-	JCAiff(asrt a1,asrt a2)
-    | JCAapp app ->
-	JCAapp { app with jc_app_args = List.map term app.jc_app_args }
-    | JCAquantifier(qt,vi,a) ->
-	JCAquantifier(qt,vi,asrt a)
-    | JCAold a ->
-	JCAold(asrt a)      
-    | JCAat(a,lab) ->
-	JCAat(asrt a,lab)      
-    | JCAinstanceof(t,lab,st) ->
-	JCAinstanceof(term t,lab,st)
-    | JCAbool_term t ->
-	JCAbool_term(term t)
-    | JCAif(t,a1,a2) ->
-	JCAif(term t,asrt a1,asrt a2)
-    | JCAmutable(t,st,tag) ->
-	JCAmutable(term t,st,tag)
-    | JCAtrue | JCAfalse | JCAeqtype _ | JCAsubtype _ as anode -> anode
-    | JCAmatch _ -> assert false (* TODO *)
-  in
-  new assertion_with ~node:anode a
-
-
-let rec replace_vi_in_assertion srcvi targett a = 
-  let term = replace_term_in_term 
-    ~source:(new term ~typ:srcvi.jc_var_info_type (JCTvar srcvi)) 
-    ~target:targett in
-  let asrt = replace_vi_in_assertion srcvi targett in
-  let anode = match a#node with
-    | JCArelation (t1, bop, t2) ->
-	JCArelation (term t1, bop, term t2)
-    | JCAnot a -> 
-	JCAnot (asrt a)
-    | JCAand al ->
-	JCAand (List.map asrt al)
-    | JCAor al ->
-	JCAor (List.map asrt al)
-    | JCAimplies (a1, a2) ->
-	JCAimplies (asrt a1, asrt a2)
-    | JCAiff (a1, a2) ->
-	JCAiff (asrt a1, asrt a2)
-    | JCAapp app ->
-	JCAapp { app with jc_app_args = List.map term app.jc_app_args }
-    | JCAquantifier (qt, vi, a) ->
-	JCAquantifier (qt, vi, asrt a)
-    | JCAold a ->
-	JCAold (asrt a)      
-    | JCAat(a,lab) ->
-	JCAat (asrt a,lab)      
-    | JCAinstanceof (t, lab, st) ->
-	JCAinstanceof (term t, lab, st)
-    | JCAbool_term t ->
-	JCAbool_term (term t)
-    | JCAif (t, a1, a2) ->
-	JCAif (term t, asrt a1, asrt a2)
-    | JCAmutable (t, st, tag) ->
-	JCAmutable (term t, st, tag)
-    | JCAtrue | JCAfalse | JCAeqtype _ | JCAsubtype _ as anode -> anode
-    | JCAmatch _ -> assert false (* TODO *)
-  in
-  new assertion_with ~node:anode a
-
-
-(* comparison by name (vs. comparison by tag in 'replace_term_in_term' ) *)
-let rec switch_vis_in_term srcvi targetvi t =
-  let term = switch_vis_in_term srcvi targetvi in
-  let node = match t#node with
-    | JCTconst c -> JCTconst c
-    | JCTvar vi -> 
-	if vi.jc_var_info_name = srcvi.jc_var_info_name then
-	  JCTvar targetvi else JCTvar vi
-    | JCTshift (t1, t2) -> JCTshift (term t1, term t2)
-    | JCTderef (t, lab, fi) -> JCTderef (term t, lab, fi)
-    | JCTbinary (t1, bop, t2) -> JCTbinary (term t1, bop, term t2)
-    | JCTunary (op, t) -> JCTunary (op, term t)
-    | JCTapp app -> let tl = app.jc_app_args in
-      JCTapp { app with jc_app_args = List.map term tl; }
-    | JCTold t -> JCTold (term t)
-    | JCTat (t, lab) -> JCTat (term t, lab)
-    | JCToffset (ok, t, si) -> JCToffset (ok, term t, si)
-    | JCTaddress (b,t) -> JCTaddress (b,term t)
-    | JCTinstanceof (t, lab, si) -> JCTinstanceof (term t, lab, si)
-    | JCTcast (t, lab, si) -> JCTcast (term t, lab, si)
-    | JCTbitwise_cast (t, lab, si) -> JCTbitwise_cast (term t, lab, si)
-    | JCTrange_cast (t, si) -> JCTrange_cast (term t, si)
-    | JCTreal_cast (t, si) -> JCTreal_cast (term t, si)
-    | JCTif (t1, t2, t3) -> JCTif (term t1, term t2, term t3)
-    | JCTrange (to1, to2) -> JCTrange (Option_misc.map term to1, Option_misc.map term to2)
-    | JCTmatch _ -> assert false (* TODO *)
-  in
-  new term_with ~node t
-    
-let rec switch_vis_in_assertion srcvi targetvi a = 
-  let term = switch_vis_in_term srcvi targetvi in
-  let asrt = switch_vis_in_assertion srcvi targetvi in
-  let anode = match a#node with
-    | JCArelation (t1, bop, t2) -> JCArelation (term t1, bop, term t2)
-    | JCAnot a -> JCAnot (asrt a)
-    | JCAand al -> JCAand (List.map asrt al)
-    | JCAor al -> JCAor (List.map asrt al)
-    | JCAimplies (a1, a2) -> JCAimplies (asrt a1, asrt a2)
-    | JCAiff (a1, a2) -> JCAiff (asrt a1, asrt a2)
-    | JCAapp app -> JCAapp { app with jc_app_args = List.map term app.jc_app_args }
-    | JCAquantifier (qt, vi, a) -> 
-	assert (vi.jc_var_info_name <> srcvi.jc_var_info_name);
-	assert (vi.jc_var_info_name <> targetvi.jc_var_info_name);
-	JCAquantifier (qt, vi, asrt a)
-    | JCAold a -> JCAold (asrt a)      
-    | JCAat (a, lab) -> JCAat (asrt a, lab)      
-    | JCAinstanceof (t, lab, st) -> JCAinstanceof (term t, lab, st)
-    | JCAbool_term t -> JCAbool_term (term t)
-    | JCAif (t, a1, a2) -> JCAif (term t, asrt a1, asrt a2)
-    | JCAmutable (t, st, tag) -> JCAmutable (term t, st, tag)
-    | JCAtrue | JCAfalse | JCAeqtype _ | JCAsubtype _ as anode -> anode
-    | JCAmatch _ -> assert false (* TODO *)
-  in
-  new assertion_with ~node:anode a
-    
 
 (*****************************************************************************)
 (* Abstract variables naming and creation.                                   *)
@@ -1796,21 +1817,9 @@ let simple_test_assertion mgr a pre =
 	    | _ -> extract_environment_and_dnf env nota
 	  end
       | JCAapp app ->
-	  let f = app.jc_app_fun in
-	  let _, term_or_assertion = 
-	    try Hashtbl.find
-	      Jc_typing.logic_functions_table f.jc_logic_info_tag
-	    with Not_found -> assert false 
-	  in
-	  begin match term_or_assertion with
-	    | JCAssertion a ->
-		let a = List.fold_left2
-		  (fun a vi t ->
-		     replace_vi_in_assertion vi t a)
-		  a f.jc_logic_info_parameters app.jc_app_args
-		in
-		extract_environment_and_dnf env a
-	    | _ -> env, Dnf.true_
+	  begin match unfolding_of_app app with
+	    | Some a -> extract_environment_and_dnf env a
+	    | None -> env, Dnf.true_
 	  end
       | JCAimplies _ | JCAiff _
       | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
@@ -3172,7 +3181,12 @@ let rec atp_of_asrt a =
 		| Exists -> quant (Atp.Exists(v,f)) r
 	in
 	quant f vars
-    | JCAapp _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
+    | JCAapp app ->
+	begin match unfolding_of_app app with
+	  | Some a -> atp_of_asrt a
+	  | None -> failwith "Atp alien"
+	end
+    | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
     | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAmatch _ | JCAsubtype _ ->
 	failwith "Atp alien"
   end with Failure "Atp alien" -> 
@@ -3817,71 +3831,80 @@ let rec wp_expr weakpre =
       { curposts with jc_post_normal = Some inita; }
     else curposts
 
-let rec record_wp_invariants weakpre s =
-  match s#node with
-    | JCElet(_,_,s) -> 
-	record_wp_invariants weakpre s
-    | JCEblock sl ->
-	List.iter (record_wp_invariants weakpre) sl
-    | JCEmatch _ -> assert false (* TODO *)
-    | JCEif(_,ts,fs) ->
-	record_wp_invariants weakpre ts;
-	record_wp_invariants weakpre fs
-    | JCEtry(s,hl,fs) ->
-	record_wp_invariants weakpre s;
-	List.iter (fun (_,_,s) -> record_wp_invariants weakpre s) hl;
-	record_wp_invariants weakpre fs
-    | JCEloop(la,ls) ->
-	let loop_invariants = weakpre.jc_weakpre_loop_invariants in
-	begin try
-	  let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in
-	  la.jc_loop_invariant <- [[],make_and (loopinvs :: List.map snd la.jc_loop_invariant)]
-	with Not_found -> () end
-    | JCEassign_var _ | JCEassign_heap _ | JCEassert _ 
-    | JCEreturn_void | JCEreturn _ | JCEthrow _ | JCEpack _ | JCEunpack _ 
-    | JCEapp _ ->
-	()
-    | _ -> assert false (* TODO *)
+(* let rec record_wp_invariants weakpre s = *)
+(*   match s#node with *)
+(*     | JCElet(_,_,s) ->  *)
+(* 	record_wp_invariants weakpre s *)
+(*     | JCEblock sl -> *)
+(* 	List.iter (record_wp_invariants weakpre) sl *)
+(*     | JCEmatch _ -> assert false (\* TODO *\) *)
+(*     | JCEif(_,ts,fs) -> *)
+(* 	record_wp_invariants weakpre ts; *)
+(* 	record_wp_invariants weakpre fs *)
+(*     | JCEtry(s,hl,fs) -> *)
+(* 	record_wp_invariants weakpre s; *)
+(* 	List.iter (fun (_,_,s) -> record_wp_invariants weakpre s) hl; *)
+(* 	record_wp_invariants weakpre fs *)
+(*     | JCEloop(la,ls) -> *)
+(* 	let loop_invariants = weakpre.jc_weakpre_loop_invariants in *)
+(* 	begin try *)
+(* 	  let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in *)
+(* 	  la.jc_loop_invariant <- [[],make_and (loopinvs :: List.map snd la.jc_loop_invariant)] *)
+(* 	with Not_found -> () end *)
+(*     | JCEassign_var _ | JCEassign_heap _ | JCEassert _  *)
+(*     | JCEreturn_void | JCEreturn _ | JCEthrow _ | JCEpack _ | JCEunpack _  *)
+(*     | JCEapp _ -> *)
+(* 	() *)
+(*     | _ -> assert false (\* TODO *\) *)
 
-let wp_function targets (fi,pos,fs,sl) =
-  if debug then printf "[wp_function]@.";
+let wp_function targets (f,pos,fs,sl) =
+  if debug then printf "[wp_function] %s@." f.jc_fun_info_name;
   let weakpre = {
     jc_weakpre_loop_invariants = Hashtbl.create 0;
   } in
   let init_req = fs.jc_fun_requires in
-  List.iter (fun target ->
-	       let initposts = {
-		 jc_post_normal = None;
-		 jc_post_exceptional = [];
-		 jc_post_modified_vars = [];
-		 jc_post_inflexion_vars = ref VarSet.empty;
-	       } in
-	       let initposts = push_modified_vars initposts in
-	       let posts = match !Jc_options.annotation_sem with
-		 | AnnotNone | AnnotInvariants -> assert false
-		 | AnnotElimPre ->
-		     let vs1 = collect_free_vars target.jc_target_regular_invariant in
-		     let vs2 = collect_free_vars target.jc_target_assertion in
-		     let vs = VarSet.union vs1 vs2 in
-		     let qvs = 
-		       VarSet.filter
-			 (fun v -> not v.jc_var_info_formal || v.jc_var_info_assigned) vs 
-		     in
-		     let curposts = add_modified_vars initposts qvs in
-		     let inita = initialize_target curposts target in
-		     { curposts with jc_post_normal = Some inita; }
-		 | AnnotWeakPre | AnnotStrongPre ->
-		     wp_expr weakpre target sl initposts 
-	       in
-	       (*     let init_req = fs.jc_fun_requires in  *)
-	       match finalize_target ~is_function_level:true ~pos ~anchor:fi.jc_fun_info_name
-		 posts target init_req
-	       with None -> () | Some infera ->
-		 fs.jc_fun_requires <- make_and [fs.jc_fun_requires;infera]
-	    ) targets
-    (* Only useful for loop invariants
-       record_wp_invariants weakpre sl
-    *)
+  let infer_req = ref [] in
+  List.iter 
+    (fun target ->
+       let initposts = {
+	 jc_post_normal = None;
+	 jc_post_exceptional = [];
+	 jc_post_modified_vars = [];
+	 jc_post_inflexion_vars = ref VarSet.empty;
+       } in
+       let initposts = push_modified_vars initposts in
+       let posts = match !Jc_options.annotation_sem with
+	 | AnnotNone | AnnotInvariants -> 
+	     assert false (* [wp_function] should not be called *)
+	 | AnnotElimPre ->
+	     (* Directly eliminate modified variables *)
+	     let vs1 = collect_free_vars target.jc_target_regular_invariant in
+	     let vs2 = collect_free_vars target.jc_target_assertion in
+	     let vs = VarSet.union vs1 vs2 in
+	     let qvs = 
+	       VarSet.filter
+		 (fun v -> 
+		    not v.jc_var_info_formal || v.jc_var_info_assigned
+		 ) vs 
+	     in
+	     let curposts = add_modified_vars initposts qvs in
+	     let inita = initialize_target curposts target in
+	     { curposts with jc_post_normal = Some inita; }
+	 | AnnotWeakPre | AnnotStrongPre ->
+	     (* Compute weakest precondition of formula *)
+	     wp_expr weakpre target sl initposts 
+       in
+       match finalize_target ~is_function_level:true ~pos 
+	 ~anchor:f.jc_fun_info_name posts target init_req
+       with 
+	 | None -> () (* precondition inconsistant or redondant *)
+	 | Some infera -> (* valid precondition *)
+	     fs.jc_fun_requires <- make_and [ fs.jc_fun_requires; infera ];
+	     infer_req := infera :: !infer_req
+    ) targets;
+  Format.printf "@[<v 2>Inferring precondition for function %s:@\n%a@]@." 
+    f.jc_fun_info_name Jc_output.assertion (make_and !infer_req)
+
 
 (*****************************************************************************)
 (* Augmenting loop invariants.                                               *)

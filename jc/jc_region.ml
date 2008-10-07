@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.27 2008-09-01 09:13:48 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.28 2008-10-07 16:07:21 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -290,7 +290,13 @@ struct
       with Not_found -> ()
 	
   and unify ?(poly=true) r1 r2 = 
-    if equal r1 r2 then () else
+    if is_dummy_region r1 && is_dummy_region r2 then ()
+    else if is_dummy_region r1 || is_dummy_region r2 then
+      let r,dr = if is_dummy_region r1 then r2, r1 else r1, r2 in
+      Format.printf "unifying a dummy region %a with a non dummy region %a@."
+	print dr print r;
+      assert false
+    else if equal r1 r2 then () else
       let rep1 = RegionUF.repr r1 and rep2 = RegionUF.repr r2 in
       RegionUF.unify r1 r2;
       let t1 = 
