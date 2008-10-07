@@ -5,12 +5,12 @@
 
 //@+ CheckArithOverflow = no
 
-//@ logic integer max(integer x, integer y) ;
-
-/*@ axiom max_def :  
-  @   \forall integer x y ; 
-  @   (max(x,y) == x || max(x,y) == y) &&
-  @   max(x,y) >= x && max(x,y) >= y ;
+/*@ logic integer max(integer x, integer y) {
+  @  axiom max_def :  
+  @    \forall integer x y ; 
+  @    (max(x,y) == x || max(x,y) == y) &&
+  @    max(x,y) >= x && max(x,y) >= y ;
+  @ }
   @*/
 
 
@@ -83,16 +83,16 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
-logic integer max{Here}(integer x, integer y) reads \nothing;
+logic integer max{Here}(integer x, integer y) {
+axiom max_def: (\forall integer x_0;
+                 (\forall integer y_0;
+                   ((((max(x_0, y_0) == x_0) || (max(x_0, y_0) == y_0)) &&
+                      (max(x_0, y_0) >= x_0)) &&
+                     (max(x_0, y_0) >= y_0))));
+  
+}
 
 exception Throwable of Throwable[0..]
-
-axiom max_def{Here} :
-(\forall integer x_0;
-  (\forall integer y_0;
-    ((((max(x_0, y_0) == x_0) || (max(x_0, y_0) == y_0)) &&
-       (max(x_0, y_0) >= x_0)) &&
-      (max(x_0, y_0) >= y_0))))
 
 integer MacCarthy_f91(integer n)
 behavior less_than_101:

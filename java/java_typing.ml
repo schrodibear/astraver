@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.141 2008-10-03 14:18:42 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.142 2008-10-07 15:54:20 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -465,6 +465,7 @@ let get_type_decl package package_env acc d =
         end
     | JPTlogic_reads((loc,id),ret_type,labels,params,reads) -> acc 
     | JPTlogic_def((loc,id),ret_type,labels,params,body) -> acc
+    | JPTlogic_axiomatic((loc,id),ret_type,labels,params,body) -> acc
 
 
 type classified_name =
@@ -495,6 +496,7 @@ type logic_body =
   | JAssertion of assertion
   | JTerm of term
   | JReads of term list
+  | JAxiomatic of (identifier * assertion) list
   | JBuiltin
 
 let logics_table = Hashtbl.create 97
@@ -3641,6 +3643,38 @@ let type_decl package_env type_env d =
                   Hashtbl.add logics_env id fi;
                   Hashtbl.add logics_table fi.java_logic_info_tag (fi,JTerm a)
           end
+    | JPTlogic_axiomatic ((loc, id), ret_type, labels, params, body) -> 
+        let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
+        let env = 
+          List.fold_left
+            (fun acc vi -> 
+               (vi.java_var_info_name,vi)::acc)
+            [] pl
+        in
+        let env =
+          { package_env = package_env;
+            type_env = type_env;
+            current_type = None;
+            label_env = labels;
+            env = env;
+          }
+        in
+	let fi =
+          match ret_type with
+            | None -> logic_info id None labels pl
+	    | Some t -> 
+                logic_info id 
+                  (Some (type_type package_env type_env false t)) labels pl 
+	in
+	(* adding fi in env before typing axiomatics *)
+        Hashtbl.add logics_env id fi;
+	let l = List.map
+	  (fun (id,e) ->
+	     let a = assertion env None e in
+	     (id,a))
+	  body
+	in
+        Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAxiomatic l)
 
 let get_bodies package_env type_env cu =
   List.iter (type_decl package_env type_env) cu.cu_type_decls

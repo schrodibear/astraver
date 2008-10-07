@@ -8,59 +8,50 @@ import java.util.HashMapIntegerLong;
 //@ type mappings;
 
 //@ logic Integer access_int(mappings m, Integer key);
-//@ logic Long access(mappings m, Integer key);
-
-//@ logic mappings update_int(mappings m, Integer key, Integer value);
-//@ logic mappings update(mappings m, Integer key, Long value);
-
-//@ logic mappings empty_mappings();
-
-/*@ axiom access_update_eq_int:
-  @   \forall mappings m, Integer key, Integer value ;
+/*@ logic mappings update_int(mappings m, Integer key, Integer value) {
+  @  axiom access_update_eq_int:
+  @     \forall mappings m, Integer key, Integer value ;
   @       access_int(update_int(m,key,value),key) == value ;
-  @*/
-
-/*@ axiom access_update_eq:
-  @   \forall mappings m, Integer key, Long value ;
-  @       access(update(m,key,value),key) == value ;
-  @*/
-
-/*@ axiom access_update_neq_int:
+  @  axiom access_update_neq_int:
   @   \forall mappings m, Integer key1 key2, Integer value ;
   @       key1 != key2 ==>
   @       access_int(update_int(m,key1,value),key2) == access_int(m,key2) ;
-  @*/
+  @ }
+  @*/ 
 
-/*@ axiom access_update_neq:
+
+
+//@ logic Long access(mappings m, Integer key);
+/*@ logic mappings update(mappings m, Integer key, Long value) {
+  @  axiom access_update_eq:
+  @   \forall mappings m, Integer key, Long value ;
+  @       access(update(m,key,value),key) == value ;
+  @  axiom access_update_neq:
   @   \forall mappings m, Integer key1 key2, Long value ;
   @       key1 != key2 ==>
   @       access(update(m,key1,value),key2) == access(m,key2) ;
+  @ }
   @*/
 
-//@ predicate containsKey(mappings m, Integer key);
 
-/*@ axiom containsKey_empty:
-  @   \forall Integer key; ! containsKey(empty_mappings(),key);
-  @*/
+//@ logic mappings empty_mappings();
 
-/*@ axiom containsKey_update_any_int:
+/*@ predicate containsKey(mappings m, Integer key) {
+  @  axiom containsKey_empty:
+  @    \forall Integer key; ! containsKey(empty_mappings(),key);
+  @  axiom containsKey_update_any_int:
   @   \forall mappings m, Integer key1 key2, Integer value; 
   @      containsKey(m,key1) ==> containsKey(update_int(m,key2,value),key1);
-  @*/
-
-/*@ axiom containsKey_update_any:
+  @ axiom containsKey_update_any:
   @   \forall mappings m, Integer key1 key2, Long value; 
   @      containsKey(m,key1) ==> containsKey(update(m,key2,value),key1);
-  @*/
-
-/*@ axiom containsKey_update_eq_int:
+  @ axiom containsKey_update_eq_int:
   @   \forall mappings m, Integer key, Integer value; 
   @      containsKey(update_int(m,key,value),key);
-  @*/
-
-/*@ axiom containsKey_update_eq:
+  @ axiom containsKey_update_eq:
   @   \forall mappings m, Integer key, Long value; 
   @      containsKey(update(m,key,value),key);
+  @ }
   @*/
 
 /* @ axiom containsKey_update_discr:
@@ -68,12 +59,12 @@ import java.util.HashMapIntegerLong;
   @      containsKey(update(m,key1,value),key2) ==> key1==key2 || containsKey(m,key2);
   @*/
 
-//@ logic integer math_fib(integer n);
-
-//@ axiom fib0 : math_fib(0) == 1;
-//@ axiom fib1 : math_fib(1) == 1;
-/*@ axiom fibn : \forall integer n; n >= 2 ==> 
+/*@ logic integer math_fib(integer n) {
+  @  axiom fib0 : math_fib(0) == 1;
+  @  axiom fib1 : math_fib(1) == 1;
+  @  axiom fibn : \forall integer n; n >= 2 ==> 
   @    math_fib(n) == math_fib(n-1) + math_fib(n-2);
+  @ }
   @*/
 
 class FibMemo {

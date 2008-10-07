@@ -34,11 +34,10 @@
   @   \forall integer x y; x <= y ==> x <= x+(y-x)/2 <= y; 
   @*/
 
-/*@ predicate is_sorted{L}(int[] t) {
+/*@ predicate is_sorted{L}(int[] t) =
   @   t != null && 
   @   \forall integer i j; 
-  @     0 <= i && i <= j && j < t.length ==> t[i] <= t[j]
-  @ }
+  @     0 <= i && i <= j && j < t.length ==> t[i] <= t[j] ;
   @*/
 
 
@@ -225,109 +224,109 @@ End:
 ========== file tests/java/BinarySearch.jloc ==========
 [K_10]
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 70
 begin = 18
 end = 23
 
 [K_11]
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 70
 begin = 17
 end = 28
 
 [K_12]
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 70
 begin = 13
 end = 28
 
 [K_13]
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 69
 begin = 8
 end = 14
 
 [K_14]
 file = "HOME/tests/java/BinarySearch.java"
-line = 76
+line = 75
 begin = 8
 end = 10
 
 [K_15]
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 24
 
 [K_16]
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 28
 
 [K_17]
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 9
 end = 10
 
 [K_18]
 file = "HOME/tests/java/BinarySearch.java"
-line = 54
+line = 53
 begin = 10
 end = 117
 
 [K_1]
 file = "HOME/tests/java/BinarySearch.java"
-line = 59
+line = 58
 begin = 10
 end = 126
 
 [K_2]
 file = "HOME/tests/java/BinarySearch.java"
-line = 65
+line = 64
 begin = 7
 end = 112
 
 [K_3]
 file = "HOME/tests/java/BinarySearch.java"
-line = 68
+line = 67
 begin = 7
 end = 10
 
 [K_4]
 file = "HOME/tests/java/BinarySearch.java"
-line = 73
+line = 72
 begin = 28
 end = 33
 
 [K_5]
 file = "HOME/tests/java/BinarySearch.java"
-line = 73
+line = 72
 begin = 14
 end = 18
 
 [K_6]
 file = "HOME/tests/java/BinarySearch.java"
-line = 73
+line = 72
 begin = 14
 end = 22
 
 [K_7]
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 71
 begin = 23
 end = 28
 
 [K_8]
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 71
 begin = 9
 end = 13
 
 [K_9]
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 71
 begin = 9
 end = 17
 
@@ -341,7 +340,7 @@ end = -1
 [BinarySearch_binary_search]
 name = "Method binary_search"
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 61
 begin = 15
 end = 28
 
@@ -472,47 +471,47 @@ clean:
 ========== file tests/java/BinarySearch.loc ==========
 [JC_40]
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 61
 begin = 15
 end = 28
 
 [JC_41]
 file = "HOME/tests/java/BinarySearch.java"
-line = 59
+line = 58
 begin = 10
 end = 126
 
 [JC_42]
 file = "HOME/tests/java/BinarySearch.java"
-line = 59
+line = 58
 begin = 10
 end = 126
 
 [JC_43]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 24
 
 [JC_44]
 kind = IndexBounds
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 24
 
 [JC_45]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 28
 
 [JC_46]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 24
 
@@ -525,7 +524,7 @@ end = 21
 [JC_47]
 kind = IndexBounds
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 24
 
@@ -538,7 +537,7 @@ end = -1
 [JC_48]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 28
 
@@ -550,7 +549,7 @@ end = 21
 
 [JC_49]
 file = "HOME/tests/java/BinarySearch.java"
-line = 65
+line = 64
 begin = 7
 end = 112
 
@@ -599,7 +598,7 @@ end = -1
 [JC_51]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 70
 begin = 18
 end = 23
 
@@ -613,21 +612,21 @@ end = 140
 [JC_53]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 70
 begin = 17
 end = 28
 
 [JC_54]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 70
 begin = 13
 end = 28
 
 [JC_55]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 70
 begin = 18
 end = 23
 
@@ -641,42 +640,42 @@ end = 140
 [JC_57]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 70
 begin = 17
 end = 28
 
 [JC_58]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 70
 begin = 13
 end = 28
 
 [JC_59]
 kind = IndexBounds
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 71
 begin = 9
 end = 13
 
 [JC_60]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 71
 begin = 23
 end = 28
 
 [JC_61]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 71
 begin = 23
 end = 28
 
 [JC_62]
 kind = IndexBounds
 file = "HOME/tests/java/BinarySearch.java"
-line = 73
+line = 72
 begin = 14
 end = 18
 
@@ -689,7 +688,7 @@ end = 21
 [JC_63]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 73
+line = 72
 begin = 28
 end = 33
 
@@ -702,7 +701,7 @@ end = 30
 [JC_64]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 73
+line = 72
 begin = 28
 end = 33
 
@@ -715,7 +714,7 @@ end = -1
 [JC_65]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 24
 
@@ -728,7 +727,7 @@ end = 30
 [JC_66]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 24
 
@@ -740,7 +739,7 @@ end = -1
 
 [JC_67]
 file = "HOME/tests/java/BinarySearch.java"
-line = 65
+line = 64
 begin = 7
 end = 112
 
@@ -796,14 +795,14 @@ end = 140
 
 [JC_71]
 file = "HOME/tests/java/BinarySearch.java"
-line = 68
+line = 67
 begin = 7
 end = 10
 
 [JC_72]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 24
 
@@ -811,7 +810,7 @@ end = 24
 name = "Method binary_search"
 behavior = "Behavior"
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 61
 begin = 15
 end = 28
 
@@ -824,7 +823,7 @@ end = 18
 [JC_73]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 63
+line = 62
 begin = 16
 end = 24
 
@@ -836,7 +835,7 @@ end = 30
 
 [JC_74]
 file = "HOME/tests/java/BinarySearch.java"
-line = 65
+line = 64
 begin = 7
 end = 112
 
@@ -976,7 +975,7 @@ end = -1
 
 [JC_33]
 file = "HOME/tests/java/BinarySearch.java"
-line = 54
+line = 53
 begin = 10
 end = 117
 
@@ -984,7 +983,7 @@ end = 117
 name = "Method binary_search"
 behavior = "Normal behavior `correctness'"
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 61
 begin = 15
 end = 28
 
@@ -996,7 +995,7 @@ end = -1
 
 [JC_35]
 file = "HOME/tests/java/BinarySearch.java"
-line = 54
+line = 53
 begin = 10
 end = 117
 
@@ -1020,7 +1019,7 @@ end = -1
 
 [JC_39]
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 61
 begin = 15
 end = 28
 
@@ -1028,7 +1027,7 @@ end = 28
 name = "Method binary_search"
 behavior = "Safety"
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 61
 begin = 15
 end = 28
 
@@ -2348,22 +2347,22 @@ why --project [...] why/BinarySearch.why
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po20.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "63" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "62" begin = "16" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po21.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "63" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "62" begin = "16" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po22.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "18" end = "23"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po23.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "18" end = "23"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2373,125 +2372,125 @@ text = "ArithOverflow"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/BinarySearch_po25.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "17" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po26.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "17" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po27.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "13" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "13" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po28.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "13" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "13" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po29.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/BinarySearch_po30.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/BinarySearch_po31.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "23" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "23" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po32.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "23" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "23" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po33.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "73" begin = "28" end = "33"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "28" end = "33"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po34.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "73" begin = "28" end = "33"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "28" end = "33"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `correctness'">
     <goal why_file="why/BinarySearch_po2.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "59" begin = "10" end = "126"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "58" begin = "10" end = "126"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/BinarySearch_po3.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "59" begin = "10" end = "126"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "58" begin = "10" end = "126"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Behavior">
     <goal why_file="why/BinarySearch_po4.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po5.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po6.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po7.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po8.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po9.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po10.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po11.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po12.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/BinarySearch_po13.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/BinarySearch_po14.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po15.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "65" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/BinarySearch_po18.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -6271,7 +6270,7 @@ why -simplify [...] why/BinarySearch.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; BinarySearch_binary_search_ensures_correctness_po_1, File "HOME/tests/java/BinarySearch.java", line 59, characters 10-126
+;; BinarySearch_binary_search_ensures_correctness_po_1, File "HOME/tests/java/BinarySearch.java", line 58, characters 10-126
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6339,7 +6338,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k)))
 (integer_of_int32 v))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_correctness_po_2, File "HOME/tests/java/BinarySearch.java", line 59, characters 10-126
+;; BinarySearch_binary_search_ensures_correctness_po_2, File "HOME/tests/java/BinarySearch.java", line 58, characters 10-126
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6392,7 +6391,7 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k)))
 (integer_of_int32 v))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_1, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_1, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -6415,7 +6414,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result1) (- result0 1))
 (<= 0 (integer_of_int32 result))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_2, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_2, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -6439,7 +6438,7 @@ why -simplify [...] why/BinarySearch.why
 (<= (integer_of_int32 result1) (- (+ (offset_max
                                      Object_t_0_7_alloc_table t_0) 1) 1))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_3, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_3, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6468,7 +6467,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 result) k_0)))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_4, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_4, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6497,7 +6496,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 result1))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_5, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_5, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6551,7 +6550,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result6) (+ (integer_of_int32 result4) 1))
 (FORALL (l0) (IMPLIES (EQ l0 result6) (<= 0 (integer_of_int32 l0))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_6, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_6, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6607,7 +6606,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ l0 result6)
 (<= (integer_of_int32 u) (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_7, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_7, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6668,7 +6667,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 l0) k_0))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_8, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_8, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6729,7 +6728,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 u)))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_9, File "HOME/tests/java/BinarySearch.java", line 68, characters 7-10
+;; BinarySearch_binary_search_ensures_default_po_9, File "HOME/tests/java/BinarySearch.java", line 67, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6785,7 +6784,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ l0 result6)
 (<= 0 (- (integer_of_int32 u) (integer_of_int32 l)))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_10, File "HOME/tests/java/BinarySearch.java", line 68, characters 7-10
+;; BinarySearch_binary_search_ensures_default_po_10, File "HOME/tests/java/BinarySearch.java", line 67, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6842,7 +6841,7 @@ why -simplify [...] why/BinarySearch.why
 (< (- (integer_of_int32 u) (integer_of_int32 l0)) (- (integer_of_int32 u) 
                                                   (integer_of_int32 l)))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_11, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_11, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6902,7 +6901,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ u0 result7)
 (<= (integer_of_int32 u0) (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1)))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_12, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_12, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -6967,7 +6966,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 l) k_0)))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_13, File "HOME/tests/java/BinarySearch.java", line 65, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_13, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7032,7 +7031,7 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 u0))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_14, File "HOME/tests/java/BinarySearch.java", line 68, characters 7-10
+;; BinarySearch_binary_search_ensures_default_po_14, File "HOME/tests/java/BinarySearch.java", line 67, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7092,7 +7091,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ u0 result7)
 (<= 0 (- (integer_of_int32 u) (integer_of_int32 l))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_15, File "HOME/tests/java/BinarySearch.java", line 68, characters 7-10
+;; BinarySearch_binary_search_ensures_default_po_15, File "HOME/tests/java/BinarySearch.java", line 67, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7169,7 +7168,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))))))))
 
-;; BinarySearch_binary_search_safety_po_2, File "HOME/tests/java/BinarySearch.java", line 63, characters 16-28
+;; BinarySearch_binary_search_safety_po_2, File "HOME/tests/java/BinarySearch.java", line 62, characters 16-28
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -7191,7 +7190,7 @@ why -simplify [...] why/BinarySearch.why
          (EQ |@true| |@true|))))
 (<= (- 0 constant_too_large_2147483648) (- result0 1)))))))))))
 
-;; BinarySearch_binary_search_safety_po_3, File "HOME/tests/java/BinarySearch.java", line 63, characters 16-28
+;; BinarySearch_binary_search_safety_po_3, File "HOME/tests/java/BinarySearch.java", line 62, characters 16-28
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -7213,7 +7212,7 @@ why -simplify [...] why/BinarySearch.why
          (EQ |@true| |@true|))))
 (<= (- result0 1) constant_too_large_2147483647))))))))))
 
-;; BinarySearch_binary_search_safety_po_4, File "HOME/tests/java/BinarySearch.java", line 71, characters 18-23
+;; BinarySearch_binary_search_safety_po_4, File "HOME/tests/java/BinarySearch.java", line 70, characters 18-23
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7257,7 +7256,7 @@ why -simplify [...] why/BinarySearch.why
 (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 u) (integer_of_int32
                                                                 l)))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_5, File "HOME/tests/java/BinarySearch.java", line 71, characters 18-23
+;; BinarySearch_binary_search_safety_po_5, File "HOME/tests/java/BinarySearch.java", line 70, characters 18-23
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7350,7 +7349,7 @@ why -simplify [...] why/BinarySearch.why
          (- (integer_of_int32 u) (integer_of_int32 l)))
 (NEQ 2 0))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_7, File "HOME/tests/java/BinarySearch.java", line 71, characters 17-28
+;; BinarySearch_binary_search_safety_po_7, File "HOME/tests/java/BinarySearch.java", line 70, characters 17-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7403,7 +7402,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ result3 (int_div (integer_of_int32 result2) 2))
 (<= (- 0 constant_too_large_2147483648) result3)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_8, File "HOME/tests/java/BinarySearch.java", line 71, characters 17-28
+;; BinarySearch_binary_search_safety_po_8, File "HOME/tests/java/BinarySearch.java", line 70, characters 17-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7456,7 +7455,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ result3 (int_div (integer_of_int32 result2) 2))
 (<= result3 constant_too_large_2147483647)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_9, File "HOME/tests/java/BinarySearch.java", line 71, characters 13-28
+;; BinarySearch_binary_search_safety_po_9, File "HOME/tests/java/BinarySearch.java", line 70, characters 13-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7514,7 +7513,7 @@ why -simplify [...] why/BinarySearch.why
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l) (integer_of_int32
                                                                 result4))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_10, File "HOME/tests/java/BinarySearch.java", line 71, characters 13-28
+;; BinarySearch_binary_search_safety_po_10, File "HOME/tests/java/BinarySearch.java", line 70, characters 13-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7571,7 +7570,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result4) result3)
 (<= (+ (integer_of_int32 l) (integer_of_int32 result4)) constant_too_large_2147483647))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_11, File "HOME/tests/java/BinarySearch.java", line 72, characters 9-13
+;; BinarySearch_binary_search_safety_po_11, File "HOME/tests/java/BinarySearch.java", line 71, characters 9-13
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7635,7 +7634,7 @@ why -simplify [...] why/BinarySearch.why
          (+ (integer_of_int32 l) (integer_of_int32 result4)))
 (<= 0 (integer_of_int32 result5))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_12, File "HOME/tests/java/BinarySearch.java", line 72, characters 9-13
+;; BinarySearch_binary_search_safety_po_12, File "HOME/tests/java/BinarySearch.java", line 71, characters 9-13
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7699,7 +7698,7 @@ why -simplify [...] why/BinarySearch.why
          (+ (integer_of_int32 l) (integer_of_int32 result4)))
 (<= (integer_of_int32 result5) (offset_max Object_t_0_7_alloc_table t_0))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_13, File "HOME/tests/java/BinarySearch.java", line 72, characters 23-28
+;; BinarySearch_binary_search_safety_po_13, File "HOME/tests/java/BinarySearch.java", line 71, characters 23-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7770,7 +7769,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (< (integer_of_int32 result6) (integer_of_int32 v))
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result5) 1))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_14, File "HOME/tests/java/BinarySearch.java", line 72, characters 23-28
+;; BinarySearch_binary_search_safety_po_14, File "HOME/tests/java/BinarySearch.java", line 71, characters 23-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7841,7 +7840,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (< (integer_of_int32 result6) (integer_of_int32 v))
 (<= (+ (integer_of_int32 result5) 1) constant_too_large_2147483647)))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_15, File "HOME/tests/java/BinarySearch.java", line 73, characters 28-33
+;; BinarySearch_binary_search_safety_po_15, File "HOME/tests/java/BinarySearch.java", line 72, characters 28-33
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -7919,7 +7918,7 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (> (integer_of_int32 result7) (integer_of_int32 v))
 (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 result5) 1))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_16, File "HOME/tests/java/BinarySearch.java", line 73, characters 28-33
+;; BinarySearch_binary_search_safety_po_16, File "HOME/tests/java/BinarySearch.java", line 72, characters 28-33
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
@@ -10812,10 +10811,10 @@ goal BinarySearch_binary_search_safety_po_16:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : .............#.................... (33/0/0/1/0)
+why/BinarySearch_why.why      : .................................. (34/0/0/0/0)
 total   :  34
-valid   :  33 ( 97%)
+valid   :  34 (100%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   1 (  3%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

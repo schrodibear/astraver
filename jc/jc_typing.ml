@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.245 2008-10-06 11:12:53 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.246 2008-10-07 15:54:20 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2024,6 +2024,9 @@ let type_labels_in_decl d = match d#node with
   | JCDlogic(_, _, labels, _, JCexpr e) ->
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
       type_labels labels (default_label labels) e
+  | JCDlogic(_, _, labels, _, JCaxiomatic l) ->
+      let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+      List.iter (fun (_,e) -> type_labels labels (default_label labels) e) l
   | JCDglobal_inv(_, body) ->
       type_labels [LabelHere] (Some LabelHere) body
   | JCDvariant_type _ | JCDunion_type _ | JCDenum_type _ | JCDlogic_type _
@@ -2413,6 +2416,8 @@ of an invariant policy";
                       in tl)) reads)
           | JCexpr body ->
               JCAssertion(assertion param_env body)
+	  | JCaxiomatic l ->
+	      JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
         in
         Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p)
     | JCDlogic(Some ty, id, labels, pl, body) ->
@@ -2433,6 +2438,8 @@ of an invariant policy";
                   typing_error d#pos
                     "inferred type differs from declared type" 
               else JCTerm t
+	  | JCaxiomatic l ->
+	      JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
         in
         Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, t)
     | JCDint_model _|JCDabstract_domain _|JCDannotation_policy _

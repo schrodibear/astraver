@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.357 2008-10-07 12:12:20 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.358 2008-10-07 15:54:20 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2100,6 +2100,22 @@ and expr_coerce ty e =
     e#mark e#pos ty
     e#typ e (expr e)
 
+(*****************************)
+(* axioms, lemmas, goals   *)
+(**************************)
+
+let tr_axiom id ~is_axiom labels a acc =
+  let lab = match labels with [lab] -> lab | _ -> LabelHere in
+  let ef = Jc_effect.assertion empty_effects a in
+  let a' = 
+    assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab a
+  in
+  let params = tmodel_parameters ~label_in_name:true ef in
+  let a' = List.fold_right (fun (n,ty') a' -> LForall(n,ty',a')) params a' in
+  if is_axiom then 
+    Axiom(id,a') :: acc 
+  else 
+    Goal(id,a') :: Axiom(id ^ "_as_axiom",a') :: acc
 
 (******************************************************************************)
 (*                               Logic functions                              *)
@@ -2155,72 +2171,46 @@ let tr_logic_fun f ta acc =
 
   (* Function definition *)
   let acc =  
-    if f.jc_logic_info_is_recursive then
-      let result_ty' = match f.jc_logic_info_result_type with
-	| None -> simple_logic_type "prop"
-	| Some ty -> tr_base_type ty
-      in
-      let decl = 
-	Logic(false, f.jc_logic_info_final_name, params, result_ty') 
-      in
-      let defaxiom = 
-	let a' = match f.jc_logic_info_result_type with
-	  | None ->
-	      let body = match ta with 
-		| JCAssertion a -> fa a
-		| JCTerm _t -> assert false (* not a predicate *)
-		| JCReads _r -> assert false (* cannot be recursive *)
-	      in
-	      let call = 
-		LPred(f.jc_logic_info_final_name, 
-		      List.map (fun (n,_ty') -> LVar n) params)
-	      in
-	      LIff(call,body)
-	  | Some ty ->
-	      let body = match ta with 
-		| JCAssertion a -> assert false (* not a logic function *)
-		| JCTerm t -> 
-		    let t' = ft t in
-		    term_coerce t#pos ty t#typ t t'
-		| JCReads _r -> assert false (* cannot be recursive *)
-	      in
-	      let call = 
-		LApp(f.jc_logic_info_final_name, 
-		     List.map (fun (n,_ty) -> LVar n) params)
-	      in
-	      LPred("eq",[ call; body ]) (* Yannick: always proper equality? *)
-	in
-	let a' = 
-	  List.fold_left (fun a' (n,ty') -> LForall(n,ty',a')) a' params
-	in
-	let name = "recursive_" ^ f.jc_logic_info_name in
-	Axiom(name,a')
-      in
-      decl :: defaxiom :: acc 
-    else
-      let decl =
-	match f.jc_logic_info_result_type, ta with
-	  | None, JCAssertion a -> (* Predicate *)
-              let body = fa a in
-              Predicate(false, f.jc_logic_info_final_name, params, body) 
-	  | Some ty, JCTerm t -> (* Function *)
-              let ty' = tr_base_type ty in
-              let t' = ft t in
-	      let t' = term_coerce t#pos ty t#typ t t' in
-              Function(false, f.jc_logic_info_final_name, params, ty', t') 
-	  | ty_opt, JCReads r -> (* Logic *)
-              let ty' = match ty_opt with
-		| None -> simple_logic_type "prop"
-		| Some ty -> tr_base_type ty
-              in
-              Logic(false, f.jc_logic_info_final_name, params, ty')
-	  | _ -> assert false (* Other *)
-      in 
-      decl :: acc 
+    match f.jc_logic_info_result_type, ta with
+      | None, JCAssertion a -> (* Predicate *)
+          let body = fa a in
+          Predicate(false, f.jc_logic_info_final_name, params, body) :: acc
+      | Some ty, JCTerm t -> (* Function *)
+          let ty' = tr_base_type ty in
+          let t' = ft t in
+	  let t' = term_coerce t#pos ty t#typ t t' in
+          Function(false, f.jc_logic_info_final_name, params, ty', t') :: acc
+      | ty_opt, JCReads r -> (* Logic *)
+          let ty' = match ty_opt with
+	    | None -> simple_logic_type "prop"
+	    | Some ty -> tr_base_type ty
+          in
+          Logic(false, f.jc_logic_info_final_name, params, ty') :: acc
+      | ty_opt, JCAxiomatic l  ->
+          let ty' = match ty_opt with
+	    | None -> simple_logic_type "prop"
+	    | Some ty -> tr_base_type ty
+          in
+	  let acc =
+	    List.fold_right
+	      (fun (id,a) acc -> 
+		 tr_axiom id ~is_axiom:true f.jc_logic_info_labels a acc)
+	      l acc 
+	  in
+	  Logic(false, f.jc_logic_info_final_name, params, ty') :: acc
+	    (*
+	      Axiomatic(false, f.jc_logic_info_final_name, params, ty', 
+	      List.map (fun (id,a) -> (id, fa a)) l)		
+	    *)
+      | None, JCTerm _ -> assert false 
+      | Some _, JCAssertion _ -> assert false 
   in
 
   (* no_update axioms *)
-  let acc = match ta with JCAssertion _ | JCTerm _ -> acc | JCReads pset ->
+  let acc = 
+    match ta with 
+      |	JCAssertion _ | JCTerm _ | JCAxiomatic _ -> acc 
+      | JCReads pset ->
     let memory_params_reads = 
       tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
     in
@@ -2279,7 +2269,10 @@ let tr_logic_fun f ta acc =
   in
 
   (* no_assign axioms *)
-  let acc = match ta with JCAssertion _ | JCTerm _ -> acc | JCReads pset ->
+  let acc = 
+    match ta with 
+      | JCAssertion _ | JCTerm _ | JCAxiomatic _ -> acc 
+      | JCReads pset ->
     let memory_params_reads = 
       tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
     in
@@ -2343,7 +2336,10 @@ let tr_logic_fun f ta acc =
   in
 
   (* alloc_extend axioms *)
-  let acc = match ta with JCAssertion _ | JCTerm _ -> acc | JCReads ps ->
+  let acc = 
+    match ta with 
+      | JCAssertion _ | JCTerm _ | JCAxiomatic _ -> acc 
+      | JCReads ps ->
     let alloc_params_reads = 
       talloc_table_params ~label_in_name:true f.jc_logic_info_effects
     in
@@ -3065,18 +3061,6 @@ let tr_specialized_fun n fname param_name_assoc acc =
 
 let tr_logic_type id acc = Type(id,[]) :: acc
 
-let tr_axiom id is_axiom labels a acc =
-  let lab = match labels with [lab] -> lab | _ -> LabelHere in
-  let ef = Jc_effect.assertion empty_effects a in
-  let a' = 
-    assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab a
-  in
-  let params = tmodel_parameters ~label_in_name:true ef in
-  let a' = List.fold_right (fun (n,ty') a' -> LForall(n,ty',a')) params a' in
-  if is_axiom then 
-    Axiom(id,a') :: acc 
-  else 
-    Goal(id,a') :: Axiom(id ^ "_as_axiom",a') :: acc
 
 let tr_exception ei acc =
   Jc_options.lprintf "producing exception '%s'@." ei.jc_exception_info_name;

@@ -4,12 +4,12 @@
 
 //@+ CheckArithOverflow = no
 
-//@ logic integer max(integer x, integer y) ;
-
-/*@ axiom max_def :  
-  @   \forall integer x y ; 
-  @   (max(x,y) == x || max(x,y) == y) &&
-  @   max(x,y) >= x && max(x,y) >= y ;
+/*@ logic integer max(integer x, integer y) {
+  @  axiom max_def :  
+  @    \forall integer x y ; 
+  @    (max(x,y) == x || max(x,y) == y) &&
+  @    max(x,y) >= x && max(x,y) >= y ;
+  @ }
   @*/
 
 

@@ -32,14 +32,13 @@
   @   0.01 * 100.0 == 1.0;
   @*/
 
-/*@ logic real amount_real_value{L}(DecimalAbstractReal x) { 
-  @    (real) x.intPart + 0.01 * (real) x.decPart }
+/*@ logic real amount_real_value{L}(DecimalAbstractReal x) =
+  @    (real) x.intPart + 0.01 * (real) x.decPart ;
   @*/
 
   
-/*@ logic integer amount_cent_value{L}(DecimalAbstractReal x) { 
-  @    DecimalAbstractReal.PRECISION * x.intPart + x.decPart
-  @ }
+/*@ logic integer amount_cent_value{L}(DecimalAbstractReal x) =
+  @    DecimalAbstractReal.PRECISION * x.intPart + x.decPart ;
   @*/
 
 public class DecimalAbstractReal {

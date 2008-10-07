@@ -137,7 +137,9 @@ let type_decl d =
     | JPTlemma _ 
     | JPTlogic_type_decl _
     | JPTlogic_reads _ 
-    | JPTlogic_def _ -> assert false
+    | JPTlogic_def _ 
+    | JPTlogic_axiomatic _ -> assert false
+    
 
 
 let compilation_unit cu =

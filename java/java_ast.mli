@@ -31,7 +31,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.37 2008-07-17 14:14:23 marche Exp $
+$Id: java_ast.mli,v 1.38 2008-10-07 15:54:20 marche Exp $
 
 ***************************************************************************)
 
@@ -287,6 +287,7 @@ type type_declaration =
   | JPTlogic_type_decl of identifier 
   | JPTlogic_reads of identifier * type_expr option * logic_label list * parameter list * pexpr list 
   | JPTlogic_def of identifier * type_expr option * logic_label list * parameter list * pexpr 
+  | JPTlogic_axiomatic of identifier * type_expr option * logic_label list * parameter list * (identifier * pexpr) list
 
 type import_statement =
   | Import_package of qualified_ident

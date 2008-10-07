@@ -29,17 +29,15 @@
 
 /* Dijkstra's dutch flag */
 
-//@ predicate is_color(int c) { Flag.BLUE <= c && c <= Flag.RED }
+//@ predicate is_color(int c) = Flag.BLUE <= c && c <= Flag.RED ;
 
-/*@ predicate is_color_array{L}(int t[]) { 
+/*@ predicate is_color_array{L}(int t[]) =
   @   t != null && 
-  @   \forall int i; 0 <= i && i < t.length ==> is_color(t[i])
-  @ }
+  @   \forall int i; 0 <= i && i < t.length ==> is_color(t[i]) ;
   @*/
 
-/*@ predicate is_monochrome{L}(int t[],integer i, integer j, int c) {
-  @   \forall int k; i <= k && k < j ==> t[k] == c
-  @ }
+/*@ predicate is_monochrome{L}(int t[],integer i, integer j, int c) =
+  @   \forall int k; i <= k && k < j ==> t[k] == c ;
   @*/
 
 

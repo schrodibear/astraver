@@ -31,20 +31,17 @@
 
 //@+ CheckArithOverflow = no
 
-/*@ predicate is_color(integer c) { 
-  @     c == FlagStatic.BLUE || c == FlagStatic.WHITE || c == FlagStatic.RED 
-  @ }
+/*@ predicate is_color(integer c) =
+  @   c == FlagStatic.BLUE || c == FlagStatic.WHITE || c == FlagStatic.RED ;
   @*/
 
-/*@ predicate is_color_array{L}(int t[]) { 
+/*@ predicate is_color_array{L}(int t[]) =
   @   t != null && 
-  @   \forall integer i; 0 <= i < t.length ==> is_color(t[i])
-  @ }
+  @   \forall integer i; 0 <= i < t.length ==> is_color(t[i]) ;
   @*/
 
-/*@ predicate is_monochrome{L}(int t[],integer i, integer j, int c) {
-  @   \forall integer k; i <= k < j ==> t[k] == c
-  @ }
+/*@ predicate is_monochrome{L}(int t[],integer i, integer j, int c) =
+  @   \forall integer k; i <= k < j ==> t[k] == c ;
   @*/
 
 

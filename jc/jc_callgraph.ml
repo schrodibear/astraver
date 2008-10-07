@@ -122,6 +122,7 @@ let compute_logic_calls f t =
       | JCTerm t -> term [] t 
       | JCAssertion a -> assertion [] a 
       | JCReads r -> []
+      | JCAxiomatic l -> List.fold_left (fun acc (_,a) -> assertion acc a) [] l
   in
   f.jc_logic_info_calls <- calls
 
@@ -166,6 +167,7 @@ open Pp
 
 let compute_logic_components ltable =  
   let tab_comp = LogicCallComponents.scc_array ltable in
+(* obsolete : use axiomatic def instead
   Array.iter 
     (function
        | [f] -> 
@@ -177,6 +179,7 @@ let compute_logic_components ltable =
        | funs ->
 	   List.iter (fun f -> f.jc_logic_info_is_recursive <- true) funs
     ) tab_comp;
+*)
   Jc_options.lprintf "***********************************\n";
   Jc_options.lprintf "Logic call graph: has %d components\n" 
     (Array.length tab_comp);

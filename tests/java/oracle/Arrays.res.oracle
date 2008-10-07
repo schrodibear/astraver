@@ -35,10 +35,9 @@
  * l is an integer and not an int, because used as t.length which 
  * (in the logic) returns an integer and not an int 
  */
-/*@ predicate is_max{L}(int[] t,int i,integer l) {
+/*@ predicate is_max{L}(int[] t,int i,integer l) =
   @   t != null && 0 <= i < l <= t.length &&
-  @   (\forall integer j; 0 <= j < l ==> t[j] <= t[i])
-  @ }
+  @   (\forall integer j; 0 <= j < l ==> t[j] <= t[i]) ;
   @*/
 
 public class Arrays {
@@ -317,237 +316,237 @@ End:
 ========== file tests/java/Arrays.jloc ==========
 [K_10]
 file = "HOME/tests/java/Arrays.java"
-line = 60
+line = 59
 begin = 17
 end = 29
 
 [K_11]
 file = "HOME/tests/java/Arrays.java"
-line = 54
+line = 53
 begin = 11
 end = 12
 
 [K_12]
 file = "HOME/tests/java/Arrays.java"
-line = 53
+line = 52
 begin = 9
 end = 13
 
 [K_13]
 file = "HOME/tests/java/Arrays.java"
-line = 45
+line = 44
 begin = 17
 end = 52
 
 [K_14]
 file = "HOME/tests/java/Arrays.java"
-line = 72
+line = 71
 begin = 13
 end = 80
 
 [K_15]
 file = "HOME/tests/java/Arrays.java"
-line = 83
+line = 82
 begin = 12
 end = 13
 
 [Arrays_arrayShift]
 name = "Method arrayShift"
 file = "HOME/tests/java/Arrays.java"
-line = 97
+line = 96
 begin = 23
 end = 33
 
 [K_16]
 file = "HOME/tests/java/Arrays.java"
-line = 79
+line = 78
 begin = 7
 end = 90
 
 [K_17]
 file = "HOME/tests/java/Arrays.java"
-line = 81
+line = 80
 begin = 18
 end = 28
 
 [K_18]
 file = "HOME/tests/java/Arrays.java"
-line = 86
+line = 85
 begin = 6
 end = 10
 
 [K_19]
 file = "HOME/tests/java/Arrays.java"
-line = 84
+line = 83
 begin = 9
 end = 13
 
 [K_20]
 file = "HOME/tests/java/Arrays.java"
-line = 84
+line = 83
 begin = 9
 end = 17
 
 [K_21]
 file = "HOME/tests/java/Arrays.java"
-line = 83
+line = 82
 begin = 29
 end = 32
 
 [K_22]
 file = "HOME/tests/java/Arrays.java"
-line = 83
+line = 82
 begin = 19
 end = 27
 
 [K_23]
 file = "HOME/tests/java/Arrays.java"
-line = 83
+line = 82
 begin = 15
 end = 27
 
 [K_24]
 file = "HOME/tests/java/Arrays.java"
-line = 77
+line = 76
 begin = 9
 end = 10
 
 [K_1]
 file = "HOME/tests/java/Arrays.java"
-line = 48
+line = 47
 begin = 13
 end = 134
 
 [K_25]
 file = "HOME/tests/java/Arrays.java"
-line = 76
+line = 75
 begin = 9
 end = 13
 
 [K_2]
 file = "HOME/tests/java/Arrays.java"
-line = 60
+line = 59
 begin = 14
 end = 15
 
 [K_26]
 file = "HOME/tests/java/Arrays.java"
-line = 69
+line = 68
 begin = 17
 end = 43
 
 [K_3]
 file = "HOME/tests/java/Arrays.java"
-line = 56
+line = 55
 begin = 14
 end = 129
 
 [K_27]
 file = "HOME/tests/java/Arrays.java"
-line = 95
+line = 94
 begin = 10
 end = 70
 
 [K_4]
 file = "HOME/tests/java/Arrays.java"
-line = 58
+line = 57
 begin = 25
 end = 35
 
 [K_28]
 file = "HOME/tests/java/Arrays.java"
-line = 106
+line = 105
 begin = 19
 end = 27
 
 [K_5]
 file = "HOME/tests/java/Arrays.java"
-line = 63
+line = 62
 begin = 6
 end = 10
 
 [K_29]
 file = "HOME/tests/java/Arrays.java"
-line = 106
+line = 105
 begin = 19
 end = 29
 
 [K_6]
 file = "HOME/tests/java/Arrays.java"
-line = 61
+line = 60
 begin = 9
 end = 13
 
 [K_7]
 file = "HOME/tests/java/Arrays.java"
-line = 61
+line = 60
 begin = 9
 end = 17
 
 [K_8]
 file = "HOME/tests/java/Arrays.java"
-line = 60
+line = 59
 begin = 31
 end = 34
 
 [K_9]
 file = "HOME/tests/java/Arrays.java"
-line = 60
+line = 59
 begin = 21
 end = 29
 
 [K_30]
 file = "HOME/tests/java/Arrays.java"
-line = 99
+line = 98
 begin = 7
 end = 230
 
 [K_31]
 file = "HOME/tests/java/Arrays.java"
-line = 104
+line = 103
 begin = 18
 end = 19
 
 [K_32]
 file = "HOME/tests/java/Arrays.java"
-line = 107
+line = 106
 begin = 12
 end = 15
 
 [K_33]
 file = "HOME/tests/java/Arrays.java"
-line = 107
+line = 106
 begin = 10
 end = 16
 
 [K_34]
 file = "HOME/tests/java/Arrays.java"
-line = 107
+line = 106
 begin = 3
 end = 16
 
 [K_35]
 file = "HOME/tests/java/Arrays.java"
-line = 106
+line = 105
 begin = 40
 end = 43
 
 [K_36]
 file = "HOME/tests/java/Arrays.java"
-line = 106
+line = 105
 begin = 32
 end = 37
 
 [K_37]
 file = "HOME/tests/java/Arrays.java"
-line = 93
+line = 92
 begin = 17
 end = 26
 
 [Arrays_findMax2]
 name = "Method findMax2"
 file = "HOME/tests/java/Arrays.java"
-line = 75
+line = 74
 begin = 22
 end = 30
 
@@ -561,7 +560,7 @@ end = -1
 [Arrays_findMax]
 name = "Method findMax"
 file = "HOME/tests/java/Arrays.java"
-line = 52
+line = 51
 begin = 24
 end = 31
 
@@ -694,91 +693,91 @@ clean:
 ========== file tests/java/Arrays.loc ==========
 [JC_90]
 file = "HOME/tests/java/Arrays.java"
-line = 97
+line = 96
 begin = 23
 end = 33
 
 [JC_91]
 file = "HOME/tests/java/Arrays.java"
-line = 95
+line = 94
 begin = 10
 end = 70
 
 [JC_92]
 file = "HOME/tests/java/Arrays.java"
-line = 95
+line = 94
 begin = 10
 end = 70
 
 [JC_40]
 file = "HOME/tests/java/Arrays.java"
-line = 52
+line = 51
 begin = 24
 end = 31
 
 [JC_93]
 kind = UserCall
 file = "HOME/tests/java/Arrays.java"
-line = 106
+line = 105
 begin = 19
 end = 27
 
 [JC_41]
 file = "HOME/tests/java/Arrays.java"
-line = 48
+line = 47
 begin = 13
 end = 134
 
 [JC_94]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 106
+line = 105
 begin = 19
 end = 27
 
 [JC_42]
 file = "HOME/tests/java/Arrays.java"
-line = 48
+line = 47
 begin = 13
 end = 134
 
 [JC_95]
 kind = UserCall
 file = "HOME/tests/java/Arrays.java"
-line = 106
+line = 105
 begin = 19
 end = 27
 
 [JC_43]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 53
+line = 52
 begin = 9
 end = 13
 
 [JC_96]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 106
+line = 105
 begin = 19
 end = 27
 
 [JC_44]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 53
+line = 52
 begin = 9
 end = 13
 
 [JC_97]
 file = "HOME/tests/java/Arrays.java"
-line = 99
+line = 98
 begin = 7
 end = 230
 
 [JC_45]
 file = "HOME/tests/java/Arrays.java"
-line = 56
+line = 55
 begin = 14
 end = 129
 
@@ -803,21 +802,21 @@ end = 21
 [JC_100]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 107
+line = 106
 begin = 10
 end = 16
 
 [JC_99]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 107
+line = 106
 begin = 10
 end = 16
 
 [JC_47]
 kind = UserCall
 file = "HOME/tests/java/Arrays.java"
-line = 60
+line = 59
 begin = 21
 end = 29
 
@@ -830,14 +829,14 @@ end = -1
 [JC_101]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 107
+line = 106
 begin = 3
 end = 16
 
 [JC_48]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 60
+line = 59
 begin = 21
 end = 29
 
@@ -850,14 +849,14 @@ end = 21
 [JC_102]
 kind = UserCall
 file = "HOME/tests/java/Arrays.java"
-line = 106
+line = 105
 begin = 19
 end = 27
 
 [JC_49]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 61
+line = 60
 begin = 9
 end = 13
 
@@ -870,7 +869,7 @@ end = -1
 [JC_103]
 kind = UserCall
 file = "HOME/tests/java/Arrays.java"
-line = 106
+line = 105
 begin = 19
 end = 27
 
@@ -882,7 +881,7 @@ end = -1
 
 [JC_104]
 file = "HOME/tests/java/Arrays.java"
-line = 99
+line = 98
 begin = 7
 end = 230
 
@@ -906,7 +905,7 @@ end = 21
 
 [JC_106]
 file = "HOME/tests/java/Arrays.java"
-line = 104
+line = 103
 begin = 18
 end = 19
 
@@ -944,7 +943,7 @@ end = -1
 name = "Method arrayShift"
 behavior = "Safety"
 file = "HOME/tests/java/Arrays.java"
-line = 97
+line = 96
 begin = 23
 end = 33
 
@@ -952,27 +951,27 @@ end = 33
 name = "Method arrayShift"
 behavior = "Behavior"
 file = "HOME/tests/java/Arrays.java"
-line = 97
+line = 96
 begin = 23
 end = 33
 
 [JC_50]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 63
+line = 62
 begin = 6
 end = 10
 
 [JC_51]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 63
+line = 62
 begin = 6
 end = 10
 
 [JC_52]
 file = "HOME/tests/java/Arrays.java"
-line = 56
+line = 55
 begin = 14
 end = 129
 
@@ -985,13 +984,13 @@ end = -1
 [JC_54]
 kind = UserCall
 file = "HOME/tests/java/Arrays.java"
-line = 60
+line = 59
 begin = 21
 end = 29
 
 [JC_55]
 file = "HOME/tests/java/Arrays.java"
-line = 58
+line = 57
 begin = 25
 end = 35
 
@@ -999,13 +998,13 @@ end = 35
 name = "Method findMax2"
 behavior = "Safety"
 file = "HOME/tests/java/Arrays.java"
-line = 75
+line = 74
 begin = 22
 end = 30
 
 [JC_56]
 file = "HOME/tests/java/Arrays.java"
-line = 56
+line = 55
 begin = 14
 end = 129
 
@@ -1030,7 +1029,7 @@ end = -1
 [JC_58]
 kind = UserCall
 file = "HOME/tests/java/Arrays.java"
-line = 60
+line = 59
 begin = 21
 end = 29
 
@@ -1042,7 +1041,7 @@ end = -1
 
 [JC_59]
 file = "HOME/tests/java/Arrays.java"
-line = 69
+line = 68
 begin = 17
 end = 43
 
@@ -1066,7 +1065,7 @@ end = -1
 
 [JC_61]
 file = "HOME/tests/java/Arrays.java"
-line = 69
+line = 68
 begin = 17
 end = 43
 
@@ -1108,7 +1107,7 @@ end = -1
 
 [JC_65]
 file = "HOME/tests/java/Arrays.java"
-line = 75
+line = 74
 begin = 22
 end = 30
 
@@ -1120,7 +1119,7 @@ end = 30
 
 [JC_66]
 file = "HOME/tests/java/Arrays.java"
-line = 75
+line = 74
 begin = 22
 end = 30
 
@@ -1132,7 +1131,7 @@ end = -1
 
 [JC_67]
 file = "HOME/tests/java/Arrays.java"
-line = 72
+line = 71
 begin = 13
 end = 80
 
@@ -1144,7 +1143,7 @@ end = -1
 
 [JC_68]
 file = "HOME/tests/java/Arrays.java"
-line = 72
+line = 71
 begin = 13
 end = 80
 
@@ -1157,7 +1156,7 @@ end = -1
 [JC_69]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 76
+line = 75
 begin = 9
 end = 13
 
@@ -1177,7 +1176,7 @@ end = 30
 name = "Method findMax"
 behavior = "Normal behavior `max_found'"
 file = "HOME/tests/java/Arrays.java"
-line = 52
+line = 51
 begin = 24
 end = 31
 
@@ -1191,20 +1190,20 @@ end = 30
 name = "Method findMax2"
 behavior = "Behavior"
 file = "HOME/tests/java/Arrays.java"
-line = 75
+line = 74
 begin = 22
 end = 30
 
 [JC_70]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 76
+line = 75
 begin = 9
 end = 13
 
 [JC_71]
 file = "HOME/tests/java/Arrays.java"
-line = 79
+line = 78
 begin = 7
 end = 90
 
@@ -1223,7 +1222,7 @@ end = 18
 [JC_73]
 kind = UserCall
 file = "HOME/tests/java/Arrays.java"
-line = 83
+line = 82
 begin = 19
 end = 27
 
@@ -1236,7 +1235,7 @@ end = 30
 [JC_74]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 83
+line = 82
 begin = 19
 end = 27
 
@@ -1244,7 +1243,7 @@ end = 27
 name = "Method findMax"
 behavior = "Safety"
 file = "HOME/tests/java/Arrays.java"
-line = 52
+line = 51
 begin = 24
 end = 31
 
@@ -1257,7 +1256,7 @@ end = 18
 [JC_75]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 84
+line = 83
 begin = 9
 end = 13
 
@@ -1270,7 +1269,7 @@ end = 23
 [JC_76]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 86
+line = 85
 begin = 6
 end = 10
 
@@ -1283,7 +1282,7 @@ end = -1
 [JC_77]
 kind = IndexBounds
 file = "HOME/tests/java/Arrays.java"
-line = 86
+line = 85
 begin = 6
 end = 10
 
@@ -1297,13 +1296,13 @@ end = 23
 name = "Method findMax2"
 behavior = "Normal behavior `max_found'"
 file = "HOME/tests/java/Arrays.java"
-line = 75
+line = 74
 begin = 22
 end = 30
 
 [JC_78]
 file = "HOME/tests/java/Arrays.java"
-line = 79
+line = 78
 begin = 7
 end = 90
 
@@ -1323,7 +1322,7 @@ end = -1
 name = "Method findMax"
 behavior = "Behavior"
 file = "HOME/tests/java/Arrays.java"
-line = 52
+line = 51
 begin = 24
 end = 31
 
@@ -1348,19 +1347,19 @@ end = 23
 [JC_80]
 kind = UserCall
 file = "HOME/tests/java/Arrays.java"
-line = 83
+line = 82
 begin = 19
 end = 27
 
 [JC_81]
 file = "HOME/tests/java/Arrays.java"
-line = 81
+line = 80
 begin = 18
 end = 28
 
 [JC_82]
 file = "HOME/tests/java/Arrays.java"
-line = 79
+line = 78
 begin = 7
 end = 90
 
@@ -1385,7 +1384,7 @@ end = 23
 [JC_84]
 kind = UserCall
 file = "HOME/tests/java/Arrays.java"
-line = 83
+line = 82
 begin = 19
 end = 27
 
@@ -1397,13 +1396,13 @@ end = 23
 
 [JC_85]
 file = "HOME/tests/java/Arrays.java"
-line = 93
+line = 92
 begin = 17
 end = 26
 
 [JC_33]
 file = "HOME/tests/java/Arrays.java"
-line = 45
+line = 44
 begin = 17
 end = 52
 
@@ -1421,13 +1420,13 @@ end = -1
 
 [JC_87]
 file = "HOME/tests/java/Arrays.java"
-line = 93
+line = 92
 begin = 17
 end = 26
 
 [JC_35]
 file = "HOME/tests/java/Arrays.java"
-line = 45
+line = 44
 begin = 17
 end = 52
 
@@ -1445,7 +1444,7 @@ end = -1
 
 [JC_89]
 file = "HOME/tests/java/Arrays.java"
-line = 97
+line = 96
 begin = 23
 end = 33
 
@@ -1463,7 +1462,7 @@ end = -1
 
 [JC_39]
 file = "HOME/tests/java/Arrays.java"
-line = 52
+line = 51
 begin = 24
 end = 31
 
@@ -2965,7 +2964,7 @@ why --project [...] why/Arrays.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po41.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "76" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "75" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
@@ -2974,117 +2973,117 @@ text = "IndexBounds"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po43.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "84" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "83" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po44.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "84" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "83" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `max_found'">
     <goal why_file="why/Arrays_po38.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "72" begin = "13" end = "80"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "71" begin = "13" end = "80"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Arrays_po39.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "72" begin = "13" end = "80"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "71" begin = "13" end = "80"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Arrays_po40.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "72" begin = "13" end = "80"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "71" begin = "13" end = "80"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Behavior">
     <goal why_file="why/Arrays_po16.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po17.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po18.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po19.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po20.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po21.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po22.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po23.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po24.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po25.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po26.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po27.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po28.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "18" end = "28"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "80" begin = "18" end = "28"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po29.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "18" end = "28"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "80" begin = "18" end = "28"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po30.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po31.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po32.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po33.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po34.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po35.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "79" begin = "7" end = "90"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po36.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "18" end = "28"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "80" begin = "18" end = "28"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po37.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "81" begin = "18" end = "28"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "80" begin = "18" end = "28"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -3093,7 +3092,7 @@ text = "IndexBounds"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po70.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "53" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "52" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
@@ -3102,117 +3101,117 @@ text = "IndexBounds"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po72.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "61" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "60" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po73.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "61" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "60" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `max_found'">
     <goal why_file="why/Arrays_po67.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "48" begin = "13" end = "134"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "47" begin = "13" end = "134"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Arrays_po68.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "48" begin = "13" end = "134"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "47" begin = "13" end = "134"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Arrays_po69.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "48" begin = "13" end = "134"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "47" begin = "13" end = "134"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Behavior">
     <goal why_file="why/Arrays_po45.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po46.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po47.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po48.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po49.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po50.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po51.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po52.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po53.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po54.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po55.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po56.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po57.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "25" end = "35"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "57" begin = "25" end = "35"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po58.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "25" end = "35"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "57" begin = "25" end = "35"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po59.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po60.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po61.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po62.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po63.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po64.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "56" begin = "14" end = "129"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po65.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "25" end = "35"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "57" begin = "25" end = "35"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po66.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "58" begin = "25" end = "35"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "57" begin = "25" end = "35"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -3225,65 +3224,65 @@ text = "IndexBounds"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po12.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "107" begin = "10" end = "16"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "106" begin = "10" end = "16"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po13.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "107" begin = "10" end = "16"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "106" begin = "10" end = "16"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po14.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "107" begin = "3" end = "16"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "106" begin = "3" end = "16"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po15.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "107" begin = "3" end = "16"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "106" begin = "3" end = "16"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     </behavior>
     <behavior name="Behavior">
     <goal why_file="why/Arrays_po1.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "99" begin = "7" end = "230"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "98" begin = "7" end = "230"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po2.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "99" begin = "7" end = "230"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "98" begin = "7" end = "230"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po3.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "99" begin = "7" end = "230"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "98" begin = "7" end = "230"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Arrays_po4.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "99" begin = "7" end = "230"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "98" begin = "7" end = "230"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po5.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "99" begin = "7" end = "230"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "98" begin = "7" end = "230"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po6.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "99" begin = "7" end = "230"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "98" begin = "7" end = "230"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po7.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "99" begin = "7" end = "230"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "98" begin = "7" end = "230"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Arrays_po8.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "104" begin = "18" end = "19"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "103" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po9.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "104" begin = "18" end = "19"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "103" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Arrays_po10.why">
-      <location file = "HOME/tests/java/Arrays.java" line = "95" begin = "10" end = "70"/>
+      <location file = "HOME/tests/java/Arrays.java" line = "94" begin = "10" end = "70"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -7423,7 +7422,7 @@ why -simplify [...] why/Arrays.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; Arrays_arrayShift_ensures_default_po_1, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_1, File "HOME/tests/java/Arrays.java", line 98, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (IMPLIES (Non_null_intM t_2 Object_t_2_9_alloc_table)
@@ -7434,7 +7433,7 @@ why -simplify [...] why/Arrays.why
          (EQ |@true| |@true|))))
 (< (- result 1) (+ (offset_max Object_t_2_9_alloc_table t_2) 1)))))))
 
-;; Arrays_arrayShift_ensures_default_po_2, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_2, File "HOME/tests/java/Arrays.java", line 98, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (IMPLIES (Non_null_intM t_2 Object_t_2_9_alloc_table)
@@ -7446,7 +7445,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (> (+ (offset_max Object_t_2_9_alloc_table t_2) 1) 0)
 (<= 0 (- result 1))))))))
 
-;; Arrays_arrayShift_ensures_default_po_3, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_3, File "HOME/tests/java/Arrays.java", line 98, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7463,7 +7462,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP_t_2_9 (shift t_2 i_2))
 (select intM_intP_t_2_9 (shift t_2 (- i_2 1)))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_4, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_4, File "HOME/tests/java/Arrays.java", line 98, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7499,7 +7498,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ j_0_0 (- j_0 1))
 (< j_0_0 (+ (offset_max Object_t_2_9_alloc_table t_2) 1))))))))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_5, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_5, File "HOME/tests/java/Arrays.java", line 98, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7535,7 +7534,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ j_0_0 (- j_0 1))
 (IMPLIES (> (+ (offset_max Object_t_2_9_alloc_table t_2) 1) 0) (<= 0 j_0_0))))))))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_6, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_6, File "HOME/tests/java/Arrays.java", line 98, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7575,7 +7574,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP_t_2_9_1 (shift t_2 i_1))
 (select intM_intP_t_2_9 (shift t_2 i_1))))))))))))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_7, File "HOME/tests/java/Arrays.java", line 99, characters 7-230
+;; Arrays_arrayShift_ensures_default_po_7, File "HOME/tests/java/Arrays.java", line 98, characters 7-230
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7616,7 +7615,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP_t_2_9_1 (shift t_2 i_2))
 (select intM_intP_t_2_9 (shift t_2 (- i_2 1)))))))))))))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_8, File "HOME/tests/java/Arrays.java", line 104, characters 18-19
+;; Arrays_arrayShift_ensures_default_po_8, File "HOME/tests/java/Arrays.java", line 103, characters 18-19
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7650,7 +7649,7 @@ why -simplify [...] why/Arrays.why
          (|why__store| intM_intP_t_2_9_0 (shift t_2 j_0) result0))
 (FORALL (j_0_0) (IMPLIES (EQ j_0_0 (- j_0 1)) (<= 0 j_0)))))))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_9, File "HOME/tests/java/Arrays.java", line 104, characters 18-19
+;; Arrays_arrayShift_ensures_default_po_9, File "HOME/tests/java/Arrays.java", line 103, characters 18-19
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7684,7 +7683,7 @@ why -simplify [...] why/Arrays.why
          (|why__store| intM_intP_t_2_9_0 (shift t_2 j_0) result0))
 (FORALL (j_0_0) (IMPLIES (EQ j_0_0 (- j_0 1)) (< j_0_0 j_0)))))))))))))))))
 
-;; Arrays_arrayShift_ensures_default_po_10, File "HOME/tests/java/Arrays.java", line 95, characters 10-70
+;; Arrays_arrayShift_ensures_default_po_10, File "HOME/tests/java/Arrays.java", line 94, characters 10-70
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7723,7 +7722,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (Non_null_intM t_2 Object_t_2_9_alloc_table)
 (>= (offset_max Object_t_2_9_alloc_table t_2) (- 0 1)))))
 
-;; Arrays_arrayShift_safety_po_2, File "HOME/tests/java/Arrays.java", line 107, characters 10-16
+;; Arrays_arrayShift_safety_po_2, File "HOME/tests/java/Arrays.java", line 106, characters 10-16
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7753,7 +7752,7 @@ why -simplify [...] why/Arrays.why
          (select intM_intP_t_2_9 (shift t_2 (- i_2 1))))))))))
 (IMPLIES (> j_0 0) (<= 0 (- j_0 1))))))))))))))
 
-;; Arrays_arrayShift_safety_po_3, File "HOME/tests/java/Arrays.java", line 107, characters 10-16
+;; Arrays_arrayShift_safety_po_3, File "HOME/tests/java/Arrays.java", line 106, characters 10-16
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7783,7 +7782,7 @@ why -simplify [...] why/Arrays.why
          (select intM_intP_t_2_9 (shift t_2 (- i_2 1))))))))))
 (IMPLIES (> j_0 0) (<= (- j_0 1) (offset_max Object_t_2_9_alloc_table t_2))))))))))))))
 
-;; Arrays_arrayShift_safety_po_4, File "HOME/tests/java/Arrays.java", line 107, characters 3-16
+;; Arrays_arrayShift_safety_po_4, File "HOME/tests/java/Arrays.java", line 106, characters 3-16
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7818,7 +7817,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result0 (select intM_intP_t_2_9_0 (shift t_2 (- j_0 1))))
 (<= 0 j_0))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_5, File "HOME/tests/java/Arrays.java", line 107, characters 3-16
+;; Arrays_arrayShift_safety_po_5, File "HOME/tests/java/Arrays.java", line 106, characters 3-16
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (FORALL (intM_intP_t_2_9)
@@ -7853,7 +7852,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result0 (select intM_intP_t_2_9_0 (shift t_2 (- j_0 1))))
 (<= j_0 (offset_max Object_t_2_9_alloc_table t_2)))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_1, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_1, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -7862,7 +7861,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP_t_1_8 (shift t_1 0))) (<= 1 1)))))))
 
-;; Arrays_findMax2_ensures_default_po_2, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_2, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -7872,7 +7871,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result (select intM_intP_t_1_8 (shift t_1 0)))
 (<= 1 (+ (offset_max Object_t_1_8_alloc_table t_1) 1))))))))
 
-;; Arrays_findMax2_ensures_default_po_3, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_3, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -7881,7 +7880,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP_t_1_8 (shift t_1 0))) (<= 0 0)))))))
 
-;; Arrays_findMax2_ensures_default_po_4, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_4, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -7891,7 +7890,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result (select intM_intP_t_1_8 (shift t_1 0)))
 (< 0 (+ (offset_max Object_t_1_8_alloc_table t_1) 1))))))))
 
-;; Arrays_findMax2_ensures_default_po_5, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_5, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -7901,7 +7900,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result (select intM_intP_t_1_8 (shift t_1 0)))
 (EQ result (select intM_intP_t_1_8 (shift t_1 0)))))))))
 
-;; Arrays_findMax2_ensures_default_po_6, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_6, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -7911,7 +7910,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ result (select intM_intP_t_1_8 (shift t_1 0)))
 (is_max t_1 0 1 Object_t_1_8_alloc_table intM_intP_t_1_8)))))))
 
-;; Arrays_findMax2_ensures_default_po_7, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_7, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -7945,7 +7944,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ m0 result2)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 1 i_3_0)))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_8, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_8, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -7981,7 +7980,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= i_3_0 (+ (offset_max Object_t_1_8_alloc_table t_1) 1))))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_9, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_9, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8015,7 +8014,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ m0 result2)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 r0)))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_10, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_10, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8051,7 +8050,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (< r0 (+ (offset_max Object_t_1_8_alloc_table t_1) 1))))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_11, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_11, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8087,7 +8086,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (EQ m0 (select intM_intP_t_1_8 (shift t_1 r0)))))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_12, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_12, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8123,7 +8122,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (is_max t_1 r0 i_3_0 Object_t_1_8_alloc_table intM_intP_t_1_8)))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_13, File "HOME/tests/java/Arrays.java", line 81, characters 18-28
+;; Arrays_findMax2_ensures_default_po_13, File "HOME/tests/java/Arrays.java", line 80, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8159,7 +8158,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= 0 (- (+ (offset_max Object_t_1_8_alloc_table t_1) 1) i_3))))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_14, File "HOME/tests/java/Arrays.java", line 81, characters 18-28
+;; Arrays_findMax2_ensures_default_po_14, File "HOME/tests/java/Arrays.java", line 80, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8196,7 +8195,7 @@ why -simplify [...] why/Arrays.why
 (< (- (+ (offset_max Object_t_1_8_alloc_table t_1) 1) i_3_0) (- (+ (offset_max
                                                                    Object_t_1_8_alloc_table t_1) 1) i_3))))))))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_15, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_15, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8224,7 +8223,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (<= result1 m)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 1 i_3_0)))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_16, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_16, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8254,7 +8253,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= i_3_0 (+ (offset_max Object_t_1_8_alloc_table t_1) 1))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_17, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_17, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8282,7 +8281,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (<= result1 m)
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 r)))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_18, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_18, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8312,7 +8311,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (< r (+ (offset_max Object_t_1_8_alloc_table t_1) 1))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_19, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_19, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8341,7 +8340,7 @@ why -simplify [...] why/Arrays.why
 (FORALL (i_3_0)
 (IMPLIES (EQ i_3_0 (+ i_3 1)) (EQ m (select intM_intP_t_1_8 (shift t_1 r)))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_20, File "HOME/tests/java/Arrays.java", line 79, characters 7-90
+;; Arrays_findMax2_ensures_default_po_20, File "HOME/tests/java/Arrays.java", line 78, characters 7-90
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8371,7 +8370,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (is_max t_1 r i_3_0 Object_t_1_8_alloc_table intM_intP_t_1_8)))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_21, File "HOME/tests/java/Arrays.java", line 81, characters 18-28
+;; Arrays_findMax2_ensures_default_po_21, File "HOME/tests/java/Arrays.java", line 80, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8401,7 +8400,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= 0 (- (+ (offset_max Object_t_1_8_alloc_table t_1) 1) i_3))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_default_po_22, File "HOME/tests/java/Arrays.java", line 81, characters 18-28
+;; Arrays_findMax2_ensures_default_po_22, File "HOME/tests/java/Arrays.java", line 80, characters 18-28
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8432,7 +8431,7 @@ why -simplify [...] why/Arrays.why
 (< (- (+ (offset_max Object_t_1_8_alloc_table t_1) 1) i_3_0) (- (+ (offset_max
                                                                    Object_t_1_8_alloc_table t_1) 1) i_3))))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_1, File "HOME/tests/java/Arrays.java", line 72, characters 13-80
+;; Arrays_findMax2_ensures_max_found_po_1, File "HOME/tests/java/Arrays.java", line 71, characters 13-80
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8458,7 +8457,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (>= i_3 result0)
 (FORALL (return) (IMPLIES (EQ return r) (<= 0 return)))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_2, File "HOME/tests/java/Arrays.java", line 72, characters 13-80
+;; Arrays_findMax2_ensures_max_found_po_2, File "HOME/tests/java/Arrays.java", line 71, characters 13-80
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8486,7 +8485,7 @@ why -simplify [...] why/Arrays.why
 (IMPLIES (EQ return r)
 (< return (+ (offset_max Object_t_1_8_alloc_table t_1) 1))))))))))))))))))
 
-;; Arrays_findMax2_ensures_max_found_po_3, File "HOME/tests/java/Arrays.java", line 72, characters 13-80
+;; Arrays_findMax2_ensures_max_found_po_3, File "HOME/tests/java/Arrays.java", line 71, characters 13-80
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8515,7 +8514,7 @@ why -simplify [...] why/Arrays.why
 (is_max
 t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_table intM_intP_t_1_8)))))))))))))))))
 
-;; Arrays_findMax2_safety_po_1, File "HOME/tests/java/Arrays.java", line 76, characters 9-13
+;; Arrays_findMax2_safety_po_1, File "HOME/tests/java/Arrays.java", line 75, characters 9-13
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (IMPLIES (AND (Non_null_intM t_1 Object_t_1_8_alloc_table)
@@ -8543,7 +8542,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
          (is_max t_1 r i_3 Object_t_1_8_alloc_table intM_intP_t_1_8))))))
 (>= (offset_max Object_t_1_8_alloc_table t_1) (- 0 1))))))))))))))
 
-;; Arrays_findMax2_safety_po_3, File "HOME/tests/java/Arrays.java", line 84, characters 9-13
+;; Arrays_findMax2_safety_po_3, File "HOME/tests/java/Arrays.java", line 83, characters 9-13
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8570,7 +8569,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
          (EQ |@true| |@true|))))
 (IMPLIES (< i_3 result0) (<= 0 i_3)))))))))))))))))
 
-;; Arrays_findMax2_safety_po_4, File "HOME/tests/java/Arrays.java", line 84, characters 9-13
+;; Arrays_findMax2_safety_po_4, File "HOME/tests/java/Arrays.java", line 83, characters 9-13
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -8597,7 +8596,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
          (EQ |@true| |@true|))))
 (IMPLIES (< i_3 result0) (<= i_3 (offset_max Object_t_1_8_alloc_table t_1))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_1, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_1, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8607,7 +8606,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP_t_0_7 (shift t_0 0))) (<= 1 1)))))))
 
-;; Arrays_findMax_ensures_default_po_2, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_2, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8618,7 +8617,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ result (select intM_intP_t_0_7 (shift t_0 0)))
 (<= 1 (+ (offset_max Object_t_0_7_alloc_table t_0) 1))))))))
 
-;; Arrays_findMax_ensures_default_po_3, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_3, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8628,7 +8627,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP_t_0_7 (shift t_0 0))) (<= 0 0)))))))
 
-;; Arrays_findMax_ensures_default_po_4, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_4, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8639,7 +8638,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ result (select intM_intP_t_0_7 (shift t_0 0)))
 (< 0 (+ (offset_max Object_t_0_7_alloc_table t_0) 1))))))))
 
-;; Arrays_findMax_ensures_default_po_5, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_5, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8650,7 +8649,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ result (select intM_intP_t_0_7 (shift t_0 0)))
 (EQ result (select intM_intP_t_0_7 (shift t_0 0)))))))))
 
-;; Arrays_findMax_ensures_default_po_6, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_6, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8663,7 +8662,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (AND (<= 0 j_1) (< j_1 1))
 (<= (select intM_intP_t_0_7 (shift t_0 j_1)) result)))))))))
 
-;; Arrays_findMax_ensures_default_po_7, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_7, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8700,7 +8699,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ m_0_0 result2)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 1 i_5_0)))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_8, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_8, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8739,7 +8738,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= i_5_0 (+ (offset_max Object_t_0_7_alloc_table t_0) 1))))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_9, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_9, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8776,7 +8775,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ m_0_0 result2)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 0 r_0_0)))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_10, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_10, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8815,7 +8814,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (< r_0_0 (+ (offset_max Object_t_0_7_alloc_table t_0) 1))))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_11, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_11, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8854,7 +8853,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (EQ m_0_0 (select intM_intP_t_0_7 (shift t_0 r_0_0)))))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_12, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_12, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8895,7 +8894,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (AND (<= 0 j_1) (< j_1 i_5_0))
 (<= (select intM_intP_t_0_7 (shift t_0 j_1)) m_0_0)))))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_13, File "HOME/tests/java/Arrays.java", line 58, characters 25-35
+;; Arrays_findMax_ensures_default_po_13, File "HOME/tests/java/Arrays.java", line 57, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8934,7 +8933,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= 0 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) i_5))))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_14, File "HOME/tests/java/Arrays.java", line 58, characters 25-35
+;; Arrays_findMax_ensures_default_po_14, File "HOME/tests/java/Arrays.java", line 57, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -8974,7 +8973,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (< (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) i_5_0) (- (+ (offset_max
                                                                    Object_t_0_7_alloc_table t_0) 1) i_5))))))))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_15, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_15, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9005,7 +9004,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (<= result1 m_0)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 1 i_5_0)))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_16, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_16, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9038,7 +9037,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= i_5_0 (+ (offset_max Object_t_0_7_alloc_table t_0) 1))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_17, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_17, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9069,7 +9068,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (<= result1 m_0)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 0 r_0)))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_18, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_18, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9102,7 +9101,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (< r_0 (+ (offset_max Object_t_0_7_alloc_table t_0) 1))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_19, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_19, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9135,7 +9134,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (EQ m_0 (select intM_intP_t_0_7 (shift t_0 r_0)))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_20, File "HOME/tests/java/Arrays.java", line 56, characters 14-129
+;; Arrays_findMax_ensures_default_po_20, File "HOME/tests/java/Arrays.java", line 55, characters 14-129
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9170,7 +9169,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (AND (<= 0 j_1) (< j_1 i_5_0))
 (<= (select intM_intP_t_0_7 (shift t_0 j_1)) m_0)))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_21, File "HOME/tests/java/Arrays.java", line 58, characters 25-35
+;; Arrays_findMax_ensures_default_po_21, File "HOME/tests/java/Arrays.java", line 57, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9203,7 +9202,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= 0 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) i_5))))))))))))))))))))
 
-;; Arrays_findMax_ensures_default_po_22, File "HOME/tests/java/Arrays.java", line 58, characters 25-35
+;; Arrays_findMax_ensures_default_po_22, File "HOME/tests/java/Arrays.java", line 57, characters 25-35
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9237,7 +9236,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (< (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) i_5_0) (- (+ (offset_max
                                                                    Object_t_0_7_alloc_table t_0) 1) i_5))))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_1, File "HOME/tests/java/Arrays.java", line 48, characters 13-134
+;; Arrays_findMax_ensures_max_found_po_1, File "HOME/tests/java/Arrays.java", line 47, characters 13-134
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9266,7 +9265,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (>= i_5 result0)
 (FORALL (return) (IMPLIES (EQ return r_0) (<= 0 return)))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_2, File "HOME/tests/java/Arrays.java", line 48, characters 13-134
+;; Arrays_findMax_ensures_max_found_po_2, File "HOME/tests/java/Arrays.java", line 47, characters 13-134
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9297,7 +9296,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
 (IMPLIES (EQ return r_0)
 (< return (+ (offset_max Object_t_0_7_alloc_table t_0) 1))))))))))))))))))
 
-;; Arrays_findMax_ensures_max_found_po_3, File "HOME/tests/java/Arrays.java", line 48, characters 13-134
+;; Arrays_findMax_ensures_max_found_po_3, File "HOME/tests/java/Arrays.java", line 47, characters 13-134
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9333,7 +9332,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
                                              intM_intP_t_0_7 (shift
                                                              t_0 return)))))))))))))))))))))
 
-;; Arrays_findMax_safety_po_1, File "HOME/tests/java/Arrays.java", line 53, characters 9-13
+;; Arrays_findMax_safety_po_1, File "HOME/tests/java/Arrays.java", line 52, characters 9-13
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
@@ -9365,7 +9364,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
          (<= (select intM_intP_t_0_7 (shift t_0 j_1)) m_0))))))))
 (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))))))))))))))
 
-;; Arrays_findMax_safety_po_3, File "HOME/tests/java/Arrays.java", line 61, characters 9-13
+;; Arrays_findMax_safety_po_3, File "HOME/tests/java/Arrays.java", line 60, characters 9-13
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -9395,7 +9394,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
          (EQ |@true| |@true|))))
 (IMPLIES (< i_5 result0) (<= 0 i_5)))))))))))))))))
 
-;; Arrays_findMax_safety_po_4, File "HOME/tests/java/Arrays.java", line 61, characters 9-13
+;; Arrays_findMax_safety_po_4, File "HOME/tests/java/Arrays.java", line 60, characters 9-13
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)

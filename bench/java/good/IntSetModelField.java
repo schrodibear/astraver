@@ -33,47 +33,41 @@
 
 //@ type intset ;
 
-//@ predicate In(int n, intset s) ;
-
 //@ logic intset emptyset() ;
-//@ logic intset union(intset s1, intset s2) ;
+
 //@ logic intset singleton(int n) ;
 
-/*@ axiom union_empty_left :
+/*@ logic intset union(intset s1, intset s2) {
+  @  axiom union_empty_left :
   @   \forall intset s ; union(emptyset(),s) == s;
+  @ }
   @*/
 
-/*@ axiom In_emptyset : 
+/*@ predicate In(int n, intset s) {
+  @  axiom In_emptyset : 
   @   \forall int n ; ! In(n,emptyset()) ;
-  @*/
-
-/*@ axiom In_singleton : 
-  @   \forall int n k ; 
-  @      In(n,singleton(k)) <==> n==k ;
-  @*/
-
-/*@ axiom In_union : 
+  @  axiom In_union : 
   @   \forall intset s1 s2, int n ; 
   @      In(n,union(s1,s2)) <==> In(n,s1) || In(n,s2) ;
-  @*/
-
-/*@ axiom intset_ext : 
+  @  axiom In_singleton : 
+  @   \forall int n k ; 
+  @      In(n,singleton(k)) <==> n==k ;
+  @  axiom intset_ext : 
   @   \forall intset s1 s2;
   @     (\forall int n ; In(n,s1) <==> In(n,s2)) ==> s1==s2 ;
+  @ }
   @*/
 
-/*@ predicate array_models(intset s, int t[], integer i, integer j) {
+/*@ predicate array_models(intset s, int t[], integer i, integer j) =
   @   t != null && 
   @   0 <= i && j < t.length &&
   @   (\forall int n; In(n,s) <==> 
-  @      (\exists int k;  i <= k <= j && n==t[k]))
-  @ }
+  @      (\exists int k;  i <= k <= j && n==t[k])) ;
   @*/
 
-/*@ predicate IntSetModelField_models(intset s, IntSetModelField i) {
+/*@ predicate IntSetModelField_models(intset s, IntSetModelField i) =
   @   i != null && 
-  @   array_models(s,i.t,0,i.size-1) 
-  @ }
+  @   array_models(s,i.t,0,i.size-1) ;
   @*/
 
 public class IntSetModelField {

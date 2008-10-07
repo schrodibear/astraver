@@ -55,9 +55,8 @@
   @   \forall integer x y z; x*(y*z) == (x*y)*z; 
   @*/
 
-/*@ predicate divides(integer x, integer y) {
-  @   \exists integer q; y == q*x
-  @ }
+/*@ predicate divides(integer x, integer y) =
+  @   \exists integer q; y == q*x ;
   @*/
 
 /*@ lemma div_mod_property:
@@ -70,10 +69,10 @@
   @    x >=0 && y > 0 ==> 0 <= x%y && x%y < y; 
   @*/
 
-/*@ predicate isGcd(integer a, integer b, integer d) {
+/*@ predicate isGcd(integer a, integer b, integer d) =
   @   divides(d,a) && divides(d,b) && 
   @     \forall integer z;
-  @     divides(z,a) && divides(z,b) ==> divides(z,d) }
+  @     divides(z,a) && divides(z,b) ==> divides(z,d) ;
   @*/
 
 /*@ lemma gcd_zero :

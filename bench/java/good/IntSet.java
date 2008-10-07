@@ -30,9 +30,8 @@
 //@ lemma mean1 : (\forall integer x y ; x <= y ==> x <= (x + y) / 2) ;
 //@ lemma mean2 : (\forall integer x y ; x < y ==> (x + y) / 2 < y) ;
 
-/*@ predicate mem(IntSet s,int n) { 
-  @    \exists integer i; 0 <= i < s.taille && s.t[i] == n 
-  @ }
+/*@ predicate mem(IntSet s,int n) =
+  @    \exists integer i; 0 <= i < s.taille && s.t[i] == n ;
   @*/
 
 public class IntSet {

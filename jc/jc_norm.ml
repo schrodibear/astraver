@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.103 2008-09-26 09:11:51 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.104 2008-10-07 15:54:20 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -617,6 +617,7 @@ let clause = function
 let reads_or_expr = function
   | JCreads elist -> JCreads(List.map expr elist)
   | JCexpr e -> JCexpr(expr e)
+  | JCaxiomatic l -> JCaxiomatic(List.map (fun (id,e) -> (id, expr e)) l)
     
 (** From parsed declaration to normalized declaration *)
 let decl d = 

@@ -31,7 +31,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.50 2008-09-25 15:04:24 marche Exp $
+$Id: java_parser.mly,v 1.51 2008-10-07 15:54:20 marche Exp $
 
 */
 
@@ -1059,26 +1059,41 @@ ident:
 kml_type_decl:
 | TYPE ident
     { JPTlogic_type_decl $2 }
-| PREDICATE ident label_binders method_parameters LEFTBRACE expr RIGHTBRACE EOF
+| PREDICATE ident label_binders method_parameters EQ expr SEMICOLON EOF
     { JPTlogic_def($2,None,$3,$4,$6) }
+| PREDICATE ident label_binders method_parameters LEFTBRACE axioms RIGHTBRACE EOF
+    { JPTlogic_axiomatic($2,None,$3,$4,$6) }
 | PREDICATE ident label_binders method_parameters reads_clause SEMICOLON EOF
     { JPTlogic_reads ($2, None, $3, $4, $5) }
-| LOGIC type_expr ident label_binders method_parameters LEFTBRACE expr RIGHTBRACE EOF
+| LOGIC type_expr ident label_binders method_parameters EQ expr SEMICOLON EOF
     { JPTlogic_def($3,Some $2,$4, $5,$7) }
+| LOGIC type_expr ident label_binders method_parameters LEFTBRACE axioms RIGHTBRACE EOF
+    { JPTlogic_axiomatic($3,Some $2,$4, $5,$7) }
 | LOGIC type_expr ident label_binders method_parameters reads_clause SEMICOLON EOF
     { JPTlogic_reads($3,Some $2,$4,$5,$6) }
+/*
 | AXIOM ident label_binders COLON expr SEMICOLON EOF
     { JPTlemma($2,true,$3,$5) }
+*/
 | LEMMA ident label_binders COLON expr SEMICOLON EOF
     { JPTlemma($2,false,$3,$5) }
 
 reads_clause:
+/*
 | READS expr_comma_list
     { $2 }
+*/
 | /* epsilon */ 
     { [] }
 ;
  
+axioms:
+| /* epsilon */
+    { [] }
+| AXIOM ident COLON expr SEMICOLON axioms
+    { ($2,$4)::$6 }
+;
+
 label_binders:
 | /* epsilon */ { [LabelHere] }
 | LEFTBRACE ident label_list_end RIGHTBRACE { (label $2)::$3 }

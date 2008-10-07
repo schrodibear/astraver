@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.110 2008-10-07 12:12:21 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.111 2008-10-07 15:54:20 marche Exp $ */
 
 %{
 
@@ -992,6 +992,19 @@ logic_definition:
 /* logic pred reads */
 | LOGIC IDENTIFIER label_binders parameters reads %prec PRECLOGIC
     { locate (JCDlogic(None, $2, $3, $4, JCreads $5)) }
+/* logic fun axiomatic def */
+| LOGIC type_expr IDENTIFIER label_binders parameters LBRACE axioms RBRACE
+    { locate (JCDlogic(Some $2, $3, $4, $5, JCaxiomatic $7)) }
+/* logic pred axiomatic def */
+| LOGIC IDENTIFIER label_binders parameters LBRACE axioms RBRACE
+    { locate (JCDlogic(None, $2, $3, $4, JCaxiomatic $6)) }
+;
+
+axioms:
+| /* epsilon */
+    { [] }
+| AXIOM IDENTIFIER COLON expression SEMICOLON axioms
+    { ($2,$4)::$6 }
 ;
 
 /*

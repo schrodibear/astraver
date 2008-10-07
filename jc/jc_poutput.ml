@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.21 2008-10-07 12:12:21 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.22 2008-10-07 15:54:20 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -313,6 +313,11 @@ let reads_or_expr fmt = function
       fprintf fmt "reads %a;" (print_list comma pexpr) el
   | JCexpr e -> 
       fprintf fmt "=@\n%a" pexpr e
+  | JCaxiomatic l ->
+      fprintf fmt "{@\n@[<v 2>%a@]@\n}" 
+	(print_list newline
+	   (fun fmt (id,e) -> 
+	      fprintf fmt "axiom %s: %a;@\n" id pexpr e)) l
 
 let type_params_decl fmt = function
   | [] -> ()

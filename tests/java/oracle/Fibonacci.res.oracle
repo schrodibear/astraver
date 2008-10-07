@@ -1,20 +1,13 @@
 ========== file tests/java/Fibonacci.java ==========
 //@+ CheckArithOverflow = no
 
-/*@ predicate isfib(integer x, integer r);
-  @*/
-
-/*@ axiom isfib0: 
-  @  isfib(0,0);
-  @*/ 
-
-/*@ axiom isfib1: 
-  @  isfib(1,1);
-  @*/ 
-
-/*@ axiom isfibn: 
-  @ \forall integer n r p; 
-  @  isfib(n-2,r) ==> isfib(n-1,p) ==> isfib(n,p+r);
+/*@ predicate isfib(integer x, integer r) {
+  @  axiom isfib0: isfib(0,0);
+  @  axiom isfib1: isfib(1,1);
+  @  axiom isfibn: 
+  @   \forall integer n r p; 
+  @     isfib(n-2,r) ==> isfib(n-1,p) ==> isfib(n,p+r);
+  @ }
   @*/ 
 
 
@@ -87,21 +80,20 @@ behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
 
-logic isfib{Here}(integer x, integer r) reads \nothing;
+logic isfib{Here}(integer x, integer r) {
+axiom isfib0: isfib(0, 0);
+  
+  axiom isfib1: isfib(1, 1);
+  
+  axiom isfibn: (\forall integer n;
+                  (\forall integer r_0;
+                    (\forall integer p;
+                      (isfib((n - 2), r_0) ==>
+                        (isfib((n - 1), p) ==> isfib(n, (p + r_0)))))));
+  
+}
 
 exception Throwable of Throwable[0..]
-
-axiom isfib1{Here} :
-isfib(1, 1)
-
-axiom isfibn{Here} :
-(\forall integer n;
-  (\forall integer r_0;
-    (\forall integer p;
-      (isfib((n - 2), r_0) ==> (isfib((n - 1), p) ==> isfib(n, (p + r_0)))))))
-
-axiom isfib0{Here} :
-isfib(0, 0)
 
 integer Fibonacci_Fib(Fibonacci[0] this_0)
   requires (K_14 : (this_0.n > 0));
@@ -150,85 +142,85 @@ End:
 ========== file tests/java/Fibonacci.jloc ==========
 [K_10]
 file = "HOME/tests/java/Fibonacci.java"
-line = 38
+line = 31
 begin = 8
 end = 13
 
 [K_11]
 file = "HOME/tests/java/Fibonacci.java"
-line = 44
+line = 37
 begin = 8
 end = 9
 
 [K_12]
 file = "HOME/tests/java/Fibonacci.java"
-line = 31
+line = 24
 begin = 9
 end = 10
 
 [K_13]
 file = "HOME/tests/java/Fibonacci.java"
-line = 30
+line = 23
 begin = 9
 end = 10
 
 [K_14]
 file = "HOME/tests/java/Fibonacci.java"
-line = 26
+line = 19
 begin = 17
 end = 22
 
 [K_1]
 file = "HOME/tests/java/Fibonacci.java"
-line = 27
+line = 20
 begin = 16
 end = 27
 
 [K_2]
 file = "HOME/tests/java/Fibonacci.java"
-line = 33
+line = 26
 begin = 1
 end = 6
 
 [K_3]
 file = "HOME/tests/java/Fibonacci.java"
-line = 36
+line = 29
 begin = 20
 end = 56
 
 [K_4]
 file = "HOME/tests/java/Fibonacci.java"
-line = 40
+line = 33
 begin = 9
 end = 10
 
 [K_5]
 file = "HOME/tests/java/Fibonacci.java"
-line = 41
+line = 34
 begin = 9
 end = 10
 
 [K_6]
 file = "HOME/tests/java/Fibonacci.java"
-line = 41
+line = 34
 begin = 9
 end = 16
 
 [K_7]
 file = "HOME/tests/java/Fibonacci.java"
-line = 41
+line = 34
 begin = 5
 end = 16
 
 [K_8]
 file = "HOME/tests/java/Fibonacci.java"
-line = 42
+line = 35
 begin = 9
 end = 14
 
 [K_9]
 file = "HOME/tests/java/Fibonacci.java"
-line = 38
+line = 31
 begin = 12
 end = 13
 
@@ -242,7 +234,7 @@ end = -1
 [Fibonacci_Fib]
 name = "Method Fib"
 file = "HOME/tests/java/Fibonacci.java"
-line = 29
+line = 22
 begin = 16
 end = 19
 
@@ -433,7 +425,7 @@ end = 23
 
 [JC_11]
 file = "HOME/tests/java/Fibonacci.java"
-line = 26
+line = 19
 begin = 17
 end = 22
 
@@ -445,7 +437,7 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/java/Fibonacci.java"
-line = 26
+line = 19
 begin = 17
 end = 22
 
@@ -453,7 +445,7 @@ end = 22
 name = "Method Fib"
 behavior = "Safety"
 file = "HOME/tests/java/Fibonacci.java"
-line = 29
+line = 22
 begin = 16
 end = 19
 
@@ -465,31 +457,31 @@ end = -1
 
 [JC_15]
 file = "HOME/tests/java/Fibonacci.java"
-line = 29
+line = 22
 begin = 16
 end = 19
 
 [JC_16]
 file = "HOME/tests/java/Fibonacci.java"
-line = 29
+line = 22
 begin = 16
 end = 19
 
 [JC_17]
 file = "HOME/tests/java/Fibonacci.java"
-line = 27
+line = 20
 begin = 16
 end = 27
 
 [JC_18]
 file = "HOME/tests/java/Fibonacci.java"
-line = 27
+line = 20
 begin = 16
 end = 27
 
 [JC_19]
 file = "HOME/tests/java/Fibonacci.java"
-line = 36
+line = 29
 begin = 20
 end = 56
 
@@ -501,7 +493,7 @@ end = -1
 
 [JC_21]
 file = "HOME/tests/java/Fibonacci.java"
-line = 36
+line = 29
 begin = 20
 end = 56
 
@@ -563,7 +555,7 @@ end = -1
 name = "Method Fib"
 behavior = "Behavior"
 file = "HOME/tests/java/Fibonacci.java"
-line = 29
+line = 22
 begin = 16
 end = 19
 
@@ -1295,31 +1287,31 @@ why --project [...] why/Fibonacci.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Behavior">
     <goal why_file="why/Fibonacci_po1.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "36" begin = "20" end = "56"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "56"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Fibonacci_po2.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "36" begin = "20" end = "56"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "56"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Fibonacci_po3.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "36" begin = "20" end = "56"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "56"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Fibonacci_po4.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "36" begin = "20" end = "56"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "56"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Fibonacci_po5.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "36" begin = "20" end = "56"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "56"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Fibonacci_po6.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "36" begin = "20" end = "56"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "56"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Fibonacci_po7.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "27" begin = "16" end = "27"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "20" begin = "16" end = "27"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -3311,7 +3303,7 @@ why -simplify [...] why/Fibonacci.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; Fibonacci_Fib_ensures_default_po_1, File "HOME/tests/java/Fibonacci.java", line 36, characters 20-56
+;; Fibonacci_Fib_ensures_default_po_1, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-56
 (FORALL (this_0)
 (FORALL (Object_this_0_3_alloc_table)
 (FORALL (Fibonacci_n_this_0_3)
@@ -3323,7 +3315,7 @@ why -simplify [...] why/Fibonacci.why
          (|why__store| Fibonacci_x_this_0_3 this_0 1))
 (<= 1 (select Fibonacci_n_this_0_3 this_0)))))))))
 
-;; Fibonacci_Fib_ensures_default_po_2, File "HOME/tests/java/Fibonacci.java", line 36, characters 20-56
+;; Fibonacci_Fib_ensures_default_po_2, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-56
 (FORALL (this_0)
 (FORALL (Object_this_0_3_alloc_table)
 (FORALL (Fibonacci_n_this_0_3)
@@ -3335,7 +3327,7 @@ why -simplify [...] why/Fibonacci.why
          (|why__store| Fibonacci_x_this_0_3 this_0 1))
 (EQ (isfib 1 (select Fibonacci_x_this_0_3_0 this_0)) |@true|))))))))
 
-;; Fibonacci_Fib_ensures_default_po_3, File "HOME/tests/java/Fibonacci.java", line 36, characters 20-56
+;; Fibonacci_Fib_ensures_default_po_3, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-56
 (FORALL (this_0)
 (FORALL (Object_this_0_3_alloc_table)
 (FORALL (Fibonacci_n_this_0_3)
@@ -3347,7 +3339,7 @@ why -simplify [...] why/Fibonacci.why
          (|why__store| Fibonacci_x_this_0_3 this_0 1))
 (EQ (isfib (- 1 1) 0) |@true|))))))))
 
-;; Fibonacci_Fib_ensures_default_po_4, File "HOME/tests/java/Fibonacci.java", line 36, characters 20-56
+;; Fibonacci_Fib_ensures_default_po_4, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-56
 (FORALL (this_0)
 (FORALL (Object_this_0_3_alloc_table)
 (FORALL (Fibonacci_n_this_0_3)
@@ -3380,7 +3372,7 @@ why -simplify [...] why/Fibonacci.why
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1)) (<= i0 (select Fibonacci_n_this_0_3 this_0))))))))))))))))))))))))))))
 
-;; Fibonacci_Fib_ensures_default_po_5, File "HOME/tests/java/Fibonacci.java", line 36, characters 20-56
+;; Fibonacci_Fib_ensures_default_po_5, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-56
 (FORALL (this_0)
 (FORALL (Object_this_0_3_alloc_table)
 (FORALL (Fibonacci_n_this_0_3)
@@ -3414,7 +3406,7 @@ why -simplify [...] why/Fibonacci.why
 (IMPLIES (EQ i0 (+ i 1))
 (EQ (isfib i0 (select Fibonacci_x_this_0_3_2 this_0)) |@true|)))))))))))))))))))))))))))
 
-;; Fibonacci_Fib_ensures_default_po_6, File "HOME/tests/java/Fibonacci.java", line 36, characters 20-56
+;; Fibonacci_Fib_ensures_default_po_6, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-56
 (FORALL (this_0)
 (FORALL (Object_this_0_3_alloc_table)
 (FORALL (Fibonacci_n_this_0_3)
@@ -3446,7 +3438,7 @@ why -simplify [...] why/Fibonacci.why
          (|why__store| Fibonacci_x_this_0_3_1 this_0 (+ result1 aux)))
 (FORALL (i0) (IMPLIES (EQ i0 (+ i 1)) (EQ (isfib (- i0 1) y0) |@true|)))))))))))))))))))))))))))
 
-;; Fibonacci_Fib_ensures_default_po_7, File "HOME/tests/java/Fibonacci.java", line 27, characters 16-27
+;; Fibonacci_Fib_ensures_default_po_7, File "HOME/tests/java/Fibonacci.java", line 20, characters 16-27
 (FORALL (this_0)
 (FORALL (Object_this_0_3_alloc_table)
 (FORALL (Fibonacci_n_this_0_3)

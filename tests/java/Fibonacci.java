@@ -1,19 +1,12 @@
 //@+ CheckArithOverflow = no
 
-/*@ predicate isfib(integer x, integer r);
-  @*/
-
-/*@ axiom isfib0: 
-  @  isfib(0,0);
-  @*/ 
-
-/*@ axiom isfib1: 
-  @  isfib(1,1);
-  @*/ 
-
-/*@ axiom isfibn: 
-  @ \forall integer n r p; 
-  @  isfib(n-2,r) ==> isfib(n-1,p) ==> isfib(n,p+r);
+/*@ predicate isfib(integer x, integer r) {
+  @  axiom isfib0: isfib(0,0);
+  @  axiom isfib1: isfib(1,1);
+  @  axiom isfibn: 
+  @   \forall integer n r p; 
+  @     isfib(n-2,r) ==> isfib(n-1,p) ==> isfib(n,p+r);
+  @ }
   @*/ 
 
 

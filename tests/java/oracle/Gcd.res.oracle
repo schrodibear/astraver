@@ -56,9 +56,8 @@
   @   \forall integer x y z; x*(y*z) == (x*y)*z; 
   @*/
 
-/*@ predicate divides(integer x, integer y) {
-  @   \exists integer q; y == q*x
-  @ }
+/*@ predicate divides(integer x, integer y) =
+  @   \exists integer q; y == q*x ;
   @*/
 
 /*@ lemma div_mod_property:
@@ -71,10 +70,10 @@
   @    x >=0 && y > 0 ==> 0 <= x%y && x%y < y; 
   @*/
 
-/*@ predicate isGcd(integer a, integer b, integer d) {
+/*@ predicate isGcd(integer a, integer b, integer d) =
   @   divides(d,a) && divides(d,b) && 
   @     \forall integer z;
-  @     divides(z,a) && divides(z,b) ==> divides(z,d) }
+  @     divides(z,a) && divides(z,b) ==> divides(z,d) ;
   @*/
 
 /*@ lemma gcd_zero :
@@ -322,116 +321,116 @@ End:
 ========== file tests/java/Gcd.jloc ==========
 [K_10]
 file = "HOME/tests/java/Gcd.java"
-line = 111
+line = 110
 begin = 35
 end = 36
 
 [K_11]
 file = "HOME/tests/java/Gcd.java"
-line = 108
+line = 107
 begin = 34
 end = 39
 
 [K_12]
 file = "HOME/tests/java/Gcd.java"
-line = 107
+line = 106
 begin = 20
 end = 25
 
 [K_13]
 file = "HOME/tests/java/Gcd.java"
-line = 106
+line = 105
 begin = 15
 end = 20
 
 [K_14]
 file = "HOME/tests/java/Gcd.java"
-line = 97
+line = 96
 begin = 51
 end = 52
 
 [K_15]
 file = "HOME/tests/java/Gcd.java"
-line = 97
+line = 96
 begin = 44
 end = 45
 
 [K_16]
 file = "HOME/tests/java/Gcd.java"
-line = 97
+line = 96
 begin = 37
 end = 38
 
 [K_17]
 file = "HOME/tests/java/Gcd.java"
-line = 97
+line = 96
 begin = 30
 end = 31
 
 [K_18]
 file = "HOME/tests/java/Gcd.java"
-line = 90
+line = 89
 begin = 17
 end = 33
 
 [K_1]
 file = "HOME/tests/java/Gcd.java"
-line = 92
+line = 91
 begin = 18
 end = 36
 
 [K_2]
 file = "HOME/tests/java/Gcd.java"
-line = 94
+line = 93
 begin = 18
 end = 57
 
 [K_3]
 file = "HOME/tests/java/Gcd.java"
-line = 99
+line = 98
 begin = 15
 end = 219
 
 [K_4]
 file = "HOME/tests/java/Gcd.java"
-line = 104
+line = 103
 begin = 25
 end = 26
 
 [K_5]
 file = "HOME/tests/java/Gcd.java"
-line = 114
+line = 113
 begin = 31
 end = 36
 
 [K_6]
 file = "HOME/tests/java/Gcd.java"
-line = 114
+line = 113
 begin = 26
 end = 36
 
 [Gcd_gcd]
 name = "Method gcd"
 file = "HOME/tests/java/Gcd.java"
-line = 96
+line = 95
 begin = 15
 end = 18
 
 [K_7]
 file = "HOME/tests/java/Gcd.java"
-line = 115
+line = 114
 begin = 31
 end = 36
 
 [K_8]
 file = "HOME/tests/java/Gcd.java"
-line = 115
+line = 114
 begin = 26
 end = 36
 
 [K_9]
 file = "HOME/tests/java/Gcd.java"
-line = 111
+line = 110
 begin = 43
 end = 44
 
@@ -571,27 +570,27 @@ clean:
 name = "Method gcd"
 behavior = "Normal behavior `resultIsGcd'"
 file = "HOME/tests/java/Gcd.java"
-line = 96
+line = 95
 begin = 15
 end = 18
 
 [JC_40]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 108
+line = 107
 begin = 34
 end = 39
 
 [JC_41]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 108
+line = 107
 begin = 34
 end = 39
 
 [JC_42]
 file = "HOME/tests/java/Gcd.java"
-line = 99
+line = 98
 begin = 15
 end = 219
 
@@ -604,21 +603,21 @@ end = -1
 [JC_44]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 107
+line = 106
 begin = 20
 end = 25
 
 [JC_45]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 107
+line = 106
 begin = 20
 end = 25
 
 [JC_46]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 108
+line = 107
 begin = 34
 end = 39
 
@@ -631,7 +630,7 @@ end = 23
 [JC_47]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 108
+line = 107
 begin = 34
 end = 39
 
@@ -705,7 +704,7 @@ end = -1
 name = "Method gcd"
 behavior = "Behavior"
 file = "HOME/tests/java/Gcd.java"
-line = 96
+line = 95
 begin = 15
 end = 18
 
@@ -743,7 +742,7 @@ end = -1
 name = "Method gcd"
 behavior = "Safety"
 file = "HOME/tests/java/Gcd.java"
-line = 96
+line = 95
 begin = 15
 end = 18
 
@@ -755,7 +754,7 @@ end = 23
 
 [JC_11]
 file = "HOME/tests/java/Gcd.java"
-line = 90
+line = 89
 begin = 17
 end = 33
 
@@ -767,7 +766,7 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/java/Gcd.java"
-line = 90
+line = 89
 begin = 17
 end = 33
 
@@ -781,7 +780,7 @@ end = -1
 name = "Method gcd"
 behavior = "Normal behavior `bezoutProperty'"
 file = "HOME/tests/java/Gcd.java"
-line = 96
+line = 95
 begin = 15
 end = 18
 
@@ -799,43 +798,43 @@ end = -1
 
 [JC_17]
 file = "HOME/tests/java/Gcd.java"
-line = 96
+line = 95
 begin = 15
 end = 18
 
 [JC_18]
 file = "HOME/tests/java/Gcd.java"
-line = 96
+line = 95
 begin = 15
 end = 18
 
 [JC_19]
 file = "HOME/tests/java/Gcd.java"
-line = 92
+line = 91
 begin = 18
 end = 36
 
 [JC_20]
 file = "HOME/tests/java/Gcd.java"
-line = 92
+line = 91
 begin = 18
 end = 36
 
 [JC_21]
 file = "HOME/tests/java/Gcd.java"
-line = 94
+line = 93
 begin = 18
 end = 57
 
 [JC_22]
 file = "HOME/tests/java/Gcd.java"
-line = 94
+line = 93
 begin = 18
 end = 57
 
 [JC_23]
 file = "HOME/tests/java/Gcd.java"
-line = 99
+line = 98
 begin = 15
 end = 219
 
@@ -848,34 +847,34 @@ end = -1
 [JC_25]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 107
+line = 106
 begin = 20
 end = 25
 
 [JC_26]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 107
+line = 106
 begin = 20
 end = 25
 
 [JC_27]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 108
+line = 107
 begin = 34
 end = 39
 
 [JC_28]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 108
+line = 107
 begin = 34
 end = 39
 
 [JC_29]
 file = "HOME/tests/java/Gcd.java"
-line = 99
+line = 98
 begin = 15
 end = 219
 
@@ -888,40 +887,40 @@ end = -1
 [JC_31]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 107
+line = 106
 begin = 20
 end = 25
 
 [JC_32]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 107
+line = 106
 begin = 20
 end = 25
 
 [JC_33]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 108
+line = 107
 begin = 34
 end = 39
 
 [JC_34]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 108
+line = 107
 begin = 34
 end = 39
 
 [JC_35]
 file = "HOME/tests/java/Gcd.java"
-line = 104
+line = 103
 begin = 25
 end = 26
 
 [JC_36]
 file = "HOME/tests/java/Gcd.java"
-line = 99
+line = 98
 begin = 15
 end = 219
 
@@ -934,14 +933,14 @@ end = -1
 [JC_38]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 107
+line = 106
 begin = 20
 end = 25
 
 [JC_39]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 107
+line = 106
 begin = 20
 end = 25
 
@@ -2107,58 +2106,58 @@ why --project [...] why/Gcd.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Gcd_po22.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "107" begin = "20" end = "25"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "106" begin = "20" end = "25"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `resultIsGcd'">
     <goal why_file="why/Gcd_po21.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "92" begin = "18" end = "36"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "91" begin = "18" end = "36"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `bezoutProperty'">
     <goal why_file="why/Gcd_po11.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "94" begin = "18" end = "57"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "93" begin = "18" end = "57"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Behavior">
     <goal why_file="why/Gcd_po12.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "99" begin = "15" end = "219"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "98" begin = "15" end = "219"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Gcd_po13.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "99" begin = "15" end = "219"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "98" begin = "15" end = "219"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Gcd_po14.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "99" begin = "15" end = "219"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "98" begin = "15" end = "219"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Gcd_po15.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "99" begin = "15" end = "219"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "98" begin = "15" end = "219"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Gcd_po16.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "99" begin = "15" end = "219"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "98" begin = "15" end = "219"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Gcd_po17.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "99" begin = "15" end = "219"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "98" begin = "15" end = "219"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Gcd_po18.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "99" begin = "15" end = "219"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "98" begin = "15" end = "219"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Gcd_po19.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "104" begin = "25" end = "26"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "103" begin = "25" end = "26"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Gcd_po20.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "104" begin = "25" end = "26"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "103" begin = "25" end = "26"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -4459,7 +4458,7 @@ why -simplify [...] why/Gcd.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; Gcd_gcd_ensures_bezoutProperty_po_1, File "HOME/tests/java/Gcd.java", line 94, characters 18-57
+;; Gcd_gcd_ensures_bezoutProperty_po_1, File "HOME/tests/java/Gcd.java", line 93, characters 18-57
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -4482,17 +4481,17 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ return mutable_x_8)
 (EXISTS (a_2) (EXISTS (b_1) (EQ (+ (* a_2 x_8) (* b_1 y_8)) return)))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_1, File "HOME/tests/java/Gcd.java", line 99, characters 15-219
+;; Gcd_gcd_ensures_default_po_1, File "HOME/tests/java/Gcd.java", line 98, characters 15-219
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0)) (EQ (+ (* 1 x_8) (* 0 y_8)) x_8))))
 
-;; Gcd_gcd_ensures_default_po_2, File "HOME/tests/java/Gcd.java", line 99, characters 15-219
+;; Gcd_gcd_ensures_default_po_2, File "HOME/tests/java/Gcd.java", line 98, characters 15-219
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0)) (EQ (+ (* 0 x_8) (* 1 y_8)) y_8))))
 
-;; Gcd_gcd_ensures_default_po_3, File "HOME/tests/java/Gcd.java", line 99, characters 15-219
+;; Gcd_gcd_ensures_default_po_3, File "HOME/tests/java/Gcd.java", line 98, characters 15-219
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -4524,7 +4523,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (>= mutable_x_8_0 0))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_4, File "HOME/tests/java/Gcd.java", line 99, characters 15-219
+;; Gcd_gcd_ensures_default_po_4, File "HOME/tests/java/Gcd.java", line 98, characters 15-219
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -4556,7 +4555,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (>= mutable_y_8_0 0))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_5, File "HOME/tests/java/Gcd.java", line 99, characters 15-219
+;; Gcd_gcd_ensures_default_po_5, File "HOME/tests/java/Gcd.java", line 98, characters 15-219
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -4589,7 +4588,7 @@ why -simplify [...] why/Gcd.why
 (FORALL (d_2)
 (IMPLIES (isGcd mutable_x_8_0 mutable_y_8_0 d_2) (isGcd x_8 y_8 d_2))))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_6, File "HOME/tests/java/Gcd.java", line 99, characters 15-219
+;; Gcd_gcd_ensures_default_po_6, File "HOME/tests/java/Gcd.java", line 98, characters 15-219
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -4621,7 +4620,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (EQ (+ (* a_3_0 x_8) (* b_2_0 y_8)) mutable_x_8_0))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_7, File "HOME/tests/java/Gcd.java", line 99, characters 15-219
+;; Gcd_gcd_ensures_default_po_7, File "HOME/tests/java/Gcd.java", line 98, characters 15-219
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -4653,7 +4652,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (EQ (+ (* c0 x_8) (* d_1_0 y_8)) mutable_y_8_0))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_8, File "HOME/tests/java/Gcd.java", line 104, characters 25-26
+;; Gcd_gcd_ensures_default_po_8, File "HOME/tests/java/Gcd.java", line 103, characters 25-26
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -4685,7 +4684,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (<= 0 mutable_y_8))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_9, File "HOME/tests/java/Gcd.java", line 104, characters 25-26
+;; Gcd_gcd_ensures_default_po_9, File "HOME/tests/java/Gcd.java", line 103, characters 25-26
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -4717,7 +4716,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (< mutable_y_8_0 mutable_y_8))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_resultIsGcd_po_1, File "HOME/tests/java/Gcd.java", line 92, characters 18-36
+;; Gcd_gcd_ensures_resultIsGcd_po_1, File "HOME/tests/java/Gcd.java", line 91, characters 18-36
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -4738,7 +4737,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (<= mutable_y_8 0)
 (FORALL (return) (IMPLIES (EQ return mutable_x_8) (isGcd x_8 y_8 return)))))))))))))))
 
-;; Gcd_gcd_safety_po_1, File "HOME/tests/java/Gcd.java", line 107, characters 20-25
+;; Gcd_gcd_safety_po_1, File "HOME/tests/java/Gcd.java", line 106, characters 20-25
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -6157,10 +6156,10 @@ goal Gcd_gcd_safety_po_1:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ???????.??.......#.... (12/0/9/1/0)
+why/Gcd_why.why               : ???????.??.......?.... (12/0/10/0/0)
 total   :  22
 valid   :  12 ( 55%)
 invalid :   0 (  0%)
-unknown :   9 ( 41%)
-timeout :   1 (  5%)
+unknown :  10 ( 45%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

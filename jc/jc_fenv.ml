@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.ml,v 1.3 2008-09-18 13:20:40 moy Exp $ *)
+(* $Id: jc_fenv.ml,v 1.4 2008-10-07 15:54:20 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -89,7 +89,9 @@ sig
 	mutable jc_logic_info_param_regions : region list;
 	mutable jc_logic_info_effects : effect;
 	mutable jc_logic_info_calls : logic_info list;
+(* obsolete
 	mutable jc_logic_info_is_recursive : bool;
+*)
 	mutable jc_logic_info_labels : label list;
       }
 
@@ -141,7 +143,9 @@ struct
 	mutable jc_logic_info_param_regions : region list;
 	mutable jc_logic_info_effects : effect;
 	mutable jc_logic_info_calls : logic_info list;
+(* obsolete
 	mutable jc_logic_info_is_recursive : bool;
+*)
 	mutable jc_logic_info_labels : label list;
       }
 

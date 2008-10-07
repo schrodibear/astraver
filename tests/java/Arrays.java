@@ -34,10 +34,9 @@
  * l is an integer and not an int, because used as t.length which 
  * (in the logic) returns an integer and not an int 
  */
-/*@ predicate is_max{L}(int[] t,int i,integer l) {
+/*@ predicate is_max{L}(int[] t,int i,integer l) =
   @   t != null && 0 <= i < l <= t.length &&
-  @   (\forall integer j; 0 <= j < l ==> t[j] <= t[i])
-  @ }
+  @   (\forall integer j; 0 <= j < l ==> t[j] <= t[i]) ;
   @*/
 
 public class Arrays {

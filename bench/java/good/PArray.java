@@ -36,20 +36,16 @@
 
 //@ logic double select(larray t, integer i);
 
-/*@ logic larray 
-  @  store(larray t, integer i, double x);
-  @*/
-
-/*@ axiom select_store_eq:
-  @  \forall larray t, integer i, double x;
-  @   select(store(t,i,x),i) == x;
-  @*/
-
-/*@ axiom select_store_neq:
-  @  \forall larray t, integer i j;
-  @   \forall double x;
-  @    i != j ==> 
-  @     select(store(t,i,x),j) == select(x,j);
+/*@ logic larray store(larray t, integer i, double x) {
+  @  axiom select_store_eq:
+  @   \forall larray t, integer i, double x;
+  @    select(store(t,i,x),i) == x;
+  @  axiom select_store_neq:
+  @   \forall larray t, integer i j;
+  @    \forall double x;
+  @     i != j ==> 
+  @      select(store(t,i,x),j) == select(x,j);
+  @ }
   @*/
 
 

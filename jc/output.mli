@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.23 2008-08-06 15:17:04 moy Exp $ i*)
+(*i $Id: output.mli,v 1.24 2008-10-07 15:54:20 marche Exp $ i*)
 
 type constant =
   | Prim_void
@@ -180,12 +180,17 @@ val make_pre : assertion -> expr -> expr;;
 val append : expr -> expr -> expr
 
 type why_decl =
-  | Param of bool * string * why_type  (*r parameter in why *)
+  | Param of bool * string * why_type         (*r parameter in why *)
   | Def of string * expr               (*r global let in why *)
-  | Logic of bool * string * (string * logic_type) list * logic_type  (*r logic decl in why *)
-  | Axiom of string * assertion            (*r Axiom *)
-  | Goal of string * assertion            (*r Goal *)
+  | Logic of bool * string * (string * logic_type) list * logic_type    (*r logic decl in why *)
   | Predicate of bool * string * (string * logic_type) list * assertion  
+(*
+  | Axiomatic of bool * string * (string * logic_type) list * logic_type * 
+      (string * assertion) list
+      (*r axiomatic definition *)
+*)
+  | Axiom of string * assertion         (*r Axiom *)
+  | Goal of string * assertion         (*r Goal *)
   | Function of bool * string * (string * logic_type) list * logic_type * term
   | Type of string * string list
   | Exception of string * logic_type option
