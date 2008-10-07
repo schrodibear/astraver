@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.146 2008-09-26 09:11:51 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.147 2008-10-07 12:12:20 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -124,6 +124,12 @@ type offset_kind = Offset_max | Offset_min
 
 type quantifier = Forall | Exists
 
+type asrt_kind = 
+  | Aassert (* Assertion to prove *)
+  | Ahint   (* Assertion to help in proofs, 
+	       can be either discarded or both used and proved *)
+  | Aassume (* Assertion that can be relied on without proof *)
+
 type real_conversion = Integer_to_real | Real_to_integer
 
 type ppattern_node =
@@ -172,8 +178,7 @@ and pexpr_node =
   | JCPEmatch of pexpr * (ppattern * pexpr) list
 (*  | JCPSskip *) (* -> JCPEconst JCCvoid *)
   | JCPEblock of pexpr list
-  | JCPEassert of string list * bool * pexpr
-      (* 2nd arg is true if it is an assertion, false if it is an assumption *)
+  | JCPEassert of string list * asrt_kind * pexpr
   | JCPEcontract of 
       pexpr option * pexpr option * pexpr pbehavior list * pexpr 
 	(* requires, decreases, behaviors, expression *)
@@ -269,7 +274,7 @@ type nexpr_node =
   | JCNEalloc of nexpr * string
   | JCNEfree of nexpr
   | JCNElet of ptype option * string * nexpr option * nexpr
-  | JCNEassert of string list * bool * nexpr
+  | JCNEassert of string list * asrt_kind * nexpr
   | JCNEcontract of 
       nexpr option * nexpr option * nexpr pbehavior list * nexpr 
 	(* requires, decreases, behaviors, expression *)
@@ -483,7 +488,7 @@ type ('li,'fi) expr_node =
   | JCEalloc of ('li,'fi) expr * struct_info
   | JCEfree of ('li,'fi) expr
   | JCElet of var_info * ('li,'fi) expr option * ('li,'fi) expr
-  | JCEassert of string list * bool * 'li assertion
+  | JCEassert of string list * asrt_kind * 'li assertion
   | JCEcontract of 'li assertion option * 'li term option * var_info * 
       (Loc.position * string * 'li behavior) list * ('li,'fi) expr
   | JCEblock of ('li,'fi) expr list

@@ -89,6 +89,11 @@ let offset_kind fmt k =
     | Offset_max -> fprintf fmt "ax"
     | Offset_min -> fprintf fmt "in"
 
+and asrt_kind fmt = function
+  | Aassert -> fprintf fmt "assert"
+  | Ahint -> fprintf fmt "hint"
+  | Aassume -> fprintf fmt "assume"
+
 let alloc_class fmt = function
   | JCalloc_root vi -> fprintf fmt "alloc-root(%s)" vi.jc_root_info_name
   | JCalloc_bitvector -> fprintf fmt "alloc-bitvector"

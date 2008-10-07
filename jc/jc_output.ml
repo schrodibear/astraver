@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.120 2008-10-06 16:51:24 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.121 2008-10-07 12:12:21 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -363,8 +363,8 @@ let rec expr fmt e =
 	  fprintf fmt "@[%a %s; %a@]"  
 	    print_type vi.jc_var_info_type vi.jc_var_info_name expr e2
       | JCEassert(behav,asrt,a) -> 
-	  fprintf fmt "@\n%s %a%a;" 
-	    (if asrt then "assert" else "assume")
+	  fprintf fmt "@\n%a %a%a;" 
+	    asrt_kind asrt
 	    (print_list_delim 
 	       (constant_string "for ") (constant_string ": ") 
 	       comma string)

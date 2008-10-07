@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.66 2008-09-26 09:11:51 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.67 2008-10-07 12:12:21 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -110,8 +110,9 @@
 	      match v with
 		| "None" -> Jc_env.AnnotNone
 		| "Invariants" -> Jc_env.AnnotInvariants
-		| "WeakPre" -> Jc_env.AnnotWeakPre
+		| "ElimPre" -> Jc_env.AnnotElimPre
 		| "StrongPre" -> Jc_env.AnnotStrongPre
+		| "WeakPre" -> Jc_env.AnnotWeakPre
 		| _ -> lex_error lexbuf ("unknown annotation policy " ^ v)
 	  end  
       | "AbstractDomain" ->
@@ -190,6 +191,7 @@ rule token = parse
   | "for"                   { FOR }
   | "free"                  { FREE }
   | "goto"                  { GOTO }
+  | "hint"                  { HINT }
   | "if"                    { IF }
   | "in"                    { IN }
   | "integer"               { INTEGER }

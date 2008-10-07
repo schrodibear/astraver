@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.356 2008-10-06 09:16:28 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.357 2008-10-07 12:12:20 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1937,12 +1937,18 @@ and expr e =
 	    ~type_safe:false ~global_assertion:false ~relocate:false
 	    LabelHere LabelPre a
 	in
-	if asrt && assert_in_current_behavior b then
-          Assert(a',Void)
-	else if assume_in_current_behavior b then
-	  assumption [ a ] a'
-	else
-	  Void
+	begin match asrt with
+	  | Aassert | Ahint ->
+	      if assert_in_current_behavior b then
+		Assert(a',Void)
+	      else if assume_in_current_behavior b then
+		assumption [ a ] a'
+	      else Void
+	  | Aassume ->
+	      if assume_in_current_behavior b then
+		assumption [ a ] a'
+	      else Void
+	end
     | JCEloop(la,e1) ->
 	let inv = 
 	  List.map snd 

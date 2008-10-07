@@ -80,8 +80,8 @@ let rec expr fmt e =
     | JCNElet(None, id, None, e1) ->
         out "(@[<hv 2>let %s in@ %a@])" id expr e1
     | JCNEassert (behav,asrt,e1) ->
-        out "(%s %a%a)" 
-	  (if asrt then "assert" else "assume")
+        out "(%a %a%a)" 
+	  asrt_kind asrt
 	  (print_list_delim 
 	     (constant_string "for ") (constant_string ": ") 
 	     comma string)
