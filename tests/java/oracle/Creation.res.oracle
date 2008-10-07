@@ -484,10 +484,19 @@ zenon/%_why.znn: why/%.why
 	@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(JESSIELIBFILE) why/$*.why
 
 smtlib: smtlib/Creation_why.smt
-	@echo 'Running Yices on proof obligations' && ($(DP) $^)
+	@echo 'Running Z3 on proof obligations' && ($(DP) $^)
 
 smtlib/%_why.smt: why/%.why
 	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIBFILE) why/$*.why
+
+z3: smtlib/Creation_why.smt
+	@echo 'Running Z3 on proof obligations' && ($(DP) -smt-solver z3 $^)
+
+yices: smtlib/Creation_why.smt
+	@echo 'Running Yices on proof obligations' && ($(DP) -smt-solver yices $^)
+
+cvc3: smtlib/Creation_why.smt
+	@echo 'Running CVC3 on proof obligations' && ($(DP) -smt-solver cvc3 $^)
 
 gui stat: Creation.stat
 

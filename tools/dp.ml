@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.44 2008-09-30 15:55:51 marche Exp $ i*)
+(*i $Id: dp.ml,v 1.45 2008-10-07 09:17:12 moy Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -42,7 +42,7 @@ let timings = ref true (* print timings *)
 let files = Queue.create ()
 
 type smt_solver = Yices | CVC3 | Z3
-let smt_solver = ref Yices
+let smt_solver = ref Z3
 let set_smt_solver = function
   | "yices" -> smt_solver := Yices
   | "cvc3" -> smt_solver := CVC3
