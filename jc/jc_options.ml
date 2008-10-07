@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.34 2008-09-30 15:55:51 marche Exp $ i*)
+(*i $Id: jc_options.ml,v 1.35 2008-10-07 08:02:40 moy Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -160,6 +160,12 @@ let _ =
 	  "  verify only these functions";
       ]
       add_file usage
+
+let () = 
+  if !trust_ai && !int_model = IMmodulo then
+    (Format.eprintf "cannot trust abstract interpretation \
+in modulo integer model"; 
+     assert false)
 
 let usage () =
   eprintf "usage: %s@." usage;

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.131 2008-10-06 16:51:24 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.132 2008-10-07 08:02:40 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -565,31 +565,29 @@ let rec p_term_of_expr e =
 
 let term_of_expr e =
   let rec term e = 
-    let tnode = match e#node with
-      | JCEconst c -> JCTconst c
-      | JCEvar vi -> JCTvar vi
+    let tnode, ty = match e#node with
+      | JCEconst c -> JCTconst c, e#typ
+      | JCEvar vi -> JCTvar vi, e#typ
       | JCEbinary (e1, (bop,opty), e2) -> 
-	  JCTbinary (term e1, ((bop :> bin_op),opty), term e2)
-      | JCEunary (uop, e1) -> JCTunary (uop, term e1)
-      | JCEshift (e1, e2) -> JCTshift (term e1, term e2)
-      | JCEderef (e1, fi) -> JCTderef (term e1, LabelHere, fi)
-      | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, LabelHere, st)
-      | JCEcast (e1, st) -> JCTcast (term e1, LabelHere, st)
-      | JCErange_cast(e1,ri) -> JCTrange_cast(term e1,ri)
-      | JCEreal_cast(e1,f) -> JCTreal_cast(term e1,f)
-	  (* range does not modify term value *)
-(* 	  (term e1)#node  *) (* but it modifies its type !!! *)
-      | JCEif (e1, e2, e3) -> JCTif (term e1, term e2, term e3)
-      | JCEoffset (off, e1, st) -> JCToffset (off, term e1, st)
+	  JCTbinary (term e1, ((bop :> bin_op),opty), term e2), e#typ
+      | JCEunary (uop, e1) -> JCTunary (uop, term e1), e#typ
+      | JCEshift (e1, e2) -> JCTshift (term e1, term e2), e#typ
+      | JCEderef (e1, fi) -> JCTderef (term e1, LabelHere, fi), e#typ
+      | JCEinstanceof (e1, st) -> JCTinstanceof (term e1, LabelHere, st), e#typ
+      | JCEcast (e1, st) -> JCTcast (term e1, LabelHere, st), e#typ
+      | JCErange_cast(e1,_)
+      | JCEreal_cast(e1,_) -> let t1 = term e1 in t1#node, t1#typ
+      | JCEif (e1, e2, e3) -> JCTif (term e1, term e2, term e3), e#typ
+      | JCEoffset (off, e1, st) -> JCToffset (off, term e1, st), e#typ
       | JCEalloc (e, _) -> (* Note: \offset_max(t) = length(t) - 1 *)
-	  JCTbinary (term e, (`Bsub,`Integer), new term ~typ:integer_type (JCTconst (JCCinteger "1")) )
+	  JCTbinary (term e, (`Bsub,`Integer), new term ~typ:integer_type (JCTconst (JCCinteger "1")) ), e#typ
       | JCEfree _ -> failwith "Not a term"
       | _ -> failwith "Not a term"
 (*       | JCEmatch (e, pel) -> *)
 (* 	  let ptl = List.map (fun (p, e) -> (p, term_of_expr e)) pel in *)
 (* 	    JCTmatch (term_of_expr e, ptl) *)
     in
-      new term ~typ:e#typ ~region:e#region tnode 
+      new term ~typ:ty ~region:e#region tnode 
   in
     try Some (term e) with Failure _ -> None
 
@@ -1798,24 +1796,22 @@ let simple_test_assertion mgr a pre =
 	    | _ -> extract_environment_and_dnf env nota
 	  end
       | JCAapp app ->
-	  let li = app.jc_app_fun in
-	  if debug then printf "[test_assertion] %a@." Jc_output.assertion a;
-	  if li.jc_logic_info_name = "full_separated" then env,Dnf.true_ else
-	    let _, term_or_assertion = 
-	      try Hashtbl.find Jc_typing.logic_functions_table li.jc_logic_info_tag
-	      with Not_found -> assert false 
-	    in
-	    begin
-	      match term_or_assertion with
-		| JCAssertion a ->
-		    let a = List.fold_left2
-		      (fun a vi t ->
-			replace_vi_in_assertion vi t a)
-		      a li.jc_logic_info_parameters app.jc_app_args
-		    in
-		    extract_environment_and_dnf env a
-		| _ -> env, Dnf.true_
-	    end
+	  let f = app.jc_app_fun in
+	  let _, term_or_assertion = 
+	    try Hashtbl.find
+	      Jc_typing.logic_functions_table f.jc_logic_info_tag
+	    with Not_found -> assert false 
+	  in
+	  begin match term_or_assertion with
+	    | JCAssertion a ->
+		let a = List.fold_left2
+		  (fun a vi t ->
+		     replace_vi_in_assertion vi t a)
+		  a f.jc_logic_info_parameters app.jc_app_args
+		in
+		extract_environment_and_dnf env a
+	    | _ -> env, Dnf.true_
+	  end
       | JCAimplies _ | JCAiff _
       | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
       | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> env,Dnf.true_
