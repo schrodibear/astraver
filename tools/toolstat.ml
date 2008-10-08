@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.1 2008-10-08 01:22:04 moy Exp $ i*)
+(*i $Id: toolstat.ml,v 1.2 2008-10-08 01:33:08 moy Exp $ i*)
 
 (* Statistics on automatic provers results *)
 
@@ -101,11 +101,19 @@ let () =
   let records : record list = !records in
 
   let provers : (prover, unit) Hashtbl.t = Hashtbl.create 5 in
+  let tests : (test * int, unit) Hashtbl.t = Hashtbl.create 5 in
   let tests_count : (test * int, int) Hashtbl.t = Hashtbl.create 5 in
   List.iter (fun (prover,test,summary,detail,time) ->
 	       Hashtbl.replace provers prover ();
 	       List.iter
-		 (fun i -> intadd tests_count (test,i) 1) (valid_detail detail)
+		 (fun i -> 
+		    Hashtbl.replace tests (test,i) ();
+		    intadd tests_count (test,i) 1
+		 ) (valid_detail detail);
+	       List.iter
+		 (fun i -> 
+		    Hashtbl.replace tests (test,i) ()
+		 ) (notvalid_detail detail)
 	    ) records;
 
   printf "@.Best individual provers:@.";
@@ -173,5 +181,16 @@ let () =
 	    (fun i (p,a,b) ->
 	       printf "%d: %s   \t%d alone \t%d by others@." i p a b;
 	       i+1
-	    ) 1 provers_ranking)
+	    ) 1 provers_ranking);
   
+  printf "@.Tests not proved:@.";
+  let tests_notproved = Hashtbl.create 17 in
+  Hashtbl.iter (fun (test,i) () ->
+		  if hfind 0 tests_count (test,i) = 0 then
+		    intadd tests_notproved test 1
+	       ) tests;
+  Hashtbl.iter (fun test n ->
+		  printf "%s \t%d not proved@." test n
+	       ) tests_notproved;
+		  
+  printf "@."
