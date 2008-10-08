@@ -154,11 +154,12 @@ DP=bin/why-dp.$(OCAMLBEST)
 CPULIMIT=bin/why-cpulimit
 WHYOBFUSCATOR=bin/why-obfuscator.$(OCAMLBEST)
 WHYSTAT=bin/why-stat.$(OCAMLBEST)
+TOOLSTAT=bin/tool-stat.$(OCAMLBEST)
 SIMPLIFY2WHY=bin/simplify2why.$(OCAMLBEST)
 REGTEST=regtest.$(OCAMLBEST)
 
 TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
-      $(SIMPLIFY2WHY) $(WHYSTAT) 
+      $(SIMPLIFY2WHY) $(WHYSTAT) $(TOOLSTAT)
 
 ifeq ($(OCAMLBEST),opt)
 JCLIB=jc/jc.cmo jc/jc.cmx
@@ -587,6 +588,16 @@ bin/why-stat.byte: $(STATCMO)
 bin/why-stat.opt: $(STATCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
+TOOLCMO=src/loc.cmo src/pp.cmo tools/toolstat_pars.cmo \
+	tools/toolstat_lex.cmo tools/toolstat.cmo
+TOOLCMX=$(TOOLCMO:.cmo=.cmx)
+
+bin/tool-stat.byte: $(TOOLCMO)
+	$(OCAMLC) $(BFLAGS) -o $@ $^
+
+bin/tool-stat.opt: $(TOOLCMX)
+	$(OCAMLOPT) $(OFLAGS) -o $@ $^
+
 bin/cadlog.opt: c/cversion.cmx jc/jc_version.cmx \
 		java/java_version.cmx tools/cadlog.cmx
 	$(OCAMLOPT) unix.cmxa -o $@ $^
@@ -708,7 +719,7 @@ java_api:
 
 install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@ 
 
-install-binary: $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@ $(WHYSTAT) $(WHYOBFUSCATOR) 
+install-binary: $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@ $(WHYSTAT) $(TOOLSTAT) $(WHYOBFUSCATOR) 
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(WHYCONFIG) $(BINDIR)/why-config$(EXE)
@@ -722,6 +733,7 @@ install-binary: $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2H
 	cp -f $(RVMERGE) $(BINDIR)/rv_merge$(EXE)
 	cp -f $(WHYOBFUSCATOR) $(BINDIR)/why-obfuscator$(EXE)
 	cp -f $(WHYSTAT) $(BINDIR)/why-stat$(EXE)
+	cp -f $(TOOLSTAT) $(BINDIR)/tool-stat$(EXE)
 	cp -f $(SIMPLIFY2WHY) $(BINDIR)/simplify2why$(EXE)
 	if test -f bin/gwhy.$(OCAMLBEST); then \
 		cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy-bin$(EXE); \
@@ -1100,6 +1112,7 @@ clean::
 	rm -f bin/why-obfuscator.opt bin/why-obfuscator.byte
 	rm -f bin/rv_merge.opt bin/rv_merge.byte
 	rm -f bin/why-stat.opt bin/why-stat.byte
+	rm -f bin/tool-stat.opt bin/tool-stat.byte
 	rm -f bin/why2html.opt bin/why2html.byte
 	rm -f bin/why-dp.opt bin/why-dp.byte
 	rm -f bin/why-cpulimit
