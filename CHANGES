@@ -1,4 +1,5 @@
 
+  o why: preliminary support for inductive definitions 
   o krakatoa/jessie: new syntax for axiomatic definitions
   o Coq support for floats requires Coq version 8.1 at least
   o Jessie bug fix: 'simplify' entry of the generated makefile was ignoring

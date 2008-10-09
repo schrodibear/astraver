@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.84 2008-10-02 12:05:57 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.85 2008-10-09 08:49:31 marche Exp $ i*)
 
 open Printf
 open Options
@@ -163,6 +163,8 @@ module View = struct
   let first_col = GTree.view_column ~title:"Proof obligations " 
     ~renderer:(renderer, ["text", Model.name]) () 
  
+  let () = first_col#set_resizable true
+  let () = first_col#set_max_width 200
 
   let add_columns ~(view : GTree.view) ~_model =
     (* let renderer = GTree.cell_renderer_text [`XALIGN 0.] in *)
@@ -174,6 +176,7 @@ module View = struct
 	   GTree.view_column ~title:(prover_name_with_version_and_enc p) 
 	     ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) ()
 	 in
+	 vc#set_resizable true;
 	 p.pr_viewcol <- Some vc;
 	 if p.pr_info.DpConfig.version <> "" then vc#set_clickable true;
 	 let _n : int = view#append_column vc in

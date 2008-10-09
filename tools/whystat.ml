@@ -182,6 +182,7 @@ let decl = function
   | Logic _
   | Axiom _
   | Predicate_def _
+  | Inductive_def _
   | Function_def _
   | TypeDecl _ ->
       ()

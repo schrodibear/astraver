@@ -451,6 +451,14 @@ let decl fmt = function
       let m = List.fold_left rename M.empty (List.map (fun (_,x,_) -> x) bl) in
       fprintf fmt "@[<hov 2>predicate %a(%a) =@ %a@]" gident id 
 	(print_list comma (logic_binder m)) bl (lexpr m) p
+  | Inductive_def(_,id, bl, l) ->
+      rename_global id;
+      fprintf fmt "@[<hov 2>predicate %a: @[%a@] {@\n  @[<v 0>%a@]@\n}@\n@]" 
+	gident id 
+	logic_type bl 
+	(print_list newline 
+	   (fun fmt (_,id,p) -> 
+	      fprintf fmt "%a: %a;" gident id (lexpr M.empty) p)) l
   | Function_def (_, id, bl, pt, e) ->
       rename_global id;
       let m = List.fold_left rename M.empty (List.map (fun (_,x,_) -> x) bl) in
