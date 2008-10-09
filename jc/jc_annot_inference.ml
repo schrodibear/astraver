@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.134 2008-10-07 16:07:21 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.135 2008-10-09 11:33:06 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2032,6 +2032,16 @@ let join mgr val1 val2 =
   let val2 = Abstract1.change_environment mgr val2 env false in
   Abstract1.join mgr val1 val2
 
+let stronger mgr val1 val2 =
+  let env = Environment.lce (Abstract1.env val1) (Abstract1.env val2) in
+  let val1 = Abstract1.change_environment mgr val1 env false in
+  let val2 = Abstract1.change_environment mgr val2 env false in
+  Abstract1.is_leq mgr val1 val2
+
+let extend mgr env val1 =
+  let env = Environment.lce env (Abstract1.env val1) in
+  Abstract1.change_environment mgr val1 env false
+
 let join_abstract_value mgr pair1 pair2 =
   {
     jc_absval_regular =
@@ -2863,7 +2873,7 @@ and ai_function mgr iaio targets (fi, loc, fs, sl) =
 	   Hashtbl.replace iai.jc_interai_function_abs fi.jc_fun_info_tag abs);
     List.iter 
       (fun target -> 
-	 if Jc_options.verbose then
+	 if Jc_options.debug then
 	   printf 
 	     "%a@[<v 2>Inferring assert invariant@\n%a@]@."
 	     Loc.report_position target.jc_target_location
@@ -2904,7 +2914,7 @@ and ai_function mgr iaio targets (fi, loc, fs, sl) =
 	   Hashtbl.replace iai.jc_interai_function_abs fi.jc_fun_info_tag abs);
     List.iter 
       (fun target -> 
-	 if Jc_options.verbose then
+	 if Jc_options.debug then
 	   printf 
 	     "%a@[<v 2>Inferring assert invariant@\n%a@]@."
 	     Loc.report_position target.jc_target_location
@@ -3336,12 +3346,19 @@ let contradictory =
       printf "@[<v 2>[contradictory] %b@]@." res;
     res
 
+let abstract_overapprox mgr env a =
+  let conjuncts = conjuncts a in
+  List.fold_left 
+    (fun absval conjunct ->
+       try
+	 let dnf = snd (linstr_of_assertion env conjunct) in
+	 Dnf.test mgr absval dnf
+       with Parser.Error _ | Failure _ -> absval
+    ) (Abstract1.top mgr env) conjuncts
+
 let simplify =
-  (*   a _ = if Jc_options.debug then *)
-  (*     printf "@[<v 2>[simplify]@\n%a@]@." Jc_output.assertion a; *)
-  (*   a *)
   let mgr = Polka.manager_alloc_strict () in
-  fun inita inva ->
+  fun ?inva inita ->
     if Jc_options.debug then
       printf "@[<v 2>[simplify]@\n%a@]@." Jc_output.assertion inita;
     let simpla = if tautology inita then new assertion JCAtrue else
@@ -3354,52 +3371,67 @@ let simplify =
       let disjuncts = List.map Atp.conjuncts disjuncts in
       let disjuncts = List.map (List.map asrt_of_atp) disjuncts in
 
-      let disjuncts =
-	List.filter (fun conjunct ->
-		       not(contradictory (make_and conjunct) inva)
-		    ) disjuncts
+      let invapprox = 
+	Option_misc.map (abstract_overapprox mgr env) inva 
+      in
+      let disjuncts = match inva with
+	| None -> disjuncts
+	| Some inva -> 
+	    List.filter (fun conjunct ->
+			   not(contradictory (make_and conjunct) inva)
+			) disjuncts
       in
 
       let abstract_disjuncts,other_disjuncts =
-	List.fold_right (fun conjunct (abstractl,otherl) ->
-			   try
-			     if Jc_options.debug then
-			       printf "asrt conjunct : %a@."
-				 (Pp.print_list (fun fmt () -> printf " /\\ ")
-				    Jc_output.assertion)
-				 conjunct;
-			     let absval = Abstract1.top mgr env in
-			     (* Overapproximate conjunct. *)
-			     let cstrs = List.map (linstr_of_assertion env) conjunct in
-			     let cstrs = List.map snd cstrs in
-			     let dnf = Dnf.make_and cstrs in
-			     (* 	  if Jc_options.debug then *)
-			     (* 	    printf "linstr conjunct : %a@."  *)
-			     (* 	      (Pp.print_list (fun fmt () -> printf " /\\ ")  *)
-			     (* 		 (fun fmt s -> print_string s)) *)
-			     (* 	      cstrs; *)
-			     let absval = Dnf.test mgr absval dnf in
-			     if Jc_options.debug then
-			       printf "abstract conjunct : %a@." Abstract1.print absval;
-			     if (Abstract1.is_top mgr absval) then
-			       failwith "Incorrect overapproximation";
-			     if Abstract1.is_bottom mgr absval then
-			       abstractl, otherl
-			     else
-			       absval :: abstractl, otherl
-			   with Parser.Error _ | Failure _ ->
-			     abstractl, make_and (List.map presentify conjunct) :: otherl
-			) disjuncts ([],[])
+	List.fold_right 
+	  (fun conjunct (abstractl,otherl) ->
+	     try
+	       if Jc_options.debug then
+		 printf "asrt conjunct : %a@."
+		   (Pp.print_list (fun fmt () -> printf " /\\ ")
+		      Jc_output.assertion)
+		   conjunct;
+	       let absval = Abstract1.top mgr env in
+	       (* Overapproximate conjunct. *)
+	       let cstrs = List.map (linstr_of_assertion env) conjunct in
+	       let cstrs = List.map snd cstrs in
+	       let dnf = Dnf.make_and cstrs in
+	       (* 	  if Jc_options.debug then *)
+	       (* 	    printf "linstr conjunct : %a@."  *)
+	       (* 	      (Pp.print_list (fun fmt () -> printf " /\\ ")  *)
+	       (* 		 (fun fmt s -> print_string s)) *)
+	       (* 	      cstrs; *)
+	       let absval = Dnf.test mgr absval dnf in
+	       if Jc_options.debug then
+		 printf "abstract conjunct : %a@." Abstract1.print absval;
+	       if (Abstract1.is_top mgr absval) then
+		 failwith "Incorrect overapproximation";
+	       if Abstract1.is_bottom mgr absval then
+		 abstractl, otherl
+	       else
+		 absval :: abstractl, otherl
+	     with Parser.Error _ | Failure _ ->
+	       abstractl, make_and (List.map presentify conjunct) :: otherl
+	  ) disjuncts ([],[])
       in
       let abstract_disjuncts =
-	List.fold_right (fun absval acc ->
-			   let acc = List.filter
-			     (fun av -> not (Abstract1.is_leq mgr av absval)) acc
-			   in
-			   if List.exists
-			     (fun av -> Abstract1.is_leq mgr absval av) acc then acc
-			   else absval :: acc
-			) abstract_disjuncts []
+	List.fold_right
+	  (fun absval acc ->
+	     (* Do not consider conjunct if less precise than [inva] *)
+	     let skip = match invapprox with 
+	       | None -> false 
+	       | Some invapprox -> stronger mgr invapprox absval
+	     in
+	     if skip then acc else
+	       (* Remove conjuncts that are weaker than current one *)
+	       let acc = 
+		 List.filter (fun av -> not (stronger mgr absval av)) acc
+	       in
+	       (* Do not add current conjunct if weaker than another one *)
+	       if List.exists
+		 (fun av -> stronger mgr av absval) acc then acc
+	       else absval :: acc
+	  ) abstract_disjuncts []
       in
       List.iter (Abstract1.minimize mgr) abstract_disjuncts;
       let abstract_disjuncts = List.map (mkinvariant mgr) abstract_disjuncts in
@@ -3410,7 +3442,7 @@ let simplify =
       printf "@[<v 2>[simplify] initial:@\n%a@]@." Jc_output.assertion inita;
     if debug then
       printf "@[<v 2>[simplify] w.r.t. invariant:@\n%a@]@."
-	Jc_output.assertion inva;
+	(print_option Jc_output.assertion) inva;
     if debug then
       printf "@[<v 2>[simplify] final:@\n%a@]@." Jc_output.assertion simpla;
     simpla
@@ -3435,20 +3467,20 @@ let quantif_eliminate qf finv =
 	      if Jc_options.debug then
 		printf "@[<v 2>After negative disjunctive normal form@\n%a@]@." 
 		  (fun fmt fm -> Atp.printer fm) qe;
-	      let res = simplify (asrt_of_atp qe) (new assertion JCAtrue) in
+	      let res = simplify (asrt_of_atp qe) in
 	      let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
-	      simplify (make_not res) finv
+	      simplify ~inva:finv (make_not res)
 	  | _ ->
 	      let qe = (Atp.dnf qe) in
 	      if Jc_options.debug then
 		printf "@[<v 2>After disjunctive normal form@\n%a@]@." 
 		  (fun fmt fm -> Atp.printer fm) qe;
 	      let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
-	      simplify (asrt_of_atp qe) finv
+	      simplify ~inva:finv (asrt_of_atp qe)
 	end
     | q -> 
 	let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
-	simplify (asrt_of_atp q) finv
+	simplify ~inva:finv (asrt_of_atp q)
 
 let collect_free_vars = 
   fold_term_and_assertion 
@@ -3532,14 +3564,14 @@ let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
     let elima = quantif_eliminate quanta inva in
     if contradictory elima patha then
       begin
-	if Jc_options.verbose then
+	if Jc_options.debug then
 	  printf "%a@[<v 2>No inferred %s@."
 	    Loc.report_position target.jc_target_location annot_name;
 	None
       end
     else
       begin
-	if Jc_options.verbose then
+	if Jc_options.debug then
 	  printf "%a@[<v 2>Inferring %s@\n%a@]@."
 	    Loc.report_position target.jc_target_location
 	    annot_name Jc_output.assertion elima;
@@ -3558,11 +3590,14 @@ let rec wp_expr weakpre =
       vi
   in
   fun target s curposts ->
+    let wp = wp_expr weakpre target in
     if debug then 
-      printf "[wp_expr] %a@." Loc.report_position s#pos;
+      printf "[wp_expr] %a@\n%a@\nfor stat %a@." Loc.report_position s#pos
+	(print_option Jc_output.assertion) curposts.jc_post_normal
+	Jc_output.expr target.jc_target_expr;
     let curposts = match s#node with
       | JCElet(vi,eo,s) ->
-	  let curposts = wp_expr weakpre target s curposts in
+	  let curposts = wp s curposts in
 	  let post = 
 	    match curposts.jc_post_normal with None -> None | Some a -> 
 	      let a = 
@@ -3589,7 +3624,7 @@ let rec wp_expr weakpre =
 	  in
 	  let curposts = add_modified_var curposts vi in
 	  { curposts with jc_post_normal = post; }
-      | JCEassign_var(vi,e) ->
+      | JCEassign_var(vi,e1) ->
 	  if debug then
 	    printf "[assignment]%s@." vi.jc_var_info_name;
 	  let vit = new term_var vi in
@@ -3603,7 +3638,7 @@ let rec wp_expr weakpre =
 		      && mem_term_in_assertion vit a)
 		then
 		  let a = replace_term_in_assertion vit t1 a in
-		  match term_of_expr e with
+		  match term_of_expr e1 with
 		    | None -> Some a
 		    | Some t2 ->
 			if vi.jc_var_info_type = boolean_type then
@@ -3623,7 +3658,8 @@ let rec wp_expr weakpre =
 	      (* Also add regular variable, for other branches in loop. *)
 	      add_modified_var curposts vi 
 	  in
-	  { curposts with jc_post_normal = post; }
+	  let curposts = { curposts with jc_post_normal = post; } in
+	  wp e1 curposts
       | JCEassign_heap(e1,fi,e2) ->
 	  begin match term_of_expr e1 with
 	    | None -> curposts (* TODO *)	| Some t1 ->
@@ -3819,15 +3855,37 @@ let rec wp_expr weakpre =
 	    (* 	  in *)
 	    (* 	  { curposts with jc_post_normal = post; } *)
       | JCEapp call -> 
-	  let curposts = wp_expr weakpre target s curposts in
+	  let curposts = wp s curposts in
 	  curposts
-      | _ -> assert false (* TODO *)
+      | JCEshift(e1,e2)
+      | JCEbinary(e1,_,e2) ->
+	  wp e1 (wp e2 curposts)
+      | JCEderef(e1,_)
+      | JCEunary(_,e1)
+      | JCEalloc(e1,_)
+      | JCEaddress(_,e1)
+      | JCEoffset(_,e1,_)
+      | JCEreal_cast(e1,_)
+      | JCErange_cast(e1,_)
+      | JCEbitwise_cast(e1,_)
+      | JCEinstanceof(e1,_)
+      | JCEcast(e1,_)
+      | JCEfree e1 ->
+	  wp e1 curposts
+      | JCEcontract (_, _, _, _, _) ->
+	  assert false (* TODO *)
+      | JCEvar _
+      | JCEconst _ -> 
+	  curposts
     in
     if s == target.jc_target_expr then
       (*       let a = new assertion(JCAimplies(target.jc_target_regular_invariant, *)
       (*       target.jc_target_assertion)) in *)
       let inita = initialize_target curposts target in
       assert (curposts.jc_post_normal = None);
+      if debug then 
+	printf "[wp_expr] found target %a@\n%a@." Loc.report_position s#pos
+	  Jc_output.assertion inita;
       { curposts with jc_post_normal = Some inita; }
     else curposts
 
@@ -3866,6 +3924,12 @@ let wp_function targets (f,pos,fs,sl) =
   let infer_req = ref [] in
   List.iter 
     (fun target ->
+       if Jc_options.debug then
+	 printf "%a@[<v 2>Infer precondition for assertion:@\n%a@]\
+@\n@[<v 2>under invariant:@\n%a@]@." 
+	   Loc.report_position target.jc_target_location 
+	   Jc_output.assertion target.jc_target_assertion
+	   Jc_output.assertion target.jc_target_regular_invariant;
        let initposts = {
 	 jc_post_normal = None;
 	 jc_post_exceptional = [];
@@ -3897,85 +3961,92 @@ let wp_function targets (f,pos,fs,sl) =
        match finalize_target ~is_function_level:true ~pos 
 	 ~anchor:f.jc_fun_info_name posts target init_req
        with 
-	 | None -> () (* precondition inconsistant or redondant *)
+	 | None -> () (* precondition inconsistant or redundant *)
 	 | Some infera -> (* valid precondition *)
-	     fs.jc_fun_requires <- make_and [ fs.jc_fun_requires; infera ];
 	     infer_req := infera :: !infer_req
     ) targets;
-  Format.printf "@[<v 2>Inferring precondition for function %s:@\n%a@]@." 
-    f.jc_fun_info_name Jc_output.assertion (make_and !infer_req)
+  (* Remove redundancy in precondition inferred *)
+  let inferred = simplify (make_and !infer_req) in
+  fs.jc_fun_requires <- make_and [ fs.jc_fun_requires; inferred ];
+  if Jc_options.verbose then
+    printf "@[<v 2>Inferring precondition for function %s:@\n%a@]@." 
+      f.jc_fun_info_name Jc_output.assertion inferred
 
 
 (*****************************************************************************)
 (* Augmenting loop invariants.                                               *)
 (*****************************************************************************)
 
-let collect_immediate_targets targets s = []
+let collect_immediate_targets targets s =
   (* Special version of [fold_expr] different from the one 
    * in [Jc_iterators] in that fpost is called after the body expr 
    * of the try block.
    *)
-  (*   let rec fold_expr fpre fpost acc s = *)
-  (*     let acc = fpre acc s in *)
-  (*     let acc = match s#node with *)
-  (*       | JCElet(_,_,s) ->  *)
-  (* 	  fold_expr fpre fpost acc s *)
-  (*       | JCEblock sl -> *)
-  (* 	  List.fold_left (fold_expr fpre fpost) acc sl *)
-  (*       | JCEmatch _ -> assert false (\* TODO *\) *)
-  (*       | JCEif(_,ts,fs) -> *)
-  (* 	  let acc = fold_expr fpre fpost acc ts in *)
-  (* 	  fold_expr fpre fpost acc fs *)
-  (*       | JCEtry(s,hl,fs) -> *)
-  (* 	  let acc = fold_expr fpre fpost acc s in *)
-  (*           let acc = fpost acc s in *)
-  (* 	  let acc =  *)
-  (* 	    List.fold_left (fun acc (_,_,s) ->  *)
-  (* 	      fold_expr fpre fpost acc s *)
-  (* 	    ) acc hl *)
-  (* 	  in *)
-  (* 	  fold_expr fpre fpost acc fs *)
-  (*       | JCEloop(_,ls) -> *)
-  (* 	  fold_expr fpre fpost acc ls *)
-  (*       | JCEreturn _ | JCEthrow _ | JCEassert _ | JCEassign_var _ | JCEapp _ *)
-  (*       | JCEassign_heap _ | JCEpack _ | JCEunpack _ | JCEreturn_void -> *)
-  (* 	  acc *)
-  (*       | _ -> assert false (\* TODO *\) *)
-  (*     in *)
-  (*     fpost acc s *)
-  (*   in *)
-  (*   let in_select_zone = ref false in *)
-  (*   let select_pre acc s = *)
-  (*     match s#node with *)
-  (*       | JCEassert a ->  *)
-  (* 	  if debug then printf "[select_pre] consider target@."; *)
-  (* 	  if debug then printf "[select_pre] in zone ? %b@." !in_select_zone; *)
-  (* 	  if !in_select_zone then  *)
-  (* 	    let target = target_of_assertion s s#pos a in *)
-  (* 	    if debug then printf "[select_pre] adding in_zone target@."; *)
-  (* 	    target::acc  *)
-  (* 	  else acc *)
-  (*       | JCEloop _ ->  *)
-  (* 	  if debug then printf "[select_pre] in_zone true@."; *)
-  (* 	  in_select_zone := true; acc *)
-  (*       | JCElet _ | JCEblock _ | JCEassign_var _ *)
-  (*       | JCEassign_heap _ | JCEpack _ | JCEunpack _ | JCEtry _ -> *)
-  (*           (\* Allowed with [JCEtry] thanks to patched [fold_expr]. *\) *)
-  (* 	  acc *)
-  (*       | JCEapp _ | JCEif _ | JCEreturn _ | JCEthrow _ *)
-  (*       | JCEreturn_void -> *)
-  (* 	  if debug then printf "[select_pre] in_zone false@."; *)
-  (* 	  in_select_zone := false; acc	 *)
-  (*       |  _ -> assert false (\* TODO *\) *)
-  (*   in *)
-  (*   let select_post acc s = *)
-  (*     match s#node with *)
-  (*       | JCEloop _ ->  *)
-  (* 	  if debug then printf "[select_post] in_zone false@."; *)
-  (* 	  in_select_zone := false; acc *)
-  (*       | _ -> acc *)
-  (*   in *)
-  (*   fold_expr select_pre select_post targets s *)
+  let rec fold_expr fpre fpost acc s =
+    let acc = fpre acc s in
+    let acc = match s#node with
+      | JCElet(_,_,s) ->
+  	  fold_expr fpre fpost acc s
+      | JCEblock sl ->
+  	  List.fold_left (fold_expr fpre fpost) acc sl
+      | JCEmatch _ -> assert false (* TODO *)
+      | JCEif(_,ts,fs) ->
+  	  let acc = fold_expr fpre fpost acc ts in
+  	  fold_expr fpre fpost acc fs
+      | JCEtry(s,hl,fs) ->
+  	  let acc = fold_expr fpre fpost acc s in
+          let acc = fpost acc s in
+  	  let acc =
+  	    List.fold_left (fun acc (_,_,s) ->
+  			      fold_expr fpre fpost acc s
+  			   ) acc hl
+  	  in
+  	  fold_expr fpre fpost acc fs
+      | JCEloop(_,ls) ->
+  	  fold_expr fpre fpost acc ls
+      | JCEreturn _ | JCEthrow _ | JCEassert _ | JCEassign_var _ | JCEapp _
+      | JCEassign_heap _ | JCEpack _ | JCEunpack _ | JCEreturn_void ->
+  	  acc
+      | _ -> assert false (* TODO *)
+    in
+    fpost acc s
+  in
+
+  (* First checks at start of function should be selected *)
+  let in_select_zone = ref true in
+
+  let select_pre acc s =
+    match s#node with
+      | JCEassert a ->
+  	  if debug then printf "[select_pre] consider target@.";
+  	  if debug then printf "[select_pre] in zone ? %b@." !in_select_zone;
+  	  if !in_select_zone then
+  	    let target = target_of_assertion s s#pos a in
+  	    if debug then printf "[select_pre] adding in_zone target@.";
+  	    target::acc
+  	  else acc
+      | JCEloop _ ->
+  	  if debug then printf "[select_pre] in_zone true@.";
+  	  in_select_zone := true; acc
+      | JCElet _ | JCEblock _ | JCEassign_var _
+      | JCEassign_heap _ | JCEpack _ | JCEunpack _ | JCEtry _ ->
+          (* Allowed with [JCEtry] thanks to patched [fold_expr]. *)
+  	  acc
+      | JCEapp _ | JCEif _ | JCEreturn _ | JCEthrow _
+      | JCEreturn_void ->
+  	  if debug then printf "[select_pre] in_zone false@.";
+  	  in_select_zone := false; acc
+      |  _ -> assert false (* TODO *)
+  in
+
+  let select_post acc s =
+    match s#node with
+      | JCEloop _ ->
+  	  if debug then printf "[select_post] in_zone false@.";
+  	  in_select_zone := false; acc
+      | _ -> acc
+  in
+  fold_expr select_pre select_post targets s
 
 let rec backprop_expr target s curpost =
   if debug then 
@@ -4016,7 +4087,7 @@ let rec backprop_expr target s curpost =
           match curpost with None -> () | Some propa ->
 	    if not (contradictory propa (make_and (List.map snd la.jc_loop_invariant))) then
               begin
-                if Jc_options.verbose then
+                if Jc_options.debug then
                   printf 
 	            "%a@[<v 2>Back-propagating loop invariant@\n%a@]@."
                     Loc.report_position s#pos
@@ -4055,6 +4126,35 @@ let backprop_function targets (fi,fs,sl) =
 (* Main function.                                                            *)
 (*****************************************************************************)
 
+let prepare_target target =
+  target.jc_target_regular_invariant <- 
+    simplify target.jc_target_regular_invariant;
+  (* Build the most precise invariant known at the current assertion point: 
+   * it is the conjunction of the regular invariant (from forward abstract
+   * interpretation) and the propagated invariant (from propagated assertions).
+   *)
+  let inv = 
+    make_and [ target.jc_target_regular_invariant;
+	       target.jc_target_propagated_invariant ]
+  in
+  (* Check whether the target assertion is a consequence of 
+   * the most precise invariant. 
+   *)
+  let impl = new assertion (JCAimplies(inv,target.jc_target_assertion)) in
+  if tautology impl then 
+    (if debug then
+       printf "%a[code_function] proof of %a discharged@." 
+	 Loc.report_position target.jc_target_location
+	 Jc_output.assertion target.jc_target_assertion;
+     None) 
+  else 
+    (if debug then
+       printf "%a[code_function] precondition needed for %a@." 
+	 Loc.report_position target.jc_target_location
+	 Jc_output.assertion target.jc_target_assertion;
+     (* Adding target to the list. *)
+     Some target)
+
 let code_function (fi,pos,fs,body_opt) =
   match body_opt with None -> () | Some sl ->
     let wp_filter canda =
@@ -4068,10 +4168,14 @@ let code_function (fi,pos,fs,body_opt) =
     begin match !Jc_options.annotation_sem with
       | AnnotNone -> ()
       | AnnotInvariants | AnnotElimPre | AnnotWeakPre | AnnotStrongPre ->
-	  (* 	    let targets = collect_immediate_targets [] sl in *)
-	  (* 	    backprop_function targets (fi,fs,sl); *)
+	  (* Collect checks that directly follow function beginning or 
+	     loop beginning *)
+	  let targets = collect_immediate_targets [] sl in
+	  backprop_function targets (fi,fs,sl);
+
 	  (* Collect checks *)
 	  let targets = collect_targets wp_filter [] sl in
+
 	  (* Generate invariants by forward abstract interpretation *)
 	  begin match !Jc_options.ai_domain with
 	    | AbsNone ->
@@ -4086,7 +4190,9 @@ let code_function (fi,pos,fs,body_opt) =
 		let mgr = Polka.manager_alloc_strict () in
 		ai_function mgr None targets (fi,pos,fs,sl)
 	  end;
-	  (* Generate invariants by forward abstract interpretation *)
+
+	  (* Generate preconditions by quantifier elimination and
+	     weakest preconditions *)
 	  begin match !Jc_options.annotation_sem with 
 	    | AnnotNone -> assert false
 	    | AnnotInvariants	-> ()
@@ -4094,40 +4200,9 @@ let code_function (fi,pos,fs,body_opt) =
  		let targets = 
 		  List.fold_right 
 		    (fun target acc ->
-		       target.jc_target_regular_invariant <- 
-			 simplify target.jc_target_regular_invariant (new assertion JCAtrue);
-		       (* Build the most precise invariant known at the current 
-			* assertion point: it is the conjunction of the regular 
-			* invariant (from forward abstract interpretation) and 
-			* the propagated invariant (from propagated assertions).
-			*)
-		       let inv = 
-			 make_and [target.jc_target_regular_invariant;
-				   target.jc_target_propagated_invariant]
-		       in
-		       (* Check whether the target assertion is a consequence of 
-			* the most precise invariant. 
-			*)
-		       let impl = 
-			 new assertion(JCAimplies(inv,target.jc_target_assertion)) 
-		       in
-		       if tautology impl then 
-			 begin
-			   if debug then
-			     printf "%a[code_function] proof of %a discharged@." 
-			       Loc.report_position target.jc_target_location
-			       Jc_output.assertion target.jc_target_assertion;
-			   acc 
-			 end
-		       else 
-			 begin
-			   if debug then
-			     printf "%a[code_function] precondition needed for %a@." 
-			       Loc.report_position target.jc_target_location
-			       Jc_output.assertion target.jc_target_assertion;
-			   (* Adding target to the list. *)
-			   target :: acc
-			 end
+		       match prepare_target target with
+			 | None -> acc
+			 | Some a -> a :: acc
 		    ) targets []
 		in
 		wp_function targets (fi,pos,fs,sl)

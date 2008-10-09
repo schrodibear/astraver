@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.125 2008-10-07 16:07:21 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.126 2008-10-09 11:33:06 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -131,7 +131,7 @@ let main () =
 	Hashtbl.iter 
 	  (fun key (f, loc, s, b) -> 
 	     match b with None -> () | Some b ->
-	       let b = Jc_ai.normalize_expr b in
+(* 	       let b = Jc_ai.normalize_expr b in *)
 	       Hashtbl.replace Jc_typing.functions_table key (f,loc,s,Some b)
 	  ) Jc_typing.functions_table;
 

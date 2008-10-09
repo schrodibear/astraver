@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.139 2008-10-09 08:19:10 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.140 2008-10-09 11:33:06 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1112,7 +1112,10 @@ let single_location ~in_assigns fef loc =
     | JCLderef(locs,lab,fi,r) ->
 	let mc,_fi_opt = lderef_mem_class ~type_safe:true locs fi in
 	if in_assigns then
-	  add_memory_writes lab fef (mc,locs#region)
+	  let fef = add_memory_writes lab fef (mc,locs#region) in
+	  (* Add effect on allocation table for [not_assigns] predicate *)
+	  let ac = alloc_class_of_mem_class mc in
+	  add_alloc_reads lab fef (ac,locs#region)
 	else
 	  add_memory_reads lab fef (mc,locs#region)
     | JCLat(loc,_lab) ->
