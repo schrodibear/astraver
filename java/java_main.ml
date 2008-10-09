@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.65 2008-10-03 14:18:42 marche Exp $ *)
+(* $Id: java_main.ml,v 1.66 2008-10-09 08:19:10 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -275,9 +275,7 @@ let main () =
     (f ^ ".jc") 
   in
   output_string cout "/*\n";
-  output_string cout "Local"; 
-  (* splitted because confuses Emacs otherwise *)
-  output_string cout "Variables:\n";
+  output_string cout "Local Variables:\n";
   output_string cout "mode: java\n";
   output_string cout "compile-command: \"jessie -why-opt -split-user-conj -locs ";
   output_string cout f;

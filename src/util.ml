@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.158 2008-07-25 07:11:06 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.159 2008-10-09 08:19:11 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -1073,6 +1073,8 @@ let print_decl fmt = function
       fprintf fmt "assert %a : <...>" Ident.print id
   | Predicate_def (_, id, _, _) ->
       fprintf fmt "predicate %a <...>" Ident.print id
+  | Inductive_def (_, id, _, _) ->
+      fprintf fmt "inductive %a <...>" Ident.print id
   | Function_def (_, id, _, _, _) ->
       fprintf fmt "function %a <...>" Ident.print id
   | TypeDecl (_, e, _, id) ->
@@ -1254,6 +1256,7 @@ let print_decl fmt = function
       fprintf fmt "defpred %s (%a) = %a" s
 	(print_list comma (fun fmt t -> print_pure_type fmt (snd t))) args
 	print_predicate pred
+  | Dinductive_def _ -> assert false (* TODO *)
   | Dfunction_def (_, s, fun_def_sch) ->
       let (args, rt, exp) = fun_def_sch.Env.scheme_type in
       fprintf fmt "deffun %s (%a) : %a = %a" s

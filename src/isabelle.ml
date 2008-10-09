@@ -425,6 +425,8 @@ let push_decl = function
   | Dlogic (_, id, t) -> Gen.add_elem (Lg, rename id) (Logic (id, t))
   | Daxiom (_, id, p) -> Gen.add_elem (Ax, rename id) (Axiom (id, p))
   | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, rename id) (Predicate (id, p))
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "Isabelle output: inductive def not yet supported"
   | Dfunction_def (_, id, p) -> Gen.add_elem (Fun, rename id) (Function (id, p))
   | Dtype (_, vl, id) -> Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
 

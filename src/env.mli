@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.52 2008-04-10 14:43:57 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.53 2008-10-09 08:19:10 marche Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -140,6 +140,7 @@ val generalize_logic_type : logic_type -> logic_type scheme
 val generalize_type_v : type_v -> type_v scheme
 val generalize_predicate : predicate -> predicate scheme
 val generalize_predicate_def : predicate_def -> predicate_def scheme
+val generalize_inductive_def : inductive_def -> inductive_def scheme
 val generalize_function_def : function_def -> function_def scheme
 val generalize_sequent : sequent -> sequent scheme
 

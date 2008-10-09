@@ -134,7 +134,7 @@ unit cons_Fibonacci(Fibonacci[0] this_1)
 ;
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Fibonacci.jloc tests/java/Fibonacci.jc && make -f tests/java/Fibonacci.makefile gui"
 End:

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic.mli,v 1.45 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: logic.mli,v 1.46 2008-10-09 08:19:10 marche Exp $ i*)
 
 (*s Logic. *)
 
@@ -97,6 +97,8 @@ type logic_type =
   | Function of pure_type list * pure_type
 
 type predicate_def = (Ident.t * pure_type) list * predicate
+
+type inductive_def = pure_type list * (Ident.t * predicate) list
 
 type function_def = (Ident.t * pure_type) list * pure_type * term
 

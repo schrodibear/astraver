@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.247 2008-10-07 16:07:21 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.248 2008-10-09 08:19:10 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2036,7 +2036,7 @@ let type_labels_in_decl d = match d#node with
   | JCDlogic(_, _, labels, _, JCexpr e) ->
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
       type_labels labels (default_label labels) e
-  | JCDlogic(_, _, labels, _, JCaxiomatic l) ->
+  | JCDlogic(_, _, labels, _, (JCaxiomatic l | JCinductive l)) ->
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
       List.iter (fun (_,e) -> type_labels labels (default_label labels) e) l
   | JCDglobal_inv(_, body) ->
@@ -2283,6 +2283,41 @@ let type_range_of_term ty t =
         () (* TODO *)
 *)
 
+(** [check_positivity pi a] checks whether the assertion [a] as exactly one positive occurrence of pi in a *)
+
+let rec occurrences pi a =
+match a#node with
+  | JCAtrue | JCAfalse -> (0,0)
+  | JCAapp app -> ((if app.jc_app_fun == pi then 1 else 0),0)
+  | JCAquantifier (Forall, vi, p) -> occurrences pi p
+  | JCAquantifier (Exists, vi, p) -> assert false (* TODO *)
+  | JCAimplies (p1, p2) -> 
+      let (pos1,neg1) = occurrences pi p1 in
+      let (pos2,neg2) = occurrences pi p2 in
+      (neg1+pos2,pos1+neg2)
+  | JCAor _ -> assert false (* TODO *)
+  | JCAand _ -> assert false (* TODO *)
+  | JCAnot _ -> assert false (* TODO *)
+  | JCAiff (_, _) -> assert false (* TODO *)
+  | JCAsubtype (_, _, _)
+  | JCAeqtype (_, _, _)
+  | JCAmutable (_, _, _)
+  | JCAif (_, _, _)
+  | JCAbool_term _
+  | JCAinstanceof (_, _, _)
+  | JCAat (_, _)
+  | JCAold _
+  | JCArelation (_, _, _)
+  | JCAmatch (_, _) -> assert false (* TODO *)
+
+let check_positivity loc pi a =
+  let (pos,neg) = occurrences pi a in
+  if pos = 0 then 
+    typing_error loc "predicate has no positive occurrence in this case";
+  if pos > 1 then 
+    typing_error loc "predicate has too many positive occurrences in this case"
+  
+
 let rec decl d =
   match d#node with
     | JCDvar (ty, id, init) ->
@@ -2430,6 +2465,13 @@ of an invariant policy";
               JCAssertion(assertion param_env body)
 	  | JCaxiomatic l ->
 	      JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
+	  | JCinductive l ->
+	      JCInductive(List.map 
+			    (fun (id,e) -> 
+			       let a = assertion param_env e in
+			       check_positivity a#pos pi a;
+			       (id,a)) 
+			    l)
         in
         Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p)
     | JCDlogic(Some ty, id, labels, pl, body) ->
@@ -2452,6 +2494,9 @@ of an invariant policy";
               else JCTerm t
 	  | JCaxiomatic l ->
 	      JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
+	  | JCinductive _ ->
+              typing_error d#pos
+                "only predicates can be inductively defined" 	      
         in
         Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, t)
     | JCDint_model _|JCDabstract_domain _|JCDannotation_policy _

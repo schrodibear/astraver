@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.138 2008-10-07 15:54:20 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.139 2008-10-09 08:19:10 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1437,7 +1437,7 @@ let logic_fun_effects f =
 	     let fef = location ~in_assigns:false empty_fun_effect loc in
 	     ef_union ef fef.jc_reads 
 	  ) ef loclist
-    | JCAxiomatic l ->
+    | JCAxiomatic l | JCInductive l ->
 	List.fold_left (fun ef (id,a) -> assertion ef a) ef l
   in
   if same_effects ef f.jc_logic_info_effects then () else

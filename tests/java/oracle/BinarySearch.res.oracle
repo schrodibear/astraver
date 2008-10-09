@@ -216,7 +216,7 @@ unit cons_BinarySearch(BinarySearch[0] this_0)
 ;
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/BinarySearch.jloc tests/java/BinarySearch.jc && make -f tests/java/BinarySearch.makefile gui"
 End:
@@ -10811,10 +10811,10 @@ goal BinarySearch_binary_search_safety_po_16:
 ========== running alt-ergo ==========
 Running Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : .................................. (34/0/0/0/0)
+why/BinarySearch_why.why      : ..........#...#................... (32/0/0/2/0)
 total   :  34
-valid   :  34 (100%)
+valid   :  32 ( 94%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   0 (  0%)
+timeout :   2 (  6%)
 failure :   0 (  0%)

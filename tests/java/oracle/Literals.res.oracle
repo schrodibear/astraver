@@ -80,7 +80,7 @@ unit cons_Literals(Literals[0] this_1)
 ;
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Literals.jloc tests/java/Literals.jc && make -f tests/java/Literals.makefile gui"
 End:

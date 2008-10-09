@@ -27,5 +27,5 @@
 (*                                                                        *)
 (**************************************************************************)
 
-val  push : Logic_decl.t -> Logic_decl.t list
+val  push : Logic_decl.t -> Logic_decl.t
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.29 2008-07-23 08:02:33 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.30 2008-10-09 08:19:10 marche Exp $ i*)
 
 open Format
 open Pp
@@ -230,6 +230,12 @@ let decl fmt d =
       let bl,p = specialize def in
       fprintf fmt "@[<hov 2>predicate %s(%a) =@ %a@]" id 
 	(print_list comma logic_binder) bl predicate p
+  | Dinductive_def (_, id, indcases) ->
+      let bl,l = specialize indcases in
+      fprintf fmt "@[<hov 2>predicate %s: %a -> prop {@\n  @[<v 0>%a@]@\n}@\n@]" id 
+	(print_list comma pure_type) bl 
+	(print_list newline 
+	   (fun fmt (id,p) -> fprintf fmt "%a: %a;" ident id predicate p)) l
   | Dfunction_def (_, id, def) ->
       let bl,pt,t = specialize def in
       fprintf fmt "@[<hov 2>function %s(%a) : %a =@ %a@]" id

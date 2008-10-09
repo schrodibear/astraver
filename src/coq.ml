@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.169 2008-04-15 08:06:40 regisgia Exp $ i*)
+(*i $Id: coq.ml,v 1.170 2008-10-09 08:19:10 marche Exp $ i*)
 
 open Options
 open Logic
@@ -1014,6 +1014,8 @@ let push_decl = function
   | Dlogic (_, id, t) -> Gen.add_elem (Lg, rename id) (Logic (id, t))
   | Daxiom (_, id, p) -> Gen.add_elem (Ax, rename id) (Axiom (id, p))
   | Dpredicate_def (_,id,p) -> Gen.add_elem (Pr, rename id) (Predicate (id, p))
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "Coq output: inductive def not yet supported"
   | Dfunction_def (_,id,f) -> Gen.add_elem (Fun, rename id) (Function (id, f))
   | Dtype (_, vl, id) -> Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
 

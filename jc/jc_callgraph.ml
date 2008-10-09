@@ -122,7 +122,8 @@ let compute_logic_calls f t =
       | JCTerm t -> term [] t 
       | JCAssertion a -> assertion [] a 
       | JCReads r -> []
-      | JCAxiomatic l -> List.fold_left (fun acc (_,a) -> assertion acc a) [] l
+      | JCAxiomatic l | JCInductive l -> 
+	  List.fold_left (fun acc (_,a) -> assertion acc a) [] l
   in
   f.jc_logic_info_calls <- calls
 

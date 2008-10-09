@@ -94,6 +94,8 @@ let rec expand = function
   | p -> 
       map_predicate expand p
 
+let expand_inductive_def (t,l) = (t,List.map (fun (id,p) -> (id,expand p)) l)
+
 let expand_sequent (ctx,p) =
   let expand_hyp = function
     | Svar _ as h -> h
@@ -102,9 +104,9 @@ let expand_sequent (ctx,p) =
 				expand p else p)  in
   (List.map expand_hyp ctx, expand p)
 
-let push = function
-  | Dtype _ as d -> d::[]
-  | Dlogic _ as  d -> d::[]
+
+let push decl = 
+  match decl with
   | Dpredicate_def (loc, ident, def) ->
       let argl,p = def.scheme_type in
       (*let rootexp = (Papp (Ident.create ident, List.map (fun (i,_) -> Tvar i) argl, [])) in*)
@@ -112,16 +114,23 @@ let push = function
       let vars = Vset.fold (fun v l -> v :: l) def.scheme_vars [] in
       Hashtbl.add pred_def ident (vars, List.map fst argl, p);
       if Options.defExpanding = All then 
-	Dlogic (loc, ident, Env.generalize_logic_type (Predicate (List.map snd argl)))::[]
+	Dlogic (loc, ident, Env.generalize_logic_type (Predicate (List.map snd argl)))
       else
-	Dpredicate_def (loc, ident, def)::[]
-  | Dfunction_def _ as  d -> d::[]
+	decl
+  | Dinductive_def(loc, ident, def) when Options.defExpanding = All -> 
+      Dinductive_def(loc,ident,
+		     Env.generalize_inductive_def 
+		       (expand_inductive_def def.scheme_type))		       
   | Daxiom (loc, ident, ps) -> 
       Daxiom (loc, ident, Env.generalize_predicate (
 			if Options.defExpanding = All then 
 			  expand ps.scheme_type else 
-			    ps.scheme_type ))::[]
+			    ps.scheme_type ))
   | Dgoal (loc, expl, ident, ps) ->
       Dgoal (loc, expl, ident, 
-	     Env.generalize_sequent (expand_sequent ps.scheme_type))::[]
+	     Env.generalize_sequent (expand_sequent ps.scheme_type)) 
+  | Dfunction_def _ 
+  | Dinductive_def _ 
+  | Dtype _ 
+  | Dlogic _ -> decl
 

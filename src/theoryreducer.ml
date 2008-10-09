@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theoryreducer.ml,v 1.10 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: theoryreducer.ml,v 1.11 2008-10-09 08:19:10 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -487,6 +487,8 @@ let launcher decl = match decl with
   | Dtype (_, _, id) as ax -> (*Printf.printf  "Dtype %s \n"  id ;*) declareType id ax 
   | Dlogic (_, id, t) as ax -> (* Printf.printf  "Dlogic %s \n"  id ;*) typingPredicate  id ax
   | Dpredicate_def (_, id, d) as ax -> (*Printf.printf  "Dpredicate_def %s \n"  id ; *)managesPredicate id ax d.scheme_type
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "Theory reducer: inductive def not yet supported"
   | Dfunction_def (_, id, d)  as ax -> (*Printf.printf  "Dfunction_def %s \n"  id ; *)managesFunction  id ax d.scheme_type
   | Daxiom (_, id, p) as ax         -> (*Printf.printf  "Daxiom %s \n"  id ; *)managesAxiom  id ax p.scheme_type
   | Dgoal (_, expl, id, s)  as ax -> (*Printf.printf  "Dgoal %s \n"  id ; *)managesGoal id ax s.Env.scheme_type 
@@ -498,6 +500,8 @@ let display q =
   | Dtype (_, _, id) -> Printf.printf  "%s \n"  id  
   | Dlogic (_, id, t) -> Printf.printf  "%s \n" id   
   | Dpredicate_def (_, id, d) -> Printf.printf  "%s \n" id
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "Theory reducer: inductive def not yet supported"
   | Dfunction_def (_, id, d) -> Printf.printf  "%s \n" id
   | Daxiom (_, id, p)          -> Printf.printf  "%s \n"  id
   | Dgoal (_, expl, id, s)   -> Printf.printf  "%s \n"  id

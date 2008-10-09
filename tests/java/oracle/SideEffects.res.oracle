@@ -111,7 +111,7 @@ unit cons_SideEffects(SideEffects[0] this_1)
 ;
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/SideEffects.jloc tests/java/SideEffects.jc && make -f tests/java/SideEffects.makefile gui"
 End:

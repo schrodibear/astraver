@@ -319,6 +319,8 @@ let rec push d =
 	push (Daxiom (loc, def ident, (Env.generalize_predicate
 					 (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]]))))
 (* A function definition can be handled as a function logic definition + an axiom *)
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "encoding mono: inductive def not yet supported"
   | Dfunction_def (loc, ident, fun_def_sch) ->
 (*       let _ = print_endline ident in *)
       let (argl, rt, term) = fun_def_sch.Env.scheme_type in

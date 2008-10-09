@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.95 2008-07-24 09:16:00 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.96 2008-10-09 08:19:10 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -439,6 +439,8 @@ let output_elem fmt = function
   | Dtype _ -> assert false
   | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "PVS output: inductive def not yet supported"
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
   | Dgoal (loc, expl, id, s) -> print_goal fmt (loc, expl, id, s)
@@ -510,6 +512,8 @@ let sort_theory () =
 	poly s; ArMap.add_scheme s (id,s) th.decls
     | Dpredicate_def (_, id, s) -> 
 	poly s; Queue.add (id, DefPredicate s) th.defs
+    | Dinductive_def(loc, ident, inddef) ->
+      failwith "PVS output: inductive def not yet supported"
     | Dfunction_def (_, id, s) -> 
 	poly s; Queue.add (id, DefFunction s) th.defs
     | Daxiom (_, id, s) -> 

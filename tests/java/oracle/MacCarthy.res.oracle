@@ -146,7 +146,7 @@ unit cons_Object(Object[0] this_12)
 ;
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/MacCarthy.jloc tests/java/MacCarthy.jc && make -f tests/java/MacCarthy.makefile gui"
 End:

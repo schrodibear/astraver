@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.76 2008-04-01 14:46:05 hubert Exp $ i*)
+(*i $Id: env.ml,v 1.77 2008-10-09 08:19:10 marche Exp $ i*)
 
 open Ident
 open Misc
@@ -136,6 +136,13 @@ let generalize_predicate_def (bl,p) =
   in
   let l = find_predicate_vars l p in
   { scheme_vars = l; scheme_type = (bl,p) }
+
+let generalize_inductive_def (bl,l) =
+  let vars = List.fold_left find_pure_type_vars Vset.empty bl in
+  let vars =
+    List.fold_left (fun acc (_,p) -> find_predicate_vars acc p) vars l
+  in
+  { scheme_vars = vars ; scheme_type = (bl,l) }
 
 let generalize_function_def (bl,t,e) = 
   let l = 

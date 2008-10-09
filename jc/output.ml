@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.38 2008-10-07 15:54:20 marche Exp $ i*)
+(*i $Id: output.ml,v 1.39 2008-10-09 08:19:10 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -626,11 +626,8 @@ type why_decl =
   | Def of string * expr               (*r global let in why *)
   | Logic of bool * string * (string * logic_type) list * logic_type    (*r logic decl in why *)
   | Predicate of bool * string * (string * logic_type) list * assertion  
-(*
-  | Axiomatic of bool * string * (string * logic_type) list * logic_type * 
-      (string * assertion) list
-      (*r axiomatic definition *)
-*)
+  | Inductive of bool * string * (string * logic_type) list *  
+      (string * assertion) list (*r inductive definition *)
   | Axiom of string * assertion         (*r Axiom *)
   | Goal of string * assertion         (*r Goal *)
   | Function of bool * string * (string * logic_type) list * logic_type * term
@@ -648,9 +645,7 @@ let get_why_id d =
     | Goal(id,_) 
     | Predicate(_,id,_,_) 
     | Function(_,id,_,_,_) 
-(*
-    | Axiomatic(_,id,_,_,_)
-*)
+    | Inductive(_,id,_,_)
     | Type (id,_) 
     | Exception(id,_) -> id
 
@@ -661,12 +656,9 @@ let iter_why_decl f d =
     | Logic(_,id,args,t) -> 
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_logic_type f t
-(*
-    | Axiomatic(_,id,args,t,axs) ->
+    | Inductive(_,id,args,cases) ->
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
-	iter_logic_type f t;
-	List.iter (fun (_,a) -> iter_assertion f a) axs
-*)
+	List.iter (fun (_,a) -> iter_assertion f a) cases
     | Predicate(_,id,args,p) -> 
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_assertion f p
@@ -733,17 +725,14 @@ let fprintf_why_decl form d =
 	  (if b then "external " else "") id 
 	  (print_list comma (fun fmt (id,t) -> fprintf_logic_type fmt t)) args
 	  fprintf_logic_type t 
-(*
-    | Axiomatic(b,id,args,t,axioms) ->
-	fprintf form "@[<hv 1>%slogic %s: %a -> %a {@\n@[<v 2>%a@]}@\n@."
+    | Inductive(b,id,args,cases) ->
+	fprintf form "@[<hv 1>%slogic %s: @[%a -> prop@] {@\n @[<v 0>%a@]@\n}@\n@."
 	  (if b then "external " else "") id 
 	  (print_list comma (fun fmt (id,t) -> fprintf_logic_type fmt t)) args
-	  fprintf_logic_type t
 	  (print_list newline 
 	     (fun fmt (id,a) ->
-		fprintf form "axiom %s:@ %a;" id fprintf_assertion a))
-	  axioms
-*)
+		fprintf form "%s: @[%a;@]" id fprintf_assertion a))
+	  cases
     | Axiom(id,p) ->
 	fprintf form "@[<hv 1>axiom %s :@ %a@]@.@." id 
 	  fprintf_assertion p

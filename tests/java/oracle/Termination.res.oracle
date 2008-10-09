@@ -141,7 +141,7 @@ unit cons_Termination(Termination[0] this_3)
 ;
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Termination.jloc tests/java/Termination.jc && make -f tests/java/Termination.makefile gui"
 End:

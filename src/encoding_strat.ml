@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_strat.ml,v 1.16 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.17 2008-10-09 08:19:10 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -327,6 +327,8 @@ let rec push d =
       push (Dlogic (loc, ident, (Env.generalize_logic_type (Predicate (snd (List.split argl))))));
       push (Daxiom (loc, def ident, (Env.generalize_predicate 
 				       (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]]))))
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "encoding strat: inductive def not yet supported"
 (* A function definition can be handled as a function logic definition + an axiom *)
   | Dfunction_def (loc, ident, fun_def_sch) ->
       let _ = print_endline ident in

@@ -196,7 +196,7 @@ unit cons_Switch(Switch[0] this_0)
 ;
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Switch.jloc tests/java/Switch.jc && make -f tests/java/Switch.makefile gui"
 End:

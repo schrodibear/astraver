@@ -218,7 +218,7 @@ behavior normal:
 }
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Creation.jloc tests/java/Creation.jc && make -f tests/java/Creation.makefile gui"
 End:

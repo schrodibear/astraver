@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_pred.ml,v 1.11 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: encoding_pred.ml,v 1.12 2008-10-09 08:19:10 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -148,6 +148,8 @@ let rec push d =
 		       (lifted_t (fst p)
 			  (Piff ((Papp (Ident.create ident, List.map (fun (i,_) -> Tvar i) (fst p), [])),
 			         (snd p)))))))
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "encoding rec: inductive def not yet supported"
 (* A function definition can be handled as a function logic definition + an axiom *)
   | Dfunction_def (loc, ident, fun_def_sch) ->
       let f = fun_def_sch.Env.scheme_type in

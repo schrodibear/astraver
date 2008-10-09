@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.155 2008-09-05 13:21:01 marche Exp $ i*)
+(*i $Id: main.ml,v 1.156 2008-10-09 08:19:10 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -68,6 +68,7 @@ let add_loc = function
   | Dtype (loc, _, s)
   | Dlogic (loc, s, _)
   | Dpredicate_def (loc, s, _)
+  | Dinductive_def (loc, s , _)
   | Dfunction_def (loc, s, _) 
   | Daxiom (loc, s, _) (* useful? *) -> Loc.add_ident s loc
   | Dgoal _ -> ()
@@ -101,9 +102,9 @@ let push_decl _vloc d =
 	  | SmtLib -> Smtlib.push_decl 
       in
       if defExpanding != NoExpanding  then 
-	let decl = (PredDefExpansor.push d) in 
-	List.iter pushing decl ;
-	List.iter store_decl_into_a_queue decl ; 
+	let decl = PredDefExpansor.push d in 
+	(* List.iter *) pushing decl ;
+	(* List.iter *) store_decl_into_a_queue decl ; 
       else
 	begin 
 	  store_decl_into_a_queue d ;
@@ -112,7 +113,7 @@ let push_decl _vloc d =
     end
   else
     if defExpanding != NoExpanding then
-      List.iter store_decl_into_a_queue (PredDefExpansor.push d)
+      (* List.iter *) store_decl_into_a_queue (PredDefExpansor.push d)
     else
       store_decl_into_a_queue d 
 	
@@ -353,6 +354,38 @@ let check_duplicate_binders loc ty =
   in
   check Ident.Idset.empty ty
 
+
+(** [check_positivity pi a] checks whether the assertion [a] as exactly one positive occurrence of pi in a *)
+
+let rec occurrences pi a =
+  match a with
+  | Ptrue | Pfalse -> (0,0)
+  | Papp (id, _, _) -> ((if id == pi then 1 else 0),0)
+  | Pimplies (_, p1, p2) -> 
+      let (pos1,neg1) = occurrences pi p1 in
+      let (pos2,neg2) = occurrences pi p2 in
+      (neg1+pos2,pos1+neg2)
+  | Forall (is_wp, id1, id2, typ, triggers, p) -> occurrences pi p
+  | Pnamed (_, _) -> assert false (* TODO *)
+  | Pfpi (_, _, _) -> assert false (* TODO *)
+  | Exists (_, _, _, _)  -> assert false (* TODO *)
+  | Forallb (_, _, _)  -> assert false (* TODO *)
+  | Pnot _ -> assert false (* TODO *)
+  | Piff (_, _) -> assert false (* TODO *)
+  | Por (_, _) -> assert false (* TODO *)
+  | Pand (_, _, _, _) -> assert false (* TODO *)
+  | Pif (_, _, _) -> assert false (* TODO *)
+  | Pvar _ -> assert false (* TODO *)
+
+let check_positivity loc id a =
+  let (pos,neg) = occurrences id a in
+  if pos = 0 then 
+    raise_located loc 
+      (AnyMessage "predicate has no positive occurrence in this case");
+  if pos > 1 then 
+    raise_located loc 
+      (AnyMessage "predicate has too many positive occurrences in this case")
+
 let interp_decl ?(_prelude=false) d = 
   let lab = Label.empty in
   match d with 
@@ -414,6 +447,26 @@ let interp_decl ?(_prelude=false) d =
 	add_global_logic id (generalize_logic_type t);
 	let p = generalize_predicate_def (pl,p) in
 	push_decl ("","",Loc.dummy_floc) (Dpredicate_def (Loc.extract loc, Ident.string id, p))
+    | Inductive_def(loc,id,t,indcases) ->
+	let env = Env.empty_logic () in
+	if is_global_logic id then raise_located loc (Clash id);
+	let pl = 
+	  match Ltyping.logic_type t with
+	    | Function _ -> raise_located loc (AnyMessage "only predicates can be inductively defined")
+	    | Predicate l -> l
+	in
+	(* add id first because indcases contain id, without generalization *)
+	add_global_logic id (empty_scheme (Predicate pl));
+	let l =
+	  List.map (fun (loc,i,p) ->
+		      let p = Ltyping.predicate lab env p in
+		      check_positivity loc id p;
+		      (id,p))
+	    indcases
+	in
+	let d = generalize_inductive_def (pl,l) in
+	push_decl ("","",Loc.dummy_floc) 
+	  (Dinductive_def (Loc.extract loc, Ident.string id, d))
     | Function_def (loc, id, pl, ty, e) ->
 	let env = Env.empty_logic () in
 	if is_global_logic id then raise_located loc (Clash id);

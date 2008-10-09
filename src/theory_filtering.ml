@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theory_filtering.ml,v 1.8 2008-02-05 12:10:50 marche Exp $ i*)
+(*i $Id: theory_filtering.ml,v 1.9 2008-10-09 08:19:10 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -264,6 +264,8 @@ let display (q,s) n =
     | Dtype (_, _, id) -> Printf.printf  "type %s (%d) : "  id 
     | Dlogic (_, id, t) -> Printf.printf  "arit %s (%d) : " id   
     | Dpredicate_def (_, id, d) -> Printf.printf  "def_pred %s (%d): " id 
+    | Dinductive_def(loc, ident, inddef) ->
+	failwith "Theory filtering: inductive def not yet supported"
     | Dfunction_def (_, id, d) -> Printf.printf  "def_func %s (%d): " id 
     | Daxiom (_, id, p)          -> Printf.printf  "axiom %s (%d): "  id 
     | Dgoal (_, expl, id, s)   -> Printf.printf  "goal %s (%d):"  id 
@@ -349,6 +351,8 @@ let launcher decl = match decl with
       declare_arity  id ax
   | Dpredicate_def (_, id, d) as ax -> (*Printf.printf  "Dpredicate_def %s \n"  *)
       declare_predicate id ax d.scheme_type 
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "Theory filtering: inductive def not yet supported"
   | Dfunction_def (_, id, d)  as ax -> (*Printf.printf  "Dfunction_def %s \n"  id ;*)  
       declare_function id ax d.scheme_type 
   | Daxiom (_, id, p) as ax         -> (*Printf.printf  "Daxiom %s \n"  id ; *)

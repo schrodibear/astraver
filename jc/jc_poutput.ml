@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.22 2008-10-07 15:54:20 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.23 2008-10-09 08:19:10 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -318,6 +318,11 @@ let reads_or_expr fmt = function
 	(print_list newline
 	   (fun fmt (id,e) -> 
 	      fprintf fmt "axiom %s: %a;@\n" id pexpr e)) l
+  | JCinductive l ->
+      fprintf fmt "{@\n@[<v 2>%a@]@\n}" 
+	(print_list newline
+	   (fun fmt (id,e) -> 
+	      fprintf fmt "case %s: %a;@\n" id pexpr e)) l
 
 let type_params_decl fmt = function
   | [] -> ()

@@ -308,7 +308,7 @@ unit cons_Arrays(Arrays[0] this_0)
 ;
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/Arrays.jloc tests/java/Arrays.jc && make -f tests/java/Arrays.makefile gui"
 End:

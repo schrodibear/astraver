@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl.ml,v 1.55 2008-09-05 13:21:01 marche Exp $ i*)
+(*i $Id: cvcl.ml,v 1.56 2008-10-09 08:19:10 marche Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -270,6 +270,8 @@ let output_elem fmt = function
   | Dtype _ -> assert false
   | Dlogic (_loc, id, t) -> print_logic fmt id t.scheme_type
   | Dpredicate_def (_loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dinductive_def _ ->
+      failwith "CVC light: inductive def not yet supported"
   | Dfunction_def (_loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (_loc, id, p) -> print_axiom fmt id p.scheme_type
   | Dgoal (loc, expl, id, s) -> print_obligation fmt loc expl id s.Env.scheme_type

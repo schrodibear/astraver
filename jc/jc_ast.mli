@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.148 2008-10-07 15:54:20 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.149 2008-10-09 08:19:10 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -215,6 +215,7 @@ type 'expr reads_or_expr =
   | JCreads of 'expr list
   | JCexpr of 'expr
   | JCaxiomatic of (string * 'expr) list
+  | JCinductive of (string * 'expr) list
 
 type 'expr decl_node =
   | JCDvar of ptype * string * 'expr option
@@ -427,6 +428,7 @@ type 'li term_or_assertion =
   | JCTerm of 'li term
   | JCReads of 'li location list
   | JCAxiomatic of (string (* identifier ? *) * 'li assertion) list
+  | JCInductive of (string (* identifier ? *) * 'li assertion) list
 
 type 'li loop_annot =
     {

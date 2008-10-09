@@ -147,7 +147,7 @@ unit cons_AllZeros(AllZeros[0] this_0)
 ;
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/AllZeros.jloc tests/java/AllZeros.jc && make -f tests/java/AllZeros.makefile gui"
 End:

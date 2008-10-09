@@ -194,6 +194,8 @@ decl:
    { Axiom (loc (), $2, $4) }
 | PREDICATE ident LEFTPAR list0_logic_binder_sep_comma RIGHTPAR EQUAL lexpr
    { Predicate_def (loc (), $2, $4, $7) }
+| PREDICATE ident COLON logic_type LEFTB indcases RIGHTB
+   { Inductive_def (loc (), $2, $4, $6) }
 | FUNCTION ident LEFTPAR list0_logic_binder_sep_comma RIGHTPAR COLON 
   primitive_type EQUAL lexpr
    { Function_def (loc (), $2, $4, $7, $9) }
@@ -205,6 +207,13 @@ decl:
    { TypeDecl (loc_i 4, $1, [$3], $4) }
 | external_ TYPE LEFTPAR list1_type_var_sep_comma RIGHTPAR ident
    { TypeDecl (loc_i 6, $1, $4, $6) }
+;
+
+indcases:
+| /* epsilon */
+    { [] }
+| ident COLON lexpr SEMICOLON indcases
+    { (loc_i 1,$1,$3)::$5 }
 ;
 
 type_v:

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.29 2008-07-24 07:54:59 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.30 2008-10-09 08:19:11 marche Exp $ i*)
 
 (*s Zenon output *)
 
@@ -325,6 +325,8 @@ let output_elem fmt = function
   | Dtype (loc, _, id) -> declare_type fmt id
   | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dinductive_def _ ->
+      failwith "Zenon output: inductive def not yet supported"
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
   | Dgoal (loc, expl, id, s) -> 

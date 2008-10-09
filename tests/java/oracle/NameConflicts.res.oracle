@@ -101,7 +101,7 @@ unit cons_NameConflicts(NameConflicts[0] this_3)
 ;
 
 /*
-LocalVariables:
+Local Variables:
 mode: java
 compile-command: "jessie -why-opt -split-user-conj -locs tests/java/NameConflicts.jloc tests/java/NameConflicts.jc && make -f tests/java/NameConflicts.makefile gui"
 End:

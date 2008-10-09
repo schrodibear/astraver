@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.51 2008-07-10 13:59:49 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.52 2008-10-09 08:19:10 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -328,6 +328,8 @@ let output_elem fmt = function
       -> print_logic fmt id t.scheme_type
   | Dlogic (_, _, _) -> fprintf fmt "" 
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "SMTLIB output: inductive def not yet supported"
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type 
   | Dgoal (loc, expl, id, s) -> print_obligation fmt loc id s.Env.scheme_type

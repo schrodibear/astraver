@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monomorph.ml,v 1.33 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: monomorph.ml,v 1.34 2008-10-09 08:19:10 marche Exp $ i*)
 
 (* monomorphic output *)
 
@@ -551,6 +551,8 @@ let push_decl = function
   | Dtype _ -> ()
   | Dlogic (loc, x, t) -> push_logic loc x t
   | Dpredicate_def (loc, x, d) -> push_predicate_def loc x d
+  | Dinductive_def(loc, ident, inddef) ->
+      failwith "monomorph: inductive def not supported"
   | Dfunction_def (loc, x, d) -> push_function_def loc x d
   | Daxiom (loc, x, p) -> push_axiom loc x p
   | Dgoal (loc, expl, x, s) -> push_obligation loc expl x s
