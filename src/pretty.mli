@@ -27,11 +27,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.mli,v 1.10 2008-02-18 09:10:04 marche Exp $ i*)
+(*i $Id: pretty.mli,v 1.11 2008-10-10 15:38:25 marche Exp $ i*)
 
 (* Why pretty-printer *)
 
-val push_decl : Logic_decl.t -> unit
+val push_decl : ?ergo:bool -> Logic_decl.t -> unit
 
 val reset : unit -> unit
 

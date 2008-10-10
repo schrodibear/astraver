@@ -27,5 +27,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-val  push : Logic_decl.t -> Logic_decl.t
+val inductive_def : 
+  Logic_decl.loc -> string -> Logic.inductive_def Env.scheme 
+  -> Logic_decl.t list
+
+val push : Logic_decl.t -> Logic_decl.t
 

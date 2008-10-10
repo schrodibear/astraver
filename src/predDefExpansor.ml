@@ -134,3 +134,13 @@ let push decl =
   | Dtype _ 
   | Dlogic _ -> decl
 
+
+
+let inductive_def loc id d =
+  let (vars,(bl,cases)) = Env.specialize_inductive_def d in
+  let t = Env.generalize_logic_type (Predicate bl) in
+  Dlogic(loc,id,t)::
+    (List.map (fun (id,p) -> 
+		 let p = Env.generalize_predicate p in
+		 Daxiom(loc,Ident.string id,p)) cases)
+    (* TODO: add inversion axiom *)

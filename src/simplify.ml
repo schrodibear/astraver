@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.83 2008-09-05 13:21:01 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.84 2008-10-10 15:38:25 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -53,12 +53,15 @@ let reset () =
   Queue.clear queue; 
   Encoding.reset ()
 
-let decl_to_elem = function
+let rec decl_to_elem = function
   | Dgoal (loc, expl, id, s) -> Queue.add (Oblig (loc, expl,id, s)) queue
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) queue
   | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
-  | _ -> ()
+  | Dinductive_def (loc, id, d) ->
+      List.iter decl_to_elem (PredDefExpansor.inductive_def loc id d)
+  | Dlogic _ -> ()
+  | Dtype _ -> ()
 
 let push_decl = Encoding.push
 

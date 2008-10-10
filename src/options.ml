@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.119 2008-07-24 07:54:59 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.120 2008-10-10 15:38:25 marche Exp $ i*)
 
 open Format
 
@@ -120,8 +120,8 @@ let coq_version = match Version.coqversion with "v8" -> V8 | _ -> V7
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Why | MultiWhy | Dispatcher
-  | WhyProject
+  | SmtLib | Isabelle | Hol4 | Gappa | Zenon 
+  | Ergo | Why | MultiWhy | Dispatcher | WhyProject
 
 let prover_ = ref (Coq coq_version)
 
@@ -248,19 +248,20 @@ Encoding for types in untyped logic:
   --encoding sstrat  encodes types using some types  + strat
 
 Prover selection:
+  --alt-ergo  selects Alt-Ergo prover
   --coq       selects COQ prover (default)
-  --pvs       selects PVS prover
-  --hol-light selects HOL Light prover
-  --mizar     selects Mizar prover
-  --harvey    selects haRVey prover
-  --isabelle  selects Isabelle prover
-  --hol4      selects HOL4 prover
-  --simplify  selects Simplify prover
   --cvcl      selects CVC Lite prover
+  --gappa     selects the Gappa prover
+  --harvey    selects haRVey prover
+  --hol-light selects HOL Light prover
+  --hol4      selects HOL4 prover
+  --isabelle  selects Isabelle prover
+  --mizar     selects Mizar prover
+  --pvs       selects PVS prover
+  --simplify  selects Simplify prover
   --smtlib    selects the SMT-LIB format
   --zenon     selects the Zenon prover
-  --gappa     selects the Gappa prover
-
+ or generic Why outputs formats:
   --why       selects the Why pretty-printer
   --multi-why selects the Why pretty-printer, with one file per goal
   --project   selects the Why project format, with one file per goal
@@ -323,6 +324,7 @@ let files =
   let rec parse = function
     | [] -> List.rev !filesq
     | ("-h" | "-help" | "--help") :: _ -> usage (); exit 0
+    | ("-alt-ergo" | "--alt-ergo") :: args -> prover_ := Ergo; parse args
     | ("-pvs" | "--pvs") :: args -> prover_ := Pvs; parse args
     | ("-coq-v7" | "--coq-v7") :: args -> prover_ := Coq V7; parse args
     | ("-coq-v8" | "--coq-v8") :: args -> prover_ := Coq V8; parse args

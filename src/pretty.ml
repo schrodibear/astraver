@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.31 2008-10-10 07:16:48 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.32 2008-10-10 15:38:25 marche Exp $ i*)
 
 open Format
 open Pp
@@ -41,7 +41,16 @@ let queue = Queue.create ()
 
 let reset () = Queue.clear queue
 
-let push_decl d = Queue.add d queue
+let push_decl ?(ergo=false) d = 
+  if ergo
+  then
+    match d with
+      | Dinductive_def (loc, id, d) ->
+	  List.iter
+	    (fun d -> Queue.add d queue)
+            (PredDefExpansor.inductive_def loc id d)
+      | _ -> Queue.add d queue
+  else Queue.add d queue
 
 let iter f = Queue.iter f queue
 

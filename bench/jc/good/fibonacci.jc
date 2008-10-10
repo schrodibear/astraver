@@ -4,10 +4,13 @@ case isfib0 : isfib(0, 0) ;
 case isfib1 : isfib(1, 1) ;
 case isfibn : 
     \forall integer n,r,p; 
-    n >= 2 && isfib(n-2,r) && isfib(n-1,p) ==> isfib(n,p+r) ;
+    n >= 0 && isfib(n,r) && isfib(n+1,p) ==> isfib(n+2,p+r) ;
 }
 
-lemma test_inversion: ! isfib(0,1)
+lemma fib2: isfib(2,1)
+lemma fib6: isfib(6,8)
+lemma neg_fib2: ! isfib(2,2)
+lemma neg_fib5: ! isfib(5,6)
 
 integer Fib(integer n)
     requires n >= 0;

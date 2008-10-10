@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.52 2008-10-09 08:19:10 marche Exp $ i*)
+(*i $Id: smtlib.ml,v 1.53 2008-10-10 15:38:25 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -302,7 +302,11 @@ let print_obligation fmt loc o s =
   fprintf fmt "  @[(not@ %a)@]" output_sequent s;
   fprintf fmt "@]@\n@\n" 
 
-let push_decl d = Encoding.push d
+let rec push_decl d = 
+  match d with
+    | Dinductive_def (loc, id, d) ->
+	List.iter push_decl (PredDefExpansor.inductive_def loc id d)
+    | _ -> Encoding.push d
 
 let iter = Encoding.iter
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.158 2008-10-10 08:41:35 marche Exp $ i*)
+(*i $Id: main.ml,v 1.159 2008-10-10 15:38:25 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -62,7 +62,7 @@ let reset () =
     | Hol4 -> Hol4.reset ()
     | SmtLib ->  ()
     | Harvey | Simplify | Zenon | CVCLite  | Gappa 
-    | Why | MultiWhy | Dispatcher | WhyProject -> ()
+    | Ergo | Why | MultiWhy | Dispatcher | WhyProject -> ()
 
 let add_loc = function
   | Dtype (loc, _, s)
@@ -93,7 +93,8 @@ let push_decl _vloc d =
 	  | Isabelle -> Isabelle.push_decl
 	  | Hol4 -> Hol4.push_decl
 	  | Gappa -> Gappa.push_decl 
-	  | Why | MultiWhy | WhyProject -> Pretty.push_decl 
+	  | Why | MultiWhy | WhyProject -> Pretty.push_decl ~ergo:false
+	  | Ergo -> Pretty.push_decl ~ergo:true
 	  | Dispatcher ->Dispatcher.push_decl
 	  | Harvey -> Harvey.push_decl
 	  | Simplify -> Simplify.push_decl
@@ -145,7 +146,7 @@ let push_parameter id _v tv = match prover () with
       if valid then Coq.push_parameter id tv
   | Pvs | HolLight | Isabelle | Hol4 | Mizar
   | Harvey | Simplify | Zenon | SmtLib | Gappa 
-  | CVCLite | Why | MultiWhy | Dispatcher | WhyProject -> 
+  | CVCLite | Ergo | Why | MultiWhy | Dispatcher | WhyProject -> 
       ()
 
 let output fwe = 
@@ -169,7 +170,7 @@ let output fwe =
     | Hol4 -> Hol4.output_file fwe
     | Gappa -> Gappa.output_file fwe
     | Dispatcher -> ()
-    | Why -> Pretty.output_file fwe
+    | Ergo | Why -> Pretty.output_file fwe
     | MultiWhy -> Pretty.output_files fwe
     | WhyProject -> Pretty.output_project fwe
   end
@@ -190,6 +191,7 @@ let encode q =
     | Hol4 -> Hol4.push_decl d
     | Gappa -> Gappa.push_decl d  
     | Why | MultiWhy | WhyProject -> Pretty.push_decl d
+    | Ergo -> Pretty.push_decl ~ergo:true d
     | Dispatcher -> Dispatcher.push_decl d      
     | Harvey -> Harvey.push_decl d
     | Simplify -> Simplify.push_decl d
@@ -355,7 +357,11 @@ let check_duplicate_binders loc ty =
   check Ident.Idset.empty ty
 
 
-(** [check_positivity pi a] checks whether the assertion [a] as exactly one positive occurrence of pi in a *)
+(** [check_clausal_form loc pi a] checks whether the assertion [a] 
+    has a valid clausal form 
+      \forall x_1,.., x_k. P1 -> ... -> P_n -> P
+    where P is headed by pi and pi has only positive occurrences in P1 .. Pn
+*)
 
 let rec occurrences pi a =
   match a with
@@ -369,25 +375,42 @@ let rec occurrences pi a =
       let (pos1,neg1) = occurrences pi p1 in
       let (pos2,neg2) = occurrences pi p2 in
       (pos1+pos2,neg1+neg2)
-  | Forall (is_wp, id1, id2, typ, triggers, p) -> occurrences pi p
+  | Pnot p1 -> 
+      let (pos1,neg1) = occurrences pi p1 in (neg1,pos1)
+  | Forall (is_wp, id1, id2, typ, triggers, p) -> 
+      assert false (* TODO *)
+      (* occurrences pi p *)
   | Pnamed (_, _) -> assert false (* TODO *)
   | Pfpi (_, _, _) -> assert false (* TODO *)
   | Exists (_, _, _, _)  -> assert false (* TODO *)
   | Forallb (_, _, _)  -> assert false (* TODO *)
-  | Pnot _ -> assert false (* TODO *)
   | Piff (_, _) -> assert false (* TODO *)
   | Por (_, _) -> assert false (* TODO *)
   | Pif (_, _, _) -> assert false (* TODO *)
   | Pvar _ -> assert false (* TODO *)
 
-let check_positivity loc id a =
-  let (pos,neg) = occurrences id a in
-  if pos = 0 then 
-    raise_located loc 
-      (AnyMessage "predicate has no positive occurrence in this case");
-  if pos > 1 then 
-    raise_located loc 
-      (AnyMessage "predicate has too many positive occurrences in this case")
+let rec check_unquantified_clausal_form loc id a =
+  match a with
+    | Pimplies (_, p1, p2) -> 
+	check_unquantified_clausal_form loc id p2;
+	let (pos1,neg1) = occurrences id p1 in
+	if neg1 > 0 then 
+	  raise_located loc 
+	    (AnyMessage "inductive predicate has a negative occurrence in this case")
+    | Papp(pi,_,_) -> 
+	if pi != id then
+	  raise_located loc 
+	    (AnyMessage "head of clause does not contain the inductive predicate")
+    | _ -> 
+	  raise_located loc 
+	    (AnyMessage "this case is not in clausal form")
+	
+
+let rec check_clausal_form loc id a =
+  match a with
+    | Forall (is_wp, id1, id2, typ, triggers, p) -> 
+	check_clausal_form loc id p
+    | _ -> check_unquantified_clausal_form loc id a
 
 let interp_decl ?(_prelude=false) d = 
   let lab = Label.empty in
@@ -463,7 +486,7 @@ let interp_decl ?(_prelude=false) d =
 	let l =
 	  List.map (fun (loc,i,p) ->
 		      let p = Ltyping.predicate lab env p in
-		      check_positivity loc id p;
+		      check_clausal_form loc id p;
 		      (i,p))
 	    indcases
 	in
@@ -571,7 +594,7 @@ let deal_channel parsef cin =
 
 let single_file () = match prover () with
   | Simplify | Harvey | Zenon | CVCLite | Gappa | Dispatcher 
-  | SmtLib | Why | MultiWhy | WhyProject -> true
+  | SmtLib | Ergo | Why | MultiWhy | WhyProject -> true
   | Coq _ | Pvs | Mizar | Hol4 | HolLight | Isabelle -> false
 
 let deal_file f =

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.28 2008-09-30 15:55:51 marche Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.29 2008-10-10 15:38:25 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -67,7 +67,7 @@ let push_elem p e =
   | Cvcl -> Cvcl.push_decl e
   | Zenon -> Zenon.push_decl e
   | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl e
-  | Ergo -> Pretty.push_decl e
+  | Ergo -> Pretty.push_decl ~ergo:true e
   | Graph -> Pretty.push_decl e
 let push_obligation p (loc, expl, id, s) = 
   let g = Dgoal (loc, expl, id, s) in
