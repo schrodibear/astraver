@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: regen.mli,v 1.24 2008-02-20 14:34:26 marche Exp $ i*)
+(*i $Id: regen.mli,v 1.25 2008-10-10 07:16:48 marche Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -44,6 +44,7 @@ type element_kind =
   | Lg
   | Ax
   | Pr
+  | Ind
   | Fun
   | Ty
 
@@ -56,6 +57,7 @@ type element =
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
+  | Inductive of string * inductive_def Env.scheme
   | Function of string * function_def Env.scheme
   | AbstractType of string * string list
 

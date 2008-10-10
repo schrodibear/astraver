@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.46 2008-10-09 08:19:10 marche Exp $ i*)
+(*i $Id: mizar.ml,v 1.47 2008-10-10 07:16:48 marche Exp $ i*)
 
 (*s Mizar output *)
 
@@ -327,6 +327,7 @@ struct
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate _ -> assert false (*TODO*)
+      | Inductive _ -> assert false (*TODO*)
       | Function _ -> assert false (*TODO*)
       | AbstractType _ -> assert false (*TODO*)
     end;
@@ -339,6 +340,7 @@ struct
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate _ -> assert false (*TODO*)
+    | Inductive _ -> assert false (*TODO*)
     | Function _ -> assert false (*TODO*)
     | AbstractType _ -> assert false (*TODO*)
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.170 2008-10-09 08:19:10 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.171 2008-10-10 07:16:48 marche Exp $ i*)
 
 open Options
 open Logic
@@ -869,13 +869,12 @@ let print_axiom fmt id p =
   fprintf fmt "Admitted.@\n"
   (* if is_polymorphic p then fprintf fmt "Implicit Arguments %s.@\n" id *)
 
+let print_poly fmt x = 
+  if v8 then fprintf fmt "(A%d:Set)" x.tag else fprintf fmt "[A%d:Set]" x.tag
 
-let reprint_predicate fmt id p =
+let reprint_predicate_def fmt id p =
   let (l,(bl,p)) = Env.specialize_predicate_def p in
   let l = Env.Vmap.fold (fun _ t acc -> t :: acc) l [] in
-  let print_poly fmt x = 
-    if v8 then fprintf fmt "(A%d:Set)" x.tag else fprintf fmt "[A%d:Set]" x.tag
-  in
   let print_binder fmt (x,pt) = 
     if v8 then 
       fprintf fmt "(%a:%a)" ident x print_pure_type pt
@@ -889,10 +888,29 @@ let reprint_predicate fmt id p =
     (print_list space print_binder) bl
     print_predicate p 
 
-let print_predicate fmt id p = 
-  reprint_predicate fmt id p;
+let print_predicate_def fmt id p = 
+  reprint_predicate_def fmt id p;
   if implicits_for_predicate p then 
     fprintf fmt "Implicit Arguments %a.@\n" idents id
+
+let reprint_inductive fmt id d =
+  let (l,(bl,cases)) = Env.specialize_inductive_def d in
+  let l = Env.Vmap.fold (fun _ t acc -> t :: acc) l [] in
+  fprintf fmt
+     "@[<hov 2>(*Why inductive*) Inductive %s %a : %a -> Prop @ := @[%a@].@]@\n" 
+    id 
+    (print_list space print_poly) l
+    (print_list arrow print_pure_type) bl
+    (print_list newline 
+       (fun fmt (id,p) -> 
+	  fprintf fmt "| %a : %a@\n" ident id print_predicate p)) cases
+
+let print_inductive fmt id d = 
+  reprint_inductive fmt id d
+(*
+  if implicits_for_predicate p then 
+    fprintf fmt "Implicit Arguments %a.@\n" idents id
+*)
 
 let reprint_type fmt id vl =
   fprintf fmt "@[<hov 2>(*Why type*) Definition %a: @[%aSet@].@]@\n"
@@ -974,7 +992,8 @@ struct
       | Obligation (loc, expl, id, s) -> print_obligation fmt loc expl id s
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
-      | Predicate (id, p) -> print_predicate fmt id p
+      | Predicate (id, p) -> print_predicate_def fmt id p
+      | Inductive(id,d) -> print_inductive fmt id d
       | Function (id, f) -> print_function fmt id f
       | AbstractType (id, vl) -> print_type fmt id vl
     end;
@@ -986,7 +1005,8 @@ struct
     | Obligation (loc, expl, id, s) -> reprint_obligation fmt loc expl id s
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
-    | Predicate (id, p) -> reprint_predicate fmt id p
+    | Predicate (id, p) -> reprint_predicate_def fmt id p
+    | Inductive(id, d) -> reprint_inductive fmt id d
     | Function (id, f) -> reprint_function fmt id f
     | AbstractType (id, vl) -> reprint_type fmt id vl
 
@@ -1014,8 +1034,8 @@ let push_decl = function
   | Dlogic (_, id, t) -> Gen.add_elem (Lg, rename id) (Logic (id, t))
   | Daxiom (_, id, p) -> Gen.add_elem (Ax, rename id) (Axiom (id, p))
   | Dpredicate_def (_,id,p) -> Gen.add_elem (Pr, rename id) (Predicate (id, p))
-  | Dinductive_def(loc, ident, inddef) ->
-      failwith "Coq output: inductive def not yet supported"
+  | Dinductive_def(loc, id, d) -> 
+      Gen.add_elem (Ind, rename id) (Inductive(id,d)) 
   | Dfunction_def (_,id,f) -> Gen.add_elem (Fun, rename id) (Function (id, f))
   | Dtype (_, vl, id) -> Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
 
@@ -1043,6 +1063,8 @@ let _ =
     "(\\*Why logic\\*) Definition[ ]+\\([^ ]*\\)[ ]*:[ ]*" Lg;
   Gen.add_regexp 
     "(\\*Why predicate\\*) Definition[ ]+\\([^ ]*\\) " Pr;
+  Gen.add_regexp 
+    "(\\*Why inductive\\*) Inductive[ ]+\\([^ ]*\\) " Ind;
   Gen.add_regexp 
     "(\\*Why function\\*) Definition[ ]+\\([^ ]*\\) " Fun;
   Gen.add_regexp 

@@ -386,6 +386,7 @@ struct
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
+      | Inductive(id, p) -> assert false
       | Function (id, f) -> print_function fmt id f
       | AbstractType (id, vl) -> print_type fmt id vl
     end;
@@ -399,6 +400,7 @@ struct
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
+    | Inductive(id, p) -> assert false
     | Function (id, f) -> reprint_function fmt id f
     | AbstractType (id, vl) -> reprint_type fmt id vl
 

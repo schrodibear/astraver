@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: regen.ml,v 1.27 2008-02-20 14:34:26 marche Exp $ i*)
+(*i $Id: regen.ml,v 1.28 2008-10-10 07:16:48 marche Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -46,6 +46,7 @@ type element_kind =
   | Lg
   | Ax
   | Pr
+  | Ind
   | Fun
   | Ty
 
@@ -58,6 +59,7 @@ type element =
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
+  | Inductive of string * inductive_def Env.scheme
   | Function of string * function_def Env.scheme
   | AbstractType of string * string list
 
@@ -91,6 +93,7 @@ module Make(X : S) = struct
     | Lg, s -> fprintf fmt "logic %s" s
     | Ax, s -> fprintf fmt "axiom %s" s
     | Pr, s -> fprintf fmt "predicate %s" s
+    | Ind, s -> fprintf fmt "inductive %s" s
     | Fun, s -> fprintf fmt "function %s" s
     | Ty, s -> fprintf fmt "type %s" s
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.156 2008-10-09 08:19:10 marche Exp $ i*)
+(*i $Id: main.ml,v 1.157 2008-10-10 07:16:48 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -365,6 +365,10 @@ let rec occurrences pi a =
       let (pos1,neg1) = occurrences pi p1 in
       let (pos2,neg2) = occurrences pi p2 in
       (neg1+pos2,pos1+neg2)
+  | Pand (_, _, p1, p2) -> 
+      let (pos1,neg1) = occurrences pi p1 in
+      let (pos2,neg2) = occurrences pi p2 in
+      (pos1+pos2,neg1+neg2)
   | Forall (is_wp, id1, id2, typ, triggers, p) -> occurrences pi p
   | Pnamed (_, _) -> assert false (* TODO *)
   | Pfpi (_, _, _) -> assert false (* TODO *)
@@ -373,7 +377,6 @@ let rec occurrences pi a =
   | Pnot _ -> assert false (* TODO *)
   | Piff (_, _) -> assert false (* TODO *)
   | Por (_, _) -> assert false (* TODO *)
-  | Pand (_, _, _, _) -> assert false (* TODO *)
   | Pif (_, _, _) -> assert false (* TODO *)
   | Pvar _ -> assert false (* TODO *)
 
@@ -461,7 +464,7 @@ let interp_decl ?(_prelude=false) d =
 	  List.map (fun (loc,i,p) ->
 		      let p = Ltyping.predicate lab env p in
 		      check_positivity loc id p;
-		      (id,p))
+		      (i,p))
 	    indcases
 	in
 	let d = generalize_inductive_def (pl,l) in

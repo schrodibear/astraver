@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.77 2008-10-09 08:19:10 marche Exp $ i*)
+(*i $Id: env.ml,v 1.78 2008-10-10 07:16:48 marche Exp $ i*)
 
 open Ident
 open Misc
@@ -244,6 +244,12 @@ let subst_predicate_def s (bl,p) =
   bl, subst_predicate s p
 
 let specialize_predicate_def = specialize_scheme subst_predicate_def
+
+let subst_inductive_def s (bl,p) =
+  let bl = List.map (subst_pure_type s) bl in
+  bl, List.map (fun (id,p) -> (id,subst_predicate s p)) p
+
+let specialize_inductive_def = specialize_scheme subst_inductive_def
 
 let subst_function_def s (bl,t,e) =
   let bl = List.map (fun (x,pt) -> (x, subst_pure_type s pt)) bl in

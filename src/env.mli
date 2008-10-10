@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.mli,v 1.53 2008-10-09 08:19:10 marche Exp $ i*)
+(*i $Id: env.mli,v 1.54 2008-10-10 07:16:48 marche Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -149,6 +149,8 @@ val specialize_logic_type : logic_type scheme -> var_subst * logic_type
 val specialize_predicate : predicate scheme -> var_subst * predicate
 val specialize_predicate_def : 
   predicate_def scheme -> var_subst * predicate_def
+val specialize_inductive_def : 
+  inductive_def scheme -> var_subst * inductive_def
 val specialize_function_def : 
   function_def scheme -> var_subst * function_def
 val specialize_sequent : sequent scheme -> var_subst * sequent
