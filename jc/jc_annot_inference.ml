@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.136 2008-10-10 10:15:41 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.137 2008-10-10 15:08:18 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2219,7 +2219,13 @@ let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
     in
     (* [elima] is the quantifier free version of [quanta].
     *)
+    if debug then 
+      printf "@[<v 2>[finalize_target] quantified formula@\n%a@]@."
+	Jc_output.assertion quanta;
     let elima = quantif_eliminate quanta inva in
+    if debug then 
+      printf "@[<v 2>[finalize_target] quantifier-free formula@\n%a@]@."
+	Jc_output.assertion elima;
     if contradictory elima patha then
       begin
 	if Jc_options.debug then
@@ -2253,6 +2259,9 @@ let rec wp_expr weakpre =
       printf "[wp_expr] %a@\n%a@\nfor stat %a@." Loc.report_position e#pos
 	(print_option Jc_output.assertion) curposts.jc_post_normal
 	Jc_output.expr target.jc_target_expr;
+    if debug then 
+      printf "[wp_expr] curposts is None? %b@." 
+	(curposts.jc_post_normal = None);
     let curposts = match e#node with
       | JCElet(v,e1opt,e2) ->
 	  let curposts = wp e2 curposts in
@@ -2357,9 +2366,9 @@ let rec wp_expr weakpre =
 	  { curposts with jc_post_normal = post }
       | JCEblock sl ->
 	  List.fold_right wp sl curposts
-      | JCEif(e1,etrue,efalse) ->
+      | JCEif(test,etrue,efalse) ->
 	  let tposts = wp etrue curposts in
-	  let ta = raw_asrt_of_expr e1 in
+	  let ta = raw_asrt_of_expr test in
 	  let f = atp_of_asrt ta in
 	  let fvars = Atp.fv f in
 	  let varsets = List.map Vwp.term fvars in
@@ -2377,7 +2386,7 @@ let rec wp_expr weakpre =
 	  let fposts = wp efalse curposts in
 	  let fpost = 
 	    match fposts.jc_post_normal with None -> None | Some a -> 
-	      let fa = raw_not_asrt (raw_asrt_of_expr e1) in
+	      let fa = raw_not_asrt (raw_asrt_of_expr test) in
 	      if !Jc_options.annotation_sem = AnnotWeakPre
 		|| (!Jc_options.annotation_sem = AnnotStrongPre
 		    && mem_any_term_in_assertion varsets a)
@@ -2395,7 +2404,8 @@ let rec wp_expr weakpre =
 	  let fvs,_ = pop_modified_vars fposts in
 	  let vs = VarSet.union tvs fvs in
 	  let curposts = add_modified_vars curposts vs in
-	  { curposts with jc_post_normal = post; }
+	  let curposts = { curposts with jc_post_normal = post } in
+	  wp test curposts
       | JCEreturn_void | JCEreturn _ -> 
 	  { curposts with jc_post_normal = None; }
       | JCEthrow(ei,_) -> (* TODO: link with value caught *)
@@ -2480,7 +2490,7 @@ let rec wp_expr weakpre =
 	    (* 	  in *)
 	    (* 	  { curposts with jc_post_normal = post; } *)
       | JCEapp call -> 
-	  let curposts = wp e curposts in
+(* 	  let curposts = wp e curposts in *)
 	  curposts
       | JCEvar _
       | JCEconst _ -> 
