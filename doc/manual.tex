@@ -1232,9 +1232,9 @@ Syntax for logic declarations is given Figure~\ref{fig:ldecl}.
       & $|$ & \te{predicate} \nt{identifier}
               \te{(} \nt{logic\_binder}\etoilesep{\te{,}}
               \te{)} \te{=} \nt{predicate} \\ \indextt{predicate}
-      & $|$ & \te{predicate} \nt{identifier}
-              \te{:} \nt{logic\_type} \te{\{}\\ 
-          & &(\nt{identifier} \te{:} \nt{predicate} \te{;})\etoile{}
+      & $|$ & \te{inductive} \nt{identifier}
+              \te{:} \nt{logic\_type} \te{=}\\ 
+          & &(\te{|} \nt{identifier} \te{:} \nt{predicate})\etoile{}
               \te{\}} \\ \indextt{predicate}
       & $|$ & \te{axiom} \nt{identifier} \te{:} 
               \nt{predicate} \\\indextt{axiom}

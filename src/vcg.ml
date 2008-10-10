@@ -863,15 +863,7 @@ let rec explain_for_pred internal user = function
       (if debug then
 	 eprintf "User label for explanation: `%a'@." (Pp.print_option pp_print_string)user;
        user)
-(*
-      (match user with
-	| None -> None
-	| Some lab -> 
-	   try Some(Util.loc_of_label lab) with Not_found -> 
-	     if debug then
-	       eprintf "Warning: no loc found for label %s@." lab;
-	     None)
-*),
+	,
       (match internal with
 	| Some n ->
 	    begin

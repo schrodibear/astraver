@@ -560,7 +560,7 @@ end = -1
 
 [cons_TestSuperConstructor_ensures_default]
 name = "Constructor of class TestSuperConstructor"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Creation.java"
 line = 64
 begin = 4
@@ -630,7 +630,7 @@ end = 12
 
 [cons_Creation_int_int_ensures_default]
 name = "Constructor of class Creation"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Creation.java"
 line = 26
 begin = 4
@@ -1060,7 +1060,7 @@ end = 117
 
 [Creation_test2_ensures_default]
 name = "Method test2"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Creation.java"
 line = 41
 begin = 22
@@ -1261,7 +1261,7 @@ end = 120
 
 [cons_Creation_ensures_default]
 name = "Constructor of class Creation"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Creation.java"
 line = 10
 begin = 4
@@ -1308,7 +1308,7 @@ end = 20
 
 [Creation_test1_ensures_default]
 name = "Method test1"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Creation.java"
 line = 33
 begin = 22
@@ -1386,7 +1386,7 @@ end = 74
 
 [Creation_test3_ensures_default]
 name = "Method test3"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Creation.java"
 line = 50
 begin = 22
@@ -1844,7 +1844,7 @@ end = -1
 
 [cons_Creation_int_ensures_default]
 name = "Constructor of class Creation"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Creation.java"
 line = 18
 begin = 4

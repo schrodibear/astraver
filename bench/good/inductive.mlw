@@ -1,10 +1,8 @@
-predicate isfib: int, int -> prop {
-  isfib0: isfib(0,0);
-  isfib1: isfib(1,1);
-  isfibn: forall n:int. forall r:int. forall p:int.
-            n >= 2 and isfib(n-2,r) and isfib(n-1,p) -> isfib(n, p+r);
-}
-
+inductive isfib: int, int -> prop =
+| isfib0: isfib(0,0)
+| isfib1: isfib(1,1)
+| isfibn: forall n:int. forall r:int. forall p:int.
+            n >= 2 and isfib(n-2,r) and isfib(n-1,p) -> isfib(n, p+r)
 
 goal test_inversion: not isfib(0,1)
 

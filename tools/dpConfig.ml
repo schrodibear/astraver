@@ -117,11 +117,11 @@ let cvc3 =
 
 let prover_list = 
   [
-    alt_ergo, ["ergo"] ;
-    simplify, ["simplify"] ;
-    z3, [] ;
-    yices, [] ;
-    cvc3, [] ;
+    alt_ergo, ["alt-ergo" ; "ergo"] ;
+    simplify, ["Simplify" ; "simplify"] ;
+    z3, ["z3"] ;
+    yices, ["yices"] ;
+    cvc3, ["cvc3"] ;
   ] 
 
 let rc_file () =

@@ -678,7 +678,7 @@ end = 23
 
 [SideEffects_m1_ensures_default]
 name = "Method m1"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/SideEffects.java"
 line = 8
 begin = 9
@@ -1633,7 +1633,7 @@ text = "IndexBounds"/>
 text = "IndexBounds"/>
     </goal>
     </behavior>
-    <behavior name="Behavior">
+    <behavior name="Default behavior">
     <goal why_file="why/SideEffects_po1.why">
       <location file = "HOME/tests/java/SideEffects.java" line = "11" begin = "12" end = "31"/>
       <explain kind = "Assert"/>

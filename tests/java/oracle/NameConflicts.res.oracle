@@ -416,7 +416,7 @@ end = -1
 
 [NameConflicts_setI_ensures_default]
 name = "Method setI"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/NameConflicts.java"
 line = 6
 begin = 9
@@ -508,7 +508,7 @@ end = 13
 
 [NameConflicts_m_ensures_default]
 name = "Method m"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/NameConflicts.java"
 line = 13
 begin = 8
@@ -524,7 +524,7 @@ end = 13
 
 [NameConflicts_field_ensures_default]
 name = "Method field"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/NameConflicts.java"
 line = 20
 begin = 8

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.85 2008-10-09 08:49:31 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.86 2008-10-10 08:41:35 marche Exp $ i*)
 
 open Printf
 open Options
@@ -162,26 +162,34 @@ module View = struct
   let renderer = GTree.cell_renderer_text [`XALIGN 0.] 
   let first_col = GTree.view_column ~title:"Proof obligations " 
     ~renderer:(renderer, ["text", Model.name]) () 
- 
-  let () = first_col#set_resizable true
-  let () = first_col#set_max_width 200
+  let last_col = GTree.view_column ~title:"Statistics" 
+    ~renderer:(renderer, ["text", Model.stat]) ()
 
+  let () = 
+    first_col#set_resizable true;
+    first_col#set_max_width 400;
+    last_col#set_resizable true
+ 
   let add_columns ~(view : GTree.view) ~_model =
     (* let renderer = GTree.cell_renderer_text [`XALIGN 0.] in *)
     let icon_renderer = GTree.cell_renderer_pixbuf [ `STOCK_SIZE `BUTTON ] in
     let _n : int = view#append_column first_col in
-    List.map
-      (fun p ->
-	 let vc = 
-	   GTree.view_column ~title:(prover_name_with_version_and_enc p) 
-	     ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) ()
-	 in
-	 vc#set_resizable true;
-	 p.pr_viewcol <- Some vc;
-	 if p.pr_info.DpConfig.version <> "" then vc#set_clickable true;
-	 let _n : int = view#append_column vc in
-	 p, vc)
-      (Model.get_provers ())
+    let l = 
+      List.map
+	(fun p ->
+	   let vc = 
+	     GTree.view_column ~title:(prover_name_with_version_and_enc p) 
+	       ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) ()
+	   in
+	   vc#set_resizable true;
+	   p.pr_viewcol <- Some vc;
+	   if p.pr_info.DpConfig.version <> "" then vc#set_clickable true;
+	   let _n : int = view#append_column vc in
+	   p, vc)
+	(Model.get_provers ())
+    in
+    let _n : int = view#append_column last_col 
+    in l
 
 end
 
@@ -266,16 +274,19 @@ let update_statistics (model:GTree.tree_store) row f children =
   let statistics = get_statistics model row in
 *)
   let total = string_of_int (get_all_results f model) in
+(*
   let name =
     if f="" then "User goals" else
     try
       let (id,beh,(_f,_l,_b,_e)) = Hashtbl.find Util.program_locs f in
-      beh ^ " of " ^ id
+      beh ^ "\nof " ^ id
     with Not_found -> "unknown function " ^ f
   in
   model#set 
-    ~row ~column:Model.name (name^" "^" ("^total^"/"^(string_of_int children)^")")
-
+    ~row ~column:Model.name name
+*)
+  model#set 
+    ~row ~column:Model.stat (total^"/"^(string_of_int children))
 
 let build_statistics (model:GTree.tree_store) f = 
   try

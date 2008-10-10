@@ -594,6 +594,14 @@ line = 98
 begin = 15
 end = 219
 
+[distr_left]
+name = "distr_left"
+behavior = "lemma"
+file = "HOME/tests/java/Gcd.jc"
+line = 67
+begin = 0
+end = 158
+
 [JC_43]
 file = "HOME/"
 line = 0
@@ -702,7 +710,7 @@ end = -1
 
 [Gcd_gcd_ensures_default]
 name = "Method gcd"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Gcd.java"
 line = 95
 begin = 15
@@ -732,6 +740,22 @@ line = 0
 begin = -1
 end = -1
 
+[mul_assoc]
+name = "mul_assoc"
+behavior = "lemma"
+file = "HOME/tests/java/Gcd.jc"
+line = 91
+begin = 0
+end = 149
+
+[distr_right]
+name = "distr_right"
+behavior = "lemma"
+file = "HOME/tests/java/Gcd.jc"
+line = 79
+begin = 0
+end = 139
+
 [JC_55]
 file = "HOME/"
 line = 0
@@ -745,6 +769,14 @@ file = "HOME/tests/java/Gcd.java"
 line = 95
 begin = 15
 end = 18
+
+[gcd_zero]
+name = "gcd_zero"
+behavior = "lemma"
+file = "HOME/tests/java/Gcd.jc"
+line = 44
+begin = 0
+end = 66
 
 [JC_10]
 file = "HOME/tests/java/Gcd.jc"
@@ -775,6 +807,14 @@ file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[mul_comm]
+name = "mul_comm"
+behavior = "lemma"
+file = "HOME/tests/java/Gcd.jc"
+line = 54
+begin = 0
+end = 103
 
 [Gcd_gcd_ensures_bezoutProperty]
 name = "Method gcd"
@@ -814,6 +854,14 @@ line = 91
 begin = 18
 end = 36
 
+[distr_right_minus]
+name = "distr_right_minus"
+behavior = "lemma"
+file = "HOME/tests/java/Gcd.jc"
+line = 73
+begin = 0
+end = 165
+
 [JC_20]
 file = "HOME/tests/java/Gcd.java"
 line = 91
@@ -851,6 +899,14 @@ line = 106
 begin = 20
 end = 25
 
+[mod_property]
+name = "mod_property"
+behavior = "lemma"
+file = "HOME/tests/java/Gcd.jc"
+line = 97
+begin = 0
+end = 160
+
 [JC_26]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
@@ -878,6 +934,22 @@ line = 98
 begin = 15
 end = 219
 
+[div_mod_property]
+name = "div_mod_property"
+behavior = "lemma"
+file = "HOME/tests/java/Gcd.jc"
+line = 85
+begin = 0
+end = 165
+
+[distr_left_minus]
+name = "distr_left_minus"
+behavior = "lemma"
+file = "HOME/tests/java/Gcd.jc"
+line = 48
+begin = 0
+end = 164
+
 [JC_30]
 file = "HOME/"
 line = 0
@@ -890,6 +962,14 @@ file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
+
+[gcd_property]
+name = "gcd_property"
+behavior = "lemma"
+file = "HOME/tests/java/Gcd.jc"
+line = 59
+begin = 0
+end = 219
 
 [JC_32]
 kind = DivByZero
@@ -2005,102 +2085,102 @@ why --project [...] why/Gcd.why
   <lemma name="distr_left">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po1.why">
-      <location file = "why/Gcd.why" line = "62" begin = "0" end = "178"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "67" begin = "0" end = "158"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_left_minus">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po2.why">
-      <location file = "why/Gcd.why" line = "76" begin = "0" end = "178"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "48" begin = "0" end = "164"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_right">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po3.why">
-      <location file = "why/Gcd.why" line = "90" begin = "0" end = "161"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "79" begin = "0" end = "139"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_right_minus">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po4.why">
-      <location file = "why/Gcd.why" line = "104" begin = "0" end = "179"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "73" begin = "0" end = "165"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="div_mod_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po5.why">
-      <location file = "why/Gcd.why" line = "118" begin = "0" end = "187"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "85" begin = "0" end = "165"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="gcd_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po6.why">
-      <location file = "why/Gcd.why" line = "142" begin = "0" end = "196"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "59" begin = "0" end = "219"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="gcd_zero">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po7.why">
-      <location file = "why/Gcd.why" line = "158" begin = "0" end = "54"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "44" begin = "0" end = "66"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mod_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po8.why">
-      <location file = "why/Gcd.why" line = "183" begin = "0" end = "178"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "97" begin = "0" end = "160"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mul_assoc">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po9.why">
-      <location file = "why/Gcd.why" line = "195" begin = "0" end = "163"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "91" begin = "0" end = "149"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mul_comm">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po10.why">
-      <location file = "why/Gcd.why" line = "209" begin = "0" end = "99"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "54" begin = "0" end = "103"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <function name="goal mul_comm">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="mul_comm">
+    <location file = "HOME/tests/java/Gcd.jc" line = "54" begin = "0" end = "103"/>
   </function>
-  <function name="goal mul_assoc">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="mul_assoc">
+    <location file = "HOME/tests/java/Gcd.jc" line = "91" begin = "0" end = "149"/>
   </function>
-  <function name="goal mod_property">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="mod_property">
+    <location file = "HOME/tests/java/Gcd.jc" line = "97" begin = "0" end = "160"/>
   </function>
-  <function name="goal gcd_zero">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="gcd_zero">
+    <location file = "HOME/tests/java/Gcd.jc" line = "44" begin = "0" end = "66"/>
   </function>
-  <function name="goal gcd_property">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="gcd_property">
+    <location file = "HOME/tests/java/Gcd.jc" line = "59" begin = "0" end = "219"/>
   </function>
-  <function name="goal div_mod_property">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="div_mod_property">
+    <location file = "HOME/tests/java/Gcd.jc" line = "85" begin = "0" end = "165"/>
   </function>
-  <function name="goal distr_right_minus">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="distr_right_minus">
+    <location file = "HOME/tests/java/Gcd.jc" line = "73" begin = "0" end = "165"/>
   </function>
-  <function name="goal distr_right">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="distr_right">
+    <location file = "HOME/tests/java/Gcd.jc" line = "79" begin = "0" end = "139"/>
   </function>
-  <function name="goal distr_left_minus">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="distr_left_minus">
+    <location file = "HOME/tests/java/Gcd.jc" line = "48" begin = "0" end = "164"/>
   </function>
-  <function name="goal distr_left">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="distr_left">
+    <location file = "HOME/tests/java/Gcd.jc" line = "67" begin = "0" end = "158"/>
   </function>
   <function name="Method gcd">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -2123,7 +2203,7 @@ text = "DivByZero"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Behavior">
+    <behavior name="Default behavior">
     <goal why_file="why/Gcd_po12.why">
       <location file = "HOME/tests/java/Gcd.java" line = "98" begin = "15" end = "219"/>
       <explain kind = "LoopInvInit"/>
@@ -4291,7 +4371,7 @@ why -simplify [...] why/Gcd.why
  ;; Why axiom bitvector_of_interface_of_interface_of_bitvector
  (FORALL (x) (EQ (bitvector_of_interface (interface_of_bitvector x)) x)))
 
-;; distr_left, File "why/Gcd.why", line 62, characters 0-178
+;; distr_left, File "HOME/tests/java/Gcd.jc", line 67, characters 0-158
 (FORALL (x_0_0 y_0 z_0)
 (EQ (* (+ x_0_0 y_0) z_0) (+ (* x_0_0 z_0) (* y_0 z_0))))
 
@@ -4300,28 +4380,28 @@ why -simplify [...] why/Gcd.why
  (FORALL (x_0_0 y_0 z_0)
  (EQ (* (+ x_0_0 y_0) z_0) (+ (* x_0_0 z_0) (* y_0 z_0)))))
 
-;; distr_left_minus, File "why/Gcd.why", line 76, characters 0-178
+;; distr_left_minus, File "HOME/tests/java/Gcd.jc", line 48, characters 0-164
 (FORALL (x_2 y_2 z_2) (EQ (* (- x_2 y_2) z_2) (- (* x_2 z_2) (* y_2 z_2))))
 
 (BG_PUSH
  ;; Why axiom distr_left_minus_as_axiom
  (FORALL (x_2 y_2 z_2) (EQ (* (- x_2 y_2) z_2) (- (* x_2 z_2) (* y_2 z_2)))))
 
-;; distr_right, File "why/Gcd.why", line 90, characters 0-161
+;; distr_right, File "HOME/tests/java/Gcd.jc", line 79, characters 0-139
 (FORALL (x_4 y z) (EQ (* x_4 (+ y z)) (+ (* x_4 y) (* x_4 z))))
 
 (BG_PUSH
  ;; Why axiom distr_right_as_axiom
  (FORALL (x_4 y z) (EQ (* x_4 (+ y z)) (+ (* x_4 y) (* x_4 z)))))
 
-;; distr_right_minus, File "why/Gcd.why", line 104, characters 0-179
+;; distr_right_minus, File "HOME/tests/java/Gcd.jc", line 73, characters 0-165
 (FORALL (x_1 y_1 z_1) (EQ (* x_1 (- y_1 z_1)) (- (* x_1 y_1) (* x_1 z_1))))
 
 (BG_PUSH
  ;; Why axiom distr_right_minus_as_axiom
  (FORALL (x_1 y_1 z_1) (EQ (* x_1 (- y_1 z_1)) (- (* x_1 y_1) (* x_1 z_1)))))
 
-;; div_mod_property, File "why/Gcd.why", line 118, characters 0-187
+;; div_mod_property, File "HOME/tests/java/Gcd.jc", line 85, characters 0-165
 (FORALL (x_6 y_6)
 (IMPLIES (AND (>= x_6 0) (> y_6 0))
 (EQ (int_mod x_6 y_6) (- x_6 (* y_6 (int_div x_6 y_6))))))
@@ -4340,7 +4420,7 @@ why -simplify [...] why/Gcd.why
   (FORALL (z_4)
   (IMPLIES (AND (divides z_4 a) (divides z_4 b)) (divides z_4 d))))))
 
-;; gcd_property, File "why/Gcd.why", line 142, characters 0-196
+;; gcd_property, File "HOME/tests/java/Gcd.jc", line 59, characters 0-219
 (FORALL (a_1 b_0 d_0 q_0)
 (IMPLIES (AND (> b_0 0) (isGcd b_0 (int_mod a_1 b_0) d_0))
 (isGcd a_1 b_0 d_0)))
@@ -4355,7 +4435,7 @@ why -simplify [...] why/Gcd.why
  (IMPLIES (AND (> b_0 0) (isGcd b_0 (int_mod a_1 b_0) d_0))
  (FORALL (q_0) (isGcd a_1 b_0 d_0)))))
 
-;; gcd_zero, File "why/Gcd.why", line 158, characters 0-54
+;; gcd_zero, File "HOME/tests/java/Gcd.jc", line 44, characters 0-66
 (FORALL (a_0) (isGcd a_0 0 a_0))
 
 (BG_PUSH
@@ -4383,7 +4463,7 @@ why -simplify [...] why/Gcd.why
  (FORALL (x interface_tag_table)
  (instanceof interface_tag_table x interface_tag)))
 
-;; mod_property, File "why/Gcd.why", line 183, characters 0-178
+;; mod_property, File "HOME/tests/java/Gcd.jc", line 97, characters 0-160
 (FORALL (x_7 y_7)
 (IMPLIES (AND (>= x_7 0) (> y_7 0))
 (AND (<= 0 (int_mod x_7 y_7)) (< (int_mod x_7 y_7) y_7))))
@@ -4394,14 +4474,14 @@ why -simplify [...] why/Gcd.why
  (IMPLIES (AND (>= x_7 0) (> y_7 0))
  (AND (<= 0 (int_mod x_7 y_7)) (< (int_mod x_7 y_7) y_7)))))
 
-;; mul_assoc, File "why/Gcd.why", line 195, characters 0-163
+;; mul_assoc, File "HOME/tests/java/Gcd.jc", line 91, characters 0-149
 (FORALL (x_4_0 y_4 z_3) (EQ (* x_4_0 (* y_4 z_3)) (* (* x_4_0 y_4) z_3)))
 
 (BG_PUSH
  ;; Why axiom mul_assoc_as_axiom
  (FORALL (x_4_0 y_4 z_3) (EQ (* x_4_0 (* y_4 z_3)) (* (* x_4_0 y_4) z_3))))
 
-;; mul_comm, File "why/Gcd.why", line 209, characters 0-99
+;; mul_comm, File "HOME/tests/java/Gcd.jc", line 54, characters 0-103
 (FORALL (x_3 y_3) (EQ (* x_3 y_3) (* y_3 x_3)))
 
 (BG_PUSH

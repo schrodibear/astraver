@@ -808,7 +808,7 @@ end = 24
 
 [BinarySearch_binary_search_ensures_default]
 name = "Method binary_search"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/BinarySearch.java"
 line = 61
 begin = 15
@@ -918,6 +918,14 @@ file = "HOME/tests/java/BinarySearch.jc"
 line = 57
 begin = 8
 end = 23
+
+[mean_property]
+name = "mean_property"
+behavior = "lemma"
+file = "HOME/tests/java/BinarySearch.jc"
+line = 71
+begin = 0
+end = 149
 
 [JC_80]
 file = "HOME/"
@@ -2332,12 +2340,12 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "why/BinarySearch.why" line = "237" begin = "0" end = "206"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "71" begin = "0" end = "149"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <function name="goal mean_property">
-    <location file = "" line = "0" begin = "0" end = "0"/>
+  <function name="mean_property">
+    <location file = "HOME/tests/java/BinarySearch.jc" line = "71" begin = "0" end = "149"/>
   </function>
   <function name="Method binary_search">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -2432,7 +2440,7 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Behavior">
+    <behavior name="Default behavior">
     <goal why_file="why/BinarySearch_po4.why">
       <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
@@ -6186,7 +6194,7 @@ why -simplify [...] why/BinarySearch.why
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
-;; mean_property, File "why/BinarySearch.why", line 237, characters 0-206
+;; mean_property, File "HOME/tests/java/BinarySearch.jc", line 71, characters 0-149
 (FORALL (x_4 y)
 (IMPLIES (<= x_4 y)
 (AND (<= x_4 (+ x_4 (int_div (- y x_4) 2)))

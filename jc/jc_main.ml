@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.126 2008-10-09 11:33:06 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.127 2008-10-10 08:41:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -309,8 +309,8 @@ let main () =
     Jc_options.lprintf "Generation of Why axioms@.";
     let d_axioms = 
       Hashtbl.fold 
-	(fun id (is_axiom,labels,p) acc ->
-	   Jc_interp.tr_axiom id is_axiom labels p acc)
+	(fun id (loc,is_axiom,labels,p) acc ->
+	   Jc_interp.tr_axiom loc id is_axiom labels p acc)
 	Jc_typing.axioms_table
 	d_lfuns
     in	       

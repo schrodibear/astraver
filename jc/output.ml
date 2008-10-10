@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.39 2008-10-09 08:19:10 marche Exp $ i*)
+(*i $Id: output.ml,v 1.40 2008-10-10 08:41:35 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -726,12 +726,12 @@ let fprintf_why_decl form d =
 	  (print_list comma (fun fmt (id,t) -> fprintf_logic_type fmt t)) args
 	  fprintf_logic_type t 
     | Inductive(b,id,args,cases) ->
-	fprintf form "@[<hv 1>%slogic %s: @[%a -> prop@] {@\n @[<v 0>%a@]@\n}@\n@."
+	fprintf form "@[<hv 1>%sinductive %s: @[%a -> prop@] =@\n@[<v 0>%a@]@\n@."
 	  (if b then "external " else "") id 
 	  (print_list comma (fun fmt (id,t) -> fprintf_logic_type fmt t)) args
 	  (print_list newline 
 	     (fun fmt (id,a) ->
-		fprintf form "%s: @[%a;@]" id fprintf_assertion a))
+		fprintf form "| %s: @[%a@]" id fprintf_assertion a))
 	  cases
     | Axiom(id,p) ->
 	fprintf form "@[<hv 1>axiom %s :@ %a@]@.@." id 

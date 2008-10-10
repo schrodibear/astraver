@@ -413,7 +413,7 @@ end = -1
 
 [Switch_test2_ensures_default]
 name = "Method test2"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Switch.java"
 line = 54
 begin = 22
@@ -587,7 +587,7 @@ end = 27
 
 [Switch_test1_ensures_default]
 name = "Method test1"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Switch.java"
 line = 36
 begin = 22

@@ -71,7 +71,7 @@ val enum_conversion_logic_functions_table : (logic_info, string) Hashtbl.t
 *)
 
 val axioms_table : 
-  (string, bool * label list * assertion) Hashtbl.t
+  (string, Loc.position * bool * label list * assertion) Hashtbl.t
 
 val global_invariants_table : 
   (logic_info, assertion) Hashtbl.t

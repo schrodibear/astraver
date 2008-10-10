@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mll,v 1.14 2008-05-26 13:39:53 marche Exp $ *)
+(* $Id: lexer.mll,v 1.15 2008-10-10 08:41:35 marche Exp $ *)
 
 {
   open Lexing
@@ -60,6 +60,7 @@
 	"goal", GOAL;
 	"if", IF;
 	"in", IN;
+	"inductive", INDUCTIVE;
 	"int", INT;
 	"invariant", INVARIANT;
 	"let", LET;

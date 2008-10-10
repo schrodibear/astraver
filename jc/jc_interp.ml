@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.359 2008-10-09 08:19:10 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.360 2008-10-10 08:41:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2104,13 +2104,19 @@ and expr_coerce ty e =
 (* axioms, lemmas, goals   *)
 (**************************)
 
-let tr_axiom id ~is_axiom labels a acc =
+let tr_axiom loc id ~is_axiom labels a acc =
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
   let ef = Jc_effect.assertion empty_effects a in
   let a' = 
     assertion ~type_safe:false ~global_assertion:true ~relocate:false lab lab a
   in
   let params = tmodel_parameters ~label_in_name:true ef in
+  reg_decl 
+    ~out_mark:id
+    ~in_mark:id
+    ~name:id
+    ~beh:(if is_axiom then "axiom" else "lemma")
+    loc;
   let a' = List.fold_right (fun (n,ty') a' -> LForall(n,ty',a')) params a' in
   if is_axiom then 
     Axiom(id,a') :: acc 
@@ -2194,13 +2200,13 @@ let tr_logic_fun f ta acc =
 	  let acc =
 	    List.fold_right
 	      (fun (id,a) acc -> 
-		 tr_axiom id ~is_axiom:true f.jc_logic_info_labels a acc)
+		 tr_axiom id#pos id#name ~is_axiom:true f.jc_logic_info_labels a acc)
 	      l acc 
 	  in
 	  Logic(false, f.jc_logic_info_final_name, params, ty') :: acc
       | None, JCInductive l  ->
 	  Inductive(false, f.jc_logic_info_final_name, params,  
-		    List.map (fun (id,a) -> (id, fa a)) l) :: acc
+		    List.map (fun (id,a) -> (id#name, fa a)) l) :: acc
       | Some _, JCInductive _ -> assert false
       | None, JCTerm _ -> assert false 
       | Some _, JCAssertion _ -> assert false 
@@ -2936,7 +2942,7 @@ let tr_fun f funpos spec body acc =
                      let normal_body = wrap_body normal_body in
                      let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
                      let beh = 
-                       if id="default" then "Behavior" else
+                       if id="default" then "Default behavior" else
 			 "Normal behavior `"^id^"'"
                      in
                      reg_decl 

@@ -5,7 +5,7 @@
   @  axiom isfib1: isfib(1,1);
   @  axiom isfibn: 
   @   \forall integer n r p; 
-  @     isfib(n-2,r) ==> isfib(n-1,p) ==> isfib(n,p+r);
+  @     n >= 2 && isfib(n-2,r) && isfib(n-1,p) ==> isfib(n,p+r);
   @ }
   @*/ 
 
@@ -13,28 +13,21 @@
 
 public class Fibonacci {
 
-    int n; 
-    int x;
-
-    /*@ requires n > 0;
-      @ ensures isfib(n, x); 
+    /*@ requires n >= 0;
+      @ ensures isfib(n, \result); 
       @*/
-    private int Fib() {
-	int y = 0;
-	int i = 1;
-	int aux;
-	x = 1;
+    public long Fib(int n) {
+	long y=0, x=1, aux;
 
-	/*@
-	  @ loop_invariant i <= n && isfib(i,x) && isfib(i-1,y);
+	/*@ loop_invariant 0<= i <= n && isfib(i+1,x) && isfib(i,y);
+	  @ loop_variant n-i;
 	  @*/
-	while (i < n) {
+	for(int i=0; i < n; i++) {
 	    aux = y;
 	    y = x;
 	    x = x + aux;
-	    i = i + 1;
 	}
-	return x;
+	return y;
     }
 }
 

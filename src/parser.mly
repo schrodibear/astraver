@@ -112,7 +112,7 @@
 %token BANG BAR BARBAR BEGIN 
 %token BIGARROW BOOL COLON COLONEQUAL COMMA DO DONE DOT ELSE END EOF EQUAL
 %token EXCEPTION EXISTS EXTERNAL FALSE FOR FORALL FPI FUN FUNCTION GE GOAL GT
-%token IF IN INT INVARIANT
+%token IF IN INDUCTIVE INT INVARIANT
 %token LE LEFTB LEFTBLEFTB LEFTPAR LEFTSQ LET LOGIC LRARROW LT MINUS 
 %token NOT NOTEQ OF OR PARAMETER PERCENT PLUS PREDICATE PROP 
 %token QUOTE RAISE RAISES READS REAL REC REF RETURNS RIGHTB RIGHTBRIGHTB
@@ -194,7 +194,7 @@ decl:
    { Axiom (loc (), $2, $4) }
 | PREDICATE ident LEFTPAR list0_logic_binder_sep_comma RIGHTPAR EQUAL lexpr
    { Predicate_def (loc (), $2, $4, $7) }
-| PREDICATE ident COLON logic_type LEFTB indcases RIGHTB
+| INDUCTIVE ident COLON logic_type EQUAL indcases 
    { Inductive_def (loc (), $2, $4, $6) }
 | FUNCTION ident LEFTPAR list0_logic_binder_sep_comma RIGHTPAR COLON 
   primitive_type EQUAL lexpr
@@ -212,8 +212,8 @@ decl:
 indcases:
 | /* epsilon */
     { [] }
-| ident COLON lexpr SEMICOLON indcases
-    { (loc_i 1,$1,$3)::$5 }
+| BAR ident COLON lexpr indcases
+    { (loc_i 2,$2,$4)::$5 }
 ;
 
 type_v:

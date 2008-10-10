@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.112 2008-10-09 08:19:10 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.113 2008-10-10 08:41:35 marche Exp $ */
 
 %{
 
@@ -1006,14 +1006,14 @@ logic_definition:
 axioms:
 | /* epsilon */
     { [] }
-| AXIOM IDENTIFIER COLON expression SEMICOLON axioms
+| AXIOM identifier COLON expression SEMICOLON axioms
     { ($2,$4)::$6 }
 ;
 
 cases:
 | /* epsilon */
     { [] }
-| CASE IDENTIFIER COLON expression SEMICOLON cases
+| CASE identifier COLON expression SEMICOLON cases
     { ($2,$4)::$6 }
 ;
 

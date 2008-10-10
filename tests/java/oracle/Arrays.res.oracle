@@ -949,7 +949,7 @@ end = 33
 
 [Arrays_arrayShift_ensures_default]
 name = "Method arrayShift"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Arrays.java"
 line = 96
 begin = 23
@@ -1188,7 +1188,7 @@ end = 30
 
 [Arrays_findMax2_ensures_default]
 name = "Method findMax2"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Arrays.java"
 line = 74
 begin = 22
@@ -1320,7 +1320,7 @@ end = -1
 
 [Arrays_findMax_ensures_default]
 name = "Method findMax"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Arrays.java"
 line = 51
 begin = 24
@@ -2997,7 +2997,7 @@ text = "IndexBounds"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Behavior">
+    <behavior name="Default behavior">
     <goal why_file="why/Arrays_po16.why">
       <location file = "HOME/tests/java/Arrays.java" line = "78" begin = "7" end = "90"/>
       <explain kind = "LoopInvInit"/>
@@ -3125,7 +3125,7 @@ text = "IndexBounds"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Behavior">
+    <behavior name="Default behavior">
     <goal why_file="why/Arrays_po45.why">
       <location file = "HOME/tests/java/Arrays.java" line = "55" begin = "14" end = "129"/>
       <explain kind = "LoopInvInit"/>
@@ -3244,7 +3244,7 @@ text = "IndexBounds"/>
 text = "IndexBounds"/>
     </goal>
     </behavior>
-    <behavior name="Behavior">
+    <behavior name="Default behavior">
     <goal why_file="why/Arrays_po1.why">
       <location file = "HOME/tests/java/Arrays.java" line = "98" begin = "7" end = "230"/>
       <explain kind = "LoopInvInit"/>

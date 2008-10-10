@@ -418,7 +418,7 @@ end = 28
 
 [Termination_loop1_ensures_default]
 name = "Method loop1"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Termination.java"
 line = 34
 begin = 9
@@ -500,7 +500,7 @@ end = -1
 
 [Termination_loop3_ensures_default]
 name = "Method loop3"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Termination.java"
 line = 45
 begin = 8
@@ -582,7 +582,7 @@ end = 14
 
 [Termination_loop2_ensures_default]
 name = "Method loop2"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/Termination.java"
 line = 39
 begin = 9
@@ -1635,7 +1635,7 @@ why --project [...] why/Termination.why
 <project name="Termination" context="why/Termination_ctx.why">
   <function name="Method loop3">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Behavior">
+    <behavior name="Default behavior">
     <goal why_file="why/Termination_po5.why">
       <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
       <explain kind = "LoopInvInit"/>
@@ -1668,7 +1668,7 @@ why --project [...] why/Termination.why
   </function>
   <function name="Method loop2">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Behavior">
+    <behavior name="Default behavior">
     <goal why_file="why/Termination_po3.why">
       <location file = "HOME/tests/java/Termination.java" line = "40" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
@@ -1681,7 +1681,7 @@ why --project [...] why/Termination.why
   </function>
   <function name="Method loop1">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Behavior">
+    <behavior name="Default behavior">
     <goal why_file="why/Termination_po1.why">
       <location file = "HOME/tests/java/Termination.java" line = "35" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>

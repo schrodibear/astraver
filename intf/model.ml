@@ -47,6 +47,7 @@ let fullname = cols#add string
 let parent = cols#add string
 let total = cols#add int
 let result = cols#add int
+let stat = cols#add string
   
 let first_row = ref None
     
@@ -340,7 +341,7 @@ let _ =
 let create_model () =
   let model = GTree.tree_store cols in
   Dispatcher.iter
-    (fun ((_,_,s,_) as o) ->
+    (fun ((_loc,expl,s,_seq) as o) ->
        Hashtbl.add obligs s o;
        let f,n = Tools.decomp_name s in
        let row =
@@ -351,7 +352,14 @@ let create_model () =
 	   Queue.add f fq;
 	   Hashtbl.add frows f row;
 	   Hashtbl.add fobligs f (Queue.create ());
-	   model#set ~row ~column:name f;
+	   let fname =
+	     if f="" then "User goals" else
+	       try
+		 let (id,beh,(_f,_l,_b,_e)) = Hashtbl.find Util.program_locs f in
+		 id ^ "\n" ^ beh
+	       with Not_found -> "why " ^ f
+	   in
+	   model#set ~row ~column:name fname;
 	   model#set ~row ~column:fullname f;
 	   model#set ~row ~column:parent f;
 	   model#set ~row ~column:total 0;
@@ -364,7 +372,12 @@ let create_model () =
        (match !first_row with None -> first_row := Some(row_n) | Some _ -> ());
        Hashtbl.add orows s row_n;
        Queue.add row_n (Hashtbl.find fobligs f);
-       model#set ~row:row_n ~column:name n;
+       let msg =
+	 match expl.Logic_decl.vc_kind with
+	   | Logic_decl.EKLemma -> "Lemma " ^ expl.Logic_decl.lemma_or_fun_name
+	   | k -> Explain.msg_of_kind k
+       in
+       model#set ~row:row_n ~column:name (if f="" then msg else (n^". "^msg));
        model#set ~row:row_n ~column:fullname s;
        model#set ~row:row_n ~column:parent f;
        model#set ~row:row_n ~column:result 0;

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.248 2008-10-09 08:19:10 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.249 2008-10-10 08:41:35 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2287,7 +2287,7 @@ let type_range_of_term ty t =
 
 let rec occurrences pi a =
 match a#node with
-  | JCAtrue | JCAfalse -> (0,0)
+  | JCArelation _ | JCAtrue | JCAfalse -> (0,0)
   | JCAapp app -> ((if app.jc_app_fun == pi then 1 else 0),0)
   | JCAquantifier (Forall, vi, p) -> occurrences pi p
   | JCAquantifier (Exists, vi, p) -> assert false (* TODO *)
@@ -2295,19 +2295,22 @@ match a#node with
       let (pos1,neg1) = occurrences pi p1 in
       let (pos2,neg2) = occurrences pi p2 in
       (neg1+pos2,pos1+neg2)
+  | JCAand l -> 
+      List.fold_left
+	(fun (p,n) a -> 
+	   let (pos1,neg1) = occurrences pi a in
+	   (p+pos1,n+neg1)) (0,0) l
   | JCAor _ -> assert false (* TODO *)
-  | JCAand _ -> assert false (* TODO *)
   | JCAnot _ -> assert false (* TODO *)
   | JCAiff (_, _) -> assert false (* TODO *)
-  | JCAsubtype (_, _, _)
-  | JCAeqtype (_, _, _)
-  | JCAmutable (_, _, _)
-  | JCAif (_, _, _)
-  | JCAbool_term _
-  | JCAinstanceof (_, _, _)
-  | JCAat (_, _)
-  | JCAold _
-  | JCArelation (_, _, _)
+  | JCAsubtype (_, _, _) -> assert false (* TODO *)
+  | JCAeqtype (_, _, _) -> assert false (* TODO *)
+  | JCAmutable (_, _, _) -> assert false (* TODO *)
+  | JCAif (_, _, _) -> assert false (* TODO *)
+  | JCAbool_term _ -> assert false (* TODO *)
+  | JCAinstanceof (_, _, _) -> assert false (* TODO *)
+  | JCAat (_, _) -> assert false (* TODO *)
+  | JCAold _ -> assert false (* TODO *)
   | JCAmatch (_, _) -> assert false (* TODO *)
 
 let check_positivity loc pi a =
@@ -2427,7 +2430,7 @@ of an invariant policy";
     | JCDlemma(id,is_axiom,labels,e) ->
 	let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
         let te = assertion [] e in
-        Hashtbl.add axioms_table id (is_axiom,labels,te)
+        Hashtbl.add axioms_table id (d#pos,is_axiom,labels,te)
     | JCDglobal_inv(id, e) ->
         let a = assertion [] e in
         let li = make_pred id in
@@ -2731,7 +2734,7 @@ let print_file fmt () =
   in
   let axioms =
     Hashtbl.fold
-      (fun name (is_axiom,labels, a) f ->
+      (fun name (loc,is_axiom,labels, a) f ->
          Jc_output.JClemma_def (name,is_axiom, labels,a)
          :: f
       ) axioms_table []

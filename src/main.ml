@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.157 2008-10-10 07:16:48 marche Exp $ i*)
+(*i $Id: main.ml,v 1.158 2008-10-10 08:41:35 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -494,7 +494,11 @@ let interp_decl ?(_prelude=false) d =
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let s = ([], p) in
-	let l = Loc.extract loc in
+	let l = 
+	  try
+	    Util.loc_of_label (Ident.string id)
+	  with Not_found -> Loc.extract loc
+	in
 	let xpl =
 	  { lemma_or_fun_name = Ident.string id;
 	    behavior = "";

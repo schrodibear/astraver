@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.123 2008-10-09 08:19:10 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.124 2008-10-10 08:41:35 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -473,12 +473,12 @@ let term_or_assertion fmt = function
       fprintf fmt "{@\n@[<v 2>%a@]@\n}" 
 	(print_list newline 
 	   (fun fmt (id,e) -> 
-	      fprintf fmt "axiom %s: %a;@\n" id assertion e)) l
+	      fprintf fmt "axiom %s: %a;@\n" id#name assertion e)) l
   | JCInductive l ->
       fprintf fmt "{@\n@[<v 2>%a@]@\n}" 
 	(print_list newline 
 	   (fun fmt (id,e) -> 
-	      fprintf fmt "case %s: %a;@\n" id assertion e)) l
+	      fprintf fmt "case %s: %a;@\n" id#name assertion e)) l
 
   
 

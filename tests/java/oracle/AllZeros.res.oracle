@@ -534,7 +534,7 @@ end = -1
 
 [AllZeros_all_zeros_ensures_default]
 name = "Method all_zeros"
-behavior = "Behavior"
+behavior = "Default behavior"
 file = "HOME/tests/java/AllZeros.java"
 line = 35
 begin = 19
@@ -1785,7 +1785,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Behavior">
+    <behavior name="Default behavior">
     <goal why_file="why/AllZeros_po1.why">
       <location file = "HOME/tests/java/AllZeros.java" line = "37" begin = "6" end = "78"/>
       <explain kind = "LoopInvInit"/>
