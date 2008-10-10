@@ -1,0 +1,35 @@
+
+inductive isfib(integer x, integer r) {
+case isfib0 : isfib(0, 0) ;
+case isfib1 : isfib(1, 1) ;
+case isfibn : 
+    \forall integer n,r,p;
+    isfib(n-2,r) ==> isfib(n-1,p) ==> isfib(n,p+r) ;
+}
+
+integer Fib(integer n) 
+    behavior default:
+      ensures isfib(n,\result);
+{  
+    var integer y = 0;
+    var integer x = 1;
+    var integer tmp;
+    var integer i = 1;
+    invariant i <=n && isfib(i, x) && isfib(i-1, y);
+    while (i < n)
+	{  
+	    tmp = y;
+	    y = x;
+	    x = x + tmp;
+	    i = i + 1;
+	};
+    return x;
+}
+
+
+/*
+Local Variables:
+mode: java
+compile-command: "jessie fibonacci.jc && make -f fibonacci.makefile gui"
+End:
+*/
