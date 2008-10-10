@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.86 2008-10-10 08:41:35 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.87 2008-10-10 15:44:33 marche Exp $ i*)
 
 open Printf
 open Options
@@ -590,8 +590,10 @@ let main () =
     GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
     ~width:(!Colors.window_width / 2) () 
   in
+  let _ = scrollview#set_shadow_type `ETCHED_OUT in
   let _ = vtable#attach ~left:0 ~top:1 ~expand:`BOTH scrollview#coerce in
-  let view = GTree.view ~model ~packing:scrollview#add_with_viewport () in
+
+  let view = GTree.view ~model ~packing:scrollview#add () in
   (* has effect but not nice 
      let () = view#misc#modify_font !general_font in
   *)
