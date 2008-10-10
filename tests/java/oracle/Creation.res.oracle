@@ -458,8 +458,8 @@ simplify: simplify/Creation_why.sx
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILE) why/$*.why
 
-ergo: why/Creation_why.why
-	@echo 'Running Ergo on proof obligations' && ($(DP) $^)
+alt-ergo ergo: why/Creation_why.why
+	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
 why/%_why.why: why/%.why
 	@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why
@@ -7622,7 +7622,7 @@ goal cons_TestSuperConstructor_ensures_normal_po_1:
   this_4)) = 12))))
 
 ========== running alt-ergo ==========
-Running Ergo on proof obligations
+Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/Creation_why.why          : ................??. (17/0/2/0/0)
 total   :  19

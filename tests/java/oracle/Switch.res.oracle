@@ -307,8 +307,8 @@ simplify: simplify/Switch_why.sx
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILE) why/$*.why
 
-ergo: why/Switch_why.why
-	@echo 'Running Ergo on proof obligations' && ($(DP) $^)
+alt-ergo ergo: why/Switch_why.why
+	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
 why/%_why.why: why/%.why
 	@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why
@@ -6093,7 +6093,7 @@ goal Switch_test2_ensures_normal_po_16:
   ("JC_31": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1)))
 
 ========== running alt-ergo ==========
-Running Ergo on proof obligations
+Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/Switch_why.why            : ...................... (22/0/0/0/0)
 total   :  22

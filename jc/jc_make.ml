@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.34 2008-10-07 09:17:12 moy Exp $ i*)
+(*i $Id: jc_make.ml,v 1.35 2008-10-10 10:15:41 moy Exp $ i*)
 
 open Format
 open Pp
@@ -121,11 +121,11 @@ let generic full f targets =
        out "simplify/%%_why.sx: why/%%.why@\n";
        out "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILE) why/$*.why@\n@\n";
        
-       out "ergo: %a@\n" (print_files ergo) targets;
-       out "\t@@echo 'Running Ergo on proof obligations' && ($(DP) $^)@\n@\n";
+       out "alt-ergo ergo: %a@\n" (print_files ergo) targets;
+       out "\t@@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)@\n@\n";
        out "why/%%_why.why: why/%%.why@\n";
        out "\t@@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why@\n@\n";
-       
+
        out "cvcl: %a@\n@\n" (print_files cvcl) targets;
        out "\t@@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)@\n@\n";
        out "cvcl/%%_why.cvc: why/%%.why@\n";

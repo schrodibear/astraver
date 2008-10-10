@@ -27,10 +27,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.31 2008-09-17 15:28:57 moy Exp $ *)
+(* $Id: jc_options.mli,v 1.32 2008-10-10 10:15:41 moy Exp $ *)
 
 open Jc_stdlib
-
+open Jc_env
 
 (*s environment variables *)
 
@@ -67,6 +67,8 @@ val trust_ai : bool
 val fast_ai : bool
 
 val verify_behavior: string -> bool
+
+val set_int_model: int_model -> unit
 
 (*s The log file *)
 

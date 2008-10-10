@@ -298,8 +298,8 @@ simplify: simplify/AllZeros_why.sx
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILE) why/$*.why
 
-ergo: why/AllZeros_why.why
-	@echo 'Running Ergo on proof obligations' && ($(DP) $^)
+alt-ergo ergo: why/AllZeros_why.why
+	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
 why/%_why.why: why/%.why
 	@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why
@@ -6255,7 +6255,7 @@ goal AllZeros_all_zeros_safety_po_4:
   ((integer_of_int32(k) + 1) <= 2147483647)
 
 ========== running alt-ergo ==========
-Running Ergo on proof obligations
+Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/AllZeros_why.why          : ................ (16/0/0/0/0)
 total   :  16

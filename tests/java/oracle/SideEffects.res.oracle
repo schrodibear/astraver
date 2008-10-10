@@ -310,8 +310,8 @@ simplify: simplify/SideEffects_why.sx
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILE) why/$*.why
 
-ergo: why/SideEffects_why.why
-	@echo 'Running Ergo on proof obligations' && ($(DP) $^)
+alt-ergo ergo: why/SideEffects_why.why
+	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
 why/%_why.why: why/%.why
 	@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why
@@ -5912,7 +5912,7 @@ goal SideEffects_m1_safety_po_6:
   (i1 <= offset_max(Object_t_7_alloc_table, t))
 
 ========== running alt-ergo ==========
-Running Ergo on proof obligations
+Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
 why/SideEffects_why.why       : ................... (19/0/0/0/0)
 total   :  19

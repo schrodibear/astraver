@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.35 2008-10-07 08:02:40 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.36 2008-10-10 10:15:41 moy Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -80,6 +80,7 @@ let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
 let annotation_sem = ref AnnotNone
 let ai_domain = ref AbsNone
+
 let int_model = ref IMbounded
 let interprocedural = ref false
 let main = ref ""
@@ -193,6 +194,14 @@ let behavior = !behavior
 
 let verify_behavior s = 
   behavior = "" || behavior = s
+
+let set_int_model im = 
+  if im = IMmodulo && trust_ai then
+    (Format.eprintf "cannot trust abstract interpretation \
+in modulo integer model"; 
+     assert false)
+  else
+    int_model := im
 
 (*s error handling *)
 

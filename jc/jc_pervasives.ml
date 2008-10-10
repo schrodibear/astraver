@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.127 2008-10-07 16:07:21 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.128 2008-10-10 10:15:41 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -612,6 +612,7 @@ let rec is_numeric_term t =
 (* assertions *)
 
 let true_assertion = new assertion JCAtrue
+let false_assertion = new assertion JCAfalse
 let is_true a = (a#node = JCAtrue)
 
 let make_and al = 

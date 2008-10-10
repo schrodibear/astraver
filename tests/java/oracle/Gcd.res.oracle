@@ -512,8 +512,8 @@ simplify: simplify/Gcd_why.sx
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILE) why/$*.why
 
-ergo: why/Gcd_why.why
-	@echo 'Running Ergo on proof obligations' && ($(DP) $^)
+alt-ergo ergo: why/Gcd_why.why
+	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
 why/%_why.why: why/%.why
 	@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why
@@ -6234,12 +6234,12 @@ goal Gcd_gcd_safety_po_1:
   (mutable_y_8 <> 0)
 
 ========== running alt-ergo ==========
-Running Ergo on proof obligations
+Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ???????.??.......?.... (12/0/10/0/0)
+why/Gcd_why.why               : ???????.??.......#.... (12/0/9/1/0)
 total   :  22
 valid   :  12 ( 55%)
 invalid :   0 (  0%)
-unknown :  10 ( 45%)
-timeout :   0 (  0%)
+unknown :   9 ( 41%)
+timeout :   1 (  5%)
 failure :   0 (  0%)

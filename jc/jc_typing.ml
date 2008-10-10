@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.249 2008-10-10 08:41:35 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.250 2008-10-10 10:15:41 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2205,6 +2205,18 @@ let () =
         
 let type_range_of_term ty t =
   match ty with
+    | JCTenum ri ->
+        let mint = 
+          new term ~pos:t#pos ~typ:integer_type
+            (JCTconst(JCCinteger (Num.string_of_num ri.jc_enum_info_min)))
+        in
+        let mina = new assertion (JCArelation(mint,(`Ble,`Integer),t)) in
+        let maxt = 
+          new term ~pos:t#pos ~typ:integer_type
+            (JCTconst(JCCinteger (Num.string_of_num ri.jc_enum_info_max)))
+        in
+        let maxa = new assertion (JCArelation(t,(`Ble,`Integer),maxt)) in
+	new assertion (JCAand [ mina; maxa ])
     | JCTpointer (JCtag(st, _), n1opt, n2opt) ->
 (*      let instanceofcstr = new assertion (JCAinstanceof (t, st)) in *)
 (*      let mincstr = match n1opt with

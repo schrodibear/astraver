@@ -119,6 +119,7 @@ val pointer_class_root : pointer_class -> Jc_env.root_info
 (* predefined functions *)
 
 val true_assertion : assertion
+val false_assertion : assertion
 val any_string : Jc_fenv.logic_info
 val real_of_integer : Jc_fenv.logic_info
 val real_of_integer_ : Jc_fenv.fun_info

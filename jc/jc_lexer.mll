@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.68 2008-10-09 08:19:10 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.69 2008-10-10 10:15:41 moy Exp $ i*)
 
 {
   open Jc_ast
@@ -127,11 +127,11 @@
 	  end  
       | "IntModel" ->
 	  begin
-	    Jc_options.int_model :=
-	      match v with
-		| "bounded" -> Jc_env.IMbounded
-		| "modulo" -> Jc_env.IMmodulo 
-		| _ -> lex_error lexbuf ("unknown int model " ^ v)
+	    Jc_options.set_int_model
+	      (match v with
+		 | "bounded" -> Jc_env.IMbounded
+		 | "modulo" -> Jc_env.IMmodulo 
+		 | _ -> lex_error lexbuf ("unknown int model " ^ v))
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 
