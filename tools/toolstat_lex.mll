@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(*i $Id: toolstat_lex.mll,v 1.1 2008-10-08 01:22:04 moy Exp $ i*)
+(*i $Id: toolstat_lex.mll,v 1.2 2008-10-11 23:08:29 moy Exp $ i*)
 
 {
   open Toolstat_pars
@@ -37,6 +37,7 @@
   open Pp
 
   let debug = false
+  let debug_more = false
 
   let extract_pos s c =
     let rec aux s acc i =
@@ -75,7 +76,7 @@
 let ws = [' ' '\t' '\012' '\r']
 let backslash_escapes = ['\\' '"' '\'' 'n' 't' 'b' 'r' 'f' ]
 let num = ['0'-'9']
-let alpha = ['a'-'z' 'A'-'Z' '_']
+let alpha = ['a'-'z' 'A'-'Z' '_' '-']
 let alphanum = alpha | num
 let id = alphanum*
 let filechar = ['.' '/' '\\']
@@ -114,7 +115,7 @@ rule token = parse
       }
   | _                                              
       { 
-(* 	if debug then printf "other token %s@." (lexeme lexbuf);  *)
+	if debug_more then printf "other token %s@." (lexeme lexbuf);
 	token lexbuf 
       }
   | eof

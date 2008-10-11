@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.2 2008-10-08 01:33:08 moy Exp $ i*)
+(*i $Id: toolstat.ml,v 1.3 2008-10-11 23:08:29 moy Exp $ i*)
 
 (* Statistics on automatic provers results *)
 
@@ -183,14 +183,25 @@ let () =
 	       i+1
 	    ) 1 provers_ranking);
   
-  printf "@.Tests not proved:@.";
   let tests_notproved = Hashtbl.create 17 in
   Hashtbl.iter (fun (test,i) () ->
 		  if hfind 0 tests_count (test,i) = 0 then
 		    intadd tests_notproved test 1
 	       ) tests;
+  printf "@.Tests not proved: %d@." (Hashtbl.length tests_notproved);
   Hashtbl.iter (fun test n ->
 		  printf "%s \t%d not proved@." test n
 	       ) tests_notproved;
+
+  let tests_proved = Hashtbl.create 17 in
+  Hashtbl.iter (fun (test,i) () ->
+		  if hfind 0 tests_notproved test = 0 then
+		    intadd tests_proved test 1
+	       ) tests;
+  printf "@.Tests proved: %d@." (Hashtbl.length tests_proved);
+  Hashtbl.iter (fun test n ->
+		  printf "%s \t%d proved@." test n
+	       ) tests_proved;
+		  
 		  
   printf "@."

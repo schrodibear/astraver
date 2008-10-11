@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.137 2008-10-10 15:08:18 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.138 2008-10-11 23:08:29 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -581,6 +581,7 @@ let rec term_depends_on_term t1 t2 =
 (* Assertion to be checked at some program point. *)
 type target_assertion = {
   jc_target_expr : expr;
+  jc_target_hint : bool;
   jc_target_location : Loc.position;
   mutable jc_target_assertion : assertion;
   mutable jc_target_regular_invariant : assertion;
@@ -651,6 +652,7 @@ type weakest_postconditions = {
 }
 
 type weakest_precondition_computation = {
+  jc_weakpre_loops : (int,expr) Hashtbl.t;
   jc_weakpre_loop_invariants : (int,assertion) Hashtbl.t;
 }
 
@@ -887,7 +889,6 @@ end = struct
     let s = "__jc_offset_max_" ^ (term_name t) in
     begin try 
       let t2 = Hashtbl.find offset_max_variable_table s in
-      if debug then printf "%a,%a@." Jc_output.term t Jc_output.term t2;
       assert (raw_term_compare t t2 = 0)
     with Not_found ->
       Hashtbl.add offset_max_variable_table s t;
@@ -1062,10 +1063,10 @@ let rec atp_of_asrt a =
      *)
     Atp.True
 
-let atp_of_asrt a =
-  if Jc_options.debug then
-    printf "@[<v 2>[atp_of_asrt]@\n%a@]@." Jc_output.assertion a;
-  atp_of_asrt a
+(* let atp_of_asrt a = *)
+(*   if Jc_options.debug then *)
+(*     printf "@[<v 2>[atp_of_asrt]@\n%a@]@." Jc_output.assertion a; *)
+(*   atp_of_asrt a *)
 
 let rec asrt_of_atp fm =
   let anode = match fm with
@@ -1101,10 +1102,10 @@ let rec asrt_of_atp fm =
   in
   new assertion anode
 
-let asrt_of_atp fm =
-  if Jc_options.debug then
-    printf "@[<v 2>[asrt_of_atp]@\n%a@]@." (fun fmt fm -> Atp.printer fm) fm;
-  asrt_of_atp fm
+(* let asrt_of_atp fm = *)
+(*   if Jc_options.debug then *)
+(*     printf "@[<v 2>[asrt_of_atp]@\n%a@]@." (fun fmt fm -> Atp.printer fm) fm; *)
+(*   asrt_of_atp fm *)
 
 (*****************************************************************************)
 (* Abstract variables naming and creation.                                   *)
@@ -1238,9 +1239,9 @@ let join_abstract_value mgr pair1 pair2 =
   }
 
 let join_invariants mgr invs1 invs2 =
-  if Jc_options.debug then
-    printf "@[<v 2>[join]@\n%a@\nand@\n%a@]@." 
-      print_abstract_invariants invs1 print_abstract_invariants invs2;
+(*   if Jc_options.debug then *)
+(*     printf "@[<v 2>[join]@\n%a@\nand@\n%a@]@."  *)
+(*       print_abstract_invariants invs1 print_abstract_invariants invs2; *)
   let join_exclists postexcl1 postexcl2 =
     let join1 = 
       List.fold_right 
@@ -1288,9 +1289,9 @@ let widening_abstract_value mgr pair1 pair2 =
   }
 
 let widen_invariants mgr invs1 invs2 =
-  if Jc_options.debug then
-    printf "@[<v 2>[widening]@\n%a@\nand@\n%a@]@." 
-      print_abstract_invariants invs1 print_abstract_invariants invs2;
+(*   if Jc_options.debug then *)
+(*     printf "@[<v 2>[widening]@\n%a@\nand@\n%a@]@."  *)
+(*       print_abstract_invariants invs1 print_abstract_invariants invs2; *)
   let widen_exclists postexcl1 postexcl2 =
     let widen1 = List.fold_right (fun (ei,post1) acc ->
 				    try
@@ -1452,8 +1453,8 @@ module Dnf = struct
 				  conj)) disj) dnf
 
   let test mgr pre dnf =
-    if debug then printf "[Dnf.test] %a@." Abstract1.print pre;
-    if debug then printf "[Dnf.test] %a@." print dnf;
+(*     if debug then printf "[Dnf.test] %a@." Abstract1.print pre; *)
+(*     if debug then printf "[Dnf.test] %a@." print dnf; *)
     let env = Abstract1.env pre in
     if is_false dnf then
       (* Make [pre] be the bottom abstract value. *)
@@ -1467,7 +1468,6 @@ module Dnf = struct
 	  with Parser.Error msg -> printf "%s@." msg; assert false
 	in
 	let res = Abstract1.meet_lincons_array mgr pre lincons in
-	if debug then printf "[Dnf.test_conj] %a@." print [conj];
 	res
       in
       (* Test each disjunct separately and then join them. *)
@@ -1672,8 +1672,6 @@ let offset_linstr_of_term env ok t =
 	  
 (* Returns a dnf. *)
 let rec linstr_of_assertion env a =
-  if debug then 
-    Format.printf "[linstr_of_assertion] %a@." Jc_output.assertion a;
   match a#node with
     | JCAtrue -> env, Dnf.true_
     | JCAfalse -> env, Dnf.false_
@@ -1910,16 +1908,16 @@ let mkinvariant mgr absval =
 
 let tautology a =
   let qf = Atp.generalize (atp_of_asrt a) in
-  if Jc_options.debug then
-    printf "@[<v 2>Before quantifier elimination@\n%a@]@."
-      (fun fmt fm -> Atp.printer fm) qf;
+(*   if Jc_options.debug then *)
+(*     printf "@[<v 2>Before quantifier elimination@\n%a@]@." *)
+(*       (fun fmt fm -> Atp.printer fm) qf; *)
   let dnf = Atp.dnf qf in
-  if Jc_options.debug then
-    printf "@[<v 2>After dnf@\n%a@]@."
-      (fun fmt fm -> Atp.printer fm) dnf;
-  if debug then printf "[before integer_qelim]@.";
+(*   if Jc_options.debug then *)
+(*     printf "@[<v 2>After dnf@\n%a@]@." *)
+(*       (fun fmt fm -> Atp.printer fm) dnf; *)
+(*   if debug then printf "[before integer_qelim]@."; *)
   let qe = Atp.fourier_qelim qf in
-  if debug then printf "[after integer_qelim]@.";
+(*   if debug then printf "[after integer_qelim]@."; *)
   let qe = asrt_of_atp qe in
   match qe#node with
     | JCAtrue -> true
@@ -1930,9 +1928,9 @@ let contradictory =
   let mgr = Polka.manager_alloc_strict () in
   fun a b ->
     (* tautology(make_not(make_and [a;b])) *)
-    if Jc_options.debug then
-      printf "@[<v 2>[contradictory]@\n%a@\n%a@]@."
-	Jc_output.assertion a Jc_output.assertion b;
+(*     if Jc_options.debug then *)
+(*       printf "@[<v 2>[contradictory]@\n%a@\n%a@]@." *)
+(* 	Jc_output.assertion a Jc_output.assertion b; *)
     let dnf = Atp.dnf(atp_of_asrt(make_and[a;b])) in
     let vars = Atp.fv dnf in
     let vars = List.map Vwp.term vars in
@@ -1954,8 +1952,8 @@ let contradictory =
 	 with Parser.Error _ | Failure _ -> false
       ) true disjuncts
     in
-    if debug then 
-      printf "@[<v 2>[contradictory] %b@]@." res;
+(*     if debug then  *)
+(*       printf "@[<v 2>[contradictory] %b@]@." res; *)
     res
 
 let abstract_overapprox mgr env a =
@@ -2004,16 +2002,16 @@ let simplify =
 	List.fold_right 
 	  (fun conjunct (abstractl,otherl) ->
 	     try
-	       if Jc_options.debug then
-		 printf "asrt conjunct : %a@."
-		   (Pp.print_list (fun fmt () -> printf " /\\ ")
-		      Jc_output.assertion)
-		   conjunct;
+(* 	       if Jc_options.debug then *)
+(* 		 printf "asrt conjunct : %a@." *)
+(* 		   (Pp.print_list (fun fmt () -> printf " /\\ ") *)
+(* 		      Jc_output.assertion) *)
+(* 		   conjunct; *)
 	       let absval,other_conjuncts = 
 		 abstract_overapprox mgr env (make_and conjunct)
 	       in
-	       if Jc_options.debug then
-		 printf "abstract conjunct : %a@." Abstract1.print absval;
+(* 	       if Jc_options.debug then *)
+(* 		 printf "abstract conjunct : %a@." Abstract1.print absval; *)
 	       if Abstract1.is_bottom mgr absval then
 		 abstractl, otherl
 	       else
@@ -2061,33 +2059,33 @@ let simplify =
     simpla
 
 let quantif_eliminate qf finv =
-  if Jc_options.debug then
-    printf "@[<v 2>Raw precondition@\n%a@]@." Jc_output.assertion qf; 
+(*   if Jc_options.debug then *)
+(*     printf "@[<v 2>Raw precondition@\n%a@]@." Jc_output.assertion qf;  *)
   let qf = atp_of_asrt qf in
-  if Jc_options.debug then
-    printf "@[<v 2>Before quantifier elimination@\n%a@]@." 
-      (fun fmt fm -> Atp.printer fm) qf; 
+(*   if Jc_options.debug then *)
+(*     printf "@[<v 2>Before quantifier elimination@\n%a@]@."  *)
+(*       (fun fmt fm -> Atp.printer fm) qf;  *)
   let qf = Atp.pnf qf in
   match qf with
     | Atp.Forall _ | Atp.Exists _ ->
 	let qe = Atp.fourier_qelim qf in
-	if Jc_options.debug then
-	  printf "@[<v 2>After quantifier elimination@\n%a@]@." 
-	    (fun fmt fm -> Atp.printer fm) qe; 
+(* 	if Jc_options.debug then *)
+(* 	  printf "@[<v 2>After quantifier elimination@\n%a@]@."  *)
+(* 	    (fun fmt fm -> Atp.printer fm) qe;  *)
 	begin match qe with
 	  | Atp.Not nqe ->
 	      let qe = (Atp.dnf nqe) in
-	      if Jc_options.debug then
-		printf "@[<v 2>After negative disjunctive normal form@\n%a@]@." 
-		  (fun fmt fm -> Atp.printer fm) qe;
+(* 	      if Jc_options.debug then *)
+(* 		printf "@[<v 2>After negative disjunctive normal form@\n%a@]@."  *)
+(* 		  (fun fmt fm -> Atp.printer fm) qe; *)
 	      let res = simplify (asrt_of_atp qe) in
 	      let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
 	      simplify ~inva:finv (make_not res)
 	  | _ ->
 	      let qe = (Atp.dnf qe) in
-	      if Jc_options.debug then
-		printf "@[<v 2>After disjunctive normal form@\n%a@]@." 
-		  (fun fmt fm -> Atp.printer fm) qe;
+(* 	      if Jc_options.debug then *)
+(* 		printf "@[<v 2>After disjunctive normal form@\n%a@]@."  *)
+(* 		  (fun fmt fm -> Atp.printer fm) qe; *)
 	      let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
 	      simplify ~inva:finv (asrt_of_atp qe)
 	end
@@ -2192,6 +2190,9 @@ let initialize_target curposts target =
 
 let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
   if Jc_options.debug then
+    printf "@[<v 2>[finalize_target]@\nfunction level? %b@]@." 
+      is_function_level;
+  if Jc_options.debug then
     printf "@[<v 2>[finalize_target]@\n%a@]@." Jc_output.assertion inva;
   let annot_name = 
     if is_function_level then "precondition" else "loop invariant" 
@@ -2206,7 +2207,12 @@ let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
     (* [patha] is the path formula. It characterizes the states from which 
      * it is possible to reach the assertion point.
      *)
-    let patha = make_and[wpa;target.jc_target_regular_invariant] in
+    let patha = 
+      if target.jc_target_hint then
+	wpa
+      else
+	make_and[wpa;target.jc_target_regular_invariant] 
+    in
     (* [impla] is the implication formula, that guarantees the assertion holds
      * when the assertion point is reached.
      *)
@@ -2255,13 +2261,19 @@ let rec wp_expr weakpre =
   in
   fun target e curposts ->
     let wp = wp_expr weakpre target in
-    if debug then 
-      printf "[wp_expr] %a@\n%a@\nfor stat %a@." Loc.report_position e#pos
-	(print_option Jc_output.assertion) curposts.jc_post_normal
-	Jc_output.expr target.jc_target_expr;
-    if debug then 
-      printf "[wp_expr] curposts is None? %b@." 
-	(curposts.jc_post_normal = None);
+    (* Do not let hints propagate too far *)
+    let block_hint curposts =
+      if target.jc_target_hint then 
+	{ curposts with jc_post_normal = None }
+      else curposts
+    in
+(*     if debug then  *)
+(*       printf "[wp_expr] %a@\n%a@\nfor stat %a@." Loc.report_position e#pos *)
+(* 	(print_option Jc_output.assertion) curposts.jc_post_normal *)
+(* 	Jc_output.expr target.jc_target_expr; *)
+(*     if debug then  *)
+(*       printf "[wp_expr] curposts is None? %b@."  *)
+(* 	(curposts.jc_post_normal = None); *)
     let curposts = match e#node with
       | JCElet(v,e1opt,e2) ->
 	  let curposts = wp e2 curposts in
@@ -2304,7 +2316,8 @@ let rec wp_expr weakpre =
 	  in
 	  add_inflexion_var curposts copyv;
 	  let curposts = 
-	    if is_function_level curposts then curposts
+	    if is_function_level curposts || target.jc_target_hint then
+	      curposts
 	    else
 	      (* Also add regular variable, for other branches in loop. *)
 	      add_modified_var curposts v
@@ -2312,7 +2325,7 @@ let rec wp_expr weakpre =
 	  let curposts = { curposts with jc_post_normal = post } in
 	  wp e1 curposts
       | JCEassign_heap(e1,fi,e2) ->
-	  begin match term_of_expr e1 with
+	  let curposts = match term_of_expr e1 with
 	    | None -> curposts (* TODO *)	
 	    | Some t1 ->
 		let dereft = 
@@ -2339,34 +2352,40 @@ let rec wp_expr weakpre =
 		in
 		add_inflexion_var curposts copyv;
 		let curposts = 
-		  if is_function_level curposts then curposts
+		  if is_function_level curposts || target.jc_target_hint then
+		    curposts
 		  else
 		    (* Also add regular variable, for other branches in loop. *)
 		    add_modified_var curposts v 
 		in
 		{ curposts with jc_post_normal = post }
-	  end
+	  in
+	  wp e1 (wp e2 curposts)
       | JCEassert(_behav,Ahint,a) -> 
 	  (* Hints are not to be used in wp computation, only added to help. *)
 	  curposts
       | JCEassert(_behav,_asrt,a1) ->
-	  let f = atp_of_asrt a1 in
-	  let fvars = Atp.fv f in
-	  let varsets = List.map Vwp.term fvars in
-	  let varsets = TermSet.of_list varsets in
-	  let post = 
-	    match curposts.jc_post_normal with None -> None | Some a ->
-	      if !Jc_options.annotation_sem = AnnotWeakPre
-		|| (!Jc_options.annotation_sem = AnnotStrongPre
-		    && mem_any_term_in_assertion varsets a)
-	      then
-		Some (make_and [ a1; a ])
-	      else Some a
-	  in
-	  { curposts with jc_post_normal = post }
+	  if target.jc_target_hint then
+	    curposts
+	  else
+	    let f = atp_of_asrt a1 in
+	    let fvars = Atp.fv f in
+	    let varsets = List.map Vwp.term fvars in
+	    let varsets = TermSet.of_list varsets in
+	    let post = 
+	      match curposts.jc_post_normal with None -> None | Some a ->
+		if !Jc_options.annotation_sem = AnnotWeakPre
+		  || (!Jc_options.annotation_sem = AnnotStrongPre
+		      && mem_any_term_in_assertion varsets a)
+		then
+		  Some (make_and [ a1; a ])
+		else Some a
+	    in
+	    { curposts with jc_post_normal = post }
       | JCEblock sl ->
 	  List.fold_right wp sl curposts
       | JCEif(test,etrue,efalse) ->
+	  let curposts = block_hint curposts in
 	  let tposts = wp etrue curposts in
 	  let ta = raw_asrt_of_expr test in
 	  let f = atp_of_asrt ta in
@@ -2405,26 +2424,28 @@ let rec wp_expr weakpre =
 	  let vs = VarSet.union tvs fvs in
 	  let curposts = add_modified_vars curposts vs in
 	  let curposts = { curposts with jc_post_normal = post } in
-	  wp test curposts
-      | JCEreturn_void | JCEreturn _ -> 
+	  let curposts = wp test curposts in
+	  block_hint curposts
+      | JCEreturn_void ->
 	  { curposts with jc_post_normal = None; }
-      | JCEthrow(ei,_) -> (* TODO: link with value caught *)
+      | JCEreturn(_ty,e1) -> 
+	  let curposts = { curposts with jc_post_normal = None } in
+	  wp e1 curposts
+      | JCEthrow(ei,e1opt) -> (* TODO: link with value caught *)
 	  let post = 
 	    try Some (List.assoc ei curposts.jc_post_exceptional) 
 	    with Not_found -> None 
 	  in
-	  { curposts with jc_post_normal = post; }
-      | JCEpack _ | JCEunpack _ -> 
-	  curposts
-      | JCEtry(s,hl,fs) ->
-	  begin match fs#node with 
-	    | JCEblock [] -> ()
-	    | _ -> () (* assert false (\* TODO: apply finally stmt to all paths. *\) *)
-	  end;
+	  let curposts = { curposts with jc_post_normal = post } in
+	  begin match e1opt with None -> curposts | Some e1 -> 
+	    wp e1 curposts
+	  end
+      | JCEtry(body,handlers,finally) ->
+	  (* TODO: apply finally stmt to all paths. *)
 	  let handlpostexcl,handlvs = 
 	    List.fold_left 
-	      (fun (curpostexcl,curvs) (ei,vio,s) ->
-		 let excposts = wp_expr weakpre target s curposts in
+	      (fun (curpostexcl,curvs) (ei,vio,ehandler) ->
+		 let excposts = wp ehandler curposts in
 		 let curpostexcl = match excposts.jc_post_normal with
 		   | None -> curpostexcl
 		   | Some a -> (ei,a) :: curpostexcl
@@ -2432,46 +2453,60 @@ let rec wp_expr weakpre =
 		 let excvs,_ = pop_modified_vars excposts in
 		 let curvs = VarSet.union curvs excvs in
 		 (curpostexcl,curvs)
-	      ) ([],VarSet.empty) hl
+	      ) ([],VarSet.empty) handlers
 	  in
 	  let curpostexcl = 
-	    List.filter (fun (ei,_) ->
-			   not (List.exists (fun (ej,_,_) ->
-					       ei.jc_exception_info_tag = ej.jc_exception_info_tag) hl)
-			) curposts.jc_post_exceptional
+	    List.filter 
+	      (fun (ei,_) ->
+		 not (List.exists 
+			(fun (ej,_,_) ->
+			   ei.jc_exception_info_tag = ej.jc_exception_info_tag
+			) handlers)
+	      ) curposts.jc_post_exceptional
 	  in
 	  let curpostexcl = handlpostexcl @ curpostexcl in
-	  let tmpposts = { curposts with jc_post_exceptional = curpostexcl; } in
-	  let bodyposts = wp_expr weakpre target s tmpposts in
+	  let tmpposts = 
+	    { curposts with jc_post_exceptional = curpostexcl; } 
+	  in
+	  let bodyposts = wp body tmpposts in
 	  let bodyvs,_ = pop_modified_vars bodyposts in
 	  let vs = VarSet.union handlvs bodyvs in
 	  let curposts = add_modified_vars curposts vs in
 	  { curposts with jc_post_normal = bodyposts.jc_post_normal; }
-      | JCEloop(la,ls) ->
-	  let curposts = { curposts with jc_post_normal = None; } in
+      | JCEloop(annot,body) ->
+	  let curposts = block_hint curposts in
+	  let loops = weakpre.jc_weakpre_loops in
+	  let loop_invariants = weakpre.jc_weakpre_loop_invariants in
+	  Hashtbl.replace loops annot.jc_loop_tag e;
+	  let curposts = { curposts with jc_post_normal = None } in
 	  let loopposts = push_modified_vars curposts in
-	  let loopposts = wp_expr weakpre target ls loopposts in
+	  let loopposts = wp body loopposts in
+	  let inva = 
+	    make_and (annot.jc_free_loop_invariant
+		      :: List.map snd annot.jc_loop_invariant)
+	  in
 	  let post = 
 	    match finalize_target 
 	      ~is_function_level:false ~pos:e#pos ~anchor:e#mark
-	      loopposts target (make_and (List.map snd la.jc_loop_invariant))
-	    with None -> None | Some infera ->
-	      target.jc_target_regular_invariant <- (make_and (List.map snd la.jc_loop_invariant));
-	      target.jc_target_assertion <- infera;
-	      begin try
-		let a = Hashtbl.find weakpre.jc_weakpre_loop_invariants
-		  la.jc_loop_tag
-		in
-		Hashtbl.replace weakpre.jc_weakpre_loop_invariants
-		  la.jc_loop_tag (make_and [a; infera])
-	      with Not_found ->
-		Hashtbl.add weakpre.jc_weakpre_loop_invariants
-		  la.jc_loop_tag infera
-	      end;
-	      let inita = initialize_target loopposts target in
-	      Some inita
+	      loopposts target inva
+	    with 
+	      | None -> None 
+	      | Some infera ->
+		  target.jc_target_regular_invariant <- inva;
+		  target.jc_target_assertion <- infera;
+		  begin try
+		    let a = Hashtbl.find loop_invariants annot.jc_loop_tag in
+		    Hashtbl.replace loop_invariants annot.jc_loop_tag 
+		      (make_and [a; infera])
+		  with Not_found ->
+		    Hashtbl.add loop_invariants annot.jc_loop_tag infera
+		  end;
+		  let inita = initialize_target loopposts target in
+		  Some inita
 	  in
-	  { curposts with jc_post_normal = post; }
+	  let curposts = { curposts with jc_post_normal = post; } in
+	  block_hint curposts
+
 	    (*       | JCEapp call ->  *)
 	    (* 	  let curposts = wp_expr weakpre target s curposts in *)
 	    (* 	  let vit = new term_var vi in *)
@@ -2505,6 +2540,8 @@ let rec wp_expr weakpre =
       | JCEbitwise_cast(e1,_)
       | JCEinstanceof(e1,_)
       | JCEcast(e1,_)
+      | JCEunpack(_,e1,_)
+      | JCEpack(_,e1,_)
       | JCEfree e1 ->
 	  wp e1 curposts
       | JCEshift(e1,e2)
@@ -2522,36 +2559,34 @@ let rec wp_expr weakpre =
       { curposts with jc_post_normal = Some inita; }
     else curposts
 
-(* let rec record_wp_invariants weakpre s = *)
-(*   match s#node with *)
-(*     | JCElet(_,_,s) ->  *)
-(* 	record_wp_invariants weakpre s *)
-(*     | JCEblock sl -> *)
-(* 	List.iter (record_wp_invariants weakpre) sl *)
-(*     | JCEmatch _ -> assert false (\* TODO *\) *)
-(*     | JCEif(_,ts,fs) -> *)
-(* 	record_wp_invariants weakpre ts; *)
-(* 	record_wp_invariants weakpre fs *)
-(*     | JCEtry(s,hl,fs) -> *)
-(* 	record_wp_invariants weakpre s; *)
-(* 	List.iter (fun (_,_,s) -> record_wp_invariants weakpre s) hl; *)
-(* 	record_wp_invariants weakpre fs *)
-(*     | JCEloop(la,ls) -> *)
-(* 	let loop_invariants = weakpre.jc_weakpre_loop_invariants in *)
-(* 	begin try *)
-(* 	  let loopinvs = Hashtbl.find loop_invariants la.jc_loop_tag in *)
-(* 	  la.jc_loop_invariant <- [[],make_and (loopinvs :: List.map snd la.jc_loop_invariant)] *)
-(* 	with Not_found -> () end *)
-(*     | JCEassign_var _ | JCEassign_heap _ | JCEassert _  *)
-(*     | JCEreturn_void | JCEreturn _ | JCEthrow _ | JCEpack _ | JCEunpack _  *)
-(*     | JCEapp _ -> *)
-(* 	() *)
-(*     | _ -> assert false (\* TODO *\) *)
+and record_wp_loop_invariants weakpre =
+  let loop_invariants = weakpre.jc_weakpre_loop_invariants in
+  Hashtbl.iter 
+    (fun _tag e -> 
+       let annot = match e#node with
+	 | JCEloop(annot,_body) -> annot
+	 | _ -> assert false
+       in
+       begin try
+	 let a = Hashtbl.find loop_invariants annot.jc_loop_tag in
+	 let a = simplify a in
+	   (* 	   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a; *)
+	   (* 	   incr nb_loop_inv; *)
+	 if Jc_options.verbose then
+	   printf 
+	     "%a@[<v 2>Inferring backward loop invariant@\n%a@]@."
+	     Loc.report_position e#pos Jc_output.assertion a;
+	 (* Register loop invariant as such *)
+	 let a = reg_annot ~pos:e#pos ~anchor:e#mark a in
+	 annot.jc_loop_invariant <-  ([], a) :: annot.jc_loop_invariant;
+       with Not_found -> () end
+    ) weakpre.jc_weakpre_loops
 
 let wp_function targets funpre (f,pos,spec,body) =
   if debug then printf "[wp_function] %s@." f.jc_fun_info_name;
   let weakpre = {
-    jc_weakpre_loop_invariants = Hashtbl.create 0;
+    jc_weakpre_loops = Hashtbl.create 3;
+    jc_weakpre_loop_invariants = Hashtbl.create 3;
   } in
   let infer_req = ref [] in
   List.iter 
@@ -2597,6 +2632,7 @@ let wp_function targets funpre (f,pos,spec,body) =
 	 | Some infera -> (* valid precondition *)
 	     infer_req := infera :: !infer_req
     ) targets;
+  record_wp_loop_invariants weakpre;
   (* Remove redundancy in precondition inferred *)
   let inferred = simplify (make_and !infer_req) in
   spec.jc_fun_requires <- make_and [ spec.jc_fun_requires; inferred ];
@@ -2823,9 +2859,10 @@ let backprop_function targets (fi,fs,sl) =
 (* Collecting assertions.                                                    *)
 (*****************************************************************************)
       
-let target_of_assertion s loc a = 
+let target_of_assertion ?(hint=false) s loc a = 
   { 
     jc_target_expr = s;
+    jc_target_hint = hint;
     jc_target_location = loc;
     jc_target_assertion = a;
     jc_target_regular_invariant = false_assertion;
@@ -2873,7 +2910,7 @@ let collect_expr_targets e =
       let zero = new term ~typ:integer_type (JCTconst(JCCinteger "0")) in
       [new assertion(JCArelation(t,(`Bneq,`Integer),zero))]
   in
-  let collect e = 
+  let collect_asserts e = 
     let asrts = match e#node with
       | JCEderef(e1,fi) -> collect_memory_access e1 fi
       | JCErange_cast(e1,ei) -> 
@@ -2919,13 +2956,17 @@ let collect_expr_targets e =
     let asrts = List.map normalize_assertion asrts in
     List.map (target_of_assertion e e#pos) asrts
   in
+  let collect_hints e = 
+    let asrts = match e#node with
+      | JCEassert(_,Ahint, a) -> [ a ]
+      | _ -> []
+    in
+    let asrts = List.map normalize_assertion asrts in
+    List.map (target_of_assertion ~hint:true e e#pos) asrts
+  in
+  let collect e = collect_asserts e @ collect_hints e in
   IExpr.fold_left (fun acc e -> collect e @ acc) [] e
     
-let collect_expr_asserts e = 
-  match term_of_expr e with None -> [] | Some _ ->
-    let targets = collect_expr_targets e in
-    List.map (fun target -> target.jc_target_assertion) targets
-      
 let rec collect_targets filter_asrt targets s =
   let candidates = List.rev (collect_expr_targets s) in
   List.filter (fun target -> filter_asrt target.jc_target_assertion) candidates
@@ -2941,7 +2982,6 @@ let set_equivalent_terms t1 t2 =
   in
   let tl = List.filter (fun t -> t <> t1) tl in
   Hashtbl.replace !pointer_terms_table t1#node (t2 :: tl)
-
 
 
 (*****************************************************************************)
@@ -3370,9 +3410,9 @@ let rec ai_inter_function_call mgr iai abs pre fi loc fs sl el =
  * It sets the initial value of invariants before treating a loop.
  *)
 and ai_expr iaio abs curinvs e =
-  if debug then 
-    printf "[ai_expr] %a on %a@." print_abstract_invariants curinvs
-      Jc_output.expr e;
+(*   if debug then  *)
+(*     printf "[ai_expr] %a on %a@." print_abstract_invariants curinvs *)
+(*       Jc_output.expr e; *)
   let loops = abs.jc_absint_loops in
   let loop_initial_invariants = abs.jc_absint_loop_initial_invariants in
   let loop_invariants = abs.jc_absint_loop_invariants in
@@ -3767,10 +3807,10 @@ and ai_call iaio abs curinvs vio e =
   let curinvs = apply_to_current_invariant assigns curinvs in
   test_assertion mgr normal_post curinvs 
 
- and record_ai_loop_invariants abs =
-    let mgr = abs.jc_absint_manager in
-    let loop_invariants = abs.jc_absint_loop_invariants in
-    Hashtbl.iter 
+and record_ai_loop_invariants abs =
+  let mgr = abs.jc_absint_manager in
+  let loop_invariants = abs.jc_absint_loop_invariants in
+  Hashtbl.iter 
     (fun _tag e -> 
        let annot = match e#node with
 	 | JCEloop(annot,_body) -> annot
@@ -3790,8 +3830,8 @@ and ai_call iaio abs curinvs vio e =
 	 if Abstract1.is_top mgr loopinv then () else
 	   let a = mkinvariant mgr loopinv in
 	   let a = simplify a in
-(* 	   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a; *)
-(* 	   incr nb_loop_inv; *)
+	   (* 	   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a; *)
+	   (* 	   incr nb_loop_inv; *)
 	   if Jc_options.verbose then
 	     printf 
 	       "%a@[<v 2>Inferring loop invariant@\n%a@]@."
