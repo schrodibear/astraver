@@ -71,7 +71,10 @@ let field_offset fi =
 			if fi.jc_field_info_tag = fi'.jc_field_info_tag then
 			  off,false
 			else
-			  off + assert false (* the fi'.jc_field_info_bitsize *), counting
+			  off + (match fi'.jc_field_info_bitsize 
+				 with Some v -> v
+				   | None -> assert false)
+				   , counting
 		      else
 			off,counting
 		   ) (0,true) st.jc_struct_info_fields
