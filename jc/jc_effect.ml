@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.140 2008-10-09 11:33:06 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.141 2008-10-13 23:23:31 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -347,6 +347,24 @@ let same_feffects fef1 fef2 =
   && same_effects fef1.jc_writes fef2.jc_writes 
   && ExceptionSet.equal fef1.jc_raises fef2.jc_raises
 
+(* Query of a single effect *)
+
+let has_memory_effect ef (mc,r) =
+  try
+    ignore (MemoryMap.find (mc,r) ef.jc_effect_memories);
+    true
+  with Not_found ->
+    try
+      ignore (MemoryMap.find (mc,r) ef.jc_effect_raw_memories);
+      true
+    with Not_found ->
+      let locs = 
+	LocationMap.filter 
+	  (fun (loc,mem) _ -> Memory.equal mem (mc,r))
+	  ef.jc_effect_precise_memories
+      in
+      not (LocationMap.is_empty locs)
+
 (* Addition of a single effect *)
     
 let add_alloc_effect lab ef (ac, r) =
@@ -458,7 +476,8 @@ let add_committed_writes fef pc =
 
 let add_exception_effect fef exc =
   { fef with jc_raises = ExceptionSet.add exc fef.jc_raises }
-  
+
+
 (*****************************************************************************)
 (*                                  Unions                                   *)
 (*****************************************************************************)

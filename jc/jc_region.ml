@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.28 2008-10-07 16:07:21 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.29 2008-10-13 23:23:31 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -149,6 +149,8 @@ struct
   let compare (a1,b1) (a2,b2) =
     let res1 = A.compare a1 a2 in
     if res1 <> 0 then res1 else B.compare b1 b2
+  let equal (a1,b1) (a2,b2) =
+    compare (a1,b1) (a2,b2) = 0
 end
 
 module RegionUF = UnionFind(InternalRegion)(RegionTable)
