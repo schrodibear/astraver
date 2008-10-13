@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.124 2008-10-10 08:41:35 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.125 2008-10-13 13:38:30 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -220,7 +220,7 @@ let rec assertion fmt a =
     | JCAold a -> fprintf fmt "\\old(%a)" assertion a
     | JCAat(a,lab) -> fprintf fmt "\\at(%a,%a)" assertion a label lab
     | JCAquantifier (q,vi, a)-> 
-	fprintf fmt "@[<v 3>(\\%a %a %s;@\n%a)@]"
+	fprintf fmt "@[(\\%a %a %s;@\n%a)@]"
 	  quantifier q
 	  print_type vi.jc_var_info_type
 	  vi.jc_var_info_name

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.3 2008-10-11 23:08:29 moy Exp $ i*)
+(*i $Id: toolstat.ml,v 1.4 2008-10-13 13:38:30 moy Exp $ i*)
 
 (* Statistics on automatic provers results *)
 
@@ -87,14 +87,24 @@ let notvalid_summary (n1,n2,n3,n4,n5) = n2 + n3 + n4 + n5
 let valid_detail (s1,s2,s3,s4,s5) = s1
 let notvalid_detail (s1,s2,s3,s4,s5) = s2 @ s3 @ s4 @ s5
 
-let print_time fmt (h,m,s) =
-  if h = 0 && m = 0 && s = 0. then 
+let print_time ~sec fmt (h,m,s) =
+  if sec then
+    let s = 3600 * h + 60 * m + (int_of_float (floor s)) in
+    fprintf fmt "%d" s
+  else if h = 0 && m = 0 && s = 0. then 
     fprintf fmt "0. s"
   else
     fprintf fmt "%a%a%a"
       (fun fmt h -> if h = 0 then () else fprintf fmt "%d h " h) h
       (fun fmt m -> if m = 0 then () else fprintf fmt "%d m " m) m
       (fun fmt s -> if s = 0. then () else fprintf fmt "%.2f s " s) s
+
+let compare_time (h1,m1,s1) (h2,m2,s2) =
+  let c = compare h1 h2 in
+  if c <> 0 then c else
+    let c = compare m1 m2 in
+    if c <> 0 then c else
+      compare s1 s2    
 
 let () = 
   Arg.parse spec parse_file usage;
@@ -119,31 +129,24 @@ let () =
   printf "@.Best individual provers:@.";
   let provers_valid : (prover, int) Hashtbl.t = Hashtbl.create 17 in
   let provers_notvalid : (prover, int) Hashtbl.t = Hashtbl.create 17 in
-  let provers_time : (prover, time) Hashtbl.t = Hashtbl.create 17 in
   List.iter (fun (prover,test,summary,detail,time) ->
 	       intadd provers_valid prover (valid_summary summary);
 	       intadd provers_notvalid prover (notvalid_summary summary);
-	       timeadd provers_time prover time
 	    ) records;
   let provers_data = 
     Hashtbl.fold (fun p () acc ->
 		    (p, 
 		     hfind 0 provers_valid p, 
-		     hfind 0 provers_notvalid p,
-		     hfind (0,0,0.) provers_time p)
+		     hfind 0 provers_notvalid p)
 		    :: acc
 		 ) provers [] 
   in
   let provers_ranking =
-    List.sort (fun (p1,v1,n1,t1) (p2,v2,n2,t2) -> 
-		 let c = compare v2 v1 in
-		 if c = 0 then compare t1 t2 else c)
-      provers_data
+    List.sort (fun (p1,v1,n1) (p2,v2,n2) -> compare v2 v1) provers_data
   in
   ignore (List.fold_left 
-	    (fun i (p,v,n,t) ->
-	       printf "%d: %s   \t%d valid \t%d not valid \tin %a@." 
-		 i p v n print_time t;
+	    (fun i (p,v,n) ->
+	       printf "%d: %s   \t%d valid \t%d not valid@." i p v n;
 	       i+1
 	    ) 1 provers_ranking);
   
@@ -180,6 +183,28 @@ let () =
   ignore (List.fold_left
 	    (fun i (p,a,b) ->
 	       printf "%d: %s   \t%d alone \t%d by others@." i p a b;
+	       i+1
+	    ) 1 provers_ranking);
+
+  printf "@.Quickest provers:@.";
+  let provers_time : (prover, time) Hashtbl.t = Hashtbl.create 17 in
+  List.iter (fun (prover,test,summary,detail,time) ->
+	       timeadd provers_time prover time
+	    ) records;
+  let provers_data = 
+    Hashtbl.fold (fun p () acc ->
+		    (p, 
+		     hfind (0,0,0.) provers_time p)
+		    :: acc
+		 ) provers [] 
+  in
+  let provers_ranking =
+    List.sort (fun (p1,t1) (p2,t2) -> compare_time t1 t2) provers_data
+  in
+  ignore (List.fold_left 
+	    (fun i (p,t) ->
+	       printf "%d: %s   \t%a \t%a s@." 
+		 i p (print_time ~sec:false) t (print_time ~sec:true) t;
 	       i+1
 	    ) 1 provers_ranking);
   
