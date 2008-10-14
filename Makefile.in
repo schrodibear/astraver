@@ -751,6 +751,7 @@ install-lib: $(JCLIB)
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/jessie.why $(LIBDIR)/jessie/why
+	cp -f lib/why/floats.why $(LIBDIR)/jessie/why
 	mkdir -p $(LIBDIR)/caduceus/coq
 	mkdir -p $(LIBDIR)/jessie/coq
 	if test "@COQVER@" = "v7"; then \
