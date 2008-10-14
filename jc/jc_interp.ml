@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.360 2008-10-10 08:41:35 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.361 2008-10-14 13:39:34 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -205,7 +205,7 @@ let bin_op: expr_bin_op -> string = function
   | `Beq, `Pointer -> "eq_pointer"
   | `Bneq, `Pointer -> "neq_pointer"
   | `Bsub, `Pointer -> 
-      if safety_checking () then "sub_pointer_" else "safe_sub_pointer_" 
+      assert false (* Should be translated into diff of addresses *)
       (* real *)
   | `Bgt, `Real -> "gt_real_"
   | `Blt, `Real -> "lt_real_"
@@ -256,7 +256,8 @@ let term_bin_op: term_bin_op -> string = function
       (* pointer *)
   | `Beq, `Pointer -> "eq_pointer_bool"
   | `Bneq, `Pointer -> "neq_pointer_bool"
-  | `Bsub, `Pointer -> "sub_pointer"
+  | `Bsub, `Pointer ->
+      assert false (* Should be translated into diff of addresses *)
       (* logic *)
   | `Beq, `Logic -> "eq"
   | `Bneq, `Logic -> "neq"
@@ -627,6 +628,15 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
         let t1'= ft t1 in
         LApp(unary_op op, 
 	     [ term_coerce t#pos (native_operator_type op) t1#typ t1 t1' ])
+    | JCTbinary(t1,(`Bsub,`Pointer),t2) ->
+        let t1' = LApp("address",[ ft t1 ]) in
+        let t2' = LApp("address",[ ft t2 ]) in
+	let st = pointer_struct t1#typ in
+	let s = string_of_int (struct_size_in_bytes st) in
+        LApp(
+	  term_bin_op (`Bdiv,`Integer),
+	  [ LApp(term_bin_op (`Bsub,`Integer), [ t1'; t2' ]);
+	    LConst(Prim_int s) ])
     | JCTbinary(t1,(_,(`Pointer | `Logic) as op),t2) ->
         let t1' = ft t1 in
         let t2' = ft t2 in
@@ -1608,6 +1618,15 @@ and expr e =
         make_app (unary_op op) 
           [ coerce ~check_int_overflow:(safety_checking()) 
               e#mark e#pos (native_operator_type op) e1#typ e1 e1' ]
+    | JCEbinary(e1,(`Bsub,`Pointer),e2) ->
+        let e1' = make_app "address" [ expr e1 ] in
+        let e2' = make_app "address" [ expr e2 ] in
+	let st = pointer_struct e1#typ in
+	let s = string_of_int (struct_size_in_bytes st) in
+        make_app
+	  (bin_op (`Bdiv,`Integer))
+	  [ make_app (bin_op (`Bsub,`Integer)) [ e1'; e2' ];
+	    Cte(Prim_int s) ]
     | JCEbinary(e1,(_,(`Pointer | `Logic) as op),e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in

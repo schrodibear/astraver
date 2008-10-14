@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(*i $Id: toolstat_lex.mll,v 1.2 2008-10-11 23:08:29 moy Exp $ i*)
+(*i $Id: toolstat_lex.mll,v 1.3 2008-10-14 13:39:34 moy Exp $ i*)
 
 {
   open Toolstat_pars
@@ -71,6 +71,13 @@
     | None -> 0
 
   let as_int = int_of_string 
+
+  let loc lexbuf = (lexeme_start_p lexbuf, lexeme_end_p lexbuf)
+
+  let newline lexbuf =
+    let pos = lexbuf.lex_curr_p in
+    lexbuf.lex_curr_p <- 
+      { pos with pos_lnum = pos.pos_lnum + 1; pos_bol = pos.pos_cnum }
 }
 
 let ws = [' ' '\t' '\012' '\r']
@@ -89,11 +96,13 @@ let real = num* '.' num*
 rule token = parse
   | "\nRunning " (id as s) " on proof obligations"
       { 
+	newline lexbuf; 
 	if debug then printf "prover %s@." s; 
 	PROVER(s)
       }
   | "\n" id "/" (file as f) "_why." id ws* ':' ws* 
       { 
+	newline lexbuf; 
 	if debug then printf "test %s@." f; 
 	TEST(f)
       }
@@ -109,10 +118,13 @@ rule token = parse
   | "\ntotal CPU time" ws* ':' 
       ((real as h) " h")* ws* ((real as m) " m")* ws* ((real as s) " sec")* 
       { 
+	newline lexbuf; 
 	if debug then printf "time %a h %a m %a s@." (print_option string) h 
 	  (print_option string) m (print_option string) s; 
 	TIME(opt_as_int h, opt_as_int m, opt_as_float s) 
       }
+  | '\n'
+      { newline lexbuf; token lexbuf }
   | _                                              
       { 
 	if debug_more then printf "other token %s@." (lexeme lexbuf);
@@ -122,5 +134,10 @@ rule token = parse
       { EOF }
 
 {
-  let parse lb = Toolstat_pars.log token lb
+  let parse lb = 
+    try
+      Toolstat_pars.log token lb
+    with Parsing.Parse_error ->
+      Format.eprintf "%a@." Loc.gen_report_position (loc lb);
+      raise Parsing.Parse_error
 }
