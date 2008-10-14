@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.361 2008-10-14 13:39:34 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.362 2008-10-14 14:51:58 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -176,6 +176,7 @@ let native_operator_type op = match snd op with
   | `Boolean -> Jc_pervasives.boolean_type
   | `Integer -> Jc_pervasives.integer_type
   | `Real -> Jc_pervasives.real_type
+  | `Double -> Jc_pervasives.double_type
 
 let unary_op: expr_unary_op -> string = function
   | `Uminus, `Integer -> "neg_int"
@@ -333,6 +334,7 @@ let has_equality_op = function
   | JCTnative Tboolean -> true
   | JCTnative Tinteger -> true
   | JCTnative Treal -> true
+  | JCTnative Tdouble -> true
   | JCTnative Tstring -> true
   | JCTlogic _s -> (* TODO *) false
   | JCTenum _ei -> true
@@ -346,6 +348,7 @@ let equality_op_for_type = function
   | JCTnative Tboolean -> "eq_bool"
   | JCTnative Tinteger -> "eq_int"
   | JCTnative Treal -> "eq_real"
+  | JCTnative Tdouble -> "eq_double"
   | JCTnative Tstring -> "eq"
   | JCTlogic s -> (* TODO *) assert false
   | JCTenum ei -> eq_of_enum ei
@@ -463,6 +466,8 @@ let term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src
 	      let e' = LApp(logic_int_of_enum ri,[ e' ]) in
 	      LApp("real_of_int",[ e' ])
 	end
+    | JCTnative Treal, JCTnative Tdouble ->
+	LApp("d_to_r",[ e' ])
     | JCTnative Tinteger, JCTnative Treal -> 
 	LApp("int_of_real",[ e' ])
       (* between enums and integer *)
@@ -500,7 +505,7 @@ let eval_integral_const e =
           let v = eval e in
           begin match op with
             | `Uminus, `Integer -> minus_num v
-            | `Uminus, (`Real | `Boolean | `Unit)
+            | `Uminus, (`Real | `Double | `Boolean | `Unit)
             | `Unot, _
             | `Ubw_not, _ -> raise Exit
           end
@@ -564,6 +569,10 @@ let coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	end
     | JCTnative Tinteger, JCTnative Treal -> 
 	make_app "int_of_real" [ e' ]
+    | JCTnative Tdouble, JCTnative Treal ->
+	make_app "r_to_d" [ Var "nearest_even" ; e' ]
+    | JCTnative Treal, JCTnative Tdouble ->
+	make_app "d_to_r" [ e' ]
       (* between enums and integer *)
     | JCTenum ri1, JCTenum ri2 
 	when ri1.jc_enum_info_name = ri2.jc_enum_info_name -> e'
@@ -714,8 +723,12 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
         begin match rc with
           | Integer_to_real ->
               term_coerce t1#pos real_type t1#typ t1 t1'
+          | Double_to_real ->
+              term_coerce t1#pos real_type t1#typ t1 t1'
           | Real_to_integer ->
               term_coerce t1#pos integer_type t1#typ t1 t1'
+	  | Round_double rm ->
+              term_coerce t1#pos double_type t1#typ t1 t1'
 	end
     | JCTderef(t1,lab',fi) -> 
 	let lab = if relocate && lab' = LabelHere then lab else lab' in
@@ -1721,9 +1734,15 @@ and expr e =
           | Integer_to_real ->
               coerce ~check_int_overflow:(safety_checking())
                 e#mark e#pos real_type e1#typ e1 e1'
+          | Double_to_real ->
+              coerce ~check_int_overflow:(safety_checking())
+                e#mark e#pos real_type e1#typ e1 e1'
           | Real_to_integer ->
               coerce ~check_int_overflow:(safety_checking())
                 e#mark e#pos integer_type e1#typ e1 e1'
+          | Round_double rm ->
+              coerce ~check_int_overflow:(safety_checking())
+                e#mark e#pos double_type e1#typ e1 e1'
         end
     | JCEderef(e1,fi) ->
   	make_deref e#mark e#pos e1 fi

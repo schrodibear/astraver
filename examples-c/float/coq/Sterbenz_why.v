@@ -4,13 +4,14 @@
 Require Export Sterbenz_spec_why.
 Require Export WhyFloats.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "/users/demons/ayad/why/examples-c/float/Sterbenz.c", line 3, characters 4-18: *)
 (*Why goal*) Lemma Sterbenz_impl_po_1 : 
   forall (x: single),
   forall (y: single),
-  forall (HW_1: (* File "Sterbenz.c", line 1, characters 14-29 *)
+  forall (HW_1: (* CADUCEUS_1 *)
                 ((Rle (Rdiv (s_to_r y) (IZR 2)) (s_to_r x)) /\
                 (Rle (s_to_r x) (Rmult (IZR 2) (s_to_r y))))),
+  (* CADUCEUS_2 *)
   (eq (s_to_r (sub_single nearest_even x y)) (Rminus (s_to_r x) (s_to_r y))).
 Proof.
 intros x y; unfold s_to_r; destruct x; destruct y;simpl.

@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.69 2008-10-10 10:15:41 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.70 2008-10-14 14:51:58 ayad Exp $ i*)
 
 {
   open Jc_ast
@@ -173,9 +173,7 @@ rule token = parse
   | "catch"                 { CATCH }
   | "continue"              { CONTINUE }
   | "do"                    { DO }
-(*
   | "double"                { DOUBLE }
-*)
   | "else"                  { ELSE }
   | "ensures"               { ENSURES }
   | "end"                   { END }

@@ -1,0 +1,26 @@
+
+
+double test1()
+  behavior default: 
+   ensures (\result :> real) == 7.0;
+{ 
+return ((2.0 * 3.5) :> double);
+}
+
+
+/*
+float test2()
+  behavior default: 
+   ensures (\result :> real) == 0.10000000149006473916;
+{ 
+return 0.1f;
+}
+*/  
+
+double diff(double x, double y)
+  behavior default:
+   ensures (\result :> real) == (x :> real) - (y :> real);
+{
+  return ((x :> real) - (y :> real)) :> double;
+}
+

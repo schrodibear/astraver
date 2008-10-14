@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.35 2008-10-10 10:15:41 moy Exp $ i*)
+(*i $Id: jc_make.ml,v 1.36 2008-10-14 14:51:58 ayad Exp $ i*)
 
 open Format
 open Pp
@@ -67,9 +67,13 @@ let generic full f targets =
        out "export WHYLIB=%s@\n@\n" Version.libdir;
        out "WHY=$(WHYEXEC) --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
        out "GWHY=$(GWHYEXEC) --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
-       out "JESSIELIBFILE ?= %s@\n@\n" 
-	 (String.escaped (Filename.concat Jc_options.libdir 
-	    (Filename.concat "why" Jc_options.libfile)));
+       out "JESSIELIBFILE ?=";
+       List.iter (fun s -> 
+		    out " %s"
+		      (String.escaped (Filename.concat Jc_options.libdir 
+				      (Filename.concat "why" s))))
+	 Jc_options.libfiles;
+       out "@\n@\n";
        out "COQDEP = coqdep@\n@\n";
 
        out ".PHONY: all coq pvs simplify cvcl harvey smtlib zenon@\n@\n";

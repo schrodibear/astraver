@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.32 2008-10-10 10:15:41 moy Exp $ *)
+(* $Id: jc_options.mli,v 1.33 2008-10-14 14:51:59 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -35,7 +35,7 @@ open Jc_env
 (*s environment variables *)
 
 val libdir : string
-val libfile : string
+val libfiles : string list
 
 (*s command-line options *)
 

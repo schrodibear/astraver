@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.36 2008-10-10 10:15:41 moy Exp $ i*)
+(*i $Id: jc_options.ml,v 1.37 2008-10-14 14:51:58 ayad Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -61,7 +61,7 @@ let libdir =
     lprintf "JESSIELIB is not set, using %s as default@." p;
     p
 
-let libfile = "jessie.why"
+let libfiles = [ "jessie.why" ; "floats.why" ]
 
 (*s command-line options *)
 

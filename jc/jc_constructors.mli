@@ -339,7 +339,7 @@ module PExpr :
       expr:pexpr -> typ:string -> ?pos:Loc.position -> unit -> pexpr
 
     val mkcast :
-      expr:pexpr -> typ:string -> ?pos:Loc.position -> unit -> pexpr
+      expr:pexpr -> typ:ptype -> ?pos:Loc.position -> unit -> pexpr
 
     val mkquantifier :
       quantifier:quantifier ->
@@ -511,7 +511,7 @@ module PExpr :
 module NExpr :
   sig
     val mkcast :
-      expr:nexpr -> typ:string -> ?pos:Loc.position -> unit -> nexpr
+      expr:nexpr -> typ:ptype -> ?pos:Loc.position -> unit -> nexpr
   end
 
 module PDecl :

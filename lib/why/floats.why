@@ -94,6 +94,15 @@ logic r_to_d : mode,real -> double
 logic double_round_error, double_total_error : double -> real
 logic double_set_model : double,real -> double
 
+(* predicates *)
+
+predicate eq_double(x:double,y:double) = d_to_r(x) = d_to_r(y)
+predicate neq_double(x:double,y:double) = d_to_r(x) <> d_to_r(y)
+predicate lt_double(x:double,y:double) = d_to_r(x) < d_to_r(y)
+predicate gt_double(x:double,y:double) = d_to_r(x) > d_to_r(y)
+predicate le_double(x:double,y:double) = d_to_r(x) <= d_to_r(y)
+predicate ge_double(x:double,y:double) = d_to_r(x) >= d_to_r(y)
+
 (* overflow checks *)
 
 logic max_double : real
@@ -125,7 +134,7 @@ parameter div_double_ :
 parameter sqrt_double_ :
   m:mode -> x:double -> 
   { d_to_r(x) >= 0.0 } double { result = sqrt_double(m,x) }
-
+ 
 parameter lt_double :
   x:double -> y:double -> 
   {} bool { if result then d_to_r(x) < d_to_r(y) else d_to_r(x) >= d_to_r(y) }
@@ -144,6 +153,35 @@ parameter eq_double :
 parameter neq_double :
   x:double -> y:double -> 
   {} bool { if result then d_to_r(x) <> d_to_r(y) else d_to_r(x) = d_to_r(y) }
+
+
+
+(* boolean versions of the comparisons and the corresponding axioms *)
+logic lt_double_bool : double,double -> bool
+logic le_double_bool : double,double -> bool
+logic gt_double_bool : double,double -> bool
+logic ge_double_bool : double,double -> bool
+logic eq_double_bool : double,double -> bool
+logic neq_double_bool : double,double -> bool
+
+axiom lt_double_bool_axiom : 
+  forall x:double. forall y:double. 
+    lt_double_bool(x,y)=true <-> d_to_r(x)<d_to_r(y)
+axiom le_double_bool_axiom : 
+  forall x:double. forall y:double. 
+    le_double_bool(x,y)=true <-> d_to_r(x)<=d_to_r(y)
+axiom gt_double_bool_axiom : 
+  forall x:double. forall y:double. 
+    gt_double_bool(x,y)=true <-> d_to_r(x)>d_to_r(y)
+axiom ge_double_bool_axiom : 
+  forall x:double. forall y:double. 
+    ge_double_bool(x,y)=true <-> d_to_r(x)>=d_to_r(y)
+axiom eq_double_bool_axiom : 
+  forall x:double. forall y:double. 
+    eq_double_bool(x,y)=true <-> d_to_r(x)=d_to_r(y)
+axiom neq_double_bool_axiom : 
+  forall x:double. forall y:double. 
+    neq_double_bool(x,y)=true <-> d_to_r(x)<>d_to_r(y)
 
 (* quad precision *)
 

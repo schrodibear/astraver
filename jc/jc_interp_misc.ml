@@ -86,6 +86,7 @@ let native_name = function
   | Tboolean -> "boolean"
   | Tinteger -> "integer"
   | Treal -> "real"
+  | Tdouble -> "double"
   | Tstring -> "string"
 
 (* let logic_bitvector_of_native nty = "bitvector_of_" ^ (native_name nty) *)
@@ -106,6 +107,7 @@ let any_value = function
 	| Tboolean -> App(Var "any_bool", Void)
 	| Tinteger -> App(Var "any_int", Void)
 	| Treal -> App(Var "any_real", Void)
+        | Tdouble -> App(Var "any_double", Void)
 	| Tstring -> App(Var "any_string", Void)
       end
   | JCTnull 
@@ -127,6 +129,7 @@ let make_eq_term ty a b =
     | JCTnative Tboolean -> "eq_bool_bool"
     | JCTnative Tinteger -> "eq_int_bool"
     | JCTnative Treal -> "eq_real_bool"
+    | JCTnative Tdouble -> "eq_double_bool"
     | JCTnative Tstring -> "eq_string_bool"
     | JCTtype_var _ -> assert false (* TODO: need environment *)
   in
@@ -141,6 +144,7 @@ let make_eq_pred ty a b =
     | JCTnative Tboolean -> "eq_bool"
     | JCTnative Tinteger -> "eq_int"
     | JCTnative Treal -> "eq_real"
+    | JCTnative Tdouble -> "eq_double"
     | JCTnative Tstring -> "eq_string"
     | JCTtype_var _ -> assert false (* TODO: need environment *)
   in
@@ -305,6 +309,7 @@ let tr_native_type = function
   | Tboolean -> "bool"
   | Tinteger -> "int"
   | Treal -> "real"
+  | Tdouble -> "double"
   | Tstring -> "string"
 
 let tr_base_type ?region = function

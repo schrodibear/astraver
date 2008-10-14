@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.113 2008-10-10 08:41:35 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.114 2008-10-14 14:51:59 ayad Exp $ */
 
 %{
 
@@ -96,8 +96,8 @@
 /* type invariant logic with variant and axiom tag */
 %token TYPE INVARIANT LOGIC INDUCTIVE WITH VARIANT AND AXIOM LEMMA TAG MATCH
 
-/* integer boolean real unit void rep */
-%token INTEGER BOOLEAN REAL UNIT REP
+/* integer boolean real double unit void rep */
+%token INTEGER BOOLEAN REAL DOUBLE UNIT REP
 
 /* assigns assumes behavior ensures requires throws reads */
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
@@ -120,10 +120,6 @@
 
 /* @ (string concat) */
 %token AT
-
-/*
-%token FLOAT DOUBLE 
-*/
 
 %token EOF
 %type <Jc_ast.pexpr Jc_ast.decl list> file
@@ -362,6 +358,8 @@ type_expr:
     { locate (JCPTnative Tboolean) }
 | REAL
     { locate (JCPTnative Treal) }
+| DOUBLE
+    { locate (JCPTnative Tdouble) }
 | UNIT
     { locate (JCPTnative Tunit) }
 | IDENTIFIER
@@ -713,12 +711,16 @@ expression:
     { locate (JCPEbinary ($1, `Bge, $3)) }
 | expression LTCOLON IDENTIFIER
     { locate (JCPEinstanceof($1, $3)) }
+/*
 | expression COLONGT IDENTIFIER
     { locate (JCPEcast($1, $3)) }
 | expression COLONGT REAL
     { locate (JCPEcast($1, "real")) }
 | expression COLONGT INTEGER
     { locate (JCPEcast($1, "integer")) }
+*/
+| expression COLONGT type_expr
+    { locate (JCPEcast($1, $3)) }
 | expression EQEQ expression 
     { locate (JCPEbinary ($1, `Beq, $3)) }
 | expression BANGEQ expression 

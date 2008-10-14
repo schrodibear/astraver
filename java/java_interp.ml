@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.162 2008-10-10 08:41:35 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.163 2008-10-14 14:51:58 ayad Exp $ *)
 
 open Format
 open Jc_output
@@ -630,10 +630,10 @@ let rec term t =
 	    match ty with
 	      | JTYbase _ -> term t
 	      | JTYclass(_,ci) ->
-		  let st = get_class ci.class_info_name in
+		  let _st = get_class ci.class_info_name in
                   mkcast
                     ~expr: (term t)
-                    ~typ: st.jc_struct_info_name
+                    ~typ: (assert false (*st.jc_struct_info_name *))
                     ()
 	      | _ -> assert false (* TODO *)
 	  end
@@ -1140,7 +1140,7 @@ let int_cast pos t e =
     mkcast
       ~pos
       ~expr: e
-      ~typ: int_range.jc_enum_info_name
+      ~typ: (assert false (* int_range.jc_enum_info_name *))
       ()
 
 let rec expr ?(reg=false) e =
@@ -1417,13 +1417,14 @@ let rec expr ?(reg=false) e =
                     reg := true;
                     mkcast
                       ~expr: (expr e1)
-                      ~typ: (get_enum_info t).jc_enum_info_name
+                      ~typ: (assert false (*(get_enum_info t).jc_enum_info_name*))
                       ()
                   end
 	      | JTYclass(_,ci) ->
-		  let st = get_class ci.class_info_name in
+		  let _st = get_class ci.class_info_name in
 		  reg := true;	    
-                  mkcast ~expr:(expr e1) ~typ:st.jc_struct_info_name ()
+                  mkcast ~expr:(expr e1) 
+		    ~typ:(assert false (*st.jc_struct_info_name*)) ()
 	      | JTYinterface ii -> 
 		  begin
 		    match e1.java_expr_type with
@@ -1438,7 +1439,8 @@ let rec expr ?(reg=false) e =
 	      | JTYarray (_, ty) ->
 		  let st = get_array_struct e.java_expr_loc ty in
 		  reg := true;	    
-                  mkcast ~expr:(expr e1) ~typ:st.jc_struct_info_name ()
+                  mkcast ~expr:(expr e1) 
+		    ~typ:(assert false (* st.jc_struct_info_name*)) ()
 	      | JTYnull | JTYlogic _ -> assert false 
 	  end
       | JEinstanceof(e,ty) ->

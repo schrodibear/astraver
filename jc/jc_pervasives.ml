@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.128 2008-10-10 10:15:41 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.129 2008-10-14 14:51:59 ayad Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -69,6 +69,7 @@ let operator_of_native = function
   | Tboolean -> `Boolean
   | Tinteger -> `Integer
   | Treal -> `Real
+  | Tdouble -> `Double
   | Tstring -> assert false
 
 let operator_of_type = function
@@ -94,6 +95,7 @@ let string_of_native t =
     | Tunit -> "unit"
     | Tinteger -> "integer"
     | Treal -> "real"
+    | Tdouble -> "double"
     | Tboolean -> "boolean"
     | Tstring -> "string"
 
@@ -186,6 +188,7 @@ let unit_type = JCTnative Tunit
 let boolean_type = JCTnative Tboolean
 let integer_type = JCTnative Tinteger
 let real_type = JCTnative Treal
+let double_type = JCTnative Tdouble
 let null_type = JCTnull
 let string_type = JCTnative Tstring
 let any_type = JCTany
@@ -885,6 +888,7 @@ let string_of_op_type = function
   | `Integer -> "integer"
   | `Unit -> "unit"
   | `Real -> "real"
+  | `Double -> "double"
   | `Boolean -> "boolean"
   | `Pointer -> "pointer"
   | `Logic -> "<some logic type>"

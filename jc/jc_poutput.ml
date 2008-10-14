@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.24 2008-10-10 08:41:35 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.25 2008-10-14 14:51:59 ayad Exp $ *)
 
 open Format
 open Jc_env
@@ -77,7 +77,9 @@ let unary_op = function
 let real_conversion fmt rc =
   match rc with
     | Integer_to_real -> fprintf fmt "real"
+    | Double_to_real -> fprintf fmt "d_to_r"
     | Real_to_integer -> fprintf fmt "integer"
+    | Round_double _ -> fprintf fmt "r_to_d" (* TODO: parameter rounding mode *)
 
 let rec ppattern fmt p =
   match p#node with
@@ -131,7 +133,7 @@ let rec pexpr fmt e =
     | JCPEassign_op (v, op, e) -> 
 	fprintf fmt "%a %s= %a" pexpr v (bin_op op) pexpr e
     | JCPEcast (e, si) ->
-	fprintf fmt "(%a :> %s)" pexpr e si
+	fprintf fmt "(%a :> %a)" pexpr e ptype si
     | JCPEalloc (e, si) ->
 	fprintf fmt "(new %s[%a])" si pexpr e 
     | JCPEfree (e) ->

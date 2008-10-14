@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.250 2008-10-10 10:15:41 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.251 2008-10-14 14:51:59 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -102,6 +102,11 @@ let find_struct_root st =
 let is_real t =
   match t with
     | JCTnative Treal -> true
+    | _ -> false
+
+let is_double t =
+  match t with
+    | JCTnative Tdouble -> true
     | _ -> false
 
 let is_boolean t =
@@ -436,6 +441,7 @@ let make_logic_unary_op loc (op : Jc_ast.unary_op) e2 =
 (*    | `Upostfix_dec | `Upostfix_inc | `Uprefix_dec | `Uprefix_inc ->
         typing_error loc "pre/post incr/decr not allowed as logical term"*)
 
+(* [term_coerce t1 t2 e] applies coercion to expr e of type t1 to t2 *)
 let term_coerce t1 t2 e =
   let tn1 =
     match t1 with
@@ -771,60 +777,69 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         JCTinstanceof(ft e1, label (), find_struct_info e#pos t)
     | JCNEcast(e1, t) ->
         let te1 = ft e1 in
-	if t = "integer" then
-	  if is_real te1#typ then
-	    integer_type, te1#region, JCTreal_cast(te1,Real_to_integer)
-	  else if is_integer te1#typ then
-	    integer_type, te1#region, te1#node
-	  else
-	    typing_error e#pos "bad cast to integer"
-	else if t = "real" then
-	  if is_integer te1#typ then
-	    real_type, te1#region, JCTreal_cast(te1,Integer_to_real)
-	  else if is_real te1#typ then 
-	    real_type, te1#region, te1#node
-	  else
-	    typing_error e#pos "bad cast to real"
-        else begin try
-          let ri = Hashtbl.find enum_types_table t in
-          if is_integer te1#typ then
-            JCTenum ri, dummy_region, JCTrange_cast(te1, ri)
-          else if is_real te1#typ then
-	    let cast = NExpr.mkcast ~expr:e1 ~typ:"integer" () in
-	    let t = ft cast in
-	    JCTenum ri, te1#region, JCTrange_cast(t, ri)
-	  else
-            typing_error e#pos "numeric type expected"
-        with Not_found ->
-          let st = find_struct_info e#pos t in
-          match te1#typ with
-            | JCTpointer(st1, a, b) ->
-                if superstruct st st1 then
-		  (te1#typ,
-                   te1#region,
-                   te1#node)
-                else if substruct st st1 then
-                  (JCTpointer(JCtag(st, []), a, b),
-                   te1#region,
-                   JCTcast(te1, label (), st))
-                else if same_hierarchy (JCtag(st, [])) st1 then
-                  typing_error e#pos "invalid cast"
-		else
-		  (* bitwise cast *)
-                  (Region.make_bitwise te1#region;
-		   JCTpointer(JCtag(st, []), a, b),
-                   te1#region,
-                   JCTbitwise_cast(te1, label(), st))
-	    | JCTnull ->
-		(* bitwise cast *)
-                (Region.make_bitwise te1#region;
-		 JCTpointer(JCtag(st,[]),None,None),
-                 te1#region,
-                 JCTbitwise_cast(te1, label(), st))
-            | JCTnative _ | JCTlogic _ | JCTenum _ | JCTany
-            | JCTtype_var _ ->
-                typing_error e#pos "only structures can be cast"
-        end
+	let ty = type_type t in
+	begin match ty with
+	  | JCTnative Tinteger ->
+	      if is_real te1#typ then
+		integer_type, te1#region, JCTreal_cast(te1,Real_to_integer)
+	      else if is_integer te1#typ then
+		integer_type, te1#region, te1#node
+	      else
+		typing_error e#pos "bad cast to integer"
+	  | JCTnative Treal ->
+	      if is_integer te1#typ then
+		real_type, te1#region, JCTreal_cast(te1,Integer_to_real)
+	      else if is_real te1#typ then 
+		real_type, te1#region, te1#node
+	      else if is_double te1#typ then 
+		real_type, te1#region, JCTreal_cast(te1,Double_to_real)
+	      else
+		typing_error e#pos "bad cast to real"
+	  | JCTnative _ -> assert false (* TODO *) 
+	  | JCTenum ri ->
+	      if is_integer te1#typ then
+		JCTenum ri, dummy_region, JCTrange_cast(te1, ri)
+	      else 
+		(* CM je ne comprends pas ce cast de real vers enum 
+		   if is_real te1#typ then
+		let cast = NExpr.mkcast ~expr:e1 ~typ:integer_type () in
+		let t = ft cast in
+		  JCTenum ri, te1#region, JCTrange_cast(t, ri)
+	      else
+		*)
+		typing_error e#pos "integer type expected"
+	  | JCTpointer(JCtag(st,_),_,_) -> 
+	      begin match te1#typ with
+		| JCTpointer(st1, a, b) ->
+		    if superstruct st st1 then
+		      (te1#typ,
+		       te1#region,
+		       te1#node)
+		    else if substruct st st1 then
+		      (JCTpointer(JCtag(st, []), a, b),
+		       te1#region,
+		       JCTcast(te1, label (), st))
+		    else if same_hierarchy (JCtag(st, [])) st1 then
+		      typing_error e#pos "invalid cast"
+		    else
+		      (* bitwise cast *)
+		      (Region.make_bitwise te1#region;
+		       JCTpointer(JCtag(st, []), a, b),
+		       te1#region,
+		       JCTbitwise_cast(te1, label(), st))
+		| JCTnull ->
+		    (* bitwise cast *)
+		    (Region.make_bitwise te1#region;
+		     JCTpointer(JCtag(st,[]),None,None),
+		     te1#region,
+		     JCTbitwise_cast(te1, label(), st))
+		| JCTnative _ | JCTlogic _ | JCTenum _ | JCTany
+		| JCTtype_var _ ->
+		    typing_error e#pos "only structures can be cast"
+	      end
+	  | JCTpointer (JCroot _, _, _)  -> assert false (* TODO *)
+	  | JCTtype_var _|JCTlogic _|JCTany|JCTnull -> assert false (* TODO *)
+	end
     | JCNEif(e1, e2, e3) ->
         let te1 = ft e1 and te2 = ft e2 and te3 = ft e3 in
         begin match te1#typ with
@@ -1727,6 +1742,77 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         let st = find_struct_info e#pos t in
         boolean_type, dummy_region, JCEinstanceof(te1, st)
     | JCNEcast(e1, t) -> 
+       let te1 = fe e1 in
+	let ty = type_type t in
+	begin match ty with
+	  | JCTnative Tinteger ->
+	      if is_real te1#typ then
+		integer_type, te1#region, JCEreal_cast(te1,Real_to_integer)
+	      else if is_integer te1#typ then
+		integer_type, te1#region, te1#node
+	      else
+		typing_error e#pos "bad cast to integer"
+	  | JCTnative Treal ->
+	      if is_integer te1#typ then
+		real_type, te1#region, JCEreal_cast(te1,Integer_to_real)
+	      else if is_real te1#typ then 
+		real_type, te1#region, te1#node
+	      else if is_double te1#typ then 
+		real_type, te1#region, JCEreal_cast(te1,Double_to_real)
+	      else
+		typing_error e#pos "bad cast to real"
+	  | JCTnative Tdouble -> 
+	      if is_real te1#typ then 
+		double_type, te1#region, 
+	        JCEreal_cast(te1,Round_double Round_nearest_even)
+	      else
+		typing_error e#pos "bad cast to double"
+	  | JCTnative _ -> assert false (* TODO *)
+	  | JCTenum ri ->
+	      if is_integer te1#typ then
+		JCTenum ri, dummy_region, JCErange_cast(te1, ri)
+	      else 
+		(* CM je ne comprends pas ce cast de real vers enum 
+		   if is_real te1#typ then
+		let cast = NExpr.mkcast ~expr:e1 ~typ:integer_type () in
+		let t = ft cast in
+		  JCTenum ri, te1#region, JCErange_cast(t, ri)
+	      else
+		*)
+		typing_error e#pos "integer type expected"
+	  | JCTpointer(JCtag(st,_),_,_) -> 
+	      begin match te1#typ with
+		| JCTpointer(st1, a, b) ->
+		    if superstruct st st1 then
+		      (te1#typ,
+		       te1#region,
+		       te1#node)
+		    else if substruct st st1 then
+		      (JCTpointer(JCtag(st, []), a, b),
+		       te1#region,
+		       JCEcast(te1, st))
+		    else if same_hierarchy (JCtag(st, [])) st1 then
+		      typing_error e#pos "invalid cast"
+		    else
+		      (* bitwise cast *)
+		      (Region.make_bitwise te1#region;
+		       JCTpointer(JCtag(st, []), a, b),
+		       te1#region,
+		       JCEbitwise_cast(te1, st))
+		| JCTnull ->
+		    (* bitwise cast *)
+		    (Region.make_bitwise te1#region;
+		     JCTpointer(JCtag(st,[]),None,None),
+		     te1#region,
+		     JCEbitwise_cast(te1, st))
+		| JCTnative _ | JCTlogic _ | JCTenum _ | JCTany
+		| JCTtype_var _ ->
+		    typing_error e#pos "only structures can be cast"
+	      end
+	  | JCTpointer (JCroot _, _, _)  -> assert false (* TODO *)
+	  | JCTtype_var _|JCTlogic _|JCTany|JCTnull -> assert false (* TODO *)
+	end
+ (*
         let te1 = fe e1 in
 	if t = "integer" then
 	  if is_real te1#typ then
@@ -1776,6 +1862,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
                 typing_error e#pos
                   "only structures or numeric types can be cast"
         end
+ *)
     | JCNEif(e1,e2,e3) ->
         let te1 = fe e1 and te2 = fe e2 and te3 = fe e3 in
         begin match te1#typ with

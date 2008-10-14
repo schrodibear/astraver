@@ -12,15 +12,16 @@ intros H1; Contradict H; apply Rabs_no_R0; auto.
 Qed.
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "/users/demons/ayad/why/examples-c/float/Sterbenz2.c", line 2, characters 12-36: *)
 (*Why goal*) Lemma Sterbenz_impl_po_1 : 
   forall (x: double),
   forall (y: double),
-  forall (HW_1: (* File "Sterbenz2.c", line 1, characters 14-73 *)
+  forall (HW_1: (* CADUCEUS_1 *)
                 ((((Rle (Rdiv (d_to_r y) (IZR 2)) (d_to_r x)) /\
                 (Rle (d_to_r x) (Rmult (IZR 2) (d_to_r y)))) /\
                 (eq (double_round_error x) (IZR 0))) /\
                 (eq (double_round_error y) (IZR 0)))),
+  (* CADUCEUS_2 *)
   (eq (double_round_error (sub_double nearest_even x y)) (IZR 0)).
 Proof.
 intros x y; unfold double_round_error, d_to_r; destruct x; destruct y; simpl.

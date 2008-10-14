@@ -54,6 +54,7 @@ val operator_of_type: jc_type -> [> operator_type]
 val integer_type : Jc_env.jc_type
 val boolean_type : Jc_env.jc_type
 val real_type : Jc_env.jc_type
+val double_type : Jc_env.jc_type
 val unit_type : Jc_env.jc_type
 val null_type : Jc_env.jc_type
 val string_type : Jc_env.jc_type

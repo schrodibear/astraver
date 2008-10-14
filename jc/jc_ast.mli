@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.150 2008-10-10 08:41:35 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.151 2008-10-14 14:51:58 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -110,7 +110,7 @@ type unary_op = [ `Uminus | `Unot | `Ubw_not ]
 
 type pexpr_unary_op = [ pm_unary_op | unary_op ]
 
-type native_operator_type = [ `Unit | `Boolean | `Integer | `Real ]
+type native_operator_type = [ `Unit | `Boolean | `Integer | `Real | `Double ]
 type operator_type = [ native_operator_type | `Pointer | `Logic ]
 
 type pred_bin_op = [comparison_op | logical_op] * operator_type
@@ -130,7 +130,14 @@ type asrt_kind =
 	       can be either discarded or both used and proved *)
   | Aassume (* Assertion that can be relied on without proof *)
 
-type real_conversion = Integer_to_real | Real_to_integer
+type rounding_mode =
+  | Round_nearest_even | Round_to_zero | Round_up | Round_down 
+  | Round_nearest_away
+
+type real_conversion = 
+  | Integer_to_real | Real_to_integer 
+  | Double_to_real
+  | Round_double of rounding_mode
 
 type ppattern_node =
   | JCPPstruct of identifier * (identifier * ppattern) list
@@ -158,7 +165,7 @@ and pexpr_node =
   | JCPEassign of pexpr * pexpr
   | JCPEassign_op of pexpr * bin_op * pexpr
   | JCPEinstanceof of pexpr * string
-  | JCPEcast of pexpr * string
+  | JCPEcast of pexpr * ptype
   | JCPEquantifier of quantifier * ptype * string list * pexpr
   | JCPEold of pexpr
   | JCPEat of pexpr * label
@@ -269,7 +276,7 @@ type nexpr_node =
   | JCNEapp of string * label list * nexpr list
   | JCNEassign of nexpr * nexpr
   | JCNEinstanceof of nexpr * string
-  | JCNEcast of nexpr * string
+  | JCNEcast of nexpr * ptype
   | JCNEif of nexpr * nexpr * nexpr
   | JCNEoffset of offset_kind * nexpr 
   | JCNEaddress of bool * nexpr 
