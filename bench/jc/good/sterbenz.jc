@@ -4,6 +4,7 @@ double test1()
   behavior default: 
    ensures (\result :> real) == 7.0;
 { 
+assert 1==0;
 return ((2.0 * 3.5) :> double);
 }
 
@@ -21,6 +22,7 @@ double diff(double x, double y)
   behavior default:
    ensures (\result :> real) == (x :> real) - (y :> real);
 {
+  assert 1==0;
   return ((x :> real) - (y :> real)) :> double;
 }
 

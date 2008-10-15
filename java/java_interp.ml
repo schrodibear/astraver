@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.163 2008-10-14 14:51:58 ayad Exp $ *)
+(* $Id: java_interp.ml,v 1.164 2008-10-15 07:18:02 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -247,6 +247,18 @@ and tr_type pos t =
 	let st = get_array_struct pos t in
 	  JCTpointer (JCtag(st, []), Some num_zero, if non_null then Some num_minus_one else None)
     | JTYlogic i -> JCTlogic i
+
+let ptype_node_of_type = function
+  | JCTnative n -> JCPTnative n
+  | JCTlogic s -> JCPTidentifier s
+  | JCTenum e -> JCPTidentifier e.jc_enum_info_name
+  | JCTpointer(JCtag(st, _), l, r) -> JCPTpointer(st.jc_struct_info_name,[], l, r)
+  | JCTpointer(JCroot v, l, r) ->
+      JCPTpointer(v.jc_root_info_name,[], l, r)
+  | JCTnull
+  | JCTany | JCTtype_var _ -> assert false
+let ptype_of_type t = new ptype (ptype_node_of_type t)
+
 
 (*s structure fields *)
 
@@ -625,17 +637,20 @@ let rec term t =
             ~expr: (term t)
             ~label: (tr_logic_label lab)
             ()
-      | JTcast(ty,(*lab,*)t) ->
+      | JTcast(ty,t') ->
 	  begin
+(*
 	    match ty with
-	      | JTYbase _ -> term t
-	      | JTYclass(_,ci) ->
-		  let _st = get_class ci.class_info_name in
+	      | JTYbase _ -> term t'
+	      | JTYclass _ ->
+*)
                   mkcast
-                    ~expr: (term t)
-                    ~typ: (assert false (*st.jc_struct_info_name *))
+                    ~expr: (term t')
+                    ~typ:(ptype_of_type (tr_type t.java_term_loc ty))
                     ()
+(*
 	      | _ -> assert false (* TODO *)
+*)
 	  end
       | JTif(t1,t2,t3) ->
 	  mkif
@@ -650,17 +665,6 @@ let rec term t =
 let quantifier = function
   | Forall -> Jc_ast.Forall
   | Exists -> Jc_ast.Exists
-
-let ptype_node_of_type = function
-  | JCTnative n -> JCPTnative n
-  | JCTlogic s -> JCPTidentifier s
-  | JCTenum e -> JCPTidentifier e.jc_enum_info_name
-  | JCTpointer(JCtag(st, _), l, r) -> JCPTpointer(st.jc_struct_info_name,[], l, r)
-  | JCTpointer(JCroot v, l, r) ->
-      JCPTpointer(v.jc_root_info_name,[], l, r)
-  | JCTnull
-  | JCTany | JCTtype_var _ -> assert false
-let ptype_of_type t = new ptype (ptype_node_of_type t)
 
 let rec assertion ?(reg=0) a =
   let a' =
@@ -1140,7 +1144,7 @@ let int_cast pos t e =
     mkcast
       ~pos
       ~expr: e
-      ~typ: (assert false (* int_range.jc_enum_info_name *))
+      ~typ: (ptype_of_type (tr_type pos t))
       ()
 
 let rec expr ?(reg=false) e =
@@ -1417,14 +1421,14 @@ let rec expr ?(reg=false) e =
                     reg := true;
                     mkcast
                       ~expr: (expr e1)
-                      ~typ: (assert false (*(get_enum_info t).jc_enum_info_name*))
+                      ~typ: (ptype_of_type (tr_type e.java_expr_loc ty))
                       ()
                   end
 	      | JTYclass(_,ci) ->
-		  let _st = get_class ci.class_info_name in
 		  reg := true;	    
                   mkcast ~expr:(expr e1) 
-		    ~typ:(assert false (*st.jc_struct_info_name*)) ()
+		    ~typ: (ptype_of_type (tr_type e.java_expr_loc ty))
+		    ()
 	      | JTYinterface ii -> 
 		  begin
 		    match e1.java_expr_type with
@@ -1437,10 +1441,10 @@ let rec expr ?(reg=false) e =
 *)
 		  end
 	      | JTYarray (_, ty) ->
-		  let st = get_array_struct e.java_expr_loc ty in
 		  reg := true;	    
                   mkcast ~expr:(expr e1) 
-		    ~typ:(assert false (* st.jc_struct_info_name*)) ()
+		    ~typ: (ptype_of_type (tr_type e.java_expr_loc ty))
+		    ()
 	      | JTYnull | JTYlogic _ -> assert false 
 	  end
       | JEinstanceof(e,ty) ->

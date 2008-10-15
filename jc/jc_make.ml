@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.36 2008-10-14 14:51:58 ayad Exp $ i*)
+(*i $Id: jc_make.ml,v 1.37 2008-10-15 07:18:02 marche Exp $ i*)
 
 open Format
 open Pp
@@ -72,7 +72,7 @@ let generic full f targets =
 		    out " %s"
 		      (String.escaped (Filename.concat Jc_options.libdir 
 				      (Filename.concat "why" s))))
-	 Jc_options.libfiles;
+	 (Jc_options.libfiles ());
        out "@\n@\n";
        out "COQDEP = coqdep@\n@\n";
 

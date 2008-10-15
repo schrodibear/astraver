@@ -27,15 +27,16 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.33 2008-10-14 14:51:59 ayad Exp $ *)
+(* $Id: jc_options.mli,v 1.34 2008-10-15 07:18:02 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
 
 (*s environment variables *)
 
+val has_floats : bool ref
 val libdir : string
-val libfiles : string list
+val libfiles : unit -> string list
 
 (*s command-line options *)
 

@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.70 2008-10-14 14:51:58 ayad Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.71 2008-10-15 07:18:02 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -173,7 +173,7 @@ rule token = parse
   | "catch"                 { CATCH }
   | "continue"              { CONTINUE }
   | "do"                    { DO }
-  | "double"                { DOUBLE }
+  | "double"                { Jc_options.has_floats := true; DOUBLE }
   | "else"                  { ELSE }
   | "ensures"               { ENSURES }
   | "end"                   { END }

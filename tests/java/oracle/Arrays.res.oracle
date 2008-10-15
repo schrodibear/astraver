@@ -3520,8 +3520,6 @@ predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
-
 logic null :  -> 'a1 pointer
 
 axiom address_injective:
@@ -3531,6 +3529,24 @@ axiom address_injective:
 axiom address_null: (address(null) = 0)
 
 axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
+
+axiom address_shift_lt:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) < address(shift(p, j))) <-> (i < j)))))
+
+axiom address_shift_le:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
+
+axiom address_sub_pointer:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
 
 axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
 
@@ -3574,33 +3590,6 @@ axiom neq_pointer_bool_def:
   (forall p1:'a1 pointer.
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
-
-axiom sub_pointer_shift:
-  (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, q)].
-      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
-
-axiom sub_pointer_self:
-  (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
-
-axiom sub_pointer_zero:
-  (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, q)].
-      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
-
-axiom sub_pointer_shift_left:
-  (forall p:'a1 pointer.
-    (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(shift(p, i), q)].
-        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
-         q) + i))))))
-
-axiom sub_pointer_shift_right:
-  (forall p:'a1 pointer.
-    (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(p, shift(q, i))].
-        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
-         q) - i))))))
 
 type ('t, 'v) memory
 
@@ -6759,6 +6748,21 @@ why -simplify [...] why/Arrays.why
  (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
+ ;; Why axiom address_shift_lt
+ (FORALL (p i j)
+ (IFF (< (address (shift p i)) (address (shift p j))) (< i j))))
+
+(BG_PUSH
+ ;; Why axiom address_shift_le
+ (FORALL (p i j)
+ (IFF (<= (address (shift p i)) (address (shift p j))) (<= i j))))
+
+(BG_PUSH
+ ;; Why axiom address_sub_pointer
+ (FORALL (p i j)
+ (IFF (<= (address (shift p i)) (address (shift p j))) (<= i j))))
+
+(BG_PUSH
  ;; Why axiom shift_zero
  (FORALL (p) (EQ (shift p 0) p)))
 
@@ -6797,39 +6801,6 @@ why -simplify [...] why/Arrays.why
 (BG_PUSH
  ;; Why axiom neq_pointer_bool_def
  (FORALL (p1 p2) (IFF (EQ (neq_pointer_bool p1 p2) |@true|) (NEQ p1 p2))))
-
-(BG_PUSH
- ;; Why axiom sub_pointer_shift
- (FORALL (p q) (IMPLIES (same_block p q) (EQ p (shift q (sub_pointer p q))))))
-
-(BG_PUSH
- ;; Why axiom sub_pointer_self
- (FORALL (p) (EQ (sub_pointer p p) 0)))
-
-(BG_PUSH
- ;; Why axiom sub_pointer_zero
- (FORALL (p q)
- (IMPLIES (same_block p q) (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q)))))
-
-(BG_PUSH
- ;; Why axiom sub_pointer_shift_left
- (FORALL (p q i)
- (IMPLIES (same_block p q)
- (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
-
- (FORALL (p q)
- (IMPLIES (same_block p q)
- (FORALL (i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))))
-
-(BG_PUSH
- ;; Why axiom sub_pointer_shift_right
- (FORALL (p q i)
- (IMPLIES (same_block p q)
- (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
-
- (FORALL (p q)
- (IMPLIES (same_block p q)
- (FORALL (i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))))
 
 (BG_PUSH
  ;; Why axiom select_store_eq
@@ -9668,8 +9639,6 @@ predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
-
 logic null :  -> 'a1 pointer
 
 axiom address_injective:
@@ -9679,6 +9648,24 @@ axiom address_injective:
 axiom address_null: (address(null) = 0)
 
 axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
+
+axiom address_shift_lt:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) < address(shift(p, j))) <-> (i < j)))))
+
+axiom address_shift_le:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
+
+axiom address_sub_pointer:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
 
 axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
 
@@ -9722,33 +9709,6 @@ axiom neq_pointer_bool_def:
   (forall p1:'a1 pointer.
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
-
-axiom sub_pointer_shift:
-  (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, q)].
-      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
-
-axiom sub_pointer_self:
-  (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
-
-axiom sub_pointer_zero:
-  (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, q)].
-      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
-
-axiom sub_pointer_shift_left:
-  (forall p:'a1 pointer.
-    (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(shift(p, i), q)].
-        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
-         q) + i))))))
-
-axiom sub_pointer_shift_right:
-  (forall p:'a1 pointer.
-    (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(p, shift(q, i))].
-        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
-         q) - i))))))
 
 type ('t, 'v) memory
 
