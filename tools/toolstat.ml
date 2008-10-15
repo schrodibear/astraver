@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.4 2008-10-13 13:38:30 moy Exp $ i*)
+(*i $Id: toolstat.ml,v 1.5 2008-10-15 15:24:42 moy Exp $ i*)
 
 (* Statistics on automatic provers results *)
 
@@ -111,18 +111,21 @@ let () =
   let records : record list = !records in
 
   let provers : (prover, unit) Hashtbl.t = Hashtbl.create 5 in
-  let tests : (test * int, unit) Hashtbl.t = Hashtbl.create 5 in
-  let tests_count : (test * int, int) Hashtbl.t = Hashtbl.create 5 in
+  let tests : (test, unit) Hashtbl.t = Hashtbl.create 5 in
+  let vc : (test * int, unit) Hashtbl.t = Hashtbl.create 5 in
+  let vc_count : (test * int, int) Hashtbl.t = Hashtbl.create 5 in
   List.iter (fun (prover,test,summary,detail,time) ->
 	       Hashtbl.replace provers prover ();
+	       (* useful to keep track of tests with 0 VC *)
+	       Hashtbl.replace tests test ();
 	       List.iter
 		 (fun i -> 
-		    Hashtbl.replace tests (test,i) ();
-		    intadd tests_count (test,i) 1
+		    Hashtbl.replace vc (test,i) ();
+		    intadd vc_count (test,i) 1
 		 ) (valid_detail detail);
 	       List.iter
 		 (fun i -> 
-		    Hashtbl.replace tests (test,i) ()
+		    Hashtbl.replace vc (test,i) ()
 		 ) (notvalid_detail detail)
 	    ) records;
 
@@ -146,7 +149,9 @@ let () =
   in
   ignore (List.fold_left 
 	    (fun i (p,v,n) ->
-	       printf "%d: %s   \t%d valid \t%d not valid@." i p v n;
+	       printf "%d: %s   \t%d valid \t%d not valid \t%d%% proved@." 
+		 i p v n 
+		 (if v + i <> 0 then v * 100 / (v + n) else 0);
 	       i+1
 	    ) 1 provers_ranking);
   
@@ -156,13 +161,13 @@ let () =
   List.iter (fun (prover,test,summary,detail,time) ->
 	       List.iter
 		 (fun i ->
-		    assert (Hashtbl.mem tests_count (test,i));
-		    if Hashtbl.find tests_count (test,i) = 1 then
+		    assert (Hashtbl.mem vc_count (test,i));
+		    if Hashtbl.find vc_count (test,i) = 1 then
 		      intadd provers_ahead prover 1
 		 ) (valid_detail detail);
 	       List.iter
 		 (fun i ->
-		    if hfind 0 tests_count (test,i) > 0 then
+		    if hfind 0 vc_count (test,i) > 0 then
 		      intadd provers_behind prover 1
 		 ) (notvalid_detail detail)
 	    ) records;
@@ -210,9 +215,9 @@ let () =
   
   let tests_notproved = Hashtbl.create 17 in
   Hashtbl.iter (fun (test,i) () ->
-		  if hfind 0 tests_count (test,i) = 0 then
+		  if hfind 0 vc_count (test,i) = 0 then
 		    intadd tests_notproved test 1
-	       ) tests;
+	       ) vc;
   printf "@.Tests not proved: %d@." (Hashtbl.length tests_notproved);
   Hashtbl.iter (fun test n ->
 		  printf "%s \t%d not proved@." test n
@@ -222,11 +227,21 @@ let () =
   Hashtbl.iter (fun (test,i) () ->
 		  if hfind 0 tests_notproved test = 0 then
 		    intadd tests_proved test 1
-	       ) tests;
+	       ) vc;
   printf "@.Tests proved: %d@." (Hashtbl.length tests_proved);
   Hashtbl.iter (fun test n ->
 		  printf "%s \t%d proved@." test n
 	       ) tests_proved;
 		  
+  let tests_no_vc = Hashtbl.create 17 in
+  Hashtbl.iter (fun test () ->
+		  if not (Hashtbl.mem tests_notproved test)
+		    && not (Hashtbl.mem tests_proved test) then
+		      Hashtbl.replace tests_no_vc test ()
+	       ) tests;
+  printf "@.Tests with no VC: %d@." (Hashtbl.length tests_no_vc);
+  Hashtbl.iter (fun test n ->
+		  printf "%s@." test
+	       ) tests_no_vc;
 		  
   printf "@."

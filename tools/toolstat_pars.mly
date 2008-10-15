@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: toolstat_pars.mly,v 1.1 2008-10-08 01:22:04 moy Exp $ */
+/* $Id: toolstat_pars.mly,v 1.2 2008-10-15 15:24:42 moy Exp $ */
 
 %{
   open Format
@@ -56,4 +56,6 @@ log:
 record:
 | PROVER TEST RESULT TIME
     { let summary,detail = $3 in ($1,$2,summary,detail,$4) }
+| PROVER TEST RESULT
+    { let summary,detail = $3 in ($1,$2,summary,detail,(0,0,0.)) }
 ;
