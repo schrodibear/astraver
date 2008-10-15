@@ -1711,7 +1711,8 @@ let memory_detailed_writes
       ) write_effects []
   in
   if type_safe then
-    let () = check_no_duplicates ~already_used:StringSet.empty writes in
+    (* non-interference precondition added later on *)
+(*     let () = check_no_duplicates ~already_used:StringSet.empty writes in *)
     writes
   else 
     remove_duplicates ~already_used:StringSet.empty writes

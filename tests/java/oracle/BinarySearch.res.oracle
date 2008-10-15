@@ -2758,12 +2758,6 @@ axiom address_shift_le:
       (forall j:int [address(shift(p, i)), address(shift(p, j))].
         ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
 
-axiom address_sub_pointer:
-  (forall p:'a1 pointer.
-    (forall i:int.
-      (forall j:int [address(shift(p, i)), address(shift(p, j))].
-        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
-
 axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
 
 axiom shift_shift:
@@ -5486,11 +5480,6 @@ why -simplify [...] why/BinarySearch.why
 
 (BG_PUSH
  ;; Why axiom address_shift_le
- (FORALL (p i j)
- (IFF (<= (address (shift p i)) (address (shift p j))) (<= i j))))
-
-(BG_PUSH
- ;; Why axiom address_sub_pointer
  (FORALL (p i j)
  (IFF (<= (address (shift p i)) (address (shift p j))) (<= i j))))
 
@@ -8241,12 +8230,6 @@ axiom address_shift_le:
       (forall j:int [address(shift(p, i)), address(shift(p, j))].
         ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
 
-axiom address_sub_pointer:
-  (forall p:'a1 pointer.
-    (forall i:int.
-      (forall j:int [address(shift(p, i)), address(shift(p, j))].
-        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
-
 axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
 
 axiom shift_shift:
@@ -10779,7 +10762,7 @@ goal BinarySearch_binary_search_safety_po_16:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ..........#....................... (33/0/0/1/0)
+why/BinarySearch_why.why      : .............#.................... (33/0/0/1/0)
 total   :  34
 valid   :  33 ( 97%)
 invalid :   0 (  0%)

@@ -2091,12 +2091,6 @@ axiom address_shift_le:
       (forall j:int [address(shift(p, i)), address(shift(p, j))].
         ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
 
-axiom address_sub_pointer:
-  (forall p:'a1 pointer.
-    (forall i:int.
-      (forall j:int [address(shift(p, i)), address(shift(p, j))].
-        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
-
 axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
 
 axiom shift_shift:
@@ -3548,11 +3542,6 @@ why -simplify [...] why/AllZeros.why
  (IFF (<= (address (shift p i)) (address (shift p j))) (<= i j))))
 
 (BG_PUSH
- ;; Why axiom address_sub_pointer
- (FORALL (p i j)
- (IFF (<= (address (shift p i)) (address (shift p j))) (<= i j))))
-
-(BG_PUSH
  ;; Why axiom shift_zero
  (FORALL (p) (EQ (shift p 0) p)))
 
@@ -4931,12 +4920,6 @@ axiom address_shift_lt:
         ((address(shift(p, i)) < address(shift(p, j))) <-> (i < j)))))
 
 axiom address_shift_le:
-  (forall p:'a1 pointer.
-    (forall i:int.
-      (forall j:int [address(shift(p, i)), address(shift(p, j))].
-        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
-
-axiom address_sub_pointer:
   (forall p:'a1 pointer.
     (forall i:int.
       (forall j:int [address(shift(p, i)), address(shift(p, j))].

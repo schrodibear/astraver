@@ -95,11 +95,6 @@ axiom address_shift_le:
   [address(shift(p,i)), address(shift(p,j))]. 
     address(shift(p,i)) <= address(shift(p,j)) <-> i <= j
 
-axiom address_sub_pointer:
-  forall p:'t pointer. forall i:int. forall j:int 
-  [address(shift(p,i)), address(shift(p,j))]. 
-    address(shift(p,i)) <= address(shift(p,j)) <-> i <= j
-
 (* shift *)
 
 axiom shift_zero:

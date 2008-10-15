@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.362 2008-10-14 14:51:58 ayad Exp $ *)
+(* $Id: jc_interp.ml,v 1.363 2008-10-15 08:59:51 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -999,10 +999,10 @@ let rec pset ~type_safe ~global_assertion before loc =
   let ft = term ~type_safe ~global_assertion ~relocate:false before before in
   let term_coerce = term_coerce ~type_safe ~global_assertion before in
   match loc#node with
-    | JCLSderef(ls,lab,fi,r) ->
+    | JCLSderef(locs,lab,fi,_r) ->
         let m = tmemory_var ~label_in_name:global_assertion lab 
-	  (JCmem_field fi,r) in
-        LApp("pset_deref", [m;fpset ls])
+	  (JCmem_field fi,locs#region) in
+        LApp("pset_deref", [m;fpset locs])
     | JCLSvar vi -> 
         let m = tvar ~label_in_name:global_assertion before vi in
         LApp("pset_singleton", [m])
@@ -1032,7 +1032,7 @@ let rec pset ~type_safe ~global_assertion before loc =
         
 let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
   match loc#node with
-    | JCLderef(e,lab,fi,fr) -> 
+    | JCLderef(e,lab,fi,_fr) -> 
         let iloc = pset ~type_safe ~global_assertion lab e in
         let mc = 
 (*           if field_of_union fi then FVvariant (union_of_field fi) else *)
@@ -1053,7 +1053,7 @@ let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
 
 let rec collect_pset_locations ~type_safe ~global_assertion loc =
   match loc#node with
-    | JCLderef(e,lab,fi,fr) -> 
+    | JCLderef(e,lab,fi,_fr) -> 
         pset ~type_safe ~global_assertion lab e
     | JCLvar vi -> 
 	LVar "pset_empty"
@@ -1170,9 +1170,9 @@ let old_to_pre_term =
 let rec old_to_pre_lset lset =
   match lset#node with
     | JCLSvar _ -> lset
-    | JCLSderef(lset,lab,fi,region) ->
+    | JCLSderef(lset,lab,fi,_region) ->
 	new location_set_with
-	  ~node:(JCLSderef(old_to_pre_lset lset, old_to_pre lab, fi, region))
+	  ~node:(JCLSderef(old_to_pre_lset lset, old_to_pre lab, fi, lset#region))
 	  lset
     | JCLSrange(lset,t1,t2) ->
 	new location_set_with
@@ -1188,9 +1188,9 @@ let rec old_to_pre_loc loc =
 	new location_with
 	  ~node:(JCLat(old_to_pre_loc l, old_to_pre lab))
 	  loc
-    | JCLderef(lset,lab,fi,region) ->
+    | JCLderef(lset,lab,fi,_region) ->
 	new location_with
-	  ~node:(JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, region))
+	  ~node:(JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, lset#region))
 	  loc
 
 let assumption al a' =
@@ -3321,6 +3321,11 @@ let tr_alloc_table (pc,r) acc =
   Param(
     false,alloc_table_name(pc,r),
     Ref_type(Base_type(alloc_table_type pc))) :: acc
+
+let tr_tag_table (rt,r) acc =
+  Param(
+    false,tag_table_name(rt,r),
+    Ref_type(Base_type(tag_table_type rt))) :: acc
 
 
 (******************************************************************************)

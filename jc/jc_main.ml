@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.127 2008-10-10 08:41:35 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.128 2008-10-15 08:59:51 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -242,6 +242,18 @@ let main () =
 	   in
 	   Jc_interp.tr_alloc_table (a,r) acc, RegionSet.add r regions)
 	Jc_effect.constant_alloc_tables
+	(d_memories,regions)
+    in	       	  
+    let d_memories,_ =
+      Hashtbl.fold 
+	(fun _ (a,r) (acc,regions) -> 
+	   let r = Region.representative r in
+	   let acc = 
+	     if RegionSet.mem r regions then acc else
+	       Jc_interp.tr_region r acc 
+	   in
+	   Jc_interp.tr_tag_table (a,r) acc, RegionSet.add r regions)
+	Jc_effect.constant_tag_tables
 	(d_memories,regions)
     in	       	  
 

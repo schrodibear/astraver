@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.140 2008-10-13 23:23:31 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.141 2008-10-15 08:59:51 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -346,7 +346,7 @@ let normalize_assertion a =
 let is_integral_type = function
   | JCTnative ty ->
       begin match ty with
-	| Tunit | Treal | Tboolean | Tstring -> false
+	| Tunit | Treal | Tdouble | Tboolean | Tstring -> false
 	| Tinteger -> true
       end
   | JCTenum _ -> true
@@ -475,7 +475,9 @@ let rec term_name =
 	  (term_name t) ^ "_cast_" ^ 
 	    (match rc with 
 	       | Integer_to_real -> "integer_to_real"
-	       | Real_to_integer -> "real_to_integer")
+	       | Real_to_integer -> "real_to_integer"
+	       | Round_double _ -> "round_double"
+	       | Double_to_real -> "double_to_real")
       | JCTif(t1,t2,t3) ->
 	  "if_" ^ (term_name t1) ^ "_then_" ^ (term_name t2) 
 	  ^ "_else_" ^ (term_name t3)
@@ -796,22 +798,17 @@ let rec asrt_of_expr e =
 	  | Some t1, Some t2 -> JCArelation (t1, bop, t2)
 	  | _ -> JCAtrue
 	end
-	  (*     | JCEbinary (e1,(#logical_op,_ as bop), e2) -> *)
-	  (* 	begin match bop with *)
-	  (* 	  | Bland -> JCAand [asrt_of_expr e1;asrt_of_expr e2] *)
-	  (* 	  | Blor -> JCAor [asrt_of_expr e1;asrt_of_expr e2] *)
-	  (* 	  | Bimplies -> JCAimplies(asrt_of_expr e1,asrt_of_expr e2) *)
-	  (* 	  | Biff -> JCAiff(asrt_of_expr e1,asrt_of_expr e2) *)
-	  (* 	  | _ -> assert false *)
-	  (* 	end *)
-    | JCEbinary _ ->
-	assert false
-	  (*     | JCEunary(uop,e1) -> *)
-	  (* 	if is_logical_unary_op uop then *)
-	  (* 	  match uop with *)
-	  (* 	    | Unot -> JCAnot(asrt_of_expr e1) *)
-	  (* 	    | _ -> assert false *)
-	  (* 	else assert false *)
+    | JCEbinary (e1,(bop,_), e2) ->
+	begin match bop with
+	  | `Bland -> JCAand [asrt_of_expr e1;asrt_of_expr e2]
+	  | `Blor -> JCAor [asrt_of_expr e1;asrt_of_expr e2]
+	  | _ -> assert false
+	end
+    | JCEunary((uop,_),e1) ->
+	begin match uop with
+	  | `Unot -> JCAnot(asrt_of_expr e1)
+	  | _ -> assert false
+	end
     | JCEinstanceof(e1,st) ->
 	begin match term_of_expr e1 with
 	  | Some t1 -> JCAinstanceof(t1,LabelHere,st)
@@ -906,15 +903,22 @@ let is_neq_binop = function
   | (`Bneq,`Integer) | (`Bneq,_) -> true
   | _ -> false
 
-let atp_relation_of_binop = function
-  | (`Blt,`Integer) | (`Blt,_) -> "<"
-  | (`Bgt,`Integer) | (`Bgt,_) -> ">"
-  | (`Ble,`Integer) | (`Ble,_) -> "<="
-  | (`Bge,`Integer) | (`Bge,_) -> ">="
-  | (`Beq,`Integer) | (`Beq,_) -> "="
-  | (`Bneq,`Integer) | (`Bneq,_) -> 
-      assert false (* Should be treated as "not (t1 eq t2)". *)
-  | _ -> assert false
+let binop_atp = 
+  [
+    (`Blt,`Integer), "<";
+    (`Bgt,`Integer), ">";
+    (`Ble,`Integer), "<=";
+    (`Bge,`Integer), ">=";
+    (`Beq,`Integer), "=";
+  ]
+
+let atp_binop = List.map (fun (op,r) -> (r,op)) binop_atp
+
+let atp_relation_of_binop op = 
+  try List.assoc op binop_atp with Not_found -> assert false
+
+let binop_of_atp_relation r =
+  try List.assoc r atp_binop with Not_found -> assert false
 
 let atp_arithmetic_of_binop = function
   | (`Badd,`Integer) | (`Badd,_) -> "+"
@@ -995,17 +999,18 @@ let rec term_of_atp tm =
 	assert false
 
 let rec atp_of_asrt a = 
-  (*   if debug then printf "[atp_of_asrt] %a@." Jc_output.assertion a; *)
   try begin match a#node with
     | JCAtrue -> 
 	Atp.True
     | JCAfalse -> 
 	Atp.False
-    | JCArelation(t1,bop,t2) ->
+    | JCArelation(t1,(_,`Integer as bop),t2) ->
 	if is_neq_binop bop then
 	  Atp.Not(Atp.Atom(Atp.R("=",List.map atp_of_term [t1;t2])))
 	else
-	  Atp.Atom(Atp.R(atp_relation_of_binop bop,List.map atp_of_term [t1;t2]))
+	  Atp.Atom(Atp.R(atp_relation_of_binop bop,
+			 List.map atp_of_term [t1;t2]))
+    | JCArelation _ -> failwith "Atp alien"
     | JCAand al -> 
 	let rec mkand = function
 	  | [] -> Atp.True
@@ -1075,16 +1080,8 @@ let rec asrt_of_atp fm =
 	JCAfalse
     | Atp.True ->
 	JCAtrue
-    | Atp.Atom(Atp.R("=",[tm1;tm2])) ->
-	JCArelation(term_of_atp tm1,(`Beq,`Integer),term_of_atp tm2)
-    | Atp.Atom(Atp.R("<",[tm1;tm2])) ->
-	JCArelation(term_of_atp tm1,(`Blt,`Integer),term_of_atp tm2)
-    | Atp.Atom(Atp.R(">",[tm1;tm2])) ->
-	JCArelation(term_of_atp tm1,(`Bgt,`Integer),term_of_atp tm2)
-    | Atp.Atom(Atp.R("<=",[tm1;tm2])) ->
-	JCArelation(term_of_atp tm1,(`Ble,`Integer),term_of_atp tm2)
-    | Atp.Atom(Atp.R(">=",[tm1;tm2])) ->
-	JCArelation(term_of_atp tm1,(`Bge,`Integer),term_of_atp tm2)
+    | Atp.Atom(Atp.R(r,[tm1;tm2])) ->
+	JCArelation(term_of_atp tm1,binop_of_atp_relation r,term_of_atp tm2)
     | Atp.Atom _ ->
 	printf "Unexpected ATP atom %a@." (fun fmt fm -> Atp.printer fm) fm;
 	assert false
@@ -1137,7 +1134,7 @@ end = struct
     match t#typ with
       | JCTnative ty ->
 	  begin match ty with
-	    | Tunit | Treal | Tstring -> false
+	    | Tunit | Treal | Tdouble | Tstring -> false
 	    | Tboolean | Tinteger -> true
 	  end
       | JCTenum _ -> true
