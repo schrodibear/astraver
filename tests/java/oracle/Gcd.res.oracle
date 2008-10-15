@@ -2409,46 +2409,6 @@ logic real_min : real, real -> real
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
 
-axiom div_positive_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (0 < b)) -> ((0 <= (a / b)) and ((a / b) <= a)))))
-
-axiom div_negative_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (0 < b)) -> ((a <= (a / b)) and ((a / b) <= 0)))))
-
-axiom div_positive_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (b < 0)) -> (((-a) <= (a / b)) and ((a / b) <= 0)))))
-
-axiom div_negative_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (b < 0)) -> ((0 <= (a / b)) and ((a / b) <= (-a))))))
-
-axiom mod_positive_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (0 < b)) -> ((0 <= (a % b)) and ((a % b) < b)))))
-
-axiom mod_negative_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (0 < b)) -> ((0 <= (a % b)) and ((a % b) < b)))))
-
-axiom mod_positive_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (b < 0)) -> (((-b) < (a % b)) and ((a % b) <= 0)))))
-
-axiom mod_negative_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (b < 0)) -> (((-b) < (a % b)) and ((a % b) <= 0)))))
-
 type 't alloc_table
 
 type 't pointer
@@ -3720,54 +3680,6 @@ why -simplify [...] why/Gcd.why
 
 (DEFPRED (zwf_zero a b) (AND (<= 0 b) (< a b)))
 
-(BG_PUSH
- ;; Why axiom div_positive_by_positive
- (FORALL (a b)
- (IMPLIES (AND (<= 0 a) (< 0 b))
- (AND (<= 0 (int_div a b)) (<= (int_div a b) a)))))
-
-(BG_PUSH
- ;; Why axiom div_negative_by_positive
- (FORALL (a b)
- (IMPLIES (AND (<= a 0) (< 0 b))
- (AND (<= a (int_div a b)) (<= (int_div a b) 0)))))
-
-(BG_PUSH
- ;; Why axiom div_positive_by_negative
- (FORALL (a b)
- (IMPLIES (AND (<= 0 a) (< b 0))
- (AND (<= (- 0 a) (int_div a b)) (<= (int_div a b) 0)))))
-
-(BG_PUSH
- ;; Why axiom div_negative_by_negative
- (FORALL (a b)
- (IMPLIES (AND (<= a 0) (< b 0))
- (AND (<= 0 (int_div a b)) (<= (int_div a b) (- 0 a))))))
-
-(BG_PUSH
- ;; Why axiom mod_positive_by_positive
- (FORALL (a b)
- (IMPLIES (AND (<= 0 a) (< 0 b))
- (AND (<= 0 (int_mod a b)) (< (int_mod a b) b)))))
-
-(BG_PUSH
- ;; Why axiom mod_negative_by_positive
- (FORALL (a b)
- (IMPLIES (AND (<= a 0) (< 0 b))
- (AND (<= 0 (int_mod a b)) (< (int_mod a b) b)))))
-
-(BG_PUSH
- ;; Why axiom mod_positive_by_negative
- (FORALL (a b)
- (IMPLIES (AND (<= 0 a) (< b 0))
- (AND (< (- 0 b) (int_mod a b)) (<= (int_mod a b) 0)))))
-
-(BG_PUSH
- ;; Why axiom mod_negative_by_negative
- (FORALL (a b)
- (IMPLIES (AND (<= a 0) (< b 0))
- (AND (< (- 0 b) (int_mod a b)) (<= (int_mod a b) 0)))))
-
 (DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
 
 (DEFPRED (same_block p q) (EQ (base_block p) (base_block q)))
@@ -4800,11 +4712,11 @@ why -simplify [...] why/Gcd.why
 ========== running Simplify ==========
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/Gcd_why.sx           : ???????.??............ (13/0/9/0/0)
+simplify/Gcd_why.sx           : ??????????............ (12/0/10/0/0)
 total   :  22
-valid   :  13 ( 59%)
+valid   :  12 ( 55%)
 invalid :   0 (  0%)
-unknown :   9 ( 41%)
+unknown :  10 ( 45%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
 ========== generation of alt-ergo VC output ==========
@@ -4974,46 +4886,6 @@ logic real_max : real, real -> real
 logic real_min : real, real -> real
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
-
-axiom div_positive_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (0 < b)) -> ((0 <= (a / b)) and ((a / b) <= a)))))
-
-axiom div_negative_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (0 < b)) -> ((a <= (a / b)) and ((a / b) <= 0)))))
-
-axiom div_positive_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (b < 0)) -> (((-a) <= (a / b)) and ((a / b) <= 0)))))
-
-axiom div_negative_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (b < 0)) -> ((0 <= (a / b)) and ((a / b) <= (-a))))))
-
-axiom mod_positive_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (0 < b)) -> ((0 <= (a % b)) and ((a % b) < b)))))
-
-axiom mod_negative_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (0 < b)) -> ((0 <= (a % b)) and ((a % b) < b)))))
-
-axiom mod_positive_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (b < 0)) -> (((-b) < (a % b)) and ((a % b) <= 0)))))
-
-axiom mod_negative_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (b < 0)) -> (((-b) < (a % b)) and ((a % b) <= 0)))))
 
 type 't alloc_table
 
@@ -6179,10 +6051,10 @@ goal Gcd_gcd_safety_po_1:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ???????.??.......#.... (12/0/9/1/0)
+why/Gcd_why.why               : ??????????.......?.... (11/0/11/0/0)
 total   :  22
-valid   :  12 ( 55%)
+valid   :  11 ( 50%)
 invalid :   0 (  0%)
-unknown :   9 ( 41%)
-timeout :   1 (  5%)
+unknown :  11 ( 50%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

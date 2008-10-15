@@ -12,8 +12,13 @@ axiom div_int_euclid:
 
 (* division *)
 
-(* TODO: check we are talking about mod and div as in C, not math ones *)
+(* TODO: check we are talking about mod and div as in C or Ada, not math ones 
+   disabled for the moment.
+   one option should be to have both math_div, math_mod and ada_div, ada_mod
 
+*)
+
+(*
 axiom div_positive_by_positive:
   forall a:int. forall b:int. 0 <= a and 0 < b -> 0 <= (a/b) and (a/b) <= a
 
@@ -35,10 +40,11 @@ axiom mod_negative_by_positive:
   forall a:int. forall b:int. a <= 0 and 0 < b -> 0 <= (a%b) and (a%b) < b
 
 axiom mod_positive_by_negative:
-  forall a:int. forall b:int. 0 <= a and b < 0 -> -b < (a%b) and (a%b) <= 0
+  forall a:int. forall b:int. 0 <= a and b < 0 -> b < (a%b) and (a%b) <= 0
 
 axiom mod_negative_by_negative:
-  forall a:int. forall b:int. a <= 0 and b < 0 -> -b < (a%b) and (a%b) <= 0
+  forall a:int. forall b:int. a <= 0 and b < 0 -> b < (a%b) and (a%b) <= 0
+*)
 
 (*****************************************************************************)
 (* pointers, allocation, validity                                            *)

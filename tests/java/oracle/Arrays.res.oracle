@@ -3454,46 +3454,6 @@ logic real_min : real, real -> real
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
 
-axiom div_positive_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (0 < b)) -> ((0 <= (a / b)) and ((a / b) <= a)))))
-
-axiom div_negative_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (0 < b)) -> ((a <= (a / b)) and ((a / b) <= 0)))))
-
-axiom div_positive_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (b < 0)) -> (((-a) <= (a / b)) and ((a / b) <= 0)))))
-
-axiom div_negative_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (b < 0)) -> ((0 <= (a / b)) and ((a / b) <= (-a))))))
-
-axiom mod_positive_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (0 < b)) -> ((0 <= (a % b)) and ((a % b) < b)))))
-
-axiom mod_negative_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (0 < b)) -> ((0 <= (a % b)) and ((a % b) < b)))))
-
-axiom mod_positive_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (b < 0)) -> (((-b) < (a % b)) and ((a % b) <= 0)))))
-
-axiom mod_negative_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (b < 0)) -> (((-b) < (a % b)) and ((a % b) <= 0)))))
-
 type 't alloc_table
 
 type 't pointer
@@ -6677,54 +6637,6 @@ why -simplify [...] why/Arrays.why
 
 (DEFPRED (zwf_zero a b) (AND (<= 0 b) (< a b)))
 
-(BG_PUSH
- ;; Why axiom div_positive_by_positive
- (FORALL (a b)
- (IMPLIES (AND (<= 0 a) (< 0 b))
- (AND (<= 0 (int_div a b)) (<= (int_div a b) a)))))
-
-(BG_PUSH
- ;; Why axiom div_negative_by_positive
- (FORALL (a b)
- (IMPLIES (AND (<= a 0) (< 0 b))
- (AND (<= a (int_div a b)) (<= (int_div a b) 0)))))
-
-(BG_PUSH
- ;; Why axiom div_positive_by_negative
- (FORALL (a b)
- (IMPLIES (AND (<= 0 a) (< b 0))
- (AND (<= (- 0 a) (int_div a b)) (<= (int_div a b) 0)))))
-
-(BG_PUSH
- ;; Why axiom div_negative_by_negative
- (FORALL (a b)
- (IMPLIES (AND (<= a 0) (< b 0))
- (AND (<= 0 (int_div a b)) (<= (int_div a b) (- 0 a))))))
-
-(BG_PUSH
- ;; Why axiom mod_positive_by_positive
- (FORALL (a b)
- (IMPLIES (AND (<= 0 a) (< 0 b))
- (AND (<= 0 (int_mod a b)) (< (int_mod a b) b)))))
-
-(BG_PUSH
- ;; Why axiom mod_negative_by_positive
- (FORALL (a b)
- (IMPLIES (AND (<= a 0) (< 0 b))
- (AND (<= 0 (int_mod a b)) (< (int_mod a b) b)))))
-
-(BG_PUSH
- ;; Why axiom mod_positive_by_negative
- (FORALL (a b)
- (IMPLIES (AND (<= 0 a) (< b 0))
- (AND (< (- 0 b) (int_mod a b)) (<= (int_mod a b) 0)))))
-
-(BG_PUSH
- ;; Why axiom mod_negative_by_negative
- (FORALL (a b)
- (IMPLIES (AND (<= a 0) (< b 0))
- (AND (< (- 0 b) (int_mod a b)) (<= (int_mod a b) 0)))))
-
 (DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
 
 (DEFPRED (same_block p q) (EQ (base_block p) (base_block q)))
@@ -9561,46 +9473,6 @@ logic real_max : real, real -> real
 logic real_min : real, real -> real
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
-
-axiom div_positive_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (0 < b)) -> ((0 <= (a / b)) and ((a / b) <= a)))))
-
-axiom div_negative_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (0 < b)) -> ((a <= (a / b)) and ((a / b) <= 0)))))
-
-axiom div_positive_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (b < 0)) -> (((-a) <= (a / b)) and ((a / b) <= 0)))))
-
-axiom div_negative_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (b < 0)) -> ((0 <= (a / b)) and ((a / b) <= (-a))))))
-
-axiom mod_positive_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (0 < b)) -> ((0 <= (a % b)) and ((a % b) < b)))))
-
-axiom mod_negative_by_positive:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (0 < b)) -> ((0 <= (a % b)) and ((a % b) < b)))))
-
-axiom mod_positive_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((0 <= a) and (b < 0)) -> (((-b) < (a % b)) and ((a % b) <= 0)))))
-
-axiom mod_negative_by_negative:
-  (forall a:int.
-    (forall b:int.
-      (((a <= 0) and (b < 0)) -> (((-b) < (a % b)) and ((a % b) <= 0)))))
 
 type 't alloc_table
 
