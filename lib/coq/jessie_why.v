@@ -2,50 +2,6 @@
    It can be modified; only the generated parts will be overwritten. *)
 Require Export Why.
 
-(*Why axiom*) Lemma div_positive_by_positive :
-  (forall (a:Z),
-   (forall (b:Z), (0 <= a /\ 0 < b -> 0 <= ((Zdiv a b)) /\ ((Zdiv a b)) <= a))).
-Admitted.
-
-(*Why axiom*) Lemma div_negative_by_positive :
-  (forall (a:Z),
-   (forall (b:Z), (a <= 0 /\ 0 < b -> a <= ((Zdiv a b)) /\ ((Zdiv a b)) <= 0))).
-Admitted.
-
-(*Why axiom*) Lemma div_positive_by_negative :
-  (forall (a:Z),
-   (forall (b:Z),
-    (0 <= a /\ b < 0 -> (Zopp a) <= ((Zdiv a b)) /\ ((Zdiv a b)) <= 0))).
-Admitted.
-
-(*Why axiom*) Lemma div_negative_by_negative :
-  (forall (a:Z),
-   (forall (b:Z),
-    (a <= 0 /\ b < 0 -> 0 <= ((Zdiv a b)) /\ ((Zdiv a b)) <= (Zopp a)))).
-Admitted.
-
-(*Why axiom*) Lemma mod_positive_by_positive :
-  (forall (a:Z),
-   (forall (b:Z), (0 <= a /\ 0 < b -> 0 <= ((Zmod a b)) /\ ((Zmod a b)) < b))).
-Admitted.
-
-(*Why axiom*) Lemma mod_negative_by_positive :
-  (forall (a:Z),
-   (forall (b:Z), (a <= 0 /\ 0 < b -> 0 <= ((Zmod a b)) /\ ((Zmod a b)) < b))).
-Admitted.
-
-(*Why axiom*) Lemma mod_positive_by_negative :
-  (forall (a:Z),
-   (forall (b:Z),
-    (0 <= a /\ b < 0 -> (Zopp b) < ((Zmod a b)) /\ ((Zmod a b)) <= 0))).
-Admitted.
-
-(*Why axiom*) Lemma mod_negative_by_negative :
-  (forall (a:Z),
-   (forall (b:Z),
-    (a <= 0 /\ b < 0 -> (Zopp b) < ((Zmod a b)) /\ ((Zmod a b)) <= 0))).
-Admitted.
-
 (*Why type*) Definition alloc_table: Set ->Set.
 Admitted.
 

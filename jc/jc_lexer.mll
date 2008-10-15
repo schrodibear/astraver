@@ -28,7 +28,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.71 2008-10-15 07:18:02 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.72 2008-10-15 11:34:49 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -393,3 +393,4 @@ Local Variables:
 compile-command: "make -C .. bin/jessie.byte"
 End: 
 *)
+
