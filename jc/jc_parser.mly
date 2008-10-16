@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.114 2008-10-14 14:51:59 ayad Exp $ */
+/* $Id: jc_parser.mly,v 1.115 2008-10-16 21:32:45 filliatr Exp $ */
 
 %{
 
@@ -794,6 +794,8 @@ tag:
 ;
 
 identifier_list: 
+| DEFAULT
+    { ["default"] }
 | IDENTIFIER 
     { [$1] }
 | IDENTIFIER COMMA identifier_list 
