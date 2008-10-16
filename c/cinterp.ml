@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.261 2008-09-08 15:31:18 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.262 2008-10-16 07:13:07 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -663,6 +663,18 @@ let interp_predicate_opt label old_label pred =
     | None -> LTrue
     | Some p -> interp_predicate label old_label p
 
+
+let guarded_app f kind loc x y =
+  Output.Label (reg_loc ~kind loc, f x y)
+
+let guarded_make_app = guarded_app Output.make_app
+
+let guarded_make_app_e = guarded_app Output.make_app_e
+
+let guarded_build_complex_app = 
+  guarded_make_app (*guarded_app build_complex_app*)
+
+
 let rounding_mode () = match !fp_rounding_mode with
   | RM_dynamic -> Deref "rounding_mode"
   | m -> Var (string_of_rounding_mode m)
@@ -740,9 +752,9 @@ let within_bounds i e =
 let is_enum e t = 
   let _,info = Cenv.find_pred ("is_enum_" ^ e) in LPred (info.logic_name, [t])
 
-let of_int (_,i as ik) e =
+let of_int loc (_,i as ik) e =
   if machine_ints && i <> ExactInt then
-    let name = Cenv.int_type_for ik in App (Var (name ^ "_of_int"), e)
+    let name = Cenv.int_type_for ik in guarded_make_app ArithOverflow loc (name ^ "_of_int") [e]
   else
     e
 
@@ -768,7 +780,7 @@ let guard_1 g e =
   let v = tmp_var () in Let (v, e, Output.Assert (g (LVar v), Var v))
 
 (* int conversion ty1 -> ty2 *)
-let interp_int_conversion ty1 ty2 e = 
+let interp_int_conversion loc ty1 ty2 e = 
   match ty1.Ctypes.ctype_node, ty2.Ctypes.ctype_node with
     (* enum -> enum *)
     | Tenum t1, Tenum t2 ->
@@ -778,10 +790,10 @@ let interp_int_conversion ty1 ty2 e =
 	enum_of_int t2 (int_of si1 e)
     (* int -> enum *)
     | Tenum t1, Tint si2 ->
-	of_int si2 (int_of_enum t1 e)
+	of_int loc si2 (int_of_enum t1 e)
     (* int -> int, no check *)
     | Tint si1, Tint si2 ->
-	of_int si2 (int_of si1 e)
+	of_int loc si2 (int_of si1 e)
     | _ -> 
 	e
 (***** TODO: some checks can be safely avoided
@@ -1132,21 +1144,15 @@ let build_minimal_app e args =
 	else
 	  build_complex_app e args
 
-let bin_op op t1 t2 = match op, t1, t2 with
+let bin_op loc op t1 t2 = match op, t1, t2 with
   | Badd_pointer_int, _, Cte (Prim_int "0") ->
       t1
   | Beq_int, Cte (Prim_int n1), Cte (Prim_int n2) ->
       Cte (Prim_bool (n1 = n2))
+  | (Bdiv_int _ | Bmod_int _), _, _ ->
+      guarded_make_app_e DivByZero loc (interp_bin_op op) [t1; t2]
   | _ ->
       build_minimal_app (interp_bin_op op) [t1; t2]
-
-let guarded_app f kind loc x y =
-  Output.Label (reg_loc ~kind loc, f x y)
-
-let guarded_make_app = guarded_app Output.make_app
-
-let guarded_build_complex_app = 
-  guarded_make_app (*guarded_app build_complex_app*)
 
 let rec interp_expr e =
   let w = interp_expr_loc e in
@@ -1159,7 +1165,7 @@ and interp_expr_loc e =
 	let t = Cte (Prim_int (Int64.to_string (Cconst.int e.nexpr_loc c))) in
 	if machine_ints then begin 
 	  match e.nexpr_type.Ctypes.ctype_node with
-	  | Tint si -> of_int si t
+	  | Tint si -> of_int loc si t
 	  | Tenum _ -> assert false (*TODO*)
 	  | _ -> assert false
 	end else 
@@ -1183,17 +1189,17 @@ and interp_expr_loc e =
 	  | Cte (Prim_bool false) -> Cte (Prim_int "0")
 	  | e -> If (e, Cte (Prim_int "1"), Cte (Prim_int "0"))
 	in
-	interp_int_conversion c_exact_int e.nexpr_type w
+	interp_int_conversion loc c_exact_int e.nexpr_type w
     | NEbinary (e1, (Badd_int _ | Bsub_int _ | Bmul_int _ |
                      Bdiv_int _ | Bmod_int _ |
 		     Bbw_and | Bbw_xor | Bbw_or | 
 		     Bshift_left | Bshift_right as op), e2) ->
-	let w = bin_op op (interp_int_expr e1) (interp_int_expr e2) in
-	interp_int_conversion c_exact_int e.nexpr_type w
+	let w = bin_op loc op (interp_int_expr e1) (interp_int_expr e2) in
+	interp_int_conversion loc c_exact_int e.nexpr_type w
     | NEbinary (e1, (Badd_pointer_int as op), e2) ->
-	bin_op op (interp_expr e1) (interp_int_expr e2)
+	bin_op loc op (interp_expr e1) (interp_int_expr e2)
     | NEbinary (e1,op,e2) ->
-	bin_op op (interp_expr e1) (interp_expr e2)
+	bin_op loc op (interp_expr e1) (interp_expr e2)
     | NEassign (e,e2) ->
 	begin
 	  match interp_lvalue e with
@@ -1233,7 +1239,7 @@ and interp_expr_loc e =
 	  | LocalRef(v) ->
 	      let n = v.var_unique_name in
 	      append
-	        (Assign(n, bin_op op (Deref n) (interp_expr e2)))
+	        (Assign(n, bin_op loc op (Deref n) (interp_expr e2)))
 	        (Deref n)
 	  | HeapRef(Valid (a,b),var,e1) -> 
 	      let tmp1 = tmp_var () in
@@ -1242,7 +1248,7 @@ and interp_expr_loc e =
 	      then
 		Let(tmp1, e1,
 		    Let(tmp2, 
-			bin_op op
+			bin_op loc op
 			  (make_app "safe_acc_" [Var var; Var tmp1]) 
 			  (interp_expr e2),
 			append
@@ -1252,7 +1258,7 @@ and interp_expr_loc e =
 	      else
 		Let(tmp1, e1,
 			Let(tmp2, 
-			    bin_op op
+			    bin_op loc op
 			      (make_app "acc_" [Var var; Var tmp1]) 
 			      (interp_expr e2),
 			    append
@@ -1264,7 +1270,7 @@ and interp_expr_loc e =
 		    let tmp2 = tmp_var () in
 		    Let(tmp1, e1,
 			Let(tmp2, 
-			    bin_op op
+			    bin_op loc op
 			      (make_app "acc_" [Var var; Var tmp1]) 
 			      (interp_expr e2),
 			    append
@@ -1306,7 +1312,7 @@ and interp_expr_loc e =
 	begin match e.nexpr_type.Ctypes.ctype_node with
 	  | Tenum _ | Tint _ -> 
 	      let w = make_app "neg_int" [interp_int_expr e] in
-	      interp_int_conversion c_exact_int e.nexpr_type w
+	      interp_int_conversion loc c_exact_int e.nexpr_type w
 	  | Tfloat fk -> 
 	      build_minimal_app (float_unop fk Uminus) [interp_expr e]
 	  | _ -> 
@@ -1319,7 +1325,7 @@ and interp_expr_loc e =
     | NEunary (Ufloat_conversion, e1) ->
 	interp_float_conversion e1.nexpr_type e.nexpr_type (interp_expr e1)
      | NEunary (Uint_conversion, e1) ->
-	interp_int_conversion e1.nexpr_type e.nexpr_type (interp_expr e1)
+	interp_int_conversion loc e1.nexpr_type e.nexpr_type (interp_expr e1)
     | NEunary (Utilde, e) ->
 	make_app "bw_compl" [interp_expr e]
     | NEunary (Uamp, e) ->
@@ -1332,7 +1338,7 @@ and interp_expr_loc e =
     | NEcast (t,e1) -> 
 	begin match t.Ctypes.ctype_node, e1.nexpr_type.Ctypes.ctype_node with
 	  | (Tenum _ | Tint _), (Tenum _ | Tint _) ->
-	      interp_int_conversion e1.nexpr_type t (interp_expr e1)
+	      interp_int_conversion loc e1.nexpr_type t (interp_expr e1)
 	  | Tfloat _, Tfloat _ -> 
 	      interp_float_conversion e1.nexpr_type t (interp_expr e1)
 	  | Tfloat _, (Tenum _ | Tint _) ->
@@ -1350,22 +1356,24 @@ and interp_expr_loc e =
 
 and interp_int_expr e =
   let w = interp_expr e in
-  interp_int_conversion e.nexpr_type c_exact_int w
+  interp_int_conversion e.nexpr_loc e.nexpr_type c_exact_int w
 
 and interp_boolean_expr e =
   let w = interp_boolean_expr_loc e in
   if e.nexpr_loc = Loc.dummy_position then w else Loc (fst e.nexpr_loc, w)
 
-and interp_boolean_expr_loc e = match e.nexpr_node with
+and interp_boolean_expr_loc e = 
+  let loc = e.nexpr_loc in
+  match e.nexpr_node with
     | NEbinary(e1, (Blt_int | Bgt_int | Ble_int | Bge_int | 
 	            Beq_int | Bneq_int as op), e2) ->
-	bin_op op (interp_int_expr e1) (interp_int_expr e2)
+	bin_op loc op (interp_int_expr e1) (interp_int_expr e2)
     | NEbinary(e1, (Blt_float _ | Bgt_float _ | Ble_float _ | Bge_float _ 
 		   |Beq_float _ | Bneq_float _
 		   |Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
 		   |Beq_pointer | Bneq_pointer 
 		   |Blt | Bgt | Ble | Bge | Beq | Bneq as op), e2) ->
-	bin_op op (interp_expr e1) (interp_expr e2)
+	bin_op loc op (interp_expr e1) (interp_expr e2)
     | NEbinary (e1, Band, e2) ->
 	And(interp_boolean_expr e1, interp_boolean_expr e2)
     | NEbinary (e1, Bor, e2) ->
@@ -1388,8 +1396,8 @@ and interp_boolean_expr_loc e = match e.nexpr_node with
 
 and interp_incr_expr op e =
   let top,one = interp_incr_op e.nexpr_type op in
-  let to_int = interp_int_conversion e.nexpr_type c_exact_int in
-  let of_int = interp_int_conversion c_exact_int e.nexpr_type in
+  let to_int = interp_int_conversion e.nexpr_loc e.nexpr_type c_exact_int in
+  let of_int = interp_int_conversion e.nexpr_loc c_exact_int e.nexpr_type in
   match interp_lvalue e with
     | LocalRef v ->
 	begin
@@ -1516,8 +1524,8 @@ and interp_statement_expr e =
 	end 
     | NEincr(op,e) ->
 	let top,one = interp_incr_op e.nexpr_type op in
-	let to_int = interp_int_conversion e.nexpr_type c_exact_int in
-	let of_int = interp_int_conversion c_exact_int e.nexpr_type in
+	let to_int = interp_int_conversion e.nexpr_loc e.nexpr_type c_exact_int in
+	let of_int = interp_int_conversion e.nexpr_loc c_exact_int e.nexpr_type in
 	begin
 	  match interp_lvalue e with
 	    | LocalRef v ->
@@ -1550,7 +1558,7 @@ and interp_statement_expr e =
 	  match interp_lvalue l with
 	    | LocalRef(v) ->
 		let n = v.var_unique_name in
-		Assign(n, bin_op op (Deref n) (interp_expr e))
+		Assign(n, bin_op e.nexpr_loc op (Deref n) (interp_expr e))
 	    | HeapRef(valid,var,e1) -> 
 		let acc = match valid with 
 		  | Valid(a,b) -> if (a<= Int64.zero && Int64.zero <b) 
@@ -1562,7 +1570,7 @@ and interp_statement_expr e =
 		    Let("caduceus2",acc ,
 			make_app "safe_upd_"
 			  [Var var; Var "caduceus1"; 
-			   bin_op op (Var "caduceus2") (interp_expr e)]))
+			   bin_op e.nexpr_loc op (Var "caduceus2") (interp_expr e)]))
 	end 
     | NEcast (_, _)
     | NEcond (_, _, _)
@@ -1994,7 +2002,9 @@ let interp_invariant label effects annot =
   in
   let var = match annot.variant with
     | None -> None
-    | Some (var,r) -> Some (interp_term None "init" var, r)
+    | Some (var,r) -> 
+	let n = reg_loc var.nterm_loc in
+	Some (Tnamed(n,interp_term None "init" var), r)
   in
   (inv, var)
 
@@ -2650,7 +2660,10 @@ let interp_c_fun fun_name (spec, ctype, id, block, loc) (why_code,why_spec) =
      match block with 
        | None -> (why_code, tspec :: why_spec)
        | Some block ->
+	   let f0 = id.fun_name in
 	   let f = id.fun_unique_name in
+	   let why_name = f ^ "_impl" in
+	   let (_ : string) = reg_loc ~id:why_name ~oldid:f0 ~name:("C function "^f0) ~beh:"Correctness" loc in
 	   if Coptions.verify id.fun_name then begin try
 	     lprintf "translating function %s@." f;
 	     abrupt_return := None;
@@ -2676,7 +2689,7 @@ let interp_c_fun fun_name (spec, ctype, id, block, loc) (why_code,why_spec) =
 		 (fun (mut_id,id) bl ->
 		    Let_ref(mut_id,Var(id),bl)) list_of_refs tblock in
 	     printf "generating Why code for function %s@." f;
-	     ((f, Def(f ^ "_impl", 
+	     ((f, Def(why_name, 
 		      Fun(tparams,pre,tblock,post,[])))::why_code,
 	      tspec :: why_spec)
 	   with Error (_, Cerror.Unsupported s) ->

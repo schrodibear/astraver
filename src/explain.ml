@@ -97,10 +97,10 @@ let msg_of_loopinv = function
 let msg_of_kind = 
   function
     | EKPre "PointerDeref" -> "pointer dereferencing"
-    | EKPre "IndexBounds" -> "index bounds"
-    | EKPre "ArithOverflow" -> "arithmetic overflow"
-    | EKPre "DivByZero" -> "division by zero"
-    | EKPre "AllocSize" -> "allocation size nonnegative"
+    | EKPre "IndexBounds" -> "check index bounds"
+    | EKPre "ArithOverflow" -> "check arithmetic overflow"
+    | EKPre "DivByZero" -> "check division by zero"
+    | EKPre "AllocSize" -> "check allocation size"
     | EKPre "UserCall" -> "precondition for user call"
     | EKPre "" -> "precondition"
     | EKPre s -> "unclassified precondition `" ^ s ^ "'"

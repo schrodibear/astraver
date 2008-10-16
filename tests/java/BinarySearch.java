@@ -49,10 +49,7 @@ class BinarySearch {
        or -1 if no element in t is equal to v  
     */
     
-    /*@ requires 
-      @   t != null &&
-      @   \forall integer k1 k2; 
-      @       0 <= k1 <= k2 <= t.length-1 ==> t[k1] <= t[k2];
+    /*@ requires t != null && is_sorted(t);
       @ behavior correctness:
       @ ensures
       @   (\result >= 0 && t[\result] == v) ||
