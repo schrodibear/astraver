@@ -50,10 +50,7 @@ class BinarySearch {
        or -1 if no element in t is equal to v  
     */
     
-    /*@ requires 
-      @   t != null &&
-      @   \forall integer k1 k2; 
-      @       0 <= k1 <= k2 <= t.length-1 ==> t[k1] <= t[k2];
+    /*@ requires t != null && is_sorted(t);
       @ behavior correctness:
       @ ensures
       @   (\result >= 0 && t[\result] == v) ||
@@ -161,12 +158,7 @@ lemma mean_property{Here} :
     ((x <= y) ==> ((x <= (x + ((y - x) / 2))) && ((x + ((y - x) / 2)) <= y)))))
 
 int32 BinarySearch_binary_search(intM[0..] t_0, int32 v)
-  requires (K_18 : (Non_null_intM(t_0) &&
-                     (\forall integer k1;
-                       (\forall integer k2;
-                         ((((0 <= k1) && (k1 <= k2)) &&
-                            (k2 <= ((\offset_max(t_0) + 1) - 1))) ==>
-                           ((t_0 + k1).intP <= (t_0 + k2).intP))))));
+  requires (K_18 : (Non_null_intM(t_0) && is_sorted(t_0)));
 behavior correctness:
   ensures (K_1 : (((\result >= 0) && ((t_0 + \result).intP == v)) ||
                    ((\result == (- 1)) &&
@@ -224,109 +216,109 @@ End:
 ========== file tests/java/BinarySearch.jloc ==========
 [K_10]
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 67
 begin = 18
 end = 23
 
 [K_11]
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 67
 begin = 17
 end = 28
 
 [K_12]
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 67
 begin = 13
 end = 28
 
 [K_13]
 file = "HOME/tests/java/BinarySearch.java"
-line = 69
+line = 66
 begin = 8
 end = 14
 
 [K_14]
 file = "HOME/tests/java/BinarySearch.java"
-line = 75
+line = 72
 begin = 8
 end = 10
 
 [K_15]
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 24
 
 [K_16]
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 28
 
 [K_17]
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 9
 end = 10
 
 [K_18]
 file = "HOME/tests/java/BinarySearch.java"
-line = 53
-begin = 10
-end = 117
+line = 52
+begin = 17
+end = 42
 
 [K_1]
 file = "HOME/tests/java/BinarySearch.java"
-line = 58
+line = 55
 begin = 10
 end = 126
 
 [K_2]
 file = "HOME/tests/java/BinarySearch.java"
-line = 64
+line = 61
 begin = 7
 end = 112
 
 [K_3]
 file = "HOME/tests/java/BinarySearch.java"
-line = 67
+line = 64
 begin = 7
 end = 10
 
 [K_4]
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 69
 begin = 28
 end = 33
 
 [K_5]
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 69
 begin = 14
 end = 18
 
 [K_6]
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 69
 begin = 14
 end = 22
 
 [K_7]
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 68
 begin = 23
 end = 28
 
 [K_8]
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 68
 begin = 9
 end = 13
 
 [K_9]
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 68
 begin = 9
 end = 17
 
@@ -340,7 +332,7 @@ end = -1
 [BinarySearch_binary_search]
 name = "Method binary_search"
 file = "HOME/tests/java/BinarySearch.java"
-line = 61
+line = 58
 begin = 15
 end = 28
 
@@ -471,47 +463,47 @@ clean:
 ========== file tests/java/BinarySearch.loc ==========
 [JC_40]
 file = "HOME/tests/java/BinarySearch.java"
-line = 61
+line = 58
 begin = 15
 end = 28
 
 [JC_41]
 file = "HOME/tests/java/BinarySearch.java"
-line = 58
+line = 55
 begin = 10
 end = 126
 
 [JC_42]
 file = "HOME/tests/java/BinarySearch.java"
-line = 58
+line = 55
 begin = 10
 end = 126
 
 [JC_43]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 24
 
 [JC_44]
 kind = IndexBounds
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 24
 
 [JC_45]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 28
 
 [JC_46]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 24
 
@@ -524,7 +516,7 @@ end = 21
 [JC_47]
 kind = IndexBounds
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 24
 
@@ -537,7 +529,7 @@ end = -1
 [JC_48]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 28
 
@@ -549,7 +541,7 @@ end = 21
 
 [JC_49]
 file = "HOME/tests/java/BinarySearch.java"
-line = 64
+line = 61
 begin = 7
 end = 112
 
@@ -598,84 +590,84 @@ end = -1
 [JC_51]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 67
 begin = 18
 end = 23
 
 [JC_52]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 110
+line = 105
 begin = 54
 end = 140
 
 [JC_53]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 67
 begin = 17
 end = 28
 
 [JC_54]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 67
 begin = 13
 end = 28
 
 [JC_55]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 67
 begin = 18
 end = 23
 
 [JC_56]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 110
+line = 105
 begin = 54
 end = 140
 
 [JC_57]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 67
 begin = 17
 end = 28
 
 [JC_58]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 67
 begin = 13
 end = 28
 
 [JC_59]
 kind = IndexBounds
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 68
 begin = 9
 end = 13
 
 [JC_60]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 68
 begin = 23
 end = 28
 
 [JC_61]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 71
+line = 68
 begin = 23
 end = 28
 
 [JC_62]
 kind = IndexBounds
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 69
 begin = 14
 end = 18
 
@@ -688,7 +680,7 @@ end = 21
 [JC_63]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 69
 begin = 28
 end = 33
 
@@ -701,7 +693,7 @@ end = 30
 [JC_64]
 kind = ArithOverflow
 file = "HOME/tests/java/BinarySearch.java"
-line = 72
+line = 69
 begin = 28
 end = 33
 
@@ -714,7 +706,7 @@ end = -1
 [JC_65]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 24
 
@@ -727,7 +719,7 @@ end = 30
 [JC_66]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 24
 
@@ -739,7 +731,7 @@ end = -1
 
 [JC_67]
 file = "HOME/tests/java/BinarySearch.java"
-line = 64
+line = 61
 begin = 7
 end = 112
 
@@ -764,7 +756,7 @@ end = -1
 [JC_69]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 110
+line = 105
 begin = 54
 end = 140
 
@@ -789,20 +781,20 @@ end = 30
 [JC_70]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 110
+line = 105
 begin = 54
 end = 140
 
 [JC_71]
 file = "HOME/tests/java/BinarySearch.java"
-line = 67
+line = 64
 begin = 7
 end = 10
 
 [JC_72]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 24
 
@@ -810,7 +802,7 @@ end = 24
 name = "Method binary_search"
 behavior = "Default behavior"
 file = "HOME/tests/java/BinarySearch.java"
-line = 61
+line = 58
 begin = 15
 end = 28
 
@@ -823,7 +815,7 @@ end = 18
 [JC_73]
 kind = UserCall
 file = "HOME/tests/java/BinarySearch.java"
-line = 62
+line = 59
 begin = 16
 end = 24
 
@@ -835,7 +827,7 @@ end = 30
 
 [JC_74]
 file = "HOME/tests/java/BinarySearch.java"
-line = 64
+line = 61
 begin = 7
 end = 112
 
@@ -860,7 +852,7 @@ end = 23
 [JC_76]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 110
+line = 105
 begin = 54
 end = 140
 
@@ -873,7 +865,7 @@ end = -1
 [JC_77]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
-line = 110
+line = 105
 begin = 54
 end = 140
 
@@ -983,15 +975,15 @@ end = -1
 
 [JC_33]
 file = "HOME/tests/java/BinarySearch.java"
-line = 53
-begin = 10
-end = 117
+line = 52
+begin = 17
+end = 42
 
 [BinarySearch_binary_search_ensures_correctness]
 name = "Method binary_search"
 behavior = "Normal behavior `correctness'"
 file = "HOME/tests/java/BinarySearch.java"
-line = 61
+line = 58
 begin = 15
 end = 28
 
@@ -1003,9 +995,9 @@ end = -1
 
 [JC_35]
 file = "HOME/tests/java/BinarySearch.java"
-line = 53
-begin = 10
-end = 117
+line = 52
+begin = 17
+end = 42
 
 [JC_36]
 file = "HOME/"
@@ -1027,7 +1019,7 @@ end = -1
 
 [JC_39]
 file = "HOME/tests/java/BinarySearch.java"
-line = 61
+line = 58
 begin = 15
 end = 28
 
@@ -1035,7 +1027,7 @@ end = 28
 name = "Method binary_search"
 behavior = "Safety"
 file = "HOME/tests/java/BinarySearch.java"
-line = 61
+line = 58
 begin = 15
 end = 28
 
@@ -1429,17 +1421,7 @@ parameter BinarySearch_binary_search_requires :
     intM_intP_t_0_7:(Object, int32) memory ->
      { (JC_33:
        (Non_null_intM(t_0, Object_t_0_7_alloc_table)
-       and (forall k1:int.
-            (forall k2:int.
-             ((le_int((0), k1)
-              and (le_int(k1, k2)
-                  and le_int(k2,
-                      sub_int(add_int(offset_max(Object_t_0_7_alloc_table,
-                                      t_0),
-                              (1)),
-                      (1))))) ->
-              le_int(integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k1))),
-              integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2)))))))))}
+       and is_sorted(t_0, Object_t_0_7_alloc_table, intM_intP_t_0_7)))}
      int32
      { (JC_42:
        ((ge_int(integer_of_int32(result), (0))
@@ -1971,16 +1953,7 @@ let BinarySearch_binary_search_ensures_correctness =
  fun (t_0 : Object pointer) (v : int32) (Object_t_0_7_alloc_table : Object alloc_table) (intM_intP_t_0_7 : (Object, int32) memory) ->
   { (JC_35:
     (Non_null_intM(t_0, Object_t_0_7_alloc_table)
-    and (forall k1:int.
-         (forall k2:int.
-          ((le_int((0), k1)
-           and (le_int(k1, k2)
-               and le_int(k2,
-                   sub_int(add_int(offset_max(Object_t_0_7_alloc_table, t_0),
-                           (1)),
-                   (1))))) ->
-           le_int(integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k1))),
-           integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) }
+    and is_sorted(t_0, Object_t_0_7_alloc_table, intM_intP_t_0_7))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2097,16 +2070,7 @@ let BinarySearch_binary_search_ensures_default =
  fun (t_0 : Object pointer) (v : int32) (Object_t_0_7_alloc_table : Object alloc_table) (intM_intP_t_0_7 : (Object, int32) memory) ->
   { (JC_35:
     (Non_null_intM(t_0, Object_t_0_7_alloc_table)
-    and (forall k1:int.
-         (forall k2:int.
-          ((le_int((0), k1)
-           and (le_int(k1, k2)
-               and le_int(k2,
-                   sub_int(add_int(offset_max(Object_t_0_7_alloc_table, t_0),
-                           (1)),
-                   (1))))) ->
-           le_int(integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k1))),
-           integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) }
+    and is_sorted(t_0, Object_t_0_7_alloc_table, intM_intP_t_0_7))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2212,16 +2176,7 @@ let BinarySearch_binary_search_safety =
  fun (t_0 : Object pointer) (v : int32) (Object_t_0_7_alloc_table : Object alloc_table) (intM_intP_t_0_7 : (Object, int32) memory) ->
   { (JC_35:
     (Non_null_intM(t_0, Object_t_0_7_alloc_table)
-    and (forall k1:int.
-         (forall k2:int.
-          ((le_int((0), k1)
-           and (le_int(k1, k2)
-               and le_int(k2,
-                   sub_int(add_int(offset_max(Object_t_0_7_alloc_table, t_0),
-                           (1)),
-                   (1))))) ->
-           le_int(integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k1))),
-           integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) }
+    and is_sorted(t_0, Object_t_0_7_alloc_table, intM_intP_t_0_7))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2351,154 +2306,154 @@ why --project [...] why/BinarySearch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/BinarySearch_po19.why">
-      <location file = "why/BinarySearch.why" line = "1194" begin = "49" end = "214"/>
+      <location file = "why/BinarySearch.why" line = "1157" begin = "49" end = "214"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/BinarySearch_po20.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "62" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "59" begin = "16" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po21.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "62" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "59" begin = "16" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po22.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "18" end = "23"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po23.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "18" end = "23"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po24.why">
-      <location file = "HOME/tests/java/BinarySearch.jc" line = "110" begin = "54" end = "140"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "105" begin = "54" end = "140"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/BinarySearch_po25.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "17" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po26.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "17" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po27.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "13" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "13" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po28.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "70" begin = "13" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "13" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po29.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/BinarySearch_po30.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/BinarySearch_po31.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "23" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "23" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po32.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "71" begin = "23" end = "28"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "68" begin = "23" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po33.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "28" end = "33"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "69" begin = "28" end = "33"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/BinarySearch_po34.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "72" begin = "28" end = "33"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "69" begin = "28" end = "33"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `correctness'">
     <goal why_file="why/BinarySearch_po2.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "58" begin = "10" end = "126"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "55" begin = "10" end = "126"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/BinarySearch_po3.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "58" begin = "10" end = "126"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "55" begin = "10" end = "126"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/BinarySearch_po4.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po5.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po6.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po7.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/BinarySearch_po8.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po9.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po10.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po11.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po12.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/BinarySearch_po13.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/BinarySearch_po14.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po15.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po16.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "112"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "61" begin = "7" end = "112"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/BinarySearch_po17.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/BinarySearch_po18.why">
-      <location file = "HOME/tests/java/BinarySearch.java" line = "67" begin = "7" end = "10"/>
+      <location file = "HOME/tests/java/BinarySearch.java" line = "64" begin = "7" end = "10"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2694,6 +2649,8 @@ predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
 predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
   (base_block(p) = base_block(q))
 
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
 logic null :  -> 'a1 pointer
@@ -2760,6 +2717,33 @@ axiom neq_pointer_bool_def:
   (forall p1:'a1 pointer.
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
+
+axiom sub_pointer_shift:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
+
+axiom sub_pointer_self:
+  (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
+
+axiom sub_pointer_zero:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
+
+axiom sub_pointer_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(shift(p, i), q)].
+        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
+         q) + i))))))
+
+axiom sub_pointer_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(p, shift(q, i))].
+        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
+         q) - i))))))
 
 type ('t, 'v) memory
 
@@ -3603,14 +3587,8 @@ goal BinarySearch_binary_search_ensures_default_po_7:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3662,14 +3640,8 @@ goal BinarySearch_binary_search_ensures_default_po_8:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3721,14 +3693,8 @@ goal BinarySearch_binary_search_ensures_default_po_9:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3776,14 +3742,8 @@ goal BinarySearch_binary_search_ensures_default_po_10:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3832,14 +3792,8 @@ goal BinarySearch_binary_search_ensures_default_po_11:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3892,14 +3846,8 @@ goal BinarySearch_binary_search_ensures_default_po_12:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -3955,14 +3903,8 @@ goal BinarySearch_binary_search_ensures_default_po_13:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4018,14 +3960,8 @@ goal BinarySearch_binary_search_ensures_default_po_14:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4077,14 +4013,8 @@ goal BinarySearch_binary_search_ensures_default_po_15:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4136,14 +4066,8 @@ goal BinarySearch_binary_search_safety_po_1:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1))
@@ -4156,14 +4080,8 @@ goal BinarySearch_binary_search_ensures_correctness_po_1:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4221,14 +4139,8 @@ goal BinarySearch_binary_search_safety_po_2:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4247,14 +4159,8 @@ goal BinarySearch_binary_search_safety_po_3:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4274,14 +4180,8 @@ goal BinarySearch_binary_search_safety_po_4:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4318,14 +4218,8 @@ goal BinarySearch_binary_search_safety_po_5:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4362,14 +4256,8 @@ goal BinarySearch_binary_search_safety_po_6:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4410,14 +4298,8 @@ goal BinarySearch_binary_search_safety_po_7:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4461,14 +4343,8 @@ goal BinarySearch_binary_search_safety_po_8:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4512,14 +4388,8 @@ goal BinarySearch_binary_search_safety_po_9:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4566,14 +4436,8 @@ goal BinarySearch_binary_search_safety_po_10:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4620,14 +4484,8 @@ goal BinarySearch_binary_search_safety_po_11:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4678,14 +4536,8 @@ goal BinarySearch_binary_search_ensures_correctness_po_2:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -4732,14 +4584,8 @@ goal BinarySearch_binary_search_safety_po_12:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4790,14 +4636,8 @@ goal BinarySearch_binary_search_safety_po_13:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4854,14 +4694,8 @@ goal BinarySearch_binary_search_safety_po_14:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4918,14 +4752,8 @@ goal BinarySearch_binary_search_safety_po_15:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -4988,14 +4816,8 @@ goal BinarySearch_binary_search_safety_po_16:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -5057,14 +4879,8 @@ goal BinarySearch_binary_search_ensures_default_po_1:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5084,14 +4900,8 @@ goal BinarySearch_binary_search_ensures_default_po_2:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5114,14 +4924,8 @@ goal BinarySearch_binary_search_ensures_default_po_3:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5146,14 +4950,8 @@ goal BinarySearch_binary_search_ensures_default_po_4:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5178,14 +4976,8 @@ goal BinarySearch_binary_search_ensures_default_po_5:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5233,14 +5025,8 @@ goal BinarySearch_binary_search_ensures_default_po_6:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -5434,6 +5220,39 @@ why -simplify [...] why/BinarySearch.why
 (BG_PUSH
  ;; Why axiom neq_pointer_bool_def
  (FORALL (p1 p2) (IFF (EQ (neq_pointer_bool p1 p2) |@true|) (NEQ p1 p2))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift
+ (FORALL (p q) (IMPLIES (same_block p q) (EQ p (shift q (sub_pointer p q))))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_self
+ (FORALL (p) (EQ (sub_pointer p p) 0)))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_zero
+ (FORALL (p q)
+ (IMPLIES (same_block p q) (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q)))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift_left
+ (FORALL (p q i)
+ (IMPLIES (same_block p q)
+ (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
+
+ (FORALL (p q)
+ (IMPLIES (same_block p q)
+ (FORALL (i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift_right
+ (FORALL (p q i)
+ (IMPLIES (same_block p q)
+ (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
+
+ (FORALL (p q)
+ (IMPLIES (same_block p q)
+ (FORALL (i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))))
 
 (BG_PUSH
  ;; Why axiom select_store_eq
@@ -6150,19 +5969,13 @@ why -simplify [...] why/BinarySearch.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-;; BinarySearch_binary_search_ensures_correctness_po_1, File "HOME/tests/java/BinarySearch.java", line 58, characters 10-126
+;; BinarySearch_binary_search_ensures_correctness_po_1, File "HOME/tests/java/BinarySearch.java", line 55, characters 10-126
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6218,19 +6031,13 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k)))
 (integer_of_int32 v))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_correctness_po_2, File "HOME/tests/java/BinarySearch.java", line 58, characters 10-126
+;; BinarySearch_binary_search_ensures_correctness_po_2, File "HOME/tests/java/BinarySearch.java", line 55, characters 10-126
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6271,18 +6078,12 @@ why -simplify [...] why/BinarySearch.why
 (NEQ (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k)))
 (integer_of_int32 v))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_1, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_1, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6294,18 +6095,12 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result1) (- result0 1))
 (<= 0 (integer_of_int32 result))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_2, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_2, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6318,19 +6113,13 @@ why -simplify [...] why/BinarySearch.why
 (<= (integer_of_int32 result1) (- (+ (offset_max
                                      Object_t_0_7_alloc_table t_0) 1) 1))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_3, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_3, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6347,19 +6136,13 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 result) k_0)))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_4, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_4, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6376,19 +6159,13 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 result1))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_5, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_5, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6430,19 +6207,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result6) (+ (integer_of_int32 result4) 1))
 (FORALL (l0) (IMPLIES (EQ l0 result6) (<= 0 (integer_of_int32 l0))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_6, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_6, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6486,19 +6257,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ l0 result6)
 (<= (integer_of_int32 u) (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_7, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_7, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6547,19 +6312,13 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 l0) k_0))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_8, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_8, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6608,19 +6367,13 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 u)))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_9, File "HOME/tests/java/BinarySearch.java", line 67, characters 7-10
+;; BinarySearch_binary_search_ensures_default_po_9, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6664,19 +6417,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ l0 result6)
 (<= 0 (- (integer_of_int32 u) (integer_of_int32 l)))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_10, File "HOME/tests/java/BinarySearch.java", line 67, characters 7-10
+;; BinarySearch_binary_search_ensures_default_po_10, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6721,19 +6468,13 @@ why -simplify [...] why/BinarySearch.why
 (< (- (integer_of_int32 u) (integer_of_int32 l0)) (- (integer_of_int32 u) 
                                                   (integer_of_int32 l)))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_11, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_11, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6781,19 +6522,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ u0 result7)
 (<= (integer_of_int32 u0) (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1)))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_12, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_12, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6846,19 +6581,13 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= (integer_of_int32 l) k_0)))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_13, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-112
+;; BinarySearch_binary_search_ensures_default_po_13, File "HOME/tests/java/BinarySearch.java", line 61, characters 7-112
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6911,19 +6640,13 @@ why -simplify [...] why/BinarySearch.why
          (integer_of_int32 v))
 (<= k_0 (integer_of_int32 u0))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_14, File "HOME/tests/java/BinarySearch.java", line 67, characters 7-10
+;; BinarySearch_binary_search_ensures_default_po_14, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -6971,19 +6694,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ u0 result7)
 (<= 0 (- (integer_of_int32 u) (integer_of_int32 l))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_ensures_default_po_15, File "HOME/tests/java/BinarySearch.java", line 67, characters 7-10
+;; BinarySearch_binary_search_ensures_default_po_15, File "HOME/tests/java/BinarySearch.java", line 64, characters 7-10
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (FORALL (result0)
@@ -7032,34 +6749,22 @@ why -simplify [...] why/BinarySearch.why
 (< (- (integer_of_int32 u0) (integer_of_int32 l)) (- (integer_of_int32 u) 
                                                   (integer_of_int32 l))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 1194, characters 49-214
+;; BinarySearch_binary_search_safety_po_1, File "why/BinarySearch.why", line 1157, characters 49-214
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))))))))
 
-;; BinarySearch_binary_search_safety_po_2, File "HOME/tests/java/BinarySearch.java", line 62, characters 16-28
+;; BinarySearch_binary_search_safety_po_2, File "HOME/tests/java/BinarySearch.java", line 59, characters 16-28
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7070,18 +6775,12 @@ why -simplify [...] why/BinarySearch.why
          (EQ |@true| |@true|))))
 (<= (- 0 constant_too_large_2147483648) (- result0 1)))))))))))
 
-;; BinarySearch_binary_search_safety_po_3, File "HOME/tests/java/BinarySearch.java", line 62, characters 16-28
+;; BinarySearch_binary_search_safety_po_3, File "HOME/tests/java/BinarySearch.java", line 59, characters 16-28
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7092,19 +6791,13 @@ why -simplify [...] why/BinarySearch.why
          (EQ |@true| |@true|))))
 (<= (- result0 1) constant_too_large_2147483647))))))))))
 
-;; BinarySearch_binary_search_safety_po_4, File "HOME/tests/java/BinarySearch.java", line 70, characters 18-23
+;; BinarySearch_binary_search_safety_po_4, File "HOME/tests/java/BinarySearch.java", line 67, characters 18-23
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7136,19 +6829,13 @@ why -simplify [...] why/BinarySearch.why
 (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 u) (integer_of_int32
                                                                 l)))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_5, File "HOME/tests/java/BinarySearch.java", line 70, characters 18-23
+;; BinarySearch_binary_search_safety_po_5, File "HOME/tests/java/BinarySearch.java", line 67, characters 18-23
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7179,19 +6866,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (<= (integer_of_int32 l) (integer_of_int32 u))
 (<= (- (integer_of_int32 u) (integer_of_int32 l)) constant_too_large_2147483647)))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_6, File "HOME/tests/java/BinarySearch.jc", line 110, characters 54-140
+;; BinarySearch_binary_search_safety_po_6, File "HOME/tests/java/BinarySearch.jc", line 105, characters 54-140
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7229,19 +6910,13 @@ why -simplify [...] why/BinarySearch.why
          (- (integer_of_int32 u) (integer_of_int32 l)))
 (NEQ 2 0))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_7, File "HOME/tests/java/BinarySearch.java", line 70, characters 17-28
+;; BinarySearch_binary_search_safety_po_7, File "HOME/tests/java/BinarySearch.java", line 67, characters 17-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7282,19 +6957,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ result3 (int_div (integer_of_int32 result2) 2))
 (<= (- 0 constant_too_large_2147483648) result3)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_8, File "HOME/tests/java/BinarySearch.java", line 70, characters 17-28
+;; BinarySearch_binary_search_safety_po_8, File "HOME/tests/java/BinarySearch.java", line 67, characters 17-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7335,19 +7004,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ result3 (int_div (integer_of_int32 result2) 2))
 (<= result3 constant_too_large_2147483647)))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_9, File "HOME/tests/java/BinarySearch.java", line 70, characters 13-28
+;; BinarySearch_binary_search_safety_po_9, File "HOME/tests/java/BinarySearch.java", line 67, characters 13-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7393,19 +7056,13 @@ why -simplify [...] why/BinarySearch.why
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l) (integer_of_int32
                                                                 result4))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_10, File "HOME/tests/java/BinarySearch.java", line 70, characters 13-28
+;; BinarySearch_binary_search_safety_po_10, File "HOME/tests/java/BinarySearch.java", line 67, characters 13-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7450,19 +7107,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (EQ (integer_of_int32 result4) result3)
 (<= (+ (integer_of_int32 l) (integer_of_int32 result4)) constant_too_large_2147483647))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_11, File "HOME/tests/java/BinarySearch.java", line 71, characters 9-13
+;; BinarySearch_binary_search_safety_po_11, File "HOME/tests/java/BinarySearch.java", line 68, characters 9-13
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7514,19 +7165,13 @@ why -simplify [...] why/BinarySearch.why
          (+ (integer_of_int32 l) (integer_of_int32 result4)))
 (<= 0 (integer_of_int32 result5))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_12, File "HOME/tests/java/BinarySearch.java", line 71, characters 9-13
+;; BinarySearch_binary_search_safety_po_12, File "HOME/tests/java/BinarySearch.java", line 68, characters 9-13
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7578,19 +7223,13 @@ why -simplify [...] why/BinarySearch.why
          (+ (integer_of_int32 l) (integer_of_int32 result4)))
 (<= (integer_of_int32 result5) (offset_max Object_t_0_7_alloc_table t_0))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_13, File "HOME/tests/java/BinarySearch.java", line 71, characters 23-28
+;; BinarySearch_binary_search_safety_po_13, File "HOME/tests/java/BinarySearch.java", line 68, characters 23-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7649,19 +7288,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (< (integer_of_int32 result6) (integer_of_int32 v))
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result5) 1))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_14, File "HOME/tests/java/BinarySearch.java", line 71, characters 23-28
+;; BinarySearch_binary_search_safety_po_14, File "HOME/tests/java/BinarySearch.java", line 68, characters 23-28
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7720,19 +7353,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (< (integer_of_int32 result6) (integer_of_int32 v))
 (<= (+ (integer_of_int32 result5) 1) constant_too_large_2147483647)))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_15, File "HOME/tests/java/BinarySearch.java", line 72, characters 28-33
+;; BinarySearch_binary_search_safety_po_15, File "HOME/tests/java/BinarySearch.java", line 69, characters 28-33
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -7798,19 +7425,13 @@ why -simplify [...] why/BinarySearch.why
 (IMPLIES (> (integer_of_int32 result7) (integer_of_int32 v))
 (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 result5) 1))))))))))))))))))))))))))))))))))))))))
 
-;; BinarySearch_binary_search_safety_po_16, File "HOME/tests/java/BinarySearch.java", line 72, characters 28-33
+;; BinarySearch_binary_search_safety_po_16, File "HOME/tests/java/BinarySearch.java", line 69, characters 28-33
 (FORALL (t_0)
 (FORALL (v)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
 (IMPLIES (AND (Non_null_intM t_0 Object_t_0_7_alloc_table)
-         (FORALL (k1 k2)
-         (IMPLIES
-         (AND (<= 0 k1)
-         (AND (<= k1 k2)
-         (<= k2 (- (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 1))))
-         (<= (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k1))) 
-         (integer_of_int32 (select intM_intP_t_0_7 (shift t_0 k2)))))))
+         (is_sorted t_0 Object_t_0_7_alloc_table intM_intP_t_0_7))
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 0)
 (IMPLIES (>= (offset_max Object_t_0_7_alloc_table t_0) (- 0 1))
@@ -8078,6 +7699,8 @@ predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
 predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
   (base_block(p) = base_block(q))
 
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
 logic null :  -> 'a1 pointer
@@ -8144,6 +7767,33 @@ axiom neq_pointer_bool_def:
   (forall p1:'a1 pointer.
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
+
+axiom sub_pointer_shift:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
+
+axiom sub_pointer_self:
+  (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
+
+axiom sub_pointer_zero:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
+
+axiom sub_pointer_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(shift(p, i), q)].
+        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
+         q) + i))))))
+
+axiom sub_pointer_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(p, shift(q, i))].
+        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
+         q) - i))))))
 
 type ('t, 'v) memory
 
@@ -8985,14 +8635,8 @@ goal BinarySearch_binary_search_ensures_correctness_po_1:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9050,14 +8694,8 @@ goal BinarySearch_binary_search_ensures_correctness_po_2:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9102,14 +8740,8 @@ goal BinarySearch_binary_search_ensures_default_po_1:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9128,14 +8760,8 @@ goal BinarySearch_binary_search_ensures_default_po_2:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9157,14 +8783,8 @@ goal BinarySearch_binary_search_ensures_default_po_3:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9188,14 +8808,8 @@ goal BinarySearch_binary_search_ensures_default_po_4:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9219,14 +8833,8 @@ goal BinarySearch_binary_search_ensures_default_po_5:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9273,14 +8881,8 @@ goal BinarySearch_binary_search_ensures_default_po_6:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9328,14 +8930,8 @@ goal BinarySearch_binary_search_ensures_default_po_7:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9386,14 +8982,8 @@ goal BinarySearch_binary_search_ensures_default_po_8:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9444,14 +9034,8 @@ goal BinarySearch_binary_search_ensures_default_po_9:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9498,14 +9082,8 @@ goal BinarySearch_binary_search_ensures_default_po_10:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9553,14 +9131,8 @@ goal BinarySearch_binary_search_ensures_default_po_11:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9612,14 +9184,8 @@ goal BinarySearch_binary_search_ensures_default_po_12:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9674,14 +9240,8 @@ goal BinarySearch_binary_search_ensures_default_po_13:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9736,14 +9296,8 @@ goal BinarySearch_binary_search_ensures_default_po_14:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9794,14 +9348,8 @@ goal BinarySearch_binary_search_ensures_default_po_15:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall result0:int.
@@ -9852,14 +9400,8 @@ goal BinarySearch_binary_search_safety_po_1:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1))
@@ -9870,14 +9412,8 @@ goal BinarySearch_binary_search_safety_po_2:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -9895,14 +9431,8 @@ goal BinarySearch_binary_search_safety_po_3:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -9921,14 +9451,8 @@ goal BinarySearch_binary_search_safety_po_4:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -9964,14 +9488,8 @@ goal BinarySearch_binary_search_safety_po_5:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10007,14 +9525,8 @@ goal BinarySearch_binary_search_safety_po_6:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10054,14 +9566,8 @@ goal BinarySearch_binary_search_safety_po_7:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10104,14 +9610,8 @@ goal BinarySearch_binary_search_safety_po_8:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10154,14 +9654,8 @@ goal BinarySearch_binary_search_safety_po_9:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10207,14 +9701,8 @@ goal BinarySearch_binary_search_safety_po_10:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10260,14 +9748,8 @@ goal BinarySearch_binary_search_safety_po_11:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10317,14 +9799,8 @@ goal BinarySearch_binary_search_safety_po_12:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10374,14 +9850,8 @@ goal BinarySearch_binary_search_safety_po_13:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10437,14 +9907,8 @@ goal BinarySearch_binary_search_safety_po_14:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10500,14 +9964,8 @@ goal BinarySearch_binary_search_safety_po_15:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10569,14 +10027,8 @@ goal BinarySearch_binary_search_safety_po_16:
   forall intM_intP_t_0_7:(Object,
   int32) memory.
   ("JC_35":
-  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and
-   (forall k1:int.
-     (forall k2:int.
-       (((0 <= k1) and
-         ((k1 <= k2) and (k2 <= ((offset_max(Object_t_0_7_alloc_table,
-          t_0) + 1) - 1)))) ->
-        (integer_of_int32(select(intM_intP_t_0_7, shift(t_0,
-        k1))) <= integer_of_int32(select(intM_intP_t_0_7, shift(t_0, k2))))))))) ->
+  (Non_null_intM(t_0, Object_t_0_7_alloc_table) and is_sorted(t_0,
+   Object_t_0_7_alloc_table, intM_intP_t_0_7))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   (offset_max(Object_t_0_7_alloc_table, t_0) >= (-1)) ->
@@ -10634,10 +10086,10 @@ goal BinarySearch_binary_search_safety_po_16:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ?.......................??........ (31/0/3/0/0)
+why/BinarySearch_why.why      : ?............#.................... (32/0/1/1/0)
 total   :  34
-valid   :  31 ( 91%)
+valid   :  32 ( 94%)
 invalid :   0 (  0%)
-unknown :   3 (  9%)
-timeout :   0 (  0%)
+unknown :   1 (  3%)
+timeout :   1 (  3%)
 failure :   0 (  0%)

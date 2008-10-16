@@ -1883,6 +1883,8 @@ predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
 predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
   (base_block(p) = base_block(q))
 
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
 logic null :  -> 'a1 pointer
@@ -1949,6 +1951,33 @@ axiom neq_pointer_bool_def:
   (forall p1:'a1 pointer.
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
+
+axiom sub_pointer_shift:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
+
+axiom sub_pointer_self:
+  (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
+
+axiom sub_pointer_zero:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
+
+axiom sub_pointer_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(shift(p, i), q)].
+        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
+         q) + i))))))
+
+axiom sub_pointer_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(p, shift(q, i))].
+        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
+         q) - i))))))
 
 type ('t, 'v) memory
 
@@ -2880,6 +2909,39 @@ why -simplify [...] why/Termination.why
  (FORALL (p1 p2) (IFF (EQ (neq_pointer_bool p1 p2) |@true|) (NEQ p1 p2))))
 
 (BG_PUSH
+ ;; Why axiom sub_pointer_shift
+ (FORALL (p q) (IMPLIES (same_block p q) (EQ p (shift q (sub_pointer p q))))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_self
+ (FORALL (p) (EQ (sub_pointer p p) 0)))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_zero
+ (FORALL (p q)
+ (IMPLIES (same_block p q) (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q)))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift_left
+ (FORALL (p q i)
+ (IMPLIES (same_block p q)
+ (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
+
+ (FORALL (p q)
+ (IMPLIES (same_block p q)
+ (FORALL (i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))))
+
+(BG_PUSH
+ ;; Why axiom sub_pointer_shift_right
+ (FORALL (p q i)
+ (IMPLIES (same_block p q)
+ (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
+
+ (FORALL (p q)
+ (IMPLIES (same_block p q)
+ (FORALL (i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))))
+
+(BG_PUSH
  ;; Why axiom select_store_eq
  (FORALL (m p1 p2 a)
  (IMPLIES (EQ p1 p2) (EQ (select (|why__store| m p1 a) p2) a)))
@@ -3743,6 +3805,8 @@ predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
 predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
   (base_block(p) = base_block(q))
 
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
 logic null :  -> 'a1 pointer
@@ -3809,6 +3873,33 @@ axiom neq_pointer_bool_def:
   (forall p1:'a1 pointer.
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
+
+axiom sub_pointer_shift:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
+
+axiom sub_pointer_self:
+  (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
+
+axiom sub_pointer_zero:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
+
+axiom sub_pointer_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(shift(p, i), q)].
+        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
+         q) + i))))))
+
+axiom sub_pointer_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(p, shift(q, i))].
+        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
+         q) - i))))))
 
 type ('t, 'v) memory
 

@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.141 2008-10-15 08:59:51 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.142 2008-10-16 08:42:32 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -539,6 +539,8 @@ let rec destruct_pointer t =
 	      let offt = new term ~typ:integer_type tnode in
 	      topt,Some offt
 	end
+    | JCTaddress(false,t1) ->
+	destruct_pointer t1
     | JCTcast(t,_,_) | JCTbitwise_cast(t,_,_) | JCTrange_cast(t,_) | JCTreal_cast(t,_) -> 
         (* Pointer arithmetic in Jessie is not related to the size of 
 	 * the underlying type, like in C. This makes it possible to commute
@@ -796,7 +798,7 @@ let rec asrt_of_expr e =
     | JCEbinary (e1,(#comparison_op,_ as bop), e2) ->
 	begin match term_of_expr e1, term_of_expr e2 with
 	  | Some t1, Some t2 -> JCArelation (t1, bop, t2)
-	  | _ -> JCAtrue
+	  | _ -> failwith "Not an assertion"
 	end
     | JCEbinary (e1,(bop,_), e2) ->
 	begin match bop with
@@ -812,17 +814,17 @@ let rec asrt_of_expr e =
     | JCEinstanceof(e1,st) ->
 	begin match term_of_expr e1 with
 	  | Some t1 -> JCAinstanceof(t1,LabelHere,st)
-	  | None -> JCAtrue 
+	  | None -> failwith "Not an assertion" 
 	end
     | JCEif (e1, e2, e3) -> 
 	begin match term_of_expr e1 with
 	  | Some t1 -> JCAif (t1, asrt_of_expr e2, asrt_of_expr e3)
-	  | None -> JCAtrue 
+	  | None -> failwith "Not an assertion"
 	end
     | JCEderef _ -> 
 	begin match term_of_expr e with
 	  | Some t -> JCAbool_term t
-	  | None -> JCAtrue 
+	  | None -> failwith "Not an assertion"
 	end
     | JCEcast _ | JCErange_cast _ | JCEreal_cast _ | JCEshift _ 
     | JCEoffset _ | JCEalloc _ | JCEfree _ -> assert false
@@ -836,7 +838,12 @@ let rec asrt_of_expr e =
   in
   new assertion anode
 
-let raw_asrt_of_expr = asrt_of_expr
+
+(* HACK !!!! *)
+let raw_asrt_of_expr e = 
+  try
+    asrt_of_expr e
+  with Failure "Not an assertion" -> true_assertion
 
 
 
@@ -1926,9 +1933,9 @@ let contradictory =
   let mgr = Polka.manager_alloc_strict () in
   fun a b ->
     (* tautology(make_not(make_and [a;b])) *)
-(*     if Jc_options.debug then *)
-(*       printf "@[<v 2>[contradictory]@\n%a@\n%a@]@." *)
-(* 	Jc_output.assertion a Jc_output.assertion b; *)
+    if Jc_options.debug then
+      printf "@[<v 2>[contradictory]@\n%a@\n%a@]@."
+	Jc_output.assertion a Jc_output.assertion b;
     let dnf = Atp.dnf(atp_of_asrt(make_and[a;b])) in
     let vars = Atp.fv dnf in
     let vars = List.map Vwp.term vars in
@@ -3438,9 +3445,9 @@ let rec ai_inter_function_call mgr iai abs pre fi loc fs sl el =
  * It sets the initial value of invariants before treating a loop.
  *)
 and ai_expr iaio abs curinvs e =
-(*   if debug then  *)
-(*     printf "[ai_expr] %a on %a@." print_abstract_invariants curinvs *)
-(*       Jc_output.expr e; *)
+  if debug then
+    printf "[ai_expr] %a on %a@." print_abstract_invariants curinvs
+      Jc_output.expr e;
   let loops = abs.jc_absint_loops in
   let loop_initial_invariants = abs.jc_absint_loop_initial_invariants in
   let loop_invariants = abs.jc_absint_loop_invariants in
@@ -3872,7 +3879,6 @@ and record_ai_loop_invariants abs =
 	   (* 	   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a; *)
 	   (* 	   incr nb_loop_inv; *)
 
-(* HACK! *)
 	   printf 
 	     "%a@[<v 2>Inferring loop invariant for function %s:@\n%a@]@."
 	     Loc.report_position e#pos 

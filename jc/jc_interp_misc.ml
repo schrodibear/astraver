@@ -1769,7 +1769,8 @@ let memory_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads
   in
   let already_used = StringSet.of_list already_used in
   if type_safe then
-    let () = check_no_duplicates ~already_used reads in
+    (* non-interference precondition added later on *)
+(*     let () = check_no_duplicates ~already_used reads in *)
     reads
   else
     remove_duplicates ~already_used reads

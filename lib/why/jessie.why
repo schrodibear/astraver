@@ -73,7 +73,14 @@ predicate same_block(p: 't pointer, q:'t pointer) =
 
 (* pointer arithmetic *)
 
+logic sub_pointer: 't pointer, 't pointer -> int
 logic shift: 't pointer, int -> 't pointer
+
+parameter sub_pointer_: p:'t pointer -> q:'t pointer -> 
+  { same_block(p,q) } int { result = sub_pointer(p,q) }
+ 
+parameter safe_sub_pointer_: p:'t pointer -> q:'t pointer -> 
+  { } int { result = sub_pointer(p,q) }
 
 (* null pointer*)
 
@@ -171,7 +178,6 @@ axiom sub_pointer_same_block:
 
 (* sub_pointer *)
 
-(*
 axiom sub_pointer_shift:
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
     same_block(p,q) ->
@@ -196,7 +202,6 @@ axiom sub_pointer_shift_right:
     forall i:int [sub_pointer(p,shift(q,i))].
       same_block(p,q) ->
         sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
-*)
 
 (*****************************************************************************)
 (* heap memories, select and store                                           *)
