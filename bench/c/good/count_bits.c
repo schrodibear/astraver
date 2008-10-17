@@ -50,3 +50,9 @@ int count_bits(int x) {
   for (c = 0; d = x&-x; x -= d) c++;
   return c;
 }
+
+/*
+Local Variables: 
+compile-command: "make count_bits.gui"
+End: 
+*/
