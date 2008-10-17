@@ -287,9 +287,9 @@ end = 23
 
 [JC_9]
 file = "HOME/tests/java/Literals.jc"
-line = 38
-begin = 8
-end = 23
+line = 40
+begin = 11
+end = 65
 
 [Literals_f_ensures_default]
 name = "Method f"
@@ -301,9 +301,9 @@ end = 9
 
 [JC_10]
 file = "HOME/tests/java/Literals.jc"
-line = 38
-begin = 8
-end = 23
+line = 40
+begin = 11
+end = 65
 
 [JC_11]
 file = "HOME/tests/java/Literals.java"

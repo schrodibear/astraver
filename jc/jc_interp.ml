@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.364 2008-10-16 08:42:32 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.365 2008-10-17 01:49:37 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -687,9 +687,9 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
 	      let s = string_of_int (struct_size_in_bytes st) in
               LApp(f,[ alloc; t1'; LConst(Prim_int s) ])
 	end
-    | JCTaddress(true,t1) -> 
+    | JCTaddress(Addr_absolute,t1) -> 
         LApp("absolute_address",[ ft t1 ])
-    | JCTaddress(false,t1) -> 
+    | JCTaddress(Addr_pointer,t1) -> 
         LApp("address",[ ft t1 ])
     | JCTinstanceof(t1,lab',st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
@@ -1697,9 +1697,9 @@ and expr e =
 	      let s = string_of_int (struct_size_in_bytes st) in
 	      make_app f [alloc; expr e1; Cte(Prim_int s)] 
 	end
-    | JCEaddress(true,e1) -> 
+    | JCEaddress(Addr_absolute,e1) -> 
         make_app "absolute_address" [ expr e1 ] 
-    | JCEaddress(false,e1) -> 
+    | JCEaddress(Addr_pointer,e1) -> 
         make_app "address" [ expr e1 ] 
     | JCEinstanceof(e1,st) ->
         let e1' = expr e1 in

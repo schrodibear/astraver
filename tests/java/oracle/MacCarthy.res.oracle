@@ -635,9 +635,9 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/MacCarthy.jc"
-line = 28
-begin = 8
-end = 23
+line = 30
+begin = 11
+end = 65
 
 [JC_108]
 file = "HOME/"
@@ -791,9 +791,9 @@ end = 30
 
 [JC_10]
 file = "HOME/tests/java/MacCarthy.jc"
-line = 28
-begin = 8
-end = 23
+line = 30
+begin = 11
+end = 65
 
 [JC_63]
 file = "HOME/lib/java_api/java/lang/Object.java"

@@ -467,9 +467,9 @@ end = 21
 
 [JC_9]
 file = "HOME/tests/java/AllZeros.jc"
-line = 45
-begin = 8
-end = 21
+line = 47
+begin = 11
+end = 66
 
 [JC_50]
 kind = UserCall
@@ -542,9 +542,9 @@ end = 28
 
 [JC_10]
 file = "HOME/tests/java/AllZeros.jc"
-line = 45
-begin = 8
-end = 21
+line = 47
+begin = 11
+end = 66
 
 [JC_11]
 file = "HOME/tests/java/AllZeros.jc"
@@ -596,9 +596,9 @@ end = 30
 
 [JC_19]
 file = "HOME/tests/java/AllZeros.jc"
-line = 50
-begin = 8
-end = 30
+line = 53
+begin = 11
+end = 113
 
 [JC_20]
 file = "HOME/tests/java/AllZeros.jc"
@@ -608,9 +608,9 @@ end = 18
 
 [JC_21]
 file = "HOME/tests/java/AllZeros.jc"
-line = 50
-begin = 8
-end = 30
+line = 53
+begin = 11
+end = 113
 
 [JC_22]
 file = "HOME/tests/java/AllZeros.jc"
@@ -676,15 +676,15 @@ end = 23
 
 [JC_31]
 file = "HOME/tests/java/AllZeros.jc"
-line = 57
-begin = 8
-end = 23
+line = 59
+begin = 11
+end = 65
 
 [JC_32]
 file = "HOME/tests/java/AllZeros.jc"
-line = 57
-begin = 8
-end = 23
+line = 59
+begin = 11
+end = 65
 
 [JC_33]
 file = "HOME/tests/java/AllZeros.java"

@@ -1295,9 +1295,9 @@ end = 20
 
 [JC_9]
 file = "HOME/tests/java/Creation.jc"
-line = 42
-begin = 8
-end = 23
+line = 44
+begin = 11
+end = 65
 
 [JC_153]
 kind = IndexBounds
@@ -1586,9 +1586,9 @@ end = 24
 
 [JC_10]
 file = "HOME/tests/java/Creation.jc"
-line = 42
-begin = 8
-end = 23
+line = 44
+begin = 11
+end = 65
 
 [JC_11]
 file = "HOME/tests/java/Creation.java"

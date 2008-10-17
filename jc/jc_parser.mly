@@ -27,7 +27,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.115 2008-10-16 21:32:45 filliatr Exp $ */
+/* $Id: jc_parser.mly,v 1.116 2008-10-17 01:49:37 moy Exp $ */
 
 %{
 
@@ -558,9 +558,9 @@ postfix_expression:
 | BSOFFSET_MIN LPAR expression RPAR 
     { locate (JCPEoffset(Offset_min,$3)) }
 | BSADDRESS LPAR expression RPAR 
-    { locate (JCPEaddress(false,$3)) }
+    { locate (JCPEaddress(Addr_pointer,$3)) }
 | BSABSOLUTE_ADDRESS LPAR expression RPAR 
-    { locate (JCPEaddress(true,$3)) }
+    { locate (JCPEaddress(Addr_absolute,$3)) }
 | postfix_expression DOT IDENTIFIER
     { locate (JCPEderef ($1, $3)) }
 | postfix_expression PLUSPLUS 

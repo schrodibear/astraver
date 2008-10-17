@@ -738,13 +738,19 @@ module Assertion :
 
     val mktrue : ?pos:Loc.position -> ?mark:string -> unit -> assertion
 
-(*
     val mkfalse :
       ?pos:Loc.position -> ?mark:string -> unit -> assertion
-*)
 
     val mkand :
       conjuncts:assertion list ->
+      ?pos:Loc.position -> ?mark:string -> unit -> assertion
+
+    val mkor :
+      disjuncts:assertion list ->
+      ?pos:Loc.position -> ?mark:string -> unit -> assertion
+
+    val mknot :
+      asrt:assertion ->
       ?pos:Loc.position -> ?mark:string -> unit -> assertion
 
   end

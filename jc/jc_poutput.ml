@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.25 2008-10-14 14:51:59 ayad Exp $ *)
+(* $Id: jc_poutput.ml,v 1.26 2008-10-17 01:49:37 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -141,9 +141,7 @@ let rec pexpr fmt e =
     | JCPEoffset(k,e) ->
 	fprintf fmt "\\offset_m%a(%a)" offset_kind k pexpr e 
     | JCPEaddress(absolute,e) ->
-	fprintf fmt "\\%aaddress(%a)" 
-	  (fun fmt b -> if b then string fmt "absolute_" else ()) absolute
-	  pexpr e 
+	fprintf fmt "\\%aaddress(%a)" address_kind absolute pexpr e 
     | JCPEinstanceof (e, si) ->
 	fprintf fmt "(%a <: %s)" pexpr e si
     | JCPEderef (e, fi) -> 

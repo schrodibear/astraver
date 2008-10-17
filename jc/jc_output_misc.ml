@@ -94,6 +94,10 @@ and asrt_kind fmt = function
   | Ahint -> fprintf fmt "hint"
   | Aassume -> fprintf fmt "assume"
 
+and address_kind fmt = function
+  | Addr_absolute -> fprintf fmt "absolute_"
+  | Addr_pointer -> fprintf fmt ""
+
 let alloc_class fmt = function
   | JCalloc_root vi -> fprintf fmt "alloc-root(%s)" vi.jc_root_info_name
   | JCalloc_bitvector -> fprintf fmt "alloc-bitvector"

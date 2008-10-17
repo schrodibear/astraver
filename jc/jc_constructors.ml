@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.18 2008-10-07 15:54:20 marche Exp $ *)
+(* $Id: jc_constructors.ml,v 1.19 2008-10-17 01:49:37 moy Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -523,13 +523,29 @@ module Assertion = struct
 
   let fake ?pos ?mark ~value () = value
 
+  let is_true a = (a#node = JCAtrue)
+  let is_false a = (a#node = JCAfalse)
+
   let mktrue = mk ~node:JCAtrue
   let mkfalse = mk ~node:JCAfalse
+
   let mkand ~conjuncts =
+    (* optimization *)
+    let conjuncts = List.filter (fun a -> not (is_true a)) conjuncts in
     match conjuncts with
       | [] -> mktrue
       | [a] -> fake ~value:a
       | alist -> mk ~node:(JCAand alist)
+
+  let mkor ~disjuncts = 
+    (* optimization *)
+    let disjuncts = List.filter (fun a -> not (is_false a)) disjuncts in
+    match disjuncts with
+      | [] -> mkfalse
+      | [a] -> fake ~value:a
+      | alist -> mk ~node:(JCAor alist)
+
+  let mknot ~asrt:a = mk ~node:(JCAnot a)
 end
 
 (*

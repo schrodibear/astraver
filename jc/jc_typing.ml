@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.251 2008-10-14 14:51:59 ayad Exp $ *)
+(* $Id: jc_typing.ml,v 1.252 2008-10-17 01:49:37 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -864,17 +864,17 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           | JCTtype_var _ ->
               typing_error e#pos "pointer expected"
         end        
-    | JCNEaddress(true,e1) ->
+    | JCNEaddress(Addr_absolute,e1) ->
         let te1 = ft e1 in
         if is_integer te1#typ then
-	  JCTnull, dummy_region, JCTaddress(true,te1)
+	  JCTnull, dummy_region, JCTaddress(Addr_absolute,te1)
 	else
           typing_error e#pos "integer expected"
-    | JCNEaddress(false,e1) ->
+    | JCNEaddress(Addr_pointer,e1) ->
         let te1 = ft e1 in
         begin match te1#typ with
           | JCTpointer(JCtag(st, _), _, _) ->
-              integer_type, dummy_region, JCTaddress(false,te1)
+              integer_type, dummy_region, JCTaddress(Addr_pointer,te1)
           | JCTpointer(JCroot _, _, _) ->
               assert false (* TODO *)
           | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
@@ -1889,17 +1889,17 @@ used as an assertion, not as a term" pi.jc_logic_info_name
               assert false (* TODO *)
           | _ -> typing_error e#pos "pointer expected"
         end
-    | JCNEaddress(true,e1) ->
+    | JCNEaddress(Addr_absolute,e1) ->
         let te1 = fe e1 in
 	if is_integer  te1#typ then
-          JCTnull, dummy_region, JCEaddress(true,te1)
+          JCTnull, dummy_region, JCEaddress(Addr_absolute,te1)
 	else 
 	  typing_error e#pos "integer expected"
-    | JCNEaddress(false,e1) ->
+    | JCNEaddress(Addr_pointer,e1) ->
         let te1 = fe e1 in
         begin match te1#typ with 
           | JCTpointer(JCtag(st, _), _, _) ->
-              integer_type, dummy_region, JCEaddress(false,te1)
+              integer_type, dummy_region, JCEaddress(Addr_pointer,te1)
           | JCTpointer(JCroot _, _, _) ->
               assert false (* TODO *)
           | _ -> typing_error e#pos "pointer expected"
@@ -1959,7 +1959,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         JCEloop(
           loop_annot
             ~invariant:(List.map (fun (behav,i) -> behav,fa i) i)
-            ~free_invariant:true_assertion
+            ~free_invariant:(Assertion.mktrue ())
             ~variant:(apply_option ft vo),
           fe body)
     | JCNEreturn None ->
@@ -2318,7 +2318,7 @@ let type_range_of_term ty t =
               new assertion (JCArelation (mint, Beq_int, n1t))
         in *)
         let maxcstr = match n2opt with
-          | None -> true_assertion
+          | None -> Assertion.mktrue ()
           | Some n2 ->
               let maxt = 
                 new term
@@ -2341,7 +2341,7 @@ let type_range_of_term ty t =
           Jc_pervasives.make_and [instanceofcstr; mincstr; maxcstr] *)
     | JCTpointer (JCroot vi, _, _) ->
         assert false (* TODO, but need to change JCToffset before *)
-    | _ -> true_assertion
+    | _ -> Assertion.mktrue ()
 
 (* First pass: declare everything with no typing
  * (use dummy values that will be replaced by "decl")

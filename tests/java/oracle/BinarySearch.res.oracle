@@ -577,9 +577,9 @@ end = 21
 
 [JC_9]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 45
-begin = 8
-end = 21
+line = 47
+begin = 11
+end = 66
 
 [JC_50]
 file = "HOME/"
@@ -673,9 +673,9 @@ end = 18
 
 [JC_10]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 45
-begin = 8
-end = 21
+line = 47
+begin = 11
+end = 66
 
 [JC_63]
 kind = ArithOverflow
@@ -774,9 +774,9 @@ end = 30
 
 [JC_19]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 50
-begin = 8
-end = 30
+line = 53
+begin = 11
+end = 113
 
 [JC_70]
 kind = DivByZero
@@ -821,9 +821,9 @@ end = 24
 
 [JC_21]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 50
-begin = 8
-end = 30
+line = 53
+begin = 11
+end = 113
 
 [JC_74]
 file = "HOME/tests/java/BinarySearch.java"
@@ -951,9 +951,9 @@ end = -1
 
 [JC_31]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 57
-begin = 8
-end = 23
+line = 59
+begin = 11
+end = 65
 
 [JC_84]
 file = "HOME/"
@@ -963,9 +963,9 @@ end = -1
 
 [JC_32]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 57
-begin = 8
-end = 23
+line = 59
+begin = 11
+end = 65
 
 [JC_85]
 file = "HOME/"

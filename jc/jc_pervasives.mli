@@ -27,7 +27,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Jc_stdlib
 open Jc_env
+open Jc_envset
 open Jc_ast
 open Jc_fenv
 
@@ -119,8 +121,6 @@ val pointer_class_root : pointer_class -> Jc_env.root_info
 
 (* predefined functions *)
 
-val true_assertion : assertion
-val false_assertion : assertion
 val any_string : Jc_fenv.logic_info
 val real_of_integer : Jc_fenv.logic_info
 val real_of_integer_ : Jc_fenv.fun_info
@@ -131,20 +131,11 @@ val default_behavior : behavior
 val empty_fun_effect : Jc_fenv.fun_effect
 val empty_effects : Jc_fenv.effect
 
-(* terms *)
-
-val raw_term_equal : term -> term -> bool
-val raw_term_compare : term -> term -> int
-
 (* assertions *)
-
-val raw_assertion_equal : assertion -> assertion -> bool
-val make_and : assertion list -> assertion
 
 val skip_term_shifts :  term -> term
 val skip_shifts : expr -> expr
 val skip_tloc_range : location_set -> location_set
-val is_true : assertion -> bool
 
 val select_option : 'a option -> 'a -> 'a
 val apply_option: ('a -> 'b) -> 'a option -> 'b option
@@ -171,6 +162,16 @@ val string_of_op_type: [< operator_type] -> string
 
 val builtin_logic_symbols :
   (Jc_env.jc_type option * string * string * Jc_env.jc_type list) list
+
+module TermOrd : OrderedHashedType with type t = term
+
+module TermSet : Set.S with type elt = term
+
+module TermMap : Map.S with type key = term
+
+module TermTable : Hashtbl.S with type key = term
+
+module AssertionOrd : OrderedType with type t = assertion
 
 (*
 Local Variables: 

@@ -27,10 +27,17 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.31 2008-09-29 09:34:55 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.32 2008-10-17 01:49:37 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
+
+module type OrderedType =
+sig
+  type t
+  val equal : t -> t -> bool
+  val compare : t -> t -> int
+end
 
 module type OrderedHashedType =
 sig
@@ -107,6 +114,12 @@ let is_pointer_type t =
     | JCTpointer _ -> true
     | _ -> false
 
+let is_integral_type = function
+  | JCTnative Tinteger -> true
+  | JCTenum _ -> true 
+  | JCTnative _ | JCTlogic _ | JCTpointer _ | JCTnull | JCTany
+  | JCTtype_var _ -> false
+
 let is_embedded_field fi =
   match fi.jc_field_info_type with
     | JCTpointer(_,Some _,Some _) -> true
@@ -166,7 +179,6 @@ module FieldOrd =
 module FieldSet = Set.Make(FieldOrd)
 
 module FieldMap = Map.Make(FieldOrd)
-
 module FieldTable = Hashtbl.Make(FieldOrd)
 
 module MemClass = 
@@ -245,7 +257,6 @@ module LogicLabelOrd =
   end
 
 module LogicLabelSet = Set.Make(LogicLabelOrd)
-
 
 (*
 Local Variables: 

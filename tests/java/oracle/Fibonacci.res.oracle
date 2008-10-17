@@ -386,9 +386,9 @@ end = 23
 
 [JC_9]
 file = "HOME/tests/java/Fibonacci.jc"
-line = 28
-begin = 8
-end = 23
+line = 30
+begin = 11
+end = 65
 
 [isfibn]
 name = "isfibn"
@@ -400,9 +400,9 @@ end = 14
 
 [JC_10]
 file = "HOME/tests/java/Fibonacci.jc"
-line = 28
-begin = 8
-end = 23
+line = 30
+begin = 11
+end = 65
 
 [JC_11]
 file = "HOME/tests/java/Fibonacci.java"

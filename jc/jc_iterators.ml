@@ -435,17 +435,6 @@ let rec map_term f t =
 
 
 (*****************************************************************************)
-(* Specific iterators on terms.                                              *)
-(*****************************************************************************)
-
-let raw_sub_term subt t =
-  fold_term (fun acc t -> acc || raw_term_equal subt t) false t
-
-let raw_strict_sub_term subt t =
-  raw_term_compare subt t <> 0 && raw_sub_term subt t
-
-
-(*****************************************************************************)
 (* General iterators on assertions.                                          *)
 (*****************************************************************************)
 
@@ -822,6 +811,20 @@ let rec map_term_and_assertion fa ft a =
 		 List.map (fun (p, a) -> p, map_term_and_assertion fa ft a) pal)
   in
   fa (new assertion_with ~node:anode a)
+
+(*****************************************************************************)
+(* Specific iterators on terms.                                              *)
+(*****************************************************************************)
+
+let raw_sub_term subt t =
+  fold_term (fun acc t -> acc || TermOrd.equal subt t) false t
+
+let raw_sub_term_in_assertion subt a =
+  fold_term_in_assertion (fun acc t -> acc || TermOrd.equal subt t) false a
+
+let raw_strict_sub_term subt t =
+  TermOrd.compare subt t <> 0 && raw_sub_term subt t
+
 
 (*****************************************************************************)
 (* General iterators on patterns.                                            *)

@@ -27,8 +27,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.129 2008-10-14 14:51:59 ayad Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.130 2008-10-17 01:49:37 moy Exp $ *)
 
+open Jc_stdlib
 open Jc_env
 open Jc_envset
 open Jc_region
@@ -398,101 +399,175 @@ let rec is_constant_term t =
     | JCTunary (_, t) | JCTrange (Some t, None) | JCTrange (None, Some t) ->
 	is_constant_term t
 
-let term_num t = match t#node with
-  | JCTconst _ -> 1
-  | JCTvar _ -> 3
-  | JCTbinary _ -> 5
-  | JCTshift _ -> 7
-  | JCTunary _ -> 13
-  | JCTderef _ -> 17
-  | JCTold _ -> 19
-  | JCToffset _ -> 23
-  | JCTaddress _ -> 25
-  | JCTinstanceof _ -> 31
-  | JCTcast _ -> 37
-  | JCTbitwise_cast _ -> 39
-  | JCTrange _ -> 41
-  | JCTapp _ -> 43
-  | JCTif _ -> 47
-  | JCTat _ -> 53
-  | JCTmatch _ -> 59
-  | JCTrange_cast _ -> 61
-  | JCTreal_cast _ -> 67
-
 (* Comparison based only on term structure, not types not locations. *)
-let rec raw_term_compare t1 t2 =
-  match t1#node, t2#node with
-    | JCTconst c1,JCTconst c2 -> 
-	Pervasives.compare c1 c2
-    | JCTvar v1,JCTvar v2 -> 
-	Pervasives.compare v1.jc_var_info_tag v2.jc_var_info_tag
-  | JCTbinary(t11,op1,t12),JCTbinary(t21,op2,t22) -> 
-      let compop = Pervasives.compare op1 op2 in
-      if compop = 0 then 
-	let comp1 = raw_term_compare t11 t21 in
-	if comp1 = 0 then raw_term_compare t12 t22 else comp1
-      else compop
-  | JCTshift(t11,t12),JCTshift(t21,t22) ->
-      let comp1 = raw_term_compare t11 t21 in
-      if comp1 = 0 then raw_term_compare t12 t22 else comp1
-  | JCTunary(op1,t11),JCTunary(op2,t21) ->
-      let compop = Pervasives.compare op1 op2 in
-      if compop = 0 then raw_term_compare t11 t21 else compop
-  | JCTold t11,JCTold t21 ->
-      raw_term_compare t11 t21
-  | JCTaddress(absolute1,t11),JCTaddress(absolute2,t21) ->
-      let compabs = Pervasives.compare absolute1 absolute2 in
-      if compabs = 0 then
-	raw_term_compare t11 t21
-      else compabs
-  | JCTderef(t11,_,fi1),JCTderef(t21,_,fi2) ->
-      let compfi = 
-	Pervasives.compare fi1.jc_field_info_tag fi2.jc_field_info_tag
-      in
-      if compfi = 0 then raw_term_compare t11 t21 else compfi
-  | JCToffset(ok1,t11,st1),JCToffset(ok2,t21,st2) ->
-      let compok = Pervasives.compare ok1 ok2 in
-      if compok = 0 then
-	let compst = 
-	  Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
-	in
-	if compst = 0 then raw_term_compare t11 t21 else compst
-      else compok
-  | JCTinstanceof(t11,lab1,st1),JCTinstanceof(t21,lab2,st2) 
-  | JCTcast(t11,lab1,st1),JCTcast(t21,lab2,st2)
-  | JCTbitwise_cast(t11,lab1,st1),JCTbitwise_cast(t21,lab2,st2) ->
-      let compst = 
-	Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
-      in
-      if compst <> 0 then compst else
-	let compst = 
-	  Pervasives.compare lab1 lab2
-	in
-	if compst <> 0 then compst else
-	  raw_term_compare t11 t21 
-  | JCTrange(t11opt,t12opt),JCTrange(t21opt,t22opt) ->
-      let comp1 = option_compare raw_term_compare t11opt t21opt in
-      if comp1 = 0 then 
-	option_compare raw_term_compare t12opt t22opt
-      else comp1
-  | JCTapp app1,JCTapp app2 ->
-      let li1 = app1.jc_app_fun and ts1 = app1.jc_app_args in
-      let li2 = app2.jc_app_fun and ts2 = app2.jc_app_args in
-      let compli = 
-	Pervasives.compare li1.jc_logic_info_tag li2.jc_logic_info_tag
-      in
-      if compli = 0 then
-	list_compare raw_term_compare ts1 ts2
-      else compli
-  | JCTif(t11,t12,t13),JCTif(t21,t22,t23) ->
-      let comp1 = raw_term_compare t11 t21 in
-      if comp1 = 0 then 
-	let comp2 = raw_term_compare t12 t22 in
-	if comp2 = 0 then raw_term_compare t13 t23 else comp2
-      else comp1
-  | _ -> term_num t2 - term_num t1
+module TermOrd = struct 
+  type t = term 
 
-let raw_term_equal t1 t2 = raw_term_compare t1 t2 = 0
+  let term_num t = match t#node with
+    | JCTconst _ -> 1
+    | JCTvar _ -> 3
+    | JCTbinary _ -> 5
+    | JCTshift _ -> 7
+    | JCTunary _ -> 13
+    | JCTderef _ -> 17
+    | JCTold _ -> 19
+    | JCToffset _ -> 23
+    | JCTaddress _ -> 25
+    | JCTinstanceof _ -> 31
+    | JCTcast _ -> 37
+    | JCTbitwise_cast _ -> 39
+    | JCTrange _ -> 41
+    | JCTapp _ -> 43
+    | JCTif _ -> 47
+    | JCTat _ -> 53
+    | JCTmatch _ -> 59
+    | JCTrange_cast _ -> 61
+    | JCTreal_cast _ -> 67
+
+  let rec compare t1 t2 =
+    match t1#node, t2#node with
+      | JCTconst c1,JCTconst c2 -> 
+	  Pervasives.compare c1 c2
+      | JCTvar v1,JCTvar v2 -> 
+	  Pervasives.compare v1.jc_var_info_tag v2.jc_var_info_tag
+      | JCTbinary(t11,op1,t12),JCTbinary(t21,op2,t22) -> 
+	  let compop = Pervasives.compare op1 op2 in
+	  if compop = 0 then 
+	    let comp1 = compare t11 t21 in
+	    if comp1 = 0 then compare t12 t22 else comp1
+	  else compop
+      | JCTshift(t11,t12),JCTshift(t21,t22) ->
+	  let comp1 = compare t11 t21 in
+	  if comp1 = 0 then compare t12 t22 else comp1
+      | JCTunary(op1,t11),JCTunary(op2,t21) ->
+	  let compop = Pervasives.compare op1 op2 in
+	  if compop = 0 then compare t11 t21 else compop
+      | JCTold t11,JCTold t21 ->
+	  compare t11 t21
+      | JCTaddress(absolute1,t11),JCTaddress(absolute2,t21) ->
+	  let compabs = Pervasives.compare absolute1 absolute2 in
+	  if compabs = 0 then
+	    compare t11 t21
+	  else compabs
+      | JCTderef(t11,_,fi1),JCTderef(t21,_,fi2) ->
+	  let compfi = 
+	    Pervasives.compare fi1.jc_field_info_tag fi2.jc_field_info_tag
+	  in
+	  if compfi = 0 then compare t11 t21 else compfi
+      | JCToffset(ok1,t11,st1),JCToffset(ok2,t21,st2) ->
+	  let compok = Pervasives.compare ok1 ok2 in
+	  if compok = 0 then
+	    let compst = 
+	      Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+	    in
+	    if compst = 0 then compare t11 t21 else compst
+	  else compok
+      | JCTinstanceof(t11,lab1,st1),JCTinstanceof(t21,lab2,st2) 
+      | JCTcast(t11,lab1,st1),JCTcast(t21,lab2,st2)
+      | JCTbitwise_cast(t11,lab1,st1),JCTbitwise_cast(t21,lab2,st2) ->
+	  let compst = 
+	    Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+	  in
+	  if compst <> 0 then compst else
+	    let compst = 
+	      Pervasives.compare lab1 lab2
+	    in
+	    if compst <> 0 then compst else
+	      compare t11 t21 
+      | JCTreal_cast(t11,conv1),JCTreal_cast(t21,conv2) ->
+	  let comp = 
+	    Pervasives.compare conv1 conv2
+	  in
+	  if comp <> 0 then comp else
+	    compare t11 t21 
+      | JCTrange_cast(t11,ri1),JCTrange_cast(t21,ri2) ->	
+	  let comp = 
+	    Pervasives.compare ri1.jc_enum_info_name ri2.jc_enum_info_name
+	  in
+	  if comp <> 0 then comp else
+	    compare t11 t21 
+      | JCTrange(t11opt,t12opt),JCTrange(t21opt,t22opt) ->
+	  let comp1 = option_compare compare t11opt t21opt in
+	  if comp1 = 0 then 
+	    option_compare compare t12opt t22opt
+	  else comp1
+      | JCTapp app1,JCTapp app2 ->
+	  let li1 = app1.jc_app_fun and ts1 = app1.jc_app_args in
+	  let li2 = app2.jc_app_fun and ts2 = app2.jc_app_args in
+	  let compli = 
+	    Pervasives.compare li1.jc_logic_info_tag li2.jc_logic_info_tag
+	  in
+	  if compli = 0 then
+	    list_compare compare ts1 ts2
+	  else compli
+      | JCTif(t11,t12,t13),JCTif(t21,t22,t23) ->
+	  let comp1 = compare t11 t21 in
+	  if comp1 = 0 then 
+	    let comp2 = compare t12 t22 in
+	    if comp2 = 0 then compare t13 t23 else comp2
+	  else comp1
+      |JCTat(t11,lab1),JCTat(t21,lab2) ->
+	 let compst = 
+	   Pervasives.compare lab1 lab2
+	 in
+	 if compst <> 0 then compst else
+	   compare t11 t21 
+      | JCTmatch _, JCTmatch _ -> assert false (* TODO *)
+      | _ ->
+	  (* Terms should have different constructors *)
+	  assert (term_num t1 <> term_num t2);
+	  term_num t2 - term_num t1
+
+  let equal t1 t2 = compare t1 t2 = 0
+
+  let rec hash t = 
+    let h = match t#node with
+      | JCTconst c1 -> 
+	  Hashtbl.hash c1
+      | JCTvar v1 -> 
+	  Hashtbl.hash v1.jc_var_info_tag
+      | JCTbinary(t11,op1,t12) -> 
+	  Hashtbl.hash op1 * hash t11 * hash t12
+      | JCTshift(t11,t12) ->
+	  hash t11 * hash t12
+      | JCTunary(op1,t11) ->
+	  Hashtbl.hash op1 * hash t11 
+      | JCTold t11 ->
+	  hash t11 
+      | JCTaddress(absolute1,t11) ->
+	  Hashtbl.hash absolute1 * hash t11
+      | JCTderef(t11,_,fi1) ->
+	  Hashtbl.hash fi1.jc_field_info_tag * hash t11
+      | JCToffset(ok1,t11,st1) ->
+	  Hashtbl.hash ok1 * hash t11 
+	  * Hashtbl.hash st1.jc_struct_info_name
+      | JCTinstanceof(t11,_,_)
+      | JCTcast(t11,_,_)
+      | JCTbitwise_cast(t11,_,_)
+      | JCTreal_cast(t11,_)
+      | JCTrange_cast(t11,_)
+      | JCTat(t11,_) -> 
+	  hash t11
+      | JCTrange(t11opt,t12opt) ->
+	  Option_misc.map_default hash 1 t11opt
+	  * Option_misc.map_default hash 1 t12opt
+      | JCTapp app1 ->
+	  let li1 = app1.jc_app_fun and ts1 = app1.jc_app_args in
+	  List.fold_left 
+	    (fun h arg -> h * hash arg) 
+	    (Hashtbl.hash li1.jc_logic_info_tag) ts1
+      | JCTif(t11,t12,t13) ->
+	  hash t11 * hash t12 * hash t13
+      | JCTmatch (_, _) -> assert false (* TODO *)
+    in
+    Hashtbl.hash (term_num t) * h
+	
+end
+
+module TermTable = Hashtbl.Make(TermOrd)
+module TermSet = Set.Make(TermOrd)
+module TermMap = Map.Make(TermOrd)
+	
 
 let tag_num tag = match tag#node with
   | JCTtag _ -> 1
@@ -508,96 +583,104 @@ let raw_tag_compare tag1 tag2 =
         let compst = 
 	  Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
         in
-        if compst = 0 then raw_term_compare t1 t2 else compst
+        if compst = 0 then TermOrd.compare t1 t2 else compst
   | _ -> tag_num tag2 - tag_num tag1
 
-let assertion_num a = match a#node with
-  | JCAtrue -> 1
-  | JCAfalse -> 3
-  | JCArelation _ -> 5
-  | JCAand _ -> 7
-  | JCAor _ -> 11
-  | JCAimplies _ -> 13
-  | JCAiff _ -> 17
-  | JCAnot _ -> 19
-  | JCAapp _ -> 23
-  | JCAquantifier _ -> 31
-  | JCAold _ -> 37
-  | JCAinstanceof  _ -> 41
-  | JCAbool_term _ -> 43
-  | JCAif _ -> 47
-  (* ??? are these supposed to be prime numbers ? *)
-  | JCAmutable _ -> 49
-  | JCAeqtype _ -> 51
-  | JCAat _ -> 53
-  | JCAmatch _ -> 59
-  | JCAsubtype _ -> 61
 
 (* Comparison based only on assertion structure, not locations. *)
-let rec raw_assertion_compare a1 a2 =
-  match a1#node, a2#node with
-    | JCAtrue,JCAtrue | JCAfalse,JCAfalse -> 0
-    | JCArelation(t11,op1,t12),JCArelation(t21,op2,t22) ->
-        let compop = Pervasives.compare op1 op2 in
-        if compop = 0 then 
-	  let comp1 = raw_term_compare t11 t21 in
-	  if comp1 = 0 then raw_term_compare t12 t22 else comp1
-        else compop
-    | JCAand als1,JCAand als2 | JCAor als1,JCAor als2 ->
-	list_compare raw_assertion_compare als1 als2
-    | JCAimplies(a11,a12),JCAimplies(a21,a22) 
-    | JCAiff(a11,a12),JCAiff(a21,a22) ->
-        let comp1 = raw_assertion_compare a11 a21 in
-        if comp1 = 0 then raw_assertion_compare a12 a22 else comp1
-    | JCAnot a1,JCAnot a2 | JCAold a1,JCAold a2 ->
-        raw_assertion_compare a1 a2
-    | JCAapp app1, JCAapp app2 ->
-	let li1 = app1.jc_app_fun in
-	let li2 = app2.jc_app_fun in
-        let compli = 
-	  Pervasives.compare li1.jc_logic_info_tag li2.jc_logic_info_tag
-        in
-        if compli = 0 then
-	  let tls1 = app1.jc_app_args in
-	  let tls2 = app2.jc_app_args in
-  	  list_compare raw_term_compare tls1 tls2
-        else compli
-    | JCAquantifier(q1,vi1,a1),JCAquantifier(q2,vi2,a2) ->
-        let compq = Pervasives.compare q1 q2 in
-        if compq = 0 then 
-	  let compvi = Pervasives.compare vi1 vi2 in
-	  if compvi = 0 then raw_assertion_compare a1 a2 else compvi
-        else compq
-    | JCAinstanceof(t1,_,st1),JCAinstanceof(t2,_,st2) ->
-        let compst = 
-	  Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
-        in
-        if compst = 0 then raw_term_compare t1 t2 else compst
-    | JCAbool_term t1,JCAbool_term t2 ->
-        raw_term_compare t1 t2
-    | JCAif(t1,a11,a12),JCAif(t2,a21,a22) ->
-        let comp0 = raw_term_compare t1 t2 in
-        if comp0 = 0 then 
-	  let comp1 = raw_assertion_compare a11 a21 in
-	  if comp1 = 0 then raw_assertion_compare a12 a22 else comp1
-        else comp0
-    | JCAmutable(t1,st1,tag1),JCAmutable(t2,st2,tag2) ->
-        let compst = 
-	  Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
-        in
-        if compst = 0 then
-	  let comptag = raw_tag_compare tag1 tag2 in
-	  if comptag = 0 then raw_term_compare t1 t2 else comptag
-        else compst
-    | JCAeqtype(tag11,tag12,so1),JCAeqtype(tag21,tag22,so2) ->
-        let compso = option_compare Pervasives.compare so1 so2 in
-        if compso = 0 then
-	  let comptag = raw_tag_compare tag11 tag21 in
-	  if comptag = 0 then raw_tag_compare tag12 tag22 else comptag
-        else compso
-    | _ -> assertion_num a1 - assertion_num a2
+module AssertionOrd = struct 
+  type t = assertion
 
-let raw_assertion_equal a1 a2 = raw_assertion_compare a1 a2 = 0
+  let assertion_num a = match a#node with
+    | JCAtrue -> 1
+    | JCAfalse -> 3
+    | JCArelation _ -> 5
+    | JCAand _ -> 7
+    | JCAor _ -> 11
+    | JCAimplies _ -> 13
+    | JCAiff _ -> 17
+    | JCAnot _ -> 19
+    | JCAapp _ -> 23
+    | JCAquantifier _ -> 31
+    | JCAold _ -> 37
+    | JCAinstanceof  _ -> 41
+    | JCAbool_term _ -> 43
+    | JCAif _ -> 47
+	(* ??? are these supposed to be prime numbers ? *)
+    | JCAmutable _ -> 49
+    | JCAeqtype _ -> 51
+    | JCAat _ -> 53
+    | JCAmatch _ -> 59
+    | JCAsubtype _ -> 61
+
+  let rec compare a1 a2 =
+    match a1#node, a2#node with
+      | JCAtrue,JCAtrue | JCAfalse,JCAfalse -> 0
+      | JCArelation(t11,op1,t12),JCArelation(t21,op2,t22) ->
+          let compop = Pervasives.compare op1 op2 in
+          if compop = 0 then 
+	    let comp1 = TermOrd.compare t11 t21 in
+	    if comp1 = 0 then TermOrd.compare t12 t22 else comp1
+          else compop
+      | JCAand als1,JCAand als2 | JCAor als1,JCAor als2 ->
+	  list_compare compare als1 als2
+      | JCAimplies(a11,a12),JCAimplies(a21,a22) 
+      | JCAiff(a11,a12),JCAiff(a21,a22) ->
+          let comp1 = compare a11 a21 in
+          if comp1 = 0 then compare a12 a22 else comp1
+      | JCAnot a1,JCAnot a2 | JCAold a1,JCAold a2 ->
+          compare a1 a2
+      | JCAapp app1, JCAapp app2 ->
+	  let li1 = app1.jc_app_fun in
+	  let li2 = app2.jc_app_fun in
+          let compli = 
+	    Pervasives.compare li1.jc_logic_info_tag li2.jc_logic_info_tag
+          in
+          if compli = 0 then
+	    let tls1 = app1.jc_app_args in
+	    let tls2 = app2.jc_app_args in
+  	    list_compare TermOrd.compare tls1 tls2
+          else compli
+      | JCAquantifier(q1,vi1,a1),JCAquantifier(q2,vi2,a2) ->
+          let compq = Pervasives.compare q1 q2 in
+          if compq = 0 then 
+	    let compvi = Pervasives.compare vi1 vi2 in
+	    if compvi = 0 then compare a1 a2 else compvi
+          else compq
+      | JCAinstanceof(t1,_,st1),JCAinstanceof(t2,_,st2) ->
+          let compst = 
+	    Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+          in
+          if compst = 0 then TermOrd.compare t1 t2 else compst
+      | JCAbool_term t1,JCAbool_term t2 ->
+          TermOrd.compare t1 t2
+      | JCAif(t1,a11,a12),JCAif(t2,a21,a22) ->
+          let comp0 = TermOrd.compare t1 t2 in
+          if comp0 = 0 then 
+	    let comp1 = compare a11 a21 in
+	    if comp1 = 0 then compare a12 a22 else comp1
+          else comp0
+      | JCAmutable(t1,st1,tag1),JCAmutable(t2,st2,tag2) ->
+          let compst = 
+	    Pervasives.compare st1.jc_struct_info_name st2.jc_struct_info_name
+          in
+          if compst = 0 then
+	    let comptag = raw_tag_compare tag1 tag2 in
+	    if comptag = 0 then TermOrd.compare t1 t2 else comptag
+          else compst
+      | JCAeqtype(tag11,tag12,so1),JCAeqtype(tag21,tag22,so2) ->
+          let compso = option_compare Pervasives.compare so1 so2 in
+          if compso = 0 then
+	    let comptag = raw_tag_compare tag11 tag21 in
+	    if comptag = 0 then raw_tag_compare tag12 tag22 else comptag
+          else compso
+      | _ -> 
+	  (* Assertions should have different constructors *)
+	  assert (assertion_num a1 <> assertion_num a2);
+	  assertion_num a1 - assertion_num a2
+
+  let equal a1 a2 = compare a1 a2 = 0
+end
 
 let rec is_numeric_term t =
   match t#node with
@@ -613,18 +696,6 @@ let rec is_numeric_term t =
 
 
 (* assertions *)
-
-let true_assertion = new assertion JCAtrue
-let false_assertion = new assertion JCAfalse
-let is_true a = (a#node = JCAtrue)
-
-let make_and al = 
-  (* optimization *)
-  let al = List.filter (fun a -> not (is_true a)) al in
-  match al with
-    | [] -> true_assertion
-    | [a] -> a
-    | a::tl -> new assertion (JCAand al)
 
 let rec is_constant_assertion a =
   match a#node with
@@ -817,17 +888,11 @@ let union_of_field fi =
   assert (root_is_union vi);
   vi
 
-let integral_type = function
-  | JCTnative Tinteger -> true
-  | JCTenum _ -> true 
-  | JCTnative _ | JCTlogic _ | JCTpointer _ | JCTnull | JCTany
-  | JCTtype_var _ -> false
-
 let integral_union vi =
   assert (root_is_union vi);
   List.fold_left (fun acc st -> acc &&
 		    match st.jc_struct_info_fields with
-		      | [fi] -> integral_type fi.jc_field_info_type
+		      | [fi] -> is_integral_type fi.jc_field_info_type
 		      | _ -> false
 		 ) true vi.jc_root_info_hroots
 

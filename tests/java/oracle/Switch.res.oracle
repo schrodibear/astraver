@@ -445,9 +445,9 @@ end = 23
 
 [JC_9]
 file = "HOME/tests/java/Switch.jc"
-line = 38
-begin = 8
-end = 23
+line = 40
+begin = 11
+end = 65
 
 [Switch_test1_safety]
 name = "Method test1"
@@ -459,9 +459,9 @@ end = 27
 
 [JC_10]
 file = "HOME/tests/java/Switch.jc"
-line = 38
-begin = 8
-end = 23
+line = 40
+begin = 11
+end = 65
 
 [JC_11]
 file = "HOME/tests/java/Switch.java"
