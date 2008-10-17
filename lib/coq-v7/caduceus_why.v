@@ -121,31 +121,31 @@ Implicit Arguments shift.
 Admitted.
 Implicit Arguments sub_pointer.
 
-(*Why predicate*) Definition lt_pointer [A682:Set] [p1:(pointer A682)] [p2:(pointer A682)]
+(*Why predicate*) Definition lt_pointer [A703:Set] [p1:(pointer A703)] [p2:(pointer A703)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) < (offset p2)`.
 Implicit Arguments lt_pointer.
 
-(*Why predicate*) Definition le_pointer [A683:Set] [p1:(pointer A683)] [p2:(pointer A683)]
+(*Why predicate*) Definition le_pointer [A704:Set] [p1:(pointer A704)] [p2:(pointer A704)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) <= (offset p2)`.
 Implicit Arguments le_pointer.
 
-(*Why predicate*) Definition gt_pointer [A684:Set] [p1:(pointer A684)] [p2:(pointer A684)]
+(*Why predicate*) Definition gt_pointer [A705:Set] [p1:(pointer A705)] [p2:(pointer A705)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) > (offset p2)`.
 Implicit Arguments gt_pointer.
 
-(*Why predicate*) Definition ge_pointer [A685:Set] [p1:(pointer A685)] [p2:(pointer A685)]
+(*Why predicate*) Definition ge_pointer [A706:Set] [p1:(pointer A706)] [p2:(pointer A706)]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) >= (offset p2)`.
 Implicit Arguments ge_pointer.
 
-(*Why predicate*) Definition valid [A686:Set] [a:alloc_table] [p:(pointer A686)]
+(*Why predicate*) Definition valid [A707:Set] [a:alloc_table] [p:(pointer A707)]
   := `0 <= (offset p)` /\ `(offset p) < (block_length a p)`.
 Implicit Arguments valid.
 
-(*Why predicate*) Definition valid_index [A687:Set] [a:alloc_table] [p:(pointer A687)] [i:Z]
+(*Why predicate*) Definition valid_index [A708:Set] [a:alloc_table] [p:(pointer A708)] [i:Z]
   := `0 <= (offset p) + i` /\ `(offset p) + i < (block_length a p)`.
 Implicit Arguments valid_index.
 
-(*Why predicate*) Definition valid_range [A688:Set] [a:alloc_table] [p:(pointer A688)] [i:Z] [j:Z]
+(*Why predicate*) Definition valid_range [A709:Set] [a:alloc_table] [p:(pointer A709)] [i:Z] [j:Z]
   := `0 <= (offset p) + i` /\ `(offset p) + j < (block_length a p)`.
 Implicit Arguments valid_range.
 
@@ -367,8 +367,8 @@ Implicit Arguments pset_union.
 Admitted.
 Implicit Arguments not_in_pset.
 
-(*Why predicate*) Definition not_assigns [A732:Set] [A731:Set] [a:alloc_table] [m1:(memory A731 A732)] [m2:(memory A731 A732)] [l:(pset A732)]
-  := ((p:(pointer A732))
+(*Why predicate*) Definition not_assigns [A753:Set] [A752:Set] [a:alloc_table] [m1:(memory A752 A753)] [m2:(memory A752 A753)] [l:(pset A753)]
+  := ((p:(pointer A753))
       ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
 Implicit Arguments not_assigns.
 
@@ -626,13 +626,13 @@ Admitted.
   ((a:alloc_table) ((l:(pset A1)) ((m:(memory A2 A1)) (not_assigns a m m l)))).
 Admitted.
 
-(*Why predicate*) Definition valid_acc [A773:Set] [A772:Set] [m1:(memory (pointer A772) A773)]
-  := ((p:(pointer A773))
+(*Why predicate*) Definition valid_acc [A794:Set] [A793:Set] [m1:(memory (pointer A793) A794)]
+  := ((p:(pointer A794))
       ((a:alloc_table) ((valid a p) -> (valid a (acc m1 p))))).
 Implicit Arguments valid_acc.
 
-(*Why predicate*) Definition valid_acc_range [A775:Set] [A774:Set] [m1:(memory (pointer A774) A775)] [size:Z]
-  := ((p:(pointer A775))
+(*Why predicate*) Definition valid_acc_range [A796:Set] [A795:Set] [m1:(memory (pointer A795) A796)] [size:Z]
+  := ((p:(pointer A796))
       ((a:alloc_table)
        ((valid a p) -> (valid_range a (acc m1 p) `0` `size - 1`)))).
 Implicit Arguments valid_acc_range.
@@ -646,14 +646,14 @@ Implicit Arguments valid_acc_range.
       ((valid_acc_range m1 size) -> ((valid a p) -> (valid a (acc m1 p)))))))).
 Admitted.
 
-(*Why predicate*) Definition separation1 [A779:Set] [A778:Set] [m1:(memory (pointer A778) A779)] [m2:(memory (pointer A778) A779)]
-  := ((p:(pointer A779))
+(*Why predicate*) Definition separation1 [A800:Set] [A799:Set] [m1:(memory (pointer A799) A800)] [m2:(memory (pointer A799) A800)]
+  := ((p:(pointer A800))
       ((a:alloc_table)
        ((valid a p) -> ~((base_addr (acc m1 p)) = (base_addr (acc m2 p)))))).
 Implicit Arguments separation1.
 
-(*Why predicate*) Definition separation1_range1 [A781:Set] [A780:Set] [m1:(memory (pointer A780) A781)] [m2:(memory (pointer A780) A781)] [size:Z]
-  := ((p:(pointer A781))
+(*Why predicate*) Definition separation1_range1 [A802:Set] [A801:Set] [m1:(memory (pointer A801) A802)] [m2:(memory (pointer A801) A802)] [size:Z]
+  := ((p:(pointer A802))
       ((a:alloc_table)
        ((valid a p) ->
         ((i1:Z)
@@ -664,8 +664,8 @@ Implicit Arguments separation1.
             (base_addr (acc m2 (shift p i2))))))))))).
 Implicit Arguments separation1_range1.
 
-(*Why predicate*) Definition separation1_range [A783:Set] [A782:Set] [m:(memory (pointer A782) A783)] [size:Z]
-  := ((p:(pointer A783))
+(*Why predicate*) Definition separation1_range [A804:Set] [A803:Set] [m:(memory (pointer A803) A804)] [size:Z]
+  := ((p:(pointer A804))
       ((a:alloc_table)
        ((valid a p) ->
         ((i1:Z)
@@ -673,15 +673,15 @@ Implicit Arguments separation1_range1.
           ~((base_addr (acc m (shift p i1))) = (base_addr (acc m p)))))))).
 Implicit Arguments separation1_range.
 
-(*Why predicate*) Definition separation2 [A785:Set] [A784:Set] [m1:(memory (pointer A784) A785)] [m2:(memory (pointer A784) A785)]
-  := ((p1:(pointer A785))
-      ((p2:(pointer A785))
+(*Why predicate*) Definition separation2 [A806:Set] [A805:Set] [m1:(memory (pointer A805) A806)] [m2:(memory (pointer A805) A806)]
+  := ((p1:(pointer A806))
+      ((p2:(pointer A806))
        (~(p1 = p2) -> ~((base_addr (acc m1 p1)) = (base_addr (acc m2 p2)))))).
 Implicit Arguments separation2.
 
-(*Why predicate*) Definition separation2_range1 [A787:Set] [A786:Set] [m1:(memory (pointer A786) A787)] [m2:(memory (pointer A786) A787)] [size:Z]
-  := ((p:(pointer A787))
-      ((q:(pointer A787))
+(*Why predicate*) Definition separation2_range1 [A808:Set] [A807:Set] [m1:(memory (pointer A807) A808)] [m2:(memory (pointer A807) A808)] [size:Z]
+  := ((p:(pointer A808))
+      ((q:(pointer A808))
        ((a:alloc_table)
         ((i:Z)
          (`0 <= i` /\ `i < size` ->

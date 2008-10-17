@@ -15,19 +15,17 @@
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
-(*  modify it under the terms of the GNU General Public                   *)
-(*  License version 2, as published by the Free Software Foundation.      *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
 (*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
 (*                                                                        *)
-(*  See the GNU General Public License version 2 for more details         *)
-(*  (enclosed in the file GPL).                                           *)
-(*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.142 2008-10-07 15:54:20 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.143 2008-10-17 11:49:29 filliatr Exp $ *)
 
 open Java_env
 open Java_ast

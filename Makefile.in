@@ -15,32 +15,15 @@
 #    Xavier URBAIN                                                       #
 #                                                                        #
 #  This software is free software; you can redistribute it and/or        #
-#  modify it under the terms of the GNU General Public                   #
-#  License version 2, as published by the Free Software Foundation.      #
+#  modify it under the terms of the GNU Library General Public           #
+#  License version 2.1, with the special exception on linking            #
+#  described in file LICENSE.                                            #
 #                                                                        #
 #  This software is distributed in the hope that it will be useful,      #
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of        #
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  #
 #                                                                        #
-#  See the GNU General Public License version 2 for more details         #
-#  (enclosed in the file GPL).                                           #
-#                                                                        #
 ##########################################################################
-
-#
-# sample Makefile for Objective Caml
-# Copyright (C) 2001 Jean-Christophe FILLIATRE
-# 
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Library General Public
-# License version 2, as published by the Free Software Foundation.
-# 
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# 
-# See the GNU Library General Public License version 2 for more details
-# (enclosed in the file LGPL).
 
 VERBOSEMAKE ?= @VERBOSEMAKE@
 
@@ -924,7 +907,7 @@ doc/main.html: doc/main.tex doc/version.tex
 	$(OCAMLYACC) -v $<
 
 .ml4.ml:
-	$(CAMLP4) -impl $< > $@
+	$(CAMLP4) pr_o.cmo -impl $< > $@
 
 lib/coq/%.vo: lib/coq/%.v
 	$(COQC8) -I lib/coq $<
@@ -980,7 +963,7 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
        mix/*.ml* \
        version.sh Version Makefile.in configure.in configure .depend .depend.coq \
        config/check_ocamlgraph.ml \
-       README INSTALL COPYING GPL CHANGES \
+       README INSTALL COPYING LICENSE CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
 	examples-c/*/*.h examples-c/*/*.c \
 	examples-c/Makefile examples-c/*/Makefile \

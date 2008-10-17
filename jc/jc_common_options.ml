@@ -15,19 +15,17 @@
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
-(*  modify it under the terms of the GNU General Public                   *)
-(*  License version 2, as published by the Free Software Foundation.      *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
 (*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
 (*                                                                        *)
-(*  See the GNU General Public License version 2 for more details         *)
-(*  (enclosed in the file GPL).                                           *)
-(*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_common_options.ml,v 1.7 2008-04-01 21:23:23 nrousset Exp $ i*)
+(*i $Id: jc_common_options.ml,v 1.8 2008-10-17 11:49:30 filliatr Exp $ i*)
 
 (*s command-line options *)
 

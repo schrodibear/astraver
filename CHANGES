@@ -1,9 +1,15 @@
 
+  o License changed to GNU LGPL 2.1, with a special exception on
+    linking (see enclosed file LICENSE)
+
+version 2.15, September 9th, 2008
+=================================
+  o Jessie bug fix: 'simplify' entry of the generated makefile was ignoring
   o why: preliminary support for inductive definitions 
   o krakatoa/jessie: new syntax for axiomatic definitions
   o Coq support for floats requires Coq version 8.1 at least
   o Jessie bug fix: 'simplify' entry of the generated makefile was ignoring
-   prelude axioms 
+    prelude axioms 
 
 version 2.14, July 28th, 2008
 =============================

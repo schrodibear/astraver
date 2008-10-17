@@ -15,19 +15,17 @@
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
-(*  modify it under the terms of the GNU General Public                   *)
-(*  License version 2, as published by the Free Software Foundation.      *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
 (*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
 (*                                                                        *)
-(*  See the GNU General Public License version 2 for more details         *)
-(*  (enclosed in the file GPL).                                           *)
-(*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.mli,v 1.17 2008-04-10 16:05:55 moy Exp $ *)
+(* $Id: jc_norm.mli,v 1.18 2008-10-17 11:49:30 filliatr Exp $ *)
 
 open Jc_env
 open Jc_fenv

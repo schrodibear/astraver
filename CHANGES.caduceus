@@ -1,6 +1,8 @@
 
 Note: These are the changes for Caduceus.
 
+version 2.15, September 9th, 2008
+=================================
  o avoid assertion failures as much as possible in case of: union
    declarations, string literals, function pointers, pointer casts
  o bug fix: 'simplify' entry of the generated makefile was ignoring

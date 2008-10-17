@@ -15,19 +15,17 @@
 (*    Xavier URBAIN                                                       *)
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
-(*  modify it under the terms of the GNU General Public                   *)
-(*  License version 2, as published by the Free Software Foundation.      *)
+(*  modify it under the terms of the GNU Library General Public           *)
+(*  License version 2.1, with the special exception on linking            *)
+(*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
 (*  but WITHOUT ANY WARRANTY; without even the implied warranty of        *)
 (*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  *)
 (*                                                                        *)
-(*  See the GNU General Public License version 2 for more details         *)
-(*  (enclosed in the file GPL).                                           *)
-(*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mlize.ml,v 1.83 2008-02-05 12:10:49 marche Exp $ i*)
+(*i $Id: mlize.ml,v 1.84 2008-10-17 11:49:32 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
