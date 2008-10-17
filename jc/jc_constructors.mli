@@ -762,6 +762,8 @@ module Assertion :
     val fake : ?pos:'a -> ?mark:'b -> value:'c -> unit -> 'c
 *)
 
+    val is_true : assertion -> bool
+
     val mktrue : ?pos:Loc.position -> ?mark:string -> unit -> assertion
 
     val mkfalse :

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.145 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.146 2008-10-17 15:27:42 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1348,7 +1348,9 @@ let presentify a =
       else if c =/ Int (-1) then
 	Some(new term ~typ:integer_type (JCTunary((`Uminus,`Integer),t)))
       else
-	let c = new term ~typ:integer_type (JCTconst(JCCinteger(string_of_num c))) in
+	let c = 
+	  new term ~typ:integer_type (JCTconst(JCCinteger(string_of_num c))) 
+	in
 	Some(new term ~typ:integer_type (JCTbinary(c,(`Bmul,`Integer),t)))
     in
     let rec mkaddterm = function
@@ -1358,7 +1360,9 @@ let presentify a =
 	  match mkmulterm (t,c), mkaddterm r with
 	    | None,None -> None
 	    | Some t,None | None,Some t -> Some t
-	    | Some t1,Some t2 -> Some(new term ~typ:integer_type (JCTbinary(t1,(`Badd,`Integer),t2)))
+	    | Some t1,Some t2 -> 
+		Some(new term ~typ:integer_type
+		       (JCTbinary(t1,(`Badd,`Integer),t2)))
     in
     try
       let coeffs,cst = linearize t in
@@ -1369,18 +1373,27 @@ let presentify a =
 			else pl, nl
 		     ) coeffs ([],[])
       in
-      let cstt = new term ~typ:integer_type (JCTconst(JCCinteger(string_of_num(abs_num cst)))) in
+      let cstt = 
+	new term ~typ:integer_type
+	  (JCTconst(JCCinteger(string_of_num(abs_num cst)))) 
+      in
       let post = match mkaddterm posl with
 	| None -> 
-	    if cst >/ Int 0 then cstt else new term ~typ:integer_type (JCTconst(JCCinteger "0"))
+	    if cst >/ Int 0 then cstt 
+	    else new term ~typ:integer_type (JCTconst(JCCinteger "0"))
 	| Some t -> 
-	    if cst >/ Int 0 then new term ~typ:integer_type (JCTbinary(t,(`Badd,`Integer),cstt)) else t
+	    if cst >/ Int 0 then
+	      new term ~typ:integer_type (JCTbinary(t,(`Badd,`Integer),cstt)) 
+	    else t
       in
       let negt = match mkaddterm negl with
 	| None ->
-	    if cst </ Int 0 then cstt else new term ~typ:integer_type (JCTconst(JCCinteger "0"))
+	    if cst </ Int 0 then cstt
+	    else new term ~typ:integer_type (JCTconst(JCCinteger "0"))
 	| Some t ->
-	    if cst </ Int 0 then new term ~typ:integer_type (JCTbinary(t,(`Badd,`Integer),cstt)) else t
+	    if cst </ Int 0 then
+	      new term ~typ:integer_type (JCTbinary(t,(`Badd,`Integer),cstt)) 
+	    else t
       in
       Some (post,negt)
     with Failure _ -> None
@@ -1388,10 +1401,14 @@ let presentify a =
   let rec linasrt_of_assertion a =
     match a#node with
       | JCArelation(t1,bop,t2) ->
-	  let subt = new term ~typ:integer_type (JCTbinary(t1,(`Bsub,`Integer),t2)) in
+	  let subt = 
+	    new term ~typ:integer_type (JCTbinary(t1,(`Bsub,`Integer),t2)) 
+	  in
 	  begin match linterms_of_term subt with
 	    | None -> a
-	    | Some (post,negt) -> new assertion(JCArelation(post,bop,negt))
+	    | Some (post,negt) -> 
+		(* Make all terms appear with a positive coefficient *)
+		new assertion(JCArelation(post,bop,negt))
 	  end
       | JCAnot a ->
 	  let nota = not_asrt a in
@@ -1400,7 +1417,8 @@ let presentify a =
 	    | _ -> linasrt_of_assertion nota
 	  end
       | JCAtrue | JCAfalse | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _
-      | JCAapp _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _ | JCAbool_term _
+      | JCAapp _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _
+      | JCAbool_term _
       | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> a
   in
   linasrt_of_assertion a
@@ -1422,9 +1440,28 @@ let mkinvariant mgr absval =
 
 
 (*****************************************************************************)
-(* Simplifying formulas.                                       *)
+(*                          Simplifying formulas                             *)
 (*****************************************************************************)
+
+let variables_and_dnf a =
+  let atp = atp_of_asrt a in
+  let dnf = Atp.dnf atp in
+  let vars = Atp.fv dnf in
+  let vars = 
+    List.fold_left 
+      (fun acc s -> 
+	 Option_misc.map_default (fun t -> t :: acc) acc (Vwp.term s)
+      ) [] vars 
+  in
+  let vars = List.map Vai.integer_variable vars in
+  let env = Environment.make (Array.of_list vars) [||] in
+  let disjuncts = Atp.disjuncts dnf in
+  let disjuncts = List.map Atp.conjuncts disjuncts in
+  let disjuncts = List.map (List.map asrt_of_atp) disjuncts in
+  env, disjuncts
     
+(* For scaling, this could be replaced by a call to [contradictory] which
+   does not involve quantifier elimination *)
 let tautology a =
   let qf = Atp.generalize (atp_of_asrt a) in
 (*   if Jc_options.debug then *)
@@ -1438,31 +1475,15 @@ let tautology a =
   let qe = Atp.fourier_qelim qf in
 (*   if debug then printf "[after integer_qelim]@."; *)
   let qe = asrt_of_atp qe in
-  match qe#node with
-    | JCAtrue -> true
-    | _ -> false
+  qe#node = JCAtrue 
 
-(* For scaling: Dnf(make_and(a,b)) + emptiness test by Apron on each disjunct *)
 let contradictory =
   let mgr = Polka.manager_alloc_strict () in
   fun a b ->
-    (* tautology(make_not(make_and [a;b])) *)
     if Jc_options.debug then
       printf "@[<v 2>[contradictory]@\n%a@\n%a@]@."
 	Jc_output.assertion a Jc_output.assertion b;
-    let dnf = Atp.dnf(atp_of_asrt(Assertion.mkand [a;b] ())) in
-    let vars = Atp.fv dnf in
-    let vars = 
-      List.fold_left 
-	(fun acc s -> 
-	   Option_misc.map_default (fun t -> t :: acc) acc (Vwp.term s)
-	) [] vars 
-    in
-    let vars = List.map Vai.integer_variable vars in
-    let env = Environment.make (Array.of_list vars) [||] in
-    let disjuncts = Atp.disjuncts dnf in
-    let disjuncts = List.map Atp.conjuncts disjuncts in
-    let disjuncts = List.map (List.map asrt_of_atp) disjuncts in
+    let env,disjuncts = variables_and_dnf (Assertion.mkand [a;b] ()) in
     assert(List.length disjuncts > 0);
     let res = List.fold_left 
       (fun acc conjunct -> acc &&
@@ -1495,32 +1516,27 @@ let abstract_overapprox mgr env a =
 	 absval, conjunct :: acc
     ) (Abstract1.top mgr env,[]) conjuncts
 
+let minimize mgr =
+  (* Use polyhedral domain to get a minimization function *)
+  let polmgr = Polka.manager_alloc_strict () in
+  fun val1 ->
+    let env = Abstract1.env val1 in
+    let a = mkinvariant mgr val1 in
+    let conjuncts = conjuncts a in
+    let dnf = 
+      Dnf.make_and (List.map (snd $ linstr_of_assertion env) conjuncts) 
+    in
+    let absval = Dnf.test polmgr (Abstract1.top polmgr env) dnf in
+    mkinvariant polmgr absval
+
 let simplify =
+  (* Use polyhedral domain for precision and to get a minimization function *)
   let mgr = Polka.manager_alloc_strict () in
   fun ?inva inita ->
     if Jc_options.debug then
       printf "@[<v 2>[simplify]@\n%a@]@." Jc_output.assertion inita;
     let simpla = if tautology inita then (Assertion.mktrue ()) else
-      let atp = atp_of_asrt inita in
-(*       if Jc_options.debug then  *)
-(* 	printf "@[<v 2>[simplify] Atp.atp@\n%a@]@."  *)
-(* 	  (fun dmt -> Atp.printer) atp; *)
-      let dnf = Atp.dnf atp in
-(*       if Jc_options.debug then  *)
-(* 	printf "@[<v 2>[simplify] Atp.dnf@\n%a@]@."  *)
-(* 	  (fun dmt -> Atp.printer) dnf; *)
-      let vars = Atp.fv dnf in
-      let vars = 
-	List.fold_left 
-	  (fun acc s -> 
-	     Option_misc.map_default (fun t -> t :: acc) acc (Vwp.term s)
-	  ) [] vars 
-      in
-      let vars = List.map Vai.integer_variable vars in
-      let env = Environment.make (Array.of_list vars) [||] in
-      let disjuncts = Atp.disjuncts dnf in
-      let disjuncts = List.map Atp.conjuncts disjuncts in
-      let disjuncts = List.map (List.map asrt_of_atp) disjuncts in
+      let env,disjuncts = variables_and_dnf inita in
       if Jc_options.debug then 
 	printf "@[<v 2>[simplify] dnf@\n%a@]@." 
 	  (print_list semi 
@@ -1533,9 +1549,10 @@ let simplify =
       let disjuncts = match inva with
 	| None -> disjuncts
 	| Some inva -> 
-	    List.filter (fun conjunct ->
-			   not(contradictory (Assertion.mkand conjunct ()) inva)
-			) disjuncts
+	    List.filter
+	      (fun conjunct ->
+		 not(contradictory (Assertion.mkand conjunct ()) inva)
+	      ) disjuncts
       in
 
       let abstract_disjuncts,other_disjuncts =
@@ -1557,7 +1574,8 @@ let simplify =
 	       else
 		 (absval,other_conjuncts) :: abstractl, otherl
 	     with Parser.Error _ | Failure _ ->
-	       abstractl, Assertion.mkand (List.map presentify conjunct) () :: otherl
+	       abstractl, 
+	       Assertion.mkand (List.map presentify conjunct) () :: otherl
 	  ) disjuncts ([],[])
       in
       let abstract_disjuncts =
@@ -1636,16 +1654,6 @@ let quantif_eliminate qf finv =
 	let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
 	simplify ~inva:finv (asrt_of_atp q)
 
-let collect_free_vars = 
-  fold_term_and_assertion 
-    (fun acc t -> match t#node with
-       | JCTvar vi -> VarSet.add vi acc
-       | _ -> acc) 
-    (fun acc a -> match a#node with
-       | JCAquantifier(_,vi,a) -> VarSet.remove vi acc
-       | _ -> acc)
-    VarSet.empty
-
 
 (*****************************************************************************)
 (* Computing weakest preconditions.                                          *)
@@ -1690,14 +1698,30 @@ let pop_modified_vars posts =
   in
   vs,{ posts with jc_post_modified_vars = vars; }
 
+let collect_free_vars a = 
+  let all_vars, quant_vars =
+    fold_term_and_assertion 
+      (fun (vars,qvars as acc) t -> match t#node with
+	 | JCTvar vi -> VarSet.add vi vars, qvars
+	 | _ -> acc) 
+      (fun (vars,qvars as acc) a -> match a#node with
+	 | JCAquantifier(_,vi,a) -> vars, VarSet.add vi qvars
+	 | _ -> acc)
+      (VarSet.empty,VarSet.empty) a
+  in
+  VarSet.diff all_vars quant_vars
 
 let initialize_target curposts target =
+  (* Collect all sub-terms not natively understood by underlying abstract 
+     domain. By default, collect all non linear arithmetic terms. *)
   let collect_sub_terms = 
-    fold_term_in_assertion (fun acc t -> match t#node with
-			      | JCTvar _ | JCTbinary(_,((`Badd,`Integer) | (`Bsub,`Integer)),_)
-			      | JCTunary((`Uminus,`Integer),_) -> acc
-			      | _ -> TermSet.add t acc
-			   ) TermSet.empty 
+    fold_term_in_assertion
+      (fun acc t -> match t#node with
+	 | JCTvar _ 
+	 | JCTbinary(_,((`Badd,`Integer) | (`Bsub,`Integer)),_)
+	 | JCTunary((`Uminus,`Integer),_) -> acc
+	 | _ -> TermSet.add t acc
+      ) TermSet.empty 
   in
   let vs1 = collect_free_vars target.jc_target_regular_invariant in
   let vs2 = collect_free_vars target.jc_target_assertion in
@@ -1705,31 +1729,39 @@ let initialize_target curposts target =
   let ts1 = collect_sub_terms target.jc_target_regular_invariant in
   let ts2 = collect_sub_terms target.jc_target_assertion in
   let ts = TermSet.union ts1 ts2 in
-  VarSet.fold (fun vi a ->
-		 let vit = new term_var vi in
-		 let copyvi = copyvar vi in
-		 add_inflexion_var curposts copyvi;
-		 let t1 = new term_var copyvi in
-		 target.jc_target_regular_invariant <-
-		   replace_term_in_assertion vit t1 target.jc_target_regular_invariant;
-		 target.jc_target_assertion <-
-		   replace_term_in_assertion vit t1 target.jc_target_assertion;
-		 let bop = equality_operator_of_type vi.jc_var_info_type in
-		 let eq = new assertion (JCArelation(t1,bop,vit)) in
-		 let eqs = 
-		   TermSet.fold (fun t acc ->
-				   if raw_strict_sub_term vit t then
-				     let t2 = replace_term_in_term ~source:vit ~target:t1 t in
-				     if is_integral_type t#typ then
-				       let bop = equality_operator_of_type t#typ in
-				       let eq = new assertion(JCArelation(t2,bop,t)) in
-				       eq::acc
-				     else acc
-				   else acc
-				) ts [eq]
-		 in
-		 Assertion.mkand(a::eqs) ()
-	      ) vs (Assertion.mktrue ())
+  (* Avoid potential blowup in WP caused by many disjunctions in initial
+     formula by replacing it by a set of equalities between variables and 
+     their current inflexion, and the same for terms that mention these
+     variables *)
+  VarSet.fold
+    (fun vi a ->
+       let vit = new term_var vi in
+       let copyvi = copyvar vi in
+       add_inflexion_var curposts copyvi;
+       let t1 = new term_var copyvi in
+       target.jc_target_regular_invariant <-
+	 replace_term_in_assertion vit t1 target.jc_target_regular_invariant;
+       target.jc_target_assertion <-
+	 replace_term_in_assertion vit t1 target.jc_target_assertion;
+       let eqs = 
+	 if is_integral_type vit#typ then
+	   let bop = equality_operator_of_type vit#typ in
+	   [ new assertion (JCArelation(t1,bop,vit)) ]
+	 else []
+       in
+       let eqs = 
+	 TermSet.fold
+	   (fun t acc ->
+	      if is_integral_type t#typ && raw_strict_sub_term vit t then
+		let t2 = replace_term_in_term ~source:vit ~target:t1 t in
+		let bop = equality_operator_of_type t#typ in
+		let eq = new assertion(JCArelation(t2,bop,t)) in
+		eq::acc
+	      else acc
+	   ) ts eqs
+       in
+       Assertion.mkand(a::eqs) ()
+    ) vs (Assertion.mktrue ())
 
 let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
   if Jc_options.debug then
@@ -1754,7 +1786,6 @@ let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
       if target.jc_target_hint then
 	wpa
       else
-	(* Add propagated? *)
 	Assertion.mkand[wpa;target.jc_target_regular_invariant] ()
     in
     (* [impla] is the implication formula, that guarantees the assertion holds
@@ -1765,7 +1796,8 @@ let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
      * variables modified.
      *)
     let quanta = 
-      VarSet.fold (fun vi a -> new assertion (JCAquantifier(Forall,vi,a))) vs impla
+      VarSet.fold 
+	(fun vi a -> new assertion (JCAquantifier(Forall,vi,a))) vs impla
     in
     (* [elima] is the quantifier free version of [quanta].
     *)
@@ -3400,8 +3432,8 @@ and record_ai_loop_invariants abs =
 	    a good place to minimize the abstract value by calling
 	    [Abstract1.minimize mgr loopinv] 
 	 *)
-	 if Abstract1.is_top mgr loopinv then () else
-	   let a = mkinvariant mgr loopinv in
+	 let a = minimize mgr loopinv in
+	 if Assertion.is_true a then () else
 	   let a = simplify a in
 	   (* 	   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a; *)
 	   (* 	   incr nb_loop_inv; *)
