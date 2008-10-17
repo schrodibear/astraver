@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.32 2008-10-17 01:49:37 moy Exp $ *)
+(* $Id: jc_envset.ml,v 1.33 2008-10-17 09:25:32 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -111,6 +111,11 @@ let get_unique_name ?local_names n =
 let is_pointer_type t =
   match t with
     | JCTnull -> true
+    | JCTpointer _ -> true
+    | _ -> false
+
+let is_nonnull_pointer_type t =
+  match t with
     | JCTpointer _ -> true
     | _ -> false
 

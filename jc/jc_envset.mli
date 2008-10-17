@@ -27,7 +27,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.28 2008-10-17 01:49:37 moy Exp $ *)
+(* $Id: jc_envset.mli,v 1.29 2008-10-17 09:25:32 moy Exp $ *)
 
 module type OrderedType =
 sig
@@ -54,6 +54,7 @@ module StringMap : Map.S with type key = string
 val get_unique_name : ?local_names:StringSet.t -> string -> string
 
 val is_pointer_type : Jc_env.jc_type -> bool
+val is_nonnull_pointer_type : Jc_env.jc_type -> bool
 val is_integral_type: jc_type -> bool
 
 val is_embedded_field : Jc_env.field_info -> bool
