@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.146 2008-10-17 15:27:42 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.147 2008-10-17 16:56:28 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -612,23 +612,62 @@ let rec atp_of_term t =
 	err ()
 
 let rec term_of_atp tm =
-  match tm with
-    | Atp.Var s -> (match Vwp.term s with Some t -> t | None -> assert false)
-    | Atp.Fn(s,[tm1;tm2]) ->
-	let tnode = 
-	  JCTbinary(term_of_atp tm1,binop_of_atp s,term_of_atp tm2) 
-	in
-	new term ~typ:integer_type tnode
-    | Atp.Fn(s,[tm1]) ->
-	let tnode = JCTunary(unop_of_atp s,term_of_atp tm1) in
-	new term ~typ:integer_type tnode
-    | Atp.Fn(s,[]) ->
-	let tnode = JCTconst(JCCinteger s) in
-	new term ~typ:integer_type tnode
-    | tm -> 
-	printf "[Jc_annot_inference.term_of_atp] unexpected ATP term %a@."
-	  (fun fmt tm -> Atp.printert tm) tm;
-	assert false
+  try
+    match tm with
+      | Atp.Var s -> (match Vwp.term s with Some t -> t | None -> assert false)
+      | Atp.Fn(s,[tm1;tm2]) ->
+	  let tnode = 
+	    JCTbinary(term_of_atp tm1,binop_of_atp s,term_of_atp tm2) 
+	  in
+	  new term ~typ:integer_type tnode
+      | Atp.Fn(s,[tm1]) ->
+	  let tnode = JCTunary(unop_of_atp s,term_of_atp tm1) in
+	  new term ~typ:integer_type tnode
+      | Atp.Fn(s,[]) ->
+	  let tnode = JCTconst(JCCinteger s) in
+	  new term ~typ:integer_type tnode
+      | tm -> assert false
+  with Assert_failure _ ->
+    printf "[Jc_annot_inference.term_of_atp] unexpected ATP term %a@."
+      (fun fmt tm -> Atp.printert tm) tm;
+    assert false
+
+let term_of_atp_with_variable_for_assertion tm =
+  try
+    let rec aux tm =
+      match tm with
+	| Atp.Var s -> (Some (Vwp.assertion s),0)
+	| Atp.Fn("+",[tm1;tm2]) ->
+	    let a1,c1 = aux tm1 in
+	    let a2,c2 = aux tm2 in
+	    let a = match a1,a2 with
+	      | Some _,Some _ -> assert false
+	      | Some a,None | None,Some a -> Some a
+	      | None,None -> None
+	    in
+	    a, c1 + c2
+	| Atp.Fn("*",[tm1;tm2]) ->
+	    let a1,c1 = aux tm1 in
+	    let a2,c2 = aux tm2 in
+	    assert (c1 >= 0 && c2 >= 0);
+	    let a = match a1,a2 with
+	      | Some _,Some _ -> assert false
+	      | Some a,None | None,Some a -> Some a
+	      | None,None -> None
+	    in
+	    a, 0
+	| Atp.Fn("-",[tm1]) ->
+	    let a1,c1 = aux tm1 in
+	    assert (a1 = None);
+	    None, - c1
+	| Atp.Fn(s,[]) ->
+	    None, int_of_string s
+	| tm -> assert false
+    in aux tm
+  with Assert_failure _ ->
+    printf "[Jc_annot_inference.term_of_atp_with_variable_for_assertion] unexpected ATP term %a@."
+      (fun fmt tm -> Atp.printert tm) tm;
+    assert false
 
 let atp_of_asrt a = 
   let err () = failwith "atp_of_asrt" in
@@ -705,27 +744,45 @@ let atp_of_asrt a =
 	| _ -> fm
   in aux a
 
+let has_variable_for_assertion fm =
+  let vars = Atp.fv fm in
+  List.exists Vwp.is_variable_for_assertion vars 
+
+let asrt_of_atp_with_variable_for_assertion fm =
+  try match fm with
+    | Atp.Atom(Atp.R(r,[tm1;tm2])) ->
+	let a1,c1 = term_of_atp_with_variable_for_assertion tm1 in
+	let a2,c2 = term_of_atp_with_variable_for_assertion tm2 in
+	begin match a1,a2 with
+	  | Some _,Some _
+	  | None,None -> assert false
+	  | Some a,None ->
+	      begin match r with
+		| ">=" | ">" -> a#node
+		| "<=" | "<" -> JCAnot a
+		| _ -> assert false
+	      end
+	  | None,Some a -> 
+	      begin match r with
+		| ">=" | ">" -> JCAnot a
+		| "<=" | "<" -> a#node
+		| _ -> assert false
+	      end
+	end
+    | _ -> assert false
+  with Assert_failure _ ->
+    printf "[Jc_annot_inference.asrt_of_atp_with_variable_for_assertion] unexpected ATP formula %a@."
+      (fun fmt fm -> Atp.printer fm) fm;
+    assert false
+
 let rec asrt_of_atp fm =
   let anode = match fm with
     | Atp.False ->
 	JCAfalse
     | Atp.True ->
 	JCAtrue
-    | Atp.Atom(Atp.R(r,[Atp.Var s;_]))
-    | Atp.Atom(Atp.R(r,[_;Atp.Var s])) when Vwp.is_variable_for_assertion s ->
-	begin match fm with
-	  | Atp.Atom(Atp.R("<=",[Atp.Fn("0",[]);Atp.Var s])) 
-	  | Atp.Atom(Atp.R(">=",[Atp.Var s;Atp.Fn("0",[])])) ->
-	      (Vwp.assertion s)#node
-	  | Atp.Atom(Atp.R(">",[Atp.Fn("0",[]);Atp.Var s]))
-	  | Atp.Atom(Atp.R("<",[Atp.Var s;Atp.Fn("0",[])])) ->
-	      JCAnot (Vwp.assertion s)
-	  | _ ->
-	      printf
-		"[Jc_annot_inference.term_of_atp] unexpected ATP atom %a@." 
-		(fun fmt fm -> Atp.printer fm) fm;
-	      assert false
-	end
+    | Atp.Atom _ when has_variable_for_assertion fm ->
+	asrt_of_atp_with_variable_for_assertion fm
     | Atp.Atom(Atp.R(r,[tm1;tm2])) ->
 	JCArelation(term_of_atp tm1,binrel_of_atp r,term_of_atp tm2)
     | Atp.Atom _ ->
