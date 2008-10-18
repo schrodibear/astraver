@@ -373,16 +373,16 @@ begin = -1
 end = -1
 
 [JC_7]
-file = "HOME/tests/java/Fibonacci.jc"
-line = 28
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_8]
-file = "HOME/tests/java/Fibonacci.jc"
-line = 28
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_9]
 file = "HOME/tests/java/Fibonacci.jc"
@@ -438,27 +438,27 @@ end = -1
 
 [JC_15]
 file = "HOME/tests/java/Fibonacci.java"
-line = 19
+line = 17
 begin = 16
-end = 19
+end = 33
 
 [JC_16]
 file = "HOME/tests/java/Fibonacci.java"
-line = 19
+line = 17
 begin = 16
-end = 19
+end = 33
 
 [JC_17]
-file = "HOME/tests/java/Fibonacci.java"
-line = 17
-begin = 16
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_18]
-file = "HOME/tests/java/Fibonacci.java"
-line = 17
-begin = 16
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_19]
 file = "HOME/tests/java/Fibonacci.java"
@@ -602,6 +602,8 @@ axiom Object_tags :
  (forall x:Object pointer.
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
+
+exception Return_label_exc of unit
 
 logic String_tag:  -> Object tag_id
 
@@ -748,13 +750,13 @@ parameter Fibonacci_Fib :
  this_0:Object pointer ->
   n_0_0:int ->
    Object_this_0_3_alloc_table:Object alloc_table ->
-    { } int { (JC_18: isfib(n_0_0, result)) }
+    { } int { (JC_16: isfib(n_0_0, result)) }
 
 parameter Fibonacci_Fib_requires :
  this_0:Object pointer ->
   n_0_0:int ->
    Object_this_0_3_alloc_table:Object alloc_table ->
-    { (JC_11: ge_int(n_0_0, (0)))} int { (JC_18: isfib(n_0_0, result)) }
+    { (JC_11: ge_int(n_0_0, (0)))} int { (JC_16: isfib(n_0_0, result)) }
 
 parameter Object_alloc_table : Object alloc_table ref
 
@@ -1187,7 +1189,7 @@ let Fibonacci_Fib_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_17: isfib(n_0_0, result)) }
+  { (JC_15: isfib(n_0_0, result)) }
 
 let Fibonacci_Fib_safety =
  fun (this_0 : Object pointer) (n_0_0 : int) (Object_this_0_3_alloc_table : Object alloc_table) ->
@@ -2310,7 +2312,7 @@ goal Fibonacci_Fib_ensures_default_po_11:
   (i >= n_0_0) ->
   forall return:int.
   (return = y) ->
-  ("JC_17": isfib(n_0_0, return))
+  ("JC_15": isfib(n_0_0, return))
 
 ========== file tests/java/why/Fibonacci_po2.why ==========
 goal Fibonacci_Fib_ensures_default_po_2:
@@ -4540,7 +4542,7 @@ goal Fibonacci_Fib_ensures_default_po_11:
   (i >= n_0_0) ->
   forall return:int.
   (return = y) ->
-  ("JC_17": isfib(n_0_0, return))
+  ("JC_15": isfib(n_0_0, return))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

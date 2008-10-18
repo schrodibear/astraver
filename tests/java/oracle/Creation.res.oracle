@@ -513,10 +513,10 @@ clean:
 
 ========== file tests/java/Creation.loc ==========
 [JC_103]
-file = "HOME/tests/java/Creation.java"
-line = 41
-begin = 22
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_104]
 file = "HOME/tests/java/Creation.java"
@@ -617,16 +617,16 @@ begin = -1
 end = -1
 
 [JC_48]
-file = "HOME/tests/java/Creation.java"
-line = 26
-begin = 4
-end = 12
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_49]
-file = "HOME/tests/java/Creation.java"
-line = 26
-begin = 4
-end = 12
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_Creation_int_int_ensures_default]
 name = "Constructor of class Creation"
@@ -901,16 +901,16 @@ begin = 4
 end = 12
 
 [JC_66]
-file = "HOME/tests/java/Creation.java"
-line = 33
-begin = 22
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_67]
-file = "HOME/tests/java/Creation.java"
-line = 33
-begin = 22
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_68]
 file = "HOME/tests/java/Creation.java"
@@ -1005,10 +1005,10 @@ begin = 35
 end = 75
 
 [JC_138]
-file = "HOME/tests/java/Creation.java"
-line = 50
-begin = 22
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_72]
 kind = UserCall
@@ -1018,10 +1018,10 @@ begin = 52
 end = 117
 
 [JC_139]
-file = "HOME/tests/java/Creation.java"
-line = 50
-begin = 22
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_73]
 kind = UserCall
@@ -1268,10 +1268,10 @@ begin = 4
 end = 12
 
 [JC_7]
-file = "HOME/tests/java/Creation.jc"
-line = 42
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_151]
 kind = UserCall
@@ -1281,10 +1281,10 @@ begin = 50
 end = 120
 
 [JC_8]
-file = "HOME/tests/java/Creation.jc"
-line = 42
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_152]
 kind = IndexBounds
@@ -1561,16 +1561,16 @@ begin = -1
 end = -1
 
 [JC_176]
-file = "HOME/tests/java/Creation.java"
-line = 64
-begin = 4
-end = 24
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_177]
-file = "HOME/tests/java/Creation.java"
-line = 64
-begin = 4
-end = 24
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_178]
 file = "HOME/tests/java/Creation.java"
@@ -1627,10 +1627,10 @@ begin = -1
 end = -1
 
 [JC_17]
-file = "HOME/tests/java/Creation.java"
-line = 18
-begin = 4
-end = 12
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_180]
 file = "HOME/tests/java/Creation.jc"
@@ -1639,10 +1639,10 @@ begin = 9
 end = 15
 
 [JC_18]
-file = "HOME/tests/java/Creation.java"
-line = 18
-begin = 4
-end = 12
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_181]
 file = "HOME/tests/java/Creation.java"
@@ -1788,16 +1788,16 @@ begin = -1
 end = -1
 
 [JC_31]
-file = "HOME/tests/java/Creation.java"
-line = 10
-begin = 4
-end = 12
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_32]
-file = "HOME/tests/java/Creation.java"
-line = 10
-begin = 4
-end = 12
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_33]
 file = "HOME/tests/java/Creation.java"
@@ -1879,10 +1879,10 @@ begin = -1
 end = -1
 
 [JC_102]
-file = "HOME/tests/java/Creation.java"
-line = 41
-begin = 22
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/Creation.why ==========
 type Object
@@ -1934,6 +1934,8 @@ axiom Object_tags :
  (forall x:Object pointer.
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
+
+exception Return_label_exc of unit
 
 logic String_tag:  -> Object tag_id
 
@@ -3356,7 +3358,7 @@ why --project [...] why/Creation.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po11.why">
-      <location file = "why/Creation.why" line = "1190" begin = "30" end = "160"/>
+      <location file = "why/Creation.why" line = "1192" begin = "30" end = "160"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po12.why">
@@ -3381,7 +3383,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po7.why">
-      <location file = "why/Creation.why" line = "1099" begin = "32" end = "166"/>
+      <location file = "why/Creation.why" line = "1101" begin = "32" end = "166"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po8.why">
@@ -3406,7 +3408,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po3.why">
-      <location file = "why/Creation.why" line = "1010" begin = "30" end = "159"/>
+      <location file = "why/Creation.why" line = "1012" begin = "30" end = "159"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po4.why">
@@ -5809,7 +5811,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test1_safety_po_1, File "HOME/tests/java/Creation.jc", line 77, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test1_safety_po_2, File "why/Creation.why", line 1010, characters 30-159
+;; Creation_test1_safety_po_2, File "why/Creation.why", line 1012, characters 30-159
 (IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (>= 1 0)
@@ -5877,7 +5879,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 97, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 1099, characters 32-166
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 1101, characters 32-166
 (IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (>= 1 0)
@@ -5951,7 +5953,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test3_safety_po_1, File "HOME/tests/java/Creation.jc", line 117, characters 57-72
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test3_safety_po_2, File "why/Creation.why", line 1190, characters 30-160
+;; Creation_test3_safety_po_2, File "why/Creation.why", line 1192, characters 30-160
 (IMPLIES TRUE
 (FORALL (result0)
 (IMPLIES (>= 1 0)

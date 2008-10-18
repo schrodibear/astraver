@@ -432,16 +432,16 @@ begin = -1
 end = -1
 
 [JC_7]
-file = "HOME/tests/java/Switch.jc"
-line = 38
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_8]
-file = "HOME/tests/java/Switch.jc"
-line = 38
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_9]
 file = "HOME/tests/java/Switch.jc"
@@ -500,16 +500,16 @@ begin = -1
 end = -1
 
 [JC_17]
-file = "HOME/tests/java/Switch.java"
-line = 36
-begin = 22
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_18]
-file = "HOME/tests/java/Switch.java"
-line = 36
-begin = 22
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_19]
 file = "HOME/tests/java/Switch.java"
@@ -580,10 +580,10 @@ begin = -1
 end = -1
 
 [JC_29]
-file = "HOME/tests/java/Switch.java"
-line = 54
-begin = 22
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [Switch_test1_ensures_default]
 name = "Method test1"
@@ -602,10 +602,10 @@ begin = 22
 end = 27
 
 [JC_30]
-file = "HOME/tests/java/Switch.java"
-line = 54
-begin = 22
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_31]
 file = "HOME/tests/java/Switch.java"
@@ -707,6 +707,8 @@ axiom Object_tags :
  (forall x:Object pointer.
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
+
+exception Return_label_exc of unit
 
 logic String_tag:  -> Object tag_id
 

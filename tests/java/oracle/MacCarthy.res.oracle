@@ -442,10 +442,10 @@ begin = -1
 end = -1
 
 [JC_93]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_41]
 file = "HOME/"
@@ -454,10 +454,10 @@ begin = -1
 end = -1
 
 [JC_94]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_42]
 file = "HOME/"
@@ -544,10 +544,10 @@ begin = -1
 end = -1
 
 [JC_101]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_48]
 file = "HOME/"
@@ -562,10 +562,10 @@ begin = 8
 end = 23
 
 [JC_102]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
-begin = 29
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_49]
 file = "HOME/lib/java_api/java/lang/Object.java"
@@ -610,10 +610,10 @@ begin = 29
 end = 33
 
 [JC_7]
-file = "HOME/tests/java/MacCarthy.jc"
-line = 28
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_106]
 file = "HOME/"
@@ -622,10 +622,10 @@ begin = -1
 end = -1
 
 [JC_8]
-file = "HOME/tests/java/MacCarthy.jc"
-line = 28
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_107]
 file = "HOME/"
@@ -646,10 +646,10 @@ begin = -1
 end = -1
 
 [JC_109]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_50]
 file = "HOME/"
@@ -670,16 +670,16 @@ begin = -1
 end = -1
 
 [JC_53]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_54]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_55]
 file = "HOME/lib/java_api/java/lang/Object.java"
@@ -694,10 +694,10 @@ begin = -1
 end = -1
 
 [JC_110]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
-begin = 29
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_57]
 file = "HOME/lib/java_api/java/lang/Object.java"
@@ -754,16 +754,16 @@ begin = -1
 end = -1
 
 [JC_117]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_118]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_119]
 file = "HOME/lib/java_api/java/lang/Object.java"
@@ -778,16 +778,16 @@ begin = -1
 end = -1
 
 [JC_61]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_62]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_10]
 file = "HOME/tests/java/MacCarthy.jc"
@@ -886,10 +886,10 @@ begin = -1
 end = -1
 
 [JC_69]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [MacCarthy_f91_ensures_greater_than_100]
 name = "Method f91"
@@ -900,10 +900,10 @@ begin = 22
 end = 25
 
 [JC_17]
-file = "HOME/tests/java/MacCarthy.java"
-line = 26
-begin = 22
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_123]
 file = "HOME/"
@@ -912,10 +912,10 @@ begin = -1
 end = -1
 
 [JC_18]
-file = "HOME/tests/java/MacCarthy.java"
-line = 26
-begin = 22
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_124]
 file = "HOME/"
@@ -930,16 +930,16 @@ begin = 18
 end = 31
 
 [JC_125]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_126]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
-begin = 22
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_127]
 file = "HOME/lib/java_api/java/lang/Object.java"
@@ -968,10 +968,10 @@ begin = 22
 end = 25
 
 [JC_70]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_71]
 file = "HOME/lib/java_api/java/lang/Object.java"
@@ -1048,10 +1048,10 @@ begin = -1
 end = -1
 
 [JC_77]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_25]
 kind = UserCall
@@ -1067,10 +1067,10 @@ begin = -1
 end = -1
 
 [JC_78]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_26]
 kind = UserCall
@@ -1107,10 +1107,10 @@ begin = 6
 end = 13
 
 [JC_133]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_28]
 kind = UserCall
@@ -1120,10 +1120,10 @@ begin = 12
 end = 28
 
 [JC_134]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_29]
 kind = UserCall
@@ -1230,10 +1230,10 @@ begin = 12
 end = 28
 
 [JC_85]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_33]
 kind = UserCall
@@ -1243,10 +1243,10 @@ begin = 16
 end = 27
 
 [JC_86]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_34]
 kind = UserCall
@@ -1365,6 +1365,8 @@ axiom Object_tags :
  (forall x:Object pointer.
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
+
+exception Return_label_exc of unit
 
 logic String_tag:  -> Object tag_id
 

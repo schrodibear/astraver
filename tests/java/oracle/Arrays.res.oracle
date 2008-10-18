@@ -693,27 +693,27 @@ clean:
 ========== file tests/java/Arrays.loc ==========
 [JC_90]
 file = "HOME/tests/java/Arrays.java"
-line = 96
-begin = 23
-end = 33
+line = 94
+begin = 10
+end = 70
 
 [JC_91]
-file = "HOME/tests/java/Arrays.java"
-line = 94
-begin = 10
-end = 70
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_92]
-file = "HOME/tests/java/Arrays.java"
-line = 94
-begin = 10
-end = 70
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_40]
-file = "HOME/tests/java/Arrays.java"
-line = 51
-begin = 24
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_93]
 kind = UserCall
@@ -898,10 +898,10 @@ begin = -1
 end = -1
 
 [JC_7]
-file = "HOME/tests/java/Arrays.jc"
-line = 35
-begin = 8
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_106]
 file = "HOME/tests/java/Arrays.java"
@@ -910,10 +910,10 @@ begin = 18
 end = 19
 
 [JC_8]
-file = "HOME/tests/java/Arrays.jc"
-line = 35
-begin = 8
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_107]
 file = "HOME/"
@@ -1106,10 +1106,10 @@ begin = -1
 end = -1
 
 [JC_65]
-file = "HOME/tests/java/Arrays.java"
-line = 74
-begin = 22
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_13]
 file = "HOME/tests/java/Arrays.jc"
@@ -1118,10 +1118,10 @@ begin = 8
 end = 30
 
 [JC_66]
-file = "HOME/tests/java/Arrays.java"
-line = 74
-begin = 22
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_14]
 file = "HOME/"
@@ -1161,16 +1161,16 @@ begin = 9
 end = 13
 
 [JC_17]
-file = "HOME/tests/java/Arrays.jc"
-line = 40
-begin = 8
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_18]
-file = "HOME/tests/java/Arrays.jc"
-line = 40
-begin = 8
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [Arrays_findMax_ensures_max_found]
 name = "Method findMax"
@@ -1339,10 +1339,10 @@ begin = -1
 end = -1
 
 [JC_29]
-file = "HOME/tests/java/Arrays.jc"
-line = 47
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_80]
 kind = UserCall
@@ -1364,10 +1364,10 @@ begin = 7
 end = 90
 
 [JC_30]
-file = "HOME/tests/java/Arrays.jc"
-line = 47
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_83]
 file = "HOME/"
@@ -1444,9 +1444,9 @@ end = -1
 
 [JC_89]
 file = "HOME/tests/java/Arrays.java"
-line = 96
-begin = 23
-end = 33
+line = 94
+begin = 10
+end = 70
 
 [JC_37]
 file = "HOME/"
@@ -1461,10 +1461,10 @@ begin = -1
 end = -1
 
 [JC_39]
-file = "HOME/tests/java/Arrays.java"
-line = 51
-begin = 24
-end = 31
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/Arrays.why ==========
 type Object
@@ -1510,6 +1510,8 @@ axiom Object_tags :
  (forall x:Object pointer.
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
+
+exception Return_label_exc of unit
 
 logic String_tag:  -> Object tag_id
 
@@ -1674,7 +1676,7 @@ parameter Arrays_arrayShift :
   intM_intP_t_2_9:(Object, int) memory ref ->
    Object_t_2_9_alloc_table:Object alloc_table ->
     { } unit reads intM_intP_t_2_9 writes intM_intP_t_2_9
-    { (JC_92:
+    { (JC_90:
       (forall i_0:int.
        ((lt_int((0), i_0)
         and lt_int(i_0,
@@ -1688,7 +1690,7 @@ parameter Arrays_arrayShift_requires :
    Object_t_2_9_alloc_table:Object alloc_table ->
     { (JC_85: Non_null_intM(t_2, Object_t_2_9_alloc_table))} unit
     reads intM_intP_t_2_9 writes intM_intP_t_2_9
-    { (JC_92:
+    { (JC_90:
       (forall i_0:int.
        ((lt_int((0), i_0)
         and lt_int(i_0,
@@ -2302,7 +2304,7 @@ let Arrays_arrayShift_ensures_default =
    with
    Return ->
    void end)
-  { (JC_91:
+  { (JC_89:
     (forall i_0:int.
      ((lt_int((0), i_0)
       and lt_int(i_0,
@@ -2969,7 +2971,7 @@ why --project [...] why/Arrays.why
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po42.why">
-      <location file = "why/Arrays.why" line = "1150" begin = "52" end = "224"/>
+      <location file = "why/Arrays.why" line = "1152" begin = "52" end = "224"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po43.why">
@@ -3097,7 +3099,7 @@ text = "IndexBounds"/>
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/Arrays_po71.why">
-      <location file = "why/Arrays.why" line = "1437" begin = "52" end = "224"/>
+      <location file = "why/Arrays.why" line = "1439" begin = "52" end = "224"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po72.why">
@@ -3220,7 +3222,7 @@ text = "IndexBounds"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Arrays_po11.why">
-      <location file = "why/Arrays.why" line = "855" begin = "32" end = "164"/>
+      <location file = "why/Arrays.why" line = "857" begin = "32" end = "164"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Arrays_po12.why">
@@ -4299,7 +4301,7 @@ goal Arrays_arrayShift_ensures_default_po_10:
   (j_0 <= 0) ->
   forall i_0:int.
   ((0 < i_0) and (i_0 < (offset_max(Object_t_2_9_alloc_table, t_2) + 1))) ->
-  ("JC_91": (select(intM_intP_t_2_9_0, shift(t_2,
+  ("JC_89": (select(intM_intP_t_2_9_0, shift(t_2,
   i_0)) = select(intM_intP_t_2_9, shift(t_2, (i_0 - 1)))))
 
 ========== file tests/java/why/Arrays_po11.why ==========
@@ -7650,7 +7652,7 @@ why -simplify [...] why/Arrays.why
 (EQ (select intM_intP_t_2_9_0 (shift t_2 i_0))
 (select intM_intP_t_2_9 (shift t_2 (- i_0 1))))))))))))))))
 
-;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 855, characters 32-164
+;; Arrays_arrayShift_safety_po_1, File "why/Arrays.why", line 857, characters 32-164
 (FORALL (t_2)
 (FORALL (Object_t_2_9_alloc_table)
 (IMPLIES (Non_null_intM t_2 Object_t_2_9_alloc_table)
@@ -8455,7 +8457,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
          (>= (+ (offset_max Object_t_1_8_alloc_table t_1) 1) 1))
 (<= 0 (offset_max Object_t_1_8_alloc_table t_1)))))
 
-;; Arrays_findMax2_safety_po_2, File "why/Arrays.why", line 1150, characters 52-224
+;; Arrays_findMax2_safety_po_2, File "why/Arrays.why", line 1152, characters 52-224
 (FORALL (t_1)
 (FORALL (Object_t_1_8_alloc_table)
 (FORALL (intM_intP_t_1_8)
@@ -9274,7 +9276,7 @@ t_1 return (+ (offset_max Object_t_1_8_alloc_table t_1) 1) Object_t_1_8_alloc_ta
          (<= (+ (offset_max Object_t_0_7_alloc_table t_0) 1) 32767)))
 (<= 0 (offset_max Object_t_0_7_alloc_table t_0)))))
 
-;; Arrays_findMax_safety_po_2, File "why/Arrays.why", line 1437, characters 52-224
+;; Arrays_findMax_safety_po_2, File "why/Arrays.why", line 1439, characters 52-224
 (FORALL (t_0)
 (FORALL (Object_t_0_7_alloc_table)
 (FORALL (intM_intP_t_0_7)
@@ -10642,7 +10644,7 @@ goal Arrays_arrayShift_ensures_default_po_10:
   (j_0 <= 0) ->
   forall i_0:int.
   ((0 < i_0) and (i_0 < (offset_max(Object_t_2_9_alloc_table, t_2) + 1))) ->
-  ("JC_91": (select(intM_intP_t_2_9_0, shift(t_2,
+  ("JC_89": (select(intM_intP_t_2_9_0, shift(t_2,
   i_0)) = select(intM_intP_t_2_9, shift(t_2, (i_0 - 1)))))
 
 goal Arrays_arrayShift_safety_po_1:

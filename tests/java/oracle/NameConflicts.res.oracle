@@ -353,10 +353,10 @@ begin = -1
 end = -1
 
 [JC_7]
-file = "HOME/tests/java/NameConflicts.jc"
-line = 40
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [NameConflicts_setI_safety]
 name = "Method setI"
@@ -367,10 +367,10 @@ begin = 9
 end = 13
 
 [JC_8]
-file = "HOME/tests/java/NameConflicts.jc"
-line = 40
-begin = 8
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_9]
 file = "HOME/tests/java/NameConflicts.jc"
@@ -429,16 +429,16 @@ begin = -1
 end = -1
 
 [JC_17]
-file = "HOME/tests/java/NameConflicts.java"
-line = 6
-begin = 9
-end = 13
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_18]
-file = "HOME/tests/java/NameConflicts.java"
-line = 6
-begin = 9
-end = 13
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_19]
 file = "HOME/tests/java/NameConflicts.java"
@@ -477,16 +477,16 @@ begin = -1
 end = -1
 
 [JC_25]
-file = "HOME/tests/java/NameConflicts.java"
-line = 13
-begin = 8
-end = 9
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_26]
-file = "HOME/tests/java/NameConflicts.java"
-line = 13
-begin = 8
-end = 9
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_27]
 file = "HOME/tests/java/NameConflicts.java"
@@ -569,16 +569,16 @@ begin = -1
 end = -1
 
 [JC_35]
-file = "HOME/tests/java/NameConflicts.java"
-line = 20
-begin = 8
-end = 13
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_36]
-file = "HOME/tests/java/NameConflicts.java"
-line = 20
-begin = 8
-end = 13
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_37]
 file = "HOME/"
@@ -657,6 +657,8 @@ axiom Object_tags :
  (forall x:Object pointer.
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
+
+exception Return_label_exc of unit
 
 logic String_tag:  -> Object tag_id
 
