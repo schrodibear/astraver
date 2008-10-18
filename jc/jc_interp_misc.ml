@@ -40,6 +40,7 @@ open Jc_effect
 
 open Output
 open Pp
+open Format
 
 (* The following functions should be eliminated eventually, but before,
  * effect.ml must be redone.
@@ -2279,12 +2280,14 @@ let make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args =
   args @ model_args
 
 let make_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =
+  if Jc_options.debug then printf "logic call to %s@." f.jc_logic_info_name;
   let args = 
     make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args 
   in
   LApp(f.jc_logic_info_final_name, args)
 
 let make_logic_pred_call ~label_in_name ~region_assoc ~label_assoc f args =
+  if Jc_options.debug then printf "logic pred call to %s@." f.jc_logic_info_name;
   let args = 
     make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args
   in 

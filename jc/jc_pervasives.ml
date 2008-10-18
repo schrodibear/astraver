@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.131 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.132 2008-10-18 02:03:02 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -725,18 +725,19 @@ let default_behavior = {
   jc_behavior_throws = None;
   jc_behavior_assumes = None;
   jc_behavior_assigns = None;
-  jc_behavior_ensures = new assertion JCAtrue
+  jc_behavior_ensures = new assertion JCAtrue;
+  jc_behavior_free_ensures = new assertion JCAtrue;
 }
 
 let contains_normal_behavior fs =
   List.exists 
     (fun (_, _, b) -> b.jc_behavior_throws = None) 
-    fs.jc_fun_behavior
+    (fs.jc_fun_default_behavior :: fs.jc_fun_behavior)
 
 let contains_exceptional_behavior fs =
   List.exists
     (fun (_, _, b) -> b.jc_behavior_throws <> None)
-    fs.jc_fun_behavior
+    (fs.jc_fun_default_behavior :: fs.jc_fun_behavior)
 
 let is_purely_exceptional_fun fs =
   not (contains_normal_behavior fs) && 

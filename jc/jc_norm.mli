@@ -25,13 +25,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.mli,v 1.18 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_norm.mli,v 1.19 2008-10-18 02:03:02 moy Exp $ *)
 
 open Jc_env
 open Jc_fenv
 open Jc_ast
 
 val decls : pexpr decl list -> nexpr decl list
+
+val return_label : identifier
 
 (*
 Local Variables: 

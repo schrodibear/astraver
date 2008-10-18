@@ -763,6 +763,7 @@ module Assertion :
 *)
 
     val is_true : assertion -> bool
+    val is_false : assertion -> bool
 
     val mktrue : ?pos:Loc.position -> ?mark:string -> unit -> assertion
 

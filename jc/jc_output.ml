@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.127 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_output.ml,v 1.128 2008-10-18 02:03:02 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -303,7 +303,7 @@ let behavior fmt (_loc,id,b) =
   
 let print_spec fmt s =
   fprintf fmt "@\n@[<v 2>  requires @[%a@];" assertion s.jc_fun_requires;
-  List.iter (behavior fmt) s.jc_fun_behavior;
+  List.iter (behavior fmt) (s.jc_fun_default_behavior :: s.jc_fun_behavior);
   fprintf fmt "@]"
 
 let call_bin_op _op =

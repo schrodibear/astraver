@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.366 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_interp.ml,v 1.367 2008-10-18 02:03:02 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -896,6 +896,7 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
         let t2' = ft t2 in
         LPred (pred_bin_op (op :> pred_bin_op),[ t1'; t2' ])
     | JCArelation(t1,(_, #native_operator_type as op),t2) ->
+(* 	if Jc_options.debug then printf "%a@." Jc_output.assertion a; *)
         let t1' = ft t1 in
         let t2' = ft t2 in
         let ty = native_operator_type op in
@@ -2140,6 +2141,10 @@ and expr_coerce ty e =
 (**************************)
 
 let tr_axiom loc id ~is_axiom labels a acc =
+
+  if Jc_options.debug then
+    Format.printf "[interp] axiom %s@." id;
+
   let lab = match labels with [lab] -> lab | _ -> LabelHere in
   let ef = Jc_effect.assertion empty_effects a in
   let a' = 
@@ -2578,6 +2583,9 @@ let function_prototypes = Hashtbl.create 0
   
 let tr_fun f funpos spec body acc =
 
+  if Jc_options.debug then
+    Format.printf "[interp] function %s@." f.jc_fun_info_name;
+
   (* precondition for calling the function and extra one for analyzing it *)
 
   let external_requires = 
@@ -2636,32 +2644,24 @@ let tr_fun f funpos spec body acc =
      - (optional) 'inferred' behaviors (computed by analysis)
      - user defined behaviors *)
 
-  let behaviors =
-    if List.exists 
-      (fun (_pos,id,b) -> 
-	 id = "default" && b.jc_behavior_assumes = None
-      ) spec.jc_fun_behavior 
-    then
-      spec.jc_fun_behavior
-    else
-      let b = { 
-	jc_behavior_throws = None;
-	jc_behavior_assumes = None;
-	jc_behavior_assigns = None;
-	jc_behavior_ensures = Assertion.mktrue (); }
-      in
-      (funpos,"default",b) :: spec.jc_fun_behavior
-  in
+  let behaviors = spec.jc_fun_default_behavior :: spec.jc_fun_behavior in
   let (safety_behavior,
        normal_behaviors_inferred, normal_behaviors, 
        excep_behaviors_inferred, excep_behaviors) =
     List.fold_left
       (fun (safety,normal_inferred,normal,excep_inferred,excep) (pos,id,b) ->
-	 let make_post ~type_safe =
+	 let make_post ~type_safe ~internal =
+	   let post =
+	     if internal && Jc_options.trust_ai then
+	       b.jc_behavior_ensures 
+	     else
+	       Assertion.mkand [ b.jc_behavior_ensures; 
+				 b.jc_behavior_free_ensures ] ()
+	   in
 	   let post = 
 	     named_assertion 
 	       ~type_safe ~global_assertion:false ~relocate:false 
-	       LabelPost LabelOld b.jc_behavior_ensures 
+	       LabelPost LabelOld post
 	   in
            let post = match b.jc_behavior_assigns with
              | None -> post
@@ -2675,8 +2675,8 @@ let tr_fun f funpos spec body acc =
 		 mark_assertion pos (make_and post assigns_post)
 	   in post
 	 in
-	 let internal_post = make_post ~type_safe:false in
-	 let external_post = make_post ~type_safe:true in
+	 let internal_post = make_post ~type_safe:false ~internal:true in
+	 let external_post = make_post ~type_safe:true ~internal:false in
 	 let behav = (id,b,internal_post,external_post) in
          match b.jc_behavior_throws with
            | None -> 
@@ -2965,71 +2965,68 @@ let tr_fun f funpos spec body acc =
 	    else acc
 	  in
 
-          (* user behaviors *)
-          if spec.jc_fun_behavior = [] then acc else
+          (* normal behaviors *)
+          let acc =
+            List.fold_right
+              (fun (id,b,internal_post,_) acc ->
+		 if Jc_options.verify_behavior id then
+ 		   let normal_body = function_body f spec id body in
+                   let normal_body = wrap_body normal_body in
+                   let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
+                   let beh = 
+                     if id="default" then "Default behavior" else
+		       "Normal behavior `"^id^"'"
+                   in
+                   reg_decl 
+                     ~out_mark:newid
+                     ~in_mark:f.jc_fun_info_name
+                     ~name:("function " ^ f.jc_fun_info_name)
+                     ~beh  
+                     funpos;
+                   Def(
+                     newid,
+                     Fun(
+		       params,
+		       assume_in_precondition b internal_requires,
+		       normal_body,
+		       internal_post,
+		       excep_posts_for_others None excep_behaviors))
+		   :: acc
+		 else acc
+              ) normal_behaviors acc
+          in 
 
-            (* normal behaviors *)
-            let acc =
-              List.fold_right
-                (fun (id,b,internal_post,_) acc ->
-		   if Jc_options.verify_behavior id then
- 		     let normal_body = function_body f spec id body in
-                     let normal_body = wrap_body normal_body in
-                     let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
-                     let beh = 
-                       if id="default" then "Default behavior" else
-			 "Normal behavior `"^id^"'"
-                     in
-                     reg_decl 
-                       ~out_mark:newid
-                       ~in_mark:f.jc_fun_info_name
-                       ~name:("function " ^ f.jc_fun_info_name)
-                       ~beh  
-                       funpos;
-                     Def(
-                       newid,
-                       Fun(
-			 params,
-			 assume_in_precondition b internal_requires,
-			 normal_body,
-			 internal_post,
-			 excep_posts_for_others None excep_behaviors))
-		     :: acc
-		   else acc
-                ) normal_behaviors acc
-            in 
-
-            (* exceptional behaviors *)
-            let acc =
-              ExceptionMap.fold
-                (fun exc bl acc ->
-                   List.fold_right
-                     (fun (id,b,internal_post,_) acc ->
-			if Jc_options.verify_behavior id then
- 			  let except_body = function_body f spec id body in
-			  let except_body = wrap_body except_body in
-                          let newid = f.jc_fun_info_name ^ "_exsures_" ^ id in
-                          reg_decl 
-                            ~out_mark:newid
-                            ~in_mark:f.jc_fun_info_name
-                            ~name:("function " ^ f.jc_fun_info_name)
-                            ~beh:("Exceptional behavior `" ^ id ^ "'")  
-                            funpos;
-                          Def(newid,
-                              Fun(
-				params,
-				assume_in_precondition b internal_requires,
-				except_body,
-				LTrue,
-				(exception_name exc, internal_post) :: 
-                                  excep_posts_for_others (Some exc) 
-				  excep_behaviors))
-                          :: acc
-			else acc
-		     ) bl acc
-		) user_excep_behaviors acc
-            in
-            acc 
+          (* exceptional behaviors *)
+          let acc =
+            ExceptionMap.fold
+              (fun exc bl acc ->
+                 List.fold_right
+                   (fun (id,b,internal_post,_) acc ->
+		      if Jc_options.verify_behavior id then
+ 			let except_body = function_body f spec id body in
+			let except_body = wrap_body except_body in
+                        let newid = f.jc_fun_info_name ^ "_exsures_" ^ id in
+                        reg_decl 
+                          ~out_mark:newid
+                          ~in_mark:f.jc_fun_info_name
+                          ~name:("function " ^ f.jc_fun_info_name)
+                          ~beh:("Exceptional behavior `" ^ id ^ "'")  
+                          funpos;
+                        Def(newid,
+                            Fun(
+			      params,
+			      assume_in_precondition b internal_requires,
+			      except_body,
+			      LTrue,
+			      (exception_name exc, internal_post) :: 
+                                excep_posts_for_others (Some exc) 
+				excep_behaviors))
+                        :: acc
+		      else acc
+		   ) bl acc
+	      ) user_excep_behaviors acc
+          in
+          acc 
 
 let tr_fun f funpos spec body acc =
   set_current_function f;

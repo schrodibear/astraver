@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.143 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_effect.ml,v 1.144 2008-10-18 02:03:02 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1423,7 +1423,10 @@ let behavior fef (_pos,_id,b) =
   Option_misc.fold_left add_exception_effect fef b.jc_behavior_throws
 
 let spec fef s = 
-  let fef = List.fold_left behavior fef s.jc_fun_behavior in
+  let fef = 
+    List.fold_left behavior fef 
+      (s.jc_fun_default_behavior :: s.jc_fun_behavior)
+  in
   let fef = { fef with jc_reads = assertion fef.jc_reads s.jc_fun_requires } in
   { fef with jc_reads = assertion fef.jc_reads s.jc_fun_free_requires }
 

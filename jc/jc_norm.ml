@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.106 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_norm.ml,v 1.107 2008-10-18 02:03:02 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -53,20 +53,26 @@ open Jc_constructors.PExpr
 
 let name_for_loop_exit = Jc_envset.get_unique_name "Loop_exit"
 let name_for_loop_continue = Jc_envset.get_unique_name "Loop_continue"
+let name_for_return_label = get_unique_name "Return_label"
 
 let loop_exit = new identifier name_for_loop_exit
 let loop_continue = new identifier name_for_loop_continue
+let return_label = new identifier name_for_return_label
 
 let label_to_exception = Hashtbl.create 17
 
 let goto_exception_for_label lab =
-  try
-    Hashtbl.find label_to_exception lab 
-  with Not_found ->
-    let excname = Jc_envset.get_unique_name ("Goto_" ^ lab) in
-    let exc = new identifier excname in
-    Hashtbl.add label_to_exception lab exc;
-    exc
+  (* CIL defines a label "return_label" to go to before returning. 
+     It is recognized here so that static analysis recognizes these returns
+     and avoids merging all returns together. *)
+  if lab = "return_label" then return_label else
+    try
+      Hashtbl.find label_to_exception lab 
+    with Not_found ->
+      let excname = Jc_envset.get_unique_name ("Goto_" ^ lab) in
+      let exc = new identifier excname in
+      Hashtbl.add label_to_exception lab exc;
+      exc
 
 
 (**************************************************************************)
@@ -657,7 +663,8 @@ let decls dlist =
   let unit_type = new ptype (JCPTnative Tunit) in
   [
     new decl (JCDexception(name_for_loop_exit,Some unit_type));
-    new decl (JCDexception(name_for_loop_continue,Some unit_type))
+    new decl (JCDexception(name_for_loop_continue,Some unit_type));
+    new decl (JCDexception(name_for_return_label,Some unit_type));
   ]
   @ Hashtbl.fold (fun _ exc acc ->
 		    new decl (JCDexception(exc#name,Some unit_type))

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.147 2008-10-17 16:56:28 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.148 2008-10-18 02:03:02 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -138,37 +138,17 @@ let rec destruct_pointer t =
 (*         None,None *)
     | JCTshift(t1,t2) ->
 	begin match destruct_pointer t1 with
-	  | tptr,None -> tptr,Some t2
-	  | tptr,Some offt -> 
+	  | None -> Some (t1,t2)
+	  | Some(tptr,offt) -> 
 	      let tnode = JCTbinary(offt,(`Badd,`Integer),t2) in
 	      let offt = new term ~typ:integer_type tnode in
-	      tptr,Some offt
+	      Some(tptr,offt)
 	end
     | JCTvar _ | JCTderef _ | JCTapp _ | JCTold _ | JCTat _ | JCTif _ 
     | JCTrange _ | JCTmatch _ | JCTaddress _ 
     | JCTconst _ | JCTbinary _ | JCTunary _ | JCToffset _ | JCTinstanceof _ 
     | JCTreal_cast _ | JCTrange_cast _ | JCTbitwise_cast _ | JCTcast _ ->
-	t,None
-
-let normalize_term t =
-  map_term 
-    (fun t -> 
-       let tnode = match t#node with
-	 | JCToffset(off,t',st) ->
-	     begin match destruct_pointer t' with
-	       | t1, None ->
-		   JCToffset(off,t1,st)
-	       | t1, Some t2 ->
-		   let offt1 = new term_with ~node:(JCToffset(off,t1,st)) t in
-		   JCTbinary(offt1,(`Bsub,`Integer),t2)
-	     end
-	 | tnode -> tnode
-       in
-       new term_with ~node:tnode t) t
-
-let normalize_assertion a =
-  let a = map_term_in_assertion normalize_term a in
-  implicit_cnf a
+	None
 
 let equality_operator_of_type ty = `Beq, operator_of_type ty
 
@@ -840,8 +820,8 @@ end = struct
 
   let offset_max_variable t = 
     let st = pointer_struct t#typ in
-    let tmin = new term ~typ:integer_type (JCToffset(Offset_max,t,st)) in
-    integer_variable tmin
+    let tmax = new term ~typ:integer_type (JCToffset(Offset_max,t,st)) in
+    integer_variable tmax
 
   let all_variables t =
     if is_integral_type t#typ then [ integer_variable t ]
@@ -1232,7 +1212,10 @@ let linstr_of_term env t =
   env, mkaddstr coeffs, cst
 
 let offset_linstr_of_term env ok t =
-  let ptrt, offt = destruct_pointer t in
+  let ptrt, offt = match destruct_pointer t with
+    | None -> t, None
+    | Some(ptrt,offt) -> ptrt, Some offt
+  in
   let st = pointer_struct ptrt#typ in
   let minmaxt = match ok with
     | Offset_min_kind ->  
@@ -1397,76 +1380,71 @@ let mkassertion lincons =
   let t2 = new term ~typ:integer_type (JCTconst c2) in
   new assertion (JCArelation(t1,op,t2)) 
 
-let presentify a =
-  let rec linterms_of_term t =
-    let mkmulterm (t,c) =
-      if c =/ Int 0 then None
-      else if c =/ Int 1 then Some t
-      else if c =/ Int (-1) then
-	Some(new term ~typ:integer_type (JCTunary((`Uminus,`Integer),t)))
-      else
-	let c = 
-	  new term ~typ:integer_type (JCTconst(JCCinteger(string_of_num c))) 
-	in
-	Some(new term ~typ:integer_type (JCTbinary(c,(`Bmul,`Integer),t)))
-    in
-    let rec mkaddterm = function
-      | [] -> None
-      | [t,c] -> mkmulterm (t,c)
-      | (t,c) :: r ->
-	  match mkmulterm (t,c), mkaddterm r with
-	    | None,None -> None
-	    | Some t,None | None,Some t -> Some t
-	    | Some t1,Some t2 -> 
-		Some(new term ~typ:integer_type
-		       (JCTbinary(t1,(`Badd,`Integer),t2)))
-    in
-    try
-      let coeffs,cst = linearize t in
-      let posl,negl =
-	TermMap.fold (fun t c (pl,nl) ->
-			if c >/ Int 0 then (t,c) :: pl, nl
-			else if c </ Int 0 then pl, (t,minus_num c) :: nl
-			else pl, nl
-		     ) coeffs ([],[])
+let rec linterms_of_term t =
+  let mkmulterm (t,c) =
+    if c =/ Int 0 then None
+    else if c =/ Int 1 then Some t
+    else if c =/ Int (-1) then
+      Some(new term ~typ:integer_type (JCTunary((`Uminus,`Integer),t)))
+    else
+      let c = 
+	new term ~typ:integer_type (JCTconst(JCCinteger(string_of_num c))) 
       in
-      let cstt = 
-	new term ~typ:integer_type
-	  (JCTconst(JCCinteger(string_of_num(abs_num cst)))) 
-      in
-      let post = match mkaddterm posl with
-	| None -> 
-	    if cst >/ Int 0 then cstt 
-	    else new term ~typ:integer_type (JCTconst(JCCinteger "0"))
-	| Some t -> 
-	    if cst >/ Int 0 then
-	      new term ~typ:integer_type (JCTbinary(t,(`Badd,`Integer),cstt)) 
-	    else t
-      in
-      let negt = match mkaddterm negl with
-	| None ->
-	    if cst </ Int 0 then cstt
-	    else new term ~typ:integer_type (JCTconst(JCCinteger "0"))
-	| Some t ->
-	    if cst </ Int 0 then
-	      new term ~typ:integer_type (JCTbinary(t,(`Badd,`Integer),cstt)) 
-	    else t
-      in
-      Some (post,negt)
-    with Failure _ -> None
+      Some(new term ~typ:integer_type (JCTbinary(c,(`Bmul,`Integer),t)))
   in
+  let rec mkaddterm = function
+    | [] -> None
+    | [t,c] -> mkmulterm (t,c)
+    | (t,c) :: r ->
+	match mkmulterm (t,c), mkaddterm r with
+	  | None,None -> None
+	  | Some t,None | None,Some t -> Some t
+	  | Some t1,Some t2 -> 
+	      Some(new term ~typ:integer_type
+		     (JCTbinary(t1,(`Badd,`Integer),t2)))
+  in
+  let coeffs,cst = linearize t in
+  let posl,negl =
+    TermMap.fold (fun t c (pl,nl) ->
+		    if c >/ Int 0 then (t,c) :: pl, nl
+		    else if c </ Int 0 then pl, (t,minus_num c) :: nl
+		    else pl, nl
+		 ) coeffs ([],[])
+  in
+  let cstt = 
+    new term ~typ:integer_type
+      (JCTconst(JCCinteger(string_of_num(abs_num cst)))) 
+  in
+  let post = match mkaddterm posl with
+    | None -> 
+	if cst >/ Int 0 then cstt 
+	else new term ~typ:integer_type (JCTconst(JCCinteger "0"))
+    | Some t -> 
+	if cst >/ Int 0 then
+	  new term ~typ:integer_type (JCTbinary(t,(`Badd,`Integer),cstt)) 
+	else t
+  in
+  let negt = match mkaddterm negl with
+    | None ->
+	if cst </ Int 0 then cstt
+	else new term ~typ:integer_type (JCTconst(JCCinteger "0"))
+    | Some t ->
+	if cst </ Int 0 then
+	  new term ~typ:integer_type (JCTbinary(t,(`Badd,`Integer),cstt)) 
+	else t
+  in
+  post,negt
+
+let mkpresentable a =
   let rec linasrt_of_assertion a =
     match a#node with
       | JCArelation(t1,bop,t2) ->
 	  let subt = 
 	    new term ~typ:integer_type (JCTbinary(t1,(`Bsub,`Integer),t2)) 
 	  in
-	  begin match linterms_of_term subt with
-	    | None -> a
-	    | Some (post,negt) -> 
-		(* Make all terms appear with a positive coefficient *)
-		new assertion(JCArelation(post,bop,negt))
-	  end
+	  let post,negt = linterms_of_term subt in
+	  (* Make all terms appear with a positive coefficient *)
+	  new assertion(JCArelation(post,bop,negt))
       | JCAnot a ->
 	  let nota = not_asrt a in
 	  begin match nota#node with
@@ -1479,6 +1457,66 @@ let presentify a =
       | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> a
   in
   linasrt_of_assertion a
+
+let mkconsistent a = 
+  let cannot_have_lower_bound t =
+    match t#node with
+      | JCToffset(Offset_min,_,_) -> true
+      | JCTapp app when app.jc_app_fun.jc_logic_info_name = "strlen" -> true
+      | _ -> false
+  in
+  let cannot_have_upper_bound t =
+    match t#node with
+      | JCToffset(Offset_max,_,_) -> true
+      | _ -> false
+  in
+  let rec aux a =
+    match a#node with
+      | JCArelation(t1,(op,_ty),t2) ->
+	  let subt = 
+	    new term ~typ:integer_type (JCTbinary(t1,(`Bsub,`Integer),t2)) 
+	  in
+	  let coeffs,_ = linearize subt in
+	  let posl,negl =
+	    TermMap.fold 
+	      (fun t c (pl,nl) ->
+		 if c >/ Int 0 then t :: pl, nl
+		 else if c </ Int 0 then pl, t :: nl
+		 else pl, nl
+	      ) coeffs ([],[])
+	  in
+	  let lbounds,ubounds = match op with
+	    | `Ble | `Blt -> posl,negl
+	    | `Bge | `Bgt -> negl,posl
+	    | `Beq | `Bneq -> [],[]
+	  in
+	  if List.exists cannot_have_upper_bound lbounds 
+	    || List.exists cannot_have_lower_bound ubounds then None
+	  else Some a
+      | JCAnot _
+      | JCAtrue | JCAfalse | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _
+      | JCAapp _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAinstanceof _
+      | JCAbool_term _
+      | JCAif _ | JCAmutable _ | JCAeqtype _ | JCAsubtype _ | JCAmatch _ -> 
+	  Some a
+  in
+  let conjuncts = conjuncts a in
+  let disjuncts = List.map disjuncts conjuncts in
+  let disjuncts = 
+    List.map 
+      (fun conjuncts ->
+	 let conjuncts = 
+	   List.map 
+	     (fun conjunct -> match aux conjunct with
+		| None -> Assertion.mktrue ()
+		| Some a -> a
+	     ) conjuncts
+	 in
+	 let disjunct = Assertion.mkand conjuncts () in
+	 if Assertion.is_true disjunct then Assertion.mkfalse () else disjunct
+      ) disjuncts
+  in
+  Assertion.mkor disjuncts ()
 
 let mkinvariant mgr absval =
   if Abstract1.is_top mgr absval then
@@ -1493,7 +1531,7 @@ let mkinvariant mgr absval =
       else acc
     in
     let asserts = mkrec [] (Lincons1.array_length linconsarr - 1) in
-    Assertion.mkand (List.map presentify asserts) ()
+    Assertion.mkand (List.map mkpresentable asserts) ()
 
 
 (*****************************************************************************)
@@ -1592,7 +1630,7 @@ let simplify =
   fun ?inva inita ->
     if Jc_options.debug then
       printf "@[<v 2>[simplify]@\n%a@]@." Jc_output.assertion inita;
-    let simpla = if tautology inita then (Assertion.mktrue ()) else
+    let simpla = (* if tautology inita then (Assertion.mktrue ()) else *)
       let env,disjuncts = variables_and_dnf inita in
       if Jc_options.debug then 
 	printf "@[<v 2>[simplify] dnf@\n%a@]@." 
@@ -1632,7 +1670,7 @@ let simplify =
 		 (absval,other_conjuncts) :: abstractl, otherl
 	     with Parser.Error _ | Failure _ ->
 	       abstractl, 
-	       Assertion.mkand (List.map presentify conjunct) () :: otherl
+	       Assertion.mkand (List.map mkpresentable conjunct) () :: otherl
 	  ) disjuncts ([],[])
       in
       let abstract_disjuncts =
@@ -1691,14 +1729,14 @@ let quantif_eliminate qf finv =
 (* 	  printf "@[<v 2>After quantifier elimination@\n%a@]@."  *)
 (* 	    (fun fmt fm -> Atp.printer fm) qe;  *)
 	begin match qe with
-	  | Atp.Not nqe ->
-	      let qe = (Atp.dnf nqe) in
-(* 	      if Jc_options.debug then *)
-(* 		printf "@[<v 2>After negative disjunctive normal form@\n%a@]@."  *)
-(* 		  (fun fmt fm -> Atp.printer fm) qe; *)
-	      let res = simplify (asrt_of_atp qe) in
-	      let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in
-	      simplify ~inva:finv (Assertion.mknot res ())
+(* 	  | Atp.Not nqe -> *)
+(* 	      let qe = (Atp.dnf nqe) in *)
+(* (\* 	      if Jc_options.debug then *\) *)
+(* (\* 		printf "@[<v 2>After negative disjunctive normal form@\n%a@]@."  *\) *)
+(* (\* 		  (fun fmt fm -> Atp.printer fm) qe; *\) *)
+(* 	      let res = simplify (asrt_of_atp qe) in *)
+(* 	      let finv = asrt_of_atp (Atp.dnf (atp_of_asrt finv)) in *)
+(* 	      simplify ~inva:finv (Assertion.mknot res ()) *)
 	  | _ ->
 	      let qe = (Atp.dnf qe) in
 (* 	      if Jc_options.debug then *)
@@ -1865,7 +1903,8 @@ let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
     if debug then 
       printf "@[<v 2>[finalize_target] quantifier-free formula@\n%a@]@."
 	Jc_output.assertion elima;
-    if contradictory elima patha then
+    let finala = mkconsistent elima in
+    if contradictory finala patha then
       begin
 	if Jc_options.debug then
 	  printf "%a@[<v 2>No inferred %s@."
@@ -1877,9 +1916,9 @@ let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
 	if Jc_options.debug then
 	  printf "%a@[<v 2>Inferring %s@\n%a@]@."
 	    Loc.report_position target.jc_target_location
-	    annot_name Jc_output.assertion elima;
-	let elima = reg_annot ~pos ~anchor elima in
-	Some elima
+	    annot_name Jc_output.assertion finala;
+	let finala = reg_annot ~pos ~anchor finala in
+	Some finala
       end
 	
 let rec wp_expr weakpre = 
@@ -1975,12 +2014,14 @@ let rec wp_expr weakpre =
 			  && mem_term_in_assertion dereft a)
 		    then
 		      let a = replace_term_in_assertion dereft tv1 a in
-		      match Jc_effect.term_of_expr e2 with None -> Some a | Some t2 ->
-			let bop = 
-			  equality_operator_of_type fi.jc_field_info_type 
-			in
-			let eq = new assertion (JCArelation(t1,bop,t2)) in
-			Some (Assertion.mkand [ eq; a ] ())
+		      match Jc_effect.term_of_expr e2 with 
+			| None -> Some a
+			| Some t2 ->
+			    let bop = 
+			      equality_operator_of_type fi.jc_field_info_type 
+			    in
+			    let eq = new assertion (JCArelation(tv1,bop,t2)) in
+			    Some (Assertion.mkand [ eq; a ] ())
 		    else Some a
 		in
 		add_inflexion_var curposts copyv;
@@ -2292,9 +2333,13 @@ let wp_function targets funpre (f,pos,spec,body) =
   record_wp_loop_invariants weakpre;
   (* Remove redundancy in precondition inferred *)
   let inferred = simplify (Assertion.mkand !infer_req ()) in
-  spec.jc_fun_requires <- Assertion.mkand [ spec.jc_fun_requires; inferred ] ();
-  printf "@[<v 2>Inferring precondition for function %s:@\n%a@]@." 
-    f.jc_fun_info_name Jc_output.assertion inferred
+  if Assertion.is_false inferred then () else
+    begin 
+      spec.jc_fun_requires <- 
+	Assertion.mkand [ spec.jc_fun_requires; inferred ] ();
+      printf "@[<v 2>Inferring precondition for function %s:@\n%a@]@." 
+	f.jc_fun_info_name Jc_output.assertion inferred
+    end
 
 
 (*****************************************************************************)
@@ -2532,20 +2577,64 @@ let target_of_assertion ?(hint=false) s loc a =
  * - no division by zero
  *)
 let collect_expr_targets e =
+
+  (* Normalization applied on targets to make them more amenable to
+     annotation inference. As such, no invariant can be deduced from these
+     modified targets, so any heuristic can be applied here to transform 
+     the target assertions *)
+  let normalize_term t =
+    map_term 
+      (fun t -> 
+	 let tnode = match t#node with
+	   | JCToffset(off,t',st) ->
+	       begin match destruct_pointer t' with
+		 | None ->
+		     JCToffset(off,t',st)
+		 | Some(t1,t2) ->
+		     let offt1 = 
+		       new term_with ~node:(JCToffset(off,t1,st)) t 
+		     in
+		     JCTbinary(offt1,(`Bsub,`Integer),t2)
+	       end
+	   | JCTapp app as tnode ->
+	       if app.jc_app_fun.jc_logic_info_name = "strlen" then
+		 let t1 = match app.jc_app_args with
+		   | [t1] -> t1
+		   | _ -> assert false
+		 in
+		 match destruct_pointer t1 with
+		   | None -> tnode
+		   | Some(tptr,offt) -> 
+		       let app = { app with jc_app_args = [tptr] } in
+		       let tapp = new term_with ~node:(JCTapp app) t in
+		       JCTbinary(tapp,(`Bsub,`Integer),offt) 
+	       else tnode
+	   | tnode -> tnode
+	 in
+	 new term_with ~node:tnode t) t
+  in
+  let normalize_target a =
+    let a = map_term_in_assertion normalize_term a in
+    implicit_cnf a
+  in
+
   (* Collect memory safety assertions. *)
   let collect_memory_access e1 fi =
     match Jc_effect.term_of_expr e1 with None -> [] | Some t1 ->
-      match destruct_pointer t1 with ptrt,offopt ->
-	let offt = match offopt with
-	  | None -> new term ~typ:integer_type (JCTconst(JCCinteger"0"))
-	  | Some offt -> offt
-	in
-	let st = pointer_struct ptrt#typ in
-	let mint = new term ~typ:integer_type (JCToffset(Offset_min,ptrt,st)) in
-	let maxt = new term ~typ:integer_type (JCToffset(Offset_max,ptrt,st)) in
-	let mina = new assertion(JCArelation(mint,(`Ble,`Integer),offt)) in
-	let maxa = new assertion(JCArelation(offt,(`Ble,`Integer),maxt)) in
-	[mina;maxa]
+      let ptrt, offt = match destruct_pointer t1 with
+	| None -> t1, None
+	| Some(ptrt,offt) -> ptrt, Some offt
+      in
+      let offt = match offt with
+	| None -> new term ~typ:integer_type (JCTconst(JCCinteger"0"))
+	| Some offt -> offt
+      in
+      let st = pointer_struct ptrt#typ in
+      let mint = new term ~typ:integer_type (JCToffset(Offset_min,ptrt,st)) in
+      let maxt = new term ~typ:integer_type (JCToffset(Offset_max,ptrt,st)) in
+      let mina = new assertion(JCArelation(mint,(`Ble,`Integer),offt)) in
+      let maxa = new assertion(JCArelation(offt,(`Ble,`Integer),maxt)) in
+      [mina;maxa]
   in
   (* Collect absence of integer overflow assertions. *)
   let collect_integer_overflow ei e1 =
@@ -2575,7 +2664,10 @@ let collect_expr_targets e =
 	  else []
       | JCEbinary(_,(`Bdiv,`Integer),e2) -> collect_zero_division e2
       | JCEapp call ->
-	  let fi = match call.jc_call_fun with JCfun f -> f | _ -> assert false in
+	  let fi = match call.jc_call_fun with 
+	    | JCfun f -> f
+	    | _ -> assert false 
+	  in
 	  let els = call.jc_call_args in
 	  let _,_,fs,_ = 
             Hashtbl.find Jc_typing.functions_table fi.jc_fun_info_tag 
@@ -2583,10 +2675,13 @@ let collect_expr_targets e =
           (* Collect preconditions of functions called. *)
           let reqa = fs.jc_fun_requires in
           let reqa = 
-	    List.fold_left2 (fun a param arg ->
-			       match Jc_effect.term_of_expr arg with None -> Assertion.mktrue () | Some targ ->
-				 replace_term_in_assertion (new term_var param) targ a
-			    ) reqa fi.jc_fun_info_parameters els
+	    List.fold_left2
+	      (fun a param arg ->
+		 match Jc_effect.term_of_expr arg with
+		   | None -> Assertion.mktrue () 
+		   | Some targ ->
+		       replace_term_in_assertion (new term_var param) targ a
+	      ) reqa fi.jc_fun_info_parameters els
           in
 	  let reqa = regionalize_assertion reqa call.jc_call_region_assoc in
           conjuncts reqa
@@ -2609,7 +2704,7 @@ let collect_expr_targets e =
 	  []
       | JCEcontract _ -> assert false (* TODO *)
     in
-    let asrts = List.map normalize_assertion asrts in
+    let asrts = List.map normalize_target asrts in
     List.map (target_of_assertion e e#pos) asrts
   in
   let collect_hints e = 
@@ -2617,7 +2712,7 @@ let collect_expr_targets e =
       | JCEassert(_,Ahint, a) -> [ a ]
       | _ -> []
     in
-    let asrts = List.map normalize_assertion asrts in
+    let asrts = List.map normalize_target asrts in
     List.map (target_of_assertion ~hint:true e e#pos) asrts
   in
   let collect e = collect_asserts e @ collect_hints e in
@@ -3061,9 +3156,9 @@ let rec ai_inter_function_call mgr iai abs pre fi loc fs sl el =
  * It sets the initial value of invariants before treating a loop.
  *)
 and ai_expr iaio abs curinvs e =
-  if debug then
-    printf "[ai_expr] %a on %a@." print_abstract_invariants curinvs
-      Jc_output.expr e;
+(*   if debug then *)
+(*     printf "[ai_expr] %a on %a@." print_abstract_invariants curinvs *)
+(*       Jc_output.expr e; *)
   let loops = abs.jc_absint_loops in
   let loop_initial_invariants = abs.jc_absint_loop_initial_invariants in
   let loop_invariants = abs.jc_absint_loop_invariants in
@@ -3163,29 +3258,45 @@ and intern_ai_expr iaio abs curinvs e =
 	(* Join both branches. *)
 	join_invariants mgr trueinvs falseinvs
     | JCEreturn_void ->
-	return_abstract_value mgr postret e normal;
+	(* For CIL, rather store return value before merge *)
+(* 	return_abstract_value mgr postret e normal; *)
 	{ curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
     | JCEreturn(_ty,e1) ->
-	let curinvs = ai curinvs e1 in
 	let result = abs.jc_absint_function.jc_fun_info_result in
 	let resultt = new term_var result in
-	let curinvs = assign_expr mgr resultt e1 curinvs in
+	let apply_return curinvs =
+	  let curinvs = ai curinvs e1 in
+	  assign_expr mgr resultt e1 curinvs
+	in
+	Hashtbl.iter 
+	  (fun e absval -> 
+	     let curinvs = { curinvs with jc_absinv_normal = absval } in
+	     let curinvs = apply_return curinvs in
+	     Hashtbl.replace postret e curinvs.jc_absinv_normal
+	  ) postret;
+	let curinvs = apply_return curinvs in
 	let normal = curinvs.jc_absinv_normal in
-	return_abstract_value mgr postret e normal;
+	(* For CIL, rather store return value before merge *)
+(* 	return_abstract_value mgr postret e normal; *)
 	{ curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
     | JCEthrow(ei,e1opt) ->
 	let curinvs = match e1opt with
 	  | None -> curinvs
 	  | Some e1 -> ai curinvs e1
 	in
-	(* TODO: add thrown value as abstract variable. *)
-	let thrown =
-	  try join_abstract_value mgr normal (List.assoc ei postexcl)
-	  with Not_found -> normal
-	in
-	let postexcl = (ei,thrown) :: (List.remove_assoc ei postexcl) in
-	let curinvs = { curinvs with jc_absinv_exceptional = postexcl } in
-	{ curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
+	if ei.jc_exception_info_name = Jc_norm.return_label#name then
+	  let normal = curinvs.jc_absinv_normal in
+	  return_abstract_value mgr postret e normal;
+	  { curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
+	else
+	  (* TODO: add thrown value as abstract variable. *)
+	  let thrown =
+	    try join_abstract_value mgr normal (List.assoc ei postexcl)
+	    with Not_found -> normal
+	  in
+	  let postexcl = (ei,thrown) :: (List.remove_assoc ei postexcl) in
+	  let curinvs = { curinvs with jc_absinv_exceptional = postexcl } in
+	  { curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
     | JCEtry(body,handlers,finally) ->
 	let curinvs = ai curinvs body in
 	let postexcl = curinvs.jc_absinv_exceptional in
@@ -3372,7 +3483,8 @@ and ai_call iaio abs curinvs vio e =
 	 if b.jc_behavior_throws = None && b.jc_behavior_assumes = None then
 	   Assertion.mkand [b.jc_behavior_ensures; acc] ()
 	 else acc
-      ) (Assertion.mktrue ()) spec.jc_fun_behavior
+      ) (Assertion.mktrue ()) 
+      (spec.jc_fun_default_behavior :: spec.jc_fun_behavior)
   in
 
 (*   let normal_behavior = *)
@@ -3468,6 +3580,22 @@ and ai_call iaio abs curinvs vio e =
   let curinvs = apply_to_current_invariant assigns curinvs in
   test_assertion mgr normal_post curinvs 
 
+and prepare_invariant mgr abs ~pos ~what absval =
+  let a = minimize mgr absval in
+  if Assertion.is_true a then 
+    None
+  else
+    let a = simplify a in
+    if Assertion.is_true a then 
+      None
+    else
+      (printf 
+	 "%a@[<v 2>Inferring %s for function %s:@\n%a@]@."
+	 Loc.report_position pos what
+	 abs.jc_absint_function.jc_fun_info_name
+	 Jc_output.assertion a;
+       Some a)
+
 and record_ai_loop_invariants abs =
   let mgr = abs.jc_absint_manager in
   let loop_invariants = abs.jc_absint_loop_invariants in
@@ -3485,27 +3613,17 @@ and record_ai_loop_invariants abs =
 	     loopinvs.jc_absinv_normal.jc_absval_regular 
 	     loopinvs.jc_absinv_normal.jc_absval_propagated
 	 in
-	 (* TODO: when it is finally implemented in APRON, this would be
-	    a good place to minimize the abstract value by calling
-	    [Abstract1.minimize mgr loopinv] 
-	 *)
-	 let a = minimize mgr loopinv in
-	 if Assertion.is_true a then () else
-	   let a = simplify a in
-	   (* 	   nb_conj_atoms_inferred := !nb_conj_atoms_inferred + nb_conj_atoms a; *)
-	   (* 	   incr nb_loop_inv; *)
-
-	   printf 
-	     "%a@[<v 2>Inferring loop invariant for function %s:@\n%a@]@."
-	     Loc.report_position e#pos 
-	     abs.jc_absint_function.jc_fun_info_name
-	     Jc_output.assertion a;
-	   (* Register loop invariant as such *)
-	   let a = reg_annot ~pos:e#pos ~anchor:e#mark a in
-	   if Jc_options.trust_ai then 
-	     annot.jc_free_loop_invariant <- a 
-	   else
-	     annot.jc_loop_invariant <-  ([], a) :: annot.jc_loop_invariant;
+	 match 
+	   prepare_invariant mgr abs ~pos:e#pos ~what:"loop invariant" loopinv 
+	 with
+	   | None -> ()
+	   | Some a ->
+	       (* Register loop invariant as such *)
+	       let a = reg_annot ~pos:e#pos ~anchor:e#mark a in
+	       if Jc_options.trust_ai then 
+		 annot.jc_free_loop_invariant <- a 
+	       else
+		 annot.jc_loop_invariant <-  ([], a) :: annot.jc_loop_invariant;
        with Not_found -> () end
     ) abs.jc_absint_loops
 
@@ -3581,7 +3699,7 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
     } in
     let finalinvs = ai_expr iaio abs initinvs body in
     begin match iaio with
-      | None ->  record_ai_loop_invariants abs 
+      | None -> record_ai_loop_invariants abs 
       | Some iai -> 
 	  Hashtbl.replace iai.jc_interai_function_abs f.jc_fun_info_tag abs
     end;
@@ -3618,7 +3736,37 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
       return_abstract_value mgr finalinvs.jc_absinv_return
 	body finalinvs.jc_absinv_normal;
 
-    (* record the inferred postcondition *)
+    (* record the postcondition inferred *)
+    let acc = 
+      Hashtbl.fold 
+	(fun _e absval acc ->
+	   let post = 
+	     meet mgr absval.jc_absval_regular absval.jc_absval_propagated
+	   in
+	   let post = Abstract1.change_environment mgr post env false in
+	   let a = 
+	     match 
+	       prepare_invariant mgr abs ~pos ~what:"postcondition case" post
+	     with
+	       | None -> Assertion.mktrue ()
+	       | Some a -> a 
+	   in a :: acc
+	) finalinvs.jc_absinv_return []
+    in
+    let post = Assertion.mkor acc () in
+    (* Register postcondition as such *)
+    let post = reg_annot ~pos ~anchor:f.jc_fun_info_name post in
+    let defpos,defid,defbehav = spec.jc_fun_default_behavior in
+    let defbehav = 
+      if Jc_options.trust_ai then 
+	{ defbehav with jc_behavior_free_ensures = 
+	    Assertion.mkand [ defbehav.jc_behavior_free_ensures; post ] () }
+      else
+	{ defbehav with jc_behavior_ensures = 
+	    Assertion.mkand [ defbehav.jc_behavior_ensures; post ] () }
+    in
+    spec.jc_fun_default_behavior <- defpos,defid,defbehav;
+
 (*     match iaio with  *)
 (*       | None -> () *)
 (*       | Some iai -> *)
@@ -3711,9 +3859,33 @@ let code_function (f,pos,spec,body) =
 	   cstr :: acc
 	) [] f.jc_fun_info_parameters
     in
+(*     let consists = *)
+(*       List.fold_left *)
+(*  	(fun acc v ->  *)
+(* 	   (\* This is not an precondition, as a pointer parameter may be null, *)
+(* 	      but rather a consistency formula for the generated precondition, *)
+(* 	      that should not assert nullity of a parameter this way *\) *)
+(* 	   let consist = *)
+(* 	     if is_nonnull_pointer_type v.jc_var_info_type then *)
+(* 	       let tv = new term_var v in *)
+(* 	       let st = pointer_struct tv#typ in *)
+(* 	       let tmin =  *)
+(* 		 new term ~typ:integer_type (JCToffset(Offset_min,tv,st))  *)
+(* 	       in *)
+(* 	       let tmax =  *)
+(* 		 new term ~typ:integer_type (JCToffset(Offset_max,tv,st))  *)
+(* 	       in *)
+(* 	       [ new assertion (JCArelation (tmin,(`Ble,`Integer),tmax)) ] *)
+(* 	     else [] *)
+(* 	   in *)
+(* 	   consist @ acc *)
+(* 	) [] f.jc_fun_info_parameters *)
+(*     in *)
     let funpre = 
-      Assertion.mkand (spec.jc_fun_requires :: spec.jc_fun_free_requires :: cstrs) ()
+      Assertion.mkand 
+	(spec.jc_fun_requires :: spec.jc_fun_free_requires :: cstrs) ()
     in
+(*     let funconsist = Assertion.mkand (funpre :: consists) () in *)
 
     begin match !Jc_options.annotation_sem with
       | AnnotNone -> ()

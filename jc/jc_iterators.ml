@@ -484,7 +484,7 @@ let iter_term_and_assertion_in_behavior ft fa bv =
 let iter_term_and_assertion_in_fun_spec ft fa spec =
   iter_term_and_assertion ft fa spec.jc_fun_requires;
   List.iter (fun (_,_,bv) -> iter_term_and_assertion_in_behavior ft fa bv)
-    spec.jc_fun_behavior
+    (spec.jc_fun_default_behavior :: spec.jc_fun_behavior)
 
 let rec fold_assertion f acc a =
   let acc = f acc a in

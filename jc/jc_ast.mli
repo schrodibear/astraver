@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.153 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_ast.mli,v 1.154 2008-10-18 02:03:02 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -453,13 +453,22 @@ type 'li behavior =
       jc_behavior_assumes : 'li assertion option ;
       jc_behavior_assigns : (Loc.position * 'li location list) option ;
       mutable jc_behavior_ensures : 'li assertion;
+      (* "free" postcondition, proved by static analysis. It can be used
+	 as the postcondition of a call without being checked in the function
+	 body, if static analysis is trusted (option [-trust-ai]) *)
+      mutable jc_behavior_free_ensures : 'li assertion;
     }
 
 type 'li fun_spec =
     {
       mutable jc_fun_requires : 'li assertion;
-      (* free precondition : used to prove the fun correctness, but not checked at call locations *)
+      (* "free" precondition, proved by static analysis. It can be used
+	 to prove the function correctness without being checked at 
+	 calls, if static analysis is trusted (option [-trust-ai]) *)
       mutable jc_fun_free_requires : 'li assertion; 
+      (* special behavior without [assumes] clause, on which all annotations
+	 not specifically attached to a behavior are checked *)
+      mutable jc_fun_default_behavior : Loc.position * string * 'li behavior;
       mutable jc_fun_behavior : (Loc.position * string * 'li behavior) list;
     }
 

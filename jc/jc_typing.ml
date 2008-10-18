@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.253 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_typing.ml,v 1.254 2008-10-18 02:03:02 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1382,7 +1382,8 @@ let behavior env vi_result (loc, id, throws, assumes, requires, assigns, ensures
       jc_behavior_requires = requires;
     *)
     jc_behavior_assigns = assigns;
-    jc_behavior_ensures = assertion env_result ensures }
+    jc_behavior_ensures = assertion env_result ensures;
+    jc_behavior_free_ensures = Assertion.mktrue () }
   in
   (*
     eprintf "lab,loc for ensures: \"%s\", %a@."
@@ -2145,9 +2146,10 @@ let clause env vi_result c acc =
             make_and (assertion env e) acc.jc_fun_requires; }
     | JCCbehavior b ->
 	let (loc,id,b) = behavior env vi_result b in
-        { acc with jc_fun_behavior = (loc,id,b)::acc.jc_fun_behavior }
-          
-
+	if id = "default" then
+	  { acc with jc_fun_default_behavior = loc,id,b }
+	else
+          { acc with jc_fun_behavior = (loc,id,b)::acc.jc_fun_behavior }
   
 let param (t,id) =
   let ty = type_type t in
@@ -2435,6 +2437,8 @@ let rec decl d =
                   (clause param_env vi) specs 
                   { jc_fun_requires = assertion_true;
                     jc_fun_free_requires = assertion_true;
+                    jc_fun_default_behavior = 
+		      Loc.dummy_position ,"default", default_behavior;
                     jc_fun_behavior = [] }
         in
         let b = Option_misc.map 
