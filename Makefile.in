@@ -285,7 +285,7 @@ JCCMO = src/version.cmo \
 	jc/jc_options.cmo \
 	jc/jc_name.cmo \
 	jc/jc_struct_tools.cmo \
-	jc/jc_typing.cmo jc/jc_norm.cmo \
+	jc/jc_norm.cmo jc/jc_typing.cmo \
 	jc/numconst.cmo \
 	jc/jc_parser.cmo jc/jc_lexer.cmo \
 	jc/jc_separation.cmo \

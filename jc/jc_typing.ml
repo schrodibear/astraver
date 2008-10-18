@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.254 2008-10-18 02:03:02 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.255 2008-10-18 21:56:43 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1568,6 +1568,13 @@ let make_bin_op loc (op: operational_op) e1 e2 =
          JCEbinary(e1, bin_op (operator_of_native t) op, e2))
     | `Bconcat -> assert false (* TODO *)
 
+
+let reset_return_label, set_return_label, get_return_label =
+  let has_label = ref false in
+  (fun () -> has_label := false), 
+  (fun () -> has_label := true), 
+  (fun () -> !has_label)
+
 let rec expr env e =
   let fe = expr env in
   let fa = assertion env in
@@ -1977,16 +1984,17 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         let tbody = unit_expr (fe body) in
         let tfinally = unit_expr (fe finally) in
         let tcatches = List.map begin function (id, v, cbody) ->
+	  if id#name = Jc_norm.return_label#name then set_return_label ();
           let ei = try
             Hashtbl.find exceptions_table id#name
           with Not_found ->
             typing_error id#pos "undeclared exception: %s" id#name
           in
-            match ei.jc_exception_info_type with
-              | Some tei -> 
-		  let vi = var tei v in
-		    ei, Some vi, unit_expr (expr ((v, vi) :: env) cbody)
-             | None -> ei, None, unit_expr (fe cbody)
+          match ei.jc_exception_info_type with
+            | Some tei -> 
+		let vi = var tei v in
+		ei, Some vi, unit_expr (expr ((v, vi) :: env) cbody)
+            | None -> ei, None, unit_expr (fe cbody)
         end catches in
           tbody#typ,
         tbody#region,
@@ -2441,9 +2449,11 @@ let rec decl d =
 		      Loc.dummy_position ,"default", default_behavior;
                     jc_fun_behavior = [] }
         in
+	reset_return_label ();
         let b = Option_misc.map 
 	  (unit_expr $ expr (("\\result",vi)::param_env)) body 
 	in
+	fi.jc_fun_info_has_return_label <- get_return_label ();
         Hashtbl.add functions_table fi.jc_fun_info_tag (fi,loc,s,b)
     | JCDenum_type(id,min,max) ->
 	begin

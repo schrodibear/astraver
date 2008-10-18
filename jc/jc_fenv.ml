@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.ml,v 1.6 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_fenv.ml,v 1.7 2008-10-18 21:56:43 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -100,6 +100,10 @@ sig
 	mutable jc_fun_info_final_name : string;
 	jc_fun_info_result : var_info;
 	jc_fun_info_return_region : region;
+	(* If function has a label "return_label", this is a label denoting
+	   the return statement of the function, to be used by static 
+	   analysis to avoid merging contexts *)
+	mutable jc_fun_info_has_return_label : bool;
 	mutable jc_fun_info_parameters : var_info list;
 	mutable jc_fun_info_param_regions : region list;
 	mutable jc_fun_info_calls : fun_info list;
@@ -154,6 +158,7 @@ struct
 	mutable jc_fun_info_final_name : string;
 	jc_fun_info_result : var_info;
 	jc_fun_info_return_region : region;
+	mutable jc_fun_info_has_return_label : bool;
 	mutable jc_fun_info_parameters : var_info list;
 	mutable jc_fun_info_param_regions : region list;
 	mutable jc_fun_info_calls : fun_info list;

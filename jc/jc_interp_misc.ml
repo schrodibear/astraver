@@ -673,7 +673,7 @@ let transpose_location_list
     ~region_assoc ~param_assoc rw_raw_mems rw_precise_mems (mc,distr) =
   let loclist =
     if MemorySet.mem (mc,distr) rw_raw_mems then
-      assert false (* TODO: paremeters *)
+      assert false (* TODO: parameters *)
     else
       LocationSet.to_list
 	(LocationSet.filter

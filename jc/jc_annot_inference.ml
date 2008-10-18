@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.148 2008-10-18 02:03:02 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.149 2008-10-18 21:56:43 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -370,7 +370,7 @@ type 'a abstract_value = {
 type 'a abstract_invariants = {
   jc_absinv_normal : 'a abstract_value;
   jc_absinv_exceptional : (exception_info * 'a abstract_value) list;
-  jc_absinv_return : (expr ref,'a abstract_value) Hashtbl.t;
+  jc_absinv_return : (expr,'a abstract_value) Hashtbl.t;
 }
 
 (* Parameters of an abstract interpretation. *)
@@ -3063,7 +3063,7 @@ let find_target_assertions targets e =
     ) [] targets
 
 let return_abstract_value mgr postret e absval1 =
-  let key = ref e in
+  let key = e in
   try 
     let absval2 = Hashtbl.find postret key in
     let absval = join_abstract_value mgr absval2 absval1 in
@@ -3259,7 +3259,8 @@ and intern_ai_expr iaio abs curinvs e =
 	join_invariants mgr trueinvs falseinvs
     | JCEreturn_void ->
 	(* For CIL, rather store return value before merge *)
-(* 	return_abstract_value mgr postret e normal; *)
+	if not abs.jc_absint_function.jc_fun_info_has_return_label then
+	  return_abstract_value mgr postret e normal;
 	{ curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
     | JCEreturn(_ty,e1) ->
 	let result = abs.jc_absint_function.jc_fun_info_result in
@@ -3277,7 +3278,8 @@ and intern_ai_expr iaio abs curinvs e =
 	let curinvs = apply_return curinvs in
 	let normal = curinvs.jc_absinv_normal in
 	(* For CIL, rather store return value before merge *)
-(* 	return_abstract_value mgr postret e normal; *)
+	if not abs.jc_absint_function.jc_fun_info_has_return_label then
+	  return_abstract_value mgr postret e normal;
 	{ curinvs with jc_absinv_normal = empty_abstract_value mgr normal }
     | JCEthrow(ei,e1opt) ->
 	let curinvs = match e1opt with

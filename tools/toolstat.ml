@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.6 2008-10-17 11:49:34 filliatr Exp $ i*)
+(*i $Id: toolstat.ml,v 1.7 2008-10-18 21:56:44 moy Exp $ i*)
 
 (* Statistics on automatic provers results *)
 
@@ -110,29 +110,36 @@ let () =
 
   let provers : (prover, unit) Hashtbl.t = Hashtbl.create 5 in
   let tests : (test, unit) Hashtbl.t = Hashtbl.create 5 in
+  let error_tests : (test, unit) Hashtbl.t = Hashtbl.create 5 in
   let vc : (test * int, unit) Hashtbl.t = Hashtbl.create 5 in
   let vc_count : (test * int, int) Hashtbl.t = Hashtbl.create 5 in
-  List.iter (fun (prover,test,summary,detail,time) ->
-	       Hashtbl.replace provers prover ();
-	       (* useful to keep track of tests with 0 VC *)
-	       Hashtbl.replace tests test ();
-	       List.iter
-		 (fun i -> 
-		    Hashtbl.replace vc (test,i) ();
-		    intadd vc_count (test,i) 1
-		 ) (valid_detail detail);
-	       List.iter
-		 (fun i -> 
-		    Hashtbl.replace vc (test,i) ()
-		 ) (notvalid_detail detail)
-	    ) records;
+  List.iter 
+    (fun (completed,prover,test,summary,detail,time) ->
+       (* useful to keep track of tests with 0 VC and tests in error *)
+       Hashtbl.replace tests test ();
+       if completed then
+	 (Hashtbl.replace provers prover ();
+	  List.iter
+	    (fun i -> 
+		Hashtbl.replace vc (test,i) ();
+	       intadd vc_count (test,i) 1
+	    ) (valid_detail detail);
+	  List.iter
+	    (fun i -> 
+	       Hashtbl.replace vc (test,i) ()
+	    ) (notvalid_detail detail))
+       else
+	 (* At least one prover was in error on this test *)
+	 Hashtbl.replace error_tests test ()
+    ) records;
 
   printf "@.Best individual provers:@.";
   let provers_valid : (prover, int) Hashtbl.t = Hashtbl.create 17 in
   let provers_notvalid : (prover, int) Hashtbl.t = Hashtbl.create 17 in
-  List.iter (fun (prover,test,summary,detail,time) ->
-	       intadd provers_valid prover (valid_summary summary);
-	       intadd provers_notvalid prover (notvalid_summary summary);
+  List.iter (fun (completed,prover,test,summary,detail,time) ->
+	       if completed then
+		 (intadd provers_valid prover (valid_summary summary);
+		  intadd provers_notvalid prover (notvalid_summary summary))
 	    ) records;
   let provers_data = 
     Hashtbl.fold (fun p () acc ->
@@ -156,18 +163,19 @@ let () =
   printf "@.Best combination provers:@.";
   let provers_ahead = Hashtbl.create 17 in
   let provers_behind = Hashtbl.create 17 in
-  List.iter (fun (prover,test,summary,detail,time) ->
-	       List.iter
-		 (fun i ->
-		    assert (Hashtbl.mem vc_count (test,i));
-		    if Hashtbl.find vc_count (test,i) = 1 then
-		      intadd provers_ahead prover 1
-		 ) (valid_detail detail);
-	       List.iter
-		 (fun i ->
+  List.iter (fun (completed,prover,test,summary,detail,time) ->
+	       if completed then
+		 (List.iter
+		    (fun i ->
+		       assert (Hashtbl.mem vc_count (test,i));
+		       if Hashtbl.find vc_count (test,i) = 1 then
+			 intadd provers_ahead prover 1
+		    ) (valid_detail detail);
+		  List.iter
+		    (fun i ->
 		    if hfind 0 vc_count (test,i) > 0 then
 		      intadd provers_behind prover 1
-		 ) (notvalid_detail detail)
+		    ) (notvalid_detail detail))
 	    ) records;
   let provers_data =
     Hashtbl.fold (fun p () acc ->
@@ -191,8 +199,9 @@ let () =
 
   printf "@.Quickest provers:@.";
   let provers_time : (prover, time) Hashtbl.t = Hashtbl.create 17 in
-  List.iter (fun (prover,test,summary,detail,time) ->
-	       timeadd provers_time prover time
+  List.iter (fun (completed,prover,test,summary,detail,time) ->
+	       if completed then
+		 timeadd provers_time prover time
 	    ) records;
   let provers_data = 
     Hashtbl.fold (fun p () acc ->
@@ -231,12 +240,21 @@ let () =
 		  printf "%s \t%d proved@." test n
 	       ) tests_proved;
 		  
+  let tests_in_error = Hashtbl.create 17 in
   let tests_no_vc = Hashtbl.create 17 in
   Hashtbl.iter (fun test () ->
 		  if not (Hashtbl.mem tests_notproved test)
-		    && not (Hashtbl.mem tests_proved test) then
-		      Hashtbl.replace tests_no_vc test ()
+		    && not (Hashtbl.mem tests_proved test) 
+		  then
+		    if Hashtbl.mem error_tests test then
+		      Hashtbl.replace tests_in_error test ()
+		    else
+		      Hashtbl.replace tests_no_vc test ()		      
 	       ) tests;
+  printf "@.Tests in error: %d@." (Hashtbl.length tests_in_error);
+  Hashtbl.iter (fun test n ->
+		  printf "%s@." test
+	       ) tests_in_error;
   printf "@.Tests with no VC: %d@." (Hashtbl.length tests_no_vc);
   Hashtbl.iter (fun test n ->
 		  printf "%s@." test

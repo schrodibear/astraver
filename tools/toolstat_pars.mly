@@ -25,12 +25,18 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: toolstat_pars.mly,v 1.3 2008-10-17 11:49:34 filliatr Exp $ */
+/* $Id: toolstat_pars.mly,v 1.4 2008-10-18 21:56:44 moy Exp $ */
 
 %{
   open Format
   open Parsing
   open Toolstat_types
+    
+  let default_test = let count = ref 0 in function () ->
+    incr count; "Unknown" ^ (string_of_int !count)
+  let default_summary = (0,0,0,0,0)
+  let default_detail = ([],[],[],[],[])
+  let default_time = (0,0,0.)
 %}
 
 %token < Toolstat_types.prover > PROVER
@@ -53,7 +59,14 @@ log:
 
 record:
 | PROVER TEST RESULT TIME
-    { let summary,detail = $3 in ($1,$2,summary,detail,$4) }
+    { let summary,detail = $3 in (true,$1,$2,summary,detail,$4) }
 | PROVER TEST RESULT
-    { let summary,detail = $3 in ($1,$2,summary,detail,(0,0,0.)) }
+    { (* Case for no VC *)
+      let summary,detail = $3 in (true,$1,$2,summary,detail,default_time) }
+| PROVER TEST
+    { (* Error case *)
+      (false,$1,$2,default_summary,default_detail,default_time) }
+| PROVER
+    { (* Error case *)
+      (false,$1,default_test (),default_summary,default_detail,default_time) }
 ;

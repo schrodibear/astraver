@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.132 2008-10-18 02:03:02 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.133 2008-10-18 21:56:43 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -349,6 +349,7 @@ let make_fun_info name ty =
     jc_fun_info_parameters = [];
     jc_fun_info_result = vi;
     jc_fun_info_return_region = Region.make_var ty name;
+    jc_fun_info_has_return_label = false; 
     jc_fun_info_param_regions = [];
     jc_fun_info_calls = [];
     jc_fun_info_is_recursive = false;
