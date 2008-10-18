@@ -25,14 +25,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib_split.mll,v 1.8 2008-10-17 11:49:34 filliatr Exp $ i*)
+(*i $Id: smtlib_split.mll,v 1.9 2008-10-18 22:57:54 moy Exp $ i*)
 
 {
 
   open Printf
   open Lexing 
 
-  let debug = ref true
+  let debug = ref false
   let callback = ref (fun f -> assert false : string -> unit)
 
   (* we put everything not a goal into [buf] *)
