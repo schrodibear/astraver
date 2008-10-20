@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.117 2008-10-17 11:49:30 filliatr Exp $ */
+/* $Id: jc_parser.mly,v 1.118 2008-10-20 15:25:35 marche Exp $ */
 
 %{
 
@@ -92,7 +92,7 @@
 %token PACK UNPACK ASSERT ASSUME HINT
 
 /* type invariant logic with variant and axiom tag */
-%token TYPE INVARIANT LOGIC INDUCTIVE WITH VARIANT AND AXIOM LEMMA TAG MATCH
+%token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM LEMMA TAG MATCH
 
 /* integer boolean real double unit void rep */
 %token INTEGER BOOLEAN REAL DOUBLE UNIT REP
@@ -1001,7 +1001,7 @@ logic_definition:
 | LOGIC IDENTIFIER label_binders parameters LBRACE axioms RBRACE
     { locate (JCDlogic(None, $2, $3, $4, JCaxiomatic $6)) }
 /* logic pred inductive def */
-| INDUCTIVE IDENTIFIER label_binders parameters LBRACE cases RBRACE
+| LOGIC IDENTIFIER label_binders parameters LBRACE cases RBRACE
     { locate (JCDlogic(None, $2, $3, $4, JCinductive $6)) }
 ;
 

@@ -10,3 +10,6 @@ simplify_lexer.ml
 simplify_parser.ml
 simplify_parser.mli
 rv_split.ml
+toolstat_lex.ml
+toolstat_pars.ml
+toolstat_pars.mli

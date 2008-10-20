@@ -8,3 +8,4 @@ coq
 simplify
 *.loc
 *.jloc
+*.annot
