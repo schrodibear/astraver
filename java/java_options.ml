@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.22 2008-10-17 11:49:29 filliatr Exp $ i*)
+(*i $Id: java_options.ml,v 1.23 2008-10-23 11:57:12 marche Exp $ i*)
 
 open Format
 
@@ -52,7 +52,7 @@ let libdir =
     lprintf "KRAKATOALIB is set to %s@." v;
     v
   with Not_found -> 
-    let p = Java_version.libdir in
+    let p = Version.libdir in
     lprintf "KRAKATOALIB is not set, using %s as default@." p;
     p
 
@@ -101,7 +101,7 @@ let version () =
   Printf.printf "This is Krakatoa version %s, compiled on %s
 Copyright (c) 2006-2008 - INRIA team-project ProVal
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
-" Java_version.version Java_version.date;
+" Version.version Version.date;
   exit 0
 
 let usage = "krakatoa [options] files"

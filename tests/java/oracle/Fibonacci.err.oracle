@@ -1,0 +1,2 @@
+File "java/java_interp.ml", line 1792, characters 34-34:
+Fatal error: exception Assert_failure("java/java_interp.ml", 1792, 34)

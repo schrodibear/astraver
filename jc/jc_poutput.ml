@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.27 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_poutput.ml,v 1.28 2008-10-23 11:57:12 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -407,8 +407,13 @@ let rec pdecl fmt d =
         fprintf fmt "# AbstractDomain = %s@\n" (string_of_abstract_domain p)
     | JCDint_model p ->
         fprintf fmt "# IntModel = %s@\n" (string_of_int_model p)
+(*
+    | JCDaxiomatic(id,decls) ->
+	fprintf fmt "axiomatic %s {@\n@[<v 2>%a@]@\n}" 
+	  id pdecls decls
+*)
    
-let rec pdecls fmt d =
+and pdecls fmt d =
   match d with
     | [] -> ()
     | d::r -> pdecl fmt d; pdecls fmt r

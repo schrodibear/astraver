@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.39 2008-10-17 11:49:30 filliatr Exp $ i*)
+(*i $Id: jc_options.ml,v 1.40 2008-10-23 11:57:12 marche Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -55,7 +55,7 @@ let libdir =
     lprintf "JESSIELIB is set to %s@." v;
     v
   with Not_found -> 
-    let p = Jc_version.libdir in
+    let p = Version.libdir in
     lprintf "JESSIELIB is not set, using %s as default@." p;
     p
 
@@ -99,7 +99,7 @@ let version () =
   Printf.printf "This is Jessie version %s, compiled on %s
 Copyright (c) 2006-2008 - INRIA team-project ProVal
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
-" Jc_version.version Jc_version.date;
+" Version.version Version.date;
   exit 0
 
 let usage = "jessie [options] files"

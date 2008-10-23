@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.20 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_constructors.ml,v 1.21 2008-10-23 11:57:12 marche Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -397,12 +397,11 @@ module PDecl = struct
     mk ~node:(JCDlemma(name, axiom, labels, body))
   let mklogic_var_def ~typ ~name ?body =
     mk ~node:(JCDlogic_var(typ, name, body))
-  let mklogic_def ?typ ~name ?(labels = []) ?(params = []) ?reads ?body ?axiomatic =
-    let roe = match reads, body, axiomatic with
-      | None, None, None -> JCreads []
-      | Some r, None, None -> JCreads r
-      | None, Some b, None -> JCexpr b
-      | None, None, Some l -> JCaxiomatic l 
+  let mklogic_def ?typ ~name ?(labels = []) ?(params = []) ?reads ?body =
+    let roe = match reads, body with
+      | None, None -> JCreads []
+      | Some r, None -> JCreads r
+      | None, Some b -> JCexpr b
       | _ ->
           raise
             (Invalid_argument "mklogic_def: cannot use both ~reads and ~body and ~axiomatic")

@@ -574,7 +574,6 @@ module PDecl :
       ?params:(ptype * string) list ->
       ?reads:'a list ->
       ?body:'a ->
-      ?axiomatic:(identifier * 'a) list ->
       ?pos:Loc.position -> unit -> 'a decl_node node_positioned
 
     val mklogic_type :

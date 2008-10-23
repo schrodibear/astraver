@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# Note: the BINDIR variable is a free variable
 # Note: the LIBDIR variable is a free variable
 # Note: the mkdirs are needed for the Ocamlbuild Makefile.
 
@@ -8,24 +9,11 @@
 # Why
 WHYVF=src/version.ml
 mkdir -p src
-echo "let coqversion = \""v8"\"" > $WHYVF
-echo "let version = \""$VERSION"\"" >> $WHYVF
+echo "let coqversion = \"v8\"" > $WHYVF
+echo "let version = \"$VERSION\"" >> $WHYVF
 echo "let date = \""`date`"\"" >> $WHYVF
-echo "let libdir = \""$LIBDIR/why"\"" >> $WHYVF
-
-# Jessie
-JESSIEVF=jc/jc_version.ml
-mkdir -p jc
-echo "let version = \""$VERSION"\"" > $JESSIEVF
-echo "let date = \""`date`"\"" >> $JESSIEVF
-echo "let libdir = \""$LIBDIR/jessie"\"" >> $JESSIEVF
-
-# Krakatoa
-KRAKATOAVF=java/java_version.ml
-mkdir -p java
-echo "let version = \""$VERSION"\"" > $KRAKATOAVF
-echo "let date = \""`date`"\"" >> $KRAKATOAVF
-echo "let libdir = \""$LIBDIR/krakatoa"\"" >> $KRAKATOAVF
+echo "let bindir = \"$BINDIR\"" >> $WHYVF
+echo "let libdir = \"$LIBDIR/why\"" >> $WHYVF
 
 # Caduceus
 CADUCEUSVF=c/cversion.ml

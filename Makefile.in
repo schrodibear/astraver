@@ -102,10 +102,9 @@ PVSLIB = @PVSLIB@
 GENERATED = src/version.ml src/rc.ml src/xml.ml \
 	    src/lexer.ml src/parser.mli \
             src/parser.ml src/linenum.ml \
-            jc/jc_version.ml jc/numconst.ml \
+            jc/numconst.ml \
 	    jc/jc_lexer.ml jc/jc_parser.mli jc/jc_parser.ml \
 	    jc/jc_ai.ml \
-	    java/java_version.ml \
 	    java/java_parser.mli java/java_parser.ml java/java_lexer.ml \
 	    ml/parsing/parser.mli ml/parsing/parser.ml ml/parsing/lexer.ml \
 	    ml/parsing/linenum.ml \
@@ -271,7 +270,7 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 # jessie
 JCCML_EXPORT = src/lib.ml src/rc.ml src/loc.ml src/pp.ml src/option_misc.ml \
 	jc/jc_type_var.ml jc/output.ml \
-	jc/jc_version.ml jc/jc_common_options.ml jc/jc_stdlib.ml \
+	jc/jc_common_options.ml jc/jc_stdlib.ml \
 	jc/jc_envset.ml jc/jc_region.ml jc/jc_fenv.ml jc/jc_constructors.ml \
 	jc/jc_pervasives.ml jc/jc_iterators.ml \
 	jc/jc_output_misc.ml jc/jc_poutput.ml jc/jc_output.ml jc/jc_noutput.ml
@@ -326,14 +325,14 @@ bin/jessie.byte: $(JCCMO)
 
 # krakatoa
 # CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
-KCMO = src/lib.cmo src/loc.cmo src/pp.cmo src/option_misc.cmo \
+KCMO = src/lib.cmo src/version.cmo \
+	src/loc.cmo src/pp.cmo src/option_misc.cmo \
 	jc/output.cmo jc/jc_type_var.cmo jc/jc_stdlib.cmo \
 	jc/jc_envset.cmo jc/jc_common_options.cmo \
 	jc/jc_region.cmo jc/jc_fenv.cmo jc/numconst.cmo jc/jc_constructors.cmo \
 	jc/jc_pervasives.cmo jc/jc_name.cmo \
 	jc/jc_iterators.cmo jc/jc_output_misc.cmo \
 	jc/jc_poutput.cmo jc/jc_output.cmo jc/jc_noutput.cmo jc/output.cmo \
-	java/java_version.cmo \
 	java/java_options.cmo java/java_pervasives.cmo \
 	java/java_abstract.cmo \
 	java/java_parser.cmo java/java_lexer.cmo java/java_syntax.cmo \
@@ -584,8 +583,7 @@ bin/tool-stat.byte: $(TOOLCMO)
 bin/tool-stat.opt: $(TOOLCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
-bin/cadlog.opt: c/cversion.cmx jc/jc_version.cmx \
-		java/java_version.cmx tools/cadlog.cmx
+bin/cadlog.opt: c/cversion.cmx tools/cadlog.cmx
 	$(OCAMLOPT) unix.cmxa -o $@ $^
 
 static:: $(STATICBINARY)
@@ -608,8 +606,8 @@ pvs-yes: $(PVSFILES)
 
 include Version
 
-doc/version.tex src/version.ml jc/jc_version.ml java/java_version.ml c/cversion.ml: Version version.sh config.status
-	LIBDIR=$(LIBDIR) ./version.sh
+doc/version.tex src/version.ml c/cversion.ml: Version version.sh config.status
+	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) ./version.sh
 
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why

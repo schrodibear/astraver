@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.165 2008-10-17 11:49:29 filliatr Exp $ *)
+(* $Id: java_interp.ml,v 1.166 2008-10-23 11:57:12 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1789,11 +1789,11 @@ let tr_logic_fun fi b acc =
   in
   let def = match b with
     | Java_typing.JAssertion a -> def_ ~body:(assertion a) ()
-    | Java_typing.JAxiomatic l -> 
+    | Java_typing.JAxiomatic l -> assert false (* TODO
 	def_ ~axiomatic:
 	  (List.map 
 	     (fun ((loc,id),a) -> (new identifier ~pos:loc id,assertion a)) l) 
-	  ()
+	  () *)
     | Java_typing.JTerm t -> def_ ~body:(term t) ()
     | Java_typing.JReads l ->
 	let logic_label = default_label fi.java_logic_info_labels in
