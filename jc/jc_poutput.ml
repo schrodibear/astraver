@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.28 2008-10-23 11:57:12 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.29 2008-10-24 12:16:41 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -305,17 +305,18 @@ let invariant fmt (id, vi, a) =
     id#name vi pexpr a
 
 let reads_or_expr fmt = function
-  | JCreads [] -> 
-      fprintf fmt "reads \\nothing;"
+  | JCreads [] -> ()
   | JCreads el -> 
       fprintf fmt "reads %a;" (print_list comma pexpr) el
   | JCexpr e -> 
       fprintf fmt "=@\n%a" pexpr e
+(*
   | JCaxiomatic l ->
       fprintf fmt "{@\n@[<v 2>%a@]@\n}" 
 	(print_list newline
 	   (fun fmt (id,e) -> 
 	      fprintf fmt "axiom %s: %a;@\n" id#name pexpr e)) l
+*)
   | JCinductive l ->
       fprintf fmt "{@\n@[<v 2>%a@]@\n}" 
 	(print_list newline
@@ -407,14 +408,13 @@ let rec pdecl fmt d =
         fprintf fmt "# AbstractDomain = %s@\n" (string_of_abstract_domain p)
     | JCDint_model p ->
         fprintf fmt "# IntModel = %s@\n" (string_of_int_model p)
-(*
-    | JCDaxiomatic(id,decls) ->
-	fprintf fmt "axiomatic %s {@\n@[<v 2>%a@]@\n}" 
-	  id pdecls decls
-*)
-   
-and pdecls fmt d =
-  match d with
+    | JCDaxiomatic(id,l) ->
+	fprintf fmt "axiomatic %s {@\n@[<v 2>%a@]@\n}" id
+	  (print_list newline pdecl) l
+	
+
+and pdecls fmt (l : pexpr decl list) =
+  match l with
     | [] -> ()
     | d::r -> pdecl fmt d; pdecls fmt r
 

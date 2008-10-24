@@ -61,7 +61,7 @@ type-all:
 $(JESSIE):
 	make -C ../../.. bin/jessie.byte
 
-why/%.why: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
+why/%.why: %.jc $(JESSIELIB)/why/jessie.why
 	$(EXECJESSIE) $<
 
 simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why

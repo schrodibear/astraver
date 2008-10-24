@@ -76,19 +76,29 @@ val field_initializer_table :
 val final_field_values_table :
   (int, Num.num list) Hashtbl.t
 
-val axioms_table : (string,(bool * Java_env.logic_label list * Java_tast.assertion)) Hashtbl.t
+val lemmas_table : (string,(Java_env.logic_label list * Java_tast.assertion)) Hashtbl.t
 
-type logic_body =
-  | JAssertion of Java_tast.assertion
-  | JTerm of Java_tast.term
-  | JReads of Java_tast.term list
-  | JAxiomatic of (Java_ast.identifier * Java_tast.assertion) list
-  | JBuiltin
+
+type logic_def_body =
+  [ `Assertion of Java_tast.assertion
+  | `Term of Java_tast.term
+  | `Inductive of (Java_ast.identifier * Java_tast.assertion) list
+  | `Builtin ]
+
+type logic_decl_body =
+  [ logic_def_body 
+  | `Reads of Java_tast.term list ]
+
+val logic_defs_table : 
+  (int,Java_env.java_logic_info * logic_def_body) Hashtbl.t
+
+type axiomatic_defs =
+  | Adecl of  Java_env.java_logic_info * logic_decl_body
+  | Aaxiom of string * bool * Java_env.logic_label list * Java_tast.assertion
+  | Atype of int
 
 val logic_types_table : (string, Java_env.logic_type_info) Hashtbl.t
-
-val logics_table : 
-  (int,Java_env.java_logic_info * logic_body) Hashtbl.t
+val axiomatics_table : (string, axiomatic_defs list) Hashtbl.t
 
 val builtin_logic_symbols : Java_env.java_logic_info list ref
 

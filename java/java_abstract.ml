@@ -288,7 +288,8 @@ let type_declaration fmt d =
     | JPTlogic_type_decl id -> assert false
     | JPTlogic_reads(id,rettype,labels,params,reads) -> assert false
     | JPTlogic_def(id,rettype,labels,param,e) -> assert false
-    | JPTlogic_axiomatic(id,rettype,labels,param,e) -> assert false
+    | JPTinductive(id,labels,param,e) -> assert false
+    | JPTaxiomatic _ -> assert false
 	
 
 let compilation_unit fmt cu =

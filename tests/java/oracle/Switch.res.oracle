@@ -88,7 +88,7 @@ Generating JC function cons_Switch for constructor Switch
 Done.
 ========== file tests/java/Switch.jc ==========
 # InvariantPolicy = Arguments
-# SeparationPolicy = Regions
+# SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
 
@@ -311,7 +311,7 @@ alt-ergo ergo: why/Switch_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
 why/%_why.why: why/%.why
-	@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why
+	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) -alt-ergo -dir why $(JESSIELIBFILE) why/$*.why
 
 cvcl: cvcl/Switch_why.cvc
 
@@ -681,8 +681,8 @@ exception Loop_continue_exc of unit
 exception Loop_exit_exc of unit
 
 predicate Non_null_Object(x:Object pointer,
- Object_x_1_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_x_1_alloc_table, x), (0))
+ Object_alloc_table:Object alloc_table) =
+ eq_int(offset_max(Object_alloc_table, x), (0))
 
 logic Object_tag:  -> Object tag_id
 
@@ -1245,12 +1245,10 @@ parameter char_of_integer_ :
   { eq_int(integer_of_char(result), x) }
 
 parameter cons_Switch :
- this_0:Object pointer ->
-  Object_this_0_3_alloc_table:Object alloc_table -> { } unit { true }
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter cons_Switch_requires :
- this_0:Object pointer ->
-  Object_this_0_3_alloc_table:Object alloc_table -> { } unit { true }
+ this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1264,21 +1262,19 @@ parameter long_of_integer_ :
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  Object_x_2_alloc_table:Object alloc_table ->
-   { } bool
-   { (JC_10:
-     (if result
-      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
-      else (x_0 = null))) }
+  { } bool reads Object_alloc_table
+  { (JC_10:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
-  Object_x_2_alloc_table:Object alloc_table ->
-   { } bool
-   { (JC_10:
-     (if result
-      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
-      else (x_0 = null))) }
+  { } bool reads Object_alloc_table
+  { (JC_10:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
 
 parameter safe_byte_of_integer_ :
  x:int -> { } byte { eq_int(integer_of_byte(result), x) }
@@ -2640,8 +2636,8 @@ type long
 type short
 
 predicate Non_null_Object(x: Object pointer,
-  Object_x_1_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_1_alloc_table, x) = 0)
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) = 0)
 
 logic Object_tag :  -> Object tag_id
 
@@ -3938,8 +3934,8 @@ why -simplify [...] why/Switch.why
  (EQ (concat_bitvector (select_bytes m p o1 s1) (select_bytes m p o2 s2))
  (select_bytes m p o1 (+ s1 s2)))))))
 
-(DEFPRED (Non_null_Object x Object_x_1_alloc_table)
-  (EQ (offset_max Object_x_1_alloc_table x) 0))
+(DEFPRED (Non_null_Object x Object_alloc_table)
+  (EQ (offset_max Object_alloc_table x) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -4549,7 +4545,7 @@ unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
 ========== generation of alt-ergo VC output ==========
-why --why [...] why/Switch.why
+why -alt-ergo [...] why/Switch.why
 ========== file tests/java/why/Switch_why.why ==========
 logic eq_unit : unit, unit -> prop
 
@@ -5365,8 +5361,8 @@ type long
 type short
 
 predicate Non_null_Object(x: Object pointer,
-  Object_x_1_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_1_alloc_table, x) = 0)
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) = 0)
 
 logic Object_tag :  -> Object tag_id
 

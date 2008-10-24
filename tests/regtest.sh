@@ -55,6 +55,13 @@ case $1 in
 	mycat $d/why/$b'_why'.why
 	echo "========== running alt-ergo =========="
 	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile ergo	
+	if grep RUNCOQ $f.java ; then
+	    echo "========== generation of Coq VC output =========="
+	    WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq	
+	    mycat $d/coq/$b'_why'.v
+	    echo "========== running Coq =========="
+	    DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq		   
+        fi
 	;;
   *.c)
 	b=`basename $1 .c`

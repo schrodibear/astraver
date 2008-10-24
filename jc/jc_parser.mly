@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.118 2008-10-20 15:25:35 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.119 2008-10-24 12:16:41 marche Exp $ */
 
 %{
 
@@ -91,8 +91,8 @@
 /* pack unpack assert */
 %token PACK UNPACK ASSERT ASSUME HINT
 
-/* type invariant logic with variant and axiom tag */
-%token TYPE INVARIANT LOGIC WITH VARIANT AND AXIOM LEMMA TAG MATCH
+/* type invariant logic axiomatic with variant and axiom tag match */
+%token TYPE INVARIANT LOGIC AXIOMATIC WITH VARIANT AND AXIOM LEMMA TAG MATCH
 
 /* integer boolean real double unit void rep */
 %token INTEGER BOOLEAN REAL DOUBLE UNIT REP
@@ -190,8 +190,10 @@ decl:
     { $1 }
 | type_definition
     { $1 }
+/*
 | axiom_definition
     { $1 }
+*/
 | global_invariant_definition
     { $1 }
 | exception_definition
@@ -212,8 +214,10 @@ decl:
 type_definition:
 | TYPE IDENTIFIER EQ int_constant DOTDOT int_constant
     { locate (JCDenum_type($2,$4,$6)) }
+/*
 | LOGIC TYPE IDENTIFIER
     { locate (JCDlogic_type($3)) }
+*/
 | TYPE IDENTIFIER EQ LSQUARE variant_tag_list RSQUARE
     { locate (JCDvariant_type($2, $5)) }
 | TYPE IDENTIFIER EQ LSQUARE union_tag_list RSQUARE
@@ -484,18 +488,6 @@ variable_definition:
 | type_expr IDENTIFIER SEMICOLON
     { locate (JCDvar($1,$2,None)) }
 ;
-
-/**********/
-/* axioms */
-/**********/
-
-axiom_definition:
-| AXIOM IDENTIFIER label_binders COLON expression
-    { locate( JCDlemma($2,true,$3,$5)) }
-| LEMMA IDENTIFIER label_binders COLON expression
-    { locate( JCDlemma($2,false,$3,$5)) }
-;
-
 
 /********************/
 /* global invariant */
@@ -792,15 +784,15 @@ tag:
 ;
 
 identifier_list: 
-| DEFAULT
-    { ["default"] }
-| IDENTIFIER 
-    { [$1] }
-| IDENTIFIER COMMA identifier_list 
-    { $1 :: $3 }
+| identifier 
+    { [$1#name] }
+| identifier COMMA identifier_list 
+    { $1#name :: $3 }
 ;
 
 identifier:
+| DEFAULT
+    { locate_identifier "default" }
 | IDENTIFIER
     { locate_identifier $1 }
 ;
@@ -980,8 +972,10 @@ logic_definition:
 | LOGIC type_expr IDENTIFIER EQ expression
     { locate (JCDlogic(Some $2, $3, [], [], JCexpr $5)) }
 /* constants no def */
+/*
 | LOGIC type_expr IDENTIFIER 
     { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
+*/
 /* logic fun def */
 | LOGIC type_expr IDENTIFIER label_binders parameters EQ expression
     { locate (JCDlogic(Some $2, $3, $4, $5, JCexpr $7)) }
@@ -989,33 +983,62 @@ logic_definition:
 | LOGIC IDENTIFIER label_binders parameters EQ expression
     { locate (JCDlogic(None, $2, $3, $4, JCexpr $6)) }
 /* logic fun reads */
+/*
 | LOGIC type_expr IDENTIFIER label_binders parameters reads %prec PRECLOGIC
     { locate (JCDlogic(Some $2, $3, $4, $5, JCreads $6)) }
+*/
 /* logic pred reads */
+/*
 | LOGIC IDENTIFIER label_binders parameters reads %prec PRECLOGIC
     { locate (JCDlogic(None, $2, $3, $4, JCreads $5)) }
+*/
 /* logic fun axiomatic def */
+/*
 | LOGIC type_expr IDENTIFIER label_binders parameters LBRACE axioms RBRACE
     { locate (JCDlogic(Some $2, $3, $4, $5, JCaxiomatic $7)) }
+*/
 /* logic pred axiomatic def */
+/*
 | LOGIC IDENTIFIER label_binders parameters LBRACE axioms RBRACE
     { locate (JCDlogic(None, $2, $3, $4, JCaxiomatic $6)) }
+*/
 /* logic pred inductive def */
-| LOGIC IDENTIFIER label_binders parameters LBRACE cases RBRACE
+| LOGIC IDENTIFIER label_binders parameters LBRACE indcases RBRACE
     { locate (JCDlogic(None, $2, $3, $4, JCinductive $6)) }
+| AXIOMATIC IDENTIFIER LBRACE logic_declarations RBRACE
+    { locate (JCDaxiomatic($2,$4)) } 
+| LEMMA IDENTIFIER label_binders COLON expression
+    { locate( JCDlemma($2,false,$3,$5)) }
 ;
 
-axioms:
-| /* epsilon */
-    { [] }
-| AXIOM identifier COLON expression SEMICOLON axioms
-    { ($2,$4)::$6 }
+
+
+logic_declarations:
+| logic_declaration
+    { [$1] }
+| logic_declaration logic_declarations
+    { $1::$2 }
 ;
 
-cases:
+logic_declaration:
+| logic_definition
+    { $1 }
+| LOGIC TYPE IDENTIFIER
+    { locate (JCDlogic_type($3)) }
+| LOGIC type_expr IDENTIFIER 
+    { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
+| LOGIC IDENTIFIER label_binders parameters 
+    { locate (JCDlogic(None, $2, $3, $4, JCreads [])) }
+| LOGIC type_expr IDENTIFIER label_binders parameters 
+    { locate (JCDlogic(Some $2, $3, $4, $5, JCreads [])) }
+| AXIOM identifier label_binders COLON expression
+    { locate( JCDlemma($2#name,true,$3,$5)) }
+;
+
+indcases:
 | /* epsilon */
     { [] }
-| CASE identifier COLON expression SEMICOLON cases
+| CASE identifier COLON expression SEMICOLON indcases
     { ($2,$4)::$6 }
 ;
 

@@ -19,7 +19,7 @@ Generating JC function cons_Literals for constructor Literals
 Done.
 ========== file tests/java/Literals.jc ==========
 # InvariantPolicy = Arguments
-# SeparationPolicy = Regions
+# SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = None
 
@@ -187,7 +187,7 @@ alt-ergo ergo: why/Literals_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
 why/%_why.why: why/%.why
-	@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why
+	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) -alt-ergo -dir why $(JESSIELIBFILE) why/$*.why
 
 cvcl: cvcl/Literals_why.cvc
 
@@ -439,8 +439,8 @@ exception Loop_continue_exc of unit
 exception Loop_exit_exc of unit
 
 predicate Non_null_Object(x:Object pointer,
- Object_x_1_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_x_1_alloc_table, x), (0))
+ Object_alloc_table:Object alloc_table) =
+ eq_int(offset_max(Object_alloc_table, x), (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -729,17 +729,17 @@ predicate valid_struct_interface(p:interface pointer,
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
+parameter Object_alloc_table : Object alloc_table ref
+
 parameter Literals_f :
  this_0:Object pointer ->
-  Object_this_0_3_alloc_table:Object alloc_table ->
-   { } int32 { (JC_16: eq_int(integer_of_int32(result), (13))) }
+  { } int32 reads Object_alloc_table
+  { (JC_16: eq_int(integer_of_int32(result), (13))) }
 
 parameter Literals_f_requires :
  this_0:Object pointer ->
-  Object_this_0_3_alloc_table:Object alloc_table ->
-   { } int32 { (JC_16: eq_int(integer_of_int32(result), (13))) }
-
-parameter Object_alloc_table : Object alloc_table ref
+  { } int32 reads Object_alloc_table
+  { (JC_16: eq_int(integer_of_int32(result), (13))) }
 
 parameter Object_tag_table : Object tag_table ref
 
@@ -969,12 +969,10 @@ parameter char_of_integer_ :
   { eq_int(integer_of_char(result), x) }
 
 parameter cons_Literals :
- this_1:Object pointer ->
-  Object_this_1_4_alloc_table:Object alloc_table -> { } unit { true }
+ this_1:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter cons_Literals_requires :
- this_1:Object pointer ->
-  Object_this_1_4_alloc_table:Object alloc_table -> { } unit { true }
+ this_1:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -988,21 +986,19 @@ parameter long_of_integer_ :
 
 parameter non_null_Object :
  x_0:Object pointer ->
-  Object_x_2_alloc_table:Object alloc_table ->
-   { } bool
-   { (JC_10:
-     (if result
-      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
-      else (x_0 = null))) }
+  { } bool reads Object_alloc_table
+  { (JC_10:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
 
 parameter non_null_Object_requires :
  x_0:Object pointer ->
-  Object_x_2_alloc_table:Object alloc_table ->
-   { } bool
-   { (JC_10:
-     (if result
-      then eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
-      else (x_0 = null))) }
+  { } bool reads Object_alloc_table
+  { (JC_10:
+    (if result
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
 
 parameter safe_byte_of_integer_ :
  x:int -> { } byte { eq_int(integer_of_byte(result), x) }
@@ -1155,8 +1151,8 @@ parameter struct_interface_mem_to_bitvector :
  bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
 
 let Literals_f_ensures_default =
- fun (this_0 : Object pointer) (Object_this_0_3_alloc_table : Object alloc_table) ->
-  { valid_struct_Literals(this_0, (0), (0), Object_this_0_3_alloc_table) }
+ fun (this_0 : Object pointer) ->
+  { valid_struct_Literals(this_0, (0), (0), Object_alloc_table) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1171,8 +1167,8 @@ let Literals_f_ensures_default =
   { (JC_15: eq_int(integer_of_int32(result), (13))) }
 
 let Literals_f_safety =
- fun (this_0 : Object pointer) (Object_this_0_3_alloc_table : Object alloc_table) ->
-  { valid_struct_Literals(this_0, (0), (0), Object_this_0_3_alloc_table) }
+ fun (this_0 : Object pointer) ->
+  { valid_struct_Literals(this_0, (0), (0), Object_alloc_table) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2026,8 +2022,8 @@ logic int32_of_integer : int -> int32
 function Literals_x() : int32 = int32_of_integer(2989)
 
 predicate Non_null_Object(x: Object pointer,
-  Object_x_1_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_1_alloc_table, x) = 0)
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -2286,8 +2282,8 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 ========== file tests/java/why/Literals_po1.why ==========
 goal Literals_f_ensures_default_po_1:
   forall this_0:Object pointer.
-  forall Object_this_0_3_alloc_table:Object alloc_table.
-  valid_struct_Literals(this_0, 0, 0, Object_this_0_3_alloc_table) ->
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
   forall result:int32.
   (integer_of_int32(result) = 2989) ->
   forall result0:int32.
@@ -2945,8 +2941,8 @@ why -simplify [...] why/Literals.why
  ;; Why function Literals_x
   (EQ Literals_x (int32_of_integer 2989)))
 
-(DEFPRED (Non_null_Object x Object_x_1_alloc_table)
-  (EQ (offset_max Object_x_1_alloc_table x) 0))
+(DEFPRED (Non_null_Object x Object_alloc_table)
+  (EQ (offset_max Object_alloc_table x) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -3167,8 +3163,8 @@ why -simplify [...] why/Literals.why
 
 ;; Literals_f_ensures_default_po_1, File "HOME/tests/java/Literals.java", line 5, characters 16-30
 (FORALL (this_0)
-(FORALL (Object_this_0_3_alloc_table)
-(IMPLIES (valid_struct_Literals this_0 0 0 Object_this_0_3_alloc_table)
+(FORALL (Object_alloc_table)
+(IMPLIES (valid_struct_Literals this_0 0 0 Object_alloc_table)
 (FORALL (result)
 (IMPLIES (EQ (integer_of_int32 result) 2989)
 (FORALL (result0)
@@ -3187,7 +3183,7 @@ unknown :   0 (  0%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
 ========== generation of alt-ergo VC output ==========
-why --why [...] why/Literals.why
+why -alt-ergo [...] why/Literals.why
 ========== file tests/java/why/Literals_why.why ==========
 logic eq_unit : unit, unit -> prop
 
@@ -4013,8 +4009,8 @@ logic int32_of_integer : int -> int32
 function Literals_x() : int32 = int32_of_integer(2989)
 
 predicate Non_null_Object(x: Object pointer,
-  Object_x_1_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_1_alloc_table, x) = 0)
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -4272,8 +4268,8 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 
 goal Literals_f_ensures_default_po_1:
   forall this_0:Object pointer.
-  forall Object_this_0_3_alloc_table:Object alloc_table.
-  valid_struct_Literals(this_0, 0, 0, Object_this_0_3_alloc_table) ->
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Literals(this_0, 0, 0, Object_alloc_table) ->
   forall result:int32.
   (integer_of_int32(result) = 2989) ->
   forall result0:int32.

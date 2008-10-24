@@ -196,16 +196,16 @@ let rec statement acc s : ('a list * 'b list) =
 
 and statements acc l = List.fold_left statement acc l
 
-let compute_logic_calls f t = 
+let compute_logic_calls f (t : [< Java_typing.logic_decl_body]) = 
   let calls =
     match t with
-      | Java_typing.JTerm t -> term [] t 
-      | Java_typing.JAssertion a -> assertion [] a 
-      | Java_typing.JReads r -> List.fold_left term [] r 
-      | Java_typing.JAxiomatic l ->
+      | `Term t -> term [] t 
+      | `Assertion a -> assertion [] a 
+      | `Reads r -> List.fold_left term [] r 
+      | `Inductive l ->
 	  List.fold_left
 	    (fun acc (_,a) -> assertion acc a) [] l
-      | Java_typing.JBuiltin -> []
+      | `Builtin -> []
   in
   f.java_logic_info_calls <- calls
 
@@ -218,7 +218,7 @@ let compute_constr_calls f req body =
     f.constr_info_calls <- b
       
 module LogicCallGraph = struct 
-  type t = (int, (java_logic_info * Java_typing.logic_body)) Hashtbl.t 
+  type t = (int, (java_logic_info * Java_typing.logic_def_body)) Hashtbl.t 
   module V = struct
     type t = java_logic_info
     let compare f1 f2 = Pervasives.compare f1.java_logic_info_tag f2.java_logic_info_tag

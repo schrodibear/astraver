@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.39 2008-10-23 12:15:36 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.40 2008-10-24 12:16:41 marche Exp $ i*)
 
 open Format
 open Pp
@@ -126,7 +126,7 @@ let generic full f targets =
        out "alt-ergo ergo: %a@\n" (print_files ergo) targets;
        out "\t@@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)@\n@\n";
        out "why/%%_why.why: why/%%.why@\n";
-       out "\t@@echo 'why --why [...] why/$*.why' && $(WHY) --why -dir why $(JESSIELIBFILE) why/$*.why@\n@\n";
+       out "\t@@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) -alt-ergo -dir why $(JESSIELIBFILE) why/$*.why@\n@\n";
 
        out "cvcl: %a@\n@\n" (print_files cvcl) targets;
        out "\t@@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)@\n@\n";

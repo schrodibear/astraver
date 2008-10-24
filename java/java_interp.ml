@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.166 2008-10-23 11:57:12 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.167 2008-10-24 12:16:40 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1743,17 +1743,6 @@ let tr_constr ci req behs b acc =
     ()
   in def :: acc
 	  
-(*s axioms *)
-
-let tr_axiom id is_axiom lab p acc =
-  let def = mklemma_def
-    ~name: id
-    ~axiom: is_axiom
-    ~labels: (List.map tr_logic_label lab)
-    ~body: (assertion p)
-    ()
-  in def::acc
-
 let default_label l =
   match l with
     | [l] -> Some l
@@ -1774,8 +1763,8 @@ let tr_non_null_logic_fun () =
     ~body: offset_maxa
     ()
       
-let tr_logic_fun fi b acc =   
-  if b = Java_typing.JBuiltin then acc else
+let tr_logic_fun fi (b : logic_decl_body) acc =   
+  if b = `Builtin then acc else
   let nfi = create_logic_fun Loc.dummy_position fi in
   let def_ =
     mklogic_def
@@ -1788,18 +1777,80 @@ let tr_logic_fun fi b acc =
          nfi.jc_logic_info_parameters)
   in
   let def = match b with
-    | Java_typing.JAssertion a -> def_ ~body:(assertion a) ()
-    | Java_typing.JAxiomatic l -> assert false (* TODO
-	def_ ~axiomatic:
+    | `Assertion a -> def_ ~body:(assertion a) ()
+    | `Inductive l -> 
+	def_ ~inductive:
 	  (List.map 
 	     (fun ((loc,id),a) -> (new identifier ~pos:loc id,assertion a)) l) 
-	  () *)
-    | Java_typing.JTerm t -> def_ ~body:(term t) ()
-    | Java_typing.JReads l ->
+	  ()
+    | `Term t -> def_ ~body:(term t) ()
+    | `Reads l -> 
 	let logic_label = default_label fi.java_logic_info_labels in
         def_ ~reads:(List.map (location logic_label) l) ()
-    | Java_typing.JBuiltin -> assert false
+    | `Builtin -> assert false
   in (def::acc)
+
+(*s axioms *)
+
+let tr_axiom id is_axiom lab p acc =
+  let def = mklemma_def
+    ~name: id
+    ~axiom: is_axiom
+    ~labels: (List.map tr_logic_label lab)
+    ~body: (assertion p)
+    ()
+  in def::acc
+
+(*
+let tr_axiomatic_decl acc d =
+  match d with
+    | Aaxiom(id,is_axiom,labels,a) -> acc
+    | Atype _ -> assert false
+    | Areads (fi, r) -> tr_logic_fun fi (JReads r) 
+    | Aind_def (_, _) -> assert false
+    | Afun_def (_, _) -> assert false
+    | Apred_def (_, _) -> assert false
+
+let tr_axiomatic_decls id l acc =
+  let l = List.fold_left tr_axiomatic_decl acc l in
+  assert false (* TODO *)
+
+let tr_axiomatic_axiom acc d =
+  match d with
+    | Aaxiom(id,is_axiom,labels,a) -> tr_axiom id is_axiom labels a acc
+    | Atype _|Areads (_, _)|Aind_def (_, _)|Afun_def (_, _)
+    | Apred_def (_, _) -> acc
+
+let tr_axiomatic_axioms id l acc =
+  let l = List.fold_left tr_axiomatic_axiom acc l in
+  assert false (* TODO *)
+*)
+
+let tr_axiomatic_decl acc d =
+  match d with
+    | Aaxiom(id,is_axiom,labels,a) -> acc
+    | Atype _ -> assert false
+    | Adecl(fi, b) -> 
+	Java_options.lprintf "translating axiomatic function %s@." fi.java_logic_info_name;
+	tr_logic_fun fi b acc 
+
+let tr_axiomatic_axiom acc d =
+  match d with
+    | Aaxiom(id,is_axiom,labels,a) -> 
+	Java_options.lprintf "translating axiom %s@." id;
+	tr_axiom id is_axiom labels a acc
+    | Atype _ -> assert false
+    | Adecl(fi, b) -> acc
+
+let tr_axiomatic id l acc =
+  Java_options.lprintf "translating axiomatic %s@." id;
+  let acc1 = List.fold_left tr_axiomatic_decl [] l in
+  let acc2 = List.fold_left tr_axiomatic_axiom acc1 l in
+  (mkaxiomatic ~name:id ~decls:(List.rev acc2) ())::acc
+
+
+
+
 
 let tr_field type_name acc fi =
   let vi = create_static_var Loc.dummy_position type_name fi in

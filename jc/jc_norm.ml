@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.107 2008-10-18 02:03:02 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.108 2008-10-24 12:16:41 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -621,11 +621,13 @@ let clause = function
 let reads_or_expr = function
   | JCreads elist -> JCreads(List.map expr elist)
   | JCexpr e -> JCexpr(expr e)
+(*
   | JCaxiomatic l -> JCaxiomatic(List.map (fun (id,e) -> (id, expr e)) l)
+*)
   | JCinductive l -> JCinductive(List.map (fun (id,e) -> (id, expr e)) l)
     
 (** From parsed declaration to normalized declaration *)
-let decl d = 
+let rec decl d = 
   let dnode = match d#node with
     | JCDfun(ty,id,params,clauses,body) ->
 	JCDfun(ty,id,params,List.map clause clauses,Option_misc.map expr body)
@@ -657,6 +659,7 @@ let decl d =
     | JCDannotation_policy x -> JCDannotation_policy x
     | JCDseparation_policy x -> JCDseparation_policy x
     | JCDinvariant_policy x -> JCDinvariant_policy x
+    | JCDaxiomatic(id,l) -> JCDaxiomatic(id,List.map decl l)
   in new decl ~pos:d#pos dnode
 	  
 let decls dlist =

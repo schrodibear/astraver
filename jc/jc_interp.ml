@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.367 2008-10-18 02:03:02 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.368 2008-10-24 12:16:41 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2163,6 +2163,8 @@ let tr_axiom loc id ~is_axiom labels a acc =
   else 
     Goal(id,a') :: Axiom(id ^ "_as_axiom",a') :: acc
 
+
+
 (******************************************************************************)
 (*                               Logic functions                              *)
 (******************************************************************************)
@@ -2232,6 +2234,7 @@ let tr_logic_fun f ta acc =
 	    | Some ty -> tr_base_type ty
           in
           Logic(false, f.jc_logic_info_final_name, params, ty') :: acc
+(*
       | ty_opt, JCAxiomatic l  ->
           let ty' = match ty_opt with
 	    | None -> simple_logic_type "prop"
@@ -2244,6 +2247,7 @@ let tr_logic_fun f ta acc =
 	      l acc 
 	  in
 	  Logic(false, f.jc_logic_info_final_name, params, ty') :: acc
+*)
       | None, JCInductive l  ->
 	  Inductive(false, f.jc_logic_info_final_name, params,  
 		    List.map (fun (id,a) -> (id#name, fa a)) l) :: acc
@@ -2255,7 +2259,7 @@ let tr_logic_fun f ta acc =
   (* no_update axioms *)
   let acc = 
     match ta with 
-      |	JCAssertion _ | JCTerm _ | JCAxiomatic _ | JCInductive _ -> acc 
+      |	JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
       | JCReads pset ->
     let memory_params_reads = 
       tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
@@ -2317,7 +2321,7 @@ let tr_logic_fun f ta acc =
   (* no_assign axioms *)
   let acc = 
     match ta with 
-      | JCAssertion _ | JCTerm _ | JCAxiomatic _ | JCInductive _ -> acc 
+      | JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
       | JCReads pset ->
     let memory_params_reads = 
       tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
@@ -2384,7 +2388,7 @@ let tr_logic_fun f ta acc =
   (* alloc_extend axioms *)
   let acc = 
     match ta with 
-      | JCAssertion _ | JCTerm _ | JCAxiomatic _ | JCInductive _ -> acc 
+      | JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
       | JCReads ps ->
     let alloc_params_reads = 
       talloc_table_params ~label_in_name:true f.jc_logic_info_effects
@@ -2509,6 +2513,16 @@ let tr_logic_fun f ta acc =
 (*         a) :: acc *)
 (*     ) li.jc_logic_info_effects.jc_effect_memories acc *)
 
+
+(***********************************)
+(*             axiomatic decls     *)
+(***********************************)
+
+
+let tr_axiomatic_decl acc d =
+  match d with
+    | Jc_typing.ABaxiom(loc,id,labels,p) -> 
+	tr_axiom loc ~is_axiom:true id labels p acc
 
 (******************************************************************************)
 (*                                 Functions                                  *)

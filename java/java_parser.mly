@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.52 2008-10-17 11:49:29 filliatr Exp $
+$Id: java_parser.mly,v 1.53 2008-10-24 12:16:40 marche Exp $
 
 */
 
@@ -99,8 +99,8 @@ $Id: java_parser.mly,v 1.52 2008-10-17 11:49:29 filliatr Exp $
 %start compilation_unit
 %type  <Java_ast.compilation_unit> compilation_unit
 
-%start kml_type_decl
-%type  <Java_ast.type_declaration> kml_type_decl
+%start kml_global_def_eof
+%type  <Java_ast.type_declaration> kml_global_def_eof
 
 %start kml_field_decl
 %type  <Java_ast.field_declaration> kml_field_decl
@@ -139,7 +139,7 @@ $Id: java_parser.mly,v 1.52 2008-10-17 11:49:29 filliatr Exp $
 
 %token REQUIRES DECREASES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR ASSERT
 %token INVARIANT LOOP_INVARIANT LOOP_VARIANT 
-%token AXIOM LEMMA LOGIC TYPE PREDICATE READS
+%token AXIOM LEMMA LOGIC TYPE PREDICATE INDUCTIVE AXIOMATIC READS
 %token BSFORALL BSEXISTS BSOLD BSAT BSRESULT BSNOTHING
 %token NON_NULL NULLABLE
 
@@ -1054,30 +1054,46 @@ ident:
 /****************************************************/
 /*s parsing of annotations: KML */
 
-kml_type_decl:
+kml_global_def_eof:
+| kml_global_def EOF
+     { $1 }
+;
+
+kml_global_def:
+| PREDICATE ident label_binders method_parameters EQ expr SEMICOLON
+    { JPTlogic_def($2,None,$3,$4,$6) }
+| INDUCTIVE ident label_binders method_parameters LEFTBRACE indcases RIGHTBRACE
+    { JPTinductive($2,$3,$4,$6) }
+| LOGIC type_expr ident label_binders method_parameters EQ expr SEMICOLON
+    { JPTlogic_def($3,Some $2,$4, $5,$7) }
+| AXIOMATIC ident LEFTBRACE kml_global_decls RIGHTBRACE
+    { JPTaxiomatic($2,$4) }
+| LEMMA ident label_binders COLON expr SEMICOLON
+    { JPTlemma($2,false,$3,$5) }
+;
+
+kml_global_decls:
+| /* epsilon */
+    { [] }
+| kml_global_decl kml_global_decls
+    { $1::$2 }
+;
+
+kml_global_decl:
 | TYPE ident
     { JPTlogic_type_decl $2 }
-| PREDICATE ident label_binders method_parameters EQ expr SEMICOLON EOF
-    { JPTlogic_def($2,None,$3,$4,$6) }
-| PREDICATE ident label_binders method_parameters LEFTBRACE axioms RIGHTBRACE EOF
-    { JPTlogic_axiomatic($2,None,$3,$4,$6) }
-| PREDICATE ident label_binders method_parameters reads_clause SEMICOLON EOF
+| PREDICATE ident label_binders method_parameters reads_clause SEMICOLON
     { JPTlogic_reads ($2, None, $3, $4, $5) }
-| LOGIC type_expr ident label_binders method_parameters EQ expr SEMICOLON EOF
-    { JPTlogic_def($3,Some $2,$4, $5,$7) }
-| LOGIC type_expr ident label_binders method_parameters LEFTBRACE axioms RIGHTBRACE EOF
-    { JPTlogic_axiomatic($3,Some $2,$4, $5,$7) }
-| LOGIC type_expr ident label_binders method_parameters reads_clause SEMICOLON EOF
+| LOGIC type_expr ident label_binders method_parameters reads_clause SEMICOLON
     { JPTlogic_reads($3,Some $2,$4,$5,$6) }
-/*
-| AXIOM ident label_binders COLON expr SEMICOLON EOF
+| AXIOM ident label_binders COLON expr SEMICOLON
     { JPTlemma($2,true,$3,$5) }
-*/
-| LEMMA ident label_binders COLON expr SEMICOLON EOF
-    { JPTlemma($2,false,$3,$5) }
+| kml_global_def
+    { $1 }
+;
 
 reads_clause:
-/*
+/* OBSOLETE
 | READS expr_comma_list
     { $2 }
 */
@@ -1085,10 +1101,10 @@ reads_clause:
     { [] }
 ;
  
-axioms:
+indcases:
 | /* epsilon */
     { [] }
-| AXIOM ident COLON expr SEMICOLON axioms
+| CASE ident COLON expr SEMICOLON indcases
     { ($2,$4)::$6 }
 ;
 

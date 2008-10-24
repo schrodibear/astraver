@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.35 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_separation.ml,v 1.36 2008-10-24 12:16:41 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -249,6 +249,15 @@ let location rresult loc =
   fold_location 
     (fold_unit (term rresult)) (fold_unit ignore) (fold_unit ignore) () loc
 
+let axiomatic_decl d =
+  match d with
+    | Jc_typing.ABaxiom(_,_,_,a) -> assertion dummy_region a 
+
+let axiomatic a =
+  try
+    let l = Hashtbl.find Jc_typing.axiomatics_table a in
+    List.iter axiomatic_decl l
+  with Not_found -> assert false
 let logic_function f =
   let (f, ta) = 
     Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag 
@@ -262,9 +271,10 @@ let logic_function f =
 	end
     | JCAssertion a -> assertion rresult a
     | JCReads r -> List.iter (location rresult) r
-    | JCAxiomatic l | JCInductive l ->
+    | JCInductive l ->
 	List.iter (fun (_,a) -> assertion rresult a) l
-  end
+  end;
+  Option_misc.iter axiomatic f.jc_logic_info_axiomatic
 
 let generalize_logic_function f =
   let param_regions =

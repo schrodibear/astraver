@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.74 2008-10-20 15:25:35 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.75 2008-10-24 12:16:41 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -163,6 +163,7 @@ rule token = parse
   | "assigns"               { ASSIGNS }
   | "assumes"               { ASSUMES }
   | "axiom"                 { AXIOM }
+  | "axiomatic"             { AXIOMATIC }
   | "behavior"              { BEHAVIOR }
   | "boolean"               { BOOLEAN }
   | "break"                 { BREAK }

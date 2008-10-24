@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.154 2008-10-18 02:03:02 moy Exp $ *)
+(* $Id: jc_ast.mli,v 1.155 2008-10-24 12:16:40 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -222,7 +222,6 @@ type 'expr clause =
 type 'expr reads_or_expr =
   | JCreads of 'expr list
   | JCexpr of 'expr
-  | JCaxiomatic of (identifier * 'expr) list
   | JCinductive of (identifier * 'expr) list
 
 type 'expr decl_node =
@@ -255,6 +254,7 @@ type 'expr decl_node =
   | JCDannotation_policy of Jc_env.annotation_sem
   | JCDabstract_domain of Jc_env.abstract_domain 
   | JCDint_model of Jc_env.int_model
+  | JCDaxiomatic of string * 'expr decl list
 
 and 'expr decl = 'expr decl_node node_positioned
 
@@ -435,7 +435,6 @@ type 'li term_or_assertion =
   | JCAssertion of 'li assertion
   | JCTerm of 'li term
   | JCReads of 'li location list
-  | JCAxiomatic of (identifier * 'li assertion) list
   | JCInductive of (identifier * 'li assertion) list
 
 type 'li loop_annot =

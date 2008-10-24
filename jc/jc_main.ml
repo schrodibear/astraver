@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.130 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_main.ml,v 1.131 2008-10-24 12:16:41 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -50,7 +50,7 @@ let compute_regions logic_components components =
     Jc_options.lprintf "Computation of regions@.";
     (* Preserve order between following calls *)
     Array.iter Jc_separation.logic_component logic_components;
-    Hashtbl.iter Jc_separation.axiom Jc_typing.axioms_table;
+    Hashtbl.iter Jc_separation.axiom Jc_typing.lemmas_table;
     Array.iter Jc_separation.code_component components
   end
 
@@ -286,7 +286,7 @@ let main () =
     in
     push_decls (treat_enum_pairs enumlist);
 
-    (* production phase 4: generation of Why logic functions *)
+    (* production phase 4.1: generation of Why logic functions *)
     Jc_options.lprintf "Translate logic functions@.";
     push_decls 
       (Hashtbl.fold 
@@ -295,13 +295,23 @@ let main () =
 	    Jc_interp.tr_logic_fun li p acc)
 	 Jc_typing.logic_functions_table );
 
-    (* production phase 5: generation of Why axioms *)
-    Jc_options.lprintf "Translate axioms@.";
+    (* production phase 4.2: generation of axiomatic logic decls*)
+    Jc_options.lprintf "Translate axiomatic declarations@.";
+    push_decls 
+      (Hashtbl.fold 
+	 (fun a decls acc ->
+	    Jc_options.lprintf "Axiomatic %s@." a;
+	    List.fold_left Jc_interp.tr_axiomatic_decl acc decls)
+	 Jc_typing.axiomatics_table);
+
+
+    (* production phase 4.3: generation of lemmas *)
+    Jc_options.lprintf "Translate lemmas@.";
     push_decls
       (Hashtbl.fold 
 	 (fun id (loc,is_axiom,labels,p) acc ->
 	    Jc_interp.tr_axiom loc id is_axiom labels p acc)
-	 Jc_typing.axioms_table);
+	 Jc_typing.lemmas_table);
 
     (* (optional) production phase 6: generation of global invariants *)
     if !Jc_options.inv_sem = InvOwnership then

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: java_options.ml,v 1.23 2008-10-23 11:57:12 marche Exp $ i*)
+(*i $Id: java_options.ml,v 1.24 2008-10-24 12:16:40 marche Exp $ i*)
 
 open Format
 
@@ -88,6 +88,7 @@ let minimal_class_hierarchy = ref false
 
 (* Jessie options *)
 let inv_sem = ref Jc_env.InvArguments
+let separation_policy = ref Jc_env.SepNone
 let annotation_sem = ref Jc_env.AnnotNone
 let ai_domain = ref Jc_env.AbsNone
 

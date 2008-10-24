@@ -31,7 +31,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.35 2008-10-17 11:49:29 filliatr Exp $
+$Id: java_lexer.mll,v 1.36 2008-10-24 12:16:40 marche Exp $
 
 ***************************************************************************)
 
@@ -66,6 +66,7 @@ $Id: java_lexer.mll,v 1.35 2008-10-17 11:49:29 filliatr Exp $
 	  "assigns", ASSIGNS;
 	  "assumes", ASSUMES;
 	  "axiom", AXIOM;
+	  "axiomatic", AXIOMATIC;
 	  "behavior", BEHAVIOR;
 	  "boolean", BOOLEAN;
 	  "break", BREAK;
@@ -97,6 +98,7 @@ $Id: java_lexer.mll,v 1.35 2008-10-17 11:49:29 filliatr Exp $
 	  "if", IF;
 	  "implements", IMPLEMENTS;
 	  "import", IMPORT;
+	  "inductive", INDUCTIVE;
 	  (* "inner", INNER; ?? *)
 	  "instanceof", INSTANCEOF;
 	  "int", INT;
@@ -269,6 +271,14 @@ i*)
 		| "Arguments" -> Jc_env.InvArguments
 		| "Ownership" -> Jc_env.InvOwnership
 		| _ -> lex_error lexbuf ("unknown invariant policy " ^ v)
+	  end  
+      | "SeparationPolicy" ->
+	  begin
+	    Java_options.separation_policy :=
+	      match v with	  
+		| "None" -> Jc_env.SepNone
+		| "Regions" -> Jc_env.SepRegions
+		| _ -> lex_error lexbuf ("unknown separation policy " ^ v)
 	  end  
       | "NonNullByDefault" ->
 	  begin

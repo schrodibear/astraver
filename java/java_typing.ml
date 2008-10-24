@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.143 2008-10-17 11:49:29 filliatr Exp $ *)
+(* $Id: java_typing.ml,v 1.144 2008-10-24 12:16:40 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -431,7 +431,7 @@ let logic_types_table = Hashtbl.create 97
 
 let new_logic_type id = id
 
-let get_type_decl package package_env acc d = 
+let rec get_type_decl package package_env acc d = 
     match d with
     | JPTclass c -> 
         (*
@@ -463,7 +463,9 @@ let get_type_decl package package_env acc d =
         end
     | JPTlogic_reads((loc,id),ret_type,labels,params,reads) -> acc 
     | JPTlogic_def((loc,id),ret_type,labels,params,body) -> acc
-    | JPTlogic_axiomatic((loc,id),ret_type,labels,params,body) -> acc
+    | JPTinductive((loc,id),labels,params,body) -> acc
+    | JPTaxiomatic(_,body) -> 
+	List.fold_left (get_type_decl package package_env) acc body
 
 
 type classified_name =
@@ -490,15 +492,23 @@ let is_reference_type t =
 
 (* logic funs *)
 
-type logic_body =
-  | JAssertion of assertion
-  | JTerm of term
-  | JReads of term list
-  | JAxiomatic of (identifier * assertion) list
-  | JBuiltin
+type logic_def_body =
+  [ `Assertion of Java_tast.assertion
+  | `Term of Java_tast.term
+  | `Inductive of (Java_ast.identifier * Java_tast.assertion) list
+  | `Builtin ]
 
-let logics_table = Hashtbl.create 97
+type logic_decl_body =
+  [ logic_def_body | `Reads of Java_tast.term list ]
+
+type axiomatic_defs =
+  | Adecl of  Java_env.java_logic_info * logic_decl_body
+  | Aaxiom of string * bool * Java_env.logic_label list * Java_tast.assertion
+  | Atype of int
+
 let logics_env = Hashtbl.create 97
+let logic_defs_table = Hashtbl.create 97
+let axiomatics_table = Hashtbl.create 97
 
 let builtin_logic_symbols = ref []
 
@@ -513,7 +523,7 @@ let () =
        let fi = logic_info id ty [] l in 
        builtin_logic_symbols := fi :: !builtin_logic_symbols;
        Hashtbl.add logics_env fi.java_logic_info_name fi;
-       Hashtbl.add logics_table fi.java_logic_info_tag (fi,JBuiltin)
+       Hashtbl.add logic_defs_table fi.java_logic_info_tag (fi,`Builtin)
     )
     Java_pervasives.builtin_logic_symbols
 
@@ -1848,7 +1858,7 @@ Typing level 2: extract bodies
 
 let field_initializer_table = Hashtbl.create 17
 
-let axioms_table = Hashtbl.create 17
+let lemmas_table = Hashtbl.create 17
 
 
 (* JLS 5.6.1: Unary Numeric Promotion *)
@@ -3497,9 +3507,10 @@ let type_field_initializer package_env type_env ci fi =
   in
     Hashtbl.add field_initializer_table fi.java_field_info_tag tinit
       
-let type_decl package_env type_env d = 
+let rec type_decl_aux ~in_axiomatic package_env type_env acc d = 
   match d with
     | JPTclass c -> 
+	assert (not in_axiomatic);
         (*
           class_modifiers : modifiers;
           class_name : identifier;
@@ -3528,14 +3539,16 @@ let type_decl package_env type_env d =
                   try Hashtbl.find class_type_env_table ci.class_info_tag
                   with Not_found -> assert false
                 in
-                  List.iter (type_field_initializer package_env full_type_env ti) 
-                    ci.class_info_fields;
-                  List.iter (type_method_spec_and_body package_env full_type_env ti) 
-                    ci.class_info_methods;
-                  List.iter (type_constr_spec_and_body package_env full_type_env ti) 
-                    ci.class_info_constructors;
+                List.iter (type_field_initializer package_env full_type_env ti) 
+                  ci.class_info_fields;
+                List.iter (type_method_spec_and_body package_env full_type_env ti) 
+                  ci.class_info_methods;
+                List.iter (type_constr_spec_and_body package_env full_type_env ti) 
+                  ci.class_info_constructors;
+		acc
         end
     | JPTinterface i -> 
+	assert (not in_axiomatic);
         begin
           let ty = 
             try
@@ -3557,10 +3570,11 @@ let type_decl package_env type_env d =
                   try Hashtbl.find interface_type_env_table ii.interface_info_tag
                   with Not_found -> assert false
                 in
-                  List.iter (type_field_initializer package_env full_type_env ti) 
-                    ii.interface_info_fields;
-                  List.iter (type_method_spec_and_body package_env full_type_env ti) 
-                    ii.interface_info_methods;
+                List.iter (type_field_initializer package_env full_type_env ti) 
+                  ii.interface_info_fields;
+                List.iter (type_method_spec_and_body package_env full_type_env ti) 
+                  ii.interface_info_methods;
+		acc
         end
     | JPTannot(loc,s) -> assert false
     | JPTlemma((loc,id),is_axiom, labels,e) -> 
@@ -3574,8 +3588,16 @@ let type_decl package_env type_env d =
         in
         (* TODO: si un seul label, c'est celui par defaut *)
         let te = assertion env None e in
-        Hashtbl.add axioms_table id (is_axiom,labels,te)
-    | JPTlogic_type_decl _ -> ()
+	if in_axiomatic then
+	  Aaxiom(id,is_axiom,labels,te)::acc
+	else
+	  begin
+	    if is_axiom then
+	      typing_error loc "axioms not allowed outside axiomatics"; 
+	    Hashtbl.add lemmas_table id (labels,te);
+	    acc
+	  end
+    | JPTlogic_type_decl _ -> acc
     | JPTlogic_reads ((loc, id), ret_type, labels, params, reads) -> 
         let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
         let env = 
@@ -3592,24 +3614,24 @@ let type_decl package_env type_env d =
             env = env;
           }
         in
-          begin match ret_type with
-            | None ->(* TODO: si un seul label, c'est celui par defaut *)
-                let fi = logic_info id None labels pl in
-                (* TODO: si un seul label, c'est celui par defaut *)
-                let r = List.map (location env None) reads in
-                  Hashtbl.add logics_env id fi;
-                  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
-            | Some ty -> 
-                let fi = 
-                  logic_info id 
-                    (Some (type_type package_env type_env false ty)) 
-                    labels pl 
-                in
-                (* TODO: si un seul label, c'est celui par defaut *)
-                let r = List.map (location env None) reads in
-                  Hashtbl.add logics_env id fi;
-                  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JReads r)
-          end
+	let fi =
+	  (* TODO: si un seul label, c'est celui par defaut *)
+	  match ret_type with
+            | None -> logic_info id None labels pl
+	    | Some ty -> 
+		logic_info id 
+                  (Some (type_type package_env type_env false ty)) 
+                  labels pl 
+	in
+        let r = List.map (location env None) reads in
+        Hashtbl.add logics_env id fi;
+	if in_axiomatic then
+	  Adecl(fi,`Reads r)::acc
+	else
+	  begin
+	    typing_error loc "logics without def not allowed outside axiomatics"; 
+	  end
+
     | JPTlogic_def ((loc, id), ret_type, labels, params, body) -> 
         let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
         let env = 
@@ -3626,23 +3648,40 @@ let type_decl package_env type_env d =
             env = env;
           }
         in
-          begin match ret_type with
-            | None ->
-                let fi = logic_info id None labels pl in
-                let a = assertion env None body in
-                  Hashtbl.add logics_env id fi;
-                  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAssertion a)
-            | Some t -> 
+	begin
+          match ret_type with
+            | None -> 
+		let fi = logic_info id None labels pl in
+		let a = assertion env None body in
+		Hashtbl.add logics_env id fi;
+		if in_axiomatic then
+		  Adecl(fi,`Assertion a)::acc
+		else
+		  begin
+		    Hashtbl.add logic_defs_table fi.java_logic_info_tag 
+		      (fi,`Assertion a);
+		    acc
+		  end		
+	    | Some ty ->
                 let fi = 
-                  logic_info id 
-                    (Some (type_type package_env type_env false t)) labels pl 
-                in
-                let a = term env None body in
-                  Hashtbl.add logics_env id fi;
-                  Hashtbl.add logics_table fi.java_logic_info_tag (fi,JTerm a)
-          end
-    | JPTlogic_axiomatic ((loc, id), ret_type, labels, params, body) -> 
-        let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
+		  logic_info id 
+                  (Some (type_type package_env type_env false ty)) labels pl 
+		in
+                let t = term env None body in
+                Hashtbl.add logics_env id fi;
+		if in_axiomatic then
+		  Adecl(fi,`Term t)::acc
+		else
+		  begin
+		    Hashtbl.add logic_defs_table fi.java_logic_info_tag 
+		      (fi,`Term t);
+		    acc
+		  end
+        end
+    | JPTinductive((loc, id), labels, params, body) -> 
+        let pl = 
+	  List.map (fun p -> fst (type_param package_env type_env p)) params 
+	in
         let env = 
           List.fold_left
             (fun acc vi -> 
@@ -3657,14 +3696,8 @@ let type_decl package_env type_env d =
             env = env;
           }
         in
-	let fi =
-          match ret_type with
-            | None -> logic_info id None labels pl
-	    | Some t -> 
-                logic_info id 
-                  (Some (type_type package_env type_env false t)) labels pl 
-	in
-	(* adding fi in env before typing axiomatics *)
+	let fi = logic_info id None labels pl in
+	(* adding fi in env before typing indcases *)
         Hashtbl.add logics_env id fi;
 	let l = List.map
 	  (fun (id,e) ->
@@ -3672,7 +3705,25 @@ let type_decl package_env type_env d =
 	     (id,a))
 	  body
 	in
-        Hashtbl.add logics_table fi.java_logic_info_tag (fi,JAxiomatic l)
+	if in_axiomatic then
+	  Adecl(fi,`Inductive l)::acc
+	else
+          begin
+	    Hashtbl.add logic_defs_table fi.java_logic_info_tag 
+	      (fi,`Inductive l);
+	    acc;
+	  end
+    | JPTaxiomatic((loc,id),l) ->
+	if in_axiomatic then
+	  typing_error loc "nested axiomatics not allowed";
+	let l = List.fold_left 
+	  (type_decl_aux ~in_axiomatic:true package_env type_env) [] l 
+	in
+	Hashtbl.add axiomatics_table id l;
+	acc
+
+let type_decl package_env type_env d = 
+  ignore (type_decl_aux ~in_axiomatic:false package_env type_env [] d)
 
 let get_bodies package_env type_env cu =
   List.iter (type_decl package_env type_env) cu.cu_type_decls

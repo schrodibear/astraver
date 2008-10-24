@@ -68,8 +68,14 @@ val enum_conversion_functions_table : (fun_info, string) Hashtbl.t
 val enum_conversion_logic_functions_table : (logic_info, string) Hashtbl.t
 *)
 
-val axioms_table : 
+val lemmas_table : 
   (string, Loc.position * bool * label list * assertion) Hashtbl.t
+
+type axiomatic_decl =
+  | ABaxiom of Loc.position * string * Jc_env.label list * Jc_constructors.assertion
+
+val axiomatics_table : 
+  (string, axiomatic_decl list) Hashtbl.t
 
 val global_invariants_table : 
   (logic_info, assertion) Hashtbl.t

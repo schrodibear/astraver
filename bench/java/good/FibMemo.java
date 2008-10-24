@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-//@+ CheckArithOverflow = no
+//@+ CheckArithOverflow = yes
 // @+ MinimalClassHierarchy = yes
 
 import java.util.HashMapIntegerInteger;

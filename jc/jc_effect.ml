@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.144 2008-10-18 02:03:02 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.145 2008-10-24 12:16:41 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1446,6 +1446,16 @@ let parameter fef v =
    
 let fixpoint_reached = ref false
 
+let axiomatic_decl_effect ef d =
+  match d with
+    | Jc_typing.ABaxiom(_,_,_,a) -> assertion ef a
+
+let axiomatic_effects ef a =
+  try
+    let l = Hashtbl.find Jc_typing.axiomatics_table a in
+    List.fold_left axiomatic_decl_effect ef l
+  with Not_found -> assert false
+
 let logic_fun_effects f = 
   let f,ta = 
     Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag 
@@ -1460,9 +1470,10 @@ let logic_fun_effects f =
 	     let fef = location ~in_assigns:false empty_fun_effect loc in
 	     ef_union ef fef.jc_reads 
 	  ) ef loclist
-    | JCAxiomatic l | JCInductive l ->
+    | JCInductive l ->
 	List.fold_left (fun ef (id,a) -> assertion ef a) ef l
   in
+  let ef = Option_misc.fold_left axiomatic_effects ef f.jc_logic_info_axiomatic in
   if same_effects ef f.jc_logic_info_effects then () else
     (fixpoint_reached := false;
      f.jc_logic_info_effects <- ef)

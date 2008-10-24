@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.67 2008-10-17 11:49:29 filliatr Exp $ *)
+(* $Id: java_main.ml,v 1.68 2008-10-24 12:16:40 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -66,7 +66,7 @@ let main () =
   
   Hashtbl.iter 
     (fun _ (f,t) -> Java_callgraph.compute_logic_calls f t)
-    Java_typing.logics_table;
+    Java_typing.logic_defs_table;
   
   Hashtbl.iter 
     (fun _ mt -> 
@@ -87,7 +87,7 @@ let main () =
   
   let _logic_components = 
     Java_callgraph.compute_logic_components 
-      Java_typing.logics_table
+      Java_typing.logic_defs_table
   in
   let components = 
     Java_callgraph.compute_components 
@@ -179,9 +179,23 @@ let main () =
   let decls = 
     Hashtbl.fold 
       (fun _ (li,p) acc ->
-	 Java_options.lprintf "generating logic function `%s'@." li.java_logic_info_name;
-	 Java_interp.tr_logic_fun li p acc)
-      Java_typing.logics_table 
+	 Java_options.lprintf "generating logic function `%s'@." 
+	   li.java_logic_info_name;
+	 Java_interp.tr_logic_fun li (p :> Java_typing.logic_decl_body) acc)
+      Java_typing.logic_defs_table 
+      decls
+  in
+  let decls = 
+    Hashtbl.fold Java_interp.tr_axiomatic Java_typing.axiomatics_table
+      decls
+  in	       
+  (* production phase 1.5 : generation of Jessie lemmas *)
+  let decls = 
+    Hashtbl.fold 
+      (fun id (lab,p) -> 
+	 Java_options.lprintf "generating lemma `%s'@."  id;
+	 Java_interp.tr_axiom id false lab p)
+      Java_typing.lemmas_table
       decls
   in
   (* any_string function *)
@@ -212,14 +226,6 @@ let main () =
       decls
   in	       	  
   
-  (* production phase 3 : generation of Jessie axioms *)
-  let decls = 
-    Hashtbl.fold 
-      (fun id (is_axiom,lab,p) acc ->
-	 Java_interp.tr_axiom id is_axiom lab p acc)
-      Java_typing.axioms_table
-      decls
-  in	       
   
   (* production phase 4 : generation of Jessie functions *)
   let decls =
@@ -261,7 +267,7 @@ let main () =
   (* production phase 5 : produce Jessie file *)
   let decls = 
     (mkinvariant_policy_def ~value:!Java_options.inv_sem ())
-    :: (mkseparation_policy_def ~value:Jc_env.SepRegions ()) 
+    :: (mkseparation_policy_def ~value:!Java_options.separation_policy ()) 
     :: (mkannotation_policy_def ~value:!Java_options.annotation_sem ())
     :: (mkabstract_domain_def ~value:!Java_options.ai_domain ())
     :: List.rev decls

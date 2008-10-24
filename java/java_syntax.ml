@@ -131,12 +131,13 @@ let type_decl d =
   match d with
     | JPTclass c -> JPTclass (class_decl c)
     | JPTinterface i -> JPTinterface (interface_decl i)
-    | JPTannot(loc,s) -> parse_annot loc s Java_parser.kml_type_decl
+    | JPTannot(loc,s) -> parse_annot loc s Java_parser.kml_global_def_eof
     | JPTlemma _ 
     | JPTlogic_type_decl _
     | JPTlogic_reads _ 
-    | JPTlogic_def _ 
-    | JPTlogic_axiomatic _ -> assert false
+    | JPTlogic_def _  -> assert false
+    | JPTinductive _ -> assert false
+    | JPTaxiomatic _ -> assert false
     
 
 

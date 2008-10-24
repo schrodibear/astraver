@@ -114,13 +114,36 @@ let expr =
        | _ -> acc
     )
 
+let axiomatic_calls_table = Hashtbl.create 17
+
+let compute_axiomatic_decl_call acc d =
+  match d with
+    | Jc_typing.ABaxiom(_,_,_,a) -> assertion acc a
+
+let compute_axiomatic_calls a =
+  try
+    Hashtbl.find axiomatic_calls_table a
+  with Not_found ->
+    try
+      let l = Hashtbl.find Jc_typing.axiomatics_table a in
+      let c = List.fold_left compute_axiomatic_decl_call [] l in
+      Hashtbl.add axiomatic_calls_table a c;
+      c
+    with
+	Not_found -> assert false
+
 let compute_logic_calls f t = 
   let calls =
     match t with
       | JCTerm t -> term [] t 
       | JCAssertion a -> assertion [] a 
-      | JCReads r -> []
-      | JCAxiomatic l | JCInductive l -> 
+      | JCReads r -> 
+	  begin
+	    match f.jc_logic_info_axiomatic with
+	      | None -> []
+	      | Some a -> compute_axiomatic_calls a 
+	  end
+      | JCInductive l -> 
 	  List.fold_left (fun acc (_,a) -> assertion acc a) [] l
   in
   f.jc_logic_info_calls <- calls
