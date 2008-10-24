@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.46 2008-10-17 11:49:33 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.47 2008-10-24 07:50:41 marche Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -37,6 +37,7 @@ let eclauses = ref 2000 (* E prover max nb of clauses *)
 let debug = ref false
 let batch = ref false
 let timings = ref true (* print timings *)
+let basename = ref false
 let files = Queue.create ()
 
 type smt_solver = Yices | CVC3 | Z3
@@ -55,6 +56,7 @@ let spec =
     "-batch", Arg.Set batch, "run in batch mode";
     "-no-timings", Arg.Clear timings, "do not display timings";
     "-smt-solver", Arg.String set_smt_solver, "<solver>";
+    "-basename", Arg.Set basename, "prints only file basenames";
   ]
 
 let () = 
@@ -155,7 +157,8 @@ let call_smt_solver = match !smt_solver with
   | Z3 -> call_z3
 
 let split f =
-  if not !batch then printf "%-30s: " f;
+  if not !batch then printf "%-30s: " 
+    (if !basename then Filename.basename f else f);
   let oldv = !nvalid in
   let oldi = !ninvalid in
   let oldt = !ntimeout in
