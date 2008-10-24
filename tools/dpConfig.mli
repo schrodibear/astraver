@@ -27,7 +27,12 @@
 
 
 
-type prover =
+
+type prover_id = 
+    Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo 
+  | Cvc3 | Graph | Z3 | Coq
+
+type prover_data =
   {
     name : string;
     mutable version: string;
@@ -49,17 +54,19 @@ type prover =
   }
     
 
-val alt_ergo : prover
+val alt_ergo : prover_data
 
-val simplify : prover
+val simplify : prover_data
 
-val z3 : prover
+val z3 : prover_data
 
-val yices : prover
+val yices : prover_data
 
-val cvc3 : prover
+val cvc3 : prover_data
 
-val prover_list : (prover * string list) list
+val coq : prover_data
+
+val prover_list : (prover_id * (prover_data * string list)) list
 
 val load_rc_file : unit -> unit
 

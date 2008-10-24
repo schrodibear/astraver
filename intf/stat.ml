@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.88 2008-10-17 11:49:29 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.89 2008-10-24 07:05:56 marche Exp $ i*)
 
 open Printf
 open Options
@@ -558,15 +558,20 @@ let main () =
 
   (* horizontal paned *)
   let hp = GPack.paned `HORIZONTAL  ~border_width:3 ~packing:vbox#add () in
+(*
   let vtable = 
     GPack.table ~row_spacings:5 ~homogeneous:false ~packing:hp#add () 
   in
+*)
+(*
   let table = GPack.table ~col_spacings:15 ~homogeneous:false () in
   let _ = vtable#attach ~left:0 ~top:0 table#coerce in
+*)
 
   let model = Model.create_model () in
 
   (* function list *)
+(*
   let files = List.map 
     (fun f -> 
        if Filename.is_relative f 
@@ -582,14 +587,17 @@ let main () =
   in
   table#attach ~left:1 ~top:0 ~expand:`BOTH files_combo#coerce;
   let _ = files_combo#entry#set_editable false in
+*)
   
   (* left tree of proof obligations *)
   let scrollview = 
     GBin.scrolled_window ~hpolicy:`AUTOMATIC ~vpolicy:`AUTOMATIC 
-    ~width:(!Colors.window_width / 2) () 
+    ~width:(!Colors.window_width / 2) ~packing:hp#add () 
   in
   let _ = scrollview#set_shadow_type `ETCHED_OUT in
+(*
   let _ = vtable#attach ~left:0 ~top:1 ~expand:`BOTH scrollview#coerce in
+*)
 
   let view = GTree.view ~model ~packing:scrollview#add () in
   (* has effect but not nice 
@@ -818,7 +826,7 @@ let main () =
   let _ = view#misc#connect#realize ~callback:view#expand_all in
 
   (* vertical paned *)
-  let hb = GPack.paned `VERTICAL  ~border_width:3 ~packing:hp#add2 () in
+  let hb = GPack.paned `VERTICAL  ~border_width:0 ~packing:hp#add2 () in
   let _ = hb#misc#connect#realize
 	  ~callback:(fun _ ->hb#set_position (!Colors.window_height*6/10 ) ) in
   let _ = hb#set_position (!Colors.window_height*9/10 ) in
@@ -930,6 +938,7 @@ let main () =
   (*
    * function selection 
    *)
+(*
   let _ =
     files_combo#entry#event#connect#after#focus_in ~callback:
       begin fun _ev -> 
@@ -938,6 +947,7 @@ let main () =
 	false
       end
   in
+*)
 
   (*
    * Running obligation 

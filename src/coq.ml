@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.172 2008-10-17 11:49:31 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.173 2008-10-24 07:05:56 marche Exp $ i*)
 
 open Options
 open Logic
@@ -1033,6 +1033,7 @@ let push_decl = function
   | Daxiom (_, id, p) -> Gen.add_elem (Ax, rename id) (Axiom (id, p))
   | Dpredicate_def (_,id,p) -> Gen.add_elem (Pr, rename id) (Predicate (id, p))
   | Dinductive_def(loc, id, d) -> 
+      let id = Ident.string id in
       Gen.add_elem (Ind, rename id) (Inductive(id,d)) 
   | Dfunction_def (_,id,f) -> Gen.add_elem (Fun, rename id) (Function (id, f))
   | Dtype (_, vl, id) -> Gen.add_elem (Ty, rename id) (AbstractType (id, vl))

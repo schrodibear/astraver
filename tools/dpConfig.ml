@@ -27,7 +27,11 @@
 
 
 
-type prover =
+type prover_id = 
+    Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo 
+  | Cvc3 | Graph | Z3 | Coq
+
+type prover_data =
   {
     name : string;
     mutable version: string;
@@ -140,14 +144,29 @@ let cvc3 =
     undecided_cregexp = None;
   }
 
+let coq =    
+  {
+    name = "Coq";
+    version = "";
+    version_switch = "-v";
+    version_regexp = "The Coq Proof Assistant, version \\([^ ]+\\)";
+    command = "coqc";
+    command_switches = "";
+    valid_regexp = "\\bunsat\\b";
+    valid_cregexp = None;
+    undecided_regexp = "Error while reading";
+    undecided_cregexp = None;
+  }
+
 
 let prover_list = 
   [
-    alt_ergo, ["alt-ergo" ; "ergo"] ;
-    simplify, ["Simplify" ; "simplify"] ;
-    z3, ["z3"] ;
-    yices, ["yices"] ;
-    cvc3, ["cvc3"] ;
+    Ergo, (alt_ergo, ["alt-ergo" ; "ergo"]) ;
+    Simplify, (simplify, ["Simplify" ; "simplify"]) ;
+    Z3, (z3, ["z3"]) ;
+    Yices, (yices, ["yices"]) ;
+    Cvc3, (cvc3, ["cvc3"]) ;
+    Coq, (coq, ["coqc"]);
   ] 
 
 let rc_file () =
@@ -178,6 +197,7 @@ let load_rc_file () =
 	 | "Z3" -> load_prover_info z3 key args
 	 | "Yices" -> load_prover_info yices key args
 	 | "CVC3" -> load_prover_info cvc3 key args
+	 | "Coq" -> load_prover_info coq key args
 	 | _ -> 
 	     printf "Unknown section [%s] in rc file@." key)
     rc
@@ -192,6 +212,6 @@ let save_prover_info fmt p =
 let save_rc_file () =
   let ch = open_out (rc_file ()) in
   let fmt = Format.formatter_of_out_channel ch in
-  List.iter (fun (p,_) -> save_prover_info fmt p) prover_list;
+  List.iter (fun (_,(p,_)) -> save_prover_info fmt p) prover_list;
   close_out ch
 

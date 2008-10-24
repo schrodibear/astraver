@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.30 2008-10-17 11:49:31 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.31 2008-10-24 07:05:56 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -54,7 +54,7 @@ let iter f = Queue.iter (fun (_,o) -> f o) oblig
 
 (* calling prover *)
 
-type prover = Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | Cvc3 | Graph | Z3
+open DpConfig
 
 let push_elem p e = 
   if not pruning then 
@@ -67,6 +67,8 @@ let push_elem p e =
   | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl e
   | Ergo -> Pretty.push_decl ~ergo:true e
   | Graph -> Pretty.push_decl e
+  | Coq -> Coq.push_decl e
+
 let push_obligation p (loc, expl, id, s) = 
   let g = Dgoal (loc, expl, id, s) in
   match p with
@@ -77,6 +79,8 @@ let push_obligation p (loc, expl, id, s) =
   | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl g
   | Ergo -> Pretty.push_decl g
   | Graph -> Pretty.push_decl g
+  | Coq -> Coq.push_decl g
+
 (* output_file is a CRITICAL SECTION *)
 (** @parama elems is the List that stores the theory
     @parama o is the proof obligation
@@ -94,6 +98,7 @@ let output_file ?encoding p (elems,o) =
     | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.reset ()
     | Ergo -> Pretty.reset ()
     | Graph -> Pretty.reset ()
+    | Coq -> Coq.reset ()
   end;
   
   if pruning then 
@@ -121,7 +126,14 @@ let output_file ?encoding p (elems,o) =
       List.iter (push_elem p) elems;
       push_obligation p o
     end;
-  let f = Filename.temp_file "gwhy" "" in
+  let f = 
+    match p with
+      | Coq ->
+	  let (_, _, id, _) = o in
+	  Format.printf "generating coq file %s_why.v@." id;
+	  id 
+      | _ -> Filename.temp_file "gwhy" "" 
+  in
   match p with
     | Simplify -> Simplify.output_file f; f ^ "_why.sx"
     | Harvey -> Harvey.output_file f; f ^ "_why.rv"
@@ -130,9 +142,17 @@ let output_file ?encoding p (elems,o) =
     | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.output_file f; f ^ "_why.smt"
     | Ergo -> Pretty.output_file f; f ^ "_why.why"
     | Graph -> Pretty.output_file f; f ^ "_why.why"
+    | Coq -> Coq.output_file f; f ^ "_why.v"
 open Format
 
-let prover_name = function 
+
+let prover_name p = 
+  try
+    let (info,_) = List.assoc p DpConfig.prover_list in
+    info.name
+  with
+      Not_found -> "(unnamed)"
+(*
   | Simplify -> "Simplify" 
   | Harvey -> "haRVey"
   | Cvcl -> "CVC Lite"
@@ -145,6 +165,8 @@ let prover_name = function
   | Cvc3 -> "CVC3"
   | Graph -> "Graph"
   | Z3 -> "Z3"
+  | Coq -> DpConfig.coq.DpConfig.name
+*)
 
 let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
   let so = try Hashtbl.find oblig_h o with Not_found -> assert false in
@@ -171,7 +193,13 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
 	Calldp.z3 ~debug ?timeout ~filename ()
     | Graph -> 
 	Calldp.graph  ~debug ?timeout ~filename ()
+    | Coq ->
+	Calldp.coq ~debug ?timeout ~filename ()
   in
-  if not debug then begin try Sys.remove filename with _ -> () end; 
+  if not debug then begin 
+    match p with
+      | Coq -> ()
+      | _ -> (try Sys.remove filename with _ -> () )
+  end; 
   r
 

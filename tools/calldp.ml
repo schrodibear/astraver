@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.55 2008-10-17 11:49:33 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.56 2008-10-24 07:05:57 marche Exp $ i*)
 
 open Printf
 
@@ -71,10 +71,6 @@ let timed_sys_command ~debug timeout cmd =
   if debug then Format.eprintf "Output file %s:@.%s@." out (file_contents out);
   (cpu_time,ret,out)
 
-let error c t cmd =
-  if c = 152 then Timeout t 
-  else ProverFailure (t,"command failed: " ^ cmd) 
-
 let grep re str =
   try
     let _ = Str.search_forward re str 0 in true
@@ -83,7 +79,8 @@ let grep re str =
 let gen_prover_call ?(debug=false) ?(timeout=30) ~filename:f p =
   let cmd = p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
-  if c = 152 (* 128 + SIGXCPU signal (24 /usr/include/bits/signum.h) *) then Timeout t
+  if c = 152 (* 128 + SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
+  then Timeout t
   else
     let res = file_contents out in
     let r =
@@ -117,6 +114,9 @@ let gen_prover_call ?(debug=false) ?(timeout=30) ~filename:f p =
 let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
   gen_prover_call ~debug ~timeout ~filename:f DpConfig.alt_ergo
 	        
+let coq ?(debug=false) ?(timeout=10) ~filename:f () =
+  gen_prover_call ~debug ~timeout ~filename:f DpConfig.coq
+	        
 let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
   gen_prover_call ~debug ~timeout ~filename:f DpConfig.simplify
 
@@ -129,6 +129,10 @@ let yices ?(debug=false) ?(timeout=10) ~filename:f () =
 let cvc3 ?(debug=false) ?(timeout=10) ~filename:f () =
   gen_prover_call ~debug ~timeout ~filename:f DpConfig.cvc3
 
+
+let error c t cmd =
+  if c = 152 then Timeout t 
+  else ProverFailure (t,"command failed: " ^ cmd) 
 
 let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "cvcl < %s" f in

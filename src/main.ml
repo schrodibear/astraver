@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.160 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.161 2008-10-24 07:05:56 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -66,9 +66,9 @@ let add_loc = function
   | Dtype (loc, _, s)
   | Dlogic (loc, s, _)
   | Dpredicate_def (loc, s, _)
-  | Dinductive_def (loc, s , _)
   | Dfunction_def (loc, s, _) 
   | Daxiom (loc, s, _) (* useful? *) -> Loc.add_ident s loc
+  | Dinductive_def (loc, s , _) -> () (* TODO ? *)
   | Dgoal _ -> ()
 
 let store_decl_into_a_queue d  = 
@@ -490,7 +490,7 @@ let interp_decl ?(_prelude=false) d =
 	in
 	let d = generalize_inductive_def (pl,l) in
 	push_decl ("","",Loc.dummy_floc) 
-	  (Dinductive_def (Loc.extract loc, Ident.string id, d))
+	  (Dinductive_def (Loc.extract loc, id, d))
     | Function_def (loc, id, pl, ty, e) ->
 	let env = Env.empty_logic () in
 	if is_global_logic id then raise_located loc (Clash id);

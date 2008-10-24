@@ -132,13 +132,77 @@ let push decl =
   | Dtype _ 
   | Dlogic _ -> decl
 
+(***************
+ inductive definitions
+**************)
 
+(*
+
+inductive id : t1 -> .. -> tn -> prop {
+
+  c_1 : forall x_1,..,x_k : H1 -> .. Hi -> id(e_1,..,e_n)
+
+| ...
+
+| c_j
+
+}
+
+gives (j+1) axioms : j direct axioms
+
+a_1 : forall x_1,..,x_k : H1 -> .. Hi -> id(e_1,..,e_n)
+..
+a_j : ...
+
+and one inversion axiom :
+
+forall y_1:t_1,..,y_n:t_n, id(y_1,..,y_n) ->
+
+  exists x_1,..,x_k: H1 /\ ... /\ Hi /\ y_1 = e1 /\ .. /\ y_n = e_n
+
+\/ 
+ 
+  ... 
+
+*)
+
+let inversion_axiom id params cases =
+  let yvars = List.map (fun t -> (fresh_var(),t)) params in
+  let rec invert = function
+    | Forall(w,id,n,t,trig,p) -> Exists(id,n,t,invert p)
+    | Pimplies(w,h,p) -> Misc.pand h (invert p)
+    | Papp(f,l,_) ->
+	assert (f == id);
+	List.fold_right2 
+	  (fun (y,_) e acc -> Misc.pand (Papp(t_eq,[Tvar y;e],[])) acc)
+	  yvars l Ptrue	
+    | _ -> assert false (* ill-formed, should have been catch by typing *)
+  in
+  let rec fold acc cases =
+    match cases with
+      | [] -> acc
+      | (id,c)::rem -> fold (Misc.por (invert c) acc) rem
+  in
+  let body = 
+    List.fold_right
+      (fun (id,c) acc -> Misc.por (invert c) acc)
+      cases Pfalse 
+  in
+  let ytvars = List.map (fun (y,_) -> Tvar y) yvars in
+  let body = Pimplies(false,Papp(id,ytvars,[]),body) in
+  List.fold_right (fun (y,t) acc -> Forall(false,y,y,t,[],acc)) yvars body
+  
+    
+  
 
 let inductive_def loc id d =
   let (vars,(bl,cases)) = Env.specialize_inductive_def d in
   let t = Env.generalize_logic_type (Predicate bl) in
-  Dlogic(loc,id,t)::
-    (List.map (fun (id,p) -> 
-		 let p = Env.generalize_predicate p in
-		 Daxiom(loc,Ident.string id,p)) cases)
-    (* TODO: add inversion axiom *)
+  let name = Ident.string id in
+  Dlogic(loc,name,t)::
+    (Daxiom(loc,name ^ "_inversion",
+	    Env.generalize_predicate (inversion_axiom id bl cases)))::
+    (List.map 
+       (fun (id,p) -> 
+	  let p = Env.generalize_predicate p in
+	  Daxiom(loc,Ident.string id,p)) cases)

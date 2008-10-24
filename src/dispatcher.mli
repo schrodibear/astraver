@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.mli,v 1.26 2008-10-17 11:49:31 filliatr Exp $ i*)
+(*i $Id: dispatcher.mli,v 1.27 2008-10-24 07:05:56 marche Exp $ i*)
 
 open Cc
 
@@ -35,12 +35,7 @@ val iter :
     (Loc.floc * Logic_decl.vc_expl * string * sequent Env.scheme -> unit) 
     -> unit
 
-type prover = 
-  | Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo 
-  | Cvc3 | Graph | Z3
-
-val prover_name : prover -> string
 
 val call_prover : 
   ?debug:bool -> ?timeout:int -> ?encoding:Options.encoding ->
-  obligation:string -> prover -> Calldp.prover_result
+  obligation:string -> DpConfig.prover_id -> Calldp.prover_result

@@ -71,7 +71,7 @@ let main () =
       printf "rc file not found, using default values for provers@\n@.";
   end;
   printf "starting autodetection...@.";
-  List.iter (fun (p,l) -> detect_prover p (l@[p.command])) prover_list;
+  List.iter (fun (_,(p,l)) -> detect_prover p (l@[p.command])) prover_list;
   printf "detection done.@.";
   printf "writing rc file...@.";
   save_rc_file ()

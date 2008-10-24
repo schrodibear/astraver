@@ -31,11 +31,11 @@ open Options
 exception No_such_prover
 
 type prover = {
-  pr_info : DpConfig.prover;
+  pr_id : DpConfig.prover_id;
+  pr_info : DpConfig.prover_data;
   pr_result : int GTree.column;
   pr_icon : GtkStock.id GTree.column;
   mutable pr_viewcol : GTree.view_column option;
-  pr_id : Dispatcher.prover;
   pr_enc : Options.encoding;
 }
   
@@ -50,53 +50,53 @@ let stat = cols#add string
 let first_row = ref None
     
 let simplify = {
+  pr_id = DpConfig.Simplify;
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Simplify;
   pr_enc = NoEncoding;
   }
 
 let graph = {
+  pr_id = DpConfig.Graph;
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Graph;
   pr_enc = NoEncoding;
   }
 
 let simplify_pred = {
+  pr_id = DpConfig.Simplify;
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Simplify;
   pr_enc = Predicates;
   }
 let simplify_strat = {
+  pr_id = DpConfig.Simplify;
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Simplify;
   pr_enc = Stratified;
   }
 let simplify_sstrat = {
+  pr_id = DpConfig.Simplify;
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Simplify;
   pr_enc = SortedStratified;
   }
 let simplify_rec = {
+  pr_id = DpConfig.Simplify;
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Simplify;
   pr_enc = Recursive;
   }
 
@@ -152,57 +152,70 @@ let rvsat = {
   }
 *)
 let yices = {
+  pr_id = DpConfig.Yices;
   pr_info = DpConfig.yices;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Yices;
   pr_enc = Monomorph;
   }
 let yicesSStrat = {
+  pr_id = DpConfig.Yices;
   pr_info = DpConfig.yices;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Yices;
   pr_enc = SortedStratified;
   }
 let ergo = {
+  pr_id = DpConfig.Ergo;
   pr_info = DpConfig.alt_ergo;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Ergo;
   pr_enc = NoEncoding;
   }
 let ergoSS = {
+  pr_id = DpConfig.Ergo;
   pr_info = DpConfig.alt_ergo;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Ergo;
   pr_enc = SortedStratified;
   }
 let cvc3 = {
+  pr_id = DpConfig.Cvc3;
   pr_info = DpConfig.cvc3;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Cvc3;
   pr_enc = SortedStratified;
   }
 let z3SS = {
+  pr_id = DpConfig.Z3;
   pr_info = DpConfig.z3;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
   pr_viewcol = None;
-  pr_id = Dispatcher.Z3;
   pr_enc = SortedStratified;
   }
 
+
+let coq = {
+  pr_id = DpConfig.Coq;
+  pr_info = DpConfig.coq;
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
+  pr_enc = NoEncoding;
+}
+
+  
 let provers = [
   ergo; (*ergoSS;*) graph; simplify; z3SS ; yicesSStrat; cvc3; 
-  (*simplify_sstrat;*) simplify_strat; yices; (* rvsat; *)
+  (*simplify_sstrat;*) simplify_strat; yices; 
+  coq ;
+  (* rvsat; *)
   (* zenon; zenon_pred; zenon_strat; zenon_rec;*)
   (* harvey; cvcl *)]
 let provers_selected = ref provers
@@ -224,7 +237,7 @@ let enc_name ~nl n p =
   let nl x = if nl then "\n" ^ x else x in 
   match p.pr_enc with
     | NoEncoding -> 
-	if p.pr_id = Dispatcher.Graph then n ^ nl "(Graph)"
+	if p.pr_id = DpConfig.Graph then n ^ nl "(Graph)"
 	else n ^ nl "" 
     | SortedStratified -> n ^ nl "(SS)"
     | Monomorph -> n ^ nl "(mono)"

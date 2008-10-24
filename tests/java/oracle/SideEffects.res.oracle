@@ -249,7 +249,7 @@ TIMEOUT ?= 10
 DP ?= why-dp -timeout $(TIMEOUT)
 WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
-export WHYLIB=WHYLIB
+WHYLIB ?= HOME/lib
 
 WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs SideEffects.loc
 

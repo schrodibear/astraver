@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.255 2008-10-18 21:56:43 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.256 2008-10-24 07:05:56 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -429,7 +429,11 @@ let num_un_op t (op: [< `Uminus | `Ubw_not]) e =
 let make_logic_unary_op loc (op : Jc_ast.unary_op) e2 =
   let t2 = e2#typ in
   match op with
-    | `Unot -> assert false
+    | `Unot -> 
+	if is_boolean t2 then
+	  assert false (* TODO *)
+	else
+          typing_error loc "boolean expected"
     | ((`Uminus | `Ubw_not) as x) -> 
         if is_numeric t2 then
           let t = lub_numeric_types t2 t2 in

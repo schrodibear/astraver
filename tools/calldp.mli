@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.mli,v 1.21 2008-10-17 11:49:33 filliatr Exp $ i*)
+(*i $Id: calldp.mli,v 1.22 2008-10-24 07:05:57 marche Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -78,5 +78,9 @@ val ergo :
   prover_result
 
 val graph : 
+  ?debug:bool -> 
+  ?timeout:int -> filename:string -> unit -> prover_result
+
+val coq : 
   ?debug:bool -> 
   ?timeout:int -> filename:string -> unit -> prover_result
