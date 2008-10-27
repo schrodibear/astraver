@@ -545,7 +545,6 @@ module PDecl :
 (*
     val mk : ?pos:Loc.position -> node:'a -> unit -> 'a node_positioned
 *)
-
     val mkfun_def :
       ?result_type:ptype ->
       name:identifier ->
