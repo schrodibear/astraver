@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.160 2008-10-17 11:49:33 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.161 2008-10-27 08:44:14 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -1251,13 +1251,13 @@ let print_decl fmt = function
       fprintf fmt "logic %a" print_logic_type log_type_sch.Env.scheme_type
   | Dpredicate_def (_, s, pred_def_sch) ->
       let (args, pred) = pred_def_sch.Env.scheme_type in
-      fprintf fmt "defpred %s (%a) = %a" s
+      fprintf fmt "defpred %s (%a) = %a" (Ident.string s)
 	(print_list comma (fun fmt t -> print_pure_type fmt (snd t))) args
 	print_predicate pred
   | Dinductive_def _ -> assert false (* TODO *)
   | Dfunction_def (_, s, fun_def_sch) ->
       let (args, rt, exp) = fun_def_sch.Env.scheme_type in
-      fprintf fmt "deffun %s (%a) : %a = %a" s
+      fprintf fmt "deffun %s (%a) : %a = %a" (Ident.string s)
 	(print_list comma (fun fmt t -> print_pure_type fmt (snd t))) args
 	print_pure_type rt
 	print_term exp

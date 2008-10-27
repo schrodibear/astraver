@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monomorph.ml,v 1.35 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.36 2008-10-27 08:44:14 marche Exp $ i*)
 
 (* monomorphic output *)
 
@@ -420,27 +420,27 @@ let rec declare_logic loc id i =
 
 and push_predicate_def_instance loc id i ((bl,p) as d) =
   IterIT.predicate_def (declare_logic loc) (declare_type loc) d;
-  push (Dpredicate_def (loc, name id i, empty_scheme d))
+  push (Dpredicate_def (loc,Ident.create (name id i), empty_scheme d))
 
 and push_function_def_instance loc id i ((bl,t,e) as d) =
   IterIT.function_def (declare_logic loc) (declare_type loc) d;
-  push (Dfunction_def (loc, name id i, empty_scheme d))
+  push (Dfunction_def (loc, Ident.create (name id i), empty_scheme d))
       
 let push_predicate_def loc id p0 =
   let (bl,_) = p0.scheme_type in
   assert (bl <> []);
   if Vset.is_empty p0.scheme_vars then
-    push_predicate_def_instance loc id [] p0.scheme_type
+    push_predicate_def_instance loc (Ident.string id) [] p0.scheme_type
   else 
-    Hashtbl.add logic_symbols (Ident.create id) (PredicateDef p0)
+    Hashtbl.add logic_symbols id (PredicateDef p0)
 
 let push_function_def loc id p0 =
   let (bl,_,_) = p0.scheme_type in
   assert (bl <> []);
   if Vset.is_empty p0.scheme_vars then
-    push_function_def_instance loc id [] p0.scheme_type
+    push_function_def_instance loc (Ident.string id) [] p0.scheme_type
   else 
-    Hashtbl.add logic_symbols (Ident.create id) (FunctionDef p0)
+    Hashtbl.add logic_symbols id (FunctionDef p0)
 
   (* axioms *)
 

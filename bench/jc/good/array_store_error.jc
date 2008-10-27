@@ -18,8 +18,8 @@ type Uarray = {
 }
 
 unit f() {
-     Uarray[0..9] Up = new Uarray[10];
-     Tarray[0..9] Tp = Up;
+ var Uarray[0..9] Up = new Uarray[10];
+ var Tarray[0..9] Tp = Up;
 }
 
 

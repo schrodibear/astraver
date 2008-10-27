@@ -33,7 +33,7 @@ case $1 in
 	rm -f $f.makefile 
 	rm -f $d/why/$b.why
 	rm -f $f.loc
-	JESSIELIB=$DIR/lib WHYLIB=$DIR/lib bin/jessie.opt -locs $f.jloc -why-opt -split-user-conj $f.jc || exit 2
+	WHYLIB=$DIR/lib bin/jessie.opt -locs $f.jloc -why-opt -split-user-conj $f.jc || exit 2
 	mycatfilterdir $f.makefile
 	mycatfilterdir $f.loc
 	mycat $d/why/$b.why
@@ -41,26 +41,26 @@ case $1 in
 	rm -f $d/why/$b.wpr	
 	rm -f $d/why/$b'_ctx'.why	
 	rm -f $d/why/$b'_po'*.why
-	WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile project
+	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile project
 	mycatfilterdir $d/why/$b.wpr	
 	mycat $d/why/$b'_ctx'.why	
 	for i in $d/why/$b'_po'*.why; do mycat $i; done
 	echo "========== generation of Simplify VC output =========="
-	WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify/$b'_why'.sx	
+	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify/$b'_why'.sx	
 	mycatfilterdir $d/simplify/$b'_why'.sx
 	echo "========== running Simplify =========="
-	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify	
+	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify	
 	echo "========== generation of alt-ergo VC output =========="
-	WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile why/$b'_why'.why	
+	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile why/$b'_why'.why	
 	mycat $d/why/$b'_why'.why
 	echo "========== running alt-ergo =========="
-	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile ergo	
+	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile ergo	
 	if grep RUNCOQ $f.java ; then
 	    echo "========== generation of Coq VC output =========="
-	    WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq	
+	    WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq	
 	    mycat $d/coq/$b'_why'.v
 	    echo "========== running Coq =========="
-	    DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq		   
+	    DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq		   
         fi
 	;;
   *.c)

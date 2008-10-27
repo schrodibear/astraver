@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.58 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.59 2008-10-27 08:44:14 marche Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1385,44 +1385,44 @@ let build_pred_graph decl =
 		| Pvar _ -> assert false
 	in
 	let compute_pred_graph = function
-		| Dpredicate_def (loc, ident, def) ->
-				let bl, p = def.scheme_type in
-				let rootexp = (Papp (
-							Ident.create ident,
-							List.map (fun (i, _) -> Tvar i) bl, [])) in
-				let piff = Piff (rootexp, p) in
-				let pforall = List.fold_right
-						(fun (var, tvar) pred -> Forall(false, var, var, tvar,[], pred))
-						bl piff in
-				let p' = cnf pforall in
-				begin
-					context := (p', Dpredicate_def (loc, ident, def))::!context;
-					let cls = get_abstract_clauses p' in
-					let cls = AbstractClauseSet.union cls !eq_link in
-					if debug then
-						begin
-						(* Format.printf "%a" Util.print_predicate p; display_cl_set   *)
-						(* cls                                                         *)
-						end;
-					update_pdlg (remove_percent_from_abstractclauseset cls )
-				end
-		| Daxiom (loc, ident, ps) ->
-		(* loc: , ident: , ps: *)
-				let p = ps.scheme_type in
-				let p' = cnf p in
-				begin
-					context := (p', Daxiom (loc, ident, ps))::!context;
-					let cls = get_abstract_clauses p' in
-					let cls = AbstractClauseSet.union cls !eq_link in
-					if debug then
-						begin
-						(* Format.printf "%a" Util.print_predicate p; display_cl_set   *)
-						(* cls                                                         *)
-						end;
-					update_pdlg (remove_percent_from_abstractclauseset cls)
-				end
-		| a ->
-				context := (Ptrue, a)::!context;
+	  | Dpredicate_def (loc, ident, def) ->
+	      let bl, p = def.scheme_type in
+	      let rootexp = (Papp (
+			       ident,
+			       List.map (fun (i, _) -> Tvar i) bl, [])) in
+	      let piff = Piff (rootexp, p) in
+	      let pforall = List.fold_right
+		(fun (var, tvar) pred -> Forall(false, var, var, tvar,[], pred))
+		bl piff in
+	      let p' = cnf pforall in
+	      begin
+		context := (p', Dpredicate_def (loc, ident, def))::!context;
+		let cls = get_abstract_clauses p' in
+		let cls = AbstractClauseSet.union cls !eq_link in
+		if debug then
+		  begin
+		    (* Format.printf "%a" Util.print_predicate p; display_cl_set   *)
+		    (* cls                                                         *)
+		  end;
+		update_pdlg (remove_percent_from_abstractclauseset cls )
+	      end
+	  | Daxiom (loc, ident, ps) ->
+	      (* loc: , ident: , ps: *)
+	      let p = ps.scheme_type in
+	      let p' = cnf p in
+	      begin
+		context := (p', Daxiom (loc, ident, ps))::!context;
+		let cls = get_abstract_clauses p' in
+		let cls = AbstractClauseSet.union cls !eq_link in
+		if debug then
+		  begin
+		    (* Format.printf "%a" Util.print_predicate p; display_cl_set   *)
+		    (* cls                                                         *)
+		  end;
+		update_pdlg (remove_percent_from_abstractclauseset cls)
+	      end
+	  | a ->
+	      context := (Ptrue, a)::!context;
 	in
 	Queue.iter compute_pred_graph decl
 
@@ -1919,15 +1919,16 @@ let managesContext relevantPreds decl =
             else
               begin
                 (* Sinon on ins�re la sa signature du pr�dicat avec un logic *)
+		let name = Ident.string ident in
                 (let bl, _ = def.scheme_type in
-                  Queue.push (Dlogic(loc, ident, generalize_logic_type (Predicate(List.map snd bl)))) decl);
+                 Queue.push (Dlogic(loc, name, generalize_logic_type (Predicate(List.map snd bl)))) decl);
                 
                 (* Ensuite, on test chacune des clauses pour �ventuellement les  *)
                 (* pr�server                                                     *)
                 let p_list = (split_one [] 1 p_cnf) in
                 let ax_list = List.map (fun p ->
                           let i = my_fresh_hyp_str () in
-                          (p, Daxiom (loc, "axiom_from_"^ident^"_part_"^i, generalize_predicate p))
+                          (p, Daxiom (loc, "axiom_from_"^name^"_part_"^i, generalize_predicate p))
                     ) p_list in
                 
                 List.iter filter_one_axiom ax_list;

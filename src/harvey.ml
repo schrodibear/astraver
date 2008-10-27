@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.52 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.53 2008-10-27 08:44:14 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -277,12 +277,14 @@ let output_obligation fmt (loc, expl, o, s) =
 let decl_to_elem = function
   | Dgoal (loc,expl,id,s) -> Queue.add (loc,expl,id,s.Env.scheme_type) oblig
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
-  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) theory
-  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) theory
-  | _ -> ()
-
-
-
+  | Dpredicate_def (_, id, p) -> 
+      Queue.add (Predicate (Ident.string id, p)) theory
+  | Dfunction_def (_, id, p) -> 
+      Queue.add (FunctionDef (Ident.string id, p)) theory
+  | Dinductive_def (_, _, _) ->
+      failwith "Harvey output: inductive def not yet supported"
+  | Dlogic (_, _, _) -> ()
+  | Dtype (_, _, _) -> ()
 
 
 

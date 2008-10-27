@@ -277,7 +277,7 @@ WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs Termination.loc
 
 GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs Termination.loc
 
-JESSIELIBFILE ?= HOME/lib/why/jessie.why
+JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 
 COQDEP = coqdep
 
@@ -288,17 +288,17 @@ all: simplify/Termination_why.sx
 project: why/Termination.wpr
 
 why/%.wpr: why/%.why
-	@echo 'why --project [...] why/$*.why' && $(WHY) --project -dir why $(JESSIELIBFILE) why/$*.why
+	@echo 'why --project [...] why/$*.why' && $(WHY) --project -dir why $(JESSIELIBFILES) why/$*.why
 
 goals: why/Termination_ctx.why
 
 why/%_ctx.why: why/%.why
-	@echo 'why --multi-why [...] why/$*.why' && $(WHY) --multi-why -dir why $(JESSIELIBFILE) why/$*.why
+	@echo 'why --multi-why [...] why/$*.why' && $(WHY) --multi-why -dir why $(JESSIELIBFILES) why/$*.why
 
 coq: coq/Termination_why.vo
 
 coq/Termination_why.v: why/Termination.why
-	@echo 'why -coq-v8 [...] why/Termination.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILE) why/Termination.why
+	@echo 'why -coq-v8 [...] why/Termination.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/Termination.why
 
 coq-goals: goals coq/Termination_ctx_why.vo
 	for f in why/Termination_po*.why; do make -f Termination.makefile coq/`basename $$f .why`_why.v ; done
@@ -315,53 +315,53 @@ coq/%.vo: coq/%.v
 pvs: pvs/Termination_why.pvs
 
 pvs/%_why.pvs: why/%.why
-	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@jessie" $(JESSIELIBFILE) why/$*.why
+	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@jessie" $(JESSIELIBFILES) why/$*.why
 
 pvs/jessie_why.pvs:
-	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@why" $(JESSIELIBFILE)
+	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@why" $(JESSIELIBFILES)
 
 isabelle: isabelle/Termination_why.thy
 
 isabelle/%_why.thy: why/%.why
-	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILE) why/$*.why
+	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILES) why/$*.why
 	cp -f HOME/lib/isabelle/jessie_why.thy isabelle/
 
 simplify: simplify/Termination_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
 
 simplify/%_why.sx: why/%.why
-	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILE) why/$*.why
+	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/Termination_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
 why/%_why.why: why/%.why
-	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) -alt-ergo -dir why $(JESSIELIBFILE) why/$*.why
+	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) -alt-ergo -dir why $(JESSIELIBFILES) why/$*.why
 
 cvcl: cvcl/Termination_why.cvc
 
 	@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)
 
 cvcl/%_why.cvc: why/%.why
-	@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(JESSIELIBFILE) why/$*.why
+	@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(JESSIELIBFILES) why/$*.why
 
 harvey: harvey/Termination_why.rv
 	@echo 'Running haRVey on proof obligations' && ($(DP) $^)
 
 harvey/%_why.rv: why/%.why
-	@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(JESSIELIBFILE) why/$*.why
+	@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(JESSIELIBFILES) why/$*.why
 
 zenon: zenon/Termination_why.znn
 	@echo 'Running Zenon on proof obligations' && ($(DP) $^)
 
 zenon/%_why.znn: why/%.why
-	@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(JESSIELIBFILE) why/$*.why
+	@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(JESSIELIBFILES) why/$*.why
 
 smtlib: smtlib/Termination_why.smt
 	@echo 'Running Z3 on proof obligations' && ($(DP) $^)
 
 smtlib/%_why.smt: why/%.why
-	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIBFILE) why/$*.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIBFILES) why/$*.why
 
 z3: smtlib/Termination_why.smt
 	@echo 'Running Z3 on proof obligations' && ($(DP) -smt-solver z3 $^)
@@ -375,7 +375,7 @@ cvc3: smtlib/Termination_why.smt
 gui stat: Termination.stat
 
 %.stat: why/%.why
-	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILE) why/$*.why
+	@echo 'gwhy-bin [...] why/$*.why' && $(GWHY) $(JESSIELIBFILES) why/$*.why
 
 -include Termination.depend
 

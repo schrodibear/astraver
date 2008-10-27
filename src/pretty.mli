@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.mli,v 1.12 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: pretty.mli,v 1.13 2008-10-27 08:44:14 marche Exp $ i*)
 
 (* Why pretty-printer *)
 
@@ -41,5 +41,5 @@ val output_files : string -> unit
 
 (* [output_project f] produces a whole project description, in a file
 [f.wpr], together with other needed files [f_ctx.why], [f_lemmas.why],
-and each goal in a seaparate file [f_po<i>.why] for i=1,2,... *)
-val output_project : string -> unit
+and each goal in a separate file [f_po<i>.why] for i=1,2,... *)
+val output_project : string -> Project.t

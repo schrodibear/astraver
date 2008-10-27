@@ -1,12 +1,26 @@
-
+FIXME: version 2.16, October 29th, 2008 (aka "Lithium beta 1")
+======================================================
+  
+  o This version is synchronized with Frama-C Lithium beta 1 
+    (http://www.frama-c.fr/)
+  o GWhy: experimental support for interactive provers 
+  o GWhy: improved display of VCs
+  o Krakatoa/Jessie: changed syntax for axiomatic definitions. 'reads'
+    clauses are now obsolete.
+  o Krakatoa/Jessie: support for inductive definitions
+  o Why: Improved support for inductive definitions. For automatic provers,
+    an inversion axiom is generated.
+  o New option -alt-ergo to output VCs in Alt-Ergo syntax. Beware that 
+    because of inductive definition, -alt-ergo is now different from 
+    -why output: inductive definitions are expansed.
   o License changed to GNU LGPL 2.1, with a special exception on
     linking (see enclosed file LICENSE)
 
 version 2.15, September 9th, 2008
 =================================
-  o Jessie bug fix: 'simplify' entry of the generated makefile was ignoring
-  o why: preliminary support for inductive definitions 
-  o krakatoa/jessie: new syntax for axiomatic definitions
+
+  o Why: preliminary support for inductive definitions 
+  o Krakatoa/Jessie: new syntax for axiomatic definitions
   o Coq support for floats requires Coq version 8.1 at least
   o Jessie bug fix: 'simplify' entry of the generated makefile was ignoring
     prelude axioms 

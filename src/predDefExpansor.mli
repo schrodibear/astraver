@@ -25,6 +25,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
+
+val inductive_inverse_body : 
+    Ident.t ->  (* predicate name *)
+    'a list ->  (* types of parameters *)
+    (Ident.t * Logic.predicate) list -> (* inductive cases *) 
+      (Ident.t * 'a) list * Logic.predicate
+      (* binders, predicate body *)
+
 val inductive_def : 
   Logic_decl.loc -> Ident.t -> Logic.inductive_def Env.scheme 
   -> Logic_decl.t list

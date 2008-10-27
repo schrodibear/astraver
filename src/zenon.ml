@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.31 2008-10-17 11:49:33 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.32 2008-10-27 08:44:14 marche Exp $ i*)
 
 (*s Zenon output *)
 
@@ -322,10 +322,14 @@ let reset () = Encoding.reset (*Monomorph.reset*) ()
 let output_elem fmt = function
   | Dtype (loc, _, id) -> declare_type fmt id
   | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
-  | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
+  | Dpredicate_def (loc, id, d) -> 
+      let id = Ident.string id in
+      print_predicate_def fmt id d.scheme_type
   | Dinductive_def _ ->
       failwith "Zenon output: inductive def not yet supported"
-  | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
+  | Dfunction_def (loc, id, d) -> 
+      let id = Ident.string id in
+      print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
   | Dgoal (loc, expl, id, s) -> 
       print_obligation fmt loc expl id s.Env.scheme_type

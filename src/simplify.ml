@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.85 2008-10-17 11:49:33 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.86 2008-10-27 08:44:14 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -54,8 +54,10 @@ let reset () =
 let rec decl_to_elem = function
   | Dgoal (loc, expl, id, s) -> Queue.add (Oblig (loc, expl,id, s)) queue
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
-  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) queue
-  | Dfunction_def (_, id, p) -> Queue.add (FunctionDef (id, p)) queue
+  | Dpredicate_def (_, id, p) -> 
+      Queue.add (Predicate (Ident.string id, p)) queue
+  | Dfunction_def (_, id, p) -> 
+      Queue.add (FunctionDef (Ident.string id, p)) queue
   | Dinductive_def (loc, id, d) ->
       List.iter decl_to_elem (PredDefExpansor.inductive_def loc id d)
   | Dlogic _ -> ()

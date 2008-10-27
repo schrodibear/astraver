@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: holl.ml,v 1.47 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.48 2008-10-27 08:44:14 marche Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -52,7 +52,7 @@ let reset () = Queue.clear elem_q
 let push_decl = function
   | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) elem_q
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
-  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) elem_q
+  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (Ident.string id, p)) elem_q
   | Dinductive_def(loc, ident, inddef) ->
       failwith "HOL light output: inductive def not yet supported"
   | Dgoal (loc,expl,id,s) -> 

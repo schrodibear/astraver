@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.121 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.122 2008-10-27 08:44:14 marche Exp $ i*)
 
 open Format
 
@@ -148,6 +148,15 @@ let mizar_environ_from f =
   with End_of_file | Exit ->
     close_in c;
     Buffer.contents buf
+
+(*s GUI settings *)
+
+(* Are we the GUI? (set in intf/stat.ml) *)
+let gui = ref false
+
+(* GUI project (set in src/main.ml) *)
+let gui_project = ref None
+
 
 (*s Parsing the command-line *)
 
@@ -537,10 +546,6 @@ let files =
   in
   parse (List.tl (Array.to_list Sys.argv))
 
-(* Are we the GUI? (set in intf/stat.ml) *)
-
-let gui = ref false
-
 (*s Finally, we dereference all the refs *)
 
 let verbose = !verbose_
@@ -548,7 +553,8 @@ let debug = !debug_
 let parse_only = !parse_only_
 let type_only = !type_only_
 let wp_only = !wp_only_
-let prover () = if !gui then Dispatcher else !prover_
+let prover ?(ignore_gui=false) () = 
+  if not ignore_gui=false && !gui then Dispatcher else !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
 let coq_preamble = match !coq_preamble_ with
@@ -668,11 +674,11 @@ end
 
 let prelude = !prelude_
 
-let lib_file f =
-  try
-    Filename.concat (Sys.getenv "WHYLIB") f
-  with Not_found ->
-    Filename.concat Version.libdir f
+let lib_dir =
+  try Sys.getenv "WHYLIB"
+  with Not_found -> Version.libdir
+
+let lib_file f = Filename.concat lib_dir (Filename.concat "why" f)
 
 let prelude_file = lib_file "prelude.why"
 let arrays_file = lib_file "arrays.why"

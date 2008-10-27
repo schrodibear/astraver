@@ -312,21 +312,23 @@ let rec push d =
 (* A predicate definition can be handled as a predicate logic definition + an axiom *)
   | Dpredicate_def (loc, ident, pred_def_sch) ->
       let (argl, pred) = pred_def_sch.Env.scheme_type in
-      let rootexp = (Papp (Ident.create ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
-	push (Dlogic (loc, ident, (Env.generalize_logic_type (Predicate (snd (List.split argl))))));
-	push (Daxiom (loc, def ident, (Env.generalize_predicate
-					 (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]]))))
+      let rootexp = (Papp (ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
+      let name = Ident.string ident in
+      push (Dlogic (loc, name, (Env.generalize_logic_type (Predicate (snd (List.split argl))))));
+      push (Daxiom (loc, def name, (Env.generalize_predicate
+				      (lifted_t argl (Piff (rootexp, pred)) [[PPat rootexp]]))))
 (* A function definition can be handled as a function logic definition + an axiom *)
   | Dinductive_def(loc, ident, inddef) ->
       failwith "encoding mono: inductive def not yet supported"
   | Dfunction_def (loc, ident, fun_def_sch) ->
 (*       let _ = print_endline ident in *)
       let (argl, rt, term) = fun_def_sch.Env.scheme_type in
-      let rootexp = (Tapp (Ident.create ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
-	push (Dlogic (loc, ident, (Env.generalize_logic_type (Function (snd (List.split argl), rt)))));
-	push (Daxiom (loc, def ident,
-		      (Env.generalize_predicate
-			 (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) [[TPat rootexp]]))))
+      let rootexp = (Tapp (ident, List.map (fun (i,_) -> Tvar i) argl, [])) in
+      let name = Ident.string ident in
+      push (Dlogic (loc, name, (Env.generalize_logic_type (Function (snd (List.split argl), rt)))));
+      push (Daxiom (loc, def name,
+		    (Env.generalize_predicate
+		       (lifted_t argl (Papp (Ident.t_eq, [rootexp; term], [])) [[TPat rootexp]]))))
 (* Axiom definitions *)
   | Daxiom (loc, ident, pred_sch) ->
       let cpt = ref 0 in

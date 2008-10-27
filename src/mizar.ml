@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.48 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.49 2008-10-27 08:44:14 marche Exp $ i*)
 
 (*s Mizar output *)
 
@@ -55,7 +55,8 @@ let push_decl = function
       Queue.add (Obligation (loc, expl, id, s.Env.scheme_type)) elem_q
   | Dlogic (_, id, t) -> Queue.add (Logic (id, t)) elem_q
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
-  | Dpredicate_def (_, id, p) -> Queue.add (Predicate (id, p)) elem_q
+  | Dpredicate_def (_, id, p) -> 
+      Queue.add (Predicate (Ident.string id, p)) elem_q
   | Dinductive_def(loc, ident, inddef) ->
       failwith "Mizar output: inductive def not yet supported"
   | Dfunction_def _ -> () (*TODO*)

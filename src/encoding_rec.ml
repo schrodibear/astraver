@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_rec.ml,v 1.14 2008-10-17 11:49:31 filliatr Exp $ i*)
+(*i $Id: encoding_rec.ml,v 1.15 2008-10-27 08:44:14 marche Exp $ i*)
 
 open Options
 open Cc
@@ -212,30 +212,42 @@ let rec push d =
       let p = pred_def_sch.Env.scheme_type in
       let rec lifted_t l p =
 	match l with [] -> p
-	| (a,t)::q -> lifted_t q (Forall(false, a, a, t, [], p)) in
-      push (Dlogic (loc, ident, 
-		    (Env.generalize_logic_type (Predicate (snd (List.split (fst p)))))));
-      push (Daxiom (loc, def ident,
-		    (Env.generalize_predicate 
-		       (lifted_t (fst p) 
-			  (Piff ((Papp (Ident.create ident, List.map (fun (i,_) -> Tvar i) (fst p), [])),
-			         (snd p)))))))
+	  | (a,t)::q -> lifted_t q (Forall(false, a, a, t, [], p)) 
+      in
+      let name = Ident.string ident in
+      push (Dlogic (loc, name, 
+		    (Env.generalize_logic_type 
+		       (Predicate (snd (List.split (fst p)))))));
+      push (Daxiom 
+	      (loc, def name,
+	       (Env.generalize_predicate 
+		  (lifted_t (fst p) 
+		     (Piff ((Papp (ident, 
+				   List.map (fun (i,_) -> Tvar i) (fst p),
+				   [])),
+			    (snd p)))))))
   | Dinductive_def _ ->
       failwith "encoding rec: inductive def not yet supported"
 (* A function definition can be handled as a function logic definition + an axiom *)
   | Dfunction_def (loc, ident, fun_def_sch) -> 
       let f = fun_def_sch.Env.scheme_type in
       let rec lifted_t l p =
-	match l with [] -> p
-	| (a,t)::q -> lifted_t q (Forall(false, a, a, t, [], p)) in
+	match l with 
+	  | [] -> p
+	  | (a,t)::q -> lifted_t q (Forall(false, a, a, t, [], p)) 
+      in
       let (ptl, rt, t) = f in
-      push (Dlogic (loc, ident, 
+      let name = Ident.string ident in
+      push (Dlogic (loc, name, 
 		    (Env.generalize_logic_type (Function (snd (List.split ptl), rt)))));
-      push (Daxiom (loc, def ident,
-		    (Env.generalize_predicate
-		       (lifted_t ptl
-			  (Papp (Ident.t_eq,
-				 [(Tapp (Ident.create ident, List.map (fun (i,_) -> Tvar i) ptl, []));
+      push (Daxiom 
+	      (loc, def name,
+	       (Env.generalize_predicate
+		  (lifted_t ptl
+		     (Papp (Ident.t_eq,
+			    [(Tapp (ident, 
+				    List.map (fun (i,_) -> Tvar i) ptl, 
+				    []));
 				  t], []))))))
   | Daxiom (loc, ident, pred_sch) -> 
       let cpt = ref 0 in

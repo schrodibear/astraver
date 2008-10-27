@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.40 2008-10-23 11:57:12 marche Exp $ i*)
+(*i $Id: jc_options.ml,v 1.41 2008-10-27 08:44:14 marche Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -51,12 +51,12 @@ let close_log () =
 
 let libdir = 
   try
-    let v = Sys.getenv "JESSIELIB" in
-    lprintf "JESSIELIB is set to %s@." v;
+    let v = Sys.getenv "WHYLIB" in
+    lprintf "WHYLIB is set to %s@." v;
     v
   with Not_found -> 
     let p = Version.libdir in
-    lprintf "JESSIELIB is not set, using %s as default@." p;
+    lprintf "WHYLIB is not set, using %s as default@." p;
     p
 
 let has_floats = ref false

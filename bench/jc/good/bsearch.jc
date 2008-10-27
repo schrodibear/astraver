@@ -1,5 +1,5 @@
 
-axiom mean_1 : \forall integer x,y; x <= y ==> x <= (x+y)/2 && (x+y)/2 <= y 
+lemma mean_1 : \forall integer x,y; x <= y ==> x <= (x+y)/2 && (x+y)/2 <= y 
 
 type byte = -128..127
 

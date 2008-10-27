@@ -4,6 +4,8 @@ inductive isfib: int, int -> prop =
 | isfibn: forall n:int. forall p:int. forall q:int. 
             n >= 0 and isfib(n,p) and isfib(n+1,q) -> isfib(n+2, p+q)
 
+goal fib0: isfib(0,0)
+goal fib1: isfib(1,1)
 goal fib2: isfib(2,1)
 goal fib6: isfib(6,8)
 goal neg_fib2: not isfib(2,2)
@@ -15,12 +17,15 @@ let rec fib (n:int) : int { variant n } =
     (fib (n-1)) + (fib (n-2))
   { isfib(n,result) }
 
+(*
 inductive isfib': int, int -> prop =
 | isfib'0: isfib'(0,0) 
 | isfib'1: isfib'(1,1)
 | isfib'n: forall n:int. forall p:int. forall q:int. forall r:int.
             n >= 2 and isfib'(n-2,p) and isfib'(n-1,q) and p+q=r -> isfib'(n, r)
 
+goal fib'2: isfib'(2,1)
+goal fib'2: isfib'(2,1)
 goal fib'2: isfib'(2,1)
 goal fib'6: isfib'(6,8)
 goal neg_fib'2: not isfib'(2,2)
@@ -31,3 +36,4 @@ let rec fib' (n:int) : int { variant n } =
   if 0<=n && n<=1 then n else
     (fib' (n-1)) + (fib' (n-2))
   { isfib'(n,result) }
+*)

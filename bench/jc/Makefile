@@ -1,6 +1,6 @@
 WHYDIR=../../
 EXT=.opt
-JESSIE=$(WHYDIR)bin/jessie$(EXT)
+JESSIE=WHYLIB=$(WHYDIR)/lib $(WHYDIR)bin/jessie$(EXT)
 
 TMPDIR=tmp
 

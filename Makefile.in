@@ -164,9 +164,9 @@ PRELUDE=lib/why/prelude.why lib/why/arrays.why lib/why/floats.why \
 
 # sanity check: the prelude files do typecheck
 check: $(BINARY) $(PRELUDE)
-	WHYLIB=lib/why $(BINARY) --no-prelude -tc lib/why/prelude.why
-	WHYLIB=lib/why $(BINARY) --no-arrays -tc lib/why/arrays.why
-	WHYLIB=lib/why $(BINARY) -tc lib/why/floats.why
+	WHYLIB=lib $(BINARY) --no-prelude -tc lib/why/prelude.why
+	WHYLIB=lib $(BINARY) --no-arrays -tc lib/why/arrays.why
+	WHYLIB=lib $(BINARY) -tc lib/why/floats.why
 
 # why-config
 WHYCONFIGCMO = src/rc.cmo src/version.cmo tools/dpConfig.cmo tools/whyConfig.cmo
@@ -610,16 +610,16 @@ doc/version.tex src/version.ml c/cversion.ml: Version version.sh config.status
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) ./version.sh
 
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
-	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why
+	WHYLIB=lib $(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why
 
 lib/coq-v7/caduceus_why.v: lib/why/caduceus.why $(BINARY)
-	WHYLIB=lib/why $(BINARY) --dir lib/coq-v7 --coq-v7 lib/why/caduceus.why
+	WHYLIB=lib $(BINARY) --dir lib/coq-v7 --coq-v7 lib/why/caduceus.why
 
 lib/coq/jessie_why.v: lib/why/jessie.why $(BINARY)
-	WHYLIB=lib/why $(BINARY) --dir lib/coq --coq-v8 lib/why/jessie.why
+	WHYLIB=lib $(BINARY) --dir lib/coq --coq-v8 lib/why/jessie.why
 
 lib/pvs/jessie_why.pvs: lib/why/jessie.why $(BINARY)
-	WHYLIB=lib/why $(BINARY) --dir lib/pvs --pvs --pvs-preamble "IMPORTING why" lib/why/jessie.why
+	WHYLIB=lib $(BINARY) --dir lib/pvs --pvs --pvs-preamble "IMPORTING why" lib/why/jessie.why
 
 # bench
 
@@ -727,19 +727,18 @@ install-lib: $(JCLIB)
 	mkdir -p $(LIBDIR)/why
 	cp -f $(PRELUDE) $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/why
-	mkdir -p $(LIBDIR)/jessie/why
-	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
+	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
-	cp -f lib/why/jessie.why $(LIBDIR)/jessie/why
-	cp -f lib/why/floats.why $(LIBDIR)/jessie/why
+	cp -f lib/why/jessie.why $(LIBDIR)/why
+	cp -f lib/why/floats.why $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/coq
-	mkdir -p $(LIBDIR)/jessie/coq
+	mkdir -p $(LIBDIR)/coq
 	if test "@COQVER@" = "v7"; then \
 	  cp -f lib/coq-v7/caduceus_why.v lib/coq-v7/caduceus_tactics.v $(LIBDIR)/caduceus/coq; \
 	else \
 	  cp -f lib/coq/caduceus_why.v lib/coq/caduceus_tactics.v $(LIBDIR)/caduceus/coq; \
-	  cp -f lib/coq/jessie_why.v $(LIBDIR)/jessie/coq; \
+	  cp -f lib/coq/jessie_why.v $(LIBDIR)/coq; \
 	fi
 	mkdir -p $(LIBDIR)/caduceus/isabelle
 	cp -f lib/isabelle/caduceus_why.thy $(LIBDIR)/caduceus/isabelle

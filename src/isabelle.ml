@@ -424,10 +424,14 @@ let push_decl = function
   | Dgoal (loc,expl,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,expl,l,s))
   | Dlogic (_, id, t) -> Gen.add_elem (Lg, rename id) (Logic (id, t))
   | Daxiom (_, id, p) -> Gen.add_elem (Ax, rename id) (Axiom (id, p))
-  | Dpredicate_def (_, id, p) -> Gen.add_elem (Pr, rename id) (Predicate (id, p))
+  | Dpredicate_def (_, id, p) -> 
+      let id = Ident.string id in
+      Gen.add_elem (Pr, rename id) (Predicate (id, p))
   | Dinductive_def(loc, ident, inddef) ->
       failwith "Isabelle output: inductive def not yet supported"
-  | Dfunction_def (_, id, p) -> Gen.add_elem (Fun, rename id) (Function (id, p))
+  | Dfunction_def (_, id, p) -> 
+      let id = Ident.string id in
+      Gen.add_elem (Fun, rename id) (Function (id, p))
   | Dtype (_, vl, id) -> Gen.add_elem (Ty, rename id) (AbstractType (id, vl))
 
 let _ = 

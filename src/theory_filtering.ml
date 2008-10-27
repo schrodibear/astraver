@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theory_filtering.ml,v 1.10 2008-10-17 11:49:33 filliatr Exp $ i*)
+(*i $Id: theory_filtering.ml,v 1.11 2008-10-27 08:44:14 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -261,10 +261,14 @@ let display (q,s) n =
   let di = function 
     | Dtype (_, _, id) -> Printf.printf  "type %s (%d) : "  id 
     | Dlogic (_, id, t) -> Printf.printf  "arit %s (%d) : " id   
-    | Dpredicate_def (_, id, d) -> Printf.printf  "def_pred %s (%d): " id 
+    | Dpredicate_def (_, id, d) -> 
+	let id = Ident.string id in
+	Printf.printf  "def_pred %s (%d): " id 
     | Dinductive_def(loc, ident, inddef) ->
 	failwith "Theory filtering: inductive def not yet supported"
-    | Dfunction_def (_, id, d) -> Printf.printf  "def_func %s (%d): " id 
+    | Dfunction_def (_, id, d) -> 
+	let id = Ident.string id in
+	Printf.printf  "def_func %s (%d): " id 
     | Daxiom (_, id, p)          -> Printf.printf  "axiom %s (%d): "  id 
     | Dgoal (_, expl, id, s)   -> Printf.printf  "goal %s (%d):"  id 
   in 
@@ -347,11 +351,15 @@ let launcher decl = match decl with
       declare_type id ax 
   | Dlogic (_, id, t) as ax -> (* Printf.printf  "Dlogic %s \n"  id ;*) 
       declare_arity  id ax
-  | Dpredicate_def (_, id, d) as ax -> (*Printf.printf  "Dpredicate_def %s \n"  *)
+  | Dpredicate_def (_, id, d) as ax -> 
+      (*Printf.printf  "Dpredicate_def %s \n"  *)
+      let id = Ident.string id in
       declare_predicate id ax d.scheme_type 
   | Dinductive_def(loc, ident, inddef) ->
       failwith "Theory filtering: inductive def not yet supported"
-  | Dfunction_def (_, id, d)  as ax -> (*Printf.printf  "Dfunction_def %s \n"  id ;*)  
+  | Dfunction_def (_, id, d)  as ax ->
+      (*Printf.printf  "Dfunction_def %s \n"  id ;*)  
+      let id = Ident.string id in
       declare_function id ax d.scheme_type 
   | Daxiom (_, id, p) as ax         -> (*Printf.printf  "Daxiom %s \n"  id ; *)
       declare_axiom  id ax p.scheme_type 

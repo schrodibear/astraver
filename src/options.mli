@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.93 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.94 2008-10-27 08:44:14 marche Exp $ i*)
 
 (*s General options *)
 
@@ -112,7 +112,7 @@ type prover =
   | SmtLib | Isabelle | Hol4 | Gappa | Zenon 
   | Ergo | Why | MultiWhy | Dispatcher | WhyProject
 
-val prover : unit -> prover
+val prover : ?ignore_gui:bool -> unit -> prover
 
 val valid : bool
 val coq_tactic : string option
@@ -154,7 +154,7 @@ val files : string list
 (*s GUI? *)
 
 val gui : bool ref
-
+val gui_project : Project.t option ref
 val lib_files_to_load : string list
 
 (*

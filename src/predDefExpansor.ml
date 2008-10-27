@@ -82,7 +82,7 @@ let rec expand = function
   | Papp (id, tl, i) as p ->
       begin 
 	try
-	  let tvars,argl,p = Hashtbl.find pred_def (Ident.string id) in
+	  let tvars,argl,p = Hashtbl.find pred_def id in
 	  let st = subst_many argl tl in
 	  let sty = List.fold_left2 (fun s v t -> Vmap.add v t s) Vmap.empty tvars i in
 	  subst_in_predicate st sty p
@@ -112,7 +112,7 @@ let push decl =
       let vars = Vset.fold (fun v l -> v :: l) def.scheme_vars [] in
       Hashtbl.add pred_def ident (vars, List.map fst argl, p);
       if Options.defExpanding = All then 
-	Dlogic (loc, ident, Env.generalize_logic_type (Predicate (List.map snd argl)))
+	Dlogic (loc, Ident.string ident, Env.generalize_logic_type (Predicate (List.map snd argl)))
       else
 	decl
   | Dinductive_def(loc, ident, def) when Options.defExpanding = All -> 
@@ -166,13 +166,14 @@ forall y_1:t_1,..,y_n:t_n, id(y_1,..,y_n) ->
 
 *)
 
-let inversion_axiom id params cases =
+
+let inductive_inverse_body id params cases =
   let yvars = List.map (fun t -> (fresh_var(),t)) params in
   let rec invert = function
     | Forall(w,id,n,t,trig,p) -> Exists(id,n,t,invert p)
     | Pimplies(w,h,p) -> Misc.pand h (invert p)
     | Papp(f,l,_) ->
-	assert (f == id);
+	assert (f == id); (* ill-formed, should have been catch by typing *)
 	List.fold_right2 
 	  (fun (y,_) e acc -> Misc.pand (Papp(t_eq,[Tvar y;e],[])) acc)
 	  yvars l Ptrue	
@@ -188,6 +189,11 @@ let inversion_axiom id params cases =
       (fun (id,c) acc -> Misc.por (invert c) acc)
       cases Pfalse 
   in
+  yvars,body
+
+
+let inversion_axiom id params cases =
+  let yvars,body = inductive_inverse_body id params cases in
   let ytvars = List.map (fun (y,_) -> Tvar y) yvars in
   let body = Pimplies(false,Papp(id,ytvars,[]),body) in
   List.fold_right (fun (y,t) acc -> Forall(false,y,y,t,[],acc)) yvars body

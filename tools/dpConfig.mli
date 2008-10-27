@@ -35,22 +35,16 @@ type prover_id =
 type prover_data =
   {
     name : string;
+    is_interactive : bool;
     mutable version: string;
     version_switch : string;
     version_regexp : string;
     mutable command : string;
     command_switches : string;
-(*
-    correct_exit_codes : int list;
-*)
     valid_regexp : string;
     mutable valid_cregexp : Str.regexp option;
     undecided_regexp : string;
     mutable undecided_cregexp : Str.regexp option;
-(*
-    invalid_regexp : string;
-    invalid_cregexp : Str.regexp option;
-*)
   }
     
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.31 2008-10-24 07:05:56 marche Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.32 2008-10-27 08:44:14 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -86,6 +86,13 @@ let push_obligation p (loc, expl, id, s) =
     @parama o is the proof obligation
 **)
 
+let get_project () =
+  match !Options.gui_project with
+    | Some p -> p
+    | None ->
+	failwith "For interactive provers, option --project must by set"
+	
+
 let output_file ?encoding p (elems,o) =
   begin match encoding with 
       Some e -> set_types_encoding e 
@@ -98,7 +105,7 @@ let output_file ?encoding p (elems,o) =
     | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.reset ()
     | Ergo -> Pretty.reset ()
     | Graph -> Pretty.reset ()
-    | Coq -> Coq.reset ()
+    | Coq -> () (* Coq.reset () *)
   end;
   
   if pruning then 
@@ -121,17 +128,14 @@ let output_file ?encoding p (elems,o) =
       Queue.iter (push_elem p) q ;
       push_obligation p o 
     end
-  else
+else
     begin
       List.iter (push_elem p) elems;
       push_obligation p o
     end;
   let f = 
     match p with
-      | Coq ->
-	  let (_, _, id, _) = o in
-	  Format.printf "generating coq file %s_why.v@." id;
-	  id 
+      | Coq -> let (_, _, id, _) = o in id 
       | _ -> Filename.temp_file "gwhy" "" 
   in
   match p with
@@ -142,9 +146,18 @@ let output_file ?encoding p (elems,o) =
     | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.output_file f; f ^ "_why.smt"
     | Ergo -> Pretty.output_file f; f ^ "_why.why"
     | Graph -> Pretty.output_file f; f ^ "_why.why"
-    | Coq -> Coq.output_file f; f ^ "_why.v"
-open Format
+    | Coq ->
+	let _p = get_project () in 
+	(* if necessary, Pretty.output_project "name ?"; *)
+	(* file should already be generated ?? *)
+	(* Coq.output_file f; *)
+	if debug then Format.printf "Reusing coq file %s_why.v@." f;
+	f ^ "_why.v" 
 
+
+	
+
+open Format
 
 let prover_name p = 
   try

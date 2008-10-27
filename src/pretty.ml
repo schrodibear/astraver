@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.34 2008-10-24 07:05:56 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.35 2008-10-27 08:44:14 marche Exp $ i*)
 
 open Format
 open Pp
@@ -235,7 +235,7 @@ let decl fmt d =
       fprintf fmt "@[logic %s : %a@]" id logic_type lt
   | Dpredicate_def (_, id, def) ->
       let bl,p = specialize def in
-      fprintf fmt "@[<hov 2>predicate %s(%a) =@ %a@]" id 
+      fprintf fmt "@[<hov 2>predicate %a(%a) =@ %a@]" ident id 
 	(print_list comma logic_binder) bl predicate p
   | Dinductive_def (_, id, indcases) ->
       let bl,l = specialize indcases in
@@ -247,7 +247,7 @@ let decl fmt d =
 	   (fun fmt (id,p) -> fprintf fmt "@[%a: %a;@]" ident id predicate p)) l
   | Dfunction_def (_, id, def) ->
       let bl,pt,t = specialize def in
-      fprintf fmt "@[<hov 2>function %s(%a) : %a =@ %a@]" id
+      fprintf fmt "@[<hov 2>function %a(%a) : %a =@ %a@]" ident id
 	(print_list comma logic_binder) bl pure_type pt term t
   | Daxiom (_, id, p) ->
       let p = specialize p in
@@ -363,4 +363,5 @@ let output_project f =
 	      vcs)
 	 behs)
     !functions;
-  Project.save p f
+  Project.save p f;
+  p

@@ -2,7 +2,7 @@
 JESSIE=OCAMLRUNPARAM=bt ../../../bin/jessie.byte
 #JESSIE=../../../bin/jessie.byte
 JESSIELIB=$(shell pwd)/../../../lib
-WHYLIB=$(shell pwd)/../../../lib
+WHYLIB=$(shell pwd)/../../../lib/why
 
 EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -why-opt -split-user-conj
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.161 2008-10-24 07:05:56 marche Exp $ i*)
+(*i $Id: main.ml,v 1.162 2008-10-27 08:44:14 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -65,9 +65,9 @@ let reset () =
 let add_loc = function
   | Dtype (loc, _, s)
   | Dlogic (loc, s, _)
+  | Daxiom (loc, s, _) (* useful? *) -> Loc.add_ident s loc
   | Dpredicate_def (loc, s, _)
   | Dfunction_def (loc, s, _) 
-  | Daxiom (loc, s, _) (* useful? *) -> Loc.add_ident s loc
   | Dinductive_def (loc, s , _) -> () (* TODO ? *)
   | Dgoal _ -> ()
 
@@ -93,7 +93,13 @@ let push_decl _vloc d =
 	  | Gappa -> Gappa.push_decl 
 	  | Why | MultiWhy | WhyProject -> Pretty.push_decl ~ergo:false
 	  | Ergo -> Pretty.push_decl ~ergo:true
-	  | Dispatcher ->Dispatcher.push_decl
+	  | Dispatcher -> 
+	      (fun d ->
+		 (* push for Dispatcher, used by Gwhy *)
+		 Dispatcher.push_decl d;
+		 if prover ~ignore_gui:true () = WhyProject then
+		   (* also push for project, used by GWhy/Coq column *)
+		   Pretty.push_decl ~ergo:false d)
 	  | Harvey -> Harvey.push_decl
 	  | Simplify -> Simplify.push_decl
 	  | Zenon -> Zenon.push_decl
@@ -167,10 +173,13 @@ let output fwe =
     | Isabelle -> Isabelle.output_file fwe
     | Hol4 -> Hol4.output_file fwe
     | Gappa -> Gappa.output_file fwe
-    | Dispatcher -> ()
+    | Dispatcher -> 
+	if prover ~ignore_gui:true () = WhyProject then
+	  (* output project, used by GWhy/Coq column *)
+	  Options.gui_project := Some(Pretty.output_project fwe)
     | Ergo | Why -> Pretty.output_file fwe
     | MultiWhy -> Pretty.output_files fwe
-    | WhyProject -> Pretty.output_project fwe
+    | WhyProject -> ignore(Pretty.output_project fwe)
   end
 
 
@@ -470,7 +479,8 @@ let interp_decl ?(_prelude=false) d =
 	let p = Ltyping.predicate lab env' p in
 	add_global_logic id (generalize_logic_type t);
 	let p = generalize_predicate_def (pl,p) in
-	push_decl ("","",Loc.dummy_floc) (Dpredicate_def (Loc.extract loc, Ident.string id, p))
+	push_decl ("","",Loc.dummy_floc) (
+	  Dpredicate_def (Loc.extract loc, id, p))
     | Inductive_def(loc,id,t,indcases) ->
 	let env = Env.empty_logic () in
 	if is_global_logic id then raise_located loc (Clash id);
@@ -504,7 +514,8 @@ let interp_decl ?(_prelude=false) d =
 	  Ltyping.expected_type loc (PureType ty);
 	add_global_logic id (generalize_logic_type t);
 	let f = generalize_function_def (pl,ty,e) in
-	push_decl ("","",Loc.dummy_floc) (Dfunction_def (Loc.extract loc, Ident.string id, f))
+	push_decl ("","",Loc.dummy_floc) 
+	  (Dfunction_def (Loc.extract loc, id, f))
     | Axiom (loc, id, p) ->
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
@@ -614,14 +625,12 @@ let main () =
     if (pruning) or (Options.pruning_hyp_v != -1) then
       begin
 	let q =  declarationQueue in 
-	encode q ;
-	if single_file () then 
-	  let lf = Filename.chop_extension (last files) in
-	  output (Options.out_file lf)  
-      end
-    else if single_file () then 
+	encode q 
+      end;
+    if single_file () then 
       let lf = Filename.chop_extension (last files) in
-      output (Options.out_file lf)
+      let outf = Options.out_file lf in      
+      output outf
   end;
   if show_time then
     let t1 = Unix.times () in

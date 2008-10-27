@@ -1,7 +1,7 @@
  
-WHY=WHYLIB=../lib/why ../bin/why.opt
-BWHY=WHYLIB=../lib/why ../bin/why.byte
-GWHY=WHYLIB=../lib/why ../bin/gwhy.opt
+WHY=WHYLIB=../lib ../bin/why.opt
+BWHY=WHYLIB=../lib ../bin/why.byte
+GWHY=WHYLIB=../lib ../bin/gwhy.opt
 
 all:
 	./bench "../bin/why.opt --coq-v8 --valid"
@@ -90,10 +90,13 @@ fastwp.simplify:
 
 fastwp.ergo:
 	$(BWHY) --why -d --fast-wp test.mlw
-	$(BWHY) -no-prelude -tc test_why.why && ergo test_why.why
+	$(BWHY) -no-prelude -tc test_why.why 
+	$(BWHY) --alt-ergo --fast-wp --all-vc test.mlw
+	../bin/why-dp.opt -no-timings test_why.why
 
-FASTWPBENCH=po oldify opaque wpcalls exns loops poly see all set return \
-            complex_arg_1 complex_arg_2 recfun 
+FASTWPBENCH=po oldify opaque inductive \
+	wpcalls exns loops poly see all set return \
+        complex_arg_1 complex_arg_2 recfun 
 fastwp.bench.simplify:
 	rm -f good/*_why.sx
 	for f in $(FASTWPBENCH) ; do \
@@ -102,11 +105,11 @@ fastwp.bench.simplify:
 	why-dp -no-timings good/*_why.sx
 
 fastwp.bench.ergo:
-	rm -f good/*_why.sx
+	rm -f good/*_why.why
 	for f in $(FASTWPBENCH) ; do \
-	  $(WHY) --why --fast-wp good/$$f.mlw; \
+	  $(WHY) --alt-ergo --fast-wp good/$$f.mlw; \
 	done
-	why-dp -no-timings good/*_why.why
+	../bin/why-dp.opt -no-timings good/*_why.why
 
 partial:
 	$(WHY) --coq-v8 -d -V --partial --valid --coq-tactic admit test.mlw

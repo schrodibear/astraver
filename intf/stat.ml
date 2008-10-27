@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.89 2008-10-24 07:05:56 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.90 2008-10-27 08:44:14 marche Exp $ i*)
 
 open Printf
 open Options
@@ -42,6 +42,7 @@ let is_caduceus =
   List.exists (fun f -> Filename.basename f = "caduceus.why") Options.files 
 *)
 
+(*
 let get_files fl = 
   let files = 
     List.map (fun f -> Filename.chop_extension (Filename.basename f)) fl 
@@ -51,10 +52,13 @@ let get_files fl =
        let file = (Filename.concat (Sys.getcwd ()) f) ^ ".c" in
        if Sys.file_exists file then file :: l else l)
     fl files
+*)
 
 let () =
   try
-    Main.main ()
+    Format.eprintf "Computation of VCs...@.";
+    Main.main ();
+    Format.eprintf "Computation of VCs done.@."
   with e ->
     Report.explain_exception Format.err_formatter e;
     Format.pp_print_newline Format.err_formatter ();
@@ -107,10 +111,12 @@ let set_loaded_config () =
   Colors.set_all_colors (Config.get_colors ())
 
 let () =
+  Format.eprintf "Reading GWhy configuration...@.";
   ignore (GtkMain.Main.init ());
   Config.create_default_config ();
   Config.load ();
-  set_loaded_config ()
+  set_loaded_config ();
+  Format.eprintf "GWhy configuration loaded...@."
 
 let modifiable_font_views = ref []
 
@@ -157,6 +163,9 @@ module View = struct
   open GtkTree
   open Model
 
+  let () = 
+    Format.eprintf "Creating GWhy Tree view...@."
+
   let renderer = GTree.cell_renderer_text [`XALIGN 0.] 
   let first_col = GTree.view_column ~title:"Proof obligations " 
     ~renderer:(renderer, ["text", Model.name]) () 
@@ -188,6 +197,9 @@ module View = struct
     in
     let _n : int = view#append_column last_col 
     in l
+
+  let () = 
+    Format.eprintf "GWhy Tree view created...@.";
 
 end
 
@@ -492,6 +504,7 @@ let run_benchmark (view:GTree.view) (model:GTree.tree_store) () =
   Queue.iter (fun f -> run_benchmark_fct view model f ()) Model.fq
 
 let main () = 
+  Format.eprintf "Creating GWhy views...@.";
   let w = GWindow.window 
 	    ~allow_grow:true ~allow_shrink:true
 	    ~width:!Colors.window_width ~height:!Colors.window_height 
@@ -1072,7 +1085,9 @@ let main () =
       Model.frows
   in
   w#add_accel_group accel_group;
-  w#show ()
+  w#show ();
+  Format.eprintf "GWhy views created.@."
+
 
 
 (* Main *)

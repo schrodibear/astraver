@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.97 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.98 2008-10-27 08:44:14 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -357,12 +357,18 @@ let print_axiom fmt id p =
   fprintf fmt "  @[<hov 2>%s: AXIOM@ @[%a@]@]@\n@\n" id print_predicate p
     
 let print_predicate_def fmt id (bl,p) =
-  fprintf fmt "  @[<hov 2>%s(@[%a@]) : bool =@ @[%a@]@]@\n@\n"
-    id (print_list comma print_logic_binder) bl print_predicate p
+  fprintf fmt "  @[<hov 2>%a(@[%a@]) : bool =@ @[%a@]@]@\n@\n"
+    ident id (print_list comma print_logic_binder) bl print_predicate p
+    
+let print_inductive_def fmt id inddef =
+  let (vars,(bl,cases)) = Env.specialize_inductive_def inddef in
+  let newvars,body = PredDefExpansor.inductive_inverse_body id bl cases in
+  fprintf fmt "  @[<hov 2>INDUCTIVE %a(@[%a@]) : bool =@ @[%a@]@]@\n@\n"
+    ident id (print_list comma print_logic_binder) newvars print_predicate body
     
 let print_function_def fmt id (bl,t,e) =
-  fprintf fmt "  @[<hov 2>%s(@[%a@]) : %a =@ @[%a@]@]@\n@\n"
-    id (print_list comma print_logic_binder) bl 
+  fprintf fmt "  @[<hov 2>%a(@[%a@]) : %a =@ @[%a@]@]@\n@\n"
+    ident id (print_list comma print_logic_binder) bl 
     print_pure_type t print_term e
     
 let print_obligation fmt (loc,expl,id,s) =
@@ -413,6 +419,7 @@ let print_axiom_scheme fmt id s =
 type def =
   | DefFunction of function_def scheme
   | DefPredicate of predicate_def scheme
+  | DefInductive of inductive_def scheme
 
 let print_def_scheme fmt id = function
   | DefFunction s -> 
@@ -423,6 +430,10 @@ let print_def_scheme fmt id = function
       let l,d = Env.specialize_predicate_def s in
       print_scheme l;
       print_predicate_def fmt id d
+  | DefInductive s ->
+      let l,d = Env.specialize_inductive_def s in
+      print_scheme l;      
+      print_inductive_def fmt id s
 
 let queue = Queue.create ()
 
@@ -437,8 +448,7 @@ let output_elem fmt = function
   | Dtype _ -> assert false
   | Dlogic (loc, id, t) -> print_logic fmt id t.scheme_type
   | Dpredicate_def (loc, id, d) -> print_predicate_def fmt id d.scheme_type
-  | Dinductive_def(loc, ident, inddef) ->
-      failwith "PVS output: inductive def not yet supported"
+  | Dinductive_def(loc, ident, inddef) -> print_inductive_def fmt ident inddef
   | Dfunction_def (loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (loc, id, p) -> print_axiom fmt id p.scheme_type
   | Dgoal (loc, expl, id, s) -> print_goal fmt (loc, expl, id, s)
@@ -509,11 +519,11 @@ let sort_theory () =
     | Dlogic (_, id, s) -> 
 	poly s; ArMap.add_scheme s (id,s) th.decls
     | Dpredicate_def (_, id, s) -> 
-	poly s; Queue.add (id, DefPredicate s) th.defs
+	poly s; Queue.add (Ident.string id, DefPredicate s) th.defs
     | Dinductive_def(loc, ident, inddef) ->
-      failwith "PVS output: inductive def not yet supported"
+	poly inddef; Queue.add (Ident.string ident, DefInductive inddef) th.defs
     | Dfunction_def (_, id, s) -> 
-	poly s; Queue.add (id, DefFunction s) th.defs
+	poly s; Queue.add (Ident.string id, DefFunction s) th.defs
     | Daxiom (_, id, s) -> 
 	poly s; ArMap.add_scheme s (id,s) th.axioms
     | Dgoal (loc, expl, id, s) -> 
@@ -556,7 +566,9 @@ let output_theory fmt th_name =
       (fun (id,def) -> 
 	let n = 
 	  let vars = match def with 
-	    | DefFunction s -> s.scheme_vars  | DefPredicate s -> s.scheme_vars
+	    | DefFunction s -> s.scheme_vars
+	    | DefInductive s -> s.scheme_vars
+	    | DefPredicate s -> s.scheme_vars
 	  in
 	  Vset.cardinal vars
 	in
@@ -565,7 +577,7 @@ let output_theory fmt th_name =
 	import_types ();
 	import_decls ();
 	importing !defs_so_far;
-	print_def_scheme fmt id def;
+	print_def_scheme fmt (Ident.create id) def;
 	end_theory fmt name;
         defs_so_far := name :: !defs_so_far)
       th.defs;
