@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.149 2008-10-18 21:56:43 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.150 2008-10-27 16:19:15 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -102,7 +102,7 @@ let rec conjuncts a =
 	  | None -> [ a ]
 	end
     | JCAnot a1 ->
-	List.map (fun a -> new assertion_with ~node:(JCAnot a1) a1)
+	List.map (fun a -> new assertion_with ~node:(JCAnot a) a)
 	  (disjuncts a1)
     | _ -> [ a ]
 and disjuncts a = 
@@ -114,7 +114,7 @@ and disjuncts a =
 	  | None -> [ a ]
 	end
     | JCAnot a1 ->
-	List.map (fun a -> new assertion_with ~node:(JCAnot a1) a1)
+	List.map (fun a -> new assertion_with ~node:(JCAnot a) a)
 	  (conjuncts a1)
     | _ -> [ a ]
 
@@ -1501,22 +1501,22 @@ let mkconsistent a =
 	  Some a
   in
   let conjuncts = conjuncts a in
-  let disjuncts = List.map disjuncts conjuncts in
-  let disjuncts = 
+  let cnf = List.map disjuncts conjuncts in
+  let conjuncts = 
     List.map 
-      (fun conjuncts ->
-	 let conjuncts = 
+      (fun conjunct ->
+	 let disjuncts = 
 	   List.map 
-	     (fun conjunct -> match aux conjunct with
-		| None -> Assertion.mktrue ()
+	     (fun disjunct -> match aux disjunct with
+		| None -> Assertion.mkfalse ()
 		| Some a -> a
-	     ) conjuncts
+	     ) conjunct
 	 in
-	 let disjunct = Assertion.mkand conjuncts () in
-	 if Assertion.is_true disjunct then Assertion.mkfalse () else disjunct
-      ) disjuncts
+	 let conjunct = Assertion.mkor disjuncts () in
+	 if Assertion.is_false conjunct then Assertion.mktrue () else conjunct
+      ) cnf
   in
-  Assertion.mkor disjuncts ()
+  Assertion.mkand conjuncts ()
 
 let mkinvariant mgr absval =
   if Abstract1.is_top mgr absval then
@@ -2313,7 +2313,8 @@ let wp_function targets funpre (f,pos,spec,body) =
 	       let qvs = 
 		 VarSet.filter
 		   (fun v -> 
-		      not v.jc_var_info_formal || v.jc_var_info_assigned
+		      (not (v.jc_var_info_static || v.jc_var_info_formal))
+		      || v.jc_var_info_assigned
 		   ) vs 
 	       in
 	       let curposts = add_modified_vars initposts qvs in

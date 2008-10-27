@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.368 2008-10-24 12:16:41 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.369 2008-10-27 16:19:15 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2911,22 +2911,22 @@ let tr_fun f funpos spec body acc =
 	      internal_write_params internal_read_params 
 	  in
 
-	  (* rename formals after parameters are computed and 
-	     before body is treated *)
-	  let list_of_refs =
-	    List.fold_right
-	      (fun id bl ->
-		 if id.jc_var_info_assigned
-		 then 
-		   let n = id.jc_var_info_final_name in
-		   let newn = "mutable_" ^ n in
-		   id.jc_var_info_final_name <- newn;
-		   (newn, n) :: bl
-		 else bl) 
-	      f.jc_fun_info_parameters [] 
-	  in
-
-	  let wrap_body body =
+	  let wrap_body f spec bname body =
+	    (* rename formals after parameters are computed and before body
+	       is treated *)
+	    let list_of_refs =
+	      List.fold_right
+		(fun id bl ->
+		   if id.jc_var_info_assigned
+		   then 
+		     let n = id.jc_var_info_final_name in
+		     let newn = "mutable_" ^ n in
+		     id.jc_var_info_final_name <- newn;
+		     (newn, n) :: bl
+		   else bl) 
+		f.jc_fun_info_parameters [] 
+	    in
+            let body = function_body f spec bname body in
 	    let body =
 	      if !Jc_options.inv_sem = InvOwnership then
 		append (assume_all_invariants f.jc_fun_info_parameters) body
@@ -2950,14 +2950,20 @@ let tr_fun f funpos spec body acc =
 		(fun (mut_id,id) e' -> Let_ref(mut_id, plain_var id, e')) 
 		list_of_refs body 
 	    in
+	    (* FS#393: restore parameter real names *)
+	    List.iter
+	      (fun v ->
+		 let n = v.jc_var_info_final_name in
+		 if List.mem_assoc n list_of_refs then
+		   v.jc_var_info_final_name <- List.assoc n list_of_refs
+	      ) f.jc_fun_info_parameters;
 	    body
 	  in
 
           (* safety behavior *)
 	  let acc = 
 	    if Jc_options.verify_behavior "safety" then
-              let safety_body = function_body f spec "safety" body in
-              let safety_body = wrap_body safety_body in
+              let safety_body = wrap_body f spec "safety" body in
               let newid = f.jc_fun_info_name ^ "_safety" in
               reg_decl 
 		~out_mark:newid
@@ -2984,8 +2990,7 @@ let tr_fun f funpos spec body acc =
             List.fold_right
               (fun (id,b,internal_post,_) acc ->
 		 if Jc_options.verify_behavior id then
- 		   let normal_body = function_body f spec id body in
-                   let normal_body = wrap_body normal_body in
+                   let normal_body = wrap_body f spec id body in
                    let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
                    let beh = 
                      if id="default" then "Default behavior" else
@@ -3017,8 +3022,7 @@ let tr_fun f funpos spec body acc =
                  List.fold_right
                    (fun (id,b,internal_post,_) acc ->
 		      if Jc_options.verify_behavior id then
- 			let except_body = function_body f spec id body in
-			let except_body = wrap_body except_body in
+			let except_body = wrap_body f spec id body in
                         let newid = f.jc_fun_info_name ^ "_exsures_" ^ id in
                         reg_decl 
                           ~out_mark:newid

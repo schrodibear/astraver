@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.257 2008-10-24 12:16:41 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.258 2008-10-27 16:19:15 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -596,20 +596,21 @@ let make_logic_bin_op loc (op: bin_op) e1 e2 =
 (** Check that used logic labels appear in the environment,
 and add the current [label] to the node in [jc_nexpr_label].
 [env] is the list of valid labels.
+[result_label] is the expected label for [\result].
 However, [label] might be changed by the "\at" construction. *)
-let rec type_labels env label e =
+let rec type_labels env ~result_label label e =
   let check e x =
     if not (List.mem x env) then
       typing_error e#pos "label `%a' not found" Jc_output_misc.label x
   in
   let iter_subs ?(env=env) label =
     List.iter
-      (fun e -> ignore (type_labels env label e))
+      (fun e -> ignore (type_labels env ~result_label label e))
       (INExpr.subs e)
   in
   e#set_label label;
   match e#node with
-    | JCNEconst _ | JCNEvar _ | JCNEderef _ | JCNEbinary _
+    | JCNEconst _ | JCNEderef _ | JCNEbinary _
     | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _
     | JCNEif _ | JCNEoffset _ | JCNEaddress _
     | JCNEalloc _ | JCNEfree _ | JCNElet _
@@ -618,11 +619,21 @@ let rec type_labels env label e =
     | JCNEmutable _ | JCNEeqtype _ | JCNEsubtype _ | JCNErange _ -> 
         iter_subs label;
         env
+    | JCNEvar id ->
+	if id = "\\result" then
+	  begin match label,result_label with
+	    | Some lab1, Some lab2 ->
+		if lab1 <> lab2 then
+		  typing_error e#pos "\\result not allowed here"
+	    | None, _ 
+	    | _, None -> typing_error e#pos "\\result not allowed here"
+	  end;
+	env
     | JCNEcontract(req,dec,behs,e) ->
-	let _ = type_labels_opt env (Some LabelHere) req in
-	let _ = type_labels_opt env (Some LabelHere) dec in
+	let _ = type_labels_opt env ~result_label:None (Some LabelHere) req in
+	let _ = type_labels_opt env ~result_label:None (Some LabelHere) dec in
 	List.iter (behavior_labels env) behs;
-	type_labels env None e
+	type_labels env ~result_label None e
     | JCNEapp(_, l, _) ->
         List.iter (check e) l;
         iter_subs label;
@@ -637,7 +648,7 @@ let rec type_labels env label e =
         env
     | JCNEblock el ->
         List.fold_left
-          (fun env e -> type_labels env label e)
+          (fun env e -> type_labels env ~result_label label e)
           env el
     | JCNElabel(lab, _) ->
         let lab = {
@@ -649,26 +660,29 @@ let rec type_labels env label e =
         iter_subs ~env label;
         env
 
-and type_labels_opt env label e =
+and type_labels_opt env ~result_label label e =
   match e with
     | None -> env
-    | Some e -> type_labels env label e
+    | Some e -> type_labels env ~result_label label e
 	
 and behavior_labels env 
     (loc,id,throws,assumes,requires,assigns,ensures) =
   let here = Some LabelHere in
-  let _ = type_labels_opt env here assumes in
-  let _ = type_labels_opt env here requires in
-  let env = LabelOld :: env in
+  let _ = type_labels_opt env ~result_label:None here assumes in
+  let _ = type_labels_opt env ~result_label:None here requires in
+  let env = LabelOld :: LabelPost :: env in
   Option_misc.iter
     (fun (_,a) ->
-       List.iter (fun e -> ignore(type_labels env here e)) a) assigns;
-  let _ = type_labels env here ensures in
+       List.iter 
+	 (fun e -> 
+	    ignore(type_labels env 
+		     ~result_label:(Some LabelPost) (Some LabelOld) e)) a)
+    assigns;
+  let _ = type_labels env ~result_label:here here ensures in
   ()
-   
 
-let type_labels env label e =
-  ignore (type_labels env label e)
+let type_labels env ~result_label label e =
+  ignore (type_labels env ~result_label label e)
 
 let get_label e =
   match e#label with
@@ -1377,7 +1391,7 @@ let behavior env vi_result (loc, id, throws, assumes, requires, assigns, ensures
     Option_misc.map 
       (fun (loc, l) -> 
          (loc, List.map 
-            (fun a -> let _,_,tl = location env a in 
+            (fun a -> let _,_,tl = location env_result a in 
              (match tl#node with
                 | JCLvar vi -> vi.jc_var_info_assigned <- true
                 | _ -> ());
@@ -2107,44 +2121,53 @@ let default_label l =
 with the correct label environment. *)
 let type_labels_in_clause = function
   | JCCrequires e ->
-      type_labels [LabelHere] (Some LabelHere) e
+      type_labels [LabelHere] ~result_label:None (Some LabelHere) e
   | JCCbehavior(_, _, _, assumes, requires, assigns, ensures) ->
-      Option_misc.iter (type_labels [LabelHere] (Some LabelHere)) assumes;
-      Option_misc.iter (type_labels [LabelHere] (Some LabelHere)) requires;
+      Option_misc.iter
+	(type_labels [LabelHere] ~result_label:None (Some LabelHere)) assumes;
+      Option_misc.iter
+	(type_labels [LabelHere] ~result_label:None (Some LabelHere)) requires;
       Option_misc.iter
         (fun (_, x) ->
            List.iter
-             (type_labels [LabelOld; LabelHere] (Some LabelHere)) x)
+             (type_labels [LabelOld; LabelHere] 
+		~result_label:(Some LabelPost) (Some LabelOld)) x)
         assigns;
-      (type_labels [LabelOld; LabelHere] (Some LabelHere)) ensures
+      type_labels [LabelOld; LabelHere] 
+	~result_label:(Some LabelHere) (Some LabelHere) ensures
 
 (** Apply [type_labels] in all expressions of a normalized declaration,
 with the correct label environment. *)
 let rec type_labels_in_decl d = match d#node with
   | JCDvar(_, _, init) ->
-      Option_misc.iter (type_labels [] None) init
+      Option_misc.iter (type_labels [] ~result_label:None None) init
   | JCDfun(_, _, _, clauses, body) ->
       Option_misc.iter
-        (type_labels [LabelHere; LabelPre] (Some LabelHere))
+        (type_labels [LabelHere; LabelPre] ~result_label:None (Some LabelHere))
         body;
       List.iter type_labels_in_clause clauses
   | JCDtag(_, _, _, _, invs) ->
       List.iter
-        (fun (_, _, e) -> type_labels [LabelHere] (Some LabelHere) e) invs
+        (fun (_, _, e) -> 
+	   type_labels [LabelHere] ~result_label:None (Some LabelHere) e) invs
   | JCDlemma(_, _, labels, body) ->
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
-      type_labels labels (default_label labels) body
+      type_labels labels ~result_label:None (default_label labels) body
   | JCDlogic(_, _, labels, _, JCreads el) ->
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
-      List.iter (type_labels labels (default_label labels)) el
+      List.iter 
+	(type_labels labels 
+	   ~result_label:(Some LabelPost) (default_label labels)) el
   | JCDlogic(_, _, labels, _, JCexpr e) ->
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
-      type_labels labels (default_label labels) e
+      type_labels labels  ~result_label:None (default_label labels) e
   | JCDlogic(_, _, labels, _, JCinductive l) ->
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
-      List.iter (fun (_,e) -> type_labels labels (default_label labels) e) l
+      List.iter (fun (_,e) -> 
+		   type_labels labels 
+		     ~result_label:None (default_label labels) e) l
   | JCDglobal_inv(_, body) ->
-      type_labels [LabelHere] (Some LabelHere) body
+      type_labels [LabelHere] ~result_label:None (Some LabelHere) body
   | JCDvariant_type _ | JCDunion_type _ | JCDenum_type _ | JCDlogic_type _
   | JCDexception _ | JCDinvariant_policy _ | JCDseparation_policy _
   | JCDannotation_policy _ | JCDabstract_domain _ | JCDint_model _ 

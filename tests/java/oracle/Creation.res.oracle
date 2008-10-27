@@ -2538,7 +2538,7 @@ parameter cons_Creation :
      eq_int(integer_of_int32(select(Creation_simple_val, this_2)), (0)))
     and (JC_37:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
-        Creation_simple_val, pset_singleton(this_2))))) }
+        Creation_simple_val, pset_singleton(this_2@))))) }
 
 parameter cons_Creation_int :
  this_1:Object pointer ->
@@ -2551,7 +2551,7 @@ parameter cons_Creation_int :
       integer_of_int32(n_1)))
      and (JC_23:
          not_assigns(Object_alloc_table@, Creation_simple_val@,
-         Creation_simple_val, pset_singleton(this_1))))) }
+         Creation_simple_val, pset_singleton(this_1@))))) }
 
 parameter cons_Creation_int_int :
  this_0:Object pointer ->
@@ -2565,7 +2565,7 @@ parameter cons_Creation_int_int :
        add_int(integer_of_int32(n_0_0), integer_of_int32(m))))
       and (JC_54:
           not_assigns(Object_alloc_table@, Creation_simple_val@,
-          Creation_simple_val, pset_singleton(this_0))))) }
+          Creation_simple_val, pset_singleton(this_0@))))) }
 
 parameter cons_Creation_int_int_requires :
  this_0:Object pointer ->
@@ -2579,7 +2579,7 @@ parameter cons_Creation_int_int_requires :
        add_int(integer_of_int32(n_0_0), integer_of_int32(m))))
       and (JC_54:
           not_assigns(Object_alloc_table@, Creation_simple_val@,
-          Creation_simple_val, pset_singleton(this_0))))) }
+          Creation_simple_val, pset_singleton(this_0@))))) }
 
 parameter cons_Creation_int_requires :
  this_1:Object pointer ->
@@ -2592,7 +2592,7 @@ parameter cons_Creation_int_requires :
       integer_of_int32(n_1)))
      and (JC_23:
          not_assigns(Object_alloc_table@, Creation_simple_val@,
-         Creation_simple_val, pset_singleton(this_1))))) }
+         Creation_simple_val, pset_singleton(this_1@))))) }
 
 parameter cons_Creation_requires :
  this_2:Object pointer ->
@@ -2603,7 +2603,7 @@ parameter cons_Creation_requires :
      eq_int(integer_of_int32(select(Creation_simple_val, this_2)), (0)))
     and (JC_37:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
-        Creation_simple_val, pset_singleton(this_2))))) }
+        Creation_simple_val, pset_singleton(this_2@))))) }
 
 parameter cons_TestSuperConstructor :
  this_4:Object pointer ->
@@ -2614,7 +2614,7 @@ parameter cons_TestSuperConstructor :
      eq_int(integer_of_int32(select(Creation_simple_val, this_4)), (12)))
     and (JC_182:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
-        Creation_simple_val, pset_singleton(this_4))))) }
+        Creation_simple_val, pset_singleton(this_4@))))) }
 
 parameter cons_TestSuperConstructor_requires :
  this_4:Object pointer ->
@@ -2625,7 +2625,7 @@ parameter cons_TestSuperConstructor_requires :
      eq_int(integer_of_int32(select(Creation_simple_val, this_4)), (12)))
     and (JC_182:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
-        Creation_simple_val, pset_singleton(this_4))))) }
+        Creation_simple_val, pset_singleton(this_4@))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -3089,7 +3089,7 @@ let cons_Creation_ensures_normal =
      eq_int(integer_of_int32(select(Creation_simple_val, this_2)), (0)))
     and (JC_34:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
-        Creation_simple_val, pset_singleton(this_2))))) }
+        Creation_simple_val, pset_singleton(this_2@))))) }
 
 let cons_Creation_int_ensures_default =
  fun (this_1 : Object pointer) (n_1 : int32) ->
@@ -3137,7 +3137,7 @@ let cons_Creation_int_ensures_normal =
      integer_of_int32(n_1)))
     and (JC_20:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
-        Creation_simple_val, pset_singleton(this_1))))) }
+        Creation_simple_val, pset_singleton(this_1@))))) }
 
 let cons_Creation_int_int_ensures_default =
  fun (this_0 : Object pointer) (n_0_0 : int32) (m : int32) ->
@@ -3180,7 +3180,7 @@ let cons_Creation_int_int_ensures_normal =
      add_int(integer_of_int32(n_0_0), integer_of_int32(m))))
     and (JC_51:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
-        Creation_simple_val, pset_singleton(this_0))))) }
+        Creation_simple_val, pset_singleton(this_0@))))) }
 
 let cons_Creation_int_int_safety =
  fun (this_0 : Object pointer) (n_0_0 : int32) (m : int32) ->
@@ -3271,7 +3271,7 @@ let cons_TestSuperConstructor_ensures_normal =
      eq_int(integer_of_int32(select(Creation_simple_val, this_4)), (12)))
     and (JC_179:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
-        Creation_simple_val, pset_singleton(this_4))))) }
+        Creation_simple_val, pset_singleton(this_4@))))) }
 
 let cons_TestSuperConstructor_safety =
  fun (this_4 : Object pointer) ->
