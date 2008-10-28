@@ -1437,7 +1437,14 @@ let add_alloc_table_argument
 	 nor counted as effect. *)
       match mode with
 	| #param_or_effect_mode -> acc
-	| `MLocal -> ((alloc,distr), (allocvar (ac,distr), ty')) :: acc
+	| `MLocal ->
+	    if Region.bitwise distr && not type_safe then
+	      (* Bitwise allocation table. Translate the allocation class. *)
+	      let ac = JCalloc_bitvector in
+	      let ty' = alloc_table_type ac in
+	      ((alloc,distr), (allocvar (ac,distr), ty')) :: acc
+	    else
+	      ((alloc,distr), (allocvar (ac,distr), ty')) :: acc
   else 
     (* Constant allocation table. Not passed in argument by the caller, 
        but counted as effect. *)
@@ -1526,7 +1533,7 @@ let alloc_table_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads
   let reads =
     AllocMap.fold
       (fun (ac,distr) _labs acc ->
-	 if AllocMap.mem (ac,distr) callee_writes.jc_effect_alloc_tables then
+	 if has_alloc_table (ac,distr) callee_writes.jc_effect_alloc_tables then
 	   (* Allocation table is written, thus it is already taken care of
 	      as a parameter. *)
 	   match mode with
@@ -1652,7 +1659,14 @@ let add_memory_argument
 	 nor counted as effect. *)
       match mode with
 	| #param_or_effect_mode -> acc
-	| `MLocal -> ((mem,distr), (memvar (mc,distr), ty')) :: acc 
+	| `MLocal ->
+	    if Region.bitwise distr && not type_safe then
+	      (* Bitwise memory. Translate the memory class. *)
+	      let mc = JCmem_bitvector in
+	      let ty' = memory_type mc in
+	      ((mem,distr), (memvar (mc,distr), ty')) :: acc 
+	    else
+	      ((mem,distr), (memvar (mc,distr), ty')) :: acc 
   else 
     (* Constant memory. Not passed in argument by the caller, 
        but counted as effect. *)
@@ -1750,7 +1764,7 @@ let memory_detailed_reads ~mode ~type_safe ~callee_writes ~callee_reads
   let reads =
     MemoryMap.fold
       (fun (mc,distr) _labs acc ->
-	 if MemoryMap.mem (mc,distr) write_effects then
+	 if has_memory (mc,distr) write_effects then
 	   (* Memory is written, thus it is already taken care of
 	      as a parameter. *)
 	   match mode with
@@ -1921,7 +1935,11 @@ let read_locals ~region_list ~callee_reads ~callee_writes ~params =
     read_model_parameters ~type_safe:false ~mode:`MLocal
       ~callee_reads ~callee_writes ~region_list ~params ~already_used:[] ()
   in
-  List.map (function (Var n,ty') -> (n,ty') | _ -> assert false) vars'
+  List.map (function (Var n,ty') -> (n,ty') | (Deref n,ty') -> 
+	      printf "Deref %s with type %a@." n Output.fprintf_logic_type ty';
+	      assert false
+	      | _ -> assert false
+	   ) vars'
 
 let read_effects ~callee_reads ~callee_writes ~region_list ~params =
   let vars' = 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.370 2008-10-28 10:09:28 ayad Exp $ *)
+(* $Id: jc_interp.ml,v 1.371 2008-10-28 12:50:14 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1537,76 +1537,75 @@ and offset = function
   | Term_offset _ -> assert false
 
 and list_type_assert ty e (lets, params) =
-  let opt =
-    match ty with
-      | JCTpointer (si, n1o, n2o) ->
-	  let tmp = tmp_var_name () in
-	  let ac = alloc_class_of_pointer_class si in
-	  let alloc = 
-	    talloc_table_var ~label_in_name:false LabelHere (ac,e#region) 
-	  in
-	  let offset_mina n = 
-	    LPred ("le_int",
-		   [LApp ("offset_min", 
-			  [alloc; LVar tmp]);
-		    LConst (Prim_int (Num.string_of_num n))]) 
-	  in
-	  let offset_maxa n =
-	    LPred ("ge_int",
-		   [LApp ("offset_max", 
-			  [alloc; LVar tmp]);
-		    LConst (Prim_int (Num.string_of_num n))])
-	  in
-	  begin match e#typ with
-	    | JCTpointer (si', n1o', n2o') ->
-		  begin match n1o, n2o with
-		    | None, None -> None
-		    | Some n, None ->
-			begin match n1o' with
-			  | Some n' when Num.le_num n' n && not Jc_options.verify_all_offsets -> None
-			  | _ -> Some (tmp, offset_mina n)
-			end
-		    | None, Some n -> 
-		begin match n2o' with
-		  | Some n' when Num.ge_num n' n && not Jc_options.verify_all_offsets -> None
-		  | _ -> Some (tmp, offset_maxa n)
-		end
-		    | Some n1, Some n2 ->
-			begin match n1o', n2o' with
-			  | None, None -> Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
-			  | Some n1', None ->
-			      if Num.le_num n1' n1 && not Jc_options.verify_all_offsets then 
-				Some (tmp, offset_maxa n2) 
-			      else
-				Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
-			  | None, Some n2' ->
-			      if Num.ge_num n2' n2 && not Jc_options.verify_all_offsets then 
-				Some (tmp, offset_mina n1) 
-			      else
-				Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
-			  | Some n1', Some n2' ->
-			      if Jc_options.verify_all_offsets then
-				Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
-			      else
-				if Num.le_num n1' n1 then 
-				  if Num.ge_num n2' n2 then None else 
-				    Some (tmp, offset_maxa n2)
-				else
-				  if Num.ge_num n2' n2 then 
-				    Some (tmp, offset_mina n1) else
-				      Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
-			end
-		  end
-	      | JCTnull ->
-		  begin match n1o, n2o with
-		    | None, None -> None
-		    | Some n, None -> Some (tmp, offset_mina n)
-		    | None, Some n -> Some (tmp, offset_maxa n)
-		    | Some n1, Some n2 -> Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
-		  end
-	      | _ -> None
-	    end
-      | _ -> None
+  let opt = match ty with
+    | JCTpointer(si,n1o,n2o) ->
+	let tmp = tmp_var_name () in
+	let ac = alloc_class_of_pointer_class si in
+	let alloc = 
+	  talloc_table_var ~label_in_name:false LabelHere (ac,e#region) 
+	in
+	let offset_mina n = 
+	  LPred ("le_int",
+		 [LApp ("offset_min", 
+			[alloc; LVar tmp]);
+		  LConst (Prim_int (Num.string_of_num n))]) 
+	in
+	let offset_maxa n =
+	  LPred ("ge_int",
+		 [LApp ("offset_max", 
+			[alloc; LVar tmp]);
+		  LConst (Prim_int (Num.string_of_num n))])
+	in
+	begin match e#typ with
+	  | JCTpointer (si', n1o', n2o') ->
+	      begin match n1o, n2o with
+		| None, None -> None
+		| Some n, None ->
+		    begin match n1o' with
+		      | Some n' when Num.le_num n' n && not Jc_options.verify_all_offsets -> None
+		      | _ -> Some (tmp, offset_mina n)
+		    end
+		| None, Some n -> 
+		    begin match n2o' with
+		      | Some n' when Num.ge_num n' n && not Jc_options.verify_all_offsets -> None
+		      | _ -> Some (tmp, offset_maxa n)
+		    end
+		| Some n1, Some n2 ->
+		    begin match n1o', n2o' with
+		      | None, None -> Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		      | Some n1', None ->
+			  if Num.le_num n1' n1 && not Jc_options.verify_all_offsets then 
+			    Some (tmp, offset_maxa n2) 
+			  else
+			    Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		      | None, Some n2' ->
+			  if Num.ge_num n2' n2 && not Jc_options.verify_all_offsets then 
+			    Some (tmp, offset_mina n1) 
+			  else
+			    Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		      | Some n1', Some n2' ->
+			  if Jc_options.verify_all_offsets then
+			    Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+			  else
+			    if Num.le_num n1' n1 then 
+			      if Num.ge_num n2' n2 then None else 
+				Some (tmp, offset_maxa n2)
+			    else
+			      if Num.ge_num n2' n2 then 
+				Some (tmp, offset_mina n1) else
+				  Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		    end
+	      end
+	  | JCTnull ->
+	      begin match n1o, n2o with
+		| None, None -> None
+		| Some n, None -> Some (tmp, offset_mina n)
+		| None, Some n -> Some (tmp, offset_maxa n)
+		| Some n1, Some n2 -> Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+	      end
+	  | _ -> None
+	end
+    | _ -> None
   in
   let e = expr_coerce ty e in
   match opt with
@@ -1899,6 +1898,11 @@ and expr e =
 		  fname args
 	      in
 	      let call = make_guarded_app e#mark UserCall e#pos fname args in
+	      let call = 
+		if is_pointer_type e#typ && Region.bitwise e#region then
+		  make_app "pointer_address" [ call ]
+		else call
+	      in
 	      let call = 
 		if pre = LTrue || not (default_checking()) then 
 		  call

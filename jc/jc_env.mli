@@ -25,9 +25,10 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.65 2008-10-28 10:09:28 ayad Exp $ *)
+(* $Id: jc_env.mli,v 1.66 2008-10-28 12:50:14 moy Exp $ *)
 
-type native_type = Tunit | Tboolean | Tinteger | Treal | Tdouble | Tfloat | Tstring
+type native_type = 
+    Tunit | Tboolean | Tinteger | Treal | Tdouble | Tfloat | Tstring
 
 type inv_sem = InvNone | InvOwnership | InvArguments
 

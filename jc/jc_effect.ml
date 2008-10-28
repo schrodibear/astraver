@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.145 2008-10-24 12:16:41 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.146 2008-10-28 12:50:14 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -138,6 +138,16 @@ let transpose_memory ~region_mem_assoc (mc,r) =
       (* No possible effect on caller types *)
       MemorySet.empty
   else MemorySet.singleton (mc,r)
+
+let has_alloc_table (ac,r) alloc_effect =
+  let allocs = AllocSet.of_list (AllocMap.keys alloc_effect) in
+  if Region.bitwise r then AllocSet.mem_region r allocs
+  else AllocSet.mem (ac,r) allocs
+
+let has_memory (mc,r) mem_effect =
+  let mems = MemorySet.of_list (MemoryMap.keys mem_effect) in
+  if Region.bitwise r then MemorySet.mem_region r mems
+  else MemorySet.mem (mc,r) mems
 
 (* Printing effects *)
 
