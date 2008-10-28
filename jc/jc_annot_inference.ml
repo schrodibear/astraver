@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.150 2008-10-27 16:19:15 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.151 2008-10-28 17:16:47 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1920,7 +1920,22 @@ let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
 	let finala = reg_annot ~pos ~anchor finala in
 	Some finala
       end
-	
+
+let forget_mem_in_assertion curposts e1 fi dereft a =
+  let mc,_ufi_opt = Jc_effect.deref_mem_class ~type_safe:true e1 fi in
+  let mem = mc, e1#region in
+  map_term_in_assertion 
+    (fun t -> 
+       if TermOrd.equal dereft t then t 
+       else 
+	 let ef = Jc_effect.term empty_effects t in
+	 if Jc_effect.has_memory_effect ef mem then
+	   let tmp = newvar t#typ in
+	   add_inflexion_var curposts tmp;
+	   new term_var tmp
+	 else t
+    ) a
+
 let rec wp_expr weakpre = 
   let var_of_term = Hashtbl.create 0 in
   (* Terms should be raw only. *)
@@ -2013,6 +2028,7 @@ let rec wp_expr weakpre =
 		      || (!Jc_options.annotation_sem = AnnotStrongPre
 			  && mem_term_in_assertion dereft a)
 		    then
+		      let a = forget_mem_in_assertion curposts e1 fi dereft a in
 		      let a = replace_term_in_assertion dereft tv1 a in
 		      match Jc_effect.term_of_expr e2 with 
 			| None -> Some a
