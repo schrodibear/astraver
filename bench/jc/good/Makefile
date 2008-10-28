@@ -1,10 +1,9 @@
 
 JESSIE=OCAMLRUNPARAM=bt ../../../bin/jessie.byte
 #JESSIE=../../../bin/jessie.byte
-JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib/why
 
-EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE) -why-opt -split-user-conj
+EXECJESSIE=WHYLIB=$(WHYLIB) $(JESSIE) -why-opt -split-user-conj
 
 JCFILES=$(shell ls *.jc)
 WFILES=$(addprefix why/, $(JCFILES:.jc=.why))
@@ -15,8 +14,8 @@ TIMEOUT=60
 default:
 	for f in $(JCFILES:.jc=); do \
 	  rm -f why/$$f.why; \
-	  make why/$$f.why; \
-	  make -f $$f.makefile simplify/$${f}_why.sx.all; \
+	  WHYLIB=$(WHYLIB) make why/$$f.why; \
+	  WHYLIB=$(WHYLIB) make -f $$f.makefile simplify/$${f}_why.sx.all; \
 	done
 	dp -timeout 10 simplify/*_why.sx.all
 
@@ -76,8 +75,8 @@ smtlib/%_why.smt.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why
 	mkdir -p why
 	rm -f why/$*.why
 	rm -f why/$*.xpl
-	make why/$*.why
-	make -f $*.makefile gui
+	WHYLIB=$(WHYLIB) make why/$*.why
+	WHYLIB=$(WHYLIB) make -f $*.makefile gui
 
 %.split: %.jc
 	mkdir -p why

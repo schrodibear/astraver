@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.162 2008-10-27 08:44:14 marche Exp $ i*)
+(*i $Id: main.ml,v 1.163 2008-10-28 14:55:27 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -94,12 +94,16 @@ let push_decl _vloc d =
 	  | Why | MultiWhy | WhyProject -> Pretty.push_decl ~ergo:false
 	  | Ergo -> Pretty.push_decl ~ergo:true
 	  | Dispatcher -> 
+(*
 	      (fun d ->
 		 (* push for Dispatcher, used by Gwhy *)
-		 Dispatcher.push_decl d;
+*)
+	      Dispatcher.push_decl
+(*
 		 if prover ~ignore_gui:true () = WhyProject then
 		   (* also push for project, used by GWhy/Coq column *)
 		   Pretty.push_decl ~ergo:false d)
+*)
 	  | Harvey -> Harvey.push_decl
 	  | Simplify -> Simplify.push_decl
 	  | Zenon -> Zenon.push_decl
@@ -173,10 +177,12 @@ let output fwe =
     | Isabelle -> Isabelle.output_file fwe
     | Hol4 -> Hol4.output_file fwe
     | Gappa -> Gappa.output_file fwe
-    | Dispatcher -> 
-	if prover ~ignore_gui:true () = WhyProject then
+    | Dispatcher -> ()
+(*
+	if prover (* ~ignore_gui:true*)  () = WhyProject then
 	  (* output project, used by GWhy/Coq column *)
 	  Options.gui_project := Some(Pretty.output_project fwe)
+*)
     | Ergo | Why -> Pretty.output_file fwe
     | MultiWhy -> Pretty.output_files fwe
     | WhyProject -> ignore(Pretty.output_project fwe)
@@ -617,21 +623,24 @@ let deal_file f =
 let main () =
   let t0 = Unix.times () in
   load_prelude ();
-  if files = [] then begin
-    deal_channel (why_parser "standard input") stdin;
-    output (Options.out_file "out")
-  end else begin
-    List.iter deal_file files;
-    if (pruning) or (Options.pruning_hyp_v != -1) then
-      begin
-	let q =  declarationQueue in 
-	encode q 
-      end;
-    if single_file () then 
-      let lf = Filename.chop_extension (last files) in
-      let outf = Options.out_file lf in      
-      output outf
-  end;
+  if files = [] then 
+    begin
+      deal_channel (why_parser "standard input") stdin;
+      output (Options.out_file "out")
+    end 
+  else 
+    begin
+      List.iter deal_file files;
+      if (pruning) or (Options.pruning_hyp_v != -1) then
+	begin
+	  let q =  declarationQueue in 
+	  encode q 
+	end;
+      if single_file () then 
+	let lf = Filename.chop_extension (last files) in
+	let outf = Options.out_file lf in      
+	output outf
+    end;
   if show_time then
     let t1 = Unix.times () in
     printf "Why execution time : %3.2f@." 

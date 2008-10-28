@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.32 2008-10-27 08:44:14 marche Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.33 2008-10-28 14:55:27 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -46,7 +46,8 @@ let add_oblig ((_,_,id,_) as o) =
   Queue.add so oblig ;
   Hashtbl.add oblig_h id so
 
-let push_decl = function
+let push_decl d = 
+  match d with
   | Dgoal (loc, expl, id, s) -> add_oblig (loc, expl, id, s)
   | d -> add_elem d
 
@@ -90,7 +91,7 @@ let get_project () =
   match !Options.gui_project with
     | Some p -> p
     | None ->
-	failwith "For interactive provers, option --project must by set"
+	failwith "For interactive provers, option --project must be set"
 	
 
 let output_file ?encoding p (elems,o) =
@@ -128,7 +129,7 @@ let output_file ?encoding p (elems,o) =
       Queue.iter (push_elem p) q ;
       push_obligation p o 
     end
-else
+  else
     begin
       List.iter (push_elem p) elems;
       push_obligation p o

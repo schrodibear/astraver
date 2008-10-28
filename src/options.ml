@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.122 2008-10-27 08:44:14 marche Exp $ i*)
+(*i $Id: options.ml,v 1.123 2008-10-28 14:55:27 marche Exp $ i*)
 
 open Format
 
@@ -553,8 +553,8 @@ let debug = !debug_
 let parse_only = !parse_only_
 let type_only = !type_only_
 let wp_only = !wp_only_
-let prover ?(ignore_gui=false) () = 
-  if not ignore_gui=false && !gui then Dispatcher else !prover_
+let prover (* ?(ignore_gui=false) *) () = 
+  if (* not ignore_gui &&*) !gui then Dispatcher else !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
 let coq_preamble = match !coq_preamble_ with

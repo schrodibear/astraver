@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.94 2008-10-27 08:44:14 marche Exp $ i*)
+(*i $Id: options.mli,v 1.95 2008-10-28 14:55:27 marche Exp $ i*)
 
 (*s General options *)
 
@@ -112,7 +112,7 @@ type prover =
   | SmtLib | Isabelle | Hol4 | Gappa | Zenon 
   | Ergo | Why | MultiWhy | Dispatcher | WhyProject
 
-val prover : ?ignore_gui:bool -> unit -> prover
+val prover : (* ?ignore_gui:bool  -> *) unit -> prover
 
 val valid : bool
 val coq_tactic : string option
