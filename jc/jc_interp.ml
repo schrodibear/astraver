@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.372 2008-10-28 15:34:48 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.373 2008-10-28 16:16:34 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1537,23 +1537,38 @@ and offset = function
   | Term_offset _ -> assert false
 
 and list_type_assert ty e (lets, params) =
+  let offset k e1 ty tmp =
+    let ac = deref_alloc_class ~type_safe:false e1 in
+    let alloc = 
+      talloc_table_var ~label_in_name:false LabelHere (ac,e1#region) 
+    in
+    match ac with
+      | JCalloc_root _ ->
+          let f = match k with
+	    | Offset_min -> "offset_min"
+	    | Offset_max -> "offset_max"
+          in
+	  LApp(f,[alloc; LVar tmp])
+      | JCalloc_bitvector -> 
+	  let st = pointer_struct ty in
+          let f = match k with
+	    | Offset_min -> "offset_min_bytes"
+	    | Offset_max -> "offset_max_bytes"
+          in
+	  let s = string_of_int (struct_size_in_bytes st) in
+	  LApp(f,[alloc; LVar tmp; LConst(Prim_int s)])
+  in
   let opt = match ty with
-    | JCTpointer(si,n1o,n2o) ->
+    | JCTpointer(pc,n1o,n2o) ->
 	let tmp = tmp_var_name () in
-	let ac = alloc_class_of_pointer_class si in
-	let alloc = 
-	  talloc_table_var ~label_in_name:false LabelHere (ac,e#region) 
-	in
 	let offset_mina n = 
 	  LPred ("le_int",
-		 [LApp ("offset_min", 
-			[alloc; LVar tmp]);
+		 [offset Offset_min e ty tmp;
 		  LConst (Prim_int (Num.string_of_num n))]) 
 	in
 	let offset_maxa n =
 	  LPred ("ge_int",
-		 [LApp ("offset_max", 
-			[alloc; LVar tmp]);
+		 [offset Offset_max e ty tmp;
 		  LConst (Prim_int (Num.string_of_num n))])
 	in
 	begin match e#typ with
