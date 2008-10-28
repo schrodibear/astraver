@@ -58,7 +58,7 @@ case $1 in
 	if grep RUNCOQ $f.java ; then
 	    echo "========== generation of Coq VC output =========="
 	    WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq	
-	    mycat $d/coq/$b'_why'.v
+	    mycatfilterdir $d/coq/$b'_why'.v
 	    echo "========== running Coq =========="
 	    DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq		   
         fi
