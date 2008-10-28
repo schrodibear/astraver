@@ -3,7 +3,7 @@
 jc_lexer.ml
 jc_parser.mli
 jc_parser.ml
-jc_version.ml
 jc_ai.ml
 numconst.ml
-jc.cma jc.cmxa
+jc.cma 
+jc.cmxa
