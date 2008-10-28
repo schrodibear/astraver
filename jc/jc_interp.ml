@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.371 2008-10-28 12:50:14 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.372 2008-10-28 15:34:48 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2273,7 +2273,18 @@ let tr_logic_fun f ta acc =
 *)
       | None, JCInductive l  ->
 	  Inductive(false, f.jc_logic_info_final_name, params,  
-		    List.map (fun (id,a) -> (id#name, fa a)) l) :: acc
+		    List.map 
+		      (fun (id,a) ->
+			 let ef = Jc_effect.assertion empty_effects a in
+			 let a' = fa a in
+			 let params = 
+			   tmodel_parameters ~label_in_name:true ef 
+			 in
+			 let a' = 
+			   List.fold_right 
+			     (fun (n,ty') a' -> LForall(n,ty',a')) params a' 
+			 in 
+			 (id#name, a')) l) :: acc
       | Some _, JCInductive _ -> assert false
       | None, JCTerm _ -> assert false 
       | Some _, JCAssertion _ -> assert false 
