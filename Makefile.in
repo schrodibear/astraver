@@ -724,14 +724,13 @@ install-binary: $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2H
 	fi
 
 install-lib: $(JCLIB)
-	mkdir -p $(LIBDIR)/why
-	cp -f $(PRELUDE) $(LIBDIR)/why
+	mkdir -p $(LIBDIR)/why/why
+	cp -f $(PRELUDE) $(LIBDIR)/why/why
+	cp -f lib/why/jessie.why $(LIBDIR)/why/why
 	mkdir -p $(LIBDIR)/caduceus/why
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
-	cp -f lib/why/jessie.why $(LIBDIR)/why
-	cp -f lib/why/floats.why $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/caduceus/coq
 	mkdir -p $(LIBDIR)/coq
 	if test "@COQVER@" = "v7"; then \
