@@ -183,6 +183,7 @@ axiom neq_double_bool_axiom :
   forall x:double. forall y:double. 
     neq_double_bool(x,y)=true <-> d_to_r(x)<>d_to_r(y)
 
+
 (* quad precision *)
 
 type quad

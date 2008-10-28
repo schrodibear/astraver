@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.29 2008-10-24 12:16:41 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.30 2008-10-28 10:09:28 ayad Exp $ *)
 
 open Format
 open Jc_env
@@ -76,9 +76,11 @@ let real_conversion fmt rc =
   match rc with
     | Integer_to_real -> fprintf fmt "real"
     | Double_to_real -> fprintf fmt "d_to_r"
+    | Float_to_real -> fprintf fmt "s_to_r"
     | Real_to_integer -> fprintf fmt "integer"
     | Round_double _ -> fprintf fmt "r_to_d" (* TODO: parameter rounding mode *)
-
+    | Round_float _ -> fprintf fmt "r_to_s"
+    
 let rec ppattern fmt p =
   match p#node with
     | JCPPstruct(st, lbls) ->

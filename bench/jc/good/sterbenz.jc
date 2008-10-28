@@ -1,5 +1,7 @@
 
 
+lemma l1: 0.5 <= 1.0 && 1.0 <= 2.0
+
 double test1()
   behavior default: 
    ensures (\result :> real) == 7.0;
@@ -8,18 +10,19 @@ return ((2.0 * 3.5) :> double);
 }
 
 
-/*
 float test2()
   behavior default: 
-   ensures (\result :> real) == 0.10000000149006473916;
+   ensures (\result :> real) == 0.100000001490116119384765625;
 { 
-return 0.1f;
+return (0.1 :> float);
 }
-*/  
+
 
 double diff(double x, double y)
-  behavior default:
-   ensures (\result :> real) == (x :> real) - (y :> real);
+behavior default:
+	assumes (y:> real)/2.0 <= (x :> real) 
+	         && (x:>real) <= 2.0*(y :> real); 
+        ensures (\result :> real) == (x :> real) - (y :> real);
 {
   return ((x :> real) - (y :> real)) :> double;
 }

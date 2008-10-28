@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.155 2008-10-24 12:16:40 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.156 2008-10-28 10:09:28 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -109,7 +109,7 @@ type unary_op = [ `Uminus | `Unot | `Ubw_not ]
 
 type pexpr_unary_op = [ pm_unary_op | unary_op ]
 
-type native_operator_type = [ `Unit | `Boolean | `Integer | `Real | `Double ]
+type native_operator_type = [ `Unit | `Boolean | `Integer | `Real | `Double | `Float ]
 type operator_type = [ native_operator_type | `Pointer | `Logic ]
 
 type pred_bin_op = [comparison_op | logical_op] * operator_type
@@ -138,7 +138,9 @@ type rounding_mode =
 type real_conversion = 
   | Integer_to_real | Real_to_integer 
   | Double_to_real
+  | Float_to_real
   | Round_double of rounding_mode
+  | Round_float of rounding_mode
 
 type ppattern_node =
   | JCPPstruct of identifier * (identifier * ppattern) list

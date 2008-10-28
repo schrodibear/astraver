@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.258 2008-10-27 16:19:15 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.259 2008-10-28 10:09:28 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -111,6 +111,11 @@ let is_real t =
 let is_double t =
   match t with
     | JCTnative Tdouble -> true
+    | _ -> false
+
+let is_float t =
+  match t with
+    | JCTnative Tfloat -> true
     | _ -> false
 
 let is_boolean t =
@@ -815,6 +820,8 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		real_type, te1#region, te1#node
 	      else if is_double te1#typ then 
 		real_type, te1#region, JCTreal_cast(te1,Double_to_real)
+	      else if is_float te1#typ then 
+		real_type, te1#region, JCTreal_cast(te1,Float_to_real)
 	      else
 		typing_error e#pos "bad cast to real"
 	  | JCTnative _ -> assert false (* TODO *) 
@@ -1789,12 +1796,20 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		real_type, te1#region, te1#node
 	      else if is_double te1#typ then 
 		real_type, te1#region, JCEreal_cast(te1,Double_to_real)
+	      else if is_float te1#typ then 
+		real_type, te1#region, JCEreal_cast(te1,Float_to_real)
 	      else
 		typing_error e#pos "bad cast to real"
 	  | JCTnative Tdouble -> 
 	      if is_real te1#typ then 
 		double_type, te1#region, 
 	        JCEreal_cast(te1,Round_double Round_nearest_even)
+	      else
+		typing_error e#pos "bad cast to double"
+	  | JCTnative Tfloat -> 
+	      if is_real te1#typ then 
+		float_type, te1#region, 
+	        JCEreal_cast(te1,Round_float Round_nearest_even)
 	      else
 		typing_error e#pos "bad cast to double"
 	  | JCTnative _ -> assert false (* TODO *)

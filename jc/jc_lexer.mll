@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.75 2008-10-24 12:16:41 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.76 2008-10-28 10:09:28 ayad Exp $ i*)
 
 {
   open Jc_ast
@@ -182,9 +182,7 @@ rule token = parse
   | "exception"             { EXCEPTION }
   | "false"                 { CONSTANT (JCCboolean false) }
   | "finally"               { FINALLY }
-(*
-  | "float"                 { FLOAT }
-*)
+  | "float"                 { Jc_options.has_floats := true; FLOAT }
   | "for"                   { FOR }
   | "free"                  { FREE }
   | "goto"                  { GOTO }

@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.119 2008-10-24 12:16:41 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.120 2008-10-28 10:09:28 ayad Exp $ */
 
 %{
 
@@ -95,7 +95,7 @@
 %token TYPE INVARIANT LOGIC AXIOMATIC WITH VARIANT AND AXIOM LEMMA TAG MATCH
 
 /* integer boolean real double unit void rep */
-%token INTEGER BOOLEAN REAL DOUBLE UNIT REP
+%token INTEGER BOOLEAN REAL DOUBLE FLOAT UNIT REP
 
 /* assigns assumes behavior ensures requires throws reads */
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
@@ -362,6 +362,8 @@ type_expr:
     { locate (JCPTnative Treal) }
 | DOUBLE
     { locate (JCPTnative Tdouble) }
+| FLOAT
+    { locate (JCPTnative Tfloat) }
 | UNIT
     { locate (JCPTnative Tunit) }
 | IDENTIFIER
