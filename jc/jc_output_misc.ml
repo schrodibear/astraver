@@ -70,7 +70,7 @@ let float_suffix fmt = function
 let const fmt c =
   match c with
     | JCCinteger s -> fprintf fmt "%s" s
-    | JCCreal(s,suf) -> fprintf fmt "%s%a" s float_suffix suf
+    | JCCreal s -> fprintf fmt "%s" s 
     | JCCboolean b -> fprintf fmt "%B" b
     | JCCnull -> fprintf fmt "null"
     | JCCvoid -> fprintf fmt "()"

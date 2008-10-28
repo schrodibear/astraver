@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.76 2008-10-28 10:09:28 ayad Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.77 2008-10-28 13:39:12 ayad Exp $ i*)
 
 {
   open Jc_ast
@@ -148,7 +148,9 @@ let rD = ['0'-'9']
 let rL = ['a'-'z' 'A'-'Z' '_']
 let rH = ['a'-'f' 'A'-'F' '0'-'9']
 let rE = ['E''e']['+''-']? rD+
-let rFS	= ('f'|'F'|'l'|'L')
+(*
+ let rFS	= ('f'|'F'|'l'|'L')
+*)
 let rIS = ('u'|'U'|'l'|'L')*
 
 rule token = parse
@@ -253,12 +255,12 @@ rule token = parse
   | rD+ rIS?                { CONSTANT (JCCinteger (lexeme lexbuf)) }
   | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (JCCinteger (lexeme lexbuf)) }
 
-  | (rD+ rE) as pre (rFS as suf)? 
-      { CONSTANT (JCCreal (pre,float_suffix suf)) }
-  | (rD* "." rD+ (rE)?) as pre (rFS as suf)? 
-      { CONSTANT (JCCreal (pre,float_suffix suf)) }
-  | (rD+ "." rD* (rE)?) as pre (rFS as suf)?  
-      { CONSTANT (JCCreal (pre,float_suffix suf)) }
+  | (rD+ rE) as pre  
+      { CONSTANT (JCCreal pre) }
+  | (rD* "." rD+ (rE)?) as pre  
+      { CONSTANT (JCCreal pre) }
+  | (rD+ "." rD* (rE)?) as pre   
+      { CONSTANT (JCCreal pre) }
 
       (* trick to deal with intervals like 0..10 *)
 

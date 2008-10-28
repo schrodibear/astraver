@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.22 2008-10-24 12:16:40 marche Exp $ *)
+(* $Id: jc_constructors.ml,v 1.23 2008-10-28 13:39:12 ayad Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -263,8 +263,8 @@ module Const = struct
 ~valuestr only"
   let mkreal ?value ?valuestr () =
     match value, valuestr with
-      | Some value, None -> JCCreal (string_of_float value, `Real)
-      | None, Some valuestr -> JCCreal(valuestr, `Real)
+      | Some value, None -> JCCreal (string_of_float value)
+      | None, Some valuestr -> JCCreal(valuestr)
       | _ -> failwith "Jc_constructors.Const.mkint: use with ~value OR \
 ~valuestr only"
 end

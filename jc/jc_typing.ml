@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.259 2008-10-28 10:09:28 ayad Exp $ *)
+(* $Id: jc_typing.ml,v 1.260 2008-10-28 13:39:12 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -472,7 +472,7 @@ let term_coerce t1 t2 e =
 		  ~region:e#region
 		  ~mark:e#mark
 		  ~pos:e#pos
-		  (JCTconst(JCCreal (n^".0", `Real)))
+		  (JCTconst(JCCreal (n^".0")))
 	    | _ ->
 		let app = {
 		  jc_app_fun = real_of_integer;
@@ -1478,7 +1478,7 @@ let coerce t1 t2 e =
 		  ~typ:real_type
 		  ~region:e#region
 		  ~pos:e#pos
-		  (JCEconst(JCCreal (n^".0", `Real)))
+		  (JCEconst(JCCreal (n^".0")))
 	    | _ ->
 		new expr
 		  ~typ: real_type

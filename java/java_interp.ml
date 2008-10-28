@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.167 2008-10-24 12:16:40 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.168 2008-10-28 13:39:12 ayad Exp $ *)
 
 open Format
 open Jc_output
@@ -460,7 +460,7 @@ let any_string_decl =
 let lit l =
   match l with
   | Integer s | Char s -> JCCinteger s
-  | Float(s,suf) -> JCCreal(s,suf)
+  | Float(s,suf) -> JCCreal s (* TODO: support for true floating point numbers *)
   | Bool b -> JCCboolean b
   | String s -> JCCstring s
   | Null  -> JCCnull
