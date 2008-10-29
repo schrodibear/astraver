@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.121 2008-10-29 09:47:55 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.122 2008-10-29 09:59:10 marche Exp $ */
 
 %{
 
@@ -1023,12 +1023,12 @@ logic_declarations:
 logic_declaration:
 | logic_definition
     { $1 }
-/* remove this comment if removed from logic_definition
 | LOGIC TYPE IDENTIFIER
     { locate (JCDlogic_type($3)) }
-*/
+/* remove this comment if removed from logic_definition
 | LOGIC type_expr IDENTIFIER 
     { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
+*/
 | LOGIC IDENTIFIER label_binders parameters 
     { locate (JCDlogic(None, $2, $3, $4, JCreads [])) }
 | LOGIC type_expr IDENTIFIER label_binders parameters 
