@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.41 2008-10-27 08:44:14 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.42 2008-10-29 16:48:23 marche Exp $ i*)
 
 open Format
 open Pp
@@ -62,9 +62,9 @@ let generic full f targets =
        out "DP ?= why-dp -timeout $(TIMEOUT)@\n";
        out "WHYEXEC ?= why@\n";
        out "GWHYEXEC ?= gwhy-bin@\n";
-       out "WHYLIB ?= %s@\n@\n" Jc_options.libdir;
-       out "WHY=$(WHYEXEC) --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
-       out "GWHY=$(GWHYEXEC) --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
+       out "WHYLIB ?= %s@\n@\n" (String.escaped Jc_options.libdir);
+       out "WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
+       out "GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) --no-arrays %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
        out "JESSIELIBFILES ?=";
        List.iter (fun s -> 
 		    out " %s"
