@@ -13,8 +13,14 @@ Require Import ZArith.
  Require Import Omega.
 Require Import ZArithRing.
 
+(*Why logic*) Definition x2 : Z.
+Admitted.
+
+(*Why logic*) Definition y2 : Z.
+Admitted.
 
 Axiom first_octant : (0 <= y2 <= x2)%Z.
+Dp_hint first_octant.
 
 Ltac omega' := generalize first_octant; omega.
 
@@ -64,12 +70,6 @@ omega.
 Qed.
 
 (*s Program correctness. *)
-
-(*Why logic*) Definition x2 : Z.
-Admitted.
-
-(*Why logic*) Definition y2 : Z.
-Admitted.
 
 (* Why obligation from file "", line 0, characters 0-0: *)
 (*Why goal*) Lemma bresenham_po_1 : 
