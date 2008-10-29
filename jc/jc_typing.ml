@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.261 2008-10-28 14:55:27 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.262 2008-10-29 09:47:55 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2728,6 +2728,7 @@ of an invariant policy";
         let param_env,ty,pi = add_logic_fundecl (Some ty,id,labels,pl) in
         let ty = match ty with Some ty -> ty | None -> assert false in
         let t = match body with
+          | JCreads [] -> JCReads []
           | JCreads reads ->
 	      if not in_axiomatic then
 		typing_error loc "allowed only inside axiomatic specification";

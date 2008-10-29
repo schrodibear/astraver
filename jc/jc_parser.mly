@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.120 2008-10-28 10:09:28 ayad Exp $ */
+/* $Id: jc_parser.mly,v 1.121 2008-10-29 09:47:55 marche Exp $ */
 
 %{
 
@@ -974,10 +974,8 @@ logic_definition:
 | LOGIC type_expr IDENTIFIER EQ expression
     { locate (JCDlogic(Some $2, $3, [], [], JCexpr $5)) }
 /* constants no def */
-/*
 | LOGIC type_expr IDENTIFIER 
     { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
-*/
 /* logic fun def */
 | LOGIC type_expr IDENTIFIER label_binders parameters EQ expression
     { locate (JCDlogic(Some $2, $3, $4, $5, JCexpr $7)) }
@@ -1025,8 +1023,10 @@ logic_declarations:
 logic_declaration:
 | logic_definition
     { $1 }
+/* remove this comment if removed from logic_definition
 | LOGIC TYPE IDENTIFIER
     { locate (JCDlogic_type($3)) }
+*/
 | LOGIC type_expr IDENTIFIER 
     { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
 | LOGIC IDENTIFIER label_binders parameters 

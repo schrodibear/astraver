@@ -728,7 +728,7 @@ install-lib: $(JCLIB)
 	cp -f $(PRELUDE) $(LIBDIR)/why/why
 	cp -f lib/why/jessie.why $(LIBDIR)/why/why
 	mkdir -p $(LIBDIR)/caduceus/why
-	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)
+#	??? cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
 	mkdir -p $(LIBDIR)/caduceus/coq
@@ -743,9 +743,8 @@ install-lib: $(JCLIB)
 	cp -f lib/isabelle/caduceus_why.thy $(LIBDIR)/caduceus/isabelle
 	mkdir -p $(LIBDIR)/caduceus/harvey
 	cp -f lib/harvey/caduceus_why.rv $(LIBDIR)/caduceus/harvey
-	mkdir -p $(LIBDIR)/krakatoa
-	cd lib; cp -r java_api $(LIBDIR)/krakatoa 
-	cd lib; cp -r javacard_api $(LIBDIR)/krakatoa
+	cd lib; cp -r java_api $(LIBDIR)/why 
+	cd lib; cp -r javacard_api $(LIBDIR)/why
 	cp -f lib/why-logo-*.png $(LIBDIR)/why
 #	remove CVS directories
 	find $(LIBDIR)/krakatoa -name CVS | xargs $(RM) -r
@@ -971,7 +970,12 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
         bench/c/bench bench/c/bench-files bench/c/*/*.c bench/c/*/*/*.c \
 	bench/jc/bench bench/jc/good/*.jc \
 	bench/java/bench bench/java/*/*.java bench/provers/*.mlw \
-	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.miz lib/mizar/dict/why.voc \
+	tests/regtest.sh tests/java/*.java \
+	tests/java/coq/*.v \
+	tests/java/result/README tests/java/oracle/*.oracle \
+	lib/coq*/*.v \
+	lib/pvs/pvscontext.el lib/pvs/*.pvs lib/pvs/*.prf \
+	lib/mizar/why.miz lib/mizar/dict/why.voc \
 	lib/why/*.why lib/isabelle/*.thy lib/hol4/*.ml lib/harvey/*.rv \
 	lib/java_api/java/*/*.java \
 	lib/javacard_api/java/lang/*.java \
@@ -990,7 +994,6 @@ distrib export: source export-doc export-www export-examples export-examples-c l
 export-www:
 	echo "<#def version>$(VERSION)</#def>" > /users/demons/filliatr/www/why/version.prehtml
 	echo "<#def cversion>$(CVERSION)</#def>" >> /users/demons/filliatr/www/why/version.prehtml
-	echo "<#def jcversion>$(JCVERSION)</#def>" >> /users/demons/filliatr/www/why/version.prehtml
 	make -C /users/demons/filliatr/www/why install
 
 source: export/$(NAME).tar.gz
