@@ -1,7 +1,7 @@
 # Why/Jessie/Krakatoa version
-VERSION=2.15
+VERSION=2.16
 # Caduceus version
-CVERSION=1.15
+CVERSION=1.16
 
 
 

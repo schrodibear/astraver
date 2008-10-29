@@ -1,6 +1,13 @@
 
 Note: These are the changes for Caduceus.
 
+version 2.16, October 29th, 2008
+================================
+
+  o bug fix for display of VCs explanations and their localizations
+  o License changed to GNU LGPL 2.1, with a special exception on
+    linking (see enclosed file LICENSE)
+
 version 2.15, September 9th, 2008
 =================================
  o avoid assertion failures as much as possible in case of: union

@@ -1,9 +1,8 @@
-FIXME: version 2.16, October 29th, 2008 (aka "Lithium beta 1")
-======================================================
+version 2.16, October 29th, 2008
+================================
   
   o This version is synchronized with Frama-C Lithium beta 1 
-    (http://www.frama-c.fr/)
-  o GWhy: experimental support for interactive provers 
+    (http://frama-c.cea.fr/)
   o GWhy: improved display of VCs
   o Krakatoa/Jessie: changed syntax for axiomatic definitions. 'reads'
     clauses are now obsolete.
