@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.41 2008-10-17 11:49:31 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.42 2008-10-29 19:20:53 nrousset Exp $ i*)
 
 open Lexing
 open Format
@@ -232,6 +232,14 @@ let rec fprintf_assertion form a =
   | LExists(id,t,a) -> 
       fprintf form "@[<hv 1>(exists %s:%a.@ %a)@]" 
 	id fprintf_logic_type t fprintf_assertion a
+  | LPred("le",[t1;t2]) ->
+      fprintf form "@[(%a <= %a)@]" 
+	fprintf_term t1
+	fprintf_term t2
+  | LPred("ge",[t1;t2]) ->
+      fprintf form "@[(%a >= %a)@]" 
+	fprintf_term t1
+	fprintf_term t2
   | LPred("eq",[t1;t2]) ->
       fprintf form "@[(%a = %a)@]" 
 	fprintf_term t1

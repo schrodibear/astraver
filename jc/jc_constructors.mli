@@ -468,8 +468,9 @@ module PExpr :
 
     val mkbreak : ?label:string -> ?pos:Loc.position -> unit -> pexpr
 
-(*
     val mkcontinue : ?label:string -> ?pos:Loc.position -> unit -> pexpr
+
+(*
     val mkgoto : label:string -> ?pos:Loc.position -> unit -> pexpr
 
 *)

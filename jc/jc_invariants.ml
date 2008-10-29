@@ -1469,7 +1469,7 @@ let code_function (fi, pos, fs, sl) vil =
 		 if s = "safety" then safety_exists := true;
 		 b.jc_behavior_ensures <- 
 		   Assertion.mkand ~pos ~conjuncts:[b.jc_behavior_ensures; post] ())
-	      (fs.jc_fun_default_behavior :: fs.jc_fun_behavior);
+	      fs.jc_fun_behavior;
 	    (* add the 'safety' spec if it does not exist 
 	       (it could exist e.g. from Krakatoa) *)
 	    if not !safety_exists then

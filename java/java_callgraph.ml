@@ -143,6 +143,7 @@ let rec statement acc s : ('a list * 'b list) =
     | JSassert (_,t) -> let (a,b) = acc in (assertion a t,b)
     | JSreturn_void
     | JSbreak _ -> acc 
+    | JScontinue _ -> acc 
     | JSswitch (e, l)-> 
 	let (a,b) = acc in
 	let b = expr b e in
@@ -175,6 +176,15 @@ let rec statement acc s : ('a list * 'b list) =
 	  | Some dec -> term (assertion a inv) dec 
 	in
 	  statement (a,b) body
+    | JSdo (body, inv, dec, cond)-> 
+	let a, b = acc in
+	let a, b = statement (a, b) body in
+	let a = match dec with 
+	  | None -> a 
+	  | Some dec -> term (assertion a inv) dec 
+	in
+	let b = expr b cond in
+	  a, b
     | JSwhile (cond, inv, dec, body)-> 
 	let (a,b) = acc in
 	let b = expr b cond in

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.168 2008-10-28 13:39:12 ayad Exp $ *)
+(* $Id: java_interp.ml,v 1.169 2008-10-29 19:20:53 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -219,7 +219,8 @@ let array_struct_table = Hashtbl.create 17
       
 let rec get_array_struct pos t = 
   try
-    (Hashtbl.find array_struct_table t: struct_info)
+    let n = Java_analysis.name_type t in 
+    (Hashtbl.find array_struct_table n: struct_info)
   with Not_found -> 
     eprintf "Array struct for type %a not found: %a@." 
       Java_typing.print_type t Loc.report_position pos;
@@ -832,7 +833,7 @@ let array_types decls =
   Java_options.lprintf "(* array types        *)@.";
   Java_options.lprintf "(**********************)@.";
   Hashtbl.fold
-    (fun t (s,f) (acc0, acc, decls) ->
+    (fun n (t, s, f) (acc0, acc, decls) ->
        let st = {
          jc_struct_info_params = [];
 	 jc_struct_info_name = s;
@@ -855,7 +856,7 @@ let array_types decls =
        in
        st.jc_struct_info_fields <- [fi];
        Java_options.lprintf "%s@." st.jc_struct_info_name;
-       Hashtbl.add array_struct_table t st;
+       Hashtbl.add array_struct_table n st;
        
        (* predicate non_null *)
        let non_null_pred = create_non_null_pred st in
@@ -863,7 +864,11 @@ let array_types decls =
        (* java_array_length fun *)
        let fi = create_java_array_length_fun st in
        let vi =
-         Jc_pervasives.var (JCTpointer(JCtag(st, []),Some num_zero,Some num_minus_one)) "x" in
+	 (* type is T[0..-1] here 
+	    (i.e. access to array length has meaning for non null arrays only) *)
+         Jc_pervasives.var 
+	   (JCTpointer (JCtag (st, []), Some num_zero, Some num_minus_one)) "x" 
+       in
        let vie = mkvar ~name:(var_name vi) () in
        let result_var = mkvar ~name:"\\result" () in
        let spec = [
@@ -904,6 +909,11 @@ let array_types decls =
               ())
            ();
        ] in
+       let vi =
+	 (* type is T[0..] here *)
+         Jc_pervasives.var 
+	   (JCTpointer (JCtag (st, []), Some num_zero, None)) "x" 
+       in
        let args = [ptype_of_type vi.jc_var_info_type, var_name vi] in
        (mklogic_def
           ~name: non_null_pred.jc_logic_info_name
@@ -1430,6 +1440,7 @@ let rec expr ?(reg=false) e =
 	      | JTYinterface ii -> 
 		  begin
 		    match e1.java_expr_type with
+		      | JTYclass _ -> expr e1 (* TODO *)
 		      | JTYinterface _ -> expr e1
 		      | _ -> assert false (* TODO *)
 (*
@@ -1459,10 +1470,20 @@ let rec expr ?(reg=false) e =
   let e = new pexpr ~pos: e.java_expr_loc e'#node in
   if !reg then locate pos e else e
 
-let initialiser e =
+let tr_initializer ty e =
   match e with
     | JIexpr e -> expr ~reg:true e
-    | _ -> assert false (* TODO *)
+    | JIlist il ->
+	begin match ty with
+	  | JTYarray (_, ty) -> 
+	      let si = get_array_struct Loc.dummy_position ty in
+		mkalloc
+		  ~count: (mkint ~value:(List.length il) ())
+		  ~typ: si.jc_struct_info_name
+		  ()
+		  (* TO COMPLETE ? *)
+	  | _ -> assert false (* should never happen *)
+	end
 
 (*
 let dummy_loc_statement s =
@@ -1521,6 +1542,8 @@ let rec statement s =
           mkvoid ()
       | JSbreak label -> 
           mkbreak ?label ()
+      | JScontinue label -> 
+          mkcontinue ?label ()
       | JSreturn_void ->
           mkreturn ()
       | JSreturn e -> 
@@ -1534,11 +1557,12 @@ let rec statement s =
       | JSblock l ->
           mkblock ~exprs:(List.map statement l)	()
       | JSvar_decl (vi, init, s) -> 
+	  let ty = vi.java_var_info_type in
 	  let vi = create_var s.java_statement_loc vi in
           mklet
             ~typ: (ptype_of_type vi.jc_var_info_type)
             ~var: (var_name vi)
-            ?init: (Option_misc.map initialiser init)
+            ?init: (Option_misc.map (tr_initializer ty) init)
             ~body: (statement s)
             ()
       | JSif (e, s1, s2) ->
@@ -1547,6 +1571,13 @@ let rec statement s =
             ~expr_then: (statement s1)
             ~expr_else: (statement s2)
             ()
+      | JSdo (s, inv, dec, e) ->
+	  let (invariant, variant) = loop_annot inv dec in
+	  let while_expr = 
+	    mkwhile ~invariant:[[], invariant]
+	      ?variant ~condition:(expr e) ~body:(statement s) ()
+	  in
+            mkblock [statement s; while_expr] ()
       | JSwhile(e,inv,dec,s) ->
 	  let (invariant, variant) = loop_annot inv dec in
           mkwhile ~invariant:[[],invariant]
@@ -1565,7 +1596,7 @@ let rec statement s =
       | JSfor_decl(decls,e,inv,dec,sl,body) ->
 	  let decls = List.map begin fun (vi, init) ->
 	    create_var s.java_statement_loc vi,
-            Option_misc.map initialiser init
+            Option_misc.map (tr_initializer vi.java_var_info_type) init
           end decls in
 	  let (invariant, variant) = loop_annot inv dec in
           (* TODO: Now that we produce parsed AST we could put inits in ~init *)
@@ -1975,7 +2006,7 @@ let tr_field type_name acc fi =
       try match Hashtbl.find Java_typing.field_initializer_table 
 	fi.java_field_info_tag with
 	  | None -> None
-	  | Some e -> Some (initialiser e)
+	  | Some e -> Some (tr_initializer fi_ty e)
       with Not_found -> None
     in
     let acc =
@@ -1990,10 +2021,15 @@ let tr_field type_name acc fi =
 (* class *)
 
 let tr_class ci acc0 acc =
+  let non_final_fields = 
+    List.filter
+      (fun fi -> not fi.java_field_info_is_final)
+      ci.class_info_fields
+  in
   let (static_fields, fields) = 
     List.partition 
       (fun fi -> fi.java_field_info_is_static)
-      ci.class_info_fields
+      non_final_fields
   in
   let super =
     let superclass = Option_misc.map (fun ci -> ci.class_info_name, [])
@@ -2066,15 +2102,12 @@ let tr_class ci acc0 acc =
 (* interfaces *)
 
 let tr_interface ii acc = 
-  let (static_fields, fields) = 
-    List.partition 
-      (fun fi -> fi.java_field_info_is_static)
+  let fields = 
+    List.filter 
+      (fun fi -> not fi.java_field_info_is_static)
       ii.interface_info_fields
   in
-  let acc = 
-    List.fold_left (tr_field ii.interface_info_name) acc static_fields 
-  in
-  let (*model_fields*)_ = List.map (create_field Loc.dummy_position) fields in
+  let (* model_fields *) _ = List.map (create_field Loc.dummy_position) fields in
   acc
 
 let tr_class_or_interface ti acc0 acc =
@@ -2086,6 +2119,21 @@ let tr_class_or_interface ti acc0 acc =
     | TypeInterface ii -> 
 	Java_options.lprintf "Handling interface '%s'@." ii.interface_info_name;
 	(acc0, tr_interface ii acc)
+
+let tr_final_static_fields ti acc =
+    match ti with
+      | TypeClass ci -> 
+	  let final_static_fields = 
+	    List.filter
+	      (fun fi -> 
+		 fi.java_field_info_is_final && fi.java_field_info_is_static)
+	      ci.class_info_fields
+	  in
+	    List.fold_left (tr_field ci.class_info_name) acc final_static_fields
+      | TypeInterface ii -> 
+	  List.fold_left 
+	    (tr_field ii.interface_info_name) 
+	    acc ii.interface_info_final_fields 
 
 let tr_invariants ci id invs decls =
   let invs =

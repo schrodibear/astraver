@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.39 2008-10-17 11:49:29 filliatr Exp $ *)
+(* $Id: java_tast.mli,v 1.40 2008-10-29 19:20:53 nrousset Exp $ *)
 
 open Java_env
 
@@ -153,6 +153,8 @@ and statement_node =
   | JSreturn of expr 
   | JSvar_decl of java_var_info * initialiser option * statement
   | JSblock of block
+  | JSdo of statement * assertion * term option * expr  
+      (*r loop body, invariant, variant, condition *)
   | JSwhile of expr * assertion * term option * statement  
       (*r condition, invariant, variant, loop body *)
   | JSfor of expr list * expr * assertion * term option * expr list * statement  
@@ -164,15 +166,14 @@ and statement_node =
   | JSassert of string option * assertion
   | JSswitch of expr * (expr switch_label list * block) list
   | JSbreak of string option
+  | JScontinue of string option
   | JSthrow of expr
   | JStry of block * (java_var_info * block) list * block option
   | JSstatement_spec of 
       assertion option * term option * behavior list * statement
 	(*r requires, decreases, behaviors, statement *)
 (*
-  | JPScontinue of identifier option
   | JPSlabel of identifier * pstatement
-  | JPSdo of pstatement * pexpr
   | JPSsynchronized of pexpr * block
 *)
 (*

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.68 2008-10-24 12:16:40 marche Exp $ *)
+(* $Id: java_main.ml,v 1.69 2008-10-29 19:20:53 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -173,7 +173,12 @@ let main () =
       Java_typing.type_table
       ([], decls_arrays)
   in
-  let decls = decls_structs @ acc @ decls_java_types @ non_null_preds in
+  let decls_constants = 
+    Hashtbl.fold
+      (fun _ id acc -> Java_interp.tr_final_static_fields id acc)
+      Java_typing.type_table
+      [] in
+  let decls = decls_structs @ acc @ decls_java_types @ decls_constants @ non_null_preds in
   
   Java_options.lprintf "production phase 1.4 : generation of Jessie logic functions@.";
   let decls = 

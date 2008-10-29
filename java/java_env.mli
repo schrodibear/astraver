@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_env.mli,v 1.40 2008-10-17 11:49:29 filliatr Exp $ *)
+(* $Id: java_env.mli,v 1.41 2008-10-29 19:20:53 nrousset Exp $ *)
 
 (*s types and environments *)
 
@@ -143,7 +143,7 @@ and package_info =
     {
       package_info_tag : int;
       package_info_name : string;
-      package_info_directory : string;
+      mutable package_info_directories : string list;
     }
     
 and java_class_info =
@@ -152,10 +152,12 @@ and java_class_info =
       class_info_name : string;
       class_info_package_env : package_info list;
       mutable class_info_incomplete : bool;
+      mutable class_info_is_final : bool;
       mutable class_info_extends : java_class_info option;
       mutable class_info_is_exception : bool;
       mutable class_info_implements : interface_info list;
       mutable class_info_fields : java_field_info list;
+      mutable class_info_final_fields : java_field_info list;
       mutable class_info_methods : method_info list;
       mutable class_info_constructors : constructor_info list;
     }
@@ -168,6 +170,7 @@ and interface_info =
       mutable interface_info_incomplete : bool;
       mutable interface_info_extends : interface_info list;
       mutable interface_info_fields : java_field_info list;
+      mutable interface_info_final_fields : java_field_info list;
       mutable interface_info_methods : method_info list;
     }
 

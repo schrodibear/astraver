@@ -73,12 +73,17 @@ let rec name_type t =
     | JTYlogic _ -> assert false
 
 let rec intro_array_struct t =
+  let n = name_type t in 
   try
-    let _ = Hashtbl.find array_struct_table t in ()
+    let _ = Hashtbl.find array_struct_table n in ()
   with Not_found ->
     let n = name_type t in 
     Java_options.lprintf "Adding array struct for type %s@." n;
-    Hashtbl.add array_struct_table t (n ^ "M", n ^ "P")
+      (* array structs indexed by name rather than by type,
+	 to void generation of two structs for nullable and non_null types
+	 of the same name.
+	 - Nicolas R. *)
+      Hashtbl.add array_struct_table n (t, n ^ "M", n ^ "P")
 
 let term t = () (* TODO *)
 
@@ -159,12 +164,14 @@ let rec statement s =
   match s.java_statement_node with
     | JSskip 
     | JSreturn_void
-    | JSbreak _ -> ()
+    | JSbreak _ | JScontinue _ -> ()
     | JSblock l -> List.iter statement l	  
     | JSvar_decl (vi, init, s) ->
 	Option_misc.iter do_initializer init;
 	statement s
     | JSif (e, s1, s2) -> expr e; statement s1; statement s2
+    | JSdo (s, inv, dec, e) ->
+	statement s; assertion inv; term dec; expr e
     | JSwhile(e,inv,dec,s) ->
 	  expr e; assertion inv; term dec; statement s
     | JSfor (el1, e, inv, dec, el2, body) ->

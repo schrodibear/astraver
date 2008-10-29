@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.373 2008-10-28 16:16:34 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.374 2008-10-29 19:20:53 nrousset Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -411,18 +411,19 @@ let tr_struct st acc =
     else 
       let pc = JCtag(st,[]) in
       let ac = alloc_class_of_pointer_class pc in
-      (* Validity parameters *)
-      make_valid_pred ac pc 
-      :: make_valid_pred JCalloc_bitvector pc 
-      (* Allocation parameters *)
-      :: make_alloc_param ~check_size:true ac pc 
-      :: make_alloc_param ~check_size:false ac pc 
-      :: make_alloc_param ~check_size:true JCalloc_bitvector pc 
-      :: make_alloc_param ~check_size:false JCalloc_bitvector pc 
-      :: make_conversion_params pc
-      @ acc
+	(* Validity parameters *)
+	make_valid_pred ~equal:true ac pc 
+	:: make_valid_pred ~equal:false ac pc 
+	:: make_valid_pred ~equal:true (* TODO ? *) JCalloc_bitvector pc 
+	  (* Allocation parameters *)
+	:: make_alloc_param ~check_size:true ac pc 
+	:: make_alloc_param ~check_size:false ac pc 
+	:: make_alloc_param ~check_size:true JCalloc_bitvector pc 
+	:: make_alloc_param ~check_size:false JCalloc_bitvector pc 
+	:: make_conversion_params pc
+	@ acc
   in
-
+    
   match st.jc_struct_info_parent with
     | None ->
         (* axiom for parenttag *)
@@ -763,7 +764,7 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
               let e' = LApp("select",[ mem; t1' ]) in
 	      (* Retrieve subpart of bitvector for specific subfield *)
 	      let off = match off with
-		| Int_offset i -> int_of_string i
+		| Int_offset s -> int_of_string s
 		| _ -> assert false (* TODO *)
 	      in
 	      let size = 
@@ -1133,29 +1134,134 @@ let reads ~type_safe ~global_assertion locs (mc,r) =
 (******************************************************************************)
 
 let bounded lb rb s =
-  let n = Numconst.integer s in Num.le_num lb n && Num.le_num n rb
+  let n = Num.num_of_string s in Num.le_num lb n && Num.le_num n rb
 
 let lbounded lb s =
-  let n = Numconst.integer s in Num.le_num lb n
+  let n = Num.num_of_string s in Num.le_num lb n
 
 let rbounded rb s =
-  let n = Numconst.integer s in Num.le_num n rb
+  let n = Num.num_of_string s in Num.le_num n rb
 
+let rec const_int_term t =
+  match t # node with
+    | JCTconst (JCCinteger s) -> Some (Numconst.integer s)
+    | JCTvar vi -> 
+	begin 
+	  try
+	    let _, init =
+	      Hashtbl.find
+		Jc_typing.logic_constants_table
+		vi.jc_var_info_tag
+	    in
+	      Option_misc.fold
+		(fun (t, _) _ -> const_int_term t) init None
+	  with Not_found -> None
+	end
+    | JCTunary (uop, t) ->
+	let no = const_int_term t in
+	  Option_misc.fold
+	    (fun n _ -> match uop with
+	       | `Uminus, `Integer -> Some (Num.minus_num n)
+	       | _ -> None)
+	    no None
+    | JCTbinary (t1, bop, t2) ->
+	let no1 = const_int_term t1 in
+	let no2 = const_int_term t2 in
+	  begin match no1, no2 with
+	    | Some n1, Some n2 ->
+		begin match bop with
+		  | `Badd, `Integer -> Some (n1 +/ n2)
+		  | `Bsub, `Integer -> Some (n1 -/ n2) 
+		  | `Bmul, `Integer -> Some (n1 */ n2)
+		  | `Bdiv, `Integer -> 
+		      let n = n1 // n2 in 
+			if Num.is_integer_num n then
+			  Some n 
+			else 
+			  None
+		  | `Bmod, `Integer -> Some (Num.mod_num n1 n2)
+		  | _ -> None
+		end
+	    | _ -> None
+	  end
+    | JCTrange_cast (t, _) -> const_int_term t
+    | JCTconst _ | JCTshift _ | JCTderef _ 
+    | JCTapp _ | JCTold _ | JCTat _ 
+    | JCToffset _ | JCTaddress _ | JCTinstanceof _ 
+    | JCTreal_cast _ | JCTif _ | JCTrange _ 
+    | JCTcast _ | JCTmatch _ | JCTbitwise_cast _ ->
+	assert false
+	  
+let rec const_int_expr e =
+  match e # node with
+    | JCEconst (JCCinteger s) -> Some (Numconst.integer s)
+    | JCEvar vi ->
+	begin
+	  try
+	    let _, init =
+	      Hashtbl.find
+		Jc_typing.logic_constants_table
+		vi.jc_var_info_tag
+	    in
+	      Option_misc.fold
+		(fun (t, _) _ -> const_int_term t) init None
+	  with Not_found -> None
+	end
+    | JCErange_cast (e, _) -> const_int_expr e
+    | JCEunary (uop, e) ->
+	let no = const_int_expr e in
+	  Option_misc.fold
+	    (fun n _ -> match uop with
+	       | `Uminus, `Integer -> Some (Num.minus_num n)
+	       | _ -> None)
+	    no None
+    | JCEbinary (e1, bop, e2) ->
+	let no1 = const_int_expr e1 in
+	let no2 = const_int_expr e2 in
+	  begin match no1, no2 with
+	    | Some n1, Some n2 ->
+		begin match bop with
+		  | `Badd, `Integer -> Some (n1 +/ n2)
+		  | `Bsub, `Integer -> Some (n1 -/ n2) 
+		  | `Bmul, `Integer -> Some (n1 */ n2)
+		  | `Bdiv, `Integer -> 
+		      let n = n1 // n2 in 
+			if Num.is_integer_num n then
+			  Some n 
+			else 
+			  None
+		  | `Bmod, `Integer -> Some (Num.mod_num n1 n2)
+		  | _ -> None
+		end
+	    | _ -> None
+	  end
+    | JCEderef _ | JCEapp _ | JCEoffset _
+    | JCEaddress _ | JCElet _ | JCEassign_var _
+    | JCEassign_heap _ ->
+	None
+    | JCEif _ -> 
+	None (* TODO *)
+    | JCEconst _ | JCEinstanceof _ | JCEreal_cast _
+    | JCEalloc _ | JCEfree _ | JCEassert _
+    | JCEcontract _ | JCEblock _ | JCEloop _
+    | JCEreturn_void | JCEreturn _ | JCEtry _
+    | JCEthrow _ | JCEpack _ | JCEunpack _
+    | JCEcast _ | JCEmatch _ | JCEshift _ 
+    | JCEbitwise_cast _ -> 
+	assert false
+	
 let destruct_pointer e = 
-  let ptre,off = match e#node with
-    | JCEshift(e1,e2) -> 
-        begin match e2#node with
-        | JCEconst (JCCinteger s) -> 
-            e1,Int_offset s
-        | JCEconst _ -> assert false
-        | _ ->
-            e1,Expr_offset e2
-        end
-    | _ -> e,Int_offset "0"
+  let ptre, off = match e # node with
+    | JCEshift (e1, e2) ->
+	e1, 
+	(let no = const_int_expr e2 in
+	   Option_misc.fold 
+	     (fun n _ -> Int_offset (Num.string_of_num n)) no (Expr_offset e2))
+    | _ -> e, Int_offset "0"
   in
-  match ptre#typ with
-  | JCTpointer(_,lb,rb) -> ptre,off,lb,rb
-  | _ -> assert false
+    match ptre # typ with
+      | JCTpointer (_, lb, rb) -> ptre, off, lb, rb
+      | _ -> assert false
 
 let rec make_lets l e =
   match l with
@@ -1246,50 +1352,24 @@ let rec make_upd_simple mark pos e1 fi tmp2 =
 	[ (tmpp,p') ; (tmpi,i') ; 
 	  (tmp1,make_app "shift" [Var tmpp; Var tmpi])] 
       in
-      match off,lb,rb with
+      match off, lb, rb with
 	| Int_offset s, Some lb, Some rb when bounded lb rb s ->
             let e1' = expr e1 in	    
 	    [ (tmp1, e1') ],
             make_app "safe_upd_" [ mem; Var tmp1; Var tmp2 ]
-	| Int_offset s,Some lb,Some rb when lbounded lb s ->
-	    letspi, 
-            make_guarded_app ~mark IndexBounds pos "lsafe_bound_upd_" 
-              [ mem ; Var tmpp; Var tmpi; 
-		Cte (Prim_int (Num.string_of_num rb)); Var tmp2 ]
-	| Int_offset s,Some lb,Some rb when rbounded rb s ->
-	    letspi, 
-            make_guarded_app ~mark IndexBounds pos "rsafe_bound_upd_" 
-              [ mem ; Var tmpp; Var tmpi; 
-		Cte (Prim_int (Num.string_of_num lb)); Var tmp2 ]
-	| off,Some lb,Some rb ->
-	    letspi, 
-            make_guarded_app ~mark IndexBounds pos "bound_upd_" 
-              [ mem ; Var tmpp; Var tmpi;  
-		Cte (Prim_int (Num.string_of_num lb)); 
-		Cte (Prim_int (Num.string_of_num rb)); Var tmp2 ]
-	| Int_offset s,Some lb,None when lbounded lb s ->
+	| Int_offset s, Some lb, _ when lbounded lb s ->
 	    letspi, 
             make_guarded_app ~mark IndexBounds pos "lsafe_lbound_upd_" 
               [ alloc; mem; Var tmpp; Var tmpi; Var tmp2 ]
-	| off,Some lb,None ->
-	    letspi, 
-            make_guarded_app ~mark IndexBounds pos "lbound_upd_" 
-              [ alloc; mem; Var tmpp; Var tmpi;
-		Cte (Prim_int (Num.string_of_num lb)); Var tmp2 ]
-	| Int_offset s,None,Some rb when rbounded rb s ->
+	| Int_offset s, _, Some rb when rbounded rb s ->
 	    letspi, 
             make_guarded_app ~mark IndexBounds pos "rsafe_rbound_upd_" 
               [ alloc; mem; Var tmpp; Var tmpi; Var tmp2 ]
-	| off,None,Some rb ->
-	    letspi, 
-            make_guarded_app ~mark IndexBounds pos "rbound_upd_" 
-              [ alloc; mem; Var tmpp; Var tmpi;
-		Cte (Prim_int (Num.string_of_num rb)); Var tmp2 ]
-	| Int_offset s,None,None when int_of_string s = 0 ->
+	| Int_offset s, None, None when int_of_string s = 0 ->
 	    [ (tmp1, p') ], 
             make_guarded_app ~mark PointerDeref pos "upd_" 
               [ alloc; mem ; Var tmp1; Var tmp2 ]
-	| off,None,None ->
+	| _ ->
 	    letspi, 
             make_guarded_app ~mark PointerDeref pos "offset_upd_" 
               [ alloc; mem ; Var tmpp; Var tmpi; Var tmp2 ]
@@ -1329,7 +1409,7 @@ and make_upd_union mark pos off e1 fi tmp2 =
       let deref = make_deref_simple mark pos e1 fi in
       (* Replace subpart of bitvector for specific subfield *)
       let off = match off with
-	| Int_offset i -> int_of_string i
+	| Int_offset s -> int_of_string s
 	| _ -> assert false (* TODO *)
       in
       let off = string_of_int off and size = string_of_int size in
@@ -1425,40 +1505,19 @@ and make_deref_simple mark pos e fi =
   let e' = 
     if safety_checking() then
       match destruct_pointer e with
-	| _,Int_offset s,Some lb,Some rb when bounded lb rb s ->
+	| _, Int_offset s, Some lb, Some rb when bounded lb rb s ->
             make_app "safe_acc_" 
               [ mem ; expr e ]
-	| p,(Int_offset s as off),Some lb,Some rb when lbounded lb s ->
-            make_guarded_app ~mark IndexBounds pos "lsafe_bound_acc_" 
-              [ mem ; expr p; offset off;
-		Cte (Prim_int (Num.string_of_num rb)) ]
-	| p,(Int_offset s as off),Some lb,Some rb when rbounded rb s ->
-            make_guarded_app ~mark IndexBounds pos "rsafe_bound_acc_" 
-              [ mem ; expr p; offset off;
-		Cte (Prim_int (Num.string_of_num lb)) ]
-	| p,off,Some lb,Some rb ->
-            make_guarded_app ~mark IndexBounds pos "bound_acc_" 
-              [ mem ; expr p; offset off; 
-		Cte (Prim_int (Num.string_of_num lb)); 
-		Cte (Prim_int (Num.string_of_num rb)) ]
-	| p,(Int_offset s as off),Some lb,None when lbounded lb s ->
+	| p, (Int_offset s as off), Some lb, _ when lbounded lb s ->
             make_guarded_app ~mark IndexBounds pos "lsafe_lbound_acc_" 
               [ alloc; mem; expr p; offset off ]
-	| p,off,Some lb,None ->
-            make_guarded_app ~mark IndexBounds pos "lbound_acc_" 
-              [ alloc; mem; expr p; offset off;
-		Cte (Prim_int (Num.string_of_num lb)) ]
-	| p,(Int_offset s as off),None,Some rb when rbounded rb s ->
+	| p, (Int_offset s as off), _, Some rb when rbounded rb s ->
             make_guarded_app ~mark IndexBounds pos "rsafe_rbound_acc_" 
               [ alloc; mem; expr p; offset off ]
-	| p,off,None,Some rb ->
-            make_guarded_app ~mark IndexBounds pos "rbound_acc_" 
-              [ alloc; mem; expr p; offset off;
-		Cte (Prim_int (Num.string_of_num rb)) ]
-	| p,Int_offset s,None,None when int_of_string s = 0 ->
+	| p, Int_offset s, None, None when int_of_string s = 0 ->
             make_guarded_app ~mark PointerDeref pos "acc_" 
               [ alloc; mem ; expr p ]
-	| p,off,None,None ->
+	| p, off, _, _ ->
             make_guarded_app ~mark PointerDeref pos "offset_acc_" 
               [ alloc; mem ; expr p; offset off ]
     else
@@ -1470,7 +1529,7 @@ and make_deref_union mark pos off e fi =
   let e' = make_deref_simple mark pos e fi in
   (* Retrieve subpart of bitvector for specific subfield *)
   let off = match off with
-    | Int_offset i -> int_of_string i
+    | Int_offset s -> int_of_string s
     | _ -> assert false (* TODO *)
   in
   let size = 
@@ -2690,7 +2749,7 @@ let tr_fun f funpos spec body acc =
                  | Some n1, Some n2 ->
 		     let ac = alloc_class_of_pointer_class pc in
                      let a' =
-                       make_valid_pred_app (ac,v.jc_var_info_region) pc
+                       make_valid_pred_app ~equal:false (ac,v.jc_var_info_region) pc
                          v' (const_of_num n1) (const_of_num n2)
                      in
                      bind_pattern_lets a'
@@ -3403,19 +3462,20 @@ let tr_root rt acc =
 	if root_is_plain_union rt 
 	  && !Jc_options.separation_sem = SepRegions then acc else
             let mem = bitvector_type in
-            Param(false,union_memory_name rt,Ref_type(Base_type mem)) :: acc
+              Param(false,union_memory_name rt,Ref_type(Base_type mem)) :: acc
       in
-      (* Validity parameters *)
-      make_valid_pred ac pc 
-      :: make_valid_pred JCalloc_bitvector pc 
-      (* Allocation parameter *)
-      :: make_alloc_param ~check_size:true ac pc 
-      :: make_alloc_param ~check_size:false ac pc 
-      :: make_alloc_param ~check_size:true JCalloc_bitvector pc 
-      :: make_alloc_param ~check_size:false JCalloc_bitvector pc 
-      :: acc
+	(* Validity parameters *)
+	make_valid_pred ~equal:true ac pc 
+	:: make_valid_pred ~equal:false ac pc 
+	:: make_valid_pred ~equal:false (* TODO ? *) JCalloc_bitvector pc 
+	  (* Allocation parameter *)
+	:: make_alloc_param ~check_size:true ac pc 
+	:: make_alloc_param ~check_size:false ac pc 
+	:: make_alloc_param ~check_size:true JCalloc_bitvector pc 
+	:: make_alloc_param ~check_size:false JCalloc_bitvector pc 
+	:: acc
     else
-      make_valid_pred ac pc :: acc 
+      make_valid_pred ~equal:true ac pc :: make_valid_pred ~equal:false ac pc :: acc 
   in
   let of_ptr_addr =
     Logic(false, of_pointer_address_name rt,

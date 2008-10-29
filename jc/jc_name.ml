@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_name.ml,v 1.33 2008-10-17 11:49:30 filliatr Exp $ *)
+(* $Id: jc_name.ml,v 1.34 2008-10-29 19:20:53 nrousset Exp $ *)
 
 open Jc_env
 open Jc_ast
@@ -142,10 +142,10 @@ let pointer_class_name = function
 	"struct_" ^ st.jc_struct_info_name
   | JCroot vi -> "root_" ^ vi.jc_root_info_name
 
-let valid_pred_name ac pc = 
+let valid_pred_name ~equal ac pc = 
   let prefix = match ac with
-    | JCalloc_root _ -> "valid"
-    | JCalloc_bitvector -> "valid_bitvector"
+    | JCalloc_root _ -> if equal then "strict_valid" else "valid"
+    | JCalloc_bitvector -> "valid_bitvector" (* TODO ? *)
   in
   prefix ^ "_" ^ (pointer_class_name pc)
 

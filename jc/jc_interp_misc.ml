@@ -165,6 +165,12 @@ let make_not_term a =
 let make_eq a b =
   LPred("eq", [ a; b ])
 
+let make_le a b =
+  LPred("le", [ a; b ])
+
+let make_ge a b =
+  LPred("ge", [ a; b ])
+
 let make_select f this =
   LApp("select", [ f; this ])
 
@@ -853,7 +859,7 @@ let define_locals ?(reads=[]) ?(writes=[]) e' =
 
 (* Validity *)
 
-let make_valid_pred_app (ac,r) pc p a b =
+let make_valid_pred_app ~equal (ac,r) pc p a b =
   let all_allocs = match ac with
     | JCalloc_bitvector -> [ ac ]
     | JCalloc_root rt -> 
@@ -874,7 +880,7 @@ let make_valid_pred_app (ac,r) pc p a b =
 	  | RplainUnion -> []
   in
   let mems = List.map (fun mc -> LVar(memory_name (mc,r))) all_mems in
-  LPred(valid_pred_name ac pc, p :: a :: b :: allocs @ mems)
+  LPred(valid_pred_name ~equal ac pc, p :: a :: b :: allocs @ mems)
 
 (*
 If T is a structure:
@@ -888,7 +894,7 @@ If T is a structure:
        valid_T'(p.f, a', b', allocs ...)
 If T is a variant, then we only have the condition on offset_min and max.
 *)
-let make_valid_pred ac pc =
+let make_valid_pred ~equal ac pc =
   let p = "p" in
   let a = "a" in
   let b = "b" in
@@ -926,12 +932,12 @@ let make_valid_pred ac pc =
       | JCtag ({ jc_struct_info_parent = Some(st, pp) }, _) ->
           LTrue,
           LTrue,
-          make_valid_pred_app 
+          make_valid_pred_app ~equal
 	    (ac,dummy_region) (JCtag(st, pp)) (LVar p) (LVar a) (LVar b)
       | JCtag ({ jc_struct_info_parent = None }, _)
       | JCroot _ ->
-          make_eq (make_offset_min ac (LVar p)) (LVar a),
-          make_eq (make_offset_max ac (LVar p)) (LVar b),
+          (if equal then make_eq else make_le) (make_offset_min ac (LVar p)) (LVar a),
+          (if equal then make_eq else make_ge) (make_offset_max ac (LVar p)) (LVar b),
           LTrue
     in
     let fields_valid = match ac with
@@ -945,7 +951,7 @@ let make_valid_pred ac pc =
 			(function
 			   | { jc_field_info_type =
 				 JCTpointer(fpc, Some fa, Some fb) } as fi ->
-			       make_valid_pred_app (ac,dummy_region) fpc
+			       make_valid_pred_app ~equal (ac,dummy_region) fpc
 				 (make_select_fi fi (LVar p))
 				 (const_of_num fa)
 				 (const_of_num fb)
@@ -959,7 +965,7 @@ let make_valid_pred ac pc =
     in
     make_and_list (omin::omax::super_valid::fields_valid)
   in
-  Predicate(false, valid_pred_name ac pc, params, validity)
+  Predicate(false, valid_pred_name ~equal ac pc, params, validity)
 
 (* Allocation *)
 
@@ -1066,7 +1072,7 @@ let make_alloc_param ~check_size ac pc =
       make_and_list (
 	[
           (* [valid_st(result,0,n-1,alloc...)] *)
-          make_valid_pred_app (ac,dummy_region) pc
+          make_valid_pred_app ~equal:true (ac,dummy_region) pc
             (LVar "result")
             (LConst(Prim_int "0"))
             (LApp("sub_int",[LVar n; LConst(Prim_int "1")]));
