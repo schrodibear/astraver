@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.145 2008-10-29 19:20:53 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.146 2008-10-30 21:53:51 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -181,9 +181,7 @@ let read_dir d =
     ([],[]) l
              
   
-(* [package_table] maps each internal package id to package_info *)
-let package_table = 
-  (Hashtbl.create 17 : (int,package_info) Hashtbl.t)
+let toplevel_packages_table = (Hashtbl.create 17 : (string, package_info) Hashtbl.t)
 
 let package_counter = ref 0
 
@@ -195,8 +193,7 @@ let new_package_info name fullname =
       package_info_directories = [fullname];
     }
   in
-  Hashtbl.add package_table !package_counter pi;
-  pi
+    pi
 
 (* [package_contents] maps each internal package id to its contents *)
 type package_member =
@@ -205,34 +202,36 @@ type package_member =
   | Type of java_type_info
 
 let package_contents = 
-  (Hashtbl.create 17 : (int,(string,package_member) Hashtbl.t) Hashtbl.t)
+  (Hashtbl.create 17 : (int, (string, package_member) Hashtbl.t) Hashtbl.t)
 
 
 let anonymous_package = new_package_info "" "."
 
+let is_anonymous_package pi = 
+  pi.package_info_tag = anonymous_package.package_info_tag
+
 let javalang_qid = [(Loc.dummy_position,"lang"); (Loc.dummy_position,"java")]
 
-let read_dir_contents dirs =
-  let d, f = List.fold_left
-    (fun (d_acc, f_acc) dir -> 
-       Java_options.lprintf "reading directory '%s'@." dir;
-       let d, f = read_dir dir in
-	 d @ d_acc, f @ f_acc)
-    ([], []) dirs
-  in
+let rec read_dir_contents ~is_toplevel dir =
+  Java_options.lprintf "reading directory '%s'@." dir;
+  let d, f = read_dir dir in
   let h = Hashtbl.create 17 in
     List.iter
       (fun (name, fullname) ->
-	 if Hashtbl.mem h name then
-	   match Hashtbl.find h name with
-	     | Subpackage pi -> 
-		 pi.package_info_directories <-
-		   fullname :: pi.package_info_directories
-	     | _ -> assert false (* should never happen *)
-	 else
-	   let pi = new_package_info name fullname in
-	     Java_options.lprintf "adding subpackage %s@." name; 
-	     Hashtbl.add h name (Subpackage pi))
+	 begin
+	   if is_toplevel then
+	     try 
+	       let pi = Hashtbl.find toplevel_packages_table name in
+		 pi.package_info_directories <- fullname :: pi.package_info_directories
+	     with Not_found ->
+	       let pi = new_package_info name fullname in
+		 Java_options.lprintf "adding subpackage %s@." name; 
+		 Hashtbl.add h name (Subpackage pi)
+	   else
+	     let pi = new_package_info name fullname in
+	       Java_options.lprintf "adding subpackage %s@." name; 
+	       Hashtbl.add h name (Subpackage pi)
+	 end)
       d;
     List.iter
       (fun (name, fullname) ->
@@ -246,25 +245,42 @@ let get_package_contents pi =
     Hashtbl.find package_contents pi.package_info_tag
   with
       Not_found ->
-        let l = read_dir_contents pi.package_info_directories in
-        Hashtbl.add package_contents pi.package_info_tag l;
-        l
+	let h = Hashtbl.create 17 in
+	  List.iter
+	    (fun dir -> 
+	       let is_top_level = is_anonymous_package pi in
+	       let h' = read_dir_contents ~is_toplevel:is_top_level dir in
+		 Hashtbl.iter 
+		   (fun name x ->
+		      try 
+			let x' = Hashtbl.find h name in
+			  match x, x' with
+			    | Subpackage pi, Subpackage pi' ->
+				pi'.package_info_directories <-
+				  pi.package_info_directories @ pi'.package_info_directories
+			    | _ -> assert false (* TODO : error message ? *)
+		      with Not_found ->
+			Hashtbl.add h name x)
+		   h')
+	    pi.package_info_directories;
+          Hashtbl.add package_contents pi.package_info_tag h;
+          h
 
 let toplevel_packages = 
   Java_options.lprintf "Reading toplevel packages@.";
   let h = Hashtbl.create 17 in
     List.iter
       (fun dir ->
-	 let h' = read_dir_contents [dir] in
+	 let h' = read_dir_contents ~is_toplevel:true dir in
 	   Hashtbl.iter 
 	     (fun name x -> 
-		if Hashtbl.mem h name then
-		  match Hashtbl.find h name, x with
-		    | Subpackage pi, Subpackage pi' -> 
-			pi.package_info_directories <-
-			  pi'.package_info_directories @ pi.package_info_directories
-		    | _ -> assert false (* should never happen *)
-		else Hashtbl.add h name x)
+		begin
+		  Hashtbl.add h name x;
+		  match x with
+		    | Subpackage pi -> 
+			Hashtbl.add toplevel_packages_table name pi
+		    | _ -> assert false
+		end)
 	     h')
       Java_options.classpath;
   h
@@ -977,7 +993,7 @@ and classify_name
                     | Type ti -> TypeName ti
                     | File f -> 
                         let ast = Java_syntax.file f in
-                        let (_,t) = get_types package_env [ast] in
+                        let (_, t) = get_types package_env [ast] in
                         try
                           let ti = List.assoc id t in
                           Hashtbl.replace contents id (Type ti);
@@ -987,7 +1003,8 @@ and classify_name
                             id f
                 with
                     Not_found ->
-                      typing_error loc "unknown identifier %s" id
+                      typing_error loc "unknown identifier %s in package %s" 
+			id pi.package_info_name
               end
           | TypeName ci ->
               begin
@@ -1387,7 +1404,7 @@ and check_if_interface_complete ii =
   if ii.interface_info_incomplete then
     begin
       (* get interface decls prototypes *)
-      let (p,d) = Hashtbl.find interface_decl_table ii.interface_info_tag in
+      let (p, d) = Hashtbl.find interface_decl_table ii.interface_info_tag in
       let t = Hashtbl.find interface_type_env_table ii.interface_info_tag in
       get_interface_prototypes p t ii d;
       ii.interface_info_incomplete <- false;    
@@ -1416,10 +1433,10 @@ and check_if_class_complete ci =
       (* get class decls prototypes *)
       let (p, d) = Hashtbl.find class_decl_table ci.class_info_tag in
       let t = Hashtbl.find class_type_env_table ci.class_info_tag in
-      ci.class_info_incomplete <- false;
-      get_class_prototypes p t ci d;
+	ci.class_info_incomplete <- false;
+	get_class_prototypes p t ci d;
     end;
-
+  
 and lookup_class_field ci id =
   check_if_class_complete ci;
   try

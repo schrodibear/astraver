@@ -139,8 +139,6 @@ let type_decl d =
     | JPTinductive _ -> assert false
     | JPTaxiomatic _ -> assert false
     
-
-
 let compilation_unit cu =
   { cu with cu_type_decls = List.map type_decl cu.cu_type_decls }
 

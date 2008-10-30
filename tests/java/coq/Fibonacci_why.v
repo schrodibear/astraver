@@ -3,8 +3,6 @@
 Require Export jessie_why.
 
 (*Why type*) Definition Object: Set.
-Admitted.
-
 (*Why type*) Definition interface: Set.
 Admitted.
 
@@ -127,11 +125,7 @@ Admitted.
                     (isfib (n_1 - 1) p) -> (isfib n_1 (p + r_0))))))
      .
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.jc", line 53, characters 0-35: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.jc", line 53, characters 0-35: *)
->>>>>>> 1.10
 (*Why goal*) Lemma isfib_2_1 : 
   (isfib 2 1).
 Proof.
@@ -142,11 +136,7 @@ Save.
 (*Why axiom*) Lemma isfib_2_1_as_axiom : (isfib 2 1).
 Admitted.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.jc", line 47, characters 0-35: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.jc", line 47, characters 0-35: *)
->>>>>>> 1.10
 (*Why goal*) Lemma isfib_6_8 : 
   (isfib 6 8).
 Proof.
@@ -157,11 +147,7 @@ Save.
 (*Why axiom*) Lemma isfib_6_8_as_axiom : (isfib 6 8).
 Admitted.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.jc", line 50, characters 0-43: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.jc", line 50, characters 0-43: *)
->>>>>>> 1.10
 (*Why goal*) Lemma not_isfib_2_2 : 
   ~(isfib 2 2).
 Proof.
@@ -182,6 +168,31 @@ Admitted.
    p = (pointer_address (interface_of_pointer_address p))).
 Admitted.
 
+(*Why predicate*) Definition strict_valid_root_Object  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (offset_min Object_alloc_table p) = a /\
+     (offset_max Object_alloc_table p) = b.
+
+(*Why predicate*) Definition strict_valid_root_interface  (p:(pointer interface)) (a:Z) (b:Z) (interface_alloc_table:(alloc_table interface))
+  := (offset_min interface_alloc_table p) = a /\
+     (offset_max interface_alloc_table p) = b.
+
+(*Why predicate*) Definition strict_valid_struct_Object  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (offset_min Object_alloc_table p) = a /\
+     (offset_max Object_alloc_table p) = b.
+
+(*Why predicate*) Definition strict_valid_struct_Fibonacci  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (strict_valid_struct_Object p a b Object_alloc_table).
+
+(*Why predicate*) Definition strict_valid_struct_String  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (strict_valid_struct_Object p a b Object_alloc_table).
+
+(*Why predicate*) Definition strict_valid_struct_Throwable  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (strict_valid_struct_Object p a b Object_alloc_table).
+
+(*Why predicate*) Definition strict_valid_struct_interface  (p:(pointer interface)) (a:Z) (b:Z) (interface_alloc_table:(alloc_table interface))
+  := (offset_min interface_alloc_table p) = a /\
+     (offset_max interface_alloc_table p) = b.
+
 (*Why predicate*) Definition valid_bitvector_struct_Object  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
   := (offset_min bitvector_alloc_table p) = a /\
      (offset_max bitvector_alloc_table p) = b.
@@ -200,16 +211,16 @@ Admitted.
      (offset_max bitvector_alloc_table p) = b.
 
 (*Why predicate*) Definition valid_root_Object  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
-  := (offset_min Object_alloc_table p) = a /\
-     (offset_max Object_alloc_table p) = b.
+  := (offset_min Object_alloc_table p) <= a /\
+     (offset_max Object_alloc_table p) >= b.
 
 (*Why predicate*) Definition valid_root_interface  (p:(pointer interface)) (a:Z) (b:Z) (interface_alloc_table:(alloc_table interface))
-  := (offset_min interface_alloc_table p) = a /\
-     (offset_max interface_alloc_table p) = b.
+  := (offset_min interface_alloc_table p) <= a /\
+     (offset_max interface_alloc_table p) >= b.
 
 (*Why predicate*) Definition valid_struct_Object  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
-  := (offset_min Object_alloc_table p) = a /\
-     (offset_max Object_alloc_table p) = b.
+  := (offset_min Object_alloc_table p) <= a /\
+     (offset_max Object_alloc_table p) >= b.
 
 (*Why predicate*) Definition valid_struct_Fibonacci  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (valid_struct_Object p a b Object_alloc_table).
@@ -221,14 +232,10 @@ Admitted.
   := (valid_struct_Object p a b Object_alloc_table).
 
 (*Why predicate*) Definition valid_struct_interface  (p:(pointer interface)) (a:Z) (b:Z) (interface_alloc_table:(alloc_table interface))
-  := (offset_min interface_alloc_table p) = a /\
-     (offset_max interface_alloc_table p) = b.
+  := (offset_min interface_alloc_table p) <= a /\
+     (offset_max interface_alloc_table p) >= b.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_1 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -238,11 +245,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_2 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -252,11 +255,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_3 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -266,11 +265,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_4 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -280,11 +275,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_5 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -308,11 +299,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_6 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -336,11 +323,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_7 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -364,11 +347,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_8 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -392,11 +371,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_9 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -420,11 +395,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_10 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -448,11 +419,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-<<<<<<< Fibonacci_why.v
 (* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 24, characters 16-33: *)
-=======
-(* Why obligation from file "/home/cmarche/ppc/why/tests/java/Fibonacci.java", line 24, characters 16-33: *)
->>>>>>> 1.10
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_11 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
