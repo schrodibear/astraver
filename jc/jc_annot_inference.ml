@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.151 2008-10-28 17:16:47 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.152 2008-10-31 12:11:48 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1063,8 +1063,8 @@ module Dnf = struct
 		 conj)) disj) dnf
       
   let test mgr pre dnf =
-(*     if debug then printf "[Dnf.test] %a@." Abstract1.print pre; *)
-(*     if debug then printf "[Dnf.test] %a@." print dnf; *)
+    if debug then printf "[Dnf.test] %a@." Abstract1.print pre;
+    if debug then printf "[Dnf.test] %a@." print dnf;
     let env = Abstract1.env pre in
     if is_false dnf then Abstract1.bottom mgr env
     else if is_true dnf then pre
@@ -1488,7 +1488,7 @@ let mkconsistent a =
 	  let lbounds,ubounds = match op with
 	    | `Ble | `Blt -> posl,negl
 	    | `Bge | `Bgt -> negl,posl
-	    | `Beq | `Bneq -> [],[]
+	    | `Beq | `Bneq -> posl@negl,posl@negl
 	  in
 	  if List.exists cannot_have_upper_bound lbounds 
 	    || List.exists cannot_have_lower_bound ubounds then None
@@ -2360,220 +2360,6 @@ let wp_function targets funpre (f,pos,spec,body) =
 
 
 (*****************************************************************************)
-(* Augmenting loop invariants.                                               *)
-(*****************************************************************************)
-
-(* let collect_immediate_targets targets s = *)
-(*   (\* Special version of [fold_expr] different from the one  *)
-(*    * in [Jc_iterators] in that fpost is called after the body expr  *)
-(*    * of the try block. *)
-(*    *\) *)
-(*   let rec fold_expr fpre fpost acc s = *)
-(*     let ite = fold_expr fpre fpost in *)
-(*     let acc = fpre acc s in *)
-(*     let acc = match s#node with *)
-(*       | JCEconst _  *)
-(*       | JCEvar _  *)
-(*       | JCEreturn_void -> *)
-(* 	  acc *)
-(*       | JCEthrow(_exc,e1_opt) -> *)
-(* 	  Option_misc.fold_left ite acc e1_opt *)
-(*       | JCEbinary(e1,_,e2)  *)
-(*       | JCEshift(e1,e2) *)
-(*       | JCEassign_heap(e1,_,e2) -> *)
-(* 	  let acc = ite acc e1 in *)
-(* 	  ite acc e2 *)
-(*       | JCEunary(_,e1) *)
-(*       | JCEderef(e1,_) *)
-(*       | JCEoffset(_,e1,_) *)
-(*       | JCEaddress(_,e1) *)
-(*       | JCEcast(e1,_) *)
-(*       | JCEbitwise_cast(e1,_)  *)
-(*       | JCErange_cast(e1,_)  *)
-(*       | JCEinstanceof(e1,_)  *)
-(*       | JCEreal_cast(e1,_) *)
-(*       | JCEunpack(_,e1,_) *)
-(*       | JCEpack(_,e1,_) *)
-(*       | JCEassign_var(_,e1)  *)
-(*       | JCEalloc(e1,_)  *)
-(*       | JCEfree e1  *)
-(*       | JCEreturn(_,e1) -> *)
-(* 	  ite acc e1 *)
-(*       | JCElet(_,e1_opt,e2) -> *)
-(* 	  let acc = Option_misc.fold_left ite acc e1_opt in *)
-(* 	  ite acc e2 *)
-(*       | JCEapp call -> *)
-(* 	  List.fold_left ite acc call.jc_call_args *)
-(*       | JCEif(e1,e2,e3) -> *)
-(* 	  let acc = ite acc e1 in *)
-(* 	  let acc = ite acc e2 in *)
-(* 	  ite acc e3 *)
-(*       | JCEmatch(e, ptl) -> *)
-(* 	  let acc = ite acc e in *)
-(* 	  List.fold_left (fun acc (_, e) -> ite acc e) acc ptl *)
-(*       | JCEblock el -> *)
-(* 	  List.fold_left ite acc el *)
-(*       | JCEtry(e1,catches,finally) -> *)
-(* 	  let acc = ite acc e1 in *)
-(* 	  let acc =  *)
-(* 	    List.fold_left (fun acc (_exc,_vi_opt,e) -> ite acc e) acc catches *)
-(* 	  in *)
-(* 	  ite acc finally *)
-(*       | JCEassert(_behav,_asrt,a) -> *)
-(* 	  ita acc a *)
-(*       | JCEloop(la,e1) -> *)
-(* 	  let acc = ite acc e1 in *)
-(* 	  let acc =  *)
-(* 	    List.fold_left  *)
-(* 	      (fun acc (_behav,a) -> ita acc a) acc la.jc_loop_invariant *)
-(* 	  in *)
-(* 	  let acc = ita acc la.jc_free_loop_invariant in *)
-(* 	  Option_misc.fold_left itt acc la.jc_loop_variant *)
-(*       | JCEcontract(a_opt,t_opt,_v,behavs,e) -> *)
-(* 	  let acc = Option_misc.fold_left ita acc a_opt in *)
-(* 	  let acc = Option_misc.fold_left itt acc t_opt in *)
-(* 	  let acc =  *)
-(* 	    List.fold_left  *)
-(* 	      (fun acc (_loc,_name,behav) -> *)
-(* 		 fold_sub_behavior acc behav *)
-(* 	      ) acc behavs *)
-(* 	  in *)
-(* 	  ite acc e *)
-
-(*       | JCEif(_,ts,fs) -> *)
-(*   	  let acc = fold_expr fpre fpost acc ts in *)
-(*   	  fold_expr fpre fpost acc fs *)
-(*       | JCEtry(s,hl,fs) -> *)
-(*   	  let acc = fold_expr fpre fpost acc s in *)
-(*           let acc = fpost acc s in *)
-(*   	  let acc = *)
-(*   	    List.fold_left (fun acc (_,_,s) -> *)
-(*   			      fold_expr fpre fpost acc s *)
-(*   			   ) acc hl *)
-(*   	  in *)
-(*   	  fold_expr fpre fpost acc fs *)
-(*       | JCEloop(_,ls) -> *)
-(*   	  fold_expr fpre fpost acc ls *)
-(*       | JCEreturn _ | JCEthrow _ | JCEassert _ | JCEassign_var _ | JCEapp _ *)
-(*       | JCEassign_heap _ | JCEpack _ | JCEunpack _ | JCEreturn_void -> *)
-(*   	  acc *)
-(*       | _ -> assert false (\* TODO *\) *)
-
-(*     in *)
-(*     fpost acc s *)
-(*   in *)
-
-(*   (\* First checks at start of function should be selected *\) *)
-(*   let in_select_zone = ref true in *)
-
-(*   let select_pre acc s = *)
-(*     match s#node with *)
-(*       | JCEassert a -> *)
-(*   	  if debug then printf "[select_pre] consider target@."; *)
-(*   	  if debug then printf "[select_pre] in zone ? %b@." !in_select_zone; *)
-(*   	  if !in_select_zone then *)
-(*   	    let target = target_of_assertion s s#pos a in *)
-(*   	    if debug then printf "[select_pre] adding in_zone target@."; *)
-(*   	    target::acc *)
-(*   	  else acc *)
-(*       | JCEloop _ -> *)
-(*   	  if debug then printf "[select_pre] in_zone true@."; *)
-(*   	  in_select_zone := true; acc *)
-(*       | JCElet _ | JCEblock _ | JCEassign_var _ *)
-(*       | JCEassign_heap _ | JCEpack _ | JCEunpack _ | JCEtry _ -> *)
-(*           (\* Allowed with [JCEtry] thanks to patched [fold_expr]. *\) *)
-(*   	  acc *)
-(*       | JCEapp _ | JCEif _ | JCEreturn _ | JCEthrow _ *)
-(*       | JCEreturn_void -> *)
-(*   	  if debug then printf "[select_pre] in_zone false@."; *)
-(*   	  in_select_zone := false; acc *)
-(*       |  _ -> assert false (\* TODO *\) *)
-(*   in *)
-
-(*   let select_post acc s = *)
-(*     match s#node with *)
-(*       | JCEloop _ -> *)
-(*   	  if debug then printf "[select_post] in_zone false@."; *)
-(*   	  in_select_zone := false; acc *)
-(*       | _ -> acc *)
-(*   in *)
-(*   fold_expr select_pre select_post targets s *)
-
-let rec backprop_expr target s curpost =
-  if debug then 
-    printf "[backprop_expr] %a@." Loc.report_position s#pos;
-  let curpost = match s#node with
-    | JCElet(vi,eo,s) ->
-	let curpost = backprop_expr target s curpost in
-	begin match curpost with None -> None | Some a -> 
-	  match eo with None -> Some a | Some e ->
-	    match Jc_effect.term_of_expr e with None -> Some a | Some t2 ->
-	      let t1 = new term_var vi in
-	      Some(replace_term_in_assertion t1 t2 a)
-	end
-    | JCEassign_var(vi,e) ->
-	begin match curpost with None -> None | Some a -> 
-	  match Jc_effect.term_of_expr e with None -> Some a | Some t2 ->
-	    let t1 = new term_var vi in
-	    Some(replace_term_in_assertion t1 t2 a)
-	end
-    | JCEassign_heap _ | JCEassert _ | JCEpack _ | JCEunpack _ ->
-	curpost
-    | JCEblock sl ->
-	List.fold_right (backprop_expr target) sl curpost
-    | JCEreturn_void | JCEreturn _ | JCEthrow _ ->
-	assert (curpost = None); curpost
-    | JCEtry(s,hl,fs) ->
-	assert (curpost = None); 
-	let curpost = backprop_expr target fs None in
-	assert (curpost = None);
-        List.iter (fun (_,_,s) ->
-  		     let curpost = backprop_expr target s None in
-		     assert (curpost = None);
-		  ) hl;
-	backprop_expr target s None
-    | JCEloop(la,ls) ->
-	let curpost = backprop_expr target ls curpost in
-	begin
-          match curpost with None -> () | Some propa ->
-	    if not (contradictory propa (Assertion.mkand (List.map snd la.jc_loop_invariant) ())) then
-              begin
-                if Jc_options.debug then
-                  printf 
-	            "%a@[<v 2>Back-propagating loop invariant@\n%a@]@."
-                    Loc.report_position s#pos
-                    Jc_output.assertion propa;
-	        la.jc_loop_invariant <- [[],Assertion.mkand (propa :: List.map snd la.jc_loop_invariant) ()]
-              end
-	end;
-	None
-	  (*     | JCEcall(_,_,s) -> *)
-	  (* 	assert (curpost = None); *)
-	  (* 	let curpost = backprop_expr target s None in *)
-	  (* 	assert (curpost = None); curpost *)
-    | JCEif(_,ts,fs) ->
-	assert (curpost = None);
-	let curpost = backprop_expr target ts None in
-	assert (curpost = None);
-	let curpost = backprop_expr target fs None in
-	assert (curpost = None); None
-    | _ -> assert false (* TODO *)
-  in
-  if s == target.jc_target_expr then
-    begin 
-      assert (curpost = None);
-      Some target.jc_target_assertion
-    end
-  else curpost
-
-let backprop_function targets (fi,fs,sl) =
-  if debug then printf "[backprop_function]@.";
-  List.iter (fun target ->
-	       ignore(backprop_expr target sl None)
-	    ) targets
-
-
-(*****************************************************************************)
 (* Collecting assertions.                                                    *)
 (*****************************************************************************)
       
@@ -2750,6 +2536,196 @@ let set_equivalent_terms t1 t2 =
   in
   let tl = List.filter (fun t -> t <> t1) tl in
   Hashtbl.replace !pointer_terms_table t1#node (t2 :: tl)
+
+
+(*****************************************************************************)
+(* Augmenting loop invariants.                                               *)
+(*****************************************************************************)
+
+let collect_immediate_targets targets s =
+  (* Special version of [fold_expr] different from the one
+   * in [Jc_iterators] in that fpost is called after the body expr
+   * of the try block.
+   *)
+  let rec fold_expr fpre fpost acc s =
+    let ite = fold_expr fpre fpost in
+    let acc = fpre acc s in
+    let acc = match s#node with
+      | JCEconst _
+      | JCEvar _
+      | JCEreturn_void ->
+	  acc
+      | JCEthrow(_exc,e1_opt) ->
+	  Option_misc.fold_left ite acc e1_opt
+      | JCEbinary(e1,_,e2)
+      | JCEshift(e1,e2)
+      | JCEassign_heap(e1,_,e2) ->
+	  let acc = ite acc e1 in
+	  ite acc e2
+      | JCEunary(_,e1)
+      | JCEderef(e1,_)
+      | JCEoffset(_,e1,_)
+      | JCEaddress(_,e1)
+      | JCEcast(e1,_)
+      | JCEbitwise_cast(e1,_)
+      | JCErange_cast(e1,_)
+      | JCEinstanceof(e1,_)
+      | JCEreal_cast(e1,_)
+      | JCEunpack(_,e1,_)
+      | JCEpack(_,e1,_)
+      | JCEassign_var(_,e1)
+      | JCEalloc(e1,_)
+      | JCEfree e1
+      | JCEreturn(_,e1) ->
+	  ite acc e1
+      | JCElet(_,e1_opt,e2) ->
+	  let acc = Option_misc.fold_left ite acc e1_opt in
+	  ite acc e2
+      | JCEapp call ->
+	  List.fold_left ite acc call.jc_call_args
+      | JCEif(e1,e2,e3) ->
+	  let acc = ite acc e1 in
+	  let acc = ite acc e2 in
+	  ite acc e3
+      | JCEmatch(e, ptl) ->
+	  let acc = ite acc e in
+	  List.fold_left (fun acc (_, e) -> ite acc e) acc ptl
+      | JCEblock el ->
+	  List.fold_left ite acc el
+      | JCEtry(e1,catches,finally) ->
+	  let acc = ite acc e1 in
+	  let acc =
+	    List.fold_left (fun acc (_exc,_vi_opt,e) -> ite acc e) acc catches
+	  in
+	  ite acc finally
+      | JCEassert(_behav,_asrt,_a) ->
+	  acc
+      | JCEloop(la,e1) ->
+	  ite acc e1
+      | JCEcontract(a_opt,t_opt,_v,behavs,e) ->
+	  ite acc e
+    in
+    fpost acc s
+  in
+
+  (* First checks at start of function should be selected *)
+  let in_select_zone = ref true in
+
+  let select_pre acc s =
+    match s#node with
+      | JCEassert(_behav,Ahint,a) ->
+  	  if debug then printf "[select_pre] consider target@.";
+  	  if debug then printf "[select_pre] in zone ? %b@." !in_select_zone;
+  	  if !in_select_zone then
+	    let al = 
+	      List.filter (fun a -> not (is_constant_assertion a)) (conjuncts a)
+	    in
+  	    let targets = List.map (target_of_assertion s s#pos) al in
+  	    if debug then printf "[select_pre] adding in_zone target@.";
+  	    targets@acc
+  	  else acc
+      | JCEloop _ ->
+  	  if debug then printf "[select_pre] in_zone true@.";
+  	  in_select_zone := true; acc
+      | JCEassert _ | JCEshift _ |JCEcontract _ | JCEfree _ | JCEalloc _
+      | JCEaddress _ | JCEoffset _ | JCEreal_cast _ | JCErange_cast _ 
+      | JCEbitwise_cast _ | JCEcast _ | JCEinstanceof _ | JCEunary _ 
+      | JCEbinary _ | JCEderef _ | JCEvar _ |JCEconst _
+      | JCElet _ | JCEblock _ | JCEassign_var _
+      | JCEassign_heap _ | JCEpack _ | JCEunpack _ | JCEtry _ ->
+          (* Allowed with [JCEtry] thanks to patched [fold_expr]. *)
+  	  acc
+      | JCEapp _ | JCEif _ | JCEreturn _ | JCEthrow _
+      | JCEreturn_void | JCEmatch _ ->
+  	  if debug then printf "[select_pre] in_zone false@.";
+  	  in_select_zone := false; acc
+  in
+
+  let select_post acc s =
+    match s#node with
+      | JCEloop _ ->
+  	  if debug then printf "[select_post] in_zone false@.";
+  	  in_select_zone := false; acc
+      | _ -> acc
+  in
+  fold_expr select_pre select_post targets s
+
+let rec backprop_expr target s curpost =
+  if debug then 
+    printf "[backprop_expr] %a@." Loc.report_position s#pos;
+  let curpost = match s#node with
+    | JCElet(vi,eo,s) ->
+	let curpost = backprop_expr target s curpost in
+	begin match curpost with None -> None | Some a -> 
+	  match eo with None -> Some a | Some e ->
+	    match Jc_effect.term_of_expr e with None -> Some a | Some t2 ->
+	      let t1 = new term_var vi in
+	      Some(replace_term_in_assertion t1 t2 a)
+	end
+    | JCEassign_var(vi,e) ->
+	begin match curpost with None -> None | Some a -> 
+	  match Jc_effect.term_of_expr e with None -> Some a | Some t2 ->
+	    let t1 = new term_var vi in
+	    Some(replace_term_in_assertion t1 t2 a)
+	end
+    | JCEblock sl ->
+	List.fold_right (backprop_expr target) sl curpost
+    | JCEreturn_void | JCEreturn _ | JCEthrow _ ->
+	assert (curpost = None); curpost
+    | JCEtry(s,hl,fs) ->
+	assert (curpost = None); 
+	let curpost = backprop_expr target fs None in
+	assert (curpost = None);
+        List.iter (fun (_,_,s) ->
+  		     let curpost = backprop_expr target s None in
+		     assert (curpost = None);
+		  ) hl;
+	backprop_expr target s None
+    | JCEloop(la,ls) ->
+	let curpost = backprop_expr target ls curpost in
+	begin
+          match curpost with None -> () | Some propa ->
+	    if not (contradictory propa (Assertion.mkand (List.map snd la.jc_loop_invariant) ())) then
+              begin
+                if Jc_options.debug then
+                  printf 
+	            "%a@[<v 2>Back-propagating loop invariant@\n%a@]@."
+                    Loc.report_position s#pos
+                    Jc_output.assertion propa;
+	        la.jc_loop_invariant <- [[],Assertion.mkand (propa :: List.map snd la.jc_loop_invariant) ()]
+              end
+	end;
+	None
+	  (*     | JCEcall(_,_,s) -> *)
+	  (* 	assert (curpost = None); *)
+	  (* 	let curpost = backprop_expr target s None in *)
+	  (* 	assert (curpost = None); curpost *)
+    | JCEif(_,ts,fs) ->
+	assert (curpost = None);
+	let curpost = backprop_expr target ts None in
+	assert (curpost = None);
+	let curpost = backprop_expr target fs None in
+	assert (curpost = None); None
+    | JCEassign_heap _ | JCEassert _ | JCEpack _ | JCEunpack _
+    | JCEshift _ |JCEcontract _ | JCEfree _ | JCEalloc _
+    | JCEaddress _ | JCEoffset _ | JCEreal_cast _ | JCErange_cast _ 
+    | JCEbitwise_cast _ | JCEcast _ | JCEinstanceof _ | JCEunary _ 
+    | JCEbinary _ | JCEderef _ | JCEvar _ |JCEconst _ ->
+	curpost
+    | JCEmatch _ | JCEapp _ -> assert false
+  in
+  if s == target.jc_target_expr then
+    begin 
+      assert (curpost = None);
+      Some target.jc_target_assertion
+    end
+  else curpost
+
+let backprop_function targets (fi,fs,sl) =
+  if debug then printf "[backprop_function]@.";
+  List.iter (fun target ->
+	       ignore(backprop_expr target sl None)
+	    ) targets
 
 
 (*****************************************************************************)
@@ -3909,14 +3885,9 @@ let code_function (f,pos,spec,body) =
     begin match !Jc_options.annotation_sem with
       | AnnotNone -> ()
       | AnnotInvariants | AnnotElimPre | AnnotWeakPre | AnnotStrongPre ->
-	  (* Collect checks that directly follow function beginning or 
-	     loop beginning *)
-(* 	  let targets = collect_immediate_targets [] sl in *)
 
 	  (* Collect checks *)
 	  let targets = collect_targets wp_filter [] body in
-
-(* 	  backprop_function targets (fi,fs,sl); *)
 
 	  (* Generate invariants by forward abstract interpretation *)
 	  begin match !Jc_options.ai_domain with
@@ -3948,7 +3919,13 @@ let code_function (f,pos,spec,body) =
 		    ) targets []
 		in
 		wp_function targets funpre (f,pos,spec,body)
-	  end
+	  end;
+
+	  (* Collect checks that directly follow function beginning or 
+	     loop beginning *)
+	  let targets = collect_immediate_targets [] body in
+	  backprop_function targets (f,spec,body)
+
     end
       
 

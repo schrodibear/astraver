@@ -77,7 +77,7 @@ logic sub_pointer: 't pointer, 't pointer -> int
 logic shift: 't pointer, int -> 't pointer
 
 parameter sub_pointer_: p:'t pointer -> q:'t pointer -> 
-  { same_block(p,q) } int { result = sub_pointer(p,q) }
+  { (*same_block(p,q)*) } int { result = sub_pointer(p,q) }
  
 parameter safe_sub_pointer_: p:'t pointer -> q:'t pointer -> 
   { } int { result = sub_pointer(p,q) }
@@ -180,7 +180,7 @@ axiom sub_pointer_same_block:
 
 axiom sub_pointer_shift:
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
-    same_block(p,q) ->
+(*    same_block(p,q) ->*)
       p = shift(q,sub_pointer(p,q))
 
 axiom sub_pointer_self:
@@ -188,19 +188,19 @@ axiom sub_pointer_self:
 
 axiom sub_pointer_zero:
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
-    same_block(p,q) ->
+(*    same_block(p,q) ->*)
       sub_pointer(p,q) = 0 -> p = q
 
 axiom sub_pointer_shift_left:
   forall p:'t pointer. forall q:'t pointer. 
     forall i:int [sub_pointer(shift(p,i),q)].
-      same_block(p,q) ->
+(*      same_block(p,q) ->*)
       sub_pointer(shift(p,i),q) = sub_pointer(p,q) + i
 
 axiom sub_pointer_shift_right:
   forall p:'t pointer. forall q:'t pointer. 
     forall i:int [sub_pointer(p,shift(q,i))].
-      same_block(p,q) ->
+(*      same_block(p,q) ->*)
         sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
 
 (*****************************************************************************)
