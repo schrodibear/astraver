@@ -859,7 +859,7 @@ let define_locals ?(reads=[]) ?(writes=[]) e' =
 
 (* Validity *)
 
-let make_valid_pred_app ~equal (ac,r) pc p a b =
+let make_valid_pred_app ~equal (ac,r) pc p ao bo =
   let all_allocs = match ac with
     | JCalloc_bitvector -> [ ac ]
     | JCalloc_root rt -> 
@@ -880,7 +880,11 @@ let make_valid_pred_app ~equal (ac,r) pc p a b =
 	  | RplainUnion -> []
   in
   let mems = List.map (fun mc -> LVar(memory_name (mc,r))) all_mems in
-  LPred(valid_pred_name ~equal ac pc, p :: a :: b :: allocs @ mems)
+  let params = allocs @ mems in
+  let f x acc = x :: acc in
+  let params = Option_misc.fold f bo params in
+  let params = Option_misc.fold f ao params in
+  LPred (valid_pred_name ~equal ~left:(ao <> None) ~right:(bo <> None) ac pc, p :: params)
 
 (*
 If T is a structure:
@@ -894,7 +898,7 @@ If T is a structure:
        valid_T'(p.f, a', b', allocs ...)
 If T is a variant, then we only have the condition on offset_min and max.
 *)
-let make_valid_pred ~equal ac pc =
+let make_valid_pred ~equal ?(left=true) ?(right=true) ac pc =
   let p = "p" in
   let a = "a" in
   let b = "b" in
@@ -925,7 +929,10 @@ let make_valid_pred ~equal ac pc =
     let p = p, pointer_type ac pc in
     let a = a, why_integer_type in
     let b = b, why_integer_type in
-    p :: a :: b :: allocs @ mems
+    let params = allocs @ mems in
+    let params = if right then b :: params else params in
+    let params = if left then a :: params else params in
+      p :: params
   in
   let validity =
     let omin, omax, super_valid = match pc with
@@ -933,7 +940,9 @@ let make_valid_pred ~equal ac pc =
           LTrue,
           LTrue,
           make_valid_pred_app ~equal
-	    (ac,dummy_region) (JCtag(st, pp)) (LVar p) (LVar a) (LVar b)
+	    (ac,dummy_region) (JCtag(st, pp)) (LVar p) 
+	    (if left then Some (LVar a) else None)
+	    (if right then Some (LVar b) else None)
       | JCtag ({ jc_struct_info_parent = None }, _)
       | JCroot _ ->
           (if equal then make_eq else make_le) (make_offset_min ac (LVar p)) (LVar a),
@@ -953,8 +962,8 @@ let make_valid_pred ~equal ac pc =
 				 JCTpointer(fpc, Some fa, Some fb) } as fi ->
 			       make_valid_pred_app ~equal (ac,dummy_region) fpc
 				 (make_select_fi fi (LVar p))
-				 (const_of_num fa)
-				 (const_of_num fb)
+				 (if left then Some (const_of_num fa) else None)
+				 (if right then Some (const_of_num fb) else None)
 			   | _ ->
 			       LTrue)
 			st.jc_struct_info_fields
@@ -963,9 +972,12 @@ let make_valid_pred ~equal ac pc =
 	    | RdiscrUnion
 	    | RplainUnion -> [ LTrue ]
     in
-    make_and_list (omin::omax::super_valid::fields_valid)
+    let validity = super_valid :: fields_valid in
+    let validity = if right then omax :: validity else validity in
+    let validity = if left then omin :: validity else validity in
+      make_and_list validity
   in
-  Predicate(false, valid_pred_name ~equal ac pc, params, validity)
+  Predicate(false, valid_pred_name ~equal ~left ~right ac pc, params, validity)
 
 (* Allocation *)
 
@@ -1074,8 +1086,8 @@ let make_alloc_param ~check_size ac pc =
           (* [valid_st(result,0,n-1,alloc...)] *)
           make_valid_pred_app ~equal:true (ac,dummy_region) pc
             (LVar "result")
-            (LConst(Prim_int "0"))
-            (LApp("sub_int",[LVar n; LConst(Prim_int "1")]));
+            (Some (LConst(Prim_int "0")))
+            (Some (LApp("sub_int",[LVar n; LConst(Prim_int "1")])));
           (* [alloc_extends(old(alloc),alloc)] *)
           LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
           (* [alloc_fresh(old(alloc),result,n)] *)

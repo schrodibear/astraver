@@ -173,9 +173,9 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs NameConflicts.loc
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) --no-arrays  -split-user-conj -explain -locs NameConflicts.loc
 
-GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs NameConflicts.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs NameConflicts.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 
@@ -810,6 +810,31 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
+predicate left_valid_struct_Object(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ (offset_min(Object_alloc_table, p) <= a)
+
+predicate left_valid_struct_NameConflicts(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_String(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_interface(p:interface pointer,
+ a:int,
+ interface_alloc_table:interface alloc_table) =
+ (offset_min(interface_alloc_table, p) <= a)
+
 logic long_of_integer: int -> long
 
 axiom long_coerce :
@@ -832,6 +857,31 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
+predicate right_valid_struct_Object(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ (offset_max(Object_alloc_table, p) >= b)
+
+predicate right_valid_struct_NameConflicts(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_String(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_interface(p:interface pointer,
+ b:int,
+ interface_alloc_table:interface alloc_table) =
+ (offset_max(interface_alloc_table, p) >= b)
+
 logic short_of_integer: int -> short
 
 axiom short_coerce :
@@ -846,6 +896,52 @@ axiom short_range :
  (forall x:short.
   (le_int((-32768), integer_of_short(x))
   and le_int(integer_of_short(x), (32767))))
+
+predicate strict_valid_root_Object(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) = a)
+ and (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p:interface pointer,
+ a:int,
+ b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) = a)
+ and (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) = a)
+ and (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_NameConflicts(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p:interface pointer,
+ a:int,
+ b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) = a)
+ and (offset_max(interface_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_Object(p:unit pointer,
  a:int,
@@ -883,22 +979,22 @@ predicate valid_root_Object(p:Object pointer,
  a:int,
  b:int,
  Object_alloc_table:Object alloc_table) =
- ((offset_min(Object_alloc_table, p) = a)
- and (offset_max(Object_alloc_table, p) = b))
+ ((offset_min(Object_alloc_table, p) <= a)
+ and (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_root_interface(p:interface pointer,
  a:int,
  b:int,
  interface_alloc_table:interface alloc_table) =
- ((offset_min(interface_alloc_table, p) = a)
- and (offset_max(interface_alloc_table, p) = b))
+ ((offset_min(interface_alloc_table, p) <= a)
+ and (offset_max(interface_alloc_table, p) >= b))
 
 predicate valid_struct_Object(p:Object pointer,
  a:int,
  b:int,
  Object_alloc_table:Object alloc_table) =
- ((offset_min(Object_alloc_table, p) = a)
- and (offset_max(Object_alloc_table, p) = b))
+ ((offset_min(Object_alloc_table, p) <= a)
+ and (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_struct_NameConflicts(p:Object pointer,
  a:int,
@@ -922,8 +1018,8 @@ predicate valid_struct_interface(p:interface pointer,
  a:int,
  b:int,
  interface_alloc_table:interface alloc_table) =
- ((offset_min(interface_alloc_table, p) = a)
- and (offset_max(interface_alloc_table, p) = b))
+ ((offset_min(interface_alloc_table, p) <= a)
+ and (offset_max(interface_alloc_table, p) >= b))
 
 parameter NameConflicts_field : (Object, int32) memory ref
 
@@ -1056,7 +1152,7 @@ parameter alloc_struct_NameConflicts :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_NameConflicts(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_NameConflicts(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -1068,7 +1164,7 @@ parameter alloc_struct_NameConflicts_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_NameConflicts(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_NameConflicts(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -1079,7 +1175,8 @@ parameter alloc_struct_Object :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_Object(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, Object_tag)))) }
@@ -1090,7 +1187,8 @@ parameter alloc_struct_Object_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_Object(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, Object_tag)))) }
@@ -1100,7 +1198,8 @@ parameter alloc_struct_String :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_String(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, String_tag)))) }
@@ -1111,7 +1210,8 @@ parameter alloc_struct_String_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_String(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, String_tag)))) }
@@ -1121,7 +1221,7 @@ parameter alloc_struct_Throwable :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_Throwable(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -1133,7 +1233,7 @@ parameter alloc_struct_Throwable_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_Throwable(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -1148,7 +1248,7 @@ parameter alloc_struct_interface :
   interface_alloc_table:interface alloc_table ref ->
    interface_tag_table:interface tag_table ref ->
     { } interface pointer writes interface_alloc_table,interface_tag_table
-    { (valid_struct_interface(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_interface(result, (0), sub_int(n, (1)),
        interface_alloc_table)
       and (alloc_extends(interface_alloc_table@, interface_alloc_table)
           and (alloc_fresh(interface_alloc_table@, result, n)
@@ -1160,7 +1260,7 @@ parameter alloc_struct_interface_requires :
    interface_tag_table:interface tag_table ref ->
     { ge_int(n, (0))} interface pointer
     writes interface_alloc_table,interface_tag_table
-    { (valid_struct_interface(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_interface(result, (0), sub_int(n, (1)),
        interface_alloc_table)
       and (alloc_extends(interface_alloc_table@, interface_alloc_table)
           and (alloc_fresh(interface_alloc_table@, result, n)
@@ -2497,6 +2597,26 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
+predicate left_valid_struct_Object(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_NameConflicts(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_String(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_interface(p: interface pointer, a: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_min(interface_alloc_table, p) <= a)
+
 logic long_of_integer : int -> long
 
 axiom long_coerce:
@@ -2520,6 +2640,26 @@ axiom pointer_addr_of_interface_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(interface_of_pointer_address(p))))
 
+predicate right_valid_struct_Object(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  p) >= b)
+
+predicate right_valid_struct_NameConflicts(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_String(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_interface(p: interface pointer, b: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_max(interface_alloc_table, p) >= b)
+
 logic short_of_integer : int -> short
 
 axiom short_coerce:
@@ -2533,6 +2673,38 @@ axiom short_of_bitvector_of_bitvector_of_short:
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
+
+predicate strict_valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_NameConflicts(p: Object pointer, a: int,
+  b: int, Object_alloc_table: Object alloc_table) =
+  strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
@@ -2558,18 +2730,18 @@ predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_root_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_struct_NameConflicts(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
@@ -2585,8 +2757,8 @@ predicate valid_struct_Throwable(p: Object pointer, a: int, b: int,
 
 predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 ========== file tests/java/why/NameConflicts_po1.why ==========
 goal NameConflicts_m_ensures_normal_po_1:
@@ -3383,6 +3555,21 @@ why -simplify [...] why/NameConflicts.why
  (FORALL (x interface_tag_table)
  (instanceof interface_tag_table x interface_tag)))
 
+(DEFPRED (left_valid_struct_Object p a Object_alloc_table)
+  (<= (offset_min Object_alloc_table p) a))
+
+(DEFPRED (left_valid_struct_NameConflicts p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_String p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_Throwable p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_interface p a interface_alloc_table)
+  (<= (offset_min interface_alloc_table p) a))
+
 (BG_PUSH
  ;; Why axiom long_coerce
  (FORALL (x)
@@ -3409,6 +3596,21 @@ why -simplify [...] why/NameConflicts.why
  ;; Why axiom pointer_addr_of_interface_of_pointer_address
  (FORALL (p) (EQ p (pointer_address (interface_of_pointer_address p)))))
 
+(DEFPRED (right_valid_struct_Object p b Object_alloc_table)
+  (>= (offset_max Object_alloc_table p) b))
+
+(DEFPRED (right_valid_struct_NameConflicts p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_String p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_Throwable p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_interface p b interface_alloc_table)
+  (>= (offset_max interface_alloc_table p) b))
+
 (BG_PUSH
  ;; Why axiom short_coerce
  (FORALL (x)
@@ -3423,6 +3625,31 @@ why -simplify [...] why/NameConflicts.why
  ;; Why axiom short_range
  (FORALL (x)
  (AND (<= (- 0 32768) (integer_of_short x)) (<= (integer_of_short x) 32767))))
+
+(DEFPRED (strict_valid_root_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (strict_valid_root_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_NameConflicts p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_String p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_Throwable p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
 
 (DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
   (AND (EQ (offset_min bitvector_alloc_table p) a)
@@ -3442,16 +3669,16 @@ why -simplify [...] why/NameConflicts.why
   (EQ (offset_max bitvector_alloc_table p) b)))
 
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
-  (AND (EQ (offset_min Object_alloc_table p) a)
-  (EQ (offset_max Object_alloc_table p) b)))
+  (AND (<= (offset_min Object_alloc_table p) a)
+  (>= (offset_max Object_alloc_table p) b)))
 
 (DEFPRED (valid_root_interface p a b interface_alloc_table)
-  (AND (EQ (offset_min interface_alloc_table p) a)
-  (EQ (offset_max interface_alloc_table p) b)))
+  (AND (<= (offset_min interface_alloc_table p) a)
+  (>= (offset_max interface_alloc_table p) b)))
 
 (DEFPRED (valid_struct_Object p a b Object_alloc_table)
-  (AND (EQ (offset_min Object_alloc_table p) a)
-  (EQ (offset_max Object_alloc_table p) b)))
+  (AND (<= (offset_min Object_alloc_table p) a)
+  (>= (offset_max Object_alloc_table p) b)))
 
 (DEFPRED (valid_struct_NameConflicts p a b Object_alloc_table)
   (valid_struct_Object p a b Object_alloc_table))
@@ -3463,8 +3690,8 @@ why -simplify [...] why/NameConflicts.why
   (valid_struct_Object p a b Object_alloc_table))
 
 (DEFPRED (valid_struct_interface p a b interface_alloc_table)
-  (AND (EQ (offset_min interface_alloc_table p) a)
-  (EQ (offset_max interface_alloc_table p) b)))
+  (AND (<= (offset_min interface_alloc_table p) a)
+  (>= (offset_max interface_alloc_table p) b)))
 
 ;; NameConflicts_m_ensures_normal_po_1, File "HOME/tests/java/NameConflicts.java", line 11, characters 18-30
 (FORALL (this_1)
@@ -4479,6 +4706,26 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
+predicate left_valid_struct_Object(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_NameConflicts(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_String(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_interface(p: interface pointer, a: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_min(interface_alloc_table, p) <= a)
+
 logic long_of_integer : int -> long
 
 axiom long_coerce:
@@ -4502,6 +4749,26 @@ axiom pointer_addr_of_interface_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(interface_of_pointer_address(p))))
 
+predicate right_valid_struct_Object(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  p) >= b)
+
+predicate right_valid_struct_NameConflicts(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_String(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_interface(p: interface pointer, b: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_max(interface_alloc_table, p) >= b)
+
 logic short_of_integer : int -> short
 
 axiom short_coerce:
@@ -4515,6 +4782,38 @@ axiom short_of_bitvector_of_bitvector_of_short:
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
+
+predicate strict_valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_NameConflicts(p: Object pointer, a: int,
+  b: int, Object_alloc_table: Object alloc_table) =
+  strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
@@ -4540,18 +4839,18 @@ predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_root_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_struct_NameConflicts(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
@@ -4567,8 +4866,8 @@ predicate valid_struct_Throwable(p: Object pointer, a: int, b: int,
 
 predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 goal NameConflicts_m_ensures_normal_po_1:
   forall this_1:Object pointer.

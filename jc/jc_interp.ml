@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.374 2008-10-29 19:20:53 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.375 2008-11-01 09:18:47 nrousset Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -414,6 +414,8 @@ let tr_struct st acc =
 	(* Validity parameters *)
 	make_valid_pred ~equal:true ac pc 
 	:: make_valid_pred ~equal:false ac pc 
+	:: make_valid_pred ~equal:false ~right:false ac pc 
+	:: make_valid_pred ~equal:false ~left:false ac pc 
 	:: make_valid_pred ~equal:true (* TODO ? *) JCalloc_bitvector pc 
 	  (* Allocation parameters *)
 	:: make_alloc_param ~check_size:true ac pc 
@@ -2722,9 +2724,9 @@ let tr_fun f funpos spec body acc =
 	named_assertion ~type_safe:true ~global_assertion:false ~relocate:false
 	  LabelHere LabelHere spec.jc_fun_free_requires
       in 
-      make_and external_requires free_requires
+	make_and external_requires free_requires
   in
-
+    
   let internal_requires = 
     named_assertion ~type_safe:false ~global_assertion:false ~relocate:false
       LabelHere LabelHere spec.jc_fun_requires
@@ -2738,29 +2740,45 @@ let tr_fun f funpos spec body acc =
     List.fold_left 
       (fun acc v ->
          let req = match v.jc_var_info_type with
-           | JCTpointer(pc,n1o,n2o) ->
+           | JCTpointer (pc, n1o, n2o) ->
 	       (* TODO: what about bitwise? *)
                let v' = 
                  term ~type_safe:false ~global_assertion:false ~relocate:false
 		   LabelHere LabelHere (new term_var v) 
                in
-               begin match n1o, n2o with
-                 | None, _ | _, None -> LTrue
-                 | Some n1, Some n2 ->
-		     let ac = alloc_class_of_pointer_class pc in
-                     let a' =
-                       make_valid_pred_app ~equal:false (ac,v.jc_var_info_region) pc
-                         v' (const_of_num n1) (const_of_num n2)
-                     in
-                     bind_pattern_lets a'
-               end
+		 begin match n1o, n2o with
+                   | None, None -> LTrue
+		   | Some n, None ->
+		       let ac = alloc_class_of_pointer_class pc in
+                       let a' =
+			 make_valid_pred_app ~equal:false
+			   (ac, v.jc_var_info_region) pc
+                           v' (Some (const_of_num n)) None
+                       in
+			 bind_pattern_lets a'
+		   | None, Some n -> 
+		       let ac = alloc_class_of_pointer_class pc in
+                       let a' =
+			 make_valid_pred_app ~equal:false 
+			   (ac, v.jc_var_info_region) pc
+                           v' None (Some (const_of_num n))
+                       in
+			 bind_pattern_lets a'
+                   | Some n1, Some n2 ->
+		       let ac = alloc_class_of_pointer_class pc in
+                       let a' =
+			 make_valid_pred_app ~equal:false (ac, v.jc_var_info_region) pc
+                           v' (Some (const_of_num n1)) (Some (const_of_num n2))
+                       in
+			 bind_pattern_lets a'
+		 end
            | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
            | JCTtype_var _ -> LTrue
 	 in
-	 make_and req acc
+	   make_and req acc
       ) internal_requires f.jc_fun_info_parameters
   in
-
+    
   (* partition behaviors as follows:
      - (optional) 'safety' behavior (if Arguments Invariant Policy is selected)
      - (optional) 'inferred' behaviors (computed by analysis)

@@ -3,6 +3,8 @@
 Require Export jessie_why.
 
 (*Why type*) Definition Object: Set.
+Admitted.
+
 (*Why type*) Definition interface: Set.
 Admitted.
 
@@ -125,35 +127,68 @@ Admitted.
                     (isfib (n_1 - 1) p) -> (isfib n_1 (p + r_0))))))
      .
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.jc", line 53, characters 0-35: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.jc", line 53, characters 0-35: *)
 (*Why goal*) Lemma isfib_2_1 : 
   (isfib 2 1).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+apply isfibn with (r_0:=0) (p:=1); intuition.
+apply isfib0.
+apply isfib1.
 Save.
 
 (*Why axiom*) Lemma isfib_2_1_as_axiom : (isfib 2 1).
 Admitted.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.jc", line 47, characters 0-35: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.jc", line 47, characters 0-35: *)
 (*Why goal*) Lemma isfib_6_8 : 
   (isfib 6 8).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
+assert (isfib3: isfib 3 2).
+apply isfibn with (r_0:=1) (p:=1); intuition.
+apply isfib1.
+apply isfib_2_1.
+assert (isfib4: isfib 4 3).
+apply isfibn with (r_0:=1) (p:=2); intuition.
+apply isfib_2_1.
+assert (isfib5: isfib 5 5).
+apply isfibn with (r_0:=2) (p:=3); intuition.
+apply isfibn with (r_0:=3) (p:=5); intuition.
+Qed.
+
+
 
 (*Why axiom*) Lemma isfib_6_8_as_axiom : (isfib 6 8).
 Admitted.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.jc", line 50, characters 0-43: *)
+(*Why predicate*) Definition left_valid_struct_Object  (p:(pointer Object)) (a:Z) (Object_alloc_table:(alloc_table Object))
+  := (offset_min Object_alloc_table p) <= a.
+
+(*Why predicate*) Definition left_valid_struct_Fibonacci  (p:(pointer Object)) (a:Z) (Object_alloc_table:(alloc_table Object))
+  := (left_valid_struct_Object p a Object_alloc_table).
+
+(*Why predicate*) Definition left_valid_struct_String  (p:(pointer Object)) (a:Z) (Object_alloc_table:(alloc_table Object))
+  := (left_valid_struct_Object p a Object_alloc_table).
+
+(*Why predicate*) Definition left_valid_struct_Throwable  (p:(pointer Object)) (a:Z) (Object_alloc_table:(alloc_table Object))
+  := (left_valid_struct_Object p a Object_alloc_table).
+
+(*Why predicate*) Definition left_valid_struct_interface  (p:(pointer interface)) (a:Z) (interface_alloc_table:(alloc_table interface))
+  := (offset_min interface_alloc_table p) <= a.
+
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.jc", line 50, characters 0-43: *)
+
 (*Why goal*) Lemma not_isfib_2_2 : 
   ~(isfib 2 2).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intro h; inversion h; intuition.
+replace (p + r_0 - (p + r_0)) with 0 in H1 by omega.
+inversion H1; auto with zarith.
+assert (p=2) by omega.
+subst.
+replace (2 + 0 - 1) with 1 in H4 by omega.
+inversion H4; auto with zarith.
 Save.
+
 
 (*Why axiom*) Lemma not_isfib_2_2_as_axiom : ~(isfib 2 2).
 Admitted.
@@ -167,6 +202,21 @@ Admitted.
   (forall (p:(pointer unit)),
    p = (pointer_address (interface_of_pointer_address p))).
 Admitted.
+
+(*Why predicate*) Definition right_valid_struct_Object  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (offset_max Object_alloc_table p) >= b.
+
+(*Why predicate*) Definition right_valid_struct_Fibonacci  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (right_valid_struct_Object p b Object_alloc_table).
+
+(*Why predicate*) Definition right_valid_struct_String  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (right_valid_struct_Object p b Object_alloc_table).
+
+(*Why predicate*) Definition right_valid_struct_Throwable  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (right_valid_struct_Object p b Object_alloc_table).
+
+(*Why predicate*) Definition right_valid_struct_interface  (p:(pointer interface)) (b:Z) (interface_alloc_table:(alloc_table interface))
+  := (offset_max interface_alloc_table p) >= b.
 
 (*Why predicate*) Definition strict_valid_root_Object  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (offset_min Object_alloc_table p) = a /\
@@ -235,47 +285,43 @@ Admitted.
   := (offset_min interface_alloc_table p) <= a /\
      (offset_max interface_alloc_table p) >= b.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_1 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   (* JC_21 *) 0 <= 0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_2 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   (* JC_21 *) 0 <= n_0_0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_3 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   (* JC_21 *) (isfib (0 + 1) 1).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intros; apply isfib1.
 Save.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_4 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   (* JC_21 *) (isfib 0 0).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intros; apply isfib0.
 Save.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_5 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -296,10 +342,9 @@ Save.
   (* JC_21 *) 0 <= i0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_6 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -320,10 +365,9 @@ Save.
   (* JC_21 *) i0 <= n_0_0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_7 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -343,11 +387,13 @@ Save.
   forall (HW_10: i0 = (i + 1)),
   (* JC_21 *) (isfib (i0 + 1) x_0_0_0).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst; auto.
+apply isfibn; intuition.
+replace (i+1+1-2) with i; auto with zarith.
+replace (i+1+1-1) with (i+1); auto with zarith.
 Save.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_8 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -367,11 +413,10 @@ Save.
   forall (HW_10: i0 = (i + 1)),
   (* JC_21 *) (isfib i0 y0).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; subst; auto.
 Save.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_9 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -392,10 +437,9 @@ Save.
   0 <= ((* JC_23 *) (n_0_0 - i)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_10 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -416,10 +460,9 @@ Save.
   ((* JC_23 *) (n_0_0 - i0)) < ((* JC_23 *) (n_0_0 - i)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.java", line 24, characters 16-33: *)
+(* Why obligation from file "/home/rousset/Why/why_cvs/why/tests/java/Fibonacci.java", line 24, characters 16-33: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_11 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -434,6 +477,7 @@ Save.
   (* JC_15 *) (isfib n_0_0 why__return).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (i=n_0_0) by omega.
+subst; auto.
 Save.
 

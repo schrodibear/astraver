@@ -399,9 +399,9 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs Creation.loc
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) --no-arrays  -split-user-conj -explain -locs Creation.loc
 
-GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs Creation.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs Creation.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 
@@ -2092,6 +2092,36 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
+predicate left_valid_struct_Object(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ (offset_min(Object_alloc_table, p) <= a)
+
+predicate left_valid_struct_Creation(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_String(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_TestSuperConstructor(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Creation(p, a, Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_interface(p:interface pointer,
+ a:int,
+ interface_alloc_table:interface alloc_table) =
+ (offset_min(interface_alloc_table, p) <= a)
+
 logic long_of_integer: int -> long
 
 axiom long_coerce :
@@ -2114,6 +2144,36 @@ axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
 
+predicate right_valid_struct_Object(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ (offset_max(Object_alloc_table, p) >= b)
+
+predicate right_valid_struct_Creation(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_String(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_TestSuperConstructor(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Creation(p, b, Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_interface(p:interface pointer,
+ b:int,
+ interface_alloc_table:interface alloc_table) =
+ (offset_max(interface_alloc_table, p) >= b)
+
 logic short_of_integer: int -> short
 
 axiom short_coerce :
@@ -2128,6 +2188,58 @@ axiom short_range :
  (forall x:short.
   (le_int((-32768), integer_of_short(x))
   and le_int(integer_of_short(x), (32767))))
+
+predicate strict_valid_root_Object(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) = a)
+ and (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p:interface pointer,
+ a:int,
+ b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) = a)
+ and (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) = a)
+ and (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_Creation(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_TestSuperConstructor(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Creation(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p:interface pointer,
+ a:int,
+ b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) = a)
+ and (offset_max(interface_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_Object(p:unit pointer,
  a:int,
@@ -2171,22 +2283,22 @@ predicate valid_root_Object(p:Object pointer,
  a:int,
  b:int,
  Object_alloc_table:Object alloc_table) =
- ((offset_min(Object_alloc_table, p) = a)
- and (offset_max(Object_alloc_table, p) = b))
+ ((offset_min(Object_alloc_table, p) <= a)
+ and (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_root_interface(p:interface pointer,
  a:int,
  b:int,
  interface_alloc_table:interface alloc_table) =
- ((offset_min(interface_alloc_table, p) = a)
- and (offset_max(interface_alloc_table, p) = b))
+ ((offset_min(interface_alloc_table, p) <= a)
+ and (offset_max(interface_alloc_table, p) >= b))
 
 predicate valid_struct_Object(p:Object pointer,
  a:int,
  b:int,
  Object_alloc_table:Object alloc_table) =
- ((offset_min(Object_alloc_table, p) = a)
- and (offset_max(Object_alloc_table, p) = b))
+ ((offset_min(Object_alloc_table, p) <= a)
+ and (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_struct_Creation(p:Object pointer,
  a:int,
@@ -2216,8 +2328,8 @@ predicate valid_struct_interface(p:interface pointer,
  a:int,
  b:int,
  interface_alloc_table:interface alloc_table) =
- ((offset_min(interface_alloc_table, p) = a)
- and (offset_max(interface_alloc_table, p) = b))
+ ((offset_min(interface_alloc_table, p) <= a)
+ and (offset_max(interface_alloc_table, p) >= b))
 
 parameter Creation_simple_val : (Object, int32) memory ref
 
@@ -2374,7 +2486,7 @@ parameter alloc_struct_Creation :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Creation(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_Creation(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -2386,7 +2498,7 @@ parameter alloc_struct_Creation_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Creation(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_Creation(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -2397,7 +2509,8 @@ parameter alloc_struct_Object :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_Object(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, Object_tag)))) }
@@ -2408,7 +2521,8 @@ parameter alloc_struct_Object_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_Object(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, Object_tag)))) }
@@ -2418,7 +2532,8 @@ parameter alloc_struct_String :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_String(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, String_tag)))) }
@@ -2429,7 +2544,8 @@ parameter alloc_struct_String_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_String(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, String_tag)))) }
@@ -2439,7 +2555,7 @@ parameter alloc_struct_TestSuperConstructor :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_TestSuperConstructor(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_TestSuperConstructor(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -2452,7 +2568,7 @@ parameter alloc_struct_TestSuperConstructor_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_TestSuperConstructor(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_TestSuperConstructor(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -2464,7 +2580,7 @@ parameter alloc_struct_Throwable :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_Throwable(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -2476,7 +2592,7 @@ parameter alloc_struct_Throwable_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_Throwable(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -2491,7 +2607,7 @@ parameter alloc_struct_interface :
   interface_alloc_table:interface alloc_table ref ->
    interface_tag_table:interface tag_table ref ->
     { } interface pointer writes interface_alloc_table,interface_tag_table
-    { (valid_struct_interface(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_interface(result, (0), sub_int(n, (1)),
        interface_alloc_table)
       and (alloc_extends(interface_alloc_table@, interface_alloc_table)
           and (alloc_fresh(interface_alloc_table@, result, n)
@@ -2503,7 +2619,7 @@ parameter alloc_struct_interface_requires :
    interface_tag_table:interface tag_table ref ->
     { ge_int(n, (0))} interface pointer
     writes interface_alloc_table,interface_tag_table
-    { (valid_struct_interface(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_interface(result, (0), sub_int(n, (1)),
        interface_alloc_table)
       and (alloc_extends(interface_alloc_table@, interface_alloc_table)
           and (alloc_fresh(interface_alloc_table@, result, n)
@@ -3302,7 +3418,7 @@ why --project [...] why/Creation.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po11.why">
-      <location file = "why/Creation.why" line = "1150" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "1266" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po12.why">
@@ -3327,7 +3443,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po7.why">
-      <location file = "why/Creation.why" line = "1070" begin = "32" end = "157"/>
+      <location file = "why/Creation.why" line = "1186" begin = "32" end = "157"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po8.why">
@@ -3352,7 +3468,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po3.why">
-      <location file = "why/Creation.why" line = "993" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "1109" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po4.why">
@@ -4405,6 +4521,30 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
+predicate left_valid_struct_Object(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_Creation(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_String(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_TestSuperConstructor(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Creation(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_interface(p: interface pointer, a: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_min(interface_alloc_table, p) <= a)
+
 logic long_of_integer : int -> long
 
 axiom long_coerce:
@@ -4428,6 +4568,30 @@ axiom pointer_addr_of_interface_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(interface_of_pointer_address(p))))
 
+predicate right_valid_struct_Object(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  p) >= b)
+
+predicate right_valid_struct_Creation(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_String(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_TestSuperConstructor(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Creation(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_interface(p: interface pointer, b: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_max(interface_alloc_table, p) >= b)
+
 logic short_of_integer : int -> short
 
 axiom short_coerce:
@@ -4441,6 +4605,42 @@ axiom short_of_bitvector_of_bitvector_of_short:
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
+
+predicate strict_valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_Creation(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_TestSuperConstructor(p: Object pointer, a: int,
+  b: int, Object_alloc_table: Object alloc_table) =
+  strict_valid_struct_Creation(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
@@ -4470,18 +4670,18 @@ predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_root_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_struct_Creation(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
@@ -4501,36 +4701,8 @@ predicate valid_struct_Throwable(p: Object pointer, a: int, b: int,
 
 predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
-
-========== file tests/java/why/Creation_po1.why ==========
-goal Creation_test1_ensures_normal_po_1:
-  forall Creation_simple_val:(Object,
-  int32) memory.
-  forall Object_alloc_table:Object alloc_table.
-  ("JC_63": true) ->
-  forall result:Object pointer.
-  forall Object_alloc_table0:Object alloc_table.
-  forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
-   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-    (alloc_fresh(Object_alloc_table, result, 1) and
-     instanceof(Object_tag_table, result, Creation_tag)))) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 17) ->
-  forall Creation_simple_val0:(Object,
-  int32) memory.
-  ("JC_24":
-  (("JC_22": (integer_of_int32(select(Creation_simple_val0,
-   result)) = integer_of_int32(result0))) and
-   ("JC_23": not_assigns(Object_alloc_table0, Creation_simple_val,
-   Creation_simple_val0, pset_singleton(result))))) ->
-  forall result1:int32.
-  (result1 = select(Creation_simple_val0, result)) ->
-  forall return:int32.
-  (return = result1) ->
-  ("JC_68": (integer_of_int32(return) = 17))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 ========== file tests/java/why/Creation_po10.why ==========
 goal Creation_test3_safety_po_1:
@@ -4545,7 +4717,7 @@ goal Creation_test3_safety_po_2:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -4561,7 +4733,7 @@ goal Creation_test3_safety_po_3:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -4692,6 +4864,34 @@ goal cons_TestSuperConstructor_ensures_normal_po_1:
   ("JC_178":
   ("JC_178": (integer_of_int32(select(Creation_simple_val0, this_4)) = 12))))
 
+========== file tests/java/why/Creation_po1.why ==========
+goal Creation_test1_ensures_normal_po_1:
+  forall Creation_simple_val:(Object,
+  int32) memory.
+  forall Object_alloc_table:Object alloc_table.
+  ("JC_63": true) ->
+  forall result:Object pointer.
+  forall Object_alloc_table0:Object alloc_table.
+  forall Object_tag_table:Object tag_table.
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
+    (alloc_fresh(Object_alloc_table, result, 1) and
+     instanceof(Object_tag_table, result, Creation_tag)))) ->
+  forall result0:int32.
+  (integer_of_int32(result0) = 17) ->
+  forall Creation_simple_val0:(Object,
+  int32) memory.
+  ("JC_24":
+  (("JC_22": (integer_of_int32(select(Creation_simple_val0,
+   result)) = integer_of_int32(result0))) and
+   ("JC_23": not_assigns(Object_alloc_table0, Creation_simple_val,
+   Creation_simple_val0, pset_singleton(result))))) ->
+  forall result1:int32.
+  (result1 = select(Creation_simple_val0, result)) ->
+  forall return:int32.
+  (return = result1) ->
+  ("JC_68": (integer_of_int32(return) = 17))
+
 ========== file tests/java/why/Creation_po2.why ==========
 goal Creation_test1_safety_po_1:
   ("JC_63": true) ->
@@ -4705,7 +4905,7 @@ goal Creation_test1_safety_po_2:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -4721,7 +4921,7 @@ goal Creation_test1_safety_po_3:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -4746,7 +4946,7 @@ goal Creation_test2_ensures_normal_po_1:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -4775,7 +4975,7 @@ goal Creation_test2_safety_po_2:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -4791,7 +4991,7 @@ goal Creation_test2_safety_po_3:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -4813,7 +5013,7 @@ goal Creation_test3_ensures_normal_po_1:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -5620,6 +5820,24 @@ why -simplify [...] why/Creation.why
  (FORALL (x interface_tag_table)
  (instanceof interface_tag_table x interface_tag)))
 
+(DEFPRED (left_valid_struct_Object p a Object_alloc_table)
+  (<= (offset_min Object_alloc_table p) a))
+
+(DEFPRED (left_valid_struct_Creation p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_String p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_TestSuperConstructor p a Object_alloc_table)
+  (left_valid_struct_Creation p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_Throwable p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_interface p a interface_alloc_table)
+  (<= (offset_min interface_alloc_table p) a))
+
 (BG_PUSH
  ;; Why axiom long_coerce
  (FORALL (x)
@@ -5646,6 +5864,24 @@ why -simplify [...] why/Creation.why
  ;; Why axiom pointer_addr_of_interface_of_pointer_address
  (FORALL (p) (EQ p (pointer_address (interface_of_pointer_address p)))))
 
+(DEFPRED (right_valid_struct_Object p b Object_alloc_table)
+  (>= (offset_max Object_alloc_table p) b))
+
+(DEFPRED (right_valid_struct_Creation p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_String p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_TestSuperConstructor p b Object_alloc_table)
+  (right_valid_struct_Creation p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_Throwable p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_interface p b interface_alloc_table)
+  (>= (offset_max interface_alloc_table p) b))
+
 (BG_PUSH
  ;; Why axiom short_coerce
  (FORALL (x)
@@ -5660,6 +5896,34 @@ why -simplify [...] why/Creation.why
  ;; Why axiom short_range
  (FORALL (x)
  (AND (<= (- 0 32768) (integer_of_short x)) (<= (integer_of_short x) 32767))))
+
+(DEFPRED (strict_valid_root_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (strict_valid_root_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_Creation p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_String p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_TestSuperConstructor p a b Object_alloc_table)
+  (strict_valid_struct_Creation p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_Throwable p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
 
 (DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
   (AND (EQ (offset_min bitvector_alloc_table p) a)
@@ -5682,16 +5946,16 @@ why -simplify [...] why/Creation.why
   (EQ (offset_max bitvector_alloc_table p) b)))
 
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
-  (AND (EQ (offset_min Object_alloc_table p) a)
-  (EQ (offset_max Object_alloc_table p) b)))
+  (AND (<= (offset_min Object_alloc_table p) a)
+  (>= (offset_max Object_alloc_table p) b)))
 
 (DEFPRED (valid_root_interface p a b interface_alloc_table)
-  (AND (EQ (offset_min interface_alloc_table p) a)
-  (EQ (offset_max interface_alloc_table p) b)))
+  (AND (<= (offset_min interface_alloc_table p) a)
+  (>= (offset_max interface_alloc_table p) b)))
 
 (DEFPRED (valid_struct_Object p a b Object_alloc_table)
-  (AND (EQ (offset_min Object_alloc_table p) a)
-  (EQ (offset_max Object_alloc_table p) b)))
+  (AND (<= (offset_min Object_alloc_table p) a)
+  (>= (offset_max Object_alloc_table p) b)))
 
 (DEFPRED (valid_struct_Creation p a b Object_alloc_table)
   (valid_struct_Object p a b Object_alloc_table))
@@ -5706,8 +5970,8 @@ why -simplify [...] why/Creation.why
   (valid_struct_Object p a b Object_alloc_table))
 
 (DEFPRED (valid_struct_interface p a b interface_alloc_table)
-  (AND (EQ (offset_min interface_alloc_table p) a)
-  (EQ (offset_max interface_alloc_table p) b)))
+  (AND (<= (offset_min interface_alloc_table p) a)
+  (>= (offset_max interface_alloc_table p) b)))
 
 ;; Creation_test1_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 31, characters 18-31
 (FORALL (Creation_simple_val)
@@ -5716,7 +5980,8 @@ why -simplify [...] why/Creation.why
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
-(IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
+(IMPLIES (AND
+         (strict_valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
          (AND (alloc_fresh Object_alloc_table result 1)
@@ -5738,14 +6003,15 @@ why -simplify [...] why/Creation.why
 ;; Creation_test1_safety_po_1, File "HOME/tests/java/Creation.jc", line 77, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test1_safety_po_2, File "why/Creation.why", line 993, characters 30-151
+;; Creation_test1_safety_po_2, File "why/Creation.why", line 1109, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
-(IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
+(IMPLIES (AND
+         (strict_valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
          (AND (alloc_fresh Object_alloc_table result 1)
@@ -5760,7 +6026,8 @@ why -simplify [...] why/Creation.why
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
-(IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
+(IMPLIES (AND
+         (strict_valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
          (AND (alloc_fresh Object_alloc_table result 1)
@@ -5784,7 +6051,8 @@ why -simplify [...] why/Creation.why
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
-(IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
+(IMPLIES (AND
+         (strict_valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
          (AND (alloc_fresh Object_alloc_table result 1)
@@ -5802,14 +6070,15 @@ why -simplify [...] why/Creation.why
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 97, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 1070, characters 32-157
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 1186, characters 32-157
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
-(IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
+(IMPLIES (AND
+         (strict_valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
          (AND (alloc_fresh Object_alloc_table result 1)
@@ -5824,7 +6093,8 @@ why -simplify [...] why/Creation.why
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
-(IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
+(IMPLIES (AND
+         (strict_valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
          (AND (alloc_fresh Object_alloc_table result 1)
@@ -5844,7 +6114,8 @@ why -simplify [...] why/Creation.why
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
-(IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
+(IMPLIES (AND
+         (strict_valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
          (AND (alloc_fresh Object_alloc_table result 1)
@@ -5868,14 +6139,15 @@ why -simplify [...] why/Creation.why
 ;; Creation_test3_safety_po_1, File "HOME/tests/java/Creation.jc", line 117, characters 57-72
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test3_safety_po_2, File "why/Creation.why", line 1150, characters 30-151
+;; Creation_test3_safety_po_2, File "why/Creation.why", line 1266, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
-(IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
+(IMPLIES (AND
+         (strict_valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
          (AND (alloc_fresh Object_alloc_table result 1)
@@ -5890,7 +6162,8 @@ why -simplify [...] why/Creation.why
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
-(IMPLIES (AND (valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
+(IMPLIES (AND
+         (strict_valid_struct_Creation result 0 (- 1 1) Object_alloc_table0)
          (AND
          (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
          (AND (alloc_fresh Object_alloc_table result 1)
@@ -7009,6 +7282,30 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
+predicate left_valid_struct_Object(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_Creation(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_String(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_TestSuperConstructor(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Creation(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_interface(p: interface pointer, a: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_min(interface_alloc_table, p) <= a)
+
 logic long_of_integer : int -> long
 
 axiom long_coerce:
@@ -7032,6 +7329,30 @@ axiom pointer_addr_of_interface_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(interface_of_pointer_address(p))))
 
+predicate right_valid_struct_Object(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  p) >= b)
+
+predicate right_valid_struct_Creation(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_String(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_TestSuperConstructor(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Creation(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_interface(p: interface pointer, b: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_max(interface_alloc_table, p) >= b)
+
 logic short_of_integer : int -> short
 
 axiom short_coerce:
@@ -7045,6 +7366,42 @@ axiom short_of_bitvector_of_bitvector_of_short:
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
+
+predicate strict_valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_Creation(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_TestSuperConstructor(p: Object pointer, a: int,
+  b: int, Object_alloc_table: Object alloc_table) =
+  strict_valid_struct_Creation(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
@@ -7074,18 +7431,18 @@ predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_root_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_struct_Creation(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
@@ -7105,8 +7462,8 @@ predicate valid_struct_Throwable(p: Object pointer, a: int, b: int,
 
 predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 goal Creation_test1_ensures_normal_po_1:
   forall Creation_simple_val:(Object,
@@ -7116,7 +7473,7 @@ goal Creation_test1_ensures_normal_po_1:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -7146,7 +7503,7 @@ goal Creation_test1_safety_po_2:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -7161,7 +7518,7 @@ goal Creation_test1_safety_po_3:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -7185,7 +7542,7 @@ goal Creation_test2_ensures_normal_po_1:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -7212,7 +7569,7 @@ goal Creation_test2_safety_po_2:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -7227,7 +7584,7 @@ goal Creation_test2_safety_po_3:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -7248,7 +7605,7 @@ goal Creation_test3_ensures_normal_po_1:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -7280,7 +7637,7 @@ goal Creation_test3_safety_po_2:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->
@@ -7295,7 +7652,7 @@ goal Creation_test3_safety_po_3:
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
-  (valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
+  (strict_valid_struct_Creation(result, 0, (1 - 1), Object_alloc_table0) and
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result, 1) and
      instanceof(Object_tag_table, result, Creation_tag)))) ->

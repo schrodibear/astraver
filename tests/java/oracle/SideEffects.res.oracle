@@ -32,7 +32,7 @@ Done.
 # AnnotationPolicy = None
 # AbstractDomain = None
 
-logic Non_null_intM{Here}(intM[0..-1] x) =
+logic Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
 
 logic Non_null_Object{Here}(Object[0..] x) =
@@ -61,12 +61,12 @@ tag intM = Object with {
   integer intP;
 }
 
-boolean non_null_intM(intM[0..-1] x)
+boolean non_null_intM(intM[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) >= -1) else (x == null));
 ;
 
-integer java_array_length_intM(intM[0..-1] x)
+integer java_array_length_intM(intM[0..] x)
 behavior non_null:
   assigns \nothing;
   ensures ((\result <= 2147483647) &&
@@ -251,9 +251,9 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-WHY=$(WHYEXEC) --no-arrays  -split-user-conj -explain -locs SideEffects.loc
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) --no-arrays  -split-user-conj -explain -locs SideEffects.loc
 
-GWHY=$(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs SideEffects.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) --no-arrays  -split-user-conj -explain -locs SideEffects.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 
@@ -371,7 +371,7 @@ begin = -1
 end = -1
 
 [JC_41]
-kind = IndexBounds
+kind = PointerDeref
 file = "HOME/tests/java/SideEffects.java"
 line = 10
 begin = 1
@@ -384,7 +384,7 @@ begin = 12
 end = 31
 
 [JC_43]
-kind = IndexBounds
+kind = PointerDeref
 file = "HOME/tests/java/SideEffects.java"
 line = 12
 begin = 1
@@ -397,7 +397,7 @@ begin = 12
 end = 44
 
 [JC_45]
-kind = IndexBounds
+kind = PointerDeref
 file = "HOME/tests/java/SideEffects.java"
 line = 14
 begin = 1
@@ -416,7 +416,7 @@ begin = 8
 end = 21
 
 [JC_47]
-kind = IndexBounds
+kind = PointerDeref
 file = "HOME/tests/java/SideEffects.java"
 line = 16
 begin = 1
@@ -837,12 +837,124 @@ axiom interface_tags :
   (forall interface_tag_table:interface tag_table.
    instanceof(interface_tag_table, x, interface_tag)))
 
+predicate left_valid_struct_Object(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ (offset_min(Object_alloc_table, p) <= a)
+
+predicate left_valid_struct_SideEffects(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_String(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_intM(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
+predicate left_valid_struct_interface(p:interface pointer,
+ a:int,
+ interface_alloc_table:interface alloc_table) =
+ (offset_min(interface_alloc_table, p) <= a)
+
 axiom pointer_addr_of_Object_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(Object_of_pointer_address(p))))
 
 axiom pointer_addr_of_interface_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(interface_of_pointer_address(p))))
+
+predicate right_valid_struct_Object(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ (offset_max(Object_alloc_table, p) >= b)
+
+predicate right_valid_struct_SideEffects(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_String(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_intM(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
+predicate right_valid_struct_interface(p:interface pointer,
+ b:int,
+ interface_alloc_table:interface alloc_table) =
+ (offset_max(interface_alloc_table, p) >= b)
+
+predicate strict_valid_root_Object(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) = a)
+ and (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p:interface pointer,
+ a:int,
+ b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) = a)
+ and (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ ((offset_min(Object_alloc_table, p) = a)
+ and (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_SideEffects(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_intM(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p:interface pointer,
+ a:int,
+ b:int,
+ interface_alloc_table:interface alloc_table) =
+ ((offset_min(interface_alloc_table, p) = a)
+ and (offset_max(interface_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_Object(p:unit pointer,
  a:int,
@@ -886,22 +998,22 @@ predicate valid_root_Object(p:Object pointer,
  a:int,
  b:int,
  Object_alloc_table:Object alloc_table) =
- ((offset_min(Object_alloc_table, p) = a)
- and (offset_max(Object_alloc_table, p) = b))
+ ((offset_min(Object_alloc_table, p) <= a)
+ and (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_root_interface(p:interface pointer,
  a:int,
  b:int,
  interface_alloc_table:interface alloc_table) =
- ((offset_min(interface_alloc_table, p) = a)
- and (offset_max(interface_alloc_table, p) = b))
+ ((offset_min(interface_alloc_table, p) <= a)
+ and (offset_max(interface_alloc_table, p) >= b))
 
 predicate valid_struct_Object(p:Object pointer,
  a:int,
  b:int,
  Object_alloc_table:Object alloc_table) =
- ((offset_min(Object_alloc_table, p) = a)
- and (offset_max(Object_alloc_table, p) = b))
+ ((offset_min(Object_alloc_table, p) <= a)
+ and (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_struct_SideEffects(p:Object pointer,
  a:int,
@@ -931,8 +1043,8 @@ predicate valid_struct_interface(p:interface pointer,
  a:int,
  b:int,
  interface_alloc_table:interface alloc_table) =
- ((offset_min(interface_alloc_table, p) = a)
- and (offset_max(interface_alloc_table, p) = b))
+ ((offset_min(interface_alloc_table, p) <= a)
+ and (offset_max(interface_alloc_table, p) >= b))
 
 parameter Object_alloc_table : Object alloc_table ref
 
@@ -1064,7 +1176,8 @@ parameter alloc_struct_Object :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_Object(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, Object_tag)))) }
@@ -1075,7 +1188,8 @@ parameter alloc_struct_Object_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Object(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_Object(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, Object_tag)))) }
@@ -1085,7 +1199,7 @@ parameter alloc_struct_SideEffects :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_SideEffects(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_SideEffects(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -1097,7 +1211,7 @@ parameter alloc_struct_SideEffects_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_SideEffects(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_SideEffects(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -1108,7 +1222,8 @@ parameter alloc_struct_String :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_String(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, String_tag)))) }
@@ -1119,7 +1234,8 @@ parameter alloc_struct_String_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_String(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_String(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, String_tag)))) }
@@ -1129,7 +1245,7 @@ parameter alloc_struct_Throwable :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_Throwable(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -1141,7 +1257,7 @@ parameter alloc_struct_Throwable_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_Throwable(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_Throwable(result, (0), sub_int(n, (1)),
        Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
@@ -1152,7 +1268,8 @@ parameter alloc_struct_intM :
   Object_alloc_table:Object alloc_table ref ->
    Object_tag_table:Object tag_table ref ->
     { } Object pointer writes Object_alloc_table,Object_tag_table
-    { (valid_struct_intM(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_intM(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, intM_tag)))) }
@@ -1163,7 +1280,8 @@ parameter alloc_struct_intM_requires :
    Object_tag_table:Object tag_table ref ->
     { ge_int(n, (0))} Object pointer
     writes Object_alloc_table,Object_tag_table
-    { (valid_struct_intM(result, (0), sub_int(n, (1)), Object_alloc_table)
+    { (strict_valid_struct_intM(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
       and (alloc_extends(Object_alloc_table@, Object_alloc_table)
           and (alloc_fresh(Object_alloc_table@, result, n)
               and instanceof(Object_tag_table, result, intM_tag)))) }
@@ -1177,7 +1295,7 @@ parameter alloc_struct_interface :
   interface_alloc_table:interface alloc_table ref ->
    interface_tag_table:interface tag_table ref ->
     { } interface pointer writes interface_alloc_table,interface_tag_table
-    { (valid_struct_interface(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_interface(result, (0), sub_int(n, (1)),
        interface_alloc_table)
       and (alloc_extends(interface_alloc_table@, interface_alloc_table)
           and (alloc_fresh(interface_alloc_table@, result, n)
@@ -1189,7 +1307,7 @@ parameter alloc_struct_interface_requires :
    interface_tag_table:interface tag_table ref ->
     { ge_int(n, (0))} interface pointer
     writes interface_alloc_table,interface_tag_table
-    { (valid_struct_interface(result, (0), sub_int(n, (1)),
+    { (strict_valid_struct_interface(result, (0), sub_int(n, (1)),
        interface_alloc_table)
       and (alloc_extends(interface_alloc_table@, interface_alloc_table)
           and (alloc_fresh(interface_alloc_table@, result, n)
@@ -1403,9 +1521,10 @@ parameter struct_interface_mem_to_bitvector :
 
 let SideEffects_m1_ensures_default =
  fun (this_0 : Object pointer) (t : Object pointer) ->
-  { (valid_struct_SideEffects(this_0, (0), (0), Object_alloc_table)
-    and (JC_35:
-        gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10)))) }
+  { (left_valid_struct_intM(t, (0), Object_alloc_table)
+    and (valid_struct_SideEffects(this_0, (0), (0), Object_alloc_table)
+        and (JC_35:
+            gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10))))) }
   (init:
   try
    begin
@@ -1491,9 +1610,10 @@ let SideEffects_m1_ensures_default =
 
 let SideEffects_m1_safety =
  fun (this_0 : Object pointer) (t : Object pointer) ->
-  { (valid_struct_SideEffects(this_0, (0), (0), Object_alloc_table)
-    and (JC_35:
-        gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10)))) }
+  { (left_valid_struct_intM(t, (0), Object_alloc_table)
+    and (valid_struct_SideEffects(this_0, (0), (0), Object_alloc_table)
+        and (JC_35:
+            gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10))))) }
   (init:
   try
    begin
@@ -1511,7 +1631,7 @@ let SideEffects_m1_safety =
                                        end)) in
                        (let jessie_6 = ((shift jessie_4) jessie_5) in
                        (JC_41:
-                       ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_4) jessie_5) (0)) jessie_3)))))) in
+                       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_4) jessie_5) jessie_3)))))) in
        void));
       (K_4:
       [ { } unit reads i,intM_intP
@@ -1526,7 +1646,7 @@ let SideEffects_m1_safety =
                                         end) in
                        (let jessie_12 = ((shift jessie_10) jessie_11) in
                        (JC_43:
-                       ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_10) jessie_11) (0)) jessie_9)))))) in
+                       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_10) jessie_11) jessie_9)))))) in
       void));
       (K_8:
       [ { } unit reads i,intM_intP
@@ -1543,7 +1663,7 @@ let SideEffects_m1_safety =
                                         end) in
                        (let jessie_17 = ((shift jessie_15) jessie_16) in
                        (JC_45:
-                       ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_15) jessie_16) (0)) jessie_14)))))) in
+                       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_15) jessie_16) jessie_14)))))) in
       void));
       (K_12:
       [ { } unit reads i,intM_intP
@@ -1564,7 +1684,7 @@ let SideEffects_m1_safety =
                                         end)) in
                        (let jessie_22 = ((shift jessie_20) jessie_21) in
                        (JC_47:
-                       ((((((lbound_upd_ !Object_alloc_table) intM_intP) jessie_20) jessie_21) (0)) jessie_19)))))) in
+                       (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_20) jessie_21) jessie_19)))))) in
       void));
       (K_16:
       [ { } unit reads i,intM_intP
@@ -1592,32 +1712,32 @@ why --project [...] why/SideEffects.why
     <goal why_file="why/SideEffects_po14.why">
       <location file = "HOME/tests/java/SideEffects.java" line = "10" begin = "1" end = "11"/>
       <explain kind = "Pre"
-text = "IndexBounds"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po15.why">
       <location file = "HOME/tests/java/SideEffects.java" line = "10" begin = "1" end = "11"/>
       <explain kind = "Pre"
-text = "IndexBounds"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po16.why">
       <location file = "HOME/tests/java/SideEffects.java" line = "12" begin = "1" end = "11"/>
       <explain kind = "Pre"
-text = "IndexBounds"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po17.why">
       <location file = "HOME/tests/java/SideEffects.java" line = "12" begin = "1" end = "11"/>
       <explain kind = "Pre"
-text = "IndexBounds"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po18.why">
       <location file = "HOME/tests/java/SideEffects.java" line = "14" begin = "1" end = "11"/>
       <explain kind = "Pre"
-text = "IndexBounds"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SideEffects_po19.why">
       <location file = "HOME/tests/java/SideEffects.java" line = "14" begin = "1" end = "11"/>
       <explain kind = "Pre"
-text = "IndexBounds"/>
+text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
@@ -2561,6 +2681,30 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
+predicate left_valid_struct_Object(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_SideEffects(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_String(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_intM(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_interface(p: interface pointer, a: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_min(interface_alloc_table, p) <= a)
+
 axiom pointer_addr_of_Object_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(Object_of_pointer_address(p))))
@@ -2568,6 +2712,66 @@ axiom pointer_addr_of_Object_of_pointer_address:
 axiom pointer_addr_of_interface_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(interface_of_pointer_address(p))))
+
+predicate right_valid_struct_Object(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  p) >= b)
+
+predicate right_valid_struct_SideEffects(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_String(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_intM(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_interface(p: interface pointer, b: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_max(interface_alloc_table, p) >= b)
+
+predicate strict_valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_SideEffects(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_intM(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
@@ -2597,18 +2801,18 @@ predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_root_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_struct_SideEffects(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
@@ -2628,24 +2832,8 @@ predicate valid_struct_intM(p: Object pointer, a: int, b: int,
 
 predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
-
-========== file tests/java/why/SideEffects_po1.why ==========
-goal SideEffects_m1_ensures_default_po_1:
-  forall this_0:Object pointer.
-  forall t:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  forall intM_intP:(Object,
-  int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
-  forall i:int.
-  (i = (0 + 1)) ->
-  forall intM_intP0:(Object,
-  int) memory.
-  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_49": (select(intM_intP0, shift(t, 0)) = 1))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 ========== file tests/java/why/SideEffects_po10.why ==========
 goal SideEffects_m1_ensures_default_po_10:
@@ -2654,8 +2842,9 @@ goal SideEffects_m1_ensures_default_po_10:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -2693,8 +2882,9 @@ goal SideEffects_m1_ensures_default_po_11:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -2732,8 +2922,9 @@ goal SideEffects_m1_ensures_default_po_12:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -2771,8 +2962,9 @@ goal SideEffects_m1_ensures_default_po_13:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -2808,19 +3000,21 @@ goal SideEffects_m1_safety_po_1:
   forall this_0:Object pointer.
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
-  (0 <= 0)
+  (offset_min(Object_alloc_table, t) <= 0)
 
 ========== file tests/java/why/SideEffects_po15.why ==========
 goal SideEffects_m1_safety_po_2:
   forall this_0:Object pointer.
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   (0 <= offset_max(Object_alloc_table, t))
@@ -2832,18 +3026,20 @@ goal SideEffects_m1_safety_po_3:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
-  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= 0) and
+   (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
   ("JC_42": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (0 <= i0)
+  (offset_min(Object_alloc_table, t) <= i0)
 
 ========== file tests/java/why/SideEffects_po17.why ==========
 goal SideEffects_m1_safety_po_4:
@@ -2852,11 +3048,13 @@ goal SideEffects_m1_safety_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
-  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= 0) and
+   (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
@@ -2872,18 +3070,21 @@ goal SideEffects_m1_safety_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
-  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= 0) and
+   (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
   ("JC_42": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= i0) and
+   (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
@@ -2892,7 +3093,7 @@ goal SideEffects_m1_safety_po_5:
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
-  (0 <= i1)
+  (offset_min(Object_alloc_table, t) <= i1)
 
 ========== file tests/java/why/SideEffects_po19.why ==========
 goal SideEffects_m1_safety_po_6:
@@ -2901,18 +3102,21 @@ goal SideEffects_m1_safety_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
-  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= 0) and
+   (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
   ("JC_42": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= i0) and
+   (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
@@ -2923,6 +3127,23 @@ goal SideEffects_m1_safety_po_6:
   (i1 = (i0 - 1)) ->
   (i1 <= offset_max(Object_alloc_table, t))
 
+========== file tests/java/why/SideEffects_po1.why ==========
+goal SideEffects_m1_ensures_default_po_1:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("JC_49": (select(intM_intP0, shift(t, 0)) = 1))
+
 ========== file tests/java/why/SideEffects_po2.why ==========
 goal SideEffects_m1_ensures_default_po_2:
   forall this_0:Object pointer.
@@ -2930,8 +3151,9 @@ goal SideEffects_m1_ensures_default_po_2:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -2946,8 +3168,9 @@ goal SideEffects_m1_ensures_default_po_3:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -2968,8 +3191,9 @@ goal SideEffects_m1_ensures_default_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -2990,8 +3214,9 @@ goal SideEffects_m1_ensures_default_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -3012,8 +3237,9 @@ goal SideEffects_m1_ensures_default_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -3042,8 +3268,9 @@ goal SideEffects_m1_ensures_default_po_7:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -3072,8 +3299,9 @@ goal SideEffects_m1_ensures_default_po_8:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -3102,8 +3330,9 @@ goal SideEffects_m1_ensures_default_po_9:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -3837,6 +4066,24 @@ why -simplify [...] why/SideEffects.why
  (FORALL (x interface_tag_table)
  (instanceof interface_tag_table x interface_tag)))
 
+(DEFPRED (left_valid_struct_Object p a Object_alloc_table)
+  (<= (offset_min Object_alloc_table p) a))
+
+(DEFPRED (left_valid_struct_SideEffects p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_String p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_Throwable p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_intM p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
+(DEFPRED (left_valid_struct_interface p a interface_alloc_table)
+  (<= (offset_min interface_alloc_table p) a))
+
 (BG_PUSH
  ;; Why axiom pointer_addr_of_Object_of_pointer_address
  (FORALL (p) (EQ p (pointer_address (Object_of_pointer_address p)))))
@@ -3844,6 +4091,52 @@ why -simplify [...] why/SideEffects.why
 (BG_PUSH
  ;; Why axiom pointer_addr_of_interface_of_pointer_address
  (FORALL (p) (EQ p (pointer_address (interface_of_pointer_address p)))))
+
+(DEFPRED (right_valid_struct_Object p b Object_alloc_table)
+  (>= (offset_max Object_alloc_table p) b))
+
+(DEFPRED (right_valid_struct_SideEffects p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_String p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_Throwable p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_intM p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
+(DEFPRED (right_valid_struct_interface p b interface_alloc_table)
+  (>= (offset_max interface_alloc_table p) b))
+
+(DEFPRED (strict_valid_root_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (strict_valid_root_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_Object p a b Object_alloc_table)
+  (AND (EQ (offset_min Object_alloc_table p) a)
+  (EQ (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (strict_valid_struct_SideEffects p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_String p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_Throwable p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_intM p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
+(DEFPRED (strict_valid_struct_interface p a b interface_alloc_table)
+  (AND (EQ (offset_min interface_alloc_table p) a)
+  (EQ (offset_max interface_alloc_table p) b)))
 
 (DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
   (AND (EQ (offset_min bitvector_alloc_table p) a)
@@ -3866,16 +4159,16 @@ why -simplify [...] why/SideEffects.why
   (EQ (offset_max bitvector_alloc_table p) b)))
 
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
-  (AND (EQ (offset_min Object_alloc_table p) a)
-  (EQ (offset_max Object_alloc_table p) b)))
+  (AND (<= (offset_min Object_alloc_table p) a)
+  (>= (offset_max Object_alloc_table p) b)))
 
 (DEFPRED (valid_root_interface p a b interface_alloc_table)
-  (AND (EQ (offset_min interface_alloc_table p) a)
-  (EQ (offset_max interface_alloc_table p) b)))
+  (AND (<= (offset_min interface_alloc_table p) a)
+  (>= (offset_max interface_alloc_table p) b)))
 
 (DEFPRED (valid_struct_Object p a b Object_alloc_table)
-  (AND (EQ (offset_min Object_alloc_table p) a)
-  (EQ (offset_max Object_alloc_table p) b)))
+  (AND (<= (offset_min Object_alloc_table p) a)
+  (>= (offset_max Object_alloc_table p) b)))
 
 (DEFPRED (valid_struct_SideEffects p a b Object_alloc_table)
   (valid_struct_Object p a b Object_alloc_table))
@@ -3890,16 +4183,17 @@ why -simplify [...] why/SideEffects.why
   (valid_struct_Object p a b Object_alloc_table))
 
 (DEFPRED (valid_struct_interface p a b interface_alloc_table)
-  (AND (EQ (offset_min interface_alloc_table p) a)
-  (EQ (offset_max interface_alloc_table p) b)))
+  (AND (<= (offset_min interface_alloc_table p) a)
+  (>= (offset_max interface_alloc_table p) b)))
 
 ;; SideEffects_m1_ensures_default_po_1, File "HOME/tests/java/SideEffects.java", line 11, characters 12-31
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -3911,8 +4205,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -3923,8 +4218,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -3941,8 +4237,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -3959,8 +4256,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -3976,8 +4274,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -4000,8 +4299,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -4024,8 +4324,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -4048,8 +4349,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -4071,8 +4373,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -4102,8 +4405,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -4133,8 +4437,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -4164,8 +4469,9 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
 (FORALL (intM_intP0)
@@ -4193,16 +4499,19 @@ why -simplify [...] why/SideEffects.why
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
-(FORALL (i) (IMPLIES (EQ i (+ 0 1)) (<= 0 0)))))))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
+(FORALL (i)
+(IMPLIES (EQ i (+ 0 1)) (<= (offset_min Object_alloc_table t) 0)))))))
 
 ;; SideEffects_m1_safety_po_2, File "HOME/tests/java/SideEffects.java", line 10, characters 1-11
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1)) (<= 0 (offset_max Object_alloc_table t))))))))
 
@@ -4211,26 +4520,31 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
-(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(IMPLIES (AND (<= (offset_min Object_alloc_table t) 0)
+         (<= 0 (offset_max Object_alloc_table t)))
 (FORALL (intM_intP0)
 (IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
 (IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
-(FORALL (i0) (IMPLIES (EQ i0 (+ i 1)) (<= 0 i0))))))))))))))
+(FORALL (i0)
+(IMPLIES (EQ i0 (+ i 1)) (<= (offset_min Object_alloc_table t) i0))))))))))))))
 
 ;; SideEffects_m1_safety_po_4, File "HOME/tests/java/SideEffects.java", line 12, characters 1-11
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
-(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(IMPLIES (AND (<= (offset_min Object_alloc_table t) 0)
+         (<= 0 (offset_max Object_alloc_table t)))
 (FORALL (intM_intP0)
 (IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
 (IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
@@ -4242,39 +4556,46 @@ why -simplify [...] why/SideEffects.why
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
-(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(IMPLIES (AND (<= (offset_min Object_alloc_table t) 0)
+         (<= 0 (offset_max Object_alloc_table t)))
 (FORALL (intM_intP0)
 (IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
 (IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1))
-(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(IMPLIES (AND (<= (offset_min Object_alloc_table t) i0)
+         (<= i0 (offset_max Object_alloc_table t)))
 (FORALL (intM_intP1)
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
 (IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
          (AND (EQ (select intM_intP1 (shift t 2)) 2) (EQ i0 2)))
-(FORALL (i1) (IMPLIES (EQ i1 (- i0 1)) (<= 0 i1))))))))))))))))))))
+(FORALL (i1)
+(IMPLIES (EQ i1 (- i0 1)) (<= (offset_min Object_alloc_table t) i1))))))))))))))))))))
 
 ;; SideEffects_m1_safety_po_6, File "HOME/tests/java/SideEffects.java", line 14, characters 1-11
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
-         (> (+ (offset_max Object_alloc_table t) 1) 10))
+(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
+         (AND (valid_struct_SideEffects this_0 0 0 Object_alloc_table)
+         (> (+ (offset_max Object_alloc_table t) 1) 10)))
 (FORALL (i)
 (IMPLIES (EQ i (+ 0 1))
-(IMPLIES (AND (<= 0 0) (<= 0 (offset_max Object_alloc_table t)))
+(IMPLIES (AND (<= (offset_min Object_alloc_table t) 0)
+         (<= 0 (offset_max Object_alloc_table t)))
 (FORALL (intM_intP0)
 (IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
 (IMPLIES (AND (EQ (select intM_intP0 (shift t 0)) 1) (EQ i 1))
 (FORALL (i0)
 (IMPLIES (EQ i0 (+ i 1))
-(IMPLIES (AND (<= 0 i0) (<= i0 (offset_max Object_alloc_table t)))
+(IMPLIES (AND (<= (offset_min Object_alloc_table t) i0)
+         (<= i0 (offset_max Object_alloc_table t)))
 (FORALL (intM_intP1)
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
 (IMPLIES (AND (EQ (select intM_intP1 (shift t 0)) 1)
@@ -5179,6 +5500,30 @@ axiom interface_tags:
     (forall interface_tag_table:interface tag_table.
       instanceof(interface_tag_table, x, interface_tag)))
 
+predicate left_valid_struct_Object(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_SideEffects(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_String(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_Throwable(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_intM(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
+predicate left_valid_struct_interface(p: interface pointer, a: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_min(interface_alloc_table, p) <= a)
+
 axiom pointer_addr_of_Object_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(Object_of_pointer_address(p))))
@@ -5186,6 +5531,66 @@ axiom pointer_addr_of_Object_of_pointer_address:
 axiom pointer_addr_of_interface_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(interface_of_pointer_address(p))))
+
+predicate right_valid_struct_Object(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
+  p) >= b)
+
+predicate right_valid_struct_SideEffects(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_String(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_Throwable(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_intM(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
+predicate right_valid_struct_interface(p: interface pointer, b: int,
+  interface_alloc_table: interface alloc_table) =
+  (offset_max(interface_alloc_table, p) >= b)
+
+predicate strict_valid_root_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_root_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
+
+predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) =
+  ((offset_min(Object_alloc_table, p) = a) and
+   (offset_max(Object_alloc_table, p) = b))
+
+predicate strict_valid_struct_SideEffects(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_String(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_Throwable(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_intM(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
+predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
+  interface_alloc_table: interface alloc_table) =
+  ((offset_min(interface_alloc_table, p) = a) and
+   (offset_max(interface_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
@@ -5215,18 +5620,18 @@ predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_root_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
-  ((offset_min(Object_alloc_table, p) = a) and
-   (offset_max(Object_alloc_table, p) = b))
+  ((offset_min(Object_alloc_table, p) <= a) and
+   (offset_max(Object_alloc_table, p) >= b))
 
 predicate valid_struct_SideEffects(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
@@ -5246,8 +5651,8 @@ predicate valid_struct_intM(p: Object pointer, a: int, b: int,
 
 predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
-  ((offset_min(interface_alloc_table, p) = a) and
-   (offset_max(interface_alloc_table, p) = b))
+  ((offset_min(interface_alloc_table, p) <= a) and
+   (offset_max(interface_alloc_table, p) >= b))
 
 goal SideEffects_m1_ensures_default_po_1:
   forall this_0:Object pointer.
@@ -5255,8 +5660,9 @@ goal SideEffects_m1_ensures_default_po_1:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5270,8 +5676,9 @@ goal SideEffects_m1_ensures_default_po_2:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5285,8 +5692,9 @@ goal SideEffects_m1_ensures_default_po_3:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5306,8 +5714,9 @@ goal SideEffects_m1_ensures_default_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5327,8 +5736,9 @@ goal SideEffects_m1_ensures_default_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5348,8 +5758,9 @@ goal SideEffects_m1_ensures_default_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5377,8 +5788,9 @@ goal SideEffects_m1_ensures_default_po_7:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5406,8 +5818,9 @@ goal SideEffects_m1_ensures_default_po_8:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5435,8 +5848,9 @@ goal SideEffects_m1_ensures_default_po_9:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5464,8 +5878,9 @@ goal SideEffects_m1_ensures_default_po_10:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5502,8 +5917,9 @@ goal SideEffects_m1_ensures_default_po_11:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5540,8 +5956,9 @@ goal SideEffects_m1_ensures_default_po_12:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5578,8 +5995,9 @@ goal SideEffects_m1_ensures_default_po_13:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   forall intM_intP0:(Object,
@@ -5614,18 +6032,20 @@ goal SideEffects_m1_safety_po_1:
   forall this_0:Object pointer.
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
-  (0 <= 0)
+  (offset_min(Object_alloc_table, t) <= 0)
 
 goal SideEffects_m1_safety_po_2:
   forall this_0:Object pointer.
   forall t:Object pointer.
   forall Object_alloc_table:Object alloc_table.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
   (0 <= offset_max(Object_alloc_table, t))
@@ -5636,18 +6056,20 @@ goal SideEffects_m1_safety_po_3:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
-  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= 0) and
+   (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
   ("JC_42": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (0 <= i0)
+  (offset_min(Object_alloc_table, t) <= i0)
 
 goal SideEffects_m1_safety_po_4:
   forall this_0:Object pointer.
@@ -5655,11 +6077,13 @@ goal SideEffects_m1_safety_po_4:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
-  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= 0) and
+   (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
@@ -5674,18 +6098,21 @@ goal SideEffects_m1_safety_po_5:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
-  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= 0) and
+   (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
   ("JC_42": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= i0) and
+   (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
@@ -5694,7 +6121,7 @@ goal SideEffects_m1_safety_po_5:
    ((select(intM_intP1, shift(t, 2)) = 2) and (i0 = 2)))) ->
   forall i1:int.
   (i1 = (i0 - 1)) ->
-  (0 <= i1)
+  (offset_min(Object_alloc_table, t) <= i1)
 
 goal SideEffects_m1_safety_po_6:
   forall this_0:Object pointer.
@@ -5702,18 +6129,21 @@ goal SideEffects_m1_safety_po_6:
   forall Object_alloc_table:Object alloc_table.
   forall intM_intP:(Object,
   int) memory.
-  (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-   ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10))) ->
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_35": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
   forall i:int.
   (i = (0 + 1)) ->
-  ((0 <= 0) and (0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= 0) and
+   (0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP0:(Object,
   int) memory.
   (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
   ("JC_42": ((select(intM_intP0, shift(t, 0)) = 1) and (i = 1))) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ((0 <= i0) and (i0 <= offset_max(Object_alloc_table, t))) ->
+  ((offset_min(Object_alloc_table, t) <= i0) and
+   (i0 <= offset_max(Object_alloc_table, t))) ->
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, i0), 2)) ->
