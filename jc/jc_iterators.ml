@@ -479,7 +479,8 @@ let iter_term_and_assertion_in_loop_annot ft fa la =
 let iter_term_and_assertion_in_behavior ft fa bv =
   Option_misc.iter (iter_term_and_assertion ft fa) bv.jc_behavior_assumes;
   (* TODO: assigns *)
-  iter_term_and_assertion ft fa bv.jc_behavior_ensures
+  iter_term_and_assertion ft fa bv.jc_behavior_ensures;
+  iter_term_and_assertion ft fa bv.jc_behavior_free_ensures
 
 let iter_term_and_assertion_in_fun_spec ft fa spec =
   iter_term_and_assertion ft fa spec.jc_fun_requires;
@@ -668,7 +669,8 @@ let fold_sub_behavior itt ita itl itls ft fa fl fls acc b =
       (fun acc (_,locs) -> List.fold_left itl acc locs)
       acc b.jc_behavior_assigns
   in
-  ita acc b.jc_behavior_ensures
+  let acc = ita acc b.jc_behavior_ensures in
+  ita acc b.jc_behavior_free_ensures
 
 let rec fold_behavior ft fa fl fls acc e =
   fold_sub_behavior 
