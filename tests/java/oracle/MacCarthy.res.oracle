@@ -2414,8 +2414,8 @@ axiom neq_pointer_bool_def:
 
 axiom sub_pointer_shift:
   (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, q)].
-      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
+    (forall q:'a1 pointer [sub_pointer(p, q)]. (p = shift(q, sub_pointer(p,
+      q)))))
 
 axiom sub_pointer_self:
   (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
@@ -2423,21 +2423,19 @@ axiom sub_pointer_self:
 axiom sub_pointer_zero:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer [sub_pointer(p, q)].
-      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
+      ((sub_pointer(p, q) = 0) -> (p = q))))
 
 axiom sub_pointer_shift_left:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(shift(p, i), q)].
-        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
-         q) + i))))))
+      (forall i:int [sub_pointer(shift(p, i), q)]. (sub_pointer(shift(p, i),
+        q) = (sub_pointer(p, q) + i)))))
 
 axiom sub_pointer_shift_right:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(p, shift(q, i))].
-        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
-         q) - i))))))
+      (forall i:int [sub_pointer(p, shift(q, i))]. (sub_pointer(p, shift(q,
+        i)) = (sub_pointer(p, q) - i)))))
 
 type ('t, 'v) memory
 
@@ -2483,6 +2481,21 @@ logic valid_pset : 'a1 alloc_table, 'a1 pset -> prop
 
 predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
   (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
+predicate pset_included(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (in_pset(p, ps1) -> in_pset(p, ps2)))
+
+axiom pset_included_self: (forall ps:'a1 pset. pset_included(ps, ps))
+
+axiom pset_included_range:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))].
+            (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
+             pset_range(ps, c, d))))))))
 
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
@@ -2748,6 +2761,21 @@ axiom alloc_extends_offset_max:
       (alloc_extends(a1, a2) ->
        (forall p:'a1 pointer.
          (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
+
+axiom alloc_extends_not_assigns_empty:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory.
+          (forall l:'a1 pset.
+            (forall p:'a1 pointer.
+              (forall n:int [alloc_extends(a1, a2), alloc_fresh(a1, p, n),
+                not_assigns(a2, m1, m2, l)].
+                ((alloc_extends(a1, a2) and
+                  (alloc_fresh(a1, p, n) and
+                   (not_assigns(a2, m1, m2, l) and pset_included(l,
+                    pset_range(pset_singleton(p), 0, (n - 1)))))) ->
+                 not_assigns(a1, m1, m2, pset_empty)))))))))
 
 logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
 'a1 pset -> prop
@@ -3368,7 +3396,7 @@ why -simplify [...] why/MacCarthy.why
 
 (BG_PUSH
  ;; Why axiom sub_pointer_shift
- (FORALL (p q) (IMPLIES (same_block p q) (EQ p (shift q (sub_pointer p q))))))
+ (FORALL (p q) (EQ p (shift q (sub_pointer p q)))))
 
 (BG_PUSH
  ;; Why axiom sub_pointer_self
@@ -3376,28 +3404,15 @@ why -simplify [...] why/MacCarthy.why
 
 (BG_PUSH
  ;; Why axiom sub_pointer_zero
- (FORALL (p q)
- (IMPLIES (same_block p q) (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q)))))
+ (FORALL (p q) (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q))))
 
 (BG_PUSH
  ;; Why axiom sub_pointer_shift_left
- (FORALL (p q i)
- (IMPLIES (same_block p q)
- (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
-
- (FORALL (p q)
- (IMPLIES (same_block p q)
- (FORALL (i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))))
+ (FORALL (p q i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
 
 (BG_PUSH
  ;; Why axiom sub_pointer_shift_right
- (FORALL (p q i)
- (IMPLIES (same_block p q)
- (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
-
- (FORALL (p q)
- (IMPLIES (same_block p q)
- (FORALL (i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))))
+ (FORALL (p q i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
 
 (BG_PUSH
  ;; Why axiom select_store_eq
@@ -3419,6 +3434,24 @@ why -simplify [...] why/MacCarthy.why
 (DEFPRED (pset_disjoint ps1 ps2)
   (FORALL (p)
   (NOT (AND (EQ (in_pset p ps1) |@true|) (EQ (in_pset p ps2) |@true|)))))
+
+(DEFPRED (pset_included ps1 ps2)
+  (FORALL (p)
+  (IMPLIES (EQ (in_pset p ps1) |@true|) (EQ (in_pset p ps2) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom pset_included_self
+ (FORALL (ps) (pset_included ps ps)))
+
+(BG_PUSH
+ ;; Why axiom pset_included_range
+ (FORALL (ps a b c d)
+ (IMPLIES (AND (<= c a) (<= b d))
+ (pset_included (pset_range ps a b) (pset_range ps c d))))
+
+ (FORALL (a b c d)
+ (IMPLIES (AND (<= c a) (<= b d))
+ (FORALL (ps) (pset_included (pset_range ps a b) (pset_range ps c d))))))
 
 (BG_PUSH
  ;; Why axiom in_pset_empty
@@ -3668,6 +3701,16 @@ why -simplify [...] why/MacCarthy.why
  (FORALL (a1 a2)
  (IMPLIES (EQ (alloc_extends a1 a2) |@true|)
  (FORALL (p) (IMPLIES (valid a1 p) (EQ (offset_max a1 p) (offset_max a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_not_assigns_empty
+ (FORALL (a1 a2 m1 m2 l p n)
+ (IMPLIES
+ (AND (EQ (alloc_extends a1 a2) |@true|)
+ (AND (alloc_fresh a1 p n)
+ (AND (not_assigns a2 m1 m2 l)
+ (pset_included l (pset_range (pset_singleton p) 0 (- n 1))))))
+ (not_assigns a1 m1 m2 pset_empty))))
 
 (BG_PUSH
  ;; Why axiom alloc_extends_except_offset_min
@@ -4331,8 +4374,8 @@ axiom neq_pointer_bool_def:
 
 axiom sub_pointer_shift:
   (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, q)].
-      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
+    (forall q:'a1 pointer [sub_pointer(p, q)]. (p = shift(q, sub_pointer(p,
+      q)))))
 
 axiom sub_pointer_self:
   (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
@@ -4340,21 +4383,19 @@ axiom sub_pointer_self:
 axiom sub_pointer_zero:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer [sub_pointer(p, q)].
-      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
+      ((sub_pointer(p, q) = 0) -> (p = q))))
 
 axiom sub_pointer_shift_left:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(shift(p, i), q)].
-        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
-         q) + i))))))
+      (forall i:int [sub_pointer(shift(p, i), q)]. (sub_pointer(shift(p, i),
+        q) = (sub_pointer(p, q) + i)))))
 
 axiom sub_pointer_shift_right:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(p, shift(q, i))].
-        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
-         q) - i))))))
+      (forall i:int [sub_pointer(p, shift(q, i))]. (sub_pointer(p, shift(q,
+        i)) = (sub_pointer(p, q) - i)))))
 
 type ('t, 'v) memory
 
@@ -4400,6 +4441,21 @@ logic valid_pset : 'a1 alloc_table, 'a1 pset -> prop
 
 predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
   (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
+predicate pset_included(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (in_pset(p, ps1) -> in_pset(p, ps2)))
+
+axiom pset_included_self: (forall ps:'a1 pset. pset_included(ps, ps))
+
+axiom pset_included_range:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))].
+            (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
+             pset_range(ps, c, d))))))))
 
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
@@ -4665,6 +4721,21 @@ axiom alloc_extends_offset_max:
       (alloc_extends(a1, a2) ->
        (forall p:'a1 pointer.
          (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
+
+axiom alloc_extends_not_assigns_empty:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory.
+          (forall l:'a1 pset.
+            (forall p:'a1 pointer.
+              (forall n:int [alloc_extends(a1, a2), alloc_fresh(a1, p, n),
+                not_assigns(a2, m1, m2, l)].
+                ((alloc_extends(a1, a2) and
+                  (alloc_fresh(a1, p, n) and
+                   (not_assigns(a2, m1, m2, l) and pset_included(l,
+                    pset_range(pset_singleton(p), 0, (n - 1)))))) ->
+                 not_assigns(a1, m1, m2, pset_empty)))))))))
 
 logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
 'a1 pset -> prop

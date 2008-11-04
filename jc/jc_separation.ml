@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.37 2008-10-27 15:12:56 marche Exp $ *)
+(* $Id: jc_separation.ml,v 1.38 2008-11-04 16:34:46 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -61,9 +61,8 @@ let in_current_component f1 =
 	List.exists 
 	  (fun f2 -> f1.jc_fun_info_tag == f2.jc_fun_info_tag) comp
 
-let term rresult t =
-  ITerm.iter
-    (fun t -> match t#node with
+let single_term rresult t =
+  match t#node with
        | JCTvar vi ->	
 	   if vi.jc_var_info_name = "\\result" then 
 	     Region.unify rresult vi.jc_var_info_region
@@ -115,11 +114,11 @@ let term rresult t =
        | JCTaddress _ | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ 
        | JCTrange_cast _ | JCTreal_cast _ ->
 	   ()
-    ) t
 
-let assertion rresult a =
-  iter_term_and_assertion (term rresult) 
-    (fun a -> match a#node with
+let term rresult t = iter_term (single_term rresult) t
+
+let single_assertion rresult a =
+  match a#node with
        | JCAapp app -> 
 	   let li = app.jc_app_fun in
 	   let param_regions =
@@ -149,11 +148,19 @@ let assertion rresult a =
        | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ | JCAmatch _
        | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAsubtype _ ->
 	   ()
-    ) a
 
-let expr rresult e = 
-  IExpr.iter 
-    (fun e -> match e#node with
+let assertion rresult a = 
+  iter_term_and_assertion (single_term rresult) (single_assertion rresult) a
+
+let single_location = ignore
+
+let single_location_set = ignore
+
+let location rresult loc =
+  iter_location (single_term rresult) single_location single_location_set loc
+
+let single_expr rresult e = 
+  match e#node with
        | JCEbinary(e1,_,e2) | JCEif(_,e1,e2) ->
 	   Region.unify e1#region e2#region
        | JCEmatch(_, (_, e1)::rem) ->
@@ -233,21 +240,22 @@ let expr rresult e =
     | JCEreturn(ty,e) ->
 	Region.unify rresult e#region
     | JCEassert(_behav,_asrt,a) ->
-	assertion rresult a
+	()
     | JCEcontract(req,dec,vi_result,behs,e) -> 
 	assert false (* TODO *)
-    | JCEloop(la,_) ->
-	iter_term_and_assertion_in_loop_annot 
-	  (term rresult) (assertion rresult) la
+    | JCEloop(la,_) -> ()
     | JCEblock _ | JCEtry _ 
     | JCEreturn_void | JCEpack _ | JCEunpack _ -> 
 	()
-  ) e
 
-let location rresult loc =
-  let fold_unit f () = f in
-  fold_location 
-    (fold_unit (term rresult)) (fold_unit ignore) (fold_unit ignore) () loc
+let expr rresult e =
+  iter_expr_and_term_and_assertion (single_term rresult)
+    (single_assertion rresult) single_location single_location_set 
+    (single_expr rresult) e
+
+(* let location rresult loc = *)
+(*   fold_location  *)
+(*     (fold_unit (term rresult)) (fold_unit ignore) (fold_unit ignore) () loc *)
 
 let axiomatic_decl d =
   match d with
@@ -293,14 +301,18 @@ let logic_component fls =
   (* Fill in association table at each call site *)
   List.iter logic_function fls
 
+let funspec rresult spec =
+  iter_funspec (single_term rresult) (single_assertion rresult) single_location
+    single_location_set spec
+
 let code_function f =
   let (f, _, spec, body) = 
     Hashtbl.find Jc_typing.functions_table f.jc_fun_info_tag 
   in
   Jc_options.lprintf "Separation: treating function %s@." f.jc_fun_info_name;
   let rresult = f.jc_fun_info_return_region in
-  iter_term_and_assertion_in_fun_spec (term rresult) (assertion rresult) spec;
-  Option_misc.iter ((*List.iter*) (expr rresult)) body
+  funspec rresult spec;
+  Option_misc.iter (expr rresult) body
 
 let generalize_code_function f =
   let param_regions =

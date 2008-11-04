@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.135 2008-10-28 10:09:28 ayad Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.136 2008-11-04 16:34:46 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -47,6 +47,8 @@ let error l =
   Format.kfprintf 
     (fun fmt -> raise (Error(l, flush_str_formatter()))) 
     str_formatter
+
+let fold_unit f () = f
 
 let zero = Num.Int 0
 let one = Num.Int 1
@@ -147,6 +149,7 @@ let rec location_set_region locs =
     | JCLSvar vi -> vi.jc_var_info_region
     | JCLSderef(_,_,_,r) -> r
     | JCLSrange(ls,_,_) -> location_set_region ls
+    | JCLSrange_term(t1,_,_) -> t1#region
 
 type location =
   | JCLvar of var_info

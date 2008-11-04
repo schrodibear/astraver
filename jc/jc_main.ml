@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.131 2008-10-24 12:16:41 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.132 2008-11-04 16:34:46 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -51,6 +51,13 @@ let compute_regions logic_components components =
     (* Preserve order between following calls *)
     Array.iter Jc_separation.logic_component logic_components;
     Hashtbl.iter Jc_separation.axiom Jc_typing.lemmas_table;
+    Hashtbl.iter
+      (fun _id axioms ->
+	 List.iter 
+	   (function Jc_typing.ABaxiom(pos,id,labs,a) ->
+	      Jc_separation.axiom id (pos,(* is_axiom = *)true,labs,a)
+	   ) axioms
+      ) Jc_typing.axiomatics_table;
     Array.iter Jc_separation.code_component components
   end
 

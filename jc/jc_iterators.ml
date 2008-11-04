@@ -386,6 +386,8 @@ let rec fold_rec_term f acc t =
   let cont,acc = f acc t in
   if cont then fold_sub_term fold_rec_term f acc t else acc
 
+let iter_term ft t = fold_term (fold_unit ft) () t
+
 let rec map_term f t =
   let tnode = match t#node with
     | JCTconst _ | JCTvar _ | JCTrange (None, None) as tnode -> tnode
@@ -619,6 +621,9 @@ let rec fold_rec_term_and_assertion ft fa acc a =
       fold_rec_term fold_rec_term_and_assertion ft fa acc a 
   else acc
 
+let iter_term_and_assertion ft fa a = 
+  fold_term_and_assertion (fold_unit ft) (fold_unit fa) () a
+
 let fold_sub_location_set itt itls ft fls acc locs =
   let itt = itt ft and itls = itls ft fls in
   match locs#node with
@@ -628,6 +633,10 @@ let fold_sub_location_set itt itls ft fls acc locs =
 	itls acc locs
     | JCLSrange(locs,t1_opt,t2_opt) ->
 	let acc = itls acc locs in
+	let acc = Option_misc.fold_left itt acc t1_opt in
+	Option_misc.fold_left itt acc t2_opt 
+   | JCLSrange_term(t0,t1_opt,t2_opt) ->
+	let acc = itt acc t0 in
 	let acc = Option_misc.fold_left itt acc t1_opt in
 	Option_misc.fold_left itt acc t2_opt 
 
@@ -641,25 +650,34 @@ let rec fold_rec_location_set ft fls acc locs =
     fold_sub_location_set fold_rec_term fold_rec_location_set ft fls acc locs 
   else acc
   
-let fold_sub_location itl itls ft fl fls acc loc =
-  let itl = itl ft fl fls and itls = itls ft fls in
+let iter_location_set ft fls loc =
+  fold_location_set (fold_unit ft) (fold_unit fls) () loc
+  
+let fold_sub_location itt itl itls ft fl fls acc loc =
+  let itt = itt ft and itl = itl ft fl fls and itls = itls ft fls in
   match loc#node with
     | JCLvar _vi ->
 	acc
     | JCLderef(locs,_lab,_fi,_r) ->
 	itls acc locs
+    | JCLderef_term(locs,_fi) ->
+	itt acc locs
     | JCLat(loc,_lab) ->
 	itl acc loc
 
 let rec fold_location ft fl fls acc loc =
   let acc = fl acc loc in
-  fold_sub_location fold_location fold_location_set ft fl fls acc loc
+  fold_sub_location fold_term fold_location fold_location_set ft fl fls acc loc
 
 let rec fold_rec_location ft fl fls acc loc =
   let cont,acc = fl acc loc in
   if cont then 
-    fold_sub_location fold_rec_location fold_rec_location_set ft fl fls acc loc 
+    fold_sub_location fold_rec_term fold_rec_location fold_rec_location_set
+      ft fl fls acc loc 
   else acc
+
+let iter_location ft fl fls loc =
+  fold_location (fold_unit ft) (fold_unit fl) (fold_unit fls) () loc
   
 let fold_sub_behavior itt ita itl itls ft fa fl fls acc b =
   let ita = ita ft fa and itl = itl ft fl fls in
@@ -682,6 +700,32 @@ let rec fold_rec_behavior ft fa fl fls acc e =
     fold_rec_term fold_rec_term_and_assertion fold_rec_location
     fold_rec_location_set
     ft fa fl fls acc e 
+
+let iter_behavior ft fa fl fls b =
+  fold_behavior (fold_unit ft) (fold_unit fa) (fold_unit fl) (fold_unit fls) 
+    () b
+
+let fold_sub_funspec itb itt ita itl itls ft fa fl fls acc spec =
+  let ita = ita ft fa and itb = itb ft fa fl fls in
+  let acc = ita acc spec.jc_fun_requires in
+  let acc = ita acc spec.jc_fun_free_requires in
+  List.fold_left
+    (fun acc (_pos,_id,behav) -> itb acc behav)
+    acc (spec.jc_fun_default_behavior :: spec.jc_fun_behavior)
+
+let fold_funspec ft fa fl fls acc spec =
+  fold_sub_funspec 
+    fold_behavior fold_term fold_term_and_assertion fold_location 
+    fold_location_set ft fa fl fls acc spec
+
+let rec fold_rec_funspec ft fa fl fls acc spec =
+  fold_sub_funspec
+    fold_rec_behavior fold_rec_term fold_rec_term_and_assertion 
+    fold_rec_location fold_rec_location_set ft fa fl fls acc spec
+
+let iter_funspec ft fa fl fls spec =
+  fold_funspec (fold_unit ft) (fold_unit fa) (fold_unit fl) (fold_unit fls) 
+    () spec
 
 let rec map_assertion f a =
   let anode = match a#node with
@@ -1092,6 +1136,10 @@ let rec fold_rec_expr_and_term_and_assertion ft fa fl fls fe acc e =
       fold_rec_location_set fold_rec_expr_and_term_and_assertion 
       ft fa fl fls fe acc e 
   else acc
+
+let iter_expr_and_term_and_assertion ft fa fl fls fe e =
+  fold_expr_and_term_and_assertion (fold_unit ft) (fold_unit fa) 
+    (fold_unit fl) (fold_unit fls) (fold_unit fe) () e
 
 module NExprAst = struct
   type t = nexpr

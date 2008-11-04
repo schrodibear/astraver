@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.147 2008-10-31 12:11:48 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.148 2008-11-04 16:34:46 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1156,6 +1156,28 @@ let single_location ~in_assigns fef loc =
 	  | JCmem_plain_union _, _ 
 	  | JCmem_bitvector, _ -> fef
 	end
+    | JCLderef_term(t1,fi) ->
+	let add_mem ~only_writes fef mc =
+	  if in_assigns then
+	    let fef = add_memory_writes lab fef (mc,t1#region) in
+	    if only_writes then fef else
+	      (* Add effect on allocation table for [not_assigns] predicate *)
+	      let ac = alloc_class_of_mem_class mc in
+	      add_alloc_reads lab fef (ac,t1#region)
+	  else
+	    if only_writes then fef else
+	      add_memory_reads lab fef (mc,t1#region)
+	in
+	let mc,ufi_opt = tderef_mem_class ~type_safe:true t1 fi in
+	let fef = add_mem ~only_writes:false fef mc in
+	begin match mc,ufi_opt with
+	  | JCmem_field fi, Some ufi ->
+	      let mems = overlapping_union_memories ufi in
+	      List.fold_left (add_mem ~only_writes:true) fef mems
+	  | JCmem_field _, None 
+	  | JCmem_plain_union _, _ 
+	  | JCmem_bitvector, _ -> fef
+	end
     | JCLat(loc,_lab) -> fef
   in true, fef
 
@@ -1173,7 +1195,8 @@ let single_location_set fef locs =
     | JCLSderef(locs,lab,fi,_r) ->
 	let mc,ufi_opt = lderef_mem_class ~type_safe:true locs fi in
 	add_memory_reads lab fef (mc,locs#region)
-    | JCLSrange(locs,_t1_opt,_t2_opt) ->
+    | JCLSrange(_,_,_)
+    | JCLSrange_term(_,_,_) ->
 	fef
   in true, fef
 

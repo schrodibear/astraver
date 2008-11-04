@@ -578,11 +578,14 @@ let ref_term : (type_safe:bool -> global_assertion:bool -> relocate:bool
 
 let rec location ~type_safe ~global_assertion lab loc = 
   let flocs = location_set ~type_safe ~global_assertion lab in
+  let ft = !ref_term ~type_safe ~global_assertion ~relocate:false lab lab in
   match loc#node with
     | JCLvar _v ->
 	LVar "pset_empty"
     | JCLderef(locs,_lab,_fi,_r) ->
 	flocs locs
+    | JCLderef_term(t1,_fi) ->
+	LApp("pset_singleton",[ ft t1 ])
     | _ -> assert false (* TODO *)
 
 and location_set ~type_safe ~global_assertion lab locs = 
@@ -605,6 +608,14 @@ and location_set ~type_safe ~global_assertion lab locs =
 	LApp("pset_range_right",[ flocs locs; ft t1 ])
     | JCLSrange(locs,None,None) ->
 	LApp("pset_all",[ flocs locs ])
+    | JCLSrange_term(locs,Some t1,Some t2) ->
+	LApp("pset_range",[ LApp("pset_singleton", [ ft locs ]); ft t1; ft t2 ])
+    | JCLSrange_term(locs,None,Some t2) ->
+	LApp("pset_range_left",[ LApp("pset_singleton", [ ft locs ]); ft t2 ])
+    | JCLSrange_term(locs,Some t1,None) ->
+	LApp("pset_range_right",[ LApp("pset_singleton", [ ft locs ]); ft t1 ])
+    | JCLSrange_term(locs,None,None) ->
+	LApp("pset_all",[ LApp("pset_singleton", [ ft locs ]) ])
 
 let rec location_list' = function
   | [] -> LVar "pset_empty"

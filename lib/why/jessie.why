@@ -77,7 +77,7 @@ logic sub_pointer: 't pointer, 't pointer -> int
 logic shift: 't pointer, int -> 't pointer
 
 parameter sub_pointer_: p:'t pointer -> q:'t pointer -> 
-  { same_block(p,q) } int { result = sub_pointer(p,q) }
+  { (*same_block(p,q)*) } int { result = sub_pointer(p,q) }
  
 parameter safe_sub_pointer_: p:'t pointer -> q:'t pointer -> 
   { } int { result = sub_pointer(p,q) }
@@ -180,7 +180,7 @@ axiom sub_pointer_same_block:
 
 axiom sub_pointer_shift:
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
-    same_block(p,q) ->
+(*    same_block(p,q) ->*)
       p = shift(q,sub_pointer(p,q))
 
 axiom sub_pointer_self:
@@ -188,20 +188,18 @@ axiom sub_pointer_self:
 
 axiom sub_pointer_zero:
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
-    same_block(p,q) ->
+(*    same_block(p,q) ->*)
       sub_pointer(p,q) = 0 -> p = q
 
 axiom sub_pointer_shift_left:
   forall p:'t pointer. forall q:'t pointer. 
     forall i:int [sub_pointer(shift(p,i),q)].
-      same_block(p,q) ->
       sub_pointer(shift(p,i),q) = sub_pointer(p,q) + i
 
 axiom sub_pointer_shift_right:
   forall p:'t pointer. forall q:'t pointer. 
     forall i:int [sub_pointer(p,shift(q,i))].
-      same_block(p,q) ->
-        sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
+      sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
 
 (*****************************************************************************)
 (* heap memories, select and store                                           *)
@@ -433,6 +431,19 @@ logic valid_pset: 't alloc_table, 't pset -> prop
 predicate pset_disjoint(ps1:'t pset, ps2:'t pset) =
   forall p:'t pointer.
     not (in_pset(p,ps1) and in_pset(p,ps2))
+
+predicate pset_included(ps1:'t pset, ps2:'t pset) =
+  forall p:'t pointer.
+    in_pset(p,ps1) -> in_pset(p,ps2)
+
+axiom pset_included_self:
+  forall ps:'t pset. pset_included(ps,ps)
+
+axiom pset_included_range:
+  forall ps:'t pset. forall a:int. forall b:int. forall c:int. forall d:int
+  [pset_included(pset_range(ps,a,b),pset_range(ps,c,d))].
+    c <= a and b <= d -> 
+      pset_included(pset_range(ps,a,b),pset_range(ps,c,d))
 
 axiom in_pset_empty:
   forall p:'t pointer. not in_pset(p,pset_empty)
@@ -758,6 +769,15 @@ axiom alloc_extends_offset_max:
     alloc_extends(a1,a2) -> 
       forall p:'t pointer.
         valid(a1,p) -> offset_max(a1,p) = offset_max(a2,p)
+
+axiom alloc_extends_not_assigns_empty: 
+  forall a1:'t alloc_table. forall a2:'t alloc_table. 
+  forall m1: ('t,'v) memory. forall m2: ('t,'v) memory. 
+  forall l:'t pset. forall p:'t pointer. forall n:int
+  [alloc_extends(a1,a2),alloc_fresh(a1,p,n),not_assigns(a2,m1,m2,l)].
+    alloc_extends(a1,a2) and alloc_fresh(a1,p,n) and not_assigns(a2,m1,m2,l)
+    and pset_included(l,pset_range(pset_singleton(p),0,n-1)) -> 
+      not_assigns(a1,m1,m2,pset_empty)
 
 (*
 axiom alloc_fresh_def:

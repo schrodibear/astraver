@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.375 2008-11-01 09:18:47 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.376 2008-11-04 16:34:46 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1043,8 +1043,32 @@ let rec pset ~type_safe ~global_assertion before loc =
              [ls; 
               term_coerce a#pos integer_type a#typ a a'; 
               term_coerce b#pos integer_type b#typ b b'])
+    | JCLSrange_term(ls,None,None) ->
+        let ls = LApp("pset_singleton",[ ft ls ]) in
+        LApp("pset_all", [ls])
+    | JCLSrange_term(ls,None,Some b) ->
+        let ls = LApp("pset_singleton",[ ft ls ]) in
+        let b' = ft b in
+        LApp("pset_range_left", 
+             [ls; 
+              term_coerce b#pos integer_type b#typ b b'])
+    | JCLSrange_term(ls,Some a,None) ->
+        let ls = LApp("pset_singleton",[ ft ls ]) in
+        let a' = ft a in
+        LApp("pset_range_right", 
+             [ls; 
+              term_coerce a#pos integer_type a#typ a a'])
+    | JCLSrange_term(ls,Some a,Some b) ->
+        let ls = LApp("pset_singleton",[ ft ls ]) in
+        let a' = ft a in
+        let b' = ft b in
+        LApp("pset_range", 
+             [ls; 
+              term_coerce a#pos integer_type a#typ a a'; 
+              term_coerce b#pos integer_type b#typ b b'])
         
 let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
+  let ft = term ~type_safe ~global_assertion ~relocate:false before before in
   match loc#node with
     | JCLderef(e,lab,fi,_fr) -> 
         let iloc = pset ~type_safe ~global_assertion lab e in
@@ -1059,6 +1083,16 @@ let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
           with Not_found -> [iloc]
         in
         (refs, MemoryMap.add (mc,location_set_region e) l mems)
+    | JCLderef_term(t1,fi) -> 
+        let iloc = LApp("pset_singleton",[ ft t1 ]) in
+        let mc = JCmem_field fi in
+        let l =
+          try
+            let l = MemoryMap.find (mc,t1#region) mems in
+            iloc::l
+          with Not_found -> [iloc]
+        in
+        (refs, MemoryMap.add (mc,t1#region) l mems)
     | JCLvar vi -> 
         let var = vi.jc_var_info_final_name in
         (StringMap.add var true refs,mems)
@@ -1066,9 +1100,13 @@ let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
         collect_locations ~type_safe ~global_assertion before (refs,mems) loc
 
 let rec collect_pset_locations ~type_safe ~global_assertion loc =
+  let ft = term ~type_safe ~global_assertion ~relocate:false in
   match loc#node with
     | JCLderef(e,lab,fi,_fr) -> 
         pset ~type_safe ~global_assertion lab e
+    | JCLderef_term(t1,fi) -> 
+	let lab = match t1#label with Some l -> l | None -> assert false in
+	LApp("pset_singleton",[ ft lab lab t1 ])	
     | JCLvar vi -> 
 	LVar "pset_empty"
     | JCLat(loc,lab) ->
@@ -1299,6 +1337,12 @@ let rec old_to_pre_lset lset =
 			   Option_misc.map old_to_pre_term t1,
 			   Option_misc.map old_to_pre_term t2))
 	  lset
+    | JCLSrange_term(lset,t1,t2) ->
+	new location_set_with
+	  ~node:(JCLSrange_term(old_to_pre_term lset, 
+				Option_misc.map old_to_pre_term t1,
+				Option_misc.map old_to_pre_term t2))
+	  lset
 
 let rec old_to_pre_loc loc =
   match loc#node with
@@ -1310,6 +1354,10 @@ let rec old_to_pre_loc loc =
     | JCLderef(lset,lab,fi,_region) ->
 	new location_with
 	  ~node:(JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, lset#region))
+	  loc
+    | JCLderef_term(t1,fi) ->
+	new location_with
+	  ~node:(JCLderef_term(old_to_pre_term t1,fi))
 	  loc
 
 let assumption al a' =
@@ -3485,7 +3533,9 @@ let tr_root rt acc =
 	(* Validity parameters *)
 	make_valid_pred ~equal:true ac pc 
 	:: make_valid_pred ~equal:false ac pc 
-	:: make_valid_pred ~equal:false (* TODO ? *) JCalloc_bitvector pc 
+	:: make_valid_pred ~equal:false ~right:false ac pc 
+	:: make_valid_pred ~equal:false ~left:false ac pc 
+        :: make_valid_pred ~equal:false (* TODO ? *) JCalloc_bitvector pc 
 	  (* Allocation parameter *)
 	:: make_alloc_param ~check_size:true ac pc 
 	:: make_alloc_param ~check_size:false ac pc 

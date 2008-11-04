@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.262 2008-10-29 09:47:55 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.263 2008-11-04 16:34:46 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1291,24 +1291,44 @@ let rec location_set env e =
           | _ -> assert false
         end
     | JCNEbinary(e, `Badd, i) ->
-        let ty,tr,te = location_set env e in
-        let ti = term env i in
-        begin
-          match ty, ti#typ with 
+	begin try
+          let ty,tr,te = location_set env e in
+	  let ti = term env i in
+          begin match ty, ti#typ with 
             | JCTpointer(st,_,_), t2 when is_integer t2 ->
                 begin match ti#node with
                   | JCTrange(t1,t2) -> ty,tr,JCLSrange(te,t1,t2)
                   | _ -> ty,tr,JCLSrange(te,Some ti,Some ti)
-(* TODO ?
-                  | _ -> ty,tr,JCLSshift(te,ti)
-*)
+		      (* TODO ?
+			 | _ -> ty,tr,JCLSshift(te,ti)
+		      *)
                 end
             | JCTpointer _, _ -> 
                 typing_error i#pos "integer expected, %a found"
                   print_type ti#typ
             | _ -> 
                 typing_error e#pos "pointer expected"
-        end
+          end
+	with Typing_error _ ->
+          let t1 = term env e in
+          let ty, tr, te = t1#typ, t1#region, t1 in
+	  let ti = term env i in
+          begin match ty, ti#typ with 
+            | JCTpointer(st,_,_), t2 when is_integer t2 ->
+                begin match ti#node with
+                  | JCTrange(t1,t2) -> ty,tr,JCLSrange_term(te,t1,t2)
+                  | _ -> ty,tr,JCLSrange_term(te,Some ti,Some ti)
+		      (* TODO ?
+			 | _ -> ty,tr,JCLSshift(te,ti)
+		      *)
+                end
+            | JCTpointer _, _ -> 
+                typing_error i#pos "integer expected, %a found"
+                  print_type ti#typ
+            | _ -> 
+                typing_error e#pos "pointer expected"
+          end
+	end
     | JCNEbinary _ ->
         assert false
     | JCNEderef(ls, f) -> 
@@ -1345,10 +1365,17 @@ let rec location env e =
         in
         vi.jc_var_info_type, vi.jc_var_info_region, JCLvar vi
     | JCNEderef(ls, f) ->
-        let t, tr, tls = location_set env ls in
-        let fi = find_field e#pos t f false in
-        let fr = Region.make_field tr fi in
-        fi.jc_field_info_type, fr, JCLderef(tls, get_label e, fi, fr)
+	begin try
+          let t, tr, tls = location_set env ls in
+          let fi = find_field e#pos t f false in
+          let fr = Region.make_field tr fi in
+          fi.jc_field_info_type, fr, JCLderef(tls, get_label e, fi, fr)
+	with Typing_error _ ->
+          let t1 = term env ls in
+          let fi = find_field e#pos t1#typ f false in
+          let fr = Region.make_field t1#region fi in
+          fi.jc_field_info_type, fr, JCLderef_term(t1, fi)
+	end
     | JCNEat(e, lab) ->
         let t, tr, tl = location env e in
         t, tr, JCLat(tl, lab)
