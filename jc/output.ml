@@ -16,7 +16,7 @@
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Library General Public           *)
-(*  License version 2.1, with the special exception on linking            *)
+(*  License version 2, with the special exception on linking              *)
 (*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.42 2008-10-29 19:20:53 nrousset Exp $ i*)
+(*i $Id: output.ml,v 1.43 2008-11-05 14:03:16 filliatr Exp $ i*)
 
 open Lexing
 open Format

@@ -16,7 +16,7 @@
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Library General Public           *)
-(*  License version 2.1, with the special exception on linking            *)
+(*  License version 2, with the special exception on linking              *)
 (*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.152 2008-10-31 12:11:48 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.153 2008-11-05 14:03:15 filliatr Exp $ *)
 
 open Jc_stdlib
 open Jc_env

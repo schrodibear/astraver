@@ -16,7 +16,7 @@
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Library General Public           *)
-(*  License version 2.1, with the special exception on linking            *)
+(*  License version 2, with the special exception on linking              *)
 (*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: wserver.ml,v 1.2 2008-10-17 11:49:33 filliatr Exp $ *)
+(* $Id: wserver.ml,v 1.3 2008-11-05 14:03:18 filliatr Exp $ *)
 (* Copyright (c) 1998-2005 INRIA *)
 
 let sock_in = ref "wserver.sin"

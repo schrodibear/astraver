@@ -16,7 +16,7 @@
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Library General Public           *)
-(*  License version 2.1, with the special exception on linking            *)
+(*  License version 2, with the special exception on linking              *)
 (*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
@@ -29,7 +29,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.40 2008-10-24 12:16:40 marche Exp $
+$Id: java_ast.mli,v 1.41 2008-11-05 14:03:14 filliatr Exp $
 
 ***************************************************************************)
 

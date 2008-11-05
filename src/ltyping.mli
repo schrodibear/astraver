@@ -16,7 +16,7 @@
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Library General Public           *)
-(*  License version 2.1, with the special exception on linking            *)
+(*  License version 2, with the special exception on linking              *)
 (*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.mli,v 1.29 2008-10-17 11:49:32 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.30 2008-11-05 14:03:17 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 

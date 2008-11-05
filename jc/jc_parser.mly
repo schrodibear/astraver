@@ -16,7 +16,7 @@
 /*                                                                        */
 /*  This software is free software; you can redistribute it and/or        */
 /*  modify it under the terms of the GNU Library General Public           */
-/*  License version 2.1, with the special exception on linking            */
+/*  License version 2, with the special exception on linking              */
 /*  described in file LICENSE.                                            */
 /*                                                                        */
 /*  This software is distributed in the hope that it will be useful,      */
@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.122 2008-10-29 09:59:10 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.123 2008-11-05 14:03:16 filliatr Exp $ */
 
 %{
 

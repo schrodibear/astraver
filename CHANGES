@@ -12,7 +12,7 @@ version 2.16, October 29th, 2008
   o New option -alt-ergo to output VCs in Alt-Ergo syntax. Beware that 
     because of inductive definition, -alt-ergo is now different from 
     -why output: inductive definitions are expansed.
-  o License changed to GNU LGPL 2.1, with a special exception on
+  o License changed to GNU LGPL 2, with a special exception on
     linking (see enclosed file LICENSE)
 
 version 2.15, September 9th, 2008

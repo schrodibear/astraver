@@ -16,7 +16,7 @@
 (*                                                                        *)
 (*  This software is free software; you can redistribute it and/or        *)
 (*  modify it under the terms of the GNU Library General Public           *)
-(*  License version 2.1, with the special exception on linking            *)
+(*  License version 2, with the special exception on linking              *)
 (*  described in file LICENSE.                                            *)
 (*                                                                        *)
 (*  This software is distributed in the hope that it will be useful,      *)
@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cpp.mll,v 1.21 2008-10-17 11:49:28 filliatr Exp $ i*)
+(*i $Id: cpp.mll,v 1.22 2008-11-05 14:03:13 filliatr Exp $ i*)
 
 (* C-preprocessor for Caduceus *)
 
