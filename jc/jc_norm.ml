@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.109 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_norm.ml,v 1.110 2008-11-05 14:43:52 moy Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -206,7 +206,7 @@ let duplicable =
     (fun acc e -> acc && match e#node with
        | JCPEconst _ | JCPEvar _ | JCPErange _ | JCPEderef _
        | JCPEunary _ | JCPEoffset _ | JCPEaddress _ | JCPEold _ | JCPEat _
-       | JCPEbinary _ | JCPEcast _ | JCPEsubtype _ ->
+       | JCPEbinary _ | JCPEcast _ | JCPEsubtype _ | JCPEbase_block _ ->
 	   true
        | JCPEassert _ | JCPEthrow _ | JCPEreturn _ | JCPEeqtype _  
        | JCPEbreak _ | JCPEcontinue _  | JCPEgoto _  | JCPEdecl _
@@ -541,6 +541,7 @@ let rec expr e =
     | JCPEat(e,lab) -> JCNEat(expr e,lab)
     | JCPEoffset(off,e) -> JCNEoffset(off,expr e)
     | JCPEaddress(absolute,e) -> JCNEaddress(absolute,expr e)
+    | JCPEbase_block(e) -> JCNEbase_block(expr e)
     | JCPEif(e1,e2,e3) -> JCNEif(expr e1,expr e2,expr e3)
     | JCPElet(tyopt,id,e1,e2) -> 
 	JCNElet(tyopt,id,Option_misc.map expr e1,expr e2)

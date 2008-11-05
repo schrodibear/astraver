@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.137 2008-11-05 14:03:16 filliatr Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.138 2008-11-05 14:43:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -399,7 +399,8 @@ let rec is_constant_term t =
     | JCTrange (None, None) (* CORRECT ? *)
     | JCTconst _ -> true
     | JCTvar _ | JCTshift _ | JCTderef _
-    | JCTapp _ | JCTold _ | JCTat _ | JCToffset _ | JCTaddress _
+    | JCTapp _ | JCTold _ | JCTat _ | JCToffset _ | JCTaddress _ 
+    | JCTbase_block _
     | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ | JCTrange_cast _
     | JCTreal_cast _ | JCTif _ | JCTmatch _ -> false
     | JCTbinary (t1, _, t2) | JCTrange (Some t1, Some t2) ->
@@ -431,6 +432,7 @@ module TermOrd = struct
     | JCTmatch _ -> 59
     | JCTrange_cast _ -> 61
     | JCTreal_cast _ -> 67
+    | JCTbase_block _ -> 71
 
   let rec compare t1 t2 =
     match t1#node, t2#node with
@@ -551,6 +553,7 @@ module TermOrd = struct
 	  * Hashtbl.hash st1.jc_struct_info_name
       | JCTinstanceof(t11,_,_)
       | JCTcast(t11,_,_)
+      | JCTbase_block(t11)
       | JCTbitwise_cast(t11,_,_)
       | JCTreal_cast(t11,_)
       | JCTrange_cast(t11,_)
@@ -697,7 +700,7 @@ let rec is_numeric_term t =
     | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTrange _ -> false
     | JCTbinary (t1, _, t2) -> is_numeric_term t1 && is_numeric_term t2
     | JCTunary (_, t) | JCTold t | JCTat(t,_) | JCTcast (t, _, _) 
-    | JCTbitwise_cast (t, _, _) 
+    | JCTbitwise_cast (t, _, _) | JCTbase_block t
     | JCTrange_cast (t, _) | JCTreal_cast (t, _) -> is_numeric_term t
     | JCTapp _ -> false (* TODO ? *)
     | JCTif _ | JCTmatch _ -> false (* TODO ? *)

@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: toolstat_lex.mll,v 1.5 2008-11-05 14:03:19 filliatr Exp $ i*)
+(*i $Id: toolstat_lex.mll,v 1.6 2008-11-05 14:43:52 moy Exp $ i*)
 
 {
   open Toolstat_pars
@@ -89,7 +89,7 @@ let file = (alphanum | filechar)*
 let special = ['.' '*' '?' '#' '!']
 let result = special*
 let int = num+
-let real = num* '.' num*
+let real = num* '.' num* | int
 
 rule token = parse
   | "\nRunning " (id as s) " on proof obligations"

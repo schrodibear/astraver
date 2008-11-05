@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.377 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_interp.ml,v 1.378 2008-11-05 14:43:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -202,8 +202,10 @@ let bin_op: expr_bin_op -> string = function
   | `Bmod, `Integer -> 
       if safety_checking () then "mod_int_" else "mod_int"
       (* pointer *)
-  | `Beq, `Pointer -> "eq_pointer"
-  | `Bneq, `Pointer -> "neq_pointer"
+  | `Beq, `Pointer -> 
+      if safety_checking () then "eq_pointer" else "safe_eq_pointer"
+  | `Bneq, `Pointer -> 
+      if safety_checking () then "neq_pointer" else "safe_neq_pointer"
   | `Bsub, `Pointer -> 
       if safety_checking () then "sub_pointer_" else "safe_sub_pointer_"
       (* real *)
@@ -535,7 +537,8 @@ let eval_integral_const e =
           (* TODO: write [eval_boolean_const] *)
           raise Exit
       | JCEconst _ | JCEvar _ | JCEshift _ | JCEderef _ 
-      | JCEinstanceof _ | JCEcast _ | JCEbitwise_cast _ | JCEreal_cast _ | JCEoffset _ 
+      | JCEinstanceof _ | JCEcast _ | JCEbitwise_cast _ | JCEreal_cast _ 
+      | JCEoffset _ | JCEbase_block _ 
       | JCEaddress _ 
       | JCEalloc _ | JCEfree _ | JCEmatch _ |JCEunpack _ |JCEpack _
       | JCEthrow _ | JCEtry _ | JCEreturn _ | JCEloop _ | JCEblock _
@@ -635,6 +638,10 @@ let bind_pattern_lets body =
   pattern_lets := [];
   binds
 
+let is_base_block t = match t#node with
+  | JCTbase_block _ -> true
+  | _ -> false
+
 let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
   let ft = term ~type_safe ~global_assertion ~relocate lab oldlab in
   let term_coerce = term_coerce ~type_safe ~global_assertion lab in
@@ -701,6 +708,8 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
         LApp("absolute_address",[ ft t1 ])
     | JCTaddress(Addr_pointer,t1) -> 
         LApp("address",[ ft t1 ])
+    | JCTbase_block(t1) -> 
+        LApp("base_block",[ ft t1 ])
     | JCTinstanceof(t1,lab',st) ->
       let lab = if relocate && lab' = LabelHere then lab else lab' in
         let t1' = ft t1 in
@@ -907,6 +916,22 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
     | JCAnot a1 -> 
 	let a1' = fa a1 in
 	LNot a1'
+    | JCArelation(t1,((`Beq | `Bneq as op),_),t2) 
+	when is_base_block t1 && is_base_block t2 ->
+	let t1 = 
+	  match t1#node with JCTbase_block t1' -> t1' | _ -> assert false 
+	in
+	let t2 = 
+	  match t2#node with JCTbase_block t2' -> t2' | _ -> assert false 
+	in
+        let t1' = ft t1 in
+        let t2' = ft t2 in
+        let p = LPred("same_block", [ t1'; t2' ]) in
+	begin match op with
+	  | `Beq -> p
+	  | `Bneq -> LNot p
+	  | _ -> assert false
+	end
     | JCArelation(t1,(_,(`Pointer | `Logic) as op),t2) ->
         let t1' = ft t1 in
         let t2' = ft t2 in
@@ -1227,7 +1252,7 @@ let rec const_int_term t =
     | JCTrange_cast (t, _) -> const_int_term t
     | JCTconst _ | JCTshift _ | JCTderef _ 
     | JCTapp _ | JCTold _ | JCTat _ 
-    | JCToffset _ | JCTaddress _ | JCTinstanceof _ 
+    | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTbase_block _
     | JCTreal_cast _ | JCTif _ | JCTrange _ 
     | JCTcast _ | JCTmatch _ | JCTbitwise_cast _ ->
 	assert false
@@ -1275,7 +1300,7 @@ let rec const_int_expr e =
 		end
 	    | _ -> None
 	  end
-    | JCEderef _ | JCEapp _ | JCEoffset _
+    | JCEderef _ | JCEapp _ | JCEoffset _ | JCEbase_block _
     | JCEaddress _ | JCElet _ | JCEassign_var _
     | JCEassign_heap _ ->
 	None
@@ -1836,6 +1861,8 @@ and expr e =
         make_app "absolute_address" [ expr e1 ] 
     | JCEaddress(Addr_pointer,e1) -> 
         make_app "address" [ expr e1 ] 
+    | JCEbase_block(e1) -> 
+        make_app "base_block" [ expr e1 ] 
     | JCEinstanceof(e1,st) ->
         let e1' = expr e1 in
         let tag = tag_table_var (struct_root st,e1#region) in

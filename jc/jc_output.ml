@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.131 2008-11-05 14:03:16 filliatr Exp $ *)
+(* $Id: jc_output.ml,v 1.132 2008-11-05 14:43:52 moy Exp $ *)
 
 open Format
 open Jc_env
@@ -155,6 +155,8 @@ let rec term fmt t =
 	fprintf fmt "@[\\offset_m%a(%a)@]" offset_kind k term t
     | JCTaddress(absolute,t) ->
 	fprintf fmt "@[\\%aaddress(%a)@]" address_kind absolute term t
+    | JCTbase_block (t)->
+	fprintf fmt "@[\\base_block(%a)@]" term t
     | JCTold t -> fprintf fmt "@[\\old(%a)@]" term t
     | JCTat(t,lab) -> fprintf fmt "@[\\at(%a,%a)@]" term t label lab
 (*
@@ -351,6 +353,8 @@ let rec expr fmt e =
 	  fprintf fmt "\\offset_m%a(%a)" offset_kind k expr e
       | JCEaddress(absolute,e) ->
 	  fprintf fmt "\\%aaddress(%a)" address_kind absolute expr e
+      | JCEbase_block(e) ->
+	  fprintf fmt "\\base_block(%a)" expr e
       | JCEalloc(e, si) ->
 	  fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e
       | JCEfree e ->

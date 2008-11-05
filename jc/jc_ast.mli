@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.159 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_ast.mli,v 1.160 2008-11-05 14:43:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -174,6 +174,7 @@ and pexpr_node =
   | JCPEaddress of address_kind * pexpr 
       (* expression is of integer type for an absolute address, and of
 	 pointer type for a pointer address *)
+  | JCPEbase_block of pexpr 
   | JCPEif of pexpr * pexpr * pexpr
   | JCPElet of ptype option * string * pexpr option * pexpr
   | JCPEdecl of ptype * string * pexpr option
@@ -281,6 +282,7 @@ type nexpr_node =
   | JCNEif of nexpr * nexpr * nexpr
   | JCNEoffset of offset_kind * nexpr 
   | JCNEaddress of address_kind * nexpr 
+  | JCNEbase_block of nexpr 
   | JCNEalloc of nexpr * string
   | JCNEfree of nexpr
   | JCNElet of ptype option * string * nexpr option * nexpr
@@ -359,6 +361,7 @@ and 'li term_node =
   | JCTat of 'li term * label
   | JCToffset of offset_kind * 'li term * struct_info 
   | JCTaddress of address_kind * 'li term
+  | JCTbase_block of 'li term
   | JCTinstanceof of 'li term * label * struct_info
   | JCTcast of 'li term * label * struct_info
   | JCTbitwise_cast of 'li term * label * struct_info
@@ -507,6 +510,7 @@ type ('li,'fi) expr_node =
   | JCEif of ('li,'fi) expr * ('li,'fi) expr * ('li,'fi) expr
   | JCEoffset of offset_kind * ('li,'fi) expr * struct_info
   | JCEaddress of address_kind * ('li,'fi) expr
+  | JCEbase_block of ('li,'fi) expr
   | JCEalloc of ('li,'fi) expr * struct_info
   | JCEfree of ('li,'fi) expr
   | JCElet of var_info * ('li,'fi) expr option * ('li,'fi) expr

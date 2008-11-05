@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.39 2008-11-05 14:03:16 filliatr Exp $ *)
+(* $Id: jc_separation.ml,v 1.40 2008-11-05 14:43:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -110,7 +110,8 @@ let single_term rresult t =
 	   Jc_options.lprintf "arg:%a@." Region.print t#region;
 	   Region.unify result_region t#region
        | JCTconst _ | JCTrange(None,None) | JCTbinary _ | JCTshift _
-       | JCTrange _ | JCTunary _ | JCTderef _ | JCTold _ | JCTat _ | JCToffset _
+       | JCTrange _ | JCTunary _ | JCTderef _ | JCTold _ | JCTat _ 
+       | JCToffset _ | JCTbase_block _
        | JCTaddress _ | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ 
        | JCTrange_cast _ | JCTreal_cast _ ->
 	   ()
@@ -171,7 +172,7 @@ let single_expr rresult e =
 	   ()
        | JCEconst _ | JCEvar _ | JCEshift _ | JCEunary _
        | JCEderef _ | JCEoffset _ | JCEaddress _ | JCEinstanceof _ | JCEcast _ 
-       | JCEbitwise_cast _ 
+       | JCEbitwise_cast _ | JCEbase_block _
        | JCErange_cast _ | JCEreal_cast _ | JCEalloc _ | JCEfree _ 
        | JCElet(_,None,_) ->
 	   ()
@@ -345,7 +346,7 @@ let regionalize_assertion a assoc =
 	  new term_with ~node:tnode t
       | JCTconst _ | JCTvar _ | JCTshift _ 
       | JCTderef _ | JCTbinary _ | JCTunary _ | JCTold _ | JCTat _ | JCToffset _
-      | JCTaddress _ 
+      | JCTaddress _ | JCTbase_block _
       | JCTinstanceof _ | JCTcast _ | JCTbitwise_cast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ | JCTmatch _ | JCTrange _ ->
 	  t
     in

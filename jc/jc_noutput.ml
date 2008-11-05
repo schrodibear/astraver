@@ -63,6 +63,8 @@ let rec expr fmt e =
         out "(\\offset_m%a(%a))" offset_kind k expr e1
     | JCNEaddress(absolute,e1) ->
         out "(\\%aaddress(%a))" address_kind absolute expr e1
+    | JCNEbase_block(e1) ->
+        out "(\\base_block(%a))" expr e1
     | JCNEalloc(e1, id) ->
         out "(TODO alloc)"
     | JCNEfree e1 ->

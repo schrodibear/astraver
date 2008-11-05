@@ -77,7 +77,7 @@ logic sub_pointer: 't pointer, 't pointer -> int
 logic shift: 't pointer, int -> 't pointer
 
 parameter sub_pointer_: p:'t pointer -> q:'t pointer -> 
-  { (*same_block(p,q)*) } int { result = sub_pointer(p,q) }
+  { same_block(p,q) } int { result = sub_pointer(p,q) }
  
 parameter safe_sub_pointer_: p:'t pointer -> q:'t pointer -> 
   { } int { result = sub_pointer(p,q) }
@@ -141,9 +141,20 @@ axiom null_pointer:
 (* pointer comparison *)
 
 parameter eq_pointer: 
-  p: 't pointer -> q: 't pointer -> {} bool { if result then p=q else p<>q }
+  p: 't pointer -> q: 't pointer -> 
+    { same_block(p,q) } bool { if result then p=q else p<>q }
+
+parameter safe_eq_pointer: 
+  p: 't pointer -> q: 't pointer -> 
+    {} bool { if result then p=q else p<>q }
+
 parameter neq_pointer: 
-  p: 't pointer -> q: 't pointer -> {} bool { if result then p<>q else p=q }
+  p: 't pointer -> q: 't pointer -> 
+    { same_block(p,q) } bool { if result then p<>q else p=q }
+
+parameter safe_neq_pointer: 
+  p: 't pointer -> q: 't pointer -> 
+    {} bool { if result then p<>q else p=q }
 
 logic eq_pointer_bool: 't pointer, 't pointer -> bool
 logic neq_pointer_bool: 't pointer, 't pointer -> bool
@@ -162,12 +173,15 @@ axiom same_block_shift:
     same_block(p,shift(p,i))
 *)
 
-(* make Simplify loop on Jessie test roux.c 
-axiom same_block_shift:
+axiom same_block_shift_right:
   forall p: 't pointer. forall q:'t pointer. forall i:int
   [same_block(p,shift(q,i))].
     same_block(p,q) -> same_block(p,shift(q,i))
-*)
+
+axiom same_block_shift_left:
+  forall p: 't pointer. forall q:'t pointer. forall i:int
+  [same_block(shift(q,i),p)].
+    same_block(q,p) -> same_block(shift(q,i),p)
 
 
 (* make Simplify loop on Jessie test roux.c 
@@ -180,7 +194,7 @@ axiom sub_pointer_same_block:
 
 axiom sub_pointer_shift:
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
-(*    same_block(p,q) ->*)
+    same_block(p,q) ->
       p = shift(q,sub_pointer(p,q))
 
 axiom sub_pointer_self:
@@ -188,7 +202,7 @@ axiom sub_pointer_self:
 
 axiom sub_pointer_zero:
   forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
-(*    same_block(p,q) ->*)
+    same_block(p,q) ->
       sub_pointer(p,q) = 0 -> p = q
 
 axiom sub_pointer_shift_left:

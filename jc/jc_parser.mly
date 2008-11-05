@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.123 2008-11-05 14:03:16 filliatr Exp $ */
+/* $Id: jc_parser.mly,v 1.124 2008-11-05 14:43:52 moy Exp $ */
 
 %{
 
@@ -103,6 +103,7 @@
 /* \forall \exists \offset_max \offset_min \address \old \result \mutable \typeof \bottom \typeeq \absolute_address */
 %token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSADDRESS BSOLD BSAT 
 %token BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM BSTYPEEQ BSABSOLUTE_ADDRESS
+%token BSBASE_BLOCK
 
 /* \nothing */
 %token BSNOTHING
@@ -553,6 +554,8 @@ postfix_expression:
     { locate (JCPEaddress(Addr_pointer,$3)) }
 | BSABSOLUTE_ADDRESS LPAR expression RPAR 
     { locate (JCPEaddress(Addr_absolute,$3)) }
+| BSBASE_BLOCK LPAR expression RPAR 
+    { locate (JCPEbase_block($3)) }
 | postfix_expression DOT IDENTIFIER
     { locate (JCPEderef ($1, $3)) }
 | postfix_expression PLUSPLUS 

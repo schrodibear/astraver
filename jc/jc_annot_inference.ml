@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.153 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.154 2008-11-05 14:43:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -145,7 +145,7 @@ let rec destruct_pointer t =
 	      Some(tptr,offt)
 	end
     | JCTvar _ | JCTderef _ | JCTapp _ | JCTold _ | JCTat _ | JCTif _ 
-    | JCTrange _ | JCTmatch _ | JCTaddress _ 
+    | JCTrange _ | JCTmatch _ | JCTaddress _ | JCTbase_block _
     | JCTconst _ | JCTbinary _ | JCTunary _ | JCToffset _ | JCTinstanceof _ 
     | JCTreal_cast _ | JCTrange_cast _ | JCTbitwise_cast _ | JCTcast _ ->
 	None
@@ -325,7 +325,8 @@ let asrt_of_expr e =
       | JCEfree _ | JCEmatch _ | JCEunpack _ | JCEpack _ | JCEthrow _ 
       | JCEtry _ | JCEreturn _ | JCEloop _ | JCEblock _ | JCEcontract _
       | JCEassert _ | JCElet _ | JCEaddress _ | JCEbitwise_cast _ 
-      | JCEassign_heap _ | JCEassign_var _ | JCEapp _ |JCEreturn_void ->
+      | JCEassign_heap _ | JCEassign_var _ | JCEapp _ |JCEreturn_void 
+      | JCEbase_block _ ->
 	  err ()
     in
     new assertion ~mark:e#mark ~pos:e#pos anode
@@ -588,7 +589,7 @@ let rec atp_of_term t =
 	Atp.Var (Vwp.variable_for_term t)
     | JCTshift _ | JCTold _ | JCTat _ | JCTmatch _ | JCTinstanceof _ 
     | JCTcast _ | JCTrange_cast _ | JCTbitwise_cast _ | JCTreal_cast _ 
-    | JCTaddress _ | JCTif _ | JCTrange _ | JCTunary _ ->
+    | JCTaddress _ | JCTif _ | JCTrange _ | JCTunary _ | JCTbase_block _ ->
 	err ()
 
 let rec term_of_atp tm =
@@ -1174,7 +1175,7 @@ let linearize t =
       | JCTvar _ | JCTderef _ | JCToffset _ | JCTapp _ | JCTbinary _ 
       | JCTunary _ | JCTshift _ | JCTinstanceof _ | JCTmatch _ 
       | JCTold _ | JCTat _ | JCTcast _ | JCTbitwise_cast _ 
-      | JCTrange_cast _ | JCTreal_cast _ | JCTaddress _
+      | JCTrange_cast _ | JCTreal_cast _ | JCTaddress _ | JCTbase_block _
       | JCTrange _ | JCTif _ -> 
 	  err ()
     with Failure "linearize" -> 
@@ -2241,6 +2242,7 @@ let rec wp_expr weakpre =
       | JCEalloc(e1,_)
       | JCEaddress(_,e1)
       | JCEoffset(_,e1,_)
+      | JCEbase_block(e1)
       | JCEreal_cast(e1,_)
       | JCErange_cast(e1,_)
       | JCEbitwise_cast(e1,_)
@@ -2503,7 +2505,7 @@ let collect_expr_targets e =
       | JCEpack _ | JCEunpack _ | JCEshift _ | JCEmatch _ | JCEfree _ 
       | JCEalloc _ | JCEoffset _ | JCEreal_cast _ | JCEinstanceof _ 
       | JCEunary _ | JCEvar _ | JCEconst _ | JCEcast _ | JCEbinary _ 
-      | JCEbitwise_cast _ | JCEaddress _ ->
+      | JCEbitwise_cast _ | JCEaddress _ | JCEbase_block _ ->
 	  []
       | JCEcontract _ -> assert false (* TODO *)
     in
@@ -2566,6 +2568,7 @@ let collect_immediate_targets targets s =
       | JCEderef(e1,_)
       | JCEoffset(_,e1,_)
       | JCEaddress(_,e1)
+      | JCEbase_block(e1)
       | JCEcast(e1,_)
       | JCEbitwise_cast(e1,_)
       | JCErange_cast(e1,_)
@@ -2632,7 +2635,8 @@ let collect_immediate_targets targets s =
       | JCEbitwise_cast _ | JCEcast _ | JCEinstanceof _ | JCEunary _ 
       | JCEbinary _ | JCEderef _ | JCEvar _ |JCEconst _
       | JCElet _ | JCEblock _ | JCEassign_var _
-      | JCEassign_heap _ | JCEpack _ | JCEunpack _ | JCEtry _ ->
+      | JCEassign_heap _ | JCEpack _ | JCEunpack _ | JCEtry _ 
+      | JCEbase_block _ ->
           (* Allowed with [JCEtry] thanks to patched [fold_expr]. *)
   	  acc
       | JCEapp _ | JCEif _ | JCEreturn _ | JCEthrow _
@@ -2710,7 +2714,7 @@ let rec backprop_expr target s curpost =
     | JCEshift _ |JCEcontract _ | JCEfree _ | JCEalloc _
     | JCEaddress _ | JCEoffset _ | JCEreal_cast _ | JCErange_cast _ 
     | JCEbitwise_cast _ | JCEcast _ | JCEinstanceof _ | JCEunary _ 
-    | JCEbinary _ | JCEderef _ | JCEvar _ |JCEconst _ ->
+    | JCEbinary _ | JCEderef _ | JCEvar _ |JCEconst _ | JCEbase_block _ ->
 	curpost
     | JCEmatch _ | JCEapp _ -> assert false
   in
@@ -3412,6 +3416,7 @@ and intern_ai_expr iaio abs curinvs e =
     | JCEderef(e1,_)
     | JCEoffset(_,e1,_)
     | JCEaddress(_,e1)
+    | JCEbase_block(e1)
     | JCEcast(e1,_)
     | JCEbitwise_cast(e1,_)
     | JCErange_cast(e1,_)

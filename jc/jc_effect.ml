@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.149 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_effect.ml,v 1.150 2008-11-05 14:43:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1056,7 +1056,7 @@ let rec single_term ef t =
 	true,
 	List.fold_left pattern ef (List.map fst ptl)
     | JCTconst _ | JCTrange _ | JCTbinary _ | JCTunary _
-    | JCTshift _ | JCTold _ | JCTat _ | JCTaddress _
+    | JCTshift _ | JCTold _ | JCTat _ | JCTaddress _ | JCTbase_block _
     | JCTbitwise_cast _ | JCTrange_cast _ | JCTreal_cast _ | JCTif _ ->
 	true, ef
 
@@ -1448,7 +1448,7 @@ let rec expr fef e =
        | JCEloop _ | JCElet _ | JCEassert _ | JCEcontract _ | JCEblock _ 
        | JCEconst _  | JCEshift _ | JCEif _ | JCErange_cast _
        | JCEreal_cast _ | JCEunary _ | JCEaddress _ | JCEbinary _ 
-       | JCEreturn_void  | JCEreturn _ | JCEbitwise_cast _ ->
+       | JCEreturn_void  | JCEreturn _ | JCEbitwise_cast _ | JCEbase_block _ ->
 	   true, fef
     ) fef e
 

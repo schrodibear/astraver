@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.264 2008-11-05 14:03:16 filliatr Exp $ *)
+(* $Id: jc_typing.ml,v 1.265 2008-11-05 14:43:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -617,7 +617,7 @@ let rec type_labels env ~result_label label e =
   match e#node with
     | JCNEconst _ | JCNEderef _ | JCNEbinary _
     | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _
-    | JCNEif _ | JCNEoffset _ | JCNEaddress _
+    | JCNEif _ | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _
     | JCNEalloc _ | JCNEfree _ | JCNElet _
     | JCNEassert _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
     | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEmatch _ | JCNEquantifier _
@@ -910,6 +910,12 @@ used as an assertion, not as a term" pi.jc_logic_info_name
           | JCTtype_var _ ->
               typing_error e#pos "pointer expected"
         end        
+    | JCNEbase_block(e1) ->
+        let te1 = ft e1 in
+        if is_pointer_type te1#typ then
+	  JCTnull, dummy_region, JCTbase_block(te1)
+	else
+          typing_error e#pos "pointer expected"
     | JCNElet(pty, id, Some e1, e2) ->
         let te1 = ft e1 in
         let ty = match pty with
@@ -1237,7 +1243,7 @@ let rec assertion env e =
           | _ -> typing_error e#pos "non boolean expression"
         end
     (* Not assertions: *)
-    | JCNEoffset _ | JCNEaddress _ 
+    | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _
     | JCNErange _ | JCNEassign _ | JCNEalloc _ | JCNEfree _
     | JCNEassert _ | JCNEblock _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
     | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEbinary _ | JCNEunary _ 
@@ -1340,7 +1346,7 @@ let rec location_set env e =
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ |JCNEreturn _ | JCNEloop _ |JCNEblock _ | JCNEassert _
     | JCNElet _ |JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEaddress _ 
-    | JCNEif _ | JCNEcast _
+    | JCNEif _ | JCNEcast _ | JCNEbase_block _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _
     | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ ->
         typing_error e#pos "invalid memory location"
@@ -1383,7 +1389,7 @@ let rec location env e =
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ | JCNEreturn _ | JCNEloop _ | JCNEblock _ | JCNEassert _
     | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEaddress _ 
-    | JCNEif _ | JCNEcast _
+    | JCNEif _ | JCNEcast _ | JCNEbase_block _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _ | JCNEbinary _
     | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ ->
         typing_error e#pos "invalid memory location"
@@ -1976,6 +1982,12 @@ used as an assertion, not as a term" pi.jc_logic_info_name
               assert false (* TODO *)
           | _ -> typing_error e#pos "pointer expected"
         end
+    | JCNEbase_block(e1) ->
+        let te1 = fe e1 in
+	if is_pointer_type te1#typ then
+          JCTnull, dummy_region, JCEbase_block(te1)
+	else 
+	  typing_error e#pos "pointer expected"
     | JCNEalloc(e1, t) ->
         let st = find_struct_info e#pos t in
         let ty = JCTpointer(JCtag(st, []), Some zero, None) in
