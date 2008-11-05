@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.379 2008-11-05 15:51:37 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.380 2008-11-05 15:56:14 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1779,10 +1779,6 @@ and value_assigned mark pos ty e =
     | Some(tmp,e',a) ->
 	Let(tmp,e',make_check ~mark ~kind:IndexBounds pos (Assert(a,Var tmp)))
 
-and is_null e = match e#node with
-  | JCEconst JCCnull -> true
-  | _ -> false
-
 and expr e =
   let infunction = get_current_function () in
   let e' = match e#node with
@@ -1803,16 +1799,6 @@ and expr e =
 (* 	  (bin_op (`Bdiv,`Integer)) *)
 (* 	  [ make_app (bin_op (`Bsub,`Integer)) [ e1'; e2' ]; *)
 (* 	    Cte(Prim_int s) ] *)
-    | JCEbinary(e1,((`Beq | `Bneq as op),_),e2) when is_null e1 || is_null e2 ->
-	(* Remove the need for a pointer and null to be in the same block *)
-        let e1' = expr e1 in
-        let e2' = expr e2 in
-	let op' = match op with
-	  | `Beq -> "safe_eq_pointer"
-	  | `Bneq -> "safe_neq_pointer"
-	  | _ -> assert false
-	in
-        make_app op' [ e1'; e2' ]
     | JCEbinary(e1,(_,(`Pointer | `Logic) as op),e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
