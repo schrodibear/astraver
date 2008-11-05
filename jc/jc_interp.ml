@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.380 2008-11-05 15:56:14 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.381 2008-11-05 22:07:56 nrousset Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1218,10 +1218,20 @@ let rec const_int_term t =
 		Jc_typing.logic_constants_table
 		vi.jc_var_info_tag
 	    in
-	      Option_misc.fold
-		(fun (t, _) _ -> const_int_term t) init None
+	      const_int_term init
 	  with Not_found -> None
 	end
+    | JCTapp app -> 
+	begin
+	  try
+	    let _, init =
+	      Hashtbl.find
+		Jc_typing.logic_constants_table
+		app.jc_app_fun.jc_logic_info_tag
+	    in
+	      const_int_term init
+	  with Not_found -> None
+	end	      
     | JCTunary (uop, t) ->
 	let no = const_int_term t in
 	  Option_misc.fold
@@ -1251,7 +1261,7 @@ let rec const_int_term t =
 	  end
     | JCTrange_cast (t, _) -> const_int_term t
     | JCTconst _ | JCTshift _ | JCTderef _ 
-    | JCTapp _ | JCTold _ | JCTat _ 
+    | JCTold _ | JCTat _ 
     | JCToffset _ | JCTaddress _ | JCTinstanceof _ | JCTbase_block _
     | JCTreal_cast _ | JCTif _ | JCTrange _ 
     | JCTcast _ | JCTmatch _ | JCTbitwise_cast _ ->
@@ -1268,9 +1278,23 @@ let rec const_int_expr e =
 		Jc_typing.logic_constants_table
 		vi.jc_var_info_tag
 	    in
-	      Option_misc.fold
-		(fun (t, _) _ -> const_int_term t) init None
+	      const_int_term init
 	  with Not_found -> None
+	end
+    | JCEapp call -> 
+	begin match call.jc_call_fun with
+	  | JClogic_fun li ->
+	      begin
+		try
+		  let _, init =
+		    Hashtbl.find
+		      Jc_typing.logic_constants_table
+		      li.jc_logic_info_tag
+		  in
+		    const_int_term init
+		with Not_found -> None
+	      end	      
+	  | JCfun _ -> None
 	end
     | JCErange_cast (e, _) -> const_int_expr e
     | JCEunary (uop, e) ->
@@ -1300,7 +1324,7 @@ let rec const_int_expr e =
 		end
 	    | _ -> None
 	  end
-    | JCEderef _ | JCEapp _ | JCEoffset _ | JCEbase_block _
+    | JCEderef _ | JCEoffset _ | JCEbase_block _
     | JCEaddress _ | JCElet _ | JCEassign_var _
     | JCEassign_heap _ ->
 	None
@@ -1321,7 +1345,8 @@ let destruct_pointer e =
 	e1, 
 	(let no = const_int_expr e2 in
 	   Option_misc.fold 
-	     (fun n _ -> Int_offset (Num.string_of_num n)) no (Expr_offset e2))
+	     (fun n _ -> 
+		Int_offset (Num.string_of_num n)) no (Expr_offset e2))
     | _ -> e, Int_offset "0"
   in
     match ptre # typ with
@@ -2780,11 +2805,57 @@ let assume_in_postcondition b post =
 
 let function_prototypes = Hashtbl.create 0 
   
+let get_valid_pred_app vi =
+  match vi.jc_var_info_type with
+    | JCTpointer (pc, n1o, n2o) ->
+	(* TODO: what about bitwise? *)
+	let v' = 
+          term ~type_safe:false ~global_assertion:false ~relocate:false
+	    LabelHere LabelHere (new term_var vi) 
+	in
+	  begin match n1o, n2o with
+            | None, None -> LTrue
+	    | Some n, None ->
+		let ac = alloc_class_of_pointer_class pc in
+                let a' =
+		  make_valid_pred_app ~equal:false
+		    (ac, vi.jc_var_info_region) pc
+                    v' (Some (const_of_num n)) None
+                in
+		  bind_pattern_lets a'
+	    | None, Some n -> 
+		let ac = alloc_class_of_pointer_class pc in
+                let a' =
+		  make_valid_pred_app ~equal:false 
+		    (ac, vi.jc_var_info_region) pc
+                    v' None (Some (const_of_num n))
+                in
+		  bind_pattern_lets a'
+            | Some n1, Some n2 ->
+		let ac = alloc_class_of_pointer_class pc in
+                let a' =
+		  make_valid_pred_app ~equal:false (ac, vi.jc_var_info_region) pc
+                    v' (Some (const_of_num n1)) (Some (const_of_num n2))
+                in
+		  bind_pattern_lets a'
+	  end
+    | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
+    | JCTtype_var _ -> LTrue
+	
 let tr_fun f funpos spec body acc =
 
   if Jc_options.debug then
     Format.printf "[interp] function %s@." f.jc_fun_info_name;
 
+  (* global variables valid predicates *)
+  let variables_valid_pred_apps =
+    Hashtbl.fold 
+      (fun _ (vi, _) acc ->
+         let req = get_valid_pred_app vi in
+	   make_and req acc) 
+      Jc_typing.variables_table LTrue
+  in
+    
   (* precondition for calling the function and extra one for analyzing it *)
 
   let external_requires = 
@@ -2810,48 +2881,14 @@ let tr_fun f funpos spec body acc =
     named_assertion ~type_safe:false ~global_assertion:false ~relocate:false 
       LabelHere LabelHere spec.jc_fun_free_requires
   in
+  let free_requires = make_and variables_valid_pred_apps free_requires in
   let internal_requires = make_and internal_requires free_requires in
   let internal_requires =
     List.fold_left 
       (fun acc v ->
-         let req = match v.jc_var_info_type with
-           | JCTpointer (pc, n1o, n2o) ->
-	       (* TODO: what about bitwise? *)
-               let v' = 
-                 term ~type_safe:false ~global_assertion:false ~relocate:false
-		   LabelHere LabelHere (new term_var v) 
-               in
-		 begin match n1o, n2o with
-                   | None, None -> LTrue
-		   | Some n, None ->
-		       let ac = alloc_class_of_pointer_class pc in
-                       let a' =
-			 make_valid_pred_app ~equal:false
-			   (ac, v.jc_var_info_region) pc
-                           v' (Some (const_of_num n)) None
-                       in
-			 bind_pattern_lets a'
-		   | None, Some n -> 
-		       let ac = alloc_class_of_pointer_class pc in
-                       let a' =
-			 make_valid_pred_app ~equal:false 
-			   (ac, v.jc_var_info_region) pc
-                           v' None (Some (const_of_num n))
-                       in
-			 bind_pattern_lets a'
-                   | Some n1, Some n2 ->
-		       let ac = alloc_class_of_pointer_class pc in
-                       let a' =
-			 make_valid_pred_app ~equal:false (ac, v.jc_var_info_region) pc
-                           v' (Some (const_of_num n1)) (Some (const_of_num n2))
-                       in
-			 bind_pattern_lets a'
-		 end
-           | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
-           | JCTtype_var _ -> LTrue
-	 in
-	   make_and req acc
-      ) internal_requires f.jc_fun_info_parameters
+         let req = get_valid_pred_app v in
+	   make_and req acc)
+      internal_requires f.jc_fun_info_parameters
   in
     
   (* partition behaviors as follows:
@@ -2898,7 +2935,13 @@ let tr_fun f funpos spec body acc =
                begin match id with
                  | "safety" ->
 		     assert (b.jc_behavior_assumes = None);
-                     behav :: safety, 
+		     let internal_post = 
+		       make_and variables_valid_pred_apps internal_post 
+		     in
+		     let external_post = 
+		       make_and variables_valid_pred_apps external_post 
+		     in
+                     (id, b, internal_post, external_post) :: safety, 
                      normal_inferred, normal, excep_inferred, excep
                  | "inferred" -> 
 		     assert (b.jc_behavior_assumes = None);
@@ -3520,7 +3563,7 @@ let tr_variable vi e acc =
       Param(false,vi.jc_var_info_final_name,t)::acc
   else
     let t = tr_base_type vi.jc_var_info_type in
-    Logic(false,vi.jc_var_info_final_name,[],t)::acc
+      Logic(false,vi.jc_var_info_final_name,[],t)::acc
 
 let tr_region r acc =
   Type(r.jc_reg_final_name,[]) :: acc

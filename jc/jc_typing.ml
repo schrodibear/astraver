@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.265 2008-11-05 14:43:52 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.266 2008-11-05 22:07:56 nrousset Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2516,7 +2516,6 @@ let check_positivity loc pi a =
   if pos > 1 then 
     typing_error loc "predicate has too many positive occurrences in this case"
   
-
 let rec decl_aux ~only_types ~axiomatic acc d =
   let loc = d#pos in
   let in_axiomatic = axiomatic <> None in
@@ -2725,12 +2724,12 @@ of an invariant policy";
 (* 	  ) body *)
 (*         in *)
 (*         Hashtbl.add logic_constants_table vi.jc_var_info_tag (vi, t) *)
-    | JCDlogic(None, id, labels, pl, body) ->
+    | JCDlogic (None, id, labels, pl, body) ->
 	if not only_types then
 	  begin
-	let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
-        let param_env,ty,pi = add_logic_fundecl (None,id,labels,pl) in
-        let p = match body with
+	    let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+            let param_env,ty,pi = add_logic_fundecl (None,id,labels,pl) in
+            let p = match body with
           | JCreads reads ->
 	      if not in_axiomatic then
 		typing_error loc "allowed only inside axiomatic specification";
@@ -2742,58 +2741,64 @@ of an invariant policy";
                       in tl)) reads)
           | JCexpr body ->
               JCAssertion(assertion param_env body)
-(*
-	  | JCaxiomatic l ->
-	      JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
-*)
+		(*
+		  | JCaxiomatic l ->
+		  JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
+		*)
 	  | JCinductive l ->
 	      JCInductive(List.map 
 			    (fun (id,e) -> 
 			       let a = assertion param_env e in
-			       check_positivity a#pos pi a;
+				 check_positivity a#pos pi a;
 			       (id,a)) 
 			    l)
-        in
-	pi.jc_logic_info_axiomatic <- axiomatic;
-        Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p);
-	acc
+            in
+	      pi.jc_logic_info_axiomatic <- axiomatic;
+              Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p);
+	      acc
 	  end
 	else 
 	  acc
-    | JCDlogic(Some ty, id, labels, pl, body) ->
+    | JCDlogic (Some ty, id, labels, pl, body) ->
 	if not only_types then
 	  begin
-	let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
-        let param_env,ty,pi = add_logic_fundecl (Some ty,id,labels,pl) in
-        let ty = match ty with Some ty -> ty | None -> assert false in
-        let t = match body with
-          | JCreads [] -> JCReads []
-          | JCreads reads ->
-	      if not in_axiomatic then
-		typing_error loc "allowed only inside axiomatic specification";
-              JCReads (
-                (List.map 
-                   (fun a -> 
-                      let _,_,tl = location param_env a 
-                      in tl)) reads)
-          | JCexpr body ->
-              let t = term param_env body in
-	      if pl = [] && not (subtype t#typ ty) 
-		|| pl <> [] && not (subtype_strict t#typ ty) then 
-                  typing_error d#pos
-                    "inferred type differs from declared type" 
-              else JCTerm t
-(*
-	  | JCaxiomatic l ->
-	      JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
-*)
-	  | JCinductive _ ->
-              typing_error d#pos
-                "only predicates can be inductively defined" 	      
-        in
-	pi.jc_logic_info_axiomatic <- axiomatic;
-        Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, t);
-	acc
+	    let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+            let param_env, ty, pi = add_logic_fundecl (Some ty,id,labels,pl) in
+            let ty = match ty with Some ty -> ty | None -> assert false in
+            let t = match body with
+              | JCreads [] -> JCReads []
+              | JCreads reads ->
+		  if not in_axiomatic then
+		    typing_error loc "allowed only inside axiomatic specification";
+		  JCReads (
+                    (List.map 
+                       (fun a -> 
+			  let _,_,tl = location param_env a 
+			  in tl)) reads)
+              | JCexpr body ->
+		  let t = term param_env body in
+		    if pl = [] && not (subtype t#typ ty) 
+		      || pl <> [] && not (subtype_strict t#typ ty) then 
+			typing_error d#pos
+			  "inferred type differs from declared type" 
+		    else 
+		      begin
+			if pl = [] then
+			  (* constant *)
+			  Hashtbl.add logic_constants_table pi.jc_logic_info_tag (pi, t);
+			JCTerm t
+		      end
+		      (*
+			| JCaxiomatic l ->
+			JCAxiomatic(List.map (fun (id,e) -> (id,assertion param_env e)) l)
+		      *)
+	      | JCinductive _ ->
+		  typing_error d#pos
+                    "only predicates can be inductively defined" 	      
+            in
+	      pi.jc_logic_info_axiomatic <- axiomatic;
+              Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, t);
+	      acc
 	  end
 	else 
 	  acc
@@ -2808,12 +2813,9 @@ of an invariant policy";
 	    Hashtbl.add axiomatics_table id decls
 	  end;
 	acc
-	
+	  
 let decl ~only_types d = 
-  ignore (decl_aux ~only_types ~axiomatic:None [] d)
-
-
-	
+  ignore (decl_aux ~only_types ~axiomatic:None [] d)	
 
 let declare_struct_info d = match d#node with
   | JCDtag(id, _, parent, _, _) ->
@@ -2990,14 +2992,14 @@ let print_file fmt () =
          :: f
       ) logic_functions_table []
   in
-  let logic_constants =
+(*  let logic_constants =
     Hashtbl.fold
       (fun _ (vi,t) f ->
          Jc_output.JClogic_const_def
            (vi.jc_var_info_type, vi.jc_var_info_name, Option_misc.map fst t)
         :: f
       ) logic_constants_table []
-  in
+  in *)
   let logic_types =
     Hashtbl.fold
       (fun _ (s) f ->
@@ -3077,7 +3079,7 @@ let print_file fmt () =
     @ (List.rev variables)
     @ (List.rev logic_types)
     @ (Jc_output.JCrec_fun_defs
-      (List.rev logic_constants @ (List.rev logic_functions)))
+      (* (List.rev logic_constants @*) (List.rev logic_functions))
     :: (List.rev axioms)
     @ (List.rev global_invariants)
     @ [Jc_output.JCrec_fun_defs (List.rev functions)]

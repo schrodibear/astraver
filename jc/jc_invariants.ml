@@ -25,6 +25,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+(* $Id: jc_invariants.ml,v 1.84 2008-11-05 22:07:56 nrousset Exp $ *)
+
 open Jc_stdlib
 open Jc_env
 open Jc_envset
@@ -1385,18 +1387,18 @@ let tr_valid_inv st acc =
   Axiom(valid_inv_axiom_name st, sem)::acc*)
 
 let rec invariant_for_struct ?pos this si =
-  let (_, invs) = 
+  let _, invs = 
     Hashtbl.find Jc_typing.structs_table si.jc_struct_info_name 
   in
   let invs = Assertion.mkand ?pos
     ~conjuncts:(List.map 
-       (fun (li, _) -> 
-	  let a = { jc_app_fun = li;
-		    jc_app_args = [this];
-		    jc_app_label_assoc = [];
-		    jc_app_region_assoc = [] }
-	  in
-	  new assertion ?pos (JCAapp a)) invs) 
+		  (fun (li, _) -> 
+		     let a = { jc_app_fun = li;
+			       jc_app_args = [this];
+			       jc_app_label_assoc = [];
+			       jc_app_region_assoc = [] }
+		     in
+		       new assertion ?pos (JCAapp a)) invs) 
     ()
   in
     match si.jc_struct_info_parent with
@@ -1408,11 +1410,10 @@ let rec invariant_for_struct ?pos this si =
 		  new term_with ~typ:(JCTpointer (JCtag(si, []), a, b)) this
 	      | _ -> assert false (* never happen *)
 	  in
-	  Assertion.mkand ?pos
+	    Assertion.mkand ?pos
 	      ~conjuncts:[invs; (invariant_for_struct ?pos this si)]
-	    ()
-	    
-
+	      ()
+	      
 let code_function (fi, pos, fs, sl) vil =
   begin
     match !Jc_common_options.inv_sem with
@@ -1427,14 +1428,14 @@ let code_function (fi, pos, fs, sl) vil =
 	    let global_invariants =
 	      Hashtbl.fold
 		(fun li _ acc -> 
-(* 		   li.jc_logic_info_parameters <- vil; *)
+		   (* li.jc_logic_info_parameters <- vil; *)
 		   let a = { jc_app_fun = li;
 			     jc_app_args = (* vitl *)[];
 			     jc_app_label_assoc = [];
 			     jc_app_region_assoc = [] }
 		   in
-		   (new assertion ~mark:(Jc_pervasives.new_label_name ())
-~pos (JCAapp a)) :: acc)
+		     (new assertion ~mark:(Jc_pervasives.new_label_name ())
+			~pos (JCAapp a)) :: acc)
 		Jc_typing.global_invariants_table []
 	    in
 	    let global_invariants = 
@@ -1445,7 +1446,7 @@ let code_function (fi, pos, fs, sl) vil =
 	      List.fold_left
 		(fun acc vi ->
 		   match vi.jc_var_info_type with
-		     | JCTpointer (JCtag(st, []), _, _) ->
+		     | JCTpointer (JCtag (st, []), _, _) ->
 			 Assertion.mkand ~pos
 			   ~conjuncts:
 			   [acc; (invariant_for_struct ~pos

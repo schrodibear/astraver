@@ -870,7 +870,7 @@ let define_locals ?(reads=[]) ?(writes=[]) e' =
 
 (* Validity *)
 
-let make_valid_pred_app ~equal (ac,r) pc p ao bo =
+let make_valid_pred_app ~equal (ac, r) pc p ao bo =
   let all_allocs = match ac with
     | JCalloc_bitvector -> [ ac ]
     | JCalloc_root rt -> 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.170 2008-11-05 14:03:14 filliatr Exp $ *)
+(* $Id: java_interp.ml,v 1.171 2008-11-05 22:07:56 nrousset Exp $ *)
 
 open Format
 open Jc_output
@@ -256,6 +256,7 @@ let ptype_node_of_type = function
       JCPTpointer(v.jc_root_info_name,[], l, r)
   | JCTnull
   | JCTany | JCTtype_var _ -> assert false
+
 let ptype_of_type t = new ptype (ptype_node_of_type t)
 
 
@@ -1878,10 +1879,6 @@ let tr_axiomatic id l acc =
   let acc1 = List.fold_left tr_axiomatic_decl [] l in
   let acc2 = List.fold_left tr_axiomatic_axiom acc1 l in
   (mkaxiomatic ~name:id ~decls:(List.rev acc2) ())::acc
-
-
-
-
 
 let tr_field type_name acc fi =
   let vi = create_static_var Loc.dummy_position type_name fi in

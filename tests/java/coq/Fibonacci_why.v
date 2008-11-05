@@ -175,7 +175,6 @@ Admitted.
 (*Why predicate*) Definition left_valid_struct_interface  (p:(pointer interface)) (a:Z) (interface_alloc_table:(alloc_table interface))
   := (offset_min interface_alloc_table p) <= a.
 
-
 (* Why obligation from file "/home/yfam7513/ppc/why/tests/java/Fibonacci.jc", line 50, characters 0-43: *)
 (*Why goal*) Lemma not_isfib_2_2 : 
   ~(isfib 2 2).

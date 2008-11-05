@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.147 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: java_typing.ml,v 1.148 2008-11-05 22:07:56 nrousset Exp $ *)
 
 open Java_env
 open Java_ast
@@ -279,12 +279,13 @@ let toplevel_packages =
 		  match x with
 		    | Subpackage pi -> 
 			Hashtbl.add toplevel_packages_table name pi
-		    | _ -> assert false
+		    | _ -> ()
+			
 		end)
 	     h')
       Java_options.classpath;
-  h
- 
+    h
+      
 let type_table : (int, java_type_info) Hashtbl.t = Hashtbl.create 97
 
 (* A GROUPER *)
@@ -602,10 +603,9 @@ let is_logic_widening_primitive_convertible tfrom tto =
     | Tinteger, Treal -> true
     | Tdouble, Treal -> true
     | _ -> false
-
-    
-let logic_unary_numeric_promotion t =
-  match t with
+	
+let logic_unary_numeric_promotion ty =
+  match ty with
     | JTYbase t -> 
         begin
           match t with
@@ -679,30 +679,38 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
         with Not_found ->
           typing_error loc "numeric types expected for +,-,*, / and %%"
             
-let make_logic_un_op loc op t1 e1 = 
-  match op with
-    | Uplus ->
-        begin
-          try 
-            let t = logic_unary_numeric_promotion t1 in
-            JTYbase t, e1.java_term_node
-          with Not_found ->
-            typing_error loc "numeric type expected for unary +"
-        end
-    | Uminus ->
-        begin
-          try
-            let t = logic_unary_numeric_promotion t1 in
-            JTYbase t, JTun (t, op, e1)
-          with Not_found ->
-            typing_error loc "numeric type expected for unary -"
-        end
-    | Ucompl ->
-        assert false (*TODO*)
-    | Unot ->
-        if is_boolean t1 then t1, JTun (Tboolean, op, e1)
-        else typing_error loc "boolean type expected for unary !"
-
+let make_logic_un_op loc op e = 
+  let ty = e.java_term_type in
+    match op with
+      | Uplus ->
+          begin
+            try 
+              let t = logic_unary_numeric_promotion ty in
+		JTYbase t, e.java_term_node
+            with Not_found ->
+              typing_error loc "numeric type expected for unary +"
+          end
+      | Uminus ->
+          begin
+            try
+              let t = logic_unary_numeric_promotion ty in
+		JTYbase t, JTun (t, op, e)
+            with Not_found ->
+              typing_error loc "numeric type expected for unary -"
+          end
+      | Ucompl ->
+          begin
+            try
+              match logic_unary_numeric_promotion ty with
+		| Tinteger -> JTYbase Tinteger, JTun (Tinteger, op, e)
+		| _ -> raise Not_found
+            with Not_found ->
+              typing_error loc "integer type expected for ~"
+          end
+      | Unot ->
+          if is_boolean ty then ty, JTun (Tboolean, op, e) else
+	    typing_error loc "boolean type expected for unary !"
+	      
 let make_predicate_bin_op loc op t1 e1 t2 e2 =
   match op with
     | Bconcat -> assert false
@@ -1127,12 +1135,6 @@ and get_field_prototypes package_env type_env ci acc d =
             not is_nullable
         in
         let ty = type_type package_env type_env non_null vd.variable_type in
-        let ty = match ty, ci with
-          | JTYclass (true, ci'), TypeClass ci
-              when is_subclass ci ci' || is_subclass ci' ci ->
-              JTYclass (false, ci')
-          | _ -> ty
-        in
         let is_static = List.mem Static vd.variable_modifiers in
         let is_final = List.mem Final vd.variable_modifiers in
         let is_ghost = List.mem Ghost vd.variable_modifiers in
@@ -1520,7 +1522,8 @@ and is_logic_call_convertible tfrom tto =
 
 and term env current_label e =
   let termt = term env current_label in
-  let ty,tt =
+  let loc = e.java_pexpr_loc in
+  let ty, tt =
     match e.java_pexpr_node with
       | JPElit l -> 
           let ty,l = 
@@ -1545,13 +1548,13 @@ and term env current_label e =
               | TermName t ->
                   t.java_term_type, t.java_term_node
               | TypeName _ ->
-                  typing_error e.java_pexpr_loc
+                  typing_error loc
                     "term expected, got a class or interface"
               | PackageName _ ->
-                  typing_error e.java_pexpr_loc
+                  typing_error loc
                     "term expected, got a package name"
               | LogicTypeName _ ->
-                  typing_error e.java_pexpr_loc
+                  typing_error loc
                     "term expected, got a logic type"
           end
 
@@ -1561,17 +1564,17 @@ and term env current_label e =
               let vi = List.assoc "\\result" env.env in
               vi.java_var_info_type,JTvar vi
             with Not_found -> 
-              typing_error e.java_pexpr_loc "\\result undefined in this context"
+              typing_error loc "\\result undefined in this context"
           end
       | JPEthis -> 
-          let vi = get_this e.java_pexpr_loc env.env in
+          let vi = get_this loc env.env in
           vi.java_var_info_type, JTvar vi
       | JPEbin (e1, op, e2) -> 
           let te1 = termt e1 and te2 = termt e2 in 
-          make_logic_bin_op e.java_pexpr_loc op 
+          make_logic_bin_op loc op 
             te1.java_term_type te1 te2.java_term_type te2
-      | JPEquantifier (q, idl, e)-> 
-          typing_error e.java_pexpr_loc
+      | JPEquantifier _ -> 
+          typing_error loc
             "quantified formulas not allowed in term position"
       | JPEold e1 -> 
           (* TODO : check label Old exists *)
@@ -1637,10 +1640,10 @@ and term env current_label e =
                       typing_error loc "logic function `%s' not found" id
                   end           
               | _ -> 
-                  typing_error e.java_pexpr_loc "method calls not allowed in annotations"
+                  typing_error loc "method calls not allowed in annotations"
           end
       | JPEcall_expr _ -> 
-          typing_error e.java_pexpr_loc 
+          typing_error loc 
             "method calls not allowed in annotations"
       | JPEfield_access fa -> 
           begin
@@ -1691,18 +1694,15 @@ and term env current_label e =
             te1.java_term_type,JTif(te1,te2,te3)
           else
             typing_error e1.java_pexpr_loc "boolean expected"
-      | JPEassign_array (_, _, _, _)
-      | JPEassign_field (_, _, _)
-      | JPEassign_name (_, _, _) ->
-          typing_error e.java_pexpr_loc 
+      | JPEassign_array _
+      | JPEassign_field _
+      | JPEassign_name _ ->
+          typing_error loc 
             "assignment not allowed in annotations"             
-      | JPEincr (_, _)-> assert false (* TODO *)
-      | JPEun (op, e1)->         
-          let te1 = termt e1 in 
-          let t,e = make_logic_un_op e.java_pexpr_loc op 
-            te1.java_term_type te1 in
-          t,e
-
+      | JPEincr (_, _) -> assert false (* TODO *)
+      | JPEun (op, e) ->         
+          let te = termt e in 
+            make_logic_un_op loc op te
   in { java_term_node = tt; 
        java_term_type = ty;
        java_term_loc = e.java_pexpr_loc }

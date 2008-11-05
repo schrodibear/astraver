@@ -31,30 +31,30 @@ open Lexing
 
 let parse_annot loc s f =
   let lb = Lexing.from_string s in
-(*
-  eprintf "lb.pos_fname = %s@." lb.lex_curr_p.pos_fname;
-  eprintf "lb.pos_lnum = %d@." lb.lex_curr_p.pos_lnum;
-  eprintf "lb.pos_bol = %d@." lb.lex_curr_p.pos_bol;
-  eprintf "lb.pos_cnum = %d@." lb.lex_curr_p.pos_cnum;
-*)
-  lb.lex_curr_p <- {loc with pos_bol = loc.pos_bol - loc.pos_cnum - 3};
-(*
-  eprintf "lb.pos_fname = %s@." lb.lex_curr_p.pos_fname;
-  eprintf "lb.pos_lnum = %d@." lb.lex_curr_p.pos_lnum;
-  eprintf "lb.pos_bol = %d@." lb.lex_curr_p.pos_bol;
-  eprintf "lb.pos_cnum = %d@." lb.lex_curr_p.pos_cnum;
-*)
-  try
-    f Java_lexer.next_token lb
-  with 
-    | Parsing.Parse_error ->
-	Java_options.parsing_error (Java_lexer.loc lb) "parse error in annotation"
-    | Java_options.Java_error (_,msg) ->
-	Java_options.parsing_error (Java_lexer.loc lb) "%s" msg
-
+    (*
+      eprintf "lb.pos_fname = %s@." lb.lex_curr_p.pos_fname;
+      eprintf "lb.pos_lnum = %d@." lb.lex_curr_p.pos_lnum;
+      eprintf "lb.pos_bol = %d@." lb.lex_curr_p.pos_bol;
+      eprintf "lb.pos_cnum = %d@." lb.lex_curr_p.pos_cnum;
+    *)
+    lb.lex_curr_p <- {loc with pos_bol = loc.pos_bol - loc.pos_cnum - 3};
+    (*
+      eprintf "lb.pos_fname = %s@." lb.lex_curr_p.pos_fname;
+      eprintf "lb.pos_lnum = %d@." lb.lex_curr_p.pos_lnum;
+      eprintf "lb.pos_bol = %d@." lb.lex_curr_p.pos_bol;
+      eprintf "lb.pos_cnum = %d@." lb.lex_curr_p.pos_cnum;
+    *)
+    try
+      f Java_lexer.next_token lb
+    with 
+      | Parsing.Parse_error ->
+	  Java_options.parsing_error (Java_lexer.loc lb) "parse error in annotation"
+      | Java_options.Java_error (_,msg) ->
+	  Java_options.parsing_error (Java_lexer.loc lb) "%s" msg
+	    
 let rec statement s =
   { s with java_pstatement_node = match s.java_pstatement_node with
-      | JPSannot(loc,s) -> parse_annot loc s Java_parser.kml_statement_annot
+      | JPSannot (loc, s) -> parse_annot loc s Java_parser.kml_statement_annot
       | JPSstatement_spec _
       | JPSghost_local_decls _ | JPSghost_statement _ | JPSloop_annot _ 
       | JPSassert _ -> assert false
@@ -131,7 +131,7 @@ let type_decl d =
   match d with
     | JPTclass c -> JPTclass (class_decl c)
     | JPTinterface i -> JPTinterface (interface_decl i)
-    | JPTannot(loc,s) -> parse_annot loc s Java_parser.kml_global_def_eof
+    | JPTannot (loc, s) -> parse_annot loc s Java_parser.kml_global_def_eof
     | JPTlemma _ 
     | JPTlogic_type_decl _
     | JPTlogic_reads _ 

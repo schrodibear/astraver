@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.54 2008-11-05 14:03:15 filliatr Exp $
+$Id: java_parser.mly,v 1.55 2008-11-05 22:07:56 nrousset Exp $
 
 */
 
@@ -661,6 +661,9 @@ local_variable_declaration:
 ;
 
 statement:
+| ANNOT
+    { let (loc, s) = $1 in 
+	locate_statement (JPSannot (loc, s)) }
 | WHILE LEFTPAR expr RIGHTPAR statement %prec WHILE
     { locate_statement (JPSwhile($3,$5)) }
 | DO statement WHILE LEFTPAR expr RIGHTPAR 
@@ -671,8 +674,8 @@ statement:
 | FOR LEFTPAR local_variable_declaration SEMICOLON for_cond SEMICOLON 
   argument_list RIGHTPAR statement 
     { locate_statement (JPSfor_decl($3,$5,$7,$9)) }
-| ANNOT
-    { let (loc,s)=$1 in locate_statement (JPSannot(loc,s)) }
+| block
+    { locate_statement (JPSblock $1) }
 | expr SEMICOLON
     { locate_statement (JPSexpr($1)) }
 | SEMICOLON
@@ -685,8 +688,6 @@ statement:
     { locate_statement (JPSif($3,$5,$7)) }
 | SWITCH LEFTPAR expr RIGHTPAR LEFTBRACE switch_block RIGHTBRACE
     { locate_statement (JPSswitch($3,$6)) }
-| block
-    { locate_statement (JPSblock $1) }
 | ident COLON statement
     { locate_statement (JPSlabel($1,$3)) } 
 | BREAK SEMICOLON
@@ -1206,7 +1207,7 @@ decreases_opt:
     { None }
 | DECREASES expr SEMICOLON 
     { Some $2 }
-
+;
 
 kml_statement_annot:
 | LOOP_INVARIANT expr SEMICOLON loop_variant_opt EOF

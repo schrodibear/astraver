@@ -43,7 +43,7 @@ val logic_type_table : (string,string) Hashtbl.t
   
 
 val logic_constants_table : 
-  (int, var_info * (term * jc_type) option) Hashtbl.t
+  (int, logic_info * Jc_fenv.logic_info Jc_ast.term) Hashtbl.t
 
 val logic_functions_table : 
   (int, logic_info * term_or_assertion) Hashtbl.t
