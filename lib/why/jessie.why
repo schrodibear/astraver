@@ -142,7 +142,9 @@ axiom null_pointer:
 
 parameter eq_pointer: 
   p: 't pointer -> q: 't pointer -> 
-    { same_block(p,q) } bool { if result then p=q else p<>q }
+    { same_block(p,q) or p = null or q = null } 
+    bool 
+    { if result then p=q else p<>q }
 
 parameter safe_eq_pointer: 
   p: 't pointer -> q: 't pointer -> 
@@ -150,7 +152,9 @@ parameter safe_eq_pointer:
 
 parameter neq_pointer: 
   p: 't pointer -> q: 't pointer -> 
-    { same_block(p,q) } bool { if result then p<>q else p=q }
+    { same_block(p,q) or p = null or q = null } 
+    bool
+    { if result then p<>q else p=q }
 
 parameter safe_neq_pointer: 
   p: 't pointer -> q: 't pointer -> 

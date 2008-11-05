@@ -2796,10 +2796,22 @@ axiom neq_pointer_bool_def:
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
 
+axiom same_block_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(p, shift(q, i))].
+        (same_block(p, q) -> same_block(p, shift(q, i))))))
+
+axiom same_block_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(shift(q, i), p)].
+        (same_block(q, p) -> same_block(shift(q, i), p)))))
+
 axiom sub_pointer_shift:
   (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, q)]. (p = shift(q, sub_pointer(p,
-      q)))))
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
 
 axiom sub_pointer_self:
   (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
@@ -2807,7 +2819,7 @@ axiom sub_pointer_self:
 axiom sub_pointer_zero:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer [sub_pointer(p, q)].
-      ((sub_pointer(p, q) = 0) -> (p = q))))
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
 
 axiom sub_pointer_shift_left:
   (forall p:'a1 pointer.
@@ -5331,8 +5343,22 @@ why -simplify [...] why/BinarySearch.why
  (FORALL (p1 p2) (IFF (EQ (neq_pointer_bool p1 p2) |@true|) (NEQ p1 p2))))
 
 (BG_PUSH
+ ;; Why axiom same_block_shift_right
+ (FORALL (p q i) (IMPLIES (same_block p q) (same_block p (shift q i))))
+
+ (FORALL (p q)
+ (IMPLIES (same_block p q) (FORALL (i) (same_block p (shift q i))))))
+
+(BG_PUSH
+ ;; Why axiom same_block_shift_left
+ (FORALL (p q i) (IMPLIES (same_block q p) (same_block (shift q i) p)))
+
+ (FORALL (p q)
+ (IMPLIES (same_block q p) (FORALL (i) (same_block (shift q i) p)))))
+
+(BG_PUSH
  ;; Why axiom sub_pointer_shift
- (FORALL (p q) (EQ p (shift q (sub_pointer p q)))))
+ (FORALL (p q) (IMPLIES (same_block p q) (EQ p (shift q (sub_pointer p q))))))
 
 (BG_PUSH
  ;; Why axiom sub_pointer_self
@@ -5340,7 +5366,8 @@ why -simplify [...] why/BinarySearch.why
 
 (BG_PUSH
  ;; Why axiom sub_pointer_zero
- (FORALL (p q) (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q))))
+ (FORALL (p q)
+ (IMPLIES (same_block p q) (IMPLIES (EQ (sub_pointer p q) 0) (EQ p q)))))
 
 (BG_PUSH
  ;; Why axiom sub_pointer_shift_left
@@ -7904,10 +7931,22 @@ axiom neq_pointer_bool_def:
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
 
+axiom same_block_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(p, shift(q, i))].
+        (same_block(p, q) -> same_block(p, shift(q, i))))))
+
+axiom same_block_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(shift(q, i), p)].
+        (same_block(q, p) -> same_block(shift(q, i), p)))))
+
 axiom sub_pointer_shift:
   (forall p:'a1 pointer.
-    (forall q:'a1 pointer [sub_pointer(p, q)]. (p = shift(q, sub_pointer(p,
-      q)))))
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
 
 axiom sub_pointer_self:
   (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
@@ -7915,7 +7954,7 @@ axiom sub_pointer_self:
 axiom sub_pointer_zero:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer [sub_pointer(p, q)].
-      ((sub_pointer(p, q) = 0) -> (p = q))))
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
 
 axiom sub_pointer_shift_left:
   (forall p:'a1 pointer.
