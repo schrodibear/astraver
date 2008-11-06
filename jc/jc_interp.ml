@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.382 2008-11-06 10:08:13 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.383 2008-11-06 15:19:15 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2853,12 +2853,14 @@ let tr_fun f funpos spec body acc =
     Format.printf "[interp] function %s@." f.jc_fun_info_name;
 
   (* global variables valid predicates *)
-  let variables_valid_pred_apps =
+  let variables_valid_pred_apps = LTrue
+(* Yannick: comment out because not taken into account in effects
     Hashtbl.fold 
       (fun _ (vi, _) acc ->
          let req = get_valid_pred_app vi in
 	   make_and req acc) 
       Jc_typing.variables_table LTrue
+*)
   in
     
   (* precondition for calling the function and extra one for analyzing it *)
