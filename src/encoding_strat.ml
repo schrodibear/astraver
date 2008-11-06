@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_strat.ml,v 1.20 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.21 2008-11-06 10:08:13 moy Exp $ i*)
 
 open Cc
 open Logic
@@ -351,23 +351,28 @@ let rec push d =
       Queue.add (Daxiom (loc, ident, new_axiom)) queue
 (* A goal is a sequent : a context and a predicate and both have to be translated *)
   | Dgoal (loc, expl, ident, s_sch) ->
-      let cpt = ref 0 in
-      let fv = Env.Vset.fold
+      begin try
+	let cpt = ref 0 in
+	let fv = Env.Vset.fold
 	  (fun tv acc -> cpt := !cpt + 1; (tv.tag, tvar^(string_of_int !cpt))::acc)
 	  (s_sch.Env.scheme_vars) [] in
-      let (context, new_cel) = 
-	List.fold_left 
-	  (fun (acc_c, acc_new_cel) s -> match s with
-	    Spred (id, p) -> (acc_c, 
-			      (Spred (id, translate_eq (translate_pred fv acc_c p)))::acc_new_cel)
-	  | Svar (id, t) -> ((id,t)::acc_c, (Svar (id, ut))::acc_new_cel))
-	  ([], [])
-	  (fst (s_sch.Env.scheme_type)) in
-      let new_sequent =
-	Env.empty_scheme
-	  (lifted_ctxt fv (List.rev new_cel),
-	   translate_eq (translate_pred fv context (snd (s_sch.Env.scheme_type)))) in
-      Queue.add (Dgoal (loc, expl, ident, new_sequent)) queue)
+	let (context, new_cel) = 
+	  List.fold_left 
+	    (fun (acc_c, acc_new_cel) s -> match s with
+		 Spred (id, p) -> (acc_c, 
+				   (Spred (id, translate_eq (translate_pred fv acc_c p)))::acc_new_cel)
+	       | Svar (id, t) -> ((id,t)::acc_c, (Svar (id, ut))::acc_new_cel))
+	    ([], [])
+	    (fst (s_sch.Env.scheme_type)) in
+	let new_sequent =
+	  Env.empty_scheme
+	    (lifted_ctxt fv (List.rev new_cel),
+	     translate_eq (translate_pred fv context (snd (s_sch.Env.scheme_type)))) in
+	Queue.add (Dgoal (loc, expl, ident, new_sequent)) queue
+      with Not_found -> 
+	Format.eprintf "Exception caught in : %a\n" Util.print_decl d;
+	Queue.add (Dgoal (loc, expl, ident, Env.empty_scheme([],Pfalse))) queue
+      end)
   with
     Not_found -> 
       Format.eprintf "Exception caught in : %a\n" Util.print_decl d;

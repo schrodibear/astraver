@@ -340,26 +340,27 @@ let rec push d =
 	Queue.add (Daxiom (loc, ident, new_axiom)) queue
 (* A goal is a sequent : a context and a predicate and both have to be translated *)
   | Dgoal (loc, expl, ident, s_sch) ->
-      if debug then Printf.printf "Encoding goal %s, %s...\n" ident (f2s loc);
-      let cpt = ref 0 in
-      let fv = Env.Vset.fold
-	(fun tv acc -> 
-	  cpt := !cpt + 1; 
-	  (tv.tag, tvar^(string_of_int !cpt))::acc)
-	(s_sch.Env.scheme_vars) [] in
+      begin try
+	if debug then Printf.printf "Encoding goal %s, %s...\n" ident (f2s loc);
+	let cpt = ref 0 in
+	let fv = Env.Vset.fold
+	  (fun tv acc -> 
+	     cpt := !cpt + 1; 
+	     (tv.tag, tvar^(string_of_int !cpt))::acc)
+	  (s_sch.Env.scheme_vars) [] in
 	if debug then
 	  (Printf.printf "Goal environment :\n";
 	   List.iter (fun (n,id) -> Printf.printf "\tIn env : %s tagged %d\n" id n) fv;
 	   Printf.printf "=========\n");
-      let (context, new_cel) =
-	List.fold_left
-	  (fun (acc_c, acc_new_cel) s -> 
-	     match s with
-		 Spred (id, p) -> 
-		   (acc_c, (Spred (id, translate_pred fv acc_c p))::acc_new_cel)
-	       | Svar (id, t) -> ((id,t)::acc_c, (Svar (id, sortify ut t))::acc_new_cel))
-	  ([], [])
-	  (fst (s_sch.Env.scheme_type)) in
+	let (context, new_cel) =
+	  List.fold_left
+	    (fun (acc_c, acc_new_cel) s -> 
+	       match s with
+		   Spred (id, p) -> 
+		     (acc_c, (Spred (id, translate_pred fv acc_c p))::acc_new_cel)
+		 | Svar (id, t) -> ((id,t)::acc_c, (Svar (id, sortify ut t))::acc_new_cel))
+	    ([], [])
+	    (fst (s_sch.Env.scheme_type)) in
 	if debug then
 	  (Printf.printf "Goal context :\n";
 	   List.iter (fun ce -> match ce with 
@@ -367,11 +368,15 @@ let rec push d =
 			| Spred(id, _) -> Printf.printf "\thyp %s : ...\n" (Ident.string id)
 		     ) new_cel;
 	   Printf.printf "=========\n");
-      let new_sequent =
-	Env.empty_scheme
-	  (lifted_ctxt fv (List.rev new_cel),
-	   translate_pred fv context (snd (s_sch.Env.scheme_type))) in
-	Queue.add (Dgoal (loc, expl, ident, new_sequent)) queue)
+	let new_sequent =
+	  Env.empty_scheme
+	    (lifted_ctxt fv (List.rev new_cel),
+	     translate_pred fv context (snd (s_sch.Env.scheme_type))) in
+	Queue.add (Dgoal (loc, expl, ident, new_sequent)) queue
+      with Not_found -> 
+	Format.eprintf "Exception caught in : %a\n" Util.print_decl d;
+	Queue.add (Dgoal (loc, expl, ident, Env.empty_scheme([],Pfalse))) queue
+      end)
   with Not_found -> 
     Format.eprintf "Exception caught in : %a\n" Util.print_decl d;
     raise Not_found

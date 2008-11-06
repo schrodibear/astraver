@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.381 2008-11-05 22:07:56 nrousset Exp $ *)
+(* $Id: jc_interp.ml,v 1.382 2008-11-06 10:08:13 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -184,7 +184,12 @@ let unary_op: expr_unary_op -> string = function
   | `Ubw_not, `Integer -> "bw_compl"
   | _ -> assert false (* not proper type *)
 
-let term_unary_op = unary_op
+let term_unary_op: expr_unary_op -> string = function
+  | `Uminus, `Integer -> "neg_int"
+  | `Uminus, `Real -> "neg_real"
+  | `Unot, `Boolean -> "bool_not"
+  | `Ubw_not, `Integer -> "bw_compl"
+  | _ -> assert false (* not proper type *)
 
 let bin_op: expr_bin_op -> string = function
     (* integer *)
@@ -651,7 +656,7 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
     | JCTconst c -> LConst(const c)
     | JCTunary(op,t1) ->
         let t1'= ft t1 in
-        LApp(unary_op op, 
+        LApp(term_unary_op op, 
 	     [ term_coerce t#pos (native_operator_type op) t1#typ t1 t1' ])
 (*     | JCTbinary(t1,(`Bsub,`Pointer),t2) -> *)
 (*         let t1' = LApp("address",[ ft t1 ]) in *)

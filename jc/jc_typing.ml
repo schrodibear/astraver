@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.266 2008-11-05 22:07:56 nrousset Exp $ *)
+(* $Id: jc_typing.ml,v 1.267 2008-11-06 10:08:13 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -432,8 +432,9 @@ let pattern = pattern [] StringMap.empty
 
 let num_op (op: [< `Badd | `Bsub | `Bmul | `Bdiv | `Bmod]) = op, Tinteger
 
-let num_un_op t (op: [< `Uminus | `Ubw_not]) e =
+let num_un_op t (op: [< `Uminus | `Ubw_not | `Unot]) e =
   match op with
+    | `Unot
     | `Uminus
     | `Ubw_not -> JCTunary((unary_op t op :> unary_op * 'a),e)
 
@@ -442,7 +443,7 @@ let make_logic_unary_op loc (op : Jc_ast.unary_op) e2 =
   match op with
     | `Unot -> 
 	if is_boolean t2 then
-	  assert false (* TODO *)
+	  t2, dummy_region, num_un_op (operator_of_native Tboolean) op  e2
 	else
           typing_error loc "boolean expected"
     | ((`Uminus | `Ubw_not) as x) -> 

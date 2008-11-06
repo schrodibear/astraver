@@ -2329,6 +2329,18 @@ axiom neq_pointer_bool_def:
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
 
+axiom same_block_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(p, shift(q, i))].
+        (same_block(p, q) -> same_block(p, shift(q, i))))))
+
+axiom same_block_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(shift(q, i), p)].
+        (same_block(q, p) -> same_block(shift(q, i), p)))))
+
 axiom sub_pointer_shift:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer [sub_pointer(p, q)].
@@ -2345,16 +2357,14 @@ axiom sub_pointer_zero:
 axiom sub_pointer_shift_left:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(shift(p, i), q)].
-        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
-         q) + i))))))
+      (forall i:int [sub_pointer(shift(p, i), q)]. (sub_pointer(shift(p, i),
+        q) = (sub_pointer(p, q) + i)))))
 
 axiom sub_pointer_shift_right:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(p, shift(q, i))].
-        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
-         q) - i))))))
+      (forall i:int [sub_pointer(p, shift(q, i))]. (sub_pointer(p, shift(q,
+        i)) = (sub_pointer(p, q) - i)))))
 
 type ('t, 'v) memory
 
@@ -2400,6 +2410,21 @@ logic valid_pset : 'a1 alloc_table, 'a1 pset -> prop
 
 predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
   (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
+predicate pset_included(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (in_pset(p, ps1) -> in_pset(p, ps2)))
+
+axiom pset_included_self: (forall ps:'a1 pset. pset_included(ps, ps))
+
+axiom pset_included_range:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))].
+            (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
+             pset_range(ps, c, d))))))))
 
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
@@ -2665,6 +2690,21 @@ axiom alloc_extends_offset_max:
       (alloc_extends(a1, a2) ->
        (forall p:'a1 pointer.
          (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
+
+axiom alloc_extends_not_assigns_empty:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory.
+          (forall l:'a1 pset.
+            (forall p:'a1 pointer.
+              (forall n:int [alloc_extends(a1, a2), alloc_fresh(a1, p, n),
+                not_assigns(a2, m1, m2, l)].
+                ((alloc_extends(a1, a2) and
+                  (alloc_fresh(a1, p, n) and
+                   (not_assigns(a2, m1, m2, l) and pset_included(l,
+                    pset_range(pset_singleton(p), 0, (n - 1)))))) ->
+                 not_assigns(a1, m1, m2, pset_empty)))))))))
 
 logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
 'a1 pset -> prop
@@ -3267,6 +3307,22 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
+========== file tests/java/why/TestNonNull_po1.why ==========
+goal TestNonNull_test_safety_po_1:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall TestNonNull_t:(Object,
+  Object pointer) memory.
+  (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
+   (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
+    TestNonNull_t) and
+    (("JC_64":
+     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+      ("JC_63": st_length(Object_alloc_table)))) and
+     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
+  (3 <= offset_max(Object_alloc_table, t))
+
 ========== file tests/java/why/TestNonNull_po10.why ==========
 goal cons_TestNonNull_safety_po_4:
   forall this_1:Object pointer.
@@ -3292,22 +3348,6 @@ goal cons_TestNonNull_safety_po_4:
   ("JC_54": ((offset_max(Object_alloc_table0, select(TestNonNull_t0,
   this_1)) + 1) = 3)) ->
   ("JC_50": ("JC_50": st_length(Object_alloc_table0)))
-
-========== file tests/java/why/TestNonNull_po1.why ==========
-goal TestNonNull_test_safety_po_1:
-  forall this_0:Object pointer.
-  forall t:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  forall TestNonNull_t:(Object,
-  Object pointer) memory.
-  (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
-   (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
-    TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
-  (3 <= offset_max(Object_alloc_table, t))
 
 ========== file tests/java/why/TestNonNull_po2.why ==========
 goal TestNonNull_test_safety_po_2:
@@ -3683,6 +3723,20 @@ why -simplify [...] why/TestNonNull.why
  (FORALL (p1 p2) (IFF (EQ (neq_pointer_bool p1 p2) |@true|) (NEQ p1 p2))))
 
 (BG_PUSH
+ ;; Why axiom same_block_shift_right
+ (FORALL (p q i) (IMPLIES (same_block p q) (same_block p (shift q i))))
+
+ (FORALL (p q)
+ (IMPLIES (same_block p q) (FORALL (i) (same_block p (shift q i))))))
+
+(BG_PUSH
+ ;; Why axiom same_block_shift_left
+ (FORALL (p q i) (IMPLIES (same_block q p) (same_block (shift q i) p)))
+
+ (FORALL (p q)
+ (IMPLIES (same_block q p) (FORALL (i) (same_block (shift q i) p)))))
+
+(BG_PUSH
  ;; Why axiom sub_pointer_shift
  (FORALL (p q) (IMPLIES (same_block p q) (EQ p (shift q (sub_pointer p q))))))
 
@@ -3697,23 +3751,11 @@ why -simplify [...] why/TestNonNull.why
 
 (BG_PUSH
  ;; Why axiom sub_pointer_shift_left
- (FORALL (p q i)
- (IMPLIES (same_block p q)
- (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
-
- (FORALL (p q)
- (IMPLIES (same_block p q)
- (FORALL (i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))))
+ (FORALL (p q i) (EQ (sub_pointer (shift p i) q) (+ (sub_pointer p q) i))))
 
 (BG_PUSH
  ;; Why axiom sub_pointer_shift_right
- (FORALL (p q i)
- (IMPLIES (same_block p q)
- (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
-
- (FORALL (p q)
- (IMPLIES (same_block p q)
- (FORALL (i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))))
+ (FORALL (p q i) (EQ (sub_pointer p (shift q i)) (- (sub_pointer p q) i))))
 
 (BG_PUSH
  ;; Why axiom select_store_eq
@@ -3735,6 +3777,24 @@ why -simplify [...] why/TestNonNull.why
 (DEFPRED (pset_disjoint ps1 ps2)
   (FORALL (p)
   (NOT (AND (EQ (in_pset p ps1) |@true|) (EQ (in_pset p ps2) |@true|)))))
+
+(DEFPRED (pset_included ps1 ps2)
+  (FORALL (p)
+  (IMPLIES (EQ (in_pset p ps1) |@true|) (EQ (in_pset p ps2) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom pset_included_self
+ (FORALL (ps) (pset_included ps ps)))
+
+(BG_PUSH
+ ;; Why axiom pset_included_range
+ (FORALL (ps a b c d)
+ (IMPLIES (AND (<= c a) (<= b d))
+ (pset_included (pset_range ps a b) (pset_range ps c d))))
+
+ (FORALL (a b c d)
+ (IMPLIES (AND (<= c a) (<= b d))
+ (FORALL (ps) (pset_included (pset_range ps a b) (pset_range ps c d))))))
 
 (BG_PUSH
  ;; Why axiom in_pset_empty
@@ -3984,6 +4044,16 @@ why -simplify [...] why/TestNonNull.why
  (FORALL (a1 a2)
  (IMPLIES (EQ (alloc_extends a1 a2) |@true|)
  (FORALL (p) (IMPLIES (valid a1 p) (EQ (offset_max a1 p) (offset_max a2 p)))))))
+
+(BG_PUSH
+ ;; Why axiom alloc_extends_not_assigns_empty
+ (FORALL (a1 a2 m1 m2 l p n)
+ (IMPLIES
+ (AND (EQ (alloc_extends a1 a2) |@true|)
+ (AND (alloc_fresh a1 p n)
+ (AND (not_assigns a2 m1 m2 l)
+ (pset_included l (pset_range (pset_singleton p) 0 (- n 1))))))
+ (not_assigns a1 m1 m2 pset_empty))))
 
 (BG_PUSH
  ;; Why axiom alloc_extends_except_offset_min
@@ -4996,6 +5066,18 @@ axiom neq_pointer_bool_def:
     (forall p2:'a1 pointer.
       ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
 
+axiom same_block_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(p, shift(q, i))].
+        (same_block(p, q) -> same_block(p, shift(q, i))))))
+
+axiom same_block_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(shift(q, i), p)].
+        (same_block(q, p) -> same_block(shift(q, i), p)))))
+
 axiom sub_pointer_shift:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer [sub_pointer(p, q)].
@@ -5012,16 +5094,14 @@ axiom sub_pointer_zero:
 axiom sub_pointer_shift_left:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(shift(p, i), q)].
-        (same_block(p, q) -> (sub_pointer(shift(p, i), q) = (sub_pointer(p,
-         q) + i))))))
+      (forall i:int [sub_pointer(shift(p, i), q)]. (sub_pointer(shift(p, i),
+        q) = (sub_pointer(p, q) + i)))))
 
 axiom sub_pointer_shift_right:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer.
-      (forall i:int [sub_pointer(p, shift(q, i))].
-        (same_block(p, q) -> (sub_pointer(p, shift(q, i)) = (sub_pointer(p,
-         q) - i))))))
+      (forall i:int [sub_pointer(p, shift(q, i))]. (sub_pointer(p, shift(q,
+        i)) = (sub_pointer(p, q) - i)))))
 
 type ('t, 'v) memory
 
@@ -5067,6 +5147,21 @@ logic valid_pset : 'a1 alloc_table, 'a1 pset -> prop
 
 predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
   (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
+predicate pset_included(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (in_pset(p, ps1) -> in_pset(p, ps2)))
+
+axiom pset_included_self: (forall ps:'a1 pset. pset_included(ps, ps))
+
+axiom pset_included_range:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))].
+            (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
+             pset_range(ps, c, d))))))))
 
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
@@ -5332,6 +5427,21 @@ axiom alloc_extends_offset_max:
       (alloc_extends(a1, a2) ->
        (forall p:'a1 pointer.
          (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
+
+axiom alloc_extends_not_assigns_empty:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory.
+          (forall l:'a1 pset.
+            (forall p:'a1 pointer.
+              (forall n:int [alloc_extends(a1, a2), alloc_fresh(a1, p, n),
+                not_assigns(a2, m1, m2, l)].
+                ((alloc_extends(a1, a2) and
+                  (alloc_fresh(a1, p, n) and
+                   (not_assigns(a2, m1, m2, l) and pset_included(l,
+                    pset_range(pset_singleton(p), 0, (n - 1)))))) ->
+                 not_assigns(a1, m1, m2, pset_empty)))))))))
 
 logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
 'a1 pset -> prop
