@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.384 2008-11-07 04:01:59 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.385 2008-11-07 18:13:20 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2243,20 +2243,22 @@ and expr e =
 	(* loop assigns  *)
 	(* By default, the assigns clause for the function is taken *)
 	(* TODO: add also a loop_assigns annotation *)
-	let loop_assigns = 
-	  List.fold_left
-	    (fun acc (pos,id,b) ->
-	       if safety_checking () || default_checking () 
-		 || id = get_current_behavior () then
-		 match b.jc_behavior_assigns with
-		   | None -> acc
-		   | Some(_pos,loclist) -> 
-		       let loclist = List.map old_to_pre_loc loclist in
-		       match acc with
-			 | None -> Some loclist
-			 | Some loclist' -> Some (loclist @ loclist')
-	       else acc
-	    ) None (get_current_spec ()).jc_fun_behavior
+	(* Yannick: remove, as function loop assigns does not deal with
+	   newly allocated memory, which may be assigned in loop *)
+	let loop_assigns = None 
+(* 	  List.fold_left *)
+(* 	    (fun acc (pos,id,b) -> *)
+(* 	       if safety_checking () || default_checking ()  *)
+(* 		 || id = get_current_behavior () then *)
+(* 		 match b.jc_behavior_assigns with *)
+(* 		   | None -> acc *)
+(* 		   | Some(_pos,loclist) ->  *)
+(* 		       let loclist = List.map old_to_pre_loc loclist in *)
+(* 		       match acc with *)
+(* 			 | None -> Some loclist *)
+(* 			 | Some loclist' -> Some (loclist @ loclist') *)
+(* 	       else acc *)
+(* 	    ) None (get_current_spec ()).jc_fun_behavior *)
 	in
         let inv' = match loop_assigns with
 	  | None -> inv'
