@@ -446,7 +446,9 @@ let tvar ~label_in_name lab v =
     lab v.jc_var_info_final_name
 
 let tparam ~label_in_name lab v = 
-  tvar_name ~label_in_name lab v, tr_base_type v.jc_var_info_type 
+  tvar_name ~label_in_name lab v,
+  tvar ~label_in_name lab v,
+  tr_base_type v.jc_var_info_type 
 
 let local_of_parameter (v',ty') = (var_name' v',ty')
 let effect_of_parameter (v',_ty') = var_name' v'
@@ -510,8 +512,9 @@ let tmemory_param ~label_in_name lab (mc,r) =
     | Some infunction -> not (mutable_memory infunction (mc,r))
   in
   let n = lvar_name ~constant ~label_in_name lab mem in
+  let v = lvar ~constant ~label_in_name lab mem in
   let ty' = memory_type mc in
-  n, ty'
+  n, v, ty'
 
 let plain_alloc_table_var (ac,r) = Var (alloc_table_name (ac,r))
 let deref_alloc_table_var (ac,r) = Deref (alloc_table_name (ac,r))
@@ -532,14 +535,15 @@ let talloc_table_var ~label_in_name lab (ac,r) =
   lvar ~constant ~label_in_name lab alloc
 
 let talloc_table_param ~label_in_name lab (ac,r) =
-  let mem = alloc_table_name (ac,r) in
+  let alloc = alloc_table_name (ac,r) in
   let constant = match !current_function with
     | None -> false (* Variables at different labels should be different *)
     | Some infunction -> not (mutable_alloc_table infunction (ac,r))
   in
-  let n = lvar_name ~constant ~label_in_name lab mem in
+  let n = lvar_name ~constant ~label_in_name lab alloc in
+  let v = lvar ~constant ~label_in_name lab alloc in
   let ty' = alloc_table_type ac in
-  n, ty'
+  n, v, ty'
 
 let plain_tag_table_var (vi,r) = Var (tag_table_name (vi,r))
 let deref_tag_table_var (vi,r) = Deref (tag_table_name (vi,r))
@@ -558,14 +562,15 @@ let ttag_table_var ~label_in_name lab (vi,r) =
   lvar ~constant ~label_in_name lab tag
 
 let ttag_table_param ~label_in_name lab (vi,r) =
-  let mem = tag_table_name (vi,r) in
+  let tag = tag_table_name (vi,r) in
   let constant = match !current_function with
     | None -> false (* Variables at different labels should be different *)
     | Some infunction -> not (mutable_tag_table infunction (vi,r))
   in
-  let n = lvar_name ~constant ~label_in_name lab mem in
+  let n = lvar_name ~constant ~label_in_name lab tag in
+  let v = lvar ~constant ~label_in_name lab tag in
   let ty' = tag_table_type vi in
-  n, ty'
+  n, v, ty'
 
 
 (******************************************************************************)
@@ -2327,7 +2332,7 @@ let make_logic_arguments ~label_in_name ~region_assoc ~label_assoc f args =
     tmodel_parameters ~label_in_name ~region_assoc ~label_assoc 
       f.jc_logic_info_effects
   in
-  let model_args = List.map (fun (n,_ty') -> LVar n) model_params in
+  let model_args = List.map (fun (_n,v,_ty') -> v) model_params in
   args @ model_args
 
 let make_logic_fun_call ~label_in_name ~region_assoc ~label_assoc f args =

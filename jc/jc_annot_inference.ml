@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.154 2008-11-05 14:43:52 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.155 2008-11-07 04:01:59 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2716,7 +2716,9 @@ let rec backprop_expr target s curpost =
     | JCEbitwise_cast _ | JCEcast _ | JCEinstanceof _ | JCEunary _ 
     | JCEbinary _ | JCEderef _ | JCEvar _ |JCEconst _ | JCEbase_block _ ->
 	curpost
-    | JCEmatch _ | JCEapp _ -> assert false
+    | JCEmatch _ | JCEapp _ -> 
+	assert (curpost = None);
+	curpost
   in
   if s == target.jc_target_expr then
     begin 

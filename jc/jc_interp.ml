@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.383 2008-11-06 15:19:15 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.384 2008-11-07 04:01:59 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -847,9 +847,17 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
               (List.length args);
             assert false
         in
+	let relab (lab1,lab2) =
+	  (lab1, if lab2 = LabelHere then lab else lab2) 
+	in
+	let label_assoc =
+	  if relocate then 
+	    (LabelHere,lab) :: List.map relab app.jc_app_label_assoc
+	  else app.jc_app_label_assoc
+	in
         make_logic_fun_call ~label_in_name:global_assertion 
 	  ~region_assoc:app.jc_app_region_assoc 
-	  ~label_assoc:app.jc_app_label_assoc
+	  ~label_assoc:label_assoc
 	  f args
     | JCTold t1 -> 
 	let lab = if relocate && oldlab = LabelHere then lab else oldlab in
@@ -970,9 +978,17 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
               (List.length args);
             assert false
         in
+	let relab (lab1,lab2) =
+	  (lab1, if lab2 = LabelHere then lab else lab2) 
+	in
+	let label_assoc =
+	  if relocate then 
+	    (LabelHere,lab) :: List.map relab app.jc_app_label_assoc
+	  else app.jc_app_label_assoc
+	in
         make_logic_pred_call ~label_in_name:global_assertion 
 	  ~region_assoc:app.jc_app_region_assoc 
-	  ~label_assoc:app.jc_app_label_assoc
+	  ~label_assoc:label_assoc
 	  f args
     | JCAquantifier(Forall,v,a1) -> 
         LForall(v.jc_var_info_final_name,
@@ -2361,7 +2377,7 @@ let tr_axiom loc id ~is_axiom labels a acc =
     ~name:id
     ~beh:(if is_axiom then "axiom" else "lemma")
     loc;
-  let a' = List.fold_right (fun (n,ty') a' -> LForall(n,ty',a')) params a' in
+  let a' = List.fold_right (fun (n,_v,ty') a' -> LForall(n,ty',a')) params a' in
   if is_axiom then 
     Axiom(id,a') :: acc 
   else 
@@ -2420,6 +2436,7 @@ let tr_logic_fun f ta acc =
     tmodel_parameters ~label_in_name:true f.jc_logic_info_effects 
   in
   let params = params @ model_params in
+  let params = List.map (fun (n,_v,ty') -> (n,ty')) params in
 
   (* Function definition *)
   let acc =  
@@ -2463,7 +2480,7 @@ let tr_logic_fun f ta acc =
 			 in
 			 let a' = 
 			   List.fold_right 
-			     (fun (n,ty') a' -> LForall(n,ty',a')) params a' 
+			     (fun (n,_v,ty') a' -> LForall(n,ty',a')) params a' 
 			 in 
 			 (id#name, a')) l) :: acc
       | Some _, JCInductive _ -> assert false
@@ -2486,7 +2503,7 @@ let tr_logic_fun f ta acc =
 	 let paramty = snd param in
 	 if not (is_memory_type paramty) then count,acc else
 	   let (mc,r),_ = (* Recover which memory it is exactly *)
-	     List.find (fun ((mc,r),(n,_)) -> n = fst param) 
+	     List.find (fun ((mc,r),(n,_v,_ty')) -> n = fst param) 
 	       memory_params_reads
 	   in
 	   let zonety,basety = deconstruct_memory_type_args paramty in
@@ -2548,7 +2565,7 @@ let tr_logic_fun f ta acc =
 	 let paramty = snd param in
 	 if not (is_memory_type paramty) then count,acc else
 	   let (mc,r),_ = (* Recover which memory it is exactly *)
-	     List.find (fun ((mc,r),(n,_)) -> n = fst param) 
+	     List.find (fun ((mc,r),(n,_v,_ty')) -> n = fst param) 
 	       memory_params_reads
 	   in
 	   let zonety,basety = deconstruct_memory_type_args paramty in
@@ -2611,11 +2628,10 @@ let tr_logic_fun f ta acc =
     let params_names = List.map fst params in
     let normal_params = List.map (fun name -> LVar name) params_names in
     snd (List.fold_left
-      (fun (count,acc) param ->
-	 let paramty = snd param in
+      (fun (count,acc) (n,_v,paramty) ->
 	 assert (is_alloc_table_type paramty);
 	 let exta = 
-	   LPred("alloc_extends",[LVar (fst param); LVar "tmpalloc"])
+	   LPred("alloc_extends",[LVar n; LVar "tmpalloc"])
 	 in
 	 let ps = 
 	   List.map 
@@ -2623,11 +2639,11 @@ let tr_logic_fun f ta acc =
 	 in
 	 let ps = location_list' ps in
 	 let valida =
-	   LPred("valid_pset",[LVar (fst param); ps])
+	   LPred("valid_pset",[LVar n; ps])
 	 in
 	 let update_params = 
            List.map (fun name ->
-		       if name = fst param then LVar "tmpalloc"
+		       if name = n then LVar "tmpalloc"
 		       else LVar name
 		    ) params_names
 	 in

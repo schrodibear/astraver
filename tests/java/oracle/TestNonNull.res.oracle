@@ -1297,8 +1297,7 @@ parameter TestNonNull_test :
  this_0:Object pointer ->
   t:Object pointer ->
    { } unit reads Object_alloc_table,intM_intP writes intM_intP
-   { (valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-     and (JC_69: st_length(Object_alloc_table))) }
+   { (JC_69: st_length(Object_alloc_table)) }
 
 parameter TestNonNull_test_requires :
  this_0:Object pointer ->
@@ -1307,8 +1306,7 @@ parameter TestNonNull_test_requires :
      ((JC_58: ge_int(add_int(offset_max(Object_alloc_table, t), (1)), (4)))
      and (JC_59: st_length(Object_alloc_table))))}
    unit reads Object_alloc_table,intM_intP writes intM_intP
-   { (valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-     and (JC_69: st_length(Object_alloc_table))) }
+   { (JC_69: st_length(Object_alloc_table)) }
 
 parameter alloc_bitvector_struct_Object :
  n:int ->
@@ -1586,16 +1584,14 @@ parameter cons_TestNonNull :
  this_1:Object pointer ->
   { } unit reads Object_alloc_table,TestNonNull_t
   writes Object_alloc_table,Object_tag_table,TestNonNull_t
-  { (valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-    and (JC_51: st_length(Object_alloc_table))) }
+  { (JC_51: st_length(Object_alloc_table)) }
 
 parameter cons_TestNonNull_requires :
  this_1:Object pointer ->
   { (JC_44: st_length(Object_alloc_table))} unit
   reads Object_alloc_table,TestNonNull_t
   writes Object_alloc_table,Object_tag_table,TestNonNull_t
-  { (valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-    and (JC_51: st_length(Object_alloc_table))) }
+  { (JC_51: st_length(Object_alloc_table)) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1605,8 +1601,7 @@ parameter int32_of_integer_ :
 parameter java_array_length_intM :
  x_2:Object pointer ->
   { } int reads Object_alloc_table
-  { ((valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-     and (JC_25: st_length(Object_alloc_table)))
+  { ((JC_25: st_length(Object_alloc_table))
     and (JC_30:
         ((le_int(result, (2147483647))
          and (ge_int(result, (0))
@@ -1618,8 +1613,7 @@ parameter java_array_length_intM :
 parameter java_array_length_intM_requires :
  x_2:Object pointer ->
   { (JC_18: st_length(Object_alloc_table))} int reads Object_alloc_table
-  { ((valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-     and (JC_25: st_length(Object_alloc_table)))
+  { ((JC_25: st_length(Object_alloc_table))
     and (JC_30:
         ((le_int(result, (2147483647))
          and (ge_int(result, (0))
@@ -1636,8 +1630,7 @@ parameter long_of_integer_ :
 parameter non_null_Object :
  x_3:Object pointer ->
   { } bool reads Object_alloc_table
-  { ((valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-     and (JC_39: st_length(Object_alloc_table)))
+  { ((JC_39: st_length(Object_alloc_table))
     and (JC_43:
         ((if result
           then eq_int(offset_max(Object_alloc_table, x_3), (0))
@@ -1647,8 +1640,7 @@ parameter non_null_Object :
 parameter non_null_Object_requires :
  x_3:Object pointer ->
   { (JC_32: st_length(Object_alloc_table))} bool reads Object_alloc_table
-  { ((valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-     and (JC_39: st_length(Object_alloc_table)))
+  { ((JC_39: st_length(Object_alloc_table))
     and (JC_43:
         ((if result
           then eq_int(offset_max(Object_alloc_table, x_3), (0))
@@ -1658,8 +1650,7 @@ parameter non_null_Object_requires :
 parameter non_null_intM :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
-  { ((valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-     and (JC_13: st_length(Object_alloc_table)))
+  { ((JC_13: st_length(Object_alloc_table))
     and (JC_17:
         ((if result
           then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
@@ -1669,8 +1660,7 @@ parameter non_null_intM :
 parameter non_null_intM_requires :
  x_1:Object pointer ->
   { (JC_6: st_length(Object_alloc_table))} bool reads Object_alloc_table
-  { ((valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-     and (JC_13: st_length(Object_alloc_table)))
+  { ((JC_13: st_length(Object_alloc_table))
     and (JC_17:
         ((if result
           then ge_int(offset_max(Object_alloc_table, x_1), neg_int((1)))
@@ -1845,12 +1835,10 @@ let TestNonNull_test_ensures_default =
   { (valid_struct_intM(t, (0), (-1), Object_alloc_table)
     and (valid_struct_TestNonNull(this_0, (0), (0), Object_alloc_table,
          TestNonNull_t)
-        and ((JC_64:
-             ((JC_62:
-              ge_int(add_int(offset_max(Object_alloc_table, t), (1)), (4)))
-             and (JC_63: st_length(Object_alloc_table))))
-            and valid_struct_intM(TestNonNull_st, (0), (-1),
-                Object_alloc_table)))) }
+        and (JC_64:
+            ((JC_62:
+             ge_int(add_int(offset_max(Object_alloc_table, t), (1)), (4)))
+            and (JC_63: st_length(Object_alloc_table)))))) }
   (init:
   try
    begin
@@ -1894,12 +1882,10 @@ let TestNonNull_test_safety =
   { (valid_struct_intM(t, (0), (-1), Object_alloc_table)
     and (valid_struct_TestNonNull(this_0, (0), (0), Object_alloc_table,
          TestNonNull_t)
-        and ((JC_64:
-             ((JC_62:
-              ge_int(add_int(offset_max(Object_alloc_table, t), (1)), (4)))
-             and (JC_63: st_length(Object_alloc_table))))
-            and valid_struct_intM(TestNonNull_st, (0), (-1),
-                Object_alloc_table)))) }
+        and (JC_64:
+            ((JC_62:
+             ge_int(add_int(offset_max(Object_alloc_table, t), (1)), (4)))
+            and (JC_63: st_length(Object_alloc_table)))))) }
   (init:
   try
    begin
@@ -1939,15 +1925,13 @@ let TestNonNull_test_safety =
    with
    Return ->
    void end)
-  { (valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-    and (JC_68: st_length(Object_alloc_table))) }
+  { (JC_68: st_length(Object_alloc_table)) }
 
 let cons_TestNonNull_ensures_default =
  fun (this_1 : Object pointer) ->
   { (valid_struct_TestNonNull(this_1, (0), (0), Object_alloc_table,
      TestNonNull_t)
-    and ((JC_46: st_length(Object_alloc_table))
-        and valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table))) }
+    and (JC_46: st_length(Object_alloc_table))) }
   (init:
   try
    begin
@@ -1976,8 +1960,7 @@ let cons_TestNonNull_safety =
  fun (this_1 : Object pointer) ->
   { (valid_struct_TestNonNull(this_1, (0), (0), Object_alloc_table,
      TestNonNull_t)
-    and ((JC_46: st_length(Object_alloc_table))
-        and valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table))) }
+    and (JC_46: st_length(Object_alloc_table))) }
   (init:
   try
    begin
@@ -2005,8 +1988,7 @@ let cons_TestNonNull_safety =
    with
    Return ->
    void end)
-  { (valid_struct_intM(TestNonNull_st, (0), (-1), Object_alloc_table)
-    and (JC_50: st_length(Object_alloc_table))) }
+  { (JC_50: st_length(Object_alloc_table)) }
 
 
 ========== make project execution ==========
@@ -2032,10 +2014,6 @@ text = "IndexBounds"/>
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/TestNonNull_po4.why">
-      <location file = "why/TestNonNull.why" line = "1123" begin = "4" end = "117"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/TestNonNull_po5.why">
       <location file = "HOME/tests/java/TestNonNull.java" line = "23" begin = "9" end = "13"/>
       <explain kind = "Post"/>
     </goal>
@@ -2044,26 +2022,22 @@ text = "IndexBounds"/>
   <function name="Constructor of class TestNonNull">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/TestNonNull_po7.why">
+    <goal why_file="why/TestNonNull_po6.why">
       <location file = "HOME/tests/java/TestNonNull.jc" line = "74" begin = "23" end = "34"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/TestNonNull_po8.why">
-      <location file = "why/TestNonNull.why" line = "1170" begin = "39" end = "178"/>
+    <goal why_file="why/TestNonNull_po7.why">
+      <location file = "why/TestNonNull.why" line = "1153" begin = "39" end = "178"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/TestNonNull_po9.why">
-      <location file = "why/TestNonNull.why" line = "1189" begin = "4" end = "117"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/TestNonNull_po10.why">
+    <goal why_file="why/TestNonNull_po8.why">
       <location file = "HOME/tests/java/TestNonNull.java" line = "16" begin = "4" end = "15"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/TestNonNull_po6.why">
+    <goal why_file="why/TestNonNull_po5.why">
       <location file = "HOME/tests/java/TestNonNull.java" line = "18" begin = "12" end = "25"/>
       <explain kind = "Assert"/>
     </goal>
@@ -2426,6 +2400,14 @@ axiom pset_included_range:
             (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
              pset_range(ps, c, d))))))))
 
+axiom pset_included_range_all:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))]. pset_included(pset_range(ps, a, b), pset_all(ps)))))))
+
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
 axiom in_pset_singleton:
@@ -2703,7 +2685,7 @@ axiom alloc_extends_not_assigns_empty:
                 ((alloc_extends(a1, a2) and
                   (alloc_fresh(a1, p, n) and
                    (not_assigns(a2, m1, m2, l) and pset_included(l,
-                    pset_range(pset_singleton(p), 0, (n - 1)))))) ->
+                    pset_all(pset_singleton(p)))))) ->
                  not_assigns(a1, m1, m2, pset_empty)))))))))
 
 logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
@@ -3317,37 +3299,10 @@ goal TestNonNull_test_safety_po_1:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
+    ("JC_64":
+    (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_63": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t))
-
-========== file tests/java/why/TestNonNull_po10.why ==========
-goal cons_TestNonNull_safety_po_4:
-  forall this_1:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  forall TestNonNull_t:(Object,
-  Object pointer) memory.
-  (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and
-   (("JC_46": st_length(Object_alloc_table)) and
-    valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table))) ->
-  (3 >= 0) ->
-  forall result:Object pointer.
-  forall Object_alloc_table0:Object alloc_table.
-  forall Object_tag_table:Object tag_table.
-  (strict_valid_struct_intM(result, 0, (3 - 1), Object_alloc_table0) and
-   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-    (alloc_fresh(Object_alloc_table, result, 3) and
-     instanceof(Object_tag_table, result, intM_tag)))) ->
-  (offset_max(Object_alloc_table0, result) >= (-1)) ->
-  forall TestNonNull_t0:(Object,
-  Object pointer) memory.
-  (TestNonNull_t0 = store(TestNonNull_t, this_1, result)) ->
-  ("JC_54": ((offset_max(Object_alloc_table0, select(TestNonNull_t0,
-  this_1)) + 1) = 3)) ->
-  ("JC_50": ("JC_50": st_length(Object_alloc_table0)))
 
 ========== file tests/java/why/TestNonNull_po2.why ==========
 goal TestNonNull_test_safety_po_2:
@@ -3361,10 +3316,9 @@ goal TestNonNull_test_safety_po_2:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
+    ("JC_64":
+    (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_63": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -3384,10 +3338,9 @@ goal TestNonNull_test_safety_po_3:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
+    ("JC_64":
+    (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_63": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -3420,10 +3373,9 @@ goal TestNonNull_test_safety_po_4:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
+    ("JC_64":
+    (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_63": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -3445,57 +3397,16 @@ goal TestNonNull_test_safety_po_4:
   (3 <= offset_max(Object_alloc_table, TestNonNull_st)) ->
   forall result3:int32.
   (result3 = select(intM_intP1, shift(TestNonNull_st, 3))) ->
-  valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)
+  ("JC_68": st_length(Object_alloc_table))
 
 ========== file tests/java/why/TestNonNull_po5.why ==========
-goal TestNonNull_test_safety_po_5:
-  forall this_0:Object pointer.
-  forall t:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  forall TestNonNull_t:(Object,
-  Object pointer) memory.
-  forall intM_intP:(Object,
-  int32) memory.
-  (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
-   (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
-    TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
-  (3 <= offset_max(Object_alloc_table, t)) ->
-  forall result:int32.
-  (result = select(intM_intP, shift(t, 3))) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  (2 <= offset_max(Object_alloc_table, t)) ->
-  forall intM_intP0:(Object,
-  int32) memory.
-  (intM_intP0 = store(intM_intP, shift(t, 2), result0)) ->
-  (2 <= offset_max(Object_alloc_table, t)) ->
-  forall result1:int32.
-  (result1 = select(intM_intP0, shift(t, 2))) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = 1) ->
-  (3 <= offset_max(Object_alloc_table, t)) ->
-  forall intM_intP1:(Object,
-  int32) memory.
-  (intM_intP1 = store(intM_intP0, shift(t, 3), result2)) ->
-  (3 <= offset_max(Object_alloc_table, TestNonNull_st)) ->
-  forall result3:int32.
-  (result3 = select(intM_intP1, shift(TestNonNull_st, 3))) ->
-  ("JC_68": ("JC_68": st_length(Object_alloc_table)))
-
-========== file tests/java/why/TestNonNull_po6.why ==========
 goal cons_TestNonNull_ensures_default_po_1:
   forall this_1:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and
-   (("JC_46": st_length(Object_alloc_table)) and
-    valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
@@ -3510,28 +3421,24 @@ goal cons_TestNonNull_ensures_default_po_1:
   ("JC_57": ((offset_max(Object_alloc_table0, select(TestNonNull_t0,
   this_1)) + 1) = 3)))
 
-========== file tests/java/why/TestNonNull_po7.why ==========
+========== file tests/java/why/TestNonNull_po6.why ==========
 goal cons_TestNonNull_safety_po_1:
   forall this_1:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and
-   (("JC_46": st_length(Object_alloc_table)) and
-    valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
   (3 >= 0)
 
-========== file tests/java/why/TestNonNull_po8.why ==========
+========== file tests/java/why/TestNonNull_po7.why ==========
 goal cons_TestNonNull_safety_po_2:
   forall this_1:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and
-   (("JC_46": st_length(Object_alloc_table)) and
-    valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
   (3 >= 0) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
@@ -3542,16 +3449,14 @@ goal cons_TestNonNull_safety_po_2:
      instanceof(Object_tag_table, result, intM_tag)))) ->
   (offset_max(Object_alloc_table0, result) >= (-1))
 
-========== file tests/java/why/TestNonNull_po9.why ==========
+========== file tests/java/why/TestNonNull_po8.why ==========
 goal cons_TestNonNull_safety_po_3:
   forall this_1:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and
-   (("JC_46": st_length(Object_alloc_table)) and
-    valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
   (3 >= 0) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
@@ -3566,7 +3471,7 @@ goal cons_TestNonNull_safety_po_3:
   (TestNonNull_t0 = store(TestNonNull_t, this_1, result)) ->
   ("JC_54": ((offset_max(Object_alloc_table0, select(TestNonNull_t0,
   this_1)) + 1) = 3)) ->
-  valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table0)
+  ("JC_50": st_length(Object_alloc_table0))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/TestNonNull.why
@@ -3795,6 +3700,10 @@ why -simplify [...] why/TestNonNull.why
  (FORALL (a b c d)
  (IMPLIES (AND (<= c a) (<= b d))
  (FORALL (ps) (pset_included (pset_range ps a b) (pset_range ps c d))))))
+
+(BG_PUSH
+ ;; Why axiom pset_included_range_all
+ (FORALL (ps a b c d) (pset_included (pset_range ps a b) (pset_all ps))))
 
 (BG_PUSH
  ;; Why axiom in_pset_empty
@@ -4052,7 +3961,7 @@ why -simplify [...] why/TestNonNull.why
  (AND (EQ (alloc_extends a1 a2) |@true|)
  (AND (alloc_fresh a1 p n)
  (AND (not_assigns a2 m1 m2 l)
- (pset_included l (pset_range (pset_singleton p) 0 (- n 1))))))
+ (pset_included l (pset_all (pset_singleton p))))))
  (not_assigns a1 m1 m2 pset_empty))))
 
 (BG_PUSH
@@ -4562,10 +4471,8 @@ why -simplify [...] why/TestNonNull.why
          (AND
          (valid_struct_TestNonNull
          this_0 0 0 Object_alloc_table TestNonNull_t)
-         (AND
          (AND (>= (+ (offset_max Object_alloc_table t) 1) 4)
-         (st_length Object_alloc_table))
-         (valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table))))
+         (st_length Object_alloc_table))))
 (<= 3 (offset_max Object_alloc_table t)))))))
 
 ;; TestNonNull_test_safety_po_2, File "HOME/tests/java/TestNonNull.java", line 25, characters 1-9
@@ -4578,10 +4485,8 @@ why -simplify [...] why/TestNonNull.why
          (AND
          (valid_struct_TestNonNull
          this_0 0 0 Object_alloc_table TestNonNull_t)
-         (AND
          (AND (>= (+ (offset_max Object_alloc_table t) 1) 4)
-         (st_length Object_alloc_table))
-         (valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table))))
+         (st_length Object_alloc_table))))
 (IMPLIES (<= 3 (offset_max Object_alloc_table t))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t 3)))
@@ -4599,10 +4504,8 @@ why -simplify [...] why/TestNonNull.why
          (AND
          (valid_struct_TestNonNull
          this_0 0 0 Object_alloc_table TestNonNull_t)
-         (AND
          (AND (>= (+ (offset_max Object_alloc_table t) 1) 4)
-         (st_length Object_alloc_table))
-         (valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table))))
+         (st_length Object_alloc_table))))
 (IMPLIES (<= 3 (offset_max Object_alloc_table t))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t 3)))
@@ -4621,7 +4524,7 @@ why -simplify [...] why/TestNonNull.why
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t 3) result2))
 (<= 3 (offset_max Object_alloc_table TestNonNull_st))))))))))))))))))))))))
 
-;; TestNonNull_test_safety_po_4, File "why/TestNonNull.why", line 1123, characters 4-117
+;; TestNonNull_test_safety_po_4, File "HOME/tests/java/TestNonNull.java", line 23, characters 9-13
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4631,45 +4534,8 @@ why -simplify [...] why/TestNonNull.why
          (AND
          (valid_struct_TestNonNull
          this_0 0 0 Object_alloc_table TestNonNull_t)
-         (AND
          (AND (>= (+ (offset_max Object_alloc_table t) 1) 4)
-         (st_length Object_alloc_table))
-         (valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table))))
-(IMPLIES (<= 3 (offset_max Object_alloc_table t))
-(FORALL (result)
-(IMPLIES (EQ result (select intM_intP (shift t 3)))
-(FORALL (result0)
-(IMPLIES (EQ (integer_of_int32 result0) 1)
-(IMPLIES (<= 2 (offset_max Object_alloc_table t))
-(FORALL (intM_intP0)
-(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 2) result0))
-(IMPLIES (<= 2 (offset_max Object_alloc_table t))
-(FORALL (result1)
-(IMPLIES (EQ result1 (select intM_intP0 (shift t 2)))
-(FORALL (result2)
-(IMPLIES (EQ (integer_of_int32 result2) 1)
-(IMPLIES (<= 3 (offset_max Object_alloc_table t))
-(FORALL (intM_intP1)
-(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t 3) result2))
-(IMPLIES (<= 3 (offset_max Object_alloc_table TestNonNull_st))
-(FORALL (result3)
-(IMPLIES (EQ result3 (select intM_intP1 (shift TestNonNull_st 3)))
-(valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table))))))))))))))))))))))))))
-
-;; TestNonNull_test_safety_po_5, File "HOME/tests/java/TestNonNull.java", line 23, characters 9-13
-(FORALL (this_0)
-(FORALL (t)
-(FORALL (Object_alloc_table)
-(FORALL (TestNonNull_t)
-(FORALL (intM_intP)
-(IMPLIES (AND (valid_struct_intM t 0 (- 0 1) Object_alloc_table)
-         (AND
-         (valid_struct_TestNonNull
-         this_0 0 0 Object_alloc_table TestNonNull_t)
-         (AND
-         (AND (>= (+ (offset_max Object_alloc_table t) 1) 4)
-         (st_length Object_alloc_table))
-         (valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table))))
+         (st_length Object_alloc_table))))
 (IMPLIES (<= 3 (offset_max Object_alloc_table t))
 (FORALL (result)
 (IMPLIES (EQ result (select intM_intP (shift t 3)))
@@ -4698,8 +4564,7 @@ why -simplify [...] why/TestNonNull.why
 (IMPLIES (AND
          (valid_struct_TestNonNull
          this_1 0 0 Object_alloc_table TestNonNull_t)
-         (AND (st_length Object_alloc_table)
-         (valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table)))
+         (st_length Object_alloc_table))
 (FORALL (result)
 (FORALL (Object_alloc_table0)
 (FORALL (Object_tag_table)
@@ -4719,19 +4584,17 @@ why -simplify [...] why/TestNonNull.why
 (IMPLIES (AND
          (valid_struct_TestNonNull
          this_1 0 0 Object_alloc_table TestNonNull_t)
-         (AND (st_length Object_alloc_table)
-         (valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table)))
+         (st_length Object_alloc_table))
 (>= 3 0)))))
 
-;; cons_TestNonNull_safety_po_2, File "why/TestNonNull.why", line 1170, characters 39-178
+;; cons_TestNonNull_safety_po_2, File "why/TestNonNull.why", line 1153, characters 39-178
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (FORALL (TestNonNull_t)
 (IMPLIES (AND
          (valid_struct_TestNonNull
          this_1 0 0 Object_alloc_table TestNonNull_t)
-         (AND (st_length Object_alloc_table)
-         (valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table)))
+         (st_length Object_alloc_table))
 (IMPLIES (>= 3 0)
 (FORALL (result)
 (FORALL (Object_alloc_table0)
@@ -4743,41 +4606,14 @@ why -simplify [...] why/TestNonNull.why
          (instanceof Object_tag_table result intM_tag))))
 (>= (offset_max Object_alloc_table0 result) (- 0 1)))))))))))
 
-;; cons_TestNonNull_safety_po_3, File "why/TestNonNull.why", line 1189, characters 4-117
+;; cons_TestNonNull_safety_po_3, File "HOME/tests/java/TestNonNull.java", line 16, characters 4-15
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (FORALL (TestNonNull_t)
 (IMPLIES (AND
          (valid_struct_TestNonNull
          this_1 0 0 Object_alloc_table TestNonNull_t)
-         (AND (st_length Object_alloc_table)
-         (valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table)))
-(IMPLIES (>= 3 0)
-(FORALL (result)
-(FORALL (Object_alloc_table0)
-(FORALL (Object_tag_table)
-(IMPLIES (AND (strict_valid_struct_intM result 0 (- 3 1) Object_alloc_table0)
-         (AND
-         (EQ (alloc_extends Object_alloc_table Object_alloc_table0) |@true|)
-         (AND (alloc_fresh Object_alloc_table result 3)
-         (instanceof Object_tag_table result intM_tag))))
-(IMPLIES (>= (offset_max Object_alloc_table0 result) (- 0 1))
-(FORALL (TestNonNull_t0)
-(IMPLIES (EQ TestNonNull_t0 (|why__store| TestNonNull_t this_1 result))
-(IMPLIES (EQ (+ (offset_max
-                Object_alloc_table0 (select TestNonNull_t0 this_1)) 1)
-         3)
-(valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table0))))))))))))))
-
-;; cons_TestNonNull_safety_po_4, File "HOME/tests/java/TestNonNull.java", line 16, characters 4-15
-(FORALL (this_1)
-(FORALL (Object_alloc_table)
-(FORALL (TestNonNull_t)
-(IMPLIES (AND
-         (valid_struct_TestNonNull
-         this_1 0 0 Object_alloc_table TestNonNull_t)
-         (AND (st_length Object_alloc_table)
-         (valid_struct_intM TestNonNull_st 0 (- 0 1) Object_alloc_table)))
+         (st_length Object_alloc_table))
 (IMPLIES (>= 3 0)
 (FORALL (result)
 (FORALL (Object_alloc_table0)
@@ -4798,11 +4634,11 @@ why -simplify [...] why/TestNonNull.why
 ========== running Simplify ==========
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/TestNonNull_why.sx   : .......... (10/0/0/0/0)
-total   :  10
-valid   :  10 (100%)
+simplify/TestNonNull_why.sx   : .......? (7/0/1/0/0)
+total   :   8
+valid   :   7 ( 88%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
+unknown :   1 ( 12%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
 ========== generation of alt-ergo VC output ==========
@@ -5163,6 +4999,14 @@ axiom pset_included_range:
             (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
              pset_range(ps, c, d))))))))
 
+axiom pset_included_range_all:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))]. pset_included(pset_range(ps, a, b), pset_all(ps)))))))
+
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
 axiom in_pset_singleton:
@@ -5440,7 +5284,7 @@ axiom alloc_extends_not_assigns_empty:
                 ((alloc_extends(a1, a2) and
                   (alloc_fresh(a1, p, n) and
                    (not_assigns(a2, m1, m2, l) and pset_included(l,
-                    pset_range(pset_singleton(p), 0, (n - 1)))))) ->
+                    pset_all(pset_singleton(p)))))) ->
                  not_assigns(a1, m1, m2, pset_empty)))))))))
 
 logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
@@ -6053,10 +5897,9 @@ goal TestNonNull_test_safety_po_1:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
+    ("JC_64":
+    (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_63": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t))
 
 goal TestNonNull_test_safety_po_2:
@@ -6070,10 +5913,9 @@ goal TestNonNull_test_safety_po_2:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
+    ("JC_64":
+    (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_63": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -6092,10 +5934,9 @@ goal TestNonNull_test_safety_po_3:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
+    ("JC_64":
+    (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_63": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -6127,10 +5968,9 @@ goal TestNonNull_test_safety_po_4:
   (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
    (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
     TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
+    ("JC_64":
+    (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
+     ("JC_63": st_length(Object_alloc_table)))))) ->
   (3 <= offset_max(Object_alloc_table, t)) ->
   forall result:int32.
   (result = select(intM_intP, shift(t, 3))) ->
@@ -6152,45 +5992,7 @@ goal TestNonNull_test_safety_po_4:
   (3 <= offset_max(Object_alloc_table, TestNonNull_st)) ->
   forall result3:int32.
   (result3 = select(intM_intP1, shift(TestNonNull_st, 3))) ->
-  valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)
-
-goal TestNonNull_test_safety_po_5:
-  forall this_0:Object pointer.
-  forall t:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  forall TestNonNull_t:(Object,
-  Object pointer) memory.
-  forall intM_intP:(Object,
-  int32) memory.
-  (valid_struct_intM(t, 0, (-1), Object_alloc_table) and
-   (valid_struct_TestNonNull(this_0, 0, 0, Object_alloc_table,
-    TestNonNull_t) and
-    (("JC_64":
-     (("JC_62": ((offset_max(Object_alloc_table, t) + 1) >= 4)) and
-      ("JC_63": st_length(Object_alloc_table)))) and
-     valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table)))) ->
-  (3 <= offset_max(Object_alloc_table, t)) ->
-  forall result:int32.
-  (result = select(intM_intP, shift(t, 3))) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  (2 <= offset_max(Object_alloc_table, t)) ->
-  forall intM_intP0:(Object,
-  int32) memory.
-  (intM_intP0 = store(intM_intP, shift(t, 2), result0)) ->
-  (2 <= offset_max(Object_alloc_table, t)) ->
-  forall result1:int32.
-  (result1 = select(intM_intP0, shift(t, 2))) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = 1) ->
-  (3 <= offset_max(Object_alloc_table, t)) ->
-  forall intM_intP1:(Object,
-  int32) memory.
-  (intM_intP1 = store(intM_intP0, shift(t, 3), result2)) ->
-  (3 <= offset_max(Object_alloc_table, TestNonNull_st)) ->
-  forall result3:int32.
-  (result3 = select(intM_intP1, shift(TestNonNull_st, 3))) ->
-  ("JC_68": ("JC_68": st_length(Object_alloc_table)))
+  ("JC_68": st_length(Object_alloc_table))
 
 goal cons_TestNonNull_ensures_default_po_1:
   forall this_1:Object pointer.
@@ -6198,9 +6000,7 @@ goal cons_TestNonNull_ensures_default_po_1:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and
-   (("JC_46": st_length(Object_alloc_table)) and
-    valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
   forall Object_tag_table:Object tag_table.
@@ -6221,9 +6021,7 @@ goal cons_TestNonNull_safety_po_1:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and
-   (("JC_46": st_length(Object_alloc_table)) and
-    valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
   (3 >= 0)
 
 goal cons_TestNonNull_safety_po_2:
@@ -6232,9 +6030,7 @@ goal cons_TestNonNull_safety_po_2:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and
-   (("JC_46": st_length(Object_alloc_table)) and
-    valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
   (3 >= 0) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
@@ -6251,9 +6047,7 @@ goal cons_TestNonNull_safety_po_3:
   forall TestNonNull_t:(Object,
   Object pointer) memory.
   (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and
-   (("JC_46": st_length(Object_alloc_table)) and
-    valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table))) ->
+   TestNonNull_t) and ("JC_46": st_length(Object_alloc_table))) ->
   (3 >= 0) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
@@ -6268,40 +6062,15 @@ goal cons_TestNonNull_safety_po_3:
   (TestNonNull_t0 = store(TestNonNull_t, this_1, result)) ->
   ("JC_54": ((offset_max(Object_alloc_table0, select(TestNonNull_t0,
   this_1)) + 1) = 3)) ->
-  valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table0)
-
-goal cons_TestNonNull_safety_po_4:
-  forall this_1:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  forall TestNonNull_t:(Object,
-  Object pointer) memory.
-  (valid_struct_TestNonNull(this_1, 0, 0, Object_alloc_table,
-   TestNonNull_t) and
-   (("JC_46": st_length(Object_alloc_table)) and
-    valid_struct_intM(TestNonNull_st, 0, (-1), Object_alloc_table))) ->
-  (3 >= 0) ->
-  forall result:Object pointer.
-  forall Object_alloc_table0:Object alloc_table.
-  forall Object_tag_table:Object tag_table.
-  (strict_valid_struct_intM(result, 0, (3 - 1), Object_alloc_table0) and
-   (alloc_extends(Object_alloc_table, Object_alloc_table0) and
-    (alloc_fresh(Object_alloc_table, result, 3) and
-     instanceof(Object_tag_table, result, intM_tag)))) ->
-  (offset_max(Object_alloc_table0, result) >= (-1)) ->
-  forall TestNonNull_t0:(Object,
-  Object pointer) memory.
-  (TestNonNull_t0 = store(TestNonNull_t, this_1, result)) ->
-  ("JC_54": ((offset_max(Object_alloc_table0, select(TestNonNull_t0,
-  this_1)) + 1) = 3)) ->
-  ("JC_50": ("JC_50": st_length(Object_alloc_table0)))
+  ("JC_50": st_length(Object_alloc_table0))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/TestNonNull_why.why       : ........## (8/0/0/2/0)
-total   :  10
-valid   :   8 ( 80%)
+why/TestNonNull_why.why       : .......? (7/0/1/0/0)
+total   :   8
+valid   :   7 ( 88%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   2 ( 20%)
+unknown :   1 ( 12%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

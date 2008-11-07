@@ -3883,6 +3883,14 @@ axiom pset_included_range:
             (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
              pset_range(ps, c, d))))))))
 
+axiom pset_included_range_all:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))]. pset_included(pset_range(ps, a, b), pset_all(ps)))))))
+
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
 axiom in_pset_singleton:
@@ -4160,7 +4168,7 @@ axiom alloc_extends_not_assigns_empty:
                 ((alloc_extends(a1, a2) and
                   (alloc_fresh(a1, p, n) and
                    (not_assigns(a2, m1, m2, l) and pset_included(l,
-                    pset_range(pset_singleton(p), 0, (n - 1)))))) ->
+                    pset_all(pset_singleton(p)))))) ->
                  not_assigns(a1, m1, m2, pset_empty)))))))))
 
 logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
@@ -5303,6 +5311,10 @@ why -simplify [...] why/Creation.why
  (FORALL (ps) (pset_included (pset_range ps a b) (pset_range ps c d))))))
 
 (BG_PUSH
+ ;; Why axiom pset_included_range_all
+ (FORALL (ps a b c d) (pset_included (pset_range ps a b) (pset_all ps))))
+
+(BG_PUSH
  ;; Why axiom in_pset_empty
  (FORALL (p) (NOT (EQ (in_pset p pset_empty) |@true|))))
 
@@ -5558,7 +5570,7 @@ why -simplify [...] why/Creation.why
  (AND (EQ (alloc_extends a1 a2) |@true|)
  (AND (alloc_fresh a1 p n)
  (AND (not_assigns a2 m1 m2 l)
- (pset_included l (pset_range (pset_singleton p) 0 (- n 1))))))
+ (pset_included l (pset_all (pset_singleton p))))))
  (not_assigns a1 m1 m2 pset_empty))))
 
 (BG_PUSH
@@ -6714,6 +6726,14 @@ axiom pset_included_range:
             (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
              pset_range(ps, c, d))))))))
 
+axiom pset_included_range_all:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))]. pset_included(pset_range(ps, a, b), pset_all(ps)))))))
+
 axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
 
 axiom in_pset_singleton:
@@ -6991,7 +7011,7 @@ axiom alloc_extends_not_assigns_empty:
                 ((alloc_extends(a1, a2) and
                   (alloc_fresh(a1, p, n) and
                    (not_assigns(a2, m1, m2, l) and pset_included(l,
-                    pset_range(pset_singleton(p), 0, (n - 1)))))) ->
+                    pset_all(pset_singleton(p)))))) ->
                  not_assigns(a1, m1, m2, pset_empty)))))))))
 
 logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
