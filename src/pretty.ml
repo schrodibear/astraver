@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.36 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: pretty.ml,v 1.37 2008-11-10 16:23:41 moy Exp $ i*)
 
 open Format
 open Pp
@@ -293,6 +293,19 @@ let output_files f =
 		decl ctxfmt d)
 	 queue)
     (f ^ "_ctx.why")
+
+let push_or_output_decl = 
+  let po = ref 0 in 
+  function d ->
+    match d with
+      | Dgoal (loc,expl,id,_) as d -> 
+	  incr po;
+	  let fpo = id ^ ".why" in
+	  print_in_file (fun fmt -> decl fmt d) fpo;
+	  if explain_vc then
+	    let ftr = id ^ ".xpl" in
+	    print_in_file (fun fmt -> print_trace fmt id ((*loc,*)expl)) ftr
+      | d -> push_decl d
 
 module SMap = Map.Make(String)
 

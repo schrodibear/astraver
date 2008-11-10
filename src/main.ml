@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.164 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.165 2008-11-10 16:23:41 moy Exp $ i*)
 
 open Options
 open Ptree
@@ -91,7 +91,8 @@ let push_decl _vloc d =
 	  | Isabelle -> Isabelle.push_decl
 	  | Hol4 -> Hol4.push_decl
 	  | Gappa -> Gappa.push_decl 
-	  | Why | MultiWhy | WhyProject -> Pretty.push_decl ~ergo:false
+	  | Why | WhyProject -> Pretty.push_decl ~ergo:false
+	  | MultiWhy -> Pretty.push_or_output_decl
 	  | Ergo -> Pretty.push_decl ~ergo:true
 	  | Dispatcher -> 
 (*
