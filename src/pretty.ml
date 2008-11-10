@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.37 2008-11-10 16:23:41 moy Exp $ i*)
+(*i $Id: pretty.ml,v 1.38 2008-11-10 17:47:20 moy Exp $ i*)
 
 open Format
 open Pp
@@ -300,10 +300,10 @@ let push_or_output_decl =
     match d with
       | Dgoal (loc,expl,id,_) as d -> 
 	  incr po;
-	  let fpo = id ^ ".why" in
+	  let fpo = Options.out_file (id ^ ".why") in
 	  print_in_file (fun fmt -> decl fmt d) fpo;
 	  if explain_vc then
-	    let ftr = id ^ ".xpl" in
+	    let ftr = Options.out_file (id ^ ".xpl") in
 	    print_in_file (fun fmt -> print_trace fmt id ((*loc,*)expl)) ftr
       | d -> push_decl d
 
