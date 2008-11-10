@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: toolstat_lex.mll,v 1.6 2008-11-05 14:43:52 moy Exp $ i*)
+(*i $Id: toolstat_lex.mll,v 1.7 2008-11-10 13:33:54 moy Exp $ i*)
 
 {
   open Toolstat_pars
@@ -34,8 +34,8 @@
   open Format
   open Pp
 
-  let debug = false
-  let debug_more = false
+  let debug = ref false
+  let debug_more = ref false
 
   let extract_pos s c =
     let rec aux s acc i =
@@ -95,29 +95,29 @@ rule token = parse
   | "\nRunning " (id as s) " on proof obligations"
       { 
 	newline lexbuf; 
-	if debug then printf "prover %s@." s; 
+	if !debug then printf "prover %s@." s; 
 	PROVER(s)
       }
   | "\n" id "/" (file as f) "_why." id ws* ':' ws* 
       { 
 	newline lexbuf; 
-	if debug then printf "test %s@." f; 
+	if !debug then printf "test %s@." f; 
 	TEST(f)
       }
   | (result as s) ws*
       '(' (int as n1) '/' (int as n2) 
       '/' (int as n3) '/' (int as n4) '/' (int as n5) ')'  
       { 
-	if debug then printf "result %s@." s; 
+	if !debug then printf "result %s@." s; 
 	RESULT
 	  (detailed_result s 
 	     (as_int n1) (as_int n2) (as_int n3) (as_int n4) (as_int n5)) 
       }
-  | "\ntotal CPU time" ws* ':' 
+  | "\ntotal CPU time" ws* ':' ws*
       ((real as h) " h")* ws* ((real as m) " m")* ws* ((real as s) " sec")* 
       { 
 	newline lexbuf; 
-	if debug then printf "time %a h %a m %a s@." (print_option string) h 
+	if !debug then printf "time %a h %a m %a s@." (print_option string) h 
 	  (print_option string) m (print_option string) s; 
 	TIME(opt_as_int h, opt_as_int m, opt_as_float s) 
       }
@@ -125,7 +125,7 @@ rule token = parse
       { newline lexbuf; token lexbuf }
   | _                                              
       { 
-	if debug_more then printf "other token %s@." (lexeme lexbuf);
+	if !debug_more then printf "other token %s@." (lexeme lexbuf);
 	token lexbuf 
       }
   | eof

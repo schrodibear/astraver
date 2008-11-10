@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.267 2008-11-06 10:08:13 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.268 2008-11-10 13:33:54 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2834,7 +2834,7 @@ let declare_struct_info d = match d#node with
         create_mutable_field si
   | _ -> ()
 
-let declare_function d = match d#node with
+let rec declare_function d = match d#node with
   | JCDfun(ty,id,pl,_specs,_body) ->
       ignore 
         (add_fundecl (ty,id#pos,id#name,pl))
@@ -2844,6 +2844,8 @@ let declare_function d = match d#node with
   | JCDlogic(ty,id,labels,pl,_body) ->
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
       ignore (add_logic_fundecl (ty,id,labels,pl))
+  | JCDaxiomatic(_id,l) -> 
+      List.iter declare_function l
   | _ -> ()
 
 let declare_variable d = match d#node with
@@ -2880,7 +2882,7 @@ let type_variant d = match d#node with
         jc_root_info_hroots = [];
         jc_root_info_kind = 
 	  (match d#node with 
-	     | JCDvariant_type _ -> Rvariant
+     | JCDvariant_type _ -> Rvariant
 	     | JCDunion_type(_,true,_) -> RdiscrUnion
 	     | JCDunion_type(_,false,_) -> RplainUnion
 	     | _ -> assert false

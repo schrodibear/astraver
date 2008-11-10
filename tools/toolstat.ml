@@ -25,15 +25,19 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.8 2008-11-05 14:03:19 filliatr Exp $ i*)
+(*i $Id: toolstat.ml,v 1.9 2008-11-10 13:33:54 moy Exp $ i*)
 
 (* Statistics on automatic provers results *)
 
 open Format
 open Toolstat_types
 
-let spec = []
-let usage = "tool-stat file"
+let spec = [
+  "-d",
+  Arg.Set Toolstat_lex.debug,
+  "  Set debug mode";
+]
+let msg = "tool-stat file"
 let records = ref []
 
 let rec explain_exception fmt = function
@@ -85,10 +89,15 @@ let notvalid_summary (n1,n2,n3,n4,n5) = n2 + n3 + n4 + n5
 let valid_detail (s1,s2,s3,s4,s5) = s1
 let notvalid_detail (s1,s2,s3,s4,s5) = s2 @ s3 @ s4 @ s5
 
-let print_time ~sec fmt (h,m,s) =
-  if sec then
+let print_time ?(sec=false) ?(min=false) ?(hour=false) fmt (h,m,s) =
+  if sec || min || hour then
     let s = 3600 * h + 60 * m + (int_of_float (floor s)) in
-    fprintf fmt "%d" s
+    if sec then 
+      fprintf fmt "%d s" s
+    else if min then
+      fprintf fmt "%.2f m" (float_of_int s /. 60.)
+    else  
+      fprintf fmt "%.2f h" (float_of_int s /. 3600.)
   else if h = 0 && m = 0 && s = 0. then 
     fprintf fmt "0. s"
   else
@@ -105,7 +114,7 @@ let compare_time (h1,m1,s1) (h2,m2,s2) =
       compare s1 s2    
 
 let () = 
-  Arg.parse spec parse_file usage;
+  Arg.parse spec parse_file msg;
   let records : record list = !records in
 
   let provers : (prover, unit) Hashtbl.t = Hashtbl.create 5 in
@@ -215,8 +224,11 @@ let () =
   in
   ignore (List.fold_left 
 	    (fun i (p,t) ->
-	       printf "%d: %s   \t%a \t%a s@." 
-		 i p (print_time ~sec:false) t (print_time ~sec:true) t;
+	       printf "%d: %s   \t%a \t%a \t%a \t%a@." 
+		 i p (fun fmt -> print_time fmt) t 
+		 (fun fmt -> print_time ~sec:true fmt) t
+		 (fun fmt -> print_time ~min:true fmt) t
+		 (fun fmt -> print_time ~hour:true fmt) t;
 	       i+1
 	    ) 1 provers_ranking);
   
