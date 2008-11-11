@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.9 2008-11-10 13:33:54 moy Exp $ i*)
+(*i $Id: toolstat.ml,v 1.10 2008-11-11 20:29:55 moy Exp $ i*)
 
 (* Statistics on automatic provers results *)
 
@@ -36,6 +36,12 @@ let spec = [
   "-d",
   Arg.Set Toolstat_lex.debug,
   "  Set debug mode";
+  "-d2",
+  Arg.Set Toolstat_lex.debug_more,
+  "  Set more debug mode";
+  "-no-parse",
+  Arg.Set Toolstat_lex.no_parsing,
+  "  Only lex file";
 ]
 let msg = "tool-stat file"
 let records = ref []

@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: toolstat_lex.mll,v 1.7 2008-11-10 13:33:54 moy Exp $ i*)
+(*i $Id: toolstat_lex.mll,v 1.8 2008-11-11 20:29:55 moy Exp $ i*)
 
 {
   open Toolstat_pars
@@ -36,6 +36,7 @@
 
   let debug = ref false
   let debug_more = ref false
+  let no_parsing = ref false
 
   let extract_pos s c =
     let rec aux s acc i =
@@ -98,7 +99,7 @@ rule token = parse
 	if !debug then printf "prover %s@." s; 
 	PROVER(s)
       }
-  | "\n" id "/" (file as f) "_why." id ws* ':' ws* 
+  | "\n" id "/" (file as f) (".why" | "_why." id) ws* ':' ws* 
       { 
 	newline lexbuf; 
 	if !debug then printf "test %s@." f; 
@@ -125,7 +126,9 @@ rule token = parse
       { newline lexbuf; token lexbuf }
   | _                                              
       { 
-	if !debug_more then printf "other token %s@." (lexeme lexbuf);
+	if !debug_more then 
+	  (printf "other token %s@." (lexeme lexbuf);
+	   flush_all ());
 	token lexbuf 
       }
   | eof
@@ -134,7 +137,8 @@ rule token = parse
 {
   let parse lb = 
     try
-      Toolstat_pars.log token lb
+      if !no_parsing then (Toolstat_pars.all token lb; [])
+      else Toolstat_pars.log token lb
     with Parsing.Parse_error ->
       Format.eprintf "%a@." Loc.gen_report_position (loc lb);
       raise Parsing.Parse_error
