@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.48 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.49 2008-11-11 00:05:07 moy Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -38,6 +38,7 @@ let debug = ref false
 let batch = ref false
 let timings = ref true (* print timings *)
 let basename = ref false
+let listing = ref false
 let files = Queue.create ()
 
 type smt_solver = Yices | CVC3 | Z3
@@ -57,6 +58,7 @@ let spec =
     "-no-timings", Arg.Clear timings, "do not display timings";
     "-smt-solver", Arg.String set_smt_solver, "<solver>";
     "-basename", Arg.Set basename, "prints only file basenames";
+    "-listing", Arg.Set listing, "argument file only lists real argument files";
   ]
 
 let () = 
@@ -65,8 +67,22 @@ let () =
     Calldp.cpulimit := Filename.concat d "why-cpulimit"
 
 let usage = "usage: why-dp [options] files.{why,rv,znn,cvc,cvc.all,sx,sx.all,smt,smt.all}"
-let () = Arg.parse spec (fun s -> Queue.push s files) usage 
-
+let () = 
+  Arg.parse spec 
+    (fun s -> 
+       if !listing then
+	 let c = open_in s in
+	 let rec push_file () = 
+	   let line = input_line c in
+	   let flist = Str.split (Str.regexp "[ \t]+") line in
+	   List.iter (fun f -> Queue.push f files) flist;
+	   push_file ()
+	 in
+	 (try push_file () with End_of_file -> ());
+	 close_in c
+       else
+	 Queue.push s files) usage 
+    
 let () = 
   Cvcl_split.debug := !debug; 
   Simplify_split.debug := !debug;
