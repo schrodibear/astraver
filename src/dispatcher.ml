@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.34 2008-11-05 14:03:16 filliatr Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.35 2008-11-12 16:31:50 moy Exp $ i*)
 
 open Options
 open Vcg
@@ -66,7 +66,7 @@ let push_elem p e =
   | Cvcl -> Cvcl.push_decl e
   | Zenon -> Zenon.push_decl e
   | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl e
-  | Ergo -> Pretty.push_decl ~ergo:true e
+  | Ergo | ErgoSelect -> Pretty.push_decl ~ergo:true e
   | Graph -> Pretty.push_decl e
   | Coq -> Coq.push_decl e
 
@@ -78,7 +78,7 @@ let push_obligation p (loc, expl, id, s) =
   | Cvcl -> Cvcl.push_decl g
   | Zenon -> Zenon.push_decl g
   | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl g
-  | Ergo -> Pretty.push_decl g
+  | Ergo | ErgoSelect -> Pretty.push_decl g
   | Graph -> Pretty.push_decl g
   | Coq -> Coq.push_decl g
 
@@ -104,7 +104,7 @@ let output_file ?encoding p (elems,o) =
     | Cvcl -> Cvcl.prelude_done := false; Cvcl.reset ()
     | Zenon -> Zenon.prelude_done := false; Zenon.reset ()
     | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.reset ()
-    | Ergo -> Pretty.reset ()
+    | Ergo | ErgoSelect -> Pretty.reset ()
     | Graph -> Pretty.reset ()
     | Coq -> () (* Coq.reset () *)
   end;
@@ -145,7 +145,7 @@ let output_file ?encoding p (elems,o) =
     | Cvcl -> Cvcl.output_file f; f ^ "_why.cvc"
     | Zenon -> Zenon.output_file f; f ^ "_why.znn"
     | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.output_file f; f ^ "_why.smt"
-    | Ergo -> Pretty.output_file f; f ^ "_why.why"
+    | Ergo | ErgoSelect -> Pretty.output_file f; f ^ "_why.why"
     | Graph -> Pretty.output_file f; f ^ "_why.why"
     | Coq ->
 	let _p = get_project () in 
@@ -200,7 +200,9 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
     | Yices -> 
 	Calldp.yices ~debug ?timeout ~filename ()
     | Ergo ->
-	Calldp.ergo ~debug ?timeout ~filename ()
+	Calldp.ergo ~select_hypotheses:false ~debug ?timeout ~filename ()
+    | ErgoSelect ->
+	Calldp.ergo ~select_hypotheses:true ~debug ?timeout ~filename ()
     | Cvc3 -> 
 	Calldp.cvc3 ~debug ?timeout ~filename ()
     | Z3 -> 

@@ -175,6 +175,14 @@ let ergo = {
   pr_viewcol = None;
   pr_enc = NoEncoding;
   }
+let ergo_select = {
+  pr_id = DpConfig.ErgoSelect;
+  pr_info = DpConfig.alt_ergo;
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
+  pr_enc = NoEncoding;
+  }
 let ergoSS = {
   pr_id = DpConfig.Ergo;
   pr_info = DpConfig.alt_ergo;
@@ -212,7 +220,7 @@ let coq = {
 
   
 let provers = [
-  ergo; (*ergoSS;*) graph; simplify; z3SS ; yicesSStrat; cvc3; 
+  ergo; ergo_select; (*ergoSS;*) graph; simplify; z3SS ; yicesSStrat; cvc3; 
   (*simplify_sstrat;*) simplify_strat; yices; 
   coq ;
   (* rvsat; *)
@@ -237,8 +245,11 @@ let enc_name ~nl n p =
   let nl x = if nl then "\n" ^ x else x in 
   match p.pr_enc with
     | NoEncoding -> 
-	if p.pr_id = DpConfig.Graph then n ^ nl "(Graph)"
-	else n ^ nl "" 
+	begin match p.pr_id with
+	  | DpConfig.Graph -> n ^ nl "(Graph)"
+	  | DpConfig.ErgoSelect -> n ^ nl "(Select)"
+	  | _ -> n ^ nl "" 
+	end
     | SortedStratified -> n ^ nl "(SS)"
     | Monomorph -> n ^ nl "(mono)"
     | Recursive -> n ^ nl "(rec)"

@@ -28,7 +28,7 @@
 
 
 type prover_id = 
-    Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo 
+    Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
   | Cvc3 | Graph | Z3 | Coq
 
 type prover_data =

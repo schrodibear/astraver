@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.49 2008-11-11 00:05:07 moy Exp $ i*)
+(*i $Id: dp.ml,v 1.50 2008-11-12 16:31:50 moy Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -39,6 +39,7 @@ let batch = ref false
 let timings = ref true (* print timings *)
 let basename = ref false
 let listing = ref false
+let select_hypotheses = ref false
 let files = Queue.create ()
 
 type smt_solver = Yices | CVC3 | Z3
@@ -59,6 +60,8 @@ let spec =
     "-smt-solver", Arg.String set_smt_solver, "<solver>";
     "-basename", Arg.Set basename, "prints only file basenames";
     "-listing", Arg.Set listing, "argument file only lists real argument files";
+    "-select", Arg.Set select_hypotheses, 
+    "applies some selection of hypotheses (only Alt-Ergo)";
   ]
 
 let () = 
@@ -149,7 +152,8 @@ let wrapper r =
   flush stdout
 
 let call_ergo f = 
-  wrapper (Calldp.ergo ~debug:!debug ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.ergo ~debug:!debug ~timeout:!timeout 
+	     ~select_hypotheses:!select_hypotheses ~filename:f ())
 let call_cvcl f = 
   wrapper (Calldp.cvcl ~debug:!debug ~timeout:!timeout ~filename:f ())
 let call_simplify f = 

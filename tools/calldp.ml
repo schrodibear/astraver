@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.57 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.58 2008-11-12 16:31:50 moy Exp $ i*)
 
 open Printf
 
@@ -76,8 +76,11 @@ let grep re str =
     let _ = Str.search_forward re str 0 in true
   with Not_found -> false
 
-let gen_prover_call ?(debug=false) ?(timeout=30) ~filename:f p =
-  let cmd = p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ f in
+let gen_prover_call ?(debug=false) ?(timeout=30) ?(switch="") ~filename:f p =
+  let cmd = 
+    p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ 
+      switch ^ " " ^ f 
+  in
   let t,c,out = timed_sys_command ~debug timeout cmd in
   if c = 152 (* 128 + SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
   then Timeout t
@@ -111,9 +114,13 @@ let gen_prover_call ?(debug=false) ?(timeout=30) ~filename:f p =
     remove_file ~debug out;
     r
 
-let ergo ?(debug=false) ?(timeout=10) ~filename:f () =
-  gen_prover_call ~debug ~timeout ~filename:f DpConfig.alt_ergo
-	        
+let ergo ?(debug=false) ?(timeout=10) ~select_hypotheses ~filename:f () =
+  if select_hypotheses then
+    gen_prover_call ~debug ~timeout ~filename:f DpConfig.alt_ergo
+  else
+    gen_prover_call ~debug ~timeout ~switch:"-select 1"
+      ~filename:f DpConfig.alt_ergo
+
 let coq ?(debug=false) ?(timeout=10) ~filename:f () =
   gen_prover_call ~debug ~timeout ~filename:f DpConfig.coq
 	        
