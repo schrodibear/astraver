@@ -101,6 +101,45 @@ Done.
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
 # AbstractDomain = None
+axiomatic NumOfPos {
+
+  logic integer num_of_pos{Here}(integer i, integer j, intM[0..] t) 
+
+
+axiom num_of_pos_false_case{Here} :
+(\forall integer i_2;
+  (\forall integer j_2;
+    (\forall integer k_0;
+      (\forall intM[0..] t_2;
+        (((i_2 <= j_2) && (! ((t_2 + j_2).intP > 0))) ==>
+          (num_of_pos(i_2, j_2, t_2) == num_of_pos(i_2, (j_2 - 1), t_2)))))))
+
+
+axiom num_of_pos_true_case{Here} :
+(\forall integer i_1;
+  (\forall integer j_1;
+    (\forall integer k;
+      (\forall intM[0..] t_1;
+        (((i_1 <= j_1) && ((t_1 + j_1).intP > 0)) ==>
+          (num_of_pos(i_1, j_1, t_1) ==
+            (num_of_pos(i_1, (j_1 - 1), t_1) + 1)))))))
+
+
+axiom num_of_pos_empty{Here} :
+(\forall integer i_0;
+  (\forall integer j_0;
+    (\forall intM[0..] t_0;
+      ((i_0 > j_0) ==> (num_of_pos(i_0, j_0, t_0) == 0)))))
+
+}
+lemma num_of_pos_strictly_increasing{Here} :
+(\forall integer i_3;
+  (\forall integer j_3;
+    (\forall integer k_1;
+      (\forall integer l;
+        (\forall intM[0..] t_3;
+          ((((j_3 < k_1) && (k_1 <= l)) && ((t_3 + k_1).intP > 0)) ==>
+            (num_of_pos(i_3, j_3, t_3) < num_of_pos(i_3, l, t_3))))))))
 
 logic Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
@@ -147,45 +186,6 @@ boolean non_null_Object(Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
-axiomatic NumOfPos {
-
-  logic integer num_of_pos{Here}(integer i, integer j, intM[0..] t) 
-
-
-axiom num_of_pos_false_case{Here} :
-(\forall integer i_2;
-  (\forall integer j_2;
-    (\forall integer k_0;
-      (\forall intM[0..] t_2;
-        (((i_2 <= j_2) && (! ((t_2 + j_2).intP > 0))) ==>
-          (num_of_pos(i_2, j_2, t_2) == num_of_pos(i_2, (j_2 - 1), t_2)))))))
-
-
-axiom num_of_pos_true_case{Here} :
-(\forall integer i_1;
-  (\forall integer j_1;
-    (\forall integer k;
-      (\forall intM[0..] t_1;
-        (((i_1 <= j_1) && ((t_1 + j_1).intP > 0)) ==>
-          (num_of_pos(i_1, j_1, t_1) ==
-            (num_of_pos(i_1, (j_1 - 1), t_1) + 1)))))))
-
-
-axiom num_of_pos_empty{Here} :
-(\forall integer i_0;
-  (\forall integer j_0;
-    (\forall intM[0..] t_0;
-      ((i_0 > j_0) ==> (num_of_pos(i_0, j_0, t_0) == 0)))))
-
-}
-lemma num_of_pos_strictly_increasing{Here} :
-(\forall integer i_3;
-  (\forall integer j_3;
-    (\forall integer k_1;
-      (\forall integer l;
-        (\forall intM[0..] t_3;
-          ((((j_3 < k_1) && (k_1 <= l)) && ((t_3 + k_1).intP > 0)) ==>
-            (num_of_pos(i_3, j_3, t_3) < num_of_pos(i_3, l, t_3))))))))
 
 exception Throwable of Throwable[0..]
 
@@ -583,7 +583,7 @@ end = 25
 
 [JC_1]
 file = "HOME/tests/java/Muller.jc"
-line = 35
+line = 74
 begin = 8
 end = 21
 
@@ -607,7 +607,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/Muller.jc"
-line = 35
+line = 74
 begin = 8
 end = 21
 
@@ -650,7 +650,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Muller.jc"
-line = 37
+line = 76
 begin = 11
 end = 66
 
@@ -750,7 +750,7 @@ end = 28
 
 [JC_10]
 file = "HOME/tests/java/Muller.jc"
-line = 37
+line = 76
 begin = 11
 end = 66
 
@@ -762,7 +762,7 @@ end = 30
 
 [JC_11]
 file = "HOME/tests/java/Muller.jc"
-line = 40
+line = 79
 begin = 8
 end = 30
 
@@ -786,7 +786,7 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/java/Muller.jc"
-line = 40
+line = 79
 begin = 8
 end = 30
 
@@ -846,7 +846,7 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/Muller.jc"
-line = 43
+line = 82
 begin = 11
 end = 113
 
@@ -864,25 +864,25 @@ end = -1
 
 [JC_20]
 file = "HOME/tests/java/Muller.jc"
-line = 42
+line = 81
 begin = 10
 end = 18
 
 [JC_21]
 file = "HOME/tests/java/Muller.jc"
-line = 43
+line = 82
 begin = 11
 end = 113
 
 [JC_22]
 file = "HOME/tests/java/Muller.jc"
-line = 42
+line = 81
 begin = 10
 end = 18
 
 [JC_23]
 file = "HOME/tests/java/Muller.jc"
-line = 47
+line = 86
 begin = 8
 end = 23
 
@@ -896,13 +896,13 @@ end = -1
 name = "num_of_pos_empty"
 behavior = "axiom"
 file = "HOME/tests/java/Muller.jc"
-line = 75
+line = 29
 begin = 0
 end = 164
 
 [JC_25]
 file = "HOME/tests/java/Muller.jc"
-line = 47
+line = 86
 begin = 8
 end = 23
 
@@ -922,7 +922,7 @@ end = -1
 name = "num_of_pos_true_case"
 behavior = "axiom"
 file = "HOME/tests/java/Muller.jc"
-line = 65
+line = 19
 begin = 0
 end = 284
 
@@ -946,13 +946,13 @@ end = -1
 
 [JC_31]
 file = "HOME/tests/java/Muller.jc"
-line = 49
+line = 88
 begin = 11
 end = 65
 
 [JC_32]
 file = "HOME/tests/java/Muller.jc"
-line = 49
+line = 88
 begin = 11
 end = 65
 
@@ -960,7 +960,7 @@ end = 65
 name = "num_of_pos_strictly_increasing"
 behavior = "lemma"
 file = "HOME/tests/java/Muller.jc"
-line = 82
+line = 36
 begin = 0
 end = 317
 
@@ -1018,7 +1018,7 @@ end = -1
 name = "num_of_pos_false_case"
 behavior = "axiom"
 file = "HOME/tests/java/Muller.jc"
-line = 56
+line = 10
 begin = 0
 end = 273
 
@@ -1038,12 +1038,12 @@ logic Object_tag:  -> Object tag_id
 axiom Muller_parenttag_Object : parenttag(Muller_tag, Object_tag)
 
 predicate Non_null_Object(x_0:Object pointer,
- Object_x_2_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_x_2_alloc_table, x_0), (0))
+ Object_x_3_alloc_table:Object alloc_table) =
+ eq_int(offset_max(Object_x_3_alloc_table, x_0), (0))
 
 predicate Non_null_intM(x:Object pointer,
- Object_x_1_alloc_table:Object alloc_table) =
- ge_int(offset_max(Object_x_1_alloc_table, x), neg_int((1)))
+ Object_x_2_alloc_table:Object alloc_table) =
+ ge_int(offset_max(Object_x_2_alloc_table, x), neg_int((1)))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -1151,47 +1151,47 @@ axiom no_assign_num_of_pos_0 :
  (forall tmp:Object pset.
   (forall tmpmem:(Object, int) memory.
    (forall tmpalloc:Object alloc_table.
-    (forall intM_intP_t_6:(Object, int) memory.
+    (forall intM_intP_t_1:(Object, int) memory.
      (forall t:Object pointer.
       (forall j:int.
        (forall i:int.
         ((pset_disjoint(tmp, pset_empty)
-         and not_assigns(tmpalloc, intM_intP_t_6, tmpmem, tmp)) ->
-         (num_of_pos(i, j, t, intM_intP_t_6) = num_of_pos(i, j, t, tmpmem))))))))))
+         and not_assigns(tmpalloc, intM_intP_t_1, tmpmem, tmp)) ->
+         (num_of_pos(i, j, t, intM_intP_t_1) = num_of_pos(i, j, t, tmpmem))))))))))
 
 axiom no_update_num_of_pos_0 :
  (forall tmp:Object pointer.
   (forall tmpval:int.
-   (forall intM_intP_t_6:(Object, int) memory.
+   (forall intM_intP_t_1:(Object, int) memory.
     (forall t:Object pointer.
      (forall j:int.
       (forall i:int.
        ((not in_pset(tmp, pset_empty)) ->
-        (num_of_pos(i, j, t, intM_intP_t_6) = num_of_pos(i, j, t,
-                                              store(intM_intP_t_6, tmp,
+        (num_of_pos(i, j, t, intM_intP_t_1) = num_of_pos(i, j, t,
+                                              store(intM_intP_t_1, tmp,
                                               tmpval))))))))))
 
 axiom num_of_pos_empty :
- (forall intM_intP_t_6:(Object, int) memory.
+ (forall intM_intP_t_1:(Object, int) memory.
   (forall i_0:int.
    (forall j_0:int.
     (forall t_0:Object pointer.
      (gt_int(i_0, j_0) ->
-      eq_int(num_of_pos(i_0, j_0, t_0, intM_intP_t_6), (0)))))))
+      eq_int(num_of_pos(i_0, j_0, t_0, intM_intP_t_1), (0)))))))
 
 axiom num_of_pos_false_case :
- (forall intM_intP_t_6:(Object, int) memory.
+ (forall intM_intP_t_1:(Object, int) memory.
   (forall i_2:int.
    (forall j_2:int.
     (forall k_0:int.
      (forall t_2:Object pointer.
       ((le_int(i_2, j_2)
-       and (not gt_int(select(intM_intP_t_6, shift(t_2, j_2)), (0)))) ->
-       eq_int(num_of_pos(i_2, j_2, t_2, intM_intP_t_6),
-       num_of_pos(i_2, sub_int(j_2, (1)), t_2, intM_intP_t_6))))))))
+       and (not gt_int(select(intM_intP_t_1, shift(t_2, j_2)), (0)))) ->
+       eq_int(num_of_pos(i_2, j_2, t_2, intM_intP_t_1),
+       num_of_pos(i_2, sub_int(j_2, (1)), t_2, intM_intP_t_1))))))))
 
 goal num_of_pos_strictly_increasing :
- (forall intM_intP_t_3_16:(Object, int) memory.
+ (forall intM_intP_t_3_14:(Object, int) memory.
   (forall i_3:int.
    (forall j_3:int.
     (forall k_1:int.
@@ -1199,12 +1199,12 @@ goal num_of_pos_strictly_increasing :
       (forall t_3:Object pointer.
        ((lt_int(j_3, k_1)
         and (le_int(k_1, l)
-            and gt_int(select(intM_intP_t_3_16, shift(t_3, k_1)), (0)))) ->
-        lt_int(num_of_pos(i_3, j_3, t_3, intM_intP_t_3_16),
-        num_of_pos(i_3, l, t_3, intM_intP_t_3_16)))))))))
+            and gt_int(select(intM_intP_t_3_14, shift(t_3, k_1)), (0)))) ->
+        lt_int(num_of_pos(i_3, j_3, t_3, intM_intP_t_3_14),
+        num_of_pos(i_3, l, t_3, intM_intP_t_3_14)))))))))
 
 axiom num_of_pos_strictly_increasing_as_axiom :
- (forall intM_intP_t_3_16:(Object, int) memory.
+ (forall intM_intP_t_3_14:(Object, int) memory.
   (forall i_3:int.
    (forall j_3:int.
     (forall k_1:int.
@@ -1212,20 +1212,20 @@ axiom num_of_pos_strictly_increasing_as_axiom :
       (forall t_3:Object pointer.
        ((lt_int(j_3, k_1)
         and (le_int(k_1, l)
-            and gt_int(select(intM_intP_t_3_16, shift(t_3, k_1)), (0)))) ->
-        lt_int(num_of_pos(i_3, j_3, t_3, intM_intP_t_3_16),
-        num_of_pos(i_3, l, t_3, intM_intP_t_3_16)))))))))
+            and gt_int(select(intM_intP_t_3_14, shift(t_3, k_1)), (0)))) ->
+        lt_int(num_of_pos(i_3, j_3, t_3, intM_intP_t_3_14),
+        num_of_pos(i_3, l, t_3, intM_intP_t_3_14)))))))))
 
 axiom num_of_pos_true_case :
- (forall intM_intP_t_6:(Object, int) memory.
+ (forall intM_intP_t_1:(Object, int) memory.
   (forall i_1:int.
    (forall j_1:int.
     (forall k:int.
      (forall t_1:Object pointer.
       ((le_int(i_1, j_1)
-       and gt_int(select(intM_intP_t_6, shift(t_1, j_1)), (0))) ->
-       eq_int(num_of_pos(i_1, j_1, t_1, intM_intP_t_6),
-       add_int(num_of_pos(i_1, sub_int(j_1, (1)), t_1, intM_intP_t_6), (1)))))))))
+       and gt_int(select(intM_intP_t_1, shift(t_1, j_1)), (0))) ->
+       eq_int(num_of_pos(i_1, j_1, t_1, intM_intP_t_1),
+       add_int(num_of_pos(i_1, sub_int(j_1, (1)), t_1, intM_intP_t_1), (1)))))))))
 
 axiom pointer_addr_of_Object_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(Object_of_pointer_address(p))))
@@ -1693,60 +1693,60 @@ parameter cons_Muller_requires :
 
 parameter java_array_length_intM :
  x_2:Object pointer ->
-  Object_x_4_alloc_table:Object alloc_table ->
+  Object_x_5_alloc_table:Object alloc_table ->
    { } int
    { (JC_21:
      (le_int(result, (2147483647))
      and (ge_int(result, (0))
          and (eq_int(result,
-              add_int(offset_max(Object_x_4_alloc_table, x_2), (1)))
+              add_int(offset_max(Object_x_5_alloc_table, x_2), (1)))
              and (true = true))))) }
 
 parameter java_array_length_intM_requires :
  x_2:Object pointer ->
-  Object_x_4_alloc_table:Object alloc_table ->
+  Object_x_5_alloc_table:Object alloc_table ->
    { } int
    { (JC_21:
      (le_int(result, (2147483647))
      and (ge_int(result, (0))
          and (eq_int(result,
-              add_int(offset_max(Object_x_4_alloc_table, x_2), (1)))
+              add_int(offset_max(Object_x_5_alloc_table, x_2), (1)))
              and (true = true))))) }
 
 parameter non_null_Object :
  x_3:Object pointer ->
-  Object_x_5_alloc_table:Object alloc_table ->
+  Object_x_6_alloc_table:Object alloc_table ->
    { } bool
    { (JC_32:
      (if result
-      then eq_int(offset_max(Object_x_5_alloc_table, x_3), (0))
+      then eq_int(offset_max(Object_x_6_alloc_table, x_3), (0))
       else (x_3 = null))) }
 
 parameter non_null_Object_requires :
  x_3:Object pointer ->
-  Object_x_5_alloc_table:Object alloc_table ->
+  Object_x_6_alloc_table:Object alloc_table ->
    { } bool
    { (JC_32:
      (if result
-      then eq_int(offset_max(Object_x_5_alloc_table, x_3), (0))
+      then eq_int(offset_max(Object_x_6_alloc_table, x_3), (0))
       else (x_3 = null))) }
 
 parameter non_null_intM :
  x_1:Object pointer ->
-  Object_x_3_alloc_table:Object alloc_table ->
+  Object_x_4_alloc_table:Object alloc_table ->
    { } bool
    { (JC_10:
      (if result
-      then ge_int(offset_max(Object_x_3_alloc_table, x_1), neg_int((1)))
+      then ge_int(offset_max(Object_x_4_alloc_table, x_1), neg_int((1)))
       else (x_1 = null))) }
 
 parameter non_null_intM_requires :
  x_1:Object pointer ->
-  Object_x_3_alloc_table:Object alloc_table ->
+  Object_x_4_alloc_table:Object alloc_table ->
    { } bool
    { (JC_10:
      (if result
-      then ge_int(offset_max(Object_x_3_alloc_table, x_1), neg_int((1)))
+      then ge_int(offset_max(Object_x_4_alloc_table, x_1), neg_int((1)))
       else (x_1 = null))) }
 
 parameter struct_Muller_alloc_of_bitvector :
@@ -2214,12 +2214,12 @@ why --project [...] why/Muller.why
   <lemma name="num_of_pos_strictly_increasing">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Muller_po1.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "82" begin = "0" end = "317"/>
+      <location file = "HOME/tests/java/Muller.jc" line = "36" begin = "0" end = "317"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="num_of_pos_strictly_increasing">
-    <location file = "HOME/tests/java/Muller.jc" line = "82" begin = "0" end = "317"/>
+    <location file = "HOME/tests/java/Muller.jc" line = "36" begin = "0" end = "317"/>
   </function>
   <function name="Method m">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -3275,12 +3275,12 @@ logic Object_tag :  -> Object tag_id
 axiom Muller_parenttag_Object: parenttag(Muller_tag, Object_tag)
 
 predicate Non_null_Object(x_0: Object pointer,
-  Object_x_2_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_2_alloc_table, x_0) = 0)
+  Object_x_3_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_3_alloc_table, x_0) = 0)
 
 predicate Non_null_intM(x: Object pointer,
-  Object_x_1_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_1_alloc_table, x) >= (-1))
+  Object_x_2_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_2_alloc_table, x) >= (-1))
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -3379,66 +3379,66 @@ axiom no_assign_num_of_pos_0:
   (forall tmp:Object pset.
     (forall tmpmem:(Object, int) memory.
       (forall tmpalloc:Object alloc_table.
-        (forall intM_intP_t_6:(Object, int) memory.
+        (forall intM_intP_t_1:(Object, int) memory.
           (forall t:Object pointer.
             (forall j:int.
               (forall i:int.
                 ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                  intM_intP_t_6, tmpmem, tmp)) ->
-                 (num_of_pos(i, j, t, intM_intP_t_6) = num_of_pos(i, j, t,
+                  intM_intP_t_1, tmpmem, tmp)) ->
+                 (num_of_pos(i, j, t, intM_intP_t_1) = num_of_pos(i, j, t,
                  tmpmem))))))))))
 
 axiom no_update_num_of_pos_0:
   (forall tmp:Object pointer.
     (forall tmpval:int.
-      (forall intM_intP_t_6:(Object, int) memory.
+      (forall intM_intP_t_1:(Object, int) memory.
         (forall t:Object pointer.
           (forall j:int.
             (forall i:int.
               ((not in_pset(tmp, pset_empty)) -> (num_of_pos(i, j, t,
-               intM_intP_t_6) = num_of_pos(i, j, t, store(intM_intP_t_6, tmp,
+               intM_intP_t_1) = num_of_pos(i, j, t, store(intM_intP_t_1, tmp,
                tmpval))))))))))
 
 axiom num_of_pos_empty:
-  (forall intM_intP_t_6:(Object, int) memory.
+  (forall intM_intP_t_1:(Object, int) memory.
     (forall i_0:int.
       (forall j_0:int.
         (forall t_0:Object pointer.
-          ((i_0 > j_0) -> (num_of_pos(i_0, j_0, t_0, intM_intP_t_6) = 0))))))
+          ((i_0 > j_0) -> (num_of_pos(i_0, j_0, t_0, intM_intP_t_1) = 0))))))
 
 axiom num_of_pos_false_case:
-  (forall intM_intP_t_6:(Object, int) memory.
+  (forall intM_intP_t_1:(Object, int) memory.
     (forall i_2:int.
       (forall j_2:int.
         (forall k_0:int.
           (forall t_2:Object pointer.
-            (((i_2 <= j_2) and (not (select(intM_intP_t_6, shift(t_2,
+            (((i_2 <= j_2) and (not (select(intM_intP_t_1, shift(t_2,
               j_2)) > 0))) ->
-             (num_of_pos(i_2, j_2, t_2, intM_intP_t_6) = num_of_pos(i_2,
-             (j_2 - 1), t_2, intM_intP_t_6))))))))
+             (num_of_pos(i_2, j_2, t_2, intM_intP_t_1) = num_of_pos(i_2,
+             (j_2 - 1), t_2, intM_intP_t_1))))))))
 
 axiom num_of_pos_strictly_increasing_as_axiom:
-  (forall intM_intP_t_3_16:(Object, int) memory.
+  (forall intM_intP_t_3_14:(Object, int) memory.
     (forall i_3:int.
       (forall j_3:int.
         (forall k_1:int.
           (forall l:int.
             (forall t_3:Object pointer.
               (((j_3 < k_1) and
-                ((k_1 <= l) and (select(intM_intP_t_3_16, shift(t_3,
+                ((k_1 <= l) and (select(intM_intP_t_3_14, shift(t_3,
                  k_1)) > 0))) ->
-               (num_of_pos(i_3, j_3, t_3, intM_intP_t_3_16) < num_of_pos(i_3,
-               l, t_3, intM_intP_t_3_16)))))))))
+               (num_of_pos(i_3, j_3, t_3, intM_intP_t_3_14) < num_of_pos(i_3,
+               l, t_3, intM_intP_t_3_14)))))))))
 
 axiom num_of_pos_true_case:
-  (forall intM_intP_t_6:(Object, int) memory.
+  (forall intM_intP_t_1:(Object, int) memory.
     (forall i_1:int.
       (forall j_1:int.
         (forall k:int.
           (forall t_1:Object pointer.
-            (((i_1 <= j_1) and (select(intM_intP_t_6, shift(t_1, j_1)) > 0)) ->
-             (num_of_pos(i_1, j_1, t_1, intM_intP_t_6) = (num_of_pos(i_1,
-             (j_1 - 1), t_1, intM_intP_t_6) + 1))))))))
+            (((i_1 <= j_1) and (select(intM_intP_t_1, shift(t_1, j_1)) > 0)) ->
+             (num_of_pos(i_1, j_1, t_1, intM_intP_t_1) = (num_of_pos(i_1,
+             (j_1 - 1), t_1, intM_intP_t_1) + 1))))))))
 
 axiom pointer_addr_of_Object_of_pointer_address:
   (forall p:unit pointer.
@@ -3572,17 +3572,17 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 
 ========== file tests/java/why/Muller_po1.why ==========
 goal num_of_pos_strictly_increasing:
-  (forall intM_intP_t_3_16:(Object, int) memory.
+  (forall intM_intP_t_3_14:(Object, int) memory.
     (forall i_3:int.
       (forall j_3:int.
         (forall k_1:int.
           (forall l:int.
             (forall t_3:Object pointer.
               (((j_3 < k_1) and
-                ((k_1 <= l) and (select(intM_intP_t_3_16, shift(t_3,
+                ((k_1 <= l) and (select(intM_intP_t_3_14, shift(t_3,
                  k_1)) > 0))) ->
-               (num_of_pos(i_3, j_3, t_3, intM_intP_t_3_16) < num_of_pos(i_3,
-               l, t_3, intM_intP_t_3_16)))))))))
+               (num_of_pos(i_3, j_3, t_3, intM_intP_t_3_14) < num_of_pos(i_3,
+               l, t_3, intM_intP_t_3_14)))))))))
 
 ========== file tests/java/why/Muller_po10.why ==========
 goal Muller_m_ensures_default_po_9:
@@ -6116,11 +6116,11 @@ why -simplify [...] why/Muller.why
  ;; Why axiom Muller_parenttag_Object
  (EQ (parenttag Muller_tag Object_tag) |@true|))
 
-(DEFPRED (Non_null_Object x_0 Object_x_2_alloc_table)
-  (EQ (offset_max Object_x_2_alloc_table x_0) 0))
+(DEFPRED (Non_null_Object x_0 Object_x_3_alloc_table)
+  (EQ (offset_max Object_x_3_alloc_table x_0) 0))
 
-(DEFPRED (Non_null_intM x Object_x_1_alloc_table)
-  (>= (offset_max Object_x_1_alloc_table x) (- 0 1)))
+(DEFPRED (Non_null_intM x Object_x_2_alloc_table)
+  (>= (offset_max Object_x_2_alloc_table x) (- 0 1)))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -6203,93 +6203,93 @@ why -simplify [...] why/Muller.why
 
 (BG_PUSH
  ;; Why axiom no_assign_num_of_pos_0
- (FORALL (tmp tmpmem tmpalloc intM_intP_t_6 t j i)
+ (FORALL (tmp tmpmem tmpalloc intM_intP_t_1 t j i)
  (IMPLIES
  (AND (pset_disjoint tmp pset_empty)
- (not_assigns tmpalloc intM_intP_t_6 tmpmem tmp))
- (EQ (num_of_pos i j t intM_intP_t_6) (num_of_pos i j t tmpmem))))
+ (not_assigns tmpalloc intM_intP_t_1 tmpmem tmp))
+ (EQ (num_of_pos i j t intM_intP_t_1) (num_of_pos i j t tmpmem))))
 
- (FORALL (tmp tmpmem tmpalloc intM_intP_t_6)
+ (FORALL (tmp tmpmem tmpalloc intM_intP_t_1)
  (IMPLIES
  (AND (pset_disjoint tmp pset_empty)
- (not_assigns tmpalloc intM_intP_t_6 tmpmem tmp))
+ (not_assigns tmpalloc intM_intP_t_1 tmpmem tmp))
  (FORALL (t j i)
- (EQ (num_of_pos i j t intM_intP_t_6) (num_of_pos i j t tmpmem))))))
+ (EQ (num_of_pos i j t intM_intP_t_1) (num_of_pos i j t tmpmem))))))
 
 (BG_PUSH
  ;; Why axiom no_update_num_of_pos_0
- (FORALL (tmp tmpval intM_intP_t_6 t j i)
+ (FORALL (tmp tmpval intM_intP_t_1 t j i)
  (IMPLIES (NOT (EQ (in_pset tmp pset_empty) |@true|))
- (EQ (num_of_pos i j t intM_intP_t_6)
- (num_of_pos i j t (|why__store| intM_intP_t_6 tmp tmpval)))))
+ (EQ (num_of_pos i j t intM_intP_t_1)
+ (num_of_pos i j t (|why__store| intM_intP_t_1 tmp tmpval)))))
 
  (FORALL (tmp)
  (IMPLIES (NOT (EQ (in_pset tmp pset_empty) |@true|))
- (FORALL (tmpval intM_intP_t_6 t j i)
- (EQ (num_of_pos i j t intM_intP_t_6)
- (num_of_pos i j t (|why__store| intM_intP_t_6 tmp tmpval)))))))
+ (FORALL (tmpval intM_intP_t_1 t j i)
+ (EQ (num_of_pos i j t intM_intP_t_1)
+ (num_of_pos i j t (|why__store| intM_intP_t_1 tmp tmpval)))))))
 
 (BG_PUSH
  ;; Why axiom num_of_pos_empty
- (FORALL (intM_intP_t_6 i_0 j_0 t_0)
- (IMPLIES (> i_0 j_0) (EQ (num_of_pos i_0 j_0 t_0 intM_intP_t_6) 0)))
+ (FORALL (intM_intP_t_1 i_0 j_0 t_0)
+ (IMPLIES (> i_0 j_0) (EQ (num_of_pos i_0 j_0 t_0 intM_intP_t_1) 0)))
 
  (FORALL (i_0 j_0)
  (IMPLIES (> i_0 j_0)
- (FORALL (intM_intP_t_6 t_0) (EQ (num_of_pos i_0 j_0 t_0 intM_intP_t_6) 0)))))
+ (FORALL (intM_intP_t_1 t_0) (EQ (num_of_pos i_0 j_0 t_0 intM_intP_t_1) 0)))))
 
 (BG_PUSH
  ;; Why axiom num_of_pos_false_case
- (FORALL (intM_intP_t_6 i_2 j_2 k_0 t_2)
+ (FORALL (intM_intP_t_1 i_2 j_2 k_0 t_2)
  (IMPLIES
- (AND (<= i_2 j_2) (NOT (> (select intM_intP_t_6 (shift t_2 j_2)) 0)))
- (EQ (num_of_pos i_2 j_2 t_2 intM_intP_t_6)
- (num_of_pos i_2 (- j_2 1) t_2 intM_intP_t_6))))
+ (AND (<= i_2 j_2) (NOT (> (select intM_intP_t_1 (shift t_2 j_2)) 0)))
+ (EQ (num_of_pos i_2 j_2 t_2 intM_intP_t_1)
+ (num_of_pos i_2 (- j_2 1) t_2 intM_intP_t_1))))
 
- (FORALL (intM_intP_t_6 i_2 j_2 t_2)
+ (FORALL (intM_intP_t_1 i_2 j_2 t_2)
  (IMPLIES
- (AND (<= i_2 j_2) (NOT (> (select intM_intP_t_6 (shift t_2 j_2)) 0)))
+ (AND (<= i_2 j_2) (NOT (> (select intM_intP_t_1 (shift t_2 j_2)) 0)))
  (FORALL (k_0)
- (EQ (num_of_pos i_2 j_2 t_2 intM_intP_t_6)
- (num_of_pos i_2 (- j_2 1) t_2 intM_intP_t_6))))))
+ (EQ (num_of_pos i_2 j_2 t_2 intM_intP_t_1)
+ (num_of_pos i_2 (- j_2 1) t_2 intM_intP_t_1))))))
 
-;; num_of_pos_strictly_increasing, File "HOME/tests/java/Muller.jc", line 82, characters 0-317
-(FORALL (intM_intP_t_3_16 i_3 j_3 k_1 l t_3)
+;; num_of_pos_strictly_increasing, File "HOME/tests/java/Muller.jc", line 36, characters 0-317
+(FORALL (intM_intP_t_3_14 i_3 j_3 k_1 l t_3)
 (IMPLIES
 (AND (< j_3 k_1)
-(AND (<= k_1 l) (> (select intM_intP_t_3_16 (shift t_3 k_1)) 0)))
-(< (num_of_pos i_3 j_3 t_3 intM_intP_t_3_16) (num_of_pos
-                                             i_3 l t_3 intM_intP_t_3_16))))
+(AND (<= k_1 l) (> (select intM_intP_t_3_14 (shift t_3 k_1)) 0)))
+(< (num_of_pos i_3 j_3 t_3 intM_intP_t_3_14) (num_of_pos
+                                             i_3 l t_3 intM_intP_t_3_14))))
 
 (BG_PUSH
  ;; Why axiom num_of_pos_strictly_increasing_as_axiom
- (FORALL (intM_intP_t_3_16 i_3 j_3 k_1 l t_3)
+ (FORALL (intM_intP_t_3_14 i_3 j_3 k_1 l t_3)
  (IMPLIES
  (AND (< j_3 k_1)
- (AND (<= k_1 l) (> (select intM_intP_t_3_16 (shift t_3 k_1)) 0)))
- (< (num_of_pos i_3 j_3 t_3 intM_intP_t_3_16) (num_of_pos
-                                              i_3 l t_3 intM_intP_t_3_16))))
+ (AND (<= k_1 l) (> (select intM_intP_t_3_14 (shift t_3 k_1)) 0)))
+ (< (num_of_pos i_3 j_3 t_3 intM_intP_t_3_14) (num_of_pos
+                                              i_3 l t_3 intM_intP_t_3_14))))
 
- (FORALL (intM_intP_t_3_16 j_3 k_1 l t_3)
+ (FORALL (intM_intP_t_3_14 j_3 k_1 l t_3)
  (IMPLIES
  (AND (< j_3 k_1)
- (AND (<= k_1 l) (> (select intM_intP_t_3_16 (shift t_3 k_1)) 0)))
+ (AND (<= k_1 l) (> (select intM_intP_t_3_14 (shift t_3 k_1)) 0)))
  (FORALL (i_3)
- (< (num_of_pos i_3 j_3 t_3 intM_intP_t_3_16) (num_of_pos
-                                              i_3 l t_3 intM_intP_t_3_16))))))
+ (< (num_of_pos i_3 j_3 t_3 intM_intP_t_3_14) (num_of_pos
+                                              i_3 l t_3 intM_intP_t_3_14))))))
 
 (BG_PUSH
  ;; Why axiom num_of_pos_true_case
- (FORALL (intM_intP_t_6 i_1 j_1 k t_1)
- (IMPLIES (AND (<= i_1 j_1) (> (select intM_intP_t_6 (shift t_1 j_1)) 0))
- (EQ (num_of_pos i_1 j_1 t_1 intM_intP_t_6)
- (+ (num_of_pos i_1 (- j_1 1) t_1 intM_intP_t_6) 1))))
+ (FORALL (intM_intP_t_1 i_1 j_1 k t_1)
+ (IMPLIES (AND (<= i_1 j_1) (> (select intM_intP_t_1 (shift t_1 j_1)) 0))
+ (EQ (num_of_pos i_1 j_1 t_1 intM_intP_t_1)
+ (+ (num_of_pos i_1 (- j_1 1) t_1 intM_intP_t_1) 1))))
 
- (FORALL (intM_intP_t_6 i_1 j_1 t_1)
- (IMPLIES (AND (<= i_1 j_1) (> (select intM_intP_t_6 (shift t_1 j_1)) 0))
+ (FORALL (intM_intP_t_1 i_1 j_1 t_1)
+ (IMPLIES (AND (<= i_1 j_1) (> (select intM_intP_t_1 (shift t_1 j_1)) 0))
  (FORALL (k)
- (EQ (num_of_pos i_1 j_1 t_1 intM_intP_t_6)
- (+ (num_of_pos i_1 (- j_1 1) t_1 intM_intP_t_6) 1))))))
+ (EQ (num_of_pos i_1 j_1 t_1 intM_intP_t_1)
+ (+ (num_of_pos i_1 (- j_1 1) t_1 intM_intP_t_1) 1))))))
 
 (BG_PUSH
  ;; Why axiom pointer_addr_of_Object_of_pointer_address
@@ -8912,12 +8912,12 @@ logic Object_tag :  -> Object tag_id
 axiom Muller_parenttag_Object: parenttag(Muller_tag, Object_tag)
 
 predicate Non_null_Object(x_0: Object pointer,
-  Object_x_2_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_2_alloc_table, x_0) = 0)
+  Object_x_3_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_3_alloc_table, x_0) = 0)
 
 predicate Non_null_intM(x: Object pointer,
-  Object_x_1_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_1_alloc_table, x) >= (-1))
+  Object_x_2_alloc_table: Object alloc_table) =
+  (offset_max(Object_x_2_alloc_table, x) >= (-1))
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -9016,79 +9016,79 @@ axiom no_assign_num_of_pos_0:
   (forall tmp:Object pset.
     (forall tmpmem:(Object, int) memory.
       (forall tmpalloc:Object alloc_table.
-        (forall intM_intP_t_6:(Object, int) memory.
+        (forall intM_intP_t_1:(Object, int) memory.
           (forall t:Object pointer.
             (forall j:int.
               (forall i:int.
                 ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                  intM_intP_t_6, tmpmem, tmp)) ->
-                 (num_of_pos(i, j, t, intM_intP_t_6) = num_of_pos(i, j, t,
+                  intM_intP_t_1, tmpmem, tmp)) ->
+                 (num_of_pos(i, j, t, intM_intP_t_1) = num_of_pos(i, j, t,
                  tmpmem))))))))))
 
 axiom no_update_num_of_pos_0:
   (forall tmp:Object pointer.
     (forall tmpval:int.
-      (forall intM_intP_t_6:(Object, int) memory.
+      (forall intM_intP_t_1:(Object, int) memory.
         (forall t:Object pointer.
           (forall j:int.
             (forall i:int.
               ((not in_pset(tmp, pset_empty)) -> (num_of_pos(i, j, t,
-               intM_intP_t_6) = num_of_pos(i, j, t, store(intM_intP_t_6, tmp,
+               intM_intP_t_1) = num_of_pos(i, j, t, store(intM_intP_t_1, tmp,
                tmpval))))))))))
 
 axiom num_of_pos_empty:
-  (forall intM_intP_t_6:(Object, int) memory.
+  (forall intM_intP_t_1:(Object, int) memory.
     (forall i_0:int.
       (forall j_0:int.
         (forall t_0:Object pointer.
-          ((i_0 > j_0) -> (num_of_pos(i_0, j_0, t_0, intM_intP_t_6) = 0))))))
+          ((i_0 > j_0) -> (num_of_pos(i_0, j_0, t_0, intM_intP_t_1) = 0))))))
 
 axiom num_of_pos_false_case:
-  (forall intM_intP_t_6:(Object, int) memory.
+  (forall intM_intP_t_1:(Object, int) memory.
     (forall i_2:int.
       (forall j_2:int.
         (forall k_0:int.
           (forall t_2:Object pointer.
-            (((i_2 <= j_2) and (not (select(intM_intP_t_6, shift(t_2,
+            (((i_2 <= j_2) and (not (select(intM_intP_t_1, shift(t_2,
               j_2)) > 0))) ->
-             (num_of_pos(i_2, j_2, t_2, intM_intP_t_6) = num_of_pos(i_2,
-             (j_2 - 1), t_2, intM_intP_t_6))))))))
+             (num_of_pos(i_2, j_2, t_2, intM_intP_t_1) = num_of_pos(i_2,
+             (j_2 - 1), t_2, intM_intP_t_1))))))))
 
 goal num_of_pos_strictly_increasing:
-  (forall intM_intP_t_3_16:(Object, int) memory.
+  (forall intM_intP_t_3_14:(Object, int) memory.
     (forall i_3:int.
       (forall j_3:int.
         (forall k_1:int.
           (forall l:int.
             (forall t_3:Object pointer.
               (((j_3 < k_1) and
-                ((k_1 <= l) and (select(intM_intP_t_3_16, shift(t_3,
+                ((k_1 <= l) and (select(intM_intP_t_3_14, shift(t_3,
                  k_1)) > 0))) ->
-               (num_of_pos(i_3, j_3, t_3, intM_intP_t_3_16) < num_of_pos(i_3,
-               l, t_3, intM_intP_t_3_16)))))))))
+               (num_of_pos(i_3, j_3, t_3, intM_intP_t_3_14) < num_of_pos(i_3,
+               l, t_3, intM_intP_t_3_14)))))))))
 
 axiom num_of_pos_strictly_increasing_as_axiom:
-  (forall intM_intP_t_3_16:(Object, int) memory.
+  (forall intM_intP_t_3_14:(Object, int) memory.
     (forall i_3:int.
       (forall j_3:int.
         (forall k_1:int.
           (forall l:int.
             (forall t_3:Object pointer.
               (((j_3 < k_1) and
-                ((k_1 <= l) and (select(intM_intP_t_3_16, shift(t_3,
+                ((k_1 <= l) and (select(intM_intP_t_3_14, shift(t_3,
                  k_1)) > 0))) ->
-               (num_of_pos(i_3, j_3, t_3, intM_intP_t_3_16) < num_of_pos(i_3,
-               l, t_3, intM_intP_t_3_16)))))))))
+               (num_of_pos(i_3, j_3, t_3, intM_intP_t_3_14) < num_of_pos(i_3,
+               l, t_3, intM_intP_t_3_14)))))))))
 
 axiom num_of_pos_true_case:
-  (forall intM_intP_t_6:(Object, int) memory.
+  (forall intM_intP_t_1:(Object, int) memory.
     (forall i_1:int.
       (forall j_1:int.
         (forall k:int.
           (forall t_1:Object pointer.
-            (((i_1 <= j_1) and (select(intM_intP_t_6, shift(t_1, j_1)) > 0)) ->
-             (num_of_pos(i_1, j_1, t_1, intM_intP_t_6) = (num_of_pos(i_1,
-             (j_1 - 1), t_1, intM_intP_t_6) + 1))))))))
+            (((i_1 <= j_1) and (select(intM_intP_t_1, shift(t_1, j_1)) > 0)) ->
+             (num_of_pos(i_1, j_1, t_1, intM_intP_t_1) = (num_of_pos(i_1,
+             (j_1 - 1), t_1, intM_intP_t_1) + 1))))))))
 
 axiom pointer_addr_of_Object_of_pointer_address:
   (forall p:unit pointer.

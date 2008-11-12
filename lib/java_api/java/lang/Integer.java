@@ -49,6 +49,7 @@ public final class Integer extends Number implements Comparable {
     /**
      * All possible chars for representing a number as a String
      */
+    /* KML
     final static char[] digits = {
 	'0' , '1' , '2' , '3' , '4' , '5' ,
 	'6' , '7' , '8' , '9' , 'a' , 'b' ,
@@ -57,6 +58,7 @@ public final class Integer extends Number implements Comparable {
 	'o' , 'p' , 'q' , 'r' , 's' , 't' ,
 	'u' , 'v' , 'w' , 'x' , 'y' , 'z'
     };
+    */
 
     /**
      * Returns a string representation of the first argument in the
@@ -236,7 +238,7 @@ public final class Integer extends Number implements Comparable {
 	return new String(buf, charPos, (32 - charPos));
     }
 
-
+    /* KML
     final static char [] DigitTens = {
 	'0', '0', '0', '0', '0', '0', '0', '0', '0', '0',
 	'1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
@@ -262,7 +264,7 @@ public final class Integer extends Number implements Comparable {
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 	} ;
-
+    */
 	// I use the "invariant division by multiplication" trick to
 	// accelerate Integer.toString.  In particular we want to
 	// avoid division by 10.

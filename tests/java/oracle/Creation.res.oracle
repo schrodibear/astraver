@@ -86,6 +86,16 @@ Done.
 # AnnotationPolicy = None
 # AbstractDomain = None
 
+type byte = -128..127
+
+type short = -32768..32767
+
+type int32 = -2147483648..2147483647
+
+type long = -9223372036854775808..9223372036854775807
+
+type char = 0..65535
+
 logic Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) == 0)
 
@@ -111,16 +121,6 @@ type interface = [interface]
 
 tag interface = {
 }
-
-type byte = -128..127
-
-type short = -32768..32767
-
-type int32 = -2147483648..2147483647
-
-type long = -9223372036854775808..9223372036854775807
-
-type char = 0..65535
 
 boolean non_null_Object(Object[0..] x)
 behavior normal:

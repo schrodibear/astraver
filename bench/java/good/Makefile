@@ -1,9 +1,8 @@
 
 JESSIE=../../../bin/jessie.byte -why-opt -split-user-conj
-JESSIELIB=$(shell pwd)/../../../lib
 WHYLIB=$(shell pwd)/../../../lib
 
-EXECJESSIE=WHYLIB=$(WHYLIB) JESSIELIB=$(JESSIELIB) $(JESSIE)  
+EXECJESSIE=WHYLIB=$(WHYLIB) $(JESSIE)  
 
 # KRAKATOA=ocamlrun -bt ../../../bin/krakatoa.byte
 KRAKATOA=../../../bin/krakatoa.byte
@@ -95,7 +94,7 @@ SCID_noannot: SCID_noannot.java
 	rm -f $*.jc
 	make $*.jc
 	make why/$*.why
-	make -f $*.makefile gui
+	WHYLIB=$(WHYLIB) make -f $*.makefile gui
 
 %.javacard: %.java
 	rm -f $*.jc

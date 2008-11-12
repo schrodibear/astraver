@@ -87,6 +87,28 @@ Done.
 # AnnotationPolicy = None
 # AbstractDomain = None
 
+type byte = -128..127
+
+type short = -32768..32767
+
+type int32 = -2147483648..2147483647
+
+type long = -9223372036854775808..9223372036854775807
+
+type char = 0..65535
+
+logic is_sorted{L}(intM[0..] t) =
+(Non_null_intM(t) &&
+  (\forall integer i;
+    (\forall integer j;
+      ((((0 <= i) && (i <= j)) && (j < (\offset_max(t) + 1))) ==>
+        ((t + i).intP <= (t + j).intP)))))
+
+lemma mean_property{Here} :
+(\forall integer x;
+  (\forall integer y;
+    ((x <= y) ==> ((x <= (x + ((y - x) / 2))) && ((x + ((y - x) / 2)) <= y)))))
+
 logic Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
 
@@ -116,16 +138,6 @@ tag intM = Object with {
   int32 intP;
 }
 
-type byte = -128..127
-
-type short = -32768..32767
-
-type int32 = -2147483648..2147483647
-
-type long = -9223372036854775808..9223372036854775807
-
-type char = 0..65535
-
 boolean non_null_intM(intM[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) >= -1) else (x == null));
@@ -142,18 +154,6 @@ boolean non_null_Object(Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
-
-logic is_sorted{L}(intM[0..] t) =
-(Non_null_intM(t) &&
-  (\forall integer i;
-    (\forall integer j;
-      ((((0 <= i) && (i <= j)) && (j < (\offset_max(t) + 1))) ==>
-        ((t + i).intP <= (t + j).intP)))))
-
-lemma mean_property{Here} :
-(\forall integer x;
-  (\forall integer y;
-    ((x <= y) ==> ((x <= (x + ((y - x) / 2))) && ((x + ((y - x) / 2)) <= y)))))
 
 exception Throwable of Throwable[0..]
 
@@ -509,7 +509,7 @@ end = 28
 
 [JC_1]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 45
+line = 57
 begin = 8
 end = 21
 
@@ -533,7 +533,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 45
+line = 57
 begin = 8
 end = 21
 
@@ -576,7 +576,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 47
+line = 59
 begin = 11
 end = 66
 
@@ -673,7 +673,7 @@ end = 33
 
 [JC_10]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 47
+line = 59
 begin = 11
 end = 66
 
@@ -686,7 +686,7 @@ end = 24
 
 [JC_11]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 50
+line = 62
 begin = 8
 end = 30
 
@@ -711,7 +711,7 @@ end = 112
 
 [JC_13]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 50
+line = 62
 begin = 8
 end = 30
 
@@ -773,7 +773,7 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 53
+line = 65
 begin = 11
 end = 113
 
@@ -807,7 +807,7 @@ end = 28
 
 [JC_20]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 52
+line = 64
 begin = 10
 end = 18
 
@@ -819,7 +819,7 @@ end = -1
 
 [JC_21]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 53
+line = 65
 begin = 11
 end = 113
 
@@ -832,7 +832,7 @@ end = 140
 
 [JC_22]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 52
+line = 64
 begin = 10
 end = 18
 
@@ -845,7 +845,7 @@ end = 140
 
 [JC_23]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 57
+line = 69
 begin = 8
 end = 23
 
@@ -869,7 +869,7 @@ end = -1
 
 [JC_25]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 57
+line = 69
 begin = 8
 end = 23
 
@@ -913,7 +913,7 @@ end = -1
 name = "mean_property"
 behavior = "lemma"
 file = "HOME/tests/java/BinarySearch.jc"
-line = 69
+line = 23
 begin = 0
 end = 149
 
@@ -949,13 +949,13 @@ end = -1
 
 [JC_31]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 59
+line = 71
 begin = 11
 end = 65
 
 [JC_32]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 59
+line = 71
 begin = 11
 end = 65
 
@@ -2377,12 +2377,12 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "HOME/tests/java/BinarySearch.jc" line = "69" begin = "0" end = "149"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "23" begin = "0" end = "149"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="mean_property">
-    <location file = "HOME/tests/java/BinarySearch.jc" line = "69" begin = "0" end = "149"/>
+    <location file = "HOME/tests/java/BinarySearch.jc" line = "23" begin = "0" end = "149"/>
   </function>
   <function name="Method binary_search">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -6066,7 +6066,7 @@ why -simplify [...] why/BinarySearch.why
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
-;; mean_property, File "HOME/tests/java/BinarySearch.jc", line 69, characters 0-149
+;; mean_property, File "HOME/tests/java/BinarySearch.jc", line 23, characters 0-149
 (FORALL (x_4 y)
 (IMPLIES (<= x_4 y)
 (AND (<= x_4 (+ x_4 (int_div (- y x_4) 2)))
@@ -10313,10 +10313,10 @@ goal BinarySearch_binary_search_safety_po_15:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ?................................ (32/0/1/0/0)
+why/BinarySearch_why.why      : ?......................??........ (30/0/3/0/0)
 total   :  33
-valid   :  32 ( 97%)
+valid   :  30 ( 91%)
 invalid :   0 (  0%)
-unknown :   1 (  3%)
+unknown :   3 (  9%)
 timeout :   0 (  0%)
 failure :   0 (  0%)

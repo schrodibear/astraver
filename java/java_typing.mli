@@ -95,7 +95,7 @@ val logic_defs_table :
 type axiomatic_defs =
   | Adecl of  Java_env.java_logic_info * logic_decl_body
   | Aaxiom of string * bool * Java_env.logic_label list * Java_tast.assertion
-  | Atype of int
+  | Atype of string
 
 val logic_types_table : (string, Java_env.logic_type_info) Hashtbl.t
 val axiomatics_table : (string, axiomatic_defs list) Hashtbl.t

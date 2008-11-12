@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.148 2008-11-05 22:07:56 nrousset Exp $ *)
+(* $Id: java_typing.ml,v 1.149 2008-11-12 14:14:20 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -279,8 +279,9 @@ let toplevel_packages =
 		  match x with
 		    | Subpackage pi -> 
 			Hashtbl.add toplevel_packages_table name pi
-		    | _ -> ()
-			
+		    | _ -> 
+			Format.eprintf "Warning: %s is not a subpackage of %s@." name dir;
+			()
 		end)
 	     h')
       Java_options.classpath;
@@ -547,7 +548,7 @@ type logic_decl_body =
 type axiomatic_defs =
   | Adecl of  Java_env.java_logic_info * logic_decl_body
   | Aaxiom of string * bool * Java_env.logic_label list * Java_tast.assertion
-  | Atype of int
+  | Atype of string
 
 let logics_env = Hashtbl.create 97
 let logic_defs_table = Hashtbl.create 97
@@ -3624,7 +3625,7 @@ let rec compute_dependencies_expr env g fi e =
     | JEassign_static_field_op _ | JEassign_array _| JEassign_array_op _
     | JEcall _ | JEconstr_call _ | JEstatic_call _ 
     | JEnew_object _ | JEnew_array _ | JEinstanceof _ ->
-	assert false (* should never happen *)
+	() (* assert false (* should never happen -> it happens ! *) *)
     | JEarray_length _ | JEarray_access _ -> assert false (* TODO *)
 	
 and compute_dependencies_vi env g fi vi =
@@ -3771,7 +3772,14 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	    Hashtbl.add lemmas_table id (labels,te);
 	    acc
 	  end
-    | JPTlogic_type_decl _ -> acc
+    | JPTlogic_type_decl (loc,id) -> 
+	if in_axiomatic then
+	  Atype id :: acc
+	else
+	  begin
+	    typing_error loc "logic types not allowed outside axiomatics"; 
+	  end
+	    
     | JPTlogic_reads ((loc, id), ret_type, labels, params, reads) -> 
         let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
         let env = 

@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.55 2008-11-05 22:07:56 nrousset Exp $
+$Id: java_parser.mly,v 1.56 2008-11-12 14:14:20 marche Exp $
 
 */
 
@@ -1081,7 +1081,7 @@ kml_global_decls:
 ;
 
 kml_global_decl:
-| TYPE ident
+| TYPE ident SEMICOLON
     { JPTlogic_type_decl $2 }
 | PREDICATE ident label_binders method_parameters reads_clause SEMICOLON
     { JPTlogic_reads ($2, None, $3, $4, $5) }

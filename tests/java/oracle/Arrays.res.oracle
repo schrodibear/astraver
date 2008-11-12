@@ -132,6 +132,11 @@ Done.
 # AnnotationPolicy = None
 # AbstractDomain = None
 
+logic is_max{L}(intM[0..] t, integer i, integer l) =
+((Non_null_intM(t) && (((0 <= i) && (i < l)) && (l <= (\offset_max(t) + 1)))) &&
+  (\forall integer j;
+    (((0 <= j) && (j < l)) ==> ((t + j).intP <= (t + i).intP))))
+
 logic Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
 
@@ -177,11 +182,6 @@ boolean non_null_Object(Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
-
-logic is_max{L}(intM[0..] t, integer i, integer l) =
-((Non_null_intM(t) && (((0 <= i) && (i < l)) && (l <= (\offset_max(t) + 1)))) &&
-  (\forall integer j;
-    (((0 <= j) && (j < l)) ==> ((t + j).intP <= (t + i).intP))))
 
 exception Throwable of Throwable[0..]
 
@@ -797,7 +797,7 @@ end = -1
 
 [JC_1]
 file = "HOME/tests/java/Arrays.jc"
-line = 35
+line = 40
 begin = 8
 end = 21
 
@@ -842,7 +842,7 @@ end = 13
 
 [JC_3]
 file = "HOME/tests/java/Arrays.jc"
-line = 35
+line = 40
 begin = 8
 end = 21
 
@@ -921,7 +921,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Arrays.jc"
-line = 37
+line = 42
 begin = 11
 end = 66
 
@@ -1050,7 +1050,7 @@ end = -1
 
 [JC_10]
 file = "HOME/tests/java/Arrays.jc"
-line = 37
+line = 42
 begin = 11
 end = 66
 
@@ -1062,7 +1062,7 @@ end = -1
 
 [JC_11]
 file = "HOME/tests/java/Arrays.jc"
-line = 40
+line = 45
 begin = 8
 end = 30
 
@@ -1086,7 +1086,7 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/java/Arrays.jc"
-line = 40
+line = 45
 begin = 8
 end = 30
 
@@ -1156,7 +1156,7 @@ end = 31
 
 [JC_19]
 file = "HOME/tests/java/Arrays.jc"
-line = 43
+line = 48
 begin = 11
 end = 113
 
@@ -1189,7 +1189,7 @@ end = 27
 
 [JC_20]
 file = "HOME/tests/java/Arrays.jc"
-line = 42
+line = 47
 begin = 10
 end = 18
 
@@ -1202,7 +1202,7 @@ end = 13
 
 [JC_21]
 file = "HOME/tests/java/Arrays.jc"
-line = 43
+line = 48
 begin = 11
 end = 113
 
@@ -1223,7 +1223,7 @@ end = 31
 
 [JC_22]
 file = "HOME/tests/java/Arrays.jc"
-line = 42
+line = 47
 begin = 10
 end = 18
 
@@ -1236,7 +1236,7 @@ end = 10
 
 [JC_23]
 file = "HOME/tests/java/Arrays.jc"
-line = 47
+line = 52
 begin = 8
 end = 23
 
@@ -1260,7 +1260,7 @@ end = -1
 
 [JC_25]
 file = "HOME/tests/java/Arrays.jc"
-line = 47
+line = 52
 begin = 8
 end = 23
 
@@ -1350,7 +1350,7 @@ end = 26
 
 [JC_31]
 file = "HOME/tests/java/Arrays.jc"
-line = 49
+line = 54
 begin = 11
 end = 65
 
@@ -1362,7 +1362,7 @@ end = -1
 
 [JC_32]
 file = "HOME/tests/java/Arrays.jc"
-line = 49
+line = 54
 begin = 11
 end = 65
 

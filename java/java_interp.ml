@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.171 2008-11-05 22:07:56 nrousset Exp $ *)
+(* $Id: java_interp.ml,v 1.172 2008-11-12 14:14:19 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -218,12 +218,12 @@ let num_minus_one = Num.Int (-1)
 let array_struct_table = Hashtbl.create 17
       
 let rec get_array_struct pos t = 
+  let n = Java_analysis.name_type t in 
   try
-    let n = Java_analysis.name_type t in 
-    (Hashtbl.find array_struct_table n: struct_info)
+    (Hashtbl.find array_struct_table n : struct_info)
   with Not_found -> 
-    eprintf "Array struct for type %a not found: %a@." 
-      Java_typing.print_type t Loc.report_position pos;
+    eprintf "Array struct for type %a (name : %s) not found: %a@." 
+      Java_typing.print_type t n Loc.report_position pos;
     raise Not_found
 
 and tr_type pos t =
@@ -1861,7 +1861,9 @@ let tr_axiomatic_axioms id l acc =
 let tr_axiomatic_decl acc d =
   match d with
     | Aaxiom(id,is_axiom,labels,a) -> acc
-    | Atype _ -> assert false
+    | Atype s -> 
+	Java_options.lprintf "translating logic type %s@." s;
+	tr_logic_type s acc
     | Adecl(fi, b) -> 
 	Java_options.lprintf "translating axiomatic function %s@." fi.java_logic_info_name;
 	tr_logic_fun fi b acc 
@@ -1871,7 +1873,7 @@ let tr_axiomatic_axiom acc d =
     | Aaxiom(id,is_axiom,labels,a) -> 
 	Java_options.lprintf "translating axiom %s@." id;
 	tr_axiom id is_axiom labels a acc
-    | Atype _ -> assert false
+    | Atype s -> acc
     | Adecl(fi, b) -> acc
 
 let tr_axiomatic id l acc =

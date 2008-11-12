@@ -77,8 +77,8 @@ let rec intro_array_struct t =
   try
     let _ = Hashtbl.find array_struct_table n in ()
   with Not_found ->
-    let n = name_type t in 
-    Java_options.lprintf "Adding array struct for type %s@." n;
+    Java_options.lprintf "Adding array struct for type %a under name %s@." 
+      Java_typing.print_type t n;
       (* array structs indexed by name rather than by type,
 	 to void generation of two structs for nullable and non_null types
 	 of the same name.
