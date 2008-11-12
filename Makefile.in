@@ -817,6 +817,9 @@ demons: $(STATICBINARY) doc/manual.ps
 	cp -f $(STATICBINARY) /users/demons/demons/bin/$$OSTYPE/why
 	cp doc/manual.ps /users/demons/demons/docs/why.ps
 
+win: why.nsi
+	"/cygdrive/c/Program Files (x86)/NSIS/makensis" /DVERSION=$(VERSION) why.nsi
+
 zip:
 	zip -A -r why-$(VERSION).zip c:/why/bin c:/why/lib c:/coq/lib/contrib/why c:/coq/lib/contrib7/why
 

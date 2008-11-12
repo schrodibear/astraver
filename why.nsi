@@ -1,23 +1,21 @@
 ;
-; why-2.13.nsi
+; why.nsi
 ; Created by Aurélien OUDOT
+; Modified by Claude Marché
 ;
 
 Name "Why"
 Icon "icons\install.ico"
-OutFile "why-2.13_install.exe"
+OutFile "why-${VERSION}-install.exe"
 
-LicenseText "This application will install Why under GNU General Public License"
-LicenseData "gpl.txt"
+LicenseText "This application will install the Why platform"
+LicenseData "LICENSE"
 ComponentText "Why platform installation"
 DirText "Destination Folder"
 
 InstallDir "$PROGRAMFILES\Why"
-UninstallText "Do you really want to delete Why tools from your system ?"
+UninstallText "Do you really want to delete Why from your system ?"
 UninstallIcon "icons\uninstall.ico"
-
-InstType Normale
-InstType Entiere
 
 ; ================================================================
 
@@ -33,7 +31,7 @@ Section -PostInstall
         WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Why" "DisplayName" "Why (uninstall)"
         WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Why" "UninstallString" '"$INSTDIR\why_uninstall.exe"'
         writeUninstaller "why_uninstall.exe"
-        WriteRegStr HKLM "Software\Why" "Repertoire" '"$INSTDIR"'
+        WriteRegStr HKLM "Software\Why" "Directory" '"$INSTDIR"'
 SectionEnd
 
 Section "ShortCut"
@@ -41,8 +39,8 @@ Section "ShortCut"
         setOutPath "$SMPROGRAMS\Why"
         CreateShortCut "$SMPROGRAMS\Why\krakatoa.lnk" "$INSTDIR\bin\krakatoa.exe"
         CreateShortCut "$SMPROGRAMS\Why\caduceus.lnk" "$INSTDIR\bin\caduceus.exe"
-        CreateShortCut "$SMPROGRAMS\Why\cpulimit.lnk" "$INSTDIR\bin\cpulimit.exe"
-        CreateShortCut "$SMPROGRAMS\Why\dp.lnk" "$INSTDIR\bin\dp.exe"
+        CreateShortCut "$SMPROGRAMS\Why\why-cpulimit.lnk" "$INSTDIR\bin\why-cpulimit.exe"
+        CreateShortCut "$SMPROGRAMS\Why\why-dp.lnk" "$INSTDIR\bin\why-dp.exe"
         CreateShortCut "$SMPROGRAMS\Why\jessie.lnk" "$INSTDIR\bin\jessie.exe"
         CreateShortCut "$SMPROGRAMS\Why\why-stat.lnk" "$INSTDIR\bin\why-stat.exe"
         CreateShortCut "$SMPROGRAMS\Why\why-obfuscator.lnk" "$INSTDIR\bin\why-obfuscator.exe"

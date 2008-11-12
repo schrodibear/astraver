@@ -235,7 +235,7 @@ integer Arrays_findMax2(intM[0..] t_1)
   requires (K_26 : (Non_null_intM(t_1) && ((\offset_max(t_1) + 1) >= 1)));
 behavior max_found:
   ensures (K_14 : (((0 <= \result) && (\result < (\offset_max(t_1) + 1))) &&
-                    is_max(t_1, \result, (\offset_max(t_1) + 1))));
+                    is_max{Here}(t_1, \result, (\offset_max(t_1) + 1))));
 {  
    {  
       (var integer m = (K_25 : (t_1 + 0).intP));
@@ -253,7 +253,7 @@ behavior max_found:
                                         ((0 <= r) &&
                                           (r < (\offset_max(t_1) + 1)))) &&
                                        (m == (t_1 + r).intP)) &&
-                                      is_max(t_1, r, i_3)));
+                                      is_max{Here}(t_1, r, i_3)));
                   variant (K_17 : ((\offset_max(t_1) + 1) - i_3));
                   for ( ; (K_23 : (i_3 <
                                     (K_22 : java_array_length_intM(t_1)))) ; 

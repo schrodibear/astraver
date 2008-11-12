@@ -29,7 +29,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.41 2008-11-05 14:03:14 filliatr Exp $
+$Id: java_ast.mli,v 1.42 2008-11-12 16:17:45 marche Exp $
 
 ***************************************************************************)
 
@@ -105,7 +105,7 @@ and pexpr_node =
   | JPEif of pexpr * pexpr * pexpr
   | JPEthis
   | JPEfield_access of java_field_access
-  | JPEcall_name of qualified_ident * pexpr list
+  | JPEcall_name of qualified_ident * identifier list * pexpr list
   | JPEcall_expr of pexpr * identifier * pexpr list
   | JPEsuper_call of identifier * pexpr list
   | JPEnew of qualified_ident * pexpr list
@@ -281,11 +281,11 @@ type type_declaration =
   | JPTclass of class_declaration
   | JPTinterface of interface_declaration
   | JPTannot of Lexing.position * string
-  | JPTlemma of identifier * bool * logic_label list * pexpr
+  | JPTlemma of identifier * bool * identifier list * pexpr
   | JPTlogic_type_decl of identifier 
-  | JPTlogic_reads of identifier * type_expr option * logic_label list * parameter list * pexpr list 
-  | JPTlogic_def of identifier * type_expr option * logic_label list * parameter list * pexpr 
-  | JPTinductive of identifier * logic_label list * parameter list * (identifier * pexpr) list
+  | JPTlogic_reads of identifier * type_expr option * identifier list * parameter list * pexpr list 
+  | JPTlogic_def of identifier * type_expr option * identifier list * parameter list * pexpr 
+  | JPTinductive of identifier * identifier list * parameter list * (identifier * pexpr) list
   | JPTaxiomatic of identifier * type_declaration list
 
 type import_statement =

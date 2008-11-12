@@ -32,7 +32,7 @@ let rec term acc t =
   match t.java_term_node with
     | JTlit _ | JTvar _ 
     | JTstatic_field_access _ -> acc
-    | JTapp (f,lt) -> f::(List.fold_left term acc lt)
+    | JTapp (f,labs,lt) -> f::(List.fold_left term acc lt)
     | JTat(t,_) -> term acc t
     | JTbin (t1,_,_,t2) -> term (term acc t1) t2
     | JTun (_,_,t1) -> term acc t1
@@ -57,7 +57,7 @@ let rec assertion acc p =
   | JAnot a -> assertion acc a
   | JAbin_obj(t1,_,t2)
   | JAbin(t1,_,_,t2) -> term (term acc t1) t2
-  | JAapp(f,lt) -> f::(List.fold_left term acc lt)
+  | JAapp(f,labs,lt) -> f::(List.fold_left term acc lt)
   | JAand(p1,p2) | JAor(p1,p2) 
   | JAimpl (p1,p2) | JAiff(p1,p2) -> 
       assertion (assertion acc p1) p2

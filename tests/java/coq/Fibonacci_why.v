@@ -127,7 +127,7 @@ Admitted.
                     (isfib (n_1 - 1) p) -> (isfib n_1 (p + r_0))))))
      .
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.jc", line 26, characters 0-35: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.jc", line 26, characters 0-29: *)
 (*Why goal*) Lemma isfib_2_1 : 
   (isfib 2 1).
 Proof.
@@ -139,7 +139,7 @@ Save.
 (*Why axiom*) Lemma isfib_2_1_as_axiom : (isfib 2 1).
 Admitted.
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.jc", line 20, characters 0-35: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.jc", line 20, characters 0-29: *)
 (*Why goal*) Lemma isfib_6_8 : 
   (isfib 6 8).
 Proof.
@@ -175,7 +175,7 @@ Admitted.
 (*Why predicate*) Definition left_valid_struct_interface  (p:(pointer interface)) (a:Z) (interface_alloc_table:(alloc_table interface))
   := (offset_min interface_alloc_table p) <= a.
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.jc", line 23, characters 0-43: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.jc", line 23, characters 0-37: *)
 (*Why goal*) Lemma not_isfib_2_2 : 
   ~(isfib 2 2).
 Proof.

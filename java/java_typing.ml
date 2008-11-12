@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.149 2008-11-12 14:14:20 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.150 2008-11-12 16:17:45 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1485,16 +1485,41 @@ let string_class =
 
 let string_type ~valid = JTYclass(valid,string_class)
 
-
 type typing_env =
     {
       package_env : Java_env.package_info list;
       type_env : (string * Java_env.java_type_info) list;
       current_type : Java_env.java_type_info option;
-      label_env : logic_label list;
+      label_env : (string * logic_label) list;
+      current_label : logic_label option;
       env : (string * Java_env.java_var_info) list;
     }
 
+
+let label_assoc loc id env fun_labels effective_labels =
+  match fun_labels, effective_labels with
+    | [lf], [] -> 
+	begin
+	  match env.current_label with
+	    | None -> 
+		typing_error loc 
+		  "%s expect a label but there is no current label" id
+	    | Some l -> [lf,l]
+	end
+    | _ ->
+	try
+	  List.map2
+	    (fun l1 (loc,id) -> 
+	       let l2 =
+		 try List.assoc id env.label_env 
+		 with Not_found -> typing_error loc "unknown label %s" id
+	       in
+	       (l1,l2))
+	    fun_labels effective_labels
+	with Invalid_argument _ ->
+	  typing_error loc 
+	    "wrong number of labels for %s" id
+	  
 (* JLS 5.1.4: Widening Reference Conversion *)
 let rec is_widening_reference_convertible tfrom tto =
   match tfrom,tto with
@@ -1521,8 +1546,8 @@ and is_logic_call_convertible tfrom tto =
     | JTYlogic s1, JTYlogic s2 -> s1==s2
     | _ -> is_widening_reference_convertible tfrom tto
 
-and term env current_label e =
-  let termt = term env current_label in
+and term env e =
+  let termt = term env in
   let loc = e.java_pexpr_loc in
   let ty, tt =
     match e.java_pexpr_node with
@@ -1614,8 +1639,8 @@ and term env current_label e =
           begin
             match te1.java_term_type with
               | JTYarray (_, t) ->
-                  let te2 = Option_misc.map (index env current_label) e2 in
-                  let te3 = Option_misc.map (index env current_label) e3 in
+                  let te2 = Option_misc.map (index env) e2 in
+                  let te3 = Option_misc.map (index env) e3 in
                   t, JTarray_range(te1,te2,te3)
               | _ ->
                   array_expected e1.java_pexpr_loc te1.java_term_type
@@ -1623,20 +1648,38 @@ and term env current_label e =
       | JPEnew_array _-> assert false (* TODO *)
       | JPEnew (_, _)-> assert false (* TODO *)
       | JPEsuper_call (_, _)-> assert false (* TODO *)
-      | JPEcall_name (qid, args)-> 
+      | JPEcall_name (qid, labels, args)-> 
           begin
             match qid with
               | [(loc,id)] -> 
                   begin 
                     try 
                       let fi = Hashtbl.find logics_env id in
-                      let args = List.map termt args in               
-                      (* TODO: check arg types *)
+		      let lab_assoc = 
+			label_assoc loc id env fi.java_logic_info_labels labels
+		      in
+                      let args = 
+			try
+			  List.map2
+			    (fun vi e ->
+			       let ty = vi.java_var_info_type in
+			       let te = termt e in
+			       if is_logic_call_convertible te.java_term_type ty 
+			       then te
+			       else
+				 typing_error e.java_pexpr_loc 
+				   "type %a expected instead of %a" 
+				   print_type ty print_type te.java_term_type) 
+			    fi.java_logic_info_parameters args
+			with  Invalid_argument _ ->
+			  typing_error e.java_pexpr_loc 
+			    "wrong number of arguments for %s" id
+		      in
                       match fi.java_logic_info_result_type with
                         | None ->
                             typing_error loc 
                               "logic symbol `%s' is a predicate" id
-                        | Some t -> t,JTapp(fi,args)
+                        | Some t -> t,JTapp(fi,lab_assoc,args)
                     with Not_found ->
                       typing_error loc "logic function `%s' not found" id
                   end           
@@ -1708,8 +1751,8 @@ and term env current_label e =
        java_term_type = ty;
        java_term_loc = e.java_pexpr_loc }
 
-and index env current_label e =
-  let te = term env current_label e in
+and index env e =
+  let te = term env e in
   match  
     logic_unary_numeric_promotion te.java_term_type 
   with
@@ -1717,9 +1760,9 @@ and index env current_label e =
     | _ -> 
         integer_expected e.java_pexpr_loc te.java_term_type
 
-and assertion env current_label e =
-  let termt = term env current_label in
-  let assertiont = assertion env current_label in
+and assertion env e =
+  let termt = term env in
+  let assertiont = assertion env in
   let ta =
   match e.java_pexpr_node with
     | JPElit (Bool true) -> JAtrue
@@ -1754,7 +1797,7 @@ and assertion env current_label e =
             te1.java_term_type te1 te2.java_term_type te2
     | JPEquantifier (q, idl, e)-> 
         let a = make_quantified_formula 
-          e.java_pexpr_loc q idl env current_label e 
+          e.java_pexpr_loc q idl env e 
         in
         a.java_assertion_node
     | JPEold a -> 
@@ -1767,7 +1810,7 @@ and assertion env current_label e =
         JAat(ta,LabelName (snd lab))    
     | JPEinstanceof (e, ty) ->
         begin
-          match current_label with
+          match env.current_label with
             | None ->
                 typing_error e.java_pexpr_loc "No memory state for this instanceof (\\at missing ?)"
             | Some l ->
@@ -1781,10 +1824,13 @@ and assertion env current_label e =
     | JPEnew_array _-> assert false (* TODO *)
     | JPEnew (_, _)-> assert false (* TODO *)
     | JPEsuper_call (_, _)-> assert false (* TODO *)
-    | JPEcall_name([(loc,id)], args)-> 
+    | JPEcall_name([(loc,id)], labels, args)-> 
         begin
           try
             let fi = Hashtbl.find logics_env id in
+	    let lab_assoc = 
+	      label_assoc loc id env fi.java_logic_info_labels labels
+	    in
             let tl =
               try
                 List.map2
@@ -1801,8 +1847,11 @@ and assertion env current_label e =
                 typing_error e.java_pexpr_loc 
                   "wrong number of arguments for %s" id
             in
-            JAapp(fi, tl)
-                 
+            match fi.java_logic_info_result_type with
+              | None -> JAapp(fi, lab_assoc, tl)                 
+              | Some t ->
+                  typing_error loc 
+                    "logic symbol `%s' is not a predicate" id
           with
               Not_found ->
                 typing_error e.java_pexpr_loc 
@@ -1853,9 +1902,9 @@ and assertion env current_label e =
   in { java_assertion_node = ta;
        java_assertion_loc = e.java_pexpr_loc }
 
-and make_quantified_formula loc q idl env current_label e : assertion =
+and make_quantified_formula loc q idl env e : assertion =
   match idl with
-    | [] -> assertion env current_label e
+    | [] -> assertion env e
     | (ty,idl)::r ->    
         let tty = type_type env.package_env env.type_env true ty in
         let env_local =
@@ -1867,8 +1916,9 @@ and make_quantified_formula loc q idl env current_label e : assertion =
             idl
         in
         let f = 
-          make_quantified_formula loc q r { env with env = env_local@env.env } 
-            current_label e 
+          make_quantified_formula loc q r 
+	    { env with env = env_local@env.env } 
+            e 
         in
         List.fold_right
           (fun (_,vi) acc ->
@@ -2328,7 +2378,7 @@ and expr_of_term t =
       | JTarray_access(t1,t2) -> 
           JEarray_access(expr_of_term t1, expr_of_term t2)
       | JTarray_range _  -> assert false (* TODO *)
-      | JTapp (_, _) -> assert false (* TODO *)
+      | JTapp (_, _, _) -> assert false (* TODO *)
       | JTbin (_, _, _, _) -> assert false (* TODO *)
       | JTun (t, op, e1) -> assert false (* TODO *)
       | JTlit _ -> assert false (* TODO *)
@@ -2670,7 +2720,8 @@ and expr ~ghost env e =
                 in
                   ty,JEcall (te2, mi, args)
           end
-      | JPEcall_name (qid, args)-> 
+      | JPEcall_name (qid, labels, args)-> 
+	  assert (labels = []);
           let args = List.map exprt args in
           let arg_types = List.map (fun e -> e.java_expr_type) args in
           let ti,id,te1 =
@@ -2993,6 +3044,7 @@ and type_field_initializer package_env type_env ci fi =
       type_env = type_env;
       current_type = Some ci;
       label_env = [];
+      current_label = None;
       env = [];
     }
   in
@@ -3044,6 +3096,31 @@ and type_field_initializer package_env type_env ci fi =
 let location env a = term env a 
   
 
+let label_env_here = ["Here",LabelHere]
+
+let labels_env l = 
+  let env,l =
+    List.fold_right 
+      (fun (loc,id) (acc1,acc2) -> 
+	 let lab = LabelName id in
+	 ((id,lab)::acc1,lab::acc2)) 
+      l ([],[])
+  in
+  match l with
+    | [lab] -> env,Some lab,l
+    | _ -> env,None,l
+
+let add_Pre_Here e = 
+  { e with 
+      label_env = ("Pre",LabelPre)::("Here",LabelHere)::e.label_env;
+      current_label = Some LabelHere;
+  }
+
+let add_Old e = 
+  { e with 
+      label_env = ("Old",LabelOld)::e.label_env;
+  }
+
 let behavior env pre_state_env post_state_env (id, b) = 
   let throws, ensures_env = 
     match b.java_pbehavior_throws with
@@ -3088,13 +3165,17 @@ let behavior env pre_state_env post_state_env (id, b) =
           assert false (* TODO *)
   in
   (id,
-   Option_misc.map (assertion { env with env = pre_state_env} (Some LabelHere)) b.java_pbehavior_assumes,
+   Option_misc.map (assertion { env with env = pre_state_env}) b.java_pbehavior_assumes,
    throws,
-   (* Note: the `assigns' clause is typed in post-state environnement *)
+   (* Note: the `assigns' clause is typed in post-state environnement because \result is available, but where the default label is in Pre 
+      TODO: we should add a Post label 
+   *)
    Option_misc.map 
      (fun (loc,l) ->
-        (loc,List.map (location { env with env = ensures_env} (Some LabelHere)) l)) b.java_pbehavior_assigns,
-   assertion {env with env = ensures_env} (Some LabelHere) b.java_pbehavior_ensures)
+        (loc,List.map (location ((*add_Post*) { env with env = ensures_env })) l)) 
+     b.java_pbehavior_assigns,
+   assertion (add_Old {env with env = ensures_env})  
+     b.java_pbehavior_ensures)
     
 
 
@@ -3120,7 +3201,6 @@ let variable_declaration ~ghost env vd =
       l (env.env,[])
 
 let rec statement env s =
-  let assertiont = assertion env in
   let exprt = expr ~ghost:false env in
   let statementt = statement env in
   let s' =
@@ -3142,7 +3222,7 @@ let rec statement env s =
       | JPSexpr e -> 
           let te = exprt e in JSexpr te
       | JPSassert(id,a) ->
-          let ta = assertiont (Some LabelHere) a in
+          let ta = assertion { env with current_label = Some LabelHere } a in
           JSassert(Option_misc.map snd id,ta)
       | JPSstatement_spec(requires,decreases,behaviors) ->
           typing_error s.java_pstatement_loc
@@ -3296,10 +3376,14 @@ and statements env b =
                 twhile :: statements env rem
           | JPSstatement_spec(requires,decreases,behaviors) ->
               let req = 
-                Option_misc.map (assertion env (Some LabelHere)) requires 
+                Option_misc.map 
+		  (assertion { env  with current_label = Some LabelHere}) 
+		  requires 
               in
               let decreases = 
-                Option_misc.map (term env (Some LabelHere)) decreases 
+                Option_misc.map 
+		  (term { env with current_label = Some LabelHere }) 
+		  decreases 
               in
               let behs = List.map (behavior env env.env env.env) behaviors in
               begin
@@ -3319,13 +3403,12 @@ and statements env b =
                 s' :: statements env rem
                   
         
-and add_Pre_Here e = { e with label_env = LabelPre::LabelHere::e.label_env }
-                  
+         
 and type_for env loc el1 inv dec e el2 s =
   let el1 = List.map (expr ~ghost:false env) el1 in
-  let inv = assertion (add_Pre_Here env) (Some LabelHere) inv in
+  let inv = assertion (add_Pre_Here env) inv in
   let dec = 
-    Option_misc.map (term (add_Pre_Here env) (Some LabelHere)) dec 
+    Option_misc.map (term (add_Pre_Here env)) dec 
   in
   let e = expr ~ghost:false env e in
   let el2 = List.map (expr ~ghost:false env) el2 in
@@ -3336,9 +3419,9 @@ and type_for env loc el1 inv dec e el2 s =
 and type_for_decl env loc vd inv dec e sl s =
   let env',decls = variable_declaration ~ghost:false env vd in
   let env = { env with env = env'} in
-  let inv = assertion (add_Pre_Here env) (Some LabelHere) inv in
+  let inv = assertion (add_Pre_Here env) inv in
   let dec = 
-    Option_misc.map (term (add_Pre_Here env) (Some LabelHere)) dec 
+    Option_misc.map (term (add_Pre_Here env)) dec 
   in
   let e = expr ~ghost:false env e in
   let sl = List.map (expr ~ghost:false env) sl in
@@ -3347,9 +3430,9 @@ and type_for_decl env loc vd inv dec e sl s =
     java_statement_loc = loc }
 
 and type_do env loc inv dec s e =
-  let inv = assertion (add_Pre_Here env) (Some LabelHere) inv in
+  let inv = assertion (add_Pre_Here env) inv in
   let dec = 
-    Option_misc.map (term (add_Pre_Here env) (Some LabelHere)) dec 
+    Option_misc.map (term (add_Pre_Here env)) dec 
   in
   let s = statement env s in
   let e = expr ~ghost:false env e in
@@ -3357,9 +3440,9 @@ and type_do env loc inv dec s e =
       java_statement_loc = loc } 
       
 and type_while env loc inv dec e s =
-  let inv = assertion (add_Pre_Here env) (Some LabelHere) inv in
+  let inv = assertion (add_Pre_Here env) inv in
   let dec = 
-    Option_misc.map (term (add_Pre_Here env) (Some LabelHere)) dec 
+    Option_misc.map (term (add_Pre_Here env)) dec 
   in
   let e = expr ~ghost:false env e in
   let s = statement env s in
@@ -3439,11 +3522,12 @@ let type_method_spec_and_body ?(dobody=true)
     let env = { package_env = package_env ;
                 type_env = type_env;
                 current_type = (Some ti);
-                label_env = [LabelHere];
+                label_env = label_env_here;
+		current_label = Some LabelHere;
                 env = local_env }
     in
-    let req = Option_misc.map (assertion env (Some LabelHere)) req in
-    let decreases = Option_misc.map (term env (Some LabelHere)) decreases in
+    let req = Option_misc.map (assertion env) req in
+    let decreases = Option_misc.map (term env) decreases in
     let env_result =
       match mi.method_info_result with
         | None -> local_env
@@ -3515,16 +3599,17 @@ let type_constr_spec_and_body ?(dobody=true)
   let env = { package_env = package_env ;
               type_env = type_env;
               current_type = (Some current_type);
-              label_env = [LabelHere];
+              label_env = label_env_here;
+	      current_label = Some LabelHere;
               env = this_env }
   in
   let req = 
     Option_misc.map 
-      (assertion { env with env = local_env } (Some LabelHere)) req 
+      (assertion { env with env = local_env }) req 
   in
   let decreases = 
     Option_misc.map 
-      (term { env with env = local_env } (Some LabelHere)) decreases 
+      (term { env with env = local_env }) decreases 
   in
   let behs = List.map (behavior env local_env this_env) behs in
   if dobody then
@@ -3658,6 +3743,7 @@ let type_final_fields package_env type_env ti fields =
 	   type_env = type_env;
 	   current_type = Some ti;
 	   label_env = [];
+	   current_label = None;
 	   env = [];
 	 }
 	 in compute_dependencies env g fi) 
@@ -3753,23 +3839,24 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
         end
     | JPTannot(loc,s) -> assert false
     | JPTlemma((loc,id),is_axiom, labels,e) -> 
+	let labels_env,current_label,tlabels = labels_env labels in
         let env =
           { package_env = package_env;
             type_env = type_env;
             current_type = None;
-            label_env = labels;
+            label_env = labels_env;
+	    current_label = current_label;
             env = [];
           }
         in
-        (* TODO: si un seul label, c'est celui par defaut *)
-        let te = assertion env None e in
+        let te = assertion env e in
 	if in_axiomatic then
-	  Aaxiom(id,is_axiom,labels,te)::acc
+	  Aaxiom(id,is_axiom,tlabels,te)::acc
 	else
 	  begin
 	    if is_axiom then
 	      typing_error loc "axioms not allowed outside axiomatics"; 
-	    Hashtbl.add lemmas_table id (labels,te);
+	    Hashtbl.add lemmas_table id (tlabels,te);
 	    acc
 	  end
     | JPTlogic_type_decl (loc,id) -> 
@@ -3781,6 +3868,7 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	  end
 	    
     | JPTlogic_reads ((loc, id), ret_type, labels, params, reads) -> 
+	let labels_env,current_label,tlabels = labels_env labels in
         let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
         let env = 
           List.fold_left
@@ -3792,20 +3880,20 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
           { package_env = package_env;
             type_env = type_env;
             current_type = None;
-            label_env = labels;
+            label_env = labels_env;
+	    current_label = current_label;
             env = env;
           }
         in
 	let fi =
-	  (* TODO: si un seul label, c'est celui par defaut *)
 	  match ret_type with
-            | None -> logic_info id None labels pl
+            | None -> logic_info id None tlabels pl
 	    | Some ty -> 
 		logic_info id 
                   (Some (type_type package_env type_env false ty)) 
-                  labels pl 
+                  tlabels pl 
 	in
-        let r = List.map (location env None) reads in
+        let r = List.map (location env) reads in
         Hashtbl.add logics_env id fi;
 	if in_axiomatic then
 	  Adecl(fi,`Reads r)::acc
@@ -3815,6 +3903,7 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	  end
 
     | JPTlogic_def ((loc, id), ret_type, labels, params, body) -> 
+	let labels_env,current_label,tlabels = labels_env labels in
         let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
         let env = 
           List.fold_left
@@ -3826,15 +3915,16 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
           { package_env = package_env;
             type_env = type_env;
             current_type = None;
-            label_env = labels;
+            label_env = labels_env;
+	    current_label = current_label;
             env = env;
           }
         in
 	begin
           match ret_type with
             | None -> 
-		let fi = logic_info id None labels pl in
-		let a = assertion env None body in
+		let fi = logic_info id None tlabels pl in
+		let a = assertion env body in
 		Hashtbl.add logics_env id fi;
 		if in_axiomatic then
 		  Adecl(fi,`Assertion a)::acc
@@ -3847,9 +3937,9 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	    | Some ty ->
                 let fi = 
 		  logic_info id 
-                  (Some (type_type package_env type_env false ty)) labels pl 
+                  (Some (type_type package_env type_env false ty)) tlabels pl 
 		in
-                let t = term env None body in
+                let t = term env body in
                 Hashtbl.add logics_env id fi;
 		if in_axiomatic then
 		  Adecl(fi,`Term t)::acc
@@ -3861,6 +3951,7 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 		  end
         end
     | JPTinductive((loc, id), labels, params, body) -> 
+	let labels_env,current_label,tlabels = labels_env labels in
         let pl = 
 	  List.map (fun p -> fst (type_param package_env type_env p)) params 
 	in
@@ -3874,16 +3965,17 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
           { package_env = package_env;
             type_env = type_env;
             current_type = None;
-            label_env = labels;
+            label_env = labels_env;
+	    current_label = current_label;
             env = env;
           }
         in
-	let fi = logic_info id None labels pl in
+	let fi = logic_info id None tlabels pl in
 	(* adding fi in env before typing indcases *)
         Hashtbl.add logics_env id fi;
 	let l = List.map
 	  (fun (id,e) ->
-	     let a = assertion env None e in
+	     let a = assertion env e in
 	     (id,a))
 	  body
 	in
@@ -3947,13 +4039,14 @@ let type_specs package_env type_env =
                  type_env = type_env;
                  current_type = (Some current_type);
                  label_env = [];
+		 current_label = None;
                  env = env;
                }
              in
              Hashtbl.add invariants_table tag
                (ci, vi, List.map 
                   (fun (id, e) ->
-                     (id, assertion env None e))
+                     (id, assertion env e))
                   invs)
          | _ -> assert false)
     invariants_env;
@@ -3964,12 +4057,13 @@ let type_specs package_env type_env =
            type_env = type_env;
            current_type = (Some current_type);
            label_env = [];
+	   current_label = None;
            env = [];
          }
        in
        Hashtbl.add static_invariants_table tag
          (List.map 
-            (fun (s, e) -> s, assertion env None e)
+            (fun (s, e) -> s, assertion env e)
          invs))
     static_invariants_env;
   Hashtbl.iter 

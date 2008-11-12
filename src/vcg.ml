@@ -877,8 +877,7 @@ let rec explain_for_pred internal user = function
 		    assert false
 	    end
 	| None -> 
-	    fprintf str_formatter 
-	      "unexplained assertion `%a'" print_predicate p;
+	    fprintf str_formatter "unexplained assertion";
 	    VCEexternal(flush_str_formatter())) 
 	      
 (* Proof obligations from the WP *)

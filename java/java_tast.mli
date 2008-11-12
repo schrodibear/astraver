@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.41 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: java_tast.mli,v 1.42 2008-11-12 16:17:45 marche Exp $ *)
 
 open Java_env
 
@@ -33,13 +33,15 @@ type bin_op = Java_ast.bin_op
 type un_op = Java_ast.un_op
 type incr_decr_op = Java_ast.incr_decr_op
 
+type label_assoc = (logic_label * logic_label) list
+
 type term_node =
     | JTlit of literal
     | JTvar of java_var_info
     | JTat of term * logic_label
     | JTbin of term * base_type * bin_op * term   
     | JTun of base_type * un_op * term
-    | JTapp of java_logic_info * term list
+    | JTapp of java_logic_info * label_assoc * term list
     | JTfield_access of term * java_field_info
     | JTstatic_field_access of java_type_info * java_field_info
     | JTarray_length of term 
@@ -70,7 +72,7 @@ type assertion_node =
   | JAbool_expr of term
   | JAbin of term * base_type * bin_op * term   
   | JAbin_obj of term * bin_op * term   
-  | JAapp of java_logic_info * term list
+  | JAapp of java_logic_info * label_assoc * term list
   | JAinstanceof of term * logic_label * java_type
   | JAif of term * assertion * assertion
 

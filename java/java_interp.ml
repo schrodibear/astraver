@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.172 2008-11-12 14:14:19 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.173 2008-11-12 16:17:45 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -591,9 +591,10 @@ let rec term t =
             ~op:(lbin_op t op)
             ~expr2:(term e2)
             ()
-      | JTapp (fi, el) -> 
+      | JTapp (fi, labels, el) -> 
           mkapp
             ~fun_name: (get_logic_fun fi).jc_logic_info_name
+	    ~labels:(List.map (fun (_,l) -> tr_logic_label l) labels)
             ~args: (List.map term el)
             ()
       | JTvar vi ->
@@ -713,9 +714,10 @@ let rec assertion ?(reg=0) a =
             ~op: (lobj_op op)
             ~expr2: (term e2)
             ()
-      | JAapp (fi, el)-> 
+      | JAapp (fi, labels, el)-> 
           mkapp
             ~fun_name: (get_logic_fun fi).jc_logic_info_name
+	    ~labels:(List.map (fun (_,l) -> tr_logic_label l) labels)
             ~args: (List.map term el)
             ()
       | JAquantifier (q, vi, a)-> 
@@ -977,7 +979,7 @@ let rec location_set logic_label t =
       | JTlit l -> assert false (* TODO *)
       | JTun(t,op,e1) -> assert false (* TODO *)
       | JTbin(e1,t,op,e2) -> assert false (* TODO *)
-      | JTapp (_, _) -> assert false (* TODO *)
+      | JTapp (_, _, _) -> assert false (* TODO *)
       | JTvar vi ->
           mkvar ~name:(var_name (get_var vi)) ()
       | JTfield_access(t,fi) -> 
@@ -1043,7 +1045,7 @@ let location logic_label t =
       | JTlit l -> assert false (* TODO *)
       | JTun(t,op,e1) -> assert false (* TODO *)
       | JTbin(e1,t,op,e2) -> assert false (* TODO *)
-      | JTapp (_, _) -> assert false (* TODO *)
+      | JTapp (_, _, _) -> assert false (* TODO *)
       | JTvar vi ->
           mkvar ~name:(var_name (get_var vi)) ()
       | JTfield_access(t,fi) -> 

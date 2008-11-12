@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.56 2008-11-12 14:14:20 marche Exp $
+$Id: java_parser.mly,v 1.57 2008-11-12 16:17:45 marche Exp $
 
 */
 
@@ -81,11 +81,13 @@ $Id: java_parser.mly,v 1.56 2008-11-12 14:14:20 marche Exp $
 	     java_pbehavior_throws = None;
 	     java_pbehavior_ensures = e }) :: behs
 
+(*
   let label (loc,s) = match s with
     | "Pre" -> LabelPre
     | "Here" -> LabelHere
     | "Old" -> LabelOld
     | _ -> LabelName s
+*)
 
   let float_of_suf = function
     | None -> `Real
@@ -796,8 +798,8 @@ primary_no_new_array:
     { locate_expr (JPEname $2) }
 | field_access
     { locate_expr (JPEfield_access $1) }
-| name LEFTPAR argument_list RIGHTPAR
-    { locate_expr (JPEcall_name($1,$3)) } 
+| name label_binders LEFTPAR argument_list RIGHTPAR
+    { locate_expr (JPEcall_name($1,$2,$4)) } 
 | SUPER DOT ident LEFTPAR argument_list RIGHTPAR
     { locate_expr (JPEsuper_call($3, $5)) }
 | primary_expr DOT ident LEFTPAR argument_list RIGHTPAR
@@ -1110,13 +1112,13 @@ indcases:
 ;
 
 label_binders:
-| /* epsilon */ { [LabelHere] }
-| LEFTBRACE ident label_list_end RIGHTBRACE { (label $2)::$3 }
+| /* epsilon */ { [] }
+| LEFTBRACE ident label_list_end RIGHTBRACE { $2::$3 }
 ;
 
 label_list_end:
 | /* epsilon */ { [] }
-| COMMA ident label_list_end { (label $2)::$3 }
+| COMMA ident label_list_end { $2::$3 }
 ;
 
 
