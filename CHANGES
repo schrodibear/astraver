@@ -1,3 +1,4 @@
+  o krakatoa/jessie: fix bug with axiomatic and multiple labels
   o New prover column in GWhy for Ergo with selection of hypotheses
 
 version 2.16, October 29th, 2008

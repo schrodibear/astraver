@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.32 2008-11-05 14:43:52 moy Exp $ *)
+(* $Id: jc_poutput.ml,v 1.33 2008-11-14 09:32:34 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -311,18 +311,11 @@ let invariant fmt (id, vi, a) =
 let reads_or_expr fmt = function
   | JCreads [] -> ()
   | JCreads el -> 
-      fprintf fmt "reads %a;" (print_list comma pexpr) el
+      fprintf fmt "@ reads %a;" (print_list comma pexpr) el
   | JCexpr e -> 
-      fprintf fmt "=@\n%a" pexpr e
-(*
-  | JCaxiomatic l ->
-      fprintf fmt "{@\n@[<v 2>%a@]@\n}" 
-	(print_list newline
-	   (fun fmt (id,e) -> 
-	      fprintf fmt "axiom %s: %a;@\n" id#name pexpr e)) l
-*)
+      fprintf fmt " =@\n%a" pexpr e
   | JCinductive l ->
-      fprintf fmt "{@\n@[<v 2>%a@]@\n}" 
+      fprintf fmt " {@\n@[<v 2>%a@]@\n}" 
 	(print_list newline
 	   (fun fmt (id,e) -> 
 	      fprintf fmt "case %s: %a;@\n" id#name pexpr e)) l
@@ -342,12 +335,12 @@ let super_option fmt = function
 let rec pdecl fmt d =
   match d#node with
     | JCDfun(ty,id,params,clauses,body) ->
-	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." ptype ty id#name
+	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@\n" ptype ty id#name
 	  (print_list comma param) params 
 	  (print_list nothing pclause) clauses
 	  (print_option_or_default "\n;" pexpr) body
     | JCDenum_type(id,min,max) ->
-	fprintf fmt "@\n@[type %s = %s..%s@]@."
+	fprintf fmt "@\n@[type %s = %s..%s@]@\n"
 	  id (Num.string_of_num min) (Num.string_of_num max)
     | JCDvariant_type(id, tags) ->
 	fprintf fmt "@\n@[type %s = [" id;
@@ -355,7 +348,7 @@ let rec pdecl fmt d =
 	  (fun fmt () -> fprintf fmt " | ")
 	  (fun fmt tag -> fprintf fmt "%s" tag#name)
 	  fmt tags;
-	fprintf fmt "]@]@."
+	fprintf fmt "]@]@\n"
     | JCDunion_type(id,discriminated,tags) ->
 	fprintf fmt "@\n@[type %s = [" id;
 	print_list
@@ -363,45 +356,44 @@ let rec pdecl fmt d =
 	     (if discriminated then '^' else '&'))
 	  (fun fmt tag -> fprintf fmt "%s" tag#name)
 	  fmt tags;
-	fprintf fmt "]@]@."
+	fprintf fmt "]@]@\n"
     | JCDtag(id, params, super, fields, invs) ->
-	fprintf fmt "@\n@[<v 2>tag %s%a = %a{%a%a@]@\n}@."
+	fprintf fmt "@\n@[<v 2>tag %s%a = %a{%a%a@]@\n}@\n"
           id
           type_params_decl params
           super_option super
           (print_list space field) fields 
 	  (print_list space invariant) invs
     | JCDvar(ty,id,init) ->
-	fprintf fmt "@\n@[%a %s%a;@]@." ptype ty id
+	fprintf fmt "@\n@[%a %s%a;@]@\n" ptype ty id
 	  (print_option (fun fmt e -> fprintf fmt " = %a" pexpr e)) init
     | JCDlemma(id,is_axiom,lab,a) ->
 	fprintf fmt "@\n@[%s %s" (if is_axiom then "axiom" else "lemma") id;
-	if lab <> [] then 
-	  fprintf fmt "%a" 
-	    (print_list_delim lbrace rbrace comma label) lab;
-	fprintf fmt " :@\n%a@]@." pexpr a
+	fprintf fmt "@[%a@]" 
+	  (print_list_delim lbrace rbrace comma label) lab;
+	fprintf fmt " :@\n%a@]@\n" pexpr a
     | JCDglobal_inv(id,a) ->
-	fprintf fmt "@\n@[invariant %s :@\n%a@]@." id pexpr a
+	fprintf fmt "@\n@[invariant %s :@\n%a@]@\n" id pexpr a
     | JCDexception(id,tyopt) ->
-	fprintf fmt "@\n@[exception %s of %a@]@." id
+	fprintf fmt "@\n@[exception %s of %a@]@\n" id
 	  (print_option ptype) tyopt
     | JCDlogic_var (ty, id, body) ->
-	fprintf fmt "@\n@[logic %a %s %a@]@." 
+	fprintf fmt "@\n@[logic %a %s %a@]@\n" 
 	  ptype ty id
 	  (print_option (fun fmt e -> fprintf fmt "=@\n%a" pexpr e)) body 
     | JCDlogic (None, id, labels, params, body) ->
-	fprintf fmt "@\n@[logic %s%a(@[%a@]) %a@]@." 
+	fprintf fmt "@\n@[logic %s@[%a@](@[%a@])%a@]@\n" 
 	  id (print_list_delim lbrace rbrace comma label) labels
 	  (print_list comma param) params
 	  reads_or_expr body 
     | JCDlogic (Some ty, id, labels, params, body) ->
-	fprintf fmt "@\n@[logic %a %s%a(@[%a@]) %a@]@." 
+	fprintf fmt "@\n@[logic %a %s@[%a@](@[%a@])%a@]@\n" 
 	  ptype ty 
 	  id (print_list_delim lbrace rbrace comma label) labels
 	  (print_list comma param) params
 	  reads_or_expr body 
     | JCDlogic_type id ->
-	fprintf fmt "@\n@[logic type %s@]@." id
+	fprintf fmt "@\n@[logic type %s@]@\n" id
     | JCDinvariant_policy p ->
         fprintf fmt "# InvariantPolicy = %s@\n" (string_of_invariant_policy p)  
     | JCDseparation_policy p ->
@@ -413,8 +405,8 @@ let rec pdecl fmt d =
     | JCDint_model p ->
         fprintf fmt "# IntModel = %s@\n" (string_of_int_model p)
     | JCDaxiomatic(id,l) ->
-	fprintf fmt "axiomatic %s {@\n@[<v 2>%a@]@\n}" id
-	  (print_list newline pdecl) l
+	fprintf fmt "@\n@[axiomatic %s {@\n@[<v 2>%a@]@\n}@]@\n" id
+	  (print_list space pdecl) l
 	
 
 and pdecls fmt (l : pexpr decl list) =

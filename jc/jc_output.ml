@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.132 2008-11-05 14:43:52 moy Exp $ *)
+(* $Id: jc_output.ml,v 1.133 2008-11-14 09:32:34 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -472,13 +472,6 @@ let term_or_assertion fmt = function
       fprintf fmt "reads \\nothing;"
   | JCReads locs -> 
       fprintf fmt "reads %a;" (print_list comma location) locs
-(*
-  | JCAxiomatic l ->
-      fprintf fmt "{@\n@[<v 2>%a@]@\n}" 
-	(print_list newline 
-	   (fun fmt (id,e) -> 
-	      fprintf fmt "axiom %s: %a;@\n" id#name assertion e)) l
-*)
   | JCInductive l ->
       fprintf fmt "{@\n@[<v 2>%a@]@\n}" 
 	(print_list newline 

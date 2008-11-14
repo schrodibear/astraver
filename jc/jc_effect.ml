@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.150 2008-11-05 14:43:52 moy Exp $ *)
+(* $Id: jc_effect.ml,v 1.151 2008-11-14 09:32:34 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -73,10 +73,8 @@ let transpose_labels ~label_assoc labs =
     | Some assoc ->
 	LogicLabelSet.fold
 	  (fun lab acc ->
-	     try
-	       let lab = List.assoc lab assoc in
-	       LogicLabelSet.add lab acc
-	     with Not_found -> LogicLabelSet.add lab acc)
+	     let lab = try List.assoc lab assoc with Not_found -> lab in
+	     LogicLabelSet.add lab acc)
 	  labs LogicLabelSet.empty
 
 let transpose_region ~region_assoc r =
@@ -234,6 +232,21 @@ let ef_union ef1 ef2 =
     jc_effect_committed =
       StringSet.union
 	ef1.jc_effect_committed ef2.jc_effect_committed;
+  }
+
+let ef_filter_labels ~label_assoc ef =
+  let filter_labels labs =
+    List.fold_left
+      (fun acc (l1,l2) ->
+	 if LogicLabelSet.mem l2 labs then LogicLabelSet.add l1 acc else acc)
+      LogicLabelSet.empty label_assoc
+  in
+  { ef with
+      jc_effect_memories =
+        MemoryMap.fold 
+	  (fun m labs acc ->
+	     MemoryMap.add m (filter_labels labs) acc
+	  ) ef.jc_effect_memories MemoryMap.empty;
   }
 
 let ef_assoc ?label_assoc ~region_assoc ~region_mem_assoc ef =
@@ -1487,10 +1500,54 @@ let axiomatic_decl_effect ef d =
   match d with
     | Jc_typing.ABaxiom(_,_,_,a) -> assertion ef a
 
-let axiomatic_effects ef a =
+let effects_from_app fi ax_effects acc app =
+  Jc_options.lprintf "@[Jc_effect.effects_from_app, fi = %s, app = %s@]@."
+    fi.jc_logic_info_name
+    app.jc_app_fun.jc_logic_info_name;
+  Jc_options.lprintf "fi == app.jc_app_fun ? %b@." (fi == app.jc_app_fun);
+  if fi == app.jc_app_fun then
+    begin
+      Jc_options.lprintf 
+	"@[fi labels = @[{%a}@] ; app label_assoc = @[{%a}@]@]@."
+	(print_list comma Jc_output_misc.label) 
+	fi.jc_logic_info_labels
+	(print_list comma 
+	   (fun fmt (l1,l2) -> 
+	      Format.fprintf fmt "%a -> %a" 
+		Jc_output_misc.label l1 
+		Jc_output_misc.label l2))
+	app.jc_app_label_assoc;      
+      ef_union
+	(ef_filter_labels app.jc_app_label_assoc ax_effects)
+	acc
+    end
+  else
+    acc
+
+let effects_from_term_app fi ax_effects acc t =
+  match t#node with
+    | JCTapp app -> effects_from_app fi ax_effects acc app
+    | _ -> acc
+
+let effects_from_pred_app fi ax_effects acc a =
+  match a#node with
+    | JCAapp app -> effects_from_app fi ax_effects acc app
+    | _ -> acc
+
+let effects_from_assertion fi ax_effects acc a =
+  Jc_iterators.fold_term_and_assertion 
+    (effects_from_term_app fi ax_effects) 
+    (effects_from_pred_app fi ax_effects) acc a
+
+let effects_from_decl fi ax_effects acc d =
+  match d with
+    | Jc_typing.ABaxiom(_,_,_,a) -> effects_from_assertion fi ax_effects acc a
+
+let effects_from_axiomatic fi ax acc =
   try
-    let l = Hashtbl.find Jc_typing.axiomatics_table a in
-    List.fold_left axiomatic_decl_effect ef l
+    let l = Hashtbl.find Jc_typing.axiomatics_table ax in
+    let ef = List.fold_left axiomatic_decl_effect empty_effects l in
+    List.fold_left (effects_from_decl fi ef) acc l    
   with Not_found -> assert false
 
 let logic_fun_effects f = 
@@ -1498,19 +1555,24 @@ let logic_fun_effects f =
     Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag 
   in
   let ef = f.jc_logic_info_effects in
-  let ef = match ta with
-    | JCTerm t -> term ef t 
-    | JCAssertion a -> assertion ef a
-    | JCReads loclist ->
+  let ef = match ta, f.jc_logic_info_axiomatic with
+    | JCTerm t, None -> term ef t 
+    | JCAssertion a, None -> assertion ef a
+    | JCInductive l, None ->
+	List.fold_left (fun ef (id,a) -> assertion ef a) ef l
+    | JCReads [], Some a ->
+	(* axiomatic def in a *)
+	effects_from_axiomatic f a ef 
+    | JCReads loclist, _ ->
+	assert (1==0); (* cause obsolete *)
 	List.fold_left
 	  (fun ef loc ->
 	     let fef = location ~in_assigns:false empty_fun_effect loc in
 	     ef_union ef fef.jc_reads 
 	  ) ef loclist
-    | JCInductive l ->
-	List.fold_left (fun ef (id,a) -> assertion ef a) ef l
+    | _,Some _ -> assert false (* impossible *)
+	(* TODO ? unify ta and jc_logic_info_axiomatic *)
   in
-  let ef = Option_misc.fold_left axiomatic_effects ef f.jc_logic_info_axiomatic in
   if same_effects ef f.jc_logic_info_effects then () else
     (fixpoint_reached := false;
      f.jc_logic_info_effects <- ef)

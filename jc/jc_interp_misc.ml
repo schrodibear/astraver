@@ -391,11 +391,13 @@ let any_value' ty' =
 (*                                 variables                                  *)
 (******************************************************************************)
 
+let transpose_label ~label_assoc lab =
+  match label_assoc with
+    | None -> lab
+    | Some l ->  try List.assoc lab l with Not_found -> lab
+
 let lvar_name ~constant ~label_in_name ?label_assoc lab n =
-  let lab = match label_assoc with
-    | None -> lab 
-    | Some assoc -> try List.assoc lab assoc with Not_found -> lab
-  in	
+  let lab = transpose_label ~label_assoc lab in
   if label_in_name && not constant then 
     match lab with
       | LabelHere -> n
@@ -2231,7 +2233,6 @@ let make_arguments
 let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
   MemoryMap.fold
     (fun (mc,distr) labs acc ->
-       let labs = transpose_labels ?label_assoc labs in
        let locr = match region_assoc with
 	 | None -> distr
 	 | Some region_assoc -> 
@@ -2241,6 +2242,7 @@ let tmemory_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
        in
        LogicLabelSet.fold
 	 (fun lab acc ->
+	    let lab = transpose_label ~label_assoc lab in
 	    let param = tmemory_param ~label_in_name lab (mc,locr) in
 	    ((mc,locr), param) :: acc
 	 ) labs acc
@@ -2254,7 +2256,6 @@ let talloc_table_detailed_params
     ~label_in_name ?region_assoc ?label_assoc reads =
   AllocMap.fold
     (fun (ac,distr) labs acc ->
-       let labs = transpose_labels ?label_assoc labs in
        let locr = match region_assoc with
 	 | None -> distr
 	 | Some region_assoc -> 
@@ -2264,6 +2265,7 @@ let talloc_table_detailed_params
        in
        LogicLabelSet.fold
 	 (fun lab acc ->
+	    let lab = transpose_label ~label_assoc lab in	    
 	    let param = talloc_table_param ~label_in_name lab (ac,locr) in
 	    ((ac,locr), param) :: acc
 	 ) labs acc
@@ -2277,7 +2279,6 @@ let talloc_table_params ~label_in_name ?region_assoc ?label_assoc reads =
 let ttag_table_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
   TagMap.fold
     (fun (vi,distr) labs acc ->
-       let labs = transpose_labels ?label_assoc labs in
        let locr = match region_assoc with
 	 | None -> distr
 	 | Some region_assoc -> 
@@ -2287,6 +2288,7 @@ let ttag_table_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
        in
        LogicLabelSet.fold
 	 (fun lab acc ->
+	    let lab = transpose_label ~label_assoc lab in	    	    
 	    let param = ttag_table_param ~label_in_name lab (vi,locr) in
 	    ((vi,locr), param) :: acc
 	 ) labs acc
@@ -2300,9 +2302,9 @@ let ttag_table_params ~label_in_name ?region_assoc ?label_assoc reads =
 let tglob_detailed_params ~label_in_name ?region_assoc ?label_assoc reads =
   VarMap.fold
     (fun v labs acc ->
-       let labs = transpose_labels ?label_assoc labs in
        LogicLabelSet.fold
 	 (fun lab acc ->
+	    let lab = transpose_label ~label_assoc lab in
 	    let param = tparam ~label_in_name lab v in
 	    (v, param) :: acc
 	 ) labs acc

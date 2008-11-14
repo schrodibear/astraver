@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.385 2008-11-07 18:13:20 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.386 2008-11-14 09:32:34 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -978,15 +978,17 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
               (List.length args);
             assert false
         in
-	let relab (lab1,lab2) =
-	  (lab1, if lab2 = LabelHere then lab else lab2) 
-	in
 	let label_assoc =
 	  if relocate then 
-	    (LabelHere,lab) :: List.map relab app.jc_app_label_assoc
+	    (assert (0=1);
+	     let relab (lab1,lab2) =
+	       (lab1, if lab2 = LabelHere then lab else lab2) 
+	     in
+	     (LabelHere,lab) :: List.map relab app.jc_app_label_assoc)
 	  else app.jc_app_label_assoc
 	in
-        make_logic_pred_call ~label_in_name:global_assertion 
+        make_logic_pred_call 
+	  ~label_in_name:global_assertion 
 	  ~region_assoc:app.jc_app_region_assoc 
 	  ~label_assoc:label_assoc
 	  f args
