@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.150 2008-11-12 16:17:45 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.151 2008-11-14 12:33:05 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -3222,7 +3222,7 @@ let rec statement env s =
       | JPSexpr e -> 
           let te = exprt e in JSexpr te
       | JPSassert(id,a) ->
-          let ta = assertion { env with current_label = Some LabelHere } a in
+          let ta = assertion (add_Pre_Here env) a in
           JSassert(Option_misc.map snd id,ta)
       | JPSstatement_spec(requires,decreases,behaviors) ->
           typing_error s.java_pstatement_loc

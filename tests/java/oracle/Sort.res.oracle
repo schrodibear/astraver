@@ -35,7 +35,7 @@ class Sort {
     /*@ requires t != null && 
       @    0 <= i < t.length && 0 <= j < t.length;
       @ assigns t[i],t[j];
-      @ ensures Swap{Old,Here}(t,i,j) && Permut{Old,Here}(t,0,t.length-1);
+      @ ensures Swap{Old,Here}(t,i,j);
       @*/
     void swap(int t[], int i, int j) {
 	int tmp = t[i];
@@ -212,10 +212,7 @@ unit Sort_swap(Sort[0] this_2, intM[0..] t, integer i_2, integer j_1)
 behavior default:
   assigns (t + [i_2..i_2]).intP,
   (t + [j_1..j_1]).intP;
-  ensures (K_1 : (Swap{Old,
-                   Here}(t, i_2, j_1) &&
-                   Permut{Old,
-                   Here}(t, 0, ((\offset_max(t) + 1) - 1))));
+  ensures (K_1 : Swap{Old, Here}(t, i_2, j_1));
 {  
    {  
       (var integer tmp = (K_5 : (t + i_2).intP));
@@ -441,7 +438,7 @@ end = 23
 file = "HOME/tests/java/Sort.java"
 line = 37
 begin = 16
-end = 73
+end = 37
 
 [K_25]
 file = "HOME/tests/java/Sort.java"
@@ -762,7 +759,7 @@ end = -1
 file = "HOME/tests/java/Sort.java"
 line = 37
 begin = 16
-end = 73
+end = 37
 
 [JC_107]
 file = "HOME/"
@@ -2027,7 +2024,7 @@ end = -1
 file = "HOME/tests/java/Sort.java"
 line = 37
 begin = 16
-end = 73
+end = 37
 
 [JC_38]
 file = "HOME/tests/java/Sort.java"
@@ -2252,60 +2249,6 @@ predicate left_valid_struct_interface(p:interface pointer,
  a:int,
  interface_alloc_table:interface alloc_table) =
  (offset_min(interface_alloc_table, p) <= a)
-
-axiom no_assign_Permut_0 :
- (forall tmp:Object pset.
-  (forall tmpmem:(Object, int) memory.
-   (forall tmpalloc:Object alloc_table.
-    (forall intM_intP_at_L1:(Object, int) memory.
-     (forall intM_intP_at_L2:(Object, int) memory.
-      (forall h:int.
-       (forall l:int.
-        (forall a_0:Object pointer.
-         ((pset_disjoint(tmp, pset_empty)
-          and not_assigns(tmpalloc, intM_intP_at_L2, tmpmem, tmp)) ->
-          (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1)
-          <-> Permut(a_0, l, h, tmpmem, intM_intP_at_L1)))))))))))
-
-axiom no_assign_Permut_1 :
- (forall tmp:Object pset.
-  (forall tmpmem:(Object, int) memory.
-   (forall tmpalloc:Object alloc_table.
-    (forall intM_intP_at_L1:(Object, int) memory.
-     (forall intM_intP_at_L2:(Object, int) memory.
-      (forall h:int.
-       (forall l:int.
-        (forall a_0:Object pointer.
-         ((pset_disjoint(tmp, pset_empty)
-          and not_assigns(tmpalloc, intM_intP_at_L1, tmpmem, tmp)) ->
-          (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1)
-          <-> Permut(a_0, l, h, intM_intP_at_L2, tmpmem)))))))))))
-
-axiom no_update_Permut_0 :
- (forall tmp:Object pointer.
-  (forall tmpval:int.
-   (forall intM_intP_at_L1:(Object, int) memory.
-    (forall intM_intP_at_L2:(Object, int) memory.
-     (forall h:int.
-      (forall l:int.
-       (forall a_0:Object pointer.
-        ((not in_pset(tmp, pset_empty)) ->
-         (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1)
-         <-> Permut(a_0, l, h, store(intM_intP_at_L2, tmp, tmpval),
-             intM_intP_at_L1))))))))))
-
-axiom no_update_Permut_1 :
- (forall tmp:Object pointer.
-  (forall tmpval:int.
-   (forall intM_intP_at_L1:(Object, int) memory.
-    (forall intM_intP_at_L2:(Object, int) memory.
-     (forall h:int.
-      (forall l:int.
-       (forall a_0:Object pointer.
-        ((not in_pset(tmp, pset_empty)) ->
-         (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1)
-         <-> Permut(a_0, l, h, intM_intP_at_L2,
-             store(intM_intP_at_L1, tmp, tmpval)))))))))))
 
 axiom pointer_addr_of_Object_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(Object_of_pointer_address(p))))
@@ -2600,11 +2543,7 @@ parameter Sort_swap :
     j_1:int ->
      { } unit reads Object_alloc_table,intM_intP writes intM_intP
      { (JC_42:
-       ((JC_40:
-        (Swap(t, i_2, j_1, intM_intP, intM_intP@)
-        and Permut(t, (0),
-            sub_int(add_int(offset_max(Object_alloc_table, t), (1)), (1)),
-            intM_intP, intM_intP@)))
+       ((JC_40: Swap(t, i_2, j_1, intM_intP, intM_intP@))
        and (JC_41:
            not_assigns(Object_alloc_table@, intM_intP@, intM_intP,
            pset_union(pset_range(pset_singleton(t@), j_1@, j_1@),
@@ -2624,11 +2563,7 @@ parameter Sort_swap_requires :
                        add_int(offset_max(Object_alloc_table, t), (1))))))))}
      unit reads Object_alloc_table,intM_intP writes intM_intP
      { (JC_42:
-       ((JC_40:
-        (Swap(t, i_2, j_1, intM_intP, intM_intP@)
-        and Permut(t, (0),
-            sub_int(add_int(offset_max(Object_alloc_table, t), (1)), (1)),
-            intM_intP, intM_intP@)))
+       ((JC_40: Swap(t, i_2, j_1, intM_intP, intM_intP@))
        and (JC_41:
            not_assigns(Object_alloc_table@, intM_intP@, intM_intP,
            pset_union(pset_range(pset_singleton(t@), j_1@, j_1@),
@@ -3848,11 +3783,7 @@ let Sort_swap_ensures_default =
    Return ->
    void end)
   { (JC_39:
-    ((JC_37:
-     (Swap(t, i_2, j_1, intM_intP, intM_intP@)
-     and Permut(t, (0),
-         sub_int(add_int(offset_max(Object_alloc_table, t), (1)), (1)),
-         intM_intP, intM_intP@)))
+    ((JC_37: Swap(t, i_2, j_1, intM_intP, intM_intP@))
     and (JC_38:
         not_assigns(Object_alloc_table@, intM_intP@, intM_intP,
         pset_union(pset_range(pset_singleton(t@), j_1@, j_1@),
@@ -3914,13 +3845,18 @@ why --project [...] why/Sort.why
   <function name="Method swap">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
+    <goal why_file="why/Sort_po43.why">
+      <location file = "HOME/tests/java/Sort.java" line = "40" begin = "11" end = "15"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
     <goal why_file="why/Sort_po44.why">
       <location file = "HOME/tests/java/Sort.java" line = "40" begin = "11" end = "15"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Sort_po45.why">
-      <location file = "HOME/tests/java/Sort.java" line = "40" begin = "11" end = "15"/>
+      <location file = "HOME/tests/java/Sort.java" line = "41" begin = "8" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -3929,22 +3865,13 @@ text = "PointerDeref"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
-    <goal why_file="why/Sort_po47.why">
-      <location file = "HOME/tests/java/Sort.java" line = "41" begin = "8" end = "12"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/Sort_po41.why">
-      <location file = "HOME/tests/java/Sort.java" line = "37" begin = "16" end = "73"/>
+      <location file = "HOME/tests/java/Sort.java" line = "37" begin = "16" end = "37"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Sort_po42.why">
-      <location file = "HOME/tests/java/Sort.java" line = "37" begin = "16" end = "73"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/Sort_po43.why">
       <location file = "HOME/tests/java/Sort.java" line = "39" begin = "9" end = "13"/>
       <explain kind = "Post"/>
     </goal>
@@ -5147,60 +5074,6 @@ predicate left_valid_struct_intM(p: Object pointer, a: int,
 predicate left_valid_struct_interface(p: interface pointer, a: int,
   interface_alloc_table: interface alloc_table) =
   (offset_min(interface_alloc_table, p) <= a)
-
-axiom no_assign_Permut_0:
-  (forall tmp:Object pset.
-    (forall tmpmem:(Object, int) memory.
-      (forall tmpalloc:Object alloc_table.
-        (forall intM_intP_at_L1:(Object, int) memory.
-          (forall intM_intP_at_L2:(Object, int) memory.
-            (forall h:int.
-              (forall l:int.
-                (forall a_0:Object pointer.
-                  ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                    intM_intP_at_L2, tmpmem, tmp)) ->
-                   (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1) <->
-                    Permut(a_0, l, h, tmpmem, intM_intP_at_L1)))))))))))
-
-axiom no_assign_Permut_1:
-  (forall tmp:Object pset.
-    (forall tmpmem:(Object, int) memory.
-      (forall tmpalloc:Object alloc_table.
-        (forall intM_intP_at_L1:(Object, int) memory.
-          (forall intM_intP_at_L2:(Object, int) memory.
-            (forall h:int.
-              (forall l:int.
-                (forall a_0:Object pointer.
-                  ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                    intM_intP_at_L1, tmpmem, tmp)) ->
-                   (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1) <->
-                    Permut(a_0, l, h, intM_intP_at_L2, tmpmem)))))))))))
-
-axiom no_update_Permut_0:
-  (forall tmp:Object pointer.
-    (forall tmpval:int.
-      (forall intM_intP_at_L1:(Object, int) memory.
-        (forall intM_intP_at_L2:(Object, int) memory.
-          (forall h:int.
-            (forall l:int.
-              (forall a_0:Object pointer.
-                ((not in_pset(tmp, pset_empty)) ->
-                 (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1) <->
-                  Permut(a_0, l, h, store(intM_intP_at_L2, tmp, tmpval),
-                  intM_intP_at_L1))))))))))
-
-axiom no_update_Permut_1:
-  (forall tmp:Object pointer.
-    (forall tmpval:int.
-      (forall intM_intP_at_L1:(Object, int) memory.
-        (forall intM_intP_at_L2:(Object, int) memory.
-          (forall h:int.
-            (forall l:int.
-              (forall a_0:Object pointer.
-                ((not in_pset(tmp, pset_empty)) ->
-                 (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1) <->
-                  Permut(a_0, l, h, intM_intP_at_L2, store(intM_intP_at_L1,
-                  tmp, tmpval)))))))))))
 
 axiom pointer_addr_of_Object_of_pointer_address:
   (forall p:unit pointer.
@@ -6771,9 +6644,7 @@ goal Sort_min_sort_ensures_default_po_28:
   forall intM_intP1:(Object,
   int) memory.
   ("JC_42":
-  (("JC_40":
-   (Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0) and Permut(t_0, 0,
-    ((offset_max(Object_alloc_table, t_0) + 1) - 1), intM_intP1, intM_intP0))) and
+  (("JC_40": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
    ("JC_41": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
@@ -6857,9 +6728,7 @@ goal Sort_min_sort_ensures_default_po_29:
   forall intM_intP1:(Object,
   int) memory.
   ("JC_42":
-  (("JC_40":
-   (Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0) and Permut(t_0, 0,
-    ((offset_max(Object_alloc_table, t_0) + 1) - 1), intM_intP1, intM_intP0))) and
+  (("JC_40": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
    ("JC_41": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
@@ -6963,9 +6832,7 @@ goal Sort_min_sort_ensures_default_po_30:
   forall intM_intP1:(Object,
   int) memory.
   ("JC_42":
-  (("JC_40":
-   (Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0) and Permut(t_0, 0,
-    ((offset_max(Object_alloc_table, t_0) + 1) - 1), intM_intP1, intM_intP0))) and
+  (("JC_40": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
    ("JC_41": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
@@ -7049,9 +6916,7 @@ goal Sort_min_sort_ensures_default_po_31:
   forall intM_intP1:(Object,
   int) memory.
   ("JC_42":
-  (("JC_40":
-   (Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0) and Permut(t_0, 0,
-    ((offset_max(Object_alloc_table, t_0) + 1) - 1), intM_intP1, intM_intP0))) and
+  (("JC_40": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
    ("JC_41": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
@@ -7141,9 +7006,7 @@ goal Sort_min_sort_ensures_default_po_32:
   forall intM_intP1:(Object,
   int) memory.
   ("JC_42":
-  (("JC_40":
-   (Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0) and Permut(t_0, 0,
-    ((offset_max(Object_alloc_table, t_0) + 1) - 1), intM_intP1, intM_intP0))) and
+  (("JC_40": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
    ("JC_41": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
@@ -7568,40 +7431,10 @@ goal Sort_swap_ensures_default_po_1:
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, j_1), result)) ->
-  ("JC_39": ("JC_37": Swap(t, i_2, j_1, intM_intP1, intM_intP)))
+  ("JC_39": ("JC_37": ("JC_37": Swap(t, i_2, j_1, intM_intP1, intM_intP))))
 
 ========== file tests/java/why/Sort_po42.why ==========
 goal Sort_swap_ensures_default_po_2:
-  forall this_2:Object pointer.
-  forall t:Object pointer.
-  forall i_2:int.
-  forall j_1:int.
-  forall Object_alloc_table:Object alloc_table.
-  forall intM_intP:(Object,
-  int) memory.
-  (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_35":
-    (Non_null_intM(t, Object_alloc_table) and
-     ((0 <= i_2) and
-      ((i_2 < (offset_max(Object_alloc_table, t) + 1)) and
-       ((0 <= j_1) and (j_1 < (offset_max(Object_alloc_table, t) + 1))))))))) ->
-  forall result:int.
-  (result = select(intM_intP, shift(t, i_2))) ->
-  forall result0:int.
-  (result0 = select(intM_intP, shift(t, j_1))) ->
-  forall intM_intP0:(Object,
-  int) memory.
-  (intM_intP0 = store(intM_intP, shift(t, i_2), result0)) ->
-  forall intM_intP1:(Object,
-  int) memory.
-  (intM_intP1 = store(intM_intP0, shift(t, j_1), result)) ->
-  ("JC_39":
-  ("JC_37": Permut(t, 0, ((offset_max(Object_alloc_table, t) + 1) - 1),
-  intM_intP1, intM_intP)))
-
-========== file tests/java/why/Sort_po43.why ==========
-goal Sort_swap_ensures_default_po_3:
   forall this_2:Object pointer.
   forall t:Object pointer.
   forall i_2:int.
@@ -7632,7 +7465,7 @@ goal Sort_swap_ensures_default_po_3:
   pset_union(pset_range(pset_singleton(t), j_1, j_1),
   pset_range(pset_singleton(t), i_2, i_2))))))
 
-========== file tests/java/why/Sort_po44.why ==========
+========== file tests/java/why/Sort_po43.why ==========
 goal Sort_swap_safety_po_1:
   forall this_2:Object pointer.
   forall t:Object pointer.
@@ -7648,7 +7481,7 @@ goal Sort_swap_safety_po_1:
        ((0 <= j_1) and (j_1 < (offset_max(Object_alloc_table, t) + 1))))))))) ->
   (offset_min(Object_alloc_table, t) <= i_2)
 
-========== file tests/java/why/Sort_po45.why ==========
+========== file tests/java/why/Sort_po44.why ==========
 goal Sort_swap_safety_po_2:
   forall this_2:Object pointer.
   forall t:Object pointer.
@@ -7664,7 +7497,7 @@ goal Sort_swap_safety_po_2:
        ((0 <= j_1) and (j_1 < (offset_max(Object_alloc_table, t) + 1))))))))) ->
   (i_2 <= offset_max(Object_alloc_table, t))
 
-========== file tests/java/why/Sort_po46.why ==========
+========== file tests/java/why/Sort_po45.why ==========
 goal Sort_swap_safety_po_3:
   forall this_2:Object pointer.
   forall t:Object pointer.
@@ -7686,7 +7519,7 @@ goal Sort_swap_safety_po_3:
   (result = select(intM_intP, shift(t, i_2))) ->
   (offset_min(Object_alloc_table, t) <= j_1)
 
-========== file tests/java/why/Sort_po47.why ==========
+========== file tests/java/why/Sort_po46.why ==========
 goal Sort_swap_safety_po_4:
   forall this_2:Object pointer.
   forall t:Object pointer.
@@ -8744,70 +8577,6 @@ why -simplify [...] why/Sort.why
 
 (DEFPRED (left_valid_struct_interface p a interface_alloc_table)
   (<= (offset_min interface_alloc_table p) a))
-
-(BG_PUSH
- ;; Why axiom no_assign_Permut_0
- (FORALL (tmp tmpmem tmpalloc intM_intP_at_L1 intM_intP_at_L2 h l a_0)
- (IMPLIES
- (AND (pset_disjoint tmp pset_empty)
- (not_assigns tmpalloc intM_intP_at_L2 tmpmem tmp))
- (IFF (EQ (Permut a_0 l h intM_intP_at_L2 intM_intP_at_L1) |@true|)
- (EQ (Permut a_0 l h tmpmem intM_intP_at_L1) |@true|))))
-
- (FORALL (tmp tmpmem tmpalloc intM_intP_at_L2)
- (IMPLIES
- (AND (pset_disjoint tmp pset_empty)
- (not_assigns tmpalloc intM_intP_at_L2 tmpmem tmp))
- (FORALL (intM_intP_at_L1 h l a_0)
- (IFF (EQ (Permut a_0 l h intM_intP_at_L2 intM_intP_at_L1) |@true|)
- (EQ (Permut a_0 l h tmpmem intM_intP_at_L1) |@true|))))))
-
-(BG_PUSH
- ;; Why axiom no_assign_Permut_1
- (FORALL (tmp tmpmem tmpalloc intM_intP_at_L1 intM_intP_at_L2 h l a_0)
- (IMPLIES
- (AND (pset_disjoint tmp pset_empty)
- (not_assigns tmpalloc intM_intP_at_L1 tmpmem tmp))
- (IFF (EQ (Permut a_0 l h intM_intP_at_L2 intM_intP_at_L1) |@true|)
- (EQ (Permut a_0 l h intM_intP_at_L2 tmpmem) |@true|))))
-
- (FORALL (tmp tmpmem tmpalloc intM_intP_at_L1)
- (IMPLIES
- (AND (pset_disjoint tmp pset_empty)
- (not_assigns tmpalloc intM_intP_at_L1 tmpmem tmp))
- (FORALL (intM_intP_at_L2 h l a_0)
- (IFF (EQ (Permut a_0 l h intM_intP_at_L2 intM_intP_at_L1) |@true|)
- (EQ (Permut a_0 l h intM_intP_at_L2 tmpmem) |@true|))))))
-
-(BG_PUSH
- ;; Why axiom no_update_Permut_0
- (FORALL (tmp tmpval intM_intP_at_L1 intM_intP_at_L2 h l a_0)
- (IMPLIES (NOT (EQ (in_pset tmp pset_empty) |@true|))
- (IFF (EQ (Permut a_0 l h intM_intP_at_L2 intM_intP_at_L1) |@true|)
- (EQ (Permut
- a_0 l h (|why__store| intM_intP_at_L2 tmp tmpval) intM_intP_at_L1) |@true|))))
-
- (FORALL (tmp)
- (IMPLIES (NOT (EQ (in_pset tmp pset_empty) |@true|))
- (FORALL (tmpval intM_intP_at_L1 intM_intP_at_L2 h l a_0)
- (IFF (EQ (Permut a_0 l h intM_intP_at_L2 intM_intP_at_L1) |@true|)
- (EQ (Permut
- a_0 l h (|why__store| intM_intP_at_L2 tmp tmpval) intM_intP_at_L1) |@true|))))))
-
-(BG_PUSH
- ;; Why axiom no_update_Permut_1
- (FORALL (tmp tmpval intM_intP_at_L1 intM_intP_at_L2 h l a_0)
- (IMPLIES (NOT (EQ (in_pset tmp pset_empty) |@true|))
- (IFF (EQ (Permut a_0 l h intM_intP_at_L2 intM_intP_at_L1) |@true|)
- (EQ (Permut
- a_0 l h intM_intP_at_L2 (|why__store| intM_intP_at_L1 tmp tmpval)) |@true|))))
-
- (FORALL (tmp)
- (IMPLIES (NOT (EQ (in_pset tmp pset_empty) |@true|))
- (FORALL (tmpval intM_intP_at_L1 intM_intP_at_L2 h l a_0)
- (IFF (EQ (Permut a_0 l h intM_intP_at_L2 intM_intP_at_L1) |@true|)
- (EQ (Permut
- a_0 l h intM_intP_at_L2 (|why__store| intM_intP_at_L1 tmp tmpval)) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom pointer_addr_of_Object_of_pointer_address
@@ -10494,10 +10263,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP0 intM_intP) |@tr
          (AND (< i_3_0 (+ (offset_max Object_alloc_table t_0) 1))
          (AND (<= 0 mi0) (< mi0 (+ (offset_max Object_alloc_table t_0) 1))))))
 (FORALL (intM_intP1)
-(IMPLIES (AND
-         (AND (Swap t_0 i_3_0 mi0 intM_intP1 intM_intP0)
-         (EQ (Permut
-         t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP0) |@true|))
+(IMPLIES (AND (Swap t_0 i_3_0 mi0 intM_intP1 intM_intP0)
          (not_assigns
          Object_alloc_table intM_intP0 intM_intP1 (pset_union
                                                   (pset_range
@@ -10575,10 +10341,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP0 intM_intP) |@tr
          (AND (< i_3_0 (+ (offset_max Object_alloc_table t_0) 1))
          (AND (<= 0 mi0) (< mi0 (+ (offset_max Object_alloc_table t_0) 1))))))
 (FORALL (intM_intP1)
-(IMPLIES (AND
-         (AND (Swap t_0 i_3_0 mi0 intM_intP1 intM_intP0)
-         (EQ (Permut
-         t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP0) |@true|))
+(IMPLIES (AND (Swap t_0 i_3_0 mi0 intM_intP1 intM_intP0)
          (not_assigns
          Object_alloc_table intM_intP0 intM_intP1 (pset_union
                                                   (pset_range
@@ -10658,10 +10421,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP0 intM_intP) |@tr
          (AND (< i_3_0 (+ (offset_max Object_alloc_table t_0) 1))
          (AND (<= 0 mi0) (< mi0 (+ (offset_max Object_alloc_table t_0) 1))))))
 (FORALL (intM_intP1)
-(IMPLIES (AND
-         (AND (Swap t_0 i_3_0 mi0 intM_intP1 intM_intP0)
-         (EQ (Permut
-         t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP0) |@true|))
+(IMPLIES (AND (Swap t_0 i_3_0 mi0 intM_intP1 intM_intP0)
          (not_assigns
          Object_alloc_table intM_intP0 intM_intP1 (pset_union
                                                   (pset_range
@@ -10740,10 +10500,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP0 intM_intP) |@tr
          (AND (< i_3_0 (+ (offset_max Object_alloc_table t_0) 1))
          (AND (<= 0 mi0) (< mi0 (+ (offset_max Object_alloc_table t_0) 1))))))
 (FORALL (intM_intP1)
-(IMPLIES (AND
-         (AND (Swap t_0 i_3_0 mi0 intM_intP1 intM_intP0)
-         (EQ (Permut
-         t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP0) |@true|))
+(IMPLIES (AND (Swap t_0 i_3_0 mi0 intM_intP1 intM_intP0)
          (not_assigns
          Object_alloc_table intM_intP0 intM_intP1 (pset_union
                                                   (pset_range
@@ -10828,10 +10585,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP0 intM_intP) |@tr
          (AND (< i_3_0 (+ (offset_max Object_alloc_table t_0) 1))
          (AND (<= 0 mi0) (< mi0 (+ (offset_max Object_alloc_table t_0) 1))))))
 (FORALL (intM_intP1)
-(IMPLIES (AND
-         (AND (Swap t_0 i_3_0 mi0 intM_intP1 intM_intP0)
-         (EQ (Permut
-         t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP0) |@true|))
+(IMPLIES (AND (Swap t_0 i_3_0 mi0 intM_intP1 intM_intP0)
          (not_assigns
          Object_alloc_table intM_intP0 intM_intP1 (pset_union
                                                   (pset_range
@@ -11175,7 +10929,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP0 intM_intP) |@tr
          (EQ |@true| |@true|))))
 (IMPLIES (< j_2_0 result2) (<= j_2_0 (offset_max Object_alloc_table t_0))))))))))))))))))))))))))))))))))))
 
-;; Sort_swap_ensures_default_po_1, File "HOME/tests/java/Sort.java", line 37, characters 16-73
+;; Sort_swap_ensures_default_po_1, File "HOME/tests/java/Sort.java", line 37, characters 16-37
 (FORALL (this_2)
 (FORALL (t)
 (FORALL (i_2)
@@ -11198,31 +10952,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP0 intM_intP) |@tr
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t j_1) result))
 (Swap t i_2 j_1 intM_intP1 intM_intP))))))))))))))))
 
-;; Sort_swap_ensures_default_po_2, File "HOME/tests/java/Sort.java", line 37, characters 16-73
-(FORALL (this_2)
-(FORALL (t)
-(FORALL (i_2)
-(FORALL (j_1)
-(FORALL (Object_alloc_table)
-(FORALL (intM_intP)
-(IMPLIES (AND (left_valid_struct_intM t 0 Object_alloc_table)
-         (AND (valid_struct_Sort this_2 0 0 Object_alloc_table)
-         (AND (Non_null_intM t Object_alloc_table)
-         (AND (<= 0 i_2)
-         (AND (< i_2 (+ (offset_max Object_alloc_table t) 1))
-         (AND (<= 0 j_1) (< j_1 (+ (offset_max Object_alloc_table t) 1))))))))
-(FORALL (result)
-(IMPLIES (EQ result (select intM_intP (shift t i_2)))
-(FORALL (result0)
-(IMPLIES (EQ result0 (select intM_intP (shift t j_1)))
-(FORALL (intM_intP0)
-(IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t i_2) result0))
-(FORALL (intM_intP1)
-(IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t j_1) result))
-(EQ (Permut
-t 0 (- (+ (offset_max Object_alloc_table t) 1) 1) intM_intP1 intM_intP) |@true|))))))))))))))))
-
-;; Sort_swap_ensures_default_po_3, File "HOME/tests/java/Sort.java", line 39, characters 9-13
+;; Sort_swap_ensures_default_po_2, File "HOME/tests/java/Sort.java", line 39, characters 9-13
 (FORALL (this_2)
 (FORALL (t)
 (FORALL (i_2)
@@ -11319,11 +11049,11 @@ Object_alloc_table intM_intP intM_intP1 (pset_union
 ========== running Simplify ==========
 Running Simplify on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/Sort_why.sx          : ............................................... (47/0/0/0/0)
-total   :  47
-valid   :  47 (100%)
+simplify/Sort_why.sx          : ...............................?.............. (45/0/1/0/0)
+total   :  46
+valid   :  45 ( 98%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
+unknown :   1 (  2%)
 timeout :   0 (  0%)
 failure :   0 (  0%)
 ========== generation of alt-ergo VC output ==========
@@ -12345,60 +12075,6 @@ predicate left_valid_struct_intM(p: Object pointer, a: int,
 predicate left_valid_struct_interface(p: interface pointer, a: int,
   interface_alloc_table: interface alloc_table) =
   (offset_min(interface_alloc_table, p) <= a)
-
-axiom no_assign_Permut_0:
-  (forall tmp:Object pset.
-    (forall tmpmem:(Object, int) memory.
-      (forall tmpalloc:Object alloc_table.
-        (forall intM_intP_at_L1:(Object, int) memory.
-          (forall intM_intP_at_L2:(Object, int) memory.
-            (forall h:int.
-              (forall l:int.
-                (forall a_0:Object pointer.
-                  ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                    intM_intP_at_L2, tmpmem, tmp)) ->
-                   (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1) <->
-                    Permut(a_0, l, h, tmpmem, intM_intP_at_L1)))))))))))
-
-axiom no_assign_Permut_1:
-  (forall tmp:Object pset.
-    (forall tmpmem:(Object, int) memory.
-      (forall tmpalloc:Object alloc_table.
-        (forall intM_intP_at_L1:(Object, int) memory.
-          (forall intM_intP_at_L2:(Object, int) memory.
-            (forall h:int.
-              (forall l:int.
-                (forall a_0:Object pointer.
-                  ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                    intM_intP_at_L1, tmpmem, tmp)) ->
-                   (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1) <->
-                    Permut(a_0, l, h, intM_intP_at_L2, tmpmem)))))))))))
-
-axiom no_update_Permut_0:
-  (forall tmp:Object pointer.
-    (forall tmpval:int.
-      (forall intM_intP_at_L1:(Object, int) memory.
-        (forall intM_intP_at_L2:(Object, int) memory.
-          (forall h:int.
-            (forall l:int.
-              (forall a_0:Object pointer.
-                ((not in_pset(tmp, pset_empty)) ->
-                 (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1) <->
-                  Permut(a_0, l, h, store(intM_intP_at_L2, tmp, tmpval),
-                  intM_intP_at_L1))))))))))
-
-axiom no_update_Permut_1:
-  (forall tmp:Object pointer.
-    (forall tmpval:int.
-      (forall intM_intP_at_L1:(Object, int) memory.
-        (forall intM_intP_at_L2:(Object, int) memory.
-          (forall h:int.
-            (forall l:int.
-              (forall a_0:Object pointer.
-                ((not in_pset(tmp, pset_empty)) ->
-                 (Permut(a_0, l, h, intM_intP_at_L2, intM_intP_at_L1) <->
-                  Permut(a_0, l, h, intM_intP_at_L2, store(intM_intP_at_L1,
-                  tmp, tmpval)))))))))))
 
 axiom pointer_addr_of_Object_of_pointer_address:
   (forall p:unit pointer.
@@ -14212,9 +13888,7 @@ goal Sort_min_sort_ensures_default_po_28:
   forall intM_intP1:(Object,
   int) memory.
   ("JC_42":
-  (("JC_40":
-   (Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0) and Permut(t_0, 0,
-    ((offset_max(Object_alloc_table, t_0) + 1) - 1), intM_intP1, intM_intP0))) and
+  (("JC_40": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
    ("JC_41": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
@@ -14297,9 +13971,7 @@ goal Sort_min_sort_ensures_default_po_29:
   forall intM_intP1:(Object,
   int) memory.
   ("JC_42":
-  (("JC_40":
-   (Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0) and Permut(t_0, 0,
-    ((offset_max(Object_alloc_table, t_0) + 1) - 1), intM_intP1, intM_intP0))) and
+  (("JC_40": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
    ("JC_41": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
@@ -14382,9 +14054,7 @@ goal Sort_min_sort_ensures_default_po_30:
   forall intM_intP1:(Object,
   int) memory.
   ("JC_42":
-  (("JC_40":
-   (Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0) and Permut(t_0, 0,
-    ((offset_max(Object_alloc_table, t_0) + 1) - 1), intM_intP1, intM_intP0))) and
+  (("JC_40": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
    ("JC_41": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
@@ -14467,9 +14137,7 @@ goal Sort_min_sort_ensures_default_po_31:
   forall intM_intP1:(Object,
   int) memory.
   ("JC_42":
-  (("JC_40":
-   (Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0) and Permut(t_0, 0,
-    ((offset_max(Object_alloc_table, t_0) + 1) - 1), intM_intP1, intM_intP0))) and
+  (("JC_40": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
    ("JC_41": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
@@ -14558,9 +14226,7 @@ goal Sort_min_sort_ensures_default_po_32:
   forall intM_intP1:(Object,
   int) memory.
   ("JC_42":
-  (("JC_40":
-   (Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0) and Permut(t_0, 0,
-    ((offset_max(Object_alloc_table, t_0) + 1) - 1), intM_intP1, intM_intP0))) and
+  (("JC_40": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
    ("JC_41": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
@@ -14950,38 +14616,9 @@ goal Sort_swap_ensures_default_po_1:
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, j_1), result)) ->
-  ("JC_39": ("JC_37": Swap(t, i_2, j_1, intM_intP1, intM_intP)))
+  ("JC_39": ("JC_37": ("JC_37": Swap(t, i_2, j_1, intM_intP1, intM_intP))))
 
 goal Sort_swap_ensures_default_po_2:
-  forall this_2:Object pointer.
-  forall t:Object pointer.
-  forall i_2:int.
-  forall j_1:int.
-  forall Object_alloc_table:Object alloc_table.
-  forall intM_intP:(Object,
-  int) memory.
-  (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_35":
-    (Non_null_intM(t, Object_alloc_table) and
-     ((0 <= i_2) and
-      ((i_2 < (offset_max(Object_alloc_table, t) + 1)) and
-       ((0 <= j_1) and (j_1 < (offset_max(Object_alloc_table, t) + 1))))))))) ->
-  forall result:int.
-  (result = select(intM_intP, shift(t, i_2))) ->
-  forall result0:int.
-  (result0 = select(intM_intP, shift(t, j_1))) ->
-  forall intM_intP0:(Object,
-  int) memory.
-  (intM_intP0 = store(intM_intP, shift(t, i_2), result0)) ->
-  forall intM_intP1:(Object,
-  int) memory.
-  (intM_intP1 = store(intM_intP0, shift(t, j_1), result)) ->
-  ("JC_39":
-  ("JC_37": Permut(t, 0, ((offset_max(Object_alloc_table, t) + 1) - 1),
-  intM_intP1, intM_intP)))
-
-goal Sort_swap_ensures_default_po_3:
   forall this_2:Object pointer.
   forall t:Object pointer.
   forall i_2:int.
@@ -15087,9 +14724,9 @@ goal Sort_swap_safety_po_4:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Sort_why.why              : ..............................#...........#.... (45/0/0/2/0)
-total   :  47
-valid   :  45 ( 96%)
+why/Sort_why.why              : ..............................#..........#.... (44/0/0/2/0)
+total   :  46
+valid   :  44 ( 96%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   2 (  4%)

@@ -34,7 +34,9 @@ class Sort {
     /*@ requires t != null && 
       @    0 <= i < t.length && 0 <= j < t.length;
       @ assigns t[i],t[j];
-      @ ensures Swap{Old,Here}(t,i,j) && Permut{Old,Here}(t,0,t.length-1);
+      @ ensures Swap{Old,Here}(t,i,j) 
+      @ //&& Permut{Old,Here}(t,0,t.length-1)
+      @ ;
       @*/
     void swap(int t[], int i, int j) {
 	int tmp = t[i];

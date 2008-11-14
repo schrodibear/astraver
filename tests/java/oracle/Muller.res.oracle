@@ -1146,30 +1146,6 @@ predicate left_valid_struct_interface(p:interface pointer,
 
 logic num_of_pos: int, int, Object pointer, (Object, int) memory -> int
 
-axiom no_assign_num_of_pos_0 :
- (forall tmp:Object pset.
-  (forall tmpmem:(Object, int) memory.
-   (forall tmpalloc:Object alloc_table.
-    (forall intM_intP_t_1:(Object, int) memory.
-     (forall t:Object pointer.
-      (forall j:int.
-       (forall i:int.
-        ((pset_disjoint(tmp, pset_empty)
-         and not_assigns(tmpalloc, intM_intP_t_1, tmpmem, tmp)) ->
-         (num_of_pos(i, j, t, intM_intP_t_1) = num_of_pos(i, j, t, tmpmem))))))))))
-
-axiom no_update_num_of_pos_0 :
- (forall tmp:Object pointer.
-  (forall tmpval:int.
-   (forall intM_intP_t_1:(Object, int) memory.
-    (forall t:Object pointer.
-     (forall j:int.
-      (forall i:int.
-       ((not in_pset(tmp, pset_empty)) ->
-        (num_of_pos(i, j, t, intM_intP_t_1) = num_of_pos(i, j, t,
-                                              store(intM_intP_t_1, tmp,
-                                              tmpval))))))))))
-
 axiom num_of_pos_empty :
  (forall intM_intP_t_1:(Object, int) memory.
   (forall i_0:int.
@@ -3373,30 +3349,6 @@ predicate left_valid_struct_interface(p: interface pointer, a: int,
   (offset_min(interface_alloc_table, p) <= a)
 
 logic num_of_pos : int, int, Object pointer, (Object, int) memory -> int
-
-axiom no_assign_num_of_pos_0:
-  (forall tmp:Object pset.
-    (forall tmpmem:(Object, int) memory.
-      (forall tmpalloc:Object alloc_table.
-        (forall intM_intP_t_1:(Object, int) memory.
-          (forall t:Object pointer.
-            (forall j:int.
-              (forall i:int.
-                ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                  intM_intP_t_1, tmpmem, tmp)) ->
-                 (num_of_pos(i, j, t, intM_intP_t_1) = num_of_pos(i, j, t,
-                 tmpmem))))))))))
-
-axiom no_update_num_of_pos_0:
-  (forall tmp:Object pointer.
-    (forall tmpval:int.
-      (forall intM_intP_t_1:(Object, int) memory.
-        (forall t:Object pointer.
-          (forall j:int.
-            (forall i:int.
-              ((not in_pset(tmp, pset_empty)) -> (num_of_pos(i, j, t,
-               intM_intP_t_1) = num_of_pos(i, j, t, store(intM_intP_t_1, tmp,
-               tmpval))))))))))
 
 axiom num_of_pos_empty:
   (forall intM_intP_t_1:(Object, int) memory.
@@ -6201,34 +6153,6 @@ why -simplify [...] why/Muller.why
   (<= (offset_min interface_alloc_table p) a))
 
 (BG_PUSH
- ;; Why axiom no_assign_num_of_pos_0
- (FORALL (tmp tmpmem tmpalloc intM_intP_t_1 t j i)
- (IMPLIES
- (AND (pset_disjoint tmp pset_empty)
- (not_assigns tmpalloc intM_intP_t_1 tmpmem tmp))
- (EQ (num_of_pos i j t intM_intP_t_1) (num_of_pos i j t tmpmem))))
-
- (FORALL (tmp tmpmem tmpalloc intM_intP_t_1)
- (IMPLIES
- (AND (pset_disjoint tmp pset_empty)
- (not_assigns tmpalloc intM_intP_t_1 tmpmem tmp))
- (FORALL (t j i)
- (EQ (num_of_pos i j t intM_intP_t_1) (num_of_pos i j t tmpmem))))))
-
-(BG_PUSH
- ;; Why axiom no_update_num_of_pos_0
- (FORALL (tmp tmpval intM_intP_t_1 t j i)
- (IMPLIES (NOT (EQ (in_pset tmp pset_empty) |@true|))
- (EQ (num_of_pos i j t intM_intP_t_1)
- (num_of_pos i j t (|why__store| intM_intP_t_1 tmp tmpval)))))
-
- (FORALL (tmp)
- (IMPLIES (NOT (EQ (in_pset tmp pset_empty) |@true|))
- (FORALL (tmpval intM_intP_t_1 t j i)
- (EQ (num_of_pos i j t intM_intP_t_1)
- (num_of_pos i j t (|why__store| intM_intP_t_1 tmp tmpval)))))))
-
-(BG_PUSH
  ;; Why axiom num_of_pos_empty
  (FORALL (intM_intP_t_1 i_0 j_0 t_0)
  (IMPLIES (> i_0 j_0) (EQ (num_of_pos i_0 j_0 t_0 intM_intP_t_1) 0)))
@@ -9010,30 +8934,6 @@ predicate left_valid_struct_interface(p: interface pointer, a: int,
   (offset_min(interface_alloc_table, p) <= a)
 
 logic num_of_pos : int, int, Object pointer, (Object, int) memory -> int
-
-axiom no_assign_num_of_pos_0:
-  (forall tmp:Object pset.
-    (forall tmpmem:(Object, int) memory.
-      (forall tmpalloc:Object alloc_table.
-        (forall intM_intP_t_1:(Object, int) memory.
-          (forall t:Object pointer.
-            (forall j:int.
-              (forall i:int.
-                ((pset_disjoint(tmp, pset_empty) and not_assigns(tmpalloc,
-                  intM_intP_t_1, tmpmem, tmp)) ->
-                 (num_of_pos(i, j, t, intM_intP_t_1) = num_of_pos(i, j, t,
-                 tmpmem))))))))))
-
-axiom no_update_num_of_pos_0:
-  (forall tmp:Object pointer.
-    (forall tmpval:int.
-      (forall intM_intP_t_1:(Object, int) memory.
-        (forall t:Object pointer.
-          (forall j:int.
-            (forall i:int.
-              ((not in_pset(tmp, pset_empty)) -> (num_of_pos(i, j, t,
-               intM_intP_t_1) = num_of_pos(i, j, t, store(intM_intP_t_1, tmp,
-               tmpval))))))))))
 
 axiom num_of_pos_empty:
   (forall intM_intP_t_1:(Object, int) memory.
