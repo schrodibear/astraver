@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.79 2008-11-05 14:43:52 moy Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.80 2008-11-14 16:00:59 ayad Exp $ i*)
 
 {
   open Jc_ast
@@ -67,11 +67,13 @@
 
   let builtins_table =
     let table = Hashtbl.create 17 in
-    let _ = 
-      List.iter
-	(fun (ty,id,whyid,params) -> Hashtbl.add table id ())
-	Jc_pervasives.builtin_logic_symbols
-    in table
+    List.iter
+      (fun (ty,id,whyid,params) -> Hashtbl.add table id ())
+      Jc_pervasives.builtin_logic_symbols;
+    List.iter
+      (fun (ty,id,whyid,params,_) -> Hashtbl.add table id ())
+      Jc_pervasives.builtin_function_symbols;
+    table
 
   let special_id lexbuf s =
     try

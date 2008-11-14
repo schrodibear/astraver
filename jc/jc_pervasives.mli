@@ -164,6 +164,9 @@ val string_of_op_type: [< operator_type] -> string
 val builtin_logic_symbols :
   (Jc_env.jc_type option * string * string * Jc_env.jc_type list) list
 
+val builtin_function_symbols :
+  (Jc_env.jc_type * string * string * Jc_env.jc_type list * Jc_fenv.builtin_treatment) list
+
 module TermOrd : OrderedHashedType with type t = term
 
 module TermSet : Set.S with type elt = term

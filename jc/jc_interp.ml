@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.388 2008-11-14 13:20:23 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.389 2008-11-14 16:00:58 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -180,6 +180,11 @@ let native_operator_type op = match snd op with
 let unary_op: expr_unary_op -> string = function
   | `Uminus, `Integer -> "neg_int"
   | `Uminus, `Real -> "neg_real"
+(*
+  | `Usqrt, `Real  -> "sqrt_real"
+  | `Usqrt,`Double -> "sqrt_gen_float"
+  | `Usqrt, `Float -> "sqrt_gen_float"
+*)
   | `Unot, `Boolean -> "not"
   | `Ubw_not, `Integer -> "bw_compl"
   | _ -> assert false (* not proper type *)
@@ -191,6 +196,27 @@ let term_unary_op: expr_unary_op -> string = function
   | `Ubw_not, `Integer -> "bw_compl"
   | _ -> assert false (* not proper type *)
 
+let float_operator f =
+  match f with
+    | `Badd -> "add_gen_float"
+    | `Bsub -> "sub_gen_float"
+    | `Bmul -> "mul_gen_float"
+    | `Bdiv -> "div_gen_float"
+    | `Bmod -> "mod_gen_float"
+
+let float_format f =
+  match f with
+    | `Double -> "Double"
+    | `Float -> "Single"
+
+let rounding_mode = function
+    | Round_nearest_even -> "nearest_even" 
+    | Round_to_zero -> "to_zero"
+    | Round_up -> "up"
+    | Round_down -> "down"
+    | Round_nearest_away -> "nearest_away"
+
+  
 let bin_op: expr_bin_op -> string = function
     (* integer *)
   | `Bgt, `Integer -> "gt_int_"
@@ -354,8 +380,8 @@ let equality_op_for_type = function
   | JCTnative Tboolean -> "eq_bool"
   | JCTnative Tinteger -> "eq_int"
   | JCTnative Treal -> "eq_real"
-  | JCTnative Tdouble -> "eq_double"
-  | JCTnative Tfloat -> "eq_single"
+  | JCTnative Tdouble -> "eq_gen_float"
+  | JCTnative Tfloat -> "eq_gen_float"
   | JCTnative Tstring -> "eq"
   | JCTlogic s -> (* TODO *) assert false
   | JCTenum ei -> eq_of_enum ei
@@ -477,9 +503,9 @@ let term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src
 	      LApp("real_of_int",[ e' ])
 	end
     | JCTnative Treal, JCTnative Tdouble ->
-	LApp("d_to_r",[ e' ])
+	LApp("float_value",[ e' ])
     | JCTnative Treal, JCTnative Tfloat ->
-	LApp("s_to_r",[ e' ])
+	LApp("float_value",[ e' ])
     | JCTnative Tinteger, JCTnative Treal -> 
 	LApp("int_of_real",[ e' ])
       (* between enums and integer *)
@@ -583,13 +609,13 @@ let coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
     | JCTnative Tinteger, JCTnative Treal -> 
 	make_app "int_of_real" [ e' ]
     | JCTnative Tdouble, JCTnative Treal ->
-	make_app "r_to_d" [ Var "nearest_even" ; e' ]
+	make_app "gen_float_of_real" [ Var "Double" ; Var "nearest_even" ; e' ]
     | JCTnative Treal, JCTnative Tdouble ->
-	make_app "d_to_r" [ e' ]
+	make_app "float_value" [ e' ]
     | JCTnative Tfloat, JCTnative Treal ->
-	make_app "r_to_s" [ Var "nearest_even" ; e' ]
+	make_app "gen_float_of_real" [ Var "Single" ; Var "nearest_even" ; e' ]
     | JCTnative Treal, JCTnative Tfloat ->
-	make_app "s_to_r" [ e' ]
+	make_app "float_value" [ e' ]
       (* between enums and integer *)
     | JCTenum ri1, JCTenum ri2 
 	when ri1.jc_enum_info_name = ri2.jc_enum_info_name -> e'
@@ -1811,6 +1837,7 @@ and list_type_assert ty e (lets, params) =
 and type_assert ty e =
   List.as_singleton (fst (list_type_assert ty e ([],[])))
 
+
 and value_assigned mark pos ty e =
   let assign_assert = type_assert ty e in
   let tmp_for_assert = match assign_assert with
@@ -1859,7 +1886,14 @@ and expr e =
         let e1' = expr e1 in
         let e2' = expr e2 in
         (* lazy disjunction *)
-        Or(e1',e2')     
+        Or(e1',e2')
+    | JCEbinary(e1,(#arithmetic_op as op,(`Double|`Float as format)),e2) ->
+	let e1' = expr e1 in
+        let e2' = expr e2 in
+        make_guarded_app
+	  ~mark:e#mark DivByZero e#pos
+	  (float_operator op)
+	  [Var (float_format format); Var "nearest_even" ; e1' ; e2' ]
     | JCEbinary(e1,(_,#native_operator_type as op),e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
@@ -1998,6 +2032,8 @@ and expr e =
 	    else "safe_free_parameter"
 	  in
 	  make_app free_fun [alloc; e1']
+
+
     | JCEapp call ->
 	begin match call.jc_call_fun with
           | JClogic_fun f -> 
@@ -2085,6 +2121,12 @@ and expr e =
 		if default_checking () then 
 		  f.jc_fun_info_final_name ^ "_requires"
 		else f.jc_fun_info_final_name
+	      in
+	      let args =
+		match f.jc_fun_info_builtin_treatment with
+		  | None -> args
+		  | Some (TreatGenFloat format) ->
+		      (Var (float_format format))::(Var "nearest_even")::args
 	      in
 	      let pre, fname, locals, prolog, epilog, args = 
 		make_arguments 

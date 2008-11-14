@@ -1,7 +1,7 @@
 
 JESSIE=OCAMLRUNPARAM=bt ../../../bin/jessie.byte
 #JESSIE=../../../bin/jessie.byte
-WHYLIB=$(shell pwd)/../../../lib/why
+WHYLIB=$(shell pwd)/../../../lib
 
 EXECJESSIE=WHYLIB=$(WHYLIB) $(JESSIE) -why-opt -split-user-conj
 
@@ -60,7 +60,7 @@ type-all:
 $(JESSIE):
 	make -C ../../.. bin/jessie.byte
 
-why/%.why: %.jc $(JESSIELIB)/why/jessie.why
+why/%.why: %.jc $(WHYLIB)/why/jessie.why
 	$(EXECJESSIE) $<
 
 simplify/%_why.sx.all: %.jc $(JESSIE) $(JESSIELIB)/why/jessie.why

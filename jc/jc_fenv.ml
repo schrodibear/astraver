@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.ml,v 1.9 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_fenv.ml,v 1.10 2008-11-14 16:00:58 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -94,11 +94,15 @@ sig
 	mutable jc_logic_info_labels : label list;
       }
 
+  type builtin_treatment =
+    | TreatGenFloat of float_operator_type
+
   type fun_info = 
       {
 	jc_fun_info_tag : int;
 	jc_fun_info_name : string;
 	mutable jc_fun_info_final_name : string;
+	mutable jc_fun_info_builtin_treatment : builtin_treatment option; 
 	jc_fun_info_result : var_info;
 	jc_fun_info_return_region : region;
 	(* If function has a label "return_label", this is a label denoting
@@ -153,11 +157,15 @@ struct
 	mutable jc_logic_info_labels : label list;
       }
 
+  type builtin_treatment =
+    | TreatGenFloat of float_operator_type
+
   type fun_info = 
       {
 	jc_fun_info_tag : int;
 	jc_fun_info_name : string;
 	mutable jc_fun_info_final_name : string;
+	mutable jc_fun_info_builtin_treatment : builtin_treatment option; 
 	jc_fun_info_result : var_info;
 	jc_fun_info_return_region : region;
 	mutable jc_fun_info_has_return_label : bool;

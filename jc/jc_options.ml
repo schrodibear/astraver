@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.42 2008-11-05 14:03:16 filliatr Exp $ i*)
+(*i $Id: jc_options.ml,v 1.43 2008-11-14 16:00:59 ayad Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -62,7 +62,7 @@ let libdir =
 let has_floats = ref false
 
 let libfiles () = 
-  "jessie.why" :: (if !has_floats then ["floats.why" ] else [])
+  "jessie.why" :: (if !has_floats then ["floats_strict.why" ] else [])
 
 (*s command-line options *)
 

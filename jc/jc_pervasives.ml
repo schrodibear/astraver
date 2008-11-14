@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.138 2008-11-05 14:43:52 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.139 2008-11-14 16:00:59 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -97,8 +97,8 @@ let string_of_native t =
     | Tunit -> "unit"
     | Tinteger -> "integer"
     | Treal -> "real"
-    | Tdouble -> "double"
-    | Tfloat -> "single"
+    | Tdouble -> "gen_float"
+    | Tfloat -> "gen_float"
     | Tboolean -> "boolean"
     | Tstring -> "string"
 
@@ -179,7 +179,7 @@ let is_logical_unary_op = function
   | _ -> false
 
 let is_arithmetic_unary_op = function
-  | `Uminus -> true
+  | `Uminus -> true 
   | _ -> false
 
 let is_bitwise_unary_op = function
@@ -355,6 +355,7 @@ let make_fun_info name ty =
   { jc_fun_info_tag = !fun_tag_counter;
     jc_fun_info_name = name;
     jc_fun_info_final_name = Jc_envset.get_unique_name name;
+    jc_fun_info_builtin_treatment = None;
     jc_fun_info_parameters = [];
     jc_fun_info_result = vi;
     jc_fun_info_return_region = Region.make_var ty name;
@@ -965,20 +966,33 @@ let string_of_op_type = function
   | `Integer -> "integer"
   | `Unit -> "unit"
   | `Real -> "real"
-  | `Double -> "double"
-  | `Float -> "single"
+  | `Double -> "gen_float"
+  | `Float -> "gen_float"
   | `Boolean -> "boolean"
   | `Pointer -> "pointer"
   | `Logic -> "<some logic type>"
 
 
 let builtin_logic_symbols =
+  (* return type, jessie name, why name, parameter types *)
   [ Some real_type, "\\real_abs", "abs_real", [real_type] ;
+    Some real_type, "\\real_sqrt", "sqrt_real", [real_type];  
     Some real_type, "\\real_max", "real_max", [real_type; real_type] ;
     Some real_type, "\\real_min", "real_min", [real_type; real_type] ;
     Some integer_type, "\\int_max", "int_max", [integer_type; integer_type] ;
     Some integer_type, "\\int_min", "int_min", [integer_type; integer_type] ;
   ]
+
+let builtin_function_symbols =
+  (* return type, jessie name, why name, parameter types, special treatment *)
+  [
+    double_type, "\\double_sqrt", "sqrt_gen_float", [double_type], TreatGenFloat `Double ;
+    double_type, "\\double_abs", "abs_gen_float", [double_type], TreatGenFloat `Double  ;
+    double_type, "\\neg_double", "neg_gen_float", [double_type], TreatGenFloat `Double  ;
+      
+]
+
+
 
 
 (*

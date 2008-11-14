@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.268 2008-11-10 13:33:54 moy Exp $ *)
+(* $Id: jc_typing.ml,v 1.269 2008-11-14 16:00:59 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -118,6 +118,12 @@ let is_float t =
     | JCTnative Tfloat -> true
     | _ -> false
 
+let is_gen_float t =
+  match t with
+    | JCTnative (Tdouble | Tfloat) -> true
+    | _ -> false
+
+
 let is_boolean t =
   match t with
     | JCTnative Tboolean -> true
@@ -140,6 +146,8 @@ let is_root_struct st =
 
 let lub_numeric_types t1 t2 =
   match t1,t2 with
+    | JCTnative Tfloat, JCTnative Tfloat -> Tfloat
+    | JCTnative (Tdouble | Tfloat), JCTnative (Tdouble | Tfloat) -> Tdouble
     | JCTnative Treal,_ | _,JCTnative Treal -> Treal
     | _ -> Tinteger
 
@@ -1559,7 +1567,9 @@ let make_bin_op loc (op: operational_op) e1 e2 =
     | `Badd as op  ->
         if is_pointer_type t1 && is_integer t2 then
           t1, e1#region, JCEshift(e1, coerce t2 Tinteger e2)
-        else if is_numeric t1 && is_numeric t2 then
+        else if is_numeric t1 && is_numeric t2 	  
+	  || is_gen_float t1 && is_gen_float t2
+	then
           let t = lub_numeric_types t1 t2 in
           (JCTnative t,
            dummy_region,
@@ -1579,7 +1589,9 @@ let make_bin_op loc (op: operational_op) e1 e2 =
         then
           (integer_type, dummy_region,
            JCEbinary(e1, bin_op `Pointer `Bsub, e2))
-        else if is_numeric t1 && is_numeric t2 then
+        else if is_numeric t1 && is_numeric t2 
+	  || is_gen_float t1 && is_gen_float t2
+	then
           let t = lub_numeric_types t1 t2 in
           (JCTnative t, dummy_region,
            JCEbinary(coerce t1 t e1,
@@ -1588,14 +1600,16 @@ let make_bin_op loc (op: operational_op) e1 e2 =
 	else
           typing_error loc "unexpected types for -"
     | `Bmul | `Bdiv | `Bmod ->
-        if is_numeric t1 && is_numeric t2 then
+        if is_numeric t1 && is_numeric t2 
+	  || is_gen_float t1 && is_gen_float t2
+	then
           let t = lub_numeric_types t1 t2 in
           (JCTnative t,dummy_region,
            JCEbinary(coerce t1 t e1,
                      bin_op (operator_of_native t) op,
                      coerce t2 t e2))
-        else 
-	  typing_error loc "numeric types expected for multiplcative operators"
+        else
+	  typing_error loc "numeric types expected for multiplicative operators"
     | `Bbw_and | `Bbw_or | `Bbw_xor ->
         if is_numeric t1 && is_numeric t2 then
           let t = lub_numeric_types t1 t2 in
@@ -2376,7 +2390,18 @@ let () =
        pi.jc_logic_info_parameters <- pl;
        pi.jc_logic_info_final_name <- whyid;
        Hashtbl.add logic_functions_env x pi)
-    Jc_pervasives.builtin_logic_symbols
+    Jc_pervasives.builtin_logic_symbols;
+  List.iter 
+    (fun (ty,x,whyid,pl,treat) -> 
+       let pi = make_fun_info x ty in
+       let pl = List.map 
+	 (fun ty -> var ~formal:true ty "_") pl
+       in
+       pi.jc_fun_info_parameters <- pl;
+       pi.jc_fun_info_final_name <- whyid;
+       pi.jc_fun_info_builtin_treatment <- Some treat;
+       Hashtbl.add functions_env x pi)
+    Jc_pervasives.builtin_function_symbols
 
 (* let add_logic_constdecl (ty, id) = *)
 (*   try *)

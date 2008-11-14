@@ -2,46 +2,110 @@
    It can be modified; only the generated parts will be overwritten. *)
 
 Require Export jessie_why.
-Require Export WhyFloats.
+(*Require Export WhyFloatsFull.*)
 Require Export Reals.
 Require Import tactics. (* tactique interval *)
-Require Export w2g.
+(*Require Export w2g.*) 
+Require Export wfull2g.
 
-(* Why obligation from file "/users/demons/ayad/why/bench/jc/good/sterbenz.jc", line 3, characters 0-34: *)
-(*Why goal*) Lemma l1 : 
-  (Rle (05 / 10)%R (1)%R) /\ (Rle (1)%R (2)%R).
-Proof.
-split;interval.
-Save.
 
-(*Why axiom*) Lemma l1_as_axiom :
-  (Rle (05 / 10)%R (1)%R) /\ (Rle (1)%R (2)%R).
-split;interval.
-Save.
+Require Export WhyFloats.
+
+
+Inductive float_format : Set :=  Single | Double.
+
+Definition bfloat_format (f : float_format) :=
+match f with 
+| Single => bsingle
+| Double => bdouble
+end.
+
+Definition precision (f : float_format) :=
+match f with 
+| Single => 24%nat
+| Double => 53%nat
+end.
+
+Definition max_gen_float (f : float_format) :=
+match f with 
+| Single => ((2-powerRZ radix (-23))*powerRZ radix 127)%R
+| Double => ((2-powerRZ radix (-52))*powerRZ radix 1023)%R
+end.
+
+Definition plus_infinity_gen_float (f : float_format) :=
+match f with 
+| Single => (powerRZ radix 128)%R
+| Double => (powerRZ radix 1024)%R
+end.
+
+
+
+(* generic floats*)
+
+Record gen_float : Set := mk_gen_float {
+   genf         : float;
+   exact_value : R;
+   model_value : R
+ }.
 
 (*
-Require Import Gappa_library.
-Require Import Gappa_tactic.
-
-Definition d_to_r := float2R.
-
-Definition nearest_even := roundNE.
-Definition r_to_d mode x := rounding_float mode (53) (1074) x.
-
-Definition double := float2.
+Hcangenf     : Fcanonic radix (bfloat_format f) genf;
 *)
-(* Why obligation from file "/users/demons/ayad/why/bench/jc/good/sterbenz.jc", line 25, characters 16-62: *)
-(*Why goal*) Lemma diff_ensures_default_po_1 : 
-  forall (x: double),
-  forall (y: double),
-  forall (HW_1: (Rle (Rdiv (d_to_r y) (2)%R) (d_to_r x)) /\
-                (Rle (d_to_r x) (Rmult (2)%R (d_to_r y)))),
-  forall (why__return: double),
-  forall (HW_3: why__return =
-                (r_to_d nearest_even (Rminus (d_to_r x) (d_to_r y)))),
-  (* JC_17 *) (eq (d_to_r why__return) (Rminus (d_to_r x) (d_to_r y))).
+
+
+Definition float_value (x:gen_float) := FtoRradix (genf x).
+
+Definition gen_round_error (x:gen_float) := 
+    (Rabs ((exact_value x) - (float_value x))).
+
+Definition gen_total_error (x:gen_float):= 
+    (Rabs ((model_value x) - (float_value x))).
+
+
+Definition gen_set_model (x:gen_float) (r:R) :=
+      mk_gen_float (genf x) (exact_value x) r.
+
+
+Definition  gen_float_of_real_aux (f:float_format) (m:mode) (r r1 r2:R) := 
+match m with
+  |  nearest_even => mk_gen_float (RND_EvenClosest (bfloat_format f) radix (precision f) r) 
+                                 r1 r2
+  |  to_zero          => mk_gen_float (RND_Zero (bfloat_format f) radix (precision f) r) 
+                                 r1 r2
+  |  up                  => mk_gen_float (RND_Min (bfloat_format f) radix (precision f) r) 
+                                 r1 r2
+  |  down             => mk_gen_float (RND_Max (bfloat_format f) radix (precision f) r) 
+				r1 r2
+  |  nearest_away => mk_gen_float (RND_ClosestUp (bfloat_format f) radix (precision f) r) 
+				r1 r2
+  end.
+
+   
+Definition gen_float_of_real (f:float_format) (m:mode) (r:R) := gen_float_of_real_aux f m r r r.
+   
+
+Definition round_float (f:float_format) (m:mode) (r:R) := FtoRradix (genf (gen_float_of_real f m r)).
+
+
+
+
+
+
+
+
+
 Proof.
-w2g.
+split;interval.
+Save.
+
+split;interval.
+Save.
+
+
+
+
+Proof.
+(*w2g.
 intros.
 subst.
 w2g.
@@ -50,25 +114,22 @@ apply Rminus_le.
 gappa.
 assert (f <=f1 - f0 <= f)%R.
 split.
-apply Rminus_le.
+apply Rminus_le.*)
 Admitted.
 
-(*unfold r_to_d, nearest_even, d_to_r.
-intros.
-subst.
 
 
-Definition seven := (Float2 7 0).
-*)
-
-(* Why obligation from file "/users/demons/ayad/why/bench/jc/good/sterbenz.jc", line 7, characters 11-35: *)
-(*Why goal*) Lemma test1_ensures_default_po_1 : 
-  forall (HW_1: (* JC_4 *) True),
-  forall (why__return: double),
-  forall (HW_3: why__return = (r_to_d nearest_even (Rmult (2)%R (35 / 10)%R))),
-  (* JC_5 *) (eq (d_to_r why__return) (7)%R).
 Proof.
-w2g.
+intuition.
+Admitted.
+
+Proof.
+intuition.
+Admitted.
+
+
+Proof.
+(*w2g.
 intros.
 assert (7 <= df why__return <= 7)%R.
 subst.
@@ -80,18 +141,170 @@ with (gappa_rounding (rounding_float roundNE 53 1074) (2 * (35/10))).
 gappa.*)
 destruct H.
 now apply Rle_antisym.
-(* FILL PROOF HERE *)
-Save.
+*)
+Admitted.
 
-(* Why obligation from file "/users/demons/ayad/why/bench/jc/good/sterbenz.jc", line 15, characters 11-61: *)
-(*Why goal*) Lemma test2_ensures_default_po_1 : 
-  forall (HW_1: (* JC_10 *) True),
-  forall (why__return: single),
-  forall (HW_3: why__return = (r_to_s nearest_even (01 / 10)%R)),
-  (* JC_11 *)
-  (eq (s_to_r why__return) (0100000001490116119384765625 / 1000000000000000000000000000)%R).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
+
+Proof.
+intuition.
+Admitted.
+
+(* Why obligation from file "why/sterbenz.why", line 21, characters 57-102: *)
+(*Why goal*) Lemma test1bis_ensures_default_po_1 : 
+  forall (HW_1: (* JC_4 *) True),
+  (Rle (Rabs (round_float Double nearest_even (2)%R)) (max_gen_float Double)).
+Proof.
+intuition.
+Admitted.
+
+(* Why obligation from file "why/sterbenz.why", line 22, characters 18-63: *)
+(*Why goal*) Lemma test1bis_ensures_default_po_2 : 
+  forall (HW_1: (* JC_4 *) True),
+  forall (HW_2: (Rle (Rabs (round_float Double nearest_even (2)%R))
+                 (max_gen_float Double))),
+  forall (result: gen_float),
+  forall (HW_3: (eq (float_value result) (round_float
+                                          Double nearest_even (2)%R)) /\
+                (eq (exact_value result) (2)%R) /\
+                (eq (model_value result) (2)%R)),
+  (Rle (Rabs (round_float Double nearest_even (35 / 10)%R))
+   (max_gen_float Double)).
+Proof.
+intuition.
+Admitted.
+
+(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 17, characters 9-42: *)
+(*Why goal*) Lemma test1bis_ensures_default_po_3 : 
+  forall (HW_1: (* JC_4 *) True),
+  forall (HW_2: (Rle (Rabs (round_float Double nearest_even (2)%R))
+                 (max_gen_float Double))),
+  forall (result: gen_float),
+  forall (HW_3: (eq (float_value result) (round_float
+                                          Double nearest_even (2)%R)) /\
+                (eq (exact_value result) (2)%R) /\
+                (eq (model_value result) (2)%R)),
+  forall (HW_4: (Rle (Rabs (round_float Double nearest_even (35 / 10)%R))
+                 (max_gen_float Double))),
+  forall (result0: gen_float),
+  forall (HW_5: (eq (float_value result0) (round_float
+                                           Double nearest_even (35 / 10)%R)) /\
+                (eq (exact_value result0) (35 / 10)%R) /\
+                (eq (model_value result0) (35 / 10)%R)),
+  (Rle
+   (Rabs
+    (round_float
+     Double nearest_even (Rmult (float_value result) (float_value result0))))
+   (max_gen_float Double)).
+Proof.
+intuition.
+Admitted.
+
+(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 15, characters 11-35: *)
+(*Why goal*) Lemma test1bis_ensures_default_po_4 : 
+  forall (HW_1: (* JC_4 *) True),
+  forall (HW_2: (Rle (Rabs (round_float Double nearest_even (2)%R))
+                 (max_gen_float Double))),
+  forall (result: gen_float),
+  forall (HW_3: (eq (float_value result) (round_float
+                                          Double nearest_even (2)%R)) /\
+                (eq (exact_value result) (2)%R) /\
+                (eq (model_value result) (2)%R)),
+  forall (HW_4: (Rle (Rabs (round_float Double nearest_even (35 / 10)%R))
+                 (max_gen_float Double))),
+  forall (result0: gen_float),
+  forall (HW_5: (eq (float_value result0) (round_float
+                                           Double nearest_even (35 / 10)%R)) /\
+                (eq (exact_value result0) (35 / 10)%R) /\
+                (eq (model_value result0) (35 / 10)%R)),
+  forall (HW_6: (Rle
+                 (Rabs
+                  (round_float
+                   Double nearest_even (Rmult
+                                        (float_value result) (float_value
+                                                              result0))))
+                 (max_gen_float Double))),
+  forall (result1: gen_float),
+  forall (HW_7: (eq (float_value result1) (round_float
+                                           Double nearest_even (Rmult
+                                                                (float_value
+                                                                 result) (
+                                                                float_value
+                                                                result0)))) /\
+                (eq (exact_value result1) (Rmult
+                                           (exact_value result) (exact_value
+                                                                 result0))) /\
+                (eq (model_value result1) (Rmult
+                                           (model_value result) (model_value
+                                                                 result0)))),
+  forall (why__return: gen_float),
+  forall (HW_8: why__return = result1),
+  (* JC_5 *) (eq (float_value why__return) (7)%R).
+Proof.
+intuition.
+Admitted.
+
+(* Why obligation from file "why/sterbenz.why", line 39, characters 57-102: *)
+(*Why goal*) Lemma test1bis_safety_po_1 : 
+  forall (HW_1: (* JC_4 *) True),
+  (Rle (Rabs (round_float Double nearest_even (2)%R)) (max_gen_float Double)).
+Proof.
+intuition.
+Admitted.
+
+(* Why obligation from file "why/sterbenz.why", line 40, characters 18-63: *)
+(*Why goal*) Lemma test1bis_safety_po_2 : 
+  forall (HW_1: (* JC_4 *) True),
+  forall (HW_2: (Rle (Rabs (round_float Double nearest_even (2)%R))
+                 (max_gen_float Double))),
+  forall (result: gen_float),
+  forall (HW_3: (eq (float_value result) (round_float
+                                          Double nearest_even (2)%R)) /\
+                (eq (exact_value result) (2)%R) /\
+                (eq (model_value result) (2)%R)),
+  (Rle (Rabs (round_float Double nearest_even (35 / 10)%R))
+   (max_gen_float Double)).
+Proof.
+intuition.
+Admitted.
+
+(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 17, characters 9-42: *)
+(*Why goal*) Lemma test1bis_safety_po_3 : 
+  forall (HW_1: (* JC_4 *) True),
+  forall (HW_2: (Rle (Rabs (round_float Double nearest_even (2)%R))
+                 (max_gen_float Double))),
+  forall (result: gen_float),
+  forall (HW_3: (eq (float_value result) (round_float
+                                          Double nearest_even (2)%R)) /\
+                (eq (exact_value result) (2)%R) /\
+                (eq (model_value result) (2)%R)),
+  forall (HW_4: (Rle (Rabs (round_float Double nearest_even (35 / 10)%R))
+                 (max_gen_float Double))),
+  forall (result0: gen_float),
+  forall (HW_5: (eq (float_value result0) (round_float
+                                           Double nearest_even (35 / 10)%R)) /\
+                (eq (exact_value result0) (35 / 10)%R) /\
+                (eq (model_value result0) (35 / 10)%R)),
+  (Rle
+   (Rabs
+    (round_float
+     Double nearest_even (Rmult (float_value result) (float_value result0))))
+   (max_gen_float Double)).
+Proof.
+intuition.
+Admitted.
+
+Proof.
+intuition.
+Admitted.
+
+Proof.
+intuition.
+Admitted.
+
+Proof.
+intuition.
+Admitted.
 
