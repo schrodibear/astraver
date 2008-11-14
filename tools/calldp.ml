@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.58 2008-11-12 16:31:50 moy Exp $ i*)
+(*i $Id: calldp.ml,v 1.59 2008-11-14 09:56:38 marche Exp $ i*)
 
 open Printf
 
@@ -116,9 +116,10 @@ let gen_prover_call ?(debug=false) ?(timeout=30) ?(switch="") ~filename:f p =
 
 let ergo ?(debug=false) ?(timeout=10) ~select_hypotheses ~filename:f () =
   if select_hypotheses then
-    gen_prover_call ~debug ~timeout ~filename:f DpConfig.alt_ergo
-  else
-    gen_prover_call ~debug ~timeout ~switch:"-select 1"
+    gen_prover_call ~debug ~timeout ~switch:"-select 1" 
+      ~filename:f DpConfig.alt_ergo
+  else    
+    gen_prover_call ~debug ~timeout 
       ~filename:f DpConfig.alt_ergo
 
 let coq ?(debug=false) ?(timeout=10) ~filename:f () =
