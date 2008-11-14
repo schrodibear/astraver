@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.151 2008-11-14 09:32:34 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.152 2008-11-14 13:20:23 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1555,23 +1555,26 @@ let logic_fun_effects f =
     Hashtbl.find Jc_typing.logic_functions_table f.jc_logic_info_tag 
   in
   let ef = f.jc_logic_info_effects in
-  let ef = match ta, f.jc_logic_info_axiomatic with
-    | JCTerm t, None -> term ef t 
-    | JCAssertion a, None -> assertion ef a
-    | JCInductive l, None ->
+  let ef = match ta with
+    | JCTerm t -> term ef t 
+    | JCAssertion a -> assertion ef a
+    | JCInductive l ->
 	List.fold_left (fun ef (id,a) -> assertion ef a) ef l
-    | JCReads [], Some a ->
-	(* axiomatic def in a *)
-	effects_from_axiomatic f a ef 
-    | JCReads loclist, _ ->
+    | JCReads [] ->
+	begin match f.jc_logic_info_axiomatic with
+	  | Some a ->
+	      (* axiomatic def in a *)
+	      effects_from_axiomatic f a ef 
+	  | None -> assert false
+	      (* not allowed outside axiomatics *)
+	end
+    | JCReads loclist ->
 	assert (1==0); (* cause obsolete *)
 	List.fold_left
 	  (fun ef loc ->
 	     let fef = location ~in_assigns:false empty_fun_effect loc in
 	     ef_union ef fef.jc_reads 
 	  ) ef loclist
-    | _,Some _ -> assert false (* impossible *)
-	(* TODO ? unify ta and jc_logic_info_axiomatic *)
   in
   if same_effects ef f.jc_logic_info_effects then () else
     (fixpoint_reached := false;
