@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.24 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_constructors.ml,v 1.25 2008-11-17 16:32:52 moy Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -524,8 +524,17 @@ module Assertion = struct
 
   let fake ?pos ?mark ~value () = value
 
-  let is_true a = (a#node = JCAtrue)
-  let is_false a = (a#node = JCAfalse)
+  let is_true a = 
+    match a#node with 
+      | JCAtrue -> true
+      | JCAbool_term t when t#node = JCTconst(JCCboolean true) -> true
+      | _ -> false
+    
+  let is_false a =
+    match a#node with 
+      | JCAfalse -> true
+      | JCAbool_term t when t#node = JCTconst(JCCboolean false) -> true
+      | _ -> false
 
   let mktrue = mk ~node:JCAtrue
   let mkfalse = mk ~node:JCAfalse

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.139 2008-11-14 16:00:59 ayad Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.140 2008-11-17 16:32:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -394,7 +394,6 @@ let rec list_compare comp ls1 ls2 = match ls1,ls2 with
 
 (* terms *)
 
-
 let rec is_constant_term t =
   match t#node with
     | JCTrange (None, None) (* CORRECT ? *)
@@ -524,6 +523,8 @@ module TermOrd = struct
 	 if compst <> 0 then compst else
 	   compare t11 t21 
       | JCTmatch _, JCTmatch _ -> assert false (* TODO *)
+      | JCTbase_block t11, JCTbase_block t21 ->
+	  compare t11 t21	  
       | _ ->
 	  (* Terms should have different constructors *)
 	  assert (term_num t1 <> term_num t2);

@@ -701,7 +701,10 @@ let transpose_location_list
     ~region_assoc ~param_assoc rw_raw_mems rw_precise_mems (mc,distr) =
   let loclist =
     if MemorySet.mem (mc,distr) rw_raw_mems then
-      assert false (* TODO: parameters *)
+      (Format.eprintf "memory %a@\nin memory set %a@." 
+	 print_memory (mc,distr) 
+	 (print_list comma print_memory) (MemorySet.elements rw_raw_mems);
+       assert false) (* TODO: parameters *)
     else
       LocationSet.to_list
 	(LocationSet.filter
@@ -2029,7 +2032,7 @@ let tag_table_arguments ~callee_reads ~callee_writes ~region_assoc =
 let specialized_functions = Hashtbl.create 0 
 
 let memory_arguments ~callee_reads ~callee_writes ~region_assoc 
-    ~region_mem_assoc ~param_assoc fname =
+    ~region_mem_assoc ~param_assoc ~with_body fname =
   let writes = 
     memory_detailed_writes
       ~mode:`MAppParam ~type_safe:true ~callee_writes 
@@ -2065,6 +2068,8 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc
   let rw_pre =
     if StringSet.is_empty rw_inter_names then
       LTrue (* no read/write interference *)
+    else if not with_body then
+      LTrue (* no body in which region assumptions must be verified *)
     else
       write_read_separation_condition 
 	~callee_reads ~callee_writes ~region_assoc ~param_assoc
@@ -2086,6 +2091,8 @@ let memory_arguments ~callee_reads ~callee_writes ~region_assoc
   let ww_pre =
     if StringSet.is_empty ww_inter_names then
       LTrue (* no write/write interference *)
+    else if not with_body then
+      LTrue (* no body in which region assumptions must be verified *)
     else
       write_write_separation_condition 
 	~callee_reads ~callee_writes ~region_assoc ~param_assoc
@@ -2197,7 +2204,7 @@ let make_bitwise_arguments alloc_wpointers alloc_rpointers
 
 let make_arguments 
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc 
-    ~with_globals fname args =
+    ~with_globals ~with_body fname args =
   let params = List.map fst param_assoc in
   let region_mem_assoc = make_region_mem_assoc ~params in
   let alloc_wpointers, alloc_rpointers, write_allocs, read_allocs = 
@@ -2209,7 +2216,7 @@ let make_arguments
   in
   let pre_mems, fname, mem_wpointers, mem_rpointers, write_mems, read_mems = 
     memory_arguments ~callee_reads ~callee_writes ~region_assoc
-      ~region_mem_assoc ~param_assoc fname
+      ~region_mem_assoc ~param_assoc ~with_body fname
   in
   let write_globs, read_globs = 
     if with_globals then

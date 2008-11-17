@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.155 2008-11-07 04:01:59 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.156 2008-11-17 16:32:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2056,9 +2056,9 @@ let rec wp_expr weakpre =
 (* 	  (\* Hints are not to be used in wp computation, only added to help. *\) *)
 (* 	  curposts *)
       | JCEassert(_behav,_asrt,a1) ->
-	  if target.jc_target_hint then
-	    curposts
-	  else
+(* 	  if target.jc_target_hint then *)
+(* 	    curposts *)
+(* 	  else *)
 	    let f = atp_of_asrt a1 in
 	    let fvars = Atp.fv f in
 	    let varsets = 
@@ -3224,8 +3224,15 @@ and intern_ai_expr iaio abs curinvs e =
         forget_invariants mgr curinvs (Vai.all_variables tv)
     | JCEassign_var(v,e1) ->
 	let tv = new term_var v in
-	let curinvs = ai curinvs e1 in
-	assign_expr mgr tv e1 curinvs
+	let curinvs = match e1#node with
+	  | JCEapp _call ->
+	      ai_call iaio abs curinvs (Some v) e1
+	  | _ ->
+	      (* TODO: precise case of allocation *)
+	      let curinvs = ai curinvs e1 in
+	      assign_expr mgr tv e1 curinvs 
+	in
+	curinvs
     | JCEassign_heap(e1,fi,e2) ->
 	let curinvs = ai curinvs e1 in
 	let curinvs = ai curinvs e2 in
@@ -3477,13 +3484,20 @@ and ai_call iaio abs curinvs vio e =
   in
   let curinvs = test_assertion ~propagated:true mgr pre curinvs in
 
+  let compulsory_behavior b =
+    match b.jc_behavior_assumes with
+      | None -> true
+      | Some a when Assertion.is_true a -> true
+      | _ -> false
+  in
+
   (* Compute normal postcondition *)
   let normal_post =
     List.fold_left
-      (fun acc (_pos,_name,b) ->
+      (fun acc (pos,name,b) ->
 	 (* TODO : handle 'assumes' clauses precisely *)
-	 if b.jc_behavior_throws = None && b.jc_behavior_assumes = None then
-	   Assertion.mkand [b.jc_behavior_ensures; acc] ()
+	 if b.jc_behavior_throws = None && compulsory_behavior b then
+	   Assertion.mkand [ b.jc_behavior_ensures; acc ] ()
 	 else acc
       ) (Assertion.mktrue ()) 
       (spec.jc_fun_default_behavior :: spec.jc_fun_behavior)
@@ -3739,6 +3753,22 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
 	body finalinvs.jc_absinv_normal;
 
     (* record the postcondition inferred *)
+    let defpos,defid,defbehav = spec.jc_fun_default_behavior in
+    let known_post = 
+      Assertion.mkand [ defbehav.jc_behavior_free_ensures;
+			defbehav.jc_behavior_ensures ] ()
+    in
+    let cstrs =
+      List.fold_left
+ 	(fun acc v -> 
+	   let cstr = 
+	     Jc_typing.type_range_of_term v.jc_var_info_type (new term_var v)
+	   in 
+	   cstr :: acc
+	) [] (f.jc_fun_info_result :: f.jc_fun_info_parameters)
+    in
+    let known_post = Assertion.mkand (known_post :: cstrs) () in
+
     let acc = 
       Hashtbl.fold 
 	(fun _e absval acc ->
@@ -3751,14 +3781,13 @@ and ai_function mgr iaio targets funpre (f,pos,spec,body) =
 	       prepare_invariant mgr abs ~pos ~what:"postcondition case" post
 	     with
 	       | None -> Assertion.mktrue ()
-	       | Some a -> a 
+	       | Some a -> simplify ~inva:known_post a
 	   in a :: acc
 	) finalinvs.jc_absinv_return []
     in
     let post = Assertion.mkor acc () in
     (* Register postcondition as such *)
     let post = reg_annot ~pos ~anchor:f.jc_fun_info_name post in
-    let defpos,defid,defbehav = spec.jc_fun_default_behavior in
     let defbehav = 
       if Jc_options.trust_ai then 
 	{ defbehav with jc_behavior_free_ensures = 

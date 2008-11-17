@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.389 2008-11-14 16:00:58 ayad Exp $ *)
+(* $Id: jc_interp.ml,v 1.390 2008-11-17 16:32:52 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2052,13 +2052,22 @@ and expr e =
 		List.map2 (fun param arg -> param,arg) 
 		  f.jc_logic_info_parameters call.jc_call_args
 	      in
+	      let with_body = 
+		let _f,body =  
+		  Hashtbl.find Jc_typing.logic_functions_table 
+		    f.jc_logic_info_tag 
+		in
+		match body with
+		  | JCTerm _ -> true
+		  | JCReads _ -> false
+		  | JCAssertion _ | JCInductive _ -> assert false
+	      in
 	      let pre, fname, locals, prolog, epilog, args = 
 		make_arguments 
                   ~callee_reads: f.jc_logic_info_effects
                   ~callee_writes: empty_effects
                   ~region_assoc: call.jc_call_region_assoc
-		  ~param_assoc
-		  ~with_globals:true
+		  ~param_assoc ~with_globals:true ~with_body
 		  f.jc_logic_info_final_name args
 	      in
 	      assert (pre = LTrue);
@@ -2122,6 +2131,12 @@ and expr e =
 		  f.jc_fun_info_final_name ^ "_requires"
 		else f.jc_fun_info_final_name
 	      in
+	      let with_body = 
+		let _f,_loc,_s,body =  
+		  Hashtbl.find Jc_typing.functions_table f.jc_fun_info_tag 
+		in
+		body <> None
+	      in
 	      let args =
 		match f.jc_fun_info_builtin_treatment with
 		  | None -> args
@@ -2133,8 +2148,7 @@ and expr e =
                   ~callee_reads: f.jc_fun_info_effects.jc_reads
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
                   ~region_assoc: call.jc_call_region_assoc
-		  ~param_assoc
-		  ~with_globals:false
+		  ~param_assoc ~with_globals:false ~with_body
 		  fname args
 	      in
 	      let call = make_guarded_app e#mark UserCall e#pos fname args in
