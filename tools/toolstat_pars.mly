@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: toolstat_pars.mly,v 1.6 2008-11-11 20:29:55 moy Exp $ */
+/* $Id: toolstat_pars.mly,v 1.7 2008-11-17 00:10:53 moy Exp $ */
 
 %{
   open Format
@@ -37,6 +37,14 @@
   let default_summary = (0,0,0,0,0)
   let default_detail = ([],[],[],[],[])
   let default_time = (0,0,0.)
+  let div_time (h,m,s) n =
+    if n = 0 then (h,m,s) else
+      let s = float_of_int (3600 * h + 60 * m) +. s in
+      let s = s /. float_of_int n in
+      let h = int_of_float s / 3600 in
+      let m = int_of_float s / 60 - 60 * h in
+      let s = s -. float_of_int (3600 * h + 60 * m) in
+      (h,m,s)
 %}
 
 %token < Toolstat_types.prover > PROVER
@@ -72,9 +80,10 @@ log:
 
 record:
 | PROVER tests TIME
-    { List.map (fun (test,result) ->
+    { let n = List.length $2 in
+      List.map (fun (test,result) ->
 		  let summary,detail = result in
-		  (true,$1,test,summary,detail,$3)
+		  (true,$1,test,summary,detail,div_time $3 n)
 	       ) $2 }
 | PROVER TEST RESULT
     { (* Case for no VC *)

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.10 2008-11-11 20:29:55 moy Exp $ i*)
+(*i $Id: toolstat.ml,v 1.11 2008-11-17 00:10:53 moy Exp $ i*)
 
 (* Statistics on automatic provers results *)
 
@@ -68,6 +68,17 @@ let parse_file f =
     pp_print_newline err_formatter ();
     exit 1
 
+let default_detail = ([],[],[],[],[])
+let default_time = (0,0,0.)
+
+let add_times (h1,m1,s1) (h2,m2,s2) =
+  let h3 = h1 + h2 and m3 = m1 + m2 and s3 = s1 +. s2 in
+  let carry = (int_of_float (floor s3)) / 60 in
+  let m3 = m3 + carry and s3 = s3 -. (float_of_int (60 * carry)) in
+  let carry = m3 / 60 in
+  let h3 = h3 + carry and m3 = m3 - (60 * carry) in
+  (h3,m3,s3)
+
 let hadd single combine h k v =
   try
     let ls = Hashtbl.find h k in
@@ -76,24 +87,35 @@ let hadd single combine h k v =
     Hashtbl.replace h k (single v)
 
 let intadd h k v = hadd (fun x -> x) ( + ) h k v
-let timeadd = 
-  hadd (fun x -> x) 
-    (fun (h1,m1,s1) (h2,m2,s2) -> 
-       let h3 = h1 + h2 and m3 = m1 + m2 and s3 = s1 +. s2 in
-       let carry = (int_of_float (floor s3)) / 60 in
-       let m3 = m3 + carry and s3 = s3 -. (float_of_int (60 * carry)) in
-       let carry = m3 / 60 in
-       let h3 = h3 + carry and m3 = m3 - (60 * carry) in
-       h3,m3,s3)
+let listadd h k v = hadd (fun x -> [x]) (fun x l -> x::l) h k v
+let timeadd = hadd (fun x -> x) add_times
 
 let hfind default h k =
   try Hashtbl.find h k with Not_found -> default
 
 let valid_summary (n1,n2,n3,n4,n5) = n1
 let notvalid_summary (n1,n2,n3,n4,n5) = n2 + n3 + n4 + n5
+let make_summary (s1,s2,s3,s4,s5) =
+  List.length s1, List.length s2, List.length s3, List.length s4, List.length s5
 
 let valid_detail (s1,s2,s3,s4,s5) = s1
 let notvalid_detail (s1,s2,s3,s4,s5) = s2 @ s3 @ s4 @ s5
+let combine_details (s1,s2,s3,s4,s5) (t1,t2,t3,t4,t5) =
+  let unique = 
+    let table = Hashtbl.create 5 in
+    function l ->
+      List.fold_left 
+	(fun acc e ->
+	   if Hashtbl.mem table e then acc else 
+	     (Hashtbl.replace table e (); e :: acc)
+	) [] l
+  in
+  let u1 = unique (s1 @ t1) in (* Start with valid *)
+  let u2 = unique (s2 @ t2) in (* Order of invalid ones unimportant *)
+  let u3 = unique (s3 @ t3) in
+  let u4 = unique (s4 @ t4) in
+  let u5 = unique (s5 @ t5) in
+  (u1, u2, u3, u4, u5)
 
 let print_time ?(sec=false) ?(min=false) ?(hour=false) fmt (h,m,s) =
   if sec || min || hour then
@@ -147,6 +169,56 @@ let () =
 	 (* At least one prover was in error on this test *)
 	 Hashtbl.replace error_tests test ()
     ) records;
+
+  (* Fill [prover_variants] with pairs of a variant and the original prover,
+     for those provers that have variants *)
+  let prover_variants : (prover, prover) Hashtbl.t = Hashtbl.create 5 in
+  let tests_variants : ((prover * test), record list) Hashtbl.t 
+      = Hashtbl.create 5 
+  in
+  let combined_prover prover = prover ^ " (all)" in
+  Hashtbl.iter 
+    (fun prover1 () ->
+       Hashtbl.iter 
+	 (fun prover2 () ->
+	    if String.length prover1 > String.length prover2 
+	      && String.sub prover1 0 (String.length prover2) = prover2 then
+		Hashtbl.replace prover_variants prover1 prover2
+	 ) provers
+    ) provers;
+  Hashtbl.iter
+    (fun _variant_prover prover ->
+       Hashtbl.replace prover_variants prover prover
+    ) prover_variants;
+  Hashtbl.iter
+    (fun variant_prover prover ->
+       Hashtbl.replace prover_variants variant_prover (combined_prover prover);
+       Hashtbl.replace provers (combined_prover prover) ()
+    ) prover_variants;
+  List.iter
+      (fun (completed,prover,test,summary,detail,time) ->
+	 try 
+	   let combined_prover = Hashtbl.find prover_variants prover in
+	   listadd tests_variants (combined_prover,test)
+	     (completed,combined_prover,test,summary,detail,time)  
+	 with Not_found -> ()
+      ) records;
+  let records =
+    Hashtbl.fold 
+      (fun (prover,test) records acc ->
+	 let completed,detail,time =
+	   List.fold_left 
+	     (fun (completed_acc,detail_acc,time_acc) 
+		(completed,_prover,_test,_summary,detail,time) ->
+		  completed_acc || completed,
+		  combine_details detail_acc detail,
+		  add_times time_acc time
+	     ) (false,default_detail,default_time) records
+	 in
+	 let summary = make_summary detail in
+	 (completed,prover,test,summary,detail,time) :: acc
+      ) tests_variants records
+  in
 
   printf "@.Best individual provers:@.";
   let provers_valid : (prover, int) Hashtbl.t = Hashtbl.create 17 in
