@@ -155,7 +155,10 @@ let prover_list =
 let rc_file () =
   let home =
     try Sys.getenv "HOME"
-    with Not_found -> ""
+    with Not_found -> 
+      (* try windows env var *)
+      try Sys.getenv "USERPROFILE"
+      with Not_found -> ""
   in
   Filename.concat home ".whyrc"
 

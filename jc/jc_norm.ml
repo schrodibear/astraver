@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.110 2008-11-05 14:43:52 moy Exp $ *)
+(* $Id: jc_norm.ml,v 1.111 2008-11-17 15:48:29 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -243,7 +243,7 @@ let normalize_assign_op pos e1 op e2 =
                ~value:(mkbinary ~pos ~expr1:e4 ~op ~expr2:e2 ())
                ())
             ()
-      | _ -> error pos "Not an lvalue in assignment"
+      | _ -> Jc_options.jc_error pos "Not an lvalue in assignment"
 
 (** Transform unary increment and decrement *)
 let normalize_pmunary pos op e =
@@ -298,7 +298,7 @@ let normalize_pmunary pos op e =
 	    let tmpvar = mkvar ~pos ~name:tmpname () in
 	    let e2 = mkderef ~pos ~expr:tmpvar ~field:f () in
 	    mklet_nodecl ~var:tmpname ~init:e1 ~body:(on_duplicable e2) ()
-	| _ -> error pos "Not an lvalue in assignment"
+	| _ -> Jc_options.jc_error pos "Not an lvalue in assignment"
 
 (** Transform local variable declarations *)
 let normalize_locvardecl pos elist = 
@@ -403,17 +403,16 @@ let rec printf_label_tree fmt lt =
 	fprintf fmt "{ %a }" (Pp.print_list Pp.space printf_label_tree ) l
 
 let rec in_label_tree lab = function
-  | LabelItem l -> if l=lab then true else false
+  | LabelItem l -> l=lab
   | LabelBlock l -> in_label_tree_list lab l
 
 and in_label_tree_list lab = function
-  | [] -> raise Not_found
+  | [] -> false
   | h::r -> 
-      try in_label_tree lab h
-      with Not_found -> in_label_tree_list lab r
+      in_label_tree lab h || in_label_tree_list lab r
 
 let rec in_label_upper_tree_list lab = function
-  | [] -> raise Not_found
+  | [] -> false
   | LabelItem l :: _ when l=lab -> true
   | _ :: r -> in_label_upper_tree_list lab r
 
@@ -432,7 +431,7 @@ let build_label_tree e : label_tree list =
 	  if in_label_upper_tree_list lab fwdacc then
 	    Hashtbl.add label_used lab ()
 	  else 
-	    error e#pos "unsupported goto";
+	    Jc_options.jc_error e#pos "unsupported goto (backward or to some inner block)";
 	  acc,fwdacc
       | JCPElabel (lab, e) ->
 	  let l,fwdl = build_bwd e ([],fwdacc) in

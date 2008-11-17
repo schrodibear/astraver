@@ -33,7 +33,11 @@ open Jc_fenv
 
 val ( $ ): ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 
+(*
+exception Error of Loc.position * string
+
 val error: Loc.position -> ('a, Format.formatter, unit, 'b) format4 -> 'a
+*)
 
 val zero: Num.num
 val one: Num.num

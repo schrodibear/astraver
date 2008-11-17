@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.36 2008-11-05 14:03:16 filliatr Exp $ *)
+(* $Id: jc_options.mli,v 1.37 2008-11-17 15:48:29 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -78,6 +78,8 @@ val close_log : unit -> unit
 (*s error handling *)
 
 exception Jc_error of Loc.position * string
+
+val jc_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
 
 val parsing_error : Loc.position -> ('a, unit, string, 'b) format4 -> 'a
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.43 2008-11-14 16:00:59 ayad Exp $ i*)
+(*i $Id: jc_options.ml,v 1.44 2008-11-17 15:48:29 marche Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -208,12 +208,16 @@ in modulo integer model";
 
 exception Jc_error of Loc.position * string
 
-let parsing_error l f = 
+let jc_error l f = 
+  Format.ksprintf 
+    (fun s -> raise (Jc_error(l, s))) f
+
+let parsing_error l f =
   Format.ksprintf 
     (fun s -> 
        let s = if s="" then s else " ("^s^")" in
        raise (Jc_error(l, "syntax error" ^ s))) f
-
+  
 (*s pos table *)
 
 let kind_of_ident = function
