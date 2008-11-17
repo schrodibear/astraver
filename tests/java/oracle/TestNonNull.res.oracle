@@ -6067,10 +6067,10 @@ goal cons_TestNonNull_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/TestNonNull_why.why       : .......# (7/0/0/1/0)
+why/TestNonNull_why.why       : .......? (7/0/1/0/0)
 total   :   8
 valid   :   7 ( 88%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   1 ( 12%)
+unknown :   1 ( 12%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

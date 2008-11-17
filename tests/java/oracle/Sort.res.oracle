@@ -14724,10 +14724,10 @@ goal Sort_swap_safety_po_4:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Sort_why.why              : ..............................#..........#.... (44/0/0/2/0)
+why/Sort_why.why              : .........................................#.... (45/0/0/1/0)
 total   :  46
-valid   :  44 ( 96%)
+valid   :  45 ( 98%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   2 (  4%)
+timeout :   1 (  2%)
 failure :   0 (  0%)
