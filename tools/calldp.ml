@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.59 2008-11-14 09:56:38 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.60 2008-11-18 17:06:34 moy Exp $ i*)
 
 open Printf
 
@@ -83,7 +83,8 @@ let gen_prover_call ?(debug=false) ?(timeout=30) ?(switch="") ~filename:f p =
   in
   let t,c,out = timed_sys_command ~debug timeout cmd in
   if c = 152 (* 128 + SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
-  then Timeout t
+  then 
+    (remove_file ~debug out; Timeout t)
   else
     let res = file_contents out in
     let r =
