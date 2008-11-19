@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.31 2008-11-05 14:03:16 filliatr Exp $ *)
+(* $Id: jc_region.ml,v 1.32 2008-11-19 17:42:00 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -270,7 +270,12 @@ struct
   let equal r1 r2 =
     InternalRegion.equal (RegionUF.repr r1) (RegionUF.repr r2)
 
+  let some_bitwise_region = ref false
+
+  let exists_bitwise () = !some_bitwise_region
+
   let rec make_bitwise r =
+    some_bitwise_region := true;
     if bitwise r then () else
       let rep = RegionUF.repr r in
       if !Jc_common_options.separation_sem = SepNone then 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.391 2008-11-19 12:35:24 ayad Exp $ *)
+(* $Id: jc_interp.ml,v 1.392 2008-11-19 17:42:00 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -461,7 +461,7 @@ let tr_struct st acc =
 	:: make_alloc_param ~check_size:false ac pc 
 	:: make_alloc_param ~check_size:true JCalloc_bitvector pc 
 	:: make_alloc_param ~check_size:false JCalloc_bitvector pc 
-	:: make_conversion_params pc
+	:: (if Region.exists_bitwise () then make_conversion_params pc else [])
 	@ acc
   in
     
@@ -1727,7 +1727,9 @@ and make_deref_bytes mark pos e fi =
   (* Convert bitvector into appropriate type *)
   match fi.jc_field_info_type with
     | JCTenum ri -> make_app (logic_enum_of_bitvector ri) [e']
-    | _ty -> assert false (* TODO *)
+    | ty -> 
+	Format.eprintf "%a@." print_type ty;
+	assert false (* TODO *)
 
 and make_deref mark pos e1 fi =
   (* Dispatch depending on kind of memory *)
@@ -2101,8 +2103,14 @@ and expr e =
                        | Some(tmp,e,_ass) -> Let(tmp,e,c))
 		  arg_types_asserts call
               in
-              define_locals ~writes:locals 
-		(append (append prolog call) epilog)
+	      let call = append prolog call in
+	      let call = 
+		if epilog = Void then call else 
+		  let tmp = tmp_var_name () in
+		  Let(tmp,call,append epilog (Var tmp))
+	      in
+              define_locals ~writes:locals call
+
           | JCfun f ->
               let arg_types_asserts, args =
 		try match f.jc_fun_info_parameters with
@@ -2193,8 +2201,13 @@ and expr e =
                        | Some(tmp,e,_ass) -> Let(tmp,e,c))
 		  arg_types_asserts call
               in
-              define_locals ~writes:locals 
-		(append (append prolog call) epilog)
+	      let call = append prolog call in
+	      let call = 
+		if epilog = Void then call else 
+		  let tmp = tmp_var_name () in
+		  Let(tmp,call,append epilog (Var tmp))
+	      in
+              define_locals ~writes:locals call
 	end
     | JCEassign_var(v,e1) -> 
 	let e1' = value_assigned e#mark e#pos v.jc_var_info_type e1 in

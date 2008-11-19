@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.156 2008-11-17 16:32:52 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.157 2008-11-19 17:41:59 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1262,24 +1262,36 @@ let rec linstr_of_assertion env a =
 	  new term ~typ:integer_type (JCTbinary(t1,(`Bsub,`Integer),t2)) 
 	in
 	let env,str,cst = linstr_of_term env subt in
-	let cstr = string_of_num (minus_num cst) in
-	(* Do not use < and > with APRON, due to bugs in some versions.
-	   Convert to equivalent non-strict. *)
-	let str = match bop with
-	  | `Blt -> [[str ^ " <= " ^ 
-			(string_of_num (pred_num (minus_num cst)))]]
-	  | `Bgt -> [[str ^ " >= " ^ 
-			(string_of_num (succ_num (minus_num cst)))]]
-	  | `Ble -> [[str ^ " <= " ^ cstr]]
-	  | `Bge -> [[str ^ " >= " ^ cstr]]
-	  | `Beq -> [[str ^ " = " ^ cstr]]
-	  | `Bneq -> 
-	      [[str ^ " <= " ^ 
-		  (string_of_num (pred_num (minus_num cst)))];
-	       [str ^ " >= " ^ 
-		  (string_of_num (succ_num (minus_num cst)))]]
-	in
-	env, str
+	if str = "" then 
+	  let ncst = minus_num cst in
+	  let is_true = match bop with
+	    | `Blt -> Int 0 </ ncst
+	    | `Bgt -> Int 0 >/ ncst
+	    | `Ble -> Int 0 <=/ ncst
+	    | `Bge -> Int 0 >=/ ncst
+	    | `Beq -> Int 0 =/ ncst
+	    | `Bneq -> Int 0 <>/ ncst
+	  in
+	  env, if is_true then Dnf.true_ else Dnf.false_
+	else
+	  let cstr = string_of_num (minus_num cst) in
+	  (* Do not use < and > with APRON, due to bugs in some versions.
+	     Convert to equivalent non-strict. *)
+	  let str = match bop with
+	    | `Blt -> [[str ^ " <= " ^ 
+			  (string_of_num (pred_num (minus_num cst)))]]
+	    | `Bgt -> [[str ^ " >= " ^ 
+			  (string_of_num (succ_num (minus_num cst)))]]
+	    | `Ble -> [[str ^ " <= " ^ cstr]]
+	    | `Bge -> [[str ^ " >= " ^ cstr]]
+	    | `Beq -> [[str ^ " = " ^ cstr]]
+	    | `Bneq -> 
+		[[str ^ " <= " ^ 
+		    (string_of_num (pred_num (minus_num cst)))];
+		 [str ^ " >= " ^ 
+		    (string_of_num (succ_num (minus_num cst)))]]
+	  in
+	  env, str
     | JCAnot a ->
 	let nota = not_asrt a in
 	begin match nota#node with
@@ -1682,14 +1694,14 @@ let simplify =
 	       other_conjuncts = [] && stronger mgr invapprox absval 
 	     in
 	     if skip then acc else
-	       (* Remove conjuncts that are weaker than current one *)
+	       (* Remove conjuncts that are stronger than current one *)
 	       let acc = 
 		 List.filter
-		   (fun (av,oc) -> not (oc = [] && stronger mgr absval av)) acc
+		   (fun (av,oc) -> not (oc = [] && stronger mgr av absval)) acc
 	       in
-	       (* Do not add current conjunct if weaker than another one *)
+	       (* Do not add current conjunct if stronger than another one *)
 	       if other_conjuncts = [] && 
-		 List.exists (fun (av,_oc) -> stronger mgr av absval) acc 
+		 List.exists (fun (av,_oc) -> stronger mgr absval av) acc 
 	       then acc
 	       else (absval,other_conjuncts) :: acc
 	  ) abstract_disjuncts []
@@ -1871,7 +1883,9 @@ let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
   let vs,curposts = pop_modified_vars curposts in
   let vs = VarSet.union vs !(curposts.jc_post_inflexion_vars) in
   if is_function_level then assert(curposts.jc_post_modified_vars = []);
-  match curposts.jc_post_normal with None -> None | Some wpa -> 
+  match curposts.jc_post_normal with 
+    | None -> assert target.jc_target_hint; None
+    | Some wpa -> 
     (* [wpa] is the formula obtained by weakest precondition from some 
      * formula at the assertion point.
      *)
@@ -1984,7 +1998,11 @@ let rec wp_expr weakpre =
 		    else Some a
 	  in
 	  let curposts = add_modified_var curposts v in
-	  { curposts with jc_post_normal = post }
+	  let curposts = { curposts with jc_post_normal = post } in
+	  begin match e1opt with
+	    | None -> curposts
+	    | Some e1 -> wp e1 curposts
+	  end
       | JCEassign_var(v,e1) ->
 	  let tv = new term_var v in
 	  let copyv = copyvar v in
@@ -2509,6 +2527,7 @@ let collect_expr_targets e =
 	  []
       | JCEcontract _ -> assert false (* TODO *)
     in
+    let asrts = List.filter (fun a -> not (is_constant_assertion a)) asrts in
     let asrts = List.map normalize_target asrts in
     List.map (target_of_assertion e e#pos) asrts
   in
@@ -3452,6 +3471,19 @@ and intern_ai_expr iaio abs curinvs e =
 
 and ai_call iaio abs curinvs vio e =
   let mgr = abs.jc_absint_manager in
+
+  (* Define common shortcuts. *)
+  let normal = curinvs.jc_absinv_normal in
+  let pre = normal.jc_absval_regular in
+  let prop = normal.jc_absval_propagated in
+
+  (* Record invariant at assertion points. *)
+  let targets = find_target_assertions abs.jc_absint_target_assertions e in
+  List.iter
+    (fun target ->
+       target.jc_target_regular_invariant <- mkinvariant mgr pre;
+       target.jc_target_propagated_invariant <- mkinvariant mgr prop
+    ) targets;
 
   let call = match e#node with JCEapp call -> call | _ -> assert false in
   let f = match call.jc_call_fun with JCfun f -> f | _ -> assert false in
