@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.140 2008-11-17 16:32:52 moy Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.141 2008-11-19 12:35:24 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -97,8 +97,8 @@ let string_of_native t =
     | Tunit -> "unit"
     | Tinteger -> "integer"
     | Treal -> "real"
-    | Tdouble -> "gen_float"
-    | Tfloat -> "gen_float"
+    | Tdouble -> "double"
+    | Tfloat -> "float"
     | Tboolean -> "boolean"
     | Tstring -> "string"
 
@@ -932,8 +932,8 @@ let possible_struct_bytesize st =
 
 (* These are only used by error messages, so feel free to change the strings. *)
 let string_of_op = function
-  | `Blt -> ">"
-  | `Bgt -> "<"
+  | `Blt -> "<"
+  | `Bgt -> ">"
   | `Ble -> "<="
   | `Bge -> ">="
   | `Beq -> "=="
@@ -988,9 +988,11 @@ let builtin_function_symbols =
   (* return type, jessie name, why name, parameter types, special treatment *)
   [
     double_type, "\\double_sqrt", "sqrt_gen_float", [double_type], TreatGenFloat `Double ;
+    float_type, "\\float_sqrt", "sqrt_gen_float", [float_type], TreatGenFloat `Float ;
     double_type, "\\double_abs", "abs_gen_float", [double_type], TreatGenFloat `Double  ;
-    double_type, "\\neg_double", "neg_gen_float", [double_type], TreatGenFloat `Double  ;
-      
+    float_type, "\\float_abs", "abs_gen_float", [float_type], TreatGenFloat `Float ;
+    double_type, "\\neg_double", "neg_gen_float", [double_type], TreatGenFloat `Double ;
+    float_type, "\\neg_float", "neg_gen_float", [float_type], TreatGenFloat `Float ;  
 ]
 
 

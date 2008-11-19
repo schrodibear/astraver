@@ -87,24 +87,16 @@ double testsqrt_double()
 { 
   return \double_sqrt(4.0 :>double); 
 }
-
 */
+
+
+
+
 
 
 /* double x et abs_double(x) dans jessie -> 
    abs_gen_float(Double,earest_even,x) dans why
    cas strict: 1 OP: no overflow 
-
-*/
-
-/*
-double testabs_double()
-  behavior default: 
-   ensures (\result :> real) == 2.0;
-{ 
-  return \double_abs((-2.0) :>double); 
-}
-
 
 real testabs()
   behavior default: 
@@ -112,7 +104,16 @@ real testabs()
 { 
   return \real_abs(-2.0); 
 }
+
+double testabs_double()
+  behavior default: 
+   ensures (\result :> real) == 2.0;
+{ 
+  return \double_abs((-2.0) :>double); 
+}
 */
+
+
 
 
 
@@ -120,7 +121,6 @@ real testabs()
 /* double x et neg_double(x) dans jessie -> 
    neg_gen_float(Double,earest_even,x) dans why
    cas strict: 1 OP: no overflow 
-*/
 
 double testneg()
   behavior default: 
@@ -128,6 +128,8 @@ double testneg()
 { 
   return \neg_double((-2.0) :>double); 
 }
+
+*/
 
 
 
@@ -143,7 +145,17 @@ boolean testlt()
 { 
   return ((2.0 :>double) < (3.0 :>double)); 
 }
+
+
+boolean testltfloat()
+  behavior default: 
+   ensures \result == true;
+{ 
+  return ((2.0 :>float) < (3.0 :>float)); 
+}
 */
+
+
 
 
 
@@ -157,6 +169,8 @@ float testcast(double x)
 return (2.0 :>double):>float;
 }
 */
+
+
 
 
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.269 2008-11-14 16:00:59 ayad Exp $ *)
+(* $Id: jc_typing.ml,v 1.270 2008-11-19 12:35:24 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1538,7 +1538,9 @@ let make_bin_op loc (op: operational_op) e1 e2 =
   let t1 = e1#typ and t2 = e2#typ in
   match op with
     | `Bgt | `Blt | `Bge | `Ble ->
-        if is_numeric t1 && is_numeric t2 then
+        if is_numeric t1 && is_numeric t2 
+	  || is_gen_float t1 && is_gen_float t2
+	then
           let t = lub_numeric_types t1 t2 in
           (boolean_type, dummy_region,
            JCEbinary(coerce t1 t e1,
@@ -1547,7 +1549,9 @@ let make_bin_op loc (op: operational_op) e1 e2 =
         else
           typing_error loc "numeric types expected for <, >, <= and >="
     | `Beq | `Bneq as op ->
-        if is_numeric t1 && is_numeric t2 then
+        if is_numeric t1 && is_numeric t2 
+	  || is_gen_float t1 && is_gen_float t2
+	then
           let t = lub_numeric_types t1 t2 in
           (boolean_type, dummy_region,
            JCEbinary(coerce t1 t e1,

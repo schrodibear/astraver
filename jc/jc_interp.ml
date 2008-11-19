@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.390 2008-11-17 16:32:52 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.391 2008-11-19 12:35:24 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -246,6 +246,12 @@ let bin_op: expr_bin_op -> string = function
   | `Ble, `Real -> "le_real_"
   | `Beq, `Real -> "eq_real_"
   | `Bneq, `Real -> "neq_real_"
+  | `Bgt, (`Double | `Float) -> "gt_gen_float"
+  | `Blt, (`Double | `Float) -> "lt_gen_float"
+  | `Bge, (`Double | `Float) -> "ge_gen_float"
+  | `Ble, (`Double | `Float) -> "le_gen_float"
+  | `Beq, (`Double | `Float) -> "eq_gen_float"
+  | `Bneq, (`Double | `Float) -> "neq_gen_float"
   | `Badd, `Real -> "add_real"
   | `Bsub, `Real -> "sub_real"
   | `Bmul, `Real -> "mul_real"
