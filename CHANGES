@@ -1,4 +1,10 @@
-  o krakatoa/jessie: fix bug with axiomatic and multiple labels
+version 2.17, November ?th, 2008
+================================
+  
+  o This version is synchronized with Frama-C Lithium beta 2 (or stable ?)
+    (http://frama-c.cea.fr/)
+  o jessie: new support for floating-point computations
+  o krakatoa/jessie: bug fix: axiomatic and multiple labels
   o New prover column in GWhy for Ergo with selection of hypotheses
 
 version 2.16, October 29th, 2008
