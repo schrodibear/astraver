@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: toolstat_lex.mll,v 1.11 2008-11-23 15:08:45 moy Exp $ i*)
+(*i $Id: toolstat_lex.mll,v 1.12 2008-11-23 17:11:53 moy Exp $ i*)
 
 {
   open Toolstat_pars
@@ -106,6 +106,12 @@ rule token = parse
 	PROVER(s)
       }
   | "\n" id "/" (file as f) ("_why." id) ws* ':' ws* 
+      { 
+	newline lexbuf; 
+	if !debug then printf "test %s@." f; 
+	TEST(f)
+      }
+  | "\n" id "/" (file "_po_" int as f) ".why" ws* ':' ws* 
       { 
 	newline lexbuf; 
 	if !debug then printf "test %s@." f; 
