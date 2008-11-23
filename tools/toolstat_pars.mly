@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: toolstat_pars.mly,v 1.7 2008-11-17 00:10:53 moy Exp $ */
+/* $Id: toolstat_pars.mly,v 1.8 2008-11-23 15:08:45 moy Exp $ */
 
 %{
   open Format
@@ -47,6 +47,7 @@
       (h,m,s)
 %}
 
+%token < string > PROJECT
 %token < Toolstat_types.prover > PROVER
 %token < Toolstat_types.test > TEST
 %token < Toolstat_types.result > RESULT
@@ -72,28 +73,52 @@ any:
 ;
 
 log: 
-| record log 
-    { $1 @ $2 }
+| project_record_list
+    { $1 }
+| subrecord_list
+    { $1 }
 | EOF 
     { [] }
 ;
 
-record:
+project_record_list:
+| project_record project_record_list 
+    { $1 @ $2 }
+| project_record
+    { $1 }
+;
+
+project_record:
+| PROJECT subrecord_list
+    { List.map (fun (completed,project,prover,test,summary,detail,time) ->
+		  let test = $1 ^ ":" ^ test in
+		  (completed,Some $1,prover,test,summary,detail,time)
+	       ) $2 }
+;
+
+subrecord_list:
+| subrecord subrecord_list 
+    { $1 @ $2 }
+| subrecord  
+    { $1 }
+;
+
+subrecord:
 | PROVER tests TIME
     { let n = List.length $2 in
       List.map (fun (test,result) ->
 		  let summary,detail = result in
-		  (true,$1,test,summary,detail,div_time $3 n)
+		  (true,None,$1,test,summary,detail,div_time $3 n)
 	       ) $2 }
 | PROVER TEST RESULT
     { (* Case for no VC *)
-      let summary,detail = $3 in [ (true,$1,$2,summary,detail,default_time) ] }
+      let summary,detail = $3 in [ (true,None,$1,$2,summary,detail,default_time) ] }
 | PROVER TEST
     { (* Error case *)
-      [ (false,$1,$2,default_summary,default_detail,default_time) ] }
+      [ (false,None,$1,$2,default_summary,default_detail,default_time) ] }
 | PROVER
     { (* Error case *)
-      [ (false,$1,default_test (),default_summary,default_detail,default_time) ] }
+      [ (false,None,$1,default_test (),default_summary,default_detail,default_time) ] }
 ;
 
 tests:

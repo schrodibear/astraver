@@ -25,8 +25,9 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat_types.mli,v 1.4 2008-11-05 14:03:19 filliatr Exp $ i*)
+(*i $Id: toolstat_types.mli,v 1.5 2008-11-23 15:08:45 moy Exp $ i*)
 
+type project = string option
 type prover = string
 type test = string
 type summary = int * int * int * int * int
@@ -35,4 +36,4 @@ type result = summary * detail
 type time = int * int * float
 type completed = bool
 
-type record = completed * prover * test * summary * detail * time
+type record = completed * project * prover * test * summary * detail * time

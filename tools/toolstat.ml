@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.11 2008-11-17 00:10:53 moy Exp $ i*)
+(*i $Id: toolstat.ml,v 1.12 2008-11-23 15:08:45 moy Exp $ i*)
 
 (* Statistics on automatic provers results *)
 
@@ -148,22 +148,22 @@ let () =
   let provers : (prover, unit) Hashtbl.t = Hashtbl.create 5 in
   let tests : (test, unit) Hashtbl.t = Hashtbl.create 5 in
   let error_tests : (test, unit) Hashtbl.t = Hashtbl.create 5 in
-  let vc : (test * int, unit) Hashtbl.t = Hashtbl.create 5 in
-  let vc_count : (test * int, int) Hashtbl.t = Hashtbl.create 5 in
+  let vc : (project * test * int, unit) Hashtbl.t = Hashtbl.create 5 in
+  let vc_count : (project * test * int, int) Hashtbl.t = Hashtbl.create 5 in
   List.iter 
-    (fun (completed,prover,test,summary,detail,time) ->
+    (fun (completed,project,prover,test,summary,detail,time) ->
        (* useful to keep track of tests with 0 VC and tests in error *)
        Hashtbl.replace tests test ();
        if completed then
 	 (Hashtbl.replace provers prover ();
 	  List.iter
 	    (fun i -> 
-		Hashtbl.replace vc (test,i) ();
-	       intadd vc_count (test,i) 1
+	       Hashtbl.replace vc (project,test,i) ();
+	       intadd vc_count (project,test,i) 1
 	    ) (valid_detail detail);
 	  List.iter
 	    (fun i -> 
-	       Hashtbl.replace vc (test,i) ()
+	       Hashtbl.replace vc (project,test,i) ()
 	    ) (notvalid_detail detail))
        else
 	 (* At least one prover was in error on this test *)
@@ -173,7 +173,7 @@ let () =
   (* Fill [prover_variants] with pairs of a variant and the original prover,
      for those provers that have variants *)
   let prover_variants : (prover, prover) Hashtbl.t = Hashtbl.create 5 in
-  let tests_variants : ((prover * test), record list) Hashtbl.t 
+  let tests_variants : ((project * prover * test), record list) Hashtbl.t 
       = Hashtbl.create 5 
   in
   let combined_prover prover = prover ^ " (all)" in
@@ -196,34 +196,34 @@ let () =
        Hashtbl.replace provers (combined_prover prover) ()
     ) prover_variants;
   List.iter
-      (fun (completed,prover,test,summary,detail,time) ->
+      (fun (completed,project,prover,test,summary,detail,time) ->
 	 try 
 	   let combined_prover = Hashtbl.find prover_variants prover in
-	   listadd tests_variants (combined_prover,test)
-	     (completed,combined_prover,test,summary,detail,time)  
+	   listadd tests_variants (project,combined_prover,test)
+	     (completed,project,combined_prover,test,summary,detail,time)  
 	 with Not_found -> ()
       ) records;
   let records =
     Hashtbl.fold 
-      (fun (prover,test) records acc ->
+      (fun (project,prover,test) records acc ->
 	 let completed,detail,time =
 	   List.fold_left 
 	     (fun (completed_acc,detail_acc,time_acc) 
-		(completed,_prover,_test,_summary,detail,time) ->
+		(completed,_project,_prover,_test,_summary,detail,time) ->
 		  completed_acc || completed,
 		  combine_details detail_acc detail,
 		  add_times time_acc time
 	     ) (false,default_detail,default_time) records
 	 in
 	 let summary = make_summary detail in
-	 (completed,prover,test,summary,detail,time) :: acc
+	 (completed,project,prover,test,summary,detail,time) :: acc
       ) tests_variants records
   in
 
   printf "@.Best individual provers:@.";
   let provers_valid : (prover, int) Hashtbl.t = Hashtbl.create 17 in
   let provers_notvalid : (prover, int) Hashtbl.t = Hashtbl.create 17 in
-  List.iter (fun (completed,prover,test,summary,detail,time) ->
+  List.iter (fun (completed,project,prover,test,summary,detail,time) ->
 	       if completed then
 		 (intadd provers_valid prover (valid_summary summary);
 		  intadd provers_notvalid prover (notvalid_summary summary))
@@ -250,17 +250,17 @@ let () =
   printf "@.Best combination provers:@.";
   let provers_ahead = Hashtbl.create 17 in
   let provers_behind = Hashtbl.create 17 in
-  List.iter (fun (completed,prover,test,summary,detail,time) ->
+  List.iter (fun (completed,project,prover,test,summary,detail,time) ->
 	       if completed then
 		 (List.iter
 		    (fun i ->
-		       assert (Hashtbl.mem vc_count (test,i));
-		       if Hashtbl.find vc_count (test,i) = 1 then
+		       assert (Hashtbl.mem vc_count (project,test,i));
+		       if Hashtbl.find vc_count (project,test,i) = 1 then
 			 intadd provers_ahead prover 1
 		    ) (valid_detail detail);
 		  List.iter
 		    (fun i ->
-		    if hfind 0 vc_count (test,i) > 0 then
+		    if hfind 0 vc_count (project,test,i) > 0 then
 		      intadd provers_behind prover 1
 		    ) (notvalid_detail detail))
 	    ) records;
@@ -286,7 +286,7 @@ let () =
 
   printf "@.Quickest provers:@.";
   let provers_time : (prover, time) Hashtbl.t = Hashtbl.create 17 in
-  List.iter (fun (completed,prover,test,summary,detail,time) ->
+  List.iter (fun (completed,project,prover,test,summary,detail,time) ->
 	       if completed then
 		 timeadd provers_time prover time
 	    ) records;
@@ -311,20 +311,53 @@ let () =
 	    ) 1 provers_ranking);
   
   let tests_notproved = Hashtbl.create 17 in
-  Hashtbl.iter (fun (test,i) () ->
-		  if hfind 0 vc_count (test,i) = 0 then
-		    intadd tests_notproved test 1
+  let projects_notproved = Hashtbl.create 17 in
+  Hashtbl.iter (fun (project,test,i) () ->
+		  if hfind 0 vc_count (project,test,i) = 0 then
+		    (intadd tests_notproved test 1;
+		     match project with 
+		       | None -> ()
+		       | Some project -> intadd projects_notproved project 1)
 	       ) vc;
+  printf "@.Projects not proved: %d@." (Hashtbl.length projects_notproved);
+  Hashtbl.iter (fun project n ->
+		  printf "%s \t%d not proved@." project n
+	       ) projects_notproved;
   printf "@.Tests not proved: %d@." (Hashtbl.length tests_notproved);
   Hashtbl.iter (fun test n ->
 		  printf "%s \t%d not proved@." test n
 	       ) tests_notproved;
 
+  let numtests_notproved = Hashtbl.create 17 in
+  Hashtbl.iter (fun project n ->
+		  intadd numtests_notproved n 1
+	       ) projects_notproved;
+  printf "@.Num tests not proved by project:@.";
+  let numtests_notproved = 
+    Hashtbl.fold (fun n numproj acc -> (n,numproj) :: acc) numtests_notproved []
+  in
+  let numtests_notproved =
+    List.sort (fun (n1,_) (n2,_) -> Pervasives.compare n1 n2) numtests_notproved
+  in
+  List.iter (fun (n,numproj) ->
+	       printf "%d not proved for \t%d projects@." n numproj
+	    ) numtests_notproved;
+
   let tests_proved = Hashtbl.create 17 in
-  Hashtbl.iter (fun (test,i) () ->
+  let projects_proved = Hashtbl.create 17 in
+  Hashtbl.iter (fun (project,test,i) () ->
 		  if hfind 0 tests_notproved test = 0 then
-		    intadd tests_proved test 1
+		    intadd tests_proved test 1;
+		  match project with 
+		    | None -> ()
+		    | Some project ->
+ 			if hfind 0 projects_notproved project = 0 then
+			  intadd projects_proved project 1
 	       ) vc;
+  printf "@.Projects proved: %d@." (Hashtbl.length projects_proved);
+  Hashtbl.iter (fun project n ->
+		  printf "%s \t%d proved@." project n
+	       ) projects_proved;
   printf "@.Tests proved: %d@." (Hashtbl.length tests_proved);
   Hashtbl.iter (fun test n ->
 		  printf "%s \t%d proved@." test n
@@ -351,3 +384,9 @@ let () =
 	       ) tests_no_vc;
 		  
   printf "@."
+
+(*
+Local Variables:
+compile-command: "LC_ALL=C make -C .."
+End:
+*)

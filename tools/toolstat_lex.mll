@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: toolstat_lex.mll,v 1.10 2008-11-15 08:54:57 moy Exp $ i*)
+(*i $Id: toolstat_lex.mll,v 1.11 2008-11-23 15:08:45 moy Exp $ i*)
 
 {
   open Toolstat_pars
@@ -93,13 +93,19 @@ let int = num+
 let real = num* '.' num* | int
 
 rule token = parse
+  | "\nDoing " ws* (id as s)
+      { 
+	newline lexbuf; 
+	if !debug then printf "project %s@." s; 
+	PROJECT(s)
+      }
   | "\nRunning " (id as s) " on proof obligations"
       { 
 	newline lexbuf; 
 	if !debug then printf "prover %s@." s; 
 	PROVER(s)
       }
-  | "\n" id "/" (file as f) (".why" | "_why." id) ws* ':' ws* 
+  | "\n" id "/" (file as f) ("_why." id) ws* ':' ws* 
       { 
 	newline lexbuf; 
 	if !debug then printf "test %s@." f; 
