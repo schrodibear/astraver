@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.157 2008-11-19 17:41:59 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.158 2008-11-23 17:24:02 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1884,7 +1884,7 @@ let finalize_target ~is_function_level ~pos ~anchor curposts target inva =
   let vs = VarSet.union vs !(curposts.jc_post_inflexion_vars) in
   if is_function_level then assert(curposts.jc_post_modified_vars = []);
   match curposts.jc_post_normal with 
-    | None -> assert target.jc_target_hint; None
+    | None -> (* assert target.jc_target_hint; *) None
     | Some wpa -> 
     (* [wpa] is the formula obtained by weakest precondition from some 
      * formula at the assertion point.
