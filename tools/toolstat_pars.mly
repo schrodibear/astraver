@@ -25,13 +25,14 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: toolstat_pars.mly,v 1.8 2008-11-23 15:08:45 moy Exp $ */
+/* $Id: toolstat_pars.mly,v 1.9 2008-11-23 15:16:30 moy Exp $ */
 
 %{
   open Format
   open Parsing
   open Toolstat_types
     
+  let default_prover = ""
   let default_test = let count = ref 0 in function () ->
     incr count; "Unknown" ^ (string_of_int !count)
   let default_summary = (0,0,0,0,0)
@@ -94,6 +95,9 @@ project_record:
 		  let test = $1 ^ ":" ^ test in
 		  (completed,Some $1,prover,test,summary,detail,time)
 	       ) $2 }
+| PROJECT
+    { (* Error case *)
+      [ (false,Some $1,default_prover,$1,default_summary,default_detail,default_time) ] }
 ;
 
 subrecord_list:
