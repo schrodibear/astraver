@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.133 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_main.ml,v 1.134 2008-11-24 16:01:00 moy Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -104,17 +104,7 @@ let main () =
     if Jc_options.debug then
       Format.printf "@\nAST AFTER TYPING:@\n%a@." Jc_typing.print_file ();
 
-    (* phase 4: adding invariants *)
-    Jc_options.lprintf "Adding invariants@.";
-    let vil = 
-      Hashtbl.fold (fun _tag (vi, _eo) acc -> vi :: acc)
-	Jc_typing.variables_table []
-    in
-    Hashtbl.iter
-      (fun _tag (f,loc,s,b) -> Jc_invariants.code_function (f, loc, s, b) vil)
-      Jc_typing.functions_table;
-
-    (* phase 5: computation of call graph *)
+    (* phase 4: computation of call graph *)
     Jc_options.lprintf "Computation of call graph@.";
     Hashtbl.iter (fun _ (f,t) -> Jc_callgraph.compute_logic_calls f t)
       Jc_typing.logic_functions_table;
@@ -129,18 +119,17 @@ let main () =
       Jc_callgraph.compute_components Jc_typing.functions_table
     in
     
-    (* phase 6: computation of regions *)
-    compute_regions logic_components components;
-
-    (* phase 7: computation of effects *)
-    compute_effects logic_components components;
-    
-    (* (optional) phase 7: inference of annotations *)
+    (* (optional) phase 5: inference of annotations *)
     if !Jc_options.annotation_sem <> AnnotNone then
       begin
-	Jc_options.lprintf "Inference of annotations@.";
+	(* phase 5.1: pre-computation of regions *)
+	compute_regions logic_components components;
 
-	(* phase 7.1: inter- or intraprocedural inference of annotations *)
+	(* phase 5.2: pre-computation of effects *)
+	compute_effects logic_components components;
+
+	(* phase 5.3: inter- or intraprocedural inference of annotations *)
+	Jc_options.lprintf "Inference of annotations@.";
 	if Jc_options.interprocedural then
 	  begin
 	    (* record recursive functions *)
@@ -161,15 +150,25 @@ let main () =
 	  Hashtbl.iter 
 	    (fun _ (f, loc, s, b) -> Jc_ai.code_function (f, loc, s, b))
 	    Jc_typing.functions_table;
-
-	(* phase 7.2: re-computation of regions *)
-	compute_regions logic_components components;
-
-	(* phase 7.3: re-computation of effects *)
-	compute_effects logic_components components;
       end;
 
-    (* (optional) phase 8: checking structure invariants *)
+    (* phase 6: add invariants *)
+    Jc_options.lprintf "Adding invariants@.";
+    let vil = 
+      Hashtbl.fold (fun _tag (vi, _eo) acc -> vi :: acc)
+	Jc_typing.variables_table []
+    in
+    Hashtbl.iter
+      (fun _tag (f,loc,s,b) -> Jc_invariants.code_function (f, loc, s, b) vil)
+      Jc_typing.functions_table;
+
+    (* phase 7: computation of regions *)
+    compute_regions logic_components components;
+
+    (* phase 8: computation of effects *)
+    compute_effects logic_components components;
+
+    (* (optional) phase 9: checking structure invariants *)
     begin match !Jc_options.inv_sem with
       | InvOwnership ->
 	  Jc_options.lprintf "Adding structure invariants@.";
