@@ -4,7 +4,7 @@
 Require Export Sterbenz_spec_why.
 Require Export WhyFloats.
 
-(* Why obligation from file "/users/demons/ayad/why/examples-c/float/Sterbenz.c", line 3, characters 4-18: *)
+(* Why obligation from file "/users/demons/ayad/ppc/why/examples-c/float/Sterbenz.c", line 3, characters 4-18: *)
 (*Why goal*) Lemma Sterbenz_impl_po_1 : 
   forall (x: single),
   forall (y: single),

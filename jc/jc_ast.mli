@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.161 2008-11-14 16:00:58 ayad Exp $ *)
+(* $Id: jc_ast.mli,v 1.162 2008-11-24 12:54:30 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -133,6 +133,9 @@ type asrt_kind =
 type rounding_mode =
   | Round_nearest_even | Round_to_zero | Round_up | Round_down 
   | Round_nearest_away
+
+type float_format = 
+  | FormatFloat | FormatDouble
 
 type real_conversion = 
   | Integer_to_real | Real_to_integer 

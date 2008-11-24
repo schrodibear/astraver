@@ -1,6 +1,7 @@
-/*
 
+/*
 lemma l1: 0.5 <= 1.0 && 1.0 <= 2.0
+
 
 double test1()
   behavior default: 
@@ -12,13 +13,13 @@ return ((2.0 * 3.5) :> double);
 
 
 
-
 /* real x et x :> double dans jessie -> 
                            x:real et gen_float_of_real(Double,nearest_even,x) dans why
                            cas strict: 1 OP: no overflow
    double x, double y  et (x op y) où op in {+,-,*,/} dans jessie ->
                      x:gen_float, y:gen_float et op_gen_float(Double,nearest_even,x,y) dans why
                      cas strict: 1 OP: no overflow si op in {+,-,*} et 2 OP si op=/ 
+
 
 double test1bis()
   behavior default: 
@@ -35,6 +36,8 @@ float test2()
 return (0.1 :> float);
 }
 
+
+
 double diff(double x, double y)
 behavior default:
 	assumes (y:> real)/2.0 <= (x :> real) 
@@ -44,6 +47,7 @@ behavior default:
   return ((x :> real) - (y :> real)) :> double;
 }
 
+
 double diffbis(double x, double y)
 behavior default:
 	assumes (y:> real)/2.0 <= (x :> real) 
@@ -52,11 +56,55 @@ behavior default:
 {
   return (x - y);
 }
-
 */
 
 
 
+
+
+
+
+/* racine polynome */
+
+float poly(float x) 
+  behavior default:
+	assumes x :> real == \real_sqrt(2.0)/2.0;
+	ensures \result :> real == 0.0;
+{
+return (2.0 :> float)*x*x-(1.0 :> float);
+}
+
+
+
+
+
+/* moncos */
+
+axiomatic axo {
+logic real cos(real x)
+/* logic real exp(real x)*/
+logic real power(real x, integer n)
+}
+
+float moncos(float x) 
+behavior default:
+	assumes \real_abs(x :> real) <= 1.0/32.0;
+	ensures \real_abs((\result :> real) - cos(x :> real)) <= power(2.0,-23);
+{
+  return (1.0 :> float) - x*x*(0.5 :>float);
+}
+
+/*
+/* monexp */
+
+double monexp(double x) 
+behavior default:
+	assumes \real_abs(x :> real) <= power(2.0,-3);
+        ensures \real_abs((\result :> real) - exp(x :> real)) <= power(2.0,-23);
+{
+  return (1.0 :> double)+x*((1.0:>double)+x/(2.0:>double));
+}
+*/
 
 
 
@@ -70,9 +118,10 @@ lemma sqrt_def : \forall real x; x>= 0.0 ==> \real_sqrt(x)*\real_sqrt(x) == x
 
 lemma sqrt_def2 : \forall real x;  x>= 0.0 ==> \real_sqrt(x*x) == x
 
-lemma l1 : 4.0 == 2.0 * 2.0
+lemma l2 : 4.0 == 2.0 * 2.0
 
-lemma l2 : 2.0 >= 0.0
+lemma l3 : 2.0 >= 0.0
+
 
 real testsqrt()
   behavior default: 
@@ -80,6 +129,7 @@ real testsqrt()
 { 
   return \real_sqrt(4.0); 
 }
+
 
 double testsqrt_double()
   behavior default: 
@@ -105,12 +155,14 @@ real testabs()
   return \real_abs(-2.0); 
 }
 
+
 double testabs_double()
   behavior default: 
    ensures (\result :> real) == 2.0;
 { 
   return \double_abs((-2.0) :>double); 
 }
+
 */
 
 
@@ -146,7 +198,6 @@ boolean testlt()
   return ((2.0 :>double) < (3.0 :>double)); 
 }
 
-
 boolean testltfloat()
   behavior default: 
    ensures \result == true;
@@ -161,6 +212,7 @@ boolean testltfloat()
 
 
 /* double x et x:>float dans jessie -> cast_gen_float(Single,nearest_even,x) dans why
+
 
 float testcast(double x)
  behavior default: 

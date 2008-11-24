@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.392 2008-11-19 17:42:00 moy Exp $ *)
+(* $Id: jc_interp.ml,v 1.393 2008-11-24 12:54:30 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -512,6 +512,9 @@ let term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src
 	LApp("float_value",[ e' ])
     | JCTnative Treal, JCTnative Tfloat ->
 	LApp("float_value",[ e' ])
+    | JCTnative Tdouble, JCTnative Treal ->
+	assert false (* TODO *)
+	(* LApp("round_float ?",[ e' ]) *)
     | JCTnative Tinteger, JCTnative Treal -> 
 	LApp("int_of_real",[ e' ])
       (* between enums and integer *)

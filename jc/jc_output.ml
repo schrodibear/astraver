@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.133 2008-11-14 09:32:34 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.134 2008-11-24 12:54:30 ayad Exp $ *)
 
 open Format
 open Jc_env
@@ -107,7 +107,14 @@ let unary_op (op, _) = match op with
   | `Unot -> "!"
   | `Ubw_not -> "~"
 
-let real_conversion = Jc_poutput.real_conversion
+let real_conversion fmt rc =
+  match rc with
+    | Integer_to_real -> fprintf fmt "real"
+    | Double_to_real -> fprintf fmt "float_value"
+    | Float_to_real -> fprintf fmt "float_value"
+    | Real_to_integer -> fprintf fmt "integer"
+    | Round_double _ -> fprintf fmt "r_to_d" (* TODO: parameter rounding mode *)
+    | Round_float _ -> fprintf fmt "r_to_s"
 
 let rec pattern fmt p =
   match p#node with
