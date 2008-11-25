@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: toolstat.ml,v 1.12 2008-11-23 15:08:45 moy Exp $ i*)
+(*i $Id: toolstat.ml,v 1.13 2008-11-25 12:44:22 moy Exp $ i*)
 
 (* Statistics on automatic provers results *)
 
@@ -45,6 +45,7 @@ let spec = [
 ]
 let msg = "tool-stat file"
 let records = ref []
+let annots = ref []
 
 let rec explain_exception fmt = function
   | Parsing.Parse_error -> 
@@ -61,7 +62,9 @@ let parse_file f =
     let c = open_in f in
     let lb = Lexing.from_channel c in
     lb.Lexing.lex_curr_p <- { lb.Lexing.lex_curr_p with Lexing.pos_fname = f };
-    records := Toolstat_lex.parse lb;
+    let ann,recs = Toolstat_lex.parse lb in
+    annots := ann;
+    records := recs;
     close_in c
   with e -> 
     explain_exception err_formatter e;
@@ -70,7 +73,8 @@ let parse_file f =
 
 let default_detail = ([],[],[],[],[])
 let default_time = (0,0,0.)
-
+let default_annot = (0,0,0,0)
+    
 let add_times (h1,m1,s1) (h2,m2,s2) =
   let h3 = h1 + h2 and m3 = m1 + m2 and s3 = s1 +. s2 in
   let carry = (int_of_float (floor s3)) / 60 in
@@ -144,6 +148,7 @@ let compare_time (h1,m1,s1) (h2,m2,s2) =
 let () = 
   Arg.parse spec parse_file msg;
   let records : record list = !records in
+  let annots : annotation list = !annots in
 
   let provers : (prover, unit) Hashtbl.t = Hashtbl.create 5 in
   let tests : (test, unit) Hashtbl.t = Hashtbl.create 5 in
@@ -309,6 +314,18 @@ let () =
 		 (fun fmt -> print_time ~hour:true fmt) t;
 	       i+1
 	    ) 1 provers_ranking);
+
+  let pre,post,inv,bwd =
+    List.fold_left 
+      (fun (pre1,post1,inv1,bwd1) (_project,(pre2,post2,inv2,bwd2)) ->
+	 (pre1+pre2,post1+post2,inv1+inv2,bwd1+bwd2)
+      ) default_annot annots 
+  in
+  printf "@.Number of relations in annotations generated:@.";
+  printf "%d in preconditions@." pre;
+  printf "%d in postconditions@." post;
+  printf "%d in loop invariants@." inv;
+  printf "%d in backward loop invariants@." bwd;
   
   let tests_notproved = Hashtbl.create 17 in
   let projects_notproved = Hashtbl.create 17 in

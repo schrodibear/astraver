@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: toolstat_lex.mll,v 1.12 2008-11-23 17:11:53 moy Exp $ i*)
+(*i $Id: toolstat_lex.mll,v 1.13 2008-11-25 12:44:22 moy Exp $ i*)
 
 {
   open Toolstat_pars
@@ -77,6 +77,10 @@
     let pos = lexbuf.lex_curr_p in
     lexbuf.lex_curr_p <- 
       { pos with pos_lnum = pos.pos_lnum + 1; pos_bol = pos.pos_cnum }
+
+  let num_eq = ref 0
+  let num_diseq = ref 0
+  let num_ineq = ref 0
 }
 
 let ws = [' ' '\t' '\012' '\r']
@@ -93,6 +97,38 @@ let int = num+
 let real = num* '.' num* | int
 
 rule token = parse
+  | "\nInferring "
+      { 
+	num_eq := 0;
+	num_diseq := 0;
+	num_ineq := 0;
+	token lexbuf
+      }
+  | "postcondition" 
+      {
+	if !debug then printf "post@."; 
+	POST
+      }
+  | "precondition" 
+      {
+	if !debug then printf "pre@."; 
+	PRE
+      }
+  | "loop invariant" 
+      {
+	if !debug then printf "loopinv@."; 
+	LOOPINV
+      }
+  | "backward loop invariant" 
+      {
+	if !debug then printf "bwd_loopinv@."; 
+	BWD_LOOPINV
+      }
+  | "==" | "!=" | "<=" | ">=" | "<" | ">"
+      {
+	if !debug then printf "relation@."; 
+	RELATION
+      }
   | "\nDoing " ws* (id as s)
       { 
 	newline lexbuf; 
@@ -149,7 +185,7 @@ rule token = parse
 {
   let parse lb = 
     try
-      if !no_parsing then (Toolstat_pars.all token lb; [])
+      if !no_parsing then (Toolstat_pars.all token lb; ([],[]))
       else Toolstat_pars.log token lb
     with Parsing.Parse_error ->
       Format.eprintf "%a@." Loc.gen_report_position (loc lb);

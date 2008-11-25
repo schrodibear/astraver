@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: toolstat_pars.mly,v 1.9 2008-11-23 15:16:30 moy Exp $ */
+/* $Id: toolstat_pars.mly,v 1.10 2008-11-25 12:44:22 moy Exp $ */
 
 %{
   open Format
@@ -46,6 +46,7 @@
       let m = int_of_float s / 60 - 60 * h in
       let s = s -. float_of_int (3600 * h + 60 * m) in
       (h,m,s)
+  let default_annot = (0,0,0,0)
 %}
 
 %token < string > PROJECT
@@ -54,9 +55,11 @@
 %token < Toolstat_types.result > RESULT
 %token < Toolstat_types.time > TIME 
 
+%token PRE POST LOOPINV BWD_LOOPINV RELATION
+
 %token EOF
 %type < unit > all
-%type < Toolstat_types.record list > log
+%type < Toolstat_types.annotation list * Toolstat_types.record list > log
 %start log all
 
 %%
@@ -67,37 +70,78 @@ all:
 ;
 
 any: 
+| PROJECT { }
 | PROVER { }
 | TEST { }
 | RESULT { }
 | TIME { }
+| PRE { }
+| POST { }
+| LOOPINV { }
+| BWD_LOOPINV { }
 ;
 
 log: 
 | project_record_list
     { $1 }
 | subrecord_list
-    { $1 }
+    { [], $1 }
 | EOF 
-    { [] }
+    { [],[] }
 ;
 
 project_record_list:
 | project_record project_record_list 
-    { $1 @ $2 }
+    { 
+      let annot1,rec1 = $1 in
+      let annot2,rec2 = $2 in
+      annot1 @ annot2, rec1 @ rec2
+    }
 | project_record
     { $1 }
 ;
 
 project_record:
-| PROJECT subrecord_list
-    { List.map (fun (completed,project,prover,test,summary,detail,time) ->
-		  let test = $1 ^ ":" ^ test in
-		  (completed,Some $1,prover,test,summary,detail,time)
-	       ) $2 }
-| PROJECT
+| PROJECT annot_list subrecord_list
+    { ([ ($1,$2) ],
+       List.map (fun (completed,project,prover,test,summary,detail,time) ->
+		   let test = $1 ^ ":" ^ test in
+		   (completed,Some $1,prover,test,summary,detail,time)
+		) $3)
+    }
+| PROJECT annot_list
     { (* Error case *)
-      [ (false,Some $1,default_prover,$1,default_summary,default_detail,default_time) ] }
+      ([ ($1,$2) ],
+       [ (false,Some $1,default_prover,$1,default_summary,
+	  default_detail,default_time) ])
+    }
+;
+
+annot_list:
+| annot annot_list 
+    { 
+      let (pre1,post1,inv1,bwd1) = $1 in
+      let (pre2,post2,inv2,bwd2) = $2 in
+      (pre1+pre2,post1+post2,inv1+inv2,bwd1+bwd2)
+    }
+|   { default_annot }
+	
+
+annot:
+| PRE count
+    { ($2,0,0,0) }
+| POST count
+    { (0,$2,0,0) }
+| LOOPINV count
+    { (0,0,$2,0) }
+| BWD_LOOPINV count
+    { (0,0,0,$2) }
+;
+
+count:
+| RELATION count 
+    { 1 + $2 }
+|   { 0 }
 ;
 
 subrecord_list:
