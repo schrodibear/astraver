@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.271 2008-11-24 12:54:30 ayad Exp $ *)
+(* $Id: jc_typing.ml,v 1.272 2008-11-25 08:29:57 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -73,7 +73,13 @@ let variables_env = Hashtbl.create 97
 type axiomatic_decl =
   | ABaxiom of Loc.position * string * Jc_env.label list * Jc_constructors.assertion
 
-let axiomatics_table = (Hashtbl.create 17 : (string, axiomatic_decl list) Hashtbl.t)
+type axiomatic_data =
+    {
+      mutable axiomatics_defined_ids : logic_info list;
+      mutable axiomatics_decls : axiomatic_decl list;
+    }
+
+let axiomatics_table = (Hashtbl.create 17 : (string, axiomatic_data) Hashtbl.t)
 
 let field_tag_counter = ref 0
 
@@ -2520,20 +2526,20 @@ let type_range_of_term ty t =
 
 (** [check_positivity pi a] checks whether the assertion [a] as exactly one positive occurrence of pi in a *)
 
-let rec occurrences pi a =
+let rec signed_occurrences pi a =
 match a#node with
   | JCArelation _ | JCAtrue | JCAfalse -> (0,0)
   | JCAapp app -> ((if app.jc_app_fun == pi then 1 else 0),0)
-  | JCAquantifier (Forall, vi, p) -> occurrences pi p
+  | JCAquantifier (Forall, vi, p) -> signed_occurrences pi p
   | JCAquantifier (Exists, vi, p) -> assert false (* TODO *)
   | JCAimplies (p1, p2) -> 
-      let (pos1,neg1) = occurrences pi p1 in
-      let (pos2,neg2) = occurrences pi p2 in
+      let (pos1,neg1) = signed_occurrences pi p1 in
+      let (pos2,neg2) = signed_occurrences pi p2 in
       (neg1+pos2,pos1+neg2)
   | JCAand l -> 
       List.fold_left
 	(fun (p,n) a -> 
-	   let (pos1,neg1) = occurrences pi a in
+	   let (pos1,neg1) = signed_occurrences pi a in
 	   (p+pos1,n+neg1)) (0,0) l
   | JCAor _ -> assert false (* TODO *)
   | JCAnot _ -> assert false (* TODO *)
@@ -2549,12 +2555,135 @@ match a#node with
   | JCAmatch (_, _) -> assert false (* TODO *)
 
 let check_positivity loc pi a =
-  let (pos,neg) = occurrences pi a in
+  let (pos,neg) = signed_occurrences pi a in
   if pos = 0 then 
     typing_error loc "predicate has no positive occurrence in this case";
   if pos > 1 then 
     typing_error loc "predicate has too many positive occurrences in this case"
+
+
+
+(** [check_consistency id data] attempt to detect trivial inconsistency cases in axiomatics
   
+    pis = data.axiomatics_defined_ids is the set of logic ids defined in this axiomatic
+
+    check 1: 
+      for each lemma: check that at least one pi of pis occurs
+
+    check 2:
+      for each lemma with labels l1,..,lk: for each li, there should be at least one occurrence 
+      of some pi of pis applied to label li.
+
+*)
+
+let rec term_occurrences table t =
+  match t#node with
+    | JCTconst _ 
+    | JCTvar _ -> ()
+    | JCTrange_cast (t, _)
+    | JCTat (t, _) 
+    | JCTunary (_, t) 
+    | JCToffset (_, t, _)
+    | JCTderef (t, _, _) -> term_occurrences table t
+    | JCTbinary (t1, _, t2)
+    | JCTshift (t1, t2) -> 
+	term_occurrences table t1; term_occurrences table t2
+    | JCTapp app ->
+      begin
+        List.iter (term_occurrences table) app.jc_app_args;
+	try
+	  let l = Hashtbl.find table app.jc_app_fun.jc_logic_info_tag in
+	  Hashtbl.replace table app.jc_app_fun.jc_logic_info_tag (app.jc_app_label_assoc::l)
+	with Not_found -> ()
+      end
+    | JCTmatch (_, _) -> assert false (* TODO *)
+    | JCTrange (_, _) -> assert false (* TODO *)
+    | JCTif (_, _, _) -> assert false (* TODO *)
+    | JCTreal_cast (_, _) -> assert false (* TODO *)
+    | JCTbitwise_cast (_, _, _) -> assert false (* TODO *)
+    | JCTcast (_, _, _) -> assert false (* TODO *)
+    | JCTinstanceof (_, _, _) -> assert false (* TODO *)
+    | JCTbase_block _ -> assert false (* TODO *)
+    | JCTaddress (_, _) -> assert false (* TODO *)
+    | JCTold _ -> assert false (* TODO *)
+
+let rec occurrences table a =
+  match a#node with
+  | JCAtrue | JCAfalse -> ()
+  | JCAapp app -> 
+      begin
+        List.iter (term_occurrences table) app.jc_app_args;
+	try
+	  let l = Hashtbl.find table app.jc_app_fun.jc_logic_info_tag in
+	  Hashtbl.replace table app.jc_app_fun.jc_logic_info_tag (app.jc_app_label_assoc::l)
+	with Not_found -> ()
+      end
+  | JCAnot p
+  | JCAquantifier (_, _, p) -> occurrences table p
+  | JCAiff (p1, p2)
+  | JCAimplies (p1, p2) -> 
+      occurrences table p1; occurrences table p2 
+  | JCAand l | JCAor l -> 
+      List.iter (occurrences table) l
+  | JCArelation(t1,op,t2) -> 
+      term_occurrences table t1; term_occurrences table t2
+  | JCAsubtype (_, _, _) -> assert false (* TODO *)
+  | JCAeqtype (_, _, _) -> assert false (* TODO *)
+  | JCAmutable (_, _, _) -> assert false (* TODO *)
+  | JCAif (_, _, _) -> assert false (* TODO *)
+  | JCAbool_term _ -> assert false (* TODO *)
+  | JCAinstanceof (_, _, _) -> assert false (* TODO *)
+  | JCAat (_, _) -> assert false (* TODO *)
+  | JCAold _ -> assert false (* TODO *)
+  | JCAmatch (_, _) -> assert false (* TODO *)
+
+let rec list_assoc_data lab l =
+  match l with
+    | [] -> false
+    | (_,d):: r -> 	
+	d=lab || list_assoc_data lab r
+
+let check_consistency id data =
+  let pis = data.axiomatics_defined_ids in
+  List.iter
+    (fun (ABaxiom(loc,axid,labels,a)) -> 
+       let h = Hashtbl.create 17 in
+       List.iter
+	 (fun pi -> Hashtbl.add h pi.jc_logic_info_tag [])
+	 pis;
+       occurrences h a;
+       Jc_options.lprintf "@[<v 2>occurrences table for axiom %s in axiomatic %s:@\n" axid id;
+       Hashtbl.iter
+	 (fun pi l ->
+	    Jc_options.lprintf "%d: @[" pi;
+	    List.iter
+	      (fun label_assoc -> 
+		 Jc_options.lprintf "%a ;" 
+		   (Pp.print_list Pp.comma (fun fmt (l1,l2) -> Jc_output_misc.label fmt l2)) label_assoc)
+	      l;
+	    Jc_options.lprintf "@]@\n")
+	 h;		 
+       Jc_options.lprintf "@]@.";
+       if Hashtbl.fold (fun pi l acc -> acc && l=[]) h true then
+	 typing_error loc 
+	   "axiom %s should contain at least one occurrence of a symbol declared in axiomatic %s" axid id;
+       List.iter
+	 (fun lab ->
+	    if not (Hashtbl.fold (fun pi l acc -> acc || List.exists (list_assoc_data lab) l) h false) then
+	      typing_error loc 
+		"there should be at least one declared symbol depending on label %a in this axiom" Jc_output_misc.label lab)
+	 labels
+    )
+    data.axiomatics_decls
+
+let update_axiomatic axiomatic pi =
+  match axiomatic with
+    | Some(id,data) ->
+	pi.jc_logic_info_axiomatic <- Some id;
+	data.axiomatics_defined_ids <- pi :: data.axiomatics_defined_ids
+    | None -> ()
+  
+
 let rec decl_aux ~only_types ~axiomatic acc d =
   let loc = d#pos in
   let in_axiomatic = axiomatic <> None in
@@ -2792,9 +2921,9 @@ of an invariant policy";
 			       (id,a)) 
 			    l)
             in
-	      pi.jc_logic_info_axiomatic <- axiomatic;
-              Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p);
-	      acc
+	    update_axiomatic axiomatic pi;
+            Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, p);
+	    acc
 	  end
 	else 
 	  acc
@@ -2835,9 +2964,9 @@ of an invariant policy";
 		  typing_error d#pos
                     "only predicates can be inductively defined" 	      
             in
-	      pi.jc_logic_info_axiomatic <- axiomatic;
-              Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, t);
-	      acc
+	    update_axiomatic axiomatic pi;
+            Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, t);
+	    acc
 	  end
 	else 
 	  acc
@@ -2846,10 +2975,17 @@ of an invariant policy";
         assert false
     | JCDaxiomatic(id,l) -> 
 	Jc_options.lprintf "Typing axiomatic %s@." id;
-	let decls = List.fold_left (decl_aux ~only_types ~axiomatic:(Some id)) [] l in
+	let data = 
+	  {
+	    axiomatics_defined_ids = [];
+	    axiomatics_decls = [];
+	  }
+	in
+	data.axiomatics_decls <- List.fold_left (decl_aux ~only_types ~axiomatic:(Some (id,data))) [] l;
 	if not only_types then
 	  begin
-	    Hashtbl.add axiomatics_table id decls
+	    check_consistency id data;
+	    Hashtbl.add axiomatics_table id data
 	  end;
 	acc
 	  

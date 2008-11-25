@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.152 2008-11-14 13:20:23 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.153 2008-11-25 08:29:57 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1546,8 +1546,8 @@ let effects_from_decl fi ax_effects acc d =
 let effects_from_axiomatic fi ax acc =
   try
     let l = Hashtbl.find Jc_typing.axiomatics_table ax in
-    let ef = List.fold_left axiomatic_decl_effect empty_effects l in
-    List.fold_left (effects_from_decl fi ef) acc l    
+    let ef = List.fold_left axiomatic_decl_effect empty_effects l.Jc_typing.axiomatics_decls in
+    List.fold_left (effects_from_decl fi ef) acc l.Jc_typing.axiomatics_decls    
   with Not_found -> assert false
 
 let logic_fun_effects f = 

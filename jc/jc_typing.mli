@@ -74,8 +74,13 @@ val lemmas_table :
 type axiomatic_decl =
   | ABaxiom of Loc.position * string * Jc_env.label list * Jc_constructors.assertion
 
-val axiomatics_table : 
-  (string, axiomatic_decl list) Hashtbl.t
+type axiomatic_data = private
+    {
+      mutable axiomatics_defined_ids : logic_info list;
+      mutable axiomatics_decls : axiomatic_decl list;
+    }
+
+val axiomatics_table : (string, axiomatic_data) Hashtbl.t
 
 val global_invariants_table : 
   (logic_info, assertion) Hashtbl.t

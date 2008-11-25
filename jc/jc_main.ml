@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.134 2008-11-24 16:01:00 moy Exp $ *)
+(* $Id: jc_main.ml,v 1.135 2008-11-25 08:29:57 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -52,11 +52,11 @@ let compute_regions logic_components components =
     Array.iter Jc_separation.logic_component logic_components;
     Hashtbl.iter Jc_separation.axiom Jc_typing.lemmas_table;
     Hashtbl.iter
-      (fun _id axioms ->
+      (fun _id data ->
 	 List.iter 
 	   (function Jc_typing.ABaxiom(pos,id,labs,a) ->
 	      Jc_separation.axiom id (pos,(* is_axiom = *)true,labs,a)
-	   ) axioms
+	   ) data.Jc_typing.axiomatics_decls
       ) Jc_typing.axiomatics_table;
     Array.iter Jc_separation.code_component components
   end
@@ -305,9 +305,9 @@ let main () =
     Jc_options.lprintf "Translate axiomatic declarations@.";
     push_decls 
       (Hashtbl.fold 
-	 (fun a decls acc ->
+	 (fun a data acc ->
 	    Jc_options.lprintf "Axiomatic %s@." a;
-	    List.fold_left Jc_interp.tr_axiomatic_decl acc decls)
+	    List.fold_left Jc_interp.tr_axiomatic_decl acc data.Jc_typing.axiomatics_decls)
 	 Jc_typing.axiomatics_table);
 
 

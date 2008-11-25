@@ -126,7 +126,7 @@ let compute_axiomatic_calls a =
   with Not_found ->
     try
       let l = Hashtbl.find Jc_typing.axiomatics_table a in
-      let c = List.fold_left compute_axiomatic_decl_call [] l in
+      let c = List.fold_left compute_axiomatic_decl_call [] l.Jc_typing.axiomatics_decls in
       Hashtbl.add axiomatic_calls_table a c;
       c
     with

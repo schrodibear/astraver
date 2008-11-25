@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.40 2008-11-05 14:43:52 moy Exp $ *)
+(* $Id: jc_separation.ml,v 1.41 2008-11-25 08:29:57 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -265,7 +265,7 @@ let axiomatic_decl d =
 let axiomatic a =
   try
     let l = Hashtbl.find Jc_typing.axiomatics_table a in
-    List.iter axiomatic_decl l
+    List.iter axiomatic_decl l.Jc_typing.axiomatics_decls
   with Not_found -> assert false
 
 let logic_function f =
