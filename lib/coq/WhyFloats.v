@@ -110,12 +110,12 @@ Definition r_to_s_aux (m:mode) (r r1 r2:R) := match m with
                      (RND_Zero_canonic bsingle radix 24 
                          radixGreaterOne psGreaterThanOne psGivesBound r)
                      r1 r2
-  |  up           => mk_single (RND_Min bsingle radix 24 r) 
-                     (RND_Min_canonic bsingle radix 24 
+  |  up           => mk_single (RND_Max bsingle radix 24 r) 
+                     (RND_Max_canonic bsingle radix 24 
                          radixGreaterOne psGreaterThanOne psGivesBound r)
                      r1 r2
-  |  down         => mk_single (RND_Max bsingle radix 24 r) 
-                     (RND_Max_canonic bsingle radix 24 
+  |  down         => mk_single (RND_Min bsingle radix 24 r) 
+                     (RND_Min_canonic bsingle radix 24 
                          radixGreaterOne psGreaterThanOne psGivesBound r)
                      r1 r2
   |  nearest_away => mk_single (RND_ClosestUp bsingle radix 24 r) 

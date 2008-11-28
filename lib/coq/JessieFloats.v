@@ -1,5 +1,5 @@
 
-(* Why full model for floating-point numbers
+(* Why model for floating-point numbers
    Implements the file lib/why/floats_full.why *)
 
 Require Export WhyFloats.
@@ -26,12 +26,13 @@ match f with
 | Double => ((2-powerRZ radix (-52))*powerRZ radix 1023)%R
 end.
 
+(*
 Definition plus_infinity_gen_float (f : float_format) :=
 match f with 
 | Single => (powerRZ radix 128)%R
 | Double => (powerRZ radix 1024)%R
 end.
-
+*)
 
 
 (* generic floats*)
@@ -42,9 +43,7 @@ Record gen_float : Set := mk_gen_float {
    model_value : R
  }.
 
-(*
-Hcangenf     : Fcanonic radix (bfloat_format f) genf;
-*)
+
 
 
 Definition float_value (x:gen_float) := FtoRradix (genf x).
@@ -66,9 +65,9 @@ match m with
                                  r1 r2
   |  to_zero          => mk_gen_float (RND_Zero (bfloat_format f) radix (precision f) r) 
                                  r1 r2
-  |  up                  => mk_gen_float (RND_Min (bfloat_format f) radix (precision f) r) 
+  |  up                  => mk_gen_float (RND_Max (bfloat_format f) radix (precision f) r) 
                                  r1 r2
-  |  down             => mk_gen_float (RND_Max (bfloat_format f) radix (precision f) r) 
+  |  down             => mk_gen_float (RND_Min (bfloat_format f) radix (precision f) r) 
 				r1 r2
   |  nearest_away => mk_gen_float (RND_ClosestUp (bfloat_format f) radix (precision f) r) 
 				r1 r2

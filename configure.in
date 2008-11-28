@@ -332,18 +332,27 @@ else
         esac
 	AC_MSG_CHECKING(Coq floating-point library)
  	case $COQVERSION in
-	   8.1*|8.2*|trunk)
+	   8.2*|trunk)
  	      if test -f $COQLIB/user-contrib/AllFloat.vo; then
 	        AC_MSG_RESULT(yes)
-	  	WHYFLOATS=lib/coq/WhyFloats.vo
+	  	WHYFLOATS="lib/coq/WhyFloats.vo lib/coq/JessieFloats.vo"
 		COQFLOATSMSG=yes
 	      else
 	        AC_MSG_RESULT(no)
 	        COQFLOATSMSG="no (Coq library AllFloat.vo not found)"
 	      fi
+ 	      if test -f $COQLIB/user-contrib/Gappa/Gappa_tactic.vo; then
+	        AC_MSG_RESULT(yes)
+	  	WHYFLOATS="$WHYFLOATS lib/coq/JessieGappa.vo"
+		COQGAPPAMSG=yes
+	      else
+	        AC_MSG_RESULT(no)
+	        COQGAPPAMSG="no (Coq library Gappa_tactic.vo not found)"
+	      fi
 	      ;;
 	   *)
-	      COQFLOATSMSG="no (requires Coq version >= 8.1)"
+	      COQFLOATSMSG="no (requires Coq version >= 8.2)"
+	      COQGAPPAMSG="no (requires Coq version >= 8.2)"
 	      ;;
            esac
 	;;
@@ -476,6 +485,7 @@ if test "$COQ" = "yes" ; then
    fi
    echo "    Lib                 : $COQLIB" 
    echo "    Floats              : $COQFLOATSMSG"
+   echo "    Gappa               : $COQGAPPAMSG"
 fi
 # echo "Alt-ergo binary         : $ERGOBIN"
 echo "PVS support             : $PVS"

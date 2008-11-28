@@ -362,7 +362,7 @@ parameter set_model : x:gen_float ref -> y:real ->
     and exact_value(x) = exact_value(x@)
     and model_value(x) = y }
 
-
+(*
 parameter lt_gen_float :
   x:gen_float -> y:gen_float -> 
   {} bool { if result then float_value(x) < float_value(y) else float_value(x) >= float_value(y) }
@@ -382,6 +382,7 @@ parameter neq_gen_float :
   x:gen_float -> y:gen_float -> 
   {} bool { if result then float_value(x) <> float_value(y) else float_value(x) = float_value(y) }
 
+*)
 
 (* conversions *)
 

@@ -24,12 +24,12 @@ logic exact_value : gen_float -> real
 logic model_value : gen_float -> real
 
 logic max_gen_float : float_format -> real
-
+(*
 axiom max_single : max_gen_float(Single) = (* (2 - 2^-23)*2^127 *)
    340282346638528859811704183484516925440.0
 
 axiom max_double : max_gen_float(Double) = 111111.0 (* (2 - 2^-52)*2^1023 *)
-
+*)
 
 (* un faux axiom: pour f=Single, m=nearest_even et r=0.1 
 axiom a1: forall f:float_format. forall m:mode. forall r:real. 
@@ -104,6 +104,8 @@ parameter div_gen_float :
     model_value(result) = model_value(x)/model_value(y)
   }
 
+(* on pourrait enlever abs_real *)
+
 parameter sqrt_gen_float_requires : 
   f:float_format -> m:mode -> x:gen_float -> 
   { float_value(x) >= 0.0 
@@ -149,6 +151,7 @@ parameter neg_gen_float :
     and 
     model_value(result) = neg_real(model_value(x))
   }
+
 parameter abs_gen_float_requires : 
   f:float_format -> m:mode -> x:gen_float -> 
   { abs_real(round_float(f,m,abs_real(float_value(x)))) <= max_gen_float(f) }
