@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.272 2008-11-25 08:29:57 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.273 2008-12-09 09:14:18 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -719,7 +719,7 @@ let label_assoc loc id cur_label fun_labels effective_labels =
 	    fun_labels effective_labels
 	with Invalid_argument _ ->
 	  typing_error loc 
-	    "wrong number of labels for %s" id
+	    "wrong number of labels for %s (expected %d, got %d)" id (List.length fun_labels) (List.length effective_labels)
 	  
 let rec term env e =
   let ft = term env in
@@ -2239,19 +2239,27 @@ let rec type_labels_in_decl d = match d#node with
         (fun (_, _, e) -> 
 	   type_labels [LabelHere] ~result_label:None (Some LabelHere) e) invs
   | JCDlemma(_, _, labels, body) ->
+(*
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+*)
       type_labels labels ~result_label:None (default_label labels) body
   | JCDlogic(_, _, labels, _, JCreads el) ->
+(*
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+*)
       List.iter 
 	(type_labels labels 
 	   ~result_label:(Some LabelPost) (default_label labels)) el
   | JCDlogic(_, _, labels, _, JCexpr e) ->
+(*
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+*)
       type_labels labels  ~result_label:None (default_label labels) e
   | JCDlogic(_, _, labels, _, JCinductive l) ->
-      let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
-      List.iter (fun (_,e) -> 
+(*
+      let _labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+*)
+      List.iter (fun (_,labels,e) -> 
 		   type_labels labels 
 		     ~result_label:None (default_label labels) e) l
   | JCDglobal_inv(_, body) ->
@@ -2842,7 +2850,9 @@ of an invariant policy";
 	Jc_options.lprintf "Typing lemma/axiom %s@." id;
 	if is_axiom && not in_axiomatic then
 	  typing_error loc "allowed only inside axiomatic specification";
+(*
 	let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+*)
         let te = assertion [] e in
         if in_axiomatic && is_axiom then
 	  (ABaxiom(d#pos,id,labels,te))::acc
@@ -2895,7 +2905,9 @@ of an invariant policy";
     | JCDlogic (None, id, labels, pl, body) ->
 	if not only_types then
 	  begin
+(*
 	    let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+*)
             let param_env,ty,pi = add_logic_fundecl (None,id,labels,pl) in
             let p = match body with
           | JCreads reads ->
@@ -2915,10 +2927,16 @@ of an invariant policy";
 		*)
 	  | JCinductive l ->
 	      JCInductive(List.map 
-			    (fun (id,e) -> 
+			    (fun (id,labels,e) -> 
+(*
+			       let labels = match labels with 
+				   [] -> [ LabelHere ] 
+				 | _ -> labels 
+			       in
+*)
 			       let a = assertion param_env e in
 				 check_positivity a#pos pi a;
-			       (id,a)) 
+			       (id,labels,a)) 
 			    l)
             in
 	    update_axiomatic axiomatic pi;
@@ -2930,7 +2948,9 @@ of an invariant policy";
     | JCDlogic (Some ty, id, labels, pl, body) ->
 	if not only_types then
 	  begin
+(*
 	    let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+*)
             let param_env, ty, pi = add_logic_fundecl (Some ty,id,labels,pl) in
             let ty = match ty with Some ty -> ty | None -> assert false in
             let t = match body with
@@ -3016,7 +3036,9 @@ let rec declare_function d = match d#node with
 (*       ignore  *)
 (* 	(add_logic_constdecl (ty,id)) *)
   | JCDlogic(ty,id,labels,pl,_body) ->
+(*
       let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
+*)
       ignore (add_logic_fundecl (ty,id,labels,pl))
   | JCDaxiomatic(_id,l) -> 
       List.iter declare_function l

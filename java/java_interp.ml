@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.173 2008-11-12 16:17:45 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.174 2008-12-09 09:14:18 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1508,14 +1508,17 @@ let reg_assertion_option a =
     | None -> mkboolean ~value:true ()
     | Some a -> reg_assertion a
 
-let loop_annot inv dec =
-  let invariant = reg_assertion inv in
-  let variant = Option_misc.map begin fun t ->
-    let t' = term t in
-    locate t.java_term_loc t'
-  end dec
+let loop_annot annot =
+  let invariant = reg_assertion annot.loop_inv in
+  let behs_inv =
+    List.map (fun (id,a) -> ([snd id],reg_assertion a)) annot.behs_loop_inv
   in
-  invariant, variant
+  let variant = 
+    Option_misc.map (fun t ->
+		       let t' = term t in
+		       locate t.java_term_loc t') annot.loop_var
+  in
+  ([],invariant)::behs_inv, variant
 
 let behavior (id,assumes,throws,assigns,ensures) =
   mkbehavior
@@ -1574,19 +1577,19 @@ let rec statement s =
             ~expr_then: (statement s1)
             ~expr_else: (statement s2)
             ()
-      | JSdo (s, inv, dec, e) ->
-	  let (invariant, variant) = loop_annot inv dec in
+      | JSdo (s, annot, e) ->
+	  let (invariant, variant) = loop_annot annot in
 	  let while_expr = 
-	    mkwhile ~invariant:[[], invariant]
+	    mkwhile ~invariant
 	      ?variant ~condition:(expr e) ~body:(statement s) ()
 	  in
             mkblock [statement s; while_expr] ()
-      | JSwhile(e,inv,dec,s) ->
-	  let (invariant, variant) = loop_annot inv dec in
-          mkwhile ~invariant:[[],invariant]
+      | JSwhile(e,annot,s) ->
+	  let (invariant, variant) = loop_annot annot in
+          mkwhile ~invariant
 	    ?variant ~condition:(expr e) ~body:(statement s) ()
-      | JSfor (el1, e, inv, dec, el2, body) ->
-	  let (invariant, variant) = loop_annot inv dec in
+      | JSfor (el1, e, annot, el2, body) ->
+	  let (invariant, variant) = loop_annot annot in
           mkfor
             ~inits: (List.map expr el1)
             ~condition: (expr e)
@@ -1596,12 +1599,12 @@ let rec statement s =
             ?variant
             ~pos: s.java_statement_loc
             ()
-      | JSfor_decl(decls,e,inv,dec,sl,body) ->
+      | JSfor_decl(decls,e,annot,sl,body) ->
 	  let decls = List.map begin fun (vi, init) ->
 	    create_var s.java_statement_loc vi,
             Option_misc.map (tr_initializer vi.java_var_info_type) init
           end decls in
-	  let (invariant, variant) = loop_annot inv dec in
+	  let (invariant, variant) = loop_annot annot in
           (* TODO: Now that we produce parsed AST we could put inits in ~init *)
 	  let res =
 	    List.fold_right
@@ -1815,7 +1818,10 @@ let tr_logic_fun fi (b : logic_decl_body) acc =
     | `Inductive l -> 
 	def_ ~inductive:
 	  (List.map 
-	     (fun ((loc,id),a) -> (new identifier ~pos:loc id,assertion a)) l) 
+	     (fun ((loc,id),labels,a) -> 
+		(new identifier ~pos:loc id,
+		 List.map tr_logic_label labels,
+		 assertion a)) l) 
 	  ()
     | `Term t -> def_ ~body:(term t) ()
     | `Reads l -> 

@@ -121,7 +121,15 @@ let behavior acc (id,assumes,throws,assigns,ensures) =
       | Some(_,l) -> List.fold_left term acc l
   in
   assertion acc ensures
-  
+
+let loop_annot acc annot =    
+  let acc = assertion acc annot.loop_inv in
+  let acc = 
+    List.fold_left (fun acc (_,a) -> assertion acc a) acc annot.behs_loop_inv 
+  in
+  match annot.loop_var with 
+    | None -> acc 
+    | Some dec -> term acc dec 
 
 let rec statement acc s : ('a list * 'b list) = 
   match s.java_statement_node with  
@@ -153,45 +161,33 @@ let rec statement acc s : ('a list * 'b list) =
     | JSthrow e 
     | JSreturn e 
     | JSexpr e -> let (a, b) = acc in (a, expr b e)
-    | JSfor (inits, cond, inv, dec, updates, body)-> 
+    | JSfor (inits, cond, annot, updates, body)-> 
 	let (a, b) = acc in
 	let b = List.fold_left expr
 	  (List.fold_left expr (expr b cond) updates)
 	  inits
 	in
-	let a = match dec with 
-	  | None -> a 
-	  | Some dec -> term (assertion a inv) dec 
-	in
-	  statement (a, b) body
-    | JSfor_decl (inits, cond, inv, dec, updates, body)-> 
+	let a = loop_annot a annot in
+	statement (a, b) body
+    | JSfor_decl (inits, cond, annot, updates, body)-> 
 	let (a,b) = acc in
 	let b = List.fold_left 
 	  (fun acc (vi,i) -> Option_misc.fold_left initialiser acc i)
 	  (List.fold_left expr (expr b cond) updates)
 	  inits
 	in
-	let a = match dec with 
-	  | None -> a 
-	  | Some dec -> term (assertion a inv) dec 
-	in
-	  statement (a,b) body
-    | JSdo (body, inv, dec, cond)-> 
+	let a = loop_annot a annot in
+	statement (a,b) body
+    | JSdo (body, annot, cond)-> 
 	let a, b = acc in
 	let a, b = statement (a, b) body in
-	let a = match dec with 
-	  | None -> a 
-	  | Some dec -> term (assertion a inv) dec 
-	in
+	let a = loop_annot a annot in
 	let b = expr b cond in
-	  a, b
-    | JSwhile (cond, inv, dec, body)-> 
+	a, b
+    | JSwhile (cond, annot, body)-> 
 	let (a,b) = acc in
 	let b = expr b cond in
-	let a = match dec with 
-	  | None -> a 
-	  | Some dec -> term (assertion a inv) dec 
-	in
+	let a = loop_annot a annot in
 	statement (a,b) body
     | JSvar_decl (vi, init, s)-> 
 	let (a,b)=acc in
@@ -214,7 +210,7 @@ let compute_logic_calls f (t : [< Java_typing.logic_decl_body]) =
       | `Reads r -> List.fold_left term [] r 
       | `Inductive l ->
 	  List.fold_left
-	    (fun acc (_,a) -> assertion acc a) [] l
+	    (fun acc (_,_,a) -> assertion acc a) [] l
       | `Builtin -> []
   in
   f.java_logic_info_calls <- calls

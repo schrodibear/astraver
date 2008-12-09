@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.35 2008-11-24 12:54:30 ayad Exp $ *)
+(* $Id: jc_poutput.ml,v 1.36 2008-12-09 09:14:18 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -199,8 +199,15 @@ let rec pexpr fmt e =
 	  variant
 	  pexpr e block [s]
     | JCPEfor (inits, cond, updates, invariant,variant, body)-> 
-	fprintf fmt "@\n@[invariant %a;%a@\nfor (%a ; %a ; %a)%a@]"
-	  pexpr invariant 
+	fprintf fmt "@[%a%a@\nfor (%a ; %a ; %a)%a@]"
+	  (print_list nothing 
+	     (fun fmt (behav,inv) -> fprintf fmt "@\ninvariant %a%a;"
+		(print_list_delim 
+		   (constant_string "for ") (constant_string ": ") 
+		   comma string)
+		behav
+		pexpr inv))
+	  invariant 
 	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" pexpr t))
 	  variant
 	  (print_list comma pexpr) inits 
@@ -308,8 +315,10 @@ let reads_or_expr fmt = function
   | JCinductive l ->
       fprintf fmt " {@\n@[<v 2>%a@]@\n}" 
 	(print_list newline
-	   (fun fmt (id,e) -> 
-	      fprintf fmt "case %s: %a;@\n" id#name pexpr e)) l
+	   (fun fmt (id,labels,e) -> 
+	      fprintf fmt "case %s@[%a@]: %a;@\n" id#name 
+		(print_list_delim lbrace rbrace comma label) labels
+		pexpr e)) l
 
 let type_params_decl fmt = function
   | [] -> ()

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.41 2008-11-25 08:29:57 marche Exp $ *)
+(* $Id: jc_separation.ml,v 1.42 2008-12-09 09:14:18 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -282,7 +282,7 @@ let logic_function f =
     | JCAssertion a -> assertion rresult a
     | JCReads r -> List.iter (location rresult) r
     | JCInductive l ->
-	List.iter (fun (_,a) -> assertion rresult a) l
+	List.iter (fun (_,_,a) -> assertion rresult a) l
   end;
   Option_misc.iter axiomatic f.jc_logic_info_axiomatic
 

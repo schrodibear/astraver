@@ -183,11 +183,12 @@ let replace_sub_pexpr e el =
 	let var,el = popopt el var in
 	let body = as1 el in 
 	JCPEwhile(test,inv,var,body)
-    | JCPEfor(inits,test,updates,inv,var,body) ->
+    | JCPEfor(inits,test,updates,inv1,var,body) ->
 	let inits,el = popn (List.length inits) el in
 	let test,el = pop el in
-	let inv,el = pop el in
 	let updates,el = popn (List.length updates) el in
+	let inv2,el = popn (List.length inv1) el in
+	let inv = List.map2 (fun (behav,_) e -> behav,e) inv1 inv2 in
 	let var,el = popopt el var in
 	let body = as1 el in 
 	JCPEfor(inits,test,updates,inv,var,body)
@@ -289,6 +290,12 @@ module PExprAst = struct
       | JCPEwhile(e1,inv,Some e3,e4) ->
 	  let e2list = List.map (fun (_behav,e) -> e) inv in
           e1 :: e2list @ [e3; e4]
+      | JCPEfor(el1,e1,el2,inv,None,e4) ->
+	  let e2list = List.map (fun (_behav,e) -> e) inv in
+	  el1 @ e1 :: el2 @ e2list @ [e4]
+      | JCPEfor(el1,e1,el2,inv,Some e4,e5) ->
+	  let e2list = List.map (fun (_behav,e) -> e) inv in
+	  el1 @ e1 :: el2 @ e2list @ [e4; e5]
       | JCPEblock el
       | JCPEapp(_,_,el) ->
 	  el
@@ -296,10 +303,6 @@ module PExprAst = struct
           e1 :: List.map (fun (_, _, e) -> e) l @ [ e2 ]
       | JCPEmatch(e, pel) ->
           e :: List.map snd pel
-      | JCPEfor(el1,e1,el2,e3,None,e4) ->
-	  el1 @ e1 :: el2 @ [e3; e4]
-      | JCPEfor(el1,e1,el2,e3,Some e4,e5) ->
-	  el1 @ e1 :: el2 @ [e3; e4; e5]
       | JCPEswitch(e,cases) ->
 	  let case c = 
 	    List.flatten (List.map (function None -> [] | Some e -> [e]) c)

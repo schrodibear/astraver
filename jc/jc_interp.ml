@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.393 2008-11-24 12:54:30 ayad Exp $ *)
+(* $Id: jc_interp.ml,v 1.394 2008-12-09 09:14:18 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2553,7 +2553,7 @@ let tr_logic_fun f ta acc =
       | None, JCInductive l  ->
 	  Inductive(false, f.jc_logic_info_final_name, params,  
 		    List.map 
-		      (fun (id,a) ->
+		      (fun (id,labels,a) ->
 			 let ef = Jc_effect.assertion empty_effects a in
 			 let a' = fa a in
 			 let params = 

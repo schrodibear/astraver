@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.124 2008-11-05 14:43:52 moy Exp $ */
+/* $Id: jc_parser.mly,v 1.125 2008-12-09 09:14:18 marche Exp $ */
 
 %{
 
@@ -891,11 +891,6 @@ iteration_expression:
 | loop_annot FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON 
     argument_expression_list_opt RPAR expression %prec precwhile
     { let (i,v) = $1 in 
-      let i = match i with 
-	| [] -> locate (JCPEconst(JCCboolean true))
-	| [_,p] -> p
-	|  _ -> assert false
-      in
       locate (JCPEfor($4, $6, $8, i, v, $10)) }
 ;
 
@@ -1043,8 +1038,8 @@ logic_declaration:
 indcases:
 | /* epsilon */
     { [] }
-| CASE identifier COLON expression SEMICOLON indcases
-    { ($2,$4)::$6 }
+| CASE identifier label_binders COLON expression SEMICOLON indcases
+    { ($2,$3,$5)::$7 }
 ;
 
 /*

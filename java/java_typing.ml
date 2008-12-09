@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.151 2008-11-14 12:33:05 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.152 2008-12-09 09:14:18 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -539,7 +539,9 @@ let is_reference_type t =
 type logic_def_body =
   [ `Assertion of Java_tast.assertion
   | `Term of Java_tast.term
-  | `Inductive of (Java_ast.identifier * Java_tast.assertion) list
+  | `Inductive of 
+      (Java_ast.identifier * Java_env.logic_label list * Java_tast.assertion) 
+	list
   | `Builtin ]
 
 type logic_decl_body =
@@ -1490,6 +1492,7 @@ type typing_env =
       package_env : Java_env.package_info list;
       type_env : (string * Java_env.java_type_info) list;
       current_type : Java_env.java_type_info option;
+      behavior_names : (string * identifier) list;
       label_env : (string * logic_label) list;
       current_label : logic_label option;
       env : (string * Java_env.java_var_info) list;
@@ -3043,6 +3046,7 @@ and type_field_initializer package_env type_env ci fi =
     { package_env = package_env;
       type_env = type_env;
       current_type = Some ci;
+      behavior_names = [];
       label_env = [];
       current_label = None;
       env = [];
@@ -3200,6 +3204,8 @@ let variable_declaration ~ghost env vd =
          (id,vi)::env,(vi,i)::decls)
       l (env.env,[])
 
+let dummy_loop_annot = (expr_true,[],None)
+
 let rec statement env s =
   let exprt = expr ~ghost:false env in
   let statementt = statement env in
@@ -3214,7 +3220,7 @@ let rec statement env s =
             JSif(te,ts1,ts2)
           else
             typing_error e.java_pexpr_loc "boolean expected"
-      | JPSloop_annot (inv, dec) -> assert false
+      | JPSloop_annot (inv, beh_invs, dec) -> assert false
       | JPSannot (_, _)-> assert false (* should not happen *)
       | JPSghost_local_decls d -> assert false (* TODO *)
       | JPSghost_statement e ->
@@ -3311,6 +3317,7 @@ and local_decl ~ghost env loc vd rem =
       decls r in
     [s]
       
+
 and statements env b =
   match b with
     | [] -> []
@@ -3321,31 +3328,32 @@ and statements env b =
               local_decl ~ghost:true env s.java_pstatement_loc vd rem
           | JPSvar_decl vd -> 
               local_decl ~ghost:false env s.java_pstatement_loc vd rem
-          | JPSloop_annot (inv, dec) ->
+          | JPSloop_annot (inv,behs_inv,dec) ->
+	      let annot = (inv,behs_inv,dec) in
               begin
                 match rem with
                   | { java_pstatement_node = JPSdo (s, e);
                       java_pstatement_loc = loc } :: rem -> 
                       let tdo =
-                        type_do env s.java_pstatement_loc inv dec s e
+                        type_do env s.java_pstatement_loc annot s e
                       in
                         tdo :: statements env rem
                   | { java_pstatement_node = JPSwhile(e,s) ;
                       java_pstatement_loc = loc } :: rem -> 
                       let twhile =
-                        type_while env s.java_pstatement_loc inv dec e s
+                        type_while env s.java_pstatement_loc annot e s
                       in
                         twhile :: statements env rem
                   | { java_pstatement_node = JPSfor (el1, e, el2, s);
                       java_pstatement_loc = loc } :: rem -> 
                       let tfor =
-                        type_for env loc el1 inv dec e el2 s
+                        type_for env loc el1 annot e el2 s
                       in
                         tfor :: statements env rem
                   | { java_pstatement_node = JPSfor_decl(vd,e,sl,s) ;
                       java_pstatement_loc = loc } :: rem -> 
                       let tfor =
-                        type_for_decl env loc vd inv dec e sl s
+                        type_for_decl env loc vd annot e sl s
                       in
                         tfor :: statements env rem
                   | _ -> assert false
@@ -3353,25 +3361,25 @@ and statements env b =
           | JPSfor (el1, e, el2, s) ->
               let tfor =
                 type_for env 
-                  s.java_pstatement_loc el1 expr_true None e el2 s
+                  s.java_pstatement_loc el1 dummy_loop_annot e el2 s
               in
                 tfor :: statements env rem
           | JPSfor_decl(vd,e,sl,s) ->
               let tfor =
                 type_for_decl env 
-                  s.java_pstatement_loc vd expr_true None e sl s
+                  s.java_pstatement_loc vd dummy_loop_annot e sl s
               in
                 tfor :: statements env rem
           | JPSdo (s, e) ->
               let tdo =
                 type_do env 
-                  s.java_pstatement_loc expr_true None s e
+                  s.java_pstatement_loc dummy_loop_annot s e
               in
                 tdo :: statements env rem
           | JPSwhile(e,s) ->
               let twhile =
                 type_while env 
-                  s.java_pstatement_loc expr_true None e s
+                  s.java_pstatement_loc dummy_loop_annot e s
               in
                 twhile :: statements env rem
           | JPSstatement_spec(requires,decreases,behaviors) ->
@@ -3404,49 +3412,58 @@ and statements env b =
                   
         
          
-and type_for env loc el1 inv dec e el2 s =
-  let el1 = List.map (expr ~ghost:false env) el1 in
+and type_loop_annot env (inv,behs_inv,dec) =
   let inv = assertion (add_Pre_Here env) inv in
+  let l = List.map
+    (fun ((loc,id),a) ->
+       let bid =
+	 try
+	   List.assoc id env.behavior_names 
+	 with Not_found ->
+	   typing_error loc "undeclared behavior"
+       in
+       (bid,assertion (add_Pre_Here env) a))
+    behs_inv 
+  in	 
   let dec = 
     Option_misc.map (term (add_Pre_Here env)) dec 
   in
+  { loop_inv = inv;
+    behs_loop_inv = l;
+    loop_var = dec;
+  }
+
+and type_for env loc el1 annot e el2 s =
+  let el1 = List.map (expr ~ghost:false env) el1 in
+  let a = type_loop_annot env annot in
   let e = expr ~ghost:false env e in
   let el2 = List.map (expr ~ghost:false env) el2 in
   let s = statement env s in
-    { java_statement_node = JSfor (el1, e, inv, dec, el2, s);
+    { java_statement_node = JSfor (el1, e, a, el2, s);
       java_statement_loc = loc }
 
-and type_for_decl env loc vd inv dec e sl s =
+and type_for_decl env loc vd annot e sl s =
   let env',decls = variable_declaration ~ghost:false env vd in
   let env = { env with env = env'} in
-  let inv = assertion (add_Pre_Here env) inv in
-  let dec = 
-    Option_misc.map (term (add_Pre_Here env)) dec 
-  in
+  let a = type_loop_annot env annot in
   let e = expr ~ghost:false env e in
   let sl = List.map (expr ~ghost:false env) sl in
   let s = statement env s in
-  { java_statement_node = JSfor_decl(decls,e,inv,dec,sl,s);
+  { java_statement_node = JSfor_decl(decls,e,a,sl,s);
     java_statement_loc = loc }
 
-and type_do env loc inv dec s e =
-  let inv = assertion (add_Pre_Here env) inv in
-  let dec = 
-    Option_misc.map (term (add_Pre_Here env)) dec 
-  in
+and type_do env loc annot s e =
+  let a = type_loop_annot env annot in
   let s = statement env s in
   let e = expr ~ghost:false env e in
-    { java_statement_node = JSdo (s, inv, dec, e);
+    { java_statement_node = JSdo (s, a, e);
       java_statement_loc = loc } 
       
-and type_while env loc inv dec e s =
-  let inv = assertion (add_Pre_Here env) inv in
-  let dec = 
-    Option_misc.map (term (add_Pre_Here env)) dec 
-  in
+and type_while env loc annot e s =
+  let a = type_loop_annot env annot in
   let e = expr ~ghost:false env e in
   let s = statement env s in
-  { java_statement_node = JSwhile(e,inv,dec,s);
+  { java_statement_node = JSwhile(e,a,s);
     java_statement_loc = loc } 
 
 and block env b =
@@ -3522,7 +3539,8 @@ let type_method_spec_and_body ?(dobody=true)
     let env = { package_env = package_env ;
                 type_env = type_env;
                 current_type = (Some ti);
-                label_env = label_env_here;
+                behavior_names = [];
+		label_env = label_env_here;
 		current_label = Some LabelHere;
                 env = local_env }
     in
@@ -3534,6 +3552,11 @@ let type_method_spec_and_body ?(dobody=true)
         | Some vi -> (vi.java_var_info_name,vi)::local_env
     in
     let behs = List.map (behavior env local_env env_result) behs in
+    let env = 
+      { env with
+	  behavior_names = 
+	  List.map (fun (id,_,_,_,_) -> snd id,id) behs }
+    in
     let body = 
       if dobody then
         Option_misc.map (statements { env with env = env_result}) body 
@@ -3599,6 +3622,7 @@ let type_constr_spec_and_body ?(dobody=true)
   let env = { package_env = package_env ;
               type_env = type_env;
               current_type = (Some current_type);
+	      behavior_names = [];
               label_env = label_env_here;
 	      current_label = Some LabelHere;
               env = this_env }
@@ -3613,6 +3637,11 @@ let type_constr_spec_and_body ?(dobody=true)
   in
   let behs = List.map (behavior env local_env this_env) behs in
   if dobody then
+    let env = 
+      { env with
+	  behavior_names = 
+	  List.map (fun (id,_,_,_,_) -> snd id,id) behs }
+    in
     match eci with
       | Invoke_none -> 
           let body = statements { env with env = this_env } body in
@@ -3742,6 +3771,7 @@ let type_final_fields package_env type_env ti fields =
 	   package_env = package_env;
 	   type_env = type_env;
 	   current_type = Some ti;
+	   behavior_names = [];
 	   label_env = [];
 	   current_label = None;
 	   env = [];
@@ -3844,7 +3874,8 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
           { package_env = package_env;
             type_env = type_env;
             current_type = None;
-            label_env = labels_env;
+            behavior_names = [];
+	    label_env = labels_env;
 	    current_label = current_label;
             env = [];
           }
@@ -3880,7 +3911,8 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
           { package_env = package_env;
             type_env = type_env;
             current_type = None;
-            label_env = labels_env;
+            behavior_names = [];
+	    label_env = labels_env;
 	    current_label = current_label;
             env = env;
           }
@@ -3915,7 +3947,8 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
           { package_env = package_env;
             type_env = type_env;
             current_type = None;
-            label_env = labels_env;
+            behavior_names = [];
+	    label_env = labels_env;
 	    current_label = current_label;
             env = env;
           }
@@ -3951,7 +3984,7 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 		  end
         end
     | JPTinductive((loc, id), labels, params, body) -> 
-	let labels_env,current_label,tlabels = labels_env labels in
+	let _labels_env,_current_label,tlabels = labels_env labels in	
         let pl = 
 	  List.map (fun p -> fst (type_param package_env type_env p)) params 
 	in
@@ -3965,8 +3998,9 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
           { package_env = package_env;
             type_env = type_env;
             current_type = None;
-            label_env = labels_env;
-	    current_label = current_label;
+            behavior_names = [];
+	    label_env = [];
+	    current_label = None;
             env = env;
           }
         in
@@ -3974,9 +4008,15 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	(* adding fi in env before typing indcases *)
         Hashtbl.add logics_env id fi;
 	let l = List.map
-	  (fun (id,e) ->
+	  (fun (id,labels,e) ->
+	     let labels_env,current_label,tlabels = labels_env labels in
+	     let env = { env with
+			   label_env = labels_env;
+			   current_label = current_label;
+		       }
+	     in
 	     let a = assertion env e in
-	     (id,a))
+	     (id,tlabels,a))
 	  body
 	in
 	if in_axiomatic then
@@ -4038,7 +4078,8 @@ let type_specs package_env type_env =
                { package_env = package_env;
                  type_env = type_env;
                  current_type = (Some current_type);
-                 label_env = [];
+               	 behavior_names = [];
+		 label_env = [];
 		 current_label = None;
                  env = env;
                }
@@ -4056,7 +4097,8 @@ let type_specs package_env type_env =
          { package_env = package_env;
            type_env = type_env;
            current_type = (Some current_type);
-           label_env = [];
+           behavior_names = [];
+	   label_env = [];
 	   current_label = None;
            env = [];
          }

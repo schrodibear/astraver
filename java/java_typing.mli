@@ -82,7 +82,9 @@ val lemmas_table : (string,(Java_env.logic_label list * Java_tast.assertion)) Ha
 type logic_def_body =
   [ `Assertion of Java_tast.assertion
   | `Term of Java_tast.term
-  | `Inductive of (Java_ast.identifier * Java_tast.assertion) list
+  | `Inductive of 
+      (Java_ast.identifier * Java_env.logic_label list * Java_tast.assertion) 
+	list
   | `Builtin ]
 
 type logic_decl_body =

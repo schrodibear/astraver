@@ -144,7 +144,7 @@ let compute_logic_calls f t =
 	      | Some a -> compute_axiomatic_calls a 
 	  end
       | JCInductive l -> 
-	  List.fold_left (fun acc (_,a) -> assertion acc a) [] l
+	  List.fold_left (fun acc (_,_,a) -> assertion acc a) [] l
   in
   f.jc_logic_info_calls <- calls
 

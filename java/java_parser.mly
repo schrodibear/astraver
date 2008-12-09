@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.57 2008-11-12 16:17:45 marche Exp $
+$Id: java_parser.mly,v 1.58 2008-12-09 09:14:18 marche Exp $
 
 */
 
@@ -1107,8 +1107,8 @@ reads_clause:
 indcases:
 | /* epsilon */
     { [] }
-| CASE ident COLON expr SEMICOLON indcases
-    { ($2,$4)::$6 }
+| CASE ident label_binders COLON expr SEMICOLON indcases
+    { ($2,$3,$5)::$7 }
 ;
 
 label_binders:
@@ -1212,10 +1212,11 @@ decreases_opt:
 ;
 
 kml_statement_annot:
-| LOOP_INVARIANT expr SEMICOLON loop_variant_opt EOF
-    { JPSloop_annot($2,$4) }
-| loop_variant EOF
-    { JPSloop_annot(locate_lit (Bool true),$1) }
+| LOOP_INVARIANT expr SEMICOLON beh_loop_inv loop_variant_opt EOF
+    { JPSloop_annot($2,$4,$5) }
+| beh_loop_inv loop_variant EOF
+    { JPSloop_annot({java_pexpr_node = JPElit (Bool true) ; 
+		     java_pexpr_loc = loc_i 2 },$1,$2) }
 | ASSERT expr SEMICOLON EOF
     { JPSassert(None,$2) }
 | ASSERT ident COLON expr SEMICOLON EOF
@@ -1226,6 +1227,13 @@ kml_statement_annot:
     { JPSghost_statement($2) }
 | requires_opt decreases_opt assigns_opt ensures_opt behaviors EOF
     { JPSstatement_spec($1,$2,default_behavior $3 $4 $5) }
+;
+
+beh_loop_inv:
+| /* $\varepsilon$ */
+    { [] }
+| FOR ident COLON LOOP_INVARIANT expr SEMICOLON beh_loop_inv
+    { ($2,$5)::$7 }
 ;
 
 loop_variant_opt:

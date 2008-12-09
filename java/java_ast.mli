@@ -29,7 +29,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.42 2008-11-12 16:17:45 marche Exp $
+$Id: java_ast.mli,v 1.43 2008-12-09 09:14:18 marche Exp $
 
 ***************************************************************************)
 
@@ -200,11 +200,12 @@ and pstatement_node =
   | JPSghost_local_decls of variable_declaration
   | JPSghost_statement of pexpr
   | JPSannot of Lexing.position * string
-  | JPSloop_annot of pexpr * pexpr option
+  | JPSloop_annot of pexpr * (identifier * pexpr) list * pexpr option
   | JPSstatement_spec of 
       pexpr option * pexpr option * (identifier * pbehavior) list
 
 and block = pstatement list
+
 ;;
 
 (*s method declarations *)
@@ -285,7 +286,7 @@ type type_declaration =
   | JPTlogic_type_decl of identifier 
   | JPTlogic_reads of identifier * type_expr option * identifier list * parameter list * pexpr list 
   | JPTlogic_def of identifier * type_expr option * identifier list * parameter list * pexpr 
-  | JPTinductive of identifier * identifier list * parameter list * (identifier * pexpr) list
+  | JPTinductive of identifier * identifier list * parameter list * (identifier * identifier list * pexpr) list
   | JPTaxiomatic of identifier * type_declaration list
 
 type import_statement =

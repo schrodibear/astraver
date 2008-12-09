@@ -460,7 +460,7 @@ module PExpr :
       ?inits:pexpr list ->
       ?condition:pexpr ->
       ?updates:pexpr list ->
-      ?invariant:pexpr ->
+      ?invariant:(string list * pexpr) list ->
       ?variant:pexpr ->
       body:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
@@ -574,7 +574,7 @@ module PDecl :
       ?params:(ptype * string) list ->
       ?reads:'a list ->
       ?body:'a ->
-      ?inductive:(identifier * 'a) list ->
+      ?inductive:(identifier * label list * 'a) list ->
       ?pos:Loc.position -> unit -> 'a decl_node node_positioned
 
     val mkaxiomatic :

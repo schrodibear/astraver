@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.153 2008-11-25 08:29:57 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.154 2008-12-09 09:14:18 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1559,7 +1559,12 @@ let logic_fun_effects f =
     | JCTerm t -> term ef t 
     | JCAssertion a -> assertion ef a
     | JCInductive l ->
-	List.fold_left (fun ef (id,a) -> assertion ef a) ef l
+	let ax_effects =
+	  List.fold_left 
+	    (fun ef (id,labels,a) -> assertion ef a) empty_effects l
+	in
+	List.fold_left (fun acc (id,labels,a) -> 
+			  effects_from_assertion f ax_effects acc a) ef l
     | JCReads [] ->
 	begin match f.jc_logic_info_axiomatic with
 	  | Some a ->

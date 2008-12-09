@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.25 2008-11-17 16:32:52 moy Exp $ *)
+(* $Id: jc_constructors.ml,v 1.26 2008-12-09 09:14:18 marche Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -357,7 +357,7 @@ either with (~expr1 AND ~expr2) OR ~list only."
       ?(invariant = []) ?variant ~body =
     mk ~node:(JCPEwhile(condition, invariant, variant, body))
   let mkfor ?(inits = []) ?(condition = mkboolean ~value:true ())
-      ?(updates = []) ?(invariant = mkboolean ~value:true ()) ?variant ~body =
+      ?(updates = []) ?(invariant = []) ?variant ~body =
     mk ~node:(JCPEfor(inits, condition, updates, invariant, variant, body))
   let mkreturn ?(expr = mkvoid ()) = mk ~node:(JCPEreturn expr)
   let mkbreak ?(label = "") = mk ~node:(JCPEbreak label)

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.111 2008-11-17 15:48:29 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.112 2008-12-09 09:14:18 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -372,7 +372,7 @@ let normalize =
 	      | JCPEwhile(test,inv,var,body) ->
 		  normalize_while e#pos test inv var body
 	      | JCPEfor(inits,test,updates,inv,var,body) ->
-		  normalize_for e#pos inits test updates [[],inv] var body
+		  normalize_for e#pos inits test updates inv var body
 	      | JCPEbreak lab ->
 		  assert (lab = ""); (* TODO for Java *)
 		  mkthrow ~pos:e#pos ~exn:loop_exit ()
@@ -624,7 +624,7 @@ let reads_or_expr = function
 (*
   | JCaxiomatic l -> JCaxiomatic(List.map (fun (id,e) -> (id, expr e)) l)
 *)
-  | JCinductive l -> JCinductive(List.map (fun (id,e) -> (id, expr e)) l)
+  | JCinductive l -> JCinductive(List.map (fun (id,labels,e) -> (id, labels, expr e)) l)
     
 (** From parsed declaration to normalized declaration *)
 let rec decl d = 

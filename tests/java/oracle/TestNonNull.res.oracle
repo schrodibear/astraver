@@ -1687,149 +1687,6 @@ parameter short_of_integer_ :
   { (le_int((-32768), x) and le_int(x, (32767)))} short
   { eq_int(integer_of_short(result), x) }
 
-parameter struct_Object_alloc_of_bitvector :
- Object_alloc_table:Object alloc_table ref ->
-  bitvector_alloc_table:unit alloc_table ->
-   { } unit writes Object_alloc_table
-   { (forall p:Object pointer.
-      (eq_int(offset_min(Object_alloc_table, p),
-       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
-      and eq_int(offset_max(Object_alloc_table, p),
-          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
-
-parameter struct_Object_alloc_to_bitvector :
- bitvector_alloc_table:unit alloc_table ref ->
-  Object_alloc_table:Object alloc_table ->
-   { } unit writes bitvector_alloc_table
-   { (forall p:Object pointer.
-      (eq_int(offset_min(Object_alloc_table, p),
-       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
-      and eq_int(offset_max(Object_alloc_table, p),
-          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
-
-parameter struct_Object_mem_of_bitvector :
- bitvector:(unit, bitvector) memory -> { } unit { true }
-
-parameter struct_Object_mem_to_bitvector :
- bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
-
-parameter struct_String_alloc_of_bitvector :
- Object_alloc_table:Object alloc_table ref ->
-  bitvector_alloc_table:unit alloc_table ->
-   { } unit writes Object_alloc_table
-   { (forall p:Object pointer.
-      (eq_int(offset_min(Object_alloc_table, p),
-       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
-      and eq_int(offset_max(Object_alloc_table, p),
-          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
-
-parameter struct_String_alloc_to_bitvector :
- bitvector_alloc_table:unit alloc_table ref ->
-  Object_alloc_table:Object alloc_table ->
-   { } unit writes bitvector_alloc_table
-   { (forall p:Object pointer.
-      (eq_int(offset_min(Object_alloc_table, p),
-       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
-      and eq_int(offset_max(Object_alloc_table, p),
-          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
-
-parameter struct_String_mem_of_bitvector :
- bitvector:(unit, bitvector) memory -> { } unit { true }
-
-parameter struct_String_mem_to_bitvector :
- bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
-
-parameter struct_TestNonNull_alloc_of_bitvector :
- Object_alloc_table:Object alloc_table ref ->
-  bitvector_alloc_table:unit alloc_table ->
-   { } unit writes Object_alloc_table { true }
-
-parameter struct_TestNonNull_alloc_to_bitvector :
- bitvector_alloc_table:unit alloc_table ref ->
-  Object_alloc_table:Object alloc_table ->
-   { } unit writes bitvector_alloc_table { true }
-
-parameter struct_TestNonNull_mem_of_bitvector :
- TestNonNull_t:(Object, Object pointer) memory ref ->
-  intM_intP:(Object, int32) memory ref ->
-   bitvector:(unit, bitvector) memory ->
-    { } unit writes TestNonNull_t,intM_intP { true }
-
-parameter struct_TestNonNull_mem_to_bitvector :
- bitvector:(unit, bitvector) memory ref ->
-  TestNonNull_t:(Object, Object pointer) memory ->
-   intM_intP:(Object, int32) memory -> { } unit writes bitvector { true }
-
-parameter struct_Throwable_alloc_of_bitvector :
- Object_alloc_table:Object alloc_table ref ->
-  bitvector_alloc_table:unit alloc_table ->
-   { } unit writes Object_alloc_table
-   { (forall p:Object pointer.
-      (eq_int(offset_min(Object_alloc_table, p),
-       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
-      and eq_int(offset_max(Object_alloc_table, p),
-          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
-
-parameter struct_Throwable_alloc_to_bitvector :
- bitvector_alloc_table:unit alloc_table ref ->
-  Object_alloc_table:Object alloc_table ->
-   { } unit writes bitvector_alloc_table
-   { (forall p:Object pointer.
-      (eq_int(offset_min(Object_alloc_table, p),
-       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
-      and eq_int(offset_max(Object_alloc_table, p),
-          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
-
-parameter struct_Throwable_mem_of_bitvector :
- bitvector:(unit, bitvector) memory -> { } unit { true }
-
-parameter struct_Throwable_mem_to_bitvector :
- bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
-
-parameter struct_intM_alloc_of_bitvector :
- Object_alloc_table:Object alloc_table ref ->
-  bitvector_alloc_table:unit alloc_table ->
-   { } unit writes Object_alloc_table { true }
-
-parameter struct_intM_alloc_to_bitvector :
- bitvector_alloc_table:unit alloc_table ref ->
-  Object_alloc_table:Object alloc_table ->
-   { } unit writes bitvector_alloc_table { true }
-
-parameter struct_intM_mem_of_bitvector :
- intM_intP:(Object, int32) memory ref ->
-  bitvector:(unit, bitvector) memory -> { } unit writes intM_intP { true }
-
-parameter struct_intM_mem_to_bitvector :
- bitvector:(unit, bitvector) memory ref ->
-  intM_intP:(Object, int32) memory -> { } unit writes bitvector { true }
-
-parameter struct_interface_alloc_of_bitvector :
- interface_alloc_table:interface alloc_table ref ->
-  bitvector_alloc_table:unit alloc_table ->
-   { } unit writes interface_alloc_table
-   { (forall p:interface pointer.
-      (eq_int(offset_min(interface_alloc_table, p),
-       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
-      and eq_int(offset_max(interface_alloc_table, p),
-          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
-
-parameter struct_interface_alloc_to_bitvector :
- bitvector_alloc_table:unit alloc_table ref ->
-  interface_alloc_table:interface alloc_table ->
-   { } unit writes bitvector_alloc_table
-   { (forall p:interface pointer.
-      (eq_int(offset_min(interface_alloc_table, p),
-       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
-      and eq_int(offset_max(interface_alloc_table, p),
-          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
-
-parameter struct_interface_mem_of_bitvector :
- bitvector:(unit, bitvector) memory -> { } unit { true }
-
-parameter struct_interface_mem_to_bitvector :
- bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
-
 let TestNonNull_test_ensures_default =
  fun (this_0 : Object pointer) (t : Object pointer) ->
   { (valid_struct_intM(t, (0), (-1), Object_alloc_table)
@@ -2028,7 +1885,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/TestNonNull_po7.why">
-      <location file = "why/TestNonNull.why" line = "1153" begin = "39" end = "178"/>
+      <location file = "why/TestNonNull.why" line = "1010" begin = "39" end = "178"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/TestNonNull_po8.why">
@@ -4587,7 +4444,7 @@ why -simplify [...] why/TestNonNull.why
          (st_length Object_alloc_table))
 (>= 3 0)))))
 
-;; cons_TestNonNull_safety_po_2, File "why/TestNonNull.why", line 1153, characters 39-178
+;; cons_TestNonNull_safety_po_2, File "why/TestNonNull.why", line 1010, characters 39-178
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (FORALL (TestNonNull_t)
@@ -6067,10 +5924,10 @@ goal cons_TestNonNull_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/TestNonNull_why.why       : .......? (7/0/1/0/0)
+why/TestNonNull_why.why       : .......# (7/0/0/1/0)
 total   :   8
 valid   :   7 ( 88%)
 invalid :   0 (  0%)
-unknown :   1 ( 12%)
-timeout :   0 (  0%)
+unknown :   0 (  0%)
+timeout :   1 ( 12%)
 failure :   0 (  0%)

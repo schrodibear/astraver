@@ -160,6 +160,11 @@ let behavior (id,assumes,throws,assigns,ensures) =
   Option_misc.iter (fun (_,l) -> List.iter term l) assigns;
   assertion ensures
 
+let loop_annot annot =
+  assertion annot.loop_inv;
+  List.iter (fun (_,a) -> assertion a) annot.behs_loop_inv;
+  Option_misc.iter term annot.loop_var
+
 let rec statement s =
   match s.java_statement_node with
     | JSskip 
@@ -170,23 +175,21 @@ let rec statement s =
 	Option_misc.iter do_initializer init;
 	statement s
     | JSif (e, s1, s2) -> expr e; statement s1; statement s2
-    | JSdo (s, inv, dec, e) ->
-	statement s; assertion inv; term dec; expr e
-    | JSwhile(e,inv,dec,s) ->
-	  expr e; assertion inv; term dec; statement s
-    | JSfor (el1, e, inv, dec, el2, body) ->
+    | JSdo (s, annot, e) ->
+	statement s; loop_annot annot; expr e
+    | JSwhile(e,annot,s) ->
+	  expr e; loop_annot annot; statement s
+    | JSfor (el1, e, annot, el2, body) ->
 	List.iter expr el1;
 	expr e;
-	assertion inv;
-	term dec;
+	loop_annot annot;
 	List.iter expr el2;
 	statement body
-    | JSfor_decl(decls,e,inv,dec,sl,body) ->
+    | JSfor_decl(decls,e,annot,sl,body) ->
 	List.iter 
 	  (fun (_,init) -> Option_misc.iter do_initializer init) decls;
 	expr e;
-	assertion inv;
-	term dec;
+	loop_annot annot;
 	List.iter expr sl;
 	statement body
     | JSthrow e

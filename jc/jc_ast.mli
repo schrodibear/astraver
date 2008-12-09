@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.162 2008-11-24 12:54:30 ayad Exp $ *)
+(* $Id: jc_ast.mli,v 1.163 2008-12-09 09:14:18 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -199,7 +199,7 @@ and pexpr_node =
       pexpr * (string list * pexpr) list * pexpr option * pexpr
 	(*r condition, invariant, variant, body *)
   | JCPEfor of 
-      pexpr list * pexpr * pexpr list * pexpr * pexpr option * pexpr
+      pexpr list * pexpr * pexpr list * (string list * pexpr) list * pexpr option * pexpr
 	(*r inits, condition, updates, invariant, variant, body *)
   | JCPEreturn of pexpr
   | JCPEbreak of string
@@ -227,7 +227,7 @@ type 'expr clause =
 type 'expr reads_or_expr =
   | JCreads of 'expr list
   | JCexpr of 'expr
-  | JCinductive of (identifier * 'expr) list
+  | JCinductive of (identifier * label list * 'expr) list
 
 type 'expr decl_node =
   | JCDvar of ptype * string * 'expr option
@@ -444,7 +444,7 @@ type 'li term_or_assertion =
   | JCAssertion of 'li assertion
   | JCTerm of 'li term
   | JCReads of 'li location list
-  | JCInductive of (identifier * 'li assertion) list
+  | JCInductive of (identifier * label list * 'li assertion) list
 
 type 'li loop_annot =
     {

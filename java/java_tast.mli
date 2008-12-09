@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.42 2008-11-12 16:17:45 marche Exp $ *)
+(* $Id: java_tast.mli,v 1.43 2008-12-09 09:14:18 marche Exp $ *)
 
 open Java_env
 
@@ -144,6 +144,12 @@ type behavior =
       (Loc.position * term list) option * (* assigns *)
       assertion (* ensures *)
 
+type loop_annot =
+    { loop_inv : assertion;
+      behs_loop_inv : (Java_ast.identifier * assertion) list;
+      loop_var : term option;
+    }
+
 type statement =
   { java_statement_loc : Loc.position ;
     java_statement_node : statement_node }
@@ -155,15 +161,15 @@ and statement_node =
   | JSreturn of expr 
   | JSvar_decl of java_var_info * initialiser option * statement
   | JSblock of block
-  | JSdo of statement * assertion * term option * expr  
-      (*r loop body, invariant, variant, condition *)
-  | JSwhile of expr * assertion * term option * statement  
-      (*r condition, invariant, variant, loop body *)
-  | JSfor of expr list * expr * assertion * term option * expr list * statement  
-      (*r init, condition, invariant, variant, steps, loop body *)
+  | JSdo of statement * loop_annot * expr  
+      (*r loop body, annot, condition *)
+  | JSwhile of expr * loop_annot * statement  
+      (*r condition, annot, loop body *)
+  | JSfor of expr list * expr * loop_annot * expr list * statement  
+      (*r init, condition, annot, steps, loop body *)
   | JSfor_decl of (java_var_info * initialiser option) list * 
-      expr * assertion * term option * expr list * statement  
-      (*r decls, condition, invariant, variant, steps, loop body *)
+      expr * loop_annot * expr list * statement  
+      (*r decls, condition, annot, steps, loop body *)
   | JSexpr of expr
   | JSassert of string option * assertion
   | JSswitch of expr * (expr switch_label list * block) list

@@ -49,17 +49,24 @@ class BinarySearch {
        or -1 if no element in t is equal to v  
     */
     
-    /*@ requires t != null && is_sorted(t);
-      @ behavior correctness:
-      @ ensures
-      @   (\result >= 0 && t[\result] == v) ||
-      @   (\result == -1 && \forall integer k; 0 <= k < t.length ==> t[k] != v);
+    /*@ requires t != null;
+      @ ensures -1 <= \result < t.length; 
+      @ behavior success:
+      @   ensures \result >= 0 ==> t[\result] == v;
+      @ behavior failure:
+      @  assumes 
+      @    \forall integer k1 k2; 
+      @       0 <= k1 <= k2 <= t.length-1 ==> t[k1] <= t[k2];
+      @  ensures \result == -1 ==>
+      @     \forall integer k; 0 <= k < t.length ==> t[k] != v;
       @*/
     static int binary_search(int t[], int v) {
 	int l = 0, u = t.length - 1;
 	/*@ loop_invariant 
-	  @   0 <= l && u <= t.length - 1 && 
-	  @   \forall integer k; 0 <= k < t.length ==> t[k] == v ==> l <= k <= u;
+	  @   0 <= l && u <= t.length - 1;
+	  @ for failure: 
+	  @  loop_invariant 
+	  @    \forall integer k; 0 <= k < t.length ==> t[k] == v ==> l <= k <= u;
 	  @ loop_variant 
 	  @   u-l ;
 	  @*/
