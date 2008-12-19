@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.394 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.395 2008-12-19 14:23:00 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -3000,7 +3000,16 @@ let tr_fun f funpos spec body acc =
 	   make_and req acc)
       internal_requires f.jc_fun_info_parameters
   in
-    
+
+  (* decreases clause: currently not handled... *)
+
+  begin
+    match spec.jc_fun_decreases with
+      | None -> ();
+      | Some _ ->
+	  Format.eprintf "Warning: decreases clause ignored (unsupported feature)@."
+  end;
+
   (* partition behaviors as follows:
      - (optional) 'safety' behavior (if Arguments Invariant Policy is selected)
      - (optional) 'inferred' behaviors (computed by analysis)

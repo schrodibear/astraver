@@ -657,6 +657,8 @@ module PDecl :
 
     val mkrequires_clause : 'a -> 'a clause
 
+    val mkdecreases_clause : 'a -> 'a clause
+
     val mkbehavior_clause :
       ?pos:Loc.position ->
       name:string ->

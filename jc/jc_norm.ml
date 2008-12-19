@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.112 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.113 2008-12-19 14:23:00 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -614,6 +614,7 @@ let expr e =
 (** From parsed clause to normalized clause *)
 let clause = function
   | JCCrequires e -> JCCrequires(expr e)
+  | JCCdecreases e -> JCCdecreases(expr e)
   | JCCbehavior b -> JCCbehavior(behavior b)
 
     

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.36 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.37 2008-12-19 14:23:00 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -285,6 +285,8 @@ let pclause fmt = function
   | JCCrequires e -> 
       if is_not_true e then
 	fprintf fmt "@\n@[<v 2>  requires @[%a@];@]" pexpr e
+  | JCCdecreases e -> 
+      fprintf fmt "@\n@[<v 2>  decreases @[%a@];@]" pexpr e
   | JCCbehavior b -> behavior fmt b
 
 let param fmt (ty,vi) =

@@ -1812,6 +1812,38 @@ logic real_max : real, real -> real
 
 logic real_min : real, real -> real
 
+axiom int_max_is_ge:
+  (forall x:int.
+    (forall y:int. ((int_max(x, y) >= x) and (int_max(x, y) >= y))))
+
+axiom int_max_is_some:
+  (forall x:int.
+    (forall y:int. ((int_max(x, y) = x) or (int_max(x, y) = y))))
+
+axiom int_min_is_le:
+  (forall x:int.
+    (forall y:int. ((int_min(x, y) <= x) and (int_min(x, y) <= y))))
+
+axiom int_min_is_some:
+  (forall x:int.
+    (forall y:int. ((int_min(x, y) = x) or (int_min(x, y) = y))))
+
+axiom real_max_is_ge:
+  (forall x:real.
+    (forall y:real. ((real_max(x, y) >= x) and (real_max(x, y) >= y))))
+
+axiom real_max_is_some:
+  (forall x:real.
+    (forall y:real. ((real_max(x, y) = x) or (real_max(x, y) = y))))
+
+axiom real_min_is_le:
+  (forall x:real.
+    (forall y:real. ((real_min(x, y) <= x) and (real_min(x, y) <= y))))
+
+axiom real_min_is_some:
+  (forall x:real.
+    (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
+
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
 
 type 't alloc_table
@@ -3340,6 +3372,42 @@ why -simplify [...] why/SideEffects.why
  ;; Why axiom neq_real_bool_axiom
  (FORALL (x y) (IFF (EQ (neq_real_bool x y) |@true|) (NEQ x y))))
 
+(BG_PUSH
+ ;; Why axiom int_max_is_ge
+ (FORALL (x y) (AND (>= (int_max x y) x) (>= (int_max x y) y))))
+
+(BG_PUSH
+ ;; Why axiom int_max_is_some
+ (FORALL (x y) (OR (EQ (int_max x y) x) (EQ (int_max x y) y))))
+
+(BG_PUSH
+ ;; Why axiom int_min_is_le
+ (FORALL (x y) (AND (<= (int_min x y) x) (<= (int_min x y) y))))
+
+(BG_PUSH
+ ;; Why axiom int_min_is_some
+ (FORALL (x y) (OR (EQ (int_min x y) x) (EQ (int_min x y) y))))
+
+(BG_PUSH
+ ;; Why axiom real_max_is_ge
+ (FORALL (x y)
+ (AND (EQ (ge_real (real_max x y) x) |@true|)
+ (EQ (ge_real (real_max x y) y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom real_max_is_some
+ (FORALL (x y) (OR (EQ (real_max x y) x) (EQ (real_max x y) y))))
+
+(BG_PUSH
+ ;; Why axiom real_min_is_le
+ (FORALL (x y)
+ (AND (EQ (le_real (real_min x y) x) |@true|)
+ (EQ (le_real (real_min x y) y) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom real_min_is_some
+ (FORALL (x y) (OR (EQ (real_min x y) x) (EQ (real_min x y) y))))
+
 (DEFPRED (zwf_zero a b) (AND (<= 0 b) (< a b)))
 
 (DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
@@ -4712,6 +4780,38 @@ logic int_min : int, int -> int
 logic real_max : real, real -> real
 
 logic real_min : real, real -> real
+
+axiom int_max_is_ge:
+  (forall x:int.
+    (forall y:int. ((int_max(x, y) >= x) and (int_max(x, y) >= y))))
+
+axiom int_max_is_some:
+  (forall x:int.
+    (forall y:int. ((int_max(x, y) = x) or (int_max(x, y) = y))))
+
+axiom int_min_is_le:
+  (forall x:int.
+    (forall y:int. ((int_min(x, y) <= x) and (int_min(x, y) <= y))))
+
+axiom int_min_is_some:
+  (forall x:int.
+    (forall y:int. ((int_min(x, y) = x) or (int_min(x, y) = y))))
+
+axiom real_max_is_ge:
+  (forall x:real.
+    (forall y:real. ((real_max(x, y) >= x) and (real_max(x, y) >= y))))
+
+axiom real_max_is_some:
+  (forall x:real.
+    (forall y:real. ((real_max(x, y) = x) or (real_max(x, y) = y))))
+
+axiom real_min_is_le:
+  (forall x:real.
+    (forall y:real. ((real_min(x, y) <= x) and (real_min(x, y) <= y))))
+
+axiom real_min_is_some:
+  (forall x:real.
+    (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
 
 predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
 

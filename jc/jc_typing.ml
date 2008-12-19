@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.273 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.274 2008-12-19 14:23:00 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2208,7 +2208,7 @@ let default_label l =
 (** Apply [type_labels] in all expressions of a normalized clause,
 with the correct label environment. *)
 let type_labels_in_clause = function
-  | JCCrequires e ->
+  | JCCrequires e | JCCdecreases e ->
       type_labels [LabelHere] ~result_label:None (Some LabelHere) e
   | JCCbehavior(_, _, _, assumes, requires, assigns, ensures) ->
       Option_misc.iter
@@ -2283,6 +2283,10 @@ let clause env vi_result c acc =
         { acc with 
           jc_fun_requires = 
             make_and (assertion env e) acc.jc_fun_requires; }
+    | JCCdecreases e ->
+	assert (acc.jc_fun_decreases = None);
+        { acc with jc_fun_decreases = Some (term env e) }
+	
     | JCCbehavior b ->
 	let (loc,id,b) = behavior env vi_result b in
 	if id = "default" then
@@ -2723,6 +2727,7 @@ let rec decl_aux ~only_types ~axiomatic acc d =
                   (clause param_env vi) specs 
                   { jc_fun_requires = assertion_true;
                     jc_fun_free_requires = assertion_true;
+		    jc_fun_decreases = None;
                     jc_fun_default_behavior = 
 		      Loc.dummy_position ,"default", default_behavior;
                     jc_fun_behavior = [] }

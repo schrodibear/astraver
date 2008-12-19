@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.163 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.164 2008-12-19 14:23:00 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -222,6 +222,7 @@ and 'a ptag = 'a ptag_node node_positioned
 
 type 'expr clause =
   | JCCrequires of 'expr
+  | JCCdecreases of 'expr 
   | JCCbehavior of 'expr pbehavior
 
 type 'expr reads_or_expr =
@@ -474,6 +475,7 @@ type 'li fun_spec =
 	 to prove the function correctness without being checked at 
 	 calls, if static analysis is trusted (option [-trust-ai]) *)
       mutable jc_fun_free_requires : 'li assertion; 
+      mutable jc_fun_decreases : 'li term option;
       (* special behavior without [assumes] clause, on which all annotations
 	 not specifically attached to a behavior are checked *)
       mutable jc_fun_default_behavior : Loc.position * string * 'li behavior;

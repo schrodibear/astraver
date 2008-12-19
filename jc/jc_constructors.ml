@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.26 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: jc_constructors.ml,v 1.27 2008-12-19 14:23:00 marche Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -437,6 +437,8 @@ module PDecl = struct
     (pos, name, throws, assumes, requires, assigns, ensures)
 
   let mkrequires_clause expr = JCCrequires expr
+
+  let mkdecreases_clause expr = JCCdecreases expr
 
   let mkbehavior_clause ?(pos = Loc.dummy_position) ~name ?throws ?assumes ?requires
       ?assigns ?(ensures = mkboolean ~value:true ()) () =

@@ -169,6 +169,38 @@ logic int_min : int, int -> int
 logic real_max : real, real -> real
 logic real_min : real, real -> real
 
+axiom int_max_is_ge :  
+  forall x:int. forall y:int. 
+  int_max(x,y) >= x and int_max(x,y) >= y
+
+axiom int_max_is_some :  
+  forall x:int. forall y:int. 
+  (int_max(x,y) = x or int_max(x,y) = y) 
+
+axiom int_min_is_le :  
+  forall x:int. forall y:int. 
+  int_min(x,y) <= x and int_min(x,y) <= y
+
+axiom int_min_is_some :  
+  forall x:int. forall y:int. 
+  (int_min(x,y) = x or int_min(x,y) = y) 
+
+axiom real_max_is_ge :  
+  forall x:real. forall y:real. 
+  real_max(x,y) >= x and real_max(x,y) >= y
+
+axiom real_max_is_some :  
+  forall x:real. forall y:real. 
+  (real_max(x,y) = x or real_max(x,y) = y) 
+
+axiom real_min_is_le :  
+  forall x:real. forall y:real. 
+  real_min(x,y) <= x and real_min(x,y) <= y
+
+axiom real_min_is_some :  
+  forall x:real. forall y:real. 
+  (real_min(x,y) = x or real_min(x,y) = y) 
+
 (* References. := is syntactic sugar for ref_set: *)
 
 parameter ref_set : x:'a ref -> v:'a -> {} unit writes x { x = v }

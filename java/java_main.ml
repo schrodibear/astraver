@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.71 2008-11-12 14:14:20 marche Exp $ *)
+(* $Id: java_main.ml,v 1.72 2008-12-19 14:23:00 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -254,6 +254,7 @@ let main () =
 		      mi.method_info_name;
 		    Java_interp.tr_method mi 
 		      mt.Java_typing.mt_requires 
+		      mt.Java_typing.mt_decreases
 		      mt.Java_typing.mt_behaviors 
 		      mt.Java_typing.mt_body acc
 		| ConstructorInfo ci ->

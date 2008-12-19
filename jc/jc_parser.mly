@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.125 2008-12-09 09:14:18 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.126 2008-12-19 14:23:00 marche Exp $ */
 
 %{
 
@@ -97,8 +97,8 @@
 /* integer boolean real double unit void rep */
 %token INTEGER BOOLEAN REAL DOUBLE FLOAT UNIT REP
 
-/* assigns assumes behavior ensures requires throws reads */
-%token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES THROWS READS
+/* assigns assumes behavior ensures requires decreases throws reads */
+%token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES DECREASES THROWS READS
 
 /* \forall \exists \offset_max \offset_min \address \old \result \mutable \typeof \bottom \typeeq \absolute_address */
 %token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSADDRESS BSOLD BSAT 
@@ -419,6 +419,8 @@ function_specification:
 spec_clause:
 | REQUIRES expression SEMICOLON
     { JCCrequires($2) }
+| DECREASES expression SEMICOLON
+    { JCCdecreases($2) }
 | behavior
   { JCCbehavior $1 }
 ;

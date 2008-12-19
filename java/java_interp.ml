@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.174 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.175 2008-12-19 14:23:00 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1508,15 +1508,16 @@ let reg_assertion_option a =
     | None -> mkboolean ~value:true ()
     | Some a -> reg_assertion a
 
+let reg_term t =
+  let t' = term t in
+  locate t.java_term_loc t'
+
 let loop_annot annot =
   let invariant = reg_assertion annot.loop_inv in
   let behs_inv =
     List.map (fun (id,a) -> ([snd id],reg_assertion a)) annot.behs_loop_inv
   in
-  let variant = 
-    Option_misc.map (fun t ->
-		       let t' = term t in
-		       locate t.java_term_loc t') annot.loop_var
+  let variant = Option_misc.map reg_term annot.loop_var
   in
   ([],invariant)::behs_inv, variant
 
@@ -1676,7 +1677,7 @@ and switch_label = function
 
 let true_assertion = mkboolean ~value:true ()
 
-let tr_method mi req behs b acc =
+let tr_method mi req dec behs b acc =
   let java_params = mi.method_info_parameters in
   let params =
     List.map (fun (p, _) -> create_var Loc.dummy_position p) java_params in
@@ -1711,9 +1712,15 @@ let tr_method mi req behs b acc =
       mi.method_info_loc
   in
   let requires = mkrequires_clause (reg_assertion_option req) in
+  let clauses =
+    match dec with
+      | None -> requires :: behaviors
+      | Some t ->
+	  requires :: (mkdecreases_clause (reg_term t)) :: behaviors
+  in
   let result_type = (* need the option monad... *)
     Option_misc.map
-    ptype_of_type
+      ptype_of_type
       (Option_misc.map
          (tr_type Loc.dummy_position)
          return_type)
@@ -1722,7 +1729,7 @@ let tr_method mi req behs b acc =
     ?result_type
     ~name: (new identifier nfi.jc_fun_info_name)
     ~params
-    ~clauses: (requires:: behaviors)
+    ~clauses
     ?body
     ()
   in def::acc
