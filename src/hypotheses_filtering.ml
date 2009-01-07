@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.60 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.61 2009-01-07 17:29:48 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1642,8 +1642,8 @@ let get_relevant_preds hl n =
 
 (**
 functions for the main function: reduce
-@param l' : liste d'hypoth�ses
-@param g' : pr�dicat du but
+@param l' : liste d'hypotheses
+@param g' : predicat du but
 **)
 let reduce_subst (l', g') =
   let many_substs_in_predicate sl p =
@@ -1689,7 +1689,7 @@ let reduce_subst (l', g') =
                     let subst = subst_one v1 t2 in
                     begin
                       if debug then
-                        Format.printf "Removed  pred %a" Util.print_predicate p;
+                        Format.printf "Removed  pred %a\n" Util.print_predicate p;
                     end;
                     (subst:: sl, fl)
                 
@@ -1910,7 +1910,7 @@ let managesContext relevantPreds decl =
             let preds_of_p_cnf = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in
             if (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then
               begin
-                (* On garde tout le pr�dicat *)
+                (* On garde tout le predicat *)
                 if debug then
                   Format.printf "Ctx Keeped\n\n";
                 Queue.push (Dpredicate_def (loc, ident, def)) decl;
@@ -1918,13 +1918,13 @@ let managesContext relevantPreds decl =
               end
             else
               begin
-                (* Sinon on ins�re la sa signature du pr�dicat avec un logic *)
+                (* Sinon on insere la signature du predicat avec un logic *)
 		let name = Ident.string ident in
                 (let bl, _ = def.scheme_type in
                  Queue.push (Dlogic(loc, name, generalize_logic_type (Predicate(List.map snd bl)))) decl);
                 
-                (* Ensuite, on test chacune des clauses pour �ventuellement les  *)
-                (* pr�server                                                     *)
+                (* Ensuite, on test chacune des clauses pour eventuellement les  *)
+                (* preserver                                                     *)
                 let p_list = (split_one [] 1 p_cnf) in
                 let ax_list = List.map (fun p ->
                           let i = my_fresh_hyp_str () in
@@ -1968,23 +1968,30 @@ let managesContext relevantPreds decl =
             Queue.push c decl;
             filter l
       in
-      filter (List.rev !context)
+      filter (List.rev !context) 
     end
 (* Fin pruning des axiomes du context *)
 
 let managesGoal ax (hyps, concl) decl =
+
   let (loc, expl, id, _) = ax in
   (** retrieves the list of predicates in the conclusion **)
   let concl_preds = get_preds_of concl true in
+
   (* if weights are not consider (as [FTP07] implementation)*)
   let relevant_preds = 
       if prune_coarse_pred_comp then 
 	get_predecessor_pred concl_preds !pb 
       else
-	begin
+	begin 
+	  (* WARNING  !!!! 
+	     This branch seems to be KO since the coarse option has been haded, when --prune-with-comp and --prune-context are both set
+	  *)
 	  let hl = compute_sequence_of_predicates concl_preds in 
 	  get_relevant_preds hl !pb 
-	end in
+	end 
+  in
+
 
   (** retrieves the list of variables in the conclusion **)
   let vars_of_concl = VarStringSet.diff (free_vars_of concl) avoided_vars in
@@ -2060,8 +2067,10 @@ let reduce q decl =
         let l' = List.append l l' in
         let (l', g') = reduce_subst (l', g') in
         
+
         (** memorize hypotheses as a graph of variables **)
         build_var_graph (l', g');
+
         
         (** focus on goal **)
         managesGoal ax (l', g') decl
