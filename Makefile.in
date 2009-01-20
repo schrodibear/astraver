@@ -747,7 +747,7 @@ install-lib: $(JCLIB)
 	cd lib; cp -r javacard_api $(LIBDIR)/why
 	cp -f lib/why-logo-*.png $(LIBDIR)/why
 #	remove CVS directories
-	find $(LIBDIR)/krakatoa -name CVS | xargs $(RM) -r
+	find $(LIBDIR) -name CVS | xargs $(RM) -r
 
 install-man:
 	mkdir -p $(MANDIR)/man1
