@@ -1,42 +1,42 @@
 
 //@+ CheckArithOverflow = no
 
-/*@ predicate Sorted{L}(int a[], integer l, integer h) =
+/*@ predicate Sorted{L}(long a[], integer l, integer h) =
   @   \forall integer i; l <= i < h ==> a[i] <= a[i+1] ;
   @*/
 
-/*@ predicate Swap{L1,L2}(int a[], integer i, integer j) =
+/*@ predicate Swap{L1,L2}(long a[], integer i, integer j) =
   @   \at(a[i],L1) == \at(a[j],L2) &&
   @   \at(a[j],L1) == \at(a[i],L2) &&
   @   \forall integer k; k != i && k != j ==> \at(a[k],L1) == \at(a[k],L2);
   @*/
 
 /*@ axiomatic Permut {
-  @  predicate Permut{L1,L2}(int a[], integer l, integer h);
+  @  predicate Permut{L1,L2}(long a[], integer l, integer h);
   @  axiom Permut_refl{L}: 
-  @   \forall int a[], integer l h; Permut{L,L}(a, l, h) ;
+  @   \forall long a[], integer l h; Permut{L,L}(a, l, h) ;
   @  axiom Permut_sym{L1,L2}: 
-  @    \forall int a[], integer l h; 
+  @    \forall long a[], integer l h; 
   @      Permut{L1,L2}(a, l, h) ==> Permut{L2,L1}(a, l, h) ;
   @  axiom Permut_trans{L1,L2,L3}: 
-  @    \forall int a[], integer l h; 
+  @    \forall long a[], integer l h; 
   @      Permut{L1,L2}(a, l, h) && Permut{L2,L3}(a, l, h) ==> 
   @        Permut{L1,L3}(a, l, h) ;
   @  axiom Permut_swap{L1,L2}: 
-  @    \forall int a[], integer l h i j; 
+  @    \forall long a[], integer l h i j; 
   @       l <= i <= h && l <= j <= h && Swap{L1,L2}(a, i, j) ==> 
   @     Permut{L1,L2}(a, l, h) ;
   @ }
   @*/
 
-class Sort {
+class Sorting {
 
     /*@ requires t != null && 
       @    0 <= i < t.length && 0 <= j < t.length;
       @ assigns t[i],t[j];
       @ ensures Swap{Old,Here}(t,i,j);
       @*/
-    void swap(int t[], int i, int j) {
+    static void swap(long t[], int i, int j) {
 	int tmp = t[i];
 	t[i] = t[j];
 	t[j] = tmp;
@@ -48,9 +48,9 @@ class Sort {
       @ behavior permutation:
       @   ensures Permut{Old,Here}(t,0,t.length-1);
       @*/
-    void min_sort(int t[]) {
-	int i,j;
-	int mi,mv;
+    static void min_sort(long t[]) {
+	int i,j, mi;
+	long mv;
 	/*@ loop_invariant 0 <= i;
 	  @ for sorted: 
 	  @  loop_invariant Sorted(t,0,i) && 
@@ -78,4 +78,46 @@ class Sort {
 	}
     }
 
+    /*@ requires t != null;
+      @ behavior sorted:
+      @   ensures Sorted(t,0,t.length-1);
+      @ behavior permutation:
+      @   ensures Permut{Old,Here}(t,0,t.length-1);
+      @*/
+    static void insert_sort(long t[]) {
+	/* main loop:
+	 * for i from 1 to t.length-1: sorts t[0..i]
+	 */
+	/*@ loop_invariant 1 <= i <= t.length;
+	  @ for sorted:
+	  @   loop_invariant Sorted(t,0,i-1);
+	  @ for permutation:
+	  @   loop_invariant Permut{Pre,Here}(t,0,t.length-1);
+	  @*/
+	for (int i=1; i < t.length; i++) {
+	    
+	    // find the right index mi to insert t[i] into t[0..i-1]
+	    int mi = i;
+	    for (int j=i-1; j >= 0; j--) {
+		if (t[j] < t[i]) mi=j;
+	    }
+	    // we shift the block t[mi..i-1] to the right
+	    long tmp = t[i];
+	    shift_right(t,mi,i);
+	    // and put t[i] at the right index
+	    t[mi] = tmp;
+	}
+    }
+
+
+    /* shift_right(t,a,b) moves the block t[a..b-1] to t[a+1..b]
+     * beware: the old value of t[b] is lost!
+     */
+    /*@ requires t!=null && 0 <= a && b < t.length ;
+      @ assigns t[a+1..b];
+      @ ensures \forall integer k; 
+      @     a+1 <= k <= b ==> t[k] == \old(t[k-1]);
+      @*/
+    static void shift_right(long t[], int a, int b);	
+    
 }

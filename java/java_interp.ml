@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.175 2008-12-19 14:23:00 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.176 2009-01-20 16:15:49 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -348,6 +348,10 @@ let get_logic_fun fi =
   with
       Not_found -> 
 	eprintf "Anomaly: cannot find logic symbol `%s'@." fi.java_logic_info_name;
+	eprintf "[";
+	Hashtbl.iter  
+	  (fun _ d -> eprintf "%s;" d.jc_logic_info_name) logics_table;
+	eprintf "]@.";
 	assert false
 
 let tr_logic_label = function

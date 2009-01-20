@@ -1,4 +1,7 @@
 
+  o Krakatoa/Jessie: support for "for" sections (associated to various 
+    behaviors) in code annotations (assert and loop invariants). 
+    See e.g tests/java/B
   o Why: min and max functions in the prelude, with appropriate 
     axiomatization
 

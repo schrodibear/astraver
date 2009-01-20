@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.152 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.153 2009-01-20 16:15:49 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -4079,8 +4079,8 @@ let type_specs package_env type_env =
                  type_env = type_env;
                  current_type = (Some current_type);
                	 behavior_names = [];
-		 label_env = [];
-		 current_label = None;
+		 label_env = label_env_here;
+		 current_label = Some LabelHere;
                  env = env;
                }
              in
