@@ -1,6 +1,8 @@
 
-  o Krakatoa: several bug fix for constructors: class invariant not assumed
-      at entrance, fields initialized to their default values.
+  o Jessie: bug fix related to assignement to the null pointer
+  o Krakatoa: several bug fix related to constructors (class invariant 
+    not anymore assumed true at entrance, object fields initialized to 
+    their default values)
   o Krakatoa/Jessie: support for "for" sections (associated to various 
     behaviors) in code annotations (assert and loop invariants). 
     See e.g tests/java/BinarySearch.java

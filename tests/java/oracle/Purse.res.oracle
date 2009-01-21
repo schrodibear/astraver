@@ -153,7 +153,7 @@ type interface = [interface]
 tag interface = {
 }
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -164,19 +164,31 @@ exception Throwable of Throwable[0..]
 
 exception Exception of Exception[0..]
 
-unit cons_Throwable(Throwable[0] this_17)
-;
+unit cons_Throwable(! Throwable[0] this_17)
+{  (this_17.backtrace = null);
+   (this_17.detailMessage = null);
+   (this_17.cause = null)
+}
 
-unit cons_Throwable_String(Throwable[0] this_18, String[0..] message)
-;
+unit cons_Throwable_String(! Throwable[0] this_18, String[0..] message)
+{  (this_18.backtrace = null);
+   (this_18.detailMessage = null);
+   (this_18.cause = null)
+}
 
-unit cons_Throwable_String_Throwable(Throwable[0] this_19,
+unit cons_Throwable_String_Throwable(! Throwable[0] this_19,
                                      String[0..] message_0,
                                      Throwable[0..] cause)
-;
+{  (this_19.backtrace = null);
+   (this_19.detailMessage = null);
+   (this_19.cause = null)
+}
 
-unit cons_Throwable_Throwable(Throwable[0] this_20, Throwable[0..] cause_0)
-;
+unit cons_Throwable_Throwable(! Throwable[0] this_20, Throwable[0..] cause_0)
+{  (this_20.backtrace = null);
+   (this_20.detailMessage = null);
+   (this_20.cause = null)
+}
 
 String[0..] Throwable_getMessage(Throwable[0] this_8)
 ;
@@ -207,29 +219,25 @@ Throwable[0..] Throwable_fillInStackTrace(Throwable[0] this_15)
 integer Throwable_getStackTraceDepth(Throwable[0] this_16)
 ;
 
-unit cons_Exception(Exception[0] this_21)
-;
+unit cons_Exception(! Exception[0] this_21){()}
 
-unit cons_Exception_String(Exception[0] this_22, String[0..] message_1)
-;
+unit cons_Exception_String(! Exception[0] this_22, String[0..] message_1){()}
 
-unit cons_Exception_String_Throwable(Exception[0] this_23,
+unit cons_Exception_String_Throwable(! Exception[0] this_23,
                                      String[0..] message_2,
-                                     Throwable[0..] cause_2)
-;
+                                     Throwable[0..] cause_2){()}
 
-unit cons_Exception_Throwable(Exception[0] this_24, Throwable[0..] cause_3)
-;
+unit cons_Exception_Throwable(! Exception[0] this_24, Throwable[0..] cause_3){()}
 
-unit cons_NoCreditException(NoCreditException[0] this_2)
-;
+unit cons_NoCreditException(! NoCreditException[0] this_2){()}
 
-unit cons_Purse(Purse[0] this_7)
+unit cons_Purse(! Purse[0] this_7)
   requires (K_2 : true);
 behavior default:
   assigns this_7.balance;
   ensures (K_3 : (this_7.balance == 0));
-{  (K_1 : (this_7.balance = 0))
+{  (this_7.balance = 0);
+   (K_1 : (this_7.balance = 0))
 }
 
 unit Purse_credit(Purse[0] this_6, integer s_0)
@@ -529,6 +537,15 @@ begin = 11
 end = 20
 
 ========== jessie execution ==========
+Generating Why function cons_Throwable
+Generating Why function cons_Throwable_String
+Generating Why function cons_Throwable_String_Throwable
+Generating Why function cons_Throwable_Throwable
+Generating Why function cons_Exception
+Generating Why function cons_Exception_String
+Generating Why function cons_Exception_String_Throwable
+Generating Why function cons_Exception_Throwable
+Generating Why function cons_NoCreditException
 Generating Why function cons_Purse
 Generating Why function Purse_credit
 Generating Why function Purse_withdraw
@@ -754,6 +771,14 @@ line = 0
 begin = -1
 end = -1
 
+[cons_Exception_Throwable_ensures_default]
+name = "Constructor of class Exception"
+behavior = "Default behavior"
+file = "HOME/lib/java_api/java/lang/Exception.java"
+line = 76
+begin = 11
+end = 20
+
 [JC_47]
 file = "HOME/"
 line = 0
@@ -801,6 +826,14 @@ file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[cons_Exception_String_Throwable_ensures_default]
+name = "Constructor of class Exception"
+behavior = "Default behavior"
+file = "HOME/lib/java_api/java/lang/Exception.java"
+line = 58
+begin = 11
+end = 20
 
 [JC_115]
 file = "HOME/lib/java_api/java/lang/Exception.java"
@@ -908,6 +941,14 @@ line = 289
 begin = 21
 end = 29
 
+[cons_Throwable_Throwable_safety]
+name = "Constructor of class Throwable"
+behavior = "Safety"
+file = "HOME/lib/java_api/java/lang/Throwable.java"
+line = 239
+begin = 11
+end = 20
+
 [JC_120]
 file = "HOME/"
 line = 0
@@ -980,6 +1021,14 @@ line = 0
 begin = -1
 end = -1
 
+[cons_Throwable_safety]
+name = "Constructor of class Throwable"
+behavior = "Safety"
+file = "HOME/lib/java_api/java/lang/Throwable.java"
+line = 179
+begin = 11
+end = 20
+
 [JC_129]
 file = "HOME/"
 line = 0
@@ -1037,6 +1086,14 @@ end = -1
 [JC_131]
 file = "HOME/lib/java_api/java/lang/Exception.java"
 line = 58
+begin = 11
+end = 20
+
+[cons_Exception_Throwable_safety]
+name = "Constructor of class Exception"
+behavior = "Safety"
+file = "HOME/lib/java_api/java/lang/Exception.java"
+line = 76
 begin = 11
 end = 20
 
@@ -1244,6 +1301,14 @@ line = 450
 begin = 16
 end = 31
 
+[cons_Throwable_String_ensures_default]
+name = "Constructor of class Throwable"
+behavior = "Default behavior"
+file = "HOME/lib/java_api/java/lang/Throwable.java"
+line = 194
+begin = 11
+end = 20
+
 [Purse_getBalance_ensures_default]
 name = "Method getBalance"
 behavior = "Default behavior"
@@ -1287,6 +1352,14 @@ file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[cons_Exception_String_ensures_default]
+name = "Constructor of class Exception"
+behavior = "Default behavior"
+file = "HOME/lib/java_api/java/lang/Exception.java"
+line = 40
+begin = 11
+end = 20
 
 [JC_3]
 file = "HOME/tests/java/Purse.jc"
@@ -1362,11 +1435,27 @@ line = 0
 begin = -1
 end = -1
 
+[cons_Throwable_String_safety]
+name = "Constructor of class Throwable"
+behavior = "Safety"
+file = "HOME/lib/java_api/java/lang/Throwable.java"
+line = 194
+begin = 11
+end = 20
+
 [JC_154]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[cons_NoCreditException_safety]
+name = "Constructor of class NoCreditException"
+behavior = "Safety"
+file = "HOME/tests/java/Purse.java"
+line = 35
+begin = 11
+end = 28
 
 [JC_155]
 file = "HOME/tests/java/Purse.java"
@@ -1482,7 +1571,7 @@ end = 16
 
 [JC_161]
 file = "HOME/tests/java/Purse.jc"
-line = 121
+line = 128
 begin = 9
 end = 16
 
@@ -1500,7 +1589,7 @@ end = 16
 
 [JC_164]
 file = "HOME/tests/java/Purse.jc"
-line = 121
+line = 128
 begin = 9
 end = 16
 
@@ -1515,6 +1604,22 @@ file = "HOME/tests/java/Purse.java"
 line = 48
 begin = 11
 end = 16
+
+[cons_Throwable_String_Throwable_safety]
+name = "Constructor of class Throwable"
+behavior = "Safety"
+file = "HOME/lib/java_api/java/lang/Throwable.java"
+line = 216
+begin = 11
+end = 20
+
+[cons_Throwable_String_Throwable_ensures_default]
+name = "Constructor of class Throwable"
+behavior = "Default behavior"
+file = "HOME/lib/java_api/java/lang/Throwable.java"
+line = 216
+begin = 11
+end = 20
 
 [JC_167]
 file = "HOME/tests/java/Purse.java"
@@ -1533,6 +1638,22 @@ file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[cons_NoCreditException_ensures_default]
+name = "Constructor of class NoCreditException"
+behavior = "Default behavior"
+file = "HOME/tests/java/Purse.java"
+line = 35
+begin = 11
+end = 28
+
+[cons_Exception_ensures_default]
+name = "Constructor of class Exception"
+behavior = "Default behavior"
+file = "HOME/lib/java_api/java/lang/Exception.java"
+line = 28
+begin = 11
+end = 20
 
 [JC_170]
 file = "HOME/tests/java/Purse.java"
@@ -1566,7 +1687,7 @@ end = 22
 
 [JC_175]
 file = "HOME/tests/java/Purse.jc"
-line = 129
+line = 137
 begin = 9
 end = 16
 
@@ -1582,9 +1703,17 @@ line = 56
 begin = 16
 end = 22
 
+[cons_Exception_String_safety]
+name = "Constructor of class Exception"
+behavior = "Safety"
+file = "HOME/lib/java_api/java/lang/Exception.java"
+line = 40
+begin = 11
+end = 20
+
 [JC_178]
 file = "HOME/tests/java/Purse.jc"
-line = 129
+line = 137
 begin = 9
 end = 16
 
@@ -1642,15 +1771,15 @@ line = 0
 begin = -1
 end = -1
 
-[JC_180]
+[Purse_credit_safety]
+name = "Method credit"
+behavior = "Safety"
 file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
 
-[Purse_credit_safety]
-name = "Method credit"
-behavior = "Safety"
+[JC_180]
 file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
@@ -1679,6 +1808,14 @@ file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
+
+[cons_Exception_String_Throwable_safety]
+name = "Constructor of class Exception"
+behavior = "Safety"
+file = "HOME/lib/java_api/java/lang/Exception.java"
+line = 58
+begin = 11
+end = 20
 
 [JC_183]
 file = "HOME/"
@@ -1726,9 +1863,17 @@ end = 25
 
 [JC_189]
 file = "HOME/tests/java/Purse.jc"
-line = 137
+line = 145
 begin = 9
 end = 16
+
+[cons_Throwable_ensures_default]
+name = "Constructor of class Throwable"
+behavior = "Default behavior"
+file = "HOME/lib/java_api/java/lang/Throwable.java"
+line = 179
+begin = 11
+end = 20
 
 [JC_20]
 file = "HOME/"
@@ -1750,7 +1895,7 @@ end = -1
 
 [JC_200]
 file = "HOME/tests/java/Purse.jc"
-line = 143
+line = 151
 begin = 10
 end = 18
 
@@ -1763,7 +1908,7 @@ end = -1
 [JC_201]
 kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
-line = 150
+line = 158
 begin = 40
 end = 64
 
@@ -1776,7 +1921,7 @@ end = -1
 [JC_202]
 kind = IndexBounds
 file = "HOME/tests/java/Purse.jc"
-line = 150
+line = 158
 begin = 7
 end = 65
 
@@ -1789,7 +1934,7 @@ end = -1
 [JC_203]
 kind = UserCall
 file = "HOME/tests/java/Purse.jc"
-line = 153
+line = 161
 begin = 24
 end = 52
 
@@ -1802,7 +1947,7 @@ end = -1
 [JC_204]
 kind = UserCall
 file = "HOME/tests/java/Purse.jc"
-line = 153
+line = 161
 begin = 24
 end = 52
 
@@ -1812,10 +1957,18 @@ line = 216
 begin = 11
 end = 20
 
+[cons_Exception_safety]
+name = "Constructor of class Exception"
+behavior = "Safety"
+file = "HOME/lib/java_api/java/lang/Exception.java"
+line = 28
+begin = 11
+end = 20
+
 [JC_205]
 kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
-line = 150
+line = 158
 begin = 40
 end = 64
 
@@ -1834,7 +1987,7 @@ end = -1
 [JC_206]
 kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
-line = 150
+line = 158
 begin = 40
 end = 64
 
@@ -1853,20 +2006,20 @@ end = 20
 [JC_207]
 kind = UserCall
 file = "HOME/tests/java/Purse.jc"
-line = 153
+line = 161
 begin = 24
 end = 52
 
 [JC_192]
 file = "HOME/tests/java/Purse.jc"
-line = 137
+line = 145
 begin = 9
 end = 16
 
 [JC_208]
 kind = UserCall
 file = "HOME/tests/java/Purse.jc"
-line = 153
+line = 161
 begin = 24
 end = 52
 
@@ -1879,7 +2032,7 @@ end = 24
 [JC_209]
 kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
-line = 150
+line = 158
 begin = 40
 end = 64
 
@@ -1903,7 +2056,7 @@ end = 24
 
 [JC_197]
 file = "HOME/tests/java/Purse.jc"
-line = 143
+line = 151
 begin = 10
 end = 18
 
@@ -1940,7 +2093,7 @@ end = -1
 [JC_210]
 kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
-line = 150
+line = 158
 begin = 40
 end = 64
 
@@ -1953,7 +2106,7 @@ end = -1
 [JC_211]
 kind = UserCall
 file = "HOME/tests/java/Purse.jc"
-line = 153
+line = 161
 begin = 24
 end = 52
 
@@ -1966,7 +2119,7 @@ end = -1
 [JC_212]
 kind = UserCall
 file = "HOME/tests/java/Purse.jc"
-line = 153
+line = 161
 begin = 24
 end = 52
 
@@ -1995,6 +2148,14 @@ begin = -1
 end = -1
 
 [JC_37]
+file = "HOME/lib/java_api/java/lang/Throwable.java"
+line = 239
+begin = 11
+end = 20
+
+[cons_Throwable_Throwable_ensures_default]
+name = "Constructor of class Throwable"
+behavior = "Default behavior"
 file = "HOME/lib/java_api/java/lang/Throwable.java"
 line = 239
 begin = 11
@@ -2984,8 +3145,7 @@ parameter cons_Purse :
 
 parameter cons_Purse_requires :
  this_7:Object pointer ->
-  { (JC_155: balance_non_negative(this_7, Purse_balance))} unit
-  reads Object_alloc_table,Purse_balance writes Purse_balance
+  { } unit reads Object_alloc_table,Purse_balance writes Purse_balance
   { ((JC_166: balance_non_negative(this_7, Purse_balance))
     and (JC_164:
         ((JC_162: eq_int(select(Purse_balance, this_7), (0)))
@@ -2994,36 +3154,60 @@ parameter cons_Purse_requires :
             pset_singleton(this_7@)))))) }
 
 parameter cons_Throwable :
- this_17:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_17:Object pointer ->
+  { } unit reads Object_alloc_table
+  writes Throwable_backtrace,Throwable_cause,Throwable_detailMessage 
+  { true }
 
 parameter cons_Throwable_String :
  this_18:Object pointer ->
-  message:Object pointer -> { } unit reads Object_alloc_table { true }
+  message:Object pointer ->
+   { } unit reads Object_alloc_table
+   writes Throwable_backtrace,Throwable_cause,Throwable_detailMessage
+   { true }
 
 parameter cons_Throwable_String_Throwable :
  this_19:Object pointer ->
   message_0:Object pointer ->
-   cause:Object pointer -> { } unit reads Object_alloc_table { true }
+   cause:Object pointer ->
+    { } unit reads Object_alloc_table
+    writes Throwable_backtrace,Throwable_cause,Throwable_detailMessage
+    { true }
 
 parameter cons_Throwable_String_Throwable_requires :
  this_19:Object pointer ->
   message_0:Object pointer ->
-   cause:Object pointer -> { } unit reads Object_alloc_table { true }
+   cause:Object pointer ->
+    { } unit reads Object_alloc_table
+    writes Throwable_backtrace,Throwable_cause,Throwable_detailMessage
+    { true }
 
 parameter cons_Throwable_String_requires :
  this_18:Object pointer ->
-  message:Object pointer -> { } unit reads Object_alloc_table { true }
+  message:Object pointer ->
+   { } unit reads Object_alloc_table
+   writes Throwable_backtrace,Throwable_cause,Throwable_detailMessage
+   { true }
 
 parameter cons_Throwable_Throwable :
  this_20:Object pointer ->
-  cause_0:Object pointer -> { } unit reads Object_alloc_table { true }
+  cause_0:Object pointer ->
+   { } unit reads Object_alloc_table
+   writes Throwable_backtrace,Throwable_cause,Throwable_detailMessage
+   { true }
 
 parameter cons_Throwable_Throwable_requires :
  this_20:Object pointer ->
-  cause_0:Object pointer -> { } unit reads Object_alloc_table { true }
+  cause_0:Object pointer ->
+   { } unit reads Object_alloc_table
+   writes Throwable_backtrace,Throwable_cause,Throwable_detailMessage
+   { true }
 
 parameter cons_Throwable_requires :
- this_17:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_17:Object pointer ->
+  { } unit reads Object_alloc_table
+  writes Throwable_backtrace,Throwable_cause,Throwable_detailMessage 
+  { true }
 
 parameter non_null_Object :
  x_0:Object pointer ->
@@ -3050,13 +3234,13 @@ let Purse_credit_ensures_default =
   (init:
   try
    begin
-     (let jessie_20 = (K_5:
-                      (let jessie_16 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
-                      (let jessie_19 = this_6 in
-                      begin
-                        (((safe_upd_ Purse_balance) jessie_19) jessie_16);
-                       jessie_16
-                      end))) in
+     (let jessie_174 = (K_5:
+                       (let jessie_170 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
+                       (let jessie_173 = this_6 in
+                       begin
+                         (((safe_upd_ Purse_balance) jessie_173) jessie_170);
+                        jessie_170
+                       end))) in
      void);
     (raise Return)
    end
@@ -3080,13 +3264,13 @@ let Purse_credit_safety =
   (init:
   try
    begin
-     (let jessie_15 = (K_5:
-                      (let jessie_11 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
-                      (let jessie_14 = this_6 in
-                      begin
-                        (((safe_upd_ Purse_balance) jessie_14) jessie_11);
-                       jessie_11
-                      end))) in
+     (let jessie_169 = (K_5:
+                       (let jessie_165 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
+                       (let jessie_168 = this_6 in
+                       begin
+                         (((safe_upd_ Purse_balance) jessie_168) jessie_165);
+                        jessie_165
+                       end))) in
      void);
     (raise Return)
    end
@@ -3141,20 +3325,20 @@ let Purse_withdraw_ensures_default =
      (if (K_13: ((ge_int_ (K_12: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
       (K_11:
-      (let jessie_34 = (let jessie_30 = (K_10:
-                                        ((sub_int (K_9:
-                                                  ((safe_acc_ !Purse_balance) this_5))) s_1)) in
-                       (let jessie_33 = this_5 in
-                       (((safe_upd_ Purse_balance) jessie_33) jessie_30))) in
+      (let jessie_188 = (let jessie_184 = (K_10:
+                                          ((sub_int (K_9:
+                                                    ((safe_acc_ !Purse_balance) this_5))) s_1)) in
+                        (let jessie_187 = this_5 in
+                        (((safe_upd_ Purse_balance) jessie_187) jessie_184))) in
       void))
      else
-      (let jessie_38 = (raise
-                        (NoCreditException_exc
-                        (let this = (JC_206:
-                                    (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
-                        (let tt = (JC_208:
-                                  (cons_NoCreditException_requires this)) in
-                        this)))) in
+      (let jessie_192 = (raise
+                         (NoCreditException_exc
+                         (let this = (JC_206:
+                                     (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
+                         (let tt = (JC_208:
+                                   (cons_NoCreditException_requires this)) in
+                         this)))) in
       void));
     (raise Return)
    end
@@ -3183,19 +3367,19 @@ let Purse_withdraw_exsures_amount_too_large =
      (if (K_13: ((ge_int_ (K_12: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
       (K_11:
-      (let jessie_43 = (let jessie_39 = (K_10:
-                                        ((sub_int (K_9:
-                                                  ((safe_acc_ !Purse_balance) this_5))) s_1)) in
-                       (let jessie_42 = this_5 in
-                       (((safe_upd_ Purse_balance) jessie_42) jessie_39))) in
+      (let jessie_197 = (let jessie_193 = (K_10:
+                                          ((sub_int (K_9:
+                                                    ((safe_acc_ !Purse_balance) this_5))) s_1)) in
+                        (let jessie_196 = this_5 in
+                        (((safe_upd_ Purse_balance) jessie_196) jessie_193))) in
       void))
      else
-      (let jessie_47 = (raise
-                        (NoCreditException_exc
-                        (let this = (JC_210:
-                                    (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
-                        (let tt = (JC_212: (cons_NoCreditException this)) in
-                        this)))) in
+      (let jessie_201 = (raise
+                         (NoCreditException_exc
+                         (let this = (JC_210:
+                                     (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
+                         (let tt = (JC_212: (cons_NoCreditException this)) in
+                         this)))) in
       void));
     (raise Return)
    end
@@ -3220,25 +3404,25 @@ let Purse_withdraw_safety =
      (if (K_13: ((ge_int_ (K_12: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
       (K_11:
-      (let jessie_25 = (let jessie_21 = (K_10:
-                                        ((sub_int (K_9:
-                                                  ((safe_acc_ !Purse_balance) this_5))) s_1)) in
-                       (let jessie_24 = this_5 in
-                       (((safe_upd_ Purse_balance) jessie_24) jessie_21))) in
+      (let jessie_179 = (let jessie_175 = (K_10:
+                                          ((sub_int (K_9:
+                                                    ((safe_acc_ !Purse_balance) this_5))) s_1)) in
+                        (let jessie_178 = this_5 in
+                        (((safe_upd_ Purse_balance) jessie_178) jessie_175))) in
       void))
      else
-      (let jessie_29 = (raise
-                        (NoCreditException_exc
-                        (let this = (let jessie_26 = (JC_201:
-                                                     (((alloc_struct_NoCreditException_requires (1)) Object_alloc_table) Object_tag_table)) in
-                                    (JC_202:
-                                    (assert
-                                    { ge_int(offset_max(Object_alloc_table,
-                                             jessie_26),
-                                      (0)) };
-                                    jessie_26))) in
-                        (let tt = (JC_204: (cons_NoCreditException this)) in
-                        this)))) in
+      (let jessie_183 = (raise
+                         (NoCreditException_exc
+                         (let this = (let jessie_180 = (JC_201:
+                                                       (((alloc_struct_NoCreditException_requires (1)) Object_alloc_table) Object_tag_table)) in
+                                     (JC_202:
+                                     (assert
+                                     { ge_int(offset_max(Object_alloc_table,
+                                              jessie_180),
+                                       (0)) };
+                                     jessie_180))) in
+                         (let tt = (JC_204: (cons_NoCreditException this)) in
+                         this)))) in
       void));
     (raise Return)
    end
@@ -3248,20 +3432,93 @@ let Purse_withdraw_safety =
   { (JC_193: balance_non_negative(this_5, Purse_balance))
     | NoCreditException_exc => true }
 
+let cons_Exception_String_Throwable_ensures_default =
+ fun (this_23 : Object pointer) (message_2 : Object pointer) (cause_2 : Object pointer) ->
+  { (left_valid_struct_Throwable(cause_2, (0), Object_alloc_table)
+    and (left_valid_struct_String(message_2, (0), Object_alloc_table)
+        and valid_struct_Exception(this_23, (0), (0), Object_alloc_table))) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_135: true) }
+
+let cons_Exception_String_Throwable_safety =
+ fun (this_23 : Object pointer) (message_2 : Object pointer) (cause_2 : Object pointer) ->
+  { (left_valid_struct_Throwable(cause_2, (0), Object_alloc_table)
+    and (left_valid_struct_String(message_2, (0), Object_alloc_table)
+        and valid_struct_Exception(this_23, (0), (0), Object_alloc_table))) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
+let cons_Exception_String_ensures_default =
+ fun (this_22 : Object pointer) (message_1 : Object pointer) ->
+  { (left_valid_struct_String(message_1, (0), Object_alloc_table)
+    and valid_struct_Exception(this_22, (0), (0), Object_alloc_table)) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_127: true) }
+
+let cons_Exception_String_safety =
+ fun (this_22 : Object pointer) (message_1 : Object pointer) ->
+  { (left_valid_struct_String(message_1, (0), Object_alloc_table)
+    and valid_struct_Exception(this_22, (0), (0), Object_alloc_table)) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
+let cons_Exception_Throwable_ensures_default =
+ fun (this_24 : Object pointer) (cause_3 : Object pointer) ->
+  { (left_valid_struct_Throwable(cause_3, (0), Object_alloc_table)
+    and valid_struct_Exception(this_24, (0), (0), Object_alloc_table)) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_143: true) }
+
+let cons_Exception_Throwable_safety =
+ fun (this_24 : Object pointer) (cause_3 : Object pointer) ->
+  { (left_valid_struct_Throwable(cause_3, (0), Object_alloc_table)
+    and valid_struct_Exception(this_24, (0), (0), Object_alloc_table)) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
+let cons_Exception_ensures_default =
+ fun (this_21 : Object pointer) ->
+  { valid_struct_Exception(this_21, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_119: true) }
+
+let cons_Exception_safety =
+ fun (this_21 : Object pointer) ->
+  { valid_struct_Exception(this_21, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
+let cons_NoCreditException_ensures_default =
+ fun (this_2 : Object pointer) ->
+  { valid_struct_NoCreditException(this_2, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_151: true) }
+
+let cons_NoCreditException_safety =
+ fun (this_2 : Object pointer) ->
+  { valid_struct_NoCreditException(this_2, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 let cons_Purse_ensures_default =
  fun (this_7 : Object pointer) ->
-  { (valid_struct_Purse(this_7, (0), (0), Object_alloc_table)
-    and (JC_157: balance_non_negative(this_7, Purse_balance))) }
+  { valid_struct_Purse(this_7, (0), (0), Object_alloc_table) }
   (init:
   try
    begin
-     (let jessie_10 = (K_1:
-                      (let jessie_6 = (0) in
-                      (let jessie_9 = this_7 in
-                      begin
-                        (((safe_upd_ Purse_balance) jessie_9) jessie_6);
-                       jessie_6
-                      end))) in
+     (let jessie_164 = begin
+                         (let jessie_159 = (let jessie_155 = (0) in
+                                           (let jessie_158 = this_7 in
+                                           (((safe_upd_ Purse_balance) jessie_158) jessie_155))) in
+                         void);
+                        (K_1:
+                        (let jessie_160 = (0) in
+                        (let jessie_163 = this_7 in
+                        begin
+                          (((safe_upd_ Purse_balance) jessie_163) jessie_160);
+                         jessie_160
+                        end)))
+                       end in
      void);
     (raise Return)
    end
@@ -3276,18 +3533,23 @@ let cons_Purse_ensures_default =
 
 let cons_Purse_safety =
  fun (this_7 : Object pointer) ->
-  { (valid_struct_Purse(this_7, (0), (0), Object_alloc_table)
-    and (JC_157: balance_non_negative(this_7, Purse_balance))) }
+  { valid_struct_Purse(this_7, (0), (0), Object_alloc_table) }
   (init:
   try
    begin
-     (let jessie_5 = (K_1:
-                     (let jessie_1 = (0) in
-                     (let jessie_4 = this_7 in
-                     begin
-                       (((safe_upd_ Purse_balance) jessie_4) jessie_1);
-                      jessie_1
-                     end))) in
+     (let jessie_154 = begin
+                         (let jessie_149 = (let jessie_145 = (0) in
+                                           (let jessie_148 = this_7 in
+                                           (((safe_upd_ Purse_balance) jessie_148) jessie_145))) in
+                         void);
+                        (K_1:
+                        (let jessie_150 = (0) in
+                        (let jessie_153 = this_7 in
+                        begin
+                          (((safe_upd_ Purse_balance) jessie_153) jessie_150);
+                         jessie_150
+                        end)))
+                       end in
      void);
     (raise Return)
    end
@@ -3295,6 +3557,254 @@ let cons_Purse_safety =
    Return ->
    void end)
   { (JC_165: balance_non_negative(this_7, Purse_balance)) }
+
+let cons_Throwable_String_Throwable_ensures_default =
+ fun (this_19 : Object pointer) (message_0 : Object pointer) (cause : Object pointer) ->
+  { (left_valid_struct_Throwable(cause, (0), Object_alloc_table)
+    and (left_valid_struct_String(message_0, (0), Object_alloc_table)
+        and valid_struct_Throwable(this_19, (0), (0), Object_alloc_table))) }
+  (init:
+  try
+   begin
+     (let jessie_108 = begin
+                         (let jessie_96 = (let jessie_92 = null in
+                                          (let jessie_95 = this_19 in
+                                          (((safe_upd_ Throwable_backtrace) jessie_95) jessie_92))) in
+                         void);
+                        (let jessie_102 = (let jessie_98 = null in
+                                          (let jessie_101 = this_19 in
+                                          (((safe_upd_ Throwable_detailMessage) jessie_101) jessie_98))) in
+                        void);
+                        (let jessie_104 = null in
+                        (let jessie_107 = this_19 in
+                        begin
+                          (((safe_upd_ Throwable_cause) jessie_107) jessie_104);
+                         jessie_104
+                        end))
+                       end in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { (JC_31: true) }
+
+let cons_Throwable_String_Throwable_safety =
+ fun (this_19 : Object pointer) (message_0 : Object pointer) (cause : Object pointer) ->
+  { (left_valid_struct_Throwable(cause, (0), Object_alloc_table)
+    and (left_valid_struct_String(message_0, (0), Object_alloc_table)
+        and valid_struct_Throwable(this_19, (0), (0), Object_alloc_table))) }
+  (init:
+  try
+   begin
+     (let jessie_90 = begin
+                        (let jessie_78 = (let jessie_74 = null in
+                                         (let jessie_77 = this_19 in
+                                         (((safe_upd_ Throwable_backtrace) jessie_77) jessie_74))) in
+                        void);
+                       (let jessie_84 = (let jessie_80 = null in
+                                        (let jessie_83 = this_19 in
+                                        (((safe_upd_ Throwable_detailMessage) jessie_83) jessie_80))) in
+                       void);
+                       (let jessie_86 = null in
+                       (let jessie_89 = this_19 in
+                       begin
+                         (((safe_upd_ Throwable_cause) jessie_89) jessie_86);
+                        jessie_86
+                       end))
+                      end in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { true }
+
+let cons_Throwable_String_ensures_default =
+ fun (this_18 : Object pointer) (message : Object pointer) ->
+  { (left_valid_struct_String(message, (0), Object_alloc_table)
+    and valid_struct_Throwable(this_18, (0), (0), Object_alloc_table)) }
+  (init:
+  try
+   begin
+     (let jessie_72 = begin
+                        (let jessie_60 = (let jessie_56 = null in
+                                         (let jessie_59 = this_18 in
+                                         (((safe_upd_ Throwable_backtrace) jessie_59) jessie_56))) in
+                        void);
+                       (let jessie_66 = (let jessie_62 = null in
+                                        (let jessie_65 = this_18 in
+                                        (((safe_upd_ Throwable_detailMessage) jessie_65) jessie_62))) in
+                       void);
+                       (let jessie_68 = null in
+                       (let jessie_71 = this_18 in
+                       begin
+                         (((safe_upd_ Throwable_cause) jessie_71) jessie_68);
+                        jessie_68
+                       end))
+                      end in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { (JC_23: true) }
+
+let cons_Throwable_String_safety =
+ fun (this_18 : Object pointer) (message : Object pointer) ->
+  { (left_valid_struct_String(message, (0), Object_alloc_table)
+    and valid_struct_Throwable(this_18, (0), (0), Object_alloc_table)) }
+  (init:
+  try
+   begin
+     (let jessie_54 = begin
+                        (let jessie_42 = (let jessie_38 = null in
+                                         (let jessie_41 = this_18 in
+                                         (((safe_upd_ Throwable_backtrace) jessie_41) jessie_38))) in
+                        void);
+                       (let jessie_48 = (let jessie_44 = null in
+                                        (let jessie_47 = this_18 in
+                                        (((safe_upd_ Throwable_detailMessage) jessie_47) jessie_44))) in
+                       void);
+                       (let jessie_50 = null in
+                       (let jessie_53 = this_18 in
+                       begin
+                         (((safe_upd_ Throwable_cause) jessie_53) jessie_50);
+                        jessie_50
+                       end))
+                      end in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { true }
+
+let cons_Throwable_Throwable_ensures_default =
+ fun (this_20 : Object pointer) (cause_0 : Object pointer) ->
+  { (left_valid_struct_Throwable(cause_0, (0), Object_alloc_table)
+    and valid_struct_Throwable(this_20, (0), (0), Object_alloc_table)) }
+  (init:
+  try
+   begin
+     (let jessie_144 = begin
+                         (let jessie_132 = (let jessie_128 = null in
+                                           (let jessie_131 = this_20 in
+                                           (((safe_upd_ Throwable_backtrace) jessie_131) jessie_128))) in
+                         void);
+                        (let jessie_138 = (let jessie_134 = null in
+                                          (let jessie_137 = this_20 in
+                                          (((safe_upd_ Throwable_detailMessage) jessie_137) jessie_134))) in
+                        void);
+                        (let jessie_140 = null in
+                        (let jessie_143 = this_20 in
+                        begin
+                          (((safe_upd_ Throwable_cause) jessie_143) jessie_140);
+                         jessie_140
+                        end))
+                       end in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { (JC_39: true) }
+
+let cons_Throwable_Throwable_safety =
+ fun (this_20 : Object pointer) (cause_0 : Object pointer) ->
+  { (left_valid_struct_Throwable(cause_0, (0), Object_alloc_table)
+    and valid_struct_Throwable(this_20, (0), (0), Object_alloc_table)) }
+  (init:
+  try
+   begin
+     (let jessie_126 = begin
+                         (let jessie_114 = (let jessie_110 = null in
+                                           (let jessie_113 = this_20 in
+                                           (((safe_upd_ Throwable_backtrace) jessie_113) jessie_110))) in
+                         void);
+                        (let jessie_120 = (let jessie_116 = null in
+                                          (let jessie_119 = this_20 in
+                                          (((safe_upd_ Throwable_detailMessage) jessie_119) jessie_116))) in
+                        void);
+                        (let jessie_122 = null in
+                        (let jessie_125 = this_20 in
+                        begin
+                          (((safe_upd_ Throwable_cause) jessie_125) jessie_122);
+                         jessie_122
+                        end))
+                       end in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { true }
+
+let cons_Throwable_ensures_default =
+ fun (this_17 : Object pointer) ->
+  { valid_struct_Throwable(this_17, (0), (0), Object_alloc_table) }
+  (init:
+  try
+   begin
+     (let jessie_36 = begin
+                        (let jessie_24 = (let jessie_20 = null in
+                                         (let jessie_23 = this_17 in
+                                         (((safe_upd_ Throwable_backtrace) jessie_23) jessie_20))) in
+                        void);
+                       (let jessie_30 = (let jessie_26 = null in
+                                        (let jessie_29 = this_17 in
+                                        (((safe_upd_ Throwable_detailMessage) jessie_29) jessie_26))) in
+                       void);
+                       (let jessie_32 = null in
+                       (let jessie_35 = this_17 in
+                       begin
+                         (((safe_upd_ Throwable_cause) jessie_35) jessie_32);
+                        jessie_32
+                       end))
+                      end in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { (JC_15: true) }
+
+let cons_Throwable_safety =
+ fun (this_17 : Object pointer) ->
+  { valid_struct_Throwable(this_17, (0), (0), Object_alloc_table) }
+  (init:
+  try
+   begin
+     (let jessie_18 = begin
+                        (let jessie_6 = (let jessie_2 = null in
+                                        (let jessie_5 = this_17 in
+                                        (((safe_upd_ Throwable_backtrace) jessie_5) jessie_2))) in
+                        void);
+                       (let jessie_12 = (let jessie_8 = null in
+                                        (let jessie_11 = this_17 in
+                                        (((safe_upd_ Throwable_detailMessage) jessie_11) jessie_8))) in
+                       void);
+                       (let jessie_14 = null in
+                       (let jessie_17 = this_17 in
+                       begin
+                         (((safe_upd_ Throwable_cause) jessie_17) jessie_14);
+                        jessie_14
+                       end))
+                      end in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { true }
 
 
 ========== make project execution ==========
@@ -3309,12 +3819,12 @@ why --project [...] why/Purse.why
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po11.why">
-      <location file = "HOME/tests/java/Purse.jc" line = "150" begin = "40" end = "64"/>
+      <location file = "HOME/tests/java/Purse.jc" line = "158" begin = "40" end = "64"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Purse_po12.why">
-      <location file = "why/Purse.why" line = "1173" begin = "38" end = "175"/>
+      <location file = "why/Purse.why" line = "1196" begin = "39" end = "179"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -3371,6 +3881,9 @@ text = "AllocSize"/>
     </goal>
     </behavior>
   </function>
+  <function name="Constructor of class Throwable">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
   <function name="Constructor of class Purse">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
@@ -3389,6 +3902,12 @@ text = "AllocSize"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class NoCreditException">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+  <function name="Constructor of class Exception">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/Purse_ctx.why ==========
@@ -4647,12 +5166,14 @@ goal cons_Purse_ensures_default_po_1:
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
-  (valid_struct_Purse(this_7, 0, 0, Object_alloc_table) and
-   ("JC_157": balance_non_negative(this_7, Purse_balance))) ->
+  valid_struct_Purse(this_7, 0, 0, Object_alloc_table) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_7, 0)) ->
-  ("JC_161": ("JC_159": ("JC_159": (select(Purse_balance0, this_7) = 0))))
+  forall Purse_balance1:(Object,
+  int) memory.
+  (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
+  ("JC_161": ("JC_159": ("JC_159": (select(Purse_balance1, this_7) = 0))))
 
 ========== file tests/java/why/Purse_po14.why ==========
 goal cons_Purse_ensures_default_po_2:
@@ -4660,14 +5181,16 @@ goal cons_Purse_ensures_default_po_2:
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
-  (valid_struct_Purse(this_7, 0, 0, Object_alloc_table) and
-   ("JC_157": balance_non_negative(this_7, Purse_balance))) ->
+  valid_struct_Purse(this_7, 0, 0, Object_alloc_table) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_7, 0)) ->
+  forall Purse_balance1:(Object,
+  int) memory.
+  (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
   ("JC_161":
   ("JC_160":
-  ("JC_160": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
+  ("JC_160": not_assigns(Object_alloc_table, Purse_balance, Purse_balance1,
   pset_singleton(this_7)))))
 
 ========== file tests/java/why/Purse_po15.why ==========
@@ -4676,12 +5199,14 @@ goal cons_Purse_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
-  (valid_struct_Purse(this_7, 0, 0, Object_alloc_table) and
-   ("JC_157": balance_non_negative(this_7, Purse_balance))) ->
+  valid_struct_Purse(this_7, 0, 0, Object_alloc_table) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_7, 0)) ->
-  ("JC_165": balance_non_negative(this_7, Purse_balance0))
+  forall Purse_balance1:(Object,
+  int) memory.
+  (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
+  ("JC_165": balance_non_negative(this_7, Purse_balance1))
 
 ========== file tests/java/why/Purse_po2.why ==========
 goal Purse_credit_ensures_default_po_2:
@@ -5960,7 +6485,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
          (|why__store| Purse_balance this_5 (- result0 s_1)))
 (balance_non_negative this_5 Purse_balance0)))))))))))))
 
-;; Purse_withdraw_safety_po_2, File "HOME/tests/java/Purse.jc", line 150, characters 40-64
+;; Purse_withdraw_safety_po_2, File "HOME/tests/java/Purse.jc", line 158, characters 40-64
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -5971,7 +6496,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (EQ result (select Purse_balance this_5))
 (IMPLIES (< result s_1) (>= 1 0)))))))))
 
-;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1173, characters 38-175
+;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1196, characters 39-179
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -5998,32 +6523,35 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (FORALL (this_7)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
-(IMPLIES (AND (valid_struct_Purse this_7 0 0 Object_alloc_table)
-         (balance_non_negative this_7 Purse_balance))
+(IMPLIES (valid_struct_Purse this_7 0 0 Object_alloc_table)
 (FORALL (Purse_balance0)
 (IMPLIES (EQ Purse_balance0 (|why__store| Purse_balance this_7 0))
-(EQ (select Purse_balance0 this_7) 0)))))))
+(FORALL (Purse_balance1)
+(IMPLIES (EQ Purse_balance1 (|why__store| Purse_balance0 this_7 0))
+(EQ (select Purse_balance1 this_7) 0)))))))))
 
 ;; cons_Purse_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 48, characters 11-16
 (FORALL (this_7)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
-(IMPLIES (AND (valid_struct_Purse this_7 0 0 Object_alloc_table)
-         (balance_non_negative this_7 Purse_balance))
+(IMPLIES (valid_struct_Purse this_7 0 0 Object_alloc_table)
 (FORALL (Purse_balance0)
 (IMPLIES (EQ Purse_balance0 (|why__store| Purse_balance this_7 0))
+(FORALL (Purse_balance1)
+(IMPLIES (EQ Purse_balance1 (|why__store| Purse_balance0 this_7 0))
 (not_assigns
-Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_7))))))))
+Object_alloc_table Purse_balance Purse_balance1 (pset_singleton this_7))))))))))
 
 ;; cons_Purse_safety_po_1, File "HOME/tests/java/Purse.java", line 48, characters 11-16
 (FORALL (this_7)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
-(IMPLIES (AND (valid_struct_Purse this_7 0 0 Object_alloc_table)
-         (balance_non_negative this_7 Purse_balance))
+(IMPLIES (valid_struct_Purse this_7 0 0 Object_alloc_table)
 (FORALL (Purse_balance0)
 (IMPLIES (EQ Purse_balance0 (|why__store| Purse_balance this_7 0))
-(balance_non_negative this_7 Purse_balance0)))))))
+(FORALL (Purse_balance1)
+(IMPLIES (EQ Purse_balance1 (|why__store| Purse_balance0 this_7 0))
+(balance_non_negative this_7 Purse_balance1)))))))))
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
@@ -7442,26 +7970,30 @@ goal cons_Purse_ensures_default_po_1:
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
-  (valid_struct_Purse(this_7, 0, 0, Object_alloc_table) and
-   ("JC_157": balance_non_negative(this_7, Purse_balance))) ->
+  valid_struct_Purse(this_7, 0, 0, Object_alloc_table) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_7, 0)) ->
-  ("JC_161": ("JC_159": ("JC_159": (select(Purse_balance0, this_7) = 0))))
+  forall Purse_balance1:(Object,
+  int) memory.
+  (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
+  ("JC_161": ("JC_159": ("JC_159": (select(Purse_balance1, this_7) = 0))))
 
 goal cons_Purse_ensures_default_po_2:
   forall this_7:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
-  (valid_struct_Purse(this_7, 0, 0, Object_alloc_table) and
-   ("JC_157": balance_non_negative(this_7, Purse_balance))) ->
+  valid_struct_Purse(this_7, 0, 0, Object_alloc_table) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_7, 0)) ->
+  forall Purse_balance1:(Object,
+  int) memory.
+  (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
   ("JC_161":
   ("JC_160":
-  ("JC_160": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
+  ("JC_160": not_assigns(Object_alloc_table, Purse_balance, Purse_balance1,
   pset_singleton(this_7)))))
 
 goal cons_Purse_safety_po_1:
@@ -7469,12 +8001,14 @@ goal cons_Purse_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   forall Purse_balance:(Object,
   int) memory.
-  (valid_struct_Purse(this_7, 0, 0, Object_alloc_table) and
-   ("JC_157": balance_non_negative(this_7, Purse_balance))) ->
+  valid_struct_Purse(this_7, 0, 0, Object_alloc_table) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_7, 0)) ->
-  ("JC_165": balance_non_negative(this_7, Purse_balance0))
+  forall Purse_balance1:(Object,
+  int) memory.
+  (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
+  ("JC_165": balance_non_negative(this_7, Purse_balance1))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

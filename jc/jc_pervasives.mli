@@ -115,6 +115,7 @@ val embedded_struct_fields : Jc_env.struct_info -> Jc_env.field_info list
 *)
 val field_sinfo : Jc_env.field_info -> Jc_env.struct_info
 val field_bounds : Jc_env.field_info -> Num.num * Num.num
+(* destruct a pointer type. *)
 val pointer_struct: jc_type -> struct_info
 val pointer_class: jc_type -> pointer_class
 (*val embedded_struct_roots : Jc_env.struct_info -> string list*)

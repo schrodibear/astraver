@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.275 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.276 2009-01-21 09:14:47 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1830,13 +1830,20 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         let te1 = fe e1 and te2 = fe e2 in
         let t1 = te1#typ and t2 = te2#typ in
         if subtype t2 t1 then 
-          match te1#node with
-            | JCEvar v ->
-                v.jc_var_info_assigned <- true;
-                t1, te2#region, JCEassign_var(v, te2)
-            | JCEderef(e, f) ->
-                t1, te2#region, JCEassign_heap(e, f, te2)
-            | _ -> typing_error e1#pos "not an lvalue"
+	  begin
+	    let te2 =
+	      match t2 with
+		| JCTnull -> new expr_with ~typ:t1 te2
+		| _ -> te2
+	    in
+            match te1#node with
+              | JCEvar v ->
+                  v.jc_var_info_assigned <- true;
+                  t1, te2#region, JCEassign_var(v, te2)
+              | JCEderef(e, f) ->
+                  t1, te2#region, JCEassign_heap(e, f, te2)
+              | _ -> typing_error e1#pos "not an lvalue"
+	  end
         else
           typing_error e2#pos 
             "type '%a' expected in assignment instead of '%a'"
