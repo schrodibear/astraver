@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.81 2008-12-19 14:23:00 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.82 2009-01-21 08:34:15 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -38,7 +38,9 @@
   let loc lexbuf : location = (lexeme_start_p lexbuf, lexeme_end_p lexbuf)
 
   exception Lexical_error of location * string
+(*
   exception Syntax_error of location
+*)
 
   let lex_error lexbuf s =
     raise (Lexical_error(loc lexbuf,s))

@@ -58,7 +58,7 @@ type interface = [interface]
 tag interface = {
 }
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -76,8 +76,7 @@ behavior default:
    }
 }
 
-unit cons_Literals(Literals[0] this_1)
-;
+unit cons_Literals(! Literals[0] this_1){()}
 
 /*
 Local Variables:
@@ -114,6 +113,7 @@ end = 14
 
 ========== jessie execution ==========
 Generating Why function Literals_f
+Generating Why function cons_Literals
 ========== file tests/java/Literals.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -255,6 +255,14 @@ line = 41
 begin = 8
 end = 23
 
+[cons_Literals_safety]
+name = "Constructor of class Literals"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_4]
 file = "HOME/"
 line = 0
@@ -274,6 +282,14 @@ begin = -1
 end = -1
 
 [JC_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Literals_ensures_default]
+name = "Constructor of class Literals"
+behavior = "Default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -1152,6 +1168,18 @@ let Literals_f_safety =
    !return end))
   { true }
 
+let cons_Literals_ensures_default =
+ fun (this_1 : Object pointer) ->
+  { valid_struct_Literals(this_1, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_23: true) }
+
+let cons_Literals_safety =
+ fun (this_1 : Object pointer) ->
+  { valid_struct_Literals(this_1, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/Literals.why
@@ -1165,6 +1193,9 @@ why --project [...] why/Literals.why
       <explain kind = "Post"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class Literals">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/Literals_ctx.why ==========

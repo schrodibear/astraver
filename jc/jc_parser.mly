@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.126 2008-12-19 14:23:00 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.127 2009-01-21 08:34:15 marche Exp $ */
 
 %{
 
@@ -56,7 +56,13 @@
 	  times_used = 0;
 	}
 
-
+  let lparams =
+    List.map
+      (fun (v,t,x) ->
+	 if v then (t,x) else
+	   Jc_options.parsing_error
+	     Loc.dummy_position
+	     "logic params cannot not be in invalid state")
 %}
 
 %token <string> IDENTIFIER
@@ -350,7 +356,9 @@ parameter_comma_list:
 
 parameter_declaration:
 | type_expr IDENTIFIER
-    { ($1,$2) }
+    { (true,$1,$2) }
+| EXCLAM type_expr IDENTIFIER
+    { (false,$2,$3) }
 ;
 
 
@@ -978,10 +986,12 @@ logic_definition:
     { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
 /* logic fun def */
 | LOGIC type_expr IDENTIFIER label_binders parameters EQ expression
-    { locate (JCDlogic(Some $2, $3, $4, $5, JCexpr $7)) }
+    { let p = lparams $5 in
+      locate (JCDlogic(Some $2, $3, $4, p, JCexpr $7)) }
 /* logic pred def */
 | LOGIC IDENTIFIER label_binders parameters EQ expression
-    { locate (JCDlogic(None, $2, $3, $4, JCexpr $6)) }
+    { let p = lparams $4 in
+      locate (JCDlogic(None, $2, $3, p, JCexpr $6)) }
 /* logic fun reads */
 /*
 | LOGIC type_expr IDENTIFIER label_binders parameters reads %prec PRECLOGIC
@@ -1004,7 +1014,8 @@ logic_definition:
 */
 /* logic pred inductive def */
 | LOGIC IDENTIFIER label_binders parameters LBRACE indcases RBRACE
-    { locate (JCDlogic(None, $2, $3, $4, JCinductive $6)) }
+    { let p = lparams $4 in
+      locate (JCDlogic(None, $2, $3, p, JCinductive $6)) }
 | AXIOMATIC IDENTIFIER LBRACE logic_declarations RBRACE
     { locate (JCDaxiomatic($2,$4)) } 
 | LEMMA IDENTIFIER label_binders COLON expression
@@ -1030,9 +1041,11 @@ logic_declaration:
     { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
 */
 | LOGIC IDENTIFIER label_binders parameters 
-    { locate (JCDlogic(None, $2, $3, $4, JCreads [])) }
+    { let p = lparams $4 in
+      locate (JCDlogic(None, $2, $3, p, JCreads [])) }
 | LOGIC type_expr IDENTIFIER label_binders parameters 
-    { locate (JCDlogic(Some $2, $3, $4, $5, JCreads [])) }
+	{ let p = lparams $5 in
+	  locate (JCDlogic(Some $2, $3, $4, p, JCreads [])) }
 | AXIOM identifier label_binders COLON expression
     { locate( JCDlemma($2#name,true,$3,$5)) }
 ;

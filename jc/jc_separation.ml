@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.42 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: jc_separation.ml,v 1.43 2009-01-21 08:34:15 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -193,7 +193,7 @@ let single_expr rresult e =
 	in
 	let params = match call.jc_call_fun with
 	  | JClogic_fun f -> f.jc_logic_info_parameters 
-	  | JCfun f -> f.jc_fun_info_parameters
+	  | JCfun f -> List.map snd f.jc_fun_info_parameters
 	in
 	let rregion = match call.jc_call_fun with
 	  | JClogic_fun f -> f.jc_logic_info_result_region 
@@ -317,7 +317,7 @@ let code_function f =
 
 let generalize_code_function f =
   let param_regions =
-    List.map (fun vi -> vi.jc_var_info_region) f.jc_fun_info_parameters in
+    List.map (fun (_,vi) -> vi.jc_var_info_region) f.jc_fun_info_parameters in
   let fun_regions = f.jc_fun_info_return_region :: param_regions in
   f.jc_fun_info_param_regions <- RegionList.reachable fun_regions
 

@@ -145,19 +145,19 @@ tag intM = Object with {
   int32 intP;
 }
 
-boolean non_null_intM(intM[0..] x)
+boolean non_null_intM(! intM[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) >= -1) else (x == null));
 ;
 
-integer java_array_length_intM(intM[0..] x)
+integer java_array_length_intM(! intM[0..] x)
 behavior non_null:
   assigns \nothing;
   ensures ((\result <= 2147483647) &&
             ((\result >= 0) && ((\result == (\offset_max(x) + 1)) && true)));
 ;
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -219,8 +219,7 @@ behavior failure:
    }
 }
 
-unit cons_BinarySearch(BinarySearch[0] this_0)
-;
+unit cons_BinarySearch(! BinarySearch[0] this_0){()}
 
 /*
 Local Variables:
@@ -371,6 +370,7 @@ end = 28
 
 ========== jessie execution ==========
 Generating Why function BinarySearch_binary_search
+Generating Why function cons_BinarySearch
 ========== file tests/java/BinarySearch.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -833,6 +833,14 @@ line = 65
 begin = 11
 end = 113
 
+[cons_BinarySearch_ensures_default]
+name = "Constructor of class BinarySearch"
+behavior = "Default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_70]
 kind = DivByZero
 file = "HOME/tests/java/BinarySearch.jc"
@@ -891,6 +899,14 @@ file = "HOME/tests/java/BinarySearch.jc"
 line = 64
 begin = 10
 end = 18
+
+[cons_BinarySearch_safety]
+name = "Constructor of class BinarySearch"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_75]
 file = "HOME/"
@@ -2439,6 +2455,18 @@ let BinarySearch_binary_search_safety =
    !return end))
   { true }
 
+let cons_BinarySearch_ensures_default =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_BinarySearch(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_90: true) }
+
+let cons_BinarySearch_safety =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_BinarySearch(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/BinarySearch.why
@@ -2627,6 +2655,9 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class BinarySearch">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/BinarySearch_ctx.why ==========

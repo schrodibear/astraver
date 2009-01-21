@@ -170,19 +170,19 @@ tag intM = Object with {
   integer intP;
 }
 
-boolean non_null_intM(intM[0..] x)
+boolean non_null_intM(! intM[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) >= -1) else (x == null));
 ;
 
-integer java_array_length_intM(intM[0..] x)
+integer java_array_length_intM(! intM[0..] x)
 behavior non_null:
   assigns \nothing;
   ensures ((\result <= 2147483647) &&
             ((\result >= 0) && ((\result == (\offset_max(x) + 1)) && true)));
 ;
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -249,8 +249,7 @@ intM[0..] Muller_m(intM[0..] t_4)
    }
 }
 
-unit cons_Muller(Muller[0] this_0)
-;
+unit cons_Muller(! Muller[0] this_0){()}
 
 /*
 Local Variables:
@@ -413,6 +412,7 @@ end = -1
 
 ========== jessie execution ==========
 Generating Why function Muller_m
+Generating Why function cons_Muller
 ========== file tests/java/Muller.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -662,6 +662,14 @@ line = 80
 begin = 9
 end = 13
 
+[cons_Muller_ensures_default]
+name = "Constructor of class Muller"
+behavior = "Default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_51]
 kind = PointerDeref
 file = "HOME/tests/java/Muller.java"
@@ -675,6 +683,14 @@ file = "HOME/tests/java/Muller.java"
 line = 80
 begin = 32
 end = 36
+
+[cons_Muller_safety]
+name = "Constructor of class Muller"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_53]
 kind = PointerDeref
@@ -2036,6 +2052,18 @@ let Muller_m_safety =
    !return end))
   { true }
 
+let cons_Muller_ensures_default =
+ fun (this_0 : Object pointer) (Object_this_0_10_alloc_table : Object alloc_table) ->
+  { valid_struct_Muller(this_0, (0), (0), Object_this_0_10_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_68: true) }
+
+let cons_Muller_safety =
+ fun (this_0 : Object pointer) (Object_this_0_10_alloc_table : Object alloc_table) ->
+  { valid_struct_Muller(this_0, (0), (0), Object_this_0_10_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/Muller.why
@@ -2244,6 +2272,9 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class Muller">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/Muller_ctx.why ==========

@@ -90,7 +90,7 @@ type interface = [interface]
 tag interface = {
 }
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -137,8 +137,7 @@ behavior default:
    }
 }
 
-unit cons_Termination(Termination[0] this_3)
-;
+unit cons_Termination(! Termination[0] this_3){()}
 
 /*
 Local Variables:
@@ -263,6 +262,7 @@ end = 13
 Generating Why function Termination_loop1
 Generating Why function Termination_loop2
 Generating Why function Termination_loop3
+Generating Why function cons_Termination
 ========== file tests/java/Termination.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -386,6 +386,14 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/Termination.loc ==========
+[cons_Termination_safety]
+name = "Constructor of class Termination"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_40]
 file = "HOME/"
 line = 0
@@ -765,6 +773,14 @@ begin = 8
 end = 13
 
 [JC_38]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Termination_ensures_default]
+name = "Constructor of class Termination"
+behavior = "Default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -1590,6 +1606,18 @@ let Termination_loop3_safety =
    !return end))
   { true }
 
+let cons_Termination_ensures_default =
+ fun (this_3 : Object pointer) ->
+  { valid_struct_Termination(this_3, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_54: true) }
+
+let cons_Termination_safety =
+ fun (this_3 : Object pointer) ->
+  { valid_struct_Termination(this_3, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/Termination.why
@@ -1653,6 +1681,9 @@ why --project [...] why/Termination.why
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class Termination">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/Termination_ctx.why ==========

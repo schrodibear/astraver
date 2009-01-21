@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.274 2008-12-19 14:23:00 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.275 2009-01-21 08:34:15 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1752,7 +1752,7 @@ let rec expr env e =
           assert (labs = []);
           let tl = try
             List.map2
-              (fun vi e ->
+              (fun (valid,vi) e ->
                  let ty = vi.jc_var_info_type in
                  let te = fe e in
                  if subtype te#typ ty then te
@@ -2299,6 +2299,11 @@ let param (t,id) =
   let vi = var ~formal:true ty id in 
   (id,vi)
 
+let fun_param (v,t,id) =
+  let ty = type_type t in
+  let vi = var ~formal:true ty id in 
+  (v,id,vi)
+
 let assertion_true = new assertion JCAtrue
 
 let field st root (rep, t, id, bitsize) =
@@ -2364,29 +2369,29 @@ let add_vardecl (ty,id) =
 let get_vardecl id =
   Hashtbl.find variables_env id
 
-let add_fundecl (ty,loc,id,pl) =
-  try
-    let fi = Hashtbl.find functions_env id in
-    Format.eprintf 
-      "FIXME: Warning: ignoring second declaration of function %s@." id;
-    let param_env =
-      List.map (fun v -> v.jc_var_info_name, v) fi.jc_fun_info_parameters
-    in
-    param_env, fi
-  with Not_found ->
-    let param_env = List.map param pl in
-    let ty = type_type ty in
-    let fi = make_fun_info id ty in
-      fi.jc_fun_info_parameters <- List.map snd param_env;
-      Hashtbl.replace functions_env id fi;
-      param_env, fi
-
 let get_fundecl id =
   let fi = Hashtbl.find functions_env id in
   let param_env =
-    List.map (fun v -> v.jc_var_info_name, v) fi.jc_fun_info_parameters
+    List.map 
+      (fun (valid,v) -> (v.jc_var_info_name, v)) 
+      fi.jc_fun_info_parameters
   in
   param_env, fi
+
+let add_fundecl (ty,loc,id,pl) =
+  try
+    let param_env,fi = get_fundecl id in
+    Format.eprintf 
+      "FIXME: Warning: ignoring second declaration of function %s@." id;
+    param_env, fi
+  with Not_found ->
+    let params = List.map fun_param pl in
+    let param_env = List.map (fun (_,t,x) -> (t,x)) params in
+    let ty = type_type ty in
+    let fi = make_fun_info id ty in
+    fi.jc_fun_info_parameters <- List.map (fun (v,_,x) -> (v,x)) params;
+    Hashtbl.replace functions_env id fi;
+    param_env, fi
 
 let add_logic_fundecl (ty,id,labels,pl) =
   try
@@ -2426,7 +2431,7 @@ let () =
     (fun (ty,x,whyid,pl,treat) -> 
        let pi = make_fun_info x ty in
        let pl = List.map 
-	 (fun ty -> var ~formal:true ty "_") pl
+	 (fun ty -> (true,var ~formal:true ty "_")) pl
        in
        pi.jc_fun_info_parameters <- pl;
        pi.jc_fun_info_final_name <- whyid;

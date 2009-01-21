@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.38 2008-11-10 17:47:20 moy Exp $ i*)
+(*i $Id: pretty.ml,v 1.39 2009-01-21 08:34:15 marche Exp $ i*)
 
 open Format
 open Pp
@@ -277,6 +277,7 @@ let output_file f =
   if explain_vc then print_in_file print_traces (f ^ "_why.xpl")
 
 let output_files f =
+  eprintf "Starting Multi-Why output with basename %s@." f;
   let po = ref 0 in
   print_in_file
     (fun ctxfmt ->
@@ -292,8 +293,9 @@ let output_files f =
 	    | d -> 
 		decl ctxfmt d)
 	 queue)
-    (f ^ "_ctx.why")
-
+    (f ^ "_ctx.why");
+  eprintf "Multi-Why output done@."
+  
 let push_or_output_decl = 
   let po = ref 0 in 
   function d ->

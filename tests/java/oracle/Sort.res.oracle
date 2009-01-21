@@ -184,19 +184,19 @@ tag intM = Object with {
   integer intP;
 }
 
-boolean non_null_intM(intM[0..] x)
+boolean non_null_intM(! intM[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) >= -1) else (x == null));
 ;
 
-integer java_array_length_intM(intM[0..] x)
+integer java_array_length_intM(! intM[0..] x)
 behavior non_null:
   assigns \nothing;
   ensures ((\result <= 2147483647) &&
             ((\result >= 0) && ((\result == (\offset_max(x) + 1)) && true)));
 ;
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -294,8 +294,7 @@ behavior permutation:
    }
 }
 
-unit cons_Sort(Sort[0] this_3)
-;
+unit cons_Sort(! Sort[0] this_3){()}
 
 unit Object_registerNatives()
 ;
@@ -330,8 +329,7 @@ unit Object_wait(Object[0] this_12)
 unit Object_finalize(Object[0] this_13)
 ;
 
-unit cons_Object(Object[0] this_14)
-;
+unit cons_Object(! Object[0] this_14){()}
 
 /*
 Local Variables:
@@ -616,6 +614,8 @@ end = 27
 ========== jessie execution ==========
 Generating Why function Sort_swap
 Generating Why function Sort_min_sort
+Generating Why function cons_Sort
+Generating Why function cons_Object
 ========== file tests/java/Sort.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -1285,6 +1285,14 @@ line = 0
 begin = -1
 end = -1
 
+[cons_Object_safety]
+name = "Constructor of class Object"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_146]
 file = "HOME/lib/java_api/java/lang/Object.java"
 line = 207
@@ -1585,6 +1593,14 @@ line = 0
 begin = -1
 end = -1
 
+[cons_Sort_ensures_default]
+name = "Constructor of class Sort"
+behavior = "Default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_162]
 file = "HOME/lib/java_api/java/lang/Object.java"
 line = 267
@@ -1847,6 +1863,14 @@ line = 92
 begin = 10
 end = 18
 
+[cons_Object_ensures_default]
+name = "Constructor of class Object"
+behavior = "Default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_200]
 file = "HOME/"
 line = 0
@@ -2064,6 +2088,14 @@ file = "HOME/tests/java/Sort.jc"
 line = 108
 begin = 9
 end = 16
+
+[cons_Sort_safety]
+name = "Constructor of class Sort"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_100]
 file = "HOME/tests/java/Sort.java"
@@ -3618,6 +3650,30 @@ let Sort_swap_safety =
    void end)
   { true }
 
+let cons_Object_ensures_default =
+ fun (this_14 : Object pointer) ->
+  { valid_struct_Object(this_14, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_204: true) }
+
+let cons_Object_safety =
+ fun (this_14 : Object pointer) ->
+  { valid_struct_Object(this_14, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
+let cons_Sort_ensures_default =
+ fun (this_3 : Object pointer) ->
+  { valid_struct_Sort(this_3, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_108: true) }
+
+let cons_Sort_safety =
+ fun (this_3 : Object pointer) ->
+  { valid_struct_Sort(this_3, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/Sort.why
@@ -3800,6 +3856,12 @@ text = "UserCall"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class Sort">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+  <function name="Constructor of class Object">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/Sort_ctx.why ==========

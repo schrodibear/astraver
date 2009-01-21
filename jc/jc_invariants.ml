@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_invariants.ml,v 1.84 2008-11-05 22:07:56 nrousset Exp $ *)
+(* $Id: jc_invariants.ml,v 1.85 2009-01-21 08:34:15 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1417,54 +1417,56 @@ let rec invariant_for_struct ?pos this si =
 let code_function (fi, pos, fs, sl) vil =
   begin
     match !Jc_common_options.inv_sem with
-      | InvArguments ->
-	  (* apply arguments invariant policy *)
-	  let invariants =
-	    (* Calculate global invariants. *)
-	    let _vitl = 
-	      List.map 
-		(fun vi -> Term.mkvar ~var:vi ()) vil 
-	    in
-	    let global_invariants =
-	      Hashtbl.fold
-		(fun li _ acc -> 
-		   (* li.jc_logic_info_parameters <- vil; *)
-		   let a = { jc_app_fun = li;
-			     jc_app_args = (* vitl *)[];
-			     jc_app_label_assoc = [];
-			     jc_app_region_assoc = [] }
-		   in
-		     (new assertion ~mark:(Jc_pervasives.new_label_name ())
-			~pos (JCAapp a)) :: acc)
-		Jc_typing.global_invariants_table []
-	    in
-	    let global_invariants = 
-	      Assertion.mkand ~pos ~conjuncts:global_invariants ()
-	    in
-	      (* Calculate invariants for each parameter. *)
-	    let invariants =
-	      List.fold_left
-		(fun acc vi ->
-		   match vi.jc_var_info_type with
-		     | JCTpointer (JCtag (st, []), _, _) ->
-			 Assertion.mkand ~pos
-			   ~conjuncts:
-			   [acc; (invariant_for_struct ~pos
-				    (Term.mkvar ~var:vi ()) st)]
-			   ()
-		     | _ -> acc)
-		(Assertion.mktrue ())
-		fi.jc_fun_info_parameters
-	    in
-	    Assertion.mkand ~pos ~conjuncts:[global_invariants; invariants] ()
+      | InvArguments ->  (* apply arguments invariant policy *)
+	  (* Calculate global invariants. *)
+	  let _vitl = 
+	    List.map 
+	      (fun vi -> Term.mkvar ~var:vi ()) vil 
 	  in
-	    (* add invariants to the function precondition *)
+	  let global_invariants =
+	    Hashtbl.fold
+	      (fun li _ acc -> 
+		 (* li.jc_logic_info_parameters <- vil; *)
+		 let a = { jc_app_fun = li;
+			   jc_app_args = (* vitl *)[];
+			   jc_app_label_assoc = [];
+			   jc_app_region_assoc = [] }
+		 in
+		 (new assertion ~mark:(Jc_pervasives.new_label_name ())
+		    ~pos (JCAapp a)) :: acc)
+	      Jc_typing.global_invariants_table []
+	  in
+	  let global_invariants = 
+	    Assertion.mkand ~pos ~conjuncts:global_invariants ()
+	  in
+	  (* Calculate invariants for each parameter. *)
+	  let pre_invariants,post_invariants =
+	    List.fold_left
+	      (fun (acc1,acc2) (valid,vi) ->
+		 match vi.jc_var_info_type with
+		   | JCTpointer (JCtag (st, []), _, _) ->
+		       let inv = 
+			 invariant_for_struct ~pos
+			   (Term.mkvar ~var:vi ()) st
+		       in
+		       ((if valid then
+			   Assertion.mkand ~pos
+			     ~conjuncts: [acc1; inv] ()
+			 else acc1),
+			Assertion.mkand ~pos
+			  ~conjuncts: [acc2; inv] ())
+		   | _ -> (acc1,acc2))
+	      (global_invariants,global_invariants)
+	      fi.jc_fun_info_parameters
+	  in
+	  (* add invariants to the function precondition *)
 	  fs.jc_fun_requires <- 
-	    Assertion.mkand ~pos ~conjuncts:[fs.jc_fun_requires; invariants] ();
-	    (* add invariants to the function postcondition *)
+	    Assertion.mkand ~pos 
+	    ~conjuncts:[fs.jc_fun_requires; pre_invariants] ();
+	  (* add invariants to the function postcondition *)
 	  if is_purely_exceptional_fun fs then () else
 	    let safety_exists = ref false in
-	    let post = invariants in
+	    let post = post_invariants in
 	    List.iter
 	      (fun (_, s, b) ->
 		 if s = "safety" then safety_exists := true;

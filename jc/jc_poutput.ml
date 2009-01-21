@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.37 2008-12-19 14:23:00 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.38 2009-01-21 08:34:15 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -292,6 +292,9 @@ let pclause fmt = function
 let param fmt (ty,vi) =
   fprintf fmt "%a %s" ptype ty vi
 
+let fun_param fmt (valid,ty,vi) =
+  fprintf fmt "%s%a %s" (if valid then "" else "! ") ptype ty vi
+
 let field fmt (rep,ty,fi,bitsize) =
   fprintf fmt "@\n";
   if rep then
@@ -338,7 +341,7 @@ let rec pdecl fmt d =
   match d#node with
     | JCDfun(ty,id,params,clauses,body) ->
 	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@\n" ptype ty id#name
-	  (print_list comma param) params 
+	  (print_list comma fun_param) params 
 	  (print_list nothing pclause) clauses
 	  (print_option_or_default "\n;" pexpr) body
     | JCDenum_type(id,min,max) ->

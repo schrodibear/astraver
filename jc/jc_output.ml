@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.136 2008-12-19 14:23:00 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.137 2009-01-21 08:34:15 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -37,7 +37,7 @@ open Jc_output_misc
 open Pp
 
 type jc_decl =
-  | JCfun_def of jc_type * string * var_info list *
+  | JCfun_def of jc_type * string * (bool * var_info) list *
       fun_spec * expr option
   | JCenum_type_def of string * Num.num * Num.num
   | JCvariant_type_def of string * string list
@@ -457,6 +457,11 @@ and block fmt b =
 let param fmt vi =
   fprintf fmt "%a %s" print_type vi.jc_var_info_type vi.jc_var_info_name
 
+let fun_param fmt (valid,vi) =
+  fprintf fmt "%s%a %s" 
+    (if valid then "" else "!")
+    print_type vi.jc_var_info_type vi.jc_var_info_name
+
 let field fmt fi =
   fprintf fmt "@\n";
   if fi.jc_field_info_rep then
@@ -544,7 +549,7 @@ let rec print_decl fmt d =
         fprintf fmt "# IntModel = %s@\n" (string_of_int_model p)
     | JCfun_def(ty,id,params,spec,body) ->
 	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." print_type ty id
-	  (print_list comma param) params 
+	  (print_list comma fun_param) params 
 	  print_spec spec 
 	  (print_option_or_default "\n;" expr) body
     | JCenum_type_def(id,min,max) ->

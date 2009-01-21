@@ -70,7 +70,7 @@ type interface = [interface]
 tag interface = {
 }
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -97,8 +97,10 @@ int32 NameConflicts_field(NameConflicts[0] this_0)
    (return (K_4 : this_0.field))
 }
 
-unit cons_NameConflicts(NameConflicts[0] this_3)
-;
+unit cons_NameConflicts(! NameConflicts[0] this_3)
+{  (this_3.i = 0);
+   (this_3.field = 0)
+}
 
 /*
 Local Variables:
@@ -163,6 +165,7 @@ end = -1
 Generating Why function NameConflicts_setI
 Generating Why function NameConflicts_m
 Generating Why function NameConflicts_field_0
+Generating Why function cons_NameConflicts
 ========== file tests/java/NameConflicts.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -408,6 +411,14 @@ line = 0
 begin = -1
 end = -1
 
+[cons_NameConflicts_ensures_default]
+name = "Constructor of class NameConflicts"
+behavior = "Default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_15]
 file = "HOME/"
 line = 0
@@ -605,6 +616,14 @@ file = "HOME/tests/java/NameConflicts.java"
 line = 13
 begin = 8
 end = 9
+
+[cons_NameConflicts_safety]
+name = "Constructor of class NameConflicts"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 ========== file tests/java/why/NameConflicts.why ==========
 type Object
@@ -1287,10 +1306,14 @@ parameter char_of_integer_ :
   { eq_int(integer_of_char(result), x) }
 
 parameter cons_NameConflicts :
- this_3:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_3:Object pointer ->
+  { } unit reads Object_alloc_table
+  writes NameConflicts_field,NameConflicts_i { true }
 
 parameter cons_NameConflicts_requires :
- this_3:Object pointer -> { } unit reads Object_alloc_table { true }
+ this_3:Object pointer ->
+  { } unit reads Object_alloc_table
+  writes NameConflicts_field,NameConflicts_i { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1460,6 +1483,58 @@ let NameConflicts_setI_safety =
    void end)
   { true }
 
+let cons_NameConflicts_ensures_default =
+ fun (this_3 : Object pointer) ->
+  { valid_struct_NameConflicts(this_3, (0), (0), Object_alloc_table) }
+  (init:
+  try
+   begin
+     (let jessie_30 = begin
+                        (let jessie_25 = (let jessie_21 = (safe_int32_of_integer_ (0)) in
+                                         (let jessie_24 = this_3 in
+                                         (((safe_upd_ NameConflicts_i) jessie_24) jessie_21))) in
+                        void);
+                       (let jessie_26 = (safe_int32_of_integer_ (0)) in
+                       (let jessie_29 = this_3 in
+                       begin
+                         (((safe_upd_ NameConflicts_field) jessie_29) jessie_26);
+                        jessie_26
+                       end))
+                      end in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { (JC_41: true) }
+
+let cons_NameConflicts_safety =
+ fun (this_3 : Object pointer) ->
+  { valid_struct_NameConflicts(this_3, (0), (0), Object_alloc_table) }
+  (init:
+  try
+   begin
+     (let jessie_20 = begin
+                        (let jessie_15 = (let jessie_11 = (safe_int32_of_integer_ (0)) in
+                                         (let jessie_14 = this_3 in
+                                         (((safe_upd_ NameConflicts_i) jessie_14) jessie_11))) in
+                        void);
+                       (let jessie_16 = (safe_int32_of_integer_ (0)) in
+                       (let jessie_19 = this_3 in
+                       begin
+                         (((safe_upd_ NameConflicts_field) jessie_19) jessie_16);
+                        jessie_16
+                       end))
+                      end in
+     void);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/NameConflicts.why
@@ -1478,6 +1553,9 @@ why --project [...] why/NameConflicts.why
     </behavior>
   </function>
   <function name="Method field">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+  <function name="Constructor of class NameConflicts">
     <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.ml,v 1.10 2008-11-14 16:00:58 ayad Exp $ *)
+(* $Id: jc_fenv.ml,v 1.11 2009-01-21 08:34:15 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -109,7 +109,7 @@ sig
 	   the return statement of the function, to be used by static 
 	   analysis to avoid merging contexts *)
 	mutable jc_fun_info_has_return_label : bool;
-	mutable jc_fun_info_parameters : var_info list;
+	mutable jc_fun_info_parameters : (bool * var_info) list;
 	mutable jc_fun_info_param_regions : region list;
 	mutable jc_fun_info_calls : fun_info list;
 	mutable jc_fun_info_is_recursive : bool;
@@ -169,7 +169,7 @@ struct
 	jc_fun_info_result : var_info;
 	jc_fun_info_return_region : region;
 	mutable jc_fun_info_has_return_label : bool;
-	mutable jc_fun_info_parameters : var_info list;
+	mutable jc_fun_info_parameters : (bool * var_info) list;
 	mutable jc_fun_info_param_regions : region list;
 	mutable jc_fun_info_calls : fun_info list;
 	mutable jc_fun_info_is_recursive : bool;

@@ -194,19 +194,19 @@ tag intM = Object with {
   integer intP;
 }
 
-boolean non_null_intM(intM[0..] x)
+boolean non_null_intM(! intM[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) >= -1) else (x == null));
 ;
 
-integer java_array_length_intM(intM[0..] x)
+integer java_array_length_intM(! intM[0..] x)
 behavior non_null:
   assigns \nothing;
   ensures ((\result <= 2147483647) &&
             ((\result >= 0) && ((\result == (\offset_max(x) + 1)) && true)));
 ;
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -315,8 +315,7 @@ behavior sorts:
    }
 }
 
-unit cons_FlagStatic(FlagStatic[0] this_1)
-;
+unit cons_FlagStatic(! FlagStatic[0] this_1){()}
 
 unit Object_registerNatives()
 ;
@@ -351,8 +350,7 @@ unit Object_wait(Object[0] this_10)
 unit Object_finalize(Object[0] this_11)
 ;
 
-unit cons_Object(Object[0] this_12)
-;
+unit cons_Object(! Object[0] this_12){()}
 
 /*
 Local Variables:
@@ -657,6 +655,8 @@ end = 27
 Generating Why function FlagStatic_isMonochrome
 Generating Why function FlagStatic_swap
 Generating Why function FlagStatic_flag
+Generating Why function cons_FlagStatic
+Generating Why function cons_Object
 ========== file tests/java/FlagStatic.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -793,6 +793,14 @@ begin = -1
 end = -1
 
 [JC_105]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_FlagStatic_safety]
+name = "Constructor of class FlagStatic"
+behavior = "Safety"
 file = "HOME/"
 line = 0
 begin = -1
@@ -1288,6 +1296,14 @@ begin = 18
 end = 26
 
 [JC_145]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Object_safety]
+name = "Constructor of class Object"
+behavior = "Safety"
 file = "HOME/"
 line = 0
 begin = -1
@@ -1877,6 +1893,14 @@ line = 65
 begin = 10
 end = 18
 
+[cons_Object_ensures_default]
+name = "Constructor of class Object"
+behavior = "Default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_200]
 file = "HOME/"
 line = 0
@@ -1998,6 +2022,14 @@ begin = -1
 end = -1
 
 [JC_197]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_FlagStatic_ensures_default]
+name = "Constructor of class FlagStatic"
+behavior = "Default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -3621,6 +3653,30 @@ let FlagStatic_swap_safety =
    void end)
   { true }
 
+let cons_FlagStatic_ensures_default =
+ fun (this_1 : Object pointer) ->
+  { valid_struct_FlagStatic(this_1, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_106: true) }
+
+let cons_FlagStatic_safety =
+ fun (this_1 : Object pointer) ->
+  { valid_struct_FlagStatic(this_1, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
+let cons_Object_ensures_default =
+ fun (this_12 : Object pointer) ->
+  { valid_struct_Object(this_12, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_202: true) }
+
+let cons_Object_safety =
+ fun (this_12 : Object pointer) ->
+  { valid_struct_Object(this_12, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/FlagStatic.why
@@ -3966,6 +4022,12 @@ text = "UserCall"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class Object">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+  <function name="Constructor of class FlagStatic">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/FlagStatic_ctx.why ==========

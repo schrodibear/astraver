@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.164 2008-12-19 14:23:00 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.165 2009-01-21 08:34:15 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -232,7 +232,7 @@ type 'expr reads_or_expr =
 
 type 'expr decl_node =
   | JCDvar of ptype * string * 'expr option
-  | JCDfun of ptype * identifier * (ptype * string) list * 'expr clause list
+  | JCDfun of ptype * identifier * (bool * ptype * string) list * 'expr clause list
       * 'expr option
   | JCDtag of
       string (* name of the tag *)

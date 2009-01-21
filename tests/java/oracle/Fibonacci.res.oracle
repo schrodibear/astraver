@@ -96,7 +96,7 @@ type interface = [interface]
 tag interface = {
 }
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -143,8 +143,7 @@ behavior default:
    }
 }
 
-unit cons_Fibonacci(Fibonacci[0] this_0)
-;
+unit cons_Fibonacci(! Fibonacci[0] this_0){()}
 
 /*
 Local Variables:
@@ -229,6 +228,7 @@ end = 26
 
 ========== jessie execution ==========
 Generating Why function Fibonacci_Fib
+Generating Why function cons_Fibonacci
 ========== file tests/java/Fibonacci.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -430,6 +430,14 @@ line = 26
 begin = 0
 end = 29
 
+[cons_Fibonacci_safety]
+name = "Constructor of class Fibonacci"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_10]
 file = "HOME/tests/java/Fibonacci.jc"
 line = 53
@@ -535,6 +543,14 @@ begin = -1
 end = -1
 
 [JC_26]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Fibonacci_ensures_default]
+name = "Constructor of class Fibonacci"
+behavior = "Default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -1242,6 +1258,18 @@ let Fibonacci_Fib_safety =
    !return end))
   { true }
 
+let cons_Fibonacci_ensures_default =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_Fibonacci(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_28: true) }
+
+let cons_Fibonacci_safety =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_Fibonacci(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/Fibonacci.why
@@ -1325,6 +1353,9 @@ why --project [...] why/Fibonacci.why
       <explain kind = "Post"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class Fibonacci">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/Fibonacci_ctx.why ==========
@@ -3383,17 +3414,17 @@ why -simplify [...] why/Fibonacci.why
 
 (BG_PUSH
  ;; Why axiom isfib_inversion
- (FORALL (aux_2_0 aux_3_0)
- (IMPLIES (EQ (isfib aux_2_0 aux_3_0) |@true|)
- (OR (AND (EQ aux_2_0 0) (EQ aux_3_0 0))
- (OR (AND (EQ aux_2_0 1) (EQ aux_3_0 1))
+ (FORALL (aux_1_0 aux_2_0)
+ (IMPLIES (EQ (isfib aux_1_0 aux_2_0) |@true|)
+ (OR (AND (EQ aux_1_0 0) (EQ aux_2_0 0))
+ (OR (AND (EQ aux_1_0 1) (EQ aux_2_0 1))
  (EXISTS (n_1)
  (EXISTS (r_0)
  (EXISTS (p)
  (AND
  (AND (>= n_1 2)
  (AND (EQ (isfib (- n_1 2) r_0) |@true|) (EQ (isfib (- n_1 1) p) |@true|)))
- (AND (EQ aux_2_0 n_1) (EQ aux_3_0 (+ p r_0))))))))))))
+ (AND (EQ aux_1_0 n_1) (EQ aux_2_0 (+ p r_0))))))))))))
 
 (BG_PUSH
  ;; Why axiom isfib0

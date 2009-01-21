@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.176 2009-01-20 16:15:49 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.177 2009-01-21 08:34:15 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -409,7 +409,7 @@ let create_fun pos tag result name params =
 	    (tr_type pos vi.java_var_info_type) 
   in
   nfi.jc_fun_info_parameters <-
-    List.map (fun (vi, _) -> create_var pos vi) params;
+    List.map (fun (vi, _) -> (true,create_var pos vi)) params;
   Hashtbl.add funs_table tag nfi;
   nfi
 
@@ -921,11 +921,12 @@ let array_types decls =
          Jc_pervasives.var 
 	   (JCTpointer (JCtag (st, []), Some num_zero, None)) "x" 
        in
-       let args = [ptype_of_type vi.jc_var_info_type, var_name vi] in
+       let args = [false, ptype_of_type vi.jc_var_info_type, var_name vi] in
+       let largs = [ptype_of_type vi.jc_var_info_type, var_name vi] in
        (mklogic_def
           ~name: non_null_pred.jc_logic_info_name
           ~labels: [Jc_env.LabelHere]
-	  ~params: args
+	  ~params: largs
           ~body:
           (mkbinary
              ~expr1: (mkoffset_max ~expr:vie ())
@@ -1691,7 +1692,7 @@ let tr_method mi req dec behs b acc =
       | Some vi -> (create_var Loc.dummy_position vi) :: params
   in
   let params = List.map
-    (fun vi -> ptype_of_type vi.jc_var_info_type, (var_name vi))
+    (fun vi -> (true, ptype_of_type vi.jc_var_info_type, (var_name vi)))
     params
   in
   let return_type = 
@@ -1737,7 +1738,31 @@ let tr_method mi req dec behs b acc =
     ?body
     ()
   in def::acc
-      
+    
+let default_base_value t =
+  match t with
+    | Tshort | Tbyte | Tchar | Tint | Tlong ->
+	JCCinteger "0"  
+    | Tboolean -> JCCboolean false
+    | Tfloat | Tdouble -> JCCreal "0.0"
+    | Tinteger | Treal -> assert false
+    | Tunit  -> assert false
+    | Tstring -> JCCnull
+
+let default_value ty =
+  match ty with
+    | JTYbase t -> default_base_value t
+    | JTYarray _ | JTYclass _ | JTYinterface _ -> JCCnull
+    | JTYlogic _ -> assert false
+    | JTYnull -> assert false
+
+let init_field this fi =
+  mkassign
+    ~location: this
+    ~field: (fi_name (get_field fi))
+    ~value: (mkconst ~const:(default_value fi.java_field_info_type) ())
+    ()
+
 let tr_constr ci req behs b acc =
   let params = List.map
     (fun (vi, _) -> create_var Loc.dummy_position vi)
@@ -1766,18 +1791,26 @@ let tr_constr ci req behs b acc =
     dummy_loc_statement (JCTSdecl(this,None,make_block body))
   in
   *)
-  let body = match body with
-    | [] -> None
-    | _ -> Some (mkblock ~exprs:body ())
+  let fields = ci.constr_info_class.class_info_fields in
+  let body = 
+    List.fold_right
+      (fun fi acc -> 
+	 if fi.java_field_info_is_static then acc else
+	 init_field (mkvar ~name:(var_name this) ()) fi::acc)
+	fields body
   in
   let _ = 
     reg_pos ~id:nfi.jc_fun_info_name 
       ~name:("Constructor of class "^ci.constr_info_class.class_info_name)
       ci.constr_info_loc 
   in
-  let params = List.map
-    (fun vi -> ptype_of_type vi.jc_var_info_type, var_name vi)
-    (this :: params)
+  let params = 
+    (* false because this not yet valid *)
+    (false, ptype_of_type this.jc_var_info_type, var_name this)
+    ::
+      List.map
+      (fun vi -> (true,ptype_of_type vi.jc_var_info_type, var_name vi))
+      params
   in
   let requires = mkrequires_clause (reg_assertion_option req) in
   let behaviors = 
@@ -1786,7 +1819,7 @@ let tr_constr ci req behs b acc =
   let def = mkfun_def
     ~name: (new identifier nfi.jc_fun_info_name)
     ~params
-    ?body
+    ~body:(mkblock ~exprs:body ())
     ~clauses: (requires::behaviors)
     ()
   in def :: acc
@@ -2094,7 +2127,7 @@ let tr_class ci acc0 acc =
         (mkfun_def
            ~result_type: (ptype_of_type Jc_pervasives.boolean_type)
            ~name: (new identifier non_null_fi.jc_fun_info_name)
-           ~params: [ptype_of_type vi.jc_var_info_type, var_name vi]
+           ~params: [false,ptype_of_type vi.jc_var_info_type, var_name vi]
            ~clauses: non_null_spec
            ()):: acc
       else acc

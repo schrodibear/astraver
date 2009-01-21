@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.141 2008-11-19 12:35:24 ayad Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.142 2009-01-21 08:34:15 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -373,7 +373,7 @@ let real_of_integer_ = make_fun_info "real_of_int" real_type
 let () = 
   let vi = var ~formal:true integer_type "n" in
   real_of_integer_.jc_fun_info_final_name <- "real_of_int";
-  real_of_integer_.jc_fun_info_parameters <- [vi]
+  real_of_integer_.jc_fun_info_parameters <- [true,vi]
 
 
 let option_compare comp opt1 opt2 = match opt1,opt2 with

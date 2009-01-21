@@ -96,19 +96,19 @@ tag intM = Object with {
   int32 intP;
 }
 
-boolean non_null_intM(intM[0..] x)
+boolean non_null_intM(! intM[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) >= -1) else (x == null));
 ;
 
-integer java_array_length_intM(intM[0..] x)
+integer java_array_length_intM(! intM[0..] x)
 behavior non_null:
   assigns \nothing;
   ensures ((\result <= 2147483647) &&
             ((\result >= 0) && ((\result == (\offset_max(x) + 1)) && true)));
 ;
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -143,8 +143,7 @@ behavior default:
    (return true)
 }
 
-unit cons_AllZeros(AllZeros[0] this_0)
-;
+unit cons_AllZeros(! AllZeros[0] this_0){()}
 
 /*
 Local Variables:
@@ -229,6 +228,7 @@ end = -1
 
 ========== jessie execution ==========
 Generating Why function AllZeros_all_zeros
+Generating Why function cons_AllZeros
 ========== file tests/java/AllZeros.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -376,6 +376,14 @@ file = "HOME/tests/java/AllZeros.java"
 line = 41
 begin = 21
 end = 29
+
+[cons_AllZeros_safety]
+name = "Constructor of class AllZeros"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_44]
 kind = PointerDeref
@@ -546,6 +554,14 @@ begin = 8
 end = 30
 
 [JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_AllZeros_ensures_default]
+name = "Constructor of class AllZeros"
+behavior = "Default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -1703,6 +1719,18 @@ let AllZeros_all_zeros_safety =
    !return end))
   { true }
 
+let cons_AllZeros_ensures_default =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_AllZeros(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_55: true) }
+
+let cons_AllZeros_safety =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_AllZeros(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/AllZeros.why
@@ -1782,6 +1810,9 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class AllZeros">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/AllZeros_ctx.why ==========

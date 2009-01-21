@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.154 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.155 2009-01-21 08:34:15 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1260,7 +1260,7 @@ let rec expr fef e =
 		      f.jc_logic_info_effects)
 	     | JCfun f -> 
 		 let region_mem_assoc = 
-		   make_region_mem_assoc f.jc_fun_info_parameters
+		   make_region_mem_assoc (List.map snd f.jc_fun_info_parameters)
 		 in
 		 fef_assoc 
 		   ~region_assoc:app.jc_call_region_assoc f.jc_fun_info_effects 
@@ -1592,7 +1592,9 @@ let fun_effects f =
   let fef = f.jc_fun_info_effects in
   let fef = spec fef s in
   let fef = Option_misc.fold_left expr fef e_opt in
-  let fef = List.fold_left parameter fef f.jc_fun_info_parameters in
+  let fef = 
+    List.fold_left parameter fef (List.map snd f.jc_fun_info_parameters) 
+  in
   if same_feffects fef f.jc_fun_info_effects then () else
     (fixpoint_reached := false;
      f.jc_fun_info_effects <- fef)

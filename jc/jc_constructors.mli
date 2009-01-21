@@ -549,7 +549,7 @@ module PDecl :
     val mkfun_def :
       ?result_type:ptype ->
       name:identifier ->
-      ?params:(ptype * string) list ->
+      ?params:(bool * ptype * string) list ->
       ?clauses:'a clause list ->
       ?body:'a ->
       ?pos:Loc.position -> unit -> 'a decl_node node_positioned

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.165 2008-11-10 16:23:41 moy Exp $ i*)
+(*i $Id: main.ml,v 1.166 2009-01-21 08:34:15 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -91,8 +91,9 @@ let push_decl _vloc d =
 	  | Isabelle -> Isabelle.push_decl
 	  | Hol4 -> Hol4.push_decl
 	  | Gappa -> Gappa.push_decl 
+	  | MultiWhy (* // Moy -> Marche NO destroy eclipse plugin
+			-> Pretty.push_or_output_decl *)
 	  | Why | WhyProject -> Pretty.push_decl ~ergo:false
-	  | MultiWhy -> Pretty.push_or_output_decl
 	  | Ergo -> Pretty.push_decl ~ergo:true
 	  | Dispatcher -> 
 (*

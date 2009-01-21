@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.395 2008-12-19 14:23:00 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.396 2009-01-21 08:34:15 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2120,7 +2120,7 @@ and expr e =
 		  | [] -> [], []
 		  | params -> 
 		      let param_types = 
-			List.map (fun v -> v.jc_var_info_type) params 
+			List.map (fun (_,v) -> v.jc_var_info_type) params 
 		      in
 		      List.fold_right2 list_type_assert
 			param_types call.jc_call_args ([],[])
@@ -2140,7 +2140,7 @@ and expr e =
 		  ) call.jc_call_args args []
 	      in
 	      let param_assoc = 
-		List.map2 (fun param arg -> param,arg) 
+		List.map2 (fun (_,param) arg -> param,arg) 
 		  f.jc_fun_info_parameters call.jc_call_args
 	      in
 	      let fname = 
@@ -2995,7 +2995,7 @@ let tr_fun f funpos spec body acc =
   let internal_requires = make_and internal_requires free_requires in
   let internal_requires =
     List.fold_left 
-      (fun acc v ->
+      (fun acc (_,v) ->
          let req = get_valid_pred_app v in
 	   make_and req acc)
       internal_requires f.jc_fun_info_parameters
@@ -3105,19 +3105,21 @@ let tr_fun f funpos spec body acc =
 
   (* Effects, parameters and locals *)
 
+  let params = List.map snd f.jc_fun_info_parameters in
+
   let external_write_effects = 
     write_effects 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ~params:f.jc_fun_info_parameters
+      ~params
   in
   let external_read_effects = 
     read_effects 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ~params:f.jc_fun_info_parameters
+      ~params
   in
   let external_write_params =
     write_parameters 
@@ -3125,7 +3127,7 @@ let tr_fun f funpos spec body acc =
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ~params:f.jc_fun_info_parameters
+      ~params
   in
   let internal_write_params =
     write_parameters 
@@ -3133,7 +3135,7 @@ let tr_fun f funpos spec body acc =
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ~params:f.jc_fun_info_parameters
+      ~params
   in
   let external_read_params =
     read_parameters 
@@ -3141,7 +3143,7 @@ let tr_fun f funpos spec body acc =
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ~params:f.jc_fun_info_parameters
+      ~params
       ~already_used:(List.map fst external_write_params)
   in
   let internal_read_params =
@@ -3150,7 +3152,7 @@ let tr_fun f funpos spec body acc =
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ~params:f.jc_fun_info_parameters
+      ~params
       ~already_used:(List.map fst internal_write_params)
   in
   let internal_write_locals =
@@ -3158,14 +3160,14 @@ let tr_fun f funpos spec body acc =
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ~params:f.jc_fun_info_parameters
+      ~params
   in
   let internal_read_locals =
     read_locals 
       ~callee_reads:f.jc_fun_info_effects.jc_reads
       ~callee_writes:f.jc_fun_info_effects.jc_writes
       ~region_list:f.jc_fun_info_param_regions
-      ~params:f.jc_fun_info_parameters
+      ~params
   in
   let define_locals e' =
     define_locals ~reads:internal_read_locals ~writes:internal_write_locals e'
@@ -3220,6 +3222,7 @@ let tr_fun f funpos spec body acc =
   (* Function type *)
 
   let ret_type = tr_var_type f.jc_fun_info_result in
+  let fparams = List.map snd f.jc_fun_info_parameters in
   let param_normal_post = 
     if is_purely_exceptional_fun spec then LFalse else
       make_and_list [external_safety_post; normal_post; normal_post_inferred] 
@@ -3232,7 +3235,7 @@ let tr_fun f funpos spec body acc =
 		 param_normal_post, param_excep_posts)
     in
     let fun_type = 
-      annot_fun_parameters f.jc_fun_info_parameters 
+      annot_fun_parameters fparams
 	external_write_params external_read_params annot_type 
     in
     let newid = f.jc_fun_info_final_name ^ "_requires" in
@@ -3246,7 +3249,7 @@ let tr_fun f funpos spec body acc =
 		 param_normal_post, param_excep_posts)
     in
     let fun_type = 
-      annot_fun_parameters f.jc_fun_info_parameters 
+      annot_fun_parameters fparams 
 	external_write_params external_read_params annot_type 
     in
     let newid = f.jc_fun_info_final_name in
@@ -3270,7 +3273,7 @@ let tr_fun f funpos spec body acc =
 
 	  (* parameters *)
 	  let params = 
-	    fun_parameters ~type_safe:false f.jc_fun_info_parameters 
+	    fun_parameters ~type_safe:false fparams 
 	      internal_write_params internal_read_params 
 	  in
 
@@ -3287,12 +3290,12 @@ let tr_fun f funpos spec body acc =
 		     id.jc_var_info_final_name <- newn;
 		     (newn, n) :: bl
 		   else bl) 
-		f.jc_fun_info_parameters [] 
+		fparams [] 
 	    in
             let body = function_body f spec bname body in
 	    let body =
 	      if !Jc_options.inv_sem = InvOwnership then
-		append (assume_all_invariants f.jc_fun_info_parameters) body
+		append (assume_all_invariants fparams) body
 	      else body
 	    in
 	    let body = define_locals body in
@@ -3319,7 +3322,7 @@ let tr_fun f funpos spec body acc =
 		 let n = v.jc_var_info_final_name in
 		 if List.mem_assoc n list_of_refs then
 		   v.jc_var_info_final_name <- List.assoc n list_of_refs
-	      ) f.jc_fun_info_parameters;
+	      ) fparams;
 	    body
 	  in
 

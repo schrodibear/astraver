@@ -25,13 +25,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_lexer.mli,v 1.10 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_lexer.mli,v 1.11 2009-01-21 08:34:15 marche Exp $ *)
 
 open Jc_ast
 
 exception Lexical_error of Loc.position * string
 
+(*
 exception Syntax_error of Loc.position
+*)
 
 val token : Lexing.lexbuf -> Jc_parser.token
 

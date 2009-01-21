@@ -230,7 +230,7 @@ type interface = [interface]
 tag interface = {
 }
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -309,8 +309,7 @@ behavior bezoutProperty:
    }
 }
 
-unit cons_Gcd(Gcd[0] this_0)
-;
+unit cons_Gcd(! Gcd[0] this_0){()}
 
 /*
 Local Variables:
@@ -443,6 +442,7 @@ end = -1
 
 ========== jessie execution ==========
 Generating Why function Gcd_gcd
+Generating Why function cons_Gcd
 ========== file tests/java/Gcd.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -588,6 +588,14 @@ line = 107
 begin = 34
 end = 39
 
+[cons_Gcd_ensures_default]
+name = "Constructor of class Gcd"
+behavior = "Default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_42]
 file = "HOME/tests/java/Gcd.java"
 line = 98
@@ -603,6 +611,14 @@ begin = 0
 end = 152
 
 [JC_43]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[cons_Gcd_safety]
+name = "Constructor of class Gcd"
+behavior = "Safety"
 file = "HOME/"
 line = 0
 begin = -1
@@ -2047,6 +2063,18 @@ let Gcd_gcd_safety =
    !return end))))
   { true }
 
+let cons_Gcd_ensures_default =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_Gcd(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_52: true) }
+
+let cons_Gcd_safety =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_Gcd(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/Gcd.why
@@ -2211,6 +2239,9 @@ text = "DivByZero"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class Gcd">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/Gcd_ctx.why ==========

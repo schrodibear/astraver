@@ -124,7 +124,7 @@ type interface = [interface]
 tag interface = {
 }
 
-boolean non_null_Object(Object[0..] x)
+boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
@@ -192,8 +192,7 @@ behavior normal:
    }
 }
 
-unit cons_Switch(Switch[0] this_0)
-;
+unit cons_Switch(! Switch[0] this_0){()}
 
 /*
 Local Variables:
@@ -238,6 +237,7 @@ end = 27
 ========== jessie execution ==========
 Generating Why function Switch_test1
 Generating Why function Switch_test2
+Generating Why function cons_Switch
 ========== file tests/java/Switch.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -449,6 +449,14 @@ line = 40
 begin = 11
 end = 65
 
+[cons_Switch_ensures_default]
+name = "Constructor of class Switch"
+behavior = "Default behavior"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [Switch_test1_safety]
 name = "Method test1"
 behavior = "Safety"
@@ -516,6 +524,14 @@ file = "HOME/tests/java/Switch.java"
 line = 34
 begin = 18
 end = 50
+
+[cons_Switch_safety]
+name = "Constructor of class Switch"
+behavior = "Safety"
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [Switch_test2_safety]
 name = "Method test2"
@@ -1689,6 +1705,18 @@ let Switch_test2_safety =
    !return end))
   { true }
 
+let cons_Switch_ensures_default =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_Switch(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { (JC_39: true) }
+
+let cons_Switch_safety =
+ fun (this_0 : Object pointer) ->
+  { valid_struct_Switch(this_0, (0), (0), Object_alloc_table) }
+  (init: try begin   void; (raise Return) end with Return -> void end)
+  { true }
+
 
 ========== make project execution ==========
 why --project [...] why/Switch.why
@@ -1791,6 +1819,9 @@ why --project [...] why/Switch.why
       <explain kind = "Post"/>
     </goal>
     </behavior>
+  </function>
+  <function name="Constructor of class Switch">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
 </project>
 ========== file tests/java/why/Switch_ctx.why ==========
