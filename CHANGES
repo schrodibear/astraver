@@ -1,6 +1,8 @@
-
-  o Jessie: bug fix related to assignement to the null pointer
-  o Krakatoa: several bug fix related to constructors (class invariant 
+version 2.18, January 22th, 2009
+================================
+  
+  o Jessie: bug fix related to assignment to the null pointer
+  o Krakatoa: several bug fixes related to constructors (class invariant 
     not anymore assumed true at entrance, object fields initialized to 
     their default values)
   o Krakatoa/Jessie: support for "for" sections (associated to various 
