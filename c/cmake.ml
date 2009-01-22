@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.62 2008-11-05 14:03:13 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.63 2009-01-22 08:50:10 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -89,7 +89,7 @@ let generic f targets =
        fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing why@@why\" $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why@\n@\n" f;
 
        fprintf fmt "pvs/%%_why.pvs: pvs/%s_spec_why.pvs why/%%.why@\n" f;
-       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing %s_spec_why\" --lib-file ../caduceus/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f f;
+       fprintf fmt "\t$(WHY) -pvs -dir pvs -pvs-preamble \"importing %s_spec_why\" $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f f;
 
        fprintf fmt "pvs/caduceus_why.pvs:@\n";
        fprintf fmt "\t$(WHY) -pvs -dir pvs $(CADULIB)/why/$(CADULIBFILE)@\n@\n";

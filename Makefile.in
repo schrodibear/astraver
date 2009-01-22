@@ -544,7 +544,7 @@ bin/why-dp.byte: $(DPCMO)
 bin/why-dp.opt: $(DPCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa str.cmxa $^
 
-bin/why-cpulimit: tools/cpulimit.c
+bin/why-cpulimit: tools/@CPULIMIT@.c
 	$(CC) -o $@ $^
 
 bin/rv_merge.byte: tools/rv_merge.ml

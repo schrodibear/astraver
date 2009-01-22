@@ -59,7 +59,7 @@ let exists p o =
 
 let read_cache () = 
   try
-    let in_channel = open_in !source_file in
+    let in_channel = open_in_bin !source_file in
     cache := from_channel in_channel
   with 
     | Sys_error s -> 

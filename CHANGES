@@ -1,6 +1,7 @@
+
 version 2.18, January 22th, 2009
 ================================
-  
+
   o Jessie: bug fix related to assignment to the null pointer
   o Krakatoa: several bug fixes related to constructors (class invariant 
     not anymore assumed true at entrance, object fields initialized to 
@@ -8,14 +9,17 @@ version 2.18, January 22th, 2009
   o Krakatoa/Jessie: support for "for" sections (associated to various 
     behaviors) in code annotations (assert and loop invariants). 
     See e.g tests/java/BinarySearch.java
+  o Caduceus: fixed 'pvs' target in generated makefile 
   o Why: min and max functions in the prelude, with appropriate 
     axiomatization
 
 version 2.17, December 17th, 2008
 ================================
-  
+
   o This version is synchronized with Frama-C Lithium 20081201
     (http://frama-c.cea.fr/)
+  o why-cpulimit: specific implementation for Cygwin (contributed by
+    Dillon Pariente)  
   o jessie: bug fix: inductive predicates and multiple labels
   o jessie: new support for floating-point computations
   o krakatoa/jessie: bug fix: axiomatic and multiple labels
