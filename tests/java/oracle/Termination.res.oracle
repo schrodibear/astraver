@@ -80,6 +80,9 @@ tag String = Object with {
 tag Throwable = Object with {
 }
 
+tag Exception = Object with {
+}
+
 tag Termination = Object with {
 }
 
@@ -96,6 +99,8 @@ behavior normal:
 ;
 
 exception Throwable of Throwable[0..]
+
+exception Exception of Exception[0..]
 
 unit Termination_loop1(Termination[0] this_2, integer n)
 {  
@@ -122,14 +127,14 @@ behavior default:
   ensures (K_9 : (\result == 0));
 {  
    {  
-      (var integer i = (K_14 : 100));
+      (var integer i = (K_16 : 100));
       
       {  
          
-         invariant (K_10 : ((0 <= i) && (i <= 100)));
-         variant (K_11 : i);
-         while ((K_13 : (i > 0)))
-         {  (K_12 : (i --))
+         invariant (K_12 : ((K_11 : (0 <= i)) && (K_10 : (i <= 100))));
+         variant (K_13 : i);
+         while ((K_15 : (i > 0)))
+         {  (K_14 : (i --))
          };
          
          (return i)
@@ -149,28 +154,40 @@ End:
 [K_10]
 file = "HOME/tests/java/Termination.java"
 line = 47
-begin = 20
+begin = 25
 end = 33
 
 [K_11]
+file = "HOME/tests/java/Termination.java"
+line = 47
+begin = 20
+end = 26
+
+[K_12]
+file = "HOME/tests/java/Termination.java"
+line = 47
+begin = 20
+end = 33
+
+[K_13]
 file = "HOME/tests/java/Termination.java"
 line = 48
 begin = 18
 end = 19
 
-[K_12]
+[K_14]
 file = "HOME/tests/java/Termination.java"
 line = 50
 begin = 15
 end = 18
 
-[K_13]
+[K_15]
 file = "HOME/tests/java/Termination.java"
 line = 50
 begin = 8
 end = 13
 
-[K_14]
+[K_16]
 file = "HOME/tests/java/Termination.java"
 line = 46
 begin = 9
@@ -444,17 +461,17 @@ end = 14
 file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 20
-end = 33
+end = 26
 
 [JC_46]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Termination.java"
+line = 47
+begin = 25
+end = 33
 
 [JC_1]
 file = "HOME/tests/java/Termination.jc"
-line = 28
+line = 31
 begin = 8
 end = 23
 
@@ -478,15 +495,15 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/Termination.jc"
-line = 28
+line = 31
 begin = 8
 end = 23
 
 [JC_49]
 file = "HOME/tests/java/Termination.java"
-line = 48
-begin = 18
-end = 19
+line = 47
+begin = 20
+end = 26
 
 [JC_4]
 file = "HOME/"
@@ -528,21 +545,21 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Termination.jc"
-line = 30
+line = 33
 begin = 11
 end = 65
 
 [JC_50]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Termination.java"
+line = 47
+begin = 25
+end = 33
 
 [JC_51]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Termination.java"
+line = 47
+begin = 20
+end = 33
 
 [JC_52]
 file = "HOME/"
@@ -551,10 +568,10 @@ begin = -1
 end = -1
 
 [JC_53]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Termination.java"
+line = 48
+begin = 18
+end = 19
 
 [JC_54]
 file = "HOME/"
@@ -588,6 +605,30 @@ line = 39
 begin = 9
 end = 14
 
+[JC_58]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_59]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_60]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_61]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [Termination_loop2_ensures_default]
 name = "Method loop2"
 behavior = "Default behavior"
@@ -598,7 +639,7 @@ end = 14
 
 [JC_10]
 file = "HOME/tests/java/Termination.jc"
-line = 30
+line = 33
 begin = 11
 end = 65
 
@@ -797,6 +838,14 @@ type Object
 
 type interface
 
+exception Exception_exc of Object pointer
+
+logic Exception_tag:  -> Object tag_id
+
+logic Object_tag:  -> Object tag_id
+
+axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
+
 exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
@@ -804,8 +853,6 @@ exception Loop_exit_exc of unit
 predicate Non_null_Object(x:Object pointer,
  Object_alloc_table:Object alloc_table) =
  eq_int(offset_max(Object_alloc_table, x), (0))
-
-logic Object_tag:  -> Object tag_id
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -882,6 +929,11 @@ predicate left_valid_struct_Object(p:Object pointer,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
+predicate left_valid_struct_Exception(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
 predicate left_valid_struct_String(p:Object pointer,
  a:int,
  Object_alloc_table:Object alloc_table) =
@@ -913,6 +965,11 @@ predicate right_valid_struct_Object(p:Object pointer,
  b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
+
+predicate right_valid_struct_Exception(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
 
 predicate right_valid_struct_String(p:Object pointer,
  b:int,
@@ -955,6 +1012,12 @@ predicate strict_valid_struct_Object(p:Object pointer,
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
 predicate strict_valid_struct_String(p:Object pointer,
  a:int,
  b:int,
@@ -986,6 +1049,12 @@ predicate valid_bitvector_struct_Object(p:unit pointer,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_String(p:unit pointer,
  a:int,
@@ -1032,6 +1101,12 @@ predicate valid_struct_Object(p:Object pointer,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ valid_struct_Object(p, a, b, Object_alloc_table)
 
 predicate valid_struct_String(p:Object pointer,
  a:int,
@@ -1085,6 +1160,24 @@ parameter Termination_loop3 :
 parameter Termination_loop3_requires :
  this_0:Object pointer ->
   { } int reads Object_alloc_table { (JC_42: eq_int(result, (0))) }
+
+parameter alloc_bitvector_struct_Exception :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Exception_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter alloc_bitvector_struct_Object :
  n:int ->
@@ -1175,6 +1268,29 @@ parameter alloc_bitvector_struct_interface_requires :
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_struct_Exception :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Exception(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Exception_tag)))) }
+
+parameter alloc_struct_Exception_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Exception(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Exception_tag)))) }
 
 parameter alloc_struct_Object :
  n:int ->
@@ -1509,19 +1625,20 @@ let Termination_loop3_ensures_default =
   (let return = ref (any_int void) in
   try
    begin
-     (let i = ref (K_14: (100)) in
+     (let i = ref (K_16: (100)) in
      begin
        try
         while true do
-        { invariant (JC_47: (le_int((0), i) and le_int(i, (100))))
-          variant (JC_49 : i) }
+        { invariant
+            (JC_51: ((JC_49: le_int((0), i)) and (JC_50: le_int(i, (100)))))
+          variant (JC_53 : i) }
          begin
            [ { } unit { true } ];
           try
            (let jessie_33 = begin
-                              (if (K_13: ((gt_int_ !i) (0)))
+                              (if (K_15: ((gt_int_ !i) (0)))
                               then
-                               (let jessie_31 = (K_12:
+                               (let jessie_31 = (K_14:
                                                 (let jessie_7 = !i in
                                                 begin
                                                   (let jessie_30 = (i := 
@@ -1561,19 +1678,20 @@ let Termination_loop3_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (let i = ref (K_14: (100)) in
+     (let i = ref (K_16: (100)) in
      begin
        try
         while true do
-        { invariant (JC_46: true)  }
+        { invariant (JC_48: true)  }
          begin
            [ { } unit reads i
-             { (JC_45: (le_int((0), i) and le_int(i, (100)))) } ];
+             { (JC_47:
+               ((JC_45: le_int((0), i)) and (JC_46: le_int(i, (100))))) } ];
           try
            (let jessie_29 = begin
-                              (if (K_13: ((gt_int_ !i) (0)))
+                              (if (K_15: ((gt_int_ !i) (0)))
                               then
-                               (let jessie_27 = (K_12:
+                               (let jessie_27 = (K_14:
                                                 (let jessie_7 = !i in
                                                 begin
                                                   (let jessie_26 = (i := 
@@ -1610,7 +1728,7 @@ let cons_Termination_ensures_default =
  fun (this_3 : Object pointer) ->
   { valid_struct_Termination(this_3, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_54: true) }
+  { (JC_58: true) }
 
 let cons_Termination_safety =
  fun (this_3 : Object pointer) ->
@@ -1627,19 +1745,19 @@ why --project [...] why/Termination.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
     <goal why_file="why/Termination_po5.why">
-      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "26"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Termination_po6.why">
-      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "25" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Termination_po7.why">
-      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "26"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po8.why">
-      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "25" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po9.why">
@@ -2570,11 +2688,15 @@ type Object
 
 type interface
 
+logic Exception_tag :  -> Object tag_id
+
+logic Object_tag :  -> Object tag_id
+
+axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
+
 predicate Non_null_Object(x: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   x) = 0)
-
-logic Object_tag :  -> Object tag_id
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -2647,6 +2769,10 @@ predicate left_valid_struct_Object(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_Exception(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
 predicate left_valid_struct_String(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
@@ -2674,6 +2800,10 @@ axiom pointer_addr_of_interface_of_pointer_address:
 predicate right_valid_struct_Object(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_Exception(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
 
 predicate right_valid_struct_String(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
@@ -2706,6 +2836,10 @@ predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) = a) and
    (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
 predicate strict_valid_struct_String(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
@@ -2727,6 +2861,10 @@ predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
@@ -2759,6 +2897,10 @@ predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
    (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
 
 predicate valid_struct_String(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
@@ -2795,11 +2937,11 @@ goal Termination_loop3_ensures_default_po_6:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_47": ((0 <= i) and (i <= 100))) ->
+  ("JC_51": (("JC_49": (0 <= i)) and ("JC_50": (i <= 100)))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  (("JC_49": i0) < ("JC_49": i))
+  (("JC_53": i0) < ("JC_53": i))
 
 ========== file tests/java/why/Termination_po11.why ==========
 goal Termination_loop3_ensures_default_po_7:
@@ -2807,7 +2949,7 @@ goal Termination_loop3_ensures_default_po_7:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_47": ((0 <= i) and (i <= 100))) ->
+  ("JC_51": (("JC_49": (0 <= i)) and ("JC_50": (i <= 100)))) ->
   (i <= 0) ->
   forall return:int.
   (return = i) ->
@@ -2854,14 +2996,14 @@ goal Termination_loop3_ensures_default_po_1:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_47": (0 <= 100))
+  ("JC_51": ("JC_49": ("JC_49": (0 <= 100))))
 
 ========== file tests/java/why/Termination_po6.why ==========
 goal Termination_loop3_ensures_default_po_2:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_47": (100 <= 100))
+  ("JC_51": ("JC_50": ("JC_50": (100 <= 100))))
 
 ========== file tests/java/why/Termination_po7.why ==========
 goal Termination_loop3_ensures_default_po_3:
@@ -2869,11 +3011,11 @@ goal Termination_loop3_ensures_default_po_3:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_47": ((0 <= i) and (i <= 100))) ->
+  ("JC_51": (("JC_49": (0 <= i)) and ("JC_50": (i <= 100)))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_47": (0 <= i0))
+  ("JC_51": ("JC_49": ("JC_49": (0 <= i0))))
 
 ========== file tests/java/why/Termination_po8.why ==========
 goal Termination_loop3_ensures_default_po_4:
@@ -2881,11 +3023,11 @@ goal Termination_loop3_ensures_default_po_4:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_47": ((0 <= i) and (i <= 100))) ->
+  ("JC_51": (("JC_49": (0 <= i)) and ("JC_50": (i <= 100)))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_47": (i0 <= 100))
+  ("JC_51": ("JC_50": ("JC_50": (i0 <= 100))))
 
 ========== file tests/java/why/Termination_po9.why ==========
 goal Termination_loop3_ensures_default_po_5:
@@ -2893,11 +3035,11 @@ goal Termination_loop3_ensures_default_po_5:
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_47": ((0 <= i) and (i <= 100))) ->
+  ("JC_51": (("JC_49": (0 <= i)) and ("JC_50": (i <= 100)))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  (0 <= ("JC_49": i))
+  (0 <= ("JC_53": i))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Termination.why
@@ -3610,6 +3752,10 @@ why -simplify [...] why/Termination.why
  (EQ (concat_bitvector (select_bytes m p o1 s1) (select_bytes m p o2 s2))
  (select_bytes m p o1 (+ s1 s2)))))))
 
+(BG_PUSH
+ ;; Why axiom Exception_parenttag_Object
+ (EQ (parenttag Exception_tag Object_tag) |@true|))
+
 (DEFPRED (Non_null_Object x Object_alloc_table)
   (EQ (offset_max Object_alloc_table x) 0))
 
@@ -3677,6 +3823,9 @@ why -simplify [...] why/Termination.why
 (DEFPRED (left_valid_struct_Object p a Object_alloc_table)
   (<= (offset_min Object_alloc_table p) a))
 
+(DEFPRED (left_valid_struct_Exception p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
 (DEFPRED (left_valid_struct_String p a Object_alloc_table)
   (left_valid_struct_Object p a Object_alloc_table))
 
@@ -3699,6 +3848,9 @@ why -simplify [...] why/Termination.why
 
 (DEFPRED (right_valid_struct_Object p b Object_alloc_table)
   (>= (offset_max Object_alloc_table p) b))
+
+(DEFPRED (right_valid_struct_Exception p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
 
 (DEFPRED (right_valid_struct_String p b Object_alloc_table)
   (right_valid_struct_Object p b Object_alloc_table))
@@ -3724,6 +3876,9 @@ why -simplify [...] why/Termination.why
   (AND (EQ (offset_min Object_alloc_table p) a)
   (EQ (offset_max Object_alloc_table p) b)))
 
+(DEFPRED (strict_valid_struct_Exception p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
 (DEFPRED (strict_valid_struct_String p a b Object_alloc_table)
   (strict_valid_struct_Object p a b Object_alloc_table))
 
@@ -3740,6 +3895,9 @@ why -simplify [...] why/Termination.why
 (DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
   (AND (EQ (offset_min bitvector_alloc_table p) a)
   (EQ (offset_max bitvector_alloc_table p) b)))
+
+(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
 
 (DEFPRED (valid_bitvector_struct_String p a b bitvector_alloc_table)
   (valid_bitvector_struct_Object p a b bitvector_alloc_table))
@@ -3765,6 +3923,9 @@ why -simplify [...] why/Termination.why
 (DEFPRED (valid_struct_Object p a b Object_alloc_table)
   (AND (<= (offset_min Object_alloc_table p) a)
   (>= (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (valid_struct_Exception p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
 
 (DEFPRED (valid_struct_String p a b Object_alloc_table)
   (valid_struct_Object p a b Object_alloc_table))
@@ -3821,18 +3982,18 @@ why -simplify [...] why/Termination.why
 (IMPLIES (EQ mutable_n_0_0_0 (+ mutable_n_0_0 1))
 (< (- 100 mutable_n_0_0_0) (- 100 mutable_n_0_0))))))))))
 
-;; Termination_loop3_ensures_default_po_1, File "HOME/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_ensures_default_po_1, File "HOME/tests/java/Termination.java", line 47, characters 20-26
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table) (<= 0 100))))
 
-;; Termination_loop3_ensures_default_po_2, File "HOME/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_ensures_default_po_2, File "HOME/tests/java/Termination.java", line 47, characters 25-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
 (<= 100 100))))
 
-;; Termination_loop3_ensures_default_po_3, File "HOME/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_ensures_default_po_3, File "HOME/tests/java/Termination.java", line 47, characters 20-26
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -3840,7 +4001,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i0)))))))))
 
-;; Termination_loop3_ensures_default_po_4, File "HOME/tests/java/Termination.java", line 47, characters 20-33
+;; Termination_loop3_ensures_default_po_4, File "HOME/tests/java/Termination.java", line 47, characters 25-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -4768,11 +4929,15 @@ type Object
 
 type interface
 
+logic Exception_tag :  -> Object tag_id
+
+logic Object_tag :  -> Object tag_id
+
+axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
+
 predicate Non_null_Object(x: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   x) = 0)
-
-logic Object_tag :  -> Object tag_id
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -4845,6 +5010,10 @@ predicate left_valid_struct_Object(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_Exception(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
 predicate left_valid_struct_String(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
@@ -4872,6 +5041,10 @@ axiom pointer_addr_of_interface_of_pointer_address:
 predicate right_valid_struct_Object(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_Exception(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
 
 predicate right_valid_struct_String(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
@@ -4904,6 +5077,10 @@ predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) = a) and
    (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
 predicate strict_valid_struct_String(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
@@ -4925,6 +5102,10 @@ predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
@@ -4957,6 +5138,10 @@ predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
    (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
 
 predicate valid_struct_String(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
@@ -5023,64 +5208,64 @@ goal Termination_loop3_ensures_default_po_1:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_47": (0 <= 100))
+  ("JC_51": ("JC_49": ("JC_49": (0 <= 100))))
 
 goal Termination_loop3_ensures_default_po_2:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
-  ("JC_47": (100 <= 100))
+  ("JC_51": ("JC_50": ("JC_50": (100 <= 100))))
 
 goal Termination_loop3_ensures_default_po_3:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_47": ((0 <= i) and (i <= 100))) ->
+  ("JC_51": (("JC_49": (0 <= i)) and ("JC_50": (i <= 100)))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_47": (0 <= i0))
+  ("JC_51": ("JC_49": ("JC_49": (0 <= i0))))
 
 goal Termination_loop3_ensures_default_po_4:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_47": ((0 <= i) and (i <= 100))) ->
+  ("JC_51": (("JC_49": (0 <= i)) and ("JC_50": (i <= 100)))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  ("JC_47": (i0 <= 100))
+  ("JC_51": ("JC_50": ("JC_50": (i0 <= 100))))
 
 goal Termination_loop3_ensures_default_po_5:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_47": ((0 <= i) and (i <= 100))) ->
+  ("JC_51": (("JC_49": (0 <= i)) and ("JC_50": (i <= 100)))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  (0 <= ("JC_49": i))
+  (0 <= ("JC_53": i))
 
 goal Termination_loop3_ensures_default_po_6:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_47": ((0 <= i) and (i <= 100))) ->
+  ("JC_51": (("JC_49": (0 <= i)) and ("JC_50": (i <= 100)))) ->
   (i > 0) ->
   forall i0:int.
   (i0 = (i - 1)) ->
-  (("JC_49": i0) < ("JC_49": i))
+  (("JC_53": i0) < ("JC_53": i))
 
 goal Termination_loop3_ensures_default_po_7:
   forall this_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   valid_struct_Termination(this_0, 0, 0, Object_alloc_table) ->
   forall i:int.
-  ("JC_47": ((0 <= i) and (i <= 100))) ->
+  ("JC_51": (("JC_49": (0 <= i)) and ("JC_50": (i <= 100)))) ->
   (i <= 0) ->
   forall return:int.
   (return = i) ->

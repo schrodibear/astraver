@@ -1,32 +1,4 @@
-/**************************************************************************/
-/*                                                                        */
-/*  The Why platform for program certification                            */
-/*  Copyright (C) 2002-2008                                               */
-/*    Romain BARDOU                                                       */
-/*    Jean-François COUCHOT                                               */
-/*    Mehdi DOGGUY                                                        */
-/*    Jean-Christophe FILLIÂTRE                                           */
-/*    Thierry HUBERT                                                      */
-/*    Claude MARCHÉ                                                       */
-/*    Yannick MOY                                                         */
-/*    Christine PAULIN                                                    */
-/*    Yann RÉGIS-GIANAS                                                   */
-/*    Nicolas ROUSSET                                                     */
-/*    Xavier URBAIN                                                       */
-/*                                                                        */
-/*  This software is free software; you can redistribute it and/or        */
-/*  modify it under the terms of the GNU Library General Public           */
-/*  License version 2, with the special exception on linking              */
-/*  described in file LICENSE.                                            */
-/*                                                                        */
-/*  This software is distributed in the hope that it will be useful,      */
-/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
-/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
-/*                                                                        */
-/**************************************************************************/
-
 //@+ CheckArithOverflow = no
-
 
 class NoCreditException extends Exception {
 
@@ -36,15 +8,17 @@ class NoCreditException extends Exception {
 
 public class Purse {
     
-    private int balance;
-    //@ invariant balance_non_negative: balance >= 0;
+    static NoCreditException noCreditException = new NoCreditException();
 
-    /*@ requires true;
+    private int balance;
+    //@ invariant balance_positive: balance > 0;
+
+    /*@ requires amount > 0;
       @ assigns balance;
-      @ ensures balance == 0;
+      @ ensures balance == amount;
       @*/
-    public Purse() {
-        balance = 0;
+    public Purse(int amount) {
+        balance = amount;
     }
 
     /*@ requires s >= 0;
@@ -57,22 +31,35 @@ public class Purse {
 
     /*@ requires s >= 0;
       @ assigns balance;
-      @ ensures s <= \old(balance) && balance == \old(balance) - s;
+      @ ensures s < \old(balance) && balance == \old(balance) - s;
       @ behavior amount_too_large:
       @   assigns \nothing;
-      @   signals (NoCreditException) s > \old(balance) ;
+      @   signals (NoCreditException) 
+      @         s >= \old(balance) ;
       @*/
     public void withdraw(int s) throws NoCreditException {
-        if (balance >= s)
+        if (s < balance)
             balance = balance - s;
         else
-            throw new NoCreditException();
+            throw noCreditException;
     }
 
-    //@ ensures \result == balance;
-    public int getBalance() {
-        return balance;
-    }
 
+    /*@ requires p != null && p != this && s >= 0;
+      @ behavior transfer_ok:
+      @   ensures 
+      @       balance == \old(balance) - s &&
+      @       p.balance == \old(p.balance) + s &&
+      @       \result == balance;
+      @ behavior transfer_failed: 
+      @   signals (NoCreditException) 
+      @       balance == \old(balance) &&
+      @       p.balance == \old(p.balance);
+      @*/
+    public int transfer_to(Purse p, int s) throws NoCreditException {
+	p.credit(s);
+	withdraw(s);
+	return balance;
+    }
+	
 }
-

@@ -8,7 +8,7 @@
 
 public class MacCarthy {
 
-    /*@ decreases \int_max(0,101-n) ;
+    /*@ decreases 101-n ;
       @ behavior less_than_101:
       @   assumes n <= 100;
       @   ensures \result == 91;
@@ -60,6 +60,9 @@ tag String = Object with {
 tag Throwable = Object with {
 }
 
+tag Exception = Object with {
+}
+
 tag MacCarthy = Object with {
 }
 
@@ -77,8 +80,10 @@ behavior normal:
 
 exception Throwable of Throwable[0..]
 
+exception Exception of Exception[0..]
+
 integer MacCarthy_f91(integer n)
-  decreases (K_8 : \int_max(0, (101 - n)));
+  decreases (K_8 : (101 - n));
 behavior less_than_101:
   assumes (n <= 100);
   ensures (K_1 : (\result == 91));
@@ -194,7 +199,7 @@ end = 13
 file = "HOME/tests/java/MacCarthy.java"
 line = 10
 begin = 18
-end = 35
+end = 23
 
 [Object_notify]
 name = "Method notify"
@@ -505,7 +510,7 @@ end = -1
 
 [JC_1]
 file = "HOME/tests/java/MacCarthy.jc"
-line = 28
+line = 31
 begin = 8
 end = 23
 
@@ -547,7 +552,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/MacCarthy.jc"
-line = 28
+line = 31
 begin = 8
 end = 23
 
@@ -633,7 +638,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/MacCarthy.jc"
-line = 30
+line = 33
 begin = 11
 end = 65
 
@@ -789,7 +794,7 @@ end = -1
 
 [JC_10]
 file = "HOME/tests/java/MacCarthy.jc"
-line = 30
+line = 33
 begin = 11
 end = 65
 
@@ -1344,13 +1349,19 @@ type Object
 
 type interface
 
+exception Exception_exc of Object pointer
+
+logic Exception_tag:  -> Object tag_id
+
+logic Object_tag:  -> Object tag_id
+
+axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
+
 exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
 logic MacCarthy_tag:  -> Object tag_id
-
-logic Object_tag:  -> Object tag_id
 
 axiom MacCarthy_parenttag_Object : parenttag(MacCarthy_tag, Object_tag)
 
@@ -1429,6 +1440,11 @@ predicate left_valid_struct_Object(p:Object pointer,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
+predicate left_valid_struct_Exception(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
 predicate left_valid_struct_MacCarthy(p:Object pointer,
  a:int,
  Object_alloc_table:Object alloc_table) =
@@ -1460,6 +1476,11 @@ predicate right_valid_struct_Object(p:Object pointer,
  b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
+
+predicate right_valid_struct_Exception(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
 
 predicate right_valid_struct_MacCarthy(p:Object pointer,
  b:int,
@@ -1502,6 +1523,12 @@ predicate strict_valid_struct_Object(p:Object pointer,
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
 predicate strict_valid_struct_MacCarthy(p:Object pointer,
  a:int,
  b:int,
@@ -1533,6 +1560,12 @@ predicate valid_bitvector_struct_Object(p:unit pointer,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_MacCarthy(p:unit pointer,
  a:int,
@@ -1579,6 +1612,12 @@ predicate valid_struct_Object(p:Object pointer,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ valid_struct_Object(p, a, b, Object_alloc_table)
 
 predicate valid_struct_MacCarthy(p:Object pointer,
  a:int,
@@ -1695,6 +1734,24 @@ parameter Object_wait_long_requires :
 parameter Object_wait_requires :
  this_10:Object pointer -> { } unit reads Object_alloc_table { true }
 
+parameter alloc_bitvector_struct_Exception :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Exception_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
 parameter alloc_bitvector_struct_MacCarthy :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -1784,6 +1841,29 @@ parameter alloc_bitvector_struct_interface_requires :
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_struct_Exception :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Exception(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Exception_tag)))) }
+
+parameter alloc_struct_Exception_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Exception(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Exception_tag)))) }
 
 parameter alloc_struct_MacCarthy :
  n:int ->
@@ -2976,9 +3056,13 @@ type Object
 
 type interface
 
-logic MacCarthy_tag :  -> Object tag_id
+logic Exception_tag :  -> Object tag_id
 
 logic Object_tag :  -> Object tag_id
+
+axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
+
+logic MacCarthy_tag :  -> Object tag_id
 
 axiom MacCarthy_parenttag_Object: parenttag(MacCarthy_tag, Object_tag)
 
@@ -3053,6 +3137,10 @@ predicate left_valid_struct_Object(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_Exception(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
 predicate left_valid_struct_MacCarthy(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
@@ -3080,6 +3168,10 @@ axiom pointer_addr_of_interface_of_pointer_address:
 predicate right_valid_struct_Object(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_Exception(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
 
 predicate right_valid_struct_MacCarthy(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
@@ -3112,6 +3204,10 @@ predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) = a) and
    (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
 predicate strict_valid_struct_MacCarthy(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
@@ -3133,6 +3229,10 @@ predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_MacCarthy(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
@@ -3165,6 +3265,10 @@ predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
    (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
 
 predicate valid_struct_MacCarthy(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
@@ -3943,6 +4047,10 @@ why -simplify [...] why/MacCarthy.why
  (select_bytes m p o1 (+ s1 s2)))))))
 
 (BG_PUSH
+ ;; Why axiom Exception_parenttag_Object
+ (EQ (parenttag Exception_tag Object_tag) |@true|))
+
+(BG_PUSH
  ;; Why axiom MacCarthy_parenttag_Object
  (EQ (parenttag MacCarthy_tag Object_tag) |@true|))
 
@@ -4009,6 +4117,9 @@ why -simplify [...] why/MacCarthy.why
 (DEFPRED (left_valid_struct_Object p a Object_alloc_table)
   (<= (offset_min Object_alloc_table p) a))
 
+(DEFPRED (left_valid_struct_Exception p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
 (DEFPRED (left_valid_struct_MacCarthy p a Object_alloc_table)
   (left_valid_struct_Object p a Object_alloc_table))
 
@@ -4031,6 +4142,9 @@ why -simplify [...] why/MacCarthy.why
 
 (DEFPRED (right_valid_struct_Object p b Object_alloc_table)
   (>= (offset_max Object_alloc_table p) b))
+
+(DEFPRED (right_valid_struct_Exception p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
 
 (DEFPRED (right_valid_struct_MacCarthy p b Object_alloc_table)
   (right_valid_struct_Object p b Object_alloc_table))
@@ -4056,6 +4170,9 @@ why -simplify [...] why/MacCarthy.why
   (AND (EQ (offset_min Object_alloc_table p) a)
   (EQ (offset_max Object_alloc_table p) b)))
 
+(DEFPRED (strict_valid_struct_Exception p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
 (DEFPRED (strict_valid_struct_MacCarthy p a b Object_alloc_table)
   (strict_valid_struct_Object p a b Object_alloc_table))
 
@@ -4072,6 +4189,9 @@ why -simplify [...] why/MacCarthy.why
 (DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
   (AND (EQ (offset_min bitvector_alloc_table p) a)
   (EQ (offset_max bitvector_alloc_table p) b)))
+
+(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
 
 (DEFPRED (valid_bitvector_struct_MacCarthy p a b bitvector_alloc_table)
   (valid_bitvector_struct_Object p a b bitvector_alloc_table))
@@ -4097,6 +4217,9 @@ why -simplify [...] why/MacCarthy.why
 (DEFPRED (valid_struct_Object p a b Object_alloc_table)
   (AND (<= (offset_min Object_alloc_table p) a)
   (>= (offset_max Object_alloc_table p) b)))
+
+(DEFPRED (valid_struct_Exception p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
 
 (DEFPRED (valid_struct_MacCarthy p a b Object_alloc_table)
   (valid_struct_Object p a b Object_alloc_table))
@@ -5043,9 +5166,13 @@ type Object
 
 type interface
 
-logic MacCarthy_tag :  -> Object tag_id
+logic Exception_tag :  -> Object tag_id
 
 logic Object_tag :  -> Object tag_id
+
+axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
+
+logic MacCarthy_tag :  -> Object tag_id
 
 axiom MacCarthy_parenttag_Object: parenttag(MacCarthy_tag, Object_tag)
 
@@ -5120,6 +5247,10 @@ predicate left_valid_struct_Object(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_Exception(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
 predicate left_valid_struct_MacCarthy(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
@@ -5147,6 +5278,10 @@ axiom pointer_addr_of_interface_of_pointer_address:
 predicate right_valid_struct_Object(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_Exception(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
 
 predicate right_valid_struct_MacCarthy(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
@@ -5179,6 +5314,10 @@ predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) = a) and
    (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
 predicate strict_valid_struct_MacCarthy(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
@@ -5200,6 +5339,10 @@ predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_MacCarthy(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
@@ -5232,6 +5375,10 @@ predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
    (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
 
 predicate valid_struct_MacCarthy(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,

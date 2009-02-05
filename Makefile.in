@@ -505,6 +505,10 @@ bin/gwhy.opt: $(GCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa threads.cmxa nums.cmxa str.cmxa graph.cmxa lablgtk.cmxa gtkThread.cmx $^
 	$(STRIP)    $@
 
+bin/gwhy.static: $(GCMX)
+	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa threads.cmxa nums.cmxa str.cmxa graph.cmxa lablgtk.cmxa gtkThread.cmx $^
+	$(STRIP)    $@
+
 bin/gwhy.byte: $(GCMO)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) -o $@ unix.cma str.cma nums.cma graph.cma lablgtk.cma threads.cma gtkThread.cmo $^
 
@@ -703,7 +707,11 @@ java_api:
 
 install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@ 
 
-install-binary: $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) $(KRAKATOA) $(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) gwhy-@LABLGTK2@ $(WHYSTAT) $(TOOLSTAT) $(WHYOBFUSCATOR) 
+BINARYFILES = $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) $(KRAKATOA) \
+	$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) bin/gwhy.$(OCAMLBEST) \
+	$(WHYSTAT) $(TOOLSTAT) $(WHYOBFUSCATOR) $(SIMPLIFY2WHY)
+
+install-binary: $(BINARYFILES) 
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(WHYCONFIG) $(BINDIR)/why-config$(EXE)
@@ -1038,21 +1046,17 @@ export-doc: $(DOC)
 	cp doc/krakatoa.pdf doc/krakatoa.html $(WWWKRAKATOA)/manual
 	(cd $(WWWKRAKATOA)/manual; hacha krakatoa.html)
 
+OSTYPE  ?= linux
+
 BINARYNAME = $(NAME)-$(OSTYPE)
 
 linux: binary
 
-BINARYFILES = $(FILES) bin/why.opt bin/why-config.opt bin/caduceus.opt \
-	bin/krakatoa.opt bin/jessie.opt
-# README INSTALL COPYING GPL $(VO7) $(VO8) \
-# 	bin/why.static bin/caduceus.static \
-# 	doc/why.1 doc/manual.ps \
-# 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.* lib/mizar/dict/why.* \
-# 	lib/why/*.why examples-c/*/*.c
+ALLBINARYFILES = $(FILES) $(BINARYFILES) 
 
-binary: $(BINARYFILES)
+binary: $(ALLBINARYFILES)
 	mkdir -p export/$(BINARYNAME)
-	cp --parents $(BINARYFILES) export/$(BINARYNAME)
+	cp --parents $(ALLBINARYFILES) export/$(BINARYNAME)
 	(cd export; tar czf $(BINARYNAME).tar.gz $(BINARYNAME))
 	cp export/$(BINARYNAME).tar.gz $(FTP)
 

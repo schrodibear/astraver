@@ -8,10 +8,17 @@ Admitted.
 (*Why type*) Definition interface: Set.
 Admitted.
 
-(*Why logic*) Definition Fibonacci_tag : (tag_id Object).
+(*Why logic*) Definition Exception_tag : (tag_id Object).
 Admitted.
 
 (*Why logic*) Definition Object_tag : (tag_id Object).
+Admitted.
+
+(*Why axiom*) Lemma Exception_parenttag_Object :
+  (parenttag Exception_tag Object_tag).
+Admitted.
+
+(*Why logic*) Definition Fibonacci_tag : (tag_id Object).
 Admitted.
 
 (*Why axiom*) Lemma Fibonacci_parenttag_Object :
@@ -163,6 +170,9 @@ Admitted.
 (*Why predicate*) Definition left_valid_struct_Object  (p:(pointer Object)) (a:Z) (Object_alloc_table:(alloc_table Object))
   := (offset_min Object_alloc_table p) <= a.
 
+(*Why predicate*) Definition left_valid_struct_Exception  (p:(pointer Object)) (a:Z) (Object_alloc_table:(alloc_table Object))
+  := (left_valid_struct_Object p a Object_alloc_table).
+
 (*Why predicate*) Definition left_valid_struct_Fibonacci  (p:(pointer Object)) (a:Z) (Object_alloc_table:(alloc_table Object))
   := (left_valid_struct_Object p a Object_alloc_table).
 
@@ -205,6 +215,9 @@ Admitted.
 (*Why predicate*) Definition right_valid_struct_Object  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (offset_max Object_alloc_table p) >= b.
 
+(*Why predicate*) Definition right_valid_struct_Exception  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (right_valid_struct_Object p b Object_alloc_table).
+
 (*Why predicate*) Definition right_valid_struct_Fibonacci  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (right_valid_struct_Object p b Object_alloc_table).
 
@@ -229,6 +242,9 @@ Admitted.
   := (offset_min Object_alloc_table p) = a /\
      (offset_max Object_alloc_table p) = b.
 
+(*Why predicate*) Definition strict_valid_struct_Exception  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (strict_valid_struct_Object p a b Object_alloc_table).
+
 (*Why predicate*) Definition strict_valid_struct_Fibonacci  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (strict_valid_struct_Object p a b Object_alloc_table).
 
@@ -245,6 +261,9 @@ Admitted.
 (*Why predicate*) Definition valid_bitvector_struct_Object  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
   := (offset_min bitvector_alloc_table p) = a /\
      (offset_max bitvector_alloc_table p) = b.
+
+(*Why predicate*) Definition valid_bitvector_struct_Exception  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
+  := (valid_bitvector_struct_Object p a b bitvector_alloc_table).
 
 (*Why predicate*) Definition valid_bitvector_struct_Fibonacci  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
   := (valid_bitvector_struct_Object p a b bitvector_alloc_table).
@@ -271,6 +290,9 @@ Admitted.
   := (offset_min Object_alloc_table p) <= a /\
      (offset_max Object_alloc_table p) >= b.
 
+(*Why predicate*) Definition valid_struct_Exception  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (valid_struct_Object p a b Object_alloc_table).
+
 (*Why predicate*) Definition valid_struct_Fibonacci  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (valid_struct_Object p a b Object_alloc_table).
 
@@ -284,51 +306,51 @@ Admitted.
   := (offset_min interface_alloc_table p) <= a /\
      (offset_max interface_alloc_table p) >= b.
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-26: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_1 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_21 *) 0 <= 0.
+  (* JC_29 *) (* JC_25 *) (* JC_25 *) 0 <= 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 25-31: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_2 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_21 *) 0 <= n_0_0.
+  (* JC_29 *) (* JC_26 *) (* JC_26 *) 0 <= n_0_0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 35-47: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_3 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_21 *) (isfib (0 + 1) 1).
+  (* JC_29 *) (* JC_27 *) (* JC_27 *) (isfib (0 + 1) 1).
 Proof.
 intros; apply isfib1.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 51-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_4 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_21 *) (isfib 0 0).
+  (* JC_29 *) (* JC_28 *) (* JC_28 *) (isfib 0 0).
 Proof.
 intros; apply isfib0.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-26: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_5 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -338,20 +360,20 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_21 *) 0 <= i0.
+  (* JC_29 *) (* JC_25 *) (* JC_25 *) 0 <= i0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 25-31: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_6 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -361,20 +383,20 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_21 *) i0 <= n_0_0.
+  (* JC_29 *) (* JC_26 *) (* JC_26 *) i0 <= n_0_0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 35-47: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_7 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -384,7 +406,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_21 *) (isfib (i0 + 1) x_0_0_0).
+  (* JC_29 *) (* JC_27 *) (* JC_27 *) (isfib (i0 + 1) x_0_0_0).
 Proof.
 intuition;subst; auto.
 apply isfibn; intuition.
@@ -392,15 +414,15 @@ replace (i+1+1-2) with i; auto with zarith.
 replace (i+1+1-1) with (i+1); auto with zarith.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 51-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_8 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -410,7 +432,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_21 *) (isfib i0 y0).
+  (* JC_29 *) (* JC_28 *) (* JC_28 *) (isfib i0 y0).
 Proof.
 intuition; subst; auto.
 Save.
@@ -422,8 +444,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -433,7 +455,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  0 <= ((* JC_23 *) (n_0_0 - i)).
+  0 <= ((* JC_31 *) (n_0_0 - i)).
 Proof.
 intuition.
 Save.
@@ -445,8 +467,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -456,7 +478,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  ((* JC_23 *) (n_0_0 - i0)) < ((* JC_23 *) (n_0_0 - i)).
+  ((* JC_31 *) (n_0_0 - i0)) < ((* JC_31 *) (n_0_0 - i)).
 Proof.
 intuition.
 Save.
@@ -468,8 +490,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_11: i >= n_0_0),
   forall (why__return: Z),
   forall (HW_12: why__return = y),

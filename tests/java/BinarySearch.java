@@ -29,7 +29,11 @@
 
 //@+ CheckArithOverflow = yes
 
-/*@ lemma mean_property : 
+/*@ lemma mean_property1 : 
+  @   \forall integer x y; x <= y ==> x <= (x+y)/2 <= y; 
+  @*/
+
+/*@ lemma mean_property2 : 
   @   \forall integer x y; x <= y ==> x <= x+(y-x)/2 <= y; 
   @*/
 

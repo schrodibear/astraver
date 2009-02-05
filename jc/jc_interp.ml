@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.396 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.397 2009-02-05 12:14:33 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1212,9 +1212,24 @@ let assigns ~type_safe ?region_list before ef locs loc =
   let mems = 
     MemoryMap.fold
       (fun (fi,r) _labs acc -> 
-	 if Option_misc.map_default (RegionList.mem r) true region_list then
-           MemoryMap.add (fi,r) [] acc
-	 else acc
+	 if true (* Option_misc.map_default (RegionList.mem r) true region_list *) then
+	   begin
+(*
+	     eprintf "ASSIGNS FOR FIELD %s@." 
+	       (match fi with JCmem_field f -> f.jc_field_info_name 
+		  | _ -> "??");
+*)
+             MemoryMap.add (fi,r) [] acc
+	   end
+	 else 
+	   begin
+(*
+	     eprintf "IGNORING ASSIGNS FOR FIELD %s@." 
+	       (match fi with JCmem_field f -> f.jc_field_info_name 
+		  | _ -> "??");
+*)
+	     acc
+	   end
       ) ef.jc_writes.jc_effect_memories MemoryMap.empty 
   in
   let refs,mems = 
@@ -2955,6 +2970,7 @@ let tr_fun f funpos spec body acc =
   if Jc_options.debug then
     Format.printf "[interp] function %s@." f.jc_fun_info_name;
 
+  Jc_options.lprintf "Jc_interp: function %s@." f.jc_fun_info_name;
   (* global variables valid predicates *)
   let variables_valid_pred_apps = LTrue
 (* Yannick: comment out because not taken into account in effects
@@ -3035,8 +3051,14 @@ let tr_fun f funpos spec body acc =
 	       LabelPost LabelOld post
 	   in
            let post = match b.jc_behavior_assigns with
-             | None -> post
+             | None -> 
+		 Jc_options.lprintf 
+		   "Jc_interp: behavior '%s' has no assigns@." id;
+		 post
              | Some(assigns_pos,loclist) ->
+		 Jc_options.lprintf 
+		   "Jc_interp: behavior '%s' has assigns clause with %d elements@." 
+		   id (List.length loclist);
 		 let assigns_post = 
                    mark_assertion assigns_pos
                      (assigns ~type_safe 

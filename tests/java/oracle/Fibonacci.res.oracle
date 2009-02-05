@@ -86,6 +86,9 @@ tag String = Object with {
 tag Throwable = Object with {
 }
 
+tag Exception = Object with {
+}
+
 tag Fibonacci = Object with {
 }
 
@@ -103,16 +106,18 @@ behavior normal:
 
 exception Throwable of Throwable[0..]
 
+exception Exception of Exception[0..]
+
 integer Fibonacci_Fib(integer n_0)
-  requires (K_10 : (n_0 >= 0));
+  requires (K_16 : (n_0 >= 0));
 behavior default:
   ensures (K_1 : isfib(n_0, \result));
 {  
    {  
-      (var integer y = (K_9 : 0));
+      (var integer y = (K_15 : 0));
       
       {  
-         (var integer x_0 = (K_8 : 1));
+         (var integer x_0 = (K_14 : 1));
          
          {  
             (var integer aux);
@@ -122,15 +127,16 @@ behavior default:
                   {  
                      (var integer i = (K_2 : 0));
                      
-                     invariant (K_3 : ((((0 <= i) && (i <= n_0)) &&
-                                         isfib((i + 1), x_0)) &&
-                                        isfib(i, y)));
-                     variant (K_4 : (n_0 - i));
-                     for ( ; (K_7 : (i < n_0)) ; (K_6 : (i ++)))
+                     invariant (K_9 : ((K_8 : ((K_7 : ((K_6 : (0 <= i)) &&
+                                                        (K_5 : (i <= n_0)))) &&
+                                                (K_4 : isfib((i + 1), x_0)))) &&
+                                        (K_3 : isfib(i, y))));
+                     variant (K_10 : (n_0 - i));
+                     for ( ; (K_13 : (i < n_0)) ; (K_12 : (i ++)))
                      {  
                         {  (aux = y);
                            (y = x_0);
-                           (x_0 = (K_5 : (x_0 + aux)))
+                           (x_0 = (K_11 : (x_0 + aux)))
                         }
                      }
                   }
@@ -154,6 +160,42 @@ End:
 ========== file tests/java/Fibonacci.jloc ==========
 [K_10]
 file = "HOME/tests/java/Fibonacci.java"
+line = 30
+begin = 18
+end = 21
+
+[K_11]
+file = "HOME/tests/java/Fibonacci.java"
+line = 35
+begin = 9
+end = 16
+
+[K_12]
+file = "HOME/tests/java/Fibonacci.java"
+line = 32
+begin = 21
+end = 24
+
+[K_13]
+file = "HOME/tests/java/Fibonacci.java"
+line = 32
+begin = 14
+end = 19
+
+[K_14]
+file = "HOME/tests/java/Fibonacci.java"
+line = 27
+begin = 13
+end = 14
+
+[K_15]
+file = "HOME/tests/java/Fibonacci.java"
+line = 27
+begin = 8
+end = 9
+
+[K_16]
+file = "HOME/tests/java/Fibonacci.java"
 line = 23
 begin = 17
 end = 23
@@ -173,44 +215,44 @@ end = 12
 [K_3]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
-begin = 20
+begin = 51
 end = 61
 
 [K_4]
 file = "HOME/tests/java/Fibonacci.java"
-line = 30
-begin = 18
-end = 21
+line = 29
+begin = 35
+end = 47
 
 [K_5]
 file = "HOME/tests/java/Fibonacci.java"
-line = 35
-begin = 9
-end = 16
+line = 29
+begin = 25
+end = 31
 
 [K_6]
 file = "HOME/tests/java/Fibonacci.java"
-line = 32
-begin = 21
-end = 24
+line = 29
+begin = 20
+end = 26
 
 [K_7]
 file = "HOME/tests/java/Fibonacci.java"
-line = 32
-begin = 14
-end = 19
+line = 29
+begin = 20
+end = 31
 
 [K_8]
 file = "HOME/tests/java/Fibonacci.java"
-line = 27
-begin = 13
-end = 14
+line = 29
+begin = 20
+end = 47
 
 [K_9]
 file = "HOME/tests/java/Fibonacci.java"
-line = 27
-begin = 8
-end = 9
+line = 29
+begin = 20
+end = 61
 
 [cons_Fibonacci]
 name = "Constructor of class Fibonacci"
@@ -354,7 +396,7 @@ clean:
 ========== file tests/java/Fibonacci.loc ==========
 [JC_1]
 file = "HOME/tests/java/Fibonacci.jc"
-line = 51
+line = 54
 begin = 8
 end = 23
 
@@ -366,7 +408,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/Fibonacci.jc"
-line = 51
+line = 54
 begin = 8
 end = 23
 
@@ -402,7 +444,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Fibonacci.jc"
-line = 53
+line = 56
 begin = 11
 end = 65
 
@@ -440,7 +482,7 @@ end = -1
 
 [JC_10]
 file = "HOME/tests/java/Fibonacci.jc"
-line = 53
+line = 56
 begin = 11
 end = 65
 
@@ -504,31 +546,31 @@ end = -1
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
 begin = 20
-end = 61
+end = 26
 
 [JC_20]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.java"
+line = 29
+begin = 25
+end = 31
 
 [JC_21]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
-begin = 20
-end = 61
+begin = 35
+end = 47
 
 [JC_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.java"
+line = 29
+begin = 51
+end = 61
 
 [JC_23]
 file = "HOME/tests/java/Fibonacci.java"
-line = 30
-begin = 18
-end = 21
+line = 29
+begin = 20
+end = 61
 
 [JC_24]
 file = "HOME/"
@@ -537,16 +579,16 @@ begin = -1
 end = -1
 
 [JC_25]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.java"
+line = 29
+begin = 20
+end = 26
 
 [JC_26]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.java"
+line = 29
+begin = 25
+end = 31
 
 [cons_Fibonacci_ensures_default]
 name = "Constructor of class Fibonacci"
@@ -557,28 +599,22 @@ begin = -1
 end = -1
 
 [JC_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.java"
+line = 29
+begin = 35
+end = 47
 
 [JC_28]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.java"
+line = 29
+begin = 51
+end = 61
 
 [JC_29]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_30]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.java"
+line = 29
+begin = 20
+end = 61
 
 [Fibonacci_Fib_ensures_default]
 name = "Method Fib"
@@ -588,7 +624,61 @@ line = 26
 begin = 23
 end = 26
 
+[JC_30]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_31]
+file = "HOME/tests/java/Fibonacci.java"
+line = 30
+begin = 18
+end = 21
+
+[JC_32]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_33]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_35]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_36]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_37]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_38]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_39]
 file = "HOME/"
 line = 0
 begin = -1
@@ -599,9 +689,15 @@ type Object
 
 type interface
 
-logic Fibonacci_tag:  -> Object tag_id
+exception Exception_exc of Object pointer
+
+logic Exception_tag:  -> Object tag_id
 
 logic Object_tag:  -> Object tag_id
+
+axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
+
+logic Fibonacci_tag:  -> Object tag_id
 
 axiom Fibonacci_parenttag_Object : parenttag(Fibonacci_tag, Object_tag)
 
@@ -703,6 +799,11 @@ predicate left_valid_struct_Object(p:Object pointer,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
 
+predicate left_valid_struct_Exception(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
+
 predicate left_valid_struct_Fibonacci(p:Object pointer,
  a:int,
  Object_alloc_table:Object alloc_table) =
@@ -738,6 +839,11 @@ predicate right_valid_struct_Object(p:Object pointer,
  b:int,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
+
+predicate right_valid_struct_Exception(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
 
 predicate right_valid_struct_Fibonacci(p:Object pointer,
  b:int,
@@ -780,6 +886,12 @@ predicate strict_valid_struct_Object(p:Object pointer,
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
 predicate strict_valid_struct_Fibonacci(p:Object pointer,
  a:int,
  b:int,
@@ -811,6 +923,12 @@ predicate valid_bitvector_struct_Object(p:unit pointer,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_Fibonacci(p:unit pointer,
  a:int,
@@ -858,6 +976,12 @@ predicate valid_struct_Object(p:Object pointer,
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
 
+predicate valid_struct_Exception(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ valid_struct_Object(p, a, b, Object_alloc_table)
+
 predicate valid_struct_Fibonacci(p:Object pointer,
  a:int,
  b:int,
@@ -893,6 +1017,24 @@ parameter Fibonacci_Fib_requires :
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_tag_table : Object tag_table ref
+
+parameter alloc_bitvector_struct_Exception :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Exception_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter alloc_bitvector_struct_Fibonacci :
  n:int ->
@@ -983,6 +1125,29 @@ parameter alloc_bitvector_struct_interface_requires :
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_struct_Exception :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Exception(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Exception_tag)))) }
+
+parameter alloc_struct_Exception_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Exception(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Exception_tag)))) }
 
 parameter alloc_struct_Fibonacci :
  n:int ->
@@ -1132,31 +1297,32 @@ let Fibonacci_Fib_ensures_default =
   (let return = ref (any_int void) in
   try
    begin
-     (let y = ref (K_9: (0)) in
-     (let x_0_0 = ref (K_8: (1)) in
+     (let y = ref (K_15: (0)) in
+     (let x_0_0 = ref (K_14: (1)) in
      (let aux = ref (any_int void) in
      begin
        (let i = ref (K_2: (0)) in
        try
         while true do
         { invariant
-            (JC_21:
-            (le_int((0), i)
-            and (le_int(i, n_0_0)
-                and (isfib(add_int(i, (1)), x_0_0) and isfib(i, y)))))
-          variant (JC_23 : sub_int(n_0_0, i)) }
+            (JC_29:
+            ((JC_25: le_int((0), i))
+            and ((JC_26: le_int(i, n_0_0))
+                and ((JC_27: isfib(add_int(i, (1)), x_0_0))
+                    and (JC_28: isfib(i, y))))))
+          variant (JC_31 : sub_int(n_0_0, i)) }
          begin
            [ { } unit { true } ];
           try
            (let jessie_15 = begin
-                              (if (K_7: ((lt_int_ !i) n_0_0))
+                              (if (K_13: ((lt_int_ !i) n_0_0))
                               then
                                (let jessie_13 = begin
                                                   (let jessie_11 = (aux := !y) in
                                                   void);
                                                  (let jessie_12 = (y := !x_0_0) in
                                                  void);
-                                                 (x_0_0 := (K_5:
+                                                 (x_0_0 := (K_11:
                                                            ((add_int !x_0_0) !aux)));
                                                  !x_0_0
                                                 end in
@@ -1169,7 +1335,7 @@ let Fibonacci_Fib_ensures_default =
            void)
            with
            Loop_continue_exc jessie_3 ->
-           (let jessie_17 = (K_6:
+           (let jessie_17 = (K_12:
                             (let jessie_1 = !i in
                             begin
                               (let jessie_16 = (i := ((add_int jessie_1) (1))) in
@@ -1199,30 +1365,31 @@ let Fibonacci_Fib_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (let y = ref (K_9: (0)) in
-     (let x_0_0 = ref (K_8: (1)) in
+     (let y = ref (K_15: (0)) in
+     (let x_0_0 = ref (K_14: (1)) in
      (let aux = ref (any_int void) in
      begin
        (let i = ref (K_2: (0)) in
        try
         while true do
-        { invariant (JC_20: true)  }
+        { invariant (JC_24: true)  }
          begin
            [ { } unit reads i,x_0_0,y
-             { (JC_19:
-               (le_int((0), i)
-               and (le_int(i, n_0_0)
-                   and (isfib(add_int(i, (1)), x_0_0) and isfib(i, y))))) } ];
+             { (JC_23:
+               ((JC_19: le_int((0), i))
+               and ((JC_20: le_int(i, n_0_0))
+                   and ((JC_21: isfib(add_int(i, (1)), x_0_0))
+                       and (JC_22: isfib(i, y)))))) } ];
           try
            (let jessie_8 = begin
-                             (if (K_7: ((lt_int_ !i) n_0_0))
+                             (if (K_13: ((lt_int_ !i) n_0_0))
                              then
                               (let jessie_6 = begin
                                                 (let jessie_4 = (aux := !y) in
                                                 void);
                                                (let jessie_5 = (y := !x_0_0) in
                                                void);
-                                               (x_0_0 := (K_5:
+                                               (x_0_0 := (K_11:
                                                          ((add_int !x_0_0) !aux)));
                                                !x_0_0
                                               end in
@@ -1235,7 +1402,7 @@ let Fibonacci_Fib_safety =
            void)
            with
            Loop_continue_exc jessie_3 ->
-           (let jessie_10 = (K_6:
+           (let jessie_10 = (K_12:
                             (let jessie_1 = !i in
                             begin
                               (let jessie_9 = (i := ((add_int jessie_1) (1))) in
@@ -1262,7 +1429,7 @@ let cons_Fibonacci_ensures_default =
  fun (this_0 : Object pointer) ->
   { valid_struct_Fibonacci(this_0, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_28: true) }
+  { (JC_36: true) }
 
 let cons_Fibonacci_safety =
  fun (this_0 : Object pointer) ->
@@ -1309,35 +1476,35 @@ why --project [...] why/Fibonacci.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
     <goal why_file="why/Fibonacci_po4.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "61"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "26"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Fibonacci_po5.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "61"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "25" end = "31"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Fibonacci_po6.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "61"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "35" end = "47"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Fibonacci_po7.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "61"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "51" end = "61"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Fibonacci_po8.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "61"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "26"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Fibonacci_po9.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "61"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "25" end = "31"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Fibonacci_po10.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "61"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "35" end = "47"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Fibonacci_po11.why">
-      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "20" end = "61"/>
+      <location file = "HOME/tests/java/Fibonacci.java" line = "29" begin = "51" end = "61"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Fibonacci_po12.why">
@@ -2242,9 +2409,13 @@ type Object
 
 type interface
 
-logic Fibonacci_tag :  -> Object tag_id
+logic Exception_tag :  -> Object tag_id
 
 logic Object_tag :  -> Object tag_id
+
+axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
+
+logic Fibonacci_tag :  -> Object tag_id
 
 axiom Fibonacci_parenttag_Object: parenttag(Fibonacci_tag, Object_tag)
 
@@ -2335,6 +2506,10 @@ predicate left_valid_struct_Object(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_Exception(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
 predicate left_valid_struct_Fibonacci(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
@@ -2364,6 +2539,10 @@ axiom pointer_addr_of_interface_of_pointer_address:
 predicate right_valid_struct_Object(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_Exception(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
 
 predicate right_valid_struct_Fibonacci(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
@@ -2396,6 +2575,10 @@ predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) = a) and
    (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
 predicate strict_valid_struct_Fibonacci(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
@@ -2417,6 +2600,10 @@ predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_Fibonacci(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
@@ -2450,6 +2637,10 @@ predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) <= a) and
    (offset_max(Object_alloc_table, p) >= b))
 
+predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
 predicate valid_struct_Fibonacci(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
   Object_alloc_table)
@@ -2478,8 +2669,10 @@ goal Fibonacci_Fib_ensures_default_po_7:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -2489,7 +2682,7 @@ goal Fibonacci_Fib_ensures_default_po_7:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_21": isfib((i0 + 1), x_0_0_0))
+  ("JC_29": ("JC_27": ("JC_27": isfib((i0 + 1), x_0_0_0))))
 
 ========== file tests/java/why/Fibonacci_po11.why ==========
 goal Fibonacci_Fib_ensures_default_po_8:
@@ -2498,8 +2691,10 @@ goal Fibonacci_Fib_ensures_default_po_8:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -2509,7 +2704,7 @@ goal Fibonacci_Fib_ensures_default_po_8:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_21": isfib(i0, y0))
+  ("JC_29": ("JC_28": ("JC_28": isfib(i0, y0))))
 
 ========== file tests/java/why/Fibonacci_po12.why ==========
 goal Fibonacci_Fib_ensures_default_po_9:
@@ -2518,8 +2713,10 @@ goal Fibonacci_Fib_ensures_default_po_9:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -2529,7 +2726,7 @@ goal Fibonacci_Fib_ensures_default_po_9:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (0 <= ("JC_23": (n_0_0 - i)))
+  (0 <= ("JC_31": (n_0_0 - i)))
 
 ========== file tests/java/why/Fibonacci_po13.why ==========
 goal Fibonacci_Fib_ensures_default_po_10:
@@ -2538,8 +2735,10 @@ goal Fibonacci_Fib_ensures_default_po_10:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -2549,7 +2748,7 @@ goal Fibonacci_Fib_ensures_default_po_10:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (("JC_23": (n_0_0 - i0)) < ("JC_23": (n_0_0 - i)))
+  (("JC_31": (n_0_0 - i0)) < ("JC_31": (n_0_0 - i)))
 
 ========== file tests/java/why/Fibonacci_po14.why ==========
 goal Fibonacci_Fib_ensures_default_po_11:
@@ -2558,8 +2757,10 @@ goal Fibonacci_Fib_ensures_default_po_11:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i >= n_0_0) ->
   forall return:int.
   (return = y) ->
@@ -2577,25 +2778,25 @@ goal not_isfib_2_2:
 goal Fibonacci_Fib_ensures_default_po_1:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_21": (0 <= 0))
+  ("JC_29": ("JC_25": ("JC_25": (0 <= 0))))
 
 ========== file tests/java/why/Fibonacci_po5.why ==========
 goal Fibonacci_Fib_ensures_default_po_2:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_21": (0 <= n_0_0))
+  ("JC_29": ("JC_26": ("JC_26": (0 <= n_0_0))))
 
 ========== file tests/java/why/Fibonacci_po6.why ==========
 goal Fibonacci_Fib_ensures_default_po_3:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_21": isfib((0 + 1), 1))
+  ("JC_29": ("JC_27": ("JC_27": isfib((0 + 1), 1))))
 
 ========== file tests/java/why/Fibonacci_po7.why ==========
 goal Fibonacci_Fib_ensures_default_po_4:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_21": isfib(0, 0))
+  ("JC_29": ("JC_28": ("JC_28": isfib(0, 0))))
 
 ========== file tests/java/why/Fibonacci_po8.why ==========
 goal Fibonacci_Fib_ensures_default_po_5:
@@ -2604,8 +2805,10 @@ goal Fibonacci_Fib_ensures_default_po_5:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -2615,7 +2818,7 @@ goal Fibonacci_Fib_ensures_default_po_5:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_21": (0 <= i0))
+  ("JC_29": ("JC_25": ("JC_25": (0 <= i0))))
 
 ========== file tests/java/why/Fibonacci_po9.why ==========
 goal Fibonacci_Fib_ensures_default_po_6:
@@ -2624,8 +2827,10 @@ goal Fibonacci_Fib_ensures_default_po_6:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -2635,7 +2840,7 @@ goal Fibonacci_Fib_ensures_default_po_6:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_21": (i0 <= n_0_0))
+  ("JC_29": ("JC_26": ("JC_26": (i0 <= n_0_0))))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Fibonacci.why
@@ -3349,6 +3554,10 @@ why -simplify [...] why/Fibonacci.why
  (select_bytes m p o1 (+ s1 s2)))))))
 
 (BG_PUSH
+ ;; Why axiom Exception_parenttag_Object
+ (EQ (parenttag Exception_tag Object_tag) |@true|))
+
+(BG_PUSH
  ;; Why axiom Fibonacci_parenttag_Object
  (EQ (parenttag Fibonacci_tag Object_tag) |@true|))
 
@@ -3459,6 +3668,9 @@ why -simplify [...] why/Fibonacci.why
 (DEFPRED (left_valid_struct_Object p a Object_alloc_table)
   (<= (offset_min Object_alloc_table p) a))
 
+(DEFPRED (left_valid_struct_Exception p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
+
 (DEFPRED (left_valid_struct_Fibonacci p a Object_alloc_table)
   (left_valid_struct_Object p a Object_alloc_table))
 
@@ -3489,6 +3701,9 @@ why -simplify [...] why/Fibonacci.why
 (DEFPRED (right_valid_struct_Object p b Object_alloc_table)
   (>= (offset_max Object_alloc_table p) b))
 
+(DEFPRED (right_valid_struct_Exception p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
 (DEFPRED (right_valid_struct_Fibonacci p b Object_alloc_table)
   (right_valid_struct_Object p b Object_alloc_table))
 
@@ -3513,6 +3728,9 @@ why -simplify [...] why/Fibonacci.why
   (AND (EQ (offset_min Object_alloc_table p) a)
   (EQ (offset_max Object_alloc_table p) b)))
 
+(DEFPRED (strict_valid_struct_Exception p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
 (DEFPRED (strict_valid_struct_Fibonacci p a b Object_alloc_table)
   (strict_valid_struct_Object p a b Object_alloc_table))
 
@@ -3529,6 +3747,9 @@ why -simplify [...] why/Fibonacci.why
 (DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
   (AND (EQ (offset_min bitvector_alloc_table p) a)
   (EQ (offset_max bitvector_alloc_table p) b)))
+
+(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
 
 (DEFPRED (valid_bitvector_struct_Fibonacci p a b bitvector_alloc_table)
   (valid_bitvector_struct_Object p a b bitvector_alloc_table))
@@ -3555,6 +3776,9 @@ why -simplify [...] why/Fibonacci.why
   (AND (<= (offset_min Object_alloc_table p) a)
   (>= (offset_max Object_alloc_table p) b)))
 
+(DEFPRED (valid_struct_Exception p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
+
 (DEFPRED (valid_struct_Fibonacci p a b Object_alloc_table)
   (valid_struct_Object p a b Object_alloc_table))
 
@@ -3568,19 +3792,19 @@ why -simplify [...] why/Fibonacci.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Fibonacci_Fib_ensures_default_po_1, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-61
+;; Fibonacci_Fib_ensures_default_po_1, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-26
 (FORALL (n_0_0) (IMPLIES (>= n_0_0 0) (<= 0 0)))
 
-;; Fibonacci_Fib_ensures_default_po_2, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-61
+;; Fibonacci_Fib_ensures_default_po_2, File "HOME/tests/java/Fibonacci.java", line 29, characters 25-31
 (FORALL (n_0_0) (IMPLIES (>= n_0_0 0) (<= 0 n_0_0)))
 
-;; Fibonacci_Fib_ensures_default_po_3, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-61
+;; Fibonacci_Fib_ensures_default_po_3, File "HOME/tests/java/Fibonacci.java", line 29, characters 35-47
 (FORALL (n_0_0) (IMPLIES (>= n_0_0 0) (EQ (isfib (+ 0 1) 1) |@true|)))
 
-;; Fibonacci_Fib_ensures_default_po_4, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-61
+;; Fibonacci_Fib_ensures_default_po_4, File "HOME/tests/java/Fibonacci.java", line 29, characters 51-61
 (FORALL (n_0_0) (IMPLIES (>= n_0_0 0) (EQ (isfib 0 0) |@true|)))
 
-;; Fibonacci_Fib_ensures_default_po_5, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-61
+;; Fibonacci_Fib_ensures_default_po_5, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-26
 (FORALL (n_0_0)
 (IMPLIES (>= n_0_0 0)
 (FORALL (i)
@@ -3598,7 +3822,7 @@ why -simplify [...] why/Fibonacci.why
 (IMPLIES (EQ x_0_0_0 (+ x_0_0 aux))
 (FORALL (i0) (IMPLIES (EQ i0 (+ i 1)) (<= 0 i0))))))))))))))))
 
-;; Fibonacci_Fib_ensures_default_po_6, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-61
+;; Fibonacci_Fib_ensures_default_po_6, File "HOME/tests/java/Fibonacci.java", line 29, characters 25-31
 (FORALL (n_0_0)
 (IMPLIES (>= n_0_0 0)
 (FORALL (i)
@@ -3616,7 +3840,7 @@ why -simplify [...] why/Fibonacci.why
 (IMPLIES (EQ x_0_0_0 (+ x_0_0 aux))
 (FORALL (i0) (IMPLIES (EQ i0 (+ i 1)) (<= i0 n_0_0))))))))))))))))
 
-;; Fibonacci_Fib_ensures_default_po_7, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-61
+;; Fibonacci_Fib_ensures_default_po_7, File "HOME/tests/java/Fibonacci.java", line 29, characters 35-47
 (FORALL (n_0_0)
 (IMPLIES (>= n_0_0 0)
 (FORALL (i)
@@ -3634,7 +3858,7 @@ why -simplify [...] why/Fibonacci.why
 (IMPLIES (EQ x_0_0_0 (+ x_0_0 aux))
 (FORALL (i0) (IMPLIES (EQ i0 (+ i 1)) (EQ (isfib (+ i0 1) x_0_0_0) |@true|))))))))))))))))
 
-;; Fibonacci_Fib_ensures_default_po_8, File "HOME/tests/java/Fibonacci.java", line 29, characters 20-61
+;; Fibonacci_Fib_ensures_default_po_8, File "HOME/tests/java/Fibonacci.java", line 29, characters 51-61
 (FORALL (n_0_0)
 (IMPLIES (>= n_0_0 0)
 (FORALL (i)
@@ -4596,9 +4820,13 @@ type Object
 
 type interface
 
-logic Fibonacci_tag :  -> Object tag_id
+logic Exception_tag :  -> Object tag_id
 
 logic Object_tag :  -> Object tag_id
+
+axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
+
+logic Fibonacci_tag :  -> Object tag_id
 
 axiom Fibonacci_parenttag_Object: parenttag(Fibonacci_tag, Object_tag)
 
@@ -4709,6 +4937,10 @@ predicate left_valid_struct_Object(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_Exception(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
 predicate left_valid_struct_Fibonacci(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
@@ -4742,6 +4974,10 @@ predicate right_valid_struct_Object(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_Exception(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
 predicate right_valid_struct_Fibonacci(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
   Object_alloc_table)
@@ -4773,6 +5009,10 @@ predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) = a) and
    (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
 predicate strict_valid_struct_Fibonacci(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
@@ -4794,6 +5034,10 @@ predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_Fibonacci(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
@@ -4827,6 +5071,10 @@ predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) <= a) and
    (offset_max(Object_alloc_table, p) >= b))
 
+predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
 predicate valid_struct_Fibonacci(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
   Object_alloc_table)
@@ -4847,22 +5095,22 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 goal Fibonacci_Fib_ensures_default_po_1:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_21": (0 <= 0))
+  ("JC_29": ("JC_25": ("JC_25": (0 <= 0))))
 
 goal Fibonacci_Fib_ensures_default_po_2:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_21": (0 <= n_0_0))
+  ("JC_29": ("JC_26": ("JC_26": (0 <= n_0_0))))
 
 goal Fibonacci_Fib_ensures_default_po_3:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_21": isfib((0 + 1), 1))
+  ("JC_29": ("JC_27": ("JC_27": isfib((0 + 1), 1))))
 
 goal Fibonacci_Fib_ensures_default_po_4:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_21": isfib(0, 0))
+  ("JC_29": ("JC_28": ("JC_28": isfib(0, 0))))
 
 goal Fibonacci_Fib_ensures_default_po_5:
   forall n_0_0:int.
@@ -4870,8 +5118,10 @@ goal Fibonacci_Fib_ensures_default_po_5:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -4881,7 +5131,7 @@ goal Fibonacci_Fib_ensures_default_po_5:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_21": (0 <= i0))
+  ("JC_29": ("JC_25": ("JC_25": (0 <= i0))))
 
 goal Fibonacci_Fib_ensures_default_po_6:
   forall n_0_0:int.
@@ -4889,8 +5139,10 @@ goal Fibonacci_Fib_ensures_default_po_6:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -4900,7 +5152,7 @@ goal Fibonacci_Fib_ensures_default_po_6:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_21": (i0 <= n_0_0))
+  ("JC_29": ("JC_26": ("JC_26": (i0 <= n_0_0))))
 
 goal Fibonacci_Fib_ensures_default_po_7:
   forall n_0_0:int.
@@ -4908,8 +5160,10 @@ goal Fibonacci_Fib_ensures_default_po_7:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -4919,7 +5173,7 @@ goal Fibonacci_Fib_ensures_default_po_7:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_21": isfib((i0 + 1), x_0_0_0))
+  ("JC_29": ("JC_27": ("JC_27": isfib((i0 + 1), x_0_0_0))))
 
 goal Fibonacci_Fib_ensures_default_po_8:
   forall n_0_0:int.
@@ -4927,8 +5181,10 @@ goal Fibonacci_Fib_ensures_default_po_8:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -4938,7 +5194,7 @@ goal Fibonacci_Fib_ensures_default_po_8:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_21": isfib(i0, y0))
+  ("JC_29": ("JC_28": ("JC_28": isfib(i0, y0))))
 
 goal Fibonacci_Fib_ensures_default_po_9:
   forall n_0_0:int.
@@ -4946,8 +5202,10 @@ goal Fibonacci_Fib_ensures_default_po_9:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -4957,7 +5215,7 @@ goal Fibonacci_Fib_ensures_default_po_9:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (0 <= ("JC_23": (n_0_0 - i)))
+  (0 <= ("JC_31": (n_0_0 - i)))
 
 goal Fibonacci_Fib_ensures_default_po_10:
   forall n_0_0:int.
@@ -4965,8 +5223,10 @@ goal Fibonacci_Fib_ensures_default_po_10:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -4976,7 +5236,7 @@ goal Fibonacci_Fib_ensures_default_po_10:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (("JC_23": (n_0_0 - i0)) < ("JC_23": (n_0_0 - i)))
+  (("JC_31": (n_0_0 - i0)) < ("JC_31": (n_0_0 - i)))
 
 goal Fibonacci_Fib_ensures_default_po_11:
   forall n_0_0:int.
@@ -4984,8 +5244,10 @@ goal Fibonacci_Fib_ensures_default_po_11:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_21":
-  ((0 <= i) and ((i <= n_0_0) and (isfib((i + 1), x_0_0) and isfib(i, y))))) ->
+  ("JC_29":
+  (("JC_25": (0 <= i)) and
+   (("JC_26": (i <= n_0_0)) and
+    (("JC_27": isfib((i + 1), x_0_0)) and ("JC_28": isfib(i, y)))))) ->
   (i >= n_0_0) ->
   forall return:int.
   (return = y) ->
@@ -5004,6 +5266,9 @@ failure :   0 (  0%)
 // RUNCOQ: will ask regtests to check Coq proofs of this program
 ========== generation of Coq VC output ==========
 why -coq-v8 [...] why/Fibonacci.why
+Error while reading /home/cmarche/recherche/why/tests/java/coq/Fibonacci_why.v :
+File "/home/cmarche/recherche/why/tests/java/coq/Fibonacci_why.v", line 24, characters 0-9
+User error: No focused proof (No proof-editing in progress).
 ========== file tests/java/coq/Fibonacci_why.v ==========
 (* This file was originally generated by why.
    It can be modified; only the generated parts will be overwritten. *)
@@ -5015,10 +5280,19 @@ Admitted.
 (*Why type*) Definition interface: Set.
 Admitted.
 
-(*Why logic*) Definition Fibonacci_tag : (tag_id Object).
+(*Why logic*) Definition Exception_tag : (tag_id Object).
 Admitted.
 
 (*Why logic*) Definition Object_tag : (tag_id Object).
+Admitted.
+
+(*Why axiom*) Lemma Exception_parenttag_Object :
+  (parenttag Exception_tag Object_tag).
+Admitted.
+
+(*Why logic*) Definition Fibonacci_tag : (tag_id Object).
+Admitted.
+
 Admitted.
 
 (*Why axiom*) Lemma Fibonacci_parenttag_Object :
@@ -5170,6 +5444,9 @@ Admitted.
 (*Why predicate*) Definition left_valid_struct_Object  (p:(pointer Object)) (a:Z) (Object_alloc_table:(alloc_table Object))
   := (offset_min Object_alloc_table p) <= a.
 
+(*Why predicate*) Definition left_valid_struct_Exception  (p:(pointer Object)) (a:Z) (Object_alloc_table:(alloc_table Object))
+  := (left_valid_struct_Object p a Object_alloc_table).
+
 (*Why predicate*) Definition left_valid_struct_Fibonacci  (p:(pointer Object)) (a:Z) (Object_alloc_table:(alloc_table Object))
   := (left_valid_struct_Object p a Object_alloc_table).
 
@@ -5212,6 +5489,9 @@ Admitted.
 (*Why predicate*) Definition right_valid_struct_Object  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (offset_max Object_alloc_table p) >= b.
 
+(*Why predicate*) Definition right_valid_struct_Exception  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (right_valid_struct_Object p b Object_alloc_table).
+
 (*Why predicate*) Definition right_valid_struct_Fibonacci  (p:(pointer Object)) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (right_valid_struct_Object p b Object_alloc_table).
 
@@ -5236,6 +5516,9 @@ Admitted.
   := (offset_min Object_alloc_table p) = a /\
      (offset_max Object_alloc_table p) = b.
 
+(*Why predicate*) Definition strict_valid_struct_Exception  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (strict_valid_struct_Object p a b Object_alloc_table).
+
 (*Why predicate*) Definition strict_valid_struct_Fibonacci  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (strict_valid_struct_Object p a b Object_alloc_table).
 
@@ -5252,6 +5535,9 @@ Admitted.
 (*Why predicate*) Definition valid_bitvector_struct_Object  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
   := (offset_min bitvector_alloc_table p) = a /\
      (offset_max bitvector_alloc_table p) = b.
+
+(*Why predicate*) Definition valid_bitvector_struct_Exception  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
+  := (valid_bitvector_struct_Object p a b bitvector_alloc_table).
 
 (*Why predicate*) Definition valid_bitvector_struct_Fibonacci  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
   := (valid_bitvector_struct_Object p a b bitvector_alloc_table).
@@ -5278,6 +5564,9 @@ Admitted.
   := (offset_min Object_alloc_table p) <= a /\
      (offset_max Object_alloc_table p) >= b.
 
+(*Why predicate*) Definition valid_struct_Exception  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
+  := (valid_struct_Object p a b Object_alloc_table).
+
 (*Why predicate*) Definition valid_struct_Fibonacci  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (valid_struct_Object p a b Object_alloc_table).
 
@@ -5291,51 +5580,51 @@ Admitted.
   := (offset_min interface_alloc_table p) <= a /\
      (offset_max interface_alloc_table p) >= b.
 
-(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 20-26: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_1 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_21 *) 0 <= 0.
+  (* JC_29 *) (* JC_25 *) (* JC_25 *) 0 <= 0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 25-31: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_2 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_21 *) 0 <= n_0_0.
+  (* JC_29 *) (* JC_26 *) (* JC_26 *) 0 <= n_0_0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 35-47: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_3 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_21 *) (isfib (0 + 1) 1).
+  (* JC_29 *) (* JC_27 *) (* JC_27 *) (isfib (0 + 1) 1).
 Proof.
 intros; apply isfib1.
 Save.
 
-(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 51-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_4 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_21 *) (isfib 0 0).
+  (* JC_29 *) (* JC_28 *) (* JC_28 *) (isfib 0 0).
 Proof.
 intros; apply isfib0.
 Save.
 
-(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 20-26: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_5 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -5345,20 +5634,20 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_21 *) 0 <= i0.
+  (* JC_29 *) (* JC_25 *) (* JC_25 *) 0 <= i0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 25-31: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_6 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -5368,20 +5657,20 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_21 *) i0 <= n_0_0.
+  (* JC_29 *) (* JC_26 *) (* JC_26 *) i0 <= n_0_0.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 35-47: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_7 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -5391,7 +5680,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_21 *) (isfib (i0 + 1) x_0_0_0).
+  (* JC_29 *) (* JC_27 *) (* JC_27 *) (isfib (i0 + 1) x_0_0_0).
 Proof.
 intuition;subst; auto.
 apply isfibn; intuition.
@@ -5399,15 +5688,15 @@ replace (i+1+1-2) with i; auto with zarith.
 replace (i+1+1-1) with (i+1); auto with zarith.
 Save.
 
-(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 20-61: *)
+(* Why obligation from file "HOME/tests/java/Fibonacci.java", line 29, characters 51-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_8 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -5417,7 +5706,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_21 *) (isfib i0 y0).
+  (* JC_29 *) (* JC_28 *) (* JC_28 *) (isfib i0 y0).
 Proof.
 intuition; subst; auto.
 Save.
@@ -5429,8 +5718,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -5440,7 +5729,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  0 <= ((* JC_23 *) (n_0_0 - i)).
+  0 <= ((* JC_31 *) (n_0_0 - i)).
 Proof.
 intuition.
 Save.
@@ -5452,8 +5741,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -5463,7 +5752,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  ((* JC_23 *) (n_0_0 - i0)) < ((* JC_23 *) (n_0_0 - i)).
+  ((* JC_31 *) (n_0_0 - i0)) < ((* JC_31 *) (n_0_0 - i)).
 Proof.
 intuition.
 Save.
@@ -5475,8 +5764,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_21 *) (0 <= i /\ i <= n_0_0 /\ (isfib (i + 1) x_0_0) /\
-                (isfib i y))),
+  forall (HW_4: (* JC_29 *) ((* JC_25 *) 0 <= i /\ (* JC_26 *) i <= n_0_0 /\
+                (* JC_27 *) (isfib (i + 1) x_0_0) /\ (* JC_28 *) (isfib i y))),
   forall (HW_11: i >= n_0_0),
   forall (why__return: Z),
   forall (HW_12: why__return = y),
@@ -5488,3 +5777,6 @@ subst; auto.
 Save.
 
 ========== running Coq ==========
+Error while reading /home/cmarche/recherche/why/tests/java/coq/Fibonacci_why.v :
+File "/home/cmarche/recherche/why/tests/java/coq/Fibonacci_why.v", line 24, characters 0-9
+User error: No focused proof (No proof-editing in progress).

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.177 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.178 2009-02-05 12:14:33 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -671,7 +671,7 @@ let quantifier = function
   | Forall -> Jc_ast.Forall
   | Exists -> Jc_ast.Exists
 
-let rec assertion ?(reg=0) a =
+let rec assertion ?(reg=false) a =
   let a' =
     match a.java_assertion_node with
       | JAtrue ->
@@ -748,9 +748,9 @@ let rec assertion ?(reg=0) a =
             ~expr2: (assertion a2)
             ()
       | JAand (a1, a2)-> 
-          mkand
-            ~expr1: (assertion a1)
-            ~expr2: (assertion a2)
+	  mkand
+            ~expr1: (assertion ~reg a1)
+            ~expr2: (assertion ~reg a2)
             ()
       | JAbool_expr t ->
           term t
@@ -772,7 +772,8 @@ let rec assertion ?(reg=0) a =
 	    ~expr_else: (assertion a2)
 	    ()
   in
-  new pexpr ~pos:a.java_assertion_loc a'#node
+  let a' = new pexpr ~pos:a.java_assertion_loc a'#node in
+  if reg then locate a.java_assertion_loc a' else a'
     
 (*let dummy_loc_assertion a =
   { jc_assertion_loc = Loc.dummy_position; 
@@ -1504,9 +1505,12 @@ let make_block l =
     | _ -> dummy_loc_statement (JCTSblock l)
 *)
 
-let reg_assertion a = 
-  let a' = assertion ~reg:1 a  in
-  locate a.java_assertion_loc a'
+let rec reg_and_subexpr a =
+  match a#node with
+    | JAand(a1,a2) -> a
+    | _ -> a
+
+let reg_assertion a = assertion ~reg:true a
 
 let reg_assertion_option a =
   match a with
@@ -1562,6 +1566,7 @@ let rec statement s =
           let _ = tr_type e.java_expr_loc e.java_expr_type in
 	  mkreturn ~expr:(expr e) ()
       | JSthrow e ->
+	  (* TODO: insert a check that e is not null *)
           mkthrow
             ~exn: (exn_name (get_exception e.java_expr_type))
             ~argument: (expr e)

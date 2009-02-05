@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.91 2008-11-05 14:03:14 filliatr Exp $ i*)
+(*i $Id: stat.ml,v 1.92 2009-02-05 12:14:33 marche Exp $ i*)
 
 open Printf
 open Options
@@ -616,6 +616,7 @@ let main () =
   (* has effect but not nice 
      let () = view#misc#modify_font !general_font in
   *)
+  modifiable_font_views := view#misc :: !modifiable_font_views;
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
   let vc_provers = View.add_columns ~view ~_model:model in
@@ -675,9 +676,22 @@ let main () =
 	 ignore(m#connect#toggled  
 		  ~callback:(fun () -> 
 			       if m#active then 
-				 Model.select_prover p
-			       else Model.deselect_prover p)))
-      Model.provers
+				 begin
+				   Model.select_prover p;
+				   match p.Model.pr_viewcol with
+				     | Some vc ->
+					 vc#set_visible true
+				     | None -> assert false
+				 end
+			       else 
+				 begin
+				   Model.deselect_prover p;
+				   match p.Model.pr_viewcol with
+				     | Some vc ->
+					 vc#set_visible false
+				     | None -> assert false
+				 end)))
+      Model.all_known_provers
   in 
   let _ = configuration_factory#add_separator ()  in
   let cache = configuration_factory#add_check_item 
@@ -875,7 +889,7 @@ let main () =
   let _ = tv1#set_editable false in
   let _ = tv1#set_wrap_mode `WORD in
  
-  modifiable_font_views := [tv1#misc;tv2#misc];
+  modifiable_font_views := tv1#misc :: tv2#misc :: !modifiable_font_views;
   change_font ();
   (* timeout set *)
   let _ = GMisc.label ~text:" Timeout" ~xalign:0. ~packing:hbox#pack () in

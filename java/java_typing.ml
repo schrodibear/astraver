@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.153 2009-01-20 16:15:49 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.154 2009-02-05 12:14:33 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -769,7 +769,6 @@ let dummy_class =
 
 let object_class = ref dummy_class
 
-
 let rec is_subclass c1 c2 =
   c1 == c2 ||
     (check_if_class_complete c1;
@@ -1472,8 +1471,6 @@ let () =
            | _ -> assert false)
       ()
 
-
-    
 let string_class =
   if !Java_options.javacard then dummy_class else
     catch_typing_errors
@@ -1945,6 +1942,19 @@ let () =
     | TypeName (TypeClass ci) -> ci.class_info_is_exception <- true
     | _ -> assert false
         
+let () = 
+  catch_typing_errors
+    (fun () ->
+       match classify_name [] [] None [] 
+         ((Loc.dummy_position,"Exception") :: javalang_qid)
+       with
+         | TypeName (TypeClass ci) -> ci.class_info_is_exception <- true
+         | _ -> assert false)
+    ()
+
+
+    
+
 (*******************************
 
 Typing level 2: extract bodies

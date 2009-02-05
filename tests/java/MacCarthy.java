@@ -7,7 +7,7 @@
 
 public class MacCarthy {
 
-    /*@ decreases \int_max(0,101-n) ;
+    /*@ decreases 101-n ;
       @ behavior less_than_101:
       @   assumes n <= 100;
       @   ensures \result == 91;

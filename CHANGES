@@ -1,4 +1,7 @@
 
+  o Jessie: fix incompleteness bug with "assigns \nothing" clauses
+  o GWhy: columns can be added/removed interactively
+
 version 2.18, January 22th, 2009
 ================================
 

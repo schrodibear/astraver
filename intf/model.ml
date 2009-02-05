@@ -219,23 +219,32 @@ let coq = {
 }
 
   
-let provers = [
-  ergo; ergo_select; (*ergoSS;*) graph; simplify; z3SS ; yicesSStrat; cvc3; 
-  (*simplify_sstrat;*) simplify_strat; yices; 
+let all_known_provers = [
+  ergo; 
+  ergo_select; 
+  (*ergoSS;*) 
+  graph; 
+  simplify; 
+  z3SS ; 
+  yicesSStrat; 
+  cvc3; 
+  (*simplify_sstrat;*) 
+  simplify_strat; 
+  yices; 
   coq ;
   (* rvsat; *)
   (* zenon; zenon_pred; zenon_strat; zenon_rec;*)
   (* harvey; cvcl *)]
-let provers_selected = ref provers
+
+let provers_selected = ref all_known_provers
 let provers_s = Hashtbl.create 17
 let get_provers () = !provers_selected
-let _ = assert (List.length provers > 0)
 
 
 (*
  * Default prover
  *)
-let default_prover = ref (List.hd provers)
+let default_prover = ref (List.hd all_known_provers)
 let get_default_prover () = !default_prover
 let set_prover p = 
   if List.mem p !provers_selected 
@@ -279,7 +288,7 @@ let update_prover_s () =
     !provers_selected
 
 let add_all_provers () = 
-  provers_selected := provers;
+  provers_selected := all_known_provers;
   update_prover_s ()
 
 let add_provers l = 
@@ -290,22 +299,15 @@ let add_provers l =
 	 let n = prover_id pr in
 	 if List.mem n l then pr::prs else prs)
       []
-      provers);
+      all_known_provers);
   if !provers_selected = [] then 
     begin 
-      provers_selected := provers
+      provers_selected := all_known_provers
     end;
   default_prover := List.hd !provers_selected;
   List.iter 
     (fun p -> Hashtbl.add provers_s p "")
     !provers_selected
-
-(*
-let affiche () = 
-  Hashtbl.iter
-    (fun p _s -> print_endline (print_prover p))
-    provers_s
-*)
 
 let select_prover p = 
   if not (Hashtbl.mem provers_s p) then
@@ -387,7 +389,7 @@ let create_model () =
 	   model#set ~row ~column:total 0;
 	   List.iter 
 	     (fun p -> model#set ~row ~column:p.pr_result 0) 
-	     provers;
+	     all_known_provers;
 	   row
        in
        let row_n = model#append ~parent:row () in
@@ -405,7 +407,7 @@ let create_model () =
        model#set ~row:row_n ~column:result 0;
        List.iter
 	 (fun p -> model#set ~row:row_n ~column:p.pr_icon `REMOVE)
-	 provers
+	 all_known_provers
     );
   model
     

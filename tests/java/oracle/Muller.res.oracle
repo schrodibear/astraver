@@ -156,6 +156,9 @@ tag String = Object with {
 tag Throwable = Object with {
 }
 
+tag Exception = Object with {
+}
+
 tag Muller = Object with {
 }
 
@@ -189,53 +192,66 @@ behavior normal:
 
 exception Throwable of Throwable[0..]
 
+exception Exception of Exception[0..]
+
 intM[0..] Muller_m(intM[0..] t_4)
-  requires (K_23 : Non_null_intM(t_4));
+  requires (K_39 : Non_null_intM(t_4));
 {  
    {  
-      (var integer count = (K_22 : 0));
+      (var integer count = (K_38 : 0));
       
       {  
          {  
             {  
                (var integer i_4 = (K_1 : 0));
                
-               invariant (K_2 : (((((0 <= i_4) &&
-                                     (i_4 <= (\offset_max(t_4) + 1))) &&
-                                    (0 <= count)) &&
-                                   (count <= i_4)) &&
-                                  (count ==
-                                    num_of_pos{Here}(0, (i_4 - 1), t_4))));
-               variant (K_3 : ((\offset_max(t_4) + 1) - i_4));
-               for ( ; (K_9 : (i_4 < (K_8 : java_array_length_intM(t_4)))) ; 
-               (K_7 : (i_4 ++)))
-               {  (if (K_6 : ((K_5 : (t_4 + i_4).intP) > 0)) then (K_4 : 
-                                                                  (count ++)) else ())
+               invariant (K_10 : ((K_9 : ((K_8 : ((K_7 : ((K_6 : (0 <= i_4)) &&
+                                                           (K_5 : (i_4 <=
+                                                                    (\offset_max(t_4) +
+                                                                    1))))) &&
+                                                   (K_4 : (0 <= count)))) &&
+                                           (K_3 : (count <= i_4)))) &&
+                                   (K_2 : (count ==
+                                            num_of_pos{Here}(0, (i_4 - 1),
+                                                             t_4)))));
+               variant (K_11 : ((\offset_max(t_4) + 1) - i_4));
+               for ( ; (K_17 : (i_4 < (K_16 : java_array_length_intM(t_4)))) ; 
+               (K_15 : (i_4 ++)))
+               {  (if (K_14 : ((K_13 : (t_4 + i_4).intP) > 0)) then (K_12 : 
+                                                                    (count ++)) else ())
                }
             }
          };
          
          {  
-            (var intM[0..] u = (K_21 : (new intM[count])));
+            (var intM[0..] u = (K_37 : (new intM[count])));
             
             {  (count = 0);
                
                {  
                   {  
-                     (var integer i_5 = (K_10 : 0));
+                     (var integer i_5 = (K_18 : 0));
                      
-                     invariant (K_11 : (((((0 <= i_5) &&
-                                            (i_5 <= (\offset_max(t_4) + 1))) &&
-                                           (0 <= count)) &&
-                                          (count <= i_5)) &&
-                                         (count ==
-                                           num_of_pos{Here}(0, (i_5 - 1), t_4))));
-                     variant (K_12 : ((\offset_max(t_4) + 1) - i_5));
-                     for ( ; (K_20 : (i_5 <
-                                       (K_19 : java_array_length_intM(t_4)))) ; 
-                     (K_18 : (i_5 ++)))
-                     {  (if (K_17 : ((K_16 : (t_4 + i_5).intP) > 0)) then 
-                        (K_15 : ((u + (K_13 : (count ++))).intP = (K_14 : 
+                     invariant (K_27 : ((K_26 : ((K_25 : ((K_24 : ((K_23 : 
+                                                                   (0 <=
+                                                                    i_5)) &&
+                                                                    (K_22 : 
+                                                                    (i_5 <=
+                                                                    (\offset_max(t_4) +
+                                                                    1))))) &&
+                                                           (K_21 : (0 <=
+                                                                    count)))) &&
+                                                  (K_20 : (count <= i_5)))) &&
+                                         (K_19 : (count ==
+                                                   num_of_pos{Here}(0,
+                                                                    (i_5 - 1),
+                                                                    t_4)))));
+                     variant (K_28 : ((\offset_max(t_4) + 1) - i_5));
+                     for ( ; (K_36 : (i_5 <
+                                       (K_35 : java_array_length_intM(t_4)))) ; 
+                     (K_34 : (i_5 ++)))
+                     {  (if (K_33 : ((K_32 : (t_4 + i_5).intP) > 0)) then 
+                        (K_31 : ((u + (K_29 : (count ++))).intP = (K_30 : 
                                                                   (t_4 +
                                                                     i_5).intP))) else ())
                      }
@@ -260,51 +276,51 @@ End:
 ========== file tests/java/Muller.jloc ==========
 [K_10]
 file = "HOME/tests/java/Muller.java"
-line = 79
-begin = 12
-end = 13
-
-[K_11]
-file = "HOME/tests/java/Muller.java"
-line = 74
+line = 63
 begin = 8
 end = 109
 
-[K_12]
+[K_11]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 66
 begin = 18
 end = 30
 
+[K_12]
+file = "HOME/tests/java/Muller.java"
+line = 68
+begin = 49
+end = 56
+
 [K_13]
 file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 21
-end = 28
+line = 68
+begin = 39
+end = 43
 
 [K_14]
 file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 32
-end = 36
+line = 68
+begin = 39
+end = 47
 
 [K_15]
 file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 19
-end = 36
+line = 68
+begin = 30
+end = 33
 
 [K_16]
 file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 9
-end = 13
+line = 68
+begin = 20
+end = 28
 
 [K_17]
 file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 9
-end = 17
+line = 68
+begin = 16
+end = 28
 
 [Muller_m]
 name = "Method m"
@@ -316,38 +332,44 @@ end = 25
 [K_18]
 file = "HOME/tests/java/Muller.java"
 line = 79
-begin = 30
-end = 33
+begin = 12
+end = 13
 
 [K_19]
 file = "HOME/tests/java/Muller.java"
-line = 79
-begin = 20
-end = 28
+line = 76
+begin = 8
+end = 36
 
 [K_20]
 file = "HOME/tests/java/Muller.java"
-line = 79
-begin = 16
-end = 28
+line = 75
+begin = 22
+end = 32
 
 [K_21]
 file = "HOME/tests/java/Muller.java"
-line = 70
-begin = 11
-end = 25
+line = 75
+begin = 8
+end = 18
 
 [K_22]
 file = "HOME/tests/java/Muller.java"
-line = 60
-begin = 13
-end = 14
+line = 74
+begin = 18
+end = 31
 
 [K_23]
 file = "HOME/tests/java/Muller.java"
-line = 57
-begin = 17
-end = 24
+line = 74
+begin = 8
+end = 14
+
+[K_24]
+file = "HOME/tests/java/Muller.java"
+line = 74
+begin = 8
+end = 31
 
 [K_1]
 file = "HOME/tests/java/Muller.java"
@@ -355,53 +377,107 @@ line = 68
 begin = 12
 end = 13
 
+[K_25]
+file = "HOME/tests/java/Muller.java"
+line = 74
+begin = 8
+end = 54
+
 [K_2]
 file = "HOME/tests/java/Muller.java"
-line = 63
+line = 65
 begin = 8
-end = 109
+end = 36
+
+[K_26]
+file = "HOME/tests/java/Muller.java"
+line = 74
+begin = 8
+end = 68
 
 [K_3]
 file = "HOME/tests/java/Muller.java"
-line = 66
-begin = 18
-end = 30
+line = 64
+begin = 22
+end = 32
+
+[K_27]
+file = "HOME/tests/java/Muller.java"
+line = 74
+begin = 8
+end = 109
 
 [K_4]
 file = "HOME/tests/java/Muller.java"
-line = 68
-begin = 49
-end = 56
+line = 64
+begin = 8
+end = 18
+
+[K_28]
+file = "HOME/tests/java/Muller.java"
+line = 77
+begin = 18
+end = 30
 
 [K_5]
 file = "HOME/tests/java/Muller.java"
-line = 68
-begin = 39
-end = 43
+line = 63
+begin = 18
+end = 31
+
+[K_29]
+file = "HOME/tests/java/Muller.java"
+line = 80
+begin = 21
+end = 28
 
 [K_6]
 file = "HOME/tests/java/Muller.java"
-line = 68
-begin = 39
-end = 47
+line = 63
+begin = 8
+end = 14
 
 [K_7]
 file = "HOME/tests/java/Muller.java"
-line = 68
-begin = 30
-end = 33
+line = 63
+begin = 8
+end = 31
 
 [K_8]
 file = "HOME/tests/java/Muller.java"
-line = 68
-begin = 20
-end = 28
+line = 63
+begin = 8
+end = 54
 
 [K_9]
 file = "HOME/tests/java/Muller.java"
-line = 68
-begin = 16
-end = 28
+line = 63
+begin = 8
+end = 68
+
+[K_30]
+file = "HOME/tests/java/Muller.java"
+line = 80
+begin = 32
+end = 36
+
+[K_31]
+file = "HOME/tests/java/Muller.java"
+line = 80
+begin = 19
+end = 36
+
+[K_32]
+file = "HOME/tests/java/Muller.java"
+line = 80
+begin = 9
+end = 13
+
+[K_33]
+file = "HOME/tests/java/Muller.java"
+line = 80
+begin = 9
+end = 17
 
 [cons_Muller]
 name = "Constructor of class Muller"
@@ -409,6 +485,42 @@ file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[K_34]
+file = "HOME/tests/java/Muller.java"
+line = 79
+begin = 30
+end = 33
+
+[K_35]
+file = "HOME/tests/java/Muller.java"
+line = 79
+begin = 20
+end = 28
+
+[K_36]
+file = "HOME/tests/java/Muller.java"
+line = 79
+begin = 16
+end = 28
+
+[K_37]
+file = "HOME/tests/java/Muller.java"
+line = 70
+begin = 11
+end = 25
+
+[K_38]
+file = "HOME/tests/java/Muller.java"
+line = 60
+begin = 13
+end = 14
+
+[K_39]
+file = "HOME/tests/java/Muller.java"
+line = 57
+begin = 17
+end = 24
 
 ========== jessie execution ==========
 Generating Why function Muller_m
@@ -536,6 +648,18 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/Muller.loc ==========
+[JC_90]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_91]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_40]
 file = "HOME/"
 line = 0
@@ -546,53 +670,49 @@ end = -1
 file = "HOME/tests/java/Muller.java"
 line = 63
 begin = 8
-end = 109
+end = 14
 
 [JC_42]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Muller.java"
+line = 63
+begin = 18
+end = 31
 
 [JC_43]
-kind = UserCall
 file = "HOME/tests/java/Muller.java"
-line = 68
-begin = 20
-end = 28
+line = 64
+begin = 8
+end = 18
 
 [JC_44]
-kind = PointerDeref
 file = "HOME/tests/java/Muller.java"
-line = 68
-begin = 39
-end = 43
+line = 64
+begin = 22
+end = 32
 
 [JC_45]
-kind = AllocSize
 file = "HOME/tests/java/Muller.java"
-line = 70
-begin = 11
-end = 25
+line = 65
+begin = 8
+end = 36
 
 [JC_46]
-kind = AllocSize
 file = "HOME/tests/java/Muller.java"
-line = 70
-begin = 11
-end = 25
+line = 63
+begin = 8
+end = 109
 
 [JC_1]
 file = "HOME/tests/java/Muller.jc"
-line = 74
+line = 77
 begin = 8
 end = 21
 
 [JC_47]
-file = "HOME/tests/java/Muller.java"
-line = 74
-begin = 8
-end = 109
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_2]
 file = "HOME/"
@@ -601,23 +721,24 @@ begin = -1
 end = -1
 
 [JC_48]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/Muller.java"
+line = 68
+begin = 20
+end = 28
 
 [JC_3]
 file = "HOME/tests/java/Muller.jc"
-line = 74
+line = 77
 begin = 8
 end = 21
 
 [JC_49]
-kind = UserCall
+kind = PointerDeref
 file = "HOME/tests/java/Muller.java"
-line = 79
-begin = 20
-end = 28
+line = 68
+begin = 39
+end = 43
 
 [JC_4]
 file = "HOME/"
@@ -651,16 +772,16 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Muller.jc"
-line = 76
+line = 79
 begin = 11
 end = 66
 
 [JC_50]
-kind = PointerDeref
+kind = AllocSize
 file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 9
-end = 13
+line = 70
+begin = 11
+end = 25
 
 [cons_Muller_ensures_default]
 name = "Constructor of class Muller"
@@ -671,18 +792,17 @@ begin = -1
 end = -1
 
 [JC_51]
-kind = PointerDeref
+kind = AllocSize
 file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 32
-end = 36
+line = 70
+begin = 11
+end = 25
 
 [JC_52]
-kind = PointerDeref
 file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 32
-end = 36
+line = 74
+begin = 8
+end = 14
 
 [cons_Muller_safety]
 name = "Constructor of class Muller"
@@ -693,50 +813,40 @@ begin = -1
 end = -1
 
 [JC_53]
-kind = PointerDeref
 file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 19
-end = 36
+line = 74
+begin = 18
+end = 31
 
 [JC_54]
 file = "HOME/tests/java/Muller.java"
-line = 63
+line = 75
+begin = 8
+end = 18
+
+[JC_55]
+file = "HOME/tests/java/Muller.java"
+line = 75
+begin = 22
+end = 32
+
+[JC_56]
+file = "HOME/tests/java/Muller.java"
+line = 76
+begin = 8
+end = 36
+
+[JC_57]
+file = "HOME/tests/java/Muller.java"
+line = 74
 begin = 8
 end = 109
 
-[JC_55]
+[JC_58]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_56]
-kind = UserCall
-file = "HOME/tests/java/Muller.java"
-line = 68
-begin = 20
-end = 28
-
-[JC_57]
-file = "HOME/tests/java/Muller.java"
-line = 66
-begin = 18
-end = 30
-
-[JC_58]
-kind = AllocSize
-file = "HOME/tests/java/Muller.java"
-line = 70
-begin = 11
-end = 25
-
-[JC_59]
-kind = AllocSize
-file = "HOME/tests/java/Muller.java"
-line = 70
-begin = 11
-end = 25
 
 [Muller_m_safety]
 name = "Method m"
@@ -746,48 +856,58 @@ line = 59
 begin = 24
 end = 25
 
-[JC_60]
-file = "HOME/tests/java/Muller.java"
-line = 74
-begin = 8
-end = 109
-
-[JC_61]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_62]
+[JC_59]
 kind = UserCall
 file = "HOME/tests/java/Muller.java"
 line = 79
 begin = 20
 end = 28
 
+[JC_60]
+kind = PointerDeref
+file = "HOME/tests/java/Muller.java"
+line = 80
+begin = 9
+end = 13
+
+[JC_61]
+kind = PointerDeref
+file = "HOME/tests/java/Muller.java"
+line = 80
+begin = 32
+end = 36
+
+[JC_62]
+kind = PointerDeref
+file = "HOME/tests/java/Muller.java"
+line = 80
+begin = 32
+end = 36
+
 [JC_10]
 file = "HOME/tests/java/Muller.jc"
-line = 76
+line = 79
 begin = 11
 end = 66
 
 [JC_63]
+kind = PointerDeref
 file = "HOME/tests/java/Muller.java"
-line = 77
-begin = 18
-end = 30
+line = 80
+begin = 19
+end = 36
 
 [JC_11]
 file = "HOME/tests/java/Muller.jc"
-line = 79
+line = 82
 begin = 8
 end = 30
 
 [JC_64]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Muller.java"
+line = 63
+begin = 8
+end = 14
 
 [JC_12]
 file = "HOME/"
@@ -796,22 +916,22 @@ begin = -1
 end = -1
 
 [JC_65]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Muller.java"
+line = 63
+begin = 18
+end = 31
 
 [JC_13]
 file = "HOME/tests/java/Muller.jc"
-line = 79
+line = 82
 begin = 8
 end = 30
 
 [JC_66]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Muller.java"
+line = 64
+begin = 8
+end = 18
 
 [JC_14]
 file = "HOME/"
@@ -820,10 +940,10 @@ begin = -1
 end = -1
 
 [JC_67]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Muller.java"
+line = 64
+begin = 22
+end = 32
 
 [JC_15]
 file = "HOME/"
@@ -832,10 +952,10 @@ begin = -1
 end = -1
 
 [JC_68]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Muller.java"
+line = 65
+begin = 8
+end = 36
 
 [JC_16]
 file = "HOME/"
@@ -844,10 +964,10 @@ begin = -1
 end = -1
 
 [JC_69]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Muller.java"
+line = 63
+begin = 8
+end = 109
 
 [JC_17]
 file = "HOME/"
@@ -863,7 +983,7 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/Muller.jc"
-line = 82
+line = 85
 begin = 11
 end = 113
 
@@ -874,34 +994,67 @@ begin = -1
 end = -1
 
 [JC_71]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/Muller.java"
+line = 68
+begin = 20
+end = 28
+
+[JC_72]
+file = "HOME/tests/java/Muller.java"
+line = 66
+begin = 18
+end = 30
 
 [JC_20]
 file = "HOME/tests/java/Muller.jc"
-line = 81
+line = 84
 begin = 10
 end = 18
+
+[JC_73]
+kind = AllocSize
+file = "HOME/tests/java/Muller.java"
+line = 70
+begin = 11
+end = 25
 
 [JC_21]
 file = "HOME/tests/java/Muller.jc"
-line = 82
+line = 85
 begin = 11
 end = 113
 
+[JC_74]
+kind = AllocSize
+file = "HOME/tests/java/Muller.java"
+line = 70
+begin = 11
+end = 25
+
 [JC_22]
 file = "HOME/tests/java/Muller.jc"
-line = 81
+line = 84
 begin = 10
 end = 18
 
+[JC_75]
+file = "HOME/tests/java/Muller.java"
+line = 74
+begin = 8
+end = 14
+
 [JC_23]
 file = "HOME/tests/java/Muller.jc"
-line = 86
+line = 89
 begin = 8
 end = 23
+
+[JC_76]
+file = "HOME/tests/java/Muller.java"
+line = 74
+begin = 18
+end = 31
 
 [JC_24]
 file = "HOME/"
@@ -917,17 +1070,35 @@ line = 28
 begin = 2
 end = 174
 
+[JC_77]
+file = "HOME/tests/java/Muller.java"
+line = 75
+begin = 8
+end = 18
+
 [JC_25]
 file = "HOME/tests/java/Muller.jc"
-line = 86
+line = 89
 begin = 8
 end = 23
+
+[JC_78]
+file = "HOME/tests/java/Muller.java"
+line = 75
+begin = 22
+end = 32
 
 [JC_26]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_79]
+file = "HOME/tests/java/Muller.java"
+line = 76
+begin = 8
+end = 36
 
 [JC_27]
 file = "HOME/"
@@ -955,21 +1126,52 @@ line = 0
 begin = -1
 end = -1
 
+[JC_80]
+file = "HOME/tests/java/Muller.java"
+line = 74
+begin = 8
+end = 109
+
+[JC_81]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_82]
+kind = UserCall
+file = "HOME/tests/java/Muller.java"
+line = 79
+begin = 20
+end = 28
+
 [JC_30]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_83]
+file = "HOME/tests/java/Muller.java"
+line = 77
+begin = 18
+end = 30
+
 [JC_31]
 file = "HOME/tests/java/Muller.jc"
-line = 88
+line = 91
 begin = 11
 end = 65
 
+[JC_84]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_32]
 file = "HOME/tests/java/Muller.jc"
-line = 88
+line = 91
 begin = 11
 end = 65
 
@@ -980,6 +1182,12 @@ file = "HOME/tests/java/Muller.jc"
 line = 36
 begin = 0
 end = 320
+
+[JC_85]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [Muller_m_ensures_default]
 name = "Method m"
@@ -995,7 +1203,19 @@ line = 57
 begin = 17
 end = 24
 
+[JC_86]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_34]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_87]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1007,7 +1227,19 @@ line = 57
 begin = 17
 end = 24
 
+[JC_88]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_36]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_89]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1044,13 +1276,19 @@ type Object
 
 type interface
 
+exception Exception_exc of Object pointer
+
+logic Exception_tag:  -> Object tag_id
+
+logic Object_tag:  -> Object tag_id
+
+axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
+
 exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
 logic Muller_tag:  -> Object tag_id
-
-logic Object_tag:  -> Object tag_id
 
 axiom Muller_parenttag_Object : parenttag(Muller_tag, Object_tag)
 
@@ -1136,6 +1374,11 @@ predicate left_valid_struct_Object(p:Object pointer,
  a:int,
  Object_alloc_table:Object alloc_table) =
  (offset_min(Object_alloc_table, p) <= a)
+
+predicate left_valid_struct_Exception(p:Object pointer,
+ a:int,
+ Object_alloc_table:Object alloc_table) =
+ left_valid_struct_Object(p, a, Object_alloc_table)
 
 predicate left_valid_struct_Muller(p:Object pointer,
  a:int,
@@ -1233,6 +1476,11 @@ predicate right_valid_struct_Object(p:Object pointer,
  Object_alloc_table:Object alloc_table) =
  (offset_max(Object_alloc_table, p) >= b)
 
+predicate right_valid_struct_Exception(p:Object pointer,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ right_valid_struct_Object(p, b, Object_alloc_table)
+
 predicate right_valid_struct_Muller(p:Object pointer,
  b:int,
  Object_alloc_table:Object alloc_table) =
@@ -1279,6 +1527,12 @@ predicate strict_valid_struct_Object(p:Object pointer,
  ((offset_min(Object_alloc_table, p) = a)
  and (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ strict_valid_struct_Object(p, a, b, Object_alloc_table)
+
 predicate strict_valid_struct_Muller(p:Object pointer,
  a:int,
  b:int,
@@ -1316,6 +1570,12 @@ predicate valid_bitvector_struct_Object(p:unit pointer,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_Muller(p:unit pointer,
  a:int,
@@ -1368,6 +1628,12 @@ predicate valid_struct_Object(p:Object pointer,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
  and (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p:Object pointer,
+ a:int,
+ b:int,
+ Object_alloc_table:Object alloc_table) =
+ valid_struct_Object(p, a, b, Object_alloc_table)
 
 predicate valid_struct_Muller(p:Object pointer,
  a:int,
@@ -1426,6 +1692,24 @@ parameter Muller_m_requires :
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_tag_table : Object tag_table ref
+
+parameter alloc_bitvector_struct_Exception :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_Exception_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter alloc_bitvector_struct_Muller :
  n:int ->
@@ -1534,6 +1818,29 @@ parameter alloc_bitvector_struct_interface_requires :
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_struct_Exception :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { } Object pointer writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Exception(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Exception_tag)))) }
+
+parameter alloc_struct_Exception_requires :
+ n:int ->
+  Object_alloc_table:Object alloc_table ref ->
+   Object_tag_table:Object tag_table ref ->
+    { ge_int(n, (0))} Object pointer
+    writes Object_alloc_table,Object_tag_table
+    { (strict_valid_struct_Exception(result, (0), sub_int(n, (1)),
+       Object_alloc_table)
+      and (alloc_extends(Object_alloc_table@, Object_alloc_table)
+          and (alloc_fresh(Object_alloc_table@, result, n)
+              and instanceof(Object_tag_table, result, Exception_tag)))) }
 
 parameter alloc_struct_Muller :
  n:int ->
@@ -1751,22 +2058,24 @@ let Muller_m_ensures_default =
   (let return = ref (any_pointer void) in
   try
    begin
-     (let count = ref (K_22: (0)) in
+     (let count = ref (K_38: (0)) in
      begin
        (let i_4 = ref (K_1: (0)) in
        try
         while true do
         { invariant
-            (JC_54:
-            (le_int((0), i_4)
-            and (le_int(i_4,
-                 add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1)))
-                and (le_int((0), count)
-                    and (le_int(count, i_4)
-                        and eq_int(count,
+            (JC_69:
+            ((JC_64: le_int((0), i_4))
+            and ((JC_65:
+                 le_int(i_4,
+                 add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1))))
+                and ((JC_66: le_int((0), count))
+                    and ((JC_67: le_int(count, i_4))
+                        and (JC_68:
+                            eq_int(count,
                             num_of_pos((0), sub_int(i_4, (1)), t_4,
-                            intM_intP_t_4_7)))))))
-          variant (JC_57 : sub_int(add_int(offset_max(Object_t_4_7_alloc_table,
+                            intM_intP_t_4_7))))))))
+          variant (JC_72 : sub_int(add_int(offset_max(Object_t_4_7_alloc_table,
                                            t_4),
                                    (1)),
                            i_4)) }
@@ -1774,17 +2083,17 @@ let Muller_m_ensures_default =
            [ { } unit { true } ];
           try
            (let jessie_34 = begin
-                              (if (K_9:
-                                  ((lt_int_ !i_4) (K_8:
-                                                  (JC_56:
+                              (if (K_17:
+                                  ((lt_int_ !i_4) (K_16:
+                                                  (JC_71:
                                                   ((java_array_length_intM_requires t_4) Object_t_4_7_alloc_table)))))
                               then
-                               (if (K_6:
-                                   ((gt_int_ (K_5:
+                               (if (K_14:
+                                   ((gt_int_ (K_13:
                                              ((safe_acc_ intM_intP_t_4_7) 
                                               ((shift t_4) !i_4)))) (0)))
                                then
-                                (K_4:
+                                (K_12:
                                 (let jessie_32 = (let jessie_2 = !count in
                                                  begin
                                                    (let jessie_31 = (count := 
@@ -1802,7 +2111,7 @@ let Muller_m_ensures_default =
            void)
            with
            Loop_continue_exc jessie_4 ->
-           (let jessie_36 = (K_7:
+           (let jessie_36 = (K_15:
                             (let jessie_1 = !i_4 in
                             begin
                               (let jessie_35 = (i_4 := ((add_int jessie_1) (1))) in
@@ -1815,25 +2124,27 @@ let Muller_m_ensures_default =
         with
         Loop_exit_exc jessie_3 ->
         void end);
-      (let u = (K_21:
-               (JC_59:
+      (let u = (K_37:
+               (JC_74:
                (((alloc_struct_intM !count) Object_Muller_m_9_alloc_table) Object_Muller_m_9_tag_table))) in
       begin
         (let jessie_38 = (count := (0)) in void);
-       (let i_5 = ref (K_10: (0)) in
+       (let i_5 = ref (K_18: (0)) in
        try
         while true do
         { invariant
-            (JC_60:
-            (le_int((0), i_5)
-            and (le_int(i_5,
-                 add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1)))
-                and (le_int((0), count)
-                    and (le_int(count, i_5)
-                        and eq_int(count,
+            (JC_80:
+            ((JC_75: le_int((0), i_5))
+            and ((JC_76:
+                 le_int(i_5,
+                 add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1))))
+                and ((JC_77: le_int((0), count))
+                    and ((JC_78: le_int(count, i_5))
+                        and (JC_79:
+                            eq_int(count,
                             num_of_pos((0), sub_int(i_5, (1)), t_4,
-                            intM_intP_t_4_7)))))))
-          variant (JC_63 : sub_int(add_int(offset_max(Object_t_4_7_alloc_table,
+                            intM_intP_t_4_7))))))))
+          variant (JC_83 : sub_int(add_int(offset_max(Object_t_4_7_alloc_table,
                                            t_4),
                                    (1)),
                            i_5)) }
@@ -1841,22 +2152,22 @@ let Muller_m_ensures_default =
            [ { } unit { true } ];
           try
            (let jessie_47 = begin
-                              (if (K_20:
-                                  ((lt_int_ !i_5) (K_19:
-                                                  (JC_62:
+                              (if (K_36:
+                                  ((lt_int_ !i_5) (K_35:
+                                                  (JC_82:
                                                   ((java_array_length_intM_requires t_4) Object_t_4_7_alloc_table)))))
                               then
-                               (if (K_17:
-                                   ((gt_int_ (K_16:
+                               (if (K_33:
+                                   ((gt_int_ (K_32:
                                              ((safe_acc_ intM_intP_t_4_7) 
                                               ((shift t_4) !i_5)))) (0)))
                                then
-                                (K_15:
-                                (let jessie_45 = (let jessie_40 = (K_14:
+                                (K_31:
+                                (let jessie_45 = (let jessie_40 = (K_30:
                                                                   ((safe_acc_ intM_intP_t_4_7) 
                                                                    ((shift t_4) !i_5))) in
                                                  (let jessie_43 = ((shift u) 
-                                                                   (K_13:
+                                                                   (K_29:
                                                                    (let jessie_6 = !count in
                                                                    begin
                                                                      
@@ -1877,7 +2188,7 @@ let Muller_m_ensures_default =
            void)
            with
            Loop_continue_exc jessie_8 ->
-           (let jessie_49 = (K_18:
+           (let jessie_49 = (K_34:
                             (let jessie_5 = !i_5 in
                             begin
                               (let jessie_48 = (i_5 := ((add_int jessie_5) (1))) in
@@ -1909,36 +2220,38 @@ let Muller_m_safety =
   (let return = ref (any_pointer void) in
   try
    begin
-     (let count = ref (K_22: (0)) in
+     (let count = ref (K_38: (0)) in
      begin
        (let i_4 = ref (K_1: (0)) in
        try
         while true do
-        { invariant (JC_42: true)  }
+        { invariant (JC_47: true)  }
          begin
            [ { } unit reads count,i_4
-             { (JC_41:
-               (le_int((0), i_4)
-               and (le_int(i_4,
-                    add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1)))
-                   and (le_int((0), count)
-                       and (le_int(count, i_4)
-                           and eq_int(count,
+             { (JC_46:
+               ((JC_41: le_int((0), i_4))
+               and ((JC_42:
+                    le_int(i_4,
+                    add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1))))
+                   and ((JC_43: le_int((0), count))
+                       and ((JC_44: le_int(count, i_4))
+                           and (JC_45:
+                               eq_int(count,
                                num_of_pos((0), sub_int(i_4, (1)), t_4,
-                               intM_intP_t_4_7))))))) } ];
+                               intM_intP_t_4_7)))))))) } ];
           try
            (let jessie_13 = begin
-                              (if (K_9:
-                                  ((lt_int_ !i_4) (K_8:
-                                                  (JC_43:
+                              (if (K_17:
+                                  ((lt_int_ !i_4) (K_16:
+                                                  (JC_48:
                                                   ((java_array_length_intM t_4) Object_t_4_7_alloc_table)))))
                               then
-                               (if (K_6:
-                                   ((gt_int_ (K_5:
-                                             (JC_44:
+                               (if (K_14:
+                                   ((gt_int_ (K_13:
+                                             (JC_49:
                                              ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_4)))) (0)))
                                then
-                                (K_4:
+                                (K_12:
                                 (let jessie_11 = (let jessie_2 = !count in
                                                  begin
                                                    (let jessie_10 = (count := 
@@ -1956,7 +2269,7 @@ let Muller_m_safety =
            void)
            with
            Loop_continue_exc jessie_4 ->
-           (let jessie_15 = (K_7:
+           (let jessie_15 = (K_15:
                             (let jessie_1 = !i_4 in
                             begin
                               (let jessie_14 = (i_4 := ((add_int jessie_1) (1))) in
@@ -1969,44 +2282,46 @@ let Muller_m_safety =
         with
         Loop_exit_exc jessie_3 ->
         void end);
-      (let u = (K_21:
-               (JC_46:
+      (let u = (K_37:
+               (JC_51:
                (((alloc_struct_intM_requires !count) Object_Muller_m_9_alloc_table) Object_Muller_m_9_tag_table))) in
       begin
         (let jessie_17 = (count := (0)) in void);
-       (let i_5 = ref (K_10: (0)) in
+       (let i_5 = ref (K_18: (0)) in
        try
         while true do
-        { invariant (JC_48: true)  }
+        { invariant (JC_58: true)  }
          begin
            [ { } unit reads count,i_5
-             { (JC_47:
-               (le_int((0), i_5)
-               and (le_int(i_5,
-                    add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1)))
-                   and (le_int((0), count)
-                       and (le_int(count, i_5)
-                           and eq_int(count,
+             { (JC_57:
+               ((JC_52: le_int((0), i_5))
+               and ((JC_53:
+                    le_int(i_5,
+                    add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1))))
+                   and ((JC_54: le_int((0), count))
+                       and ((JC_55: le_int(count, i_5))
+                           and (JC_56:
+                               eq_int(count,
                                num_of_pos((0), sub_int(i_5, (1)), t_4,
-                               intM_intP_t_4_7))))))) } ];
+                               intM_intP_t_4_7)))))))) } ];
           try
            (let jessie_26 = begin
-                              (if (K_20:
-                                  ((lt_int_ !i_5) (K_19:
-                                                  (JC_49:
+                              (if (K_36:
+                                  ((lt_int_ !i_5) (K_35:
+                                                  (JC_59:
                                                   ((java_array_length_intM t_4) Object_t_4_7_alloc_table)))))
                               then
-                               (if (K_17:
-                                   ((gt_int_ (K_16:
-                                             (JC_50:
+                               (if (K_33:
+                                   ((gt_int_ (K_32:
+                                             (JC_60:
                                              ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5)))) (0)))
                                then
-                                (K_15:
-                                (let jessie_24 = (let jessie_19 = (K_14:
-                                                                  (JC_52:
+                                (K_31:
+                                (let jessie_24 = (let jessie_19 = (K_30:
+                                                                  (JC_62:
                                                                   ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5))) in
                                                  (let jessie_20 = u in
-                                                 (let jessie_21 = (K_13:
+                                                 (let jessie_21 = (K_29:
                                                                   (let jessie_6 = !count in
                                                                   begin
                                                                     (let jessie_23 = 
@@ -2016,7 +2331,7 @@ let Muller_m_safety =
                                                                    jessie_6
                                                                   end)) in
                                                  (let jessie_22 = ((shift jessie_20) jessie_21) in
-                                                 (JC_53:
+                                                 (JC_63:
                                                  (((((offset_upd_ !Object_Muller_m_9_alloc_table) intM_intP_Muller_m_9) jessie_20) jessie_21) jessie_19)))))) in
                                 void))
                                else void)
@@ -2028,7 +2343,7 @@ let Muller_m_safety =
            void)
            with
            Loop_continue_exc jessie_8 ->
-           (let jessie_28 = (K_18:
+           (let jessie_28 = (K_34:
                             (let jessie_5 = !i_5 in
                             begin
                               (let jessie_27 = (i_5 := ((add_int jessie_5) (1))) in
@@ -2056,7 +2371,7 @@ let cons_Muller_ensures_default =
  fun (this_0 : Object pointer) (Object_this_0_10_alloc_table : Object alloc_table) ->
   { valid_struct_Muller(this_0, (0), (0), Object_this_0_10_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_68: true) }
+  { (JC_88: true) }
 
 let cons_Muller_safety =
  fun (this_0 : Object pointer) (Object_this_0_10_alloc_table : Object alloc_table) ->
@@ -2120,43 +2435,43 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/Muller_po2.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "14"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Muller_po3.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "18" end = "31"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Muller_po4.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "64" begin = "8" end = "18"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Muller_po5.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "64" begin = "22" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Muller_po6.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "65" begin = "8" end = "36"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Muller_po7.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "14"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po8.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "18" end = "31"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po9.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "64" begin = "8" end = "18"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po10.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "64" begin = "22" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po11.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "65" begin = "8" end = "36"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po12.why">
@@ -2168,23 +2483,23 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po14.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "14"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po15.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "18" end = "31"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po16.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "64" begin = "8" end = "18"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po17.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "64" begin = "22" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po18.why">
-      <location file = "HOME/tests/java/Muller.java" line = "63" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "65" begin = "8" end = "36"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po19.why">
@@ -2196,43 +2511,43 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po21.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "14"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Muller_po22.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "18" end = "31"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Muller_po23.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "75" begin = "8" end = "18"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Muller_po24.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "75" begin = "22" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Muller_po25.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "76" begin = "8" end = "36"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Muller_po26.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "14"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po27.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "18" end = "31"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po28.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "75" begin = "8" end = "18"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po29.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "75" begin = "22" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po30.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "76" begin = "8" end = "36"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po31.why">
@@ -2244,23 +2559,23 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po33.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "14"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po34.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "18" end = "31"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po35.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "75" begin = "8" end = "18"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po36.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "75" begin = "22" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po37.why">
-      <location file = "HOME/tests/java/Muller.java" line = "74" begin = "8" end = "109"/>
+      <location file = "HOME/tests/java/Muller.java" line = "76" begin = "8" end = "36"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Muller_po38.why">
@@ -3161,9 +3476,13 @@ type Object
 
 type interface
 
-logic Muller_tag :  -> Object tag_id
+logic Exception_tag :  -> Object tag_id
 
 logic Object_tag :  -> Object tag_id
+
+axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
+
+logic Muller_tag :  -> Object tag_id
 
 axiom Muller_parenttag_Object: parenttag(Muller_tag, Object_tag)
 
@@ -3246,6 +3565,10 @@ predicate left_valid_struct_Object(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_Exception(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
+
 predicate left_valid_struct_Muller(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
   Object_alloc_table)
@@ -3324,6 +3647,10 @@ predicate right_valid_struct_Object(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_Exception(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
 predicate right_valid_struct_Muller(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
   Object_alloc_table)
@@ -3359,6 +3686,10 @@ predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) = a) and
    (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
 predicate strict_valid_struct_Muller(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
@@ -3384,6 +3715,10 @@ predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_Muller(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
@@ -3420,6 +3755,10 @@ predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
    (offset_max(Object_alloc_table, p) >= b))
+
+predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
 
 predicate valid_struct_Muller(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
@@ -3467,12 +3806,12 @@ goal Muller_m_ensures_default_po_9:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3487,7 +3826,7 @@ goal Muller_m_ensures_default_po_9:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (count0 <= i_4_0))
+  ("JC_69": ("JC_67": ("JC_67": (count0 <= i_4_0))))
 
 ========== file tests/java/why/Muller_po11.why ==========
 goal Muller_m_ensures_default_po_10:
@@ -3499,12 +3838,12 @@ goal Muller_m_ensures_default_po_10:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3519,7 +3858,9 @@ goal Muller_m_ensures_default_po_10:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (count0 = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_69":
+  ("JC_68":
+  ("JC_68": (count0 = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/Muller_po12.why ==========
 goal Muller_m_ensures_default_po_11:
@@ -3531,12 +3872,12 @@ goal Muller_m_ensures_default_po_11:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3551,7 +3892,7 @@ goal Muller_m_ensures_default_po_11:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  (0 <= ("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
+  (0 <= ("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
 
 ========== file tests/java/why/Muller_po13.why ==========
 goal Muller_m_ensures_default_po_12:
@@ -3563,12 +3904,12 @@ goal Muller_m_ensures_default_po_12:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3583,8 +3924,8 @@ goal Muller_m_ensures_default_po_12:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  (("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4_0)) < 
-  ("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
+  (("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4_0)) < 
+  ("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
 
 ========== file tests/java/why/Muller_po14.why ==========
 goal Muller_m_ensures_default_po_13:
@@ -3596,12 +3937,12 @@ goal Muller_m_ensures_default_po_13:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3614,7 +3955,7 @@ goal Muller_m_ensures_default_po_13:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (0 <= i_4_0))
+  ("JC_69": ("JC_64": ("JC_64": (0 <= i_4_0))))
 
 ========== file tests/java/why/Muller_po15.why ==========
 goal Muller_m_ensures_default_po_14:
@@ -3626,12 +3967,12 @@ goal Muller_m_ensures_default_po_14:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3644,7 +3985,9 @@ goal Muller_m_ensures_default_po_14:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_69":
+  ("JC_65":
+  ("JC_65": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/Muller_po16.why ==========
 goal Muller_m_ensures_default_po_15:
@@ -3656,12 +3999,12 @@ goal Muller_m_ensures_default_po_15:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3674,7 +4017,7 @@ goal Muller_m_ensures_default_po_15:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (0 <= count))
+  ("JC_69": ("JC_66": ("JC_66": (0 <= count))))
 
 ========== file tests/java/why/Muller_po17.why ==========
 goal Muller_m_ensures_default_po_16:
@@ -3686,12 +4029,12 @@ goal Muller_m_ensures_default_po_16:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3704,7 +4047,7 @@ goal Muller_m_ensures_default_po_16:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (count <= i_4_0))
+  ("JC_69": ("JC_67": ("JC_67": (count <= i_4_0))))
 
 ========== file tests/java/why/Muller_po18.why ==========
 goal Muller_m_ensures_default_po_17:
@@ -3716,12 +4059,12 @@ goal Muller_m_ensures_default_po_17:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3734,7 +4077,9 @@ goal Muller_m_ensures_default_po_17:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (count = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_69":
+  ("JC_68":
+  ("JC_68": (count = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/Muller_po19.why ==========
 goal Muller_m_ensures_default_po_18:
@@ -3746,12 +4091,12 @@ goal Muller_m_ensures_default_po_18:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3764,7 +4109,7 @@ goal Muller_m_ensures_default_po_18:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  (0 <= ("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
+  (0 <= ("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
 
 ========== file tests/java/why/Muller_po2.why ==========
 goal Muller_m_ensures_default_po_1:
@@ -3772,7 +4117,7 @@ goal Muller_m_ensures_default_po_1:
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_54": (0 <= 0))
+  ("JC_69": ("JC_64": ("JC_64": (0 <= 0))))
 
 ========== file tests/java/why/Muller_po20.why ==========
 goal Muller_m_ensures_default_po_19:
@@ -3784,12 +4129,12 @@ goal Muller_m_ensures_default_po_19:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3802,8 +4147,8 @@ goal Muller_m_ensures_default_po_19:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  (("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4_0)) < 
-  ("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
+  (("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4_0)) < 
+  ("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
 
 ========== file tests/java/why/Muller_po21.why ==========
 goal Muller_m_ensures_default_po_20:
@@ -3816,12 +4161,12 @@ goal Muller_m_ensures_default_po_20:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3840,7 +4185,7 @@ goal Muller_m_ensures_default_po_20:
      instanceof(Object_Muller_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_60": (0 <= 0))
+  ("JC_80": ("JC_75": ("JC_75": (0 <= 0))))
 
 ========== file tests/java/why/Muller_po22.why ==========
 goal Muller_m_ensures_default_po_21:
@@ -3853,12 +4198,12 @@ goal Muller_m_ensures_default_po_21:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3877,7 +4222,9 @@ goal Muller_m_ensures_default_po_21:
      instanceof(Object_Muller_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_60": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_80":
+  ("JC_76":
+  ("JC_76": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/Muller_po23.why ==========
 goal Muller_m_ensures_default_po_22:
@@ -3890,12 +4237,12 @@ goal Muller_m_ensures_default_po_22:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3914,7 +4261,7 @@ goal Muller_m_ensures_default_po_22:
      instanceof(Object_Muller_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_60": (0 <= count0))
+  ("JC_80": ("JC_77": ("JC_77": (0 <= count0))))
 
 ========== file tests/java/why/Muller_po24.why ==========
 goal Muller_m_ensures_default_po_23:
@@ -3927,12 +4274,12 @@ goal Muller_m_ensures_default_po_23:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3951,7 +4298,7 @@ goal Muller_m_ensures_default_po_23:
      instanceof(Object_Muller_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_60": (count0 <= 0))
+  ("JC_80": ("JC_78": ("JC_78": (count0 <= 0))))
 
 ========== file tests/java/why/Muller_po25.why ==========
 goal Muller_m_ensures_default_po_24:
@@ -3964,12 +4311,12 @@ goal Muller_m_ensures_default_po_24:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3988,7 +4335,9 @@ goal Muller_m_ensures_default_po_24:
      instanceof(Object_Muller_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_60": (count0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_80":
+  ("JC_79":
+  ("JC_79": (count0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/Muller_po26.why ==========
 goal Muller_m_ensures_default_po_25:
@@ -4001,12 +4350,12 @@ goal Muller_m_ensures_default_po_25:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4029,12 +4378,12 @@ goal Muller_m_ensures_default_po_25:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4055,7 +4404,7 @@ goal Muller_m_ensures_default_po_25:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (0 <= i_5_0))
+  ("JC_80": ("JC_75": ("JC_75": (0 <= i_5_0))))
 
 ========== file tests/java/why/Muller_po27.why ==========
 goal Muller_m_ensures_default_po_26:
@@ -4068,12 +4417,12 @@ goal Muller_m_ensures_default_po_26:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4096,12 +4445,12 @@ goal Muller_m_ensures_default_po_26:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4122,7 +4471,9 @@ goal Muller_m_ensures_default_po_26:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_80":
+  ("JC_76":
+  ("JC_76": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/Muller_po28.why ==========
 goal Muller_m_ensures_default_po_27:
@@ -4135,12 +4486,12 @@ goal Muller_m_ensures_default_po_27:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4163,12 +4514,12 @@ goal Muller_m_ensures_default_po_27:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4189,7 +4540,7 @@ goal Muller_m_ensures_default_po_27:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (0 <= count2))
+  ("JC_80": ("JC_77": ("JC_77": (0 <= count2))))
 
 ========== file tests/java/why/Muller_po29.why ==========
 goal Muller_m_ensures_default_po_28:
@@ -4202,12 +4553,12 @@ goal Muller_m_ensures_default_po_28:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4230,12 +4581,12 @@ goal Muller_m_ensures_default_po_28:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4256,7 +4607,7 @@ goal Muller_m_ensures_default_po_28:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (count2 <= i_5_0))
+  ("JC_80": ("JC_78": ("JC_78": (count2 <= i_5_0))))
 
 ========== file tests/java/why/Muller_po3.why ==========
 goal Muller_m_ensures_default_po_2:
@@ -4264,7 +4615,9 @@ goal Muller_m_ensures_default_po_2:
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_54": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_69":
+  ("JC_65":
+  ("JC_65": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/Muller_po30.why ==========
 goal Muller_m_ensures_default_po_29:
@@ -4277,12 +4630,12 @@ goal Muller_m_ensures_default_po_29:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4305,12 +4658,12 @@ goal Muller_m_ensures_default_po_29:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4331,7 +4684,9 @@ goal Muller_m_ensures_default_po_29:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (count2 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_80":
+  ("JC_79":
+  ("JC_79": (count2 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/Muller_po31.why ==========
 goal Muller_m_ensures_default_po_30:
@@ -4344,12 +4699,12 @@ goal Muller_m_ensures_default_po_30:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4372,12 +4727,12 @@ goal Muller_m_ensures_default_po_30:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4398,7 +4753,7 @@ goal Muller_m_ensures_default_po_30:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (0 <= ("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (0 <= ("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 ========== file tests/java/why/Muller_po32.why ==========
 goal Muller_m_ensures_default_po_31:
@@ -4411,12 +4766,12 @@ goal Muller_m_ensures_default_po_31:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4439,12 +4794,12 @@ goal Muller_m_ensures_default_po_31:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4465,8 +4820,8 @@ goal Muller_m_ensures_default_po_31:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
-  ("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
+  ("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 ========== file tests/java/why/Muller_po33.why ==========
 goal Muller_m_ensures_default_po_32:
@@ -4479,12 +4834,12 @@ goal Muller_m_ensures_default_po_32:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4505,12 +4860,12 @@ goal Muller_m_ensures_default_po_32:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4523,7 +4878,7 @@ goal Muller_m_ensures_default_po_32:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (0 <= i_5_0))
+  ("JC_80": ("JC_75": ("JC_75": (0 <= i_5_0))))
 
 ========== file tests/java/why/Muller_po34.why ==========
 goal Muller_m_ensures_default_po_33:
@@ -4536,12 +4891,12 @@ goal Muller_m_ensures_default_po_33:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4562,12 +4917,12 @@ goal Muller_m_ensures_default_po_33:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4580,7 +4935,9 @@ goal Muller_m_ensures_default_po_33:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_80":
+  ("JC_76":
+  ("JC_76": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/Muller_po35.why ==========
 goal Muller_m_ensures_default_po_34:
@@ -4593,12 +4950,12 @@ goal Muller_m_ensures_default_po_34:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4619,12 +4976,12 @@ goal Muller_m_ensures_default_po_34:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4637,7 +4994,7 @@ goal Muller_m_ensures_default_po_34:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (0 <= count1))
+  ("JC_80": ("JC_77": ("JC_77": (0 <= count1))))
 
 ========== file tests/java/why/Muller_po36.why ==========
 goal Muller_m_ensures_default_po_35:
@@ -4650,12 +5007,12 @@ goal Muller_m_ensures_default_po_35:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4676,12 +5033,12 @@ goal Muller_m_ensures_default_po_35:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4694,7 +5051,7 @@ goal Muller_m_ensures_default_po_35:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (count1 <= i_5_0))
+  ("JC_80": ("JC_78": ("JC_78": (count1 <= i_5_0))))
 
 ========== file tests/java/why/Muller_po37.why ==========
 goal Muller_m_ensures_default_po_36:
@@ -4707,12 +5064,12 @@ goal Muller_m_ensures_default_po_36:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4733,12 +5090,12 @@ goal Muller_m_ensures_default_po_36:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4751,7 +5108,9 @@ goal Muller_m_ensures_default_po_36:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (count1 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_80":
+  ("JC_79":
+  ("JC_79": (count1 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/Muller_po38.why ==========
 goal Muller_m_ensures_default_po_37:
@@ -4764,12 +5123,12 @@ goal Muller_m_ensures_default_po_37:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4790,12 +5149,12 @@ goal Muller_m_ensures_default_po_37:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4808,7 +5167,7 @@ goal Muller_m_ensures_default_po_37:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (0 <= ("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (0 <= ("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 ========== file tests/java/why/Muller_po39.why ==========
 goal Muller_m_ensures_default_po_38:
@@ -4821,12 +5180,12 @@ goal Muller_m_ensures_default_po_38:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4847,12 +5206,12 @@ goal Muller_m_ensures_default_po_38:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4865,8 +5224,8 @@ goal Muller_m_ensures_default_po_38:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
-  ("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
+  ("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 ========== file tests/java/why/Muller_po4.why ==========
 goal Muller_m_ensures_default_po_3:
@@ -4874,7 +5233,7 @@ goal Muller_m_ensures_default_po_3:
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_54": (0 <= 0))
+  ("JC_69": ("JC_66": ("JC_66": (0 <= 0))))
 
 ========== file tests/java/why/Muller_po40.why ==========
 goal Muller_m_safety_po_1:
@@ -4886,13 +5245,13 @@ goal Muller_m_safety_po_1:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4912,13 +5271,13 @@ goal Muller_m_safety_po_2:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4938,13 +5297,13 @@ goal Muller_m_safety_po_3:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4965,13 +5324,13 @@ goal Muller_m_safety_po_4:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4993,13 +5352,13 @@ goal Muller_m_safety_po_4:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_48": true) ->
-  ("JC_47":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_58": true) ->
+  ("JC_57":
+  (("JC_52": (0 <= i_5)) and
+   (("JC_53": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_54": (0 <= count1)) and
+     (("JC_55": (count1 <= i_5)) and
+      ("JC_56": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5020,13 +5379,13 @@ goal Muller_m_safety_po_5:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -5048,13 +5407,13 @@ goal Muller_m_safety_po_5:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_48": true) ->
-  ("JC_47":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_58": true) ->
+  ("JC_57":
+  (("JC_52": (0 <= i_5)) and
+   (("JC_53": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_54": (0 <= count1)) and
+     (("JC_55": (count1 <= i_5)) and
+      ("JC_56": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5075,13 +5434,13 @@ goal Muller_m_safety_po_6:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -5103,13 +5462,13 @@ goal Muller_m_safety_po_6:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_48": true) ->
-  ("JC_47":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_58": true) ->
+  ("JC_57":
+  (("JC_52": (0 <= i_5)) and
+   (("JC_53": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_54": (0 <= count1)) and
+     (("JC_55": (count1 <= i_5)) and
+      ("JC_56": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5141,13 +5500,13 @@ goal Muller_m_safety_po_7:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -5169,13 +5528,13 @@ goal Muller_m_safety_po_7:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_48": true) ->
-  ("JC_47":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_58": true) ->
+  ("JC_57":
+  (("JC_52": (0 <= i_5)) and
+   (("JC_53": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_54": (0 <= count1)) and
+     (("JC_55": (count1 <= i_5)) and
+      ("JC_56": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5202,7 +5561,7 @@ goal Muller_m_ensures_default_po_4:
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_54": (0 <= 0))
+  ("JC_69": ("JC_67": ("JC_67": (0 <= 0))))
 
 ========== file tests/java/why/Muller_po6.why ==========
 goal Muller_m_ensures_default_po_5:
@@ -5212,7 +5571,8 @@ goal Muller_m_ensures_default_po_5:
   int) memory.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_54": (0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_69":
+  ("JC_68": ("JC_68": (0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/Muller_po7.why ==========
 goal Muller_m_ensures_default_po_6:
@@ -5224,12 +5584,12 @@ goal Muller_m_ensures_default_po_6:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -5244,7 +5604,7 @@ goal Muller_m_ensures_default_po_6:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (0 <= i_4_0))
+  ("JC_69": ("JC_64": ("JC_64": (0 <= i_4_0))))
 
 ========== file tests/java/why/Muller_po8.why ==========
 goal Muller_m_ensures_default_po_7:
@@ -5256,12 +5616,12 @@ goal Muller_m_ensures_default_po_7:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -5276,7 +5636,9 @@ goal Muller_m_ensures_default_po_7:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_69":
+  ("JC_65":
+  ("JC_65": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/Muller_po9.why ==========
 goal Muller_m_ensures_default_po_8:
@@ -5288,12 +5650,12 @@ goal Muller_m_ensures_default_po_8:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -5308,7 +5670,7 @@ goal Muller_m_ensures_default_po_8:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (0 <= count0))
+  ("JC_69": ("JC_66": ("JC_66": (0 <= count0))))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Muller.why
@@ -6022,6 +6384,10 @@ why -simplify [...] why/Muller.why
  (select_bytes m p o1 (+ s1 s2)))))))
 
 (BG_PUSH
+ ;; Why axiom Exception_parenttag_Object
+ (EQ (parenttag Exception_tag Object_tag) |@true|))
+
+(BG_PUSH
  ;; Why axiom Muller_parenttag_Object
  (EQ (parenttag Muller_tag Object_tag) |@true|))
 
@@ -6094,6 +6460,9 @@ why -simplify [...] why/Muller.why
 
 (DEFPRED (left_valid_struct_Object p a Object_alloc_table)
   (<= (offset_min Object_alloc_table p) a))
+
+(DEFPRED (left_valid_struct_Exception p a Object_alloc_table)
+  (left_valid_struct_Object p a Object_alloc_table))
 
 (DEFPRED (left_valid_struct_Muller p a Object_alloc_table)
   (left_valid_struct_Object p a Object_alloc_table))
@@ -6186,6 +6555,9 @@ why -simplify [...] why/Muller.why
 (DEFPRED (right_valid_struct_Object p b Object_alloc_table)
   (>= (offset_max Object_alloc_table p) b))
 
+(DEFPRED (right_valid_struct_Exception p b Object_alloc_table)
+  (right_valid_struct_Object p b Object_alloc_table))
+
 (DEFPRED (right_valid_struct_Muller p b Object_alloc_table)
   (right_valid_struct_Object p b Object_alloc_table))
 
@@ -6213,6 +6585,9 @@ why -simplify [...] why/Muller.why
   (AND (EQ (offset_min Object_alloc_table p) a)
   (EQ (offset_max Object_alloc_table p) b)))
 
+(DEFPRED (strict_valid_struct_Exception p a b Object_alloc_table)
+  (strict_valid_struct_Object p a b Object_alloc_table))
+
 (DEFPRED (strict_valid_struct_Muller p a b Object_alloc_table)
   (strict_valid_struct_Object p a b Object_alloc_table))
 
@@ -6232,6 +6607,9 @@ why -simplify [...] why/Muller.why
 (DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
   (AND (EQ (offset_min bitvector_alloc_table p) a)
   (EQ (offset_max bitvector_alloc_table p) b)))
+
+(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
+  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
 
 (DEFPRED (valid_bitvector_struct_Muller p a b bitvector_alloc_table)
   (valid_bitvector_struct_Object p a b bitvector_alloc_table))
@@ -6261,6 +6639,9 @@ why -simplify [...] why/Muller.why
   (AND (<= (offset_min Object_alloc_table p) a)
   (>= (offset_max Object_alloc_table p) b)))
 
+(DEFPRED (valid_struct_Exception p a b Object_alloc_table)
+  (valid_struct_Object p a b Object_alloc_table))
+
 (DEFPRED (valid_struct_Muller p a b Object_alloc_table)
   (valid_struct_Object p a b Object_alloc_table))
 
@@ -6277,35 +6658,35 @@ why -simplify [...] why/Muller.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Muller_m_ensures_default_po_1, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_1, File "HOME/tests/java/Muller.java", line 63, characters 8-14
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_4 0 Object_t_4_7_alloc_table)
          (Non_null_intM t_4 Object_t_4_7_alloc_table))
 (<= 0 0))))
 
-;; Muller_m_ensures_default_po_2, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_2, File "HOME/tests/java/Muller.java", line 63, characters 18-31
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_4 0 Object_t_4_7_alloc_table)
          (Non_null_intM t_4 Object_t_4_7_alloc_table))
 (<= 0 (+ (offset_max Object_t_4_7_alloc_table t_4) 1)))))
 
-;; Muller_m_ensures_default_po_3, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_3, File "HOME/tests/java/Muller.java", line 64, characters 8-18
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_4 0 Object_t_4_7_alloc_table)
          (Non_null_intM t_4 Object_t_4_7_alloc_table))
 (<= 0 0))))
 
-;; Muller_m_ensures_default_po_4, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_4, File "HOME/tests/java/Muller.java", line 64, characters 22-32
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_4 0 Object_t_4_7_alloc_table)
          (Non_null_intM t_4 Object_t_4_7_alloc_table))
 (<= 0 0))))
 
-;; Muller_m_ensures_default_po_5, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_5, File "HOME/tests/java/Muller.java", line 65, characters 8-36
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6313,7 +6694,7 @@ why -simplify [...] why/Muller.why
          (Non_null_intM t_4 Object_t_4_7_alloc_table))
 (EQ 0 (num_of_pos 0 (- 0 1) t_4 intM_intP_t_4_7))))))
 
-;; Muller_m_ensures_default_po_6, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_6, File "HOME/tests/java/Muller.java", line 63, characters 8-14
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6339,7 +6720,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ count0 (+ count 1))
 (FORALL (i_4_0) (IMPLIES (EQ i_4_0 (+ i_4 1)) (<= 0 i_4_0))))))))))))))))))
 
-;; Muller_m_ensures_default_po_7, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_7, File "HOME/tests/java/Muller.java", line 63, characters 18-31
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6367,7 +6748,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_4_0 (+ i_4 1))
 (<= i_4_0 (+ (offset_max Object_t_4_7_alloc_table t_4) 1)))))))))))))))))))
 
-;; Muller_m_ensures_default_po_8, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_8, File "HOME/tests/java/Muller.java", line 64, characters 8-18
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6393,7 +6774,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ count0 (+ count 1))
 (FORALL (i_4_0) (IMPLIES (EQ i_4_0 (+ i_4 1)) (<= 0 count0))))))))))))))))))
 
-;; Muller_m_ensures_default_po_9, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_9, File "HOME/tests/java/Muller.java", line 64, characters 22-32
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6419,7 +6800,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ count0 (+ count 1))
 (FORALL (i_4_0) (IMPLIES (EQ i_4_0 (+ i_4 1)) (<= count0 i_4_0))))))))))))))))))
 
-;; Muller_m_ensures_default_po_10, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_10, File "HOME/tests/java/Muller.java", line 65, characters 8-36
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6504,7 +6885,7 @@ why -simplify [...] why/Muller.why
 (< (- (+ (offset_max Object_t_4_7_alloc_table t_4) 1) i_4_0) (- (+ (offset_max
                                                                    Object_t_4_7_alloc_table t_4) 1) i_4)))))))))))))))))))
 
-;; Muller_m_ensures_default_po_13, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_13, File "HOME/tests/java/Muller.java", line 63, characters 8-14
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6528,7 +6909,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (<= result0 0)
 (FORALL (i_4_0) (IMPLIES (EQ i_4_0 (+ i_4 1)) (<= 0 i_4_0))))))))))))))))
 
-;; Muller_m_ensures_default_po_14, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_14, File "HOME/tests/java/Muller.java", line 63, characters 18-31
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6554,7 +6935,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_4_0 (+ i_4 1))
 (<= i_4_0 (+ (offset_max Object_t_4_7_alloc_table t_4) 1)))))))))))))))))
 
-;; Muller_m_ensures_default_po_15, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_15, File "HOME/tests/java/Muller.java", line 64, characters 8-18
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6578,7 +6959,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (<= result0 0)
 (FORALL (i_4_0) (IMPLIES (EQ i_4_0 (+ i_4 1)) (<= 0 count))))))))))))))))
 
-;; Muller_m_ensures_default_po_16, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_16, File "HOME/tests/java/Muller.java", line 64, characters 22-32
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6602,7 +6983,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (<= result0 0)
 (FORALL (i_4_0) (IMPLIES (EQ i_4_0 (+ i_4 1)) (<= count i_4_0))))))))))))))))
 
-;; Muller_m_ensures_default_po_17, File "HOME/tests/java/Muller.java", line 63, characters 8-109
+;; Muller_m_ensures_default_po_17, File "HOME/tests/java/Muller.java", line 65, characters 8-36
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6681,7 +7062,7 @@ why -simplify [...] why/Muller.why
 (< (- (+ (offset_max Object_t_4_7_alloc_table t_4) 1) i_4_0) (- (+ (offset_max
                                                                    Object_t_4_7_alloc_table t_4) 1) i_4)))))))))))))))))
 
-;; Muller_m_ensures_default_po_20, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_20, File "HOME/tests/java/Muller.java", line 74, characters 8-14
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6714,7 +7095,7 @@ why -simplify [...] why/Muller.why
          (instanceof Object_Muller_m_9_tag_table result0 intM_tag))))
 (FORALL (count0) (IMPLIES (EQ count0 0) (<= 0 0))))))))))))))))))
 
-;; Muller_m_ensures_default_po_21, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_21, File "HOME/tests/java/Muller.java", line 74, characters 18-31
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6749,7 +7130,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ count0 0)
 (<= 0 (+ (offset_max Object_t_4_7_alloc_table t_4) 1)))))))))))))))))))
 
-;; Muller_m_ensures_default_po_22, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_22, File "HOME/tests/java/Muller.java", line 75, characters 8-18
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6782,7 +7163,7 @@ why -simplify [...] why/Muller.why
          (instanceof Object_Muller_m_9_tag_table result0 intM_tag))))
 (FORALL (count0) (IMPLIES (EQ count0 0) (<= 0 count0))))))))))))))))))
 
-;; Muller_m_ensures_default_po_23, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_23, File "HOME/tests/java/Muller.java", line 75, characters 22-32
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6815,7 +7196,7 @@ why -simplify [...] why/Muller.why
          (instanceof Object_Muller_m_9_tag_table result0 intM_tag))))
 (FORALL (count0) (IMPLIES (EQ count0 0) (<= count0 0))))))))))))))))))
 
-;; Muller_m_ensures_default_po_24, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_24, File "HOME/tests/java/Muller.java", line 76, characters 8-36
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6850,7 +7231,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ count0 0)
 (EQ count0 (num_of_pos 0 (- 0 1) t_4 intM_intP_t_4_7)))))))))))))))))))
 
-;; Muller_m_ensures_default_po_25, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_25, File "HOME/tests/java/Muller.java", line 74, characters 8-14
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6909,7 +7290,7 @@ why -simplify [...] why/Muller.why
          (|why__store| intM_intP_Muller_m_9 (shift result0 count1) result3))
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 0 i_5_0))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_26, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_26, File "HOME/tests/java/Muller.java", line 74, characters 18-31
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -6970,7 +7351,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= i_5_0 (+ (offset_max Object_t_4_7_alloc_table t_4) 1)))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_27, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_27, File "HOME/tests/java/Muller.java", line 75, characters 8-18
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -7029,7 +7410,7 @@ why -simplify [...] why/Muller.why
          (|why__store| intM_intP_Muller_m_9 (shift result0 count1) result3))
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 0 count2))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_28, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_28, File "HOME/tests/java/Muller.java", line 75, characters 22-32
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -7088,7 +7469,7 @@ why -simplify [...] why/Muller.why
          (|why__store| intM_intP_Muller_m_9 (shift result0 count1) result3))
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= count2 i_5_0))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_29, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_29, File "HOME/tests/java/Muller.java", line 76, characters 8-36
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -7272,7 +7653,7 @@ why -simplify [...] why/Muller.why
 (< (- (+ (offset_max Object_t_4_7_alloc_table t_4) 1) i_5_0) (- (+ (offset_max
                                                                    Object_t_4_7_alloc_table t_4) 1) i_5)))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_32, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_32, File "HOME/tests/java/Muller.java", line 74, characters 8-14
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -7323,7 +7704,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (<= result2 0)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 0 i_5_0)))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_33, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_33, File "HOME/tests/java/Muller.java", line 74, characters 18-31
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -7376,7 +7757,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_5_0 (+ i_5 1))
 (<= i_5_0 (+ (offset_max Object_t_4_7_alloc_table t_4) 1))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_34, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_34, File "HOME/tests/java/Muller.java", line 75, characters 8-18
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -7427,7 +7808,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (<= result2 0)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= 0 count1)))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_35, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_35, File "HOME/tests/java/Muller.java", line 75, characters 22-32
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -7478,7 +7859,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (<= result2 0)
 (FORALL (i_5_0) (IMPLIES (EQ i_5_0 (+ i_5 1)) (<= count1 i_5_0)))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_36, File "HOME/tests/java/Muller.java", line 74, characters 8-109
+;; Muller_m_ensures_default_po_36, File "HOME/tests/java/Muller.java", line 76, characters 8-36
 (FORALL (t_4)
 (FORALL (Object_t_4_7_alloc_table)
 (FORALL (intM_intP_t_4_7)
@@ -8821,9 +9202,13 @@ type Object
 
 type interface
 
-logic Muller_tag :  -> Object tag_id
+logic Exception_tag :  -> Object tag_id
 
 logic Object_tag :  -> Object tag_id
+
+axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
+
+logic Muller_tag :  -> Object tag_id
 
 axiom Muller_parenttag_Object: parenttag(Muller_tag, Object_tag)
 
@@ -8905,6 +9290,10 @@ axiom interface_tags:
 predicate left_valid_struct_Object(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = (offset_min(Object_alloc_table,
   p) <= a)
+
+predicate left_valid_struct_Exception(p: Object pointer, a: int,
+  Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
+  Object_alloc_table)
 
 predicate left_valid_struct_Muller(p: Object pointer, a: int,
   Object_alloc_table: Object alloc_table) = left_valid_struct_Object(p, a,
@@ -8998,6 +9387,10 @@ predicate right_valid_struct_Object(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_Exception(p: Object pointer, b: int,
+  Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
+  Object_alloc_table)
+
 predicate right_valid_struct_Muller(p: Object pointer, b: int,
   Object_alloc_table: Object alloc_table) = right_valid_struct_Object(p, b,
   Object_alloc_table)
@@ -9033,6 +9426,10 @@ predicate strict_valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) = a) and
    (offset_max(Object_alloc_table, p) = b))
 
+predicate strict_valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
+  b, Object_alloc_table)
+
 predicate strict_valid_struct_Muller(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
@@ -9058,6 +9455,10 @@ predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
+  a, b, bitvector_alloc_table)
 
 predicate valid_bitvector_struct_Muller(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
@@ -9095,6 +9496,10 @@ predicate valid_struct_Object(p: Object pointer, a: int, b: int,
   ((offset_min(Object_alloc_table, p) <= a) and
    (offset_max(Object_alloc_table, p) >= b))
 
+predicate valid_struct_Exception(p: Object pointer, a: int, b: int,
+  Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
+  Object_alloc_table)
+
 predicate valid_struct_Muller(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
   Object_alloc_table)
@@ -9121,28 +9526,30 @@ goal Muller_m_ensures_default_po_1:
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_54": (0 <= 0))
+  ("JC_69": ("JC_64": ("JC_64": (0 <= 0))))
 
 goal Muller_m_ensures_default_po_2:
   forall t_4:Object pointer.
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_54": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_69":
+  ("JC_65":
+  ("JC_65": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal Muller_m_ensures_default_po_3:
   forall t_4:Object pointer.
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_54": (0 <= 0))
+  ("JC_69": ("JC_66": ("JC_66": (0 <= 0))))
 
 goal Muller_m_ensures_default_po_4:
   forall t_4:Object pointer.
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_54": (0 <= 0))
+  ("JC_69": ("JC_67": ("JC_67": (0 <= 0))))
 
 goal Muller_m_ensures_default_po_5:
   forall t_4:Object pointer.
@@ -9151,7 +9558,8 @@ goal Muller_m_ensures_default_po_5:
   int) memory.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_54": (0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_69":
+  ("JC_68": ("JC_68": (0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal Muller_m_ensures_default_po_6:
   forall t_4:Object pointer.
@@ -9162,12 +9570,12 @@ goal Muller_m_ensures_default_po_6:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9182,7 +9590,7 @@ goal Muller_m_ensures_default_po_6:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (0 <= i_4_0))
+  ("JC_69": ("JC_64": ("JC_64": (0 <= i_4_0))))
 
 goal Muller_m_ensures_default_po_7:
   forall t_4:Object pointer.
@@ -9193,12 +9601,12 @@ goal Muller_m_ensures_default_po_7:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9213,7 +9621,9 @@ goal Muller_m_ensures_default_po_7:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_69":
+  ("JC_65":
+  ("JC_65": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal Muller_m_ensures_default_po_8:
   forall t_4:Object pointer.
@@ -9224,12 +9634,12 @@ goal Muller_m_ensures_default_po_8:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9244,7 +9654,7 @@ goal Muller_m_ensures_default_po_8:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (0 <= count0))
+  ("JC_69": ("JC_66": ("JC_66": (0 <= count0))))
 
 goal Muller_m_ensures_default_po_9:
   forall t_4:Object pointer.
@@ -9255,12 +9665,12 @@ goal Muller_m_ensures_default_po_9:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9275,7 +9685,7 @@ goal Muller_m_ensures_default_po_9:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (count0 <= i_4_0))
+  ("JC_69": ("JC_67": ("JC_67": (count0 <= i_4_0))))
 
 goal Muller_m_ensures_default_po_10:
   forall t_4:Object pointer.
@@ -9286,12 +9696,12 @@ goal Muller_m_ensures_default_po_10:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9306,7 +9716,9 @@ goal Muller_m_ensures_default_po_10:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (count0 = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_69":
+  ("JC_68":
+  ("JC_68": (count0 = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal Muller_m_ensures_default_po_11:
   forall t_4:Object pointer.
@@ -9317,12 +9729,12 @@ goal Muller_m_ensures_default_po_11:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9337,7 +9749,7 @@ goal Muller_m_ensures_default_po_11:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  (0 <= ("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
+  (0 <= ("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
 
 goal Muller_m_ensures_default_po_12:
   forall t_4:Object pointer.
@@ -9348,12 +9760,12 @@ goal Muller_m_ensures_default_po_12:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9368,8 +9780,8 @@ goal Muller_m_ensures_default_po_12:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  (("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4_0)) < 
-  ("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
+  (("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4_0)) < 
+  ("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
 
 goal Muller_m_ensures_default_po_13:
   forall t_4:Object pointer.
@@ -9380,12 +9792,12 @@ goal Muller_m_ensures_default_po_13:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9398,7 +9810,7 @@ goal Muller_m_ensures_default_po_13:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (0 <= i_4_0))
+  ("JC_69": ("JC_64": ("JC_64": (0 <= i_4_0))))
 
 goal Muller_m_ensures_default_po_14:
   forall t_4:Object pointer.
@@ -9409,12 +9821,12 @@ goal Muller_m_ensures_default_po_14:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9427,7 +9839,9 @@ goal Muller_m_ensures_default_po_14:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_69":
+  ("JC_65":
+  ("JC_65": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal Muller_m_ensures_default_po_15:
   forall t_4:Object pointer.
@@ -9438,12 +9852,12 @@ goal Muller_m_ensures_default_po_15:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9456,7 +9870,7 @@ goal Muller_m_ensures_default_po_15:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (0 <= count))
+  ("JC_69": ("JC_66": ("JC_66": (0 <= count))))
 
 goal Muller_m_ensures_default_po_16:
   forall t_4:Object pointer.
@@ -9467,12 +9881,12 @@ goal Muller_m_ensures_default_po_16:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9485,7 +9899,7 @@ goal Muller_m_ensures_default_po_16:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (count <= i_4_0))
+  ("JC_69": ("JC_67": ("JC_67": (count <= i_4_0))))
 
 goal Muller_m_ensures_default_po_17:
   forall t_4:Object pointer.
@@ -9496,12 +9910,12 @@ goal Muller_m_ensures_default_po_17:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9514,7 +9928,9 @@ goal Muller_m_ensures_default_po_17:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_54": (count = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_69":
+  ("JC_68":
+  ("JC_68": (count = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal Muller_m_ensures_default_po_18:
   forall t_4:Object pointer.
@@ -9525,12 +9941,12 @@ goal Muller_m_ensures_default_po_18:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9543,7 +9959,7 @@ goal Muller_m_ensures_default_po_18:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  (0 <= ("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
+  (0 <= ("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
 
 goal Muller_m_ensures_default_po_19:
   forall t_4:Object pointer.
@@ -9554,12 +9970,12 @@ goal Muller_m_ensures_default_po_19:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9572,8 +9988,8 @@ goal Muller_m_ensures_default_po_19:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  (("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4_0)) < 
-  ("JC_57": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
+  (("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4_0)) < 
+  ("JC_72": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_4)))
 
 goal Muller_m_ensures_default_po_20:
   forall t_4:Object pointer.
@@ -9585,12 +10001,12 @@ goal Muller_m_ensures_default_po_20:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9609,7 +10025,7 @@ goal Muller_m_ensures_default_po_20:
      instanceof(Object_Muller_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_60": (0 <= 0))
+  ("JC_80": ("JC_75": ("JC_75": (0 <= 0))))
 
 goal Muller_m_ensures_default_po_21:
   forall t_4:Object pointer.
@@ -9621,12 +10037,12 @@ goal Muller_m_ensures_default_po_21:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9645,7 +10061,9 @@ goal Muller_m_ensures_default_po_21:
      instanceof(Object_Muller_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_60": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_80":
+  ("JC_76":
+  ("JC_76": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal Muller_m_ensures_default_po_22:
   forall t_4:Object pointer.
@@ -9657,12 +10075,12 @@ goal Muller_m_ensures_default_po_22:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9681,7 +10099,7 @@ goal Muller_m_ensures_default_po_22:
      instanceof(Object_Muller_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_60": (0 <= count0))
+  ("JC_80": ("JC_77": ("JC_77": (0 <= count0))))
 
 goal Muller_m_ensures_default_po_23:
   forall t_4:Object pointer.
@@ -9693,12 +10111,12 @@ goal Muller_m_ensures_default_po_23:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9717,7 +10135,7 @@ goal Muller_m_ensures_default_po_23:
      instanceof(Object_Muller_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_60": (count0 <= 0))
+  ("JC_80": ("JC_78": ("JC_78": (count0 <= 0))))
 
 goal Muller_m_ensures_default_po_24:
   forall t_4:Object pointer.
@@ -9729,12 +10147,12 @@ goal Muller_m_ensures_default_po_24:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9753,7 +10171,9 @@ goal Muller_m_ensures_default_po_24:
      instanceof(Object_Muller_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_60": (count0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_80":
+  ("JC_79":
+  ("JC_79": (count0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal Muller_m_ensures_default_po_25:
   forall t_4:Object pointer.
@@ -9765,12 +10185,12 @@ goal Muller_m_ensures_default_po_25:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9793,12 +10213,12 @@ goal Muller_m_ensures_default_po_25:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -9819,7 +10239,7 @@ goal Muller_m_ensures_default_po_25:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (0 <= i_5_0))
+  ("JC_80": ("JC_75": ("JC_75": (0 <= i_5_0))))
 
 goal Muller_m_ensures_default_po_26:
   forall t_4:Object pointer.
@@ -9831,12 +10251,12 @@ goal Muller_m_ensures_default_po_26:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9859,12 +10279,12 @@ goal Muller_m_ensures_default_po_26:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -9885,7 +10305,9 @@ goal Muller_m_ensures_default_po_26:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_80":
+  ("JC_76":
+  ("JC_76": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal Muller_m_ensures_default_po_27:
   forall t_4:Object pointer.
@@ -9897,12 +10319,12 @@ goal Muller_m_ensures_default_po_27:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9925,12 +10347,12 @@ goal Muller_m_ensures_default_po_27:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -9951,7 +10373,7 @@ goal Muller_m_ensures_default_po_27:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (0 <= count2))
+  ("JC_80": ("JC_77": ("JC_77": (0 <= count2))))
 
 goal Muller_m_ensures_default_po_28:
   forall t_4:Object pointer.
@@ -9963,12 +10385,12 @@ goal Muller_m_ensures_default_po_28:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9991,12 +10413,12 @@ goal Muller_m_ensures_default_po_28:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10017,7 +10439,7 @@ goal Muller_m_ensures_default_po_28:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (count2 <= i_5_0))
+  ("JC_80": ("JC_78": ("JC_78": (count2 <= i_5_0))))
 
 goal Muller_m_ensures_default_po_29:
   forall t_4:Object pointer.
@@ -10029,12 +10451,12 @@ goal Muller_m_ensures_default_po_29:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10057,12 +10479,12 @@ goal Muller_m_ensures_default_po_29:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10083,7 +10505,9 @@ goal Muller_m_ensures_default_po_29:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (count2 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_80":
+  ("JC_79":
+  ("JC_79": (count2 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal Muller_m_ensures_default_po_30:
   forall t_4:Object pointer.
@@ -10095,12 +10519,12 @@ goal Muller_m_ensures_default_po_30:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10123,12 +10547,12 @@ goal Muller_m_ensures_default_po_30:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10149,7 +10573,7 @@ goal Muller_m_ensures_default_po_30:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (0 <= ("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (0 <= ("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 goal Muller_m_ensures_default_po_31:
   forall t_4:Object pointer.
@@ -10161,12 +10585,12 @@ goal Muller_m_ensures_default_po_31:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10189,12 +10613,12 @@ goal Muller_m_ensures_default_po_31:
   forall i_5:int.
   forall intM_intP_Muller_m_9:(Object,
   int) memory.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10215,8 +10639,8 @@ goal Muller_m_ensures_default_po_31:
   count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
-  ("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
+  ("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 goal Muller_m_ensures_default_po_32:
   forall t_4:Object pointer.
@@ -10228,12 +10652,12 @@ goal Muller_m_ensures_default_po_32:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10254,12 +10678,12 @@ goal Muller_m_ensures_default_po_32:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10272,7 +10696,7 @@ goal Muller_m_ensures_default_po_32:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (0 <= i_5_0))
+  ("JC_80": ("JC_75": ("JC_75": (0 <= i_5_0))))
 
 goal Muller_m_ensures_default_po_33:
   forall t_4:Object pointer.
@@ -10284,12 +10708,12 @@ goal Muller_m_ensures_default_po_33:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10310,12 +10734,12 @@ goal Muller_m_ensures_default_po_33:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10328,7 +10752,9 @@ goal Muller_m_ensures_default_po_33:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))
+  ("JC_80":
+  ("JC_76":
+  ("JC_76": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal Muller_m_ensures_default_po_34:
   forall t_4:Object pointer.
@@ -10340,12 +10766,12 @@ goal Muller_m_ensures_default_po_34:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10366,12 +10792,12 @@ goal Muller_m_ensures_default_po_34:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10384,7 +10810,7 @@ goal Muller_m_ensures_default_po_34:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (0 <= count1))
+  ("JC_80": ("JC_77": ("JC_77": (0 <= count1))))
 
 goal Muller_m_ensures_default_po_35:
   forall t_4:Object pointer.
@@ -10396,12 +10822,12 @@ goal Muller_m_ensures_default_po_35:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10422,12 +10848,12 @@ goal Muller_m_ensures_default_po_35:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10440,7 +10866,7 @@ goal Muller_m_ensures_default_po_35:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (count1 <= i_5_0))
+  ("JC_80": ("JC_78": ("JC_78": (count1 <= i_5_0))))
 
 goal Muller_m_ensures_default_po_36:
   forall t_4:Object pointer.
@@ -10452,12 +10878,12 @@ goal Muller_m_ensures_default_po_36:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10478,12 +10904,12 @@ goal Muller_m_ensures_default_po_36:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10496,7 +10922,9 @@ goal Muller_m_ensures_default_po_36:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_60": (count1 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))
+  ("JC_80":
+  ("JC_79":
+  ("JC_79": (count1 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal Muller_m_ensures_default_po_37:
   forall t_4:Object pointer.
@@ -10508,12 +10936,12 @@ goal Muller_m_ensures_default_po_37:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10534,12 +10962,12 @@ goal Muller_m_ensures_default_po_37:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10552,7 +10980,7 @@ goal Muller_m_ensures_default_po_37:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (0 <= ("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (0 <= ("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 goal Muller_m_ensures_default_po_38:
   forall t_4:Object pointer.
@@ -10564,12 +10992,12 @@ goal Muller_m_ensures_default_po_38:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_54":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_69":
+  (("JC_64": (0 <= i_4)) and
+   (("JC_65": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_66": (0 <= count)) and
+     (("JC_67": (count <= i_4)) and
+      ("JC_68": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10590,12 +11018,12 @@ goal Muller_m_ensures_default_po_38:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_60":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_80":
+  (("JC_75": (0 <= i_5)) and
+   (("JC_76": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_77": (0 <= count1)) and
+     (("JC_78": (count1 <= i_5)) and
+      ("JC_79": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10608,8 +11036,8 @@ goal Muller_m_ensures_default_po_38:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
-  ("JC_63": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
+  ("JC_83": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 goal Muller_m_safety_po_1:
   forall t_4:Object pointer.
@@ -10620,13 +11048,13 @@ goal Muller_m_safety_po_1:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10645,13 +11073,13 @@ goal Muller_m_safety_po_2:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10670,13 +11098,13 @@ goal Muller_m_safety_po_3:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10696,13 +11124,13 @@ goal Muller_m_safety_po_4:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10724,13 +11152,13 @@ goal Muller_m_safety_po_4:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_48": true) ->
-  ("JC_47":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_58": true) ->
+  ("JC_57":
+  (("JC_52": (0 <= i_5)) and
+   (("JC_53": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_54": (0 <= count1)) and
+     (("JC_55": (count1 <= i_5)) and
+      ("JC_56": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10750,13 +11178,13 @@ goal Muller_m_safety_po_5:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10778,13 +11206,13 @@ goal Muller_m_safety_po_5:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_48": true) ->
-  ("JC_47":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_58": true) ->
+  ("JC_57":
+  (("JC_52": (0 <= i_5)) and
+   (("JC_53": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_54": (0 <= count1)) and
+     (("JC_55": (count1 <= i_5)) and
+      ("JC_56": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10804,13 +11232,13 @@ goal Muller_m_safety_po_6:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10832,13 +11260,13 @@ goal Muller_m_safety_po_6:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_48": true) ->
-  ("JC_47":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_58": true) ->
+  ("JC_57":
+  (("JC_52": (0 <= i_5)) and
+   (("JC_53": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_54": (0 <= count1)) and
+     (("JC_55": (count1 <= i_5)) and
+      ("JC_56": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10869,13 +11297,13 @@ goal Muller_m_safety_po_7:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_42": true) ->
-  ("JC_41":
-  ((0 <= i_4) and
-   ((i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count) and
-     ((count <= i_4) and (count = num_of_pos(0, (i_4 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_47": true) ->
+  ("JC_46":
+  (("JC_41": (0 <= i_4)) and
+   (("JC_42": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_43": (0 <= count)) and
+     (("JC_44": (count <= i_4)) and
+      ("JC_45": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10897,13 +11325,13 @@ goal Muller_m_safety_po_7:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_48": true) ->
-  ("JC_47":
-  ((0 <= i_5) and
-   ((i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)) and
-    ((0 <= count1) and
-     ((count1 <= i_5) and (count1 = num_of_pos(0, (i_5 - 1), t_4,
-      intM_intP_t_4_7))))))) ->
+  ("JC_58": true) ->
+  ("JC_57":
+  (("JC_52": (0 <= i_5)) and
+   (("JC_53": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_54": (0 <= count1)) and
+     (("JC_55": (count1 <= i_5)) and
+      ("JC_56": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
