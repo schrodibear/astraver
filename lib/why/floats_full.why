@@ -153,9 +153,11 @@ and
 
 
 
-predicate sign_zero_result(m:mode,x:gen_float) = float_value(x) = 0.0 -> ((m = down -> float_sign(x) = Negative) 
-     	  		    	                                           and 
-				                                          (m <> down -> float_sign(x) = Positive)) 
+predicate sign_zero_result(m:mode,x:gen_float) = 
+  float_value(x) = 0.0 -> 
+    (  (m = down -> float_sign(x) = Negative) 
+     and 
+       (m <> down -> float_sign(x) = Positive)) 
 
 predicate float_less_than_real(x:gen_float,y:real) = (is_finite(x) and float_value(x) <= y) or is_minus_infinity(x)
 
