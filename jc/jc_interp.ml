@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.398 2009-02-06 11:48:40 ayad Exp $ *)
+(* $Id: jc_interp.ml,v 1.399 2009-02-06 15:32:27 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1225,7 +1225,8 @@ let assigns ~type_safe ?region_list before ef locs loc =
   let mems = 
     MemoryMap.fold
       (fun (fi,r) _labs acc -> 
-	 if true (* Option_misc.map_default (RegionList.mem r) true region_list *) then
+	 if (* TODO: bug some assigns \nothing clauses are not translated e.g. in Purse.java *)
+	   Option_misc.map_default (RegionList.mem r) true region_list then
 	   begin
 (*
 	     eprintf "ASSIGNS FOR FIELD %s@." 
