@@ -227,7 +227,7 @@ else
       AC_MSG_ERROR(You need ocamlgraph 0.99b or higher; you may need to compile from sources *http://ocamlgraph.lri.fr/*)
    fi
 fi
-
+rm -f config/check_ocamlgraph.cmo config/check_ocamlgraph.cmi config/check_ocamlgraph.cmx config/check_ocamlgraph$EXE
 # checking local ocamlgraph compilation
 
 if test "$LOCALOCAMLGRAPH" = yes; then
