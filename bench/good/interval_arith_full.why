@@ -1,0 +1,197 @@
+
+	
+let mul_dn (x:gen_float) (y:gen_float) =
+ { is_not_nan(x) and is_not_nan(y) and
+   (float_class(x) = Infinite -> float_value(y) <> 0.0 and diff_sign(x,y)) and
+   (float_class(y) = Infinite -> float_value(x) <> 0.0 and diff_sign(x,y))
+ }
+ (mul_gen_float Double down x y)
+ {
+  float_less_than_real(result,float_value(x)*float_value(y))
+}
+
+  
+
+
+(*
+ forall x1:real. forall y1:real. 
+     (* x: <0 borne inf, y: >0 borne sup -> result: borne inf *) 
+     (float_sign(x) = Negative and float_sign(y) = Positive and
+      float_less_than_real(x,x1) and real_less_than_float(y1,y) ->
+      float_less_than_real(result,x1*y1))
+    and 
+     (* x: >0 borne sup, y: <0 borne inf -> result: borne inf *) 
+     (float_sign(x) = Positive and float_sign(y) = Negative and
+      real_less_than_float(x1,x) and float_less_than_real(y,y1) ->
+      float_less_than_real(result,x1*y1))
+    and
+     (* x: <0 borne sup, y: <0 borne sup -> result: borne inf *) 
+     (float_sign(x) = Negative and float_sign(y) = Negative and
+      real_less_than_float(x1,x) and real_less_than_float(y1,y) ->
+      float_less_than_real(result,x1*y1))
+    and 
+     (* x: >0 borne inf, y: >0 borne inf -> result: borne inf *) 
+     (float_sign(x) = Positive and float_sign(y) = Positive and
+      float_less_than_real(x,x1) and float_less_than_real(y,y1) ->
+      float_less_than_real(result,x1*y1))
+*)
+
+
+
+
+let mul_up (x:gen_float) (y:gen_float) =
+ { is_not_nan(x) and is_not_nan(y) and 
+   (float_class(x) = Infinite -> float_value(y) <> 0.0 and diff_sign(x,y)) and
+   (float_class(y) = Infinite -> float_value(x) <> 0.0 and diff_sign(x,y))
+}
+(neg_gen_float Double down (mul_gen_float Double down x (neg_gen_float Double down y)))
+ {
+real_less_than_float(float_value(x)*float_value(y),result)
+}
+
+
+
+
+let min (x:gen_float) (y:gen_float) =
+ { is_not_nan(x) and is_not_nan(y) 
+}
+if (lt_gen_float x y) then x else y
+ { float_less_than_float(result,x) and float_less_than_float(result,y)
+} 
+
+
+
+let max (x:gen_float) (y:gen_float) =
+ { is_not_nan(x) and is_not_nan(y) 
+}
+if (gt_gen_float x y) then x else y
+{  float_less_than_float(x,result) and float_less_than_float(y,result)
+} 
+
+
+
+
+predicate is_interval(l:gen_float,u:gen_float)= (float_class(l)= Finite or (float_class(l)= Infinite and 
+                                                 float_sign(l)= Negative))
+                                                 and 
+						(float_class(u)= Finite or (float_class(u)= Infinite and 
+                                                 float_sign(u)= Positive))
+
+predicate in_interval(a:real,l:gen_float,u:gen_float) = float_less_than_real(l,a) and real_less_than_float(a,u)
+
+
+
+
+
+
+parameter zl:gen_float ref
+parameter zu:gen_float ref
+
+let add (xl:gen_float) (xu:gen_float) (yl:gen_float) (yu:gen_float) =
+{ }
+begin
+zl := (add_gen_float Double down xl yl);
+zu := (neg_gen_float Double down (sub_gen_float Double down (neg_gen_float Double down xu) yu))
+end
+{ forall a:real. forall b:real. 
+         in_interval(a,xl,xu) and in_interval(b,yl,yu) -> in_interval(a+b,zl,zu)
+}
+
+
+
+
+
+
+
+parameter tl:gen_float ref
+parameter tu:gen_float ref
+parameter zero:gen_float ref
+
+let mul (xl:gen_float) (xu:gen_float) (yl:gen_float) (yu:gen_float) =
+{ is_interval(xl,xu) and is_interval(yl,yu) 
+}
+  zero := gen_float_of_real Double down 0.0;
+  if (lt_gen_float xl !zero) then
+    if (gt_gen_float xu !zero) then
+      if (lt_gen_float yl !zero) then
+        if (gt_gen_float yu !zero) then
+            begin
+	    tl := min (mul_dn xl yu) (mul_dn xu yl);
+            tu := max (mul_up xl yl) (mul_up xu yu)
+	    end
+        else           
+            begin
+	    tl := mul_dn xu yl;
+            tu := mul_up xl yl
+	    end
+      else
+        begin
+        if (gt_gen_float yu !zero) then
+            begin
+	    tl := mul_dn xl yu;
+            tu := mul_up xu yu
+	    end
+        else
+            begin           
+            tl := !zero;
+            tu := !zero 
+	    end
+	end
+    else
+      begin
+      if (lt_gen_float yl !zero) then
+        begin
+	if (gt_gen_float yu !zero) then
+            begin
+	    tl := mul_dn xl yu;
+            tu := mul_up xl yl
+	    end
+        else           
+            begin
+	    tl := mul_dn xu yu;
+            tu := mul_up xl yl
+	    end
+	end
+      else
+        if (gt_gen_float yu !zero) then
+            begin 
+	    tl := mul_dn xl yu;
+            tu := mul_up xu yl
+	    end
+        else          
+            begin
+	    tl := !zero;
+            tu := !zero
+	    end
+      end
+  else
+    if (gt_gen_float xu !zero) then
+      if (lt_gen_float yl !zero) then
+        if (gt_gen_float yu !zero) then
+            begin
+	    tl := mul_dn xu yl;
+            tu := mul_up xu yu
+	    end
+        else           
+            begin
+	    tl := mul_dn xu yl;
+            tu := mul_up xl yu
+	    end
+      else
+        if (gt_gen_float yu !zero) then
+            begin
+	    tl := mul_dn xl yl;
+            tu := mul_up xu yu
+	    end
+        else           
+            begin
+	    tl := !zero;
+            tu := !zero
+	    end
+    else               
+        begin
+	tl := !zero;
+        tu := !zero
+        end
+{ is_interval(zl,zu) and forall a:real. forall b:real. 
+                         in_interval(a,xl,xu) and in_interval(b,yl,yu) -> in_interval(a+b,tl,tu)}

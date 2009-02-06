@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.37 2008-11-17 15:48:29 marche Exp $ *)
+(* $Id: jc_options.mli,v 1.38 2009-02-06 11:48:40 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -64,6 +64,8 @@ val ai_domain : Jc_env.abstract_domain ref
 val int_model : Jc_env.int_model ref
 val trust_ai : bool
 val fast_ai : bool
+
+val current_rounding_mode : Jc_env.float_rounding_mode ref
 
 val verify_behavior: string -> bool
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.44 2008-11-17 15:48:29 marche Exp $ i*)
+(*i $Id: jc_options.ml,v 1.45 2009-02-06 11:48:40 ayad Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -81,6 +81,8 @@ let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
 let annotation_sem = ref AnnotNone
 let ai_domain = ref AbsNone
+
+let current_rounding_mode = ref FRMnearest
 
 let int_model = ref IMbounded
 let interprocedural = ref false

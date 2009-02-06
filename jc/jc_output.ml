@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.137 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.138 2009-02-06 11:48:40 ayad Exp $ *)
 
 open Format
 open Jc_env
@@ -60,6 +60,7 @@ type jc_decl =
   | JCannotation_policy of Jc_env.annotation_sem
   | JCabstract_domain of Jc_env.abstract_domain 
   | JCint_model of Jc_env.int_model      
+  | JCfloat_rounding_mode of Jc_env.float_rounding_mode      
 
 (*
 let lbin_op op =
@@ -535,6 +536,14 @@ let string_of_int_model p =
     | Jc_env.IMbounded -> "bounded"
     | Jc_env.IMmodulo -> "modulo"
 
+let string_of_float_rounding_mode p =
+  match p with
+    | Jc_env.FRMnearest -> "nearest"
+    | Jc_env.FRMdownward -> "downward"
+    | Jc_env.FRMupward -> "up"
+    | Jc_env.FRMtowardzero -> "to_zero"
+    | Jc_env.FRMtowardawayzero -> "nearest_away"
+
 let rec print_decl fmt d =
   match d with
     | JCinvariant_policy p ->
@@ -547,6 +556,8 @@ let rec print_decl fmt d =
         fprintf fmt "# AbstractDomain = %s@\n" (string_of_abstract_domain p)
     | JCint_model p ->
         fprintf fmt "# IntModel = %s@\n" (string_of_int_model p)
+    | JCfloat_rounding_mode p ->
+        fprintf fmt "# FloatRoundingMode = %s@\n" (string_of_float_rounding_mode p)
     | JCfun_def(ty,id,params,spec,body) ->
 	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." print_type ty id
 	  (print_list comma fun_param) params 

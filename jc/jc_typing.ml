@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.276 2009-01-21 09:14:47 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.277 2009-02-06 11:48:40 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -847,7 +847,17 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	      else if is_float te1#typ then 
 		double_type, te1#region, te1#node
 	      else
-		typing_error e#pos "bad cast to double"
+		typing_error e#pos "bad cast to double"	  
+	  | JCTnative Tfloat -> 
+	      if is_real te1#typ then 
+		float_type, te1#region, JCTreal_cast(te1,Round_float Round_nearest_even)
+	      else if is_float te1#typ then
+		float_type, te1#region, te1#node
+	      else if is_double te1#typ then 
+		float_type, te1#region, JCTreal_cast(te1,Round_float Round_nearest_even) 
+	      else
+		typing_error e#pos "bad cast to float"
+
 	  | JCTnative _ -> assert false (* TODO *)
 	  | JCTenum ri ->
 	      if is_integer te1#typ then
@@ -1511,7 +1521,14 @@ let make_unary_op loc (op : Jc_ast.unary_op) e2 =
                 typing_error loc "boolean expected"
         in (JCTnative t,dummy_region,
             JCEunary(unary_op (operator_of_native t) op, e2))
-    | `Uminus | `Ubw_not as op -> 
+    | `Uminus -> 
+        if is_numeric t2 || is_gen_float t2 then
+          let t = lub_numeric_types t2 t2 in
+          (JCTnative t,dummy_region,
+           JCEunary(unary_op (operator_of_native t) op, e2))
+        else
+          typing_error loc "numeric type expected"
+    | `Ubw_not -> 
         if is_numeric t2 then
           let t = lub_numeric_types t2 t2 in
           (JCTnative t,dummy_region,
@@ -1885,7 +1902,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		float_type, te1#region, 
 	        JCEreal_cast(te1,Round_float Round_nearest_even)
 	      else
-		typing_error e#pos "bad cast to double"
+		typing_error e#pos "bad cast to float"
 	  | JCTnative _ -> assert false (* TODO *)
 	  | JCTenum ri ->
 	      if is_integer te1#typ then

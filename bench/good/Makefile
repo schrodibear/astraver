@@ -10,6 +10,8 @@ tc:
 
 WHY=../../bin/why.opt
 
+GWHY=../../bin/gwhy.opt
+
 %_why.v %_valid.v: %.mlw $(WHY)
 	$(WHY) -V -d --coq-v8 --valid --coq-tactic intuition $<
 
@@ -19,3 +21,15 @@ WHY=../../bin/why.opt
 %_valid.vo: %_valid.v %_why.vo
 	coqc -I ../../lib/coq $<
 
+
+interval_arith_full_why.v: interval_arith_full.why $(WHY)
+	$(WHY) -V --coq-v8 --coq-tactic intuition ../../lib/why/floats_full.why $<
+
+interval_arith_full.gui: interval_arith_full.why $(GWHY)
+	$(GWHY) -split-user-conj -V ../../lib/why/floats_full.why $<
+
+tes1_floats_why.v: tes1_floats.why $(WHY)
+	$(WHY) -V --coq-v8 --coq-tactic intuition ../../lib/why/floats_full.why $<
+
+tes1_floats.gui: tes1_floats.why $(GWHY)
+	$(GWHY) -split-user-conj -V ../../lib/why/floats_full.why $<

@@ -7,25 +7,23 @@ Require Export Veltkamp.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "/users/demons/ayad/ppc/why/examples-c/float/Malcolm.c", line 8, characters 13-17: *)
 (*Why goal*) Lemma malcolm1_impl_po_1 : 
   forall (A: double),
   forall (HW_2: A = (r_to_d nearest_even (IZR 2))),
-  (* File "Malcolm.c", line 8, characters 14-18 *) (eq (d_to_r A) (IZR 2)).
+  (* CADUCEUS_4 *) (* CADUCEUS_4 *) (eq (d_to_r A) (IZR 2)).
 Proof.
 intros.
 rewrite HW_2;auto with zarith real.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "/users/demons/ayad/ppc/why/examples-c/float/Malcolm.c", line 10, characters 16-72: *)
 (*Why goal*) Lemma malcolm1_impl_po_2 : 
   forall (A: double),
   forall (HW_2: A = (r_to_d nearest_even (IZR 2))),
-  forall (HW_3: (* File "Malcolm.c", line 8, characters 14-18 *)
-                (eq (d_to_r A) (IZR 2))),
-  (* File "Malcolm.c", line 10, characters 17-73 *)
-  ((eq (d_to_r A) (Rpower (IZR 2) (IZR (my_log (d_to_r A))))) /\ 1 <=
-  (my_log (d_to_r A)) /\ (my_log (d_to_r A)) <= 53).
+  forall (HW_3: (* CADUCEUS_4 *) (eq (d_to_r A) (IZR 2))),
+  (* CADUCEUS_2 *) ((eq (d_to_r A) (powerRZ (IZR 2) (my_log (d_to_r A)))) /\
+  1 <= (my_log (d_to_r A)) /\ (my_log (d_to_r A)) <= 53).
 Proof.
 intros.
 rewrite HW_3.
@@ -38,28 +36,25 @@ unfold Rpower; simpl.
 ring (1*ln 2)%R; rewrite exp_ln; auto with real.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "/users/demons/ayad/ppc/why/examples-c/float/Malcolm.c", line 10, characters 16-72: *)
 (*Why goal*) Lemma malcolm1_impl_po_3 : 
   forall (A: double),
   forall (HW_2: A = (r_to_d nearest_even (IZR 2))),
-  forall (HW_3: (* File "Malcolm.c", line 8, characters 14-18 *)
-                (eq (d_to_r A) (IZR 2))),
-  forall (HW_4: (* File "Malcolm.c", line 10, characters 17-73 *)
-                ((eq (d_to_r A) (Rpower (IZR 2) (IZR (my_log (d_to_r A))))) /\
-                1 <= (my_log (d_to_r A)) /\ (my_log (d_to_r A)) <= 53)),
+  forall (HW_3: (* CADUCEUS_4 *) (eq (d_to_r A) (IZR 2))),
   forall (A0: double),
-  forall (HW_5: (* File "Malcolm.c", line 10, characters 17-73 *)
-                ((eq (d_to_r A0) (Rpower (IZR 2) (IZR (my_log (d_to_r A0))))) /\
+  forall (HW_4: (* CADUCEUS_2 *)
+                ((eq (d_to_r A0) (powerRZ (IZR 2) (my_log (d_to_r A0)))) /\
                 1 <= (my_log (d_to_r A0)) /\ (my_log (d_to_r A0)) <= 53)),
-  forall (HW_6: ~(eq (d_to_r A0) (d_to_r (add_double nearest_even A0
-                                          (r_to_d nearest_even (IZR 1)))))),
+  forall (HW_5: ~(eq (d_to_r A0) (d_to_r
+                                  (add_double
+                                   nearest_even A0 (r_to_d
+                                                    nearest_even (IZR 1)))))),
   forall (A1: double),
-  forall (HW_7: A1 = (mul_double nearest_even A0
-                      (r_to_d nearest_even (IZR 2)))),
-  (* File "Malcolm.c", line 10, characters 17-73 *)
-  ((eq (d_to_r A1) (Rpower (IZR 2) (IZR (my_log (d_to_r A1))))) /\ 1 <=
-  (my_log (d_to_r A1)) /\ (my_log (d_to_r A1)) <= 53) /\
-  (Zwf 0 (53 - (my_log (d_to_r A1))) (53 - (my_log (d_to_r A0)))).
+  forall (HW_6: A1 =
+                (mul_double nearest_even A0 (r_to_d nearest_even (IZR 2)))),
+  (* CADUCEUS_2 *)
+  ((eq (d_to_r A1) (powerRZ (IZR 2) (my_log (d_to_r A1)))) /\ 1 <=
+  (my_log (d_to_r A1)) /\ (my_log (d_to_r A1)) <= 53).
 Proof.
 intros.
 unfold Zwf.
@@ -162,22 +157,25 @@ apply trans_eq with (Zpower_nat radix 52*
     powerRZ radix (Fexp (Float (Zpower_nat radix 52) 1)))%R; auto.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file "/users/demons/ayad/ppc/why/examples-c/float/Malcolm.c", line 12, characters 15-27: *)
 (*Why goal*) Lemma malcolm1_impl_po_4 : 
   forall (A: double),
   forall (HW_2: A = (r_to_d nearest_even (IZR 2))),
-  forall (HW_3: (* File "Malcolm.c", line 8, characters 14-18 *)
-                (eq (d_to_r A) (IZR 2))),
-  forall (HW_4: (* File "Malcolm.c", line 10, characters 17-73 *)
-                ((eq (d_to_r A) (Rpower (IZR 2) (IZR (my_log (d_to_r A))))) /\
-                1 <= (my_log (d_to_r A)) /\ (my_log (d_to_r A)) <= 53)),
+  forall (HW_3: (* CADUCEUS_4 *) (eq (d_to_r A) (IZR 2))),
   forall (A0: double),
-  forall (HW_5: (* File "Malcolm.c", line 10, characters 17-73 *)
-                ((eq (d_to_r A0) (Rpower (IZR 2) (IZR (my_log (d_to_r A0))))) /\
+  forall (HW_4: (* CADUCEUS_2 *)
+                ((eq (d_to_r A0) (powerRZ (IZR 2) (my_log (d_to_r A0)))) /\
                 1 <= (my_log (d_to_r A0)) /\ (my_log (d_to_r A0)) <= 53)),
-  forall (HW_8: (eq (d_to_r A0) (d_to_r (add_double nearest_even A0
-                                         (r_to_d nearest_even (IZR 1)))))),
-  (eq (d_to_r A0) (Rpower (IZR 2) (IZR 53))).
+  forall (HW_5: ~(eq (d_to_r A0) (d_to_r
+                                  (add_double
+                                   nearest_even A0 (r_to_d
+                                                    nearest_even (IZR 1)))))),
+  forall (A1: double),
+  forall (HW_6: A1 =
+                (mul_double nearest_even A0 (r_to_d nearest_even (IZR 2)))),
+  (Zwf 0 ((* CADUCEUS_3 *) (53 - (my_log (d_to_r A1)))) ((* CADUCEUS_3 *)
+                                                        (53 -
+                                                        (my_log (d_to_r A0))))).
 Proof.
 intros.
 elim HW_5; intros.
@@ -224,5 +222,24 @@ apply RoundedModeProjectorIdemEq with bdouble 53%nat (EvenClosest bdouble radix 
 replace  (FtoR radix f) with (FtoR radix df' + 1)%R; auto with zarith.
 rewrite H6; unfold FtoR, Zsucc; simpl; rewrite plus_IZR; simpl.
 rewrite H3; ring.
+Save.
+
+(* Why obligation from file "/users/demons/ayad/ppc/why/examples-c/float/Malcolm.c", line 3, characters 12-32: *)
+(*Why goal*) Lemma malcolm1_impl_po_5 : 
+  forall (A: double),
+  forall (HW_2: A = (r_to_d nearest_even (IZR 2))),
+  forall (HW_3: (* CADUCEUS_4 *) (eq (d_to_r A) (IZR 2))),
+  forall (A0: double),
+  forall (HW_4: (* CADUCEUS_2 *)
+                ((eq (d_to_r A0) (powerRZ (IZR 2) (my_log (d_to_r A0)))) /\
+                1 <= (my_log (d_to_r A0)) /\ (my_log (d_to_r A0)) <= 53)),
+  forall (HW_7: (eq (d_to_r A0) (d_to_r
+                                 (add_double
+                                  nearest_even A0 (r_to_d
+                                                   nearest_even (IZR 1)))))),
+  (* CADUCEUS_1 *) (eq (d_to_r A0) (powerRZ (IZR 2) 53)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

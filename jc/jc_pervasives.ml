@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.142 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.143 2009-02-06 11:48:40 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -982,7 +982,20 @@ let builtin_logic_symbols =
     Some real_type, "\\real_min", "real_min", [real_type; real_type] ;
     Some integer_type, "\\int_max", "int_max", [integer_type; integer_type] ;
     Some integer_type, "\\int_min", "int_min", [integer_type; integer_type] ;
-  ]
+    
+    Some real_type, "\\double_exact", "exact_value", [double_type];
+    Some real_type, "\\float_exact", "exact_value", [float_type];
+    Some real_type, "\\double_model", "model_value", [double_type];
+    Some real_type, "\\float_model", "model_value", [float_type];
+    
+    Some real_type, "\\double_round_error", "gen_round_error", [double_type];
+    Some real_type, "\\float_round_error", "gen_round_error", [float_type];
+    Some real_type, "\\double_total_error", "gen_total_error", [double_type];
+    Some real_type, "\\float_total_error", "gen_total_error", [float_type];
+(*  Some real_type, "\\double_relative_error", "gen_relative_error", [double_type];
+    Some real_type, "\\float_relative_error", "gen_relative_error", [float_type];
+*)
+]
 
 let builtin_function_symbols =
   (* return type, jessie name, why name, parameter types, special treatment *)

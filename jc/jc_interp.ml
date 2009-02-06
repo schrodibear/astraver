@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.397 2009-02-05 12:14:33 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.398 2009-02-06 11:48:40 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -180,11 +180,6 @@ let native_operator_type op = match snd op with
 let unary_op: expr_unary_op -> string = function
   | `Uminus, `Integer -> "neg_int"
   | `Uminus, `Real -> "neg_real"
-(*
-  | `Usqrt, `Real  -> "sqrt_real"
-  | `Usqrt,`Double -> "sqrt_gen_float"
-  | `Usqrt, `Float -> "sqrt_gen_float"
-*)
   | `Unot, `Boolean -> "not"
   | `Ubw_not, `Integer -> "bw_compl"
   | _ -> assert false (* not proper type *)
@@ -209,14 +204,31 @@ let float_format f =
     | `Double -> "Double"
     | `Float -> "Single"
 
+(*
 let rounding_mode = function
     | Round_nearest_even -> "nearest_even" 
     | Round_to_zero -> "to_zero"
     | Round_up -> "up"
     | Round_down -> "down"
     | Round_nearest_away -> "nearest_away"
+*)
 
-  
+let logic_current_rounding_mode () =
+  match !Jc_options.current_rounding_mode with
+    | FRMnearest -> LVar "nearest_even"
+    | FRMdownward -> LVar "down"
+    | FRMupward -> LVar "up"
+    | FRMtowardzero -> LVar "to_zero"
+    | FRMtowardawayzero -> LVar "nearest_away"
+
+let current_rounding_mode () =
+  match !Jc_options.current_rounding_mode with
+    | FRMnearest -> Var "nearest_even"
+    | FRMdownward -> Var "down"
+    | FRMupward -> Var "up"
+    | FRMtowardzero -> Var "to_zero"
+    | FRMtowardawayzero -> Var "nearest_away"
+
 let bin_op: expr_bin_op -> string = function
     (* integer *)
   | `Bgt, `Integer -> "gt_int_"
@@ -513,8 +525,9 @@ let term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src
     | JCTnative Treal, JCTnative Tfloat ->
 	LApp("float_value",[ e' ])
     | JCTnative Tdouble, JCTnative Treal ->
-	assert false (* TODO *)
-	(* LApp("round_float ?",[ e' ]) *)
+	LApp ("gen_float_of_real_logic", [ LVar "Double" ; logic_current_rounding_mode () ; e' ])
+    | JCTnative Tfloat, JCTnative Treal ->
+	LApp("gen_float_of_real_logic", [ LVar "Single" ; logic_current_rounding_mode () ; e' ])
     | JCTnative Tinteger, JCTnative Treal -> 
 	LApp("int_of_real",[ e' ])
       (* between enums and integer *)
@@ -618,11 +631,11 @@ let coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
     | JCTnative Tinteger, JCTnative Treal -> 
 	make_app "int_of_real" [ e' ]
     | JCTnative Tdouble, JCTnative Treal ->
-	make_app "gen_float_of_real" [ Var "Double" ; Var "nearest_even" ; e' ]
+	make_app "gen_float_of_real" [ Var "Double" ; current_rounding_mode () ; e' ]
     | JCTnative Treal, JCTnative Tdouble ->
 	make_app "float_value" [ e' ]
     | JCTnative Tfloat, JCTnative Treal ->
-	make_app "gen_float_of_real" [ Var "Single" ; Var "nearest_even" ; e' ]
+	make_app "gen_float_of_real" [ Var "Single" ; current_rounding_mode () ; e' ]
     | JCTnative Treal, JCTnative Tfloat ->
 	make_app "float_value" [ e' ]
       (* between enums and integer *)
@@ -1885,6 +1898,12 @@ and expr e =
     | JCEconst JCCnull -> Var "null"
     | JCEconst c -> Cte(const c)
     | JCEvar v -> var v
+    | JCEunary((`Uminus,(`Double|`Float as format)),e2) ->
+        let e2' = expr e2 in
+        make_guarded_app
+	  ~mark:e#mark DivByZero e#pos
+	  "neg_gen_float"
+	  [Var (float_format format); current_rounding_mode () ; e2' ]
     | JCEunary(op,e1) ->
         let e1' = expr e1 in
         make_app (unary_op op) 
@@ -1919,7 +1938,7 @@ and expr e =
         make_guarded_app
 	  ~mark:e#mark DivByZero e#pos
 	  (float_operator op)
-	  [Var (float_format format); Var "nearest_even" ; e1' ; e2' ]
+	  [Var (float_format format); current_rounding_mode () ; e1' ; e2' ]
     | JCEbinary(e1,(_,#native_operator_type as op),e2) ->
         let e1' = expr e1 in
         let e2' = expr e2 in
@@ -2173,7 +2192,7 @@ and expr e =
 		match f.jc_fun_info_builtin_treatment with
 		  | None -> args
 		  | Some (TreatGenFloat format) ->
-		      (Var (float_format format))::(Var "nearest_even")::args
+		      (Var (float_format format))::(current_rounding_mode ())::args
 	      in
 	      let pre, fname, locals, prolog, epilog, args = 
 		make_arguments 

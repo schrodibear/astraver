@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.82 2009-01-21 08:34:15 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.83 2009-02-06 11:48:40 ayad Exp $ i*)
 
 {
   open Jc_ast
@@ -134,6 +134,17 @@
 		 | "bounded" -> Jc_env.IMbounded
 		 | "modulo" -> Jc_env.IMmodulo 
 		 | _ -> lex_error lexbuf ("unknown int model " ^ v))
+	  end  
+      | "FloatRoundingMode" ->
+	  begin
+	    Jc_options.current_rounding_mode :=
+	      (match v with
+		 | "nearest" -> Jc_env.FRMnearest
+		 | "downward" -> Jc_env.FRMdownward
+		 | "upward" -> Jc_env.FRMupward
+		 | "towardzero" -> Jc_env.FRMtowardzero
+		 | "towardawayzero" -> Jc_env.FRMtowardawayzero 
+		 | _ -> lex_error lexbuf ("unknown float rounding mode " ^ v))
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 

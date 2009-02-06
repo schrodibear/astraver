@@ -7,8 +7,7 @@ Require Export WhyFloats.
 (*Why type*) Definition global: Set.
 Admitted.
 
-(*Why logic*) Definition my_log : R -> Z
-    := fun (s:R) => IRNDD (ln(s)/ln(2)).
+(*Why logic*) Definition my_log : R -> Z.
 
 
 

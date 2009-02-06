@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.67 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_env.mli,v 1.68 2009-02-06 11:48:40 ayad Exp $ *)
 
 type native_type = 
     Tunit | Tboolean | Tinteger | Treal | Tdouble | Tfloat | Tstring
@@ -40,6 +40,8 @@ type annotation_sem =
 type abstract_domain = AbsNone | AbsBox | AbsOct | AbsPol
 
 type int_model = IMbounded | IMmodulo
+
+type float_rounding_mode = FRMdownward | FRMnearest | FRMupward | FRMtowardzero | FRMtowardawayzero
 
 type root_kind = Rvariant | RplainUnion | RdiscrUnion
 

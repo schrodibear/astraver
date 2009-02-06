@@ -3,976 +3,123 @@
 
 Require Export jessie_why.
 Require Export Reals.
-Require Export JessieGappa. (*Buts Gappa a partir de Jessie*)
-Require Import tactics. (* tactique interval *)
-
-(*Require Export JessieFloats.*) (*Buts Floats8.2 a partir de Jessie *)
-
-(*Require Export w2g. *) (*pont buts Floats8.2 vers Gappa*)
+Require Export JessieGappa. 
+Require Import tactics. 
+(*Require Export JessieFloats.*) 
 
 
-(*
+(* Why obligation from file "why/sterbenz1.why", line 33, characters 17-226: *)
+(*Why goal*) Lemma diff_ensures_default_po_1 : 
+  forall (x: gen_float),
+  forall (y: gen_float),
+  forall (HW_1: (Rle (Rdiv (float_value y) (2)%R) (float_value x)) /\
+                (Rle (float_value x) (Rmult (2)%R (float_value y)))),
+  (Rle
+   (Rabs
+    (round_float Double nearest_even (Rminus (float_value x) (float_value y))))
+   (max_gen_float Double)).
 Proof.
-w2g.
 intros.
-subst.
-w2g.
+destruct HW_1.
+Admitted.
+
+
+Lemma equality_helper :
+  forall x y,
+ (0 <= x - y <= 0)%R ->
+  x = y.
+Proof.
+intros x y (Ha, Hb).
 apply Rle_antisym.
-apply Rminus_le.
-gappa.
-assert (f <=f1 - f0 <= f)%R.
-split.
-apply Rminus_le.
-Admitted.
+apply Rplus_le_reg_l with (-y)%R.
+now rewrite Rplus_opp_l, Rplus_comm.
+apply Ropp_le_cancel.
+apply Rplus_le_reg_l with x.
+now rewrite Rplus_opp_r.
+Qed.
 
+
+(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz1.jc", line 8, characters 16-62: *)
+(*Why goal*) Lemma diff_ensures_default_po_2 : 
+  forall (x: gen_float),
+  forall (y: gen_float),
+  forall (HW_1: (Rle (Rdiv (float_value y) (2)%R) (float_value x)) /\
+                (Rle (float_value x) (Rmult (2)%R (float_value y)))),
+  forall (HW_2: (Rle
+                 (Rabs
+                  (round_float
+                   Double nearest_even (Rminus
+                                        (float_value x) (float_value y))))
+                 (max_gen_float Double))),
+  forall (result: gen_float),
+  forall (HW_3: (eq (float_value result) (round_float
+                                          Double nearest_even (Rminus
+                                                               (float_value x) (
+                                                               float_value y)))) /\
+                (eq (exact_value result) (Rminus
+                                          (float_value x) (float_value y))) /\
+                (eq (model_value result) (Rminus
+                                          (float_value x) (float_value y)))),
+  forall (why__return: gen_float),
+  forall (HW_4: why__return = result),
+  (* JC_5 *)
+  (eq (float_value why__return) (Rminus (float_value x) (float_value y))).
 Proof.
-w2g.
-intros.
-assert (7 <= df why__return <= 7)%R.
+intros x y.
+set (fx := float_value x).
+set (fy := float_value y).
+unfold round_float,max_gen_float.
+intuition.
 subst.
-w2g.
+clear H3 H4.
+rewrite H1; clear H1.
+apply equality_helper.
+set (f := (fx - fy)%R) in *. 
+
+
+
+
 gappa.
-change (float2R (rounding_float roundNE 53 1074 (2 * (35 / 10))))
-with (gappa_rounding (rounding_float roundNE 53 1074) (2 * (35/10))).
+
+
+
+Rminus_diag_uniq.
+apply Rle_antisym.
 gappa.
-destruct H.
-now apply Rle_antisym.
+
+elim HW_3.
+intros.
+rewrite H.
+apply trans_eq with (FtoRradix (Fminus radix (genf x) (genf y))).
+unfold FtoRradix.
+apply sym_eq.
+apply RoundedModeProjectorIdemEq with bdouble 53%nat (EvenClosest bdouble radix 53);auto with zarith.
+apply Sterbenz; auto with zarith real.
+
+
+unfold float_value.
+unfold round_float.
+unfold gen_float_of_real. 
+unfold gen_float_of_real_aux.
+unfold bfloat_format.
+unfold precision.
+
+unfold mk_gen_float.
+apply trans_eq with Fminus2
 Admitted.
-*)
-
-
-(*
-(*Why logic*) Definition cos : R -> R.
-Admitted.
-*)
-
-(*
-(*Why logic*) Definition power : R -> Z -> R.
-Admitted.
-*)
-
-Definition power (x:R) (n:Z) := powerRZ x n.
-
-
-(* Why obligation from file "why/sterbenz.why", line 47, characters 57-102: *)
-(*Why goal*) Lemma moncos_ensures_default_po_1 : 
-  forall (x_2: gen_float),
-  forall (HW_1: (Rle (Rabs (float_value x_2)) (Rdiv (1)%R (32)%R))),
-  (Rle (Rabs (round_float Single nearest_even (1)%R)) (max_gen_float Single)).
-Proof.
-intuition.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
 Save.
 
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 92, characters 26-29: *)
-(*Why goal*) Lemma moncos_ensures_default_po_2 : 
-  forall (x_2: gen_float),
-  forall (HW_1: (Rle (Rabs (float_value x_2)) (Rdiv (1)%R (32)%R))),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (1)%R)) /\
-                (eq (exact_value result) (1)%R) /\
-                (eq (model_value result) (1)%R)),
+(* Why obligation from file "why/sterbenz1.why", line 52, characters 17-226: *)
+(*Why goal*) Lemma diff_safety_po_1 : 
+  forall (x: gen_float),
+  forall (y: gen_float),
+  forall (HW_1: (* JC_4 *) True),
   (Rle
    (Rabs
-    (round_float
-     Single nearest_even (Rmult (float_value x_2) (float_value x_2))))
-   (max_gen_float Single)).
-Proof.
-intuition.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
-Save.
-
-(* Why obligation from file "why/sterbenz.why", line 51, characters 19-64: *)
-(*Why goal*) Lemma moncos_ensures_default_po_3 : 
-  forall (x_2: gen_float),
-  forall (HW_1: (Rle (Rabs (float_value x_2)) (Rdiv (1)%R (32)%R))),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (1)%R)) /\
-                (eq (exact_value result) (1)%R) /\
-                (eq (model_value result) (1)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value x_2) (float_value x_2))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 x_2) (
-                                                                float_value
-                                                                x_2)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value x_2) (exact_value x_2))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value x_2) (model_value x_2)))),
-  (Rle (Rabs (round_float Single nearest_even (05 / 10)%R))
-   (max_gen_float Single)).
-Proof.
-intuition.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
-Save.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 92, characters 26-43: *)
-(*Why goal*) Lemma moncos_ensures_default_po_4 : 
-  forall (x_2: gen_float),
-  forall (HW_1: (Rle (Rabs (float_value x_2)) (Rdiv (1)%R (32)%R))),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (1)%R)) /\
-                (eq (exact_value result) (1)%R) /\
-                (eq (model_value result) (1)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value x_2) (float_value x_2))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 x_2) (
-                                                                float_value
-                                                                x_2)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value x_2) (exact_value x_2))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value x_2) (model_value x_2)))),
-  forall (HW_6: (Rle (Rabs (round_float Single nearest_even (05 / 10)%R))
-                 (max_gen_float Single))),
-  forall (result1: gen_float),
-  forall (HW_7: (eq (float_value result1) (round_float
-                                           Single nearest_even (05 / 10)%R)) /\
-                (eq (exact_value result1) (05 / 10)%R) /\
-                (eq (model_value result1) (05 / 10)%R)),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rmult (float_value result0) (float_value result1))))
-   (max_gen_float Single)).
-Proof.
-intuition.
-rewrite H0,H3.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
-Save.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 92, characters 9-43: *)
-(*Why goal*) Lemma moncos_ensures_default_po_5 : 
-  forall (x_2: gen_float),
-  forall (HW_1: (Rle (Rabs (float_value x_2)) (Rdiv (1)%R (32)%R))),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (1)%R)) /\
-                (eq (exact_value result) (1)%R) /\
-                (eq (model_value result) (1)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value x_2) (float_value x_2))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 x_2) (
-                                                                float_value
-                                                                x_2)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value x_2) (exact_value x_2))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value x_2) (model_value x_2)))),
-  forall (HW_6: (Rle (Rabs (round_float Single nearest_even (05 / 10)%R))
-                 (max_gen_float Single))),
-  forall (result1: gen_float),
-  forall (HW_7: (eq (float_value result1) (round_float
-                                           Single nearest_even (05 / 10)%R)) /\
-                (eq (exact_value result1) (05 / 10)%R) /\
-                (eq (model_value result1) (05 / 10)%R)),
-  forall (HW_8: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result0) (float_value
-                                                               result1))))
-                 (max_gen_float Single))),
-  forall (result2: gen_float),
-  forall (HW_9: (eq (float_value result2) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result0) (
-                                                                float_value
-                                                                result1)))) /\
-                (eq (exact_value result2) (Rmult
-                                           (exact_value result0) (exact_value
-                                                                  result1))) /\
-                (eq (model_value result2) (Rmult
-                                           (model_value result0) (model_value
-                                                                  result1)))),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rminus (float_value result) (float_value result2))))
-   (max_gen_float Single)).
-Proof.
-intuition.
-rewrite H,H6;rewrite H0,H3.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
-Save.
-
-
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 90, characters 9-72: *)
-(*Why goal*) Lemma moncos_ensures_default_po_6 : 
-  forall (x_2: gen_float),
-  forall (HW_1: (Rle (Rabs (float_value x_2)) (Rdiv (1)%R (32)%R))),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (1)%R)) /\
-                (eq (exact_value result) (1)%R) /\
-                (eq (model_value result) (1)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value x_2) (float_value x_2))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 x_2) (
-                                                                float_value
-                                                                x_2)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value x_2) (exact_value x_2))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value x_2) (model_value x_2)))),
-  forall (HW_6: (Rle (Rabs (round_float Single nearest_even (05 / 10)%R))
-                 (max_gen_float Single))),
-  forall (result1: gen_float),
-  forall (HW_7: (eq (float_value result1) (round_float
-                                           Single nearest_even (05 / 10)%R)) /\
-                (eq (exact_value result1) (05 / 10)%R) /\
-                (eq (model_value result1) (05 / 10)%R)),
-  forall (HW_8: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result0) (float_value
-                                                               result1))))
-                 (max_gen_float Single))),
-  forall (result2: gen_float),
-  forall (HW_9: (eq (float_value result2) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result0) (
-                                                                float_value
-                                                                result1)))) /\
-                (eq (exact_value result2) (Rmult
-                                           (exact_value result0) (exact_value
-                                                                  result1))) /\
-                (eq (model_value result2) (Rmult
-                                           (model_value result0) (model_value
-                                                                  result1)))),
-  forall (HW_10: (Rle
-                  (Rabs
-                   (round_float
-                    Single nearest_even (Rminus
-                                         (float_value result) (float_value
-                                                               result2))))
-                  (max_gen_float Single))),
-  forall (result3: gen_float),
-  forall (HW_11: (eq (float_value result3) (round_float
-                                            Single nearest_even (Rminus
-                                                                 (float_value
-                                                                  result) (
-                                                                 float_value
-                                                                 result2)))) /\
-                 (eq (exact_value result3) (Rminus
-                                            (exact_value result) (exact_value
-                                                                  result2))) /\
-                 (eq (model_value result3) (Rminus
-                                            (model_value result) (model_value
-                                                                  result2)))),
-  forall (why__return: gen_float),
-  forall (HW_12: why__return = result3),
-  (* JC_23 *)
-  (Rle (Rabs (Rminus (float_value why__return) (cos (float_value x_2))))
-   (power (2)%R (Zopp 23))).
-Proof.
-intuition.
-rewrite HW_12; rewrite H9;rewrite H6, H;rewrite H0,H3.
-unfold power; unfold round_float, max_gen_float, nearest_even.
-assert (Rabs ((1 - ( (float_value x_2) * 
-(float_value x_2) ) *(5/10) ) - cos (float_value x_2) ) 
-<= 7/134217728)%R.
-interval with (i_bisect_diff (float_value x_2), i_nocheck).
-rewrite <- (generic_proof.exp_factor_powerRZ 2).
-simpl.
-gappa.
-(*
-interval_intro (Rabs ((1 - ( (float_value x_3) * 
-(float_value x_3) ) *(5/10) ) - Rtrigo_def.cos (float_value x_3) )) 
-upper with (i_bisect_diff (float_value x_3) ).
-rewrite <- (generic_proof.exp_factor_powerRZ 2).
-simpl.
-gappa.
-*)
-Save.
-
-(* Why obligation from file "why/sterbenz.why", line 70, characters 57-102: *)
-(*Why goal*) Lemma moncos_safety_po_1 : 
-  forall (HW_1: (* JC_22 *) True),
-  (Rle (Rabs (round_float Single nearest_even (1)%R)) (max_gen_float Single)).
+    (round_float Double nearest_even (Rminus (float_value x) (float_value y))))
+   (max_gen_float Double)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
-Admitted.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 92, characters 26-29: *)
-(*Why goal*) Lemma moncos_safety_po_2 : 
-  forall (x_2: gen_float),
-  forall (HW_1: (* JC_22 *) True),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (1)%R)) /\
-                (eq (exact_value result) (1)%R) /\
-                (eq (model_value result) (1)%R)),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rmult (float_value x_2) (float_value x_2))))
-   (max_gen_float Single)).
-Proof.
-intuition.
-Admitted.
-(* FILL PROOF HERE *)
-
-
-(* Why obligation from file "why/sterbenz.why", line 74, characters 19-64: *)
-(*Why goal*) Lemma moncos_safety_po_3 : 
-  forall (x_2: gen_float),
-  forall (HW_1: (* JC_22 *) True),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (1)%R)) /\
-                (eq (exact_value result) (1)%R) /\
-                (eq (model_value result) (1)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value x_2) (float_value x_2))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 x_2) (
-                                                                float_value
-                                                                x_2)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value x_2) (exact_value x_2))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value x_2) (model_value x_2)))),
-  (Rle (Rabs (round_float Single nearest_even (05 / 10)%R))
-   (max_gen_float Single)).
-Proof.
-intuition.
-Admitted.
-(* FILL PROOF HERE *)
-
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 92, characters 26-43: *)
-(*Why goal*) Lemma moncos_safety_po_4 : 
-  forall (x_2: gen_float),
-  forall (HW_1: (* JC_22 *) True),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (1)%R)) /\
-                (eq (exact_value result) (1)%R) /\
-                (eq (model_value result) (1)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value x_2) (float_value x_2))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 x_2) (
-                                                                float_value
-                                                                x_2)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value x_2) (exact_value x_2))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value x_2) (model_value x_2)))),
-  forall (HW_6: (Rle (Rabs (round_float Single nearest_even (05 / 10)%R))
-                 (max_gen_float Single))),
-  forall (result1: gen_float),
-  forall (HW_7: (eq (float_value result1) (round_float
-                                           Single nearest_even (05 / 10)%R)) /\
-                (eq (exact_value result1) (05 / 10)%R) /\
-                (eq (model_value result1) (05 / 10)%R)),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rmult (float_value result0) (float_value result1))))
-   (max_gen_float Single)).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Admitted.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 92, characters 9-43: *)
-(*Why goal*) Lemma moncos_safety_po_5 : 
-  forall (x_2: gen_float),
-  forall (HW_1: (* JC_22 *) True),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (1)%R)) /\
-                (eq (exact_value result) (1)%R) /\
-                (eq (model_value result) (1)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value x_2) (float_value x_2))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 x_2) (
-                                                                float_value
-                                                                x_2)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value x_2) (exact_value x_2))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value x_2) (model_value x_2)))),
-  forall (HW_6: (Rle (Rabs (round_float Single nearest_even (05 / 10)%R))
-                 (max_gen_float Single))),
-  forall (result1: gen_float),
-  forall (HW_7: (eq (float_value result1) (round_float
-                                           Single nearest_even (05 / 10)%R)) /\
-                (eq (exact_value result1) (05 / 10)%R) /\
-                (eq (model_value result1) (05 / 10)%R)),
-  forall (HW_8: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result0) (float_value
-                                                               result1))))
-                 (max_gen_float Single))),
-  forall (result2: gen_float),
-  forall (HW_9: (eq (float_value result2) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result0) (
-                                                                float_value
-                                                                result1)))) /\
-                (eq (exact_value result2) (Rmult
-                                           (exact_value result0) (exact_value
-                                                                  result1))) /\
-                (eq (model_value result2) (Rmult
-                                           (model_value result0) (model_value
-                                                                  result1)))),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rminus (float_value result) (float_value result2))))
-   (max_gen_float Single)).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Admitted.
-
-
-(* Why obligation from file "why/sterbenz.why", line 95, characters 61-106: *)
-(*Why goal*) Lemma poly_ensures_default_po_1 : 
-  forall (x: gen_float),
-  forall (HW_1: (eq (float_value x) (Rdiv (sqrt (2)%R) (2)%R))),
-  (Rle (Rabs (round_float Single nearest_even (2)%R)) (max_gen_float Single)).
-Proof.
-intuition.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
 Save.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 72, characters 7-23: *)
-(*Why goal*) Lemma poly_ensures_default_po_2 : 
-  forall (x: gen_float),
-  forall (HW_1: (eq (float_value x) (Rdiv (sqrt (2)%R) (2)%R))),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (2)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (2)%R)) /\
-                (eq (exact_value result) (2)%R) /\
-                (eq (model_value result) (2)%R)),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rmult (float_value result) (float_value x))))
-   (max_gen_float Single)).
-Proof.
-intuition.
-rewrite HW_1,H.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
-Save.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 72, characters 7-25: *)
-(*Why goal*) Lemma poly_ensures_default_po_3 : 
-  forall (x: gen_float),
-  forall (HW_1: (eq (float_value x) (Rdiv (sqrt (2)%R) (2)%R))),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (2)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (2)%R)) /\
-                (eq (exact_value result) (2)%R) /\
-                (eq (model_value result) (2)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result) (
-                                                                float_value x)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value result) (exact_value
-                                                                 x))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value result) (model_value
-                                                                 x)))),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rmult (float_value result0) (float_value x))))
-   (max_gen_float Single)).
-Proof.
-intuition.
-rewrite H0.
-rewrite HW_1,H.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
-Save.
-
-(* Why obligation from file "why/sterbenz.why", line 96, characters 18-63: *)
-(*Why goal*) Lemma poly_ensures_default_po_4 : 
-  forall (x: gen_float),
-  forall (HW_1: (eq (float_value x) (Rdiv (sqrt (2)%R) (2)%R))),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (2)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (2)%R)) /\
-                (eq (exact_value result) (2)%R) /\
-                (eq (model_value result) (2)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result) (
-                                                                float_value x)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value result) (exact_value
-                                                                 x))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value result) (model_value
-                                                                 x)))),
-  forall (HW_6: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result0) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result1: gen_float),
-  forall (HW_7: (eq (float_value result1) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result0) (
-                                                                float_value x)))) /\
-                (eq (exact_value result1) (Rmult
-                                           (exact_value result0) (exact_value
-                                                                  x))) /\
-                (eq (model_value result1) (Rmult
-                                           (model_value result0) (model_value
-                                                                  x)))),
-  (Rle (Rabs (round_float Single nearest_even (1)%R)) (max_gen_float Single)).
-Proof.
-intuition.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
-Save.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 72, characters 7-40: *)
-(*Why goal*) Lemma poly_ensures_default_po_5 : 
-  forall (x: gen_float),
-  forall (HW_1: (eq (float_value x) (Rdiv (sqrt (2)%R) (2)%R))),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (2)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (2)%R)) /\
-                (eq (exact_value result) (2)%R) /\
-                (eq (model_value result) (2)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result) (
-                                                                float_value x)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value result) (exact_value
-                                                                 x))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value result) (model_value
-                                                                 x)))),
-  forall (HW_6: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result0) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result1: gen_float),
-  forall (HW_7: (eq (float_value result1) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result0) (
-                                                                float_value x)))) /\
-                (eq (exact_value result1) (Rmult
-                                           (exact_value result0) (exact_value
-                                                                  x))) /\
-                (eq (model_value result1) (Rmult
-                                           (model_value result0) (model_value
-                                                                  x)))),
-  forall (HW_8: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result2: gen_float),
-  forall (HW_9: (eq (float_value result2) (round_float
-                                           Single nearest_even (1)%R)) /\
-                (eq (exact_value result2) (1)%R) /\
-                (eq (model_value result2) (1)%R)),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rminus (float_value result1) (float_value result2))))
-   (max_gen_float Single)).
-Proof.
-intuition.
-rewrite H3,H6;rewrite H0;rewrite H, HW_1.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
-Save.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 70, characters 9-31: *)
-(*Why goal*) Lemma poly_ensures_default_po_6 : 
-  forall (x: gen_float),
-  forall (HW_1: (eq (float_value x) (Rdiv (sqrt (2)%R) (2)%R))),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (2)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (2)%R)) /\
-                (eq (exact_value result) (2)%R) /\
-                (eq (model_value result) (2)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result) (
-                                                                float_value x)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value result) (exact_value
-                                                                 x))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value result) (model_value
-                                                                 x)))),
-  forall (HW_6: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result0) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result1: gen_float),
-  forall (HW_7: (eq (float_value result1) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result0) (
-                                                                float_value x)))) /\
-                (eq (exact_value result1) (Rmult
-                                           (exact_value result0) (exact_value
-                                                                  x))) /\
-                (eq (model_value result1) (Rmult
-                                           (model_value result0) (model_value
-                                                                  x)))),
-  forall (HW_8: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result2: gen_float),
-  forall (HW_9: (eq (float_value result2) (round_float
-                                           Single nearest_even (1)%R)) /\
-                (eq (exact_value result2) (1)%R) /\
-                (eq (model_value result2) (1)%R)),
-  forall (HW_10: (Rle
-                  (Rabs
-                   (round_float
-                    Single nearest_even (Rminus
-                                         (float_value result1) (float_value
-                                                                result2))))
-                  (max_gen_float Single))),
-  forall (result3: gen_float),
-  forall (HW_11: (eq (float_value result3) (round_float
-                                            Single nearest_even (Rminus
-                                                                 (float_value
-                                                                  result1) (
-                                                                 float_value
-                                                                 result2)))) /\
-                 (eq (exact_value result3) (Rminus
-                                            (exact_value result1) (exact_value
-                                                                   result2))) /\
-                 (eq (model_value result3) (Rminus
-                                            (model_value result1) (model_value
-                                                                   result2)))),
-  forall (why__return: gen_float),
-  forall (HW_12: why__return = result3),
-  (* JC_5 *) (eq (float_value why__return) (0)%R).
-Proof.
-intuition.
-rewrite HW_12;rewrite H9;rewrite H3,H6;rewrite H0;rewrite H, HW_1.
-unfold round_float, max_gen_float, nearest_even.
-gappa.
-Save.
-
-
-(* Why obligation from file "why/sterbenz.why", line 117, characters 61-106: *)
-(*Why goal*) Lemma poly_safety_po_1 : 
-  forall (HW_1: (* JC_4 *) True),
-  (Rle (Rabs (round_float Single nearest_even (2)%R)) (max_gen_float Single)).
-Proof.
-Admitted.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 72, characters 7-23: *)
-(*Why goal*) Lemma poly_safety_po_2 : 
-  forall (x: gen_float),
-  forall (HW_1: (* JC_4 *) True),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (2)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (2)%R)) /\
-                (eq (exact_value result) (2)%R) /\
-                (eq (model_value result) (2)%R)),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rmult (float_value result) (float_value x))))
-   (max_gen_float Single)).
-Proof.
-Admitted.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 72, characters 7-25: *)
-(*Why goal*) Lemma poly_safety_po_3 : 
-  forall (x: gen_float),
-  forall (HW_1: (* JC_4 *) True),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (2)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (2)%R)) /\
-                (eq (exact_value result) (2)%R) /\
-                (eq (model_value result) (2)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result) (
-                                                                float_value x)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value result) (exact_value
-                                                                 x))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value result) (model_value
-                                                                 x)))),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rmult (float_value result0) (float_value x))))
-   (max_gen_float Single)).
-Proof.
-Admitted.
-
-(* Why obligation from file "why/sterbenz.why", line 118, characters 18-63: *)
-(*Why goal*) Lemma poly_safety_po_4 : 
-  forall (x: gen_float),
-  forall (HW_1: (* JC_4 *) True),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (2)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (2)%R)) /\
-                (eq (exact_value result) (2)%R) /\
-                (eq (model_value result) (2)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result) (
-                                                                float_value x)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value result) (exact_value
-                                                                 x))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value result) (model_value
-                                                                 x)))),
-  forall (HW_6: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result0) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result1: gen_float),
-  forall (HW_7: (eq (float_value result1) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result0) (
-                                                                float_value x)))) /\
-                (eq (exact_value result1) (Rmult
-                                           (exact_value result0) (exact_value
-                                                                  x))) /\
-                (eq (model_value result1) (Rmult
-                                           (model_value result0) (model_value
-                                                                  x)))),
-  (Rle (Rabs (round_float Single nearest_even (1)%R)) (max_gen_float Single)).
-Proof.
-Admitted.
-
-(* Why obligation from file "/users/demons/ayad/ppc/why/bench/jc/good/sterbenz.jc", line 72, characters 7-40: *)
-(*Why goal*) Lemma poly_safety_po_5 : 
-  forall (x: gen_float),
-  forall (HW_1: (* JC_4 *) True),
-  forall (HW_2: (Rle (Rabs (round_float Single nearest_even (2)%R))
-                 (max_gen_float Single))),
-  forall (result: gen_float),
-  forall (HW_3: (eq (float_value result) (round_float
-                                          Single nearest_even (2)%R)) /\
-                (eq (exact_value result) (2)%R) /\
-                (eq (model_value result) (2)%R)),
-  forall (HW_4: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result0: gen_float),
-  forall (HW_5: (eq (float_value result0) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result) (
-                                                                float_value x)))) /\
-                (eq (exact_value result0) (Rmult
-                                           (exact_value result) (exact_value
-                                                                 x))) /\
-                (eq (model_value result0) (Rmult
-                                           (model_value result) (model_value
-                                                                 x)))),
-  forall (HW_6: (Rle
-                 (Rabs
-                  (round_float
-                   Single nearest_even (Rmult
-                                        (float_value result0) (float_value x))))
-                 (max_gen_float Single))),
-  forall (result1: gen_float),
-  forall (HW_7: (eq (float_value result1) (round_float
-                                           Single nearest_even (Rmult
-                                                                (float_value
-                                                                 result0) (
-                                                                float_value x)))) /\
-                (eq (exact_value result1) (Rmult
-                                           (exact_value result0) (exact_value
-                                                                  x))) /\
-                (eq (model_value result1) (Rmult
-                                           (model_value result0) (model_value
-                                                                  x)))),
-  forall (HW_8: (Rle (Rabs (round_float Single nearest_even (1)%R))
-                 (max_gen_float Single))),
-  forall (result2: gen_float),
-  forall (HW_9: (eq (float_value result2) (round_float
-                                           Single nearest_even (1)%R)) /\
-                (eq (exact_value result2) (1)%R) /\
-                (eq (model_value result2) (1)%R)),
-  (Rle
-   (Rabs
-    (round_float
-     Single nearest_even (Rminus (float_value result1) (float_value result2))))
-   (max_gen_float Single)).
-Proof.
-Admitted.
-
 
