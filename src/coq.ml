@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.175 2008-11-05 14:03:16 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.176 2009-02-09 15:39:23 marche Exp $ i*)
 
 open Options
 open Logic
@@ -496,7 +496,12 @@ let print_term_v8 fmt t =
     | Tapp (id, [a], _) when id == t_abs_real ->
 	fprintf fmt "(@[Rabs@ %a@])" print3 a
     | Tapp (id, [t], _) when id == t_neg_int ->
-	fprintf fmt "(Zopp@ %a)" print3 t
+	begin
+	  (* special case for -constant to avoid extra "simpl" *)
+	  match t with
+	    | Tconst (ConstInt n) -> fprintf fmt "-%s" n
+	    | _ -> fprintf fmt "(Zopp@ %a)" print3 t
+	end
     | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [a; b; c], _) when id == if_then_else -> 
