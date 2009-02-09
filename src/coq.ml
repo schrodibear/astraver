@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.176 2009-02-09 15:39:23 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.177 2009-02-09 15:43:38 marche Exp $ i*)
 
 open Options
 open Logic
@@ -499,7 +499,7 @@ let print_term_v8 fmt t =
 	begin
 	  (* special case for -constant to avoid extra "simpl" *)
 	  match t with
-	    | Tconst (ConstInt n) -> fprintf fmt "-%s" n
+	    | Tconst (ConstInt n) -> fprintf fmt "(-%s)" n
 	    | _ -> fprintf fmt "(Zopp@ %a)" print3 t
 	end
     | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->
