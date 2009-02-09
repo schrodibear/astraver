@@ -127,7 +127,7 @@ Admitted.
 (*Why axiom*) Lemma null_pointer :
   forall (A1:Set),
   (forall (a:(alloc_table A1)), (offset_min a (@null A1)) >= 0 /\
-   (offset_max a (@null A1)) <= (Zopp 2)).
+   (offset_max a (@null A1)) <= -2).
 Admitted.
 
 (*Why logic*) Definition eq_pointer_bool :
