@@ -1,3 +1,4 @@
+  o GWhy: new column for Gappa prover (http://lipforge.ens-lyon.fr/www/gappa/)
   o Coq output: improved output of -e when e is an integer constant
   o Jessie: fix incompleteness bug with "assigns \nothing" clauses
   o GWhy: columns can be added/removed interactively
