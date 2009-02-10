@@ -25,13 +25,15 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.mli,v 1.9 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: gappa.mli,v 1.10 2009-02-10 13:44:43 marche Exp $ i*)
 
 open Cc
 
 val reset : unit -> unit
 
 val push_decl : Logic_decl.t -> unit
+
+val output_one_file : string -> unit
 
 val output_file : string -> unit
 

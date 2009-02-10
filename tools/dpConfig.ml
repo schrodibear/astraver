@@ -29,7 +29,7 @@
 
 type prover_id = 
     Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
-  | Cvc3 | Graph | Z3 | Coq
+  | Cvc3 | Graph | Z3 | Coq | Gappa
 
 type prover_data =
   {
@@ -46,6 +46,21 @@ type prover_data =
     mutable undecided_cregexp : Str.regexp option;
   }
     
+let gappa =
+  {
+    name = "Gappa";
+    is_interactive = false;
+    version = "";
+    version_switch = "--version";
+    version_regexp = "Gappa \\([^ ]*\\)";
+    command = "gappa";
+    command_switches = "";
+    valid_regexp = ""; (* not used, see calldp.ml *)
+    valid_cregexp = None;
+    undecided_regexp = ""; (* not used, see calldp.ml *)
+    undecided_cregexp = None;
+  }
+
 let alt_ergo =
   {
     name = "Alt-Ergo";
@@ -150,6 +165,7 @@ let prover_list =
     Yices, (yices, ["yices"]) ;
     Cvc3, (cvc3, ["cvc3"]) ;
     Coq, (coq, ["coqc"]);
+    Gappa, (gappa, ["gappa"]) ;
   ] 
 
 let rc_file () =
@@ -184,6 +200,7 @@ let load_rc_file () =
 	 | "Yices" -> load_prover_info yices key args
 	 | "CVC3" -> load_prover_info cvc3 key args
 	 | "Coq" -> load_prover_info coq key args
+	 | "Gappa" -> load_prover_info gappa key args
 	 | _ -> 
 	     printf "Unknown section [%s] in rc file@." key)
     rc

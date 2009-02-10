@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.35 2008-11-12 16:31:50 moy Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.36 2009-02-10 13:44:43 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -69,6 +69,7 @@ let push_elem p e =
   | Ergo | ErgoSelect -> Pretty.push_decl ~ergo:true e
   | Graph -> Pretty.push_decl e
   | Coq -> Coq.push_decl e
+  | Gappa -> Gappa.push_decl e
 
 let push_obligation p (loc, expl, id, s) = 
   let g = Dgoal (loc, expl, id, s) in
@@ -81,6 +82,7 @@ let push_obligation p (loc, expl, id, s) =
   | Ergo | ErgoSelect -> Pretty.push_decl g
   | Graph -> Pretty.push_decl g
   | Coq -> Coq.push_decl g
+  | Gappa -> Gappa.push_decl g
 
 (* output_file is a CRITICAL SECTION *)
 (** @parama elems is the List that stores the theory
@@ -107,6 +109,7 @@ let output_file ?encoding p (elems,o) =
     | Ergo | ErgoSelect -> Pretty.reset ()
     | Graph -> Pretty.reset ()
     | Coq -> () (* Coq.reset () *)
+    | Gappa -> Gappa.reset ()
   end;
   
   if pruning then 
@@ -147,6 +150,8 @@ let output_file ?encoding p (elems,o) =
     | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.output_file f; f ^ "_why.smt"
     | Ergo | ErgoSelect -> Pretty.output_file f; f ^ "_why.why"
     | Graph -> Pretty.output_file f; f ^ "_why.why"
+    | Gappa -> 
+	Gappa.output_one_file f; f ^ "_why.gappa"
     | Coq ->
 	let _p = get_project () in 
 	(* if necessary, Pretty.output_project "name ?"; *)
@@ -211,6 +216,8 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
 	Calldp.graph  ~debug ?timeout ~filename ()
     | Coq ->
 	Calldp.coq ~debug ?timeout ~filename ()
+    | Gappa ->
+	Calldp.gappa ~debug ?timeout ~filename ()
   in
   if not debug then begin 
     match p with

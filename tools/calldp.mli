@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.mli,v 1.24 2008-11-12 16:31:50 moy Exp $ i*)
+(*i $Id: calldp.mli,v 1.25 2009-02-10 13:44:43 marche Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -40,6 +40,10 @@ type prover_result =
   | ProverFailure of float * string
 
 val cpulimit : string ref
+
+val gappa :
+  ?debug:bool -> ?timeout:int -> filename:string -> unit -> 
+  prover_result
 
 val simplify : 
   ?debug:bool -> ?timeout:int -> filename:string -> unit -> 

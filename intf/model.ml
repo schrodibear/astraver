@@ -100,6 +100,15 @@ let simplify_rec = {
   pr_enc = Recursive;
   }
 
+let gappa = {
+  pr_id = DpConfig.Gappa;
+  pr_info = DpConfig.gappa;
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
+  pr_enc = NoEncoding;
+  }
+
 (*
 let zenon = {
   pr_name = "Zenon";
@@ -231,6 +240,7 @@ let all_known_provers = [
   (*simplify_sstrat;*) 
   simplify_strat; 
   yices; 
+  gappa ;
   coq ;
   (* rvsat; *)
   (* zenon; zenon_pred; zenon_strat; zenon_rec;*)

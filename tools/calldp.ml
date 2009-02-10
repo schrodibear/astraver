@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.60 2008-11-18 17:06:34 moy Exp $ i*)
+(*i $Id: calldp.ml,v 1.61 2009-02-10 13:44:43 marche Exp $ i*)
 
 open Printf
 
@@ -142,6 +142,27 @@ let cvc3 ?(debug=false) ?(timeout=10) ~filename:f () =
 let error c t cmd =
   if c = 152 then Timeout t 
   else ProverFailure (t,"command failed: " ^ cmd) 
+
+let gappa ?(debug=false) ?(timeout=10) ~filename:f () =
+  let p = DpConfig.gappa in
+  let cmd = 
+    p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ f 
+  in
+  let t,c,out = timed_sys_command debug timeout cmd in
+  let r =
+    if c = 152 (* 128 + SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
+    then Timeout t
+    else
+      if c == 0 then
+	Valid t
+      else
+	if c == 1 then
+	  CannotDecide(t,Some (file_contents out)) 
+	else 
+	  ProverFailure(t,"command failed: " ^ cmd ^ "\n" ^ file_contents out)
+  in
+  remove_file ~debug out;
+  r
 
 let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "cvcl < %s" f in

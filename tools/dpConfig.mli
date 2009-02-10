@@ -30,7 +30,7 @@
 
 type prover_id = 
     Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
-  | Cvc3 | Graph | Z3 | Coq
+  | Cvc3 | Graph | Z3 | Coq | Gappa
 
 type prover_data =
   {
@@ -57,6 +57,8 @@ val z3 : prover_data
 val yices : prover_data
 
 val cvc3 : prover_data
+
+val gappa : prover_data
 
 val coq : prover_data
 

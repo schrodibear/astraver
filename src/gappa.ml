@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.21 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.22 2009-02-10 13:44:43 marche Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -373,6 +373,15 @@ let print_obligation fmt (eq,p) =
   fprintf fmt "@@dne = float<ieee_64, ne>;@\n@\n";
   fprintf fmt "%a@\n" (print_list newline print_equation) eq;
   fprintf fmt "@[{ %a }@]@." print_pred p
+
+let output_one_file f =
+  let sep = "### DO NOT EDIT ABOVE THIS LINE" in
+  let file = out_file (f ^ "_why.gappa") in
+  do_not_edit_above ~file
+    ~before:(fun fmt -> Queue.iter (print_obligation fmt) queue)
+    ~sep
+    ~after:(fun fmt -> ())
+
 
 let output_file fwe =
   let sep = "### DO NOT EDIT ABOVE THIS LINE" in
