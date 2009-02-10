@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.22 2009-02-10 13:44:43 marche Exp $ i*)
+(*i $Id: gappa.ml,v 1.23 2009-02-10 14:26:09 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -128,6 +128,8 @@ let eval_constant = function
   | _ -> 
       assert false
 
+let gen_table = Hashtbl.create 10
+
 let rec term e = function
   | t when is_constant t ->
       Gcst (eval_constant t)
@@ -140,6 +142,8 @@ let rec term e = function
   (* real ops *)
   | Tapp (id, [t], _) when id == t_neg_real -> 
       Gneg (term e t)
+  | Tapp (id, [t], _) when id == t_abs_real -> 
+      Gabs (term e t)
   | Tapp (id, [t1; t2], _) when id == t_add_real -> 
       Gadd (term e t1, term e t2)
   | Tapp (id, [t1; t2], _) when id == t_sub_real -> 
@@ -173,9 +177,16 @@ let rec term e = function
   (* errors *)
   | Tapp (id, [t], _) when id == double_round_error ->
       Gabs (Gsub (term Double t, term Exact t))
-  (* anything else is discarded *)
-  | Tapp _ -> 
-      raise NotGappa
+  (* anything else is generalized as a fresh variable *)
+  | Tapp _ as t ->
+    Gvar (e,
+    try
+      Hashtbl.find gen_table t
+    with Not_found ->
+      let n = Ident.string (fresh_var ()) in
+      Hashtbl.add gen_table t n;
+      n
+    )
   | Tnamed(_,t) -> term e t
 
 let termo e t = try Some (term e t) with NotGappa -> None
@@ -267,7 +278,9 @@ let rec ghyp = function
 
 let queue = Queue.create ()
 
-let reset () = Queue.clear queue
+let reset () =
+  Queue.clear queue;
+  Hashtbl.clear gen_table
 
 let add_ctx_vars =
   List.fold_left 
