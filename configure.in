@@ -305,10 +305,10 @@ else
     if test "$COQDEP" = true ; then
 	AC_MSG_ERROR(Cannot find coqdep.)
     fi
-    COQLIB=`coqc -where`
+    COQLIB=`$COQC -where`
 
     AC_MSG_CHECKING(Coq version)
-    COQVERSION=`coqc -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
+    COQVERSION=`$COQC -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
 
     case $COQVERSION in
     7.4*)
