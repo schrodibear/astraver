@@ -1,0 +1,25 @@
+
+
+axiomatic axo {
+
+  logic real cos(real x)
+   
+  logic real power(real x, integer n)
+   
+  logic real abs(real x)
+  
+}
+
+float moncos(float x)
+  requires (abs((x :> real)) <= (1.0 / 32.0));
+behavior default:
+  ensures (abs(((\result :> real) - cos((x :> real)))) <=
+                   power(2.0, (- 23)));
+{  
+   var float __retres;
+   
+    __retres = (1.0 :> float) - (x * x) * (0.5 :> float);
+      
+   return __retres   
+}
+
