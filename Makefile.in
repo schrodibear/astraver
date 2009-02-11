@@ -160,6 +160,8 @@ byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.
 .PHONY: check
 
 PRELUDE=lib/why/prelude.why lib/why/arrays.why lib/why/floats.why \
+	lib/why/floats_strict.why lib/why/floats_full.why \
+	lib/why/jessie.why \
 	lib/why/mix.why
 
 # sanity check: the prelude files do typecheck
@@ -734,7 +736,6 @@ install-binary: $(BINARYFILES)
 install-lib: $(JCLIB)
 	mkdir -p $(LIBDIR)/why/why
 	cp -f $(PRELUDE) $(LIBDIR)/why/why
-	cp -f lib/why/jessie.why $(LIBDIR)/why/why
 	mkdir -p $(LIBDIR)/caduceus/why
 #	??? cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
