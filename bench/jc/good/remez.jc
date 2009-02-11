@@ -1,0 +1,25 @@
+
+axiomatic Exp {
+
+  logic real exp(real x)
+   
+  logic real power(real x, integer n)
+   
+  logic real abs(real x)
+  
+}
+
+double monexp(double x)
+  requires \real_abs(x :> real) <= 1.0;
+  behavior default:
+    ensures \real_abs(\result :> real) - exp(x :> real) <= power(2.0, -4);
+{  
+   var double retres;
+   
+   retres = (0.9890365552 :> double) +
+	    (1.130258690 :> double) * x +
+ 	    (0.5540440796 :> double) * x * x;
+   return retres;
+
+}
+
