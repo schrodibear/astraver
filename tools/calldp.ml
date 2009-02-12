@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.61 2009-02-10 13:44:43 marche Exp $ i*)
+(*i $Id: calldp.ml,v 1.62 2009-02-12 15:06:44 filliatr Exp $ i*)
 
 open Printf
 
@@ -146,7 +146,7 @@ let error c t cmd =
 let gappa ?(debug=false) ?(timeout=10) ~filename:f () =
   let p = DpConfig.gappa in
   let cmd = 
-    p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ f 
+    p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " < " ^ f 
   in
   let t,c,out = timed_sys_command debug timeout cmd in
   let r =
