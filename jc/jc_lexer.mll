@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.83 2009-02-06 11:48:40 ayad Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.84 2009-02-12 10:03:07 melquion Exp $ i*)
 
 {
   open Jc_ast
@@ -163,6 +163,7 @@ let rD = ['0'-'9']
 let rL = ['a'-'z' 'A'-'Z' '_']
 let rH = ['a'-'f' 'A'-'F' '0'-'9']
 let rE = ['E''e']['+''-']? rD+
+let rP = ['P''p']['+''-']? rD+
 (*
  let rFS	= ('f'|'F'|'l'|'L')
 *)
@@ -269,6 +270,10 @@ rule token = parse
   | rD+ rIS?                { CONSTANT (JCCinteger (lexeme lexbuf)) }
   | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (JCCinteger (lexeme lexbuf)) }
 
+  | ('0'['x''X'] rH+ '.' rH* rP) as pre
+      { CONSTANT (JCCreal pre) }
+  | ('0'['x''X'] rH* '.' rH+ rP) as pre
+      { CONSTANT (JCCreal pre) }
   | (rD+ rE) as pre  
       { CONSTANT (JCCreal pre) }
   | (rD* "." rD+ (rE)?) as pre  
