@@ -2,22 +2,20 @@ axiomatic Exp {
 
   logic real exp(real x)
 
-  logic real power(real x, integer n)
-
 }
 
-double monexp(double x)
-  requires \real_abs(x :> real) <= 1.0 && (x :> real) == \double_exact(x);
+float monexp(float x)
+  requires \real_abs(x :> real) <= 1.0 && (x :> real) == \float_exact(x);
   behavior default:
     ensures \real_abs((\result :> real) - exp(x :> real)) <= 0.05;
 {
-  var double retres;
+  var float retres;
 
-  retres = (0.9890365552 :> double) +
-           (1.130258690 :> double) * x +
-           (0.5540440796 :> double) * x * x;
+  retres = (0.9890365552 :> float) +
+           (1.130258690 :> float) * x +
+           (0.5540440796 :> float) * x * x;
 
-  assert \real_abs(\double_exact(retres) - exp(x :> real)) <= 0.047;
+  assert \real_abs(\float_exact(retres) - exp(x :> real)) <= 0.049;
 
   return retres;
 }
