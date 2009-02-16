@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.92 2009-02-05 12:14:33 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.93 2009-02-16 16:31:37 melquion Exp $ i*)
 
 open Printf
 open Options
@@ -189,11 +189,12 @@ module View = struct
 	       ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) ()
 	   in
 	   vc#set_resizable true;
+	   vc#set_visible false;
 	   p.pr_viewcol <- Some vc;
 	   if p.pr_info.DpConfig.version <> "" then vc#set_clickable true;
 	   let _n : int = view#append_column vc in
 	   p, vc)
-	(Model.get_provers ())
+	(Model.all_known_provers (*get_provers ()*))
     in
     let _n : int = view#append_column last_col 
     in l
@@ -670,8 +671,14 @@ let main () =
   let _ = 
     List.iter
       (fun p -> 
+         let active = List.mem p (Model.get_provers ()) in
+         begin
+           match p.Model.pr_viewcol with
+           | Some vc -> vc#set_visible active
+           | None -> assert false
+         end;
 	 let m = configuration_factory#add_check_item 
-	   ~active:(List.mem p (Model.get_provers ())) (Model.prover_id p)
+	   ~active:(active) (Model.prover_id p)
 	 in 
 	 ignore(m#connect#toggled  
 		  ~callback:(fun () -> 
