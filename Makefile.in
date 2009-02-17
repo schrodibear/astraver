@@ -954,7 +954,7 @@ otags:
 	otags src/*.mli src/*.ml c/*.mli c/*.ml intf/*.mli intf/*.ml
 
 wc:
-	ocamlwc -p src/*.ml* jc/*.ml* c/*.ml* intf/*.ml* tools/*.ml*
+	ocamlwc -p src/*.ml* jc/*.ml* c/*.ml* intf/*.ml* tools/*.ml* java/*.ml*
 
 # distrib
 #########
