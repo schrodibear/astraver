@@ -3,4 +3,5 @@
 java_lexer.ml
 java_parser.mli
 java_parser.ml
-
+*.cmx
+*.cmi

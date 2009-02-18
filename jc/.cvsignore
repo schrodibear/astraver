@@ -7,3 +7,6 @@ jc_ai.ml
 numconst.ml
 jc.cma 
 jc.cmxa
+*.cmx
+*.cmi
+*.cmo

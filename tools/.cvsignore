@@ -13,3 +13,5 @@ rv_split.ml
 toolstat_lex.ml
 toolstat_pars.ml
 toolstat_pars.mli
+*.cmi
+*.cmx

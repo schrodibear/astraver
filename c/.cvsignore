@@ -11,3 +11,5 @@ clparser.ml
 cversion.ml
 cpp.ml
 *.annot
+*.cmx
+*.cmi

@@ -3,3 +3,6 @@ hilight.ml
 tagsplit.ml
 whyhilight.ml
 config.ml
+*.cmx
+*.cmi
+*.cmo
