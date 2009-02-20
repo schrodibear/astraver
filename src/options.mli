@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.96 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.97 2009-02-20 16:11:41 stoulsn Exp $ i*)
 
 (*s General options *)
 
@@ -85,6 +85,7 @@ val pruning_hyp_arithmetic_tactic : bool
 val pruning_hyp_var_tactic : int
 val pruning_hyp_polarized_preds : bool
 val prune_context : bool
+val prune_get_depths : bool
 (* FIN de Heuristiques en test *)
 val modulo : bool
 

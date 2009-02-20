@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.61 2009-01-07 17:29:48 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.62 2009-02-20 16:11:41 stoulsn Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -710,7 +710,7 @@ let removes_fresh_vars vs =
     vs
     VarStringSet.empty
 
-(** returns the set of  all the successors of a node **)
+(** returns the set of all the successors of a node **)
 let succs_of vs =
   VarStringSet.fold
     (fun el l ->
@@ -726,30 +726,77 @@ let succs_of vs =
     vs
     VarStringSet.empty
 
-(**
-@param v the initial set of variables
-@param n the depth of the tree of variables
-@param acc acumumulates the variables that have already been visited
-@return the ist of variables reachable in n steps
 
+
+
+
+
+
+
+(**
+   @param v the initial set of variables
+   @param n the depth of the tree of variables
+   @return the list of variables reachable in n steps
 **)
-let get_reachable_vars v n =
+let get_n_depth_vars v n =
+  (**
+     @param v the initial, or newly reached, set of variables
+     @param n the depth of the tree of variables
+     @param acc acumumulates the variables that have already been visited
+     @return the list of variables reachable in n steps
+  **)
   let rec get_vars_in_tree_b v n acc =
     let vret =
       if n > 0 then
-        let succ_set = succs_of v in
-        let v' = VarStringSet.diff succ_set acc in
-        VarStringSet.union v
-          (get_vars_in_tree_b
-              v'
-              (n - 1)
-              (VarStringSet.union v succ_set)
-          )
+	let succ_set = succs_of v in
+	let newly_reached = VarStringSet.diff succ_set acc in
+	(*VarStringSet.union v
+          ( *)
+	get_vars_in_tree_b 
+          newly_reached
+          (n - 1) 
+          (VarStringSet.union v succ_set)
+          (* ) *)
       else
-        v in
-    VarStringSet.diff vret avoided_vars in
-  VarStringSet.diff
-    (get_vars_in_tree_b v n VarStringSet.empty) v
+	v 
+    in
+    (** Some variables have to not be consider in the graph **)
+    VarStringSet.diff vret avoided_vars 
+
+
+  in
+  VarStringSet.diff (get_vars_in_tree_b v n VarStringSet.empty) v
+
+
+(**
+   @param v the initial set of variables
+   @return the minimum depth needed to reach all reachable variables
+**)
+let get_depth_of_reachable_vars v =
+  
+  let rec get_depth nrvars depth acc =
+    let succ_set = succs_of nrvars in
+    let treated_vars = VarStringSet.union nrvars acc in
+    let newly_reached = VarStringSet.diff succ_set treated_vars in
+
+    if (VarStringSet.cardinal newly_reached) > 0 then
+      get_depth
+        newly_reached
+        (depth + 1) 
+        treated_vars
+    else
+      depth
+	
+  in
+  get_depth v 0 VarStringSet.empty
+    
+
+
+
+
+
+
+
 (** End of graph of variables **)
 
 (**
@@ -1608,7 +1655,7 @@ let get_preds_of p filter_comparison =
   !s
 
 let get_predecessor_pred p n =
-  (** av stands for tha already visited preds
+  (** av stands for the already visited preds
   nyt stands for not yet treated preds **)
   let rec get_preds_in_graph nyv av n =
     if n > 0 then
@@ -1635,6 +1682,61 @@ let get_relevant_preds hl n =
   done; 
   !avs
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(** 
+    @param p the set of initial predicates
+    @return the minimum depth needed to reach all reachable predicates from p
+**)
+let get_depth_of_reachable_preds p =
+  (** 
+      @param nyt stands for not yet treated preds 
+      @param av stands for the already visited preds
+      @param depth stands for the current visited depth
+      @return the minimum depth needed to reach all reachable predicates from p
+  **)
+  let rec get_depth nyt av depth =
+    let new_preds = set_of_pred_p nyt in
+    let all_treated = PdlSet.union nyt av in
+    let newly_reached = PdlSet.diff new_preds all_treated in
+    if (PdlSet.cardinal newly_reached) > 0 then 
+      get_depth
+	newly_reached
+	all_treated
+	(depth + 1)
+    else
+      depth
+  in
+  get_depth p PdlSet.empty 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
  
@@ -1996,7 +2098,7 @@ let managesGoal ax (hyps, concl) decl =
   (** retrieves the list of variables in the conclusion **)
   let vars_of_concl = VarStringSet.diff (free_vars_of concl) avoided_vars in
   let reachable_vars = VarStringSet.diff
-      (get_reachable_vars vars_of_concl !vb)
+      (get_n_depth_vars vars_of_concl !vb)
       avoided_vars in
   let relevant_vars = VarStringSet.union reachable_vars vars_of_concl in 
   (* Traitement fait 2 fois pour l'optimisation *)
@@ -2006,8 +2108,9 @@ let managesGoal ax (hyps, concl) decl =
   
   if debug then
     begin
-      display_str "Relevant vars " relevant_vars;
-      display_str "Reachable vars " reachable_vars;
+      display_str "Concl_vars : " vars_of_concl ;
+      display_str "Relevant vars : " relevant_vars;
+      display_str "Reachable vars : " reachable_vars;
       
       if VarStringSet.subset relevant_vars reachable_vars then Format.printf "Relevant <: Reachable\n" else Format.printf "Relevant /<: Reachable\n";
       if VarStringSet.subset reachable_vars relevant_vars then Format.printf "Reachable <: Relevant\n" else Format.printf "Reachable /<: Relevant\n";
@@ -2020,6 +2123,14 @@ let managesGoal ax (hyps, concl) decl =
       DotVG.output_graph oc !vg
     end;
   
+  if Options.prune_get_depths then
+    begin
+      Format.printf 
+	"Max depth of predicates: %d\nMax depth of variables: %d\n" 
+	(get_depth_of_reachable_preds concl_preds) 
+	(get_depth_of_reachable_vars vars_of_concl) 
+    end;
+
   managesContext relevant_preds decl;
   
   (loc, expl, id, (l', concl))

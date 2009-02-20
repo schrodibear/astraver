@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.124 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.125 2009-02-20 16:11:41 stoulsn Exp $ i*)
 
 open Format
 
@@ -77,6 +77,7 @@ let pruning_hyp_var_tactic_ = ref 0
 let pruning_hyp_polarized_preds_ = ref false
 let prune_context_ = ref false
 let prune_coarse_pred_comp_ = ref false
+let prune_get_depths_ = ref false
 (* FIN de Heuristiques en test *)
 let modulo_ = ref false 
 
@@ -239,6 +240,7 @@ Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
   --prune-polarized-preds     Consider polarity on predicates 
   --prune-context             Filter axioms with Pred depth
   --prune-coarse-pred-comp    abstract weights in predicate predecessors computation  
+  --prune-get-depths          get minimum depths to reach all reachable vars/preds
 
 Prelude files:
   --no-prelude   do not read the prelude files (prelude.why and arrays.why)
@@ -510,9 +512,9 @@ let files =
 	prune_context_ := true ; parse args
     | ("--prune-coarse-pred-comp" | "-prune-coarse-pred-comp") :: args ->
 	prune_coarse_pred_comp_ := true ; parse args
-	    
 
-
+    | ("--prune-get-depths" | "-prune-get-depths") :: args ->
+	prune_get_depths_ := true ; parse args
 (* FIN de Heuristiques en test *)
 
     | ("-modulo" | "--modulo") :: args ->
@@ -602,6 +604,7 @@ let pruning_hyp_var_tactic = !pruning_hyp_var_tactic_
 let pruning_hyp_polarized_preds = !pruning_hyp_polarized_preds_
 let prune_context = !prune_context_
 let prune_coarse_pred_comp = !prune_coarse_pred_comp_
+let prune_get_depths = !prune_get_depths_
 (* FIN de Heuristiques en test *)
 let modulo = !modulo_
 let defExpanding = !defExpanding_
