@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mll,v 1.17 2008-11-05 14:03:17 filliatr Exp $ *)
+(* $Id: lexer.mll,v 1.18 2009-02-25 13:35:44 melquion Exp $ *)
 
 {
   open Lexing
@@ -119,7 +119,9 @@ let letter = alpha | '_'
 let digit = ['0'-'9']
 let ident = letter (letter | digit | '\'')*
 let float = digit+ '.' digit* | digit* '.' digit+
-let floatexp = float ['e' 'E'] ['-' '+']? digit+ 
+let floatexp = float ['e' 'E'] ['-' '+']? digit+
+let hexadigit = ['0'-'9' 'a'-'f' 'A'-'F']
+let hexafloat = '0' ['x' 'X'] (hexadigit* '.' hexadigit+ | hexadigit+ '.' hexadigit*) ['p' 'P'] ['-' '+']? digit+
 
 rule token = parse
   | "#" space* ("\"" ([^ '\010' '\013' '"' ]* as file) "\"")?
@@ -136,6 +138,8 @@ rule token = parse
   | float as s
       { FLOAT s }
   | floatexp as s
+      { FLOAT s }
+  | hexafloat as s
       { FLOAT s }
   | "(*"
       { comment lexbuf; token lexbuf }
