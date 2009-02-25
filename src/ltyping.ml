@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.73 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.74 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -251,11 +251,6 @@ and desc_predicate loc lab env = function
       let v = pure_type env pt in
       let p = predicate lab (Env.add_logic id v env) a in
       exists id (PureType v) p
-  | PPfpi (e, f1, f2) ->
-      (match term lab env e with
-	 | te, PTreal -> Pfpi (te, f1, f2)
-	 | _ -> raise_located e.pp_loc 
-	         (AnyMessage "this expression should have type real"))
   | PPnamed (n, a) ->
       Pnamed (User n, predicate lab env a)
 
@@ -311,7 +306,7 @@ and desc_term loc lab env = function
   | PPnamed(n, t) -> 
       let tt,ty = term lab env t in Tnamed(User n, tt), ty
 
-  | PPprefix (PPnot, _) | PPforall _ | PPexists _ | PPfpi _ ->
+  | PPprefix (PPnot, _) | PPforall _ | PPexists _ ->
       term_expected loc
 
 and type_if lab env a b c =

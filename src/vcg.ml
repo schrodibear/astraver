@@ -91,7 +91,6 @@ let rec eval p =
 	  with Exit -> p
 	end
     | Papp (_, _, _) 
-    | Pfpi (_, _, _) 
     | Exists (_, _, _, _)
     | Forallb (_, _, _)
     | Forall (_, _, _, _, _, _)
@@ -246,8 +245,6 @@ let rec unif_pred u = function
 	 raise Exit)
   | Pnot a, Pnot a' -> 
       unif_pred u (a, a')
-  | Pfpi (t, a, b), Pfpi (t', a', b') when a = a' && b = b' ->
-      unif_term u (t, t')
   | Forall (_, _, n, _, _, p), Forall (_, _, n', _, _, p') 
   | Exists (_, n, _, p), Exists (_, n', _, p') ->
       let p'n = subst_in_predicate (subst_onev n' n) p' in 
@@ -256,9 +253,9 @@ let rec unif_pred u = function
   | p, Pnamed (_, p') ->
       unif_pred u (p, p')
   (* outside of the diagonal -> false *)
-  | (Pfpi _ | Forall _ | Exists _ | Forallb _ | Pnot _ | Piff _ | Por _ |
+  | (Forall _ | Exists _ | Forallb _ | Pnot _ | Piff _ | Por _ |
      Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue),
-    (Pfpi _ | Forall _ | Exists _ | Forallb _ | Pnot _ | Piff _ | Por _ |
+    (Forall _ | Exists _ | Forallb _ | Pnot _ | Piff _ | Por _ |
      Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue) ->
       raise Exit
 

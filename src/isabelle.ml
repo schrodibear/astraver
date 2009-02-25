@@ -158,15 +158,12 @@ let rec print_term fmt = function
       fprintf fmt "False" 
   | Tconst ConstUnit -> 
       fprintf fmt "()" 
-  | Tconst (ConstFloat (i,f,e)) ->
-      let e = (if e = "" then 0 else int_of_string e) - String.length f in
-      if e = 0 then
-	fprintf fmt "(real (%s%s::int))" i f
-      else if e > 0 then
-	fprintf fmt "(real (%s%s::int * 1%s))" i f (String.make e '0')
-      else
-	fprintf fmt "(real (%s%s::int) / real (1%s::int))" 
-	  i f (String.make (-e) '0')
+  | Tconst (ConstFloat c) ->
+      Print_real.print_with_integers
+	"(real (%s::int))" 
+	"(real (%s::int * %s))"
+	"(real (%s::int) / real (%s::int))" 
+	fmt c
   | Tderef _ -> 
       assert false
   (* arithmetic *)
@@ -259,8 +256,6 @@ let rec print_predicate fmt = function
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "(@[? %a::%a.@ %a@])" ident id'
 	print_pure_type t print_predicate p'
-  | Pfpi _ ->
-      failwith "fpi not supported in Isabelle/HOL"
   | Pnamed (User n, p) ->
       fprintf fmt "@[(* %s: *)@ %a@]" (String.escaped n) print_predicate p
   | Pnamed (_, p) -> print_predicate fmt p

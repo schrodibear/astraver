@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theoryreducer.ml,v 1.14 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: theoryreducer.ml,v 1.15 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -138,8 +138,12 @@ struct
 	    symbolsSet  := StringSet.add n !symbolsSet 
 	| Tconst (ConstBool b) -> () 
 	| Tconst ConstUnit -> ()
-	| Tconst (ConstFloat (i,f,e)) ->
-	    symbolsSet  :=  StringSet.add  (""^i^"."^f^"E"^e) !symbolsSet
+	| Tconst (ConstFloat (RConstDecimal (i,f,None))) ->
+	    symbolsSet  :=  StringSet.add  (i^"."^f) !symbolsSet
+	| Tconst (ConstFloat (RConstDecimal (i,f, Some e))) ->
+	    symbolsSet  :=  StringSet.add  (i^"."^f^"E"^e) !symbolsSet
+	| Tconst (ConstFloat (RConstHexa (i,f,e))) ->
+	    symbolsSet  :=  StringSet.add  (i^"."^f^"P"^e) !symbolsSet
 	| Tderef _ -> ()
 	| Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	    collect a; 
@@ -214,8 +218,6 @@ struct
 	    collect a;
 	| Forall (_,id,n,t,_,p) | Exists (id,n,t,p) ->    
 	    collect p
-	| Pfpi _ ->
-	    failwith "fpi not yet suported "
 	| Pnamed (_, p) -> (* TODO: print name *)
 	    collect p 
 	|_ -> ()

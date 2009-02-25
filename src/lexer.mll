@@ -25,10 +25,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mll,v 1.18 2009-02-25 13:35:44 melquion Exp $ *)
+(* $Id: lexer.mll,v 1.19 2009-02-25 15:03:44 filliatr Exp $ *)
 
 {
   open Lexing
+  open Logic
   open Parser
 
   let keywords = Hashtbl.create 97
@@ -110,6 +111,13 @@
 	  pos_lnum = int_of_string line;
 	  pos_bol = pos.pos_cnum - int_of_string chars;
       }
+
+  let remove_leading_plus s =
+    let n = String.length s in 
+    if n > 0 && s.[0] = '+' then String.sub s 1 (n-1) else s
+
+  let option_app f = function None -> None | Some x -> Some (f x)
+
 }
 
 let newline = '\n'
@@ -135,12 +143,13 @@ rule token = parse
       { try Hashtbl.find keywords id with Not_found -> IDENT id }
   | digit+ as s
       { INTEGER s }
-  | float as s
-      { FLOAT s }
-  | floatexp as s
-      { FLOAT s }
-  | hexafloat as s
-      { FLOAT s }
+  | (digit+ as i) '.' (digit* as f) (['e' 'E'] (['-' '+']? digit+ as e))?
+  | (digit* as i) '.' (digit+ as f) (['e' 'E'] (['-' '+']? digit+ as e))?
+      { FLOAT (RConstDecimal (i, f, option_app remove_leading_plus e)) }
+  | '0' ['x' 'X'] ((hexadigit* as i) '.' (hexadigit+ as f) 
+                  |(hexadigit+ as i) '.' (hexadigit* as f))
+    ['p' 'P'] (['-' '+']? digit+ as e)
+      { FLOAT (RConstHexa (i, f, remove_leading_plus e)) }
   | "(*"
       { comment lexbuf; token lexbuf }
   | "'"

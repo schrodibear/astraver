@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.162 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.163 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -79,8 +79,8 @@ let rec print_term fmt = function
       fprintf fmt "%b" b
   | Tconst ConstUnit -> 
       fprintf fmt "void" 
-  | Tconst (ConstFloat (i,f,e)) -> 
-      fprintf fmt "%s.%se%s" i f e
+  | Tconst (ConstFloat c) -> 
+      Print_real.print fmt c
   | Tvar id -> 
       (if debug then Ident.dbprint else Ident.print) fmt id
   | Tderef id ->
@@ -155,9 +155,9 @@ and print_predicate fmt = function
       fprintf fmt "@[<hov 2>(exists %a:%a @ %a)@]" 
 	(if debug then Ident.dbprint else Ident.print) b 
 	print_pure_type v print_predicate p
-  | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
-      fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
-	print_term t i1 f1 e1 i2 f2 e2
+(*   | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) -> *)
+(*       fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]"  *)
+(* 	print_term t i1 f1 e1 i2 f2 e2 *)
   | Pnamed (User n, p) ->
       fprintf fmt "@[%s:@ %a@]" n print_predicate p
   | Pnamed (Internal n, p) ->
@@ -616,7 +616,6 @@ and occur_predicate id = function
   | Pnot a -> occur_predicate id a
   | Forall (_,_,_,_,tl,a) -> occur_triggers id tl || occur_predicate id a
   | Exists (_,_,_,a) -> occur_predicate id a
-  | Pfpi (t,_,_) -> occur_term id t
   | Pnamed (_, a) -> occur_predicate id a
 
 let occur_assertion id a = occur_predicate id a.a_value
@@ -681,7 +680,7 @@ let mk_bool_forall x p = match noPnamed p with
 		end
 	    | Papp (_, tl, _) as p ->
 		if List.exists (occur_term x) tl then raise Exit; p
-	    | Pif (t, _, _) | Pfpi (t, _, _) when occur_term x t -> 
+	    | Pif (t, _, _) when occur_term x t -> 
 		raise Exit
 	    | p ->
 		map_predicate subst p

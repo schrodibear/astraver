@@ -104,7 +104,7 @@
 
 %token <string> IDENT
 %token <string> INTEGER
-%token <string> FLOAT
+%token <Logic.real_constant> FLOAT
 %token <string> STRING
 %token ABSURD AMPAMP AND ARRAY ARROW AS ASSERT AT AXIOM 
 %token BANG BAR BARBAR BEGIN 
@@ -426,15 +426,10 @@ lexpr:
      mk $2 }
 | EXISTS ident COLON primitive_type DOT lexpr %prec prec_exists
    { mk_pp (PPexists ($2, $4, $6)) }
-| FPI LEFTPAR lexpr COMMA FLOAT COMMA FLOAT RIGHTPAR
-   { let f1 = Float_lexer.split $5 in
-     let f2 = Float_lexer.split $7 in
-     mk_pp (PPfpi ($3, f1, f2)) }
 | INTEGER
    { mk_pp (PPconst (ConstInt $1)) }
 | FLOAT
-   { let (f,i,e) = Float_lexer.split $1 in 
-     mk_pp (PPconst (ConstFloat (f,i,e))) }
+   { mk_pp (PPconst (ConstFloat $1)) }
 | TRUE
    { mk_pp PPtrue }
 | FALSE
@@ -585,7 +580,7 @@ simple_expr:
 | INTEGER
    { locate (Sconst (ConstInt $1)) }
 | FLOAT
-   { let f = Float_lexer.split $1 in locate (Sconst (ConstFloat f)) }
+   { let f = $1 in locate (Sconst (ConstFloat f)) }
 | VOID
    { locate (Sconst ConstUnit) }
 | TRUE

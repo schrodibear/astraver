@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.99 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.100 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -106,24 +106,6 @@ let prefix id =
   with Not_found -> assert false
 
 
-let print_real fmt = function
-  | "","0",_ | "0","",_ | "0","0",_ -> 
-      fprintf fmt "0.0"
-  | "",f,"" -> 
-      fprintf fmt "0.%s" f
-  | i,"","" -> 
-      fprintf fmt "%s.0" i
-  | i,f,"" ->
-      fprintf fmt "%s.%s" i f      
-  | i,f,e ->
-      let e = (int_of_string e) - String.length f in
-      if e = 0 then
-	fprintf fmt "%s%s" i f
-      else if e > 0 then
-	fprintf fmt "(%s%s * 1%s)" i f (String.make e '0')
-      else
-	fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
-
 let ident = Ident.print
 
 let rec filter_phantom_type = function
@@ -148,6 +130,8 @@ and print_instance fmt l =
   match List.filter filter_phantom_type l with
     | [] -> ()
     | i -> fprintf fmt "[%a]" (print_list comma print_pure_type) i
+
+let print_real = Print_real.print_no_exponent 
 
 let print_term fmt t = 
   let rec print0 fmt = function
@@ -285,9 +269,6 @@ let print_predicate fmt p =
 	fprintf fmt "(@[EXISTS (%s: " (Ident.string id');
 	print_pure_type fmt t; fprintf fmt "):@ ";
 	print0 fmt p'; fprintf fmt "@])"
-    | Pfpi (t,f1,f2) ->
-	fprintf fmt 
-	"@[fpi(%a,%a,%a)@]" print_term t print_real f1 print_real f2
     | Pnamed (_, p) -> (* TODO: print name *)
 	print3 fmt p
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 

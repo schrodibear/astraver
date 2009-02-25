@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ocaml.ml,v 1.27 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.28 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -97,8 +97,10 @@ let constant fmt = function
   | ConstInt n -> fprintf fmt "%s" n
   | ConstBool b -> fprintf fmt "%b" b
   | ConstUnit -> fprintf fmt "()"
-  | ConstFloat (i,f,"") -> fprintf fmt "%s.%s" i f
-  | ConstFloat (i,f,e) -> fprintf fmt "%s.%se%s" i f e
+  | ConstFloat (RConstDecimal (i,f,None)) -> fprintf fmt "%s.%s" i f
+  | ConstFloat (RConstDecimal (i,f,Some e)) -> fprintf fmt "%s.%se%s" i f e
+  | ConstFloat (RConstHexa (i,f,e)) -> 
+      fprintf fmt "(float_of_string \"0x%s.%sp%s\")" i f e
 
 (*s logical expressions *)
 

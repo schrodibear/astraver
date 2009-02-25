@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: theory_filtering.ml,v 1.12 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: theory_filtering.ml,v 1.13 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -209,8 +209,6 @@ let symbols  f  =
 	  collect a;
       | Forall (_,id,n,t,_,p) | Exists (id,n,t,p) ->    
 	  collect p
-      | Pfpi _ ->
-	  failwith "fpi not yet suported "
       | Pnamed (_, p) -> (* TODO: print name *)
 	  collect p 
       |_ -> ()

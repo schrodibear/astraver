@@ -105,7 +105,6 @@ let rec lexpr avoid s p = match p.pp_desc with
   | PPif (a, b, c) -> 
       lexpr avoid (lexpr avoid (lexpr avoid s a) b) c
   | PPprefix (_, a) 
-  | PPfpi (a, _, _) 
   | PPnamed (_, a) ->
       lexpr avoid s a
   | PPforall (id,_,_,p)
@@ -129,7 +128,6 @@ let rec lexpr avoid s p = match p.pp_desc with
   | PPif (a, b, c) -> 
       lexpr avoid (lexpr avoid (lexpr avoid s a) b) c
   | PPprefix (_, a) 
-  | PPfpi (a, _, _) 
   | PPnamed (_, a) ->
       lexpr avoid s a
   | PPforall (id,_,_,p)
@@ -153,8 +151,7 @@ let rec compute_literal_number  pr = match pr.pp_desc with
   | PPprefix(_,p)
   | PPforall (_, _, _, p)
   | PPexists (_,_,p) 
-  | PPnamed(_,p) 
-  | PPfpi(p,_,_) ->
+  | PPnamed(_,p) ->
       compute_literal_number  p
   | PPvar(_)   
   | PPconst(_) ->

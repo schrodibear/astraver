@@ -134,10 +134,8 @@ let constant fmt = function
       fprintf fmt "%b" b
   | ConstUnit -> 
       fprintf fmt "void" 
-  | ConstFloat (i,f,"") -> 
-      fprintf fmt "%s.%s" i f
-  | ConstFloat (i,f,e) -> 
-      fprintf fmt "%s.%se%s" i f e
+  | ConstFloat c -> 
+      Print_real.print fmt c
 
 let rec lexpr m fmt p = 
   let lexprm = lexpr m in
@@ -197,9 +195,6 @@ let rec lexpr m fmt p =
       let m = rename m id in
       fprintf fmt "@[<hov 2>(exists %a:%a.@ %a)@]" 
 	(ident m) id ppure_type v (lexpr m) p
-  | PPfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
-      fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
-	lexprm t i1 f1 e1 i2 f2 e2
   | PPnamed (_, p) ->
       lexprm fmt p
 

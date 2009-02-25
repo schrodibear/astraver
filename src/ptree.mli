@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ptree.mli,v 1.44 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.45 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -66,7 +66,6 @@ and pp_desc =
   | PPif of lexpr * lexpr * lexpr
   | PPforall of Ident.t * ppure_type * lexpr list list * lexpr
   | PPexists of Ident.t * ppure_type * lexpr
-  | PPfpi of lexpr * real_constant * real_constant
   | PPnamed of string * lexpr
 
 type assertion = { 

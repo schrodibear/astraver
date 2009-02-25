@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: monomorph.ml,v 1.37 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.38 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -104,7 +104,7 @@ module IterIT = struct
     | Forall (_, _, _, v, tl, p) -> 
 	g v; List.iter (List.iter (pattern f g)) tl; predicate f g p
     | Pnamed (_, a) -> predicate f g a
-    | Ptrue | Pfalse | Pvar _ | Pfpi _ -> ()
+    | Ptrue | Pfalse | Pvar _ -> ()
     | Papp (id, tl, i) -> f id i; List.iter (term f) tl
 
   and pattern f g = function
@@ -214,7 +214,6 @@ module GenSubst(S : Substitution) = struct
     | Exists (id, b, v, p) -> 
 	Exists (id, b, pure_type s v, predicate s p)
     | Forallb (w, a, b) -> Forallb (w, predicate s a, predicate s b)
-    | Pfpi (t, a, b) -> Pfpi (term s t, a, b)
     | Pnamed (n, a) -> Pnamed (n, predicate s a)
     | Ptrue | Pfalse | Pvar _ as p -> p
 
@@ -303,7 +302,6 @@ module OpenInstances = struct
 	List.fold_left (List.fold_left pattern) (predicate s p) tl
     | Exists (_, _, _, p) -> predicate s p
     | Pnamed (_, p) -> predicate s p
-    | Pfpi (t, _, _) -> term s t
 	  
 end
 

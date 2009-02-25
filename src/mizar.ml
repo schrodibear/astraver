@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.50 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.51 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -154,10 +154,12 @@ let rec print_term fmt t =
 	fprintf fmt "FALSE" 
     | Tconst ConstUnit -> 
 	fprintf fmt "(Extract 0)" 
-    | Tconst (ConstFloat (i,f,"")) ->
+    | Tconst (ConstFloat (RConstDecimal (i,f,None))) ->
 	fprintf fmt "%s.%s" i f
-    | Tconst (ConstFloat (i,f,e)) ->
+    | Tconst (ConstFloat (RConstDecimal (i,f,Some e))) ->
 	fprintf fmt "%s.%se%s" i f e
+    | Tconst (ConstFloat (RConstHexa _)) ->
+	failwith "hexadecimal real constants not supported in Mizar"
     | Tderef _ -> 
 	assert false
     (* arithmetic *)
@@ -249,8 +251,6 @@ let print_predicate fmt p =
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[ex %s being %a st@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
-    | Pfpi _ ->
-	failwith "fpi not supported with Mizar"
     | Pnamed (_, p) -> (* TODO: print name *)
 	print3 fmt p
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 

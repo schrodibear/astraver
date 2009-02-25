@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.62 2009-02-20 16:11:41 stoulsn Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.63 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -181,8 +181,6 @@ let free_vars_of p =
     | Pnot a -> collect qvars a;
     | Forall (_, id, _, _, _, p) | Exists (id, _, _, p) ->
         collect (VarStringSet.add (PureVar (Ident.string id)) qvars) p
-    | Pfpi _ ->
-        failwith "fpi not yet suported "
     | Pnamed (_, p) -> collect qvars p
     | Pvar _ | Pfalse | Ptrue -> ()
   in
@@ -351,7 +349,6 @@ let cnf fm =
   (* code.                                                                   *)
   and rm_pnamed par = match par with
     | Pnamed(_, p) -> rm_pnamed p
-    | Pfpi (a, b, c) -> Pfpi (a, b, c)
     | Exists (a, b, c, d) -> Exists (a, b, c, (rm_pnamed d))
     | Forallb (a, b, c) -> Forallb (a, (rm_pnamed b), (rm_pnamed c))
     | Forall (a, b, c, d, e, f) -> Forall (a, b, c, d, e, (rm_pnamed f))
@@ -463,7 +460,6 @@ let sets_of_vars f =
     | Pif (a, b, c) -> Pif (local_subst_in_term id1 id2 a,
           local_subst_in_predicate id1 id2 b,
           local_subst_in_predicate id1 id2 c)
-    | Pfpi (t, f1, f2) -> Pfpi (local_subst_in_term id1 id2 t, f1, f2)
     | Forall (w, id, b, v, tl, p) ->
         Forall (w, id, b, v, List.map (List.map (
                   (fun id1 id2 -> function
@@ -553,8 +549,6 @@ let sets_of_vars f =
           end
         else
           collect (VarStringSet.add (PureVar (Ident.string id)) qvars) p
-    | Pfpi _ ->
-        failwith "fpi not yet suported "
     | Pnamed (_, p) ->
         collect qvars p
     | Pvar _ | Pfalse | Ptrue -> ()
@@ -1424,7 +1418,6 @@ let build_pred_graph decl =
 				(add_atom Ptrue { num = 0; pos = StringSet.empty; neg = StringSet.empty;
 							cmp = IdentPairSet.empty })
 		| Pnamed(_, _)
-		| Pfpi (_, _, _)
 		| Forallb (_, _, _)
 		| Piff (_, _)
 		| Pif (_, _, _)
@@ -1767,8 +1760,6 @@ let reduce_subst (l', g') =
         Pif (many_substs_in_term sl a,
           many_substs_in_predicate sl b,
           many_substs_in_predicate sl c)
-    | Pfpi (t, f1, f2) ->
-        Pfpi (many_substs_in_term sl t, f1, f2)
     | Forall (w, id, b, v, tl, p) ->
         Forall (w, id, b, v, tl,
           many_substs_in_predicate sl p)
@@ -1888,8 +1879,6 @@ let filter_acc_variables l concl_rep selection_strategy pred_symb =
       
       | Pfalse
       | Ptrue -> true
-      | Pfpi _ ->
-          failwith "fpi not yet suported "
       | Pnamed (_, _) ->
           failwith "Pnamed has to be not found there (nnf has to remove it)"
       | Forallb (_, _, _) ->

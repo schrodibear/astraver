@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: holl.ml,v 1.49 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.50 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -123,15 +123,12 @@ let rec print_term fmt = function
       fprintf fmt "F" 
   | Tconst ConstUnit -> 
       fprintf fmt "one" 
-  | Tconst (ConstFloat (i,f,e)) ->
-      let e = (if e = "" then 0 else int_of_string e) - String.length f in
-      if e = 0 then
-	fprintf fmt "(real_of_num %s%s)" i f
-      else if e > 0 then
-	fprintf fmt "(real_of_num (%s%s * 1%s))" i f (String.make e '0')
-      else
-	fprintf fmt "(real_of_num %s%s / real_of_num 1%s)" 
-	  i f (String.make (-e) '0')
+  | Tconst (ConstFloat c) ->
+      Print_real.print_with_integers 
+	"(real_of_num %s)" 
+	"(real_of_num (%s * %s))"
+	"(real_of_num %s / real_of_num %s)" 
+	fmt c
   | Tderef _ -> 
       assert false
   (* arithmetic *)
@@ -221,8 +218,6 @@ let rec print_predicate fmt = function
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "(@[?%s:%a.@ %a@])" (Ident.string id')
 	print_pure_type t print_predicate p'
-  | Pfpi _ ->
-      failwith "fpi not supported in HOL Light"
   | Pnamed (User n, p) ->
       fprintf fmt "@[(* %s: *) %a@]" n print_predicate p
   | Pnamed (_, p) -> print_predicate fmt p

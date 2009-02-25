@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.54 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.55 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -147,16 +147,12 @@ let rec print_term fmt = function
       fprintf fmt "harvey__%b" b
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
-  | Tconst (ConstFloat (i,f,e)) ->
-      let f = if f = "0" then "" else f in
-      let e = (if e = "" then 0 else int_of_string e) - String.length f in
-      if e = 0 then
-	fprintf fmt "(real_of_int %s%s)" i f
-      else if e > 0 then
-	fprintf fmt "(real_of_int (* %s%s 1%s))" i f (String.make e '0')
-      else
-	fprintf fmt "(div_real (real_of_int %s%s) (real_of_int 1%s))" 
-	  i f (String.make (-e) '0')
+  | Tconst (ConstFloat c) ->
+      Print_real.print_with_integers 
+	"(real_of_int %s)"
+	"(real_of_int (* %s %s))"
+	"(div_real (real_of_int %s) (real_of_int %s))" 
+	fmt c
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 
@@ -218,8 +214,6 @@ let rec print_predicate fmt = function
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(exists %a@ %a)@]" ident id' print_predicate p'
-  | Pfpi _ ->
-      failwith "fpi not supported with haRVey"
   | Pnamed (_, p) -> (* TODO: print name *)
       print_predicate fmt p
 

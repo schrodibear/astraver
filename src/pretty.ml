@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.39 2009-01-21 08:34:15 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.40 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -95,10 +95,8 @@ let rec term fmt = function
       fprintf fmt "%b" b
   | Tconst ConstUnit -> 
       fprintf fmt "void" 
-  | Tconst (ConstFloat (i,f,"")) -> 
-      fprintf fmt "%s.%s" i f
-  | Tconst (ConstFloat (i,f,e)) -> 
-      fprintf fmt "%s.%se%s" i f e
+  | Tconst (ConstFloat c) ->
+      Print_real.print fmt c
   | Tvar id | Tderef id | Tapp (id, [], _) -> 
       ident fmt id
   | Tapp (id, [t1; t2], _) when id == t_add_int || id == t_add_real ->
@@ -182,9 +180,6 @@ let rec predicate fmt = function
       let p = subst_in_predicate (subst_onev n id) p in
       fprintf fmt "@[<hov 2>(exists %a:%a.@ %a)@]" 
 	ident id pure_type v predicate p
-  | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
-      fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
-	term t i1 f1 e1 i2 f2 e2
   | Pnamed (User n, p) ->
       fprintf fmt "@[(%S:@ %a)@]" n predicate p
   | Pnamed (_, p) -> predicate fmt p

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.87 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.88 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -158,16 +158,12 @@ let rec print_term fmt = function
       fprintf fmt "|@@%b|" b
   | Tconst ConstUnit -> 
       fprintf fmt "tt" (* TODO: CORRECT? *)
-  | Tconst (ConstFloat (i,f,e)) ->
-      let f = if f = "0" then "" else f in
-      let e = (if e = "" then 0 else int_of_string e) - String.length f in
-      if e = 0 then
-	fprintf fmt "(real_of_int %s%s)" i f
-      else if e > 0 then
-	fprintf fmt "(real_of_int (* %s%s 1%s))" i f (String.make e '0')
-      else
-	fprintf fmt "(div_real (real_of_int %s%s) (real_of_int 1%s))" 
-	  i f (String.make (-e) '0')
+  | Tconst (ConstFloat c) ->
+      Print_real.print_with_integers 
+	"(real_of_int %s)" 
+	"(real_of_int (* %s %s))"
+	"(div_real (real_of_int %s) (real_of_int %s))" 
+	fmt c
   | Tderef _ -> 
       assert false
 (**
@@ -295,8 +291,6 @@ let rec print_predicate pos fmt p =
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(EXISTS (%a)@ %a)@]" ident id' pp p'
-  | Pfpi _ ->
-      failwith "fpi not supported with Simplify"
   | Pnamed (_n, p) ->
       (*fprintf fmt "@[;;%s@\n%a@]" n pp p*) 
       pp fmt p

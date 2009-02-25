@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.24 2009-02-13 17:06:46 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.25 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -128,8 +128,9 @@ let eval_constant = function
   | Tconst (ConstFloat f) -> 
     begin
       match f with
-      | (i,f,"") -> Printf.sprintf "%s.%s" i f
-      | (i,f,e)  -> Printf.sprintf "%s.%se%s" i f e
+      | RConstDecimal (i,f,None) -> Printf.sprintf "%s.%s" i f
+      | RConstDecimal (i,f,Some e)  -> Printf.sprintf "%s.%se%s" i f e
+      | RConstHexa (i,f,e) -> Printf.sprintf "0x%s.%sp%s" i f e
     end
   | Tapp (id, [Tconst (ConstInt n)], _) when id == real_of_int -> 
       n
@@ -287,7 +288,6 @@ let rec gpred = function
   | Pnot _
   | Forallb _
   | Exists _
-  | Pfpi _
   | Ptrue | Pfalse | Pvar _ -> (* discarded *)
       None
 

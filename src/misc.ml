@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.123 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.124 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -283,7 +283,6 @@ let rec collect_pred s = function
   | Pnot a -> collect_pred s a
   | Forall (_, _, _, _, _, p) -> collect_pred s p
   | Exists (_, _, _, p) -> collect_pred s p
-  | Pfpi (t, _, _) -> collect_term s t
   | Pnamed (_, p) -> collect_pred s p
 
 let term_vars = collect_term Idset.empty
@@ -310,7 +309,7 @@ let rec map_predicate f = function
   | Exists (id, b, v, p) -> Exists (id, b, v, f p)
   | Forallb (w, a, b) -> Forallb (w, f a, f b)
   | Pnamed (n, a) -> Pnamed (n, f a)
-  | Ptrue | Pfalse | Pvar _ | Papp _ | Pfpi _ as p -> p
+  | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
 
 let rec tsubst_in_term s = function
   | Tvar x | Tderef x as t -> 
@@ -326,7 +325,6 @@ let rec tsubst_in_predicate s = function
   | Pif (a, b ,c) -> Pif (tsubst_in_term s a, 
 			  tsubst_in_predicate s b, 
 			  tsubst_in_predicate s c)
-  | Pfpi (t, f1, f2) -> Pfpi (tsubst_in_term s t, f1, f2)
   | Forall (w, id, b, v, tl, p) -> 
       Forall (w, id, b, v, List.map (List.map (tsubst_in_pattern s)) tl,
 	      tsubst_in_predicate s p)
@@ -362,7 +360,6 @@ let rec subst_in_predicate s = function
   | Pif (a, b ,c) -> Pif (subst_in_term s a, 
 			  subst_in_predicate s b, 
 			  subst_in_predicate s c)
-  | Pfpi (t, f1, f2) -> Pfpi (subst_in_term s t, f1, f2)
   | Forall (w, id, b, v, tl, p) -> 
       Forall (w, id, b, v, List.map (List.map (subst_in_pattern s)) tl,
 	      subst_in_predicate s p)
@@ -615,9 +612,6 @@ let rec eq_predicate p1 p2 = match p1, p2 with
       eq_predicate a1 a2
   | Pif (t1, a1, b1), Pif (t2, a2, b2) ->
       eq_term t1 t2 && eq_predicate a1 a2 && eq_predicate b1 b2
-  | Pfpi (t1, a1, b1), Pfpi (t2, a2, b2) ->
-      eq_term t1 t2 && a1 = a2 && b1 = b2
-	  (* no alpha-equivalence *)
   | (Forall _ | Exists _), _
   | _, (Forall _ | Exists _) ->
       false
@@ -627,9 +621,9 @@ let rec eq_predicate p1 p2 = match p1, p2 with
   | _, Pnamed (_, p2) ->
       eq_predicate p1 p2
 	(* outside of the diagonal -> false *)
-  | (Pfpi _ | Forallb _ | Pnot _ | Piff _ | Por _ |
+  | (Forallb _ | Pnot _ | Piff _ | Por _ |
 	 Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue),
-      (Pfpi _ | Forallb _ | Pnot _ | Piff _ | Por _ |
+      (Forallb _ | Pnot _ | Piff _ | Por _ |
 	   Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue) ->
       false
 
@@ -655,7 +649,6 @@ module Size = struct
     | Exists (_,_,_,p) -> 1 + predicate p
     | Forallb (_,p1,p2) -> 1+ predicate p1 + predicate p2
     | Pnamed (_,p) -> predicate p
-    | Pfpi (t,_,_) -> 1 + term t
 
   let assertion a = predicate a.a_value
 

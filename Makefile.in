@@ -222,7 +222,7 @@ bin/top: $(CMO)
 
 # world-why-web
 WWEBCMO = src/lib.cmo src/rc.cmo src/version.cmo src/options.cmo src/loc.cmo\
-	 src/ident.cmo src/float_lexer.cmo src/effect.cmo src/pp.cmo \
+	 src/ident.cmo  src/effect.cmo src/pp.cmo \
 	src/option_misc.cmo\
 	src/misc.cmo src/parser.cmo src/lexer.cmo src/report.cmo\
 	 src/env.cmo src/rename.cmo src/explain.cmo src/util.cmo src/xml.cmo\
@@ -559,7 +559,7 @@ bin/rv_merge.byte: tools/rv_merge.ml
 bin/rv_merge.opt: tools/rv_merge.ml
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
-OBFCMO=src/pp.cmo src/loc.cmo src/ident.cmo src/float_lexer.cmo \
+OBFCMO=src/pp.cmo src/loc.cmo src/ident.cmo  \
        src/parser.cmo src/lexer.cmo src/print_real.cmo tools/obfuscator.cmo
 OBFCMX=$(OBFCMO:.cmo=.cmx)
 
@@ -569,7 +569,7 @@ bin/why-obfuscator.byte: $(OBFCMO)
 bin/why-obfuscator.opt: $(OBFCMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ nums.cmxa $^
 
-STATCMO=src/pp.cmo src/loc.cmo src/ident.cmo src/float_lexer.cmo \
+STATCMO=src/pp.cmo src/loc.cmo src/ident.cmo  \
         src/parser.cmo src/lexer.cmo tools/whystat.cmo
 STATCMX=$(STATCMO:.cmo=.cmx)
 

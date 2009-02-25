@@ -25,11 +25,13 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic.mli,v 1.48 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.49 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Logic. *)
 
-type real_constant = string * string * string (* int / frac / exp *)
+type real_constant = 
+  | RConstDecimal of string * string * string option (* int / frac / exp *)
+  | RConstHexa of string * string * string
 
 type constant =
   | ConstInt of string
@@ -83,7 +85,7 @@ type predicate =
   | Forall of is_wp * Ident.t * Ident.t * pure_type * triggers * predicate
   | Forallb of is_wp * predicate * predicate
   | Exists of Ident.t * Ident.t * pure_type * predicate
-  | Pfpi of term * real_constant * real_constant
+(*   | Pfpi of term * real_constant * real_constant *)
   | Pnamed of term_label * predicate
 and pattern = TPat of term | PPat of predicate
 and trigger = pattern list

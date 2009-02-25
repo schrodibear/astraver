@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.166 2009-01-21 08:34:15 marche Exp $ i*)
+(*i $Id: main.ml,v 1.167 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -396,7 +396,6 @@ let rec occurrences pi a =
       assert false (* TODO *)
       (* occurrences pi p *)
   | Pnamed (_, _) -> assert false (* TODO *)
-  | Pfpi (_, _, _) -> assert false (* TODO *)
   | Exists (_, _, _, _)  -> assert false (* TODO *)
   | Forallb (_, _, _)  -> assert false (* TODO *)
   | Piff (_, _) -> assert false (* TODO *)

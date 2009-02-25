@@ -63,8 +63,6 @@ let rec subst_in_predicate s st = function
       Pif (subst_in_term s st a, 
 	   subst_in_predicate s st b, 
 	   subst_in_predicate s st c)
-  | Pfpi (t, f1, f2) -> 
-      Pfpi (subst_in_term s st t, f1, f2)
   | Forall (w, id, b, v, tl, p) -> 
       Forall (w, id, b, subst_in_pure_type st v, 
 	      List.map (List.map (subst_in_pattern s st)) tl,

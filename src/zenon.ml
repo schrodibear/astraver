@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.33 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.34 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s Zenon output *)
 
@@ -134,15 +134,12 @@ let rec print_term fmt = function
       fprintf fmt "false"
   | Tconst ConstUnit -> 
       fprintf fmt "tt" (* TODO: CORRECT? *)
-  | Tconst (ConstFloat (i,f,e)) ->
-      let f = if f = "0" then "" else f in
-      let e = (if e = "" then 0 else int_of_string e) - String.length f in
-      if e = 0 then
-	fprintf fmt "why__real_const_%s%s" i f
-      else if e > 0 then
-	fprintf fmt "(why__mul_real why__real_const_%s%s why__real_const_1%s)" i f (String.make e '0')
-      else
-	fprintf fmt "(why_div_real why__real_const_%s%s why__real_const_1%s)" i f (String.make (-e) '0')
+  | Tconst (ConstFloat c) ->
+      Print_real.print_with_integers
+	"why__real_const_%s"
+	"(why__mul_real why__real_const_%s why__real_const_%s)"
+	"(why_div_real why__real_const_%s why__real_const_%s)"
+	fmt c
   | Tderef _ -> 
       assert false
   | Tapp (id, ([_;_] as tl), _) when id == t_mod_int ->
@@ -227,8 +224,6 @@ let rec print_predicate fmt = function
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(E. ((%a \"%a\")@ %a))@]" 
 	ident id' print_pure_type t print_predicate p'
-  | Pfpi _ ->
-      failwith "fpi not supported with Zenon"
   | Pnamed (_, p) -> (* TODO: print name *)
       print_predicate fmt p
 
