@@ -75,7 +75,7 @@ let read_cache () =
 let clean seq =
   let (ctx, p) = seq.Env.scheme_type in
   let rec clean0 = function 
-    | Pvar _ | Papp (_, _, _) | Pfpi (_,_,_) | Ptrue | Pfalse as p -> p
+    | Pvar _ | Papp (_, _, _) | Ptrue | Pfalse as p -> p
     | Pimplies (i, p1, p2) -> 
 	Pimplies (i, clean0 p1, clean0 p2)
     | Pif (t, p1, p2) ->

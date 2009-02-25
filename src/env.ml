@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.80 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.81 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -100,7 +100,6 @@ let rec find_pattern_vars acc = function
 and find_predicate_vars acc p =
   match p with
     | Pvar _
-    | Pfpi _
     | Ptrue
     | Pfalse -> 
 	acc
@@ -207,7 +206,6 @@ and subst_predicate s p =
   | Forallb (w, a, b) -> Forallb (w, f a, f b)
   | Papp (id, tl, i) -> 
       Papp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
-  | Pfpi (t, a, b) -> Pfpi (subst_term s t, a, b)
   | Pnamed (n, a) -> Pnamed (n, f a)
   | Ptrue | Pfalse | Pvar _ as p -> p
 

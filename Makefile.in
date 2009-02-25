@@ -112,7 +112,7 @@ GENERATED = src/version.ml src/rc.ml src/xml.ml \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
 	    intf/hilight.ml intf/whyhilight.ml \
 	    intf/tagsplit.ml intf/config.ml \
-	    tools/why2html.ml src/float_lexer.ml tools/cvcl_split.ml \
+	    tools/why2html.ml  tools/cvcl_split.ml \
 	    tools/simplify_split.ml tools/smtlib_split.ml tools/rv_split.ml \
 	    tools/zenon_split.ml tools/ergo_split.ml \
 	    tools/simplify_lexer.ml tools/simplify_parser.mli \
@@ -186,7 +186,7 @@ bin/why-config.byte: $(WHYCONFIGCMO)
 # why
 CMO = src/lib.cmo src/rc.cmo tools/dpConfig.cmo \
       src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
-	   src/ident.cmo src/float_lexer.cmo  \
+	   src/ident.cmo src/print_real.cmo  \
 	   src/effect.cmo src/pp.cmo src/option_misc.cmo src/misc.cmo 	\
 	   src/parser.cmo src/lexer.cmo src/report.cmo \
            src/env.cmo src/rename.cmo src/explain.cmo src/util.cmo 	\
@@ -560,14 +560,14 @@ bin/rv_merge.opt: tools/rv_merge.ml
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
 OBFCMO=src/pp.cmo src/loc.cmo src/ident.cmo src/float_lexer.cmo \
-       src/parser.cmo src/lexer.cmo tools/obfuscator.cmo
+       src/parser.cmo src/lexer.cmo src/print_real.cmo tools/obfuscator.cmo
 OBFCMX=$(OBFCMO:.cmo=.cmx)
 
 bin/why-obfuscator.byte: $(OBFCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ $^
+	$(OCAMLC) $(BFLAGS) -o $@ nums.cma $^
 
 bin/why-obfuscator.opt: $(OBFCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ nums.cmxa $^
 
 STATCMO=src/pp.cmo src/loc.cmo src/ident.cmo src/float_lexer.cmo \
         src/parser.cmo src/lexer.cmo tools/whystat.cmo

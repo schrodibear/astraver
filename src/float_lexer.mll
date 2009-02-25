@@ -28,19 +28,22 @@
 {
   open Lexing
   let string_of_option = function None -> "" | Some s -> s
+  let remove_leading_plus s =
+    let n = String.length s in 
+    if n > 0 && s.[0] = '+' then String.sub s 1 (n-1) else s
 }
 
 rule split = parse
   | (['0'-'9']+ as int) '.' (['0'-'9']* as frac) 
     (['e''E'](['-''+']?['0'-'9']+ as exp))? ['f''F''d''D'] ?
-      { (int, frac, string_of_option exp) }
+      { (int, frac, remove_leading_plus (string_of_option exp)) }
 
   | '.' (['0'-'9']+ as frac) (['e''E'](['-''+']?['0'-'9']+ as exp))? 
     ['f''F''d''D'] ?
-      { ("", frac, string_of_option exp) }
+      { ("", frac, remove_leading_plus (string_of_option exp)) }
 
   | (['0'-'9']+ as int) ['e''E'] (['-''+']?['0'-'9']+ as exp) ['f''F''d''D'] ?
-      { (int, "", exp) }
+      { (int, "", remove_leading_plus exp) }
 
 {
   let split s = split (from_string s)

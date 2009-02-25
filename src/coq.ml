@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.177 2009-02-09 15:43:38 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.178 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -175,7 +175,7 @@ let print_term_v7 fmt t =
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
 	fprintf fmt "tt" 
-    | Tconst (ConstFloat (i,f,e)) -> 
+    | Tconst (ConstFloat _) -> 
 	assert (!inz == 0); (* TODO: reals inside integer expressions *)
 	failwith "real constants not supported with Coq V7"
     | Tvar id when id == implicit ->
@@ -271,8 +271,6 @@ let print_predicate_v7 fmt p =
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[EX %a:%a |@ %a@])" ident id'
 	  print_pure_type t print0 p'
-    | Pfpi _ ->
-	failwith "fpi not supported with Coq V7"
     | Pnamed (User n, p) ->
 	fprintf fmt "@[((* %s *)@ %a)@]" n print3 p
     | Pnamed (_, p) -> print3 fmt p
@@ -469,15 +467,9 @@ let print_term_v8 fmt t =
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
 	fprintf fmt "tt" 
-    | Tconst (ConstFloat (i,f,e)) -> 
-	let f = if f = "0" then "" else f in
-	let e = (if e = "" then 0 else int_of_string e) - String.length f in
-	if e = 0 then
-	  fprintf fmt "(%s%s)%%R" i f
-	else if e > 0 then
-	  fprintf fmt "(%s%s * 1%s)%%R" i f (String.make e '0')
-	else
-	  fprintf fmt "(%s%s / 1%s)%%R" i f (String.make (-e) '0')
+    | Tconst (ConstFloat c) -> 
+	Print_real.print_with_integers 
+	  "(%s)%%R" "(%s * %s)%%R" "(%s / %s)%%R" fmt c
     | Tvar id when id == implicit ->
 	fprintf fmt "?"
     | Tvar id when id == t_zwf_zero ->
@@ -581,8 +573,6 @@ let print_predicate_v8 fmt p =
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[exists %a:%a,@ %a@])" ident id'
 	  print_pure_type t print0 p'
-    | Pfpi _ ->
-	failwith "fpi not supported with Coq V8"
     | Pnamed (User n, p) ->
 	fprintf fmt "@[(* %s *)@ %a@]" n print3 p
     | Pnamed (_, p) -> print3 fmt p

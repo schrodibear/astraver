@@ -7,3 +7,5 @@ let rec f91 (n:int) : int { variant 101-n } =
   else
     n - 10
   { (n <= 100 and result = 91) or (n >= 101 and result = n - 10) }
+  (* { (n <= 100 -> result = 91) and (n >= 101 -> result = n - 10) } *)
+

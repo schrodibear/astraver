@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cvcl.ml,v 1.59 2008-11-05 14:03:16 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.60 2009-02-25 15:03:44 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -97,15 +97,11 @@ let rec print_term fmt = function
       fprintf fmt "false"
   | Tconst ConstUnit -> 
       fprintf fmt "tt" (* TODO: CORRECT? *)
-  | Tconst (ConstFloat (i,f,e)) ->
-      let f = if f = "0" then "" else f in
-      let e = (if e = "" then 0 else int_of_string e) - String.length f in
-      if e = 0 then
-	fprintf fmt "%s%s" i f
-      else if e > 0 then
-	fprintf fmt "(%s%s * 1%s)" i f (String.make e '0')
-      else
-	fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
+  | Tconst (ConstFloat c) ->
+      Print_real.print_with_integers
+	"%s" 
+	"(%s * %s)"
+	"(%s / %s)" fmt c
   | Tderef _ -> 
       assert false
   | Tapp (id, ([_;_] as tl), _) when id == t_mod_int ->
@@ -183,8 +179,6 @@ let rec print_predicate fmt = function
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(EXISTS (%a:%a):@ %a)@]" 
 	Ident.print id' print_pure_type t print_predicate p'
-  | Pfpi _ ->
-      failwith "fpi not supported with CVCL"
   | Pnamed (_, p) -> (* TODO: print name *)
       print_predicate fmt p
 

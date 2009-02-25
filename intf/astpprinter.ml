@@ -60,11 +60,8 @@ let print_term fmt t =
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
 	fprintf fmt "tt" 
-    | Tconst (ConstFloat (i,f,e)) -> 
-	if e = "" then
-	  fprintf fmt "%s.%s" i f
-	else 
-	  fprintf fmt "(%s.%se%s)" i f e  
+    | Tconst (ConstFloat c) -> 
+	Print_real.print fmt c
     | Tvar id when id == implicit ->
 	fprintf fmt "<?>"
     | Tvar id when id == t_zwf_zero ->
@@ -177,8 +174,6 @@ let print_predicate fmt p =
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[\\exists %a %s;@ %a@])"
 	  print_pure_type t (Ident.string id') print0 p'
-    | Pfpi _ ->
-	failwith "fpi not supported with Coq V8"
     | Pnamed (User n, p) ->
 	(match (Tools.grab_infos n) with
 	   | None -> fprintf fmt "@[%a@]" print3 p
