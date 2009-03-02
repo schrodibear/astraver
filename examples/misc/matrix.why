@@ -1,0 +1,186 @@
+(* ########################################################################## *)
+(*                             Definitions of matrices                        *)
+(*                         Frédéric Gava (Université Paris 12)                *)
+(* ########################################################################## *)
+
+(* ************************** *)
+(* Definition of the matrices *)
+(* ************************** *)
+
+type 'a fmatrice
+
+
+(* ****************************** *)
+(* access and update of a matrice *)
+(* ****************************** *)
+
+logic mat_access : 'a fmatrice, int,int -> 'a
+logic mat_update : 'a fmatrice, int,int,'a -> 'a fmatrice
+
+
+(* *************** *)
+(* axiom of update *)
+(* *************** *)
+
+axiom mat_access_update : 
+  forall m : 'a fmatrice. forall i : int. forall j : int. forall v : 'a.
+  mat_access(mat_update(m,i,j,v), i,j) = v
+
+axiom access_update_neq : 
+  forall m : 'a fmatrice. forall i1 : int. forall j1 : int. 
+                          forall i2 : int. forall j2 : int.
+			  forall v : 'a.
+  (i1 <> i2) or (j1<>j2) -> mat_access(mat_update(m,i1,j1,v),i2,j2) = mat_access(m,i2,j2)
+
+
+(* ********************** *)
+(* size of row and column *)
+(* ********************** *)
+
+logic mat_size_row : 'a fmatrice -> int
+logic mat_size_column : 'a fmatrice -> int
+
+
+(* ************************************ *)
+(* effective size of the row and column *)
+(* ************************************ *)
+
+parameter mat_size_row_ : 
+  m:'a fmatrice ref -> {} int reads m { result=mat_size_row(m) }
+
+parameter mat_size_column_ : 
+  m:'a fmatrice ref -> {} int reads m { result=mat_size_column(m) }
+
+
+(* *************************** *)
+(* effective access and update *)
+(* *************************** *)
+
+parameter mat_get :
+  m:'a fmatrice ref -> i:int -> j:int -> 
+    { 0 <= i < mat_size_row(m) 
+  and 0 <= j < mat_size_column(m)} 'a reads m { result = mat_access(m,i,j) }
+
+parameter mat_set : 
+  m:'a fmatrice ref -> i:int -> j:int -> v:'a -> 
+    { 0 <= i < mat_size_row(m) 
+  and 0 <= j < mat_size_column(m) } unit writes m { m = mat_update(m@,i,j,v) }
+
+
+(* *********************************** *)
+(* axioms on row and column and update *)
+(* *********************************** *)
+
+axiom mat_size_row_update :
+  forall m:'a fmatrice. forall i:int. forall j:int. forall v:'a.
+  mat_size_row(mat_update(m,i,j,v)) = mat_size_row(m)
+
+axiom mat_size_column_update :
+  forall m:'a fmatrice. forall i:int. forall j:int. forall v:'a.
+  mat_size_column(mat_update(m,i,j,v)) = mat_size_column(m)
+
+
+
+(* ########################################################################## *)
+(*                   Multiplication of square matrices C=A*B                  *)
+(* ########################################################################## *)
+
+
+(* ******************** *)
+(* size of the matrices *)
+(* ******************** *)
+
+logic N : int
+
+axiom N_range : 1 <= N
+
+
+(* ****************** *)
+(* Usefull Predicates *)
+(* ****************** *)
+
+(*  sigma_mat_mult A B mini maxi i j === sigma_{r=mini}^{maxi} A[i,r]*B[r,j] *)
+logic sigma_mat_mult : real fmatrice,real fmatrice,int,int,int,int -> real
+
+axiom sigma_mat_mult_def_1 :
+  forall A,B:real fmatrice. forall mini,maxi,i,j:int.
+  maxi > mini -> sigma_mat_mult(A,B,mini,maxi,i,j) = 0.
+
+axiom sigma_mat_mult_def_2 :
+  forall A,B:real fmatrice. forall mini,maxi,i,j:int.
+  mini < maxi -> 
+    sigma_mat_mult(A,B,mini,maxi,i,j) = 
+    sigma_mat_mult(A,B,mini,maxi-1,i,j) + 
+      mat_access(A,i,maxi) * mat_access(B,maxi,j)
+
+(* Part of C that have been completly calulated *)
+predicate mat_mult_done(A:real fmatrice, B:real fmatrice,C:real fmatrice,iu:int,id:int,jl:int,jr:int) =
+ forall i,j:int.  (iu<=i<id and jl<=j<jr) -> mat_access(C,i,j)=sigma_mat_mult(A,B,0,N-1,i,j)
+
+(* Part of C that need to be calculated *)
+predicate mat_mult_todo(C:real fmatrice,C':real fmatrice,iu:int,id:int,jl:int,jr:int) =
+  forall i,j:int.  (iu<=i<id and jl<=j<jr) -> mat_access(C,i,j)=mat_access(C',i,j)
+
+(* C=A*B *)  
+predicate mat_mult(A:real fmatrice, B:real fmatrice,C:real fmatrice) =
+  mat_mult_done(A,B,C,0,N,0,N)
+
+(* ******************************** *)
+(* Definition of the multiplication *)
+(* ******************************** *)
+
+let mult (A : real fmatrice ref)
+         (B : real fmatrice ref)
+	 (C : real fmatrice ref) =
+{
+     mat_size_row(A) = N
+ and mat_size_row(B) = N
+ and mat_size_row(C) = N
+ and mat_size_column(A) = N
+ and mat_size_column(B) = N
+ and mat_size_column(C) = N
+ and (forall x,y:int. 0<=x<N and 0<=y<N -> mat_access(C,x,y)=0.)
+}
+ init:
+ let i=ref 0 in
+  while !i<N do
+   { invariant 
+          0<=i<=N 
+      and mat_mult_done(A,B,C,0,i,0,N) 
+      and mat_mult_todo(C,C@init,i,N,0,N)
+      and (mat_size_column(C) = mat_size_column(C@init)) 
+      and (mat_size_row(C) = mat_size_row(C@init))
+     variant N-i}
+   let j=ref 0 in
+    begin
+     while !j<N do
+     { invariant 
+            0<=j<=N 
+	and mat_mult_done(A,B,C,0,i,0,N)
+	and mat_mult_todo(C,C@init,i+1,N,0,N) 
+	and mat_mult_done(A,B,C,i,i+1,0,j)
+	and mat_mult_todo(C,C@init,i,i+1,j,N)
+        and (mat_size_column(C) = mat_size_column(C@init)) 
+	and (mat_size_row(C) = mat_size_row(C@init))
+       variant N-j }
+      let r=ref 0 in
+        while !r<N do
+	{ invariant
+	       0<=r<=N 
+	   and mat_mult_done(A,B,C,0,i,0,N)
+           and mat_mult_todo(C,C@init,i+1,N,0,N)
+	   and mat_mult_done(A,B,C,i,i+1,0,j)
+     	   and mat_mult_todo(C,C@init,i,i+1,j+1,N)
+	   and (mat_access(C,i,j)=mat_access(C@init,i,j)+sigma_mat_mult(A,B,0,r-1,i,j))
+           and (mat_size_column(C) = mat_size_column(C@init))
+	   and (mat_size_row(C) = mat_size_row(C@init))
+	  variant N-r}
+	  mat_set C !i !j ((mat_get C !i !j) + ((mat_get A !i !r) * (mat_get B !r !j)));
+	  r:=!r+1
+	done;
+       j:=!j+1
+     done
+    end;
+   i:=!i+1
+  done
+  { mat_mult(A,B,C) }
