@@ -106,7 +106,7 @@ Save.
   forall (HW_6: x0 > 0),
   forall (x1: Z),
   forall (HW_7: x1 = (Zopp x0)),
-  x1 = (Zopp 10).
+  x1 = (-10).
 Proof.
 intuition.
 Save.
@@ -121,7 +121,7 @@ Save.
   forall (HW_2: x0 <= 10),
   forall (HW_5: x0 >= 10),
   forall (HW_8: x0 <= 0),
-  x0 = (Zopp 10).
+  x0 = (-10).
 Proof.
 intuition.
 Save.

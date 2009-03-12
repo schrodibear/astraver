@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.74 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.75 2009-03-12 14:28:11 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -121,6 +121,11 @@ let rec unify t1 t2 = match (t1,t2) with
       t1 = t2
 
 let make_comparison loc (a,ta) r (b,tb) = 
+  if not (unify ta tb) then
+    raise_located loc 
+      (ExpectedType2 
+	 ((fun f -> Util.print_pure_type f (normalize_pure_type ta)),
+	  (fun f -> Util.print_pure_type f (normalize_pure_type tb))));
   match normalize_pure_type ta, r, normalize_pure_type tb with
   | PTint, (PPlt|PPle|PPgt|PPge|PPeq|PPneq), PTint ->
       Papp (int_cmp r, [a; b], [])
@@ -129,16 +134,11 @@ let make_comparison loc (a,ta) r (b,tb) =
   | (PTbool | PTunit as ta), (PPeq|PPneq), (PTbool | PTunit) ->
       Papp (other_cmp (ta,r), [a; b], [])
   | ta, (PPeq|PPneq), tb ->
-      if unify ta tb then
-	match normalize_pure_type ta, normalize_pure_type tb with
-	  | PTint, PTint -> Papp (int_cmp r, [a;b], [])
-	  | PTreal, PTreal -> Papp (real_cmp r, [a;b], [])
-	  | _ -> Papp (other_cmp (ta,r), [a; b], [ta])
-      else
-	raise_located loc 
-	  (ExpectedType2 
-	     ((fun f -> Util.print_pure_type f (normalize_pure_type ta)),
-	      (fun f -> Util.print_pure_type f (normalize_pure_type tb))))
+      begin match ta, tb with
+	| PTint, PTint -> Papp (int_cmp r, [a;b], [])
+	| PTreal, PTreal -> Papp (real_cmp r, [a;b], [])
+	| _ -> Papp (other_cmp (ta,r), [a; b], [ta])
+      end
   | ta, _, _ ->
       raise_located loc (IllegalComparison (fun fmt -> print_pure_type fmt ta))
 

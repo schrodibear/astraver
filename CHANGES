@@ -1,4 +1,5 @@
 
+  o Why: fixed typing bug with polymorphic function symbols and comparisons
   o GWhy: new column for Gappa prover (http://lipforge.ens-lyon.fr/www/gappa/)
   o Coq output: improved output of -e when e is an integer constant
   o Jessie: fix incompleteness bug with "assigns \nothing" clauses

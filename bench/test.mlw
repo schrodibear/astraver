@@ -1,3 +1,7 @@
 
-goal test : 0.1 = 0.05 + 0x1.50p-2
+type 'a tt
+logic f: int, 'a tt -> 'b
+type t
+logic v : t tt
+goal comparison_error : (0 <= f(0,v)) 
 
