@@ -134,7 +134,7 @@ Admitted.
                     (isfib (n_1 - 1) p) -> (isfib n_1 (p + r_0))))))
      .
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.jc", line 26, characters 0-29: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.jc", line 26, characters 0-29: *)
 (*Why goal*) Lemma isfib_2_1 : 
   (isfib 2 1).
 Proof.
@@ -146,7 +146,7 @@ Save.
 (*Why axiom*) Lemma isfib_2_1_as_axiom : (isfib 2 1).
 Admitted.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.jc", line 20, characters 0-29: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.jc", line 20, characters 0-29: *)
 (*Why goal*) Lemma isfib_6_8 : 
   (isfib 6 8).
 Proof.
@@ -185,7 +185,7 @@ Admitted.
 (*Why predicate*) Definition left_valid_struct_interface  (p:(pointer interface)) (a:Z) (interface_alloc_table:(alloc_table interface))
   := (offset_min interface_alloc_table p) <= a.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.jc", line 23, characters 0-37: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.jc", line 23, characters 0-37: *)
 (*Why goal*) Lemma not_isfib_2_2 : 
   ~(isfib 2 2).
 Proof.
@@ -306,7 +306,7 @@ Admitted.
   := (offset_min interface_alloc_table p) <= a /\
      (offset_max interface_alloc_table p) >= b.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-26: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-26: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_1 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -315,7 +315,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 29, characters 25-31: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 25-31: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_2 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -324,7 +324,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 29, characters 35-47: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 35-47: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_3 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -333,7 +333,7 @@ Proof.
 intros; apply isfib1.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 29, characters 51-61: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 51-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_4 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -342,7 +342,7 @@ Proof.
 intros; apply isfib0.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 29, characters 20-26: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 20-26: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_5 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -365,7 +365,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 29, characters 25-31: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 25-31: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_6 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -388,7 +388,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 29, characters 35-47: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 35-47: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_7 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -414,7 +414,7 @@ replace (i+1+1-2) with i; auto with zarith.
 replace (i+1+1-1) with (i+1); auto with zarith.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 29, characters 51-61: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 29, characters 51-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_8 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -437,7 +437,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 24, characters 16-33: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 24, characters 16-33: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_9 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -452,19 +452,11 @@ Save.
   (* JC_15 *) (isfib n_0_0 why__return).
 Proof.
 intuition.
-Save.
-
-Proof.
-intuition.
-Save.
-
-Proof.
-intuition.
 assert (i=n_0_0) by omega.
 subst; auto.
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
 (*Why goal*) Lemma Fibonacci_Fib_safety_po_1 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -486,10 +478,9 @@ Save.
   0 <= ((* JC_25 *) (n_0_0 - i)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/cmarche/recherche/ppc/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
+(* Why obligation from file "/home/cmarche/recherche/why/tests/java/Fibonacci.java", line 30, characters 18-21: *)
 (*Why goal*) Lemma Fibonacci_Fib_safety_po_2 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
@@ -511,6 +502,5 @@ Save.
   ((* JC_25 *) (n_0_0 - i0)) < ((* JC_25 *) (n_0_0 - i)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 

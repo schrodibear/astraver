@@ -237,7 +237,7 @@ let safety_checking () = get_current_behavior () = "safety"
 let default_checking () = get_current_behavior () = "default"
 *)
 let in_current_behavior = function
-  | [] -> default_checking ()
+  | [] -> assert false (* default_checking () *)
   | ls -> 
 (*
       Format.eprintf 
