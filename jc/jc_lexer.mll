@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.84 2009-02-12 10:03:07 melquion Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.85 2009-03-16 08:36:39 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -210,6 +210,7 @@ rule token = parse
   | "lemma"                 { LEMMA }
   | "let"                   { LET }
   | "logic"                 { LOGIC }
+  | "loop"                  { LOOP }
   | "match"                 { MATCH }
   | "new"                   { NEW }
   | "null"                  { NULL }

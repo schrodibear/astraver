@@ -233,13 +233,22 @@ let reset_current_behavior () = current_behavior := None
 let get_current_behavior () = 
   match !current_behavior with None -> assert false | Some behav -> behav
 let safety_checking () = get_current_behavior () = "safety"
+(*
 let default_checking () = get_current_behavior () = "default"
-let assert_in_current_behavior = function
-  | [] -> default_checking ()
-  | ls -> List.exists (fun behav -> behav = get_current_behavior ()) ls
+*)
+let in_current_behavior = function
+  | [] -> assert false (*default_checking ()*)
+  | ls -> 
+(*
+      Format.eprintf 
+	"checking if behavior is in current which is %s@." (get_current_behavior());
+*)
+      List.exists (fun behav -> behav#name = get_current_behavior ()) ls
+(*
 let assume_in_current_behavior = function
-  | [] -> not (default_checking ())
-  | ls -> List.exists (fun behav -> behav = get_current_behavior ()) ls
+  | [] -> assert false (*not (default_checking ())*)
+  | ls -> List.exists (fun behav -> behav#name = get_current_behavior ()) ls
+*)
 
 let current_spec : fun_spec option ref = ref None
 let set_current_spec s = current_spec := Some s

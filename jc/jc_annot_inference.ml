@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.158 2008-11-23 17:24:02 moy Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.159 2009-03-16 08:36:39 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -38,7 +38,6 @@ open Jc_options
 open Jc_constructors
 open Jc_pervasives
 open Jc_separation
-open Jc_iterators
 
 open Pp
 open Format

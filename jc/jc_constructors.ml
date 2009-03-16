@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.27 2008-12-19 14:23:00 marche Exp $ *)
+(* $Id: jc_constructors.ml,v 1.28 2009-03-16 08:36:39 marche Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -354,11 +354,11 @@ either with (~expr1 AND ~expr2) OR ~list only."
   let mkmatch ~expr ~cases = mk ~node:(JCPEmatch(expr, cases))
   let mkassert ~expr = mk ~node:(JCPEassert ([],Aassert,expr))
   let mkwhile ?(condition = mkboolean ~value:true ())
-      ?(invariant = []) ?variant ~body =
-    mk ~node:(JCPEwhile(condition, invariant, variant, body))
+      ?(behaviors = []) ?variant ~body =
+    mk ~node:(JCPEwhile(condition, behaviors, variant, body))
   let mkfor ?(inits = []) ?(condition = mkboolean ~value:true ())
-      ?(updates = []) ?(invariant = []) ?variant ~body =
-    mk ~node:(JCPEfor(inits, condition, updates, invariant, variant, body))
+      ?(updates = []) ?(behaviors = []) ?variant ~body =
+    mk ~node:(JCPEfor(inits, condition, updates, behaviors, variant, body))
   let mkreturn ?(expr = mkvoid ()) = mk ~node:(JCPEreturn expr)
   let mkbreak ?(label = "") = mk ~node:(JCPEbreak label)
   let mkcontinue ?(label = "") = mk ~node:(JCPEcontinue label)
@@ -562,6 +562,6 @@ end
 
 (*
 Local Variables: 
-compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C nice make -j -C .. byte"
 End: 
 *)

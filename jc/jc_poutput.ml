@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.38 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.39 2009-03-16 08:36:39 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -34,6 +34,7 @@ open Jc_pervasives
 open Jc_ast
 open Jc_output_misc
 open Pp
+
 
 let is_not_true (p : Jc_ast.pexpr) =
   match p#node with
@@ -95,6 +96,9 @@ let rec ppattern fmt p =
 let quantifier fmt = function
   | Forall -> fprintf fmt "forall"
   | Exists -> fprintf fmt "exists"
+
+let identifier fmt id =
+  fprintf fmt "%s" id#name
 
 let rec pexpr fmt e =
   match e#node with
@@ -158,7 +162,7 @@ let rec pexpr fmt e =
 	fprintf fmt "@[<hv 2>(\\%a %a %a;@\n%a)@]"
 	  quantifier q
 	  ptype ty
-	  (print_list comma string) vil
+	  (print_list comma identifier) vil
 	  pexpr a
     | JCPEmutable _ -> assert false (* TODO *)
     | JCPEeqtype(tag1,tag2) -> 
@@ -185,19 +189,16 @@ let rec pexpr fmt e =
 	fprintf fmt "@\n(continue %s)" lab
     | JCPEbreak lab -> 
 	fprintf fmt "@\n(break %s)" lab
-    | JCPEwhile (e, invariant,variant, s)-> 
-	fprintf fmt "@\n@[%a%a@\nwhile (%a)%a@]"
-	  (print_list nothing 
-	     (fun fmt (behav,inv) -> fprintf fmt "@\ninvariant %a%a;"
-		(print_list_delim 
-		   (constant_string "for ") (constant_string ": ") 
-		   comma string)
-		behav
-		pexpr inv))
-	  invariant
+    | JCPEwhile (e, behaviors, variant, s)-> 
+	fprintf fmt "@\n@[loop %a%a@\nwhile (%a)%a@]"
+	  (print_list nothing loop_behavior) behaviors
 	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" pexpr t))
 	  variant
 	  pexpr e block [s]
+    | JCPEfor (inits, cond, updates, behaviors, variant, body)-> 
+	fprintf fmt "@\n@[loop %a@\n%a@\nfor (%a ; %a ; %a)%a@]"
+	  (print_list nothing loop_behavior) behaviors
+(*
     | JCPEfor (inits, cond, updates, invariant,variant, body)-> 
 	fprintf fmt "@[%a%a@\nfor (%a ; %a ; %a)%a@]"
 	  (print_list nothing 
@@ -208,6 +209,8 @@ let rec pexpr fmt e =
 		behav
 		pexpr inv))
 	  invariant 
+>>>>>>> 1.38
+*)
 	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" pexpr t))
 	  variant
 	  (print_list comma pexpr) inits 
@@ -223,7 +226,7 @@ let rec pexpr fmt e =
 	  asrt_kind asrt
 	  (print_list_delim 
 	     (constant_string "for ") (constant_string ": ") 
-	     comma string)
+	     comma identifier)
 	  behav
 	  pexpr a
     | JCPEcontract(req,dec,behs,e) -> 
@@ -238,6 +241,7 @@ let rec pexpr fmt e =
     | JCPEswitch (e, csl) ->
 	fprintf fmt "@\n@[<v 2>switch (%a) {%a@]@\n}"
 	  pexpr e (print_list nothing case) csl
+
 
 and ptag fmt tag =
   match tag#node with
@@ -280,6 +284,19 @@ and behavior fmt (_loc,id,throws,assumes,requires,assigns,ensures) =
        (print_list_or_default "\\nothing" comma pexpr) locs)
     assigns;
   fprintf fmt "@\nensures %a;@]" pexpr ensures
+
+and loop_behavior fmt (ids,inv,ass) =        
+  fprintf fmt "@\n@[<v 2>behavior %a:@\n"
+    (print_list comma (fun fmt id -> fprintf fmt "%s" id#name)) ids;
+  Option_misc.iter
+    (fun i -> fprintf fmt "invariant %a;" pexpr i) inv;
+  Option_misc.iter 
+    (fun (_,locs) -> fprintf fmt "@\nassigns %a;" 
+       (print_list_or_default "\\nothing" comma pexpr) locs)
+    ass;
+  fprintf fmt "@]"
+
+
 
 let pclause fmt = function
   | JCCrequires e -> 

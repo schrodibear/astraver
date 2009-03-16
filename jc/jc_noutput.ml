@@ -33,6 +33,10 @@ open Jc_ast
 open Format
 open Pp
 
+
+let identifier fmt id =
+  fprintf fmt "%s" id#name
+
 let rec expr fmt e =
   let out x = fprintf fmt x in
   match e#node with
@@ -82,13 +86,15 @@ let rec expr fmt e =
 	  asrt_kind asrt
 	  (print_list_delim 
 	     (constant_string "for ") (constant_string ": ") 
-	     comma string)
+	     comma identifier)
 	  behav
 	  expr e1
     | JCNEcontract _ -> assert false (* TODO *)
     | JCNEblock el ->
         out "{@ @[<hv 2>%a@]@ }" (print_list semi expr) el
     | JCNEloop(inv, Some e2, e3) ->
+	assert false (* TODO *)
+	  (*
         out "@[<hv 2>%a@ variant %a;@ %a done@]" 
 	  (print_list nothing 
 	     (fun fmt (behav,inv) -> out "@\ninvariant %a%a;"
@@ -100,8 +106,11 @@ let rec expr fmt e =
 	  inv
 	  expr e2
           expr e3
+	  *)
     | JCNEloop(inv, None, e2) ->
-        out "@[<hv 2>%a@ %a done@]" 
+        assert false (* TODO *)
+	  (*
+	    out "@[<hv 2>%a@ %a done@]" 
 	  (print_list nothing 
 	     (fun fmt (behav,inv) -> out "@\ninvariant %a%a;"
 		(print_list_delim 
@@ -111,6 +120,7 @@ let rec expr fmt e =
 		expr inv))
 	  inv
 	  expr e2
+	  *)
     | JCNEreturn(Some e1) ->
         out "(return %a)" expr e1
     | JCNEreturn None ->
@@ -133,10 +143,10 @@ let rec expr fmt e =
         out "(TODO match)"
     | JCNEquantifier(Forall, pty, idl, e1) ->
         out "(@[<hv 2>\\forall %a %a,@ %a@])" ptype pty
-          (print_list space string) idl expr e1
+          (print_list space identifier) idl expr e1
     | JCNEquantifier(Exists, pty, idl, e1) ->
         out "(@[<hv 2>\\exists %a %a,@ %a@])" ptype pty
-          (print_list space string) idl expr e1
+          (print_list space identifier) idl expr e1
     | JCNEold e1 ->
         out "(TODO old)"
     | JCNEat(e1, lab) ->

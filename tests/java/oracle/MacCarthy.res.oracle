@@ -2024,10 +2024,9 @@ let MacCarthy_f91_ensures_default =
       begin
         (return := (K_6:
                    (JC_30:
-                   (MacCarthy_f91_requires (K_5:
-                                           (JC_29:
-                                           (MacCarthy_f91_requires (K_4:
-                                                                   ((add_int n_1) (11))))))))));
+                   (MacCarthy_f91 (K_5:
+                                  (JC_29:
+                                  (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
        (raise Return)
       end
      else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);
@@ -2100,9 +2099,10 @@ let MacCarthy_f91_safety =
       begin
         (return := (K_6:
                    (JC_26:
-                   (MacCarthy_f91 (K_5:
-                                  (JC_25:
-                                  (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
+                   (MacCarthy_f91_requires (K_5:
+                                           (JC_25:
+                                           (MacCarthy_f91_requires (K_4:
+                                                                   ((add_int n_1) (11))))))))));
        (raise Return)
       end
      else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);

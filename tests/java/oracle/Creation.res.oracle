@@ -2883,7 +2883,7 @@ let Creation_test1_ensures_default =
                 (let this = (JC_85:
                             (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
                 (let tt = (JC_87:
-                          ((cons_Creation_int_requires this) (safe_int32_of_integer_ (17)))) in
+                          ((cons_Creation_int this) (safe_int32_of_integer_ (17)))) in
                 this))) in
      begin
        (return := (K_9: ((safe_acc_ !Creation_simple_val) t_1)));
@@ -2937,7 +2937,7 @@ let Creation_test1_safety =
                               (0)) };
                             jessie_71))) in
                 (let tt = (JC_77:
-                          ((cons_Creation_int this) (safe_int32_of_integer_ (17)))) in
+                          ((cons_Creation_int_requires this) (safe_int32_of_integer_ (17)))) in
                 this))) in
      begin
        (return := (K_9:
@@ -2962,8 +2962,7 @@ let Creation_test2_ensures_default =
      (let t_0 = (K_13:
                 (let this_3 = (JC_121:
                               (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
-                (let tt_0 = (JC_123: (cons_Creation_requires this_3)) in
-                this_3))) in
+                (let tt_0 = (JC_123: (cons_Creation this_3)) in this_3))) in
      begin
        (return := (K_12: ((safe_acc_ !Creation_simple_val) t_0)));
       (raise Return)
@@ -3013,7 +3012,8 @@ let Creation_test2_safety =
                                        jessie_92),
                                 (0)) };
                               jessie_92))) in
-                (let tt_0 = (JC_113: (cons_Creation this_3)) in this_3))) in
+                (let tt_0 = (JC_113: (cons_Creation_requires this_3)) in
+                this_3))) in
      begin
        (return := (K_12:
                   (JC_115:
@@ -3038,7 +3038,7 @@ let Creation_test3_ensures_default =
               (let this_5 = (JC_159:
                             (((alloc_struct_Creation (1)) Object_alloc_table) Object_tag_table)) in
               (let tt_1 = (JC_161:
-                          (((cons_Creation_int_int_requires this_5) (safe_int32_of_integer_ (10))) 
+                          (((cons_Creation_int_int this_5) (safe_int32_of_integer_ (10))) 
                            (safe_int32_of_integer_ (7)))) in
               this_5))) in
      begin
@@ -3094,7 +3094,7 @@ let Creation_test3_safety =
                               (0)) };
                             jessie_113))) in
               (let tt_1 = (JC_151:
-                          (((cons_Creation_int_int this_5) (safe_int32_of_integer_ (10))) 
+                          (((cons_Creation_int_int_requires this_5) (safe_int32_of_integer_ (10))) 
                            (safe_int32_of_integer_ (7)))) in
               this_5))) in
      begin
@@ -3120,9 +3120,7 @@ let cons_Creation_ensures_default =
                       (let jessie_40 = this_2 in
                       (((safe_upd_ Creation_simple_val) jessie_40) jessie_37))) in
      void);
-    (K_3:
-    (JC_40:
-    ((cons_Creation_int_requires this_2) (safe_int32_of_integer_ (0)))));
+    (K_3: (JC_40: ((cons_Creation_int this_2) (safe_int32_of_integer_ (0)))));
     (raise Return)
    end
    with
@@ -3225,10 +3223,9 @@ let cons_Creation_int_int_ensures_default =
      void);
     (K_6:
     (JC_58:
-    ((cons_Creation_int_requires this_0) (K_5:
-                                         (safe_int32_of_integer_ ((add_int 
-                                                                   (integer_of_int32 n_0_0)) 
-                                                                  (integer_of_int32 m)))))));
+    ((cons_Creation_int this_0) (K_5:
+                                (safe_int32_of_integer_ ((add_int (integer_of_int32 n_0_0)) 
+                                                         (integer_of_int32 m)))))));
     (raise Return)
    end
    with
@@ -3276,10 +3273,11 @@ let cons_Creation_int_int_safety =
      void);
     (K_6:
     (JC_57:
-    ((cons_Creation_int this_0) (K_5:
-                                (JC_56:
-                                (int32_of_integer_ ((add_int (integer_of_int32 n_0_0)) 
-                                                    (integer_of_int32 m))))))));
+    ((cons_Creation_int_requires this_0) (K_5:
+                                         (JC_56:
+                                         (int32_of_integer_ ((add_int 
+                                                              (integer_of_int32 n_0_0)) 
+                                                             (integer_of_int32 m))))))));
     (raise Return)
    end
    with
@@ -3324,7 +3322,9 @@ let cons_Creation_safety =
                       (let jessie_34 = this_2 in
                       (((safe_upd_ Creation_simple_val) jessie_34) jessie_31))) in
      void);
-    (K_3: (JC_39: ((cons_Creation_int this_2) (safe_int32_of_integer_ (0)))));
+    (K_3:
+    (JC_39:
+    ((cons_Creation_int_requires this_2) (safe_int32_of_integer_ (0)))));
     (raise Return)
    end
    with
@@ -3339,8 +3339,7 @@ let cons_TestSuperConstructor_ensures_default =
   try
    begin
      (K_17:
-     (JC_185:
-     ((cons_Creation_int_requires this_4) (safe_int32_of_integer_ (12)))));
+     (JC_185: ((cons_Creation_int this_4) (safe_int32_of_integer_ (12)))));
     (raise Return)
    end
    with
@@ -3375,7 +3374,8 @@ let cons_TestSuperConstructor_safety =
   try
    begin
      (K_17:
-     (JC_184: ((cons_Creation_int this_4) (safe_int32_of_integer_ (12)))));
+     (JC_184:
+     ((cons_Creation_int_requires this_4) (safe_int32_of_integer_ (12)))));
     (raise Return)
    end
    with
@@ -3422,7 +3422,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po7.why">
-      <location file = "why/Creation.why" line = "1117" begin = "32" end = "157"/>
+      <location file = "why/Creation.why" line = "1116" begin = "32" end = "157"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po8.why">
@@ -6338,7 +6338,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 105, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 1117, characters 32-157
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 1116, characters 32-157
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)

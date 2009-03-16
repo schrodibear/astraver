@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_invariants.ml,v 1.85 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: jc_invariants.ml,v 1.86 2009-03-16 08:36:39 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -37,7 +37,9 @@ open Jc_fenv
 open Jc_name
 open Jc_constructors
 open Jc_pervasives
+(*
 open Jc_iterators
+*)
 open Jc_interp_misc
 open Jc_struct_tools
 
@@ -184,7 +186,7 @@ let field this pos fi =
 
 (* A pattern may hide some dereferencing. *)
 let pattern this p =
-  iter_pattern
+  Jc_iterators.iter_pattern
     (fun p -> match p#node with
        | JCPstruct(_, fipl) ->
 	   List.iter (field this p#pos) (List.map fst fipl)
@@ -196,7 +198,7 @@ is the argument of the pointer. Thus, it is sufficient to check that all
 dereferencing is done on a rep field AND that all applications do not read
 any memory (else one could hide dereferencing in logic functions). *)
 let term this t =
-  ITerm.iter
+  Jc_iterators.ITerm.iter
     (fun t -> match t#node with
        | JCTapp app ->
 	   let id = app.jc_app_fun in
@@ -301,7 +303,7 @@ let check invs =
 (***********************************)
 
 let rec term_memories aux t = 
-  fold_term 
+  Jc_iterators.fold_term 
     (fun aux t -> match t#node with
     | JCTderef(t, lab, fi) ->
 	let m = fi.jc_field_info_final_name in

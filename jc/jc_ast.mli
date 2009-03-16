@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.165 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.166 2009-03-16 08:36:39 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -159,6 +159,11 @@ type 'expr pbehavior =
     * 'expr option * (Loc.position * 'expr list) option * 'expr
       (*r loc, name, throws, assumes,requires,assigns,ensures *)
  
+and 'expr loopbehavior =
+    identifier list 
+    * 'expr option * (Loc.position * 'expr list) option 
+      (*r idents, invariant, assigns *)
+    
 and pexpr_node =
   | JCPEconst of const
   | JCPElabel of string * pexpr
@@ -171,7 +176,7 @@ and pexpr_node =
   | JCPEassign_op of pexpr * bin_op * pexpr
   | JCPEinstanceof of pexpr * string
   | JCPEcast of pexpr * ptype
-  | JCPEquantifier of quantifier * ptype * string list * pexpr
+  | JCPEquantifier of quantifier * ptype * identifier list * pexpr
   | JCPEold of pexpr
   | JCPEat of pexpr * label
   | JCPEoffset of offset_kind * pexpr 
@@ -189,18 +194,18 @@ and pexpr_node =
   | JCPEeqtype of pexpr ptag * pexpr ptag
   | JCPEsubtype of pexpr ptag * pexpr ptag
   | JCPEmatch of pexpr * (ppattern * pexpr) list
-(*  | JCPSskip *) (* -> JCPEconst JCCvoid *)
   | JCPEblock of pexpr list
-  | JCPEassert of string list * asrt_kind * pexpr
+  | JCPEassert of identifier list * asrt_kind * pexpr
   | JCPEcontract of 
       pexpr option * pexpr option * pexpr pbehavior list * pexpr 
 	(* requires, decreases, behaviors, expression *)
   | JCPEwhile of 
-      pexpr * (string list * pexpr) list * pexpr option * pexpr
-	(*r condition, invariant, variant, body *)
+      pexpr * pexpr loopbehavior list * pexpr option * pexpr
+	(*r condition, behaviors, variant, body *)
   | JCPEfor of 
-      pexpr list * pexpr * pexpr list * (string list * pexpr) list * pexpr option * pexpr
-	(*r inits, condition, updates, invariant, variant, body *)
+      pexpr list * pexpr * pexpr list * pexpr loopbehavior list 
+      * pexpr option * pexpr
+	(*r inits, condition, updates, behaviors, variant, body *)
   | JCPEreturn of pexpr
   | JCPEbreak of string
   | JCPEcontinue of string
@@ -291,13 +296,13 @@ type nexpr_node =
   | JCNEalloc of nexpr * string
   | JCNEfree of nexpr
   | JCNElet of ptype option * string * nexpr option * nexpr
-  | JCNEassert of string list * asrt_kind * nexpr
+  | JCNEassert of identifier list * asrt_kind * nexpr
   | JCNEcontract of 
       nexpr option * nexpr option * nexpr pbehavior list * nexpr 
 	(* requires, decreases, behaviors, expression *)
   | JCNEblock of nexpr list
-  | JCNEloop of (string list * nexpr) list * nexpr option * nexpr
-      (*r invariant, variant, body *)
+  | JCNEloop of nexpr loopbehavior list * nexpr option * nexpr
+      (*r behaviors, variant, body *)
   | JCNEreturn of nexpr option
   | JCNEtry of nexpr * (identifier * string * nexpr) list * nexpr
   | JCNEthrow of identifier * nexpr option
@@ -305,7 +310,7 @@ type nexpr_node =
   | JCNEunpack of nexpr * identifier option
   | JCNEmatch of nexpr * (ppattern * nexpr) list
   (* Assertions only *)
-  | JCNEquantifier of quantifier * ptype * string list * nexpr
+  | JCNEquantifier of quantifier * ptype * identifier list * nexpr
   | JCNEold of nexpr
   | JCNEat of nexpr * label
   | JCNEmutable of nexpr * nexpr ptag
@@ -450,7 +455,10 @@ type 'li term_or_assertion =
 type 'li loop_annot =
     {
       jc_loop_tag : int;
-      mutable jc_loop_invariant : (string list * 'li assertion) list;
+      mutable jc_loop_behaviors : 
+	(identifier list * 
+	   'li assertion option * 
+	   'li location list option) list;
       mutable jc_free_loop_invariant : 'li assertion;
       jc_loop_variant : 'li term option;
     }
@@ -520,7 +528,7 @@ type ('li,'fi) expr_node =
   | JCEalloc of ('li,'fi) expr * struct_info
   | JCEfree of ('li,'fi) expr
   | JCElet of var_info * ('li,'fi) expr option * ('li,'fi) expr
-  | JCEassert of string list * asrt_kind * 'li assertion
+  | JCEassert of identifier list * asrt_kind * 'li assertion
   | JCEcontract of 'li assertion option * 'li term option * var_info * 
       (Loc.position * string * 'li behavior) list * ('li,'fi) expr
   | JCEblock of ('li,'fi) expr list

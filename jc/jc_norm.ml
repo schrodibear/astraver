@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.113 2008-12-19 14:23:00 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.114 2009-03-16 08:36:39 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -34,7 +34,9 @@ open Jc_pervasives
 open Jc_constructors
 open Jc_ast
 open Format
+(*
 open Jc_iterators
+*)
 open Jc_constructors.PExpr
 
 
@@ -152,7 +154,7 @@ let normalize_switch pos e caselist =
   mklet_nodecl ~var:tmpname ~init:e ~body:trye ()
 
 (** Transform while-loop *)
-let normalize_while pos test inv var body =
+let normalize_while pos test behs var body =
   let body = match test#node with
     | JCPEconst(JCCboolean true) -> body
 	(* Special case of an infinite loop [while(true)].
@@ -165,7 +167,7 @@ let normalize_while pos test inv var body =
   in
   mktry ~pos
     ~expr:
-    (mkwhile ~pos ~invariant:inv ?variant:var 
+    (mkwhile ~pos ~behaviors:behs ?variant:var 
        ~body:
        (mktry ~pos 
           ~expr:
@@ -178,12 +180,12 @@ let normalize_while pos test inv var body =
     ()
 
 (** Transform for-loop *)
-let normalize_for pos inits test updates inv var body =
+let normalize_for pos inits test updates behs var body =
   mkblock ~pos
     ~exprs:(inits 
 	    @ [mktry ~pos
                  ~expr:
-		 (mkwhile ~pos ~invariant:inv ?variant:var 
+		 (mkwhile ~pos ~behaviors:behs ?variant:var 
                     ~body:
 		    (mktry ~pos 
                        ~expr:
@@ -202,7 +204,7 @@ let normalize_for pos inits test updates inv var body =
     ()
     
 let duplicable =
-  IPExpr.fold_left 
+  Jc_iterators.IPExpr.fold_left 
     (fun acc e -> acc && match e#node with
        | JCPEconst _ | JCPEvar _ | JCPErange _ | JCPEderef _
        | JCPEunary _ | JCPEoffset _ | JCPEaddress _ | JCPEold _ | JCPEat _
@@ -356,7 +358,7 @@ let normalize_postaction pos elist =
 
 (** Apply normalizations recursively *)
 let normalize = 
-  map_pexpr 
+  Jc_iterators.map_pexpr 
     ~before:(fun e -> match e#node with
 	       | JCPEblock elist ->
 		   normalize_postaction e#pos elist
@@ -371,8 +373,8 @@ let normalize =
 		  normalize_switch e#pos e' caselist
 	      | JCPEwhile(test,inv,var,body) ->
 		  normalize_while e#pos test inv var body
-	      | JCPEfor(inits,test,updates,inv,var,body) ->
-		  normalize_for e#pos inits test updates inv var body
+	      | JCPEfor(inits,test,updates,behs,var,body) ->
+		  normalize_for e#pos inits test updates behs var body
 	      | JCPEbreak lab ->
 		  assert (lab = ""); (* TODO for Java *)
 		  mkthrow ~pos:e#pos ~exn:loop_exit ()
@@ -440,7 +442,7 @@ let build_label_tree e : label_tree list =
 	  let l,fwdl = List.fold_right build_bwd sl ([],fwdacc) in
 	  (LabelBlock l) :: acc, fwdl
       | _ ->
-	  let elist = IPExpr.subs e in
+	  let elist = Jc_iterators.IPExpr.subs e in
 	  LabelBlock 
 	    (List.map (fun e -> LabelBlock(fst (build_bwd e ([],fwdacc)))) elist)
 	  :: acc, fwdacc
@@ -503,7 +505,7 @@ let rec goto e lz =
 	let el = List.rev el in
 	(goto_block pos el)#node, lz2
     | _ ->
-	let elist = IPExpr.subs e in
+	let elist = Jc_iterators.IPExpr.subs e in
 	let lz1list,lz2 = match lz with
 	  | LabelBlock b1::after ->
 	      List.map
@@ -512,7 +514,7 @@ let rec goto e lz =
 	  | _ -> assert false
 	in
 	let elist,_ = List.split (List.map2 goto elist lz1list) in
-	(replace_sub_pexpr e elist)#node, lz2
+	(Jc_iterators.replace_sub_pexpr e elist)#node, lz2
   in new pexpr_with ~node:enode e, lz2
 
 
@@ -564,9 +566,9 @@ let rec expr e =
 		     Option_misc.map expr dec,
 		     List.map behavior behs,
 		     expr e)
-    | JCPEwhile(_,inv,vareopt,e) ->
-	let inv = List.map (fun (behav,e) -> behav,expr e) inv in
-	JCNEloop(inv,Option_misc.map expr vareopt,expr e)
+    | JCPEwhile(_,behs,vareopt,e) ->
+	let behs = List.map loopbehavior behs in
+	JCNEloop(behs,Option_misc.map expr vareopt,expr e)
     | JCPEfor _ -> assert false
     | JCPEreturn e ->
         begin match e#node with
@@ -600,6 +602,10 @@ and behavior (pos,id,idopt,e1opt,e2opt,asslist,e3) =
    Option_misc.map expr e2opt,
    Option_misc.map (fun (pos,elist) -> pos,List.map expr elist) asslist,
    expr e3)
+
+and loopbehavior (ids,inv,asslist) =
+  (ids,Option_misc.map expr inv,
+   Option_misc.map (fun (pos,elist) -> pos,List.map expr elist) asslist)
 
 let expr e =
   let e,_ = goto e (build_label_tree e) in

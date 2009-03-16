@@ -25,14 +25,18 @@
 (*                                                                        *)
 (**************************************************************************)
 
+open Jc_ast
+open Jc_constructors
+
+(*
 open Format
 open Jc_env
 open Jc_envset
 open Jc_fenv
-open Jc_constructors
-open Jc_ast
 open Jc_fenv
 open Jc_pervasives
+
+*)
 
 module type TAst = sig
   type t
@@ -76,6 +80,7 @@ end
 (*****************************************************************************)
 (* General iterators on parsed expressions.                                  *)
 (*****************************************************************************)
+
 
 let replace_sub_pexpr e el =
   let as1 = function [e1] -> e1 | _ -> assert false in
@@ -176,22 +181,34 @@ let replace_sub_pexpr e el =
 	let e1 = as1 el in JCPEassert(behav,asrt,e1)
     | JCPEcontract(req,dec,behs,_e) ->
 	let e1 = as1 el in JCPEcontract(req,dec,behs,e1)
-    | JCPEwhile(_test,inv1,var,_body) ->
+    | JCPEwhile(test,behs,variant,body) ->
 	let test,el = pop el in
-	let inv2,el = popn (List.length inv1) el in
-	let inv = List.map2 (fun (behav,_) e -> behav,e) inv1 inv2 in
-	let var,el = popopt el var in
+	let behs,el =
+	  List.fold_right
+	    (fun (names,inv,ass) (b,el) ->
+	       let inv,el = popopt el inv in
+	       ((names,inv,ass)::b,el)) 
+	    behs
+	    ([],el)
+	in
+	let variant,el = popopt el variant in
 	let body = as1 el in 
-	JCPEwhile(test,inv,var,body)
-    | JCPEfor(inits,test,updates,inv1,var,body) ->
+	JCPEwhile(test,behs,variant,body)
+    | JCPEfor(inits,test,updates,behs,var,body) ->
 	let inits,el = popn (List.length inits) el in
 	let test,el = pop el in
 	let updates,el = popn (List.length updates) el in
-	let inv2,el = popn (List.length inv1) el in
-	let inv = List.map2 (fun (behav,_) e -> behav,e) inv1 inv2 in
+	let behs,el =
+	  List.fold_right
+	    (fun (names,inv,ass) (b,el) ->
+	       let inv,el = popopt el inv in
+	       ((names,inv,ass)::b,el)) 
+	    behs
+	    ([],el)
+	in
 	let var,el = popopt el var in
 	let body = as1 el in 
-	JCPEfor(inits,test,updates,inv,var,body)
+	JCPEfor(inits,test,updates,behs,var,body)
     | JCPEreturn _ ->
 	let e1 = as1 el in JCPEreturn e1
     | JCPEtry(body,catches,finally) ->
@@ -284,18 +301,24 @@ module PExprAst = struct
       | JCPEif(e1, e2, e3) ->
 	  [e1; e2; e3]
       | JCPEcontract(_,_,_,e) -> [e]
-      | JCPEwhile(e1,inv,None,e3) ->
-	  let e2list = List.map (fun (_behav,e) -> e) inv in
-          e1 :: e2list @ [e3]
-      | JCPEwhile(e1,inv,Some e3,e4) ->
-	  let e2list = List.map (fun (_behav,e) -> e) inv in
-          e1 :: e2list @ [e3; e4]
-      | JCPEfor(el1,e1,el2,inv,None,e4) ->
-	  let e2list = List.map (fun (_behav,e) -> e) inv in
-	  el1 @ e1 :: el2 @ e2list @ [e4]
-      | JCPEfor(el1,e1,el2,inv,Some e4,e5) ->
-	  let e2list = List.map (fun (_behav,e) -> e) inv in
-	  el1 @ e1 :: el2 @ e2list @ [e4; e5]
+      | JCPEwhile(e1,behs,variant,body) ->
+	  let acc =
+	    List.fold_right
+	      (fun (_,inv,ass) acc ->
+		 Option_misc.fold (fun x l -> x::l) inv acc
+		   (* TODO : ass *))
+	      behs
+	      (Option_misc.fold (fun x l -> x::l) variant [body])
+	  in e1::acc
+      | JCPEfor(inits,cond,update,behs,variant,body) ->
+	  let acc =
+	    List.fold_right
+	      (fun (_,inv,ass) acc ->
+		 Option_misc.fold (fun x l -> x::l) inv acc
+		   (* TODO : ass *))
+	      behs
+	      (Option_misc.fold (fun x l -> x::l) variant [body])
+	  in inits @ cond :: update @ acc
       | JCPEblock el
       | JCPEapp(_,_,el) ->
 	  el
@@ -348,6 +371,7 @@ end
 
 module ITerm = Iterators(TermAst)
 
+
 let fold_sub_term it f acc t =
   let it = it f in
   match t#node with
@@ -392,6 +416,8 @@ let rec fold_term f acc t =
 let rec fold_rec_term f acc t =
   let cont,acc = f acc t in
   if cont then fold_sub_term fold_rec_term f acc t else acc
+
+let fold_unit f () = f
 
 let iter_term ft t = fold_term (fold_unit ft) () t
 
@@ -451,7 +477,7 @@ let rec iter_term_and_assertion ft fa a =
   let iter_tag tag = 
     match tag#node with
       | JCTtag _ | JCTbottom -> ()
-      | JCTtypeof(t,_st) -> ITerm.iter ft t
+      | JCTtypeof(t,_st) -> (* ITerm.iter *) iter_term ft t
   in
   fa a;
   match a#node with
@@ -460,27 +486,28 @@ let rec iter_term_and_assertion ft fa a =
 	iter_tag tag1; 
 	iter_tag tag2
     | JCArelation(t1,_,t2) -> 
-	ITerm.iter ft t1;
-	ITerm.iter ft t2
+	(* ITerm.iter *) iter_term ft t1;
+	(* ITerm.iter *) iter_term ft t2
     | JCAapp app ->
-	List.iter (ITerm.iter ft) app.jc_app_args
+	List.iter (iter_term ft) app.jc_app_args
     | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
-	ITerm.iter ft t1
+	iter_term ft t1
     | JCAand al | JCAor al ->
 	List.iter (iter_term_and_assertion ft fa) al
     | JCAimplies(a1,a2) | JCAiff(a1,a2) ->
 	iter_term_and_assertion ft fa a1;
 	iter_term_and_assertion ft fa a2
     | JCAif(t1,a1,a2) ->
-	ITerm.iter ft t1;
+	iter_term ft t1;
 	iter_term_and_assertion ft fa a1;
 	iter_term_and_assertion ft fa a2
     | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	iter_term_and_assertion ft fa a1
     | JCAmatch(t, pal) ->
-	ITerm.iter ft t;
+	iter_term ft t;
 	List.iter (fun (_, a) -> iter_term_and_assertion ft fa a) pal
 
+(*
 let iter_term_and_assertion_in_loop_annot ft fa la =
   List.iter (fun (_behav,inv) ->
 	       iter_term_and_assertion ft fa inv) la.jc_loop_invariant;
@@ -519,10 +546,14 @@ let rec fold_assertion f acc a =
 (*     | JCTtag _ | JCTbottom -> acc *)
 (*     | JCTtypeof(t,_st) -> fold_term f acc t *)
 
+*)
+
 let fold_sub_term_in_tag it f acc tag = 
   match tag#node with
     | JCTtag _ | JCTbottom -> acc
     | JCTtypeof(t,_st) -> it f acc t
+
+(*
 
 let fold_term_in_tag f acc tag =
   fold_sub_term_in_tag fold_term f acc tag
@@ -589,6 +620,8 @@ let rec fold_term_in_assertion f acc a =
 (* 	  acc pal *)
 (*   in *)
 (*   fa acc a *)
+*)
+
 
 let rec fold_sub_term_and_assertion itt ita ft fa acc a =
   match a#node with
@@ -630,8 +663,10 @@ let rec fold_rec_term_and_assertion ft fa acc a =
       fold_rec_term fold_rec_term_and_assertion ft fa acc a 
   else acc
 
+(*
 let iter_term_and_assertion ft fa a = 
   fold_term_and_assertion (fold_unit ft) (fold_unit fa) () a
+*)
 
 let fold_sub_location_set itt itls ft fls acc locs =
   let itt = itt ft and itls = itls ft fls in
@@ -652,16 +687,18 @@ let fold_sub_location_set itt itls ft fls acc locs =
 let rec fold_location_set ft fls acc locs =
   let acc = fls acc locs in
   fold_sub_location_set fold_term fold_location_set ft fls acc locs
-
+  
 let rec fold_rec_location_set ft fls acc locs =
   let cont,acc = fls acc locs in
   if cont then 
     fold_sub_location_set fold_rec_term fold_rec_location_set ft fls acc locs 
   else acc
-  
+
+(*  
 let iter_location_set ft fls loc =
   fold_location_set (fold_unit ft) (fold_unit fls) () loc
-  
+*)
+
 let fold_sub_location itt itl itls ft fl fls acc loc =
   let itt = itt ft and itl = itl ft fl fls and itls = itls ft fls in
   match loc#node with
@@ -687,7 +724,7 @@ let rec fold_rec_location ft fl fls acc loc =
 
 let iter_location ft fl fls loc =
   fold_location (fold_unit ft) (fold_unit fl) (fold_unit fls) () loc
-  
+
 let fold_sub_behavior itt ita itl itls ft fa fl fls acc b =
   let ita = ita ft fa and itl = itl ft fl fls in
   let acc = Option_misc.fold_left ita acc b.jc_behavior_assumes in
@@ -710,9 +747,11 @@ let rec fold_rec_behavior ft fa fl fls acc e =
     fold_rec_location_set
     ft fa fl fls acc e 
 
+(*
 let iter_behavior ft fa fl fls b =
   fold_behavior (fold_unit ft) (fold_unit fa) (fold_unit fl) (fold_unit fls) 
     () b
+*)
 
 let fold_sub_funspec itb itt ita itl itls ft fa fl fls acc spec =
   let ita = ita ft fa and itb = itb ft fa fl fls in
@@ -727,14 +766,18 @@ let fold_funspec ft fa fl fls acc spec =
     fold_behavior fold_term fold_term_and_assertion fold_location 
     fold_location_set ft fa fl fls acc spec
 
+(*
 let rec fold_rec_funspec ft fa fl fls acc spec =
   fold_sub_funspec
     fold_rec_behavior fold_rec_term fold_rec_term_and_assertion 
     fold_rec_location fold_rec_location_set ft fa fl fls acc spec
 
+*)
 let iter_funspec ft fa fl fls spec =
   fold_funspec (fold_unit ft) (fold_unit fa) (fold_unit fl) (fold_unit fls) 
     () spec
+
+(*
 
 let rec map_assertion f a =
   let anode = match a#node with
@@ -765,6 +808,8 @@ let rec map_assertion f a =
   in
   f (new assertion_with ~node:anode a)
 
+*)
+
 let map_term_in_tag f tag = 
   let tag_node = match tag#node with
     | JCTtag _ | JCTbottom as tag_node -> tag_node
@@ -772,6 +817,7 @@ let map_term_in_tag f tag =
 	JCTtypeof(map_term f t,st)
   in
   new tag_with ~node:tag_node tag
+
 
 let rec map_term_in_assertion f a =
   let anode = match a#node with
@@ -819,6 +865,7 @@ let rec map_term_in_assertion f a =
   in
   new assertion_with ~node:anode a
 
+(*
 let rec map_term_and_assertion fa ft a =
   let anode = match a#node with
     | JCAtrue | JCAfalse as anode -> anode
@@ -877,11 +924,12 @@ let raw_sub_term_in_assertion subt a =
 
 let raw_strict_sub_term subt t =
   TermOrd.compare subt t <> 0 && raw_sub_term subt t
-
+*)
 
 (*****************************************************************************)
 (* General iterators on patterns.                                            *)
 (*****************************************************************************)
+
 
 let rec iter_pattern f p =
   f p;
@@ -897,6 +945,7 @@ let rec iter_pattern f p =
     | JCPany
     | JCPconst _ -> ()
 
+(*
 let rec fold_pattern f acc p =
   let acc = f acc p in
   match p#node with
@@ -1005,9 +1054,10 @@ let replace_sub_expr e el =
 	let e1 = as1 el in JCEunpack(st1,e1,st2)
   in
   new expr_with ~node:enode e
+*)
 
 module ExprAst = struct
-  type t = expr
+  type t = Jc_constructors.expr
   let subs e =
     match e#node with
       | JCEconst _
@@ -1055,10 +1105,13 @@ end
 
 module IExpr = Iterators(ExprAst)
 
+(*
+
 let rec map_expr ?(before = fun x -> x) ?(after = fun x -> x) e =
   let e = before e in
   let elist = List.map (map_expr ~before ~after) (ExprAst.subs e) in
   after (replace_sub_expr e elist)
+*)
 
 let fold_sub_expr_and_term_and_assertion 
     itt ita itl itls ite ft fa fl fls fe acc e =
@@ -1119,7 +1172,10 @@ let fold_sub_expr_and_term_and_assertion
 	let acc = ite acc e1 in
 	let acc = 
 	  List.fold_left 
-	    (fun acc (_behav,a) -> ita acc a) acc la.jc_loop_invariant
+	    (fun acc (id,inv,assigns) -> 
+	       let acc = Option_misc.fold_left ita acc inv in
+	       acc (* TODO: fold on assigns *)
+	    ) acc la.jc_loop_behaviors
 	in
 	let acc = ita acc la.jc_free_loop_invariant in
 	Option_misc.fold_left itt acc la.jc_loop_variant
@@ -1134,12 +1190,14 @@ let fold_sub_expr_and_term_and_assertion
 	in
 	ite acc e
 
+
 let rec fold_expr_and_term_and_assertion ft fa fl fls fe acc e =
   let acc = fe acc e in
   fold_sub_expr_and_term_and_assertion 
     fold_term fold_term_and_assertion fold_location fold_location_set
     fold_expr_and_term_and_assertion 
     ft fa fl fls fe acc e
+
 
 let rec fold_rec_expr_and_term_and_assertion ft fa fl fls fe acc e =
   let cont,acc = fe acc e in
@@ -1153,6 +1211,7 @@ let rec fold_rec_expr_and_term_and_assertion ft fa fl fls fe acc e =
 let iter_expr_and_term_and_assertion ft fa fl fls fe e =
   fold_expr_and_term_and_assertion (fold_unit ft) (fold_unit fa) 
     (fold_unit fl) (fold_unit fls) (fold_unit fe) () e
+
 
 module NExprAst = struct
   type t = nexpr
@@ -1202,12 +1261,13 @@ module NExprAst = struct
 	  [e]
       | JCNEif(e1, e2, e3) ->
           [e1; e2; e3]
-      | JCNEloop(inv, None, e2) ->
-	  let e1list = List.map (fun (_behav,e) -> e) inv in
-          e1list @ [e2]
-      | JCNEloop(inv, Some e2, e3) ->
-	  let e1list = List.map (fun (_behav,e) -> e) inv in
-          e1list @ [e2; e3]
+      | JCNEloop(behs, variant, e2) ->
+	  List.fold_right
+	    (fun (_,inv,ass) acc ->
+	       Option_misc.fold (fun x l -> x::l) inv acc
+		 (* TODO : ass *))
+	    behs
+	    (Option_misc.fold (fun x l -> x::l) variant [e2])
       | JCNEapp(_, _, el)
       | JCNEblock el ->
           el

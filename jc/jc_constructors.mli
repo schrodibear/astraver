@@ -370,12 +370,12 @@ module PExpr :
     val mkquantifier :
       quantifier:quantifier ->
       typ:ptype ->
-      vars:string list ->
+      vars:identifier list ->
       body:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
     val mkforall :
       typ:ptype ->
-      vars:string list ->
+      vars:identifier list ->
       body:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
 (*
@@ -452,7 +452,7 @@ module PExpr :
 
     val mkwhile :
       ?condition:pexpr ->
-      ?invariant:(string list * pexpr) list ->
+      ?behaviors:pexpr loopbehavior list ->
       ?variant:pexpr ->
       body:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
@@ -460,7 +460,7 @@ module PExpr :
       ?inits:pexpr list ->
       ?condition:pexpr ->
       ?updates:pexpr list ->
-      ?invariant:(string list * pexpr) list ->
+      ?behaviors:pexpr loopbehavior list ->
       ?variant:pexpr ->
       body:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
@@ -791,3 +791,9 @@ module Assertion :
       ?pos:Loc.position -> ?mark:string -> unit -> assertion
 
   end
+
+(*
+Local Variables: 
+compile-command: "LC_ALL=C nice make -j -C .. byte"
+End: 
+*)

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.143 2009-02-06 11:48:40 ayad Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.144 2009-03-16 08:36:39 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -47,8 +47,6 @@ let error l =
   Format.kfprintf 
     (fun fmt -> raise (Error(l, flush_str_formatter()))) 
     str_formatter
-
-let fold_unit f () = f
 
 let zero = Num.Int 0
 let one = Num.Int 1

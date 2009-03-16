@@ -3374,8 +3374,7 @@ let Purse_withdraw_ensures_default =
                          (NoCreditException_exc
                          (let this = (JC_210:
                                      (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
-                         (let tt = (JC_212:
-                                   (cons_NoCreditException_requires this)) in
+                         (let tt = (JC_212: (cons_NoCreditException this)) in
                          this)))) in
       void));
     (raise Return)
@@ -3460,7 +3459,8 @@ let Purse_withdraw_safety =
                                               jessie_180),
                                        (0)) };
                                      jessie_180))) in
-                         (let tt = (JC_208: (cons_NoCreditException this)) in
+                         (let tt = (JC_208:
+                                   (cons_NoCreditException_requires this)) in
                          this)))) in
       void));
     (raise Return)
@@ -3863,7 +3863,7 @@ why --project [...] why/Purse.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Purse_po12.why">
-      <location file = "why/Purse.why" line = "1199" begin = "39" end = "179"/>
+      <location file = "why/Purse.why" line = "1198" begin = "39" end = "179"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -6538,7 +6538,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (EQ result (select Purse_balance this_5))
 (IMPLIES (< result s_1) (>= 1 0)))))))))
 
-;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1199, characters 39-179
+;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1198, characters 39-179
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)

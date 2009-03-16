@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.155 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.156 2009-03-16 08:36:39 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -38,7 +38,9 @@ open Jc_fenv
 open Jc_name
 open Jc_constructors
 open Jc_pervasives
+(*
 open Jc_iterators
+*)
 open Jc_struct_tools
 
 open Format
@@ -1074,7 +1076,7 @@ let rec single_term ef t =
 	true, ef
 
 and term ef t =
-  fold_rec_term single_term ef t
+  Jc_iterators.fold_rec_term single_term ef t
 
 let tag ef lab t vi_opt r =
   match vi_opt with
@@ -1118,7 +1120,7 @@ let single_assertion ef a =
 	true, ef
 
 let assertion ef a =
-  fold_rec_term_and_assertion single_term single_assertion ef a
+  Jc_iterators.fold_rec_term_and_assertion single_term single_assertion ef a
 
 
 (******************************************************************************)
@@ -1214,7 +1216,7 @@ let single_location_set fef locs =
   in true, fef
 
 let location ~in_assigns fef loc =
-  fold_rec_location single_term
+  Jc_iterators.fold_rec_location single_term
     (single_location ~in_assigns) single_location_set fef loc
 
 
@@ -1223,7 +1225,8 @@ let location ~in_assigns fef loc =
 (******************************************************************************)
 
 let rec expr fef e =
-  fold_rec_expr_and_term_and_assertion single_term single_assertion
+  Jc_iterators.fold_rec_expr_and_term_and_assertion 
+    single_term single_assertion
     (single_location ~in_assigns:true) single_location_set
     (fun (fef : fun_effect) e -> match e#node with
        | JCEvar v ->
@@ -1467,7 +1470,7 @@ let rec expr fef e =
 
 let behavior fef (_pos,_id,b) =
   let fef = 
-    fold_rec_behavior single_term single_assertion
+    Jc_iterators.fold_rec_behavior single_term single_assertion
       (single_location ~in_assigns:true) single_location_set fef b
   in
   Option_misc.fold_left add_exception_effect fef b.jc_behavior_throws

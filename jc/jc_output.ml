@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.138 2009-02-06 11:48:40 ayad Exp $ *)
+(* $Id: jc_output.ml,v 1.139 2009-03-16 08:36:39 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -78,6 +78,9 @@ let lbin_op op =
   if op == Jc_pervasives.shift then "+" else
   raise Not_found
 *)
+
+let identifier fmt id =
+  fprintf fmt "%s" id#name
 
 let bin_op (op, _) = match op with
   | `Blt -> "<"
@@ -381,7 +384,7 @@ let rec expr fmt e =
 	    asrt_kind asrt
 	    (print_list_delim 
 	       (constant_string "for ") (constant_string ": ") 
-	       comma string)
+	       comma identifier)
 	    behav
 	    assertion a
       | JCEcontract(req,dec,vi_result,behs,e) ->
@@ -413,6 +416,8 @@ let rec expr fmt e =
       | JCEshift(e1, e2) -> 
 	  fprintf fmt "@[(%a + %a)@]" expr e1 expr e2
       | JCEloop(la, e) ->
+	  assert false
+(*
           fprintf fmt "@\n@[%a%a@\nwhile (true)%a@]"
 	  (print_list nothing 
 	     (fun fmt (behav,inv) -> fprintf fmt "@\ninvariant %a%a;"
@@ -425,6 +430,7 @@ let rec expr fmt e =
             (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
             la.jc_loop_variant
             expr e
+*)
       | JCEapp{ jc_call_fun = (JClogic_fun{ jc_logic_info_final_name = name }
                 | JCfun{ jc_fun_info_final_name = name });
                 jc_call_args = args } ->

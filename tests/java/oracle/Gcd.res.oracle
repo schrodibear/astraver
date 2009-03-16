@@ -264,26 +264,29 @@ behavior bezoutProperty:
                (var integer d_1 = (K_22 : 1));
                
                {  
-                  
-                  invariant (K_11 : ((K_10 : ((K_9 : ((K_8 : ((K_7 : 
-                                                              (x_8 >=
-                                                                0)) &&
-                                                               (K_6 : 
-                                                               (y_8 >=
-                                                                 0)))) &&
-                                                       (K_5 : (\forall integer d_2;
-                                                                (isGcd(
-                                                                  x_8, y_8,
-                                                                  d_2) ==>
-                                                                  \at(isGcd(
-                                                                  x_8, y_8,
-                                                                  d_2),Pre)))))) &&
-                                               (K_4 : (((a_3 * \at(x_8,Pre)) +
-                                                         (b_2 * \at(y_8,Pre))) ==
-                                                        x_8)))) &&
-                                      (K_3 : (((c * \at(x_8,Pre)) +
-                                                (d_1 * \at(y_8,Pre))) ==
-                                               y_8))));
+                  loop 
+                  behavior default:
+                    invariant (K_11 : ((K_10 : ((K_9 : ((K_8 : ((K_7 : 
+                                                                (x_8 >=
+                                                                  0)) &&
+                                                                 (K_6 : 
+                                                                 (y_8 >=
+                                                                   0)))) &&
+                                                         (K_5 : (\forall integer d_2;
+                                                                  (isGcd(
+                                                                    x_8, y_8,
+                                                                    d_2) ==>
+                                                                    \at(isGcd(
+                                                                    x_8, y_8,
+                                                                    d_2),Pre)))))) &&
+                                                 (K_4 : (((a_3 *
+                                                            \at(x_8,Pre)) +
+                                                           (b_2 *
+                                                             \at(y_8,Pre))) ==
+                                                          x_8)))) &&
+                                        (K_3 : (((c * \at(x_8,Pre)) +
+                                                  (d_1 * \at(y_8,Pre))) ==
+                                                 y_8))));
                   variant (K_12 : y_8);
                   while ((K_21 : (y_8 > 0)))
                   {  
@@ -650,15 +653,15 @@ end = 18
 
 [JC_40]
 file = "HOME/tests/java/Gcd.java"
-line = 99
-begin = 9
-end = 81
+line = 98
+begin = 25
+end = 31
 
 [JC_41]
 file = "HOME/tests/java/Gcd.java"
-line = 101
-begin = 15
-end = 45
+line = 99
+begin = 9
+end = 81
 
 [cons_Gcd_ensures_default]
 name = "Constructor of class Gcd"
@@ -670,7 +673,7 @@ end = -1
 
 [JC_42]
 file = "HOME/tests/java/Gcd.java"
-line = 102
+line = 101
 begin = 15
 end = 45
 
@@ -684,9 +687,9 @@ end = 152
 
 [JC_43]
 file = "HOME/tests/java/Gcd.java"
-line = 98
+line = 102
 begin = 15
-end = 219
+end = 45
 
 [cons_Gcd_safety]
 name = "Constructor of class Gcd"
@@ -697,17 +700,16 @@ begin = -1
 end = -1
 
 [JC_44]
+file = "HOME/tests/java/Gcd.java"
+line = 98
+begin = 15
+end = 219
+
+[JC_45]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_45]
-kind = DivByZero
-file = "HOME/tests/java/Gcd.java"
-line = 106
-begin = 20
-end = 25
 
 [JC_46]
 kind = DivByZero
@@ -725,9 +727,9 @@ end = 23
 [JC_47]
 kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 107
-begin = 34
-end = 39
+line = 106
+begin = 20
+end = 25
 
 [JC_2]
 file = "HOME/"
@@ -749,10 +751,11 @@ begin = 8
 end = 23
 
 [JC_49]
+kind = DivByZero
 file = "HOME/tests/java/Gcd.java"
-line = 103
-begin = 25
-end = 26
+line = 107
+begin = 34
+end = 39
 
 [JC_4]
 file = "HOME/"
@@ -1248,15 +1251,15 @@ end = 39
 
 [JC_38]
 file = "HOME/tests/java/Gcd.java"
-line = 98
-begin = 15
-end = 21
+line = 103
+begin = 25
+end = 26
 
 [JC_39]
 file = "HOME/tests/java/Gcd.java"
 line = 98
-begin = 25
-end = 31
+begin = 15
+end = 21
 
 ========== file tests/java/why/Gcd.why ==========
 type Object
@@ -2102,22 +2105,22 @@ let Gcd_gcd_ensures_default =
        try
         while true do
         { invariant
-            (JC_43:
-            ((JC_38: ge_int(mutable_x_8, (0)))
-            and ((JC_39: ge_int(mutable_y_8, (0)))
-                and ((JC_40:
+            (JC_44:
+            ((JC_39: ge_int(mutable_x_8, (0)))
+            and ((JC_40: ge_int(mutable_y_8, (0)))
+                and ((JC_41:
                      (forall d_2:int.
                       (isGcd(mutable_x_8, mutable_y_8, d_2) ->
                        isGcd(mutable_x_8@init, mutable_y_8@init, d_2@init))))
-                    and ((JC_41:
+                    and ((JC_42:
                          eq_int(add_int(mul_int(a_3, mutable_x_8@init),
                                 mul_int(b_2, mutable_y_8@init)),
                          mutable_x_8))
-                        and (JC_42:
+                        and (JC_43:
                             eq_int(add_int(mul_int(c, mutable_x_8@init),
                                    mul_int(d_1, mutable_y_8@init)),
                             mutable_y_8)))))))
-          variant (JC_49 : mutable_y_8) }
+           }
          begin
            [ { } unit { true } ];
           try
@@ -2125,10 +2128,10 @@ let Gcd_gcd_ensures_default =
                               (if (K_21: ((gt_int_ !mutable_y_8) (0)))
                               then
                                (let jessie_16 = (let r = (K_20:
-                                                         (JC_46:
+                                                         (JC_47:
                                                          ((mod_int !mutable_x_8) !mutable_y_8))) in
                                                 (let q_1 = (K_19:
-                                                           (JC_48:
+                                                           (JC_49:
                                                            ((div_int !mutable_x_8) !mutable_y_8))) in
                                                 begin
                                                   (let jessie_11 = (mutable_x_8 := !mutable_y_8) in
@@ -2290,7 +2293,7 @@ let Gcd_gcd_safety =
      begin
        try
         while true do
-        { invariant (JC_33: true)  }
+        { invariant (JC_33: true) variant (JC_38 : mutable_y_8) }
          begin
            [ { } unit reads a_3,b_2,c,d_1,mutable_x_8,mutable_y_8
              { (JC_32:
@@ -2488,14 +2491,22 @@ why --project [...] why/Gcd.why
   <function name="Method gcd">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/Gcd_po22.why">
+    <goal why_file="why/Gcd_po20.why">
       <location file = "HOME/tests/java/Gcd.java" line = "106" begin = "20" end = "25"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
+    <goal why_file="why/Gcd_po21.why">
+      <location file = "HOME/tests/java/Gcd.java" line = "103" begin = "25" end = "26"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/Gcd_po22.why">
+      <location file = "HOME/tests/java/Gcd.java" line = "103" begin = "25" end = "26"/>
+      <explain kind = "VarDecr"/>
+    </goal>
     </behavior>
     <behavior name="Normal behavior `resultIsGcd'">
-    <goal why_file="why/Gcd_po21.why">
+    <goal why_file="why/Gcd_po19.why">
       <location file = "HOME/tests/java/Gcd.java" line = "91" begin = "18" end = "36"/>
       <explain kind = "Post"/>
     </goal>
@@ -2534,14 +2545,6 @@ text = "DivByZero"/>
     <goal why_file="why/Gcd_po18.why">
       <location file = "HOME/tests/java/Gcd.java" line = "102" begin = "15" end = "45"/>
       <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Gcd_po19.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "103" begin = "25" end = "26"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/Gcd_po20.why">
-      <location file = "HOME/tests/java/Gcd.java" line = "103" begin = "25" end = "26"/>
-      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>
@@ -3765,14 +3768,14 @@ goal Gcd_gcd_ensures_default_po_1:
   forall x_8:int.
   forall y_8:int.
   ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
-  ("JC_43": ("JC_41": ("JC_41": (((1 * x_8) + (0 * y_8)) = x_8))))
+  ("JC_44": ("JC_42": ("JC_42": (((1 * x_8) + (0 * y_8)) = x_8))))
 
 ========== file tests/java/why/Gcd_po13.why ==========
 goal Gcd_gcd_ensures_default_po_2:
   forall x_8:int.
   forall y_8:int.
   ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
-  ("JC_43": ("JC_42": ("JC_42": (((0 * x_8) + (1 * y_8)) = y_8))))
+  ("JC_44": ("JC_43": ("JC_43": (((0 * x_8) + (1 * y_8)) = y_8))))
 
 ========== file tests/java/why/Gcd_po14.why ==========
 goal Gcd_gcd_ensures_default_po_3:
@@ -3785,14 +3788,14 @@ goal Gcd_gcd_ensures_default_po_3:
   forall d_1:int.
   forall mutable_x_8:int.
   forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
+  ("JC_44":
+  (("JC_39": (mutable_x_8 >= 0)) and
+   (("JC_40": (mutable_y_8 >= 0)) and
+    (("JC_41":
      (forall d_2:int.
        (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+     (("JC_42": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_43": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   forall mutable_x_8_0:int.
   (mutable_x_8_0 = mutable_y_8) ->
@@ -3806,7 +3809,7 @@ goal Gcd_gcd_ensures_default_po_3:
   (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  ("JC_43": ("JC_38": ("JC_38": (mutable_x_8_0 >= 0))))
+  ("JC_44": ("JC_39": ("JC_39": (mutable_x_8_0 >= 0))))
 
 ========== file tests/java/why/Gcd_po15.why ==========
 goal Gcd_gcd_ensures_default_po_4:
@@ -3819,14 +3822,14 @@ goal Gcd_gcd_ensures_default_po_4:
   forall d_1:int.
   forall mutable_x_8:int.
   forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
+  ("JC_44":
+  (("JC_39": (mutable_x_8 >= 0)) and
+   (("JC_40": (mutable_y_8 >= 0)) and
+    (("JC_41":
      (forall d_2:int.
        (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+     (("JC_42": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_43": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   forall mutable_x_8_0:int.
   (mutable_x_8_0 = mutable_y_8) ->
@@ -3840,7 +3843,7 @@ goal Gcd_gcd_ensures_default_po_4:
   (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  ("JC_43": ("JC_39": ("JC_39": (mutable_y_8_0 >= 0))))
+  ("JC_44": ("JC_40": ("JC_40": (mutable_y_8_0 >= 0))))
 
 ========== file tests/java/why/Gcd_po16.why ==========
 goal Gcd_gcd_ensures_default_po_5:
@@ -3853,14 +3856,14 @@ goal Gcd_gcd_ensures_default_po_5:
   forall d_1:int.
   forall mutable_x_8:int.
   forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
+  ("JC_44":
+  (("JC_39": (mutable_x_8 >= 0)) and
+   (("JC_40": (mutable_y_8 >= 0)) and
+    (("JC_41":
      (forall d_2:int.
        (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+     (("JC_42": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_43": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   forall mutable_x_8_0:int.
   (mutable_x_8_0 = mutable_y_8) ->
@@ -3874,9 +3877,9 @@ goal Gcd_gcd_ensures_default_po_5:
   (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  ("JC_43":
-  ("JC_40":
-  ("JC_40":
+  ("JC_44":
+  ("JC_41":
+  ("JC_41":
   (forall d_2:int.
     (isGcd(mutable_x_8_0, mutable_y_8_0, d_2) -> isGcd(x_8, y_8, d_2))))))
 
@@ -3891,14 +3894,14 @@ goal Gcd_gcd_ensures_default_po_6:
   forall d_1:int.
   forall mutable_x_8:int.
   forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
+  ("JC_44":
+  (("JC_39": (mutable_x_8 >= 0)) and
+   (("JC_40": (mutable_y_8 >= 0)) and
+    (("JC_41":
      (forall d_2:int.
        (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+     (("JC_42": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_43": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   forall mutable_x_8_0:int.
   (mutable_x_8_0 = mutable_y_8) ->
@@ -3912,8 +3915,8 @@ goal Gcd_gcd_ensures_default_po_6:
   (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  ("JC_43":
-  ("JC_41": ("JC_41": (((a_3_0 * x_8) + (b_2_0 * y_8)) = mutable_x_8_0))))
+  ("JC_44":
+  ("JC_42": ("JC_42": (((a_3_0 * x_8) + (b_2_0 * y_8)) = mutable_x_8_0))))
 
 ========== file tests/java/why/Gcd_po18.why ==========
 goal Gcd_gcd_ensures_default_po_7:
@@ -3926,14 +3929,14 @@ goal Gcd_gcd_ensures_default_po_7:
   forall d_1:int.
   forall mutable_x_8:int.
   forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
+  ("JC_44":
+  (("JC_39": (mutable_x_8 >= 0)) and
+   (("JC_40": (mutable_y_8 >= 0)) and
+    (("JC_41":
      (forall d_2:int.
        (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+     (("JC_42": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_43": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   forall mutable_x_8_0:int.
   (mutable_x_8_0 = mutable_y_8) ->
@@ -3947,84 +3950,10 @@ goal Gcd_gcd_ensures_default_po_7:
   (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  ("JC_43":
-  ("JC_42": ("JC_42": (((c0 * x_8) + (d_1_0 * y_8)) = mutable_y_8_0))))
+  ("JC_44":
+  ("JC_43": ("JC_43": (((c0 * x_8) + (d_1_0 * y_8)) = mutable_y_8_0))))
 
 ========== file tests/java/why/Gcd_po19.why ==========
-goal Gcd_gcd_ensures_default_po_8:
-  forall x_8:int.
-  forall y_8:int.
-  ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
-  forall a_3:int.
-  forall b_2:int.
-  forall c:int.
-  forall d_1:int.
-  forall mutable_x_8:int.
-  forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
-     (forall d_2:int.
-       (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
-  (mutable_y_8 > 0) ->
-  forall mutable_x_8_0:int.
-  (mutable_x_8_0 = mutable_y_8) ->
-  forall mutable_y_8_0:int.
-  (mutable_y_8_0 = (mutable_x_8 % mutable_y_8)) ->
-  forall a_3_0:int.
-  (a_3_0 = c) ->
-  forall b_2_0:int.
-  (b_2_0 = d_1) ->
-  forall c0:int.
-  (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
-  forall d_1_0:int.
-  (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  (0 <= ("JC_49": mutable_y_8))
-
-========== file tests/java/why/Gcd_po2.why ==========
-goal distr_left_minus:
-  (forall x_2:int.
-    (forall y_2:int.
-      (forall z_2:int. (((x_2 - y_2) * z_2) = ((x_2 * z_2) - (y_2 * z_2))))))
-
-========== file tests/java/why/Gcd_po20.why ==========
-goal Gcd_gcd_ensures_default_po_9:
-  forall x_8:int.
-  forall y_8:int.
-  ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
-  forall a_3:int.
-  forall b_2:int.
-  forall c:int.
-  forall d_1:int.
-  forall mutable_x_8:int.
-  forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
-     (forall d_2:int.
-       (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
-  (mutable_y_8 > 0) ->
-  forall mutable_x_8_0:int.
-  (mutable_x_8_0 = mutable_y_8) ->
-  forall mutable_y_8_0:int.
-  (mutable_y_8_0 = (mutable_x_8 % mutable_y_8)) ->
-  forall a_3_0:int.
-  (a_3_0 = c) ->
-  forall b_2_0:int.
-  (b_2_0 = d_1) ->
-  forall c0:int.
-  (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
-  forall d_1_0:int.
-  (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  (("JC_49": mutable_y_8_0) < ("JC_49": mutable_y_8))
-
-========== file tests/java/why/Gcd_po21.why ==========
 goal Gcd_gcd_ensures_resultIsGcd_po_1:
   forall x_8:int.
   forall y_8:int.
@@ -4049,7 +3978,13 @@ goal Gcd_gcd_ensures_resultIsGcd_po_1:
   (return = mutable_x_8) ->
   ("JC_23": isGcd(x_8, y_8, return))
 
-========== file tests/java/why/Gcd_po22.why ==========
+========== file tests/java/why/Gcd_po2.why ==========
+goal distr_left_minus:
+  (forall x_2:int.
+    (forall y_2:int.
+      (forall z_2:int. (((x_2 - y_2) * z_2) = ((x_2 * z_2) - (y_2 * z_2))))))
+
+========== file tests/java/why/Gcd_po20.why ==========
 goal Gcd_gcd_safety_po_1:
   forall x_8:int.
   forall y_8:int.
@@ -4071,6 +4006,88 @@ goal Gcd_gcd_safety_po_1:
       ("JC_31": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   (mutable_y_8 <> 0)
+
+========== file tests/java/why/Gcd_po21.why ==========
+goal Gcd_gcd_safety_po_2:
+  forall x_8:int.
+  forall y_8:int.
+  ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
+  forall a_3:int.
+  forall b_2:int.
+  forall c:int.
+  forall d_1:int.
+  forall mutable_x_8:int.
+  forall mutable_y_8:int.
+  ("JC_33": true) ->
+  ("JC_32":
+  (("JC_27": (mutable_x_8 >= 0)) and
+   (("JC_28": (mutable_y_8 >= 0)) and
+    (("JC_29":
+     (forall d_2:int.
+       (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
+     (("JC_30": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_31": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+  (mutable_y_8 > 0) ->
+  (mutable_y_8 <> 0) ->
+  forall result:int.
+  (result = (mutable_x_8 % mutable_y_8)) ->
+  (mutable_y_8 <> 0) ->
+  forall result0:int.
+  (result0 = (mutable_x_8 / mutable_y_8)) ->
+  forall mutable_x_8_0:int.
+  (mutable_x_8_0 = mutable_y_8) ->
+  forall mutable_y_8_0:int.
+  (mutable_y_8_0 = result) ->
+  forall a_3_0:int.
+  (a_3_0 = c) ->
+  forall b_2_0:int.
+  (b_2_0 = d_1) ->
+  forall c0:int.
+  (c0 = (a_3 - (c * result0))) ->
+  forall d_1_0:int.
+  (d_1_0 = (b_2 - (d_1 * result0))) ->
+  (0 <= ("JC_38": mutable_y_8))
+
+========== file tests/java/why/Gcd_po22.why ==========
+goal Gcd_gcd_safety_po_3:
+  forall x_8:int.
+  forall y_8:int.
+  ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
+  forall a_3:int.
+  forall b_2:int.
+  forall c:int.
+  forall d_1:int.
+  forall mutable_x_8:int.
+  forall mutable_y_8:int.
+  ("JC_33": true) ->
+  ("JC_32":
+  (("JC_27": (mutable_x_8 >= 0)) and
+   (("JC_28": (mutable_y_8 >= 0)) and
+    (("JC_29":
+     (forall d_2:int.
+       (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
+     (("JC_30": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_31": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+  (mutable_y_8 > 0) ->
+  (mutable_y_8 <> 0) ->
+  forall result:int.
+  (result = (mutable_x_8 % mutable_y_8)) ->
+  (mutable_y_8 <> 0) ->
+  forall result0:int.
+  (result0 = (mutable_x_8 / mutable_y_8)) ->
+  forall mutable_x_8_0:int.
+  (mutable_x_8_0 = mutable_y_8) ->
+  forall mutable_y_8_0:int.
+  (mutable_y_8_0 = result) ->
+  forall a_3_0:int.
+  (a_3_0 = c) ->
+  forall b_2_0:int.
+  (b_2_0 = d_1) ->
+  forall c0:int.
+  (c0 = (a_3 - (c * result0))) ->
+  forall d_1_0:int.
+  (d_1_0 = (b_2 - (d_1 * result0))) ->
+  (("JC_38": mutable_y_8_0) < ("JC_38": mutable_y_8))
 
 ========== file tests/java/why/Gcd_po3.why ==========
 goal distr_right:
@@ -5306,70 +5323,6 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (EQ (+ (* c0 x_8) (* d_1_0 y_8)) mutable_y_8_0))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_8, File "HOME/tests/java/Gcd.java", line 103, characters 25-26
-(FORALL (x_8)
-(FORALL (y_8)
-(IMPLIES (AND (>= x_8 0) (>= y_8 0))
-(FORALL (a_3)
-(FORALL (b_2)
-(FORALL (c)
-(FORALL (d_1)
-(FORALL (mutable_x_8)
-(FORALL (mutable_y_8)
-(IMPLIES (AND (>= mutable_x_8 0)
-         (AND (>= mutable_y_8 0)
-         (AND
-         (FORALL (d_2)
-         (IMPLIES (isGcd mutable_x_8 mutable_y_8 d_2) (isGcd x_8 y_8 d_2)))
-         (AND (EQ (+ (* a_3 x_8) (* b_2 y_8)) mutable_x_8)
-         (EQ (+ (* c x_8) (* d_1 y_8)) mutable_y_8)))))
-(IMPLIES (> mutable_y_8 0)
-(FORALL (mutable_x_8_0)
-(IMPLIES (EQ mutable_x_8_0 mutable_y_8)
-(FORALL (mutable_y_8_0)
-(IMPLIES (EQ mutable_y_8_0 (int_mod mutable_x_8 mutable_y_8))
-(FORALL (a_3_0)
-(IMPLIES (EQ a_3_0 c)
-(FORALL (b_2_0)
-(IMPLIES (EQ b_2_0 d_1)
-(FORALL (c0)
-(IMPLIES (EQ c0 (- a_3 (* c (int_div mutable_x_8 mutable_y_8))))
-(FORALL (d_1_0)
-(IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
-(<= 0 mutable_y_8))))))))))))))))))))))))
-
-;; Gcd_gcd_ensures_default_po_9, File "HOME/tests/java/Gcd.java", line 103, characters 25-26
-(FORALL (x_8)
-(FORALL (y_8)
-(IMPLIES (AND (>= x_8 0) (>= y_8 0))
-(FORALL (a_3)
-(FORALL (b_2)
-(FORALL (c)
-(FORALL (d_1)
-(FORALL (mutable_x_8)
-(FORALL (mutable_y_8)
-(IMPLIES (AND (>= mutable_x_8 0)
-         (AND (>= mutable_y_8 0)
-         (AND
-         (FORALL (d_2)
-         (IMPLIES (isGcd mutable_x_8 mutable_y_8 d_2) (isGcd x_8 y_8 d_2)))
-         (AND (EQ (+ (* a_3 x_8) (* b_2 y_8)) mutable_x_8)
-         (EQ (+ (* c x_8) (* d_1 y_8)) mutable_y_8)))))
-(IMPLIES (> mutable_y_8 0)
-(FORALL (mutable_x_8_0)
-(IMPLIES (EQ mutable_x_8_0 mutable_y_8)
-(FORALL (mutable_y_8_0)
-(IMPLIES (EQ mutable_y_8_0 (int_mod mutable_x_8 mutable_y_8))
-(FORALL (a_3_0)
-(IMPLIES (EQ a_3_0 c)
-(FORALL (b_2_0)
-(IMPLIES (EQ b_2_0 d_1)
-(FORALL (c0)
-(IMPLIES (EQ c0 (- a_3 (* c (int_div mutable_x_8 mutable_y_8))))
-(FORALL (d_1_0)
-(IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
-(< mutable_y_8_0 mutable_y_8))))))))))))))))))))))))
-
 ;; Gcd_gcd_ensures_resultIsGcd_po_1, File "HOME/tests/java/Gcd.java", line 91, characters 18-36
 (FORALL (x_8)
 (FORALL (y_8)
@@ -5410,6 +5363,82 @@ why -simplify [...] why/Gcd.why
          (AND (EQ (+ (* a_3 x_8) (* b_2 y_8)) mutable_x_8)
          (EQ (+ (* c x_8) (* d_1 y_8)) mutable_y_8)))))
 (IMPLIES (> mutable_y_8 0) (NEQ mutable_y_8 0)))))))))))))
+
+;; Gcd_gcd_safety_po_2, File "HOME/tests/java/Gcd.java", line 103, characters 25-26
+(FORALL (x_8)
+(FORALL (y_8)
+(IMPLIES (AND (>= x_8 0) (>= y_8 0))
+(FORALL (a_3)
+(FORALL (b_2)
+(FORALL (c)
+(FORALL (d_1)
+(FORALL (mutable_x_8)
+(FORALL (mutable_y_8)
+(IMPLIES TRUE
+(IMPLIES (AND (>= mutable_x_8 0)
+         (AND (>= mutable_y_8 0)
+         (AND
+         (FORALL (d_2)
+         (IMPLIES (isGcd mutable_x_8 mutable_y_8 d_2) (isGcd x_8 y_8 d_2)))
+         (AND (EQ (+ (* a_3 x_8) (* b_2 y_8)) mutable_x_8)
+         (EQ (+ (* c x_8) (* d_1 y_8)) mutable_y_8)))))
+(IMPLIES (> mutable_y_8 0)
+(IMPLIES (NEQ mutable_y_8 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_mod mutable_x_8 mutable_y_8))
+(IMPLIES (NEQ mutable_y_8 0)
+(FORALL (result0)
+(IMPLIES (EQ result0 (int_div mutable_x_8 mutable_y_8))
+(FORALL (mutable_x_8_0)
+(IMPLIES (EQ mutable_x_8_0 mutable_y_8)
+(FORALL (mutable_y_8_0)
+(IMPLIES (EQ mutable_y_8_0 result)
+(FORALL (a_3_0)
+(IMPLIES (EQ a_3_0 c)
+(FORALL (b_2_0)
+(IMPLIES (EQ b_2_0 d_1)
+(FORALL (c0)
+(IMPLIES (EQ c0 (- a_3 (* c result0)))
+(FORALL (d_1_0)
+(IMPLIES (EQ d_1_0 (- b_2 (* d_1 result0))) (<= 0 mutable_y_8)))))))))))))))))))))))))))))))
+
+;; Gcd_gcd_safety_po_3, File "HOME/tests/java/Gcd.java", line 103, characters 25-26
+(FORALL (x_8)
+(FORALL (y_8)
+(IMPLIES (AND (>= x_8 0) (>= y_8 0))
+(FORALL (a_3)
+(FORALL (b_2)
+(FORALL (c)
+(FORALL (d_1)
+(FORALL (mutable_x_8)
+(FORALL (mutable_y_8)
+(IMPLIES TRUE
+(IMPLIES (AND (>= mutable_x_8 0)
+         (AND (>= mutable_y_8 0)
+         (AND
+         (FORALL (d_2)
+         (IMPLIES (isGcd mutable_x_8 mutable_y_8 d_2) (isGcd x_8 y_8 d_2)))
+         (AND (EQ (+ (* a_3 x_8) (* b_2 y_8)) mutable_x_8)
+         (EQ (+ (* c x_8) (* d_1 y_8)) mutable_y_8)))))
+(IMPLIES (> mutable_y_8 0)
+(IMPLIES (NEQ mutable_y_8 0)
+(FORALL (result)
+(IMPLIES (EQ result (int_mod mutable_x_8 mutable_y_8))
+(IMPLIES (NEQ mutable_y_8 0)
+(FORALL (result0)
+(IMPLIES (EQ result0 (int_div mutable_x_8 mutable_y_8))
+(FORALL (mutable_x_8_0)
+(IMPLIES (EQ mutable_x_8_0 mutable_y_8)
+(FORALL (mutable_y_8_0)
+(IMPLIES (EQ mutable_y_8_0 result)
+(FORALL (a_3_0)
+(IMPLIES (EQ a_3_0 c)
+(FORALL (b_2_0)
+(IMPLIES (EQ b_2_0 d_1)
+(FORALL (c0)
+(IMPLIES (EQ c0 (- a_3 (* c result0)))
+(FORALL (d_1_0)
+(IMPLIES (EQ d_1_0 (- b_2 (* d_1 result0))) (< mutable_y_8_0 mutable_y_8)))))))))))))))))))))))))))))))
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
@@ -6678,13 +6707,13 @@ goal Gcd_gcd_ensures_default_po_1:
   forall x_8:int.
   forall y_8:int.
   ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
-  ("JC_43": ("JC_41": ("JC_41": (((1 * x_8) + (0 * y_8)) = x_8))))
+  ("JC_44": ("JC_42": ("JC_42": (((1 * x_8) + (0 * y_8)) = x_8))))
 
 goal Gcd_gcd_ensures_default_po_2:
   forall x_8:int.
   forall y_8:int.
   ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
-  ("JC_43": ("JC_42": ("JC_42": (((0 * x_8) + (1 * y_8)) = y_8))))
+  ("JC_44": ("JC_43": ("JC_43": (((0 * x_8) + (1 * y_8)) = y_8))))
 
 goal Gcd_gcd_ensures_default_po_3:
   forall x_8:int.
@@ -6696,14 +6725,14 @@ goal Gcd_gcd_ensures_default_po_3:
   forall d_1:int.
   forall mutable_x_8:int.
   forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
+  ("JC_44":
+  (("JC_39": (mutable_x_8 >= 0)) and
+   (("JC_40": (mutable_y_8 >= 0)) and
+    (("JC_41":
      (forall d_2:int.
        (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+     (("JC_42": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_43": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   forall mutable_x_8_0:int.
   (mutable_x_8_0 = mutable_y_8) ->
@@ -6717,7 +6746,7 @@ goal Gcd_gcd_ensures_default_po_3:
   (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  ("JC_43": ("JC_38": ("JC_38": (mutable_x_8_0 >= 0))))
+  ("JC_44": ("JC_39": ("JC_39": (mutable_x_8_0 >= 0))))
 
 goal Gcd_gcd_ensures_default_po_4:
   forall x_8:int.
@@ -6729,14 +6758,14 @@ goal Gcd_gcd_ensures_default_po_4:
   forall d_1:int.
   forall mutable_x_8:int.
   forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
+  ("JC_44":
+  (("JC_39": (mutable_x_8 >= 0)) and
+   (("JC_40": (mutable_y_8 >= 0)) and
+    (("JC_41":
      (forall d_2:int.
        (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+     (("JC_42": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_43": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   forall mutable_x_8_0:int.
   (mutable_x_8_0 = mutable_y_8) ->
@@ -6750,7 +6779,7 @@ goal Gcd_gcd_ensures_default_po_4:
   (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  ("JC_43": ("JC_39": ("JC_39": (mutable_y_8_0 >= 0))))
+  ("JC_44": ("JC_40": ("JC_40": (mutable_y_8_0 >= 0))))
 
 goal Gcd_gcd_ensures_default_po_5:
   forall x_8:int.
@@ -6762,14 +6791,14 @@ goal Gcd_gcd_ensures_default_po_5:
   forall d_1:int.
   forall mutable_x_8:int.
   forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
+  ("JC_44":
+  (("JC_39": (mutable_x_8 >= 0)) and
+   (("JC_40": (mutable_y_8 >= 0)) and
+    (("JC_41":
      (forall d_2:int.
        (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+     (("JC_42": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_43": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   forall mutable_x_8_0:int.
   (mutable_x_8_0 = mutable_y_8) ->
@@ -6783,9 +6812,9 @@ goal Gcd_gcd_ensures_default_po_5:
   (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  ("JC_43":
-  ("JC_40":
-  ("JC_40":
+  ("JC_44":
+  ("JC_41":
+  ("JC_41":
   (forall d_2:int.
     (isGcd(mutable_x_8_0, mutable_y_8_0, d_2) -> isGcd(x_8, y_8, d_2))))))
 
@@ -6799,14 +6828,14 @@ goal Gcd_gcd_ensures_default_po_6:
   forall d_1:int.
   forall mutable_x_8:int.
   forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
+  ("JC_44":
+  (("JC_39": (mutable_x_8 >= 0)) and
+   (("JC_40": (mutable_y_8 >= 0)) and
+    (("JC_41":
      (forall d_2:int.
        (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+     (("JC_42": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_43": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   forall mutable_x_8_0:int.
   (mutable_x_8_0 = mutable_y_8) ->
@@ -6820,8 +6849,8 @@ goal Gcd_gcd_ensures_default_po_6:
   (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  ("JC_43":
-  ("JC_41": ("JC_41": (((a_3_0 * x_8) + (b_2_0 * y_8)) = mutable_x_8_0))))
+  ("JC_44":
+  ("JC_42": ("JC_42": (((a_3_0 * x_8) + (b_2_0 * y_8)) = mutable_x_8_0))))
 
 goal Gcd_gcd_ensures_default_po_7:
   forall x_8:int.
@@ -6833,14 +6862,14 @@ goal Gcd_gcd_ensures_default_po_7:
   forall d_1:int.
   forall mutable_x_8:int.
   forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
+  ("JC_44":
+  (("JC_39": (mutable_x_8 >= 0)) and
+   (("JC_40": (mutable_y_8 >= 0)) and
+    (("JC_41":
      (forall d_2:int.
        (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+     (("JC_42": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_43": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   forall mutable_x_8_0:int.
   (mutable_x_8_0 = mutable_y_8) ->
@@ -6854,74 +6883,8 @@ goal Gcd_gcd_ensures_default_po_7:
   (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  ("JC_43":
-  ("JC_42": ("JC_42": (((c0 * x_8) + (d_1_0 * y_8)) = mutable_y_8_0))))
-
-goal Gcd_gcd_ensures_default_po_8:
-  forall x_8:int.
-  forall y_8:int.
-  ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
-  forall a_3:int.
-  forall b_2:int.
-  forall c:int.
-  forall d_1:int.
-  forall mutable_x_8:int.
-  forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
-     (forall d_2:int.
-       (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
-  (mutable_y_8 > 0) ->
-  forall mutable_x_8_0:int.
-  (mutable_x_8_0 = mutable_y_8) ->
-  forall mutable_y_8_0:int.
-  (mutable_y_8_0 = (mutable_x_8 % mutable_y_8)) ->
-  forall a_3_0:int.
-  (a_3_0 = c) ->
-  forall b_2_0:int.
-  (b_2_0 = d_1) ->
-  forall c0:int.
-  (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
-  forall d_1_0:int.
-  (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  (0 <= ("JC_49": mutable_y_8))
-
-goal Gcd_gcd_ensures_default_po_9:
-  forall x_8:int.
-  forall y_8:int.
-  ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
-  forall a_3:int.
-  forall b_2:int.
-  forall c:int.
-  forall d_1:int.
-  forall mutable_x_8:int.
-  forall mutable_y_8:int.
-  ("JC_43":
-  (("JC_38": (mutable_x_8 >= 0)) and
-   (("JC_39": (mutable_y_8 >= 0)) and
-    (("JC_40":
-     (forall d_2:int.
-       (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
-     (("JC_41": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
-      ("JC_42": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
-  (mutable_y_8 > 0) ->
-  forall mutable_x_8_0:int.
-  (mutable_x_8_0 = mutable_y_8) ->
-  forall mutable_y_8_0:int.
-  (mutable_y_8_0 = (mutable_x_8 % mutable_y_8)) ->
-  forall a_3_0:int.
-  (a_3_0 = c) ->
-  forall b_2_0:int.
-  (b_2_0 = d_1) ->
-  forall c0:int.
-  (c0 = (a_3 - (c * (mutable_x_8 / mutable_y_8)))) ->
-  forall d_1_0:int.
-  (d_1_0 = (b_2 - (d_1 * (mutable_x_8 / mutable_y_8)))) ->
-  (("JC_49": mutable_y_8_0) < ("JC_49": mutable_y_8))
+  ("JC_44":
+  ("JC_43": ("JC_43": (((c0 * x_8) + (d_1_0 * y_8)) = mutable_y_8_0))))
 
 goal Gcd_gcd_ensures_resultIsGcd_po_1:
   forall x_8:int.
@@ -6968,6 +6931,86 @@ goal Gcd_gcd_safety_po_1:
       ("JC_31": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
   (mutable_y_8 > 0) ->
   (mutable_y_8 <> 0)
+
+goal Gcd_gcd_safety_po_2:
+  forall x_8:int.
+  forall y_8:int.
+  ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
+  forall a_3:int.
+  forall b_2:int.
+  forall c:int.
+  forall d_1:int.
+  forall mutable_x_8:int.
+  forall mutable_y_8:int.
+  ("JC_33": true) ->
+  ("JC_32":
+  (("JC_27": (mutable_x_8 >= 0)) and
+   (("JC_28": (mutable_y_8 >= 0)) and
+    (("JC_29":
+     (forall d_2:int.
+       (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
+     (("JC_30": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_31": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+  (mutable_y_8 > 0) ->
+  (mutable_y_8 <> 0) ->
+  forall result:int.
+  (result = (mutable_x_8 % mutable_y_8)) ->
+  (mutable_y_8 <> 0) ->
+  forall result0:int.
+  (result0 = (mutable_x_8 / mutable_y_8)) ->
+  forall mutable_x_8_0:int.
+  (mutable_x_8_0 = mutable_y_8) ->
+  forall mutable_y_8_0:int.
+  (mutable_y_8_0 = result) ->
+  forall a_3_0:int.
+  (a_3_0 = c) ->
+  forall b_2_0:int.
+  (b_2_0 = d_1) ->
+  forall c0:int.
+  (c0 = (a_3 - (c * result0))) ->
+  forall d_1_0:int.
+  (d_1_0 = (b_2 - (d_1 * result0))) ->
+  (0 <= ("JC_38": mutable_y_8))
+
+goal Gcd_gcd_safety_po_3:
+  forall x_8:int.
+  forall y_8:int.
+  ("JC_17": (("JC_15": (x_8 >= 0)) and ("JC_16": (y_8 >= 0)))) ->
+  forall a_3:int.
+  forall b_2:int.
+  forall c:int.
+  forall d_1:int.
+  forall mutable_x_8:int.
+  forall mutable_y_8:int.
+  ("JC_33": true) ->
+  ("JC_32":
+  (("JC_27": (mutable_x_8 >= 0)) and
+   (("JC_28": (mutable_y_8 >= 0)) and
+    (("JC_29":
+     (forall d_2:int.
+       (isGcd(mutable_x_8, mutable_y_8, d_2) -> isGcd(x_8, y_8, d_2)))) and
+     (("JC_30": (((a_3 * x_8) + (b_2 * y_8)) = mutable_x_8)) and
+      ("JC_31": (((c * x_8) + (d_1 * y_8)) = mutable_y_8))))))) ->
+  (mutable_y_8 > 0) ->
+  (mutable_y_8 <> 0) ->
+  forall result:int.
+  (result = (mutable_x_8 % mutable_y_8)) ->
+  (mutable_y_8 <> 0) ->
+  forall result0:int.
+  (result0 = (mutable_x_8 / mutable_y_8)) ->
+  forall mutable_x_8_0:int.
+  (mutable_x_8_0 = mutable_y_8) ->
+  forall mutable_y_8_0:int.
+  (mutable_y_8_0 = result) ->
+  forall a_3_0:int.
+  (a_3_0 = c) ->
+  forall b_2_0:int.
+  (b_2_0 = d_1) ->
+  forall c0:int.
+  (c0 = (a_3 - (c * result0))) ->
+  forall d_1_0:int.
+  (d_1_0 = (b_2 - (d_1 * result0))) ->
+  (("JC_38": mutable_y_8_0) < ("JC_38": mutable_y_8))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

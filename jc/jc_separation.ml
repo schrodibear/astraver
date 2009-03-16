@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.43 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: jc_separation.ml,v 1.44 2009-03-16 08:36:39 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -36,7 +36,9 @@ open Jc_fenv
 
 open Jc_constructors
 open Jc_pervasives
+(*
 open Jc_iterators
+*)
 
 open Format
 open Pp
@@ -116,7 +118,7 @@ let single_term rresult t =
        | JCTrange_cast _ | JCTreal_cast _ ->
 	   ()
 
-let term rresult t = iter_term (single_term rresult) t
+let term rresult t = Jc_iterators.iter_term (single_term rresult) t
 
 let single_assertion rresult a =
   match a#node with
@@ -151,14 +153,16 @@ let single_assertion rresult a =
 	   ()
 
 let assertion rresult a = 
-  iter_term_and_assertion (single_term rresult) (single_assertion rresult) a
+  Jc_iterators.iter_term_and_assertion 
+    (single_term rresult) (single_assertion rresult) a
 
 let single_location = ignore
 
 let single_location_set = ignore
 
 let location rresult loc =
-  iter_location (single_term rresult) single_location single_location_set loc
+  Jc_iterators.iter_location 
+    (single_term rresult) single_location single_location_set loc
 
 let single_expr rresult e = 
   match e#node with
@@ -250,7 +254,8 @@ let single_expr rresult e =
 	()
 
 let expr rresult e =
-  iter_expr_and_term_and_assertion (single_term rresult)
+  Jc_iterators.iter_expr_and_term_and_assertion 
+    (single_term rresult)
     (single_assertion rresult) single_location single_location_set 
     (single_expr rresult) e
 
@@ -303,7 +308,8 @@ let logic_component fls =
   List.iter logic_function fls
 
 let funspec rresult spec =
-  iter_funspec (single_term rresult) (single_assertion rresult) single_location
+  Jc_iterators.iter_funspec 
+    (single_term rresult) (single_assertion rresult) single_location
     single_location_set spec
 
 let code_function f =
@@ -334,7 +340,7 @@ let code_component fls =
 let axiom id (loc,is_axiom,labels,a) = assertion (* labels *) dummy_region a
 
 let regionalize_assertion a assoc =
-  map_term_in_assertion (fun t ->
+  Jc_iterators.map_term_in_assertion (fun t ->
     let t = match t#node with
       | JCTapp app ->
 	  let app_assoc = 

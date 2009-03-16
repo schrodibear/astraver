@@ -31,10 +31,12 @@ open Jc_ast
 open Jc_fenv
 
 open Jc_pervasives
+(*
 open Jc_iterators
+*)
 
 let rec term acc t =
-  fold_term 
+  Jc_iterators.fold_term 
     (fun acc t -> match t#node with
     | JCTapp app -> app.jc_app_fun::acc
     | _ -> acc
@@ -92,15 +94,19 @@ let spec s =
 *)
 
 let loop_annot acc la = 
-  let acc = List.fold_left (fun acc (_behav,inv) -> assertion acc inv)
-    acc la.jc_loop_invariant 
+  let acc = 
+    List.fold_left 
+      (fun acc (id,inv,assigns) -> 
+	 (* TODO : traverse assigns clause *)
+	 Option_misc.fold_left assertion acc inv)
+      acc la.jc_loop_behaviors 
   in
   match la.jc_loop_variant with
   | None -> acc
   | Some t -> term acc t
 
 let expr = 
-  IExpr.fold_left 
+  Jc_iterators.IExpr.fold_left 
     (fun acc e -> match e#node with  
        | JCEapp call ->
 	   let f = call.jc_call_fun in

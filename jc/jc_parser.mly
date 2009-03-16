@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.127 2009-01-21 08:34:15 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.128 2009-03-16 08:36:39 marche Exp $ */
 
 %{
 
@@ -89,7 +89,7 @@
 %token AMPAMP BARBAR EQEQGT LTEQEQGT EXCLAM
 
 /* if then else return while break for fo break continue case switch default goto */
-%token IF THEN ELSE RETURN WHILE FOR DO BREAK CONTINUE CASE SWITCH DEFAULT GOTO
+%token IF THEN ELSE RETURN WHILE FOR DO BREAK CONTINUE CASE SWITCH DEFAULT GOTO LOOP
 
 /* exception of throw try catch finally new free let in var */
 %token EXCEPTION OF THROW TRY CATCH FINALLY NEW FREE LET IN VAR
@@ -150,7 +150,7 @@
 
 /* precedences on expressions  */
 
-%nonassoc RETURN ASSERT ASSUME THROW precwhile
+%nonassoc RETURN ASSERT ASSUME THROW HINT precwhile
 %nonassoc COLON
 %nonassoc PRECFORALL 
 /* <=> */
@@ -473,15 +473,16 @@ assigns:
     { Some (pos_i 2,[]) }
 ;
 
+/* TODO: decide if we restore reads clauses
 reads:
-| /* epsilon */
+| 
     { [] }
 | READS argument_expression_list SEMICOLON
     { $2 }
 | READS BSNOTHING SEMICOLON
     { [] }
 ;
-
+*/
 
 function_definition: 
 | type_expr identifier parameters function_specification compound_expr
@@ -800,9 +801,9 @@ tag:
 
 identifier_list: 
 | identifier 
-    { [$1#name] }
+    { [$1] }
 | identifier COMMA identifier_list 
-    { $1#name :: $3 }
+    { $1 :: $3 }
 ;
 
 identifier:
@@ -901,9 +902,17 @@ iteration_expression:
 | loop_annot FOR LPAR argument_expression_list_opt SEMICOLON expression SEMICOLON 
     argument_expression_list_opt RPAR expression %prec precwhile
     { let (i,v) = $1 in 
+      (*
+	let i = match i with 
+	| [] -> locate (JCPEconst(JCCboolean true))
+	| [_,p] -> p
+	|  _ -> assert false
+      in
+      *)
       locate (JCPEfor($4, $6, $8, i, v, $10)) }
 ;
 
+/* obsolete: loop behaviors
 loop_invariant:
 | INVARIANT FOR identifier_list COLON expression SEMICOLON %prec FOR
     { ($3, $5) }
@@ -917,16 +926,38 @@ loop_invariant_list:
 | loop_invariant
     { [$1] }
 ;
+*/
+
+loop_behavior:
+| INVARIANT expression SEMICOLON 
+    { (Some $2,None) }
+| INVARIANT expression SEMICOLON ASSIGNS expression_list SEMICOLON 
+    { (Some $2,Some (pos_i 5,$5)) }
+| ASSIGNS expression_list SEMICOLON 
+    { (None,Some (pos_i 2,$2)) }
+;
+
+loop_for_behavior_list:
+| BEHAVIOR identifier_list COLON loop_behavior loop_for_behavior_list
+    { let (i,a) = $4 in ($2,i,a) :: $5 }
+| /* epsilon */
+    { [] }
+;
+
+loop_behaviors:
+| loop_behavior loop_for_behavior_list
+    { let (i,a) = $1 in ([],i,a)::$2 }
+| loop_for_behavior_list
+    { $1 }
+;
 
 loop_annot:
-| loop_invariant_list VARIANT expression SEMICOLON
-    { ($1, Some $3) }
-| loop_invariant_list
-    { ($1, None) }
-| VARIANT expression SEMICOLON
-    { ([], Some $2) }
-| %prec PRECLOOPANNOT
-    { ([], None) }
+| LOOP loop_behaviors VARIANT expression SEMICOLON
+    { ($2, Some $4) }
+| LOOP loop_behaviors
+    { ($2, None) }
+| LOOP VARIANT expression SEMICOLON
+    { ([], Some $3) }
 ;
 
 jump_expression: 
@@ -1113,6 +1144,6 @@ pattern_expression_list:
 
 /*
 Local Variables: 
-compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
+compile-command: "LC_ALL=C make -C .. byte"
 End: 
 */

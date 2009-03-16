@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.399 2009-02-06 15:32:27 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.400 2009-03-16 08:36:39 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2179,7 +2179,7 @@ and expr e =
 		  f.jc_fun_info_parameters call.jc_call_args
 	      in
 	      let fname = 
-		if default_checking () then 
+		if safety_checking () then 
 		  f.jc_fun_info_final_name ^ "_requires"
 		else f.jc_fun_info_final_name
 	      in
@@ -2210,7 +2210,7 @@ and expr e =
 		else call
 	      in
 	      let call = 
-		if pre = LTrue || not (default_checking()) then 
+		if pre = LTrue || not (safety_checking()) then 
 		  call
 		else
 		  make_check ~mark:e#mark (* ~kind:Separation *) e#pos 
@@ -2309,26 +2309,28 @@ and expr e =
 	in
 	begin match asrt with
 	  | Aassert | Ahint ->
-	      if assert_in_current_behavior b then
+	      if in_current_behavior b then
 		Assert(a',Void)
-	      else if assume_in_current_behavior b then
+	      else (*if assume_in_current_behavior b then *)
 		assumption [ a ] a'
-	      else Void
+	      (* else Void *)
 	  | Aassume ->
-	      if assume_in_current_behavior b then
+	      (* if assume_in_current_behavior b then *)
 		assumption [ a ] a'
-	      else Void
+	      (* else Void *)
 	end
     | JCEloop(la,e1) ->
-	let inv = 
-	  List.map snd 
-	    (List.filter 
-	       (assert_in_current_behavior $ fst) la.jc_loop_invariant)
-	in
-	let assume_inv = 
-	  List.map snd 
-	    (List.filter
-	       (assume_in_current_behavior $ fst) la.jc_loop_invariant)
+	let inv,assume_from_inv = 
+	  List.fold_left
+	    (fun ((invariants,assumes) as acc) (names,inv,ass) ->
+	       match inv with
+		 | Some i ->
+		     if in_current_behavior names
+		     then (i::invariants,assumes)
+		     else (invariants,i::assumes)
+		 | None -> acc)
+	    ([],[])
+	    la.jc_loop_behaviors
 	in
         let inv' = 
 	  make_and_list 
@@ -2337,12 +2339,12 @@ and expr e =
 		  ~type_safe:false ~global_assertion:false ~relocate:false
 		  LabelHere LabelPre) inv) 
 	in
-        let assume_inv' = 
+        let assume_from_inv' = 
 	  make_and_list 
 	    (List.map 
 	       (named_assertion 
 		  ~type_safe:false ~global_assertion:false ~relocate:false
-		  LabelHere LabelPre) assume_inv) 
+		  LabelHere LabelPre) assume_from_inv) 
 	in
 	(* free invariant: trusted or not *)
 	let free_inv = la.jc_free_loop_invariant in
@@ -2386,7 +2388,7 @@ and expr e =
 	(* loop body *) 
         let body = expr e1 in
 	let add_assume s =
-          let s = append (assumption assume_inv assume_inv') s in
+          let s = append (assumption assume_from_inv assume_from_inv') s in
           if Jc_options.trust_ai then
             append (assumption [ free_inv ] free_inv') s
           else s
@@ -2394,7 +2396,7 @@ and expr e =
 	let body = [ add_assume body ] in
 	(* final generation, depending on presence of variant or not *)
         begin match la.jc_loop_variant with
-          | Some t when default_checking () ->
+          | Some t when safety_checking () ->
               let variant = 
 		named_term 
 		  ~type_safe:false ~global_assertion:false ~relocate:false

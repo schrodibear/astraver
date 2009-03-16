@@ -46,8 +46,6 @@ val eight: Num.num
 val is_power_of_two: Num.num -> bool
 val log2: Num.num -> Num.num
 
-val fold_unit: ('a -> unit) -> unit -> 'a -> unit
-
 (* labels *)
 
 val new_label_name: unit -> string

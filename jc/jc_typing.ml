@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.277 2009-02-06 11:48:40 ayad Exp $ *)
+(* $Id: jc_typing.ml,v 1.278 2009-03-16 08:36:39 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -36,7 +36,9 @@ open Jc_fenv
 
 open Jc_constructors
 open Jc_pervasives
+(*
 open Jc_iterators
+*)
 open Jc_struct_tools
 
 open Format
@@ -626,7 +628,7 @@ let rec type_labels env ~result_label label e =
   let iter_subs ?(env=env) label =
     List.iter
       (fun e -> ignore (type_labels env ~result_label label e))
-      (INExpr.subs e)
+      (Jc_iterators.INExpr.subs e)
   in
   e#set_label label;
   match e#node with
@@ -1294,8 +1296,8 @@ and make_quantifier q loc ty idl env e : assertion =
   match idl with
     | [] -> assertion env e
     | id :: r ->
-        let vi = var ty id in
-        let env = (id, vi) :: env in
+        let vi = var ty id#name in
+        let env = (id#name, vi) :: env in
         let f = 
           JCAquantifier (q, vi, make_quantifier q loc ty r env e) 
         in
@@ -1306,11 +1308,12 @@ and make_quantifier q loc ty idl env e : assertion =
 (******************************************************************************)
 
 let loop_annot =
-  let cnt = ref 0 in fun ~invariant ~free_invariant ~variant ->
+  let cnt = ref 0 in 
+  fun ~behaviors ~free_invariant ~variant ->
     incr cnt;
     {
       jc_loop_tag = !cnt;
-      jc_loop_invariant = invariant;
+      jc_loop_behaviors = behaviors;
       jc_free_loop_invariant = free_invariant;
       jc_loop_variant = variant;
     }
@@ -1490,6 +1493,14 @@ let behavior env vi_result (loc, id, throws, assumes, requires, assigns, ensures
   *)
   (loc,id,b)
     
+
+let loopbehavior env (names,inv,ass) = 
+  (names,Option_misc.map (assertion env) inv,
+     Option_misc.map 
+       (fun (p,locs) -> 
+	  List.map 
+	    (fun l -> 
+	       let _,_,tl = location env l in tl) locs) ass)
 
 let make_unary_op loc (op : Jc_ast.unary_op) e2 =
   let t2 = e2#typ in
@@ -1692,7 +1703,6 @@ let reset_return_label, set_return_label, get_return_label =
 
 let rec expr env e =
   let fe = expr env in
-  let fa = assertion env in
   let ft = term env in
   let lab = ref "" in
   let ty, region, typed_e = match e#node with
@@ -2095,12 +2105,12 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	      let but_last = List.map unit_expr but_last in
               last#typ, last#region, JCEblock(List.rev(last::but_last))
         end
-    | JCNEloop(i, vo, body) ->
+    | JCNEloop(behs, vo, body) ->
         unit_type,
         dummy_region,
         JCEloop(
           loop_annot
-            ~invariant:(List.map (fun (behav,i) -> behav,fa i) i)
+            ~behaviors:(List.map (loopbehavior env) behs)
             ~free_invariant:(Assertion.mktrue ())
             ~variant:(apply_option ft vo),
           fe body)
