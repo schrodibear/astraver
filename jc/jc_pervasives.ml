@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.144 2009-03-16 08:36:39 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.145 2009-03-17 12:35:25 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -993,6 +993,7 @@ let builtin_logic_symbols =
 (*  Some real_type, "\\double_relative_error", "gen_relative_error", [double_type];
     Some real_type, "\\float_relative_error", "gen_relative_error", [float_type];
 *)
+    Some real_type, "\\cos", "cos", [real_type] ;
 ]
 
 let builtin_function_symbols =

@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.85 2009-03-16 08:36:39 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.86 2009-03-17 12:35:25 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -272,13 +272,10 @@ rule token = parse
   | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (JCCinteger (lexeme lexbuf)) }
 
   | ('0'['x''X'] rH+ '.' rH* rP) as pre
-      { CONSTANT (JCCreal pre) }
   | ('0'['x''X'] rH* '.' rH+ rP) as pre
-      { CONSTANT (JCCreal pre) }
+  | ('0'['x''X'] rH+ rP) as pre
   | (rD+ rE) as pre  
-      { CONSTANT (JCCreal pre) }
   | (rD* "." rD+ (rE)?) as pre  
-      { CONSTANT (JCCreal pre) }
   | (rD+ "." rD* (rE)?) as pre   
       { CONSTANT (JCCreal pre) }
 

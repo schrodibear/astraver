@@ -1,0 +1,1 @@
+sh: line 1: 16393 CPU time limit exceeded /home/cmarche/newppc/trunk/why/bin/why-cpulimit 10 ergo /tmp/ergo3407c9.why > /tmp/outb60267 2>&1

@@ -1,0 +1,8 @@
+sh: line 1: 16651 CPU time limit exceeded /home/cmarche/newppc/trunk/why/bin/why-cpulimit 10 ergo /tmp/ergo879888.why > /tmp/out93916a 2>&1
+sh: line 1: 17026 CPU time limit exceeded /home/cmarche/newppc/trunk/why/bin/why-cpulimit 10 ergo /tmp/ergoa66444.why > /tmp/out8b452e 2>&1
+sh: line 1: 17240 CPU time limit exceeded /home/cmarche/newppc/trunk/why/bin/why-cpulimit 10 ergo /tmp/ergo87f8de.why > /tmp/out0bd3aa 2>&1
+sh: line 1: 17333 CPU time limit exceeded /home/cmarche/newppc/trunk/why/bin/why-cpulimit 10 ergo /tmp/ergo5c794b.why > /tmp/outb47f12 2>&1
+sh: line 1: 17391 CPU time limit exceeded /home/cmarche/newppc/trunk/why/bin/why-cpulimit 10 ergo /tmp/ergoee9206.why > /tmp/out546a5b 2>&1
+sh: line 1: 17410 CPU time limit exceeded /home/cmarche/newppc/trunk/why/bin/why-cpulimit 10 ergo /tmp/ergoab13f0.why > /tmp/outbff8c0 2>&1
+sh: line 1: 17413 CPU time limit exceeded /home/cmarche/newppc/trunk/why/bin/why-cpulimit 10 ergo /tmp/ergofffa4f.why > /tmp/out1a6e58 2>&1
+sh: line 1: 17415 CPU time limit exceeded /home/cmarche/newppc/trunk/why/bin/why-cpulimit 10 ergo /tmp/ergo335756.why > /tmp/oute37338 2>&1

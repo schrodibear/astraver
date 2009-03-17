@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.25 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.26 2009-03-17 12:35:25 marche Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -213,7 +213,8 @@ let rec term e = function
       if id' == fmt_double then Gcst "0x1.FFFFFFFFFFFFFp1023" else
       raise NotGappa
   (* [Jessie] rounding *)
-  | Tapp (id, [Tapp (fmt, [], _); Tapp (mode, [], _); t], _) when id = round_float ->
+  | Tapp (id, [Tapp (fmt, [], _); Tapp (mode, [], _); t], _) 
+      when id = round_float ->
       let fmt =
         if fmt == fmt_single then Single else
         if fmt == fmt_double then Double else

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mll,v 1.19 2009-02-25 15:03:44 filliatr Exp $ *)
+(* $Id: lexer.mll,v 1.20 2009-03-17 12:35:25 marche Exp $ *)
 
 {
   open Lexing
@@ -129,7 +129,9 @@ let ident = letter (letter | digit | '\'')*
 let float = digit+ '.' digit* | digit* '.' digit+
 let floatexp = float ['e' 'E'] ['-' '+']? digit+
 let hexadigit = ['0'-'9' 'a'-'f' 'A'-'F']
-let hexafloat = '0' ['x' 'X'] (hexadigit* '.' hexadigit+ | hexadigit+ '.' hexadigit*) ['p' 'P'] ['-' '+']? digit+
+(*
+let hexafloat = '0' ['x' 'X'] (hexadigit* '.' hexadigit+ | hexadigit+ '.' hexadigit* ) ['p' 'P'] ['-' '+']? digit+
+  *)
 
 rule token = parse
   | "#" space* ("\"" ([^ '\010' '\013' '"' ]* as file) "\"")?
@@ -147,7 +149,8 @@ rule token = parse
   | (digit* as i) '.' (digit+ as f) (['e' 'E'] (['-' '+']? digit+ as e))?
       { FLOAT (RConstDecimal (i, f, option_app remove_leading_plus e)) }
   | '0' ['x' 'X'] ((hexadigit* as i) '.' (hexadigit+ as f) 
-                  |(hexadigit+ as i) '.' (hexadigit* as f))
+                  |(hexadigit+ as i) '.' (hexadigit* as f)
+		  |(hexadigit+ as i) ("" as f))
     ['p' 'P'] (['-' '+']? digit+ as e)
       { FLOAT (RConstHexa (i, f, remove_leading_plus e)) }
   | "(*"

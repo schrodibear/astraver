@@ -4752,6 +4752,8 @@ logic neg_real : real -> real
 
 logic abs_real : real -> real
 
+logic cos : real -> real
+
 logic sqrt_real : real -> real
 
 logic real_of_int : int -> real
@@ -12148,6 +12150,8 @@ logic neg_real : real -> real
 
 logic abs_real : real -> real
 
+logic cos : real -> real
+
 logic sqrt_real : real -> real
 
 logic real_of_int : int -> real
@@ -15974,7 +15978,7 @@ goal FlagStatic_swap_safety_po_4:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/FlagStatic_why.why        : .......#....###.......#....##.........................................#.... (67/0/0/8/0)
+why/FlagStatic_why.why        : .......#....###.......#....###............................................. (67/0/0/8/0)
 total   :  75
 valid   :  67 ( 89%)
 invalid :   0 (  0%)

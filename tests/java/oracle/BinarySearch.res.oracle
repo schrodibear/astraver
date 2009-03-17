@@ -3026,6 +3026,8 @@ logic neg_real : real -> real
 
 logic abs_real : real -> real
 
+logic cos : real -> real
+
 logic sqrt_real : real -> real
 
 logic real_of_int : int -> real
@@ -8926,6 +8928,8 @@ logic neg_real : real -> real
 
 logic abs_real : real -> real
 
+logic cos : real -> real
+
 logic sqrt_real : real -> real
 
 logic real_of_int : int -> real
@@ -11796,7 +11800,7 @@ goal BinarySearch_binary_search_safety_po_19:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ??...........#...........??............ (34/0/4/1/0)
+why/BinarySearch_why.why      : ??.......................??..#......... (34/0/4/1/0)
 total   :  39
 valid   :  34 ( 87%)
 invalid :   0 (  0%)

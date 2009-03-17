@@ -2705,6 +2705,8 @@ logic neg_real : real -> real
 
 logic abs_real : real -> real
 
+logic cos : real -> real
+
 logic sqrt_real : real -> real
 
 logic real_of_int : int -> real
@@ -8511,6 +8513,8 @@ logic neg_real : real -> real
 
 logic abs_real : real -> real
 
+logic cos : real -> real
+
 logic sqrt_real : real -> real
 
 logic real_of_int : int -> real
@@ -11483,10 +11487,10 @@ goal Muller_m_safety_po_15:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Muller_why.why            : ?............................................. (45/0/1/0/0)
+why/Muller_why.why            : ?.....................................#....... (44/0/1/1/0)
 total   :  46
-valid   :  45 ( 98%)
+valid   :  44 ( 96%)
 invalid :   0 (  0%)
 unknown :   1 (  2%)
-timeout :   0 (  0%)
+timeout :   1 (  2%)
 failure :   0 (  0%)
