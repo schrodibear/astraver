@@ -3,7 +3,7 @@
 
 Require Export Reals.
 Require Export Gappa_tactic.
-Require Export tactics.
+
 
 
 Inductive float_format : Set :=  Single | Double.
@@ -394,6 +394,11 @@ float_class x = Finite /\
                                          (m=down -> float_value x =
                                           Ropp (min_gen_float f))).
 
+Definition sign_zero_result (m:mode) (x:gen_float) := 
+float_value x = 0%R -> (m = down -> float_sign x = Negative) 
+                                      /\ 
+                                     (m <> down -> float_sign x = Positive).
+
 Definition float_less_than_real  (x:gen_float) (y:R) := 
                (is_finite x /\ (float_value x <= y)%R) \/ is_minus_infinity x.
 
@@ -417,9 +422,8 @@ Definition float_strict_greater_than_float  (x:gen_float) (y:gen_float) :=
                float_strict_less_than_float y x.
 
 Definition float_eq_float  (x:gen_float) (y:gen_float) := 
-               is_not_nan x /\ is_not_nan y /\ 
-               ((is_finite x /\ is_finite y /\ float_value x = float_value y) 
-               \/ (is_infinite x /\ is_infinite y /\ same_sign x y)).
+               (is_finite x /\ is_finite y /\ float_value x = float_value y) 
+               \/ (is_infinite x /\ is_infinite y /\ same_sign x y).
 
 Definition float_neq_float  (x:gen_float) (y:gen_float) := 
                is_nan x \/ is_nan y 
@@ -976,6 +980,7 @@ case (float_sign x); case (is_gen_zero_dec x);
 [trivial | intro;right;intuition;discriminate | intro;right;intuition | trivial 
  | auto | intuition].
 Save.
+
 
 Lemma is_gen_zero_minus_dec: forall x, float_class x =Finite -> 
             is_gen_zero_minus x \/ ~  is_gen_zero_minus x.
