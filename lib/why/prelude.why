@@ -115,6 +115,10 @@ logic pow_real : real,real -> real
 logic neg_real : real -> real      (* prefix - *)
 logic abs_real : real -> real
 
+(* exp and log *)
+
+logic exp : real -> real
+
 (* trigonometric functions *)
 
 logic cos : real -> real
