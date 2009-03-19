@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cmake.ml,v 1.63 2009-01-22 08:50:10 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.64 2009-03-19 08:28:37 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -38,8 +38,6 @@ let add ~file ~f =
 
 let simplify fmt f = fprintf fmt "simplify/%s_why.sx" f
 let ergo fmt f = fprintf fmt "why/%s_why.why" f
-let cvc3 fmt f = fprintf fmt "cvc3/%s_why.smt" f
-let z3 fmt f = fprintf fmt "z3/%s_why.smt" f
 let coq_v fmt f = fprintf fmt "coq/%s_why.v" f
 let coq_vo fmt f = fprintf fmt "coq/%s_why.vo" f
 let pvs fmt f = fprintf fmt "pvs/%s_why.pvs" f
@@ -142,19 +140,18 @@ let generic f targets =
        fprintf fmt "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
        fprintf fmt "smtlib: %a@\n" (print_files smtlib) targets;
-       fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (why-dp -timeout $(TIMEOUT) $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running Z3 on proof obligations' && (why-dp -timeout $(TIMEOUT) $^)@\n@\n";
        fprintf fmt "smtlib/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
        fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat -exp all   -dir smtlib $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
        
-       fprintf fmt "z3: %a@\n" (print_files z3) targets;
-       fprintf fmt "\t@@echo 'Running Z3 on proof obligations' && (dp -smt-solver z3 -timeout $(TIMEOUT) $^)@\n@\n";
-       fprintf fmt "z3/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat -exp all   -dir z3 $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "yices: %a@\n" (print_files smtlib) targets;
+       fprintf fmt "\t@@echo 'Running Yices on proof obligations' && (why-dp -smt-solver yices -timeout $(TIMEOUT) $^)@\n@\n";
 
-       fprintf fmt "cvc3: %a@\n" (print_files cvc3) targets;
-       fprintf fmt "\t@@echo 'Running CVC3 on proof obligations' && (dp -smt-solver cvc3 -timeout $(TIMEOUT) $^)@\n@\n";
-       fprintf fmt "cvc3/%%_why.smt: why/%s_spec.why why/%%.why@\n" f;
-       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat -exp all   -dir cvc3 $(CADULIB)/why/$(CADULIBFILE) why/%s_spec.why why/$*.why@\n@\n" f;
+       fprintf fmt "z3: %a@\n" (print_files smtlib) targets;
+       fprintf fmt "\t@@echo 'Running Z3 on proof obligations' && (why-dp -smt-solver z3 -timeout $(TIMEOUT) $^)@\n@\n";
+
+      fprintf fmt "cvc3: %a@\n" (print_files smtlib) targets;
+       fprintf fmt "\t@@echo 'Running CVC3 on proof obligations' && (why-dp -smt-solver cvc3 -timeout $(TIMEOUT) $^)@\n@\n";
 
        fprintf fmt "gui stat: %s@\n" 
 	 (match targets with f::_ -> f^".stat" | [] -> "");

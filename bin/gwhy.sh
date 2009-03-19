@@ -16,7 +16,7 @@ case $1 in
 	;;
   *.jc)
 	b=`basename $1 .jc`
-	jessie $b.jc || exit 1
+	jessie -why-opt -split-user-conj $b.jc || exit 1
 	make -f $b.makefile gui
 	;;
   *.mlw|*.why)
