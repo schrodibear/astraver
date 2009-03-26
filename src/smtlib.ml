@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.57 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.58 2009-03-26 11:34:16 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -197,8 +197,8 @@ let rec print_predicate fmt = function
   | Papp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
-      (** TODO : DIRTY WAY TO translatate suxh predicate;
-	  may be previously dispached into to inequality **)
+      (** TODO : DIRTY WAY TO translate such predicate;
+	  may be previously dispatched into an inequality **)
       fprintf fmt "@[(and (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl, _) when id == t_distinct ->

@@ -64,6 +64,10 @@ logic mul_int : int,int -> int (* * *)
 logic div_int : int,int -> int (* / in logic only *)
 logic mod_int : int,int -> int (* % in logic only *)
 logic neg_int : int -> int     (* prefix - *)
+logic abs_int : int -> int
+
+axiom abs_int_pos: forall x:int. x >= 0 -> abs_int(x) = x
+axiom abs_int_neg: forall x:int. x <= 0 -> abs_int(x) = -x
 
 (* / and % in programs: *)
 parameter div_int_ : x:int -> y:int -> { y<>0 } int { result = x / y }
@@ -111,22 +115,39 @@ logic add_real : real,real -> real (* + *)
 logic sub_real : real,real -> real (* - *)
 logic mul_real : real,real -> real (* * *)
 logic div_real : real,real -> real (* / *)
+logic sqrt_real : real -> real
 logic pow_real : real,real -> real 
 logic neg_real : real -> real      (* prefix - *)
 logic abs_real : real -> real
 
+axiom abs_real_pos: forall x:real. x >= 0.0 -> abs_real(x) = x
+axiom abs_real_neg: forall x:real. x <= 0.0 -> abs_real(x) = -x
+
 (* exp and log *)
 
 logic exp : real -> real
+logic log : real -> real
+logic log10 : real -> real
+
+axiom log_exp: forall x:real. log(exp(x)) = x
 
 (* trigonometric functions *)
 
 logic cos : real -> real
+logic sin : real -> real
+logic tan : real -> real
+logic cosh : real -> real
+logic sinh : real -> real
+logic tanh : real -> real
+logic acos : real -> real
+logic asin : real -> real
+logic atan : real -> real
+logic atan2 : real, real -> real
+logic hypot : real, real -> real
 
 (* / in programs: *)
 parameter div_real_ : x:real -> y:real -> { y<>0.0 } real { result = x / y }
 
-logic sqrt_real : real -> real
 parameter sqrt_real_ : x:real -> { x >= 0.0 } real { result = sqrt_real(x) }
 
 logic real_of_int : int -> real

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.146 2009-03-17 14:40:34 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.147 2009-03-26 11:34:15 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -974,12 +974,16 @@ let string_of_op_type = function
 
 let builtin_logic_symbols =
   (* return type, jessie name, why name, parameter types *)
-  [ Some real_type, "\\real_abs", "abs_real", [real_type] ;
-    Some real_type, "\\real_sqrt", "sqrt_real", [real_type];  
+  [ Some integer_type, "\\integer_max", "int_max", [integer_type; integer_type] ;
+    Some integer_type, "\\integer_min", "int_min", [integer_type; integer_type] ;
     Some real_type, "\\real_max", "real_max", [real_type; real_type] ;
     Some real_type, "\\real_min", "real_min", [real_type; real_type] ;
-    Some integer_type, "\\int_max", "int_max", [integer_type; integer_type] ;
-    Some integer_type, "\\int_min", "int_min", [integer_type; integer_type] ;
+
+    Some integer_type, "\\integer_abs", "abs_int", [integer_type] ;
+    Some real_type, "\\real_abs", "abs_real", [real_type] ;
+
+    Some real_type, "\\real_sqrt", "sqrt_real", [real_type];  
+    Some real_type, "\\real_pow", "pow_real", [real_type];  
     
     Some real_type, "\\double_exact", "exact_value", [double_type];
     Some real_type, "\\float_exact", "exact_value", [float_type];
@@ -993,8 +997,21 @@ let builtin_logic_symbols =
 (*  Some real_type, "\\double_relative_error", "gen_relative_error", [double_type];
     Some real_type, "\\float_relative_error", "gen_relative_error", [float_type];
 *)
-    Some real_type, "\\cos", "cos", [real_type] ;
     Some real_type, "\\exp", "exp", [real_type] ;
+    Some real_type, "\\log", "log", [real_type] ;
+    Some real_type, "\\log10", "log10", [real_type] ;
+    Some real_type, "\\cos", "cos", [real_type] ;
+    Some real_type, "\\sin", "sin", [real_type] ;
+    Some real_type, "\\tan", "tan", [real_type] ;
+    Some real_type, "\\cosh", "cosh", [real_type] ;
+    Some real_type, "\\sinh", "sinh", [real_type] ;
+    Some real_type, "\\tanh", "tanh", [real_type] ;
+    Some real_type, "\\acos", "acos", [real_type] ;
+    Some real_type, "\\asin", "asin", [real_type] ;
+    Some real_type, "\\atan", "atan", [real_type] ;
+    Some real_type, "\\atan2", "atan2", [real_type; real_type] ;
+    Some real_type, "\\hypot", "hypot", [real_type; real_type] ;
+
 ]
 
 let builtin_function_symbols =
