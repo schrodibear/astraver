@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_mono2.ml,v 1.6 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: encoding_mono2.ml,v 1.7 2009-03-27 17:01:16 marche Exp $ i*)
 
 (** 
     Such encoding aims at simulating polymorphism in 
@@ -89,7 +89,7 @@ let unit = Tapp (Ident.create (prefix^"unit"), [], [])
 let instantiate_arity id inst =
   let arity = 
     try List.assoc (Ident.string id) !arities
-    with e -> (print_endline ("unknown arity :"^(Ident.string id))); raise e in
+    with e -> (print_endline ("Encoding_mono2: unknown arity for "^(Ident.string id))); raise e in
   let (vs, log_type) = Env.specialize_logic_type arity in
   match log_type with 
       Function (ptl, rt) ->
@@ -111,7 +111,7 @@ let instantiate_arity id inst =
 let getParamTypeList id =
   let arity = 
     try List.assoc (Ident.string id) !arities
-    with e -> (print_endline ("unknown arity :"^(Ident.string id))); raise e in
+    with e -> (print_endline ("Encoding_mono2: unknown arity for "^(Ident.string id))); raise e in
   let (vs, log_type) = Env.specialize_logic_type arity in
   match log_type with 
       Function (ptl, _) -> ptl

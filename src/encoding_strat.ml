@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_strat.ml,v 1.21 2008-11-06 10:08:13 moy Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.22 2009-03-27 17:01:16 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -134,7 +134,8 @@ let plunge fv term pt =
 let instantiate_arity id inst =
   let arity = 
     try List.assoc (Ident.string id) !arities
-    with e -> (print_endline ("unknown arity :"^(Ident.string id))); raise e in
+    with e -> 
+      (print_endline ("unknown arity for symbol "^(Ident.string id))); raise e in
   let (vs, log_type) = Env.specialize_logic_type arity in
   match log_type with 
     Function (ptl, rt) ->
@@ -387,6 +388,9 @@ let iter f =
 let reset () = 
   arities := [];
   Queue.clear queue;
-  List.iter push arith_kernel
-(*   Env.iter_global_logic (fun id _ -> print_endline (Ident.string id)); *)
-(*   Env.iter_global_logic (fun id lts -> push (Dlogic (loc, Ident.string id, lts))) *)
+  List.iter push arith_kernel;
+(*
+  Env.iter_global_logic (fun id _ -> print_endline (Ident.string id));
+  Env.iter_global_logic 
+    (fun id lts -> push (Dlogic (loc, Ident.string id, lts)))
+*)

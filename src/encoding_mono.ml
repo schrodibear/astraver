@@ -171,7 +171,7 @@ let plunge fv term pt =
 let get_arity id =
   let arity =
     try List.assoc (Ident.string id) !arities
-    with e -> (print_endline ("unknown arity :"^(Ident.string id))); raise e in
+    with e -> (print_endline ("Encoding_mono.get_arity: unknown arity for "^(Ident.string id))); raise e in
     match arity.Env.scheme_type with
 	Function (ptl, rt) -> ptl, rt
       | Predicate ptl -> ptl, PTbool (* ce PTbool est arbitraire et inutilisé *)
@@ -180,7 +180,7 @@ let get_arity id =
 let instantiate_arity id inst =
   let arity =
     try List.assoc (Ident.string id) !arities
-    with e -> (print_endline ("unknown arity :"^(Ident.string id))); raise e in
+    with e -> (print_endline ("Encoding_mono.instantiate_arity: unknown arity for "^(Ident.string id))); raise e in
   let (vs, log_type) = Env.specialize_logic_type arity in
     if debug then 
       (print_string "\t{";
@@ -304,6 +304,9 @@ let rec push d =
 (* In the case of a logic definition, we redefine the logic symbol  *)
 (* with types u and s, and its complete arity is stored for the encoding *)
   | Dlogic (loc, ident, arity) -> 
+(*
+      Format.eprintf "Encoding_mono: adding %s in arities@." ident;
+*)
       arities := (ident, arity)::!arities;
       let newarity = match arity.Env.scheme_type with
 	  Predicate ptl -> Predicate (monoify ptl)
