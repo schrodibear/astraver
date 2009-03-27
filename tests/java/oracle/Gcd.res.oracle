@@ -336,183 +336,183 @@ End:
 */
 ========== file tests/java/Gcd.jloc ==========
 [K_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 169
 
 [K_11]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 219
 
 [K_12]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 103
 begin = 25
 end = 26
 
 [K_13]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 113
 begin = 31
 end = 36
 
 [K_14]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 113
 begin = 26
 end = 36
 
 [K_15]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 114
 begin = 31
 end = 36
 
 [K_16]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 114
 begin = 26
 end = 36
 
 [K_17]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 110
 begin = 43
 end = 44
 
 [K_18]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 110
 begin = 35
 end = 36
 
 [K_19]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 107
 begin = 34
 end = 39
 
 [K_20]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
 
 [K_21]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 105
 begin = 15
 end = 20
 
 [K_22]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 96
 begin = 51
 end = 52
 
 [K_23]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 96
 begin = 44
 end = 45
 
 [K_24]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 96
 begin = 37
 end = 38
 
 [K_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 91
 begin = 18
 end = 36
 
 [K_25]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 96
 begin = 30
 end = 31
 
 [K_2]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 93
 begin = 18
 end = 57
 
 [K_26]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 27
 end = 33
 
 [K_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 102
 begin = 15
 end = 45
 
 [K_27]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 17
 end = 23
 
 [K_4]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 101
 begin = 15
 end = 45
 
 [K_28]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 17
 end = 33
 
 [K_5]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 99
 begin = 9
 end = 81
 
 [K_6]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 25
 end = 31
 
 [Gcd_gcd]
 name = "Method gcd"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 95
 begin = 15
 end = 18
 
 [K_7]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 21
 
 [K_8]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 31
 
 [K_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 119
 
 [cons_Gcd]
 name = "Constructor of class Gcd"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -646,19 +646,19 @@ clean:
 [Gcd_gcd_ensures_resultIsGcd]
 name = "Method gcd"
 behavior = "Normal behavior `resultIsGcd'"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 95
 begin = 15
 end = 18
 
 [JC_40]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 25
 end = 31
 
 [JC_41]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 99
 begin = 9
 end = 81
@@ -666,13 +666,13 @@ end = 81
 [cons_Gcd_ensures_default]
 name = "Constructor of class Gcd"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_42]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 101
 begin = 15
 end = 45
@@ -680,13 +680,13 @@ end = 45
 [distr_left]
 name = "distr_left"
 behavior = "lemma"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 38
 begin = 0
 end = 152
 
 [JC_43]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 102
 begin = 15
 end = 45
@@ -694,107 +694,107 @@ end = 45
 [cons_Gcd_safety]
 name = "Constructor of class Gcd"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_44]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 219
 
 [JC_45]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_46]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
 
 [JC_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 99
 begin = 8
 end = 23
 
 [JC_47]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
 
 [JC_2]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_48]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 107
 begin = 34
 end = 39
 
 [JC_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 99
 begin = 8
 end = 23
 
 [JC_49]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 107
 begin = 34
 end = 39
 
 [JC_4]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_5]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_6]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_7]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_8]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 101
 begin = 11
 end = 65
 
 [JC_50]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 21
@@ -802,31 +802,31 @@ end = 21
 [Gcd_gcd_ensures_default]
 name = "Method gcd"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 95
 begin = 15
 end = 18
 
 [JC_51]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 25
 end = 31
 
 [JC_52]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 99
 begin = 9
 end = 81
 
 [JC_53]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 101
 begin = 15
 end = 45
 
 [JC_54]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 102
 begin = 15
 end = 45
@@ -834,7 +834,7 @@ end = 45
 [mul_assoc]
 name = "mul_assoc"
 behavior = "lemma"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 62
 begin = 0
 end = 143
@@ -842,33 +842,33 @@ end = 143
 [distr_right]
 name = "distr_right"
 behavior = "lemma"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 50
 begin = 0
 end = 133
 
 [JC_55]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 219
 
 [JC_56]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_57]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
 
 [JC_58]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
@@ -876,27 +876,27 @@ end = 25
 [Gcd_gcd_safety]
 name = "Method gcd"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 95
 begin = 15
 end = 18
 
 [JC_59]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 107
 begin = 34
 end = 39
 
 [JC_60]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 107
 begin = 34
 end = 39
 
 [JC_61]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 21
@@ -904,67 +904,67 @@ end = 21
 [gcd_zero]
 name = "gcd_zero"
 behavior = "lemma"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 15
 begin = 0
 end = 60
 
 [JC_62]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 25
 end = 31
 
 [JC_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 101
 begin = 11
 end = 65
 
 [JC_63]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 99
 begin = 9
 end = 81
 
 [JC_11]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 17
 end = 23
 
 [JC_64]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 101
 begin = 15
 end = 45
 
 [JC_12]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 27
 end = 33
 
 [JC_65]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 102
 begin = 15
 end = 45
 
 [JC_13]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 17
 end = 33
 
 [JC_66]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 219
 
 [JC_14]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -972,7 +972,7 @@ end = -1
 [mul_comm]
 name = "mul_comm"
 behavior = "lemma"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 25
 begin = 0
 end = 97
@@ -980,57 +980,57 @@ end = 97
 [Gcd_gcd_ensures_bezoutProperty]
 name = "Method gcd"
 behavior = "Normal behavior `bezoutProperty'"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 95
 begin = 15
 end = 18
 
 [JC_67]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_15]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 17
 end = 23
 
 [JC_68]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
 
 [JC_16]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 27
 end = 33
 
 [JC_69]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
 
 [JC_17]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 17
 end = 33
 
 [JC_18]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_19]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1038,93 +1038,93 @@ end = -1
 [distr_right_minus]
 name = "distr_right_minus"
 behavior = "lemma"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 44
 begin = 0
 end = 159
 
 [JC_70]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 107
 begin = 34
 end = 39
 
 [JC_71]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 107
 begin = 34
 end = 39
 
 [JC_72]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_20]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_73]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_21]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_74]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_22]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_75]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_23]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 91
 begin = 18
 end = 36
 
 [JC_76]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_24]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 91
 begin = 18
 end = 36
 
 [JC_77]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_25]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 93
 begin = 18
 end = 57
@@ -1132,43 +1132,43 @@ end = 57
 [mod_property]
 name = "mod_property"
 behavior = "lemma"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 68
 begin = 0
 end = 154
 
 [JC_78]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_26]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 93
 begin = 18
 end = 57
 
 [JC_79]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_27]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 21
 
 [JC_28]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 25
 end = 31
 
 [JC_29]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 99
 begin = 9
 end = 81
@@ -1176,7 +1176,7 @@ end = 81
 [div_mod_property]
 name = "div_mod_property"
 behavior = "lemma"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 56
 begin = 0
 end = 159
@@ -1184,19 +1184,19 @@ end = 159
 [distr_left_minus]
 name = "distr_left_minus"
 behavior = "lemma"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 19
 begin = 0
 end = 158
 
 [JC_30]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 101
 begin = 15
 end = 45
 
 [JC_31]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 102
 begin = 15
 end = 45
@@ -1204,59 +1204,59 @@ end = 45
 [gcd_property]
 name = "gcd_property"
 behavior = "lemma"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc"
+file = "HOME/tests/java/Gcd.jc"
 line = 30
 begin = 0
 end = 213
 
 [JC_32]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 219
 
 [JC_33]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_34]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
 
 [JC_35]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
 
 [JC_36]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 107
 begin = 34
 end = 39
 
 [JC_37]
 kind = DivByZero
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 107
 begin = 34
 end = 39
 
 [JC_38]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 103
 begin = 25
 end = 26
 
 [JC_39]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java"
+file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
 end = 21
@@ -2391,159 +2391,159 @@ why --project [...] why/Gcd.why
   <lemma name="distr_left">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po1.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "38" begin = "0" end = "152"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "38" begin = "0" end = "152"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_left_minus">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po2.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "19" begin = "0" end = "158"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "19" begin = "0" end = "158"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_right">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po3.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "50" begin = "0" end = "133"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "50" begin = "0" end = "133"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_right_minus">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po4.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "44" begin = "0" end = "159"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "44" begin = "0" end = "159"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="div_mod_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po5.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "56" begin = "0" end = "159"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "56" begin = "0" end = "159"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="gcd_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po6.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "30" begin = "0" end = "213"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "30" begin = "0" end = "213"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="gcd_zero">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po7.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "15" begin = "0" end = "60"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "15" begin = "0" end = "60"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mod_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po8.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "68" begin = "0" end = "154"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "68" begin = "0" end = "154"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mul_assoc">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po9.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "62" begin = "0" end = "143"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "62" begin = "0" end = "143"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mul_comm">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Gcd_po10.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "25" begin = "0" end = "97"/>
+      <location file = "HOME/tests/java/Gcd.jc" line = "25" begin = "0" end = "97"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="mul_comm">
-    <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "25" begin = "0" end = "97"/>
+    <location file = "HOME/tests/java/Gcd.jc" line = "25" begin = "0" end = "97"/>
   </function>
   <function name="mul_assoc">
-    <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "62" begin = "0" end = "143"/>
+    <location file = "HOME/tests/java/Gcd.jc" line = "62" begin = "0" end = "143"/>
   </function>
   <function name="mod_property">
-    <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "68" begin = "0" end = "154"/>
+    <location file = "HOME/tests/java/Gcd.jc" line = "68" begin = "0" end = "154"/>
   </function>
   <function name="gcd_zero">
-    <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "15" begin = "0" end = "60"/>
+    <location file = "HOME/tests/java/Gcd.jc" line = "15" begin = "0" end = "60"/>
   </function>
   <function name="gcd_property">
-    <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "30" begin = "0" end = "213"/>
+    <location file = "HOME/tests/java/Gcd.jc" line = "30" begin = "0" end = "213"/>
   </function>
   <function name="div_mod_property">
-    <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "56" begin = "0" end = "159"/>
+    <location file = "HOME/tests/java/Gcd.jc" line = "56" begin = "0" end = "159"/>
   </function>
   <function name="distr_right_minus">
-    <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "44" begin = "0" end = "159"/>
+    <location file = "HOME/tests/java/Gcd.jc" line = "44" begin = "0" end = "159"/>
   </function>
   <function name="distr_right">
-    <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "50" begin = "0" end = "133"/>
+    <location file = "HOME/tests/java/Gcd.jc" line = "50" begin = "0" end = "133"/>
   </function>
   <function name="distr_left_minus">
-    <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "19" begin = "0" end = "158"/>
+    <location file = "HOME/tests/java/Gcd.jc" line = "19" begin = "0" end = "158"/>
   </function>
   <function name="distr_left">
-    <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc" line = "38" begin = "0" end = "152"/>
+    <location file = "HOME/tests/java/Gcd.jc" line = "38" begin = "0" end = "152"/>
   </function>
   <function name="Method gcd">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Gcd_po20.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "106" begin = "20" end = "25"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "106" begin = "20" end = "25"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/Gcd_po21.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "103" begin = "25" end = "26"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "103" begin = "25" end = "26"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Gcd_po22.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "103" begin = "25" end = "26"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "103" begin = "25" end = "26"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `resultIsGcd'">
     <goal why_file="why/Gcd_po19.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "91" begin = "18" end = "36"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "91" begin = "18" end = "36"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `bezoutProperty'">
     <goal why_file="why/Gcd_po11.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "93" begin = "18" end = "57"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "93" begin = "18" end = "57"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/Gcd_po12.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "101" begin = "15" end = "45"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "101" begin = "15" end = "45"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Gcd_po13.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "102" begin = "15" end = "45"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "102" begin = "15" end = "45"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Gcd_po14.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "98" begin = "15" end = "21"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "98" begin = "15" end = "21"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Gcd_po15.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "98" begin = "25" end = "31"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "98" begin = "25" end = "31"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Gcd_po16.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "99" begin = "9" end = "81"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "99" begin = "9" end = "81"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Gcd_po17.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "101" begin = "15" end = "45"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "101" begin = "15" end = "45"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Gcd_po18.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java" line = "102" begin = "15" end = "45"/>
+      <location file = "HOME/tests/java/Gcd.java" line = "102" begin = "15" end = "45"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
@@ -4956,7 +4956,7 @@ why -simplify [...] why/Gcd.why
  ;; Why axiom bitvector_of_interface_of_interface_of_bitvector
  (FORALL (x) (EQ (bitvector_of_interface (interface_of_bitvector x)) x)))
 
-;; distr_left, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc", line 38, characters 0-152
+;; distr_left, File "HOME/tests/java/Gcd.jc", line 38, characters 0-152
 (FORALL (x_0_0 y_0 z_0)
 (EQ (* (+ x_0_0 y_0) z_0) (+ (* x_0_0 z_0) (* y_0 z_0))))
 
@@ -4965,28 +4965,28 @@ why -simplify [...] why/Gcd.why
  (FORALL (x_0_0 y_0 z_0)
  (EQ (* (+ x_0_0 y_0) z_0) (+ (* x_0_0 z_0) (* y_0 z_0)))))
 
-;; distr_left_minus, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc", line 19, characters 0-158
+;; distr_left_minus, File "HOME/tests/java/Gcd.jc", line 19, characters 0-158
 (FORALL (x_2 y_2 z_2) (EQ (* (- x_2 y_2) z_2) (- (* x_2 z_2) (* y_2 z_2))))
 
 (BG_PUSH
  ;; Why axiom distr_left_minus_as_axiom
  (FORALL (x_2 y_2 z_2) (EQ (* (- x_2 y_2) z_2) (- (* x_2 z_2) (* y_2 z_2)))))
 
-;; distr_right, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc", line 50, characters 0-133
+;; distr_right, File "HOME/tests/java/Gcd.jc", line 50, characters 0-133
 (FORALL (x_4 y z) (EQ (* x_4 (+ y z)) (+ (* x_4 y) (* x_4 z))))
 
 (BG_PUSH
  ;; Why axiom distr_right_as_axiom
  (FORALL (x_4 y z) (EQ (* x_4 (+ y z)) (+ (* x_4 y) (* x_4 z)))))
 
-;; distr_right_minus, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc", line 44, characters 0-159
+;; distr_right_minus, File "HOME/tests/java/Gcd.jc", line 44, characters 0-159
 (FORALL (x_1 y_1 z_1) (EQ (* x_1 (- y_1 z_1)) (- (* x_1 y_1) (* x_1 z_1))))
 
 (BG_PUSH
  ;; Why axiom distr_right_minus_as_axiom
  (FORALL (x_1 y_1 z_1) (EQ (* x_1 (- y_1 z_1)) (- (* x_1 y_1) (* x_1 z_1)))))
 
-;; div_mod_property, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc", line 56, characters 0-159
+;; div_mod_property, File "HOME/tests/java/Gcd.jc", line 56, characters 0-159
 (FORALL (x_6 y_6)
 (IMPLIES (AND (>= x_6 0) (> y_6 0))
 (EQ (int_mod x_6 y_6) (- x_6 (* y_6 (int_div x_6 y_6))))))
@@ -5005,7 +5005,7 @@ why -simplify [...] why/Gcd.why
   (FORALL (z_4)
   (IMPLIES (AND (divides z_4 a) (divides z_4 b)) (divides z_4 d))))))
 
-;; gcd_property, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc", line 30, characters 0-213
+;; gcd_property, File "HOME/tests/java/Gcd.jc", line 30, characters 0-213
 (FORALL (a_1 b_0 d_0 q_0)
 (IMPLIES (AND (> b_0 0) (isGcd b_0 (int_mod a_1 b_0) d_0))
 (isGcd a_1 b_0 d_0)))
@@ -5020,7 +5020,7 @@ why -simplify [...] why/Gcd.why
  (IMPLIES (AND (> b_0 0) (isGcd b_0 (int_mod a_1 b_0) d_0))
  (FORALL (q_0) (isGcd a_1 b_0 d_0)))))
 
-;; gcd_zero, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc", line 15, characters 0-60
+;; gcd_zero, File "HOME/tests/java/Gcd.jc", line 15, characters 0-60
 (FORALL (a_0) (isGcd a_0 0 a_0))
 
 (BG_PUSH
@@ -5066,7 +5066,7 @@ why -simplify [...] why/Gcd.why
 (DEFPRED (left_valid_struct_interface p a interface_alloc_table)
   (<= (offset_min interface_alloc_table p) a))
 
-;; mod_property, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc", line 68, characters 0-154
+;; mod_property, File "HOME/tests/java/Gcd.jc", line 68, characters 0-154
 (FORALL (x_7 y_7)
 (IMPLIES (AND (>= x_7 0) (> y_7 0))
 (AND (<= 0 (int_mod x_7 y_7)) (< (int_mod x_7 y_7) y_7))))
@@ -5077,14 +5077,14 @@ why -simplify [...] why/Gcd.why
  (IMPLIES (AND (>= x_7 0) (> y_7 0))
  (AND (<= 0 (int_mod x_7 y_7)) (< (int_mod x_7 y_7) y_7)))))
 
-;; mul_assoc, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc", line 62, characters 0-143
+;; mul_assoc, File "HOME/tests/java/Gcd.jc", line 62, characters 0-143
 (FORALL (x_4_0 y_4 z_3) (EQ (* x_4_0 (* y_4 z_3)) (* (* x_4_0 y_4) z_3)))
 
 (BG_PUSH
  ;; Why axiom mul_assoc_as_axiom
  (FORALL (x_4_0 y_4 z_3) (EQ (* x_4_0 (* y_4 z_3)) (* (* x_4_0 y_4) z_3))))
 
-;; mul_comm, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.jc", line 25, characters 0-97
+;; mul_comm, File "HOME/tests/java/Gcd.jc", line 25, characters 0-97
 (FORALL (x_3 y_3) (EQ (* x_3 y_3) (* y_3 x_3)))
 
 (BG_PUSH
@@ -5193,7 +5193,7 @@ why -simplify [...] why/Gcd.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Gcd_gcd_ensures_bezoutProperty_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 93, characters 18-57
+;; Gcd_gcd_ensures_bezoutProperty_po_1, File "HOME/tests/java/Gcd.java", line 93, characters 18-57
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -5216,17 +5216,17 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ return mutable_x_8)
 (EXISTS (a_2) (EXISTS (b_1) (EQ (+ (* a_2 x_8) (* b_1 y_8)) return)))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 101, characters 15-45
+;; Gcd_gcd_ensures_default_po_1, File "HOME/tests/java/Gcd.java", line 101, characters 15-45
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0)) (EQ (+ (* 1 x_8) (* 0 y_8)) x_8))))
 
-;; Gcd_gcd_ensures_default_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 102, characters 15-45
+;; Gcd_gcd_ensures_default_po_2, File "HOME/tests/java/Gcd.java", line 102, characters 15-45
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0)) (EQ (+ (* 0 x_8) (* 1 y_8)) y_8))))
 
-;; Gcd_gcd_ensures_default_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 98, characters 15-21
+;; Gcd_gcd_ensures_default_po_3, File "HOME/tests/java/Gcd.java", line 98, characters 15-21
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -5258,7 +5258,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (>= mutable_x_8_0 0))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_4, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 98, characters 25-31
+;; Gcd_gcd_ensures_default_po_4, File "HOME/tests/java/Gcd.java", line 98, characters 25-31
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -5290,7 +5290,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (>= mutable_y_8_0 0))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_5, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 99, characters 9-81
+;; Gcd_gcd_ensures_default_po_5, File "HOME/tests/java/Gcd.java", line 99, characters 9-81
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -5323,7 +5323,7 @@ why -simplify [...] why/Gcd.why
 (FORALL (d_2)
 (IMPLIES (isGcd mutable_x_8_0 mutable_y_8_0 d_2) (isGcd x_8 y_8 d_2))))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_6, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 101, characters 15-45
+;; Gcd_gcd_ensures_default_po_6, File "HOME/tests/java/Gcd.java", line 101, characters 15-45
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -5355,7 +5355,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (EQ (+ (* a_3_0 x_8) (* b_2_0 y_8)) mutable_x_8_0))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_default_po_7, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 102, characters 15-45
+;; Gcd_gcd_ensures_default_po_7, File "HOME/tests/java/Gcd.java", line 102, characters 15-45
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -5387,7 +5387,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 (int_div mutable_x_8 mutable_y_8))))
 (EQ (+ (* c0 x_8) (* d_1_0 y_8)) mutable_y_8_0))))))))))))))))))))))))
 
-;; Gcd_gcd_ensures_resultIsGcd_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 91, characters 18-36
+;; Gcd_gcd_ensures_resultIsGcd_po_1, File "HOME/tests/java/Gcd.java", line 91, characters 18-36
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -5408,7 +5408,7 @@ why -simplify [...] why/Gcd.why
 (IMPLIES (<= mutable_y_8 0)
 (FORALL (return) (IMPLIES (EQ return mutable_x_8) (isGcd x_8 y_8 return)))))))))))))))
 
-;; Gcd_gcd_safety_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 106, characters 20-25
+;; Gcd_gcd_safety_po_1, File "HOME/tests/java/Gcd.java", line 106, characters 20-25
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -5428,7 +5428,7 @@ why -simplify [...] why/Gcd.why
          (EQ (+ (* c x_8) (* d_1 y_8)) mutable_y_8)))))
 (IMPLIES (> mutable_y_8 0) (NEQ mutable_y_8 0)))))))))))))
 
-;; Gcd_gcd_safety_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 103, characters 25-26
+;; Gcd_gcd_safety_po_2, File "HOME/tests/java/Gcd.java", line 103, characters 25-26
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))
@@ -5466,7 +5466,7 @@ why -simplify [...] why/Gcd.why
 (FORALL (d_1_0)
 (IMPLIES (EQ d_1_0 (- b_2 (* d_1 result0))) (<= 0 mutable_y_8)))))))))))))))))))))))))))))))
 
-;; Gcd_gcd_safety_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/Gcd.java", line 103, characters 25-26
+;; Gcd_gcd_safety_po_3, File "HOME/tests/java/Gcd.java", line 103, characters 25-26
 (FORALL (x_8)
 (FORALL (y_8)
 (IMPLIES (AND (>= x_8 0) (>= y_8 0))

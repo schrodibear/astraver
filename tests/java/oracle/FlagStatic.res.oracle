@@ -389,128 +389,128 @@ End:
 */
 ========== file tests/java/FlagStatic.jloc ==========
 [K_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 59
 begin = 17
 end = 22
 
 [K_11]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 40
 end = 53
 
 [K_12]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 35
 end = 41
 
 [K_13]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 30
 end = 36
 
 [K_14]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 30
 end = 41
 
 [K_15]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 30
 end = 53
 
 [K_16]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 17
 end = 26
 
 [K_17]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 17
 end = 53
 
 [K_18]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 66
 begin = 40
 end = 58
 
 [K_19]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 66
 begin = 18
 end = 36
 
 [FlagStatic_flag]
 name = "Method flag"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 83
 begin = 23
 end = 27
 
 [K_20]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 66
 begin = 18
 end = 58
 
 [K_21]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 70
 begin = 8
 end = 12
 
 [K_22]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 70
 begin = 1
 end = 12
 
 [K_23]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 71
 begin = 1
 end = 9
 
 [K_24]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 69
 begin = 9
 end = 13
 
 [K_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 52
 begin = 18
 end = 53
 
 [K_25]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 43
 end = 55
 
 [K_2]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 59
 begin = 14
 end = 15
 
 [K_26]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 38
 end = 44
 
 [K_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 56
 begin = 8
 end = 49
@@ -523,55 +523,55 @@ begin = 19
 end = 25
 
 [K_27]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 38
 end = 55
 
 [K_4]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 55
 begin = 24
 end = 30
 
 [K_28]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 22
 end = 34
 
 [K_5]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 55
 begin = 24
 end = 85
 
 [K_29]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 17
 end = 23
 
 [K_6]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 57
 begin = 22
 end = 27
 
 [K_7]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 59
 begin = 33
 end = 37
 
 [K_8]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 59
 begin = 33
 end = 42
 
 [K_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 59
 begin = 24
 end = 27
@@ -585,75 +585,75 @@ end = 35
 
 [cons_FlagStatic]
 name = "Constructor of class FlagStatic"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [cons_Object]
 name = "Constructor of class Object"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [K_30]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 17
 end = 34
 
 [K_31]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 17
 end = 55
 
 [K_32]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 78
 begin = 13
 end = 169
 
 [K_33]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 92
 begin = 14
 end = 45
 
 [K_34]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 91
 begin = 7
 end = 33
 
 [K_35]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 90
 begin = 7
 end = 32
 
 [FlagStatic_swap]
 name = "Method swap"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 68
 begin = 24
 end = 28
 
 [K_36]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 22
 end = 35
 
 [K_37]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 17
 end = 23
 
 [K_38]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 12
 end = 18
@@ -666,7 +666,7 @@ begin = 22
 end = 26
 
 [K_39]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 7
 end = 13
@@ -693,31 +693,31 @@ begin = 29
 end = 38
 
 [K_40]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 7
 end = 18
 
 [K_41]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 7
 end = 23
 
 [K_42]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 7
 end = 35
 
 [K_43]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 24
 
 [K_44]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 63
@@ -730,31 +730,31 @@ begin = 18
 end = 26
 
 [K_45]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 99
 
 [K_46]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 136
 
 [K_47]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 185
 
 [K_48]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 93
 begin = 18
 end = 23
 
 [K_49]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 98
 begin = 9
 end = 12
@@ -768,13 +768,13 @@ end = 46
 
 [FlagStatic_isMonochrome]
 name = "Method isMonochrome"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 54
 begin = 26
 end = 38
 
 [K_50]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 98
 begin = 14
 end = 17
@@ -787,25 +787,25 @@ begin = 28
 end = 33
 
 [K_51]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 98
 begin = 2
 end = 18
 
 [K_52]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 101
 begin = 2
 end = 5
 
 [K_53]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 104
 begin = 9
 end = 12
 
 [K_54]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 104
 begin = 2
 end = 16
@@ -818,37 +818,37 @@ begin = 22
 end = 26
 
 [K_55]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 96
 begin = 13
 end = 17
 
 [K_56]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 95
 begin = 8
 end = 13
 
 [K_57]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 86
 begin = 9
 end = 17
 
 [K_58]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 85
 begin = 9
 end = 10
 
 [K_59]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 84
 begin = 9
 end = 10
 
 [K_60]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 75
 begin = 10
 end = 27
@@ -990,19 +990,19 @@ clean:
 
 ========== file tests/java/FlagStatic.loc ==========
 [JC_103]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_104]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_105]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 78
 begin = 13
 end = 169
@@ -1010,99 +1010,99 @@ end = 169
 [cons_FlagStatic_safety]
 name = "Constructor of class FlagStatic"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_106]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 78
 begin = 13
 end = 169
 
 [JC_40]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 30
 end = 36
 
 [JC_107]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 86
 begin = 9
 end = 17
 
 [JC_41]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 35
 end = 41
 
 [JC_108]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 86
 begin = 9
 end = 17
 
 [JC_42]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 40
 end = 53
 
 [JC_220]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_109]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 24
 
 [JC_43]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 17
 end = 53
 
 [JC_221]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_44]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_222]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_45]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_223]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_46]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1114,19 +1114,19 @@ begin = 22
 end = 26
 
 [JC_47]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_225]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_48]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1138,128 +1138,128 @@ begin = 22
 end = 26
 
 [JC_49]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 52
 begin = 18
 end = 53
 
 [JC_227]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_228]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_229]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_110]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 7
 end = 13
 
 [JC_111]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 12
 end = 18
 
 [JC_112]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 17
 end = 23
 
 [JC_113]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 22
 end = 35
 
 [JC_114]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 90
 begin = 7
 end = 32
 
 [JC_115]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 91
 begin = 7
 end = 33
 
 [JC_116]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 92
 begin = 14
 end = 45
 
 [JC_50]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 52
 begin = 18
 end = 53
 
 [JC_117]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 185
 
 [JC_51]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 55
 begin = 24
 end = 30
 
 [JC_118]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_52]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 56
 begin = 8
 end = 49
 
 [JC_230]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_119]
 kind = PointerDeref
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 96
 begin = 13
 end = 17
 
 [JC_53]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 55
 begin = 24
 end = 85
 
 [JC_231]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_54]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1272,19 +1272,19 @@ end = 26
 
 [JC_55]
 kind = PointerDeref
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 59
 begin = 33
 end = 37
 
 [JC_233]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_56]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 57
 begin = 22
 end = 27
@@ -1296,37 +1296,37 @@ begin = 22
 end = 26
 
 [JC_57]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 55
 begin = 24
 end = 30
 
 [JC_235]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_58]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 56
 begin = 8
 end = 49
 
 [JC_236]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_59]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 55
 begin = 24
 end = 85
 
 [JC_237]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1334,96 +1334,96 @@ end = -1
 [FlagStatic_flag_ensures_sorts]
 name = "Method flag"
 behavior = "Normal behavior `sorts'"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 83
 begin = 23
 end = 27
 
 [JC_238]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_239]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_120]
 kind = PointerDeref
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 96
 begin = 13
 end = 17
 
 [JC_121]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 98
 begin = 2
 end = 18
 
 [JC_122]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 104
 begin = 2
 end = 16
 
 [JC_123]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 93
 begin = 18
 end = 23
 
 [JC_124]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 86
 begin = 9
 end = 17
 
 [JC_125]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 86
 begin = 9
 end = 17
 
 [JC_126]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 24
 
 [JC_60]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_127]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 7
 end = 13
 
 [JC_61]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 55
 begin = 24
 end = 30
 
 [JC_128]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 12
 end = 18
 
 [JC_62]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 56
 begin = 8
 end = 49
@@ -1435,25 +1435,25 @@ begin = 19
 end = 27
 
 [JC_129]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 17
 end = 23
 
 [JC_63]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 55
 begin = 24
 end = 85
 
 [JC_241]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_64]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1465,269 +1465,269 @@ begin = 19
 end = 27
 
 [JC_65]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 17
 end = 23
 
 [JC_243]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_66]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 22
 end = 34
 
 [JC_244]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_67]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 38
 end = 44
 
 [JC_245]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_68]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 43
 end = 55
 
 [JC_246]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_69]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 17
 end = 55
 
 [JC_247]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_248]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_249]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_130]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 22
 end = 35
 
 [JC_131]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 90
 begin = 7
 end = 32
 
 [JC_132]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 91
 begin = 7
 end = 33
 
 [JC_133]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 92
 begin = 14
 end = 45
 
 [JC_134]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 185
 
 [JC_135]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_136]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 98
 begin = 2
 end = 18
 
 [JC_70]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_137]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 104
 begin = 2
 end = 16
 
 [JC_71]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 17
 end = 23
 
 [JC_138]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 86
 begin = 9
 end = 17
 
 [JC_72]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 22
 end = 34
 
 [JC_250]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_139]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 86
 begin = 9
 end = 17
 
 [JC_73]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 38
 end = 44
 
 [JC_251]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_74]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 43
 end = 55
 
 [JC_252]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_75]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 63
 begin = 17
 end = 55
 
 [JC_253]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_76]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_254]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_77]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_255]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_78]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_79]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_140]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 24
 
 [JC_141]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 7
 end = 13
 
 [JC_142]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 12
 end = 18
 
 [JC_143]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 17
 end = 23
 
 [JC_144]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 22
 end = 35
 
 [JC_145]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 90
 begin = 7
 end = 32
@@ -1735,43 +1735,43 @@ end = 32
 [cons_Object_safety]
 name = "Constructor of class Object"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_146]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 91
 begin = 7
 end = 33
 
 [JC_80]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_147]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 92
 begin = 14
 end = 45
 
 [JC_81]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 66
 begin = 18
 end = 36
 
 [JC_148]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
 end = 185
 
 [JC_82]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 66
 begin = 40
 end = 58
@@ -1779,147 +1779,147 @@ end = 58
 [FlagStatic_swap_ensures_default]
 name = "Method swap"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 68
 begin = 24
 end = 28
 
 [JC_149]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_83]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 66
 begin = 18
 end = 58
 
 [JC_84]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 68
 begin = 24
 end = 28
 
 [JC_85]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 118
 begin = 9
 end = 20
 
 [JC_86]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 66
 begin = 18
 end = 36
 
 [JC_87]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 66
 begin = 40
 end = 58
 
 [JC_88]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 66
 begin = 18
 end = 58
 
 [JC_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 61
 begin = 8
 end = 21
 
 [JC_89]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 68
 begin = 24
 end = 28
 
 [JC_2]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 61
 begin = 8
 end = 21
 
 [JC_4]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_5]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_6]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_150]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 98
 begin = 2
 end = 18
 
 [JC_7]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_151]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 104
 begin = 2
 end = 16
 
 [JC_8]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_152]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 63
 begin = 11
 end = 66
 
 [JC_153]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_154]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_155]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1927,97 +1927,97 @@ end = -1
 [FlagStatic_isMonochrome_ensures_default]
 name = "Method isMonochrome"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 54
 begin = 26
 end = 38
 
 [JC_156]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_90]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 118
 begin = 9
 end = 20
 
 [JC_157]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_91]
 kind = PointerDeref
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 69
 begin = 9
 end = 13
 
 [JC_158]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_92]
 kind = PointerDeref
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 69
 begin = 9
 end = 13
 
 [JC_159]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_93]
 kind = PointerDeref
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 70
 begin = 8
 end = 12
 
 [JC_94]
 kind = PointerDeref
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 70
 begin = 8
 end = 12
 
 [JC_95]
 kind = PointerDeref
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 70
 begin = 1
 end = 12
 
 [JC_96]
 kind = PointerDeref
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 71
 begin = 1
 end = 9
 
 [JC_97]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 75
 begin = 10
 end = 27
 
 [JC_98]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_99]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 75
 begin = 10
 end = 27
@@ -2029,7 +2029,7 @@ begin = 31
 end = 46
 
 [JC_161]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2037,7 +2037,7 @@ end = -1
 [FlagStatic_swap_ensures_i_j_swapped]
 name = "Method swap"
 behavior = "Normal behavior `i_j_swapped'"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 68
 begin = 24
 end = 28
@@ -2049,31 +2049,31 @@ begin = 31
 end = 46
 
 [JC_163]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_164]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_165]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_166]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_167]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2085,7 +2085,7 @@ begin = 22
 end = 30
 
 [JC_169]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2093,7 +2093,7 @@ end = -1
 [FlagStatic_isMonochrome_ensures_decides_monochromatic]
 name = "Method isMonochrome"
 behavior = "Normal behavior `decides_monochromatic'"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 54
 begin = 26
 end = 38
@@ -2101,7 +2101,7 @@ end = 38
 [FlagStatic_swap_safety]
 name = "Method swap"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 68
 begin = 24
 end = 28
@@ -2109,7 +2109,7 @@ end = 28
 [FlagStatic_flag_ensures_default]
 name = "Method flag"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 83
 begin = 23
 end = 27
@@ -2121,31 +2121,31 @@ begin = 22
 end = 30
 
 [JC_171]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_172]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_173]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_174]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_175]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2159,13 +2159,13 @@ end = 25
 [FlagStatic_flag_safety]
 name = "Method flag"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 83
 begin = 23
 end = 27
 
 [JC_177]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2177,91 +2177,91 @@ begin = 19
 end = 25
 
 [JC_179]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 63
 begin = 11
 end = 66
 
 [JC_11]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 66
 begin = 8
 end = 30
 
 [JC_12]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_13]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 66
 begin = 8
 end = 30
 
 [JC_14]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_15]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_16]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_17]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_180]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_18]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_181]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_19]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 69
 begin = 11
 end = 113
 
 [JC_182]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_183]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2273,7 +2273,7 @@ begin = 28
 end = 33
 
 [JC_185]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2285,37 +2285,37 @@ begin = 28
 end = 33
 
 [JC_187]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_188]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_189]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_20]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 68
 begin = 10
 end = 18
 
 [JC_21]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 69
 begin = 11
 end = 113
 
 [JC_22]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 68
 begin = 10
 end = 18
@@ -2323,7 +2323,7 @@ end = 18
 [cons_Object_ensures_default]
 name = "Constructor of class Object"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2335,19 +2335,19 @@ begin = 29
 end = 35
 
 [JC_23]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 73
 begin = 8
 end = 23
 
 [JC_201]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_24]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2359,73 +2359,73 @@ begin = 29
 end = 35
 
 [JC_25]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 73
 begin = 8
 end = 23
 
 [JC_203]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_26]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_204]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_27]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_205]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_190]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_28]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_206]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_191]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_29]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_207]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2443,13 +2443,13 @@ begin = 29
 end = 38
 
 [JC_193]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_209]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2461,19 +2461,19 @@ begin = 18
 end = 26
 
 [JC_195]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_196]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_197]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2481,37 +2481,37 @@ end = -1
 [cons_FlagStatic_ensures_default]
 name = "Constructor of class FlagStatic"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_198]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_199]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_30]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_31]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 75
 begin = 11
 end = 65
 
 [JC_32]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.jc"
+file = "HOME/tests/java/FlagStatic.jc"
 line = 75
 begin = 11
 end = 65
@@ -2523,67 +2523,67 @@ begin = 29
 end = 38
 
 [JC_33]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 17
 end = 26
 
 [JC_211]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_34]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 30
 end = 36
 
 [JC_212]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_35]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 35
 end = 41
 
 [JC_213]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_36]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 40
 end = 53
 
 [JC_214]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_37]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 17
 end = 53
 
 [JC_215]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_38]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2595,13 +2595,13 @@ begin = 29
 end = 33
 
 [JC_39]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 50
 begin = 17
 end = 26
 
 [JC_217]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2609,7 +2609,7 @@ end = -1
 [FlagStatic_isMonochrome_safety]
 name = "Method isMonochrome"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java"
+file = "HOME/tests/java/FlagStatic.java"
 line = 54
 begin = 26
 end = 38
@@ -2621,25 +2621,25 @@ begin = 29
 end = 33
 
 [JC_219]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_100]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_101]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_102]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -4303,37 +4303,37 @@ why --project [...] why/FlagStatic.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/FlagStatic_po72.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "69" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "69" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/FlagStatic_po73.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "69" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "69" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/FlagStatic_po74.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "70" begin = "8" end = "12"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "70" begin = "8" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/FlagStatic_po75.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "70" begin = "8" end = "12"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "70" begin = "8" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `i_j_swapped'">
     <goal why_file="why/FlagStatic_po69.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "66" begin = "18" end = "36"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "66" begin = "18" end = "36"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/FlagStatic_po70.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "66" begin = "40" end = "58"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "66" begin = "40" end = "58"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/FlagStatic_po71.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "68" begin = "24" end = "28"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "68" begin = "24" end = "28"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -4342,57 +4342,57 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/FlagStatic_po65.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "59" begin = "33" end = "37"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "59" begin = "33" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/FlagStatic_po66.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "59" begin = "33" end = "37"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "59" begin = "33" end = "37"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/FlagStatic_po67.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "57" begin = "22" end = "27"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "57" begin = "22" end = "27"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/FlagStatic_po68.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "57" begin = "22" end = "27"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "57" begin = "22" end = "27"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `decides_monochromatic'">
     <goal why_file="why/FlagStatic_po57.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "52" begin = "18" end = "53"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "52" begin = "18" end = "53"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/FlagStatic_po58.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "52" begin = "18" end = "53"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "52" begin = "18" end = "53"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/FlagStatic_po59.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "52" begin = "18" end = "53"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "52" begin = "18" end = "53"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/FlagStatic_po60.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "52" begin = "18" end = "53"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "52" begin = "18" end = "53"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/FlagStatic_po61.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "55" begin = "24" end = "30"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "55" begin = "24" end = "30"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/FlagStatic_po62.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "56" begin = "8" end = "49"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "56" begin = "8" end = "49"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/FlagStatic_po63.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "55" begin = "24" end = "30"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "55" begin = "24" end = "30"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po64.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "56" begin = "8" end = "49"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "56" begin = "8" end = "49"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
@@ -4401,241 +4401,241 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/FlagStatic_po39.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "96" begin = "13" end = "17"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "96" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/FlagStatic_po40.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "96" begin = "13" end = "17"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "96" begin = "13" end = "17"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/FlagStatic_po41.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "98" begin = "2" end = "18"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "98" begin = "2" end = "18"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po42.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "98" begin = "2" end = "18"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "98" begin = "2" end = "18"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po43.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "98" begin = "2" end = "18"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "98" begin = "2" end = "18"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po44.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "98" begin = "2" end = "18"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "98" begin = "2" end = "18"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po45.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/FlagStatic_po46.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/FlagStatic_po47.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/FlagStatic_po48.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/FlagStatic_po49.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "104" begin = "2" end = "16"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "104" begin = "2" end = "16"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po50.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "104" begin = "2" end = "16"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "104" begin = "2" end = "16"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po51.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "104" begin = "2" end = "16"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "104" begin = "2" end = "16"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po52.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "104" begin = "2" end = "16"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "104" begin = "2" end = "16"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po53.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/FlagStatic_po54.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/FlagStatic_po55.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/FlagStatic_po56.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "93" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `sorts'">
     <goal why_file="why/FlagStatic_po38.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "78" begin = "13" end = "169"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "78" begin = "13" end = "169"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/FlagStatic_po1.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "7" end = "13"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "7" end = "13"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/FlagStatic_po2.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "12" end = "18"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "12" end = "18"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/FlagStatic_po3.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "17" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "17" end = "23"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/FlagStatic_po4.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "22" end = "35"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "22" end = "35"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/FlagStatic_po5.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "90" begin = "7" end = "32"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "90" begin = "7" end = "32"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/FlagStatic_po6.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "91" begin = "7" end = "33"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "91" begin = "7" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/FlagStatic_po7.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "92" begin = "14" end = "45"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "92" begin = "14" end = "45"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/FlagStatic_po8.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "88" begin = "7" end = "24"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "88" begin = "7" end = "24"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po9.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "7" end = "13"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "7" end = "13"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po10.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "12" end = "18"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "12" end = "18"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po11.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "17" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "17" end = "23"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po12.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "22" end = "35"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "22" end = "35"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po13.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "90" begin = "7" end = "32"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "90" begin = "7" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po14.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "91" begin = "7" end = "33"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "91" begin = "7" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po15.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "92" begin = "14" end = "45"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "92" begin = "14" end = "45"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po16.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "7" end = "13"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "7" end = "13"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po17.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "12" end = "18"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "12" end = "18"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po18.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "17" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "17" end = "23"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po19.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "22" end = "35"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "22" end = "35"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po20.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "90" begin = "7" end = "32"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "90" begin = "7" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po21.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "91" begin = "7" end = "33"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "91" begin = "7" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po22.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "92" begin = "14" end = "45"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "92" begin = "14" end = "45"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po23.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "88" begin = "7" end = "24"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "88" begin = "7" end = "24"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po24.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "7" end = "13"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "7" end = "13"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po25.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "12" end = "18"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "12" end = "18"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po26.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "17" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "17" end = "23"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po27.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "22" end = "35"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "22" end = "35"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po28.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "90" begin = "7" end = "32"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "90" begin = "7" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po29.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "91" begin = "7" end = "33"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "91" begin = "7" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po30.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "92" begin = "14" end = "45"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "92" begin = "14" end = "45"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po31.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "7" end = "13"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "7" end = "13"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po32.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "12" end = "18"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "12" end = "18"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po33.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "17" end = "23"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "17" end = "23"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po34.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "89" begin = "22" end = "35"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "89" begin = "22" end = "35"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po35.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "90" begin = "7" end = "32"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "90" begin = "7" end = "32"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po36.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "91" begin = "7" end = "33"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "91" begin = "7" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/FlagStatic_po37.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java" line = "92" begin = "14" end = "45"/>
+      <location file = "HOME/tests/java/FlagStatic.java" line = "92" begin = "14" end = "45"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
@@ -9663,7 +9663,7 @@ why -simplify [...] why/FlagStatic.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; FlagStatic_flag_ensures_default_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 7-13
+;; FlagStatic_flag_ensures_default_po_1, File "HOME/tests/java/FlagStatic.java", line 89, characters 7-13
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9676,7 +9676,7 @@ why -simplify [...] why/FlagStatic.why
          (EQ |@true| |@true|))))
 (<= 0 0)))))))
 
-;; FlagStatic_flag_ensures_default_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 12-18
+;; FlagStatic_flag_ensures_default_po_2, File "HOME/tests/java/FlagStatic.java", line 89, characters 12-18
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9689,7 +9689,7 @@ why -simplify [...] why/FlagStatic.why
          (EQ |@true| |@true|))))
 (<= 0 0)))))))
 
-;; FlagStatic_flag_ensures_default_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 17-23
+;; FlagStatic_flag_ensures_default_po_3, File "HOME/tests/java/FlagStatic.java", line 89, characters 17-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9702,7 +9702,7 @@ why -simplify [...] why/FlagStatic.why
          (EQ |@true| |@true|))))
 (<= 0 result)))))))
 
-;; FlagStatic_flag_ensures_default_po_4, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 22-35
+;; FlagStatic_flag_ensures_default_po_4, File "HOME/tests/java/FlagStatic.java", line 89, characters 22-35
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9715,7 +9715,7 @@ why -simplify [...] why/FlagStatic.why
          (EQ |@true| |@true|))))
 (<= result (+ (offset_max Object_alloc_table t_1) 1))))))))
 
-;; FlagStatic_flag_ensures_default_po_5, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 90, characters 7-32
+;; FlagStatic_flag_ensures_default_po_5, File "HOME/tests/java/FlagStatic.java", line 90, characters 7-32
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9728,7 +9728,7 @@ why -simplify [...] why/FlagStatic.why
          (EQ |@true| |@true|))))
 (is_monochrome t_1 0 0 FlagStatic_BLUE intM_intP)))))))
 
-;; FlagStatic_flag_ensures_default_po_6, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 91, characters 7-33
+;; FlagStatic_flag_ensures_default_po_6, File "HOME/tests/java/FlagStatic.java", line 91, characters 7-33
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9741,7 +9741,7 @@ why -simplify [...] why/FlagStatic.why
          (EQ |@true| |@true|))))
 (is_monochrome t_1 0 0 FlagStatic_WHITE intM_intP)))))))
 
-;; FlagStatic_flag_ensures_default_po_7, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 92, characters 14-45
+;; FlagStatic_flag_ensures_default_po_7, File "HOME/tests/java/FlagStatic.java", line 92, characters 14-45
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9755,7 +9755,7 @@ why -simplify [...] why/FlagStatic.why
 (is_monochrome
 t_1 result (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP)))))))
 
-;; FlagStatic_flag_ensures_default_po_8, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 88, characters 7-24
+;; FlagStatic_flag_ensures_default_po_8, File "HOME/tests/java/FlagStatic.java", line 88, characters 7-24
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9803,7 +9803,7 @@ t_1 result (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP)))
                                                   (pset_singleton t_1) b_0 b_0))))
 (is_color_array t_1 Object_alloc_table intM_intP1))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_9, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 7-13
+;; FlagStatic_flag_ensures_default_po_9, File "HOME/tests/java/FlagStatic.java", line 89, characters 7-13
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9851,7 +9851,7 @@ t_1 result (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP)))
                                                   (pset_singleton t_1) b_0 b_0))))
 (<= 0 b_0_0))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_10, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 12-18
+;; FlagStatic_flag_ensures_default_po_10, File "HOME/tests/java/FlagStatic.java", line 89, characters 12-18
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9899,7 +9899,7 @@ t_1 result (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP)))
                                                   (pset_singleton t_1) b_0 b_0))))
 (<= b_0_0 i_3_0))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_11, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 17-23
+;; FlagStatic_flag_ensures_default_po_11, File "HOME/tests/java/FlagStatic.java", line 89, characters 17-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9947,7 +9947,7 @@ t_1 result (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP)))
                                                   (pset_singleton t_1) b_0 b_0))))
 (<= i_3_0 r_0))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_12, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 22-35
+;; FlagStatic_flag_ensures_default_po_12, File "HOME/tests/java/FlagStatic.java", line 89, characters 22-35
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -9995,7 +9995,7 @@ t_1 result (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP)))
                                                   (pset_singleton t_1) b_0 b_0))))
 (<= r_0 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_13, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 90, characters 7-32
+;; FlagStatic_flag_ensures_default_po_13, File "HOME/tests/java/FlagStatic.java", line 90, characters 7-32
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10043,7 +10043,7 @@ t_1 result (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP)))
                                                   (pset_singleton t_1) b_0 b_0))))
 (is_monochrome t_1 0 b_0_0 FlagStatic_BLUE intM_intP1))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_14, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 91, characters 7-33
+;; FlagStatic_flag_ensures_default_po_14, File "HOME/tests/java/FlagStatic.java", line 91, characters 7-33
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10091,7 +10091,7 @@ t_1 result (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP)))
                                                   (pset_singleton t_1) b_0 b_0))))
 (is_monochrome t_1 b_0_0 i_3_0 FlagStatic_WHITE intM_intP1))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_15, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 92, characters 14-45
+;; FlagStatic_flag_ensures_default_po_15, File "HOME/tests/java/FlagStatic.java", line 92, characters 14-45
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10140,7 +10140,7 @@ t_1 result (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP)))
 (is_monochrome
 t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_16, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 7-13
+;; FlagStatic_flag_ensures_default_po_16, File "HOME/tests/java/FlagStatic.java", line 89, characters 7-13
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10172,7 +10172,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))))
          (AND (NEQ result0 FlagStatic_WHITE) (EQ |@false| |@true|)))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 b_0)))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_17, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 12-18
+;; FlagStatic_flag_ensures_default_po_17, File "HOME/tests/java/FlagStatic.java", line 89, characters 12-18
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10204,7 +10204,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))))
          (AND (NEQ result0 FlagStatic_WHITE) (EQ |@false| |@true|)))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= b_0 i_3_0)))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_18, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 17-23
+;; FlagStatic_flag_ensures_default_po_18, File "HOME/tests/java/FlagStatic.java", line 89, characters 17-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10236,7 +10236,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))))
          (AND (NEQ result0 FlagStatic_WHITE) (EQ |@false| |@true|)))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= i_3_0 r_0)))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_19, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 22-35
+;; FlagStatic_flag_ensures_default_po_19, File "HOME/tests/java/FlagStatic.java", line 89, characters 22-35
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10270,7 +10270,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))))
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (<= r_0 (+ (offset_max Object_alloc_table t_1) 1))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_20, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 90, characters 7-32
+;; FlagStatic_flag_ensures_default_po_20, File "HOME/tests/java/FlagStatic.java", line 90, characters 7-32
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10304,7 +10304,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))))
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (is_monochrome t_1 0 b_0 FlagStatic_BLUE intM_intP0)))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_21, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 91, characters 7-33
+;; FlagStatic_flag_ensures_default_po_21, File "HOME/tests/java/FlagStatic.java", line 91, characters 7-33
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10338,7 +10338,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))))
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (is_monochrome t_1 b_0 i_3_0 FlagStatic_WHITE intM_intP0)))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_22, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 92, characters 14-45
+;; FlagStatic_flag_ensures_default_po_22, File "HOME/tests/java/FlagStatic.java", line 92, characters 14-45
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10373,7 +10373,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))))
 (is_monochrome
 t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_23, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 88, characters 7-24
+;; FlagStatic_flag_ensures_default_po_23, File "HOME/tests/java/FlagStatic.java", line 88, characters 7-24
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10421,7 +10421,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))
                                                   (pset_singleton t_1) r_0_0 r_0_0))))
 (is_color_array t_1 Object_alloc_table intM_intP1))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_24, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 7-13
+;; FlagStatic_flag_ensures_default_po_24, File "HOME/tests/java/FlagStatic.java", line 89, characters 7-13
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10469,7 +10469,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))
                                                   (pset_singleton t_1) r_0_0 r_0_0))))
 (<= 0 b_0))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_25, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 12-18
+;; FlagStatic_flag_ensures_default_po_25, File "HOME/tests/java/FlagStatic.java", line 89, characters 12-18
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10517,7 +10517,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))
                                                   (pset_singleton t_1) r_0_0 r_0_0))))
 (<= b_0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_26, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 17-23
+;; FlagStatic_flag_ensures_default_po_26, File "HOME/tests/java/FlagStatic.java", line 89, characters 17-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10565,7 +10565,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))
                                                   (pset_singleton t_1) r_0_0 r_0_0))))
 (<= i_3 r_0_0))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_27, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 22-35
+;; FlagStatic_flag_ensures_default_po_27, File "HOME/tests/java/FlagStatic.java", line 89, characters 22-35
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10613,7 +10613,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))
                                                   (pset_singleton t_1) r_0_0 r_0_0))))
 (<= r_0_0 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_28, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 90, characters 7-32
+;; FlagStatic_flag_ensures_default_po_28, File "HOME/tests/java/FlagStatic.java", line 90, characters 7-32
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10661,7 +10661,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))
                                                   (pset_singleton t_1) r_0_0 r_0_0))))
 (is_monochrome t_1 0 b_0 FlagStatic_BLUE intM_intP1))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_29, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 91, characters 7-33
+;; FlagStatic_flag_ensures_default_po_29, File "HOME/tests/java/FlagStatic.java", line 91, characters 7-33
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10709,7 +10709,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))
                                                   (pset_singleton t_1) r_0_0 r_0_0))))
 (is_monochrome t_1 b_0 i_3 FlagStatic_WHITE intM_intP1))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_30, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 92, characters 14-45
+;; FlagStatic_flag_ensures_default_po_30, File "HOME/tests/java/FlagStatic.java", line 92, characters 14-45
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10758,7 +10758,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))
 (is_monochrome
 t_1 r_0_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1))))))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_31, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 7-13
+;; FlagStatic_flag_ensures_default_po_31, File "HOME/tests/java/FlagStatic.java", line 89, characters 7-13
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10790,7 +10790,7 @@ t_1 r_0_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))
 (IMPLIES (AND (NEQ result0 FlagStatic_RED) (EQ |@false| |@false|))
 (<= 0 b_0))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_32, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 12-18
+;; FlagStatic_flag_ensures_default_po_32, File "HOME/tests/java/FlagStatic.java", line 89, characters 12-18
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10822,7 +10822,7 @@ t_1 r_0_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))
 (IMPLIES (AND (NEQ result0 FlagStatic_RED) (EQ |@false| |@false|))
 (<= b_0 i_3))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_33, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 17-23
+;; FlagStatic_flag_ensures_default_po_33, File "HOME/tests/java/FlagStatic.java", line 89, characters 17-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10854,7 +10854,7 @@ t_1 r_0_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))
 (IMPLIES (AND (NEQ result0 FlagStatic_RED) (EQ |@false| |@false|))
 (<= i_3 r_0))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_34, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 89, characters 22-35
+;; FlagStatic_flag_ensures_default_po_34, File "HOME/tests/java/FlagStatic.java", line 89, characters 22-35
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10886,7 +10886,7 @@ t_1 r_0_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))
 (IMPLIES (AND (NEQ result0 FlagStatic_RED) (EQ |@false| |@false|))
 (<= r_0 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_35, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 90, characters 7-32
+;; FlagStatic_flag_ensures_default_po_35, File "HOME/tests/java/FlagStatic.java", line 90, characters 7-32
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10918,7 +10918,7 @@ t_1 r_0_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))
 (IMPLIES (AND (NEQ result0 FlagStatic_RED) (EQ |@false| |@false|))
 (is_monochrome t_1 0 b_0 FlagStatic_BLUE intM_intP0))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_36, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 91, characters 7-33
+;; FlagStatic_flag_ensures_default_po_36, File "HOME/tests/java/FlagStatic.java", line 91, characters 7-33
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10950,7 +10950,7 @@ t_1 r_0_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))
 (IMPLIES (AND (NEQ result0 FlagStatic_RED) (EQ |@false| |@false|))
 (is_monochrome t_1 b_0 i_3 FlagStatic_WHITE intM_intP0))))))))))))))))))
 
-;; FlagStatic_flag_ensures_default_po_37, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 92, characters 14-45
+;; FlagStatic_flag_ensures_default_po_37, File "HOME/tests/java/FlagStatic.java", line 92, characters 14-45
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -10983,7 +10983,7 @@ t_1 r_0_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP1)))
 (is_monochrome
 t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0))))))))))))))))))
 
-;; FlagStatic_flag_ensures_sorts_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 78, characters 13-169
+;; FlagStatic_flag_ensures_sorts_po_1, File "HOME/tests/java/FlagStatic.java", line 78, characters 13-169
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11016,7 +11016,7 @@ t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))
 (is_monochrome
 t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 96, characters 13-17
+;; FlagStatic_flag_safety_po_1, File "HOME/tests/java/FlagStatic.java", line 96, characters 13-17
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11043,7 +11043,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0))))))))
 (IMPLIES (< i_3 r_0) (<= (offset_min Object_alloc_table t_1) i_3))))))))))))))
 
-;; FlagStatic_flag_safety_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 96, characters 13-17
+;; FlagStatic_flag_safety_po_2, File "HOME/tests/java/FlagStatic.java", line 96, characters 13-17
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11070,7 +11070,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0))))))))
 (IMPLIES (< i_3 r_0) (<= i_3 (offset_max Object_alloc_table t_1)))))))))))))))
 
-;; FlagStatic_flag_safety_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 98, characters 2-18
+;; FlagStatic_flag_safety_po_3, File "HOME/tests/java/FlagStatic.java", line 98, characters 2-18
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11106,7 +11106,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ b_0_0 (+ b_0 1))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 b_0))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_4, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 98, characters 2-18
+;; FlagStatic_flag_safety_po_4, File "HOME/tests/java/FlagStatic.java", line 98, characters 2-18
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11144,7 +11144,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (< b_0 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_5, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 98, characters 2-18
+;; FlagStatic_flag_safety_po_5, File "HOME/tests/java/FlagStatic.java", line 98, characters 2-18
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11180,7 +11180,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ b_0_0 (+ b_0 1))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_6, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 98, characters 2-18
+;; FlagStatic_flag_safety_po_6, File "HOME/tests/java/FlagStatic.java", line 98, characters 2-18
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11218,7 +11218,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (< i_3 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_7, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 93, characters 18-23
+;; FlagStatic_flag_safety_po_7, File "HOME/tests/java/FlagStatic.java", line 93, characters 18-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11272,7 +11272,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
                                                   (pset_singleton t_1) b_0 b_0))))
 (<= 0 (- r_0 i_3))))))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_8, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 93, characters 18-23
+;; FlagStatic_flag_safety_po_8, File "HOME/tests/java/FlagStatic.java", line 93, characters 18-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11326,7 +11326,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
                                                   (pset_singleton t_1) b_0 b_0))))
 (< (- r_0 i_3_0) (- r_0 i_3))))))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_9, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 93, characters 18-23
+;; FlagStatic_flag_safety_po_9, File "HOME/tests/java/FlagStatic.java", line 93, characters 18-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11361,7 +11361,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (NEQ result0 FlagStatic_WHITE) (EQ |@false| |@true|)))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 (- r_0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_10, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 93, characters 18-23
+;; FlagStatic_flag_safety_po_10, File "HOME/tests/java/FlagStatic.java", line 93, characters 18-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11396,7 +11396,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (NEQ result0 FlagStatic_WHITE) (EQ |@false| |@true|)))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (< (- r_0 i_3_0) (- r_0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_11, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 104, characters 2-16
+;; FlagStatic_flag_safety_po_11, File "HOME/tests/java/FlagStatic.java", line 104, characters 2-16
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11432,7 +11432,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (NEQ result0 FlagStatic_RED) (EQ |@false| |@true|)))
 (FORALL (r_0_0) (IMPLIES (EQ r_0_0 (- r_0 1)) (<= 0 r_0_0))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_12, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 104, characters 2-16
+;; FlagStatic_flag_safety_po_12, File "HOME/tests/java/FlagStatic.java", line 104, characters 2-16
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11470,7 +11470,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ r_0_0 (- r_0 1))
 (< r_0_0 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_13, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 104, characters 2-16
+;; FlagStatic_flag_safety_po_13, File "HOME/tests/java/FlagStatic.java", line 104, characters 2-16
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11506,7 +11506,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (NEQ result0 FlagStatic_RED) (EQ |@false| |@true|)))
 (FORALL (r_0_0) (IMPLIES (EQ r_0_0 (- r_0 1)) (<= 0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_14, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 104, characters 2-16
+;; FlagStatic_flag_safety_po_14, File "HOME/tests/java/FlagStatic.java", line 104, characters 2-16
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11544,7 +11544,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ r_0_0 (- r_0 1))
 (< i_3 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_15, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 93, characters 18-23
+;; FlagStatic_flag_safety_po_15, File "HOME/tests/java/FlagStatic.java", line 93, characters 18-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11598,7 +11598,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
                                                   (pset_singleton t_1) r_0_0 r_0_0))))
 (<= 0 (- r_0 i_3))))))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_16, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 93, characters 18-23
+;; FlagStatic_flag_safety_po_16, File "HOME/tests/java/FlagStatic.java", line 93, characters 18-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11652,7 +11652,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
                                                   (pset_singleton t_1) r_0_0 r_0_0))))
 (< (- r_0_0 i_3) (- r_0 i_3))))))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_17, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 93, characters 18-23
+;; FlagStatic_flag_safety_po_17, File "HOME/tests/java/FlagStatic.java", line 93, characters 18-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11687,7 +11687,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (AND (NEQ result0 FlagStatic_RED) (EQ |@false| |@false|))
 (<= 0 (- r_0 i_3)))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_18, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 93, characters 18-23
+;; FlagStatic_flag_safety_po_18, File "HOME/tests/java/FlagStatic.java", line 93, characters 18-23
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11722,7 +11722,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (AND (NEQ result0 FlagStatic_RED) (EQ |@false| |@false|))
 (< (- r_0 i_3) (- r_0 i_3)))))))))))))))))))))
 
-;; FlagStatic_isMonochrome_ensures_decides_monochromatic_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 52, characters 18-53
+;; FlagStatic_isMonochrome_ensures_decides_monochromatic_po_1, File "HOME/tests/java/FlagStatic.java", line 52, characters 18-53
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11747,7 +11747,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ return |@false|)
 (IMPLIES (EQ return |@true|) (is_monochrome t i j c_0 intM_intP))))))))))))))))))
 
-;; FlagStatic_isMonochrome_ensures_decides_monochromatic_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 52, characters 18-53
+;; FlagStatic_isMonochrome_ensures_decides_monochromatic_po_2, File "HOME/tests/java/FlagStatic.java", line 52, characters 18-53
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11772,7 +11772,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ return |@false|)
 (IMPLIES (is_monochrome t i j c_0 intM_intP) (EQ return |@true|))))))))))))))))))
 
-;; FlagStatic_isMonochrome_ensures_decides_monochromatic_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 52, characters 18-53
+;; FlagStatic_isMonochrome_ensures_decides_monochromatic_po_3, File "HOME/tests/java/FlagStatic.java", line 52, characters 18-53
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11794,7 +11794,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ return |@true|)
 (IMPLIES (EQ return |@true|) (is_monochrome t i j c_0 intM_intP)))))))))))))))
 
-;; FlagStatic_isMonochrome_ensures_decides_monochromatic_po_4, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 52, characters 18-53
+;; FlagStatic_isMonochrome_ensures_decides_monochromatic_po_4, File "HOME/tests/java/FlagStatic.java", line 52, characters 18-53
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11816,7 +11816,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ return |@true|)
 (IMPLIES (is_monochrome t i j c_0 intM_intP) (EQ return |@true|)))))))))))))))
 
-;; FlagStatic_isMonochrome_ensures_default_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 55, characters 24-30
+;; FlagStatic_isMonochrome_ensures_default_po_1, File "HOME/tests/java/FlagStatic.java", line 55, characters 24-30
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11827,7 +11827,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (<= i j) (<= j (+ (offset_max Object_alloc_table t) 1))))))
 (<= i i))))))
 
-;; FlagStatic_isMonochrome_ensures_default_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 56, characters 8-49
+;; FlagStatic_isMonochrome_ensures_default_po_2, File "HOME/tests/java/FlagStatic.java", line 56, characters 8-49
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11841,7 +11841,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (FORALL (l)
 (IMPLIES (AND (<= i l) (< l i)) (EQ (select intM_intP (shift t l)) c_0))))))))))
 
-;; FlagStatic_isMonochrome_ensures_default_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 55, characters 24-30
+;; FlagStatic_isMonochrome_ensures_default_po_3, File "HOME/tests/java/FlagStatic.java", line 55, characters 24-30
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11863,7 +11863,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ result c_0)
 (FORALL (k_0_0) (IMPLIES (EQ k_0_0 (+ k_0 1)) (<= i k_0_0))))))))))))))))
 
-;; FlagStatic_isMonochrome_ensures_default_po_4, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 56, characters 8-49
+;; FlagStatic_isMonochrome_ensures_default_po_4, File "HOME/tests/java/FlagStatic.java", line 56, characters 8-49
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11888,7 +11888,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (FORALL (l)
 (IMPLIES (AND (<= i l) (< l k_0_0)) (EQ (select intM_intP (shift t l)) c_0))))))))))))))))))
 
-;; FlagStatic_isMonochrome_safety_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 59, characters 33-37
+;; FlagStatic_isMonochrome_safety_po_1, File "HOME/tests/java/FlagStatic.java", line 59, characters 33-37
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11907,7 +11907,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (EQ (select intM_intP (shift t l)) c_0))))
 (IMPLIES (< k_0 j) (<= (offset_min Object_alloc_table t) k_0))))))))))))
 
-;; FlagStatic_isMonochrome_safety_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 59, characters 33-37
+;; FlagStatic_isMonochrome_safety_po_2, File "HOME/tests/java/FlagStatic.java", line 59, characters 33-37
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11926,7 +11926,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (EQ (select intM_intP (shift t l)) c_0))))
 (IMPLIES (< k_0 j) (<= k_0 (offset_max Object_alloc_table t)))))))))))))
 
-;; FlagStatic_isMonochrome_safety_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 57, characters 22-27
+;; FlagStatic_isMonochrome_safety_po_3, File "HOME/tests/java/FlagStatic.java", line 57, characters 22-27
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11951,7 +11951,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ result c_0)
 (FORALL (k_0_0) (IMPLIES (EQ k_0_0 (+ k_0 1)) (<= 0 (- j k_0)))))))))))))))))))
 
-;; FlagStatic_isMonochrome_safety_po_4, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 57, characters 22-27
+;; FlagStatic_isMonochrome_safety_po_4, File "HOME/tests/java/FlagStatic.java", line 57, characters 22-27
 (FORALL (t)
 (FORALL (i)
 (FORALL (j)
@@ -11976,7 +11976,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ result c_0)
 (FORALL (k_0_0) (IMPLIES (EQ k_0_0 (+ k_0 1)) (< (- j k_0_0) (- j k_0)))))))))))))))))))
 
-;; FlagStatic_swap_ensures_i_j_swapped_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 66, characters 18-36
+;; FlagStatic_swap_ensures_i_j_swapped_po_1, File "HOME/tests/java/FlagStatic.java", line 66, characters 18-36
 (FORALL (t_0)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -11996,7 +11996,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t_0 j_0) result))
 (EQ (select intM_intP1 (shift t_0 i_0)) (select intM_intP (shift t_0 j_0)))))))))))))))))
 
-;; FlagStatic_swap_ensures_i_j_swapped_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 66, characters 40-58
+;; FlagStatic_swap_ensures_i_j_swapped_po_2, File "HOME/tests/java/FlagStatic.java", line 66, characters 40-58
 (FORALL (t_0)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -12016,7 +12016,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t_0 j_0) result))
 (EQ (select intM_intP1 (shift t_0 j_0)) (select intM_intP (shift t_0 i_0)))))))))))))))))
 
-;; FlagStatic_swap_ensures_i_j_swapped_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 68, characters 24-28
+;; FlagStatic_swap_ensures_i_j_swapped_po_3, File "HOME/tests/java/FlagStatic.java", line 68, characters 24-28
 (FORALL (t_0)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -12041,7 +12041,7 @@ Object_alloc_table intM_intP intM_intP1 (pset_union
                                         (pset_range
                                         (pset_singleton t_0) i_0 i_0)))))))))))))))))
 
-;; FlagStatic_swap_safety_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 69, characters 9-13
+;; FlagStatic_swap_safety_po_1, File "HOME/tests/java/FlagStatic.java", line 69, characters 9-13
 (FORALL (t_0)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -12052,7 +12052,7 @@ Object_alloc_table intM_intP intM_intP1 (pset_union
          (AND (<= 0 j_0) (< j_0 (+ (offset_max Object_alloc_table t_0) 1))))))
 (<= (offset_min Object_alloc_table t_0) i_0))))))
 
-;; FlagStatic_swap_safety_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 69, characters 9-13
+;; FlagStatic_swap_safety_po_2, File "HOME/tests/java/FlagStatic.java", line 69, characters 9-13
 (FORALL (t_0)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -12063,7 +12063,7 @@ Object_alloc_table intM_intP intM_intP1 (pset_union
          (AND (<= 0 j_0) (< j_0 (+ (offset_max Object_alloc_table t_0) 1))))))
 (<= i_0 (offset_max Object_alloc_table t_0)))))))
 
-;; FlagStatic_swap_safety_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 70, characters 8-12
+;; FlagStatic_swap_safety_po_3, File "HOME/tests/java/FlagStatic.java", line 70, characters 8-12
 (FORALL (t_0)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -12079,7 +12079,7 @@ Object_alloc_table intM_intP intM_intP1 (pset_union
 (IMPLIES (EQ result (select intM_intP (shift t_0 i_0)))
 (<= (offset_min Object_alloc_table t_0) j_0))))))))))
 
-;; FlagStatic_swap_safety_po_4, File "/home/cmarche/local/ppc/trunk/why/tests/java/FlagStatic.java", line 70, characters 8-12
+;; FlagStatic_swap_safety_po_4, File "HOME/tests/java/FlagStatic.java", line 70, characters 8-12
 (FORALL (t_0)
 (FORALL (i_0)
 (FORALL (j_0)

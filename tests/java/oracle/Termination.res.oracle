@@ -155,125 +155,125 @@ End:
 */
 ========== file tests/java/Termination.jloc ==========
 [K_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 25
 end = 33
 
 [K_11]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 20
 end = 26
 
 [K_12]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 20
 end = 33
 
 [K_13]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 48
 begin = 18
 end = 19
 
 [K_14]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 50
 begin = 15
 end = 18
 
 [K_15]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 50
 begin = 8
 end = 13
 
 [K_16]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 46
 begin = 9
 end = 12
 
 [cons_Termination]
 name = "Constructor of class Termination"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [K_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 35
 begin = 5
 end = 20
 
 [K_2]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 35
 begin = 18
 end = 19
 
 [K_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 36
 begin = 15
 end = 18
 
 [K_4]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 36
 begin = 8
 end = 13
 
 [K_5]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 40
 begin = 5
 end = 24
 
 [K_6]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 40
 begin = 18
 end = 23
 
 [K_7]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 41
 begin = 17
 end = 20
 
 [K_8]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 41
 begin = 8
 end = 15
 
 [K_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 44
 begin = 16
 end = 28
 
 [Termination_loop1]
 name = "Method loop1"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 34
 begin = 9
 end = 14
 
 [Termination_loop2]
 name = "Method loop2"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 39
 begin = 9
 end = 14
 
 [Termination_loop3]
 name = "Method loop3"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 45
 begin = 8
 end = 13
@@ -409,37 +409,37 @@ clean:
 [cons_Termination_safety]
 name = "Constructor of class Termination"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_40]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_41]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 44
 begin = 16
 end = 28
 
 [JC_42]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 44
 begin = 16
 end = 28
 
 [JC_43]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_44]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -447,7 +447,7 @@ end = -1
 [Termination_loop1_ensures_default]
 name = "Method loop1"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 34
 begin = 9
 end = 14
@@ -455,73 +455,73 @@ end = 14
 [Termination_loop1_safety]
 name = "Method loop1"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 34
 begin = 9
 end = 14
 
 [JC_45]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 20
 end = 26
 
 [JC_46]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 25
 end = 33
 
 [JC_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.jc"
+file = "HOME/tests/java/Termination.jc"
 line = 31
 begin = 8
 end = 23
 
 [JC_47]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 20
 end = 33
 
 [JC_2]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_48]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.jc"
+file = "HOME/tests/java/Termination.jc"
 line = 31
 begin = 8
 end = 23
 
 [JC_49]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 48
 begin = 18
 end = 19
 
 [JC_4]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_5]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_6]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -529,73 +529,73 @@ end = -1
 [Termination_loop3_ensures_default]
 name = "Method loop3"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 45
 begin = 8
 end = 13
 
 [JC_7]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_8]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.jc"
+file = "HOME/tests/java/Termination.jc"
 line = 33
 begin = 11
 end = 65
 
 [JC_50]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 20
 end = 26
 
 [JC_51]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 25
 end = 33
 
 [JC_52]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 47
 begin = 20
 end = 33
 
 [JC_53]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_54]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_55]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_56]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_57]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -603,31 +603,31 @@ end = -1
 [Termination_loop2_safety]
 name = "Method loop2"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 39
 begin = 9
 end = 14
 
 [JC_58]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_59]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_60]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_61]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -635,55 +635,55 @@ end = -1
 [Termination_loop2_ensures_default]
 name = "Method loop2"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 39
 begin = 9
 end = 14
 
 [JC_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.jc"
+file = "HOME/tests/java/Termination.jc"
 line = 33
 begin = 11
 end = 65
 
 [JC_11]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 34
 begin = 9
 end = 14
 
 [JC_12]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_13]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 34
 begin = 9
 end = 14
 
 [JC_14]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_15]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_16]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_17]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -691,133 +691,133 @@ end = -1
 [Termination_loop3_safety]
 name = "Method loop3"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 45
 begin = 8
 end = 13
 
 [JC_18]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_19]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 35
 begin = 5
 end = 20
 
 [JC_20]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_21]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 35
 begin = 18
 end = 19
 
 [JC_22]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 35
 begin = 5
 end = 20
 
 [JC_23]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_24]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 39
 begin = 9
 end = 14
 
 [JC_25]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_26]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 39
 begin = 9
 end = 14
 
 [JC_27]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_28]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_29]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_30]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_31]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_32]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 40
 begin = 5
 end = 24
 
 [JC_33]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_34]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 40
 begin = 18
 end = 23
 
 [JC_35]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 40
 begin = 5
 end = 24
 
 [JC_36]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_37]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 45
 begin = 8
 end = 13
 
 [JC_38]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -825,13 +825,13 @@ end = -1
 [cons_Termination_ensures_default]
 name = "Constructor of class Termination"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_39]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java"
+file = "HOME/tests/java/Termination.java"
 line = 45
 begin = 8
 end = 13
@@ -1748,33 +1748,33 @@ why --project [...] why/Termination.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Termination_po10.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "48" begin = "18" end = "19"/>
+      <location file = "HOME/tests/java/Termination.java" line = "48" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po11.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "48" begin = "18" end = "19"/>
+      <location file = "HOME/tests/java/Termination.java" line = "48" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/Termination_po5.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "47" begin = "20" end = "26"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "26"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Termination_po6.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "47" begin = "25" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "25" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Termination_po7.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "47" begin = "20" end = "26"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "26"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po8.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "47" begin = "25" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "25" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po9.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "44" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/Termination.java" line = "44" begin = "16" end = "28"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -1783,11 +1783,11 @@ why --project [...] why/Termination.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Termination_po3.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "40" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/Termination.java" line = "40" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po4.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "40" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/Termination.java" line = "40" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1796,11 +1796,11 @@ why --project [...] why/Termination.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Termination_po1.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "35" begin = "18" end = "19"/>
+      <location file = "HOME/tests/java/Termination.java" line = "35" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po2.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java" line = "35" begin = "18" end = "19"/>
+      <location file = "HOME/tests/java/Termination.java" line = "35" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -4015,7 +4015,7 @@ why -simplify [...] why/Termination.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Termination_loop1_safety_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 35, characters 18-19
+;; Termination_loop1_safety_po_1, File "HOME/tests/java/Termination.java", line 35, characters 18-19
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_2 0 0 Object_alloc_table)
@@ -4026,7 +4026,7 @@ why -simplify [...] why/Termination.why
 (FORALL (mutable_n_1_0)
 (IMPLIES (EQ mutable_n_1_0 (- mutable_n_1 1)) (<= 0 mutable_n_1))))))))))
 
-;; Termination_loop1_safety_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 35, characters 18-19
+;; Termination_loop1_safety_po_2, File "HOME/tests/java/Termination.java", line 35, characters 18-19
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_2 0 0 Object_alloc_table)
@@ -4037,7 +4037,7 @@ why -simplify [...] why/Termination.why
 (FORALL (mutable_n_1_0)
 (IMPLIES (EQ mutable_n_1_0 (- mutable_n_1 1)) (< mutable_n_1_0 mutable_n_1))))))))))
 
-;; Termination_loop2_safety_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 40, characters 18-23
+;; Termination_loop2_safety_po_1, File "HOME/tests/java/Termination.java", line 40, characters 18-23
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_1 0 0 Object_alloc_table)
@@ -4049,7 +4049,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (EQ mutable_n_0_0_0 (+ mutable_n_0_0 1))
 (<= 0 (- 100 mutable_n_0_0)))))))))))
 
-;; Termination_loop2_safety_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 40, characters 18-23
+;; Termination_loop2_safety_po_2, File "HOME/tests/java/Termination.java", line 40, characters 18-23
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_1 0 0 Object_alloc_table)
@@ -4061,18 +4061,18 @@ why -simplify [...] why/Termination.why
 (IMPLIES (EQ mutable_n_0_0_0 (+ mutable_n_0_0 1))
 (< (- 100 mutable_n_0_0_0) (- 100 mutable_n_0_0)))))))))))
 
-;; Termination_loop3_ensures_default_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 47, characters 20-26
+;; Termination_loop3_ensures_default_po_1, File "HOME/tests/java/Termination.java", line 47, characters 20-26
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table) (<= 0 100))))
 
-;; Termination_loop3_ensures_default_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 47, characters 25-33
+;; Termination_loop3_ensures_default_po_2, File "HOME/tests/java/Termination.java", line 47, characters 25-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
 (<= 100 100))))
 
-;; Termination_loop3_ensures_default_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 47, characters 20-26
+;; Termination_loop3_ensures_default_po_3, File "HOME/tests/java/Termination.java", line 47, characters 20-26
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -4080,7 +4080,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i0)))))))))
 
-;; Termination_loop3_ensures_default_po_4, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 47, characters 25-33
+;; Termination_loop3_ensures_default_po_4, File "HOME/tests/java/Termination.java", line 47, characters 25-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -4088,7 +4088,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= i0 100)))))))))
 
-;; Termination_loop3_ensures_default_po_5, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 44, characters 16-28
+;; Termination_loop3_ensures_default_po_5, File "HOME/tests/java/Termination.java", line 44, characters 16-28
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -4096,7 +4096,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (<= i 0) (FORALL (return) (IMPLIES (EQ return i) (EQ return 0)))))))))
 
-;; Termination_loop3_safety_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 48, characters 18-19
+;; Termination_loop3_safety_po_1, File "HOME/tests/java/Termination.java", line 48, characters 18-19
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -4105,7 +4105,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i))))))))))
 
-;; Termination_loop3_safety_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Termination.java", line 48, characters 18-19
+;; Termination_loop3_safety_po_2, File "HOME/tests/java/Termination.java", line 48, characters 18-19
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)

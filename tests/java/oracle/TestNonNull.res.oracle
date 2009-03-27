@@ -148,81 +148,81 @@ End:
 */
 ========== file tests/java/TestNonNull.jloc ==========
 [K_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 24
 begin = 9
 end = 13
 
 [K_11]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 22
 begin = 17
 end = 30
 
 [cons_TestNonNull]
 name = "Constructor of class TestNonNull"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 16
 begin = 4
 end = 15
 
 [K_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 17
 begin = 1
 end = 15
 
 [K_2]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 18
 begin = 12
 end = 25
 
 [K_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 18
 begin = 12
 end = 25
 
 [K_4]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 25
 begin = 1
 end = 9
 
 [K_5]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 27
 begin = 3
 end = 8
 
 [K_6]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 27
 begin = 1
 end = 13
 
 [K_7]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 28
 begin = 1
 end = 6
 
 [K_8]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 28
 begin = 1
 end = 11
 
 [K_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 26
 begin = 9
 end = 13
 
 [TestNonNull_test]
 name = "Method test"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/TestNonNull.java"
+file = "HOME/tests/java/TestNonNull.java"
 line = 23
 begin = 9
 end = 13

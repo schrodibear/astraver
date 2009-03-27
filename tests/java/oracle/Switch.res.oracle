@@ -207,46 +207,46 @@ End:
 */
 ========== file tests/java/Switch.jloc ==========
 [K_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 34
 begin = 18
 end = 50
 
 [K_2]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 52
 begin = 20
 end = 52
 
 [K_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 51
 begin = 19
 end = 51
 
 [K_4]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 51
 begin = 18
 end = 110
 
 [cons_Switch]
 name = "Constructor of class Switch"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [Switch_test1]
 name = "Method test1"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 36
 begin = 22
 end = 27
 
 [Switch_test2]
 name = "Method test2"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 54
 begin = 22
 end = 27
@@ -379,55 +379,55 @@ clean:
 
 ========== file tests/java/Switch.loc ==========
 [JC_40]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_41]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_42]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_43]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_44]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_45]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_46]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.jc"
+file = "HOME/tests/java/Switch.jc"
 line = 41
 begin = 8
 end = 23
 
 [JC_2]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -435,19 +435,19 @@ end = -1
 [Switch_test1_ensures_normal]
 name = "Method test1"
 behavior = "Normal behavior `normal'"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 36
 begin = 22
 end = 27
 
 [JC_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.jc"
+file = "HOME/tests/java/Switch.jc"
 line = 41
 begin = 8
 end = 23
 
 [JC_4]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -455,37 +455,37 @@ end = -1
 [Switch_test2_ensures_default]
 name = "Method test2"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 54
 begin = 22
 end = 27
 
 [JC_5]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_6]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_7]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_8]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.jc"
+file = "HOME/tests/java/Switch.jc"
 line = 43
 begin = 11
 end = 65
@@ -493,7 +493,7 @@ end = 65
 [cons_Switch_ensures_default]
 name = "Constructor of class Switch"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -501,67 +501,67 @@ end = -1
 [Switch_test1_safety]
 name = "Method test1"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 36
 begin = 22
 end = 27
 
 [JC_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.jc"
+file = "HOME/tests/java/Switch.jc"
 line = 43
 begin = 11
 end = 65
 
 [JC_11]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 36
 begin = 22
 end = 27
 
 [JC_12]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_13]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 36
 begin = 22
 end = 27
 
 [JC_14]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_15]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_16]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_17]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_18]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_19]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 34
 begin = 18
 end = 50
@@ -569,7 +569,7 @@ end = 50
 [cons_Switch_safety]
 name = "Constructor of class Switch"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -577,67 +577,67 @@ end = -1
 [Switch_test2_safety]
 name = "Method test2"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 54
 begin = 22
 end = 27
 
 [JC_20]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.jc"
+file = "HOME/tests/java/Switch.jc"
 line = 52
 begin = 10
 end = 18
 
 [JC_21]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 34
 begin = 18
 end = 50
 
 [JC_22]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.jc"
+file = "HOME/tests/java/Switch.jc"
 line = 52
 begin = 10
 end = 18
 
 [JC_23]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 54
 begin = 22
 end = 27
 
 [JC_24]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_25]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 54
 begin = 22
 end = 27
 
 [JC_26]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_27]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_28]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_29]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -645,7 +645,7 @@ end = -1
 [Switch_test1_ensures_default]
 name = "Method test1"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 36
 begin = 22
 end = 27
@@ -653,67 +653,67 @@ end = 27
 [Switch_test2_ensures_normal]
 name = "Method test2"
 behavior = "Normal behavior `normal'"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 54
 begin = 22
 end = 27
 
 [JC_30]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_31]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 51
 begin = 19
 end = 51
 
 [JC_32]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 52
 begin = 20
 end = 52
 
 [JC_33]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 51
 begin = 18
 end = 110
 
 [JC_34]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.jc"
+file = "HOME/tests/java/Switch.jc"
 line = 78
 begin = 10
 end = 18
 
 [JC_35]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 51
 begin = 19
 end = 51
 
 [JC_36]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 52
 begin = 20
 end = 52
 
 [JC_37]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java"
+file = "HOME/tests/java/Switch.java"
 line = 51
 begin = 18
 end = 110
 
 [JC_38]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.jc"
+file = "HOME/tests/java/Switch.jc"
 line = 78
 begin = 10
 end = 18
 
 [JC_39]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1848,67 +1848,67 @@ why --project [...] why/Switch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Normal behavior `normal'">
     <goal why_file="why/Switch_po7.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po8.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po9.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po10.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po11.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po12.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po13.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po14.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po15.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po16.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po17.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po18.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po19.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po20.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po21.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po22.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -1917,27 +1917,27 @@ why --project [...] why/Switch.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Normal behavior `normal'">
     <goal why_file="why/Switch_po1.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
+      <location file = "HOME/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po2.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
+      <location file = "HOME/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po3.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
+      <location file = "HOME/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po4.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
+      <location file = "HOME/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po5.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
+      <location file = "HOME/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po6.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
+      <location file = "HOME/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -4675,7 +4675,7 @@ why -simplify [...] why/Switch.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Switch_test1_ensures_normal_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_1, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_1) 1)
@@ -4691,7 +4691,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1))
 (EQ (integer_of_int32 return) 0)))))))))))
 
-;; Switch_test1_ensures_normal_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_2, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_1) 1)
@@ -4707,7 +4707,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1))))))))))))
 
-;; Switch_test1_ensures_normal_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_3, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_1) 1)
@@ -4723,7 +4723,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1))
 (EQ (integer_of_int32 return) 0))))))))))))
 
-;; Switch_test1_ensures_normal_po_4, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_4, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_1) 1)
@@ -4739,7 +4739,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1)))))))))))))
 
-;; Switch_test1_ensures_normal_po_5, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_5, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (FORALL (result)
@@ -4751,7 +4751,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1))
 (EQ (integer_of_int32 return) 0)))))))))
 
-;; Switch_test1_ensures_normal_po_6, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_6, File "HOME/tests/java/Switch.java", line 34, characters 18-50
 (FORALL (n_1)
 (IMPLIES TRUE
 (FORALL (result)
@@ -4763,7 +4763,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_1) 0) (EQ (integer_of_int32 n_1) 1))))))))))
 
-;; Switch_test2_ensures_normal_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_1, File "HOME/tests/java/Switch.java", line 51, characters 19-51
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 1)
@@ -4779,7 +4779,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))
 (EQ (integer_of_int32 return) 1)))))))))))
 
-;; Switch_test2_ensures_normal_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_2, File "HOME/tests/java/Switch.java", line 51, characters 19-51
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 1)
@@ -4795,7 +4795,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))))))))))))
 
-;; Switch_test2_ensures_normal_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_3, File "HOME/tests/java/Switch.java", line 52, characters 20-52
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 1)
@@ -4811,7 +4811,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))
 (EQ (integer_of_int32 return) 0)))))))))))
 
-;; Switch_test2_ensures_normal_po_4, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_4, File "HOME/tests/java/Switch.java", line 52, characters 20-52
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 1)
@@ -4827,7 +4827,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))))))))))))
 
-;; Switch_test2_ensures_normal_po_5, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_5, File "HOME/tests/java/Switch.java", line 51, characters 19-51
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -4845,7 +4845,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))
 (EQ (integer_of_int32 return) 1))))))))))))
 
-;; Switch_test2_ensures_normal_po_6, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_6, File "HOME/tests/java/Switch.java", line 51, characters 19-51
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -4863,7 +4863,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7)))))))))))))
 
-;; Switch_test2_ensures_normal_po_7, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_7, File "HOME/tests/java/Switch.java", line 52, characters 20-52
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -4881,7 +4881,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))
 (EQ (integer_of_int32 return) 0))))))))))))
 
-;; Switch_test2_ensures_normal_po_8, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_8, File "HOME/tests/java/Switch.java", line 52, characters 20-52
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -4899,7 +4899,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1)))))))))))))
 
-;; Switch_test2_ensures_normal_po_9, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_9, File "HOME/tests/java/Switch.java", line 51, characters 19-51
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -4921,7 +4921,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))
 (EQ (integer_of_int32 return) 1)))))))))))))
 
-;; Switch_test2_ensures_normal_po_10, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_10, File "HOME/tests/java/Switch.java", line 51, characters 19-51
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -4943,7 +4943,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))))))))))))))
 
-;; Switch_test2_ensures_normal_po_11, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_11, File "HOME/tests/java/Switch.java", line 52, characters 20-52
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -4965,7 +4965,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))
 (EQ (integer_of_int32 return) 0)))))))))))))
 
-;; Switch_test2_ensures_normal_po_12, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_12, File "HOME/tests/java/Switch.java", line 52, characters 20-52
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0_0) 1)
@@ -4987,7 +4987,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))))))))))))))
 
-;; Switch_test2_ensures_normal_po_13, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_13, File "HOME/tests/java/Switch.java", line 51, characters 19-51
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (FORALL (result)
@@ -5003,7 +5003,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7))
 (EQ (integer_of_int32 return) 1))))))))))
 
-;; Switch_test2_ensures_normal_po_14, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_14, File "HOME/tests/java/Switch.java", line 51, characters 19-51
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (FORALL (result)
@@ -5019,7 +5019,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0_0) 4) (EQ (integer_of_int32 n_0_0) 7)))))))))))
 
-;; Switch_test2_ensures_normal_po_15, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_15, File "HOME/tests/java/Switch.java", line 52, characters 20-52
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (FORALL (result)
@@ -5035,7 +5035,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0_0) 0) (EQ (integer_of_int32 n_0_0) 1))
 (EQ (integer_of_int32 return) 0))))))))))
 
-;; Switch_test2_ensures_normal_po_16, File "/home/cmarche/local/ppc/trunk/why/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_16, File "HOME/tests/java/Switch.java", line 52, characters 20-52
 (FORALL (n_0_0)
 (IMPLIES TRUE
 (FORALL (result)

@@ -1,3 +1,0 @@
-sh: line 1:  1199 CPU time limit exceeded /users/demons/marche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo6afb45.why > /tmp/out03b5dc 2>&1
-sh: line 1:  2096 CPU time limit exceeded /users/demons/marche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo34d94d.why > /tmp/out810437 2>&1
-sh: line 1:  2672 CPU time limit exceeded /users/demons/marche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo3b9ab9.why > /tmp/out1682b8 2>&1

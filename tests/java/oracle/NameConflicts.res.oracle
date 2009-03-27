@@ -116,52 +116,52 @@ End:
 ========== file tests/java/NameConflicts.jloc ==========
 [NameConflicts_field]
 name = "Method field"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 20
 begin = 8
 end = 13
 
 [K_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 7
 begin = 1
 end = 11
 
 [K_2]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 11
 begin = 18
 end = 30
 
 [K_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 14
 begin = 14
 end = 15
 
 [K_4]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 20
 begin = 25
 end = 30
 
 [NameConflicts_setI]
 name = "Method setI"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 6
 begin = 9
 end = 13
 
 [NameConflicts_m]
 name = "Method m"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 13
 begin = 8
 end = 9
 
 [cons_NameConflicts]
 name = "Constructor of class NameConflicts"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -295,73 +295,73 @@ clean:
 
 ========== file tests/java/NameConflicts.loc ==========
 [JC_40]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_41]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_42]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_43]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_44]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.jc"
+file = "HOME/tests/java/NameConflicts.jc"
 line = 43
 begin = 8
 end = 23
 
 [JC_2]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.jc"
+file = "HOME/tests/java/NameConflicts.jc"
 line = 43
 begin = 8
 end = 23
 
 [JC_4]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_5]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_6]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_7]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -369,49 +369,49 @@ end = -1
 [NameConflicts_setI_safety]
 name = "Method setI"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 6
 begin = 9
 end = 13
 
 [JC_8]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.jc"
+file = "HOME/tests/java/NameConflicts.jc"
 line = 45
 begin = 11
 end = 65
 
 [JC_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.jc"
+file = "HOME/tests/java/NameConflicts.jc"
 line = 45
 begin = 11
 end = 65
 
 [JC_11]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 6
 begin = 9
 end = 13
 
 [JC_12]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_13]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 6
 begin = 9
 end = 13
 
 [JC_14]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -419,13 +419,13 @@ end = -1
 [cons_NameConflicts_ensures_default]
 name = "Constructor of class NameConflicts"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_15]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -433,91 +433,91 @@ end = -1
 [NameConflicts_setI_ensures_default]
 name = "Method setI"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 6
 begin = 9
 end = 13
 
 [JC_16]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_17]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_18]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_19]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 13
 begin = 8
 end = 9
 
 [JC_20]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_21]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 13
 begin = 8
 end = 9
 
 [JC_22]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_23]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_24]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_25]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_26]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_27]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 11
 begin = 18
 end = 30
 
 [JC_28]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 11
 begin = 18
 end = 30
 
 [JC_29]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 20
 begin = 8
 end = 13
@@ -525,7 +525,7 @@ end = 13
 [NameConflicts_m_ensures_default]
 name = "Method m"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 13
 begin = 8
 end = 9
@@ -533,7 +533,7 @@ end = 9
 [NameConflicts_field_safety]
 name = "Method field"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 20
 begin = 8
 end = 13
@@ -541,19 +541,19 @@ end = 13
 [NameConflicts_field_ensures_default]
 name = "Method field"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 20
 begin = 8
 end = 13
 
 [JC_30]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_31]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 20
 begin = 8
 end = 13
@@ -561,55 +561,55 @@ end = 13
 [NameConflicts_m_safety]
 name = "Method m"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 13
 begin = 8
 end = 9
 
 [JC_32]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_33]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_34]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_35]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_36]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_37]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_38]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_39]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -617,7 +617,7 @@ end = -1
 [NameConflicts_m_ensures_normal]
 name = "Method m"
 behavior = "Normal behavior `normal'"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java"
+file = "HOME/tests/java/NameConflicts.java"
 line = 13
 begin = 8
 end = 9
@@ -625,7 +625,7 @@ end = 9
 [cons_NameConflicts_safety]
 name = "Constructor of class NameConflicts"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1627,7 +1627,7 @@ why --project [...] why/NameConflicts.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Normal behavior `normal'">
     <goal why_file="why/NameConflicts_po1.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java" line = "11" begin = "18" end = "30"/>
+      <location file = "HOME/tests/java/NameConflicts.java" line = "11" begin = "18" end = "30"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -3982,7 +3982,7 @@ why -simplify [...] why/NameConflicts.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; NameConflicts_m_ensures_normal_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/NameConflicts.java", line 11, characters 18-30
+;; NameConflicts_m_ensures_normal_po_1, File "HOME/tests/java/NameConflicts.java", line 11, characters 18-30
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_NameConflicts this_1 0 0 Object_alloc_table)

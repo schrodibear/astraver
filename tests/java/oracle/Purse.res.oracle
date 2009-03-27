@@ -287,62 +287,62 @@ End:
 */
 ========== file tests/java/Purse.jloc ==========
 [K_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 65
 begin = 38
 end = 55
 
 [K_11]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 69
 begin = 22
 end = 29
 
 [Purse_withdraw]
 name = "Method withdraw"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [K_12]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 69
 begin = 22
 end = 33
 
 [K_13]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 69
 begin = 12
 end = 33
 
 [K_14]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 68
 begin = 12
 end = 19
 
 [K_15]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 68
 begin = 12
 end = 24
 
 [K_16]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 60
 begin = 17
 end = 23
 
 [K_17]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 74
 begin = 16
 end = 34
 
 [K_18]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 76
 begin = 15
 end = 22
@@ -363,7 +363,7 @@ end = 41
 
 [cons_NoCreditException]
 name = "Constructor of class NoCreditException"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 35
 begin = 11
 end = 28
@@ -377,19 +377,19 @@ end = 20
 
 [Purse_getBalance]
 name = "Method getBalance"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 75
 begin = 15
 end = 25
 
 [K_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 49
 begin = 8
 end = 19
 
 [K_2]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 44
 begin = 17
 end = 21
@@ -402,43 +402,43 @@ begin = 16
 end = 31
 
 [K_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 46
 begin = 16
 end = 28
 
 [K_4]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 54
 begin = 16
 end = 44
 
 [K_5]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 57
 begin = 8
 end = 20
 
 [K_6]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 52
 begin = 17
 end = 23
 
 [K_7]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 38
 end = 66
 
 [K_8]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 16
 end = 34
 
 [K_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 16
 end = 66
@@ -501,7 +501,7 @@ end = 43
 
 [Purse_credit]
 name = "Method credit"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
@@ -522,7 +522,7 @@ end = 31
 
 [cons_Purse]
 name = "Constructor of class Purse"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 48
 begin = 11
 end = 16
@@ -686,13 +686,13 @@ clean:
 
 ========== file tests/java/Purse.loc ==========
 [JC_103]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_104]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -700,25 +700,25 @@ end = -1
 [cons_Purse_safety]
 name = "Constructor of class Purse"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 48
 begin = 11
 end = 16
 
 [JC_105]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_106]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_40]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -730,25 +730,25 @@ begin = 23
 end = 41
 
 [JC_41]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_108]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_42]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_220]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -766,19 +766,19 @@ begin = 18
 end = 28
 
 [JC_221]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 74
 begin = 16
 end = 34
 
 [JC_44]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_222]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 74
 begin = 16
 end = 34
@@ -790,19 +790,19 @@ begin = 18
 end = 28
 
 [JC_223]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 75
 begin = 15
 end = 25
 
 [JC_46]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_224]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 75
 begin = 15
 end = 25
@@ -816,49 +816,49 @@ begin = 11
 end = 20
 
 [JC_47]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_48]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_49]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_110]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_111]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_112]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_113]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_114]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -878,13 +878,13 @@ begin = 11
 end = 20
 
 [JC_116]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_50]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -902,19 +902,19 @@ begin = 18
 end = 37
 
 [JC_118]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_52]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_119]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -926,19 +926,19 @@ begin = 18
 end = 37
 
 [JC_54]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_55]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_56]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -946,13 +946,13 @@ end = -1
 [Purse_credit_ensures_default]
 name = "Method credit"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
 
 [JC_57]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -960,13 +960,13 @@ end = -1
 [Purse_withdraw_safety]
 name = "Method withdraw"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [JC_58]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -986,19 +986,19 @@ begin = 11
 end = 20
 
 [JC_120]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_121]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_122]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1010,7 +1010,7 @@ begin = 11
 end = 20
 
 [JC_124]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1022,19 +1022,19 @@ begin = 11
 end = 20
 
 [JC_126]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_60]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_127]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1046,13 +1046,13 @@ begin = 21
 end = 29
 
 [JC_128]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_62]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1066,31 +1066,31 @@ begin = 11
 end = 20
 
 [JC_129]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_63]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_64]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_65]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_66]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1102,7 +1102,7 @@ begin = 34
 end = 43
 
 [JC_68]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1114,7 +1114,7 @@ begin = 34
 end = 43
 
 [JC_130]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1134,7 +1134,7 @@ begin = 11
 end = 20
 
 [JC_132]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1146,49 +1146,49 @@ begin = 11
 end = 20
 
 [JC_134]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_135]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_136]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_70]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_137]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_71]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_138]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_72]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1200,13 +1200,13 @@ begin = 11
 end = 20
 
 [JC_73]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_74]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1218,7 +1218,7 @@ begin = 18
 end = 26
 
 [JC_76]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1230,19 +1230,19 @@ begin = 18
 end = 26
 
 [JC_78]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_79]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_140]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1254,67 +1254,67 @@ begin = 11
 end = 20
 
 [JC_142]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_143]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_144]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_145]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_146]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_80]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_147]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 35
 begin = 11
 end = 28
 
 [JC_81]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_148]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_82]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_149]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 35
 begin = 11
 end = 28
@@ -1326,7 +1326,7 @@ begin = 16
 end = 31
 
 [JC_84]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1348,43 +1348,43 @@ end = 20
 [Purse_getBalance_ensures_default]
 name = "Method getBalance"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 75
 begin = 15
 end = 25
 
 [JC_86]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_87]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_88]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_1]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 48
 begin = 8
 end = 23
 
 [JC_89]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_2]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1398,43 +1398,43 @@ begin = 11
 end = 20
 
 [JC_3]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 48
 begin = 8
 end = 23
 
 [JC_4]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_5]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_6]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_150]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_7]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_151]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1442,31 +1442,31 @@ end = -1
 [Purse_withdraw_ensures_default]
 name = "Method withdraw"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [JC_8]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_152]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_9]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 50
 begin = 11
 end = 65
 
 [JC_153]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1480,7 +1480,7 @@ begin = 11
 end = 20
 
 [JC_154]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1488,31 +1488,31 @@ end = -1
 [cons_NoCreditException_safety]
 name = "Constructor of class NoCreditException"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 35
 begin = 11
 end = 28
 
 [JC_155]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 48
 begin = 11
 end = 16
 
 [JC_156]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_90]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_157]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 48
 begin = 11
 end = 16
@@ -1524,19 +1524,19 @@ begin = 16
 end = 31
 
 [JC_158]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_92]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_159]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 46
 begin = 16
 end = 28
@@ -1548,31 +1548,31 @@ begin = 16
 end = 31
 
 [JC_94]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_95]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_96]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_97]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_98]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1586,7 +1586,7 @@ end = 57
 [cons_Purse_ensures_default]
 name = "Constructor of class Purse"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 48
 begin = 11
 end = 16
@@ -1594,49 +1594,49 @@ end = 16
 [Purse_withdraw_exsures_amount_too_large]
 name = "Method withdraw"
 behavior = "Exceptional behavior `amount_too_large'"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [JC_160]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 48
 begin = 11
 end = 16
 
 [JC_161]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 128
 begin = 9
 end = 16
 
 [JC_162]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 46
 begin = 16
 end = 28
 
 [JC_163]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 48
 begin = 11
 end = 16
 
 [JC_164]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 128
 begin = 9
 end = 16
 
 [JC_165]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 48
 begin = 11
 end = 16
 
 [JC_166]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 48
 begin = 11
 end = 16
@@ -1658,19 +1658,19 @@ begin = 11
 end = 20
 
 [JC_167]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 52
 begin = 17
 end = 23
 
 [JC_168]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
 
 [JC_169]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1678,7 +1678,7 @@ end = -1
 [cons_NoCreditException_ensures_default]
 name = "Constructor of class NoCreditException"
 behavior = "Default behavior"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 35
 begin = 11
 end = 28
@@ -1692,49 +1692,49 @@ begin = 11
 end = 20
 
 [JC_170]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 52
 begin = 17
 end = 23
 
 [JC_171]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
 
 [JC_172]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_173]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 54
 begin = 16
 end = 44
 
 [JC_174]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
 
 [JC_175]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 137
 begin = 9
 end = 16
 
 [JC_176]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 54
 begin = 16
 end = 44
 
 [JC_177]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
@@ -1748,19 +1748,19 @@ begin = 11
 end = 20
 
 [JC_178]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 137
 begin = 9
 end = 16
 
 [JC_179]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
 
 [JC_10]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 50
 begin = 11
 end = 65
@@ -1772,7 +1772,7 @@ begin = 11
 end = 20
 
 [JC_12]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1784,25 +1784,25 @@ begin = 11
 end = 20
 
 [JC_14]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_15]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_16]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_17]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1810,25 +1810,25 @@ end = -1
 [Purse_credit_safety]
 name = "Method credit"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
 
 [JC_180]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
 
 [JC_18]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_181]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 60
 begin = 17
 end = 23
@@ -1840,7 +1840,7 @@ begin = 11
 end = 20
 
 [JC_182]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
@@ -1854,37 +1854,37 @@ begin = 11
 end = 20
 
 [JC_183]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_184]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 60
 begin = 17
 end = 23
 
 [JC_185]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [JC_186]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_187]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 16
 end = 34
 
 [JC_188]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 38
 end = 66
@@ -1892,13 +1892,13 @@ end = 66
 [Purse_getBalance_safety]
 name = "Method getBalance"
 behavior = "Safety"
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 75
 begin = 15
 end = 25
 
 [JC_189]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 16
 end = 66
@@ -1912,7 +1912,7 @@ begin = 11
 end = 20
 
 [JC_20]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -1924,61 +1924,61 @@ begin = 11
 end = 20
 
 [JC_22]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_200]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [JC_23]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_201]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 151
 begin = 10
 end = 18
 
 [JC_24]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_202]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 65
 begin = 38
 end = 55
 
 [JC_25]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_203]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [JC_26]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_204]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 151
 begin = 10
 end = 18
@@ -1999,32 +1999,32 @@ end = 20
 
 [JC_205]
 kind = AllocSize
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 158
 begin = 40
 end = 64
 
 [JC_190]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [JC_28]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_206]
 kind = IndexBounds
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 158
 begin = 7
 end = 65
 
 [JC_191]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 145
 begin = 9
 end = 16
@@ -2037,120 +2037,120 @@ end = 20
 
 [JC_207]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 161
 begin = 24
 end = 52
 
 [JC_192]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 16
 end = 34
 
 [JC_208]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 161
 begin = 24
 end = 52
 
 [JC_193]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 38
 end = 66
 
 [JC_209]
 kind = AllocSize
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 158
 begin = 40
 end = 64
 
 [JC_194]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 16
 end = 66
 
 [JC_195]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [JC_196]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 145
 begin = 9
 end = 16
 
 [JC_197]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [JC_198]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 67
 begin = 16
 end = 24
 
 [JC_199]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 65
 begin = 38
 end = 55
 
 [JC_30]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_31]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_32]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_210]
 kind = AllocSize
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 158
 begin = 40
 end = 64
 
 [JC_33]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_211]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 161
 begin = 24
 end = 52
 
 [JC_34]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_212]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 161
 begin = 24
 end = 52
@@ -2163,20 +2163,20 @@ end = 20
 
 [JC_213]
 kind = AllocSize
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 158
 begin = 40
 end = 64
 
 [JC_36]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_214]
 kind = AllocSize
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 158
 begin = 40
 end = 64
@@ -2197,50 +2197,50 @@ end = 20
 
 [JC_215]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 161
 begin = 24
 end = 52
 
 [JC_38]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_216]
 kind = UserCall
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc"
+file = "HOME/tests/java/Purse.jc"
 line = 161
 begin = 24
 end = 52
 
 [JC_39]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_217]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 75
 begin = 15
 end = 25
 
 [JC_218]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_219]
-file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java"
+file = "HOME/tests/java/Purse.java"
 line = 75
 begin = 15
 end = 25
 
 [JC_100]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -2252,7 +2252,7 @@ begin = 41
 end = 57
 
 [JC_102]
-file = "/home/cmarche/local/ppc/trunk/why/"
+file = "HOME/"
 line = 0
 begin = -1
 end = -1
@@ -3854,11 +3854,11 @@ why --project [...] why/Purse.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Purse_po10.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "67" begin = "16" end = "24"/>
+      <location file = "HOME/tests/java/Purse.java" line = "67" begin = "16" end = "24"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po11.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc" line = "158" begin = "40" end = "64"/>
+      <location file = "HOME/tests/java/Purse.jc" line = "158" begin = "40" end = "64"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
@@ -3869,25 +3869,25 @@ text = "AllocSize"/>
     </behavior>
     <behavior name="Exceptional behavior `amount_too_large'">
     <goal why_file="why/Purse_po8.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "65" begin = "38" end = "55"/>
+      <location file = "HOME/tests/java/Purse.java" line = "65" begin = "38" end = "55"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po9.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "67" begin = "16" end = "24"/>
+      <location file = "HOME/tests/java/Purse.java" line = "67" begin = "16" end = "24"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/Purse_po5.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "62" begin = "16" end = "34"/>
+      <location file = "HOME/tests/java/Purse.java" line = "62" begin = "16" end = "34"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po6.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "62" begin = "38" end = "66"/>
+      <location file = "HOME/tests/java/Purse.java" line = "62" begin = "38" end = "66"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po7.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "67" begin = "16" end = "24"/>
+      <location file = "HOME/tests/java/Purse.java" line = "67" begin = "16" end = "24"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -3896,7 +3896,7 @@ text = "AllocSize"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
     <goal why_file="why/Purse_po4.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "74" begin = "16" end = "34"/>
+      <location file = "HOME/tests/java/Purse.java" line = "74" begin = "16" end = "34"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -3905,17 +3905,17 @@ text = "AllocSize"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Purse_po3.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "56" begin = "16" end = "22"/>
+      <location file = "HOME/tests/java/Purse.java" line = "56" begin = "16" end = "22"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/Purse_po1.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "54" begin = "16" end = "44"/>
+      <location file = "HOME/tests/java/Purse.java" line = "54" begin = "16" end = "44"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po2.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "56" begin = "16" end = "22"/>
+      <location file = "HOME/tests/java/Purse.java" line = "56" begin = "16" end = "22"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -3927,17 +3927,17 @@ text = "AllocSize"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Purse_po15.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "48" begin = "11" end = "16"/>
+      <location file = "HOME/tests/java/Purse.java" line = "48" begin = "11" end = "16"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/Purse_po13.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "46" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/Purse.java" line = "46" begin = "16" end = "28"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po14.why">
-      <location file = "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java" line = "48" begin = "11" end = "16"/>
+      <location file = "HOME/tests/java/Purse.java" line = "48" begin = "11" end = "16"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -6424,7 +6424,7 @@ why -simplify [...] why/Purse.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Purse_credit_ensures_default_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 54, characters 16-44
+;; Purse_credit_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 54, characters 16-44
 (FORALL (this_6)
 (FORALL (s_0)
 (FORALL (Object_alloc_table)
@@ -6438,7 +6438,7 @@ why -simplify [...] why/Purse.why
          (|why__store| Purse_balance this_6 (+ result s_0)))
 (EQ (select Purse_balance0 this_6) (+ (select Purse_balance this_6) s_0)))))))))))
 
-;; Purse_credit_ensures_default_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 56, characters 16-22
+;; Purse_credit_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 56, characters 16-22
 (FORALL (this_6)
 (FORALL (s_0)
 (FORALL (Object_alloc_table)
@@ -6453,7 +6453,7 @@ why -simplify [...] why/Purse.why
 (not_assigns
 Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6)))))))))))
 
-;; Purse_credit_safety_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 56, characters 16-22
+;; Purse_credit_safety_po_1, File "HOME/tests/java/Purse.java", line 56, characters 16-22
 (FORALL (this_6)
 (FORALL (s_0)
 (FORALL (Object_alloc_table)
@@ -6467,7 +6467,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
          (|why__store| Purse_balance this_6 (+ result s_0)))
 (balance_non_negative this_6 Purse_balance0))))))))))
 
-;; Purse_getBalance_ensures_default_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 74, characters 16-34
+;; Purse_getBalance_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 74, characters 16-34
 (FORALL (this_4)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
@@ -6478,7 +6478,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
 (FORALL (return)
 (IMPLIES (EQ return result) (EQ return (select Purse_balance this_4))))))))))
 
-;; Purse_withdraw_ensures_default_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 62, characters 16-34
+;; Purse_withdraw_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 62, characters 16-34
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6495,7 +6495,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
          (|why__store| Purse_balance this_5 (- result0 s_1)))
 (<= s_1 (select Purse_balance this_5))))))))))))))
 
-;; Purse_withdraw_ensures_default_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 62, characters 38-66
+;; Purse_withdraw_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 62, characters 38-66
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6512,7 +6512,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
          (|why__store| Purse_balance this_5 (- result0 s_1)))
 (EQ (select Purse_balance0 this_5) (- (select Purse_balance this_5) s_1))))))))))))))
 
-;; Purse_withdraw_ensures_default_po_3, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 67, characters 16-24
+;; Purse_withdraw_ensures_default_po_3, File "HOME/tests/java/Purse.java", line 67, characters 16-24
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6530,7 +6530,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
 (not_assigns
 Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))))))
 
-;; Purse_withdraw_exsures_amount_too_large_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 65, characters 38-55
+;; Purse_withdraw_exsures_amount_too_large_po_1, File "HOME/tests/java/Purse.java", line 65, characters 38-55
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6552,7 +6552,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
          (instanceof Object_tag_table result0 NoCreditException_tag))))
 (> s_1 (select Purse_balance this_5))))))))))))))
 
-;; Purse_withdraw_exsures_amount_too_large_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 67, characters 16-24
+;; Purse_withdraw_exsures_amount_too_large_po_2, File "HOME/tests/java/Purse.java", line 67, characters 16-24
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6574,7 +6574,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
          (instanceof Object_tag_table result0 NoCreditException_tag))))
 (balance_non_negative this_5 Purse_balance)))))))))))))
 
-;; Purse_withdraw_safety_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 67, characters 16-24
+;; Purse_withdraw_safety_po_1, File "HOME/tests/java/Purse.java", line 67, characters 16-24
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6591,7 +6591,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
          (|why__store| Purse_balance this_5 (- result0 s_1)))
 (balance_non_negative this_5 Purse_balance0)))))))))))))
 
-;; Purse_withdraw_safety_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.jc", line 158, characters 40-64
+;; Purse_withdraw_safety_po_2, File "HOME/tests/java/Purse.jc", line 158, characters 40-64
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6625,7 +6625,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
          (instanceof Object_tag_table result0 NoCreditException_tag))))
 (>= (offset_max Object_alloc_table0 result0) 0))))))))))))))
 
-;; cons_Purse_ensures_default_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 46, characters 16-28
+;; cons_Purse_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 46, characters 16-28
 (FORALL (this_7)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
@@ -6636,7 +6636,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (EQ Purse_balance1 (|why__store| Purse_balance0 this_7 0))
 (EQ (select Purse_balance1 this_7) 0)))))))))
 
-;; cons_Purse_ensures_default_po_2, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 48, characters 11-16
+;; cons_Purse_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 48, characters 11-16
 (FORALL (this_7)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
@@ -6648,7 +6648,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (not_assigns
 Object_alloc_table Purse_balance Purse_balance1 (pset_singleton this_7))))))))))
 
-;; cons_Purse_safety_po_1, File "/home/cmarche/local/ppc/trunk/why/tests/java/Purse.java", line 48, characters 11-16
+;; cons_Purse_safety_po_1, File "HOME/tests/java/Purse.java", line 48, characters 11-16
 (FORALL (this_7)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
