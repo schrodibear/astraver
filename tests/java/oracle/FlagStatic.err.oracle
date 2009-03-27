@@ -1,0 +1,8 @@
+sh: line 1: 30576 CPU time limit exceeded /home/cmarche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergodfd83f.why > /tmp/out6c63a9 2>&1
+sh: line 1: 30612 CPU time limit exceeded /home/cmarche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergoad4ef2.why > /tmp/out7e7a54 2>&1
+sh: line 1: 30708 CPU time limit exceeded /home/cmarche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo5ef576.why > /tmp/out4a599e 2>&1
+sh: line 1: 30715 CPU time limit exceeded /home/cmarche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo78545e.why > /tmp/outa48c32 2>&1
+sh: line 1: 30733 CPU time limit exceeded /home/cmarche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo8314d2.why > /tmp/out335915 2>&1
+sh: line 1: 30745 CPU time limit exceeded /home/cmarche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo5da7da.why > /tmp/out94e715 2>&1
+sh: line 1: 30750 CPU time limit exceeded /home/cmarche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo1096f9.why > /tmp/out05a746 2>&1
+sh: line 1: 30838 CPU time limit exceeded /home/cmarche/local/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergoc48732.why > /tmp/out188a8b 2>&1
