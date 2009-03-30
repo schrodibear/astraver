@@ -2001,24 +2001,6 @@ axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
 
 axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
 
-logic add_int : int, int -> int
-
-logic sub_int : int, int -> int
-
-logic mul_int : int, int -> int
-
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
-
-logic neg_int : int -> int
-
-logic abs_int : int -> int
-
-axiom abs_int_pos: (forall x:int. ((x >= 0) -> (abs_int(x) = x)))
-
-axiom abs_int_neg: (forall x:int. ((x <= 0) -> (abs_int(x) = (-x))))
-
 logic lt_int : int, int -> prop
 
 logic le_int : int, int -> prop
@@ -2060,6 +2042,69 @@ axiom eq_int_bool_axiom:
 
 axiom neq_int_bool_axiom:
   (forall x:int. (forall y:int. ((neq_int_bool(x, y) = true) <-> (x <> y))))
+
+logic add_int : int, int -> int
+
+logic sub_int : int, int -> int
+
+logic mul_int : int, int -> int
+
+logic div_int : int, int -> int
+
+logic mod_int : int, int -> int
+
+logic neg_int : int -> int
+
+logic abs_int : int -> int
+
+axiom abs_int_pos: (forall x:int. ((x >= 0) -> (abs_int(x) = x)))
+
+axiom abs_int_neg: (forall x:int. ((x <= 0) -> (abs_int(x) = (-x))))
+
+logic lt_real : real, real -> prop
+
+logic le_real : real, real -> prop
+
+logic gt_real : real, real -> prop
+
+logic ge_real : real, real -> prop
+
+logic eq_real : real, real -> prop
+
+logic neq_real : real, real -> prop
+
+logic lt_real_bool : real, real -> bool
+
+logic le_real_bool : real, real -> bool
+
+logic gt_real_bool : real, real -> bool
+
+logic ge_real_bool : real, real -> bool
+
+logic eq_real_bool : real, real -> bool
+
+logic neq_real_bool : real, real -> bool
+
+axiom lt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((lt_real_bool(x, y) = true) <-> (x < y))))
+
+axiom le_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((le_real_bool(x, y) = true) <-> (x <= y))))
+
+axiom gt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((gt_real_bool(x, y) = true) <-> (x > y))))
+
+axiom ge_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((ge_real_bool(x, y) = true) <-> (x >= y))))
+
+axiom eq_real_bool_axiom:
+  (forall x:real. (forall y:real. ((eq_real_bool(x, y) = true) <-> (x = y))))
+
+axiom neq_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
 
 logic add_real : real, real -> real
 
@@ -2115,51 +2160,6 @@ logic hypot : real, real -> real
 logic real_of_int : int -> real
 
 logic int_of_real : real -> int
-
-logic lt_real : real, real -> prop
-
-logic le_real : real, real -> prop
-
-logic gt_real : real, real -> prop
-
-logic ge_real : real, real -> prop
-
-logic eq_real : real, real -> prop
-
-logic neq_real : real, real -> prop
-
-logic lt_real_bool : real, real -> bool
-
-logic le_real_bool : real, real -> bool
-
-logic gt_real_bool : real, real -> bool
-
-logic ge_real_bool : real, real -> bool
-
-logic eq_real_bool : real, real -> bool
-
-logic neq_real_bool : real, real -> bool
-
-axiom lt_real_bool_axiom:
-  (forall x:real. (forall y:real. ((lt_real_bool(x, y) = true) <-> (x < y))))
-
-axiom le_real_bool_axiom:
-  (forall x:real.
-    (forall y:real. ((le_real_bool(x, y) = true) <-> (x <= y))))
-
-axiom gt_real_bool_axiom:
-  (forall x:real. (forall y:real. ((gt_real_bool(x, y) = true) <-> (x > y))))
-
-axiom ge_real_bool_axiom:
-  (forall x:real.
-    (forall y:real. ((ge_real_bool(x, y) = true) <-> (x >= y))))
-
-axiom eq_real_bool_axiom:
-  (forall x:real. (forall y:real. ((eq_real_bool(x, y) = true) <-> (x = y))))
-
-axiom neq_real_bool_axiom:
-  (forall x:real.
-    (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
 
 logic int_max : int, int -> int
 
@@ -3812,14 +3812,6 @@ why -simplify [...] why/AllZeros.why
  (FORALL (x y) (EQ (ite |@false| x y) y)))
 
 (BG_PUSH
- ;; Why axiom abs_int_pos
- (FORALL (x) (IMPLIES (>= x 0) (EQ (abs_int x) x))))
-
-(BG_PUSH
- ;; Why axiom abs_int_neg
- (FORALL (x) (IMPLIES (<= x 0) (EQ (abs_int x) (- 0 x)))))
-
-(BG_PUSH
  ;; Why axiom lt_int_bool_axiom
  (FORALL (x y) (IFF (EQ (lt_int_bool x y) |@true|) (< x y))))
 
@@ -3844,19 +3836,12 @@ why -simplify [...] why/AllZeros.why
  (FORALL (x y) (IFF (EQ (neq_int_bool x y) |@true|) (NEQ x y))))
 
 (BG_PUSH
- ;; Why axiom abs_real_pos
- (FORALL (x)
- (IMPLIES (EQ (ge_real x (real_of_int 0)) |@true|) (EQ (real_abs x) x))))
+ ;; Why axiom abs_int_pos
+ (FORALL (x) (IMPLIES (>= x 0) (EQ (abs_int x) x))))
 
 (BG_PUSH
- ;; Why axiom abs_real_neg
- (FORALL (x)
- (IMPLIES (EQ (le_real x (real_of_int 0)) |@true|)
- (EQ (real_abs x) (real_neg x)))))
-
-(BG_PUSH
- ;; Why axiom log_exp
- (FORALL (x) (EQ (log (exp x)) x)))
+ ;; Why axiom abs_int_neg
+ (FORALL (x) (IMPLIES (<= x 0) (EQ (abs_int x) (- 0 x)))))
 
 (BG_PUSH
  ;; Why axiom lt_real_bool_axiom
@@ -3885,6 +3870,21 @@ why -simplify [...] why/AllZeros.why
 (BG_PUSH
  ;; Why axiom neq_real_bool_axiom
  (FORALL (x y) (IFF (EQ (neq_real_bool x y) |@true|) (NEQ x y))))
+
+(BG_PUSH
+ ;; Why axiom abs_real_pos
+ (FORALL (x)
+ (IMPLIES (EQ (ge_real x (real_of_int 0)) |@true|) (EQ (real_abs x) x))))
+
+(BG_PUSH
+ ;; Why axiom abs_real_neg
+ (FORALL (x)
+ (IMPLIES (EQ (le_real x (real_of_int 0)) |@true|)
+ (EQ (real_abs x) (real_neg x)))))
+
+(BG_PUSH
+ ;; Why axiom log_exp
+ (FORALL (x) (EQ (log (exp x)) x)))
 
 (BG_PUSH
  ;; Why axiom int_max_is_ge
@@ -5298,24 +5298,6 @@ axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
 
 axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
 
-logic add_int : int, int -> int
-
-logic sub_int : int, int -> int
-
-logic mul_int : int, int -> int
-
-logic div_int : int, int -> int
-
-logic mod_int : int, int -> int
-
-logic neg_int : int -> int
-
-logic abs_int : int -> int
-
-axiom abs_int_pos: (forall x:int. ((x >= 0) -> (abs_int(x) = x)))
-
-axiom abs_int_neg: (forall x:int. ((x <= 0) -> (abs_int(x) = (-x))))
-
 logic lt_int : int, int -> prop
 
 logic le_int : int, int -> prop
@@ -5357,6 +5339,69 @@ axiom eq_int_bool_axiom:
 
 axiom neq_int_bool_axiom:
   (forall x:int. (forall y:int. ((neq_int_bool(x, y) = true) <-> (x <> y))))
+
+logic add_int : int, int -> int
+
+logic sub_int : int, int -> int
+
+logic mul_int : int, int -> int
+
+logic div_int : int, int -> int
+
+logic mod_int : int, int -> int
+
+logic neg_int : int -> int
+
+logic abs_int : int -> int
+
+axiom abs_int_pos: (forall x:int. ((x >= 0) -> (abs_int(x) = x)))
+
+axiom abs_int_neg: (forall x:int. ((x <= 0) -> (abs_int(x) = (-x))))
+
+logic lt_real : real, real -> prop
+
+logic le_real : real, real -> prop
+
+logic gt_real : real, real -> prop
+
+logic ge_real : real, real -> prop
+
+logic eq_real : real, real -> prop
+
+logic neq_real : real, real -> prop
+
+logic lt_real_bool : real, real -> bool
+
+logic le_real_bool : real, real -> bool
+
+logic gt_real_bool : real, real -> bool
+
+logic ge_real_bool : real, real -> bool
+
+logic eq_real_bool : real, real -> bool
+
+logic neq_real_bool : real, real -> bool
+
+axiom lt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((lt_real_bool(x, y) = true) <-> (x < y))))
+
+axiom le_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((le_real_bool(x, y) = true) <-> (x <= y))))
+
+axiom gt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((gt_real_bool(x, y) = true) <-> (x > y))))
+
+axiom ge_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((ge_real_bool(x, y) = true) <-> (x >= y))))
+
+axiom eq_real_bool_axiom:
+  (forall x:real. (forall y:real. ((eq_real_bool(x, y) = true) <-> (x = y))))
+
+axiom neq_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
 
 logic add_real : real, real -> real
 
@@ -5412,51 +5457,6 @@ logic hypot : real, real -> real
 logic real_of_int : int -> real
 
 logic int_of_real : real -> int
-
-logic lt_real : real, real -> prop
-
-logic le_real : real, real -> prop
-
-logic gt_real : real, real -> prop
-
-logic ge_real : real, real -> prop
-
-logic eq_real : real, real -> prop
-
-logic neq_real : real, real -> prop
-
-logic lt_real_bool : real, real -> bool
-
-logic le_real_bool : real, real -> bool
-
-logic gt_real_bool : real, real -> bool
-
-logic ge_real_bool : real, real -> bool
-
-logic eq_real_bool : real, real -> bool
-
-logic neq_real_bool : real, real -> bool
-
-axiom lt_real_bool_axiom:
-  (forall x:real. (forall y:real. ((lt_real_bool(x, y) = true) <-> (x < y))))
-
-axiom le_real_bool_axiom:
-  (forall x:real.
-    (forall y:real. ((le_real_bool(x, y) = true) <-> (x <= y))))
-
-axiom gt_real_bool_axiom:
-  (forall x:real. (forall y:real. ((gt_real_bool(x, y) = true) <-> (x > y))))
-
-axiom ge_real_bool_axiom:
-  (forall x:real.
-    (forall y:real. ((ge_real_bool(x, y) = true) <-> (x >= y))))
-
-axiom eq_real_bool_axiom:
-  (forall x:real. (forall y:real. ((eq_real_bool(x, y) = true) <-> (x = y))))
-
-axiom neq_real_bool_axiom:
-  (forall x:real.
-    (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
 
 logic int_max : int, int -> int
 
