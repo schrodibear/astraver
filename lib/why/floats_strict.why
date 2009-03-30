@@ -25,12 +25,12 @@ logic exact_value : gen_float -> real
 logic model_value : gen_float -> real
 
 logic max_gen_float : float_format -> real
-(*
-axiom max_single : max_gen_float(Single) = (* (2 - 2^-23)*2^127 *)
-                                           340282346638528859811704183484516925440.0
 
-axiom max_double : max_gen_float(Double) = 111111.0 (* (2 - 2^-52)*2^1023 *)
-*)
+axiom max_single : max_gen_float(Single) = 0x1.FFFFFEp127
+ (* (2 - 2^-23)*2^127 *)
+
+axiom max_double : max_gen_float(Double) = 0x1.FFFFFFFFFFFFFp1023 
+ (* (2 - 2^-52)*2^1023 *)
 
 
 predicate no_overflow(f:float_format, m:mode, x:real)= abs_real(round_float(f,m,x)) <= max_gen_float(f)

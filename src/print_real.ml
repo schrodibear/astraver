@@ -77,3 +77,8 @@ let print fmt = function
   | RConstHexa (i, f, e) -> 
       fprintf fmt "0x%s.%sp%s" i f e
 
+(*
+Local Variables: 
+compile-command: "unset LANG; nice make -j -C .. bin/why.byte"
+End: 
+*)

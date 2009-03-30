@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.58 2009-03-26 11:34:16 marche Exp $ i*)
+(*i $Id: smtlib.ml,v 1.59 2009-03-30 15:23:09 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -127,11 +127,13 @@ let rec print_term fmt = function
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
   | Tconst (ConstFloat c) ->
-      Print_real.print_with_integers
+      Print_real.print_no_exponent fmt c
+(*
 	"(real_of_int %s)"
 	"(real_of_int (* %s %s))"
 	"(div_real (real_of_int %s) (real_of_int %s))" 
 	fmt c
+*)
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 
@@ -375,3 +377,10 @@ let output_file f =
   fprintf fmt "@\n)@\n";
   pp_print_flush fmt ();
   close_out cout
+
+
+(*
+Local Variables: 
+compile-command: "unset LANG; nice make -j -C .. bin/why.byte"
+End: 
+*)

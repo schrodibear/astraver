@@ -1,0 +1,18 @@
+
+goal l0 : 1 + 1 = 2
+
+goal l1: 1.5 + 1.5 = 3.0
+
+goal l2: 1.5 * 1.5 = 2.25
+
+
+goal max_single: 0x1.FFFFFEp127 = 340282346638528859811704183484516925440.0
+
+(* (2 - 2^-52)*2^1023 *)
+goal max_double: 0x1.FFFFFFFFFFFFFp1023 = (2.0 - 0x1p-52) * 0x1p1023
+
+(*
+Local Variables: 
+compile-command: "../../bin/gwhy.byte real_consts.why"
+End: 
+*)
