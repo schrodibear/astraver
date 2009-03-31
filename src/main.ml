@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.167 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.168 2009-03-31 12:46:11 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -426,9 +426,25 @@ let rec check_clausal_form loc id a =
 	check_clausal_form loc id p
     | _ -> check_unquantified_clausal_form loc id a
 
-let interp_decl ?(_prelude=false) d = 
+let loaded_files = Hashtbl.create 17
+
+let rec interp_decl ?(_prelude=false) d = 
   let lab = Label.empty in
   match d with 
+    | Include (loc,s) ->
+	let file =
+	  if Sys.file_exists s then s else lib_file s
+	in
+	begin
+	  try
+	    if Hashtbl.find loaded_files file then ()
+	    else raise_located loc 
+	      (AnyMessage "circular inclusion")
+	  with Not_found ->
+	    Hashtbl.add loaded_files file false;
+	    load_file file;
+	    Hashtbl.add loaded_files file true;	    
+	  end
     | Program (loc,id, p) ->
 	if Env.is_global id then raise_located p.ploc (Clash id);
 	(try interp_program loc id p with Exit -> ())
@@ -580,7 +596,7 @@ let interp_decl ?(_prelude=false) d =
 	    
 (*s Prelude *)
 
-let load_file ?(_prelude=false) f =
+and load_file ?(_prelude=false) f =
   let c = open_in f in
   let p = Lexer.parse_file (Lexing.from_channel c) in
   List.iter (interp_decl ~_prelude) p;

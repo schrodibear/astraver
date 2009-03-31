@@ -418,6 +418,8 @@ let logic_type fmt = function
       fprintf fmt "%a -> %a" (print_list comma ppure_type) ptl ppure_type pt
 
 let decl fmt = function
+  | Include (_,s) ->
+      fprintf fmt "@[<hov 2>include@ \"%S\"@]" s
   | Program (_,id, p) -> 
       rename_global id;
       fprintf fmt "@[<hov 2>let %a =@ %a@]" gident id (program M.empty) p

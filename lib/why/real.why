@@ -1,0 +1,81 @@
+(* boolean versions of the comparisons and the corresponding axioms *)
+logic lt_real_bool : real,real -> bool
+logic le_real_bool : real,real -> bool
+logic gt_real_bool : real,real -> bool
+logic ge_real_bool : real,real -> bool
+logic eq_real_bool : real,real -> bool
+logic neq_real_bool : real,real -> bool
+
+axiom lt_real_bool_axiom : 
+  forall x:real. forall y:real. lt_real_bool(x,y)=true <-> x<y
+axiom le_real_bool_axiom : 
+  forall x:real. forall y:real. le_real_bool(x,y)=true <-> x<=y
+axiom gt_real_bool_axiom : 
+  forall x:real. forall y:real. gt_real_bool(x,y)=true <-> x>y
+axiom ge_real_bool_axiom : 
+  forall x:real. forall y:real. ge_real_bool(x,y)=true <-> x>=y
+axiom eq_real_bool_axiom : 
+  forall x:real. forall y:real. eq_real_bool(x,y)=true <-> x=y
+axiom neq_real_bool_axiom : 
+  forall x:real. forall y:real. neq_real_bool(x,y)=true <-> x<>y
+
+
+(* min and max *)
+
+logic real_max : real, real -> real
+logic real_min : real, real -> real
+
+axiom real_max_is_ge :  
+  forall x:real. forall y:real. 
+  real_max(x,y) >= x and real_max(x,y) >= y
+
+axiom real_max_is_some :  
+  forall x:real. forall y:real. 
+  (real_max(x,y) = x or real_max(x,y) = y) 
+
+axiom real_min_is_le :  
+  forall x:real. forall y:real. 
+  real_min(x,y) <= x and real_min(x,y) <= y
+
+axiom real_min_is_some :  
+  forall x:real. forall y:real. 
+  (real_min(x,y) = x or real_min(x,y) = y) 
+
+
+logic sqrt_real : real -> real
+
+parameter sqrt_real_ : 
+	  x:real -> { x >= 0.0 } real { result = sqrt_real(x) }
+
+logic pow_real : real,real -> real 
+logic abs_real : real -> real
+
+axiom abs_real_pos: forall x:real. x >= 0.0 -> abs_real(x) = x
+axiom abs_real_neg: forall x:real. x <= 0.0 -> abs_real(x) = -x
+
+(* exp and log *)
+
+logic exp : real -> real
+logic log : real -> real
+logic log10 : real -> real
+
+axiom log_exp: forall x:real. log(exp(x)) = x
+
+
+(* trigonometric functions *)
+
+logic cos : real -> real
+logic sin : real -> real
+logic tan : real -> real
+logic cosh : real -> real
+logic sinh : real -> real
+logic tanh : real -> real
+logic acos : real -> real
+logic asin : real -> real
+logic atan : real -> real
+logic atan2 : real, real -> real
+logic hypot : real, real -> real
+
+
+parameter any_real : unit -> {} real { true }
+

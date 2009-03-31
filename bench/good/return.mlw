@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 exception Return of int
 
 logic N : int

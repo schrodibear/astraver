@@ -1,4 +1,6 @@
 
+include "real.why"
+
 (* prelude for floating-point arithmetic *)
 
 type mode

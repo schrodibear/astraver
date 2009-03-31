@@ -3,7 +3,7 @@
 
 Require Export abs_spec_why.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/abs.c", line 5, characters 6-8: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/abs.c", line 5, characters 6-8: *)
 (*Why goal*) Lemma abs1_impl_po_1 : 
   forall (p: (pointer global)),
   forall (alloc: alloc_table),
@@ -12,7 +12,7 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/abs.c", line 3, characters 12-19: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/abs.c", line 3, characters 12-19: *)
 (*Why goal*) Lemma abs1_impl_po_2 : 
   forall (p: (pointer global)),
   forall (alloc: alloc_table),
@@ -33,7 +33,7 @@ intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/abs.c", line 3, characters 12-19: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/abs.c", line 3, characters 12-19: *)
 (*Why goal*) Lemma abs1_impl_po_3 : 
   forall (p: (pointer global)),
   forall (alloc: alloc_table),
@@ -48,7 +48,7 @@ intuition.
 Save.
 
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/abs.c", line 9, characters 12-19: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/abs.c", line 9, characters 12-19: *)
 (*Why goal*) Lemma abs2_impl_po_1 : 
   forall (p: (pointer global)),
   forall (alloc: alloc_table),
@@ -71,7 +71,7 @@ subst intM_global0.
 caduceus.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/abs.c", line 9, characters 12-19: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/abs.c", line 9, characters 12-19: *)
 (*Why goal*) Lemma abs2_impl_po_2 : 
   forall (p: (pointer global)),
   forall (alloc: alloc_table),

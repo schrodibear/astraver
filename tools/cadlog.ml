@@ -63,8 +63,8 @@ let tool =
     "Caduceus"
 
 let version,date =
-  if !jessie then Jc_version.version, Jc_version.date else 
-  if !krakatoa then Java_version.version, Java_version.date else 
+  if !jessie || !krakatoa 
+  then Version.version, Version.date else 
     Cversion.version, Cversion.date
 
 let d,m,y =

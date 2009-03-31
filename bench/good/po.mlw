@@ -61,6 +61,8 @@ let p14 () = { x = 0 } (incrx2 void) { result = 1 }
 
 (* arrays *)
 
+include "arrays.why"
+
 parameter t : int array
 
 let p15 () = { array_length(t) = 10 } t[0] 

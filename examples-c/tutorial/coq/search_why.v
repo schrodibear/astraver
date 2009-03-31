@@ -3,7 +3,7 @@
 
 Require Export search_spec_why.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/search.c", line 8, characters 16-64: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/search.c", line 8, characters 16-64: *)
 (*Why goal*) Lemma index_impl_po_1 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -17,7 +17,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/search.c", line 11, characters 8-12: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/search.c", line 11, characters 8-12: *)
 (*Why goal*) Lemma index_impl_po_2 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -37,7 +37,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/search.c", line 3, characters 4-105: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/search.c", line 3, characters 4-105: *)
 (*Why goal*) Lemma index_impl_po_3 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -65,7 +65,7 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/search.c", line 8, characters 16-64: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/search.c", line 8, characters 16-64: *)
 (*Why goal*) Lemma index_impl_po_4 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -97,7 +97,7 @@ apply (H0 k); auto.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", line 19, characters 20-33: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/search.c", line 9, characters 14-19: *)
 (*Why goal*) Lemma index_impl_po_5 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -118,12 +118,12 @@ Save.
   forall (HW_8: result0 <> v),
   forall (i0: Z),
   forall (HW_9: i0 = (i + 1)),
-  (Zwf 0 (n - i0) (n - i)).
+  (Zwf 0 ((* CADUCEUS_4 *) (n - i0)) ((* CADUCEUS_4 *) (n - i))).
 Proof.
 intuition.
 apply H0 with i0; auto with *.
 Save.
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/search.c", line 3, characters 4-105: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/search.c", line 3, characters 4-105: *)
 (*Why goal*) Lemma index_impl_po_6 : 
   forall (t: (pointer global)),
   forall (n: Z),

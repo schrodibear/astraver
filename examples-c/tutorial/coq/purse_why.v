@@ -4,7 +4,7 @@
 
 Require Export purse_spec_why.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 12, characters 15-25: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/purse.c", line 12, characters 15-25: *)
 (*Why goal*) Lemma credit0_impl_po_1 : 
   forall (p: (pointer global)),
   forall (s: Z),
@@ -17,7 +17,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 10, characters 12-62: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/purse.c", line 10, characters 12-62: *)
 (*Why goal*) Lemma credit0_impl_po_2 : 
   forall (p: (pointer global)),
   forall (s: Z),
@@ -37,7 +37,7 @@ Proof.
 unfold purse_inv; intuition; subst; caduceus.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 41, characters 15-25: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/purse.c", line 41, characters 15-25: *)
 (*Why goal*) Lemma credit_impl_po_1 : 
   forall (p: (pointer global)),
   forall (s: Z),
@@ -79,7 +79,7 @@ subst; intuition.
 apply (@pset_singleton_elim _ p0 p0); trivial.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 57, characters 4-15: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/purse.c", line 57, characters 4-15: *)
 (*Why goal*) Lemma test1_impl_po_1 : 
   forall (p1: (pointer global)),
   forall (p2: (pointer global)),
@@ -92,7 +92,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", line 39, characters 31-64: *)
+(* Why obligation from file "why/purse.why", line 39, characters 31-66: *)
 (*Why goal*) Lemma test1_impl_po_2 : 
   forall (p1: (pointer global)),
   forall (p2: (pointer global)),
@@ -111,7 +111,7 @@ subst.
 caduceus.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 55, characters 12-24: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/purse.c", line 55, characters 12-24: *)
 (*Why goal*) Lemma test1_impl_po_3 : 
   forall (p1: (pointer global)),
   forall (p2: (pointer global)),
@@ -142,7 +142,7 @@ rewrite H8; intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/purse.why", line 60, characters 36-69: *)
+(* Why obligation from file "why/purse.why", line 60, characters 36-71: *)
 (*Why goal*) Lemma test2_impl_po_1 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
@@ -166,7 +166,7 @@ intuition.
 apply alloc_extends_valid with alloc0;auto.
 Save.
 
-(* Why obligation from file "why/purse.why", line 61, characters 35-68: *)
+(* Why obligation from file "why/purse.why", line 61, characters 35-70: *)
 (*Why goal*) Lemma test2_impl_po_2 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
@@ -210,7 +210,7 @@ which contradicts H0.
 
 Save.
 
-(* Why obligation from file "why/purse.why", line 62, characters 35-69: *)
+(* Why obligation from file "why/purse.why", line 62, characters 35-71: *)
 (*Why goal*) Lemma test2_impl_po_3 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
@@ -262,7 +262,7 @@ generalize (fresh_not_valid _ _ _ H7);intuition.
 (* again we need p1 <> p2 *)
 Save.
 
-(* Why obligation from file "why/purse.why", line 63, characters 35-70: *)
+(* Why obligation from file "why/purse.why", line 63, characters 35-72: *)
 (*Why goal*) Lemma test2_impl_po_4 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
@@ -316,7 +316,7 @@ Proof.
 unfold purse_inv; intuition.
 Admitted.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 77, characters 11-22: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/purse.c", line 77, characters 11-22: *)
 (*Why goal*) Lemma test2_impl_po_5 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
@@ -380,7 +380,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 77, characters 25-36: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/purse.c", line 77, characters 25-36: *)
 (*Why goal*) Lemma test2_impl_po_6 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
@@ -447,7 +447,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", line 76, characters 4-73: *)
+(* Why obligation from file "why/purse.why", line 76, characters 4-75: *)
 (*Why goal*) Lemma test2_impl_po_7 : 
   forall (alloc0: alloc_table),
   forall (balance_global: (memory Z global)),
@@ -531,7 +531,7 @@ rewrite H12.
 rewrite H8;intuition.
 Admitted.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 19, characters 15-25: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/purse.c", line 19, characters 15-25: *)
 (*Why goal*) Lemma withdraw0_impl_po_1 : 
   forall (p: (pointer global)),
   forall (s: Z),
@@ -544,7 +544,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 17, characters 12-62: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/purse.c", line 17, characters 12-62: *)
 (*Why goal*) Lemma withdraw0_impl_po_2 : 
   forall (p: (pointer global)),
   forall (s: Z),
@@ -566,7 +566,7 @@ subst; caduceus.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/purse.c", line 49, characters 15-25: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/purse.c", line 49, characters 15-25: *)
 (*Why goal*) Lemma withdraw_impl_po_1 : 
   forall (p: (pointer global)),
   forall (s: Z),

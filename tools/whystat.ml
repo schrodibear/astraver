@@ -171,6 +171,7 @@ let decl = function
       let s = intros S.empty p in
       M.add s ; 
       compute_literal_number p;
+  | Include _
   | Program _
   | Parameter _
   | Exception _

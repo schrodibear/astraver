@@ -3,7 +3,7 @@
 
 Require Export swap_spec_why.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/swap.c", line 5, characters 12-16: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/swap.c", line 5, characters 12-16: *)
 (*Why goal*) Lemma swap_impl_po_1 : 
   forall (t: (pointer global)),
   forall (i: Z),
@@ -19,7 +19,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/swap.c", line 6, characters 9-13: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/swap.c", line 6, characters 9-13: *)
 (*Why goal*) Lemma swap_impl_po_2 : 
   forall (t: (pointer global)),
   forall (i: Z),
@@ -42,7 +42,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/swap.c", line 6, characters 2-6: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/swap.c", line 6, characters 2-6: *)
 (*Why goal*) Lemma swap_impl_po_3 : 
   forall (t: (pointer global)),
   forall (i: Z),
@@ -68,7 +68,7 @@ Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/swap.c", line 7, characters 2-6: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/swap.c", line 7, characters 2-6: *)
 (*Why goal*) Lemma swap_impl_po_4 : 
   forall (t: (pointer global)),
   forall (i: Z),
@@ -100,7 +100,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/swap.c", line 2, characters 12-52: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/swap.c", line 2, characters 12-52: *)
 (*Why goal*) Lemma swap_impl_po_5 : 
   forall (t: (pointer global)),
   forall (i: Z),

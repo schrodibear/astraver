@@ -1,4 +1,8 @@
 
+  o [Why] deprecated options -no-prelude, -no-arrays, -fp
+  o [Why] new declaration [include "file"] in Why input language
+  o [Why] prelude is split into smaller files: bool.why integer.why 
+    real.why
   o [Jessie] added several builtin functions on reals: 
     \exp, \log, \cos, \sin, etc. 
   o [Why] added several functions on reals in prelude: 

@@ -2,6 +2,257 @@
    It can be modified; only the generated parts will be overwritten. *)
 Require Export Why.
 
+(*Why logic*) Definition bool_and : bool -> bool -> bool.
+Admitted.
+
+(*Why logic*) Definition bool_or : bool -> bool -> bool.
+Admitted.
+
+(*Why logic*) Definition bool_xor : bool -> bool -> bool.
+Admitted.
+
+(*Why logic*) Definition bool_not : bool -> bool.
+Admitted.
+
+(*Why axiom*) Lemma bool_and_def :
+  (forall (a:bool),
+   (forall (b:bool), ((bool_and a b) = true <-> a = true /\ b = true))).
+Admitted.
+
+(*Why axiom*) Lemma bool_or_def :
+  (forall (a:bool),
+   (forall (b:bool), ((bool_or a b) = true <-> a = true \/ b = true))).
+Admitted.
+
+(*Why axiom*) Lemma bool_xor_def :
+  (forall (a:bool), (forall (b:bool), ((bool_xor a b) = true <-> ~(a = b)))).
+Admitted.
+
+(*Why axiom*) Lemma bool_not_def :
+  (forall (a:bool), ((bool_not a) = true <-> a = false)).
+Admitted.
+
+(*Why logic*) Definition ite : forall (A1:Set), bool -> A1 -> A1 -> A1.
+Admitted.
+Implicit Arguments ite.
+
+(*Why axiom*) Lemma ite_true :
+  forall (A1:Set),
+  (forall (x:A1), (forall (y:A1), (if_then_else true x y) = x)).
+Admitted.
+
+(*Why axiom*) Lemma ite_false :
+  forall (A1:Set),
+  (forall (x:A1), (forall (y:A1), (if_then_else false x y) = y)).
+Admitted.
+
+(*Why logic*) Definition lt_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition le_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition gt_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition ge_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition eq_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why logic*) Definition neq_int_bool : Z -> Z -> bool.
+Admitted.
+
+(*Why axiom*) Lemma lt_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((lt_int_bool x y) = true <-> x < y))).
+Admitted.
+
+(*Why axiom*) Lemma le_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((le_int_bool x y) = true <-> x <= y))).
+Admitted.
+
+(*Why axiom*) Lemma gt_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((gt_int_bool x y) = true <-> x > y))).
+Admitted.
+
+(*Why axiom*) Lemma ge_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((ge_int_bool x y) = true <-> x >= y))).
+Admitted.
+
+(*Why axiom*) Lemma eq_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((eq_int_bool x y) = true <-> x = y))).
+Admitted.
+
+(*Why axiom*) Lemma neq_int_bool_axiom :
+  (forall (x:Z), (forall (y:Z), ((neq_int_bool x y) = true <-> x <> y))).
+Admitted.
+
+(*Why logic*) Definition abs_int : Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma abs_int_pos :
+  (forall (x:Z), (x >= 0 -> (abs_int x) = x)).
+Admitted.
+
+(*Why axiom*) Lemma abs_int_neg :
+  (forall (x:Z), (x <= 0 -> (abs_int x) = (Zopp x))).
+Admitted.
+
+(*Why logic*) Definition int_max : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition int_min : Z -> Z -> Z.
+Admitted.
+
+(*Why axiom*) Lemma int_max_is_ge :
+  (forall (x:Z), (forall (y:Z), (int_max x y) >= x /\ (int_max x y) >= y)).
+Admitted.
+
+(*Why axiom*) Lemma int_max_is_some :
+  (forall (x:Z), (forall (y:Z), (int_max x y) = x \/ (int_max x y) = y)).
+Admitted.
+
+(*Why axiom*) Lemma int_min_is_le :
+  (forall (x:Z), (forall (y:Z), (int_min x y) <= x /\ (int_min x y) <= y)).
+Admitted.
+
+(*Why axiom*) Lemma int_min_is_some :
+  (forall (x:Z), (forall (y:Z), (int_min x y) = x \/ (int_min x y) = y)).
+Admitted.
+
+Require Import Reals.
+
+(*Why logic*) Definition lt_real_bool : R -> R -> bool.
+Admitted.
+
+(*Why logic*) Definition le_real_bool : R -> R -> bool.
+Admitted.
+
+(*Why logic*) Definition gt_real_bool : R -> R -> bool.
+Admitted.
+
+(*Why logic*) Definition ge_real_bool : R -> R -> bool.
+Admitted.
+
+(*Why logic*) Definition eq_real_bool : R -> R -> bool.
+Admitted.
+
+(*Why logic*) Definition neq_real_bool : R -> R -> bool.
+Admitted.
+
+(*Why axiom*) Lemma lt_real_bool_axiom :
+  (forall (x:R), (forall (y:R), ((lt_real_bool x y) = true <-> (Rlt x y)))).
+Admitted.
+
+(*Why axiom*) Lemma le_real_bool_axiom :
+  (forall (x:R), (forall (y:R), ((le_real_bool x y) = true <-> (Rle x y)))).
+Admitted.
+
+(*Why axiom*) Lemma gt_real_bool_axiom :
+  (forall (x:R), (forall (y:R), ((gt_real_bool x y) = true <-> (Rgt x y)))).
+Admitted.
+
+(*Why axiom*) Lemma ge_real_bool_axiom :
+  (forall (x:R), (forall (y:R), ((ge_real_bool x y) = true <-> (Rge x y)))).
+Admitted.
+
+(*Why axiom*) Lemma eq_real_bool_axiom :
+  (forall (x:R), (forall (y:R), ((eq_real_bool x y) = true <-> (eq x y)))).
+Admitted.
+
+(*Why axiom*) Lemma neq_real_bool_axiom :
+  (forall (x:R), (forall (y:R), ((neq_real_bool x y) = true <-> ~(eq x y)))).
+Admitted.
+
+(*Why logic*) Definition real_max : R -> R -> R.
+Admitted.
+
+(*Why logic*) Definition real_min : R -> R -> R.
+Admitted.
+
+(*Why axiom*) Lemma real_max_is_ge :
+  (forall (x:R),
+   (forall (y:R), (Rge (real_max x y) x) /\ (Rge (real_max x y) y))).
+Admitted.
+
+(*Why axiom*) Lemma real_max_is_some :
+  (forall (x:R),
+   (forall (y:R), (eq (real_max x y) x) \/ (eq (real_max x y) y))).
+Admitted.
+
+(*Why axiom*) Lemma real_min_is_le :
+  (forall (x:R),
+   (forall (y:R), (Rle (real_min x y) x) /\ (Rle (real_min x y) y))).
+Admitted.
+
+(*Why axiom*) Lemma real_min_is_some :
+  (forall (x:R),
+   (forall (y:R), (eq (real_min x y) x) \/ (eq (real_min x y) y))).
+Admitted.
+
+(*Why logic*) Definition sqrt_real : R -> R.
+Admitted.
+
+(*Why logic*) Definition pow_real : R -> R -> R.
+Admitted.
+
+(*Why logic*) Definition abs_real : R -> R.
+Admitted.
+
+(*Why axiom*) Lemma abs_real_pos :
+  (forall (x:R), ((Rge x (0)%R) -> (eq (Rabs x) x))).
+Admitted.
+
+(*Why axiom*) Lemma abs_real_neg :
+  (forall (x:R), ((Rle x (0)%R) -> (eq (Rabs x) (Ropp x)))).
+Admitted.
+
+(*Why logic*) Definition exp : R -> R.
+Admitted.
+
+(*Why logic*) Definition log : R -> R.
+Admitted.
+
+(*Why logic*) Definition log10 : R -> R.
+Admitted.
+
+(*Why axiom*) Lemma log_exp : (forall (x:R), (eq (log (exp x)) x)).
+Admitted.
+
+(*Why logic*) Definition cos : R -> R.
+Admitted.
+
+(*Why logic*) Definition sin : R -> R.
+Admitted.
+
+(*Why logic*) Definition tan : R -> R.
+Admitted.
+
+(*Why logic*) Definition cosh : R -> R.
+Admitted.
+
+(*Why logic*) Definition sinh : R -> R.
+Admitted.
+
+(*Why logic*) Definition tanh : R -> R.
+Admitted.
+
+(*Why logic*) Definition acos : R -> R.
+Admitted.
+
+(*Why logic*) Definition asin : R -> R.
+Admitted.
+
+(*Why logic*) Definition atan : R -> R.
+Admitted.
+
+(*Why logic*) Definition atan2 : R -> R -> R.
+Admitted.
+
+(*Why logic*) Definition hypot : R -> R -> R.
+Admitted.
+
 (*Why type*) Definition alloc_table: Set ->Set.
 Admitted.
 
@@ -38,11 +289,11 @@ Implicit Arguments offset_max.
 Admitted.
 Implicit Arguments offset_min.
 
-(*Why predicate*) Definition valid (A833:Set) (a:(alloc_table A833)) (p:(pointer A833))
+(*Why predicate*) Definition valid (A767:Set) (a:(alloc_table A767)) (p:(pointer A767))
   := (offset_min a p) <= 0 /\ (offset_max a p) >= 0.
 Implicit Arguments valid.
 
-(*Why predicate*) Definition same_block (A834:Set) (p:(pointer A834)) (q:(pointer A834))
+(*Why predicate*) Definition same_block (A768:Set) (p:(pointer A768)) (q:(pointer A768))
   := (base_block p) = (base_block q).
 Implicit Arguments same_block.
 
@@ -284,12 +535,12 @@ Implicit Arguments in_pset.
 Admitted.
 Implicit Arguments valid_pset.
 
-(*Why predicate*) Definition pset_disjoint (A880:Set) (ps1:(pset A880)) (ps2:(pset A880))
-  := (forall (p:(pointer A880)), ~((in_pset p ps1) /\ (in_pset p ps2))).
+(*Why predicate*) Definition pset_disjoint (A814:Set) (ps1:(pset A814)) (ps2:(pset A814))
+  := (forall (p:(pointer A814)), ~((in_pset p ps1) /\ (in_pset p ps2))).
 Implicit Arguments pset_disjoint.
 
-(*Why predicate*) Definition pset_included (A881:Set) (ps1:(pset A881)) (ps2:(pset A881))
-  := (forall (p:(pointer A881)), ((in_pset p ps1) -> (in_pset p ps2))).
+(*Why predicate*) Definition pset_included (A815:Set) (ps1:(pset A815)) (ps2:(pset A815))
+  := (forall (p:(pointer A815)), ((in_pset p ps1) -> (in_pset p ps2))).
 Implicit Arguments pset_included.
 
 (*Why axiom*) Lemma pset_included_self :
@@ -427,8 +678,8 @@ Admitted.
       (valid_pset a s2))))).
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A901:Set) (A900:Set) (a:(alloc_table A900)) (m1:(memory A900 A901)) (m2:(memory A900 A901)) (l:(pset A900))
-  := (forall (p:(pointer A900)),
+(*Why predicate*) Definition not_assigns (A835:Set) (A834:Set) (a:(alloc_table A834)) (m1:(memory A834 A835)) (m2:(memory A834 A835)) (l:(pset A834))
+  := (forall (p:(pointer A834)),
       ((valid a p) /\ ~(in_pset p l) -> (select m2 p) = (select m1 p))).
 Implicit Arguments not_assigns.
 
@@ -530,7 +781,7 @@ Admitted.
      ((subtag t1 t2) -> ((parenttag t2 t3) -> (subtag t1 t3)))))).
 Admitted.
 
-(*Why predicate*) Definition instanceof (A920:Set) (a:(tag_table A920)) (p:(pointer A920)) (t:(tag_id A920))
+(*Why predicate*) Definition instanceof (A854:Set) (a:(tag_table A854)) (p:(pointer A854)) (t:(tag_id A854))
   := (subtag (typeof a p) t).
 Implicit Arguments instanceof.
 
@@ -557,8 +808,8 @@ Unset Contextual Implicit.
   forall (A1:Set), (forall (t:(tag_id A1)), (subtag t (@bottom_tag A1))).
 Admitted.
 
-(*Why predicate*) Definition root_tag (A925:Set) (t:(tag_id A925))
-  := (parenttag t (@bottom_tag A925)).
+(*Why predicate*) Definition root_tag (A859:Set) (t:(tag_id A859))
+  := (parenttag t (@bottom_tag A859)).
 Implicit Arguments root_tag.
 
 (*Why axiom*) Lemma root_subtag :
@@ -570,7 +821,7 @@ Implicit Arguments root_tag.
       ((root_tag b) -> (~(a = b) -> ((subtag c a) -> ~(subtag c b)))))))).
 Admitted.
 
-(*Why predicate*) Definition fully_packed (A927:Set) (tag_table:(tag_table A927)) (mutable:(memory A927 (tag_id A927))) (this:(pointer A927))
+(*Why predicate*) Definition fully_packed (A861:Set) (tag_table:(tag_table A861)) (mutable:(memory A861 (tag_id A861))) (this:(pointer A861))
   := (select mutable this) = (typeof tag_table this).
 Implicit Arguments fully_packed.
 
@@ -643,7 +894,7 @@ Admitted.
 Admitted.
 Implicit Arguments alloc_extends.
 
-(*Why predicate*) Definition alloc_fresh (A929:Set) (a:(alloc_table A929)) (p:(pointer A929)) (n:Z)
+(*Why predicate*) Definition alloc_fresh (A863:Set) (a:(alloc_table A863)) (p:(pointer A863)) (n:Z)
   := (forall (i:Z), (0 <= i /\ i < n -> ~(valid a (shift p i)))).
 Implicit Arguments alloc_fresh.
 

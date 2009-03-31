@@ -212,7 +212,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/reverse.why", line 24, characters 19-39: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/linked-lists/reverse.c", line 18, characters 14-23: *)
 (*Why goal*) Lemma rev_impl_po_5 : 
   forall (p0: (pointer global)),
   forall (alloc: alloc_table),
@@ -239,7 +239,9 @@ Save.
   forall (HW_8: tl_global1 = (upd tl_global0 r p)),
   forall (p1: (pointer global)),
   forall (HW_9: p1 = r),
-  (length_order (length tl_global1 r0) (length tl_global0 r)).
+  (length_order
+   ((* CADUCEUS_17 *) (length tl_global1 r0)) ((* CADUCEUS_17 *)
+                                              (length tl_global0 r))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

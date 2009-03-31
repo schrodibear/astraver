@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 (* Unitary (typing) tests *)
 
 (* types syntax: values *)

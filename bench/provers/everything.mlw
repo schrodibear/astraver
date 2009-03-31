@@ -68,6 +68,8 @@ goal equiv_trans :
 
 (* if-then-else *)
 
+include "bool.why"
+
 goal ite1 : 1 = if true then 1 else 2
 
 goal ite2 : 2 = if false then 1 else 2

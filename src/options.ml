@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.125 2009-02-20 16:11:41 stoulsn Exp $ i*)
+(*i $Id: options.ml,v 1.126 2009-03-31 12:46:11 marche Exp $ i*)
 
 open Format
 
@@ -57,9 +57,6 @@ let split_user_conj_ = ref false
 let split_bool_op_ = ref false
 let lvlmax_ = ref max_int
 let all_vc_ = ref false
-let prelude_ = ref true
-let arrays_ = ref true
-let floats_ = ref false
 let eval_goals_ = ref false 
 let pruning_ = ref false 
 let pruning_hyp_v_ = {contents = -1}
@@ -85,6 +82,7 @@ let phantom_types = Hashtbl.create 17
 
 let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
+let no_pervasives = ref false
 let files_to_load_ = ref []
 let show_time_ = ref false
 let locs_files = ref []
@@ -243,10 +241,7 @@ Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
   --prune-get-depths          get minimum depths to reach all reachable vars/preds
 
 Prelude files:
-  --no-prelude   do not read the prelude files (prelude.why and arrays.why)
-  --no-arrays    do not read the arrays prelude file (arrays.why)
   --lib-file f   load file f from the library
-  --fp           use floating-point arithmetic (same as --lib-file floats.why)
 
 Encoding for types in untyped logic:
   --encoding none    does not encode types into terms for untyped provers
@@ -351,8 +346,12 @@ let files =
     | ("-multi-why" | "--multi-why") :: args -> prover_ := MultiWhy; parse args
     | ("-project" | "--project") :: args -> prover_ := WhyProject; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
-    | ("-fp" | "--fp") :: args -> floats_ := true; parse args
     | ("-show-time" | "--show-time") :: args -> show_time_ := true; parse args
+    | ("-no-prelude" | "--no-prelude" | "-no-arrays" | "--no-arrays"
+      | "-fp" | "--fp" as o) :: _ ->
+	Printf.eprintf "%s: deprecated\n" o; exit 1
+    | "--no-pervasives" :: args ->
+	no_pervasives := true; parse args
     | ("-lib-file" | "--lib-file") :: f :: args -> 
 	lib_files_to_load_ := f :: !lib_files_to_load_; parse args
     | ("-lib-file" | "--lib-file") :: [] -> usage (); exit 1
@@ -448,10 +447,6 @@ let files =
 	usage (); exit 1
     | ("-all-vc" | "--all-vc" | "--allvc") :: args ->
 	all_vc_ := true; parse args
-    | ("-no-prelude" | "--no-prelude") :: args ->
-	prelude_ := false; parse args
-    | ("-no-arrays" | "--no-arrays") :: args ->
-	arrays_ := false; parse args
     | ("-partial" | "--partial") :: args ->
 	termination_ := Partial; parse args
     | ("-total" | "--total") :: args ->
@@ -622,8 +617,6 @@ let set_types_encoding ec = types_encoding_ := ec
 
 let get_type_expanding () = !defExpanding_
 
-let arrays = !arrays_
-let floats = !floats_
 let show_time = !show_time_
 
 let file f = if dir = "" then f else Lib.file ~dir ~file:f
@@ -675,8 +668,6 @@ end
 
 (* prelude *)
 
-let prelude = !prelude_
-
 let lib_dir =
   try Sys.getenv "WHYLIB"
   with Not_found -> Version.libdir
@@ -684,21 +675,24 @@ let lib_dir =
 let lib_file f = Filename.concat lib_dir (Filename.concat "why" f)
 
 let prelude_file = lib_file "prelude.why"
-let arrays_file = lib_file "arrays.why"
-let floats_file = lib_file "floats.why"
 
 let lib_files_to_load = 
-  (if prelude then 
-     prelude_file :: (if arrays then [arrays_file] else [])
-   else
-     []) @
-  (if floats then [floats_file] else []) @
+  (if !no_pervasives then [] else [prelude_file]) @ 
   List.rev_map lib_file !lib_files_to_load_ @
   List.rev !files_to_load_
 
+let floats = List.mem "floats.why" !lib_files_to_load_
+
 let () = 
-  if prelude && not (Sys.file_exists prelude_file) then begin
+  if not (Sys.file_exists prelude_file) then begin
     Printf.eprintf "cannot find prelude file %s\n" prelude_file;
+    begin
+      try 
+	let s = Sys.getenv "WHYLIB" in
+	Printf.eprintf "(WHYLIB is set to %s)\n" s      
+      with Not_found -> 
+	Printf.eprintf "(WHYLIB is not set, libdir is %s)\n" Version.libdir
+    end;
     exit 1
   end
 

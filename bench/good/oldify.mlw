@@ -9,6 +9,8 @@ parameter f1 : y:int ->
 let g1 () = (f1 !r) { q1(r, r@, r@) }
 
 
+include "arrays.why"
+
 logic q: int farray, int farray, int -> prop
 
 parameter f : t:int array -> x:int -> 

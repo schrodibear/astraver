@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.163 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.164 2009-03-31 12:46:11 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -1057,6 +1057,7 @@ and print_phandler fmt = function
 let print_external fmt b = if b then fprintf fmt "external "
 
 let print_decl fmt = function
+  | Include (_,s) -> fprintf fmt "include \"%S\"" s 
   | Program (_,id, p) -> fprintf fmt "let %a = %a" Ident.print id print_ptree p
   | Parameter (_, e, ids, v) -> 
       fprintf fmt "%aparameter <...>" print_external e

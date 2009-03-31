@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coptions.ml,v 1.50 2008-11-05 14:03:13 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.51 2009-03-31 12:46:11 marche Exp $ i*)
 
 open Format
 
@@ -309,7 +309,7 @@ let use_floats = ref false
 let why_opt () = 
   let o = !why_opt in
   (*let o = if int_overflow_check then o ^ " --lib-file marith.why" else o in*)
-  if floats && !use_floats then o ^ " --fp" else o
+  if floats && !use_floats then o ^ " -lib-file floats.why" else o
 
 let verify f = match !verification with
   | All -> true

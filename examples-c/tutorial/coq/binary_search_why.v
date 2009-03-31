@@ -3,7 +3,7 @@
 
 Require Export binary_search_spec_why.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 14, characters 6-147: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 14, characters 6-147: *)
 (*Why goal*) Lemma binary_search_impl_po_1 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -17,19 +17,19 @@ Require Export binary_search_spec_why.
                   ((0 <= k1 /\ k1 <= k2) /\ k2 <= (n - 1) ->
                    (acc intM_global (shift t k1)) <=
                    (acc intM_global (shift t k2))))))),
-  (* CADUCEUS_4 *) ((((0 <= 0 /\ (n - 1) <= (n - 1)) /\ (Zopp 1) <= (Zopp
-  1) /\ (Zopp 1) <= (n - 1)) /\
-  (((Zopp 1) = (Zopp 1) ->
+  (* CADUCEUS_4 *) ((((0 <= 0 /\ (n - 1) <= (n - 1)) /\ (-1) <= (-1) /\
+  (-1) <= (n - 1)) /\
+  (((-1) = (-1) ->
     (forall (k:Z),
      (0 <= k /\ k < n ->
       ((acc intM_global (shift t k)) = v -> 0 <= k /\ k <= (n - 1))))))) /\
-  (((Zopp 1) >= 0 -> (acc intM_global (shift t (Zopp 1))) = v))).
+  (((-1) >= 0 -> (acc intM_global (shift t (-1))) = v))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/binary_search.why", line 37, characters 25-48: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 20, characters 12-23: *)
 (*Why goal*) Lemma binary_search_impl_po_2 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -46,9 +46,9 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
-                p /\ p <= (n - 1)) /\
-                ((p = (Zopp 1) ->
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (-1) <= p /\
+                p <= (n - 1)) /\
+                ((p = (-1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
@@ -59,7 +59,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 21, characters 15-26: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 21, characters 15-26: *)
 (*Why goal*) Lemma binary_search_impl_po_3 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -76,9 +76,9 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
-                p /\ p <= (n - 1)) /\
-                ((p = (Zopp 1) ->
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (-1) <= p /\
+                p <= (n - 1)) /\
+                ((p = (-1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
@@ -87,13 +87,13 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  (* CADUCEUS_7 *) (* CADUCEUS_7 *) (l <= result /\ result <= u).
+  (* CADUCEUS_9 *) (* CADUCEUS_9 *) (l <= result /\ result <= u).
 Proof.
 intros.
 generalize (mean_1 l u); intuition.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 22, characters 8-12: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 22, characters 8-12: *)
 (*Why goal*) Lemma binary_search_impl_po_4 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -110,9 +110,9 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
-                p /\ p <= (n - 1)) /\
-                ((p = (Zopp 1) ->
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (-1) <= p /\
+                p <= (n - 1)) /\
+                ((p = (-1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
@@ -121,7 +121,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_9 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   (valid alloc result0).
@@ -131,7 +131,7 @@ subst.
 apply valid_range_valid_shift with 0 (n-1); intuition.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 14, characters 6-147: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 14, characters 6-147: *)
 (*Why goal*) Lemma binary_search_impl_po_5 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -148,9 +148,9 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
-                p /\ p <= (n - 1)) /\
-                ((p = (Zopp 1) ->
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (-1) <= p /\
+                p <= (n - 1)) /\
+                ((p = (-1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
@@ -159,7 +159,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_9 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -168,9 +168,9 @@ Save.
   forall (HW_10: result1 < v),
   forall (l0: Z),
   forall (HW_11: l0 = (result + 1)),
-  (* CADUCEUS_4 *) ((((0 <= l0 /\ u <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
+  (* CADUCEUS_4 *) ((((0 <= l0 /\ u <= (n - 1)) /\ (-1) <= p /\ p <=
   (n - 1)) /\
-  ((p = (Zopp 1) ->
+  ((p = (-1) ->
     (forall (k:Z),
      (0 <= k /\ k < n ->
       ((acc intM_global (shift t k)) = v -> l0 <= k /\ k <= u)))))) /\
@@ -186,7 +186,7 @@ assumption.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "why/binary_search.why", line 34, characters 24-37: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 17, characters 14-17: *)
 (*Why goal*) Lemma binary_search_impl_po_6 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -203,9 +203,9 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
-                p /\ p <= (n - 1)) /\
-                ((p = (Zopp 1) ->
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (-1) <= p /\
+                p <= (n - 1)) /\
+                ((p = (-1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
@@ -214,7 +214,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_9 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -223,14 +223,14 @@ Save.
   forall (HW_10: result1 < v),
   forall (l0: Z),
   forall (HW_11: l0 = (result + 1)),
-  (Zwf 0 (u - l0) (u - l)).
+  (Zwf 0 ((* CADUCEUS_5 *) (u - l0)) ((* CADUCEUS_5 *) (u - l))).
 Proof.
 intuition.
 subst.
 apply valid_range_valid_shift with 0 (n-1); intuition.
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 24, characters 13-17: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 24, characters 13-17: *)
 (*Why goal*) Lemma binary_search_impl_po_7 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -247,9 +247,9 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
-                p /\ p <= (n - 1)) /\
-                ((p = (Zopp 1) ->
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (-1) <= p /\
+                p <= (n - 1)) /\
+                ((p = (-1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
@@ -258,7 +258,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_9 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -272,7 +272,7 @@ Proof.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 14, characters 6-147: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 14, characters 6-147: *)
 (*Why goal*) Lemma binary_search_impl_po_8 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -289,9 +289,9 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
-                p /\ p <= (n - 1)) /\
-                ((p = (Zopp 1) ->
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (-1) <= p /\
+                p <= (n - 1)) /\
+                ((p = (-1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
@@ -300,7 +300,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_9 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -315,9 +315,9 @@ Save.
   forall (HW_16: result3 > v),
   forall (u0: Z),
   forall (HW_17: u0 = (result - 1)),
-  (* CADUCEUS_4 *) ((((0 <= l /\ u0 <= (n - 1)) /\ (Zopp 1) <= p /\ p <=
+  (* CADUCEUS_4 *) ((((0 <= l /\ u0 <= (n - 1)) /\ (-1) <= p /\ p <=
   (n - 1)) /\
-  ((p = (Zopp 1) ->
+  ((p = (-1) ->
     (forall (k:Z),
      (0 <= k /\ k < n ->
       ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u0)))))) /\
@@ -327,7 +327,7 @@ intuition.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "why/binary_search.why", line 34, characters 24-37: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 17, characters 14-17: *)
 (*Why goal*) Lemma binary_search_impl_po_9 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -344,9 +344,9 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
-                p /\ p <= (n - 1)) /\
-                ((p = (Zopp 1) ->
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (-1) <= p /\
+                p <= (n - 1)) /\
+                ((p = (-1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
@@ -355,7 +355,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_9 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -370,13 +370,13 @@ Save.
   forall (HW_16: result3 > v),
   forall (u0: Z),
   forall (HW_17: u0 = (result - 1)),
-  (Zwf 0 (u0 - l) (u - l)).
+  (Zwf 0 ((* CADUCEUS_5 *) (u0 - l)) ((* CADUCEUS_5 *) (u - l))).
 Proof.
 intuition.
 admit. (*TODO*)
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 8, characters 4-102: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 8, characters 4-102: *)
 (*Why goal*) Lemma binary_search_impl_po_10 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -393,9 +393,9 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
-                p /\ p <= (n - 1)) /\
-                ((p = (Zopp 1) ->
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (-1) <= p /\
+                p <= (n - 1)) /\
+                ((p = (-1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
@@ -404,7 +404,7 @@ Save.
   forall (HW_4: 2 <> 0),
   forall (result: Z),
   forall (HW_5: result = ((Zdiv (l + u) 2))),
-  forall (HW_6: (* CADUCEUS_7 *) (l <= result /\ result <= u)),
+  forall (HW_6: (* CADUCEUS_9 *) (l <= result /\ result <= u)),
   forall (result0: (pointer global)),
   forall (HW_7: result0 = (shift t result)),
   forall (HW_8: (valid alloc result0)),
@@ -420,14 +420,14 @@ Save.
   forall (p0: Z),
   forall (HW_19: p0 = result),
   (* CADUCEUS_3 *) (p0 >= 0 /\ (acc intM_global (shift t p0)) = v \/ p0 =
-  (Zopp 1) /\
+  (-1) /\
   (forall (k:Z), (0 <= k /\ k < n -> (acc intM_global (shift t k)) <> v))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/binary_search.c", line 8, characters 4-102: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/binary_search.c", line 8, characters 4-102: *)
 (*Why goal*) Lemma binary_search_impl_po_11 : 
   forall (t: (pointer global)),
   forall (n: Z),
@@ -444,16 +444,16 @@ Save.
   forall (l: Z),
   forall (p: Z),
   forall (u: Z),
-  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (Zopp 1) <=
-                p /\ p <= (n - 1)) /\
-                ((p = (Zopp 1) ->
+  forall (HW_2: (* CADUCEUS_4 *) ((((0 <= l /\ u <= (n - 1)) /\ (-1) <= p /\
+                p <= (n - 1)) /\
+                ((p = (-1) ->
                   (forall (k:Z),
                    (0 <= k /\ k < n ->
                     ((acc intM_global (shift t k)) = v -> l <= k /\ k <= u)))))) /\
                 ((p >= 0 -> (acc intM_global (shift t p)) = v)))),
   forall (HW_20: l > u),
-  (* CADUCEUS_3 *) (p >= 0 /\ (acc intM_global (shift t p)) = v \/ p = (Zopp
-  1) /\
+  (* CADUCEUS_3 *) (p >= 0 /\ (acc intM_global (shift t p)) = v \/ p =
+  (-1) /\
   (forall (k:Z), (0 <= k /\ k < n -> (acc intM_global (shift t k)) <> v))).
 Proof.
 intuition.

@@ -3,7 +3,7 @@
 
 Require Export max_spec_why.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/max.c", line 2, characters 4-87: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/max.c", line 2, characters 4-87: *)
 (*Why goal*) Lemma max_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -15,7 +15,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "/home/jcf/soft/why/examples-c/tutorial/max.c", line 2, characters 4-87: *)
+(* Why obligation from file "/home/cmarche/recherche/why/examples-c/tutorial/max.c", line 2, characters 4-87: *)
 (*Why goal*) Lemma max_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
