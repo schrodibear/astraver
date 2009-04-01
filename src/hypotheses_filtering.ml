@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.63 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.64 2009-04-01 13:21:00 stouls Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -112,6 +112,9 @@ let set_vb n =
   vb := n
 
 let context = ref []
+let predicateMaximumDepth = ref 0
+let variablesMaximumDepth = ref 0
+
 
 (**
 ***********************
@@ -1552,19 +1555,20 @@ let compute_sequence_of_predicates concl_preds =
 		) !vSet;
 	
 	if debug then
-		begin
-			Format.printf "List of predicates \n";
-			for i = 0 to 10 do
-				Format.printf "L[%d] is " i;
-				try
-					let l_i = Hashtbl.find hash_lits i in
-					display_symb_of_pdl_set l_i
-				with _ ->
-						Format.printf " empty \n";
-			done;
-		end;
+	  begin
+	    Format.printf "List of predicates \n";
+	    for i = 0 to 10 do
+	      Format.printf "L[%d] is " i;
+	      try
+		let l_i = Hashtbl.find hash_lits i in
+		display_symb_of_pdl_set l_i
+	      with _ ->
+		Format.printf " empty \n";
+	    done;
+	  end;
+	predicateMaximumDepth:=!max;
 	hash_lits
-
+	  
 
 
 
@@ -1936,10 +1940,15 @@ let filter_acc_variables l concl_rep selection_strategy pred_symb =
           display_str "vars" vars;
           display_str "concl_rep" concl_rep;
         end;
-        if condition then
+        if (!variablesMaximumDepth< !vb) or condition then
           begin
             if debug then
-              Format.printf "Keeped #1 (Vars)\n\n";
+	      begin
+ 		if (!predicateMaximumDepth< !pb) then
+ 		  Format.printf "Keeped #1 (Vars - No filter due to VariableMaximumDepth<PredDepth)\n\n"
+ 		else
+ 		  Format.printf "Keeped #1 (Vars)\n\n"
+ 	      end;
             
             (* the predicate symbols has to be in the list of symbols *)
             let preds_of_p = get_preds_of p use_comparison_as_criteria_for_hypothesis_filtering in
@@ -1951,11 +1960,17 @@ let filter_acc_variables l concl_rep selection_strategy pred_symb =
                   Format.printf "Relevent Preds : \n";
                   display_symb_of_pdl_set pred_symb;
                 end;
-              if abstr_subset_of_pdl preds_of_p pred_symb then
+	      
+	      if (!predicateMaximumDepth< !pb) or (abstr_subset_of_pdl preds_of_p pred_symb) then
                 begin
-                  if debug then
-                    Format.printf "Keeped #2 (Preds)\n\n";
-                  Spred (t, p):: filter q
+                  if debug then 
+ 		    begin
+ 		      if (!predicateMaximumDepth< !pb) then
+ 			Format.printf "Keeped #2 (Preds - No filter due to MaxReachableDepth<PredDepth)\n\n"
+ 		      else
+ 			Format.printf "Keeped #2 (Preds)\n\n"
+ 		    end;
+		  Spred (t, p):: filter q
                 end
               else
                 begin
@@ -1984,10 +1999,21 @@ let managesContext relevantPreds decl =
       (* pas                                                               *)
       let filter_one_axiom (p, ax) =
         let preds_of_p = get_preds_of p use_comparison_as_criteria_for_hypothesis_filtering in
-        if abstr_subset_of_pdl preds_of_p relevantPreds then
-          Queue.push ax decl
+
+
+	if (!predicateMaximumDepth< !pb) or (abstr_subset_of_pdl preds_of_p relevantPreds) then
+	  begin
+            if debug then 
+	      begin
+		if (!predicateMaximumDepth< !pb) then
+		  Format.printf "Ctx Keeped (No filter due to MaxReachableDepth<PredDepth)\n\n"
+		else
+		  Format.printf "Ctx Keeped \n\n"
+	      end;
+            Queue.push ax decl
+	  end
         else
-          begin
+          begin 
             if debug then
               Format.printf "Ctx Dropped\n\n";
             (* Queue.push ax decl *)
@@ -1999,11 +2025,16 @@ let managesContext relevantPreds decl =
         
         | (p_cnf, Dpredicate_def (loc, ident, def)) :: l ->
             let preds_of_p_cnf = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in
-            if (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then
-              begin
+	    if (!predicateMaximumDepth< !pb) or (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then
+	      begin
                 (* On garde tout le predicat *)
                 if debug then
-                  Format.printf "Ctx Keeped\n\n";
+		  begin
+		    if (!predicateMaximumDepth< !pb) then
+		      Format.printf "Ctx Keeped (No filter due to MaxReachableDepth<PredDepth)\n\n"
+		    else
+                      Format.printf "Ctx Keeped\n\n"
+		  end;
                 Queue.push (Dpredicate_def (loc, ident, def)) decl;
                 filter l
               end
@@ -2028,11 +2059,17 @@ let managesContext relevantPreds decl =
         
         | (p_cnf, Daxiom (loc, ident, ps)) :: l ->
             let preds_of_p_cnf = get_preds_of p_cnf use_comparison_as_criteria_for_hypothesis_filtering in
-            if (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then
+            if (!predicateMaximumDepth< !pb) or (abstr_subset_of_pdl preds_of_p_cnf relevantPreds) then
               begin
                 (* On garde tout l'axiome en forme originale *)
                 if debug then
-                  Format.printf "Ctx Keeped\n\n";
+		  begin
+		    if (!predicateMaximumDepth< !pb) then
+		      Format.printf "Ctx Keeped (No filter due to MaxReachableDepth<PredDepth)\n\n"
+		    else
+                      Format.printf "Ctx Keeped\n\n"
+		  end;
+
                 Queue.push (Daxiom (loc, ident, ps)) decl;
                 filter l
               end
@@ -2082,6 +2119,8 @@ let managesGoal ax (hyps, concl) decl =
 	  get_relevant_preds hl !pb 
 	end 
   in
+  if prune_coarse_pred_comp then predicateMaximumDepth:=(get_depth_of_reachable_preds concl_preds);
+
 
 
   (** retrieves the list of variables in the conclusion **)
@@ -2091,7 +2130,9 @@ let managesGoal ax (hyps, concl) decl =
       avoided_vars in
   let relevant_vars = VarStringSet.union reachable_vars vars_of_concl in 
   (* Traitement fait 2 fois pour l'optimisation *)
-  
+  (* Calcul de la profondeur max atteignable dans le graph de variables *)
+  variablesMaximumDepth:=(get_depth_of_reachable_vars vars_of_concl);
+
   let l' = filter_acc_variables hyps relevant_vars var_filter_tactic 
     (*All  AllInABranch*) relevant_preds in
   
@@ -2116,8 +2157,8 @@ let managesGoal ax (hyps, concl) decl =
     begin
       Format.printf 
 	"Max depth of predicates: %d\nMax depth of variables: %d\n" 
-	(get_depth_of_reachable_preds concl_preds) 
-	(get_depth_of_reachable_vars vars_of_concl) 
+	!predicateMaximumDepth
+	!variablesMaximumDepth
     end;
 
   managesContext relevant_preds decl;
