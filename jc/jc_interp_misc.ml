@@ -114,7 +114,8 @@ let any_value = function
   | JCTnull 
   | JCTpointer _ -> App(Var "any_pointer", Void)
   | JCTenum ri -> App (Var(fun_any_enum ri), Void)
-  | JCTlogic _ | JCTany -> assert false
+  | JCTlogic _ -> assert false (* TODO *)
+  | JCTany -> assert false
   | JCTtype_var _ -> assert false (* TODO: need environment *)
 
 (* functions to make Why expressions *)

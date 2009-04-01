@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_strat.ml,v 1.22 2009-03-27 17:01:16 marche Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.23 2009-04-01 14:08:33 marche Exp $ i*)
 
 open Cc
 open Logic
@@ -371,12 +371,12 @@ let rec push d =
 	     translate_eq (translate_pred fv context (snd (s_sch.Env.scheme_type)))) in
 	Queue.add (Dgoal (loc, expl, ident, new_sequent)) queue
       with Not_found -> 
-	Format.eprintf "Exception caught in : %a\n" Util.print_decl d;
+	Format.eprintf "Exception Not_found caught in : %a\n" Util.print_decl d;
 	Queue.add (Dgoal (loc, expl, ident, Env.empty_scheme([],Pfalse))) queue
       end)
   with
     Not_found -> 
-      Format.eprintf "Exception caught in : %a\n" Util.print_decl d;
+      Format.eprintf "Exception Not_found caught in : %a\n" Util.print_decl d;
       raise Not_found
 
 let iter f =

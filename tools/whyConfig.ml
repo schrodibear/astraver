@@ -39,7 +39,7 @@ let rec detect_prover p cmds =
 	eprintf "debug: command = %s@." c;
 *)
 	let ret = Sys.command c in
-	if ret <> 0 then
+	if ret <> 0 && not (p == gappa && ret = 1) then
 	  begin
 	    printf "command %s failed@." cmd;
 	    detect_prover p rem
