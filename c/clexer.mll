@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: clexer.mll,v 1.28 2008-11-05 14:03:13 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.29 2009-04-02 11:51:39 melquion Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -81,7 +81,8 @@ let rD =	['0'-'9']
 let rL = ['a'-'z' 'A'-'Z' '_']
 let rH = ['a'-'f' 'A'-'F' '0'-'9']
 let rE = ['E''e']['+''-']? rD+
-let rFS	= ('f'|'F'|'l'|'L')
+let rP = ['P''p']['+''-']? rD+
+let rFS = ('f'|'F'|'l'|'L')
 let rIS = ('u'|'U'|'l'|'L')*
 
 rule token = parse
@@ -148,14 +149,18 @@ rule token = parse
   | rL (rL | rD)*       { let s = lexeme lexbuf in
 			  if Ctypes.mem s then TYPE_NAME s else IDENTIFIER s }
 
-  | '0'['x''X'] rH+ rIS?    { CONSTANT (IntConstant (lexeme lexbuf)) }
-  | '0' rD+ rIS?            { CONSTANT (IntConstant (lexeme lexbuf)) }
-  | rD+ rIS?                { CONSTANT (IntConstant (lexeme lexbuf)) }
-  | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | '0'['x''X'] rH+ rIS?
+  | '0' rD+ rIS?
+  | rD+ rIS?
+  | 'L'? "'" [^ '\n' '\'']+ "'"
+    { CONSTANT (IntConstant (lexeme lexbuf)) }
 
-  | rD+ rE rFS?             { CONSTANT (RealConstant (lexeme lexbuf)) }
-  | rD* "." rD+ (rE)? rFS?  { CONSTANT (RealConstant (lexeme lexbuf)) }
-  | rD+ "." rD* (rE)? rFS?  { CONSTANT (RealConstant (lexeme lexbuf)) }
+  | rD+ rE rFS?
+  | rD* '.' rD+ (rE)? rFS?
+  | rD+ '.' rD* (rE)? rFS?
+  | '0' ['x''X'] rH+ '.'? rH* rP rFS?
+  | '0' ['x''X'] rH* '.' rH+ rP rFS?
+    { CONSTANT (RealConstant (lexeme lexbuf)) }
 
   | 'L'? '"' [^ '"']* '"'     { STRING_LITERAL (lexeme lexbuf) }
 
