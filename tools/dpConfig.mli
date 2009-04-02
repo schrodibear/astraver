@@ -63,6 +63,7 @@ val gappa : prover_data
 val coq : prover_data
 
 val prover_list : (prover_id * (prover_data * string list)) list
+  (** list of all known provers: uniq id, data, list of possible command names *)
 
 val load_rc_file : unit -> unit
 

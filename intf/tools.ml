@@ -51,10 +51,6 @@ let decomp_name =
     else
       "", s
 
-let get_home () = 
-  try Sys.getenv "HOME"
-  with Not_found -> ""
-
 (*
  * Live update
  *)

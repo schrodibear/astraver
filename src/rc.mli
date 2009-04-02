@@ -33,6 +33,14 @@ type rc_value =
   | RCstring of string
   | RCident of string
 
+val int : rc_value -> int
+  (** raise Failure "Rc.int" if not a int value *)
+
+val bool : rc_value -> bool
+  (** raise Failure "Rc.bool" if not a int value *)
+
 val from_file : string -> (string * (string * rc_value) list) list
+
+val get_home_dir : unit -> string
 
 

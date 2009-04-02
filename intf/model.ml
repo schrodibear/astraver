@@ -28,17 +28,8 @@
 open Gobject.Data
 open Options
 
-exception No_such_prover
+(* columns of the model *)
 
-type prover = {
-  pr_id : DpConfig.prover_id;
-  pr_info : DpConfig.prover_data;
-  pr_result : int GTree.column;
-  pr_icon : GtkStock.id GTree.column;
-  mutable pr_viewcol : GTree.view_column option;
-  pr_enc : Options.encoding;
-}
-  
 let cols = new GTree.column_list
 let name = cols#add string
 let fullname = cols#add string
@@ -48,7 +39,42 @@ let result = cols#add int
 let stat = cols#add string
   
 let first_row = ref None
-    
+
+
+type prover = {
+  pr_id : DpConfig.prover_id;
+  pr_info : DpConfig.prover_data;
+  pr_result : int GTree.column;
+  pr_icon : GtkStock.id GTree.column;
+  mutable pr_viewcol : GTree.view_column option;
+  pr_enc : Options.encoding;
+}
+
+let enc_name ~nl n p =
+  let nl x = if nl then "\n" ^ x else x in 
+  match p.pr_enc with
+    | NoEncoding -> 
+	begin match p.pr_id with
+	  | DpConfig.Graph -> n ^ nl "(Graph)"
+	  | DpConfig.ErgoSelect -> n ^ nl "(Select)"
+	  | _ -> n ^ nl "" 
+	end
+    | SortedStratified -> n ^ nl "(SS)"
+    | Monomorph -> n ^ nl "(mono)"
+    | Recursive -> n ^ nl "(rec)"
+    | Stratified -> n ^ nl "(Strat)"
+    | Predicates -> n ^ nl "(pred)"
+
+let prover_id p = 
+  enc_name ~nl:false p.pr_info.DpConfig.name p
+  
+let prover_name_with_version_and_enc p = 
+  let v = p.pr_info.DpConfig.version in
+  let n = p.pr_info.DpConfig.name in
+  let n = if v <> "" then n ^ "\n" ^ v else n ^ "\n(uninstalled)" in
+  enc_name ~nl:true n p
+	 
+
 let simplify = {
   pr_id = DpConfig.Simplify;
   pr_info = DpConfig.simplify;
@@ -168,7 +194,7 @@ let yices = {
   pr_viewcol = None;
   pr_enc = Monomorph;
   }
-let yicesSStrat = {
+let yicesSS = {
   pr_id = DpConfig.Yices;
   pr_info = DpConfig.yices;
   pr_result = cols#add int;
@@ -200,7 +226,7 @@ let ergoSS = {
   pr_viewcol = None;
   pr_enc = SortedStratified;
   }
-let cvc3 = {
+let cvc3SS = {
   pr_id = DpConfig.Cvc3;
   pr_info = DpConfig.cvc3;
   pr_result = cols#add int;
@@ -227,111 +253,63 @@ let coq = {
   pr_enc = NoEncoding;
 }
 
+
+(***********
+
+all provers 
+
+
+******)
   
 let all_known_provers = [
   ergo; 
   ergo_select; 
   (*ergoSS;*) 
-  graph; 
   simplify; 
+  graph; 
   z3SS ; 
-  yicesSStrat; 
-  cvc3; 
+  yicesSS; 
+  cvc3SS; 
   (*simplify_sstrat;*) 
+(*
   simplify_strat; 
+*)
   yices; 
   gappa ;
+(*
   coq ;
+*)
   (* rvsat; *)
   (* zenon; zenon_pred; zenon_strat; zenon_rec;*)
   (* harvey; cvcl *)]
 
-let provers_selected = ref all_known_provers
-let provers_s = Hashtbl.create 17
-let get_provers () = !provers_selected
+let prover_states = List.map (fun x -> (x,ref false)) all_known_provers
 
+let get_prover_states () = 
+  List.map (fun (x,y) -> (x,!y)) prover_states
 
-(*
- * Default prover
- *)
 let default_prover = ref (List.hd all_known_provers)
+
 let get_default_prover () = !default_prover
-let set_prover p = 
-  if List.mem p !provers_selected 
-  then default_prover := p
 
-let enc_name ~nl n p =
-  let nl x = if nl then "\n" ^ x else x in 
-  match p.pr_enc with
-    | NoEncoding -> 
-	begin match p.pr_id with
-	  | DpConfig.Graph -> n ^ nl "(Graph)"
-	  | DpConfig.ErgoSelect -> n ^ nl "(Select)"
-	  | _ -> n ^ nl "" 
-	end
-    | SortedStratified -> n ^ nl "(SS)"
-    | Monomorph -> n ^ nl "(mono)"
-    | Recursive -> n ^ nl "(rec)"
-    | Stratified -> n ^ nl "(Strat)"
-    | Predicates -> n ^ nl "(pred)"
-
-let prover_id p = 
-  enc_name ~nl:false p.pr_info.DpConfig.name p
-
-let prover_name_with_version_and_enc p = 
-  let v = p.pr_info.DpConfig.version in
-  let n = p.pr_info.DpConfig.name in
-  let n = if v <> "" then n ^ "\n" ^ v else n ^ "\n(uninstalled)" in
-  enc_name ~nl:true n p
-	 
-let get_prover s = 
-  let rec next = function
-    | [] -> 
-	raise No_such_prover
-    | p' :: r -> 
-	if prover_id p' = s then p' else next r
-  in next !provers_selected
-
-let update_prover_s () = 
-  List.iter 
-    (fun p -> Hashtbl.add provers_s p "")
-    !provers_selected
-
-let add_all_provers () = 
-  provers_selected := all_known_provers;
-  update_prover_s ()
-
-let add_provers l = 
-  assert (List.length l > 0);
-  provers_selected := 
-    List.rev (List.fold_left
-      (fun prs pr -> 
-	 let n = prover_id pr in
-	 if List.mem n l then pr::prs else prs)
-      []
-      all_known_provers);
-  if !provers_selected = [] then 
-    begin 
-      provers_selected := all_known_provers
-    end;
-  default_prover := List.hd !provers_selected;
-  List.iter 
-    (fun p -> Hashtbl.add provers_s p "")
-    !provers_selected
+let set_default_prover p = 
+  default_prover := p
 
 let select_prover p = 
-  if not (Hashtbl.mem provers_s p) then
-    Hashtbl.add provers_s p ""
+  let s = List.assq p prover_states in s:= true
 
 let deselect_prover p = 
-  Hashtbl.remove provers_s p
-
-let get_provers_s () = 
-  Hashtbl.fold 
-    (fun k _v acc -> k::acc)
-    provers_s
-    []
+  let s = List.assq p prover_states in s:= false
   
+  let get_prover s = 
+  let rec next = function
+    | [] -> 
+	raise Not_found
+    | (p',_) :: r -> 
+	if prover_id p' = s then p' else next r
+  in next prover_states
+
+
 (* all obligations *)
 let obligs = Hashtbl.create 97
 let find_oblig = Hashtbl.find obligs

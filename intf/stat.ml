@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.93 2009-02-16 16:31:37 melquion Exp $ i*)
+(*i $Id: stat.ml,v 1.94 2009-04-02 11:22:04 marche Exp $ i*)
 
 open Printf
 open Options
@@ -67,7 +67,8 @@ let () =
 (* GTK *)
 
 (* config in .gwhyrc *)
-let set_loaded_config () = 
+(*
+let set_loaded_config () =
   let l = [("cache", Cache.set_active) ; 
 	   ("hard_proof", Cache.set_hard_proof) ; 
 	   ("live_update", Tools.set_live)] 
@@ -89,12 +90,9 @@ let set_loaded_config () =
        prerr_endline ("     [...] .gwhyrc : invalid value for timeout"); 
        10 
      end);
-  Model.set_prover 
-    (try Model.get_prover (Config.get_value "prover")
-     with Model.No_such_prover -> begin
-       prerr_endline ("     [...] .gwhyrc : invalid value for prover"); 
-       List.hd (Model.get_provers ())
-     end);
+  (try Model.set_default_prover (Model.get_prover (Config.get_value "prover"))
+   with Not_found -> 
+     prerr_endline ("     [...] .gwhyrc : invalid value for prover"));
   List.iter
     (fun (k,f,def) ->
        let v = 
@@ -109,13 +107,18 @@ let set_loaded_config () =
      ("window_height", Colors.window_height, 768);
      ("font_size", Colors.font_size, 10) ];
   Colors.set_all_colors (Config.get_colors ())
+*)
 
 let () =
   Format.eprintf "Reading GWhy configuration...@.";
   ignore (GtkMain.Main.init ());
+(*
   Config.create_default_config ();
-  Config.load ();
+*)
+  GConfig.load ();
+(*
   set_loaded_config ();
+*)
   Format.eprintf "GWhy configuration loaded...@."
 
 let modifiable_font_views = ref []
@@ -128,10 +131,14 @@ let change_font () =
   List.iter (fun v -> v#modify_font f) !modifiable_font_views
 
 let enlarge_font () =
-  incr Colors.font_size; change_font ()
+  incr Colors.font_size; 
+  change_font ();
+  GConfig.save ()
 
 let reduce_font () =
-  decr Colors.font_size; change_font ()
+  decr Colors.font_size; 
+  change_font ();
+  GConfig.save ()
 
 let display_info = ref (function _s -> failwith "not ready")
 let flash_info = ref (function _s -> failwith "not ready")
@@ -183,18 +190,18 @@ module View = struct
     let _n : int = view#append_column first_col in
     let l = 
       List.map
-	(fun p ->
+	(fun (p,state) ->
 	   let vc = 
 	     GTree.view_column ~title:(prover_name_with_version_and_enc p) 
 	       ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) ()
 	   in
 	   vc#set_resizable true;
-	   vc#set_visible false;
+	   vc#set_visible state;
 	   p.pr_viewcol <- Some vc;
 	   if p.pr_info.DpConfig.version <> "" then vc#set_clickable true;
 	   let _n : int = view#append_column vc in
 	   p, vc)
-	(Model.all_known_provers (*get_provers ()*))
+	(Model.get_prover_states ())
     in
     let _n : int = view#append_column last_col 
     in l
@@ -304,18 +311,20 @@ let build_statistics (model:GTree.tree_store) f =
     let row = Model.find_fct f
     and children = ref 0 in
     List.iter 
-      (fun p -> model#set ~row ~column:p.Model.pr_result 0) 
-      (Model.get_provers ());
+      (fun (p,s) -> 
+	 if s then model#set ~row ~column:p.Model.pr_result 0) 
+      (Model.get_prover_states ());
     Model.iter_fobligs
       f
       (fun r -> 
 	 incr children;
 	 List.iter 
-	   (fun p -> 
-	      let r = model#get ~row:r ~column:p.Model.pr_result 
-	      and u = model#get ~row ~column:p.Model.pr_result in
-	      model#set ~row ~column:p.Model.pr_result (u+r)) 
-	   (Model.get_provers ()));
+	   (fun (p,s) -> 
+	      if s then
+		let r = model#get ~row:r ~column:p.Model.pr_result 
+		and u = model#get ~row ~column:p.Model.pr_result in
+		model#set ~row ~column:p.Model.pr_result (u+r)) 
+	   (Model.get_prover_states ()));
     update_statistics model row f !children
       (*
     let statistics = get_statistics model row in
@@ -486,11 +495,15 @@ let run_benchmark_fct (view:GTree.view) (model:GTree.tree_store) f () =
 	let rec try_prover = function
 	  | [] -> 
 	      ()
-	  | p :: pl -> 
-	      let result = run_prover_child p view model oblig true false in
+	  | (p,s) :: pl ->
+	      
+	      let result = 
+		if s then run_prover_child p view model oblig true false 
+		else 0
+	      in
 	      if result = 0 then try_prover pl
 	in
-	try_prover (Model.get_provers ()))
+	try_prover (Model.get_prover_states ()))
       mychildren;
     if not (Tools.live_update ()) then begin 
       build_statistics model f
@@ -509,7 +522,7 @@ let main () =
   let w = GWindow.window 
 	    ~allow_grow:true ~allow_shrink:true
 	    ~width:!Colors.window_width ~height:!Colors.window_height 
-	    ~title:"gWhy : Easy proof with easy tool" ()
+	    ~title:"gWhy: a verification conditions viewer" ()
   in
   ignore (w#misc#connect#size_allocate 
 	    (let old_w = ref 0 
@@ -520,6 +533,7 @@ let main () =
 		 old_w := w;
 		 Colors.window_height := h;
 		 Colors.window_width := w;
+		 GConfig.save ()
 	       end));
   (* no effect 
      w#misc#modify_font !general_font;
@@ -545,22 +559,26 @@ let main () =
   *)
   let _ = 
     file_factory#add_image_item ~key:GdkKeysyms._Q ~label:"_Quit" 
-      ~callback:(fun () -> exit 0) () 
+      ~callback:(fun () -> GConfig.save(); exit 0) () 
   in
   (* configuration menu *)
   let configuration_menu = factory#add_submenu "_Configuration" in
   let configuration_factory = 
     new GMenu.factory configuration_menu ~accel_group 
   in
-  let unit () = () in
+(* should not be needed anymore
   let _ =
     configuration_factory#add_item ~key:GdkKeysyms._S
-      ~callback:(fun () -> Config.save ()) "Save preferences" in
-  let _ =
+      ~callback:(fun () -> GConfig.save ()) "Save preferences" in
+*)
+(*
+  let i =
     configuration_factory#add_item 
-      ~callback:(fun () -> Preferences.show Tools.Color unit ()) 
+      ~callback:(fun () -> Preferences.show Tools.Color (fun () -> ()) ()) 
       "Customize colors" 
   in
+  i#set_active false; HOW DO TO THIS IN LABLGTK ?
+*)
   let _ = 
     configuration_factory#add_item ~key:GdkKeysyms._plus
       ~callback:enlarge_font "Enlarge font" 
@@ -670,15 +688,14 @@ let main () =
   let _ = configuration_factory#add_separator ()  in
   let _ = 
     List.iter
-      (fun p -> 
-         let active = List.mem p (Model.get_provers ()) in
+      (fun (p,active) -> 
          begin
            match p.Model.pr_viewcol with
            | Some vc -> vc#set_visible active
            | None -> assert false
          end;
 	 let m = configuration_factory#add_check_item 
-	   ~active:(active) (Model.prover_id p)
+	   ~active (Model.prover_id p)
 	 in 
 	 ignore(m#connect#toggled  
 		  ~callback:(fun () -> 
@@ -697,8 +714,9 @@ let main () =
 				     | Some vc ->
 					 vc#set_visible false
 				     | None -> assert false
-				 end)))
-      Model.all_known_provers
+				 end;
+			       GConfig.save ())))
+      (Model.get_prover_states ())
   in 
   let _ = configuration_factory#add_separator ()  in
   let cache = configuration_factory#add_check_item 
@@ -793,26 +811,29 @@ let main () =
   let select_prover p = 
     (try !flash_info ((Model.prover_id p) ^" selected for default mode !")
     with _ -> ());
-    Model.set_prover p
+    Model.set_default_prover p
   in
   let provers_m = 
     let name = Model.prover_id (Model.get_default_prover ())
-    and pp = List.hd (Model.get_provers ()) in
+    and pp = fst (List.hd (Model.get_prover_states ())) in
     let n = Model.prover_id pp in
     let fm = proof_factory#add_radio_item ~active:(name = n) n in
     ignore(fm#connect#toggled  
 	     ~callback:(fun () -> select_prover pp));
     let group = fm#group in
-    (pp, fm) :: List.map
-      (fun p -> 
-	 let n = Model.prover_id p in
-	 let m = proof_factory#add_radio_item 
-	   ~active:(name = n) ~group n 
-	 in 
-	 ignore(m#connect#toggled  
-		  ~callback:(fun () -> select_prover p));
-	 p,m)
-      (List.tl (Model.get_provers ()))
+    (pp, fm) :: List.fold_right
+      (fun (p,s) acc -> 
+	 if s then
+	   let n = Model.prover_id p in
+	   let m = proof_factory#add_radio_item 
+	     ~active:(name = n) ~group n 
+	   in 
+	   ignore(m#connect#toggled  
+		    ~callback:(fun () -> select_prover p));
+	   (p,m)::acc
+	 else acc)
+      (List.tl (Model.get_prover_states ()))
+      []
   in 
   let switch_next_prover () =     
     let current_prover = Model.get_default_prover () in
@@ -992,13 +1013,16 @@ let main () =
 	  let row = model#get_iter p in
           let prover = 
 	    match List.filter 
-	      (fun p -> 
-		 match p.Model.pr_viewcol with
-		   | None -> assert false
-		   | Some c -> c#title = col#title
-	       (* WHY c == col is not enough ???? *)) 
-	      (Model.get_provers ()) with
-		| [p] -> p
+	      (fun (p,s) -> 
+		 if s then
+		   match p.Model.pr_viewcol with
+		     | None -> assert false
+		     | Some c -> c#title = col#title
+		  (* WHY c == col is not enough ???? *)
+		 else false) 
+	      (Model.get_prover_states ()) 
+	    with
+		| [p,_] -> p
 		| [] -> assert false
 		| _ -> assert false
 (*
@@ -1087,7 +1111,7 @@ let main () =
 		      model#set ~row ~column:zecol.Model.pr_result 1;
 		      model#set ~row ~column:Model.result 1;
 		      model#set ~row:parent ~column:zecol.Model.pr_result (r+1)
-		    with Model.No_such_prover -> ()
+		    with Not_found -> ()
 		 )
 		 (Cache.find cleaned)
 	     with Not_found -> 

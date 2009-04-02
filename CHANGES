@@ -1,4 +1,6 @@
 
+  o [GWhy] improved prover column configuration, improved config saving
+    incompatibility warning: old .gwhyrc files will be ignored and overwritten 
   o [Why] deprecated options -no-prelude, -no-arrays, -fp
   o [Why] new declaration [include "file"] in Why input language
   o [Why] prelude is split into smaller files: bool.why integer.why 

@@ -168,14 +168,8 @@ let prover_list =
     Gappa, (gappa, ["gappa"]) ;
   ] 
 
-let rc_file () =
-  let home =
-    try Sys.getenv "HOME"
-    with Not_found -> 
-      (* try windows env var *)
-      try Sys.getenv "USERPROFILE"
-      with Not_found -> ""
-  in
+let rc_file () = 
+  let home = Rc.get_home_dir () in
   Filename.concat home ".whyrc"
 
 open Format
@@ -189,8 +183,12 @@ let load_prover_info p key l =
 	   printf "Unknown field `%s' in section [%s] of rc file@." field key)
     l
 	 
+let already_loaded = ref false
+
 let load_rc_file () = 
-  let rc = Rc.from_file (rc_file ()) in
+  if !already_loaded then () else
+  let rc_file = rc_file () in
+  let rc = Rc.from_file rc_file in
   List.iter
     (fun (key,args) ->
        match key with
@@ -202,8 +200,9 @@ let load_rc_file () =
 	 | "Coq" -> load_prover_info coq key args
 	 | "Gappa" -> load_prover_info gappa key args
 	 | _ -> 
-	     printf "Unknown section [%s] in rc file@." key)
-    rc
+	     printf "Unknown section [%s] in config file '%s'@." key rc_file)
+    rc;
+  already_loaded := true
 	     
 
 let save_prover_info fmt p =

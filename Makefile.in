@@ -159,7 +159,8 @@ byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.
 
 .PHONY: check
 
-PRELUDE=lib/why/prelude.why lib/why/arrays.why lib/why/floats.why \
+PRELUDE=lib/why/prelude.why lib/why/bool.why lib/why/integer.why \
+	lib/why/real.why lib/why/arrays.why lib/why/floats.why \
 	lib/why/floats_strict.why lib/why/floats_full.why \
 	lib/why/jessie.why \
 	lib/why/mix.why
@@ -496,7 +497,7 @@ bin/why-viewer.byte: $(WVCMO)
 # graphical interface
 GCMO = $(CMO) intf/colors.cmo intf/tags.cmo intf/tools.cmo intf/tagsplit.cmo\
 	      intf/astprinter.cmo intf/astnprinter.cmo intf/astpprinter.cmo\
-	      intf/model.cmo intf/cache.cmo intf/config.cmo intf/hilight.cmo\
+	      intf/model.cmo intf/cache.cmo intf/gConfig.cmo intf/hilight.cmo\
 	      intf/whyhilight.cmo intf/pprinter.cmo intf/preferences.cmo intf/stat.cmo
 GCMX = $(GCMO:.cmo=.cmx)
 

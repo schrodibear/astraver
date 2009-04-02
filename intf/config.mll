@@ -34,7 +34,7 @@
   exception Lexical_error of string
   exception Eof 
 
-  let config_file = Filename.concat (get_home ()) ".gwhyrc"
+  let config_file = Filename.concat (Rc.get_home_dir ()) ".gwhyrc"
 
   let key = Buffer.create 128
   let string_buffer = Buffer.create 128
@@ -84,8 +84,9 @@
     output_string out_channel "# It must be contain at least one prover. Otherwise, all valid provers will be selected.\n";
     output_string out_channel "provers = ";
     List.iter 
-      (fun p -> output_string out_channel ("\""^(Model.prover_id p)^"\" "))
-      (Model.get_provers_s ());
+      (fun (p,s) -> 
+	 if s then output_string out_channel ("\""^(Model.prover_id p)^"\" "))
+      (Model.get_prover_states ());
 
 
     output_string out_channel "\n\n# window parameters\n";
@@ -156,20 +157,20 @@ rule token = parse
       { let ckey = Buffer.contents key in
 	(if ckey = "" then 
 	   () (* not needed : Buffer.add_string key id *)
-	 else if ckey = "provers" then
-	   if Queue.length vals = 0 then
-	     Model.add_all_provers () 
-	   else if Queue.length vals <> 0 then
-	     let provers = 
-	       Queue.fold 
-		 (fun prs pr -> pr::prs)
-		 []
+	 else 
+	   if ckey = "provers" then
+	     if Queue.length vals = 0 then
+	       () (* Model.add_all_provers () *)
+	     else if Queue.length vals <> 0 then
+	       Queue.iter 
+		 (fun pr -> 
+		      let p = Model.get_prover pr in
+		      Model.select_prover p)
 		 vals
-	     in Model.add_provers provers
-	   else raise (Lexical_error "no provers selected")
-	 else if Queue.length vals = 1 then
-	   let p = Queue.pop vals in
-	   Hashtbl.add config ckey p
+	     else raise (Lexical_error "no provers selected")
+	   else if Queue.length vals = 1 then
+	     let p = Queue.pop vals in
+	     Hashtbl.add config ckey p
 	 else if Queue.length vals = 2 then
 	   let fst = Queue.pop vals in
 	   let snd = Queue.pop vals in
@@ -198,14 +199,13 @@ rule token = parse
 	(if ckey <> "" then 
 	   if ckey = "provers" then
 	     if Queue.length vals = 0 then
-	       Model.add_all_provers () 
+	       () (* Model.add_all_provers ()  *)
 	     else if Queue.length vals <> 0 then
-	       let provers = 
-		 Queue.fold 
-		   (fun prs pr -> pr::prs)
-		   []
-		   vals
-	       in Model.add_provers provers
+	        Queue.iter 
+		 (fun pr -> 
+		      let p = Model.get_prover pr in
+		      Model.select_prover p)
+		 vals
 	     else raise (Lexical_error "no provers selected")
 	   else if Queue.length vals = 1 then
 	     let p = Queue.pop vals in

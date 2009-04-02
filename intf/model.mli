@@ -1,5 +1,16 @@
 
 
+(** {2 columns of the model} *)
+
+val name : string GTree.column
+val stat : string GTree.column
+val fullname : string GTree.column
+val result : int GTree.column
+val parent : string GTree.column
+val total : int GTree.column
+
+(** {2 prover data} *)
+
 type prover = {
   pr_id : DpConfig.prover_id;
   pr_info : DpConfig.prover_data;
@@ -8,16 +19,46 @@ type prover = {
   mutable pr_viewcol : GTree.view_column option;
   pr_enc : Options.encoding;
 }
+    (** type of a prover description in the model *)
 
-val all_known_provers : prover list
+val ergo : prover
+val simplify : prover
+val z3SS : prover
+val yicesSS : prover
+val cvc3SS : prover
+val gappa: prover
 
-val name : string GTree.column
-val stat : string GTree.column
-val fullname : string GTree.column
-val result : int GTree.column
-val parent : string GTree.column
-val total : int GTree.column
+val prover_id : prover -> string
+  (** return a prover identifier with name and encoding, e.g. "Z3(SS)",
+      which can be used for indexing *)
+
+val prover_name_with_version_and_enc : prover -> string
+  (** return a printable prover name under the form "prover_id\nversion\n(encoding)" *)
+
+(** {2 provers with their current selected/deselected status *)
+
+val get_prover_states : unit -> (prover*bool) list
+  (** returns the list of known provers 
+      with there current state: selected or not *)
+
+val select_prover : prover -> unit
+  (* sets prover state to selected *)
+
+val deselect_prover : prover -> unit
+  (* sets prover state to deselected *)
+
+val get_prover : string -> prover
+  (** search for an existing prover from its unique id (see [prover_id]
+      above). raises Not_found if no prover of this id exist *)
+
+val get_default_prover : unit -> prover
+
+val set_default_prover : prover -> unit
+
+(** {3 not documented} *)
+
 val fq : string Queue.t
+(* queue of functions in the model *)
 
 val create_model : unit -> GTree.tree_store
 
@@ -25,8 +66,6 @@ val frows : (string, Gtk.tree_iter) Hashtbl.t
 val fwrows : (string, (prover, string) Hashtbl.t) Hashtbl.t
 val first_row : Gtk.tree_iter option ref
 
-val select_prover : prover -> unit
-val deselect_prover : prover -> unit
 
 
 val find_fct : string -> Gtk.tree_iter
@@ -46,24 +85,6 @@ val obligs :
   Hashtbl.t
 
 
-val prover_name_with_version_and_enc : prover -> string
 
 
-val prover_id : prover -> string
-
-val get_default_prover : unit -> prover
-
-val get_provers : unit -> prover list
-
-val get_provers_s : unit -> prover list
-
-val add_all_provers : unit -> unit
-
-val add_provers : string list -> unit
-
-val set_prover : prover -> unit
-
-exception No_such_prover
-
-val get_prover : string -> prover
 

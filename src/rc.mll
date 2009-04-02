@@ -29,12 +29,27 @@
 
   open Lexing
 
+  let get_home_dir () =
+    try Sys.getenv "HOME"
+    with Not_found -> 
+      (* try windows env var *)
+      try Sys.getenv "USERPROFILE"
+      with Not_found -> ""
+
 type rc_value =
   | RCint of int
   | RCbool of bool
   | RCfloat of float
   | RCstring of string
   | RCident of string
+
+let int = function
+  | RCint n -> n
+  | _ -> failwith "Rc.int"
+
+let bool = function
+  | RCbool b -> b
+  | _ -> failwith "Rc.bool"
 
 let buf = Buffer.create 17
 
@@ -56,7 +71,7 @@ let push_record () =
 let space = [' ' '\t' '\r' '\n']+
 let digit = ['0'-'9']
 let letter = ['a'-'z' 'A'-'Z']
-let ident = (letter | '_') (letter | digit | '_' | '-') * 
+let ident = (letter | '_') (letter | digit | '_' | '-' | '(' | ')') * 
 let sign = '-' | '+' 
 let integer = sign? digit+
 let mantissa = ['e''E'] sign? digit+
