@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.88 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.89 2009-04-06 15:27:46 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -143,6 +143,19 @@ let sortp fmt id = idents fmt ("IS" ^ Ident.string id)
 
 let simplify_max_int = Int64.of_string "2147483646"
 
+let pp_exp fmt e =
+  if e="" then () else
+    if e.[0] = '-' then
+      fprintf fmt "minus%s" (String.sub e 1 (String.length e - 1))
+    else
+      fprintf fmt "%s" e
+
+let print_real fmt = function
+  | RConstDecimal (i, f, e) -> 
+      fprintf fmt "%s_%se%a" i f (Pp.print_option pp_exp) e
+  | RConstHexa (i, f, e) -> 
+      fprintf fmt "0x%s_%sp%a" i f pp_exp e
+
 let rec print_term fmt = function
   | Tvar id -> 
       fprintf fmt "%a" ident id
@@ -159,11 +172,14 @@ let rec print_term fmt = function
   | Tconst ConstUnit -> 
       fprintf fmt "tt" (* TODO: CORRECT? *)
   | Tconst (ConstFloat c) ->
+      fprintf fmt "real_constant_%a" print_real c 
+(*
       Print_real.print_with_integers 
 	"(real_of_int %s)" 
 	"(real_of_int (* %s %s))"
 	"(div_real (real_of_int %s) (real_of_int %s))" 
 	fmt c
+*)
   | Tderef _ -> 
       assert false
 (**

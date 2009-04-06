@@ -21,9 +21,74 @@ let print_decimal_no_exponent fmt = function
       else
 	fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
 
+
+let num0 = Num.Int 0
+let num10 = Num.Int 10
+let num16 = Num.Int 16
+
+let decnumber s =
+  let r = ref num0 in
+  for i=0 to String.length s - 1 do
+    r := Num.add_num (Num.mult_num num10 !r) 
+      (Num.num_of_int (Char.code s.[i] - Char.code '0'))
+  done;
+  !r
+    
+let hexnumber s =
+  let r = ref num0 in
+  for i=0 to String.length s - 1 do
+    let c = s.[i] in
+    let v = 
+      match c with
+	| '0'..'9' -> Char.code c - Char.code '0'
+	| 'a'..'f' -> Char.code c - Char.code 'a' + 10
+	| 'A'..'F' -> Char.code c - Char.code 'A' + 10
+	| _ -> assert false
+    in
+    r := Num.add_num (Num.mult_num num16 !r) (Num.num_of_int v)
+  done;
+  !r
+    
+let print_hexa fmt i f e =
+  let mant = hexnumber (i^f) in
+  let v =
+    if e=""
+    then mant
+    else
+      if String.get e 0 = '-' then
+	Num.div_num mant 
+	  (Num.power_num (Num.Int 2) 
+	     (decnumber (String.sub e 1 (String.length e - 1))))
+      else
+	
+	Num.mult_num mant 
+	  (Num.power_num (Num.Int 2) (decnumber e))
+  in
+  let v = 
+    Num.div_num v 
+      (Num.power_num (Num.Int 16) (Num.num_of_int (String.length f))) 
+  in
+  let i = Num.floor_num v in
+  let f = ref (Num.sub_num v i) in
+  if Num.eq_num !f num0 then
+    fprintf fmt "%s.0" (Num.string_of_num i)
+  else
+    begin
+      fprintf fmt "%s." (Num.string_of_num i);
+      while not (Num.eq_num !f num0) do
+	f := Num.mult_num !f num10;
+	let i =  Num.floor_num !f in
+	fprintf fmt "%s" (Num.string_of_num i);
+	f := Num.sub_num !f i
+      done
+    end
+(*
+  Format.fprintf fmt ";;;; %s@\n" (Num.string_of_num v)
+*)
+
 let print_no_exponent fmt = function
   | RConstDecimal (i, f, e) -> print_decimal_no_exponent fmt (i,f,e)
-  | RConstHexa (i, f, e) -> (* print_hexa fmt i f e *) assert false (*TODO*)
+  | RConstHexa (i, f, e) -> print_hexa fmt i f e 
 
 let hexa_to_decimal s =
   let n = String.length s in
@@ -79,6 +144,6 @@ let print fmt = function
 
 (*
 Local Variables: 
-compile-command: "unset LANG; nice make -j -C .. bin/why.byte"
+compile-command: "unset LANG; nice make -j -C .. byte"
 End: 
 *)
