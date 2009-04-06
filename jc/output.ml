@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.43 2008-11-05 14:03:16 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.44 2009-04-06 13:29:57 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -849,6 +849,7 @@ type kind =
   | AllocSize
   | Pack
   | Unpack
+  | FPoverflow
 
 
 let pos_table : 
@@ -878,7 +879,7 @@ let print_kind fmt k =
        | IndexBounds -> "IndexBounds"
        | DownCast -> "DownCast"
        | ArithOverflow -> "ArithOverflow"
-    )
+       | FPoverflow -> "FPOverflow")
 
 let abs_fname f =
   if Filename.is_relative f then

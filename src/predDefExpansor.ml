@@ -92,16 +92,16 @@ let rec expand = function
 
 let expand_inductive_def (t,l) = (t,List.map (fun (id,p) -> (id,expand p)) l)
 
-let expand_sequent (ctx,p) =
+let expand_sequent ~recursive_expand (ctx,p) =
   let expand_hyp = function
     | Svar _ as h -> h
-    | Spred (id, p) -> Spred (id, 
-			      if Options.defExpanding = All then 
-				expand p else p)  in
+    | Spred (id, p) -> 
+	Spred (id, if recursive_expand then expand p else p)  
+  in
   (List.map expand_hyp ctx, expand p)
 
 
-let push decl = 
+let push ~recursive_expand decl = 
   match decl with
   | Dpredicate_def (loc, ident, def) ->
       let argl,p = def.scheme_type in
@@ -109,24 +109,22 @@ let push decl =
       let p = expand p  in
       let vars = Vset.fold (fun v l -> v :: l) def.scheme_vars [] in
       Hashtbl.add pred_def ident (vars, List.map fst argl, p);
-      if Options.defExpanding = All then 
+      if recursive_expand then 
 	Dlogic (loc, Ident.string ident, Env.generalize_logic_type (Predicate (List.map snd argl)))
       else
 	decl
-  | Dinductive_def(loc, ident, def) when Options.defExpanding = All -> 
+  | Dinductive_def(loc, ident, def) when recursive_expand -> 
       Dinductive_def(loc,ident,
 		     Env.generalize_inductive_def 
 		       (expand_inductive_def def.scheme_type))		       
-  | Daxiom (loc, ident, ps) -> 
-      Daxiom (loc, ident, Env.generalize_predicate (
-			if Options.defExpanding = All then 
-			  expand ps.scheme_type else 
-			    ps.scheme_type ))
+  | Daxiom (loc, ident, ps) when recursive_expand -> 
+      Daxiom (loc, ident, Env.generalize_predicate(expand ps.scheme_type)) 
   | Dgoal (loc, expl, ident, ps) ->
       Dgoal (loc, expl, ident, 
-	     Env.generalize_sequent (expand_sequent ps.scheme_type)) 
+	     Env.generalize_sequent (expand_sequent ~recursive_expand ps.scheme_type)) 
   | Dfunction_def _ 
   | Dinductive_def _ 
+  | Daxiom _
   | Dtype _ 
   | Dlogic _ -> decl
 

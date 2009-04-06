@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.26 2009-03-17 12:35:25 marche Exp $ i*)
+(*i $Id: gappa.ml,v 1.27 2009-04-06 13:29:58 marche Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -410,7 +410,7 @@ let process_obligation (ctx, concl) =
 	Queue.add (el, gconcl) queue
 
 let push_decl d =
-  let decl = PredDefExpansor.push d in
+  let decl = PredDefExpansor.push ~recursive_expand:true d in
   match decl with
   | Logic_decl.Dgoal (_,_,_,s) -> process_obligation s.Env.scheme_type
   | _ -> ()

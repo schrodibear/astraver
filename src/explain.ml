@@ -126,6 +126,7 @@ let msg_of_kind =
     | EKPre "PointerDeref" -> "pointer dereferencing"
     | EKPre "IndexBounds" -> "check index bounds"
     | EKPre "ArithOverflow" -> "check arithmetic overflow"
+    | EKPre "FPOverflow" -> "check FP overflow"
     | EKPre "DivByZero" -> "check division by zero"
     | EKPre "AllocSize" -> "check allocation size"
     | EKPre "UserCall" -> "precondition for user call"

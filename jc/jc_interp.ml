@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.400 2009-03-16 08:36:39 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.401 2009-04-06 13:29:57 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -134,6 +134,7 @@ let make_check ?mark ?kind pos e' =
 let make_guarded_app ~mark kind pos f args =
   make_check ~mark ~kind pos (make_app f args)
 
+(*
 let print_kind fmt k =
   fprintf fmt "%s"
     (match k with
@@ -146,7 +147,9 @@ let print_kind fmt k =
        | IndexBounds -> "IndexBounds"
        | DownCast -> "DownCast"
        | ArithOverflow -> "ArithOverflow"
+       | FPoverflow -> "FPOverflow"
     )
+*)
 
 let print_locs fmt =
   Hashtbl.iter 
@@ -191,18 +194,27 @@ let term_unary_op: expr_unary_op -> string = function
   | `Ubw_not, `Integer -> "bw_compl"
   | _ -> assert false (* not proper type *)
 
-let float_operator f =
-  match f with
-    | `Badd -> "add_gen_float"
-    | `Bsub -> "sub_gen_float"
-    | `Bmul -> "mul_gen_float"
-    | `Bdiv -> "div_gen_float"
-    | `Bmod -> "mod_gen_float"
+let float_operator ~safe f =
+  let s =
+    match f with
+      | `Badd -> "add_gen_float"
+      | `Bsub -> "sub_gen_float"
+      | `Bmul -> "mul_gen_float"
+      | `Bdiv -> "div_gen_float"
+      | `Bmod -> "mod_gen_float"
+  in
+  if safe then s ^ "_safe" else s
 
 let float_format f =
   match f with
     | `Double -> "Double"
     | `Float -> "Single"
+
+let float_format_from_type f =
+  match f with
+    | Tdouble -> "Double"
+    | Tfloat -> "Single"
+    | _ -> assert false
 
 (*
 let rounding_mode = function
@@ -520,14 +532,11 @@ let term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src
 	      let e' = LApp(logic_int_of_enum ri,[ e' ]) in
 	      LApp("real_of_int",[ e' ])
 	end
-    | JCTnative Treal, JCTnative Tdouble ->
+    | JCTnative Treal, JCTnative (Tfloat | Tdouble) ->
 	LApp("float_value",[ e' ])
-    | JCTnative Treal, JCTnative Tfloat ->
-	LApp("float_value",[ e' ])
-    | JCTnative Tdouble, JCTnative Treal ->
-	LApp ("gen_float_of_real_logic", [ LVar "Double" ; logic_current_rounding_mode () ; e' ])
-    | JCTnative Tfloat, JCTnative Treal ->
-	LApp("gen_float_of_real_logic", [ LVar "Single" ; logic_current_rounding_mode () ; e' ])
+    | JCTnative (Tfloat | Tdouble as f), JCTnative Treal ->
+	LApp ("gen_float_of_real_logic", 
+	      [ LVar (float_format_from_type f) ; logic_current_rounding_mode () ; e' ])
     | JCTnative Tinteger, JCTnative Treal -> 
 	LApp("int_of_real",[ e' ])
       (* between enums and integer *)
@@ -630,13 +639,15 @@ let coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	end
     | JCTnative Tinteger, JCTnative Treal -> 
 	make_app "int_of_real" [ e' ]
-    | JCTnative Tdouble, JCTnative Treal ->
-	make_app "gen_float_of_real" [ Var "Double" ; current_rounding_mode () ; e' ]
-    | JCTnative Treal, JCTnative Tdouble ->
-	make_app "float_value" [ e' ]
-    | JCTnative Tfloat, JCTnative Treal ->
-	make_app "gen_float_of_real" [ Var "Single" ; current_rounding_mode () ; e' ]
-    | JCTnative Treal, JCTnative Tfloat ->
+    | JCTnative (Tfloat | Tdouble as f), JCTnative Treal ->
+	if check_int_overflow then
+	  make_guarded_app ~mark FPoverflow pos
+	    "gen_float_of_real" 
+	    [ Var (float_format_from_type f) ; current_rounding_mode () ; e' ]
+	else
+	  make_app "gen_float_of_real_safe" 
+	    [ Var (float_format_from_type f) ; current_rounding_mode () ; e' ]
+    | JCTnative Treal, JCTnative (Tfloat | Tdouble) ->
 	make_app "float_value" [ e' ]
       (* between enums and integer *)
     | JCTenum ri1, JCTenum ri2 
@@ -1226,7 +1237,7 @@ let assigns ~type_safe ?region_list before ef locs loc =
     MemoryMap.fold
       (fun (fi,r) _labs acc -> 
 	 if (* TODO: bug some assigns \nothing clauses are not translated e.g. in Purse.java *)
-	   Option_misc.map_default (RegionList.mem r) true region_list then
+	   true (* Option_misc.map_default (RegionList.mem r) true region_list *) then
 	   begin
 (*
 	     eprintf "ASSIGNS FOR FIELD %s@." 
@@ -1902,7 +1913,7 @@ and expr e =
     | JCEunary((`Uminus,(`Double|`Float as format)),e2) ->
         let e2' = expr e2 in
         make_guarded_app
-	  ~mark:e#mark DivByZero e#pos
+	  ~mark:e#mark FPoverflow e#pos
 	  "neg_gen_float"
 	  [Var (float_format format); current_rounding_mode () ; e2' ]
     | JCEunary(op,e1) ->
@@ -1937,8 +1948,8 @@ and expr e =
 	let e1' = expr e1 in
         let e2' = expr e2 in
         make_guarded_app
-	  ~mark:e#mark DivByZero e#pos
-	  (float_operator op)
+	  ~mark:e#mark FPoverflow e#pos
+	  (float_operator ~safe:(not (safety_checking())) op)
 	  [Var (float_format format); current_rounding_mode () ; e1' ; e2' ]
     | JCEbinary(e1,(_,#native_operator_type as op),e2) ->
         let e1' = expr e1 in

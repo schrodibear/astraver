@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.168 2009-03-31 12:46:11 marche Exp $ i*)
+(*i $Id: main.ml,v 1.169 2009-04-06 13:29:58 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -112,22 +112,23 @@ let push_decl _vloc d =
 	  | CVCLite -> Cvcl.push_decl
 	  | SmtLib -> Smtlib.push_decl 
       in
-      if defExpanding != NoExpanding  then 
-	let decl = PredDefExpansor.push d in 
-	(* List.iter *) pushing decl ;
-	(* List.iter *) store_decl_into_a_queue decl ; 
-      else
-	begin 
-	  store_decl_into_a_queue d ;
-	  pushing d 
-	end
+      let decl =
+	match defExpanding with
+	  | NoExpanding -> d
+	  | Options.Goal -> PredDefExpansor.push ~recursive_expand:false d 
+	  | All -> PredDefExpansor.push ~recursive_expand:true d 
+      in
+      pushing decl ;
+      store_decl_into_a_queue decl 
     end
   else
-    if defExpanding != NoExpanding then
-      (* List.iter *) store_decl_into_a_queue (PredDefExpansor.push d)
-    else
-      store_decl_into_a_queue d 
-	
+      let decl =
+	match defExpanding with
+	  | NoExpanding -> d
+	  | Options.Goal -> PredDefExpansor.push ~recursive_expand:false d 
+	  | All -> PredDefExpansor.push ~recursive_expand:true d 
+      in
+      store_decl_into_a_queue decl
 	
 	
 let push_obligations vloc = 

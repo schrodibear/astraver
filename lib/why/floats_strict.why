@@ -1,39 +1,7 @@
 
 (* Jessie prelude for floating-point arithmetic, strict mode *)
 
-type mode
-
-logic nearest_even, to_zero, up, down, nearest_away : mode
-
-parameter rounding_mode : mode ref
-
-(* generic precision floats *)
-
-type float_format
-
-logic Single, Double, Quad : float_format
-
-(* [gen_float] denotes the type of generic floats *)
-
-type gen_float
-
-logic round_float : float_format, mode, real -> real
-logic gen_float_of_real_logic : float_format, mode, real -> gen_float
-
-logic float_value : gen_float -> real
-logic exact_value : gen_float -> real
-logic model_value : gen_float -> real
-
-logic max_gen_float : float_format -> real
-
-axiom max_single : max_gen_float(Single) = 0x1.FFFFFEp127
- (* (2 - 2^-23)*2^127 *)
-
-axiom max_double : max_gen_float(Double) = 0x1.FFFFFFFFFFFFFp1023 
- (* (2 - 2^-52)*2^1023 *)
-
-
-predicate no_overflow(f:float_format, m:mode, x:real)= abs_real(round_float(f,m,x)) <= max_gen_float(f)
+include "floats_common.why"
 
 
 axiom a1: forall f:float_format. forall m:mode. forall x:real.
@@ -71,28 +39,53 @@ parameter gen_float_of_real :
     and exact_value(result) = x
     and model_value(result) = x }
 
+parameter gen_float_of_real_safe : 
+  f:float_format -> m:mode -> x:real ->
+  { }
+  gen_float
+  { float_value(result) = round_float(f,m,x) 
+    and exact_value(result) = x
+    and model_value(result) = x }
+
+
+predicate add_gen_float_post(f:float_format,m:mode,x:gen_float,y:gen_float,res:gen_float) =
+    float_value(res) = round_float(f,m,float_value(x) + float_value(y))
+    and 
+    exact_value(res) = exact_value(x) + exact_value(y)
+    and 
+    model_value(res) = model_value(x) + model_value(y)
 
 parameter add_gen_float : 
   f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
   { no_overflow(f,m,float_value(x) + float_value(y)) }
   gen_float
-  { float_value(result) = round_float(f,m,float_value(x) + float_value(y))
+  { add_gen_float_post(f,m,x,y,result) }
+
+parameter add_gen_float_safe : 
+  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
+  { }
+  gen_float
+  { add_gen_float_post(f,m,x,y,result) }
+
+predicate sub_gen_float_post(f:float_format,m:mode,x:gen_float,y:gen_float,res:gen_float) =
+    float_value(res) = round_float(f,m,float_value(x) - float_value(y))
     and 
-    exact_value(result) = exact_value(x) + exact_value(y)
+    exact_value(res) = exact_value(x) - exact_value(y)
     and 
-    model_value(result) = model_value(x) + model_value(y)
-  }
+    model_value(res) = model_value(x) - model_value(y)
 
 parameter sub_gen_float : 
   f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
   { no_overflow(f,m,float_value(x) - float_value(y)) }
   gen_float
-  { float_value(result) = round_float(f,m,float_value(x) - float_value(y))
-    and 
-    exact_value(result) = exact_value(x) - exact_value(y)
-    and 
-    model_value(result) = model_value(x) - model_value(y)
-  }
+  { sub_gen_float_post(f,m,x,y,result) }
+
+parameter sub_gen_float_safe : 
+  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
+  { }
+  gen_float
+  { no_overflow(f,m,float_value(x) - float_value(y)) 
+    and sub_gen_float_post(f,m,x,y,result) }
 
 parameter neg_gen_float : 
   f:float_format -> m:mode -> x:gen_float -> 
@@ -105,16 +98,25 @@ parameter neg_gen_float :
     model_value(result) = neg_real(model_value(x))
   }
 
+predicate mul_gen_float_post(f:float_format,m:mode,x:gen_float,y:gen_float,res:gen_float) =
+    float_value(res) = round_float(f,m,float_value(x) * float_value(y))
+    and 
+    exact_value(res) = exact_value(x) * exact_value(y)
+    and 
+    model_value(res) = model_value(x) * model_value(y)
+
 parameter mul_gen_float : 
   f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
   { no_overflow(f,m,float_value(x)*float_value(y)) }
   gen_float
-  { float_value(result) = round_float(f,m,float_value(x) * float_value(y))
-    and 
-    exact_value(result) = exact_value(x) * exact_value(y)
-    and 
-    model_value(result) = model_value(x) * model_value(y)
-  }
+  { no_overflow(f,m,float_value(x)*float_value(y))
+    and mul_gen_float_post(f,m,x,y,result) }
+
+parameter mul_gen_float_safe : 
+  f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
+  { }
+  gen_float
+  { mul_gen_float_post(f,m,x,y,result) }
 
 parameter div_gen_float : 
   f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 

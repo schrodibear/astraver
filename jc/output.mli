@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.27 2008-11-05 14:03:16 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.28 2009-04-06 13:29:57 marche Exp $ i*)
 
 type constant =
   | Prim_void
@@ -204,6 +204,9 @@ type kind =
   | AllocSize
   | Pack
   | Unpack
+  | FPoverflow
+
+val print_kind : Format.formatter -> kind -> unit
 
 val pos_table : 
     (string, (kind option * string option * string option * Loc.position)) 
