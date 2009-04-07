@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.278 2009-03-16 08:36:39 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.279 2009-04-07 15:35:00 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2593,7 +2593,9 @@ match a#node with
 	   let (pos1,neg1) = signed_occurrences pi a in
 	   (p+pos1,n+neg1)) (0,0) l
   | JCAor _ -> assert false (* TODO *)
-  | JCAnot _ -> assert false (* TODO *)
+  | JCAnot p -> 
+      let (pos,neg) = signed_occurrences pi p in
+      (neg,pos)
   | JCAiff (_, _) -> assert false (* TODO *)
   | JCAsubtype (_, _, _) -> assert false (* TODO *)
   | JCAeqtype (_, _, _) -> assert false (* TODO *)

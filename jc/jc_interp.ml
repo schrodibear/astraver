@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.401 2009-04-06 13:29:57 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.402 2009-04-07 15:34:59 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1236,8 +1236,8 @@ let assigns ~type_safe ?region_list before ef locs loc =
   let mems = 
     MemoryMap.fold
       (fun (fi,r) _labs acc -> 
-	 if (* TODO: bug some assigns \nothing clauses are not translated e.g. in Purse.java *)
-	   true (* Option_misc.map_default (RegionList.mem r) true region_list *) then
+	 if (* TODO: bug some assigns \nothing clauses are not translated e.g. in Purse.java (perhaps when no region is used). The first test resolve the problem but may hide another bug : What must be region_list when --no-region is used? *)
+	   !Jc_options.separation_sem = SepNone || Option_misc.map_default (RegionList.mem r) true region_list then
 	   begin
 (*
 	     eprintf "ASSIGNS FOR FIELD %s@." 
