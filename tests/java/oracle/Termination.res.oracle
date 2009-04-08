@@ -321,7 +321,7 @@ coq/Termination_why.v: why/Termination.why
 	@echo 'why -coq-v8 [...] why/Termination.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/Termination.why
 
 coq-goals: goals coq/Termination_ctx_why.vo
-	for f in why/Termination_po*.why; do make -f Termination.makefile coq/`basename $$f .why`_why.v ; done
+	for f in why/*_po*.why; do make -f Termination.makefile coq/`basename $$f .why`_why.v ; done
 
 coq/Termination_ctx_why.v: why/Termination_ctx.why
 	@echo 'why -coq-v8 [...] why/Termination_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/Termination_ctx.why
@@ -2965,19 +2965,6 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
-========== file tests/java/why/Termination_po1.why ==========
-goal Termination_loop1_safety_po_1:
-  forall this_2:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
-  forall mutable_n_1:int.
-  ("JC_20": true) ->
-  ("JC_19": (true = true)) ->
-  (mutable_n_1 > 0) ->
-  forall mutable_n_1_0:int.
-  (mutable_n_1_0 = (mutable_n_1 - 1)) ->
-  (0 <= ("JC_21": mutable_n_1))
-
 ========== file tests/java/why/Termination_po10.why ==========
 goal Termination_loop3_safety_po_1:
   forall this_0:Object pointer.
@@ -3003,6 +2990,19 @@ goal Termination_loop3_safety_po_2:
   forall i0:int.
   (i0 = (i - 1)) ->
   (("JC_49": i0) < ("JC_49": i))
+
+========== file tests/java/why/Termination_po1.why ==========
+goal Termination_loop1_safety_po_1:
+  forall this_2:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
+  forall mutable_n_1:int.
+  ("JC_20": true) ->
+  ("JC_19": (true = true)) ->
+  (mutable_n_1 > 0) ->
+  forall mutable_n_1_0:int.
+  (mutable_n_1_0 = (mutable_n_1 - 1)) ->
+  (0 <= ("JC_21": mutable_n_1))
 
 ========== file tests/java/why/Termination_po2.why ==========
 goal Termination_loop1_safety_po_2:
@@ -3228,12 +3228,12 @@ why -simplify [...] why/Termination.why
 (BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
- (IMPLIES (EQ (ge_real x (real_of_int 0)) |@true|) (EQ (real_abs x) x))))
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
 
 (BG_PUSH
  ;; Why axiom abs_real_neg
  (FORALL (x)
- (IMPLIES (EQ (le_real x (real_of_int 0)) |@true|)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
  (EQ (real_abs x) (real_neg x)))))
 
 (BG_PUSH

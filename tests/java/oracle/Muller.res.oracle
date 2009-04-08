@@ -569,7 +569,7 @@ coq/Muller_why.v: why/Muller.why
 	@echo 'why -coq-v8 [...] why/Muller.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/Muller.why
 
 coq-goals: goals coq/Muller_ctx_why.vo
-	for f in why/Muller_po*.why; do make -f Muller.makefile coq/`basename $$f .why`_why.v ; done
+	for f in why/*_po*.why; do make -f Muller.makefile coq/`basename $$f .why`_why.v ; done
 
 coq/Muller_ctx_why.v: why/Muller_ctx.why
 	@echo 'why -coq-v8 [...] why/Muller_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/Muller_ctx.why
@@ -3830,21 +3830,6 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
-========== file tests/java/why/Muller_po1.why ==========
-goal num_of_pos_strictly_increasing:
-  (forall intM_intP_t_3_14_at_L:(Object, int) memory.
-    (forall i_3:int.
-      (forall j_3:int.
-        (forall k_1:int.
-          (forall l:int.
-            (forall t_3:Object pointer.
-              (((j_3 < k_1) and
-                ((k_1 <= l) and (select(intM_intP_t_3_14_at_L, shift(t_3,
-                 k_1)) > 0))) ->
-               (num_of_pos(i_3, j_3, t_3,
-               intM_intP_t_3_14_at_L) < num_of_pos(i_3, l, t_3,
-               intM_intP_t_3_14_at_L)))))))))
-
 ========== file tests/java/why/Muller_po10.why ==========
 goal Muller_m_ensures_default_po_9:
   forall t_4:Object pointer.
@@ -4178,13 +4163,20 @@ goal Muller_m_ensures_default_po_18:
   (count0 = 0) ->
   ("JC_81": ("JC_78": ("JC_78": (0 <= count0))))
 
-========== file tests/java/why/Muller_po2.why ==========
-goal Muller_m_ensures_default_po_1:
-  forall t_4:Object pointer.
-  forall Object_t_4_7_alloc_table:Object alloc_table.
-  (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
-   ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_71": ("JC_66": ("JC_66": (0 <= 0))))
+========== file tests/java/why/Muller_po1.why ==========
+goal num_of_pos_strictly_increasing:
+  (forall intM_intP_t_3_14_at_L:(Object, int) memory.
+    (forall i_3:int.
+      (forall j_3:int.
+        (forall k_1:int.
+          (forall l:int.
+            (forall t_3:Object pointer.
+              (((j_3 < k_1) and
+                ((k_1 <= l) and (select(intM_intP_t_3_14_at_L, shift(t_3,
+                 k_1)) > 0))) ->
+               (num_of_pos(i_3, j_3, t_3,
+               intM_intP_t_3_14_at_L) < num_of_pos(i_3, l, t_3,
+               intM_intP_t_3_14_at_L)))))))))
 
 ========== file tests/java/why/Muller_po20.why ==========
 goal Muller_m_ensures_default_po_19:
@@ -4774,15 +4766,13 @@ goal Muller_m_ensures_default_po_28:
   (i_5_0 = (i_5 + 1)) ->
   ("JC_81": ("JC_78": ("JC_78": (0 <= count1))))
 
-========== file tests/java/why/Muller_po3.why ==========
-goal Muller_m_ensures_default_po_2:
+========== file tests/java/why/Muller_po2.why ==========
+goal Muller_m_ensures_default_po_1:
   forall t_4:Object pointer.
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_71":
-  ("JC_67":
-  ("JC_67": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_71": ("JC_66": ("JC_66": (0 <= 0))))
 
 ========== file tests/java/why/Muller_po30.why ==========
 goal Muller_m_ensures_default_po_29:
@@ -5171,13 +5161,15 @@ goal Muller_m_safety_po_8:
   (i_5 < result1) ->
   (offset_min(Object_t_4_7_alloc_table, t_4) <= i_5)
 
-========== file tests/java/why/Muller_po4.why ==========
-goal Muller_m_ensures_default_po_3:
+========== file tests/java/why/Muller_po3.why ==========
+goal Muller_m_ensures_default_po_2:
   forall t_4:Object pointer.
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_71": ("JC_68": ("JC_68": (0 <= 0))))
+  ("JC_71":
+  ("JC_67":
+  ("JC_67": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/Muller_po40.why ==========
 goal Muller_m_safety_po_9:
@@ -5644,6 +5636,14 @@ goal Muller_m_safety_po_15:
   (("JC_65": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
   ("JC_65": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
+========== file tests/java/why/Muller_po4.why ==========
+goal Muller_m_ensures_default_po_3:
+  forall t_4:Object pointer.
+  forall Object_t_4_7_alloc_table:Object alloc_table.
+  (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
+   ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
+  ("JC_71": ("JC_68": ("JC_68": (0 <= 0))))
+
 ========== file tests/java/why/Muller_po5.why ==========
 goal Muller_m_ensures_default_po_4:
   forall t_4:Object pointer.
@@ -5896,12 +5896,12 @@ why -simplify [...] why/Muller.why
 (BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
- (IMPLIES (EQ (ge_real x (real_of_int 0)) |@true|) (EQ (real_abs x) x))))
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
 
 (BG_PUSH
  ;; Why axiom abs_real_neg
  (FORALL (x)
- (IMPLIES (EQ (le_real x (real_of_int 0)) |@true|)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
  (EQ (real_abs x) (real_neg x)))))
 
 (BG_PUSH

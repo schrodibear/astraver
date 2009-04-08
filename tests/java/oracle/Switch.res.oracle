@@ -293,7 +293,7 @@ coq/Switch_why.v: why/Switch.why
 	@echo 'why -coq-v8 [...] why/Switch.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/Switch.why
 
 coq-goals: goals coq/Switch_ctx_why.vo
-	for f in why/Switch_po*.why; do make -f Switch.makefile coq/`basename $$f .why`_why.v ; done
+	for f in why/*_po*.why; do make -f Switch.makefile coq/`basename $$f .why`_why.v ; done
 
 coq/Switch_ctx_why.v: why/Switch_ctx.why
 	@echo 'why -coq-v8 [...] why/Switch_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/Switch_ctx.why
@@ -3243,23 +3243,6 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
-========== file tests/java/why/Switch_po1.why ==========
-goal Switch_test1_ensures_normal_po_1:
-  forall n_1:int32.
-  ("JC_14": true) ->
-  ((integer_of_int32(n_1) = 1) or
-   ((integer_of_int32(n_1) <> 1) and
-    ((integer_of_int32(n_1) = 0) or
-     ((integer_of_int32(n_1) <> 0) and (false = true))))) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 0) ->
-  forall r_0:int32.
-  (r_0 = result0) ->
-  forall return:int32.
-  (return = r_0) ->
-  ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)) ->
-  ("JC_19": (integer_of_int32(return) = 0))
-
 ========== file tests/java/why/Switch_po10.why ==========
 goal Switch_test2_ensures_normal_po_4:
   forall n_0_0:int32.
@@ -3466,8 +3449,8 @@ goal Switch_test2_ensures_normal_po_13:
   ((integer_of_int32(n_0_0) = 4) or (integer_of_int32(n_0_0) = 7)) ->
   ("JC_33": ("JC_31": (integer_of_int32(return) = 1)))
 
-========== file tests/java/why/Switch_po2.why ==========
-goal Switch_test1_ensures_normal_po_2:
+========== file tests/java/why/Switch_po1.why ==========
+goal Switch_test1_ensures_normal_po_1:
   forall n_1:int32.
   ("JC_14": true) ->
   ((integer_of_int32(n_1) = 1) or
@@ -3480,8 +3463,8 @@ goal Switch_test1_ensures_normal_po_2:
   (r_0 = result0) ->
   forall return:int32.
   (return = r_0) ->
-  (integer_of_int32(return) = 0) ->
-  ("JC_19": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
+  ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)) ->
+  ("JC_19": (integer_of_int32(return) = 0))
 
 ========== file tests/java/why/Switch_po20.why ==========
 goal Switch_test2_ensures_normal_po_14:
@@ -3532,6 +3515,23 @@ goal Switch_test2_ensures_normal_po_16:
   (integer_of_int32(return) = 0) ->
   ("JC_33":
   ("JC_32": ((integer_of_int32(n_0_0) = 0) or (integer_of_int32(n_0_0) = 1))))
+
+========== file tests/java/why/Switch_po2.why ==========
+goal Switch_test1_ensures_normal_po_2:
+  forall n_1:int32.
+  ("JC_14": true) ->
+  ((integer_of_int32(n_1) = 1) or
+   ((integer_of_int32(n_1) <> 1) and
+    ((integer_of_int32(n_1) = 0) or
+     ((integer_of_int32(n_1) <> 0) and (false = true))))) ->
+  forall result0:int32.
+  (integer_of_int32(result0) = 0) ->
+  forall r_0:int32.
+  (r_0 = result0) ->
+  forall return:int32.
+  (return = r_0) ->
+  (integer_of_int32(return) = 0) ->
+  ("JC_19": ((integer_of_int32(n_1) = 0) or (integer_of_int32(n_1) = 1)))
 
 ========== file tests/java/why/Switch_po3.why ==========
 goal Switch_test1_ensures_normal_po_3:
@@ -3778,12 +3778,12 @@ why -simplify [...] why/Switch.why
 (BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
- (IMPLIES (EQ (ge_real x (real_of_int 0)) |@true|) (EQ (real_abs x) x))))
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
 
 (BG_PUSH
  ;; Why axiom abs_real_neg
  (FORALL (x)
- (IMPLIES (EQ (le_real x (real_of_int 0)) |@true|)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
  (EQ (real_abs x) (real_neg x)))))
 
 (BG_PUSH

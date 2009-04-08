@@ -234,11 +234,8 @@ let reset_current_behavior () = current_behavior := None
 let get_current_behavior () = 
   match !current_behavior with None -> assert false | Some behav -> behav
 let safety_checking () = get_current_behavior () = "safety"
-(*
-let default_checking () = get_current_behavior () = "default"
-*)
 let in_current_behavior = function
-  | [] -> assert false (* default_checking () *)
+  | [] -> get_current_behavior () = "default"
   | ls -> 
 (*
       Format.eprintf 

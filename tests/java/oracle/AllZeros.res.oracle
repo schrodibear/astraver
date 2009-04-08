@@ -300,7 +300,7 @@ coq/AllZeros_why.v: why/AllZeros.why
 	@echo 'why -coq-v8 [...] why/AllZeros.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/AllZeros.why
 
 coq-goals: goals coq/AllZeros_ctx_why.vo
-	for f in why/AllZeros_po*.why; do make -f AllZeros.makefile coq/`basename $$f .why`_why.v ; done
+	for f in why/*_po*.why; do make -f AllZeros.makefile coq/`basename $$f .why`_why.v ; done
 
 coq/AllZeros_ctx_why.v: why/AllZeros_ctx.why
 	@echo 'why -coq-v8 [...] why/AllZeros_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/AllZeros_ctx.why
@@ -3289,16 +3289,6 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
-========== file tests/java/why/AllZeros_po1.why ==========
-goal AllZeros_all_zeros_ensures_default_po_1:
-  forall t:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   ("JC_35": Non_null_intM(t, Object_alloc_table))) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  ("JC_54": ("JC_51": ("JC_51": (0 <= integer_of_int32(result)))))
-
 ========== file tests/java/why/AllZeros_po10.why ==========
 goal AllZeros_all_zeros_ensures_default_po_10:
   forall t:Object pointer.
@@ -3534,6 +3524,16 @@ goal AllZeros_all_zeros_safety_po_6:
    t) + 1) - integer_of_int32(k0))) < ("JC_50":
                                       ((offset_max(Object_alloc_table,
                                       t) + 1) - integer_of_int32(k))))
+
+========== file tests/java/why/AllZeros_po1.why ==========
+goal AllZeros_all_zeros_ensures_default_po_1:
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   ("JC_35": Non_null_intM(t, Object_alloc_table))) ->
+  forall result:int32.
+  (integer_of_int32(result) = 0) ->
+  ("JC_54": ("JC_51": ("JC_51": (0 <= integer_of_int32(result)))))
 
 ========== file tests/java/why/AllZeros_po2.why ==========
 goal AllZeros_all_zeros_ensures_default_po_2:
@@ -3912,12 +3912,12 @@ why -simplify [...] why/AllZeros.why
 (BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
- (IMPLIES (EQ (ge_real x (real_of_int 0)) |@true|) (EQ (real_abs x) x))))
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
 
 (BG_PUSH
  ;; Why axiom abs_real_neg
  (FORALL (x)
- (IMPLIES (EQ (le_real x (real_of_int 0)) |@true|)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
  (EQ (real_abs x) (real_neg x)))))
 
 (BG_PUSH

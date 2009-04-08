@@ -157,7 +157,7 @@ coq/Literals_why.v: why/Literals.why
 	@echo 'why -coq-v8 [...] why/Literals.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/Literals.why
 
 coq-goals: goals coq/Literals_ctx_why.vo
-	for f in why/Literals_po*.why; do make -f Literals.makefile coq/`basename $$f .why`_why.v ; done
+	for f in why/*_po*.why; do make -f Literals.makefile coq/`basename $$f .why`_why.v ; done
 
 coq/Literals_ctx_why.v: why/Literals_ctx.why
 	@echo 'why -coq-v8 [...] why/Literals_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/Literals_ctx.why
@@ -2725,12 +2725,12 @@ why -simplify [...] why/Literals.why
 (BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
- (IMPLIES (EQ (ge_real x (real_of_int 0)) |@true|) (EQ (real_abs x) x))))
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
 
 (BG_PUSH
  ;; Why axiom abs_real_neg
  (FORALL (x)
- (IMPLIES (EQ (le_real x (real_of_int 0)) |@true|)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
  (EQ (real_abs x) (real_neg x)))))
 
 (BG_PUSH

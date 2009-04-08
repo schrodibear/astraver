@@ -452,7 +452,7 @@ coq/BinarySearch_why.v: why/BinarySearch.why
 	@echo 'why -coq-v8 [...] why/BinarySearch.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/BinarySearch.why
 
 coq-goals: goals coq/BinarySearch_ctx_why.vo
-	for f in why/BinarySearch_po*.why; do make -f BinarySearch.makefile coq/`basename $$f .why`_why.v ; done
+	for f in why/*_po*.why; do make -f BinarySearch.makefile coq/`basename $$f .why`_why.v ; done
 
 coq/BinarySearch_ctx_why.v: why/BinarySearch_ctx.why
 	@echo 'why -coq-v8 [...] why/BinarySearch_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/BinarySearch_ctx.why
@@ -4269,12 +4269,6 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
-========== file tests/java/why/BinarySearch_po1.why ==========
-goal mean_property1:
-  (forall x_4:int.
-    (forall y:int.
-      ((x_4 <= y) -> ((x_4 <= ((x_4 + y) / 2)) and (((x_4 + y) / 2) <= y)))))
-
 ========== file tests/java/why/BinarySearch_po10.why ==========
 goal BinarySearch_binary_search_ensures_default_po_8:
   forall t_0:Object pointer.
@@ -4767,13 +4761,11 @@ goal BinarySearch_binary_search_ensures_success_po_1:
   ("JC_45": (integer_of_int32(select(intM_intP, shift(t_0,
   integer_of_int32(return)))) = integer_of_int32(v)))
 
-========== file tests/java/why/BinarySearch_po2.why ==========
-goal mean_property2:
-  (forall x_0_0:int.
-    (forall y_0:int.
-      ((x_0_0 <= y_0) ->
-       ((x_0_0 <= (x_0_0 + ((y_0 - x_0_0) / 2))) and
-        ((x_0_0 + ((y_0 - x_0_0) / 2)) <= y_0)))))
+========== file tests/java/why/BinarySearch_po1.why ==========
+goal mean_property1:
+  (forall x_4:int.
+    (forall y:int.
+      ((x_4 <= y) -> ((x_4 <= ((x_4 + y) / 2)) and (((x_4 + y) / 2) <= y)))))
 
 ========== file tests/java/why/BinarySearch_po20.why ==========
 goal BinarySearch_binary_search_ensures_success_po_2:
@@ -5128,22 +5120,13 @@ goal BinarySearch_binary_search_safety_po_9:
   (integer_of_int32(result4) = result3) ->
   ((integer_of_int32(l) + integer_of_int32(result4)) <= 2147483647)
 
-========== file tests/java/why/BinarySearch_po3.why ==========
-goal BinarySearch_binary_search_ensures_default_po_1:
-  forall t_0:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
-   ("JC_35": Non_null_intM(t_0, Object_alloc_table))) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall result0:int.
-  ("JC_21":
-  ((result0 <= 2147483647) and
-   ((result0 >= 0) and
-    ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (result0 - 1)) ->
-  ("JC_77": ("JC_75": ("JC_75": (0 <= integer_of_int32(result)))))
+========== file tests/java/why/BinarySearch_po2.why ==========
+goal mean_property2:
+  (forall x_0_0:int.
+    (forall y_0:int.
+      ((x_0_0 <= y_0) ->
+       ((x_0_0 <= (x_0_0 + ((y_0 - x_0_0) / 2))) and
+        ((x_0_0 + ((y_0 - x_0_0) / 2)) <= y_0)))))
 
 ========== file tests/java/why/BinarySearch_po30.why ==========
 goal BinarySearch_binary_search_safety_po_10:
@@ -5721,6 +5704,23 @@ goal BinarySearch_binary_search_safety_po_19:
   (("JC_72": (integer_of_int32(u0) - integer_of_int32(l))) < ("JC_72":
                                                              (integer_of_int32(u) - integer_of_int32(l))))
 
+========== file tests/java/why/BinarySearch_po3.why ==========
+goal BinarySearch_binary_search_ensures_default_po_1:
+  forall t_0:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
+   ("JC_35": Non_null_intM(t_0, Object_alloc_table))) ->
+  forall result:int32.
+  (integer_of_int32(result) = 0) ->
+  forall result0:int.
+  ("JC_21":
+  ((result0 <= 2147483647) and
+   ((result0 >= 0) and
+    ((result0 = (offset_max(Object_alloc_table, t_0) + 1)) and (true = true))))) ->
+  forall result1:int32.
+  (integer_of_int32(result1) = (result0 - 1)) ->
+  ("JC_77": ("JC_75": ("JC_75": (0 <= integer_of_int32(result)))))
+
 ========== file tests/java/why/BinarySearch_po4.why ==========
 goal BinarySearch_binary_search_ensures_default_po_2:
   forall t_0:Object pointer.
@@ -6108,12 +6108,12 @@ why -simplify [...] why/BinarySearch.why
 (BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
- (IMPLIES (EQ (ge_real x (real_of_int 0)) |@true|) (EQ (real_abs x) x))))
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
 
 (BG_PUSH
  ;; Why axiom abs_real_neg
  (FORALL (x)
- (IMPLIES (EQ (le_real x (real_of_int 0)) |@true|)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
  (EQ (real_abs x) (real_neg x)))))
 
 (BG_PUSH

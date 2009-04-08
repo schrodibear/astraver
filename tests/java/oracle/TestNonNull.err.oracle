@@ -1,2 +1,1 @@
-File "jc/jc_interp_misc.ml", line 240, characters 10-10:
-Uncaught exception: File "jc/jc_interp_misc.ml", line 240, characters 10-16: Assertion failed
+sh: line 1:   510 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo56fa7f.why > /tmp/outc49029 2>&1

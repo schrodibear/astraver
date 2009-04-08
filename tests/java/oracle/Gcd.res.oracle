@@ -558,7 +558,7 @@ coq/Gcd_why.v: why/Gcd.why
 	@echo 'why -coq-v8 [...] why/Gcd.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/Gcd.why
 
 coq-goals: goals coq/Gcd_ctx_why.vo
-	for f in why/Gcd_po*.why; do make -f Gcd.makefile coq/`basename $$f .why`_why.v ; done
+	for f in why/*_po*.why; do make -f Gcd.makefile coq/`basename $$f .why`_why.v ; done
 
 coq/Gcd_ctx_why.v: why/Gcd_ctx.why
 	@echo 'why -coq-v8 [...] why/Gcd_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/Gcd_ctx.why
@@ -3767,13 +3767,6 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
-========== file tests/java/why/Gcd_po1.why ==========
-goal distr_left:
-  (forall x_0_0:int.
-    (forall y_0:int.
-      (forall z_0:int.
-        (((x_0_0 + y_0) * z_0) = ((x_0_0 * z_0) + (y_0 * z_0))))))
-
 ========== file tests/java/why/Gcd_po10.why ==========
 goal mul_comm:
   (forall x_3:int. (forall y_3:int. ((x_3 * y_3) = (y_3 * x_3))))
@@ -4019,11 +4012,12 @@ goal Gcd_gcd_ensures_resultIsGcd_po_1:
   (return = mutable_x_8) ->
   ("JC_23": isGcd(x_8, y_8, return))
 
-========== file tests/java/why/Gcd_po2.why ==========
-goal distr_left_minus:
-  (forall x_2:int.
-    (forall y_2:int.
-      (forall z_2:int. (((x_2 - y_2) * z_2) = ((x_2 * z_2) - (y_2 * z_2))))))
+========== file tests/java/why/Gcd_po1.why ==========
+goal distr_left:
+  (forall x_0_0:int.
+    (forall y_0:int.
+      (forall z_0:int.
+        (((x_0_0 + y_0) * z_0) = ((x_0_0 * z_0) + (y_0 * z_0))))))
 
 ========== file tests/java/why/Gcd_po20.why ==========
 goal Gcd_gcd_safety_po_1:
@@ -4129,6 +4123,12 @@ goal Gcd_gcd_safety_po_3:
   forall d_1_0:int.
   (d_1_0 = (b_2 - (d_1 * result0))) ->
   (("JC_38": mutable_y_8_0) < ("JC_38": mutable_y_8))
+
+========== file tests/java/why/Gcd_po2.why ==========
+goal distr_left_minus:
+  (forall x_2:int.
+    (forall y_2:int.
+      (forall z_2:int. (((x_2 - y_2) * z_2) = ((x_2 * z_2) - (y_2 * z_2))))))
 
 ========== file tests/java/why/Gcd_po3.why ==========
 goal distr_right:
@@ -4310,12 +4310,12 @@ why -simplify [...] why/Gcd.why
 (BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
- (IMPLIES (EQ (ge_real x (real_of_int 0)) |@true|) (EQ (real_abs x) x))))
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
 
 (BG_PUSH
  ;; Why axiom abs_real_neg
  (FORALL (x)
- (IMPLIES (EQ (le_real x (real_of_int 0)) |@true|)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
  (EQ (real_abs x) (real_neg x)))))
 
 (BG_PUSH

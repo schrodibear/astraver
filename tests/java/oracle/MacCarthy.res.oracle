@@ -327,7 +327,7 @@ coq/MacCarthy_why.v: why/MacCarthy.why
 	@echo 'why -coq-v8 [...] why/MacCarthy.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/MacCarthy.why
 
 coq-goals: goals coq/MacCarthy_ctx_why.vo
-	for f in why/MacCarthy_po*.why; do make -f MacCarthy.makefile coq/`basename $$f .why`_why.v ; done
+	for f in why/*_po*.why; do make -f MacCarthy.makefile coq/`basename $$f .why`_why.v ; done
 
 coq/MacCarthy_ctx_why.v: why/MacCarthy_ctx.why
 	@echo 'why -coq-v8 [...] why/MacCarthy_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/MacCarthy_ctx.why
@@ -3511,12 +3511,12 @@ why -simplify [...] why/MacCarthy.why
 (BG_PUSH
  ;; Why axiom abs_real_pos
  (FORALL (x)
- (IMPLIES (EQ (ge_real x (real_of_int 0)) |@true|) (EQ (real_abs x) x))))
+ (IMPLIES (EQ (ge_real x real_constant_0_0e) |@true|) (EQ (real_abs x) x))))
 
 (BG_PUSH
  ;; Why axiom abs_real_neg
  (FORALL (x)
- (IMPLIES (EQ (le_real x (real_of_int 0)) |@true|)
+ (IMPLIES (EQ (le_real x real_constant_0_0e) |@true|)
  (EQ (real_abs x) (real_neg x)))))
 
 (BG_PUSH
