@@ -1,13 +1,7 @@
-axiomatic Exp {
-
-  logic real exp(real x)
-
-}
-
-float monexp(float x)
+float my_exp(float x)
   requires \real_abs(x :> real) <= 1.0 && (x :> real) == \float_exact(x);
   behavior default:
-    ensures \real_abs((\result :> real) - exp(x :> real)) <= 0.05;
+    ensures \real_abs((\result :> real) - \exp(x :> real)) <= 0.05;
 {
   var float retres;
 
@@ -15,7 +9,7 @@ float monexp(float x)
            (1.130258690 :> float) * x +
            (0.5540440796 :> float) * x * x;
 
-  assert \real_abs(\float_exact(retres) - exp(x :> real)) <= 0.049;
+  assert \real_abs(\float_exact(retres) - \exp(x :> real)) <= 0.049;
 
   return retres;
 }
