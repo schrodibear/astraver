@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.402 2009-04-07 15:34:59 bobot Exp $ *)
+(* $Id: jc_interp.ml,v 1.403 2009-04-09 10:51:26 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -201,7 +201,8 @@ let float_operator ~safe f =
       | `Bsub -> "sub_gen_float"
       | `Bmul -> "mul_gen_float"
       | `Bdiv -> "div_gen_float"
-      | `Bmod -> "mod_gen_float"
+      | `Uminus -> "neg_gen_float"
+      | `Bmod -> assert false
   in
   if safe then s ^ "_safe" else s
 
@@ -1914,7 +1915,7 @@ and expr e =
         let e2' = expr e2 in
         make_guarded_app
 	  ~mark:e#mark FPoverflow e#pos
-	  "neg_gen_float"
+	   (float_operator ~safe:(not (safety_checking())) `Uminus)
 	  [Var (float_format format); current_rounding_mode () ; e2' ]
     | JCEunary(op,e1) ->
         let e1' = expr e1 in

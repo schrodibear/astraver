@@ -67,7 +67,8 @@ parameter add_gen_float_safe :
   gen_float
   { add_gen_float_post(f,m,x,y,result) }
 
-predicate sub_gen_float_post(f:float_format,m:mode,x:gen_float,y:gen_float,res:gen_float) =
+predicate sub_gen_float_post(f:float_format,m:mode,
+	  x:gen_float,y:gen_float,res:gen_float) =
     float_value(res) = round_float(f,m,float_value(x) - float_value(y))
     and 
     exact_value(res) = exact_value(x) - exact_value(y)
@@ -87,16 +88,26 @@ parameter sub_gen_float_safe :
   { no_overflow(f,m,float_value(x) - float_value(y)) 
     and sub_gen_float_post(f,m,x,y,result) }
 
+predicate neg_gen_float_post(f:float_format,m:mode,
+	  x:gen_float,res:gen_float) =
+    float_value(res) = round_float(f,m,-(float_value(x)))
+    and 
+    exact_value(res) = -(exact_value(x))
+    and 
+    model_value(res) = -(model_value(x))
+
 parameter neg_gen_float : 
   f:float_format -> m:mode -> x:gen_float -> 
-  { no_overflow(f,m,neg_real(float_value(x))) }
+  { no_overflow(f,m,-(float_value(x))) }
   gen_float
-  { float_value(result) = round_float(f,m,neg_real(float_value(x)))
-    and 
-    exact_value(result) = neg_real(exact_value(x))
-    and 
-    model_value(result) = neg_real(model_value(x))
-  }
+  { neg_gen_float_post(f,m,x,result) }
+
+parameter neg_gen_float_safe : 
+  f:float_format -> m:mode -> x:gen_float -> 
+  { }
+  gen_float
+  { no_overflow(f,m,-(float_value(x))) and
+    neg_gen_float_post(f,m,x,result) }
 
 predicate mul_gen_float_post(f:float_format,m:mode,x:gen_float,y:gen_float,res:gen_float) =
     float_value(res) = round_float(f,m,float_value(x) * float_value(y))
@@ -166,18 +177,6 @@ parameter sqrt_gen_float :
     model_value(result) = sqrt_real(model_value(x))
   }
 
-(*
-parameter neg_gen_float_requires : 
-  f:float_format -> m:mode -> x:gen_float -> 
-  {no_overflow(f,m,neg_real(float_value(x))) }
-  gen_float
-  { float_value(result) = round_float(f,m,neg_real(float_value(x)))
-    and 
-    exact_value(result) = neg_real(exact_value(x))
-    and 
-    model_value(result) = neg_real(model_value(x))
-  }
-*)
 
 parameter abs_gen_float_requires : 
   f:float_format -> m:mode -> x:gen_float -> 

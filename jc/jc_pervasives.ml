@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.147 2009-03-26 11:34:15 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.148 2009-04-09 10:51:26 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -971,6 +971,15 @@ let string_of_op_type = function
   | `Pointer -> "pointer"
   | `Logic -> "<some logic type>"
 
+let sign = JCTlogic "sign"
+
+(* Note: jessie does not support overloading. The right practice is
+   to add suffixes to make precise the type of arguments
+
+   TODO: rename integer_max to max_integer, real_abs to abs_real, etc.
+
+*)
+
 
 let builtin_logic_symbols =
   (* return type, jessie name, why name, parameter types *)
@@ -997,6 +1006,8 @@ let builtin_logic_symbols =
 (*  Some real_type, "\\double_relative_error", "gen_relative_error", [double_type];
     Some real_type, "\\float_relative_error", "gen_relative_error", [float_type];
 *)
+    Some sign, "\\sign_float", "float_sign", [float_type];
+    Some sign, "\\sign_double", "float_sign", [double_type];
     Some real_type, "\\exp", "exp", [real_type] ;
     Some real_type, "\\log", "log", [real_type] ;
     Some real_type, "\\log10", "log10", [real_type] ;

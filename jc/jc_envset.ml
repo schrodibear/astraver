@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.35 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_envset.ml,v 1.36 2009-04-09 10:51:26 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -82,6 +82,8 @@ let () =
       "of"; "or"; "parameter"; "predicate"; "prop"; "raise"; "raises";
       "reads"; "real"; "rec"; "ref"; "result"; "returns"; "then"; "true"; "try";
       "type"; "unit"; "variant"; "void"; "while"; "with"; "writes"; "init";
+      (* Why prelude *)
+      "exp" ; "log" ; "sin" ; "cos" ; "tan" ;
       (* jessie generated names *)
       (* "global" ; "alloc"  *)
     ]

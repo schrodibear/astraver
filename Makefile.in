@@ -161,7 +161,8 @@ byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.
 
 PRELUDE=lib/why/prelude.why lib/why/bool.why lib/why/integer.why \
 	lib/why/real.why lib/why/arrays.why lib/why/floats.why \
-	lib/why/floats_strict.why lib/why/floats_full.why lib/why/floats_common.why \
+	lib/why/floats_common.why lib/why/floats_strict.why \
+	lib/why/floats_full.why \
 	lib/why/jessie.why \
 	lib/why/mix.why
 

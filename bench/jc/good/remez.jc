@@ -1,4 +1,14 @@
+<<<<<<< remez.jc
+
+
+logic real exp(real x) = x
+
+
+
+float monexp(float x)
+=======
 float my_exp(float x)
+>>>>>>> 1.4
   requires \real_abs(x :> real) <= 1.0 && (x :> real) == \float_exact(x);
   behavior default:
     ensures \real_abs((\result :> real) - \exp(x :> real)) <= 0.05;

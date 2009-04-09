@@ -29,6 +29,8 @@ axiom abs_int_neg: forall x:int. x <= 0 -> abs_int(x) = -x
 
 (* min and max *)
 
+(* TODO: rename to max_int and min_int *)
+
 logic int_max : int, int -> int
 logic int_min : int, int -> int
 
