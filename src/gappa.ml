@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.28 2009-04-15 13:12:32 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.29 2009-04-15 13:46:22 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -253,12 +253,14 @@ let rec gpred = function
       begin match termo Exact t1, termo Exact t2 with
 	| Some (Gcst c1), Some t2 -> Some (Gge (t2, c1))
 	| Some t1, Some (Gcst c2) -> Some (Gle (t1, c2))
+        | Some t1, Some t2 -> Some (Gle (Gsub (t1, t2), "0"))
 	| _ -> None
       end
   | Papp (id, [t1; t2], _) when id == t_ge_real ->
       begin match termo Exact t1, termo Exact t2 with
 	| Some (Gcst c1), Some t2 -> Some (Gle (t2, c1))
 	| Some t1, Some (Gcst c2) -> Some (Gge (t1, c2))
+        | Some t1, Some t2 -> Some (Gge (Gsub (t1, t2), "0"))
 	| _ -> None
       end
   | Pand (_, _, Papp (id1, [f1; t1], _), Papp (id2, [t2; f2], _))
@@ -268,6 +270,20 @@ let rec gpred = function
       try Some (Gin (term Rounded t1, eval_constant f1, eval_constant f2))
       with NotGappa -> None
     end
+  | Papp (id, [t1; t2], _) when is_eq id ->
+      begin match termo Exact t1, termo Exact t2 with
+        | Some (Gcst c1), Some t2 -> Some (Gin (t2, c1, c1))
+        | Some t1, Some (Gcst c2) -> Some (Gin (t1, c2, c2))
+        | Some t1, Some t2 -> Some (Gin (Gsub (t1, t2), "0", "0"))
+        | _ -> None
+      end
+  | Papp (id, [t1; t2], _) when is_neq id ->
+      begin match termo Exact t1, termo Exact t2 with
+        | Some (Gcst c1), Some t2 -> Some (Gnot (Gin (t2, c1, c1)))
+        | Some t1, Some (Gcst c2) -> Some (Gnot (Gin (t1, c2, c2)))
+        | Some t1, Some t2 -> Some (Gnot (Gin (Gsub (t1, t2), "0", "0")))
+        | _ -> None
+      end
   | Pand (_, _, p1, p2) ->
       gando (gpred p1, gpred p2)
   | Por (p1, p2) ->
@@ -282,11 +298,15 @@ let rec gpred = function
       end
   | Pnamed (_, p) ->
       gpred p
+  | Pnot p ->
+      begin match gpred p with
+        | Some p -> Some (Gnot p)
+        | _ -> None
+      end
   | Forall _ 
   | Papp _
   | Pif _
   | Piff _
-  | Pnot _
   | Forallb _
   | Exists _
   | Ptrue | Pfalse | Pvar _ -> (* discarded *)
