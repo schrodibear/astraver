@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.29 2009-04-15 13:46:22 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.30 2009-04-15 16:42:44 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -49,7 +49,8 @@ type float_fmt = Single | Double
 type mode = Mnearest_even
 
 type gterm =
-  | Gvar of float_field * string
+  | Gvar of string
+  | Gfld of float_field * string
   | Grnd of float_fmt * mode * gterm
   | Gcst of string
   | Gneg of gterm
@@ -78,19 +79,8 @@ let real_of_int = Ident.create "real_of_int"
 
 let nearest_even = Ident.create "nearest_even"
 
-let t_double = Ident.create "double"
-let neg_double = Ident.create "neg_double"
-let add_double = Ident.create "add_double"
-let sub_double = Ident.create "sub_double"
-let mul_double = Ident.create "mul_double"
-let div_double = Ident.create "div_double"
 let pow_real = Ident.create "pow_real"
-let d_to_r = Ident.create "d_to_r"
-let d_to_exact = Ident.create "d_to_exact"
-let r_to_d = Ident.create "r_to_d"
-let double_round_error = Ident.create "double_round_error"
 
-(* [Jessie] *)
 let max_gen_float = Ident.create "max_gen_float"
 let round_float = Ident.create "round_float"
 let float_value = Ident.create "float_value"
@@ -98,12 +88,6 @@ let exact_value = Ident.create "exact_value"
 let model_value = Ident.create "model_value"
 let fmt_single = Ident.create "Single"
 let fmt_double = Ident.create "Double"
-
-let mode = function
-  | Tapp (id, [], _) | Tvar id when id == nearest_even ->
-      Mnearest_even
-  | _ ->
-      raise NotGappa
 
 let is_int_constant = function
   | Tconst (ConstInt _) -> true
@@ -140,106 +124,85 @@ let eval_constant = function
   | _ ->
       raise NotGappa
 
-(* [Caduceus] *)
-let grnd e m t =
-  match e with
-  | Rounded -> Grnd (Double, mode m, t)
-  | _ -> t
-
 let field_of_id s =
   if s == float_value then Rounded else
   if s == exact_value then Exact else
   if s == model_value then Model else
   assert false
 
+(* contains all the terms that have been generalized away,
+   because they were not recognized *)
 let gen_table = Hashtbl.create 10
+
+(* contains the terms associated to variables, especially gen_float variables *)
 let var_table = Hashtbl.create 10
 
-let rec term e = function
+let rec term = function
   | t when is_constant t ->
       Gcst (eval_constant t)
   | Tconst _ ->
       raise NotGappa
   | Tvar id ->
     begin
-      (*Format.printf "try subst: %s@." (Ident.string id);*)
-      try Hashtbl.find var_table id
-      with Not_found -> (*Format.printf "fail@.";*) Gvar (e, Ident.string id)
+      try
+        Hashtbl.find var_table id
+      with Not_found ->
+        Gvar (Ident.string id)
     end
-  | Tderef id -> 
-      Gvar (e, Ident.string id)
+  | Tderef id ->
+      Gvar (Ident.string id)
   (* real ops *)
-  | Tapp (id, [t], _) when id == t_neg_real -> 
-      Gneg (term e t)
-  | Tapp (id, [t], _) when id == t_abs_real -> 
-      Gabs (term e t)
-  | Tapp (id, [t1; t2], _) when id == t_add_real -> 
-      Gadd (term e t1, term e t2)
-  | Tapp (id, [t1; t2], _) when id == t_sub_real -> 
-      Gsub (term e t1, term e t2)
-  | Tapp (id, [t1; t2], _) when id == t_mul_real -> 
-      Gmul (term e t1, term e t2)
-  | Tapp (id, [t1; t2], _) when id == t_div_real -> 
-      Gdiv (term e t1, term e t2)
-  (* [Caduceus] float operations *)
-  | Tapp (id, [m; t], _) when id == neg_double -> 
-      grnd e m (Gneg (term e t))
-  | Tapp (id, [m; t1; t2], _) when id == add_double -> 
-      grnd e m (Gadd (term e t1, term e t2))
-  | Tapp (id, [m; t1; t2], _) when id == sub_double -> 
-      grnd e m (Gsub (term e t1, term e t2))
-  | Tapp (id, [m; t1; t2], _) when id == mul_double -> 
-      grnd e m (Gmul (term e t1, term e t2))
-  | Tapp (id, [m; t1; t2], _) when id == div_double -> 
-      grnd e m (Gdiv (term e t1, term e t2))
+  | Tapp (id, [t], _) when id == t_neg_real ->
+      Gneg (term t)
+  | Tapp (id, [t], _) when id == t_abs_real ->
+      Gabs (term t)
+  | Tapp (id, [t1; t2], _) when id == t_add_real ->
+      Gadd (term t1, term t2)
+  | Tapp (id, [t1; t2], _) when id == t_sub_real ->
+      Gsub (term t1, term t2)
+  | Tapp (id, [t1; t2], _) when id == t_mul_real ->
+      Gmul (term t1, term t2)
+  | Tapp (id, [t1; t2], _) when id == t_div_real ->
+      Gdiv (term t1, term t2)
   (* conversions *)
   | Tapp (id, [t], _) when id == real_of_int ->
-      term Exact t
-  (* [Caduceus] conversions *)
-  | Tapp (id, [t], _) when id == d_to_r ->
-      term Rounded t
-  | Tapp (id, [t], _) when id == d_to_exact ->
-      term Exact t
-  | Tapp (id, [m; t], _) when id == r_to_d && e = Rounded ->
-      Grnd (Double, mode m, term Exact t)
-  | Tapp (id, [m; t], _) when id == r_to_d ->
-      term e t
-  (* [Caduceus] errors *)
-  | Tapp (id, [t], _) when id == double_round_error ->
-      Gabs (Gsub (term Rounded t, term Exact t))
+      term t
   (* [Jessie] format upper bounds *)
   | Tapp (id, [Tapp (id', [], _)], _) when id == max_gen_float ->
       if id' == fmt_single then Gcst "0x1.FFFFFEp127" else
       if id' == fmt_double then Gcst "0x1.FFFFFFFFFFFFFp1023" else
       raise NotGappa
   (* [Jessie] rounding *)
-  | Tapp (id, [Tapp (fmt, [], _); Tapp (mode, [], _); t], _) 
+  | Tapp (id, [Tapp (fmt, [], _); Tapp (m, [], _); t], _)
       when id = round_float ->
       let fmt =
         if fmt == fmt_single then Single else
         if fmt == fmt_double then Double else
         raise NotGappa in
-      Grnd (fmt, Mnearest_even, term e t)
+      let mode =
+        if m == nearest_even then Mnearest_even else
+        raise NotGappa in
+      Grnd (fmt, mode, term t)
   | Tapp (id, [Tvar _ as x], _)
-    when (id == float_value || id == exact_value || id == model_value) ->
+      when (id == float_value || id == exact_value || id == model_value) ->
     begin
-      match term (field_of_id id) x with
-      | Gvar _ as v -> v
-      | _ -> raise NotGappa
+      match term x with
+        | Gvar v -> Gfld (field_of_id id, v)
+        | _ -> raise NotGappa
     end
   (* anything else is generalized as a fresh variable *)
   | Tapp _ as t ->
-      Gvar (e,
+      Gvar (
         try
           Hashtbl.find gen_table t
         with Not_found ->
           let n = Ident.string (fresh_var ()) in
-          Hashtbl.add gen_table t n;
+          Hashtbl.replace gen_table t n;
           n
         )
-  | Tnamed(_,t) -> term e t
+  | Tnamed(_,t) -> term t
 
-let termo e t = try Some (term e t) with NotGappa -> None
+let termo t = try Some (term t) with NotGappa -> None
 
 let gando = function
   | Some p1, Some p2 -> Some (Gand (p1, p2))
@@ -250,14 +213,14 @@ let gando = function
 
 let rec gpred = function
   | Papp (id, [t1; t2], _) when id == t_le_real ->
-      begin match termo Exact t1, termo Exact t2 with
+      begin match termo t1, termo t2 with
 	| Some (Gcst c1), Some t2 -> Some (Gge (t2, c1))
 	| Some t1, Some (Gcst c2) -> Some (Gle (t1, c2))
         | Some t1, Some t2 -> Some (Gle (Gsub (t1, t2), "0"))
 	| _ -> None
       end
   | Papp (id, [t1; t2], _) when id == t_ge_real ->
-      begin match termo Exact t1, termo Exact t2 with
+      begin match termo t1, termo t2 with
 	| Some (Gcst c1), Some t2 -> Some (Gle (t2, c1))
 	| Some t1, Some (Gcst c2) -> Some (Gge (t1, c2))
         | Some t1, Some t2 -> Some (Gge (Gsub (t1, t2), "0"))
@@ -267,18 +230,18 @@ let rec gpred = function
     when id1 == t_le_real && id2 == t_le_real && t1 = t2 
     && is_constant f1 && is_constant f2 ->
     begin 
-      try Some (Gin (term Rounded t1, eval_constant f1, eval_constant f2))
+      try Some (Gin (term t1, eval_constant f1, eval_constant f2))
       with NotGappa -> None
     end
   | Papp (id, [t1; t2], _) when is_eq id ->
-      begin match termo Exact t1, termo Exact t2 with
+      begin match termo t1, termo t2 with
         | Some (Gcst c1), Some t2 -> Some (Gin (t2, c1, c1))
         | Some t1, Some (Gcst c2) -> Some (Gin (t1, c2, c2))
         | Some t1, Some t2 -> Some (Gin (Gsub (t1, t2), "0", "0"))
         | _ -> None
       end
   | Papp (id, [t1; t2], _) when is_neq id ->
-      begin match termo Exact t1, termo Exact t2 with
+      begin match termo t1, termo t2 with
         | Some (Gcst c1), Some t2 -> Some (Gnot (Gin (t2, c1, c1)))
         | Some t1, Some (Gcst c2) -> Some (Gnot (Gin (t1, c2, c2)))
         | Some t1, Some t2 -> Some (Gnot (Gin (Gsub (t1, t2), "0", "0")))
@@ -319,36 +282,19 @@ let gpred p =
 (* extraction of a list of equalities and possibly a Gappa predicate *)
 
 let rec ghyp = function
-(*  | Papp (id, [Tvar x; t], _) when is_eq id ->
-      let x = Ident.string x in
-      begin match termo Double t, termo Exact t with
-	| Some t1, Some t2 -> [x, t1; "exact_"^x, t2], None
-	| _ -> [], None
-      end*)
-  (* [Caduceus] *)
-  | Papp (id, [Tapp (id', [Tvar x], _); t], _) 
-    when is_eq id && id' == d_to_exact ->
-      let x = Ident.string x in
-      begin match termo Exact t with
-	| Some t -> [Exact, x, t], None
-	| None -> [], None
-      end
   | Papp (id, [Tvar x; t], _) when is_eq id ->
     begin
-      match termo Rounded t with
+      match termo t with
       | Some t' ->
-        (*Format.printf "subst %s %a@." (Ident.string x) Util.print_term t;*)
-        Hashtbl.replace var_table x t';
-        [], None
+          Hashtbl.replace var_table x t';
+          [], None
       | None -> [], None
     end
-  (* [Jessie] *)
   | Papp (id, [Tapp (id', [Tvar x], _); t], _)
     when is_eq id && (id' == float_value || id' == exact_value || id' == model_value) ->
     begin
-      let e = field_of_id id' in
-      match termo e t with
-      | Some t -> [e, Ident.string x, t], None
+      match termo t with
+      | Some t -> [field_of_id id', Ident.string x, t], None
       | None -> [], None
     end
   | Pand (_, _, p1, p2) as p ->
@@ -396,37 +342,29 @@ let gimplies l p = match l with
   | [] -> p
   | _ -> Gimplies (gands l, p)
 
-let equations vl el0 =
-  (* (* invalid in Jessie, so disabled *)
-  List.fold_left
-    (fun el x ->
-       if List.mem_assoc x el0 then el 
-       else (x, Grnd (Double, Mnearest_even, Gvar (Exact, "init_"^x))) :: el)
-    (List.rev el0) vl
-  *)
-  List.rev el0
-
 let process_obligation (ctx, concl) =
   let ctx,concl = intros ctx concl in
-	let vl,el,pl = 
-	  List.fold_left 
-	    (fun ((vl,el,pl) as acc) h -> match h with
-	       | Svar (x, PTexternal ([], id)) when id == t_double ->
-		   Ident.string x :: vl, el, pl
-	       | Svar _ -> 
-		   acc
-	       | Spred (_, p) -> 
-		   let ep,pp = ghyp p in
-		   let pl = match pp with None -> pl | Some pp -> pp::pl in
-		   vl, ep :: el, pl)
-	    ([], [],[]) ctx
+    let el, pl =
+      List.fold_left
+        (fun ((el, pl) as acc) h ->
+          match h with
+            | Svar _ -> acc
+            | Spred (_, p) -> 
+                let ep, pp = ghyp p in
+                let pl =
+                  match pp with
+                    | None -> pl
+                    | Some pp -> pp :: pl
+                  in
+                ep :: el, pl)
+        ([],[]) ctx
 	in
   match gpred concl with
     | None -> (* goal is not a gappa prop *)
 	if debug then Format.eprintf "not a gappa prop; skipped@."
     | Some p ->
 	let gconcl = gimplies pl p in
-	let el = equations vl (List.flatten el) in
+        let el = List.rev (List.flatten el) in
 	Queue.add (el, gconcl) queue
 
 let push_decl d =
@@ -436,9 +374,10 @@ let push_decl d =
   | _ -> ()
 
 let rec print_term fmt = function
-  | Gvar (Rounded, x) -> fprintf fmt "float_%s" x
-  | Gvar (Exact,   x) -> fprintf fmt "exact_%s" x
-  | Gvar (Model,   x) -> fprintf fmt "model_%s" x
+  | Gvar x -> fprintf fmt "%s" x
+  | Gfld (Rounded, x) -> fprintf fmt "float_%s" x
+  | Gfld (Exact,   x) -> fprintf fmt "exact_%s" x
+  | Gfld (Model,   x) -> fprintf fmt "model_%s" x
   | Grnd (Single, Mnearest_even, t) -> fprintf fmt "sne(%a)" print_term t
   | Grnd (Double, Mnearest_even, t) -> fprintf fmt "dne(%a)" print_term t
   | Gcst c -> fprintf fmt "%s" c
@@ -457,11 +396,11 @@ let rec print_pred fmt = function
   | Gin (t, r1, r2) ->
       fprintf fmt "%a in [%s, %s]" print_term t r1 r2
   | Gimplies (p1, p2) ->
-      fprintf fmt "(%a ->@ %a)" print_pred p1 print_pred p2
+      fprintf fmt "(@[%a ->@ %a@])" print_pred p1 print_pred p2
   | Gand (p1, p2) ->
-      fprintf fmt "(%a /\\ %a)" print_pred p1 print_pred p2
+      fprintf fmt "(@[%a /\\@ %a@])" print_pred p1 print_pred p2
   | Gor (p1, p2) ->
-      fprintf fmt "(%a \\/ %a)" print_pred p1 print_pred p2
+      fprintf fmt "(@[%a \\/@ %a@])" print_pred p1 print_pred p2
   | Gnot p ->
       fprintf fmt "(not %a)" print_pred p
 
@@ -476,8 +415,8 @@ let print_equation fmt (e, x, t) =
 let print_obligation fmt (eq,p) =
   fprintf fmt "@@sne = float<ieee_32, ne>;@\n";
   fprintf fmt "@@dne = float<ieee_64, ne>;@\n@\n";
-  fprintf fmt "%a@\n" (print_list newline print_equation) eq;
-  fprintf fmt "@[{ %a }@]@." print_pred p
+  fprintf fmt "%a@\n@\n" (print_list newline print_equation) eq;
+  fprintf fmt "{ @[%a@] }@." print_pred p
 
 let output_one_file f =
   let sep = "### DO NOT EDIT ABOVE THIS LINE" in
