@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.403 2009-04-09 10:51:26 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.404 2009-04-15 15:35:13 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1915,7 +1915,8 @@ and expr e =
         let e2' = expr e2 in
         make_guarded_app
 	  ~mark:e#mark FPoverflow e#pos
-	   (float_operator ~safe:(not (safety_checking())) `Uminus)
+	    (*(float_operator ~safe:(not (safety_checking())) `Uminus)*)
+	     (float_operator ~safe:(!Jc_options.float_model = FMstrict) `Uminus)
 	  [Var (float_format format); current_rounding_mode () ; e2' ]
     | JCEunary(op,e1) ->
         let e1' = expr e1 in
@@ -1950,7 +1951,8 @@ and expr e =
         let e2' = expr e2 in
         make_guarded_app
 	  ~mark:e#mark FPoverflow e#pos
-	  (float_operator ~safe:(not (safety_checking())) op)
+	  (*(float_operator ~safe:(not (safety_checking())) op)*)
+	  (float_operator ~safe:(!Jc_options.float_model = FMstrict) op)
 	  [Var (float_format format); current_rounding_mode () ; e1' ; e2' ]
     | JCEbinary(e1,(_,#native_operator_type as op),e2) ->
         let e1' = expr e1 in

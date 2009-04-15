@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.38 2009-02-06 11:48:40 ayad Exp $ *)
+(* $Id: jc_options.mli,v 1.39 2009-04-15 15:35:14 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -34,7 +34,9 @@ open Jc_env
 
 val has_floats : bool ref
 val libdir : string
-val libfiles : unit -> string list
+(*val float_lib : string list
+val libfiles : unit -> string list*)
+val libfiles : string list ref
 
 (*s command-line options *)
 
@@ -62,6 +64,7 @@ val separation_sem : Jc_env.separation_sem ref
 val annotation_sem : Jc_env.annotation_sem ref
 val ai_domain : Jc_env.abstract_domain ref
 val int_model : Jc_env.int_model ref
+val float_model : Jc_env.float_model ref
 val trust_ai : bool
 val fast_ai : bool
 
@@ -70,6 +73,8 @@ val current_rounding_mode : Jc_env.float_rounding_mode ref
 val verify_behavior: string -> bool
 
 val set_int_model: int_model -> unit
+
+val set_float_model: float_model -> unit
 
 (*s The log file *)
 

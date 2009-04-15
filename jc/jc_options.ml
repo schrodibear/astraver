@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.45 2009-02-06 11:48:40 ayad Exp $ i*)
+(*i $Id: jc_options.ml,v 1.46 2009-04-15 15:35:13 ayad Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -61,8 +61,19 @@ let libdir =
 
 let has_floats = ref false
 
+let float_model : float_model ref = ref FMreal
+
+(*let float_lib = 
+match !Jc_options.float_model with
+| Jc_env.FMreal -> []
+| Jc_env.FMstrict -> ["floats_strict.why" ]
+| Jc_env.FMfull -> ["floats_full.why" ]
+
 let libfiles () = 
-  "jessie.why" :: (if !has_floats then ["floats_strict.why" ] else [])
+  "jessie.why" :: (if !Jc_options.has_floats then float_lib else [])
+*)
+
+let libfiles = ref ["jessie.why"]
 
 (*s command-line options *)
 
@@ -205,6 +216,9 @@ in modulo integer model";
      assert false)
   else
     int_model := im
+
+let set_float_model fm = float_model := fm
+
 
 (*s error handling *)
 

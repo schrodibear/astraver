@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.148 2009-04-09 10:51:26 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.149 2009-04-15 15:35:14 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1003,14 +1003,31 @@ let builtin_logic_symbols =
     Some real_type, "\\float_round_error", "gen_round_error", [float_type];
     Some real_type, "\\double_total_error", "gen_total_error", [double_type];
     Some real_type, "\\float_total_error", "gen_total_error", [float_type];
-(*  Some real_type, "\\double_relative_error", "gen_relative_error", [double_type];
+    Some real_type, "\\double_relative_error", "gen_relative_error", [double_type];
     Some real_type, "\\float_relative_error", "gen_relative_error", [float_type];
-*)
+    
     Some sign, "\\sign_float", "float_sign", [float_type];
     Some sign, "\\sign_double", "float_sign", [double_type];
+
+    Some (JCTnative Tboolean), "\\is_finite_float", "is_finite", [float_type];
+    Some (JCTnative Tboolean), "\\is_finite_double", "is_finite", [double_type];
+
+    Some (JCTnative Tboolean), "\\is_infinite_float", "is_infinite", [float_type];
+    Some (JCTnative Tboolean), "\\is_infinite_double", "is_infinite", [double_type];
+
+    Some (JCTnative Tboolean), "\\is_NaN_float", "is_NaN", [float_type];
+    Some (JCTnative Tboolean), "\\is_NaN_double", "is_NaN", [double_type];
+
+    Some (JCTnative Tboolean), "\\is_minus_infinity_float", "is_minus_infinity", [float_type];
+    Some (JCTnative Tboolean), "\\is_minus_infinity_double", "is_minus_infinity", [double_type];
+  
+    Some (JCTnative Tboolean), "\\is_plus_infinity_float", "is_plus_infinity", [float_type];
+    Some (JCTnative Tboolean), "\\is_plus_infinity_double", "is_plus_infinity", [double_type];
+  
     Some real_type, "\\exp", "exp", [real_type] ;
     Some real_type, "\\log", "log", [real_type] ;
     Some real_type, "\\log10", "log10", [real_type] ;
+    
     Some real_type, "\\cos", "cos", [real_type] ;
     Some real_type, "\\sin", "sin", [real_type] ;
     Some real_type, "\\tan", "tan", [real_type] ;

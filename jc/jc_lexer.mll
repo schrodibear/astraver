@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.86 2009-03-17 12:35:25 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.87 2009-04-15 15:35:13 ayad Exp $ i*)
 
 {
   open Jc_ast
@@ -135,6 +135,17 @@
 		 | "modulo" -> Jc_env.IMmodulo 
 		 | _ -> lex_error lexbuf ("unknown int model " ^ v))
 	  end  
+      | "FloatModel" ->
+	  begin
+	      (match v with
+	         | "real" -> Jc_options.float_model := Jc_env.FMreal;
+		     Jc_options.libfiles := ["jessie.why"]
+		 | "strict" -> Jc_options.float_model := Jc_env.FMstrict;
+		     Jc_options.libfiles := "jessie.why" :: ["floats_strict.why"]
+		 | "full" -> Jc_options.float_model := Jc_env.FMfull;
+		     Jc_options.libfiles := "jessie.why" :: ["floats_full.why"]
+		 | _ -> lex_error lexbuf ("unknown float model " ^ v))
+	  end  
       | "FloatRoundingMode" ->
 	  begin
 	    Jc_options.current_rounding_mode :=
@@ -148,7 +159,7 @@
 	  end  
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 
-  let float_suffix = function
+ let float_suffix = function
     | None -> `Real
     | Some('f' | 'F') -> `Single
     | Some('d' | 'D') -> `Double
