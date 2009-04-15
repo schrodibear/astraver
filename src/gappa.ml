@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.27 2009-04-06 13:29:58 marche Exp $ i*)
+(*i $Id: gappa.ml,v 1.28 2009-04-15 13:12:32 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -117,6 +117,7 @@ let eval_int_constant = function
 
 let is_constant = function
   | Tconst (ConstFloat _) -> true
+  | Tapp (id, [Tconst (ConstFloat _)], _) when id == t_neg_real -> true
   | Tapp (id, [Tconst (ConstInt _)], _) when id == real_of_int -> true
   | Tapp (pr, [Tapp (ri1, [Tconst (ConstInt "2")], _);
 	       Tapp (ri2, [n], _)], _) 
@@ -124,16 +125,15 @@ let is_constant = function
       && is_int_constant n -> true
   | _ -> false
 
+let eval_rconst = function
+  | RConstDecimal (i,f,None) -> Printf.sprintf "%s.%s" i f
+  | RConstDecimal (i,f,Some e)  -> Printf.sprintf "%s.%se%s" i f e
+  | RConstHexa (i,f,e) -> Printf.sprintf "0x%s.%sp%s" i f e
+
 let eval_constant = function
-  | Tconst (ConstFloat f) -> 
-    begin
-      match f with
-      | RConstDecimal (i,f,None) -> Printf.sprintf "%s.%s" i f
-      | RConstDecimal (i,f,Some e)  -> Printf.sprintf "%s.%se%s" i f e
-      | RConstHexa (i,f,e) -> Printf.sprintf "0x%s.%sp%s" i f e
-    end
-  | Tapp (id, [Tconst (ConstInt n)], _) when id == real_of_int -> 
-      n
+  | Tconst (ConstFloat f) -> eval_rconst f
+  | Tapp (id, [Tconst (ConstFloat f)], _) when id == t_neg_real -> "-"^(eval_rconst f)
+  | Tapp (id, [Tconst (ConstInt n)], _) when id == real_of_int -> n
   | Tapp (pr, [Tapp (ri1, [Tconst (ConstInt "2")], _); Tapp (ri2, [n], _)], _)
     when pr == pow_real && ri1 == real_of_int && ri2 = real_of_int -> 
       Printf.sprintf "1b%s" (eval_int_constant n)
