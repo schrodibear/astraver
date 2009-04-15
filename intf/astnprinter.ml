@@ -70,7 +70,7 @@ let print_term fmt t =
 	Ident.print fmt id
     | Tderef _ ->
 	assert false
-    | Tapp (id, [t], _) when id == t_neg_int ->
+    | Tapp (id, [t], _) when id == t_neg_int || id == t_neg_real ->
 	fprintf fmt "-%a" print3 t
     | Tapp (id, [_;_], _) as t when is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t

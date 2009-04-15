@@ -74,7 +74,7 @@ let print_term fmt t =
 	print_fct_acc fmt t
     | Tapp (id, _, _) as t when Ident.string id = "shift" ->
 	print_fct_shift fmt t
-    | Tapp (id, [t], _) when id == t_neg_int ->
+    | Tapp (id, [t], _) when id == t_neg_int || id == t_neg_real ->
 	fprintf fmt "(- %a)" print3 t
     | Tapp (id, [_;_], _) as t when is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
