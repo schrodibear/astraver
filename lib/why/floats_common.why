@@ -44,4 +44,15 @@ axiom max_quad: max_gen_float(Quad) = 0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383
  (* (2 - 2^-112)*2^16383 *)
 
 
-predicate no_overflow(f:float_format,m:mode,x:real) = abs_real(round_float(f,m,x)) <= max_gen_float(f)
+predicate no_overflow(f:float_format,m:mode,x:real) = 
+	  abs_real(round_float(f,m,x)) <= max_gen_float(f)
+
+
+(********************************************************)
+(* a few lemmas for automatic provers others than gappa *)
+(********************************************************)
+
+(* useful at least for constants *)
+axiom bounded_real_no_overflow : 
+      forall f:float_format. forall m:mode. forall x:real. 
+      	     abs_real(x) <= max_gen_float(f) -> no_overflow(f,m,x)

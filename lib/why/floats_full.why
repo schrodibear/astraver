@@ -159,14 +159,15 @@ predicate float_neq_float(x:gen_float,y:gen_float) =
 
 (* axioms on round_float *)
 axiom round_of_zero: forall f:float_format. forall m:mode. round_float(f,m,0.0) = 0.0
-axiom bounded_real_no_overflow : forall f:float_format. forall m:mode. forall x:real. 
-                                 abs_real(x) <= max_gen_float(f) -> no_overflow(f,m,x)
 
-axiom positive_constant : forall f:float_format. forall m:mode. forall x:real.  
-                          min_gen_float(f) <= x <= max_gen_float(f) -> no_overflow(f,m,x) and round_float(f,m,x) > 0.0 
+axiom positive_constant : 
+      forall f:float_format. forall m:mode. forall x:real.  
+      min_gen_float(f) <= x <= max_gen_float(f) -> 	    
+          no_overflow(f,m,x) and round_float(f,m,x) > 0.0 
 
-axiom negative_constant : forall f:float_format. forall m:mode. forall x:real.  
-                          - max_gen_float(f) <= x <= - min_gen_float(f) -> no_overflow(f,m,x) and round_float(f,m,x) < 0.0
+axiom negative_constant : 
+      forall f:float_format. forall m:mode. forall x:real.  
+       - max_gen_float(f) <= x <= - min_gen_float(f) -> no_overflow(f,m,x) and round_float(f,m,x) < 0.0
 
 axiom round_not_zero: forall f:float_format. forall m:mode. forall x:real.  
                          abs_real(x) >= min_gen_float(f) -> abs_real(round_float(f,m,x)) >= min_gen_float(f)

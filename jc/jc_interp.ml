@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.404 2009-04-15 15:35:13 ayad Exp $ *)
+(* $Id: jc_interp.ml,v 1.405 2009-04-16 11:54:07 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1915,9 +1915,9 @@ and expr e =
         let e2' = expr e2 in
         make_guarded_app
 	  ~mark:e#mark FPoverflow e#pos
-	    (*(float_operator ~safe:(not (safety_checking())) `Uminus)*)
-	     (float_operator ~safe:(!Jc_options.float_model = FMstrict) `Uminus)
-	  [Var (float_format format); current_rounding_mode () ; e2' ]
+	  (float_operator ~safe:(!Jc_options.float_model = FMstrict && 
+	       (not (safety_checking()))) `Uminus)
+	     [Var (float_format format); current_rounding_mode () ; e2' ]
     | JCEunary(op,e1) ->
         let e1' = expr e1 in
         make_app (unary_op op) 
@@ -1951,8 +1951,7 @@ and expr e =
         let e2' = expr e2 in
         make_guarded_app
 	  ~mark:e#mark FPoverflow e#pos
-	  (*(float_operator ~safe:(not (safety_checking())) op)*)
-	  (float_operator ~safe:(!Jc_options.float_model = FMstrict) op)
+	  (float_operator ~safe:(!Jc_options.float_model = FMstrict && (not (safety_checking()))) op)
 	  [Var (float_format format); current_rounding_mode () ; e1' ; e2' ]
     | JCEbinary(e1,(_,#native_operator_type as op),e2) ->
         let e1' = expr e1 in
@@ -2046,10 +2045,13 @@ and expr e =
               coerce ~check_int_overflow:(safety_checking())
                 e#mark e#pos integer_type e1#typ e1 e1'
           | Round_double rm ->
-              coerce ~check_int_overflow:(safety_checking())
+              coerce ~check_int_overflow:(safety_checking() 
+					    (* no safe version in the full model*) 
+	      || !Jc_options.float_model <> FMstrict)
                 e#mark e#pos double_type e1#typ e1 e1'
 	  | Round_float rm ->
-              coerce ~check_int_overflow:(safety_checking())
+              coerce ~check_int_overflow:(safety_checking() 
+	      || !Jc_options.float_model <> FMstrict )
                 e#mark e#pos float_type e1#typ e1 e1'
         end
     | JCEderef(e1,fi) ->
