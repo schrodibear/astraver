@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.30 2009-04-15 16:42:44 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.31 2009-04-16 09:29:38 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -100,12 +100,12 @@ let eval_int_constant = function
   | _ -> assert false
 
 let is_constant = function
+  | t when is_int_constant t -> true
   | Tconst (ConstFloat _) -> true
   | Tapp (id, [Tconst (ConstFloat _)], _) when id == t_neg_real -> true
-  | Tapp (id, [Tconst (ConstInt _)], _) when id == real_of_int -> true
-  | Tapp (pr, [Tapp (ri1, [Tconst (ConstInt "2")], _);
-	       Tapp (ri2, [n], _)], _) 
-    when pr == pow_real && ri1 == real_of_int && ri2 = real_of_int 
+  | Tapp (id, [t], _) when id == real_of_int && is_int_constant t -> true
+  | Tapp (pr, [Tapp (ri1, [Tconst (ConstInt "2")], _); Tapp (ri2, [n], _)], _)
+    when pr == pow_real && ri1 == real_of_int && ri2 = real_of_int
       && is_int_constant n -> true
   | _ -> false
 
@@ -115,11 +115,12 @@ let eval_rconst = function
   | RConstHexa (i,f,e) -> Printf.sprintf "0x%s.%sp%s" i f e
 
 let eval_constant = function
+  | t when is_int_constant t ->eval_int_constant t
   | Tconst (ConstFloat f) -> eval_rconst f
   | Tapp (id, [Tconst (ConstFloat f)], _) when id == t_neg_real -> "-"^(eval_rconst f)
-  | Tapp (id, [Tconst (ConstInt n)], _) when id == real_of_int -> n
+  | Tapp (id, [t], _) when id == real_of_int -> eval_int_constant t
   | Tapp (pr, [Tapp (ri1, [Tconst (ConstInt "2")], _); Tapp (ri2, [n], _)], _)
-    when pr == pow_real && ri1 == real_of_int && ri2 = real_of_int -> 
+    when pr == pow_real && ri1 == real_of_int && ri2 = real_of_int ->
       Printf.sprintf "1b%s" (eval_int_constant n)
   | _ ->
       raise NotGappa
@@ -151,16 +152,16 @@ let rec term = function
     end
   | Tderef id ->
       Gvar (Ident.string id)
-  (* real ops *)
-  | Tapp (id, [t], _) when id == t_neg_real ->
+  (* int and real ops *)
+  | Tapp (id, [t], _) when id == t_neg_real || id = t_neg_int ->
       Gneg (term t)
   | Tapp (id, [t], _) when id == t_abs_real ->
       Gabs (term t)
-  | Tapp (id, [t1; t2], _) when id == t_add_real ->
+  | Tapp (id, [t1; t2], _) when id == t_add_real || id = t_add_int ->
       Gadd (term t1, term t2)
-  | Tapp (id, [t1; t2], _) when id == t_sub_real ->
+  | Tapp (id, [t1; t2], _) when id == t_sub_real || id = t_sub_int ->
       Gsub (term t1, term t2)
-  | Tapp (id, [t1; t2], _) when id == t_mul_real ->
+  | Tapp (id, [t1; t2], _) when id == t_mul_real || id = t_mul_int ->
       Gmul (term t1, term t2)
   | Tapp (id, [t1; t2], _) when id == t_div_real ->
       Gdiv (term t1, term t2)
@@ -212,14 +213,14 @@ let gando = function
 (* recognition of a Gappa predicate *)
 
 let rec gpred = function
-  | Papp (id, [t1; t2], _) when id == t_le_real ->
+  | Papp (id, [t1; t2], _) when id == t_le_real || id == t_le_int ->
       begin match termo t1, termo t2 with
 	| Some (Gcst c1), Some t2 -> Some (Gge (t2, c1))
 	| Some t1, Some (Gcst c2) -> Some (Gle (t1, c2))
         | Some t1, Some t2 -> Some (Gle (Gsub (t1, t2), "0"))
 	| _ -> None
       end
-  | Papp (id, [t1; t2], _) when id == t_ge_real ->
+  | Papp (id, [t1; t2], _) when id == t_ge_real || id == t_ge_int ->
       begin match termo t1, termo t2 with
 	| Some (Gcst c1), Some t2 -> Some (Gle (t2, c1))
 	| Some t1, Some (Gcst c2) -> Some (Gge (t1, c2))
@@ -227,8 +228,8 @@ let rec gpred = function
 	| _ -> None
       end
   | Pand (_, _, Papp (id1, [f1; t1], _), Papp (id2, [t2; f2], _))
-    when id1 == t_le_real && id2 == t_le_real && t1 = t2 
-    && is_constant f1 && is_constant f2 ->
+    when (id1 == t_le_real || id1 == t_le_int) && (id2 == t_le_real || id2 == t_le_int)
+    && t1 = t2 && is_constant f1 && is_constant f2 ->
     begin 
       try Some (Gin (term t1, eval_constant f1, eval_constant f2))
       with NotGappa -> None
