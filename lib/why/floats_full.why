@@ -123,23 +123,19 @@ predicate sign_zero_result(m:mode,x:gen_float) =
      and 
        (m <> down -> float_sign(x) = Positive)) 
 
-predicate float_less_than_real(x:gen_float,y:real) = (is_finite(x) and float_value(x) <= y) or is_minus_infinity(x)
-
-predicate real_less_than_float(x:real, y:gen_float) = (is_finite(y) and x <= float_value(y)) or is_plus_infinity(y)
-
-predicate float_less_than_float(x:gen_float,y:gen_float) = 
+predicate float_le_float(x:gen_float,y:gen_float) = 
           (is_finite(x) and is_finite(y) and float_value(x) <= float_value(y))
            or (is_minus_infinity(x) and is_not_NaN(y))
            or (is_not_NaN(x) and is_plus_infinity(y))
 
-predicate float_strict_less_than_float(x:gen_float,y:gen_float) = 
+predicate float_lt_float(x:gen_float,y:gen_float) = 
           (is_finite(x) and is_finite(y) and float_value(x) < float_value(y))
            or (is_minus_infinity(x) and is_not_NaN(y) and not is_minus_infinity(y)) 
            or (is_not_NaN(x) and not is_plus_infinity(x) and is_plus_infinity(y))
 
-predicate float_greater_than_float(x:gen_float,y:gen_float) = float_strict_less_than_float(y,x)
+predicate float_ge_float(x:gen_float,y:gen_float) = float_le_float(y,x)
 
-predicate float_strict_greater_than_float(x:gen_float,y:gen_float) = float_strict_less_than_float(y,x)
+predicate float_gt_float(x:gen_float,y:gen_float) = float_lt_float(y,x)
 
 predicate float_eq_float(x:gen_float,y:gen_float) = 
           is_not_NaN(x) and is_not_NaN(y) and 
@@ -147,19 +143,10 @@ predicate float_eq_float(x:gen_float,y:gen_float) =
            or 
           (is_infinite(x) and is_infinite(y) and same_sign(x,y)))
 
-predicate float_neq_float(x:gen_float,y:gen_float) =
-          is_NaN(x) or is_NaN(y) 
-          or (is_not_NaN(x) and is_not_NaN(y) and (diff_class(x,y)  
-                                                   or 
- 						  (is_infinite(x) and is_infinite(y) and diff_sign(x,y))
-						   or 
-						  (is_finite(x) and is_finite(y) and float_value(x) <> float_value(y))))
-
+predicate float_neq_float(x:gen_float,y:gen_float) = not float_eq_float(x,y)
 
 
 (* axioms on round_float *)
-axiom round_of_zero: forall f:float_format. forall m:mode. round_float(f,m,0.0) = 0.0
-
 axiom positive_constant : 
       forall f:float_format. forall m:mode. forall x:real.  
       min_gen_float(f) <= x <= max_gen_float(f) -> 	    
@@ -467,7 +454,7 @@ f:float_format -> m:mode -> x:gen_float ->
 gen_float
 { (is_NaN(x)  -> is_NaN(result))
 and 
-  (is_infinite(x) -> (is_infinite(result) and diff_sign(result,x)))
+  (is_infinite(x) -> is_infinite(result))
 and 
   ((is_finite(x) and no_overflow(f,m,neg_real(float_value(x)))) -> 
   		    (is_finite(result) and float_value(result) = round_float(f,m,neg_real(float_value(x)))))

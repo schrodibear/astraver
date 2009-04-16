@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 (* MIX model *)
 
 parameter mem : int array

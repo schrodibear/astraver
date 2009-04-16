@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.149 2009-04-15 15:35:14 ayad Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.150 2009-04-16 15:53:23 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -972,6 +972,8 @@ let string_of_op_type = function
   | `Logic -> "<some logic type>"
 
 let sign = JCTlogic "sign"
+let float_format = JCTlogic "float_format"
+let rounding_mode = JCTlogic "rounding_mode"
 
 (* Note: jessie does not support overloading. The right practice is
    to add suffixes to make precise the type of arguments
@@ -1039,7 +1041,13 @@ let builtin_logic_symbols =
     Some real_type, "\\atan", "atan", [real_type] ;
     Some real_type, "\\atan2", "atan2", [real_type; real_type] ;
     Some real_type, "\\hypot", "hypot", [real_type; real_type] ;
-
+    Some real_type, "\\round_float", "round_float", [float_format; rounding_mode; real_type];
+    None, "\\no_overflow", "no_overflow", [float_format; rounding_mode; real_type];
+    Some float_format, "\\Double", "Double", [];
+    Some rounding_mode, "\\Down", "down", [];
+    Some sign, "\\Positive", "Positive", [];
+    Some sign, "\\Negative", "Negative", [];
+    
 ]
 
 let builtin_function_symbols =

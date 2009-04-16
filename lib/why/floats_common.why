@@ -56,3 +56,27 @@ predicate no_overflow(f:float_format,m:mode,x:real) =
 axiom bounded_real_no_overflow : 
       forall f:float_format. forall m:mode. forall x:real. 
       	     abs_real(x) <= max_gen_float(f) -> no_overflow(f,m,x)
+
+
+axiom round_down_le: 
+ forall f:float_format. forall x:real. round_float(f,down,x) <= x
+
+axiom round_up_ge: 
+ forall f:float_format. forall x:real. round_float(f,up,x) >= x
+
+axiom round_increasing:
+ forall f:float_format. forall m:mode. forall x:real. forall y:real .
+   x <= y -> round_float(f,m,x) <= round_float(f,m,y)
+
+axiom round_zero:
+ forall f:float_format. forall m:mode. round_float(f,m,0.0) = 0.0
+
+axiom round_down_neg: 
+ forall f:float_format. forall x:real. 
+     round_float(f,down,-x) = -round_float(f,up,x)
+
+axiom round_up_neg: 
+ forall f:float_format. forall x:real. 
+     round_float(f,up,-x) = -round_float(f,down,x)
+
+

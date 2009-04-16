@@ -159,18 +159,20 @@ byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.
 
 .PHONY: check
 
-PRELUDE=lib/why/prelude.why lib/why/bool.why lib/why/integer.why \
+WHYLIBS=lib/why/bool.why lib/why/integer.why \
 	lib/why/real.why lib/why/arrays.why lib/why/floats.why \
 	lib/why/floats_common.why lib/why/floats_strict.why \
 	lib/why/floats_full.why \
 	lib/why/jessie.why \
 	lib/why/mix.why
 
+PRELUDE=lib/why/prelude.why $(WHYLIBS)
+
 # sanity check: the prelude files do typecheck
 check: $(BINARY) $(PRELUDE)
 	WHYLIB=lib $(BINARY) --no-pervasives -tc lib/why/prelude.why
-	for f in arrays bool integer real floats ; do \
-		WHYLIB=lib $(BINARY) -tc lib/why/$$f.why; \
+	for f in $(WHYLIBS) ; do \
+		WHYLIB=lib $(BINARY) -tc $$f; \
 	done
 
 # why-config

@@ -1736,8 +1736,7 @@ logic abs_real : real -> real
 
 axiom abs_real_pos: (forall x:real. ((x >= 0.0) -> (abs_real(x) = x)))
 
-axiom abs_real_neg:
-  (forall x:real. ((x <= 0.0) -> (abs_real(x) = neg_real(x))))
+axiom abs_real_neg: (forall x:real. ((x <= 0.0) -> (abs_real(x) = (-x))))
 
 logic exp : real -> real
 
@@ -4215,8 +4214,7 @@ logic abs_real : real -> real
 
 axiom abs_real_pos: (forall x:real. ((x >= 0.0) -> (abs_real(x) = x)))
 
-axiom abs_real_neg:
-  (forall x:real. ((x <= 0.0) -> (abs_real(x) = neg_real(x))))
+axiom abs_real_neg: (forall x:real. ((x <= 0.0) -> (abs_real(x) = (-x))))
 
 logic exp : real -> real
 

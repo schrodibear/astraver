@@ -221,25 +221,25 @@ destruct (float_class x); destruct (float_sign x);intuition;
 right; intro; destruct H; discriminate.
 Save.
 
-Definition is_nan  (x:gen_float) := float_class x = Nan.
-Lemma is_nan_dec: forall x, is_nan x \/ ~ is_nan x.
+Definition is_NaN  (x:gen_float) := float_class x = Nan.
+Lemma is_NaN_dec: forall x, is_NaN x \/ ~ is_NaN x.
 Proof.
-intro; unfold is_nan;destruct (float_class x); 
+intro; unfold is_NaN;destruct (float_class x); 
 [right; discriminate | right; discriminate | auto].
 Save.
 
-Definition is_not_nan  (x:gen_float) := 
+Definition is_not_NaN  (x:gen_float) := 
                float_class x = Finite \/ float_class x = Infinite.
-Lemma is_not_nan_correct1: forall x,
-            is_not_nan x -> ~ is_nan x.
+Lemma is_not_NaN_correct1: forall x,
+            is_not_NaN x -> ~ is_NaN x.
 Proof.
-intuition; unfold is_not_nan,is_nan in *.
+intuition; unfold is_not_NaN,is_NaN in *.
 rewrite H0 in H;destruct H;discriminate.
 Save.
-Lemma is_not_nan_correct2: forall x,
-            ~ is_nan x -> is_not_nan x.
+Lemma is_not_NaN_correct2: forall x,
+            ~ is_NaN x -> is_not_NaN x.
 Proof.
-intuition;unfold is_not_nan,is_nan in *.
+intuition;unfold is_not_NaN,is_NaN in *.
 destruct (float_class x);auto.
 contradiction H;trivial.
 Save.
@@ -407,13 +407,13 @@ Definition real_less_than_float  (x:R) (y:gen_float) :=
 
 Definition float_less_than_float  (x:gen_float) (y:gen_float) := 
                (is_finite x /\ is_finite y /\ (float_value x <= float_value y)%R)
-               \/ (is_minus_infinity x /\ is_not_nan y) 
-               \/ (is_not_nan x /\ is_plus_infinity y).
+               \/ (is_minus_infinity x /\ is_not_NaN y) 
+               \/ (is_not_NaN x /\ is_plus_infinity y).
 
 Definition float_strict_less_than_float (x:gen_float) (y:gen_float) := 
                (is_finite x /\ is_finite y /\ (float_value x < float_value y)%R) 
-               \/ (is_minus_infinity x /\ is_not_nan y /\ ~ is_minus_infinity y) 
-               \/ (is_not_nan x /\ ~ is_plus_infinity x /\ is_plus_infinity y).
+               \/ (is_minus_infinity x /\ is_not_NaN y /\ ~ is_minus_infinity y) 
+               \/ (is_not_NaN x /\ ~ is_plus_infinity x /\ is_plus_infinity y).
 
 Definition float_greater_than_float  (x:gen_float) (y:gen_float) := 
                float_strict_less_than_float y x.
@@ -426,8 +426,8 @@ Definition float_eq_float  (x:gen_float) (y:gen_float) :=
                \/ (is_infinite x /\ is_infinite y /\ same_sign x y).
 
 Definition float_neq_float  (x:gen_float) (y:gen_float) := 
-               is_nan x \/ is_nan y 
-               \/ (is_not_nan x /\ is_not_nan y /\ (diff_class x y 
+               is_NaN x \/ is_NaN y 
+               \/ (is_not_NaN x /\ is_not_NaN y /\ (diff_class x y 
                                                                    \/ (is_infinite x /\ is_infinite y /\ diff_sign x y) 
                                                                    \/ (is_finite x /\ is_finite y /\ float_value x <> float_value y))).
 
@@ -813,10 +813,10 @@ Proof.
 Admitted.
 
 
-Lemma gen_float_of_real_not_nan : forall f m x,
-             is_not_nan (gen_float_of_real_logic f m x).
+Lemma gen_float_of_real_not_NaN : forall f m x,
+             is_not_NaN (gen_float_of_real_logic f m x).
 Proof.
-intros;unfold is_not_nan.
+intros;unfold is_not_NaN.
 case (Rle_dec (Rabs x) (max_gen_float f));intro.
 left;exact (proj1 (gen_bounded_real_no_overflow f m x r)).
 assert (Rabs x > max_gen_float f)%R by (apply Rnot_le_gt;trivial);clear n.
