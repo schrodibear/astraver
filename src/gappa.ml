@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.31 2009-04-16 09:29:38 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.32 2009-04-16 16:21:32 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -79,8 +79,6 @@ let real_of_int = Ident.create "real_of_int"
 
 let nearest_even = Ident.create "nearest_even"
 
-let pow_real = Ident.create "pow_real"
-
 let max_gen_float = Ident.create "max_gen_float"
 let round_float = Ident.create "round_float"
 let float_value = Ident.create "float_value"
@@ -99,31 +97,44 @@ let eval_int_constant = function
   | Tapp (id, [Tconst (ConstInt n)], _) when id == t_neg_int -> "-"^n
   | _ -> assert false
 
+let is_pos_constant = function
+  | Tconst (ConstInt _) -> true
+  | Tconst (ConstFloat _) -> true
+  | Tapp (id, [Tconst (ConstInt _)], _) when id == real_of_int -> true
+  | Tapp (id, [Tapp (id', [], _)], _) when id == max_gen_float &&
+      (id' == fmt_single || id' == fmt_double) -> true
+  | _ -> false
+
 let is_constant = function
   | t when is_int_constant t -> true
-  | Tconst (ConstFloat _) -> true
-  | Tapp (id, [Tconst (ConstFloat _)], _) when id == t_neg_real -> true
+  | t when is_pos_constant t -> true
   | Tapp (id, [t], _) when id == real_of_int && is_int_constant t -> true
-  | Tapp (pr, [Tapp (ri1, [Tconst (ConstInt "2")], _); Tapp (ri2, [n], _)], _)
-    when pr == pow_real && ri1 == real_of_int && ri2 = real_of_int
-      && is_int_constant n -> true
+  | Tapp (id, [t], _) when id == t_neg_real  && is_pos_constant t -> true
   | _ -> false
 
 let eval_rconst = function
-  | RConstDecimal (i,f,None) -> Printf.sprintf "%s.%s" i f
-  | RConstDecimal (i,f,Some e)  -> Printf.sprintf "%s.%se%s" i f e
-  | RConstHexa (i,f,e) -> Printf.sprintf "0x%s.%sp%s" i f e
+  | RConstDecimal (i, f, None)   -> Printf.sprintf "%s.%s"      i f
+  | RConstDecimal (i, f, Some e) -> Printf.sprintf "%s.%se%s"   i f e
+  | RConstHexa (i, f, e)         -> Printf.sprintf "0x%s.%sp%s" i f e
+
+let eval_pos_constant = function
+  | Tconst (ConstInt n) -> n
+  | Tconst (ConstFloat f) -> eval_rconst f
+  | Tapp (id, [Tconst (ConstInt n)], _) when id == real_of_int -> "-" ^ n
+  | Tapp (id, [Tapp (id', [], _)], _) when id == max_gen_float ->
+      if id' == fmt_single then "0x1.FFFFFEp127" else
+      if id' == fmt_double then "0x1.FFFFFFFFFFFFFp1023" else
+      raise NotGappa
+  | _ -> raise NotGappa
 
 let eval_constant = function
-  | t when is_int_constant t ->eval_int_constant t
-  | Tconst (ConstFloat f) -> eval_rconst f
-  | Tapp (id, [Tconst (ConstFloat f)], _) when id == t_neg_real -> "-"^(eval_rconst f)
-  | Tapp (id, [t], _) when id == real_of_int -> eval_int_constant t
-  | Tapp (pr, [Tapp (ri1, [Tconst (ConstInt "2")], _); Tapp (ri2, [n], _)], _)
-    when pr == pow_real && ri1 == real_of_int && ri2 = real_of_int ->
-      Printf.sprintf "1b%s" (eval_int_constant n)
-  | _ ->
-      raise NotGappa
+  | t when is_int_constant t -> eval_int_constant t
+  | t when is_pos_constant t -> eval_pos_constant t
+  | Tapp (id, [t], _) when id == real_of_int && is_int_constant t
+      -> eval_int_constant t
+  | Tapp (id, [t], _) when id == t_neg_real  && is_pos_constant t
+      -> "-" ^ (eval_pos_constant t)
+  | _ -> raise NotGappa
 
 let field_of_id s =
   if s == float_value then Rounded else
@@ -168,11 +179,6 @@ let rec term = function
   (* conversions *)
   | Tapp (id, [t], _) when id == real_of_int ->
       term t
-  (* [Jessie] format upper bounds *)
-  | Tapp (id, [Tapp (id', [], _)], _) when id == max_gen_float ->
-      if id' == fmt_single then Gcst "0x1.FFFFFEp127" else
-      if id' == fmt_double then Gcst "0x1.FFFFFFFFFFFFFp1023" else
-      raise NotGappa
   (* [Jessie] rounding *)
   | Tapp (id, [Tapp (fmt, [], _); Tapp (m, [], _); t], _)
       when id = round_float ->
@@ -441,5 +447,3 @@ let output_file fwe =
 	 ~sep
 	 ~after:(fun fmt -> ()))
     queue
-
-
