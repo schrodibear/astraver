@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.32 2009-04-16 16:21:32 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.33 2009-04-16 17:35:04 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -45,8 +45,8 @@ open Pp
 type float_field = Rounded | Exact | Model
 (* formats of the float model *)
 type float_fmt = Single | Double
-
-type mode = Mnearest_even
+(* modes of the float model *)
+type mode = RndNE | RndZR | RndUP | RndDN | RndNA
 
 type gterm =
   | Gvar of string
@@ -77,13 +77,19 @@ exception NotGappa
 
 let real_of_int = Ident.create "real_of_int"
 
-let nearest_even = Ident.create "nearest_even"
+let rnd_ne = Ident.create "nearest_even"
+let rnd_zr = Ident.create "to_zero"
+let rnd_up = Ident.create "up"
+let rnd_dn = Ident.create "dn"
+let rnd_na = Ident.create "nearest_away"
 
 let max_gen_float = Ident.create "max_gen_float"
 let round_float = Ident.create "round_float"
+
 let float_value = Ident.create "float_value"
 let exact_value = Ident.create "exact_value"
 let model_value = Ident.create "model_value"
+
 let fmt_single = Ident.create "Single"
 let fmt_double = Ident.create "Double"
 
@@ -149,6 +155,9 @@ let gen_table = Hashtbl.create 10
 (* contains the terms associated to variables, especially gen_float variables *)
 let var_table = Hashtbl.create 10
 
+(* contains the roundings used *)
+let rnd_table = Hashtbl.create 10
+
 let rec term = function
   | t when is_constant t ->
       Gcst (eval_constant t)
@@ -187,8 +196,13 @@ let rec term = function
         if fmt == fmt_double then Double else
         raise NotGappa in
       let mode =
-        if m == nearest_even then Mnearest_even else
+        if m == rnd_ne then RndNE else
+        if m == rnd_zr then RndZR else
+        if m == rnd_up then RndUP else
+        if m == rnd_dn then RndDN else
+        if m == rnd_na then RndNA else
         raise NotGappa in
+      Hashtbl.replace rnd_table (fmt, mode) ();
       Grnd (fmt, mode, term t)
   | Tapp (id, [Tvar _ as x], _)
       when (id == float_value || id == exact_value || id == model_value) ->
@@ -322,7 +336,8 @@ let queue = Queue.create ()
 let reset () =
   Queue.clear queue;
   Hashtbl.clear gen_table;
-  Hashtbl.clear var_table
+  Hashtbl.clear var_table;
+  Hashtbl.clear rnd_table
 
 let add_ctx_vars =
   List.fold_left 
@@ -380,13 +395,23 @@ let push_decl d =
   | Logic_decl.Dgoal (_,_,_,s) -> process_obligation s.Env.scheme_type
   | _ -> ()
 
+let get_format = function
+  | Single -> "32"
+  | Double -> "64"
+
+let get_mode = function
+  | RndNE -> "ne"
+  | RndZR -> "zr"
+  | RndUP -> "up"
+  | RndDN -> "dn"
+  | RndNA -> "na"
+
 let rec print_term fmt = function
   | Gvar x -> fprintf fmt "%s" x
   | Gfld (Rounded, x) -> fprintf fmt "float_%s" x
   | Gfld (Exact,   x) -> fprintf fmt "exact_%s" x
   | Gfld (Model,   x) -> fprintf fmt "model_%s" x
-  | Grnd (Single, Mnearest_even, t) -> fprintf fmt "sne(%a)" print_term t
-  | Grnd (Double, Mnearest_even, t) -> fprintf fmt "dne(%a)" print_term t
+  | Grnd (f, m, t) -> fprintf fmt "rnd_%s%s(%a)" (get_format f) (get_mode m) print_term t
   | Gcst c -> fprintf fmt "%s" c
   | Gneg t -> fprintf fmt "(-%a)" print_term t
   | Gadd (t1, t2) -> fprintf fmt "(%a + %a)" print_term t1 print_term t2
@@ -420,9 +445,11 @@ let print_equation fmt (e, x, t) =
   fprintf fmt "@[%s%s = %a;@]" e x print_term t
 
 let print_obligation fmt (eq,p) =
-  fprintf fmt "@@sne = float<ieee_32, ne>;@\n";
-  fprintf fmt "@@dne = float<ieee_64, ne>;@\n@\n";
-  fprintf fmt "%a@\n@\n" (print_list newline print_equation) eq;
+  Hashtbl.iter (fun (f, m) () ->
+    let f = get_format f in
+    let m = get_mode m in
+    fprintf fmt "@@rnd_%s%s = float<ieee_%s, %s>;@\n" f m f m) rnd_table;
+  fprintf fmt "@\n%a@\n@\n" (print_list newline print_equation) eq;
   fprintf fmt "{ @[%a@] }@." print_pred p
 
 let output_one_file f =
