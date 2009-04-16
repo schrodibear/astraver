@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.33 2009-04-16 17:35:04 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.34 2009-04-16 17:45:01 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -80,7 +80,7 @@ let real_of_int = Ident.create "real_of_int"
 let rnd_ne = Ident.create "nearest_even"
 let rnd_zr = Ident.create "to_zero"
 let rnd_up = Ident.create "up"
-let rnd_dn = Ident.create "dn"
+let rnd_dn = Ident.create "down"
 let rnd_na = Ident.create "nearest_away"
 
 let max_gen_float = Ident.create "max_gen_float"
