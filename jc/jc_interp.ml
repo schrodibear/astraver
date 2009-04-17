@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.405 2009-04-16 11:54:07 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.406 2009-04-17 16:33:53 melquion Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -640,6 +640,13 @@ let coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	end
     | JCTnative Tinteger, JCTnative Treal -> 
 	make_app "int_of_real" [ e' ]
+    | JCTnative (Tfloat | Tdouble as f), JCTnative (Tfloat | Tdouble) ->
+        if check_int_overflow then
+          make_guarded_app ~mark FPoverflow pos "cast_gen_float"
+            [ Var (float_format_from_type f) ; current_rounding_mode () ; e' ]
+        else
+          make_app "cast_gen_float_safe"
+            [ Var (float_format_from_type f) ; current_rounding_mode () ; e' ]
     | JCTnative (Tfloat | Tdouble as f), JCTnative Treal ->
 	if check_int_overflow then
 	  make_guarded_app ~mark FPoverflow pos
