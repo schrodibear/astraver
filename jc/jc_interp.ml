@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.406 2009-04-17 16:33:53 melquion Exp $ *)
+(* $Id: jc_interp.ml,v 1.407 2009-04-17 17:00:08 melquion Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -617,7 +617,7 @@ let rec fits_in_enum ri e =
     | Some c -> ri.jc_enum_info_min <=/ c && c <=/ ri.jc_enum_info_max
     | None -> false
 
-let coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
+let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
   match ty_dst, ty_src with
       (* identity *)
     | JCTnative t, JCTnative u when t = u -> e'
@@ -640,6 +640,9 @@ let coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	end
     | JCTnative Tinteger, JCTnative Treal -> 
 	make_app "int_of_real" [ e' ]
+    | JCTnative (Tfloat | Tdouble), JCTnative Tinteger ->
+        coerce ~check_int_overflow mark pos ty_dst (JCTnative Treal) e
+          (coerce ~check_int_overflow mark pos (JCTnative Treal) ty_src e e')
     | JCTnative (Tfloat | Tdouble as f), JCTnative (Tfloat | Tdouble) ->
         if check_int_overflow then
           make_guarded_app ~mark FPoverflow pos "cast_gen_float"
