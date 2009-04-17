@@ -40,9 +40,10 @@ axiom max_single: max_gen_float(Single) = 0x1.FFFFFEp127
 axiom max_double: max_gen_float(Double) = 0x1.FFFFFFFFFFFFFp1023 
  (* (2 - 2^-52)*2^1023 *)
 
+(* commented out because makes Yices fail 
 axiom max_quad: max_gen_float(Quad) = 0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383 
  (* (2 - 2^-112)*2^16383 *)
-
+*)
 
 predicate no_overflow(f:float_format,m:mode,x:real) = 
 	  abs_real(round_float(f,m,x)) <= max_gen_float(f)

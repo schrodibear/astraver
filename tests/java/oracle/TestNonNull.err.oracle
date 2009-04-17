@@ -1,1 +1,0 @@
-sh: line 1:  2249 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo837c91.why > /tmp/out0f51a6 2>&1

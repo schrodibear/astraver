@@ -51,12 +51,16 @@ case $1 in
 	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify/$b'_why'.sx	
 	mycatfilterdir $d/simplify/$b'_why'.sx
 	echo "========== running Simplify =========="
-	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify	
+	tmp=$(tempfile -s regtests_simplify)
+	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify 2> $tmp	
+	grep -v 'CPU time limit' $tmp >&2
 	echo "========== generation of alt-ergo VC output =========="
 	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile why/$b'_why'.why	
 	mycat $d/why/$b'_why'.why
 	echo "========== running alt-ergo =========="
-	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile ergo	
+	tmp=$(tempfile -s regtests_ergo)
+	DP="$DIR/bin/why-dp.opt -no-timings -timeout 10" WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile ergo 2> $tmp
+	grep -v 'CPU time limit' $tmp >&2
 	if grep RUNCOQ $f.java ; then
 	    echo "========== generation of Coq VC output =========="
 	    WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile coq	

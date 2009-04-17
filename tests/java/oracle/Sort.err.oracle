@@ -1,3 +1,0 @@
-sh: line 1:  3306 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo565682.why > /tmp/out50b79d 2>&1
-sh: line 1:  4429 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergoeca048.why > /tmp/out4733ce 2>&1
-sh: line 1:  5186 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergoba684f.why > /tmp/outd1b955 2>&1

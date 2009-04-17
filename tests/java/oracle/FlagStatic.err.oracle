@@ -1,8 +1,0 @@
-sh: line 1:  6283 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo134d23.why > /tmp/out544cbb 2>&1
-sh: line 1:  7412 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergof11a2b.why > /tmp/out3e19eb 2>&1
-sh: line 1:  8682 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo2a1a80.why > /tmp/out1c0561 2>&1
-sh: line 1: 10051 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo69c69c.why > /tmp/out744f51 2>&1
-sh: line 1: 12332 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergoaf57c8.why > /tmp/outd00623 2>&1
-sh: line 1: 14529 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergobc11e3.why > /tmp/outd57aec 2>&1
-sh: line 1: 17127 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo7c6ca6.why > /tmp/outd43107 2>&1
-sh: line 1: 19989 CPU time limit exceeded /home/cmarche/recherche/ppc/trunk/why/bin/why-cpulimit 10 alt-ergo /tmp/ergo950f95.why > /tmp/oute2ca1b 2>&1
