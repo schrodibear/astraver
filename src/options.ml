@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.126 2009-03-31 12:46:11 marche Exp $ i*)
+(*i $Id: options.ml,v 1.127 2009-04-17 18:35:17 stouls Exp $ i*)
 
 open Format
 
@@ -75,6 +75,7 @@ let pruning_hyp_polarized_preds_ = ref false
 let prune_context_ = ref false
 let prune_coarse_pred_comp_ = ref false
 let prune_get_depths_ = ref false
+let pruning_hyp_considere_arith_comparison_as_special_predicate_ = ref true
 (* FIN de Heuristiques en test *)
 let modulo_ = ref false 
 
@@ -227,6 +228,7 @@ VC transformation options:
 
 Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
   --prune-with-comp           uses comparisons as predicates
+  --prune-without-arith       does not considere as particular predicates
   --prune-with-comp-filter    as previous and uses also comparisons as filters
   --prune-keep-local-links    insert quantified variables in variables graph
   --prune-comp-dual-encoding  do not inverse negative comparisons
@@ -510,6 +512,9 @@ let files =
 
     | ("--prune-get-depths" | "-prune-get-depths") :: args ->
 	prune_get_depths_ := true ; parse args
+
+    | ("--prune-without-arith" | "-prune-without-arith") :: args ->
+	pruning_hyp_considere_arith_comparison_as_special_predicate_ := false ; parse args
 (* FIN de Heuristiques en test *)
 
     | ("-modulo" | "--modulo") :: args ->
@@ -600,6 +605,7 @@ let pruning_hyp_polarized_preds = !pruning_hyp_polarized_preds_
 let prune_context = !prune_context_
 let prune_coarse_pred_comp = !prune_coarse_pred_comp_
 let prune_get_depths = !prune_get_depths_
+let pruning_hyp_considere_arith_comparison_as_special_predicate= !pruning_hyp_considere_arith_comparison_as_special_predicate_
 (* FIN de Heuristiques en test *)
 let modulo = !modulo_
 let defExpanding = !defExpanding_
