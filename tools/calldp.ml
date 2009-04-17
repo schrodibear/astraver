@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.62 2009-02-12 15:06:44 filliatr Exp $ i*)
+(*i $Id: calldp.ml,v 1.63 2009-04-17 06:23:57 stouls Exp $ i*)
 
 open Printf
 
@@ -228,7 +228,7 @@ let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
   let pruning_hyp = 3 in 
   let last_dot_index = String.rindex f '.' in 
   let f_for_simplify = (String.sub f  0 last_dot_index) ^ "_why.sx" in 
-  let cmd = sprintf "why --simplify --no-prelude %s " f in
+  let cmd = sprintf "why --simplify --no-pervasives %s " f in
   let t'= 
     (float_of_int timeout) /. (float_of_int (pruning_hyp +1)) in
   let t'',c,out = timed_sys_command ~debug (int_of_float t') cmd in
@@ -260,7 +260,7 @@ let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
 
     do
       (* compute the new proof obligation *)
-      let cmd = sprintf "why --simplify --no-prelude --prune-hyp %d %d %s " !pb !vb f  in
+      let cmd = sprintf "why --simplify --no-pervasives --prune-hyp %d %d %s " !pb !vb f  in
       let t'',c',out = timed_sys_command ~debug (int_of_float t') cmd in
     
       let cmd = sprintf "Simplify %s"  f_for_simplify in
