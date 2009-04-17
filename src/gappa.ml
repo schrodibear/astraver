@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.36 2009-04-17 13:52:59 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.37 2009-04-17 14:01:44 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -365,14 +365,6 @@ let rec intros ctx = function
   | c -> 
       ctx, c
 
-let gands = function
-  | [] -> assert false
-  | p0 :: l -> List.fold_right (fun p acc -> Gand (p, acc)) l p0
-
-let gimplies l p = match l with
-  | [] -> p
-  | _ -> Gimplies (gands l, p)
-
 let process_obligation (ctx, concl) =
   let ctx,concl = intros ctx concl in
     let el, pl =
@@ -394,7 +386,7 @@ let process_obligation (ctx, concl) =
     | None -> (* goal is not a gappa prop *)
 	if debug then Format.eprintf "not a gappa prop; skipped@."
     | Some p ->
-	let gconcl = gimplies pl p in
+        let gconcl = List.fold_right (fun p acc -> Gimplies (p, acc)) pl p in
         let el = List.rev (List.flatten el) in
 	Queue.add (el, gconcl) queue
 
@@ -437,7 +429,7 @@ let rec print_pred fmt = function
   | Gin (t, r1, r2) ->
       fprintf fmt "%a in [%s, %s]" print_term t r1 r2
   | Gimplies (p1, p2) ->
-      fprintf fmt "(@[%a ->@ %a@])" print_pred p1 print_pred p2
+      fprintf fmt "@[%a ->@ %a@]" print_pred p1 print_pred p2
   | Gand (p1, p2) ->
       fprintf fmt "(@[%a /\\@ %a@])" print_pred p1 print_pred p2
   | Gor (p1, p2) ->
