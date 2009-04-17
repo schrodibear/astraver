@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.280 2009-04-17 16:33:53 melquion Exp $ *)
+(* $Id: jc_typing.ml,v 1.281 2009-04-17 16:38:52 melquion Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1905,14 +1905,16 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 	      if is_real te1#typ then 
 		double_type, te1#region, 
 	        JCEreal_cast(te1,Round_double Round_nearest_even)
+              else if is_float te1#typ then
+                double_type, te1#region, te1#node
 	      else
 		typing_error e#pos "bad cast to double"
 	  | JCTnative Tfloat -> 
 	      if is_real te1#typ then 
 		float_type, te1#region, 
 	        JCEreal_cast(te1,Round_float Round_nearest_even)
-              else if is_double te1#typ then 
-                float_type, te1#region, JCEreal_cast(te1,Round_float Round_nearest_even) 
+              else if is_double te1#typ then
+                float_type, te1#region, JCEreal_cast(te1,Round_float Round_nearest_even)
 	      else
 		typing_error e#pos "bad cast to float"
 	  | JCTnative _ -> assert false (* TODO *)
