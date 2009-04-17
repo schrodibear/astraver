@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.35 2009-04-17 13:34:17 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.36 2009-04-17 13:52:59 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -232,7 +232,7 @@ let gando = function
 
 (* recognition of a Gappa predicate *)
 
-let rec gpred = function
+let rec gpred def = function
   | Papp (id, [t1; t2], _) when id == t_le_real || id == t_le_int ->
       begin match termo t1, termo t2 with
 	| Some (Gcst c1), Some t2 -> Some (Gge (t2, c1))
@@ -269,24 +269,30 @@ let rec gpred = function
         | _ -> None
       end
   | Pand (_, _, p1, p2) ->
-      begin match gpred p1, gpred p2 with
+      begin match gpred def p1, gpred def p2 with
         | Some p1, Some p2 -> Some (Gand (p1, p2))
+        | (Some _ as p1), None when def = true -> p1
+        | None, (Some _ as p2) when def = true -> p2
         | _-> None
       end
   | Por (p1, p2) ->
-      begin match gpred p1, gpred p2 with
-	| Some p1, Some p2 -> Some (Gor (p1, p2))
-	| _ -> None
+      begin match gpred def p1, gpred def p2 with
+        | Some p1, Some p2 -> Some (Gor (p1, p2))
+        | (Some _ as p1), None when def = false -> p1
+        | None, (Some _ as p2) when def = false -> p2
+        | _ -> None
       end
   | Pimplies (_, p1, p2) ->
-      begin match gpred p1, gpred p2 with
-	| Some p1, Some p2 -> Some (Gimplies (p1, p2))
-	| _ -> None
+      begin match gpred (not def) p1, gpred def p2 with
+        | Some p1, Some p2 -> Some (Gimplies (p1, p2))
+        | Some p1, None        when def = false -> Some (Gnot p1)
+        | None, (Some _ as p2) when def = false -> p2
+        | _ -> None
       end
   | Pnamed (_, p) ->
-      gpred p
+      gpred def p
   | Pnot p ->
-      begin match gpred p with
+      begin match gpred (not def) p with
         | Some p -> Some (Gnot p)
         | _ -> None
       end
@@ -323,13 +329,13 @@ let rec ghyp = function
     end
   | Pand (_, _, p1, p2) as p ->
       begin match ghyp p1, ghyp p2 with
-	| ([], _), ([], _) -> [], gpred p
-	| (e1,p1), (e2, p2) -> e1 @ e2, gando (p1, p2)
+        | ([], _), ([], _) -> [], gpred true p
+        | (e1,p1), (e2, p2) -> e1 @ e2, gando (p1, p2)
       end
   | Pnamed (_, p) ->
       ghyp p
   | p ->
-      [], gpred p
+      [], gpred true p
 
 (* Processing obligations.
    One Why obligation can be split into several Gappa obligations *)
@@ -384,7 +390,7 @@ let process_obligation (ctx, concl) =
                 ep :: el, pl)
         ([],[]) ctx
 	in
-  match gpred concl with
+  match gpred false concl with
     | None -> (* goal is not a gappa prop *)
 	if debug then Format.eprintf "not a gappa prop; skipped@."
     | Some p ->
