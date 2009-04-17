@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.34 2009-04-16 17:45:01 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.35 2009-04-17 13:34:17 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -269,7 +269,10 @@ let rec gpred = function
         | _ -> None
       end
   | Pand (_, _, p1, p2) ->
-      gando (gpred p1, gpred p2)
+      begin match gpred p1, gpred p2 with
+        | Some p1, Some p2 -> Some (Gand (p1, p2))
+        | _-> None
+      end
   | Por (p1, p2) ->
       begin match gpred p1, gpred p2 with
 	| Some p1, Some p2 -> Some (Gor (p1, p2))
