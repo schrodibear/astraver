@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.407 2009-04-17 17:00:08 melquion Exp $ *)
+(* $Id: jc_interp.ml,v 1.408 2009-04-17 17:07:01 melquion Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -640,7 +640,7 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	end
     | JCTnative Tinteger, JCTnative Treal -> 
 	make_app "int_of_real" [ e' ]
-    | JCTnative (Tfloat | Tdouble), JCTnative Tinteger ->
+    | JCTnative (Tfloat | Tdouble), (JCTnative Tinteger | JCTenum _) ->
         coerce ~check_int_overflow mark pos ty_dst (JCTnative Treal) e
           (coerce ~check_int_overflow mark pos (JCTnative Treal) ty_src e e')
     | JCTnative (Tfloat | Tdouble as f), JCTnative (Tfloat | Tdouble) ->
