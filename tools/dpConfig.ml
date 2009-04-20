@@ -62,7 +62,7 @@ let gappa =
     command = "gappa";
     command_switches = "";
     valid_regexp = make_regexp ""; (* not used, see calldp.ml *)
-    undecided_regexp = make_regexp ""; (* not used, see calldp.ml *)
+    undecided_regexp = make_regexp "no contradiction was found\\|some enclosures were not satisfied";
   }
 
 let alt_ergo =

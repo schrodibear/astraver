@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.64 2009-04-20 16:13:36 melquion Exp $ i*)
+(*i $Id: calldp.ml,v 1.65 2009-04-20 16:57:54 melquion Exp $ i*)
 
 open Printf
 
@@ -144,13 +144,13 @@ let gappa ?(debug=false) ?(timeout=10) ~filename:f () =
     if c = 152 (* 128 + SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
     then Timeout t
     else
+      let res = file_contents out in
       if c == 0 then
-	Valid t
+        Valid t
+      else if c == 1 && grep p.DpConfig.undecided_regexp res then
+        CannotDecide(t, Some res) 
       else
-	if c == 1 then
-	  CannotDecide(t,Some (file_contents out)) 
-	else 
-	  ProverFailure(t,"command failed: " ^ cmd ^ "\n" ^ file_contents out)
+        ProverFailure(t, "command failed: " ^ cmd ^ "\n" ^ res)
   in
   remove_file ~debug out;
   r
