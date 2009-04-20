@@ -31,6 +31,14 @@ type prover_id =
     Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
   | Cvc3 | Graph | Z3 | Coq | Gappa
 
+type lazy_regexp =
+  {
+    regexp : string;
+    mutable cregexp  : Str.regexp option;
+  }
+
+let make_regexp s = { regexp = s; cregexp = None }
+
 type prover_data =
   {
     name : string;
@@ -40,10 +48,8 @@ type prover_data =
     version_regexp : string;
     mutable command : string;
     command_switches : string;
-    valid_regexp : string;
-    mutable valid_cregexp : Str.regexp option;
-    undecided_regexp : string;
-    mutable undecided_cregexp : Str.regexp option;
+    valid_regexp : lazy_regexp;
+    undecided_regexp : lazy_regexp;
   }
     
 let gappa =
@@ -55,10 +61,8 @@ let gappa =
     version_regexp = "Gappa \\([^ ]*\\)";
     command = "gappa";
     command_switches = "";
-    valid_regexp = ""; (* not used, see calldp.ml *)
-    valid_cregexp = None;
-    undecided_regexp = ""; (* not used, see calldp.ml *)
-    undecided_cregexp = None;
+    valid_regexp = make_regexp ""; (* not used, see calldp.ml *)
+    undecided_regexp = make_regexp ""; (* not used, see calldp.ml *)
   }
 
 let alt_ergo =
@@ -70,10 +74,8 @@ let alt_ergo =
     version_regexp = "Ergo \\([^ ]*\\)";
     command = "alt-ergo";
     command_switches = "";
-    valid_regexp = "\\bValid\\b";
-    valid_cregexp = None;
-    undecided_regexp = "\\bI don't know\\b\\|\\bInvalid\\b";
-    undecided_cregexp = None;
+    valid_regexp = make_regexp "\\bValid\\b";
+    undecided_regexp = make_regexp "\\bI don't know\\b\\|\\bInvalid\\b";
   }
 
 let simplify = 
@@ -85,10 +87,8 @@ let simplify =
     version_regexp = "Simplify version \\([^ ,]+\\)";
     command = "Simplify";
     command_switches = "";
-    valid_regexp = "\\bValid\\b";
-    valid_cregexp = None;
-    undecided_regexp = "\\bInvalid\\b";
-    undecided_cregexp = None;
+    valid_regexp = make_regexp "\\bValid\\b";
+    undecided_regexp = make_regexp "\\bInvalid\\b";
   }
 
 let z3 =
@@ -104,10 +104,8 @@ let z3 =
 "wine /home/cmarche/.wine/drive_c/Program\ Files/Microsoft\ Research/Z3-1.3.6/bin/z3.exe";
     
 *)
-    valid_regexp = "\\bunsat\\b";
-    valid_cregexp = None;
-    undecided_regexp = "\\bunknown\\b\\|\\bsat\\b";
-    undecided_cregexp = None;
+    valid_regexp = make_regexp "\\bunsat\\b";
+    undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b";
   }
 
 
@@ -120,10 +118,8 @@ let yices =
     version_regexp = "\\([^ ]+\\)";
     command = "yices";
     command_switches = "-pc 0 -smt < ";
-    valid_regexp = "\\bunsat\\b";
-    valid_cregexp = None;
-    undecided_regexp = "\\bunknown\\b\\|\\bsat\\b\\|feature not supported: non linear problem";
-    undecided_cregexp = None;
+    valid_regexp = make_regexp "\\bunsat\\b";
+    undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b\\|feature not supported: non linear problem";
   }
 
 let cvc3 =    
@@ -135,10 +131,8 @@ let cvc3 =
     version_regexp = "This is CVC3 version \\([^ ]+\\)";
     command = "cvc3";
     command_switches = "-lang smt < ";
-    valid_regexp = "\\bunsat\\b";
-    valid_cregexp = None;
-    undecided_regexp = "\\bunknown\\b\\|\\bsat\\b";
-    undecided_cregexp = None;
+    valid_regexp = make_regexp "\\bunsat\\b";
+    undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b";
   }
 
 let coq =    
@@ -150,10 +144,8 @@ let coq =
     version_regexp = "The Coq Proof Assistant, version \\([^ ]+\\)";
     command = "coqc";
     command_switches = "";
-    valid_regexp = "\\bunsat\\b";
-    valid_cregexp = None;
-    undecided_regexp = "Error while reading";
-    undecided_cregexp = None;
+    valid_regexp = make_regexp "\\bunsat\\b";
+    undecided_regexp = make_regexp "Error while reading";
   }
 
 

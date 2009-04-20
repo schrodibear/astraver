@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.63 2009-04-17 06:23:57 stouls Exp $ i*)
+(*i $Id: calldp.ml,v 1.64 2009-04-20 16:13:36 melquion Exp $ i*)
 
 open Printf
 
@@ -72,6 +72,14 @@ let timed_sys_command ~debug timeout cmd =
   (cpu_time,ret,out)
 
 let grep re str =
+  let re =
+    match re.DpConfig.cregexp with
+      | None ->
+          let r = Str.regexp re.DpConfig.regexp in
+          re.DpConfig.cregexp <- Some r;
+          r
+      | Some r -> r
+    in
   try
     let _ = Str.search_forward re str 0 in true
   with Not_found -> false
@@ -88,30 +96,13 @@ let gen_prover_call ?(debug=false) ?(timeout=30) ?(switch="") ~filename:f p =
   else
     let res = file_contents out in
     let r =
-      let valid_re =
-	match p.DpConfig.valid_cregexp with
-	  | None ->
-	      let r = Str.regexp p.DpConfig.valid_regexp in
-	      p.DpConfig.valid_cregexp <- Some r;
-	      r
-	  | Some r -> r
-      in
-      if grep valid_re res then
-	Valid t
+      if grep p.DpConfig.valid_regexp res then
+        Valid t
+      else if grep p.DpConfig.undecided_regexp res then
+        CannotDecide(t, None)
       else
-	let undecided_re =
-	  match p.DpConfig.undecided_cregexp with
-	    | None ->
-		let r = Str.regexp p.DpConfig.undecided_regexp in
-		p.DpConfig.undecided_cregexp <- Some r;
-		r
-	    | Some r -> r
-	in
-	if grep undecided_re res then
-	  CannotDecide(t, None)
-	else
-	  ProverFailure(t,"prover command " ^ cmd ^ " produced unrecognized answer: " ^ out)
-    in
+        ProverFailure(t,"prover command " ^ cmd ^ " produced unrecognized answer: " ^ out)
+      in
     remove_file ~debug out;
     r
 

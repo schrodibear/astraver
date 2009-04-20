@@ -32,6 +32,12 @@ type prover_id =
     Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
   | Cvc3 | Graph | Z3 | Coq | Gappa
 
+type lazy_regexp =
+  {
+    regexp : string;
+    mutable cregexp  : Str.regexp option;
+  }
+
 type prover_data =
   {
     name : string;
@@ -41,10 +47,8 @@ type prover_data =
     version_regexp : string;
     mutable command : string;
     command_switches : string;
-    valid_regexp : string;
-    mutable valid_cregexp : Str.regexp option;
-    undecided_regexp : string;
-    mutable undecided_cregexp : Str.regexp option;
+    valid_regexp : lazy_regexp;
+    undecided_regexp : lazy_regexp;
   }
     
 
