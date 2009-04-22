@@ -2,7 +2,7 @@
 
 WHYBIN=../../bin/why.opt 
 WHY=WHYLIB=../../lib $(WHYBIN) -split-user-conj
-GWHY=WHYLIB=../../lib ../../bin/gwhy.opt -split-user-conj
+GWHY=WHYLIB=../../lib ../../bin/gwhy.opt -split-user-conj --lib-file arrays.why
 CADUCEUS=WHYLIB=../../lib ../../bin/caduceus.opt
 # WHYOPTIONS=--coq-v8
 WHYOPTIONS=--coq-v8 --valid

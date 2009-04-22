@@ -718,7 +718,9 @@ BINARYFILES = $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) $(KRAKATOA) \
 	$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) bin/gwhy.$(OCAMLBEST) \
 	$(WHYSTAT) $(TOOLSTAT) $(WHYOBFUSCATOR) $(SIMPLIFY2WHY)
 
-install-binary: $(BINARYFILES) 
+# install-binary should not depend on $(BINARYFILES); otherwise it
+# enforces the compilation of gwhy, even when lablgtk2 is not installed
+install-binary: 
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(WHYCONFIG) $(BINDIR)/why-config$(EXE)
