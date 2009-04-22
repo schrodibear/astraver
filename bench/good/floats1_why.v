@@ -4,11 +4,11 @@ Require Export Why.
 Require Export JessieGappa.
 
 
-(* Why obligation from file "tes1_floats.why", line 18, characters 2-23: *)
+(* Why obligation from file "floats1.why", line 16, characters 2-23: *)
 (*Why goal*) Lemma tes1_po_1 : 
   forall (x: gen_float),
   forall (y: gen_float),
-  forall (HW_1: (float_class x) = Finite /\ (float_class y) = Finite /\
+  forall (HW_1: (is_finite x) /\ (is_finite y) /\
                 ~(eq (float_value x) (0)%R) /\ ~(eq (float_value y) (0)%R) /\
                 (eq (float_value x) (float_value y))),
   forall (result: gen_float),
@@ -16,10 +16,10 @@ Require Export JessieGappa.
   forall (one: gen_float),
   forall (HW_3: one = result),
   forall (result0: gen_float),
-  forall (HW_4: (((is_nan one) \/ (is_nan x) -> (is_nan result0))) /\
+  forall (HW_4: (((is_NaN one) \/ (is_NaN x) -> (is_NaN result0))) /\
                 (((is_finite one) /\ (is_infinite x) -> (is_gen_zero result0))) /\
                 (((is_infinite one) /\ (is_finite x) -> (is_infinite result0))) /\
-                (((is_infinite one) /\ (is_infinite x) -> (is_nan result0))) /\
+                (((is_infinite one) /\ (is_infinite x) -> (is_NaN result0))) /\
                 (((is_finite one) /\ (is_finite x) /\
                   ~(eq (float_value x) (0)%R) /\
                   (no_overflow
@@ -40,7 +40,7 @@ Require Export JessieGappa.
                   (overflow_value Double nearest_even result0))) /\
                 (((is_finite one) /\ (is_gen_zero x) /\
                   ~(eq (float_value one) (0)%R) -> (is_infinite result0))) /\
-                (((is_gen_zero one) /\ (is_gen_zero x) -> (is_nan result0))) /\
+                (((is_gen_zero one) /\ (is_gen_zero x) -> (is_NaN result0))) /\
                 (product_sign result0 one x) /\
                 (eq (exact_value result0) (Rdiv
                                            (exact_value one) (exact_value x))) /\
@@ -49,10 +49,10 @@ Require Export JessieGappa.
   forall (z1: gen_float),
   forall (HW_5: z1 = result0),
   forall (result1: gen_float),
-  forall (HW_6: (((is_nan one) \/ (is_nan y) -> (is_nan result1))) /\
+  forall (HW_6: (((is_NaN one) \/ (is_NaN y) -> (is_NaN result1))) /\
                 (((is_finite one) /\ (is_infinite y) -> (is_gen_zero result1))) /\
                 (((is_infinite one) /\ (is_finite y) -> (is_infinite result1))) /\
-                (((is_infinite one) /\ (is_infinite y) -> (is_nan result1))) /\
+                (((is_infinite one) /\ (is_infinite y) -> (is_NaN result1))) /\
                 (((is_finite one) /\ (is_finite y) /\
                   ~(eq (float_value y) (0)%R) /\
                   (no_overflow
@@ -73,7 +73,7 @@ Require Export JessieGappa.
                   (overflow_value Double nearest_even result1))) /\
                 (((is_finite one) /\ (is_gen_zero y) /\
                   ~(eq (float_value one) (0)%R) -> (is_infinite result1))) /\
-                (((is_gen_zero one) /\ (is_gen_zero y) -> (is_nan result1))) /\
+                (((is_gen_zero one) /\ (is_gen_zero y) -> (is_NaN result1))) /\
                 (product_sign result1 one y) /\
                 (eq (exact_value result1) (Rdiv
                                            (exact_value one) (exact_value y))) /\
@@ -83,19 +83,18 @@ Require Export JessieGappa.
   forall (HW_7: z2 = result1),
   (float_eq_float z1 z2).
 Proof.
-unfold float_eq_float,is_finite,is_infinite,same_sign,is_not_nan.
+unfold float_eq_float,is_finite,is_infinite,same_sign,is_not_NaN.
 intros.
 decompose [and or] HW_4;clear HW_4.
 decompose [and or] HW_6;clear HW_6.
 decompose [and] HW_1;clear HW_1.
 subst.
 repeat split.
-admit. (*result0 is not nan *)
-admit. (*result1 is not nan *)
 case (overflow_dec Double nearest_even (float_value (gen_float_of_real_logic Double nearest_even 1) /
         float_value x));intro.
 assert (Rabs 1 <= max_gen_float Double)%R.
-admit.
+unfold max_gen_float.
+gappa.
 generalize (H3 (conj (proj1 
 (gen_bounded_real_no_overflow Double nearest_even 1%R H27))
 (conj H20 (conj H22 H25))));intros (h1,h2).
@@ -107,7 +106,8 @@ left.
 repeat split;trivial.
 rewrite h2,H26;auto.
 assert (Rabs 1 <= max_gen_float Double)%R.
-admit.
+unfold max_gen_float.
+gappa.
 generalize (proj2 (proj2 (proj2 (H4 (conj (proj1 
 (gen_bounded_real_no_overflow Double nearest_even 1%R H27))
 (conj H20 (conj H22 H25)))))));intro h5.
@@ -246,7 +246,7 @@ Save.
 
 
 
-(* Why obligation from file "tes1_floats.why", line 37, characters 9-62: *)
+(* Why obligation from file "floats1.why", line 31, characters 9-62: *)
 (*Why goal*) Lemma tes2_po_1 : 
   forall (x: gen_float),
   forall (y: gen_float),
@@ -255,10 +255,11 @@ Save.
 Proof.
 intros.
 unfold min_gen_float,max_gen_float.
-Admitted.
+gappa.
+Save.
 
 
-(* Why obligation from file "tes1_floats.why", line 38, characters 8-92: *)
+(* Why obligation from file "floats1.why", line 32, characters 8-92: *)
 (*Why goal*) Lemma tes2_po_2 : 
   forall (x: gen_float),
   forall (y: gen_float),
@@ -273,7 +274,7 @@ intros.
 Admitted.
 
 
-(* Why obligation from file "tes1_floats.why", line 42, characters 2-48: *)
+(* Why obligation from file "floats1.why", line 36, characters 2-48: *)
 (*Why goal*) Lemma tes2_po_3 : 
   forall (x: gen_float),
   forall (y: gen_float),
@@ -284,10 +285,10 @@ Admitted.
   forall (HW_3: (float_class one) = Finite /\ (float_sign one) = Positive /\
                 ~(eq (float_value one) (0)%R)),
   forall (result: gen_float),
-  forall (HW_4: (((is_nan one) \/ (is_nan x) -> (is_nan result))) /\
+  forall (HW_4: (((is_NaN one) \/ (is_NaN x) -> (is_NaN result))) /\
                 (((is_finite one) /\ (is_infinite x) -> (is_gen_zero result))) /\
                 (((is_infinite one) /\ (is_finite x) -> (is_infinite result))) /\
-                (((is_infinite one) /\ (is_infinite x) -> (is_nan result))) /\
+                (((is_infinite one) /\ (is_infinite x) -> (is_NaN result))) /\
                 (((is_finite one) /\ (is_finite x) /\
                   ~(eq (float_value x) (0)%R) /\
                   (no_overflow
@@ -308,7 +309,7 @@ Admitted.
                   (overflow_value Double nearest_even result))) /\
                 (((is_finite one) /\ (is_gen_zero x) /\
                   ~(eq (float_value one) (0)%R) -> (is_infinite result))) /\
-                (((is_gen_zero one) /\ (is_gen_zero x) -> (is_nan result))) /\
+                (((is_gen_zero one) /\ (is_gen_zero x) -> (is_NaN result))) /\
                 (product_sign result one x) /\
                 (eq (exact_value result) (Rdiv
                                           (exact_value one) (exact_value x))) /\
@@ -317,10 +318,10 @@ Admitted.
   forall (t1: gen_float),
   forall (HW_5: t1 = result),
   forall (result0: gen_float),
-  forall (HW_6: (((is_nan one) \/ (is_nan y) -> (is_nan result0))) /\
+  forall (HW_6: (((is_NaN one) \/ (is_NaN y) -> (is_NaN result0))) /\
                 (((is_finite one) /\ (is_infinite y) -> (is_gen_zero result0))) /\
                 (((is_infinite one) /\ (is_finite y) -> (is_infinite result0))) /\
-                (((is_infinite one) /\ (is_infinite y) -> (is_nan result0))) /\
+                (((is_infinite one) /\ (is_infinite y) -> (is_NaN result0))) /\
                 (((is_finite one) /\ (is_finite y) /\
                   ~(eq (float_value y) (0)%R) /\
                   (no_overflow
@@ -341,7 +342,7 @@ Admitted.
                   (overflow_value Double nearest_even result0))) /\
                 (((is_finite one) /\ (is_gen_zero y) /\
                   ~(eq (float_value one) (0)%R) -> (is_infinite result0))) /\
-                (((is_gen_zero one) /\ (is_gen_zero y) -> (is_nan result0))) /\
+                (((is_gen_zero one) /\ (is_gen_zero y) -> (is_NaN result0))) /\
                 (product_sign result0 one y) /\
                 (eq (exact_value result0) (Rdiv
                                            (exact_value one) (exact_value y))) /\
@@ -351,7 +352,7 @@ Admitted.
   forall (HW_7: t2 = result0),
   ((is_plus_infinity t1) /\ (is_minus_infinity t2)).
 Proof.
-unfold is_plus_infinity, is_minus_infinity,is_gen_zero_plus, is_gen_zero_minus.
+unfold is_finite,is_infinite, is_plus_infinity, is_minus_infinity,is_gen_zero_plus, is_gen_zero_minus.
 intros.
 subst.
 decompose [and or] HW_4;clear HW_4.
@@ -360,9 +361,8 @@ decompose [and] HW_1;clear HW_1.
 decompose [and] HW_3;clear HW_3.
 generalize (is_gen_zero_correct1 x H23);intro.
 generalize (is_gen_zero_correct1 y H20);intro.
-destruct H23;destruct H20.
-generalize (H5 (conj H22 (conj H23 (conj H26 H28))));intro.
-generalize (H16 (conj H22 (conj H20 (conj H29 H28))));intro.
+generalize (H5 (conj H22 (conj H23 H28)));intro.
+generalize (H16 (conj H22 (conj H20 H28)));intro.
 repeat split;trivial;unfold product_sign,same_sign,diff_sign in *;
 rewrite H27,H24,H25 in *.
 clear -H7; intuition.

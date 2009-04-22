@@ -28,8 +28,8 @@ interval_arith_full_why.v: interval_arith_full.why $(WHY)
 interval_arith_full.gui: interval_arith_full.why $(GWHY)
 	WHYLIB=../../lib $(GWHY) -split-user-conj -V ../../lib/why/floats_full.why $<
 
-tes1_floats_why.v: tes1_floats.why $(WHY)
+floats1_why.v: floats1.why $(WHY)
 	$(WHY) -V --coq-v8 --coq-tactic intuition ../../lib/why/floats_full.why $<
 
-tes1_floats.gui: tes1_floats.why $(GWHY)
+floats1.gui: floats1.why $(GWHY)
 	$(GWHY) -split-user-conj -V ../../lib/why/floats_full.why $<

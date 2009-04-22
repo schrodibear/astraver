@@ -5,8 +5,6 @@ Require Export JessieGappa.
 
 
 
-
-
 Lemma round_down_less: forall f x, (round_float f down x <= x)%R.
 intros;case f;unfold round_float.
 unfold gappa_rounding.
@@ -20,15 +18,15 @@ Admitted.
 (*Why predicate*) Definition real_less_than_float  (x:R) (y:gen_float)
   := (is_finite y) /\ (Rle x (float_value y)) \/ (is_plus_infinity y).
 
-(* Why obligation from file "interval_arith_full.why", line 16, characters 2-60: *)
+(* Why obligation from file "interval_arith_full.why", line 18, characters 2-60: *)
 (*Why goal*) Lemma mul_dn_po_1 : 
   forall (x: gen_float),
   forall (y: gen_float),
   forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y) /\
-                (((float_class x) = Infinite ->
-                  ~(eq (float_value y) (0)%R) /\ (diff_sign x y))) /\
-                (((float_class y) = Infinite ->
-                  ~(eq (float_value x) (0)%R) /\ (diff_sign x y)))),
+                (((is_infinite x) -> ~(eq (float_value y) (0)%R) /\
+                  (diff_sign x y))) /\
+                (((is_infinite y) -> ~(eq (float_value x) (0)%R) /\
+                  (diff_sign x y)))),
   forall (result: gen_float),
   forall (HW_2: (((is_NaN x) \/ (is_NaN y) -> (is_NaN result))) /\
                 (((is_gen_zero x) /\ (is_infinite y) -> (is_NaN result))) /\
@@ -94,6 +92,7 @@ unfold float_value.
 rewrite H19.
 rewrite Rmult_0_l.
 rewrite round_of_zero,Rabs_R0.
+unfold max_gen_float.
 admit. (*as in JessieGappa*)
 intro x_not_zero.
 case (Req_dec (genf y) 0%R).
@@ -151,15 +150,15 @@ Qed.
 
 
 
-(* Why obligation from file "interval_arith_full.why", line 55, characters 0-58: *)
+(* Why obligation from file "interval_arith_full.why", line 57, characters 0-58: *)
 (*Why goal*) Lemma mul_up_po_1 : 
   forall (x: gen_float),
   forall (y: gen_float),
   forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y) /\
-                (((float_class x) = Infinite ->
-                  ~(eq (float_value y) (0)%R) /\ (diff_sign x y))) /\
-                (((float_class y) = Infinite ->
-                  ~(eq (float_value x) (0)%R) /\ (diff_sign x y)))),
+                (((is_infinite x) -> ~(eq (float_value y) (0)%R) /\
+                  (diff_sign x y))) /\
+                (((is_infinite y) -> ~(eq (float_value x) (0)%R) /\
+                  (diff_sign x y)))),
   forall (result: gen_float),
   forall (HW_2: (((is_NaN y) -> (is_NaN result))) /\
                 (((is_infinite y) -> (is_infinite result))) /\
@@ -317,14 +316,14 @@ Save.
 
 
 (*Why predicate*) Definition is_interval  (l:gen_float) (u:gen_float)
-  := ((float_class l) = Finite \/ (float_class l) = Infinite /\
-     (float_sign l) = Negative) /\ ((float_class u) = Finite \/
-     (float_class u) = Infinite /\ (float_sign u) = Positive).
+  := ((is_finite l) \/ (is_infinite l) /\ (float_sign l) = Negative) /\
+     ((is_finite u) \/ (is_infinite u) /\ (float_sign u) = Positive).
 
 (*Why predicate*) Definition in_interval  (a:R) (l:gen_float) (u:gen_float)
   := (float_less_than_real l a) /\ (real_less_than_float a u).
 
-(* Why obligation from file "interval_arith_full.why", line 102, characters 2-113: *)
+
+(* Why obligation from file "interval_arith_full.why", line 106, characters 2-113: *)
 (*Why goal*) Lemma add_po_1 : 
   forall (xl: gen_float),
   forall (xu: gen_float),
@@ -791,20 +790,20 @@ admit.  (*as above *)
                              else (Rle (float_value yu) (float_value zero))))) ->
                           (if result then (((is_not_NaN xl) /\
                            (is_not_NaN yu) /\
-                           (((float_class xl) = Infinite ->
+                           (((is_infinite xl) ->
                              ~(eq (float_value yu) (0)%R) /\
                              (diff_sign xl yu))) /\
-                           (((float_class yu) = Infinite ->
+                           (((is_infinite yu) ->
                              ~(eq (float_value xl) (0)%R) /\
                              (diff_sign xl yu)))) /\
                            (forall (result:gen_float),
                             ((float_less_than_real
                               result (Rmult (float_value xl) (float_value yu))) ->
                              (((is_not_NaN xu) /\ (is_not_NaN yl) /\
-                             (((float_class xu) = Infinite ->
+                             (((is_infinite xu) ->
                                ~(eq (float_value yl) (0)%R) /\
                                (diff_sign xu yl))) /\
-                             (((float_class yl) = Infinite ->
+                             (((is_infinite yl) ->
                                ~(eq (float_value xu) (0)%R) /\
                                (diff_sign xu yl)))) /\
                              (forall (result0:gen_float),
@@ -819,10 +818,10 @@ admit.  (*as above *)
                                  (forall (tl:gen_float),
                                   (tl = result1 -> (((is_not_NaN xl) /\
                                    (is_not_NaN yl) /\
-                                   (((float_class xl) = Infinite ->
+                                   (((is_infinite xl) ->
                                      ~(eq (float_value yl) (0)%R) /\
                                      (diff_sign xl yl))) /\
-                                   (((float_class yl) = Infinite ->
+                                   (((is_infinite yl) ->
                                      ~(eq (float_value xl) (0)%R) /\
                                      (diff_sign xl yl)))) /\
                                    (forall (result:gen_float),
@@ -830,10 +829,10 @@ admit.  (*as above *)
                                       (Rmult
                                        (float_value xl) (float_value yl)) result) ->
                                      (((is_not_NaN xu) /\ (is_not_NaN yu) /\
-                                     (((float_class xu) = Infinite ->
+                                     (((is_infinite xu) ->
                                        ~(eq (float_value yu) (0)%R) /\
                                        (diff_sign xu yu))) /\
-                                     (((float_class yu) = Infinite ->
+                                     (((is_infinite yu) ->
                                        ~(eq (float_value xu) (0)%R) /\
                                        (diff_sign xu yu)))) /\
                                      (forall (result0:gen_float),
@@ -852,12 +851,12 @@ admit.  (*as above *)
                                             (forall (b:R),
                                              ((in_interval a xl xu) /\
                                               (in_interval b yl yu) ->
-                                              (in_interval (Rplus a b) tl tu)))))))))))))))))))))))))))
+                                              (in_interval (Rmult a b) tl tu)))))))))))))))))))))))))))
                            else (((is_not_NaN xu) /\ (is_not_NaN yl) /\
-                           (((float_class xu) = Infinite ->
+                           (((is_infinite xu) ->
                              ~(eq (float_value yl) (0)%R) /\
                              (diff_sign xu yl))) /\
-                           (((float_class yl) = Infinite ->
+                           (((is_infinite yl) ->
                              ~(eq (float_value xu) (0)%R) /\
                              (diff_sign xu yl)))) /\
                            (forall (result:gen_float),
@@ -866,10 +865,10 @@ admit.  (*as above *)
                              (forall (tl:gen_float),
                               (tl = result -> (((is_not_NaN xl) /\
                                (is_not_NaN yl) /\
-                               (((float_class xl) = Infinite ->
+                               (((is_infinite xl) ->
                                  ~(eq (float_value yl) (0)%R) /\
                                  (diff_sign xl yl))) /\
-                               (((float_class yl) = Infinite ->
+                               (((is_infinite yl) ->
                                  ~(eq (float_value xl) (0)%R) /\
                                  (diff_sign xl yl)))) /\
                                (forall (result:gen_float),
@@ -881,7 +880,7 @@ admit.  (*as above *)
                                     (forall (b:R),
                                      ((in_interval a xl xu) /\
                                       (in_interval b yl yu) ->
-                                      (in_interval (Rplus a b) tl tu))))))))))))))))))
+                                      (in_interval (Rmult a b) tl tu))))))))))))))))))
                    else (forall (result:bool),
                          ((((is_NaN yu) \/ (is_NaN zero) -> result = false)) /\
                           (((is_finite yu) /\ (is_infinite zero) ->
@@ -901,10 +900,10 @@ admit.  (*as above *)
                              else (Rle (float_value yu) (float_value zero))))) ->
                           (if result then (((is_not_NaN xl) /\
                            (is_not_NaN yu) /\
-                           (((float_class xl) = Infinite ->
+                           (((is_infinite xl) ->
                              ~(eq (float_value yu) (0)%R) /\
                              (diff_sign xl yu))) /\
-                           (((float_class yu) = Infinite ->
+                           (((is_infinite yu) ->
                              ~(eq (float_value xl) (0)%R) /\
                              (diff_sign xl yu)))) /\
                            (forall (result:gen_float),
@@ -913,10 +912,10 @@ admit.  (*as above *)
                              (forall (tl:gen_float),
                               (tl = result -> (((is_not_NaN xu) /\
                                (is_not_NaN yu) /\
-                               (((float_class xu) = Infinite ->
+                               (((is_infinite xu) ->
                                  ~(eq (float_value yu) (0)%R) /\
                                  (diff_sign xu yu))) /\
-                               (((float_class yu) = Infinite ->
+                               (((is_infinite yu) ->
                                  ~(eq (float_value xu) (0)%R) /\
                                  (diff_sign xu yu)))) /\
                                (forall (result:gen_float),
@@ -928,7 +927,7 @@ admit.  (*as above *)
                                     (forall (b:R),
                                      ((in_interval a xl xu) /\
                                       (in_interval b yl yu) ->
-                                      (in_interval (Rplus a b) tl tu)))))))))))))))
+                                      (in_interval (Rmult a b) tl tu)))))))))))))))
                            else (forall (tl:gen_float),
                                  (tl = zero ->
                                   (forall (tu:gen_float),
@@ -937,7 +936,7 @@ admit.  (*as above *)
                                      (forall (b:R),
                                       ((in_interval a xl xu) /\
                                        (in_interval b yl yu) ->
-                                       (in_interval (Rplus a b) tl tu)))))))))))))))
+                                       (in_interval (Rmult a b) tl tu)))))))))))))))
            else (forall (result:bool),
                  ((((is_NaN yl) \/ (is_NaN zero) -> result = false)) /\
                   (((is_finite yl) /\ (is_infinite zero) ->
@@ -974,10 +973,10 @@ admit.  (*as above *)
                              else (Rle (float_value yu) (float_value zero))))) ->
                           (if result then (((is_not_NaN xl) /\
                            (is_not_NaN yu) /\
-                           (((float_class xl) = Infinite ->
+                           (((is_infinite xl) ->
                              ~(eq (float_value yu) (0)%R) /\
                              (diff_sign xl yu))) /\
-                           (((float_class yu) = Infinite ->
+                           (((is_infinite yu) ->
                              ~(eq (float_value xl) (0)%R) /\
                              (diff_sign xl yu)))) /\
                            (forall (result:gen_float),
@@ -986,10 +985,10 @@ admit.  (*as above *)
                              (forall (tl:gen_float),
                               (tl = result -> (((is_not_NaN xl) /\
                                (is_not_NaN yl) /\
-                               (((float_class xl) = Infinite ->
+                               (((is_infinite xl) ->
                                  ~(eq (float_value yl) (0)%R) /\
                                  (diff_sign xl yl))) /\
-                               (((float_class yl) = Infinite ->
+                               (((is_infinite yl) ->
                                  ~(eq (float_value xl) (0)%R) /\
                                  (diff_sign xl yl)))) /\
                                (forall (result:gen_float),
@@ -1001,12 +1000,12 @@ admit.  (*as above *)
                                     (forall (b:R),
                                      ((in_interval a xl xu) /\
                                       (in_interval b yl yu) ->
-                                      (in_interval (Rplus a b) tl tu)))))))))))))))
+                                      (in_interval (Rmult a b) tl tu)))))))))))))))
                            else (((is_not_NaN xu) /\ (is_not_NaN yu) /\
-                           (((float_class xu) = Infinite ->
+                           (((is_infinite xu) ->
                              ~(eq (float_value yu) (0)%R) /\
                              (diff_sign xu yu))) /\
-                           (((float_class yu) = Infinite ->
+                           (((is_infinite yu) ->
                              ~(eq (float_value xu) (0)%R) /\
                              (diff_sign xu yu)))) /\
                            (forall (result:gen_float),
@@ -1015,10 +1014,10 @@ admit.  (*as above *)
                              (forall (tl:gen_float),
                               (tl = result -> (((is_not_NaN xl) /\
                                (is_not_NaN yl) /\
-                               (((float_class xl) = Infinite ->
+                               (((is_infinite xl) ->
                                  ~(eq (float_value yl) (0)%R) /\
                                  (diff_sign xl yl))) /\
-                               (((float_class yl) = Infinite ->
+                               (((is_infinite yl) ->
                                  ~(eq (float_value xl) (0)%R) /\
                                  (diff_sign xl yl)))) /\
                                (forall (result:gen_float),
@@ -1030,7 +1029,7 @@ admit.  (*as above *)
                                     (forall (b:R),
                                      ((in_interval a xl xu) /\
                                       (in_interval b yl yu) ->
-                                      (in_interval (Rplus a b) tl tu))))))))))))))))))
+                                      (in_interval (Rmult a b) tl tu))))))))))))))))))
                    else (forall (result:bool),
                          ((((is_NaN yu) \/ (is_NaN zero) -> result = false)) /\
                           (((is_finite yu) /\ (is_infinite zero) ->
@@ -1050,10 +1049,10 @@ admit.  (*as above *)
                              else (Rle (float_value yu) (float_value zero))))) ->
                           (if result then (((is_not_NaN xl) /\
                            (is_not_NaN yu) /\
-                           (((float_class xl) = Infinite ->
+                           (((is_infinite xl) ->
                              ~(eq (float_value yu) (0)%R) /\
                              (diff_sign xl yu))) /\
-                           (((float_class yu) = Infinite ->
+                           (((is_infinite yu) ->
                              ~(eq (float_value xl) (0)%R) /\
                              (diff_sign xl yu)))) /\
                            (forall (result:gen_float),
@@ -1062,10 +1061,10 @@ admit.  (*as above *)
                              (forall (tl:gen_float),
                               (tl = result -> (((is_not_NaN xu) /\
                                (is_not_NaN yl) /\
-                               (((float_class xu) = Infinite ->
+                               (((is_infinite xu) ->
                                  ~(eq (float_value yl) (0)%R) /\
                                  (diff_sign xu yl))) /\
-                               (((float_class yl) = Infinite ->
+                               (((is_infinite yl) ->
                                  ~(eq (float_value xu) (0)%R) /\
                                  (diff_sign xu yl)))) /\
                                (forall (result:gen_float),
@@ -1077,7 +1076,7 @@ admit.  (*as above *)
                                     (forall (b:R),
                                      ((in_interval a xl xu) /\
                                       (in_interval b yl yu) ->
-                                      (in_interval (Rplus a b) tl tu)))))))))))))))
+                                      (in_interval (Rmult a b) tl tu)))))))))))))))
                            else (forall (tl:gen_float),
                                  (tl = zero ->
                                   (forall (tu:gen_float),
@@ -1086,7 +1085,7 @@ admit.  (*as above *)
                                      (forall (b:R),
                                       ((in_interval a xl xu) /\
                                        (in_interval b yl yu) ->
-                                       (in_interval (Rplus a b) tl tu))))))))))))))))))
+                                       (in_interval (Rmult a b) tl tu))))))))))))))))))
    else (forall (result:bool),
          ((((is_NaN xu) \/ (is_NaN zero) -> result = false)) /\
           (((is_finite xu) /\ (is_infinite zero) ->
@@ -1139,10 +1138,10 @@ admit.  (*as above *)
                              else (Rle (float_value yu) (float_value zero))))) ->
                           (if result then (((is_not_NaN xu) /\
                            (is_not_NaN yl) /\
-                           (((float_class xu) = Infinite ->
+                           (((is_infinite xu) ->
                              ~(eq (float_value yl) (0)%R) /\
                              (diff_sign xu yl))) /\
-                           (((float_class yl) = Infinite ->
+                           (((is_infinite yl) ->
                              ~(eq (float_value xu) (0)%R) /\
                              (diff_sign xu yl)))) /\
                            (forall (result:gen_float),
@@ -1151,10 +1150,10 @@ admit.  (*as above *)
                              (forall (tl:gen_float),
                               (tl = result -> (((is_not_NaN xu) /\
                                (is_not_NaN yu) /\
-                               (((float_class xu) = Infinite ->
+                               (((is_infinite xu) ->
                                  ~(eq (float_value yu) (0)%R) /\
                                  (diff_sign xu yu))) /\
-                               (((float_class yu) = Infinite ->
+                               (((is_infinite yu) ->
                                  ~(eq (float_value xu) (0)%R) /\
                                  (diff_sign xu yu)))) /\
                                (forall (result:gen_float),
@@ -1166,12 +1165,12 @@ admit.  (*as above *)
                                     (forall (b:R),
                                      ((in_interval a xl xu) /\
                                       (in_interval b yl yu) ->
-                                      (in_interval (Rplus a b) tl tu)))))))))))))))
+                                      (in_interval (Rmult a b) tl tu)))))))))))))))
                            else (((is_not_NaN xu) /\ (is_not_NaN yl) /\
-                           (((float_class xu) = Infinite ->
+                           (((is_infinite xu) ->
                              ~(eq (float_value yl) (0)%R) /\
                              (diff_sign xu yl))) /\
-                           (((float_class yl) = Infinite ->
+                           (((is_infinite yl) ->
                              ~(eq (float_value xu) (0)%R) /\
                              (diff_sign xu yl)))) /\
                            (forall (result:gen_float),
@@ -1180,10 +1179,10 @@ admit.  (*as above *)
                              (forall (tl:gen_float),
                               (tl = result -> (((is_not_NaN xl) /\
                                (is_not_NaN yu) /\
-                               (((float_class xl) = Infinite ->
+                               (((is_infinite xl) ->
                                  ~(eq (float_value yu) (0)%R) /\
                                  (diff_sign xl yu))) /\
-                               (((float_class yu) = Infinite ->
+                               (((is_infinite yu) ->
                                  ~(eq (float_value xl) (0)%R) /\
                                  (diff_sign xl yu)))) /\
                                (forall (result:gen_float),
@@ -1195,7 +1194,7 @@ admit.  (*as above *)
                                     (forall (b:R),
                                      ((in_interval a xl xu) /\
                                       (in_interval b yl yu) ->
-                                      (in_interval (Rplus a b) tl tu))))))))))))))))))
+                                      (in_interval (Rmult a b) tl tu))))))))))))))))))
                    else (forall (result:bool),
                          ((((is_NaN yu) \/ (is_NaN zero) -> result = false)) /\
                           (((is_finite yu) /\ (is_infinite zero) ->
@@ -1215,10 +1214,10 @@ admit.  (*as above *)
                              else (Rle (float_value yu) (float_value zero))))) ->
                           (if result then (((is_not_NaN xl) /\
                            (is_not_NaN yl) /\
-                           (((float_class xl) = Infinite ->
+                           (((is_infinite xl) ->
                              ~(eq (float_value yl) (0)%R) /\
                              (diff_sign xl yl))) /\
-                           (((float_class yl) = Infinite ->
+                           (((is_infinite yl) ->
                              ~(eq (float_value xl) (0)%R) /\
                              (diff_sign xl yl)))) /\
                            (forall (result:gen_float),
@@ -1227,10 +1226,10 @@ admit.  (*as above *)
                              (forall (tl:gen_float),
                               (tl = result -> (((is_not_NaN xu) /\
                                (is_not_NaN yu) /\
-                               (((float_class xu) = Infinite ->
+                               (((is_infinite xu) ->
                                  ~(eq (float_value yu) (0)%R) /\
                                  (diff_sign xu yu))) /\
-                               (((float_class yu) = Infinite ->
+                               (((is_infinite yu) ->
                                  ~(eq (float_value xu) (0)%R) /\
                                  (diff_sign xu yu)))) /\
                                (forall (result:gen_float),
@@ -1242,7 +1241,7 @@ admit.  (*as above *)
                                     (forall (b:R),
                                      ((in_interval a xl xu) /\
                                       (in_interval b yl yu) ->
-                                      (in_interval (Rplus a b) tl tu)))))))))))))))
+                                      (in_interval (Rmult a b) tl tu)))))))))))))))
                            else (forall (tl:gen_float),
                                  (tl = zero ->
                                   (forall (tu:gen_float),
@@ -1251,7 +1250,7 @@ admit.  (*as above *)
                                      (forall (b:R),
                                       ((in_interval a xl xu) /\
                                        (in_interval b yl yu) ->
-                                       (in_interval (Rplus a b) tl tu)))))))))))))))
+                                       (in_interval (Rmult a b) tl tu)))))))))))))))
            else (forall (tl:gen_float),
                  (tl = zero ->
                   (forall (tu:gen_float),
@@ -1259,7 +1258,7 @@ admit.  (*as above *)
                     (forall (a:R),
                      (forall (b:R),
                       ((in_interval a xl xu) /\ (in_interval b yl yu) ->
-                       (in_interval (Rplus a b) tl tu))))))))))))).
+                       (in_interval (Rmult a b) tl tu))))))))))))).
 Proof.
 
 

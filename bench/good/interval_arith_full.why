@@ -6,10 +6,12 @@ predicate real_less_than_float(x:real,y:gen_float) =
        (is_finite(y) and x <= float_value(y)) or is_plus_infinity(y)
 
 	
+
 let mul_dn (x:gen_float) (y:gen_float) =
+
  { is_not_NaN(x) and is_not_NaN(y) and
-   (float_class(x) = Infinite -> float_value(y) <> 0.0 and diff_sign(x,y)) and
-   (float_class(y) = Infinite -> float_value(x) <> 0.0 and diff_sign(x,y))
+   (is_infinite(x) -> float_value(y) <> 0.0 and diff_sign(x,y)) and
+   (is_infinite(y) -> float_value(x) <> 0.0 and diff_sign(x,y))
  }
  (mul_gen_float Double down x y)
  {
@@ -47,9 +49,9 @@ let mul_dn (x:gen_float) (y:gen_float) =
 
 let mul_up (x:gen_float) (y:gen_float) =
  { is_not_NaN(x) and is_not_NaN(y) and 
-   (float_class(x) = Infinite -> float_value(y) <> 0.0 and diff_sign(x,y)) and
-   (float_class(y) = Infinite -> float_value(x) <> 0.0 and diff_sign(x,y))
-}
+   (is_infinite(x) -> float_value(y) <> 0.0 and diff_sign(x,y)) and
+   (is_infinite(y) -> float_value(x) <> 0.0 and diff_sign(x,y))
+ }
 (neg_gen_float Double down (mul_gen_float Double down x (neg_gen_float Double down y)))
  {
 real_less_than_float(float_value(x)*float_value(y),result)
@@ -58,13 +60,20 @@ real_less_than_float(float_value(x)*float_value(y),result)
 
 
 
+(*
+predicate float_less_than_float(x:gen_float,y:gen_float) = 
+          (is_finite(x) and is_finite(y) and float_value(x) <= float_value(y))
+           or (is_minus_infinity(x) and is_not_NaN(y))
+           or (is_not_NaN(x) and is_plus_infinity(y))
+*)
+
+
 let min (x:gen_float) (y:gen_float) =
  { is_not_NaN(x) and is_not_NaN(y) 
 }
 if (lt_gen_float x y) then x else y
  { float_le_float(result,x) and float_le_float(result,y)
 } 
-
 
 
 let max (x:gen_float) (y:gen_float) =
@@ -77,16 +86,11 @@ if (gt_gen_float x y) then x else y
 
 
 
-predicate is_interval(l:gen_float,u:gen_float)= (float_class(l)= Finite or (float_class(l)= Infinite and 
-                                                 float_sign(l)= Negative))
+predicate is_interval(l:gen_float,u:gen_float)= (is_finite(l) or (is_infinite(l) and float_sign(l) = Negative))
                                                  and 
-						(float_class(u)= Finite or (float_class(u)= Infinite and 
-                                                 float_sign(u)= Positive))
+						(is_finite(u) or (is_infinite(u) and float_sign(u) = Positive))
 
 predicate in_interval(a:real,l:gen_float,u:gen_float) = float_less_than_real(l,a) and real_less_than_float(a,u)
-
-
-
 
 
 
@@ -200,4 +204,4 @@ let mul (xl:gen_float) (xu:gen_float) (yl:gen_float) (yu:gen_float) =
         tu := !zero
         end
 { is_interval(zl,zu) and forall a:real. forall b:real. 
-                         in_interval(a,xl,xu) and in_interval(b,yl,yu) -> in_interval(a+b,tl,tu)}
+                         in_interval(a,xl,xu) and in_interval(b,yl,yu) -> in_interval(a*b,tl,tu)}
