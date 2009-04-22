@@ -58,7 +58,7 @@ Definition round_mode (m:mode) :=
 Inductive Float_class  : Set :=  
   Finite
 | Infinite 
-| Nan.
+| NaN.
 
 Inductive sign : Set := 
   Negative 
@@ -132,6 +132,14 @@ Record gen_float : Set := mk_gen_float {
 
 (*Definition float_value x := float2R (genf x).*)
 
+
+Lemma class_dec: forall x:gen_float, 
+float_class x = Finite \/ float_class x = Infinite \/ float_class x = NaN.
+Proof.
+intros;destruct (float_class x);intuition.
+Save.
+
+
 Definition same_sign_real (x:gen_float) (y:R) :=
                same_sign_real_bool (float_sign x) y.
 
@@ -186,7 +194,6 @@ unfold float_value in *.
 apply (same_sign_real_bool_correct3 (float_sign x) (genf x) H2);trivial.
 Save.
 
-
 Definition is_finite  (x:gen_float) := float_class x = Finite.
 Lemma is_finite_dec: forall x, is_finite x \/ ~ is_finite x.
 Proof.
@@ -221,7 +228,7 @@ destruct (float_class x); destruct (float_sign x);intuition;
 right; intro; destruct H; discriminate.
 Save.
 
-Definition is_NaN  (x:gen_float) := float_class x = Nan.
+Definition is_NaN  (x:gen_float) := float_class x = NaN.
 Lemma is_NaN_dec: forall x, is_NaN x \/ ~ is_NaN x.
 Proof.
 intro; unfold is_NaN;destruct (float_class x); 
@@ -277,6 +284,19 @@ Lemma sign_not_neg_pos: forall x:gen_float,
 Proof.
 intros;case (sign_dec x);[intro;absurd (float_sign x = Negative);auto | 
 auto].
+Save.
+
+Lemma diff_sign_trans: forall x y z, 
+      diff_sign x y /\ diff_sign y z -> same_sign x z.
+Proof.
+unfold diff_sign,same_sign.
+intros.
+destruct H.
+destruct (float_sign y).
+generalize ((sign_not_neg_pos x) H);intro;rewrite H1;symmetry;
+apply (sign_not_neg_pos z);auto.
+generalize ((sign_not_pos_neg x) H);intro;rewrite H1;symmetry;
+apply (sign_not_pos_neg z);auto.
 Save.
 
 Lemma same_sign_dec: forall x y, same_sign x y \/ diff_sign x y.
@@ -399,37 +419,29 @@ float_value x = 0%R -> (m = down -> float_sign x = Negative)
                                       /\ 
                                      (m <> down -> float_sign x = Positive).
 
-Definition float_less_than_real  (x:gen_float) (y:R) := 
-               (is_finite x /\ (float_value x <= y)%R) \/ is_minus_infinity x.
-
-Definition real_less_than_float  (x:R) (y:gen_float) := 
-               (is_finite y /\ (x <= float_value y)%R) \/ is_plus_infinity y.
-
-Definition float_less_than_float  (x:gen_float) (y:gen_float) := 
+Definition float_le_float  (x:gen_float) (y:gen_float) := 
                (is_finite x /\ is_finite y /\ (float_value x <= float_value y)%R)
                \/ (is_minus_infinity x /\ is_not_NaN y) 
                \/ (is_not_NaN x /\ is_plus_infinity y).
 
-Definition float_strict_less_than_float (x:gen_float) (y:gen_float) := 
+Definition float_lt_float (x:gen_float) (y:gen_float) := 
                (is_finite x /\ is_finite y /\ (float_value x < float_value y)%R) 
                \/ (is_minus_infinity x /\ is_not_NaN y /\ ~ is_minus_infinity y) 
                \/ (is_not_NaN x /\ ~ is_plus_infinity x /\ is_plus_infinity y).
 
-Definition float_greater_than_float  (x:gen_float) (y:gen_float) := 
-               float_strict_less_than_float y x.
+Definition float_ge_float  (x:gen_float) (y:gen_float) := 
+               float_le_float y x.
 
-Definition float_strict_greater_than_float  (x:gen_float) (y:gen_float) := 
-               float_strict_less_than_float y x.
+Definition float_gt_float  (x:gen_float) (y:gen_float) := 
+               float_lt_float y x.
 
 Definition float_eq_float  (x:gen_float) (y:gen_float) := 
+               is_not_NaN x /\ is_not_NaN y /\
                (is_finite x /\ is_finite y /\ float_value x = float_value y) 
                \/ (is_infinite x /\ is_infinite y /\ same_sign x y).
 
-Definition float_neq_float  (x:gen_float) (y:gen_float) := 
-               is_NaN x \/ is_NaN y 
-               \/ (is_not_NaN x /\ is_not_NaN y /\ (diff_class x y 
-                                                                   \/ (is_infinite x /\ is_infinite y /\ diff_sign x y) 
-                                                                   \/ (is_finite x /\ is_finite y /\ float_value x <> float_value y))).
+Definition float_ne_float  (x:gen_float) (y:gen_float) := 
+                ~ float_eq_float x y.
 
 Lemma round_of_zero: forall f m,
             (round_float f m 0 = 0)%R.
@@ -440,6 +452,14 @@ Save.
 
 Lemma round_of_max_gen: forall f m,
             round_float f m (max_gen_float f) = max_gen_float f.
+Proof.
+intros; case f;case m;unfold round_float,round_mode, max_gen_float;
+admit. (*gappa succeeds but not with nearest_away *)
+Save.
+
+
+Lemma round_of_opp_max_gen: forall f m,
+            round_float f m (- max_gen_float f) = Ropp (max_gen_float f).
 Proof.
 intros; case f;case m;unfold round_float,round_mode, max_gen_float;
 admit. (*gappa succeeds but not with nearest_away *)
