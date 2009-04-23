@@ -16,11 +16,12 @@ end.
 
 Definition max_gen_float (f : float_format) :=
 match f with 
-| Single => (* ((2-powerRZ 2 (-23))*powerRZ 2 127)%R *)
-                  (16777215*powerRZ 2 104)%R
-| Double => 
- (* (2 - 2 ^ (-52)) * 2 ^ 1023 = 2 ^ 1024 - 2 ^ 971 = (2^53 - 1) * 2^ 971 *)
-                  (9007199254740991 * powerRZ 2 971)%R
+| Single => (16777215*powerRZ 2 104)%R
+	    (* ((2-powerRZ 2 (-23))*powerRZ 2 127)%R *)
+                  
+| Double => (9007199254740991 * powerRZ 2 971)%R
+ 	    (* (2 - 2 ^ (-52)) * 2 ^ 1023 = 2 ^ 1024 - 2 ^ 971 = (2^53 - 1) * 2^ 971 *)
+                  
 end.
 
 Definition min_float2 (f : float_format) :=
@@ -130,8 +131,26 @@ Record gen_float : Set := mk_gen_float {
    model_value : R
 }.
 
-(*Definition float_value x := float2R (genf x).*)
 
+Lemma sign_dec: forall x, 
+             float_sign x =Negative \/ float_sign x = Positive.
+Proof.
+intros;destruct (float_sign x); auto.
+Save.  
+
+Lemma sign_not_pos_neg: forall x:gen_float,
+            float_sign x <> Positive -> float_sign x =Negative.
+Proof.
+intros;case (sign_dec x); [auto | 
+intro;absurd (float_sign x = Positive);auto].
+Save.
+
+Lemma sign_not_neg_pos: forall x:gen_float,
+            float_sign x <> Negative -> float_sign x = Positive.
+Proof.
+intros;case (sign_dec x);[intro;absurd (float_sign x = Negative);auto | 
+auto].
+Save.
 
 Lemma class_dec: forall x:gen_float, 
 float_class x = Finite \/ float_class x = Infinite \/ float_class x = NaN.
@@ -141,7 +160,78 @@ Save.
 
 
 Definition same_sign_real (x:gen_float) (y:R) :=
-               same_sign_real_bool (float_sign x) y.
+                      same_sign_real_bool (float_sign x) y.
+
+Definition same_sign (x y : gen_float) := 
+                      float_sign x = float_sign y .
+
+Definition diff_sign (x y : gen_float) := 
+                      float_sign x <> float_sign y.
+
+Definition product_sign (z x y : gen_float) :=
+                     (same_sign x y -> float_sign z = Positive) /\
+                     (diff_sign x y  -> float_sign z = Negative).
+
+Definition same_class (x:gen_float) (y:gen_float):= 
+                     float_class x = float_class y.
+ 
+Definition diff_class  (x:gen_float) (y:gen_float) := 
+               float_class x <> float_class y.
+
+Lemma same_sign_dec: forall x y, same_sign x y \/ diff_sign x y.
+Proof.
+intros;unfold same_sign, diff_sign.
+destruct (float_sign x); destruct (float_sign y); 
+[auto | right;discriminate | right;discriminate | auto].
+Save.
+
+Lemma same_class_dec: forall x y, same_class x y \/ diff_class x y.
+Proof.
+intros;unfold same_class, diff_class.
+destruct (float_class x); destruct (float_class y);
+[auto | right;discriminate | right;discriminate | right;discriminate | 
+auto | right;discriminate | right;discriminate | right;discriminate | 
+auto].
+Save.
+
+Lemma diff_sign_trans: forall x y z, 
+      diff_sign x y /\ diff_sign y z -> same_sign x z.
+Proof.
+unfold diff_sign,same_sign.
+intros.
+destruct H.
+destruct (float_sign y).
+generalize ((sign_not_neg_pos x) H);intro;rewrite H1;symmetry;
+apply (sign_not_neg_pos z);auto.
+generalize ((sign_not_pos_neg x) H);intro;rewrite H1;symmetry;
+apply (sign_not_pos_neg z);auto.
+Save.
+
+
+Lemma exists_positive_float : Infinite = Finite ->  (float2R (Float2 2 3) <> 0)%R -> 
+             same_sign_real_bool Positive (float2R (Float2 2 3)).
+Proof.
+intros;discriminate H.
+Save.
+Lemma exists_negative_float: Infinite = Finite ->  (float2R (Float2 2 3) <> 0)%R -> 
+             same_sign_real_bool Negative (float2R (Float2 2 3)).
+Proof.
+intros; discriminate H.
+Save.
+
+Lemma exists_product_sign: forall x y, exists z, product_sign z x y.
+Proof.
+intros; unfold product_sign.
+case (same_sign_dec x y); intro.
+exists (mk_gen_float (Float2 2 3) Infinite Positive exists_positive_float
+ 1%R 1%R);split;
+intro;[auto | unfold same_sign, diff_sign in *;rewrite H in H0;
+contradiction H0; trivial].
+exists (mk_gen_float (Float2 2 3) Infinite Negative exists_negative_float 
+1%R 1%R);split;
+intro; [unfold same_sign, diff_sign in *;rewrite H0 in H;
+contradiction H; trivial | auto].
+Save.
 
 Lemma finite_sign : forall x:gen_float,
             float_class x = Finite /\ (float_value x <> 0)%R -> 
@@ -194,7 +284,25 @@ unfold float_value in *.
 apply (same_sign_real_bool_correct3 (float_sign x) (genf x) H2);trivial.
 Save.
 
+
+Lemma same_sign_product: forall x y,
+      float_class x = Finite /\ float_class y = Finite /\ 
+      same_sign x y -> (float_value x * float_value y >= 0)%R.
+Proof.
+intros.
+destruct H.
+Admitted.
+(*todo*)
+
+Lemma diff_sign_product: forall x y,
+      float_class x = Finite /\ float_class y = Finite /\
+      (float_value x * float_value y < 0)%R -> diff_sign x y.
+Proof.
+Admitted.
+(*todo*)
+
 Definition is_finite  (x:gen_float) := float_class x = Finite.
+
 Lemma is_finite_dec: forall x, is_finite x \/ ~ is_finite x.
 Proof.
 intro; unfold is_finite; destruct (float_class x); 
@@ -202,14 +310,42 @@ intro; unfold is_finite; destruct (float_class x);
 Save.
 
 Definition is_infinite  (x:gen_float) := float_class x = Infinite.
+
 Lemma is_infinite_dec: forall x, is_infinite x \/ ~ is_infinite x.
 Proof.
 intro; unfold is_infinite; destruct (float_class x);
 [right; discriminate | auto | right; discriminate]. 
 Save.
 
+Definition is_NaN  (x:gen_float) := float_class x = NaN.
+
+Lemma is_NaN_dec: forall x, is_NaN x \/ ~ is_NaN x.
+Proof.
+intro; unfold is_NaN;destruct (float_class x); 
+[right; discriminate | right; discriminate | auto].
+Save.
+
+Definition is_not_NaN  (x:gen_float) := 
+               float_class x = Finite \/ float_class x = Infinite.
+
+Lemma is_not_NaN_correct1: forall x,
+            is_not_NaN x -> ~ is_NaN x.
+Proof.
+intuition; unfold is_not_NaN,is_NaN in *.
+rewrite H0 in H;destruct H;discriminate.
+Save.
+
+Lemma is_not_NaN_correct2: forall x,
+            ~ is_NaN x -> is_not_NaN x.
+Proof.
+intuition;unfold is_not_NaN,is_NaN in *.
+destruct (float_class x);auto.
+contradiction H;trivial.
+Save.
+
 Definition is_minus_infinity  (x:gen_float) := 
                float_class x = Infinite /\ float_sign x = Negative.
+
 Lemma is_minus_infinity_dec: forall x, 
             is_minus_infinity x \/ ~ is_minus_infinity x.
 Proof.
@@ -220,124 +356,13 @@ Save.
 
 Definition is_plus_infinity  (x:gen_float) := 
                float_class x = Infinite /\ float_sign x = Positive.
+
 Lemma is_plus_infinity_dec: forall x, 
             is_plus_infinity x \/ ~ is_plus_infinity x.
 Proof.
 intro; unfold is_plus_infinity;
 destruct (float_class x); destruct (float_sign x);intuition;
 right; intro; destruct H; discriminate.
-Save.
-
-Definition is_NaN  (x:gen_float) := float_class x = NaN.
-Lemma is_NaN_dec: forall x, is_NaN x \/ ~ is_NaN x.
-Proof.
-intro; unfold is_NaN;destruct (float_class x); 
-[right; discriminate | right; discriminate | auto].
-Save.
-
-Definition is_not_NaN  (x:gen_float) := 
-               float_class x = Finite \/ float_class x = Infinite.
-Lemma is_not_NaN_correct1: forall x,
-            is_not_NaN x -> ~ is_NaN x.
-Proof.
-intuition; unfold is_not_NaN,is_NaN in *.
-rewrite H0 in H;destruct H;discriminate.
-Save.
-Lemma is_not_NaN_correct2: forall x,
-            ~ is_NaN x -> is_not_NaN x.
-Proof.
-intuition;unfold is_not_NaN,is_NaN in *.
-destruct (float_class x);auto.
-contradiction H;trivial.
-Save.
-
-
-Definition same_sign (x y : gen_float) := 
-               float_sign x = float_sign y .
-Definition diff_sign (x y : gen_float) := 
-               float_sign x <> float_sign y.
-Definition product_sign (z x y : gen_float) :=
-               (same_sign x y -> float_sign z = Positive) /\
-               (diff_sign x y  -> float_sign z = Negative).
-
-Definition same_class  (x:gen_float) (y:gen_float):= 
-               float_class x = float_class y.
- 
-Definition diff_class  (x:gen_float) (y:gen_float) := 
-               float_class x <> float_class y.
-
-Lemma sign_dec: forall x, 
-             float_sign x =Negative \/ float_sign x = Positive.
-Proof.
-intros;destruct (float_sign x); auto.
-Save.  
-
-Lemma sign_not_pos_neg: forall x:gen_float,
-            float_sign x <> Positive -> float_sign x =Negative.
-Proof.
-intros;case (sign_dec x); [auto | 
-intro;absurd (float_sign x = Positive);auto].
-Save.
-
-Lemma sign_not_neg_pos: forall x:gen_float,
-            float_sign x <> Negative -> float_sign x = Positive.
-Proof.
-intros;case (sign_dec x);[intro;absurd (float_sign x = Negative);auto | 
-auto].
-Save.
-
-Lemma diff_sign_trans: forall x y z, 
-      diff_sign x y /\ diff_sign y z -> same_sign x z.
-Proof.
-unfold diff_sign,same_sign.
-intros.
-destruct H.
-destruct (float_sign y).
-generalize ((sign_not_neg_pos x) H);intro;rewrite H1;symmetry;
-apply (sign_not_neg_pos z);auto.
-generalize ((sign_not_pos_neg x) H);intro;rewrite H1;symmetry;
-apply (sign_not_pos_neg z);auto.
-Save.
-
-Lemma same_sign_dec: forall x y, same_sign x y \/ diff_sign x y.
-Proof.
-intros;unfold same_sign, diff_sign.
-destruct (float_sign x); destruct (float_sign y); 
-[auto | right;discriminate | right;discriminate | auto].
-Save.
-
-Lemma exists_positive_float : Infinite = Finite ->  (float2R (Float2 2 3) <> 0)%R -> 
-             same_sign_real_bool Positive (float2R (Float2 2 3)).
-Proof.
-intros;discriminate H.
-Save.
-Lemma exists_negative_float: Infinite = Finite ->  (float2R (Float2 2 3) <> 0)%R -> 
-             same_sign_real_bool Negative (float2R (Float2 2 3)).
-Proof.
-intros; discriminate H.
-Save.
-
-Lemma exists_product_sign: forall x y, exists z, product_sign z x y.
-Proof.
-intros; unfold product_sign.
-case (same_sign_dec x y); intro.
-exists (mk_gen_float (Float2 2 3) Infinite Positive exists_positive_float
- 1%R 1%R);split;
-intro;[auto | unfold same_sign, diff_sign in *;rewrite H in H0;
-contradiction H0; trivial].
-exists (mk_gen_float (Float2 2 3) Infinite Negative exists_negative_float 
-1%R 1%R);split;
-intro; [unfold same_sign, diff_sign in *;rewrite H0 in H;
-contradiction H; trivial | auto].
-Save.
-
-Lemma same_class_dec: forall x y, same_class x y \/ diff_class x y.
-Proof.
-intros;unfold same_class, diff_class.
-destruct (float_class x); destruct (float_class y);
-[auto | right;discriminate | right;discriminate | right;discriminate | 
-auto | right;discriminate | right;discriminate | right;discriminate | 
-auto].
 Save.
 
  
@@ -371,53 +396,50 @@ auto with real; intros; elim H; auto with real.
 Save.
 
 Definition overflow_value  (f:float_format) (m:mode) (x:gen_float) := 
-(m = down -> (float_sign x = Negative -> float_class x = Infinite) /\
-                       (float_sign x = Positive -> float_class x = Finite /\
-                                                                float_value x = max_gen_float f))
+(m = down -> (float_sign x = Negative -> is_infinite x) /\
+                       (float_sign x = Positive -> is_finite x /\
+                                                   float_value x = max_gen_float f))
 /\
-(m = up -> (float_sign x = Negative -> float_class x = Finite /\
-                                              float_value x = Ropp (max_gen_float f)) /\
-                   (float_sign x = Positive -> float_class x = Infinite)) 
+(m = up -> (float_sign x = Negative -> is_finite x /\
+                                       float_value x = Ropp (max_gen_float f)) /\
+           (float_sign x = Positive -> is_infinite x)) 
 /\
-(m = to_zero -> float_class x = Finite /\
-                           (float_sign x = Negative -> 
-                           float_value x = Ropp (max_gen_float f)) /\
-                           (float_sign x = Positive -> 
-                           float_value x = max_gen_float f)) 
+(m = to_zero -> is_finite x /\
+               (float_sign x = Negative -> 
+                float_value x = Ropp (max_gen_float f)) /\
+               (float_sign x = Positive -> 
+                float_value x = max_gen_float f)) 
 /\
-(m = nearest_away \/ m = nearest_even -> float_class x = Infinite).
+(m = nearest_away \/ m = nearest_even -> is_infinite x).
 
 Definition overflow_value_ (f:float_format) (m:mode) (x:gen_float) :=
 match m, float_sign x with 
-   | down, Negative => float_class x = Infinite
-   | down, Positive => float_class x = Finite /\
-                                  float_value x = max_gen_float f
-   | up, Negative => float_class x = Finite /\
-                               float_value x = (- max_gen_float f)%R
-   | up, Positive => float_class x = Infinite
-   | to_zero, Negative => float_class x = Finite /\
-                                       float_value x = (- max_gen_float f)%R
-   | to_zero, Positive => float_class x = Finite /\
-                                  float_value x = max_gen_float f
-   | _ , _ => float_class x = Infinite
+   | down, Negative => is_infinite x 
+   | down, Positive => is_finite x /\
+                       float_value x = max_gen_float f
+   | up, Negative => is_finite x /\
+                     float_value x = (- max_gen_float f)%R
+   | up, Positive => is_infinite x 
+   | to_zero, Negative => is_finite x /\
+                          float_value x = (- max_gen_float f)%R
+   | to_zero, Positive => is_finite x /\
+                          float_value x = max_gen_float f
+   | _ , _ => is_infinite x
 end.
 
 
 Definition underflow_value (f:float_format) (m:mode) (x:gen_float) :=
-float_class x = Finite /\ 
-(float_sign x = Positive -> (m=down \/ m=to_zero \/ m=nearest_even \/ 
-                                        m=nearest_away -> float_value x = 0%R) /\
-                                       (m=up -> float_value x =  min_gen_float f))
+is_finite x /\ 
+(float_sign x = Positive -> (m <> up -> float_value x = 0%R) /\
+                            (m=up -> float_value x =  min_gen_float f))
 /\
-(float_sign x = Negative -> (m=up \/ m=to_zero \/ m=nearest_even \/ 
-                                          m=nearest_away -> float_value x = 0%R) /\
-                                         (m=down -> float_value x =
-                                          Ropp (min_gen_float f))).
+(float_sign x = Negative -> (m <> down -> float_value x = 0%R) /\
+                            (m = down -> float_value x = Ropp (min_gen_float f))).
 
 Definition sign_zero_result (m:mode) (x:gen_float) := 
 float_value x = 0%R -> (m = down -> float_sign x = Negative) 
-                                      /\ 
-                                     (m <> down -> float_sign x = Positive).
+                       /\ 
+                       (m <> down -> float_sign x = Positive).
 
 Definition float_le_float  (x:gen_float) (y:gen_float) := 
                (is_finite x /\ is_finite y /\ (float_value x <= float_value y)%R)
@@ -443,6 +465,7 @@ Definition float_eq_float  (x:gen_float) (y:gen_float) :=
 Definition float_ne_float  (x:gen_float) (y:gen_float) := 
                 ~ float_eq_float x y.
 
+
 Lemma round_of_zero: forall f m,
             (round_float f m 0 = 0)%R.
 Proof.
@@ -450,13 +473,35 @@ intros; case f;case m;unfold round_float,round_mode;
 admit. (*gappa succeeds but not with nearest_away *)
 Save.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Lemma round_of_max_gen: forall f m,
             round_float f m (max_gen_float f) = max_gen_float f.
 Proof.
 intros; case f;case m;unfold round_float,round_mode, max_gen_float;
-admit. (*gappa succeeds but not with nearest_away *)
+admit. (*gappa succeeds but not with nearest_away til today !! *)
 Save.
-
 
 Lemma round_of_opp_max_gen: forall f m,
             round_float f m (- max_gen_float f) = Ropp (max_gen_float f).

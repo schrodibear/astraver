@@ -1,5 +1,5 @@
-(* minimal set of definitions for using gappa *)
-(* formalization of the strict why model *)
+(* minimal set of definitions for using gappa library *)
+(* formalization of the strict why model: why/lib/why/floats_strict.why *)
 
 Require Export Reals.
 Require Export Gappa_tactic.
@@ -9,12 +9,18 @@ Inductive float_format : Set :=  Single | Double.
 
 Definition max_gen_float (f : float_format) :=
 match f with 
-| Single => (* ((2-powerRZ 2 (-23))*powerRZ 2 127)%R *)
-                  (16777215*powerRZ 2 104)%R
-| Double => 
- (* (2 - 2 ^ (-52)) * 2 ^ 1023 = 2 ^ 1024 - 2 ^ 971 = (2^53 - 1) * 2^ 971 *)
-                  (9007199254740991 * powerRZ 2 971)%R
+| Single => (16777215*powerRZ 2 104)%R
+            (* ((2-powerRZ 2 (-23))*powerRZ 2 127)%R *)
+| Double => (9007199254740991 * powerRZ 2 971)%R
+            (* (2 - 2 ^ (-52)) * 2 ^ 1023 = 2 ^ 1024 - 2 ^ 971 = (2^53 - 1) * 2^ 971 *)
 end.
+
+
+Definition min_gen_float (f:float_format) :=
+ match f with 
+  | Single => powerRZ 2 (-149)
+  | Double => powerRZ 2 (-1074)
+ end.
 
 
 Inductive mode : Set := 
@@ -81,31 +87,100 @@ intros; case f;case m;unfold round_float,round_mode;
 admit. (*gappa succeeds but not with nearest_away *)
 Save.
 
+Lemma round_of_max_gen: forall f m,
+            round_float f m (max_gen_float f) = max_gen_float f.
+Proof.
+intros; case f;case m;unfold round_float,round_mode, max_gen_float;
+admit. (*gappa succeeds but not with nearest_away til today !! *)
+Save.
+
+Lemma round_of_opp_max_gen: forall f m,
+            round_float f m (- max_gen_float f) = Ropp (max_gen_float f).
+Proof.
+intros; case f;case m;unfold round_float,round_mode, max_gen_float;
+admit. (*gappa succeeds but not with nearest_away *)
+Save.
+
+Lemma round_of_min_gen: forall f m,
+            round_float f m (min_gen_float f) = min_gen_float f.
+Proof.
+intros; case f;case m;unfold round_float,round_mode, min_gen_float;
+admit. (*gappa succeeds but not with nearest_away *)
+Save.
+
+
+Lemma round_of_float2: forall f m, forall x:float2, 
+                                       round_float f m x = x.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Lemma opp_of_float2: forall x:float2, exists y :float2, y = Ropp x.
+*)
+
+Lemma round_of_opp_min_gen: forall f m,
+            round_float f m (- min_gen_float f) = Ropp (min_gen_float f).
+Proof.
+intros; case f;case m;unfold round_float,round_mode, min_gen_float;
+admit. (*gappa succeeds but not with nearest_away *)
+Save.
+
+
 Lemma bounded_real_no_overflow : forall f m x, 
 (Rabs x <= max_gen_float f)%R -> no_overflow f m x.
 Proof.
 intros f m x;case f; case m;
 unfold no_overflow,round_float,round_mode,max_gen_float;intro;
-admit. (*gappa succeeds but not with nearest_away *)
+admit. (*gappa succeeds but not with nearest_away til today !! *)
 Save.
 
+
+(*
+(* powerRZ 2 (max_exp f) is the next gen_float after max_gen_float f *)
 Definition max_exp (f:float_format) :=
 match f with 
- | Single => 128%Z
- | Double => 1024%Z
+ | Single => 128%Z 
+ | Double => 1024%Z  
 end.
 
-(* just for m <> nearest_even and  m <> nearest_away*)
-(*Lemma bounded_real_overflow : forall f m x,
-((max_gen_float f < x < powerRZ 2 (max_exp f))%R -> 
-~  no_overflow f up x /\ 
-(m = down \/ m = to_zero -> no_overflow f m x))
-/\ 
-((- powerRZ 2 (max_exp f) < x < - max_gen_float f)%R -> 
-~  no_overflow f down x /\ 
-(m = up \/ m = to_zero -> no_overflow f m x))
+
+(* just for m <> nearest_even *)
+Lemma bounded_real_overflow_pos : forall f m x,
+(x > max_gen_float f)%R 
+(* (max_gen_float f < x < powerRZ 2 (max_exp f))%R *) -> 
+(m = up \/ m = nearest_away -> ~ no_overflow f m x) 
 /\
-(Rabs x >= powerRZ 2 (max_exp f))%R -> ~  no_overflow f m x.
+(m = down \/ m = to_zero -> round_float f m x = max_gen_float f).
+Proof.
+Admitted.
+
+(* just for m <> nearest_even *)
+Lemma bounded_real_overflow_neg: forall f m x,
+(x < - max_gen_float f)%R 
+(* (- powerRZ 2 (max_exp f) < x < - max_gen_float f)%R *) -> 
+(m = down \/ m = nearest_away -> ~ no_overflow f m x)
+/\
+(m = up \/ m = to_zero -> (round_float f m x = - max_gen_float f)%R).
+Proof.
+Admitted.
+
+Lemma big_reals_overflow: forall f m x, 
+(Rabs x >= powerRZ 2 (max_exp f))%R -> ~ no_overflow f m x.
 Proof.
 Admitted.
 *)
@@ -126,6 +201,9 @@ Axiom a2: forall f m x,
 Axiom a3: forall f m x,
                  model_value (gen_float_of_real_logic f m x) = x.
 
+Axiom a4: forall f m x,
+          no_overflow f m x /\ (exists y, x = float_value y) -> 
+          float_value (gen_float_of_real_logic f m x) = x.
 
 
 
