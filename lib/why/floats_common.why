@@ -1,5 +1,11 @@
 
-(* Jessie prelude for floating-point arithmetic, common to strict and full mode *)
+(*********************************************************************************)
+(*********************************************************************************)
+(* Jessie prelude for floating-point arithmetic, common to Strcit and Full mode **) 
+
+(*********************************************************************************)
+(*********************************************************************************)
+
 
 include "real.why"
 
@@ -7,14 +13,21 @@ type mode
 
 logic nearest_even, to_zero, up, down, nearest_away : mode
 
-axiom no_other_mode : forall m:mode. m = nearest_even or m = to_zero or m = up or m = down or m = nearest_away
-axiom mode_distinct : nearest_even <> to_zero and nearest_even <> up and nearest_even <> down and 
-                      nearest_even <> nearest_away and  to_zero <> up and to_zero <> down and to_zero <> nearest_away and 
-                      up <> down and up <> nearest_away and down <> nearest_away
- 
-parameter rounding_mode : mode ref
+axiom no_other_mode : forall m:mode. 
+      m = nearest_even or m = to_zero or m = up or m = down or m = nearest_away
+axiom mode_distinct : 
+      nearest_even <> to_zero and nearest_even <> up and nearest_even <> down and 
+      nearest_even <> nearest_away and  to_zero <> up and to_zero <> down and 
+      to_zero <> nearest_away and up <> down and up <> nearest_away and 
+      down <> nearest_away
 
-(* generic precision floats *)
+parameter current_rounding_mode : mode ref
+
+
+
+(***************************************************)
+(*********** generic precision floats **************) 
+(***************************************************)
 
 type float_format
 
@@ -35,49 +48,103 @@ logic max_gen_float : float_format -> real
 logic min_gen_float : float_format -> real
 
 axiom max_single: max_gen_float(Single) = 0x1.FFFFFEp127
- (* (2 - 2^-23)*2^127 *)
+      (* (2 - 2^-23)*2^127 *)
 
 axiom max_double: max_gen_float(Double) = 0x1.FFFFFFFFFFFFFp1023 
- (* (2 - 2^-52)*2^1023 *)
+      (* (2 - 2^-52)*2^1023 *)
 
 (* commented out because makes Yices fail 
 axiom max_quad: max_gen_float(Quad) = 0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383 
- (* (2 - 2^-112)*2^16383 *)
+      (* (2 - 2^-112)*2^16383 *)
 *)
 
 predicate no_overflow(f:float_format,m:mode,x:real) = 
 	  abs_real(round_float(f,m,x)) <= max_gen_float(f)
 
 
-(********************************************************)
-(* a few lemmas for automatic provers others than gappa *)
-(********************************************************)
 
-(* useful at least for constants *)
+
+(*************************************************************)
+(**** a few lemmas for automatic provers others than gappa ***)
+(*************************************************************)
+
+
+(**** useful at least for constants ****)
+
 axiom bounded_real_no_overflow : 
       forall f:float_format. forall m:mode. forall x:real. 
       	     abs_real(x) <= max_gen_float(f) -> no_overflow(f,m,x)
 
+axiom round_of_greater_max: forall f:float_format. forall m:mode. forall x:real.
+      x > max_gen_float(f) -> 
+      (m <> to_zero and m <> down and m <> nearest_even -> not no_overflow(f,m,x)) 
+      and 
+      (m = to_zero or m = down -> round_float(f,m,x) = max_gen_float(f))
 
-axiom round_down_le: 
- forall f:float_format. forall x:real. round_float(f,down,x) <= x
+axiom round_of_less_minus_max: forall f:float_format. forall m:mode. forall x:real.
+      x < - max_gen_float(f) -> 
+      (m <> to_zero and m <> up and m <> nearest_even -> not no_overflow(f,m,x)) 
+      and 
+      (m = to_zero or m = up -> round_float(f,m,x) = - max_gen_float(f))
 
-axiom round_up_ge: 
- forall f:float_format. forall x:real. round_float(f,up,x) >= x
+axiom positive_constant: forall f:float_format. forall m:mode. forall x:real.  
+      min_gen_float(f) <= x <= max_gen_float(f) -> 
+      no_overflow(f,m,x) and round_float(f,m,x) > 0.0 
 
-axiom round_increasing:
- forall f:float_format. forall m:mode. forall x:real. forall y:real .
-   x <= y -> round_float(f,m,x) <= round_float(f,m,y)
+axiom negative_constant: forall f:float_format. forall m:mode. forall x:real.  
+       - max_gen_float(f) <= x <= - min_gen_float(f) -> 
+      no_overflow(f,m,x) and round_float(f,m,x) < 0.0
 
-axiom round_zero:
- forall f:float_format. forall m:mode. round_float(f,m,0.0) = 0.0
+axiom round_not_zero: forall f:float_format. forall m:mode. forall x:real.
+      abs_real(x) >= min_gen_float(f) -> abs_real(round_float(f,m,x)) >= min_gen_float(f)
 
-axiom round_down_neg: 
- forall f:float_format. forall x:real. 
+axiom round_greater_max: forall f:float_format. forall x:real. forall m:mode. 
+      abs_real(round_float(f,m,x)) > max_gen_float(f) -> 
+      abs_real(x) > max_gen_float(f)
+
+axiom round_increasing: forall f:float_format. forall m:mode. forall x:real. forall y:real .
+      x <= y -> round_float(f,m,x) <= round_float(f,m,y)
+
+axiom round_zero: forall f:float_format. forall m:mode. 
+      round_float(f,m,0.0) = 0.0
+
+axiom round_of_max_gen: forall f:float_format. forall m:mode.
+      round_float(f,m,max_gen_float(f)) = max_gen_float(f)
+
+axiom round_of_opp_max_gen: forall f:float_format. forall m:mode.
+      round_float(f,m,-max_gen_float(f)) = -max_gen_float(f)
+
+axiom round_of_min_gen: forall f:float_format. forall m:mode.
+      round_float(f,m,min_gen_float(f)) = min_gen_float(f)
+
+axiom round_of_opp_min_gen: forall f:float_format. forall m:mode.
+      round_float(f,m,-min_gen_float(f)) = -min_gen_float(f)
+
+axiom round_down_le: forall f:float_format. forall x:real. 
+      round_float(f,down,x) <= x
+
+axiom round_up_ge: forall f:float_format. forall x:real. 
+      round_float(f,up,x) >= x
+
+axiom round_down_neg: forall f:float_format. forall x:real. 
      round_float(f,down,-x) = -round_float(f,up,x)
 
-axiom round_up_neg: 
- forall f:float_format. forall x:real. 
+axiom round_up_neg: forall f:float_format. forall x:real. 
      round_float(f,up,-x) = -round_float(f,down,x)
+
+axiom round_round:
+ forall f:float_format. forall m1:mode. forall m2:mode. forall x:real. 
+     round_float(f,m1,round_float(f,m2,x)) = round_float(f,m2,x)
+
+
+
+(******* axioms on reals ******)
+
+axiom prod_pos: 
+  forall x:real. forall y:real.
+  (x > 0.0 and y > 0.0 -> x * y > 0.0) and (x < 0.0 and y < 0.0 -> x * y < 0.0)
+
+axiom abs_minus: 
+  forall x:real. abs_real(-x) = abs_real(x)
 
 

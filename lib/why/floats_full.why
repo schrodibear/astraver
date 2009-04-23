@@ -1,5 +1,10 @@
 
-(* Jessie prelude for floating-point arithmetic, full mode *)
+(************************************************************************)
+(************************************************************************)
+(****** Jessie prelude for floating-point arithmetic, Full mode *********) 
+
+(************************************************************************)
+(************************************************************************)
 
 include "floats_common.why"
 
@@ -10,7 +15,10 @@ axiom min_single : min_gen_float(Single) <= 0x1p-149
 axiom min_double : min_gen_float(Double) <= 0x1p-1074
 
 
-(* additional views *)
+
+(***************************************************)
+(*************** additional views ******************) 
+(***************************************************)
 
 type Float_class
 
@@ -32,97 +40,147 @@ axiom sign_distinct : Negative <> Positive
 logic float_class : gen_float -> Float_class
 logic float_sign : gen_float -> sign
 
-(* axioms on float_sign *)
-axiom sign_not_pos_neg : forall x:gen_float. float_sign(x) <> Positive -> float_sign(x) = Negative
-axiom sign_not_neg_pos : forall x:gen_float. float_sign(x) <> Negative -> float_sign(x) = Positive
-
 
 inductive same_sign_real_bool : sign, real -> prop =
  | neg_case : forall x:real. x < 0.0 -> same_sign_real_bool(Negative,x)
  | pos_case : forall x:real. x > 0.0 -> same_sign_real_bool(Positive,x)
 
-(* axioms on same_sign_real_bool *)
+
+
+(***************************************************)
+(*********** axioms on float_sign ******************) 
+(***************************************************)
+
+axiom sign_not_pos_neg : forall x:gen_float. 
+      float_sign(x) <> Positive -> float_sign(x) = Negative
+axiom sign_not_neg_pos : forall x:gen_float. 
+      float_sign(x) <> Negative -> float_sign(x) = Positive
+
 axiom same_sign_real_bool_zero1 : forall b:sign. not same_sign_real_bool(b,0.0)
 axiom same_sign_real_bool_zero2 : forall x:real. 
-                                  same_sign_real_bool(Negative,x) and same_sign_real_bool(Positive,x) -> false
-axiom same_sign_real_bool_zero3 : forall b:sign. forall x:real. same_sign_real_bool(b,x) -> x <> 0.0
+         same_sign_real_bool(Negative,x) and same_sign_real_bool(Positive,x) -> false
+axiom same_sign_real_bool_zero3 : forall b:sign. forall x:real. 
+         same_sign_real_bool(b,x) -> x <> 0.0
 axiom same_sign_real_bool_correct2 : forall b:sign. forall x:real.
-                                     same_sign_real_bool(b,x) -> (x < 0.0 <-> b = Negative)
+         same_sign_real_bool(b,x) -> (x < 0.0 <-> b = Negative)
 axiom same_sign_real_bool_correct3 : forall b:sign. forall x:real.
-                                     same_sign_real_bool(b,x) -> (x > 0.0 <-> b = Positive)
+         same_sign_real_bool(b,x) -> (x > 0.0 <-> b = Positive)
 
+
+
+(***************************************************)
+(******** predicates to deal with float_sign *******)
+(***************************************************)
 
 predicate same_sign_real (x:gen_float,y:real) = same_sign_real_bool(float_sign(x),y)
-
 predicate same_sign(x:gen_float,y:gen_float)  = float_sign(x) = float_sign(y)
-
 predicate diff_sign(x:gen_float,y:gen_float)  = float_sign(x) <> float_sign(y)
 
-predicate product_sign(z:gen_float,x:gen_float,y:gen_float) = (same_sign(x,y) -> float_sign(z)= Positive) and
-          						      (diff_sign(x,y) -> float_sign(z)= Negative)
+predicate product_sign(z:gen_float,x:gen_float,y:gen_float) = 
+	  (same_sign(x,y) -> float_sign(z)= Positive) and
+          (diff_sign(x,y) -> float_sign(z)= Negative)
+
+
+
+(***************************************************)
+(******* predicates to deal with float_class *******)
+(***************************************************)
 
 predicate same_class(x:gen_float,y:gen_float) = float_class(x) = float_class(y)
 predicate diff_class(x:gen_float,y:gen_float) = float_class(x) <> float_class(y)
 
 
-(* axioms on sign of finite gen_float *) 
+
+(***************************************************)
+(******* axioms on sign of finite gen_float ********)
+(***************************************************)
+
+(* non-zero finite gen_float has the same sign as its float_value *)
 axiom finite_sign : forall x:gen_float.
-                    (float_class(x) = Finite and float_value(x) <> 0.0) -> same_sign_real(x,float_value(x))
-axiom finite_sign_neg1: forall x:gen_float. float_class(x) = Finite and float_value(x) < 0.0 -> float_sign(x) = Negative
-axiom finite_sign_neg2: forall x:gen_float. float_class(x) = Finite and float_value(x) <> 0.0 
-                                            and float_sign(x) = Negative -> float_value(x) < 0.0
-axiom finite_sign_pos1: forall x:gen_float. float_class(x) = Finite and float_value(x) > 0.0 -> float_sign(x) = Positive
-axiom finite_sign_pos2: forall x:gen_float. float_class(x) = Finite and float_value(x) <> 0.0 
-                                            and float_sign(x) = Positive -> float_value(x) > 0.0
+      (float_class(x) = Finite and float_value(x) <> 0.0) -> 
+       same_sign_real(x,float_value(x))
+
+axiom finite_sign_neg1: forall x:gen_float. 
+      float_class(x) = Finite and float_value(x) < 0.0 -> 
+                                  float_sign(x) = Negative
+axiom finite_sign_neg2: forall x:gen_float. 
+      float_class(x) = Finite and float_value(x) <> 0.0 and float_sign(x) = Negative -> 
+                                  float_value(x) < 0.0
+axiom finite_sign_pos1: forall x:gen_float. 
+      float_class(x) = Finite and float_value(x) > 0.0 -> 
+                                  float_sign(x) = Positive
+axiom finite_sign_pos2: forall x:gen_float. 
+      float_class(x) = Finite and float_value(x) <> 0.0 and float_sign(x) = Positive -> 
+      		       	      	  float_value(x) > 0.0
+
+axiom same_sign_product: forall x:gen_float. forall y:gen_float.
+      float_class(x) = Finite and float_class(y) = Finite and 
+      same_sign(x,y) -> float_value(x) * float_value(y) >= 0.0
+
+axiom diff_sign_product: forall x:gen_float. forall y:gen_float.
+      float_class(x) = Finite and float_class(y) = Finite and 
+      float_value(x) * float_value(y) < 0.0 -> diff_sign(x,y)
 
 
-(* usefull predicates *)
+
+(***************************************************)
+(************** usefull predicates *****************)
+(***************************************************)
+
 predicate is_finite(x:gen_float) = float_class(x) = Finite
 predicate is_infinite(x:gen_float) = float_class(x) = Infinite
 predicate is_NaN(x:gen_float) = float_class(x) = NaN
-
-predicate is_not_NaN(x:gen_float) = float_class(x) = Finite or float_class(x) = Infinite
-
-predicate is_minus_infinity(x:gen_float) = float_class(x) = Infinite and float_sign(x) = Negative
-predicate is_plus_infinity(x:gen_float) = float_class(x) = Infinite and float_sign(x) = Positive
-
-predicate is_gen_zero(x:gen_float)= float_class(x) = Finite and float_value(x) = 0.0
+predicate is_not_NaN(x:gen_float) = is_finite(x) or is_infinite(x)
+predicate is_minus_infinity(x:gen_float) = is_infinite(x) and float_sign(x) = Negative
+predicate is_plus_infinity(x:gen_float) = is_infinite(x) and float_sign(x) = Positive
+predicate is_gen_zero(x:gen_float)= is_finite(x) and float_value(x) = 0.0
 predicate is_gen_zero_plus(x:gen_float) = is_gen_zero(x) and float_sign(x) = Positive
 predicate is_gen_zero_minus(x:gen_float) = is_gen_zero(x) and float_sign(x) = Negative
 
+
+(* predicate to use in case of overflow result of an operation *)
 predicate overflow_value(f:float_format,m:mode,x:gen_float) = 
-  (m = down -> (float_sign(x) = Negative -> is_infinite(x)) and 
-               (float_sign(x) = Positive -> float_class(x)= Finite and float_value(x)= max_gen_float(f)))  
-and
-  (m = up -> (float_sign(x) = Negative -> is_finite(x) and float_value(x)= - max_gen_float(f)) and 
-             (float_sign(x) = Positive -> is_infinite(x)))  
-and 
-  (m = to_zero -> is_finite(x) and 
+         (m = down -> (float_sign(x) = Negative -> is_infinite(x)) and
+	              (float_sign(x) = Positive -> is_finite(x) and 
+                                                   float_value(x)= max_gen_float(f)))  
+          and
+         (m = up -> (float_sign(x) = Negative -> is_finite(x) and 
+                                                 float_value(x)= - max_gen_float(f)) and 
+                    (float_sign(x) = Positive -> is_infinite(x)))  
+          and 
+         (m = to_zero -> is_finite(x) and 
                  (float_sign(x) = Negative -> float_value(x)= - max_gen_float(f)) and 
                  (float_sign(x) = Positive -> float_value(x)=   max_gen_float(f)))  
-and 
-  (m = nearest_away or m = nearest_even -> is_infinite(x)) 
+          and 
+         (m = nearest_away or m = nearest_even -> is_infinite(x)) 
 
 
+(* predicate to use in case of underflow result of an operation *)
 predicate underflow_value(f:float_format,m:mode,x:gen_float) = 
-float_class(x) = Finite 
-and
-(float_sign(x) = Positive -> (m = down or m = to_zero or m = nearest_even or m = nearest_away -> float_value(x) = 0.0) 
-                              and 
-                             (m = up -> float_value(x) = min_gen_float(f)))
-and 
-(float_sign(x) = Negative -> (m = up or m = to_zero or m = nearest_even or m = nearest_away -> float_value(x) = 0.0) 
-                              and 
-                             (m = down -> float_value(x) = - min_gen_float(f)))
+          is_finite(x) 
+          and
+          (float_sign(x) = Positive -> 
+              (m = down or m = to_zero or m = nearest_even or m = nearest_away -> 
+                                      float_value(x) = 0.0) 
+               and 
+              (m = up -> float_value(x) = min_gen_float(f)))
+          and 
+          (float_sign(x) = Negative -> 
+              (m = up or m = to_zero or m = nearest_even or m = nearest_away -> 
+                                      float_value(x) = 0.0) 
+               and 
+               (m = down -> float_value(x) = - min_gen_float(f)))
 
 
-
+(* predicate to get the sign of a zero result of an operation *)
 predicate sign_zero_result(m:mode,x:gen_float) = 
-  float_value(x) = 0.0 -> 
-    (  (m = down -> float_sign(x) = Negative) 
-     and 
-       (m <> down -> float_sign(x) = Positive)) 
+           float_value(x) = 0.0 -> 
+          ((m = down -> float_sign(x) = Negative) 
+           and 
+           (m <> down -> float_sign(x) = Positive)) 
 
+
+(**** Comparisons of floats in the logic ****)
 predicate float_le_float(x:gen_float,y:gen_float) = 
           (is_finite(x) and is_finite(y) and float_value(x) <= float_value(y))
            or (is_minus_infinity(x) and is_not_NaN(y))
@@ -143,34 +201,23 @@ predicate float_eq_float(x:gen_float,y:gen_float) =
            or 
           (is_infinite(x) and is_infinite(y) and same_sign(x,y)))
 
-predicate float_neq_float(x:gen_float,y:gen_float) = not float_eq_float(x,y)
-
-
-(* axioms on round_float *)
-axiom positive_constant : 
-      forall f:float_format. forall m:mode. forall x:real.  
-      min_gen_float(f) <= x <= max_gen_float(f) -> 	    
-          no_overflow(f,m,x) and round_float(f,m,x) > 0.0 
-
-axiom negative_constant : 
-      forall f:float_format. forall m:mode. forall x:real.  
-       - max_gen_float(f) <= x <= - min_gen_float(f) -> no_overflow(f,m,x) and round_float(f,m,x) < 0.0
-
-axiom round_not_zero: forall f:float_format. forall m:mode. forall x:real.  
-                         abs_real(x) >= min_gen_float(f) -> abs_real(round_float(f,m,x)) >= min_gen_float(f)
+predicate float_ne_float(x:gen_float,y:gen_float) = not float_eq_float(x,y)
 
 
 
+(***************************************************)
+(******** axioms on gen_float_of_real_logic ********)
+(***************************************************)
 
-(* axioms on gen_float_of_real_logic *)
 axiom a1 : forall f:float_format. forall m:mode. forall x:real.
-           no_overflow(f,m,x) -> (is_finite(gen_float_of_real_logic(f,m,x)) and 
-                                  float_value(gen_float_of_real_logic(f,m,x)) = round_float(f,m,x) and 
-				  sign_zero_result(m,gen_float_of_real_logic(f,m,x)))
+           no_overflow(f,m,x) -> 
+           (is_finite(gen_float_of_real_logic(f,m,x)) and
+            float_value(gen_float_of_real_logic(f,m,x)) = round_float(f,m,x))
 
 axiom a2 : forall f:float_format. forall m:mode. forall x:real.
-           not no_overflow(f,m,x) -> (same_sign_real(gen_float_of_real_logic(f,m,x),x) 
-	      			      and overflow_value(f,m,gen_float_of_real_logic(f,m,x)))
+           not no_overflow(f,m,x) -> 
+           (same_sign_real(gen_float_of_real_logic(f,m,x),x) and 
+            overflow_value(f,m,gen_float_of_real_logic(f,m,x)))
 
 axiom a3 : forall f:float_format. forall m:mode. forall x:real.
            exact_value(gen_float_of_real_logic(f,m,x)) = x
@@ -182,18 +229,18 @@ axiom gen_float_of_zero : forall f:float_format. forall m:mode.
                           is_gen_zero(gen_float_of_real_logic(f,m,0.0))
 
 (* remplace l'axiom precedent !
-axiom gen_float_of_zero1 : forall f:float_format. forall m:mode. is_gen_zero_plus(gen_float_of_real_logic(f,m,0.0))
+axiom gen_float_of_zero1 : forall f:float_format. forall m:mode. 
+         is_gen_zero_plus(gen_float_of_real_logic(f,m,0.0))
 *)
 
-
 axiom finite_gen_float_of_real_logic : forall f:float_format. forall m:mode. forall x:real.
-                                       is_finite(gen_float_of_real_logic(f,m,x)) ->
-                                       abs_real(float_value(gen_float_of_real_logic(f,m,x))) <= max_gen_float(f)
+      is_finite(gen_float_of_real_logic(f,m,x)) ->
+      abs_real(float_value(gen_float_of_real_logic(f,m,x))) <= max_gen_float(f)
 
 axiom gen_bounded_real_no_overflow : forall f:float_format. forall m:mode. forall x:real. 
-             abs_real(x) <= max_gen_float(f) -> 
-             (is_finite(gen_float_of_real_logic(f,m,x)) and
-             float_value(gen_float_of_real_logic(f,m,x)) = round_float(f,m,x))
+          abs_real(x) <= max_gen_float(f) -> 
+          (is_finite(gen_float_of_real_logic(f,m,x)) and
+          float_value(gen_float_of_real_logic(f,m,x)) = round_float(f,m,x))
 
 axiom gen_positive_constant : forall f:float_format. forall m:mode. forall x:real.
                                min_gen_float(f) <= x <= max_gen_float(f) ->
@@ -209,43 +256,41 @@ axiom gen_negative_constant :forall f:float_format. forall m:mode. forall x:real
 
 
 
-(* axioms on gen_zero *)
-axiom is_gen_zero_correct1 : forall x:gen_float. is_gen_zero(x) -> float_value(x) =0.0
-
-axiom is_gen_zero_correct2 : forall x:gen_float. is_finite(x) -> float_value(x) = 0.0 -> is_gen_zero(x)
+(***************************************************)
+(************** axioms on gen_zero *****************)
+(***************************************************)
 
 axiom is_gen_zero_comp1 : forall x:gen_float. forall y:gen_float.
-      is_gen_zero(x) -> float_value(x) = float_value(y) -> is_finite(y) -> is_gen_zero(y)
+      is_gen_zero(x) and float_value(x) = float_value(y) and is_finite(y) -> 
+                         is_gen_zero(y)
 
 axiom is_gen_zero_comp2 : forall x:gen_float. forall y:gen_float. 
-      is_finite(x) -> not is_gen_zero(x) -> float_value(x) = float_value(y) -> not is_gen_zero(y)
+      is_finite(x) and not is_gen_zero(x) and float_value(x) = float_value(y) -> 
+                         not is_gen_zero(y)
 
 
 
 
-
-
-
-(* binary operations *)
+(***************************************************)
+(** specification of unary and binary operations ***)
+(***************************************************)
 
 parameter gen_float_of_real :
 f:float_format -> m:mode -> x:real ->
 { }
 gen_float
-{ result = gen_float_of_real_logic(f,m,x) 
+{ (*result = gen_float_of_real_logic(f,m,x) *)
 
-(*
 (no_overflow(f,m,x)     -> (is_finite(result) and float_value(result) = round_float(f,m,x))) 
   and 
   (not no_overflow(f,m,x) -> (same_sign_real(result,x) and overflow_value(f,m,result)))
 
   and exact_value(result) = x	
   and model_value(result) = x
-*)
+
 }
 
 
-          
 
 parameter add_gen_float : 
 f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
@@ -257,22 +302,22 @@ gen_float
   and                    
   ((is_infinite(x) and is_finite(y)) -> (is_infinite(result) and same_sign(result,x)))
   and
-  ((is_infinite(x) and is_infinite(y) and same_sign(x,y)) -> (is_infinite(result) and same_sign(result,x)))
+  ((is_infinite(x) and is_infinite(y) and same_sign(x,y)) -> 
+                    (is_infinite(result) and same_sign(result,x)))
   and
   ((is_infinite(x) and is_infinite(y) and diff_sign(x,y)) -> is_NaN(result))
   and 
   ((is_finite(x) and is_finite(y) and no_overflow(f,m,float_value(x)+float_value(y))) -> 
-                             (is_finite(result) and
- 			     float_value(result) = round_float(f,m,float_value(x)+float_value(y)) and 
-			     sign_zero_result(m,result)))
+                    (is_finite(result) and
+ 	             float_value(result) = round_float(f,m,float_value(x)+float_value(y)) and 
+                     sign_zero_result(m,result)))
   and 
   ((is_finite(x) and is_finite(y) and not no_overflow(f,m,float_value(x)+float_value(y))) -> 
-                             (same_sign_real(result,float_value(x)+float_value(y)) and
-			      overflow_value(f,m,result)))      
+                    (same_sign_real(result,float_value(x)+float_value(y)) and
+	             overflow_value(f,m,result)))      
   and
   exact_value(result) = exact_value(x) + exact_value(y) and 
   model_value(result) = model_value(x) + model_value(y)
-
 }
 
 
@@ -289,20 +334,20 @@ gen_float
   and
   ((is_infinite(x) and is_infinite(y) and same_sign(x,y)) -> is_NaN(result))
   and
-  ((is_infinite(x) and is_infinite(y) and diff_sign(x,y)) -> (is_infinite(result) and same_sign(result,x)))
+  ((is_infinite(x) and is_infinite(y) and diff_sign(x,y)) -> 
+                    (is_infinite(result) and same_sign(result,x)))
   and 
   ((is_finite(x) and is_finite(y) and no_overflow(f,m,float_value(x)-float_value(y))) ->
-			     (is_finite(result) and
-			      float_value(result)= round_float(f,m,float_value(x)-float_value(y))and 
-			      sign_zero_result(m,result)))
+		    (is_finite(result) and
+	             float_value(result)= round_float(f,m,float_value(x)-float_value(y))and 
+	             sign_zero_result(m,result)))
   and 
   ((is_finite(x) and is_finite(y) and not no_overflow(f,m,float_value(x)-float_value(y))) -> 
-                             (same_sign_real(result,float_value(x)-float_value(y)) and
- 			      overflow_value(f,m,result)))      
+                    (same_sign_real(result,float_value(x)-float_value(y)) and
+ 		     overflow_value(f,m,result)))      
   and
   exact_value(result) = exact_value(x) - exact_value(y) and 
   model_value(result) = model_value(x) - model_value(y)
-
 }
 
 
@@ -317,33 +362,28 @@ and
   (is_infinite(x) -> is_infinite(result))
 and
   ((is_finite(x) and no_overflow(f,m,abs_real(float_value(x))))  -> 
-                                (is_finite(result) and
-			         float_value(result)= round_float(f,m,abs_real(float_value(x)))))
+                     (is_finite(result) and
+          	      float_value(result)= round_float(f,m,abs_real(float_value(x)))))
 and
-  ((is_finite(x) and not no_overflow(f,m,abs_real(float_value(x))))  -> overflow_value(f,m,result))
+  ((is_finite(x) and not no_overflow(f,m,abs_real(float_value(x)))) -> 
+                      overflow_value(f,m,result))
 and
   float_sign(result) = Positive and 
   exact_value(result) = abs_real(exact_value(x)) and 
   model_value(result) = abs_real(model_value(x))
-
 } 
 
 
 
 
-(*
+(*TODO:
 parameter fma_gen_float : 
 f:float_format -> m:mode -> x:gen_float -> y:gen_float -> z:gen_float ->
 { }
 gen_float
 { ((is_NaN(x)  or  is_NaN(y) or is_NaN(z)) -> is_NaN(result))
 and 
-
-
-
-}
 *)
-
 
 
 
@@ -353,29 +393,29 @@ f:float_format -> m:mode -> x:gen_float -> y:gen_float ->
 { }
 gen_float
 { ((is_NaN(x)  or  is_NaN(y)) -> is_NaN(result))
-  and 
+and 
   ((is_gen_zero(x) and is_infinite(y)) -> is_NaN(result))
-  and 
+and 
   ((is_finite(x) and is_infinite(y) and float_value(x) <> 0.0) -> is_infinite(result))
-  and                    
+and                    
   ((is_infinite(x) and is_gen_zero(y)) -> is_NaN(result))
-  and
+and
   ((is_infinite(x) and is_finite(y) and float_value(y) <> 0.0) -> is_infinite(result))
-  and
+and
   ((is_infinite(x) and is_infinite(y)) -> is_infinite(result))
-  and 
+and 
   ((is_finite(x) and is_finite(y) and no_overflow(f,m,float_value(x)*float_value(y))) ->
-			             (is_finite(result) and
-			              float_value(result) = round_float(f,m,float_value(x) * float_value(y))))
-  and 
-  ((is_finite(x) and is_finite(y) and not no_overflow(f,m,float_value(x)*float_value(y))) -> (overflow_value(f,m,result)))          
-  and
-  product_sign(result,x,y) and
+	             (is_finite(result) and
+	              float_value(result) = round_float(f,m,float_value(x) * float_value(y))))
+and 
+  ((is_finite(x) and is_finite(y) and not no_overflow(f,m,float_value(x)*float_value(y))) -> 
+                     (overflow_value(f,m,result)))          
+and
+  product_sign(result,x,y) 
+and
   exact_value(result) = exact_value(x) * exact_value(y) and 
   model_value(result) = model_value(x) * model_value(y)
-
 }
-
 
 
 
@@ -392,21 +432,23 @@ and
 and
   ((is_infinite(x) and is_infinite(y)) -> is_NaN(result))
 and 
-  ((is_finite(x) and is_finite(y) and float_value(y) <> 0.0 and no_overflow(f,m,float_value(x)/float_value(y))) ->
-			     (is_finite(result) and
-			      float_value(result)= round_float(f,m,float_value(x)/float_value(y))))
+  ((is_finite(x) and is_finite(y) and float_value(y) <> 0.0 and 
+                     no_overflow(f,m,float_value(x)/float_value(y))) ->
+		     (is_finite(result) and
+		      float_value(result)= round_float(f,m,float_value(x)/float_value(y))))
 and 
-  ((is_finite(x) and is_finite(y) and float_value(y) <> 0.0 and not no_overflow(f,m,float_value(x)/float_value(y))) -> 
-			      overflow_value(f,m,result)) 
+  ((is_finite(x) and is_finite(y) and float_value(y) <> 0.0 and 
+                     not no_overflow(f,m,float_value(x)/float_value(y))) -> 
+		     overflow_value(f,m,result)) 
 and 
   ((is_finite(x) and is_gen_zero(y) and float_value(x) <> 0.0) -> is_infinite(result))
 and 
   ((is_gen_zero(x) and is_gen_zero(y)) -> is_NaN(result))
 and
-  product_sign(result,x,y) and
+  product_sign(result,x,y) 
+and
   exact_value(result) = exact_value(x)/exact_value(y) and 
   model_value(result) = model_value(x)/model_value(y)
-
 }
 
 
@@ -423,28 +465,22 @@ and
 and 
   ((is_finite(x) and float_value(x)< 0.0) -> is_NaN(result))
 and 
-  ((is_finite(x) and float_value(x) >= 0.0 and no_overflow(f,m,sqrt_real(float_value(x)))) -> 	
-                			  (is_finite(result) and 
-					   float_value(result)= round_float(f,m,sqrt_real(float_value(x)))))
+  ((is_finite(x) and float_value(x) >= 0.0 and 
+                      no_overflow(f,m,sqrt_real(float_value(x)))) -> 	
+                      (is_finite(result) and 
+		       float_value(result)= round_float(f,m,sqrt_real(float_value(x)))))
 and 
-  ((is_finite(x) and float_value(x) >= 0.0 and not no_overflow(f,m,sqrt_real(float_value(x)))) ->
-                        		           overflow_value(f,m,result))
+  ((is_finite(x) and float_value(x) >= 0.0 and 
+                      not no_overflow(f,m,sqrt_real(float_value(x)))) ->
+                      overflow_value(f,m,result))
 and 
    (* not always positive because sqrt(-0) = -0 *)
-   same_sign(result,x) and 
+   same_sign(result,x) 
+and 
    exact_value(result) = sqrt_real(exact_value(x)) and 
    model_value(result) = sqrt_real(model_value(x))
 }
 
-
-
-(* if sqrt is defined in the logic: 
-
-axiom fdfh : forall f:float_format. forall m:mode. forall x:gen_float.
-                     is_gen_zero_minus(x) -> is_gen_zero_minus(sqrt_gen_float(f,m,x))            
-axiom lmij : forall f:float_format. forall m:mode. forall x:gen_float.
-                     is_gen_zero_plus(x) -> is_gen_zero_plus(sqrt_gen_float(f,m,x)) 
-*)
 
 
 		    	        
@@ -457,19 +493,21 @@ and
   (is_infinite(x) -> is_infinite(result))
 and 
   ((is_finite(x) and no_overflow(f,m,neg_real(float_value(x)))) -> 
-  		    (is_finite(result) and float_value(result) = round_float(f,m,neg_real(float_value(x)))))
+  		     (is_finite(result) and 
+                      float_value(result) = round_float(f,m,neg_real(float_value(x)))))
 and 
-  ((is_finite(x) and not no_overflow(f,m,neg_real(float_value(x)))) -> overflow_value(f,m,result))
+  ((is_finite(x) and not no_overflow(f,m,neg_real(float_value(x)))) -> 
+                      overflow_value(f,m,result))
 and
-  diff_sign(result,x) and
+  diff_sign(result,x) 
+and
   exact_value(result) = neg_real(exact_value(x)) and 
   model_value(result) = neg_real(model_value(x))
-
 }
 
 
 
-(*
+(* TODO ??
 parameter nextup_gen_float : 
 f:float_format -> x:gen_float -> 
 { }
@@ -480,26 +518,31 @@ and
 and 
   (is_plus_infinity(x) -> is_plus_infinity(result))
 and 
-  (is_finite(x) and float_value(x) < - max_gen_float(f) -> is_finite(result) and float_value(result) = - max_gen_float(f))
+  (is_finite(x) and float_value(x) < - max_gen_float(f) -> 
+                is_finite(result) and float_value(result) = - max_gen_float(f))
 and 
   (is_finite(x) and - max_gen_float(f) <= float_value(x) < - min_gen_float(f) -> 
-                      is_finite(result) and - max_gen_float(f) < float_value(result) <= - min_gen_float(f))
+                is_finite(result) and 
+              - max_gen_float(f) < float_value(result) <= - min_gen_float(f))
 and 
   (is_finite(x) and float_value(x) = - min_gen_float(f) -> is_gen_zero_minus(result))
 and 
-  (is_gen_zero_minus(x) or is_gen_zero_plus(x) -> is_finite(result) and float_value(result) = min_gen_float(f)) 
+  (is_gen_zero_minus(x) or is_gen_zero_plus(x) -> 
+                is_finite(result) and float_value(result) = min_gen_float(f)) 
 and 
   (is_finite(x) and min_gen_float(f) <= float_value(x) < max_gen_float(f) -> 
-                    is_finite(result) and  min_gen_float(f) < float_value(result) <= max_gen_float(f))
+                is_finite(result) and  
+                min_gen_float(f) < float_value(result) <= max_gen_float(f))
 and 
   (is_finite(x) and float_value(x) >= max_gen_float(f) -> is_plus_infinity(result))
 }
 
-function nextdown_gen_float(f:float_format,x:gen_float) : gen_float = neg_gen_float(nextup_gen_float(neg_gen_float(x)))
+function nextdown_gen_float(f:float_format,x:gen_float) : gen_float = 
+                neg_gen_float(nextup_gen_float(neg_gen_float(x)))
 *)
 
 
-(*
+(* TODO:
 parameter remainder_gen_float : 
 f:float_format -> m:mode -> x:gen_float -> y:gen_float ->
 { }
@@ -512,15 +555,19 @@ and
 and 
   (is_gen_zero(y) -> is_NaN(result))
 and 
-  (is_finite(x) and is_finite(y) and float_value(y) <> 0.0 -> is_finite(result) and 
-   float_value(result) = float_value(x) - float_value(y) * int_of_real(float_value(x)/float_value(y)) (*nearest_even*)
-   and (float_value(result) = 0.0 -> same_sign(result,x)))
+  (is_finite(x) and is_finite(y) and float_value(y) <> 0.0 -> 
+                is_finite(result) and 
+                float_value(result) = 
+                float_value(x) - float_value(y) * int_of_real(float_value(x)/float_value(y)) 
+                (*nearest_even*) 
+and 
+  (float_value(result) = 0.0 -> same_sign(result,x)))
 }
 *)
 
 
 
-(*
+(* TODO ??
 predicate is_negative_NaN(x:gen_float) = is_NaN(x) and float_sign(x) = Negative
 predicate is_positive_NaN(x:gen_float) = is_NaN(x) and float_sign(x) = Positive
 
@@ -546,9 +593,12 @@ and
 
 
 
-function gen_round_error(x:gen_float) : real = abs_real(float_value(x) - exact_value(x))
-function gen_relative_error(x:gen_float) : real = abs_real(float_value(x) - exact_value(x))/exact_value(x)
-function gen_total_error(x:gen_float) : real = abs_real(float_value(x) - model_value(x))
+function gen_round_error(x:gen_float) : real = 
+	 abs_real(float_value(x) - exact_value(x))
+function gen_relative_error(x:gen_float) : real = 
+	 abs_real(float_value(x) - exact_value(x))/exact_value(x)
+function gen_total_error(x:gen_float) : real = 
+	 abs_real(float_value(x) - model_value(x))
 
 
 parameter set_model : x:gen_float ref -> y:real ->
@@ -557,7 +607,6 @@ parameter set_model : x:gen_float ref -> y:real ->
   { float_value(x) = float_value(x@)
     and exact_value(x) = exact_value(x@)
     and model_value(x) = y }
-
 
 parameter lt_gen_float :
 x:gen_float -> y:gen_float -> 
@@ -571,8 +620,10 @@ and
   ((is_infinite(x) and is_finite(y)) -> if result then float_sign(x)= Negative
        		      		        else float_sign(x)= Positive)
 and
-  ((is_infinite(x) and is_infinite(y)) -> if result then (float_sign(x) = Negative and float_sign(y) = Positive)
-				          else (float_sign(x) = Positive or float_sign(y) = Negative)) 
+  ((is_infinite(x) and is_infinite(y)) -> if result then (float_sign(x) = Negative and 
+                                                          float_sign(y) = Positive)
+				          else (float_sign(x) = Positive or 
+                                                float_sign(y) = Negative)) 
 and
  ((is_finite(x) and is_finite(y)) -> if result then float_value(x) < float_value(y) 
  		   	      	     else float_value(x) >= float_value(y))
@@ -592,8 +643,10 @@ and
   ((is_infinite(x) and is_finite(y)) -> if result then float_sign(x) = Negative
     		      		        else float_sign(x) = Positive)
 and
-  ((is_infinite(x) and is_infinite(y)) -> if result then (float_sign(x)= Negative or float_sign(y)= Positive) 
-				          else (float_sign(x)= Positive and float_sign(y)= Negative))
+  ((is_infinite(x) and is_infinite(y)) -> if result then (float_sign(x)= Negative or 
+                                                          float_sign(y)= Positive) 
+				          else (float_sign(x)= Positive and 
+                                                float_sign(y)= Negative))
 and
  ((is_finite(x) and is_finite(y)) -> if result then float_value(x) <= float_value(y) 
  		   	             else float_value(x) > float_value(y))
@@ -614,8 +667,10 @@ and
   ((is_infinite(x) and is_finite(y)) -> if result then float_sign(x)= Positive
   	       		      	        else float_sign(x)= Negative)
 and
-  ((is_infinite(x) and is_infinite(y)) -> if result then (float_sign(x)= Positive and float_sign(y)= Negative)
-				          else (float_sign(x)= Negative or float_sign(y)= Positive))
+  ((is_infinite(x) and is_infinite(y)) -> if result then (float_sign(x)= Positive and 
+                                                          float_sign(y)= Negative)
+				          else (float_sign(x)= Negative or 
+                                                float_sign(y)= Positive))
 and
  ((is_finite(x) and is_finite(y)) ->  if result then float_value(x) > float_value(y) 
  		   	      	      else float_value(x) <= float_value(y))
@@ -637,8 +692,10 @@ and
   ((is_infinite(x) and is_finite(y)) -> if result then float_sign(x)= Positive
    	       		      	        else float_sign(x)= Negative)
 and
-  ((is_infinite(x) and is_infinite(y)) -> if result then (float_sign(x)= Positive or float_sign(y)= Negative)
-                  		          else (float_sign(x)= Negative and float_sign(y)= Positive))
+  ((is_infinite(x) and is_infinite(y)) -> if result then (float_sign(x)= Positive or 
+                                                          float_sign(y)= Negative)
+                  		          else (float_sign(x)= Negative and 
+                                                float_sign(y)= Positive))
 and
  ((is_finite(x) and is_finite(y)) -> if result then float_value(x) >= float_value(y) 
  		   	             else float_value(x) < float_value(y))
@@ -684,7 +741,10 @@ and
 }
 
 
-(* conversions *)
+
+(***************************************************)
+(********** conversions between formats ************) 
+(***************************************************)
 
 parameter cast_gen_float : 
 f:float_format -> m:mode -> x:gen_float ->
@@ -694,17 +754,22 @@ gen_float
   and
   (is_infinite(x) -> (is_infinite(result) and same_sign(result,x)))
   and 
-  ((is_finite(x) and no_overflow(f,m,float_value(x))) -> (float_class(result) = Finite and
-                   		                          float_value(result) = round_float(f,m,float_value(x))))
+  ((is_finite(x) and no_overflow(f,m,float_value(x))) -> 
+                    (float_class(result) = Finite and
+                     float_value(result) = round_float(f,m,float_value(x))))
   and 
-  ((is_finite(x) and not no_overflow(f,m,float_value(x))) -> same_sign(result,x) and overflow_value(f,m,result))
+  ((is_finite(x) and not no_overflow(f,m,float_value(x))) -> 
+                     same_sign(result,x) and overflow_value(f,m,result))
   and 
-  exact_value(result) = exact_value(x)and 
+  exact_value(result) = exact_value(x) and 
   model_value(result) = model_value(x) 
 
 }
 
 
-(* any function *)
+
+(***************************************************)
+(***************** any function ********************) 
+(***************************************************)
 
 parameter any_gen_float : float_format -> { } gen_float { }

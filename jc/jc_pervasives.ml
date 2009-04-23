@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.150 2009-04-16 15:53:23 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.151 2009-04-23 13:50:34 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1043,11 +1043,37 @@ let builtin_logic_symbols =
     Some real_type, "\\hypot", "hypot", [real_type; real_type] ;
     Some real_type, "\\round_float", "round_float", [float_format; rounding_mode; real_type];
     None, "\\no_overflow", "no_overflow", [float_format; rounding_mode; real_type];
+    
+    Some float_format, "\\Single", "Single", [];
     Some float_format, "\\Double", "Double", [];
+    Some float_format, "\\Quad", "Quad", [];
+
     Some rounding_mode, "\\Down", "down", [];
+    Some rounding_mode, "\\Up", "up", [];
+    Some rounding_mode, "\\ToZero", "to_zero", [];
+    Some rounding_mode, "\\NearestEven", "nearest_even", [];
+    Some rounding_mode, "\\NearestAway", "nearest_away", [];
+
     Some sign, "\\Positive", "Positive", [];
     Some sign, "\\Negative", "Negative", [];
     
+    Some (JCTnative Tboolean), "\\le_float", "float_le_float", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\le_double", "float_le_float", [double_type;double_type];
+
+    Some (JCTnative Tboolean), "\\lt_float", "float_lt_float", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\lt_double", "float_lt_float", [double_type;double_type];
+
+    Some (JCTnative Tboolean), "\\ge_float", "float_ge_float", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\ge_double", "float_ge_float", [double_type;double_type];
+
+    Some (JCTnative Tboolean), "\\gt_float", "float_gt_float", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\gt_double", "float_gt_float", [double_type;double_type];
+
+    Some (JCTnative Tboolean), "\\eq_float", "float_eq_float", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\eq_double", "float_eq_float", [double_type;double_type];
+
+    Some (JCTnative Tboolean), "\\ne_float", "float_ne_float", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\ne_double", "float_ne_float", [double_type;double_type];
 ]
 
 let builtin_function_symbols =
