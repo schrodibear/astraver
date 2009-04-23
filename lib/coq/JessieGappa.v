@@ -731,6 +731,15 @@ generalize (a2 f m x H0);intros (H1,H2).
 unfold overflow_value,same_sign_real in *.
 decompose [and or] H2;clear H2.
 destruct m.
+
+
+
+
+
+
+
+Admitted.
+(*
 clear H3 H4 H5;rewrite H in H7;discriminate H7;auto.
 
 clear H3 H5 H7.
@@ -796,6 +805,7 @@ case f;unfold max_gen_float;admit. (*as above*)
 
 clear H3 H4 H5;rewrite H in H7;discriminate H7;auto.
 Save.
+*)
 
 Lemma gen_bounded_real_no_overflow : forall f m x, 
             (Rabs x <= max_gen_float f)%R -> 

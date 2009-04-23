@@ -108,9 +108,10 @@ intros; case f;case m;unfold round_float,round_mode, min_gen_float;
 admit. (*gappa succeeds but not with nearest_away *)
 Save.
 
-
+(*
 Lemma round_of_float2: forall f m, forall x:float2, 
                                        round_float f m x = x.
+*)
 
 
 
@@ -128,8 +129,7 @@ Lemma round_of_float2: forall f m, forall x:float2,
 
 
 
-
-
+(*
 Lemma opp_of_float2: forall x:float2, exists y :float2, y = Ropp x.
 *)
 
