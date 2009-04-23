@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.37 2009-04-17 14:01:44 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.38 2009-04-23 15:25:20 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -157,6 +157,10 @@ let var_table = Hashtbl.create 10
 
 (* contains the roundings used *)
 let rnd_table = Hashtbl.create 10
+
+(* contains the names already defined,
+   so new definitions should be as equalities *)
+let def_table = Hashtbl.create 10
 
 let rec term = function
   | t when is_constant t ->
@@ -320,12 +324,19 @@ let rec ghyp = function
           [], None
       | None -> [], None
     end
-  | Papp (id, [Tapp (id', [Tvar x], _); t], _)
-    when is_eq id && (id' == float_value || id' == exact_value || id' == model_value) ->
+  | Papp (id, [Tapp (id', [Tvar x], _); t], _) as p
+      when is_eq id && (id' == float_value || id' == exact_value || id' == model_value) ->
     begin
       match termo t with
-      | Some t -> [field_of_id id', Ident.string x, t], None
-      | None -> [], None
+      | Some t ->
+          let f = field_of_id id' in
+          if Hashtbl.mem def_table (f, x) then
+           (Hashtbl.add def_table (f, x) ();
+            [f, Ident.string x, t], None)
+          else
+            [], gpred true p
+      | None ->
+          [], gpred true p
     end
   | Pand (_, _, p1, p2) as p ->
       begin match ghyp p1, ghyp p2 with
@@ -346,7 +357,8 @@ let reset () =
   Queue.clear queue;
   Hashtbl.clear gen_table;
   Hashtbl.clear var_table;
-  Hashtbl.clear rnd_table
+  Hashtbl.clear rnd_table;
+  Hashtbl.clear def_table
 
 let add_ctx_vars =
   List.fold_left 
