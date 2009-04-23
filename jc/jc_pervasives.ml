@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.151 2009-04-23 13:50:34 ayad Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.152 2009-04-23 15:03:07 melquion Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -993,8 +993,8 @@ let builtin_logic_symbols =
     Some integer_type, "\\integer_abs", "abs_int", [integer_type] ;
     Some real_type, "\\real_abs", "abs_real", [real_type] ;
 
-    Some real_type, "\\real_sqrt", "sqrt_real", [real_type];  
-    Some real_type, "\\real_pow", "pow_real", [real_type];  
+    Some real_type, "\\real_sqrt", "sqrt_real", [real_type];
+    Some real_type, "\\real_pow", "pow_real", [real_type; real_type];
     
     Some real_type, "\\double_exact", "exact_value", [double_type];
     Some real_type, "\\float_exact", "exact_value", [float_type];
