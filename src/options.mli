@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.98 2009-04-17 18:35:17 stouls Exp $ i*)
+(*i $Id: options.mli,v 1.99 2009-04-23 16:03:42 melquion Exp $ i*)
 
 (*s General options *)
 
@@ -134,7 +134,6 @@ val no_cvcl_prelude : bool
 
 val floats : bool
 val show_time : bool
-val gappa_rnd : string
 
 (*s [file f] appends [f] to the directory specified with [-dir], if any *)
 

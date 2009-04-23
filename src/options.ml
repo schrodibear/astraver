@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.127 2009-04-17 18:35:17 stouls Exp $ i*)
+(*i $Id: options.ml,v 1.128 2009-04-23 16:03:42 melquion Exp $ i*)
 
 open Format
 
@@ -81,7 +81,6 @@ let modulo_ = ref false
 
 let phantom_types = Hashtbl.create 17
 
-let gappa_rnd_ = ref "float < ieee_64, ne >"
 let lib_files_to_load_ = ref []
 let no_pervasives = ref false
 let files_to_load_ = ref []
@@ -414,10 +413,6 @@ let files =
 	ocaml_annot_ := true; parse args
     | ("--ocaml-ext" | "-ocaml-ext") :: args -> 
 	ocaml_externals_ := true; parse args
-    | ("-gappa-rnd" | "--gappa-rnd") :: s :: args -> 
-	gappa_rnd_ := s; parse args
-    | ("-gappa-rnd" | "--gappa-rnd") :: [] -> 
-	usage (); exit 1
     | ("-o" | "-output" | "--output") :: f :: args -> 
 	output_ := Some f; parse args
     | ("-o" | "-output" | "--output") :: [] -> 
@@ -586,7 +581,6 @@ let split_bool_op = !split_bool_op_
 let lvlmax = !lvlmax_
 let all_vc = !all_vc_
 let termination = !termination_
-let gappa_rnd = !gappa_rnd_
 let eval_goals = !eval_goals_
 let pruning = !pruning_
 let pruning_hyp_p = !pruning_hyp_p_
