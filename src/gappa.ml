@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.38 2009-04-23 15:25:20 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.39 2009-04-24 15:55:17 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -433,21 +433,29 @@ let rec print_term fmt = function
   | Gdiv (t1, t2) -> fprintf fmt "(%a / %a)" print_term t1 print_term t2
   | Gabs t -> fprintf fmt "|%a|" print_term t
 
-let rec print_pred fmt = function
+let rec print_pred_atom fmt = function
   | Gle (t, r1) ->
       fprintf fmt "%a <= %s" print_term t r1
   | Gge (t, r1) ->
       fprintf fmt "%a >= %s" print_term t r1
   | Gin (t, r1, r2) ->
       fprintf fmt "%a in [%s, %s]" print_term t r1 r2
-  | Gimplies (p1, p2) ->
-      fprintf fmt "@[%a ->@ %a@]" print_pred p1 print_pred p2
-  | Gand (p1, p2) ->
-      fprintf fmt "(@[%a /\\@ %a@])" print_pred p1 print_pred p2
-  | Gor (p1, p2) ->
-      fprintf fmt "(@[%a \\/@ %a@])" print_pred p1 print_pred p2
   | Gnot p ->
-      fprintf fmt "(not %a)" print_pred p
+      fprintf fmt "not %a" print_pred_atom p
+  | _ as p ->
+      fprintf fmt "(%a)" print_pred p
+and print_pred_left fmt = function
+  | Gand (p1, p2) ->
+      fprintf fmt "@[%a /\\@ %a@]" print_pred_atom p1 print_pred_atom p2
+  | Gor (p1, p2) ->
+      fprintf fmt "@[%a \\/@ %a@]" print_pred_atom p1 print_pred_atom p2
+  | _ as p ->
+      print_pred_atom fmt p
+and print_pred fmt = function
+  | Gimplies (p1, p2) ->
+      fprintf fmt "@[%a ->@ %a@]" print_pred_left p1 print_pred p2
+  | _ as p ->
+      print_pred_left fmt p
 
 let print_equation fmt (e, x, t) =
   let e =
