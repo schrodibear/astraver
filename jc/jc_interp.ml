@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.408 2009-04-17 17:07:01 melquion Exp $ *)
+(* $Id: jc_interp.ml,v 1.409 2009-04-24 09:32:25 melquion Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -511,7 +511,7 @@ let tr_struct st acc =
 (*                                 Coercions                                  *)
 (******************************************************************************)
 
-let term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src e e' =
+let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src e e' =
   match ty_dst, ty_src with
       (* identity *)
     | JCTnative t, JCTnative u when t = u -> e'
@@ -538,6 +538,9 @@ let term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src
     | JCTnative (Tfloat | Tdouble as f), JCTnative Treal ->
 	LApp ("gen_float_of_real_logic", 
 	      [ LVar (float_format_from_type f) ; logic_current_rounding_mode () ; e' ])
+    | JCTnative (Tfloat | Tdouble), (JCTnative Tinteger | JCTenum _) ->
+        term_coerce ~type_safe ~global_assertion lab pos ty_dst (JCTnative Treal) e
+          (term_coerce ~type_safe ~global_assertion lab pos (JCTnative Treal) ty_src e e')
     | JCTnative Tinteger, JCTnative Treal -> 
 	LApp("int_of_real",[ e' ])
       (* between enums and integer *)
