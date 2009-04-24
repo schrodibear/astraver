@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.66 2009-04-17 18:35:17 stouls Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.67 2009-04-24 14:23:02 stouls Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -40,7 +40,7 @@
    1) Hypotheses are expanded thanks to the intros tactic. 
    A short goal is then produced.
    2) Variables of hypothesis are stored into a graph where 
-   - a variable is represented by a vertex
+  - a variable is represented by a vertex
    - a predicate linking some variables is represented by 
    the complete graph with all the vertices 
    corresponding to the variables 
@@ -977,16 +977,16 @@ module DotPdlGraph = Graph.Graphviz.Dot(DisplayPdlGraph)
 updates the graph_of_predicates
 **)
 let update_pdlg acs =
-  (** Updates the graph from one clause.
-      @param a_clause: Input abstract clause.
+  (** Updates the graph from a set of clauses.
+      @param a_clause: Input abstract clauses set.
       assigns !pdlg. **)
   let update_pdlg_c a_clause =
+    let nlab = a_clause.num - 1 in
     if (StringSet.cardinal (StringSet.union a_clause.pos a_clause.neg))
       <= 1 then ()
     else
       begin
 	(* Implements Table 1 from [CGS08]. n is p and n' is q. *)
-	let nlab = a_clause.num - 1 in
 	let neg = ref a_clause.neg in
 	StringSet.iter
 	  (fun p ->
@@ -1001,10 +1001,7 @@ let update_pdlg acs =
 	     (* neg p)                                                  *)
 	     StringSet.iter (fun q ->
 			       if not(p = q) then
-				 begin
-				   add_edge Neg Pos nlab p q;
-				   add_edge Pos Neg nlab q p; (* ICICICICI Ajoute pour tester *)
-				 end
+				 add_edge Neg Pos nlab p q;
 			    ) a_clause.pos
 	  ) a_clause.neg;
 	let pos = ref a_clause.pos in
@@ -1017,8 +1014,16 @@ let update_pdlg acs =
 				 add_edge Pos Pos nlab p p'
 			    ) !pos
 	  ) a_clause.pos;
+      end;
+
+    if ((IdentPairSet.cardinal a_clause.cmp)<=0 
+	|| (StringSet.cardinal (StringSet.union a_clause.pos a_clause.neg))<= 0)
+    then ()
+    else
+      begin
+	let suffixes cmp id = (cmp^"_"^(Ident.string id)) in
 	(* Addition of arcs memorizing comparison predicates: *)
-	let cmps = ref a_clause.cmp in
+	let cmps = ref a_clause.cmp in 
 	IdentPairSet.iter
 	  (fun ip ->  (* ip is a pair of functional symbols. *)
 	     cmps := IdentPairSet.remove ip !cmps;
@@ -1027,18 +1032,13 @@ let update_pdlg acs =
 		   begin
 		     StringSet.iter
 		       (fun p ->
-			  add_edge Neg Pos nlab p (Ident.string f1);
-			  add_edge Neg Pos nlab p (Ident.string f2);
+			  add_edge Neg Pos nlab (suffixes p f1) (suffixes p f2);
 		       ) a_clause.neg;
 		     (* Idem for positive literals *)
 		     StringSet.iter
 		       (fun p ->
-			  add_edge Pos Pos nlab p (Ident.string f1);
-			  add_edge Pos Pos nlab p (Ident.string f2);
+			  add_edge Pos Pos nlab (suffixes p f1) (suffixes p f2);
 		       ) a_clause.pos;
-		     (* Links between f1 and f2 *)
-		     add_edge Neg Pos nlab (Ident.string f1) (Ident.string f2);
-		     add_edge Neg Pos nlab (Ident.string f2) (Ident.string f1);
 		   end
 	  ) a_clause.cmp
       end
@@ -1071,9 +1071,9 @@ let remove_percent_from_abstractclauseset cls =
 				num = cl.num; 
 				neg = remove_percent_from_stringset cl.neg; 
 				pos = remove_percent_from_stringset cl.pos;
-				cmp = IdentPairSet.empty } !r)
+				cmp = cl.cmp } !r)
       cls);
-  !r
+  !r 
 
 (** To take comparison operators into account, we consider each operator 
     suffixed by each of its closed identifier **)
@@ -1091,7 +1091,7 @@ let get_suffixed_ident i1 i2 =
 
 let comparison_to_consider id =
   use_comparison_as_criteria_for_graph_construction && (
-    ((not comparison_eqOnly) && (is_comparison id or is_int_comparison id or is_real_comparison id))
+    ((not comparison_eqOnly) && (is_int_comparison id or is_real_comparison id))
     || (id == t_eq || id == t_neq || id == t_eq_int || id == t_neq_int || id == t_eq_real || id == t_neq_real )
   )
 
@@ -1142,6 +1142,175 @@ let get_positive_ident id =
     (Ident.string (inv_comparison id))
   else
     (Ident.string id)
+
+
+
+
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+(**
+   Encodes the arithmetics transitivity throug 11 axioms. The resulting graphe is the following : 
+   =_int  ~~1~~> <=_int
+   =_int  ~~x~~> <_int
+   <=_int ~~2~~> =_int
+   <=_int ~~x~~> <_int
+   <_int  ~~1~~> <=_int 
+   <_int  ~~1~~> <>_int
+   <>_int ~~2~~> <_int
+   <=_int ~~x~~> <>_int
+
+   =_int  ~~1~~> >=_int
+   =_int  ~~x~~> >_int
+   >=_int ~~2~~> =_int
+   >=_int ~~x~~> >_int
+   >_int  ~~1~~> >=_int 
+   >_int  ~~1~~> <>_int
+   <>_int ~~2~~> >_int
+   >=_int ~~x~~> <>_int
+
+   =_int  ~~x~~> <>_int
+   <=_int ~~1~~> >=_int
+   >=_int ~~1~~> <=_int
+   <_int  ~~1~~> >_int
+   >_int  ~~1~~> <_int
+  
+   Needed ? 
+   <>_int ~~x~~> <=_int
+   <>_int ~~x~~> >=_int
+   <>_int ~~x~~> =_int
+   <_int  ~~x~~> =_int
+   >_int  ~~x~~> =_int
+
+
+   where x=2 or more.
+*)
+let add_arith_transitivity oper suffix =
+  if (considere_arith_comparison_as_special_predicate)
+     
+  then begin
+
+    let one = 2 in
+    let two = 3 in
+    let x = 3 in
+    let cls = ref AbstractClauseSet.empty in
+
+    let add id1 n id2 =
+      cls := AbstractClauseSet.add 
+	{ num = n;
+	  neg = id1;
+	  pos = id2;
+	  cmp = IdentPairSet.empty }
+	!cls
+    in
+
+    let add_all eq neq ge gt le lt =
+      (*    =_int  ~~1~~> <=_int *)
+      add   eq      one   le;
+      (*    =_int  ~~x~~> <_int *)
+      add   eq       x    lt;
+      (*    <=_int ~~2~~> =_int *)
+      add   le      two   eq;
+      (*    <=_int ~~x~~> <_int *)
+      add   le       x    lt;
+      (*    <_int  ~~1~~> <=_int  *)
+      add   lt      one   le;
+      (*    <_int  ~~1~~> <>_int *)
+      add   lt      one   neq;
+      (*    <>_int ~~2~~> <_int *)
+      add   neq     two   lt;
+      (*    <=_int ~~x~~> <>_int *)
+      add   le       x    neq;
+      
+      (*    =_int  ~~1~~> >=_int *)
+      add   eq      one   ge;
+      (*    =_int  ~~x~~> >_int *)
+      add   eq       x    gt;
+      (*    >=_int ~~2~~> =_int *)
+      add   ge      two   eq;
+      (*    >=_int ~~x~~> >_int *)
+      add   ge       x    gt;
+      (*    >_int  ~~1~~> >=_int  *)
+      add   gt      one   ge;
+      (*    >_int  ~~1~~> <>_int *)
+      add   gt      one   neq;
+      (*    <>_int ~~2~~> >_int *)
+      add   neq     two   gt;
+      (*    >=_int ~~x~~> <>_int *)
+      add   ge       x    neq;
+      
+      (*    =_int  ~~x~~> <>_int *)
+      add   eq       x    neq;
+      (*    <=_int ~~1~~> >=_int *)
+      add   le      one   ge;
+      (*    >=_int ~~1~~> <=_int *)
+      add   ge      one   le;
+      (*    <_int  ~~1~~> >_int *)
+      add   lt      one   gt;
+      (*    >_int  ~~1~~> <_int *)
+      add   gt      one   lt;
+      
+      
+      update_pdlg (remove_percent_from_abstractclauseset !cls)
+    in
+
+    let setIt id = match suffix with 
+      | Some(s) -> StringSet.singleton (get_suffixed_ident id  s)
+      | None -> StringSet.singleton (Ident.string id)
+    in
+
+    match oper with
+      | Some(id) when is_int_comparison id -> 
+	  add_all 
+	    (setIt t_eq_int)
+	    (setIt t_neq_int)
+	    (setIt t_ge_int)
+	    (setIt t_gt_int)
+	    (setIt t_le_int)
+	    (setIt t_lt_int)
+	    
+	    
+      | Some(id) when is_real_comparison id -> 
+	  add_all 
+	    (setIt t_eq_real)
+	    (setIt t_neq_real)
+	    (setIt t_ge_real)
+	    (setIt t_gt_real)
+	    (setIt t_le_real)
+	    (setIt t_lt_real)
+	    
+	    
+      | _ -> 
+	  add_all 
+	    (setIt t_eq_int)
+	    (setIt t_neq_int)
+	    (setIt t_ge_int)
+	    (setIt t_gt_int)
+	    (setIt t_le_int)
+	    (setIt t_lt_int);
+	  
+	  add_all 
+	    (setIt t_eq_real)
+	    (setIt t_neq_real)
+	    (setIt t_ge_real)
+	    (setIt t_gt_real)
+	    (setIt t_le_real)
+	    (setIt t_lt_real)
+  end
+
+
+
+
 
 let build_pred_graph decl =
   let eq_link = ref AbstractClauseSet.empty in
@@ -1196,6 +1365,9 @@ let build_pred_graph decl =
 	    eq_link:= AbstractClauseSet.union !trio !eq_link
 	  end;
 	
+
+	add_arith_transitivity (Some(compId)) (Some(appId));
+
 	treated_suffixes:= StringSet.add (Ident.string appId) !treated_suffixes
       end
   in
@@ -1207,57 +1379,54 @@ let build_pred_graph decl =
   (** @result : a set of clauses. **)
   let add_atom atome cl =  
 
+    let oneCl cl = AbstractClauseSet.singleton cl in
+    let twoCl cl1 cl2 =
+      AbstractClauseSet.add cl1 (AbstractClauseSet.singleton cl2)
+    in
     let add_neg ?(num=1) neg =
       { num = cl.num + num;
 	neg = StringSet.add neg cl.neg;
 	pos = cl.pos;
-	cmp = IdentPairSet.empty }
+	cmp = cl.cmp }
     in
     let add_pos ?(num=1) pos =
       { num = cl.num + num;
 	neg = cl.neg;
 	pos = StringSet.add pos cl.pos;
-	cmp = IdentPairSet.empty }
+	cmp = cl.cmp }
     in
-    let add_cmp ?(num=1) p1 p2 =
+    let add_cmp ?(num=1) id p1 p2 =
       { num = cl.num + num;
-	neg = cl.neg;
-	pos = cl.pos;
-	cmp = IdentPairSet.singleton (Pair (p1,p2)) }
-    in
-    let oneCl cl = 
-       AbstractClauseSet.singleton cl
-    in
-    let twoCl cl1 cl2 = 
-      AbstractClauseSet.add cl1
-	(AbstractClauseSet.singleton cl2)
+	neg = StringSet.add (Ident.string (inv_comparison id))cl.neg;
+	pos = StringSet.add (Ident.string id) cl.pos;
+	cmp = IdentPairSet.add (Pair (p1,p2)) cl.cmp }
     in
     let inc_oneCl () =
-      AbstractClauseSet.singleton 
+      oneCl
 	{ num = cl.num +1;
 	  neg = cl.neg;
 	  pos = cl.pos;	
-	  cmp = IdentPairSet.empty}
+	  cmp = cl.cmp }
     in
 
 
     match atome with
-      | Pnot (Papp (id, l, i)) when (*not (considere_arith_comparison_as_special_predicate && (is_comparison id or
-					   is_int_comparison id or is_real_comparison id))*)
-	  not (comparison_to_consider id)
-	  ->
+      | Pnot (Papp (id, l, i)) 
+	  when not (considere_arith_comparison_as_special_predicate
+		    && (comparison_to_consider id)) ->
  	  oneCl (add_neg (Ident.string id)) 
 
 
 	    
-      | Papp (id, l, i) when (*not (considere_arith_comparison_as_special_predicate && 
-				    (is_comparison id or is_int_comparison id or is_real_comparison id)) ->*)
-	  not (comparison_to_consider id)
-	  -> 
+      | Papp (id, l, i) 
+	  when not (considere_arith_comparison_as_special_predicate 
+		    && (comparison_to_consider id)) -> 
 	  oneCl (add_pos (Ident.string id))
 
 
-      | Pnot (Papp (id, [el1; el2], i)) when (comparison_to_consider id) ->
+
+
+      | Pnot (Papp (id, [el1; el2], i)) ->
 	  begin 
 	    match (el1, el2) with
 	      | (Tapp(ti1, _, _), Tapp(ti2, _, _ )) when suffixed_comparison ->
@@ -1265,46 +1434,40 @@ let build_pred_graph decl =
 		  (add_suffixed_depends id ti1);
 		  (add_suffixed_depends id ti2);
 
-		  oneCl (add_cmp ti1 ti2)
+		  oneCl (add_cmp (inv_comparison id) ti1 ti2)
                   (* End of "Added for [CGS08] Sec. 4.3" *)
 
 
-	      | (Tapp _, Tapp _) when not suffixed_comparison ->
-		  if (keep_single_comparison_representation) then
-		    twoCl
-		      (add_neg (get_positive_ident id))
-		      (add_pos (get_positive_ident id))
-
-		  else
-		    twoCl
-		      (add_pos (Ident.string (inv_comparison id)))(*Finalement, laisson le neg dans neg et le pos dans pos*)
-		      (add_neg (Ident.string id))
-		      
-
 	      | (Tapp(ti, _, _), _ )
-	      | ( _, Tapp(ti, _, _)) ->
+	      | ( _, Tapp(ti, _, _)) when suffixed_comparison ->
 		  (add_suffixed_depends id ti);
 		  if (keep_single_comparison_representation) then
 		    twoCl
 		      (add_neg (get_positive_suffixed_ident id ti))
 		      (add_pos (get_positive_suffixed_ident id ti))
-
 		  else
-		    (* Les versions positives et negatives de id sont mises dans Neg *)
-		    (*twoCl
-		      (add_neg (get_positive_suffixed_ident id ti)) 
-		      (add_neg (get_suffixed_ident id ti))*)
+		    oneCl (add_neg (get_suffixed_ident id ti))
 
-		    twoCl
-		      (add_pos (get_suffixed_ident (inv_comparison id) ti)) 
-		      (add_neg (get_suffixed_ident id ti))
 
+	      | ( _, _ ) when suffixed_comparison ->
+		  (inc_oneCl ())
 		      
-	      | ( _, _ ) ->
-		  inc_oneCl ()
+
+
+
+
+	      | ( _, _ ) (* when not suffixed_comparison *) -> 
+		  if (keep_single_comparison_representation) then
+		    twoCl
+		      (add_neg (get_positive_ident id))
+		      (add_pos (get_positive_ident id)) 
+		  else
+		    oneCl (add_neg (Ident.string id))
+		      
+
 	  end
 	    
-      | Papp (id, [el1; el2], i) when (comparison_to_consider id) ->
+      | Papp (id, [el1; el2], i) ->
 	  begin
 	    match (el1, el2) with
 	      | (Tapp(ti1, _, _), Tapp(ti2, _, _ )) when suffixed_comparison ->
@@ -1312,50 +1475,37 @@ let build_pred_graph decl =
 		  (add_suffixed_depends id ti1);
 		  (add_suffixed_depends id ti2);
 
-		  oneCl (add_cmp ti1 ti2)
+		  oneCl (add_cmp id ti1 ti2)
                   (* End of "Added for [CGS08] Sec. 4.3" *)
 
 
-
-	      | (Tapp _, Tapp _ ) when not suffixed_comparison ->
-		  if (* (is_negative_comparison id) *)
-(* 		    &&  *)keep_single_comparison_representation then
-		    
-		    twoCl
-		      (add_pos (*~num:2*) (get_positive_ident id))
-		      (add_neg (*~num:2*) (get_positive_ident id))
-		      
-		  else
-		    twoCl
-		      (add_neg (*~num:2*) (Ident.string (inv_comparison id)))
-		      (add_pos (*~num:2*) (Ident.string id)) (* Dans la version negative du Papp, on avait inverse l'un des deux *)
-
-			
-
 	      | (Tapp(ti, _, _), _ )
-	      | ( _, Tapp(ti, _, _)) ->
+	      | ( _, Tapp(ti, _, _)) when suffixed_comparison ->
 		  (add_suffixed_depends id ti);
-		  if (* (is_negative_comparison id)  *)
-(* 		    &&  *)keep_single_comparison_representation then
-
+		  if keep_single_comparison_representation then
 		    twoCl
-		      (add_pos (* ~num:2 *) (get_positive_suffixed_ident id ti))
-		      (add_neg (* ~num:2 *) (get_positive_suffixed_ident id ti))
+		      (add_pos (get_positive_suffixed_ident id ti))
+		      (add_neg (get_positive_suffixed_ident id ti))
 
 		  else
-		    (*twoCl
-		      (add_neg ~num:2 (get_suffixed_ident id ti))
-		      (add_pos ~num:2 (get_suffixed_ident id ti))*)
+		    oneCl (add_pos (get_suffixed_ident id ti))
 
 
+	      | ( _, _ ) when suffixed_comparison ->  
+		  (inc_oneCl ())
+
+
+
+
+	      | ( _, _)  (* when not suffixed_comparison *) ->
+		  if keep_single_comparison_representation then
 		    twoCl
-		      (add_pos (* ~num:2 *) (get_suffixed_ident id ti)) 
-		      (add_neg (* ~num:2 *) (get_suffixed_ident (inv_comparison id) ti))
-
-
+		      (add_pos (get_positive_ident id))
+		      (add_neg (get_positive_ident id))
 		      
-	      | ( _, _ ) ->  
-		  inc_oneCl ()
+		  else
+		    oneCl (add_pos (Ident.string id))
+
 	  end
 
       | _ ->
@@ -1467,6 +1617,7 @@ let build_pred_graph decl =
     | a -> 
 	context := (Ptrue, a)::!context;
   in 
+  if not suffixed_comparison then add_arith_transitivity None None; 
   Queue.iter compute_pred_graph decl
     
 (** End of graph of predicates**)
@@ -1610,10 +1761,7 @@ let get_preds_of p filter_comparison =
   in
   let rec get polarity = function
     (* Treatment of each predicates cases, expect comparison predicates *)
-    | Papp (id, l, i) when not
-      (is_comparison id or
-        is_int_comparison id or
-        is_real_comparison id) ->
+    | Papp (id, l, i) when not (comparison_to_consider id) ->
         s := PdlSet.add { l = remove_percents (Ident.string id);
             pol = if polarity == 1 then Pos else Neg } !s
     
