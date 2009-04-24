@@ -108,37 +108,20 @@ intros; case f;case m;unfold round_float,round_mode, min_gen_float;
 admit. (*gappa succeeds but not with nearest_away *)
 Save.
 
-(*
-Lemma round_of_float2: forall f m, forall x:float2, 
-                                       round_float f m x = x.
-*)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(*
-Lemma opp_of_float2: forall x:float2, exists y :float2, y = Ropp x.
-*)
-
 Lemma round_of_opp_min_gen: forall f m,
             round_float f m (- min_gen_float f) = Ropp (min_gen_float f).
 Proof.
 intros; case f;case m;unfold round_float,round_mode, min_gen_float;
 admit. (*gappa succeeds but not with nearest_away *)
 Save.
+
+(*
+Lemma round_pow_constant: forall f m x n,
+      round_float f m (powerRZ x n) = (powerRZ x n).
+Lemma round_of_float_value: forall f m, forall x:gen_float, 
+                            round_float f m x = x.
+Lemma opp_of_float2: forall x:float2, exists y :float2, y = Ropp x.
+*)
 
 
 Lemma bounded_real_no_overflow : forall f m x, 
@@ -166,8 +149,6 @@ Lemma bounded_real_overflow_pos : forall f m x,
 (m = up \/ m = nearest_away -> ~ no_overflow f m x) 
 /\
 (m = down \/ m = to_zero -> round_float f m x = max_gen_float f).
-Proof.
-Admitted.
 
 (* just for m <> nearest_even *)
 Lemma bounded_real_overflow_neg: forall f m x,
@@ -176,14 +157,129 @@ Lemma bounded_real_overflow_neg: forall f m x,
 (m = down \/ m = nearest_away -> ~ no_overflow f m x)
 /\
 (m = up \/ m = to_zero -> (round_float f m x = - max_gen_float f)%R).
-Proof.
-Admitted.
 
-Lemma big_reals_overflow: forall f m x, 
-(Rabs x >= powerRZ 2 (max_exp f))%R -> ~ no_overflow f m x.
-Proof.
-Admitted.
+(* and for m = nearest_even *)
+Lemma bounded_real_overflow_nearest_even: forall f x, 
+(Rabs x >= powerRZ 2 (max_exp f))%R -> ~ no_overflow f nearest_even x.
+
+Lemma round_greater_max: forall f m x, 
+      ~ no_overflow f m x -> (Rabs x > max_gen_float f)%R.
 *)
+
+
+
+Lemma positive_constant : forall f m x, 
+            (min_gen_float f <= x <= max_gen_float f)%R -> 
+            no_overflow f m x  /\ (round_float f m x > 0)%R.
+Proof.
+intros;split.
+apply bounded_real_no_overflow;destruct H.
+assert (x >= 0)%R.
+apply Rge_trans with (min_gen_float f).
+apply Rle_ge;trivial.
+case f; unfold min_gen_float;apply Rle_ge;apply powerRZ_le;auto with real.
+rewrite Rabs_right;trivial.
+assert (round_float f m x >= min_gen_float f)%R.
+rewrite <- (round_of_min_gen f m);apply Rle_ge.
+destruct f;unfold round_float; destruct H;
+apply Gappa_round.round_extension_monotone;trivial.
+apply Rge_gt_trans with (min_gen_float f);trivial.
+case f; unfold min_gen_float;apply Rlt_gt;apply powerRZ_lt;auto with real.
+Save.
+
+Lemma negative_constant : forall f m x, 
+            (Ropp (max_gen_float f) <= x <= Ropp (min_gen_float f))%R -> 
+            no_overflow f m x  /\ (round_float f m x < 0)%R.
+Proof.
+intros;split.
+apply bounded_real_no_overflow;destruct H.
+assert (x < 0)%R.
+apply Rle_lt_trans with (Ropp (min_gen_float f));trivial.
+rewrite <- Ropp_0;apply Ropp_gt_lt_contravar.
+case f; unfold min_gen_float;apply Rlt_gt;apply powerRZ_lt;auto with real.
+rewrite Rabs_left;trivial.
+rewrite <- (Ropp_involutive (max_gen_float f)).
+apply Ropp_le_contravar;trivial.
+assert (round_float f m x <= - min_gen_float f)%R.
+rewrite <- (round_of_opp_min_gen f m).
+destruct f;unfold round_float; destruct H;
+apply Gappa_round.round_extension_monotone;trivial.
+apply Rle_lt_trans with (Ropp (min_gen_float f));trivial.
+rewrite <- Ropp_0;apply Ropp_gt_lt_contravar.
+case f; unfold min_gen_float;apply Rlt_gt;apply powerRZ_lt;auto with real.
+Save.
+
+Lemma round_increasing: forall f m x y,
+      (x <= y)%R -> (round_float f m x <= round_float f m y)%R.
+Proof.
+intros;case f;case m;unfold round_float;
+apply Gappa_round.round_extension_monotone;trivial.
+Save.
+
+Lemma round_greater_min: forall f m x, 
+            (Rabs x >= min_gen_float f)%R ->
+            (Rabs (round_float f m x) >= min_gen_float f)%R.
+Proof.
+intros.
+case (Rge_dec x 0);intro.
+rewrite (Rabs_right x r) in H.
+assert (round_float f m x >= 0)%R.
+apply Rge_trans with (min_gen_float f)%R.
+rewrite <- (round_of_min_gen f m); apply Rle_ge;destruct f;
+unfold round_float;apply Gappa_round.round_extension_monotone;
+apply Rge_le;trivial.
+case f; unfold min_gen_float;apply Rle_ge;apply powerRZ_le;auto with real.
+rewrite Rabs_right;trivial.
+rewrite <- (round_of_min_gen f m);apply Rle_ge.
+destruct f;unfold round_float;apply Gappa_round.round_extension_monotone;
+apply Rge_le;trivial.
+assert (x < 0)%R by (apply Rnot_ge_lt;trivial).
+rewrite (Rabs_left x H0) in H.
+assert (round_float f m x < 0)%R.
+apply Rle_lt_trans with (- min_gen_float f)%R.
+rewrite <- (round_of_opp_min_gen f m);destruct f;unfold round_float;
+apply Gappa_round.round_extension_monotone;
+rewrite <- (Ropp_involutive x).
+apply (Ropp_le_contravar (Ropp x) (min_gen_float Single));apply Rge_le;trivial.
+apply (Ropp_le_contravar (Ropp x) (min_gen_float Double));apply Rge_le;trivial.
+rewrite <- Ropp_0;apply Ropp_gt_lt_contravar.
+case f; unfold min_gen_float;apply Rlt_gt;apply powerRZ_lt;auto with real.
+rewrite Rabs_left;trivial.
+rewrite <- (Ropp_involutive (min_gen_float f)).
+apply (Ropp_le_ge_contravar (round_float f m x) (- min_gen_float f)).
+rewrite <- (round_of_opp_min_gen f m).
+destruct f;unfold round_float;apply Gappa_round.round_extension_monotone;
+rewrite <- (Ropp_involutive x).
+apply (Ropp_ge_le_contravar (Ropp x) (min_gen_float Single));trivial.
+apply (Ropp_ge_le_contravar (Ropp x) (min_gen_float Double));trivial.
+Save.
+
+
+(*
+Lemma round_less_min_pos: forall f m x, 
+            (0< x < min_gen_float f)%R -> 
+            (round_float f m x = 0%R \/ round_float f m x = min_gen_float f).
+Lemma round_less_min_neg: forall f m x, 
+            (Ropp (min_gen_float f) < x < 0)%R -> 
+            (round_float f m x = 0%R \/ round_float f m x = Ropp (min_gen_float f)). 
+
+Lemma round_down_le: forall f x, (round_float f down x <= x)%R.
+Lemma round_up_ge: forall f x, (round_float f up x >= x)%R.
+Lemma round_down_neg: forall f x, 
+             (round_float f down (-x) = - round_float f up x)%R.   
+Lemma round_up_neg:  forall f x,  
+             (round_float f up (-x) = - round_float f down x)%R.
+
+Lemma no_overflow_neg: forall f x, 
+no_overflow f down x -> no_overflow f up (-x).
+Proof.
+intros;unfold no_overflow;rewrite (round_up_neg f x);
+rewrite Rabs_Ropp;trivial.
+Save.
+*)
+
+
+
 
 
 Definition gen_float_of_real_logic (f : float_format) (m : mode) (x :R) :=
