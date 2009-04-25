@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.67 2009-04-24 14:23:02 stouls Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.68 2009-04-25 11:29:05 stouls Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1089,6 +1089,9 @@ let get_suffixed_ident i1 i2 =
     (Ident.string i1)
 (* in (remove_percents s) *)
 
+let is_comparison id =
+    (is_int_comparison id or is_real_comparison id)
+
 let comparison_to_consider id =
   use_comparison_as_criteria_for_graph_construction && (
     ((not comparison_eqOnly) && (is_int_comparison id or is_real_comparison id))
@@ -1196,7 +1199,7 @@ let get_positive_ident id =
    where x=2 or more.
 *)
 let add_arith_transitivity oper suffix =
-  if (considere_arith_comparison_as_special_predicate)
+  if (considere_arith_comparison_as_special_predicate && use_comparison_as_criteria_for_graph_construction)
      
   then begin
 
@@ -1411,22 +1414,29 @@ let build_pred_graph decl =
 
 
     match atome with
+	(* If it is not a comparison or 
+	   it is a comparison, we considere comparison but we don't considere it as a special predicate *)
       | Pnot (Papp (id, l, i)) 
-	  when not (considere_arith_comparison_as_special_predicate
-		    && (comparison_to_consider id)) ->
+	  when ((not (is_comparison id))
+		|| ((is_comparison id) && (comparison_to_consider id) && not considere_arith_comparison_as_special_predicate)) ->
+(* 	  when not (considere_arith_comparison_as_special_predicate  *)
+(* 		    && (comparison_to_consider id)) ->  *)
  	  oneCl (add_neg (Ident.string id)) 
 
 
 	    
       | Papp (id, l, i) 
-	  when not (considere_arith_comparison_as_special_predicate 
-		    && (comparison_to_consider id)) -> 
+	  when ((not (is_comparison id))
+		|| ((is_comparison id) && (comparison_to_consider id) && not considere_arith_comparison_as_special_predicate)) ->
+(* 	  when not (considere_arith_comparison_as_special_predicate  *)
+(* 		    && (comparison_to_consider id)) ->  *)
 	  oneCl (add_pos (Ident.string id))
 
 
-
-
-      | Pnot (Papp (id, [el1; el2], i)) ->
+	    
+      (* If it is a comparison, we considere comparison and considere it as a special predicate *)
+      | Pnot (Papp (id, [el1; el2], i)) 
+	  when ((is_comparison id) && (comparison_to_consider id) && considere_arith_comparison_as_special_predicate) ->
 	  begin 
 	    match (el1, el2) with
 	      | (Tapp(ti1, _, _), Tapp(ti2, _, _ )) when suffixed_comparison ->
@@ -1467,7 +1477,8 @@ let build_pred_graph decl =
 
 	  end
 	    
-      | Papp (id, [el1; el2], i) ->
+      | Papp (id, [el1; el2], i) 
+	  when ((is_comparison id) && (comparison_to_consider id) && considere_arith_comparison_as_special_predicate) ->
 	  begin
 	    match (el1, el2) with
 	      | (Tapp(ti1, _, _), Tapp(ti2, _, _ )) when suffixed_comparison ->
@@ -1508,7 +1519,9 @@ let build_pred_graph decl =
 
 	  end
 
+      (* If it is a comparison and don't considere it *)
       | _ ->
+(* 	  when ((is_comparison id) && not (comparison_to_consider id)) -> *)
 	  inc_oneCl ()
 
   in 
