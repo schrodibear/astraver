@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.128 2009-04-23 16:03:42 melquion Exp $ i*)
+(*i $Id: options.ml,v 1.129 2009-04-29 05:26:01 stouls Exp $ i*)
 
 open Format
 
@@ -65,7 +65,7 @@ let pruning_hyp_p_ = {contents = -1}
 let pruning_hyp_CompInGraph_ = ref false
 let pruning_hyp_CompInFiltering_ = ref false
 let pruning_hyp_LinkVarsQuantif_ = ref false
-let pruning_hyp_keep_single_comparison_representation_ = ref true
+let pruning_hyp_keep_single_comparison_representation_ = ref false
 let pruning_hyp_comparison_eqOnly_ = ref false
 let pruning_hyp_suffixed_comparison_ = ref false
 let pruning_hyp_equalities_linked_ = ref false
@@ -226,20 +226,20 @@ VC transformation options:
   --exp goal         expands the predicate definitions only in goal 
 
 Heuristics UNDER TEST of pruning (needs --prun-hyp to be used) :
-  --prune-with-comp           uses comparisons as predicates
-  --prune-without-arith       does not considere as particular predicates
-  --prune-with-comp-filter    as previous and uses also comparisons as filters
-  --prune-keep-local-links    insert quantified variables in variables graph
-  --prune-comp-dual-encoding  do not inverse negative comparisons
-  --prune-eq-only             consider only equality comparison as a predicate
-  --prune-suffixed-comp       suffixes comparison predicates
-  --prune-link-eqs            link each suffixed equalitie to the unsuffixed
-  --prune-arith-tactic        statically link arithmetic operators (=, < & <=)
-  --prune-vars-filter T       T in {All, One-var, One-branch, Split-hyps, CNF}   
-  --prune-polarized-preds     Consider polarity on predicates 
-  --prune-context             Filter axioms with Pred depth
-  --prune-coarse-pred-comp    abstract weights in predicate predecessors computation  
-  --prune-get-depths          get minimum depths to reach all reachable vars/preds
+  --prune-with-comp            uses comparisons as predicates
+  --prune-without-arith        does not considere as particular predicates
+  --prune-with-comp-filter     as previous and uses also comparisons as filters
+  --prune-keep-local-links     insert quantified variables in variables graph
+  --prune-comp-single-encoding do not inverse negative comparisons
+  --prune-eq-only              consider only equality comparison as a predicate
+  --prune-suffixed-comp        suffixes comparison predicates
+  --prune-link-eqs             link each suffixed equalitie to the unsuffixed
+  --prune-arith-tactic         statically link arithmetic operators (=, < & <=)
+  --prune-vars-filter T        T in {All, One-var, One-branch, Split-hyps, CNF}   
+  --prune-polarized-preds      Consider polarity on predicates 
+  --prune-context              Filter axioms with Pred depth
+  --prune-coarse-pred-comp     abstract weights in predicate predecessors
+  --prune-get-depths           get minimum depths to reach reachable vars/preds
 
 Prelude files:
   --lib-file f   load file f from the library
@@ -467,8 +467,8 @@ let files =
     | ("--prune-keep-local-links" | "-prune-keep-local-links"):: args ->
 	pruning_hyp_LinkVarsQuantif_ := true ; 
 	parse args
-    | ("--prune-comp-dual-encoding" | "-prune-comp-dual-encoding"):: args ->
-	pruning_hyp_keep_single_comparison_representation_ := false ; 
+    | ("--prune-comp-single-encoding" | "-prune-comp-single-encoding"):: args ->
+	pruning_hyp_keep_single_comparison_representation_ := true ; 
 	parse args
     | ("--prune-eq-only" | "-prune-eq-only"):: args ->
 	pruning_hyp_CompInGraph_ := true ; 

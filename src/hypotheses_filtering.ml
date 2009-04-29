@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.68 2009-04-25 11:29:05 stouls Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.69 2009-04-29 05:26:00 stouls Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -1090,7 +1090,7 @@ let get_suffixed_ident i1 i2 =
 (* in (remove_percents s) *)
 
 let is_comparison id =
-    (is_int_comparison id or is_real_comparison id)
+    (is_int_comparison id or is_real_comparison id or is_comparison id)
 
 let comparison_to_consider id =
   use_comparison_as_criteria_for_graph_construction && (
@@ -1414,6 +1414,14 @@ let build_pred_graph decl =
 
 
     match atome with
+      | Pnot (Papp (id, _, _)) 
+      | Papp (id, _, _) 
+	  when (is_comparison id) && not use_comparison_as_criteria_for_graph_construction ->
+	  Format.printf "\n\nIgnore comparisons Pred : %a\n\n" Util.print_predicate atome ; 
+	    inc_oneCl ()
+
+
+
 	(* If it is not a comparison or 
 	   it is a comparison, we considere comparison but we don't considere it as a special predicate *)
       | Pnot (Papp (id, l, i)) 
