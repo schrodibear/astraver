@@ -126,15 +126,24 @@ axiom round_greater_min: forall f:float_format. forall m:mode. forall x:real.
       abs_real(x) >= min_gen_float(f) -> abs_real(round_float(f,m,x)) >= min_gen_float(f)
 
 
-(*from JessieGappa.v: usefull ??
+(* just for m <> nearest_even *)
 axiom round_less_min_pos: forall f:float_format. forall m:mode. forall x:real.
-      0.0 < x < min_gen_float(f) -> 
-            (round_float(f,m,x) = 0.0 or round_float(f,m,x) = min_gen_float(f))
-axiom round_less_min_neg: forall f:float_format. forall m:mode. forall x:real.
-      - min_gen_float(f) < x < 0.0 -> 
-            (round_float(f,m,x) = 0.0 or round_float(f,m,x) = -min_gen_float(f))
-*)
+      0.0 < x < min_gen_float(f) ->
+      (m = up or  m = nearest_away -> round_float(f,m,x) = min_gen_float(f))
+      and
+      (m = down or m = to_zero -> round_float(f,m,x) = 0.0)
 
+(* just for m <> nearest_even *)
+axiom round_less_min_neg: forall f:float_format. forall m:mode. forall x:real.
+      - min_gen_float(f) < x < 0.0 ->
+      (m = down  or m = nearest_away -> round_float(f,m,x) = - min_gen_float(f))
+      and
+      (m = up or m = to_zero -> round_float(f,m,x) = 0.0)
+
+(* and for m = nearest_even *)
+axiom round_less_min_nearest_even: forall x:real.
+      (abs_real(x) <= 0x2.0p-150 -> round_float(Single,nearest_even,x) = 0.0) and
+      (abs_real(x) <= 0x2.0p-1075 -> round_float(Double,nearest_even,x) = 0.0)
 
 
 axiom round_of_zero: forall f:float_format. forall m:mode. 
