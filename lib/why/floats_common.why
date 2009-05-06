@@ -88,6 +88,7 @@ axiom bounded_real_no_overflow :
       forall f:float_format. forall m:mode. forall x:real. 
       	     abs_real(x) <= max_gen_float(f) -> no_overflow(f,m,x)
 
+(*
 (* just for m <> nearest_even *)
 axiom bounded_real_overflow_pos: forall f:float_format. forall m:mode. forall x:real.
       x > max_gen_float(f) -> 
@@ -149,18 +150,17 @@ axiom round_less_min_nearest_even: forall x:real.
 axiom round_of_zero: forall f:float_format. forall m:mode. 
       round_float(f,m,0.0) = 0.0
 
+(* wrong
 axiom round_of_float_value:
       forall f:float_format. forall m:mode. forall x:gen_float. 
       round_float(f,m,float_value(x)) = float_value(x)
-
-axiom round_round:
-      forall f:float_format. forall m1:mode. forall m2:mode. forall x:real. 
-      round_float(f,m1,round_float(f,m2,x)) = round_float(f,m2,x)
+*)
 
 (* round_float of hexadecimal constant !!
 axiom round_hexa: forall f:float_format. forall m:mode. forall n:int. forall y:real.
+      (* need hypotheses on n *)
       round_float(f,m,0xypn) = 0xypn
-*)
+
 axiom round_pow_constant: 
       forall f:float_format. forall m:mode. forall x:real. forall y:real.
       round_float(f,m,pow_real(x,y)) = pow_real(x,y)
@@ -177,13 +177,13 @@ axiom round_of_min_gen: forall f:float_format. forall m:mode.
 axiom round_of_opp_min_gen: forall f:float_format. forall m:mode.
       round_float(f,m,-min_gen_float(f)) = -min_gen_float(f)
 
+*)
+*)
 
-
-
-
-
+(* axioms about round_float and round modes *)
 axiom round_down_le: forall f:float_format. forall x:real. 
       round_float(f,down,x) <= x
+
 
 axiom round_up_ge: forall f:float_format. forall x:real. 
       round_float(f,up,x) >= x
@@ -194,7 +194,9 @@ axiom round_down_neg: forall f:float_format. forall x:real.
 axiom round_up_neg: forall f:float_format. forall x:real. 
      round_float(f,up,-x) = -round_float(f,down,x)
 
-
+axiom round_idempotent:
+      forall f:float_format. forall m1:mode. forall m2:mode. forall x:real. 
+      round_float(f,m1,round_float(f,m2,x)) = round_float(f,m2,x)
 
 
 (******* axioms on reals ******)
