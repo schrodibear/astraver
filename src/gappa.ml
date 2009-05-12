@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.40 2009-05-12 15:37:18 nguyen Exp $ i*)
+(*i $Id: gappa.ml,v 1.41 2009-05-12 17:02:28 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -396,14 +396,15 @@ let process_obligation (ctx, concl) =
                   in
                 ep :: el, pl)
         ([],[]) ctx
-	in
-  match gpred false concl with
-    | None -> (* goal is not a gappa prop *)
-	if debug then Format.eprintf "not a gappa prop; skipped@."
-    | Some p ->
-        let gconcl = List.fold_right (fun p acc -> Gimplies (p, acc)) pl p in
-        let el = List.rev (List.flatten el) in
-	Queue.add (el, gconcl) queue
+      in
+  let gconcl =
+    match gpred false concl with
+      | None -> Gle (Gcst "1", "0")
+      | Some p -> p
+    in
+  let el = List.rev (List.flatten el) in
+  let gconcl = List.fold_right (fun p acc -> Gimplies (p, acc)) pl gconcl in
+  Queue.add (el, gconcl) queue
 
 let push_decl d =
   let decl = PredDefExpansor.push ~recursive_expand:true d in
