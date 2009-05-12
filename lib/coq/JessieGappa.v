@@ -4,10 +4,6 @@
 Require Export Reals.
 Require Export Gappa_tactic.
 
-Require Export tactics.
-
-
-
 Inductive float_format : Set :=  Single | Double.
 
 Definition max_float2 (f : float_format) :=
