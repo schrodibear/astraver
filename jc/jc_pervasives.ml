@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.152 2009-04-23 15:03:07 melquion Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.153 2009-05-12 15:37:18 nguyen Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -63,13 +63,19 @@ let rec log2 i =
   assert (i >/ zero);
   if i =/ one then zero else one +/ log2 (i // two)
 
-let operator_of_native = function
+let operator_of_format (f : float_format) =
+  match f with
+    | `Float -> `Float
+    | `Double -> `Double
+    | `Binary80 -> `Binary80
+
+let operator_of_native t = 
+  match t with
   | Tunit -> `Unit
   | Tboolean -> `Boolean
   | Tinteger -> `Integer
   | Treal -> `Real
-  | Tdouble -> `Double
-  | Tfloat -> `Float
+  | Tgenfloat f -> operator_of_format f
   | Tstring -> assert false
 
 let operator_of_type = function
@@ -90,13 +96,18 @@ let root_name st =
 let field_root_name fi =
   fi.jc_field_info_hroot.jc_struct_info_name
 
+let string_of_format f =
+  match f with
+    | `Double -> "double"
+    | `Float -> "float"
+    | `Binary80 -> "binary80"
+
 let string_of_native t =
   match t with
     | Tunit -> "unit"
     | Tinteger -> "integer"
     | Treal -> "real"
-    | Tdouble -> "double"
-    | Tfloat -> "float"
+    | Tgenfloat f -> string_of_format f
     | Tboolean -> "boolean"
     | Tstring -> "string"
 
@@ -190,8 +201,8 @@ let unit_type = JCTnative Tunit
 let boolean_type = JCTnative Tboolean
 let integer_type = JCTnative Tinteger
 let real_type = JCTnative Treal
-let double_type = JCTnative Tdouble
-let float_type = JCTnative Tfloat
+let double_type = JCTnative (Tgenfloat `Double)
+let float_type = JCTnative (Tgenfloat `Float)
 let null_type = JCTnull
 let string_type = JCTnative Tstring
 let any_type = JCTany
@@ -967,6 +978,7 @@ let string_of_op_type = function
   | `Real -> "real"
   | `Double -> "gen_float"
   | `Float -> "gen_float"
+  | `Binary80 -> "gen_float" 
   | `Boolean -> "boolean"
   | `Pointer -> "pointer"
   | `Logic -> "<some logic type>"
@@ -1076,15 +1088,19 @@ let builtin_logic_symbols =
     Some (JCTnative Tboolean), "\\ne_double", "float_ne_float", [double_type;double_type];
 ]
 
+let treatdouble = TreatGenFloat (`Double :> float_format)
+
+let treatfloat = TreatGenFloat (`Float :> float_format)
+
 let builtin_function_symbols =
   (* return type, jessie name, why name, parameter types, special treatment *)
   [
-    double_type, "\\double_sqrt", "sqrt_gen_float", [double_type], TreatGenFloat `Double ;
-    float_type, "\\float_sqrt", "sqrt_gen_float", [float_type], TreatGenFloat `Float ;
-    double_type, "\\double_abs", "abs_gen_float", [double_type], TreatGenFloat `Double  ;
-    float_type, "\\float_abs", "abs_gen_float", [float_type], TreatGenFloat `Float ;
-    double_type, "\\neg_double", "neg_gen_float", [double_type], TreatGenFloat `Double ;
-    float_type, "\\neg_float", "neg_gen_float", [float_type], TreatGenFloat `Float ;  
+    double_type, "\\double_sqrt", "sqrt_gen_float", [double_type], treatdouble ;
+    float_type, "\\float_sqrt", "sqrt_gen_float", [float_type], treatfloat ;
+    double_type, "\\double_abs", "abs_gen_float", [double_type], treatdouble ;
+    float_type, "\\float_abs", "abs_gen_float", [float_type], treatfloat ;
+    double_type, "\\neg_double", "neg_gen_float", [double_type], treatdouble ;
+    float_type, "\\neg_float", "neg_gen_float", [float_type], treatfloat ;  
 ]
 
 

@@ -25,10 +25,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.69 2009-04-15 15:35:13 ayad Exp $ *)
+(* $Id: jc_env.mli,v 1.70 2009-05-12 15:37:17 nguyen Exp $ *)
+
+type float_format = [ `Double | `Float | `Binary80 ]
 
 type native_type = 
-    Tunit | Tboolean | Tinteger | Treal | Tdouble | Tfloat | Tstring
+    Tunit | Tboolean | Tinteger | Treal | Tgenfloat of float_format | Tstring
 
 type inv_sem = InvNone | InvOwnership | InvArguments
 
@@ -44,6 +46,8 @@ type int_model = IMbounded | IMmodulo
 type float_model = FMreal | FMstrict | FMfull
 
 type float_rounding_mode = FRMdownward | FRMnearest | FRMupward | FRMtowardzero | FRMtowardawayzero
+
+type float_instruction_set = FISstrictIEEE754 | FISx87
 
 type root_kind = Rvariant | RplainUnion | RdiscrUnion
 

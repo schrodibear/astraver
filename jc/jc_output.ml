@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.140 2009-04-15 15:35:14 ayad Exp $ *)
+(* $Id: jc_output.ml,v 1.141 2009-05-12 15:37:18 nguyen Exp $ *)
 
 open Format
 open Jc_env
@@ -62,6 +62,7 @@ type jc_decl =
   | JCint_model of Jc_env.int_model      
   | JCfloat_rounding_mode of Jc_env.float_rounding_mode      
   | JCfloat_model of Jc_env.float_model 
+  | JCfloat_instruction_set of string
 
 (*
 let lbin_op op =
@@ -118,8 +119,9 @@ let real_conversion fmt rc =
     | Double_to_real -> fprintf fmt "float_value"
     | Float_to_real -> fprintf fmt "float_value"
     | Real_to_integer -> fprintf fmt "integer"
-    | Round_double _ -> fprintf fmt "r_to_d" (* TODO: parameter rounding mode *)
-    | Round_float _ -> fprintf fmt "r_to_s"
+    | Round(f,m) -> (* fprintf fmt "r_to_s" ou "r_to_" *)
+         (* TODO ? parameter rounding mode *)
+	assert false
 
 let rec pattern fmt p =
   match p#node with
@@ -573,6 +575,8 @@ let rec print_decl fmt d =
         fprintf fmt "# FloatModel = %s@\n" (string_of_float_model p)
     | JCfloat_rounding_mode p ->
         fprintf fmt "# FloatRoundingMode = %s@\n" (string_of_float_rounding_mode p)
+    | JCfloat_instruction_set p ->
+        fprintf fmt "# FloatInstructionSet = %s@\n" p
     | JCfun_def(ty,id,params,spec,body) ->
 	fprintf fmt "@\n@[%a %s(@[%a@])%a%a@]@." print_type ty id
 	  (print_list comma fun_param) params 

@@ -4,6 +4,8 @@
 Require Export Reals.
 Require Export Gappa_tactic.
 
+Require Export tactics.
+
 
 
 Inductive float_format : Set :=  Single | Double.

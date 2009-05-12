@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.39 2009-04-15 15:35:14 ayad Exp $ *)
+(* $Id: jc_options.mli,v 1.40 2009-05-12 15:37:18 nguyen Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -65,6 +65,7 @@ val annotation_sem : Jc_env.annotation_sem ref
 val ai_domain : Jc_env.abstract_domain ref
 val int_model : Jc_env.int_model ref
 val float_model : Jc_env.float_model ref
+val float_instruction_set : Jc_env.float_instruction_set ref
 val trust_ai : bool
 val fast_ai : bool
 

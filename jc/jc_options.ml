@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.46 2009-04-15 15:35:13 ayad Exp $ i*)
+(*i $Id: jc_options.ml,v 1.47 2009-05-12 15:37:18 nguyen Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -62,6 +62,7 @@ let libdir =
 let has_floats = ref false
 
 let float_model : float_model ref = ref FMreal
+let float_instruction_set : float_instruction_set ref = ref FISstrictIEEE754
 
 (*let float_lib = 
 match !Jc_options.float_model with

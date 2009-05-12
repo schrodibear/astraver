@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.ml,v 1.11 2009-01-21 08:34:15 marche Exp $ *)
+(* $Id: jc_fenv.ml,v 1.12 2009-05-12 15:37:17 nguyen Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -95,7 +95,7 @@ sig
       }
 
   type builtin_treatment =
-    | TreatGenFloat of float_operator_type
+    | TreatGenFloat of float_format
 
   type fun_info = 
       {
@@ -158,7 +158,7 @@ struct
       }
 
   type builtin_treatment =
-    | TreatGenFloat of float_operator_type
+    | TreatGenFloat of float_format
 
   type fun_info = 
       {

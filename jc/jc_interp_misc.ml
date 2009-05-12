@@ -85,8 +85,7 @@ let native_name = function
   | Tboolean -> "boolean"
   | Tinteger -> "integer"
   | Treal -> "real"
-  | Tdouble -> "gen_float"
-  | Tfloat -> "gen_float"
+  | Tgenfloat _ -> "gen_float"
   | Tstring -> "string"
 
 (* let logic_bitvector_of_native nty = "bitvector_of_" ^ (native_name nty) *)
@@ -99,6 +98,10 @@ let logic_union_of_field fi = "bitvector_of_" ^ fi.jc_field_info_name
 let logic_field_of_union fi = fi.jc_field_info_name ^ "_of_bitvector"
 
 
+let why_name_of_format = function
+  | `Float -> "Single"
+  | `Double -> "Double"
+  | `Binary80 -> "Binary80"
 
 let any_value = function
   | JCTnative ty -> 
@@ -107,8 +110,7 @@ let any_value = function
 	| Tboolean -> App(Var "any_bool", Void)
 	| Tinteger -> App(Var "any_int", Void)
 	| Treal -> App(Var "any_real", Void)
-        | Tdouble -> App(Var "any_gen_float", Var "Double")
-	| Tfloat -> App(Var "any_gen_float", Var "Single") 
+	| Tgenfloat f -> App(Var "any_gen_float", Var (why_name_of_format f)) 
 	| Tstring -> App(Var "any_string", Void)
       end
   | JCTnull 
@@ -131,8 +133,7 @@ let make_eq_term ty a b =
     | JCTnative Tboolean -> "eq_bool_bool"
     | JCTnative Tinteger -> "eq_int_bool"
     | JCTnative Treal -> "eq_real_bool"
-    | JCTnative Tdouble -> "eq_gen_float"
-    | JCTnative Tfloat -> "eq_gen_float"
+    | JCTnative (Tgenfloat _) -> "eq_gen_float"
     | JCTnative Tstring -> "eq_string_bool"
     | JCTtype_var _ -> assert false (* TODO: need environment *)
   in
@@ -147,8 +148,7 @@ let make_eq_pred ty a b =
     | JCTnative Tboolean -> "eq_bool"
     | JCTnative Tinteger -> "eq_int"
     | JCTnative Treal -> "eq_real"
-    | JCTnative Tdouble -> "eq_gen_float"
-    | JCTnative Tfloat -> "eq_gen_float"
+    | JCTnative (Tgenfloat _) -> "eq_gen_float"
     | JCTnative Tstring -> "eq_string"
     | JCTtype_var _ -> assert false (* TODO: need environment *)
   in
@@ -324,8 +324,7 @@ let tr_native_type = function
   | Tboolean -> "bool"
   | Tinteger -> "int"
   | Treal -> "real"
-  | Tdouble -> "gen_float"
-  | Tfloat -> "gen_float"
+  | Tgenfloat _ -> "gen_float"
   | Tstring -> "string"
 
 let tr_base_type ?region = function

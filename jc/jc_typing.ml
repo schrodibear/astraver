@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.283 2009-04-24 09:32:25 melquion Exp $ *)
+(* $Id: jc_typing.ml,v 1.284 2009-05-12 15:37:18 nguyen Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -118,17 +118,17 @@ let is_real t =
 
 let is_double t =
   match t with
-    | JCTnative Tdouble -> true
+    | JCTnative (Tgenfloat `Double) -> true
     | _ -> false
 
 let is_float t =
   match t with
-    | JCTnative Tfloat -> true
+    | JCTnative (Tgenfloat `Float) -> true
     | _ -> false
 
 let is_gen_float t =
   match t with
-    | JCTnative (Tdouble | Tfloat) -> true
+    | JCTnative (Tgenfloat _) -> true
     | _ -> false
 
 
@@ -154,8 +154,12 @@ let is_root_struct st =
 
 let lub_numeric_types t1 t2 =
   match t1,t2 with
-    | JCTnative Tfloat, JCTnative Tfloat -> Tfloat
-    | JCTnative (Tdouble | Tfloat), JCTnative (Tdouble | Tfloat) -> Tdouble
+    | JCTnative (Tgenfloat _), JCTnative (Tgenfloat _) when
+	!Jc_options.float_instruction_set = FISx87 ->
+	Tgenfloat `Binary80
+    | JCTnative (Tgenfloat `Float), JCTnative (Tgenfloat `Float) -> (Tgenfloat `Float)
+    | JCTnative (Tgenfloat _), JCTnative (Tgenfloat _) -> Tgenfloat `Double
+	(* note: there is an invariant that when not in FISx87, `Binary80 never occurs *)
     | JCTnative Treal,_ | _,JCTnative Treal -> Treal
     | _ -> Tinteger
 
@@ -841,7 +845,27 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		real_type, te1#region, JCTreal_cast(te1,Float_to_real)
 	      else
 		typing_error e#pos "bad cast to real"
-	  | JCTnative Tdouble -> 
+	  | JCTnative (Tgenfloat f) ->
+	       if is_real te1#typ || is_integer te1#typ then 
+                JCTnative (Tgenfloat f), te1#region, JCTreal_cast(te1, Round (f,Round_nearest_even))
+	       else
+		 begin
+		   match te1#typ with
+		     | JCTnative (Tgenfloat f1) ->
+			 let e =
+			   match (f1,f) with
+			     | _,`Binary80 -> te1#node
+			     | (`Float|`Double),`Double -> te1#node
+			     | `Float,`Float -> te1#node
+			     | _ ->
+				 JCTreal_cast(te1, Round(f,Round_nearest_even)) 
+			 in
+			   JCTnative (Tgenfloat f), te1#region, e
+		     | _ -> typing_error e#pos "bad cast to floating-point number"	  
+		 end
+
+(*
+	  | JCTnative (Tgenfloat `Double) -> 
               if is_real te1#typ || is_integer te1#typ then 
                 double_type, te1#region, JCTreal_cast(te1, Round_double Round_nearest_even)
 	      else if is_double te1#typ then
@@ -857,7 +881,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		float_type, te1#region, te1#node
 	      else
 		typing_error e#pos "bad cast to float"
-
+*)
 	  | JCTnative _ -> assert false (* TODO *)
 	  | JCTenum ri ->
 	      if is_integer te1#typ then
@@ -1854,14 +1878,33 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNEassign(e1, e2) -> 
         let te1 = fe e1 and te2 = fe e2 in
         let t1 = te1#typ and t2 = te2#typ in
-        if subtype t2 t1 then 
-	  begin
-	    let te2 =
-	      match t2 with
-		| JCTnull -> new expr_with ~typ:t1 te2
-		| _ -> te2
-	    in
-            match te1#node with
+	let te2 = 
+          if subtype t2 t1 then 
+	    match t2 with
+	      | JCTnull -> new expr_with ~typ:t1 te2
+	      | _ -> te2
+	  else
+	    (* particular case for floats: implicit cast *)
+	    begin
+	      match (t1,t2) with
+		| JCTnative (Tgenfloat f1), JCTnative (Tgenfloat f2) ->
+		    begin
+		      match (f2,f1) with
+			| _,`Binary80 -> te2
+			| (`Float|`Double),`Double -> te2
+			| `Float,`Float -> te2
+			| _ ->
+			    new expr ~typ:t1 ~pos:te2#pos
+			      (JCEreal_cast(te2, Round(f1,Round_nearest_even)))
+		    end
+		| _ -> 
+		    typing_error e2#pos 
+		      "type '%a' expected in assignment instead of '%a'"
+		      print_type t1 print_type t2
+	    end
+	in
+          begin
+	    match te1#node with
               | JCEvar v ->
                   v.jc_var_info_assigned <- true;
                   t1, te2#region, JCEassign_var(v, te2)
@@ -1869,10 +1912,6 @@ used as an assertion, not as a term" pi.jc_logic_info_name
                   t1, te2#region, JCEassign_heap(e, f, te2)
               | _ -> typing_error e1#pos "not an lvalue"
 	  end
-        else
-          typing_error e2#pos 
-            "type '%a' expected in assignment instead of '%a'"
-            print_type t1 print_type t2
     | JCNEinstanceof(e1, t) -> 
         let te1 = fe e1 in
         let st = find_struct_info e#pos t in
@@ -1899,6 +1938,25 @@ used as an assertion, not as a term" pi.jc_logic_info_name
 		real_type, te1#region, JCEreal_cast(te1,Float_to_real)
 	      else
 		typing_error e#pos "bad cast to real"
+	  | JCTnative (Tgenfloat f) ->
+	       if is_real te1#typ || is_integer te1#typ then 
+                JCTnative (Tgenfloat f), te1#region, JCEreal_cast(te1, Round (f,Round_nearest_even))
+	       else
+		 begin
+		   match te1#typ with
+		     | JCTnative (Tgenfloat f1) ->
+			 let e =
+			   match (f1,f) with
+			     | _,`Binary80 -> te1#node
+			     | (`Float|`Double),`Double -> te1#node
+			     | `Float,`Float -> te1#node
+			     | _ ->
+				 JCEreal_cast(te1, Round(f,Round_nearest_even)) 
+			 in
+			   JCTnative (Tgenfloat f), te1#region, e
+		     | _ -> typing_error e#pos "bad cast to floating-point number"	  
+		 end
+(*
 	  | JCTnative Tdouble -> 
               if is_real te1#typ || is_integer te1#typ then
                 double_type, te1#region, JCEreal_cast(te1,Round_double Round_nearest_even)
@@ -1911,6 +1969,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
                 float_type, te1#region, JCEreal_cast(te1,Round_float Round_nearest_even)
 	      else
 		typing_error e#pos "bad cast to float"
+*)
 	  | JCTnative _ -> assert false (* TODO *)
 	  | JCTenum ri ->
 	      if is_integer te1#typ then

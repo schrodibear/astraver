@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.409 2009-04-24 09:32:25 melquion Exp $ *)
+(* $Id: jc_interp.ml,v 1.410 2009-05-12 15:37:17 nguyen Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -179,6 +179,7 @@ let native_operator_type op = match snd op with
   | `Real -> Jc_pervasives.real_type
   | `Double -> Jc_pervasives.double_type
   | `Float -> Jc_pervasives.float_type
+  | `Binary80 -> JCTnative (Tgenfloat `Binary80)
 
 let unary_op: expr_unary_op -> string = function
   | `Uminus, `Integer -> "neg_int"
@@ -210,12 +211,7 @@ let float_format f =
   match f with
     | `Double -> "Double"
     | `Float -> "Single"
-
-let float_format_from_type f =
-  match f with
-    | Tdouble -> "Double"
-    | Tfloat -> "Single"
-    | _ -> assert false
+    | `Binary80 -> "Binary80"
 
 (*
 let rounding_mode = function
@@ -396,8 +392,7 @@ let has_equality_op = function
   | JCTnative Tboolean -> true
   | JCTnative Tinteger -> true
   | JCTnative Treal -> true
-  | JCTnative Tdouble -> true
-  | JCTnative Tfloat -> true
+  | JCTnative (Tgenfloat _) -> true
   | JCTnative Tstring -> true
   | JCTlogic _s -> (* TODO *) false
   | JCTenum _ei -> true
@@ -411,8 +406,7 @@ let equality_op_for_type = function
   | JCTnative Tboolean -> "eq_bool"
   | JCTnative Tinteger -> "eq_int"
   | JCTnative Treal -> "eq_real"
-  | JCTnative Tdouble -> "eq_gen_float"
-  | JCTnative Tfloat -> "eq_gen_float"
+  | JCTnative (Tgenfloat _) -> "eq_gen_float"
   | JCTnative Tstring -> "eq"
   | JCTlogic s -> (* TODO *) assert false
   | JCTenum ei -> eq_of_enum ei
@@ -533,12 +527,12 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty
 	      let e' = LApp(logic_int_of_enum ri,[ e' ]) in
 	      LApp("real_of_int",[ e' ])
 	end
-    | JCTnative Treal, JCTnative (Tfloat | Tdouble) ->
+    | JCTnative Treal, JCTnative (Tgenfloat _) ->
 	LApp("float_value",[ e' ])
-    | JCTnative (Tfloat | Tdouble as f), JCTnative Treal ->
+    | JCTnative (Tgenfloat f), JCTnative Treal ->
 	LApp ("gen_float_of_real_logic", 
-	      [ LVar (float_format_from_type f) ; logic_current_rounding_mode () ; e' ])
-    | JCTnative (Tfloat | Tdouble), (JCTnative Tinteger | JCTenum _) ->
+	      [ LVar (float_format f) ; logic_current_rounding_mode () ; e' ])
+    | JCTnative (Tgenfloat f), (JCTnative Tinteger | JCTenum _) ->
         term_coerce ~type_safe ~global_assertion lab pos ty_dst (JCTnative Treal) e
           (term_coerce ~type_safe ~global_assertion lab pos (JCTnative Treal) ty_src e e')
     | JCTnative Tinteger, JCTnative Treal -> 
@@ -578,7 +572,7 @@ let eval_integral_const e =
           let v = eval e in
           begin match op with
             | `Uminus, `Integer -> minus_num v
-            | `Uminus, (`Real | `Double | `Float | `Boolean | `Unit)
+            | `Uminus, (`Real | `Binary80 | `Double | `Float | `Boolean | `Unit)
             | `Unot, _
             | `Ubw_not, _ -> raise Exit
           end
@@ -643,25 +637,25 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
 	end
     | JCTnative Tinteger, JCTnative Treal -> 
 	make_app "int_of_real" [ e' ]
-    | JCTnative (Tfloat | Tdouble), (JCTnative Tinteger | JCTenum _) ->
+    | JCTnative (Tgenfloat _), (JCTnative Tinteger | JCTenum _) ->
         coerce ~check_int_overflow mark pos ty_dst (JCTnative Treal) e
           (coerce ~check_int_overflow mark pos (JCTnative Treal) ty_src e e')
-    | JCTnative (Tfloat | Tdouble as f), JCTnative (Tfloat | Tdouble) ->
+    | JCTnative (Tgenfloat f), JCTnative (Tgenfloat _) ->
         if check_int_overflow then
           make_guarded_app ~mark FPoverflow pos "cast_gen_float"
-            [ Var (float_format_from_type f) ; current_rounding_mode () ; e' ]
+            [ Var (float_format f) ; current_rounding_mode () ; e' ]
         else
           make_app "cast_gen_float_safe"
-            [ Var (float_format_from_type f) ; current_rounding_mode () ; e' ]
-    | JCTnative (Tfloat | Tdouble as f), JCTnative Treal ->
+            [ Var (float_format f) ; current_rounding_mode () ; e' ]
+    | JCTnative (Tgenfloat f), JCTnative Treal ->
 	if check_int_overflow then
 	  make_guarded_app ~mark FPoverflow pos
 	    "gen_float_of_real" 
-	    [ Var (float_format_from_type f) ; current_rounding_mode () ; e' ]
+	    [ Var (float_format f) ; current_rounding_mode () ; e' ]
 	else
 	  make_app "gen_float_of_real_safe" 
-	    [ Var (float_format_from_type f) ; current_rounding_mode () ; e' ]
-    | JCTnative Treal, JCTnative (Tfloat | Tdouble) ->
+	    [ Var (float_format f) ; current_rounding_mode () ; e' ]
+    | JCTnative Treal, JCTnative (Tgenfloat _) ->
 	make_app "float_value" [ e' ]
       (* between enums and integer *)
     | JCTenum ri1, JCTenum ri2 
@@ -825,10 +819,8 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
 	      term_coerce t1#pos real_type t1#typ t1 t1'
           | Real_to_integer ->
               term_coerce t1#pos integer_type t1#typ t1 t1'
-	  | Round_double rm ->
-              term_coerce t1#pos double_type t1#typ t1 t1'
-	  | Round_float rm ->
-              term_coerce t1#pos float_type t1#typ t1 t1'
+	  | Round(f,rm) ->
+              term_coerce t1#pos (JCTnative (Tgenfloat f)) t1#typ t1 t1'
 	end
     | JCTderef(t1,lab',fi) -> 
 	let lab = if relocate && lab' = LabelHere then lab else lab' in
@@ -1959,7 +1951,7 @@ and expr e =
         let e2' = expr e2 in
         (* lazy disjunction *)
         Or(e1',e2')
-    | JCEbinary(e1,(#arithmetic_op as op,(`Double|`Float as format)),e2) ->
+    | JCEbinary(e1,(#arithmetic_op as op,(`Double|`Float|`Binary80 as format)),e2) ->
 	let e1' = expr e1 in
         let e2' = expr e2 in
         make_guarded_app
@@ -2057,15 +2049,11 @@ and expr e =
           | Real_to_integer ->
               coerce ~check_int_overflow:(safety_checking())
                 e#mark e#pos integer_type e1#typ e1 e1'
-          | Round_double rm ->
+          | Round(f,rm) ->
               coerce ~check_int_overflow:(safety_checking() 
 					    (* no safe version in the full model*) 
 	      || !Jc_options.float_model <> FMstrict)
-                e#mark e#pos double_type e1#typ e1 e1'
-	  | Round_float rm ->
-              coerce ~check_int_overflow:(safety_checking() 
-	      || !Jc_options.float_model <> FMstrict )
-                e#mark e#pos float_type e1#typ e1 e1'
+                e#mark e#pos (JCTnative (Tgenfloat f)) e1#typ e1 e1'
         end
     | JCEderef(e1,fi) ->
   	make_deref e#mark e#pos e1 fi

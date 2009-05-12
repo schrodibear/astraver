@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.39 2009-04-24 15:55:17 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.40 2009-05-12 15:37:18 nguyen Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -44,7 +44,7 @@ open Pp
 (* fields of the float model *)
 type float_field = Rounded | Exact | Model
 (* formats of the float model *)
-type float_fmt = Single | Double
+type float_fmt = Single | Double | Binary80
 (* modes of the float model *)
 type mode = RndNE | RndZR | RndUP | RndDN | RndNA
 
@@ -92,6 +92,7 @@ let model_value = Ident.create "model_value"
 
 let fmt_single = Ident.create "Single"
 let fmt_double = Ident.create "Double"
+let fmt_binary80 = Ident.create "Binary80"
 
 let is_int_constant = function
   | Tconst (ConstInt _) -> true
@@ -108,7 +109,7 @@ let is_pos_constant = function
   | Tconst (ConstFloat _) -> true
   | Tapp (id, [Tconst (ConstInt _)], _) when id == real_of_int -> true
   | Tapp (id, [Tapp (id', [], _)], _) when id == max_gen_float &&
-      (id' == fmt_single || id' == fmt_double) -> true
+      (id' == fmt_single || id' == fmt_double || id' == fmt_binary80) -> true
   | _ -> false
 
 let is_constant = function
@@ -130,6 +131,7 @@ let eval_pos_constant = function
   | Tapp (id, [Tapp (id', [], _)], _) when id == max_gen_float ->
       if id' == fmt_single then "0x1.FFFFFEp127" else
       if id' == fmt_double then "0x1.FFFFFFFFFFFFFp1023" else
+      if id' == fmt_binary80 then "0x1.FFFFFFFFFFFFFFFEp16383" else
       raise NotGappa
   | _ -> raise NotGappa
 
@@ -198,6 +200,7 @@ let rec term = function
       let fmt =
         if fmt == fmt_single then Single else
         if fmt == fmt_double then Double else
+        if fmt == fmt_binary80 then Binary80 else
         raise NotGappa in
       let mode =
         if m == rnd_ne then RndNE else
@@ -409,8 +412,9 @@ let push_decl d =
   | _ -> ()
 
 let get_format = function
-  | Single -> "32"
-  | Double -> "64"
+  | Single -> "ieee_32"
+  | Double -> "ieee_64"
+  | Binary80 -> "x86_80"
 
 let get_mode = function
   | RndNE -> "ne"
@@ -469,7 +473,7 @@ let print_obligation fmt (eq,p) =
   Hashtbl.iter (fun (f, m) () ->
     let f = get_format f in
     let m = get_mode m in
-    fprintf fmt "@@rnd_%s%s = float<ieee_%s, %s>;@\n" f m f m) rnd_table;
+    fprintf fmt "@@rnd_%s%s = float<%s, %s>;@\n" f m f m) rnd_table;
   fprintf fmt "@\n%a@\n@\n" (print_list newline print_equation) eq;
   fprintf fmt "{ @[%a@] }@." print_pred p
 

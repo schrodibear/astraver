@@ -52,8 +52,8 @@ val new_label_name: unit -> string
 
 (* types *)
 
-val operator_of_native: native_type -> [> native_operator_type]
-val operator_of_type: jc_type -> [> operator_type]
+val operator_of_native: native_type -> [> native_operator_type] 
+val operator_of_type: jc_type -> [> operator_type] 
 
 val integer_type : Jc_env.jc_type
 val boolean_type : Jc_env.jc_type

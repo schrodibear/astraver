@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.128 2009-03-16 08:36:39 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.129 2009-05-12 15:37:18 nguyen Exp $ */
 
 %{
 
@@ -370,9 +370,9 @@ type_expr:
 | REAL
     { locate (JCPTnative Treal) }
 | DOUBLE
-    { locate (JCPTnative Tdouble) }
+    { locate (JCPTnative (Tgenfloat `Double)) }
 | FLOAT
-    { locate (JCPTnative Tfloat) }
+    { locate (JCPTnative (Tgenfloat `Float)) }
 | UNIT
     { locate (JCPTnative Tunit) }
 | IDENTIFIER

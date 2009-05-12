@@ -31,7 +31,7 @@ parameter current_rounding_mode : mode ref
 
 type float_format
 
-logic Single, Double, Quad : float_format
+logic Single, Double, Binary80, Quad : float_format
 
 (* [gen_float] denotes the type of generic floats *)
 
@@ -53,7 +53,9 @@ axiom max_single: max_gen_float(Single) = 0x1.FFFFFEp127
                  (* (2 - 2^-23)*2^127 *)
 axiom max_double: max_gen_float(Double) = 0x1.FFFFFFFFFFFFFp1023 
                  (* (2 - 2^-52)*2^1023 *)
-(* commented out because makes Yices fail 
+axiom max_binary80: max_gen_float(Binary80) = 0x1.FFFFFFFFFFFFFFFEp16383 
+
+(* commented out because makes Yices fail (really ? to check)
 axiom max_quad: max_gen_float(Quad) = 0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383 
                 (* (2 - 2^-112)*2^16383 *)
 *)

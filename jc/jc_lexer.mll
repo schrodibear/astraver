@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.87 2009-04-15 15:35:13 ayad Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.88 2009-05-12 15:37:18 nguyen Exp $ i*)
 
 {
   open Jc_ast
@@ -156,7 +156,14 @@
 		 | "towardzero" -> Jc_env.FRMtowardzero
 		 | "towardawayzero" -> Jc_env.FRMtowardawayzero 
 		 | _ -> lex_error lexbuf ("unknown float rounding mode " ^ v))
-	  end  
+	  end 
+      | "FloatInstructionSet" ->
+	  begin
+	    Jc_options.float_instruction_set :=
+	      (match v with
+		 | "x87" -> Jc_env.FISx87
+		 | _ -> lex_error lexbuf ("unknown float instruction set " ^ v))
+	  end 
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
 
  let float_suffix = function
