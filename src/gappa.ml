@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.41 2009-05-12 17:02:28 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.42 2009-05-12 17:09:41 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -253,6 +253,20 @@ let rec gpred def = function
 	| Some t1, Some (Gcst c2) -> Some (Gge (t1, c2))
         | Some t1, Some t2 -> Some (Gge (Gsub (t1, t2), "0"))
 	| _ -> None
+      end
+  | Papp (id, [t1; t2], _) when id == t_lt_real || id == t_lt_int ->
+      begin match termo t1, termo t2 with
+        | Some (Gcst c1), Some t2 -> Some (Gnot (Gle (t2, c1)))
+        | Some t1, Some (Gcst c2) -> Some (Gnot (Gge (t1, c2)))
+        | Some t1, Some t2 -> Some (Gnot (Gge (Gsub (t1, t2), "0")))
+        | _ -> None
+      end
+  | Papp (id, [t1; t2], _) when id == t_gt_real || id == t_gt_int ->
+      begin match termo t1, termo t2 with
+        | Some (Gcst c1), Some t2 -> Some (Gnot (Gge (t2, c1)))
+        | Some t1, Some (Gcst c2) -> Some (Gnot (Gle (t1, c2)))
+        | Some t1, Some t2 -> Some (Gnot (Gle (Gsub (t1, t2), "0")))
+        | _ -> None
       end
   | Pand (_, _, Papp (id1, [f1; t1], _), Papp (id2, [t2; f2], _))
     when (id1 == t_le_real || id1 == t_le_int) && (id2 == t_le_real || id2 == t_le_int)
