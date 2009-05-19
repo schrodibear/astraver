@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.179 2009-03-16 08:36:39 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.180 2009-05-19 07:30:41 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1641,10 +1641,16 @@ let rec statement s =
                  ())
 	  in mkblock ~exprs:[res] ()
       | JSexpr e -> expr e
-      | JSassert(id,e) -> 
+      | JSassert(forid,id,e) -> 
 	  let pos = e.java_assertion_loc in
 	  let e' = reg_assertion e in
-          let e = mkassert ~expr:e' () in
+	  let behs = 
+	    Option_misc.fold_left
+	      (fun acc id -> 
+		 (new identifier id)::acc)
+	      [] forid
+	  in
+          let e = mkassert ~behs:behs ~expr:e' () in
 	  locate ?id pos e
       | JSswitch(e,l) -> 
           mkswitch ~expr:(expr e) ~cases:(List.map switch_case l) ()

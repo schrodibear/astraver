@@ -195,7 +195,7 @@ let rec statement s =
     | JSthrow e
     | JSreturn e 
     | JSexpr e -> expr e
-    | JSassert(id,e) -> assertion e
+    | JSassert(_,_,e) -> assertion e
     | JSswitch(e,l) -> 
 	expr e;
 	List.iter (fun (labels,b) ->

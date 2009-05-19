@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.28 2009-03-16 08:36:39 marche Exp $ *)
+(* $Id: jc_constructors.ml,v 1.29 2009-05-19 07:30:41 marche Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -352,7 +352,8 @@ either with (~expr1 AND ~expr2) OR ~list only."
   let mkmutable ~expr ~tag = mk ~node:(JCPEmutable(expr, tag))
   let mktag_equality ~tag1 ~tag2 = mk ~node:(JCPEeqtype(tag1, tag2))
   let mkmatch ~expr ~cases = mk ~node:(JCPEmatch(expr, cases))
-  let mkassert ~expr = mk ~node:(JCPEassert ([],Aassert,expr))
+  let mkassert ?(behs=[]) ~expr = 
+    mk ~node:(JCPEassert (behs,Aassert,expr))
   let mkwhile ?(condition = mkboolean ~value:true ())
       ?(behaviors = []) ?variant ~body =
     mk ~node:(JCPEwhile(condition, behaviors, variant, body))

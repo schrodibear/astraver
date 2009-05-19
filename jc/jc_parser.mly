@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.129 2009-05-12 15:37:18 nguyen Exp $ */
+/* $Id: jc_parser.mly,v 1.130 2009-05-19 07:30:41 marche Exp $ */
 
 %{
 
@@ -473,7 +473,6 @@ assigns:
     { Some (pos_i 2,[]) }
 ;
 
-/* TODO: decide if we restore reads clauses
 reads:
 | 
     { [] }
@@ -482,7 +481,6 @@ reads:
 | READS BSNOTHING SEMICOLON
     { [] }
 ;
-*/
 
 function_definition: 
 | type_expr identifier parameters function_specification compound_expr
@@ -1071,12 +1069,12 @@ logic_declaration:
 | LOGIC type_expr IDENTIFIER 
     { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
 */
-| LOGIC IDENTIFIER label_binders parameters 
+| LOGIC IDENTIFIER label_binders parameters reads
     { let p = lparams $4 in
-      locate (JCDlogic(None, $2, $3, p, JCreads [])) }
-| LOGIC type_expr IDENTIFIER label_binders parameters 
+      locate (JCDlogic(None, $2, $3, p, JCreads $5)) }
+| LOGIC type_expr IDENTIFIER label_binders parameters reads
 	{ let p = lparams $5 in
-	  locate (JCDlogic(Some $2, $3, $4, p, JCreads [])) }
+	  locate (JCDlogic(Some $2, $3, $4, p, JCreads $6)) }
 | AXIOM identifier label_binders COLON expression
     { locate( JCDlemma($2#name,true,$3,$5)) }
 ;

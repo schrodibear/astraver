@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.410 2009-05-12 15:37:17 nguyen Exp $ *)
+(* $Id: jc_interp.ml,v 1.411 2009-05-19 07:30:41 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2624,7 +2624,7 @@ let tr_logic_fun f ta acc =
   in
 
   (* no_update axioms *)
-(* TODO: use computed effects instead
+(* TODO: use computed effects instead *)
   let acc = 
     match ta with 
       |	JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
@@ -2685,10 +2685,10 @@ let tr_logic_fun f ta acc =
 	   count + 1, Axiom(name,a) :: acc
       ) (0,acc) params)
   in
-*)
+(**)
 
   (* no_assign axioms *)
-(* TODO: use computed effects instead
+(* TODO: use computed effects instead *)
   let acc = 
     match ta with 
       | JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
@@ -2754,7 +2754,7 @@ let tr_logic_fun f ta acc =
 	   count + 1, Axiom(name,a) :: acc
       ) (0,acc) params) (* memory_param_reads ? *)
   in
-*)
+(**)
 
   (* alloc_extend axioms *)
 (* TODO: use computed effects instead

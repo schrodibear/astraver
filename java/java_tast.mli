@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.43 2008-12-09 09:14:18 marche Exp $ *)
+(* $Id: java_tast.mli,v 1.44 2009-05-19 07:30:41 marche Exp $ *)
 
 open Java_env
 
@@ -171,7 +171,7 @@ and statement_node =
       expr * loop_annot * expr list * statement  
       (*r decls, condition, annot, steps, loop body *)
   | JSexpr of expr
-  | JSassert of string option * assertion
+  | JSassert of string option * string option * assertion
   | JSswitch of expr * (expr switch_label list * block) list
   | JSbreak of string option
   | JScontinue of string option

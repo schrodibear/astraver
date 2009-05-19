@@ -29,7 +29,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.43 2008-12-09 09:14:18 marche Exp $
+$Id: java_ast.mli,v 1.44 2009-05-19 07:30:41 marche Exp $
 
 ***************************************************************************)
 
@@ -195,8 +195,9 @@ and pstatement_node =
   | JPStry of block * (parameter * block) list * block option
   | JPSswitch of pexpr * (pexpr switch_label list * block) list
   | JPSblock of block
-  | JPSsynchronized of pexpr * block
-  | JPSassert of identifier option * pexpr
+  | JPSsynchronized of pexpr * block      
+  | JPSassert of identifier option * identifier option * pexpr
+      (* for id1: assert id2 : e *)
   | JPSghost_local_decls of variable_declaration
   | JPSghost_statement of pexpr
   | JPSannot of Lexing.position * string

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.154 2009-02-05 12:14:33 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.155 2009-05-19 07:30:41 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -3237,9 +3237,9 @@ let rec statement env s =
           let te = expr ~ghost:true env e in JSexpr te
       | JPSexpr e -> 
           let te = exprt e in JSexpr te
-      | JPSassert(id,a) ->
+      | JPSassert(forid,id,a) ->
           let ta = assertion (add_Pre_Here env) a in
-          JSassert(Option_misc.map snd id,ta)
+          JSassert(Option_misc.map snd forid,Option_misc.map snd id,ta)
       | JPSstatement_spec(requires,decreases,behaviors) ->
           typing_error s.java_pstatement_loc
             "statement spec should appear before a statement"

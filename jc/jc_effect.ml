@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.156 2009-03-16 08:36:39 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.157 2009-05-19 07:30:41 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1577,8 +1577,9 @@ let logic_fun_effects f =
 	      (* not allowed outside axiomatics *)
 	end
     | JCReads loclist ->
+(*
 	assert (1==0); (* cause obsolete *)
-	List.fold_left
+*)	List.fold_left
 	  (fun ef loc ->
 	     let fef = location ~in_assigns:false empty_fun_effect loc in
 	     ef_union ef fef.jc_reads 

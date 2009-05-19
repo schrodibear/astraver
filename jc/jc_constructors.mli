@@ -448,7 +448,7 @@ module PExpr :
       ?pos:Loc.position -> unit -> pexpr
 *)
 
-    val mkassert : expr:pexpr -> ?pos:Loc.position -> unit -> pexpr
+    val mkassert : ?behs:identifier list -> expr:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
     val mkwhile :
       ?condition:pexpr ->

@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.58 2008-12-09 09:14:18 marche Exp $
+$Id: java_parser.mly,v 1.59 2009-05-19 07:30:41 marche Exp $
 
 */
 
@@ -1096,10 +1096,8 @@ kml_global_decl:
 ;
 
 reads_clause:
-/* OBSOLETE
 | READS expr_comma_list
     { $2 }
-*/
 | /* epsilon */ 
     { [] }
 ;
@@ -1218,9 +1216,13 @@ kml_statement_annot:
     { JPSloop_annot({java_pexpr_node = JPElit (Bool true) ; 
 		     java_pexpr_loc = loc_i 2 },$1,$2) }
 | ASSERT expr SEMICOLON EOF
-    { JPSassert(None,$2) }
+    { JPSassert(None,None,$2) }
+| FOR ident COLON ASSERT expr SEMICOLON EOF
+    { JPSassert(Some $2,None,$5) }
+/* never used ?
 | ASSERT ident COLON expr SEMICOLON EOF
-    { JPSassert(Some $2,$4) }
+    { JPSassert(None,Some $2,$4) }
+*/
 | GHOST local_variable_declaration SEMICOLON EOF
     { JPSghost_local_decls($2) }
 | GHOST expr SEMICOLON EOF

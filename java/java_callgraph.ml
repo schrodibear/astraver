@@ -148,7 +148,7 @@ let rec statement acc s : ('a list * 'b list) =
 	in 
 	  Option_misc.fold 
 	    (fun b acc -> List.fold_left statement acc b) finally acc
-    | JSassert (_,t) -> let (a,b) = acc in (assertion a t,b)
+    | JSassert(_,_,t) -> let (a,b) = acc in (assertion a t,b)
     | JSreturn_void
     | JSbreak _ -> acc 
     | JScontinue _ -> acc 

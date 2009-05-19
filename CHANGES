@@ -1,4 +1,12 @@
 
+<<<<<<< CHANGES
+  o [Krakatoa/Jessie] "reads" clauses on logic functions and
+    predicates, which disappeared in version 2.16, have been
+    resurected. Beware that the semantics is slightly different from
+    Caduceus one: it has to precisely give the memory footprint of the
+    function, and not only an under-approximation. It is use to
+    automatically generate footprint axioms.    
+=======
   o [GWhy] improved prover column configuration, improved config saving
     incompatibility warning: old .gwhyrc files will be ignored and overwritten 
   o [Why] deprecated options -no-prelude, -no-arrays, -fp
@@ -9,6 +17,7 @@
     \exp, \log, \cos, \sin, etc. 
   o [Why] added several functions on reals in prelude: 
     exp, log, cos, sin, etc. (see prelude.why)
+>>>>>>> 1.224
   o [Jessie] syntax change for loops: can have behaviors with assigns clauses
   o [Why] fixed typing bug with polymorphic function symbols and comparisons
   o [GWhy] new column for Gappa prover (http://lipforge.ens-lyon.fr/www/gappa/)
