@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.51 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.52 2009-05-20 14:31:29 marche Exp $ i*)
 
 (*s Mizar output *)
 
@@ -287,7 +287,7 @@ let rec print_thesis fmt = function
 
 let reprint_obligation fmt loc expl id s =
   let s = s.Env.scheme_type in
-  fprintf fmt "@[ :: %a @]@\n" Loc.report_obligation_position loc;
+  fprintf fmt "@[ :: %a @]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
   fprintf fmt "@[ (*Why goal*) theorem %s:@\n @[%a@]@]@\n" id print_sequent s
   (*;
   fprintf fmt "@[ :: %a @]@\n@\n" Util.print_explanation expl

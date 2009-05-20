@@ -304,7 +304,7 @@ let print_axiom fmt id p =
   reprint_axiom fmt id p
 
 let reprint_obligation fmt loc expl id s =
-  fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
+  fprintf fmt "@[(* %a *)@]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
   fprintf fmt "@[<hov 4>(*Why goal*) lemma %a:@\n%a;@]@\n" idents id print_sequent s
 (*;
   fprintf fmt "@[(* %a *)@]@\n" Util.print_explanation expl

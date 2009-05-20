@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.178 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.179 2009-05-20 14:31:29 marche Exp $ i*)
 
 open Options
 open Logic
@@ -786,7 +786,7 @@ let print_sequent fmt s =
 (*let _ = Vcg.log_print_function := print_sequent*)
       
 let reprint_obligation fmt loc expl id s =
-  fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
+  fprintf fmt "@[(* %a *)@]@\n" (Loc.report_obligation_position  ~onlybasename:true) loc;
   fprintf fmt "@[<hov 2>(*Why goal*) Lemma %s : @\n%a.@]@\n" id print_sequent s
   (*;
   fprintf fmt "@[<hov 2>(* %a *)@]@\n" Util.print_explanation expl

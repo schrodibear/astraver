@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.412 2009-05-20 13:38:26 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.413 2009-05-20 14:31:29 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2628,6 +2628,7 @@ let tr_logic_fun f ta acc =
   let acc = 
     match ta with 
       |	JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
+      | JCReads [] -> acc (* TODO: diff "reads \nothing" and nothing *)
       | JCReads pset ->
     let memory_params_reads = 
       tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects
@@ -2693,6 +2694,7 @@ let tr_logic_fun f ta acc =
   let acc = 
     match ta with 
       | JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
+      | JCReads [] -> acc (* TODO: diff "reads \nothing" and nothing *)
       | JCReads pset ->
     let memory_params_reads = 
       tmemory_detailed_params ~label_in_name:true f.jc_logic_info_effects

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: loc.ml,v 1.27 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.28 2009-05-20 14:31:29 marche Exp $ i*)
 
 let join (b,_) (_,e) = (b,e)
 
@@ -104,8 +104,9 @@ let parse s =
        in
        { p with pos_cnum = c1 }, { p with pos_cnum = c2 })
 
-let report_obligation_position fmt loc =
+let report_obligation_position ?(onlybasename=false) fmt loc =
   let (f,l,b,e) = loc in
+  let f = if onlybasename then Filename.basename f else f in
   fprintf fmt "Why obligation from file \"%s\", " f;
   fprintf fmt "line %d, characters %d-%d:" l b e
 

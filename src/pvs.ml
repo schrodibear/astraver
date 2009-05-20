@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.100 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.101 2009-05-20 14:31:29 marche Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -353,7 +353,7 @@ let print_function_def fmt id (bl,t,e) =
     print_pure_type t print_term e
     
 let print_obligation fmt (loc,expl,id,s) =
-  fprintf fmt "  @[%% %a @]@\n" Loc.report_obligation_position loc;
+  fprintf fmt "  @[%% %a @]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
   fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
   print_sequent fmt s;
   fprintf fmt "@]@\n"

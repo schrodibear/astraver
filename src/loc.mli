@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: loc.mli,v 1.25 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: loc.mli,v 1.26 2009-05-20 14:31:29 marche Exp $ i*)
 
 open Format
 
@@ -52,7 +52,7 @@ val extract :  position -> floc
 val gen_report_line : formatter -> floc -> unit
 val gen_report_position : formatter -> position -> unit
 val report_position : formatter -> position -> unit
-val report_obligation_position : formatter -> floc -> unit
+val report_obligation_position : ?onlybasename:bool -> formatter -> floc -> unit
 
 
 (* for both type [t] and [position] *)
