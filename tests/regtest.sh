@@ -46,7 +46,7 @@ case $1 in
 	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile project
 	mycatfilterdir $d/why/$b.wpr	
 	mycat $d/why/$b'_ctx'.why	
-	for i in $d/why/$b'_po'*.why; do mycat $i; done
+	for i in `ls $d/why/$b'_po'*.why`; do mycat $i; done
 	echo "========== generation of Simplify VC output =========="
 	WHYLIB=$DIR/lib WHYEXEC=$DIR/bin/why.opt make --quiet -C $d -f $b.makefile simplify/$b'_why'.sx	
 	mycatfilterdir $d/simplify/$b'_why'.sx

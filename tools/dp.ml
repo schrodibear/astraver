@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dp.ml,v 1.50 2008-11-12 16:31:50 moy Exp $ i*)
+(*i $Id: dp.ml,v 1.51 2009-05-20 14:37:29 marche Exp $ i*)
 
 (* script to call automatic provers *)
 
@@ -57,7 +57,7 @@ let spec =
     "-debug", Arg.Set debug, "set the debug flag";
     "-batch", Arg.Set batch, "run in batch mode";
     "-no-timings", Arg.Clear timings, "do not display timings";
-    "-smt-solver", Arg.String set_smt_solver, "<solver>";
+    "-smt-solver", Arg.String set_smt_solver, "<solver id> (yices, cvc3 or z3)";
     "-basename", Arg.Set basename, "prints only file basenames";
     "-listing", Arg.Set listing, "argument file only lists real argument files";
     "-select", Arg.Set select_hypotheses, 

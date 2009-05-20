@@ -1,4 +1,6 @@
-type Point = {
+# InvariantPolicy = Ownership
+
+tag Point = {
   integer x;
   integer y;
   boolean colored;
@@ -6,13 +8,15 @@ type Point = {
   invariant colored_inv(this) = this.colored ==> this <: ColorPoint;
 }
 
-and type ColorPoint = Point with {
+tag ColorPoint = Point with {
   integer c;
   invariant color_inv(this) = this.c >= 0 && this.c <= 255;
 }
 
+type Point = [Point]
+
 unit break_color_inv(ColorPoint[0] p)
-  requires p.mutable;
+  requires \mutable(p);
   behavior ok:
     ensures true;
 {
@@ -20,14 +24,14 @@ unit break_color_inv(ColorPoint[0] p)
 }
 
 unit move(Point[0] p)
-  requires p.mutable == false && p.committed == false;
+  requires \mutable(p,Point) && p.committed == false;
   behavior ok:
-    ensures p.mutable == false && p.committed == false;
+    ensures \mutable(p,Point) && p.committed == false;
 {
   unpack(p);
   p.x += 1;
   p.y += 1;
-  if (p.colored) break_color_inv(p :> ColorPoint); // BAD!
+  if (p.colored) then break_color_inv(p :> ColorPoint[0]); // BAD! 
   pack(p);
 }
 

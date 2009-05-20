@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.157 2009-05-19 07:30:41 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.158 2009-05-20 14:37:29 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1042,6 +1042,9 @@ let rec single_term ef t =
 	    ~region_mem_assoc
 	    app.jc_app_fun.jc_logic_info_effects 
 	in
+	(if app.jc_app_fun.jc_logic_info_name = "content" then
+	   Format.eprintf "**Effects for logic application content(): %a@."
+	   print_effect ef_app);
 	true,
 	ef_union ef_app ef
     | JCTderef(t1,lab,fi) ->

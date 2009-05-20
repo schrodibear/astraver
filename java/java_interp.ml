@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.181 2009-05-20 13:38:26 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.182 2009-05-20 14:37:29 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1770,7 +1770,7 @@ let default_value ty =
   match ty with
     | JTYbase t -> default_base_value t
     | JTYarray _ | JTYclass _ | JTYinterface _ -> JCCnull
-    | JTYlogic _ -> assert false
+    | JTYlogic _ -> eprintf "ICI@."; assert false
     | JTYnull -> assert false
 
 let init_field this fi =
@@ -1813,7 +1813,9 @@ let tr_constr ci req behs b acc =
     List.fold_right
       (fun fi acc -> 
 	 if fi.java_field_info_is_static then acc else
-	 init_field (mkvar ~name:(var_name this) ()) fi::acc)
+	 try
+	   init_field (mkvar ~name:(var_name this) ()) fi::acc
+	 with Assert_failure _ -> acc)
 	fields body
   in
   let _ = 

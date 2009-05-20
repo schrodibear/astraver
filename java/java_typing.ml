@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.156 2009-05-20 13:38:26 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.157 2009-05-20 14:37:29 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -1859,8 +1859,11 @@ and assertion env e =
         end
     | JPEcall_name _ | JPEcall_expr _ -> 
         typing_error e.java_pexpr_loc 
-          "method calls not allowed in assertion"       
-    | JPEfield_access _-> assert false (* TODO *)
+          "method call not allowed in assertion"       
+    | JPEfield_access _-> 
+        typing_error e.java_pexpr_loc 
+          "field access not allowed in assertion"       
+	  (* TODO: boolean fields can be seen as predicates *)
     | JPEif (e1, e2, e3)-> 
         let te1 = termt e1 in
         if is_boolean te1.java_term_type then       
