@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.411 2009-05-19 07:30:41 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.412 2009-05-20 13:38:26 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2688,7 +2688,8 @@ let tr_logic_fun f ta acc =
 (**)
 
   (* no_assign axioms *)
-(* TODO: use computed effects instead *)
+(* WRONG when JCreads [], it does not distinghishes between no reads and reads \nothing
+   TODO: use computed effects instead *)
   let acc = 
     match ta with 
       | JCAssertion _ | JCTerm _ | JCInductive _ -> acc 

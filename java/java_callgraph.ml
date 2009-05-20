@@ -152,6 +152,7 @@ let rec statement acc s : ('a list * 'b list) =
     | JSreturn_void
     | JSbreak _ -> acc 
     | JScontinue _ -> acc 
+    | JSlabel(lab,s) ->	statement acc s
     | JSswitch (e, l)-> 
 	let (a,b) = acc in
 	let b = expr b e in

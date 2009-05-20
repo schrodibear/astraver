@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.44 2009-05-19 07:30:41 marche Exp $ *)
+(* $Id: java_tast.mli,v 1.45 2009-05-20 13:38:26 marche Exp $ *)
 
 open Java_env
 
@@ -180,8 +180,8 @@ and statement_node =
   | JSstatement_spec of 
       assertion option * term option * behavior list * statement
 	(*r requires, decreases, behaviors, statement *)
+  | JSlabel of string * statement
 (*
-  | JPSlabel of identifier * pstatement
   | JPSsynchronized of pexpr * block
 *)
 (*

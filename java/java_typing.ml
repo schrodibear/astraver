@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.155 2009-05-19 07:30:41 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.156 2009-05-20 13:38:26 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -3278,7 +3278,9 @@ let rec statement env s =
       | JPSfor _ -> assert false
       | JPSdo (_, _)-> assert false (* TODO *)
       | JPSwhile _ -> assert false
-      | JPSlabel (_, _)-> assert false (* TODO *)
+      | JPSlabel ((loc,id), s)-> 
+	  JSlabel(id, statement 
+		    {env with label_env = (id, LabelName id)::env.label_env} s)
       | JPSbreak l -> JSbreak (Option_misc.map snd l)
       | JPScontinue l -> JScontinue (Option_misc.map snd l)
       | JPSreturn None -> 

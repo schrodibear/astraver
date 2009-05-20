@@ -170,6 +170,7 @@ let rec statement s =
     | JSskip 
     | JSreturn_void
     | JSbreak _ | JScontinue _ -> ()
+    | JSlabel(lab,s) -> statement s
     | JSblock l -> List.iter statement l	  
     | JSvar_decl (vi, init, s) ->
 	Option_misc.iter do_initializer init;

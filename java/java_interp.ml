@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.180 2009-05-19 07:30:41 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.181 2009-05-20 13:38:26 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1560,6 +1560,8 @@ let rec statement s =
     match s.java_statement_node with
       | JSskip ->
           mkvoid ()
+      | JSlabel(lab,s) ->
+	  mklabel lab (statement s) ()
       | JSbreak label -> 
           mkbreak ?label ()
       | JScontinue label -> 
