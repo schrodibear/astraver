@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.114 2009-03-16 08:36:39 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.115 2009-05-22 14:29:50 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -313,6 +313,18 @@ let normalize_locvardecl pos elist =
 		[mklet_nodecl ~pos:e#pos ~typ:ty ~var:name ?init:initopt
                    ~body:(mkblock ~pos ~exprs:acc ()) ()]
 	    | JCPElabel(lab, e1) ->
+		(* the scope of lab is indeed extended to the end of that block, so that e.g.
+		   { (L: e1); ... ; assert ... \at(x,L) ... }
+		   
+		   is valid
+		*)
+		[mklabel
+                  ~pos:e#pos
+                  ~label:lab 
+		  (* CAUTION ! shouldn't we recurse normalize on e1 ??? *)
+                  ~expr:(mkblock ~pos ~exprs:(e1::acc) ())
+		  ()]
+		(*
                 begin match e1#node with
                   | JCPEdecl(ty,name,initopt) ->
                       [mklabel
@@ -329,6 +341,7 @@ let normalize_locvardecl pos elist =
                          ()]
                   | _ -> e::acc
                 end
+		*)
 	    | _ -> e::acc
        ) elist []
     )
