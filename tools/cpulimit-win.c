@@ -23,6 +23,7 @@ int main( int argc, char *argv[] )
 STARTUPINFO si;
 PROCESS_INFORMATION pi;
 int i;
+unsigned ex;
 unsigned long s=0;	// length of args after concat
 char * p;			// command line parameter
 ZeroMemory( &si, sizeof(si) );
@@ -56,11 +57,12 @@ if( !CreateProcess(NULL, p, NULL, NULL, FALSE,0, NULL, NULL, &si, &pi) ){
 // waits, terminates and frees handles and malloc
 WaitForSingleObject( pi.hProcess, 1000*atoi(argv[1]) );
 TerminateProcess(pi.hProcess,10);
+GetExitCodeProcess(pi.hProcess,(LPDWORD)&ex);
 CloseHandle( pi.hProcess );
 CloseHandle( pi.hThread );
 free(p);
 
-return errno;
+return ex;
 }
 
 // How to compile under Cygwin (needs make, gcc and win32api):
