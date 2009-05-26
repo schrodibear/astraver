@@ -141,12 +141,14 @@ let rec expr fmt e =
         out "(TODO unpack)"
     | JCNEmatch(e1, pel) ->
         out "(TODO match)"
-    | JCNEquantifier(Forall, pty, idl, e1) ->
-        out "(@[<hv 2>\\forall %a %a,@ %a@])" ptype pty
-          (print_list space identifier) idl expr e1
-    | JCNEquantifier(Exists, pty, idl, e1) ->
-        out "(@[<hv 2>\\exists %a %a,@ %a@])" ptype pty
-          (print_list space identifier) idl expr e1
+    | JCNEquantifier(Forall, pty, idl, trigs, e1) ->
+        out "(@[<hv 2>\\forall %a %a %a,@ %a@])" ptype pty
+          (print_list space identifier) idl
+          triggers trigs expr e1
+    | JCNEquantifier(Exists, pty, idl, trigs, e1) ->
+        out "(@[<hv 2>\\exists %a %a%a,@ %a@])" ptype pty
+          (print_list space identifier) idl 
+           triggers trigs expr e1
     | JCNEold e1 ->
         out "(TODO old)"
     | JCNEat(e1, lab) ->
@@ -165,6 +167,9 @@ let rec expr fmt e =
         out "(.. %a)" expr e1
     | JCNErange(None, None) ->
         out "(..)"
+
+and triggers fmt trigs = 
+  print_list_delim lsquare rsquare alt (print_list comma expr) fmt trigs
 
 (*
 Local Variables: 

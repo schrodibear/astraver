@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.413 2009-05-20 14:31:29 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.414 2009-05-26 14:25:00 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -449,7 +449,7 @@ let tr_struct st acc =
                :: Logic(false,logic_union_of_field fi,
 			[("",tr_base_type fi.jc_field_info_type)],uty)
                :: Axiom((logic_field_of_union fi)^"_of_"^(logic_union_of_field fi),
-			LForall("x",tr_base_type fi.jc_field_info_type,
+			LForall("x",tr_base_type fi.jc_field_info_type, [],
 				LPred(equality_op_for_type fi.jc_field_info_type,
                                       [LApp(logic_field_of_union fi,
                                             [LApp(logic_union_of_field fi, 
@@ -703,7 +703,7 @@ let bind_pattern_lets body =
     List.fold_left
       (fun body bind ->
 	 match bind with
-	   | JCforall(id, ty) -> LForall(id, ty, body)
+	   | JCforall(id, ty) -> LForall(id, ty, [], body)
 	   | JClet(id, value) -> LLet(id, value, body))
       body (List.rev !pattern_lets)
   in
@@ -1056,13 +1056,15 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
 	  ~region_assoc:app.jc_app_region_assoc 
 	  ~label_assoc:label_assoc
 	  f args
-    | JCAquantifier(Forall,v,a1) -> 
+    | JCAquantifier(Forall,v,trigs,a1) -> 
         LForall(v.jc_var_info_final_name,
                 tr_var_base_type v,
+                triggers fa ft trigs,
                 fa a1)
-    | JCAquantifier(Exists,v,a1) -> 
+    | JCAquantifier(Exists,v,trigs, a1) -> 
         LExists(v.jc_var_info_final_name,
                 tr_var_base_type v,
+                triggers fa ft trigs,
                 fa a1)
     | JCAold a1 -> 
 	let lab = if relocate && oldlab = LabelHere then lab else oldlab in
@@ -1104,6 +1106,12 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
   let a' = bind_pattern_lets a' in
   if a#mark = "" then a' else LNamed(reg_check ~mark:a#mark a#pos, a')
 
+and triggers fa ft trigs = 
+  let pat = function
+    | JCAPatT t -> LPatT (ft t)
+    | JCAPatP a -> LPatP (fa a) in
+  List.map (List.map pat) trigs
+
 let mark_assertion pos a' =
   match a' with
     | LNamed _ -> a'
@@ -1128,7 +1136,14 @@ let rec pset ~type_safe ~global_assertion before loc =
     | JCLSderef(locs,lab,fi,_r) ->
         let m = tmemory_var ~label_in_name:global_assertion lab 
 	  (JCmem_field fi,locs#region) in
-        LApp("pset_deref", [m;fpset locs])
+        (*begin
+          match locs#node with
+              (* reduce the pset_deref of a singleton *)
+            | JCLSvar vi ->        
+                let v = tvar ~label_in_name:global_assertion before vi in
+                LApp("pset_singleton",[LApp("select", [m;v])])
+            | _ ->*) LApp("pset_deref", [m;fpset locs])
+        (*end*)
     | JCLSvar vi -> 
         let m = tvar ~label_in_name:global_assertion before vi in
         LApp("pset_singleton", [m])
@@ -2512,7 +2527,7 @@ let tr_axiom loc id ~is_axiom labels a acc =
     ~name:id
     ~beh:(if is_axiom then "axiom" else "lemma")
     loc;
-  let a' = List.fold_right (fun (n,_v,ty') a' -> LForall(n,ty',a')) params a' in
+  let a' = List.fold_right (fun (n,_v,ty') a' -> LForall(n,ty',[],a')) params a' in
   if is_axiom then 
     Axiom(id,a') :: acc 
   else 
@@ -2615,7 +2630,7 @@ let tr_logic_fun f ta acc =
 			 in
 			 let a' = 
 			   List.fold_right 
-			     (fun (n,_v,ty') a' -> LForall(n,ty',a')) params a' 
+			     (fun (n,_v,ty') a' -> LForall(n,ty',[],a')) params a' 
 			 in 
 			 (id#name, a')) l) :: acc
       | Some _, JCInductive _ -> assert false
@@ -2624,7 +2639,7 @@ let tr_logic_fun f ta acc =
   in
 
   (* no_update axioms *)
-(* TODO: use computed effects instead *)
+(* TODO francois: use computed effects instead *)
   let acc = 
     match ta with 
       |	JCAssertion _ | JCTerm _ | JCInductive _ -> acc 
@@ -2671,13 +2686,13 @@ let tr_logic_fun f ta acc =
 			     LApp(f.jc_logic_info_final_name,update_params)]))
 	   in
 	   let a = 
-             List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params
+             List.fold_left (fun a (name,ty) -> LForall(name,ty,[],a)) a params
 	   in
 	   let a = 
              LForall(
-	       "tmp",raw_pointer_type zonety,
+	       "tmp",raw_pointer_type zonety,[],
 	       LForall(
-		 "tmpval",basety,
+		 "tmpval",basety,[],
 		 a))
 	   in
 	   let name = 
@@ -2740,15 +2755,15 @@ let tr_logic_fun f ta acc =
 			     LApp(f.jc_logic_info_final_name,update_params)]))
 	   in
 	   let a = 
-             List.fold_left (fun a (name,ty) -> LForall(name,ty,a)) a params
+             List.fold_left (fun a (name,ty) -> LForall(name,ty,[],a)) a params
 	   in
 	   let a = 
              LForall(
-	       "tmp",raw_pset_type zonety,
+	       "tmp",raw_pset_type zonety,[],
                LForall(
-		 "tmpmem",paramty,
+		 "tmpmem",paramty,[],
 		 LForall(
-		   "tmpalloc",raw_alloc_table_type zonety,
+		   "tmpalloc",raw_alloc_table_type zonety,[],
 		 a)))
 	   in
 	   let name = 
@@ -3509,10 +3524,16 @@ let tr_specialized_fun n fname param_name_assoc acc =
       | LImpl(a1,a2) -> LImpl(modif_assertion a1,modif_assertion a2)
       | LIf(t,a1,a2) -> LIf(modif_term t,modif_assertion a1,modif_assertion a2)
       | LLet(id,t,a) -> LLet(id,modif_term t,modif_assertion a)
-      | LForall(id,t,a) -> LForall(id,t,modif_assertion a)
-      | LExists(id,t,a) -> LExists(id,t,modif_assertion a)
+      | LForall(id,t,trigs,a) -> LForall(id,t,triggers trigs,modif_assertion a)
+      | LExists(id,t,trigs,a) -> LExists(id,t,triggers trigs,modif_assertion a)
       | LPred(id,l) -> LPred(id,List.map modif_term l)
       | LNamed (n, a) -> LNamed (n, modif_assertion a)
+
+  and triggers trigs =
+    let pat = function
+      | LPatT t -> LPatT (modif_term t)
+      | LPatP a -> LPatP (modif_assertion a) in
+    List.map (List.map pat) trigs
       
   and modif_term t =
     match t with
@@ -3632,27 +3653,27 @@ let tr_enum_type ri (* to_int of_int *) acc =
         [Logic (false, mod_of_enum ri, 
                 ["x", simple_logic_type "int"], simple_logic_type "int");
          Axiom (name ^ "_mod_def",
-                LForall ("x", simple_logic_type "int",
+                LForall ("x", simple_logic_type "int", [],
                          LPred ("eq_int", [LApp (mod_of_enum ri, [LVar "x"]);
                                            LApp (logic_int_of_enum ri, 
                                                  [LApp (logic_enum_of_int ri,
                                                         [LVar "x"])])])));
          Axiom (name ^ "_mod_lb",
-                LForall ("x", simple_logic_type "int",
+                LForall ("x", simple_logic_type "int", [],
                          LPred ("ge_int", [LApp (mod_of_enum ri, [LVar "x"]);
                                            LConst (Prim_int min)])));
          Axiom (name ^ "_mod_gb",
-                LForall ("x", simple_logic_type "int",
+                LForall ("x", simple_logic_type "int", [],
                          LPred ("le_int", [LApp (mod_of_enum ri, [LVar "x"]);
                                            LConst (Prim_int max)])));
          Axiom (name ^ "_mod_id",
-                LForall ("x", simple_logic_type "int",
+                LForall ("x", simple_logic_type "int", [],
                          LImpl (in_bounds (LVar "x"), 
                                 LPred ("eq_int", [LApp (mod_of_enum ri, 
                                                         [LVar "x"]);
                                                   LVar "x"]))));
          Axiom (name ^ "_mod_lt",
-                LForall ("x", simple_logic_type "int",
+                LForall ("x", simple_logic_type "int", [],
                          LImpl (LPred ("lt_int", [LVar "x"; 
                                                   LConst (Prim_int min)]), 
                                 LPred ("eq_int", [fmod (LVar "x");
@@ -3660,7 +3681,7 @@ let tr_enum_type ri (* to_int of_int *) acc =
                                                               [LVar "x"; 
                                                                width]))]))));
          Axiom (name ^ "_mod_gt",
-                LForall ("x", simple_logic_type "int",
+                LForall ("x", simple_logic_type "int", [],
                          LImpl (LPred ("gt_int", [LVar "x"; 
                                                   LConst (Prim_int max)]), 
                                 LPred ("eq_int", [fmod (LVar "x");
@@ -3673,10 +3694,10 @@ let tr_enum_type ri (* to_int of_int *) acc =
   :: Param(false,safe_fun_enum_of_int ri,safe_of_int_type)
   :: Param(false,fun_any_enum ri,any_type)
   :: Axiom(name^"_range",
-           LForall("x",lt,in_bounds 
+           LForall("x",lt, [],in_bounds 
                      (LApp(logic_int_of_enum ri,[LVar "x"]))))
   :: Axiom(name^"_coerce",
-           LForall("x",why_integer_type,
+           LForall("x",why_integer_type, [],
                    LImpl(in_bounds (LVar "x"),
                          LPred("eq_int",
                                [LApp(logic_int_of_enum ri,
@@ -3686,14 +3707,14 @@ let tr_enum_type ri (* to_int of_int *) acc =
   :: Logic(false,logic_bitvector_of_enum ri,["",lt],bitvector_type)
   :: Logic(false,logic_enum_of_bitvector ri,["",bitvector_type],lt)
   :: Axiom((logic_enum_of_bitvector ri)^"_of_"^(logic_bitvector_of_enum ri),
-	   LForall("x",lt,
+	   LForall("x",lt, [],
 		   LPred(equality_op_for_type (JCTenum ri),
                          [LApp(logic_enum_of_bitvector ri,
                                [LApp(logic_bitvector_of_enum ri, 
                                      [LVar "x"])]);
                           LVar "x"])))
   :: Axiom((logic_bitvector_of_enum ri)^"_of_"^(logic_enum_of_bitvector ri),
-	   LForall("x",bitvector_type,
+	   LForall("x",bitvector_type, [],
 		   LPred("eq", (* TODO: equality for bitvectors ? *)
                          [LApp(logic_bitvector_of_enum ri,
                                [LApp(logic_enum_of_bitvector ri, 
@@ -3731,7 +3752,7 @@ let tr_enum_type_pair ri1 ri2 acc =
         let modsmall = LApp(mod_of_enum smallri,[LVar "x"]) in
         let modbig = LApp(mod_of_enum bigri,[LVar "x"]) in
         Axiom(smallname ^ "_" ^ bigname ^ "_mod_coincide",
-              LForall("x",why_integer_type,
+              LForall("x",why_integer_type, [],
                       LImpl(in_bounds modbig,
                             LPred("eq_int",[modsmall;modbig]))))
       in
@@ -3808,7 +3829,7 @@ let tr_root rt acc =
   let addr_axiom =
     let p = "p" in
     Axiom("pointer_addr_of_" ^ (of_pointer_address_name rt),
-	  LForall(p, raw_pointer_type why_unit_type,
+	  LForall(p, raw_pointer_type why_unit_type, [],
 		  make_eq_pred (JCTpointer(pc,None,None))
 		    (LVar p)
 		    (LApp("pointer_address",
@@ -3818,7 +3839,7 @@ let tr_root rt acc =
   let rev_addr_axiom =
     let p = "p" in
     Axiom((of_pointer_address_name rt) ^ "_of_pointer_addr",
-	  LForall(p, pointer_type ac pc,
+	  LForall(p, pointer_type ac pc, [],
 		  make_eq_pred (JCTpointer(pc,None,None))
 		    (LVar p)
 		    (LApp(of_pointer_address_name rt,
@@ -3830,14 +3851,14 @@ let tr_root rt acc =
     [Logic(false,logic_bitvector_of_variant rt,["",lt],bitvector_type);
      Logic(false,logic_variant_of_bitvector rt,["",bitvector_type],lt);
      Axiom((logic_variant_of_bitvector rt)^"_of_"^(logic_bitvector_of_variant rt),
-	   LForall("x",lt,
+	   LForall("x",lt, [],
 		   LPred(equality_op_for_type (JCTpointer (pc,None,None)),
                          [LApp(logic_variant_of_bitvector rt,
 			       [LApp(logic_bitvector_of_variant rt, 
                                      [LVar "x"])]);
                           LVar "x"])));
      Axiom((logic_bitvector_of_variant rt)^"_of_"^(logic_variant_of_bitvector rt),
-	   LForall("x",bitvector_type,
+	   LForall("x",bitvector_type, [],
 		   LPred("eq", (* TODO: equality for bitvectors ? *)
                          [LApp(logic_bitvector_of_variant rt,
 			       [LApp(logic_variant_of_bitvector rt, 
@@ -3874,10 +3895,10 @@ let tr_root rt acc =
       variant_axiom_on_tags_name rt,
       LForall(
         v,
-        pointer_type ac pc,
+        pointer_type ac pc, [],
         LForall(
           tag_table,
-          tag_table_type rt,
+          tag_table_type rt, [],
           make_or_list
             (List.map
                (make_instanceof (LVar tag_table) (LVar v))

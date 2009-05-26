@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.44 2009-04-06 13:29:57 marche Exp $ i*)
+(*i $Id: output.ml,v 1.45 2009-05-26 14:25:04 bobot Exp $ i*)
 
 open Lexing
 open Format
@@ -112,13 +112,16 @@ type assertion =
   | LIf of term * assertion * assertion
   | LLet of string * term * assertion
       (*r warning: only for Coq assertions *)
-  | LForall of string * logic_type * assertion
+  | LForall of string * logic_type * trigger list list * assertion
       (*r forall x:t.a *)
-  | LExists of string * logic_type * assertion
+  | LExists of string * logic_type * trigger list list * assertion
       (*r exists x:t.a *)
   | LPred of string * term list
   | LNamed of string * assertion
-;;
+and trigger =
+  |LPatP of assertion
+  |LPatT of term
+
 
 let rec unname a =
   match a with
@@ -182,11 +185,21 @@ let rec iter_assertion f a =
   | LIf(t,a1,a2) -> 
       iter_term f t; iter_assertion f a1; iter_assertion f a2 
   | LLet(id,t,a) -> iter_term f t; iter_assertion f a
-  | LForall(id,t,a) -> iter_logic_type f t; iter_assertion f a
-  | LExists(id,t,a) -> iter_logic_type f t; iter_assertion f a
+  | LForall(id,t,trigs,a) -> iter_logic_type f t; 
+      iter_triggers f trigs;
+      iter_assertion f a
+  | LExists(id,t,trigs,a) -> iter_logic_type f t; 
+      iter_triggers f trigs;
+      iter_assertion f a
   | LPred(id,l) -> f id; List.iter (iter_term f) l
   | LNamed (_, a) -> iter_assertion f a
-;;
+
+and iter_triggers f trigs =
+  List.iter (List.iter 
+               (function 
+                  | LPatP a -> iter_assertion f a
+                  | LPatT t -> iter_term f t)) trigs
+
 
 let rec fprintf_logic_type form t =
   match t.logic_type_args with
@@ -226,12 +239,12 @@ let rec fprintf_assertion form a =
   | LLet(id,t,a) -> 
       fprintf form "@[<hv 1>(let @[<hv 1>%s =@ %a in@]@ %a)@]" id
 	fprintf_term t fprintf_assertion a
-  | LForall(id,t,a) -> 
-      fprintf form "@[<hv 1>(forall %s:%a.@ %a)@]" 
-	id fprintf_logic_type t fprintf_assertion a
-  | LExists(id,t,a) -> 
-      fprintf form "@[<hv 1>(exists %s:%a.@ %a)@]" 
-	id fprintf_logic_type t fprintf_assertion a
+  | LForall(id,t,trigs,a) -> 
+      fprintf form "@[<hv 1>(forall %s:%a%a.@ %a)@]" 
+	id fprintf_logic_type t fprintf_triggers trigs fprintf_assertion a
+  | LExists(id,t,trigs,a) -> 
+      fprintf form "@[<hv 1>(exists %s:%a%a.@ %a)@]" 
+	id fprintf_logic_type t fprintf_triggers trigs fprintf_assertion a
   | LPred("le",[t1;t2]) ->
       fprintf form "@[(%a <= %a)@]" 
 	fprintf_term t1
@@ -256,7 +269,12 @@ let rec fprintf_assertion form a =
       fprintf form "%s" id
   | LNamed (n, a) ->
       fprintf form "@[(%s:@ %a)@]" n fprintf_assertion a
-;;
+
+and fprintf_triggers fmt trigs = 
+  let pat fmt = function
+    | LPatT t -> fprintf_term fmt t
+    | LPatP p -> fprintf_assertion fmt p in
+  print_list_delim lsquare rsquare alt (print_list comma pat) fmt trigs	
 
 (*s types *)
 

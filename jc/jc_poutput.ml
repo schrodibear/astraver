@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.39 2009-03-16 08:36:39 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.40 2009-05-26 14:25:04 bobot Exp $ *)
 
 open Format
 open Jc_env
@@ -158,12 +158,12 @@ let rec pexpr fmt e =
 	  (print_list comma pexpr) args 
     | JCPErange(t1,t2) -> 
 	fprintf fmt "@[[%a..%a]@]" (print_option pexpr) t1 (print_option pexpr) t2
-    | JCPEquantifier (q,ty,vil, a)-> 
-	fprintf fmt "@[<hv 2>(\\%a %a %a;@\n%a)@]"
+    | JCPEquantifier (q,ty,vil,trigs, a)-> 
+	fprintf fmt "@[<hv 2>(\\%a %a %a%a;@\n%a)@]"
 	  quantifier q
 	  ptype ty
 	  (print_list comma identifier) vil
-	  pexpr a
+	  triggers trigs pexpr a
     | JCPEmutable _ -> assert false (* TODO *)
     | JCPEeqtype(tag1,tag2) -> 
 	fprintf fmt "\\typeeq(%a,%a)" ptag tag1 ptag tag2
@@ -242,6 +242,8 @@ let rec pexpr fmt e =
 	fprintf fmt "@\n@[<v 2>switch (%a) {%a@]@\n}"
 	  pexpr e (print_list nothing case) csl
 
+and triggers fmt trigs = 
+  print_list_delim lsquare rsquare alt (print_list comma pexpr) fmt trigs
 
 and ptag fmt tag =
   match tag#node with
@@ -429,7 +431,6 @@ let rec pdecl fmt d =
     | JCDaxiomatic(id,l) ->
 	fprintf fmt "@\n@[axiomatic %s {@\n@[<v 2>%a@]@\n}@]@\n" id
 	  (print_list space pdecl) l
-	
 
 and pdecls fmt (l : pexpr decl list) =
   match l with

@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.131 2009-05-26 13:29:15 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.132 2009-05-26 14:25:03 bobot Exp $ */
 
 %{
 
@@ -97,8 +97,8 @@
 /* pack unpack assert */
 %token PACK UNPACK ASSERT ASSUME HINT
 
-/* type invariant logic axiomatic with variant and axiom tag match */
-%token TYPE INVARIANT LOGIC AXIOMATIC WITH VARIANT AND AXIOM LEMMA TAG MATCH
+/* type invariant logic axiomatic with variant and axiom tag */
+%token TYPE INVARIANT LOGIC AXIOMATIC WITH VARIANT AND AXIOM LEMMA TAG
 
 /* integer boolean real double unit void rep */
 %token INTEGER BOOLEAN REAL DOUBLE FLOAT UNIT REP
@@ -119,6 +119,8 @@
 
 /* & ~ ^ | << >> >>> */
 %token AMP TILDE HAT PIPE LSHIFT LRSHIFT ARSHIFT
+/* | with greater priority */
+%token ALT
 
 /* |= &= ^= */
 %token BAREQ AMPEQ CARETEQ
@@ -161,6 +163,7 @@
 %left BARBAR
 %left AMPAMP
 %left PIPE
+%left ALT
 %left AS
 %left HAT
 %left AMP
@@ -770,12 +773,12 @@ expression:
 *)
       in locate a }
 
-| BSFORALL type_expr identifier_list SEMICOLON expression 
+| BSFORALL type_expr identifier_list triggers SEMICOLON expression 
     %prec PRECFORALL
-    { locate (JCPEquantifier(Forall,$2,$3,$5)) }
-| BSEXISTS type_expr identifier_list SEMICOLON expression 
+    { locate (JCPEquantifier(Forall,$2,$3,$4,$6)) }
+| BSEXISTS type_expr identifier_list triggers SEMICOLON expression 
     %prec PRECFORALL
-    { locate (JCPEquantifier(Exists,$2,$3,$5)) }
+    { locate (JCPEquantifier(Exists,$2,$3,$4,$6)) }
 | expression EQEQGT expression
     { locate (JCPEbinary($1,`Bimplies,$3)) }
 | expression LTEQEQGT expression
@@ -814,6 +817,20 @@ identifier:
     { locate_identifier "default" }
 | IDENTIFIER
     { locate_identifier $1 }
+;
+
+triggers:
+| /* epsilon */ { [] }
+| LSQUARE list1_trigger_sep_bar RSQUARE { $2 }
+;
+
+list1_trigger_sep_bar:
+| trigger { [$1] }
+| trigger PIPE list1_trigger_sep_bar { $1 :: $3 }
+;
+
+trigger:
+  argument_expression_list { $1 }
 ;
 
 /****************/
@@ -1112,6 +1129,7 @@ field_patterns:
     { [] }
 ;
 
+/*Multiply defined : Does ocamlyacc take the last*/
 pattern_expression_list:
 | pattern MINUSGT expression SEMICOLON pattern_expression_list
     { ($1, $3)::$5 }

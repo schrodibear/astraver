@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.115 2009-05-22 14:29:50 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.116 2009-05-26 14:25:02 bobot Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -550,7 +550,8 @@ let rec expr e =
     | JCPEassign_op _ -> assert false
     | JCPEinstanceof(e,id) -> JCNEinstanceof(expr e,id)
     | JCPEcast(e,id) -> JCNEcast(expr e,id)
-    | JCPEquantifier(q,ty,idlist,e) -> JCNEquantifier(q,ty,idlist,expr e)
+    | JCPEquantifier(q,ty,idlist,trigs,e) -> 
+        JCNEquantifier(q,ty,idlist,List.map (List.map expr) trigs,expr e)
     | JCPEold e -> JCNEold(expr e)
     | JCPEat(e,lab) -> JCNEat(expr e,lab)
     | JCPEoffset(off,e) -> JCNEoffset(off,expr e)

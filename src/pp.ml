@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.ml,v 1.19 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: pp.ml,v 1.20 2009-05-26 14:25:05 bobot Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -65,6 +65,8 @@ let newline fmt () = fprintf fmt "@\n"
 let arrow fmt () = fprintf fmt "@ -> "
 let lbrace fmt () = fprintf fmt "{"
 let rbrace fmt () = fprintf fmt "}"
+let lsquare fmt () = fprintf fmt "["
+let rsquare fmt () = fprintf fmt "]"
 let nothing fmt () = ()
 let string fmt s = fprintf fmt "%s" s
 let constant_string s fmt () = string fmt s

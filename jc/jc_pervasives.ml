@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.153 2009-05-12 15:37:18 nguyen Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.154 2009-05-26 14:25:03 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -663,11 +663,16 @@ module AssertionOrd = struct
 	    let tls2 = app2.jc_app_args in
   	    list_compare TermOrd.compare tls1 tls2
           else compli
-      | JCAquantifier(q1,vi1,a1),JCAquantifier(q2,vi2,a2) ->
+      | JCAquantifier(q1,vi1,trigs1,a1),JCAquantifier(q2,vi2,trigs2,a2) ->
           let compq = Pervasives.compare q1 q2 in
           if compq = 0 then 
 	    let compvi = Pervasives.compare vi1 vi2 in
-	    if compvi = 0 then compare a1 a2 else compvi
+	    if compvi = 0 then 
+              let comptrigs = list_compare (list_compare compare_pat) 
+                trigs1 trigs2 in
+              if comptrigs = 0 then compare a1 a2 
+              else comptrigs
+            else compvi
           else compq
       | JCAinstanceof(t1,_,st1),JCAinstanceof(t2,_,st2) ->
           let compst = 
@@ -700,7 +705,12 @@ module AssertionOrd = struct
 	  (* Assertions should have different constructors *)
 	  assert (assertion_num a1 <> assertion_num a2);
 	  assertion_num a1 - assertion_num a2
-
+  and compare_pat pat1 pat2 = 
+    match pat1,pat2 with
+      | JCAPatT t1,JCAPatT t2 -> TermOrd.compare t1 t2
+      | JCAPatT _, _ -> 1
+      | _,JCAPatT _ -> -1
+      | JCAPatP p1, JCAPatP p2 -> compare p1 p2
   let equal a1 a2 = compare a1 a2 = 0
 end
 
@@ -728,7 +738,7 @@ let rec is_constant_assertion a =
 	List.for_all is_constant_assertion al
     | JCAimplies (a1, a2) | JCAiff (a1, a2) ->
 	is_constant_assertion a1 && is_constant_assertion a2
-    | JCAnot a | JCAquantifier (_, _, a) | JCAold a | JCAat(a,_)
+    | JCAnot a | JCAquantifier (_, _, _, a) | JCAold a | JCAat(a,_)
 	-> is_constant_assertion a
     | JCAapp _ | JCAinstanceof _ | JCAmutable _ | JCAeqtype _
     | JCAsubtype _

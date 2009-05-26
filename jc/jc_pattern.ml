@@ -174,7 +174,7 @@ let pattern_list_assertion translate_body arg ty pbl default =
        let body = translate_body body in
        let case =
 	 List.fold_left
-	   (fun acc (n, ty) -> LForall(n, tr_base_type ty, acc))
+	   (fun acc (n, ty) -> LForall(n, tr_base_type ty, [], acc))
 	   (LImpl(cond, body))
 	   vars
        in

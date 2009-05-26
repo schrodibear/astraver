@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.264 2008-11-05 14:03:13 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.265 2009-05-26 14:24:59 bobot Exp $ i*)
 
 open Format
 open Coptions
@@ -538,12 +538,12 @@ let rec interp_predicate label old_label p =
 	List.fold_right
 	  (fun (t,x) p -> 
 	     LExists(x.var_unique_name,
-		     Info.output_why_type x.var_why_type,p)) l (f p)
+		     Info.output_why_type x.var_why_type, [],p)) l (f p)
     | NPforall (l, p) ->	
 	List.fold_right
 	  (fun (t,x) p -> 
 	     LForall(x.var_unique_name,
-		     Info.output_why_type x.var_why_type,p)) l (f p)
+		     Info.output_why_type x.var_why_type, [],p)) l (f p)
     | NPif (t, p1, p2) -> 
 	let t = ft t in
 	let zero = LConst (Prim_int "0") in
@@ -872,7 +872,7 @@ let make_int_types_decls () =
     (Logic (false, of_name, ["x", lt], simple_logic_type "int")) 
     ::
     (Axiom (name ^ "_domain", 
-	     LForall ("x", lt, in_bounds (LApp (of_name, [LVar "x"]))))) 
+	     LForall ("x", lt,  [],in_bounds (LApp (of_name, [LVar "x"]))))) 
     ::
     (if int_model = IMmodulo then
        let width = LConst (Prim_int (Invariant.string_two_power_n size)) in
@@ -880,19 +880,19 @@ let make_int_types_decls () =
        [Logic (false, mod_name, 
 	       ["x", simple_logic_type "int"], simple_logic_type "int");
 	Axiom (mod_name ^ "_id",
-	       LForall ("x", simple_logic_type "int",
+	       LForall ("x", simple_logic_type "int", [],
 		       LImpl (in_bounds (LVar "x"), 
 		             LPred ("eq", [LApp (mod_name, [LVar "x"]);
 					   LVar "x"]))));
 	Axiom (mod_name ^ "_lt",
-	       LForall ("x", simple_logic_type "int",
+	       LForall ("x", simple_logic_type "int", [],
 		       LImpl (LPred ("lt_int", [LVar "x"; 
 						LConst (Prim_int min)]), 
 		             LPred ("eq", [fmod (LVar "x");
 					   fmod (LApp ("add_int", 
 						      [LVar "x"; width]))]))));
 	Axiom (mod_name ^ "_gt",
-	       LForall ("x", simple_logic_type "int",
+	       LForall ("x", simple_logic_type "int", [],
 		       LImpl (LPred ("gt_int", [LVar "x"; 
 						LConst (Prim_int max)]), 
 		             LPred ("eq", [fmod (LVar "x");
@@ -944,7 +944,7 @@ let make_enum_types_decls () =
 		  LFalse vl))
     ::
     (Axiom (name ^ "_domain", 
-	    LForall ("x", lt, LPred (is_enum, [LApp (of_name, [LVar "x"])])))) 
+	    LForall ("x", lt, [],LPred (is_enum, [LApp (of_name, [LVar "x"])])))) 
     ::
     (Param (false, name ^ "_of_int",
 	    Prod_type ("x", int, 
@@ -2487,12 +2487,12 @@ let interp_axiom p =
   let a  =  
     HeapVarSet.fold
       (fun arg t -> LForall
-	 (heap_var_name arg,Info.output_why_type arg.var_why_type,t))
+	 (heap_var_name arg,Info.output_why_type arg.var_why_type, [],t))
       e.Ceffect.reads_var a in
   ZoneSet.fold 
     (fun (z,s,ty) t -> 
        let z = repr z in
-       LForall (s^"_"^z.name,Info.output_why_type (Info.Memory(ty,z)),t))
+       LForall (s^"_"^z.name,Info.output_why_type (Info.Memory(ty,z)), [],t))
     e.Ceffect.reads a 
 
 let interp_effects e =

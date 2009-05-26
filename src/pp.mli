@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.19 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: pp.mli,v 1.20 2009-05-26 14:25:05 bobot Exp $ i*)
 
 open Format
 
@@ -56,6 +56,8 @@ val underscore : formatter -> unit -> unit
 val arrow : formatter -> unit -> unit
 val lbrace : formatter -> unit -> unit
 val rbrace : formatter -> unit -> unit
+val lsquare : formatter -> unit -> unit
+val rsquare : formatter -> unit -> unit
 val nothing : formatter -> unit -> unit
 val string : formatter -> string -> unit
 val constant_string : string -> formatter -> unit -> unit

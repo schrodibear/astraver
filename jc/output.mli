@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.28 2009-04-06 13:29:57 marche Exp $ i*)
+(*i $Id: output.mli,v 1.29 2009-05-26 14:25:05 bobot Exp $ i*)
 
 type constant =
   | Prim_void
@@ -63,13 +63,16 @@ type assertion =
   | LImpl of assertion * assertion
   | LIf of term * assertion * assertion
   | LLet of string * term * assertion
-  | LForall of string * logic_type * assertion
+  | LForall of string * logic_type * trigger list list * assertion
       (*r forall x:t.a *)
-  | LExists of string * logic_type * assertion
+  | LExists of string * logic_type * trigger list list * assertion
       (*r exists x:t.a *)
   | LPred of string * term list
   | LNamed of string * assertion
-;;
+
+and trigger =
+  |LPatP of assertion
+  |LPatT of term
 
 val make_or : assertion -> assertion -> assertion
 val make_and : assertion -> assertion -> assertion

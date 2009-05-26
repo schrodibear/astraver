@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.29 2009-05-19 07:30:41 marche Exp $ *)
+(* $Id: jc_constructors.ml,v 1.30 2009-05-26 14:25:00 bobot Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -318,8 +318,8 @@ either with (~expr1 AND ~expr2) OR ~list only."
       | Some op -> mk ~node:(JCPEassign_op(location, op, value))
   let mkinstanceof ~expr ~typ = mk ~node:(JCPEinstanceof(expr, typ))
   let mkcast ~expr ~typ = mk ~node:(JCPEcast(expr, typ))
-  let mkquantifier ~quantifier ~typ ~vars ~body =
-    mk ~node:(JCPEquantifier(quantifier, typ, vars, body))
+  let mkquantifier ~quantifier ~typ ~vars ?(triggers=[]) ~body =
+    mk ~node:(JCPEquantifier(quantifier, typ, vars, triggers, body))
   let mkforall = mkquantifier ~quantifier:Forall
   let mkexists = mkquantifier ~quantifier:Exists
   let mkold ~expr = mk ~node:(JCPEold expr)

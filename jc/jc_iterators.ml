@@ -134,8 +134,8 @@ let replace_sub_pexpr e el =
 	let e1 = as1 el in JCPEderef(e1,fi)
     | JCPEapp(fi,labs,_args) ->
 	JCPEapp(fi,labs,el)
-    | JCPEquantifier(q,ty,labs,_e) ->
-	let e1 = as1 el in JCPEquantifier(q,ty,labs,e1)
+    | JCPEquantifier(q,ty,labs,trigs,_e) ->
+	let e1 = as1 el in JCPEquantifier(q,ty,labs,trigs,e1)
     | JCPEold _e ->
 	let e1 = as1 el in JCPEold(e1)
     | JCPEat(_e,lab) ->
@@ -284,7 +284,6 @@ module PExprAst = struct
       | JCPEthrow(_, e)
       | JCPEpack(e, _)
       | JCPEunpack(e, _)
-      | JCPEquantifier(_,_,_,e)
       | JCPEold e
       | JCPEat(e,_)
       | JCPErange(Some e,None)
@@ -322,6 +321,7 @@ module PExprAst = struct
       | JCPEblock el
       | JCPEapp(_,_,el) ->
 	  el
+      | JCPEquantifier(_,_,_,trigs,e) -> [e](*::(List.concat trigs)*)
       | JCPEtry(e1, l, e2) ->
           e1 :: List.map (fun (_, _, e) -> e) l @ [ e2 ]
       | JCPEmatch(e, pel) ->
@@ -501,8 +501,14 @@ let rec iter_term_and_assertion ft fa a =
 	iter_term ft t1;
 	iter_term_and_assertion ft fa a1;
 	iter_term_and_assertion ft fa a2
-    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
+    | JCAnot a1 | JCAold a1 | JCAat(a1,_) ->
 	iter_term_and_assertion ft fa a1
+    | JCAquantifier(_,_,trigs, a1) ->
+        List.iter (List.iter (function 
+                                | JCAPatT t -> iter_term ft t
+                                | JCAPatP a -> iter_term_and_assertion ft fa a))
+          trigs;
+        iter_term_and_assertion ft fa a1
     | JCAmatch(t, pal) ->
 	iter_term ft t;
 	List.iter (fun (_, a) -> iter_term_and_assertion ft fa a) pal
@@ -645,8 +651,14 @@ let rec fold_sub_term_and_assertion itt ita ft fa acc a =
 	let acc = itt ft acc t1 in
 	let acc = ita ft fa acc a1 in
 	ita ft fa acc a2
-    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
+    | JCAnot a1 | JCAold a1 | JCAat(a1,_) ->
 	ita ft fa acc a1
+    | JCAquantifier(_,_,trigs,a1) ->
+        let pat acc = function
+          | JCAPatT t -> itt ft acc t
+          | JCAPatP a -> ita ft fa acc a in
+        let acc = List.fold_left (List.fold_left pat) acc trigs in
+        ita ft fa acc a1
     | JCAmatch(t, pal) ->
 	let acc = itt ft acc t in
 	List.fold_left (fun acc (_, a) -> ita ft fa acc a)
@@ -853,8 +865,12 @@ let rec map_term_in_assertion f a =
 	  map_term_in_assertion f a2)
     | JCAnot a1 ->
 	JCAnot(map_term_in_assertion f a1)
-    | JCAquantifier(q,vi,a1) ->
-	JCAquantifier(q,vi,map_term_in_assertion f a1)
+    | JCAquantifier(q,vi,trigs,a1) ->
+        let pat = function
+          | JCAPatT t -> JCAPatT (map_term f t)
+          | a -> a in
+        let trigs = List.map (List.map pat) trigs in
+	JCAquantifier(q,vi,trigs,map_term_in_assertion f a1)
     | JCAold a1 ->
 	JCAold(map_term_in_assertion f a1)
     | JCAat(a1,lab) ->
@@ -1245,7 +1261,6 @@ module NExprAst = struct
       | JCNEthrow(_, Some e)
       | JCNEpack(e, _)
       | JCNEunpack(e, _)
-      | JCNEquantifier(_, _, _, e)
       | JCNEold e
       | JCNEat(e, _)
       | JCNEmutable(e, _)
@@ -1271,6 +1286,7 @@ module NExprAst = struct
       | JCNEapp(_, _, el)
       | JCNEblock el ->
           el
+      | JCNEquantifier(_, _, _, el, e) -> e::(List.concat el)
       | JCNEmatch(e, pel) ->
           e :: List.map snd pel
       | JCNEtry(e1, l, e2) ->

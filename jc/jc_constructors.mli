@@ -371,11 +371,13 @@ module PExpr :
       quantifier:quantifier ->
       typ:ptype ->
       vars:identifier list ->
+      ?triggers:pexpr list list ->
       body:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
     val mkforall :
       typ:ptype ->
       vars:identifier list ->
+      ?triggers:pexpr list list ->
       body:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
 (*

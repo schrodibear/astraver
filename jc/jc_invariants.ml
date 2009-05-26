@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_invariants.ml,v 1.86 2009-03-16 08:36:39 marche Exp $ *)
+(* $Id: jc_invariants.ml,v 1.87 2009-05-26 14:25:01 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -265,7 +265,7 @@ let rec assertion this p =
     | JCAbool_term t -> term this t
     | JCAold p -> assertion this p
     | JCAat(p,_) -> assertion this p
-    | JCAquantifier(_,id, p) -> assertion this p
+    | JCAquantifier(_,id, _, p) -> assertion this p
     | JCAapp app ->
 	let id = app.jc_app_fun in
 	if MemoryMap.is_empty id.jc_logic_info_effects.jc_effect_memories
@@ -326,7 +326,7 @@ let rec assertion_memories aux a = match a#node with
   | JCAnot a
   | JCAold a
   | JCAat(a,_)
-  | JCAquantifier(_,_, a) -> assertion_memories aux a
+  | JCAquantifier(_,_, _, a) -> assertion_memories aux a
   | JCAapp app -> List.fold_left term_memories aux app.jc_app_args
   | JCAinstanceof(t, _, _ )
   | JCAbool_term t -> term_memories aux t
@@ -715,7 +715,7 @@ let not_mutable_implies_fields_committed this st =
 	     let range = make_range (LVar index) omin omax in
 	     let pred =
 	       LForall(
-		 index, simple_logic_type "int",
+		 index, simple_logic_type "int", [],
 		 LImpl(range, eq))
 	     in
 	     (params, pred)::acc
@@ -838,10 +838,10 @@ let owner_unicity this root =
 
   let forall =
     LForall(
-      index1, simple_logic_type "int",
+      index1, simple_logic_type "int", [],
       LForall(
-	index2, simple_logic_type "int",
-	LForall(x_name, x_type, impl)))
+	index2, simple_logic_type "int", [],
+	LForall(x_name, x_type, [], impl)))
   in
 
   (* params *)
@@ -898,7 +898,7 @@ let make_hierarchy_global_invariant acc root =
   let params = params_ou@params in
 
   (* predicate body, quantified on "this" *)
-  let body = LForall(this, this_ty, make_and_list [ mut_inv; mut_com; com_fp; owner_unicity ]) in
+  let body = LForall(this, this_ty, [], make_and_list [ mut_inv; mut_com; com_fp; owner_unicity ]) in
 
   (* sort the parameters and only keep one of each *)
   let params = List.fold_left
@@ -1077,7 +1077,7 @@ let hierarchy_committed_postcond this root fields value =
 	    (make_shift this_fi (LVar index)))
 	 (LConst(Prim_bool value))
        in
-       LForall(index, simple_logic_type "int", LImpl(range, new_value)))
+       LForall(index, simple_logic_type "int", [], LImpl(range, new_value)))
     fields
   in
   (* result *)
@@ -1160,7 +1160,7 @@ let make_components_precond this st reads =
        in
        let range = make_range (LVar index_name) omin omax in
        let valid_impl = LImpl(range, body) in
-       let forall = LForall(index_name, simple_logic_type "int", valid_impl) in
+       let forall = LForall(index_name, simple_logic_type "int", [], valid_impl) in
        forall::l, reads)
     ([], reads)
     (components st)

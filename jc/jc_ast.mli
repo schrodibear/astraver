@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.167 2009-05-12 15:37:17 nguyen Exp $ *)
+(* $Id: jc_ast.mli,v 1.168 2009-05-26 14:25:00 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -171,7 +171,7 @@ and pexpr_node =
   | JCPEassign_op of pexpr * bin_op * pexpr
   | JCPEinstanceof of pexpr * string
   | JCPEcast of pexpr * ptype
-  | JCPEquantifier of quantifier * ptype * identifier list * pexpr
+  | JCPEquantifier of quantifier * ptype * identifier list * pexpr list list * pexpr
   | JCPEold of pexpr
   | JCPEat of pexpr * label
   | JCPEoffset of offset_kind * pexpr 
@@ -305,7 +305,7 @@ type nexpr_node =
   | JCNEunpack of nexpr * identifier option
   | JCNEmatch of nexpr * (ppattern * nexpr) list
   (* Assertions only *)
-  | JCNEquantifier of quantifier * ptype * identifier list * nexpr
+  | JCNEquantifier of quantifier * ptype * identifier list * nexpr list list * nexpr
   | JCNEold of nexpr
   | JCNEat of nexpr * label
   | JCNEmutable of nexpr * nexpr ptag
@@ -428,7 +428,7 @@ type 'li assertion_node =
   | JCAiff of 'li assertion * 'li assertion
   | JCAnot of 'li assertion
   | JCAapp of 'li app
-  | JCAquantifier of quantifier * var_info * 'li assertion
+  | JCAquantifier of quantifier * var_info * 'li trigger list * 'li assertion
   | JCAold of 'li assertion
   | JCAat of 'li assertion * label
   | JCAinstanceof of 'li term * label * struct_info
@@ -440,6 +440,9 @@ type 'li assertion_node =
   | JCAmatch of 'li term * (pattern * 'li assertion) list
 
 and 'li assertion = 'li assertion_node c_assertion
+
+and 'li tpattern = JCAPatT of 'li term | JCAPatP of 'li assertion
+and 'li trigger = 'li tpattern list
 
 type 'li term_or_assertion =
   | JCAssertion of 'li assertion

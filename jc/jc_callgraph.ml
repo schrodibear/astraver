@@ -58,8 +58,9 @@ let rec assertion acc p =
       assertion (assertion acc p1) p2
   | JCAif(t1,p2,p3) -> 
       assertion (assertion (term acc t1) p2) p3
-  | JCAnot p | JCAold p | JCAat(p,_) | JCAquantifier (_,_,p) -> 
+  | JCAnot p | JCAold p | JCAat(p,_) ->
       assertion acc p
+  | JCAquantifier (_,_,trigs,p) -> triggers (assertion acc p) trigs
   | JCAinstanceof(t,_,_)
   | JCAmutable(t,_,_)
   | JCAbool_term t -> term acc t
@@ -67,6 +68,12 @@ let rec assertion acc p =
       tag (tag acc t1) t2
   | JCAmatch(t, pal) ->
       term (List.fold_left (fun acc (_, a) -> assertion acc a) acc pal) t
+
+and triggers acc trigs =
+  List.fold_left (List.fold_left 
+    (fun acc pat -> match pat with
+       | JCAPatT t -> term acc t
+       | JCAPatP p -> assertion acc p)) acc trigs
 
 (*
 let spec s = 

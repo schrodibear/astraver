@@ -1325,7 +1325,7 @@ let make_conversion_params pc =
 	    in
 	    let ty' = pointer_type ac pc in
 	    let post = make_and post_min post_max in
-	    LForall(p,ty',post)
+	    LForall(p,ty',[],post)
 	  in
 	  post_alloc
 	else LTrue
@@ -1367,7 +1367,7 @@ let make_conversion_params pc =
 				  LConst(Prim_int off); LConst(Prim_int size) ])))
 		   in
 		   let ty' = pointer_type ac pc in (* Correct pc *)
-		   let posti = LForall(pi,ty',posti) in
+		   let posti = LForall(pi,ty',[],posti) in
 		   make_and acc posti, i+1
 		 else acc, i
 	      ) (LTrue,0) fields

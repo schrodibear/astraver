@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.284 2009-05-12 15:37:18 nguyen Exp $ *)
+(* $Id: jc_typing.ml,v 1.285 2009-05-26 14:25:04 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1268,9 +1268,9 @@ let rec assertion env e =
           pel
         in
         JCAmatch(targ, tpal)
-    | JCNEquantifier(q, ty, idl, e1) ->
+    | JCNEquantifier(q, ty, idl, trigs, e1) ->
         let ty = type_type ty in
-        (make_quantifier q e#pos ty idl env e1)#node
+        (make_quantifier q e#pos ty idl env trigs e1)#node
     | JCNEold e1 ->
         JCAold(fa e1)
     | JCNEat(e1, lab) ->
@@ -1314,16 +1314,33 @@ let rec assertion env e =
     ~pos: e#pos
     ta
 
-and make_quantifier q loc ty idl env e : assertion =
+and make_quantifier q loc ty idl env trigs e : assertion =
   match idl with
-    | [] -> assertion env e
+    | [] -> assertion env e (*Here the triggers disappear if idl start empty*)
     | id :: r ->
         let vi = var ty id#name in
         let env = (id#name, vi) :: env in
+        let trigs_id,trigs_r = 
+          match r with
+            | [] -> (*id is the last variable, 
+                      the trigger should stay here*)
+                triggers env trigs,[] 
+            | _ -> [],trigs in
         let f = 
-          JCAquantifier (q, vi, make_quantifier q loc ty r env e) 
+          JCAquantifier (q, vi, trigs_id, make_quantifier q loc ty r env trigs_r e) 
         in
         new assertion ~pos:loc f
+
+and triggers env l =
+  let pat e =  
+    match e#node with
+    | JCNEapp (id,_,_) ->
+        let pi = find_logic_info id in
+        (match pi.jc_logic_info_result_type with
+          | None ->   JCAPatP (assertion env e)
+          | Some _ -> JCAPatT (term env e))
+    | _ ->  typing_error e#pos "IllformedPattern" in
+  List.map (List.map pat) l
 
 (******************************************************************************)
 (*                                Expressions                                 *)
@@ -2638,8 +2655,8 @@ let rec signed_occurrences pi a =
 match a#node with
   | JCArelation _ | JCAtrue | JCAfalse -> (0,0)
   | JCAapp app -> ((if app.jc_app_fun == pi then 1 else 0),0)
-  | JCAquantifier (Forall, vi, p) -> signed_occurrences pi p
-  | JCAquantifier (Exists, vi, p) -> assert false (* TODO *)
+  | JCAquantifier (Forall, vi, _, p) -> signed_occurrences pi p
+  | JCAquantifier (Exists, vi, _, p) -> assert false (* TODO *)
   | JCAimplies (p1, p2) -> 
       let (pos1,neg1) = signed_occurrences pi p1 in
       let (pos2,neg2) = signed_occurrences pi p2 in
@@ -2729,7 +2746,7 @@ let rec occurrences table a =
 	with Not_found -> ()
       end
   | JCAnot p
-  | JCAquantifier (_, _, p) -> occurrences table p
+  | JCAquantifier (_, _, _, p) -> occurrences table p
   | JCAiff (p1, p2)
   | JCAimplies (p1, p2) -> 
       occurrences table p1; occurrences table p2 

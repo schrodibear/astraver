@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.141 2009-05-12 15:37:18 nguyen Exp $ *)
+(* $Id: jc_output.ml,v 1.142 2009-05-26 14:25:03 bobot Exp $ *)
 
 open Format
 open Jc_env
@@ -231,11 +231,12 @@ let rec assertion fmt a =
 	fprintf fmt "(%a <: %s)" term t st.jc_struct_info_name
     | JCAold a -> fprintf fmt "\\old(%a)" assertion a
     | JCAat(a,lab) -> fprintf fmt "\\at(%a,%a)" assertion a label lab
-    | JCAquantifier (q,vi, a)-> 
-	fprintf fmt "@[(\\%a %a %s;@\n%a)@]"
+    | JCAquantifier (q,vi, trigs, a)-> 
+	fprintf fmt "@[(\\%a %a %s%a;@\n%a)@]"
 	  quantifier q
 	  print_type vi.jc_var_info_type
 	  vi.jc_var_info_name
+          triggers trigs
 	  assertion a
     | JCArelation (t1, op, t2) ->
 	fprintf fmt "@[(%a %s %a)@]" term t1 (bin_op op) term t2
@@ -283,6 +284,13 @@ let rec assertion fmt a =
 	  (fun (p, a) -> fprintf fmt "  @[<v 2>%a ->@ %a;@]@ "
 	     pattern p assertion a) pal;
 	fprintf fmt "end@]"
+
+and triggers fmt trigs = 
+  let pat fmt = function
+  | JCAPatT t -> term fmt t
+  | JCAPatP p -> assertion fmt p in
+  print_list_delim lsquare rsquare alt (print_list comma pat) fmt trigs	
+
 
 let rec location_set fmt locs = 
   match locs#node with
