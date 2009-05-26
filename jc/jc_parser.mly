@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.130 2009-05-19 07:30:41 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.131 2009-05-26 13:29:15 marche Exp $ */
 
 %{
 
@@ -434,7 +434,7 @@ spec_clause:
 ;
 
 behavior:
-| BEHAVIOR ident_or_default COLON throws assumes requires assigns 
+| BEHAVIOR ident_or_default COLON throws assumes requires assigns_opt
   ENSURES expression SEMICOLON
     { (pos_i 2,$2,$4,$5,$6,$7,$9) }
 ;
@@ -464,9 +464,14 @@ requires:
     { Some $2 }
 ;
 
-assigns:
+assigns_opt:
 | /* epsilon */
     { None }
+| assigns
+    { $1 }
+;
+
+assigns:
 | ASSIGNS argument_expression_list SEMICOLON
     { Some(pos_i 2,$2) }
 | ASSIGNS BSNOTHING SEMICOLON
@@ -910,29 +915,12 @@ iteration_expression:
       locate (JCPEfor($4, $6, $8, i, v, $10)) }
 ;
 
-/* obsolete: loop behaviors
-loop_invariant:
-| INVARIANT FOR identifier_list COLON expression SEMICOLON %prec FOR
-    { ($3, $5) }
-| INVARIANT expression SEMICOLON
-    { ([], $2) }
-;
-
-loop_invariant_list:
-| loop_invariant loop_invariant_list
-    { $1 :: $2 }
-| loop_invariant
-    { [$1] }
-;
-*/
 
 loop_behavior:
-| INVARIANT expression SEMICOLON 
-    { (Some $2,None) }
-| INVARIANT expression SEMICOLON ASSIGNS expression_list SEMICOLON 
-    { (Some $2,Some (pos_i 5,$5)) }
-| ASSIGNS expression_list SEMICOLON 
-    { (None,Some (pos_i 2,$2)) }
+| INVARIANT expression SEMICOLON assigns_opt
+    { (Some $2,$4) }
+| assigns
+    { (None,$1) }
 ;
 
 loop_for_behavior_list:
@@ -954,8 +942,6 @@ loop_annot:
     { ($2, Some $4) }
 | LOOP loop_behaviors
     { ($2, None) }
-| LOOP VARIANT expression SEMICOLON
-    { ([], Some $3) }
 ;
 
 jump_expression: 
