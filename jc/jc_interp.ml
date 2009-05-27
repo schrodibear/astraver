@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.414 2009-05-26 14:25:00 bobot Exp $ *)
+(* $Id: jc_interp.ml,v 1.415 2009-05-27 08:54:21 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2359,7 +2359,14 @@ and expr e =
 		 | Some i ->
 		     if in_current_behavior names
 		     then (i::invariants,assumes)
-		     else (invariants,i::assumes)
+		     else 
+		       if List.exists 
+			 (fun behav -> behav#name = "default") 
+			 names
+		       then
+			 (invariants,i::assumes)
+		       else
+			 (invariants,assumes)
 		 | None -> acc)
 	    ([],[])
 	    la.jc_loop_behaviors
