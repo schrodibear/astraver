@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.75 2009-03-12 14:28:11 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.76 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -253,6 +253,10 @@ and desc_predicate loc lab env = function
       exists id (PureType v) p
   | PPnamed (n, a) ->
       Pnamed (User n, predicate lab env a)
+  | PPlet (x, e1, e2) ->
+      let t1, ty = term lab env e1 in
+      let env = Env.add_logic x ty env in
+      plet x t1 (predicate lab env e2)
 
 and type_pvar loc env x =
   if is_at x then 
@@ -305,6 +309,11 @@ and desc_term loc lab env = function
 	 | _ -> expected_num loc)
   | PPnamed(n, t) -> 
       let tt,ty = term lab env t in Tnamed(User n, tt), ty
+  | PPlet (x, e1, e2) ->
+      let t1, ty1 = term lab env e1 in
+      let env = Env.add_logic x ty1 env in
+      let t2, ty2 = term lab env e2 in
+      tsubst_in_term (subst_one x t1) t2, ty2
 
   | PPprefix (PPnot, _) | PPforall _ | PPexists _ ->
       term_expected loc

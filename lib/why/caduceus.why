@@ -12,6 +12,8 @@ logic lsl : int,int -> int
 
 logic lsr : int,int -> int
 
+parameter any_int: unit -> {} int { true }
+
 (* pointers *)
 
 type 'z pointer

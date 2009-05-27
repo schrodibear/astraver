@@ -2,7 +2,7 @@
    It can be modified; only the generated parts will be overwritten. *)
 Require Export Why.
 
-(* Why obligation from file "good/booleans.mlw", line 12, characters 4-14: *)
+(* Why obligation from file "booleans.mlw", line 12, characters 4-14: *)
 (*Why goal*) Lemma test_and_1_po_1 : 
   forall (x0: Z),
   forall (x: Z),
@@ -15,7 +15,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 12, characters 4-14: *)
+(* Why obligation from file "booleans.mlw", line 12, characters 4-14: *)
 (*Why goal*) Lemma test_and_1_po_2 : 
   forall (x0: Z),
   forall (x: Z),
@@ -28,7 +28,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 17, characters 4-14: *)
+(* Why obligation from file "booleans.mlw", line 17, characters 4-14: *)
 (*Why goal*) Lemma test_and_2_po_1 : 
   forall (x: Z),
   forall (HW_2: x <> 0),
@@ -40,7 +40,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 17, characters 4-14: *)
+(* Why obligation from file "booleans.mlw", line 17, characters 4-14: *)
 (*Why goal*) Lemma test_and_2_po_2 : 
   forall (x: Z),
   forall (HW_2: x <> 0),
@@ -52,7 +52,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 21, characters 4-24: *)
+(* Why obligation from file "booleans.mlw", line 21, characters 4-24: *)
 (*Why goal*) Lemma test_or_1_po_1 : 
   forall (x0: Z),
   forall (x: Z),
@@ -64,7 +64,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 21, characters 4-24: *)
+(* Why obligation from file "booleans.mlw", line 21, characters 4-24: *)
 (*Why goal*) Lemma test_or_1_po_2 : 
   forall (x0: Z),
   forall (x: Z),
@@ -76,7 +76,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 25, characters 4-20: *)
+(* Why obligation from file "booleans.mlw", line 25, characters 4-20: *)
 (*Why goal*) Lemma test_or_2_po_1 : 
   forall (x: Z),
   forall (HW_1: x = 0 \/ x <> 0 /\ x = 1),
@@ -85,7 +85,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 25, characters 4-20: *)
+(* Why obligation from file "booleans.mlw", line 25, characters 4-20: *)
 (*Why goal*) Lemma test_or_2_po_2 : 
   forall (x: Z),
   forall (HW_2: x <> 0 /\ x <> 1),
@@ -94,7 +94,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 29, characters 4-9: *)
+(* Why obligation from file "booleans.mlw", line 29, characters 4-9: *)
 (*Why goal*) Lemma test_not_1_po_1 : 
   forall (x: Z),
   forall (HW_1: x <> 0),
@@ -105,7 +105,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 33, characters 36-42: *)
+(* Why obligation from file "booleans.mlw", line 33, characters 36-42: *)
 (*Why goal*) Lemma test_not_2_po_1 : 
   forall (x: Z),
   forall (HW_1: x <= 0),
@@ -119,7 +119,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 38, characters 4-24: *)
+(* Why obligation from file "booleans.mlw", line 38, characters 4-24: *)
 (*Why goal*) Lemma test_all_1_po_1 : 
   forall (x: Z),
   ((x >= 0 /\ x <> 0 \/ (x < 0 \/ x >= 0 /\ x = 0) /\ x >= 1 <-> x >= 1)).
@@ -130,7 +130,7 @@ Save.
 (*Why logic*) Definition D : Z.
 Admitted.
 
-(* Why obligation from file "good/booleans.mlw", line 51, characters 3-28: *)
+(* Why obligation from file "booleans.mlw", line 51, characters 3-28: *)
 (*Why goal*) Lemma test_cd3d_po_1 : 
   forall (vx: Z),
   forall (vy: Z),
@@ -147,7 +147,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/booleans.mlw", line 51, characters 3-28: *)
+(* Why obligation from file "booleans.mlw", line 51, characters 3-28: *)
 (*Why goal*) Lemma test_cd3d_po_2 : 
   forall (vx: Z),
   forall (vy: Z),

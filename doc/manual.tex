@@ -1143,6 +1143,7 @@ Syntax for logic declarations is given Figure~\ref{fig:ldecl}.
       & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
       & $|$ & \nt{lab\_identifier} \te{[} \nt{term} \te{]} \\
       & $|$ & \te{if} \nt{term} \te{then} \nt{term} \te{else} \nt{term} \\
+      & $|$ & \te{let} \nt{identifier} \te{=} \nt{term} \te{in} \nt{term} \\
       & $|$ & \te{(} \nt{term} \te{)} \\
   \\[0.1em]
 
@@ -1181,6 +1182,8 @@ Syntax for logic declarations is given Figure~\ref{fig:ldecl}.
       & $|$ & \te{not} \nt{predicate} \\
       & $|$ & \te{if} \nt{term} \te{then} \nt{predicate} 
               \te{else} \nt{predicate} \\
+      & $|$ & \te{let} \nt{identifier} \te{=} \nt{term} 
+              \te{in} \nt{predicate} \\
       & $|$ & \te{forall} \nt{identifier}\plussep{\te{,}}
               \te{:} \nt{primitive\_type} $[$ \nt{triggers} $]$
               \te{.} \nt{predicate} \\

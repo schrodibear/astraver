@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.89 2009-04-06 15:27:46 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.90 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -310,6 +310,8 @@ let rec print_predicate pos fmt p =
   | Pnamed (_n, p) ->
       (*fprintf fmt "@[;;%s@\n%a@]" n pp p*) 
       pp fmt p
+  | Plet (_, n, t, p) ->
+      pp fmt (subst_term_in_predicate n t p)
   (** BUG Simplify
   | Pnamed (n, p) when pos ->
       fprintf fmt "@[(LBLPOS@ |%s|@ %a)@]" n pp p

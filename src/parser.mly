@@ -442,6 +442,8 @@ lexpr:
    { $2 }
 | ident_or_string COLON lexpr %prec prec_named
    { mk_pp (PPnamed ($1, $3)) }
+| LET ident EQUAL lexpr IN lexpr 
+   { mk_pp (PPlet ($2, $4, $6)) }
 ;
 
 triggers:

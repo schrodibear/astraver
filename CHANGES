@@ -1,4 +1,6 @@
 
+  o [Why] added a let/in construct in logic (let x = term in term /
+    let x = term in predicate)
   o [Krakatoa/Jessie] "reads" clauses on logic functions and
     predicates, which disappeared in version 2.16, have been
     resurected. Beware that the semantics is slightly different from

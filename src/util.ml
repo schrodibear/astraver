@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.164 2009-03-31 12:46:11 marche Exp $ i*)
+(*i $Id: util.ml,v 1.165 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -155,13 +155,13 @@ and print_predicate fmt = function
       fprintf fmt "@[<hov 2>(exists %a:%a @ %a)@]" 
 	(if debug then Ident.dbprint else Ident.print) b 
 	print_pure_type v print_predicate p
-(*   | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) -> *)
-(*       fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]"  *)
-(* 	print_term t i1 f1 e1 i2 f2 e2 *)
   | Pnamed (User n, p) ->
       fprintf fmt "@[%s:@ %a@]" n print_predicate p
   | Pnamed (Internal n, p) ->
       fprintf fmt "@[(%d):@ %a@]" n print_predicate p
+  | Plet (_, x, t, p) ->
+      fprintf fmt "@[(let %a = %a in@ %a)@]" Ident.print x print_term t
+	print_predicate p
 
 let print_assertion fmt a = 
   fprintf fmt "%a: %a" Ident.print a.a_name print_predicate a.a_value
@@ -617,6 +617,7 @@ and occur_predicate id = function
   | Forall (_,_,_,_,tl,a) -> occur_triggers id tl || occur_predicate id a
   | Exists (_,_,_,a) -> occur_predicate id a
   | Pnamed (_, a) -> occur_predicate id a
+  | Plet (_, _, t, a) -> occur_term id t || occur_predicate id a
 
 let occur_assertion id a = occur_predicate id a.a_value
 
@@ -746,6 +747,13 @@ let exists x v p =
   let n = Ident.bound x in
   let p = subst_in_predicate (subst_onev x n) p in
   Exists (x, n, mlize_type v, p)
+
+let plet x t p =
+  let n = Ident.bound x in
+  let s = subst_onev x n in
+  let t = subst_in_term s t in
+  let p = subst_in_predicate s p in
+  Plet (x, n, t, p)
 
 (* decomposing universal quantifiers, renaming variables on the fly *)
 

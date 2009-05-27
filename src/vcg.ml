@@ -102,7 +102,8 @@ let rec eval p =
     | Pimplies (_, _, _)
     | Pvar _
     | Pfalse
-    | Ptrue -> p
+    | Ptrue 
+    | Plet _ -> p
 
 
 
@@ -249,14 +250,19 @@ let rec unif_pred u = function
   | Exists (_, n, _, p), Exists (_, n', _, p') ->
       let p'n = subst_in_predicate (subst_onev n' n) p' in 
       unif_pred u (p, p'n)
+  | Plet (_, n, t, p), Plet (_, n', t', p') ->
+      let u = unif_term u (t, t') in
+      let p'n = subst_in_predicate (subst_onev n' n) p' in 
+      unif_pred u (p, p'n)
   | Pnamed (_, p), p'
   | p, Pnamed (_, p') ->
       unif_pred u (p, p')
   (* outside of the diagonal -> false *)
   | (Forall _ | Exists _ | Forallb _ | Pnot _ | Piff _ | Por _ |
-     Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue),
+     Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue | Plet _),
     (Forall _ | Exists _ | Forallb _ | Pnot _ | Piff _ | Por _ |
-     Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue) ->
+     Pand _ | Pif _ | Pimplies _ | Papp _ | Pvar _ | Pfalse | Ptrue | Plet _) 
+    ->
       raise Exit
 
 (* [lookup_instance]. 

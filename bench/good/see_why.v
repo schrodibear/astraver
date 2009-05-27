@@ -6,7 +6,7 @@ Require Import Why.
 (*Why axiom*) Lemma mult_1_1 : (1 * 1) = 1.
 Admitted.
 
-(* Why obligation from file "good/see.mlw", line 9, characters 30-55: *)
+(* Why obligation from file "see.mlw", line 9, characters 30-55: *)
 (*Why goal*) Lemma f_po_1 : 
   forall (b0: Z),
   forall (b: Z),
@@ -17,7 +17,7 @@ intuition.
 Save.
 
 
-(* Why obligation from file "good/see.mlw", line 17, characters 4-21: *)
+(* Why obligation from file "see.mlw", line 17, characters 4-21: *)
 (*Why goal*) Lemma k_po_1 : 
   forall (b: Z),
   forall (HW_1: b = 0),

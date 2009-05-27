@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.124 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.125 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -284,6 +284,7 @@ let rec collect_pred s = function
   | Forall (_, _, _, _, _, p) -> collect_pred s p
   | Exists (_, _, _, p) -> collect_pred s p
   | Pnamed (_, p) -> collect_pred s p
+  | Plet (_, _, t, p) -> collect_pred (collect_term s t) p
 
 let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
@@ -309,6 +310,7 @@ let rec map_predicate f = function
   | Exists (id, b, v, p) -> Exists (id, b, v, f p)
   | Forallb (w, a, b) -> Forallb (w, f a, f b)
   | Pnamed (n, a) -> Pnamed (n, f a)
+  | Plet (id, b, t, p) -> Plet (id, b, t, f p)
   | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
 
 let rec tsubst_in_term s = function
@@ -328,7 +330,10 @@ let rec tsubst_in_predicate s = function
   | Forall (w, id, b, v, tl, p) -> 
       Forall (w, id, b, v, List.map (List.map (tsubst_in_pattern s)) tl,
 	      tsubst_in_predicate s p)
-  | p -> map_predicate (tsubst_in_predicate s) p
+  | Plet (id, n, t, p) ->
+      Plet (id, n, tsubst_in_term s t, tsubst_in_predicate s p)
+  | p -> 
+      map_predicate (tsubst_in_predicate s) p
 
 and tsubst_in_pattern s = function
   | TPat t -> TPat (tsubst_in_term s t)
@@ -363,7 +368,10 @@ let rec subst_in_predicate s = function
   | Forall (w, id, b, v, tl, p) -> 
       Forall (w, id, b, v, List.map (List.map (subst_in_pattern s)) tl,
 	      subst_in_predicate s p)
-  | p -> map_predicate (subst_in_predicate s) p
+  | Plet (id, n, t, p) ->
+      Plet (id, n, subst_in_term s t, subst_in_predicate s p)
+  | p -> 
+      map_predicate (subst_in_predicate s) p
 
 and subst_in_pattern s = function
   | TPat t -> TPat (subst_in_term s t)
@@ -388,6 +396,8 @@ let rec subst_manyv  vl1 vl2 = match vl1, vl2 with
   | x1 :: l1, x2 :: l2 -> Idmap.add x1 x2 (subst_manyv l1 l2)
   | _ -> invalid_arg "subst_manyv"
 
+let subst_term_in_predicate x t p =
+  tsubst_in_predicate (subst_one x t) p
 
 let rec unref_term = function
   | Tderef id -> Tvar id
@@ -612,8 +622,8 @@ let rec eq_predicate p1 p2 = match p1, p2 with
       eq_predicate a1 a2
   | Pif (t1, a1, b1), Pif (t2, a2, b2) ->
       eq_term t1 t2 && eq_predicate a1 a2 && eq_predicate b1 b2
-  | (Forall _ | Exists _), _
-  | _, (Forall _ | Exists _) ->
+  | (Forall _ | Exists _ | Plet _), _
+  | _, (Forall _ | Exists _ | Plet _) ->
       false
 	(* equality up to names *)
   | Pnamed (_, p1), _ ->
@@ -648,6 +658,7 @@ module Size = struct
     | Forall (_,_,_,_,_,p) -> 1 + predicate p
     | Exists (_,_,_,p) -> 1 + predicate p
     | Forallb (_,p1,p2) -> 1+ predicate p1 + predicate p2
+    | Plet (_, _, t, p) -> 1 + term t + predicate p
     | Pnamed (_,p) -> predicate p
 
   let assertion a = predicate a.a_value

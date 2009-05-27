@@ -136,7 +136,7 @@ Admitted.
 (*Why logic*) Definition N : Z.
 Admitted.
 
-(* Why obligation from file "good/return.mlw", line 16, characters 18-24: *)
+(* Why obligation from file "return.mlw", line 16, characters 18-24: *)
 (*Why goal*) Lemma p_po_1 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),
@@ -147,7 +147,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/return.mlw", line 18, characters 9-14: *)
+(* Why obligation from file "return.mlw", line 18, characters 9-14: *)
 (*Why goal*) Lemma p_po_2 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),
@@ -161,7 +161,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/return.mlw", line 25, characters 4-36: *)
+(* Why obligation from file "return.mlw", line 25, characters 4-36: *)
 (*Why goal*) Lemma p_po_3 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),
@@ -180,7 +180,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/return.mlw", line 16, characters 18-24: *)
+(* Why obligation from file "return.mlw", line 16, characters 18-24: *)
 (*Why goal*) Lemma p_po_4 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),
@@ -200,7 +200,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/return.mlw", line 17, characters 16-21: *)
+(* Why obligation from file "return.mlw", line 17, characters 16-21: *)
 (*Why goal*) Lemma p_po_5 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),
@@ -220,7 +220,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/return.mlw", line 25, characters 4-36: *)
+(* Why obligation from file "return.mlw", line 25, characters 4-36: *)
 (*Why goal*) Lemma p_po_6 : 
   forall (t: (array Z)),
   forall (HW_1: (array_length t) = N),

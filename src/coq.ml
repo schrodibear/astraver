@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.179 2009-05-20 14:31:29 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.180 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -274,6 +274,7 @@ let print_predicate_v7 fmt p =
     | Pnamed (User n, p) ->
 	fprintf fmt "@[((* %s *)@ %a)@]" n print3 p
     | Pnamed (_, p) -> print3 fmt p
+    | Plet (_, x, t, p) -> print3 fmt (subst_term_in_predicate x t p)
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
@@ -576,6 +577,11 @@ let print_predicate_v8 fmt p =
     | Pnamed (User n, p) ->
 	fprintf fmt "@[(* %s *)@ %a@]" n print3 p
     | Pnamed (_, p) -> print3 fmt p
+    | Plet (id, n, t, p) ->
+	let id' = next_away id (predicate_vars p) in
+	let p' = subst_in_predicate (subst_onev n id') p in
+	fprintf fmt "@[@[<hov 2>let %a :=@ %a in@]@\n%a@]"
+	  ident id' print_term t print0 p'
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in

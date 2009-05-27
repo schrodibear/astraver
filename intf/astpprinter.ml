@@ -174,6 +174,11 @@ let print_predicate fmt p =
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[\\exists %a %s;@ %a@])"
 	  print_pure_type t (Ident.string id') print0 p'
+    | Plet (id,n,t,p) -> 
+	let id' = next_away id (predicate_vars p) in
+	let p' = subst_in_predicate (subst_onev n id') p in
+	fprintf fmt "(@[let %s = %a in@ %a@])"
+	  (Ident.string id') print_term t print0 p'
     | Pnamed (User n, p) ->
 	(match (Tools.grab_infos n) with
 	   | None -> fprintf fmt "@[%a@]" print3 p

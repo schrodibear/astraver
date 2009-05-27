@@ -148,7 +148,7 @@ Admitted.
 
 
 
-(* Why obligation from file "good/oldify.mlw", line 21, characters 4-30: *)
+(* Why obligation from file "oldify.mlw", line 21, characters 4-30: *)
 (*Why goal*) Lemma g_po_1 : 
   forall (t: (array Z)),
   forall (result: Z),

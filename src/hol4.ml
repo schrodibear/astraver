@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hol4.ml,v 1.28 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: hol4.ml,v 1.29 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 (*s HOL 4 output (contributed by Seungkeol Choe, University of Utah) *)
 
@@ -221,6 +221,8 @@ let rec print_predicate fmt = function
   | Pnamed (User n, p) ->
       fprintf fmt "@[(* %s: *) %a@]" n print_predicate p
   | Pnamed (_, p) -> print_predicate fmt p
+  | Plet (_, n, t, p) ->
+      print_predicate fmt (subst_term_in_predicate n t p)
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function

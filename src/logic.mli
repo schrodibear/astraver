@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic.mli,v 1.49 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.50 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -85,8 +85,9 @@ type predicate =
   | Forall of is_wp * Ident.t * Ident.t * pure_type * triggers * predicate
   | Forallb of is_wp * predicate * predicate
   | Exists of Ident.t * Ident.t * pure_type * predicate
-(*   | Pfpi of term * real_constant * real_constant *)
   | Pnamed of term_label * predicate
+  | Plet of Ident.t * Ident.t * term * predicate
+
 and pattern = TPat of term | PPat of predicate
 and trigger = pattern list
 and triggers = trigger list

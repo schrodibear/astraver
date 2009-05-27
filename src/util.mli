@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.mli,v 1.74 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.75 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 open Cc
 open Logic
@@ -104,6 +104,7 @@ val exists : Ident.t -> type_v -> predicate -> predicate
 val foralls_many : 
   ?is_wp:is_wp -> (Ident.t * type_v) list -> predicate -> predicate
 
+val plet : Ident.t -> term -> predicate -> predicate
 
 (* versions performing simplifcations *)
 val pforall : ?is_wp:is_wp -> Ident.t -> type_v -> predicate -> predicate

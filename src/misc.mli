@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.mli,v 1.91 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.92 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -174,6 +174,8 @@ val subst_one : Ident.t -> term -> substitution
 val subst_onev : Ident.t -> Ident.t -> var_substitution
 val subst_many : Ident.t list -> term list -> substitution
 val subst_manyv : Ident.t list -> Ident.t list -> var_substitution
+
+val subst_term_in_predicate : Ident.t -> term -> predicate -> predicate
 
 val map_predicate : (predicate -> predicate) -> predicate -> predicate
 

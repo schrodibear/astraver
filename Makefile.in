@@ -948,7 +948,7 @@ jc/jc_ai.ml: jc/jc_annot_inference.ml jc/jc_annot_fail.ml Makefile
 ############
 
 tags:
-	find . -name "*.ml*" | sort -r | xargs \
+	find src -name "*.ml*" | sort -r | xargs \
 	etags "--regex=/let[ \t]+\([^ \t]+\)/\1/" \
 	      "--regex=/let[ \t]+rec[ \t]+\([^ \t]+\)/\1/" \
 	      "--regex=/and[ \t]+\([^ \t]+\)/\1/" \

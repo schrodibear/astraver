@@ -197,6 +197,10 @@ let rec lexpr m fmt p =
 	(ident m) id ppure_type v (lexpr m) p
   | PPnamed (_, p) ->
       lexprm fmt p
+  | PPlet (id,t,p) ->
+      let m = rename m id in
+      fprintf fmt "@[<hov 2>(let %a = %a in@ %a)@]" (ident m) id 
+	(lexpr m) t (lexpr m) p
 
 and triggers m fmt = function
   | [] -> ()

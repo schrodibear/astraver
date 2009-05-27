@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.41 2009-04-15 13:01:06 melquion Exp $ i*)
+(*i $Id: pretty.ml,v 1.42 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -180,6 +180,11 @@ let rec predicate fmt = function
       let p = subst_in_predicate (subst_onev n id) p in
       fprintf fmt "@[<hov 2>(exists %a:%a.@ %a)@]" 
 	ident id pure_type v predicate p
+  | Plet (id, n, t, p) ->
+      let id = next_away id (predicate_vars p) in
+      let p = subst_in_predicate (subst_onev n id) p in
+      fprintf fmt "@[<hov 2>(let %a = %a in@ %a)@]" 
+	ident id term t predicate p
   | Pnamed (User n, p) ->
       fprintf fmt "@[(%S:@ %a)@]" n predicate p
   | Pnamed (_, p) -> predicate fmt p

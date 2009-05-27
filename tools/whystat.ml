@@ -111,29 +111,8 @@ let rec lexpr avoid s p = match p.pp_desc with
   | PPexists (id,_,p) ->
       let avoid = S.add id avoid in
       lexpr avoid s p
-
-
-let rec lexpr avoid s p = match p.pp_desc with
-  | PPvar id -> 
-      ident avoid s id
-  | PPapp (id, l) ->
-      let s = ident avoid s id in
-      List.fold_left (lexpr avoid) s l
-  | PPconst _
-  | PPtrue 
-  | PPfalse ->
-      s
-  | PPinfix (a, _, b) ->
-      lexpr avoid (lexpr avoid s a) b
-  | PPif (a, b, c) -> 
-      lexpr avoid (lexpr avoid (lexpr avoid s a) b) c
-  | PPprefix (_, a) 
-  | PPnamed (_, a) ->
-      lexpr avoid s a
-  | PPforall (id,_,_,p)
-  | PPexists (id,_,p) ->
-      let avoid = S.add id avoid in
-      lexpr avoid s p
+  | PPlet (id, t, p) ->
+      lexpr (S.add id avoid) (lexpr avoid s t) p
 
 
 let number_of_literals = ref 0
@@ -151,7 +130,8 @@ let rec compute_literal_number  pr = match pr.pp_desc with
   | PPprefix(_,p)
   | PPforall (_, _, _, p)
   | PPexists (_,_,p) 
-  | PPnamed(_,p) ->
+  | PPnamed(_,p)
+  | PPlet (_,_,p) ->
       compute_literal_number  p
   | PPvar(_)   
   | PPconst(_) ->

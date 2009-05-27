@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: mizar.ml,v 1.52 2009-05-20 14:31:29 marche Exp $ i*)
+(*i $Id: mizar.ml,v 1.53 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -253,6 +253,8 @@ let print_predicate fmt p =
 	  print_pure_type t print0 p'
     | Pnamed (_, p) -> (* TODO: print name *)
 	print3 fmt p
+    | Plet (_, n, t, p) ->
+	print3 fmt (subst_term_in_predicate n t p)
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in

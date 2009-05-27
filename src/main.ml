@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.169 2009-04-06 13:29:58 marche Exp $ i*)
+(*i $Id: main.ml,v 1.170 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -403,6 +403,7 @@ let rec occurrences pi a =
   | Por (_, _) -> assert false (* TODO *)
   | Pif (_, _, _) -> assert false (* TODO *)
   | Pvar _ -> assert false (* TODO *)
+  | Plet _ -> assert false (* TODO *)
 
 let rec check_unquantified_clausal_form loc id a =
   match a with

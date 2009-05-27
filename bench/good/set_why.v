@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file ".", line 0, characters 0-0: *)
 (*Why goal*) Lemma p_po_1 : 
   forall (result: bool),
   forall (x: Z),
@@ -14,7 +14,7 @@ destruct result; intuition.
 Save.
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file ".", line 0, characters 0-0: *)
 (*Why goal*) Lemma p2_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
@@ -29,7 +29,7 @@ Proof.
 destruct result; intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file ".", line 0, characters 0-0: *)
 (*Why goal*) Lemma p3_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 0),
@@ -44,7 +44,7 @@ Proof.
 destruct result; intuition.
 Save.
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file ".", line 0, characters 0-0: *)
 (*Why goal*) Lemma p4_po_1 : 
   forall (y: Z),
   forall (HW_1: y >= 1),

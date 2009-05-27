@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: env.ml,v 1.81 2009-02-25 15:03:44 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.82 2009-05-27 07:14:07 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -122,6 +122,8 @@ and find_predicate_vars acc p =
 	find_predicate_vars (find_predicate_vars acc p1) p2
     | Pnamed (_,p) ->
 	find_predicate_vars acc p
+    | Plet (_, _, _, p) ->
+	find_predicate_vars acc p
 
 let generalize_predicate p =
   let l = find_predicate_vars Vset.empty p in
@@ -207,6 +209,7 @@ and subst_predicate s p =
   | Papp (id, tl, i) -> 
       Papp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
   | Pnamed (n, a) -> Pnamed (n, f a)
+  | Plet (x, b, t, p) -> Plet (x, b, subst_term s t, f p)
   | Ptrue | Pfalse | Pvar _ as p -> p
 
 let rec subst_type_v s = function
