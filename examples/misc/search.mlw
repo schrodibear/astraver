@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 (* Search in an array for a null value *)
 
 exception Not_found

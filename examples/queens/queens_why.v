@@ -148,7 +148,7 @@ Admitted.
 Implicit Arguments acc_upd_neq.
 Dp_hint acc_upd_neq.
 
-(*Why predicate*) Definition eq_prefix (A178:Set) (t:(arr A178)) (u:(arr A178)) (i:Z)
+(*Why predicate*) Definition eq_prefix (A104:Set) (t:(arr A104)) (u:(arr A104)) (i:Z)
   := (forall (k:Z), (0 <= k /\ k < i -> (acc t k) = (acc u k))).
 Implicit Arguments eq_prefix.
 

@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 (** Selection sort *)
 
 parameter t : int array

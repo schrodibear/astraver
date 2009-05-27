@@ -12,6 +12,8 @@
 (* Jean-Christophe FILLIATRE, February 98                             *)
 (**********************************************************************)
 
+include "arrays.why"
+
 (* specification *)
 
 logic N : int

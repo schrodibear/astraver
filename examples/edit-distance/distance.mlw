@@ -13,6 +13,8 @@
     complexity is O(n1 * n2), as usual.
 *)
 
+include "arrays.why"
+
 (*s Parameters. Input of the program is composed of two arrays
     of characters, [w1] of size [n1] and [w2] of size [n2]. *)
 

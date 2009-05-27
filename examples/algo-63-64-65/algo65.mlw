@@ -10,6 +10,8 @@ Pages: 321 - 322
 
 ***)
 
+include "arrays.why"
+
 (* Algorithm 63 *)
 
 parameter partition : 

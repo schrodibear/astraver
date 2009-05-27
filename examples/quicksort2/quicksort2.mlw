@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 (* A variant of quicksort, with partitioning a la Bentley *)
 
 (* exchange of two elements *)

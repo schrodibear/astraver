@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 (* maxisort: Maximum sort *)
 
 (* swapping two elements of an array *)

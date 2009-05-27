@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 axiom mean : forall l,u:int. l < u -> l <= (l+u)/2 < u
 
 parameter merge :

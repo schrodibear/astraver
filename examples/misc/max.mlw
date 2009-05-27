@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 (* exemple pour le Coq'Art *)
 
 logic l : int

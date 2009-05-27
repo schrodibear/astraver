@@ -7,6 +7,8 @@
 (*                                                                        *)
 (**************************************************************************)
 
+include "arrays.why"
+
 type A
 
 parameter A_eq_bool : x:A -> y:A -> {} bool { if result then x=y else not x=y }

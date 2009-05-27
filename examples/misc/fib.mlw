@@ -84,6 +84,8 @@ let fib3 (n:int) =
 
 (** Imperative, in an array *)
 
+include "arrays.why"
+
 parameter t : int array
 
 let fib4 (n:int) =

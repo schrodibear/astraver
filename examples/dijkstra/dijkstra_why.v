@@ -25,12 +25,12 @@ Implicit Arguments set_rmv.
 Admitted.
 Implicit Arguments In.
 
-(*Why predicate*) Definition Is_empty (A232:Set) (s:(set A232))
-  := (forall (x:A232), ~(In x s)).
+(*Why predicate*) Definition Is_empty (A158:Set) (s:(set A158))
+  := (forall (x:A158), ~(In x s)).
 Implicit Arguments Is_empty.
 
-(*Why predicate*) Definition Incl (A233:Set) (s1:(set A233)) (s2:(set A233))
-  := (forall (x:A233), ((In x s1) -> (In x s2))).
+(*Why predicate*) Definition Incl (A159:Set) (s1:(set A159)) (s2:(set A159))
+  := (forall (x:A159), ((In x s1) -> (In x s2))).
 Implicit Arguments Incl.
 
 (*Why axiom*) Lemma set_empty_def :

@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 logic v : int
 
 function mean(x : int, y : int) : int = (x + y) / 2
