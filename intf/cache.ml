@@ -94,8 +94,8 @@ let clean seq =
 	Forallb (wp, clean0 p1, clean0 p2)
     | Exists (id1, id2, pt, p) ->
 	Exists (id1, id2, pt, clean0 p)
-    | Plet (x, n, t, p) ->
-	Plet (x, n, t, clean0 p)
+    | Plet (x, n, pt, t, p) ->
+	Plet (x, n, pt, t, clean0 p)
     | Pnamed (_, p) ->
 	clean0 p
   and clean1 = function 
