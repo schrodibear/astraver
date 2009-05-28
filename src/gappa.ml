@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.43 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: gappa.ml,v 1.44 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -312,7 +312,7 @@ let rec gpred def = function
       end
   | Pnamed (_, p) ->
       gpred def p
-  | Plet (_, n, t, p) ->
+  | Plet (_, n, _, t, p) ->
       gpred def (subst_term_in_predicate n t p)
   | Pnot p ->
       begin match gpred (not def) p with

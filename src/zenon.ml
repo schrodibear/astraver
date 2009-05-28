@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: zenon.ml,v 1.35 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: zenon.ml,v 1.36 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 (*s Zenon output *)
 
@@ -226,7 +226,7 @@ let rec print_predicate fmt = function
 	ident id' print_pure_type t print_predicate p'
   | Pnamed (_, p) -> (* TODO: print name *)
       print_predicate fmt p
-  | Plet (_, n, t, p) ->
+  | Plet (_, n, _, t, p) ->
       print_predicate fmt (subst_term_in_predicate n t p)
 
 let cc_external_type = function

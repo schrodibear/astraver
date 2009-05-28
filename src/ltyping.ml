@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ltyping.ml,v 1.76 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.77 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -256,7 +256,7 @@ and desc_predicate loc lab env = function
   | PPlet (x, e1, e2) ->
       let t1, ty = term lab env e1 in
       let env = Env.add_logic x ty env in
-      plet x t1 (predicate lab env e2)
+      plet x ty t1 (predicate lab env e2)
 
 and type_pvar loc env x =
   if is_at x then 

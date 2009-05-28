@@ -168,6 +168,14 @@ let plunge fv term pt =
   in
     Tapp (Ident.create sort,[leftt pt; term],[])
 
+(* Function that strips the top most sort application, for terms bound
+   in let-ins *)
+let strip_topmost t =
+  match t with
+    | Tapp (symb, [encoded_ty; encoded_t], []) when symb = Ident.create sort ->
+	encoded_t
+    | _ -> t
+
 let get_arity id =
   let arity =
     try List.assoc (Ident.string id) !arities
@@ -210,7 +218,8 @@ let instantiate_arity id inst =
    direct superterm. *)
 let rec translate_term fv lv rt = function
   | Tvar id as t ->
-      let pt = try List.assoc id lv with e -> raise e in
+      let pt = try List.assoc id lv with e -> 
+	(Printf.eprintf "variable %s\n" (Ident.string id); raise e) in
 	(match is_const rt, is_const pt with
 	     true, true -> t
 	   | true, false -> Tapp (Ident.create (s2c rt), [plunge fv t pt], [])
@@ -262,6 +271,9 @@ let rec translate_pred fv lv = function
       let _ = instantiate_arity id inst in
       let arity,_ = get_arity id in
 	Papp (id, List.map2 (translate_term fv lv) arity tl, [])
+  | Plet (id, n, pt, t, p) -> 
+      let t' = strip_topmost (translate_term fv lv pt t) in
+	Plet (id, n, sortify ut pt, t', translate_pred fv ((n,pt)::lv) p)
   | Pimplies (iswp, p1, p2) ->
       Pimplies (iswp, translate_pred fv lv p1, translate_pred fv lv p2)
   | Pif (t, p1, p2) ->

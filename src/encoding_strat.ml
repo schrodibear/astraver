@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_strat.ml,v 1.23 2009-04-01 14:08:33 marche Exp $ i*)
+(*i $Id: encoding_strat.ml,v 1.24 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 open Cc
 open Logic
@@ -130,6 +130,15 @@ let plunge fv term pt =
 	[leftt pt; term],
 	[])
 
+(* Function that strips the top most sort application, for terms bound
+   in let-ins *)
+let strip_topmost t =
+  match t with
+    | Tapp (symb, [encoded_ty; encoded_t], []) 
+	when symb = Ident.create (prefix^"sort") ->
+	encoded_t
+    | _ -> t
+
 (* Ground instanciation of an arity (to be plunged under) *)
 let instantiate_arity id inst =
   let arity = 
@@ -193,6 +202,9 @@ let rec translate_pred fv lv = function
 (*       Papp (Ident.create ("neq"^suffix), [translate_term fv lv a; translate_term fv lv b], []) *)
   | Papp (id, tl, inst) ->
       Papp (id, List.map (translate_term fv lv) tl, [])
+  | Plet (id, n, pt, t, p) -> 
+      let t' = strip_topmost (translate_term fv lv t) in
+	Plet (id, n, ut, t', translate_pred fv ((n,pt)::lv) p)
   | Pimplies (iswp, p1, p2) ->
       Pimplies (iswp, translate_pred fv lv p1, translate_pred fv lv p2)
   | Pif (t, p1, p2) ->

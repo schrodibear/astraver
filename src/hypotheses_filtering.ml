@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: hypotheses_filtering.ml,v 1.70 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: hypotheses_filtering.ml,v 1.71 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 (**
    This module provides a quick way to filter hypotheses of 
@@ -186,7 +186,7 @@ let free_vars_of p =
     | Pnot a -> collect qvars a;
     | Forall (_, id, _, _, _, p) | Exists (id, _, _, p) ->
         collect (VarStringSet.add (PureVar (Ident.string id)) qvars) p
-    | Plet (_, n, t, p)  ->
+    | Plet (_, n, _, t, p)  ->
         collect qvars (subst_term_in_predicate n t p) (* FIXME? *)
     | Pnamed (_, p) -> collect qvars p
     | Pvar _ | Pfalse | Ptrue -> ()
@@ -359,7 +359,7 @@ let cnf fm =
     | Exists (a, b, c, d) -> Exists (a, b, c, (rm_pnamed d))
     | Forallb (a, b, c) -> Forallb (a, (rm_pnamed b), (rm_pnamed c))
     | Forall (a, b, c, d, e, f) -> Forall (a, b, c, d, e, (rm_pnamed f))
-    | Plet (id, x, t, p) -> Plet (id, x, t, rm_pnamed p)
+    | Plet (id, x, pt, t, p) -> Plet (id, x, pt, t, rm_pnamed p)
     | Pnot a -> rm_pnamed a
     | Piff (a, b) -> Piff (rm_pnamed a, rm_pnamed b)
     | Por (c, d) -> Por (rm_pnamed c, rm_pnamed d)
@@ -559,7 +559,7 @@ let sets_of_vars f =
           collect (VarStringSet.add (PureVar (Ident.string id)) qvars) p
     | Pnamed (_, p) ->
         collect qvars p
-    | Plet (_, n, t, p) ->
+    | Plet (_, n, _, t, p) ->
 	collect qvars (subst_term_in_predicate n t p)
     | Pvar _ | Pfalse | Ptrue -> ()
   in
@@ -1564,7 +1564,7 @@ let build_pred_graph decl =
     match p with
       | Forall (_, _, _, _, _, p) 
       | Exists (_, _, _, p) -> get_abstract_clauses p
-      | Plet (_, n, t, p) ->
+      | Plet (_, n, _, t, p) ->
 	  get_abstract_clauses (subst_term_in_predicate n t p)
       | Pand (_, _, p1, p2) ->
 	  AbstractClauseSet.union
@@ -2024,7 +2024,7 @@ let filter_acc_variables l concl_rep selection_strategy pred_symb =
             if debug then Format.printf "   -> Quantif %s \n" (Ident.string id)
           end;
           all_v p ((Ident.string id):: qvars)
-      | Plet (_, n, t, p) ->
+      | Plet (_, n, _, t, p) ->
 	  all_v (subst_term_in_predicate n t p) qvars
       | Piff (p1, p2)
       | Pand (_, _, p1, p2)

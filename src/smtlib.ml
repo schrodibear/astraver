@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.60 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: smtlib.ml,v 1.61 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -244,7 +244,7 @@ let rec print_predicate fmt = function
 	print_bvar id' print_pure_type t print_predicate p'
   | Pnamed (_, p) -> (* TODO: print name *)
       print_predicate fmt p
-  | Plet (_, n, t, p) ->
+  | Plet (_, n, _, t, p) ->
       let id' = bound_variable n in
       let s = subst_onev n id' in
       let t' = subst_in_term s t in

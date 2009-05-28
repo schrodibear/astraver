@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.165 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.166 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 open Logic
 open Ident
@@ -159,7 +159,7 @@ and print_predicate fmt = function
       fprintf fmt "@[%s:@ %a@]" n print_predicate p
   | Pnamed (Internal n, p) ->
       fprintf fmt "@[(%d):@ %a@]" n print_predicate p
-  | Plet (_, x, t, p) ->
+  | Plet (_, x, _, t, p) ->
       fprintf fmt "@[(let %a = %a in@ %a)@]" Ident.print x print_term t
 	print_predicate p
 
@@ -617,7 +617,7 @@ and occur_predicate id = function
   | Forall (_,_,_,_,tl,a) -> occur_triggers id tl || occur_predicate id a
   | Exists (_,_,_,a) -> occur_predicate id a
   | Pnamed (_, a) -> occur_predicate id a
-  | Plet (_, _, t, a) -> occur_term id t || occur_predicate id a
+  | Plet (_, _, _, t, a) -> occur_term id t || occur_predicate id a
 
 let occur_assertion id a = occur_predicate id a.a_value
 
@@ -748,12 +748,12 @@ let exists x v p =
   let p = subst_in_predicate (subst_onev x n) p in
   Exists (x, n, mlize_type v, p)
 
-let plet x t p =
+let plet x pt t p =
   let n = Ident.bound x in
   let s = subst_onev x n in
   let t = subst_in_term s t in
   let p = subst_in_predicate s p in
-  Plet (x, n, t, p)
+  Plet (x, n, pt, t, p)
 
 (* decomposing universal quantifiers, renaming variables on the fly *)
 

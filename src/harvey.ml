@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: harvey.ml,v 1.56 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.57 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -216,7 +216,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(exists %a@ %a)@]" ident id' print_predicate p'
   | Pnamed (_, p) -> (* TODO: print name *)
       print_predicate fmt p
-  | Plet (_, n, t, p) ->
+  | Plet (_, n, _, t, p) ->
       print_predicate fmt (subst_term_in_predicate n t p)
 
 let print_axiom fmt id p =

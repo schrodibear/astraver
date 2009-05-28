@@ -259,7 +259,7 @@ let rec print_predicate fmt = function
   | Pnamed (User n, p) ->
       fprintf fmt "@[(* %s: *)@ %a@]" (String.escaped n) print_predicate p
   | Pnamed (_, p) -> print_predicate fmt p
-  | Plet (_, n, t, p) ->
+  | Plet (_, n, _, t, p) ->
       print_predicate fmt (subst_term_in_predicate n t p)
   
 let print_sequent fmt (hyps,concl) =

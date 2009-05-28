@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pvs.ml,v 1.102 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.103 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 open Logic
 open Logic_decl
@@ -271,7 +271,7 @@ let print_predicate fmt p =
 	print0 fmt p'; fprintf fmt "@])"
     | Pnamed (_, p) -> (* TODO: print name *)
 	print3 fmt p
-    | Plet (_, n, t, p) ->
+    | Plet (_, n, _, t, p) ->
 	print3 fmt (subst_term_in_predicate n t p)
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p

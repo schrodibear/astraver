@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: misc.ml,v 1.125 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.126 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 open Options
 open Ident
@@ -284,7 +284,7 @@ let rec collect_pred s = function
   | Forall (_, _, _, _, _, p) -> collect_pred s p
   | Exists (_, _, _, p) -> collect_pred s p
   | Pnamed (_, p) -> collect_pred s p
-  | Plet (_, _, t, p) -> collect_pred (collect_term s t) p
+  | Plet (_, _, _, t, p) -> collect_pred (collect_term s t) p
 
 let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
@@ -310,7 +310,7 @@ let rec map_predicate f = function
   | Exists (id, b, v, p) -> Exists (id, b, v, f p)
   | Forallb (w, a, b) -> Forallb (w, f a, f b)
   | Pnamed (n, a) -> Pnamed (n, f a)
-  | Plet (id, b, t, p) -> Plet (id, b, t, f p)
+  | Plet (id, b, pt, t, p) -> Plet (id, b, pt, t, f p)
   | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
 
 let rec tsubst_in_term s = function
@@ -330,8 +330,8 @@ let rec tsubst_in_predicate s = function
   | Forall (w, id, b, v, tl, p) -> 
       Forall (w, id, b, v, List.map (List.map (tsubst_in_pattern s)) tl,
 	      tsubst_in_predicate s p)
-  | Plet (id, n, t, p) ->
-      Plet (id, n, tsubst_in_term s t, tsubst_in_predicate s p)
+  | Plet (id, n, pt, t, p) ->
+      Plet (id, n, pt, tsubst_in_term s t, tsubst_in_predicate s p)
   | p -> 
       map_predicate (tsubst_in_predicate s) p
 
@@ -368,8 +368,8 @@ let rec subst_in_predicate s = function
   | Forall (w, id, b, v, tl, p) -> 
       Forall (w, id, b, v, List.map (List.map (subst_in_pattern s)) tl,
 	      subst_in_predicate s p)
-  | Plet (id, n, t, p) ->
-      Plet (id, n, subst_in_term s t, subst_in_predicate s p)
+  | Plet (id, n, pt, t, p) ->
+      Plet (id, n, pt, subst_in_term s t, subst_in_predicate s p)
   | p -> 
       map_predicate (subst_in_predicate s) p
 
@@ -658,7 +658,7 @@ module Size = struct
     | Forall (_,_,_,_,_,p) -> 1 + predicate p
     | Exists (_,_,_,p) -> 1 + predicate p
     | Forallb (_,p1,p2) -> 1+ predicate p1 + predicate p2
-    | Plet (_, _, t, p) -> 1 + term t + predicate p
+    | Plet (_, _, _, t, p) -> 1 + term t + predicate p
     | Pnamed (_,p) -> predicate p
 
   let assertion a = predicate a.a_value

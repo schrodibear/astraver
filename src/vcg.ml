@@ -250,7 +250,7 @@ let rec unif_pred u = function
   | Exists (_, n, _, p), Exists (_, n', _, p') ->
       let p'n = subst_in_predicate (subst_onev n' n) p' in 
       unif_pred u (p, p'n)
-  | Plet (_, n, t, p), Plet (_, n', t', p') ->
+  | Plet (_, n, _, t, p), Plet (_, n', _, t', p') ->
       let u = unif_term u (t, t') in
       let p'n = subst_in_predicate (subst_onev n' n) p' in 
       unif_pred u (p, p'n)

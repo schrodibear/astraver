@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: encoding_pred.ml,v 1.15 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: encoding_pred.ml,v 1.16 2009-05-28 10:56:49 lescuyer Exp $ i*)
 
 open Cc
 open Logic
@@ -197,6 +197,9 @@ let rec push d =
 	| Forall (iswp, id, n, pt, tl, p) ->
 	    Forall (iswp, id, n, ut, tl,
 		    Pimplies(false, plunge fv (Tvar n) pt, translate_eq p))
+	| Plet (id, n, pt, t, p) -> 
+	    Plet (id, n, pt, t, 
+		  Pimplies(false, plunge fv (Tvar n) pt, translate_eq p)) 
 	| Forallb (iswp, p1, p2) ->
 	    Forallb (iswp, translate_eq p1, translate_eq p2)
 	| Exists (id, n, pt, p) ->
@@ -234,6 +237,9 @@ let rec push d =
 	| Forall (iswp, id, n, pt, tl, p) ->
 	    Forall (iswp, id, n, ut, tl,
 		    Pimplies(false, plunge fv (Tvar n) pt, translate_eq p))
+	| Plet (id, n, pt, t, p) -> 
+	    Plet (id, n, pt, t, 
+		  Pimplies(false, plunge fv (Tvar n) pt, translate_eq p)) 
 	| Forallb (iswp, p1, p2) ->
 	    Forallb (iswp, translate_eq p1, translate_eq p2)
 	| Exists (id, n, pt, p) ->
