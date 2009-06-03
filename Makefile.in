@@ -74,7 +74,7 @@ ATPLIB = -I atp
 COQC7  = @COQC7@
 COQC8  = @COQC8@
 COQDEP = @COQDEP@
-COQLIB = @COQLIB@
+COQLIB = "@COQLIB@"
 
 VO7= lib/coq-v7/WhyInt.vo lib/coq-v7/WhyArrays.vo  lib/coq-v7/WhyBool.vo \
      lib/coq-v7/WhyTuples.vo  lib/coq-v7/WhyPermut.vo \

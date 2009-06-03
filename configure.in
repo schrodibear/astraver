@@ -305,8 +305,7 @@ else
     if test "$COQDEP" = true ; then
 	AC_MSG_ERROR(Cannot find coqdep.)
     fi
-    COQLIB=`$COQC -where`
-
+    COQLIB=`$COQC -where | sed -e 's|\\\|/|g' -e 's| |\\ |g'`
     AC_MSG_CHECKING(Coq version)
     COQVERSION=`$COQC -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
 
@@ -335,7 +334,7 @@ else
 	AC_MSG_CHECKING(Coq floating-point library)
  	case $COQVERSION in
 	   8.2*|trunk)
- 	      if test -f $COQLIB/user-contrib/AllFloat.vo; then
+ 	      if test -f "$COQLIB/user-contrib/AllFloat.vo"; then
 	        AC_MSG_RESULT(yes)
 	  	WHYFLOATS="lib/coq/WhyFloats.vo lib/coq/JessieFloats.vo"
 		COQFLOATSMSG=yes
@@ -343,7 +342,8 @@ else
 	        AC_MSG_RESULT(no)
 	        COQFLOATSMSG="no (Coq library AllFloat.vo not found)"
 	      fi
- 	      if test -f $COQLIB/user-contrib/Gappa/Gappa_tactic.vo; then
+	      AC_MSG_CHECKING(Coq Gappa library)
+ 	      if test -f "$COQLIB/user-contrib/Gappa/Gappa_tactic.vo"; then
 	        AC_MSG_RESULT(yes)
 	  	WHYFLOATS="$WHYFLOATS lib/coq/JessieGappa.vo"
 		COQGAPPAMSG=yes
