@@ -4,6 +4,10 @@ val fold_term :
  ('a -> 'b Jc_ast.term -> 'a) -> 'a -> 'b Jc_ast.term -> 'a
 
 (* spec ? *)
+val fold_term_in_assertion :
+  ('a -> 'b Jc_ast.term -> 'a) -> 'a -> 'b Jc_ast.assertion -> 'a
+
+(* spec ? *)
 val iter_term : ('a Jc_ast.term -> unit) -> 'a Jc_ast.term -> unit
 
 (* spec ? *)
@@ -116,6 +120,25 @@ val map_pexpr :
   Jc_ast.pexpr -> Jc_ast.pexpr
 
 
+(* spec ?
+   This function is used only once, in Jc_annot_inference
+   -> should be erased
+*)
+val map_expr :
+  ?before:((Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr ->
+             (Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr) ->
+  ?after:(Jc_constructors.expr_with -> Jc_constructors.expr_with) ->
+  (Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr ->
+  (Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr
+
+val replace_sub_expr :
+  < mark : string; node : Jc_fenv.expr_node;
+  original_type : Jc_env.jc_type; pos : Loc.position;
+  region : Jc_env.region; typ : Jc_env.jc_type; .. > ->
+    (Jc_fenv.logic_info, Jc_fenv.fun_info) Jc_ast.expr list ->
+    Jc_constructors.expr_with
+
+
 module ITerm : sig
   type t = Jc_constructors.term
   val iter : (t -> unit) -> t -> unit
@@ -133,6 +156,8 @@ module IExpr : sig
 
   (* spec ? *)
   val fold_left : ('a -> t -> 'a) -> 'a -> t -> 'a
+
+  val subs : t -> t list 
 
 end
 

@@ -559,14 +559,15 @@ let fold_sub_term_in_tag it f acc tag =
     | JCTtag _ | JCTbottom -> acc
     | JCTtypeof(t,_st) -> it f acc t
 
-(*
-
 let fold_term_in_tag f acc tag =
   fold_sub_term_in_tag fold_term f acc tag
+
+(*
 
 let fold_rec_term_in_tag f acc tag =
   fold_sub_term_in_tag fold_rec_term f acc tag
 
+*)
 let rec fold_term_in_assertion f acc a =
   match a#node with
     | JCAtrue | JCAfalse -> acc
@@ -589,7 +590,7 @@ let rec fold_term_in_assertion f acc a =
 	let acc = fold_term f acc t1 in
 	let acc = fold_term_in_assertion f acc a1 in
 	fold_term_in_assertion f acc a2
-    | JCAnot a1 | JCAquantifier(_,_,a1) | JCAold a1 | JCAat(a1,_) ->
+    | JCAnot a1 | JCAquantifier(_,_,_,a1) | JCAold a1 | JCAat(a1,_) ->
 	fold_term_in_assertion f acc a1
     | JCAmatch(t, pal) ->
 	let acc = fold_term f acc t in
@@ -626,7 +627,6 @@ let rec fold_term_in_assertion f acc a =
 (* 	  acc pal *)
 (*   in *)
 (*   fa acc a *)
-*)
 
 
 let rec fold_sub_term_and_assertion itt ita ft fa acc a =
@@ -928,18 +928,6 @@ let rec map_term_and_assertion fa ft a =
   in
   fa (new assertion_with ~node:anode a)
 
-(*****************************************************************************)
-(* Specific iterators on terms.                                              *)
-(*****************************************************************************)
-
-let raw_sub_term subt t =
-  fold_term (fun acc t -> acc || TermOrd.equal subt t) false t
-
-let raw_sub_term_in_assertion subt a =
-  fold_term_in_assertion (fun acc t -> acc || TermOrd.equal subt t) false a
-
-let raw_strict_sub_term subt t =
-  TermOrd.compare subt t <> 0 && raw_sub_term subt t
 *)
 
 (*****************************************************************************)
@@ -975,6 +963,7 @@ let rec fold_pattern f acc p =
     | JCPvar _
     | JCPany
     | JCPconst _ -> ()
+*)
 
 (*****************************************************************************)
 (* General iterators on expressions.                                         *)
@@ -1070,7 +1059,6 @@ let replace_sub_expr e el =
 	let e1 = as1 el in JCEunpack(st1,e1,st2)
   in
   new expr_with ~node:enode e
-*)
 
 module ExprAst = struct
   type t = Jc_constructors.expr
@@ -1121,13 +1109,10 @@ end
 
 module IExpr = Iterators(ExprAst)
 
-(*
-
 let rec map_expr ?(before = fun x -> x) ?(after = fun x -> x) e =
   let e = before e in
   let elist = List.map (map_expr ~before ~after) (ExprAst.subs e) in
   after (replace_sub_expr e elist)
-*)
 
 let fold_sub_expr_and_term_and_assertion 
     itt ita itl itls ite ft fa fl fls fe acc e =
