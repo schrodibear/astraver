@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.mli,v 1.12 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: smtlib.mli,v 1.13 2009-06-05 10:36:55 marche Exp $ i*)
 
 open Cc
 
@@ -33,6 +33,6 @@ val reset : unit -> unit
 
 val push_decl : Logic_decl.t -> unit
 
-val output_file : string -> unit
+val output_file : ?logic:string -> string -> unit
 
 

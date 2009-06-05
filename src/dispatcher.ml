@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.36 2009-02-10 13:44:43 marche Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.37 2009-06-05 10:36:55 marche Exp $ i*)
 
 open Options
 open Vcg
@@ -147,7 +147,9 @@ let output_file ?encoding p (elems,o) =
     | Harvey -> Harvey.output_file f; f ^ "_why.rv"
     | Cvcl -> Cvcl.output_file f; f ^ "_why.cvc"
     | Zenon -> Zenon.output_file f; f ^ "_why.znn"
-    | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.output_file f; f ^ "_why.smt"
+    | Rvsat | Yices | Cvc3 -> 
+	Smtlib.output_file ~logic:"AUFLIRA" f; f ^ "_why.smt"
+    | Z3 -> Smtlib.output_file f; f ^ "_why.smt"
     | Ergo | ErgoSelect -> Pretty.output_file f; f ^ "_why.why"
     | Graph -> Pretty.output_file f; f ^ "_why.why"
     | Gappa -> 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.61 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: smtlib.ml,v 1.62 2009-06-05 10:36:55 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -344,13 +344,18 @@ let output_elem fmt = function
 
    
 
-let output_file f = 
+let output_file ?logic f = 
   let fname = f ^ "_why.smt" in
   let cout = open_out fname in
   let fmt = formatter_of_out_channel cout in
   fprintf fmt "(benchmark %a@\n" idents (Filename.basename f);
   fprintf fmt "  :status unknown@\n";
-  fprintf fmt "  :logic AUFLIA@\n";
+  begin
+    match logic with
+      | None -> ()
+      | Some l -> 
+	  fprintf fmt "  :logic %s@\n" l;
+  end;
 (*   if (Options.get_types_encoding() != SortedStratified) then   *)
   begin
     fprintf fmt "  :extrasorts (c_Boolean)@\n";
@@ -367,16 +372,6 @@ let output_file f =
   fprintf fmt "  :extrafuns ((div_int Int Int Int))@\n";
   if not modulo then begin 
     fprintf fmt "  :extrafuns ((modulo Int Int Int))@\n";
-(* Claude: Why adding such an axiom here ??? --> prelude_why.why ?
-    fprintf fmt "  :assumption
-                   (forall (?x Int) (?y Int) 
-                              (and (implies (not (= ?y 0)) (<= 0 (modulo ?x ?y)))
-                                   (implies (< 0 ?y ) (<   (modulo ?x ?y) ?y))
-                                   (implies (< ?y 0) 
-                                      (< (modulo ?x ?y) (- 0 ?y)))
-                                   (implies (not (= ?y 0)) (exists (?t Int)
-                                      (= ?x (+ (* ?t ?y) (modulo ?x ?y )))))))@\n";
-*)
   end;
   iter (output_elem fmt);
   
