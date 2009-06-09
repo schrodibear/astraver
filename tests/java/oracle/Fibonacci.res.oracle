@@ -397,6 +397,18 @@ clean:
 	rm -f coq/*.vo
 
 ========== file tests/java/Fibonacci.loc ==========
+[JC_40]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_41]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_1]
 file = "HOME/tests/java/Fibonacci.jc"
 line = 54
@@ -582,16 +594,16 @@ begin = -1
 end = -1
 
 [JC_25]
+file = "HOME/tests/java/Fibonacci.jc"
+line = 82
+begin = 21
+end = 716
+
+[JC_26]
 file = "HOME/tests/java/Fibonacci.java"
 line = 30
 begin = 18
 end = 21
-
-[JC_26]
-file = "HOME/tests/java/Fibonacci.java"
-line = 29
-begin = 20
-end = 26
 
 [cons_Fibonacci_ensures_default]
 name = "Constructor of class Fibonacci"
@@ -604,20 +616,20 @@ end = -1
 [JC_27]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
-begin = 25
-end = 31
+begin = 20
+end = 26
 
 [JC_28]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
-begin = 35
-end = 47
+begin = 25
+end = 31
 
 [JC_29]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
-begin = 51
-end = 61
+begin = 35
+end = 47
 
 [Fibonacci_Fib_ensures_default]
 name = "Method Fib"
@@ -630,14 +642,14 @@ end = 26
 [JC_30]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
-begin = 20
+begin = 51
 end = 61
 
 [JC_31]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.java"
+line = 29
+begin = 20
+end = 61
 
 [JC_32]
 file = "HOME/"
@@ -646,10 +658,10 @@ begin = -1
 end = -1
 
 [JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Fibonacci.jc"
+line = 82
+begin = 21
+end = 716
 
 [JC_34]
 file = "HOME/"
@@ -1308,11 +1320,11 @@ let Fibonacci_Fib_ensures_default =
        try
         while true do
         { invariant
-            (JC_30:
-            ((JC_26: le_int((0), i))
-            and ((JC_27: le_int(i, n_0_0))
-                and ((JC_28: isfib(add_int(i, (1)), x_0_0))
-                    and (JC_29: isfib(i, y))))))
+            (JC_31:
+            ((JC_27: le_int((0), i))
+            and ((JC_28: le_int(i, n_0_0))
+                and ((JC_29: isfib(add_int(i, (1)), x_0_0))
+                    and (JC_30: isfib(i, y))))))
            }
          begin
            [ { } unit { true } ];
@@ -1375,7 +1387,7 @@ let Fibonacci_Fib_safety =
        (let i = ref (K_2: (0)) in
        try
         while true do
-        { invariant (JC_24: true) variant (JC_25 : sub_int(n_0_0, i)) }
+        { invariant (JC_25: true) variant (JC_26 : sub_int(n_0_0, i)) }
          begin
            [ { } unit reads i,x_0_0,y
              { (JC_23:
@@ -1432,7 +1444,7 @@ let cons_Fibonacci_ensures_default =
  fun (this_0 : Object pointer) ->
   { valid_struct_Fibonacci(this_0, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_36: true) }
+  { (JC_38: true) }
 
 let cons_Fibonacci_safety =
  fun (this_0 : Object pointer) ->
@@ -2712,10 +2724,10 @@ goal Fibonacci_Fib_ensures_default_po_7:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_30":
-  (("JC_26": (0 <= i)) and
-   (("JC_27": (i <= n_0_0)) and
-    (("JC_28": isfib((i + 1), x_0_0)) and ("JC_29": isfib(i, y)))))) ->
+  ("JC_31":
+  (("JC_27": (0 <= i)) and
+   (("JC_28": (i <= n_0_0)) and
+    (("JC_29": isfib((i + 1), x_0_0)) and ("JC_30": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -2725,7 +2737,7 @@ goal Fibonacci_Fib_ensures_default_po_7:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_30": ("JC_28": ("JC_28": isfib((i0 + 1), x_0_0_0))))
+  ("JC_31": ("JC_29": ("JC_29": isfib((i0 + 1), x_0_0_0))))
 
 ========== file tests/java/why/Fibonacci_po11.why ==========
 goal Fibonacci_Fib_ensures_default_po_8:
@@ -2734,10 +2746,10 @@ goal Fibonacci_Fib_ensures_default_po_8:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_30":
-  (("JC_26": (0 <= i)) and
-   (("JC_27": (i <= n_0_0)) and
-    (("JC_28": isfib((i + 1), x_0_0)) and ("JC_29": isfib(i, y)))))) ->
+  ("JC_31":
+  (("JC_27": (0 <= i)) and
+   (("JC_28": (i <= n_0_0)) and
+    (("JC_29": isfib((i + 1), x_0_0)) and ("JC_30": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -2747,7 +2759,7 @@ goal Fibonacci_Fib_ensures_default_po_8:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_30": ("JC_29": ("JC_29": isfib(i0, y0))))
+  ("JC_31": ("JC_30": ("JC_30": isfib(i0, y0))))
 
 ========== file tests/java/why/Fibonacci_po12.why ==========
 goal Fibonacci_Fib_ensures_default_po_9:
@@ -2756,10 +2768,10 @@ goal Fibonacci_Fib_ensures_default_po_9:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_30":
-  (("JC_26": (0 <= i)) and
-   (("JC_27": (i <= n_0_0)) and
-    (("JC_28": isfib((i + 1), x_0_0)) and ("JC_29": isfib(i, y)))))) ->
+  ("JC_31":
+  (("JC_27": (0 <= i)) and
+   (("JC_28": (i <= n_0_0)) and
+    (("JC_29": isfib((i + 1), x_0_0)) and ("JC_30": isfib(i, y)))))) ->
   (i >= n_0_0) ->
   forall return:int.
   (return = y) ->
@@ -2772,7 +2784,7 @@ goal Fibonacci_Fib_safety_po_1:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_24": true) ->
+  ("JC_25": true) ->
   ("JC_23":
   (("JC_19": (0 <= i)) and
    (("JC_20": (i <= n_0_0)) and
@@ -2786,7 +2798,7 @@ goal Fibonacci_Fib_safety_po_1:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (0 <= ("JC_25": (n_0_0 - i)))
+  (0 <= ("JC_26": (n_0_0 - i)))
 
 ========== file tests/java/why/Fibonacci_po14.why ==========
 goal Fibonacci_Fib_safety_po_2:
@@ -2795,7 +2807,7 @@ goal Fibonacci_Fib_safety_po_2:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_24": true) ->
+  ("JC_25": true) ->
   ("JC_23":
   (("JC_19": (0 <= i)) and
    (("JC_20": (i <= n_0_0)) and
@@ -2809,7 +2821,7 @@ goal Fibonacci_Fib_safety_po_2:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (("JC_25": (n_0_0 - i0)) < ("JC_25": (n_0_0 - i)))
+  (("JC_26": (n_0_0 - i0)) < ("JC_26": (n_0_0 - i)))
 
 ========== file tests/java/why/Fibonacci_po1.why ==========
 goal isfib_2_1:
@@ -2827,25 +2839,25 @@ goal not_isfib_2_2:
 goal Fibonacci_Fib_ensures_default_po_1:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_30": ("JC_26": ("JC_26": (0 <= 0))))
+  ("JC_31": ("JC_27": ("JC_27": (0 <= 0))))
 
 ========== file tests/java/why/Fibonacci_po5.why ==========
 goal Fibonacci_Fib_ensures_default_po_2:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_30": ("JC_27": ("JC_27": (0 <= n_0_0))))
+  ("JC_31": ("JC_28": ("JC_28": (0 <= n_0_0))))
 
 ========== file tests/java/why/Fibonacci_po6.why ==========
 goal Fibonacci_Fib_ensures_default_po_3:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_30": ("JC_28": ("JC_28": isfib((0 + 1), 1))))
+  ("JC_31": ("JC_29": ("JC_29": isfib((0 + 1), 1))))
 
 ========== file tests/java/why/Fibonacci_po7.why ==========
 goal Fibonacci_Fib_ensures_default_po_4:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_30": ("JC_29": ("JC_29": isfib(0, 0))))
+  ("JC_31": ("JC_30": ("JC_30": isfib(0, 0))))
 
 ========== file tests/java/why/Fibonacci_po8.why ==========
 goal Fibonacci_Fib_ensures_default_po_5:
@@ -2854,10 +2866,10 @@ goal Fibonacci_Fib_ensures_default_po_5:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_30":
-  (("JC_26": (0 <= i)) and
-   (("JC_27": (i <= n_0_0)) and
-    (("JC_28": isfib((i + 1), x_0_0)) and ("JC_29": isfib(i, y)))))) ->
+  ("JC_31":
+  (("JC_27": (0 <= i)) and
+   (("JC_28": (i <= n_0_0)) and
+    (("JC_29": isfib((i + 1), x_0_0)) and ("JC_30": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -2867,7 +2879,7 @@ goal Fibonacci_Fib_ensures_default_po_5:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_30": ("JC_26": ("JC_26": (0 <= i0))))
+  ("JC_31": ("JC_27": ("JC_27": (0 <= i0))))
 
 ========== file tests/java/why/Fibonacci_po9.why ==========
 goal Fibonacci_Fib_ensures_default_po_6:
@@ -2876,10 +2888,10 @@ goal Fibonacci_Fib_ensures_default_po_6:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_30":
-  (("JC_26": (0 <= i)) and
-   (("JC_27": (i <= n_0_0)) and
-    (("JC_28": isfib((i + 1), x_0_0)) and ("JC_29": isfib(i, y)))))) ->
+  ("JC_31":
+  (("JC_27": (0 <= i)) and
+   (("JC_28": (i <= n_0_0)) and
+    (("JC_29": isfib((i + 1), x_0_0)) and ("JC_30": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -2889,7 +2901,7 @@ goal Fibonacci_Fib_ensures_default_po_6:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_30": ("JC_27": ("JC_27": (i0 <= n_0_0))))
+  ("JC_31": ("JC_28": ("JC_28": (i0 <= n_0_0))))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Fibonacci.why
@@ -5211,22 +5223,22 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 goal Fibonacci_Fib_ensures_default_po_1:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_30": ("JC_26": ("JC_26": (0 <= 0))))
+  ("JC_31": ("JC_27": ("JC_27": (0 <= 0))))
 
 goal Fibonacci_Fib_ensures_default_po_2:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_30": ("JC_27": ("JC_27": (0 <= n_0_0))))
+  ("JC_31": ("JC_28": ("JC_28": (0 <= n_0_0))))
 
 goal Fibonacci_Fib_ensures_default_po_3:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_30": ("JC_28": ("JC_28": isfib((0 + 1), 1))))
+  ("JC_31": ("JC_29": ("JC_29": isfib((0 + 1), 1))))
 
 goal Fibonacci_Fib_ensures_default_po_4:
   forall n_0_0:int.
   ("JC_13": (n_0_0 >= 0)) ->
-  ("JC_30": ("JC_29": ("JC_29": isfib(0, 0))))
+  ("JC_31": ("JC_30": ("JC_30": isfib(0, 0))))
 
 goal Fibonacci_Fib_ensures_default_po_5:
   forall n_0_0:int.
@@ -5234,10 +5246,10 @@ goal Fibonacci_Fib_ensures_default_po_5:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_30":
-  (("JC_26": (0 <= i)) and
-   (("JC_27": (i <= n_0_0)) and
-    (("JC_28": isfib((i + 1), x_0_0)) and ("JC_29": isfib(i, y)))))) ->
+  ("JC_31":
+  (("JC_27": (0 <= i)) and
+   (("JC_28": (i <= n_0_0)) and
+    (("JC_29": isfib((i + 1), x_0_0)) and ("JC_30": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -5247,7 +5259,7 @@ goal Fibonacci_Fib_ensures_default_po_5:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_30": ("JC_26": ("JC_26": (0 <= i0))))
+  ("JC_31": ("JC_27": ("JC_27": (0 <= i0))))
 
 goal Fibonacci_Fib_ensures_default_po_6:
   forall n_0_0:int.
@@ -5255,10 +5267,10 @@ goal Fibonacci_Fib_ensures_default_po_6:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_30":
-  (("JC_26": (0 <= i)) and
-   (("JC_27": (i <= n_0_0)) and
-    (("JC_28": isfib((i + 1), x_0_0)) and ("JC_29": isfib(i, y)))))) ->
+  ("JC_31":
+  (("JC_27": (0 <= i)) and
+   (("JC_28": (i <= n_0_0)) and
+    (("JC_29": isfib((i + 1), x_0_0)) and ("JC_30": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -5268,7 +5280,7 @@ goal Fibonacci_Fib_ensures_default_po_6:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_30": ("JC_27": ("JC_27": (i0 <= n_0_0))))
+  ("JC_31": ("JC_28": ("JC_28": (i0 <= n_0_0))))
 
 goal Fibonacci_Fib_ensures_default_po_7:
   forall n_0_0:int.
@@ -5276,10 +5288,10 @@ goal Fibonacci_Fib_ensures_default_po_7:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_30":
-  (("JC_26": (0 <= i)) and
-   (("JC_27": (i <= n_0_0)) and
-    (("JC_28": isfib((i + 1), x_0_0)) and ("JC_29": isfib(i, y)))))) ->
+  ("JC_31":
+  (("JC_27": (0 <= i)) and
+   (("JC_28": (i <= n_0_0)) and
+    (("JC_29": isfib((i + 1), x_0_0)) and ("JC_30": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -5289,7 +5301,7 @@ goal Fibonacci_Fib_ensures_default_po_7:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_30": ("JC_28": ("JC_28": isfib((i0 + 1), x_0_0_0))))
+  ("JC_31": ("JC_29": ("JC_29": isfib((i0 + 1), x_0_0_0))))
 
 goal Fibonacci_Fib_ensures_default_po_8:
   forall n_0_0:int.
@@ -5297,10 +5309,10 @@ goal Fibonacci_Fib_ensures_default_po_8:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_30":
-  (("JC_26": (0 <= i)) and
-   (("JC_27": (i <= n_0_0)) and
-    (("JC_28": isfib((i + 1), x_0_0)) and ("JC_29": isfib(i, y)))))) ->
+  ("JC_31":
+  (("JC_27": (0 <= i)) and
+   (("JC_28": (i <= n_0_0)) and
+    (("JC_29": isfib((i + 1), x_0_0)) and ("JC_30": isfib(i, y)))))) ->
   (i < n_0_0) ->
   forall aux:int.
   (aux = y) ->
@@ -5310,7 +5322,7 @@ goal Fibonacci_Fib_ensures_default_po_8:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  ("JC_30": ("JC_29": ("JC_29": isfib(i0, y0))))
+  ("JC_31": ("JC_30": ("JC_30": isfib(i0, y0))))
 
 goal Fibonacci_Fib_ensures_default_po_9:
   forall n_0_0:int.
@@ -5318,10 +5330,10 @@ goal Fibonacci_Fib_ensures_default_po_9:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_30":
-  (("JC_26": (0 <= i)) and
-   (("JC_27": (i <= n_0_0)) and
-    (("JC_28": isfib((i + 1), x_0_0)) and ("JC_29": isfib(i, y)))))) ->
+  ("JC_31":
+  (("JC_27": (0 <= i)) and
+   (("JC_28": (i <= n_0_0)) and
+    (("JC_29": isfib((i + 1), x_0_0)) and ("JC_30": isfib(i, y)))))) ->
   (i >= n_0_0) ->
   forall return:int.
   (return = y) ->
@@ -5333,7 +5345,7 @@ goal Fibonacci_Fib_safety_po_1:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_24": true) ->
+  ("JC_25": true) ->
   ("JC_23":
   (("JC_19": (0 <= i)) and
    (("JC_20": (i <= n_0_0)) and
@@ -5347,7 +5359,7 @@ goal Fibonacci_Fib_safety_po_1:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (0 <= ("JC_25": (n_0_0 - i)))
+  (0 <= ("JC_26": (n_0_0 - i)))
 
 goal Fibonacci_Fib_safety_po_2:
   forall n_0_0:int.
@@ -5355,7 +5367,7 @@ goal Fibonacci_Fib_safety_po_2:
   forall i:int.
   forall x_0_0:int.
   forall y:int.
-  ("JC_24": true) ->
+  ("JC_25": true) ->
   ("JC_23":
   (("JC_19": (0 <= i)) and
    (("JC_20": (i <= n_0_0)) and
@@ -5369,7 +5381,7 @@ goal Fibonacci_Fib_safety_po_2:
   (x_0_0_0 = (x_0_0 + aux)) ->
   forall i0:int.
   (i0 = (i + 1)) ->
-  (("JC_25": (n_0_0 - i0)) < ("JC_25": (n_0_0 - i)))
+  (("JC_26": (n_0_0 - i0)) < ("JC_26": (n_0_0 - i)))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
@@ -5697,7 +5709,7 @@ Admitted.
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_1 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_30 *) (* JC_26 *) (* JC_26 *) 0 <= 0.
+  (* JC_31 *) (* JC_27 *) (* JC_27 *) 0 <= 0.
 Proof.
 intuition.
 Save.
@@ -5706,7 +5718,7 @@ Save.
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_2 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_30 *) (* JC_27 *) (* JC_27 *) 0 <= n_0_0.
+  (* JC_31 *) (* JC_28 *) (* JC_28 *) 0 <= n_0_0.
 Proof.
 intuition.
 Save.
@@ -5715,7 +5727,7 @@ Save.
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_3 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_30 *) (* JC_28 *) (* JC_28 *) (isfib (0 + 1) 1).
+  (* JC_31 *) (* JC_29 *) (* JC_29 *) (isfib (0 + 1) 1).
 Proof.
 intros; apply isfib1.
 Save.
@@ -5724,7 +5736,7 @@ Save.
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_4 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_30 *) (* JC_29 *) (* JC_29 *) (isfib 0 0).
+  (* JC_31 *) (* JC_30 *) (* JC_30 *) (isfib 0 0).
 Proof.
 intros; apply isfib0.
 Save.
@@ -5736,8 +5748,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_30 *) ((* JC_26 *) 0 <= i /\ (* JC_27 *) i <= n_0_0 /\
-                (* JC_28 *) (isfib (i + 1) x_0_0) /\ (* JC_29 *) (isfib i y))),
+  forall (HW_4: (* JC_31 *) ((* JC_27 *) 0 <= i /\ (* JC_28 *) i <= n_0_0 /\
+                (* JC_29 *) (isfib (i + 1) x_0_0) /\ (* JC_30 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -5747,7 +5759,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_30 *) (* JC_26 *) (* JC_26 *) 0 <= i0.
+  (* JC_31 *) (* JC_27 *) (* JC_27 *) 0 <= i0.
 Proof.
 intuition.
 Save.
@@ -5759,8 +5771,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_30 *) ((* JC_26 *) 0 <= i /\ (* JC_27 *) i <= n_0_0 /\
-                (* JC_28 *) (isfib (i + 1) x_0_0) /\ (* JC_29 *) (isfib i y))),
+  forall (HW_4: (* JC_31 *) ((* JC_27 *) 0 <= i /\ (* JC_28 *) i <= n_0_0 /\
+                (* JC_29 *) (isfib (i + 1) x_0_0) /\ (* JC_30 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -5770,7 +5782,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_30 *) (* JC_27 *) (* JC_27 *) i0 <= n_0_0.
+  (* JC_31 *) (* JC_28 *) (* JC_28 *) i0 <= n_0_0.
 Proof.
 intuition.
 Save.
@@ -5782,8 +5794,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_30 *) ((* JC_26 *) 0 <= i /\ (* JC_27 *) i <= n_0_0 /\
-                (* JC_28 *) (isfib (i + 1) x_0_0) /\ (* JC_29 *) (isfib i y))),
+  forall (HW_4: (* JC_31 *) ((* JC_27 *) 0 <= i /\ (* JC_28 *) i <= n_0_0 /\
+                (* JC_29 *) (isfib (i + 1) x_0_0) /\ (* JC_30 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -5793,7 +5805,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_30 *) (* JC_28 *) (* JC_28 *) (isfib (i0 + 1) x_0_0_0).
+  (* JC_31 *) (* JC_29 *) (* JC_29 *) (isfib (i0 + 1) x_0_0_0).
 Proof.
 intuition;subst; auto.
 apply isfibn; intuition.
@@ -5808,8 +5820,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_30 *) ((* JC_26 *) 0 <= i /\ (* JC_27 *) i <= n_0_0 /\
-                (* JC_28 *) (isfib (i + 1) x_0_0) /\ (* JC_29 *) (isfib i y))),
+  forall (HW_4: (* JC_31 *) ((* JC_27 *) 0 <= i /\ (* JC_28 *) i <= n_0_0 /\
+                (* JC_29 *) (isfib (i + 1) x_0_0) /\ (* JC_30 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -5819,7 +5831,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_30 *) (* JC_29 *) (* JC_29 *) (isfib i0 y0).
+  (* JC_31 *) (* JC_30 *) (* JC_30 *) (isfib i0 y0).
 Proof.
 intuition; subst; auto.
 Save.
@@ -5831,8 +5843,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_30 *) ((* JC_26 *) 0 <= i /\ (* JC_27 *) i <= n_0_0 /\
-                (* JC_28 *) (isfib (i + 1) x_0_0) /\ (* JC_29 *) (isfib i y))),
+  forall (HW_4: (* JC_31 *) ((* JC_27 *) 0 <= i /\ (* JC_28 *) i <= n_0_0 /\
+                (* JC_29 *) (isfib (i + 1) x_0_0) /\ (* JC_30 *) (isfib i y))),
   forall (HW_11: i >= n_0_0),
   forall (why__return: Z),
   forall (HW_12: why__return = y),
@@ -5850,7 +5862,7 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_24 *) True),
+  forall (HW_4: (* JC_25 *) True),
   forall (HW_5: (* JC_23 *) ((* JC_19 *) 0 <= i /\ (* JC_20 *) i <= n_0_0 /\
                 (* JC_21 *) (isfib (i + 1) x_0_0) /\ (* JC_22 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
@@ -5862,7 +5874,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  0 <= ((* JC_25 *) (n_0_0 - i)).
+  0 <= ((* JC_26 *) (n_0_0 - i)).
 Proof.
 intuition.
 Save.
@@ -5874,7 +5886,7 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_24 *) True),
+  forall (HW_4: (* JC_25 *) True),
   forall (HW_5: (* JC_23 *) ((* JC_19 *) 0 <= i /\ (* JC_20 *) i <= n_0_0 /\
                 (* JC_21 *) (isfib (i + 1) x_0_0) /\ (* JC_22 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
@@ -5886,7 +5898,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  ((* JC_25 *) (n_0_0 - i0)) < ((* JC_25 *) (n_0_0 - i)).
+  ((* JC_26 *) (n_0_0 - i0)) < ((* JC_26 *) (n_0_0 - i)).
 Proof.
 intuition.
 Save.

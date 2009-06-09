@@ -482,10 +482,10 @@ end = 34
 
 [JC_53]
 kind = IndexBounds
-file = "HOME/tests/java/TestNonNull.java"
-line = 17
-begin = 1
-end = 15
+file = "HOME/tests/java/TestNonNull.jc"
+line = 80
+begin = 11
+end = 35
 
 [JC_54]
 file = "HOME/tests/java/TestNonNull.java"
@@ -661,10 +661,10 @@ end = 13
 
 [JC_72]
 kind = IndexBounds
-file = "HOME/tests/java/TestNonNull.java"
-line = 25
-begin = 1
-end = 9
+file = "HOME/tests/java/TestNonNull.jc"
+line = 91
+begin = 17
+end = 33
 
 [JC_20]
 file = "HOME/tests/java/TestNonNull.jc"
@@ -700,10 +700,10 @@ end = -1
 
 [JC_75]
 kind = IndexBounds
-file = "HOME/tests/java/TestNonNull.java"
-line = 27
-begin = 1
-end = 13
+file = "HOME/tests/java/TestNonNull.jc"
+line = 96
+begin = 23
+end = 76
 
 [JC_23]
 file = "HOME/"
@@ -1782,16 +1782,16 @@ let TestNonNull_test_ensures_default =
    begin
      (let jessie_46 = (let i = (K_10:
                                ((safe_acc_ !intM_intP) ((shift t) (3)))) in
+                      (K_4:
                       begin
-                        (K_4:
                         (let jessie_40 = (let jessie_36 = (safe_int32_of_integer_ (1)) in
                                          (let jessie_39 = ((shift t) (2)) in
                                          (((safe_upd_ intM_intP) jessie_39) jessie_36))) in
-                        void));
+                        void);
                        (let j = (K_9:
                                 ((safe_acc_ !intM_intP) ((shift t) (integer_of_int32 TestNonNull_N)))) in
+                       (K_6:
                        begin
-                         (K_6:
                          (let jessie_45 = (let jessie_41 = (safe_int32_of_integer_ (1)) in
                                           (let jessie_44 = ((shift t) 
                                                             (integer_of_int32 
@@ -1800,13 +1800,13 @@ let TestNonNull_test_ensures_default =
                                                               ((add_int 
                                                                 (integer_of_int32 TestNonNull_N)) (1)))))) in
                                           (((safe_upd_ intM_intP) jessie_44) jessie_41))) in
-                         void));
+                         void);
                         (K_8:
                         ((eq_int_ (integer_of_int32 (K_7:
                                                     ((safe_acc_ !intM_intP) 
                                                      ((shift TestNonNull_st) (3)))))) (1)))
-                       end)
-                      end) in
+                       end))
+                      end)) in
      void);
     (raise Return)
    end
@@ -1830,33 +1830,33 @@ let TestNonNull_test_safety =
      (let jessie_35 = (let i = (K_10:
                                (JC_71:
                                ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) t) (3)))) in
+                      (K_4:
                       begin
-                        (K_4:
                         (let jessie_29 = (let jessie_25 = (safe_int32_of_integer_ (1)) in
                                          (let jessie_26 = t in
                                          (let jessie_27 = (2) in
                                          (let jessie_28 = ((shift jessie_26) jessie_27) in
                                          (JC_72:
                                          (((((lsafe_lbound_upd_ !Object_alloc_table) intM_intP) jessie_26) jessie_27) jessie_25)))))) in
-                        void));
+                        void);
                        (let j = (K_9:
                                 (JC_74:
                                 ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) t) (2)))) in
+                       (K_6:
                        begin
-                         (K_6:
                          (let jessie_34 = (let jessie_30 = (safe_int32_of_integer_ (1)) in
                                           (let jessie_31 = t in
                                           (let jessie_32 = (3) in
                                           (let jessie_33 = ((shift jessie_31) jessie_32) in
                                           (JC_75:
                                           (((((lsafe_lbound_upd_ !Object_alloc_table) intM_intP) jessie_31) jessie_32) jessie_30)))))) in
-                         void));
+                         void);
                         (K_8:
                         ((eq_int_ (integer_of_int32 (K_7:
                                                     (JC_76:
                                                     ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) TestNonNull_st) (3)))))) (1)))
-                       end)
-                      end) in
+                       end))
+                      end)) in
      void);
     (raise Return)
    end
@@ -1878,19 +1878,21 @@ let cons_TestNonNull_ensures_default =
                       (((safe_upd_ TestNonNull_t) jessie_17) jessie_14))) in
      void);
     (K_1:
-    (let jessie_24 = (let jessie_20 = (JC_56:
-                                      (((alloc_struct_intM (3)) Object_alloc_table) Object_tag_table)) in
-                     (let jessie_23 = this_1 in
-                     (((safe_upd_ TestNonNull_t) jessie_23) jessie_20))) in
-    void));
-    (K_3:
-    (assert
-    { (JC_57:
-      eq_int(add_int(offset_max(Object_alloc_table,
-                     select(TestNonNull_t, this_1)),
-             (1)),
-      (3))) };
-    void));
+    begin
+      (let jessie_24 = (let jessie_20 = (JC_56:
+                                        (((alloc_struct_intM (3)) Object_alloc_table) Object_tag_table)) in
+                       (let jessie_23 = this_1 in
+                       (((safe_upd_ TestNonNull_t) jessie_23) jessie_20))) in
+      void);
+     (K_3:
+     (assert
+     { (JC_57:
+       eq_int(add_int(offset_max(Object_alloc_table,
+                      select(TestNonNull_t, this_1)),
+              (1)),
+       (3))) };
+     void))
+    end);
     (raise Return)
    end
    with
@@ -1911,24 +1913,26 @@ let cons_TestNonNull_safety =
                      (((safe_upd_ TestNonNull_t) jessie_5) jessie_2))) in
      void);
     (K_1:
-    (let jessie_12 = (let jessie_8 = (let jessie_7 = (JC_52:
-                                                     (((alloc_struct_intM_requires (3)) Object_alloc_table) Object_tag_table)) in
-                                     (JC_53:
-                                     (assert
-                                     { ge_int(offset_max(Object_alloc_table,
-                                              jessie_7),
-                                       (-1)) };
-                                     jessie_7))) in
-                     (let jessie_11 = this_1 in
-                     (((safe_upd_ TestNonNull_t) jessie_11) jessie_8))) in
-    void));
-    (K_3:
-    [ { } unit reads Object_alloc_table,TestNonNull_t
-      { (JC_54:
-        eq_int(add_int(offset_max(Object_alloc_table,
-                       select(TestNonNull_t, this_1)),
-               (1)),
-        (3))) } ]);
+    begin
+      (let jessie_12 = (let jessie_8 = (let jessie_7 = (JC_52:
+                                                       (((alloc_struct_intM_requires (3)) Object_alloc_table) Object_tag_table)) in
+                                       (JC_53:
+                                       (assert
+                                       { ge_int(offset_max(Object_alloc_table,
+                                                jessie_7),
+                                         (-1)) };
+                                       jessie_7))) in
+                       (let jessie_11 = this_1 in
+                       (((safe_upd_ TestNonNull_t) jessie_11) jessie_8))) in
+      void);
+     (K_3:
+     [ { } unit reads Object_alloc_table,TestNonNull_t
+       { (JC_54:
+         eq_int(add_int(offset_max(Object_alloc_table,
+                        select(TestNonNull_t, this_1)),
+                (1)),
+         (3))) } ])
+    end);
     (raise Return)
    end
    with
@@ -1950,7 +1954,7 @@ why --project [...] why/TestNonNull.why
 text = "IndexBounds"/>
     </goal>
     <goal why_file="why/TestNonNull_po2.why">
-      <location file = "HOME/tests/java/TestNonNull.java" line = "25" begin = "1" end = "9"/>
+      <location file = "HOME/tests/java/TestNonNull.jc" line = "91" begin = "17" end = "33"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
@@ -1974,7 +1978,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/TestNonNull_po7.why">
-      <location file = "why/TestNonNull.why" line = "1093" begin = "39" end = "178"/>
+      <location file = "why/TestNonNull.why" line = "1096" begin = "41" end = "184"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/TestNonNull_po8.why">
@@ -4609,7 +4613,7 @@ why -simplify [...] why/TestNonNull.why
          (st_length Object_alloc_table))))
 (<= 3 (offset_max Object_alloc_table t)))))))
 
-;; TestNonNull_test_safety_po_2, File "HOME/tests/java/TestNonNull.java", line 25, characters 1-9
+;; TestNonNull_test_safety_po_2, File "HOME/tests/java/TestNonNull.jc", line 91, characters 17-33
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4725,7 +4729,7 @@ why -simplify [...] why/TestNonNull.why
 (IMPLIES (EQ TestNonNull_t0 (|why__store| TestNonNull_t this_1 null))
 (>= 3 0)))))))
 
-;; cons_TestNonNull_safety_po_2, File "why/TestNonNull.why", line 1093, characters 39-178
+;; cons_TestNonNull_safety_po_2, File "why/TestNonNull.why", line 1096, characters 41-184
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (FORALL (TestNonNull_t)

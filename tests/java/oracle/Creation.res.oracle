@@ -547,10 +547,10 @@ end = 74
 
 [JC_40]
 kind = UserCall
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Creation.jc"
+line = 67
+begin = 10
+end = 38
 
 [JC_107]
 kind = IndexBounds
@@ -561,10 +561,10 @@ end = 75
 
 [JC_41]
 kind = UserCall
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Creation.jc"
+line = 67
+begin = 10
+end = 38
 
 [cons_TestSuperConstructor_ensures_default]
 name = "Constructor of class TestSuperConstructor"
@@ -759,24 +759,24 @@ end = 9
 
 [JC_57]
 kind = UserCall
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Creation.jc"
+line = 75
+begin = 10
+end = 65
 
 [JC_58]
 kind = UserCall
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Creation.jc"
+line = 75
+begin = 10
+end = 65
 
 [JC_59]
 kind = UserCall
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Creation.jc"
+line = 75
+begin = 10
+end = 65
 
 [JC_120]
 kind = AllocSize
@@ -1690,24 +1690,24 @@ end = 15
 
 [JC_186]
 kind = UserCall
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Creation.jc"
+line = 142
+begin = 11
+end = 40
 
 [JC_187]
 kind = UserCall
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Creation.jc"
+line = 142
+begin = 11
+end = 40
 
 [JC_188]
 kind = UserCall
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Creation.jc"
+line = 142
+begin = 11
+end = 40
 
 [JC_20]
 file = "HOME/tests/java/Creation.java"
@@ -1857,10 +1857,10 @@ end = 15
 
 [JC_39]
 kind = UserCall
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Creation.jc"
+line = 67
+begin = 10
+end = 38
 
 [cons_Creation_int_ensures_default]
 name = "Constructor of class Creation"
