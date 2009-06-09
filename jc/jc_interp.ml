@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.415 2009-05-27 08:54:21 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.416 2009-06-09 13:38:38 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1195,7 +1195,9 @@ let rec pset ~type_safe ~global_assertion before loc =
               term_coerce b#pos integer_type b#typ b b'])
         
 let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
+(*
   let ft = term ~type_safe ~global_assertion ~relocate:false before before in
+*)
   match loc#node with
     | JCLderef(e,lab,fi,_fr) -> 
         let iloc = pset ~type_safe ~global_assertion lab e in
@@ -1211,6 +1213,8 @@ let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
         in
         (refs, MemoryMap.add (mc,location_set_region e) l mems)
     | JCLderef_term(t1,fi) -> 
+	assert false
+(*
         let iloc = LApp("pset_singleton",[ ft t1 ]) in
         let mc = JCmem_field fi in
         let l =
@@ -1220,6 +1224,7 @@ let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
           with Not_found -> [iloc]
         in
         (refs, MemoryMap.add (mc,t1#region) l mems)
+*)
     | JCLvar vi -> 
         let var = vi.jc_var_info_final_name in
         (StringMap.add var true refs,mems)
@@ -2354,7 +2359,7 @@ and expr e =
     | JCEloop(la,e1) ->
 	let inv,assume_from_inv = 
 	  List.fold_left
-	    (fun ((invariants,assumes) as acc) (names,inv,ass) ->
+	    (fun ((invariants,assumes) as acc) (names,inv,_) ->
 	       match inv with
 		 | Some i ->
 		     if in_current_behavior names
@@ -2395,34 +2400,105 @@ and expr e =
         let inv' = 
 	  if Jc_options.trust_ai then inv' else make_and inv' free_inv' 
 	in
-	(* loop assigns  *)
-	(* By default, the assigns clause for the function is taken *)
-	(* TODO: add also a loop_assigns annotation *)
-	(* Yannick: remove, as function loop assigns does not deal with
-	   newly allocated memory, which may be assigned in loop *)
-	let loop_assigns = None 
-(* 	  List.fold_left *)
-(* 	    (fun acc (pos,id,b) -> *)
-(* 	       if safety_checking () || default_checking ()  *)
-(* 		 || id = get_current_behavior () then *)
-(* 		 match b.jc_behavior_assigns with *)
-(* 		   | None -> acc *)
-(* 		   | Some(_pos,loclist) ->  *)
-(* 		       let loclist = List.map old_to_pre_loc loclist in *)
-(* 		       match acc with *)
-(* 			 | None -> Some loclist *)
-(* 			 | Some loclist' -> Some (loclist @ loclist') *)
-(* 	       else acc *)
-(* 	    ) None (get_current_spec ()).jc_fun_behavior *)
+	(* loop assigns 
+
+	   By default, the assigns clause for the function should be
+	   taken
+
+	   Yannick: wrong, as function's assigns clause does not deal
+	   with newly allocated memory, nor local variables, which may
+	   be assigned in the loop.
+	   
+	   Claude: agreed. But we should find a default anyway for the
+	   loop assigns. Since the assigns is splitted into parts
+	   corresponding to heap variables, the first thing is the
+	   throw out the parts concerning local variables. For the
+	   heap variables where some allocation occurred: no idea. E.g
+
+	   int t[10];
+	   //@ assigns t[0..9]
+	   f() {
+	   int u[] = new int [10];
+	   // default loop assigns from function assigns ? 
+	   // optimal loop assigns is t[0..i], u[0..i]
+	   for (i=0; i < 10; i++) {
+	   t[i] = ...; u[i] = ...
+	   }
+
+	   one simple idea should be: do not generate loop assigns
+	   from function's assigns if allocation occurs.
+
+	*)
+
+	
+	(* THIS is the old code computing a default loop assigns from function's loop assigns: disabled for the moment.
+   
+let loop_assigns = None
+	  List.fold_left
+	    (fun acc (pos,id,b) ->
+	       if safety_checking () || default_checking ()
+		 || id = get_current_behavior () then
+		 match b.jc_behavior_assigns with
+		   | None -> acc
+		   | Some(_pos,loclist) ->
+		       let loclist = List.map old_to_pre_loc loclist in
+		       match acc with
+			 | None -> Some loclist
+			 | Some loclist' -> Some (loclist @ loclist')
+	       else acc
+	    ) None (get_current_spec ()).jc_fun_behavior
 	in
-        let inv' = match loop_assigns with
-	  | None -> inv'
-	  | _ ->
-	      let ass =
-		assigns ~type_safe:false 
-		  LabelPre infunction.jc_fun_info_effects loop_assigns e#pos
-	      in
-	      make_and inv' (mark_assertion e#pos ass)
+*)
+
+	(* This is the code producing the Why invariant from the user's loop assigns 
+
+   a loop assigns for behavior b should be 
+
+   - taken as an invariant if current behavior is b
+
+   - taken as an assumption at loop entrance if current behavior is not b
+     and b is "default"
+
+     WARNING: this is UNSOUND if the defautl behavior has an assumes clause!!!
+       -> temporarily disabled
+
+   - otherwise ignored
+
+*)
+
+   
+	let loop_assigns = 
+	  List.fold_left
+	    (fun acc (names,_inv,ass) ->
+	       match ass with
+		 | Some i ->
+		     if in_current_behavior names
+		     then 
+		       match acc with
+			 | None -> Some i
+			 | Some l -> Some (i@l)
+		     else 
+		       (*
+			 if List.exists 
+			 (fun behav -> behav#name = "default") 
+			 names
+			 then
+			 (invariants,i::assumes)
+		       else
+			 (invariants,assumes)
+		       *)
+		       acc
+		 | None -> acc)
+	    None
+	    la.jc_loop_behaviors
+	in
+
+	let ass =
+	  assigns ~type_safe:false 
+	    LabelPre infunction.jc_fun_info_effects loop_assigns e#pos
+	in
+
+        let inv' = make_and inv' (mark_assertion e#pos ass)
 	in
 	(* loop body *) 
         let body = expr e1 in

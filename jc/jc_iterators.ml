@@ -1264,8 +1264,12 @@ module NExprAst = struct
       | JCNEloop(behs, variant, e2) ->
 	  List.fold_right
 	    (fun (_,inv,ass) acc ->
-	       Option_misc.fold (fun x l -> x::l) inv acc
-		 (* TODO : ass *))
+	       let acc = 
+		 Option_misc.fold (fun x l -> x::l) inv acc
+	       in
+		 Option_misc.fold 
+		   (fun (_,locs) l -> locs@l) 
+		   ass acc)
 	    behs
 	    (Option_misc.fold (fun x l -> x::l) variant [e2])
       | JCNEapp(_, _, el)

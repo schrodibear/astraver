@@ -93,7 +93,7 @@ let rec expr fmt e =
     | JCNEblock el ->
         out "{@ @[<hv 2>%a@]@ }" (print_list semi expr) el
     | JCNEloop(inv, Some e2, e3) ->
-	assert false (* TODO *)
+	out "(some loop)" (* TODO *)
 	  (*
         out "@[<hv 2>%a@ variant %a;@ %a done@]" 
 	  (print_list nothing 
@@ -108,7 +108,7 @@ let rec expr fmt e =
           expr e3
 	  *)
     | JCNEloop(inv, None, e2) ->
-        assert false (* TODO *)
+        out "(some loop)" (* TODO *)
 	  (*
 	    out "@[<hv 2>%a@ %a done@]" 
 	  (print_list nothing 

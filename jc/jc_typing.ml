@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.285 2009-05-26 14:25:04 bobot Exp $ *)
+(* $Id: jc_typing.ml,v 1.286 2009-06-09 13:38:38 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -635,6 +635,12 @@ let rec type_labels env ~result_label label e =
       (Jc_iterators.INExpr.subs e)
   in
   e#set_label label;
+(*
+  (match label with
+    | None -> assert false
+    | Some l ->
+	eprintf "setting label %a to expr %a@." Jc_output_misc.label l Jc_noutput.expr e);
+*)
   match e#node with
     | JCNEconst _ | JCNEderef _ | JCNEbinary _
     | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _
@@ -1447,17 +1453,21 @@ let rec location env e =
         in
         vi.jc_var_info_type, vi.jc_var_info_region, JCLvar vi
     | JCNEderef(ls, f) ->
+(*
 	begin try
+*)
           let t, tr, tls = location_set env ls in
           let fi = find_field e#pos t f false in
           let fr = Region.make_field tr fi in
           fi.jc_field_info_type, fr, JCLderef(tls, get_label e, fi, fr)
+(*
 	with Typing_error _ ->
           let t1 = term env ls in
           let fi = find_field e#pos t1#typ f false in
           let fr = Region.make_field t1#region fi in
           fi.jc_field_info_type, fr, JCLderef_term(t1, fi)
 	end
+*)
     | JCNEat(e, lab) ->
         let t, tr, tl = location env e in
         t, tr, JCLat(tl, lab)

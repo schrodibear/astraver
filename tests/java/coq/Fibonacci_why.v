@@ -310,7 +310,7 @@ Admitted.
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_1 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_30 *) (* JC_26 *) (* JC_26 *) 0 <= 0.
+  (* JC_31 *) (* JC_27 *) (* JC_27 *) 0 <= 0.
 Proof.
 intuition.
 Save.
@@ -319,7 +319,7 @@ Save.
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_2 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_30 *) (* JC_27 *) (* JC_27 *) 0 <= n_0_0.
+  (* JC_31 *) (* JC_28 *) (* JC_28 *) 0 <= n_0_0.
 Proof.
 intuition.
 Save.
@@ -328,7 +328,7 @@ Save.
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_3 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_30 *) (* JC_28 *) (* JC_28 *) (isfib (0 + 1) 1).
+  (* JC_31 *) (* JC_29 *) (* JC_29 *) (isfib (0 + 1) 1).
 Proof.
 intros; apply isfib1.
 Save.
@@ -337,7 +337,7 @@ Save.
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_4 : 
   forall (n_0_0: Z),
   forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_30 *) (* JC_29 *) (* JC_29 *) (isfib 0 0).
+  (* JC_31 *) (* JC_30 *) (* JC_30 *) (isfib 0 0).
 Proof.
 intros; apply isfib0.
 Save.
@@ -349,8 +349,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_30 *) ((* JC_26 *) 0 <= i /\ (* JC_27 *) i <= n_0_0 /\
-                (* JC_28 *) (isfib (i + 1) x_0_0) /\ (* JC_29 *) (isfib i y))),
+  forall (HW_4: (* JC_31 *) ((* JC_27 *) 0 <= i /\ (* JC_28 *) i <= n_0_0 /\
+                (* JC_29 *) (isfib (i + 1) x_0_0) /\ (* JC_30 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -360,7 +360,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_30 *) (* JC_26 *) (* JC_26 *) 0 <= i0.
+  (* JC_31 *) (* JC_27 *) (* JC_27 *) 0 <= i0.
 Proof.
 intuition.
 Save.
@@ -372,8 +372,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_30 *) ((* JC_26 *) 0 <= i /\ (* JC_27 *) i <= n_0_0 /\
-                (* JC_28 *) (isfib (i + 1) x_0_0) /\ (* JC_29 *) (isfib i y))),
+  forall (HW_4: (* JC_31 *) ((* JC_27 *) 0 <= i /\ (* JC_28 *) i <= n_0_0 /\
+                (* JC_29 *) (isfib (i + 1) x_0_0) /\ (* JC_30 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -383,7 +383,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_30 *) (* JC_27 *) (* JC_27 *) i0 <= n_0_0.
+  (* JC_31 *) (* JC_28 *) (* JC_28 *) i0 <= n_0_0.
 Proof.
 intuition.
 Save.
@@ -395,8 +395,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_30 *) ((* JC_26 *) 0 <= i /\ (* JC_27 *) i <= n_0_0 /\
-                (* JC_28 *) (isfib (i + 1) x_0_0) /\ (* JC_29 *) (isfib i y))),
+  forall (HW_4: (* JC_31 *) ((* JC_27 *) 0 <= i /\ (* JC_28 *) i <= n_0_0 /\
+                (* JC_29 *) (isfib (i + 1) x_0_0) /\ (* JC_30 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -406,7 +406,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_30 *) (* JC_28 *) (* JC_28 *) (isfib (i0 + 1) x_0_0_0).
+  (* JC_31 *) (* JC_29 *) (* JC_29 *) (isfib (i0 + 1) x_0_0_0).
 Proof.
 intuition;subst; auto.
 apply isfibn; intuition.
@@ -421,8 +421,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_30 *) ((* JC_26 *) 0 <= i /\ (* JC_27 *) i <= n_0_0 /\
-                (* JC_28 *) (isfib (i + 1) x_0_0) /\ (* JC_29 *) (isfib i y))),
+  forall (HW_4: (* JC_31 *) ((* JC_27 *) 0 <= i /\ (* JC_28 *) i <= n_0_0 /\
+                (* JC_29 *) (isfib (i + 1) x_0_0) /\ (* JC_30 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
@@ -432,7 +432,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_30 *) (* JC_29 *) (* JC_29 *) (isfib i0 y0).
+  (* JC_31 *) (* JC_30 *) (* JC_30 *) (isfib i0 y0).
 Proof.
 intuition; subst; auto.
 Save.
@@ -444,8 +444,8 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_30 *) ((* JC_26 *) 0 <= i /\ (* JC_27 *) i <= n_0_0 /\
-                (* JC_28 *) (isfib (i + 1) x_0_0) /\ (* JC_29 *) (isfib i y))),
+  forall (HW_4: (* JC_31 *) ((* JC_27 *) 0 <= i /\ (* JC_28 *) i <= n_0_0 /\
+                (* JC_29 *) (isfib (i + 1) x_0_0) /\ (* JC_30 *) (isfib i y))),
   forall (HW_11: i >= n_0_0),
   forall (why__return: Z),
   forall (HW_12: why__return = y),
@@ -463,7 +463,7 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_24 *) True),
+  forall (HW_4: (* JC_25 *) True),
   forall (HW_5: (* JC_23 *) ((* JC_19 *) 0 <= i /\ (* JC_20 *) i <= n_0_0 /\
                 (* JC_21 *) (isfib (i + 1) x_0_0) /\ (* JC_22 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
@@ -475,7 +475,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  0 <= ((* JC_25 *) (n_0_0 - i)).
+  0 <= ((* JC_26 *) (n_0_0 - i)).
 Proof.
 intuition.
 Save.
@@ -487,7 +487,7 @@ Save.
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_24 *) True),
+  forall (HW_4: (* JC_25 *) True),
   forall (HW_5: (* JC_23 *) ((* JC_19 *) 0 <= i /\ (* JC_20 *) i <= n_0_0 /\
                 (* JC_21 *) (isfib (i + 1) x_0_0) /\ (* JC_22 *) (isfib i y))),
   forall (HW_6: i < n_0_0),
@@ -499,7 +499,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  ((* JC_25 *) (n_0_0 - i0)) < ((* JC_25 *) (n_0_0 - i)).
+  ((* JC_26 *) (n_0_0 - i0)) < ((* JC_26 *) (n_0_0 - i)).
 Proof.
 intuition.
 Save.

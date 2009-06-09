@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.142 2009-05-26 14:25:03 bobot Exp $ *)
+(* $Id: jc_output.ml,v 1.143 2009-06-09 13:38:38 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -427,27 +427,37 @@ let rec expr fmt e =
       | JCEshift(e1, e2) -> 
 	  fprintf fmt "@[(%a + %a)@]" expr e1 expr e2
       | JCEloop(la, e) ->
-	  assert false
-(*
           fprintf fmt "@\n@[%a%a@\nwhile (true)%a@]"
-	  (print_list nothing 
+	  (print_list nothing loop_behavior) 
+(*
 	     (fun fmt (behav,inv) -> fprintf fmt "@\ninvariant %a%a;"
 		(print_list_delim 
 		   (constant_string "for ") (constant_string ": ") 
 		   comma string)
 		behav
 		assertion inv))
-	    la.jc_loop_invariant
+*)
+	    la.jc_loop_behaviors
             (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
             la.jc_loop_variant
             expr e
-*)
       | JCEapp{ jc_call_fun = (JClogic_fun{ jc_logic_info_final_name = name }
                 | JCfun{ jc_fun_info_final_name = name });
                 jc_call_args = args } ->
           fprintf fmt "@[%s(%a)@]" name
             (print_list comma expr) args
 	
+and loop_behavior fmt (ids,inv,ass) =        
+  fprintf fmt "@\n@[<v 2>behavior %a:@\n"
+    (print_list comma (fun fmt id -> fprintf fmt "%s" id#name)) ids;
+  Option_misc.iter
+    (fun i -> fprintf fmt "invariant %a;" assertion i) inv;
+  Option_misc.iter 
+    (fun locs -> fprintf fmt "@\nassigns %a;" 
+       (print_list_or_default "\\nothing" comma location) locs)
+    ass;
+  fprintf fmt "@]"
+
 and case fmt (c,sl) =
   let onecase fmt = function
     | Some c ->

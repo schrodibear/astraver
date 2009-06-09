@@ -1,4 +1,5 @@
 
+  o [Jessie] support for loop_assigns clauses
   o [Why] added a let/in construct in logic (let x = term in term /
     let x = term in predicate)
   o [Krakatoa/Jessie] "reads" clauses on logic functions and
