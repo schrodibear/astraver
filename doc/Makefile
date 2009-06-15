@@ -122,5 +122,7 @@ pp: pp.ml
 
 clean::
 	rm -f *~ *.dvi *.log *.aux *.toc \
-	dep.ps doc.ps manual.ps caduceus.ps krakatoa.pdf main.pdf 
+		dep.ps doc.ps manual.ps caduceus.ps krakatoa.pdf main.pdf 
+	rm -f *.cm*
+
 
