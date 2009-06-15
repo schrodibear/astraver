@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.43 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: pretty.ml,v 1.44 2009-06-15 08:25:24 monate Exp $ i*)
 
 open Format
 open Pp
@@ -181,10 +181,14 @@ let rec predicate fmt = function
       fprintf fmt "@[<hov 2>(exists %a:%a.@ %a)@]" 
 	ident id pure_type v predicate p
   | Plet (id, n, _, t, p) ->
+      if false then  (* TODO: alt-ergo has no let support yet. *)
       let id = next_away id (predicate_vars p) in
       let p = subst_in_predicate (subst_onev n id) p in
       fprintf fmt "@[<hov 2>(let %a = %a in@ %a)@]" 
 	ident id term t predicate p
+      else 
+        let p = tsubst_in_predicate (subst_one n t) p in
+        fprintf fmt "@[%a@]" predicate p
   | Pnamed (User n, p) ->
       fprintf fmt "@[(%S:@ %a)@]" n predicate p
   | Pnamed (_, p) -> predicate fmt p
