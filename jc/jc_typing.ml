@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.286 2009-06-09 13:38:38 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.287 2009-06-18 11:49:05 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2770,8 +2770,8 @@ let rec occurrences table a =
   | JCAif (_, _, _) -> assert false (* TODO *)
   | JCAbool_term _ -> assert false (* TODO *)
   | JCAinstanceof (_, _, _) -> assert false (* TODO *)
-  | JCAat (_, _) -> assert false (* TODO *)
-  | JCAold _ -> assert false (* TODO *)
+  | JCAold p 
+  | JCAat (p, _) -> occurrences table p
   | JCAmatch (_, _) -> assert false (* TODO *)
 
 let rec list_assoc_data lab l =
