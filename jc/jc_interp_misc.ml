@@ -234,6 +234,9 @@ let reset_current_behavior () = current_behavior := None
 let get_current_behavior () = 
   match !current_behavior with None -> assert false | Some behav -> behav
 let safety_checking () = get_current_behavior () = "safety"
+
+let is_current_behavior id = id = get_current_behavior ()
+
 let in_current_behavior = function
   | [] -> get_current_behavior () = "default"
 (*
@@ -246,7 +249,8 @@ eprintf "current_behavior = %s@."  (get_current_behavior ());
       Format.eprintf 
 	"checking if behavior is in current which is %s@." (get_current_behavior());
 *)
-      List.exists (fun behav -> behav#name = get_current_behavior ()) ls
+      let b = get_current_behavior () in
+      List.exists (fun behav -> behav#name = b) ls
 (*
 let assume_in_current_behavior = function
   | [] -> assert false (*not (default_checking ())*)
@@ -259,6 +263,14 @@ let reset_current_spec () = current_spec := None
 let get_current_spec () = 
   match !current_spec with None -> assert false | Some s -> s
 
+
+let fresh_loop_label =
+  let c = ref 0 in
+  fun () -> incr c; 
+    let n = "loop_" ^ string_of_int !c in
+    { label_info_name = n;
+      label_info_final_name = n;
+      times_used = 1 }
 
 (******************************************************************************)
 (*                                   types                                    *)

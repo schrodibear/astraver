@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.416 2009-06-09 13:38:38 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.417 2009-06-18 07:00:22 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2409,35 +2409,52 @@ and expr e =
 	   with newly allocated memory, nor local variables, which may
 	   be assigned in the loop.
 	   
-	   Claude: agreed. But we should find a default anyway for the
-	   loop assigns. Since the assigns is splitted into parts
-	   corresponding to heap variables, the first thing is the
-	   throw out the parts concerning local variables. For the
-	   heap variables where some allocation occurred: no idea. E.g
+	   Claude: it is not wrong if we take care: the implicit loop
+	   assigns generated from the function's assigns should relate
+	   the state Pre (for the function) and current state. Whereas an
+	   explicit loop assigns relates the state before entering the
+	   loop and the current state. example:	
+
 
 	   int t[10];
 	   //@ assigns t[0..9]
-	   f() {
+	   f() { int i;
 	   int u[] = new int [10];
-	   // default loop assigns from function assigns ? 
-	   // optimal loop assigns is t[0..i], u[0..i]
+	   //@ loop assigns t[0..i], u[0..i]
 	   for (i=0; i < 10; i++) {
 	   t[i] = ...; u[i] = ...
 	   }
 
-	   one simple idea should be: do not generate loop assigns
-	   from function's assigns if allocation occurs.
+	   the Why code should be
+
+	   f() { let i = ref any_int() in
+	   let u = alloc_array(10) // writes alloc 
+	   in
+	   loop_init:
+	   i := 0;
+	   while (!i < 10) do
+	     invariant
+	        // from loop assigns
+	        assigns(alloc@loop_init,intP@loop_init,intP,
+	                    t[0..i] union u[0..i])
+	        and
+	        // from function's assigns
+	        assigns(alloc@,intP@,intP, t[0..9])
+	     intP := store(intP,t+!i,...);
+	     intP := store(intP,u+!i,...);
+	     i := !i + 1;
+	   done;
 
 	*)
 
 	
-	(* THIS is the old code computing a default loop assigns from function's loop assigns: disabled for the moment.
+	(* loop assigns from function's loop assigns *)
    
-let loop_assigns = None
+	let loop_assigns_from_function = 
+	  let s = get_current_spec () in
 	  List.fold_left
 	    (fun acc (pos,id,b) ->
-	       if safety_checking () || default_checking ()
-		 || id = get_current_behavior () then
+	       if is_current_behavior id then
 		 match b.jc_behavior_assigns with
 		   | None -> acc
 		   | Some(_pos,loclist) ->
@@ -2446,9 +2463,8 @@ let loop_assigns = None
 			 | None -> Some loclist
 			 | Some loclist' -> Some (loclist @ loclist')
 	       else acc
-	    ) None (get_current_spec ()).jc_fun_behavior
+	    ) None (s.jc_fun_default_behavior::s.jc_fun_behavior)
 	in
-*)
 
 	(* This is the code producing the Why invariant from the user's loop assigns 
 
@@ -2493,12 +2509,23 @@ let loop_assigns = None
 	    la.jc_loop_behaviors
 	in
 
+	let loop_label = fresh_loop_label() in
+	  
 	let ass =
 	  assigns ~type_safe:false 
-	    LabelPre infunction.jc_fun_info_effects loop_assigns e#pos
+	    (LabelName loop_label) infunction.jc_fun_info_effects loop_assigns 
+	    e#pos
 	in
 
-        let inv' = make_and inv' (mark_assertion e#pos ass)
+	let ass_from_fun =
+	  assigns ~type_safe:false 
+	    LabelPre infunction.jc_fun_info_effects loop_assigns_from_function
+	    e#pos
+	in
+
+        let inv' = 
+	  make_and inv' (make_and (mark_assertion e#pos ass)
+			   (mark_assertion e#pos ass_from_fun))
 	in
 	(* loop body *) 
         let body = expr e1 in
@@ -2509,10 +2536,11 @@ let loop_assigns = None
           else s
         in
 	let body = [ add_assume body ] in
-	(* final generation, depending on presence of variant or not *)
-        begin match la.jc_loop_variant with
-          | Some t when safety_checking () ->
-              let variant = 
+	(* loop variant *)
+	let loop_variant =	  
+          match la.jc_loop_variant with
+            | Some t when safety_checking () ->
+		let variant = 
 		named_term 
 		  ~type_safe:false ~global_assertion:false ~relocate:false
 		  LabelHere LabelPre t 
@@ -2521,10 +2549,12 @@ let loop_assigns = None
 		term_coerce ~type_safe:false ~global_assertion:false LabelHere
 		  t#pos integer_type t#typ t variant 
 	      in
-              While(Cte(Prim_bool true), inv', Some (variant,None), body)
-          | _ ->
-              While(Cte(Prim_bool true), inv', None, body)
-        end
+              Some (variant,None)
+          | _ -> None
+        in
+        Label(loop_label.label_info_final_name,
+	      While(Cte(Prim_bool true), inv', loop_variant, body))
+	
     | JCEcontract(req,dec,vi_result,behs,e) ->
 	assert (req = None);
 	assert (dec = None);
