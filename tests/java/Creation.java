@@ -1,4 +1,6 @@
 
+//@+ CheckArithOverflow = no
+
 class Creation {
 
     int simple_val;

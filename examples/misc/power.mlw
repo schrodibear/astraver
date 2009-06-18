@@ -5,13 +5,20 @@ logic x : int
 
 parameter n,m,y : int ref
 
-logic div2 : int -> int
+predicate even(x : int) = x = 2 * (x/2)
 
-logic Zeven : int -> prop
-logic Zodd : int -> prop
-parameter is_odd : n:int -> { } bool { if result then Zodd(n) else Zeven(n) }
+predicate odd(x : int) = x = 2 * (x/2) + 1
 
-logic Zpower : int,int -> int
+parameter is_odd : n:int -> { } bool { if result then odd(n) else even(n) }
+
+logic power : int,int -> int
+
+axiom power_0 :
+  forall x:int. power(x,0) = 1
+axiom power_even : 
+  forall x:int. forall n:int. n >= 0 -> power(x,2*n) = power(x*x,n)
+axiom power_odd : 
+  forall x:int. forall n:int. n >= 0 -> power(x,2*n+1) = x * power(x*x,n)
 
 let power1 () =
   { n >= 0 }
@@ -20,12 +27,12 @@ let power1 () =
     m := x; 
     y := 1;
     while !n > 0 do
-      { invariant Zpower(x,n@init) = y * Zpower(m,n) and n >= 0
+      { invariant power(x,n@init) = y * power(m,n) and n >= 0
         variant n }
-      if (is_odd !n) then y := !y * !m;
+      if is_odd !n then y := !y * !m;
       m := !m * !m;
-      n := (div2 !n)
+      n := !n / 2
     done
   end
-  { y = Zpower(x,n@) }
+  { y = power(x,n@) }
 

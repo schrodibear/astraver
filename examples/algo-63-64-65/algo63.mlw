@@ -1,4 +1,6 @@
 
+include "arrays.why"
+
 (***
    	
 C. A. R. Hoare 	 
@@ -16,7 +18,7 @@ parameter partition :
   a : int array -> m:int -> n:int -> i:int ref -> j:int ref ->
   { m < n } 
   unit writes a,i,j
-  { m <= j and j < i and i <= n and sub_permut(m,n,a@,a) and
+  { m <= j and j < i and i <= n and permut(a@,a,m,n) and
     exists x:int.
       (forall r:int. m <= r <= j -> a[r] <= x) and
       (forall r:int. j < r < i -> a[r] = x) and

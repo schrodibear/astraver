@@ -74,39 +74,6 @@ parameter mod_int_ : x:int -> y:int -> { y<>0 } int { result = x % y }
 
 predicate zwf_zero(a:int, b:int) = 0 <= b and a < b
 
-(*********)
-(* Reals *)
-(*********)
-
-(* real comparisons in logic... *)
-logic lt_real : real,real -> prop
-logic le_real : real,real -> prop
-logic gt_real : real,real -> prop
-logic ge_real : real,real -> prop
-logic eq_real : real,real -> prop
-logic neq_real : real,real -> prop
-
-(* ... and in programs: *)
-parameter lt_real_ : x:real -> y:real -> {} bool {if result then x<y else x>=y}
-parameter le_real_ : x:real -> y:real -> {} bool {if result then x<=y else x>y}
-parameter gt_real_ : x:real -> y:real -> {} bool {if result then x>y else x<=y}
-parameter ge_real_ : x:real -> y:real -> {} bool {if result then x>=y else x<y}
-parameter eq_real_ : x:real -> y:real -> {} bool {if result then x=y else x<>y}
-parameter neq_real_: x:real -> y:real -> {} bool {if result then x<>y else x=y}
-
-logic add_real : real,real -> real (* + *)
-logic sub_real : real,real -> real (* - *)
-logic mul_real : real,real -> real (* * *)
-logic div_real : real,real -> real (* / *)
-logic neg_real : real -> real      (* prefix - *)
-
-(* / in programs: *)
-parameter div_real_ : x:real -> y:real -> { y<>0.0 } real { result = x / y }
-
-
-logic real_of_int : int -> real
-logic int_of_real : real -> int
-
 (**************)
 (* references *)
 (**************)
