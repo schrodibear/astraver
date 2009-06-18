@@ -39,6 +39,6 @@ let selection () =
 
 (*
 Local Variables: 
-compile-command: "gwhy -split-user-conj selection.mlw"
+compile-command: "gwhy-bin -split-user-conj selection.mlw"
 End: 
 *)
