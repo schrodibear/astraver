@@ -218,7 +218,9 @@ let rec intros ctx = function
 let create_tag (tbuf:GText.buffer) t loc = 
   if not (Hashtbl.mem gtktags t) then begin
     let (fc, bc) = get_color "lpredicate" in
-    let new_tag = tbuf#create_tag [`BACKGROUND bc; `FOREGROUND fc] in
+    let new_tag = 
+      Tags.make_tag tbuf ~name:(bc^fc) [`BACKGROUND fc; `FOREGROUND bc]
+    in
     ignore(
       new_tag#connect#event ~callback:
 	(fun ~origin ev it -> 
@@ -273,7 +275,7 @@ let get_buffer =
 let color_lines tags =
   let buf = !tv_source#buffer in
   let top = buf#start_iter in
-  let orange_bg = buf#create_tag ~name:"orange_bg" [`BACKGROUND "orange"] in
+  let orange_bg = Tags.make_tag buf ~name:"orange_bg" [`BACKGROUND "orange"] in
   (*
   buf#remove_tag_by_name ~start:buf#start_iter ~stop:buf#end_iter "orange_bg";
   *)
@@ -300,11 +302,14 @@ let print_all (tbuf:GText.buffer) s p =
   (* 3. then we fill the GTK text buffer using Tagsplit.split *)
   let _utags = split tbuf (Lexing.from_string str) in
   let (_,concl) = p in
+  let fc = get_fc "separator" in
+  let bc = get_bc "separator" in
   let mytag = 
-    tbuf#create_tag
+    Tags.make_tag tbuf
+      ~name:("s"^fc^bc)
       [`UNDERLINE `SINGLE;
-       `FOREGROUND (get_fc "separator"); 
-       `BACKGROUND (get_bc "separator")] 
+       `FOREGROUND fc; 
+       `BACKGROUND bc] 
   in
   tbuf#insert ~tags:[mytag] ~iter:tbuf#end_iter 
     "              \n\n";

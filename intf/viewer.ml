@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: viewer.ml,v 1.17 2008-11-05 14:03:14 filliatr Exp $ i*)
+(*i $Id: viewer.ml,v 1.18 2009-06-19 09:33:36 monate Exp $ i*)
 
 open Format
 open Options
@@ -339,7 +339,7 @@ let main () =
   let _ = tv1#set_editable false in
 
   (* hook for navigator *)
-  let bgtag = buf1#create_tag [`BACKGROUND "light blue"] in
+  let bgtag = Tags.make_tag ~name:"lblue" buf1 [`BACKGROUND "light blue"] in
   Tree.show_info_ref := 
   (fun ((b,e),s) -> 
      buf1#remove_tag bgtag ~start:buf1#start_iter ~stop:buf1#end_iter;

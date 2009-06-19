@@ -70,3 +70,26 @@ let reset_last_colored () =
 let refresh_last_colored tag = 
   reset_last_colored ();
   last_colored := tag
+
+module IntHashtbl = 
+  Hashtbl.Make(struct 
+                 type t = int 
+                 let hash = Hashtbl.hash 
+                 let equal = (=) 
+               end)
+module StringSet = Set.Make(String)
+let tag_names = IntHashtbl.create 17
+let make_tag (buffer:< tag_table : Gtk.text_tag_table;
+              create_tag : ?name:string -> GText.tag_property list -> GText.tag ; .. >)
+    ~name l 
+    = 
+  match GtkText.TagTable.lookup buffer#tag_table name with
+  | None -> 
+      let oid = Oo.id buffer in
+      let old_set = 
+        try IntHashtbl.find tag_names oid 
+        with Not_found -> StringSet.empty 
+      in
+      IntHashtbl.replace tag_names oid (StringSet.add name old_set);
+      buffer#create_tag ~name l
+  | Some t -> new GText.tag t
