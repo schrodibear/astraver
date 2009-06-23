@@ -123,6 +123,45 @@ Admitted.
 
 Require Import Reals.
 
+(*Why logic*) Definition lt_real : R -> R -> Prop.
+Admitted.
+
+(*Why logic*) Definition le_real : R -> R -> Prop.
+Admitted.
+
+(*Why logic*) Definition gt_real : R -> R -> Prop.
+Admitted.
+
+(*Why logic*) Definition ge_real : R -> R -> Prop.
+Admitted.
+
+(*Why logic*) Definition eq_real : R -> R -> Prop.
+Admitted.
+
+(*Why logic*) Definition neq_real : R -> R -> Prop.
+Admitted.
+
+(*Why logic*) Definition add_real : R -> R -> R.
+Admitted.
+
+(*Why logic*) Definition sub_real : R -> R -> R.
+Admitted.
+
+(*Why logic*) Definition mul_real : R -> R -> R.
+Admitted.
+
+(*Why logic*) Definition div_real : R -> R -> R.
+Admitted.
+
+(*Why logic*) Definition neg_real : R -> R.
+Admitted.
+
+(*Why logic*) Definition real_of_int : Z -> R.
+Admitted.
+
+(*Why logic*) Definition int_of_real : R -> Z.
+Admitted.
+
 (*Why logic*) Definition lt_real_bool : R -> R -> bool.
 Admitted.
 

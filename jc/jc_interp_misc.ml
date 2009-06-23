@@ -646,6 +646,8 @@ and location_set ~type_safe ~global_assertion lab locs =
 	LApp("pset_range_right",[ LApp("pset_singleton", [ ft locs ]); ft t1 ])
     | JCLSrange_term(locs,None,None) ->
 	LApp("pset_all",[ LApp("pset_singleton", [ ft locs ]) ])
+    | JCLSat(locs,lab) -> flocs locs
+	
 
 let rec location_list' = function
   | [] -> LVar "pset_empty"

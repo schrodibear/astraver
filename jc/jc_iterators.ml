@@ -695,6 +695,7 @@ let fold_sub_location_set itt itls ft fls acc locs =
 	let acc = itt acc t0 in
 	let acc = Option_misc.fold_left itt acc t1_opt in
 	Option_misc.fold_left itt acc t2_opt 
+   | JCLSat(ls,lab) -> itls acc ls
 
 let rec fold_location_set ft fls acc locs =
   let acc = fls acc locs in

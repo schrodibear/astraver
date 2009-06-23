@@ -1,5 +1,6 @@
 
 
+//@+ CheckArithOverflow = no
 
 public class negate {
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.154 2009-05-26 14:25:03 bobot Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.155 2009-06-23 10:19:14 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -159,6 +159,7 @@ let rec location_set_region locs =
     | JCLSderef(_,_,_,r) -> r
     | JCLSrange(ls,_,_) -> location_set_region ls
     | JCLSrange_term(t1,_,_) -> t1#region
+    | JCLSat(ls,_) -> location_set_region ls
 
 type location =
   | JCLvar of var_info

@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.132 2009-05-26 14:25:03 bobot Exp $ */
+/* $Id: jc_parser.mly,v 1.133 2009-06-23 10:19:14 marche Exp $ */
 
 %{
 
@@ -49,6 +49,7 @@
     | "Pre" -> LabelPre
     | "Old" -> LabelOld
     | "Here" -> LabelHere
+    | "Post" -> LabelPost
     | _ -> 
 	LabelName { 
 	  label_info_name = s; 

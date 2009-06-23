@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.158 2009-05-20 14:37:29 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.159 2009-06-23 10:19:14 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1199,7 +1199,7 @@ let single_location ~in_assigns fef loc =
     | JCLat(loc,_lab) -> fef
   in true, fef
 
-let single_location_set fef locs =
+let rec single_location_set fef locs =
   let lab = 
     match locs#label with None -> LabelHere | Some lab -> lab
   in
@@ -1216,6 +1216,7 @@ let single_location_set fef locs =
     | JCLSrange(_,_,_)
     | JCLSrange_term(_,_,_) ->
 	fef
+    | JCLSat(locs,_) -> snd (single_location_set fef locs)
   in true, fef
 
 let location ~in_assigns fef loc =

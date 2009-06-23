@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.168 2009-05-26 14:25:00 bobot Exp $ *)
+(* $Id: jc_ast.mli,v 1.169 2009-06-23 10:19:14 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -400,6 +400,7 @@ type 'li location_set_node =
 *)
   | JCLSrange of 'li location_set * 'li term option * 'li term option
   | JCLSrange_term of 'li term * 'li term option * 'li term option
+  | JCLSat of 'li location_set * label
 
 and 'li location_node =
   | JCLvar of var_info

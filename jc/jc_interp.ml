@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.417 2009-06-18 07:00:22 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.418 2009-06-23 10:19:14 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1193,6 +1193,7 @@ let rec pset ~type_safe ~global_assertion before loc =
              [ls; 
               term_coerce a#pos integer_type a#typ a a'; 
               term_coerce b#pos integer_type b#typ b b'])
+    | JCLSat(locs,_) -> fpset locs
         
 let rec collect_locations ~type_safe ~global_assertion before (refs,mems) loc =
 (*
@@ -1515,6 +1516,10 @@ let rec old_to_pre_lset lset =
 	  ~node:(JCLSrange_term(old_to_pre_term lset, 
 				Option_misc.map old_to_pre_term t1,
 				Option_misc.map old_to_pre_term t2))
+	  lset
+    | JCLSat(lset,lab) ->
+	new location_set_with
+	  ~node:(JCLSat(old_to_pre_lset lset,old_to_pre lab))
 	  lset
 
 let rec old_to_pre_loc loc =

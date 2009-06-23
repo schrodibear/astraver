@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.143 2009-06-09 13:38:38 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.144 2009-06-23 10:19:14 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -304,6 +304,8 @@ let rec location_set fmt locs =
     | JCLSrange_term (locset, t1, t2) ->
 	fprintf fmt "(%a + [%a..%a])" term locset 
 	  (print_option term) t1 (print_option term) t2
+    | JCLSat(locset,lab) ->
+	fprintf fmt "\\at(%a, %a)" location_set locset label lab
 
 let rec location fmt loc = 
   match loc#node with

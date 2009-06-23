@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.287 2009-06-18 11:49:05 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.288 2009-06-23 10:19:14 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1424,7 +1424,11 @@ let rec location_set env e =
         let fi = find_field e#pos t f false in
         let fr = Region.make_field tr fi in
         fi.jc_field_info_type, fr, JCLSderef(tls, get_label e, fi, fr)   
-    | JCNErange _ | JCNEeqtype _ | JCNEmutable _ | JCNEat _ | JCNEold _
+    | JCNEat(ls, lab) ->
+	let t,tr,tls = location_set env ls in
+	t,tr,JCLSat(tls,lab)
+	
+    | JCNErange _ | JCNEeqtype _ | JCNEmutable _ | JCNEold _
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ |JCNEreturn _ | JCNEloop _ |JCNEblock _ | JCNEassert _
     | JCNElet _ |JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEaddress _ 
@@ -2336,7 +2340,7 @@ let type_labels_in_clause = function
       Option_misc.iter
         (fun (_, x) ->
            List.iter
-             (type_labels [LabelOld; LabelHere] 
+             (type_labels [LabelOld; LabelPost] 
 		~result_label:(Some LabelPost) (Some LabelOld)) x)
         assigns;
       type_labels [LabelOld; LabelHere] 
