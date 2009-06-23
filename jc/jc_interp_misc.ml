@@ -724,26 +724,29 @@ let transpose_location_set ~region_assoc ~param_assoc locs w=
 
 let transpose_location_list
     ~region_assoc ~param_assoc rw_raw_mems rw_precise_mems (mc,distr) =
-  let loclist =
-    if MemorySet.mem (mc,distr) rw_raw_mems then
-      (Format.eprintf "memory %a@\nin memory set %a@." 
-	 print_memory (mc,distr) 
-	 (print_list comma print_memory) (MemorySet.elements rw_raw_mems);
-       assert false) (* TODO: parameters *)
+  if MemorySet.mem (mc,distr) rw_raw_mems then
+      begin
+	Format.eprintf "** Jc_interp_misc.transpose_location_list: TODO: parameters **@.";
+	Format.eprintf "memory %a@\nin memory set %a@." 
+	  print_memory (mc,distr) 
+	  (print_list comma print_memory) (MemorySet.elements rw_raw_mems);
+	assert false
+      end
     else
-      LocationSet.to_list
-	(LocationSet.filter
-	   (fun (_loc,(_mc,r)) -> Region.equal r distr)
-	   rw_precise_mems)
-  in
-  List.fold_left
-    (fun acc (loc,(mc,rdist)) ->
-       match transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) with
-	 | None -> acc
-	 | Some(RawMemory(mc,rloc)) -> assert false
-	 | Some(PreciseMemory(loc,(mc,rloc))) ->
-	     loc :: acc
-    ) [] loclist
+      let loclist =
+	LocationSet.to_list
+	  (LocationSet.filter
+	     (fun (_loc,(_mc,r)) -> Region.equal r distr)
+	     rw_precise_mems)
+      in
+      List.fold_left
+	(fun acc (loc,(mc,rdist)) ->
+	   match transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) with
+	     | None -> acc
+	     | Some(RawMemory(mc,rloc)) -> assert false
+	     | Some(PreciseMemory(loc,(mc,rloc))) ->
+		 loc :: acc
+	) [] loclist
 
 let write_read_separation_condition 
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc 

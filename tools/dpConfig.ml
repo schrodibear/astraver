@@ -71,7 +71,7 @@ let alt_ergo =
     is_interactive = false;
     version = "";
     version_switch = "-version";
-    version_regexp = "Ergo \\([^ ]*\\)";
+    version_regexp = ".*Ergo \\([^ ]*\\)";
     command = "alt-ergo";
     command_switches = "";
     valid_regexp = make_regexp "\\bValid\\b";
@@ -100,10 +100,6 @@ let z3 =
     version_regexp = "Z3 version \\([^ \r]+\\)";
     command = "z3";
     command_switches = "-smt";
-(*
-"wine /home/cmarche/.wine/drive_c/Program\ Files/Microsoft\ Research/Z3-1.3.6/bin/z3.exe";
-    
-*)
     valid_regexp = make_regexp "\\bunsat\\b";
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b";
   }

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_region.ml,v 1.32 2008-11-19 17:42:00 moy Exp $ *)
+(* $Id: jc_region.ml,v 1.33 2009-06-23 14:37:30 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -187,6 +187,7 @@ struct
   let to_list s =
     S.fold (fun e acc -> e :: acc) s []
   let fold = S.fold
+  let filter = S.filter
   let map_repr s = 
     S.fold (fun (fi,r) acc -> S.add (fi,RegionUF.repr r) acc) s S.empty
   let find_region r s =
