@@ -1,4 +1,8 @@
+version 2.19, June 23rd, 2009
+================================
 
+  o This version is synchronized with Frama-C Beryllium beta 1 200906xx
+    (http://frama-c.cea.fr/)
   o [Jessie] support for label 'Post' in assigns clauses
   o [Jessie] support for loop_assigns clauses
   o [Why] added a let/in construct in logic (let x = term in term /
