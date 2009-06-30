@@ -1,3 +1,8 @@
 
-goal g : add_real (1.0, 2.5) = 3.5
+type 'a list
+
+logic nil : 'a list
+
+function f(x:'a) : 'a list = nil
+
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.170 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.171 2009-06-30 20:21:12 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -535,7 +535,7 @@ let rec interp_decl ?(_prelude=false) d =
 	let t = Function (List.map snd pl, ty) in
 	let env' = List.fold_right (fun (x,pt) -> add_logic x pt) pl env in
 	let e,ty' = Ltyping.term lab env' e in
-	if not (eq_pure_type ty ty') then 
+	if not (Ltyping.unify ty ty') then 
 	  Ltyping.expected_type loc (PureType ty);
 	add_global_logic id (generalize_logic_type t);
 	let f = generalize_function_def (pl,ty,e) in
