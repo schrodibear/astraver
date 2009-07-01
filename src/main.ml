@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.171 2009-06-30 20:21:12 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.172 2009-07-01 15:18:30 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -636,8 +636,9 @@ let deal_file f =
   let cin = open_in f in 
   deal_channel (why_parser f) cin;
   close_in cin;
-  let fwe = Filename.chop_extension f in
-  if not (single_file ()) then output (Options.out_file fwe)
+  if not type_only then
+    let fwe = Filename.chop_extension f in
+    if not (single_file ()) then output (Options.out_file fwe)
 
 let main () =
   let t0 = Unix.times () in
@@ -650,6 +651,7 @@ let main () =
   else 
     begin
       List.iter deal_file files;
+      if type_only then exit 0;
       if (pruning) or (Options.pruning_hyp_v != -1) then
 	begin
 	  let q =  declarationQueue in 

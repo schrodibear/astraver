@@ -166,6 +166,8 @@ WHYLIBS=lib/why/bool.why lib/why/integer.why \
 	lib/why/jessie.why \
 	lib/why/mix.why
 
+GENERATEDCOQFILES=floats_common_Floats floats_common_Gappa
+
 PRELUDE=lib/why/prelude.why $(WHYLIBS)
 
 # sanity check: the prelude files do typecheck
@@ -174,6 +176,14 @@ check: $(BINARY) $(PRELUDE)
 	for f in $(WHYLIBS) ; do \
 		WHYLIB=lib $(BINARY) -tc $$f; \
 	done
+
+generate_coq_files: $(BINARY) 
+	for f in $(GENERATEDCOQFILES) ; do \
+		WHYLIB=lib $(BINARY) -output lib/coq/$$f lib/why/floats_common.why ;\
+	done
+
+lib/coq/float_common_Gappa_why.v: lib/why/floats_common.why
+	WHYLIB=lib $(BINARY) -tc -output $@ $< 
 
 # why-config
 WHYCONFIGCMO = src/rc.cmo src/version.cmo tools/dpConfig.cmo tools/whyConfig.cmo
@@ -606,7 +616,7 @@ static:: $(STATICBINARY)
 coq-no:
 coq-yes: coq-@COQVER@
 coq-v7: $(VO7)
-coq-v8: $(VO8)
+coq-v8: generate_coq_files $(VO8)
 
 ########
 # PVS
