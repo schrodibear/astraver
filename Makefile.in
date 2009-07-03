@@ -1038,6 +1038,7 @@ tarball-for-framac:
 	cp export/$(NAME).tar.gz export/why-for-framac.tar.gz
 
 tarball: 
+	mkdir -p export
 	cd export; rm -rf $(NAME) $(NAME).tar.gz
 	make export/$(NAME).tar.gz
 
@@ -1129,7 +1130,9 @@ clean::
 	rm -f $(GENERATED)
 	make -C atp clean
 	make -C doc clean
-	make -C examples-v7 clean
+	if test -d examples-v7; then \
+		make -C examples-v7 clean ; \
+	fi
 	make -C examples clean
 
 dist-clean:: clean
