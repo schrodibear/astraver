@@ -311,6 +311,7 @@ JCCMO = src/version.cmo \
 	jc/jc_interp_misc.cmo jc/jc_invariants.cmo \
 	jc/jc_pattern.cmo \
 	jc/jc_interp.cmo \
+	jc/jc_frame.cmo \
 	jc/jc_make.cmo jc/jc_main.cmo
 JCCMX = $(JCCMO:.cmo=.cmx)
 

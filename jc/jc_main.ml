@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.135 2008-11-25 08:29:57 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.136 2009-07-06 17:03:52 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -298,7 +298,7 @@ let main () =
       (Hashtbl.fold 
 	 (fun _ (li, p) acc ->
 	    Jc_options.lprintf "Logic function %s@." li.jc_logic_info_name;
-	    Jc_interp.tr_logic_fun li p acc)
+	    Jc_frame.tr_logic_fun li p acc)
 	 Jc_typing.logic_functions_table );
 
     (* production phase 4.2: generation of axiomatic logic decls*)
