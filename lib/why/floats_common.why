@@ -64,8 +64,9 @@ axiom max_quad: max_gen_float(Quad) = 0x1.FFFFFFFFFFFFFFFFFFFFFFFFFFFFp16383
 (* values of min_gen_float *)
 axiom min_single : min_gen_float(Single) = 0x1p-149
 axiom min_double : min_gen_float(Double) = 0x1p-1074
-
-
+(***********mt*******************)
+axiom min_Binary80 : min_gen_float(Binary80) = 0x1p-16445
+(***********mt*********************)
 (*
 (* values of max_exp: the exponent of the next gen_float after max_gen_float *)
 axiom max_exp_single: max_exp(Single) = 128
