@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.144 2009-06-23 10:19:14 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.145 2009-07-16 13:12:52 nguyen Exp $ *)
 
 open Format
 open Jc_env
@@ -578,6 +578,7 @@ let string_of_float_model p =
     | Jc_env.FMreal -> "real"
     | Jc_env.FMstrict -> "strict"
     | Jc_env.FMfull-> "full"
+    | Jc_env.FMmultirounding-> "multirounding"
 
 let rec print_decl fmt d =
   match d with

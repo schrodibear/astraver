@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.70 2009-05-12 15:37:17 nguyen Exp $ *)
+(* $Id: jc_env.mli,v 1.71 2009-07-16 13:12:52 nguyen Exp $ *)
 
 type float_format = [ `Double | `Float | `Binary80 ]
 
@@ -43,7 +43,7 @@ type abstract_domain = AbsNone | AbsBox | AbsOct | AbsPol
 
 type int_model = IMbounded | IMmodulo
 
-type float_model = FMreal | FMstrict | FMfull
+type float_model = FMreal | FMstrict | FMfull | FMmultirounding
 
 type float_rounding_mode = FRMdownward | FRMnearest | FRMupward | FRMtowardzero | FRMtowardawayzero
 

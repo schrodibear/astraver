@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.47 2009-05-12 15:37:18 nguyen Exp $ i*)
+(*i $Id: jc_options.ml,v 1.48 2009-07-16 13:12:52 nguyen Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -63,16 +63,6 @@ let has_floats = ref false
 
 let float_model : float_model ref = ref FMreal
 let float_instruction_set : float_instruction_set ref = ref FISstrictIEEE754
-
-(*let float_lib = 
-match !Jc_options.float_model with
-| Jc_env.FMreal -> []
-| Jc_env.FMstrict -> ["floats_strict.why" ]
-| Jc_env.FMfull -> ["floats_full.why" ]
-
-let libfiles () = 
-  "jessie.why" :: (if !Jc_options.has_floats then float_lib else [])
-*)
 
 let libfiles = ref ["jessie.why"]
 

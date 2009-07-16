@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.136 2009-07-06 17:03:52 bobot Exp $ *)
+(* $Id: jc_main.ml,v 1.137 2009-07-16 13:12:52 nguyen Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -386,6 +386,20 @@ let main () =
 
     (* output phase 3: produce makefile *)
     Jc_options.lprintf "Produce makefile@.";
+    (*
+      we first have to update Jc_options.libfiles depending on the current
+      pragmas
+    *)
+    begin
+      match !Jc_options.float_model with
+	| Jc_env.FMreal -> ()
+	| Jc_env.FMstrict ->
+	    Jc_options.libfiles := !Jc_options.libfiles @ ["floats_strict.why"]
+	| Jc_env.FMfull ->
+	    Jc_options.libfiles := !Jc_options.libfiles @ ["floats_full.why"]
+	|  Jc_env.FMmultirounding ->
+	     Jc_options.libfiles := !Jc_options.libfiles @ ["floats_multi_rounding.why"]
+    end;
     Jc_make.makefile filename
       
     | _ -> Jc_options.usage ()

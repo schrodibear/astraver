@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.88 2009-05-12 15:37:18 nguyen Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.89 2009-07-16 13:12:52 nguyen Exp $ i*)
 
 {
   open Jc_ast
@@ -137,13 +137,12 @@
 	  end  
       | "FloatModel" ->
 	  begin
+	    Jc_options.float_model := 
 	      (match v with
-	         | "real" -> Jc_options.float_model := Jc_env.FMreal;
-		     Jc_options.libfiles := ["jessie.why"]
-		 | "strict" -> Jc_options.float_model := Jc_env.FMstrict;
-		     Jc_options.libfiles := "jessie.why" :: ["floats_strict.why"]
-		 | "full" -> Jc_options.float_model := Jc_env.FMfull;
-		     Jc_options.libfiles := "jessie.why" :: ["floats_full.why"]
+	         | "real" -> Jc_env.FMreal
+		 | "strict" -> Jc_env.FMstrict
+		 | "full" -> Jc_env.FMfull
+		 | "multirounding" -> Jc_env.FMmultirounding
 		 | _ -> lex_error lexbuf ("unknown float model " ^ v))
 	  end  
       | "FloatRoundingMode" ->
@@ -162,6 +161,7 @@
 	    Jc_options.float_instruction_set :=
 	      (match v with
 		 | "x87" -> Jc_env.FISx87
+		 | "ieee754" -> Jc_env.FISstrictIEEE754
 		 | _ -> lex_error lexbuf ("unknown float instruction set " ^ v))
 	  end 
       | _ -> lex_error lexbuf ("unknown pragma " ^ id)
