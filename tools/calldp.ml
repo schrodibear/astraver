@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.67 2009-07-16 14:50:54 nguyen Exp $ i*)
+(*i $Id: calldp.ml,v 1.68 2009-07-16 15:52:34 nguyen Exp $ i*)
 
 open Printf
 
@@ -84,7 +84,7 @@ let grep re str =
     let _ = Str.search_forward re str 0 in true
   with Not_found -> false
 
-let gen_prover_call ?(debug=false) ?(timeout=30) ?(switch="") ~filename:f p =
+let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="") ~filename:f p =
   let cmd = 
     p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ 
       switch ^ " " ^ f 
