@@ -55,7 +55,8 @@ let enc_name ~nl n p =
   match p.pr_enc with
     | NoEncoding -> 
 	begin match p.pr_id with
-	  | DpConfig.Graph -> n ^ nl "(Graph)"
+	  | DpConfig.SimplifySelect 
+	  | DpConfig.GappaSelect 
 	  | DpConfig.ErgoSelect -> n ^ nl "(Select)"
 	  | _ -> n ^ nl "" 
 	end
@@ -84,8 +85,8 @@ let simplify = {
   pr_enc = NoEncoding;
   }
 
-let graph = {
-  pr_id = DpConfig.Graph;
+let simplify_select = {
+  pr_id = DpConfig.SimplifySelect;
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
@@ -128,6 +129,15 @@ let simplify_rec = {
 
 let gappa = {
   pr_id = DpConfig.Gappa;
+  pr_info = DpConfig.gappa;
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_viewcol = None;
+  pr_enc = NoEncoding;
+  }
+
+let gappa_select = {
+  pr_id = DpConfig.GappaSelect;
   pr_info = DpConfig.gappa;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
@@ -266,7 +276,7 @@ let all_known_provers = [
   ergo_select; 
   (*ergoSS;*) 
   simplify; 
-  graph; 
+  simplify_select; 
   z3SS ; 
   yicesSS; 
   cvc3SS; 
@@ -276,6 +286,7 @@ let all_known_provers = [
 *)
   yices; 
   gappa ;
+  gappa_select ;
 (*
   coq ;
 *)

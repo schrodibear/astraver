@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.ml,v 1.66 2009-04-20 17:02:37 melquion Exp $ i*)
+(*i $Id: calldp.ml,v 1.67 2009-07-16 14:50:54 nguyen Exp $ i*)
 
 open Printf
 
@@ -96,7 +96,12 @@ let gen_prover_call ?(debug=false) ?(timeout=30) ?(switch="") ~filename:f p =
   else
     let res = file_contents out in
     let r =
-      if grep p.DpConfig.valid_regexp res then
+      let valid_result =
+	match p.DpConfig.valid_regexp with
+	  | None -> c == 0
+	  | Some r -> grep r res
+      in
+      if valid_result then
         Valid t
       else if grep p.DpConfig.undecided_regexp res then
         CannotDecide(t, None)
@@ -105,6 +110,30 @@ let gen_prover_call ?(debug=false) ?(timeout=30) ?(switch="") ~filename:f p =
       in
     remove_file ~debug out;
     r
+
+let gappa ?(debug=false) ?(timeout=10) ~filename:f () =
+  gen_prover_call ~debug ~timeout ~filename:f DpConfig.gappa
+(*
+  let p = DpConfig.gappa in
+  let cmd = 
+    p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ f 
+  in
+  let t,c,out = timed_sys_command debug timeout cmd in
+  let r =
+    if c = 152 (* 128 + SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
+    then Timeout t
+    else
+      let res = file_contents out in
+      if c == 0 then
+        Valid t
+      else if c == 1 && grep p.DpConfig.undecided_regexp res then
+        CannotDecide(t, Some res) 
+      else
+        ProverFailure(t, "command failed: " ^ cmd ^ "\n" ^ res)
+  in
+  remove_file ~debug out;
+  r
+*)
 
 let ergo ?(debug=false) ?(timeout=10) ~select_hypotheses ~filename:f () =
   if select_hypotheses then
@@ -133,27 +162,6 @@ let cvc3 ?(debug=false) ?(timeout=10) ~filename:f () =
 let error c t cmd =
   if c = 152 then Timeout t 
   else ProverFailure (t,"command failed: " ^ cmd) 
-
-let gappa ?(debug=false) ?(timeout=10) ~filename:f () =
-  let p = DpConfig.gappa in
-  let cmd = 
-    p.DpConfig.command ^ " " ^ p.DpConfig.command_switches ^ " " ^ f 
-  in
-  let t,c,out = timed_sys_command debug timeout cmd in
-  let r =
-    if c = 152 (* 128 + SIGXCPU signal (i.e. 24, /usr/include/bits/signum.h) *) 
-    then Timeout t
-    else
-      let res = file_contents out in
-      if c == 0 then
-        Valid t
-      else if c == 1 && grep p.DpConfig.undecided_regexp res then
-        CannotDecide(t, Some res) 
-      else
-        ProverFailure(t, "command failed: " ^ cmd ^ "\n" ^ res)
-  in
-  remove_file ~debug out;
-  r
 
 let cvcl ?(debug=false) ?(timeout=10) ~filename:f () =
   let cmd = sprintf "cvcl < %s" f in
@@ -215,14 +223,22 @@ let simplify ?(debug=false) ?(timeout=10) ~filename:f () =
    Face to a timeout result, the prover is called again with the same PO but 
    with a longer timeout.
 **)
-let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
+let generic_hypotheses_selection  ?(debug=false) ?(timeout=10) ~filename:f p () =
   let pruning_hyp = 3 in 
   let last_dot_index = String.rindex f '.' in 
-  let f_for_simplify = (String.sub f  0 last_dot_index) ^ "_why.sx" in 
-  let cmd = sprintf "why --simplify --no-pervasives %s " f in
+  let option, prover, file_for_prover = 
+    match p with
+      | DpConfig.Simplify ->
+	  "simplify", DpConfig.simplify, (String.sub f  0 last_dot_index) ^ "_why.sx" 
+      | DpConfig.Gappa ->
+	  "gappa", DpConfig.gappa, (String.sub f  0 last_dot_index) ^ "_why_po_1.gappa" 
+      | _ -> assert false (* TODO *)
+  in 
+  let cmd = sprintf "why --%s --no-pervasives %s " option f in
   let t'= 
     (float_of_int timeout) /. (float_of_int (pruning_hyp +1)) in
   let t'',c,out = timed_sys_command ~debug (int_of_float t') cmd in
+(*
   let cmd = sprintf "Simplify %s"  f_for_simplify in
   let t'',c,out = timed_sys_command ~debug (int_of_float (t' -. t'')) cmd in
   let result_sort t'' out  = 
@@ -234,11 +250,21 @@ let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
       else
 	ProverFailure
 	  (t'',"command failed: " ^ cmd ^ "\n" ^ file_contents out) in
+*)
+  let r =
+    gen_prover_call ~debug ~timeout:(int_of_float (t' -. t''))
+      ~filename:file_for_prover prover
+  in
+(*
   if c == 0 then 
     let r = result_sort t'' out in
     remove_file ~debug out;
     r
   else 
+*)
+  match r with 
+    | Valid _ -> r
+    | _ ->
     let t = ref 0.0 in 
     let c = ref 0 in 
     let vb = ref 0 in
@@ -251,22 +277,36 @@ let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
 
     do
       (* compute the new proof obligation *)
-      let cmd = sprintf "why --simplify --no-pervasives --prune-hyp %d %d %s " !pb !vb f  in
+      let cmd = sprintf "why --%s --no-pervasives --prune-hyp %d %d %s " option !pb !vb f  in
       let t'',c',out = timed_sys_command ~debug (int_of_float t') cmd in
     
+(*
       let cmd = sprintf "Simplify %s"  f_for_simplify in
       let t'',c',out = timed_sys_command ~debug (int_of_float (t' -. t'')) cmd in
-
+*)
+      r :=
+	gen_prover_call ~debug ~timeout:(int_of_float (t' -. t''))
+	  ~filename:file_for_prover prover  ;
+(*
       t :=  !t +. t'';
       c := c';
       r := result_sort t'' out ;
       vb := !vb+1 ;
+*)
       explicitRes := match !r with 
-	  Valid _ | Timeout _ | ProverFailure _  -> false 
-	| Invalid _ | CannotDecide  _ ->   true ;
+	| Valid _ | Timeout _ | ProverFailure _  -> false 
+	| Invalid (t'',_) | CannotDecide ( t'',_) ->
+	    t :=  !t +. t'';
+	    vb := !vb+1 ;
+(*
+  c := c';
+  r := result_sort t'' out ;
+*)    
+	    true ;
 	 
     done;
     
+(*
     let res  = 
       if !t >= float_of_int timeout then 
 	error !c (float_of_int timeout) cmd
@@ -276,7 +316,8 @@ let graph  ?(debug=false) ?(timeout=10) ~filename:f () =
 	else
 	  !r in
     res
-          
+*)
+      !r
 	  
       
     

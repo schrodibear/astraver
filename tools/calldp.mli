@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: calldp.mli,v 1.25 2009-02-10 13:44:43 marche Exp $ i*)
+(*i $Id: calldp.mli,v 1.26 2009-07-16 14:50:54 nguyen Exp $ i*)
 
 (* Call external decision procedures on a single input file *)
 
@@ -81,9 +81,9 @@ val ergo :
   ?debug:bool -> ?timeout:int -> select_hypotheses:bool -> filename:string ->
   unit -> prover_result
 
-val graph : 
+val generic_hypotheses_selection : 
   ?debug:bool -> 
-  ?timeout:int -> filename:string -> unit -> prover_result
+  ?timeout:int -> filename:string -> DpConfig.prover_id -> unit -> prover_result
 
 val coq : 
   ?debug:bool -> 

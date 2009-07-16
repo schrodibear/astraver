@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.419 2009-07-06 17:03:51 bobot Exp $ *)
+(* $Id: jc_interp.ml,v 1.420 2009-07-16 14:50:54 nguyen Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -195,7 +195,12 @@ let term_unary_op: expr_unary_op -> string = function
   | `Ubw_not, `Integer -> "bw_compl"
   | _ -> assert false (* not proper type *)
 
-let float_operator ~safe f =
+let float_model_has_safe_functions () =
+  match !Jc_options.float_model with
+    | FMstrict | FMmultirounding -> true
+    | FMreal | FMfull -> false
+ 
+let float_operator f =
   let s =
     match f with
       | `Badd -> "add_gen_float"
@@ -205,7 +210,8 @@ let float_operator ~safe f =
       | `Uminus -> "neg_gen_float"
       | `Bmod -> assert false
   in
-  if safe then s ^ "_safe" else s
+  if float_model_has_safe_functions() && (not (safety_checking())) 
+  then s ^ "_safe" else s
 
 let float_format f =
   match f with
@@ -1945,8 +1951,7 @@ and expr e =
         let e2' = expr e2 in
         make_guarded_app
 	  ~mark:e#mark FPoverflow e#pos
-	  (float_operator ~safe:(!Jc_options.float_model = FMstrict && 
-	       (not (safety_checking()))) `Uminus)
+	  (float_operator `Uminus)
 	     [Var (float_format format); current_rounding_mode () ; e2' ]
     | JCEunary(op,e1) ->
         let e1' = expr e1 in
@@ -1981,7 +1986,7 @@ and expr e =
         let e2' = expr e2 in
         make_guarded_app
 	  ~mark:e#mark FPoverflow e#pos
-	  (float_operator ~safe:(!Jc_options.float_model = FMstrict && (not (safety_checking()))) op)
+	  (float_operator op)
 	  [Var (float_format format); current_rounding_mode () ; e1' ; e2' ]
     | JCEbinary(e1,(_,#native_operator_type as op),e2) ->
         let e1' = expr e1 in
@@ -2077,7 +2082,7 @@ and expr e =
           | Round(f,rm) ->
               coerce ~check_int_overflow:(safety_checking() 
 					    (* no safe version in the full model*) 
-	      || !Jc_options.float_model <> FMstrict)
+	      || not (float_model_has_safe_functions ()))
                 e#mark e#pos (JCTnative (Tgenfloat f)) e1#typ e1 e1'
         end
     | JCEderef(e1,fi) ->

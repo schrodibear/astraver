@@ -68,7 +68,9 @@ let load_default_config () =
 	       | Yices -> Model.yicesSS
 	       | Gappa -> Model.gappa
 	       | Coq -> raise Exit (* not yet supported in GWhy *)
-	       | Graph|ErgoSelect|Rvsat|Zenon|Cvcl|Harvey ->
+	       | SimplifySelect
+	       | ErgoSelect | GappaSelect
+	       | Rvsat|Zenon|Cvcl|Harvey ->
 		   assert false (* not handled by dpConfig *)
 	   in	     
 	   printf "installed prover '%s' selected@." pdata.name;

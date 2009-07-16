@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: dispatcher.ml,v 1.37 2009-06-05 10:36:55 marche Exp $ i*)
+(*i $Id: dispatcher.ml,v 1.38 2009-07-16 14:50:54 nguyen Exp $ i*)
 
 open Options
 open Vcg
@@ -66,8 +66,8 @@ let push_elem p e =
   | Cvcl -> Cvcl.push_decl e
   | Zenon -> Zenon.push_decl e
   | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl e
-  | Ergo | ErgoSelect -> Pretty.push_decl ~ergo:true e
-  | Graph -> Pretty.push_decl e
+  | Ergo | ErgoSelect | SimplifySelect 
+  | GappaSelect -> Pretty.push_decl ~ergo:true e
   | Coq -> Coq.push_decl e
   | Gappa -> Gappa.push_decl e
 
@@ -79,8 +79,8 @@ let push_obligation p (loc, expl, id, s) =
   | Cvcl -> Cvcl.push_decl g
   | Zenon -> Zenon.push_decl g
   | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.push_decl g
-  | Ergo | ErgoSelect -> Pretty.push_decl g
-  | Graph -> Pretty.push_decl g
+  | Ergo | ErgoSelect | SimplifySelect 
+  | GappaSelect -> Pretty.push_decl g
   | Coq -> Coq.push_decl g
   | Gappa -> Gappa.push_decl g
 
@@ -106,8 +106,8 @@ let output_file ?encoding p (elems,o) =
     | Cvcl -> Cvcl.prelude_done := false; Cvcl.reset ()
     | Zenon -> Zenon.prelude_done := false; Zenon.reset ()
     | Rvsat | Yices | Cvc3 | Z3 -> Smtlib.reset ()
-    | Ergo | ErgoSelect -> Pretty.reset ()
-    | Graph -> Pretty.reset ()
+    | Ergo | ErgoSelect | SimplifySelect
+    | GappaSelect -> Pretty.reset ()
     | Coq -> () (* Coq.reset () *)
     | Gappa -> Gappa.reset ()
   end;
@@ -150,8 +150,8 @@ let output_file ?encoding p (elems,o) =
     | Rvsat | Yices | Cvc3 -> 
 	Smtlib.output_file ~logic:"AUFLIRA" f; f ^ "_why.smt"
     | Z3 -> Smtlib.output_file f; f ^ "_why.smt"
-    | Ergo | ErgoSelect -> Pretty.output_file f; f ^ "_why.why"
-    | Graph -> Pretty.output_file f; f ^ "_why.why"
+    | Ergo | ErgoSelect | SimplifySelect 
+    | GappaSelect -> Pretty.output_file f; f ^ "_why.why"
     | Gappa -> 
 	Gappa.output_one_file f; f ^ "_why.gappa"
     | Coq ->
@@ -214,12 +214,16 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
 	Calldp.cvc3 ~debug ?timeout ~filename ()
     | Z3 -> 
 	Calldp.z3 ~debug ?timeout ~filename ()
-    | Graph -> 
-	Calldp.graph  ~debug ?timeout ~filename ()
+    | SimplifySelect -> 
+	Calldp.generic_hypotheses_selection ~debug ?timeout ~filename 
+	  DpConfig.Simplify ()
     | Coq ->
 	Calldp.coq ~debug ?timeout ~filename ()
     | Gappa ->
 	Calldp.gappa ~debug ?timeout ~filename ()
+    | GappaSelect ->
+	Calldp.generic_hypotheses_selection ~debug ?timeout ~filename 
+	  DpConfig.Gappa ()
   in
   if not debug then begin 
     match p with

@@ -29,7 +29,7 @@
 
 type prover_id = 
     Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
-  | Cvc3 | Graph | Z3 | Coq | Gappa
+  | Cvc3 | SimplifySelect | Z3 | Coq | Gappa | GappaSelect
 
 type lazy_regexp =
   {
@@ -48,7 +48,8 @@ type prover_data =
     version_regexp : string;
     mutable command : string;
     command_switches : string;
-    valid_regexp : lazy_regexp;
+    valid_regexp : lazy_regexp option;
+    (* when None, validity is checked by testing return code == 0 *)
     undecided_regexp : lazy_regexp;
   }
     
@@ -61,7 +62,7 @@ let gappa =
     version_regexp = "Gappa \\([^ ]*\\)";
     command = "gappa";
     command_switches = "";
-    valid_regexp = make_regexp ""; (* not used, see calldp.ml *)
+    valid_regexp = None; (* valid iff return code = 0 *)
     undecided_regexp = make_regexp "no contradiction was found\\|some enclosures were not satisfied";
   }
 
@@ -74,7 +75,7 @@ let alt_ergo =
     version_regexp = ".*Ergo \\([^ ]*\\)";
     command = "alt-ergo";
     command_switches = "";
-    valid_regexp = make_regexp "\\bValid\\b";
+    valid_regexp = Some (make_regexp "\\bValid\\b");
     undecided_regexp = make_regexp "\\bI don't know\\b\\|\\bInvalid\\b";
   }
 
@@ -87,7 +88,7 @@ let simplify =
     version_regexp = "Simplify version \\([^ ,]+\\)";
     command = "Simplify";
     command_switches = "";
-    valid_regexp = make_regexp "\\bValid\\b";
+    valid_regexp = Some (make_regexp "\\bValid\\b");
     undecided_regexp = make_regexp "\\bInvalid\\b";
   }
 
@@ -100,7 +101,7 @@ let z3 =
     version_regexp = "Z3 version \\([^ \r]+\\)";
     command = "z3";
     command_switches = "-smt";
-    valid_regexp = make_regexp "\\bunsat\\b";
+    valid_regexp = Some (make_regexp "\\bunsat\\b");
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b";
   }
 
@@ -114,7 +115,7 @@ let yices =
     version_regexp = "\\([^ ]+\\)";
     command = "yices";
     command_switches = "-pc 0 -smt < ";
-    valid_regexp = make_regexp "\\bunsat\\b";
+    valid_regexp = Some (make_regexp "\\bunsat\\b");
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b\\|feature not supported: non linear problem";
   }
 
@@ -127,7 +128,7 @@ let cvc3 =
     version_regexp = "This is CVC3 version \\([^ ]+\\)";
     command = "cvc3";
     command_switches = "-lang smt < ";
-    valid_regexp = make_regexp "\\bunsat\\b";
+    valid_regexp = Some (make_regexp "\\bunsat\\b");
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b";
   }
 
@@ -140,7 +141,7 @@ let coq =
     version_regexp = "The Coq Proof Assistant, version \\([^ ]+\\)";
     command = "coqc";
     command_switches = "";
-    valid_regexp = make_regexp "\\bunsat\\b";
+    valid_regexp = None;
     undecided_regexp = make_regexp "Error while reading";
   }
 

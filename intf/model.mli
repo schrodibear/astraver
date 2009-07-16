@@ -27,6 +27,7 @@ val z3SS : prover
 val yicesSS : prover
 val cvc3SS : prover
 val gappa: prover
+val gappa_select: prover
 
 val prover_id : prover -> string
   (** return a prover identifier with name and encoding, e.g. "Z3(SS)",
