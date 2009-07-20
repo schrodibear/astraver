@@ -116,7 +116,7 @@ predicate add_gen_float_post5(f:float_format,m:mode,
 (*CASE 1:*)
 
     (abs_real(float_value(x)+float_value(y))>=0x1p-1022  ->
-    (abs_real((float_value(result) -(float_value(x)+float_value(y)))/ (float_value(x)+float_value(y)))<=(0x1.002p-53))) 
+    (abs_real((float_value(result) -(float_value(x)+float_value(y)))/ (float_value(x)+float_value(y)))<=(0x1.002p-53)  and abs_real(float_value(result)) >= 0x1p-1022 and abs_real(float_value(x)+float_value(y))>=0x1p-1022)) 
 
 and
 
@@ -124,7 +124,7 @@ and
   (((0.0 <= abs_real(float_value(x) + float_value(y)) <= 0x1p-1022) (*and 
                  (abs_real(float_value(x) + float_value(y)) <> 0x1p-1022)*)) ->
 
-(abs_real(float_value(result)-(float_value(x) + float_value(y)))<=0x1p-1075))
+(abs_real(float_value(result)-(float_value(x) + float_value(y)))<=0x1p-1075 and  abs_real(float_value(x) + float_value(y)) <= 0x1p-1022))
 
 and
     exact_value(result) = exact_value(x) + exact_value(y)
@@ -164,14 +164,14 @@ predicate sub_gen_float_post5(f:float_format,m:mode,
 (*CASE 1:*)
 
     (abs_real(float_value(x)-float_value(y))>=0x1p-1022  ->
-    abs_real((float_value(result) -(float_value(x)-float_value(y)))/ (float_value(x)-float_value(y)))<=0x1.002p-53) 
+   (( abs_real((float_value(result) -(float_value(x)-float_value(y)))/ (float_value(x)-float_value(y)))<=0x1.002p-53) and abs_real(float_value(result)) >= 0x1p-1022 and (abs_real(float_value(x)-float_value(y))>=0x1p-1022)))
 
 and
 
 (*CASE 2: *)
   (((0.0 <= abs_real(float_value(x) - float_value(y)) <= 0x1p-1022) (*and 
                  (abs_real(float_value(x) - float_value(y)) <> 0x1p-1022)*)) ->
- abs_real(float_value(result)-(float_value(x) - float_value(y)))<=0x1p-1075)
+ (abs_real(float_value(result)-(float_value(x) - float_value(y)))<=0x1p-1075 and  abs_real(float_value(x) - float_value(y)) <= 0x1p-1022))
 
 
 and
@@ -237,7 +237,7 @@ predicate mul_gen_float_post5(f:float_format,m:mode,
 (*CASE 1:*)
 
     (abs_real(float_value(x)*float_value(y))>=0x1p-1022  ->
-    (abs_real((float_value(result) -(float_value(x)*float_value(y)))/ (float_value(x)*float_value(y)))<=(0x1.002p-53))) 
+   ( (abs_real((float_value(result) -(float_value(x)*float_value(y)))/ (float_value(x)*float_value(y)))<=(0x1.002p-53))) and abs_real(float_value(result)) >= 0x1p-1022 and abs_real(float_value(x)*float_value(y))>=0x1p-1022)
 
 and
 
@@ -246,7 +246,7 @@ and
   (((0.0 <= abs_real(float_value(x) * float_value(y)) <= 0x1p-1022) (*and 
                  (abs_real(float_value(x) * float_value(y)) <> 0x1p-1022)*)) ->
 
-(abs_real(float_value(result) -float_value(x)*float_value(y))<=0x1p-1075))
+((abs_real(float_value(result) -float_value(x)*float_value(y))<=0x1p-1075) and abs_real(float_value(x) * float_value(y)) <= 0x1p-1022))
 
 and
      exact_value(result) = exact_value(x) * exact_value(y)
