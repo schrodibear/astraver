@@ -99,6 +99,7 @@ parameter gen_float_of_real_safe :
 
 
 
+(*
 predicate add_gen_float_post(f:float_format,m:mode,
                              x:gen_float,y:gen_float,res:gen_float) =
     float_value(res) = round_float(f,m,float_value(x) + float_value(y))
@@ -107,24 +108,32 @@ predicate add_gen_float_post(f:float_format,m:mode,
     and 
     model_value(res) = model_value(x) + model_value(y)
 
-
+*)
 (*********************************************************)
 
-predicate add_gen_float_post5(f:float_format,m:mode,
+predicate add_gen_float_post(f:float_format,m:mode,
 	                     x:gen_float,y:gen_float,result:gen_float) =
 
 (*CASE 1:*)
 
     (abs_real(float_value(x)+float_value(y))>=0x1p-1022  ->
-    (abs_real((float_value(result) -(float_value(x)+float_value(y)))/ (float_value(x)+float_value(y)))<=(0x1.002p-53)  and abs_real(float_value(result)) >= 0x1p-1022 and abs_real(float_value(x)+float_value(y))>=0x1p-1022)) 
+
+    (abs_real((float_value(result) -(float_value(x)+float_value(y)))/ (float_value(x)+float_value(y))) <= 0x1.0000000001p-53  
+     and 
+     abs_real(float_value(result)) >= 0x1p-1022 
+     and 
+     abs_real(float_value(x)+float_value(y))>=0x1p-1022)) 
 
 and
 
 (*CASE 2: *)
-  (((0.0 <= abs_real(float_value(x) + float_value(y)) <= 0x1p-1022) (*and 
-                 (abs_real(float_value(x) + float_value(y)) <> 0x1p-1022)*)) ->
+     ((abs_real(float_value(x) + float_value(y)) <= 0x1p-1022) ->
 
-(abs_real(float_value(result)-(float_value(x) + float_value(y)))<=0x1p-1075 and  abs_real(float_value(x) + float_value(y)) <= 0x1p-1022))
+     (abs_real(float_value(result)-(float_value(x) + float_value(y))) <=  0x1.00000000001p-1075      
+      and  
+      abs_real(float_value(x) + float_value(y)) <= 0x1p-1022)
+      and
+      abs_real(float_value(result)) <= 0x1p-1022 )
 
 and
     exact_value(result) = exact_value(x) + exact_value(y)
@@ -135,7 +144,7 @@ parameter add_gen_float :
   f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
   { no_overflow(f,m,float_value(x) + float_value(y)) }
   gen_float
-  { add_gen_float_post5(f,m,x,y,result) }
+  { add_gen_float_post(f,m,x,y,result) }
 
 
 
@@ -144,10 +153,10 @@ parameter add_gen_float_safe :
   { }
   gen_float
   { no_overflow(f,m,float_value(x) + float_value(y)) and
-    add_gen_float_post5(f,m,x,y,result) }
+    add_gen_float_post(f,m,x,y,result) }
 
 
-
+(*
 predicate sub_gen_float_post(f:float_format,m:mode,
 	                     x:gen_float,y:gen_float,res:gen_float) =
     float_value(res) = round_float(f,m,float_value(x) - float_value(y))
@@ -155,24 +164,32 @@ predicate sub_gen_float_post(f:float_format,m:mode,
     exact_value(res) = exact_value(x) - exact_value(y)
     and 
     model_value(res) = model_value(x) - model_value(y)
-
+*)
 (*********************************************************)
 
-predicate sub_gen_float_post5(f:float_format,m:mode,
+predicate sub_gen_float_post(f:float_format,m:mode,
 	                     x:gen_float,y:gen_float,result:gen_float) =
 
 (*CASE 1:*)
 
     (abs_real(float_value(x)-float_value(y))>=0x1p-1022  ->
-   (( abs_real((float_value(result) -(float_value(x)-float_value(y)))/ (float_value(x)-float_value(y)))<=0x1.002p-53) and abs_real(float_value(result)) >= 0x1p-1022 and (abs_real(float_value(x)-float_value(y))>=0x1p-1022)))
+
+    (abs_real((float_value(result) -(float_value(x)-float_value(y)))/ (float_value(x)-float_value(y))) <= 0x1.0000000001p-53    
+     and 
+     abs_real(float_value(result)) >= 0x1p-1022 
+     and 
+     abs_real(float_value(x)-float_value(y))>=0x1p-1022))
 
 and
 
 (*CASE 2: *)
-  (((0.0 <= abs_real(float_value(x) - float_value(y)) <= 0x1p-1022) (*and 
-                 (abs_real(float_value(x) - float_value(y)) <> 0x1p-1022)*)) ->
- (abs_real(float_value(result)-(float_value(x) - float_value(y)))<=0x1p-1075 and  abs_real(float_value(x) - float_value(y)) <= 0x1p-1022))
+  ((0.0 <= abs_real(float_value(x) - float_value(y)) <= 0x1p-1022) ->
 
+  (abs_real(float_value(result)-(float_value(x) - float_value(y))) <= 0x1.00000000001p-1075 
+   and  
+   abs_real(float_value(x) - float_value(y)) <= 0x1p-1022)
+   and
+      float_value(result) <= 0x1p-1022 )
 
 and
      exact_value(result) = exact_value(x) - exact_value(y)
@@ -182,7 +199,7 @@ parameter sub_gen_float :
   f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
   { no_overflow(f,m,float_value(x) - float_value(y)) }
   gen_float
-  {sub_gen_float_post5(f,m,x,y,result)}
+  {sub_gen_float_post(f,m,x,y,result)}
 
 parameter sub_gen_float_safe : 
   f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
@@ -190,7 +207,7 @@ parameter sub_gen_float_safe :
   gen_float
   { no_overflow(f,m,float_value(x) - float_value(y)) 
     and 
-    sub_gen_float_post5(f,m,x,y,result)
+    sub_gen_float_post(f,m,x,y,result)
   
   }
 
@@ -220,7 +237,7 @@ parameter neg_gen_float_safe :
     neg_gen_float_post(f,m,x,result) }
 
 
-
+(*
 predicate mul_gen_float_post(f:float_format,m:mode,
                              x:gen_float,y:gen_float,res:gen_float) =
     float_value(res) = round_float(f,m,float_value(x) * float_value(y))
@@ -228,35 +245,43 @@ predicate mul_gen_float_post(f:float_format,m:mode,
     exact_value(res) = exact_value(x) * exact_value(y)
     and 
     model_value(res) = model_value(x) * model_value(y)
-
+*)
 (*********************************************************)
 
-predicate mul_gen_float_post5(f:float_format,m:mode,
+predicate mul_gen_float_post(f:float_format,m:mode,
 	                     x:gen_float,y:gen_float,result:gen_float) =
 
 (*CASE 1:*)
 
-    (abs_real(float_value(x)*float_value(y))>=0x1p-1022  ->
-   ( (abs_real((float_value(result) -(float_value(x)*float_value(y)))/ (float_value(x)*float_value(y)))<=(0x1.002p-53))) and abs_real(float_value(result)) >= 0x1p-1022 and abs_real(float_value(x)*float_value(y))>=0x1p-1022)
+   (abs_real(float_value(x)*float_value(y))>=0x1p-1022  ->
+
+   (abs_real((float_value(result) -(float_value(x)*float_value(y)))/ (float_value(x)*float_value(y))) <= 0x1.0000000001p-53  
+     and 
+     abs_real(float_value(result)) >= 0x1p-1022 
+     and 
+     abs_real(float_value(x)*float_value(y))>=0x1p-1022))
 
 and
 
 (*CASE 2: *)    
 
-  (((0.0 <= abs_real(float_value(x) * float_value(y)) <= 0x1p-1022) (*and 
-                 (abs_real(float_value(x) * float_value(y)) <> 0x1p-1022)*)) ->
+  ((abs_real(float_value(x) * float_value(y)) <= 0x1p-1022) ->
 
-((abs_real(float_value(result) -float_value(x)*float_value(y))<=0x1p-1075) and abs_real(float_value(x) * float_value(y)) <= 0x1p-1022))
+  (abs_real(float_value(result) -float_value(x)*float_value(y)) <= 0x1.00000000001p-1075
+    and
+    abs_real(float_value(x) * float_value(y)) <= 0x1p-1022)
+    and
+      float_value(result) <= 0x1p-1022 )
 
 and
-     exact_value(result) = exact_value(x) * exact_value(y)
+   exact_value(result) = exact_value(x) * exact_value(y)
 
 (*********************************************************)
 parameter mul_gen_float : 
   f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
   { no_overflow(f,m,float_value(x)*float_value(y)) }
   gen_float
- { mul_gen_float_post5(f,m,x,y,result)} 
+ { mul_gen_float_post(f,m,x,y,result)} 
 
 
 parameter mul_gen_float_safe : 
@@ -264,10 +289,11 @@ parameter mul_gen_float_safe :
   { }
   gen_float
   { no_overflow(f,m,float_value(x)*float_value(y)) and
-   mul_gen_float_post5(f,m,x,y,result)
+   mul_gen_float_post(f,m,x,y,result)
 
 }
 
+(*
 predicate div_gen_float_post(f:float_format,m:mode,
                              x:gen_float,y:gen_float,res:gen_float) =
     float_value(res) = round_float(f,m,float_value(x)/float_value(y))
@@ -275,49 +301,36 @@ predicate div_gen_float_post(f:float_format,m:mode,
     exact_value(res) = exact_value(x)/exact_value(y)
     and 
     model_value(res) = model_value(x)/model_value(y)
+*)
 
-
-predicate div_gen_float_post1(f:float_format,m:mode,
+predicate div_gen_float_post(f:float_format,m:mode,
                              x:gen_float,y:gen_float,result:gen_float) =
 
-(*CASE 1: (x/y)>=0x1p-1022  ->  abs((result - (x/y)/(x/y))) <=0x1p-53*)
+(*CASE 1: *)
 
- (abs_real(float_value(x)/float_value(y))>=0x1p-1022  -> 
-  (abs_real((float_value(result) - float_value(x)/float_value(y))/ (float_value(x)/float_value(y)))<=0x1p-53)) and
+    (abs_real(float_value(x)/float_value(y))>=0x1p-1022  -> 
+ 
+    (abs_real((float_value(result) - float_value(x)/float_value(y))/ (float_value(x)/float_value(y))) <= 0x1.0000000001p-53    
+     and 
+     float_value(result) >= 0x1p-1022 
+     and 
+     abs_real(float_value(x)/float_value(y))>=  0x1p-1022)) 
 
+and
 
-(*CASE 2: (0x1p-1075<(x/y)<0x1p-1022) -> result - (x / y)<=0x1p-1075 *)
+(*CASE 2: *)
 
-  (((0x1p-1075 <= abs_real(float_value(x)/float_value(y)) <= 0x1p-1022) and 
-                 (abs_real(float_value(x)/float_value(y)) <> 0x1p-1022) and 
-                 (abs_real(float_value(x)/float_value(y)) <> 0x1p-1075)) ->
-  (abs_real(float_value(result)-float_value(x)/float_value(y))<=0x1p-1075)) and
+     ((abs_real(float_value(x)/float_value(y)) <= 0x1p-1022) ->
 
-(*CASE 3: 0 <= x/y <= 0x1p-1075   ->  result ==0 *)
+     (abs_real(float_value(result)-(float_value(x)/float_value(y))) <= 0x1.00000000001p-1075
+      and  
+      abs_real(float_value(x)/float_value(y)) <= 0x1p-1022)
+      and
+      float_value(result) <= 0x1p-1022 ) 
+and
 
-  ((0.0 <= abs_real(float_value(x)/float_value(y)) <= 0x1p-1075) ->
-  (float_value(result)=0.0))
+     exact_value(result) = exact_value(x) / exact_value(y)
 
-predicate div_gen_float_post2(f:float_format,m:mode,
-                             x:gen_float,y:gen_float,result:gen_float) =
-
-(*CASE 1: (x/y)>=0x1p-16382  ->  abs((result - (x/y)/(x/y))) <=0x1p-64*)
-
- (abs_real(float_value(x)/float_value(y))>=0x1p-16382  -> 
-  (abs_real((float_value(result) - float_value(x)/float_value(y))/ (float_value(x)/float_value(y)))<=0x1p-64)) and
-
-
-(*CASE 2: (0x1p-16446<(x/y)<0x1p-16382) -> result - (x / y)<=0x1p-16446 *)
-
-  (((0x1p-16446 <= abs_real(float_value(x)/float_value(y)) <= 0x1p-16382) and 
-                 (abs_real(float_value(x)/float_value(y)) <> 0x1p-16382) and 
-                 (abs_real(float_value(x)/float_value(y)) <> 0x1p-16446)) ->
-  (abs_real(float_value(result)-float_value(x)/float_value(y))<=0x1p-16446)) and
-
-(*CASE 3: 0 <= x/y <= 0x1p-16446   ->  result ==0 *)
-
-  ((0.0 <= abs_real(float_value(x)/float_value(y)) <= 0x1p-16446) ->
-  (float_value(result)=0.0))
 
 parameter div_gen_float : 
   f:float_format -> m:mode -> x:gen_float -> y:gen_float -> 
