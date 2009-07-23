@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.59 2009-05-19 07:30:41 marche Exp $
+$Id: java_parser.mly,v 1.60 2009-07-23 14:35:37 marche Exp $
 
 */
 
@@ -113,6 +113,9 @@ $Id: java_parser.mly,v 1.59 2009-05-19 07:30:41 marche Exp $
 %start kml_modifier
 %type  <Java_ast.modifier> kml_modifier
 
+%start kml_spec_eof
+%type <Java_ast.theory> kml_spec_eof
+
 %type <Java_ast.qualified_ident> name
 
 /*s Tokens */
@@ -142,6 +145,7 @@ $Id: java_parser.mly,v 1.59 2009-05-19 07:30:41 marche Exp $
 %token REQUIRES DECREASES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR ASSERT
 %token INVARIANT LOOP_INVARIANT LOOP_VARIANT 
 %token AXIOM LEMMA LOGIC TYPE PREDICATE INDUCTIVE AXIOMATIC READS
+%token THEORY
 %token BSFORALL BSEXISTS BSOLD BSAT BSRESULT BSNOTHING
 %token NON_NULL NULLABLE
 
@@ -1056,6 +1060,15 @@ ident:
 
 /****************************************************/
 /*s parsing of annotations: KML */
+
+kml_spec_eof:
+| kml_theory EOF
+     { $1 }
+;
+
+kml_theory:
+| THEORY ident LEFTBRACE kml_global_decls RIGHTBRACE
+    { JPTtheory($2,$4) }
 
 kml_global_def_eof:
 | kml_global_def EOF

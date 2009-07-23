@@ -145,12 +145,23 @@ let compilation_unit cu =
 let file f = 
   try
     let c = open_in f in
-    let d = Java_lexer.parse f c in
+    if Filename.check_suffix f ".spec" then
+      (* we parse the file as a spec file *)
+      let d = Java_lexer.parse_spec f c in
+      close_in c;
+      printf "Parsing of spec file %s was OK.@." f;
+      match d with
+	| JPTtheory(id,_) ->
+	    printf "It contains theory '%s'@." (snd id);
+	    exit 0
+    else
+      (* we parse the file as an annotated java file *)
+      let d = Java_lexer.parse f c in
       close_in c; 
       compilation_unit d
-  with
-    | Java_lexer.Lexical_error(l,s) ->
-	eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
+    with
+      | Java_lexer.Lexical_error(l,s) ->
+	  eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
 	exit 1
 
 (*
