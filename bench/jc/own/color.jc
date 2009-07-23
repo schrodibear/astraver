@@ -5,7 +5,8 @@ tag Point = {
   integer y;
   boolean colored;
   invariant point_inv(this) = this.x >= 0 && this.y >= 0;
-  invariant colored_inv(this) = this.colored ==> this <: ColorPoint;
+  invariant colored_inv(this) = 
+       this.colored ==> this <: ColorPoint;
 }
 
 tag ColorPoint = Point with {
