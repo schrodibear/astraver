@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.157 2009-05-20 14:37:29 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.158 2009-07-24 07:59:53 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -510,6 +510,8 @@ let rec get_type_decl package package_env acc d =
     | JPTinductive((loc,id),labels,params,body) -> acc
     | JPTaxiomatic(_,body) -> 
 	List.fold_left (get_type_decl package package_env) acc body
+    | JPTimport id ->
+	
 
 
 type classified_name =
