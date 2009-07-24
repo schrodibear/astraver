@@ -143,6 +143,23 @@ let type_decl d =
 let compilation_unit cu =
   { cu with cu_type_decls = List.map type_decl cu.cu_type_decls }
 
+let spec_file f =
+  try
+    let c = open_in f in
+    (* we parse the file as a spec file *)
+    let d = Java_lexer.parse_spec f c in
+    close_in c;
+    printf "Parsing of spec file %s was OK.@." f;
+    match d with
+      | JPTtheory(id,body) ->
+	  printf "It contains theory '%s'@." (snd id);
+	  body
+  with
+    | Java_lexer.Lexical_error(l,s) ->
+	eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
+	exit 1
+
+
 let file f = 
   try
     let c = open_in f in

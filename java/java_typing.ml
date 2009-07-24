@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.159 2009-07-24 08:03:10 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.160 2009-07-24 08:57:14 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -472,6 +472,8 @@ let new_class_info ~is_final (p:package_info) (id:string) c =
 
 let logic_types_table = Hashtbl.create 97
 
+let import_spec_table = Hashtbl.create 17
+
 let new_logic_type id = id
 
 let rec get_type_decl package package_env acc d = 
@@ -510,8 +512,17 @@ let rec get_type_decl package package_env acc d =
     | JPTinductive((loc,id),labels,params,body) -> acc
     | JPTaxiomatic(_,body) -> 
 	List.fold_left (get_type_decl package package_env) acc body
-    | JPTimport id ->
-	assert false (* TODO *)
+    | JPTimport(loc,id) ->
+	(* we look if id is already in the import table *)
+	try
+	  let _ = Hashtbl.find import_spec_table id in
+	  Java_options.lprintf "importing %s: was already imported@." id;
+	  acc
+	with Not_found ->
+	  Java_options.lprintf "importing spec %s@." id;  
+	  let spec_body = Java_syntax.spec_file (id ^ ".spec") in
+	  Hashtbl.add import_spec_table id spec_body;
+	  List.fold_left (get_type_decl package package_env) acc spec_body
 
 
 type classified_name =
@@ -3944,6 +3955,7 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	in
         let r = List.map (location env) reads in
         Hashtbl.add logics_env id fi;
+	Java_options.lprintf "Adding logic function '%s' in the logic environment@." id;
 	if in_axiomatic then
 	  Adecl(fi,`Reads r)::acc
 	else
@@ -4052,6 +4064,20 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	in
 	Hashtbl.add axiomatics_table id l;
 	acc
+    | JPTimport(loc,id) -> 	
+	if in_axiomatic then
+	  typing_error loc "import not allowed in axiomatics";
+	let body = 
+	  try
+	    Hashtbl.find import_spec_table id 
+	  with Not_found -> assert false
+	in	  
+	let l = List.fold_left 
+	  (type_decl_aux ~in_axiomatic:true package_env type_env) [] body
+	in
+	Hashtbl.add axiomatics_table id l;
+	acc
+	
 
 let type_decl package_env type_env d = 
   ignore (type_decl_aux ~in_axiomatic:false package_env type_env [] d)

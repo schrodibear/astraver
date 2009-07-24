@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.61 2009-07-24 07:59:53 marche Exp $
+$Id: java_parser.mly,v 1.62 2009-07-24 08:57:14 marche Exp $
 
 */
 
@@ -1087,7 +1087,7 @@ kml_global_def:
 | LEMMA ident label_binders COLON expr SEMICOLON
     { JPTlemma($2,false,$3,$5) }
 | IMPORT ident SEMICOLON
-    { JPTimport $2 }
+    { JPTimport($2) }
 ;
 
 kml_global_decls:
