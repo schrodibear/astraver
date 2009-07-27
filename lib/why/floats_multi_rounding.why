@@ -352,6 +352,34 @@ parameter div_gen_float_safe :
     and div_gen_float_post(f,m,x,y,result) }
 
 
+predicate sqrt_gen_float_post(f:float_format,m:mode,
+                             x:gen_float,result:gen_float) =
+
+(*CASE 1: *)
+
+    (abs_real(sqrt_real(float_value(x)))>=0x1p-1022  -> 
+ 
+    (abs_real(float_value(result) - sqrt_real(float_value(x))/ sqrt_real(float_value(x))) <= 0x1.0000000001p-53    
+     and 
+     float_value(result) >= 0x1p-1022 
+     and 
+     abs_real(sqrt_real(float_value(x)))>=  0x1p-1022)) 
+
+and
+
+(*CASE 2: *)
+
+     ((abs_real(sqrt_real(float_value(x))) <= 0x1p-1022) ->
+
+     (abs_real(float_value(result)-sqrt_real(float_value(x))) <= 0x1.00000000001p-1075
+      and  
+      abs_real(sqrt_real(float_value(x))) <= 0x1p-1022)
+      and
+      float_value(result) <= 0x1p-1022 ) 
+and
+
+     exact_value(result) = sqrt_real(exact_value(x))
+
 
 parameter sqrt_gen_float_requires : 
   f:float_format -> m:mode -> x:gen_float -> 
@@ -359,9 +387,7 @@ parameter sqrt_gen_float_requires :
     and 
     no_overflow(f,m,sqrt_real(float_value(x))) }
   gen_float
-  { float_value(result) = round_float(f,m,sqrt_real(float_value(x)))
-    and 
-    exact_value(result) = sqrt_real(exact_value(x))
+  { sqrt_gen_float_post(f,m,x,result)
     and 
     model_value(result) = sqrt_real(model_value(x))
   }
@@ -372,13 +398,39 @@ parameter sqrt_gen_float :
   f:float_format -> m:mode -> x:gen_float -> 
   {  }
   gen_float
-  { float_value(result) = round_float(f,m,sqrt_real(float_value(x)))
-    and 
-    exact_value(result) = sqrt_real(exact_value(x))
+  { sqrt_gen_float_post(f,m,x,result)
     and 
     model_value(result) = sqrt_real(model_value(x))
   }
 
+(***********not exact***********)
+predicate abs_gen_float_post(f:float_format,m:mode,
+                             x:gen_float,result:gen_float) =
+
+(*CASE 1: *)
+
+    (abs_real(float_value(x))>=0x1p-1022  -> 
+ 
+    (abs_real(float_value(result) - abs_real(float_value(x))/ abs_real(float_value(x))) <= 0x1.0000000001p-53    
+     and 
+     float_value(result) >= 0x1p-1022 
+     and 
+     abs_real(abs_real(float_value(x)))>=  0x1p-1022)) 
+
+and
+
+(*CASE 2: *)
+
+     ((abs_real(float_value(x)) <= 0x1p-1022) ->
+
+     (abs_real(float_value(result)-abs_real(float_value(x))) <= 0x1.00000000001p-1075
+      and  
+      abs_real(float_value(x)) <= 0x1p-1022)
+      and
+      float_value(result) <= 0x1p-1022 ) 
+and
+
+     exact_value(result) = abs_real(exact_value(x))
 
 
 parameter abs_gen_float_requires : 
