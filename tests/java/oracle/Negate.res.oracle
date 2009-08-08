@@ -1,6 +1,7 @@
 ========== file tests/java/Negate.java ==========
 
 
+//@+ CheckArithOverflow = no
 
 public class negate {
 

@@ -3,3 +3,7 @@ Warning: recursive definition of isfib in generated file
 Warning: recursive definition of isfib in generated file
 Warning: recursive definition of isfib in generated file
 Warning: recursive definition of isfib in generated file
+make: coqc: Command not found
+make: *** [coq/Fibonacci_why.vo] Error 127
+make: coqc: Command not found
+make: *** [coq/Fibonacci_why.vo] Error 127
