@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.62 2009-07-24 08:57:14 marche Exp $
+$Id: java_parser.mly,v 1.63 2009-08-08 06:29:52 marche Exp $
 
 */
 
@@ -168,7 +168,7 @@ $Id: java_parser.mly,v 1.62 2009-07-24 08:57:14 marche Exp $
 %token CARET               
 %token AMPERSAND           
 %token <Java_ast.bin_op> EQOP
-%token <Java_ast.bin_op> COMP 
+%token GT LT LE GE
 %token <Java_ast.bin_op> SHIFT
 %token PLUS MINUS 
 %token STAR SLASH PERCENT
@@ -191,7 +191,7 @@ x%right EQ ASSIGNOP
 %left CARET               /*r bitwise or boolean XOR ["^"] */
 %left AMPERSAND           /*r bitwise or boolean AND ["&"] */
 %left EQOP                /*r ["=="] and ["!="] */
-%left COMP INSTANCEOF  /*r ["<"], ["<="], [">"], [">="] and ["instanceof"] */
+%left GT LT LE GE INSTANCEOF  /*r ["<"], ["<="], [">"], [">="] and ["instanceof"] */
 %left SHIFT                 /*r ["<<"], [">>"] and [">>>"] */
 %left PLUS MINUS             /*r ["+"] and ["-"] */
 %left STAR SLASH PERCENT     /*r ["*"], ["/"] and ["%"] */
@@ -933,7 +933,7 @@ expr_no_name:
     { locate_expr (JPEbin($1,Bbwand,$3)) } 
 | expr EQOP expr          
     { locate_expr (JPEbin($1,$2,$3)) } 
-| expr COMP expr         
+| expr comp expr %prec GT
     { locate_expr (JPEbin($1,$2,$3)) } 
 | expr SHIFT expr         
     { locate_expr (JPEbin($1,$2,$3)) } 
@@ -1019,6 +1019,14 @@ expr_comma_list:
     { [$1] }
 | expr COMMA expr_comma_list
     { $1::$3 }
+;
+
+
+comp:
+| GT { Bgt }
+| LT { Blt }
+| LE { Ble }
+| GE { Bge }
 ;
 
 assign_op:

@@ -31,7 +31,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.38 2009-07-23 14:35:37 marche Exp $
+$Id: java_lexer.mll,v 1.39 2009-08-08 06:29:52 marche Exp $
 
 ***************************************************************************)
 
@@ -410,13 +410,13 @@ rule token = parse
   | "|=" 
       { ASSIGNOP Bbwor }
   | ">" 
-      { COMP Bgt }
+      { GT }
   | "<" 
-      { COMP Blt }
+      { LT }
   | "<=" 
-      { COMP Ble }
+      { LE }
   | ">="
-      { COMP Bge }
+      { GE }
   | "==" 
       { EQOP Beq }
   | "!="
