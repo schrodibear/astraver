@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.63 2009-08-08 06:29:52 marche Exp $
+$Id: java_parser.mly,v 1.64 2009-08-24 14:25:40 giorgetti Exp $
 
 */
 
@@ -168,11 +168,15 @@ $Id: java_parser.mly,v 1.63 2009-08-08 06:29:52 marche Exp $
 %token CARET               
 %token AMPERSAND           
 %token <Java_ast.bin_op> EQOP
+/*<<<<<<< java_parser.mly
+%token <Java_ast.bin_op> COMP
+=======*/
 %token GT LT LE GE
 %token <Java_ast.bin_op> SHIFT
 %token PLUS MINUS 
 %token STAR SLASH PERCENT
 %token PLUSPLUS MINUSMINUS TILDA BANG
+
 
 /*s Operator precedences */
 
@@ -298,7 +302,7 @@ field_declaration:
 | static_initializer 
     { JPFstatic_initializer($1) }
 | ANNOT
-    { let (loc,s)=$1 in JPFannot(loc,s) }
+    { let(loc,s)=$1 in JPFannot(loc,s) }
 /* Java 1.4 */
 | class_declaration
     { JPFclass $1 }
@@ -894,6 +898,7 @@ non_basic_cast:
     { locate_expr (JPEcast(Type_name($2),$4)) }
 ;
 
+
 expr:
 | name
     { locate_expr (JPEname $1) }
@@ -1066,6 +1071,23 @@ ident:
     { (loc(), "type") }
 ;
 
+type_parameter_list:
+| ident
+   { [$1] }
+| ident COMMA type_parameter_list
+   { $1::$3 }
+;
+
+
+poly_theory_id:
+| name
+   { PolyTheoryId($1,[]) }
+| name LT type_parameter_list GT
+   { PolyTheoryId($1,$3) }
+;
+
+
+
 /****************************************************/
 /*s parsing of annotations: KML */
 
@@ -1075,8 +1097,9 @@ kml_spec_eof:
 ;
 
 kml_theory:
-| THEORY ident LEFTBRACE kml_global_decls RIGHTBRACE
+| THEORY poly_theory_id LEFTBRACE kml_global_decls RIGHTBRACE
     { JPTtheory($2,$4) }
+;
 
 kml_global_def_eof:
 | kml_global_def EOF
@@ -1094,7 +1117,7 @@ kml_global_def:
     { JPTaxiomatic($2,$4) }
 | LEMMA ident label_binders COLON expr SEMICOLON
     { JPTlemma($2,false,$3,$5) }
-| IMPORT ident SEMICOLON
+| IMPORT poly_theory_id SEMICOLON
     { JPTimport($2) }
 ;
 

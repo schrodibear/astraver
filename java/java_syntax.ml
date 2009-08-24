@@ -151,9 +151,11 @@ let spec_file f =
     close_in c;
     printf "Parsing of spec file %s was OK.@." f;
     match d with
-      | JPTtheory(id,body) ->
-	  printf "It contains theory '%s'@." (snd id);
-	  body
+    | JPTtheory(PolyTheoryId(qid,params),body) ->
+         printf "It contains theory '%s'@."
+           (Java_pervasives.qualified_ident2string
+             qid ".");
+         body
   with
     | Java_lexer.Lexical_error(l,s) ->
 	eprintf "%a: lexical error: %s@." Loc.gen_report_position l s;
@@ -169,9 +171,10 @@ let file f =
       close_in c;
       printf "Parsing of spec file %s was OK.@." f;
       match d with
-	| JPTtheory(id,_) ->
-	    printf "It contains theory '%s'@." (snd id);
-	    exit 0
+	| JPTtheory(PolyTheoryId(qid,params),_) ->
+	    printf "It contains theory '%s'@."
+              (Java_pervasives.qualified_ident2string qid ".");
+ 	    exit 0
     else
       (* we parse the file as an annotated java file *)
       let d = Java_lexer.parse f c in

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.160 2009-07-24 08:57:14 marche Exp $ *)
+(* $Id: java_typing.ml,v 1.161 2009-08-24 14:25:40 giorgetti Exp $ *)
 
 open Java_env
 open Java_ast
@@ -512,7 +512,11 @@ let rec get_type_decl package package_env acc d =
     | JPTinductive((loc,id),labels,params,body) -> acc
     | JPTaxiomatic(_,body) -> 
 	List.fold_left (get_type_decl package package_env) acc body
-    | JPTimport(loc,id) ->
+    | JPTimport(PolyTheoryId(qid,params))  ->
+        let 
+          id = Java_pervasives.qualified_ident2string
+                 qid "."
+        in
 	(* we look if id is already in the import table *)
 	try
 	  let _ = Hashtbl.find import_spec_table id in
@@ -520,7 +524,11 @@ let rec get_type_decl package package_env acc d =
 	  acc
 	with Not_found ->
 	  Java_options.lprintf "importing spec %s@." id;  
-	  let spec_body = Java_syntax.spec_file (id ^ ".spec") in
+	  let 
+            spec_body = Java_syntax.spec_file 
+              ((Java_pervasives.qualified_ident2string qid "/") 
+               ^ ".spec") 
+          in
 	  Hashtbl.add import_spec_table id spec_body;
 	  List.fold_left (get_type_decl package package_env) acc spec_body
 
@@ -2251,7 +2259,7 @@ and cast_convertible tfrom tto =
           is_subclass cfrom cto || is_subclass cto cfrom
       | JTYclass (_, ci), JTYinterface ii ->
 	  if ci.class_info_is_final then implements ci ii else 
-	    true (* JLS 2.0: OK, JLS 3.0: TO COMPLETE *)
+	    true (* JLS 2.0: OK, JLS 3.0: TO COMPLTE *)
       | JTYclass(_,c), JTYarray _ -> 
           c == !object_class
       | JTYinterface _,JTYclass _ -> assert false (* TODO *)
@@ -4064,17 +4072,22 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	in
 	Hashtbl.add axiomatics_table id l;
 	acc
-    | JPTimport(loc,id) -> 	
+    | JPTimport(PolyTheoryId(id_list,params)) -> 
+        let loc = fst (List.hd id_list) in
 	if in_axiomatic then
 	  typing_error loc "import not allowed in axiomatics";
+        
+
+        let qid = Java_pervasives.qualified_ident2string id_list "." in
 	let body = 
 	  try
-	    Hashtbl.find import_spec_table id 
+	    Hashtbl.find import_spec_table qid
 	  with Not_found -> assert false
 	in	  
 	let l = List.fold_left 
 	  (type_decl_aux ~in_axiomatic:true package_env type_env) [] body
 	in
+        let id = snd (List.hd id_list) in
 	Hashtbl.add axiomatics_table id l;
 	acc
 	

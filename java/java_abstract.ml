@@ -290,7 +290,7 @@ let type_declaration fmt d =
     | JPTlogic_def(id,rettype,labels,param,e) -> assert false
     | JPTinductive(id,labels,param,e) -> assert false
     | JPTaxiomatic _ -> assert false
-	
+    | JPTimport _ -> assert false	
 
 let compilation_unit fmt cu =
   (*

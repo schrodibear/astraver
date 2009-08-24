@@ -29,7 +29,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.47 2009-07-24 08:57:14 marche Exp $
+$Id: java_ast.mli,v 1.48 2009-08-24 14:25:40 giorgetti Exp $
 
 ***************************************************************************)
 
@@ -277,6 +277,12 @@ and interface_declaration =
     }
 
 
+
+(* my 30.07*)
+
+type poly_theory_id =
+ | PolyTheoryId of qualified_ident * identifier list (* type type_parameter_list *)
+
 (*s compilation units *)
 
 type type_declaration =
@@ -289,10 +295,12 @@ type type_declaration =
   | JPTlogic_def of identifier * type_expr option * identifier list * parameter list * pexpr 
   | JPTinductive of identifier * identifier list * parameter list * (identifier * identifier list * pexpr) list
   | JPTaxiomatic of identifier * type_declaration list
-  | JPTimport of identifier 
+  | JPTimport of  poly_theory_id 
+
 
 type theory =
-  | JPTtheory of identifier * type_declaration list
+ | JPTtheory of poly_theory_id * type_declaration list
+
 
 type import_statement =
   | Import_package of qualified_ident

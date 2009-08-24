@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_pervasives.ml,v 1.21 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: java_pervasives.ml,v 1.22 2009-08-24 14:25:40 giorgetti Exp $ *)
 
 (*** Utility functions ***)
 
@@ -192,6 +192,18 @@ let builtin_logic_symbols =
     (Some integer_type, "\\int_max", [integer_type; integer_type]) ;
     (Some integer_type, "\\int_min", [integer_type; integer_type]) ;
   ]
+
+
+(* AG, 08/13/2009. 
+   For (Java_typing.get_type_decl ... JPTimport(...)). *)
+(* From a qualified identifier qid to a string.
+  Can be used to implement Java_???.print_qualified_ident. *)
+let rec qualified_ident2string qid separator = 
+  match qid with
+    | [] -> ""
+    | [(_,id)] -> id
+    | (_,id)::r ->
+        (qualified_ident2string r separator) ^ separator ^ id
 
 (*
 Local Variables: 

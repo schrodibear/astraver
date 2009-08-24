@@ -3,7 +3,7 @@
 (*  The Why platform for program certification                            *)
 (*  Copyright (C) 2002-2008                                               *)
 (*    Romain BARDOU                                                       *)
-(*    Jean-François COUCHOT                                               *)
+(*    Jan-François COUCHOT                                               *)
 (*    Mehdi DOGGUY                                                        *)
 (*    Jean-Christophe FILLIÂTRE                                           *)
 (*    Thierry HUBERT                                                      *)
@@ -31,7 +31,7 @@ Lexer for JavaCard source files
 
 VerifiCard Project - Démons research team - LRI - Université Paris XI
 
-$Id: java_lexer.mll,v 1.39 2009-08-08 06:29:52 marche Exp $
+$Id: java_lexer.mll,v 1.40 2009-08-24 14:25:40 giorgetti Exp $
 
 ***************************************************************************)
 
@@ -421,6 +421,7 @@ rule token = parse
       { EQOP Beq }
   | "!="
       { EQOP Bne }
+
 
       (* decimal constants *)
 
