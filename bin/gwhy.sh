@@ -5,6 +5,9 @@ case $1 in
 	b=`basename $1 .java`
 	krakatoa $1 || exit 1
 	echo "krakatoa on $b.java done"
+        d=`dirname $1`
+        echo "cd $d"
+        cd $d
 	jessie -locs $b.jloc -why-opt -split-user-conj $b.jc || exit 2
 	echo "jessie done"
 	make -f $b.makefile gui
