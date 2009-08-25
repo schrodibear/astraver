@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.ml,v 1.181 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: coq.ml,v 1.182 2009-08-25 14:13:50 marche Exp $ i*)
 
 open Options
 open Logic
@@ -581,7 +581,7 @@ let print_predicate_v8 fmt p =
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "@[@[<hov 2>let %a :=@ %a in@]@\n%a@]"
-	  ident id' print_term t print0 p'
+	  ident id' print_term_v8 t print0 p'
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
