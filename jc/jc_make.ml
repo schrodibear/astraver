@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.46 2009-04-15 15:35:13 ayad Exp $ i*)
+(*i $Id: jc_make.ml,v 1.47 2009-08-26 13:47:41 marche Exp $ i*)
 
 open Format
 open Pp
@@ -63,8 +63,8 @@ let generic full f targets =
        out "WHYEXEC ?= why@\n";
        out "GWHYEXEC ?= gwhy-bin@\n";
        out "WHYLIB ?= %s@\n@\n" (String.escaped Jc_options.libdir);
-       out "WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
-       out "GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
+       out "WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT) %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
+       out "GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT) %s -explain -locs %s.loc@\n@\n" (Jc_options.why_opt) f;
        out "JESSIELIBFILES ?=";
        List.iter (fun s ->
 		    out " %s"
@@ -79,74 +79,87 @@ let generic full f targets =
 	 (print_files simplify) targets;
 
        out "project: %a@\n@\n" (print_files wpr) targets;
+       out "why/%%.wpr:  WHYOPT=--project -dir why@\n";
        out "why/%%.wpr: why/%%.why@\n";
-       out "\t@@echo 'why --project [...] why/$*.why' && $(WHY) --project -dir why $(JESSIELIBFILES) why/$*.why@\n@\n";
+       out "\t@@echo 'why --project [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        out "goals: %a@\n@\n" (print_files why_goals) targets;
+       out "why/%%_ctx.why: WHYOPT=--multi-why -dir why@\n";
        out "why/%%_ctx.why: why/%%.why@\n";
-       out "\t@@echo 'why --multi-why [...] why/$*.why' && $(WHY) --multi-why -dir why $(JESSIELIBFILES) why/$*.why@\n@\n";
+       out "\t@@echo 'why --multi-why [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        out "coq: %a@\n@\n" (print_files coq_vo) targets;
 
+       out "coq/%s_why.v: WHYOPT=-coq -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\"@\n" f;
        out "coq/%s_why.v: why/%s.why@\n" f f;
-       out "\t@@echo 'why -coq-v8 [...] why/%s.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\" $(JESSIELIBFILES) why/%s.why@\n@\n" f f;
+       out "\t@@echo 'why -coq [...] why/%s.why' && $(WHY) $(JESSIELIBFILES) why/%s.why@\n@\n" f f;
 
 
        out "coq-goals: goals coq/%s_ctx_why.vo@\n" f;
        out "\tfor f in why/*_po*.why; do make -f %s.makefile coq/`basename $$f .why`_why.v ; done@\n@\n" f;
 
 
+       out "coq/%s_ctx_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\"@\n" f;
        out "coq/%s_ctx_why.v: why/%s_ctx.why@\n" f f;
-       out "\t@@echo 'why -coq-v8 [...] why/%s_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\" why/%s_ctx.why@\n@\n" f f;
-
+       out "\t@@echo 'why -coq [...] why/%s_ctx.why' && $(WHY) why/%s_ctx.why@\n@\n" f f;
+       out "coq/%%_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble \"Require Export %s_ctx_why.\" -coq-tactic \"intuition\"@\n" f;
        out "coq/%%_why.v: why/%%.why@\n";
-       out "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble \"Require Export %s_ctx_why.\" -coq-tactic \"intuition\" why/%s_ctx.why why/$*.why@\n@\n" f f;
+       out "\t@@echo 'why -coq [...] why/$*.why' && $(WHY) why/%s_ctx.why why/$*.why@\n@\n" f;
        out "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n@\n";
 
        out "pvs: %a@\n@\n" (print_files pvs) targets;
 
+       out "pvs/%%_why.pvs: WHYOPT=-pvs -dir pvs -pvs-preamble \"IMPORTING why@@jessie\"@\n";
        out "pvs/%%_why.pvs: why/%%.why@\n";
-       out "\t$(WHY) -pvs -dir pvs -pvs-preamble \"IMPORTING why@@jessie\" $(JESSIELIBFILES) why/$*.why@\n@\n";
+       out "\t$(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
+       out "pvs/jessie_why.pvs:WHYOPT=-pvs -dir pvs -pvs-preamble \"IMPORTING why@@why\"@\n";
        out "pvs/jessie_why.pvs:@\n";
-       out "\t$(WHY) -pvs -dir pvs -pvs-preamble \"IMPORTING why@@why\" $(JESSIELIBFILES)@\n@\n";
+       out "\t$(WHY) $(JESSIELIBFILES)@\n@\n";
 
        out "isabelle: %a@\n@\n" (print_files isabelle) targets;
 
+       out "isabelle/%%_why.thy: WHYOPT=-isabelle -dir isabelle -isabelle-base-theory jessie_why@\n";
        out "isabelle/%%_why.thy: why/%%.why@\n";
-       out "\t$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILES) why/$*.why@\n";
+       out "\t$(WHY) $(JESSIELIBFILES) why/$*.why@\n";
        out "\tcp -f %s/isabelle/jessie_why.thy isabelle/@\n@\n"
 	 Jc_options.libdir;
 
        out "simplify: %a@\n" (print_files simplify) targets;
        out "\t@@echo 'Running Simplify on proof obligations' && ($(DP) $^)@\n@\n";
+       out "simplify/%%_why.sx: WHYOPT=-simplify -dir simplify@\n";
        out "simplify/%%_why.sx: why/%%.why@\n";
-       out "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILES) why/$*.why@\n@\n";
+       out "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        out "alt-ergo ergo: %a@\n" (print_files ergo) targets;
        out "\t@@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)@\n@\n";
+       out "why/%%_why.why: WHYOPT=-alt-ergo -dir why@\n";
        out "why/%%_why.why: why/%%.why@\n";
-       out "\t@@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) -alt-ergo -dir why $(JESSIELIBFILES) why/$*.why@\n@\n";
+       out "\t@@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        out "cvcl: %a@\n@\n" (print_files cvcl) targets;
        out "\t@@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)@\n@\n";
+       out "cvcl/%%_why.cvc: WHYOPT=-cvcl -dir cvcl@\n";
        out "cvcl/%%_why.cvc: why/%%.why@\n";
-       out "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(JESSIELIBFILES) why/$*.why@\n@\n";
+       out "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        out "harvey: %a@\n" (print_files harvey) targets;
        out "\t@@echo 'Running haRVey on proof obligations' && ($(DP) $^)@\n@\n";
+       out "harvey/%%_why.rv: WHYOPT=-harvey -dir harvey@\n";
        out "harvey/%%_why.rv: why/%%.why@\n";
-       out "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(JESSIELIBFILES) why/$*.why@\n@\n";
+       out "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        out "zenon: %a@\n" (print_files zenon) targets;
        out "\t@@echo 'Running Zenon on proof obligations' && ($(DP) $^)@\n@\n";
+       out "zenon/%%_why.znn: WHYOPT=-zenon -dir zenon@\n";
        out "zenon/%%_why.znn: why/%%.why@\n";
-       out "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(JESSIELIBFILES) why/$*.why@\n@\n";
+       out "\t@@echo 'why -zenon [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        out "smtlib: %a@\n" (print_files smtlib) targets;
        out "\t@@echo 'Running Z3 on proof obligations' && ($(DP) $^)@\n@\n";
+       out "smtlib/%%_why.smt:  WHYOPT=-smtlib --encoding sstrat --exp goal -dir smtlib@\n";
        out "smtlib/%%_why.smt: why/%%.why@\n";
-       out "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIBFILES) why/$*.why@\n@\n";
+       out "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        out "z3: %a@\n" (print_files smtlib) targets;
        out "\t@@echo 'Running Z3 on proof obligations' && ($(DP) -smt-solver z3 $^)@\n@\n";

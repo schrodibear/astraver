@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ergo_split.mll,v 1.6 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: ergo_split.mll,v 1.7 2009-08-26 13:47:41 marche Exp $ i*)
 
 {
 
@@ -54,7 +54,8 @@
 
 }
 
-let letters = ['a'-'z']+
+let letters = ['a'-'z''A'-'Z''_''0'-'9']+
+
 rule split = parse
   | "goal" 
       { let file = start_file () in print "goal"; goal file lexbuf }
@@ -87,4 +88,3 @@ and goal file = parse
     close_in c
 
 }
-

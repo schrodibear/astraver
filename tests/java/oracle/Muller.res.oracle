@@ -541,9 +541,9 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC)  -split-user-conj -explain -locs Muller.loc
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Muller.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC)  -split-user-conj -explain -locs Muller.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Muller.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 
@@ -555,81 +555,95 @@ all: simplify/Muller_why.sx
 
 project: why/Muller.wpr
 
+why/%.wpr:  WHYOPT=--project -dir why
 why/%.wpr: why/%.why
-	@echo 'why --project [...] why/$*.why' && $(WHY) --project -dir why $(JESSIELIBFILES) why/$*.why
+	@echo 'why --project [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 goals: why/Muller_ctx.why
 
+why/%_ctx.why: WHYOPT=--multi-why -dir why
 why/%_ctx.why: why/%.why
-	@echo 'why --multi-why [...] why/$*.why' && $(WHY) --multi-why -dir why $(JESSIELIBFILES) why/$*.why
+	@echo 'why --multi-why [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 coq: coq/Muller_why.vo
 
+coq/Muller_why.v: WHYOPT=-coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
 coq/Muller_why.v: why/Muller.why
-	@echo 'why -coq-v8 [...] why/Muller.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/Muller.why
+	@echo 'why -coq [...] why/Muller.why' && $(WHY) $(JESSIELIBFILES) why/Muller.why
 
 coq-goals: goals coq/Muller_ctx_why.vo
 	for f in why/*_po*.why; do make -f Muller.makefile coq/`basename $$f .why`_why.v ; done
 
+coq/Muller_ctx_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
 coq/Muller_ctx_why.v: why/Muller_ctx.why
-	@echo 'why -coq-v8 [...] why/Muller_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/Muller_ctx.why
+	@echo 'why -coq [...] why/Muller_ctx.why' && $(WHY) why/Muller_ctx.why
 
+coq/%_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export Muller_ctx_why." -coq-tactic "intuition"
 coq/%_why.v: why/%.why
-	@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export Muller_ctx_why." -coq-tactic "intuition" why/Muller_ctx.why why/$*.why
+	@echo 'why -coq [...] why/$*.why' && $(WHY) why/Muller_ctx.why why/$*.why
 
 coq/%.vo: coq/%.v
 	coqc -I coq $<
 
 pvs: pvs/Muller_why.pvs
 
+pvs/%_why.pvs: WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@jessie"
 pvs/%_why.pvs: why/%.why
-	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@jessie" $(JESSIELIBFILES) why/$*.why
+	$(WHY) $(JESSIELIBFILES) why/$*.why
 
+pvs/jessie_why.pvs:WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@why"
 pvs/jessie_why.pvs:
-	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@why" $(JESSIELIBFILES)
+	$(WHY) $(JESSIELIBFILES)
 
 isabelle: isabelle/Muller_why.thy
 
+isabelle/%_why.thy: WHYOPT=-isabelle -dir isabelle -isabelle-base-theory jessie_why
 isabelle/%_why.thy: why/%.why
-	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILES) why/$*.why
+	$(WHY) $(JESSIELIBFILES) why/$*.why
 	cp -f HOME/lib/isabelle/jessie_why.thy isabelle/
 
 simplify: simplify/Muller_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
 
+simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
-	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILES) why/$*.why
+	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/Muller_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
+why/%_why.why: WHYOPT=-alt-ergo -dir why
 why/%_why.why: why/%.why
-	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) -alt-ergo -dir why $(JESSIELIBFILES) why/$*.why
+	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 cvcl: cvcl/Muller_why.cvc
 
 	@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)
 
+cvcl/%_why.cvc: WHYOPT=-cvcl -dir cvcl
 cvcl/%_why.cvc: why/%.why
-	@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(JESSIELIBFILES) why/$*.why
+	@echo 'why -cvcl [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 harvey: harvey/Muller_why.rv
 	@echo 'Running haRVey on proof obligations' && ($(DP) $^)
 
+harvey/%_why.rv: WHYOPT=-harvey -dir harvey
 harvey/%_why.rv: why/%.why
-	@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(JESSIELIBFILES) why/$*.why
+	@echo 'why -harvey [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 zenon: zenon/Muller_why.znn
 	@echo 'Running Zenon on proof obligations' && ($(DP) $^)
 
+zenon/%_why.znn: WHYOPT=-zenon -dir zenon
 zenon/%_why.znn: why/%.why
-	@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(JESSIELIBFILES) why/$*.why
+	@echo 'why -zenon [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 smtlib: smtlib/Muller_why.smt
 	@echo 'Running Z3 on proof obligations' && ($(DP) $^)
 
+smtlib/%_why.smt:  WHYOPT=-smtlib --encoding sstrat --exp goal -dir smtlib
 smtlib/%_why.smt: why/%.why
-	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIBFILES) why/$*.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 z3: smtlib/Muller_why.smt
 	@echo 'Running Z3 on proof obligations' && ($(DP) -smt-solver z3 $^)

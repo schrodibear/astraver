@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: coq.mli,v 1.30 2008-11-05 14:03:16 filliatr Exp $ i*)
+(*i $Id: coq.mli,v 1.31 2009-08-26 13:47:41 marche Exp $ i*)
 
 open Cc
 open Vcg
@@ -40,7 +40,7 @@ val push_program : string -> cc_type -> cc_functional_program -> unit
 
 val push_parameter : string -> cc_type -> unit
 
-val output_file : string -> unit
+val output_file : bool -> string -> unit
 
 (* exported for the GUI *)
 

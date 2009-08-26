@@ -326,7 +326,9 @@ else
 	case $COQVERSION in
 	8.1*|8.2*|trunk)
 	  JESSIELIBCOQ=lib/coq/jessie_why.vo
-	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
+	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v
+          COQVER=v8.1
+          ;;
 	*)
 	  JESSIELIBCOQ=
 	  cp -f lib/coq/WhyCoq8.v lib/coq/WhyCoqCompat.v;;

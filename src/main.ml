@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.172 2009-07-01 15:18:30 marche Exp $ i*)
+(*i $Id: main.ml,v 1.173 2009-08-26 13:47:41 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -160,7 +160,7 @@ let push_parameter id _v tv = match prover () with
   | CVCLite | Ergo | Why | MultiWhy | Dispatcher | WhyProject -> 
       ()
 
-let output fwe = 
+let output is_last fwe =
   if wol then begin
     let cout = open_out (Options.out_file (fwe ^ ".wol")) in
     output_value cout !Vcg.logs;
@@ -169,7 +169,7 @@ let output fwe =
     Pp.print_in_file Ocaml.output (Options.out_file "out")
   else begin match prover () with
     | Pvs -> Pvs.output_file fwe
-    | Coq _ -> Coq.output_file fwe
+    | Coq _ -> Coq.output_file is_last fwe
     | HolLight -> Holl.output_file fwe
     | Mizar -> Mizar.output_file fwe    
     | Harvey -> Harvey.output_file fwe
@@ -631,26 +631,31 @@ let single_file () = match prover () with
   | SmtLib | Ergo | Why | MultiWhy | WhyProject -> true
   | Coq _ | Pvs | Mizar | Hol4 | HolLight | Isabelle -> false
 
-let deal_file f =
+let deal_file is_last f =
   reset ();
   let cin = open_in f in 
   deal_channel (why_parser f) cin;
   close_in cin;
   if not type_only then
     let fwe = Filename.chop_extension f in
-    if not (single_file ()) then output (Options.out_file fwe)
+    if not (single_file ()) then output is_last (Options.out_file fwe)
 
+let rec iter_with_last f = function
+  | [] -> ()
+  | [x] -> f true x
+  | x::l -> f false x; iter_with_last f l
+  
 let main () =
   let t0 = Unix.times () in
   load_prelude ();
   if files = [] then 
     begin
       deal_channel (why_parser "standard input") stdin;
-      output (Options.out_file "out")
+      output false (Options.out_file "out")
     end 
   else 
     begin
-      List.iter deal_file files;
+      iter_with_last deal_file files;
       if type_only then exit 0;
       if (pruning) or (Options.pruning_hyp_v != -1) then
 	begin
@@ -660,10 +665,9 @@ let main () =
       if single_file () then 
 	let lf = Filename.chop_extension (last files) in
 	let outf = Options.out_file lf in      
-	output outf
+	output false outf
     end;
   if show_time then
     let t1 = Unix.times () in
     printf "Why execution time : %3.2f@." 
       (t1.Unix.tms_utime -. t0.Unix.tms_utime)
-

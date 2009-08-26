@@ -75,6 +75,7 @@ COQC7  = @COQC7@
 COQC8  = @COQC8@
 COQDEP = @COQDEP@
 COQLIB = "@COQLIB@"
+COQVER = @COQVER@
 
 VO7= lib/coq-v7/WhyInt.vo lib/coq-v7/WhyArrays.vo  lib/coq-v7/WhyBool.vo \
      lib/coq-v7/WhyTuples.vo  lib/coq-v7/WhyPermut.vo \
@@ -146,7 +147,7 @@ TOOLS=$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) $(WHYOBFUSCATOR) \
       $(SIMPLIFY2WHY) $(WHYSTAT) $(TOOLSTAT)
 
 ifeq ($(OCAMLBEST),opt)
-JCLIB=jc/jc.cmo jc/jc.cmx
+JCLIB=jc/jc.cmo jc/jc.cmx jc/jc.o
 else
 JCLIB=jc/jc.cmo
 endif
@@ -294,7 +295,7 @@ JCCML_EXPORT = src/lib.ml src/rc.ml src/loc.ml src/pp.ml src/option_misc.ml \
 	jc/jc_output_misc.ml jc/jc_poutput.ml jc/jc_output.ml jc/jc_noutput.ml
 JCCMO_EXPORT = $(JCCML_EXPORT:.ml=.cmo)
 JCCMX_EXPORT = $(JCCML_EXPORT:.ml=.cmx)
-JCCMI_EXPORT = jc/jc_ast.cmi jc/jc_env.cmi $(JCCML_EXPORT:.ml=.cmi)
+JCCMI_EXPORT = jc/jc_ast.cmi jc/jc_env.cmi jc/jc.cmi $(JCCML_EXPORT:.ml=.cmi)
 
 JCCMO = src/version.cmo \
 	@ATPCMO@ $(JCCMO_EXPORT) \
@@ -618,6 +619,7 @@ coq-no:
 coq-yes: coq-@COQVER@
 coq-v7: $(VO7)
 coq-v8: generate_coq_files $(VO8)
+coq-v8.1: generate_coq_files $(VO8)
 
 ########
 # PVS
@@ -629,7 +631,7 @@ pvs-yes: $(PVSFILES)
 include Version
 
 doc/version.tex src/version.ml c/cversion.ml: Version version.sh config.status
-	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) ./version.sh
+	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) COQVER=$(COQVER) ./version.sh
 
 lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 	WHYLIB=lib $(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why
@@ -755,7 +757,8 @@ install-lib: $(JCLIB)
 	mkdir -p $(LIBDIR)/why/why
 	cp -f $(PRELUDE) $(LIBDIR)/why/why
 	mkdir -p $(LIBDIR)/caduceus/why
-#	??? cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)
+	mkdir -p $(LIBDIR)/jessie
+	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
 	mkdir -p $(LIBDIR)/caduceus/coq
@@ -786,7 +789,7 @@ install-coq-v7:
 	mkdir -p $(LIBDIR)/why/coq7
 	cp -f $(V7FILES) $(LIBDIR)/why/coq7
 	cp -f $(VO7) $(LIBDIR)/why/coq7
-install-coq-v8: 
+install-coq-v8 install-coq-v8.1:
 	if test -w $(COQLIB) ; then \
 	 mkdir -p $(COQLIB)/user-contrib ; \
 	 cp -f $(V8FILES) $(COQLIB)/user-contrib ; \

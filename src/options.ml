@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.129 2009-04-29 05:26:01 stouls Exp $ i*)
+(*i $Id: options.ml,v 1.130 2009-08-26 13:47:41 marche Exp $ i*)
 
 open Format
 
@@ -112,8 +112,9 @@ let wol_ = ref false
 
 let c_file = ref false
 
-type coq_version = V7 | V8
-let coq_version = match Version.coqversion with "v8" -> V8 | _ -> V7
+type coq_version = V7 | V8 | V81
+let coq_version =
+  match Version.coqversion with "v8" -> V8 | "v8.1" -> V81 | _ -> V7
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
@@ -333,6 +334,7 @@ let files =
     | ("-pvs" | "--pvs") :: args -> prover_ := Pvs; parse args
     | ("-coq-v7" | "--coq-v7") :: args -> prover_ := Coq V7; parse args
     | ("-coq-v8" | "--coq-v8") :: args -> prover_ := Coq V8; parse args
+    | ("-coq-v81" | "--coq-v81") :: args -> prover_ := Coq V81; parse args
     | ("-coq" | "--coq") :: args -> prover_ := Coq coq_version; parse args
     | ("-hol-light" | "--hol-light") :: args -> prover_ := HolLight; parse args
     | ("-mizar" | "--mizar") :: args -> prover_ := Mizar; parse args

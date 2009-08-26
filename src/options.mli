@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.99 2009-04-23 16:03:42 melquion Exp $ i*)
+(*i $Id: options.mli,v 1.100 2009-08-26 13:47:41 marche Exp $ i*)
 
 (*s General options *)
 
@@ -107,7 +107,7 @@ val termination : termination
 
 (*s Prover options *)
 
-type coq_version = V7 | V8
+type coq_version = V7 | V8 | V81
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite

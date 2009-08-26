@@ -1,4 +1,5 @@
 
+  o [Why] fixed some bugs with Coq output
   o [GWhy] new column gappa+hypotheses selection
 
 version 2.19, June 23rd, 2009

@@ -399,9 +399,9 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC)  -split-user-conj -explain -locs Creation.loc
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Creation.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC)  -split-user-conj -explain -locs Creation.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Creation.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 
@@ -413,81 +413,95 @@ all: simplify/Creation_why.sx
 
 project: why/Creation.wpr
 
+why/%.wpr:  WHYOPT=--project -dir why
 why/%.wpr: why/%.why
-	@echo 'why --project [...] why/$*.why' && $(WHY) --project -dir why $(JESSIELIBFILES) why/$*.why
+	@echo 'why --project [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 goals: why/Creation_ctx.why
 
+why/%_ctx.why: WHYOPT=--multi-why -dir why
 why/%_ctx.why: why/%.why
-	@echo 'why --multi-why [...] why/$*.why' && $(WHY) --multi-why -dir why $(JESSIELIBFILES) why/$*.why
+	@echo 'why --multi-why [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 coq: coq/Creation_why.vo
 
+coq/Creation_why.v: WHYOPT=-coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
 coq/Creation_why.v: why/Creation.why
-	@echo 'why -coq-v8 [...] why/Creation.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/Creation.why
+	@echo 'why -coq [...] why/Creation.why' && $(WHY) $(JESSIELIBFILES) why/Creation.why
 
 coq-goals: goals coq/Creation_ctx_why.vo
 	for f in why/*_po*.why; do make -f Creation.makefile coq/`basename $$f .why`_why.v ; done
 
+coq/Creation_ctx_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
 coq/Creation_ctx_why.v: why/Creation_ctx.why
-	@echo 'why -coq-v8 [...] why/Creation_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/Creation_ctx.why
+	@echo 'why -coq [...] why/Creation_ctx.why' && $(WHY) why/Creation_ctx.why
 
+coq/%_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export Creation_ctx_why." -coq-tactic "intuition"
 coq/%_why.v: why/%.why
-	@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export Creation_ctx_why." -coq-tactic "intuition" why/Creation_ctx.why why/$*.why
+	@echo 'why -coq [...] why/$*.why' && $(WHY) why/Creation_ctx.why why/$*.why
 
 coq/%.vo: coq/%.v
 	coqc -I coq $<
 
 pvs: pvs/Creation_why.pvs
 
+pvs/%_why.pvs: WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@jessie"
 pvs/%_why.pvs: why/%.why
-	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@jessie" $(JESSIELIBFILES) why/$*.why
+	$(WHY) $(JESSIELIBFILES) why/$*.why
 
+pvs/jessie_why.pvs:WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@why"
 pvs/jessie_why.pvs:
-	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@why" $(JESSIELIBFILES)
+	$(WHY) $(JESSIELIBFILES)
 
 isabelle: isabelle/Creation_why.thy
 
+isabelle/%_why.thy: WHYOPT=-isabelle -dir isabelle -isabelle-base-theory jessie_why
 isabelle/%_why.thy: why/%.why
-	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILES) why/$*.why
+	$(WHY) $(JESSIELIBFILES) why/$*.why
 	cp -f HOME/lib/isabelle/jessie_why.thy isabelle/
 
 simplify: simplify/Creation_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
 
+simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
-	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILES) why/$*.why
+	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/Creation_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
+why/%_why.why: WHYOPT=-alt-ergo -dir why
 why/%_why.why: why/%.why
-	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) -alt-ergo -dir why $(JESSIELIBFILES) why/$*.why
+	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 cvcl: cvcl/Creation_why.cvc
 
 	@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)
 
+cvcl/%_why.cvc: WHYOPT=-cvcl -dir cvcl
 cvcl/%_why.cvc: why/%.why
-	@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(JESSIELIBFILES) why/$*.why
+	@echo 'why -cvcl [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 harvey: harvey/Creation_why.rv
 	@echo 'Running haRVey on proof obligations' && ($(DP) $^)
 
+harvey/%_why.rv: WHYOPT=-harvey -dir harvey
 harvey/%_why.rv: why/%.why
-	@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(JESSIELIBFILES) why/$*.why
+	@echo 'why -harvey [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 zenon: zenon/Creation_why.znn
 	@echo 'Running Zenon on proof obligations' && ($(DP) $^)
 
+zenon/%_why.znn: WHYOPT=-zenon -dir zenon
 zenon/%_why.znn: why/%.why
-	@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(JESSIELIBFILES) why/$*.why
+	@echo 'why -zenon [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 smtlib: smtlib/Creation_why.smt
 	@echo 'Running Z3 on proof obligations' && ($(DP) $^)
 
+smtlib/%_why.smt:  WHYOPT=-smtlib --encoding sstrat --exp goal -dir smtlib
 smtlib/%_why.smt: why/%.why
-	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIBFILES) why/$*.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 z3: smtlib/Creation_why.smt
 	@echo 'Running Z3 on proof obligations' && ($(DP) -smt-solver z3 $^)
@@ -2577,48 +2591,46 @@ parameter cons_Creation :
 
 parameter cons_Creation_int :
  this_1:Object pointer ->
-  n_1:int ->
+  n:int ->
    { } unit reads Creation_simple_val,Object_alloc_table
    writes Creation_simple_val
    { (JC_24:
-     ((JC_22: eq_int(select(Creation_simple_val, this_1), n_1))
+     ((JC_22: eq_int(select(Creation_simple_val, this_1), n))
      and (JC_23:
          not_assigns(Object_alloc_table@, Creation_simple_val@,
          Creation_simple_val, pset_singleton(this_1@))))) }
 
 parameter cons_Creation_int_int :
  this_0:Object pointer ->
-  n_0_0:int ->
+  n_0:int ->
    m:int ->
     { } unit reads Creation_simple_val,Object_alloc_table
     writes Creation_simple_val
     { (JC_55:
-      ((JC_53:
-       eq_int(select(Creation_simple_val, this_0), add_int(n_0_0, m)))
+      ((JC_53: eq_int(select(Creation_simple_val, this_0), add_int(n_0, m)))
       and (JC_54:
           not_assigns(Object_alloc_table@, Creation_simple_val@,
           Creation_simple_val, pset_singleton(this_0@))))) }
 
 parameter cons_Creation_int_int_requires :
  this_0:Object pointer ->
-  n_0_0:int ->
+  n_0:int ->
    m:int ->
     { } unit reads Creation_simple_val,Object_alloc_table
     writes Creation_simple_val
     { (JC_55:
-      ((JC_53:
-       eq_int(select(Creation_simple_val, this_0), add_int(n_0_0, m)))
+      ((JC_53: eq_int(select(Creation_simple_val, this_0), add_int(n_0, m)))
       and (JC_54:
           not_assigns(Object_alloc_table@, Creation_simple_val@,
           Creation_simple_val, pset_singleton(this_0@))))) }
 
 parameter cons_Creation_int_requires :
  this_1:Object pointer ->
-  n_1:int ->
+  n:int ->
    { } unit reads Creation_simple_val,Object_alloc_table
    writes Creation_simple_val
    { (JC_24:
-     ((JC_22: eq_int(select(Creation_simple_val, this_1), n_1))
+     ((JC_22: eq_int(select(Creation_simple_val, this_1), n))
      and (JC_23:
          not_assigns(Object_alloc_table@, Creation_simple_val@,
          Creation_simple_val, pset_singleton(this_1@))))) }
@@ -2944,7 +2956,7 @@ let cons_Creation_ensures_normal =
         Creation_simple_val, pset_singleton(this_2@))))) }
 
 let cons_Creation_int_ensures_default =
- fun (this_1 : Object pointer) (n_1 : int) ->
+ fun (this_1 : Object pointer) (n : int) ->
   { valid_struct_Creation(this_1, (0), (0), Object_alloc_table) }
   (init:
   try
@@ -2955,7 +2967,7 @@ let cons_Creation_int_ensures_default =
                                          (((safe_upd_ Creation_simple_val) jessie_14) jessie_11))) in
                         void);
                        (K_1:
-                       (let jessie_16 = n_1 in
+                       (let jessie_16 = n in
                        (let jessie_19 = this_1 in
                        begin
                          (((safe_upd_ Creation_simple_val) jessie_19) jessie_16);
@@ -2971,7 +2983,7 @@ let cons_Creation_int_ensures_default =
   { (JC_15: true) }
 
 let cons_Creation_int_ensures_normal =
- fun (this_1 : Object pointer) (n_1 : int) ->
+ fun (this_1 : Object pointer) (n : int) ->
   { valid_struct_Creation(this_1, (0), (0), Object_alloc_table) }
   (init:
   try
@@ -2982,7 +2994,7 @@ let cons_Creation_int_ensures_normal =
                                          (((safe_upd_ Creation_simple_val) jessie_24) jessie_21))) in
                         void);
                        (K_1:
-                       (let jessie_26 = n_1 in
+                       (let jessie_26 = n in
                        (let jessie_29 = this_1 in
                        begin
                          (((safe_upd_ Creation_simple_val) jessie_29) jessie_26);
@@ -2996,13 +3008,13 @@ let cons_Creation_int_ensures_normal =
    Return ->
    void end)
   { (JC_21:
-    ((JC_19: eq_int(select(Creation_simple_val, this_1), n_1))
+    ((JC_19: eq_int(select(Creation_simple_val, this_1), n))
     and (JC_20:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
         Creation_simple_val, pset_singleton(this_1@))))) }
 
 let cons_Creation_int_int_ensures_default =
- fun (this_0 : Object pointer) (n_0_0 : int) (m : int) ->
+ fun (this_0 : Object pointer) (n_0 : int) (m : int) ->
   { valid_struct_Creation(this_0, (0), (0), Object_alloc_table) }
   (init:
   try
@@ -3011,7 +3023,7 @@ let cons_Creation_int_int_ensures_default =
                       (let jessie_58 = this_0 in
                       (((safe_upd_ Creation_simple_val) jessie_58) jessie_55))) in
      void);
-    (K_6: (JC_57: ((cons_Creation_int this_0) (K_5: ((add_int n_0_0) m)))));
+    (K_6: (JC_57: ((cons_Creation_int this_0) (K_5: ((add_int n_0) m)))));
     (raise Return)
    end
    with
@@ -3020,7 +3032,7 @@ let cons_Creation_int_int_ensures_default =
   { (JC_46: true) }
 
 let cons_Creation_int_int_ensures_normal =
- fun (this_0 : Object pointer) (n_0_0 : int) (m : int) ->
+ fun (this_0 : Object pointer) (n_0 : int) (m : int) ->
   { valid_struct_Creation(this_0, (0), (0), Object_alloc_table) }
   (init:
   try
@@ -3029,20 +3041,20 @@ let cons_Creation_int_int_ensures_normal =
                       (let jessie_64 = this_0 in
                       (((safe_upd_ Creation_simple_val) jessie_64) jessie_61))) in
      void);
-    (K_6: (JC_58: ((cons_Creation_int this_0) (K_5: ((add_int n_0_0) m)))));
+    (K_6: (JC_58: ((cons_Creation_int this_0) (K_5: ((add_int n_0) m)))));
     (raise Return)
    end
    with
    Return ->
    void end)
   { (JC_52:
-    ((JC_50: eq_int(select(Creation_simple_val, this_0), add_int(n_0_0, m)))
+    ((JC_50: eq_int(select(Creation_simple_val, this_0), add_int(n_0, m)))
     and (JC_51:
         not_assigns(Object_alloc_table@, Creation_simple_val@,
         Creation_simple_val, pset_singleton(this_0@))))) }
 
 let cons_Creation_int_int_safety =
- fun (this_0 : Object pointer) (n_0_0 : int) (m : int) ->
+ fun (this_0 : Object pointer) (n_0 : int) (m : int) ->
   { valid_struct_Creation(this_0, (0), (0), Object_alloc_table) }
   (init:
   try
@@ -3052,7 +3064,7 @@ let cons_Creation_int_int_safety =
                       (((safe_upd_ Creation_simple_val) jessie_52) jessie_49))) in
      void);
     (K_6:
-    (JC_56: ((cons_Creation_int_requires this_0) (K_5: ((add_int n_0_0) m)))));
+    (JC_56: ((cons_Creation_int_requires this_0) (K_5: ((add_int n_0) m)))));
     (raise Return)
    end
    with
@@ -3061,7 +3073,7 @@ let cons_Creation_int_int_safety =
   { true }
 
 let cons_Creation_int_safety =
- fun (this_1 : Object pointer) (n_1 : int) ->
+ fun (this_1 : Object pointer) (n : int) ->
   { valid_struct_Creation(this_1, (0), (0), Object_alloc_table) }
   (init:
   try
@@ -3072,7 +3084,7 @@ let cons_Creation_int_safety =
                                         (((safe_upd_ Creation_simple_val) jessie_4) jessie_1))) in
                         void);
                        (K_1:
-                       (let jessie_6 = n_1 in
+                       (let jessie_6 = n in
                        (let jessie_9 = this_1 in
                        begin
                          (((safe_upd_ Creation_simple_val) jessie_9) jessie_6);
@@ -3163,7 +3175,7 @@ why --project [...] why/Creation.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po12.why">
-      <location file = "why/Creation.why" line = "994" begin = "30" end = "152"/>
+      <location file = "why/Creation.why" line = "992" begin = "30" end = "152"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po13.why">
@@ -3192,7 +3204,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po7.why">
-      <location file = "why/Creation.why" line = "911" begin = "32" end = "157"/>
+      <location file = "why/Creation.why" line = "909" begin = "32" end = "157"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po8.why">
@@ -3217,7 +3229,7 @@ text = "IndexBounds"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Creation_po3.why">
-      <location file = "why/Creation.why" line = "836" begin = "30" end = "151"/>
+      <location file = "why/Creation.why" line = "834" begin = "30" end = "151"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Creation_po4.why">
@@ -4534,7 +4546,7 @@ goal cons_Creation_ensures_normal_po_1:
 ========== file tests/java/why/Creation_po15.why ==========
 goal cons_Creation_int_ensures_normal_po_1:
   forall this_1:Object pointer.
-  forall n_1:int.
+  forall n:int.
   forall Creation_simple_val:(Object,
   int) memory.
   forall Object_alloc_table:Object alloc_table.
@@ -4544,14 +4556,13 @@ goal cons_Creation_int_ensures_normal_po_1:
   (Creation_simple_val0 = store(Creation_simple_val, this_1, 0)) ->
   forall Creation_simple_val1:(Object,
   int) memory.
-  (Creation_simple_val1 = store(Creation_simple_val0, this_1, n_1)) ->
-  ("JC_21":
-  ("JC_19": ("JC_19": (select(Creation_simple_val1, this_1) = n_1))))
+  (Creation_simple_val1 = store(Creation_simple_val0, this_1, n)) ->
+  ("JC_21": ("JC_19": ("JC_19": (select(Creation_simple_val1, this_1) = n))))
 
 ========== file tests/java/why/Creation_po16.why ==========
 goal cons_Creation_int_ensures_normal_po_2:
   forall this_1:Object pointer.
-  forall n_1:int.
+  forall n:int.
   forall Creation_simple_val:(Object,
   int) memory.
   forall Object_alloc_table:Object alloc_table.
@@ -4561,7 +4572,7 @@ goal cons_Creation_int_ensures_normal_po_2:
   (Creation_simple_val0 = store(Creation_simple_val, this_1, 0)) ->
   forall Creation_simple_val1:(Object,
   int) memory.
-  (Creation_simple_val1 = store(Creation_simple_val0, this_1, n_1)) ->
+  (Creation_simple_val1 = store(Creation_simple_val0, this_1, n)) ->
   ("JC_21":
   ("JC_20":
   ("JC_20": not_assigns(Object_alloc_table, Creation_simple_val,
@@ -4570,7 +4581,7 @@ goal cons_Creation_int_ensures_normal_po_2:
 ========== file tests/java/why/Creation_po17.why ==========
 goal cons_Creation_int_int_ensures_normal_po_1:
   forall this_0:Object pointer.
-  forall n_0_0:int.
+  forall n_0:int.
   forall m:int.
   forall Creation_simple_val:(Object,
   int) memory.
@@ -4582,7 +4593,7 @@ goal cons_Creation_int_int_ensures_normal_po_1:
   forall Creation_simple_val1:(Object,
   int) memory.
   ("JC_24":
-  (("JC_22": (select(Creation_simple_val1, this_0) = (n_0_0 + m))) and
+  (("JC_22": (select(Creation_simple_val1, this_0) = (n_0 + m))) and
    ("JC_23": not_assigns(Object_alloc_table, Creation_simple_val0,
    Creation_simple_val1, pset_singleton(this_0))))) ->
   ("JC_52":
@@ -5715,7 +5726,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test1_safety_po_1, File "HOME/tests/java/Creation.jc", line 75, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test1_safety_po_2, File "why/Creation.why", line 836, characters 30-151
+;; Creation_test1_safety_po_2, File "why/Creation.why", line 834, characters 30-151
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -5777,7 +5788,7 @@ why -simplify [...] why/Creation.why
 ;; Creation_test2_safety_po_1, File "HOME/tests/java/Creation.jc", line 95, characters 59-74
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test2_safety_po_2, File "why/Creation.why", line 911, characters 32-157
+;; Creation_test2_safety_po_2, File "why/Creation.why", line 909, characters 32-157
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -5864,7 +5875,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val0 pset_empty))))))))))
 ;; Creation_test3_safety_po_1, File "HOME/tests/java/Creation.jc", line 115, characters 57-72
 (IMPLIES TRUE (>= 1 0))
 
-;; Creation_test3_safety_po_2, File "why/Creation.why", line 994, characters 30-152
+;; Creation_test3_safety_po_2, File "why/Creation.why", line 992, characters 30-152
 (FORALL (Object_alloc_table)
 (IMPLIES TRUE
 (IMPLIES (>= 1 0)
@@ -5920,7 +5931,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val1 (pset_singleton
 
 ;; cons_Creation_int_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 18, characters 18-38
 (FORALL (this_1)
-(FORALL (n_1)
+(FORALL (n)
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Creation this_1 0 0 Object_alloc_table)
@@ -5929,12 +5940,12 @@ Object_alloc_table Creation_simple_val Creation_simple_val1 (pset_singleton
          (|why__store| Creation_simple_val this_1 0))
 (FORALL (Creation_simple_val1)
 (IMPLIES (EQ Creation_simple_val1
-         (|why__store| Creation_simple_val0 this_1 n_1))
-(EQ (select Creation_simple_val1 this_1) n_1))))))))))
+         (|why__store| Creation_simple_val0 this_1 n))
+(EQ (select Creation_simple_val1 this_1) n))))))))))
 
 ;; cons_Creation_int_ensures_normal_po_2, File "HOME/tests/java/Creation.java", line 20, characters 4-12
 (FORALL (this_1)
-(FORALL (n_1)
+(FORALL (n)
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Creation this_1 0 0 Object_alloc_table)
@@ -5943,14 +5954,14 @@ Object_alloc_table Creation_simple_val Creation_simple_val1 (pset_singleton
          (|why__store| Creation_simple_val this_1 0))
 (FORALL (Creation_simple_val1)
 (IMPLIES (EQ Creation_simple_val1
-         (|why__store| Creation_simple_val0 this_1 n_1))
+         (|why__store| Creation_simple_val0 this_1 n))
 (not_assigns
 Object_alloc_table Creation_simple_val Creation_simple_val1 (pset_singleton
                                                             this_1)))))))))))
 
 ;; cons_Creation_int_int_ensures_normal_po_1, File "HOME/tests/java/Creation.java", line 28, characters 4-12
 (FORALL (this_0)
-(FORALL (n_0_0)
+(FORALL (n_0)
 (FORALL (m)
 (FORALL (Creation_simple_val)
 (FORALL (Object_alloc_table)
@@ -5959,7 +5970,7 @@ Object_alloc_table Creation_simple_val Creation_simple_val1 (pset_singleton
 (IMPLIES (EQ Creation_simple_val0
          (|why__store| Creation_simple_val this_0 0))
 (FORALL (Creation_simple_val1)
-(IMPLIES (AND (EQ (select Creation_simple_val1 this_0) (+ n_0_0 m))
+(IMPLIES (AND (EQ (select Creation_simple_val1 this_0) (+ n_0 m))
          (not_assigns
          Object_alloc_table Creation_simple_val0 Creation_simple_val1 
          (pset_singleton this_0)))
@@ -7399,7 +7410,7 @@ goal cons_Creation_ensures_normal_po_1:
 
 goal cons_Creation_int_ensures_normal_po_1:
   forall this_1:Object pointer.
-  forall n_1:int.
+  forall n:int.
   forall Creation_simple_val:(Object,
   int) memory.
   forall Object_alloc_table:Object alloc_table.
@@ -7409,13 +7420,12 @@ goal cons_Creation_int_ensures_normal_po_1:
   (Creation_simple_val0 = store(Creation_simple_val, this_1, 0)) ->
   forall Creation_simple_val1:(Object,
   int) memory.
-  (Creation_simple_val1 = store(Creation_simple_val0, this_1, n_1)) ->
-  ("JC_21":
-  ("JC_19": ("JC_19": (select(Creation_simple_val1, this_1) = n_1))))
+  (Creation_simple_val1 = store(Creation_simple_val0, this_1, n)) ->
+  ("JC_21": ("JC_19": ("JC_19": (select(Creation_simple_val1, this_1) = n))))
 
 goal cons_Creation_int_ensures_normal_po_2:
   forall this_1:Object pointer.
-  forall n_1:int.
+  forall n:int.
   forall Creation_simple_val:(Object,
   int) memory.
   forall Object_alloc_table:Object alloc_table.
@@ -7425,7 +7435,7 @@ goal cons_Creation_int_ensures_normal_po_2:
   (Creation_simple_val0 = store(Creation_simple_val, this_1, 0)) ->
   forall Creation_simple_val1:(Object,
   int) memory.
-  (Creation_simple_val1 = store(Creation_simple_val0, this_1, n_1)) ->
+  (Creation_simple_val1 = store(Creation_simple_val0, this_1, n)) ->
   ("JC_21":
   ("JC_20":
   ("JC_20": not_assigns(Object_alloc_table, Creation_simple_val,
@@ -7433,7 +7443,7 @@ goal cons_Creation_int_ensures_normal_po_2:
 
 goal cons_Creation_int_int_ensures_normal_po_1:
   forall this_0:Object pointer.
-  forall n_0_0:int.
+  forall n_0:int.
   forall m:int.
   forall Creation_simple_val:(Object,
   int) memory.
@@ -7445,7 +7455,7 @@ goal cons_Creation_int_int_ensures_normal_po_1:
   forall Creation_simple_val1:(Object,
   int) memory.
   ("JC_24":
-  (("JC_22": (select(Creation_simple_val1, this_0) = (n_0_0 + m))) and
+  (("JC_22": (select(Creation_simple_val1, this_0) = (n_0 + m))) and
    ("JC_23": not_assigns(Object_alloc_table, Creation_simple_val0,
    Creation_simple_val1, pset_singleton(this_0))))) ->
   ("JC_52":

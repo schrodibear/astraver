@@ -299,9 +299,9 @@ WHYEXEC ?= why
 GWHYEXEC ?= gwhy-bin
 WHYLIB ?= HOME/lib
 
-WHY=WHYLIB=$(WHYLIB) $(WHYEXEC)  -split-user-conj -explain -locs MacCarthy.loc
+WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs MacCarthy.loc
 
-GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC)  -split-user-conj -explain -locs MacCarthy.loc
+GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs MacCarthy.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
 
@@ -313,81 +313,95 @@ all: simplify/MacCarthy_why.sx
 
 project: why/MacCarthy.wpr
 
+why/%.wpr:  WHYOPT=--project -dir why
 why/%.wpr: why/%.why
-	@echo 'why --project [...] why/$*.why' && $(WHY) --project -dir why $(JESSIELIBFILES) why/$*.why
+	@echo 'why --project [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 goals: why/MacCarthy_ctx.why
 
+why/%_ctx.why: WHYOPT=--multi-why -dir why
 why/%_ctx.why: why/%.why
-	@echo 'why --multi-why [...] why/$*.why' && $(WHY) --multi-why -dir why $(JESSIELIBFILES) why/$*.why
+	@echo 'why --multi-why [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 coq: coq/MacCarthy_why.vo
 
+coq/MacCarthy_why.v: WHYOPT=-coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
 coq/MacCarthy_why.v: why/MacCarthy.why
-	@echo 'why -coq-v8 [...] why/MacCarthy.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" $(JESSIELIBFILES) why/MacCarthy.why
+	@echo 'why -coq [...] why/MacCarthy.why' && $(WHY) $(JESSIELIBFILES) why/MacCarthy.why
 
 coq-goals: goals coq/MacCarthy_ctx_why.vo
 	for f in why/*_po*.why; do make -f MacCarthy.makefile coq/`basename $$f .why`_why.v ; done
 
+coq/MacCarthy_ctx_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
 coq/MacCarthy_ctx_why.v: why/MacCarthy_ctx.why
-	@echo 'why -coq-v8 [...] why/MacCarthy_ctx.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition" why/MacCarthy_ctx.why
+	@echo 'why -coq [...] why/MacCarthy_ctx.why' && $(WHY) why/MacCarthy_ctx.why
 
+coq/%_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble "Require Export MacCarthy_ctx_why." -coq-tactic "intuition"
 coq/%_why.v: why/%.why
-	@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -no-prelude -coq-v8 -dir coq -coq-preamble "Require Export MacCarthy_ctx_why." -coq-tactic "intuition" why/MacCarthy_ctx.why why/$*.why
+	@echo 'why -coq [...] why/$*.why' && $(WHY) why/MacCarthy_ctx.why why/$*.why
 
 coq/%.vo: coq/%.v
 	coqc -I coq $<
 
 pvs: pvs/MacCarthy_why.pvs
 
+pvs/%_why.pvs: WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@jessie"
 pvs/%_why.pvs: why/%.why
-	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@jessie" $(JESSIELIBFILES) why/$*.why
+	$(WHY) $(JESSIELIBFILES) why/$*.why
 
+pvs/jessie_why.pvs:WHYOPT=-pvs -dir pvs -pvs-preamble "IMPORTING why@why"
 pvs/jessie_why.pvs:
-	$(WHY) -pvs -dir pvs -pvs-preamble "IMPORTING why@why" $(JESSIELIBFILES)
+	$(WHY) $(JESSIELIBFILES)
 
 isabelle: isabelle/MacCarthy_why.thy
 
+isabelle/%_why.thy: WHYOPT=-isabelle -dir isabelle -isabelle-base-theory jessie_why
 isabelle/%_why.thy: why/%.why
-	$(WHY) -isabelle -dir isabelle -isabelle-base-theory jessie_why $(JESSIELIBFILES) why/$*.why
+	$(WHY) $(JESSIELIBFILES) why/$*.why
 	cp -f HOME/lib/isabelle/jessie_why.thy isabelle/
 
 simplify: simplify/MacCarthy_why.sx
 	@echo 'Running Simplify on proof obligations' && ($(DP) $^)
 
+simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
-	@echo 'why -simplify [...] why/$*.why' && $(WHY) -simplify -dir simplify $(JESSIELIBFILES) why/$*.why
+	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/MacCarthy_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
 
+why/%_why.why: WHYOPT=-alt-ergo -dir why
 why/%_why.why: why/%.why
-	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) -alt-ergo -dir why $(JESSIELIBFILES) why/$*.why
+	@echo 'why -alt-ergo [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 cvcl: cvcl/MacCarthy_why.cvc
 
 	@echo 'Running CVC Lite on proof obligations' && ($(DP) $^)
 
+cvcl/%_why.cvc: WHYOPT=-cvcl -dir cvcl
 cvcl/%_why.cvc: why/%.why
-	@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -dir cvcl $(JESSIELIBFILES) why/$*.why
+	@echo 'why -cvcl [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 harvey: harvey/MacCarthy_why.rv
 	@echo 'Running haRVey on proof obligations' && ($(DP) $^)
 
+harvey/%_why.rv: WHYOPT=-harvey -dir harvey
 harvey/%_why.rv: why/%.why
-	@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(JESSIELIBFILES) why/$*.why
+	@echo 'why -harvey [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 zenon: zenon/MacCarthy_why.znn
 	@echo 'Running Zenon on proof obligations' && ($(DP) $^)
 
+zenon/%_why.znn: WHYOPT=-zenon -dir zenon
 zenon/%_why.znn: why/%.why
-	@echo 'why -zenon [...] why/$*.why' && $(WHY) -zenon -dir zenon $(JESSIELIBFILES) why/$*.why
+	@echo 'why -zenon [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 smtlib: smtlib/MacCarthy_why.smt
 	@echo 'Running Z3 on proof obligations' && ($(DP) $^)
 
+smtlib/%_why.smt:  WHYOPT=-smtlib --encoding sstrat --exp goal -dir smtlib
 smtlib/%_why.smt: why/%.why
-	@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib --encoding sstrat --exp goal -dir smtlib $(JESSIELIBFILES) why/$*.why
+	@echo 'why -smtlib [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 z3: smtlib/MacCarthy_why.smt
 	@echo 'Running Z3 on proof obligations' && ($(DP) -smt-solver z3 $^)
@@ -1645,16 +1659,16 @@ predicate valid_struct_interface(p:interface pointer,
  and (offset_max(interface_alloc_table, p) >= b))
 
 parameter MacCarthy_f91 :
- n_1:int ->
+ n:int ->
   { } int
-  { ((ge_int(n_1@, (101)) -> (JC_22: eq_int(result, sub_int(n_1, (10)))))
-    and (le_int(n_1@, (100)) -> (JC_20: eq_int(result, (91))))) }
+  { ((ge_int(n@, (101)) -> (JC_22: eq_int(result, sub_int(n, (10)))))
+    and (le_int(n@, (100)) -> (JC_20: eq_int(result, (91))))) }
 
 parameter MacCarthy_f91_requires :
- n_1:int ->
+ n:int ->
   { } int
-  { ((ge_int(n_1@, (101)) -> (JC_22: eq_int(result, sub_int(n_1, (10)))))
-    and (le_int(n_1@, (100)) -> (JC_20: eq_int(result, (91))))) }
+  { ((ge_int(n@, (101)) -> (JC_22: eq_int(result, sub_int(n, (10)))))
+    and (le_int(n@, (100)) -> (JC_20: eq_int(result, (91))))) }
 
 parameter Object_alloc_table : Object alloc_table ref
 
@@ -2013,23 +2027,23 @@ parameter non_null_Object_requires :
      else (x_0 = null))) }
 
 let MacCarthy_f91_ensures_default =
- fun (n_1 : int) ->
+ fun (n : int) ->
   { (JC_14: true) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (if (K_7: ((le_int_ n_1) (100)))
+     (if (K_7: ((le_int_ n) (100)))
      then
       begin
         (return := (K_6:
                    (JC_30:
                    (MacCarthy_f91 (K_5:
                                   (JC_29:
-                                  (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
+                                  (MacCarthy_f91 (K_4: ((add_int n) (11))))))))));
        (raise Return)
       end
-     else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);
+     else begin   (return := (K_3: ((sub_int n) (10)))); (raise Return) end);
     absurd 
    end
    with
@@ -2038,48 +2052,48 @@ let MacCarthy_f91_ensures_default =
   { (JC_15: true) }
 
 let MacCarthy_f91_ensures_greater_than_100 =
- fun (n_1 : int) ->
-  { ge_int(n_1, (101)) }
+ fun (n : int) ->
+  { ge_int(n, (101)) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (if (K_7: ((le_int_ n_1) (100)))
+     (if (K_7: ((le_int_ n) (100)))
      then
       begin
         (return := (K_6:
                    (JC_38:
                    (MacCarthy_f91 (K_5:
                                   (JC_37:
-                                  (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
+                                  (MacCarthy_f91 (K_4: ((add_int n) (11))))))))));
        (raise Return)
       end
-     else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);
+     else begin   (return := (K_3: ((sub_int n) (10)))); (raise Return) end);
     absurd 
    end
    with
    Return ->
    !return end))
-  { (JC_21: eq_int(result, sub_int(n_1, (10)))) }
+  { (JC_21: eq_int(result, sub_int(n, (10)))) }
 
 let MacCarthy_f91_ensures_less_than_101 =
- fun (n_1 : int) ->
-  { le_int(n_1, (100)) }
+ fun (n : int) ->
+  { le_int(n, (100)) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (if (K_7: ((le_int_ n_1) (100)))
+     (if (K_7: ((le_int_ n) (100)))
      then
       begin
         (return := (K_6:
                    (JC_34:
                    (MacCarthy_f91 (K_5:
                                   (JC_33:
-                                  (MacCarthy_f91 (K_4: ((add_int n_1) (11))))))))));
+                                  (MacCarthy_f91 (K_4: ((add_int n) (11))))))))));
        (raise Return)
       end
-     else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);
+     else begin   (return := (K_3: ((sub_int n) (10)))); (raise Return) end);
     absurd 
    end
    with
@@ -2088,13 +2102,13 @@ let MacCarthy_f91_ensures_less_than_101 =
   { (JC_19: eq_int(result, (91))) }
 
 let MacCarthy_f91_safety =
- fun (n_1 : int) ->
+ fun (n : int) ->
   { (JC_14: true) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (if (K_7: ((le_int_ n_1) (100)))
+     (if (K_7: ((le_int_ n) (100)))
      then
       begin
         (return := (K_6:
@@ -2102,10 +2116,10 @@ let MacCarthy_f91_safety =
                    (MacCarthy_f91_requires (K_5:
                                            (JC_25:
                                            (MacCarthy_f91_requires (K_4:
-                                                                   ((add_int n_1) (11))))))))));
+                                                                   ((add_int n) (11))))))))));
        (raise Return)
       end
-     else begin   (return := (K_3: ((sub_int n_1) (10)))); (raise Return) end);
+     else begin   (return := (K_3: ((sub_int n) (10)))); (raise Return) end);
     absurd 
    end
    with
@@ -3331,36 +3345,36 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 
 ========== file tests/java/why/MacCarthy_po1.why ==========
 goal MacCarthy_f91_ensures_greater_than_100_po_1:
-  forall n_1:int.
-  (n_1 >= 101) ->
-  (n_1 <= 100) ->
+  forall n:int.
+  (n >= 101) ->
+  (n <= 100) ->
   forall result:int.
-  ((((n_1 + 11) >= 101) -> ("JC_22": (result = ((n_1 + 11) - 10)))) and
-   (((n_1 + 11) <= 100) -> ("JC_20": (result = 91)))) ->
+  ((((n + 11) >= 101) -> ("JC_22": (result = ((n + 11) - 10)))) and
+   (((n + 11) <= 100) -> ("JC_20": (result = 91)))) ->
   forall result0:int.
   (((result >= 101) -> ("JC_22": (result0 = (result - 10)))) and
    ((result <= 100) -> ("JC_20": (result0 = 91)))) ->
   forall return:int.
   (return = result0) ->
-  ("JC_21": (return = (n_1 - 10)))
+  ("JC_21": (return = (n - 10)))
 
 ========== file tests/java/why/MacCarthy_po2.why ==========
 goal MacCarthy_f91_ensures_greater_than_100_po_2:
-  forall n_1:int.
-  (n_1 >= 101) ->
-  (n_1 > 100) ->
+  forall n:int.
+  (n >= 101) ->
+  (n > 100) ->
   forall return:int.
-  (return = (n_1 - 10)) ->
-  ("JC_21": (return = (n_1 - 10)))
+  (return = (n - 10)) ->
+  ("JC_21": (return = (n - 10)))
 
 ========== file tests/java/why/MacCarthy_po3.why ==========
 goal MacCarthy_f91_ensures_less_than_101_po_1:
-  forall n_1:int.
-  (n_1 <= 100) ->
-  (n_1 <= 100) ->
+  forall n:int.
+  (n <= 100) ->
+  (n <= 100) ->
   forall result:int.
-  ((((n_1 + 11) >= 101) -> ("JC_22": (result = ((n_1 + 11) - 10)))) and
-   (((n_1 + 11) <= 100) -> ("JC_20": (result = 91)))) ->
+  ((((n + 11) >= 101) -> ("JC_22": (result = ((n + 11) - 10)))) and
+   (((n + 11) <= 100) -> ("JC_20": (result = 91)))) ->
   forall result0:int.
   (((result >= 101) -> ("JC_22": (result0 = (result - 10)))) and
    ((result <= 100) -> ("JC_20": (result0 = 91)))) ->
@@ -3370,11 +3384,11 @@ goal MacCarthy_f91_ensures_less_than_101_po_1:
 
 ========== file tests/java/why/MacCarthy_po4.why ==========
 goal MacCarthy_f91_ensures_less_than_101_po_2:
-  forall n_1:int.
-  (n_1 <= 100) ->
-  (n_1 > 100) ->
+  forall n:int.
+  (n <= 100) ->
+  (n > 100) ->
   forall return:int.
-  (return = (n_1 - 10)) ->
+  (return = (n - 10)) ->
   ("JC_19": (return = 91))
 
 ========== generation of Simplify VC output ==========
@@ -4300,40 +4314,40 @@ why -simplify [...] why/MacCarthy.why
   (>= (offset_max interface_alloc_table p) b)))
 
 ;; MacCarthy_f91_ensures_greater_than_100_po_1, File "HOME/tests/java/MacCarthy.java", line 16, characters 18-35
-(FORALL (n_1)
-(IMPLIES (>= n_1 101)
-(IMPLIES (<= n_1 100)
+(FORALL (n)
+(IMPLIES (>= n 101)
+(IMPLIES (<= n 100)
 (FORALL (result)
-(IMPLIES (AND (IMPLIES (>= (+ n_1 11) 101) (EQ result (- (+ n_1 11) 10)))
-         (IMPLIES (<= (+ n_1 11) 100) (EQ result 91)))
+(IMPLIES (AND (IMPLIES (>= (+ n 11) 101) (EQ result (- (+ n 11) 10)))
+         (IMPLIES (<= (+ n 11) 100) (EQ result 91)))
 (FORALL (result0)
 (IMPLIES (AND (IMPLIES (>= result 101) (EQ result0 (- result 10)))
          (IMPLIES (<= result 100) (EQ result0 91)))
-(FORALL (return) (IMPLIES (EQ return result0) (EQ return (- n_1 10)))))))))))
+(FORALL (return) (IMPLIES (EQ return result0) (EQ return (- n 10)))))))))))
 
 ;; MacCarthy_f91_ensures_greater_than_100_po_2, File "HOME/tests/java/MacCarthy.java", line 16, characters 18-35
-(FORALL (n_1)
-(IMPLIES (>= n_1 101)
-(IMPLIES (> n_1 100)
-(FORALL (return) (IMPLIES (EQ return (- n_1 10)) (EQ return (- n_1 10)))))))
+(FORALL (n)
+(IMPLIES (>= n 101)
+(IMPLIES (> n 100)
+(FORALL (return) (IMPLIES (EQ return (- n 10)) (EQ return (- n 10)))))))
 
 ;; MacCarthy_f91_ensures_less_than_101_po_1, File "HOME/tests/java/MacCarthy.java", line 13, characters 18-31
-(FORALL (n_1)
-(IMPLIES (<= n_1 100)
-(IMPLIES (<= n_1 100)
+(FORALL (n)
+(IMPLIES (<= n 100)
+(IMPLIES (<= n 100)
 (FORALL (result)
-(IMPLIES (AND (IMPLIES (>= (+ n_1 11) 101) (EQ result (- (+ n_1 11) 10)))
-         (IMPLIES (<= (+ n_1 11) 100) (EQ result 91)))
+(IMPLIES (AND (IMPLIES (>= (+ n 11) 101) (EQ result (- (+ n 11) 10)))
+         (IMPLIES (<= (+ n 11) 100) (EQ result 91)))
 (FORALL (result0)
 (IMPLIES (AND (IMPLIES (>= result 101) (EQ result0 (- result 10)))
          (IMPLIES (<= result 100) (EQ result0 91)))
 (FORALL (return) (IMPLIES (EQ return result0) (EQ return 91))))))))))
 
 ;; MacCarthy_f91_ensures_less_than_101_po_2, File "HOME/tests/java/MacCarthy.java", line 13, characters 18-31
-(FORALL (n_1)
-(IMPLIES (<= n_1 100)
-(IMPLIES (> n_1 100)
-(FORALL (return) (IMPLIES (EQ return (- n_1 10)) (EQ return 91))))))
+(FORALL (n)
+(IMPLIES (<= n 100)
+(IMPLIES (> n 100)
+(FORALL (return) (IMPLIES (EQ return (- n 10)) (EQ return 91))))))
 
 ========== running Simplify ==========
 Running Simplify on proof obligations
@@ -5505,34 +5519,34 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
    (offset_max(interface_alloc_table, p) >= b))
 
 goal MacCarthy_f91_ensures_greater_than_100_po_1:
-  forall n_1:int.
-  (n_1 >= 101) ->
-  (n_1 <= 100) ->
+  forall n:int.
+  (n >= 101) ->
+  (n <= 100) ->
   forall result:int.
-  ((((n_1 + 11) >= 101) -> ("JC_22": (result = ((n_1 + 11) - 10)))) and
-   (((n_1 + 11) <= 100) -> ("JC_20": (result = 91)))) ->
+  ((((n + 11) >= 101) -> ("JC_22": (result = ((n + 11) - 10)))) and
+   (((n + 11) <= 100) -> ("JC_20": (result = 91)))) ->
   forall result0:int.
   (((result >= 101) -> ("JC_22": (result0 = (result - 10)))) and
    ((result <= 100) -> ("JC_20": (result0 = 91)))) ->
   forall return:int.
   (return = result0) ->
-  ("JC_21": (return = (n_1 - 10)))
+  ("JC_21": (return = (n - 10)))
 
 goal MacCarthy_f91_ensures_greater_than_100_po_2:
-  forall n_1:int.
-  (n_1 >= 101) ->
-  (n_1 > 100) ->
+  forall n:int.
+  (n >= 101) ->
+  (n > 100) ->
   forall return:int.
-  (return = (n_1 - 10)) ->
-  ("JC_21": (return = (n_1 - 10)))
+  (return = (n - 10)) ->
+  ("JC_21": (return = (n - 10)))
 
 goal MacCarthy_f91_ensures_less_than_101_po_1:
-  forall n_1:int.
-  (n_1 <= 100) ->
-  (n_1 <= 100) ->
+  forall n:int.
+  (n <= 100) ->
+  (n <= 100) ->
   forall result:int.
-  ((((n_1 + 11) >= 101) -> ("JC_22": (result = ((n_1 + 11) - 10)))) and
-   (((n_1 + 11) <= 100) -> ("JC_20": (result = 91)))) ->
+  ((((n + 11) >= 101) -> ("JC_22": (result = ((n + 11) - 10)))) and
+   (((n + 11) <= 100) -> ("JC_20": (result = 91)))) ->
   forall result0:int.
   (((result >= 101) -> ("JC_22": (result0 = (result - 10)))) and
    ((result <= 100) -> ("JC_20": (result0 = 91)))) ->
@@ -5541,11 +5555,11 @@ goal MacCarthy_f91_ensures_less_than_101_po_1:
   ("JC_19": (return = 91))
 
 goal MacCarthy_f91_ensures_less_than_101_po_2:
-  forall n_1:int.
-  (n_1 <= 100) ->
-  (n_1 > 100) ->
+  forall n:int.
+  (n <= 100) ->
+  (n > 100) ->
   forall return:int.
-  (return = (n_1 - 10)) ->
+  (return = (n - 10)) ->
   ("JC_19": (return = 91))
 
 ========== running alt-ergo ==========
