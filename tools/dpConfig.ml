@@ -114,7 +114,7 @@ let yices =
     version_switch = "--version";
     version_regexp = "\\([^ ]+\\)";
     command = "yices";
-    command_switches = "-pc 0 -smt < ";
+    command_switches = "-pc 0 -smt ";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b\\|feature not supported: non linear problem";
   }
@@ -127,7 +127,7 @@ let cvc3 =
     version_switch = "-version";
     version_regexp = "This is CVC3 version \\([^ ]+\\)";
     command = "cvc3";
-    command_switches = "-lang smt < ";
+    command_switches = "-lang smt ";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b";
   }

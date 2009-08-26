@@ -5420,7 +5420,7 @@ failure :   0 (  0%)
 // RUNCOQ: will ask regtests to check Coq proofs of this program
 ========== generation of Coq VC output ==========
 why -coq [...] why/Fibonacci.why
-File "/home/cmarche/recherche/why/tests/java/coq/Fibonacci_why.v",
+File "/home/cmarche/recherche/ppc/trunk/why/tests/java/coq/Fibonacci_why.v",
 line 455, characters 10-15:
 Error: The reference n_0_0 was not found in the current environment.
 ========== file tests/java/coq/Fibonacci_why.v ==========
@@ -5931,6 +5931,6 @@ intuition.
 Save.
 
 ========== running Coq ==========
-File "/home/cmarche/recherche/why/tests/java/coq/Fibonacci_why.v",
+File "/home/cmarche/recherche/ppc/trunk/why/tests/java/coq/Fibonacci_why.v",
 line 455, characters 10-15:
 Error: The reference n_0_0 was not found in the current environment.
