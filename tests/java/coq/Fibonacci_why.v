@@ -452,7 +452,7 @@ Save.
   (* JC_15 *) (isfib n_0 why__return).
 Proof.
 intuition.
-assert (i=n_0_0) by omega.
+assert (i=n_0) by omega.
 subst; auto.
 Save.
 
