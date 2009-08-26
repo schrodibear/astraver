@@ -126,8 +126,10 @@ val pointer_class_root : pointer_class -> Jc_env.root_info
 (* predefined functions *)
 
 val any_string : Jc_fenv.logic_info
+(*
 val real_of_integer : Jc_fenv.logic_info
 val real_of_integer_ : Jc_fenv.fun_info
+*)
 val full_separated : Jc_fenv.logic_info
 
 val default_behavior : behavior

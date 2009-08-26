@@ -604,7 +604,7 @@ module PDecl :
       name:string ->
       ?params:string list ->
       ?super:string * ptype list ->
-      ?fields:(bool * ptype * string * int option) list ->
+      ?fields:(field_modifiers * ptype * string * int option) list ->
       ?invariants:(identifier * string * 'a) list ->
       ?pos:Loc.position -> unit -> 'a decl_node node_positioned
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.420 2009-07-16 14:50:54 nguyen Exp $ *)
+(* $Id: jc_interp.ml,v 1.421 2009-08-26 12:41:55 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2146,14 +2146,16 @@ and expr e =
 		  f.jc_logic_info_parameters call.jc_call_args
 	      in
 	      let with_body = 
-		let _f,body =  
-		  Hashtbl.find Jc_typing.logic_functions_table 
-		    f.jc_logic_info_tag 
-		in
-		match body with
-		  | JCTerm _ -> true
-		  | JCReads _ -> false
-		  | JCAssertion _ | JCInductive _ -> assert false
+		try
+                  let _f,body =  
+		    Hashtbl.find Jc_typing.logic_functions_table 
+		      f.jc_logic_info_tag 
+		  in
+		  match body with
+		    | JCTerm _ -> true
+		    | JCReads _ -> false
+		    | JCAssertion _ | JCInductive _ -> assert false
+                with Not_found -> false
 	      in
 	      let pre, fname, locals, prolog, epilog, args = 
 		make_arguments 
@@ -2231,15 +2233,22 @@ and expr e =
 		else f.jc_fun_info_final_name
 	      in
 	      let with_body = 
-		let _f,_loc,_s,body =  
-		  Hashtbl.find Jc_typing.functions_table f.jc_fun_info_tag 
-		in
-		body <> None
+		try
+		  let _f,_loc,_s,body =  
+                    Hashtbl.find Jc_typing.functions_table f.jc_fun_info_tag 
+		  in
+		  body <> None
+                with Not_found -> 
+                  (*
+                    eprintf "Fatal error: tag for %s not found@." f.jc_fun_info_name;
+                    assert false
+                  *)
+                  false
 	      in
 	      let args =
 		match f.jc_fun_info_builtin_treatment with
-		  | None -> args
-		  | Some (TreatGenFloat format) ->
+		  | TreatNothing -> args
+		  | TreatGenFloat format ->
 		      (Var (float_format format))::(current_rounding_mode ())::args
 	      in
 	      let pre, fname, locals, prolog, epilog, args = 

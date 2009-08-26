@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.133 2009-06-23 10:19:14 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.134 2009-08-26 12:41:55 marche Exp $ */
 
 %{
 
@@ -96,7 +96,7 @@
 %token EXCEPTION OF THROW TRY CATCH FINALLY NEW FREE LET IN VAR
 
 /* pack unpack assert */
-%token PACK UNPACK ASSERT ASSUME HINT
+%token ABSTRACT PACK UNPACK ASSERT ASSUME HINT
 
 /* type invariant logic axiomatic with variant and axiom tag */
 %token TYPE INVARIANT LOGIC AXIOMATIC WITH VARIANT AND AXIOM LEMMA TAG
@@ -304,15 +304,20 @@ field_declaration_list:
 ;
 
 field_declaration:
-| type_expr IDENTIFIER SEMICOLON
-    { (false, $1, $2, None) }
-| type_expr IDENTIFIER COLON int_constant SEMICOLON
-    { (false, $1, $2, Some (Num.int_of_num $4)) }
-| REP type_expr IDENTIFIER SEMICOLON
-    { (true, $2, $3, None) }
-| REP type_expr IDENTIFIER COLON int_constant SEMICOLON
-    { (true, $2, $3, Some (Num.int_of_num $5)) }
+| field_modifier type_expr IDENTIFIER SEMICOLON
+    { ($1, $2, $3, None) }
+| field_modifier type_expr IDENTIFIER COLON int_constant SEMICOLON
+    { ($1, $2, $3, Some (Num.int_of_num $5)) }
 ;
+
+field_modifier:
+| /* epsilon */
+    { (false,false) }
+| REP
+    { (true,false) }
+| ABSTRACT
+    { (true,true) }
+;        
 
 invariant:
 | INVARIANT identifier LPAR IDENTIFIER RPAR EQ expression SEMICOLON

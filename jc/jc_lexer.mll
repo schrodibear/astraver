@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.89 2009-07-16 13:12:52 nguyen Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.90 2009-08-26 12:41:55 marche Exp $ i*)
 
 {
   open Jc_ast
@@ -193,6 +193,7 @@ rule token = parse
   | "/*@" | "//@"           { lex_error lexbuf "annotations should not be in @ comments" }
   | "/*"                    { comment lexbuf; token lexbuf }
   | "//" [^ '\n']* '\n'     { newline lexbuf; token lexbuf }
+  | "abstract"              { ABSTRACT }
   | "and"                   { AND }
   | "as"                    { AS }
   | "assert"                { ASSERT }

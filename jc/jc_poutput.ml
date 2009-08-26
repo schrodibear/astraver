@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.40 2009-05-26 14:25:04 bobot Exp $ *)
+(* $Id: jc_poutput.ml,v 1.41 2009-08-26 12:41:55 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -164,15 +164,18 @@ let rec pexpr fmt e =
 	  ptype ty
 	  (print_list comma identifier) vil
 	  triggers trigs pexpr a
-    | JCPEmutable _ -> assert false (* TODO *)
+    | JCPEmutable _ -> 
+        fprintf fmt "\\mutable(TODO)"
     | JCPEeqtype(tag1,tag2) -> 
 	fprintf fmt "\\typeeq(%a,%a)" ptag tag1 ptag tag2
     | JCPEsubtype(tag1,tag2) -> 
 	fprintf fmt "(%a <: %a)" ptag tag1 ptag tag2
     | JCPEreturn (e) ->
 	fprintf fmt "@\n(return %a)" pexpr e
-    | JCPEunpack _ -> assert false (* TODO *) 
-    | JCPEpack _ -> assert false (* TODO *) 
+    | JCPEunpack _ -> 
+        fprintf fmt "unpack(TODO)"
+    | JCPEpack _ -> 
+        fprintf fmt "pack(TODO)"
     | JCPEthrow (ei, eo) ->
 	fprintf fmt "@\n(throw %s %a)" 
 	  ei#name 
@@ -314,10 +317,14 @@ let param fmt (ty,vi) =
 let fun_param fmt (valid,ty,vi) =
   fprintf fmt "%s%a %s" (if valid then "" else "! ") ptype ty vi
 
-let field fmt (rep,ty,fi,bitsize) =
+let field fmt (modifier,ty,fi,bitsize) =
+  let (rep,abstract) = modifier in
   fprintf fmt "@\n";
-  if rep then
-    fprintf fmt "rep ";
+  if abstract then
+    fprintf fmt "abstract "
+  else
+    if rep then
+      fprintf fmt "rep ";
   fprintf fmt "%a %s" 
     ptype ty fi;
   match bitsize with

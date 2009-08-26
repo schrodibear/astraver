@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.288 2009-06-23 10:19:14 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.289 2009-08-26 12:41:55 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -72,6 +72,44 @@ let variables_table = Hashtbl.create 97
 let variables_env = Hashtbl.create 97
 
 
+
+let () =
+  List.iter 
+    (fun (ty,x,whyid,pl) -> 
+       let pi = match ty with 
+	 | None -> make_pred x
+	 | Some ty -> make_logic_fun x ty
+       in
+       let pl = List.map 
+	 (fun ty -> var ~formal:true ty "_") pl
+       in
+       pi.jc_logic_info_parameters <- pl;
+       pi.jc_logic_info_final_name <- whyid;
+       Hashtbl.add logic_functions_env x pi)
+    Jc_pervasives.builtin_logic_symbols;
+  List.iter 
+    (fun (ty,x,whyid,pl,treat) -> 
+       let pi = make_fun_info x ty in
+       let pl = List.map 
+	 (fun ty -> (true,var ~formal:true ty "_")) pl
+       in
+       pi.jc_fun_info_parameters <- pl;
+       pi.jc_fun_info_final_name <- whyid;
+       pi.jc_fun_info_builtin_treatment <- treat;
+       Hashtbl.add functions_env x pi)
+    Jc_pervasives.builtin_function_symbols
+
+let real_of_integer =
+  let fi =
+    Hashtbl.find logic_functions_env "\\real_of_integer"
+  in
+(*
+  eprintf "\\real_of_integer.jc_logic_fun_info_tag = %d@." fi.jc_logic_info_tag;
+*)
+  fi
+
+
+
 type axiomatic_decl =
   | ABaxiom of Loc.position * string * Jc_env.label list * Jc_constructors.assertion
 
@@ -96,6 +134,7 @@ let create_mutable_field st =
     jc_field_info_hroot = st.jc_struct_info_hroot;
     jc_field_info_struct = st;
     jc_field_info_rep = false;
+    jc_field_info_abstract = false;
     jc_field_info_bitsize = None;
   } in
   Hashtbl.add committed_fields_table st.jc_struct_info_name fi
@@ -1622,7 +1661,7 @@ let coerce t1 t2 e =
 		  ~typ: real_type
 		  ~pos: e#pos
 		  (JCEapp{
-		     jc_call_fun = JCfun real_of_integer_;
+		     jc_call_fun = JClogic_fun real_of_integer;
 		     jc_call_args = [e];
 		     jc_call_region_assoc = [];
 		     jc_call_label_assoc = [];
@@ -2428,7 +2467,7 @@ let fun_param (v,t,id) =
 
 let assertion_true = new assertion JCAtrue
 
-let field st root (rep, t, id, bitsize) =
+let field st root ((rep,abs), t, id, bitsize) =
   let ty = type_type t in
   incr field_tag_counter;
   let name = st.jc_struct_info_name ^ "_" ^ id in
@@ -2440,6 +2479,7 @@ let field st root (rep, t, id, bitsize) =
     jc_field_info_hroot = root;
     jc_field_info_struct = st;
     jc_field_info_rep = rep or (not (is_pointer_type ty));
+    jc_field_info_abstract = abs;
     jc_field_info_bitsize = bitsize;
   } in
   fi
@@ -2535,31 +2575,6 @@ let add_logic_fundecl (ty,id,labels,pl) =
     Hashtbl.replace logic_functions_env id pi;
     param_env, ty, pi
 
-let () =
-  List.iter 
-    (fun (ty,x,whyid,pl) -> 
-       let pi = match ty with 
-	 | None -> make_pred x
-	 | Some ty -> make_logic_fun x ty
-       in
-       let pl = List.map 
-	 (fun ty -> var ~formal:true ty "_") pl
-       in
-       pi.jc_logic_info_parameters <- pl;
-       pi.jc_logic_info_final_name <- whyid;
-       Hashtbl.add logic_functions_env x pi)
-    Jc_pervasives.builtin_logic_symbols;
-  List.iter 
-    (fun (ty,x,whyid,pl,treat) -> 
-       let pi = make_fun_info x ty in
-       let pl = List.map 
-	 (fun ty -> (true,var ~formal:true ty "_")) pl
-       in
-       pi.jc_fun_info_parameters <- pl;
-       pi.jc_fun_info_final_name <- whyid;
-       pi.jc_fun_info_builtin_treatment <- Some treat;
-       Hashtbl.add functions_env x pi)
-    Jc_pervasives.builtin_function_symbols
 
 (* let add_logic_constdecl (ty, id) = *)
 (*   try *)

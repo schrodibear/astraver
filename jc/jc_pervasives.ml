@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.155 2009-06-23 10:19:14 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.156 2009-08-26 12:41:55 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -318,12 +318,13 @@ let make_logic_fun name ty =
     jc_logic_info_labels = [];
   }
 
-let real_of_integer = make_logic_fun "real_of_int" real_type
 let any_string = make_logic_fun "any_string" string_type
 
+(*
 let () = 
   let vi = var ~formal:true integer_type "n" in
   real_of_integer.jc_logic_info_parameters <- [vi]
+*)
 
 let full_separated = make_logic_fun "full_separated" null_type
 
@@ -365,7 +366,7 @@ let make_fun_info name ty =
   { jc_fun_info_tag = !fun_tag_counter;
     jc_fun_info_name = name;
     jc_fun_info_final_name = Jc_envset.get_unique_name name;
-    jc_fun_info_builtin_treatment = None;
+    jc_fun_info_builtin_treatment = TreatNothing;
     jc_fun_info_parameters = [];
     jc_fun_info_result = vi;
     jc_fun_info_return_region = Region.make_var ty name;
@@ -376,14 +377,6 @@ let make_fun_info name ty =
     jc_fun_info_logic_apps = [];
     jc_fun_info_effects = empty_fun_effect;
   }
-
-
-let real_of_integer_ = make_fun_info "real_of_int" real_type
-
-let () = 
-  let vi = var ~formal:true integer_type "n" in
-  real_of_integer_.jc_fun_info_final_name <- "real_of_int";
-  real_of_integer_.jc_fun_info_parameters <- [true,vi]
 
 
 let option_compare comp opt1 opt2 = match opt1,opt2 with
@@ -1008,7 +1001,8 @@ let rounding_mode = JCTlogic "rounding_mode"
 
 let builtin_logic_symbols =
   (* return type, jessie name, why name, parameter types *)
-  [ Some integer_type, "\\integer_max", "int_max", [integer_type; integer_type] ;
+  [ Some real_type, "\\real_of_integer", "real_of_int", [integer_type] ;
+    Some integer_type, "\\integer_max", "int_max", [integer_type; integer_type] ;
     Some integer_type, "\\integer_min", "int_min", [integer_type; integer_type] ;
     Some real_type, "\\real_max", "real_max", [real_type; real_type] ;
     Some real_type, "\\real_min", "real_min", [real_type; real_type] ;
@@ -1106,6 +1100,7 @@ let treatfloat = TreatGenFloat (`Float :> float_format)
 let builtin_function_symbols =
   (* return type, jessie name, why name, parameter types, special treatment *)
   [
+    real_type, "\\real_of_integer", "real_of_int", [integer_type], TreatNothing ;
     double_type, "\\double_sqrt", "sqrt_gen_float", [double_type], treatdouble ;
     float_type, "\\float_sqrt", "sqrt_gen_float", [float_type], treatfloat ;
     double_type, "\\double_abs", "abs_gen_float", [double_type], treatdouble ;

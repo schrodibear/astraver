@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.71 2009-07-16 13:12:52 nguyen Exp $ *)
+(* $Id: jc_env.mli,v 1.72 2009-08-26 12:41:55 marche Exp $ *)
 
 type float_format = [ `Double | `Float | `Binary80 ]
 
@@ -103,6 +103,7 @@ and field_info =
       jc_field_info_hroot : struct_info;
         (* The root of the structure in which the field is defined *)
       jc_field_info_rep : bool; (* "rep" flag *)
+      jc_field_info_abstract : bool; (* "abstract" flag *)
       jc_field_info_bitsize : int option;
         (* Size of the field in bits, optional *)
     }

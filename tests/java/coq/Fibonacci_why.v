@@ -127,11 +127,11 @@ Admitted.
      
      | isfib1 : (isfib 1 1)
      
-     | isfibn : (forall (n_1:Z),
+     | isfibn : (forall (n:Z),
                  (forall (r_0:Z),
                   (forall (p:Z),
-                   (n_1 >= 2 /\ (isfib (n_1 - 2) r_0) /\
-                    (isfib (n_1 - 1) p) -> (isfib n_1 (p + r_0))))))
+                   (n >= 2 /\ (isfib (n - 2) r_0) /\ (isfib (n - 1) p) ->
+                    (isfib n (p + r_0))))))
      .
 
 (* Why obligation from file "Fibonacci.jc", line 26, characters 0-29: *)
@@ -308,8 +308,8 @@ Admitted.
 
 (* Why obligation from file "Fibonacci.java", line 29, characters 20-26: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_1 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
   (* JC_32 *) (* JC_28 *) (* JC_28 *) 0 <= 0.
 Proof.
 intuition.
@@ -317,17 +317,17 @@ Save.
 
 (* Why obligation from file "Fibonacci.java", line 29, characters 25-31: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_2 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
-  (* JC_32 *) (* JC_29 *) (* JC_29 *) 0 <= n_0_0.
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
+  (* JC_32 *) (* JC_29 *) (* JC_29 *) 0 <= n_0.
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "Fibonacci.java", line 29, characters 35-47: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_3 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
   (* JC_32 *) (* JC_30 *) (* JC_30 *) (isfib (0 + 1) 1).
 Proof.
 intros; apply isfib1.
@@ -335,8 +335,8 @@ Save.
 
 (* Why obligation from file "Fibonacci.java", line 29, characters 51-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_4 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
   (* JC_32 *) (* JC_31 *) (* JC_31 *) (isfib 0 0).
 Proof.
 intros; apply isfib0.
@@ -344,14 +344,14 @@ Save.
 
 (* Why obligation from file "Fibonacci.java", line 29, characters 20-26: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_5 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_32 *) ((* JC_28 *) 0 <= i /\ (* JC_29 *) i <= n_0_0 /\
+  forall (HW_4: (* JC_32 *) ((* JC_28 *) 0 <= i /\ (* JC_29 *) i <= n_0 /\
                 (* JC_30 *) (isfib (i + 1) x_0_0) /\ (* JC_31 *) (isfib i y))),
-  forall (HW_6: i < n_0_0),
+  forall (HW_6: i < n_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
   forall (y0: Z),
@@ -367,14 +367,14 @@ Save.
 
 (* Why obligation from file "Fibonacci.java", line 29, characters 25-31: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_6 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_32 *) ((* JC_28 *) 0 <= i /\ (* JC_29 *) i <= n_0_0 /\
+  forall (HW_4: (* JC_32 *) ((* JC_28 *) 0 <= i /\ (* JC_29 *) i <= n_0 /\
                 (* JC_30 *) (isfib (i + 1) x_0_0) /\ (* JC_31 *) (isfib i y))),
-  forall (HW_6: i < n_0_0),
+  forall (HW_6: i < n_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
   forall (y0: Z),
@@ -383,21 +383,21 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  (* JC_32 *) (* JC_29 *) (* JC_29 *) i0 <= n_0_0.
+  (* JC_32 *) (* JC_29 *) (* JC_29 *) i0 <= n_0.
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "Fibonacci.java", line 29, characters 35-47: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_7 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_32 *) ((* JC_28 *) 0 <= i /\ (* JC_29 *) i <= n_0_0 /\
+  forall (HW_4: (* JC_32 *) ((* JC_28 *) 0 <= i /\ (* JC_29 *) i <= n_0 /\
                 (* JC_30 *) (isfib (i + 1) x_0_0) /\ (* JC_31 *) (isfib i y))),
-  forall (HW_6: i < n_0_0),
+  forall (HW_6: i < n_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
   forall (y0: Z),
@@ -416,14 +416,14 @@ Save.
 
 (* Why obligation from file "Fibonacci.java", line 29, characters 51-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_8 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_32 *) ((* JC_28 *) 0 <= i /\ (* JC_29 *) i <= n_0_0 /\
+  forall (HW_4: (* JC_32 *) ((* JC_28 *) 0 <= i /\ (* JC_29 *) i <= n_0 /\
                 (* JC_30 *) (isfib (i + 1) x_0_0) /\ (* JC_31 *) (isfib i y))),
-  forall (HW_6: i < n_0_0),
+  forall (HW_6: i < n_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
   forall (y0: Z),
@@ -439,17 +439,17 @@ Save.
 
 (* Why obligation from file "Fibonacci.java", line 24, characters 16-33: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_9 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
-  forall (HW_4: (* JC_32 *) ((* JC_28 *) 0 <= i /\ (* JC_29 *) i <= n_0_0 /\
+  forall (HW_4: (* JC_32 *) ((* JC_28 *) 0 <= i /\ (* JC_29 *) i <= n_0 /\
                 (* JC_30 *) (isfib (i + 1) x_0_0) /\ (* JC_31 *) (isfib i y))),
-  forall (HW_11: i >= n_0_0),
+  forall (HW_11: i >= n_0),
   forall (why__return: Z),
   forall (HW_12: why__return = y),
-  (* JC_15 *) (isfib n_0_0 why__return).
+  (* JC_15 *) (isfib n_0 why__return).
 Proof.
 intuition.
 assert (i=n_0_0) by omega.
@@ -458,15 +458,15 @@ Save.
 
 (* Why obligation from file "Fibonacci.java", line 30, characters 18-21: *)
 (*Why goal*) Lemma Fibonacci_Fib_safety_po_1 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
   forall (HW_4: (* JC_25 *) True),
-  forall (HW_5: (* JC_23 *) ((* JC_19 *) 0 <= i /\ (* JC_20 *) i <= n_0_0 /\
+  forall (HW_5: (* JC_23 *) ((* JC_19 *) 0 <= i /\ (* JC_20 *) i <= n_0 /\
                 (* JC_21 *) (isfib (i + 1) x_0_0) /\ (* JC_22 *) (isfib i y))),
-  forall (HW_6: i < n_0_0),
+  forall (HW_6: i < n_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
   forall (y0: Z),
@@ -475,22 +475,22 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  0 <= ((* JC_27 *) (n_0_0 - i)).
+  0 <= ((* JC_27 *) (n_0 - i)).
 Proof.
 intuition.
 Save.
 
 (* Why obligation from file "Fibonacci.java", line 30, characters 18-21: *)
 (*Why goal*) Lemma Fibonacci_Fib_safety_po_2 : 
-  forall (n_0_0: Z),
-  forall (HW_1: (* JC_13 *) n_0_0 >= 0),
+  forall (n_0: Z),
+  forall (HW_1: (* JC_13 *) n_0 >= 0),
   forall (i: Z),
   forall (x_0_0: Z),
   forall (y: Z),
   forall (HW_4: (* JC_25 *) True),
-  forall (HW_5: (* JC_23 *) ((* JC_19 *) 0 <= i /\ (* JC_20 *) i <= n_0_0 /\
+  forall (HW_5: (* JC_23 *) ((* JC_19 *) 0 <= i /\ (* JC_20 *) i <= n_0 /\
                 (* JC_21 *) (isfib (i + 1) x_0_0) /\ (* JC_22 *) (isfib i y))),
-  forall (HW_6: i < n_0_0),
+  forall (HW_6: i < n_0),
   forall (aux: Z),
   forall (HW_7: aux = y),
   forall (y0: Z),
@@ -499,7 +499,7 @@ Save.
   forall (HW_9: x_0_0_0 = (x_0_0 + aux)),
   forall (i0: Z),
   forall (HW_10: i0 = (i + 1)),
-  ((* JC_27 *) (n_0_0 - i0)) < ((* JC_27 *) (n_0_0 - i)).
+  ((* JC_27 *) (n_0 - i0)) < ((* JC_27 *) (n_0 - i)).
 Proof.
 intuition.
 Save.

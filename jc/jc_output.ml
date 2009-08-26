@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.145 2009-07-16 13:12:52 nguyen Exp $ *)
+(* $Id: jc_output.ml,v 1.146 2009-08-26 12:41:55 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -275,7 +275,8 @@ let rec assertion fmt a =
 	  l;
 	fprintf fmt ")@]"
     | JCAfalse -> fprintf fmt "false"
-    | JCAmutable _ -> assert false (* TODO *)
+    | JCAmutable _ -> 
+        fprintf fmt "mutable(TODO)"
     | JCAeqtype _ -> assert false (* TODO *)
     | JCAsubtype _ -> assert false (* TODO *)
     | JCAmatch (t, pal) ->
@@ -418,8 +419,10 @@ let rec expr fmt e =
 	  fprintf fmt "@\nthrow %s %a;"
 	    ei.jc_exception_info_name
 	    (print_option_or_default "()" expr) eo
-      | JCEpack _ | JCEunpack _ ->
-          assert false (* TODO *)
+      | JCEpack _ ->
+          fprintf fmt "pack(TODO)"
+      | JCEunpack _ ->
+          fprintf fmt "unpack(TODO)"
       | JCEmatch(e, pel) ->
 	  fprintf fmt "@[<v 2>match %a with@ " expr e;
 	  List.iter

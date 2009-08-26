@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.182 2009-05-20 14:37:29 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.183 2009-08-26 12:41:55 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -290,6 +290,7 @@ let create_field pos fi =
       jc_field_info_hroot = ci.jc_struct_info_hroot;
       jc_field_info_struct = ci;
       jc_field_info_rep = false;
+      jc_field_info_abstract = false;
       jc_field_info_bitsize = None;
       (*
 	jc_field_info_final_name = vi.java_field_info_name;
@@ -860,6 +861,7 @@ let array_types decls =
 	 jc_field_info_hroot = object_root;
 	 jc_field_info_struct = st;
 	 jc_field_info_rep = false;
+	 jc_field_info_abstract = false;
 	 jc_field_info_bitsize = None;
        }
        in
@@ -941,7 +943,7 @@ let array_types decls =
           ~super:("Object", [])
 	  ~fields:
           (List.map begin fun fi ->
-             fi.jc_field_info_rep,
+             (fi.jc_field_info_rep,fi.jc_field_info_abstract),
              ptype_of_type fi.jc_field_info_type,
              fi_name fi,
 	     None
@@ -2152,7 +2154,7 @@ let tr_class ci acc0 acc =
       else acc
     in
     let fields = List.map begin function fi ->
-      fi.jc_field_info_rep,
+      (fi.jc_field_info_rep,fi.jc_field_info_abstract),
       ptype_of_type fi.jc_field_info_type,
       fi_name fi,
       None

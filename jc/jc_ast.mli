@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.169 2009-06-23 10:19:14 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.170 2009-08-26 12:41:55 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -230,6 +230,8 @@ type 'expr reads_or_expr =
   | JCexpr of 'expr
   | JCinductive of (identifier * label list * 'expr) list
 
+type field_modifiers = bool * bool
+
 type 'expr decl_node =
   | JCDvar of ptype * string * 'expr option
   | JCDfun of ptype * identifier * (bool * ptype * string) list * 'expr clause list
@@ -238,7 +240,7 @@ type 'expr decl_node =
       string (* name of the tag *)
       * string list (* type parameters *)
       * (string * ptype list) option (* parent tag, applied type parameters *)
-      * (bool * ptype * string * int option) list (* fields *)
+      * (field_modifiers * ptype * string * int option) list (* fields *)
       * (identifier * string * 'expr) list (* invariants *)
   | JCDvariant_type of string * identifier list
   | JCDunion_type of string * bool * identifier list
