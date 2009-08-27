@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.29 2009-05-26 14:25:05 bobot Exp $ i*)
+(*i $Id: output.mli,v 1.30 2009-08-27 16:43:02 bobot Exp $ i*)
 
 type constant =
   | Prim_void
@@ -78,6 +78,8 @@ val make_or : assertion -> assertion -> assertion
 val make_and : assertion -> assertion -> assertion
 val make_or_list : assertion list -> assertion
 val make_and_list : assertion list -> assertion
+val make_forall_list : (string * logic_type) list -> trigger list list 
+  -> assertion -> assertion
 val make_impl : assertion -> assertion -> assertion
 val make_equiv : assertion -> assertion -> assertion
 

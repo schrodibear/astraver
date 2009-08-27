@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.45 2009-05-26 14:25:04 bobot Exp $ i*)
+(*i $Id: output.ml,v 1.46 2009-08-27 16:43:02 bobot Exp $ i*)
 
 open Lexing
 open Format
@@ -158,6 +158,12 @@ let rec make_or_list l =
   match l with
     | [] -> LFalse
     | f::r -> make_or f (make_or_list r)
+
+let rec make_forall_list l triggers assertion =
+  match l with
+    | [] -> assertion
+    | [s,ty] -> LForall(s,ty,triggers,assertion)
+    | (s,ty)::l -> LForall(s,ty,[],make_forall_list l triggers assertion)
 
 let make_impl a1 a2 =
   match (unname a1,unname a2) with

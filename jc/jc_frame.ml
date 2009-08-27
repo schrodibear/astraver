@@ -86,7 +86,18 @@ let tr_logic_fun f ta acc =
           let ty' = tr_base_type ty in
           let t' = ft t in
 	  let t' = term_coerce t#pos ty t#typ t t' in
-          Function(false, f.jc_logic_info_final_name, params, ty', t') :: acc
+          if List.mem f f.jc_logic_info_calls then
+            let logic = Logic(false,f.jc_logic_info_final_name, params, ty') in 
+            let fstparams = List.map (fun (s,_) -> LVar s) params in
+            let axiom =
+              Axiom("_jc_axiom_"^f.jc_logic_info_final_name,
+                    make_forall_list params []
+                      (make_eq 
+                         (LApp(f.jc_logic_info_final_name,fstparams))
+                         t')) in
+            logic::axiom::acc
+          else
+            Function(false, f.jc_logic_info_final_name, params, ty', t') :: acc
       | ty_opt, JCReads r -> (* Logic *)
           let ty' = match ty_opt with
 	    | None -> simple_logic_type "prop"
