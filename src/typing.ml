@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: typing.ml,v 1.141 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.142 2009-09-04 15:29:46 bobot Exp $ i*)
 
 (*s Typing. *)
 
@@ -886,11 +886,11 @@ let rec typef ?(userlabel="") lab env expr =
       let d = Post (t_e, q, tr) in
       gmake_node loc env userlabel toplabel d v e' ~post:(Some q)
 
-  | Sassert (p, e) ->
+  | Sassert (kind,p, e) ->
       let ep,p = state_pre lab env loc p in
       let t_e = typef lab env e in
       let ef = Effect.union (effect t_e) ep in
-      make_node toplabel (Assertion (`ASSERT,p, t_e)) (result_type t_e) ef
+      make_node toplabel (Assertion ((kind :> Ast.assert_kind),p, t_e)) (result_type t_e) ef
 
   | Slabel (s, e) ->
       if (Label.mem s lab) then raise_located loc (ReboundLabel s);

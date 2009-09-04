@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: wp.ml,v 1.115 2008-11-05 14:03:18 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.116 2009-09-04 15:29:46 bobot Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -245,7 +245,7 @@ let abstract_binders =
 
 (*s Adding precondition and obligations to the wp *)
 
-let add_to_wp loc explain_id al w =
+let add_to_wp ?(is_sym=false) loc explain_id al w =
   let al = List.map (fun p -> (*loc_name loc*) p.a_value) al in
   if al = [] then
     w
@@ -254,10 +254,10 @@ let add_to_wp loc explain_id al w =
 	Some (asst_app 
 		(fun w -> 
 		   Pnamed(explain_id,
-			  List.fold_right (wpand ~is_sym:false) al w))
+			  List.fold_right (wpand ~is_sym) al w))
 		w)
     | None -> 
-	Some (wp_named loc (Pnamed(explain_id,wpands ~is_sym:false al)))
+	Some (wp_named loc (Pnamed(explain_id,wpands ~is_sym al)))
 
 (*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary.
@@ -419,8 +419,8 @@ and wp_desc info d q =
 	  match k with
 	    | `ABSURD ->
 		Cc.VCEabsurd
-	    | `ASSERT ->
-		Cc.VCEassert (List.map (fun a -> (a.a_loc,a.a_value)) l) 
+	    | #Cc.assert_kind as k -> (*ASSERT et CHECK*)
+		Cc.VCEassert (k,List.map (fun a -> (a.a_loc,a.a_value)) l) 
 	    | `PRE ->
 		let lab = info.t_userlabel in
 		let loc = info.t_loc in
@@ -431,7 +431,10 @@ and wp_desc info d q =
 		Cc.VCEpre (lab,loc,List.map (fun a -> (a.a_loc,a.a_value)) l) 
 	in
 	let id = reg_explanation expl in
-	Assertion (k, l, e'), add_to_wp info.t_loc id l w
+        let is_sym = match k with
+          | `CHECK -> true
+          | `ASSERT | `PRE | `ABSURD -> false in
+	Assertion (k, l, e'), add_to_wp ~is_sym info.t_loc id l w
     | Absurd ->
 	Absurd, Some (anonymous info.t_loc Pfalse)
     | Any k as d ->

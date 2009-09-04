@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.ml,v 1.20 2009-05-26 14:25:05 bobot Exp $ i*)
+(*i $Id: pp.ml,v 1.21 2009-09-04 15:29:45 bobot Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -55,6 +55,9 @@ let print_list_delim start stop sep pr fmt = function
   | [] -> ()
   | l -> fprintf fmt "%a%a%a" start () (print_list sep pr) l stop ()
 
+let print_pair_delim start sep stop pr1 pr2 fmt (a,b) =
+  fprintf fmt "%a%a%a%a%a" start () pr1 a sep () pr2 b stop ()
+
 let comma fmt () = fprintf fmt ",@ "
 let simple_comma fmt () = fprintf fmt ", "
 let underscore fmt () = fprintf fmt "_"
@@ -67,9 +70,13 @@ let lbrace fmt () = fprintf fmt "{"
 let rbrace fmt () = fprintf fmt "}"
 let lsquare fmt () = fprintf fmt "["
 let rsquare fmt () = fprintf fmt "]"
-let nothing fmt () = ()
+let lparen fmt () = fprintf fmt "("
+let rparen fmt () = fprintf fmt ")"
+let nothing fmt _ = ()
 let string fmt s = fprintf fmt "%s" s
 let constant_string s fmt () = string fmt s
+
+let print_pair pr1 = print_pair_delim lparen comma rparen pr1
 
 let hov n fmt f x = pp_open_hovbox fmt n; f x; pp_close_box fmt ()
 

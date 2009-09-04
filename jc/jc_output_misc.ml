@@ -120,6 +120,7 @@ and asrt_kind fmt = function
   | Aassert -> fprintf fmt "assert"
   | Ahint -> fprintf fmt "hint"
   | Aassume -> fprintf fmt "assume"
+  | Acheck -> fprintf fmt "check"
 
 and address_kind fmt = function
   | Addr_absolute -> fprintf fmt "absolute_"

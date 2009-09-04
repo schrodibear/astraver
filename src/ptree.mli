@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ptree.mli,v 1.47 2009-05-27 07:14:07 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.48 2009-09-04 15:29:45 bobot Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -107,6 +107,8 @@ type variant = lexpr * variable
 
 type exn_pattern = variable * variable option
 
+type assert_kind = [`ASSERT | `CHECK]
+
 type t = 
   { pdesc : t_desc;
     ploc : loc }
@@ -133,7 +135,7 @@ and t_desc =
   | Sabsurd of ptype_v option
   | Sany of ptype_c
   | Slabel of label * t
-  | Sassert of assertion list * t
+  | Sassert of assert_kind * assertion list * t
   | Spost of t * postcondition * transp
 
 type parsed_program = t

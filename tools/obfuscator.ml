@@ -388,8 +388,9 @@ let rec program m fmt p =
       fprintf fmt "[ %a ]" (type_c m) c
   | Slabel (l, e) ->
       fprintf fmt "(%s: %a)" l progm e
-  | Sassert (al, e) ->
-      fprintf fmt "(assert %a; %a)"
+  | Sassert (k,al, e) ->
+      fprintf fmt "(%s %a; %a)"
+        (match k with `ASSERT -> "assert" | `CHECK -> "check")
 	(print_list space (bracket_assertion m)) al (program m) e
   | Spost (e, p, Types.Transparent) ->
       fprintf fmt "(%a { %a })" progm e (post m) (Some p)

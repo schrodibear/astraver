@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.20 2009-05-26 14:25:05 bobot Exp $ i*)
+(*i $Id: pp.mli,v 1.21 2009-09-04 15:29:45 bobot Exp $ i*)
 
 open Format
 
@@ -46,6 +46,17 @@ val print_list_delim :
   (Format.formatter -> unit -> unit) ->
   (Format.formatter -> unit -> unit) ->
   (Format.formatter -> 'b -> unit) -> Format.formatter -> 'b list -> unit
+val print_pair_delim :
+  (Format.formatter -> unit -> unit) ->
+  (Format.formatter -> unit -> unit) ->
+  (Format.formatter -> unit -> unit) ->
+  (Format.formatter -> 'a -> unit) -> 
+  (Format.formatter -> 'b -> unit) -> Format.formatter -> 'a * 'b -> unit
+
+val print_pair :
+  (Format.formatter -> 'a -> unit) -> 
+  (Format.formatter -> 'b -> unit) -> Format.formatter -> 'a * 'b -> unit
+
 val space : formatter -> unit -> unit
 val alt : formatter -> unit -> unit
 val newline : formatter -> unit -> unit
@@ -58,7 +69,9 @@ val lbrace : formatter -> unit -> unit
 val rbrace : formatter -> unit -> unit
 val lsquare : formatter -> unit -> unit
 val rsquare : formatter -> unit -> unit
-val nothing : formatter -> unit -> unit
+val lparen : formatter -> unit -> unit
+val rparen : formatter -> unit -> unit
+val nothing : formatter -> 'a -> unit
 val string : formatter -> string -> unit
 val constant_string : string -> formatter -> unit -> unit
 val hov : int -> formatter -> ('a -> unit) -> 'a -> unit

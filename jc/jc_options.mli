@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_options.mli,v 1.40 2009-05-12 15:37:18 nguyen Exp $ *)
+(* $Id: jc_options.mli,v 1.41 2009-09-04 15:29:45 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -34,9 +34,10 @@ open Jc_env
 
 val has_floats : bool ref
 val libdir : string
-(*val float_lib : string list
-val libfiles : unit -> string list*)
-val libfiles : string list ref
+(*val float_lib : string list*)
+val get_libfiles : unit -> string list
+(*val libfiles : string list ref*)
+val add_to_libfiles : string -> unit
 
 (*s command-line options *)
 
@@ -68,6 +69,8 @@ val float_model : Jc_env.float_model ref
 val float_instruction_set : Jc_env.float_instruction_set ref
 val trust_ai : bool
 val fast_ai : bool
+
+val gen_frame_rule_with_ft : bool
 
 val current_rounding_mode : Jc_env.float_rounding_mode ref
 

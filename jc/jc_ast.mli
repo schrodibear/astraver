@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.170 2009-08-26 12:41:55 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.171 2009-09-04 15:29:45 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -128,6 +128,7 @@ type asrt_kind =
   | Ahint   (* Assertion to help in proofs, 
 	       can be either discarded or both used and proved *)
   | Aassume (* Assertion that can be relied on without proof *)
+  | Acheck  (* Assertion to prove but which is not used after *)
 
 type rounding_mode =
   | Round_nearest_even | Round_to_zero | Round_up | Round_down 
@@ -262,7 +263,9 @@ type 'expr decl_node =
   | JCDannotation_policy of Jc_env.annotation_sem
   | JCDabstract_domain of Jc_env.abstract_domain 
   | JCDint_model of Jc_env.int_model
+  | JCDpragma_gen_sep of string * string * (ptype * string list) list
   | JCDaxiomatic of string * 'expr decl list
+
 
 and 'expr decl = 'expr decl_node node_positioned
 

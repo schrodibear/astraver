@@ -263,6 +263,7 @@ let get_kind e =
     | "Other" -> Logic_decl.EKOther (get_string_attr "text" e)
     | "Absurd" -> Logic_decl.EKAbsurd 
     | "Assert" -> Logic_decl.EKAssert 
+    | "Check" -> Logic_decl.EKCheck 
     | "Pre" -> Logic_decl.EKPre (get_string_attr "text" e)
     | "Post" -> Logic_decl.EKPost 
     | "WfRel" -> Logic_decl.EKWfRel

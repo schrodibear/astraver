@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.421 2009-08-26 12:41:55 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.422 2009-09-04 15:29:45 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1551,6 +1551,13 @@ let assumption al a' =
   in
   BlackBox(Annot_type(LTrue, unit_type, read_effects, [], a', []))
 
+let check al a' =
+  let ef = List.fold_left Jc_effect.assertion empty_effects al in
+  let read_effects = 
+    local_read_effects ~callee_reads:ef ~callee_writes:empty_effects
+  in
+  BlackBox(Annot_type(a', unit_type, read_effects, [], LTrue, []))
+
 (* Translate the heap update `e1.fi = tmp2' 
 
    essentially we want
@@ -1939,7 +1946,7 @@ and value_assigned mark pos ty e =
 	coerce ~check_int_overflow:(safety_checking()) 
 	  mark e#pos ty e#typ e e'
     | Some(tmp,e',a) ->
-	Let(tmp,e',make_check ~mark ~kind:IndexBounds pos (Assert(a,Var tmp)))
+	Let(tmp,e',make_check ~mark ~kind:IndexBounds pos (Assert(`ASSERT,a,Var tmp)))
 
 and expr e =
   let infunction = get_current_function () in
@@ -2180,7 +2187,7 @@ and expr e =
 		if arg_types_assert = LTrue || not (safety_checking()) then 
 		  call
 		else
-		  Assert(arg_types_assert,call) 
+		  Assert(`ASSERT,arg_types_assert,call) 
               in
               let call =
 		List.fold_right
@@ -2270,7 +2277,7 @@ and expr e =
 		  call
 		else
 		  make_check ~mark:e#mark (* ~kind:Separation *) e#pos 
-		    (Assert(pre,call))
+		    (Assert(`ASSERT,pre,call))
 	      in
               let arg_types_assert =
 		List.fold_right
@@ -2285,7 +2292,7 @@ and expr e =
 		  call
 		else
 		  make_check ~mark:e#mark ~kind:IndexBounds e#pos 
-		    (Assert(arg_types_assert,call))
+		    (Assert(`ASSERT,arg_types_assert,call))
               in
               let call =
 		List.fold_right
@@ -2366,7 +2373,7 @@ and expr e =
 	begin match asrt with
 	  | Aassert | Ahint ->
 	      if in_current_behavior b then
-		Assert(a',Void)
+		Assert(`ASSERT,a',Void)
 	      else (*if assume_in_current_behavior b then *)
 		assumption [ a ] a'
 	      (* else Void *)
@@ -2374,6 +2381,11 @@ and expr e =
 	      (* if assume_in_current_behavior b then *)
 		assumption [ a ] a'
 	      (* else Void *)
+          | Acheck ->
+              if in_current_behavior b then
+	      (* if assume_in_current_behavior b then *)
+		Assert(`CHECK,a',Void)
+	      else Void
 	end
     | JCEloop(la,e1) ->
 	let inv,assume_from_inv = 

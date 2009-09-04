@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.137 2009-07-16 13:12:52 nguyen Exp $ *)
+(* $Id: jc_main.ml,v 1.138 2009-09-04 15:29:45 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -112,6 +112,7 @@ let main () =
       (fun _ (f,_loc,s,b) -> 
 	 Option_misc.iter (Jc_callgraph.compute_calls f s) b
       ) Jc_typing.functions_table;
+
     let logic_components = 
       Jc_callgraph.compute_logic_components Jc_typing.logic_functions_table
     in
@@ -292,6 +293,11 @@ let main () =
     in
     push_decls (treat_enum_pairs enumlist);
 
+    (* generation of the separation predicates : compute the needed generated predicates *)
+    if Jc_options.gen_frame_rule_with_ft then
+      (Jc_options.lprintf "Compute needed predicates@.";
+       Jc_frame.compute_needed_predicates ());
+
     (* production phase 4.1: generation of Why logic functions *)
     Jc_options.lprintf "Translate logic functions@.";
     push_decls 
@@ -394,11 +400,11 @@ let main () =
       match !Jc_options.float_model with
 	| Jc_env.FMreal -> ()
 	| Jc_env.FMstrict ->
-	    Jc_options.libfiles := !Jc_options.libfiles @ ["floats_strict.why"]
+	    Jc_options.add_to_libfiles "floats_strict.why"
 	| Jc_env.FMfull ->
-	    Jc_options.libfiles := !Jc_options.libfiles @ ["floats_full.why"]
+	    Jc_options.add_to_libfiles "floats_full.why"
 	|  Jc_env.FMmultirounding ->
-	     Jc_options.libfiles := !Jc_options.libfiles @ ["floats_multi_rounding.why"]
+	     Jc_options.add_to_libfiles "floats_multi_rounding.why"
     end;
     Jc_make.makefile filename
       

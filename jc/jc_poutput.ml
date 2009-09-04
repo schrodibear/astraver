@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.41 2009-08-26 12:41:55 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.42 2009-09-04 15:29:45 bobot Exp $ *)
 
 open Format
 open Jc_env
@@ -435,6 +435,11 @@ let rec pdecl fmt d =
         fprintf fmt "# AbstractDomain = %s@\n" (string_of_abstract_domain p)
     | JCDint_model p ->
         fprintf fmt "# IntModel = %s@\n" (string_of_int_model p)
+    | JCDpragma_gen_sep (kind,s,l) -> 
+        let print_ptype_r =
+          print_pair ptype (print_list semi string) in
+        fprintf fmt "# Gen_Separation %s %s(%a)\n" kind s 
+          (print_list comma print_ptype_r) l
     | JCDaxiomatic(id,l) ->
 	fprintf fmt "@\n@[axiomatic %s {@\n@[<v 2>%a@]@\n}@]@\n" id
 	  (print_list space pdecl) l

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_invariants.ml,v 1.87 2009-05-26 14:25:01 bobot Exp $ *)
+(* $Id: jc_invariants.ml,v 1.88 2009-09-04 15:29:45 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -570,8 +570,8 @@ let assert_mutable e fi =
 	  [ e_committed;
 	    LConst (Prim_bool false) ])
       in
-      Assert(make_and sub not_committed, Void)*)
-      Assert(sub, Void)
+      Assert(`ASSERT,make_and sub not_committed, Void)*)
+      Assert(`ASSERT,sub, Void)
     end
   else
     Void

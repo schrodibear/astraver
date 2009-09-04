@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_make.ml,v 1.47 2009-08-26 13:47:41 marche Exp $ i*)
+(*i $Id: jc_make.ml,v 1.48 2009-09-04 15:29:45 bobot Exp $ i*)
 
 open Format
 open Pp
@@ -70,7 +70,7 @@ let generic full f targets =
 		    out " %s"
 		      (String.escaped (Filename.concat "$(WHYLIB)"
 					 (Filename.concat "why" s))))
-	 (!Jc_options.libfiles);
+	 (Jc_options.get_libfiles ());
        out "@\n@\n";
        out "COQDEP = coqdep@\n@\n";
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: logic_decl.mli,v 1.20 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: logic_decl.mli,v 1.21 2009-09-04 15:29:45 bobot Exp $ i*)
 
 (*s Logical declarations. 
     This is what is sent to the various provers (see main.ml and the provers
@@ -40,6 +40,7 @@ type 'a scheme = 'a Env.scheme
 type expl_kind = 
   | EKAbsurd
   | EKAssert
+  | EKCheck
   | EKLoopInvInit of string
   | EKLoopInvPreserv of string
   | EKPost

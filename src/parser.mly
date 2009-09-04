@@ -108,7 +108,7 @@
 %token <string> STRING
 %token ABSURD AMPAMP AND ARRAY ARROW AS ASSERT AT AXIOM 
 %token BANG BAR BARBAR BEGIN 
-%token BIGARROW BOOL COLON COLONEQUAL COMMA DO DONE DOT ELSE END EOF EQUAL
+%token BIGARROW BOOL CHECK COLON COLONEQUAL COMMA DO DONE DOT ELSE END EOF EQUAL
 %token EXCEPTION EXISTS EXTERNAL FALSE FOR FORALL FPI FUN FUNCTION GE GOAL GT
 %token IF IN INCLUDE INDUCTIVE INT INVARIANT
 %token LE LEFTB LEFTBLEFTB LEFTPAR LEFTSQ LET LOGIC LRARROW LT MINUS 
@@ -571,7 +571,9 @@ expr:
 | expr SEMICOLON expr
    { locate (Sseq ($1, $3)) }
 | ASSERT list1_bracket_assertion SEMICOLON expr 
-   { locate (Sassert ($2, $4)) }
+   { locate (Sassert (`ASSERT,$2, $4)) }
+| CHECK list1_bracket_assertion SEMICOLON expr 
+   { locate (Sassert (`CHECK,$2, $4)) }
 | expr LEFTB post_condition RIGHTB
    { locate (Spost ($1, $3, Transparent)) }
 | expr LEFTBLEFTB post_condition RIGHTBRIGHTB

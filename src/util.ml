@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: util.ml,v 1.166 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: util.ml,v 1.167 2009-09-04 15:29:46 bobot Exp $ i*)
 
 open Logic
 open Ident
@@ -1053,7 +1053,8 @@ let rec print_ptree fmt p = match p.pdesc with
   | Sany _ -> fprintf fmt "<Sany>"
   | Spost (e,q,Transparent) -> fprintf fmt "@[%a@ {...}@]" print_ptree e
   | Spost (e,q,Opaque) -> fprintf fmt "@[%a@ {{...}}@]" print_ptree e
-  | Sassert (p,e) -> fprintf fmt "@[{...}@ %a@]" print_ptree e
+  | Sassert (`ASSERT,p,e) -> fprintf fmt "@[{...}@ %a@]" print_ptree e
+  | Sassert (`CHECK,p,e) -> fprintf fmt "@[{{...}}@ %a@]" print_ptree e
   | Slabel (l,e) -> fprintf fmt "@[%s: %a@]" l print_ptree e
 
 and print_phandler fmt = function
@@ -1176,7 +1177,10 @@ let cook_explanation (userlab : string option) e =
     match e with
       | VCEexternal s -> EKOther s, dummy_reloc 
       | VCEabsurd -> EKAbsurd, dummy_reloc
-      | VCEassert p -> EKAssert, (reloc_xpl (List.hd p))
+      | VCEassert (k,p) -> 
+          (match k with 
+            | `ASSERT -> EKAssert
+            | `CHECK -> EKCheck), (reloc_xpl (List.hd p))      
       | VCEpre(lab,loc,p) -> 
 	  begin
 	    if debug then eprintf "Util.cook_explanation: label,loc for pre = %s,%a@." lab

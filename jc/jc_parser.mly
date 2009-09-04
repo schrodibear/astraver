@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.134 2009-08-26 12:41:55 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.135 2009-09-04 15:29:45 bobot Exp $ */
 
 %{
 
@@ -96,7 +96,7 @@
 %token EXCEPTION OF THROW TRY CATCH FINALLY NEW FREE LET IN VAR
 
 /* pack unpack assert */
-%token ABSTRACT PACK UNPACK ASSERT ASSUME HINT
+%token ABSTRACT PACK UNPACK ASSERT ASSUME HINT CHECK
 
 /* type invariant logic axiomatic with variant and axiom tag */
 %token TYPE INVARIANT LOGIC AXIOMATIC WITH VARIANT AND AXIOM LEMMA TAG
@@ -128,6 +128,8 @@
 
 /* @ (string concat) */
 %token AT
+
+%token PRAGMA_GEN_SEP
 
 %token EOF
 %type <Jc_ast.pexpr Jc_ast.decl list> file
@@ -210,6 +212,8 @@ decl:
 | exception_definition
     { $1 }
 | logic_definition
+    { $1 }
+| pragma_gen_sep 
     { $1 }
 /*
 | error
@@ -697,6 +701,10 @@ expression:
     { locate (JCPEassert($3,Aassume,$5)) }
 | ASSUME expression 
     { locate (JCPEassert([],Aassume,$2)) }
+| CHECK FOR identifier_list COLON expression %prec FOR
+    { locate (JCPEassert($3,Acheck,$5)) }
+| CHECK expression 
+    { locate (JCPEassert([],Acheck,$2)) }
 | behavior compound_expr
     { locate (JCPEcontract(None,None,[$1],$2)) } 
 | iteration_expression 
@@ -1148,6 +1156,36 @@ pattern_expression_list:
     { ($1, $3)::$4 }
 | pattern MINUSGT compound_expr
     { [$1, $3] }
+;
+
+/**************/
+/* pragma_gen_sep */
+/**************/
+pragma_gen_sep:
+| PRAGMA_GEN_SEP IDENTIFIER  LPAR type_expr_comma_list RPAR
+    { locate (JCDpragma_gen_sep("",$2, $4)) }
+| PRAGMA_GEN_SEP IDENTIFIER IDENTIFIER  LPAR type_expr_comma_list RPAR
+    { locate (JCDpragma_gen_sep($2,$3, $5)) }
+;
+
+type_expr_parameters:
+| LPARRPAR
+    { [] }
+| LPAR RPAR
+    { [] }
+| LPAR type_expr_comma_list RPAR
+    { $2 } 
+;
+
+type_expr_restreint:
+|type_expr {$1,[]}
+|type_expr PIPE LPAR type_parameter_names RPAR {$1,$4}
+
+type_expr_comma_list: 
+| type_expr_restreint
+    { [$1] }
+| type_expr_restreint COMMA type_expr_comma_list
+    { $1 :: $3 }
 ;
 
 /*

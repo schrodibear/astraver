@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: cinterp.ml,v 1.265 2009-05-26 14:24:59 bobot Exp $ i*)
+(*i $Id: cinterp.ml,v 1.266 2009-09-04 15:29:44 bobot Exp $ i*)
 
 open Format
 open Coptions
@@ -775,7 +775,7 @@ let int_of_enum tag e =
     e
 
 let guard_1 g e =
-  let v = tmp_var () in Let (v, e, Output.Assert (g (LVar v), Var v))
+  let v = tmp_var () in Let (v, e, Output.Assert (`ASSERT,g (LVar v), Var v))
 
 (* int conversion ty1 -> ty2 *)
 let interp_int_conversion loc ty1 ty2 e = 
@@ -2212,7 +2212,7 @@ and interp_statement_loc ab may_break stat = match stat.nst_node with
       else
 	res
   | NSassert(pred) -> 
-      Output.Assert(interp_predicate None "init" pred, Void)
+      Output.Assert(`ASSERT,interp_predicate None "init" pred, Void)
   | NSassume pred -> 
       (* Abusing assumptions endangers your proof ... *)
       let post,_ = interp_predicate None "init" pred, Void in

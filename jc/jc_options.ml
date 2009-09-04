@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: jc_options.ml,v 1.48 2009-07-16 13:12:52 nguyen Exp $ i*)
+(*i $Id: jc_options.ml,v 1.49 2009-09-04 15:29:45 bobot Exp $ i*)
 
 open Jc_stdlib
 open Format
@@ -66,6 +66,9 @@ let float_instruction_set : float_instruction_set ref = ref FISstrictIEEE754
 
 let libfiles = ref ["jessie.why"]
 
+let add_to_libfiles s = libfiles := s :: !libfiles
+let get_libfiles () = List.rev !libfiles
+
 (*s command-line options *)
 
 let parse_only = ref false
@@ -91,6 +94,8 @@ let interprocedural = ref false
 let main = ref ""
 let trust_ai = ref false
 let fast_ai = ref false
+
+let gen_frame_rule_with_ft = ref false
 
 let files_ = ref []
 let add_file f = files_ := f :: !files_
@@ -164,6 +169,8 @@ let _ =
 	  "  verify invariants only (Arguments policy)";
 	"-verify", Arg.String (function s -> verify := s::!verify), 
 	  "  verify only these functions";
+        "-gen_frame_rule_with_ft", Arg.Set gen_frame_rule_with_ft,
+        "Experimental : Generate frame rule for predicates and logic functions using only their definitions";
       ]
       add_file usage
 
@@ -196,6 +203,9 @@ let verify = !verify
 let interprocedural = !interprocedural
 let main = !main
 let behavior = !behavior
+
+let gen_frame_rule_with_ft = !gen_frame_rule_with_ft
+let () = if gen_frame_rule_with_ft then libfiles := "mybag.why"::!libfiles
 
 let verify_behavior s = 
   behavior = "" || behavior = s

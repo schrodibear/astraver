@@ -1,4 +1,6 @@
 
+  o [Why][Jessie] add a new assertion check which is used like assert.
+    It try to prove the assertion but do not use it as hypothesis.  
   o [Why] fixed some bugs with Coq output
   o [GWhy] new column gappa+hypotheses selection
 

@@ -191,8 +191,14 @@ let inductive_inverse_body id params cases =
 let inversion_axiom id params cases =
   let yvars,body = inductive_inverse_body id params cases in
   let ytvars = List.map (fun (y,_) -> Tvar y) yvars in
-  let body = Pimplies(false,Papp(id,ytvars,[]),body) in
-  List.fold_right (fun (y,t) acc -> Forall(false,y,y,t,[],acc)) yvars body
+  let app = Papp(id,ytvars,[]) in
+  let body = Pimplies(false,app,body) in
+  (*match yvars with
+    | [] -> body
+    | (y,t)::yvars -> 
+        let body = Forall(false,y,y,t,[[PPat app]],body) in*)
+        List.fold_right (fun (y,t) acc -> Forall(false,y,y,t,[],acc))
+          yvars body
   
     
   

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.289 2009-08-26 12:41:55 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.290 2009-09-04 15:29:45 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -71,7 +71,11 @@ let functions_env = Hashtbl.create 97
 let variables_table = Hashtbl.create 97
 let variables_env = Hashtbl.create 97
 
-
+(* Store the generated user predicates *)
+let pragma_gen_sep = Hashtbl.create 10
+(* Keep the pragma which are defined 
+   before one of its argument *)
+let pragma_before_def = Hashtbl.create 10
 
 let () =
   List.iter 
@@ -1148,6 +1152,12 @@ let make_and a1 a2 =
     | (JCAand l1 , _ ) -> new assertion(JCAand(l1@[a2]))
     | (_ , JCAand l2) -> new assertion(JCAand(a1::l2))
     | _ -> new assertion(JCAand [a1;a2])
+
+let rec make_and_list l =
+  match l with
+    | [] -> assert false
+    | [a] -> a
+    | f::r -> make_and f (make_and_list r)
 
 let make_or a1 a2 =
   match (a1#node, a2#node) with
@@ -2431,7 +2441,7 @@ let rec type_labels_in_decl d = match d#node with
   | JCDlogic_var _ ->
       ()
   | JCDaxiomatic(id,l) -> List.iter type_labels_in_decl l
-
+  | JCDpragma_gen_sep _ -> ()
 
 
 (* <====== A partir d'ici, c'est pas encore fait *)
@@ -2839,6 +2849,99 @@ let update_axiomatic axiomatic pi =
 	data.axiomatics_defined_ids <- pi :: data.axiomatics_defined_ids
     | None -> ()
   
+exception Identifier_Not_found of string
+
+
+let create_pragma_gen_sep_logic_aux loc kind id li =
+  let translate_param (p,restr) = 
+    match p#node,restr with
+      | JCPTnative _,_ -> typing_error loc "A Separation pragma can't reference \"pure\" type"
+      | JCPTidentifier s,_ -> (* Should be the identifier of a logic *)
+          let info = 
+            try
+              find_logic_info s
+            with Not_found -> raise (Identifier_Not_found s)
+          in `Logic (info,restr)
+      | JCPTpointer (_,[],None,None),[] -> 
+          let ty = type_type p in
+          `Pointer (newvar ty)
+      | JCPTpointer _, _::_ -> typing_error loc "In a separation pragma pointer can't be at that time restreint to some field"
+      | JCPTpointer _,_ -> failwith "TODO : sorry I'm lazy. But what have you done?" in
+  let change_var_name = function
+    |`Logic (info,restr) -> 
+       let params = info.jc_logic_info_parameters in
+       let new_params = List.map copyvar params in
+       `Logic (info,restr,new_params)
+    |`Pointer _ as e -> e in
+  let to_param = function 
+    | `Logic (_,_,new_params) -> new_params
+    | `Pointer var -> [var]
+  in
+  let params = List.map translate_param li in
+  let params = List.map change_var_name params in
+  let param_env = List.concat (List.map to_param params) in
+  let pi = make_pred id in
+  pi.jc_logic_info_parameters <- param_env;
+  let cur_label = LabelName { 
+    label_info_name = "L";
+    label_info_final_name = "L";
+    times_used = 0;
+  } in
+  pi.jc_logic_info_labels <- [cur_label];
+  Hashtbl.replace logic_functions_env id pi;
+  (* create a dumb definition with the correct effect 
+     which will be replace by the correcte one at the end *)
+  let to_def = function
+    | `Logic (info,_,params) -> 
+        let param = List.map (fun x -> new term ~pos:loc ~typ:x.jc_var_info_type (JCTvar x))
+          params in
+        new assertion begin
+          match info.jc_logic_info_result_type with
+            | None ->
+                JCAapp {jc_app_fun = info;
+                        jc_app_args = param;
+                        jc_app_region_assoc = [];
+                        jc_app_label_assoc = 
+                    label_assoc loc "bug in the generation" (Some cur_label) info.jc_logic_info_labels []
+                       }
+            | Some ty -> 
+                let term = new term ~pos:loc
+                  ~typ:ty
+                  (JCTapp {jc_app_fun = info;
+                           jc_app_args = param;
+                           jc_app_region_assoc = [];
+                           jc_app_label_assoc = []}) in
+                make_rel_bin_op loc `Beq term term
+        end
+    | `Pointer var -> 
+        let t = new term ~pos:loc ~typ:var.jc_var_info_type (JCTvar var) in
+        new assertion (make_rel_bin_op loc `Beq t t) in
+  let def = JCAssertion (make_and_list (List.map to_def params)) in
+  Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, def);
+  Hashtbl.add pragma_gen_sep pi.jc_logic_info_tag (kind,params,(None:Output.why_decl option))
+
+
+let create_pragma_gen_sep_logic loc kind id li =
+  try
+    create_pragma_gen_sep_logic_aux loc kind id li
+  with Identifier_Not_found ident -> 
+    Hashtbl.add pragma_before_def ident (loc,kind,id,li)
+
+let create_if_pragma_before ident =
+  List.iter (fun (loc,kind,id,li) ->
+               create_pragma_gen_sep_logic loc kind id li)
+    (Hashtbl.find_all pragma_before_def ident);
+    (Hashtbl.remove_all pragma_before_def ident)
+
+let test_if_pragma_notdefined () =
+  if not (Hashtbl.is_empty pragma_before_def) then
+    Hashtbl.iter (fun ident (loc,kind,id,li) ->
+    typing_error loc "The pragma %s has not been defined because 
+%s appeared nowhere" id ident) pragma_before_def
+  
+
+(*let test_*)
+    
 
 let rec decl_aux ~only_types ~axiomatic acc d =
   let loc = d#pos in
@@ -3058,6 +3161,7 @@ of an invariant policy";
 	    let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
 *)
             let param_env,ty,pi = add_logic_fundecl (None,id,labels,pl) in
+            create_if_pragma_before id;
             let p = match body with
           | JCreads reads ->
 	      if not in_axiomatic then
@@ -3101,6 +3205,7 @@ of an invariant policy";
 	    let labels = match labels with [] -> [ LabelHere ] | _ -> labels in
 *)
             let param_env, ty, pi = add_logic_fundecl (Some ty,id,labels,pl) in
+            create_if_pragma_before id;
             let ty = match ty with Some ty -> ty | None -> assert false in
             let t = match body with
               | JCreads [] -> JCReads []
@@ -3142,6 +3247,19 @@ of an invariant policy";
     | JCDint_model _|JCDabstract_domain _|JCDannotation_policy _
     | JCDseparation_policy _|JCDinvariant_policy _ ->
         assert false
+    | JCDpragma_gen_sep (kind,id,li) -> 
+	if Jc_options.gen_frame_rule_with_ft && not only_types then
+	  begin
+            let kind = match kind,li with
+              | "",_ -> `Sep
+              | "inc", [_;_] -> `Inc
+              | "cni", [_;_] -> `Cni
+
+              | ("inc"|"cni"), _ -> typing_error loc "A Gen_separation inc or cni pragma should have 2 arguments (%i given)" (List.length li)
+              | _ -> typing_error loc "I dont know that kind of Gen_separation pragma : %s" kind in
+            create_pragma_gen_sep_logic loc kind id li
+          end;
+	acc
     | JCDaxiomatic(id,l) -> 
 	Jc_options.lprintf "Typing axiomatic %s@." id;
 	let data = 
@@ -3318,7 +3436,9 @@ let type_file ast =
   (* 5. declaring coding and logic functions *)
   List.iter declare_function ast;
   (* 6. remaining declarations *)
-  List.iter (decl ~only_types:false) ast
+  List.iter (decl ~only_types:false) ast;
+  (* 7. test if all the pragma have been defined *)
+  test_if_pragma_notdefined ()
 
 let print_file fmt () =
   let functions =

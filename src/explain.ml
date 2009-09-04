@@ -81,6 +81,7 @@ let print_kind ?(quote=false) fmt (loc,k) =
 	| EKOther s -> fprintf fmt "kind = \"Other\"@\ntext = \"%s\"" s
 	| EKAbsurd -> fprintf fmt "kind = \"Absurd\""
 	| EKAssert -> fprintf fmt "kind = \"Assert\""
+        | EKCheck -> fprintf fmt "kind = \"Check\""
 	| EKPre s -> fprintf fmt "kind = \"Pre\"@\ntext = \"%s\"" s
 	| EKPost -> fprintf fmt "kind = \"Post\""
 	| EKWfRel -> fprintf fmt "kind = \"WfRel\""
@@ -100,6 +101,7 @@ let print_kind ?(quote=false) fmt (loc,k) =
 	| EKOther s -> fprintf fmt "kind = Other@\ntext = \"%s\"@\n" s
 	| EKAbsurd -> fprintf fmt "kind = Absurd@\n"
 	| EKAssert -> fprintf fmt "kind = Assert@\n"
+	| EKCheck -> fprintf fmt "kind = Check@\n"
 	| EKPre s -> fprintf fmt "kind = Pre@\ntext = \"%s\"@\n" s
 	| EKPost -> fprintf fmt "kind = Post@\n"
 	| EKWfRel -> fprintf fmt "kind = WfRel@\n"
@@ -135,6 +137,7 @@ let msg_of_kind =
     | EKOther s -> "unclassified obligation `" ^ s ^ "'"
     | EKAbsurd -> "unreachable code"
     | EKAssert -> "assertion"
+    | EKCheck -> "check"
     | EKPost -> "postcondition"
     | EKWfRel -> "well-foundness of relation"
     | EKVarDecr -> "variant decrease" 

@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(*i $Id: jc_lexer.mll,v 1.90 2009-08-26 12:41:55 marche Exp $ i*)
+(*i $Id: jc_lexer.mll,v 1.91 2009-09-04 15:29:45 bobot Exp $ i*)
 
 {
   open Jc_ast
@@ -207,6 +207,7 @@ rule token = parse
   | "case"                  { CASE }
   | "default"               { DEFAULT }
   | "catch"                 { CATCH }
+  | "check"                 { CHECK }
   | "continue"              { CONTINUE }
   | "decreases"             { DECREASES }
   | "do"                    { DO }
@@ -281,6 +282,7 @@ rule token = parse
   | '#' space* ((rL | rD)+ as id) space* "=" 
         space* ((rL | rD)+ as v) space* '\n'
       { pragma lexbuf id v; newline lexbuf; token lexbuf } 
+  | '#' ' '* "Gen_Separation" { PRAGMA_GEN_SEP }
   | rL (rL | rD)*           { match lexeme lexbuf with
 				| "_" -> UNDERSCORE
 				| s -> IDENTIFIER s }

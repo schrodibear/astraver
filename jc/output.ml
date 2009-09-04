@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.46 2009-08-27 16:43:02 bobot Exp $ i*)
+(*i $Id: output.ml,v 1.47 2009-09-04 15:29:45 bobot Exp $ i*)
 
 open Lexing
 open Format
@@ -132,6 +132,8 @@ let is_not_true a =
   match unname a with
     | LTrue -> false
     | _ -> true
+
+let make_var s = LVar s
 
 let make_or a1 a2 =
   match (unname a1,unname a2) with
@@ -388,6 +390,8 @@ type variant = term * string option
 
 type opaque = bool
 
+type assert_kind = [`ASSERT | `CHECK]
+
 type expr =
   | Cte of constant
   | Var of string
@@ -413,7 +417,7 @@ type expr =
       assertion * expr * assertion * ((string * assertion) list)
   | Triple of opaque * 
       assertion * expr * assertion * ((string * assertion) list)
-  | Assert of assertion * expr
+  | Assert of assert_kind * assertion * expr
   | Label of string * expr
   | BlackBox of why_type
   | Absurd
@@ -508,7 +512,7 @@ let rec iter_expr f e =
 	iter_expr f e;
 	iter_assertion f post;
 	List.iter (fun (_,a) -> iter_assertion f a) exceps
-    | Assert(p, e) -> iter_assertion f p; iter_expr f e
+    | Assert(_,p, e) -> iter_assertion f p; iter_expr f e
     | Label (_,e) | Loc (_,e) -> iter_expr f e
     | BlackBox(ty) -> iter_why_type f ty
     | Absurd -> ()
@@ -619,8 +623,9 @@ let rec fprintf_expr form e =
 		  l
 	end;
 	fprintf form ")@]"
-    | Assert(p, e) ->
-	fprintf form "@[<hv 0>(assert@ { %a };@ %a)@]" 
+    | Assert(k,p, e) ->
+	fprintf form "@[<hv 0>(%s@ { %a };@ %a)@]" 
+          (match k with `ASSERT -> "assert" | `CHECK -> "check")
 	  fprintf_assertion p fprintf_expr e
     | Label (s, e) ->
 	fprintf form "@[<hv 0>(%s:@ %a)@]" s fprintf_expr e

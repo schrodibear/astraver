@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ast.mli,v 1.62 2008-11-05 14:03:16 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.63 2009-09-04 15:29:45 bobot Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -51,7 +51,7 @@ type precondition = assertion
 
 type postcondition = assertion * (Ident.t * assertion) list
 
-type assert_kind = [ `ABSURD | `ASSERT | `PRE ]
+type assert_kind = [ `ABSURD | `ASSERT | `PRE | `CHECK]
 
 (* ['a] is the type of information associated to the nodes. 
    It will be defined later in module [Env] *)

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.116 2009-05-26 14:25:02 bobot Exp $ *)
+(* $Id: jc_norm.ml,v 1.117 2009-09-04 15:29:45 bobot Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -681,6 +681,7 @@ let rec decl d =
     | JCDseparation_policy x -> JCDseparation_policy x
     | JCDinvariant_policy x -> JCDinvariant_policy x
     | JCDaxiomatic(id,l) -> JCDaxiomatic(id,List.map decl l)
+    | JCDpragma_gen_sep _ as e -> e
   in new decl ~pos:d#pos dnode
 	  
 let decls dlist =

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_stdlib.ml,v 1.11 2008-11-05 14:03:16 filliatr Exp $ *)
+(* $Id: jc_stdlib.ml,v 1.12 2009-09-04 15:29:45 bobot Exp $ *)
 
 module List = struct
   include List
@@ -95,6 +95,7 @@ module Map = struct
     val add_merge: ('a -> 'a -> 'a) -> key -> 'a -> 'a t -> 'a t
     val diff_merge: ('a -> 'a -> 'a) -> ('a -> bool) -> 'a t -> 'a t -> 'a t
     val inter_merge: ('a -> 'a -> 'a) -> ('a -> bool) -> 'a t -> 'a t -> 'a t
+    val inter_merge_option: ('a -> 'b -> 'c option) -> 'a t -> 'b t -> 'c t
   end
 
   module Make(Ord : OrderedType) : S with type key = Ord.t = struct
@@ -160,6 +161,16 @@ module Map = struct
 		if g v then m else add k v m
 	      with Not_found -> m
 	   ) m1 empty
+
+    let inter_merge_option f m1 m2 =
+      fold (fun k v1 m ->
+	      try
+		let v2 = find k m2 in
+		match f v1 v2 with
+                  | Some v -> add k v m
+                  | None -> m
+	      with Not_found -> m
+	   ) m1 empty
 	
   end
 end
@@ -175,6 +186,8 @@ module Hashtbl = struct
     val keys: 'a t -> key list
     val values: 'a t -> 'a list
     val choose: 'a t -> (key * 'a) option
+    val remove_all : 'a t -> key -> unit
+    val is_empty : 'a t -> bool
   end
 
   module type Std = sig
@@ -212,7 +225,25 @@ module Hashtbl = struct
 	iter (fun k v -> p := Some(k,v); failwith "Hashtbl.choose") t
       with Failure "Hashtbl.choose" -> () end;
       !p
+
+    let remove_all t p =
+      List.iter (fun _ -> remove t p) (find_all t p)
+
+    let is_empty t =
+      try
+        iter (fun _ _ ->  raise Not_found) t;
+        true
+      with Not_found -> false          
   end
+
+  let remove_all t p =
+    List.iter (fun _ -> remove t p) (find_all t p)
+      
+  let is_empty t =
+    try
+      iter (fun _ _ ->  raise Not_found) t;
+      true
+    with Not_found -> false
 
 end
 

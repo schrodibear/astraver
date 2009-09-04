@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mll,v 1.21 2009-03-31 12:46:11 marche Exp $ *)
+(* $Id: lexer.mll,v 1.22 2009-09-04 15:29:45 bobot Exp $ *)
 
 {
   open Lexing
@@ -44,6 +44,7 @@
 	"axiom", AXIOM;
 	"begin", BEGIN;
         "bool", BOOL;
+        "check", CHECK;
 	"do", DO;
 	"done", DONE;
         "else", ELSE;

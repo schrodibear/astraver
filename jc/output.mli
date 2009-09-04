@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.30 2009-08-27 16:43:02 bobot Exp $ i*)
+(*i $Id: output.mli,v 1.31 2009-09-04 15:29:45 bobot Exp $ i*)
 
 type constant =
   | Prim_void
@@ -74,6 +74,9 @@ and trigger =
   |LPatP of assertion
   |LPatT of term
 
+val make_var : string -> term
+
+
 val make_or : assertion -> assertion -> assertion
 val make_and : assertion -> assertion -> assertion
 val make_or_list : assertion list -> assertion
@@ -104,6 +107,8 @@ type variant = term * string option
 
 type opaque = bool
 
+type assert_kind = [`ASSERT | `CHECK]
+
 type expr =
   | Cte of constant
   | Var of string
@@ -129,7 +134,7 @@ type expr =
       assertion * expr * assertion * ((string * assertion) list)
   | Triple of opaque * 
       assertion * expr * assertion * ((string * assertion) list)
-  | Assert of assertion * expr
+  | Assert of assert_kind * assertion * expr
   | Label of string * expr
   | BlackBox of why_type
   | Absurd 

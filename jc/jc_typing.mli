@@ -102,6 +102,14 @@ val print_file : Format.formatter -> unit -> unit
 
 val type_labels_in_decl : nexpr decl -> unit
 
+val pragma_gen_sep :  (int,
+   [ `Sep | `Inc | `Cni] *
+   [ `Logic of Jc_fenv.logic_info * string list * Jc_env.var_info list
+   | `Pointer of Jc_env.var_info ] list 
+                       * Output.why_decl option) Jc_stdlib.Hashtbl.t
+
+val comparable_types : jc_type -> jc_type -> bool
+
 (*
 Local Variables: 
 compile-command: "make -C .. bin/jessie.byte"
