@@ -1,0 +1,9 @@
+type 'a mybag
+
+logic empty_mybag : 'a mybag
+logic all_mybag : 'a mybag
+
+logic in_mybag : 'a,'a mybag -> prop
+logic inter_mybag : 'a mybag,'a mybag -> 'a mybag
+logic rem_mybag : 'a,'a mybag -> 'a mybag
+
