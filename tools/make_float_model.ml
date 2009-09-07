@@ -61,6 +61,16 @@ logic %s_model : %s -> real@.@." t t t t t t;
 
 
 
+
+(* Coq  model *)
+
+let output_coq_model fmt t p e =
+  fprintf fmt "(* Coq model for float type '%s'
+ * with precision = %d and min exponent = %d 
+ *)@.@." t p e
+
+(* main program *)
+
 let type_name = Sys.argv.(1)
 
 let precision = int_of_string Sys.argv.(2)
@@ -71,6 +81,11 @@ let main =
   let f = "lib/why/" ^ type_name ^ "_model.why" in
   let c = open_out f in
   output_common_part (formatter_of_out_channel c) type_name precision exponent;
+  close_out c;
+
+  let f = "lib/coq/" ^ type_name ^ "_model.v" in
+  let c = open_out f in
+  output_coq_model (formatter_of_out_channel c) type_name precision exponent;
   close_out c;
 
 
