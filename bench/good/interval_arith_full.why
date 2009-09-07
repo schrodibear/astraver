@@ -1,4 +1,23 @@
 
+
+
+let min (x:gen_float) (y:gen_float) =
+ { is_not_NaN(x) and is_not_NaN(y) 
+}
+if (lt_gen_float x y) then x else y
+ { float_le_float(result,x) and float_le_float(result,y)
+} 
+
+
+let max (x:gen_float) (y:gen_float) =
+ { is_not_NaN(x) and is_not_NaN(y) 
+}
+if (gt_gen_float x y) then x else y
+{  float_le_float(x,result) and float_le_float(y,result)
+} 
+
+
+
 predicate float_less_than_real(x:gen_float,y:real) = 
        (is_finite(x) and float_value(x) <= y)  or is_minus_infinity(x)
 
@@ -6,7 +25,6 @@ predicate real_less_than_float(x:real,y:gen_float) =
        (is_finite(y) and x <= float_value(y)) or is_plus_infinity(y)
 
 	
-
 let mul_dn (x:gen_float) (y:gen_float) =
 
  { is_not_NaN(x) and is_not_NaN(y) and
@@ -21,7 +39,8 @@ let mul_dn (x:gen_float) (y:gen_float) =
   
 
 
-(*
+(* obsolete ???
+
  forall x1:real. forall y1:real. 
      (* x: <0 borne inf, y: >0 borne sup -> result: borne inf *) 
      (float_sign(x) = Negative and float_sign(y) = Positive and
@@ -42,6 +61,7 @@ let mul_dn (x:gen_float) (y:gen_float) =
      (float_sign(x) = Positive and float_sign(y) = Positive and
       float_less_than_real(x,x1) and float_less_than_real(y,y1) ->
       float_less_than_real(result,x1*y1))
+
 *)
 
 
@@ -59,30 +79,13 @@ real_less_than_float(float_value(x)*float_value(y),result)
 
 
 
-
-(*
-predicate float_less_than_float(x:gen_float,y:gen_float) = 
-          (is_finite(x) and is_finite(y) and float_value(x) <= float_value(y))
-           or (is_minus_infinity(x) and is_not_NaN(y))
-           or (is_not_NaN(x) and is_plus_infinity(y))
-*)
+(*********************
 
 
-let min (x:gen_float) (y:gen_float) =
- { is_not_NaN(x) and is_not_NaN(y) 
-}
-if (lt_gen_float x y) then x else y
- { float_le_float(result,x) and float_le_float(result,y)
-} 
+  intervals
 
 
-let max (x:gen_float) (y:gen_float) =
- { is_not_NaN(x) and is_not_NaN(y) 
-}
-if (gt_gen_float x y) then x else y
-{  float_le_float(x,result) and float_le_float(y,result)
-} 
-
+**********************)
 
 
 

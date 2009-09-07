@@ -3,7 +3,35 @@
 Require Export Why.
 Require Export JessieGappa.
 
+(*Why axiom*) Lemma round_down_le :
+  (forall (f:float_format), (forall (x:R), (Rle (round_float f down x) x))).
+Admitted.
 
+(*Why axiom*) Lemma round_up_ge :
+  (forall (f:float_format), (forall (x:R), (Rge (round_float f up x) x))).
+Admitted.
+
+(*Why axiom*) Lemma round_down_neg :
+  (forall (f:float_format),
+   (forall (x:R),
+    (eq (round_float f down (Ropp x)) (Ropp (round_float f up x))))).
+Admitted.
+
+(*Why axiom*) Lemma round_up_neg :
+  (forall (f:float_format),
+   (forall (x:R),
+    (eq (round_float f up (Ropp x)) (Ropp (round_float f down x))))).
+Admitted.
+
+(*Why axiom*) Lemma round_idempotent :
+  (forall (f:float_format),
+   (forall (m1:mode),
+    (forall (m2:mode),
+     (forall (x:R),
+      (eq (round_float f m1 (round_float f m2 x)) (round_float f m2 x)))))).
+Admitted.
+
+(* maintenant axiom dans JessieGappa, ou plutot floats_common_why.v
 
 Lemma round_down_less: forall f x, (round_float f down x <= x)%R.
 intros;case f;unfold round_float.
@@ -11,6 +39,71 @@ unfold gappa_rounding.
 unfold rounding_float.
 Admitted.
 
+*)
+
+(* Why obligation from file ".", line 0, characters 0-0: *)
+(*Why goal*) Lemma min_po_1 : 
+  forall (x: gen_float),
+  forall (y: gen_float),
+  forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y)),
+  forall (result: bool),
+  forall (HW_2: (((is_NaN x) \/ (is_NaN y) -> result = false)) /\
+                (((is_finite x) /\ (is_infinite y) ->
+                  (if result then (float_sign y) = Positive
+                   else (float_sign y) = Negative))) /\
+                (((is_infinite x) /\ (is_finite y) ->
+                  (if result then (float_sign x) = Negative
+                   else (float_sign x) = Positive))) /\
+                (((is_infinite x) /\ (is_infinite y) ->
+                  (if result then (float_sign x) = Negative /\
+                   (float_sign y) = Positive
+                   else (float_sign x) = Positive \/
+                   (float_sign y) = Negative))) /\
+                (((is_finite x) /\ (is_finite y) ->
+                  (if result then (Rlt (float_value x) (float_value y))
+                   else (Rge (float_value x) (float_value y)))))),
+  (if result then ((float_le_float x x) /\ (float_le_float x y))
+   else ((float_le_float y x) /\ (float_le_float y y))).
+Proof.
+destruct result.
+ergo.
+intuition; try ergo.
+unfold float_le_float, is_not_NaN, is_NaN,
+   is_plus_infinity, is_minus_infinity.
+destruct (float_sign y); ergo.
+Save.
+
+(* Why obligation from file ".", line 0, characters 0-0: *)
+(*Why goal*) Lemma max_po_1 : 
+  forall (x: gen_float),
+  forall (y: gen_float),
+  forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y)),
+  forall (result: bool),
+  forall (HW_2: (((is_NaN x) \/ (is_NaN y) -> result = false)) /\
+                (((is_finite x) /\ (is_infinite y) ->
+                  (if result then (float_sign y) = Negative
+                   else (float_sign y) = Positive))) /\
+                (((is_infinite x) /\ (is_finite y) ->
+                  (if result then (float_sign x) = Positive
+                   else (float_sign x) = Negative))) /\
+                (((is_infinite x) /\ (is_infinite y) ->
+                  (if result then (float_sign x) = Positive /\
+                   (float_sign y) = Negative
+                   else (float_sign x) = Negative \/
+                   (float_sign y) = Positive))) /\
+                (((is_finite x) /\ (is_finite y) ->
+                  (if result then (Rgt (float_value x) (float_value y))
+                   else (Rle (float_value x) (float_value y)))))),
+  (if result then ((float_le_float x x) /\ (float_le_float y x))
+   else ((float_le_float x y) /\ (float_le_float y y))).
+Proof.
+destruct result.
+ergo.
+intuition; try ergo.
+unfold float_le_float, is_not_NaN, is_NaN,
+   is_plus_infinity, is_minus_infinity.
+destruct (float_sign y); ergo.
+Save.
 
 (*Why predicate*) Definition float_less_than_real  (x:gen_float) (y:R)
   := (is_finite x) /\ (Rle (float_value x) y) \/ (is_minus_infinity x).
@@ -18,7 +111,13 @@ Admitted.
 (*Why predicate*) Definition real_less_than_float  (x:R) (y:gen_float)
   := (is_finite y) /\ (Rle x (float_value y)) \/ (is_plus_infinity y).
 
-(* Why obligation from file "interval_arith_full.why", line 18, characters 2-60: *)
+Dp_hint round_down_le.
+Dp_hint round_up_ge.
+
+Goal (0 <= 9 * powerRZ 2 1)%R.
+ergo.
+ 
+(* Why obligation from file "interval_arith_full.why", line 36, characters 2-60: *)
 (*Why goal*) Lemma mul_dn_po_1 : 
   forall (x: gen_float),
   forall (y: gen_float),
@@ -56,6 +155,9 @@ Admitted.
   (float_less_than_real result (Rmult (float_value x) (float_value y))).
 Proof.
 unfold float_less_than_real,product_sign, is_not_NaN,is_finite,is_minus_infinity.
+(*
+intuition.
+*)
 intros.
 decompose [and or] HW_2; clear HW_2.
 decompose [and] HW_1; clear HW_1.
@@ -63,24 +165,31 @@ elim H9.
 elim H13.
 intros.
 case (overflow_dec Double down (float_value x * float_value y)).
+(* replaced by cvc3.
 intros.
 left.
 generalize (H5 (conj H16 (conj H14 H17))).
 intros (H18,H19).
 split; trivial.
 rewrite H19.
-apply round_down_less (* Admitted above *).
+apply round_down_le (* Admitted above *).
+*)
+cvc3.
 intros.
 generalize (proj1 (H6 (conj H16 (conj H14 H17))) (refl_equal _)).
 clear H6.
 intros H6.
 case (same_sign_dec x y).
+
 intros.
 rewrite H8 in *;auto.
 left.
 split.
+(* replaced by cvc3.
 clear -H6.
 intuition.
+*)
+cvc3.
 generalize (proj2 H6 (refl_equal _)); clear H6; intros (H6, h1).
 rewrite h1.
 unfold no_overflow in H17.
@@ -93,6 +202,8 @@ rewrite H19.
 rewrite Rmult_0_l.
 rewrite round_of_zero,Rabs_R0.
 unfold max_gen_float.
+ergo.
+cvc3.
 admit. (*as in JessieGappa*)
 intro x_not_zero.
 case (Req_dec (genf y) 0%R).
@@ -150,7 +261,7 @@ Qed.
 
 
 
-(* Why obligation from file "interval_arith_full.why", line 57, characters 0-58: *)
+(* Why obligation from file "interval_arith_full.why", line 77, characters 0-58: *)
 (*Why goal*) Lemma mul_up_po_1 : 
   forall (x: gen_float),
   forall (y: gen_float),
@@ -224,30 +335,9 @@ Admitted.
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma min_po_1 : 
-  forall (x: gen_float),
-  forall (y: gen_float),
-  forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y)),
-  forall (result: bool),
-  forall (HW_2: (((is_NaN x) \/ (is_NaN y) -> result = false)) /\
-                (((is_finite x) /\ (is_infinite y) ->
-                  (if result then (float_sign y) = Positive
-                   else (float_sign y) = Negative))) /\
-                (((is_infinite x) /\ (is_finite y) ->
-                  (if result then (float_sign x) = Negative
-                   else (float_sign x) = Positive))) /\
-                (((is_infinite x) /\ (is_infinite y) ->
-                  (if result then (float_sign x) = Negative /\
-                   (float_sign y) = Positive
-                   else (float_sign x) = Positive \/
-                   (float_sign y) = Negative))) /\
-                (((is_finite x) /\ (is_finite y) ->
-                  (if result then (Rlt (float_value x) (float_value y))
-                   else (Rge (float_value x) (float_value y)))))),
-  (if result then ((float_le_float x x) /\ (float_le_float x y))
-   else ((float_le_float y x) /\ (float_le_float y y))).
 Proof.
+
+(********  preuve de min_po_1 ****************)
 (*
 destruct result.
 ergo.
@@ -273,30 +363,9 @@ destruct (float_sign y); intuition.
 Save.
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
-(*Why goal*) Lemma max_po_1 : 
-  forall (x: gen_float),
-  forall (y: gen_float),
-  forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y)),
-  forall (result: bool),
-  forall (HW_2: (((is_NaN x) \/ (is_NaN y) -> result = false)) /\
-                (((is_finite x) /\ (is_infinite y) ->
-                  (if result then (float_sign y) = Negative
-                   else (float_sign y) = Positive))) /\
-                (((is_infinite x) /\ (is_finite y) ->
-                  (if result then (float_sign x) = Positive
-                   else (float_sign x) = Negative))) /\
-                (((is_infinite x) /\ (is_infinite y) ->
-                  (if result then (float_sign x) = Positive /\
-                   (float_sign y) = Negative
-                   else (float_sign x) = Negative \/
-                   (float_sign y) = Positive))) /\
-                (((is_finite x) /\ (is_finite y) ->
-                  (if result then (Rgt (float_value x) (float_value y))
-                   else (Rle (float_value x) (float_value y)))))),
-  (if result then ((float_le_float x x) /\ (float_le_float y x))
-   else ((float_le_float x y) /\ (float_le_float y y))).
 Proof.
+
+(********  preuve de max_po_1 ****************)
 unfold float_le_float,is_not_NaN,is_plus_infinity,is_minus_infinity.
 intros.
 decompose [and or] HW_1; clear HW_1;
@@ -323,7 +392,7 @@ Save.
   := (float_less_than_real l a) /\ (real_less_than_float a u).
 
 
-(* Why obligation from file "interval_arith_full.why", line 106, characters 2-113: *)
+(* Why obligation from file "interval_arith_full.why", line 109, characters 2-113: *)
 (*Why goal*) Lemma add_po_1 : 
   forall (xl: gen_float),
   forall (xu: gen_float),
@@ -708,7 +777,7 @@ admit.  (*as above *)
 
 
 
-(* Why obligation from file "", line 0, characters 0-0: *)
+(* Why obligation from file ".", line 0, characters 0-0: *)
 (*Why goal*) Lemma mul_po_1 : 
   forall (xl: gen_float),
   forall (xu: gen_float),
@@ -718,7 +787,13 @@ admit.  (*as above *)
   forall (zu: gen_float),
   forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
   forall (result: gen_float),
-  forall (HW_2: result = (gen_float_of_real_logic Double down (0)%R)),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
   forall (zero: gen_float),
   forall (HW_3: zero = result),
   forall (result0: bool),

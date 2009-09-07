@@ -16,6 +16,7 @@ include "floats_common.why"
 (******** axioms on gen_float_of_real_logic ********)
 (***************************************************)
 
+(* obsolete ?
 axiom a1: forall f:float_format. forall m:mode. forall x:real.
           no_overflow(f,m,x) ->
           float_value(gen_float_of_real_logic(f,m,x)) = round_float(f,m,x)
@@ -26,10 +27,12 @@ axiom a2: forall f:float_format. forall m:mode. forall x:real.
 axiom a3: forall f:float_format. forall m:mode. forall x:real.
           model_value(gen_float_of_real_logic(f,m,x)) = x
 
+*)
+(* FAUX
 axiom a4: forall f:float_format. forall m:mode. forall x:real. 
           no_overflow(f,m,x) and (exists y:gen_float. x = float_value(y)) -> 
           float_value(gen_float_of_real_logic(f,m,x))= x
-
+*)
  
 
 
