@@ -292,6 +292,17 @@ Admitted.
 (*Why logic*) Definition hypot : R -> R -> R.
 Admitted.
 
+(*Why axiom*) Lemma prod_pos :
+  (forall (x:R),
+   (forall (y:R),
+    (((Rgt x (0)%R) /\ (Rgt y (0)%R) -> (Rgt (Rmult x y) (0)%R))) /\
+    (((Rlt x (0)%R) /\ (Rlt y (0)%R) -> (Rgt (Rmult x y) (0)%R))))).
+Admitted.
+
+(*Why axiom*) Lemma abs_minus :
+  (forall (x:R), (eq (Rabs (Ropp x)) (Rabs x))).
+Admitted.
+
 (*Why type*) Definition alloc_table: Set ->Set.
 Admitted.
 
