@@ -176,7 +176,7 @@ WHYLIBS=lib/why/bool.why lib/why/integer.why \
 	lib/why/floats_full.why \
 	lib/why/jessie.why lib/why/mybag.why \
 	lib/why/mix.why \
-	lib/why/double_model.why lib/why/single_model.why
+	lib/why/double_model.why lib/why/double_strict.why lib/why/single_model.why lib/why/single_strict.why
 
 GENERATEDCOQFILES=floats_common_Floats floats_common_Gappa
 
@@ -644,10 +644,10 @@ bin/cadlog.opt: src/version.cmx c/cversion.cmx tools/cadlog.cmx
 tools/make_float_model.opt: tools/make_float_model.cmx
 	$(OCAMLOPT) -o $@ $^
 
-lib/why/double_model.why: tools/make_float_model.opt
+lib/why/double_model.why lib/why/double_strict.why: tools/make_float_model.opt
 	tools/make_float_model.opt double 53 -1074 
 
-lib/why/single_model.why: tools/make_float_model.opt
+lib/why/single_model.why lib/why/single_strict.why: tools/make_float_model.opt
 	tools/make_float_model.opt single 24 -149 
 
 

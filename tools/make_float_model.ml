@@ -158,7 +158,7 @@ let output_strict_part fmt t p e =
   { no_overflow_%s(m,x) }
   %s
   { %s_of_real_post(m,x,result) }@." t t t t;
-  fprintf fmt "parameter %s_of_real_safe : mode -> x:real ->
+  fprintf fmt "parameter %s_of_real_safe : m:mode -> x:real ->
   { }
   %s
   { no_overflow_%s(m,x) and
@@ -188,7 +188,7 @@ let output_strict_part fmt t p e =
   { no_overflow_%s(m,%s_value(x) * %s_value(y)) }
   %s
   { mul_%s_post(m,x,y,result) }@." t t t t t t t t;
-  fprintf fmt "parameter sub_%s_safe : m:mode -> x:%s -> y:%s -> 
+  fprintf fmt "parameter mul_%s_safe : m:mode -> x:%s -> y:%s -> 
   { }
   %s
   { no_overflow_%s(m,%s_value(x) * %s_value(y)) and
