@@ -182,6 +182,19 @@ Admitted.
 (*Why logic*) Definition hypot : R -> R -> R.
 Admitted.
 
+(*Why axiom*) Lemma prod_pos :
+  (forall (x:R),
+   (forall (y:R),
+    (((Rgt x (0)%R) /\ (Rgt y (0)%R) -> (Rgt (Rmult x y) (0)%R))) /\
+    (((Rlt x (0)%R) /\ (Rlt y (0)%R) -> (Rgt (Rmult x y) (0)%R))))).
+Admitted.
+Dp_hint prod_pos.
+
+(*Why axiom*) Lemma abs_minus :
+  (forall (x:R), (eq (Rabs (Ropp x)) (Rabs x))).
+Admitted.
+Dp_hint abs_minus.
+
 (*Why type*) Definition mode: Set.
 Admitted.
 
@@ -322,16 +335,9 @@ Dp_hint round_up_neg.
 Admitted.
 Dp_hint round_idempotent.
 
-(*Why axiom*) Lemma prod_pos :
-  (forall (x:R),
-   (forall (y:R),
-    (((Rgt x (0)%R) /\ (Rgt y (0)%R) -> (Rgt (Rmult x y) (0)%R))) /\
-    (((Rlt x (0)%R) /\ (Rlt y (0)%R) -> (Rgt (Rmult x y) (0)%R))))).
 Admitted.
 Dp_hint prod_pos.
 
-(*Why axiom*) Lemma abs_minus :
-  (forall (x:R), (eq (Rabs (Ropp x)) (Rabs x))).
 Admitted.
 Dp_hint abs_minus.
 
