@@ -200,13 +200,5 @@ axiom round_idempotent:
       round_float(f,m1,round_float(f,m2,x)) = round_float(f,m2,x)
 
 
-(******* axioms on reals ******)
-
-axiom prod_pos: 
-  forall x:real. forall y:real.
-  (x > 0.0 and y > 0.0 -> x * y > 0.0) and (x < 0.0 and y < 0.0 -> x * y > 0.0)
-
-axiom abs_minus: 
-  forall x:real. abs_real(-x) = abs_real(x)
 
 
