@@ -33,7 +33,6 @@ JESSIE_INCLUDES	?= -I $(WHY_DISTRIB)/src -I $(WHY_DISTRIB)/jc
 JCCMO		?= $(WHY_DISTRIB)/jc/jc.cmo
 JCCMX		?= $(JCCMO:.cmo=.cmx)
 PLUGIN_DIR      ?=.
-USABLE_NATIVE_DYNLINK?=yes
 
 PLUGIN_NAME:=Jessie
 PLUGIN_CMO:= jessie_config jessie_options integer common rewrite \
