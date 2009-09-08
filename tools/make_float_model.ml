@@ -132,10 +132,19 @@ axiom round_%s_idempotent:
     and 
     %s_model(res) = sqrt_real(%s_model(x))@.@."  t t t t t t t t t t;
 
+ fprintf fmt "predicate neg_%s_post(x:%s,res:%s) =
+    %s_value(res) = -%s_value(x)
+    and 
+    %s_exact(res) = -%s_exact(x)
+    and 
+    %s_model(res) = -%s_model(x)@.@."  t t t t t t t t t;
 
-(* negation... à réfléchir ... *)
-(* valeur absolue... à réfléchir ... *)
-(* casts... à réfléchir *)
+ fprintf fmt "predicate abs_%s_post(x:%s,res:%s) =
+    %s_value(res) = abs_real(%s_value(x))
+    and 
+    %s_exact(res) = abs_real(%s_exact(x))
+    and 
+    %s_model(res) = abs_real(%s_model(x))@.@."  t t t t t t t t t;
 
 ();;
 
@@ -208,6 +217,16 @@ let output_strict_part fmt t p e =
   { %s_value(x) >= 0.0  and
     sqrt_%s_post(m,x,result) }@.@." t t t t t;
 
+  fprintf fmt "parameter neg_%s : x:%s -> 
+  { }
+  %s
+  { neg_%s_post(x,result) }@." t t t t;
+
+  fprintf fmt "parameter abs_%s : x:%s -> 
+  { }
+  %s
+  { abs_%s_post(x,result) }@." t t t t;
+
   fprintf fmt "(* Comparisons for the strict model for %s format *)@.@." t;
   fprintf fmt "parameter lt_%s : x:%s -> y:%s -> 
   {} bool { if result then %s_value(x) < %s_value(y) 
@@ -229,16 +248,18 @@ let output_strict_part fmt t p e =
             else %s_value(x) = %s_value(y) }@.@." t t t t t t t;
 
 fprintf fmt "(* Any %s *)
-  parameter any_%s : { } %s { }" t t t
+  parameter any_%s : { } %s { }" t t t;
 
-
+();;
 
 (* Coq  model *)
 
 let output_coq_model fmt t p e =
   fprintf fmt "(* Coq model for float type '%s'
  * with precision = %d and min exponent = %d 
- *)@.@." t p e
+ *)@.@." t p e;
+
+();;
 
 (* main program *)
 
@@ -252,6 +273,11 @@ let main =
   let f = "lib/why/" ^ type_name ^ "_model.why" in
   let c = open_out f in
   output_common_part (formatter_of_out_channel c) type_name precision exponent;
+  close_out c;
+
+  let f = "lib/why/" ^ type_name ^ "_strict.why" in
+  let c = open_out f in
+  output_strict_part (formatter_of_out_channel c) type_name precision exponent;
   close_out c;
 
   let f = "lib/coq/" ^ type_name ^ "_model.v" in
