@@ -608,7 +608,26 @@ parameter lt_gen_float :
 x:gen_float -> y:gen_float -> 
 { }
 bool
-{ ((is_NaN(x) or is_NaN(y)) -> result = false)
+{ 
+if result then is_not_NaN(x) and is_not_NaN(y) and 
+   (is_finite(x) and is_finite(y) and float_value(x) < float_value(y))
+    or 
+   (is_minus_infinity(x) and is_plus_infinity(y))
+    or
+   (is_minus_infinity(x) and is_finite(y))
+    or 
+   (is_finite(x) and is_plus_infinity(y))
+else (is_NaN(x) or is_NaN(y)
+    or 
+    (is_finite(x) and is_finite(y) and float_value(x) >= float_value(y))
+    or 
+     is_plus_infinity(x) 
+    or 
+     is_minus_infinity(y))
+}
+
+(*
+((is_NaN(x) or is_NaN(y)) -> result = false)
 and
   ((is_finite(x) and is_infinite(y)) -> if result then float_sign(y) = Positive 
   		    	                else float_sign(y)= Negative)
@@ -624,7 +643,7 @@ and
 and
  ((is_finite(x) and is_finite(y)) -> if result then float_value(x) < float_value(y) 
  		   	      	     else float_value(x) >= float_value(y))
-}
+*)
 
 
 
@@ -657,7 +676,27 @@ parameter gt_gen_float :
 x:gen_float -> y:gen_float -> 
 { }
 bool
-{ ((is_NaN(x) or is_NaN(y)) -> result = false)
+{ 
+if result then is_not_NaN(x) and is_not_NaN(y) and 
+   (is_finite(x) and is_finite(y) and float_value(x) > float_value(y))
+    or 
+   (is_plus_infinity(x) and is_minus_infinity(y))
+    or
+   (is_plus_infinity(x) and is_finite(y))
+    or 
+   (is_finite(x) and is_minus_infinity(y))
+else (is_NaN(x) or is_NaN(y)
+    or 
+    (is_finite(x) and is_finite(y) and float_value(x) <= float_value(y))
+    or 
+     is_minus_infinity(x) 
+    or 
+     is_plus_infinity(y))
+}
+
+
+(*
+((is_NaN(x) or is_NaN(y)) -> result = false)
 and
   ((is_finite(x) and is_infinite(y)) -> if result then float_sign(y)= Negative 
        		      		        else float_sign(y)= Positive)
@@ -672,7 +711,7 @@ and
 and
  ((is_finite(x) and is_finite(y)) ->  if result then float_value(x) > float_value(y) 
  		   	      	      else float_value(x) <= float_value(y))
-}
+*)
 
 
 

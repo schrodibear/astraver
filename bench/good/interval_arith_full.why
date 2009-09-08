@@ -28,8 +28,11 @@ predicate real_less_than_float(x:real,y:gen_float) =
 let mul_dn (x:gen_float) (y:gen_float) =
 
  { is_not_NaN(x) and is_not_NaN(y) and
-   (is_infinite(x) -> float_value(y) <> 0.0 and diff_sign(x,y)) and
-   (is_infinite(y) -> float_value(x) <> 0.0 and diff_sign(x,y))
+  ((is_infinite(x) or is_infinite(y)) -> diff_sign(x,y))
+and               
+  (is_infinite(x) and is_finite(y) -> float_value(y) <> 0.0) 
+and
+  (is_infinite(y) and is_finite(x) -> float_value(x) <> 0.0)
  }
  (mul_gen_float Double down x y)
  {
@@ -69,9 +72,13 @@ let mul_dn (x:gen_float) (y:gen_float) =
 
 let mul_up (x:gen_float) (y:gen_float) =
  { is_not_NaN(x) and is_not_NaN(y) and 
-   (is_infinite(x) -> float_value(y) <> 0.0 and diff_sign(x,y)) and
-   (is_infinite(y) -> float_value(x) <> 0.0 and diff_sign(x,y))
+  ((is_infinite(x) or is_infinite(y)) -> same_sign(x,y))
+and               
+  (is_infinite(x) and is_finite(y) -> float_value(y) <> 0.0) 
+and
+  (is_infinite(y) and is_finite(x) -> float_value(x) <> 0.0)
  }
+ assert { float_value(y) <> 0.0 -> abs_real(float_value(y)) >= 0x1.0p-1074 };
 (neg_gen_float Double down (mul_gen_float Double down x (neg_gen_float Double down y)))
  {
 real_less_than_float(float_value(x)*float_value(y),result)
@@ -124,6 +131,7 @@ let mul (xl:gen_float) (xu:gen_float) (yl:gen_float) (yu:gen_float) =
 { is_interval(xl,xu) and is_interval(yl,yu) 
 }
   zero := gen_float_of_real Double down 0.0;
+assert {float_value(zero)=0.0};
   if (lt_gen_float xl !zero) then
     if (gt_gen_float xu !zero) then
       if (lt_gen_float yl !zero) then

@@ -3,33 +3,6 @@
 Require Export Why.
 Require Export JessieGappa.
 
-(*Why axiom*) Lemma round_down_le :
-  (forall (f:float_format), (forall (x:R), (Rle (round_float f down x) x))).
-Admitted.
-
-(*Why axiom*) Lemma round_up_ge :
-  (forall (f:float_format), (forall (x:R), (Rge (round_float f up x) x))).
-Admitted.
-
-(*Why axiom*) Lemma round_down_neg :
-  (forall (f:float_format),
-   (forall (x:R),
-    (eq (round_float f down (Ropp x)) (Ropp (round_float f up x))))).
-Admitted.
-
-(*Why axiom*) Lemma round_up_neg :
-  (forall (f:float_format),
-   (forall (x:R),
-    (eq (round_float f up (Ropp x)) (Ropp (round_float f down x))))).
-Admitted.
-
-(*Why axiom*) Lemma round_idempotent :
-  (forall (f:float_format),
-   (forall (m1:mode),
-    (forall (m2:mode),
-     (forall (x:R),
-      (eq (round_float f m1 (round_float f m2 x)) (round_float f m2 x)))))).
-Admitted.
 
 (* maintenant axiom dans JessieGappa, ou plutot floats_common_why.v
 
@@ -41,29 +14,57 @@ Admitted.
 
 *)
 
-(* Why obligation from file ".", line 0, characters 0-0: *)
+(* Why obligation from file "interval_arith_full.why", line 8, characters 3-56: *)
 (*Why goal*) Lemma min_po_1 : 
   forall (x: gen_float),
   forall (y: gen_float),
   forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y)),
-  forall (result: bool),
-  forall (HW_2: (((is_NaN x) \/ (is_NaN y) -> result = false)) /\
-                (((is_finite x) /\ (is_infinite y) ->
-                  (if result then (float_sign y) = Positive
-                   else (float_sign y) = Negative))) /\
-                (((is_infinite x) /\ (is_finite y) ->
-                  (if result then (float_sign x) = Negative
-                   else (float_sign x) = Positive))) /\
-                (((is_infinite x) /\ (is_infinite y) ->
-                  (if result then (float_sign x) = Negative /\
-                   (float_sign y) = Positive
-                   else (float_sign x) = Positive \/
-                   (float_sign y) = Negative))) /\
-                (((is_finite x) /\ (is_finite y) ->
-                  (if result then (Rlt (float_value x) (float_value y))
-                   else (Rge (float_value x) (float_value y)))))),
-  (if result then ((float_le_float x x) /\ (float_le_float x y))
-   else ((float_le_float y x) /\ (float_le_float y y))).
+  forall (HW_2: (is_not_NaN x) /\ (is_not_NaN y) /\ (is_finite x) /\
+                (is_finite y) /\ (Rlt (float_value x) (float_value y)) \/
+                (is_minus_infinity x) /\ (is_plus_infinity y) \/
+                (is_minus_infinity x) /\ (is_finite y) \/ (is_finite x) /\
+                (is_plus_infinity y)),
+  ((float_le_float x x) /\ (float_le_float x y)).
+Proof.
+ergo.
+Qed.
+
+(*
+destruct result.
+ergo.
+intuition; try ergo.
+unfold float_le_float, is_not_NaN, is_NaN,
+   is_plus_infinity, is_minus_infinity.
+destruct (float_sign y); ergo.
+Save.
+*)
+
+(* Why obligation from file "interval_arith_full.why", line 8, characters 3-56: *)
+(*Why goal*) Lemma min_po_2 : 
+  forall (x: gen_float),
+  forall (y: gen_float),
+  forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y)),
+  forall (HW_3: (is_NaN x) \/ (is_NaN y) \/ (is_finite x) /\ (is_finite y) /\
+                (Rge (float_value x) (float_value y)) \/
+                (is_plus_infinity x) \/ (is_minus_infinity y)),
+  ((float_le_float y x) /\ (float_le_float y y)).
+Proof.
+unfold float_le_float, is_not_NaN, is_NaN,
+   is_plus_infinity, is_minus_infinity.
+intuition; try ergo.
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 16, characters 3-56: *)
+(*Why goal*) Lemma max_po_1 : 
+  forall (x: gen_float),
+  forall (y: gen_float),
+  forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y)),
+  forall (HW_2: (is_not_NaN x) /\ (is_not_NaN y) /\ (is_finite x) /\
+                (is_finite y) /\ (Rgt (float_value x) (float_value y)) \/
+                (is_plus_infinity x) /\ (is_minus_infinity y) \/
+                (is_plus_infinity x) /\ (is_finite y) \/ (is_finite x) /\
+                (is_minus_infinity y)),
+  ((float_le_float x x) /\ (float_le_float y x)).
 Proof.
 destruct result.
 ergo.
@@ -73,36 +74,18 @@ unfold float_le_float, is_not_NaN, is_NaN,
 destruct (float_sign y); ergo.
 Save.
 
-(* Why obligation from file ".", line 0, characters 0-0: *)
-(*Why goal*) Lemma max_po_1 : 
+(* Why obligation from file "interval_arith_full.why", line 16, characters 3-56: *)
+(*Why goal*) Lemma max_po_2 : 
   forall (x: gen_float),
   forall (y: gen_float),
   forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y)),
-  forall (result: bool),
-  forall (HW_2: (((is_NaN x) \/ (is_NaN y) -> result = false)) /\
-                (((is_finite x) /\ (is_infinite y) ->
-                  (if result then (float_sign y) = Negative
-                   else (float_sign y) = Positive))) /\
-                (((is_infinite x) /\ (is_finite y) ->
-                  (if result then (float_sign x) = Positive
-                   else (float_sign x) = Negative))) /\
-                (((is_infinite x) /\ (is_infinite y) ->
-                  (if result then (float_sign x) = Positive /\
-                   (float_sign y) = Negative
-                   else (float_sign x) = Negative \/
-                   (float_sign y) = Positive))) /\
-                (((is_finite x) /\ (is_finite y) ->
-                  (if result then (Rgt (float_value x) (float_value y))
-                   else (Rle (float_value x) (float_value y)))))),
-  (if result then ((float_le_float x x) /\ (float_le_float y x))
-   else ((float_le_float x y) /\ (float_le_float y y))).
+  forall (HW_3: (is_NaN x) \/ (is_NaN y) \/ (is_finite x) /\ (is_finite y) /\
+                (Rle (float_value x) (float_value y)) \/
+                (is_minus_infinity x) \/ (is_plus_infinity y)),
+  ((float_le_float x y) /\ (float_le_float y y)).
 Proof.
-destruct result.
-ergo.
-intuition; try ergo.
-unfold float_le_float, is_not_NaN, is_NaN,
-   is_plus_infinity, is_minus_infinity.
-destruct (float_sign y); ergo.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (*Why predicate*) Definition float_less_than_real  (x:gen_float) (y:R)
@@ -117,15 +100,16 @@ Dp_hint round_up_ge.
 Goal (0 <= 9 * powerRZ 2 1)%R.
 ergo.
  
-(* Why obligation from file "interval_arith_full.why", line 36, characters 2-60: *)
+(* Why obligation from file "interval_arith_full.why", line 39, characters 2-60: *)
 (*Why goal*) Lemma mul_dn_po_1 : 
   forall (x: gen_float),
   forall (y: gen_float),
   forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y) /\
-                (((is_infinite x) -> ~(eq (float_value y) (0)%R) /\
-                  (diff_sign x y))) /\
-                (((is_infinite y) -> ~(eq (float_value x) (0)%R) /\
-                  (diff_sign x y)))),
+                (((is_infinite x) \/ (is_infinite y) -> (diff_sign x y))) /\
+                (((is_infinite x) /\ (is_finite y) ->
+                  ~(eq (float_value y) (0)%R))) /\
+                (((is_infinite y) /\ (is_finite x) ->
+                  ~(eq (float_value x) (0)%R)))),
   forall (result: gen_float),
   forall (HW_2: (((is_NaN x) \/ (is_NaN y) -> (is_NaN result))) /\
                 (((is_gen_zero x) /\ (is_infinite y) -> (is_NaN result))) /\
@@ -202,8 +186,6 @@ rewrite H19.
 rewrite Rmult_0_l.
 rewrite round_of_zero,Rabs_R0.
 unfold max_gen_float.
-ergo.
-cvc3.
 admit. (*as in JessieGappa*)
 intro x_not_zero.
 case (Req_dec (genf y) 0%R).
@@ -228,7 +210,7 @@ apply H17.
 rewrite Rabs_right.
 apply Rlt_le.
 apply Rle_lt_trans with (2 := H).
-apply round_down_less (* Admitted above *).
+apply round_down_le (* Admitted above *).
 replace R0 with (round_float Double down 0).
 unfold round_float.
 apply Rle_ge.
@@ -261,17 +243,40 @@ Qed.
 
 
 
-(* Why obligation from file "interval_arith_full.why", line 77, characters 0-58: *)
+(* Why obligation from file "interval_arith_full.why", line 81, characters 10-74: *)
 (*Why goal*) Lemma mul_up_po_1 : 
   forall (x: gen_float),
   forall (y: gen_float),
   forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y) /\
-                (((is_infinite x) -> ~(eq (float_value y) (0)%R) /\
-                  (diff_sign x y))) /\
-                (((is_infinite y) -> ~(eq (float_value x) (0)%R) /\
-                  (diff_sign x y)))),
+                (((is_infinite x) \/ (is_infinite y) -> (same_sign x y))) /\
+                (((is_infinite x) /\ (is_finite y) ->
+                  ~(eq (float_value y) (0)%R))) /\
+                (((is_infinite y) /\ (is_finite x) ->
+                  ~(eq (float_value x) (0)%R)))),
+  ((~(eq (float_value y) (0)%R) ->
+    (Rge (Rabs (float_value y))
+     (1 / 202402253307310618352495346718917307049556649764142118356901358027430339567995346891960383701437124495187077864316811911389808737385793476867013399940738509921517424276566361364466907742093216341239767678472745068562007483424692698618103355649159556340810056512358769552333414615230502532186327508646006263307707741093494784)%R))).
+Proof.
+Admitted.
+
+
+
+
+(* Why obligation from file "interval_arith_full.why", line 84, characters 0-58: *)
+(*Why goal*) Lemma mul_up_po_2 : 
+  forall (x: gen_float),
+  forall (y: gen_float),
+  forall (HW_1: (is_not_NaN x) /\ (is_not_NaN y) /\
+                (((is_infinite x) \/ (is_infinite y) -> (same_sign x y))) /\
+                (((is_infinite x) /\ (is_finite y) ->
+                  ~(eq (float_value y) (0)%R))) /\
+                (((is_infinite y) /\ (is_finite x) ->
+                  ~(eq (float_value x) (0)%R)))),
+  forall (HW_2: (~(eq (float_value y) (0)%R) ->
+                 (Rge (Rabs (float_value y))
+                  (1 / 202402253307310618352495346718917307049556649764142118356901358027430339567995346891960383701437124495187077864316811911389808737385793476867013399940738509921517424276566361364466907742093216341239767678472745068562007483424692698618103355649159556340810056512358769552333414615230502532186327508646006263307707741093494784)%R))),
   forall (result: gen_float),
-  forall (HW_2: (((is_NaN y) -> (is_NaN result))) /\
+  forall (HW_3: (((is_NaN y) -> (is_NaN result))) /\
                 (((is_infinite y) -> (is_infinite result))) /\
                 (((is_finite y) /\
                   (no_overflow Double down (Ropp (float_value y))) ->
@@ -285,7 +290,7 @@ Qed.
                 (eq (exact_value result) (Ropp (exact_value y))) /\
                 (eq (model_value result) (Ropp (model_value y)))),
   forall (result0: gen_float),
-  forall (HW_3: (((is_NaN x) \/ (is_NaN result) -> (is_NaN result0))) /\
+  forall (HW_4: (((is_NaN x) \/ (is_NaN result) -> (is_NaN result0))) /\
                 (((is_gen_zero x) /\ (is_infinite result) -> (is_NaN result0))) /\
                 (((is_finite x) /\ (is_infinite result) /\
                   ~(eq (float_value x) (0)%R) -> (is_infinite result0))) /\
@@ -314,7 +319,7 @@ Qed.
                                            (model_value x) (model_value
                                                             result)))),
   forall (result1: gen_float),
-  forall (HW_4: (((is_NaN result0) -> (is_NaN result1))) /\
+  forall (HW_5: (((is_NaN result0) -> (is_NaN result1))) /\
                 (((is_infinite result0) -> (is_infinite result1))) /\
                 (((is_finite result0) /\
                   (no_overflow Double down (Ropp (float_value result0))) ->
@@ -331,58 +336,9 @@ Qed.
                 (eq (model_value result1) (Ropp (model_value result0)))),
   (real_less_than_float (Rmult (float_value x) (float_value y)) result1).
 Proof.
-Admitted.
-
-
-
-Proof.
-
-(********  preuve de min_po_1 ****************)
-(*
-destruct result.
-ergo.
-simplify.
-ergo.
-simplify.
-*)
-unfold float_le_float,is_not_NaN,is_plus_infinity,is_minus_infinity.
-intros.
-decompose [and or] HW_1; clear HW_1;
-decompose [and or] HW_2; clear HW_2.
-
-destruct result;split;left; intuition.
-
-destruct result; [split; [left;intuition | repeat right; intuition] |  
-split; right;left;intuition].
-
-destruct result; [split; right;left;intuition | split; [repeat right;intuition | 
-left;intuition]].
-
-destruct result; split; right;intuition.
-destruct (float_sign y); intuition.
+intuition.
+(* FILL PROOF HERE *)
 Save.
-
-
-Proof.
-
-(********  preuve de max_po_1 ****************)
-unfold float_le_float,is_not_NaN,is_plus_infinity,is_minus_infinity.
-intros.
-decompose [and or] HW_1; clear HW_1;
-decompose [and or] HW_2; clear HW_2.
-
-destruct result; split;left; intuition.
-
-destruct result; [split; [left;intuition | right; left; intuition] | 
-split; repeat right; intuition].
-
-destruct result; [split; repeat right; intuition | split; [right;left;intuition | 
-left;intuition]].
-
-destruct result;split;right; intuition.
-destruct (float_sign y); intuition.
-Save.
-
 
 (*Why predicate*) Definition is_interval  (l:gen_float) (u:gen_float)
   := ((is_finite l) \/ (is_infinite l) /\ (float_sign l) = Negative) /\
@@ -392,7 +348,7 @@ Save.
   := (float_less_than_real l a) /\ (real_less_than_float a u).
 
 
-(* Why obligation from file "interval_arith_full.why", line 109, characters 2-113: *)
+(* Why obligation from file "interval_arith_full.why", line 116, characters 2-113: *)
 (*Why goal*) Lemma add_po_1 : 
   forall (xl: gen_float),
   forall (xu: gen_float),
@@ -502,6 +458,7 @@ Save.
   forall (HW_7: (in_interval a xl xu) /\ (in_interval b yl yu)),
   (in_interval (Rplus a b) zl zu).
 Proof.
+(* old proof in Coq v8.2
 unfold in_interval, float_less_than_real, real_less_than_float.
 intros.
 decompose [and or] HW_1; clear HW_1.
@@ -770,15 +727,478 @@ destruct H36.
 destruct H37.
 split.
 admit.  (*as above *)
+*)
+*)
+Admitted.
 
 
 
 
-
-
-
-(* Why obligation from file ".", line 0, characters 0-0: *)
+(* Why obligation from file "interval_arith_full.why", line 134, characters 8-29: *)
 (*Why goal*) Lemma mul_po_1 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  (eq (float_value zero) (0)%R).
+Proof.
+intros.
+unfold in_interval,is_interval in *.
+destruct result0.
+destruct result0.
+admit.
+admit.
+destruct result0.
+admit.
+ergo.
+cvc3.
+assert (yl_positive: ((float_value yl) >=0)%R).
+cvc3.
+destruct result0.
+
+
+
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 140, characters 16-28: *)
+(*Why goal*) Lemma mul_po_2 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_7: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                (is_finite zero) /\
+                (Rlt (float_value yl) (float_value zero)) \/
+                (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity yl) /\ (is_finite zero) \/
+                (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_8: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                (is_finite zero) /\
+                (Rgt (float_value yu) (float_value zero)) \/
+                (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity yu) /\ (is_finite zero) \/
+                (is_finite yu) /\ (is_minus_infinity zero)),
+  ((is_not_NaN xl) /\ (is_not_NaN yu) /\
+  (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+  (((is_infinite xl) /\ (is_finite yu) -> ~(eq (float_value yu) (0)%R))) /\
+  (((is_infinite yu) /\ (is_finite xl) -> ~(eq (float_value xl) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 140, characters 31-43: *)
+(*Why goal*) Lemma mul_po_3 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_7: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                (is_finite zero) /\
+                (Rlt (float_value yl) (float_value zero)) \/
+                (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity yl) /\ (is_finite zero) \/
+                (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_8: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                (is_finite zero) /\
+                (Rgt (float_value yu) (float_value zero)) \/
+                (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity yu) /\ (is_finite zero) \/
+                (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_9: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                (((is_infinite xl) /\ (is_finite yu) ->
+                  ~(eq (float_value yu) (0)%R))) /\
+                (((is_infinite yu) /\ (is_finite xl) ->
+                  ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_10: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  ((is_not_NaN xu) /\ (is_not_NaN yl) /\
+  (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+  (((is_infinite xu) /\ (is_finite yl) -> ~(eq (float_value yl) (0)%R))) /\
+  (((is_infinite yl) /\ (is_finite xu) -> ~(eq (float_value xu) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 140, characters 11-44: *)
+(*Why goal*) Lemma mul_po_4 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_7: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                (is_finite zero) /\
+                (Rlt (float_value yl) (float_value zero)) \/
+                (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity yl) /\ (is_finite zero) \/
+                (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_8: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                (is_finite zero) /\
+                (Rgt (float_value yu) (float_value zero)) \/
+                (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity yu) /\ (is_finite zero) \/
+                (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_9: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                (((is_infinite xl) /\ (is_finite yu) ->
+                  ~(eq (float_value yu) (0)%R))) /\
+                (((is_infinite yu) /\ (is_finite xl) ->
+                  ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_10: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (HW_11: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_12: (float_less_than_real
+                  result1 (Rmult (float_value xu) (float_value yl)))),
+  ((is_not_NaN result0) /\ (is_not_NaN result1)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 141, characters 23-35: *)
+(*Why goal*) Lemma mul_po_5 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_7: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                (is_finite zero) /\
+                (Rlt (float_value yl) (float_value zero)) \/
+                (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity yl) /\ (is_finite zero) \/
+                (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_8: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                (is_finite zero) /\
+                (Rgt (float_value yu) (float_value zero)) \/
+                (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity yu) /\ (is_finite zero) \/
+                (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_9: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                (((is_infinite xl) /\ (is_finite yu) ->
+                  ~(eq (float_value yu) (0)%R))) /\
+                (((is_infinite yu) /\ (is_finite xl) ->
+                  ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_10: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (HW_11: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_12: (float_less_than_real
+                  result1 (Rmult (float_value xu) (float_value yl)))),
+  forall (HW_13: (is_not_NaN result0) /\ (is_not_NaN result1)),
+  forall (result2: gen_float),
+  forall (HW_14: (float_le_float result2 result0) /\
+                 (float_le_float result2 result1)),
+  forall (tl: gen_float),
+  forall (HW_15: tl = result2),
+  ((is_not_NaN xl) /\ (is_not_NaN yl) /\
+  (((is_infinite xl) \/ (is_infinite yl) -> (same_sign xl yl))) /\
+  (((is_infinite xl) /\ (is_finite yl) -> ~(eq (float_value yl) (0)%R))) /\
+  (((is_infinite yl) /\ (is_finite xl) -> ~(eq (float_value xl) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 141, characters 38-50: *)
+(*Why goal*) Lemma mul_po_6 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_7: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                (is_finite zero) /\
+                (Rlt (float_value yl) (float_value zero)) \/
+                (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity yl) /\ (is_finite zero) \/
+                (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_8: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                (is_finite zero) /\
+                (Rgt (float_value yu) (float_value zero)) \/
+                (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity yu) /\ (is_finite zero) \/
+                (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_9: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                (((is_infinite xl) /\ (is_finite yu) ->
+                  ~(eq (float_value yu) (0)%R))) /\
+                (((is_infinite yu) /\ (is_finite xl) ->
+                  ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_10: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (HW_11: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_12: (float_less_than_real
+                  result1 (Rmult (float_value xu) (float_value yl)))),
+  forall (HW_13: (is_not_NaN result0) /\ (is_not_NaN result1)),
+  forall (result2: gen_float),
+  forall (HW_14: (float_le_float result2 result0) /\
+                 (float_le_float result2 result1)),
+  forall (tl: gen_float),
+  forall (HW_15: tl = result2),
+  forall (HW_16: (is_not_NaN xl) /\ (is_not_NaN yl) /\
+                 (((is_infinite xl) \/ (is_infinite yl) -> (same_sign xl yl))) /\
+                 (((is_infinite xl) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result3: gen_float),
+  forall (HW_17: (real_less_than_float
+                  (Rmult (float_value xl) (float_value yl)) result3)),
+  ((is_not_NaN xu) /\ (is_not_NaN yu) /\
+  (((is_infinite xu) \/ (is_infinite yu) -> (same_sign xu yu))) /\
+  (((is_infinite xu) /\ (is_finite yu) -> ~(eq (float_value yu) (0)%R))) /\
+  (((is_infinite yu) /\ (is_finite xu) -> ~(eq (float_value xu) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 141, characters 18-51: *)
+(*Why goal*) Lemma mul_po_7 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_7: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                (is_finite zero) /\
+                (Rlt (float_value yl) (float_value zero)) \/
+                (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity yl) /\ (is_finite zero) \/
+                (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_8: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                (is_finite zero) /\
+                (Rgt (float_value yu) (float_value zero)) \/
+                (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity yu) /\ (is_finite zero) \/
+                (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_9: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                (((is_infinite xl) /\ (is_finite yu) ->
+                  ~(eq (float_value yu) (0)%R))) /\
+                (((is_infinite yu) /\ (is_finite xl) ->
+                  ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_10: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (HW_11: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_12: (float_less_than_real
+                  result1 (Rmult (float_value xu) (float_value yl)))),
+  forall (HW_13: (is_not_NaN result0) /\ (is_not_NaN result1)),
+  forall (result2: gen_float),
+  forall (HW_14: (float_le_float result2 result0) /\
+                 (float_le_float result2 result1)),
+  forall (tl: gen_float),
+  forall (HW_15: tl = result2),
+  forall (HW_16: (is_not_NaN xl) /\ (is_not_NaN yl) /\
+                 (((is_infinite xl) \/ (is_infinite yl) -> (same_sign xl yl))) /\
+                 (((is_infinite xl) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result3: gen_float),
+  forall (HW_17: (real_less_than_float
+                  (Rmult (float_value xl) (float_value yl)) result3)),
+  forall (HW_18: (is_not_NaN xu) /\ (is_not_NaN yu) /\
+                 (((is_infinite xu) \/ (is_infinite yu) -> (same_sign xu yu))) /\
+                 (((is_infinite xu) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result4: gen_float),
+  forall (HW_19: (real_less_than_float
+                  (Rmult (float_value xu) (float_value yu)) result4)),
+  ((is_not_NaN result3) /\ (is_not_NaN result4)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_8 : 
   forall (xl: gen_float),
   forall (xu: gen_float),
   forall (yl: gen_float),
@@ -796,547 +1216,1726 @@ admit.  (*as above *)
                 (eq (model_value result) (0)%R)),
   forall (zero: gen_float),
   forall (HW_3: zero = result),
-  forall (result0: bool),
-  forall (HW_4: (((is_NaN xl) \/ (is_NaN zero) -> result0 = false)) /\
-                (((is_finite xl) /\ (is_infinite zero) ->
-                  (if result0 then (float_sign zero) = Positive
-                   else (float_sign zero) = Negative))) /\
-                (((is_infinite xl) /\ (is_finite zero) ->
-                  (if result0 then (float_sign xl) = Negative
-                   else (float_sign xl) = Positive))) /\
-                (((is_infinite xl) /\ (is_infinite zero) ->
-                  (if result0 then (float_sign xl) = Negative /\
-                   (float_sign zero) = Positive
-                   else (float_sign xl) = Positive \/
-                   (float_sign zero) = Negative))) /\
-                (((is_finite xl) /\ (is_finite zero) ->
-                  (if result0 then (Rlt (float_value xl) (float_value zero))
-                   else (Rge (float_value xl) (float_value zero)))))),
-  (if result0
-   then (forall (result:bool),
-         ((((is_NaN xu) \/ (is_NaN zero) -> result = false)) /\
-          (((is_finite xu) /\ (is_infinite zero) ->
-            (if result then (float_sign zero) = Negative
-             else (float_sign zero) = Positive))) /\
-          (((is_infinite xu) /\ (is_finite zero) ->
-            (if result then (float_sign xu) = Positive
-             else (float_sign xu) = Negative))) /\
-          (((is_infinite xu) /\ (is_infinite zero) ->
-            (if result then (float_sign xu) = Positive /\
-             (float_sign zero) = Negative else (float_sign xu) = Negative \/
-             (float_sign zero) = Positive))) /\
-          (((is_finite xu) /\ (is_finite zero) ->
-            (if result then (Rgt (float_value xu) (float_value zero))
-             else (Rle (float_value xu) (float_value zero))))) ->
-          (if result
-           then (forall (result:bool),
-                 ((((is_NaN yl) \/ (is_NaN zero) -> result = false)) /\
-                  (((is_finite yl) /\ (is_infinite zero) ->
-                    (if result then (float_sign zero) = Positive
-                     else (float_sign zero) = Negative))) /\
-                  (((is_infinite yl) /\ (is_finite zero) ->
-                    (if result then (float_sign yl) = Negative
-                     else (float_sign yl) = Positive))) /\
-                  (((is_infinite yl) /\ (is_infinite zero) ->
-                    (if result then (float_sign yl) = Negative /\
-                     (float_sign zero) = Positive
-                     else (float_sign yl) = Positive \/
-                     (float_sign zero) = Negative))) /\
-                  (((is_finite yl) /\ (is_finite zero) ->
-                    (if result then (Rlt (float_value yl) (float_value zero))
-                     else (Rge (float_value yl) (float_value zero))))) ->
-                  (if result
-                   then (forall (result:bool),
-                         ((((is_NaN yu) \/ (is_NaN zero) -> result = false)) /\
-                          (((is_finite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign zero) = Negative
-                             else (float_sign zero) = Positive))) /\
-                          (((is_infinite yu) /\ (is_finite zero) ->
-                            (if result then (float_sign yu) = Positive
-                             else (float_sign yu) = Negative))) /\
-                          (((is_infinite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign yu) = Positive /\
-                             (float_sign zero) = Negative
-                             else (float_sign yu) = Negative \/
-                             (float_sign zero) = Positive))) /\
-                          (((is_finite yu) /\ (is_finite zero) ->
-                            (if result
-                             then (Rgt (float_value yu) (float_value zero))
-                             else (Rle (float_value yu) (float_value zero))))) ->
-                          (if result then (((is_not_NaN xl) /\
-                           (is_not_NaN yu) /\
-                           (((is_infinite xl) ->
-                             ~(eq (float_value yu) (0)%R) /\
-                             (diff_sign xl yu))) /\
-                           (((is_infinite yu) ->
-                             ~(eq (float_value xl) (0)%R) /\
-                             (diff_sign xl yu)))) /\
-                           (forall (result:gen_float),
-                            ((float_less_than_real
-                              result (Rmult (float_value xl) (float_value yu))) ->
-                             (((is_not_NaN xu) /\ (is_not_NaN yl) /\
-                             (((is_infinite xu) ->
-                               ~(eq (float_value yl) (0)%R) /\
-                               (diff_sign xu yl))) /\
-                             (((is_infinite yl) ->
-                               ~(eq (float_value xu) (0)%R) /\
-                               (diff_sign xu yl)))) /\
-                             (forall (result0:gen_float),
-                              ((float_less_than_real
-                                result0 (Rmult
-                                         (float_value xu) (float_value yl))) ->
-                               (((is_not_NaN result) /\
-                               (is_not_NaN result0)) /\
-                               (forall (result1:gen_float),
-                                ((float_le_float result1 result) /\
-                                 (float_le_float result1 result0) ->
-                                 (forall (tl:gen_float),
-                                  (tl = result1 -> (((is_not_NaN xl) /\
-                                   (is_not_NaN yl) /\
-                                   (((is_infinite xl) ->
-                                     ~(eq (float_value yl) (0)%R) /\
-                                     (diff_sign xl yl))) /\
-                                   (((is_infinite yl) ->
-                                     ~(eq (float_value xl) (0)%R) /\
-                                     (diff_sign xl yl)))) /\
-                                   (forall (result:gen_float),
-                                    ((real_less_than_float
-                                      (Rmult
-                                       (float_value xl) (float_value yl)) result) ->
-                                     (((is_not_NaN xu) /\ (is_not_NaN yu) /\
-                                     (((is_infinite xu) ->
-                                       ~(eq (float_value yu) (0)%R) /\
-                                       (diff_sign xu yu))) /\
-                                     (((is_infinite yu) ->
-                                       ~(eq (float_value xu) (0)%R) /\
-                                       (diff_sign xu yu)))) /\
-                                     (forall (result0:gen_float),
-                                      ((real_less_than_float
-                                        (Rmult
-                                         (float_value xu) (float_value yu)) result0) ->
-                                       (((is_not_NaN result) /\
-                                       (is_not_NaN result0)) /\
-                                       (forall (result1:gen_float),
-                                        ((float_le_float result result1) /\
-                                         (float_le_float result0 result1) ->
-                                         (forall (tu:gen_float),
-                                          (tu = result1 ->
-                                           ((is_interval zl zu) /\
-                                           (forall (a:R),
-                                            (forall (b:R),
-                                             ((in_interval a xl xu) /\
-                                              (in_interval b yl yu) ->
-                                              (in_interval (Rmult a b) tl tu)))))))))))))))))))))))))))
-                           else (((is_not_NaN xu) /\ (is_not_NaN yl) /\
-                           (((is_infinite xu) ->
-                             ~(eq (float_value yl) (0)%R) /\
-                             (diff_sign xu yl))) /\
-                           (((is_infinite yl) ->
-                             ~(eq (float_value xu) (0)%R) /\
-                             (diff_sign xu yl)))) /\
-                           (forall (result:gen_float),
-                            ((float_less_than_real
-                              result (Rmult (float_value xu) (float_value yl))) ->
-                             (forall (tl:gen_float),
-                              (tl = result -> (((is_not_NaN xl) /\
-                               (is_not_NaN yl) /\
-                               (((is_infinite xl) ->
-                                 ~(eq (float_value yl) (0)%R) /\
-                                 (diff_sign xl yl))) /\
-                               (((is_infinite yl) ->
-                                 ~(eq (float_value xl) (0)%R) /\
-                                 (diff_sign xl yl)))) /\
-                               (forall (result:gen_float),
-                                ((real_less_than_float
-                                  (Rmult (float_value xl) (float_value yl)) result) ->
-                                 (forall (tu:gen_float),
-                                  (tu = result -> ((is_interval zl zu) /\
-                                   (forall (a:R),
-                                    (forall (b:R),
-                                     ((in_interval a xl xu) /\
-                                      (in_interval b yl yu) ->
-                                      (in_interval (Rmult a b) tl tu))))))))))))))))))
-                   else (forall (result:bool),
-                         ((((is_NaN yu) \/ (is_NaN zero) -> result = false)) /\
-                          (((is_finite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign zero) = Negative
-                             else (float_sign zero) = Positive))) /\
-                          (((is_infinite yu) /\ (is_finite zero) ->
-                            (if result then (float_sign yu) = Positive
-                             else (float_sign yu) = Negative))) /\
-                          (((is_infinite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign yu) = Positive /\
-                             (float_sign zero) = Negative
-                             else (float_sign yu) = Negative \/
-                             (float_sign zero) = Positive))) /\
-                          (((is_finite yu) /\ (is_finite zero) ->
-                            (if result
-                             then (Rgt (float_value yu) (float_value zero))
-                             else (Rle (float_value yu) (float_value zero))))) ->
-                          (if result then (((is_not_NaN xl) /\
-                           (is_not_NaN yu) /\
-                           (((is_infinite xl) ->
-                             ~(eq (float_value yu) (0)%R) /\
-                             (diff_sign xl yu))) /\
-                           (((is_infinite yu) ->
-                             ~(eq (float_value xl) (0)%R) /\
-                             (diff_sign xl yu)))) /\
-                           (forall (result:gen_float),
-                            ((float_less_than_real
-                              result (Rmult (float_value xl) (float_value yu))) ->
-                             (forall (tl:gen_float),
-                              (tl = result -> (((is_not_NaN xu) /\
-                               (is_not_NaN yu) /\
-                               (((is_infinite xu) ->
-                                 ~(eq (float_value yu) (0)%R) /\
-                                 (diff_sign xu yu))) /\
-                               (((is_infinite yu) ->
-                                 ~(eq (float_value xu) (0)%R) /\
-                                 (diff_sign xu yu)))) /\
-                               (forall (result:gen_float),
-                                ((real_less_than_float
-                                  (Rmult (float_value xu) (float_value yu)) result) ->
-                                 (forall (tu:gen_float),
-                                  (tu = result -> ((is_interval zl zu) /\
-                                   (forall (a:R),
-                                    (forall (b:R),
-                                     ((in_interval a xl xu) /\
-                                      (in_interval b yl yu) ->
-                                      (in_interval (Rmult a b) tl tu)))))))))))))))
-                           else (forall (tl:gen_float),
-                                 (tl = zero ->
-                                  (forall (tu:gen_float),
-                                   (tu = zero -> ((is_interval zl zu) /\
-                                    (forall (a:R),
-                                     (forall (b:R),
-                                      ((in_interval a xl xu) /\
-                                       (in_interval b yl yu) ->
-                                       (in_interval (Rmult a b) tl tu)))))))))))))))
-           else (forall (result:bool),
-                 ((((is_NaN yl) \/ (is_NaN zero) -> result = false)) /\
-                  (((is_finite yl) /\ (is_infinite zero) ->
-                    (if result then (float_sign zero) = Positive
-                     else (float_sign zero) = Negative))) /\
-                  (((is_infinite yl) /\ (is_finite zero) ->
-                    (if result then (float_sign yl) = Negative
-                     else (float_sign yl) = Positive))) /\
-                  (((is_infinite yl) /\ (is_infinite zero) ->
-                    (if result then (float_sign yl) = Negative /\
-                     (float_sign zero) = Positive
-                     else (float_sign yl) = Positive \/
-                     (float_sign zero) = Negative))) /\
-                  (((is_finite yl) /\ (is_finite zero) ->
-                    (if result then (Rlt (float_value yl) (float_value zero))
-                     else (Rge (float_value yl) (float_value zero))))) ->
-                  (if result
-                   then (forall (result:bool),
-                         ((((is_NaN yu) \/ (is_NaN zero) -> result = false)) /\
-                          (((is_finite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign zero) = Negative
-                             else (float_sign zero) = Positive))) /\
-                          (((is_infinite yu) /\ (is_finite zero) ->
-                            (if result then (float_sign yu) = Positive
-                             else (float_sign yu) = Negative))) /\
-                          (((is_infinite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign yu) = Positive /\
-                             (float_sign zero) = Negative
-                             else (float_sign yu) = Negative \/
-                             (float_sign zero) = Positive))) /\
-                          (((is_finite yu) /\ (is_finite zero) ->
-                            (if result
-                             then (Rgt (float_value yu) (float_value zero))
-                             else (Rle (float_value yu) (float_value zero))))) ->
-                          (if result then (((is_not_NaN xl) /\
-                           (is_not_NaN yu) /\
-                           (((is_infinite xl) ->
-                             ~(eq (float_value yu) (0)%R) /\
-                             (diff_sign xl yu))) /\
-                           (((is_infinite yu) ->
-                             ~(eq (float_value xl) (0)%R) /\
-                             (diff_sign xl yu)))) /\
-                           (forall (result:gen_float),
-                            ((float_less_than_real
-                              result (Rmult (float_value xl) (float_value yu))) ->
-                             (forall (tl:gen_float),
-                              (tl = result -> (((is_not_NaN xl) /\
-                               (is_not_NaN yl) /\
-                               (((is_infinite xl) ->
-                                 ~(eq (float_value yl) (0)%R) /\
-                                 (diff_sign xl yl))) /\
-                               (((is_infinite yl) ->
-                                 ~(eq (float_value xl) (0)%R) /\
-                                 (diff_sign xl yl)))) /\
-                               (forall (result:gen_float),
-                                ((real_less_than_float
-                                  (Rmult (float_value xl) (float_value yl)) result) ->
-                                 (forall (tu:gen_float),
-                                  (tu = result -> ((is_interval zl zu) /\
-                                   (forall (a:R),
-                                    (forall (b:R),
-                                     ((in_interval a xl xu) /\
-                                      (in_interval b yl yu) ->
-                                      (in_interval (Rmult a b) tl tu)))))))))))))))
-                           else (((is_not_NaN xu) /\ (is_not_NaN yu) /\
-                           (((is_infinite xu) ->
-                             ~(eq (float_value yu) (0)%R) /\
-                             (diff_sign xu yu))) /\
-                           (((is_infinite yu) ->
-                             ~(eq (float_value xu) (0)%R) /\
-                             (diff_sign xu yu)))) /\
-                           (forall (result:gen_float),
-                            ((float_less_than_real
-                              result (Rmult (float_value xu) (float_value yu))) ->
-                             (forall (tl:gen_float),
-                              (tl = result -> (((is_not_NaN xl) /\
-                               (is_not_NaN yl) /\
-                               (((is_infinite xl) ->
-                                 ~(eq (float_value yl) (0)%R) /\
-                                 (diff_sign xl yl))) /\
-                               (((is_infinite yl) ->
-                                 ~(eq (float_value xl) (0)%R) /\
-                                 (diff_sign xl yl)))) /\
-                               (forall (result:gen_float),
-                                ((real_less_than_float
-                                  (Rmult (float_value xl) (float_value yl)) result) ->
-                                 (forall (tu:gen_float),
-                                  (tu = result -> ((is_interval zl zu) /\
-                                   (forall (a:R),
-                                    (forall (b:R),
-                                     ((in_interval a xl xu) /\
-                                      (in_interval b yl yu) ->
-                                      (in_interval (Rmult a b) tl tu))))))))))))))))))
-                   else (forall (result:bool),
-                         ((((is_NaN yu) \/ (is_NaN zero) -> result = false)) /\
-                          (((is_finite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign zero) = Negative
-                             else (float_sign zero) = Positive))) /\
-                          (((is_infinite yu) /\ (is_finite zero) ->
-                            (if result then (float_sign yu) = Positive
-                             else (float_sign yu) = Negative))) /\
-                          (((is_infinite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign yu) = Positive /\
-                             (float_sign zero) = Negative
-                             else (float_sign yu) = Negative \/
-                             (float_sign zero) = Positive))) /\
-                          (((is_finite yu) /\ (is_finite zero) ->
-                            (if result
-                             then (Rgt (float_value yu) (float_value zero))
-                             else (Rle (float_value yu) (float_value zero))))) ->
-                          (if result then (((is_not_NaN xl) /\
-                           (is_not_NaN yu) /\
-                           (((is_infinite xl) ->
-                             ~(eq (float_value yu) (0)%R) /\
-                             (diff_sign xl yu))) /\
-                           (((is_infinite yu) ->
-                             ~(eq (float_value xl) (0)%R) /\
-                             (diff_sign xl yu)))) /\
-                           (forall (result:gen_float),
-                            ((float_less_than_real
-                              result (Rmult (float_value xl) (float_value yu))) ->
-                             (forall (tl:gen_float),
-                              (tl = result -> (((is_not_NaN xu) /\
-                               (is_not_NaN yl) /\
-                               (((is_infinite xu) ->
-                                 ~(eq (float_value yl) (0)%R) /\
-                                 (diff_sign xu yl))) /\
-                               (((is_infinite yl) ->
-                                 ~(eq (float_value xu) (0)%R) /\
-                                 (diff_sign xu yl)))) /\
-                               (forall (result:gen_float),
-                                ((real_less_than_float
-                                  (Rmult (float_value xu) (float_value yl)) result) ->
-                                 (forall (tu:gen_float),
-                                  (tu = result -> ((is_interval zl zu) /\
-                                   (forall (a:R),
-                                    (forall (b:R),
-                                     ((in_interval a xl xu) /\
-                                      (in_interval b yl yu) ->
-                                      (in_interval (Rmult a b) tl tu)))))))))))))))
-                           else (forall (tl:gen_float),
-                                 (tl = zero ->
-                                  (forall (tu:gen_float),
-                                   (tu = zero -> ((is_interval zl zu) /\
-                                    (forall (a:R),
-                                     (forall (b:R),
-                                      ((in_interval a xl xu) /\
-                                       (in_interval b yl yu) ->
-                                       (in_interval (Rmult a b) tl tu))))))))))))))))))
-   else (forall (result:bool),
-         ((((is_NaN xu) \/ (is_NaN zero) -> result = false)) /\
-          (((is_finite xu) /\ (is_infinite zero) ->
-            (if result then (float_sign zero) = Negative
-             else (float_sign zero) = Positive))) /\
-          (((is_infinite xu) /\ (is_finite zero) ->
-            (if result then (float_sign xu) = Positive
-             else (float_sign xu) = Negative))) /\
-          (((is_infinite xu) /\ (is_infinite zero) ->
-            (if result then (float_sign xu) = Positive /\
-             (float_sign zero) = Negative else (float_sign xu) = Negative \/
-             (float_sign zero) = Positive))) /\
-          (((is_finite xu) /\ (is_finite zero) ->
-            (if result then (Rgt (float_value xu) (float_value zero))
-             else (Rle (float_value xu) (float_value zero))))) ->
-          (if result
-           then (forall (result:bool),
-                 ((((is_NaN yl) \/ (is_NaN zero) -> result = false)) /\
-                  (((is_finite yl) /\ (is_infinite zero) ->
-                    (if result then (float_sign zero) = Positive
-                     else (float_sign zero) = Negative))) /\
-                  (((is_infinite yl) /\ (is_finite zero) ->
-                    (if result then (float_sign yl) = Negative
-                     else (float_sign yl) = Positive))) /\
-                  (((is_infinite yl) /\ (is_infinite zero) ->
-                    (if result then (float_sign yl) = Negative /\
-                     (float_sign zero) = Positive
-                     else (float_sign yl) = Positive \/
-                     (float_sign zero) = Negative))) /\
-                  (((is_finite yl) /\ (is_finite zero) ->
-                    (if result then (Rlt (float_value yl) (float_value zero))
-                     else (Rge (float_value yl) (float_value zero))))) ->
-                  (if result
-                   then (forall (result:bool),
-                         ((((is_NaN yu) \/ (is_NaN zero) -> result = false)) /\
-                          (((is_finite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign zero) = Negative
-                             else (float_sign zero) = Positive))) /\
-                          (((is_infinite yu) /\ (is_finite zero) ->
-                            (if result then (float_sign yu) = Positive
-                             else (float_sign yu) = Negative))) /\
-                          (((is_infinite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign yu) = Positive /\
-                             (float_sign zero) = Negative
-                             else (float_sign yu) = Negative \/
-                             (float_sign zero) = Positive))) /\
-                          (((is_finite yu) /\ (is_finite zero) ->
-                            (if result
-                             then (Rgt (float_value yu) (float_value zero))
-                             else (Rle (float_value yu) (float_value zero))))) ->
-                          (if result then (((is_not_NaN xu) /\
-                           (is_not_NaN yl) /\
-                           (((is_infinite xu) ->
-                             ~(eq (float_value yl) (0)%R) /\
-                             (diff_sign xu yl))) /\
-                           (((is_infinite yl) ->
-                             ~(eq (float_value xu) (0)%R) /\
-                             (diff_sign xu yl)))) /\
-                           (forall (result:gen_float),
-                            ((float_less_than_real
-                              result (Rmult (float_value xu) (float_value yl))) ->
-                             (forall (tl:gen_float),
-                              (tl = result -> (((is_not_NaN xu) /\
-                               (is_not_NaN yu) /\
-                               (((is_infinite xu) ->
-                                 ~(eq (float_value yu) (0)%R) /\
-                                 (diff_sign xu yu))) /\
-                               (((is_infinite yu) ->
-                                 ~(eq (float_value xu) (0)%R) /\
-                                 (diff_sign xu yu)))) /\
-                               (forall (result:gen_float),
-                                ((real_less_than_float
-                                  (Rmult (float_value xu) (float_value yu)) result) ->
-                                 (forall (tu:gen_float),
-                                  (tu = result -> ((is_interval zl zu) /\
-                                   (forall (a:R),
-                                    (forall (b:R),
-                                     ((in_interval a xl xu) /\
-                                      (in_interval b yl yu) ->
-                                      (in_interval (Rmult a b) tl tu)))))))))))))))
-                           else (((is_not_NaN xu) /\ (is_not_NaN yl) /\
-                           (((is_infinite xu) ->
-                             ~(eq (float_value yl) (0)%R) /\
-                             (diff_sign xu yl))) /\
-                           (((is_infinite yl) ->
-                             ~(eq (float_value xu) (0)%R) /\
-                             (diff_sign xu yl)))) /\
-                           (forall (result:gen_float),
-                            ((float_less_than_real
-                              result (Rmult (float_value xu) (float_value yl))) ->
-                             (forall (tl:gen_float),
-                              (tl = result -> (((is_not_NaN xl) /\
-                               (is_not_NaN yu) /\
-                               (((is_infinite xl) ->
-                                 ~(eq (float_value yu) (0)%R) /\
-                                 (diff_sign xl yu))) /\
-                               (((is_infinite yu) ->
-                                 ~(eq (float_value xl) (0)%R) /\
-                                 (diff_sign xl yu)))) /\
-                               (forall (result:gen_float),
-                                ((real_less_than_float
-                                  (Rmult (float_value xl) (float_value yu)) result) ->
-                                 (forall (tu:gen_float),
-                                  (tu = result -> ((is_interval zl zu) /\
-                                   (forall (a:R),
-                                    (forall (b:R),
-                                     ((in_interval a xl xu) /\
-                                      (in_interval b yl yu) ->
-                                      (in_interval (Rmult a b) tl tu))))))))))))))))))
-                   else (forall (result:bool),
-                         ((((is_NaN yu) \/ (is_NaN zero) -> result = false)) /\
-                          (((is_finite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign zero) = Negative
-                             else (float_sign zero) = Positive))) /\
-                          (((is_infinite yu) /\ (is_finite zero) ->
-                            (if result then (float_sign yu) = Positive
-                             else (float_sign yu) = Negative))) /\
-                          (((is_infinite yu) /\ (is_infinite zero) ->
-                            (if result then (float_sign yu) = Positive /\
-                             (float_sign zero) = Negative
-                             else (float_sign yu) = Negative \/
-                             (float_sign zero) = Positive))) /\
-                          (((is_finite yu) /\ (is_finite zero) ->
-                            (if result
-                             then (Rgt (float_value yu) (float_value zero))
-                             else (Rle (float_value yu) (float_value zero))))) ->
-                          (if result then (((is_not_NaN xl) /\
-                           (is_not_NaN yl) /\
-                           (((is_infinite xl) ->
-                             ~(eq (float_value yl) (0)%R) /\
-                             (diff_sign xl yl))) /\
-                           (((is_infinite yl) ->
-                             ~(eq (float_value xl) (0)%R) /\
-                             (diff_sign xl yl)))) /\
-                           (forall (result:gen_float),
-                            ((float_less_than_real
-                              result (Rmult (float_value xl) (float_value yl))) ->
-                             (forall (tl:gen_float),
-                              (tl = result -> (((is_not_NaN xu) /\
-                               (is_not_NaN yu) /\
-                               (((is_infinite xu) ->
-                                 ~(eq (float_value yu) (0)%R) /\
-                                 (diff_sign xu yu))) /\
-                               (((is_infinite yu) ->
-                                 ~(eq (float_value xu) (0)%R) /\
-                                 (diff_sign xu yu)))) /\
-                               (forall (result:gen_float),
-                                ((real_less_than_float
-                                  (Rmult (float_value xu) (float_value yu)) result) ->
-                                 (forall (tu:gen_float),
-                                  (tu = result -> ((is_interval zl zu) /\
-                                   (forall (a:R),
-                                    (forall (b:R),
-                                     ((in_interval a xl xu) /\
-                                      (in_interval b yl yu) ->
-                                      (in_interval (Rmult a b) tl tu)))))))))))))))
-                           else (forall (tl:gen_float),
-                                 (tl = zero ->
-                                  (forall (tu:gen_float),
-                                   (tu = zero -> ((is_interval zl zu) /\
-                                    (forall (a:R),
-                                     (forall (b:R),
-                                      ((in_interval a xl xu) /\
-                                       (in_interval b yl yu) ->
-                                       (in_interval (Rmult a b) tl tu)))))))))))))))
-           else (forall (tl:gen_float),
-                 (tl = zero ->
-                  (forall (tu:gen_float),
-                   (tu = zero -> ((is_interval zl zu) /\
-                    (forall (a:R),
-                     (forall (b:R),
-                      ((in_interval a xl xu) /\ (in_interval b yl yu) ->
-                       (in_interval (Rmult a b) tl tu))))))))))))).
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_7: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                (is_finite zero) /\
+                (Rlt (float_value yl) (float_value zero)) \/
+                (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity yl) /\ (is_finite zero) \/
+                (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_8: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                (is_finite zero) /\
+                (Rgt (float_value yu) (float_value zero)) \/
+                (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity yu) /\ (is_finite zero) \/
+                (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_9: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                (((is_infinite xl) /\ (is_finite yu) ->
+                  ~(eq (float_value yu) (0)%R))) /\
+                (((is_infinite yu) /\ (is_finite xl) ->
+                  ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_10: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (HW_11: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_12: (float_less_than_real
+                  result1 (Rmult (float_value xu) (float_value yl)))),
+  forall (HW_13: (is_not_NaN result0) /\ (is_not_NaN result1)),
+  forall (result2: gen_float),
+  forall (HW_14: (float_le_float result2 result0) /\
+                 (float_le_float result2 result1)),
+  forall (tl: gen_float),
+  forall (HW_15: tl = result2),
+  forall (HW_16: (is_not_NaN xl) /\ (is_not_NaN yl) /\
+                 (((is_infinite xl) \/ (is_infinite yl) -> (same_sign xl yl))) /\
+                 (((is_infinite xl) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result3: gen_float),
+  forall (HW_17: (real_less_than_float
+                  (Rmult (float_value xl) (float_value yl)) result3)),
+  forall (HW_18: (is_not_NaN xu) /\ (is_not_NaN yu) /\
+                 (((is_infinite xu) \/ (is_infinite yu) -> (same_sign xu yu))) /\
+                 (((is_infinite xu) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result4: gen_float),
+  forall (HW_19: (real_less_than_float
+                  (Rmult (float_value xu) (float_value yu)) result4)),
+  forall (HW_20: (is_not_NaN result3) /\ (is_not_NaN result4)),
+  forall (result5: gen_float),
+  forall (HW_21: (float_le_float result3 result5) /\
+                 (float_le_float result4 result5)),
+  forall (tu: gen_float),
+  forall (HW_22: tu = result5),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
 Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
+(* Why obligation from file "interval_arith_full.why", line 145, characters 11-23: *)
+(*Why goal*) Lemma mul_po_9 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_7: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                (is_finite zero) /\
+                (Rlt (float_value yl) (float_value zero)) \/
+                (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity yl) /\ (is_finite zero) \/
+                (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_23: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  ((is_not_NaN xu) /\ (is_not_NaN yl) /\
+  (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+  (((is_infinite xu) /\ (is_finite yl) -> ~(eq (float_value yl) (0)%R))) /\
+  (((is_infinite yl) /\ (is_finite xu) -> ~(eq (float_value xu) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
+(* Why obligation from file "interval_arith_full.why", line 146, characters 18-30: *)
+(*Why goal*) Lemma mul_po_10 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_7: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                (is_finite zero) /\
+                (Rlt (float_value yl) (float_value zero)) \/
+                (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity yl) /\ (is_finite zero) \/
+                (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_23: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  forall (HW_24: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_25: (float_less_than_real
+                  result0 (Rmult (float_value xu) (float_value yl)))),
+  forall (tl: gen_float),
+  forall (HW_26: tl = result0),
+  ((is_not_NaN xl) /\ (is_not_NaN yl) /\
+  (((is_infinite xl) \/ (is_infinite yl) -> (same_sign xl yl))) /\
+  (((is_infinite xl) /\ (is_finite yl) -> ~(eq (float_value yl) (0)%R))) /\
+  (((is_infinite yl) /\ (is_finite xl) -> ~(eq (float_value xl) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_11 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_7: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                (is_finite zero) /\
+                (Rlt (float_value yl) (float_value zero)) \/
+                (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity yl) /\ (is_finite zero) \/
+                (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_23: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  forall (HW_24: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_25: (float_less_than_real
+                  result0 (Rmult (float_value xu) (float_value yl)))),
+  forall (tl: gen_float),
+  forall (HW_26: tl = result0),
+  forall (HW_27: (is_not_NaN xl) /\ (is_not_NaN yl) /\
+                 (((is_infinite xl) \/ (is_infinite yl) -> (same_sign xl yl))) /\
+                 (((is_infinite xl) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_28: (real_less_than_float
+                  (Rmult (float_value xl) (float_value yl)) result1)),
+  forall (tu: gen_float),
+  forall (HW_29: tu = result1),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 152, characters 11-23: *)
+(*Why goal*) Lemma mul_po_12 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_30: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_31: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  ((is_not_NaN xl) /\ (is_not_NaN yu) /\
+  (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+  (((is_infinite xl) /\ (is_finite yu) -> ~(eq (float_value yu) (0)%R))) /\
+  (((is_infinite yu) /\ (is_finite xl) -> ~(eq (float_value xl) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 153, characters 18-30: *)
+(*Why goal*) Lemma mul_po_13 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_30: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_31: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_32: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                 (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                 (((is_infinite xl) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_33: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (tl: gen_float),
+  forall (HW_34: tl = result0),
+  ((is_not_NaN xu) /\ (is_not_NaN yu) /\
+  (((is_infinite xu) \/ (is_infinite yu) -> (same_sign xu yu))) /\
+  (((is_infinite xu) /\ (is_finite yu) -> ~(eq (float_value yu) (0)%R))) /\
+  (((is_infinite yu) /\ (is_finite xu) -> ~(eq (float_value xu) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_14 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_30: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_31: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_32: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                 (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                 (((is_infinite xl) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_33: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (tl: gen_float),
+  forall (HW_34: tl = result0),
+  forall (HW_35: (is_not_NaN xu) /\ (is_not_NaN yu) /\
+                 (((is_infinite xu) \/ (is_infinite yu) -> (same_sign xu yu))) /\
+                 (((is_infinite xu) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_36: (real_less_than_float
+                  (Rmult (float_value xu) (float_value yu)) result1)),
+  forall (tu: gen_float),
+  forall (HW_37: tu = result1),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_15 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_6: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                (is_finite zero) /\
+                (Rgt (float_value xu) (float_value zero)) \/
+                (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                (is_plus_infinity xu) /\ (is_finite zero) \/
+                (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_30: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_38: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  forall (tl: gen_float),
+  forall (HW_39: tl = zero),
+  forall (tu: gen_float),
+  forall (HW_40: tu = zero),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 167, characters 11-23: *)
+(*Why goal*) Lemma mul_po_16 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_41: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (HW_42: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_43: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  ((is_not_NaN xl) /\ (is_not_NaN yu) /\
+  (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+  (((is_infinite xl) /\ (is_finite yu) -> ~(eq (float_value yu) (0)%R))) /\
+  (((is_infinite yu) /\ (is_finite xl) -> ~(eq (float_value xl) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 168, characters 18-30: *)
+(*Why goal*) Lemma mul_po_17 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_41: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (HW_42: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_43: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_44: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                 (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                 (((is_infinite xl) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_45: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (tl: gen_float),
+  forall (HW_46: tl = result0),
+  ((is_not_NaN xl) /\ (is_not_NaN yl) /\
+  (((is_infinite xl) \/ (is_infinite yl) -> (same_sign xl yl))) /\
+  (((is_infinite xl) /\ (is_finite yl) -> ~(eq (float_value yl) (0)%R))) /\
+  (((is_infinite yl) /\ (is_finite xl) -> ~(eq (float_value xl) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_18 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_41: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (HW_42: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_43: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_44: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                 (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                 (((is_infinite xl) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_45: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (tl: gen_float),
+  forall (HW_46: tl = result0),
+  forall (HW_47: (is_not_NaN xl) /\ (is_not_NaN yl) /\
+                 (((is_infinite xl) \/ (is_infinite yl) -> (same_sign xl yl))) /\
+                 (((is_infinite xl) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_48: (real_less_than_float
+                  (Rmult (float_value xl) (float_value yl)) result1)),
+  forall (tu: gen_float),
+  forall (HW_49: tu = result1),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 172, characters 11-23: *)
+(*Why goal*) Lemma mul_po_19 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_41: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (HW_42: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_50: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  ((is_not_NaN xu) /\ (is_not_NaN yu) /\
+  (((is_infinite xu) \/ (is_infinite yu) -> (diff_sign xu yu))) /\
+  (((is_infinite xu) /\ (is_finite yu) -> ~(eq (float_value yu) (0)%R))) /\
+  (((is_infinite yu) /\ (is_finite xu) -> ~(eq (float_value xu) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 173, characters 18-30: *)
+(*Why goal*) Lemma mul_po_20 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_41: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (HW_42: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_50: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  forall (HW_51: (is_not_NaN xu) /\ (is_not_NaN yu) /\
+                 (((is_infinite xu) \/ (is_infinite yu) -> (diff_sign xu yu))) /\
+                 (((is_infinite xu) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_52: (float_less_than_real
+                  result0 (Rmult (float_value xu) (float_value yu)))),
+  forall (tl: gen_float),
+  forall (HW_53: tl = result0),
+  ((is_not_NaN xl) /\ (is_not_NaN yl) /\
+  (((is_infinite xl) \/ (is_infinite yl) -> (same_sign xl yl))) /\
+  (((is_infinite xl) /\ (is_finite yl) -> ~(eq (float_value yl) (0)%R))) /\
+  (((is_infinite yl) /\ (is_finite xl) -> ~(eq (float_value xl) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_21 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_41: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (HW_42: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_50: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  forall (HW_51: (is_not_NaN xu) /\ (is_not_NaN yu) /\
+                 (((is_infinite xu) \/ (is_infinite yu) -> (diff_sign xu yu))) /\
+                 (((is_infinite xu) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_52: (float_less_than_real
+                  result0 (Rmult (float_value xu) (float_value yu)))),
+  forall (tl: gen_float),
+  forall (HW_53: tl = result0),
+  forall (HW_54: (is_not_NaN xl) /\ (is_not_NaN yl) /\
+                 (((is_infinite xl) \/ (is_infinite yl) -> (same_sign xl yl))) /\
+                 (((is_infinite xl) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_55: (real_less_than_float
+                  (Rmult (float_value xl) (float_value yl)) result1)),
+  forall (tu: gen_float),
+  forall (HW_56: tu = result1),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 179, characters 11-23: *)
+(*Why goal*) Lemma mul_po_22 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_41: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (HW_57: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_58: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  ((is_not_NaN xl) /\ (is_not_NaN yu) /\
+  (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+  (((is_infinite xl) /\ (is_finite yu) -> ~(eq (float_value yu) (0)%R))) /\
+  (((is_infinite yu) /\ (is_finite xl) -> ~(eq (float_value xl) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 180, characters 18-30: *)
+(*Why goal*) Lemma mul_po_23 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_41: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (HW_57: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_58: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_59: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                 (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                 (((is_infinite xl) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_60: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (tl: gen_float),
+  forall (HW_61: tl = result0),
+  ((is_not_NaN xu) /\ (is_not_NaN yl) /\
+  (((is_infinite xu) \/ (is_infinite yl) -> (same_sign xu yl))) /\
+  (((is_infinite xu) /\ (is_finite yl) -> ~(eq (float_value yl) (0)%R))) /\
+  (((is_infinite yl) /\ (is_finite xu) -> ~(eq (float_value xu) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_24 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_41: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (HW_57: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_58: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_59: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                 (((is_infinite xl) \/ (is_infinite yu) -> (diff_sign xl yu))) /\
+                 (((is_infinite xl) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_60: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yu)))),
+  forall (tl: gen_float),
+  forall (HW_61: tl = result0),
+  forall (HW_62: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (same_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_63: (real_less_than_float
+                  (Rmult (float_value xu) (float_value yl)) result1)),
+  forall (tu: gen_float),
+  forall (HW_64: tu = result1),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_25 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_5: (is_not_NaN xl) /\ (is_not_NaN zero) /\ (is_finite xl) /\
+                (is_finite zero) /\
+                (Rlt (float_value xl) (float_value zero)) \/
+                (is_minus_infinity xl) /\ (is_plus_infinity zero) \/
+                (is_minus_infinity xl) /\ (is_finite zero) \/
+                (is_finite xl) /\ (is_plus_infinity zero)),
+  forall (HW_41: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (HW_57: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_65: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  forall (tl: gen_float),
+  forall (HW_66: tl = zero),
+  forall (tu: gen_float),
+  forall (HW_67: tu = zero),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 193, characters 11-23: *)
+(*Why goal*) Lemma mul_po_26 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_69: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value xu) (float_value zero)) \/
+                 (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity xu) /\ (is_finite zero) \/
+                 (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_70: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_71: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  ((is_not_NaN xu) /\ (is_not_NaN yl) /\
+  (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+  (((is_infinite xu) /\ (is_finite yl) -> ~(eq (float_value yl) (0)%R))) /\
+  (((is_infinite yl) /\ (is_finite xu) -> ~(eq (float_value xu) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 194, characters 18-30: *)
+(*Why goal*) Lemma mul_po_27 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_69: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value xu) (float_value zero)) \/
+                 (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity xu) /\ (is_finite zero) \/
+                 (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_70: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_71: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_72: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_73: (float_less_than_real
+                  result0 (Rmult (float_value xu) (float_value yl)))),
+  forall (tl: gen_float),
+  forall (HW_74: tl = result0),
+  ((is_not_NaN xu) /\ (is_not_NaN yu) /\
+  (((is_infinite xu) \/ (is_infinite yu) -> (same_sign xu yu))) /\
+  (((is_infinite xu) /\ (is_finite yu) -> ~(eq (float_value yu) (0)%R))) /\
+  (((is_infinite yu) /\ (is_finite xu) -> ~(eq (float_value xu) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_28 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_69: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value xu) (float_value zero)) \/
+                 (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity xu) /\ (is_finite zero) \/
+                 (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_70: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_71: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_72: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_73: (float_less_than_real
+                  result0 (Rmult (float_value xu) (float_value yl)))),
+  forall (tl: gen_float),
+  forall (HW_74: tl = result0),
+  forall (HW_75: (is_not_NaN xu) /\ (is_not_NaN yu) /\
+                 (((is_infinite xu) \/ (is_infinite yu) -> (same_sign xu yu))) /\
+                 (((is_infinite xu) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_76: (real_less_than_float
+                  (Rmult (float_value xu) (float_value yu)) result1)),
+  forall (tu: gen_float),
+  forall (HW_77: tu = result1),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 198, characters 11-23: *)
+(*Why goal*) Lemma mul_po_29 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_69: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value xu) (float_value zero)) \/
+                 (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity xu) /\ (is_finite zero) \/
+                 (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_70: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_78: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  ((is_not_NaN xu) /\ (is_not_NaN yl) /\
+  (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+  (((is_infinite xu) /\ (is_finite yl) -> ~(eq (float_value yl) (0)%R))) /\
+  (((is_infinite yl) /\ (is_finite xu) -> ~(eq (float_value xu) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 199, characters 18-30: *)
+(*Why goal*) Lemma mul_po_30 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_69: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value xu) (float_value zero)) \/
+                 (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity xu) /\ (is_finite zero) \/
+                 (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_70: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_78: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  forall (HW_79: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_80: (float_less_than_real
+                  result0 (Rmult (float_value xu) (float_value yl)))),
+  forall (tl: gen_float),
+  forall (HW_81: tl = result0),
+  ((is_not_NaN xl) /\ (is_not_NaN yu) /\
+  (((is_infinite xl) \/ (is_infinite yu) -> (same_sign xl yu))) /\
+  (((is_infinite xl) /\ (is_finite yu) -> ~(eq (float_value yu) (0)%R))) /\
+  (((is_infinite yu) /\ (is_finite xl) -> ~(eq (float_value xl) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_31 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_69: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value xu) (float_value zero)) \/
+                 (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity xu) /\ (is_finite zero) \/
+                 (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_70: (is_not_NaN yl) /\ (is_not_NaN zero) /\ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rlt (float_value yl) (float_value zero)) \/
+                 (is_minus_infinity yl) /\ (is_plus_infinity zero) \/
+                 (is_minus_infinity yl) /\ (is_finite zero) \/
+                 (is_finite yl) /\ (is_plus_infinity zero)),
+  forall (HW_78: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  forall (HW_79: (is_not_NaN xu) /\ (is_not_NaN yl) /\
+                 (((is_infinite xu) \/ (is_infinite yl) -> (diff_sign xu yl))) /\
+                 (((is_infinite xu) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_80: (float_less_than_real
+                  result0 (Rmult (float_value xu) (float_value yl)))),
+  forall (tl: gen_float),
+  forall (HW_81: tl = result0),
+  forall (HW_82: (is_not_NaN xl) /\ (is_not_NaN yu) /\
+                 (((is_infinite xl) \/ (is_infinite yu) -> (same_sign xl yu))) /\
+                 (((is_infinite xl) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_83: (real_less_than_float
+                  (Rmult (float_value xl) (float_value yu)) result1)),
+  forall (tu: gen_float),
+  forall (HW_84: tu = result1),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 204, characters 11-23: *)
+(*Why goal*) Lemma mul_po_32 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_69: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value xu) (float_value zero)) \/
+                 (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity xu) /\ (is_finite zero) \/
+                 (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_85: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_86: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  ((is_not_NaN xl) /\ (is_not_NaN yl) /\
+  (((is_infinite xl) \/ (is_infinite yl) -> (diff_sign xl yl))) /\
+  (((is_infinite xl) /\ (is_finite yl) -> ~(eq (float_value yl) (0)%R))) /\
+  (((is_infinite yl) /\ (is_finite xl) -> ~(eq (float_value xl) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 205, characters 18-30: *)
+(*Why goal*) Lemma mul_po_33 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_69: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value xu) (float_value zero)) \/
+                 (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity xu) /\ (is_finite zero) \/
+                 (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_85: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_86: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_87: (is_not_NaN xl) /\ (is_not_NaN yl) /\
+                 (((is_infinite xl) \/ (is_infinite yl) -> (diff_sign xl yl))) /\
+                 (((is_infinite xl) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_88: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yl)))),
+  forall (tl: gen_float),
+  forall (HW_89: tl = result0),
+  ((is_not_NaN xu) /\ (is_not_NaN yu) /\
+  (((is_infinite xu) \/ (is_infinite yu) -> (same_sign xu yu))) /\
+  (((is_infinite xu) /\ (is_finite yu) -> ~(eq (float_value yu) (0)%R))) /\
+  (((is_infinite yu) /\ (is_finite xu) -> ~(eq (float_value xu) (0)%R)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_34 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_69: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value xu) (float_value zero)) \/
+                 (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity xu) /\ (is_finite zero) \/
+                 (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_85: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_86: (is_not_NaN yu) /\ (is_not_NaN zero) /\ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value yu) (float_value zero)) \/
+                 (is_plus_infinity yu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity yu) /\ (is_finite zero) \/
+                 (is_finite yu) /\ (is_minus_infinity zero)),
+  forall (HW_87: (is_not_NaN xl) /\ (is_not_NaN yl) /\
+                 (((is_infinite xl) \/ (is_infinite yl) -> (diff_sign xl yl))) /\
+                 (((is_infinite xl) /\ (is_finite yl) ->
+                   ~(eq (float_value yl) (0)%R))) /\
+                 (((is_infinite yl) /\ (is_finite xl) ->
+                   ~(eq (float_value xl) (0)%R)))),
+  forall (result0: gen_float),
+  forall (HW_88: (float_less_than_real
+                  result0 (Rmult (float_value xl) (float_value yl)))),
+  forall (tl: gen_float),
+  forall (HW_89: tl = result0),
+  forall (HW_90: (is_not_NaN xu) /\ (is_not_NaN yu) /\
+                 (((is_infinite xu) \/ (is_infinite yu) -> (same_sign xu yu))) /\
+                 (((is_infinite xu) /\ (is_finite yu) ->
+                   ~(eq (float_value yu) (0)%R))) /\
+                 (((is_infinite yu) /\ (is_finite xu) ->
+                   ~(eq (float_value xu) (0)%R)))),
+  forall (result1: gen_float),
+  forall (HW_91: (real_less_than_float
+                  (Rmult (float_value xu) (float_value yu)) result1)),
+  forall (tu: gen_float),
+  forall (HW_92: tu = result1),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_35 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_69: (is_not_NaN xu) /\ (is_not_NaN zero) /\ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rgt (float_value xu) (float_value zero)) \/
+                 (is_plus_infinity xu) /\ (is_minus_infinity zero) \/
+                 (is_plus_infinity xu) /\ (is_finite zero) \/
+                 (is_finite xu) /\ (is_minus_infinity zero)),
+  forall (HW_85: (is_NaN yl) \/ (is_NaN zero) \/ (is_finite yl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value yl) (float_value zero)) \/
+                 (is_plus_infinity yl) \/ (is_minus_infinity zero)),
+  forall (HW_93: (is_NaN yu) \/ (is_NaN zero) \/ (is_finite yu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value yu) (float_value zero)) \/
+                 (is_minus_infinity yu) \/ (is_plus_infinity zero)),
+  forall (tl: gen_float),
+  forall (HW_94: tl = zero),
+  forall (tu: gen_float),
+  forall (HW_95: tu = zero),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "interval_arith_full.why", line 217, characters 2-152: *)
+(*Why goal*) Lemma mul_po_36 : 
+  forall (xl: gen_float),
+  forall (xu: gen_float),
+  forall (yl: gen_float),
+  forall (yu: gen_float),
+  forall (zl: gen_float),
+  forall (zu: gen_float),
+  forall (HW_1: (is_interval xl xu) /\ (is_interval yl yu)),
+  forall (result: gen_float),
+  forall (HW_2: (((no_overflow Double down (0)%R) -> (is_finite result) /\
+                  (eq (float_value result) (round_float Double down (0)%R)))) /\
+                ((~(no_overflow Double down (0)%R) ->
+                  (same_sign_real result (0)%R) /\
+                  (overflow_value Double down result))) /\
+                (eq (exact_value result) (0)%R) /\
+                (eq (model_value result) (0)%R)),
+  forall (zero: gen_float),
+  forall (HW_3: zero = result),
+  forall (HW_4: (eq (float_value zero) (0)%R)),
+  forall (HW_68: (is_NaN xl) \/ (is_NaN zero) \/ (is_finite xl) /\
+                 (is_finite zero) /\
+                 (Rge (float_value xl) (float_value zero)) \/
+                 (is_plus_infinity xl) \/ (is_minus_infinity zero)),
+  forall (HW_96: (is_NaN xu) \/ (is_NaN zero) \/ (is_finite xu) /\
+                 (is_finite zero) /\
+                 (Rle (float_value xu) (float_value zero)) \/
+                 (is_minus_infinity xu) \/ (is_plus_infinity zero)),
+  forall (tl: gen_float),
+  forall (HW_97: tl = zero),
+  forall (tu: gen_float),
+  forall (HW_98: tu = zero),
+  ((is_interval zl zu) /\
+  (forall (a:R),
+   (forall (b:R),
+    ((in_interval a xl xu) /\ (in_interval b yl yu) ->
+     (in_interval (Rmult a b) tl tu))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
