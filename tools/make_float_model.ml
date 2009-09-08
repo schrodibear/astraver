@@ -65,8 +65,8 @@ function %s_total_error(x:%s) : real =
 fprintf fmt "parameter %s_set_model : x:%s ref -> y:real ->
   { } 
   unit writes x
-  { %s_value(x) = %s_value(x@)
-    and %s_exact(x) = %s_exact(x@)
+  { %s_value(x) = %s_value(x@@)
+    and %s_exact(x) = %s_exact(x@@)
     and %s_model(x) = y }@.@." t t t t t t t;
 
   fprintf fmt "function max_%s() : real = 0x1.%sp%d@.@." t (hex_of_precision (p-1)) (-p-e+2) ;
@@ -130,13 +130,14 @@ axiom round_%s_idempotent:
     and 
     %s_exact(res) = sqrt_real(%s_exact(x))
     and 
-    %s_model(res) = sqrt_real(%s_model(x))@.@." t t t t t t t t t;
+    %s_model(res) = sqrt_real(%s_model(x))@.@."  t t t t t t t t t t;
 
 
 (* negation... à réfléchir ... *)
 (* valeur absolue... à réfléchir ... *)
 (* casts... à réfléchir *)
 
+();;
 
 (* Strict  model *)
 
@@ -195,7 +196,7 @@ let output_strict_part fmt t p e =
   %s
   { %s_value(y) <> 0.0  and
     no_overflow_%s(m,%s_value(x) / %s_value(y)) and
-    div_%s_post(m,x,y,result) }@.@." t t t t t t t t t
+    div_%s_post(m,x,y,result) }@.@." t t t t t t t t t;
 
   fprintf fmt "parameter sqrt_%s : m:mode -> x:%s -> 
   { %s_value(x) >= 0.0 }
