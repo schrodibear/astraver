@@ -1,0 +1,3 @@
+[preprocessing] running gcc -C -E -I. dowhile.c
+Warning: exception Loop_exit cannot be thrown
+Warning: exception Loop_exit cannot be thrown

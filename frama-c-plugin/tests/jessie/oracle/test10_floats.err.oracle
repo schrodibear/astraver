@@ -1,0 +1,8 @@
+[kernel...] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD test10_floats.c"
+File "test10_floats.c", line 4, characters 0-0:
+Invalid symbol
+Parsing error
+Error during linking
+Jessie: nothing to process. There was probably an error before.
+sed: can't read test10_floats.jessie/test10_floats.jc: No such file or directory
+make[1]: *** [test10_floats.regtest] Error 2

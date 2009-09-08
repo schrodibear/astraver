@@ -1,0 +1,411 @@
+FRAMAC_SHARE=PPCHOME/share PPCHOME/bin/toplevel.opt -jessie-analysis -journal-disable -jessie-analysis -jessie-gen-only assigns_range.c
+Parsing
+[preprocessing] running gcc -C -E -I. -include PPCHOME/share/jessie/jessie_prolog.h -dD assigns_range.c
+Cleaning unused parts
+Symbolic link
+Starting semantical analysis
+Starting Jessie translation
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+type uint16 = 0..65535
+
+type int32 = -2147483648..2147483647
+
+type int8 = -128..127
+
+tag int_P = {
+  int32 int_M: 32;
+}
+
+type int_P = [int_P]
+
+tag unsigned_short_P = {
+  uint16 unsigned_short_M: 16;
+}
+
+type unsigned_short_P = [unsigned_short_P]
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+axiomatic MemCmp {
+
+  logic integer memcmp{L}(char_P[..] s1, char_P[..] s2, integer n)
+   
+  axiom memcmp_range{L} :
+  (\forall char_P[..] s1;
+    (\forall char_P[..] s2;
+      (\forall integer n;
+        ((((- 2147483647) - 1) <= memcmp{L}(s1, s2, n)) &&
+          (memcmp{L}(s1, s2, n) <= 2147483647)))))
+   
+  axiom memcmp_zero{L} :
+  (\forall char_P[..] s1;
+    (\forall char_P[..] s2;
+      (\forall integer n;
+        ((memcmp{L}(s1, s2, n) == 0) <==>
+          (\forall integer i;
+            (((0 <= i) && (i < n)) ==> ((s1 + i).char_M == (s2 + i).char_M)))))))
+  
+}
+
+axiomatic MemChr {
+
+  logic boolean memchr{L}(char_P[..] s, integer c, integer n)
+   
+  axiom memchr_def{L} :
+  (\forall char_P[..] s;
+    (\forall integer c;
+      (\forall integer n;
+        ((memchr{L}(s, c, n) == true) <==>
+          (\exists int32 i;
+            (((0 <= i) && (i < n)) && ((s + i).char_M == c)))))))
+  
+}
+
+axiomatic MemSet {
+
+  logic boolean memset{L}(char_P[..] s, integer c, integer n)
+   
+  axiom memset_def{L} :
+  (\forall char_P[..] s;
+    (\forall integer c;
+      (\forall integer n;
+        ((memset{L}(s, c, n) == true) <==>
+          (\forall integer i;
+            (((0 <= i) && (i < n)) ==> ((s + i).char_M == c)))))))
+  
+}
+
+axiomatic StrLen {
+
+  logic integer strlen{L}(char_P[..] s)
+   
+  axiom strlen_pos_or_null{L} :
+  (\forall char_P[..] s;
+    (\forall integer i;
+      (((((0 <= i) && (i <= 2147483647)) &&
+          (\forall integer j;
+            (((0 <= j) && (j < i)) ==> ((s + j).char_M != 0)))) &&
+         ((s + i).char_M == 0)) ==>
+        (strlen{L}(s) == i))))
+   
+  axiom strlen_neg{L} :
+  (\forall char_P[..] s;
+    ((\forall integer i;
+       (((0 <= i) && (i <= 2147483647)) ==> ((s + i).char_M != 0))) ==>
+      (strlen{L}(s) < 0)))
+   
+  axiom strlen_range{L} :
+  (\forall char_P[..] s;
+    (strlen{L}(s) <= 2147483647))
+   
+  axiom strlen_before_null{L} :
+  (\forall char_P[..] s;
+    (\forall integer i;
+      (((0 <= i) && (i < strlen{L}(s))) ==> ((s + i).char_M != 0))))
+   
+  axiom strlen_at_null{L} :
+  (\forall char_P[..] s;
+    ((0 <= strlen{L}(s)) ==> ((s + strlen{L}(s)).char_M == 0)))
+   
+  axiom strlen_not_zero{L} :
+  (\forall char_P[..] s;
+    (\forall integer i;
+      ((((0 <= i) && (i <= strlen{L}(s))) && ((s + i).char_M != 0)) ==>
+        (i < strlen{L}(s)))))
+   
+  axiom strlen_zero{L} :
+  (\forall char_P[..] s;
+    (\forall integer i;
+      ((((0 <= i) && (i <= strlen{L}(s))) && ((s + i).char_M == 0)) ==>
+        (i == strlen{L}(s)))))
+   
+  axiom strlen_sup{L} :
+  (\forall char_P[..] s;
+    (\forall integer i;
+      (((0 <= i) && ((s + i).char_M == 0)) ==>
+        ((0 <= strlen{L}(s)) && (strlen{L}(s) <= i)))))
+   
+  axiom strlen_shift{L} :
+  (\forall char_P[..] s;
+    (\forall integer i;
+      (((0 <= i) && (i <= strlen{L}(s))) ==>
+        (strlen{L}((s + i)) == (strlen{L}(s) - i)))))
+   
+  axiom strlen_create{L} :
+  (\forall char_P[..] s;
+    (\forall integer i;
+      ((((0 <= i) && (i <= 2147483647)) && ((s + i).char_M == 0)) ==>
+        ((0 <= strlen{L}(s)) && (strlen{L}(s) <= i)))))
+   
+  axiom strlen_create_shift{L} :
+  (\forall char_P[..] s;
+    (\forall integer i;
+      (\forall integer k;
+        ((((0 <= k) && ((k <= i) && (i <= 2147483647))) &&
+           ((s + i).char_M == 0)) ==>
+          ((0 <= strlen{L}((s + k))) && (strlen{L}((s + k)) <= (i - k)))))))
+   
+  axiom memcmp_strlen_left{L} :
+  (\forall char_P[..] s1;
+    (\forall char_P[..] s2;
+      (\forall integer n;
+        (((memcmp{L}(s1, s2, n) == 0) && (strlen{L}(s1) < n)) ==>
+          (strlen{L}(s1) == strlen{L}(s2))))))
+   
+  axiom memcmp_strlen_right{L} :
+  (\forall char_P[..] s1;
+    (\forall char_P[..] s2;
+      (\forall integer n;
+        (((memcmp{L}(s1, s2, n) == 0) && (strlen{L}(s2) < n)) ==>
+          (strlen{L}(s1) == strlen{L}(s2))))))
+   
+  axiom memcmp_strlen_shift_left{L} :
+  (\forall char_P[..] s1;
+    (\forall char_P[..] s2;
+      (\forall integer k;
+        (\forall integer n;
+          ((((memcmp{L}(s1, (s2 + k), n) == 0) && (0 <= k)) &&
+             (strlen{L}(s1) < n)) ==>
+            ((0 <= strlen{L}(s2)) && (strlen{L}(s2) <= (k + strlen{L}(s1)))))))))
+   
+  axiom memcmp_strlen_shift_right{L} :
+  (\forall char_P[..] s1;
+    (\forall char_P[..] s2;
+      (\forall integer k;
+        (\forall integer n;
+          ((((memcmp{L}((s1 + k), s2, n) == 0) && (0 <= k)) &&
+             (strlen{L}(s2) < n)) ==>
+            ((0 <= strlen{L}(s1)) && (strlen{L}(s1) <= (k + strlen{L}(s2)))))))))
+  
+}
+
+axiomatic StrCmp {
+
+  logic integer strcmp{L}(char_P[..] s1, char_P[..] s2)
+   
+  axiom strcmp_range{L} :
+  (\forall char_P[..] s1;
+    (\forall char_P[..] s2;
+      ((((- 2147483647) - 1) <= strcmp{L}(s1, s2)) &&
+        (strcmp{L}(s1, s2) <= 2147483647))))
+   
+  axiom strcmp_zero{L} :
+  (\forall char_P[..] s1;
+    (\forall char_P[..] s2;
+      ((strcmp{L}(s1, s2) == 0) <==>
+        ((strlen{L}(s1) == strlen{L}(s2)) &&
+          (\forall integer i;
+            (((0 <= i) && (i <= strlen{L}(s1))) ==>
+              ((s1 + i).char_M == (s2 + i).char_M)))))))
+  
+}
+
+axiomatic StrNCmp {
+
+  logic integer strncmp{L}(char_P[..] s1, char_P[..] s2, integer n)
+   
+  axiom strncmp_zero{L} :
+  (\forall char_P[..] s1;
+    (\forall char_P[..] s2;
+      (\forall integer n;
+        ((strncmp{L}(s1, s2, n) == 0) <==>
+          (((strlen{L}(s1) < n) && (strcmp{L}(s1, s2) == 0)) ||
+            (\forall integer i;
+              (((0 <= i) && (i < n)) ==>
+                ((s1 + i).char_M == (s2 + i).char_M))))))))
+  
+}
+
+axiomatic StrChr {
+
+  logic boolean strchr{L}(char_P[..] s, integer c)
+   
+  axiom strchr_def{L} :
+  (\forall char_P[..] s;
+    (\forall integer c;
+      ((strchr{L}(s, c) == true) <==>
+        (\exists integer i;
+          (((0 <= i) && (i <= strlen{L}(s))) && ((s + i).char_M == c))))))
+  
+}
+
+axiomatic WcsLen {
+
+  logic integer wcslen{L}(unsigned_short_P[..] s)
+   
+  axiom wcslen_pos_or_null{L} :
+  (\forall unsigned_short_P[..] s;
+    (\forall integer i;
+      ((((0 <= i) &&
+          (\forall integer j;
+            (((0 <= j) && (j < i)) ==> ((s + j).unsigned_short_M != 0)))) &&
+         ((s + i).unsigned_short_M == 0)) ==>
+        (wcslen{L}(s) == i))))
+   
+  axiom wcslen_neg{L} :
+  (\forall unsigned_short_P[..] s;
+    ((\forall integer i;
+       ((0 <= i) ==> ((s + i).unsigned_short_M != 0))) ==>
+      (wcslen{L}(s) < 0)))
+   
+  axiom wcslen_before_null{L} :
+  (\forall unsigned_short_P[..] s;
+    (\forall int32 i;
+      (((0 <= i) && (i < wcslen{L}(s))) ==> ((s + i).unsigned_short_M != 0))))
+   
+  axiom wcslen_at_null{L} :
+  (\forall unsigned_short_P[..] s;
+    ((0 <= wcslen{L}(s)) ==> ((s + wcslen{L}(s)).unsigned_short_M == 0)))
+   
+  axiom wcslen_not_zero{L} :
+  (\forall unsigned_short_P[..] s;
+    (\forall int32 i;
+      ((((0 <= i) && (i <= wcslen{L}(s))) && ((s + i).unsigned_short_M != 0)) ==>
+        (i < wcslen{L}(s)))))
+   
+  axiom wcslen_zero{L} :
+  (\forall unsigned_short_P[..] s;
+    (\forall int32 i;
+      ((((0 <= i) && (i <= wcslen{L}(s))) && ((s + i).unsigned_short_M == 0)) ==>
+        (i == wcslen{L}(s)))))
+   
+  axiom wcslen_sup{L} :
+  (\forall unsigned_short_P[..] s;
+    (\forall int32 i;
+      (((0 <= i) && ((s + i).unsigned_short_M == 0)) ==>
+        ((0 <= wcslen{L}(s)) && (wcslen{L}(s) <= i)))))
+   
+  axiom wcslen_shift{L} :
+  (\forall unsigned_short_P[..] s;
+    (\forall int32 i;
+      (((0 <= i) && (i <= wcslen{L}(s))) ==>
+        (wcslen{L}((s + i)) == (wcslen{L}(s) - i)))))
+   
+  axiom wcslen_create{L} :
+  (\forall unsigned_short_P[..] s;
+    (\forall int32 i;
+      (((0 <= i) && ((s + i).unsigned_short_M == 0)) ==>
+        ((0 <= wcslen{L}(s)) && (wcslen{L}(s) <= i)))))
+   
+  axiom wcslen_create_shift{L} :
+  (\forall unsigned_short_P[..] s;
+    (\forall int32 i;
+      (\forall int32 k;
+        ((((0 <= k) && (k <= i)) && ((s + i).unsigned_short_M == 0)) ==>
+          ((0 <= wcslen{L}((s + k))) && (wcslen{L}((s + k)) <= (i - k)))))))
+  
+}
+
+axiomatic WcsCmp {
+
+  logic integer wcscmp{L}(unsigned_short_P[..] s1, unsigned_short_P[..] s2)
+   
+  axiom wcscmp_zero{L} :
+  (\forall unsigned_short_P[..] s1;
+    (\forall unsigned_short_P[..] s2;
+      ((wcscmp{L}(s1, s2) == 0) <==>
+        ((wcslen{L}(s1) == wcslen{L}(s2)) &&
+          (\forall integer i;
+            (((0 <= i) && (i <= wcslen{L}(s1))) ==>
+              ((s1 + i).unsigned_short_M == (s2 + i).unsigned_short_M)))))))
+  
+}
+
+axiomatic WcsNCmp {
+
+  logic integer wcsncmp{L}(unsigned_short_P[..] s1, unsigned_short_P[..] s2,
+                           integer n)
+   
+  axiom wcsncmp_zero{L} :
+  (\forall unsigned_short_P[..] s1;
+    (\forall unsigned_short_P[..] s2;
+      (\forall integer n;
+        ((wcsncmp{L}(s1, s2, n) == 0) <==>
+          (((wcslen{L}(s1) < n) && (wcscmp{L}(s1, s2) == 0)) ||
+            (\forall integer i;
+              (((0 <= i) && (i < n)) ==>
+                ((s1 + i).unsigned_short_M == (s2 + i).unsigned_short_M))))))))
+  
+}
+
+logic integer minimum(integer i, integer j) =
+(if (i < j) then i else j)
+
+logic integer maximum(integer i, integer j) =
+(if (i < j) then j else i)
+
+logic valid_string{L}(char_P[..] s) =
+((0 <= strlen{L}(s)) &&
+  ((\offset_min(s) <= 0) && (\offset_max(s) >= strlen{L}(s))))
+
+logic valid_string_or_null{L}(char_P[..] s) =
+((s == null) || valid_string{L}(s))
+
+logic valid_wstring{L}(unsigned_short_P[..] s) =
+((0 <= wcslen{L}(s)) &&
+  ((\offset_min(s) <= 0) && (\offset_max(s) >= wcslen{L}(s))))
+
+logic valid_wstring_or_null{L}(unsigned_short_P[..] s) =
+((s == null) || valid_wstring{L}(s))
+
+int_P[0..9] t;
+
+invariant valid_t :
+((\offset_min(t) <= 0) && (\offset_max(t) >= 9))
+
+int32 f()
+behavior default:
+  assumes true;
+  assigns (t + [0..3]).int_M;
+  ensures (C_13 : true);
+{  
+   (var int32 __retres);
+   
+   {  
+      {  (C_2 : ((C_1 : (t + 3).int_M) = 0));
+         (C_5 : ((C_4 : (t + 2).int_M) = (C_3 : (t + 3).int_M)));
+         (C_8 : ((C_7 : (t + 1).int_M) = (C_6 : (t + 2).int_M)));
+         (C_11 : ((C_10 : (t + 0).int_M) = (C_9 : (t + 1).int_M)))
+      };
+      (C_12 : (__retres = 0));
+      
+      (return __retres)
+   }
+}
+
+int32 g()
+behavior default:
+  assumes true;
+  assigns (t + \at(\result,Post)).int_M;
+  ensures (C_17 : true);
+{  
+   (var int32 __retres_0);
+   
+   {  (C_15 : ((C_14 : (t + 2).int_M) = 9));
+      (C_16 : (__retres_0 = 2));
+      
+      (return __retres_0)
+   }
+}
+
+WHYLIB=PPCHOME/why/lib PPCHOME/why/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs assigns_range.jessie/assigns_range.cloc assigns_range.jessie/assigns_range.jc

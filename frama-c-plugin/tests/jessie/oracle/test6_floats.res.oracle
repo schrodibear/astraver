@@ -1,0 +1,70 @@
+Options are: -journal-disable -cpp-extra-args -I PPCHOME/share/jessie -jessie-analysis -jessie-gen-only test6_floats.c
+[preprocessing] running gcc -C -E -I. -I PPCHOME/share/jessie -dD test6_floats.c
+Starting Jessie translation
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+type int8 = -128..127
+
+type int32 = -2147483648..2147483647
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+logic my_killing_prop(double uc, double up, int32 n)
+
+double comput_seq(double u0, double u1, int32 N)
+behavior default:
+  assumes true;
+  ensures (C_14 : true);
+{  
+   (var int32 i);
+   
+   (var double uprev);
+   
+   (var double ucur);
+   
+   (var double tmp);
+   
+   {  (C_1 : (uprev = u0));
+      (C_2 : (ucur = u1));
+      (C_3 : (i = 2));
+      
+      {  
+         loop 
+         while (true)
+         {  
+            {  (if (i <= N) then () else 
+               (goto while_0_break));
+               (C_6 : (tmp = (C_5 : ((C_4 : (2 :> double)) * ucur))));
+               (C_8 : (tmp = (C_7 : (tmp - uprev))));
+               (C_9 : (uprev = ucur));
+               (C_10 : (ucur = tmp));
+               (C_13 : (i = (C_12 : ((C_11 : (i + 1)) :> int32))))
+            }
+         };
+         (while_0_break : ())
+      };
+      
+      (return ucur)
+   }
+}
+
+WHYLIB=PPCHOME/why/lib PPCHOME/why/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs test6_floats.jessie/test6_floats.cloc test6_floats.jessie/test6_floats.jc

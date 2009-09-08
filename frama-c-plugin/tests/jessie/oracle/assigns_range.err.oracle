@@ -1,0 +1,5 @@
+Producing Jessie files in subdir assigns_range.jessie
+File assigns_range.jessie/assigns_range.jc written.
+File assigns_range.jessie/assigns_range.cloc written.
+File "assigns_range.jessie/assigns_range.jc", line 392, characters 15-32: typing error: label `Post' not found
+make[1]: *** [assigns_range.regtest] Erreur 1

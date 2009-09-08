@@ -69,6 +69,15 @@ APRONLIB = @APRONLIB@
 APRONLIBS = @APRONLIBS@
 APRONBYTLIBS = $(APRONLIBS:.cmxa=.cma)
 
+FRAMAC= @FRAMAC@
+
+ifeq ($(FRAMAC),yes)
+JESSIE_PLUGIN_BYTE= jessie_plugin.byte
+JESSIE_PLUGIN_OPT= jessie_plugin.opt
+JESSIE_PLUGIN_BEST= jessie_plugin.$(OCAMLBEST)
+.PHONY: $(JESSIE_PLUGIN_BYTE) $(JESSIE_PLUGIN_OPT)
+endif
+
 ATPLIB = -I atp
 
 COQC7  = @COQC7@
@@ -152,11 +161,12 @@ else
 JCLIB=jc/jc.cmo
 endif
 
-all: $(BINARY) $(WHYCONFIG) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST)
+all: $(BINARY) $(WHYCONFIG) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST) $(JESSIE_PLUGIN_BEST)
 
 opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.opt bin/krakatoa.opt
-
-byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.byte
+	$(JESSIE_PLUGIN_OPT)
+byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.byte \
+	$(JESSIE_PLUGIN_BYTE)
 
 .PHONY: check
 
@@ -201,6 +211,13 @@ bin/why-config.byte: $(WHYCONFIGCMO)
 
 
 # why
+CMO_EXPORT =  src/lib.cmo src/rc.cmo src/loc.cmo \
+	   src/ident.cmo src/print_real.cmo  \
+	   src/effect.cmo src/pp.cmo src/option_misc.cmo src/misc.cmo 	\
+	   src/parser.cmo src/lexer.cmo src/report.cmo \
+           src/env.cmo src/rename.cmo src/explain.cmo 	\
+	   src/xml.cmo src/project.cmo 
+
 CMO = src/lib.cmo src/rc.cmo tools/dpConfig.cmo \
       src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
 	   src/ident.cmo src/print_real.cmo  \
@@ -287,16 +304,15 @@ bin/caduceus.static: $(CCMXA) $(CCMX)
 
 
 # jessie
-JCCML_EXPORT = src/lib.ml src/rc.ml src/loc.ml src/pp.ml src/option_misc.ml \
-	jc/jc_type_var.ml jc/output.ml \
+JCCML_EXPORT = jc/jc_type_var.ml jc/output.ml \
 	jc/jc_common_options.ml jc/jc_stdlib.ml \
 	jc/jc_envset.ml jc/jc_region.ml jc/jc_fenv.ml \
 	jc/jc_constructors.ml \
 	jc/jc_pervasives.ml jc/jc_iterators.ml \
 	jc/jc_output_misc.ml jc/jc_poutput.ml jc/jc_output.ml jc/jc_noutput.ml
-JCCMO_EXPORT = $(JCCML_EXPORT:.ml=.cmo)
-JCCMX_EXPORT = $(JCCML_EXPORT:.ml=.cmx)
-JCCMI_EXPORT = jc/jc_ast.cmi jc/jc_env.cmi jc/jc.cmi $(JCCML_EXPORT:.ml=.cmi)
+JCCMO_EXPORT = $(CMO_EXPORT) $(JCCML_EXPORT:.ml=.cmo)
+JCCMX_EXPORT = $(JCCMO_EXPORT:.cmo=.cmx)
+JCCMI_EXPORT = jc/jc_ast.cmi jc/jc_env.cmi jc/jc.cmi $(JCCMO_EXPORT:.cmo=.cmi)
 
 JCCMO = src/version.cmo \
 	@ATPCMO@ $(JCCMO_EXPORT) \
@@ -326,22 +342,37 @@ atp/atp.cmo:
 	make -C atp atp.cmo
 
 jc/jc.cmi jc/jc.cmo: $(JCCMO_EXPORT)
-	$(OCAMLC) $(BFLAGS) -pack -o jc/jc.cmo $^
+	$(OCAMLC) $(BFLAGS) -pack -o jc/jc.cmo src/ast.cmi $^
 
 jc/jc.cmx: $(JCCMX_EXPORT)
-	$(OCAMLOPT) $(OFLAGS) -pack -o $@ $^
+	$(OCAMLOPT) $(OFLAGS) -pack -o $@ src/ast.cmi $^
 
 ppc: jc/jc.cmi jc/jc.cmo jc/jc.cmx
 
 bin/jessie.opt: $(JCCMX)
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) $(OFLAGS) $(APRONLIB) $(APRONLIBS) $(ATPLIB) -o $@ \
-		unix.cmxa nums.cmxa graph.cmxa $^
+		unix.cmxa str.cmxa nums.cmxa graph.cmxa $^
 	$(STRIP)    $@
 
 bin/jessie.byte: $(JCCMO) 
 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) $(BFLAGS) $(APRONLIB) $(APRONBYTLIBS) $(ATPLIB) -o $@ \
-		unix.cma nums.cma graph.cma $^
+		unix.cma str.cma nums.cma graph.cma $^
 
+
+# Frama-C plugin for Jessie
+ifeq ($(FRAMAC),yes)
+JESSIE_PLUGIN_PATH=frama-c-plugin
+$(JESSIE_PLUGIN_BYTE): jc/jc.cmo $(JCCMO) $(CMO)
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH) Jessie.cmo
+
+$(JESSIE_PLUGIN_OPT): $(JCLIB) $(JCCMX) $(CMX)
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH)
+
+install: 
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH) install
+clean::
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH) clean
+endif
 
 # krakatoa
 # CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
@@ -1159,11 +1190,12 @@ coq-clean::
 
 .PHONY: depend
 .depend depend: $(GENERATED)
-	if test "$(FRAMAC)" != "yes"; then \
-	  rm -f .depend; \
-	  $(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml mix/*.mli mix/*.ml ml/*.ml ml/*.mli > .depend; \
-	  $(OCAMLDEP) -slash $(MLINCLUDES) ml/parsing/*.ml ml/parsing/*.mli ml/typing/*.ml ml/typing/*.mli ml/utils/*.ml ml/utils/*.mli >> .depend; \
-	fi
+	rm -f .depend
+	$(OCAMLDEP) -slash $(INCLUDES) src/*.ml src/*.mli jc/*.mli jc/*.ml c/*.mli c/*.ml java/*.mli java/*.ml intf/*.ml intf/*.mli tools/*.mli tools/*.ml mix/*.mli mix/*.ml ml/*.ml ml/*.mli > .depend
+	$(OCAMLDEP) -slash $(MLINCLUDES) ml/parsing/*.ml ml/parsing/*.mli ml/typing/*.ml ml/typing/*.mli ml/utils/*.ml ml/utils/*.mli >> .depend
+ifeq ($(FRAMAC),yes)
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
+endif
 
 .depend.coq: #lib/coq*/*.v
 	if test @COQ@ = yes; then \

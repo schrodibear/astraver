@@ -1,0 +1,934 @@
+*** Begin Jessie file generated for diff ***
+cat fs248.jc
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+
+logic type padding
+
+type _bool = 0..1
+
+type int8 = -128..127
+
+type uint8 = 0..255
+
+type int32 = -2147483648..2147483647
+
+type uint32 = 0..4294967295
+
+type int16 = -32768..32767
+
+type uint16 = 0..65535
+
+type int64 = -9223372036854775808..9223372036854775807
+
+type uint64 = 0..18446744073709551615
+
+logic uint32 struct_int_P_x_to_unsigned_int_(int_P[..] x) reads \nothing;
+
+logic int_P[..] unsigned_int__to_struct_int_P_x(uint32 x) reads \nothing;
+
+axiom struct_int_P_x_to_unsigned_int__axiom :
+(\forall int_P[..] x;
+  (x == unsigned_int__to_struct_int_P_x(struct_int_P_x_to_unsigned_int_(x))))
+
+axiom unsigned_int__to_struct_int_P_x_axiom :
+(\forall uint32 x;
+  (x == struct_int_P_x_to_unsigned_int_(unsigned_int__to_struct_int_P_x(x))))
+
+tag int_P = void_P with {
+  void_P[..] int_M: 32;
+}
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+tag S = {
+  int32 a: 32; 
+  int32 b: 32; 
+  int32 c_1: 32;
+}
+
+type S = [S]
+
+tag T = {
+  S[0] s1: 96; 
+  S[0] s2: 96; 
+  S[0] s3: 96; 
+  S[0] s4: 96;
+}
+
+type T = [T]
+
+type u_1 = [u_1 ^ llP ^ i_1P ^ c_2P]
+
+tag u_1 = {
+  padding padding: 64;
+}
+
+tag llP = {
+  int64 llM: 64;
+}
+
+tag i_1P = {
+  int32 i_1M: 32; 
+  padding padding_1: 32;
+}
+
+tag c_2P = {
+  int8 c_2M: 8; 
+  padding padding_2: 56;
+}
+
+logic integer memcmp(char_P[..] s1, char_P[..] s2, integer n) reads (s1 +
+                                                                    [0..
+                                                                    (n -
+                                                                    1)]).char_M,
+(s2 + [0..(n - 1)]).char_M;
+
+axiom memcmp_range :
+(\forall char_P[..] s1;
+  (\forall char_P[..] s2;
+    (\forall integer n;
+      ((((- 2147483647) - 1) <= memcmp(s1, s2, n)) &&
+        (memcmp(s1, s2, n) <= 2147483647)))))
+
+axiom memcmp_zero :
+(\forall char_P[..] s1;
+  (\forall char_P[..] s2;
+    (\forall integer n;
+      ((memcmp(s1, s2, n) == 0) <==>
+        (\forall integer i;
+          (((0 <= i) && (i < n)) ==> ((s1 + i).char_M == (s2 + i).char_M)))))))
+
+logic boolean memchr(char_P[..] s, integer c, integer n) reads (s +
+                                                                 [0..(n - 1)]).char_M;
+
+axiom memchr_def :
+(\forall char_P[..] s;
+  (\forall integer c;
+    (\forall integer n;
+      ((memchr(s, c, n) == true) <==>
+        (\exists int32 i;
+          (((0 <= i) && (i < n)) && ((s + i).char_M == c)))))))
+
+logic boolean memset(char_P[..] s, integer c, integer n) reads (s +
+                                                                 [0..(n - 1)]).char_M;
+
+axiom memset_def :
+(\forall char_P[..] s;
+  (\forall integer c;
+    (\forall integer n;
+      ((memset(s, c, n) == true) <==>
+        (\forall integer i;
+          (((0 <= i) && (i < n)) ==> ((s + i).char_M == c)))))))
+
+logic integer strlen(char_P[..] s) reads (s + [0..]).char_M;
+
+logic valid_string(char_P[..] s) =
+((0 <= strlen(s)) &&
+  ((\offset_min(s) <= 0) && (\offset_max(s) >= strlen(s))))
+
+axiom strlen_range :
+(\forall char_P[..] s;
+  ((((- 2147483647) - 1) <= strlen(s)) && (strlen(s) <= 2147483647)))
+
+axiom strlen_before_null :
+(\forall char_P[..] s;
+  (\forall integer i;
+    (((0 <= i) && (i < strlen(s))) ==> ((s + i).char_M != 0))))
+
+axiom strlen_at_null :
+(\forall char_P[..] s;
+  ((0 <= strlen(s)) ==> ((s + strlen(s)).char_M == 0)))
+
+axiom strlen_not_zero :
+(\forall char_P[..] s;
+  (\forall integer i;
+    ((((0 <= i) && (i <= strlen(s))) && ((s + i).char_M != 0)) ==>
+      (i < strlen(s)))))
+
+axiom strlen_zero :
+(\forall char_P[..] s;
+  (\forall integer i;
+    ((((0 <= i) && (i <= strlen(s))) && ((s + i).char_M == 0)) ==>
+      (i == strlen(s)))))
+
+axiom strlen_fwd_zero :
+(\forall char_P[..] s;
+  (\forall integer i;
+    (((0 <= i) && ((s + i).char_M == 0)) ==>
+      ((0 <= strlen(s)) && (strlen(s) <= i)))))
+
+axiom strlen_sup :
+(\forall char_P[..] s;
+  (\forall integer i;
+    (((0 <= i) && ((s + i).char_M == 0)) ==>
+      ((0 <= strlen(s)) && (strlen(s) <= i)))))
+
+axiom strlen_shift :
+(\forall char_P[..] s;
+  (\forall integer i;
+    (((0 <= i) && (i <= strlen(s))) ==> (strlen((s + i)) == (strlen(s) - i)))))
+
+axiom strlen_create :
+(\forall char_P[..] s;
+  (\forall integer i;
+    (((0 <= i) && ((s + i).char_M == 0)) ==>
+      ((0 <= strlen(s)) && (strlen(s) <= i)))))
+
+axiom strlen_create_shift :
+(\forall char_P[..] s;
+  (\forall integer i;
+    (\forall integer k;
+      ((((0 <= k) && (k <= i)) && ((s + i).char_M == 0)) ==>
+        ((0 <= strlen((s + k))) && (strlen((s + k)) <= (i - k)))))))
+
+logic integer strcmp(char_P[..] s1, char_P[..] s2) reads (s1 +
+                                                           [0..strlen(s1)]).char_M,
+(s2 + [0..strlen(s2)]).char_M;
+
+axiom strcmp_range :
+(\forall char_P[..] s1;
+  (\forall char_P[..] s2;
+    ((((- 2147483647) - 1) <= strcmp(s1, s2)) &&
+      (strcmp(s1, s2) <= 2147483647))))
+
+axiom strcmp_zero :
+(\forall char_P[..] s1;
+  (\forall char_P[..] s2;
+    ((strcmp(s1, s2) == 0) <==>
+      ((strlen(s1) == strlen(s2)) &&
+        (\forall integer i;
+          (((0 <= i) && (i <= strlen(s1))) ==>
+            ((s1 + i).char_M == (s2 + i).char_M)))))))
+
+logic boolean strchr(char_P[..] s, integer c) reads (s + [0..strlen(s)]).char_M;
+
+axiom strchr_def :
+(\forall char_P[..] s;
+  (\forall integer c;
+    ((strchr(s, c) == true) <==>
+      (\exists integer i;
+        (((0 <= i) && (i <= strlen(s))) && ((s + i).char_M == c))))))
+
+unit f(char_P[..] x_0, int_P[..] y_0)
+behavior default:
+  assumes true;
+  ensures (C_27 : true);
+{  
+   (var char_P[..] tmp);
+   
+   (var int64 __jc_off_x_0);
+   
+   (var int64 __jc_off_tmp);
+   
+   {  (C_1 : (__jc_off_x_0 = 0));
+      (C_9 : ((C_8 : (C_7 : (x_0 + __jc_off_x_0)).char_M) = (C_6 : ((C_5 : 
+                                                                    ((C_4 : (
+                                                                    (C_3 : 
+                                                                    (C_2 : 
+                                                                    (x_0 +
+                                                                    __jc_off_x_0)).char_M) :> int32)) +
+                                                                    1)) :> int8))));
+      (C_10 : (__jc_off_tmp = __jc_off_x_0));
+      (C_13 : (__jc_off_x_0 = (C_12 : ((C_11 : (__jc_off_x_0 + 1)) :> int64))));
+      (C_21 : ((C_20 : (C_19 : (x_0 + __jc_off_x_0)).char_M) = (C_18 : (
+                                                               (C_17 : 
+                                                               ((C_16 : (
+                                                                (C_15 : 
+                                                                (C_14 : 
+                                                                (x_0 +
+                                                                  __jc_off_x_0)).char_M) :> int32)) +
+                                                                 1)) :> int8))));
+      (C_26 : ((C_25 : y_0.int_M) = (C_24 : ((C_23 : ((C_22 : y_0.int_M) + 1)) :> int32))));
+      
+      (return ())
+   }
+}
+
+int32 Frama_C_dump_each()
+behavior default:
+  assumes true;
+  ensures (C_28 : true);
+behavior generated:
+  assumes true;
+  ensures (C_29 : true);
+;
+
+unit f2(char_P[..] x_0_1)
+behavior default:
+  assumes true;
+  ensures (C_46 : true);
+{  
+   (var char_P[..] q_0);
+   
+   (var int64 __jc_off_q_0);
+   
+   {  (C_35 : ((C_34 : x_0_1.char_M) = (C_33 : ((C_32 : ((C_31 : ((C_30 : x_0_1.char_M) :> int32)) +
+                                                          1)) :> int8))));
+      (C_36 : (__jc_off_q_0 = 1));
+      (C_44 : ((C_43 : (C_42 : (x_0_1 + __jc_off_q_0)).char_M) = (C_41 : (
+                                                                 (C_40 : 
+                                                                 ((C_39 : (
+                                                                  (C_38 : 
+                                                                  (C_37 : 
+                                                                  (x_0_1 +
+                                                                    __jc_off_q_0)).char_M) :> int32)) +
+                                                                   1)) :> int8))));
+      (C_45 : Frama_C_dump_each());
+      
+      (return ())
+   }
+}
+
+int_P[0] A;
+
+int_P[0] B;
+
+int32 C;
+
+int32 D;
+
+int32 E;
+
+int32 F;
+
+int32 G;
+
+int_P[0..4] p;
+
+invariant valid_p :
+((\offset_min(p) <= 0) && (\offset_max(p) >= 4))
+
+int_P[0..4] q;
+
+invariant valid_q :
+((\offset_min(q) <= 0) && (\offset_max(q) >= 4))
+
+int_P[0..4] p2;
+
+invariant valid_p2 :
+((\offset_min(p2) <= 0) && (\offset_max(p2) >= 4))
+
+int_P[0..4] q2;
+
+invariant valid_q2 :
+((\offset_min(q2) <= 0) && (\offset_max(q2) >= 4))
+
+int32 t;
+
+int32 u;
+
+int32 v;
+
+int32 w;
+
+int_P[0] x;
+
+int_P[0] y;
+
+int_P[0] z;
+
+int32 t2;
+
+int32 v2;
+
+int_P[..] PTR1;
+
+int_P[..] PTR2;
+
+int_P[..] PTR3;
+
+int_P[..] PTR4;
+
+int32 c;
+
+int32 c1;
+
+int32 c2;
+
+int32 c3;
+
+int32 c4;
+
+unit main()
+behavior default:
+  assumes true;
+  ensures (C_99 : true);
+{  
+   {  (C_47 : __globinit_whole_program());
+      (C_49 : ((C_48 : A.int_M) = 1));
+      (C_51 : ((C_50 : B.int_M) = 2));
+      (C_53 : f((C_52 : (A :> char_P)), B));
+      (C_55 : f((C_54 : (A :> char_P)), A));
+      (C_57 : f((C_56 : (p :> char_P)), B));
+      (C_59 : ((C_58 : x.int_M) = 1));
+      (C_61 : ((C_60 : y.int_M) = 2));
+      (C_63 : ((C_62 : z.int_M) = 3));
+      (if (c1 != 0) then (C_65 : (PTR1 = y)) else (C_64 : (PTR1 = x)));
+      (if (c2 != 0) then (C_67 : (PTR2 = y)) else (C_66 : (PTR2 = z)));
+      (C_68 : (PTR3 = PTR1));
+      (C_70 : ((C_69 : PTR1.int_M) = 4));
+      (C_72 : (t = (C_71 : PTR1.int_M)));
+      (C_74 : ((C_73 : PTR2.int_M) = 5));
+      (C_76 : (v = (C_75 : PTR1.int_M)));
+      (C_78 : (u = (C_77 : PTR2.int_M)));
+      (C_80 : (w = (C_79 : PTR3.int_M)));
+      (if (c3 != 0) then (C_84 : (PTR4 = (C_83 : (p2 + 1)))) else (C_82 : (PTR4 = 
+                                                                  (C_81 : 
+                                                                  (q2 +
+                                                                    2)))));
+      (C_86 : ((C_85 : PTR4.int_M) = 6));
+      (C_88 : (t2 = (C_87 : PTR4.int_M)));
+      (C_91 : ((C_90 : (C_89 : (PTR4 + -1)).int_M) = 7));
+      (C_98 : (v2 = (C_97 : (C_96 : (PTR4 +
+                                      (C_95 : ((C_94 : ((C_93 : ((C_92 : 
+                                                                 (v2 -
+                                                                   v2)) :> int32)) -
+                                                         1)) :> int32)))).int_M)));
+      
+      (return ())
+   }
+}
+
+S[0] e;
+
+invariant valid_e :
+((\offset_min(e) <= 0) && (\offset_max(e) >= 0))
+
+S[0] g;
+
+invariant valid_g :
+((\offset_min(g) <= 0) && (\offset_max(g) >= 0))
+
+unit main3()
+behavior default:
+  assumes true;
+  ensures (C_181 : true);
+{  
+   (var S[..] p_0);
+   
+   (var S[0] s1_1);
+   
+   (var S[0] s2_1);
+   
+   (var int32 tmp_0);
+   
+   (var int32 tmp_3);
+   
+   {  (C_101 : (s1_1 = (C_100 : (new S[1]))));
+      (C_103 : (s2_1 = (C_102 : (new S[1]))));
+      (C_105 : ((C_104 : s1_1.a) = 2));
+      (C_107 : ((C_106 : s1_1.b) = 4));
+      (C_109 : ((C_108 : s1_1.c_1) = 6));
+      (C_111 : ((C_110 : s2_1.a) = 1));
+      (C_113 : ((C_112 : s2_1.b) = 3));
+      (C_115 : ((C_114 : s2_1.c_1) = 5));
+      (if (c != 0) then (C_117 : (p_0 = s1_1)) else (C_116 : (p_0 = s2_1)));
+      (C_119 : ((C_118 : p_0.a) = 7));
+      (C_121 : (t = (C_120 : p_0.b)));
+      (C_123 : ((C_122 : z.int_M) = 2));
+      (if ((C_128 : ((C_127 : (c + (C_126 : (1 :> int32)))) :> int32)) != 0) then 
+      (C_125 : (u = 0)) else (C_124 : (u = 1)));
+      (C_129 : (v = u));
+      (if (w == v) then (C_131 : ((C_130 : z.int_M) = u)) else ());
+      
+      {  
+         {  (if ((C_140 : ((C_139 : (c + (C_138 : (1 :> int32)))) :> int32)) !=
+                  0) then (C_137 : (tmp_0 = 0)) else (if ((C_136 : ((C_135 : 
+                                                                    (c +
+                                                                    (C_134 : (2 :> int32)))) :> int32)) !=
+                                                           0) then (C_133 : (tmp_0 = 1)) else 
+                                                     (C_132 : (tmp_0 = 2))))
+         };
+         (C_142 : (PTR1 = (C_141 : (p2 + tmp_0))))
+      };
+      (C_144 : (PTR2 = (C_143 : (PTR1 + 1))));
+      (if ((C_156 : ((C_155 : (c + (C_154 : (10 :> int32)))) :> int32)) != 0) then 
+      (C_153 : ((C_152 : PTR1.int_M) = 96)) else (if ((C_151 : ((C_150 : 
+                                                                (c +
+                                                                  (C_149 : (11 :> int32)))) :> int32)) !=
+                                                       0) then (C_148 : (
+                                                               (C_147 : PTR1.int_M) = 97)) else 
+                                                 (C_146 : ((C_145 : PTR1.int_M) = 98))));
+      
+      {  
+         {  (if ((C_165 : ((C_164 : (c + (C_163 : (3 :> int32)))) :> int32)) !=
+                  0) then (C_162 : (tmp_3 = 1)) else (if ((C_161 : ((C_160 : 
+                                                                    (c +
+                                                                    (C_159 : (4 :> int32)))) :> int32)) !=
+                                                           0) then (C_158 : (tmp_3 = 2)) else 
+                                                     (C_157 : (tmp_3 = 4))))
+         };
+         (C_167 : (PTR3 = (C_166 : (p2 + tmp_3))))
+      };
+      (C_169 : ((C_168 : PTR3.int_M) = 99));
+      (C_170 : (PTR4 = PTR3));
+      (C_173 : ((C_172 : x.int_M) = (C_171 : PTR1.int_M)));
+      (if (PTR4 == PTR2) then 
+      {  (C_175 : (t2 = (C_174 : PTR1.int_M)));
+         (C_178 : (v2 = (C_177 : ((C_176 : (PTR3 - PTR1)) :> int32))))
+      } else (L : 
+             (goto L)));
+      
+      {  (C_179 : (free(s1_1)));
+         (C_180 : (free(s2_1)));
+         
+         (return ())
+      }
+   }
+}
+
+T[0] h;
+
+invariant valid_h :
+((\offset_min(h) <= 0) && (\offset_max(h) >= 0))
+
+T[0] i;
+
+invariant valid_i :
+((\offset_min(i) <= 0) && (\offset_max(i) >= 0))
+
+unit main4()
+behavior default:
+  assumes true;
+  ensures (C_353 : true);
+{  
+   (var S[..] p_0_1);
+   
+   (var S[0] s);
+   
+   (var S[0] ss);
+   
+   (var S[0] sss);
+   
+   (var T[..] pt);
+   
+   (var T[0] t1);
+   
+   (var T[0] t2_0);
+   
+   {  (C_183 : (s = (C_182 : (new S[1]))));
+      (C_185 : (ss = (C_184 : (new S[1]))));
+      (C_187 : (sss = (C_186 : (new S[1]))));
+      (C_189 : (t1 = (C_188 : (new T[1]))));
+      (C_191 : (t2_0 = (C_190 : (new T[1]))));
+      (C_194 : ((C_193 : (C_192 : t1.s1).a) = 1));
+      (C_197 : ((C_196 : (C_195 : t1.s1).b) = 2));
+      (C_200 : ((C_199 : (C_198 : t1.s1).c_1) = 3));
+      (C_203 : ((C_202 : (C_201 : t1.s2).a) = 4));
+      (C_206 : ((C_205 : (C_204 : t1.s2).b) = 5));
+      (C_209 : ((C_208 : (C_207 : t1.s2).c_1) = 6));
+      (C_212 : ((C_211 : (C_210 : t1.s3).a) = 7));
+      (C_215 : ((C_214 : (C_213 : t1.s3).b) = 8));
+      (C_218 : ((C_217 : (C_216 : t1.s3).c_1) = 9));
+      (C_221 : ((C_220 : (C_219 : t1.s4).a) = 10));
+      (C_224 : ((C_223 : (C_222 : t1.s4).b) = 11));
+      (C_227 : ((C_226 : (C_225 : t1.s4).c_1) = 12));
+      (C_230 : ((C_229 : (C_228 : t2_0.s1).a) = 21));
+      (C_233 : ((C_232 : (C_231 : t2_0.s1).b) = 22));
+      (C_236 : ((C_235 : (C_234 : t2_0.s1).c_1) = 23));
+      (C_239 : ((C_238 : (C_237 : t2_0.s2).a) = 24));
+      (C_242 : ((C_241 : (C_240 : t2_0.s2).b) = 25));
+      (C_245 : ((C_244 : (C_243 : t2_0.s2).c_1) = 26));
+      (C_248 : ((C_247 : (C_246 : t2_0.s3).a) = 27));
+      (C_251 : ((C_250 : (C_249 : t2_0.s3).b) = 28));
+      (C_254 : ((C_253 : (C_252 : t2_0.s3).c_1) = 29));
+      (C_257 : ((C_256 : (C_255 : t2_0.s4).a) = 30));
+      (C_260 : ((C_259 : (C_258 : t2_0.s4).b) = 31));
+      (C_263 : ((C_262 : (C_261 : t2_0.s4).c_1) = 32));
+      (if (c != 0) then (C_267 : (p_0_1 = (C_266 : t1.s2))) else (C_265 : (p_0_1 = 
+                                                                 (C_264 : t2_0.s3))));
+      (if (c != 0) then (C_273 : (pt = (C_272 : ((C_271 : t1.s2) :> T)))) else 
+      (C_270 : (pt = (C_269 : ((C_268 : t2_0.s3) :> T)))));
+      (C_275 : ((C_274 : p_0_1.a) = 777));
+      
+      {  (C_278 : ((C_277 : s.a) = (C_276 : p_0_1.a)));
+         (C_281 : ((C_280 : s.b) = (C_279 : p_0_1.b)));
+         (C_284 : ((C_283 : s.c_1) = (C_282 : p_0_1.c_1)))
+      };
+      (C_287 : ((C_286 : (C_285 : pt.s1).b) = 888));
+      
+      {  (C_291 : ((C_290 : sss.a) = (C_289 : (C_288 : pt.s1).a)));
+         (C_295 : ((C_294 : sss.b) = (C_293 : (C_292 : pt.s1).b)));
+         (C_299 : ((C_298 : sss.c_1) = (C_297 : (C_296 : pt.s1).c_1)))
+      };
+      (C_300 : (pt = null));
+      
+      {  (C_304 : ((C_303 : ss.a) = (C_302 : (C_301 : pt.s1).a)));
+         (C_308 : ((C_307 : ss.b) = (C_306 : (C_305 : pt.s1).b)));
+         (C_312 : ((C_311 : ss.c_1) = (C_310 : (C_309 : pt.s1).c_1)))
+      };
+      (C_314 : ((C_313 : z.int_M) = 1000));
+      (if ((C_323 : ((C_322 : (c + (C_321 : (1 :> int32)))) :> int32)) != 0) then 
+      (C_320 : (u = 0)) else (if ((C_319 : ((C_318 : (c +
+                                                       (C_317 : (2 :> int32)))) :> int32)) !=
+                                   0) then (C_316 : (u = 1)) else (C_315 : (u = 2))));
+      (C_326 : (v = (C_325 : ((C_324 : (u + 1)) :> int32))));
+      (if ((C_338 : ((C_337 : (c + (C_336 : (3 :> int32)))) :> int32)) != 0) then 
+      (C_335 : ((C_334 : x.int_M) = 1)) else (if ((C_333 : ((C_332 : 
+                                                            (c +
+                                                              (C_331 : (4 :> int32)))) :> int32)) !=
+                                                   0) then (C_330 : (
+                                                           (C_329 : x.int_M) = 2)) else 
+                                             (C_328 : ((C_327 : x.int_M) = 5))));
+      (C_341 : ((C_340 : y.int_M) = (C_339 : x.int_M)));
+      (if ((C_347 : y.int_M) == v) then (C_346 : ((C_345 : z.int_M) = 
+                                        (C_344 : ((C_343 : (u -
+                                                             (C_342 : x.int_M))) :> int32)))) else ());
+      
+      {  (C_348 : (free(s)));
+         (C_349 : (free(ss)));
+         (C_350 : (free(sss)));
+         (C_351 : (free(t1)));
+         (C_352 : (free(t2_0)));
+         
+         (return ())
+      }
+   }
+}
+
+unit main5()
+behavior default:
+  assumes true;
+  ensures (C_469 : true);
+{  
+   (var S[0] sss_1);
+   
+   (var T[..] pt_1);
+   
+   (var T[0] t1_1);
+   
+   (var T[0] t2_0_1);
+   
+   {  (C_355 : (sss_1 = (C_354 : (new S[1]))));
+      (C_357 : (t1_1 = (C_356 : (new T[1]))));
+      (C_359 : (t2_0_1 = (C_358 : (new T[1]))));
+      (C_362 : ((C_361 : (C_360 : t1_1.s1).a) = 1));
+      (C_365 : ((C_364 : (C_363 : t1_1.s1).b) = 2));
+      (C_368 : ((C_367 : (C_366 : t1_1.s1).c_1) = 3));
+      (C_371 : ((C_370 : (C_369 : t1_1.s2).a) = 4));
+      (C_374 : ((C_373 : (C_372 : t1_1.s2).b) = 5));
+      (C_377 : ((C_376 : (C_375 : t1_1.s2).c_1) = 6));
+      (C_380 : ((C_379 : (C_378 : t1_1.s3).a) = 7));
+      (C_383 : ((C_382 : (C_381 : t1_1.s3).b) = 8));
+      (C_386 : ((C_385 : (C_384 : t1_1.s3).c_1) = 9));
+      (C_389 : ((C_388 : (C_387 : t1_1.s4).a) = 10));
+      (C_392 : ((C_391 : (C_390 : t1_1.s4).b) = 11));
+      (C_395 : ((C_394 : (C_393 : t1_1.s4).c_1) = 12));
+      (C_398 : ((C_397 : (C_396 : t2_0_1.s1).a) = 21));
+      (C_401 : ((C_400 : (C_399 : t2_0_1.s1).b) = 22));
+      (C_404 : ((C_403 : (C_402 : t2_0_1.s1).c_1) = 23));
+      (C_407 : ((C_406 : (C_405 : t2_0_1.s2).a) = 24));
+      (C_410 : ((C_409 : (C_408 : t2_0_1.s2).b) = 25));
+      (C_413 : ((C_412 : (C_411 : t2_0_1.s2).c_1) = 26));
+      (C_416 : ((C_415 : (C_414 : t2_0_1.s3).a) = 27));
+      (C_419 : ((C_418 : (C_417 : t2_0_1.s3).b) = 28));
+      (C_422 : ((C_421 : (C_420 : t2_0_1.s3).c_1) = 29));
+      (C_425 : ((C_424 : (C_423 : t2_0_1.s4).a) = 30));
+      (C_428 : ((C_427 : (C_426 : t2_0_1.s4).b) = 31));
+      (C_431 : ((C_430 : (C_429 : t2_0_1.s4).c_1) = 32));
+      (if (c != 0) then 
+      {  (C_440 : (pt_1 = (C_439 : ((C_438 : t1_1.s2) :> T))));
+         (C_443 : ((C_442 : (C_441 : pt_1.s1).b) = 888))
+      } else 
+      {  (C_434 : (pt_1 = (C_433 : ((C_432 : t2_0_1.s3) :> T))));
+         (C_437 : ((C_436 : (C_435 : pt_1.s1).b) = 999))
+      });
+      
+      {  (C_447 : ((C_446 : sss_1.a) = (C_445 : (C_444 : pt_1.s1).a)));
+         (C_451 : ((C_450 : sss_1.b) = (C_449 : (C_448 : pt_1.s1).b)));
+         (C_455 : ((C_454 : sss_1.c_1) = (C_453 : (C_452 : pt_1.s1).c_1)))
+      };
+      (C_457 : ((C_456 : z.int_M) = 2));
+      (if ((C_462 : ((C_461 : (c + (C_460 : (1 :> int32)))) :> int32)) != 0) then 
+      (C_459 : (u = 0)) else (C_458 : (u = 1)));
+      (C_463 : (v = u));
+      (if (v == w) then (C_465 : ((C_464 : z.int_M) = u)) else ());
+      
+      {  (C_466 : (free(sss_1)));
+         (C_467 : (free(t1_1)));
+         (C_468 : (free(t2_0_1)));
+         
+         (return ())
+      }
+   }
+}
+
+unit main6(int32 c_0_4)
+behavior default:
+  assumes true;
+  ensures (C_502 : true);
+{  
+   (var int32 i_0);
+   
+   {  (C_470 : (i_0 = 0));
+      (if (c_0_4 != 0) then (C_474 : (PTR1 = (C_473 : (p + 1)))) else 
+      (C_472 : (PTR1 = (C_471 : (q + 2)))));
+      (C_476 : ((C_475 : PTR1.int_M) = 77));
+      
+      {  
+         
+         while (true)
+         {  
+            {  (if (i_0 < 100) then () else 
+               (goto while_0_break));
+               (C_478 : ((C_477 : x.int_M) = i_0));
+               (C_481 : (i_0 = (C_480 : ((C_479 : (i_0 + 1)) :> int32))))
+            }
+         };
+         (while_0_break : ())
+      };
+      (C_484 : ((C_483 : y.int_M) = (C_482 : PTR1.int_M)));
+      (C_487 : (PTR2 = (C_486 : ((C_485 : PTR2.int_M) :> int_P))));
+      (if (PTR2 == (C_493 : (PTR1 :> char_P))) then (C_492 : ((C_491 : z.int_M) = 
+                                                    (C_490 : PTR2.int_M))) else 
+      (C_489 : ((C_488 : z.int_M) = -33)));
+      (if (c_0_4 != 0) then (C_495 : (u = 0)) else (C_494 : (u = 1)));
+      (C_496 : (v = u));
+      (C_497 : (w = v));
+      (if ((C_501 : ((C_500 : (c_0_4 + 1)) :> int32)) != 0) then (C_499 : (u = 0)) else 
+      (C_498 : (u = 1)));
+      
+      (return ())
+   }
+}
+
+unit main7(int32 c_0)
+behavior default:
+  assumes true;
+  ensures (C_527 : true);
+{  
+   (var int32 i_0_1);
+   
+   {  (C_503 : (i_0_1 = 0));
+      (if (c_0 != 0) then (C_507 : (PTR1 = (C_506 : (p + 1)))) else (C_505 : (PTR1 = 
+                                                                    (C_504 : 
+                                                                    (q +
+                                                                    2)))));
+      (C_509 : ((C_508 : PTR1.int_M) = 77));
+      
+      {  
+         
+         while (true)
+         {  
+            {  (if (i_0_1 < 100) then () else 
+               (goto while_1_break));
+               (C_511 : ((C_510 : x.int_M) = i_0_1));
+               (C_514 : (i_0_1 = (C_513 : ((C_512 : (i_0_1 + 1)) :> int32))))
+            }
+         };
+         (while_1_break : ())
+      };
+      (C_517 : ((C_516 : y.int_M) = (C_515 : PTR1.int_M)));
+      (C_520 : (PTR2 = (C_519 : ((C_518 : PTR2.int_M) :> int_P))));
+      (if (PTR2 == (C_526 : (PTR1 :> char_P))) then (C_525 : ((C_524 : z.int_M) = 
+                                                    (C_523 : PTR2.int_M))) else 
+      (C_522 : ((C_521 : z.int_M) = -33)));
+      
+      (return ())
+   }
+}
+
+int32 tz1;
+
+int32 tz2;
+
+int32 tz3;
+
+int32 tx;
+
+int32 ty;
+
+int32 tz;
+
+unit main8(int32 c_0_6)
+behavior default:
+  assumes true;
+  ensures (C_599 : true);
+{  
+   {  (if (c_0_6 != 0) then (C_529 : (tx = 2)) else (C_528 : (tx = 3)));
+      (C_532 : (ty = (C_531 : ((C_530 : (tx + 1)) :> int32))));
+      (C_535 : (tz = (C_534 : ((C_533 : (ty + 2)) :> int32))));
+      (C_539 : (tz1 = (C_538 : ((if (tz ==
+                                      (C_537 : ((C_536 : (ty + 2)) :> int32))) then 1 else 0) :> int32))));
+      (C_543 : (tz2 = (C_542 : ((if (tz ==
+                                      (C_541 : ((C_540 : (tx + 3)) :> int32))) then 1 else 0) :> int32))));
+      (C_547 : (tz3 = (C_546 : ((if (tx ==
+                                      (C_545 : ((C_544 : (ty - 1)) :> int32))) then 1 else 0) :> int32))));
+      (if (c_0_6 != 0) then (C_551 : ((C_550 : A.int_M) = 3)) else (C_549 : (
+                                                                   (C_548 : A.int_M) = 4)));
+      (C_556 : ((C_555 : B.int_M) = (C_554 : ((C_553 : ((C_552 : A.int_M) +
+                                                         1)) :> int32))));
+      (C_563 : ((C_562 : y.int_M) = (C_561 : ((if ((C_560 : B.int_M) ==
+                                                    (C_559 : ((C_558 : 
+                                                              ((C_557 : A.int_M) +
+                                                                1)) :> int32))) then 1 else 0) :> int32))));
+      (C_572 : (t = (C_571 : ((C_570 : ((C_569 : ((C_568 : ((C_567 : B.int_M) +
+                                                             3)) :> int32)) -
+                                         (C_566 : ((C_565 : ((C_564 : A.int_M) -
+                                                              1)) :> int32)))) :> int32))));
+      (if (c_0_6 != 0) then (C_576 : (PTR1 = (C_575 : (p + 2)))) else 
+      (C_574 : (PTR1 = (C_573 : (q + 3)))));
+      (C_579 : (PTR2 = unsigned_int__to_struct_int_P_x((C_578 : ((C_577 : 
+                                                                 (struct_int_P_x_to_unsigned_int_(
+                                                                   PTR1) +
+                                                                   4)) :> uint32)))));
+      (C_581 : (PTR3 = (C_580 : (PTR2 - 1))));
+      (C_583 : (u = (C_582 : PTR2.int_M)));
+      (C_586 : ((C_585 : (C_584 : (PTR1 + 1)).int_M) = 44));
+      (C_588 : (v = (C_587 : PTR2.int_M)));
+      (C_590 : (w = (C_589 : PTR1.int_M)));
+      (C_592 : ((C_591 : PTR1.int_M) = 33));
+      (C_595 : ((C_594 : x.int_M) = (C_593 : PTR1.int_M)));
+      (C_598 : ((C_597 : z.int_M) = (C_596 : PTR3.int_M)));
+      
+      (return ())
+   }
+}
+
+unit main9(int32 c_0_1)
+behavior default:
+  assumes true;
+  ensures (C_617 : true);
+{  
+   {  (if (c_0_1 != 0) then 
+      {  (C_607 : (PTR1 = (C_606 : (q + 1))));
+         (C_609 : ((C_608 : PTR1.int_M) = 33));
+         (C_610 : (PTR2 = PTR1))
+      } else 
+      {  (C_601 : (PTR1 = (C_600 : (q + 2))));
+         (C_603 : ((C_602 : PTR1.int_M) = 44));
+         (C_605 : (PTR2 = (C_604 : (PTR1 + 1))))
+      });
+      (C_613 : ((C_612 : x.int_M) = (C_611 : PTR1.int_M)));
+      (C_616 : ((C_615 : y.int_M) = (C_614 : PTR2.int_M)));
+      
+      (return ())
+   }
+}
+
+unit main10(int32 c_0_3)
+behavior default:
+  assumes true;
+  ensures (C_637 : true);
+{  
+   {  (C_619 : (PTR1 = (C_618 : (q + 1))));
+      (C_621 : ((C_620 : PTR1.int_M) = 33));
+      
+      {  
+         
+         while (true)
+         {  
+            {  (if (c_0_3 != 0) then () else 
+               (goto while_2_break));
+               (C_623 : (PTR1 = (C_622 : (q + 1))));
+               (C_626 : ((C_625 : (C_624 : (PTR1 - 1)).int_M) = 33))
+            }
+         };
+         (while_2_break : ())
+      };
+      (C_630 : ((C_629 : x.int_M) = (C_628 : (C_627 : (PTR1 - 1)).int_M)));
+      (C_636 : ((C_635 : y.int_M) = (C_634 : ((C_633 : ((C_632 : x.int_M) -
+                                                         (C_631 : (q + 0).int_M))) :> int32))));
+      
+      (return ())
+   }
+}
+
+unit main11(int32 c_0_5)
+behavior default:
+  assumes true;
+  ensures (C_652 : true);
+{  
+   (var int_P[..] t_0);
+   
+   {  (C_639 : (PTR1 = (C_638 : (q + 1))));
+      (C_641 : ((C_640 : PTR1.int_M) = 33));
+      
+      {  
+         
+         while (true)
+         {  
+            {  (if (c_0_5 != 0) then () else 
+               (goto while_3_break));
+               (C_643 : (t_0 = (C_642 : (q + 2))));
+               (C_646 : ((C_645 : t_0.int_M) = (C_644 : t_0.int_M)));
+               (C_648 : (PTR1 = (C_647 : (t_0 - 1))))
+            }
+         };
+         (while_3_break : ())
+      };
+      (C_651 : ((C_650 : x.int_M) = (C_649 : PTR1.int_M)));
+      
+      (return ())
+   }
+}
+
+u_1[0] U;
+
+invariant valid_U :
+((\offset_min(U) <= 0) && (\offset_max(U) >= 0))
+
+int8 char1;
+
+int64 ll1;
+
+unit main12(int32 c_0_2)
+behavior default:
+  assumes true;
+  ensures (C_673 : true);
+{  
+   {  (C_654 : f2((C_653 : (p :> char_P))));
+      (if (c_0_2 != 0) then (C_656 : (t = 0)) else (C_655 : (t = 1)));
+      (if ((C_660 : ((C_659 : (c_0_2 + 1)) :> int32)) != 0) then (C_658 : (ll1 = 15)) else 
+      (C_657 : (ll1 = 16)));
+      (C_665 : ((C_664 : (C_663 : (U :> llP)).llM) = (C_662 : ((C_661 : 
+                                                               (ll1 +
+                                                                 1)) :> int64))));
+      (if ((C_672 : ((C_671 : (c_0_2 + 2)) :> int32)) != 0) then (C_670 : (
+                                                                 (C_669 : 
+                                                                 (C_668 : (U :> i_1P)).i_1M) = 
+                                                                 (C_667 : (
+                                                                 (C_666 : 
+                                                                 (t +
+                                                                   2)) :> int32)))) else 
+      (L : 
+      (goto L)));
+      
+      (return ())
+   }
+}
+
+unit __globinit_whole_program()
+behavior default:
+  assumes true;
+  ensures (C_702 : true);
+{  
+   {  (C_675 : (A = (C_674 : (new int_P[1]))));
+      (C_677 : (B = (C_676 : (new int_P[1]))));
+      (C_679 : (x = (C_678 : (new int_P[1]))));
+      (C_681 : (y = (C_680 : (new int_P[1]))));
+      (C_683 : (z = (C_682 : (new int_P[1]))));
+      (C_685 : (e = (C_684 : (new S[1]))));
+      (C_687 : (g = (C_686 : (new S[1]))));
+      (C_689 : (h = (C_688 : (new T[1]))));
+      (C_691 : (i = (C_690 : (new T[1]))));
+      (C_693 : (U = (C_692 : (new u_1[1]))));
+      (C_695 : (p = (C_694 : (new int_P[5]))));
+      (C_697 : (q = (C_696 : (new int_P[5]))));
+      (C_699 : (p2 = (C_698 : (new int_P[5]))));
+      (C_701 : (q2 = (C_700 : (new int_P[5]))))
+   }
+}

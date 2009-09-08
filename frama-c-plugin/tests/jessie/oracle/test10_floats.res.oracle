@@ -1,0 +1,4 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie-analysis -jessie-gen-only test10_floats.c
+[kernel] error: skipping file "test10_floats.c" that has errors.
+[kernel] error: your code cannot be parsed. Aborting analysis.
+Starting Jessie translation

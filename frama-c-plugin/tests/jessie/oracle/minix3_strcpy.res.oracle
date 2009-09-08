@@ -1,0 +1,3435 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only minix3_strcpy.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD minix3_strcpy.c"
+[jessie] Starting Jessie translation
+[jessie] Producing Jessie files in subdir minix3_strcpy.jessie
+[jessie] File minix3_strcpy.jessie/minix3_strcpy.jc written.
+[jessie] File minix3_strcpy.jessie/minix3_strcpy.cloc written.
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+type uint16 = 0..65535
+
+type int8 = -128..127
+
+type int32 = -2147483648..2147483647
+
+tag unsigned_short_P = {
+  uint16 unsigned_short_M: 16;
+}
+
+type unsigned_short_P = [unsigned_short_P]
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+axiomatic MemCmp {
+
+  logic integer memcmp{L}(char_P[..] s1, char_P[..] s2, integer n)
+   
+  axiom memcmp_range{L} :
+  (\forall char_P[..] s1_0;
+    (\forall char_P[..] s2_0;
+      (\forall integer n_0;
+        ((((- 2147483647) - 1) <= memcmp{L}(s1_0, s2_0, n_0)) &&
+          (memcmp{L}(s1_0, s2_0, n_0) <= 2147483647)))))
+   
+  axiom memcmp_zero{L} :
+  (\forall char_P[..] s1_1;
+    (\forall char_P[..] s2_1;
+      (\forall integer n_1;
+        ((memcmp{L}(s1_1, s2_1, n_1) == 0) <==>
+          (\forall integer i;
+            (((0 <= i) && (i < n_1)) ==>
+              ((s1_1 + i).char_M == (s2_1 + i).char_M)))))))
+  
+}
+
+axiomatic MemChr {
+
+  logic boolean memchr{L}(char_P[..] s, integer c, integer n_2)
+   
+  axiom memchr_def{L} :
+  (\forall char_P[..] s_0;
+    (\forall integer c_0;
+      (\forall integer n_3;
+        ((memchr{L}(s_0, c_0, n_3) == true) <==>
+          (\exists int32 i_0;
+            (((0 <= i_0) && (i_0 < n_3)) && ((s_0 + i_0).char_M == c_0)))))))
+  
+}
+
+axiomatic MemSet {
+
+  logic boolean memset{L}(char_P[..] s_1, integer c_1, integer n_4)
+   
+  axiom memset_def{L} :
+  (\forall char_P[..] s_2;
+    (\forall integer c_2;
+      (\forall integer n_5;
+        ((memset{L}(s_2, c_2, n_5) == true) <==>
+          (\forall integer i_1;
+            (((0 <= i_1) && (i_1 < n_5)) ==> ((s_2 + i_1).char_M == c_2)))))))
+  
+}
+
+axiomatic StrLen {
+
+  logic integer strlen{L}(char_P[..] s_3)
+   
+  axiom strlen_pos_or_null{L} :
+  (\forall char_P[..] s_4;
+    (\forall integer i_2;
+      (((((0 <= i_2) && (i_2 <= 2147483647)) &&
+          (\forall integer j;
+            (((0 <= j) && (j < i_2)) ==> ((s_4 + j).char_M != 0)))) &&
+         ((s_4 + i_2).char_M == 0)) ==>
+        (strlen{L}(s_4) == i_2))))
+   
+  axiom strlen_neg{L} :
+  (\forall char_P[..] s_5;
+    ((\forall integer i_3;
+       (((0 <= i_3) && (i_3 <= 2147483647)) ==> ((s_5 + i_3).char_M != 0))) ==>
+      (strlen{L}(s_5) < 0)))
+   
+  axiom strlen_range{L} :
+  (\forall char_P[..] s_6;
+    (strlen{L}(s_6) <= 2147483647))
+   
+  axiom strlen_before_null{L} :
+  (\forall char_P[..] s_7;
+    (\forall integer i_4;
+      (((0 <= i_4) && (i_4 < strlen{L}(s_7))) ==> ((s_7 + i_4).char_M != 0))))
+   
+  axiom strlen_at_null{L} :
+  (\forall char_P[..] s_8;
+    ((0 <= strlen{L}(s_8)) ==> ((s_8 + strlen{L}(s_8)).char_M == 0)))
+   
+  axiom strlen_not_zero{L} :
+  (\forall char_P[..] s_9;
+    (\forall integer i_5;
+      ((((0 <= i_5) && (i_5 <= strlen{L}(s_9))) && ((s_9 + i_5).char_M != 0)) ==>
+        (i_5 < strlen{L}(s_9)))))
+   
+  axiom strlen_zero{L} :
+  (\forall char_P[..] s_10;
+    (\forall integer i_6;
+      ((((0 <= i_6) && (i_6 <= strlen{L}(s_10))) &&
+         ((s_10 + i_6).char_M == 0)) ==>
+        (i_6 == strlen{L}(s_10)))))
+   
+  axiom strlen_sup{L} :
+  (\forall char_P[..] s_11;
+    (\forall integer i_7;
+      (((0 <= i_7) && ((s_11 + i_7).char_M == 0)) ==>
+        ((0 <= strlen{L}(s_11)) && (strlen{L}(s_11) <= i_7)))))
+   
+  axiom strlen_shift{L} :
+  (\forall char_P[..] s_12;
+    (\forall integer i_8;
+      (((0 <= i_8) && (i_8 <= strlen{L}(s_12))) ==>
+        (strlen{L}((s_12 + i_8)) == (strlen{L}(s_12) - i_8)))))
+   
+  axiom strlen_create{L} :
+  (\forall char_P[..] s_13;
+    (\forall integer i_9;
+      ((((0 <= i_9) && (i_9 <= 2147483647)) && ((s_13 + i_9).char_M == 0)) ==>
+        ((0 <= strlen{L}(s_13)) && (strlen{L}(s_13) <= i_9)))))
+   
+  axiom strlen_create_shift{L} :
+  (\forall char_P[..] s_14;
+    (\forall integer i_10;
+      (\forall integer k;
+        ((((0 <= k) && ((k <= i_10) && (i_10 <= 2147483647))) &&
+           ((s_14 + i_10).char_M == 0)) ==>
+          ((0 <= strlen{L}((s_14 + k))) &&
+            (strlen{L}((s_14 + k)) <= (i_10 - k)))))))
+   
+  axiom memcmp_strlen_left{L} :
+  (\forall char_P[..] s1_2;
+    (\forall char_P[..] s2_2;
+      (\forall integer n_6;
+        (((memcmp{L}(s1_2, s2_2, n_6) == 0) && (strlen{L}(s1_2) < n_6)) ==>
+          (strlen{L}(s1_2) == strlen{L}(s2_2))))))
+   
+  axiom memcmp_strlen_right{L} :
+  (\forall char_P[..] s1_3;
+    (\forall char_P[..] s2_3;
+      (\forall integer n_7;
+        (((memcmp{L}(s1_3, s2_3, n_7) == 0) && (strlen{L}(s2_3) < n_7)) ==>
+          (strlen{L}(s1_3) == strlen{L}(s2_3))))))
+   
+  axiom memcmp_strlen_shift_left{L} :
+  (\forall char_P[..] s1_4;
+    (\forall char_P[..] s2_4;
+      (\forall integer k_0;
+        (\forall integer n_8;
+          ((((memcmp{L}(s1_4, (s2_4 + k_0), n_8) == 0) && (0 <= k_0)) &&
+             (strlen{L}(s1_4) < n_8)) ==>
+            ((0 <= strlen{L}(s2_4)) &&
+              (strlen{L}(s2_4) <= (k_0 + strlen{L}(s1_4)))))))))
+   
+  axiom memcmp_strlen_shift_right{L} :
+  (\forall char_P[..] s1_5;
+    (\forall char_P[..] s2_5;
+      (\forall integer k_1;
+        (\forall integer n_9;
+          ((((memcmp{L}((s1_5 + k_1), s2_5, n_9) == 0) && (0 <= k_1)) &&
+             (strlen{L}(s2_5) < n_9)) ==>
+            ((0 <= strlen{L}(s1_5)) &&
+              (strlen{L}(s1_5) <= (k_1 + strlen{L}(s2_5)))))))))
+  
+}
+
+axiomatic StrCmp {
+
+  logic integer strcmp{L}(char_P[..] s1_6, char_P[..] s2_6)
+   
+  axiom strcmp_range{L} :
+  (\forall char_P[..] s1_7;
+    (\forall char_P[..] s2_7;
+      ((((- 2147483647) - 1) <= strcmp{L}(s1_7, s2_7)) &&
+        (strcmp{L}(s1_7, s2_7) <= 2147483647))))
+   
+  axiom strcmp_zero{L} :
+  (\forall char_P[..] s1_8;
+    (\forall char_P[..] s2_8;
+      ((strcmp{L}(s1_8, s2_8) == 0) <==>
+        ((strlen{L}(s1_8) == strlen{L}(s2_8)) &&
+          (\forall integer i_11;
+            (((0 <= i_11) && (i_11 <= strlen{L}(s1_8))) ==>
+              ((s1_8 + i_11).char_M == (s2_8 + i_11).char_M)))))))
+  
+}
+
+axiomatic StrNCmp {
+
+  logic integer strncmp{L}(char_P[..] s1_9, char_P[..] s2_9, integer n_10)
+   
+  axiom strncmp_zero{L} :
+  (\forall char_P[..] s1_10;
+    (\forall char_P[..] s2_10;
+      (\forall integer n_11;
+        ((strncmp{L}(s1_10, s2_10, n_11) == 0) <==>
+          (((strlen{L}(s1_10) < n_11) && (strcmp{L}(s1_10, s2_10) == 0)) ||
+            (\forall integer i_12;
+              (((0 <= i_12) && (i_12 < n_11)) ==>
+                ((s1_10 + i_12).char_M == (s2_10 + i_12).char_M))))))))
+  
+}
+
+axiomatic StrChr {
+
+  logic boolean strchr{L}(char_P[..] s_15, integer c_3)
+   
+  axiom strchr_def{L} :
+  (\forall char_P[..] s_16;
+    (\forall integer c_4;
+      ((strchr{L}(s_16, c_4) == true) <==>
+        (\exists integer i_13;
+          (((0 <= i_13) && (i_13 <= strlen{L}(s_16))) &&
+            ((s_16 + i_13).char_M == c_4))))))
+  
+}
+
+axiomatic WcsLen {
+
+  logic integer wcslen{L}(unsigned_short_P[..] s_17)
+   
+  axiom wcslen_pos_or_null{L} :
+  (\forall unsigned_short_P[..] s_18;
+    (\forall integer i_14;
+      ((((0 <= i_14) &&
+          (\forall integer j_0;
+            (((0 <= j_0) && (j_0 < i_14)) ==>
+              ((s_18 + j_0).unsigned_short_M != 0)))) &&
+         ((s_18 + i_14).unsigned_short_M == 0)) ==>
+        (wcslen{L}(s_18) == i_14))))
+   
+  axiom wcslen_neg{L} :
+  (\forall unsigned_short_P[..] s_19;
+    ((\forall integer i_15;
+       ((0 <= i_15) ==> ((s_19 + i_15).unsigned_short_M != 0))) ==>
+      (wcslen{L}(s_19) < 0)))
+   
+  axiom wcslen_before_null{L} :
+  (\forall unsigned_short_P[..] s_20;
+    (\forall int32 i_16;
+      (((0 <= i_16) && (i_16 < wcslen{L}(s_20))) ==>
+        ((s_20 + i_16).unsigned_short_M != 0))))
+   
+  axiom wcslen_at_null{L} :
+  (\forall unsigned_short_P[..] s_21;
+    ((0 <= wcslen{L}(s_21)) ==>
+      ((s_21 + wcslen{L}(s_21)).unsigned_short_M == 0)))
+   
+  axiom wcslen_not_zero{L} :
+  (\forall unsigned_short_P[..] s_22;
+    (\forall int32 i_17;
+      ((((0 <= i_17) && (i_17 <= wcslen{L}(s_22))) &&
+         ((s_22 + i_17).unsigned_short_M != 0)) ==>
+        (i_17 < wcslen{L}(s_22)))))
+   
+  axiom wcslen_zero{L} :
+  (\forall unsigned_short_P[..] s_23;
+    (\forall int32 i_18;
+      ((((0 <= i_18) && (i_18 <= wcslen{L}(s_23))) &&
+         ((s_23 + i_18).unsigned_short_M == 0)) ==>
+        (i_18 == wcslen{L}(s_23)))))
+   
+  axiom wcslen_sup{L} :
+  (\forall unsigned_short_P[..] s_24;
+    (\forall int32 i_19;
+      (((0 <= i_19) && ((s_24 + i_19).unsigned_short_M == 0)) ==>
+        ((0 <= wcslen{L}(s_24)) && (wcslen{L}(s_24) <= i_19)))))
+   
+  axiom wcslen_shift{L} :
+  (\forall unsigned_short_P[..] s_25;
+    (\forall int32 i_20;
+      (((0 <= i_20) && (i_20 <= wcslen{L}(s_25))) ==>
+        (wcslen{L}((s_25 + i_20)) == (wcslen{L}(s_25) - i_20)))))
+   
+  axiom wcslen_create{L} :
+  (\forall unsigned_short_P[..] s_26;
+    (\forall int32 i_21;
+      (((0 <= i_21) && ((s_26 + i_21).unsigned_short_M == 0)) ==>
+        ((0 <= wcslen{L}(s_26)) && (wcslen{L}(s_26) <= i_21)))))
+   
+  axiom wcslen_create_shift{L} :
+  (\forall unsigned_short_P[..] s_27;
+    (\forall int32 i_22;
+      (\forall int32 k_2;
+        ((((0 <= k_2) && (k_2 <= i_22)) &&
+           ((s_27 + i_22).unsigned_short_M == 0)) ==>
+          ((0 <= wcslen{L}((s_27 + k_2))) &&
+            (wcslen{L}((s_27 + k_2)) <= (i_22 - k_2)))))))
+  
+}
+
+axiomatic WcsCmp {
+
+  logic integer wcscmp{L}(unsigned_short_P[..] s1_11,
+                          unsigned_short_P[..] s2_11)
+   
+  axiom wcscmp_zero{L} :
+  (\forall unsigned_short_P[..] s1_12;
+    (\forall unsigned_short_P[..] s2_12;
+      ((wcscmp{L}(s1_12, s2_12) == 0) <==>
+        ((wcslen{L}(s1_12) == wcslen{L}(s2_12)) &&
+          (\forall integer i_23;
+            (((0 <= i_23) && (i_23 <= wcslen{L}(s1_12))) ==>
+              ((s1_12 + i_23).unsigned_short_M ==
+                (s2_12 + i_23).unsigned_short_M)))))))
+  
+}
+
+axiomatic WcsNCmp {
+
+  logic integer wcsncmp{L}(unsigned_short_P[..] s1_13,
+                           unsigned_short_P[..] s2_13, integer n_12)
+   
+  axiom wcsncmp_zero{L} :
+  (\forall unsigned_short_P[..] s1_14;
+    (\forall unsigned_short_P[..] s2_14;
+      (\forall integer n_13;
+        ((wcsncmp{L}(s1_14, s2_14, n_13) == 0) <==>
+          (((wcslen{L}(s1_14) < n_13) && (wcscmp{L}(s1_14, s2_14) == 0)) ||
+            (\forall integer i_24;
+              (((0 <= i_24) && (i_24 < n_13)) ==>
+                ((s1_14 + i_24).unsigned_short_M ==
+                  (s2_14 + i_24).unsigned_short_M))))))))
+  
+}
+
+logic integer minimum(integer i_25, integer j_1) =
+(if (i_25 < j_1) then i_25 else j_1)
+
+logic integer maximum(integer i_26, integer j_2) =
+(if (i_26 < j_2) then j_2 else i_26)
+
+logic valid_string{L}(char_P[..] s_28) =
+((0 <= strlen{L}(s_28)) &&
+  ((\offset_min(s_28) <= 0) && (\offset_max(s_28) >= strlen{L}(s_28))))
+
+logic valid_string_or_null{L}(char_P[..] s_29) =
+((s_29 == null) || valid_string{L}(s_29))
+
+logic valid_wstring{L}(unsigned_short_P[..] s_30) =
+((0 <= wcslen{L}(s_30)) &&
+  ((\offset_min(s_30) <= 0) && (\offset_max(s_30) >= wcslen{L}(s_30))))
+
+logic valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
+((s_31 == null) || valid_wstring{L}(s_31))
+
+char_P[..] strcpy(char_P[..] ret, char_P[..] s2)
+  requires (C_12 : valid_string(s2));
+behavior default:
+  assumes true;
+  ensures (C_13 : true);
+{  
+   (var char_P[..] s1);
+   
+   (var char_P[..] tmp);
+   
+   (var int8 tmp_0);
+   
+   (var char_P[..] tmp_1);
+   
+   {  (C_1 : (s1 = ret));
+      
+      {  
+         loop 
+         while (true)
+         {  
+            {  
+               {  
+                  {  (C_2 : (tmp = s1));
+                     (C_4 : (s1 = (C_3 : (s1 + 1))))
+                  };
+                  
+                  {  (C_5 : (tmp_1 = s2));
+                     (C_7 : (s2 = (C_6 : (s2 + 1))));
+                     (C_9 : (tmp_0 = (C_8 : tmp_1.char_M)))
+                  };
+                  (C_11 : ((C_10 : tmp.char_M) = tmp_0))
+               };
+               (if (tmp_0 != 0) then () else 
+               (goto while_0_break))
+            }
+         };
+         (while_0_break : ())
+      };
+      
+      (return ret)
+   }
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs minix3_strcpy.jessie/minix3_strcpy.cloc minix3_strcpy.jessie/minix3_strcpy.jc
+type char_P
+
+type int32
+
+type int8
+
+type padding
+
+type uint16
+
+type unsigned_short_P
+
+type void_P
+
+exception Goto_while_0_break_exc of unit
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
+
+logic bitvector_of_char_P: char_P pointer -> bitvector
+
+logic char_P_of_bitvector: bitvector -> char_P pointer
+
+axiom bitvector_of_char_P_of_char_P_of_bitvector :
+ (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
+
+logic bitvector_of_int32: int32 -> bitvector
+
+logic int32_of_bitvector: bitvector -> int32
+
+axiom bitvector_of_int32_of_int32_of_bitvector :
+ (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
+
+logic bitvector_of_int8: int8 -> bitvector
+
+logic int8_of_bitvector: bitvector -> int8
+
+axiom bitvector_of_int8_of_int8_of_bitvector :
+ (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
+
+logic bitvector_of_uint16: uint16 -> bitvector
+
+logic uint16_of_bitvector: bitvector -> uint16
+
+axiom bitvector_of_uint16_of_uint16_of_bitvector :
+ (forall x:bitvector. (bitvector_of_uint16(uint16_of_bitvector(x)) = x))
+
+logic bitvector_of_unsigned_short_P: unsigned_short_P pointer -> bitvector
+
+logic unsigned_short_P_of_bitvector: bitvector -> unsigned_short_P pointer
+
+axiom bitvector_of_unsigned_short_P_of_unsigned_short_P_of_bitvector :
+ (forall x:bitvector.
+  (bitvector_of_unsigned_short_P(unsigned_short_P_of_bitvector(x)) = x))
+
+logic bitvector_of_void_P: void_P pointer -> bitvector
+
+logic void_P_of_bitvector: bitvector -> void_P pointer
+
+axiom bitvector_of_void_P_of_void_P_of_bitvector :
+ (forall x:bitvector. (bitvector_of_void_P(void_P_of_bitvector(x)) = x))
+
+logic char_P_tag:  -> char_P tag_id
+
+axiom char_P_int : (int_of_tag(char_P_tag) = (1))
+
+axiom char_P_of_bitvector_of_bitvector_of_char_P :
+ (forall x:char_P pointer. (char_P_of_bitvector(bitvector_of_char_P(x)) = x))
+
+logic char_P_of_pointer_address: unit pointer -> char_P pointer
+
+axiom char_P_of_pointer_address_of_pointer_addr :
+ (forall p:char_P pointer.
+  (p = char_P_of_pointer_address(pointer_address(p))))
+
+axiom char_P_parenttag_bottom : parenttag(char_P_tag, bottom_tag)
+
+axiom char_P_tags :
+ (forall x:char_P pointer.
+  (forall char_P_tag_table:char_P tag_table.
+   instanceof(char_P_tag_table, x, char_P_tag)))
+
+logic integer_of_int32: int32 -> int
+
+predicate eq_int32(x:int32,
+ y:int32) =
+ eq_int(integer_of_int32(x), integer_of_int32(y))
+
+logic integer_of_int8: int8 -> int
+
+predicate eq_int8(x:int8,
+ y:int8) =
+ eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint16: uint16 -> int
+
+predicate eq_uint16(x:uint16,
+ y:uint16) =
+ eq_int(integer_of_uint16(x), integer_of_uint16(y))
+
+logic int32_of_integer: int -> int32
+
+axiom int32_coerce :
+ (forall x:int.
+  ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
+   eq_int(integer_of_int32(int32_of_integer(x)), x)))
+
+axiom int32_of_bitvector_of_bitvector_of_int32 :
+ (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
+
+axiom int32_range :
+ (forall x:int32.
+  (le_int((-2147483648), integer_of_int32(x))
+  and le_int(integer_of_int32(x), (2147483647))))
+
+logic int8_of_integer: int -> int8
+
+axiom int8_coerce :
+ (forall x:int.
+  ((le_int((-128), x) and le_int(x, (127))) ->
+   eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_of_bitvector_of_bitvector_of_int8 :
+ (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
+
+axiom int8_range :
+ (forall x:int8.
+  (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
+
+predicate left_valid_struct_char_P(p:char_P pointer,
+ a:int,
+ char_P_alloc_table:char_P alloc_table) =
+ (offset_min(char_P_alloc_table, p) <= a)
+
+predicate left_valid_struct_unsigned_short_P(p:unsigned_short_P pointer,
+ a:int,
+ unsigned_short_P_alloc_table:unsigned_short_P alloc_table) =
+ (offset_min(unsigned_short_P_alloc_table, p) <= a)
+
+predicate left_valid_struct_void_P(p:void_P pointer,
+ a:int,
+ void_P_alloc_table:void_P alloc_table) =
+ (offset_min(void_P_alloc_table, p) <= a)
+
+function maximum(i_26:int,
+ j_2:int) : int =
+ (if lt_int_bool(i_26, j_2) then j_2 else i_26)
+
+logic memchr: char_P pointer, int, int, (char_P, int8) memory -> bool
+
+axiom memchr_def :
+ (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
+  (forall s_0:char_P pointer.
+   (forall c_0:int.
+    (forall n_3:int.
+     (eq_bool(memchr(s_0, c_0, n_3, char_P_char_M_s_3_at_L), true)
+     <-> (exists i_0:int32.
+          (le_int((0), integer_of_int32(i_0))
+          and (lt_int(integer_of_int32(i_0), n_3)
+              and eq_int(integer_of_int8(select(char_P_char_M_s_3_at_L,
+                                         shift(s_0, integer_of_int32(i_0)))),
+                  c_0)))))))))
+
+logic memcmp: char_P pointer,
+ char_P pointer,
+ int,
+ (char_P, int8) memory,
+ (char_P, int8) memory -> int
+
+axiom memcmp_range :
+ (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+  (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+   (forall s1_0:char_P pointer.
+    (forall s2_0_0:char_P pointer.
+     (forall n_0:int.
+      (le_int(sub_int(neg_int((2147483647)), (1)),
+       memcmp(s1_0, s2_0_0, n_0, char_P_char_M_s2_2_at_L,
+       char_P_char_M_s1_1_at_L))
+      and le_int(memcmp(s1_0, s2_0_0, n_0, char_P_char_M_s2_2_at_L,
+                 char_P_char_M_s1_1_at_L),
+          (2147483647))))))))
+
+logic strlen: char_P pointer, (char_P, int8) memory -> int
+
+axiom memcmp_strlen_left :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s1_2:char_P pointer.
+   (forall s2_2:char_P pointer.
+    (forall n_6:int.
+     ((eq_int(memcmp(s1_2, s2_2, n_6, char_P_char_M_s_3_5_at_L,
+              char_P_char_M_s_3_5_at_L),
+       (0))
+      and lt_int(strlen(s1_2, char_P_char_M_s_3_5_at_L), n_6)) ->
+      eq_int(strlen(s1_2, char_P_char_M_s_3_5_at_L),
+      strlen(s2_2, char_P_char_M_s_3_5_at_L)))))))
+
+axiom memcmp_strlen_right :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s1_3:char_P pointer.
+   (forall s2_3:char_P pointer.
+    (forall n_7:int.
+     ((eq_int(memcmp(s1_3, s2_3, n_7, char_P_char_M_s_3_5_at_L,
+              char_P_char_M_s_3_5_at_L),
+       (0))
+      and lt_int(strlen(s2_3, char_P_char_M_s_3_5_at_L), n_7)) ->
+      eq_int(strlen(s1_3, char_P_char_M_s_3_5_at_L),
+      strlen(s2_3, char_P_char_M_s_3_5_at_L)))))))
+
+axiom memcmp_strlen_shift_left :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s1_4:char_P pointer.
+   (forall s2_4:char_P pointer.
+    (forall k_0:int.
+     (forall n_8:int.
+      ((eq_int(memcmp(s1_4, shift(s2_4, k_0), n_8, char_P_char_M_s_3_5_at_L,
+               char_P_char_M_s_3_5_at_L),
+        (0))
+       and (le_int((0), k_0)
+           and lt_int(strlen(s1_4, char_P_char_M_s_3_5_at_L), n_8))) ->
+       (le_int((0), strlen(s2_4, char_P_char_M_s_3_5_at_L))
+       and le_int(strlen(s2_4, char_P_char_M_s_3_5_at_L),
+           add_int(k_0, strlen(s1_4, char_P_char_M_s_3_5_at_L))))))))))
+
+axiom memcmp_strlen_shift_right :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s1_5:char_P pointer.
+   (forall s2_5:char_P pointer.
+    (forall k_1:int.
+     (forall n_9:int.
+      ((eq_int(memcmp(shift(s1_5, k_1), s2_5, n_9, char_P_char_M_s_3_5_at_L,
+               char_P_char_M_s_3_5_at_L),
+        (0))
+       and (le_int((0), k_1)
+           and lt_int(strlen(s2_5, char_P_char_M_s_3_5_at_L), n_9))) ->
+       (le_int((0), strlen(s1_5, char_P_char_M_s_3_5_at_L))
+       and le_int(strlen(s1_5, char_P_char_M_s_3_5_at_L),
+           add_int(k_1, strlen(s2_5, char_P_char_M_s_3_5_at_L))))))))))
+
+axiom memcmp_zero :
+ (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+  (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+   (forall s1_1:char_P pointer.
+    (forall s2_1:char_P pointer.
+     (forall n_1:int.
+      (eq_int(memcmp(s1_1, s2_1, n_1, char_P_char_M_s2_2_at_L,
+              char_P_char_M_s1_1_at_L),
+       (0))
+      <-> (forall i:int.
+           ((le_int((0), i) and lt_int(i, n_1)) ->
+            eq_int(integer_of_int8(select(char_P_char_M_s1_1_at_L,
+                                   shift(s1_1, i))),
+            integer_of_int8(select(char_P_char_M_s2_2_at_L, shift(s2_1, i))))))))))))
+
+logic memset: char_P pointer, int, int, (char_P, int8) memory -> bool
+
+axiom memset_def :
+ (forall char_P_char_M_s_1_4_at_L:(char_P, int8) memory.
+  (forall s_2:char_P pointer.
+   (forall c_2:int.
+    (forall n_5:int.
+     (eq_bool(memset(s_2, c_2, n_5, char_P_char_M_s_1_4_at_L), true)
+     <-> (forall i_1:int.
+          ((le_int((0), i_1) and lt_int(i_1, n_5)) ->
+           eq_int(integer_of_int8(select(char_P_char_M_s_1_4_at_L,
+                                  shift(s_2, i_1))),
+           c_2))))))))
+
+function minimum(i_25:int,
+ j_1:int) : int =
+ (if lt_int_bool(i_25, j_1) then i_25 else j_1)
+
+axiom pointer_addr_of_char_P_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+
+logic unsigned_short_P_of_pointer_address: unit pointer -> unsigned_short_P pointer
+
+axiom pointer_addr_of_unsigned_short_P_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_short_P_of_pointer_address(p))))
+
+logic void_P_of_pointer_address: unit pointer -> void_P pointer
+
+axiom pointer_addr_of_void_P_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+
+predicate right_valid_struct_char_P(p:char_P pointer,
+ b:int,
+ char_P_alloc_table:char_P alloc_table) =
+ (offset_max(char_P_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_short_P(p:unsigned_short_P pointer,
+ b:int,
+ unsigned_short_P_alloc_table:unsigned_short_P alloc_table) =
+ (offset_max(unsigned_short_P_alloc_table, p) >= b)
+
+predicate right_valid_struct_void_P(p:void_P pointer,
+ b:int,
+ void_P_alloc_table:void_P alloc_table) =
+ (offset_max(void_P_alloc_table, p) >= b)
+
+logic strchr: char_P pointer, int, (char_P, int8) memory -> bool
+
+axiom strchr_def :
+ (forall char_P_char_M_s_15_10_at_L:(char_P, int8) memory.
+  (forall s_16:char_P pointer.
+   (forall c_4:int.
+    (eq_bool(strchr(s_16, c_4, char_P_char_M_s_15_10_at_L), true)
+    <-> (exists i_13:int.
+         (le_int((0), i_13)
+         and (le_int(i_13, strlen(s_16, char_P_char_M_s_15_10_at_L))
+             and eq_int(integer_of_int8(select(char_P_char_M_s_15_10_at_L,
+                                        shift(s_16, i_13))),
+                 c_4))))))))
+
+logic strcmp: char_P pointer,
+ char_P pointer,
+ (char_P, int8) memory,
+ (char_P, int8) memory -> int
+
+axiom strcmp_range :
+ (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+  (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+   (forall s1_7:char_P pointer.
+    (forall s2_7:char_P pointer.
+     (le_int(sub_int(neg_int((2147483647)), (1)),
+      strcmp(s1_7, s2_7, char_P_char_M_s2_6_7_at_L,
+      char_P_char_M_s1_6_6_at_L))
+     and le_int(strcmp(s1_7, s2_7, char_P_char_M_s2_6_7_at_L,
+                char_P_char_M_s1_6_6_at_L),
+         (2147483647)))))))
+
+axiom strcmp_zero :
+ (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+  (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+   (forall s1_8:char_P pointer.
+    (forall s2_8:char_P pointer.
+     (eq_int(strcmp(s1_8, s2_8, char_P_char_M_s2_6_7_at_L,
+             char_P_char_M_s1_6_6_at_L),
+      (0))
+     <-> (eq_int(strlen(s1_8, char_P_char_M_s1_6_6_at_L),
+          strlen(s2_8, char_P_char_M_s2_6_7_at_L))
+         and (forall i_11:int.
+              ((le_int((0), i_11)
+               and le_int(i_11, strlen(s1_8, char_P_char_M_s1_6_6_at_L))) ->
+               eq_int(integer_of_int8(select(char_P_char_M_s1_6_6_at_L,
+                                      shift(s1_8, i_11))),
+               integer_of_int8(select(char_P_char_M_s2_6_7_at_L,
+                               shift(s2_8, i_11))))))))))))
+
+predicate strict_valid_root_char_P(p:char_P pointer,
+ a:int,
+ b:int,
+ char_P_alloc_table:char_P alloc_table) =
+ ((offset_min(char_P_alloc_table, p) = a)
+ and (offset_max(char_P_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_short_P(p:unsigned_short_P pointer,
+ a:int,
+ b:int,
+ unsigned_short_P_alloc_table:unsigned_short_P alloc_table) =
+ ((offset_min(unsigned_short_P_alloc_table, p) = a)
+ and (offset_max(unsigned_short_P_alloc_table, p) = b))
+
+predicate strict_valid_root_void_P(p:void_P pointer,
+ a:int,
+ b:int,
+ void_P_alloc_table:void_P alloc_table) =
+ ((offset_min(void_P_alloc_table, p) = a)
+ and (offset_max(void_P_alloc_table, p) = b))
+
+predicate strict_valid_struct_char_P(p:char_P pointer,
+ a:int,
+ b:int,
+ char_P_alloc_table:char_P alloc_table) =
+ ((offset_min(char_P_alloc_table, p) = a)
+ and (offset_max(char_P_alloc_table, p) = b))
+
+predicate strict_valid_struct_unsigned_short_P(p:unsigned_short_P pointer,
+ a:int,
+ b:int,
+ unsigned_short_P_alloc_table:unsigned_short_P alloc_table) =
+ ((offset_min(unsigned_short_P_alloc_table, p) = a)
+ and (offset_max(unsigned_short_P_alloc_table, p) = b))
+
+predicate strict_valid_struct_void_P(p:void_P pointer,
+ a:int,
+ b:int,
+ void_P_alloc_table:void_P alloc_table) =
+ ((offset_min(void_P_alloc_table, p) = a)
+ and (offset_max(void_P_alloc_table, p) = b))
+
+axiom strlen_at_null :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_8:char_P pointer.
+   (le_int((0), strlen(s_8, char_P_char_M_s_3_5_at_L)) ->
+    eq_int(integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+                           shift(s_8, strlen(s_8, char_P_char_M_s_3_5_at_L)))),
+    (0)))))
+
+axiom strlen_before_null :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_7:char_P pointer.
+   (forall i_4:int.
+    ((le_int((0), i_4)
+     and lt_int(i_4, strlen(s_7, char_P_char_M_s_3_5_at_L))) ->
+     neq_int(integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+                             shift(s_7, i_4))),
+     (0))))))
+
+axiom strlen_create :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_13:char_P pointer.
+   (forall i_9:int.
+    ((le_int((0), i_9)
+     and (le_int(i_9, (2147483647))
+         and eq_int(integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+                                    shift(s_13, i_9))),
+             (0)))) ->
+     (le_int((0), strlen(s_13, char_P_char_M_s_3_5_at_L))
+     and le_int(strlen(s_13, char_P_char_M_s_3_5_at_L), i_9))))))
+
+axiom strlen_create_shift :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_14:char_P pointer.
+   (forall i_10:int.
+    (forall k:int.
+     ((le_int((0), k)
+      and (le_int(k, i_10)
+          and (le_int(i_10, (2147483647))
+              and eq_int(integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+                                         shift(s_14, i_10))),
+                  (0))))) ->
+      (le_int((0), strlen(shift(s_14, k), char_P_char_M_s_3_5_at_L))
+      and le_int(strlen(shift(s_14, k), char_P_char_M_s_3_5_at_L),
+          sub_int(i_10, k))))))))
+
+axiom strlen_neg :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_5:char_P pointer.
+   ((forall i_3:int.
+     ((le_int((0), i_3) and le_int(i_3, (2147483647))) ->
+      neq_int(integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+                              shift(s_5, i_3))),
+      (0)))) ->
+    lt_int(strlen(s_5, char_P_char_M_s_3_5_at_L), (0)))))
+
+axiom strlen_not_zero :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_9:char_P pointer.
+   (forall i_5:int.
+    ((le_int((0), i_5)
+     and (le_int(i_5, strlen(s_9, char_P_char_M_s_3_5_at_L))
+         and neq_int(integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+                                     shift(s_9, i_5))),
+             (0)))) ->
+     lt_int(i_5, strlen(s_9, char_P_char_M_s_3_5_at_L))))))
+
+axiom strlen_pos_or_null :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_4:char_P pointer.
+   (forall i_2:int.
+    ((le_int((0), i_2)
+     and (le_int(i_2, (2147483647))
+         and ((forall j:int.
+               ((le_int((0), j) and lt_int(j, i_2)) ->
+                neq_int(integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+                                        shift(s_4, j))),
+                (0))))
+             and eq_int(integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+                                        shift(s_4, i_2))),
+                 (0))))) ->
+     eq_int(strlen(s_4, char_P_char_M_s_3_5_at_L), i_2)))))
+
+axiom strlen_range :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_6:char_P pointer.
+   le_int(strlen(s_6, char_P_char_M_s_3_5_at_L), (2147483647))))
+
+axiom strlen_shift :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_12:char_P pointer.
+   (forall i_8:int.
+    ((le_int((0), i_8)
+     and le_int(i_8, strlen(s_12, char_P_char_M_s_3_5_at_L))) ->
+     eq_int(strlen(shift(s_12, i_8), char_P_char_M_s_3_5_at_L),
+     sub_int(strlen(s_12, char_P_char_M_s_3_5_at_L), i_8))))))
+
+axiom strlen_sup :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_11:char_P pointer.
+   (forall i_7:int.
+    ((le_int((0), i_7)
+     and eq_int(integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+                                shift(s_11, i_7))),
+         (0))) ->
+     (le_int((0), strlen(s_11, char_P_char_M_s_3_5_at_L))
+     and le_int(strlen(s_11, char_P_char_M_s_3_5_at_L), i_7))))))
+
+axiom strlen_zero :
+ (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+  (forall s_10:char_P pointer.
+   (forall i_6:int.
+    ((le_int((0), i_6)
+     and (le_int(i_6, strlen(s_10, char_P_char_M_s_3_5_at_L))
+         and eq_int(integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+                                    shift(s_10, i_6))),
+             (0)))) ->
+     eq_int(i_6, strlen(s_10, char_P_char_M_s_3_5_at_L))))))
+
+logic strncmp: char_P pointer,
+ char_P pointer,
+ int,
+ (char_P, int8) memory,
+ (char_P, int8) memory -> int
+
+axiom strncmp_zero :
+ (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
+  (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
+   (forall s1_10:char_P pointer.
+    (forall s2_10:char_P pointer.
+     (forall n_11:int.
+      (eq_int(strncmp(s1_10, s2_10, n_11, char_P_char_M_s2_9_9_at_L,
+              char_P_char_M_s1_9_8_at_L),
+       (0))
+      <-> ((lt_int(strlen(s1_10, char_P_char_M_s1_9_8_at_L), n_11)
+           and eq_int(strcmp(s1_10, s2_10, char_P_char_M_s2_9_9_at_L,
+                      char_P_char_M_s1_9_8_at_L),
+               (0)))
+          or (forall i_12:int.
+              ((le_int((0), i_12) and lt_int(i_12, n_11)) ->
+               eq_int(integer_of_int8(select(char_P_char_M_s1_9_8_at_L,
+                                      shift(s1_10, i_12))),
+               integer_of_int8(select(char_P_char_M_s2_9_9_at_L,
+                               shift(s2_10, i_12)))))))))))))
+
+logic uint16_of_integer: int -> uint16
+
+axiom uint16_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (65535))) ->
+   eq_int(integer_of_uint16(uint16_of_integer(x)), x)))
+
+axiom uint16_of_bitvector_of_bitvector_of_uint16 :
+ (forall x:uint16. eq_uint16(uint16_of_bitvector(bitvector_of_uint16(x)), x))
+
+axiom uint16_range :
+ (forall x:uint16.
+  (le_int((0), integer_of_uint16(x))
+  and le_int(integer_of_uint16(x), (65535))))
+
+logic unsigned_short_P_tag:  -> unsigned_short_P tag_id
+
+axiom unsigned_short_P_int : (int_of_tag(unsigned_short_P_tag) = (1))
+
+axiom unsigned_short_P_of_bitvector_of_bitvector_of_unsigned_short_P :
+ (forall x:unsigned_short_P pointer.
+  (unsigned_short_P_of_bitvector(bitvector_of_unsigned_short_P(x)) = x))
+
+axiom unsigned_short_P_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_short_P pointer.
+  (p = unsigned_short_P_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_short_P_parenttag_bottom :
+ parenttag(unsigned_short_P_tag, bottom_tag)
+
+axiom unsigned_short_P_tags :
+ (forall x:unsigned_short_P pointer.
+  (forall unsigned_short_P_tag_table:unsigned_short_P tag_table.
+   instanceof(unsigned_short_P_tag_table, x, unsigned_short_P_tag)))
+
+predicate valid_bitvector_struct_char_P(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_unsigned_short_P(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_void_P(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_root_char_P(p:char_P pointer,
+ a:int,
+ b:int,
+ char_P_alloc_table:char_P alloc_table) =
+ ((offset_min(char_P_alloc_table, p) <= a)
+ and (offset_max(char_P_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_short_P(p:unsigned_short_P pointer,
+ a:int,
+ b:int,
+ unsigned_short_P_alloc_table:unsigned_short_P alloc_table) =
+ ((offset_min(unsigned_short_P_alloc_table, p) <= a)
+ and (offset_max(unsigned_short_P_alloc_table, p) >= b))
+
+predicate valid_root_void_P(p:void_P pointer,
+ a:int,
+ b:int,
+ void_P_alloc_table:void_P alloc_table) =
+ ((offset_min(void_P_alloc_table, p) <= a)
+ and (offset_max(void_P_alloc_table, p) >= b))
+
+predicate valid_string(s_28:char_P pointer,
+ char_P_s_28_16_alloc_table_at_L:char_P alloc_table,
+ char_P_char_M_s_28_16_at_L:(char_P, int8) memory) =
+ (le_int((0), strlen(s_28, char_P_char_M_s_28_16_at_L))
+ and (le_int(offset_min(char_P_s_28_16_alloc_table_at_L, s_28), (0))
+     and ge_int(offset_max(char_P_s_28_16_alloc_table_at_L, s_28),
+         strlen(s_28, char_P_char_M_s_28_16_at_L))))
+
+predicate valid_string_or_null(s_29:char_P pointer,
+ char_P_s_29_17_alloc_table_at_L:char_P alloc_table,
+ char_P_char_M_s_29_17_at_L:(char_P, int8) memory) =
+ ((s_29 = null)
+ or valid_string(s_29, char_P_s_29_17_alloc_table_at_L,
+    char_P_char_M_s_29_17_at_L))
+
+predicate valid_struct_char_P(p:char_P pointer,
+ a:int,
+ b:int,
+ char_P_alloc_table:char_P alloc_table) =
+ ((offset_min(char_P_alloc_table, p) <= a)
+ and (offset_max(char_P_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_short_P(p:unsigned_short_P pointer,
+ a:int,
+ b:int,
+ unsigned_short_P_alloc_table:unsigned_short_P alloc_table) =
+ ((offset_min(unsigned_short_P_alloc_table, p) <= a)
+ and (offset_max(unsigned_short_P_alloc_table, p) >= b))
+
+predicate valid_struct_void_P(p:void_P pointer,
+ a:int,
+ b:int,
+ void_P_alloc_table:void_P alloc_table) =
+ ((offset_min(void_P_alloc_table, p) <= a)
+ and (offset_max(void_P_alloc_table, p) >= b))
+
+logic wcslen: unsigned_short_P pointer,
+ (unsigned_short_P, uint16) memory -> int
+
+predicate valid_wstring(s_30:unsigned_short_P pointer,
+ unsigned_short_P_s_30_18_alloc_table_at_L:unsigned_short_P alloc_table,
+ unsigned_short_P_unsigned_short_M_s_30_18_at_L:(unsigned_short_P, uint16) memory) =
+ (le_int((0), wcslen(s_30, unsigned_short_P_unsigned_short_M_s_30_18_at_L))
+ and (le_int(offset_min(unsigned_short_P_s_30_18_alloc_table_at_L, s_30),
+      (0))
+     and ge_int(offset_max(unsigned_short_P_s_30_18_alloc_table_at_L, s_30),
+         wcslen(s_30, unsigned_short_P_unsigned_short_M_s_30_18_at_L))))
+
+predicate valid_wstring_or_null(s_31:unsigned_short_P pointer,
+ unsigned_short_P_s_31_19_alloc_table_at_L:unsigned_short_P alloc_table,
+ unsigned_short_P_unsigned_short_M_s_31_19_at_L:(unsigned_short_P, uint16) memory) =
+ ((s_31 = null)
+ or valid_wstring(s_31, unsigned_short_P_s_31_19_alloc_table_at_L,
+    unsigned_short_P_unsigned_short_M_s_31_19_at_L))
+
+logic void_P_tag:  -> void_P tag_id
+
+axiom void_P_int : (int_of_tag(void_P_tag) = (1))
+
+axiom void_P_of_bitvector_of_bitvector_of_void_P :
+ (forall x:void_P pointer. (void_P_of_bitvector(bitvector_of_void_P(x)) = x))
+
+axiom void_P_of_pointer_address_of_pointer_addr :
+ (forall p:void_P pointer.
+  (p = void_P_of_pointer_address(pointer_address(p))))
+
+axiom void_P_parenttag_bottom : parenttag(void_P_tag, bottom_tag)
+
+axiom void_P_tags :
+ (forall x:void_P pointer.
+  (forall void_P_tag_table:void_P tag_table.
+   instanceof(void_P_tag_table, x, void_P_tag)))
+
+logic wcscmp: unsigned_short_P pointer,
+ unsigned_short_P pointer,
+ (unsigned_short_P, uint16) memory,
+ (unsigned_short_P, uint16) memory -> int
+
+axiom wcscmp_zero :
+ (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P, uint16) memory.
+  (forall unsigned_short_P_unsigned_short_M_s1_11_12_at_L:(unsigned_short_P, uint16) memory.
+   (forall s1_12:unsigned_short_P pointer.
+    (forall s2_12:unsigned_short_P pointer.
+     (eq_int(wcscmp(s1_12, s2_12,
+             unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+             unsigned_short_P_unsigned_short_M_s1_11_12_at_L),
+      (0))
+     <-> (eq_int(wcslen(s1_12,
+                 unsigned_short_P_unsigned_short_M_s1_11_12_at_L),
+          wcslen(s2_12, unsigned_short_P_unsigned_short_M_s2_11_13_at_L))
+         and (forall i_23:int.
+              ((le_int((0), i_23)
+               and le_int(i_23,
+                   wcslen(s1_12,
+                   unsigned_short_P_unsigned_short_M_s1_11_12_at_L))) ->
+               eq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s1_11_12_at_L,
+                                        shift(s1_12, i_23))),
+               integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+                                 shift(s2_12, i_23))))))))))))
+
+axiom wcslen_at_null :
+ (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+  (forall s_21:unsigned_short_P pointer.
+   (le_int((0), wcslen(s_21, unsigned_short_P_unsigned_short_M_s_17_11_at_L)) ->
+    eq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+                             shift(s_21,
+                             wcslen(s_21,
+                             unsigned_short_P_unsigned_short_M_s_17_11_at_L)))),
+    (0)))))
+
+axiom wcslen_before_null :
+ (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+  (forall s_20:unsigned_short_P pointer.
+   (forall i_16:int32.
+    ((le_int((0), integer_of_int32(i_16))
+     and lt_int(integer_of_int32(i_16),
+         wcslen(s_20, unsigned_short_P_unsigned_short_M_s_17_11_at_L))) ->
+     neq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+                               shift(s_20, integer_of_int32(i_16)))),
+     (0))))))
+
+axiom wcslen_create :
+ (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+  (forall s_26:unsigned_short_P pointer.
+   (forall i_21:int32.
+    ((le_int((0), integer_of_int32(i_21))
+     and eq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+                                  shift(s_26, integer_of_int32(i_21)))),
+         (0))) ->
+     (le_int((0),
+      wcslen(s_26, unsigned_short_P_unsigned_short_M_s_17_11_at_L))
+     and le_int(wcslen(s_26, unsigned_short_P_unsigned_short_M_s_17_11_at_L),
+         integer_of_int32(i_21)))))))
+
+axiom wcslen_create_shift :
+ (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+  (forall s_27:unsigned_short_P pointer.
+   (forall i_22:int32.
+    (forall k_2:int32.
+     ((le_int((0), integer_of_int32(k_2))
+      and (le_int(integer_of_int32(k_2), integer_of_int32(i_22))
+          and eq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+                                       shift(s_27, integer_of_int32(i_22)))),
+              (0)))) ->
+      (le_int((0),
+       wcslen(shift(s_27, integer_of_int32(k_2)),
+       unsigned_short_P_unsigned_short_M_s_17_11_at_L))
+      and le_int(wcslen(shift(s_27, integer_of_int32(k_2)),
+                 unsigned_short_P_unsigned_short_M_s_17_11_at_L),
+          sub_int(integer_of_int32(i_22), integer_of_int32(k_2)))))))))
+
+axiom wcslen_neg :
+ (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+  (forall s_19:unsigned_short_P pointer.
+   ((forall i_15:int.
+     (le_int((0), i_15) ->
+      neq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+                                shift(s_19, i_15))),
+      (0)))) ->
+    lt_int(wcslen(s_19, unsigned_short_P_unsigned_short_M_s_17_11_at_L), (0)))))
+
+axiom wcslen_not_zero :
+ (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+  (forall s_22:unsigned_short_P pointer.
+   (forall i_17:int32.
+    ((le_int((0), integer_of_int32(i_17))
+     and (le_int(integer_of_int32(i_17),
+          wcslen(s_22, unsigned_short_P_unsigned_short_M_s_17_11_at_L))
+         and neq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+                                       shift(s_22, integer_of_int32(i_17)))),
+             (0)))) ->
+     lt_int(integer_of_int32(i_17),
+     wcslen(s_22, unsigned_short_P_unsigned_short_M_s_17_11_at_L))))))
+
+axiom wcslen_pos_or_null :
+ (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+  (forall s_18:unsigned_short_P pointer.
+   (forall i_14:int.
+    ((le_int((0), i_14)
+     and ((forall j_0:int.
+           ((le_int((0), j_0) and lt_int(j_0, i_14)) ->
+            neq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+                                      shift(s_18, j_0))),
+            (0))))
+         and eq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+                                      shift(s_18, i_14))),
+             (0)))) ->
+     eq_int(wcslen(s_18, unsigned_short_P_unsigned_short_M_s_17_11_at_L),
+     i_14)))))
+
+axiom wcslen_shift :
+ (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+  (forall s_25:unsigned_short_P pointer.
+   (forall i_20:int32.
+    ((le_int((0), integer_of_int32(i_20))
+     and le_int(integer_of_int32(i_20),
+         wcslen(s_25, unsigned_short_P_unsigned_short_M_s_17_11_at_L))) ->
+     eq_int(wcslen(shift(s_25, integer_of_int32(i_20)),
+            unsigned_short_P_unsigned_short_M_s_17_11_at_L),
+     sub_int(wcslen(s_25, unsigned_short_P_unsigned_short_M_s_17_11_at_L),
+     integer_of_int32(i_20)))))))
+
+axiom wcslen_sup :
+ (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+  (forall s_24:unsigned_short_P pointer.
+   (forall i_19:int32.
+    ((le_int((0), integer_of_int32(i_19))
+     and eq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+                                  shift(s_24, integer_of_int32(i_19)))),
+         (0))) ->
+     (le_int((0),
+      wcslen(s_24, unsigned_short_P_unsigned_short_M_s_17_11_at_L))
+     and le_int(wcslen(s_24, unsigned_short_P_unsigned_short_M_s_17_11_at_L),
+         integer_of_int32(i_19)))))))
+
+axiom wcslen_zero :
+ (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P, uint16) memory.
+  (forall s_23:unsigned_short_P pointer.
+   (forall i_18:int32.
+    ((le_int((0), integer_of_int32(i_18))
+     and (le_int(integer_of_int32(i_18),
+          wcslen(s_23, unsigned_short_P_unsigned_short_M_s_17_11_at_L))
+         and eq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+                                      shift(s_23, integer_of_int32(i_18)))),
+             (0)))) ->
+     eq_int(integer_of_int32(i_18),
+     wcslen(s_23, unsigned_short_P_unsigned_short_M_s_17_11_at_L))))))
+
+logic wcsncmp: unsigned_short_P pointer,
+ unsigned_short_P pointer,
+ int,
+ (unsigned_short_P, uint16) memory,
+ (unsigned_short_P, uint16) memory -> int
+
+axiom wcsncmp_zero :
+ (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P, uint16) memory.
+  (forall unsigned_short_P_unsigned_short_M_s1_13_14_at_L:(unsigned_short_P, uint16) memory.
+   (forall s1_14:unsigned_short_P pointer.
+    (forall s2_14:unsigned_short_P pointer.
+     (forall n_13:int.
+      (eq_int(wcsncmp(s1_14, s2_14, n_13,
+              unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+              unsigned_short_P_unsigned_short_M_s1_13_14_at_L),
+       (0))
+      <-> ((lt_int(wcslen(s1_14,
+                   unsigned_short_P_unsigned_short_M_s1_13_14_at_L),
+            n_13)
+           and eq_int(wcscmp(s1_14, s2_14,
+                      unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                      unsigned_short_P_unsigned_short_M_s1_13_14_at_L),
+               (0)))
+          or (forall i_24:int.
+              ((le_int((0), i_24) and lt_int(i_24, n_13)) ->
+               eq_int(integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s1_13_14_at_L,
+                                        shift(s1_14, i_24))),
+               integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                                 shift(s2_14, i_24)))))))))))))
+
+parameter alloc_bitvector_struct_char_P :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_char_P_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_unsigned_short_P :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_unsigned_short_P(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_unsigned_short_P_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_unsigned_short_P(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_void_P :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_void_P_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter char_P_alloc_table : char_P alloc_table ref
+
+parameter char_P_tag_table : char_P tag_table ref
+
+parameter alloc_struct_char_P :
+ n:int ->
+  char_P_alloc_table:char_P alloc_table ref ->
+   char_P_tag_table:char_P tag_table ref ->
+    { } char_P pointer writes char_P_alloc_table,char_P_tag_table
+    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
+       char_P_alloc_table)
+      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
+          and (alloc_fresh(char_P_alloc_table@, result, n)
+              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+
+parameter alloc_struct_char_P_requires :
+ n:int ->
+  char_P_alloc_table:char_P alloc_table ref ->
+   char_P_tag_table:char_P tag_table ref ->
+    { ge_int(n, (0))} char_P pointer
+    writes char_P_alloc_table,char_P_tag_table
+    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
+       char_P_alloc_table)
+      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
+          and (alloc_fresh(char_P_alloc_table@, result, n)
+              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+
+parameter unsigned_short_P_alloc_table : unsigned_short_P alloc_table ref
+
+parameter unsigned_short_P_tag_table : unsigned_short_P tag_table ref
+
+parameter alloc_struct_unsigned_short_P :
+ n:int ->
+  unsigned_short_P_alloc_table:unsigned_short_P alloc_table ref ->
+   unsigned_short_P_tag_table:unsigned_short_P tag_table ref ->
+    { } unsigned_short_P pointer
+    writes unsigned_short_P_alloc_table,unsigned_short_P_tag_table
+    { (strict_valid_struct_unsigned_short_P(result, (0), sub_int(n, (1)),
+       unsigned_short_P_alloc_table)
+      and (alloc_extends(unsigned_short_P_alloc_table@,
+           unsigned_short_P_alloc_table)
+          and (alloc_fresh(unsigned_short_P_alloc_table@, result, n)
+              and instanceof(unsigned_short_P_tag_table, result,
+                  unsigned_short_P_tag)))) }
+
+parameter alloc_struct_unsigned_short_P_requires :
+ n:int ->
+  unsigned_short_P_alloc_table:unsigned_short_P alloc_table ref ->
+   unsigned_short_P_tag_table:unsigned_short_P tag_table ref ->
+    { ge_int(n, (0))} unsigned_short_P pointer
+    writes unsigned_short_P_alloc_table,unsigned_short_P_tag_table
+    { (strict_valid_struct_unsigned_short_P(result, (0), sub_int(n, (1)),
+       unsigned_short_P_alloc_table)
+      and (alloc_extends(unsigned_short_P_alloc_table@,
+           unsigned_short_P_alloc_table)
+          and (alloc_fresh(unsigned_short_P_alloc_table@, result, n)
+              and instanceof(unsigned_short_P_tag_table, result,
+                  unsigned_short_P_tag)))) }
+
+parameter void_P_alloc_table : void_P alloc_table ref
+
+parameter void_P_tag_table : void_P tag_table ref
+
+parameter alloc_struct_void_P :
+ n:int ->
+  void_P_alloc_table:void_P alloc_table ref ->
+   void_P_tag_table:void_P tag_table ref ->
+    { } void_P pointer writes void_P_alloc_table,void_P_tag_table
+    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
+       void_P_alloc_table)
+      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
+          and (alloc_fresh(void_P_alloc_table@, result, n)
+              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+
+parameter alloc_struct_void_P_requires :
+ n:int ->
+  void_P_alloc_table:void_P alloc_table ref ->
+   void_P_tag_table:void_P tag_table ref ->
+    { ge_int(n, (0))} void_P pointer
+    writes void_P_alloc_table,void_P_tag_table
+    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
+       void_P_alloc_table)
+      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
+          and (alloc_fresh(void_P_alloc_table@, result, n)
+              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+
+parameter any_int32 : unit -> { } int32 { true }
+
+parameter any_int8 : unit -> { } int8 { true }
+
+parameter any_uint16 : unit -> { } uint16 { true }
+
+parameter int32_of_integer_ :
+ x:int ->
+  { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
+  { eq_int(integer_of_int32(result), x) }
+
+parameter int8_of_integer_ :
+ x:int ->
+  { (le_int((-128), x) and le_int(x, (127)))} int8
+  { eq_int(integer_of_int8(result), x) }
+
+parameter safe_int32_of_integer_ :
+ x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
+
+parameter safe_int8_of_integer_ :
+ x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
+
+parameter safe_uint16_of_integer_ :
+ x:int -> { } uint16 { eq_int(integer_of_uint16(result), x) }
+
+parameter strcpy :
+ ret:char_P pointer ->
+  s2_0:char_P pointer ->
+   char_P_char_M_ret_20:(char_P, int8) memory ref ->
+    char_P_s2_21_alloc_table:char_P alloc_table ->
+     char_P_ret_20_alloc_table:char_P alloc_table ->
+      char_P_char_M_s2_21:(char_P, int8) memory ->
+       { } char_P pointer writes char_P_char_M_ret_20 { true }
+
+parameter strcpy_requires :
+ ret:char_P pointer ->
+  s2_0:char_P pointer ->
+   char_P_char_M_ret_20:(char_P, int8) memory ref ->
+    char_P_s2_21_alloc_table:char_P alloc_table ->
+     char_P_ret_20_alloc_table:char_P alloc_table ->
+      char_P_char_M_s2_21:(char_P, int8) memory ->
+       { (JC_1:
+         valid_string(s2_0, char_P_s2_21_alloc_table, char_P_char_M_s2_21))}
+       char_P pointer writes char_P_char_M_ret_20 { true }
+
+parameter uint16_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (65535)))} uint16
+  { eq_int(integer_of_uint16(result), x) }
+
+let strcpy_ensures_default =
+ fun (ret : char_P pointer) (s2_0 : char_P pointer) (char_P_char_M_ret_20 : (char_P, int8) memory ref) (char_P_ret_20_alloc_table : char_P alloc_table) (char_P_s2_21_alloc_table : char_P alloc_table) (char_P_char_M_s2_21 : (char_P, int8) memory) ->
+  { ((true = true)
+    and (JC_3:
+        valid_string(s2_0, char_P_s2_21_alloc_table, char_P_char_M_s2_21))) }
+  (let mutable_s2_0 = ref s2_0 in
+  (init:
+  (let return = ref (any_pointer void) in
+  try
+   begin
+     (let s1_15 = ref (any_pointer void) in
+     (let tmp = ref (any_pointer void) in
+     (let tmp_0 = ref (any_int8 void) in
+     (let tmp_1 = ref (any_pointer void) in
+     (C_1:
+     begin
+       (let jessie_25 = (s1_15 := ret) in void);
+      try
+       (let jessie_42 = begin
+                          (loop_2:
+                          while true do
+                          { invariant (JC_16: true)  }
+                           begin
+                             [ { } unit { true } ];
+                            try
+                             (let jessie_41 = begin
+                                                (let jessie_39 = begin
+                                                                   (let jessie_29 = 
+                                                                   (C_2:
+                                                                   begin
+                                                                     
+                                                                    (let jessie_27 = 
+                                                                    (tmp := !s1_15) in
+                                                                    void);
+                                                                    (C_4:
+                                                                    begin
+                                                                      
+                                                                    (s1_15 := 
+                                                                    (C_3:
+                                                                    ((shift !s1_15) (1))));
+                                                                    !s1_15
+                                                                    end)
+                                                                   end) in
+                                                                   void);
+                                                                  (let jessie_34 = 
+                                                                  (C_5:
+                                                                  begin
+                                                                    (let jessie_31 = 
+                                                                    (tmp_1 := !mutable_s2_0) in
+                                                                    void);
+                                                                   (C_7:
+                                                                   begin
+                                                                     
+                                                                    (let jessie_33 = 
+                                                                    (mutable_s2_0 := 
+                                                                    (C_6:
+                                                                    ((shift !mutable_s2_0) (1)))) in
+                                                                    void);
+                                                                    (C_9:
+                                                                    begin
+                                                                      
+                                                                    (tmp_0 := 
+                                                                    (C_8:
+                                                                    ((safe_acc_ char_P_char_M_s2_21) !tmp_1)));
+                                                                    !tmp_0
+                                                                    end)
+                                                                   end)
+                                                                  end) in
+                                                                  void);
+                                                                  (C_11:
+                                                                  (let jessie_35 = !tmp_0 in
+                                                                  (let jessie_38 = !tmp in
+                                                                  begin
+                                                                    (((safe_upd_ char_P_char_M_ret_20) jessie_38) jessie_35);
+                                                                   jessie_35
+                                                                  end)))
+                                                                 end in
+                                                void);
+                                               (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
+                                               then void
+                                               else
+                                                (let jessie_40 = (raise
+                                                                  (Goto_while_0_break_exc
+                                                                  void)) in
+                                                void));
+                                               (raise
+                                                (Loop_continue_exc
+                                                void))
+                                              end in
+                             void)
+                             with
+                             Loop_continue_exc jessie_3 ->
+                             void end
+                           end
+                          done);
+                         (raise (Goto_while_0_break_exc void))
+                        end in
+       void)
+       with
+       Goto_while_0_break_exc jessie_1 ->
+       (while_0_break: void) end;
+      (return := ret);
+      (raise Return)
+     end)))));
+    absurd 
+   end
+   with
+   Return ->
+   !return end)))
+  { (JC_5: true) }
+
+let strcpy_safety =
+ fun (ret : char_P pointer) (s2_0 : char_P pointer) (char_P_char_M_ret_20 : (char_P, int8) memory ref) (char_P_ret_20_alloc_table : char_P alloc_table) (char_P_s2_21_alloc_table : char_P alloc_table) (char_P_char_M_s2_21 : (char_P, int8) memory) ->
+  { (JC_3: valid_string(s2_0, char_P_s2_21_alloc_table, char_P_char_M_s2_21)) }
+  (let mutable_s2_0 = ref s2_0 in
+  (init:
+  (let return = ref (any_pointer void) in
+  try
+   begin
+     (let s1_15 = ref (any_pointer void) in
+     (let tmp = ref (any_pointer void) in
+     (let tmp_0 = ref (any_int8 void) in
+     (let tmp_1 = ref (any_pointer void) in
+     (C_1:
+     begin
+       (let jessie_5 = (s1_15 := ret) in void);
+      try
+       (let jessie_22 = begin
+                          (loop_1:
+                          while true do
+                          { invariant (JC_10: true)  }
+                           begin
+                             [ { } unit { true } ];
+                            try
+                             (let jessie_21 = begin
+                                                (let jessie_19 = begin
+                                                                   (let jessie_9 = 
+                                                                   (C_2:
+                                                                   begin
+                                                                     
+                                                                    (let jessie_7 = 
+                                                                    (tmp := !s1_15) in
+                                                                    void);
+                                                                    (C_4:
+                                                                    begin
+                                                                      
+                                                                    (s1_15 := 
+                                                                    (C_3:
+                                                                    ((shift !s1_15) (1))));
+                                                                    !s1_15
+                                                                    end)
+                                                                   end) in
+                                                                   void);
+                                                                  (let jessie_14 = 
+                                                                  (C_5:
+                                                                  begin
+                                                                    (let jessie_11 = 
+                                                                    (tmp_1 := !mutable_s2_0) in
+                                                                    void);
+                                                                   (C_7:
+                                                                   begin
+                                                                     
+                                                                    (let jessie_13 = 
+                                                                    (mutable_s2_0 := 
+                                                                    (C_6:
+                                                                    ((shift !mutable_s2_0) (1)))) in
+                                                                    void);
+                                                                    (C_9:
+                                                                    begin
+                                                                      
+                                                                    (tmp_0 := 
+                                                                    (C_8:
+                                                                    (JC_13:
+                                                                    (((acc_ char_P_s2_21_alloc_table) char_P_char_M_s2_21) !tmp_1))));
+                                                                    !tmp_0
+                                                                    end)
+                                                                   end)
+                                                                  end) in
+                                                                  void);
+                                                                  (C_11:
+                                                                  (let jessie_15 = !tmp_0 in
+                                                                  (let jessie_18 = !tmp in
+                                                                  begin
+                                                                    (JC_14:
+                                                                    ((((upd_ char_P_ret_20_alloc_table) char_P_char_M_ret_20) jessie_18) jessie_15));
+                                                                   jessie_15
+                                                                  end)))
+                                                                 end in
+                                                void);
+                                               (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
+                                               then void
+                                               else
+                                                (let jessie_20 = (raise
+                                                                  (Goto_while_0_break_exc
+                                                                  void)) in
+                                                void));
+                                               (raise
+                                                (Loop_continue_exc
+                                                void))
+                                              end in
+                             void)
+                             with
+                             Loop_continue_exc jessie_3 ->
+                             void end
+                           end
+                          done);
+                         (raise (Goto_while_0_break_exc void))
+                        end in
+       void)
+       with
+       Goto_while_0_break_exc jessie_1 ->
+       (while_0_break: void) end;
+      (return := ret);
+      (raise Return)
+     end)))));
+    absurd 
+   end
+   with
+   Return ->
+   !return end)))
+  { true }
+
+
+WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C minix3_strcpy.jessie --quiet -f minix3_strcpy.makefile project
+why --project [...] why/minix3_strcpy.why
+<project name="minix3_strcpy" context="why/minix3_strcpy_ctx.why">
+  <function name="Function strcpy">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
+    <goal why_file="why/minix3_strcpy_po1.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/minix3_strcpy_po2.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/minix3_strcpy_po3.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/minix3_strcpy_po4.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    </behavior>
+  </function>
+</project>
+logic eq_unit : unit, unit -> prop
+
+logic neq_unit : unit, unit -> prop
+
+logic eq_bool : bool, bool -> prop
+
+logic neq_bool : bool, bool -> prop
+
+logic lt_int : int, int -> prop
+
+logic le_int : int, int -> prop
+
+logic gt_int : int, int -> prop
+
+logic ge_int : int, int -> prop
+
+logic eq_int : int, int -> prop
+
+logic neq_int : int, int -> prop
+
+logic add_int : int, int -> int
+
+logic sub_int : int, int -> int
+
+logic mul_int : int, int -> int
+
+logic div_int : int, int -> int
+
+logic mod_int : int, int -> int
+
+logic neg_int : int -> int
+
+predicate zwf_zero(a: int, b: int) = ((0 <= b) and (a < b))
+
+logic bool_and : bool, bool -> bool
+
+logic bool_or : bool, bool -> bool
+
+logic bool_xor : bool, bool -> bool
+
+logic bool_not : bool -> bool
+
+axiom bool_and_def:
+  (forall a:bool.
+    (forall b:bool.
+      ((bool_and(a, b) = true) <-> ((a = true) and (b = true)))))
+
+axiom bool_or_def:
+  (forall a:bool.
+    (forall b:bool. ((bool_or(a, b) = true) <-> ((a = true) or (b = true)))))
+
+axiom bool_xor_def:
+  (forall a:bool. (forall b:bool. ((bool_xor(a, b) = true) <-> (a <> b))))
+
+axiom bool_not_def: (forall a:bool. ((bool_not(a) = true) <-> (a = false)))
+
+logic ite : bool, 'a1, 'a1 -> 'a1
+
+axiom ite_true: (forall x:'a1. (forall y:'a1. (ite(true, x, y) = x)))
+
+axiom ite_false: (forall x:'a1. (forall y:'a1. (ite(false, x, y) = y)))
+
+logic lt_int_bool : int, int -> bool
+
+logic le_int_bool : int, int -> bool
+
+logic gt_int_bool : int, int -> bool
+
+logic ge_int_bool : int, int -> bool
+
+logic eq_int_bool : int, int -> bool
+
+logic neq_int_bool : int, int -> bool
+
+axiom lt_int_bool_axiom:
+  (forall x:int. (forall y:int. ((lt_int_bool(x, y) = true) <-> (x < y))))
+
+axiom le_int_bool_axiom:
+  (forall x:int. (forall y:int. ((le_int_bool(x, y) = true) <-> (x <= y))))
+
+axiom gt_int_bool_axiom:
+  (forall x:int. (forall y:int. ((gt_int_bool(x, y) = true) <-> (x > y))))
+
+axiom ge_int_bool_axiom:
+  (forall x:int. (forall y:int. ((ge_int_bool(x, y) = true) <-> (x >= y))))
+
+axiom eq_int_bool_axiom:
+  (forall x:int. (forall y:int. ((eq_int_bool(x, y) = true) <-> (x = y))))
+
+axiom neq_int_bool_axiom:
+  (forall x:int. (forall y:int. ((neq_int_bool(x, y) = true) <-> (x <> y))))
+
+logic abs_int : int -> int
+
+axiom abs_int_pos: (forall x:int. ((x >= 0) -> (abs_int(x) = x)))
+
+axiom abs_int_neg: (forall x:int. ((x <= 0) -> (abs_int(x) = (-x))))
+
+logic int_max : int, int -> int
+
+logic int_min : int, int -> int
+
+axiom int_max_is_ge:
+  (forall x:int.
+    (forall y:int. ((int_max(x, y) >= x) and (int_max(x, y) >= y))))
+
+axiom int_max_is_some:
+  (forall x:int.
+    (forall y:int. ((int_max(x, y) = x) or (int_max(x, y) = y))))
+
+axiom int_min_is_le:
+  (forall x:int.
+    (forall y:int. ((int_min(x, y) <= x) and (int_min(x, y) <= y))))
+
+axiom int_min_is_some:
+  (forall x:int.
+    (forall y:int. ((int_min(x, y) = x) or (int_min(x, y) = y))))
+
+logic lt_real : real, real -> prop
+
+logic le_real : real, real -> prop
+
+logic gt_real : real, real -> prop
+
+logic ge_real : real, real -> prop
+
+logic eq_real : real, real -> prop
+
+logic neq_real : real, real -> prop
+
+logic add_real : real, real -> real
+
+logic sub_real : real, real -> real
+
+logic mul_real : real, real -> real
+
+logic div_real : real, real -> real
+
+logic neg_real : real -> real
+
+logic real_of_int : int -> real
+
+logic int_of_real : real -> int
+
+logic lt_real_bool : real, real -> bool
+
+logic le_real_bool : real, real -> bool
+
+logic gt_real_bool : real, real -> bool
+
+logic ge_real_bool : real, real -> bool
+
+logic eq_real_bool : real, real -> bool
+
+logic neq_real_bool : real, real -> bool
+
+axiom lt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((lt_real_bool(x, y) = true) <-> (x < y))))
+
+axiom le_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((le_real_bool(x, y) = true) <-> (x <= y))))
+
+axiom gt_real_bool_axiom:
+  (forall x:real. (forall y:real. ((gt_real_bool(x, y) = true) <-> (x > y))))
+
+axiom ge_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((ge_real_bool(x, y) = true) <-> (x >= y))))
+
+axiom eq_real_bool_axiom:
+  (forall x:real. (forall y:real. ((eq_real_bool(x, y) = true) <-> (x = y))))
+
+axiom neq_real_bool_axiom:
+  (forall x:real.
+    (forall y:real. ((neq_real_bool(x, y) = true) <-> (x <> y))))
+
+logic real_max : real, real -> real
+
+logic real_min : real, real -> real
+
+axiom real_max_is_ge:
+  (forall x:real.
+    (forall y:real. ((real_max(x, y) >= x) and (real_max(x, y) >= y))))
+
+axiom real_max_is_some:
+  (forall x:real.
+    (forall y:real. ((real_max(x, y) = x) or (real_max(x, y) = y))))
+
+axiom real_min_is_le:
+  (forall x:real.
+    (forall y:real. ((real_min(x, y) <= x) and (real_min(x, y) <= y))))
+
+axiom real_min_is_some:
+  (forall x:real.
+    (forall y:real. ((real_min(x, y) = x) or (real_min(x, y) = y))))
+
+logic sqrt_real : real -> real
+
+logic pow_real : real, real -> real
+
+logic abs_real : real -> real
+
+axiom abs_real_pos:
+  (forall x:real [abs_real(x)]. ((x >= 0.0) -> (abs_real(x) = x)))
+
+axiom abs_real_neg:
+  (forall x:real [abs_real(x)]. ((x <= 0.0) -> (abs_real(x) = (-x))))
+
+logic exp : real -> real
+
+logic log : real -> real
+
+logic log10 : real -> real
+
+axiom log_exp: (forall x:real. (log(exp(x)) = x))
+
+logic cos : real -> real
+
+logic sin : real -> real
+
+logic tan : real -> real
+
+logic cosh : real -> real
+
+logic sinh : real -> real
+
+logic tanh : real -> real
+
+logic acos : real -> real
+
+logic asin : real -> real
+
+logic atan : real -> real
+
+logic atan2 : real, real -> real
+
+logic hypot : real, real -> real
+
+type 't alloc_table
+
+type 't pointer
+
+type 't block
+
+logic base_block : 'a1 pointer -> 'a1 block
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
+
+logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
+
+logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
+
+predicate valid(a: 'a1 alloc_table, p: 'a1 pointer) =
+  ((offset_min(a, p) <= 0) and (offset_max(a, p) >= 0))
+
+predicate same_block(p: 'a1 pointer, q: 'a1 pointer) =
+  (base_block(p) = base_block(q))
+
+logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
+
+logic shift : 'a1 pointer, int -> 'a1 pointer
+
+logic null :  -> 'a1 pointer
+
+axiom address_injective:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
+
+axiom address_null: (address(null) = 0)
+
+axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
+
+axiom address_shift_lt:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) < address(shift(p, j))) <-> (i < j)))))
+
+axiom address_shift_le:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [address(shift(p, i)), address(shift(p, j))].
+        ((address(shift(p, i)) <= address(shift(p, j))) <-> (i <= j)))))
+
+axiom shift_zero: (forall p:'a1 pointer [shift(p, 0)]. (shift(p, 0) = p))
+
+axiom shift_shift:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [shift(shift(p, i), j)]. (shift(shift(p, i),
+        j) = shift(p, (i + j))))))
+
+axiom offset_max_shift:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (forall i:int. (offset_max(a, shift(p, i)) = (offset_max(a, p) - i)))))
+
+axiom offset_min_shift:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (forall i:int. (offset_min(a, shift(p, i)) = (offset_min(a, p) - i)))))
+
+axiom neq_shift:
+  (forall p:'a1 pointer.
+    (forall i:int.
+      (forall j:int [shift(p, i), shift(p, j)].
+        ((i <> j) -> (shift(p, i) <> shift(p, j))))))
+
+axiom null_not_valid: (forall a:'a1 alloc_table. (not valid(a, null)))
+
+axiom null_pointer:
+  (forall a:'a1 alloc_table.
+    ((offset_min(a, null) >= 0) and (offset_max(a, null) <= (-2))))
+
+logic eq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
+
+logic neq_pointer_bool : 'a1 pointer, 'a1 pointer -> bool
+
+axiom eq_pointer_bool_def:
+  (forall p1:'a1 pointer.
+    (forall p2:'a1 pointer. ((eq_pointer_bool(p1, p2) = true) <-> (p1 = p2))))
+
+axiom neq_pointer_bool_def:
+  (forall p1:'a1 pointer.
+    (forall p2:'a1 pointer.
+      ((neq_pointer_bool(p1, p2) = true) <-> (p1 <> p2))))
+
+axiom same_block_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(p, shift(q, i))].
+        (same_block(p, q) -> same_block(p, shift(q, i))))))
+
+axiom same_block_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [same_block(shift(q, i), p)].
+        (same_block(q, p) -> same_block(shift(q, i), p)))))
+
+axiom sub_pointer_shift:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> (p = shift(q, sub_pointer(p, q))))))
+
+axiom sub_pointer_self:
+  (forall p:'a1 pointer [sub_pointer(p, p)]. (sub_pointer(p, p) = 0))
+
+axiom sub_pointer_zero:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer [sub_pointer(p, q)].
+      (same_block(p, q) -> ((sub_pointer(p, q) = 0) -> (p = q)))))
+
+axiom sub_pointer_shift_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(shift(p, i), q)]. (sub_pointer(shift(p, i),
+        q) = (sub_pointer(p, q) + i)))))
+
+axiom sub_pointer_shift_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [sub_pointer(p, shift(q, i))]. (sub_pointer(p, shift(q,
+        i)) = (sub_pointer(p, q) - i)))))
+
+type ('t, 'v) memory
+
+logic select : ('a2, 'a1) memory, 'a2 pointer -> 'a1
+
+logic store : ('a1, 'a2) memory, 'a1 pointer, 'a2 -> ('a1, 'a2) memory
+
+axiom select_store_eq:
+  (forall m:('a1, 'a2) memory.
+    (forall p1:'a1 pointer.
+      (forall p2:'a1 pointer.
+        (forall a:'a2 [store(m, p1, a), p2].
+          ((p1 = p2) -> (select(store(m, p1, a), p2) = a))))))
+
+axiom select_store_neq:
+  (forall m:('a1, 'a2) memory.
+    (forall p1:'a1 pointer.
+      (forall p2:'a1 pointer.
+        (forall a:'a2 [store(m, p1, a), p2].
+          ((p1 <> p2) -> (select(store(m, p1, a), p2) = select(m, p2)))))))
+
+type 't pset
+
+logic pset_empty :  -> 'a1 pset
+
+logic pset_singleton : 'a1 pointer -> 'a1 pset
+
+logic pset_deref : ('a2, 'a1 pointer) memory, 'a2 pset -> 'a1 pset
+
+logic pset_union : 'a1 pset, 'a1 pset -> 'a1 pset
+
+logic pset_all : 'a1 pset -> 'a1 pset
+
+logic pset_range : 'a1 pset, int, int -> 'a1 pset
+
+logic pset_range_left : 'a1 pset, int -> 'a1 pset
+
+logic pset_range_right : 'a1 pset, int -> 'a1 pset
+
+logic in_pset : 'a1 pointer, 'a1 pset -> prop
+
+logic valid_pset : 'a1 alloc_table, 'a1 pset -> prop
+
+predicate pset_disjoint(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (not (in_pset(p, ps1) and in_pset(p, ps2))))
+
+predicate pset_included(ps1: 'a1 pset, ps2: 'a1 pset) =
+  (forall p:'a1 pointer. (in_pset(p, ps1) -> in_pset(p, ps2)))
+
+axiom pset_included_self: (forall ps:'a1 pset. pset_included(ps, ps))
+
+axiom pset_included_range:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))].
+            (((c <= a) and (b <= d)) -> pset_included(pset_range(ps, a, b),
+             pset_range(ps, c, d))))))))
+
+axiom pset_included_range_all:
+  (forall ps:'a1 pset.
+    (forall a:int.
+      (forall b:int.
+        (forall c:int.
+          (forall d:int [pset_included(pset_range(ps, a, b), pset_range(ps,
+            c, d))]. pset_included(pset_range(ps, a, b), pset_all(ps)))))))
+
+axiom in_pset_empty: (forall p:'a1 pointer. (not in_pset(p, pset_empty)))
+
+axiom in_pset_singleton:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer. (in_pset(p, pset_singleton(q)) <-> (p = q))))
+
+axiom in_pset_deref:
+  (forall p:'a1 pointer.
+    (forall m:('a2, 'a1 pointer) memory.
+      (forall q:'a2 pset.
+        (in_pset(p, pset_deref(m, q)) <->
+         (exists r:'a2 pointer. (in_pset(r, q) and (p = select(m, r))))))))
+
+axiom in_pset_all:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (in_pset(p, pset_all(q)) <->
+       (exists i:int.
+         (exists r:'a1 pointer. (in_pset(r, q) and (p = shift(r, i))))))))
+
+axiom in_pset_range:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall a:int.
+        (forall b:int.
+          (in_pset(p, pset_range(q, a, b)) <->
+           (exists i:int.
+             (exists r:'a1 pointer.
+               ((a <= i) and
+                ((i <= b) and (in_pset(r, q) and (p = shift(r, i))))))))))))
+
+axiom in_pset_range_left:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall b:int.
+        (in_pset(p, pset_range_left(q, b)) <->
+         (exists i:int.
+           (exists r:'a1 pointer.
+             ((i <= b) and (in_pset(r, q) and (p = shift(r, i))))))))))
+
+axiom in_pset_range_right:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pset.
+      (forall a:int.
+        (in_pset(p, pset_range_right(q, a)) <->
+         (exists i:int.
+           (exists r:'a1 pointer.
+             ((a <= i) and (in_pset(r, q) and (p = shift(r, i))))))))))
+
+axiom in_pset_union:
+  (forall p:'a1 pointer.
+    (forall s1:'a1 pset.
+      (forall s2:'a1 pset.
+        (in_pset(p, pset_union(s1, s2)) <->
+         (in_pset(p, s1) or in_pset(p, s2))))))
+
+axiom valid_pset_empty: (forall a:'a1 alloc_table. valid_pset(a, pset_empty))
+
+axiom valid_pset_singleton:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (valid_pset(a, pset_singleton(p)) <-> valid(a, p))))
+
+axiom valid_pset_deref:
+  (forall a:'a1 alloc_table.
+    (forall m:('a2, 'a1 pointer) memory.
+      (forall q:'a2 pset.
+        (valid_pset(a, pset_deref(m, q)) <->
+         (forall r:'a2 pointer.
+           (forall p:'a1 pointer.
+             ((in_pset(r, q) and (p = select(m, r))) -> valid(a, p))))))))
+
+axiom valid_pset_range:
+  (forall a:'a1 alloc_table.
+    (forall q:'a1 pset.
+      (forall c:int.
+        (forall d:int.
+          (valid_pset(a, pset_range(q, c, d)) <->
+           (forall i:int.
+             (forall r:'a1 pointer.
+               ((in_pset(r, q) and ((c <= i) and (i <= d))) -> valid(a,
+                shift(r, i))))))))))
+
+axiom valid_pset_union:
+  (forall a:'a1 alloc_table.
+    (forall s1:'a1 pset.
+      (forall s2:'a1 pset.
+        (valid_pset(a, pset_union(s1, s2)) <->
+         (valid_pset(a, s1) and valid_pset(a, s2))))))
+
+predicate not_assigns(a: 'a1 alloc_table, m1: ('a1, 'a2) memory, m2: ('a1,
+  'a2) memory, l: 'a1 pset) =
+  (forall p:'a1 pointer.
+    ((valid(a, p) and (not in_pset(p, l))) -> (select(m2, p) = select(m1, p))))
+
+axiom not_assigns_refl:
+  (forall a:'a1 alloc_table.
+    (forall m:('a1, 'a2) memory.
+      (forall l:'a1 pset. not_assigns(a, m, m, l))))
+
+axiom not_assigns_trans:
+  (forall a:'a1 alloc_table.
+    (forall m1:('a1, 'a2) memory.
+      (forall m2:('a1, 'a2) memory.
+        (forall m3:('a1, 'a2) memory.
+          (forall l:'a1 pset [not_assigns(a, m1, m2, l), not_assigns(a, m1,
+            m3, l)].
+            (not_assigns(a, m1, m2, l) ->
+             (not_assigns(a, m2, m3, l) -> not_assigns(a, m1, m3, l))))))))
+
+logic full_separated : 'a1 pointer, 'a2 pointer -> prop
+
+axiom full_separated_shift1:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(p, q), shift(q, i)].
+        (full_separated(p, q) -> full_separated(p, shift(q, i))))))
+
+axiom full_separated_shift2:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(p, q), shift(q, i)].
+        (full_separated(p, q) -> full_separated(shift(q, i), p)))))
+
+axiom full_separated_shift3:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(q, p), shift(q, i)].
+        (full_separated(q, p) -> full_separated(shift(q, i), p)))))
+
+axiom full_separated_shift4:
+  (forall p:'a1 pointer.
+    (forall q:'a1 pointer.
+      (forall i:int [full_separated(q, p), shift(q, i)].
+        (full_separated(q, p) -> full_separated(p, shift(q, i))))))
+
+type 't tag_table
+
+type 't tag_id
+
+logic int_of_tag : 'a1 tag_id -> int
+
+logic typeof : 'a1 tag_table, 'a1 pointer -> 'a1 tag_id
+
+logic parenttag : 'a1 tag_id, 'a1 tag_id -> prop
+
+logic subtag : 'a1 tag_id, 'a1 tag_id -> prop
+
+logic subtag_bool : 'a1 tag_id, 'a1 tag_id -> bool
+
+axiom subtag_bool_def:
+  (forall t1:'a1 tag_id.
+    (forall t2:'a1 tag_id. ((subtag_bool(t1, t2) = true) <-> subtag(t1, t2))))
+
+axiom subtag_refl: (forall t:'a1 tag_id. subtag(t, t))
+
+axiom subtag_parent:
+  (forall t1:'a1 tag_id.
+    (forall t2:'a1 tag_id.
+      (forall t3:'a1 tag_id.
+        (subtag(t1, t2) -> (parenttag(t2, t3) -> subtag(t1, t3))))))
+
+predicate instanceof(a: 'a1 tag_table, p: 'a1 pointer, t: 'a1 tag_id) =
+  subtag(typeof(a, p), t)
+
+logic downcast : 'a1 tag_table, 'a1 pointer, 'a1 tag_id -> 'a1 pointer
+
+axiom downcast_instanceof:
+  (forall a:'a1 tag_table.
+    (forall p:'a1 pointer.
+      (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
+
+logic bottom_tag :  -> 'a1 tag_id
+
+axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
+
+predicate root_tag(t: 'a1 tag_id) = parenttag(t, bottom_tag)
+
+axiom root_subtag:
+  (forall a:'a1 tag_id.
+    (forall b:'a1 tag_id.
+      (forall c:'a1 tag_id.
+        (root_tag(a) ->
+         (root_tag(b) -> ((a <> b) -> (subtag(c, a) -> (not subtag(c, b)))))))))
+
+predicate fully_packed(tag_table: 'a1 tag_table, mutable: ('a1,
+  'a1 tag_id) memory, this: 'a1 pointer) = (select(mutable,
+  this) = typeof(tag_table, this))
+
+logic bw_compl : int -> int
+
+logic bw_and : int, int -> int
+
+axiom bw_and_not_null:
+  (forall a:int.
+    (forall b:int. ((bw_and(a, b) <> 0) -> ((a <> 0) and (b <> 0)))))
+
+logic bw_xor : int, int -> int
+
+logic bw_or : int, int -> int
+
+logic lsl : int, int -> int
+
+axiom lsl_left_positive_returns_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= lsl(a, b)))))
+
+axiom lsl_left_positive_monotone:
+  (forall a1:int.
+    (forall a2:int.
+      (forall b:int.
+        (((0 <= a1) and ((a1 <= a2) and (0 <= b))) -> (lsl(a1, b) <= lsl(a2,
+         b))))))
+
+logic lsr : int, int -> int
+
+axiom lsr_left_positive_returns_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= lsr(a, b)))))
+
+axiom lsr_left_positive_decreases:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsr(a, b) <= a))))
+
+logic asr : int, int -> int
+
+axiom asr_positive_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (0 <= asr(a, b)))))
+
+axiom asr_decreases_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (asr(a, b) <= a))))
+
+axiom asr_lsr_same_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (asr(a, b) = lsr(a, b)))))
+
+axiom lsl_of_lsr_decreases_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsl(lsr(a, b), b) <= a))))
+
+axiom lsr_of_lsl_identity_on_positive:
+  (forall a:int.
+    (forall b:int. (((0 <= a) and (0 <= b)) -> (lsr(lsl(a, b), b) = a))))
+
+logic alloc_extends : 'a1 alloc_table, 'a1 alloc_table -> prop
+
+predicate alloc_fresh(a: 'a1 alloc_table, p: 'a1 pointer, n: int) =
+  (forall i:int. (((0 <= i) and (i < n)) -> (not valid(a, shift(p, i)))))
+
+axiom alloc_extends_offset_min:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table [alloc_extends(a1, a2)].
+      (alloc_extends(a1, a2) ->
+       (forall p:'a1 pointer.
+         (valid(a1, p) -> (offset_min(a1, p) = offset_min(a2, p)))))))
+
+axiom alloc_extends_offset_max:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table [alloc_extends(a1, a2)].
+      (alloc_extends(a1, a2) ->
+       (forall p:'a1 pointer.
+         (valid(a1, p) -> (offset_max(a1, p) = offset_max(a2, p)))))))
+
+axiom alloc_extends_not_assigns_empty:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall m1:('a1, 'a2) memory.
+        (forall m2:('a1, 'a2) memory.
+          (forall l:'a1 pset.
+            (forall p:'a1 pointer.
+              (forall n:int [alloc_extends(a1, a2), alloc_fresh(a1, p, n),
+                not_assigns(a2, m1, m2, l)].
+                ((alloc_extends(a1, a2) and
+                  (alloc_fresh(a1, p, n) and
+                   (not_assigns(a2, m1, m2, l) and pset_included(l,
+                    pset_all(pset_singleton(p)))))) ->
+                 not_assigns(a1, m1, m2, pset_empty)))))))))
+
+logic alloc_extends_except : 'a1 alloc_table, 'a1 alloc_table,
+'a1 pset -> prop
+
+axiom alloc_extends_except_offset_min:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall l:'a1 pset [alloc_extends_except(a1, a2, l)].
+        (alloc_extends_except(a1, a2, l) ->
+         (forall p:'a1 pointer.
+           ((valid(a1, p) and (not in_pset(p, l))) -> (offset_min(a1,
+            p) = offset_min(a2, p))))))))
+
+axiom alloc_extends_except_offset_max:
+  (forall a1:'a1 alloc_table.
+    (forall a2:'a1 alloc_table.
+      (forall l:'a1 pset [alloc_extends_except(a1, a2, l)].
+        (alloc_extends_except(a1, a2, l) ->
+         (forall p:'a1 pointer.
+           ((valid(a1, p) and (not in_pset(p, l))) -> (offset_max(a1,
+            p) = offset_max(a2, p))))))))
+
+type bitvector
+
+logic concat_bitvector : bitvector, bitvector -> bitvector
+
+logic offset_min_bytes : 'a1 alloc_table, 'a1 pointer, int -> int
+
+logic offset_max_bytes : 'a1 alloc_table, 'a1 pointer, int -> int
+
+axiom offset_min_bytes_def:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (forall s:int [offset_min_bytes(a, p, s)].
+        ((0 < s) ->
+         ((offset_min(a, p) <= (s * offset_min_bytes(a, p, s))) and
+          (((s * offset_min_bytes(a, p, s)) - s) < offset_min(a, p)))))))
+
+axiom offset_max_bytes_def:
+  (forall a:'a1 alloc_table.
+    (forall p:'a1 pointer.
+      (forall s:int [offset_max_bytes(a, p, s)].
+        ((0 < s) ->
+         (((((s * offset_max_bytes(a, p, s)) + s) - 1) <= offset_max(a,
+          p)) and (offset_max(a, p) < ((((s * offset_max_bytes(a, p,
+          s)) + s) + s) - 1)))))))
+
+logic extract_bytes : bitvector, int, int -> bitvector
+
+logic replace_bytes : bitvector, int, int, bitvector -> bitvector
+
+axiom select_store_eq_union:
+  (forall o1:int.
+    (forall s1:int.
+      (forall o2:int.
+        (forall s2:int.
+          (forall v1:bitvector.
+            (forall v2:bitvector [extract_bytes(replace_bytes(v1, o1, s1,
+              v2), o2, s2)].
+              (((o1 = o2) and (s1 = s2)) -> (extract_bytes(replace_bytes(v1,
+               o1, s1, v2), o2, s2) = v2))))))))
+
+axiom select_store_neq_union:
+  (forall o1:int.
+    (forall s1:int.
+      (forall o2:int.
+        (forall s2:int.
+          (forall v1:bitvector.
+            (forall v2:bitvector [extract_bytes(replace_bytes(v1, o1, s1,
+              v2), o2, s2)].
+              ((((o2 + s2) <= o1) or ((o1 + s2) <= o2)) ->
+               (extract_bytes(replace_bytes(v1, o1, s1, v2), o2,
+               s2) = extract_bytes(v1, o2, s2)))))))))
+
+axiom concat_replace_bytes_up:
+  (forall o1:int.
+    (forall s1:int.
+      (forall o2:int.
+        (forall s2:int.
+          (forall v1:bitvector.
+            (forall v2:bitvector.
+              (forall v3:bitvector [replace_bytes(replace_bytes(v1, o1, s1,
+                v2), o2, s2, v3)].
+                (((o1 + s1) = o2) -> (replace_bytes(replace_bytes(v1, o1, s1,
+                 v2), o2, s2, v3) = replace_bytes(v1, o1, (s1 + s2),
+                 concat_bitvector(v2, v3)))))))))))
+
+axiom concat_replace_bytes_down:
+  (forall o1:int.
+    (forall s1:int.
+      (forall o2:int.
+        (forall s2:int.
+          (forall v1:bitvector.
+            (forall v2:bitvector.
+              (forall v3:bitvector [replace_bytes(replace_bytes(v1, o1, s1,
+                v2), o2, s2, v3)].
+                (((o2 + s2) = o1) -> (replace_bytes(replace_bytes(v1, o1, s1,
+                 v2), o2, s2, v3) = replace_bytes(v1, o2, (s1 + s2),
+                 concat_bitvector(v3, v2)))))))))))
+
+axiom concat_extract_bytes:
+  (forall o1:int.
+    (forall s1:int.
+      (forall o2:int.
+        (forall s2:int.
+          (forall v:bitvector [concat_bitvector(extract_bytes(v, o1, s1),
+            extract_bytes(v, o2, s2))].
+            (((o1 + s1) = o2) -> (concat_bitvector(extract_bytes(v, o1, s1),
+             extract_bytes(v, o2, s2)) = extract_bytes(v, o1, (s1 + s2)))))))))
+
+logic select_bytes : ('a1, bitvector) memory, 'a1 pointer, int,
+int -> bitvector
+
+logic store_bytes : ('a1, bitvector) memory, 'a1 pointer, int, int,
+bitvector -> ('a1, bitvector) memory
+
+axiom select_store_eq_bytes:
+  (forall m:('a1, bitvector) memory.
+    (forall p1:'a1 pointer.
+      (forall p2:'a1 pointer.
+        (forall o1:int.
+          (forall s1:int.
+            (forall o2:int.
+              (forall s2:int.
+                (forall v:bitvector [select_bytes(store_bytes(m, p1, o1, s1,
+                  v), p2, o2, s2)].
+                  (((p1 = p2) and ((o1 = o2) and (s1 = s2))) ->
+                   (select_bytes(store_bytes(m, p1, o1, s1, v), p2, o2,
+                   s2) = v))))))))))
+
+axiom select_store_neq_bytes:
+  (forall m:('a1, bitvector) memory.
+    (forall p1:'a1 pointer.
+      (forall p2:'a1 pointer.
+        (forall o1:int.
+          (forall s1:int.
+            (forall o2:int.
+              (forall s2:int.
+                (forall v:bitvector [select_bytes(store_bytes(m, p1, o1, s1,
+                  v), p2, o2, s2)].
+                  (pset_disjoint(pset_range(pset_singleton(p1), o1,
+                   (o1 + s1)), pset_range(pset_singleton(p2), o2,
+                   (o2 + s2))) -> (select_bytes(store_bytes(m, p1, o1, s1,
+                   v), p2, o2, s2) = select_bytes(m, p2, o2, s2)))))))))))
+
+axiom shift_store_bytes:
+  (forall m:('a1, bitvector) memory.
+    (forall p:'a1 pointer.
+      (forall i:int.
+        (forall o:int.
+          (forall s:int.
+            (forall v:bitvector [store_bytes(m, shift(p, i), o, s, v)].
+              (store_bytes(m, shift(p, i), o, s, v) = store_bytes(m, p,
+              (o + i), s, v))))))))
+
+axiom shift_select_bytes:
+  (forall m:('a1, bitvector) memory.
+    (forall p:'a1 pointer.
+      (forall i:int.
+        (forall o:int.
+          (forall s:int.
+            (forall v:bitvector [select_bytes(m, shift(p, i), o, s)].
+              (select_bytes(m, shift(p, i), o, s) = select_bytes(m, p,
+              (o + i), s))))))))
+
+axiom concat_store_bytes_up:
+  (forall m:('a1, bitvector) memory.
+    (forall p:'a1 pointer.
+      (forall o1:int.
+        (forall s1:int.
+          (forall o2:int.
+            (forall s2:int.
+              (forall v1:bitvector.
+                (forall v2:bitvector [store_bytes(store_bytes(m, p, o1, s1,
+                  v1), p, o2, s2, v2)].
+                  (((o1 + s1) = o2) -> (store_bytes(store_bytes(m, p, o1, s1,
+                   v1), p, o2, s2, v2) = store_bytes(m, p, o1, (s1 + s2),
+                   concat_bitvector(v1, v2))))))))))))
+
+axiom concat_store_bytes_down:
+  (forall m:('a1, bitvector) memory.
+    (forall p:'a1 pointer.
+      (forall o1:int.
+        (forall s1:int.
+          (forall o2:int.
+            (forall s2:int.
+              (forall v1:bitvector.
+                (forall v2:bitvector [store_bytes(store_bytes(m, p, o1, s1,
+                  v1), p, o2, s2, v2)].
+                  (((o2 + s2) = o1) -> (store_bytes(store_bytes(m, p, o1, s1,
+                   v1), p, o2, s2, v2) = store_bytes(m, p, o2, (s1 + s2),
+                   concat_bitvector(v2, v1))))))))))))
+
+axiom concat_select_bytes:
+  (forall m:('a1, bitvector) memory.
+    (forall p:'a1 pointer.
+      (forall o1:int.
+        (forall s1:int.
+          (forall o2:int.
+            (forall s2:int [concat_bitvector(select_bytes(m, p, o1, s1),
+              select_bytes(m, p, o2, s2))].
+              (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
+               s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
+               (s1 + s2))))))))))
+
+type char_P
+
+type int32
+
+type int8
+
+type padding
+
+type uint16
+
+type unsigned_short_P
+
+type void_P
+
+logic bitvector_of_char_P : char_P pointer -> bitvector
+
+logic char_P_of_bitvector : bitvector -> char_P pointer
+
+axiom bitvector_of_char_P_of_char_P_of_bitvector:
+  (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
+
+logic bitvector_of_int32 : int32 -> bitvector
+
+logic int32_of_bitvector : bitvector -> int32
+
+axiom bitvector_of_int32_of_int32_of_bitvector:
+  (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
+
+logic bitvector_of_int8 : int8 -> bitvector
+
+logic int8_of_bitvector : bitvector -> int8
+
+axiom bitvector_of_int8_of_int8_of_bitvector:
+  (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
+
+logic bitvector_of_uint16 : uint16 -> bitvector
+
+logic uint16_of_bitvector : bitvector -> uint16
+
+axiom bitvector_of_uint16_of_uint16_of_bitvector:
+  (forall x:bitvector. (bitvector_of_uint16(uint16_of_bitvector(x)) = x))
+
+logic bitvector_of_unsigned_short_P : unsigned_short_P pointer -> bitvector
+
+logic unsigned_short_P_of_bitvector : bitvector -> unsigned_short_P pointer
+
+axiom bitvector_of_unsigned_short_P_of_unsigned_short_P_of_bitvector:
+  (forall x:bitvector.
+    (bitvector_of_unsigned_short_P(unsigned_short_P_of_bitvector(x)) = x))
+
+logic bitvector_of_void_P : void_P pointer -> bitvector
+
+logic void_P_of_bitvector : bitvector -> void_P pointer
+
+axiom bitvector_of_void_P_of_void_P_of_bitvector:
+  (forall x:bitvector. (bitvector_of_void_P(void_P_of_bitvector(x)) = x))
+
+logic char_P_tag :  -> char_P tag_id
+
+axiom char_P_int: (int_of_tag(char_P_tag) = 1)
+
+axiom char_P_of_bitvector_of_bitvector_of_char_P:
+  (forall x:char_P pointer.
+    (char_P_of_bitvector(bitvector_of_char_P(x)) = x))
+
+logic char_P_of_pointer_address : unit pointer -> char_P pointer
+
+axiom char_P_of_pointer_address_of_pointer_addr:
+  (forall p:char_P pointer.
+    (p = char_P_of_pointer_address(pointer_address(p))))
+
+axiom char_P_parenttag_bottom: parenttag(char_P_tag, bottom_tag)
+
+axiom char_P_tags:
+  (forall x:char_P pointer.
+    (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
+      x, char_P_tag)))
+
+logic integer_of_int32 : int32 -> int
+
+predicate eq_int32(x: int32, y: int32) =
+  (integer_of_int32(x) = integer_of_int32(y))
+
+logic integer_of_int8 : int8 -> int
+
+predicate eq_int8(x: int8, y: int8) =
+  (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint16 : uint16 -> int
+
+predicate eq_uint16(x: uint16, y: uint16) =
+  (integer_of_uint16(x) = integer_of_uint16(y))
+
+logic int32_of_integer : int -> int32
+
+axiom int32_coerce:
+  (forall x:int.
+    ((((-2147483648) <= x) and (x <= 2147483647)) ->
+     (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_of_bitvector_of_bitvector_of_int32:
+  (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
+
+axiom int32_range:
+  (forall x:int32.
+    (((-2147483648) <= integer_of_int32(x)) and
+     (integer_of_int32(x) <= 2147483647)))
+
+logic int8_of_integer : int -> int8
+
+axiom int8_coerce:
+  (forall x:int.
+    ((((-128) <= x) and (x <= 127)) ->
+     (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_of_bitvector_of_bitvector_of_int8:
+  (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
+
+axiom int8_range:
+  (forall x:int8.
+    (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
+
+predicate left_valid_struct_char_P(p: char_P pointer, a: int,
+  char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_unsigned_short_P(p: unsigned_short_P pointer,
+  a: int, unsigned_short_P_alloc_table: unsigned_short_P alloc_table) =
+  (offset_min(unsigned_short_P_alloc_table, p) <= a)
+
+predicate left_valid_struct_void_P(p: void_P pointer, a: int,
+  void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
+  p) <= a)
+
+function maximum(i_26: int, j_2: int) : int = ite(lt_int_bool(i_26, j_2),
+  j_2, i_26)
+
+logic memchr : char_P pointer, int, int, (char_P, int8) memory -> bool
+
+axiom memchr_def:
+  (forall char_P_char_M_s_3_at_L:(char_P, int8) memory.
+    (forall s_0:char_P pointer.
+      (forall c_0:int.
+        (forall n_3:int.
+          ((memchr(s_0, c_0, n_3, char_P_char_M_s_3_at_L) = true) <->
+           (exists i_0:int32.
+             ((0 <= integer_of_int32(i_0)) and
+              ((integer_of_int32(i_0) < n_3) and
+               (integer_of_int8(select(char_P_char_M_s_3_at_L, shift(s_0,
+               integer_of_int32(i_0)))) = c_0)))))))))
+
+logic memcmp : char_P pointer, char_P pointer, int, (char_P, int8) memory,
+(char_P, int8) memory -> int
+
+axiom memcmp_range:
+  (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+      (forall s1_0:char_P pointer.
+        (forall s2_0_0:char_P pointer.
+          (forall n_0:int.
+            ((((-2147483647) - 1) <= memcmp(s1_0, s2_0_0, n_0,
+             char_P_char_M_s2_2_at_L, char_P_char_M_s1_1_at_L)) and
+             (memcmp(s1_0, s2_0_0, n_0, char_P_char_M_s2_2_at_L,
+             char_P_char_M_s1_1_at_L) <= 2147483647)))))))
+
+logic strlen : char_P pointer, (char_P, int8) memory -> int
+
+axiom memcmp_strlen_left:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s1_2:char_P pointer.
+      (forall s2_2:char_P pointer.
+        (forall n_6:int.
+          (((memcmp(s1_2, s2_2, n_6, char_P_char_M_s_3_5_at_L,
+            char_P_char_M_s_3_5_at_L) = 0) and (strlen(s1_2,
+            char_P_char_M_s_3_5_at_L) < n_6)) ->
+           (strlen(s1_2, char_P_char_M_s_3_5_at_L) = strlen(s2_2,
+           char_P_char_M_s_3_5_at_L)))))))
+
+axiom memcmp_strlen_right:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s1_3:char_P pointer.
+      (forall s2_3:char_P pointer.
+        (forall n_7:int.
+          (((memcmp(s1_3, s2_3, n_7, char_P_char_M_s_3_5_at_L,
+            char_P_char_M_s_3_5_at_L) = 0) and (strlen(s2_3,
+            char_P_char_M_s_3_5_at_L) < n_7)) ->
+           (strlen(s1_3, char_P_char_M_s_3_5_at_L) = strlen(s2_3,
+           char_P_char_M_s_3_5_at_L)))))))
+
+axiom memcmp_strlen_shift_left:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s1_4:char_P pointer.
+      (forall s2_4:char_P pointer.
+        (forall k_0:int.
+          (forall n_8:int.
+            (((memcmp(s1_4, shift(s2_4, k_0), n_8, char_P_char_M_s_3_5_at_L,
+              char_P_char_M_s_3_5_at_L) = 0) and
+              ((0 <= k_0) and (strlen(s1_4, char_P_char_M_s_3_5_at_L) < n_8))) ->
+             ((0 <= strlen(s2_4, char_P_char_M_s_3_5_at_L)) and (strlen(s2_4,
+              char_P_char_M_s_3_5_at_L) <= (k_0 + strlen(s1_4,
+              char_P_char_M_s_3_5_at_L))))))))))
+
+axiom memcmp_strlen_shift_right:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s1_5:char_P pointer.
+      (forall s2_5:char_P pointer.
+        (forall k_1:int.
+          (forall n_9:int.
+            (((memcmp(shift(s1_5, k_1), s2_5, n_9, char_P_char_M_s_3_5_at_L,
+              char_P_char_M_s_3_5_at_L) = 0) and
+              ((0 <= k_1) and (strlen(s2_5, char_P_char_M_s_3_5_at_L) < n_9))) ->
+             ((0 <= strlen(s1_5, char_P_char_M_s_3_5_at_L)) and (strlen(s1_5,
+              char_P_char_M_s_3_5_at_L) <= (k_1 + strlen(s2_5,
+              char_P_char_M_s_3_5_at_L))))))))))
+
+axiom memcmp_zero:
+  (forall char_P_char_M_s2_2_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s1_1_at_L:(char_P, int8) memory.
+      (forall s1_1:char_P pointer.
+        (forall s2_1:char_P pointer.
+          (forall n_1:int.
+            ((memcmp(s1_1, s2_1, n_1, char_P_char_M_s2_2_at_L,
+             char_P_char_M_s1_1_at_L) = 0) <->
+             (forall i:int.
+               (((0 <= i) and (i < n_1)) ->
+                (integer_of_int8(select(char_P_char_M_s1_1_at_L, shift(s1_1,
+                i))) = integer_of_int8(select(char_P_char_M_s2_2_at_L,
+                shift(s2_1, i))))))))))))
+
+logic memset : char_P pointer, int, int, (char_P, int8) memory -> bool
+
+axiom memset_def:
+  (forall char_P_char_M_s_1_4_at_L:(char_P, int8) memory.
+    (forall s_2:char_P pointer.
+      (forall c_2:int.
+        (forall n_5:int.
+          ((memset(s_2, c_2, n_5, char_P_char_M_s_1_4_at_L) = true) <->
+           (forall i_1:int.
+             (((0 <= i_1) and (i_1 < n_5)) ->
+              (integer_of_int8(select(char_P_char_M_s_1_4_at_L, shift(s_2,
+              i_1))) = c_2))))))))
+
+function minimum(i_25: int, j_1: int) : int = ite(lt_int_bool(i_25, j_1),
+  i_25, j_1)
+
+axiom pointer_addr_of_char_P_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(char_P_of_pointer_address(p))))
+
+logic unsigned_short_P_of_pointer_address : unit pointer -> unsigned_short_P pointer
+
+axiom pointer_addr_of_unsigned_short_P_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_short_P_of_pointer_address(p))))
+
+logic void_P_of_pointer_address : unit pointer -> void_P pointer
+
+axiom pointer_addr_of_void_P_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(void_P_of_pointer_address(p))))
+
+predicate right_valid_struct_char_P(p: char_P pointer, b: int,
+  char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
+  p) >= b)
+
+predicate right_valid_struct_unsigned_short_P(p: unsigned_short_P pointer,
+  b: int, unsigned_short_P_alloc_table: unsigned_short_P alloc_table) =
+  (offset_max(unsigned_short_P_alloc_table, p) >= b)
+
+predicate right_valid_struct_void_P(p: void_P pointer, b: int,
+  void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
+  p) >= b)
+
+logic strchr : char_P pointer, int, (char_P, int8) memory -> bool
+
+axiom strchr_def:
+  (forall char_P_char_M_s_15_10_at_L:(char_P, int8) memory.
+    (forall s_16:char_P pointer.
+      (forall c_4:int.
+        ((strchr(s_16, c_4, char_P_char_M_s_15_10_at_L) = true) <->
+         (exists i_13:int.
+           ((0 <= i_13) and
+            ((i_13 <= strlen(s_16, char_P_char_M_s_15_10_at_L)) and
+             (integer_of_int8(select(char_P_char_M_s_15_10_at_L, shift(s_16,
+             i_13))) = c_4))))))))
+
+logic strcmp : char_P pointer, char_P pointer, (char_P, int8) memory,
+(char_P, int8) memory -> int
+
+axiom strcmp_range:
+  (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+      (forall s1_7:char_P pointer.
+        (forall s2_7:char_P pointer.
+          ((((-2147483647) - 1) <= strcmp(s1_7, s2_7,
+           char_P_char_M_s2_6_7_at_L, char_P_char_M_s1_6_6_at_L)) and
+           (strcmp(s1_7, s2_7, char_P_char_M_s2_6_7_at_L,
+           char_P_char_M_s1_6_6_at_L) <= 2147483647))))))
+
+axiom strcmp_zero:
+  (forall char_P_char_M_s2_6_7_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s1_6_6_at_L:(char_P, int8) memory.
+      (forall s1_8:char_P pointer.
+        (forall s2_8:char_P pointer.
+          ((strcmp(s1_8, s2_8, char_P_char_M_s2_6_7_at_L,
+           char_P_char_M_s1_6_6_at_L) = 0) <->
+           ((strlen(s1_8, char_P_char_M_s1_6_6_at_L) = strlen(s2_8,
+            char_P_char_M_s2_6_7_at_L)) and
+            (forall i_11:int.
+              (((0 <= i_11) and (i_11 <= strlen(s1_8,
+                char_P_char_M_s1_6_6_at_L))) ->
+               (integer_of_int8(select(char_P_char_M_s1_6_6_at_L, shift(s1_8,
+               i_11))) = integer_of_int8(select(char_P_char_M_s2_6_7_at_L,
+               shift(s2_8, i_11))))))))))))
+
+predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
+  char_P_alloc_table: char_P alloc_table) =
+  ((offset_min(char_P_alloc_table, p) = a) and
+   (offset_max(char_P_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_short_P(p: unsigned_short_P pointer,
+  a: int, b: int,
+  unsigned_short_P_alloc_table: unsigned_short_P alloc_table) =
+  ((offset_min(unsigned_short_P_alloc_table, p) = a) and
+   (offset_max(unsigned_short_P_alloc_table, p) = b))
+
+predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
+  void_P_alloc_table: void_P alloc_table) =
+  ((offset_min(void_P_alloc_table, p) = a) and
+   (offset_max(void_P_alloc_table, p) = b))
+
+predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
+  char_P_alloc_table: char_P alloc_table) =
+  ((offset_min(char_P_alloc_table, p) = a) and
+   (offset_max(char_P_alloc_table, p) = b))
+
+predicate strict_valid_struct_unsigned_short_P(p: unsigned_short_P pointer,
+  a: int, b: int,
+  unsigned_short_P_alloc_table: unsigned_short_P alloc_table) =
+  ((offset_min(unsigned_short_P_alloc_table, p) = a) and
+   (offset_max(unsigned_short_P_alloc_table, p) = b))
+
+predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
+  void_P_alloc_table: void_P alloc_table) =
+  ((offset_min(void_P_alloc_table, p) = a) and
+   (offset_max(void_P_alloc_table, p) = b))
+
+axiom strlen_at_null:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_8:char_P pointer.
+      ((0 <= strlen(s_8, char_P_char_M_s_3_5_at_L)) ->
+       (integer_of_int8(select(char_P_char_M_s_3_5_at_L, shift(s_8,
+       strlen(s_8, char_P_char_M_s_3_5_at_L)))) = 0))))
+
+axiom strlen_before_null:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_7:char_P pointer.
+      (forall i_4:int.
+        (((0 <= i_4) and (i_4 < strlen(s_7, char_P_char_M_s_3_5_at_L))) ->
+         (integer_of_int8(select(char_P_char_M_s_3_5_at_L, shift(s_7,
+         i_4))) <> 0)))))
+
+axiom strlen_create:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_13:char_P pointer.
+      (forall i_9:int.
+        (((0 <= i_9) and
+          ((i_9 <= 2147483647) and
+           (integer_of_int8(select(char_P_char_M_s_3_5_at_L, shift(s_13,
+           i_9))) = 0))) ->
+         ((0 <= strlen(s_13, char_P_char_M_s_3_5_at_L)) and (strlen(s_13,
+          char_P_char_M_s_3_5_at_L) <= i_9))))))
+
+axiom strlen_create_shift:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_14:char_P pointer.
+      (forall i_10:int.
+        (forall k:int.
+          (((0 <= k) and
+            ((k <= i_10) and
+             ((i_10 <= 2147483647) and
+              (integer_of_int8(select(char_P_char_M_s_3_5_at_L, shift(s_14,
+              i_10))) = 0)))) ->
+           ((0 <= strlen(shift(s_14, k), char_P_char_M_s_3_5_at_L)) and
+            (strlen(shift(s_14, k), char_P_char_M_s_3_5_at_L) <= (i_10 - k))))))))
+
+axiom strlen_neg:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_5:char_P pointer.
+      ((forall i_3:int.
+         (((0 <= i_3) and (i_3 <= 2147483647)) ->
+          (integer_of_int8(select(char_P_char_M_s_3_5_at_L, shift(s_5,
+          i_3))) <> 0))) ->
+       (strlen(s_5, char_P_char_M_s_3_5_at_L) < 0))))
+
+axiom strlen_not_zero:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_9:char_P pointer.
+      (forall i_5:int.
+        (((0 <= i_5) and
+          ((i_5 <= strlen(s_9, char_P_char_M_s_3_5_at_L)) and
+           (integer_of_int8(select(char_P_char_M_s_3_5_at_L, shift(s_9,
+           i_5))) <> 0))) ->
+         (i_5 < strlen(s_9, char_P_char_M_s_3_5_at_L))))))
+
+axiom strlen_pos_or_null:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_4:char_P pointer.
+      (forall i_2:int.
+        (((0 <= i_2) and
+          ((i_2 <= 2147483647) and
+           ((forall j:int.
+              (((0 <= j) and (j < i_2)) ->
+               (integer_of_int8(select(char_P_char_M_s_3_5_at_L, shift(s_4,
+               j))) <> 0))) and
+            (integer_of_int8(select(char_P_char_M_s_3_5_at_L, shift(s_4,
+            i_2))) = 0)))) ->
+         (strlen(s_4, char_P_char_M_s_3_5_at_L) = i_2)))))
+
+axiom strlen_range:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_6:char_P pointer. (strlen(s_6,
+      char_P_char_M_s_3_5_at_L) <= 2147483647)))
+
+axiom strlen_shift:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_12:char_P pointer.
+      (forall i_8:int.
+        (((0 <= i_8) and (i_8 <= strlen(s_12, char_P_char_M_s_3_5_at_L))) ->
+         (strlen(shift(s_12, i_8), char_P_char_M_s_3_5_at_L) = (strlen(s_12,
+         char_P_char_M_s_3_5_at_L) - i_8))))))
+
+axiom strlen_sup:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_11:char_P pointer.
+      (forall i_7:int.
+        (((0 <= i_7) and (integer_of_int8(select(char_P_char_M_s_3_5_at_L,
+          shift(s_11, i_7))) = 0)) ->
+         ((0 <= strlen(s_11, char_P_char_M_s_3_5_at_L)) and (strlen(s_11,
+          char_P_char_M_s_3_5_at_L) <= i_7))))))
+
+axiom strlen_zero:
+  (forall char_P_char_M_s_3_5_at_L:(char_P, int8) memory.
+    (forall s_10:char_P pointer.
+      (forall i_6:int.
+        (((0 <= i_6) and
+          ((i_6 <= strlen(s_10, char_P_char_M_s_3_5_at_L)) and
+           (integer_of_int8(select(char_P_char_M_s_3_5_at_L, shift(s_10,
+           i_6))) = 0))) ->
+         (i_6 = strlen(s_10, char_P_char_M_s_3_5_at_L))))))
+
+logic strncmp : char_P pointer, char_P pointer, int, (char_P, int8) memory,
+(char_P, int8) memory -> int
+
+axiom strncmp_zero:
+  (forall char_P_char_M_s2_9_9_at_L:(char_P, int8) memory.
+    (forall char_P_char_M_s1_9_8_at_L:(char_P, int8) memory.
+      (forall s1_10:char_P pointer.
+        (forall s2_10:char_P pointer.
+          (forall n_11:int.
+            ((strncmp(s1_10, s2_10, n_11, char_P_char_M_s2_9_9_at_L,
+             char_P_char_M_s1_9_8_at_L) = 0) <->
+             (((strlen(s1_10, char_P_char_M_s1_9_8_at_L) < n_11) and
+               (strcmp(s1_10, s2_10, char_P_char_M_s2_9_9_at_L,
+               char_P_char_M_s1_9_8_at_L) = 0)) or
+              (forall i_12:int.
+                (((0 <= i_12) and (i_12 < n_11)) ->
+                 (integer_of_int8(select(char_P_char_M_s1_9_8_at_L,
+                 shift(s1_10,
+                 i_12))) = integer_of_int8(select(char_P_char_M_s2_9_9_at_L,
+                 shift(s2_10, i_12)))))))))))))
+
+logic uint16_of_integer : int -> uint16
+
+axiom uint16_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 65535)) ->
+     (integer_of_uint16(uint16_of_integer(x)) = x)))
+
+axiom uint16_of_bitvector_of_bitvector_of_uint16:
+  (forall x:uint16. eq_uint16(uint16_of_bitvector(bitvector_of_uint16(x)),
+    x))
+
+axiom uint16_range:
+  (forall x:uint16.
+    ((0 <= integer_of_uint16(x)) and (integer_of_uint16(x) <= 65535)))
+
+logic unsigned_short_P_tag :  -> unsigned_short_P tag_id
+
+axiom unsigned_short_P_int: (int_of_tag(unsigned_short_P_tag) = 1)
+
+axiom unsigned_short_P_of_bitvector_of_bitvector_of_unsigned_short_P:
+  (forall x:unsigned_short_P pointer.
+    (unsigned_short_P_of_bitvector(bitvector_of_unsigned_short_P(x)) = x))
+
+axiom unsigned_short_P_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_short_P pointer.
+    (p = unsigned_short_P_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_short_P_parenttag_bottom: parenttag(unsigned_short_P_tag,
+  bottom_tag)
+
+axiom unsigned_short_P_tags:
+  (forall x:unsigned_short_P pointer.
+    (forall unsigned_short_P_tag_table:unsigned_short_P tag_table.
+      instanceof(unsigned_short_P_tag_table, x, unsigned_short_P_tag)))
+
+predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_unsigned_short_P(p: unit pointer, a: int,
+  b: int, bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_void_P(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
+  char_P_alloc_table: char_P alloc_table) =
+  ((offset_min(char_P_alloc_table, p) <= a) and
+   (offset_max(char_P_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_short_P(p: unsigned_short_P pointer, a: int,
+  b: int, unsigned_short_P_alloc_table: unsigned_short_P alloc_table) =
+  ((offset_min(unsigned_short_P_alloc_table, p) <= a) and
+   (offset_max(unsigned_short_P_alloc_table, p) >= b))
+
+predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
+  void_P_alloc_table: void_P alloc_table) =
+  ((offset_min(void_P_alloc_table, p) <= a) and
+   (offset_max(void_P_alloc_table, p) >= b))
+
+predicate valid_string(s_28: char_P pointer,
+  char_P_s_28_16_alloc_table_at_L: char_P alloc_table,
+  char_P_char_M_s_28_16_at_L: (char_P, int8) memory) =
+  ((0 <= strlen(s_28, char_P_char_M_s_28_16_at_L)) and
+   ((offset_min(char_P_s_28_16_alloc_table_at_L, s_28) <= 0) and
+    (offset_max(char_P_s_28_16_alloc_table_at_L, s_28) >= strlen(s_28,
+    char_P_char_M_s_28_16_at_L))))
+
+predicate valid_string_or_null(s_29: char_P pointer,
+  char_P_s_29_17_alloc_table_at_L: char_P alloc_table,
+  char_P_char_M_s_29_17_at_L: (char_P, int8) memory) =
+  ((s_29 = null) or valid_string(s_29, char_P_s_29_17_alloc_table_at_L,
+   char_P_char_M_s_29_17_at_L))
+
+predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
+  char_P_alloc_table: char_P alloc_table) =
+  ((offset_min(char_P_alloc_table, p) <= a) and
+   (offset_max(char_P_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_short_P(p: unsigned_short_P pointer, a: int,
+  b: int, unsigned_short_P_alloc_table: unsigned_short_P alloc_table) =
+  ((offset_min(unsigned_short_P_alloc_table, p) <= a) and
+   (offset_max(unsigned_short_P_alloc_table, p) >= b))
+
+predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
+  void_P_alloc_table: void_P alloc_table) =
+  ((offset_min(void_P_alloc_table, p) <= a) and
+   (offset_max(void_P_alloc_table, p) >= b))
+
+logic wcslen : unsigned_short_P pointer, (unsigned_short_P,
+uint16) memory -> int
+
+predicate valid_wstring(s_30: unsigned_short_P pointer,
+  unsigned_short_P_s_30_18_alloc_table_at_L: unsigned_short_P alloc_table,
+  unsigned_short_P_unsigned_short_M_s_30_18_at_L: (unsigned_short_P,
+  uint16) memory) =
+  ((0 <= wcslen(s_30, unsigned_short_P_unsigned_short_M_s_30_18_at_L)) and
+   ((offset_min(unsigned_short_P_s_30_18_alloc_table_at_L, s_30) <= 0) and
+    (offset_max(unsigned_short_P_s_30_18_alloc_table_at_L,
+    s_30) >= wcslen(s_30, unsigned_short_P_unsigned_short_M_s_30_18_at_L))))
+
+predicate valid_wstring_or_null(s_31: unsigned_short_P pointer,
+  unsigned_short_P_s_31_19_alloc_table_at_L: unsigned_short_P alloc_table,
+  unsigned_short_P_unsigned_short_M_s_31_19_at_L: (unsigned_short_P,
+  uint16) memory) =
+  ((s_31 = null) or valid_wstring(s_31,
+   unsigned_short_P_s_31_19_alloc_table_at_L,
+   unsigned_short_P_unsigned_short_M_s_31_19_at_L))
+
+logic void_P_tag :  -> void_P tag_id
+
+axiom void_P_int: (int_of_tag(void_P_tag) = 1)
+
+axiom void_P_of_bitvector_of_bitvector_of_void_P:
+  (forall x:void_P pointer.
+    (void_P_of_bitvector(bitvector_of_void_P(x)) = x))
+
+axiom void_P_of_pointer_address_of_pointer_addr:
+  (forall p:void_P pointer.
+    (p = void_P_of_pointer_address(pointer_address(p))))
+
+axiom void_P_parenttag_bottom: parenttag(void_P_tag, bottom_tag)
+
+axiom void_P_tags:
+  (forall x:void_P pointer.
+    (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
+      x, void_P_tag)))
+
+logic wcscmp : unsigned_short_P pointer, unsigned_short_P pointer,
+(unsigned_short_P, uint16) memory, (unsigned_short_P, uint16) memory -> int
+
+axiom wcscmp_zero:
+  (forall unsigned_short_P_unsigned_short_M_s2_11_13_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall unsigned_short_P_unsigned_short_M_s1_11_12_at_L:(unsigned_short_P,
+      uint16) memory.
+      (forall s1_12:unsigned_short_P pointer.
+        (forall s2_12:unsigned_short_P pointer.
+          ((wcscmp(s1_12, s2_12,
+           unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+           unsigned_short_P_unsigned_short_M_s1_11_12_at_L) = 0) <->
+           ((wcslen(s1_12,
+            unsigned_short_P_unsigned_short_M_s1_11_12_at_L) = wcslen(s2_12,
+            unsigned_short_P_unsigned_short_M_s2_11_13_at_L)) and
+            (forall i_23:int.
+              (((0 <= i_23) and (i_23 <= wcslen(s1_12,
+                unsigned_short_P_unsigned_short_M_s1_11_12_at_L))) ->
+               (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s1_11_12_at_L,
+               shift(s1_12,
+               i_23))) = integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s2_11_13_at_L,
+               shift(s2_12, i_23))))))))))))
+
+axiom wcslen_at_null:
+  (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall s_21:unsigned_short_P pointer.
+      ((0 <= wcslen(s_21, unsigned_short_P_unsigned_short_M_s_17_11_at_L)) ->
+       (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+       shift(s_21, wcslen(s_21,
+       unsigned_short_P_unsigned_short_M_s_17_11_at_L)))) = 0))))
+
+axiom wcslen_before_null:
+  (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall s_20:unsigned_short_P pointer.
+      (forall i_16:int32.
+        (((0 <= integer_of_int32(i_16)) and
+          (integer_of_int32(i_16) < wcslen(s_20,
+          unsigned_short_P_unsigned_short_M_s_17_11_at_L))) ->
+         (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+         shift(s_20, integer_of_int32(i_16)))) <> 0)))))
+
+axiom wcslen_create:
+  (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall s_26:unsigned_short_P pointer.
+      (forall i_21:int32.
+        (((0 <= integer_of_int32(i_21)) and
+          (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+          shift(s_26, integer_of_int32(i_21)))) = 0)) ->
+         ((0 <= wcslen(s_26,
+          unsigned_short_P_unsigned_short_M_s_17_11_at_L)) and (wcslen(s_26,
+          unsigned_short_P_unsigned_short_M_s_17_11_at_L) <= integer_of_int32(i_21)))))))
+
+axiom wcslen_create_shift:
+  (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall s_27:unsigned_short_P pointer.
+      (forall i_22:int32.
+        (forall k_2:int32.
+          (((0 <= integer_of_int32(k_2)) and
+            ((integer_of_int32(k_2) <= integer_of_int32(i_22)) and
+             (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+             shift(s_27, integer_of_int32(i_22)))) = 0))) ->
+           ((0 <= wcslen(shift(s_27, integer_of_int32(k_2)),
+            unsigned_short_P_unsigned_short_M_s_17_11_at_L)) and
+            (wcslen(shift(s_27, integer_of_int32(k_2)),
+            unsigned_short_P_unsigned_short_M_s_17_11_at_L) <= (integer_of_int32(i_22) - integer_of_int32(k_2)))))))))
+
+axiom wcslen_neg:
+  (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall s_19:unsigned_short_P pointer.
+      ((forall i_15:int.
+         ((0 <= i_15) ->
+          (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+          shift(s_19, i_15))) <> 0))) ->
+       (wcslen(s_19, unsigned_short_P_unsigned_short_M_s_17_11_at_L) < 0))))
+
+axiom wcslen_not_zero:
+  (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall s_22:unsigned_short_P pointer.
+      (forall i_17:int32.
+        (((0 <= integer_of_int32(i_17)) and
+          ((integer_of_int32(i_17) <= wcslen(s_22,
+           unsigned_short_P_unsigned_short_M_s_17_11_at_L)) and
+           (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+           shift(s_22, integer_of_int32(i_17)))) <> 0))) ->
+         (integer_of_int32(i_17) < wcslen(s_22,
+         unsigned_short_P_unsigned_short_M_s_17_11_at_L))))))
+
+axiom wcslen_pos_or_null:
+  (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall s_18:unsigned_short_P pointer.
+      (forall i_14:int.
+        (((0 <= i_14) and
+          ((forall j_0:int.
+             (((0 <= j_0) and (j_0 < i_14)) ->
+              (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+              shift(s_18, j_0))) <> 0))) and
+           (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+           shift(s_18, i_14))) = 0))) ->
+         (wcslen(s_18,
+         unsigned_short_P_unsigned_short_M_s_17_11_at_L) = i_14)))))
+
+axiom wcslen_shift:
+  (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall s_25:unsigned_short_P pointer.
+      (forall i_20:int32.
+        (((0 <= integer_of_int32(i_20)) and
+          (integer_of_int32(i_20) <= wcslen(s_25,
+          unsigned_short_P_unsigned_short_M_s_17_11_at_L))) ->
+         (wcslen(shift(s_25, integer_of_int32(i_20)),
+         unsigned_short_P_unsigned_short_M_s_17_11_at_L) = (wcslen(s_25,
+         unsigned_short_P_unsigned_short_M_s_17_11_at_L) - integer_of_int32(i_20)))))))
+
+axiom wcslen_sup:
+  (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall s_24:unsigned_short_P pointer.
+      (forall i_19:int32.
+        (((0 <= integer_of_int32(i_19)) and
+          (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+          shift(s_24, integer_of_int32(i_19)))) = 0)) ->
+         ((0 <= wcslen(s_24,
+          unsigned_short_P_unsigned_short_M_s_17_11_at_L)) and (wcslen(s_24,
+          unsigned_short_P_unsigned_short_M_s_17_11_at_L) <= integer_of_int32(i_19)))))))
+
+axiom wcslen_zero:
+  (forall unsigned_short_P_unsigned_short_M_s_17_11_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall s_23:unsigned_short_P pointer.
+      (forall i_18:int32.
+        (((0 <= integer_of_int32(i_18)) and
+          ((integer_of_int32(i_18) <= wcslen(s_23,
+           unsigned_short_P_unsigned_short_M_s_17_11_at_L)) and
+           (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s_17_11_at_L,
+           shift(s_23, integer_of_int32(i_18)))) = 0))) ->
+         (integer_of_int32(i_18) = wcslen(s_23,
+         unsigned_short_P_unsigned_short_M_s_17_11_at_L))))))
+
+logic wcsncmp : unsigned_short_P pointer, unsigned_short_P pointer, int,
+(unsigned_short_P, uint16) memory, (unsigned_short_P, uint16) memory -> int
+
+axiom wcsncmp_zero:
+  (forall unsigned_short_P_unsigned_short_M_s2_13_15_at_L:(unsigned_short_P,
+    uint16) memory.
+    (forall unsigned_short_P_unsigned_short_M_s1_13_14_at_L:(unsigned_short_P,
+      uint16) memory.
+      (forall s1_14:unsigned_short_P pointer.
+        (forall s2_14:unsigned_short_P pointer.
+          (forall n_13:int.
+            ((wcsncmp(s1_14, s2_14, n_13,
+             unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+             unsigned_short_P_unsigned_short_M_s1_13_14_at_L) = 0) <->
+             (((wcslen(s1_14,
+               unsigned_short_P_unsigned_short_M_s1_13_14_at_L) < n_13) and
+               (wcscmp(s1_14, s2_14,
+               unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+               unsigned_short_P_unsigned_short_M_s1_13_14_at_L) = 0)) or
+              (forall i_24:int.
+                (((0 <= i_24) and (i_24 < n_13)) ->
+                 (integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s1_13_14_at_L,
+                 shift(s1_14,
+                 i_24))) = integer_of_uint16(select(unsigned_short_P_unsigned_short_M_s2_13_15_at_L,
+                 shift(s2_14, i_24)))))))))))))
+

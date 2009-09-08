@@ -1,0 +1,5 @@
+[preprocessing] running gcc -C -E -I. isqrt.c
+
+Warning: Cannot find main to add global initializer __globinit_whole_program
+Warning: exception Loop_exit cannot be thrown
+Warning: exception Loop_exit cannot be thrown

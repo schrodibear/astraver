@@ -265,6 +265,8 @@ if test "$enable_apron" = "yes" ; then
    ATPCMO=atp/atp.cmo
 fi
 
+# Frama-C
+AC_CHECK_PROG(FRAMAC,frama-c,yes,no)
 
 # camlp4 
 AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)
@@ -439,6 +441,7 @@ AC_SUBST(OCAMLWEB)
 AC_SUBST(enable_apron)
 AC_SUBST(APRONLIB)
 AC_SUBST(APRONLIBS)
+AC_SUBST(FRAMAC)
 AC_SUBST(ATPCMO)
 
 AC_SUBST(COQ)
@@ -478,6 +481,7 @@ echo "OCaml library path      : $OCAMLLIB"
 echo "OcamlGraph lib          : $OCAMLGRAPHVER"
 echo "Verbose make            : $VERBOSEMAKE"
 echo "Abstract interpretation : $enable_apron"
+echo "Frama-C                 : $FRAMAC"
 if test "$enable_apron" = "yes" ; then
    echo "    APRON lib           : $APRONLIB"
 fi

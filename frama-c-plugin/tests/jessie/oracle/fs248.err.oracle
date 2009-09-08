@@ -1,0 +1,4 @@
+[preprocessing] running gcc -C -E -I. fs248.c
+fs248.c:281: Warning: skipping all arguments of implicit prototype Frama_C_dump_each
+Uncaught exception: Not_found
+make: *** [fs248.regtest] Error 2
