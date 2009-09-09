@@ -1,2 +1,4 @@
 *.annot
 Jessie.cma
+Jessie.cmxs
+frama-c-Jessie*
