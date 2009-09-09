@@ -25,8 +25,14 @@
 # To be used independently of Frama-C, a version of Frama-C compatible with
 # Jessie has to be properly installed as long as the Jessie-specific stuff.
 
-FRAMAC_SHARE  ?=$(shell frama-c -journal-disable -print-path)
-FRAMAC_LIBDIR ?=$(shell frama-c -journal-disable -print-libpath)
+# Do not use ?= to initialize both below variables 
+# (fixed efficiency issue, see GNU Make manual, Section 8.11)
+ifndef FRAMAC_SHARE
+FRAMAC_SHARE  :=$(shell frama-c -journal-disable -print-path)
+endif
+ifndef FRAMAC_LIBDIR
+FRAMAC_LIBDIR :=$(shell frama-c -journal-disable -print-libpath)
+endif
 
 WHY_DISTRIB	?= ..
 JESSIE_INCLUDES	?= -I $(WHY_DISTRIB)/src -I $(WHY_DISTRIB)/jc
@@ -40,8 +46,8 @@ PLUGIN_CMO:= jessie_config jessie_options integer common rewrite \
 PLUGIN_HAS_MLI:=yes
 PLUGIN_BFLAGS:=$(JESSIE_INCLUDES)
 PLUGIN_OFLAGS:=$(JESSIE_INCLUDES)
-PLUGIN_EXTRA_BYTE:=$(JCCMO)
-PLUGIN_EXTRA_OPT:=$(JCCMX)
+PLUGIN_EXTRA_BYTE+=$(JCCMO)
+PLUGIN_EXTRA_OPT+=$(JCCMX)
 PLUGIN_DEPFLAGS:=$(JESSIE_INCLUDES)
 PLUGIN_DOCFLAGS:=$(JESSIE_INCLUDES)
 
