@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.45 2009-09-10 12:37:13 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.46 2009-09-10 13:04:52 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -351,7 +351,7 @@ let rec ghyp = function
       match termo t with
       | Some t ->
           let f = field_of_id id' in
-          if Hashtbl.mem def_table (f, x) then
+          if not (Hashtbl.mem def_table (f, x)) then
            (Hashtbl.add def_table (f, x) ();
             [f, Ident.string x, t], None)
           else
