@@ -756,6 +756,14 @@ logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
 
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
 type 't alloc_table
 
 type 't pointer
@@ -1530,38 +1538,6 @@ axiom round_idempotent:
       (forall m2:mode.
         (forall x:real. (round_float(f, m1, round_float(f, m2,
           x)) = round_float(f, m2, x))))))
-
-axiom prod_pos:
-  (forall x:real.
-    (forall y:real.
-      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
-       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
-
-axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
-
-axiom a1:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        (no_overflow(f, m, x) -> (float_value(gen_float_of_real_logic(f, m,
-         x)) = round_float(f, m, x))))))
-
-axiom a2:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real. (exact_value(gen_float_of_real_logic(f, m, x)) = x))))
-
-axiom a3:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real. (model_value(gen_float_of_real_logic(f, m, x)) = x))))
-
-axiom a4:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((no_overflow(f, m, x) and (exists y:gen_float. (x = float_value(y)))) ->
-         (float_value(gen_float_of_real_logic(f, m, x)) = x)))))
 
 predicate gen_float_of_real_post(f: float_format, m: mode, x: real,
   res: gen_float) =

@@ -16,6 +16,5 @@ export PPC_OPTIONS="-journal-disable $options"
 options=`grep "@JC_OPTIONS:" $file.c`
 options=`echo $options | cut -c13-`
 export JC_OPTIONS="$options"
-export FRAMAC_SHARE=`frama-c -print-share-path`
-export FRAMAC_PLUGIN=`frama-c -print-plugin-path`
+export MAKEFLAGS=
 make --quiet "$file.$suffix"

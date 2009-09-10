@@ -25,7 +25,7 @@
 # To be used independently of Frama-C, a version of Frama-C compatible with
 # Jessie has to be properly installed as long as the Jessie-specific stuff.
 
-# Do not use ?= to initialize both below variables 
+# Do not use ?= to initialize both below variables
 # (fixed efficiency issue, see GNU Make manual, Section 8.11)
 ifndef FRAMAC_SHARE
 FRAMAC_SHARE  :=$(shell frama-c -journal-disable -print-path)
@@ -57,9 +57,31 @@ interp.cmo: $(WHY_DISTRIB)/jc/jc.cmi
 
 tests::$(WHY_DISTRIB)/bin/jessie.byte $(WHY_DISTRIB)/bin/jessie.opt
 
+ifeq ($(FRAMAC_MAKE),yes)
+unexport $(FRAMAC_MAKE)
+all:: $(WHY_DISTRIB)/Makefile
+
+all::
+	$(MAKE) -C $(WHY_DISTRIB) all
+
+depend::
+	$(MAKE) -C $(WHY_DISTRIB) depend
+
+clean::
+	$(MAKE) -C $(WHY_DISTRIB) clean
+endif
+
 jessie_config.ml:
 	echo "let jessie_local = false" > $@
 
+$(WHY_DISTRIB)/Makefile: $(WHY_DISTRIB)/Makefile.in $(WHY_DISTRIB)/config.status
+	cd $(WHY_DISTRIB) && ./config.status
+
+$(WHY_DISTRIB)/config.status: $(WHY_DISTRIB)/configure
+	cd $(WHY_DISTRIB) && ./config.status --recheck
+
+$(WHY_DISTRIB)/configure: $(WHY_DISTRIB)/configure.in
+	cd $(WHY_DISTRIB) && autoconf
 
 $(WHY_DISTRIB)/%:
 	$(MAKE) -C $(WHY_DISTRIB) $*

@@ -1980,6 +1980,14 @@ logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
 
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
 type 't alloc_table
 
 type 't pointer

@@ -10,11 +10,10 @@
 #function canonpath ()
 #{ echo $(cd $(dirname $1); pwd -P)/$(basename $1) }
 
-
 PPCHOME=$(shell (cd ../..; pwd -P))
 WHYHOME=$(shell (cd  ../../..; pwd -P))
-PPCOPT=$(shell ./check_opt.sh)
-PPCBYTE=frama-c.byte
+FRAMAC_OPT=$(shell ./check_opt.sh)
+FRAMAC_BYTE?=frama-c.byte
 
 JESSIEOPT=$(WHYHOME)/bin/jessie.opt
 JESSIEBYTE=$(WHYHOME)/bin/jessie.byte
@@ -28,9 +27,23 @@ GWHYBYTE=$(WHYHOME)/bin/gwhy.byte
 CADUCEUSLIB=$(WHYHOME)/lib
 WHYLIB=$(WHYHOME)/lib
 
-EXECPPCOPT= FRAMAC_SHARE=$(PPCHOME)/share $(PPCOPT) -load-module $(PPCHOME)/Jessie.cmxs
+ENVPPC=FRAMAC_PLUGIN=$(FRAMAC_PLUGIN)
 
-EXECPPCBYTE= FRAMAC_SHARE=$(PPCHOME)/share $(PPCBYTE) -load-module $(PPCHOME)/Jessie.cma
+ifeq ("$(wildcard $(PPCHOME)/Jessie.cma)","")
+EXECPPCBYTE=$(ENVPPC) $(FRAMAC_BYTE)
+else
+EXECPPCBYTE=$(ENVPPC) $(FRAMAC_BYTE) -load-module $(PPCHOME)/Jessie.cma
+endif
+
+ifeq ($(FRAMAC_OPT),$(FRAMAC_BYTE))
+EXECPPCOPT=$(EXECPPCBYTE)
+else
+ifeq ("$(wildcard $(PPCHOME)/Jessie.cmxs)","")
+EXECPPCOPT=$(ENVPPC) $(FRAMAC_OPT)
+else
+EXECPPCOPT=$(ENVPPC) $(FRAMAC_OPT) -load-module $(PPCHOME)/Jessie.cmxs
+endif
+endif
 
 EXECJESSIEOPT=WHYLIB=$(WHYLIB) $(JESSIEOPT)
 EXECJESSIEBYTE=WHYLIB=$(WHYLIB) $(JESSIEBYTE)
@@ -68,6 +81,8 @@ default:
 
 %: %.c
 	rm -f $*.jessie/$*.jc
+	echo $(FRAMAC_PLUGIN)
+	echo $(FRAMAC_SHARE)
 	$(EXECPPCBYTE) $(PPC_OPTIONS) -jessie-gen-only $^
 	$(EXECJESSIEBYTE) $(JC_OPTIONS) -locs $*.jessie/$*.cloc $*.jessie/$*.jc
 	$(ENVWHYOPT) make -C $*.jessie -f $*.makefile gui
@@ -207,7 +222,7 @@ simplify/%_why.sx.all: %.c
 		-f $*.makefile project | sed -e "s|$(PPCHOME)|PPCHOME|g" | sed -e "s|$(WHYHOME)|WHYHOME|g"
 	@echo "*** End output command for diff ***"
 	@echo "*** Begin VC file generated for diff ***"
-	@$(ENVWHYOPT) make --quiet -C $*.jessie --quiet -f $*.makefile project
+	@$(ENVWHYOPT) make --quiet -C $*.jessie -f $*.makefile project
 	@cat $*.jessie/why/$*.wpr
 	@cat $*.jessie/why/$*'_ctx'.why
 	@for i in $(wildcard $*.jessie/why/$*'_po'*.why); do \
