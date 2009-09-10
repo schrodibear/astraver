@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.44 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: gappa.ml,v 1.45 2009-09-10 12:37:13 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -328,9 +328,11 @@ let rec gpred def = function
   | Ptrue | Pfalse | Pvar _ -> (* discarded *)
       None
 
-let gpred p =
-  (*Format.printf "gpred %a@." Util.print_predicate p;*)
-  gpred p
+(*
+let gpred def p =
+  Format.printf "gpred %a@." Util.print_predicate p;
+  gpred def p
+*)
 
 (* extraction of a list of equalities and possibly a Gappa predicate *)
 
@@ -357,9 +359,8 @@ let rec ghyp = function
       | None ->
           [], gpred true p
     end
-  | Pand (_, _, p1, p2) as p ->
+  | Pand (_, _, p1, p2) ->
       begin match ghyp p1, ghyp p2 with
-        | ([], _), ([], _) -> [], gpred true p
         | (e1,p1), (e2, p2) -> e1 @ e2, gando (p1, p2)
       end
   | Pnamed (_, p) ->
@@ -383,6 +384,7 @@ let add_ctx_vars =
   List.fold_left 
     (fun acc -> function Svar (id,_) -> Idset.add id acc | _ -> acc)
 
+(* takes a reverted context and returns an augmented reverted context *)
 let rec intros ctx = function
   | Forall (_, id, n, t, _, p) ->
       let id' = next_away id (add_ctx_vars (predicate_vars p) ctx) in
@@ -397,29 +399,30 @@ let rec intros ctx = function
       ctx, c
 
 let process_obligation (ctx, concl) =
-  let ctx,concl = intros ctx concl in
-    let el, pl =
-      List.fold_left
-        (fun ((el, pl) as acc) h ->
-          match h with
-            | Svar _ -> acc
-            | Spred (_, p) -> 
-                let ep, pp = ghyp p in
-                let pl =
-                  match pp with
-                    | None -> pl
-                    | Some pp -> pp :: pl
-                  in
-                ep :: el, pl)
-        ([],[]) ctx
-      in
+  let ctx, concl = intros (List.rev ctx) concl in
+  let ctx = List.rev ctx in
+  let el, pl =
+    List.fold_left
+      (fun ((el, pl) as acc) h ->
+        match h with
+          | Svar _ -> acc
+          | Spred (_, p) -> 
+              let ep, pp = ghyp p in
+              let pl =
+                match pp with
+                  | None -> pl
+                  | Some pp -> pp :: pl
+                in
+              ep :: el, pl)
+      ([],[]) ctx
+    in
+  let el = List.rev (List.flatten el) in
   let gconcl =
     match gpred false concl with
       | None -> Gle (Gcst "1", "0")
       | Some p -> p
     in
-  let el = List.rev (List.flatten el) in
-  let gconcl = List.fold_right (fun p acc -> Gimplies (p, acc)) pl gconcl in
+  let gconcl = List.fold_left (fun acc p -> Gimplies (p, acc)) gconcl pl in
   Queue.add (el, gconcl) queue
 
 let push_decl d =
