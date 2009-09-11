@@ -1,6 +1,8 @@
 
+// @ lemma a1: \forall integer x,y; x*y != 0 ==> x!=0 && y!=0;
 
 #pragma JessieFloatModel(multirounding)
+#pragma JessieIntegerModel(math)
 // #pragma JessieFloatModel(strict)
 
 
@@ -12,10 +14,12 @@
   @ ensures (\result != 0 ==> \result == signe(\exact(x))) &&
   @          \abs(\result) <= 1 ;
   @*/
-double sign(double x, double M) {
-  if (x >= M)
+int sign(double x, double M) {
+   double m = -M;
+  //@ assert  m == -M;
+  if (x > M)
     return 1;
-  if (x <= -M)
+  if (x < m)
     return -1;
   return 0;
 }
@@ -23,6 +27,7 @@ double sign(double x, double M) {
 // 
 /*@ requires 
   @   sx == \exact(sx) &&
+
   @   sy == \exact(sy) &&
   @   vx == \exact(vx) &&
   @   vy == \exact(vy) &&
@@ -36,15 +41,15 @@ double sign(double x, double M) {
   @            * signe(\exact(sx)*\exact(vy)-\exact(sy)*\exact(vx));
   @*/
 
-double eps_line(double sx, double sy, 
+int eps_line(double sx, double sy, 
 	     double vx, double vy) {
-  double s1,s2;
+  int s1,s2;
 
-   s1=sign(sx*vx+sy*vy, 0x1.9000000001ap-45 );
+   s1=sign(sx*vx+sy*vy, 0x1.9000000001bp-45 );
 
   /*@ assert \abs(s1) <= 1 && 
       (s1 != 0 ==> s1 == signe(\exact(sx)*\exact(vx)+\exact(sy)*\exact(vy))); */   
-    s2=sign(sx*vy-sy*vx, 0x1.9000000001ap-45 );
+    s2=sign(sx*vy-sy*vx, 0x1.9000000001bp-45 );
 
   /*@ assert \abs(s2) <= 1 &&
       (s2 != 0 ==> s2 == signe(\exact(sx)*\exact(vy)-\exact(sy)*\exact(vx))); */
