@@ -27,7 +27,9 @@ GWHYBYTE=$(WHYHOME)/bin/gwhy.byte
 CADUCEUSLIB=$(WHYHOME)/lib
 WHYLIB=$(WHYHOME)/lib
 
+ifneq ("$(FRAMAC_PLUGIN)","")
 ENVPPC=FRAMAC_PLUGIN=$(FRAMAC_PLUGIN)
+endif
 
 ifeq ("$(wildcard $(PPCHOME)/Jessie.cma)","")
 EXECPPCBYTE=$(ENVPPC) $(FRAMAC_BYTE)
