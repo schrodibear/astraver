@@ -295,6 +295,15 @@ Dp_hint min_double.
 (*Why predicate*) Definition no_overflow  (f:float_format) (m:mode) (x:R)
   := (Rle (Rabs (round_float f m x)) (max_gen_float f)).
 
+(*Why function*) Definition gen_round_error  (x:gen_float)
+  := (Rabs (Rminus (float_value x) (exact_value x))).
+
+(*Why function*) Definition gen_relative_error  (x:gen_float)
+  := (Rabs (Rdiv (Rminus (float_value x) (exact_value x)) (exact_value x))).
+
+(*Why function*) Definition gen_total_error  (x:gen_float)
+  := (Rabs (Rminus (float_value x) (model_value x))).
+
 (*Why axiom*) Lemma bounded_real_no_overflow :
   (forall (f:float_format),
    (forall (m:mode),
