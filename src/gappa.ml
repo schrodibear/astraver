@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.47 2009-09-21 15:40:13 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.48 2009-09-21 15:52:58 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -188,7 +188,7 @@ let rec term = function
   (* int and real ops *)
   | Tapp (id, [t], _) when id == t_neg_real || id = t_neg_int ->
       Gneg (term t)
-  | Tapp (id, [t], _) when id == t_abs_real ->
+  | Tapp (id, [t], _) when id == t_abs_real || id == t_abs_int ->
       Gabs (term t)
   | Tapp (id, [t1; t2], _) when id == t_add_real || id = t_add_int ->
       Gadd (term t1, term t2)

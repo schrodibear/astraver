@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.mli,v 1.64 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.65 2009-09-21 15:52:58 melquion Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -115,6 +115,7 @@ val t_mul_int : t
 val t_div_int : t
 val t_mod_int : t
 val t_neg_int : t
+val t_abs_int : t
 
 val t_add_real : t
 val t_sub_real : t

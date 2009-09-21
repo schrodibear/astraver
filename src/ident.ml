@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: ident.ml,v 1.73 2008-11-05 14:03:17 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.74 2009-09-21 15:52:58 melquion Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -146,13 +146,13 @@ let t_mul_int = create "mul_int"
 let t_div_int = create "div_int"
 let t_mod_int = create "mod_int"
 let t_neg_int = create "neg_int"
+let t_abs_int = create "abs_int"
 
 let t_add_real = create "add_real"
 let t_sub_real = create "sub_real"
 let t_mul_real = create "mul_real"
 let t_div_real = create "div_real"
 let t_neg_real = create "neg_real"
-
 let t_abs_real = create "abs_real"
 let t_pow_real = create "pow_real"
 let t_sqrt_real = create "sqrt_real"
