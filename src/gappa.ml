@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.50 2009-09-21 17:09:40 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.51 2009-09-21 17:20:42 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -320,6 +320,9 @@ let rec gpred def = function
         | None, (Some _ as p2) when def = false -> p2
         | _ -> None
       end
+  | Pimplies (_, Papp (id, [Tconst (ConstBool true); Tconst (ConstBool true)], _), p)
+      when id == t_eq_bool ->
+      gpred def p
   | Pimplies (_, p1, p2) ->
       begin match gpred (not def) p1, gpred def p2 with
         | Some p1, Some p2 -> Some (Gimplies (p1, p2))
