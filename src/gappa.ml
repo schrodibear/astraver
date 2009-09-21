@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.46 2009-09-10 13:04:52 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.47 2009-09-21 15:40:13 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -164,18 +164,25 @@ let rnd_table = Hashtbl.create 10
    so new definitions should be as equalities *)
 let def_table = Hashtbl.create 10
 
+let rec subst_var = function
+  | Tvar id as t ->
+    begin
+      try
+        Hashtbl.find var_table id
+      with Not_found ->
+        t
+    end
+  | Tnamed (_, t) -> subst_var t
+  | Tapp (id, l1, l2) -> Tapp (id, List.map subst_var l1, l2)
+  | t -> t
+
 let rec term = function
   | t when is_constant t ->
       Gcst (eval_constant t)
   | Tconst _ ->
       raise NotGappa
   | Tvar id ->
-    begin
-      try
-        Hashtbl.find var_table id
-      with Not_found ->
-        Gvar (Ident.string id)
-    end
+      Gvar (Ident.string id)
   | Tderef id ->
       Gvar (Ident.string id)
   (* int and real ops *)
@@ -230,7 +237,7 @@ let rec term = function
         )
   | Tnamed(_,t) -> term t
 
-let termo t = try Some (term t) with NotGappa -> None
+let termo t = try Some (term (subst_var t)) with NotGappa -> None
 
 let gando = function
   | Some p1, Some p2 -> Some (Gand (p1, p2))
@@ -339,11 +346,8 @@ let gpred def p =
 let rec ghyp = function
   | Papp (id, [Tvar x; t], _) when is_eq id ->
     begin
-      match termo t with
-      | Some t' ->
-          Hashtbl.replace var_table x t';
-          [], None
-      | None -> [], None
+      Hashtbl.replace var_table x (subst_var t);
+      [], None
     end
   | Papp (id, [Tapp (id', [Tvar x], _); t], _) as p
       when is_eq id && (id' == float_value || id' == exact_value || id' == model_value) ->
