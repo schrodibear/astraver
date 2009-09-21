@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.51 2009-09-21 17:20:42 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.52 2009-09-21 17:30:52 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -87,6 +87,7 @@ let rnd_na = Ident.create "nearest_away"
 let max_gen_float = Ident.create "max_gen_float"
 let round_float = Ident.create "round_float"
 let gen_round_error = Ident.create "gen_round_error"
+let gen_float_of_real_logic = Ident.create "gen_float_of_real_logic"
 
 let float_value = Ident.create "float_value"
 let exact_value = Ident.create "exact_value"
@@ -207,7 +208,7 @@ let rec term = function
       term t
   (* [Jessie] rounding *)
   | Tapp (id, [Tapp (fmt, [], _); Tapp (m, [], _); t], _)
-      when id = round_float ->
+      when id == round_float ->
       let fmt =
         if fmt == fmt_single then Single else
         if fmt == fmt_double then Double else
@@ -222,6 +223,9 @@ let rec term = function
         raise NotGappa in
       Hashtbl.replace rnd_table (fmt, mode) ();
       Grnd (fmt, mode, term t)
+  | Tapp (id1, [Tapp (id2, l1, l2)], _)
+      when id1 == float_value && id2 == gen_float_of_real_logic ->
+      term (Tapp (round_float, l1, l2))
   | Tapp (id, [Tvar _ as x], _)
       when (id == float_value || id == exact_value || id == model_value) ->
     begin
