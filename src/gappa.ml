@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.49 2009-09-21 17:02:59 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.50 2009-09-21 17:09:40 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -53,6 +53,7 @@ type gterm =
   | Gfld of float_field * string
   | Grnd of float_fmt * mode * gterm
   | Gcst of string
+  | Gsqrt of gterm
   | Gneg of gterm
   | Gadd of gterm * gterm
   | Gsub of gterm * gterm
@@ -191,6 +192,8 @@ let rec term = function
       Gneg (term t)
   | Tapp (id, [t], _) when id == t_abs_real || id == t_abs_int ->
       Gabs (term t)
+  | Tapp (id, [t], _) when id == t_sqrt_real ->
+      Gsqrt (term t)
   | Tapp (id, [t1; t2], _) when id == t_add_real || id = t_add_int ->
       Gadd (term t1, term t2)
   | Tapp (id, [t1; t2], _) when id == t_sub_real || id = t_sub_int ->
@@ -467,6 +470,7 @@ let rec print_term fmt = function
   | Gmul (t1, t2) -> fprintf fmt "(%a * %a)" print_term t1 print_term t2
   | Gdiv (t1, t2) -> fprintf fmt "(%a / %a)" print_term t1 print_term t2
   | Gabs t -> fprintf fmt "|%a|" print_term t
+  | Gsqrt t -> fprintf fmt "sqrt(%a)" print_term t
 
 let rec print_pred_atom fmt = function
   | Gle (t, r1) ->
