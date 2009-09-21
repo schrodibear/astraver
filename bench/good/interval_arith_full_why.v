@@ -26,8 +26,12 @@ Admitted.
                 (is_plus_infinity y)),
   (float_le_float x x).
 Proof.
+(* 
 cvc3.
-Qed.
+Qed. pas de version svn de coq
+*) 
+Admitted.
+
 
 (*
 destruct result.
