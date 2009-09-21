@@ -460,31 +460,6 @@ parameter abs_gen_float :
   }
 
 
-
-
-(***************************************************)
-(*********** Dealing with rounding errors **********)
-(***************************************************)
-
-function gen_round_error(x:gen_float) : real = 
-	 abs_real(float_value(x) - exact_value(x))
-
-function gen_relative_error(x:gen_float) : real =
-         abs_real(float_value(x) - exact_value(x))/exact_value(x)
-
-function gen_total_error(x:gen_float) : real = 
-	 abs_real(float_value(x) - model_value(x))
-
-parameter set_model : x:gen_float ref -> y:real ->
-  { } 
-  unit writes x
-  { float_value(x) = float_value(x@)
-    and exact_value(x) = exact_value(x@)
-    and model_value(x) = y }
-
-
-
-
 (***************************************************)
 (******** comparisons of floats in the code ********)
 (***************************************************)

@@ -72,10 +72,24 @@ axiom max_exp_double: max_exp(Double) = 1024
 *)
 
 
-predicate no_overflow(f:float_format,m:mode,x:real) = 
-	  abs_real(round_float(f,m,x)) <= max_gen_float(f)
+predicate no_overflow(f:float_format,m:mode,x:real) =
+	abs_real(round_float(f, m, x)) <= max_gen_float(f)
 
+function gen_round_error(x:gen_float) : real =
+	abs_real(float_value(x) - exact_value(x))
 
+function gen_relative_error(x:gen_float) : real =
+	abs_real((float_value(x) - exact_value(x)) / exact_value(x))
+
+function gen_total_error(x:gen_float) : real =
+	abs_real(float_value(x) - model_value(x))
+
+parameter set_model : x:gen_float ref -> y:real ->
+	{ }
+	unit writes x
+	{ float_value(x) = float_value(x@)
+	  and exact_value(x) = exact_value(x@)
+	  and model_value(x) = y }
 
 
 (*************************************************************)
