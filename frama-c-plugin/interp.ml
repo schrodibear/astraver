@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.1 2009-09-08 11:11:42 monate Exp $ *)
+(* $Id: interp.ml,v 1.2 2009-09-21 08:40:14 virgile Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -465,7 +465,7 @@ let ctype ?bitsize ty =
 
     | TArray _ -> assert false (* Removed by translation *)
 
-    | TFun _ -> 
+    | TFun _ ->
 	unsupported "Function pointer type %a not allowed"
 	  !Ast_printer.d_type ty
 
@@ -878,7 +878,7 @@ and terms_lval pos lv =
                 List.map
                   (fun e ->
                      mkexpr
-                       (JCPEcast(e,ctype 
+                       (JCPEcast(e,ctype
                                    (TPtr(TComp(repfi.fcomp,empty_size_cache (),[]),[])))) pos)
                   e
               in
@@ -891,7 +891,7 @@ and terms_lval pos lv =
 
 and term t =
   match terms t with [ t ] -> t
-    | _ -> 
+    | _ ->
 	unsupported "Expecting a single term, not a set:@ %a@."
           !Ast_printer.d_term t
 
@@ -913,16 +913,16 @@ let rec pred p =
 	(*
           JCPEapp(name,logic_labels_assoc labels,List.map term tl)
 	*)
-        let args = 
-	  List.map2 
+        let args =
+	  List.map2
 	    (fun lv t ->
 	       let t' = term t in
 	       if isLogicFloatType t.term_type && isLogicRealType lv.lv_type
-	       then 
-		 mkexpr (JCPEcast(t', mktype (JCPTnative Treal))) t.term_loc 
+	       then
+		 mkexpr (JCPEcast(t', mktype (JCPTnative Treal))) t.term_loc
 	       else t')
 	    pinfo.l_profile
-	    tl 
+	    tl
 	in
 	JCPEapp(name,logic_labels_assoc labels, args)
 
@@ -1830,7 +1830,7 @@ let rec statement s =
     | UnspecifiedSequence seq ->
         (* [VP] TODO: take into account undefined behavior tied to the
           effects of the statements... *)
-        JCPEblock(statement_list (List.map (fun (x,_,_) -> x) seq))
+        JCPEblock(statement_list (List.map (fun (x,_,_,_) -> x) seq))
 
     | TryFinally _ | TryExcept _ -> assert false
   in
@@ -2060,7 +2060,7 @@ let global vardefs g =
     | GCompTag(compinfo,pos) when compinfo.cstruct -> (* struct type *)
         let field fi =
           let this =
-            default_field_modifiers, 
+            default_field_modifiers,
             ctype ?bitsize:fi.fsize_in_bits fi.ftype,
             fi.fname, fi.fsize_in_bits
           in
@@ -2069,7 +2069,7 @@ let global vardefs g =
           in
           if padding_size = 0 then [this] else
             let padding =
-              default_field_modifiers, 
+              default_field_modifiers,
               type_of_padding, unique_name "padding", fi.fpadding_in_bits
             in
             [this;padding]
@@ -2131,7 +2131,7 @@ let global vardefs g =
         in
         let padding =
           if union_size = 0 then [] else
-            [default_field_modifiers, 
+            [default_field_modifiers,
              type_of_padding, unique_name "padding", Some union_size]
         in
         let union_tag = JCDtag(compinfo.cname,[],None,padding,[]) in
@@ -2401,7 +2401,7 @@ let pragma = function
 		  [Jc_output.JCfloat_model Jc_env.FMmultirounding]
               | s ->
                   Jessie_options.warning ~current:true
-                    "pragma %s: identifier %s is not a valid value (ignored)." 
+                    "pragma %s: identifier %s is not a valid value (ignored)."
 		    name s; []
             end;
         | "JessieFloatRoundingMode" ->
@@ -2418,7 +2418,7 @@ let pragma = function
               | "towardawayzero" -> float_rounding_mode := `Towardawayzero;
                   [Jc_output.JCfloat_rounding_mode Jc_env.FRMtowardawayzero]
               | s ->
-                  Jessie_options.warning ~current:true 
+                  Jessie_options.warning ~current:true
 		    "pragma %s: identifier %s is not a valid value (ignored)" name s; []
             end
 	| "JessieFloatInstructionSet" ->
@@ -2475,7 +2475,7 @@ let pragmas f =
         | "box" -> Jc_output.JCabstract_domain Jc_env.AbsBox
         | "oct" -> Jc_output.JCabstract_domain Jc_env.AbsOct
         | "poly" -> Jc_output.JCabstract_domain Jc_env.AbsPol
-        | s -> 
+        | s ->
 	    Jessie_options.abort "unknown abstract domain %s" s)
   :: List.flatten (List.rev (List.rev_map pragma f.globals))
 
