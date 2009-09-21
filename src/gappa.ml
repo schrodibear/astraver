@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.48 2009-09-21 15:52:58 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.49 2009-09-21 17:02:59 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -85,6 +85,7 @@ let rnd_na = Ident.create "nearest_away"
 
 let max_gen_float = Ident.create "max_gen_float"
 let round_float = Ident.create "round_float"
+let gen_round_error = Ident.create "gen_round_error"
 
 let float_value = Ident.create "float_value"
 let exact_value = Ident.create "exact_value"
@@ -223,6 +224,12 @@ let rec term = function
     begin
       match term x with
         | Gvar v -> Gfld (field_of_id id, v)
+        | _ -> raise NotGappa
+    end
+  | Tapp (id, [Tvar _ as x], _) when id == gen_round_error ->
+    begin
+      match term x with
+        | Gvar v -> Gabs (Gsub (Gfld (Rounded, v), Gfld (Exact, v)))
         | _ -> raise NotGappa
     end
   (* anything else is generalized as a fresh variable *)
