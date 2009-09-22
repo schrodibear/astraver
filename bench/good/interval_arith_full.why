@@ -14,7 +14,7 @@ let max (x:gen_float) (y:gen_float) =
 }
 if (gt_gen_float x y) then x else y
 {  float_le_float(x,result) and float_le_float(y,result)
-} 
+}
 
 
 
@@ -85,6 +85,7 @@ let mul_up (x:gen_float) (y:gen_float) =
  {
 real_less_than_float(float_value(x)*float_value(y),result) 
 
+
 (*
 and 
 (is_finite(x) and is_infinite(y) -> real_less_than_float(float_value(x)*float_value(y),result)) 
@@ -136,6 +137,19 @@ end
 
 axiom help: forall x:real. forall y:real. forall z:real. forall t:real.
    (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
+
+axiom help1: forall x:real. forall y:real. forall z:real. 
+   (0.0 <= x and y <= z) -> x*y <= x*z
+
+axiom help2: forall x:real. forall y:real. forall z:real. 
+   (0.0 < x and y <= z) -> x*y < x*z
+
+axiom help3: forall x:real. forall y:real. forall z:real. 
+   (x <= 0.0 and y <= z) -> x*y >= x*z
+
+axiom help4: forall x:real. forall y:real. forall z:real. 
+   (x < 0.0 and y <= z) -> x*y > x*z
+
 
 
 
@@ -225,7 +239,6 @@ assert {float_value(zero)=0.0};
           assert {is_plus_infinity(xu) or (is_finite(xu) and 
                      float_value(xu)> 0.0)};
             tl := mul_dn xl yl;
-            assert { float_value(tl) <= float_value(xl) * float_value(yl) };
             tu := mul_up xu yu;
 	    (* xu > 0 et yu > 0*)
 	    assert { real_less_than_float(float_value(xu) * float_value(yu), tu) };
@@ -246,83 +259,126 @@ assert {float_value(zero)=0.0};
 { is_interval(tl,tu) and 
 
 
-(*
-  forall a:real. forall b:real. 
+ forall a:real. forall b:real. 
       in_interval(a,xl,xu) and in_interval(b,yl,yu) -> in_interval(a*b,tl,tu)
 
+(* completement prouvé par Z3 et partiellement par cvc3 !!
 *)
 
-(*
-  forall a:real. forall b:real. 
+
+
+
+
+
+(*  Borne inférieure: 
+
+forall a:real. forall b:real. 
        float_less_than_real(xl,a) and float_less_than_real(yl,b) ->
            float_less_than_real(tl,a*b)
-       and float_less_than_real(tl,float_value(xl)*float_value(yl)) 
-*)
 
-(*
- forall a:real. forall b:real. 
+completement prouvé par Z3 !
+
+forall a:real. forall b:real. 
        is_finite(xl) and float_value(xl) <= a and 
        is_finite(yl) and float_value(yl) <= b ->
            float_less_than_real(tl,a*b)
 
-prouvé par ergo !
-*)
+completement prouvé par Z3 !
 
-
-
- forall a:real. forall b:real. 
-       (is_finite(xl) and float_value(xl) <= a and 
-       is_finite(yl) and float_value(yl) <= b ->
-        float_less_than_real(tl,float_value(xl)*float_value(yl)) 
-        and float_value(xl) * float_value(yl) <= a*b)
-and 
-       (is_finite(xu) and a <= float_value(xu) and 
-       is_finite(yu) and b <= float_value(yu) ->
-        real_less_than_float(float_value(xu)*float_value(yu),tu) 
-        and a*b <= float_value(xu) * float_value(yu))
-
-(*
 forall a:real. forall b:real. 
-       is_finite(xl) and float_value(xl) <= a and 
-       is_finite(yl) and float_value(yl) <= b and is_finite(tl) ->
-           float_value(tl) <= a*b
-
-*)
-
-
-(*
- forall a:real. forall b:real. 
        is_minus_infinity(xl) and 
        is_finite(yl) and float_value(yl) <= b ->
            float_less_than_real(tl,a*b)
 
-prouvé par tous
+forall a:real. forall b:real. 
+       is_finite(xl) and float_value(xl) <= a and 
+       is_minus_infinity(yl) ->
+           float_less_than_real(tl,a*b)
 
+forall a:real. forall b:real. 
+       is_minus_infinity(xl) and is_minus_infinity(yl) ->
+           float_less_than_real(tl,a*b)
+
+completement prouvés par Z3 !
 *)
 
-(*
- forall a:real. forall b:real. 
+
+
+
+
+(* Les deux bornes ensembles:
+
+forall a:real. forall b:real. 
+       (is_finite(xl) and float_value(xl) <= a and 
+       is_finite(yl) and float_value(yl) <= b and
+       is_finite(xu) and a <= float_value(xu) and 
+       is_finite(yu) and b <= float_value(yu)) ->  
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+
+completement prouvé par Z3 !
+
+forall a:real. forall b:real. 
+       (is_finite(xl) and float_value(xl) <= a and 
+       is_finite(yl) and float_value(yl) <= b and
+       is_plus_infinity(xu) and 
+       is_finite(yu) and b <= float_value(yu)) ->
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+
+completement prouvé par Z3 et cvc3 !
+
+forall a:real. forall b:real. 
+       (is_finite(xl) and float_value(xl) <= a and 
+       is_finite(yl) and float_value(yl) <= b and
+       is_finite(xu) and a <= float_value(xu) and  
+       is_plus_infinity(yu)) ->
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+
+completement prouvé par Z3 et cvc3 !
+
+
+forall a:real. forall b:real. 
+       (is_finite(xl) and float_value(xl) <= a and 
+       is_finite(yl) and float_value(yl) <= b and
+       is_plus_infinity(xu) and  
+       is_plus_infinity(yu)) ->
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+
+completement prouvé par Z3 et cvc3 !
+
+forall a:real. forall b:real. 
+       (is_minus_infinity(xl) and 
        is_minus_infinity(yl) and 
-       is_finite(xl) and float_value(xl) <= a ->
-           float_less_than_real(tl,a*b)
+       is_plus_infinity(xu) and  
+       is_plus_infinity(yu)) ->
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+complètetement prouvé par tous
 
-prouvé par tous
-*)
-
-(*
- forall a:real. forall b:real. 
+forall a:real. forall b:real. 
+       (is_minus_infinity(xl) and 
        is_minus_infinity(yl) and 
-       is_minus_infinity(xl) ->
-           float_less_than_real(tl,a*b)
+       is_finite(xu) and a <= float_value(xu) and 
+       is_finite(yu) and b <= float_value(yu)) ->
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
-prouve par tous 
+complètetement prouvé par tous
 
-*)
+forall a:real. forall b:real. 
+       (is_minus_infinity(xl) and 
+       is_minus_infinity(yl) and 
+       is_plus_infinity(xu) and 
+       is_finite(yu) and b <= float_value(yu)) ->
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
-(*
-  forall a:real. forall b:real. 
-       float_less_than_real(xl,a) and float_less_than_real(yl,b) ->
-           float_less_than_real(tl,a*b)
+complètetement prouvé par tous
+
+forall a:real. forall b:real. 
+       (is_minus_infinity(xl) and 
+       is_minus_infinity(yl) and 
+       is_finite(xu) and a <= float_value(xu) and 
+       is_plus_infinity(yu)) ->
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+
+complètetement prouvé par tous
 
 *)
 
