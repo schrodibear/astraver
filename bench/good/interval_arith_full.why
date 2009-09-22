@@ -232,16 +232,16 @@ assert {float_value(zero)=0.0};
       else (* yl >=0* et xl>=0*)
         if (gt_gen_float yu !zero) then
             begin
-          assert {is_finite(xl) and 0.0 <= float_value(xl)};
+     (*   assert {is_finite(xl) and 0.0 <= float_value(xl)};
 	  assert {is_finite(yl) and 0.0 <= float_value(yl)};
           assert {is_plus_infinity(yu) or (is_finite(yu) and 
                      float_value(yu)> 0.0)};
           assert {is_plus_infinity(xu) or (is_finite(xu) and 
-                     float_value(xu)> 0.0)};
+                     float_value(xu)> 0.0)}; *)
             tl := mul_dn xl yl;
             tu := mul_up xu yu;
 	    (* xu > 0 et yu > 0*)
-	    assert { real_less_than_float(float_value(xu) * float_value(yu), tu) };
+	(*  assert { real_less_than_float(float_value(xu) * float_value(yu), tu) }; *)
             void
 	    end
         else           
