@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: lexer.mll,v 1.22 2009-09-04 15:29:45 bobot Exp $ *)
+(* $Id: lexer.mll,v 1.23 2009-09-22 16:41:13 melquion Exp $ *)
 
 {
   open Lexing
@@ -128,8 +128,6 @@ let alpha = ['a'-'z' 'A'-'Z']
 let letter = alpha | '_'
 let digit = ['0'-'9']
 let ident = letter (letter | digit | '\'')*
-let float = digit+ '.' digit* | digit* '.' digit+
-let floatexp = float ['e' 'E'] ['-' '+']? digit+
 let hexadigit = ['0'-'9' 'a'-'f' 'A'-'F']
 (*
 let hexafloat = '0' ['x' 'X'] (hexadigit* '.' hexadigit+ | hexadigit+ '.' hexadigit* ) ['p' 'P'] ['-' '+']? digit+
@@ -147,6 +145,7 @@ rule token = parse
       { try Hashtbl.find keywords id with Not_found -> IDENT id }
   | digit+ as s
       { INTEGER s }
+  | (digit+ as i) ("" as f) ['e' 'E'] (['-' '+']? digit+ as e)
   | (digit+ as i) '.' (digit* as f) (['e' 'E'] (['-' '+']? digit+ as e))?
   | (digit* as i) '.' (digit+ as f) (['e' 'E'] (['-' '+']? digit+ as e))?
       { FLOAT (RConstDecimal (i, f, option_app remove_leading_plus e)) }
