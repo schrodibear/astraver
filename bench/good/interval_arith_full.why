@@ -83,8 +83,10 @@ let mul_up (x:gen_float) (y:gen_float) =
 }
 (neg_gen_float Double down (mul_gen_float Double down x (neg_gen_float Double down y)))
  {
-real_less_than_float(float_value(x)*float_value(y),result) 
-
+real_less_than_float(float_value(x)*float_value(y),result) and
+((is_infinite(x) and is_infinite(y)) -> is_infinite(result)) and
+((is_plus_infinity(x) or is_plus_infinity(y)) -> is_plus_infinity(result)) and
+((is_minus_infinity(x) or is_minus_infinity(y)) -> is_plus_infinity(result))
 
 (*
 and 
@@ -135,33 +137,79 @@ end
 
 
 
-axiom help: forall x:real. forall y:real. forall z:real. forall t:real.
+
+axiom axo1: forall x:gen_float. forall a:real. forall b:real.
+(float_less_than_real(x,a) and a <= b) -> float_less_than_real(x,b)
+
+axiom axo2: forall x:gen_float. forall a:real. forall b:real.
+(a <= b and real_less_than_float(b,x)) -> real_less_than_float(a,x)
+
+axiom axo3: forall x:gen_float. forall y:gen_float. forall a:real. 
+(float_le_float(x,y) and float_less_than_real(y,a)) -> float_less_than_real(x,a)
+
+axiom axo4: forall x:gen_float. forall y:gen_float. forall a:real. 
+(real_less_than_float(a,x) and float_le_float(x,y)) -> real_less_than_float(a,y)
+
+
+
+axiom help1: forall x:real. forall y:real. forall z:real. forall t:real.
    (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
 
+(* pas besoin de help2 !!
+axiom help2: forall x:real. forall y:real. forall z:real. forall t:real.
+   (x <= y <= 0.0 and z <= t <= 0.0) -> x*z >= y*t
+*)
 
-axiom help1: forall x:real. forall y:real. forall z:real. 
+axiom help3: forall x:real. forall y:real. forall a:real. forall b:real.
+   (0.0 <= a <= x and y <= b and y < 0.0) -> x*y <= a*b 
+(*
+(*c'est le meme que help3, pas besoin de help4 *)
+axiom help4: forall x:real. forall y:real. forall a:real. forall b:real.
+   (x <= a and x < 0.0 and 0.0 <= b <= y) -> x*y <= a*b 
+*)
+	
+axiom help5: forall x:real. forall y:real. forall a:real. forall b:real.
+   (a <= x and x > 0.0 and y <= b <= 0.0 ) -> x*y <= a*b
+
+(*c'est le meme que help5 mais Z3 n'arrive pas à prouver certaines postconditions sans help6 !! bizare *)
+axiom help6: forall x:real. forall y:real. forall a:real. forall b:real.
+   (b <= y and y > 0.0 and x <= a <= 0.0 ) -> x*y <= a*b
+
+axiom help7: forall x:real. forall y:real. forall a:real. forall b:real.
+   (x <= a <= 0.0 and y <= b and y < 0.0) -> a*b <= x*y
+
+(*c'est le meme que help7 mais Z3 n'arrive pas à prouver certaines postconditions sans help8 !! bizare *)
+axiom help8: forall x:real. forall y:real. forall a:real. forall b:real.
+   (x <= a and x < 0.0 and y <= b <= 0.0 ) -> a*b <= x*y
+
+axiom help9: forall x:real. forall y:real. forall a:real. forall b:real.
+   (a <= x and x > 0.0 and 0.0 <= b <= y ) -> a*b <= x*y 
+
+
+
+
+axiom help10: forall x:real. forall y:real. forall z:real. 
    (0.0 <= x and y <= z) -> x*y <= x*z
 
-axiom help2: forall x:real. forall y:real. forall z:real. 
+axiom help11: forall x:real. forall y:real. forall z:real. 
    (0.0 < x and y <= z) -> x*y <= x*z
 
-axiom help2_: forall x:real. forall y:real. forall z:real. 
+axiom help12: forall x:real. forall y:real. forall z:real. 
    (0.0 < x and y < z) -> x*y < x*z
 
-axiom help2__: forall x:real. forall y:real. forall z:real. 
+axiom help13: forall x:real. forall y:real. forall z:real. 
    (0.0 <= x and y < z) -> x*y <= x*z
 
-
-axiom help3: forall x:real. forall y:real. forall z:real. 
+axiom help14: forall x:real. forall y:real. forall z:real. 
    (x <= 0.0 and y <= z) -> x*y >= x*z
 
-axiom help4: forall x:real. forall y:real. forall z:real. 
+axiom help15: forall x:real. forall y:real. forall z:real. 
    (x < 0.0 and y <= z) -> x*y >= x*z
 
-axiom help4_: forall x:real. forall y:real. forall z:real. 
+axiom help16: forall x:real. forall y:real. forall z:real. 
    (x < 0.0 and y < z) -> x*y > x*z
 
-axiom help4__: forall x:real. forall y:real. forall z:real. 
+axiom help17: forall x:real. forall y:real. forall z:real. 
    (x <= 0.0 and y < z) -> x*y >= x*z
 
 
@@ -186,19 +234,19 @@ assert {float_value(zero)=0.0};
             tu := max (mul_up xl yl) (mul_up xu yu)
 	    end
         else           
-            begin
+            begin (* xl,yl< 0 et xu > 0 et yu <=0 *)
 	    tl := mul_dn xu yl;
-            tu := mul_up xl yl
-	    end
-      else
+	    tu := mul_up xl yl
+            end
+      else 
         begin
         if (gt_gen_float yu !zero) then
-            begin
+            begin (* xl< 0 et yl >=0 et xu > 0 et yu >0 *)
 	    tl := mul_dn xl yu;
             tu := mul_up xu yu
 	    end
         else
-            begin           
+            begin (* xl< 0 et yl >=0 et xu > 0 et yu <=0 *)          
             tl := !zero;
             tu := !zero 
 	    end
@@ -208,24 +256,24 @@ assert {float_value(zero)=0.0};
       if (lt_gen_float yl !zero) then
         begin
 	if (gt_gen_float yu !zero) then
-            begin
+            begin (* xl,yl< 0 et xu <= 0 et yu >0 *)
 	    tl := mul_dn xl yu;
             tu := mul_up xl yl
 	    end
         else           
-            begin
+            begin (* xl,yl< 0 et xu <= 0 et yu <=0 *)
 	    tl := mul_dn xu yu;
             tu := mul_up xl yl
 	    end
 	end
-      else
+      else 
         if (gt_gen_float yu !zero) then
-            begin 
+            begin (* xl< 0 et yl>=0 et xu <= 0 et yu >0 *) 
 	    tl := mul_dn xl yu;
             tu := mul_up xu yl
 	    end
         else          
-            begin
+            begin (* xl< 0 et yl>=0 et xu <= 0 et yu <=0 *)
 	    tl := !zero;
             tu := !zero
 	    end
@@ -234,36 +282,27 @@ assert {float_value(zero)=0.0};
     if (gt_gen_float xu !zero) then
       if (lt_gen_float yl !zero) then
         if (gt_gen_float yu !zero) then
-            begin
+            begin (* xl>=0 et yl<0 et xu > 0 et yu >0 *)
 	    tl := mul_dn xu yl;
             tu := mul_up xu yu
 	    end
-        else   (*yu <=0*)        
-            begin
+        else           
+            begin (* xl>=0 et yl<0 et xu > 0 et yu <=0*)
 	    tl := mul_dn xu yl;
             tu := mul_up xl yu
 	    end
-      else (* yl >=0* et xl>=0*)
+      else 
         if (gt_gen_float yu !zero) then
-            begin
-     (*   assert {is_finite(xl) and 0.0 <= float_value(xl)};
-	  assert {is_finite(yl) and 0.0 <= float_value(yl)};
-          assert {is_plus_infinity(yu) or (is_finite(yu) and 
-                     float_value(yu)> 0.0)};
-          assert {is_plus_infinity(xu) or (is_finite(xu) and 
-                     float_value(xu)> 0.0)}; *)
-            tl := mul_dn xl yl;
-            tu := mul_up xu yu;
-	    (* xu > 0 et yu > 0*)
-	(*  assert { real_less_than_float(float_value(xu) * float_value(yu), tu) }; *)
-            void
-	    end
+            begin (* xl>=0 et yl >=0 et xu > 0 et yu >0*)
+     	    tl := mul_dn xl yl;
+	    tu := mul_up xu yu
+            end
         else           
-            begin
+            begin  (* xl>=0 et yl >=0 et xu > 0 et yu <=0*)
 	    tl := !zero;
             tu := !zero
 	    end
-    else               
+    else   (* xl>=0 et yl qlq et xu <= 0 et yu qlq *)             
         begin
 	tl := !zero;
         tu := !zero
@@ -274,9 +313,11 @@ assert {float_value(zero)=0.0};
 
 
  forall a:real. forall b:real. 
-      in_interval(a,xl,xu) and in_interval(b,yl,yu) -> in_interval(a*b,tl,tu)
+      in_interval(a,xl,xu) and in_interval(b,yl,yu) -> 
+         (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
-(* completement prouvé par Z3 et partiellement par cvc3 !!
+(*
+completement prouvé par Z3 sauf postconditions 63, 110, 157 et 160 prouvés par cvc3
 *)
 
 
@@ -284,7 +325,8 @@ assert {float_value(zero)=0.0};
 
 
 
-(*  Borne inférieure: 
+(*  Borne inférieure: Il ne faut pas considerer la borne inf toute seule parce que 
+    le calcul de tl parfois depend de xu et/ou yu
 
 forall a:real. forall b:real. 
        float_less_than_real(xl,a) and float_less_than_real(yl,b) ->
@@ -308,13 +350,14 @@ forall a:real. forall b:real.
        is_finite(xl) and float_value(xl) <= a and 
        is_minus_infinity(yl) ->
            float_less_than_real(tl,a*b)
-
 forall a:real. forall b:real. 
        is_minus_infinity(xl) and is_minus_infinity(yl) ->
            float_less_than_real(tl,a*b)
 
 completement prouvés par Z3 !
 *)
+
+
 
 
 
@@ -329,7 +372,7 @@ forall a:real. forall b:real.
        is_finite(yu) and b <= float_value(yu)) ->  
            (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
-completement prouvé par Z3 !
+completement prouvé par Z3 
 
 forall a:real. forall b:real. 
        (is_finite(xl) and float_value(xl) <= a and 
@@ -338,7 +381,7 @@ forall a:real. forall b:real.
        is_finite(yu) and b <= float_value(yu)) ->
            (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
-completement prouvé par Z3 et cvc3 !
+completement prouvé par Z3 et ergo (pour une seule postcondition en ajoutant des assertions)
 
 forall a:real. forall b:real. 
        (is_finite(xl) and float_value(xl) <= a and 
@@ -347,8 +390,7 @@ forall a:real. forall b:real.
        is_plus_infinity(yu)) ->
            (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
-completement prouvé par Z3 et cvc3 !
-
+completement prouvé par Z3 et ergo (pour une seule postcondition)
 
 forall a:real. forall b:real. 
        (is_finite(xl) and float_value(xl) <= a and 
@@ -357,7 +399,99 @@ forall a:real. forall b:real.
        is_plus_infinity(yu)) ->
            (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
-completement prouvé par Z3 et cvc3 !
+completement prouvé par Z3 et ergo (pour une seule postcondition en ajoutant des assertions)
+
+
+
+
+
+***************aussi *******************
+
+
+
+forall a:real. forall b:real. 
+       (is_minus_infinity(xl) and 
+       is_finite(yl) and float_value(yl) <= b and 
+       is_finite(xu) and a <= float_value(xu) and 
+       is_finite(yu) and b <= float_value(yu)) ->  
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+
+completement prouvé par Z3
+
+forall a:real. forall b:real. 
+       (is_minus_infinity(xl) and 
+       is_finite(yl) and float_value(yl) <= b and 
+       is_plus_infinity(xu) and 
+       is_finite(yu) and b <= float_value(yu)) ->  
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+completement prouvé par Z3
+
+forall a:real. forall b:real. 
+       (is_minus_infinity(xl) and 
+       is_finite(yl) and float_value(yl) <= b and 
+       is_finite(xu) and a <= float_value(xu) and 
+       is_plus_infinity(yu)) ->  
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+completement prouvé par Z3
+
+forall a:real. forall b:real. 
+       (is_minus_infinity(xl) and 
+       is_finite(yl) and float_value(yl) <= b and 
+       is_plus_infinity(xu) and 
+       is_plus_infinity(yu)) ->  
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+
+completement prouvé par Z3
+
+
+
+
+
+***************aussi *******************
+
+
+forall a:real. forall b:real. 
+       (is_finite(xl) and float_value(xl) <= a and 
+       is_minus_infinity(yl) and 
+       is_finite(xu) and a <= float_value(xu) and 
+       is_finite(yu) and b <= float_value(yu)) ->  
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+completement prouvé par Z3
+
+forall a:real. forall b:real. 
+       (is_finite(xl) and float_value(xl) <= a and 
+       is_minus_infinity(yl) and 
+       is_plus_infinity(xu) and 
+       is_finite(yu) and b <= float_value(yu)) ->  
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+completement prouvé par Z3
+
+forall a:real. forall b:real. 
+       (is_finite(xl) and float_value(xl) <= a and 
+       is_minus_infinity(yl) and 
+       is_finite(xu) and a <= float_value(xu) and 
+       is_plus_infinity(yu)) ->  
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+
+completement prouvé par Z3
+
+forall a:real. forall b:real. 
+       (is_finite(xl) and float_value(xl) <= a and 
+       is_minus_infinity(yl) and 
+       is_plus_infinity(xu) and 
+       is_plus_infinity(yu)) ->  
+           (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+
+completement prouvé par Z3
+
+
+
+
+*******************aussi************************
+
+
+
+
 
 forall a:real. forall b:real. 
        (is_minus_infinity(xl) and 
@@ -365,6 +499,7 @@ forall a:real. forall b:real.
        is_plus_infinity(xu) and  
        is_plus_infinity(yu)) ->
            (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
+
 complètetement prouvé par tous
 
 forall a:real. forall b:real. 
@@ -374,7 +509,7 @@ forall a:real. forall b:real.
        is_finite(yu) and b <= float_value(yu)) ->
            (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
-complètetement prouvé par tous
+complètetement prouvé par Z3 et ergo (pour une seule postcondition en ajoutant des assertions) 
 
 forall a:real. forall b:real. 
        (is_minus_infinity(xl) and 
@@ -383,7 +518,7 @@ forall a:real. forall b:real.
        is_finite(yu) and b <= float_value(yu)) ->
            (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
-complètetement prouvé par tous
+complètetement prouvé par Z3
 
 forall a:real. forall b:real. 
        (is_minus_infinity(xl) and 
@@ -392,7 +527,7 @@ forall a:real. forall b:real.
        is_plus_infinity(yu)) ->
            (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
-complètetement prouvé par tous
+complètetement prouvé par Z3
 
 *)
 
