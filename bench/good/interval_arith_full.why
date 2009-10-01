@@ -82,11 +82,9 @@ let mul_up (x:gen_float) (y:gen_float) =
   (is_infinite(y) and is_finite(x) -> float_value(x) <> 0.0) 
   and 
   (is_finite(x) and is_finite(y) and not no_overflow(Double,down,-float_value(y)) and float_sign(y) = Positive 
-        -> float_value(x) > 0.0)
+        -> float_value(x) > 0.0) 
 }
-
 (neg_gen_float Double down (mul_gen_float Double down x (neg_gen_float Double down y)))
-
 (*
 begin
 a := (neg_gen_float Double down y);
