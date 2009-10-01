@@ -37,7 +37,7 @@ and
  (mul_gen_float Double down x y)
  {
   float_less_than_real(result,float_value(x)*float_value(y)) and
-(is_infinite(x) or is_infinite(y) -> is_minus_infinity(result))
+(is_infinite(x) or is_infinite(y) -> is_minus_infinity(result)) 
 }
 
 
@@ -68,6 +68,9 @@ and
 *)
 
 
+parameter a:gen_float ref
+parameter b:gen_float ref
+parameter z:gen_float ref
 
 
 let mul_up (x:gen_float) (y:gen_float) =
@@ -81,24 +84,49 @@ let mul_up (x:gen_float) (y:gen_float) =
   (is_finite(x) and is_finite(y) and not no_overflow(Double,down,-float_value(y)) and float_sign(y) = Positive 
         -> float_value(x) > 0.0)
 }
+
 (neg_gen_float Double down (mul_gen_float Double down x (neg_gen_float Double down y)))
- {
+
+(*
+begin
+a := (neg_gen_float Double down y);
+b := (mul_gen_float Double down x !a);
+z := (neg_gen_float Double down !b)
+end
+*)
+{
 real_less_than_float(float_value(x)*float_value(y),result) and
 ((is_infinite(x) and is_infinite(y)) -> is_infinite(result)) and
 ((is_plus_infinity(x) or is_plus_infinity(y)) -> is_plus_infinity(result)) and
 ((is_minus_infinity(x) or is_minus_infinity(y)) -> is_plus_infinity(result))
 
+
+and 
+(is_finite(x) and is_finite(y) and 
+        no_overflow(Double,down,-float_value(y)) and 
+        no_overflow(Double,down,float_value(x)*round_float(Double,down,-float_value(y))) and
+        no_overflow(Double,down,-round_float(Double,down,float_value(x)*round_float(Double,down,-float_value(y)))) and float_value(x) > 0.0 -> 
+                 is_finite(result) and 
+
+float_value(result) = round_float(Double,down,-round_float(Double,down,float_value(x)*round_float(Double,down,-float_value(y)))) and 
+float_value(result) = - round_float(Double,up,round_float(Double,down,float_value(x)*round_float(Double,down,-float_value(y)))) and 
+float_value(result) = - round_float(Double,down,float_value(x)*round_float(Double,down,-float_value(y))) 
+and
+float_value(result) >= -float_value(x)*round_float(Double,down,-float_value(y))
+and 
+float_value(result) >= float_value(x)*round_float(Double,up,float_value(y))
+and
+float_value(result) >= float_value(x)*float_value(y)
+and
+real_less_than_float(float_value(x)*float_value(y),result))
+
 (*
 and 
-(is_finite(x) and is_infinite(y) -> real_less_than_float(float_value(x)*float_value(y),result)) 
-and 
-(is_infinite(x) and is_finite(y) and no_overflow(Double,down,-float_value(y)) -> real_less_than_float(float_value(x)*float_value(y),result)) 
-and 
-(is_infinite(x) and is_finite(y) and not no_overflow(Double,down,-float_value(y)) -> real_less_than_float(float_value(x)*float_value(y),result)) 
-and 
-(is_infinite(x) and is_infinite(y) -> real_less_than_float(float_value(x)*float_value(y),result)) 
-and 
-
+(is_finite(x) and is_finite(y) and 
+        no_overflow(Double,down,-float_value(y)) and 
+        no_overflow(Double,down,float_value(x)*float_value(a)) and
+        no_overflow(Double,down,-float_value(b)) and float_value(x) > 0.0 -> 
+                 is_finite(z) and real_less_than_float(float_value(x)*float_value(y),z))
 *)
 }
 
@@ -215,6 +243,7 @@ axiom help17: forall x:real. forall y:real. forall z:real.
 
 
 
+
 parameter tl:gen_float ref
 parameter tu:gen_float ref
 parameter zero:gen_float ref
@@ -310,9 +339,8 @@ assert {float_value(zero)=0.0};
   end;
   void       
 { is_interval(tl,tu) and 
-
-
- forall a:real. forall b:real. 
+ 
+  forall a:real. forall b:real. 
       in_interval(a,xl,xu) and in_interval(b,yl,yu) -> 
          (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 

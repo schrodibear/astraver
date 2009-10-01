@@ -32,4 +32,5 @@ floats1_why.v: floats1.why $(WHY)
 	$(WHY) -V --coq-v8 --coq-tactic intuition ../../lib/why/floats_full.why $<
 
 floats1.gui: floats1.why $(GWHY)
-	$(GWHY) -split-user-conj -V ../../lib/why/floats_full.why $<
+	WHYLIB=../../lib $(GWHY) -split-user-conj -V ../../lib/why/floats_full.why $<
+
