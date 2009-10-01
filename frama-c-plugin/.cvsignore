@@ -2,3 +2,5 @@
 Jessie.cma
 Jessie.cmxs
 frama-c-Jessie*
+.depend
+ptests_local_config.ml
