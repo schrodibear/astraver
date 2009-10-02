@@ -1,6 +1,67 @@
 
 
 
+
+goal helper_for_multiplication_goal: 
+      forall x:real. forall y:real. forall z:real. forall t:real.
+   (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
+
+axiom helper_for_multiplication: 
+      forall x:real. forall y:real. forall z:real. forall t:real.
+   (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
+
+
+
+
+axiom help3: forall x:real. forall y:real. forall a:real. forall b:real.
+   (0.0 <= a <= x and y <= b and y < 0.0) -> x*y <= a*b 
+	
+axiom help5: forall x:real. forall y:real. forall a:real. forall b:real.
+   (a <= x and x > 0.0 and y <= b <= 0.0 ) -> x*y <= a*b
+
+(*c'est le meme que help5 mais Z3 n'arrive pas à prouver certaines postconditions sans help6 !! bizare *)
+axiom help6: forall x:real. forall y:real. forall a:real. forall b:real.
+   (b <= y and y > 0.0 and x <= a <= 0.0 ) -> x*y <= a*b
+
+axiom help7: forall x:real. forall y:real. forall a:real. forall b:real.
+   (x <= a <= 0.0 and y <= b and y < 0.0) -> a*b <= x*y
+
+(*c'est le meme que help7 mais Z3 n'arrive pas à prouver certaines postconditions sans help8 !! bizare *)
+axiom help8: forall x:real. forall y:real. forall a:real. forall b:real.
+   (x <= a and x < 0.0 and y <= b <= 0.0 ) -> a*b <= x*y
+
+axiom help9: forall x:real. forall y:real. forall a:real. forall b:real.
+   (a <= x and x > 0.0 and 0.0 <= b <= y ) -> a*b <= x*y 
+
+
+
+axiom help10: forall x:real. forall y:real. forall z:real. 
+   (0.0 <= x and y <= z) -> x*y <= x*z
+
+axiom help11: forall x:real. forall y:real. forall z:real. 
+   (0.0 < x and y <= z) -> x*y <= x*z
+
+axiom help12: forall x:real. forall y:real. forall z:real. 
+   (0.0 < x and y < z) -> x*y < x*z
+
+axiom help13: forall x:real. forall y:real. forall z:real. 
+   (0.0 <= x and y < z) -> x*y <= x*z
+
+axiom help14: forall x:real. forall y:real. forall z:real. 
+   (x <= 0.0 and y <= z) -> x*y >= x*z
+
+axiom help15: forall x:real. forall y:real. forall z:real. 
+   (x < 0.0 and y <= z) -> x*y >= x*z
+
+
+
+(*
+axiom help16: forall x:real. forall y:real. forall z:real. 
+   (x < 0.0 and y < z) -> x*y > x*z
+*)
+
+
+
 let min (x:gen_float) (y:gen_float) =
  { is_not_NaN(x) and is_not_NaN(y) 
 }
@@ -27,12 +88,15 @@ predicate real_less_than_float(x:real,y:gen_float) =
 	
 let mul_dn (x:gen_float) (y:gen_float) =
 
- { is_not_NaN(x) and is_not_NaN(y) and
+{
+(*
+ is_not_NaN(x) and is_not_NaN(y) and
   ((is_infinite(x) or is_infinite(y)) -> diff_sign(x,y))
 and               
   (is_infinite(x) and is_finite(y) -> float_value(y) <> 0.0) 
 and
   (is_infinite(y) and is_finite(x) -> float_value(x) <> 0.0)
+*)
  }
  (mul_gen_float Double down x y)
  {
@@ -42,95 +106,36 @@ and
 
 
 
-(* obsolete ???
-
- forall x1:real. forall y1:real. 
-     (* x: <0 borne inf, y: >0 borne sup -> result: borne inf *) 
-     (float_sign(x) = Negative and float_sign(y) = Positive and
-      float_less_than_real(x,x1) and real_less_than_float(y1,y) ->
-      float_less_than_real(result,x1*y1))
-    and 
-     (* x: >0 borne sup, y: <0 borne inf -> result: borne inf *) 
-     (float_sign(x) = Positive and float_sign(y) = Negative and
-      real_less_than_float(x1,x) and float_less_than_real(y,y1) ->
-      float_less_than_real(result,x1*y1))
-    and
-     (* x: <0 borne sup, y: <0 borne sup -> result: borne inf *) 
-     (float_sign(x) = Negative and float_sign(y) = Negative and
-      real_less_than_float(x1,x) and real_less_than_float(y1,y) ->
-      float_less_than_real(result,x1*y1))
-    and 
-     (* x: >0 borne inf, y: >0 borne inf -> result: borne inf *) 
-     (float_sign(x) = Positive and float_sign(y) = Positive and
-      float_less_than_real(x,x1) and float_less_than_real(y,y1) ->
-      float_less_than_real(result,x1*y1))
-
-*)
-
-
 parameter a:gen_float ref
 parameter b:gen_float ref
 parameter z:gen_float ref
 
 
 let mul_up (x:gen_float) (y:gen_float) =
- { is_not_NaN(x) and is_not_NaN(y) and
+ {
+(*
+ is_not_NaN(x) and is_not_NaN(y) and
   ((is_infinite(x) or is_infinite(y)) -> same_sign(x,y)) 
   and
-  (is_infinite(x) and is_finite(y) -> float_value(y) <> 0.0 ) (* and abs_real(float_value(y)) >= 0x1.0p-1074 *)
+  (is_infinite(x) and is_finite(y) -> float_value(y) <> 0.0 )
   and 
   (is_infinite(y) and is_finite(x) -> float_value(x) <> 0.0)
-(* 
-  and 
-  (is_finite(x) and is_finite(y) and not no_overflow(Double,down,-float_value(y)) and float_sign(y) = Positive 
-        -> float_value(x) > 0.0) 
 *)
 }
-(neg_gen_float Double down (mul_gen_float Double down x (neg_gen_float Double down y)))
-(*
 begin
 a := (neg_gen_float Double down y);
+assert { 
+  is_finite(y) -> is_finite(a) and float_value(a) = - float_value(y) };
 b := (mul_gen_float Double down x !a);
-z := (neg_gen_float Double down !b)
+z := (neg_gen_float Double down !b) ;
+assert { 
+  is_finite(b) -> is_finite(z) and float_value(z) = - float_value(b) };
+!z
 end
-*)
 {
 real_less_than_float(float_value(x)*float_value(y),result) and
 ((is_infinite(x) or is_infinite(y)) -> is_plus_infinity(result)) 
 
-(*
-((is_infinite(x) and is_infinite(y)) -> is_infinite(result)) and
-((is_plus_infinity(x) or is_plus_infinity(y)) -> is_plus_infinity(result)) and
-((is_minus_infinity(x) or is_minus_infinity(y)) -> is_plus_infinity(result))
-*)
-(*
-and 
-(is_finite(x) and is_finite(y) and 
-        no_overflow(Double,down,-float_value(y)) and 
-        no_overflow(Double,down,float_value(x)*round_float(Double,down,-float_value(y))) and
-        no_overflow(Double,down,-round_float(Double,down,float_value(x)*round_float(Double,down,-float_value(y)))) and float_value(x) > 0.0 -> 
-                 is_finite(result) and 
-
-float_value(result) = round_float(Double,down,-round_float(Double,down,float_value(x)*round_float(Double,down,-float_value(y)))) and 
-float_value(result) = - round_float(Double,up,round_float(Double,down,float_value(x)*round_float(Double,down,-float_value(y)))) and 
-float_value(result) = - round_float(Double,down,float_value(x)*round_float(Double,down,-float_value(y))) 
-and
-float_value(result) >= -float_value(x)*round_float(Double,down,-float_value(y))
-and 
-float_value(result) >= float_value(x)*round_float(Double,up,float_value(y))
-and
-float_value(result) >= float_value(x)*float_value(y)
-and
-real_less_than_float(float_value(x)*float_value(y),result))
-*)
-(*
-and 
-(is_finite(x) and is_finite(y) and 
-        no_overflow(Double,down,-float_value(y)) and 
-        no_overflow(Double,down,float_value(x)*float_value(a)) and
-        no_overflow(Double,down,-float_value(b)) and float_value(x) > 0.0 -> 
-                 is_finite(z) and real_less_than_float(float_value(x)*float_value(y),z))
-*)
 }
 
 
@@ -181,67 +186,6 @@ axiom axo3: forall x:gen_float. forall y:gen_float. forall a:real.
 axiom axo4: forall x:gen_float. forall y:gen_float. forall a:real. 
 (real_less_than_float(a,x) and float_le_float(x,y)) -> real_less_than_float(a,y)
 
-
-
-axiom help1: forall x:real. forall y:real. forall z:real. forall t:real.
-   (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
-
-(* pas besoin de help2 !!
-axiom help2: forall x:real. forall y:real. forall z:real. forall t:real.
-   (x <= y <= 0.0 and z <= t <= 0.0) -> x*z >= y*t
-*)
-
-axiom help3: forall x:real. forall y:real. forall a:real. forall b:real.
-   (0.0 <= a <= x and y <= b and y < 0.0) -> x*y <= a*b 
-(*
-(*c'est le meme que help3, pas besoin de help4 *)
-axiom help4: forall x:real. forall y:real. forall a:real. forall b:real.
-   (x <= a and x < 0.0 and 0.0 <= b <= y) -> x*y <= a*b 
-*)
-	
-axiom help5: forall x:real. forall y:real. forall a:real. forall b:real.
-   (a <= x and x > 0.0 and y <= b <= 0.0 ) -> x*y <= a*b
-
-(*c'est le meme que help5 mais Z3 n'arrive pas à prouver certaines postconditions sans help6 !! bizare *)
-axiom help6: forall x:real. forall y:real. forall a:real. forall b:real.
-   (b <= y and y > 0.0 and x <= a <= 0.0 ) -> x*y <= a*b
-
-axiom help7: forall x:real. forall y:real. forall a:real. forall b:real.
-   (x <= a <= 0.0 and y <= b and y < 0.0) -> a*b <= x*y
-
-(*c'est le meme que help7 mais Z3 n'arrive pas à prouver certaines postconditions sans help8 !! bizare *)
-axiom help8: forall x:real. forall y:real. forall a:real. forall b:real.
-   (x <= a and x < 0.0 and y <= b <= 0.0 ) -> a*b <= x*y
-
-axiom help9: forall x:real. forall y:real. forall a:real. forall b:real.
-   (a <= x and x > 0.0 and 0.0 <= b <= y ) -> a*b <= x*y 
-
-
-
-
-axiom help10: forall x:real. forall y:real. forall z:real. 
-   (0.0 <= x and y <= z) -> x*y <= x*z
-
-axiom help11: forall x:real. forall y:real. forall z:real. 
-   (0.0 < x and y <= z) -> x*y <= x*z
-
-axiom help12: forall x:real. forall y:real. forall z:real. 
-   (0.0 < x and y < z) -> x*y < x*z
-
-axiom help13: forall x:real. forall y:real. forall z:real. 
-   (0.0 <= x and y < z) -> x*y <= x*z
-
-axiom help14: forall x:real. forall y:real. forall z:real. 
-   (x <= 0.0 and y <= z) -> x*y >= x*z
-
-axiom help15: forall x:real. forall y:real. forall z:real. 
-   (x < 0.0 and y <= z) -> x*y >= x*z
-
-axiom help16: forall x:real. forall y:real. forall z:real. 
-   (x < 0.0 and y < z) -> x*y > x*z
-
-axiom help17: forall x:real. forall y:real. forall z:real. 
-   (x <= 0.0 and y < z) -> x*y >= x*z
 
 
 
