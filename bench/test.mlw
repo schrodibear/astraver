@@ -1,8 +1,4 @@
 
-type 'a list
-
-logic nil : 'a list
-
-function f(x:'a) : 'a list = nil
+function f(x:int) : int = x+1
 
 

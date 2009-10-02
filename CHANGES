@@ -1,11 +1,16 @@
-  o [Jessie][Frama-C] Integration of the Jessie plugin from Frama-C
+
+version 2.20, October 2nd, 2009
+===============================
+
+  o [Jessie][Frama-C] Integration of the Jessie plugin for Frama-C
+    Compatible with Frama-C release Beryllium 2 (20090902)
   o [Why][Jessie] add a new assertion check which is used like assert.
     It try to prove the assertion but do not use it as hypothesis.  
   o [Why] fixed some bugs with Coq output
   o [GWhy] new column gappa+hypotheses selection
 
 version 2.19, June 23rd, 2009
-================================
+=============================
 
   o This version is synchronized with Frama-C Beryllium beta 1 200906xx
     (http://frama-c.cea.fr/)

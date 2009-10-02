@@ -1,0 +1,36 @@
+
+logic m,n,p : int
+
+type matrix
+
+logic get : matrix, int, int -> int
+
+parameter c : matrix ref
+
+logic ab : int,int -> int
+
+
+let test () =
+  { 0 < m and 0 < n and 0 < p }
+  let i = ref 0 in
+  while !i < m do 
+    { invariant i <= m and
+      forall i',j':int. 
+        0 <= i' < i -> 0 <= j' < p -> get(c,i',j') = ab(i',j') }
+    L2:
+    let j = ref 0 in
+    while !j < p do 
+      { invariant 0 <= j <= p and
+  (forall j':int. 0 <= j' < j -> get(c,i,j') = ab(i,j')) and
+  (forall i',j':int. 0 <= i' < i -> 0 <= j' < p 
+	-> get(c,i',j') = get(c@L2,i',j')) }
+      [ {} unit writes c 
+        { get(c,i,j) = ab(i,j) and
+  (forall j':int. 0 <= j' < j -> get(c,i,j') = ab(i,j')) and
+  (forall i',j':int. 0 <= i' < i -> 0 <= j' < p -> get(c,i',j') = ab(i',j')) }
+      ];
+      j := !j + 1
+    done;
+    i := !i + 1
+  done
+  { forall i',j':int. 0 <= i' < m -> 0 <= j' < p -> get(c,i',j') = ab(i',j') }
