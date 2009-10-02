@@ -77,7 +77,7 @@ let mul_up (x:gen_float) (y:gen_float) =
  { is_not_NaN(x) and is_not_NaN(y) and
   ((is_infinite(x) or is_infinite(y)) -> same_sign(x,y)) 
   and
-  (is_infinite(x) and is_finite(y) -> float_value(y) <> 0.0 and abs_real(float_value(y)) >= 0x1.0p-1074 )
+  (is_infinite(x) and is_finite(y) -> float_value(y) <> 0.0 ) (* and abs_real(float_value(y)) >= 0x1.0p-1074 *)
   and 
   (is_infinite(y) and is_finite(x) -> float_value(x) <> 0.0) 
   and 
@@ -94,11 +94,14 @@ end
 *)
 {
 real_less_than_float(float_value(x)*float_value(y),result) and
+((is_infinite(x) or is_infinite(y)) -> is_plus_infinity(result)) 
+
+(*
 ((is_infinite(x) and is_infinite(y)) -> is_infinite(result)) and
 ((is_plus_infinity(x) or is_plus_infinity(y)) -> is_plus_infinity(result)) and
 ((is_minus_infinity(x) or is_minus_infinity(y)) -> is_plus_infinity(result))
-
-
+*)
+(*
 and 
 (is_finite(x) and is_finite(y) and 
         no_overflow(Double,down,-float_value(y)) and 
@@ -117,7 +120,7 @@ and
 float_value(result) >= float_value(x)*float_value(y)
 and
 real_less_than_float(float_value(x)*float_value(y),result))
-
+*)
 (*
 and 
 (is_finite(x) and is_finite(y) and 
