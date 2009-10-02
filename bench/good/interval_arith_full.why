@@ -14,7 +14,7 @@ goal help3_goal: forall x:real. forall y:real. forall a:real.
 axiom help3: forall x:real. forall y:real. forall a:real. 
              forall b:real.
    (0.0 <= a <= x and y <= b and y < 0.0) -> x*y <= a*b 
-	
+
 goal  help5_goal: forall x:real. forall y:real. forall a:real. 
              forall b:real.
    (a <= x and x > 0.0 and y <= b <= 0.0 ) -> x*y <= a*b
@@ -57,6 +57,33 @@ axiom help9: forall x:real. forall y:real. forall a:real.
              forall b:real.
    (a <= x and x > 0.0 and 0.0 <= b <= y ) -> a*b <= x*y 
 
+(*
+axiom help10: forall x:real. forall y:real. forall z:real.
+  (0.0 <= x and y <= z) -> x*y <= x*z
+
+axiom help11: forall x:real. forall y:real. forall z:real.
+  (0.0 < x and y <= z) -> x*y <= x*z
+
+axiom help12: forall x:real. forall y:real. forall z:real. 
+ (0.0 < x and y < z) -> x*y < x*z
+
+axiom help13: forall x:real. forall y:real. forall z:real.
+ (0.0 <= x and y < z) -> x*y <= x*z
+
+axiom help14: forall x:real. forall y:real. forall z:real.
+  (x <= 0.0 and y <= z) -> x*y >= x*z
+
+axiom help15: forall x:real. forall y:real. forall z:real. 
+  (x < 0.0 and y <= z) -> x*y >= x*z
+
+axiom help16: forall x:real. forall y:real. forall z:real.
+ (x < 0.0 and y < z) -> x*y > x*z
+
+axiom help17: forall x:real. forall y:real. forall z:real.
+ (x <= 0.0 and y < z) -> x*y >= x*z
+*)
+
+
 
 
 let min (x:gen_float) (y:gen_float) =
@@ -86,14 +113,12 @@ predicate real_less_than_float(x:real,y:gen_float) =
 let mul_dn (x:gen_float) (y:gen_float) =
 
 {
-(*
  is_not_NaN(x) and is_not_NaN(y) and
   ((is_infinite(x) or is_infinite(y)) -> diff_sign(x,y))
 and               
   (is_infinite(x) and is_finite(y) -> float_value(y) <> 0.0) 
 and
   (is_infinite(y) and is_finite(x) -> float_value(x) <> 0.0)
-*)
  }
  (mul_gen_float Double down x y)
  {
@@ -110,14 +135,13 @@ parameter z:gen_float ref
 
 let mul_up (x:gen_float) (y:gen_float) =
  {
-(*
+
  is_not_NaN(x) and is_not_NaN(y) and
   ((is_infinite(x) or is_infinite(y)) -> same_sign(x,y)) 
   and
   (is_infinite(x) and is_finite(y) -> float_value(y) <> 0.0 )
   and 
   (is_infinite(y) and is_finite(x) -> float_value(x) <> 0.0)
-*)
 }
 begin
 a := (neg_gen_float Double down y);
