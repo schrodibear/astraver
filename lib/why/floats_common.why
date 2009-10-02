@@ -103,7 +103,7 @@ axiom bounded_real_no_overflow :
       forall f:float_format. forall m:mode. forall x:real. 
       	     abs_real(x) <= max_gen_float(f) -> no_overflow(f,m,x)
 
-(*
+
 (* just for m <> nearest_even *)
 axiom bounded_real_overflow_pos: forall f:float_format. forall m:mode. forall x:real.
       x > max_gen_float(f) -> 
@@ -193,7 +193,7 @@ axiom round_of_opp_min_gen: forall f:float_format. forall m:mode.
       round_float(f,m,-min_gen_float(f)) = -min_gen_float(f)
 
 *)
-*)
+
 
 (* axioms about round_float and round modes *)
 axiom round_down_le: forall f:float_format. forall x:real. 
@@ -216,3 +216,86 @@ axiom round_idempotent:
 
 
 
+(*axioms to help the validation of the multiplication of intervals *)
+
+
+axiom help1: forall x:real. forall y:real. forall z:real. forall t:real.
+   (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
+
+(* pas besoin de help2 !!
+axiom help2: forall x:real. forall y:real. forall z:real. forall t:real.
+   (x <= y <= 0.0 and z <= t <= 0.0) -> x*z >= y*t
+*)
+
+axiom help3: forall x:real. forall y:real. forall a:real. forall b:real.
+   (0.0 <= a <= x and y <= b and y < 0.0) -> x*y <= a*b 
+(*
+(*c'est le meme que help3, pas besoin de help4 *)
+axiom help4: forall x:real. forall y:real. forall a:real. forall b:real.
+   (x <= a and x < 0.0 and 0.0 <= b <= y) -> x*y <= a*b 
+*)
+	
+axiom help5: forall x:real. forall y:real. forall a:real. forall b:real.
+   (a <= x and x > 0.0 and y <= b <= 0.0 ) -> x*y <= a*b
+
+(*c'est le meme que help5 mais Z3 n'arrive pas à prouver certaines postconditions sans help6 !! bizare *)
+axiom help6: forall x:real. forall y:real. forall a:real. forall b:real.
+   (b <= y and y > 0.0 and x <= a <= 0.0 ) -> x*y <= a*b
+
+axiom help7: forall x:real. forall y:real. forall a:real. forall b:real.
+   (x <= a <= 0.0 and y <= b and y < 0.0) -> a*b <= x*y
+
+(*c'est le meme que help7 mais Z3 n'arrive pas à prouver certaines postconditions sans help8 !! bizare *)
+axiom help8: forall x:real. forall y:real. forall a:real. forall b:real.
+   (x <= a and x < 0.0 and y <= b <= 0.0 ) -> a*b <= x*y
+
+axiom help9: forall x:real. forall y:real. forall a:real. forall b:real.
+   (a <= x and x > 0.0 and 0.0 <= b <= y ) -> a*b <= x*y 
+
+
+
+
+axiom help10: forall x:real. forall y:real. forall z:real. 
+   (0.0 <= x and y <= z) -> x*y <= x*z
+
+axiom help11: forall x:real. forall y:real. forall z:real. 
+   (0.0 < x and y <= z) -> x*y <= x*z
+
+axiom help12: forall x:real. forall y:real. forall z:real. 
+   (0.0 < x and y < z) -> x*y < x*z
+
+axiom help13: forall x:real. forall y:real. forall z:real. 
+   (0.0 <= x and y < z) -> x*y <= x*z
+
+axiom help14: forall x:real. forall y:real. forall z:real. 
+   (x <= 0.0 and y <= z) -> x*y >= x*z
+
+axiom help15: forall x:real. forall y:real. forall z:real. 
+   (x < 0.0 and y <= z) -> x*y >= x*z
+
+axiom help16: forall x:real. forall y:real. forall z:real. 
+   (x < 0.0 and y < z) -> x*y > x*z
+
+axiom help17: forall x:real. forall y:real. forall z:real. 
+   (x <= 0.0 and y < z) -> x*y >= x*z
+
+
+
+axiom hdfsss: forall x:real. forall y:real. forall z:real. 
+   (x > 0.0 and y >= z) -> x*y >= x*z
+
+
+(*
+axiom fdfd: forall x:real. forall y:real.
+   x <= y -> -x >= -y
+
+axiom fdfd: forall x:real. 
+   -1.0 * (-x) = x 
+*)
+
+
+axiom ttt: forall x:gen_float.
+(float_value(x) > 0.0) -> float_value(x) <> 0.0
+
+axiom ttt: forall x:gen_float.
+(float_value(x) < 0.0) -> float_value(x) <> 0.0

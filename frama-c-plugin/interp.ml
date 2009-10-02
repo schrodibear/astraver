@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.2 2009-09-21 08:40:14 virgile Exp $ *)
+(* $Id: interp.ml,v 1.3 2009-10-02 12:47:01 ayad Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -176,6 +176,11 @@ let relation = function
   | Rneq -> `Bneq
 
 
+type float_model = [ `Real | `Strict | `Full | `Multirounding ]
+
+let float_model : float_model ref = ref `Real
+
+
 let rec name_with_profile s prof =
   match prof with
     | [] ->
@@ -271,12 +276,35 @@ let translated_name linfo =
 		| _ -> assert false
 	    end
 	| "\\is_finite" ->
+ (*         begin
+	  match !float_model,(List.hd linfo.l_profile).lv_type with
+	      | `Real,_ -> assert false
+              | (`Strict | `Full | `Multirounding),Ctype x when x == doubleType -> 
+                                   "\\is_finite_double"  
+              | (`Strict | `Full | `Multirounding),Ctype x when x == floatType -> 
+                                   "\\is_finite_float"  
+	      | _,_ -> assert false
+	  end
+*)
+           begin
+	   match !float_model with
+	      | `Real -> assert false
+              | `Strict | `Full | `Multirounding -> 
+	                begin
+	      		match (List.hd linfo.l_profile).lv_type with
+			| Ctype x when x == doubleType -> "\\is_finite_double"
+			| Ctype x when x == floatType -> "\\is_finite_float"
+			| _ -> assert false
+	    		end
+	   end			
+(*	| "\\is_finite" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
 		| Ctype x when x == doubleType -> "\\is_finite_double"
 		| Ctype x when x == floatType -> "\\is_finite_float"
 		| _ -> assert false
 	    end
+*)
 	| "\\is_infinite" ->
 	    begin
 	      match (List.hd linfo.l_profile).lv_type with
@@ -409,11 +437,11 @@ let type_conversion ty1 ty2 =
       Hashtbl.add
         type_conversion_table (sig1,sig2) (ty1,ty2,ty1_to_ty2,ty2_to_ty1);
       ty1_to_ty2,ty2_to_ty1
-
+(*
 type float_model = [ `Real | `Strict | `Full | `Multirounding ]
 
 let float_model : float_model ref = ref `Real
-
+*)
 type float_rounding_mode = [ `Downward | `Nearest | `Upward | `Towardzero | `Towardawayzero ]
 
 let float_rounding_mode : float_rounding_mode ref = ref `Nearest

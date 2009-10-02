@@ -38,6 +38,7 @@ double max(double x, double y)
   @*/
 
 
+
 /*@ requires ! \is_NaN(x) && ! \is_NaN(y) 
   @    && (\is_infinite(x) ==> y != 0.0 && dif_sign(x,y))
   @    && (\is_infinite(y) ==> x != 0.0 && dif_sign(x,y));
@@ -62,71 +63,80 @@ double mul_dn(double x, double y)
 }
 
 
-/*@ requires !\is_NaN(x) && !\is_NaN(y) && sam_sign(x,y) &&
-  @          (\is_infinite(x) ==> y != 0.0 && \abs(y) >= 0x1.0p-1074 ) 
+
+/*@ requires !\is_NaN(x) && !\is_NaN(y) && 
+  @          (\is_infinite(x) || \is_infinite(y) ==> sam_sign(x,y)) 
   @          &&
-  @          (\is_infinite(y) ==> x != 0.0 )
+  @          (\is_infinite(x) && \is_finite(y) ==> y != 0.0 && \abs(y) >= 0x1.0p-1074 ) 
   @          &&
-  @          (\is_finite(y) && !\no_overflow(\Double,\Down,-y) && \sign(y) == \Positive
-                              ==> x != 0.0 );
+  @          (\is_infinite(y) && \is_finite(x) ==> x != 0.0 )
+  @          &&
+  @          (\is_finite(x) && \is_finite(y) && !\no_overflow(\Double,\Down,-y) && \sign(y) == \Positive
+  @                            ==> x > 0.0 );
   @ ensures  real_le_double(x * y,\result);
   @*/
 double mul_up(double x, double y) {
   double a=-y;
   double b=x*a;
   double z=-b;
-  /* double z = -(x * -y);*/
-
-  /* @ assert \is_infinite(x) || \is_infinite(y) ==> real_le_double(x * y,z);
+  /*  double z = -(x * -y);*/ 
+ 
+  /*@ assert \is_infinite(x) || \is_infinite(y) ==> real_le_double(x * y,z);
     @*/
 
 
-  /* @ assert \is_finite(x) && \is_infinite(y) ==> real_le_double(x * y,z) ;
+  /*@ assert \is_finite(x) && \is_infinite(y) ==> real_le_double(x * y,z) ;
     @*/
-  /* @ assert \is_infinite(x) && \is_finite(y) &&
+  /*@ assert \is_infinite(x) && \is_finite(y) && 
     @    \no_overflow(\Double,\Down,-y) ==> real_le_double(x * y,z);
     @*/
-  /* @ assert \is_infinite(x) && \is_finite(y) &&
+  /*@ assert \is_infinite(x) && \is_finite(y) &&
     @    ! \no_overflow(\Double,\Down,-y) ==> real_le_double(x * y,z);
     @*/
-  /* @ assert \is_infinite(x) && \is_infinite(y) ==> real_le_double(x * y,z);
+  /*@ assert \is_infinite(x) && \is_infinite(y) ==> real_le_double(x * y,z);
     @*/
+
   
 
-  /* @ assert \is_finite(x) && \is_finite(y) && 
+  /*@ assert \is_finite(x) && \is_finite(y) && 
     @     \no_overflow(\Double,\Down,-y) &&
     @     \no_overflow(\Double,\Down,x*a) && 
     @     !\no_overflow(\Double,\Down,-b) ==> real_le_double(x * y,z) ;
     @*/
-  /* @ assert \is_finite(x) && \is_finite(y) && 
+  /*@ assert \is_finite(x) && \is_finite(y) && 
     @     \no_overflow(\Double,\Down,-y) &&
     @     !\no_overflow(\Double,\Down,x*a) ==> real_le_double(x * y,z) ;
     @*/
-  /* @ assert \is_finite(x) && \is_finite(y) && 
-    @     !\no_overflow(\Double,\Down,-y) && \sign(y) == \Positive 
-    @                                      ==> real_le_double(x * y,z) ;
+  /*@ assert \is_finite(x) && \is_finite(y) && 
+    @     !\no_overflow(\Double,\Down,-y) && \sign(y) == \Positive
+    @                                     ==> real_le_double(x * y,z) ;
     @*/
-  /* @ assert \is_finite(x) && \is_finite(y) && 
+  /*@ assert \is_finite(x) && \is_finite(y) && 
     @     !\no_overflow(\Double,\Down,-y) && \sign(y) == \Negative &&
     @     !\no_overflow(\Double,\Down,x*a) ==> real_le_double(x * y,z) ;
     @*/
-  /* @ assert \is_finite(x) && \is_finite(y) && 
+  /*@ assert \is_finite(x) && \is_finite(y) && 
     @     !\no_overflow(\Double,\Down,-y) && \sign(y) == \Negative &&
     @     \no_overflow(\Double,\Down,x*a) &&
     @     !\no_overflow(\Double,\Down,-b)  ==> real_le_double(x * y,z) ;
     @*/
-  /* @ assert \is_finite(x) && \is_finite(y) && 
+  /*@ assert \is_finite(x) && \is_finite(y) && 
     @     !\no_overflow(\Double,\Down,-y) && \sign(y) == \Negative &&
     @     \no_overflow(\Double,\Down,x*a) &&
     @     \no_overflow(\Double,\Down,-b) ==> real_le_double(x * y,z);
     @*/
-  /* @ assert \is_finite(x) && \is_finite(y) && 
+  /*@ assert \is_finite(x) && \is_finite(y) && 
     @     \no_overflow(\Double,\Down,-y) &&
     @     \no_overflow(\Double,\Down,x*a) && 
-    @     \no_overflow(\Double,\Down,-b) ==> real_le_double(x * y,z) ;
+    @     \no_overflow(\Double,\Down,-b) && x > 0.0 ==> \is_finite(z) && real_le_double(x * y,z) ;
+    @*/
+  /*@ assert \is_finite(x) && \is_finite(y) && 
+    @     \no_overflow(\Double,\Down,-y) &&
+    @     \no_overflow(\Double,\Down,x*a) && 
+    @     \no_overflow(\Double,\Down,-b) && x < 0.0 ==> \is_finite(z) && real_le_double(x * y,z) ;
     @*/
   
-  return z;
+   return z;  
 }
 
 
@@ -180,6 +190,78 @@ void add(double xl, double xu, double yl, double yu)
     @*/
 }
 
+
+
+
+
+/*@ requires is_interval(xl,xu) && is_interval(yl,yu);
+  @ ensures is_interval(zl,zu);
+  @ ensures \forall real a,b; 
+  @    in_interval(a,xl,xu) && in_interval(b,yl,yu) ==>
+  @    in_interval(a*b,zl,zu);    
+  @*/
+
+void mul(double xl, double xu, double yl, double yu)
+{
+  if (xl < 0.0)
+    if (xu > 0.0)
+      if (yl < 0.0)
+        if (yu > 0.0) // M * M
+          { zl = min(mul_dn(xl, yu), mul_dn(xu, yl));
+            zu = max(mul_up(xl, yl), mul_up(xu, yu)); }
+        else           // M * N
+          { zl = mul_dn(xu, yl);
+            zu = mul_up(xl, yl); }
+      else
+        if (yu > 0.0) // M * P
+          { zl = mul_dn(xl, yu);
+            zu = mul_up(xu, yu); }
+        else           // M * Z
+          { zl = 0.0;
+            zu = 0.0; }
+    else
+      if (yl < 0.0)
+        if (yu > 0.0) // N * M
+          { zl = mul_dn(xl, yu);
+            zu = mul_up(xl, yl); }
+        else           // N * N
+          { zl = mul_dn(xu, yu);
+            zu = mul_up(xl, yl); }
+      else
+        if (yu > 0.0) // N * P
+          { zl = mul_dn(xl, yu);
+            zu = mul_up(xu, yl); }
+        else           // N * Z
+          { zl = 0.0;
+            zu = 0.0; }
+  else
+    if (xu > 0.0)
+      if (yl < 0.0)
+        if (yu > 0.0) // P * M
+          { zl = mul_dn(xu, yl);
+            zu = mul_up(xu, yu); }
+        else           // P * N
+          { zl = mul_dn(xu, yl);
+            zu = mul_up(xl, yu); }
+      else
+        if (yu > 0.0) // P * P
+          { zl = mul_dn(xl, yl);
+            zu = mul_up(xu, yu); }
+        else           // P * Z
+          { zl = 0.0;
+            zu = 0.0; }
+    else               // Z * ?
+      { zl = 0.0;
+        zu = 0.0; }
+}
+
+
+/*
+voir feuille: pour montrer que si xu > 0 alors float_value(xu) <> 0 lorsque xu=+infini
+ 
+axiom siddd: forall x:gen_float.
+   is_plus_infinity(x) -> float_value(x) > max_gen_float(Double)
+*/
 
 
 /* 

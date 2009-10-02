@@ -311,6 +311,118 @@ Dp_hint min_double.
 Admitted.
 Dp_hint bounded_real_no_overflow.
 
+(*Why axiom*) Lemma bounded_real_overflow_pos :
+  (forall (f:float_format),
+   (forall (m:mode),
+    (forall (x:R),
+     ((Rgt x (max_gen_float f)) ->
+      ((m = up \/ m = nearest_away -> ~(no_overflow f m x))) /\
+      ((m = down \/ m = to_zero -> (eq (round_float f m x) (max_gen_float f)))))))).
+Admitted.
+Dp_hint bounded_real_overflow_pos.
+
+(*Why axiom*) Lemma bounded_real_overflow_neg :
+  (forall (f:float_format),
+   (forall (m:mode),
+    (forall (x:R),
+     ((Rlt x (Ropp (max_gen_float f))) ->
+      ((m = down \/ m = nearest_away -> ~(no_overflow f m x))) /\
+      ((m = up \/ m = to_zero ->
+        (eq (round_float f m x) (Ropp (max_gen_float f))))))))).
+Admitted.
+Dp_hint bounded_real_overflow_neg.
+
+(*Why axiom*) Lemma bounded_real_overflow_nearest_even :
+  (forall (x:R),
+   (((Rge (Rabs x) (2 * 340282366920938463463374607431768211456)%R) ->
+     ~(no_overflow Single nearest_even x))) /\
+   (((Rge (Rabs x)
+      (2 * 179769313486231590772930519078902473361797697894230657273430081157732675805500963132708477322407536021120113879871393357658789768814416622492847430639474124377767893424865485276302219601246094119453082952085005768838150682342462881473913110540827237163350510684586298239947245938479716304835356329624224137216)%R) ->
+     ~(no_overflow Double nearest_even x)))).
+Admitted.
+Dp_hint bounded_real_overflow_nearest_even.
+
+(*Why axiom*) Lemma round_greater_max :
+  (forall (f:float_format),
+   (forall (m:mode),
+    (forall (x:R), (~(no_overflow f m x) -> (Rgt (Rabs x) (max_gen_float f)))))).
+Admitted.
+Dp_hint round_greater_max.
+
+(*Why axiom*) Lemma positive_constant :
+  (forall (f:float_format),
+   (forall (m:mode),
+    (forall (x:R),
+     ((Rle (min_gen_float f) x) /\ (Rle x (max_gen_float f)) ->
+      (no_overflow f m x) /\ (Rgt (round_float f m x) (0)%R))))).
+Admitted.
+Dp_hint positive_constant.
+
+(*Why axiom*) Lemma negative_constant :
+  (forall (f:float_format),
+   (forall (m:mode),
+    (forall (x:R),
+     ((Rle (Ropp (max_gen_float f)) x) /\ (Rle x (Ropp (min_gen_float f))) ->
+      (no_overflow f m x) /\ (Rlt (round_float f m x) (0)%R))))).
+Admitted.
+Dp_hint negative_constant.
+
+(*Why axiom*) Lemma round_increasing :
+  (forall (f:float_format),
+   (forall (m:mode),
+    (forall (x:R),
+     (forall (y:R),
+      ((Rle x y) -> (Rle (round_float f m x) (round_float f m y))))))).
+Admitted.
+Dp_hint round_increasing.
+
+(*Why axiom*) Lemma round_greater_min :
+  (forall (f:float_format),
+   (forall (m:mode),
+    (forall (x:R),
+     ((Rge (Rabs x) (min_gen_float f)) ->
+      (Rge (Rabs (round_float f m x)) (min_gen_float f)))))).
+Admitted.
+Dp_hint round_greater_min.
+
+(*Why axiom*) Lemma round_less_min_pos :
+  (forall (f:float_format),
+   (forall (m:mode),
+    (forall (x:R),
+     ((Rlt (0)%R x) /\ (Rlt x (min_gen_float f)) ->
+      ((m = up \/ m = nearest_away ->
+        (eq (round_float f m x) (min_gen_float f)))) /\
+      ((m = down \/ m = to_zero -> (eq (round_float f m x) (0)%R))))))).
+Admitted.
+Dp_hint round_less_min_pos.
+
+(*Why axiom*) Lemma round_less_min_neg :
+  (forall (f:float_format),
+   (forall (m:mode),
+    (forall (x:R),
+     ((Rlt (Ropp (min_gen_float f)) x) /\ (Rlt x (0)%R) ->
+      ((m = down \/ m = nearest_away ->
+        (eq (round_float f m x) (Ropp (min_gen_float f))))) /\
+      ((m = up \/ m = to_zero -> (eq (round_float f m x) (0)%R))))))).
+Admitted.
+Dp_hint round_less_min_neg.
+
+(*Why axiom*) Lemma round_less_min_nearest_even :
+  (forall (x:R),
+   (((Rle (Rabs x) (2 / 1427247692705959881058285969449495136382746624)%R) ->
+     (eq (round_float Single nearest_even x) (0)%R))) /\
+   (((Rle (Rabs x)
+      (2 / 404804506614621236704990693437834614099113299528284236713802716054860679135990693783920767402874248990374155728633623822779617474771586953734026799881477019843034848553132722728933815484186432682479535356945490137124014966849385397236206711298319112681620113024717539104666829230461005064372655017292012526615415482186989568)%R) ->
+     (eq (round_float Double nearest_even x) (0)%R)))).
+Admitted.
+Dp_hint round_less_min_nearest_even.
+
+(*Why axiom*) Lemma round_of_zero :
+  (forall (f:float_format),
+   (forall (m:mode), (eq (round_float f m (0)%R) (0)%R))).
+Admitted.
+Dp_hint round_of_zero.
+
 (*Why axiom*) Lemma round_down_le :
   (forall (f:float_format), (forall (x:R), (Rle (round_float f down x) x))).
 Admitted.
@@ -349,4 +461,165 @@ Dp_hint prod_pos.
 
 Admitted.
 Dp_hint abs_minus.
+
+Admitted.
+Dp_hint help.
+
+(*Why axiom*) Lemma help1 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (z:R),
+     (forall (t:R),
+      (((Rle (0)%R x) /\ (Rle x y)) /\ (Rle (0)%R z) /\ (Rle z t) ->
+       (Rle (Rmult x z) (Rmult y t))))))).
+Admitted.
+Dp_hint help1.
+
+Admitted.
+Dp_hint help2.
+
+Admitted.
+Dp_hint help2_.
+
+Admitted.
+Dp_hint help2__.
+
+(*Why axiom*) Lemma help3 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (a:R),
+     (forall (b:R),
+      (((Rle (0)%R a) /\ (Rle a x)) /\ (Rle y b) /\ (Rlt y (0)%R) ->
+       (Rle (Rmult x y) (Rmult a b))))))).
+Admitted.
+Dp_hint help3.
+
+Admitted.
+Dp_hint help4.
+
+Admitted.
+Dp_hint help4_.
+
+Admitted.
+Dp_hint help4__.
+
+(*Why axiom*) Lemma help5 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (a:R),
+     (forall (b:R),
+      ((Rle a x) /\ (Rgt x (0)%R) /\ (Rle y b) /\ (Rle b (0)%R) ->
+       (Rle (Rmult x y) (Rmult a b))))))).
+Admitted.
+Dp_hint help5.
+
+(*Why axiom*) Lemma help6 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (a:R),
+     (forall (b:R),
+      ((Rle b y) /\ (Rgt y (0)%R) /\ (Rle x a) /\ (Rle a (0)%R) ->
+       (Rle (Rmult x y) (Rmult a b))))))).
+Admitted.
+Dp_hint help6.
+
+(*Why axiom*) Lemma help7 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (a:R),
+     (forall (b:R),
+      (((Rle x a) /\ (Rle a (0)%R)) /\ (Rle y b) /\ (Rlt y (0)%R) ->
+       (Rle (Rmult a b) (Rmult x y))))))).
+Admitted.
+Dp_hint help7.
+
+(*Why axiom*) Lemma help8 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (a:R),
+     (forall (b:R),
+      ((Rle x a) /\ (Rlt x (0)%R) /\ (Rle y b) /\ (Rle b (0)%R) ->
+       (Rle (Rmult a b) (Rmult x y))))))).
+Admitted.
+Dp_hint help8.
+
+(*Why axiom*) Lemma help9 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (a:R),
+     (forall (b:R),
+      ((Rle a x) /\ (Rgt x (0)%R) /\ (Rle (0)%R b) /\ (Rle b y) ->
+       (Rle (Rmult a b) (Rmult x y))))))).
+Admitted.
+Dp_hint help9.
+
+(*Why axiom*) Lemma help10 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (z:R),
+     ((Rle (0)%R x) /\ (Rle y z) -> (Rle (Rmult x y) (Rmult x z)))))).
+Admitted.
+Dp_hint help10.
+
+(*Why axiom*) Lemma help11 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (z:R),
+     ((Rlt (0)%R x) /\ (Rle y z) -> (Rle (Rmult x y) (Rmult x z)))))).
+Admitted.
+Dp_hint help11.
+
+(*Why axiom*) Lemma help12 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (z:R),
+     ((Rlt (0)%R x) /\ (Rlt y z) -> (Rlt (Rmult x y) (Rmult x z)))))).
+Admitted.
+Dp_hint help12.
+
+(*Why axiom*) Lemma help13 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (z:R),
+     ((Rle (0)%R x) /\ (Rlt y z) -> (Rle (Rmult x y) (Rmult x z)))))).
+Admitted.
+Dp_hint help13.
+
+(*Why axiom*) Lemma help14 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (z:R),
+     ((Rle x (0)%R) /\ (Rle y z) -> (Rge (Rmult x y) (Rmult x z)))))).
+Admitted.
+Dp_hint help14.
+
+(*Why axiom*) Lemma help15 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (z:R),
+     ((Rlt x (0)%R) /\ (Rle y z) -> (Rge (Rmult x y) (Rmult x z)))))).
+Admitted.
+Dp_hint help15.
+
+(*Why axiom*) Lemma help16 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (z:R),
+     ((Rlt x (0)%R) /\ (Rlt y z) -> (Rgt (Rmult x y) (Rmult x z)))))).
+Admitted.
+Dp_hint help16.
+
+(*Why axiom*) Lemma help17 :
+  (forall (x:R),
+   (forall (y:R),
+    (forall (z:R),
+     ((Rle x (0)%R) /\ (Rlt y z) -> (Rge (Rmult x y) (Rmult x z)))))).
+Admitted.
+Dp_hint help17.
+
+(*Why axiom*) Lemma ttt :
+  (forall (x:gen_float),
+   ((Rgt (float_value x) (0)%R) -> ~(eq (float_value x) (0)%R))).
+Admitted.
+Dp_hint ttt.
 

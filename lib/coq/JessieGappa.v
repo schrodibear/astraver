@@ -363,7 +363,7 @@ destruct (float_class x); destruct (float_sign x);intuition;
 right; intro; destruct H; discriminate.
 Save.
 
- 
+
 Definition gen_round_error (x:gen_float) := 
                (Rabs ((exact_value x) - (float_value x))).
 Definition gen_relative_error (x:gen_float) := 
@@ -433,6 +433,46 @@ is_finite x /\
 /\
 (float_sign x = Negative -> (m <> down -> float_value x = 0%R) /\
                             (m = down -> float_value x = Ropp (min_gen_float f))).
+
+
+(*Why predicate*) Definition gen_float_of_real_post  (f:float_format) (m:mode) (x:R) (res:gen_float)
+  := (eq (float_value res) (round_float f m x)) /\
+     (eq (exact_value res) x) /\ (eq (model_value res) x).
+
+(*Why predicate*) Definition add_gen_float_post  (f:float_format) (m:mode) (x:gen_float) (y:gen_float) (res:gen_float)
+  := (eq (float_value res) (round_float
+                            f m (Rplus (float_value x) (float_value y)))) /\
+     (eq (exact_value res) (Rplus (exact_value x) (exact_value y))) /\
+     (eq (model_value res) (Rplus (model_value x) (model_value y))).
+
+(*Why predicate*) Definition sub_gen_float_post  (f:float_format) (m:mode) (x:gen_float) (y:gen_float) (res:gen_float)
+  := (eq (float_value res) (round_float
+                            f m (Rminus (float_value x) (float_value y)))) /\
+     (eq (exact_value res) (Rminus (exact_value x) (exact_value y))) /\
+     (eq (model_value res) (Rminus (model_value x) (model_value y))).
+
+(*Why predicate*) Definition neg_gen_float_post  (f:float_format) (m:mode) (x:gen_float) (res:gen_float)
+  := (eq (float_value res) (round_float f m (Ropp (float_value x)))) /\
+     (eq (exact_value res) (Ropp (exact_value x))) /\
+     (eq (model_value res) (Ropp (model_value x))).
+
+(*Why predicate*) Definition mul_gen_float_post  (f:float_format) (m:mode) (x:gen_float) (y:gen_float) (res:gen_float)
+  := (eq (float_value res) (round_float
+                            f m (Rmult (float_value x) (float_value y)))) /\
+     (eq (exact_value res) (Rmult (exact_value x) (exact_value y))) /\
+     (eq (model_value res) (Rmult (model_value x) (model_value y))).
+
+(*Why predicate*) Definition div_gen_float_post  (f:float_format) (m:mode) (x:gen_float) (y:gen_float) (res:gen_float)
+  := (eq (float_value res) (round_float
+                            f m (Rdiv (float_value x) (float_value y)))) /\
+     (eq (exact_value res) (Rdiv (exact_value x) (exact_value y))) /\
+     (eq (model_value res) (Rdiv (model_value x) (model_value y))).
+
+(*Why predicate*) Definition cast_gen_float_post  (f:float_format) (m:mode) (x:gen_float) (res:gen_float)
+  := (eq (float_value res) (round_float f m (float_value x))) /\
+     (eq (exact_value res) (exact_value x)) /\
+     (eq (model_value res) (model_value x)).
+
 
 Definition sign_zero_result (m:mode) (x:gen_float) := 
 float_value x = 0%R -> (m = down -> float_sign x = Negative) 
