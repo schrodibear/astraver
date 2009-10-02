@@ -1,7 +1,4 @@
 
-
-
-
 goal helper_for_multiplication_goal: 
       forall x:real. forall y:real. forall z:real. forall t:real.
    (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
@@ -10,55 +7,55 @@ axiom helper_for_multiplication:
       forall x:real. forall y:real. forall z:real. forall t:real.
    (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
 
+goal help3_goal: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
+   (0.0 <= a <= x and y <= b and y < 0.0) -> x*y <= a*b 
 
-
-
-axiom help3: forall x:real. forall y:real. forall a:real. forall b:real.
+axiom help3: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
    (0.0 <= a <= x and y <= b and y < 0.0) -> x*y <= a*b 
 	
-axiom help5: forall x:real. forall y:real. forall a:real. forall b:real.
+goal  help5_goal: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
+   (a <= x and x > 0.0 and y <= b <= 0.0 ) -> x*y <= a*b
+
+axiom help5: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
    (a <= x and x > 0.0 and y <= b <= 0.0 ) -> x*y <= a*b
 
 (*c'est le meme que help5 mais Z3 n'arrive pas à prouver certaines postconditions sans help6 !! bizare *)
-axiom help6: forall x:real. forall y:real. forall a:real. forall b:real.
+goal help6_goal: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
    (b <= y and y > 0.0 and x <= a <= 0.0 ) -> x*y <= a*b
 
-axiom help7: forall x:real. forall y:real. forall a:real. forall b:real.
+axiom help6: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
+   (b <= y and y > 0.0 and x <= a <= 0.0 ) -> x*y <= a*b
+
+goal help7_goal: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
+   (x <= a <= 0.0 and y <= b and y < 0.0) -> a*b <= x*y
+
+axiom help7: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
    (x <= a <= 0.0 and y <= b and y < 0.0) -> a*b <= x*y
 
 (*c'est le meme que help7 mais Z3 n'arrive pas à prouver certaines postconditions sans help8 !! bizare *)
-axiom help8: forall x:real. forall y:real. forall a:real. forall b:real.
+goal help8_goal: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
    (x <= a and x < 0.0 and y <= b <= 0.0 ) -> a*b <= x*y
 
-axiom help9: forall x:real. forall y:real. forall a:real. forall b:real.
+axiom help8: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
+   (x <= a and x < 0.0 and y <= b <= 0.0 ) -> a*b <= x*y
+
+goal help9_goal: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
    (a <= x and x > 0.0 and 0.0 <= b <= y ) -> a*b <= x*y 
 
-
-
-axiom help10: forall x:real. forall y:real. forall z:real. 
-   (0.0 <= x and y <= z) -> x*y <= x*z
-
-axiom help11: forall x:real. forall y:real. forall z:real. 
-   (0.0 < x and y <= z) -> x*y <= x*z
-
-axiom help12: forall x:real. forall y:real. forall z:real. 
-   (0.0 < x and y < z) -> x*y < x*z
-
-axiom help13: forall x:real. forall y:real. forall z:real. 
-   (0.0 <= x and y < z) -> x*y <= x*z
-
-axiom help14: forall x:real. forall y:real. forall z:real. 
-   (x <= 0.0 and y <= z) -> x*y >= x*z
-
-axiom help15: forall x:real. forall y:real. forall z:real. 
-   (x < 0.0 and y <= z) -> x*y >= x*z
-
-
-
-(*
-axiom help16: forall x:real. forall y:real. forall z:real. 
-   (x < 0.0 and y < z) -> x*y > x*z
-*)
+axiom help9: forall x:real. forall y:real. forall a:real. 
+             forall b:real.
+   (a <= x and x > 0.0 and 0.0 <= b <= y ) -> a*b <= x*y 
 
 
 
@@ -170,21 +167,6 @@ end
 { forall a:real. forall b:real. 
          in_interval(a,xl,xu) and in_interval(b,yl,yu) -> in_interval(a+b,zl,zu)
 }
-
-
-
-
-axiom axo1: forall x:gen_float. forall a:real. forall b:real.
-(float_less_than_real(x,a) and a <= b) -> float_less_than_real(x,b)
-
-axiom axo2: forall x:gen_float. forall a:real. forall b:real.
-(a <= b and real_less_than_float(b,x)) -> real_less_than_float(a,x)
-
-axiom axo3: forall x:gen_float. forall y:gen_float. forall a:real. 
-(float_le_float(x,y) and float_less_than_real(y,a)) -> float_less_than_real(x,a)
-
-axiom axo4: forall x:gen_float. forall y:gen_float. forall a:real. 
-(real_less_than_float(a,x) and float_le_float(x,y)) -> real_less_than_float(a,y)
 
 
 
