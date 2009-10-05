@@ -1,9 +1,9 @@
 
-goal helper_for_multiplication_goal: 
+goal help1_goal: 
       forall x:real. forall y:real. forall z:real. forall t:real.
    (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
 
-axiom helper_for_multiplication: 
+axiom help1: 
       forall x:real. forall y:real. forall z:real. forall t:real.
    (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
 
@@ -272,7 +272,7 @@ assert {float_value(zero)=0.0};
          (float_less_than_real(tl,a*b) and real_less_than_float(a*b,tu))
 
 (*
-completement prouvé par Z3 sauf postconditions 63, 110, 157 et 160 prouvés par cvc3
+completement prouvé par Z3 sauf postconditions 55, 96 et 140 prouvés par cvc3
 *)
 
 
