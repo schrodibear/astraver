@@ -95,4 +95,4 @@ PLUGIN_GENERATED_LIST+=$(JESSIE_HOME_DIR)/jessie_config.ml
 
 include $(FRAMAC_SHARE)/Makefile.dynamic
 
-tests: $(WHY_DISTRIB)/bin/jessie.$(OCAMLBEST) $(WHY_DISTRIB)/bin/why.$(OCAMLBEST)
+tests:: $(WHY_DISTRIB)/bin/jessie.$(OCAMLBEST) $(WHY_DISTRIB)/bin/why.$(OCAMLBEST)
