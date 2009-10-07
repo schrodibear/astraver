@@ -363,9 +363,11 @@ bin/jessie.byte: $(JCCMO)
 ifeq ($(FRAMAC),yes)
 JESSIE_PLUGIN_PATH=frama-c-plugin
 $(JESSIE_PLUGIN_BYTE): jc/jc.cmo $(JCCMO) $(CMO)
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH) Jessie.cmo
 
 $(JESSIE_PLUGIN_OPT): $(JCLIB) $(JCCMX) $(CMX)
+	$(MAKE) -C $(JESSIE_PLUGIN_PATH) depend
 	$(MAKE) -C $(JESSIE_PLUGIN_PATH)
 
 install: 
@@ -1060,7 +1062,10 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	lib/*.png \
 	atp/*.ml atp/LICENSE.txt atp/Makefile atp/Mk_ml_file \
 	ocamlgraph/configure.in ocamlgraph/configure ocamlgraph/.depend \
-	ocamlgraph/Makefile.in ocamlgraph/META.in ocamlgraph/*/*.ml*
+	ocamlgraph/Makefile.in ocamlgraph/META.in ocamlgraph/*/*.ml* \
+        frama-c-plugin/Makefile frama-c-plugin/configure \
+	frama-c-plugin/*.ml* frama-c-plugin/share/jessie/*.h \
+	frama-c-plugin/tests/jessie/*.c
 
 distrib export: source export-doc export-www export-examples export-examples-c linux
 
