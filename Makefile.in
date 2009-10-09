@@ -1064,8 +1064,9 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	ocamlgraph/configure.in ocamlgraph/configure ocamlgraph/.depend \
 	ocamlgraph/Makefile.in ocamlgraph/META.in ocamlgraph/*/*.ml* \
         frama-c-plugin/Makefile frama-c-plugin/configure \
-	frama-c-plugin/*.ml* frama-c-plugin/share/jessie/*.h \
-	frama-c-plugin/tests/jessie/*.c
+	frama-c-plugin/*.ml* frama-c-plugin/share/jessie/*.h 
+
+# ne pas distribuer ces tests-la	frama-c-plugin/tests/jessie/*.c
 
 distrib export: source export-doc export-www export-examples export-examples-c linux
 

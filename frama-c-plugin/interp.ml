@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.3 2009-10-02 12:47:01 ayad Exp $ *)
+(* $Id: interp.ml,v 1.4 2009-10-09 18:49:39 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -197,6 +197,8 @@ let rec name_with_profile s prof =
 
 let translated_names_table = Hashtbl.create 257
 
+exception CtePredicate of bool
+
 let translated_name linfo =
 (*
   Format.eprintf "Jessie.interp: linfo = %s(%a)(%d)@."
@@ -276,19 +278,11 @@ let translated_name linfo =
 		| _ -> assert false
 	    end
 	| "\\is_finite" ->
- (*         begin
-	  match !float_model,(List.hd linfo.l_profile).lv_type with
-	      | `Real,_ -> assert false
-              | (`Strict | `Full | `Multirounding),Ctype x when x == doubleType -> 
-                                   "\\is_finite_double"  
-              | (`Strict | `Full | `Multirounding),Ctype x when x == floatType -> 
-                                   "\\is_finite_float"  
-	      | _,_ -> assert false
-	  end
-*)
            begin
 	   match !float_model with
-	      | `Real -> assert false
+	      | `Real -> 
+		  warning "\\is_finite always true in mode JessieFloatModel(real)";
+		  raise (CtePredicate true)
               | `Strict | `Full | `Multirounding -> 
 	                begin
 	      		match (List.hd linfo.l_profile).lv_type with
@@ -297,41 +291,61 @@ let translated_name linfo =
 			| _ -> assert false
 	    		end
 	   end			
-(*	| "\\is_finite" ->
-	    begin
-	      match (List.hd linfo.l_profile).lv_type with
-		| Ctype x when x == doubleType -> "\\is_finite_double"
-		| Ctype x when x == floatType -> "\\is_finite_float"
-		| _ -> assert false
-	    end
-*)
 	| "\\is_infinite" ->
-	    begin
-	      match (List.hd linfo.l_profile).lv_type with
-		| Ctype x when x == doubleType -> "\\is_infinite_double"
-		| Ctype x when x == floatType -> "\\is_infinite_float"
-		| _ -> assert false
+            begin
+	      match !float_model with
+		| `Real -> 
+		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
+		    raise (CtePredicate false)
+		| `Strict | `Full | `Multirounding -> 
+		    begin
+		      match (List.hd linfo.l_profile).lv_type with
+			| Ctype x when x == doubleType -> "\\is_infinite_double"
+			| Ctype x when x == floatType -> "\\is_infinite_float"
+			| _ -> assert false
+		    end
 	    end
 	| "\\is_NaN" ->
-	    begin
-	      match (List.hd linfo.l_profile).lv_type with
-		| Ctype x when x == doubleType -> "\\is_NaN_double"
-		| Ctype x when x == floatType -> "\\is_NaN_float"
-		| _ -> assert false
+            begin
+	      match !float_model with
+		| `Real -> 
+		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
+		    raise (CtePredicate false)
+		| `Strict | `Full | `Multirounding -> 
+		    begin
+		      match (List.hd linfo.l_profile).lv_type with
+			| Ctype x when x == doubleType -> "\\is_NaN_double"
+			| Ctype x when x == floatType -> "\\is_NaN_float"
+			| _ -> assert false
+		    end
 	    end
 	| "\\is_minus_infinity" ->
-	    begin
-	      match (List.hd linfo.l_profile).lv_type with
-		| Ctype x when x == doubleType -> "\\is_minus_infinity_double"
-		| Ctype x when x == floatType -> "\\is_minus_infinity_float"
-		| _ -> assert false
+            begin
+	      match !float_model with
+		| `Real -> 
+		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
+		    raise (CtePredicate false)
+		| `Strict | `Full | `Multirounding -> 
+		    begin
+		      match (List.hd linfo.l_profile).lv_type with
+			| Ctype x when x == doubleType -> "\\is_minus_infinity_double"
+			| Ctype x when x == floatType -> "\\is_minus_infinity_float"
+			| _ -> assert false
+		    end
 	    end
 	| "\\is_plus_infinity" ->
-	    begin
-	      match (List.hd linfo.l_profile).lv_type with
-		| Ctype x when x == doubleType -> "\\is_plus_infinity_double"
-		| Ctype x when x == floatType -> "\\is_plus_infinity_float"
-		| _ -> assert false
+            begin
+	      match !float_model with
+		| `Real -> 
+		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
+		    raise (CtePredicate false)
+		| `Strict | `Full | `Multirounding -> 
+		    begin
+		      match (List.hd linfo.l_profile).lv_type with
+			| Ctype x when x == doubleType -> "\\is_plus_infinity_double"
+			| Ctype x when x == floatType -> "\\is_plus_infinity_float"
+			| _ -> assert false
+		    end
 	    end
 	| "\\le_float" ->
 	    begin
@@ -789,24 +803,29 @@ and terms t =
         List.map (fun x -> x#node) (terms_lval t.term_loc tlv)
 
     | Tapp(linfo,labels,tlist) ->
-        let name = translated_name linfo in
-        let args =
-	  List.map2
-	    (fun lv t ->
-	       let t' = terms t in
-	       if isLogicFloatType t.term_type && isLogicRealType lv.lv_type
-	       then
-		 List.map
-		   (fun t' ->
-		      mkexpr (JCPEcast(t', mktype (JCPTnative Treal))) t.term_loc)
-		   t'
+	begin
+	  try
+            let name = translated_name linfo in
+            let args =
+	      List.map2
+		(fun lv t ->
+		   let t' = terms t in
+		   if isLogicFloatType t.term_type && isLogicRealType lv.lv_type
+		   then
+		     List.map
+		       (fun t' ->
+			  mkexpr (JCPEcast(t', mktype (JCPTnative Treal))) t.term_loc)
+		       t'
 	       else t')
-	    linfo.l_profile
-	    tlist
-	in
-        let all_args = List.fold_right (product (fun x y -> x::y)) args [[]] in
-        List.map
-          (fun x -> JCPEapp(name,logic_labels_assoc labels,x)) all_args
+		linfo.l_profile
+		tlist
+	    in
+            let all_args = List.fold_right (product (fun x y -> x::y)) args [[]] in
+            List.map
+              (fun x -> JCPEapp(name,logic_labels_assoc labels,x)) all_args
+	  with (CtePredicate b)->
+	   [JCPEconst (JCCboolean b)]
+	end
 
     | Tif(t1,t2,t3) ->
         let t1 = terms t1 in let t2 = terms t2 in let t3 = terms t3 in
@@ -937,7 +956,9 @@ let rec pred p =
     | Ptrue -> JCPEconst(JCCboolean true)
 
     | Papp(pinfo,labels,tl) ->
-        let name = translated_name pinfo in
+	begin
+	  try
+            let name = translated_name pinfo in
 	(*
           JCPEapp(name,logic_labels_assoc labels,List.map term tl)
 	*)
@@ -953,7 +974,9 @@ let rec pred p =
 	    tl
 	in
 	JCPEapp(name,logic_labels_assoc labels, args)
-
+	  with (CtePredicate b) -> JCPEconst(JCCboolean b)
+	    
+	end
     | Prel((Rlt | Rgt | Rle | Rge as rel),t1,t2)
         when app_term_type isPointerType false t1.term_type ->
         (* Pointer comparison is translated as subtraction *)
@@ -2510,6 +2533,6 @@ let pragmas f =
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make -C ../.. -j bin/toplevel.byte"
+compile-command: "LC_ALL=C make"
 End:
 *)

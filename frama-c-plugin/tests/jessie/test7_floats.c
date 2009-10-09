@@ -28,7 +28,7 @@ double monexp(double x) {
   @     && \round_error(\result) <= \round_error(x) + 0x0.3p-20;  
   @*/
 double exp1(double x) {
-  float r = 0.9890365552 + 1.130258690*x + 0.5540440796*x*x;
+  double r = 0.9890365552 + 1.130258690*x + 0.5540440796*x*x;
   //@ assert \abs(x) <= 0x1.00001p0; // by SMT provers and lemma abs_triangle
   /*@ assert \abs(\exact(r) - \exp(\exact(x))) <= 0x0.FFFFp-4;  // by interval
     @*/

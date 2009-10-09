@@ -481,7 +481,7 @@ echo "OCaml library path      : $OCAMLLIB"
 echo "OcamlGraph lib          : $OCAMLGRAPHVER"
 echo "Verbose make            : $VERBOSEMAKE"
 echo "Abstract interpretation : $enable_apron"
-echo "Frama-C                 : $FRAMAC"
+echo "Frama-C plugin          : $FRAMAC"
 if test "$enable_apron" = "yes" ; then
    echo "    APRON lib           : $APRONLIB"
 fi

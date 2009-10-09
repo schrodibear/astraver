@@ -1219,3 +1219,6 @@ Admitted.
          (select_bytes m p o1 (s1 + s2))))))))).
 Admitted.
 
+(*Why logic*) Definition real_of_bitvector : bitvector -> R.
+Admitted.
+

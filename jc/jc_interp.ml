@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.422 2009-09-04 15:29:45 bobot Exp $ *)
+(* $Id: jc_interp.ml,v 1.423 2009-10-09 18:49:39 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1814,9 +1814,28 @@ and make_deref_bytes mark pos e fi =
   (* Convert bitvector into appropriate type *)
   match fi.jc_field_info_type with
     | JCTenum ri -> make_app (logic_enum_of_bitvector ri) [e']
+    | JCTnative t -> 
+	begin
+	  match t with
+	    | Treal  -> 
+		make_app logic_real_of_bitvector [e']
+	    | Tgenfloat _ -> assert false (* TODO *)
+	    | Tstring -> assert false (* TODO *)
+	    | Tinteger -> assert false (* TODO *)
+	    | Tboolean -> assert false (* TODO *)
+	    | Tunit  -> assert false (* TODO *)
+	end
+    | JCTtype_var _ -> assert false (* TODO *)
+    | JCTpointer (_, _, _) -> assert false (* TODO *)
+    | JCTlogic _ -> assert false (* TODO *)
+    | JCTany -> assert false (* TODO *)
+    | JCTnull -> assert false (* TODO *)
+
+(*
     | ty -> 
 	Format.eprintf "%a@." print_type ty;
 	assert false (* TODO *)
+*)
 
 and make_deref mark pos e1 fi =
   (* Dispatch depending on kind of memory *)
