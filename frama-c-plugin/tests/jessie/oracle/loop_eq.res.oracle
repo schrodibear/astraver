@@ -1,4 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only loop_eq.c
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Journal_loader.cmo" (dynlink error "interface mismatch on Extlib")
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmo" (dynlink error "interface mismatch on File")
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD loop_eq.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir loop_eq.jessie
@@ -1523,6 +1525,8 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic real_of_bitvector : bitvector -> real
 
 type char_P
 

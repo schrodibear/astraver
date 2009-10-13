@@ -1,4 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only test4_floats.c
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Journal_loader.cmo" (dynlink error "interface mismatch on Extlib")
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmo" (dynlink error "interface mismatch on File")
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD test4_floats.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir test4_floats.jessie
@@ -1470,6 +1472,8 @@ axiom concat_select_bytes:
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
 
+logic real_of_bitvector : bitvector -> real
+
 type mode
 
 logic nearest_even :  -> mode
@@ -1536,21 +1540,17 @@ axiom min_double: (min_gen_float(Double) = 0x1.p-1074)
 predicate no_overflow(f: float_format, m: mode, x: real) =
   (abs_real(round_float(f, m, x)) <= max_gen_float(f))
 
-axiom bounded_real_no_overflow:
-  (forall f:float_format.
-    (forall m:mode.
-      (forall x:real.
-        ((abs_real(x) <= max_gen_float(f)) -> no_overflow(f, m, x)))))
+function gen_round_error(x: gen_float) : real =
+  abs_real((float_value(x) - exact_value(x)))
 
-axiom round_down_le:
-  (forall f:float_format. (forall x:real. (round_float(f, down, x) <= x)))
+function gen_relative_error(x: gen_float) : real =
+  abs_real(((float_value(x) - exact_value(x)) / exact_value(x)))
+
+function gen_total_error(x: gen_float) : real =
+  abs_real((float_value(x) - model_value(x)))
 
 axiom round_up_ge:
   (forall f:float_format. (forall x:real. (round_float(f, up, x) >= x)))
-
-axiom round_down_neg:
-  (forall f:float_format.
-    (forall x:real. (round_float(f, down, (-x)) = (-round_float(f, up, x)))))
 
 axiom round_up_neg:
   (forall f:float_format.
@@ -1601,15 +1601,6 @@ predicate div_gen_float_post(f: float_format, m: mode, x: gen_float,
    (float_value(x) / float_value(y)))) and
    ((exact_value(res) = (exact_value(x) / exact_value(y))) and
     (model_value(res) = (model_value(x) / model_value(y)))))
-
-function gen_round_error(x: gen_float) : real =
-  abs_real((float_value(x) - exact_value(x)))
-
-function gen_relative_error(x: gen_float) : real =
-  (abs_real((float_value(x) - exact_value(x))) / exact_value(x))
-
-function gen_total_error(x: gen_float) : real =
-  abs_real((float_value(x) - model_value(x)))
 
 predicate cast_gen_float_post(f: float_format, m: mode, x: gen_float,
   res: gen_float) =

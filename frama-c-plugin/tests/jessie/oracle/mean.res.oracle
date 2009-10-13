@@ -1,8 +1,10 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only mean.c
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Journal_loader.cmxs" (dynlink error "error loading shared library: /usr/local/lib/frama-c/plugins/Journal_loader.cmxs: undefined symbol: camlPlugin__is_default_667")
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmxs" (dynlink error "error loading shared library: /usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmxs: undefined symbol: camlPlugin__is_default_667")
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD mean.c"
 [jessie] Starting Jessie translation
-[kernel] No code for function min_int, default assigns generated
 [kernel] No code for function max_int, default assigns generated
+[kernel] No code for function min_int, default assigns generated
 [jessie] Producing Jessie files in subdir mean.jessie
 [jessie] File mean.jessie/mean.jc written.
 [jessie] File mean.jessie/mean.cloc written.
@@ -83,24 +85,24 @@ behavior default:
    }
 }
 
-int32 min_int(int32 x_0, int32 y_0)
+int32 min_int(int32 x_1, int32 y_1)
 behavior default:
   assumes true;
   assigns \nothing;
-  ensures (C_24 : (((\result == x_0) && (x_0 <= y_0)) ||
-                    ((\result == y_0) && (y_0 <= x_0))));
+  ensures (C_24 : (((\result == x_1) && (x_1 <= y_1)) ||
+                    ((\result == y_1) && (y_1 <= x_1))));
 ;
 
-int32 max_int(int32 x_1, int32 y_1)
+int32 max_int(int32 x, int32 y)
 behavior default:
   assumes true;
   assigns \nothing;
-  ensures (C_25 : (((\result == x_1) && (x_1 >= y_1)) ||
-                    ((\result == y_1) && (y_1 >= x_1))));
+  ensures (C_25 : (((\result == x) && (x >= y)) ||
+                    ((\result == y) && (y >= x))));
 ;
 
-int32 mean2(int32 x, int32 y)
-  requires (C_37 : ((C_38 : (0 <= x)) && (C_39 : (0 <= y))));
+int32 mean2(int32 x_0, int32 y_0)
+  requires (C_37 : ((C_38 : (0 <= x_0)) && (C_39 : (0 <= y_0))));
 behavior default:
   assumes true;
   ensures (C_40 : true);
@@ -111,8 +113,8 @@ behavior default:
    
    (var int32 __retres_1);
    
-   {  (C_27 : (min = (C_26 : min_int(x, y))));
-      (C_29 : (max = (C_28 : max_int(x, y))));
+   {  (C_27 : (min = (C_26 : min_int(x_0, y_0))));
+      (C_29 : (max = (C_28 : max_int(x_0, y_0))));
       (C_36 : (__retres_1 = (C_35 : ((C_34 : (min +
                                                (C_33 : ((C_32 : ((C_31 : (
                                                                  (C_30 : 
@@ -494,37 +496,37 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter max_int :
- x_1:int32 ->
-  y_1:int32 ->
+ x:int32 ->
+  y:int32 ->
    { } int32
    { ((true = true) ->
       (JC_63:
-      ((eq_int(integer_of_int32(result), integer_of_int32(x_1))
-       and ge_int(integer_of_int32(x_1), integer_of_int32(y_1)))
-      or (eq_int(integer_of_int32(result), integer_of_int32(y_1))
-         and ge_int(integer_of_int32(y_1), integer_of_int32(x_1)))))) }
+      ((eq_int(integer_of_int32(result), integer_of_int32(x))
+       and ge_int(integer_of_int32(x), integer_of_int32(y)))
+      or (eq_int(integer_of_int32(result), integer_of_int32(y))
+         and ge_int(integer_of_int32(y), integer_of_int32(x)))))) }
 
 parameter max_int_requires :
- x_1:int32 ->
-  y_1:int32 ->
+ x:int32 ->
+  y:int32 ->
    { } int32
    { ((true = true) ->
       (JC_63:
-      ((eq_int(integer_of_int32(result), integer_of_int32(x_1))
-       and ge_int(integer_of_int32(x_1), integer_of_int32(y_1)))
-      or (eq_int(integer_of_int32(result), integer_of_int32(y_1))
-         and ge_int(integer_of_int32(y_1), integer_of_int32(x_1)))))) }
+      ((eq_int(integer_of_int32(result), integer_of_int32(x))
+       and ge_int(integer_of_int32(x), integer_of_int32(y)))
+      or (eq_int(integer_of_int32(result), integer_of_int32(y))
+         and ge_int(integer_of_int32(y), integer_of_int32(x)))))) }
 
 parameter mean : l:int32 -> r:int32 -> { } int32 { true }
 
-parameter mean2 : x:int32 -> y:int32 -> { } int32 { true }
+parameter mean2 : x_0:int32 -> y_0:int32 -> { } int32 { true }
 
 parameter mean2_requires :
- x:int32 ->
-  y:int32 ->
+ x_0:int32 ->
+  y_0:int32 ->
    { (JC_69:
-     ((JC_67: le_int((0), integer_of_int32(x)))
-     and (JC_68: le_int((0), integer_of_int32(y)))))}
+     ((JC_67: le_int((0), integer_of_int32(x_0)))
+     and (JC_68: le_int((0), integer_of_int32(y_0)))))}
    int32 { true }
 
 parameter mean_requires :
@@ -536,26 +538,26 @@ parameter mean_requires :
    int32 { true }
 
 parameter min_int :
- x_0:int32 ->
-  y_0:int32 ->
+ x_1:int32 ->
+  y_1:int32 ->
    { } int32
    { ((true = true) ->
       (JC_53:
-      ((eq_int(integer_of_int32(result), integer_of_int32(x_0))
-       and le_int(integer_of_int32(x_0), integer_of_int32(y_0)))
-      or (eq_int(integer_of_int32(result), integer_of_int32(y_0))
-         and le_int(integer_of_int32(y_0), integer_of_int32(x_0)))))) }
+      ((eq_int(integer_of_int32(result), integer_of_int32(x_1))
+       and le_int(integer_of_int32(x_1), integer_of_int32(y_1)))
+      or (eq_int(integer_of_int32(result), integer_of_int32(y_1))
+         and le_int(integer_of_int32(y_1), integer_of_int32(x_1)))))) }
 
 parameter min_int_requires :
- x_0:int32 ->
-  y_0:int32 ->
+ x_1:int32 ->
+  y_1:int32 ->
    { } int32
    { ((true = true) ->
       (JC_53:
-      ((eq_int(integer_of_int32(result), integer_of_int32(x_0))
-       and le_int(integer_of_int32(x_0), integer_of_int32(y_0)))
-      or (eq_int(integer_of_int32(result), integer_of_int32(y_0))
-         and le_int(integer_of_int32(y_0), integer_of_int32(x_0)))))) }
+      ((eq_int(integer_of_int32(result), integer_of_int32(x_1))
+       and le_int(integer_of_int32(x_1), integer_of_int32(y_1)))
+      or (eq_int(integer_of_int32(result), integer_of_int32(y_1))
+         and le_int(integer_of_int32(y_1), integer_of_int32(x_1)))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -580,11 +582,11 @@ parameter umean_requires :
    { true }
 
 let mean2_ensures_default =
- fun (x : int32) (y : int32) ->
+ fun (x_0 : int32) (y_0 : int32) ->
   { ((true = true)
     and (JC_73:
-        ((JC_71: le_int((0), integer_of_int32(x)))
-        and (JC_72: le_int((0), integer_of_int32(y)))))) }
+        ((JC_71: le_int((0), integer_of_int32(x_0)))
+        and (JC_72: le_int((0), integer_of_int32(y_0)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -594,10 +596,11 @@ let mean2_ensures_default =
      (let __retres_1 = ref (any_int32 void) in
      (C_27:
      begin
-       (let jessie_8 = (min := (C_26: (JC_92: ((min_int x) y)))) in void);
+       (let jessie_8 = (min := (C_26: (JC_92: ((min_int x_0) y_0)))) in void);
       (C_29:
       begin
-        (let jessie_9 = (max := (C_28: (JC_94: ((max_int x) y)))) in void);
+        (let jessie_9 = (max := (C_28: (JC_94: ((max_int x_0) y_0)))) in
+        void);
        (C_36:
        begin
          (let jessie_10 = (__retres_1 := (C_35:
@@ -631,10 +634,10 @@ let mean2_ensures_default =
   { (JC_75: true) }
 
 let mean2_safety =
- fun (x : int32) (y : int32) ->
+ fun (x_0 : int32) (y_0 : int32) ->
   { (JC_73:
-    ((JC_71: le_int((0), integer_of_int32(x)))
-    and (JC_72: le_int((0), integer_of_int32(y))))) }
+    ((JC_71: le_int((0), integer_of_int32(x_0)))
+    and (JC_72: le_int((0), integer_of_int32(y_0))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -644,11 +647,11 @@ let mean2_safety =
      (let __retres_1 = ref (any_int32 void) in
      (C_27:
      begin
-       (let jessie_5 = (min := (C_26: (JC_80: ((min_int_requires x) y)))) in
+       (let jessie_5 = (min := (C_26: (JC_80: ((min_int_requires x_0) y_0)))) in
        void);
       (C_29:
       begin
-        (let jessie_6 = (max := (C_28: (JC_82: ((max_int_requires x) y)))) in
+        (let jessie_6 = (max := (C_28: (JC_82: ((max_int_requires x_0) y_0)))) in
         void);
        (C_36:
        begin
@@ -1952,6 +1955,8 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic real_of_bitvector : bitvector -> real
 
 type char_P
 

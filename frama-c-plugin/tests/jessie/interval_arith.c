@@ -256,12 +256,6 @@ void mul(double xl, double xu, double yl, double yu)
 }
 
 
-/*
-voir feuille: pour montrer que si xu > 0 alors float_value(xu) <> 0 lorsque xu=+infini
- 
-axiom siddd: forall x:gen_float.
-   is_plus_infinity(x) -> float_value(x) > max_gen_float(Double)
-*/
 
 
 /* 

@@ -73,16 +73,16 @@ axiom max_exp_double: max_exp(Double) = 1024
 
 
 predicate no_overflow(f:float_format,m:mode,x:real) =
-	abs_real(round_float(f, m, x)) <= max_gen_float(f)
+  abs_real(round_float(f, m, x)) <= max_gen_float(f)
 
 function gen_round_error(x:gen_float) : real =
-	abs_real(float_value(x) - exact_value(x))
+  abs_real(float_value(x) - exact_value(x))
 
 function gen_relative_error(x:gen_float) : real =
-	abs_real((float_value(x) - exact_value(x)) / exact_value(x))
+  abs_real((float_value(x) - exact_value(x)) / exact_value(x))
 
 function gen_total_error(x:gen_float) : real =
-	abs_real(float_value(x) - model_value(x))
+  abs_real(float_value(x) - model_value(x))
 
 parameter set_model : x:gen_float ref -> y:real ->
 	{ }
@@ -92,17 +92,24 @@ parameter set_model : x:gen_float ref -> y:real ->
 	  and model_value(x) = y }
 
 
+
 (*************************************************************)
 (**** a few lemmas for automatic provers others than gappa ***)
 (*************************************************************)
-
-
-(**** useful at least for constants ****)
-
+(*
 axiom bounded_real_no_overflow : 
       forall f:float_format. forall m:mode. forall x:real. 
       	     abs_real(x) <= max_gen_float(f) -> no_overflow(f,m,x)
 
+axiom round_of_zero: forall f:float_format. forall m:mode. 
+      round_float(f,m,0.0) = 0.0
+
+axiom round_greater_max: forall f:float_format. forall m:mode. forall x:real.  
+      not no_overflow(f,m,x) -> abs_real(x) > max_gen_float(f)
+
+axiom round_increasing: 
+      forall f:float_format. forall m:mode. forall x:real. forall y:real.
+      x <= y -> round_float(f,m,x) <= round_float(f,m,y)
 
 (* just for m <> nearest_even *)
 axiom bounded_real_overflow_pos: forall f:float_format. forall m:mode. forall x:real.
@@ -123,24 +130,17 @@ axiom bounded_real_overflow_nearest_even: forall x:real.
       (abs_real(x) >= 0x2.0p128 -> not no_overflow(Single,nearest_even,x)) and
       (abs_real(x) >= 0x2.0p1024 -> not no_overflow(Double,nearest_even,x))
 
-axiom round_greater_max: forall f:float_format. forall m:mode. forall x:real.  
-      not no_overflow(f,m,x) -> abs_real(x) > max_gen_float(f)
-
 axiom positive_constant: forall f:float_format. forall m:mode. forall x:real.  
-      min_gen_float(f) <= x <= max_gen_float(f) -> 
-      no_overflow(f,m,x) and round_float(f,m,x) > 0.0 
+      min_gen_float(f) <= x <= max_gen_float(f) ->
+             no_overflow(f,m,x) and round_float(f,m,x) > 0.0 
 
 axiom negative_constant: forall f:float_format. forall m:mode. forall x:real.  
-       - max_gen_float(f) <= x <= - min_gen_float(f) -> 
-      no_overflow(f,m,x) and round_float(f,m,x) < 0.0
-
-axiom round_increasing: 
-      forall f:float_format. forall m:mode. forall x:real. forall y:real.
-      x <= y -> round_float(f,m,x) <= round_float(f,m,y)
+      - max_gen_float(f) <= x <= - min_gen_float(f) -> 
+             no_overflow(f,m,x) and round_float(f,m,x) < 0.0
 
 axiom round_greater_min: forall f:float_format. forall m:mode. forall x:real.
-      abs_real(x) >= min_gen_float(f) -> abs_real(round_float(f,m,x)) >= min_gen_float(f)
-
+      abs_real(x) >= min_gen_float(f) -> 
+                     abs_real(round_float(f,m,x)) >= min_gen_float(f)
 
 (* just for m <> nearest_even *)
 axiom round_less_min_pos: forall f:float_format. forall m:mode. forall x:real.
@@ -158,27 +158,11 @@ axiom round_less_min_neg: forall f:float_format. forall m:mode. forall x:real.
 
 (* and for m = nearest_even *)
 axiom round_less_min_nearest_even: forall x:real.
-      (abs_real(x) <= 0x2.0p-150 -> round_float(Single,nearest_even,x) = 0.0) and
-      (abs_real(x) <= 0x2.0p-1075 -> round_float(Double,nearest_even,x) = 0.0)
+      (abs_real(x) <= 0x1p-150 -> round_float(Single,nearest_even,x) = 0.0) and
+      (abs_real(x) <= 0x1p-1075 -> round_float(Double,nearest_even,x) = 0.0)
 
 
-axiom round_of_zero: forall f:float_format. forall m:mode. 
-      round_float(f,m,0.0) = 0.0
 
-(* wrong
-axiom round_of_float_value:
-      forall f:float_format. forall m:mode. forall x:gen_float. 
-      round_float(f,m,float_value(x)) = float_value(x)
-*)
-
-(* round_float of hexadecimal constant !!
-axiom round_hexa: forall f:float_format. forall m:mode. forall n:int. forall y:real.
-      (* need hypotheses on n *)
-      round_float(f,m,0xypn) = 0xypn
-
-axiom round_pow_constant: 
-      forall f:float_format. forall m:mode. forall x:real. forall y:real.
-      round_float(f,m,pow_real(x,y)) = pow_real(x,y)
 
 axiom round_of_max_gen: forall f:float_format. forall m:mode.
       round_float(f,m,max_gen_float(f)) = max_gen_float(f)
@@ -192,19 +176,20 @@ axiom round_of_min_gen: forall f:float_format. forall m:mode.
 axiom round_of_opp_min_gen: forall f:float_format. forall m:mode.
       round_float(f,m,-min_gen_float(f)) = -min_gen_float(f)
 
-*)
 
 
-(* axioms about round_float and round modes *)
+
+
+
 axiom round_down_le: forall f:float_format. forall x:real. 
       round_float(f,down,x) <= x
 
-
-axiom round_up_ge: forall f:float_format. forall x:real. 
-      round_float(f,up,x) >= x
-
 axiom round_down_neg: forall f:float_format. forall x:real. 
      round_float(f,down,-x) = -round_float(f,up,x)
+
+*)
+axiom round_up_ge: forall f:float_format. forall x:real. 
+      round_float(f,up,x) >= x
 
 axiom round_up_neg: forall f:float_format. forall x:real. 
      round_float(f,up,-x) = -round_float(f,down,x)
@@ -212,90 +197,3 @@ axiom round_up_neg: forall f:float_format. forall x:real.
 axiom round_idempotent:
       forall f:float_format. forall m1:mode. forall m2:mode. forall x:real. 
       round_float(f,m1,round_float(f,m2,x)) = round_float(f,m2,x)
-
-
-
-
-(*axioms to help the validation of the multiplication of intervals *)
-
-
-axiom help1: forall x:real. forall y:real. forall z:real. forall t:real.
-   (0.0 <= x <= y and 0.0 <= z <= t) -> x*z <= y*t
-
-(* pas besoin de help2 !!
-axiom help2: forall x:real. forall y:real. forall z:real. forall t:real.
-   (x <= y <= 0.0 and z <= t <= 0.0) -> x*z >= y*t
-*)
-
-axiom help3: forall x:real. forall y:real. forall a:real. forall b:real.
-   (0.0 <= a <= x and y <= b and y < 0.0) -> x*y <= a*b 
-(*
-(*c'est le meme que help3, pas besoin de help4 *)
-axiom help4: forall x:real. forall y:real. forall a:real. forall b:real.
-   (x <= a and x < 0.0 and 0.0 <= b <= y) -> x*y <= a*b 
-*)
-	
-axiom help5: forall x:real. forall y:real. forall a:real. forall b:real.
-   (a <= x and x > 0.0 and y <= b <= 0.0 ) -> x*y <= a*b
-
-(*c'est le meme que help5 mais Z3 n'arrive pas à prouver certaines postconditions sans help6 !! bizare *)
-axiom help6: forall x:real. forall y:real. forall a:real. forall b:real.
-   (b <= y and y > 0.0 and x <= a <= 0.0 ) -> x*y <= a*b
-
-axiom help7: forall x:real. forall y:real. forall a:real. forall b:real.
-   (x <= a <= 0.0 and y <= b and y < 0.0) -> a*b <= x*y
-
-(*c'est le meme que help7 mais Z3 n'arrive pas à prouver certaines postconditions sans help8 !! bizare *)
-axiom help8: forall x:real. forall y:real. forall a:real. forall b:real.
-   (x <= a and x < 0.0 and y <= b <= 0.0 ) -> a*b <= x*y
-
-axiom help9: forall x:real. forall y:real. forall a:real. forall b:real.
-   (a <= x and x > 0.0 and 0.0 <= b <= y ) -> a*b <= x*y 
-
-
-
-
-axiom help10: forall x:real. forall y:real. forall z:real. 
-   (0.0 <= x and y <= z) -> x*y <= x*z
-
-axiom help11: forall x:real. forall y:real. forall z:real. 
-   (0.0 < x and y <= z) -> x*y <= x*z
-
-axiom help12: forall x:real. forall y:real. forall z:real. 
-   (0.0 < x and y < z) -> x*y < x*z
-
-axiom help13: forall x:real. forall y:real. forall z:real. 
-   (0.0 <= x and y < z) -> x*y <= x*z
-
-axiom help14: forall x:real. forall y:real. forall z:real. 
-   (x <= 0.0 and y <= z) -> x*y >= x*z
-
-axiom help15: forall x:real. forall y:real. forall z:real. 
-   (x < 0.0 and y <= z) -> x*y >= x*z
-
-axiom help16: forall x:real. forall y:real. forall z:real. 
-   (x < 0.0 and y < z) -> x*y > x*z
-
-axiom help17: forall x:real. forall y:real. forall z:real. 
-   (x <= 0.0 and y < z) -> x*y >= x*z
-
-
-
-axiom hdfsss: forall x:real. forall y:real. forall z:real. 
-   (x > 0.0 and y >= z) -> x*y >= x*z
-
-
-(*
-axiom fdfd: forall x:real. forall y:real.
-   x <= y -> -x >= -y
-
-axiom fdfd: forall x:real. 
-   -1.0 * (-x) = x 
-*)
-
-
-axiom ttt: forall x:gen_float.
-(float_value(x) > 0.0) -> float_value(x) <> 0.0
-
-axiom ttt: forall x:gen_float.
-(float_value(x) < 0.0) -> float_value(x) <> 0.0

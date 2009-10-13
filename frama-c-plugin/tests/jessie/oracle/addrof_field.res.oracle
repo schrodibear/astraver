@@ -1,4 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only addrof_field.c
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Journal_loader.cmxs" (dynlink error "error loading shared library: /usr/local/lib/frama-c/plugins/Journal_loader.cmxs: undefined symbol: camlPlugin__is_default_667")
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmxs" (dynlink error "error loading shared library: /usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmxs: undefined symbol: camlPlugin__is_default_667")
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD addrof_field.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir addrof_field.jessie
@@ -50,14 +52,14 @@ tag S = {
 
 type S = [S]
 
-unit gs(S[..] s, int32 i)
-  requires (C_4 : ((C_5 : (\offset_min(s) <= 0)) &&
-                    (C_6 : (\offset_max(s) >= 0))));
+unit gs(S[..] s_0, int32 i_0)
+  requires (C_4 : ((C_5 : (\offset_min(s_0) <= 0)) &&
+                    (C_6 : (\offset_max(s_0) >= 0))));
 behavior default:
   assumes true;
-  ensures (C_7 : (s.p.int_M == \old(i)));
+  ensures (C_7 : (s_0.p.int_M == \old(i_0)));
 {  
-   {  (C_3 : ((C_2 : (C_1 : s.p).int_M) = i));
+   {  (C_3 : ((C_2 : (C_1 : s_0.p).int_M) = i_0));
       
       (return ())
    }
@@ -85,16 +87,16 @@ behavior default:
    }
 }
 
-unit gps(struct_S_xP[..] s_0, int32 i_0)
-  requires (C_28 : (((C_30 : (\offset_min(s_0) <= 0)) &&
-                      (C_31 : (\offset_max(s_0) >= 0))) &&
-                     ((C_33 : (\offset_min(s_0.struct_S_xM) <= 0)) &&
-                       (C_34 : (\offset_max(s_0.struct_S_xM) >= 0)))));
+unit gps(struct_S_xP[..] s, int32 i)
+  requires (C_28 : (((C_30 : (\offset_min(s) <= 0)) &&
+                      (C_31 : (\offset_max(s) >= 0))) &&
+                     ((C_33 : (\offset_min(s.struct_S_xM) <= 0)) &&
+                       (C_34 : (\offset_max(s.struct_S_xM) >= 0)))));
 behavior default:
   assumes true;
-  ensures (C_35 : (s_0.struct_S_xM.p.int_M == \old(i_0)));
+  ensures (C_35 : (s.struct_S_xM.p.int_M == \old(i)));
 {  
-   {  (C_27 : ((C_26 : (C_25 : (C_24 : s_0.struct_S_xM).p).int_M) = i_0));
+   {  (C_27 : ((C_26 : (C_25 : (C_24 : s.struct_S_xM).p).int_M) = i));
       
       (return ())
    }
@@ -847,82 +849,81 @@ parameter fs_requires :
   { ((true = true) -> (JC_20: eq_int(integer_of_int32(result), (0)))) }
 
 parameter gps :
- s_0:struct_S_xP pointer ->
-  i_0:int32 ->
+ s:struct_S_xP pointer ->
+  i:int32 ->
    int_P_int_M_p_8:(int_P, int32) memory ref ->
-    struct_S_xP_s_0_2_alloc_table:struct_S_xP alloc_table ->
+    struct_S_xP_s_2_alloc_table:struct_S_xP alloc_table ->
      int_P_p_8_alloc_table:int_P alloc_table ->
       S_struct_S_xM_7_alloc_table:S alloc_table ->
        S_p_struct_S_xM_7:(S, int_P pointer) memory ->
-        struct_S_xP_struct_S_xM_s_0_2:(struct_S_xP, S pointer) memory ->
+        struct_S_xP_struct_S_xM_s_2:(struct_S_xP, S pointer) memory ->
          { } unit reads int_P_int_M_p_8 writes int_P_int_M_p_8
          { ((true = true) ->
             (JC_42:
             eq_int(integer_of_int32(select(int_P_int_M_p_8,
                                     select(S_p_struct_S_xM_7,
-                                    select(struct_S_xP_struct_S_xM_s_0_2,
-                                    s_0)))),
-            integer_of_int32(i_0@)))) }
+                                    select(struct_S_xP_struct_S_xM_s_2, s)))),
+            integer_of_int32(i@)))) }
 
 parameter gps_requires :
- s_0:struct_S_xP pointer ->
-  i_0:int32 ->
+ s:struct_S_xP pointer ->
+  i:int32 ->
    int_P_int_M_p_8:(int_P, int32) memory ref ->
-    struct_S_xP_s_0_2_alloc_table:struct_S_xP alloc_table ->
+    struct_S_xP_s_2_alloc_table:struct_S_xP alloc_table ->
      int_P_p_8_alloc_table:int_P alloc_table ->
       S_struct_S_xM_7_alloc_table:S alloc_table ->
        S_p_struct_S_xM_7:(S, int_P pointer) memory ->
-        struct_S_xP_struct_S_xM_s_0_2:(struct_S_xP, S pointer) memory ->
+        struct_S_xP_struct_S_xM_s_2:(struct_S_xP, S pointer) memory ->
          { (JC_33:
-           ((JC_29:
-            le_int(offset_min(struct_S_xP_s_0_2_alloc_table, s_0), (0)))
+           ((JC_29: le_int(offset_min(struct_S_xP_s_2_alloc_table, s), (0)))
            and ((JC_30:
-                ge_int(offset_max(struct_S_xP_s_0_2_alloc_table, s_0), (0)))
+                ge_int(offset_max(struct_S_xP_s_2_alloc_table, s), (0)))
                and ((JC_31:
                     le_int(offset_min(S_struct_S_xM_7_alloc_table,
-                           select(struct_S_xP_struct_S_xM_s_0_2, s_0)),
+                           select(struct_S_xP_struct_S_xM_s_2, s)),
                     (0)))
                    and (JC_32:
                        ge_int(offset_max(S_struct_S_xM_7_alloc_table,
-                              select(struct_S_xP_struct_S_xM_s_0_2, s_0)),
+                              select(struct_S_xP_struct_S_xM_s_2, s)),
                        (0)))))))}
          unit reads int_P_int_M_p_8 writes int_P_int_M_p_8
          { ((true = true) ->
             (JC_42:
             eq_int(integer_of_int32(select(int_P_int_M_p_8,
                                     select(S_p_struct_S_xM_7,
-                                    select(struct_S_xP_struct_S_xM_s_0_2,
-                                    s_0)))),
-            integer_of_int32(i_0@)))) }
+                                    select(struct_S_xP_struct_S_xM_s_2, s)))),
+            integer_of_int32(i@)))) }
 
 parameter gs :
- s:S pointer ->
-  i:int32 ->
+ s_0:S pointer ->
+  i_0:int32 ->
    int_P_int_M_p_3:(int_P, int32) memory ref ->
     int_P_p_3_alloc_table:int_P alloc_table ->
-     S_s_1_alloc_table:S alloc_table ->
-      S_p_s_1:(S, int_P pointer) memory ->
+     S_s_0_1_alloc_table:S alloc_table ->
+      S_p_s_0_1:(S, int_P pointer) memory ->
        { } unit reads int_P_int_M_p_3 writes int_P_int_M_p_3
        { ((true = true) ->
           (JC_10:
-          eq_int(integer_of_int32(select(int_P_int_M_p_3, select(S_p_s_1, s))),
-          integer_of_int32(i@)))) }
+          eq_int(integer_of_int32(select(int_P_int_M_p_3,
+                                  select(S_p_s_0_1, s_0))),
+          integer_of_int32(i_0@)))) }
 
 parameter gs_requires :
- s:S pointer ->
-  i:int32 ->
+ s_0:S pointer ->
+  i_0:int32 ->
    int_P_int_M_p_3:(int_P, int32) memory ref ->
     int_P_p_3_alloc_table:int_P alloc_table ->
-     S_s_1_alloc_table:S alloc_table ->
-      S_p_s_1:(S, int_P pointer) memory ->
+     S_s_0_1_alloc_table:S alloc_table ->
+      S_p_s_0_1:(S, int_P pointer) memory ->
        { (JC_3:
-         ((JC_1: le_int(offset_min(S_s_1_alloc_table, s), (0)))
-         and (JC_2: ge_int(offset_max(S_s_1_alloc_table, s), (0)))))}
+         ((JC_1: le_int(offset_min(S_s_0_1_alloc_table, s_0), (0)))
+         and (JC_2: ge_int(offset_max(S_s_0_1_alloc_table, s_0), (0)))))}
        unit reads int_P_int_M_p_3 writes int_P_int_M_p_3
        { ((true = true) ->
           (JC_10:
-          eq_int(integer_of_int32(select(int_P_int_M_p_3, select(S_p_s_1, s))),
-          integer_of_int32(i@)))) }
+          eq_int(integer_of_int32(select(int_P_int_M_p_3,
+                                  select(S_p_s_0_1, s_0))),
+          integer_of_int32(i_0@)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1272,30 +1273,29 @@ let fs_safety =
   { true }
 
 let gps_ensures_default =
- fun (s_0 : struct_S_xP pointer) (i_0 : int32) (int_P_int_M_p_8 : (int_P, int32) memory ref) (S_struct_S_xM_7_alloc_table : S alloc_table) (int_P_p_8_alloc_table : int_P alloc_table) (struct_S_xP_s_0_2_alloc_table : struct_S_xP alloc_table) (struct_S_xP_struct_S_xM_s_0_2 : (struct_S_xP, S pointer) memory) (S_p_struct_S_xM_7 : (S, int_P pointer) memory) ->
+ fun (s : struct_S_xP pointer) (i : int32) (int_P_int_M_p_8 : (int_P, int32) memory ref) (S_struct_S_xM_7_alloc_table : S alloc_table) (int_P_p_8_alloc_table : int_P alloc_table) (struct_S_xP_s_2_alloc_table : struct_S_xP alloc_table) (struct_S_xP_struct_S_xM_s_2 : (struct_S_xP, S pointer) memory) (S_p_struct_S_xM_7 : (S, int_P pointer) memory) ->
   { ((true = true)
     and (JC_39:
-        ((JC_35: le_int(offset_min(struct_S_xP_s_0_2_alloc_table, s_0), (0)))
-        and ((JC_36:
-             ge_int(offset_max(struct_S_xP_s_0_2_alloc_table, s_0), (0)))
+        ((JC_35: le_int(offset_min(struct_S_xP_s_2_alloc_table, s), (0)))
+        and ((JC_36: ge_int(offset_max(struct_S_xP_s_2_alloc_table, s), (0)))
             and ((JC_37:
                  le_int(offset_min(S_struct_S_xM_7_alloc_table,
-                        select(struct_S_xP_struct_S_xM_s_0_2, s_0)),
+                        select(struct_S_xP_struct_S_xM_s_2, s)),
                  (0)))
                 and (JC_38:
                     ge_int(offset_max(S_struct_S_xM_7_alloc_table,
-                           select(struct_S_xP_struct_S_xM_s_0_2, s_0)),
+                           select(struct_S_xP_struct_S_xM_s_2, s)),
                     (0)))))))) }
   (init:
   try
    begin
      (C_27:
      begin
-       (let jessie_50 = (let jessie_46 = i_0 in
+       (let jessie_50 = (let jessie_46 = i in
                         (let jessie_49 = (C_25:
                                          ((safe_acc_ S_p_struct_S_xM_7) 
                                           (C_24:
-                                          ((safe_acc_ struct_S_xP_struct_S_xM_s_0_2) s_0)))) in
+                                          ((safe_acc_ struct_S_xP_struct_S_xM_s_2) s)))) in
                         (((safe_upd_ int_P_int_M_p_8) jessie_49) jessie_46))) in
        void);
       (raise Return)
@@ -1308,34 +1308,34 @@ let gps_ensures_default =
   { (JC_41:
     eq_int(integer_of_int32(select(int_P_int_M_p_8,
                             select(S_p_struct_S_xM_7,
-                            select(struct_S_xP_struct_S_xM_s_0_2, s_0)))),
-    integer_of_int32(i_0@))) }
+                            select(struct_S_xP_struct_S_xM_s_2, s)))),
+    integer_of_int32(i@))) }
 
 let gps_safety =
- fun (s_0 : struct_S_xP pointer) (i_0 : int32) (int_P_int_M_p_8 : (int_P, int32) memory ref) (S_struct_S_xM_7_alloc_table : S alloc_table) (int_P_p_8_alloc_table : int_P alloc_table) (struct_S_xP_s_0_2_alloc_table : struct_S_xP alloc_table) (struct_S_xP_struct_S_xM_s_0_2 : (struct_S_xP, S pointer) memory) (S_p_struct_S_xM_7 : (S, int_P pointer) memory) ->
+ fun (s : struct_S_xP pointer) (i : int32) (int_P_int_M_p_8 : (int_P, int32) memory ref) (S_struct_S_xM_7_alloc_table : S alloc_table) (int_P_p_8_alloc_table : int_P alloc_table) (struct_S_xP_s_2_alloc_table : struct_S_xP alloc_table) (struct_S_xP_struct_S_xM_s_2 : (struct_S_xP, S pointer) memory) (S_p_struct_S_xM_7 : (S, int_P pointer) memory) ->
   { (JC_39:
-    ((JC_35: le_int(offset_min(struct_S_xP_s_0_2_alloc_table, s_0), (0)))
-    and ((JC_36: ge_int(offset_max(struct_S_xP_s_0_2_alloc_table, s_0), (0)))
+    ((JC_35: le_int(offset_min(struct_S_xP_s_2_alloc_table, s), (0)))
+    and ((JC_36: ge_int(offset_max(struct_S_xP_s_2_alloc_table, s), (0)))
         and ((JC_37:
              le_int(offset_min(S_struct_S_xM_7_alloc_table,
-                    select(struct_S_xP_struct_S_xM_s_0_2, s_0)),
+                    select(struct_S_xP_struct_S_xM_s_2, s)),
              (0)))
             and (JC_38:
                 ge_int(offset_max(S_struct_S_xM_7_alloc_table,
-                       select(struct_S_xP_struct_S_xM_s_0_2, s_0)),
+                       select(struct_S_xP_struct_S_xM_s_2, s)),
                 (0))))))) }
   (init:
   try
    begin
      (C_27:
      begin
-       (let jessie_45 = (let jessie_41 = i_0 in
+       (let jessie_45 = (let jessie_41 = i in
                         (let jessie_44 = (C_25:
                                          (JC_46:
                                          (((acc_ S_struct_S_xM_7_alloc_table) S_p_struct_S_xM_7) 
                                           (C_24:
                                           (JC_45:
-                                          (((acc_ struct_S_xP_s_0_2_alloc_table) struct_S_xP_struct_S_xM_s_0_2) s_0)))))) in
+                                          (((acc_ struct_S_xP_s_2_alloc_table) struct_S_xP_struct_S_xM_s_2) s)))))) in
                         (JC_47:
                         ((((upd_ int_P_p_8_alloc_table) int_P_int_M_p_8) jessie_44) jessie_41)))) in
        void);
@@ -1349,18 +1349,18 @@ let gps_safety =
   { true }
 
 let gs_ensures_default =
- fun (s : S pointer) (i : int32) (int_P_int_M_p_3 : (int_P, int32) memory ref) (S_s_1_alloc_table : S alloc_table) (int_P_p_3_alloc_table : int_P alloc_table) (S_p_s_1 : (S, int_P pointer) memory) ->
+ fun (s_0 : S pointer) (i_0 : int32) (int_P_int_M_p_3 : (int_P, int32) memory ref) (S_s_0_1_alloc_table : S alloc_table) (int_P_p_3_alloc_table : int_P alloc_table) (S_p_s_0_1 : (S, int_P pointer) memory) ->
   { ((true = true)
     and (JC_7:
-        ((JC_5: le_int(offset_min(S_s_1_alloc_table, s), (0)))
-        and (JC_6: ge_int(offset_max(S_s_1_alloc_table, s), (0)))))) }
+        ((JC_5: le_int(offset_min(S_s_0_1_alloc_table, s_0), (0)))
+        and (JC_6: ge_int(offset_max(S_s_0_1_alloc_table, s_0), (0)))))) }
   (init:
   try
    begin
      (C_3:
      begin
-       (let jessie_10 = (let jessie_6 = i in
-                        (let jessie_9 = (C_1: ((safe_acc_ S_p_s_1) s)) in
+       (let jessie_10 = (let jessie_6 = i_0 in
+                        (let jessie_9 = (C_1: ((safe_acc_ S_p_s_0_1) s_0)) in
                         (((safe_upd_ int_P_int_M_p_3) jessie_9) jessie_6))) in
        void);
       (raise Return)
@@ -1371,23 +1371,23 @@ let gs_ensures_default =
    Return ->
    void end)
   { (JC_9:
-    eq_int(integer_of_int32(select(int_P_int_M_p_3, select(S_p_s_1, s))),
-    integer_of_int32(i@))) }
+    eq_int(integer_of_int32(select(int_P_int_M_p_3, select(S_p_s_0_1, s_0))),
+    integer_of_int32(i_0@))) }
 
 let gs_safety =
- fun (s : S pointer) (i : int32) (int_P_int_M_p_3 : (int_P, int32) memory ref) (S_s_1_alloc_table : S alloc_table) (int_P_p_3_alloc_table : int_P alloc_table) (S_p_s_1 : (S, int_P pointer) memory) ->
+ fun (s_0 : S pointer) (i_0 : int32) (int_P_int_M_p_3 : (int_P, int32) memory ref) (S_s_0_1_alloc_table : S alloc_table) (int_P_p_3_alloc_table : int_P alloc_table) (S_p_s_0_1 : (S, int_P pointer) memory) ->
   { (JC_7:
-    ((JC_5: le_int(offset_min(S_s_1_alloc_table, s), (0)))
-    and (JC_6: ge_int(offset_max(S_s_1_alloc_table, s), (0))))) }
+    ((JC_5: le_int(offset_min(S_s_0_1_alloc_table, s_0), (0)))
+    and (JC_6: ge_int(offset_max(S_s_0_1_alloc_table, s_0), (0))))) }
   (init:
   try
    begin
      (C_3:
      begin
-       (let jessie_5 = (let jessie_1 = i in
+       (let jessie_5 = (let jessie_1 = i_0 in
                        (let jessie_4 = (C_1:
                                        (JC_13:
-                                       (((acc_ S_s_1_alloc_table) S_p_s_1) s))) in
+                                       (((acc_ S_s_0_1_alloc_table) S_p_s_0_1) s_0))) in
                        (JC_14:
                        ((((upd_ int_P_p_3_alloc_table) int_P_int_M_p_3) jessie_4) jessie_1)))) in
        void);
@@ -2496,6 +2496,8 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic real_of_bitvector : bitvector -> real
 
 type S
 

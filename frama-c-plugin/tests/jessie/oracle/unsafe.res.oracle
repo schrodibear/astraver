@@ -1,4 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only unsafe.c
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Journal_loader.cmxs" (dynlink error "error loading shared library: /usr/local/lib/frama-c/plugins/Journal_loader.cmxs: undefined symbol: camlPlugin__is_default_667")
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmxs" (dynlink error "error loading shared library: /usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmxs: undefined symbol: camlPlugin__is_default_667")
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD unsafe.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir unsafe.jessie
@@ -42,20 +44,20 @@ int_P[0..9] t;
 invariant valid_t :
 ((\offset_min(t) <= 0) && (\offset_max(t) >= 9))
 
-int32 f(int32 i_0)
+int32 f(int32 i_1)
 behavior default:
   assumes true;
   ensures (C_5 : true);
 {  
    (var int32 __retres);
    
-   {  (C_4 : (__retres = (C_3 : (t + (C_2 : ((C_1 : (i_0 - i_0)) :> int32))).int_M)));
+   {  (C_4 : (__retres = (C_3 : (t + (C_2 : ((C_1 : (i_1 - i_1)) :> int32))).int_M)));
       
       (return __retres)
    }
 }
 
-int32 g(int32 i_1)
+int32 g(int32 i_2)
 behavior default:
   assumes true;
   ensures (C_8 : true);
@@ -68,20 +70,20 @@ behavior default:
    }
 }
 
-int32 h(int32 i_2)
+int32 h(int32 i)
 behavior default:
   assumes true;
   ensures (C_11 : true);
 {  
    (var int32 __retres_1);
    
-   {  (C_10 : (__retres_1 = (C_9 : (t + i_2).int_M)));
+   {  (C_10 : (__retres_1 = (C_9 : (t + i).int_M)));
       
       (return __retres_1)
    }
 }
 
-int32 h2(int32 i)
+int32 h2(int32 i_0)
 behavior default:
   assumes true;
   ensures (C_14 : true);
@@ -542,45 +544,45 @@ parameter int_P_t_1_alloc_table : int_P alloc_table ref
 parameter int_P_int_M_t_1 : (int_P, int32) memory ref
 
 parameter f :
- i_0:int32 ->
+ i_1:int32 ->
   { } int32 reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_12: valid_t(int_P_t_1_alloc_table)) }
 
 parameter f_requires :
- i_0:int32 ->
+ i_1:int32 ->
   { (JC_5: valid_t(int_P_t_1_alloc_table))} int32
   reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_12: valid_t(int_P_t_1_alloc_table)) }
 
 parameter g :
- i_1:int32 ->
+ i_2:int32 ->
   { } int32 reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_24: valid_t(int_P_t_1_alloc_table)) }
 
 parameter g_requires :
- i_1:int32 ->
+ i_2:int32 ->
   { (JC_17: valid_t(int_P_t_1_alloc_table))} int32
   reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_24: valid_t(int_P_t_1_alloc_table)) }
 
 parameter h :
- i_2:int32 ->
+ i:int32 ->
   { } int32 reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_34: valid_t(int_P_t_1_alloc_table)) }
 
 parameter h2 :
- i:int32 ->
+ i_0:int32 ->
   { } int32 reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_44: valid_t(int_P_t_1_alloc_table)) }
 
 parameter h2_requires :
- i:int32 ->
+ i_0:int32 ->
   { (JC_37: valid_t(int_P_t_1_alloc_table))} int32
   reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_44: valid_t(int_P_t_1_alloc_table)) }
 
 parameter h_requires :
- i_2:int32 ->
+ i:int32 ->
   { (JC_27: valid_t(int_P_t_1_alloc_table))} int32
   reads int_P_int_M_t_1,int_P_t_1_alloc_table
   { (JC_34: valid_t(int_P_t_1_alloc_table)) }
@@ -602,7 +604,7 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let f_ensures_default =
- fun (i_0 : int32) ->
+ fun (i_1 : int32) ->
   { ((true = true) and (JC_7: valid_t(int_P_t_1_alloc_table))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -618,8 +620,8 @@ let f_ensures_default =
                                                                     (safe_int32_of_integer_ 
                                                                     (C_1:
                                                                     ((sub_int 
-                                                                    (integer_of_int32 i_0)) 
-                                                                    (integer_of_int32 i_0)))))))))) in
+                                                                    (integer_of_int32 i_1)) 
+                                                                    (integer_of_int32 i_1)))))))))) in
        void);
       (return := !__retres);
       (raise Return)
@@ -632,7 +634,7 @@ let f_ensures_default =
   { (JC_9: true) }
 
 let f_safety =
- fun (i_0 : int32) ->
+ fun (i_1 : int32) ->
   { (JC_7: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
@@ -648,8 +650,8 @@ let f_safety =
                                                        (JC_15:
                                                        (int32_of_integer_ 
                                                         (C_1:
-                                                        ((sub_int (integer_of_int32 i_0)) 
-                                                         (integer_of_int32 i_0))))))))))) in
+                                                        ((sub_int (integer_of_int32 i_1)) 
+                                                         (integer_of_int32 i_1))))))))))) in
        void);
       (return := !__retres);
       (raise Return)
@@ -662,7 +664,7 @@ let f_safety =
   { (JC_11: valid_t(int_P_t_1_alloc_table)) }
 
 let g_ensures_default =
- fun (i_1 : int32) ->
+ fun (i_2 : int32) ->
   { ((true = true) and (JC_19: valid_t(int_P_t_1_alloc_table))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -685,7 +687,7 @@ let g_ensures_default =
   { (JC_21: true) }
 
 let g_safety =
- fun (i_1 : int32) ->
+ fun (i_2 : int32) ->
   { (JC_19: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
@@ -709,7 +711,7 @@ let g_safety =
   { (JC_23: valid_t(int_P_t_1_alloc_table)) }
 
 let h2_ensures_default =
- fun (i : int32) ->
+ fun (i_0 : int32) ->
   { ((true = true) and (JC_39: valid_t(int_P_t_1_alloc_table))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -732,7 +734,7 @@ let h2_ensures_default =
   { (JC_41: true) }
 
 let h2_safety =
- fun (i : int32) ->
+ fun (i_0 : int32) ->
   { (JC_39: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
@@ -755,7 +757,7 @@ let h2_safety =
   { (JC_43: valid_t(int_P_t_1_alloc_table)) }
 
 let h_ensures_default =
- fun (i_2 : int32) ->
+ fun (i : int32) ->
   { ((true = true) and (JC_29: valid_t(int_P_t_1_alloc_table))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -766,7 +768,7 @@ let h_ensures_default =
      begin
        (let jessie_6 = (__retres_1 := (C_9:
                                       ((safe_acc_ !int_P_int_M_t_1) ((shift t) 
-                                                                    (integer_of_int32 i_2))))) in
+                                                                    (integer_of_int32 i))))) in
        void);
       (return := !__retres_1);
       (raise Return)
@@ -779,7 +781,7 @@ let h_ensures_default =
   { (JC_31: true) }
 
 let h_safety =
- fun (i_2 : int32) ->
+ fun (i : int32) ->
   { (JC_29: valid_t(int_P_t_1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
@@ -791,7 +793,7 @@ let h_safety =
        (let jessie_5 = (__retres_1 := (C_9:
                                       (JC_36:
                                       ((((offset_acc_ !int_P_t_1_alloc_table) !int_P_int_M_t_1) t) 
-                                       (integer_of_int32 i_2))))) in
+                                       (integer_of_int32 i))))) in
        void);
       (return := !__retres_1);
       (raise Return)
@@ -1789,6 +1791,8 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic real_of_bitvector : bitvector -> real
 
 type char_P
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.156 2009-08-26 12:41:55 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.157 2009-10-13 15:43:30 ayad Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1061,6 +1061,8 @@ let builtin_logic_symbols =
     Some real_type, "\\round_float", "round_float", [float_format; rounding_mode; real_type];
     None, "\\no_overflow", "no_overflow", [float_format; rounding_mode; real_type];
     
+    Some real_type, "\\round_float", "round_float", [float_format; rounding_mode; real_type];
+
     Some float_format, "\\Single", "Single", [];
     Some float_format, "\\Double", "Double", [];
     Some float_format, "\\Quad", "Quad", [];

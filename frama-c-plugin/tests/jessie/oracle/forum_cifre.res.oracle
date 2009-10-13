@@ -1,4 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only forum_cifre.c
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Journal_loader.cmo" (dynlink error "interface mismatch on Extlib")
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmo" (dynlink error "interface mismatch on File")
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD forum_cifre.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir forum_cifre.jessie
@@ -391,9 +393,8 @@ logic paquet_bien_forme{Here}(__anonstruct_paquet_t_1[..] paquet) =
    (\offset_max(paquet.message) >= (paquet.longueur - 1))) &&
   valid_string{Here}(paquet.message))
 
-char_P[..] strncpy(char_P[..] destination_0, char_P[..] source,
-                   uint32 taille_0)
-  requires (C_30 : (taille_0 < 1000000));
+char_P[..] strncpy(char_P[..] destination, char_P[..] source, uint32 taille)
+  requires (C_30 : (taille < 1000000));
 behavior default:
   assumes true;
   ensures (C_31 : true);
@@ -408,8 +409,8 @@ behavior default:
    
    (var char_P[..] tmp_2);
    
-   {  (C_1 : (curseur = destination_0));
-      (if (taille_0 > 0) then 
+   {  (C_1 : (curseur = destination));
+      (if (taille > 0) then 
       {  
          {  
             loop 
@@ -428,8 +429,8 @@ behavior default:
                      (C_11 : ((C_10 : tmp.char_M) = tmp_0))
                   };
                   (if (tmp_0 != 0) then 
-                  {  (C_14 : (taille_0 = (C_13 : ((C_12 : (taille_0 - 1)) :> uint32))));
-                     (if (taille_0 > 0) then () else 
+                  {  (C_14 : (taille = (C_13 : ((C_12 : (taille - 1)) :> uint32))));
+                     (if (taille > 0) then () else 
                      (goto while_0_break))
                   } else 
                   (goto while_0_break))
@@ -442,22 +443,21 @@ behavior default:
             ()
          };
          (if ((C_29 : ((C_28 : source.char_M) :> int32)) == 0) then 
-         {  (C_19 : (taille_0 = (C_18 : ((C_17 : (taille_0 - 1)) :> uint32))));
-            (if (taille_0 > 0) then 
+         {  (C_19 : (taille = (C_18 : ((C_17 : (taille - 1)) :> uint32))));
+            (if (taille > 0) then 
             {  
                loop 
                while (true)
                {  
                   {  
                      {  
-                        {  (C_20 : (tmp_2 = destination_0));
-                           (C_22 : (destination_0 = (C_21 : (destination_0 +
-                                                              1))))
+                        {  (C_20 : (tmp_2 = destination));
+                           (C_22 : (destination = (C_21 : (destination + 1))))
                         };
                         (C_24 : ((C_23 : tmp_2.char_M) = 0))
                      };
-                     (C_27 : (taille_0 = (C_26 : ((C_25 : (taille_0 - 1)) :> uint32))));
-                     (if (taille_0 > 0) then () else 
+                     (C_27 : (taille = (C_26 : ((C_25 : (taille - 1)) :> uint32))));
+                     (if (taille > 0) then () else 
                      (goto while_1_break))
                   }
                };
@@ -466,36 +466,36 @@ behavior default:
          } else ())
       } else ());
       
-      (return destination_0)
+      (return destination)
    }
 }
 
-int32 recevoir_un_paquet(char_P[..] destination, uint32 taille,
+int32 recevoir_un_paquet(char_P[..] destination_0, uint32 taille_0,
                          __anonstruct_paquet_t_1[..] paquet)
   requires (C_37 : (((C_39 : (\offset_min(paquet) <= 0)) &&
                       (C_40 : (\offset_max(paquet) >= 0))) &&
-                     ((C_42 : (\offset_min(destination) <= 0)) &&
-                       (C_43 : (\offset_max(destination) >= (taille - 1))))));
+                     ((C_42 : (\offset_min(destination_0) <= 0)) &&
+                       (C_43 : (\offset_max(destination_0) >= (taille_0 - 1))))));
 behavior default:
   assumes true;
   ensures (C_44 : true);
 behavior echec:
-  assumes (taille < paquet.longueur);
+  assumes (taille_0 < paquet.longueur);
   assigns \nothing;
   ensures (C_45 : (\result == 0));
 behavior succes:
-  assumes (taille >= paquet.longueur);
-  assigns (destination + [0..(taille - 1)]).char_M;
+  assumes (taille_0 >= paquet.longueur);
+  assigns (destination_0 + [0..(taille_0 - 1)]).char_M;
   ensures (C_46 : (\result == 1));
 {  
    (var int32 __retres);
    
-   {  (if (taille < (C_33 : paquet.longueur)) then 
+   {  (if (taille_0 < (C_33 : paquet.longueur)) then 
       {  (C_32 : (__retres = 0));
          
          (goto return_label)
       } else ());
-      (C_35 : strncpy(destination, (C_34 : paquet.message), taille));
+      (C_35 : strncpy(destination_0, (C_34 : paquet.message), taille_0));
       (C_36 : (__retres = 1));
       (return_label : 
       (return __retres))
@@ -1718,45 +1718,45 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter recevoir_un_paquet :
- destination:char_P pointer ->
-  taille:uint32 ->
+ destination_0:char_P pointer ->
+  taille_0:uint32 ->
    paquet_0:__anonstruct_paquet_t_1 pointer ->
-    char_P_char_M_destination_25:(char_P, int8) memory ref ->
+    char_P_char_M_destination_0_25:(char_P, int8) memory ref ->
      char_P_message_80_alloc_table:char_P alloc_table ->
-      char_P_destination_25_alloc_table:char_P alloc_table ->
+      char_P_destination_0_25_alloc_table:char_P alloc_table ->
        __anonstruct_paquet_t_1_paquet_26_alloc_table:__anonstruct_paquet_t_1 alloc_table ->
         __anonstruct_paquet_t_1_message_paquet_26:(__anonstruct_paquet_t_1, char_P pointer) memory ->
          __anonstruct_paquet_t_1_longueur_paquet_26:(__anonstruct_paquet_t_1, uint32) memory ->
           char_P_char_M_message_80:(char_P, int8) memory ->
-           { } int32 writes char_P_char_M_destination_25
-           { ((ge_int(integer_of_uint32(taille@),
+           { } int32 writes char_P_char_M_destination_0_25
+           { ((ge_int(integer_of_uint32(taille_0@),
                integer_of_uint32(select(__anonstruct_paquet_t_1_longueur_paquet_26@,
                                  paquet_0@))) ->
                (JC_60:
                ((JC_58: eq_int(integer_of_int32(result), (1)))
                and (JC_59:
-                   not_assigns(char_P_destination_25_alloc_table@,
-                   char_P_char_M_destination_25@,
-                   char_P_char_M_destination_25,
-                   pset_range(pset_singleton(destination@), (0),
-                   sub_int(integer_of_uint32(taille@), (1))))))))
-             and (lt_int(integer_of_uint32(taille@),
+                   not_assigns(char_P_destination_0_25_alloc_table@,
+                   char_P_char_M_destination_0_25@,
+                   char_P_char_M_destination_0_25,
+                   pset_range(pset_singleton(destination_0@), (0),
+                   sub_int(integer_of_uint32(taille_0@), (1))))))))
+             and (lt_int(integer_of_uint32(taille_0@),
                   integer_of_uint32(select(__anonstruct_paquet_t_1_longueur_paquet_26@,
                                     paquet_0@))) ->
                   (JC_54:
                   ((JC_52: eq_int(integer_of_int32(result), (0)))
                   and (JC_53:
-                      not_assigns(char_P_destination_25_alloc_table@,
-                      char_P_char_M_destination_25@,
-                      char_P_char_M_destination_25, pset_empty)))))) }
+                      not_assigns(char_P_destination_0_25_alloc_table@,
+                      char_P_char_M_destination_0_25@,
+                      char_P_char_M_destination_0_25, pset_empty)))))) }
 
 parameter recevoir_un_paquet_requires :
- destination:char_P pointer ->
-  taille:uint32 ->
+ destination_0:char_P pointer ->
+  taille_0:uint32 ->
    paquet_0:__anonstruct_paquet_t_1 pointer ->
-    char_P_char_M_destination_25:(char_P, int8) memory ref ->
+    char_P_char_M_destination_0_25:(char_P, int8) memory ref ->
      char_P_message_80_alloc_table:char_P alloc_table ->
-      char_P_destination_25_alloc_table:char_P alloc_table ->
+      char_P_destination_0_25_alloc_table:char_P alloc_table ->
        __anonstruct_paquet_t_1_paquet_26_alloc_table:__anonstruct_paquet_t_1 alloc_table ->
         __anonstruct_paquet_t_1_message_paquet_26:(__anonstruct_paquet_t_1, char_P pointer) memory ->
          __anonstruct_paquet_t_1_longueur_paquet_26:(__anonstruct_paquet_t_1, uint32) memory ->
@@ -1771,34 +1771,34 @@ parameter recevoir_un_paquet_requires :
                          paquet_0),
                   (0)))
                  and ((JC_35:
-                      le_int(offset_min(char_P_destination_25_alloc_table,
-                             destination),
+                      le_int(offset_min(char_P_destination_0_25_alloc_table,
+                             destination_0),
                       (0)))
                      and (JC_36:
-                         ge_int(offset_max(char_P_destination_25_alloc_table,
-                                destination),
-                         sub_int(integer_of_uint32(taille), (1))))))))}
-           int32 writes char_P_char_M_destination_25
-           { ((ge_int(integer_of_uint32(taille@),
+                         ge_int(offset_max(char_P_destination_0_25_alloc_table,
+                                destination_0),
+                         sub_int(integer_of_uint32(taille_0), (1))))))))}
+           int32 writes char_P_char_M_destination_0_25
+           { ((ge_int(integer_of_uint32(taille_0@),
                integer_of_uint32(select(__anonstruct_paquet_t_1_longueur_paquet_26@,
                                  paquet_0@))) ->
                (JC_60:
                ((JC_58: eq_int(integer_of_int32(result), (1)))
                and (JC_59:
-                   not_assigns(char_P_destination_25_alloc_table@,
-                   char_P_char_M_destination_25@,
-                   char_P_char_M_destination_25,
-                   pset_range(pset_singleton(destination@), (0),
-                   sub_int(integer_of_uint32(taille@), (1))))))))
-             and (lt_int(integer_of_uint32(taille@),
+                   not_assigns(char_P_destination_0_25_alloc_table@,
+                   char_P_char_M_destination_0_25@,
+                   char_P_char_M_destination_0_25,
+                   pset_range(pset_singleton(destination_0@), (0),
+                   sub_int(integer_of_uint32(taille_0@), (1))))))))
+             and (lt_int(integer_of_uint32(taille_0@),
                   integer_of_uint32(select(__anonstruct_paquet_t_1_longueur_paquet_26@,
                                     paquet_0@))) ->
                   (JC_54:
                   ((JC_52: eq_int(integer_of_int32(result), (0)))
                   and (JC_53:
-                      not_assigns(char_P_destination_25_alloc_table@,
-                      char_P_char_M_destination_25@,
-                      char_P_char_M_destination_25, pset_empty)))))) }
+                      not_assigns(char_P_destination_0_25_alloc_table@,
+                      char_P_char_M_destination_0_25@,
+                      char_P_char_M_destination_0_25, pset_empty)))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1813,25 +1813,25 @@ parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
 
 parameter strncpy :
- destination_0:char_P pointer ->
+ destination:char_P pointer ->
   source:char_P pointer ->
-   taille_0:uint32 ->
-    char_P_char_M_destination_0_21:(char_P, int8) memory ref ->
+   taille:uint32 ->
+    char_P_char_M_destination_21:(char_P, int8) memory ref ->
      char_P_source_22_alloc_table:char_P alloc_table ->
-      char_P_destination_0_21_alloc_table:char_P alloc_table ->
+      char_P_destination_21_alloc_table:char_P alloc_table ->
        char_P_char_M_source_22:(char_P, int8) memory ->
-        { } char_P pointer writes char_P_char_M_destination_0_21 { true }
+        { } char_P pointer writes char_P_char_M_destination_21 { true }
 
 parameter strncpy_requires :
- destination_0:char_P pointer ->
+ destination:char_P pointer ->
   source:char_P pointer ->
-   taille_0:uint32 ->
-    char_P_char_M_destination_0_21:(char_P, int8) memory ref ->
+   taille:uint32 ->
+    char_P_char_M_destination_21:(char_P, int8) memory ref ->
      char_P_source_22_alloc_table:char_P alloc_table ->
-      char_P_destination_0_21_alloc_table:char_P alloc_table ->
+      char_P_destination_21_alloc_table:char_P alloc_table ->
        char_P_char_M_source_22:(char_P, int8) memory ->
-        { (JC_1: lt_int(integer_of_uint32(taille_0), (1000000)))}
-        char_P pointer writes char_P_char_M_destination_0_21 { true }
+        { (JC_1: lt_int(integer_of_uint32(taille), (1000000)))}
+        char_P pointer writes char_P_char_M_destination_21 { true }
 
 parameter uint16_of_integer_ :
  x:int ->
@@ -1844,7 +1844,7 @@ parameter uint32_of_integer_ :
   { eq_int(integer_of_uint32(result), x) }
 
 let recevoir_un_paquet_ensures_default =
- fun (destination : char_P pointer) (taille : uint32) (paquet_0 : __anonstruct_paquet_t_1 pointer) (char_P_char_M_destination_25 : (char_P, int8) memory ref) (__anonstruct_paquet_t_1_paquet_26_alloc_table : __anonstruct_paquet_t_1 alloc_table) (char_P_destination_25_alloc_table : char_P alloc_table) (char_P_message_80_alloc_table : char_P alloc_table) (char_P_char_M_message_80 : (char_P, int8) memory) (__anonstruct_paquet_t_1_longueur_paquet_26 : (__anonstruct_paquet_t_1, uint32) memory) (__anonstruct_paquet_t_1_message_paquet_26 : (__anonstruct_paquet_t_1, char_P pointer) memory) ->
+ fun (destination_0 : char_P pointer) (taille_0 : uint32) (paquet_0 : __anonstruct_paquet_t_1 pointer) (char_P_char_M_destination_0_25 : (char_P, int8) memory ref) (__anonstruct_paquet_t_1_paquet_26_alloc_table : __anonstruct_paquet_t_1 alloc_table) (char_P_destination_0_25_alloc_table : char_P alloc_table) (char_P_message_80_alloc_table : char_P alloc_table) (char_P_char_M_message_80 : (char_P, int8) memory) (__anonstruct_paquet_t_1_longueur_paquet_26 : (__anonstruct_paquet_t_1, uint32) memory) (__anonstruct_paquet_t_1_message_paquet_26 : (__anonstruct_paquet_t_1, char_P pointer) memory) ->
   { ((true = true)
     and (JC_43:
         ((JC_39:
@@ -1856,13 +1856,13 @@ let recevoir_un_paquet_ensures_default =
                     paquet_0),
              (0)))
             and ((JC_41:
-                 le_int(offset_min(char_P_destination_25_alloc_table,
-                        destination),
+                 le_int(offset_min(char_P_destination_0_25_alloc_table,
+                        destination_0),
                  (0)))
                 and (JC_42:
-                    ge_int(offset_max(char_P_destination_25_alloc_table,
-                           destination),
-                    sub_int(integer_of_uint32(taille), (1))))))))) }
+                    ge_int(offset_max(char_P_destination_0_25_alloc_table,
+                           destination_0),
+                    sub_int(integer_of_uint32(taille_0), (1))))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1870,9 +1870,9 @@ let recevoir_un_paquet_ensures_default =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_97 = begin
-                         (if ((lt_int_ (integer_of_uint32 taille)) (integer_of_uint32 
-                                                                    (C_33:
-                                                                    ((safe_acc_ __anonstruct_paquet_t_1_longueur_paquet_26) paquet_0))))
+                         (if ((lt_int_ (integer_of_uint32 taille_0)) 
+                              (integer_of_uint32 (C_33:
+                                                 ((safe_acc_ __anonstruct_paquet_t_1_longueur_paquet_26) paquet_0))))
                          then
                           (let jessie_92 = (C_32:
                                            begin
@@ -1886,9 +1886,9 @@ let recevoir_un_paquet_ensures_default =
                         (C_35:
                         begin
                           (let jessie_95 = (JC_64:
-                                           (((((((strncpy destination) 
+                                           (((((((strncpy destination_0) 
                                                  (C_34:
-                                                 ((safe_acc_ __anonstruct_paquet_t_1_message_paquet_26) paquet_0))) taille) char_P_char_M_destination_25) char_P_message_80_alloc_table) char_P_destination_25_alloc_table) char_P_char_M_message_80)) in
+                                                 ((safe_acc_ __anonstruct_paquet_t_1_message_paquet_26) paquet_0))) taille_0) char_P_char_M_destination_0_25) char_P_message_80_alloc_table) char_P_destination_0_25_alloc_table) char_P_char_M_message_80)) in
                           void);
                          (C_36:
                          begin
@@ -1910,8 +1910,8 @@ let recevoir_un_paquet_ensures_default =
   { (JC_45: true) }
 
 let recevoir_un_paquet_ensures_echec =
- fun (destination : char_P pointer) (taille : uint32) (paquet_0 : __anonstruct_paquet_t_1 pointer) (char_P_char_M_destination_25 : (char_P, int8) memory ref) (__anonstruct_paquet_t_1_paquet_26_alloc_table : __anonstruct_paquet_t_1 alloc_table) (char_P_destination_25_alloc_table : char_P alloc_table) (char_P_message_80_alloc_table : char_P alloc_table) (char_P_char_M_message_80 : (char_P, int8) memory) (__anonstruct_paquet_t_1_longueur_paquet_26 : (__anonstruct_paquet_t_1, uint32) memory) (__anonstruct_paquet_t_1_message_paquet_26 : (__anonstruct_paquet_t_1, char_P pointer) memory) ->
-  { (lt_int(integer_of_uint32(taille),
+ fun (destination_0 : char_P pointer) (taille_0 : uint32) (paquet_0 : __anonstruct_paquet_t_1 pointer) (char_P_char_M_destination_0_25 : (char_P, int8) memory ref) (__anonstruct_paquet_t_1_paquet_26_alloc_table : __anonstruct_paquet_t_1 alloc_table) (char_P_destination_0_25_alloc_table : char_P alloc_table) (char_P_message_80_alloc_table : char_P alloc_table) (char_P_char_M_message_80 : (char_P, int8) memory) (__anonstruct_paquet_t_1_longueur_paquet_26 : (__anonstruct_paquet_t_1, uint32) memory) (__anonstruct_paquet_t_1_message_paquet_26 : (__anonstruct_paquet_t_1, char_P pointer) memory) ->
+  { (lt_int(integer_of_uint32(taille_0),
      integer_of_uint32(select(__anonstruct_paquet_t_1_longueur_paquet_26,
                        paquet_0)))
     and (JC_43:
@@ -1924,13 +1924,13 @@ let recevoir_un_paquet_ensures_echec =
                     paquet_0),
              (0)))
             and ((JC_41:
-                 le_int(offset_min(char_P_destination_25_alloc_table,
-                        destination),
+                 le_int(offset_min(char_P_destination_0_25_alloc_table,
+                        destination_0),
                  (0)))
                 and (JC_42:
-                    ge_int(offset_max(char_P_destination_25_alloc_table,
-                           destination),
-                    sub_int(integer_of_uint32(taille), (1))))))))) }
+                    ge_int(offset_max(char_P_destination_0_25_alloc_table,
+                           destination_0),
+                    sub_int(integer_of_uint32(taille_0), (1))))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1938,9 +1938,9 @@ let recevoir_un_paquet_ensures_echec =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_104 = begin
-                          (if ((lt_int_ (integer_of_uint32 taille)) (integer_of_uint32 
-                                                                    (C_33:
-                                                                    ((safe_acc_ __anonstruct_paquet_t_1_longueur_paquet_26) paquet_0))))
+                          (if ((lt_int_ (integer_of_uint32 taille_0)) 
+                               (integer_of_uint32 (C_33:
+                                                  ((safe_acc_ __anonstruct_paquet_t_1_longueur_paquet_26) paquet_0))))
                           then
                            (let jessie_99 = (C_32:
                                             begin
@@ -1954,9 +1954,9 @@ let recevoir_un_paquet_ensures_echec =
                          (C_35:
                          begin
                            (let jessie_102 = (JC_65:
-                                             (((((((strncpy destination) 
+                                             (((((((strncpy destination_0) 
                                                    (C_34:
-                                                   ((safe_acc_ __anonstruct_paquet_t_1_message_paquet_26) paquet_0))) taille) char_P_char_M_destination_25) char_P_message_80_alloc_table) char_P_destination_25_alloc_table) char_P_char_M_message_80)) in
+                                                   ((safe_acc_ __anonstruct_paquet_t_1_message_paquet_26) paquet_0))) taille_0) char_P_char_M_destination_0_25) char_P_message_80_alloc_table) char_P_destination_0_25_alloc_table) char_P_char_M_message_80)) in
                            void);
                           (C_36:
                           begin
@@ -1978,13 +1978,13 @@ let recevoir_un_paquet_ensures_echec =
   { (JC_51:
     ((JC_49: eq_int(integer_of_int32(result), (0)))
     and (JC_50:
-        not_assigns(char_P_destination_25_alloc_table@,
-        char_P_char_M_destination_25@, char_P_char_M_destination_25,
+        not_assigns(char_P_destination_0_25_alloc_table@,
+        char_P_char_M_destination_0_25@, char_P_char_M_destination_0_25,
         pset_empty)))) }
 
 let recevoir_un_paquet_ensures_succes =
- fun (destination : char_P pointer) (taille : uint32) (paquet_0 : __anonstruct_paquet_t_1 pointer) (char_P_char_M_destination_25 : (char_P, int8) memory ref) (__anonstruct_paquet_t_1_paquet_26_alloc_table : __anonstruct_paquet_t_1 alloc_table) (char_P_destination_25_alloc_table : char_P alloc_table) (char_P_message_80_alloc_table : char_P alloc_table) (char_P_char_M_message_80 : (char_P, int8) memory) (__anonstruct_paquet_t_1_longueur_paquet_26 : (__anonstruct_paquet_t_1, uint32) memory) (__anonstruct_paquet_t_1_message_paquet_26 : (__anonstruct_paquet_t_1, char_P pointer) memory) ->
-  { (ge_int(integer_of_uint32(taille),
+ fun (destination_0 : char_P pointer) (taille_0 : uint32) (paquet_0 : __anonstruct_paquet_t_1 pointer) (char_P_char_M_destination_0_25 : (char_P, int8) memory ref) (__anonstruct_paquet_t_1_paquet_26_alloc_table : __anonstruct_paquet_t_1 alloc_table) (char_P_destination_0_25_alloc_table : char_P alloc_table) (char_P_message_80_alloc_table : char_P alloc_table) (char_P_char_M_message_80 : (char_P, int8) memory) (__anonstruct_paquet_t_1_longueur_paquet_26 : (__anonstruct_paquet_t_1, uint32) memory) (__anonstruct_paquet_t_1_message_paquet_26 : (__anonstruct_paquet_t_1, char_P pointer) memory) ->
+  { (ge_int(integer_of_uint32(taille_0),
      integer_of_uint32(select(__anonstruct_paquet_t_1_longueur_paquet_26,
                        paquet_0)))
     and (JC_43:
@@ -1997,13 +1997,13 @@ let recevoir_un_paquet_ensures_succes =
                     paquet_0),
              (0)))
             and ((JC_41:
-                 le_int(offset_min(char_P_destination_25_alloc_table,
-                        destination),
+                 le_int(offset_min(char_P_destination_0_25_alloc_table,
+                        destination_0),
                  (0)))
                 and (JC_42:
-                    ge_int(offset_max(char_P_destination_25_alloc_table,
-                           destination),
-                    sub_int(integer_of_uint32(taille), (1))))))))) }
+                    ge_int(offset_max(char_P_destination_0_25_alloc_table,
+                           destination_0),
+                    sub_int(integer_of_uint32(taille_0), (1))))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2011,9 +2011,9 @@ let recevoir_un_paquet_ensures_succes =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_111 = begin
-                          (if ((lt_int_ (integer_of_uint32 taille)) (integer_of_uint32 
-                                                                    (C_33:
-                                                                    ((safe_acc_ __anonstruct_paquet_t_1_longueur_paquet_26) paquet_0))))
+                          (if ((lt_int_ (integer_of_uint32 taille_0)) 
+                               (integer_of_uint32 (C_33:
+                                                  ((safe_acc_ __anonstruct_paquet_t_1_longueur_paquet_26) paquet_0))))
                           then
                            (let jessie_106 = (C_32:
                                              begin
@@ -2027,9 +2027,9 @@ let recevoir_un_paquet_ensures_succes =
                          (C_35:
                          begin
                            (let jessie_109 = (JC_66:
-                                             (((((((strncpy destination) 
+                                             (((((((strncpy destination_0) 
                                                    (C_34:
-                                                   ((safe_acc_ __anonstruct_paquet_t_1_message_paquet_26) paquet_0))) taille) char_P_char_M_destination_25) char_P_message_80_alloc_table) char_P_destination_25_alloc_table) char_P_char_M_message_80)) in
+                                                   ((safe_acc_ __anonstruct_paquet_t_1_message_paquet_26) paquet_0))) taille_0) char_P_char_M_destination_0_25) char_P_message_80_alloc_table) char_P_destination_0_25_alloc_table) char_P_char_M_message_80)) in
                            void);
                           (C_36:
                           begin
@@ -2051,13 +2051,13 @@ let recevoir_un_paquet_ensures_succes =
   { (JC_57:
     ((JC_55: eq_int(integer_of_int32(result), (1)))
     and (JC_56:
-        not_assigns(char_P_destination_25_alloc_table@,
-        char_P_char_M_destination_25@, char_P_char_M_destination_25,
-        pset_range(pset_singleton(destination@), (0),
-        sub_int(integer_of_uint32(taille@), (1))))))) }
+        not_assigns(char_P_destination_0_25_alloc_table@,
+        char_P_char_M_destination_0_25@, char_P_char_M_destination_0_25,
+        pset_range(pset_singleton(destination_0@), (0),
+        sub_int(integer_of_uint32(taille_0@), (1))))))) }
 
 let recevoir_un_paquet_safety =
- fun (destination : char_P pointer) (taille : uint32) (paquet_0 : __anonstruct_paquet_t_1 pointer) (char_P_char_M_destination_25 : (char_P, int8) memory ref) (__anonstruct_paquet_t_1_paquet_26_alloc_table : __anonstruct_paquet_t_1 alloc_table) (char_P_destination_25_alloc_table : char_P alloc_table) (char_P_message_80_alloc_table : char_P alloc_table) (char_P_char_M_message_80 : (char_P, int8) memory) (__anonstruct_paquet_t_1_longueur_paquet_26 : (__anonstruct_paquet_t_1, uint32) memory) (__anonstruct_paquet_t_1_message_paquet_26 : (__anonstruct_paquet_t_1, char_P pointer) memory) ->
+ fun (destination_0 : char_P pointer) (taille_0 : uint32) (paquet_0 : __anonstruct_paquet_t_1 pointer) (char_P_char_M_destination_0_25 : (char_P, int8) memory ref) (__anonstruct_paquet_t_1_paquet_26_alloc_table : __anonstruct_paquet_t_1 alloc_table) (char_P_destination_0_25_alloc_table : char_P alloc_table) (char_P_message_80_alloc_table : char_P alloc_table) (char_P_char_M_message_80 : (char_P, int8) memory) (__anonstruct_paquet_t_1_longueur_paquet_26 : (__anonstruct_paquet_t_1, uint32) memory) (__anonstruct_paquet_t_1_message_paquet_26 : (__anonstruct_paquet_t_1, char_P pointer) memory) ->
   { (JC_43:
     ((JC_39:
      le_int(offset_min(__anonstruct_paquet_t_1_paquet_26_alloc_table,
@@ -2068,13 +2068,13 @@ let recevoir_un_paquet_safety =
                 paquet_0),
          (0)))
         and ((JC_41:
-             le_int(offset_min(char_P_destination_25_alloc_table,
-                    destination),
+             le_int(offset_min(char_P_destination_0_25_alloc_table,
+                    destination_0),
              (0)))
             and (JC_42:
-                ge_int(offset_max(char_P_destination_25_alloc_table,
-                       destination),
-                sub_int(integer_of_uint32(taille), (1)))))))) }
+                ge_int(offset_max(char_P_destination_0_25_alloc_table,
+                       destination_0),
+                sub_int(integer_of_uint32(taille_0), (1)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -2082,10 +2082,10 @@ let recevoir_un_paquet_safety =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_90 = begin
-                         (if ((lt_int_ (integer_of_uint32 taille)) (integer_of_uint32 
-                                                                    (C_33:
-                                                                    (JC_61:
-                                                                    (((acc_ __anonstruct_paquet_t_1_paquet_26_alloc_table) __anonstruct_paquet_t_1_longueur_paquet_26) paquet_0)))))
+                         (if ((lt_int_ (integer_of_uint32 taille_0)) 
+                              (integer_of_uint32 (C_33:
+                                                 (JC_61:
+                                                 (((acc_ __anonstruct_paquet_t_1_paquet_26_alloc_table) __anonstruct_paquet_t_1_longueur_paquet_26) paquet_0)))))
                          then
                           (let jessie_85 = (C_32:
                                            begin
@@ -2099,10 +2099,10 @@ let recevoir_un_paquet_safety =
                         (C_35:
                         begin
                           (let jessie_88 = (JC_63:
-                                           (((((((strncpy_requires destination) 
+                                           (((((((strncpy_requires destination_0) 
                                                  (C_34:
                                                  (JC_62:
-                                                 (((acc_ __anonstruct_paquet_t_1_paquet_26_alloc_table) __anonstruct_paquet_t_1_message_paquet_26) paquet_0)))) taille) char_P_char_M_destination_25) char_P_message_80_alloc_table) char_P_destination_25_alloc_table) char_P_char_M_message_80)) in
+                                                 (((acc_ __anonstruct_paquet_t_1_paquet_26_alloc_table) __anonstruct_paquet_t_1_message_paquet_26) paquet_0)))) taille_0) char_P_char_M_destination_0_25) char_P_message_80_alloc_table) char_P_destination_0_25_alloc_table) char_P_char_M_message_80)) in
                           void);
                          (C_36:
                          begin
@@ -2124,12 +2124,11 @@ let recevoir_un_paquet_safety =
   { true }
 
 let strncpy_ensures_default =
- fun (destination_0 : char_P pointer) (source : char_P pointer) (taille_0 : uint32) (char_P_char_M_destination_0_21 : (char_P, int8) memory ref) (char_P_destination_0_21_alloc_table : char_P alloc_table) (char_P_source_22_alloc_table : char_P alloc_table) (char_P_char_M_source_22 : (char_P, int8) memory) ->
-  { ((true = true)
-    and (JC_3: lt_int(integer_of_uint32(taille_0), (1000000)))) }
-  (let mutable_destination_0 = ref destination_0 in
+ fun (destination : char_P pointer) (source : char_P pointer) (taille : uint32) (char_P_char_M_destination_21 : (char_P, int8) memory ref) (char_P_destination_21_alloc_table : char_P alloc_table) (char_P_source_22_alloc_table : char_P alloc_table) (char_P_char_M_source_22 : (char_P, int8) memory) ->
+  { ((true = true) and (JC_3: lt_int(integer_of_uint32(taille), (1000000)))) }
+  (let mutable_destination = ref destination in
   (let mutable_source = ref source in
-  (let mutable_taille_0 = ref taille_0 in
+  (let mutable_taille = ref taille in
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -2141,8 +2140,8 @@ let strncpy_ensures_default =
      (let tmp_2 = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_47 = (curseur := !mutable_destination_0) in void);
-      (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+       (let jessie_47 = (curseur := !mutable_destination) in void);
+      (if ((gt_int_ (integer_of_uint32 !mutable_taille)) (0))
       then
        begin
          try
@@ -2204,7 +2203,7 @@ let strncpy_ensures_default =
                                                                     (let jessie_60 = !tmp in
                                                                     begin
                                                                       
-                                                                    (((safe_upd_ char_P_char_M_destination_0_21) jessie_60) jessie_57);
+                                                                    (((safe_upd_ char_P_char_M_destination_21) jessie_60) jessie_57);
                                                                     jessie_57
                                                                     end)))
                                                                     end in
@@ -2214,13 +2213,13 @@ let strncpy_ensures_default =
                                                    (C_14:
                                                    begin
                                                      (let jessie_62 = 
-                                                     (mutable_taille_0 := 
+                                                     (mutable_taille := 
                                                       (C_13:
                                                       (safe_uint32_of_integer_ 
                                                        (C_12:
-                                                       ((sub_int (integer_of_uint32 !mutable_taille_0)) (1)))))) in
+                                                       ((sub_int (integer_of_uint32 !mutable_taille)) (1)))))) in
                                                      void);
-                                                    (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+                                                    (if ((gt_int_ (integer_of_uint32 !mutable_taille)) (0))
                                                     then void
                                                     else
                                                      (let jessie_63 = 
@@ -2265,12 +2264,12 @@ let strncpy_ensures_default =
         then
          (C_19:
          begin
-           (let jessie_69 = (mutable_taille_0 := (C_18:
-                                                 (safe_uint32_of_integer_ 
-                                                  (C_17:
-                                                  ((sub_int (integer_of_uint32 !mutable_taille_0)) (1)))))) in
+           (let jessie_69 = (mutable_taille := (C_18:
+                                               (safe_uint32_of_integer_ 
+                                                (C_17:
+                                                ((sub_int (integer_of_uint32 !mutable_taille)) (1)))))) in
            void);
-          (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+          (if ((gt_int_ (integer_of_uint32 !mutable_taille)) (0))
           then
            try
             (let jessie_82 = begin
@@ -2287,14 +2286,14 @@ let strncpy_ensures_default =
                                                        (C_20:
                                                        begin
                                                          (let jessie_71 = 
-                                                         (tmp_2 := !mutable_destination_0) in
+                                                         (tmp_2 := !mutable_destination) in
                                                          void);
                                                         (C_22:
                                                         begin
-                                                          (mutable_destination_0 := 
+                                                          (mutable_destination := 
                                                            (C_21:
-                                                           ((shift !mutable_destination_0) (1))));
-                                                         !mutable_destination_0
+                                                           ((shift !mutable_destination) (1))));
+                                                         !mutable_destination
                                                         end)
                                                        end) in
                                                        void);
@@ -2303,7 +2302,7 @@ let strncpy_ensures_default =
                                                       (safe_int8_of_integer_ (0)) in
                                                       (let jessie_77 = !tmp_2 in
                                                       begin
-                                                        (((safe_upd_ char_P_char_M_destination_0_21) jessie_77) jessie_74);
+                                                        (((safe_upd_ char_P_char_M_destination_21) jessie_77) jessie_74);
                                                        jessie_74
                                                       end)))
                                                      end in
@@ -2311,13 +2310,13 @@ let strncpy_ensures_default =
                                                     (C_27:
                                                     begin
                                                       (let jessie_79 = 
-                                                      (mutable_taille_0 := 
+                                                      (mutable_taille := 
                                                        (C_26:
                                                        (safe_uint32_of_integer_ 
                                                         (C_25:
-                                                        ((sub_int (integer_of_uint32 !mutable_taille_0)) (1)))))) in
+                                                        ((sub_int (integer_of_uint32 !mutable_taille)) (1)))))) in
                                                       void);
-                                                     (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+                                                     (if ((gt_int_ (integer_of_uint32 !mutable_taille)) (0))
                                                      then void
                                                      else
                                                       (let jessie_80 = 
@@ -2347,7 +2346,7 @@ let strncpy_ensures_default =
         else void)
        end
       else void);
-      (return := !mutable_destination_0);
+      (return := !mutable_destination);
       (raise Return)
      end))))));
     absurd 
@@ -2358,11 +2357,11 @@ let strncpy_ensures_default =
   { (JC_5: true) }
 
 let strncpy_safety =
- fun (destination_0 : char_P pointer) (source : char_P pointer) (taille_0 : uint32) (char_P_char_M_destination_0_21 : (char_P, int8) memory ref) (char_P_destination_0_21_alloc_table : char_P alloc_table) (char_P_source_22_alloc_table : char_P alloc_table) (char_P_char_M_source_22 : (char_P, int8) memory) ->
-  { (JC_3: lt_int(integer_of_uint32(taille_0), (1000000))) }
-  (let mutable_destination_0 = ref destination_0 in
+ fun (destination : char_P pointer) (source : char_P pointer) (taille : uint32) (char_P_char_M_destination_21 : (char_P, int8) memory ref) (char_P_destination_21_alloc_table : char_P alloc_table) (char_P_source_22_alloc_table : char_P alloc_table) (char_P_char_M_source_22 : (char_P, int8) memory) ->
+  { (JC_3: lt_int(integer_of_uint32(taille), (1000000))) }
+  (let mutable_destination = ref destination in
   (let mutable_source = ref source in
-  (let mutable_taille_0 = ref taille_0 in
+  (let mutable_taille = ref taille in
   (init:
   (let return = ref (any_pointer void) in
   try
@@ -2374,8 +2373,8 @@ let strncpy_safety =
      (let tmp_2 = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_9 = (curseur := !mutable_destination_0) in void);
-      (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+       (let jessie_9 = (curseur := !mutable_destination) in void);
+      (if ((gt_int_ (integer_of_uint32 !mutable_taille)) (0))
       then
        begin
          try
@@ -2439,7 +2438,7 @@ let strncpy_safety =
                                                                     begin
                                                                       
                                                                     (JC_14:
-                                                                    ((((upd_ char_P_destination_0_21_alloc_table) char_P_char_M_destination_0_21) jessie_22) jessie_19));
+                                                                    ((((upd_ char_P_destination_21_alloc_table) char_P_char_M_destination_21) jessie_22) jessie_19));
                                                                     jessie_19
                                                                     end)))
                                                                     end in
@@ -2449,14 +2448,14 @@ let strncpy_safety =
                                                    (C_14:
                                                    begin
                                                      (let jessie_24 = 
-                                                     (mutable_taille_0 := 
+                                                     (mutable_taille := 
                                                       (C_13:
                                                       (JC_16:
                                                       (uint32_of_integer_ 
                                                        (C_12:
-                                                       ((sub_int (integer_of_uint32 !mutable_taille_0)) (1))))))) in
+                                                       ((sub_int (integer_of_uint32 !mutable_taille)) (1))))))) in
                                                      void);
-                                                    (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+                                                    (if ((gt_int_ (integer_of_uint32 !mutable_taille)) (0))
                                                     then void
                                                     else
                                                      (let jessie_25 = 
@@ -2503,13 +2502,13 @@ let strncpy_safety =
         then
          (C_19:
          begin
-           (let jessie_31 = (mutable_taille_0 := (C_18:
-                                                 (JC_20:
-                                                 (uint32_of_integer_ 
-                                                  (C_17:
-                                                  ((sub_int (integer_of_uint32 !mutable_taille_0)) (1))))))) in
+           (let jessie_31 = (mutable_taille := (C_18:
+                                               (JC_20:
+                                               (uint32_of_integer_ (C_17:
+                                                                   ((sub_int 
+                                                                    (integer_of_uint32 !mutable_taille)) (1))))))) in
            void);
-          (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+          (if ((gt_int_ (integer_of_uint32 !mutable_taille)) (0))
           then
            try
             (let jessie_44 = begin
@@ -2526,14 +2525,14 @@ let strncpy_safety =
                                                        (C_20:
                                                        begin
                                                          (let jessie_33 = 
-                                                         (tmp_2 := !mutable_destination_0) in
+                                                         (tmp_2 := !mutable_destination) in
                                                          void);
                                                         (C_22:
                                                         begin
-                                                          (mutable_destination_0 := 
+                                                          (mutable_destination := 
                                                            (C_21:
-                                                           ((shift !mutable_destination_0) (1))));
-                                                         !mutable_destination_0
+                                                           ((shift !mutable_destination) (1))));
+                                                         !mutable_destination
                                                         end)
                                                        end) in
                                                        void);
@@ -2543,7 +2542,7 @@ let strncpy_safety =
                                                       (let jessie_39 = !tmp_2 in
                                                       begin
                                                         (JC_24:
-                                                        ((((upd_ char_P_destination_0_21_alloc_table) char_P_char_M_destination_0_21) jessie_39) jessie_36));
+                                                        ((((upd_ char_P_destination_21_alloc_table) char_P_char_M_destination_21) jessie_39) jessie_36));
                                                        jessie_36
                                                       end)))
                                                      end in
@@ -2551,14 +2550,14 @@ let strncpy_safety =
                                                     (C_27:
                                                     begin
                                                       (let jessie_41 = 
-                                                      (mutable_taille_0 := 
+                                                      (mutable_taille := 
                                                        (C_26:
                                                        (JC_26:
                                                        (uint32_of_integer_ 
                                                         (C_25:
-                                                        ((sub_int (integer_of_uint32 !mutable_taille_0)) (1))))))) in
+                                                        ((sub_int (integer_of_uint32 !mutable_taille)) (1))))))) in
                                                       void);
-                                                     (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+                                                     (if ((gt_int_ (integer_of_uint32 !mutable_taille)) (0))
                                                      then void
                                                      else
                                                       (let jessie_42 = 
@@ -2588,7 +2587,7 @@ let strncpy_safety =
         else void)
        end
       else void);
-      (return := !mutable_destination_0);
+      (return := !mutable_destination);
       (raise Return)
      end))))));
     absurd 
@@ -3660,6 +3659,8 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic real_of_bitvector : bitvector -> real
 
 type __anonstruct_paquet_t_1
 

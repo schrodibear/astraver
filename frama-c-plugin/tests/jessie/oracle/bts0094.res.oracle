@@ -1,4 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0094.c
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Journal_loader.cmxs" (dynlink error "error loading shared library: /usr/local/lib/frama-c/plugins/Journal_loader.cmxs: undefined symbol: camlPlugin__is_default_667")
+[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmxs" (dynlink error "error loading shared library: /usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmxs: undefined symbol: camlPlugin__is_default_667")
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0094.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0094.jessie
@@ -35,23 +37,23 @@ tag void_P = {
 
 type void_P = [void_P]
 
-int8 char_range(int8 i_1)
+int8 char_range(int8 i_0)
 behavior default:
   assumes true;
   ensures (C_3 : true);
 {  
    {  
       {  
-         (assert for default: (C_1 : (i_1 >= ((- 127) - 1))));
+         (assert for default: (C_1 : (i_0 >= ((- 127) - 1))));
          ()
       };
       
       {  
-         (assert for default: (C_2 : (i_1 <= 127)));
+         (assert for default: (C_2 : (i_0 <= 127)));
          ()
       };
       
-      (return i_1)
+      (return i_0)
    }
 }
 
@@ -115,23 +117,23 @@ behavior default:
    }
 }
 
-uint16 ushort_range(uint16 i_0)
+uint16 ushort_range(uint16 i_1)
 behavior default:
   assumes true;
   ensures (C_15 : true);
 {  
    {  
       {  
-         (assert for default: (C_13 : (i_0 >= 0)));
+         (assert for default: (C_13 : (i_1 >= 0)));
          ()
       };
       
       {  
-         (assert for default: (C_14 : (i_0 <= ((32767 * 2) + 1))));
+         (assert for default: (C_14 : (i_1 <= ((32767 * 2) + 1))));
          ()
       };
       
-      (return i_0)
+      (return i_1)
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0094.jessie/bts0094.cloc bts0094.jessie/bts0094.jc
@@ -513,9 +515,9 @@ parameter any_uint16 : unit -> { } uint16 { true }
 
 parameter any_uint8 : unit -> { } uint8 { true }
 
-parameter char_range : i_1:int8 -> { } int8 { true }
+parameter char_range : i_0:int8 -> { } int8 { true }
 
-parameter char_range_requires : i_1:int8 -> { } int8 { true }
+parameter char_range_requires : i_0:int8 -> { } int8 { true }
 
 parameter int16_of_integer_ :
  x:int ->
@@ -561,24 +563,24 @@ parameter uint8_of_integer_ :
   { (le_int((0), x) and le_int(x, (255)))} uint8
   { eq_int(integer_of_uint8(result), x) }
 
-parameter ushort_range : i_0:uint16 -> { } uint16 { true }
+parameter ushort_range : i_1:uint16 -> { } uint16 { true }
 
-parameter ushort_range_requires : i_0:uint16 -> { } uint16 { true }
+parameter ushort_range_requires : i_1:uint16 -> { } uint16 { true }
 
 let char_range_ensures_default =
- fun (i_1 : int8) ->
+ fun (i_0 : int8) ->
   { (true = true) }
   (init:
   (let return = ref (any_int8 void) in
   try
    begin
      (assert
-     { (JC_11: ge_int(integer_of_int8(i_1), sub_int(neg_int((127)), (1)))) };
+     { (JC_11: ge_int(integer_of_int8(i_0), sub_int(neg_int((127)), (1)))) };
      void);
     void;
-    (assert { (JC_12: le_int(integer_of_int8(i_1), (127))) }; void);
+    (assert { (JC_12: le_int(integer_of_int8(i_0), (127))) }; void);
     void;
-    (return := i_1);
+    (return := i_0);
     (raise Return);
     absurd 
    end
@@ -588,18 +590,18 @@ let char_range_ensures_default =
   { (JC_5: true) }
 
 let char_range_safety =
- fun (i_1 : int8) ->
+ fun (i_0 : int8) ->
   { (JC_4: true) }
   (init:
   (let return = ref (any_int8 void) in
   try
    begin
      [ { } unit
-       { (JC_9: ge_int(integer_of_int8(i_1), sub_int(neg_int((127)), (1)))) } ];
+       { (JC_9: ge_int(integer_of_int8(i_0), sub_int(neg_int((127)), (1)))) } ];
     void;
-    [ { } unit { (JC_10: le_int(integer_of_int8(i_1), (127))) } ];
+    [ { } unit { (JC_10: le_int(integer_of_int8(i_0), (127))) } ];
     void;
-    (return := i_1);
+    (return := i_0);
     (raise Return);
     absurd 
    end
@@ -740,20 +742,20 @@ let uchar_range_safety =
   { true }
 
 let ushort_range_ensures_default =
- fun (i_0 : uint16) ->
+ fun (i_1 : uint16) ->
   { (true = true) }
   (init:
   (let return = ref (any_uint16 void) in
   try
    begin
-     (assert { (JC_59: ge_int(integer_of_uint16(i_0), (0))) }; void);
+     (assert { (JC_59: ge_int(integer_of_uint16(i_1), (0))) }; void);
     void;
     (assert
     { (JC_60:
-      le_int(integer_of_uint16(i_0), add_int(mul_int((32767), (2)), (1)))) };
+      le_int(integer_of_uint16(i_1), add_int(mul_int((32767), (2)), (1)))) };
     void);
     void;
-    (return := i_0);
+    (return := i_1);
     (raise Return);
     absurd 
    end
@@ -763,19 +765,19 @@ let ushort_range_ensures_default =
   { (JC_53: true) }
 
 let ushort_range_safety =
- fun (i_0 : uint16) ->
+ fun (i_1 : uint16) ->
   { (JC_52: true) }
   (init:
   (let return = ref (any_uint16 void) in
   try
    begin
-     [ { } unit { (JC_57: ge_int(integer_of_uint16(i_0), (0))) } ];
+     [ { } unit { (JC_57: ge_int(integer_of_uint16(i_1), (0))) } ];
     void;
     [ { } unit
       { (JC_58:
-        le_int(integer_of_uint16(i_0), add_int(mul_int((32767), (2)), (1)))) } ];
+        le_int(integer_of_uint16(i_1), add_int(mul_int((32767), (2)), (1)))) } ];
     void;
-    (return := i_0);
+    (return := i_1);
     (raise Return);
     absurd 
    end
@@ -1792,6 +1794,8 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic real_of_bitvector : bitvector -> real
 
 type char_P
 

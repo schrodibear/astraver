@@ -251,6 +251,9 @@ axiom gen_negative_constant :forall f:float_format. forall m:mode. forall x:real
                   	       float_sign(gen_float_of_real_logic(f,m,x)) = Negative
 
 
+axiom dsds: forall f:float_format. forall x: gen_float. 
+      abs_real(float_value(x)) <= max_gen_float(f) -> is_finite(x)
+ 
 
 (***************************************************)
 (************** axioms on gen_zero *****************)
