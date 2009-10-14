@@ -26,7 +26,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: gappa.ml,v 1.52 2009-09-21 17:30:52 melquion Exp $ i*)
+(*i $Id: gappa.ml,v 1.53 2009-10-14 12:17:18 melquion Exp $ i*)
 
 (*s Gappa's output *)
 
@@ -65,6 +65,7 @@ type gpred =
   | Gle of gterm * string
   | Gge of gterm * string
   | Gin of gterm * string * string
+  | Grel of gterm * gterm * string
   | Gimplies of gpred * gpred
   | Gand of gpred * gpred
   | Gor of gpred * gpred
@@ -265,8 +266,19 @@ let rec gpred def = function
       begin match termo t1, termo t2 with
 	| Some (Gcst c1), Some t2 -> Some (Gge (t2, c1))
 	| Some t1, Some (Gcst c2) -> Some (Gle (t1, c2))
-        | Some t1, Some t2 -> Some (Gle (Gsub (t1, t2), "0"))
-	| _ -> None
+        | Some t1, Some t2 ->
+            begin match t1, t2 with
+              | Gabs (Gsub (t1, t2)), Gmul (Gcst c, Gabs t3) when t2 = t3 ->
+                  Some (Grel (t1, t2, c))
+              | Gabs (Gsub (t2, t1)), Gmul (Gcst c, Gabs t3) when t2 = t3 ->
+                  Some (Grel (t1, t2, c))
+              | Gabs (Gsub (t1, t2)), Gmul (Gabs t3, Gcst c) when t2 = t3 ->
+                  Some (Grel (t1, t2, c))
+              | Gabs (Gsub (t2, t1)), Gmul (Gabs t3, Gcst c) when t2 = t3 ->
+                  Some (Grel (t1, t2, c))
+              | _ -> Some (Gle (Gsub (t1, t2), "0"))
+            end
+        | _ -> None
       end
   | Papp (id, [t1; t2], _) when id == t_ge_real || id == t_ge_int ->
       begin match termo t1, termo t2 with
@@ -486,6 +498,8 @@ let rec print_pred_atom fmt = function
       fprintf fmt "%a >= %s" print_term t r1
   | Gin (t, r1, r2) ->
       fprintf fmt "%a in [%s, %s]" print_term t r1 r2
+  | Grel (t1, t2, r1) ->
+      fprintf fmt "|%a -/ %a| <= %s" print_term t1 print_term t2 r1
   | Gnot p ->
       fprintf fmt "not %a" print_pred_atom p
   | _ as p ->
