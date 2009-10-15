@@ -2,7 +2,7 @@
 open Format
 open DpConfig
 
-let rc_file () = 
+let rc_file () =
   let home = Rc.get_home_dir () in
   Filename.concat home ".gwhyrc"
 
@@ -18,13 +18,13 @@ let save_main fmt =
 
 let save_prover_setting fmt (p,s) =
   fprintf fmt "%s = %b@." (Model.prover_id p) s
-  
+
 let save_provers fmt l=
   fprintf fmt "[provers]@.";
   List.iter (save_prover_setting fmt) l;
   fprintf fmt "@."
 
-let save () = 
+let save () =
   let ch = open_out (rc_file ()) in
   let fmt = Format.formatter_of_out_channel ch in
   save_main fmt;
@@ -51,13 +51,17 @@ let set_prover_setting (key,arg) =
     if b then Model.select_prover p else Model.deselect_prover p
   with Not_found ->
     printf "Unknown prover id `%s' in section [provers] of rc file@." key
-      
+
 
 let load_default_config () =
-  DpConfig.load_rc_file (); (* already done in Stat.main() ? *)
+  (try
+     DpConfig.load_rc_file ()
+   with Not_found ->
+      print_endline "Why config file not found, please run why-config first.";
+      exit 1);
   List.iter
     (fun (pid,(pdata,_)) ->
-       if pdata.version <> "" then 
+       if pdata.version <> "" then
 	 try
 	   let pr =
 	     match pid with
@@ -72,15 +76,15 @@ let load_default_config () =
 	       | ErgoSelect | GappaSelect
 	       | Rvsat|Zenon|Cvcl|Harvey ->
 		   assert false (* not handled by dpConfig *)
-	   in	     
+	   in
 	   printf "installed prover '%s' selected@." pdata.name;
 	   Model.select_prover pr
 	 with Exit -> ())
     DpConfig.prover_list;
   save ()
 
-  
-let load () = 
+
+let load () =
   let rc_file = rc_file () in
   try
     let rc = Rc.from_file rc_file in
@@ -89,15 +93,13 @@ let load () =
 	 match key with
 	   | "main" -> List.iter set_main_setting args
 	   | "provers" -> List.iter set_prover_setting args
-	   | _ -> 
+	   | _ ->
 	       printf "Unknown section [%s] in config file '%s'@." key rc_file)
       rc
-  with 
-    | Not_found -> 
+  with
+    | Not_found ->
 	printf "Config file '%s' does not exists, using default config@." rc_file;
 	load_default_config ()
     | Failure msg ->
 	printf "Reading '%s' failed (%s), using default config@." rc_file msg;
 	load_default_config ()
-	
-
