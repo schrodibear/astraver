@@ -1,4 +1,6 @@
 
+
+  o [GWhy] Fixed 'Not_found' exception if .whyrc absent
   o [Frama-C plugin] Fixed installation problems.
   o [Frama-C plugin] predicates for finiteness of floats (\is_finite,
     \is_infinite, etc.) do not fail in mode JessieFloatModel(real) but
