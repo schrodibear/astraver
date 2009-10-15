@@ -3,7 +3,8 @@
   o [Frama-C plugin] predicates for finiteness of floats (\is_finite,
     \is_infinite, etc.) do not fail in mode JessieFloatModel(real) but
     give the expected truth value.
-  o [Jessie] do not fail anymore on pointer casts over floats or reals
+  o [Jessie] do not fail anymore on pointer casts over floats or reals. 
+    Fixes bug 273 of Frama-C BTS
 
 version 2.20, October 2nd, 2009
 ===============================
