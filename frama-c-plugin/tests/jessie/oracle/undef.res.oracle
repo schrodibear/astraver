@@ -1,6 +1,4 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only undef.c
-[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Journal_loader.cmo" (dynlink error "interface mismatch on Extlib")
-[kernel] warning: cannot load file "/usr/local/lib/frama-c/plugins/Ltl_to_acsl.cmo" (dynlink error "interface mismatch on File")
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD undef.c"
 undef.c:544:[kernel] warning: Body of function missing_return_wrong falls-through. Adding a return statement
 undef.c:552:[kernel] warning: Body of function missing_return_unsafe falls-through. Adding a return statement
