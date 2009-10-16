@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: common.ml,v 1.1 2009-09-08 11:11:42 monate Exp $ *)
+(* $Id: common.ml,v 1.2 2009-10-16 09:48:22 virgile Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -47,9 +47,17 @@ let unsupported fmt =
     (fun evt ->
        raise (Unsupported evt.Log.evt_message)
     ) ~current:true fmt
-    
+
 let warning fmt = Jessie_options.warning ~current:true fmt
 let warn_general fmt = Jessie_options.warning ~current:false fmt
+
+let warn_once =
+  let known_warns = Hashtbl.create 7 in
+  fun s ->
+    if not (Hashtbl.mem known_warns s) then begin
+      Hashtbl.add known_warns s ();
+      warn_general "%s" s
+    end
 
 (*****************************************************************************)
 (* Options                                                                   *)
@@ -187,7 +195,7 @@ let name_of_integral_type ?bitsize ty =
   in
   match unrollType ty with
     | TInt(IBool,_attr) -> "_bool"
-    | TInt(ik,_attr) ->	
+    | TInt(ik,_attr) ->
 	name_it (isSigned ik) (size_in_bytes ik)
     | TEnum _ ->
 	name_it
@@ -883,7 +891,7 @@ object(self)
           try
             if not (fi == FieldinfoHashtbl.find known_fields fi)
             then
-	      Jessie_options.warning ~current:true 
+	      Jessie_options.warning ~current:true
 		"Field %s of type %s is not shared between declaration and use"
                 fi.fname fi.fcomp.cname
           with Not_found ->
@@ -1064,7 +1072,7 @@ let malloc_function () =
     let behav = {
       b_name = name_of_default_behavior;
       b_assumes = [];
-      b_ensures = [];
+      b_post_cond = [];
       b_assigns = [ Nothing,[] ];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
@@ -1083,7 +1091,7 @@ let free_function () =
     let behav = {
       b_name = name_of_default_behavior;
       b_assumes = [];
-      b_ensures = [];
+      b_post_cond = [];
       b_assigns = [ Nothing,[] ];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in

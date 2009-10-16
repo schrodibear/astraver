@@ -46,9 +46,7 @@ behavior default:
          variant (C_1 : 1);
          while (true)
          {  
-            {  
-               (goto while_0_break)
-            }
+            (goto while_0_break)
          };
          (while_0_break : ())
       };

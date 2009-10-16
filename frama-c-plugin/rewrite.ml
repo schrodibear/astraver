@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: rewrite.ml,v 1.1 2009-09-08 11:11:43 monate Exp $ *)
+(* $Id: rewrite.ml,v 1.2 2009-10-16 09:48:22 virgile Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -51,11 +51,11 @@ class add_default_behavior =
           { b_name = name_of_default_behavior;
             b_assigns = [];
             b_assumes = [];
-            b_ensures = [];
+            b_post_cond = [];
           } :: s.spec_behavior
       end;
       SkipChildren
-      
+
     method vcode_annot _ = SkipChildren
 
     method vfile f =
@@ -1470,7 +1470,7 @@ object
       ChangeTo (typeAddAttributes attr charPtrType)
 (*
     else if isCharType ty then
-      (* Yannick: All (un)signed chars changed into char for now ... 
+      (* Yannick: All (un)signed chars changed into char for now ...
 	 Claude: why ????
       *)
       let attr = typeAttr ty in

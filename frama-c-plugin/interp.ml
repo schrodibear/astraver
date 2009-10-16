@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.4 2009-10-09 18:49:39 marche Exp $ *)
+(* $Id: interp.ml,v 1.5 2009-10-16 09:48:22 virgile Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -280,24 +280,24 @@ let translated_name linfo =
 	| "\\is_finite" ->
            begin
 	   match !float_model with
-	      | `Real -> 
+	      | `Real ->
 		  warning "\\is_finite always true in mode JessieFloatModel(real)";
 		  raise (CtePredicate true)
-              | `Strict | `Full | `Multirounding -> 
+              | `Strict | `Full | `Multirounding ->
 	                begin
 	      		match (List.hd linfo.l_profile).lv_type with
 			| Ctype x when x == doubleType -> "\\is_finite_double"
 			| Ctype x when x == floatType -> "\\is_finite_float"
 			| _ -> assert false
 	    		end
-	   end			
+	   end
 	| "\\is_infinite" ->
             begin
 	      match !float_model with
-		| `Real -> 
+		| `Real ->
 		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
 		    raise (CtePredicate false)
-		| `Strict | `Full | `Multirounding -> 
+		| `Strict | `Full | `Multirounding ->
 		    begin
 		      match (List.hd linfo.l_profile).lv_type with
 			| Ctype x when x == doubleType -> "\\is_infinite_double"
@@ -308,10 +308,10 @@ let translated_name linfo =
 	| "\\is_NaN" ->
             begin
 	      match !float_model with
-		| `Real -> 
+		| `Real ->
 		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
 		    raise (CtePredicate false)
-		| `Strict | `Full | `Multirounding -> 
+		| `Strict | `Full | `Multirounding ->
 		    begin
 		      match (List.hd linfo.l_profile).lv_type with
 			| Ctype x when x == doubleType -> "\\is_NaN_double"
@@ -322,10 +322,10 @@ let translated_name linfo =
 	| "\\is_minus_infinity" ->
             begin
 	      match !float_model with
-		| `Real -> 
+		| `Real ->
 		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
 		    raise (CtePredicate false)
-		| `Strict | `Full | `Multirounding -> 
+		| `Strict | `Full | `Multirounding ->
 		    begin
 		      match (List.hd linfo.l_profile).lv_type with
 			| Ctype x when x == doubleType -> "\\is_minus_infinity_double"
@@ -336,10 +336,10 @@ let translated_name linfo =
 	| "\\is_plus_infinity" ->
             begin
 	      match !float_model with
-		| `Real -> 
+		| `Real ->
 		    warning "\\is_infinite always false in mode JessieFloatModel(real)";
 		    raise (CtePredicate false)
-		| `Strict | `Full | `Multirounding -> 
+		| `Strict | `Full | `Multirounding ->
 		    begin
 		      match (List.hd linfo.l_profile).lv_type with
 			| Ctype x when x == doubleType -> "\\is_plus_infinity_double"
@@ -975,7 +975,7 @@ let rec pred p =
 	in
 	JCPEapp(name,logic_labels_assoc labels, args)
 	  with (CtePredicate b) -> JCPEconst(JCCboolean b)
-	    
+
 	end
     | Prel((Rlt | Rgt | Rle | Rge as rel),t1,t2)
         when app_term_type isPointerType false t1.term_type ->
@@ -1183,7 +1183,13 @@ let spec funspec =
     JCCrequires(locate (pred (Logic_const.pred_of_id_pred p)))
   in
   let requires = List.map require funspec.spec_requires in
+  let is_normal_postcond =
+    function (Normal,_) -> true
+      | (Exits | Returns | Breaks | Continues),_ -> false
+  in
   let behavior b =
+    if List.exists (not $ is_normal_postcond) b.b_post_cond then
+      warn_once "abrupt clause(s) ignored";
     JCCbehavior(
       Loc.dummy_position,
       b.b_name,
@@ -1191,18 +1197,23 @@ let spec funspec =
       Some(conjunct Loc.dummy_position b.b_assumes),
       None, (* requires *)
       assigns b.b_assigns,
-      locate (conjunct Loc.dummy_position b.b_ensures))
+      locate
+        (conjunct Loc.dummy_position
+           (Extlib.filter_map
+              (function (Normal,_) -> true
+                 | (Exits | Returns | Breaks | Continues),_ -> false)
+              snd b.b_post_cond)))
   in
   let behaviors = List.map behavior funspec.spec_behavior in
 
   if funspec.spec_complete_behaviors <> [] then
-    warn_general "Complete behaviors specification(s) ignored" ;
+    warn_once "Complete behaviors specification(s) ignored" ;
   if funspec.spec_disjoint_behaviors <> [] then
-    warn_general "Disjoint behaviors specification(s) ignored" ;
+    warn_once "Disjoint behaviors specification(s) ignored" ;
   if funspec.spec_variant <> None then
-    warn_general "Variant(s) for recursive function ignored" ;
+    warn_once "Variant(s) for recursive function ignored" ;
   if funspec.spec_terminates <> None then
-    warn_general "Termination condition(s) ignored" ;
+    warn_once "Termination condition(s) ignored" ;
 
   (* TODO: translate function spec variant, terminates and complete/disjoint
      behaviors *)

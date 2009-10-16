@@ -53,16 +53,16 @@ S[0..2] ga3;
 invariant valid_ga3 :
 ((\offset_min(ga3) <= 0) && (\offset_max(ga3) >= 2))
 
-unit fg(int32 i)
+unit fg(int32 i_0)
 behavior default:
   assumes true;
-  ensures (C_7 : ((C_8 : ((ga1 + 0).ii == i)) &&
-                   ((C_10 : ((ga2 + 1).ii == i)) &&
-                     (C_11 : ((ga3 + 2).ii == i)))));
+  ensures (C_7 : ((C_8 : ((ga1 + 0).ii == i_0)) &&
+                   ((C_10 : ((ga2 + 1).ii == i_0)) &&
+                     (C_11 : ((ga3 + 2).ii == i_0)))));
 {  
-   {  (C_2 : ((C_1 : (ga1 + 0).ii) = i));
-      (C_4 : ((C_3 : (ga2 + 1).ii) = i));
-      (C_6 : ((C_5 : (ga3 + 2).ii) = i));
+   {  (C_2 : ((C_1 : (ga1 + 0).ii) = i_0));
+      (C_4 : ((C_3 : (ga2 + 1).ii) = i_0));
+      (C_6 : ((C_5 : (ga3 + 2).ii) = i_0));
       
       (return ())
    }
@@ -94,7 +94,7 @@ behavior default:
    }
 }
 
-unit lg(int32 i_0)
+unit lg(int32 i)
 behavior default:
   assumes true;
   ensures (C_47 : true);
@@ -114,22 +114,22 @@ behavior default:
       (C_30 : ((C_29 : (la3 + 1).jj) = 0));
       (C_32 : ((C_31 : (la3 + 2).ii) = 0));
       (C_34 : ((C_33 : (la3 + 2).jj) = 0));
-      (C_36 : ((C_35 : (la1 + 0).jj) = i_0));
-      (C_38 : ((C_37 : (la2 + 1).jj) = i_0));
-      (C_40 : ((C_39 : (la3 + 2).jj) = i_0));
+      (C_36 : ((C_35 : (la1 + 0).jj) = i));
+      (C_38 : ((C_37 : (la2 + 1).jj) = i));
+      (C_40 : ((C_39 : (la3 + 2).jj) = i));
       
       {  
-         (assert for default: (C_41 : ((la1 + 0).jj == i_0)));
+         (assert for default: (C_41 : ((la1 + 0).jj == i)));
          ()
       };
       
       {  
-         (assert for default: (C_42 : ((la2 + 1).jj == i_0)));
+         (assert for default: (C_42 : ((la2 + 1).jj == i)));
          ()
       };
       
       {  
-         (assert for default: (C_43 : ((la3 + 2).jj == i_0)));
+         (assert for default: (C_43 : ((la3 + 2).jj == i)));
          ()
       };
       
@@ -609,7 +609,7 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter fg :
- i:int32 ->
+ i_0:int32 ->
   { } unit
   reads S_ga1_1_alloc_table,S_ga2_2_alloc_table,S_ga3_3_alloc_table,S_ii_ga1_1,S_ii_ga2_2,S_ii_ga3_3
   writes S_ii_ga1_1,S_ii_ga2_2,S_ii_ga3_3
@@ -621,16 +621,16 @@ parameter fg :
          (JC_27:
          ((JC_24:
           eq_int(integer_of_int32(select(S_ii_ga1_1, shift(ga1, (0)))),
-          integer_of_int32(i)))
+          integer_of_int32(i_0)))
          and ((JC_25:
               eq_int(integer_of_int32(select(S_ii_ga2_2, shift(ga2, (1)))),
-              integer_of_int32(i)))
+              integer_of_int32(i_0)))
              and (JC_26:
                  eq_int(integer_of_int32(select(S_ii_ga3_3, shift(ga3, (2)))),
-                 integer_of_int32(i)))))))) }
+                 integer_of_int32(i_0)))))))) }
 
 parameter fg_requires :
- i:int32 ->
+ i_0:int32 ->
   { (JC_13:
     ((JC_10: valid_ga1(S_ga1_1_alloc_table))
     and ((JC_11: valid_ga2(S_ga2_2_alloc_table))
@@ -646,13 +646,13 @@ parameter fg_requires :
          (JC_27:
          ((JC_24:
           eq_int(integer_of_int32(select(S_ii_ga1_1, shift(ga1, (0)))),
-          integer_of_int32(i)))
+          integer_of_int32(i_0)))
          and ((JC_25:
               eq_int(integer_of_int32(select(S_ii_ga2_2, shift(ga2, (1)))),
-              integer_of_int32(i)))
+              integer_of_int32(i_0)))
              and (JC_26:
                  eq_int(integer_of_int32(select(S_ii_ga3_3, shift(ga3, (2)))),
-                 integer_of_int32(i)))))))) }
+                 integer_of_int32(i_0)))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -665,7 +665,7 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter lg :
- i_0:int32 ->
+ i:int32 ->
   { } unit reads S_ga1_1_alloc_table,S_ga2_2_alloc_table,S_ga3_3_alloc_table
   { (JC_83:
     ((JC_80: valid_ga1(S_ga1_1_alloc_table))
@@ -673,7 +673,7 @@ parameter lg :
         and (JC_82: valid_ga3(S_ga3_3_alloc_table))))) }
 
 parameter lg_requires :
- i_0:int32 ->
+ i:int32 ->
   { (JC_67:
     ((JC_64: valid_ga1(S_ga1_1_alloc_table))
     and ((JC_65: valid_ga2(S_ga2_2_alloc_table))
@@ -715,7 +715,7 @@ parameter testg_requires :
         and (JC_54: valid_ga3(S_ga3_3_alloc_table))))) }
 
 let fg_ensures_default =
- fun (i : int32) ->
+ fun (i_0 : int32) ->
   { ((true = true)
     and (JC_18:
         ((JC_15: valid_ga1(S_ga1_1_alloc_table))
@@ -726,19 +726,19 @@ let fg_ensures_default =
    begin
      (C_2:
      begin
-       (let jessie_20 = (let jessie_16 = i in
+       (let jessie_20 = (let jessie_16 = i_0 in
                         (let jessie_19 = ((shift ga1) (0)) in
                         (((safe_upd_ S_ii_ga1_1) jessie_19) jessie_16))) in
        void);
       (C_4:
       begin
-        (let jessie_25 = (let jessie_21 = i in
+        (let jessie_25 = (let jessie_21 = i_0 in
                          (let jessie_24 = ((shift ga2) (1)) in
                          (((safe_upd_ S_ii_ga2_2) jessie_24) jessie_21))) in
         void);
        (C_6:
        begin
-         (let jessie_30 = (let jessie_26 = i in
+         (let jessie_30 = (let jessie_26 = i_0 in
                           (let jessie_29 = ((shift ga3) (2)) in
                           (((safe_upd_ S_ii_ga3_3) jessie_29) jessie_26))) in
          void);
@@ -754,16 +754,16 @@ let fg_ensures_default =
   { (JC_23:
     ((JC_20:
      eq_int(integer_of_int32(select(S_ii_ga1_1, shift(ga1, (0)))),
-     integer_of_int32(i)))
+     integer_of_int32(i_0)))
     and ((JC_21:
          eq_int(integer_of_int32(select(S_ii_ga2_2, shift(ga2, (1)))),
-         integer_of_int32(i)))
+         integer_of_int32(i_0)))
         and (JC_22:
             eq_int(integer_of_int32(select(S_ii_ga3_3, shift(ga3, (2)))),
-            integer_of_int32(i)))))) }
+            integer_of_int32(i_0)))))) }
 
 let fg_safety =
- fun (i : int32) ->
+ fun (i_0 : int32) ->
   { (JC_18:
     ((JC_15: valid_ga1(S_ga1_1_alloc_table))
     and ((JC_16: valid_ga2(S_ga2_2_alloc_table))
@@ -773,19 +773,19 @@ let fg_safety =
    begin
      (C_2:
      begin
-       (let jessie_5 = (let jessie_1 = i in
+       (let jessie_5 = (let jessie_1 = i_0 in
                        (let jessie_4 = ((shift ga1) (0)) in
                        (((safe_upd_ S_ii_ga1_1) jessie_4) jessie_1))) in
        void);
       (C_4:
       begin
-        (let jessie_10 = (let jessie_6 = i in
+        (let jessie_10 = (let jessie_6 = i_0 in
                          (let jessie_9 = ((shift ga2) (1)) in
                          (((safe_upd_ S_ii_ga2_2) jessie_9) jessie_6))) in
         void);
        (C_6:
        begin
-         (let jessie_15 = (let jessie_11 = i in
+         (let jessie_15 = (let jessie_11 = i_0 in
                           (let jessie_14 = ((shift ga3) (2)) in
                           (((safe_upd_ S_ii_ga3_3) jessie_14) jessie_11))) in
          void);
@@ -804,7 +804,7 @@ let fg_safety =
         and (JC_30: valid_ga3(S_ga3_3_alloc_table))))) }
 
 let lg_ensures_default =
- fun (i_0 : int32) ->
+ fun (i : int32) ->
   { ((true = true)
     and (JC_72:
         ((JC_69: valid_ga1(S_ga1_1_alloc_table))
@@ -882,19 +882,19 @@ let lg_ensures_default =
                void);
               (C_36:
               begin
-                (let jessie_122 = (let jessie_118 = i_0 in
+                (let jessie_122 = (let jessie_118 = i in
                                   (let jessie_121 = ((shift !la1) (0)) in
                                   (((safe_upd_ S_jj_la1_4) jessie_121) jessie_118))) in
                 void);
                (C_38:
                begin
-                 (let jessie_127 = (let jessie_123 = i_0 in
+                 (let jessie_127 = (let jessie_123 = i in
                                    (let jessie_126 = ((shift !la2) (1)) in
                                    (((safe_upd_ S_jj_la2_5) jessie_126) jessie_123))) in
                  void);
                 (C_40:
                 begin
-                  (let jessie_132 = (let jessie_128 = i_0 in
+                  (let jessie_132 = (let jessie_128 = i in
                                     (let jessie_131 = ((shift !la3) (2)) in
                                     (((safe_upd_ S_jj_la3_6) jessie_131) jessie_128))) in
                   void);
@@ -902,21 +902,21 @@ let lg_ensures_default =
                  { (JC_99:
                    eq_int(integer_of_int32(select(S_jj_la1_4,
                                            shift(la1, (0)))),
-                   integer_of_int32(i_0))) };
+                   integer_of_int32(i))) };
                  void);
                  void;
                  (assert
                  { (JC_100:
                    eq_int(integer_of_int32(select(S_jj_la2_5,
                                            shift(la2, (1)))),
-                   integer_of_int32(i_0))) };
+                   integer_of_int32(i))) };
                  void);
                  void;
                  (assert
                  { (JC_101:
                    eq_int(integer_of_int32(select(S_jj_la3_6,
                                            shift(la3, (2)))),
-                   integer_of_int32(i_0))) };
+                   integer_of_int32(i))) };
                  void);
                  void;
                  (C_44:
@@ -952,7 +952,7 @@ let lg_ensures_default =
   { (JC_74: true) }
 
 let lg_safety =
- fun (i_0 : int32) ->
+ fun (i : int32) ->
   { (JC_72:
     ((JC_69: valid_ga1(S_ga1_1_alloc_table))
     and ((JC_70: valid_ga2(S_ga2_2_alloc_table))
@@ -1047,19 +1047,19 @@ let lg_safety =
                void);
               (C_36:
               begin
-                (let jessie_71 = (let jessie_67 = i_0 in
+                (let jessie_71 = (let jessie_67 = i in
                                  (let jessie_70 = ((shift !la1) (0)) in
                                  (((safe_upd_ S_jj_la1_4) jessie_70) jessie_67))) in
                 void);
                (C_38:
                begin
-                 (let jessie_76 = (let jessie_72 = i_0 in
+                 (let jessie_76 = (let jessie_72 = i in
                                   (let jessie_75 = ((shift !la2) (1)) in
                                   (((safe_upd_ S_jj_la2_5) jessie_75) jessie_72))) in
                  void);
                 (C_40:
                 begin
-                  (let jessie_81 = (let jessie_77 = i_0 in
+                  (let jessie_81 = (let jessie_77 = i in
                                    (let jessie_80 = ((shift !la3) (2)) in
                                    (((safe_upd_ S_jj_la3_6) jessie_80) jessie_77))) in
                   void);
@@ -1067,19 +1067,19 @@ let lg_safety =
                    { (JC_90:
                      eq_int(integer_of_int32(select(S_jj_la1_4,
                                              shift(la1, (0)))),
-                     integer_of_int32(i_0))) } ];
+                     integer_of_int32(i))) } ];
                  void;
                  [ { } unit reads S_jj_la2_5,la2
                    { (JC_91:
                      eq_int(integer_of_int32(select(S_jj_la2_5,
                                              shift(la2, (1)))),
-                     integer_of_int32(i_0))) } ];
+                     integer_of_int32(i))) } ];
                  void;
                  [ { } unit reads S_jj_la3_6,la3
                    { (JC_92:
                      eq_int(integer_of_int32(select(S_jj_la3_6,
                                              shift(la3, (2)))),
-                     integer_of_int32(i_0))) } ];
+                     integer_of_int32(i))) } ];
                  void;
                  (C_44:
                  begin

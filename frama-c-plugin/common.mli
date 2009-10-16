@@ -30,6 +30,9 @@ val unsupported    : ('a,Format.formatter,unit,'b) format4 -> 'a
 val warning        : ('a,Format.formatter,unit) format -> 'a
 val warn_general   : ('a,Format.formatter,unit) format -> 'a
 
+(** warning for currently ignored feature which is only displayed once *)
+val warn_once      : string -> unit
+
 (* Jessie specific names *)
 
 val name_of_default_behavior : string

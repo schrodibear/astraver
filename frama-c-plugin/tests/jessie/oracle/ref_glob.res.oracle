@@ -50,15 +50,15 @@ tag __anonstruct_las_1 = {
 
 type __anonstruct_las_1 = [__anonstruct_las_1]
 
-unit g(int_P[..] p_0)
-  requires (C_3 : ((C_4 : (\offset_min(p_0) <= 0)) &&
-                    (C_5 : (\offset_max(p_0) >= 0))));
+unit g(int_P[..] p)
+  requires (C_3 : ((C_4 : (\offset_min(p) <= 0)) &&
+                    (C_5 : (\offset_max(p) >= 0))));
 behavior default:
   assumes true;
-  assigns p_0.int_M;
-  ensures (C_6 : (p_0.int_M == 1));
+  assigns p.int_M;
+  ensures (C_6 : (p.int_M == 1));
 {  
-   {  (C_2 : ((C_1 : p_0.int_M) = 1));
+   {  (C_2 : ((C_1 : p.int_M) = 1));
       
       (return ())
    }
@@ -115,17 +115,17 @@ int_P[0..2] t;
 invariant valid_t :
 ((\offset_min(t) <= 0) && (\offset_max(t) >= 2))
 
-unit h(int_xP[..] p)
-  requires (C_28 : (((C_30 : (\offset_min(p) <= 0)) &&
-                      (C_31 : (\offset_max(p) >= 0))) &&
-                     ((C_33 : (\offset_min(p.int_xM) <= 0)) &&
-                       (C_34 : (\offset_max(p.int_xM) >= 0)))));
+unit h(int_xP[..] p_0)
+  requires (C_28 : (((C_30 : (\offset_min(p_0) <= 0)) &&
+                      (C_31 : (\offset_max(p_0) >= 0))) &&
+                     ((C_33 : (\offset_min(p_0.int_xM) <= 0)) &&
+                       (C_34 : (\offset_max(p_0.int_xM) >= 0)))));
 behavior default:
   assumes true;
-  assigns p.int_xM.int_M;
-  ensures (C_35 : (p.int_xM.int_M == 2));
+  assigns p_0.int_xM.int_M;
+  ensures (C_35 : (p_0.int_xM.int_M == 2));
 {  
-   {  (C_27 : ((C_26 : (C_25 : p.int_xM).int_M) = 2));
+   {  (C_27 : ((C_26 : (C_25 : p_0.int_xM).int_M) = 2));
       
       (return ())
    }
@@ -998,46 +998,45 @@ parameter f4_requires :
              pset_deref(__anonstruct_las_1_c1_plas_2@, pset_singleton(plas@))))))))) }
 
 parameter g :
- p_0:int_P pointer ->
-  int_P_int_M_p_0_4:(int_P, int32) memory ref ->
-   int_P_p_0_4_alloc_table:int_P alloc_table ->
-    { } unit reads int_P_int_M_p_0_4,int_P_t_3_alloc_table
-    writes int_P_int_M_p_0_4
+ p:int_P pointer ->
+  int_P_int_M_p_4:(int_P, int32) memory ref ->
+   int_P_p_4_alloc_table:int_P alloc_table ->
+    { } unit reads int_P_int_M_p_4,int_P_t_3_alloc_table
+    writes int_P_int_M_p_4
     { ((JC_25: valid_t(int_P_t_3_alloc_table))
       and ((true = true) ->
            (JC_23:
            ((JC_21:
-            eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0)), (1)))
+            eq_int(integer_of_int32(select(int_P_int_M_p_4, p)), (1)))
            and (JC_22:
-               not_assigns(int_P_p_0_4_alloc_table@, int_P_int_M_p_0_4@,
-               int_P_int_M_p_0_4, pset_singleton(p_0@))))))) }
+               not_assigns(int_P_p_4_alloc_table@, int_P_int_M_p_4@,
+               int_P_int_M_p_4, pset_singleton(p@))))))) }
 
 parameter g_requires :
- p_0:int_P pointer ->
-  int_P_int_M_p_0_4:(int_P, int32) memory ref ->
-   int_P_p_0_4_alloc_table:int_P alloc_table ->
+ p:int_P pointer ->
+  int_P_int_M_p_4:(int_P, int32) memory ref ->
+   int_P_p_4_alloc_table:int_P alloc_table ->
     { (JC_10:
       ((JC_8:
-       ((JC_6: le_int(offset_min(int_P_p_0_4_alloc_table, p_0), (0)))
-       and (JC_7: ge_int(offset_max(int_P_p_0_4_alloc_table, p_0), (0)))))
+       ((JC_6: le_int(offset_min(int_P_p_4_alloc_table, p), (0)))
+       and (JC_7: ge_int(offset_max(int_P_p_4_alloc_table, p), (0)))))
       and (JC_9: valid_t(int_P_t_3_alloc_table))))}
-    unit reads int_P_int_M_p_0_4,int_P_t_3_alloc_table
-    writes int_P_int_M_p_0_4
+    unit reads int_P_int_M_p_4,int_P_t_3_alloc_table writes int_P_int_M_p_4
     { ((JC_25: valid_t(int_P_t_3_alloc_table))
       and ((true = true) ->
            (JC_23:
            ((JC_21:
-            eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0)), (1)))
+            eq_int(integer_of_int32(select(int_P_int_M_p_4, p)), (1)))
            and (JC_22:
-               not_assigns(int_P_p_0_4_alloc_table@, int_P_int_M_p_0_4@,
-               int_P_int_M_p_0_4, pset_singleton(p_0@))))))) }
+               not_assigns(int_P_p_4_alloc_table@, int_P_int_M_p_4@,
+               int_P_int_M_p_4, pset_singleton(p@))))))) }
 
 parameter h :
- p:int_xP pointer ->
+ p_0:int_xP pointer ->
   int_P_int_M_int_xM_6:(int_P, int32) memory ref ->
-   int_xP_p_5_alloc_table:int_xP alloc_table ->
+   int_xP_p_0_5_alloc_table:int_xP alloc_table ->
     int_P_int_xM_6_alloc_table:int_P alloc_table ->
-     int_xP_int_xM_p_5:(int_xP, int_P pointer) memory ->
+     int_xP_int_xM_p_0_5:(int_xP, int_P pointer) memory ->
       { } unit reads int_P_int_M_int_xM_6,int_P_t_3_alloc_table
       writes int_P_int_M_int_xM_6
       { ((JC_108: valid_t(int_P_t_3_alloc_table))
@@ -1045,30 +1044,30 @@ parameter h :
              (JC_106:
              ((JC_104:
               eq_int(integer_of_int32(select(int_P_int_M_int_xM_6,
-                                      select(int_xP_int_xM_p_5, p))),
+                                      select(int_xP_int_xM_p_0_5, p_0))),
               (2)))
              and (JC_105:
                  not_assigns(int_P_int_xM_6_alloc_table@,
                  int_P_int_M_int_xM_6@, int_P_int_M_int_xM_6,
-                 pset_deref(int_xP_int_xM_p_5@, pset_singleton(p@)))))))) }
+                 pset_deref(int_xP_int_xM_p_0_5@, pset_singleton(p_0@)))))))) }
 
 parameter h_requires :
- p:int_xP pointer ->
+ p_0:int_xP pointer ->
   int_P_int_M_int_xM_6:(int_P, int32) memory ref ->
-   int_xP_p_5_alloc_table:int_xP alloc_table ->
+   int_xP_p_0_5_alloc_table:int_xP alloc_table ->
     int_P_int_xM_6_alloc_table:int_P alloc_table ->
-     int_xP_int_xM_p_5:(int_xP, int_P pointer) memory ->
+     int_xP_int_xM_p_0_5:(int_xP, int_P pointer) memory ->
       { (JC_91:
         ((JC_89:
-         ((JC_85: le_int(offset_min(int_xP_p_5_alloc_table, p), (0)))
-         and ((JC_86: ge_int(offset_max(int_xP_p_5_alloc_table, p), (0)))
+         ((JC_85: le_int(offset_min(int_xP_p_0_5_alloc_table, p_0), (0)))
+         and ((JC_86: ge_int(offset_max(int_xP_p_0_5_alloc_table, p_0), (0)))
              and ((JC_87:
                   le_int(offset_min(int_P_int_xM_6_alloc_table,
-                         select(int_xP_int_xM_p_5, p)),
+                         select(int_xP_int_xM_p_0_5, p_0)),
                   (0)))
                  and (JC_88:
                      ge_int(offset_max(int_P_int_xM_6_alloc_table,
-                            select(int_xP_int_xM_p_5, p)),
+                            select(int_xP_int_xM_p_0_5, p_0)),
                      (0)))))))
         and (JC_90: valid_t(int_P_t_3_alloc_table))))}
       unit reads int_P_int_M_int_xM_6,int_P_t_3_alloc_table
@@ -1078,12 +1077,12 @@ parameter h_requires :
              (JC_106:
              ((JC_104:
               eq_int(integer_of_int32(select(int_P_int_M_int_xM_6,
-                                      select(int_xP_int_xM_p_5, p))),
+                                      select(int_xP_int_xM_p_0_5, p_0))),
               (2)))
              and (JC_105:
                  not_assigns(int_P_int_xM_6_alloc_table@,
                  int_P_int_M_int_xM_6@, int_P_int_M_int_xM_6,
-                 pset_deref(int_xP_int_xM_p_5@, pset_singleton(p@)))))))) }
+                 pset_deref(int_xP_int_xM_p_0_5@, pset_singleton(p_0@)))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1287,12 +1286,12 @@ let f4_safety =
   { (JC_75: valid_t(int_P_t_3_alloc_table)) }
 
 let g_ensures_default =
- fun (p_0 : int_P pointer) (int_P_int_M_p_0_4 : (int_P, int32) memory ref) (int_P_p_0_4_alloc_table : int_P alloc_table) ->
+ fun (p : int_P pointer) (int_P_int_M_p_4 : (int_P, int32) memory ref) (int_P_p_4_alloc_table : int_P alloc_table) ->
   { ((true = true)
     and (JC_16:
         ((JC_14:
-         ((JC_12: le_int(offset_min(int_P_p_0_4_alloc_table, p_0), (0)))
-         and (JC_13: ge_int(offset_max(int_P_p_0_4_alloc_table, p_0), (0)))))
+         ((JC_12: le_int(offset_min(int_P_p_4_alloc_table, p), (0)))
+         and (JC_13: ge_int(offset_max(int_P_p_4_alloc_table, p), (0)))))
         and (JC_15: valid_t(int_P_t_3_alloc_table))))) }
   (init:
   try
@@ -1300,8 +1299,8 @@ let g_ensures_default =
      (C_2:
      begin
        (let jessie_10 = (let jessie_6 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_9 = p_0 in
-                        (((safe_upd_ int_P_int_M_p_0_4) jessie_9) jessie_6))) in
+                        (let jessie_9 = p in
+                        (((safe_upd_ int_P_int_M_p_4) jessie_9) jessie_6))) in
        void);
       (raise Return)
      end);
@@ -1311,17 +1310,17 @@ let g_ensures_default =
    Return ->
    void end)
   { (JC_20:
-    ((JC_18: eq_int(integer_of_int32(select(int_P_int_M_p_0_4, p_0)), (1)))
+    ((JC_18: eq_int(integer_of_int32(select(int_P_int_M_p_4, p)), (1)))
     and (JC_19:
-        not_assigns(int_P_p_0_4_alloc_table@, int_P_int_M_p_0_4@,
-        int_P_int_M_p_0_4, pset_singleton(p_0@))))) }
+        not_assigns(int_P_p_4_alloc_table@, int_P_int_M_p_4@,
+        int_P_int_M_p_4, pset_singleton(p@))))) }
 
 let g_safety =
- fun (p_0 : int_P pointer) (int_P_int_M_p_0_4 : (int_P, int32) memory ref) (int_P_p_0_4_alloc_table : int_P alloc_table) ->
+ fun (p : int_P pointer) (int_P_int_M_p_4 : (int_P, int32) memory ref) (int_P_p_4_alloc_table : int_P alloc_table) ->
   { (JC_16:
     ((JC_14:
-     ((JC_12: le_int(offset_min(int_P_p_0_4_alloc_table, p_0), (0)))
-     and (JC_13: ge_int(offset_max(int_P_p_0_4_alloc_table, p_0), (0)))))
+     ((JC_12: le_int(offset_min(int_P_p_4_alloc_table, p), (0)))
+     and (JC_13: ge_int(offset_max(int_P_p_4_alloc_table, p), (0)))))
     and (JC_15: valid_t(int_P_t_3_alloc_table)))) }
   (init:
   try
@@ -1329,9 +1328,9 @@ let g_safety =
      (C_2:
      begin
        (let jessie_5 = (let jessie_1 = (safe_int32_of_integer_ (1)) in
-                       (let jessie_4 = p_0 in
+                       (let jessie_4 = p in
                        (JC_26:
-                       ((((upd_ int_P_p_0_4_alloc_table) int_P_int_M_p_0_4) jessie_4) jessie_1)))) in
+                       ((((upd_ int_P_p_4_alloc_table) int_P_int_M_p_4) jessie_4) jessie_1)))) in
        void);
       (raise Return)
      end);
@@ -1343,19 +1342,19 @@ let g_safety =
   { (JC_24: valid_t(int_P_t_3_alloc_table)) }
 
 let h_ensures_default =
- fun (p : int_xP pointer) (int_P_int_M_int_xM_6 : (int_P, int32) memory ref) (int_P_int_xM_6_alloc_table : int_P alloc_table) (int_xP_p_5_alloc_table : int_xP alloc_table) (int_xP_int_xM_p_5 : (int_xP, int_P pointer) memory) ->
+ fun (p_0 : int_xP pointer) (int_P_int_M_int_xM_6 : (int_P, int32) memory ref) (int_P_int_xM_6_alloc_table : int_P alloc_table) (int_xP_p_0_5_alloc_table : int_xP alloc_table) (int_xP_int_xM_p_0_5 : (int_xP, int_P pointer) memory) ->
   { ((true = true)
     and (JC_99:
         ((JC_97:
-         ((JC_93: le_int(offset_min(int_xP_p_5_alloc_table, p), (0)))
-         and ((JC_94: ge_int(offset_max(int_xP_p_5_alloc_table, p), (0)))
+         ((JC_93: le_int(offset_min(int_xP_p_0_5_alloc_table, p_0), (0)))
+         and ((JC_94: ge_int(offset_max(int_xP_p_0_5_alloc_table, p_0), (0)))
              and ((JC_95:
                   le_int(offset_min(int_P_int_xM_6_alloc_table,
-                         select(int_xP_int_xM_p_5, p)),
+                         select(int_xP_int_xM_p_0_5, p_0)),
                   (0)))
                  and (JC_96:
                      ge_int(offset_max(int_P_int_xM_6_alloc_table,
-                            select(int_xP_int_xM_p_5, p)),
+                            select(int_xP_int_xM_p_0_5, p_0)),
                      (0)))))))
         and (JC_98: valid_t(int_P_t_3_alloc_table))))) }
   (init:
@@ -1365,7 +1364,7 @@ let h_ensures_default =
      begin
        (let jessie_46 = (let jessie_42 = (safe_int32_of_integer_ (2)) in
                         (let jessie_45 = (C_25:
-                                         ((safe_acc_ int_xP_int_xM_p_5) p)) in
+                                         ((safe_acc_ int_xP_int_xM_p_0_5) p_0)) in
                         (((safe_upd_ int_P_int_M_int_xM_6) jessie_45) jessie_42))) in
        void);
       (raise Return)
@@ -1378,26 +1377,26 @@ let h_ensures_default =
   { (JC_103:
     ((JC_101:
      eq_int(integer_of_int32(select(int_P_int_M_int_xM_6,
-                             select(int_xP_int_xM_p_5, p))),
+                             select(int_xP_int_xM_p_0_5, p_0))),
      (2)))
     and (JC_102:
         not_assigns(int_P_int_xM_6_alloc_table@, int_P_int_M_int_xM_6@,
         int_P_int_M_int_xM_6,
-        pset_deref(int_xP_int_xM_p_5@, pset_singleton(p@)))))) }
+        pset_deref(int_xP_int_xM_p_0_5@, pset_singleton(p_0@)))))) }
 
 let h_safety =
- fun (p : int_xP pointer) (int_P_int_M_int_xM_6 : (int_P, int32) memory ref) (int_P_int_xM_6_alloc_table : int_P alloc_table) (int_xP_p_5_alloc_table : int_xP alloc_table) (int_xP_int_xM_p_5 : (int_xP, int_P pointer) memory) ->
+ fun (p_0 : int_xP pointer) (int_P_int_M_int_xM_6 : (int_P, int32) memory ref) (int_P_int_xM_6_alloc_table : int_P alloc_table) (int_xP_p_0_5_alloc_table : int_xP alloc_table) (int_xP_int_xM_p_0_5 : (int_xP, int_P pointer) memory) ->
   { (JC_99:
     ((JC_97:
-     ((JC_93: le_int(offset_min(int_xP_p_5_alloc_table, p), (0)))
-     and ((JC_94: ge_int(offset_max(int_xP_p_5_alloc_table, p), (0)))
+     ((JC_93: le_int(offset_min(int_xP_p_0_5_alloc_table, p_0), (0)))
+     and ((JC_94: ge_int(offset_max(int_xP_p_0_5_alloc_table, p_0), (0)))
          and ((JC_95:
               le_int(offset_min(int_P_int_xM_6_alloc_table,
-                     select(int_xP_int_xM_p_5, p)),
+                     select(int_xP_int_xM_p_0_5, p_0)),
               (0)))
              and (JC_96:
                  ge_int(offset_max(int_P_int_xM_6_alloc_table,
-                        select(int_xP_int_xM_p_5, p)),
+                        select(int_xP_int_xM_p_0_5, p_0)),
                  (0)))))))
     and (JC_98: valid_t(int_P_t_3_alloc_table)))) }
   (init:
@@ -1408,7 +1407,7 @@ let h_safety =
        (let jessie_41 = (let jessie_37 = (safe_int32_of_integer_ (2)) in
                         (let jessie_40 = (C_25:
                                          (JC_109:
-                                         (((acc_ int_xP_p_5_alloc_table) int_xP_int_xM_p_5) p))) in
+                                         (((acc_ int_xP_p_0_5_alloc_table) int_xP_int_xM_p_0_5) p_0))) in
                         (JC_110:
                         ((((upd_ int_P_int_xM_6_alloc_table) int_P_int_M_int_xM_6) jessie_40) jessie_37)))) in
        void);

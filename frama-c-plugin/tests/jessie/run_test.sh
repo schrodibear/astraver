@@ -9,7 +9,7 @@ fi
 cd "$dir"
 file=`basename "$name"`
 export PPCHOME=`(cd ../..; pwd -P)`
-export WHYHOME=`(cd  ../../../..; pwd -P)`
+export WHYHOME=`(cd  ../../..; pwd -P)`
 options=`grep "@PPC_OPTIONS:" $file.c`
 options=`echo $options | cut -c14-`
 export PPC_OPTIONS="-journal-disable $options"

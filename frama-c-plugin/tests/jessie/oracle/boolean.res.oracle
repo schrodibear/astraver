@@ -31,32 +31,32 @@ tag void_P = {
 
 type void_P = [void_P]
 
-int32 and_0(int32 i, int32 j)
+int32 and_0(int32 i_0, int32 j_0)
 behavior default:
   assumes true;
-  ensures (C_4 : ((\result != 0) <==> ((i != 0) && (j != 0))));
+  ensures (C_4 : ((\result != 0) <==> ((i_0 != 0) && (j_0 != 0))));
 {  
    (var int32 ret);
    
-   {  (if (i != 0) then (if (j != 0) then (C_3 : (ret = 1)) else (C_2 : (ret = 0))) else 
-      (C_1 : (ret = 0)));
+   {  (if (i_0 != 0) then (if (j_0 != 0) then (C_3 : (ret = 1)) else 
+                          (C_2 : (ret = 0))) else (C_1 : (ret = 0)));
       
       (return ret)
    }
 }
 
-int32 or(int32 i_0, int32 j_0)
+int32 or(int32 i, int32 j)
 behavior default:
   assumes true;
-  ensures (C_8 : ((\result != 0) <==> ((i_0 != 0) || (j_0 != 0))));
+  ensures (C_8 : ((\result != 0) <==> ((i != 0) || (j != 0))));
 {  
    (var int32 __retres);
    
-   {  (if (i_0 != 0) then 
+   {  (if (i != 0) then 
       {  (C_6 : (__retres = 1));
          
          (goto return_label)
-      } else (if (j_0 != 0) then 
+      } else (if (j != 0) then 
              {  (C_5 : (__retres = 1));
                 
                 (goto return_label)
@@ -379,24 +379,24 @@ parameter alloc_struct_void_P_requires :
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
 parameter and_0 :
- i:int32 ->
-  j:int32 ->
+ i_0:int32 ->
+  j_0:int32 ->
    { } int32
    { ((true = true) ->
       (JC_6:
       (neq_int(integer_of_int32(result), (0))
-      <-> (neq_int(integer_of_int32(i), (0))
-          and neq_int(integer_of_int32(j), (0)))))) }
+      <-> (neq_int(integer_of_int32(i_0), (0))
+          and neq_int(integer_of_int32(j_0), (0)))))) }
 
 parameter and_0_requires :
- i:int32 ->
-  j:int32 ->
+ i_0:int32 ->
+  j_0:int32 ->
    { } int32
    { ((true = true) ->
       (JC_6:
       (neq_int(integer_of_int32(result), (0))
-      <-> (neq_int(integer_of_int32(i), (0))
-          and neq_int(integer_of_int32(j), (0)))))) }
+      <-> (neq_int(integer_of_int32(i_0), (0))
+          and neq_int(integer_of_int32(j_0), (0)))))) }
 
 parameter any_int32 : unit -> { } int32 { true }
 
@@ -413,24 +413,24 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter or_0 :
- i_0:int32 ->
-  j_0:int32 ->
+ i:int32 ->
+  j:int32 ->
    { } int32
    { ((true = true) ->
       (JC_14:
       (neq_int(integer_of_int32(result), (0))
-      <-> (neq_int(integer_of_int32(i_0), (0))
-          or neq_int(integer_of_int32(j_0), (0)))))) }
+      <-> (neq_int(integer_of_int32(i), (0))
+          or neq_int(integer_of_int32(j), (0)))))) }
 
 parameter or_0_requires :
- i_0:int32 ->
-  j_0:int32 ->
+ i:int32 ->
+  j:int32 ->
    { } int32
    { ((true = true) ->
       (JC_14:
       (neq_int(integer_of_int32(result), (0))
-      <-> (neq_int(integer_of_int32(i_0), (0))
-          or neq_int(integer_of_int32(j_0), (0)))))) }
+      <-> (neq_int(integer_of_int32(i), (0))
+          or neq_int(integer_of_int32(j), (0)))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -439,7 +439,7 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let and_0_ensures_default =
- fun (i : int32) (j : int32) ->
+ fun (i_0 : int32) (j_0 : int32) ->
   { (true = true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -447,9 +447,9 @@ let and_0_ensures_default =
    begin
      (let ret = ref (any_int32 void) in
      begin
-       (if ((neq_int_ (integer_of_int32 i)) (0))
+       (if ((neq_int_ (integer_of_int32 i_0)) (0))
        then
-        (let jessie_4 = (if ((neq_int_ (integer_of_int32 j)) (0))
+        (let jessie_4 = (if ((neq_int_ (integer_of_int32 j_0)) (0))
                         then
                          (C_3:
                          begin
@@ -473,11 +473,11 @@ let and_0_ensures_default =
    !return end))
   { (JC_5:
     (neq_int(integer_of_int32(result), (0))
-    <-> (neq_int(integer_of_int32(i), (0))
-        and neq_int(integer_of_int32(j), (0))))) }
+    <-> (neq_int(integer_of_int32(i_0), (0))
+        and neq_int(integer_of_int32(j_0), (0))))) }
 
 let and_0_safety =
- fun (i : int32) (j : int32) ->
+ fun (i_0 : int32) (j_0 : int32) ->
   { (JC_4: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -485,9 +485,9 @@ let and_0_safety =
    begin
      (let ret = ref (any_int32 void) in
      begin
-       (if ((neq_int_ (integer_of_int32 i)) (0))
+       (if ((neq_int_ (integer_of_int32 i_0)) (0))
        then
-        (let jessie_2 = (if ((neq_int_ (integer_of_int32 j)) (0))
+        (let jessie_2 = (if ((neq_int_ (integer_of_int32 j_0)) (0))
                         then
                          (C_3:
                          begin
@@ -512,7 +512,7 @@ let and_0_safety =
   { true }
 
 let or_ensures_default =
- fun (i_0 : int32) (j_0 : int32) ->
+ fun (i : int32) (j : int32) ->
   { (true = true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -521,7 +521,7 @@ let or_ensures_default =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_17 = begin
-                         (if ((neq_int_ (integer_of_int32 i_0)) (0))
+                         (if ((neq_int_ (integer_of_int32 i)) (0))
                          then
                           (let jessie_13 = (C_6:
                                            begin
@@ -532,7 +532,7 @@ let or_ensures_default =
                                            end) in
                           void)
                          else
-                          (if ((neq_int_ (integer_of_int32 j_0)) (0))
+                          (if ((neq_int_ (integer_of_int32 j)) (0))
                           then
                            (let jessie_15 = (C_5:
                                             begin
@@ -561,11 +561,11 @@ let or_ensures_default =
    !return end))
   { (JC_13:
     (neq_int(integer_of_int32(result), (0))
-    <-> (neq_int(integer_of_int32(i_0), (0))
-        or neq_int(integer_of_int32(j_0), (0))))) }
+    <-> (neq_int(integer_of_int32(i), (0))
+        or neq_int(integer_of_int32(j), (0))))) }
 
 let or_safety =
- fun (i_0 : int32) (j_0 : int32) ->
+ fun (i : int32) (j : int32) ->
   { (JC_12: true) }
   (init:
   (let return = ref (any_int32 void) in
@@ -574,7 +574,7 @@ let or_safety =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_11 = begin
-                         (if ((neq_int_ (integer_of_int32 i_0)) (0))
+                         (if ((neq_int_ (integer_of_int32 i)) (0))
                          then
                           (let jessie_7 = (C_6:
                                           begin
@@ -585,7 +585,7 @@ let or_safety =
                                           end) in
                           void)
                          else
-                          (if ((neq_int_ (integer_of_int32 j_0)) (0))
+                          (if ((neq_int_ (integer_of_int32 j)) (0))
                           then
                            (let jessie_9 = (C_5:
                                            begin

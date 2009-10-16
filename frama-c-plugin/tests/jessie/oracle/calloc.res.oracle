@@ -400,12 +400,12 @@ behavior default:
   ensures (C_14 : (\result == strlen{Here}(s)));
 ;
 
-char_P[..] calloc(uint32 nmemb, uint32 size_0)
+char_P[..] calloc(uint32 nmemb, uint32 size)
 behavior default:
   assumes true;
   assigns \nothing;
   ensures (C_15 : ((C_16 : (\offset_min(\result) <= 0)) &&
-                    (C_17 : (\offset_max(\result) >= ((size_0 * nmemb) - 1)))));
+                    (C_17 : (\offset_max(\result) >= ((size * nmemb) - 1)))));
 ;
 
 unit f(char_P[..] x)
@@ -1482,7 +1482,7 @@ parameter any_uint32 : unit -> { } uint32 { true }
 
 parameter calloc :
  nmemb:uint32 ->
-  size_0:uint32 ->
+  size:uint32 ->
    char_P_result_25_alloc_table:char_P alloc_table ->
     { } char_P pointer
     { ((true = true) ->
@@ -1491,13 +1491,12 @@ parameter calloc :
         le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
        and (JC_46:
            ge_int(offset_max(char_P_result_25_alloc_table, result),
-           sub_int(mul_int(integer_of_uint32(size_0),
-                   integer_of_uint32(nmemb)),
+           sub_int(mul_int(integer_of_uint32(size), integer_of_uint32(nmemb)),
            (1))))))) }
 
 parameter calloc_requires :
  nmemb:uint32 ->
-  size_0:uint32 ->
+  size:uint32 ->
    char_P_result_25_alloc_table:char_P alloc_table ->
     { } char_P pointer
     { ((true = true) ->
@@ -1506,8 +1505,7 @@ parameter calloc_requires :
         le_int(offset_min(char_P_result_25_alloc_table, result), (0)))
        and (JC_46:
            ge_int(offset_max(char_P_result_25_alloc_table, result),
-           sub_int(mul_int(integer_of_uint32(size_0),
-                   integer_of_uint32(nmemb)),
+           sub_int(mul_int(integer_of_uint32(size), integer_of_uint32(nmemb)),
            (1))))))) }
 
 parameter f :
