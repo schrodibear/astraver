@@ -161,7 +161,10 @@ else
 JCLIB=jc/jc.cmo
 endif
 
-all: $(BINARY) $(WHYCONFIG) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST) $(JESSIE_PLUGIN_BEST)
+# refrain parallel make (-j nn) from starting ocaml compilation too early 
+*.cm*: .depend
+
+all: .depend $(BINARY) $(WHYCONFIG) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST) $(JESSIE_PLUGIN_BEST)
 
 opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.opt bin/krakatoa.opt
 	$(JESSIE_PLUGIN_OPT)

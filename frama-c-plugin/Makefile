@@ -53,20 +53,13 @@ PLUGIN_DOCFLAGS:=$(JESSIE_INCLUDES)
 
 PLUGIN_TESTS_DIRS:=jessie
 
-interp.cmo: $(WHY_DISTRIB)/jc/jc.cmo
-
-interp.cmi: $(WHY_DISTRIB)/jc/jc.cmi
-
-interp.cmx: $(WHY_DISTRIB)/jc/jc.cmx
-
-
 ifeq ($(FRAMAC_MAKE),yes)
 unexport $(FRAMAC_MAKE)
 
 all: why_all
 
 .PHONY: why_all
-why_all: all: $(WHY_DISTRIB)/Makefile
+why_all: $(WHY_DISTRIB)/Makefile
 	$(MAKE) -C $(WHY_DISTRIB) all
 
 depend::
@@ -75,6 +68,12 @@ depend::
 clean::
 	$(MAKE) -C $(WHY_DISTRIB) clean
 endif
+
+interp.cmo: $(WHY_DISTRIB)/jc/jc.cmo
+
+interp.cmi: $(WHY_DISTRIB)/jc/jc.cmi
+
+interp.cmx: $(WHY_DISTRIB)/jc/jc.cmx
 
 jessie_config.ml:
 	echo "let jessie_local = false" > $@
@@ -88,7 +87,10 @@ $(WHY_DISTRIB)/config.status: $(WHY_DISTRIB)/configure
 $(WHY_DISTRIB)/configure: $(WHY_DISTRIB)/configure.in
 	cd $(WHY_DISTRIB) && autoconf
 
-$(WHY_DISTRIB)/%:
+$(WHY_DISTRIB)/Makefile.in: ;
+$(WHY_DISTRIB)/configure.in: ;
+
+$(WHY_DISTRIB)/%: $(WHY_DISTRIB)/Makefile
 	$(MAKE) -C $(WHY_DISTRIB) $*
 
 PLUGIN_GENERATED_LIST+=$(JESSIE_HOME_DIR)/jessie_config.ml
