@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.mli,v 1.31 2008-11-05 14:03:15 filliatr Exp $ *)
+(* $Id: jc_envset.mli,v 1.32 2009-10-19 11:55:33 bobot Exp $ *)
 
 module type OrderedType =
 sig
@@ -96,6 +96,9 @@ module AllocClass : OrderedHashedType with type t = alloc_class
 module PointerClass : OrderedHashedType with type t = pointer_class
 
 module LogicLabelSet : Set.S with type elt = label
+
+module TypeVarOrd : OrderedHashedType with type t = type_var_info
+module TypeVarMap : Map.S with type key = type_var_info
 
 (*
 Local Variables: 

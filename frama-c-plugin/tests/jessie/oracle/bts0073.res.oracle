@@ -39,7 +39,7 @@ type void_P = [void_P]
 
 axiomatic myaxioms {
 
-  logic myrelation(int32 p, int32 q)
+  predicate myrelation(int32 p, int32 q)
    
   logic int32 mylogic{L}(int_P[..] p_0)
    

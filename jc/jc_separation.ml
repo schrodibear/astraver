@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_separation.ml,v 1.44 2009-03-16 08:36:39 marche Exp $ *)
+(* $Id: jc_separation.ml,v 1.45 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -337,7 +337,7 @@ let code_component fls =
   (* Fill in association table at each call site *)
   List.iter code_function fls
 
-let axiom id (loc,is_axiom,labels,a) = assertion (* labels *) dummy_region a
+let axiom id (loc,is_axiom,_,labels,a) = assertion (* labels *) dummy_region a
 
 let regionalize_assertion a assoc =
   Jc_iterators.map_term_in_assertion (fun t ->

@@ -36,7 +36,7 @@ behavior default:
 	         && (x:>real) <= 2.0*(y :> real); 
         ensures (\result :> real) == (x :> real) - (y :> real);
 {
-  return ((x :> real) - (y :> real)) :> double;
+  return (((x :> real) - (y :> real)) :> double);
 }
 
 
@@ -60,10 +60,10 @@ behavior default:
 
 float poly(float x) 
   behavior default:
-	assumes x :> real == \real_sqrt(2.0)/2.0;
-	ensures \result :> real == 0.0;
+	assumes (x :> real) == \real_sqrt(2.0)/2.0;
+	ensures (\result :> real) == 0.0;
 {
-return (2.0 :> float)*x*x-(1.0 :> float);
+return (2.0:>float)*x*x-(1.0 :> float);
 }
 
 
@@ -78,8 +78,8 @@ logic real power(real x, integer n)
 
 float moncos(float x) 
 behavior default:
-	assumes \real_abs(x :> real) <= 1.0/32.0;
-	ensures \real_abs((\result :> real) - cos(x :> real)) <= power(2.0,-23);
+	assumes \real_abs((x :> real)) <= 1.0/32.0;
+	ensures \real_abs((\result :> real) - cos((x :> real))) <= power(2.0,-23);
 {
   return (1.0 :> float) - x*x*(0.5 :>float);
 }
@@ -120,7 +120,7 @@ real testsqrt()
 
 double testsqrt_double()
   behavior default: 
-   ensures \result :>real == 2.0;
+   ensures (\result :>real) == 2.0;
 { 
   return \double_sqrt(4.0 :>double); 
 }
@@ -182,9 +182,9 @@ boolean testltfloat()
 
 float testcast(double x)
  behavior default: 
-   ensures \result :>real == 2.0;
+   ensures (\result :>real) == 2.0;
 {
-return (2.0 :>double):>float;
+return ((2.0 :>double):>float);
 }
 
 
@@ -214,7 +214,7 @@ double Sterbenz(double x, double y)
 double test3(double x)
 behavior default :
   assumes \is_plus_infinity_double(x);  
-  ensures \result :> real == 0.0; 
+  ensures (\result :> real) == 0.0; 
 { 
 return ((3.0:>double)/x);
 }
@@ -250,6 +250,6 @@ double test7()
 behavior default :
   ensures \is_finite_double(\result);
 {
-return 2.0:>double;
+return (2.0:>double);
 }
 */

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.47 2009-09-04 15:29:45 bobot Exp $ i*)
+(*i $Id: output.ml,v 1.48 2009-10-19 11:55:33 bobot Exp $ i*)
 
 open Lexing
 open Format
@@ -97,6 +97,10 @@ type logic_type =
       logic_type_args : logic_type list;
     }
 (*r int, float, int list, ... *)
+
+let logic_type_var s = { logic_type_name = "'"^s;
+                   logic_type_args = [];
+                 }
 
 let rec iter_logic_type f t =
   f t.logic_type_name;

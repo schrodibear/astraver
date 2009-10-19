@@ -31,7 +31,7 @@ type void_P = [void_P]
 
 axiomatic Foo {
 
-  logic foo(integer x)
+  predicate foo(integer x)
    
   axiom f0 :
   foo(0)

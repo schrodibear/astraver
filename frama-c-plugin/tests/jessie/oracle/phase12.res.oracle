@@ -53,14 +53,15 @@ uint32 __TT1_cpt;
 
 enum___anonenum_T_RESULTAT_1_P[..] __TT1_v0;
 
-logic f_cond0{L}(enum___anonenum_T_RESULTAT_1_P[..] testv0, integer cpt) =
+predicate f_cond0{L}(enum___anonenum_T_RESULTAT_1_P[..] testv0, integer cpt) =
 ((testv0 + cpt).enum___anonenum_T_RESULTAT_1_M == 1)
 
-logic f_cond1{L}(enum___anonenum_T_RESULTAT_1_P[..] testv0_0, integer cpt_0) =
+predicate f_cond1{L}(enum___anonenum_T_RESULTAT_1_P[..] testv0_0,
+                     integer cpt_0) =
 ((testv0_0 + cpt_0).enum___anonenum_T_RESULTAT_1_M == 0)
 
-logic f_cond_OK{L}(enum___anonenum_T_RESULTAT_1_P[..] testv0_1,
-                   integer cpt_1, integer cpt_panne) =
+predicate f_cond_OK{L}(enum___anonenum_T_RESULTAT_1_P[..] testv0_1,
+                       integer cpt_1, integer cpt_panne) =
 (f_cond0{L}(testv0_1, cpt_1) ||
   (f_cond1{L}(testv0_1, cpt_1) &&
     ((__ConsignerPanne_v0 + cpt_panne).enum___anonenum_T_RESULTAT_1_M == 1)))

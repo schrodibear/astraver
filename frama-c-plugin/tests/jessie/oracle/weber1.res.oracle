@@ -37,7 +37,7 @@ tag void_P = {
 
 type void_P = [void_P]
 
-logic disjoint_arrays(int_P[..] a, int_P[..] b, integer i) =
+predicate disjoint_arrays(int_P[..] a, int_P[..] b, integer i) =
 (\forall integer k1;
   (\forall integer k2;
     ((((0 <= k1) && (k1 < i)) && ((0 <= k2) && (k2 < i))) ==>

@@ -63,7 +63,7 @@ axiomatic IntArray {
   
 }
 
-logic Swap(int_array a1, int_array a2, integer i_3, integer j_0) =
+predicate Swap(int_array a1, int_array a2, integer i_3, integer j_0) =
 (((access(a1, i_3) == access(a2, j_0)) &&
    (access(a1, j_0) == access(a2, i_3))) &&
   (\forall integer k;
@@ -71,7 +71,7 @@ logic Swap(int_array a1, int_array a2, integer i_3, integer j_0) =
 
 axiomatic Permut {
 
-  logic Permut(int_array a1_0, int_array a2_0, integer l, integer h)
+  predicate Permut(int_array a1_0, int_array a2_0, integer l, integer h)
    
   axiom Permut_refl :
   (\forall int_array a_3;
@@ -131,18 +131,18 @@ axiomatic ArrayContents {
   
 }
 
-logic Sorted{L}(int_P[..] a_6, integer l_5, integer h_5) =
+predicate Sorted{L}(int_P[..] a_6, integer l_5, integer h_5) =
 (\forall integer i_6;
   (((l_5 <= i_6) && (i_6 < h_5)) ==>
     ((a_6 + i_6).int_M <= (a_6 + (i_6 + 1)).int_M)))
 
-logic Hnode{L}(int_P[..] a_7, integer i_7, integer h_6) =
+predicate Hnode{L}(int_P[..] a_7, integer i_7, integer h_6) =
 (((((2 * i_7) + 1) <= h_6) ==>
    ((a_7 + i_7).int_M >= (a_7 + ((2 * i_7) + 1)).int_M)) &&
   ((((2 * i_7) + 2) <= h_6) ==>
     ((a_7 + i_7).int_M >= (a_7 + ((2 * i_7) + 2)).int_M)))
 
-logic H{L}(int_P[..] a_8, integer l_6, integer h_7) =
+predicate H{L}(int_P[..] a_8, integer l_6, integer h_7) =
 (\forall integer i_8;
   (((l_6 <= i_8) && (i_8 <= h_7)) ==> Hnode{L}(a_8, i_8, h_7)))
 

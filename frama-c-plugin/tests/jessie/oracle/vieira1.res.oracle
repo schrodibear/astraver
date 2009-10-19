@@ -39,8 +39,8 @@ type void_P = [void_P]
 
 axiomatic Sumone {
 
-  logic sumone{L1, L2}(integer k1, int_P[..] a1, int_P[..] b1, integer k2,
-                       int_P[..] a2, int_P[..] b2, integer n)
+  predicate sumone{L1, L2}(integer k1, int_P[..] a1, int_P[..] b1,
+                           integer k2, int_P[..] a2, int_P[..] b2, integer n)
    
   axiom sumone_start{L} :
   (\forall integer k1_0;

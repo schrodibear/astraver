@@ -42,10 +42,10 @@ logic real sqr_real(real x_0) =
 lemma l2 :
 ((sqr_real(1.5) == 2.25) && (sqr_integer((- 5)) == 25))
 
-logic is_pos_integer(integer x_1) =
+predicate is_pos_integer(integer x_1) =
 (x_1 > 0)
 
-logic is_pos_real(real x_2) =
+predicate is_pos_real(real x_2) =
 (x_2 > 0.0)
 
 lemma l3 :

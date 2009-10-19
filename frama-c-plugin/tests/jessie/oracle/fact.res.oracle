@@ -27,7 +27,7 @@ tag void_P = {
 
 type void_P = [void_P]
 
-logic is_prod(integer a, integer b, integer n) {
+predicate is_prod(integer a, integer b, integer n) {
 case is_prod_empty: (\forall integer a_0;
                       (\forall integer b_0;
                         ((a_0 > b_0) ==> is_prod(a_0, b_0, 1))));

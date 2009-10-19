@@ -39,7 +39,7 @@ val is_root_struct : struct_info -> bool
 
 val substruct : struct_info -> pointer_class -> bool
 
-val logic_type_table : (string,string) Hashtbl.t
+val logic_type_table : (string,string * type_var_info list) Hashtbl.t
   
 
 val logic_constants_table : 
@@ -69,7 +69,7 @@ val enum_conversion_logic_functions_table : (logic_info, string) Hashtbl.t
 *)
 
 val lemmas_table : 
-  (string, Loc.position * bool * label list * assertion) Hashtbl.t
+  (string, Loc.position * bool * type_var_info list * label list * assertion) Hashtbl.t
 
 type axiomatic_decl =
   | ABaxiom of Loc.position * string * Jc_env.label list * Jc_constructors.assertion

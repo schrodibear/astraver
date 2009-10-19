@@ -39,7 +39,7 @@ type void_P = [void_P]
 
 axiomatic Not_supported {
 
-  logic disjoint_arrays(int_P[..] a, int_P[..] b, integer length)
+  predicate disjoint_arrays(int_P[..] a, int_P[..] b, integer length)
   
 }
 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.31 2009-09-04 15:29:45 bobot Exp $ i*)
+(*i $Id: output.mli,v 1.32 2009-10-19 11:55:33 bobot Exp $ i*)
 
 type constant =
   | Prim_void
@@ -40,6 +40,8 @@ type logic_type =
     { logic_type_name : string;
       logic_type_args : logic_type list;
     }
+
+val logic_type_var : string -> logic_type
 
 val fprintf_logic_type : Format.formatter -> logic_type -> unit
 

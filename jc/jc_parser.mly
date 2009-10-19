@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.135 2009-09-04 15:29:45 bobot Exp $ */
+/* $Id: jc_parser.mly,v 1.136 2009-10-19 11:55:33 bobot Exp $ */
 
 %{
 
@@ -99,7 +99,8 @@
 %token ABSTRACT PACK UNPACK ASSERT ASSUME HINT CHECK
 
 /* type invariant logic axiomatic with variant and axiom tag */
-%token TYPE INVARIANT LOGIC AXIOMATIC WITH VARIANT AND AXIOM LEMMA TAG
+%token TYPE INVARIANT LOGIC PREDICATE AXIOMATIC WITH VARIANT 
+%token AND AXIOM LEMMA TAG
 
 /* integer boolean real double unit void rep */
 %token INTEGER BOOLEAN REAL DOUBLE FLOAT UNIT REP
@@ -155,7 +156,7 @@
 
 /* precedences on expressions  */
 
-%nonassoc RETURN ASSERT ASSUME THROW HINT precwhile
+%nonassoc RETURN ASSERT ASSUME THROW HINT precwhile CHECK
 %nonassoc COLON
 %nonassoc PRECFORALL 
 /* <=> */
@@ -166,11 +167,12 @@
 %left BARBAR
 %left AMPAMP
 %left PIPE
+%left pipe_trigger
 %left ALT
 %left AS
 %left HAT
 %left AMP
-%left LT GT LTEQ GTEQ EQEQ BANGEQ COLONGT LTCOLON
+%left LT GT LTEQ GTEQ EQEQ BANGEQ LTCOLON COLONGT
 %nonassoc DOTDOT
 /* unary -, unary +, ++, --, ! ~ */
 %nonassoc UMINUS UPLUS PLUSPLUS MINUSMINUS EXCLAM TILDE
@@ -388,9 +390,10 @@ type_expr:
     { locate (JCPTnative (Tgenfloat `Float)) }
 | UNIT
     { locate (JCPTnative Tunit) }
-| IDENTIFIER
-    { locate (JCPTidentifier $1) }
-
+| IDENTIFIER 
+    { locate (JCPTidentifier ($1,[])) }
+| IDENTIFIER  LT type_parameters GT
+    { locate (JCPTidentifier ($1,$3)) }
 | IDENTIFIER LSQUARE DOTDOT RSQUARE
     { locate (JCPTpointer($1,[],None,None)) }
 | IDENTIFIER LSQUARE int_constant RSQUARE
@@ -556,6 +559,8 @@ primary_expression:
     { locate (JCPEconst JCCnull) }
 | STRING_LITERAL 
     { locate (JCPEconst (JCCstring $1)) }
+| LPAR expression COLONGT type_expr RPAR
+    { locate (JCPEcast($2, $4)) }
 | LPAR expression RPAR 
     { $2 }
 | LPAR IDENTIFIER COLON expression RPAR
@@ -745,8 +750,9 @@ expression:
 | expression COLONGT INTEGER
     { locate (JCPEcast($1, "integer")) }
 */
-| expression COLONGT type_expr
-    { locate (JCPEcast($1, $3)) }
+/* COLOGT est maintenant dans primary_expr */
+/*| expression COLONGT type_expr
+    { locate (JCPEcast($1, $3)) }*/
 | expression EQEQ expression 
     { locate (JCPEbinary ($1, `Beq, $3)) }
 | expression BANGEQ expression 
@@ -755,7 +761,7 @@ expression:
     { locate (JCPEbinary ($1, `Bbw_and, $3)) }
 | expression HAT expression 
     { locate (JCPEbinary ($1, `Bbw_xor, $3)) }
-| expression PIPE expression 
+| expression PIPE expression
     { locate (JCPEbinary ($1, `Bbw_or, $3)) }
 | expression AMPAMP expression 
     { locate (JCPEbinary($1, `Bland, $3)) }
@@ -840,7 +846,7 @@ triggers:
 
 list1_trigger_sep_bar:
 | trigger { [$1] }
-| trigger PIPE list1_trigger_sep_bar { $1 :: $3 }
+| trigger PIPE list1_trigger_sep_bar  %prec pipe_trigger { $1 :: $3 }
 ;
 
 trigger:
@@ -1025,48 +1031,49 @@ exception_expression:
 
 logic_definition:
 /* constants def */
-| LOGIC type_expr IDENTIFIER EQ expression
-    { locate (JCDlogic(Some $2, $3, [], [], JCexpr $5)) }
+| LOGIC type_expr IDENTIFIER logic_type_arg EQ expression
+    { locate (JCDlogic(Some $2, $3, $4, [], [], JCexpr $6)) }
 /* constants no def */
-| LOGIC type_expr IDENTIFIER 
-    { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
+| LOGIC type_expr IDENTIFIER logic_type_arg
+    { locate (JCDlogic(Some $2, $3, $4 , [], [], JCreads [])) }
 /* logic fun def */
-| LOGIC type_expr IDENTIFIER label_binders parameters EQ expression
-    { let p = lparams $5 in
-      locate (JCDlogic(Some $2, $3, $4, p, JCexpr $7)) }
+| LOGIC type_expr IDENTIFIER logic_type_arg label_binders parameters EQ expression
+    { let p = lparams $6 in
+      locate (JCDlogic(Some $2, $3, $4 , $5, p, JCexpr $8)) }
 /* logic pred def */
-| LOGIC IDENTIFIER label_binders parameters EQ expression
-    { let p = lparams $4 in
-      locate (JCDlogic(None, $2, $3, p, JCexpr $6)) }
+| PREDICATE IDENTIFIER logic_type_arg label_binders parameters EQ expression
+    { let p = lparams $5 in
+      locate (JCDlogic(None, $2, $3  ,$4, p, JCexpr $7)) }
 /* logic fun reads */
 /*
-| LOGIC type_expr IDENTIFIER label_binders parameters reads %prec PRECLOGIC
-    { locate (JCDlogic(Some $2, $3, $4, $5, JCreads $6)) }
+| LOGIC type_expr IDENTIFIER logic_type_arg label_binders parameters reads %prec PRECLOGIC
+    { locate (JCDlogic(Some $2, $3, $4 ,$5, $6, JCreads $7)) }
 */
 /* logic pred reads */
 /*
-| LOGIC IDENTIFIER label_binders parameters reads %prec PRECLOGIC
-    { locate (JCDlogic(None, $2, $3, $4, JCreads $5)) }
+| PREDICATE IDENTIFIER logic_type_arg label_binders parameters reads %prec PRECLOGIC
+    { locate (JCDlogic(None, $2, $3 ,$4, $5, JCreads $6)) }
 */
 /* logic fun axiomatic def */
 /*
-| LOGIC type_expr IDENTIFIER label_binders parameters LBRACE axioms RBRACE
-    { locate (JCDlogic(Some $2, $3, $4, $5, JCaxiomatic $7)) }
+| LOGIC type_expr IDENTIFIER logic_type_arg label_binders parameters LBRACE axioms RBRACE
+    { locate (JCDlogic(Some $2, $3, $4 ,$5, $6, JCaxiomatic $8)) }
 */
 /* logic pred axiomatic def */
 /*
-| LOGIC IDENTIFIER label_binders parameters LBRACE axioms RBRACE
-    { locate (JCDlogic(None, $2, $3, $4, JCaxiomatic $6)) }
+| PREDICATE IDENTIFIER logic_type_arg label_binders parameters LBRACE axioms RBRACE
+    { locate (JCDlogic(None, $2, $3, $4, $5, JCaxiomatic $7)) }
 */
 /* logic pred inductive def */
-| LOGIC IDENTIFIER label_binders parameters LBRACE indcases RBRACE
-    { let p = lparams $4 in
-      locate (JCDlogic(None, $2, $3, p, JCinductive $6)) }
+| PREDICATE IDENTIFIER logic_type_arg label_binders parameters LBRACE indcases RBRACE
+    { let p = lparams $5 in
+      locate (JCDlogic(None, $2, $3 ,$4 , p, JCinductive $7)) }
 | AXIOMATIC IDENTIFIER LBRACE logic_declarations RBRACE
     { locate (JCDaxiomatic($2,$4)) } 
-| LEMMA IDENTIFIER label_binders COLON expression
-    { locate( JCDlemma($2,false,$3,$5)) }
+| LEMMA IDENTIFIER logic_type_arg label_binders COLON expression
+    { locate( JCDlemma($2,false,$3,$4,$6)) }
 ;
+
 
 
 
@@ -1077,23 +1084,31 @@ logic_declarations:
     { $1::$2 }
 ;
 
+string_list:
+| IDENTIFIER {[$1]}
+| IDENTIFIER COMMA string_list {$1::$3}
+
+logic_type_arg:
+| {[]}
+| LT string_list GT {$2}
+
 logic_declaration:
 | logic_definition
     { $1 }
-| LOGIC TYPE IDENTIFIER
-    { locate (JCDlogic_type($3)) }
+| LOGIC TYPE IDENTIFIER logic_type_arg
+    { locate (JCDlogic_type($3,$4)) }
 /* remove this comment if removed from logic_definition
 | LOGIC type_expr IDENTIFIER 
     { locate (JCDlogic(Some $2, $3, [], [], JCreads [])) }
 */
-| LOGIC IDENTIFIER label_binders parameters reads
-    { let p = lparams $4 in
-      locate (JCDlogic(None, $2, $3, p, JCreads $5)) }
-| LOGIC type_expr IDENTIFIER label_binders parameters reads
-	{ let p = lparams $5 in
-	  locate (JCDlogic(Some $2, $3, $4, p, JCreads $6)) }
-| AXIOM identifier label_binders COLON expression
-    { locate( JCDlemma($2#name,true,$3,$5)) }
+| PREDICATE IDENTIFIER logic_type_arg label_binders parameters reads
+    { let p = lparams $5 in
+      locate (JCDlogic(None, $2, $3, $4, p, JCreads $6)) }
+| LOGIC type_expr IDENTIFIER logic_type_arg label_binders parameters reads
+	{ let p = lparams $6 in
+	  locate (JCDlogic(Some $2, $3, $4, $5, p, JCreads $7)) }
+| AXIOM identifier logic_type_arg label_binders COLON expression
+    { locate( JCDlemma($2#name,true,$3,$4,$6)) }
 ;
 
 indcases:
@@ -1143,7 +1158,7 @@ field_patterns:
     { [] }
 ;
 
-/*Multiply defined : Does ocamlyacc take the last*/
+/*Multiply defined : Does ocamlyacc take the last. In fact it seems to take the first (cf. variant.jc)*/
 pattern_expression_list:
 | pattern MINUSGT expression SEMICOLON pattern_expression_list
     { ($1, $3)::$5 }
@@ -1151,21 +1166,22 @@ pattern_expression_list:
     { [$1, $3] }
 ;
 
-pattern_expression_list:
+
+/*pattern_expression_list:
 | pattern MINUSGT compound_expr pattern_expression_list
     { ($1, $3)::$4 }
 | pattern MINUSGT compound_expr
     { [$1, $3] }
-;
+;*/
 
 /**************/
 /* pragma_gen_sep */
 /**************/
 pragma_gen_sep:
-| PRAGMA_GEN_SEP IDENTIFIER  LPAR type_expr_comma_list RPAR
-    { locate (JCDpragma_gen_sep("",$2, $4)) }
-| PRAGMA_GEN_SEP IDENTIFIER IDENTIFIER  LPAR type_expr_comma_list RPAR
-    { locate (JCDpragma_gen_sep($2,$3, $5)) }
+| PRAGMA_GEN_SEP IDENTIFIER type_expr_parameters
+    { locate (JCDpragma_gen_sep("",$2, $3)) }
+| PRAGMA_GEN_SEP IDENTIFIER IDENTIFIER type_expr_parameters
+    { locate (JCDpragma_gen_sep($2,$3, $4)) }
 ;
 
 type_expr_parameters:

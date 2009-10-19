@@ -48,7 +48,7 @@ invariant valid_Page :
 
 axiomatic EqMessage {
 
-  logic eq_message{L}(char_P[..] s, integer m)
+  predicate eq_message{L}(char_P[..] s, integer m)
   
 }
 

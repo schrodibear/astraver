@@ -39,7 +39,7 @@ type void_P = [void_P]
 
 axiomatic P {
 
-  logic p{L}(int_P[..] x)
+  predicate p{L}(int_P[..] x)
    
   axiom p_footprint{L} :
   (\forall int_P[..] x_0;

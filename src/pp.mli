@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pp.mli,v 1.21 2009-09-04 15:29:45 bobot Exp $ i*)
+(*i $Id: pp.mli,v 1.22 2009-10-19 11:55:33 bobot Exp $ i*)
 
 open Format
 
@@ -71,6 +71,8 @@ val lsquare : formatter -> unit -> unit
 val rsquare : formatter -> unit -> unit
 val lparen : formatter -> unit -> unit
 val rparen : formatter -> unit -> unit
+val lchevron : formatter -> unit -> unit
+val rchevron : formatter -> unit -> unit
 val nothing : formatter -> 'a -> unit
 val string : formatter -> string -> unit
 val constant_string : string -> formatter -> unit -> unit

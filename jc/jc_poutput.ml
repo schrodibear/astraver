@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.42 2009-09-04 15:29:45 bobot Exp $ *)
+(* $Id: jc_poutput.ml,v 1.43 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Format
 open Jc_env
@@ -351,9 +351,7 @@ let reads_or_expr fmt = function
 		(print_list_delim lbrace rbrace comma label) labels
 		pexpr e)) l
 
-let type_params_decl fmt = function
-  | [] -> ()
-  | l -> fprintf fmt "<%a>" (print_list comma Pp.string) l
+let type_params_decl fmt l = print_list_delim lchevron rchevron comma Pp.string fmt l
 
 let type_params fmt = function
   | [] -> ()
@@ -398,11 +396,12 @@ let rec pdecl fmt d =
     | JCDvar(ty,id,init) ->
 	fprintf fmt "@\n@[%a %s%a;@]@\n" ptype ty id
 	  (print_option (fun fmt e -> fprintf fmt " = %a" pexpr e)) init
-    | JCDlemma(id,is_axiom,lab,a) ->
-	fprintf fmt "@\n@[%s %s" (if is_axiom then "axiom" else "lemma") id;
-	fprintf fmt "@[%a@]" 
-	  (print_list_delim lbrace rbrace comma label) lab;
-	fprintf fmt " :@\n%a@]@\n" pexpr a
+    | JCDlemma(id,is_axiom,poly_args,lab,a) ->
+	fprintf fmt "@\n@[%s %s@[%a@]@[%a@] :@\n%a@]@\n" 
+          (if is_axiom then "axiom" else "lemma") id
+	  (print_list_delim lchevron rchevron comma string) poly_args
+	  (print_list_delim lbrace rbrace comma label) lab
+	  pexpr a
     | JCDglobal_inv(id,a) ->
 	fprintf fmt "@\n@[invariant %s :@\n%a@]@\n" id pexpr a
     | JCDexception(id,tyopt) ->
@@ -412,19 +411,22 @@ let rec pdecl fmt d =
 	fprintf fmt "@\n@[logic %a %s %a@]@\n" 
 	  ptype ty id
 	  (print_option (fun fmt e -> fprintf fmt "=@\n%a" pexpr e)) body 
-    | JCDlogic (None, id, labels, params, body) ->
-	fprintf fmt "@\n@[logic %s@[%a@](@[%a@])%a@]@\n" 
-	  id (print_list_delim lbrace rbrace comma label) labels
+    | JCDlogic (None, id, poly_args, labels, params, body) ->
+	fprintf fmt "@\n@[predicate %s@[%a@]@[%a@](@[%a@])%a@]@\n" 
+	  id 
+          (print_list_delim lchevron rchevron comma string) poly_args
+          (print_list_delim lbrace rbrace comma label) labels
 	  (print_list comma param) params
 	  reads_or_expr body 
-    | JCDlogic (Some ty, id, labels, params, body) ->
-	fprintf fmt "@\n@[logic %a %s@[%a@](@[%a@])%a@]@\n" 
-	  ptype ty 
-	  id (print_list_delim lbrace rbrace comma label) labels
+    | JCDlogic (Some ty, id, poly_args, labels, params, body) ->
+	fprintf fmt "@\n@[logic %a %s@[%a@]@[%a@](@[%a@])%a@]@\n" 
+	  ptype ty id 
+          (print_list_delim lchevron rchevron comma string) poly_args
+          (print_list_delim lbrace rbrace comma label) labels
 	  (print_list comma param) params
 	  reads_or_expr body 
-    | JCDlogic_type id ->
-	fprintf fmt "@\n@[logic type %s@]@\n" id
+    | JCDlogic_type (id,args) ->
+	fprintf fmt "@\n@[logic type %s%a@]@\n" id (print_list_delim lchevron rchevron comma string) args
     | JCDinvariant_policy p ->
         fprintf fmt "# InvariantPolicy = %s@\n" (string_of_invariant_policy p)  
     | JCDseparation_policy p ->

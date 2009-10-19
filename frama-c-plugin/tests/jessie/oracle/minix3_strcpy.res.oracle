@@ -363,18 +363,18 @@ logic integer minimum(integer i_25, integer j_1) =
 logic integer maximum(integer i_26, integer j_2) =
 (if (i_26 < j_2) then j_2 else i_26)
 
-logic valid_string{L}(char_P[..] s_28) =
+predicate valid_string{L}(char_P[..] s_28) =
 ((0 <= strlen{L}(s_28)) &&
   ((\offset_min(s_28) <= 0) && (\offset_max(s_28) >= strlen{L}(s_28))))
 
-logic valid_string_or_null{L}(char_P[..] s_29) =
+predicate valid_string_or_null{L}(char_P[..] s_29) =
 ((s_29 == null) || valid_string{L}(s_29))
 
-logic valid_wstring{L}(unsigned_short_P[..] s_30) =
+predicate valid_wstring{L}(unsigned_short_P[..] s_30) =
 ((0 <= wcslen{L}(s_30)) &&
   ((\offset_min(s_30) <= 0) && (\offset_max(s_30) >= wcslen{L}(s_30))))
 
-logic valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
+predicate valid_wstring_or_null{L}(unsigned_short_P[..] s_31) =
 ((s_31 == null) || valid_wstring{L}(s_31))
 
 char_P[..] strcpy(char_P[..] ret, char_P[..] s2)

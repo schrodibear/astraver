@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_constructors.ml,v 1.30 2009-05-26 14:25:00 bobot Exp $ *)
+(* $Id: jc_constructors.ml,v 1.31 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Jc_env
 open Jc_region
@@ -394,12 +394,13 @@ module PDecl = struct
   let mkfun_def ?(result_type = new ptype (JCPTnative Tunit)) ~name
       ?(params = []) ?(clauses = []) ?body =
     mk ~node:(JCDfun(result_type, name, params, clauses, body))
-  let mklemma_def ~name ?(axiom = false) ?(labels = []) ~body =
-    mk ~node:(JCDlemma(name, axiom, labels, body))
+  let mklemma_def ~name ?(axiom = false) ?(poly_args=[]) ?(labels = []) ~body =
+    mk ~node:(JCDlemma(name, axiom, poly_args, labels, body))
   let mklogic_var_def ~typ ~name ?body =
     mk ~node:(JCDlogic_var(typ, name, body))
-  let mklogic_def ?typ ~name ?(labels = []) ?(params = []) ?reads ?body ?inductive = 
-  let roe = match reads, body, inductive with
+  let mklogic_def ?typ ~name ?(poly_args = []) ?(labels = []) ?(params = []) 
+      ?reads ?body ?inductive = 
+    let roe = match reads, body, inductive with
       | None, None, None -> JCreads []
       | Some r, None, None -> JCreads r
       | None, Some b, None -> JCexpr b
@@ -408,12 +409,12 @@ module PDecl = struct
           raise
             (Invalid_argument "mklogic_def: cannot use both ~reads and ~body and ~inductive")
     in
-    mk ~node:(JCDlogic(typ, name, labels, params, roe))
+    mk ~node:(JCDlogic(typ, name, poly_args, labels, params, roe))
       
   let mkaxiomatic ~name ~decls =
     mk ~node:(JCDaxiomatic(name,decls))
-  let mklogic_type ~name =
-    mk ~node:(JCDlogic_type(name))
+  let mklogic_type ?(args = []) ~name =
+    mk ~node:(JCDlogic_type(name,args))
   let mkvar_def ~typ ~name ?init =
     mk ~node:(JCDvar(typ, name, init))
   let mkglobal_inv_def ~name ~body =

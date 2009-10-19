@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_envset.ml,v 1.36 2009-04-09 10:51:26 marche Exp $ *)
+(* $Id: jc_envset.ml,v 1.37 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -130,13 +130,24 @@ let is_embedded_field fi =
     | JCTpointer(_,Some _,Some _) -> true
     | _ -> false
 
-module VarOrd = struct
-  type t = var_info
-  let compare v1 v2 = 
-    Pervasives.compare v1.jc_var_info_tag v2.jc_var_info_tag
-  let equal v1 v2 = v1.jc_var_info_tag = v2.jc_var_info_tag
-  let hash v = Hashtbl.hash v.jc_var_info_tag
+module type Tag =
+  sig
+    type t
+    val tag_of_val : t -> int
+  end
+
+module OrderedHashedTypeOfTag (X:Tag) : OrderedHashedType with type t = X.t =
+struct
+  type t = X.t
+  let compare v1 v2 = Pervasives.compare (X.tag_of_val v1) (X.tag_of_val v2)
+  let equal v1 v2 = (X.tag_of_val v1) = (X.tag_of_val v2)
+  let hash v = Hashtbl.hash (X.tag_of_val v)
 end
+
+module VarOrd = OrderedHashedTypeOfTag 
+  (struct type t = var_info
+          let tag_of_val x = x.jc_var_info_tag
+   end)
 
 module VarSet = Set.Make(VarOrd)
 
@@ -171,15 +182,10 @@ module VariantSet = Set.Make(VariantOrd)
 
 module VariantMap = Map.Make(VariantOrd)
 
-module FieldOrd =
-  struct type t = field_info
-	 let compare f1 f2 = 
-	   Pervasives.compare 
-	     f1.jc_field_info_tag f2.jc_field_info_tag
-	 let equal f1 f2 =
-	   f1.jc_field_info_tag = f2.jc_field_info_tag
-	 let hash fi = fi.jc_field_info_tag
-  end
+module FieldOrd =  OrderedHashedTypeOfTag 
+  (struct type t = field_info
+          let tag_of_val x = x.jc_field_info_tag
+   end)
 
 module FieldSet = Set.Make(FieldOrd)
 
@@ -245,12 +251,10 @@ struct
     | JCroot b -> VariantOrd.hash b
 end
 
-module ExceptionOrd =   
-  struct type t = exception_info
-	 let compare f1 f2 = 
-	   Pervasives.compare 
-	     f1.jc_exception_info_tag f2.jc_exception_info_tag
-  end
+module ExceptionOrd =  OrderedHashedTypeOfTag 
+  (struct type t = exception_info
+          let tag_of_val x = x.jc_exception_info_tag
+   end)  
 
 module ExceptionSet = Set.Make(ExceptionOrd)
 
@@ -262,6 +266,13 @@ module LogicLabelOrd =
   end
 
 module LogicLabelSet = Set.Make(LogicLabelOrd)
+
+module TypeVarOrd = OrderedHashedTypeOfTag 
+  (struct type t = type_var_info
+          let tag_of_val x = x.jc_type_var_info_tag
+   end)
+
+module TypeVarMap = Map.Make(TypeVarOrd)
 
 (*
 Local Variables: 

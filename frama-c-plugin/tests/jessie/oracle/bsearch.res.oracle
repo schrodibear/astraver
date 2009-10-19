@@ -42,7 +42,7 @@ lemma mean :
   (\forall integer y;
     ((x <= y) ==> ((x <= ((x + y) / 2)) && (((x + y) / 2) <= y)))))
 
-logic sorted{L}(long_P[..] t, integer a, integer b) =
+predicate sorted{L}(long_P[..] t, integer a, integer b) =
 (\forall integer i;
   (\forall integer j;
     (((a <= i) && ((i <= j) && (j <= b))) ==>

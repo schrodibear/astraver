@@ -346,11 +346,13 @@ let tr_native_type = function
   | Tgenfloat _ -> "gen_float"
   | Tstring -> "string"
 
-let tr_base_type ?region = function
+let rec tr_base_type ?region = function
   | JCTnative ty -> 
       simple_logic_type (tr_native_type ty)
-  | JCTlogic s -> 
-      simple_logic_type s
+  | JCTlogic (s,l) ->
+      { logic_type_name = s;
+        logic_type_args = List.map (tr_base_type ?region)  l;
+      }
   | JCTenum ri -> 
       simple_logic_type ri.jc_enum_info_name
   | JCTpointer(pc, _, _) ->
@@ -363,7 +365,7 @@ let tr_base_type ?region = function
       in
       pointer_type ac pc
   | JCTnull | JCTany -> assert false
-  | JCTtype_var _ -> assert false (* TODO (need environment) *)
+  | JCTtype_var t -> logic_type_var (Jc_type_var.uname t)
 
 let tr_type ~region ty = Base_type (tr_base_type ~region ty)
 

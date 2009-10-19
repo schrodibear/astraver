@@ -39,7 +39,7 @@ type void_P = [void_P]
 
 type __anonenum_RESULTAT_1 = 0..1
 
-logic result{L}(__anonenum_RESULTAT_1 status, int32 n) =
+predicate result{L}(__anonenum_RESULTAT_1 status, int32 n) =
 ((status == 0) && (n > 0))
 
 axiomatic statusInitial {
@@ -50,7 +50,7 @@ axiomatic statusInitial {
   (\forall integer i_0;
     (status_initial{L}(i_0) == 0))
    
-  logic function2_res{L}(int32 n_0) =
+  predicate function2_res{L}(int32 n_0) =
   result{L}(status_initial{L}(1), n_0)
   
 }

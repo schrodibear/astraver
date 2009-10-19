@@ -33,7 +33,7 @@ type void_P = [void_P]
 
 int32 g;
 
-logic gzero{L}() =
+predicate gzero{L}() =
 (g == 0)
 
 unit f()

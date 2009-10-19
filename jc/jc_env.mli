@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_env.mli,v 1.72 2009-08-26 12:41:55 marche Exp $ *)
+(* $Id: jc_env.mli,v 1.73 2009-10-19 11:55:33 bobot Exp $ *)
 
 type float_format = [ `Double | `Float | `Binary80 ]
 
@@ -53,12 +53,16 @@ type root_kind = Rvariant | RplainUnion | RdiscrUnion
 
 type jc_type =
   | JCTnative of native_type
-  | JCTlogic of string
+  | JCTlogic of (string * jc_type list)
   | JCTenum of enum_info
   | JCTpointer of pointer_class * Num.num option * Num.num option
   | JCTnull
   | JCTany (* used when typing (if ... then raise E else ...): raise E is any *)
-  | JCTtype_var of Jc_type_var.t
+  | JCTtype_var of type_var_info
+
+and type_var_info =  { jc_type_var_info_name : string;
+                       jc_type_var_info_tag : int;
+                       jc_type_var_info_univ : bool} (* The variable is universally quantified *)
 
 and pointer_class =
   | JCtag of struct_info * jc_type list (* struct_info, type parameters *)
@@ -73,7 +77,7 @@ and enum_info =
 
 and struct_info =
     { 
-              jc_struct_info_params : Jc_type_var.t list;
+              jc_struct_info_params : type_var_info list;
               jc_struct_info_name : string;
       mutable jc_struct_info_parent : (struct_info * jc_type list) option;
       mutable jc_struct_info_hroot : struct_info;

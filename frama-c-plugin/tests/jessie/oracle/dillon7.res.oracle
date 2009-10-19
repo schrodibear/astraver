@@ -53,7 +53,7 @@ real v;
 
 axiomatic MyCast {
 
-  logic simulated_cast{L}(__anonstruct_ts_1[..] p, float_P[..] t)
+  predicate simulated_cast{L}(__anonstruct_ts_1[..] p, float_P[..] t)
    
   axiom a{L} :
   (\forall __anonstruct_ts_1[..] p_0;

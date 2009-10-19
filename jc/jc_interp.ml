@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.423 2009-10-09 18:49:39 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.424 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -512,10 +512,17 @@ let tr_struct st acc =
 (******************************************************************************)
 
 let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty_src e e' =
+  let rec aux a b = 
+    match a,b with
+      | JCTlogic (t,tl), JCTlogic (u,ul) when t = u -> List.for_all2 aux tl ul
+      | JCTtype_var _, JCTtype_var _ -> true (*jc_typing take care of that*)
+      | (JCTtype_var _, _) | (_,JCTtype_var _) -> true
+      | _ -> false
+  in
   match ty_dst, ty_src with
       (* identity *)
     | JCTnative t, JCTnative u when t = u -> e'
-    | JCTlogic t, JCTlogic u when t = u -> e'
+    | (JCTlogic _|JCTtype_var _), (JCTlogic _|JCTtype_var _) when aux ty_dst ty_src -> e'
     | JCTany, JCTany -> e'
       (* between integer/enum and real *)
     | JCTnative Treal, JCTnative Tinteger -> 
@@ -566,7 +573,7 @@ let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos ty_dst ty
         LApp("downcast", [ tag; e'; LVar (tag_name st1) ])
     |  _ -> 
          Jc_typing.typing_error pos 
-           "can't coerce type %a to type %a" 
+           "can't (term_)coerce type %a to type %a" 
            print_type ty_src print_type ty_dst
            
 let eval_integral_const e =
@@ -3361,7 +3368,7 @@ let tr_specialized_fun n fname param_name_assoc acc =
 (*                               Logic entities                               *)
 (******************************************************************************)
 
-let tr_logic_type id acc = Type(id,[]) :: acc
+let tr_logic_type (id,l) acc = Type(id,List.map Jc_type_var.name l) :: acc
 
 
 let tr_exception ei acc =

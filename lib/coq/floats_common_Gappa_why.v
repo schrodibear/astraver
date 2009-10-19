@@ -2,9 +2,6 @@
    It can be modified; only the generated parts will be overwritten. *)
 Require Export Why.
 
-Require Export Reals.
-Require Export Gappa_tactic.
-
 (*Why logic*) Definition lt_real : R -> R -> Prop.
 Admitted.
 
@@ -65,30 +62,35 @@ Admitted.
 (*Why axiom*) Lemma lt_real_bool_axiom :
   (forall (x:R), (forall (y:R), ((lt_real_bool x y) = true <-> (Rlt x y)))).
 Admitted.
+Dp_hint lt_real_bool_axiom.
 
 (*Why axiom*) Lemma le_real_bool_axiom :
   (forall (x:R), (forall (y:R), ((le_real_bool x y) = true <-> (Rle x y)))).
 Admitted.
+Dp_hint le_real_bool_axiom.
 
 (*Why axiom*) Lemma gt_real_bool_axiom :
   (forall (x:R), (forall (y:R), ((gt_real_bool x y) = true <-> (Rgt x y)))).
 Admitted.
+Dp_hint gt_real_bool_axiom.
 
 (*Why axiom*) Lemma ge_real_bool_axiom :
   (forall (x:R), (forall (y:R), ((ge_real_bool x y) = true <-> (Rge x y)))).
 Admitted.
+Dp_hint ge_real_bool_axiom.
 
 (*Why axiom*) Lemma eq_real_bool_axiom :
   (forall (x:R), (forall (y:R), ((eq_real_bool x y) = true <-> (eq x y)))).
 Admitted.
+Dp_hint eq_real_bool_axiom.
 
 (*Why axiom*) Lemma neq_real_bool_axiom :
   (forall (x:R), (forall (y:R), ((neq_real_bool x y) = true <-> ~(eq x y)))).
 Admitted.
+Dp_hint neq_real_bool_axiom.
 
 (*Why logic*) Definition real_max : R -> R -> R.
-exact Rmax.
-Defined.
+Admitted.
 
 (*Why logic*) Definition real_min : R -> R -> R.
 Admitted.
@@ -96,26 +98,26 @@ Admitted.
 (*Why axiom*) Lemma real_max_is_ge :
   (forall (x:R),
    (forall (y:R), (Rge (real_max x y) x) /\ (Rge (real_max x y) y))).
-unfold real_max.
-intros; split.
-apply Rle_ge; apply RmaxLess1.
-apply Rle_ge; apply RmaxLess2.
-Qed.
+Admitted.
+Dp_hint real_max_is_ge.
 
 (*Why axiom*) Lemma real_max_is_some :
   (forall (x:R),
    (forall (y:R), (eq (real_max x y) x) \/ (eq (real_max x y) y))).
 Admitted.
+Dp_hint real_max_is_some.
 
 (*Why axiom*) Lemma real_min_is_le :
   (forall (x:R),
    (forall (y:R), (Rle (real_min x y) x) /\ (Rle (real_min x y) y))).
 Admitted.
+Dp_hint real_min_is_le.
 
 (*Why axiom*) Lemma real_min_is_some :
   (forall (x:R),
    (forall (y:R), (eq (real_min x y) x) \/ (eq (real_min x y) y))).
 Admitted.
+Dp_hint real_min_is_some.
 
 (*Why logic*) Definition sqrt_real : R -> R.
 Admitted.
@@ -304,175 +306,10 @@ Dp_hint min_double.
 (*Why function*) Definition gen_total_error  (x:gen_float)
   := (Rabs (Rminus (float_value x) (model_value x))).
 
-Admitted.
-Dp_hint bounded_real_no_overflow.
-
-Admitted.
-Dp_hint bounded_real_overflow_pos.
-
-Admitted.
-Dp_hint bounded_real_overflow_neg.
-
-Admitted.
-Dp_hint bounded_real_overflow_nearest_even.
-
-Admitted.
-Dp_hint round_greater_max.
-
-Admitted.
-Dp_hint positive_constant.
-
-Admitted.
-Dp_hint negative_constant.
-
-Admitted.
-Dp_hint round_increasing.
-
-Admitted.
-Dp_hint round_greater_min.
-
-Admitted.
-Dp_hint round_less_min_pos.
-
-Admitted.
-Dp_hint round_less_min_neg.
-
-Admitted.
-Dp_hint round_less_min_nearest_even.
-
-Admitted.
-Dp_hint round_of_zero.
-
-Admitted.
-Dp_hint round_down_le.
-
-Admitted.
-Dp_hint round_up_ge.
-
-Admitted.
-Dp_hint round_down_neg.
-
-Admitted.
-Dp_hint round_up_neg.
-
-Admitted.
-Dp_hint round_idempotent.
-
-Admitted.
-Dp_hint prod_pos.
-
-Admitted.
-Dp_hint abs_minus.
-
-Admitted.
-Dp_hint help.
-
-Admitted.
-Dp_hint help1.
-
-Admitted.
-Dp_hint help2.
-
-Admitted.
-Dp_hint help2_.
-
-Admitted.
-Dp_hint help2__.
-
-Admitted.
-Dp_hint help3.
-
-Admitted.
-Dp_hint help4.
-
-Admitted.
-Dp_hint help4_.
-
-Admitted.
-Dp_hint help4__.
-
-Admitted.
-Dp_hint help5.
-
-Admitted.
-Dp_hint help6.
-
-Admitted.
-Dp_hint help7.
-
-Admitted.
-Dp_hint help8.
-
-Admitted.
-Dp_hint help9.
-
-Admitted.
-Dp_hint help10.
-
-Admitted.
-Dp_hint help11.
-
-Admitted.
-Dp_hint help12.
-
-Admitted.
-Dp_hint help13.
-
-Admitted.
-Dp_hint help14.
-
-Admitted.
-Dp_hint help15.
-
-Admitted.
-Dp_hint help16.
-
-Admitted.
-Dp_hint help17.
-
-Admitted.
-Dp_hint hdfsss.
-
-Admitted.
-Dp_hint ttt.
-
-Admitted.
-Dp_hint ttt.
-
-Admitted.
-Dp_hint round_of_zero.
-
-Admitted.
-Dp_hint bounded_real_no_overflow.
-
-Admitted.
-Dp_hint round_greater_max.
-
-Admitted.
-Dp_hint round_increasing.
-
-Admitted.
-Dp_hint round_of_max_gen.
-
-Admitted.
-Dp_hint round_of_opp_max_gen.
-
-Admitted.
-Dp_hint round_of_min_gen.
-
-Admitted.
-Dp_hint round_of_opp_min_gen.
-
-Admitted.
-Dp_hint round_down_le.
-
 (*Why axiom*) Lemma round_up_ge :
   (forall (f:float_format), (forall (x:R), (Rge (round_float f up x) x))).
 Admitted.
 Dp_hint round_up_ge.
-
-Admitted.
-Dp_hint round_down_neg.
 
 (*Why axiom*) Lemma round_up_neg :
   (forall (f:float_format),

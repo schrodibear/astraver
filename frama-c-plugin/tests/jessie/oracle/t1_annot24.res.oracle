@@ -130,12 +130,12 @@ axiomatic Automata {
   
 }
 
-logic buch_Trans_Cond_param{L}(integer _buch_numTrans, integer _buch_op,
-                               integer _buch_status) =
+predicate buch_Trans_Cond_param{L}(integer _buch_numTrans, integer _buch_op,
+                                   integer _buch_status) =
 (((_buch_numTrans == 0) ==> (status == 0)) &&
   ((_buch_numTrans == 1) ==> ((_buch_op == 2) && (_buch_status == 1))))
 
-logic buch_Trans_Cond{L}(integer _buch_numTrans_0) =
+predicate buch_Trans_Cond{L}(integer _buch_numTrans_0) =
 buch_Trans_Cond_param{L}(_buch_numTrans_0, buch_CurOperation,
                          buch_CurOpStatus)
 

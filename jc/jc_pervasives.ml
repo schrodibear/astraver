@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.157 2009-10-13 15:43:30 ayad Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.158 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -111,10 +111,12 @@ let string_of_native t =
     | Tboolean -> "boolean"
     | Tstring -> "string"
 
+let print_type_var fmt v = fprintf fmt "(var_%s_%d)" v.jc_type_var_info_name v.jc_type_var_info_tag
+
 let rec print_type fmt t =
   match t with
     | JCTnative n -> fprintf fmt "%s" (string_of_native n)
-    | JCTlogic s -> fprintf fmt "%s" s
+    | JCTlogic (s,l) -> fprintf fmt "%s%a" s (Pp.print_list_delim Pp.lchevron Pp.rchevron Pp.comma print_type) l
     | JCTenum ri -> fprintf fmt "%s" ri.jc_enum_info_name
     | JCTpointer(pc, ao, bo) ->
         begin match pc with
@@ -141,7 +143,7 @@ let rec print_type fmt t =
 	end
     | JCTnull -> fprintf fmt "(nulltype)"  
     | JCTany -> fprintf fmt "(anytype)"  
-    | JCTtype_var v -> fprintf fmt "(var%d)" (Jc_type_var.uid v)
+    | JCTtype_var v -> print_type_var fmt v
 
 let num_of_constant loc c =
     match c with
@@ -287,6 +289,7 @@ let empty_logic_info =
     jc_logic_info_final_name = "";
     jc_logic_info_result_type = None;
     jc_logic_info_result_region = dummy_region; (* TODO *)
+    jc_logic_info_poly_args = [];
     jc_logic_info_parameters = [];
     jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
@@ -307,6 +310,7 @@ let make_logic_fun name ty =
     jc_logic_info_final_name = Jc_envset.get_unique_name name;
     jc_logic_info_result_type = Some ty;
     jc_logic_info_result_region = Region.make_var ty name;
+    jc_logic_info_poly_args = [];
     jc_logic_info_parameters = [];
     jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
@@ -337,6 +341,7 @@ let make_pred name =
     jc_logic_info_final_name = Jc_envset.get_unique_name name;
     jc_logic_info_result_type = None;
     jc_logic_info_result_region = dummy_region;
+    jc_logic_info_poly_args = [];
     jc_logic_info_parameters = [];
     jc_logic_info_param_regions = [];
     jc_logic_info_effects = empty_effects;
@@ -987,9 +992,9 @@ let string_of_op_type = function
   | `Pointer -> "pointer"
   | `Logic -> "<some logic type>"
 
-let sign = JCTlogic "sign"
-let float_format = JCTlogic "float_format"
-let rounding_mode = JCTlogic "rounding_mode"
+let sign = JCTlogic ("sign",[])
+let float_format = JCTlogic ("float_format",[])
+let rounding_mode = JCTlogic ("rounding_mode",[])
 
 (* Note: jessie does not support overloading. The right practice is
    to add suffixes to make precise the type of arguments

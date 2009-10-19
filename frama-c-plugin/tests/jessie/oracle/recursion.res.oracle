@@ -41,7 +41,7 @@ type _List = [_List]
 
 axiomatic IsList {
 
-  logic is_list{L}(_List[..] x)
+  predicate is_list{L}(_List[..] x)
    
   logic integer list_length{L}(_List[..] x_0)
   

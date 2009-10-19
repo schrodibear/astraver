@@ -49,7 +49,7 @@ tag __anonstruct_las1_2 = {
 
 type __anonstruct_las1_2 = [__anonstruct_las1_2]
 
-logic inv{L}(__anonstruct_las1_2[..] v) =
+predicate inv{L}(__anonstruct_las1_2[..] v) =
 (((\offset_min(v) <= 0) && (\offset_max(v) >= 0)) ==>
   ((\offset_min(v.s) <= 0) && (\offset_max(v.s) >= 0)))
 

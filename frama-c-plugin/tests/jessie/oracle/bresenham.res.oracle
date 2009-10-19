@@ -49,11 +49,11 @@ axiomatic Abs {
   
 }
 
-logic best{Here}(integer x_1, integer y) =
+predicate best{Here}(integer x_1, integer y) =
 (\forall integer yp;
   (abs(((x2 * y) - (x_1 * y2))) <= abs(((x2 * yp) - (x_1 * y2)))))
 
-logic Invariant{Here}(integer x_2, integer y_0, integer e) =
+predicate Invariant{Here}(integer x_2, integer y_0, integer e) =
 ((e == (((2 * (x_2 + 1)) * y2) - (((2 * y_0) + 1) * x2))) &&
   (((2 * (y2 - x2)) <= e) && (e <= (2 * y2))))
 

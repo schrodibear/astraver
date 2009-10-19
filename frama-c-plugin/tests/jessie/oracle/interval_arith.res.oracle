@@ -67,21 +67,21 @@ behavior default:
    }
 }
 
-logic dif_sign(double x, double y) =
+predicate dif_sign(double x, double y) =
 (\sign_double(x) != \sign_double(y))
 
-logic sam_sign(double x_0, double y_0) =
+predicate sam_sign(double x_0, double y_0) =
 (\sign_double(x_0) == \sign_double(y_0))
 
-logic double_le_real(double x_1, real y_1) =
+predicate double_le_real(double x_1, real y_1) =
 ((\is_finite_double(x_1) && ((x_1 :> real) <= y_1)) ||
   \is_minus_infinity_double(x_1))
 
-logic real_le_double(real x_2, double y_2) =
+predicate real_le_double(real x_2, double y_2) =
 ((\is_finite_double(y_2) && (x_2 <= (y_2 :> real))) ||
   \is_plus_infinity_double(y_2))
 
-logic in_interval(real a, double l, double u) =
+predicate in_interval(real a, double l, double u) =
 (double_le_real(l, a) && real_le_double(a, u))
 
 double mul_dn(double x_0, double y_0)
@@ -332,7 +332,7 @@ double zl;
 
 double zu;
 
-logic is_interval(double xl, double xu) =
+predicate is_interval(double xl, double xu) =
 ((\is_finite_double(xl) || \is_minus_infinity_double(xl)) &&
   (\is_finite_double(xu) || \is_plus_infinity_double(xu)))
 

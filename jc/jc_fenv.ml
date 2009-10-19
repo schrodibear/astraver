@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.ml,v 1.13 2009-08-26 12:41:55 marche Exp $ *)
+(* $Id: jc_fenv.ml,v 1.14 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -83,6 +83,7 @@ sig
 	mutable jc_logic_info_final_name : string;
 	mutable jc_logic_info_result_type : jc_type option;
 	mutable jc_logic_info_result_region : region;
+        mutable jc_logic_info_poly_args : type_var_info list;
 	mutable jc_logic_info_parameters : var_info list;
 	mutable jc_logic_info_param_regions : region list;
 	mutable jc_logic_info_effects : effect;
@@ -147,6 +148,7 @@ struct
 	mutable jc_logic_info_result_type : jc_type option;
         (*r None for predicates *)
 	mutable jc_logic_info_result_region : region;
+        mutable jc_logic_info_poly_args : type_var_info list;
 	mutable jc_logic_info_parameters : var_info list;
 	mutable jc_logic_info_param_regions : region list;
 	mutable jc_logic_info_effects : effect;

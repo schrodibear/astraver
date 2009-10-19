@@ -67,6 +67,7 @@ val any_type: jc_type
 
 val string_of_native: Jc_env.native_type -> string
 val print_type : Format.formatter -> Jc_env.jc_type -> unit
+val print_type_var : Format.formatter -> Jc_env.type_var_info -> unit
 
 val struct_of_union: Jc_env.struct_info -> bool
 val struct_of_plain_union : Jc_env.struct_info -> bool

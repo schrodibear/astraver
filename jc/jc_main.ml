@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.138 2009-09-04 15:29:45 bobot Exp $ *)
+(* $Id: jc_main.ml,v 1.139 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -55,7 +55,7 @@ let compute_regions logic_components components =
       (fun _id data ->
 	 List.iter 
 	   (function Jc_typing.ABaxiom(pos,id,labs,a) ->
-	      Jc_separation.axiom id (pos,(* is_axiom = *)true,labs,a)
+	      Jc_separation.axiom id (pos,(* is_axiom = *)true,[],labs,a)
 	   ) data.Jc_typing.axiomatics_decls
       ) Jc_typing.axiomatics_table;
     Array.iter Jc_separation.code_component components
@@ -321,7 +321,7 @@ let main () =
     Jc_options.lprintf "Translate lemmas@.";
     push_decls
       (Hashtbl.fold 
-	 (fun id (loc,is_axiom,labels,p) acc ->
+	 (fun id (loc,is_axiom,_,labels,p) acc ->
 	    Jc_interp.tr_axiom loc id is_axiom labels p acc)
 	 Jc_typing.lemmas_table);
 

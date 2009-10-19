@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.117 2009-09-04 15:29:45 bobot Exp $ *)
+(* $Id: jc_norm.ml,v 1.118 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -663,25 +663,26 @@ let rec decl d =
 		List.map (fun (id,name,e) -> id,name,expr e) invs)
     | JCDvar(ty,id,init) ->
 	JCDvar(ty,id,Option_misc.map expr init)
-    | JCDlemma(id,is_axiom,lab,a) ->
-	JCDlemma(id,is_axiom,lab,expr a)
+    | JCDlemma(id,is_axiom,poly_args,lab,a) ->
+	JCDlemma(id,is_axiom,poly_args,lab,expr a)
     | JCDglobal_inv(id,a) ->
 	JCDglobal_inv(id,expr a)
     | JCDexception(id,ty) ->
 	JCDexception(id,ty)
     | JCDlogic_var (ty, id, body) ->
 	JCDlogic_var (ty, id, Option_misc.map expr body)
-    | JCDlogic (ty, id, labels, params, body) ->
-	JCDlogic (ty, id, labels, params, reads_or_expr body)
-    | JCDlogic_type id ->
-	JCDlogic_type id
-    | JCDint_model x -> JCDint_model x
-    | JCDabstract_domain x -> JCDabstract_domain x
-    | JCDannotation_policy x -> JCDannotation_policy x
-    | JCDseparation_policy x -> JCDseparation_policy x
-    | JCDinvariant_policy x -> JCDinvariant_policy x
+    | JCDlogic (ty, id, poly_args, labels, params, body) ->
+	JCDlogic (ty, id, poly_args, labels, params, reads_or_expr body)
     | JCDaxiomatic(id,l) -> JCDaxiomatic(id,List.map decl l)
+    | JCDlogic_type _
+    | JCDint_model _
+    | JCDabstract_domain _
+    | JCDannotation_policy _
+    | JCDseparation_policy _
+    | JCDinvariant_policy _
     | JCDpragma_gen_sep _ as e -> e
+
+
   in new decl ~pos:d#pos dnode
 	  
 let decls dlist =

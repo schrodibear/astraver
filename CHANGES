@@ -1,4 +1,8 @@
 
+
+  o [Jessie] Polymorphic logic types added (use < >)
+
+
 version 2.21, October 15, 2009
 ==============================
   o [GWhy] Fixed 'Not_found' exception if .whyrc absent

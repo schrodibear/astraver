@@ -38,7 +38,7 @@ tag _Node = {
 
 type _Node = [_Node]
 
-logic reachable{L}(_Node[..] x, _Node[..] y) {
+predicate reachable{L}(_Node[..] x, _Node[..] y) {
 case empty{L}: (\forall _Node[..] x_0;
                  reachable{L}(x_0, x_0));
   
@@ -51,14 +51,14 @@ case empty{L}: (\forall _Node[..] x_0;
   
 }
 
-logic is_list{L}(_Node[..] x_2) =
+predicate is_list{L}(_Node[..] x_2) =
 reachable{L}(x_2, null)
 
-logic is_in_list{L}(_Node[..] x_3, integer elem) =
+predicate is_in_list{L}(_Node[..] x_3, integer elem) =
 (\exists _Node[..] y_1;
   (reachable{L}(x_3, y_1) && (y_1.elem == elem)))
 
-logic is_cycle{L}(_Node[..] x_4) =
+predicate is_cycle{L}(_Node[..] x_4) =
 (\exists _Node[..] y_2;
   (reachable{L}(x_4, y_2) && (y_2.next == x_4)))
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs quantified_pointer.jessie/quantified_pointer.cloc quantified_pointer.jessie/quantified_pointer.jc

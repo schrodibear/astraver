@@ -38,7 +38,7 @@ tag void_P = {
 
 type void_P = [void_P]
 
-logic val{P, Q}(int_P[..] x) =
+predicate val{P, Q}(int_P[..] x) =
 \at(((\offset_min(x) <= 0) && (\offset_max(x) >= 0)),P)
 
 unit f(int_P[..] x)
@@ -61,7 +61,7 @@ behavior default:
 
 int32 g;
 
-logic valg{P, Q}() =
+predicate valg{P, Q}() =
 \at((g == 0),P)
 
 unit h()

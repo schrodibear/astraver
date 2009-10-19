@@ -63,7 +63,7 @@ behavior default:
 
 axiomatic P {
 
-  logic p{L1, L2}(char_P[..] x)
+  predicate p{L1, L2}(char_P[..] x)
   
 }
 

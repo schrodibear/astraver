@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.146 2009-08-26 12:41:55 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.147 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Format
 open Jc_env
@@ -48,13 +48,13 @@ type jc_decl =
       (* deprecated, all tag definitions of a file are mutually recursive *)
   | JCrec_fun_defs of jc_decl list
   | JCvar_def of jc_type * string * expr option
-  | JClemma_def of string * bool * label list * assertion
-  | JClogic_fun_def of jc_type option * string * label list 
+  | JClemma_def of string * bool * type_var_info list * label list * assertion
+  | JClogic_fun_def of jc_type option * string * type_var_info list * label list 
       * var_info list * term_or_assertion      
   | JCexception_def of string * exception_info
   | JCglobinv_def of string * assertion
-  | JClogic_const_def of jc_type * string * term option
-  | JClogic_type_def of string
+  | JClogic_const_def of jc_type * string * type_var_info list * term option
+  | JClogic_type_def of string * type_var_info list
   | JCinvariant_policy of Jc_env.inv_sem
   | JCseparation_policy of Jc_env.separation_sem
   | JCannotation_policy of Jc_env.annotation_sem
@@ -83,6 +83,8 @@ let lbin_op op =
 
 let identifier fmt id =
   fprintf fmt "%s" id#name
+
+let type_var_info fmt x = fprintf fmt "%s" (Jc_type_var.uname x)
 
 let bin_op (op, _) = match op with
   | `Blt -> "<"
@@ -633,50 +635,66 @@ let rec print_decl fmt d =
     | JCvar_def(ty,id,init) ->
 	fprintf fmt "@\n@[%a %s%a;@]@." print_type ty id
 	  (print_option (fun fmt e -> fprintf fmt " = %a" expr e)) init
-    | JClemma_def(id,is_axiom,lab,a) ->
-	fprintf fmt "@\n@[%s %s" (if is_axiom then "axiom" else "lemma") id;
-	if lab <> [] then
-	  fprintf fmt "%a" (print_list_delim lbrace rbrace comma label) lab;
-	fprintf fmt " :@\n%a@]@." assertion a
+    | JClemma_def(id,is_axiom,poly_args,lab,a) ->
+	fprintf fmt "@\n@[%s %s%a%a :@\n%a@]@." 
+          (if is_axiom then "axiom" else "lemma") id
+          (print_list_delim lchevron rchevron comma type_var_info) poly_args
+          (print_list_delim lbrace rbrace comma label) lab
+          assertion a
     | JCglobinv_def(id,a) ->
 	fprintf fmt "@\n@[invariant %s :@\n%a@]@." id assertion a
     | JCexception_def(id,ei) ->
 	fprintf fmt "@\n@[exception %s of %a@]@." id
 	  (print_option_or_default "unit" print_type)
 	  ei.jc_exception_info_type
-    | JClogic_const_def(ty,id,None) ->
-	fprintf fmt "@\n@[logic %a %s@]@." print_type ty id
-    | JClogic_const_def(ty,id,Some t) ->
-	fprintf fmt "@\n@[logic %a %s = %a@]@." print_type ty id
+    | JClogic_const_def(ty,id,poly_args,None) ->
+	fprintf fmt "@\n@[logic %a %s%a@]@." print_type ty id 
+          (print_list_delim lchevron rchevron comma type_var_info) poly_args
+          
+    | JClogic_const_def(ty,id,poly_args,Some t) ->
+	fprintf fmt "@\n@[logic %a %s%a = %a@]@." print_type ty id
+          (print_list_delim lchevron rchevron comma type_var_info) poly_args
 	  term t
-    | JClogic_fun_def(ty,id,labels,[],JCReads l) ->
+    | JClogic_fun_def(None,id,poly_args,labels,[],JCReads l) ->
 	assert (l=[]);
 	assert (labels=[]);
-	fprintf fmt "@\n@[logic %a %s@]@." 
-	  (print_option print_type) ty id
+	fprintf fmt "@\n@[predicate %s@[%a@]@]@." 
+	  id
+          (print_list_delim lchevron rchevron comma type_var_info) poly_args
+    | JClogic_fun_def(Some ty,id,poly_args,labels,[],JCReads l) ->
+	assert (l=[]);
+	assert (labels=[]);
+	fprintf fmt "@\n@[logic %a %s@[%a@]@]@." 
+	  print_type ty id
+          (print_list_delim lchevron rchevron comma type_var_info) poly_args
 (* Yannick: no need for different rule for const logic *)
 (*     | JClogic_fun_def(ty,id,labels,[],JCTerm t) -> *)
 (* 	assert (labels=[]); *)
 (* 	fprintf fmt "@\n@[logic %a %s = %a@]@."  *)
 (* 	  (print_option print_type) ty id term t *)
-    | JClogic_fun_def(ty,id,[],params,body) ->
-	fprintf fmt "@\n@[logic %a %s(@[%a@]) %a@]@." 
-	  (print_option print_type) ty 
-	  id (print_list comma param) params
-	  term_or_assertion body 
-    | JClogic_fun_def (None, id, labels, params, body) ->
-	fprintf fmt "@\n@[logic %s%a(@[%a@]) %a@]@." 
-	  id (print_list_delim lbrace rbrace comma label) labels
+(*    | JClogic_fun_def(ty,id,poly_args,[],params,body) ->
+	fprintf fmt "@\n@[logic %a %s@[%a@](@[%a@]) %a@]@." 
+	  (print_option print_type) ty id 
+          (print_list_delim lchevron rchevron comma type_var_info) poly_args
+          (print_list comma param) params
+	  term_or_assertion body *)
+    | JClogic_fun_def (None, id, poly_args, labels, params, body) ->
+	fprintf fmt "@\n@[predicate %s%a%a(@[%a@]) %a@]@." 
+	  id 
+          (print_list_delim lchevron rchevron comma type_var_info) poly_args
+          (print_list_delim lbrace rbrace comma label) labels
 	  (print_list comma param) params
 	  term_or_assertion body 
-    | JClogic_fun_def (Some ty, id, labels, params, body) ->
-	fprintf fmt "@\n@[logic %a %s%a(@[%a@]) %a@]@." 
-	  print_type ty 
-	  id (print_list_delim lbrace rbrace comma label) labels
+    | JClogic_fun_def (Some ty, id, poly_args, labels, params, body) ->
+	fprintf fmt "@\n@[logic %a %s%a%a(@[%a@]) %a@]@." 
+	  print_type ty id
+          (print_list_delim lchevron rchevron comma type_var_info) poly_args
+          (print_list_delim lbrace rbrace comma label) labels
 	  (print_list comma param) params
 	  term_or_assertion body 
-    | JClogic_type_def id ->
-	fprintf fmt "@\n@[logic type %s@]@." id
+    | JClogic_type_def (id,args) ->
+	fprintf fmt "@\n@[logic type %s%a@]@." id
+          (print_list_delim lchevron rchevron comma type_var_info) args
    
 let rec print_decls fmt d =
   match d with

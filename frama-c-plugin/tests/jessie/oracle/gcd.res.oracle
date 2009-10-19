@@ -61,7 +61,7 @@ lemma mul_assoc :
     (\forall integer z_3;
       ((x_4 * (y_4 * z_3)) == ((x_4 * y_4) * z_3)))))
 
-logic divides(integer x_5, integer y_5) =
+predicate divides(integer x_5, integer y_5) =
 (\exists integer q;
   (y_5 == (q * x_5)))
 
@@ -77,7 +77,7 @@ lemma mod_property :
     (((x_7 >= 0) && (y_7 > 0)) ==>
       ((0 <= (x_7 % y_7)) && ((x_7 % y_7) < y_7)))))
 
-logic isGcd(integer a, integer b, integer d) =
+predicate isGcd(integer a, integer b, integer d) =
 ((divides(d, a) && divides(d, b)) &&
   (\forall integer z_4;
     ((divides(z_4, a) && divides(z_4, b)) ==> divides(z_4, d))))

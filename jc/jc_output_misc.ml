@@ -87,7 +87,7 @@ let label fmt l =
 let rec ptype fmt t =
   match t#node with
     | JCPTnative n -> fprintf fmt "%s" (string_of_native n)
-    | JCPTidentifier s -> string fmt s
+    | JCPTidentifier (s,args) -> fprintf fmt "%s%a" s (print_list_delim lchevron rchevron comma ptype) args
     | JCPTpointer (name,params,ao, bo) ->
 	begin match ao, bo with
 	  | None, None ->
@@ -107,9 +107,7 @@ let rec ptype fmt t =
 		  (Num.string_of_num a) (Num.string_of_num b)
 	end
 
-and ptype_params fmt = function
-  | [] -> ()
-  | l -> fprintf fmt "<%a>" (print_list comma ptype) l
+and ptype_params fmt l = print_list_delim lchevron rchevron comma ptype fmt l
 
 let offset_kind fmt k =
   match k with

@@ -559,6 +559,7 @@ module PDecl :
     val mklemma_def :
       name:string ->
       ?axiom:bool ->
+      ?poly_args:string list ->
       ?labels:label list ->
       body:'a ->
       ?pos:Loc.position -> unit -> 'a decl_node node_positioned
@@ -572,6 +573,7 @@ module PDecl :
     val mklogic_def :
       ?typ:ptype ->
       name:string ->
+      ?poly_args:string list ->
       ?labels:label list ->
       ?params:(ptype * string) list ->
       ?reads:'a list ->
@@ -586,6 +588,7 @@ module PDecl :
       unit -> 'a decl_node node_positioned
 
     val mklogic_type :
+      ?args:string list ->
       name:string ->
       ?pos:Loc.position -> unit -> 'a decl_node node_positioned
 

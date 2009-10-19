@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.5 2009-10-16 09:48:22 virgile Exp $ *)
+(* $Id: interp.ml,v 1.6 2009-10-19 11:55:31 bobot Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -425,7 +425,7 @@ let translated_name linfo =
 (* Cil to Jessie translation of types                                        *)
 (*****************************************************************************)
 
-let type_of_padding = mktype (JCPTidentifier name_of_padding_type)
+let type_of_padding = mktype (JCPTidentifier (name_of_padding_type,[]))
 
 let type_conversion_table = Hashtbl.create 0
 
@@ -468,7 +468,7 @@ let ctype ?bitsize ty =
         if Jessie_options.IntModel.get_val () = Jessie_options.IMexact then
           JCPTnative Tinteger
         else
-          JCPTidentifier (name_of_integral_type ?bitsize ty)
+          JCPTidentifier (name_of_integral_type ?bitsize ty,[])
 
     | TFloat(fk,_attr) ->
         begin
@@ -513,9 +513,9 @@ let ctype ?bitsize ty =
 
     | TNamed _ -> assert false (* Removed by call to [unrollType] *)
 
-    | TComp(compinfo,_,_) -> JCPTidentifier compinfo.cname
+    | TComp(compinfo,_,_) -> JCPTidentifier (compinfo.cname,[])
 
-    | TEnum(enuminfo,_) -> JCPTidentifier enuminfo.ename
+    | TEnum(enuminfo,_) -> JCPTidentifier (enuminfo.ename,[])
 
     | TBuiltin_va_list _ -> unsupported "Type builtin_va_list not allowed"
   in
@@ -523,7 +523,7 @@ let ctype ?bitsize ty =
 
 let ltype = function
   | Ctype ty -> ctype ty
-  | Ltype (s,[]) -> mktype (JCPTidentifier s.lt_name)
+  | Ltype (s,[]) -> mktype (JCPTidentifier (s.lt_name,[]))
   | Linteger -> mktype (JCPTnative Tinteger)
   | Lreal -> mktype (JCPTnative Treal)
   | Ltype(_,_) | Lvar _ | Larrow _ ->
@@ -860,8 +860,8 @@ and terms t =
     | Trange(low,high) -> [JCPErange(opt_map term low,opt_map term high)]
     | Tunion l ->
         List.map (fun x -> x#node) (List.flatten (List.map terms l))
-    | Tcomprehension _ -> assert false (* TODO: does not exist in Jessie *)
-    | Tinter _ -> assert false (* TODO: does not exist in Jessie *)
+    | Tcomprehension _ -> Extlib.not_yet_implemented "Interp.terms Tcomprehension" (* TODO: does not exist in Jessie *)
+    | Tinter _ -> Extlib.not_yet_implemented "Interp.terms Tinter" (* TODO: does not exist in Jessie *)
     | Tempty_set -> []
   in
   List.map (swap mkexpr t.term_loc) enode
@@ -1945,7 +1945,7 @@ let rec annotation is_axiomatic annot pos = match annot with
         in
 	let name = translated_name info in
         [JCDlogic(Option_misc.map ltype info.l_type,
-                  name,
+                  name,[],
                   logic_labels info.l_labels,
                   params,body)]
       with (Unsupported _ | NotImplemented _) ->
@@ -1955,7 +1955,7 @@ let rec annotation is_axiomatic annot pos = match annot with
 
   | Dlemma(name,is_axiom,labels,_poly,property) ->
       begin try
-        [JCDlemma(name,is_axiom,logic_labels labels,pred property)]
+        [JCDlemma(name,is_axiom,[],logic_labels labels,pred property)]
       with (Unsupported _ | NotImplemented _) ->
         warning "Dropping lemma %s@." name ;
         []
@@ -1974,7 +1974,7 @@ let rec annotation is_axiomatic annot pos = match annot with
       begin try
 	let n = translated_name annot in
         [JCDlogic(
-           None,n, logic_labels annot.l_labels,
+           None,n, [],logic_labels annot.l_labels,
            List.map logic_variable annot.l_profile,
            JCexpr(pred (Logic_utils.get_pred_body annot)))]
       with (Unsupported _ | NotImplemented _) ->
@@ -1983,8 +1983,8 @@ let rec annotation is_axiomatic annot pos = match annot with
       end
 
   | Dtype info when info.lt_params=[] ->
-      let myself = mktype (JCPTidentifier info.lt_name) in
-      let mydecl = JCDlogic_type info.lt_name in
+      let myself = mktype (JCPTidentifier (info.lt_name,[])) in
+      let mydecl = JCDlogic_type (info.lt_name,[]) in
       let axiomatic ctors =
         let cons = List.map
           (fun x ->
@@ -1997,14 +1997,14 @@ let rec annotation is_axiomatic annot pos = match annot with
                [] -> JCDlogic_var(myself,x.ctor_name,None)
              | l ->
                  let params = List.map make_params l in
-                 JCDlogic(Some myself,x.ctor_name,[],params,
+                 JCDlogic(Some myself,x.ctor_name,[],[],params,
                           JCreads []
                             (*(List.map (fun (_,x) ->
                               mkexpr (JCPEvar x) pos) params)*)))
           ctors
         in
         let tag_fun = JCDlogic (Some (mktype (JCPTnative Tinteger)),
-                                info.lt_name ^ "_tag",[],[myself,"x"],
+                                info.lt_name ^ "_tag",[],[],[myself,"x"],
                                 JCreads[])
         in
         let tag_axiom cons (i,axioms) =
@@ -2040,7 +2040,7 @@ let rec annotation is_axiomatic annot pos = match annot with
                  pos)
           in
           (i+one,
-           JCDlemma(cons.ctor_name ^ "_tag_val",true,[], pred)
+           JCDlemma(cons.ctor_name ^ "_tag_val",true,[],[], pred)
            ::axioms)
         in
         let (_,axioms) = List.fold_right tag_axiom ctors (zero,[]) in
@@ -2071,13 +2071,13 @@ let rec annotation is_axiomatic annot pos = match annot with
           [] -> cons
         | [x] ->
             cons @
-              [JCDlemma(info.lt_name ^ "_inductive", true, [],
+              [JCDlemma(info.lt_name ^ "_inductive", true, [], [],
                         (mkexpr (JCPEquantifier
                                    (Forall,myself,
                                     [new identifier "x"], [],one_case x)) pos))]
         | x::l ->
             tag_fun :: cons @ axioms @
-              [JCDlemma(info.lt_name ^ "_inductive", true, [],
+              [JCDlemma(info.lt_name ^ "_inductive", true, [], [],
                         mkexpr
                           (JCPEquantifier(
                              Forall,myself,
@@ -2400,7 +2400,7 @@ let file f =
     List.flatten (List.rev (List.rev_map (global vardefs) globals))
   in
   mkdecl (JCDaxiomatic("Padding",
-                       [mkdecl (JCDlogic_type name_of_padding_type)
+                       [mkdecl (JCDlogic_type (name_of_padding_type, []))
                           Loc.dummy_position]))
     Loc.dummy_position
   (* Define all integral types as enumerated types in Jessie *)
@@ -2544,6 +2544,6 @@ let pragmas f =
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make"
+compile-command: "LC_ALL=C make -C .. -j jessie_plugin.byte"
 End:
 *)

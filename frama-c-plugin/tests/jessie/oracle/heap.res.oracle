@@ -58,7 +58,7 @@ axiomatic Bag {
   
 }
 
-logic is_max_bag(bag b_1, integer m) =
+predicate is_max_bag(bag b_1, integer m) =
 ((occ_bag(m, b_1) >= 1) &&
   (\forall integer x_3;
     ((occ_bag(x_3, b_1) >= 1) ==> (x_3 <= m))))
@@ -87,7 +87,7 @@ axiomatic Tree {
 
 axiomatic IsHeap {
 
-  logic is_heap(tree t_0)
+  predicate is_heap(tree t_0)
    
   axiom is_heap_def_1 :
   is_heap(Empty())

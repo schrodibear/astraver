@@ -1,7 +1,7 @@
 
-logic divides(integer x, integer y) = \exists integer q; y == q * x
+predicate divides(integer x, integer y) = \exists integer q; y == q * x
 
-logic isGcd(integer a, integer b, integer d) =
+predicate isGcd(integer a, integer b, integer d) =
  divides(d, a) && divides(d, b) &&
   \forall integer z;
     divides(z, a) && divides(z, b) ==> divides(z, d)

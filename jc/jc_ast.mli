@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.171 2009-09-04 15:29:45 bobot Exp $ *)
+(* $Id: jc_ast.mli,v 1.172 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -84,7 +84,7 @@ end
 
 type ptype_node = 
   | JCPTnative of native_type
-  | JCPTidentifier of string
+  | JCPTidentifier of string * ptype list
   | JCPTpointer of string * ptype list * Num.num option * Num.num option
 
 and ptype = ptype_node node_positioned
@@ -247,12 +247,12 @@ type 'expr decl_node =
   | JCDunion_type of string * bool * identifier list
       (* name, discriminated, structure names *)
   | JCDenum_type of string * Num.num * Num.num
-  | JCDlogic_type of string 
-  | JCDlemma of string * bool * label list * 'expr
+  | JCDlogic_type of string * string list
+  | JCDlemma of string * bool * string list * label list * 'expr
       (* 2nd arg is true if it is an axiom *)
   | JCDexception of string * ptype option
   (* logic functions and predicates (return type: None if predicate) *)
-  | JCDlogic of ptype option * string * label list * (ptype * string) list 
+  | JCDlogic of ptype option * string * string list * label list * (ptype * string) list 
       * 'expr reads_or_expr
   | JCDlogic_var of ptype * string * 'expr option
   (* global invariant *)

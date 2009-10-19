@@ -31,13 +31,13 @@ tag void_P = {
 
 type void_P = [void_P]
 
-logic pcond1(integer p) =
+predicate pcond1(integer p) =
 (if (p > 0) then true else false)
 
-logic pcond2(integer p_0) =
+predicate pcond2(integer p_0) =
 (if (p_0 < 10) then true else false)
 
-logic pcond3(boolean c1, boolean c2) =
+predicate pcond3(boolean c1, boolean c2) =
 ((c1 == true) && (c2 == true))
 
 int32 ftest2(int32 x, int32 y)

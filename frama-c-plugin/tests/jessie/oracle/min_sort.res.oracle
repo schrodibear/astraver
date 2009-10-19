@@ -38,14 +38,14 @@ tag void_P = {
 
 type void_P = [void_P]
 
-logic Swap{L1, L2}(int_P[..] a, integer i, integer j) =
+predicate Swap{L1, L2}(int_P[..] a, integer i, integer j) =
 (((\at((a + i).int_M,L1) == \at((a + j).int_M,L2)) &&
    (\at((a + j).int_M,L1) == \at((a + i).int_M,L2))) &&
   (\forall integer k;
     (((k != i) && (k != j)) ==>
       (\at((a + k).int_M,L1) == \at((a + k).int_M,L2)))))
 
-logic Permut{L1, L2}(int_P[..] a_0, integer l, integer h) {
+predicate Permut{L1, L2}(int_P[..] a_0, integer l, integer h) {
 case Permut_refl{L}: (\forall int_P[..] a_1;
                        (\forall integer l_0;
                          (\forall integer h_0;
@@ -83,7 +83,7 @@ case Permut_refl{L}: (\forall int_P[..] a_1;
   
 }
 
-logic Sorted{L}(int_P[..] a_5, integer l_4, integer h_4) =
+predicate Sorted{L}(int_P[..] a_5, integer l_4, integer h_4) =
 (\forall integer i_1;
   (((l_4 <= i_1) && (i_1 < h_4)) ==>
     ((a_5 + i_1).int_M <= (a_5 + (i_1 + 1)).int_M)))

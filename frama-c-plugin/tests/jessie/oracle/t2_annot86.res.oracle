@@ -46,7 +46,7 @@ axiomatic BuchTransStart {
   
 }
 
-logic I_3() =
+predicate I_3() =
 (\forall integer _buch_st;
   (((0 <= _buch_st) && (_buch_st < 6)) ==>
     (\exists integer _buch_tr;

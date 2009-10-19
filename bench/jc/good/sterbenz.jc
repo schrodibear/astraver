@@ -7,6 +7,6 @@ behavior default:
 	         && (x:>real) <= 2.0*(y :> real); 
         ensures (\result :> real) == (x :> real) - (y :> real);
 {
-  return ((x :> real) - (y :> real)) :> double;
+  return (((x :> real) - (y :> real)) :> double);
 }
 

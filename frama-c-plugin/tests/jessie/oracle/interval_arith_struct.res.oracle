@@ -74,17 +74,17 @@ behavior default:
    }
 }
 
-logic dif_sign(double x, double y) =
+predicate dif_sign(double x, double y) =
 (\sign_double(x) != \sign_double(y))
 
-logic sam_sign(double x_0, double y_0) =
+predicate sam_sign(double x_0, double y_0) =
 (\sign_double(x_0) == \sign_double(y_0))
 
-logic double_le_real(double x_1, real y_1) =
+predicate double_le_real(double x_1, real y_1) =
 ((\is_finite_double(x_1) && ((x_1 :> real) <= y_1)) ||
   \is_minus_infinity_double(x_1))
 
-logic real_le_double(real x_2, double y_2) =
+predicate real_le_double(real x_2, double y_2) =
 ((\is_finite_double(y_2) && (x_2 <= (y_2 :> real))) ||
   \is_plus_infinity_double(y_2))
 
@@ -135,11 +135,11 @@ behavior default:
    }
 }
 
-logic is_interval{Here}(__anonstruct_interval_1[0] x_3) =
+predicate is_interval{Here}(__anonstruct_interval_1[0] x_3) =
 ((\is_finite_double(x_3.l) || \is_minus_infinity_double(x_3.l)) &&
   (\is_finite_double(x_3.u) || \is_plus_infinity_double(x_3.u)))
 
-logic in_interval{L}(real a, __anonstruct_interval_1[0] x_4) =
+predicate in_interval{L}(real a, __anonstruct_interval_1[0] x_4) =
 (double_le_real(x_4.l, a) && real_le_double(a, x_4.u))
 
 __anonstruct_interval_1[0] add(__anonstruct_interval_1[0] v_x_0,

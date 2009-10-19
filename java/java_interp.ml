@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.183 2009-08-26 12:41:55 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.184 2009-10-19 11:55:33 bobot Exp $ *)
 
 open Format
 open Jc_output
@@ -246,12 +246,14 @@ and tr_type pos t =
     | JTYarray (non_null, t) ->
 	let st = get_array_struct pos t in
 	  JCTpointer (JCtag(st, []), Some num_zero, if non_null then Some num_minus_one else None)
-    | JTYlogic i -> JCTlogic i
+    | JTYlogic i -> JCTlogic (i,[])
 
 let ptype_node_of_type = function
   | JCTnative n -> JCPTnative n
-  | JCTlogic s -> JCPTidentifier s
-  | JCTenum e -> JCPTidentifier e.jc_enum_info_name
+  | JCTlogic (s,[]) -> JCPTidentifier (s,[])
+  | JCTlogic (s,_) -> failwith ("Java_interp.ptype_node_of_type : \
+The case of logic type with argument is left undone")
+  | JCTenum e -> JCPTidentifier (e.jc_enum_info_name,[])
   | JCTpointer(JCtag(st, _), l, r) -> JCPTpointer(st.jc_struct_info_name,[], l, r)
   | JCTpointer(JCroot v, l, r) ->
       JCPTpointer(v.jc_root_info_name,[], l, r)

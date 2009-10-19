@@ -78,7 +78,7 @@ axiomatic ListLength {
 
 axiomatic Reachable {
 
-  logic reachable{State}(Proc[..] p_3, Proc[..] q)
+  predicate reachable{State}(Proc[..] p_3, Proc[..] q)
    
   axiom reachable_def{State} :
   (\forall Proc[..] p_4;

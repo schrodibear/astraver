@@ -14,7 +14,7 @@ then
     else
 	echo "$1.jc: Why FAILED:"
 	cat $WHYLOG
-	exit 1
+	#exit 1
     fi
 else
     cat jessie.log >> $JCLOG

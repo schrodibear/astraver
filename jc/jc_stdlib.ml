@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_stdlib.ml,v 1.12 2009-09-04 15:29:45 bobot Exp $ *)
+(* $Id: jc_stdlib.ml,v 1.13 2009-10-19 11:55:33 bobot Exp $ *)
 
 module List = struct
   include List
@@ -52,6 +52,13 @@ module List = struct
       | [] -> acc
     in
     aux [] l
+
+  let map_fold f acc l =
+    let (rev,acc) = List.fold_left 
+      (fun (rev,acc) e -> let (e,acc) = (f acc e) in (e::rev,acc)) 
+      ([],acc) l in
+    (List.rev rev,acc)
+    
 
 end
 

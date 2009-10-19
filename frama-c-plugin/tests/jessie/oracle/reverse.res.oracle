@@ -61,7 +61,7 @@ axiomatic List {
   axiom rev_nil :
   (rev(nil()) == nil())
    
-  logic disjoint(list l1_0, list l2_0)
+  predicate disjoint(list l1_0, list l2_0)
    
   axiom disjoint_nil_right :
   (\forall list l_4;
@@ -88,7 +88,7 @@ axiomatic List {
   
 }
 
-logic linked_path{L}(struct_list[..] p1, list l_8, struct_list[..] p2) {
+predicate linked_path{L}(struct_list[..] p1, list l_8, struct_list[..] p2) {
 case path_null{L}: (\forall struct_list[..] p_0;
                      linked_path{L}(p_0, nil(), p_0));
   
@@ -112,7 +112,7 @@ lemma linked_path_cons_inv{L} :
              ((\offset_min(p1_1) <= 0) && (\offset_max(p1_1) >= 0))) &&
             linked_path{L}(p1_1.tl, l_10, p3)))))))
 
-logic list_contents{L}(struct_list[..] p_1, list l_11) =
+predicate list_contents{L}(struct_list[..] p_1, list l_11) =
 linked_path{L}(p_1, l_11, null)
 
 lemma list_contents_functional{L} :
@@ -128,7 +128,7 @@ lemma list_contents_valid{L} :
     ((list_contents{L}(p_3, l_12) && (p_3 != null)) ==>
       ((\offset_min(p_3) <= 0) && (\offset_max(p_3) >= 0)))))
 
-logic null_term_list{L}(struct_list[..] p_4) =
+predicate null_term_list{L}(struct_list[..] p_4) =
 (\exists list l_13;
   list_contents{L}(p_4, l_13))
 
