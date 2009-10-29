@@ -1,3 +1,6 @@
+*.cmx
+*.cmi
+*.cmo
 *.annot
 Jessie.cma
 Jessie.cmxs
