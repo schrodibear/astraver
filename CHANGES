@@ -1,5 +1,6 @@
 
 
+  o [Why] support for Yices 2.0
   o [Why] coq output: add "Require Export Rbase" by default
   o [Jessie] Polymorphic logic types added (use < >)
 

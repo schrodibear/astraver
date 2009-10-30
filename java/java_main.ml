@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.73 2009-01-20 16:15:49 marche Exp $ *)
+(* $Id: java_main.ml,v 1.74 2009-10-30 16:17:00 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -173,6 +173,18 @@ let main () =
       Java_typing.type_table
       [] in
 
+  Java_options.lprintf "production phase 1.4 : generation of Jessie struct types@.";
+  let non_null_preds = Java_interp.tr_non_null_logic_fun () :: non_null_preds in
+  let decls_java_types, decls_structs =
+    Hashtbl.fold 
+      (fun _ id (acc0, acc) ->
+	 Java_interp.tr_class_or_interface id acc0 acc)
+      Java_typing.type_table
+      ([], decls_arrays)
+  in
+  let decls = decls_structs @ acc @ decls_java_types @ decls_constants @ non_null_preds @ decls in
+  
+
   Java_options.lprintf "production phase 1.3 : generation of Jessie logic functions@.";
   let decls = 
     Hashtbl.fold 
@@ -197,17 +209,6 @@ let main () =
       decls
   in
 
-  Java_options.lprintf "production phase 1.4 : generation of Jessie struct types@.";
-  let non_null_preds = Java_interp.tr_non_null_logic_fun () :: non_null_preds in
-  let decls_java_types, decls_structs =
-    Hashtbl.fold 
-      (fun _ id (acc0, acc) ->
-	 Java_interp.tr_class_or_interface id acc0 acc)
-      Java_typing.type_table
-      ([], decls_arrays)
-  in
-  let decls = decls_structs @ acc @ decls_java_types @ decls_constants @ non_null_preds @ decls in
-  
   (* any_string function *)
   (*  let decls = Java_interp.any_string_decl :: decls in *)
   (* class invariants *)

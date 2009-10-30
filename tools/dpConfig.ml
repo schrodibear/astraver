@@ -112,9 +112,9 @@ let yices =
     is_interactive = false;
     version = "";
     version_switch = "--version";
-    version_regexp = "\\([^ ]+\\)";
+    version_regexp = "[Yices ]*\\([0-9.]+\\)";
     command = "yices";
-    command_switches = "-pc 0 -smt ";
+    command_switches = "-smt ";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b\\|feature not supported: non linear problem";
   }
