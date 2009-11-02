@@ -30,6 +30,8 @@ WHYLIB=$(WHYHOME)/lib
 ifneq ("$(FRAMAC_PLUGIN)","")
 ifneq ("$(FRAMAC_PLUGIN)",".")
 ENVPPC=FRAMAC_PLUGIN=$(FRAMAC_PLUGIN)
+else
+ENVPPC=FRAMAC_PLUGIN=$(PPCHOME)
 endif
 endif
 
