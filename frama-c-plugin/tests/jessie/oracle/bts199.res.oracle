@@ -1,8 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts199.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts199.c"
-[jessie] Starting Jessie translation
-[kernel] No code for function fabs, default assigns generated
-bts199.c:14:[jessie] failure: Unexpected failure.
-                  Please submit bug report (Ref. "interp.ml:1798:18").
-[kernel] Plugin jessie aborted because of an internal error.
-         Please report with 'crash' at http://bts.frama-c.com

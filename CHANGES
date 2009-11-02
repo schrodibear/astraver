@@ -1,4 +1,5 @@
 
+  o [Frama-C plugin] bug fix: 0306
   o [Frama-C plugin] bugs closed: 0041, 0063, 0073, 0094, 0102, 0199, 0273
   o [Why] support for Yices 2.0
   o [Why] coq output: add "Require Export Rbase" by default

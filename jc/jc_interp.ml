@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.424 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: jc_interp.ml,v 1.425 2009-11-02 15:52:04 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1828,7 +1828,8 @@ and make_deref_bytes mark pos e fi =
 		make_app logic_real_of_bitvector [e']
 	    | Tgenfloat _ -> assert false (* TODO *)
 	    | Tstring -> assert false (* TODO *)
-	    | Tinteger -> assert false (* TODO *)
+	    | Tinteger ->
+		make_app logic_integer_of_bitvector [e']                
 	    | Tboolean -> assert false (* TODO *)
 	    | Tunit  -> assert false (* TODO *)
 	end

@@ -1,6 +1,6 @@
 /* Frama-C BTS 0306
 
-Status: open
+Status: closed
 
 yields:
 
