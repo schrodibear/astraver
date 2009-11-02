@@ -1,0 +1,76 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0080.c
+[kernel] warning: cannot load plug-in Test_dynlink
+                  (./test_dynlink.cmxs: file not found)
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0080.c"
+[jessie] Starting Jessie translation
+[jessie] Producing Jessie files in subdir bts0080.jessie
+[jessie] File bts0080.jessie/bts0080.jc written.
+[jessie] File bts0080.jessie/bts0080.cloc written.
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+type int32 = -2147483648..2147483647
+
+type int8 = -128..127
+
+tag int_P = {
+  int32 int_M: 32;
+}
+
+type int_P = [int_P]
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+unit Swap(int_P[..] p, int_P[..] q)
+  requires (C_8 : (((C_10 : (\offset_min(p) <= 0)) &&
+                     (C_11 : (\offset_max(p) >= 0))) &&
+                    ((C_13 : (\offset_min(q) <= 0)) &&
+                      (C_14 : (\offset_max(q) >= 0)))));
+behavior default:
+  assumes true;
+  assigns p.int_M,
+  q.int_M;
+  ensures (C_15 : ((C_16 : (p.int_M == \old(q.int_M))) &&
+                    (C_17 : (q.int_M == \old(p.int_M)))));
+{  
+   (var int32 temp);
+   
+   {  (C_2 : (temp = (C_1 : p.int_M)));
+      (C_5 : ((C_4 : p.int_M) = (C_3 : q.int_M)));
+      (C_7 : ((C_6 : q.int_M) = temp));
+      
+      (return ())
+   }
+}
+
+unit foo(int_P[..] a, int32 k)
+  requires (C_21 : ((C_22 : (\offset_min(a) <= 0)) &&
+                     (C_23 : (\offset_max(a) >= k))));
+behavior default:
+  assumes true;
+  ensures (C_24 : true);
+{  
+   {  (C_20 : Swap((C_18 : (a + 0)), (C_19 : (a + k))));
+      
+      (return ())
+   }
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0080.jessie/bts0080.cloc bts0080.jessie/bts0080.jc

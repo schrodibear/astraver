@@ -1,0 +1,636 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0102.c
+[kernel] warning: cannot load plug-in Test_dynlink
+                  (./test_dynlink.cmxs: file not found)
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0102.c"
+[jessie] Starting Jessie translation
+[kernel] No code for function fmod, default assigns generated
+bts0102.c:136:[jessie] warning: skipping all arguments of implicit prototype fmod
+[jessie] Producing Jessie files in subdir bts0102.jessie
+[jessie] File bts0102.jessie/bts0102.jc written.
+[jessie] File bts0102.jessie/bts0102.cloc written.
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+# FloatModel = strict
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+type int8 = -128..127
+
+type int32 = -2147483648..2147483647
+
+tag double_P = {
+  double double_M: 64;
+}
+
+type double_P = [double_P]
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+axiomatic int_matrices {
+
+  logic real pow_i(integer a, integer b)
+   
+  logic integer max_int()
+   
+  axiom max_int_eq :
+  (max_int() == 0x1p53)
+   
+  predicate delay(integer n, integer p) =
+  (((0 < n) && (2 <= p)) &&
+    ((((p - 1) / 2.) * (pow_i(p, (n - 1)) + pow_i((p - 2), (n - 1)))) <=
+      max_int()))
+   
+  axiom delay_decreases :
+  (\forall integer n1;
+    (\forall integer n2;
+      (\forall integer p1;
+        (\forall integer p2;
+          (((0 < n1) && (n1 <= n2)) ==>
+            (((2 <= p1) && (p1 <= p2)) ==> (delay(n2, p2) ==> delay(n1, p1))))))))
+   
+  axiom delay_2 :
+  delay(55, 2)
+   
+  logic integer l_pmax(integer n_0)
+   
+  axiom l_pmax_def :
+  (\forall integer n_1;
+    (delay(n_1, l_pmax(n_1)) && (! delay(n_1, (l_pmax(n_1) + 1)))))
+   
+  axiom delay_pmax :
+  (\forall integer n_2;
+    (\forall integer p_0;
+      (delay(n_2, p_0) ==> (p_0 <= l_pmax(n_2)))))
+  
+}
+
+predicate is_exact_int_mat{L}(double_P[..] X, integer LDX, integer N,
+                              integer M) =
+(((((((\offset_min(X) <= 0) && (\offset_max(X) >= ((N * LDX) + M))) &&
+      (0 <= LDX)) &&
+     (0 <= N)) &&
+    (0 <= M)) &&
+   (M <= LDX)) &&
+  (\forall integer i;
+    (\forall integer j;
+      ((((0 <= i) && (i < N)) && ((0 <= j) && (j < M))) ==>
+        ((\double_round_error((X + ((i * LDX) + j)).double_M) == 0) &&
+          (\exists integer v;
+            (((X + ((i * LDX) + j)).double_M :> real) == v)))))))
+
+predicate is_exact_int_mat_bounded_by{L}(double_P[..] X_0, integer LDX_0,
+                                         integer N_0, integer M_0,
+                                         integer min, integer max) =
+(((((((\offset_min(X_0) <= 0) && (\offset_max(X_0) >= ((N_0 * LDX_0) + M_0))) &&
+      (0 <= LDX_0)) &&
+     (0 <= N_0)) &&
+    (0 <= M_0)) &&
+   (M_0 <= LDX_0)) &&
+  (\forall integer i_0;
+    (\forall integer j_0;
+      ((((0 <= i_0) && (i_0 < N_0)) && ((0 <= j_0) && (j_0 < M_0))) ==>
+        (((\double_round_error((X_0 + ((i_0 * LDX_0) + j_0)).double_M) == 0) &&
+           (\exists integer v_0;
+             (((X_0 + ((i_0 * LDX_0) + j_0)).double_M :> real) == v_0))) &&
+          ((min <= ((X_0 + ((i_0 * LDX_0) + j_0)).double_M :> real)) &&
+            (((X_0 + ((i_0 * LDX_0) + j_0)).double_M :> real) <= max)))))))
+
+predicate temporary_is_exact_int_mat_bounded_by{L}(double_P[..] X_1,
+                                                   integer LDX_1,
+                                                   integer N_1, integer M_1,
+                                                   integer k, integer min_0,
+                                                   integer max_0) =
+(((((((\offset_min(X_1) <= 0) && (\offset_max(X_1) >= ((N_1 * LDX_1) + M_1))) &&
+      (0 <= LDX_1)) &&
+     (0 <= N_1)) &&
+    (0 <= M_1)) &&
+   (M_1 <= LDX_1)) &&
+  (\forall integer i_1;
+    (\forall integer j_1;
+      (((((0 <= i_1) && (i_1 < N_1)) && ((0 <= j_1) && (j_1 < M_1))) ||
+         ((i_1 == N_1) && ((0 <= j_1) && (j_1 < k)))) ==>
+        (((\double_round_error((X_1 + ((i_1 * LDX_1) + j_1)).double_M) == 0) &&
+           (\exists integer v_1;
+             (((X_1 + ((i_1 * LDX_1) + j_1)).double_M :> real) == v_1))) &&
+          ((min_0 <= ((X_1 + ((i_1 * LDX_1) + j_1)).double_M :> real)) &&
+            (((X_1 + ((i_1 * LDX_1) + j_1)).double_M :> real) <= max_0)))))))
+
+unit DGEMM_NEG(int32 N, int32 M, int32 K, int32 p, double_P[..] A, int32 LDA,
+               double_P[..] X, int32 LDX, double_P[..] Y, int32 LDY)
+  requires (C_61 : (((((((C_67 : (2 <= p)) &&
+                          (C_68 : ((((p - 1) * (p - 1)) * M) <= max_int()))) &&
+                         (C_69 : (\base_block(Y) != \base_block(A)))) &&
+                        (C_70 : (\forall integer i_2;
+                                  (\forall integer j_2;
+                                    (((0 <= i_2) &&
+                                       (i_2 <= ((((N - 1) * LDY) + K) - 1))) ==>
+                                      (((0 <= j_2) &&
+                                         (j_2 <= ((((M - 1) * LDX) + K) - 1))) ==>
+                                        ((Y + i_2) != (X + j_2)))))))) &&
+                       (C_71 : is_exact_int_mat_bounded_by{Here}(Y, LDY, N,
+                                                                 K, 0,
+                                                                 (p - 1)))) &&
+                      (C_72 : is_exact_int_mat_bounded_by{Here}(A, LDA, N, M,
+                                                                0, (p - 1)))) &&
+                     (C_73 : is_exact_int_mat_bounded_by{Here}(X, LDX, M, K,
+                                                               0, (p - 1)))));
+behavior default:
+  assumes true;
+  assigns (Y + [0..((((N - 1) * LDY) + K) - 1)]).double_M;
+  ensures (C_74 : is_exact_int_mat_bounded_by{Here}(Y, LDY, N, K,
+                                                    (((1 - p) * (p - 1)) * M),
+                                                    (p - 1)));
+{  
+   (var int32 i);
+   
+   (var int32 j);
+   
+   (var int32 k);
+   
+   {  (C_1 : (i = 0));
+      
+      {  
+         loop 
+         behavior default:
+           invariant (C_2 : (((C_4 : (0 <= i)) && (C_5 : (i <= N))) &&
+                              (C_6 : is_exact_int_mat_bounded_by{Here}(
+                              Y, LDY, i, K, (((1 - p) * (p - 1)) * M),
+                              (p - 1)))));
+         behavior default:
+           
+           assigns (Y + [0..((((i - 1) * LDY) + K) - 1)]).double_M;
+         while (true)
+         {  
+            {  (if (i < N) then () else 
+               (goto while_0_break));
+               (C_7 : (k = 0));
+               
+               {  
+                  loop 
+                  behavior default:
+                    invariant (C_8 : (((C_10 : (0 <= k)) &&
+                                        (C_11 : (k <= K))) &&
+                                       (C_12 : temporary_is_exact_int_mat_bounded_by{Here}(
+                                       Y, LDY, i, K, k,
+                                       (((1 - p) * (p - 1)) * M), (p - 1)))));
+                  behavior default:
+                    
+                    assigns (Y + [(i * LDY)..((i * LDY) + (k - 1))]).double_M;
+                  while (true)
+                  {  
+                     {  (if (k < K) then () else 
+                        (goto while_1_break));
+                        (C_13 : (j = 0));
+                        
+                        {  
+                           loop 
+                           behavior default:
+                             invariant (C_14 : ((((((C_19 : (0 <= j)) &&
+                                                     (C_20 : (j <= M))) &&
+                                                    (C_21 : (\double_round_error(
+                                                              (Y +
+                                                                ((i * LDY) +
+                                                                  k)).double_M) ==
+                                                              0))) &&
+                                                   (C_22 : (\exists integer v_2;
+                                                             (((Y +
+                                                                 ((i * LDY) +
+                                                                   k)).double_M :> real) ==
+                                                               v_2)))) &&
+                                                  (C_23 : ((((1 - p) *
+                                                              (p - 1)) *
+                                                             j) <=
+                                                            ((Y +
+                                                               ((i * LDY) +
+                                                                 k)).double_M :> real)))) &&
+                                                 (C_24 : (((Y +
+                                                             ((i * LDY) + k)).double_M :> real) <=
+                                                           (p - 1)))));
+                           behavior default:
+                             
+                             assigns (Y + ((i * LDY) + k)).double_M;
+                           while (true)
+                           {  
+                              {  (if (j < M) then () else 
+                                 (goto while_2_break));
+                                 (C_51 : ((C_50 : (C_49 : (Y +
+                                                            (C_48 : (
+                                                            (C_47 : ((C_46 : (
+                                                                    (C_45 : 
+                                                                    (i *
+                                                                    LDY)) :> int32)) +
+                                                                    k)) :> int32)))).double_M) = 
+                                 (C_44 : ((C_43 : (C_42 : (Y +
+                                                            (C_41 : (
+                                                            (C_40 : ((C_39 : (
+                                                                    (C_38 : 
+                                                                    (i *
+                                                                    LDY)) :> int32)) +
+                                                                    k)) :> int32)))).double_M) -
+                                           (C_37 : ((C_36 : (C_35 : (A +
+                                                                    (C_34 : (
+                                                                    (C_33 : 
+                                                                    ((C_32 : (
+                                                                    (C_31 : 
+                                                                    (i *
+                                                                    LDA)) :> int32)) +
+                                                                    j)) :> int32)))).double_M) *
+                                                     (C_30 : (C_29 : 
+                                                             (X +
+                                                               (C_28 : (
+                                                               (C_27 : 
+                                                               ((C_26 : (
+                                                                (C_25 : 
+                                                                (j *
+                                                                  LDX)) :> int32)) +
+                                                                 k)) :> int32)))).double_M)))))));
+                                 (C_54 : (j = (C_53 : ((C_52 : (j + 1)) :> int32))))
+                              }
+                           };
+                           (while_2_break : ())
+                        };
+                        (C_57 : (k = (C_56 : ((C_55 : (k + 1)) :> int32))))
+                     }
+                  };
+                  (while_1_break : ())
+               };
+               (C_60 : (i = (C_59 : ((C_58 : (i + 1)) :> int32))))
+            }
+         };
+         (while_0_break : ())
+      };
+      
+      (return ())
+   }
+}
+
+int32 fmod()
+behavior default:
+  assumes true;
+  assigns \nothing;
+  ensures (C_75 : true);
+;
+
+unit DREMM(int32 N_1, int32 K_1, int32 p_2, double_P[..] X_0, int32 LDX_0)
+  requires (C_122 : is_exact_int_mat{Here}(X_0, LDX_0, N_1, K_1));
+behavior default:
+  assumes true;
+  assigns (X_0 + [0..((((N_1 - 1) * LDX_0) + K_1) - 1)]).double_M;
+  ensures (C_123 : ((C_124 : is_exact_int_mat_bounded_by{Here}(X_0, LDX_0,
+                                                               N_1, K_1, 0,
+                                                               (p_2 - 1))) &&
+                     (C_125 : (\forall integer i_3;
+                                (\forall integer j_3;
+                                  ((((0 <= i_3) && (i_3 < N_1)) &&
+                                     ((0 <= j_3) && (j_3 < K_1))) ==>
+                                    (\exists integer d;
+                                      (((X_0 + ((i_3 * LDX_0) + j_3)).double_M :> real) ==
+                                        ((\old((X_0 + ((i_3 * LDX_0) + j_3)).double_M) :> real) +
+                                          (d * p_2))))))))));
+{  
+   (var int32 i_0);
+   
+   (var int32 k_0);
+   
+   {  (C_76 : (i_0 = 0));
+      
+      {  
+         loop 
+         while (true)
+         {  
+            {  (if (i_0 < N_1) then () else 
+               (goto while_3_break));
+               (C_77 : (k_0 = 0));
+               
+               {  
+                  loop 
+                  while (true)
+                  {  
+                     {  (if (k_0 < K_1) then () else 
+                        (goto while_4_break));
+                        (C_93 : (let __cil_tmp = (C_84 : fmod())
+                                in (C_92 : ((C_91 : (C_90 : (X_0 +
+                                                              (C_89 : (
+                                                              (C_88 : 
+                                                              ((C_87 : (
+                                                               (C_86 : 
+                                                               (i_0 *
+                                                                 LDX_0)) :> int32)) +
+                                                                k_0)) :> int32)))).double_M) = 
+                                   (C_85 : (__cil_tmp :> double))))));
+                        (if ((C_115 : (C_114 : (X_0 +
+                                                 (C_113 : ((C_112 : ((C_111 : (
+                                                                    (C_110 : 
+                                                                    (i_0 *
+                                                                    LDX_0)) :> int32)) +
+                                                                    k_0)) :> int32)))).double_M) <
+                              (C_109 : (0 :> double))) then (C_108 : (
+                                                            (C_107 : 
+                                                            (C_106 : 
+                                                            (X_0 +
+                                                              (C_105 : (
+                                                              (C_104 : 
+                                                              ((C_103 : (
+                                                               (C_102 : 
+                                                               (i_0 *
+                                                                 LDX_0)) :> int32)) +
+                                                                k_0)) :> int32)))).double_M) = 
+                                                            (C_101 : 
+                                                            ((C_100 : 
+                                                             (C_99 : 
+                                                             (X_0 +
+                                                               (C_98 : (
+                                                               (C_97 : 
+                                                               ((C_96 : (
+                                                                (C_95 : 
+                                                                (i_0 *
+                                                                  LDX_0)) :> int32)) +
+                                                                 k_0)) :> int32)))).double_M) +
+                                                              (C_94 : (p_2 :> double)))))) else ());
+                        (C_118 : (k_0 = (C_117 : ((C_116 : (k_0 + 1)) :> int32))))
+                     }
+                  };
+                  (while_4_break : ())
+               };
+               (C_121 : (i_0 = (C_120 : ((C_119 : (i_0 + 1)) :> int32))))
+            }
+         };
+         (while_3_break : ())
+      };
+      
+      (return ())
+   }
+}
+
+unit DTRSM(int32 N_2, int32 K_2, double_P[..] A_1, int32 LDA_1,
+           double_P[..] X_1, int32 LDX_1)
+  requires (C_169 : (((C_171 : (N_2 <= 55)) &&
+                       (C_172 : is_exact_int_mat_bounded_by{Here}(X_1, LDX_1,
+                                                                  N_2, K_2,
+                                                                  0,
+                                                                  (l_pmax(
+                                                                    N_2) -
+                                                                    1)))) &&
+                      (C_173 : is_exact_int_mat_bounded_by{Here}(A_1, LDA_1,
+                                                                 N_2, N_2, 0,
+                                                                 (l_pmax(
+                                                                   N_2) -
+                                                                   1)))));
+behavior default:
+  assumes true;
+  assigns (X_1 + [0..((((N_2 - 1) * LDX_1) + K_2) - 1)]).double_M;
+  ensures (C_174 : is_exact_int_mat_bounded_by{Here}(X_1, LDX_1, N_2, K_2,
+                                                     (- max_int()), max_int(
+                                                     )));
+{  
+   (var int32 i_1);
+   
+   (var int32 j_0);
+   
+   (var int32 k_1);
+   
+   {  (C_128 : (i_1 = (C_127 : ((C_126 : (N_2 - 2)) :> int32))));
+      
+      {  
+         loop 
+         while (true)
+         {  
+            {  (if (i_1 >= 0) then () else 
+               (goto while_5_break));
+               (C_131 : (j_0 = (C_130 : ((C_129 : (i_1 + 1)) :> int32))));
+               
+               {  
+                  loop 
+                  while (true)
+                  {  
+                     {  (if (j_0 < N_2) then () else 
+                        (goto while_6_break));
+                        (C_132 : (k_1 = 0));
+                        
+                        {  
+                           loop 
+                           while (true)
+                           {  
+                              {  (if (k_1 < K_2) then () else 
+                                 (goto while_7_break));
+                                 (C_159 : ((C_158 : (C_157 : (X_1 +
+                                                               (C_156 : (
+                                                               (C_155 : 
+                                                               ((C_154 : (
+                                                                (C_153 : 
+                                                                (i_1 *
+                                                                  LDX_1)) :> int32)) +
+                                                                 k_1)) :> int32)))).double_M) = 
+                                 (C_152 : ((C_151 : (C_150 : (X_1 +
+                                                               (C_149 : (
+                                                               (C_148 : 
+                                                               ((C_147 : (
+                                                                (C_146 : 
+                                                                (i_1 *
+                                                                  LDX_1)) :> int32)) +
+                                                                 k_1)) :> int32)))).double_M) -
+                                            (C_145 : ((C_144 : (C_143 : 
+                                                               (A_1 +
+                                                                 (C_142 : (
+                                                                 (C_141 : 
+                                                                 ((C_140 : (
+                                                                  (C_139 : 
+                                                                  (i_1 *
+                                                                    LDA_1)) :> int32)) +
+                                                                   j_0)) :> int32)))).double_M) *
+                                                       (C_138 : (C_137 : 
+                                                                (X_1 +
+                                                                  (C_136 : (
+                                                                  (C_135 : 
+                                                                  ((C_134 : (
+                                                                   (C_133 : 
+                                                                   (j_0 *
+                                                                    LDX_1)) :> int32)) +
+                                                                    k_1)) :> int32)))).double_M)))))));
+                                 (C_162 : (k_1 = (C_161 : ((C_160 : (k_1 + 1)) :> int32))))
+                              }
+                           };
+                           (while_7_break : ())
+                        };
+                        (C_165 : (j_0 = (C_164 : ((C_163 : (j_0 + 1)) :> int32))))
+                     }
+                  };
+                  (while_6_break : ())
+               };
+               (C_168 : (i_1 = (C_167 : ((C_166 : (i_1 - 1)) :> int32))))
+            }
+         };
+         (while_5_break : ())
+      };
+      
+      (return ())
+   }
+}
+
+int32 Nmax(int32 p_0)
+  requires (C_202 : (2 <= p_0));
+behavior default:
+  assumes true;
+  ensures (C_203 : (((C_205 : delay(\result, p_0)) &&
+                      (C_206 : (\forall integer q;
+                                 (((1 <= q) && (q <= \result)) <==>
+                                   delay(q, p_0))))) &&
+                     (C_207 : (\result <= 55))));
+{  
+   (var double pp);
+   
+   (var double p2);
+   
+   (var int32 N_4);
+   
+   {  (C_176 : (pp = (C_175 : (1 :> double))));
+      (C_178 : (p2 = (C_177 : (1 :> double))));
+      (C_179 : (N_4 = 0));
+      
+      {  
+         loop 
+         while (true)
+         {  
+            {  (if ((C_190 : ((C_189 : ((C_188 : ((if ((C_187 : ((C_186 : 
+                                                                 ((C_185 : (
+                                                                  (C_184 : (
+                                                                  (C_183 : 
+                                                                  (p_0 -
+                                                                    1)) :> int32)) :> double)) *
+                                                                   (C_182 : 
+                                                                   (pp +
+                                                                    p2)))) /
+                                                                  (C_181 : (2 :> double)))) <
+                                                        (C_180 : (1 :> double))) then 1 else 0) :> int32)) ^
+                                         -53)) :> int32)) !=
+                     0) then () else 
+               (goto while_8_break));
+               (C_193 : (pp = (C_192 : (pp * (C_191 : (p_0 :> double))))));
+               (C_198 : (p2 = (C_197 : (p2 *
+                                         (C_196 : ((C_195 : ((C_194 : 
+                                                             (p_0 -
+                                                               2)) :> int32)) :> double))))));
+               (C_201 : (N_4 = (C_200 : ((C_199 : (N_4 + 1)) :> int32))))
+            }
+         };
+         (while_8_break : ())
+      };
+      
+      (return N_4)
+   }
+}
+
+int32 pmax(int32 N_3)
+behavior default:
+  assumes true;
+  ensures (C_217 : (\result == l_pmax(N_3)));
+{  
+   (var int32 p_3);
+   
+   (var int32 tmp);
+   
+   (var int32 __retres);
+   
+   {  (C_208 : (p_3 = 1));
+      
+      {  
+         loop 
+         while (true)
+         {  
+            {  
+               {  (C_210 : (tmp = (C_209 : Nmax(p_3))));
+                  ()
+               };
+               (if (N_3 <= tmp) then () else 
+               (goto while_9_break));
+               (C_213 : (p_3 = (C_212 : ((C_211 : (p_3 + 1)) :> int32))))
+            }
+         };
+         (while_9_break : ())
+      };
+      (C_216 : (__retres = (C_215 : ((C_214 : (p_3 - 1)) :> int32))));
+      
+      (return __retres)
+   }
+}
+
+unit LZ_TRSM(int32 N_0, int32 K_0, int32 p_1, double_P[..] A_0, int32 LDA_0,
+             double_P[..] B, int32 LDB)
+  requires (C_245 : (((((C_249 : (2 <= p_1)) &&
+                         (C_250 : ((((p_1 - 1) * (p_1 - 1)) * N_0) <=
+                                    max_int()))) &&
+                        (C_251 : (\base_block(B) != \base_block(A_0)))) &&
+                       (C_252 : is_exact_int_mat_bounded_by{Here}(A_0, LDA_0,
+                                                                  N_0, N_0,
+                                                                  0,
+                                                                  (p_1 - 1)))) &&
+                      (C_253 : is_exact_int_mat_bounded_by{Here}(B, LDB, N_0,
+                                                                 K_0, 0,
+                                                                 (p_1 - 1)))));
+behavior default:
+  assumes true;
+  assigns (B + [0..((((N_0 - 1) * LDB) + K_0) - 1)]).double_M;
+  ensures (C_254 : is_exact_int_mat_bounded_by{Here}(B, LDB, N_0, K_0, 0,
+                                                     (p_1 - 1)));
+{  
+   (var int32 P);
+   
+   (var int32 G);
+   
+   (var int32 tmp_0);
+   
+   {  
+      {  (C_219 : (tmp_0 = (C_218 : Nmax(p_1))));
+         ()
+      };
+      (if (N_0 <= tmp_0) then 
+      {  
+         {  
+            (assert for default: (C_242 : (N_0 <= 55)));
+            ()
+         };
+         
+         {  (C_243 : DTRSM(N_0, K_0, A_0, LDA_0, B, LDB))
+         };
+         (C_244 : DREMM(N_0, K_0, p_1, B, LDB))
+      } else 
+      {  (C_222 : (P = (C_221 : ((C_220 : (N_0 / 2)) :> int32))));
+         (C_225 : (G = (C_224 : ((C_223 : (N_0 - P)) :> int32))));
+         (C_234 : LZ_TRSM(G, K_0, p_1,
+                          (C_230 : (A_0 +
+                                     (C_229 : ((C_228 : (P *
+                                                          (C_227 : ((C_226 : 
+                                                                    (LDA_0 +
+                                                                    1)) :> int32)))) :> int32)))),
+                          LDA_0,
+                          (C_233 : (B +
+                                     (C_232 : ((C_231 : (P * LDB)) :> int32)))),
+                          LDB));
+         (C_239 : DGEMM_NEG(P, G, K_0, p_1, (C_235 : (A_0 + P)), LDA_0,
+                            (C_238 : (B +
+                                       (C_237 : ((C_236 : (P * LDB)) :> int32)))),
+                            LDB, B, LDB));
+         (C_240 : DREMM(P, K_0, p_1, B, LDB));
+         (C_241 : LZ_TRSM(P, K_0, p_1, A_0, LDA_0, B, LDB))
+      });
+      
+      (return ())
+   }
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0102.jessie/bts0102.cloc bts0102.jessie/bts0102.jc

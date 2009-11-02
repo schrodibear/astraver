@@ -1,4 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only weber2.c
+[kernel] warning: cannot load plug-in Test_dynlink
+                  (./test_dynlink.cmxs: file not found)
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD weber2.c"
 weber2.c:7:[kernel] warning: Body of function find_int_array falls-through. Adding a return statement
 [jessie] Starting Jessie translation

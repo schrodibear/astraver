@@ -1,6 +1,14 @@
-/* run.config
-   DONTRUN: bug JC (Why: Unbound variable char_P_char_M_foo_6)
+/* Frama-C BTS 92
+
+
+Yields:
+
+File "why/bts92.why", line 339, characters 5-24:
+Unbound variable char_P_char_M_foo_6
+
  */
+
+
 char T;
 
 /*@

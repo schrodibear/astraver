@@ -93,11 +93,9 @@ if test "$OCAMLC" = no ; then
 	AC_MSG_ERROR(Cannot find ocamlc.)
 fi
 
-# we extract Ocaml version number and library path
+# we extract Ocaml version number 
 OCAMLVERSION=`$OCAMLC -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
 echo "ocaml version is $OCAMLVERSION"
-OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d ' ' | tr -d '\\r'`
-echo "ocaml library path is $OCAMLLIB"
 
 case $OCAMLVERSION in
   0.*|1.*|2.00|3.00*|3.01*|3.02*|3.03*|3.04*|3.05*|3.06*|3.07*)
@@ -111,6 +109,11 @@ case $OCAMLVERSION in
   *)
 	FORPACK="-for-pack Graph";;
 esac
+
+# Ocaml library path
+# old way: OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d ' ' | tr -d '\\r'`
+OCAMLLIB=`$OCAMLC -where | tr -d '\\r'`
+echo "ocaml library path is $OCAMLLIB"
 
 # then we look for ocamlopt; if not present, we issue a warning
 # if the version is not the same, we also discard it

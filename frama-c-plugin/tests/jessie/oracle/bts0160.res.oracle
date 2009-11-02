@@ -854,12 +854,12 @@ text = "unexplained assertion"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0160_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0160.c" line = "9" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/bts0160.c" line = "16" begin = "4" end = "9"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0160_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0160.c" line = "9" begin = "4" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/bts0160.c" line = "16" begin = "4" end = "9"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>

@@ -1,5 +1,7 @@
 /* Frama-C BTS 0080
 
+Status: open
+
 yields:
 
 memory (mem-field(int_M),q_21)
@@ -9,8 +11,6 @@ File "jc/jc_interp_misc.ml", line 707, characters 7-7:
 Uncaught exception: File "jc/jc_interp_misc.ml", line 707, characters 7-13: Assertion failed
 Jessie subprocess failed: jessie -why-opt -split-user-conj -v -locs tst2.cloc tst2.jc 
 
-
-Still open
 
 */
 

@@ -1,8 +1,12 @@
-/*
+/* Frama-C BTS 0041
 
-  BTS #41, version bis: explicit loop assigns clause
+version bis: explicit loop assigns clause
+
+Status: closed
+
 
  */
+
 
 # pragma JessieIntegerModel(exact)
 
@@ -66,3 +70,10 @@ void foo(int a[], int aLength) {
 }
 
 
+
+
+/* 
+Local Variables:
+compile-command: "LC_ALL=C frama-c -jessie bts0041-bis.c"
+End:
+*/

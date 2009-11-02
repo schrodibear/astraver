@@ -1,11 +1,12 @@
 /* Frama-C BTS 0040
 
+Status: open
+
 yields:
 
 File "wholeprogram.jc", line 53, characters 15-26: typing error: type
 float_P[..] expected instead of real
 
-still open
   
 */
 

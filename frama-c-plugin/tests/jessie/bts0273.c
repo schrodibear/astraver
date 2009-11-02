@@ -1,5 +1,7 @@
 /* Frama-C BTS 0273 
 
+Status: closed
+
 yields:
 
 Uncaught exception: File "jc/jc_interp.ml", line 1819, characters 1-7: Assertion failed

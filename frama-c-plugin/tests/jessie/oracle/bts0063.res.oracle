@@ -1,4 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0063.c
+[kernel] warning: cannot load plug-in Test_dynlink
+                  (./test_dynlink.cmxs: file not found)
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0063.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0063.jessie
@@ -452,7 +454,7 @@ why --project [...] why/bts0063.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
     <goal why_file="why/bts0063_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0063.c" line = "6" begin = "13" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/bts0063.c" line = "11" begin = "13" end = "30"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>

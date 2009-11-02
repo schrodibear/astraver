@@ -1,3 +1,8 @@
+/* Frama-C BTS 0094
+
+Status: closed
+
+*/
 
 #include <limits.h>
 
@@ -35,4 +40,12 @@ unsigned short ushort_range(unsigned short i)
     //@ assert i <= USHRT_MAX;
     return i;
 }
+
+/* 
+Local Variables:
+compile-command: "LC_ALL=C frama-c -jessie bts0094.c"
+End:
+*/
+
+
 

@@ -1,10 +1,16 @@
 /* Frama-C BTS 0102
 
+Status: open
+
 yields:
 
 
-assert false at line 718 of jc/jc_interp_misc.ml
-
+** Jc_interp_misc.transpose_location_list: TODO: parameters **
+memory (mem-field(double_M),X_5)
+in memory set (mem-field(double_M),A_4), (mem-field(double_M),X_5),
+(mem-field(double_M),Y_6)
+File "jc/jc_interp_misc.ml", line 737, characters 1-1:
+Uncaught exception: File "jc/jc_interp_misc.ml", line 737, characters 1-7: Assertion failed
 
 */
 

@@ -1,11 +1,11 @@
 /* Frama-C BTS 0071 
 
+Status: closed
+
 yields:
 
 File "why/label.why", line 350, characters 30-47:
 Unbound label 'Mylabel'
-
-
 
 
 Fixed in Why 2.20

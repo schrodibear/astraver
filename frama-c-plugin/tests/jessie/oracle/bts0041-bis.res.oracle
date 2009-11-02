@@ -2720,59 +2720,59 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po51.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "18" begin = "5" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "5" end = "15"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po52.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "18" begin = "5" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "5" end = "15"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po53.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "18" begin = "5" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "5" end = "15"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po54.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "32" begin = "5" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "5" end = "16"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po55.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "32" begin = "5" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "5" end = "16"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po56.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "32" begin = "5" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "5" end = "16"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po57.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "47" begin = "5" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "51" begin = "5" end = "9"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po58.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "47" begin = "5" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "51" begin = "5" end = "9"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po59.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "47" begin = "5" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "51" begin = "5" end = "9"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0041-bis_po46.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "47" begin = "5" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "51" begin = "5" end = "9"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po47.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "47" begin = "5" end = "9"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "51" begin = "5" end = "9"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -2792,29 +2792,29 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po42.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "57" begin = "5" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "61" begin = "5" end = "8"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po43.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "57" begin = "5" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "61" begin = "5" end = "8"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po44.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "57" begin = "5" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "61" begin = "5" end = "8"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po45.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "57" begin = "5" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "61" begin = "5" end = "8"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0041-bis_po33.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "60" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "64" begin = "21" end = "27"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -2829,7 +2829,7 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "60" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "64" begin = "21" end = "27"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -2844,7 +2844,7 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po39.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "57" begin = "5" end = "8"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "61" begin = "5" end = "8"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -2864,29 +2864,29 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po30.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "18" begin = "5" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "5" end = "15"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po31.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "18" begin = "5" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "5" end = "15"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po32.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "18" begin = "5" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "5" end = "15"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0041-bis_po19.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "26" begin = "21" end = "27"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po20.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "31" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "26" begin = "31" end = "38"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -2901,12 +2901,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po23.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "26" begin = "21" end = "27"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "31" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "26" begin = "31" end = "38"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -2921,7 +2921,7 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po27.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "18" begin = "5" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "22" begin = "5" end = "15"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -2961,29 +2961,29 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po16.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "32" begin = "5" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "5" end = "16"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po17.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "32" begin = "5" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "5" end = "16"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po18.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "32" begin = "5" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "5" end = "16"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0041-bis_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "40" begin = "21" end = "27"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "31" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "40" begin = "31" end = "38"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -2998,12 +2998,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "21" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "40" begin = "21" end = "27"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "31" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "40" begin = "31" end = "38"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -3018,7 +3018,7 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0041-bis_po9.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "32" begin = "5" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.c" line = "36" begin = "5" end = "16"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>

@@ -1,3 +1,11 @@
+/* Frama-C BTS 0073
+
+Status: closed
+
+
+*/
+
+
 /*@
 axiomatic myaxioms{
 
@@ -11,3 +19,11 @@ axiomatic myaxioms{
 @*/
 
 
+
+
+
+/* 
+Local Variables:
+compile-command: "LC_ALL=C frama-c -jessie bts0073.c"
+End:
+*/

@@ -1,6 +1,7 @@
-/*
+/* Frama-C BTS 0041
 
-  BTS #41
+Status: closed, but see bts0041-bis.c
+
 
  */
 
@@ -59,3 +60,9 @@ void foo(int a[], int aLength) {
 }
 
 
+
+/* 
+Local Variables:
+compile-command: "LC_ALL=C frama-c -jessie bts0041.c"
+End:
+*/

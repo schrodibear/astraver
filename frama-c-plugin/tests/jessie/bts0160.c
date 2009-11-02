@@ -1,3 +1,10 @@
+/* Frama-C BTS 0102
+
+Status: closed
+
+*/
+
+
 typedef struct { int * rc; } S;
  
 /*@
@@ -12,3 +19,11 @@ int main1(  S* p,int* r)
  *(p->rc) = 55;
  return 1;
 }
+
+
+
+/*
+Local Variables:
+compile-command: "LC_ALL=C frama-c -jessie bts0160.c"
+End:
+*/

@@ -1,14 +1,12 @@
 /* Frama-C BTS 0199
 
-yields:
+Status: closed
 
-error: unexpected error File "src/jessie/interp.ml", line 1764,
-characters 18-24: Assertion failed
-
-
-Still open
+Note: it is incorrect C code anyway: "a" instead of 'a'
 
 */
+
+# pragma JessieIntegerModel(math)
 
 float v;
 

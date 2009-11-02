@@ -1,4 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only addrof_param.c
+[kernel] warning: cannot load plug-in Test_dynlink
+                  (./test_dynlink.cmxs: file not found)
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD addrof_param.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir addrof_param.jessie
