@@ -10,9 +10,9 @@
 #function canonpath ()
 #{ echo $(cd $(dirname $1); pwd -P)/$(basename $1) }
 
-PPCHOME=$(shell (cd ../..; pwd -P))
-WHYHOME=$(shell (cd  ../../..; pwd -P))
-FRAMAC_OPT=$(shell ./check_opt.sh)
+PPCHOME:=$(shell (cd ../..; pwd -P))
+WHYHOME:=$(shell (cd  ../../..; pwd -P))
+FRAMAC_OPT:=$(shell ./check_opt.sh)
 FRAMAC_BYTE?=frama-c.byte
 
 JESSIEOPT=$(WHYHOME)/bin/jessie.opt
@@ -29,9 +29,9 @@ WHYLIB=$(WHYHOME)/lib
 
 ifneq ("$(FRAMAC_PLUGIN)","")
 ifneq ("$(FRAMAC_PLUGIN)",".")
-ENVPPC=FRAMAC_PLUGIN=$(FRAMAC_PLUGIN)
+ENVPPC:=FRAMAC_PLUGIN=$(FRAMAC_PLUGIN)
 else
-ENVPPC=FRAMAC_PLUGIN=$(PPCHOME)
+ENVPPC:=FRAMAC_PLUGIN="`unset FRAMAC_PLUGIN; $(FRAMAC_BYTE) -print-plugin-path`"
 endif
 endif
 
@@ -203,6 +203,7 @@ simplify/%_why.sx.all: %.c
 	@echo "*** Begin output command for diff ***"
 	@echo "*** Begin stderr for diff ***" >&2
 	@echo Options are: $(PPC_OPTIONS) -jessie-gen-only $^
+#	@echo "COMMAND=$(EXECPPCOPT)"
 	@$(EXECPPCOPT) $(PPC_OPTIONS) -jessie-gen-only $^
 	@echo "*** End output command for diff ***"
 #	Output Jessie file generated for diff in regression tests

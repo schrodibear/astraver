@@ -1,6 +1,4 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0102.c
-[kernel] warning: cannot load plug-in Test_dynlink
-                  (./test_dynlink.cmxs: file not found)
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0102.c"
 [jessie] Starting Jessie translation
 [kernel] No code for function fmod, default assigns generated

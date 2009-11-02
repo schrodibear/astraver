@@ -1,6 +1,4 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only check-fma.c
-[kernel] warning: cannot load plug-in Test_dynlink
-                  (./test_dynlink.cmxs: file not found)
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD check-fma.c"
 check-fma.c:14:[kernel] warning: Body of function main falls-through. Adding a return statement
 [jessie] Starting Jessie translation

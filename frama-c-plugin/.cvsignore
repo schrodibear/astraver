@@ -7,3 +7,5 @@ Jessie.cmxs
 frama-c-Jessie*
 .depend
 ptests_local_config.ml
+config.status
+jessie_config.ml

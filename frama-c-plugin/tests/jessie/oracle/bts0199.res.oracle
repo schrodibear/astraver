@@ -1,16 +1,13 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0199.c
-[kernel] warning: cannot load plug-in Test_dynlink
-                  (./test_dynlink.cmxs: file not found)
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0199.c"
 [jessie] Starting Jessie translation
 [kernel] No code for function fabs, default assigns generated
-bts0199.c:20:[jessie] warning: skipping all arguments of implicit prototype fabs
-bts0199.c:23:[jessie] user error: Casting from type struct char_P (*)[2] to type int  not allowed
-bts0199.c:23:[jessie] warning: Dropping definition of function fun
+bts0199.c:18:[jessie] warning: skipping all arguments of implicit prototype fabs
+bts0199.c:21:[jessie] user error: Casting from type struct char_P (*)[2] to type int  not allowed
+bts0199.c:21:[jessie] warning: Dropping definition of function fun
 [jessie] Producing Jessie files in subdir bts0199.jessie
 [jessie] File bts0199.jessie/bts0199.jc written.
 [jessie] File bts0199.jessie/bts0199.cloc written.
-# IntModel = bounded
 # InvariantPolicy = Arguments
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
@@ -22,12 +19,8 @@ axiomatic Padding {
   
 }
 
-type int8 = -128..127
-
-type int32 = -2147483648..2147483647
-
 tag char_P = {
-  int8 char_M: 8;
+  integer char_M: 8;
 }
 
 type char_P = [char_P]
@@ -44,7 +37,7 @@ invariant valid___string_a :
 
 real v;
 
-int32 fabs()
+integer fabs()
 behavior default:
   assumes true;
   assigns \nothing;
@@ -60,10 +53,6 @@ WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fa
 type __string_a_1
 
 type char_P
-
-type int32
-
-type int8
 
 type padding
 
@@ -83,20 +72,6 @@ logic char_P_of_bitvector: bitvector -> char_P pointer
 
 axiom bitvector_of_char_P_of_char_P_of_bitvector :
  (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
-
-logic bitvector_of_int32: int32 -> bitvector
-
-logic int32_of_bitvector: bitvector -> int32
-
-axiom bitvector_of_int32_of_int32_of_bitvector :
- (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
-
-logic bitvector_of_int8: int8 -> bitvector
-
-logic int8_of_bitvector: bitvector -> int8
-
-axiom bitvector_of_int8_of_int8_of_bitvector :
- (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P: void_P pointer -> bitvector
 
@@ -124,47 +99,6 @@ axiom char_P_tags :
  (forall x:char_P pointer.
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
-
-logic integer_of_int32: int32 -> int
-
-predicate eq_int32(x:int32,
- y:int32) =
- eq_int(integer_of_int32(x), integer_of_int32(y))
-
-logic integer_of_int8: int8 -> int
-
-predicate eq_int8(x:int8,
- y:int8) =
- eq_int(integer_of_int8(x), integer_of_int8(y))
-
-logic int32_of_integer: int -> int32
-
-axiom int32_coerce :
- (forall x:int.
-  ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
-   eq_int(integer_of_int32(int32_of_integer(x)), x)))
-
-axiom int32_of_bitvector_of_bitvector_of_int32 :
- (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
-
-axiom int32_range :
- (forall x:int32.
-  (le_int((-2147483648), integer_of_int32(x))
-  and le_int(integer_of_int32(x), (2147483647))))
-
-logic int8_of_integer: int -> int8
-
-axiom int8_coerce :
- (forall x:int.
-  ((le_int((-128), x) and le_int(x, (127))) ->
-   eq_int(integer_of_int8(int8_of_integer(x)), x)))
-
-axiom int8_of_bitvector_of_bitvector_of_int8 :
- (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
-
-axiom int8_range :
- (forall x:int8.
-  (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
 predicate left_valid_struct_char_P(p:char_P pointer,
  a:int,
@@ -378,20 +312,16 @@ parameter alloc_struct_void_P_requires :
           and (alloc_fresh(void_P_alloc_table@, result, n)
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
-parameter any_int32 : unit -> { } int32 { true }
-
-parameter any_int8 : unit -> { } int8 { true }
-
 parameter char_P___string_a_1_alloc_table : char_P alloc_table ref
 
 parameter fabs :
  tt:unit ->
-  { } int32 reads char_P___string_a_1_alloc_table
+  { } int reads char_P___string_a_1_alloc_table
   { (JC_12: valid___string_a(char_P___string_a_1_alloc_table)) }
 
 parameter fabs_requires :
  tt:unit ->
-  { (JC_3: valid___string_a(char_P___string_a_1_alloc_table))} int32
+  { (JC_3: valid___string_a(char_P___string_a_1_alloc_table))} int
   reads char_P___string_a_1_alloc_table
   { (JC_12: valid___string_a(char_P___string_a_1_alloc_table)) }
 
@@ -405,22 +335,6 @@ parameter fun_0_requires :
   { (JC_13: valid___string_a(char_P___string_a_1_alloc_table))} unit
   reads char_P___string_a_1_alloc_table
   { (JC_20: valid___string_a(char_P___string_a_1_alloc_table)) }
-
-parameter int32_of_integer_ :
- x:int ->
-  { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
-  { eq_int(integer_of_int32(result), x) }
-
-parameter int8_of_integer_ :
- x:int ->
-  { (le_int((-128), x) and le_int(x, (127)))} int8
-  { eq_int(integer_of_int8(result), x) }
-
-parameter safe_int32_of_integer_ :
- x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
-
-parameter safe_int8_of_integer_ :
- x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0199.jessie --quiet -f bts0199.makefile project
@@ -1362,10 +1276,6 @@ type __string_a_1
 
 type char_P
 
-type int32
-
-type int8
-
 type padding
 
 type void_P
@@ -1378,20 +1288,6 @@ logic char_P_of_bitvector : bitvector -> char_P pointer
 
 axiom bitvector_of_char_P_of_char_P_of_bitvector:
   (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
-
-logic bitvector_of_int32 : int32 -> bitvector
-
-logic int32_of_bitvector : bitvector -> int32
-
-axiom bitvector_of_int32_of_int32_of_bitvector:
-  (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
-
-logic bitvector_of_int8 : int8 -> bitvector
-
-logic int8_of_bitvector : bitvector -> int8
-
-axiom bitvector_of_int8_of_int8_of_bitvector:
-  (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P : void_P pointer -> bitvector
 
@@ -1420,45 +1316,6 @@ axiom char_P_tags:
   (forall x:char_P pointer.
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
-
-logic integer_of_int32 : int32 -> int
-
-predicate eq_int32(x: int32, y: int32) =
-  (integer_of_int32(x) = integer_of_int32(y))
-
-logic integer_of_int8 : int8 -> int
-
-predicate eq_int8(x: int8, y: int8) =
-  (integer_of_int8(x) = integer_of_int8(y))
-
-logic int32_of_integer : int -> int32
-
-axiom int32_coerce:
-  (forall x:int.
-    ((((-2147483648) <= x) and (x <= 2147483647)) ->
-     (integer_of_int32(int32_of_integer(x)) = x)))
-
-axiom int32_of_bitvector_of_bitvector_of_int32:
-  (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
-
-axiom int32_range:
-  (forall x:int32.
-    (((-2147483648) <= integer_of_int32(x)) and
-     (integer_of_int32(x) <= 2147483647)))
-
-logic int8_of_integer : int -> int8
-
-axiom int8_coerce:
-  (forall x:int.
-    ((((-128) <= x) and (x <= 127)) ->
-     (integer_of_int8(int8_of_integer(x)) = x)))
-
-axiom int8_of_bitvector_of_bitvector_of_int8:
-  (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
-
-axiom int8_range:
-  (forall x:int8.
-    (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
