@@ -8,3 +8,5 @@ if (ocamlopt -shared -o test_dynlink.cmxs check_opt.ml) 2> /dev/null; then
 else
   echo $FRAMAC_BYTE
 fi
+
+rm -f test_dynlink.cmxs check_opt.cm*
