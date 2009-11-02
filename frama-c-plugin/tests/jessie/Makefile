@@ -28,7 +28,9 @@ CADUCEUSLIB=$(WHYHOME)/lib
 WHYLIB=$(WHYHOME)/lib
 
 ifneq ("$(FRAMAC_PLUGIN)","")
+ifneq ("$(FRAMAC_PLUGIN)",".")
 ENVPPC=FRAMAC_PLUGIN=$(FRAMAC_PLUGIN)
+endif
 endif
 
 ifeq ("$(wildcard $(PPCHOME)/Jessie.cma)","")
