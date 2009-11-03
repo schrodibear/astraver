@@ -11,6 +11,13 @@ File "jc/jc_interp_misc.ml", line 707, characters 7-7:
 Uncaught exception: File "jc/jc_interp_misc.ml", line 707, characters 7-13: Assertion failed
 Jessie subprocess failed: jessie -why-opt -split-user-conj -v -locs tst2.cloc tst2.jc 
 
+Update: now yields:
+
+File "why/bts0080.why", line 641, characters 95-110:
+Application to int_P_int_M_a_3 creates an alias
+
+See also bts0039.c
+
 
 */
 

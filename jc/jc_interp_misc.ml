@@ -667,6 +667,8 @@ let separation_condition loclist loclist' =
 
 type memory_effect = RawMemory of Memory.t | PreciseMemory of Location.t
 
+exception NoRegion
+
 let rec transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) =
   match transpose_region ~region_assoc rdist with
     | None -> None
@@ -679,10 +681,10 @@ let rec transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) =
 		else
 		  begin match List.mem_assoc_eq VarOrd.equal v param_assoc with
 		    | None -> (* Local variable *)
-			failwith "Cannot transpose location"
+			raise NoRegion
 		    | Some e -> 
 			match location_of_expr e with
-			  | None -> failwith "Cannot transpose location"
+			  | None -> raise NoRegion
 			  | Some loc' -> loc'#node
 		  end
 	    | JCLderef(locs,lab,fi,r) ->
@@ -694,12 +696,12 @@ let rec transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) =
 	  in
 	  let loc = new location_with ~region:rloc ~node loc in
 	  Some(PreciseMemory(loc,(mc,rloc)))
-	with Failure "Cannot transpose location" ->
+	with NoRegion ->
 	  Some(RawMemory(mc,rloc))
 
 and transpose_location_set ~region_assoc ~param_assoc locs =
   match transpose_region ~region_assoc locs#region with
-    | None -> failwith "Cannot transpose location"
+    | None -> raise NoRegion
     | Some rloc ->
 	let node = match locs#node with
 	  | JCLSvar v ->
@@ -708,10 +710,10 @@ and transpose_location_set ~region_assoc ~param_assoc locs =
 	      else
 		begin match List.mem_assoc_eq VarOrd.equal v param_assoc with
 		  | None -> (* Local variable *)
-		      failwith "Cannot transpose location"
+		      raise NoRegion
 		  | Some e -> 
 		      match location_set_of_expr e with
-			| None -> failwith "Cannot transpose location"
+			| None -> raise NoRegion
 			| Some locs' -> locs'#node
 	      end
 	  | JCLSderef(locs',lab,fi,r) ->
@@ -723,35 +725,49 @@ and transpose_location_set ~region_assoc ~param_assoc locs =
 	in
 	new location_set_with ~region:rloc ~node locs
 
-let transpose_location_set ~region_assoc ~param_assoc locs w=
+let transpose_location_set ~region_assoc ~param_assoc locs w =
   try Some(transpose_location_set ~region_assoc ~param_assoc locs)
-  with Failure "Cannot transpose location" -> None
+  with NoRegion -> None
 
 let transpose_location_list
     ~region_assoc ~param_assoc rw_raw_mems rw_precise_mems (mc,distr) =
   if MemorySet.mem (mc,distr) rw_raw_mems then
       begin
+(*
 	Format.eprintf "** Jc_interp_misc.transpose_location_list: TODO: parameters **@.";
 	Format.eprintf "memory %a@\nin memory set %a@." 
 	  print_memory (mc,distr) 
 	  (print_list comma print_memory) (MemorySet.elements rw_raw_mems);
 	assert false
-      end
+*)
+        []
+(*
+        MemorySet.fold
+          (fun (mc,r) acc ->
+             if Region.equal r distr then
+               let r' =
+	         match 
+                   transpose_region ~region_assoc r 
+                 with 
+                   | None -> None
+                   | Some rloc -> Some(RawMemory(mc,rloc))
+               in
+                 failwith "what to do ?"
+             else acc) rw_raw_mems []
+*)
+     end
+
     else
-      let loclist =
-	LocationSet.to_list
-	  (LocationSet.filter
-	     (fun (_loc,(_mc,r)) -> Region.equal r distr)
-	     rw_precise_mems)
-      in
-      List.fold_left
-	(fun acc (loc,(mc,rdist)) ->
-	   match transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) with
-	     | None -> acc
-	     | Some(RawMemory(mc,rloc)) -> assert false
-	     | Some(PreciseMemory(loc,(mc,rloc))) ->
-		 loc :: acc
-	) [] loclist
+      LocationSet.fold
+	(fun ((_,(_,r)) as x) acc ->
+           if Region.equal r distr then
+	     match 
+               transpose_location ~region_assoc ~param_assoc x 
+             with
+	       | None -> acc
+	       | Some(RawMemory _) -> assert false
+	       | Some(PreciseMemory(loc,(mc,rloc))) -> loc :: acc
+           else acc) rw_precise_mems []
 
 let write_read_separation_condition 
     ~callee_reads ~callee_writes ~region_assoc ~param_assoc 
@@ -784,10 +800,10 @@ let write_read_separation_condition
 		  transpose_location_list ~region_assoc ~param_assoc
 		    rw_raw_mems rw_precise_mems (mc',distr')
 		in
-		assert (loclist <> []);
-		assert (loclist' <> []);
-		let pre = separation_condition loclist loclist' in
-		make_and pre acc
+		if loclist <> [] && loclist' <> [] then
+		  let pre = separation_condition loclist loclist' in
+		  make_and pre acc
+                else acc
 	      else acc
 	   ) acc writes
        else acc
@@ -829,10 +845,10 @@ let write_write_separation_condition
 	   transpose_location_list ~region_assoc ~param_assoc
 	     rw_raw_mems rw_precise_mems (mc',distr')
 	 in
-	 assert (loclist <> []);
-	 assert (loclist' <> []);
-	 let pre = separation_condition loclist loclist' in
-	 make_and pre acc
+	 if loclist <> [] && loclist' <> [] then
+	   let pre = separation_condition loclist loclist' in
+	   make_and pre acc
+         else acc
        else acc
     ) LTrue write_pairs
 

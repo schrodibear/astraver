@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.131 2009-10-30 16:17:00 marche Exp $ i*)
+(*i $Id: options.ml,v 1.132 2009-11-03 15:09:16 marche Exp $ i*)
 
 open Format
 
@@ -558,7 +558,7 @@ let valid = !valid_
 let coq_tactic = !coq_tactic_
 let coq_preamble = match !coq_preamble_ with
   | None when prover () = Coq V7 -> "Require Why."
-  | None -> "Require Export Why.\nRequire Export Rbase."
+  | None -> "Require Export Why."
   | Some s -> s
 let pvs_preamble = match !pvs_preamble_ with
   | None -> "IMPORTING why@why"

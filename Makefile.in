@@ -53,6 +53,7 @@ OCAMLOPT = @OCAMLOPT@
 OCAMLDEP = @OCAMLDEP@
 OCAMLLEX = @OCAMLLEX@
 OCAMLYACC= @OCAMLYACC@
+OCAMLDOC = @OCAMLDOC@
 OCAMLLIB = @OCAMLLIB@
 OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
@@ -909,6 +910,7 @@ DOC=doc/manual.ps doc/manual.html doc/caduceus.ps doc/caduceus.html \
 
 doc:: $(DOC)
 
+
 doc/manual.ps: doc/manual.tex doc/version.tex
 	make -C doc manual.ps
 
@@ -938,6 +940,19 @@ doc/main.pdf: doc/main.tex doc/version.tex
 
 doc/main.html: doc/main.tex doc/version.tex
 	make -C doc main.html
+
+
+# API HTML DOC
+##############
+
+OCAMLDOCSRC = $(WHYCONFIGCMO:.cmo=.ml) $(WHYCONFIGCMI:.cmi=.mli)
+	# $(JCCMO:.cmo=.ml) $(JCCMI:.cmi=.mli) 
+
+apidoc: $(OCAMLDOCSRC)
+	mkdir -p ocamldoc
+	rm -f ocamldoc/* 
+	$(OCAMLDOC) -d ocamldoc -html $(INCLUDES) $(OCAMLDOCSRC)
+
 
 # special rules
 ###############
