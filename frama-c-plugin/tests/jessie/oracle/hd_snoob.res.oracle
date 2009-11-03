@@ -5464,7 +5464,7 @@ let snoob4_safety =
         (let jessie_140 = begin
                             (loop_1:
                             while true do
-                            { invariant (JC_870: true)  }
+                            { invariant (JC_870: true) variant (0) }
                              begin
                                [ { } unit { true } ];
                               try
@@ -5866,14 +5866,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/hd_snoob_po241.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/hd_snoob.why" line = "4678" begin = "64" end = "65"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po242.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/hd_snoob.why" line = "4678" begin = "64" end = "65"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po243.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
@@ -5891,12 +5889,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/hd_snoob_po246.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/hd_snoob_po247.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -5921,6 +5919,16 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/hd_snoob_po252.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po253.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po254.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "131" begin = "4" end = "10"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
@@ -6406,16 +6414,6 @@ text = "unexplained assertion"/>
   <function name="Function snoob">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/hd_snoob_po253.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/hd_snoob_po254.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
     <goal why_file="why/hd_snoob_po255.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
@@ -6487,12 +6485,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/hd_snoob_po269.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/hd_snoob_po270.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -6517,6 +6515,16 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/hd_snoob_po275.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po276.why">
+      <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/hd_snoob_po277.why">
       <location file = "PPCHOME/tests/jessie/hd_snoob.c" line = "53" begin = "9" end = "14"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>

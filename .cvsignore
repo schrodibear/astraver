@@ -20,4 +20,6 @@ configure.lineno
 config.log
 a.out
 _build
+ocamldoc
 regtest.opt
+make_float_model.opt

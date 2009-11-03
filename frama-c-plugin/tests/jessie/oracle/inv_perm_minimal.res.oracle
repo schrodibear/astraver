@@ -979,7 +979,7 @@ let safety_safety =
         (let jessie_30 = begin
                            (loop_1:
                            while true do
-                           { invariant (JC_24: true)  }
+                           { invariant (JC_24: true) variant (0) }
                             begin
                               [ { } unit reads int_P_int_M_t_1,j,m
                                 { (JC_22:
@@ -1047,7 +1047,7 @@ let safety_safety =
                                                                     { invariant
                                                                     (JC_37:
                                                                     true)
-                                                                     }
+                                                                    variant (0) }
                                                                     begin
                                                                       
                                                                     [ 
@@ -1330,14 +1330,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po32.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/inv_perm_minimal.why" line = "922" begin = "77" end = "78"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po33.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/inv_perm_minimal.why" line = "922" begin = "77" end = "78"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po34.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
@@ -1358,6 +1356,24 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/inv_perm_minimal_po38.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/inv_perm_minimal_po39.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/inv_perm_minimal_po40.why">
+      <location file = "why/inv_perm_minimal.why" line = "854" begin = "62" end = "63"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/inv_perm_minimal_po41.why">
+      <location file = "why/inv_perm_minimal.why" line = "854" begin = "62" end = "63"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">

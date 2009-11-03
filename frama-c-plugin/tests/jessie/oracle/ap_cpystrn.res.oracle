@@ -1723,7 +1723,8 @@ let ap_cpystrn_safety =
                           (let jessie_20 = begin
                                              (loop_1:
                                              while true do
-                                             { invariant (JC_10: true)  }
+                                             { invariant (JC_10: true)
+                                               variant (0) }
                                               begin
                                                 [ { } unit { true } ];
                                                try
@@ -1939,11 +1940,19 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/ap_cpystrn_po15.why">
+      <location file = "why/ap_cpystrn.why" line = "1301" begin = "56" end = "57"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/ap_cpystrn_po16.why">
+      <location file = "why/ap_cpystrn.why" line = "1301" begin = "56" end = "57"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/ap_cpystrn_po17.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/ap_cpystrn_po16.why">
+    <goal why_file="why/ap_cpystrn_po18.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>

@@ -1074,7 +1074,7 @@ let test_safety =
         (let jessie_16 = begin
                            (loop_1:
                            while true do
-                           { invariant (JC_32: true)  }
+                           { invariant (JC_32: true) variant (0) }
                             begin
                               [ { } unit
                                 reads i_0,int_P_int_xM_3_alloc_table,int_xP_int_xM_result_1,t
@@ -1217,6 +1217,14 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/malloc_po31.why">
+      <location file = "why/malloc.why" line = "962" begin = "62" end = "63"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/malloc_po32.why">
+      <location file = "why/malloc.why" line = "962" begin = "62" end = "63"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">

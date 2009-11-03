@@ -11,6 +11,13 @@ in memory set (mem-field(int_M),a_1),
 File "jc/jc_interp_misc.ml", line 737, characters 1-1:
 Uncaught exception: File "jc/jc_interp_misc.ml", line 737, characters 1-7: Assertion failed
 
+Update: now yields
+
+File "why/bts0039.why", line 711, characters 125-140:
+Application to int_P_int_M_p_3 creates an alias
+
+See also bts0080.c
+
 */
 
 typedef struct {int i;int j;} las;

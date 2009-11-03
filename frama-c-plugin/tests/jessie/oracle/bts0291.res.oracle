@@ -1,9 +1,9 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only oct_vs_pol.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD oct_vs_pol.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0291.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0291.c"
 [jessie] Starting Jessie translation
-[jessie] Producing Jessie files in subdir oct_vs_pol.jessie
-[jessie] File oct_vs_pol.jessie/oct_vs_pol.jc written.
-[jessie] File oct_vs_pol.jessie/oct_vs_pol.cloc written.
+[jessie] Producing Jessie files in subdir bts0291.jessie
+[jessie] File bts0291.jessie/bts0291.jc written.
+[jessie] File bts0291.jessie/bts0291.cloc written.
 # IntModel = bounded
 # InvariantPolicy = Arguments
 # SeparationPolicy = Regions
@@ -16,9 +16,15 @@ axiomatic Padding {
   
 }
 
+type int32 = -2147483648..2147483647
+
 type int8 = -128..127
 
-type int32 = -2147483648..2147483647
+tag int_P = {
+  int32 int_M: 32;
+}
+
+type int_P = [int_P]
 
 tag char_P = {
   int8 char_M: 8;
@@ -31,60 +37,57 @@ tag void_P = {
 
 type void_P = [void_P]
 
-unit __globinit_whole_program()
+unit foo(int_P[..] x, char_P[..] y)
+  requires (C_5 : (((C_7 : (\offset_min(x) <= 0)) &&
+                     (C_8 : (\offset_max(x) >= 0))) &&
+                    ((C_10 : (\offset_min(y) <= 0)) &&
+                      (C_11 : (\offset_max(y) >= 0)))));
 behavior default:
   assumes true;
-  ensures (C_1 : true);
-;
-
-int32 main()
-behavior default:
-  assumes true;
-  ensures (C_14 : true);
+  assigns x.int_M,
+  y.char_M;
+  ensures (C_12 : ((C_13 : (y.char_M == 2)) && (C_14 : (x.int_M == (- 1)))));
 {  
-   (var int32 i);
-   
-   (var int32 j);
-   
-   (var int32 k);
-   
-   (var int32 __retres);
-   
-   {  (C_2 : __globinit_whole_program());
-      (C_3 : (i = 0));
-      (C_4 : (k = 0));
+   {  (C_2 : ((C_1 : x.int_M) = -1));
+      (C_4 : ((C_3 : y.char_M) = 2));
       
-      {  
-         loop 
-         while (true)
-         {  
-            {  (if (0 <= j) then (if (j <= 9) then () else 
-                                 (goto while_0_break)) else 
-               (goto while_0_break));
-               (C_9 : (i = (C_8 : ((C_7 : ((C_6 : ((C_5 : (i * 10)) :> int32)) +
-                                            j)) :> int32))));
-               (C_12 : (k = (C_11 : ((C_10 : (k + 1)) :> int32))))
-            }
-         };
-         (while_0_break : ())
-      };
-      (C_13 : (__retres = 0));
-      
-      (return __retres)
+      (return ())
    }
 }
-WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs oct_vs_pol.jessie/oct_vs_pol.cloc oct_vs_pol.jessie/oct_vs_pol.jc
+
+unit test1()
+behavior default:
+  assumes true;
+  ensures (C_21 : true);
+{  
+   (var int_P[0] x_0);
+   
+   {  (C_16 : (x_0 = (C_15 : (new int_P[1]))));
+      (C_18 : foo(x_0, (C_17 : (x_0 :> char_P[..]))));
+      
+      {  
+         (assert for default: (C_19 : (2 == (- 1))));
+         ()
+      };
+      
+      {  (C_20 : (free(x_0)));
+         
+         (return ())
+      }
+   }
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0291.jessie/bts0291.cloc bts0291.jessie/bts0291.jc
 type char_P
 
 type int32
 
 type int8
 
+type int_P
+
 type padding
 
 type void_P
-
-exception Goto_while_0_break_exc of unit
 
 exception Loop_continue_exc of unit
 
@@ -112,6 +115,13 @@ logic int8_of_bitvector: bitvector -> int8
 
 axiom bitvector_of_int8_of_int8_of_bitvector :
  (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
+
+logic bitvector_of_int_P: int_P pointer -> bitvector
+
+logic int_P_of_bitvector: bitvector -> int_P pointer
+
+axiom bitvector_of_int_P_of_int_P_of_bitvector :
+ (forall x:bitvector. (bitvector_of_int_P(int_P_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P: void_P pointer -> bitvector
 
@@ -181,10 +191,34 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
+logic int_P_tag:  -> int_P tag_id
+
+axiom int_P_int : (int_of_tag(int_P_tag) = (1))
+
+axiom int_P_of_bitvector_of_bitvector_of_int_P :
+ (forall x:int_P pointer. (int_P_of_bitvector(bitvector_of_int_P(x)) = x))
+
+logic int_P_of_pointer_address: unit pointer -> int_P pointer
+
+axiom int_P_of_pointer_address_of_pointer_addr :
+ (forall p:int_P pointer. (p = int_P_of_pointer_address(pointer_address(p))))
+
+axiom int_P_parenttag_bottom : parenttag(int_P_tag, bottom_tag)
+
+axiom int_P_tags :
+ (forall x:int_P pointer.
+  (forall int_P_tag_table:int_P tag_table.
+   instanceof(int_P_tag_table, x, int_P_tag)))
+
 predicate left_valid_struct_char_P(p:char_P pointer,
  a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
+
+predicate left_valid_struct_int_P(p:int_P pointer,
+ a:int,
+ int_P_alloc_table:int_P alloc_table) =
+ (offset_min(int_P_alloc_table, p) <= a)
 
 predicate left_valid_struct_void_P(p:void_P pointer,
  a:int,
@@ -193,6 +227,9 @@ predicate left_valid_struct_void_P(p:void_P pointer,
 
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+
+axiom pointer_addr_of_int_P_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(int_P_of_pointer_address(p))))
 
 logic void_P_of_pointer_address: unit pointer -> void_P pointer
 
@@ -203,6 +240,11 @@ predicate right_valid_struct_char_P(p:char_P pointer,
  b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
+
+predicate right_valid_struct_int_P(p:int_P pointer,
+ b:int,
+ int_P_alloc_table:int_P alloc_table) =
+ (offset_max(int_P_alloc_table, p) >= b)
 
 predicate right_valid_struct_void_P(p:void_P pointer,
  b:int,
@@ -215,6 +257,13 @@ predicate strict_valid_root_char_P(p:char_P pointer,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
+
+predicate strict_valid_root_int_P(p:int_P pointer,
+ a:int,
+ b:int,
+ int_P_alloc_table:int_P alloc_table) =
+ ((offset_min(int_P_alloc_table, p) = a)
+ and (offset_max(int_P_alloc_table, p) = b))
 
 predicate strict_valid_root_void_P(p:void_P pointer,
  a:int,
@@ -230,6 +279,13 @@ predicate strict_valid_struct_char_P(p:char_P pointer,
  ((offset_min(char_P_alloc_table, p) = a)
  and (offset_max(char_P_alloc_table, p) = b))
 
+predicate strict_valid_struct_int_P(p:int_P pointer,
+ a:int,
+ b:int,
+ int_P_alloc_table:int_P alloc_table) =
+ ((offset_min(int_P_alloc_table, p) = a)
+ and (offset_max(int_P_alloc_table, p) = b))
+
 predicate strict_valid_struct_void_P(p:void_P pointer,
  a:int,
  b:int,
@@ -238,6 +294,13 @@ predicate strict_valid_struct_void_P(p:void_P pointer,
  and (offset_max(void_P_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_char_P(p:unit pointer,
+ a:int,
+ b:int,
+ bitvector_alloc_table:unit alloc_table) =
+ ((offset_min(bitvector_alloc_table, p) = a)
+ and (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_int_P(p:unit pointer,
  a:int,
  b:int,
  bitvector_alloc_table:unit alloc_table) =
@@ -258,6 +321,13 @@ predicate valid_root_char_P(p:char_P pointer,
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
 
+predicate valid_root_int_P(p:int_P pointer,
+ a:int,
+ b:int,
+ int_P_alloc_table:int_P alloc_table) =
+ ((offset_min(int_P_alloc_table, p) <= a)
+ and (offset_max(int_P_alloc_table, p) >= b))
+
 predicate valid_root_void_P(p:void_P pointer,
  a:int,
  b:int,
@@ -271,6 +341,13 @@ predicate valid_struct_char_P(p:char_P pointer,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) <= a)
  and (offset_max(char_P_alloc_table, p) >= b))
+
+predicate valid_struct_int_P(p:int_P pointer,
+ a:int,
+ b:int,
+ int_P_alloc_table:int_P alloc_table) =
+ ((offset_min(int_P_alloc_table, p) <= a)
+ and (offset_max(int_P_alloc_table, p) >= b))
 
 predicate valid_struct_void_P(p:void_P pointer,
  a:int,
@@ -297,10 +374,6 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter __globinit_whole_program : tt:unit -> { } unit { true }
-
-parameter __globinit_whole_program_requires : tt:unit -> { } unit { true }
-
 parameter alloc_bitvector_struct_char_P :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -315,6 +388,24 @@ parameter alloc_bitvector_struct_char_P_requires :
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
    { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_int_P :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { } unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_int_P(result, (0), sub_int(n, (1)),
+      bitvector_alloc_table)
+     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
+         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+
+parameter alloc_bitvector_struct_int_P_requires :
+ n:int ->
+  bitvector_alloc_table:unit alloc_table ref ->
+   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
+   { (valid_bitvector_struct_int_P(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
@@ -364,6 +455,32 @@ parameter alloc_struct_char_P_requires :
           and (alloc_fresh(char_P_alloc_table@, result, n)
               and instanceof(char_P_tag_table, result, char_P_tag)))) }
 
+parameter int_P_alloc_table : int_P alloc_table ref
+
+parameter int_P_tag_table : int_P tag_table ref
+
+parameter alloc_struct_int_P :
+ n:int ->
+  int_P_alloc_table:int_P alloc_table ref ->
+   int_P_tag_table:int_P tag_table ref ->
+    { } int_P pointer writes int_P_alloc_table,int_P_tag_table
+    { (strict_valid_struct_int_P(result, (0), sub_int(n, (1)),
+       int_P_alloc_table)
+      and (alloc_extends(int_P_alloc_table@, int_P_alloc_table)
+          and (alloc_fresh(int_P_alloc_table@, result, n)
+              and instanceof(int_P_tag_table, result, int_P_tag)))) }
+
+parameter alloc_struct_int_P_requires :
+ n:int ->
+  int_P_alloc_table:int_P alloc_table ref ->
+   int_P_tag_table:int_P tag_table ref ->
+    { ge_int(n, (0))} int_P pointer writes int_P_alloc_table,int_P_tag_table
+    { (strict_valid_struct_int_P(result, (0), sub_int(n, (1)),
+       int_P_alloc_table)
+      and (alloc_extends(int_P_alloc_table@, int_P_alloc_table)
+          and (alloc_fresh(int_P_alloc_table@, result, n)
+              and instanceof(int_P_tag_table, result, int_P_tag)))) }
+
 parameter void_P_alloc_table : void_P alloc_table ref
 
 parameter void_P_tag_table : void_P tag_table ref
@@ -395,6 +512,62 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter foo :
+ x:int_P pointer ->
+  y:char_P pointer ->
+   char_P_char_M_y_2:(char_P, int8) memory ref ->
+    int_P_int_M_x_1:(int_P, int32) memory ref ->
+     int_P_x_1_alloc_table:int_P alloc_table ->
+      char_P_y_2_alloc_table:char_P alloc_table ->
+       { } unit reads char_P_char_M_y_2,int_P_int_M_x_1
+       writes char_P_char_M_y_2,int_P_int_M_x_1
+       { ((true = true) ->
+          (JC_26:
+          ((JC_22:
+           ((JC_20:
+            eq_int(integer_of_int8(select(char_P_char_M_y_2, y)), (2)))
+           and (JC_21:
+               eq_int(integer_of_int32(select(int_P_int_M_x_1, x)),
+               neg_int((1))))))
+          and (JC_25:
+              ((JC_23:
+               not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
+               int_P_int_M_x_1, pset_singleton(x@)))
+              and (JC_24:
+                  not_assigns(char_P_y_2_alloc_table@, char_P_char_M_y_2@,
+                  char_P_char_M_y_2, pset_singleton(y@)))))))) }
+
+parameter foo_requires :
+ x:int_P pointer ->
+  y:char_P pointer ->
+   char_P_char_M_y_2:(char_P, int8) memory ref ->
+    int_P_int_M_x_1:(int_P, int32) memory ref ->
+     int_P_x_1_alloc_table:int_P alloc_table ->
+      char_P_y_2_alloc_table:char_P alloc_table ->
+       { (JC_5:
+         ((JC_1: le_int(offset_min(int_P_x_1_alloc_table, x), (0)))
+         and ((JC_2: ge_int(offset_max(int_P_x_1_alloc_table, x), (0)))
+             and ((JC_3: le_int(offset_min(char_P_y_2_alloc_table, y), (0)))
+                 and (JC_4:
+                     ge_int(offset_max(char_P_y_2_alloc_table, y), (0)))))))}
+       unit reads char_P_char_M_y_2,int_P_int_M_x_1
+       writes char_P_char_M_y_2,int_P_int_M_x_1
+       { ((true = true) ->
+          (JC_26:
+          ((JC_22:
+           ((JC_20:
+            eq_int(integer_of_int8(select(char_P_char_M_y_2, y)), (2)))
+           and (JC_21:
+               eq_int(integer_of_int32(select(int_P_int_M_x_1, x)),
+               neg_int((1))))))
+          and (JC_25:
+              ((JC_23:
+               not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
+               int_P_int_M_x_1, pset_singleton(x@)))
+              and (JC_24:
+                  not_assigns(char_P_y_2_alloc_table@, char_P_char_M_y_2@,
+                  char_P_char_M_y_2, pset_singleton(y@)))))))) }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -405,292 +578,401 @@ parameter int8_of_integer_ :
   { (le_int((-128), x) and le_int(x, (127)))} int8
   { eq_int(integer_of_int8(result), x) }
 
-parameter main : tt:unit -> { } int32 { true }
-
-parameter main_requires : tt:unit -> { } int32 { true }
-
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
-let main_ensures_default =
+parameter struct_char_P_alloc_of_bitvector :
+ char_P_alloc_table:char_P alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes char_P_alloc_table
+   { (forall p:char_P pointer.
+      (eq_int(offset_min(char_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (1)))
+      and eq_int(offset_max(char_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (1))))) }
+
+parameter struct_char_P_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  char_P_alloc_table:char_P alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:char_P pointer.
+      (eq_int(offset_min(char_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (1)))
+      and eq_int(offset_max(char_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (1))))) }
+
+parameter struct_char_P_mem_of_bitvector :
+ char_P_char_M:(char_P, int8) memory ref ->
+  bitvector:(unit, bitvector) memory ->
+   { } unit writes char_P_char_M
+   { (forall p0:char_P pointer.
+      eq_int8(select(char_P_char_M, p0),
+      int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                        (1))))) }
+
+parameter struct_char_P_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  char_P_char_M:(char_P, int8) memory ->
+   { } unit writes bitvector
+   { (forall p0:char_P pointer.
+      eq_int8(select(char_P_char_M, p0),
+      int8_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                        (1))))) }
+
+parameter struct_int_P_alloc_of_bitvector :
+ int_P_alloc_table:int_P alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes int_P_alloc_table
+   { (forall p:int_P pointer.
+      (eq_int(offset_min(int_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (4)))
+      and eq_int(offset_max(int_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (4))))) }
+
+parameter struct_int_P_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  int_P_alloc_table:int_P alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:int_P pointer.
+      (eq_int(offset_min(int_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (4)))
+      and eq_int(offset_max(int_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (4))))) }
+
+parameter struct_int_P_mem_of_bitvector :
+ int_P_int_M:(int_P, int32) memory ref ->
+  bitvector:(unit, bitvector) memory ->
+   { } unit writes int_P_int_M
+   { (forall p0:int_P pointer.
+      eq_int32(select(int_P_int_M, p0),
+      int32_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                         (4))))) }
+
+parameter struct_int_P_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref ->
+  int_P_int_M:(int_P, int32) memory ->
+   { } unit writes bitvector
+   { (forall p0:int_P pointer.
+      eq_int32(select(int_P_int_M, p0),
+      int32_of_bitvector(select_bytes(bitvector, pointer_address(p0), (0),
+                         (4))))) }
+
+parameter struct_void_P_alloc_of_bitvector :
+ void_P_alloc_table:void_P alloc_table ref ->
+  bitvector_alloc_table:unit alloc_table ->
+   { } unit writes void_P_alloc_table
+   { (forall p:void_P pointer.
+      (eq_int(offset_min(void_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(void_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_void_P_alloc_to_bitvector :
+ bitvector_alloc_table:unit alloc_table ref ->
+  void_P_alloc_table:void_P alloc_table ->
+   { } unit writes bitvector_alloc_table
+   { (forall p:void_P pointer.
+      (eq_int(offset_min(void_P_alloc_table, p),
+       offset_min_bytes(bitvector_alloc_table, pointer_address(p), (0)))
+      and eq_int(offset_max(void_P_alloc_table, p),
+          offset_max_bytes(bitvector_alloc_table, pointer_address(p), (0))))) }
+
+parameter struct_void_P_mem_of_bitvector :
+ bitvector:(unit, bitvector) memory -> { } unit { true }
+
+parameter struct_void_P_mem_to_bitvector :
+ bitvector:(unit, bitvector) memory ref -> { } unit writes bitvector { true }
+
+parameter test1 : tt:unit -> { } unit { true }
+
+parameter test1_requires : tt:unit -> { } unit { true }
+
+let foo_ensures_default =
+ fun (x : int_P pointer) (y : char_P pointer) (int_P_int_M_x_1 : (int_P, int32) memory ref) (char_P_char_M_y_2 : (char_P, int8) memory ref) (char_P_y_2_alloc_table : char_P alloc_table) (int_P_x_1_alloc_table : int_P alloc_table) ->
+  { ((true = true)
+    and (JC_11:
+        ((JC_7: le_int(offset_min(int_P_x_1_alloc_table, x), (0)))
+        and ((JC_8: ge_int(offset_max(int_P_x_1_alloc_table, x), (0)))
+            and ((JC_9: le_int(offset_min(char_P_y_2_alloc_table, y), (0)))
+                and (JC_10:
+                    ge_int(offset_max(char_P_y_2_alloc_table, y), (0)))))))) }
+  (init:
+  try
+   begin
+     (C_2:
+     begin
+       (let jessie_15 = (let jessie_11 = (safe_int32_of_integer_ (neg_int (1))) in
+                        (let jessie_14 = x in
+                        (((safe_upd_ int_P_int_M_x_1) jessie_14) jessie_11))) in
+       void);
+      (C_4:
+      begin
+        (let jessie_20 = (let jessie_16 = (safe_int8_of_integer_ (2)) in
+                         (let jessie_19 = y in
+                         (((safe_upd_ char_P_char_M_y_2) jessie_19) jessie_16))) in
+        void);
+       (raise Return)
+      end)
+     end);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { (JC_19:
+    ((JC_15:
+     ((JC_13: eq_int(integer_of_int8(select(char_P_char_M_y_2, y)), (2)))
+     and (JC_14:
+         eq_int(integer_of_int32(select(int_P_int_M_x_1, x)), neg_int((1))))))
+    and (JC_18:
+        ((JC_16:
+         not_assigns(int_P_x_1_alloc_table@, int_P_int_M_x_1@,
+         int_P_int_M_x_1, pset_singleton(x@)))
+        and (JC_17:
+            not_assigns(char_P_y_2_alloc_table@, char_P_char_M_y_2@,
+            char_P_char_M_y_2, pset_singleton(y@))))))) }
+
+let foo_safety =
+ fun (x : int_P pointer) (y : char_P pointer) (int_P_int_M_x_1 : (int_P, int32) memory ref) (char_P_char_M_y_2 : (char_P, int8) memory ref) (char_P_y_2_alloc_table : char_P alloc_table) (int_P_x_1_alloc_table : int_P alloc_table) ->
+  { (JC_11:
+    ((JC_7: le_int(offset_min(int_P_x_1_alloc_table, x), (0)))
+    and ((JC_8: ge_int(offset_max(int_P_x_1_alloc_table, x), (0)))
+        and ((JC_9: le_int(offset_min(char_P_y_2_alloc_table, y), (0)))
+            and (JC_10: ge_int(offset_max(char_P_y_2_alloc_table, y), (0))))))) }
+  (init:
+  try
+   begin
+     (C_2:
+     begin
+       (let jessie_5 = (let jessie_1 = (safe_int32_of_integer_ (neg_int (1))) in
+                       (let jessie_4 = x in
+                       (JC_29:
+                       ((((upd_ int_P_x_1_alloc_table) int_P_int_M_x_1) jessie_4) jessie_1)))) in
+       void);
+      (C_4:
+      begin
+        (let jessie_10 = (let jessie_6 = (safe_int8_of_integer_ (2)) in
+                         (let jessie_9 = y in
+                         (JC_30:
+                         ((((upd_ char_P_y_2_alloc_table) char_P_char_M_y_2) jessie_9) jessie_6)))) in
+        void);
+       (raise Return)
+      end)
+     end);
+    (raise Return)
+   end
+   with
+   Return ->
+   void end)
+  { true }
+
+let test1_ensures_default =
  fun (tt : unit) ->
   { (true = true) }
   (init:
-  (let return = ref (any_int32 void) in
   try
    begin
-     (let i = ref (any_int32 void) in
-     (let j = (any_int32 void) in
-     (let k = ref (any_int32 void) in
-     (let __retres = ref (any_int32 void) in
-     (C_2:
+     (let bitvector_x_0_3 = ref (any_memory void) in
+     (let int_P_x_0_3_tag_table = ref (any_tag_table void) in
+     (let bitvector_x_0_3_alloc_table = ref (any_alloc_table void) in
+     (let x_0 = ref (any_pointer void) in
+     (C_16:
      begin
-       (JC_27: (__globinit_whole_program void));
-      (C_3:
+       (let jessie_27 = (x_0 := (C_15:
+                                (JC_44:
+                                ((alloc_bitvector_struct_int_P (1)) bitvector_x_0_3_alloc_table)))) in
+       void);
+      (C_18:
       begin
-        (let jessie_13 = (i := (safe_int32_of_integer_ (0))) in void);
-       (C_4:
-       begin
-         (let jessie_14 = (k := (safe_int32_of_integer_ (0))) in void);
-        try
-         (let jessie_20 = begin
-                            (loop_2:
-                            while true do
-                            { invariant (JC_29: true)  }
-                             begin
-                               [ { } unit { true } ];
-                              try
-                               (let jessie_19 = begin
-                                                  (let jessie_18 = begin
-                                                                     
-                                                                    (if 
-                                                                    ((le_int_ (0)) 
-                                                                    (integer_of_int32 j))
-                                                                    then
-                                                                    (if 
-                                                                    ((le_int_ 
-                                                                    (integer_of_int32 j)) (9))
-                                                                    then void
-                                                                    else
-                                                                    (let jessie_15 = 
-                                                                    (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                                    void))
-                                                                    else
-                                                                    (let jessie_16 = 
-                                                                    (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                                    void));
-                                                                    (C_9:
-                                                                    begin
-                                                                      
-                                                                    (let jessie_17 = 
-                                                                    (i := 
-                                                                    (C_8:
-                                                                    (safe_int32_of_integer_ 
-                                                                    (C_7:
-                                                                    ((add_int 
-                                                                    (integer_of_int32 
-                                                                    (C_6:
-                                                                    (safe_int32_of_integer_ 
-                                                                    (C_5:
-                                                                    ((mul_int 
-                                                                    (integer_of_int32 !i)) (10))))))) 
-                                                                    (integer_of_int32 j)))))) in
-                                                                    void);
-                                                                    (C_12:
-                                                                    begin
-                                                                      
-                                                                    (k := 
-                                                                    (C_11:
-                                                                    (safe_int32_of_integer_ 
-                                                                    (C_10:
-                                                                    ((add_int 
-                                                                    (integer_of_int32 !k)) (1))))));
-                                                                    !k
-                                                                    end)
-                                                                    end)
-                                                                   end in
-                                                  void);
-                                                 (raise
-                                                  (Loop_continue_exc
-                                                  void))
-                                                end in
-                               void)
-                               with
-                               Loop_continue_exc jessie_3 ->
-                               void end
-                             end
-                            done);
-                           (raise (Goto_while_0_break_exc void))
-                          end in
-         void)
-         with
-         Goto_while_0_break_exc jessie_1 ->
-         (while_0_break: void) end;
-        (C_13:
+        (let char_P_x_0_3_alloc_table = ref (any_alloc_table void) in
+        (let int_P_x_0_3_alloc_table = ref (any_alloc_table void) in
+        (let char_P_char_M_x_0_3 = ref (any_memory void) in
+        (let int_P_int_M_x_0_3 = ref (any_memory void) in
+        (let jessie_30 = begin
+                           ((struct_char_P_alloc_of_bitvector char_P_x_0_3_alloc_table) !bitvector_x_0_3_alloc_table);
+                          ((struct_char_P_mem_of_bitvector char_P_char_M_x_0_3) !bitvector_x_0_3);
+                          ((struct_int_P_alloc_of_bitvector int_P_x_0_3_alloc_table) !bitvector_x_0_3_alloc_table);
+                          ((struct_int_P_mem_of_bitvector int_P_int_M_x_0_3) !bitvector_x_0_3);
+                          (JC_45:
+                          ((((((foo (int_P_of_pointer_address !x_0)) 
+                               (char_P_of_pointer_address (C_17: !x_0))) char_P_char_M_x_0_3) int_P_int_M_x_0_3) !int_P_x_0_3_alloc_table) !char_P_x_0_3_alloc_table))
+                         end in
         begin
-          (let jessie_21 = (__retres := (safe_int32_of_integer_ (0))) in
-          void);
-         (return := !__retres);
-         (raise Return)
-        end)
+          ((struct_char_P_mem_to_bitvector bitvector_x_0_3) !char_P_char_M_x_0_3);
+         ((struct_int_P_mem_to_bitvector bitvector_x_0_3) !int_P_int_M_x_0_3);
+         jessie_30
+        end)))));
+       (assert { (JC_46: eq_int((2), neg_int((1)))) }; void);
+       void;
+       (C_20:
+       begin
+         ((safe_free_parameter bitvector_x_0_3_alloc_table) !x_0);
+        (raise Return)
        end)
       end)
      end)))));
-    absurd 
+    (raise Return)
    end
    with
    Return ->
-   !return end))
-  { (JC_13: true) }
+   void end)
+  { (JC_35: true) }
 
-let main_safety =
+let test1_safety =
  fun (tt : unit) ->
-  { (JC_12: true) }
+  { (JC_34: true) }
   (init:
-  (let return = ref (any_int32 void) in
   try
    begin
-     (let i = ref (any_int32 void) in
-     (let j = (any_int32 void) in
-     (let k = ref (any_int32 void) in
-     (let __retres = ref (any_int32 void) in
-     (C_2:
+     (let bitvector_x_0_3 = ref (any_memory void) in
+     (let int_P_x_0_3_tag_table = ref (any_tag_table void) in
+     (let bitvector_x_0_3_alloc_table = ref (any_alloc_table void) in
+     (let x_0 = ref (any_pointer void) in
+     (C_16:
      begin
-       (JC_17: (__globinit_whole_program_requires void));
-      (C_3:
+       (let jessie_22 = (x_0 := (let jessie_21 = (C_15:
+                                                 (JC_39:
+                                                 ((alloc_bitvector_struct_int_P_requires (1)) bitvector_x_0_3_alloc_table))) in
+                                (JC_40:
+                                (assert
+                                { ge_int(offset_max_bytes(bitvector_x_0_3_alloc_table,
+                                         jessie_21, (4)),
+                                  (0)) };
+                                jessie_21)))) in
+       void);
+      (C_18:
       begin
-        (let jessie_4 = (i := (safe_int32_of_integer_ (0))) in void);
-       (C_4:
-       begin
-         (let jessie_5 = (k := (safe_int32_of_integer_ (0))) in void);
-        try
-         (let jessie_11 = begin
-                            (loop_1:
-                            while true do
-                            { invariant (JC_19: true) variant (0) }
-                             begin
-                               [ { } unit { true } ];
-                              try
-                               (let jessie_10 = begin
-                                                  (let jessie_9 = begin
-                                                                    (if 
-                                                                    ((le_int_ (0)) 
-                                                                    (integer_of_int32 j))
-                                                                    then
-                                                                    (if 
-                                                                    ((le_int_ 
-                                                                    (integer_of_int32 j)) (9))
-                                                                    then void
-                                                                    else
-                                                                    (let jessie_6 = 
-                                                                    (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                                    void))
-                                                                    else
-                                                                    (let jessie_7 = 
-                                                                    (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                                    void));
-                                                                   (C_9:
-                                                                   begin
-                                                                     
-                                                                    (let jessie_8 = 
-                                                                    (i := 
-                                                                    (C_8:
-                                                                    (JC_24:
-                                                                    (int32_of_integer_ 
-                                                                    (C_7:
-                                                                    ((add_int 
-                                                                    (integer_of_int32 
-                                                                    (C_6:
-                                                                    (JC_23:
-                                                                    (int32_of_integer_ 
-                                                                    (C_5:
-                                                                    ((mul_int 
-                                                                    (integer_of_int32 !i)) (10)))))))) 
-                                                                    (integer_of_int32 j))))))) in
-                                                                    void);
-                                                                    (C_12:
-                                                                    begin
-                                                                      
-                                                                    (k := 
-                                                                    (C_11:
-                                                                    (JC_26:
-                                                                    (int32_of_integer_ 
-                                                                    (C_10:
-                                                                    ((add_int 
-                                                                    (integer_of_int32 !k)) (1)))))));
-                                                                    !k
-                                                                    end)
-                                                                   end)
-                                                                  end in
-                                                  void);
-                                                 (raise
-                                                  (Loop_continue_exc
-                                                  void))
-                                                end in
-                               void)
-                               with
-                               Loop_continue_exc jessie_3 ->
-                               void end
-                             end
-                            done);
-                           (raise (Goto_while_0_break_exc void))
-                          end in
-         void)
-         with
-         Goto_while_0_break_exc jessie_1 ->
-         (while_0_break: void) end;
-        (C_13:
+        (let char_P_x_0_3_alloc_table = ref (any_alloc_table void) in
+        (let int_P_x_0_3_alloc_table = ref (any_alloc_table void) in
+        (let char_P_char_M_x_0_3 = ref (any_memory void) in
+        (let int_P_int_M_x_0_3 = ref (any_memory void) in
+        (let jessie_25 = begin
+                           ((struct_char_P_alloc_of_bitvector char_P_x_0_3_alloc_table) !bitvector_x_0_3_alloc_table);
+                          ((struct_char_P_mem_of_bitvector char_P_char_M_x_0_3) !bitvector_x_0_3);
+                          ((struct_int_P_alloc_of_bitvector int_P_x_0_3_alloc_table) !bitvector_x_0_3_alloc_table);
+                          ((struct_int_P_mem_of_bitvector int_P_int_M_x_0_3) !bitvector_x_0_3);
+                          (JC_41:
+                          ((((((foo_requires (int_P_of_pointer_address !x_0)) 
+                               (char_P_of_pointer_address (C_17: !x_0))) char_P_char_M_x_0_3) int_P_int_M_x_0_3) !int_P_x_0_3_alloc_table) !char_P_x_0_3_alloc_table))
+                         end in
         begin
-          (let jessie_12 = (__retres := (safe_int32_of_integer_ (0))) in
-          void);
-         (return := !__retres);
-         (raise Return)
-        end)
+          ((struct_char_P_mem_to_bitvector bitvector_x_0_3) !char_P_char_M_x_0_3);
+         ((struct_int_P_mem_to_bitvector bitvector_x_0_3) !int_P_int_M_x_0_3);
+         jessie_25
+        end)))));
+       [ { } unit { (JC_42: eq_int((2), neg_int((1)))) } ];
+       void;
+       (C_20:
+       begin
+         ((free_parameter bitvector_x_0_3_alloc_table) !x_0); (raise Return)
        end)
       end)
      end)))));
-    absurd 
+    (raise Return)
    end
    with
    Return ->
-   !return end))
+   void end)
   { true }
 
 
-WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C oct_vs_pol.jessie --quiet -f oct_vs_pol.makefile project
-why --project [...] why/oct_vs_pol.why
-<project name="oct_vs_pol" context="why/oct_vs_pol_ctx.why">
-  <function name="Function main">
+WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0291.jessie --quiet -f bts0291.makefile project
+why --project [...] why/bts0291.why
+<project name="bts0291" context="why/bts0291_ctx.why">
+  <function name="Function test1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/oct_vs_pol_po1.why">
+    <goal why_file="why/bts0291_po10.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/oct_vs_pol_po2.why">
+    <goal why_file="why/bts0291_po11.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/oct_vs_pol_po3.why">
+    <goal why_file="why/bts0291_po12.why">
+      <location file = "PPCHOME/tests/jessie/bts0291.c" line = "14" begin = "13" end = "22"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0291_po13.why">
+      <location file = "PPCHOME/tests/jessie/bts0291.c" line = "14" begin = "13" end = "22"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0291_po14.why">
+      <location file = "PPCHOME/tests/jessie/bts0291.c" line = "14" begin = "26" end = "35"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0291_po15.why">
+      <location file = "PPCHOME/tests/jessie/bts0291.c" line = "14" begin = "26" end = "35"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0291_po16.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/oct_vs_pol_po4.why">
+    </behavior>
+    <behavior name="Default behavior">
+    <goal why_file="why/bts0291_po9.why">
+      <location file = "PPCHOME/tests/jessie/bts0291.c" line = "30" begin = "12" end = "17"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    </behavior>
+  </function>
+  <function name="Function foo">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
+    <goal why_file="why/bts0291_po5.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/oct_vs_pol_po5.why">
+    <goal why_file="why/bts0291_po6.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/oct_vs_pol_po6.why">
+    <goal why_file="why/bts0291_po7.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/oct_vs_pol_po7.why">
-      <location file = "why/oct_vs_pol.why" line = "481" begin = "63" end = "64"/>
-      <explain kind = "VarDecr"/>
+    <goal why_file="why/bts0291_po8.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/oct_vs_pol_po8.why">
-      <location file = "why/oct_vs_pol.why" line = "481" begin = "63" end = "64"/>
-      <explain kind = "VarDecr"/>
+    </behavior>
+    <behavior name="Default behavior">
+    <goal why_file="why/bts0291_po1.why">
+      <location file = "PPCHOME/tests/jessie/bts0291.c" line = "16" begin = "12" end = "17"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0291_po2.why">
+      <location file = "PPCHOME/tests/jessie/bts0291.c" line = "16" begin = "21" end = "27"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0291_po3.why">
+      <location file = "PPCHOME/tests/jessie/bts0291.c" line = "18" begin = "5" end = "8"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0291_po4.why">
+      <location file = "PPCHOME/tests/jessie/bts0291.c" line = "18" begin = "5" end = "8"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
     </goal>
     </behavior>
   </function>
@@ -1634,6 +1916,8 @@ type int32
 
 type int8
 
+type int_P
+
 type padding
 
 type void_P
@@ -1658,6 +1942,13 @@ logic int8_of_bitvector : bitvector -> int8
 
 axiom bitvector_of_int8_of_int8_of_bitvector:
   (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
+
+logic bitvector_of_int_P : int_P pointer -> bitvector
+
+logic int_P_of_bitvector : bitvector -> int_P pointer
+
+axiom bitvector_of_int_P_of_int_P_of_bitvector:
+  (forall x:bitvector. (bitvector_of_int_P(int_P_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P : void_P pointer -> bitvector
 
@@ -1726,8 +2017,32 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
+logic int_P_tag :  -> int_P tag_id
+
+axiom int_P_int: (int_of_tag(int_P_tag) = 1)
+
+axiom int_P_of_bitvector_of_bitvector_of_int_P:
+  (forall x:int_P pointer. (int_P_of_bitvector(bitvector_of_int_P(x)) = x))
+
+logic int_P_of_pointer_address : unit pointer -> int_P pointer
+
+axiom int_P_of_pointer_address_of_pointer_addr:
+  (forall p:int_P pointer.
+    (p = int_P_of_pointer_address(pointer_address(p))))
+
+axiom int_P_parenttag_bottom: parenttag(int_P_tag, bottom_tag)
+
+axiom int_P_tags:
+  (forall x:int_P pointer.
+    (forall int_P_tag_table:int_P tag_table. instanceof(int_P_tag_table, x,
+      int_P_tag)))
+
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
+  p) <= a)
+
+predicate left_valid_struct_int_P(p: int_P pointer, a: int,
+  int_P_alloc_table: int_P alloc_table) = (offset_min(int_P_alloc_table,
   p) <= a)
 
 predicate left_valid_struct_void_P(p: void_P pointer, a: int,
@@ -1737,6 +2052,9 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
+
+axiom pointer_addr_of_int_P_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(int_P_of_pointer_address(p))))
 
 logic void_P_of_pointer_address : unit pointer -> void_P pointer
 
@@ -1748,6 +2066,10 @@ predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_int_P(p: int_P pointer, b: int,
+  int_P_alloc_table: int_P alloc_table) = (offset_max(int_P_alloc_table,
+  p) >= b)
+
 predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
@@ -1756,6 +2078,11 @@ predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
   ((offset_min(char_P_alloc_table, p) = a) and
    (offset_max(char_P_alloc_table, p) = b))
+
+predicate strict_valid_root_int_P(p: int_P pointer, a: int, b: int,
+  int_P_alloc_table: int_P alloc_table) =
+  ((offset_min(int_P_alloc_table, p) = a) and (offset_max(int_P_alloc_table,
+   p) = b))
 
 predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
@@ -1767,12 +2094,22 @@ predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
   ((offset_min(char_P_alloc_table, p) = a) and
    (offset_max(char_P_alloc_table, p) = b))
 
+predicate strict_valid_struct_int_P(p: int_P pointer, a: int, b: int,
+  int_P_alloc_table: int_P alloc_table) =
+  ((offset_min(int_P_alloc_table, p) = a) and (offset_max(int_P_alloc_table,
+   p) = b))
+
 predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
   ((offset_min(void_P_alloc_table, p) = a) and
    (offset_max(void_P_alloc_table, p) = b))
 
 predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+  bitvector_alloc_table: unit alloc_table) =
+  ((offset_min(bitvector_alloc_table, p) = a) and
+   (offset_max(bitvector_alloc_table, p) = b))
+
+predicate valid_bitvector_struct_int_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
@@ -1787,6 +2124,11 @@ predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
   ((offset_min(char_P_alloc_table, p) <= a) and
    (offset_max(char_P_alloc_table, p) >= b))
 
+predicate valid_root_int_P(p: int_P pointer, a: int, b: int,
+  int_P_alloc_table: int_P alloc_table) =
+  ((offset_min(int_P_alloc_table, p) <= a) and (offset_max(int_P_alloc_table,
+   p) >= b))
+
 predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
   ((offset_min(void_P_alloc_table, p) <= a) and
@@ -1796,6 +2138,11 @@ predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
   ((offset_min(char_P_alloc_table, p) <= a) and
    (offset_max(char_P_alloc_table, p) >= b))
+
+predicate valid_struct_int_P(p: int_P pointer, a: int, b: int,
+  int_P_alloc_table: int_P alloc_table) =
+  ((offset_min(int_P_alloc_table, p) <= a) and (offset_max(int_P_alloc_table,
+   p) >= b))
 
 predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =

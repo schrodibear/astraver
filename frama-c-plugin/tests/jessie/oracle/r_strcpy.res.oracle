@@ -527,7 +527,7 @@ let r_strcpy_safety =
        (let jessie_14 = begin
                           (loop_1:
                           while true do
-                          { invariant (JC_10: true)  }
+                          { invariant (JC_10: true) variant (0) }
                            begin
                              [ { } unit { true } ];
                             try
@@ -668,6 +668,14 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/r_strcpy_po11.why">
+      <location file = "why/r_strcpy.why" line = "467" begin = "61" end = "62"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/r_strcpy_po12.why">
+      <location file = "why/r_strcpy.why" line = "467" begin = "61" end = "62"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>

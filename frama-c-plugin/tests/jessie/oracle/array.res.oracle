@@ -687,7 +687,7 @@ let f_safety =
          (let jessie_30 = begin
                             (loop_3:
                             while true do
-                            { invariant (JC_27: true)  }
+                            { invariant (JC_27: true) variant (0) }
                              begin
                                [ { } unit { true } ];
                               try
@@ -844,7 +844,7 @@ let foo_safety =
        (let jessie_6 = (i_0 := (safe_int32_of_integer_ (0))) in void);
       (loop_1:
       while true do
-      { invariant (JC_10: true)  }
+      { invariant (JC_10: true) variant (0) }
        begin
          [ { } unit { true } ];
         try
@@ -901,16 +901,6 @@ why --project [...] why/array.why
   <function name="Function foo">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/array_po7.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/array_po8.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
     <goal why_file="why/array_po9.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
@@ -920,6 +910,24 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/array_po11.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/array_po12.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/array_po13.why">
+      <location file = "why/array.why" line = "758" begin = "41" end = "42"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/array_po14.why">
+      <location file = "why/array.why" line = "758" begin = "41" end = "42"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>
@@ -955,6 +963,14 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/array_po7.why">
+      <location file = "why/array.why" line = "601" begin = "63" end = "64"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/array_po8.why">
+      <location file = "why/array.why" line = "601" begin = "63" end = "64"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>

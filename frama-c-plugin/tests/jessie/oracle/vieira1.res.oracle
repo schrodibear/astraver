@@ -1091,7 +1091,7 @@ let func_safety =
          (let jessie_29 = begin
                             (loop_2:
                             while true do
-                            { invariant (JC_43: true)  }
+                            { invariant (JC_43: true) variant (0) }
                              begin
                                [ { } unit reads int_P_int_M_a_5,k
                                  { (JC_41:
@@ -1268,6 +1268,14 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/vieira1_po29.why">
+      <location file = "why/vieira1.why" line = "937" begin = "63" end = "64"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/vieira1_po30.why">
+      <location file = "why/vieira1.why" line = "937" begin = "63" end = "64"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">

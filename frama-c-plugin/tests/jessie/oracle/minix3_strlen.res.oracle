@@ -1609,7 +1609,7 @@ let strlen_safety =
        (let jessie_12 = begin
                           (loop_1:
                           while true do
-                          { invariant (JC_10: true)  }
+                          { invariant (JC_10: true) variant (0) }
                            begin
                              [ { } unit { true } ];
                             try
@@ -1693,16 +1693,24 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/minix3_strlen_po3.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/minix3_strlen.why" line = "1198" begin = "61" end = "62"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/minix3_strlen_po4.why">
+      <location file = "why/minix3_strlen.why" line = "1198" begin = "61" end = "62"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/minix3_strlen_po5.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/minix3_strlen_po5.why">
+    <goal why_file="why/minix3_strlen_po6.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/minix3_strlen_po7.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>

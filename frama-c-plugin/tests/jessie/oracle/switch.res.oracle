@@ -1706,7 +1706,8 @@ let f5_safety =
                             (let jessie_100 = begin
                                                 (loop_1:
                                                 while true do
-                                                { invariant (JC_50: true)  }
+                                                { invariant (JC_50: true)
+                                                  variant (0) }
                                                  begin
                                                    [ { } unit { true } ];
                                                   try

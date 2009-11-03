@@ -696,7 +696,7 @@ let permut_search_safety =
                         void);
                        (loop_1:
                        while true do
-                       { invariant (JC_13: true)  }
+                       { invariant (JC_13: true) variant (0) }
                         begin
                           [ { } unit reads idx
                             { (JC_11:
@@ -787,6 +787,14 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/permut_search2_po9.why">
+      <location file = "why/permut_search2.why" line = "608" begin = "58" end = "59"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/permut_search2_po10.why">
+      <location file = "why/permut_search2.why" line = "608" begin = "58" end = "59"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">

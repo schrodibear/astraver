@@ -2790,7 +2790,7 @@ let init_uint_through_int_safety =
         (let jessie_23 = begin
                            (loop_1:
                            while true do
-                           { invariant (JC_31: true)  }
+                           { invariant (JC_31: true) variant (0) }
                             begin
                               [ { } unit reads i_27
                                 { (JC_29:
@@ -3098,19 +3098,19 @@ why --project [...] why/cast_integer_pointers.why
   <function name="Function uint_to_int">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/cast_integer_pointers_po22.why">
+    <goal why_file="why/cast_integer_pointers_po24.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/cast_integer_pointers_po23.why">
+    <goal why_file="why/cast_integer_pointers_po25.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `identity'">
-    <goal why_file="why/cast_integer_pointers_po21.why">
+    <goal why_file="why/cast_integer_pointers_po23.why">
       <location file = "PPCHOME/tests/jessie/cast_integer_pointers.c" line = "9" begin = "14" end = "28"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
@@ -3120,17 +3120,17 @@ text = "unexplained assertion"/>
   <function name="Function uchar_ptr">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/cast_integer_pointers_po18.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/cast_integer_pointers_po19.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
     <goal why_file="why/cast_integer_pointers_po20.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/cast_integer_pointers_po21.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/cast_integer_pointers_po22.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
@@ -3140,17 +3140,17 @@ text = "unexplained assertion"/>
   <function name="Function schar_ptr">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/cast_integer_pointers_po15.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/cast_integer_pointers_po16.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
     <goal why_file="why/cast_integer_pointers_po17.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/cast_integer_pointers_po18.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/cast_integer_pointers_po19.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
@@ -3179,6 +3179,14 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/cast_integer_pointers_po15.why">
+      <location file = "why/cast_integer_pointers.why" line = "2275" begin = "62" end = "63"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/cast_integer_pointers_po16.why">
+      <location file = "why/cast_integer_pointers.why" line = "2275" begin = "62" end = "63"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">

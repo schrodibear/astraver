@@ -1101,7 +1101,8 @@ let equal_int_array_safety =
                          (let jessie_15 = begin
                                             (loop_1:
                                             while true do
-                                            { invariant (JC_27: true)  }
+                                            { invariant (JC_27: true)
+                                              variant (0) }
                                              begin
                                                [ { } unit
                                                  reads a,mutable_first1
@@ -1238,6 +1239,14 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/weber6_po16.why">
+      <location file = "why/weber6.why" line = "1004" begin = "55" end = "56"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/weber6_po17.why">
+      <location file = "why/weber6.why" line = "1004" begin = "55" end = "56"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `not_equal'">

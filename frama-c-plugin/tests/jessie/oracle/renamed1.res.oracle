@@ -3034,7 +3034,7 @@ let F7_safety =
                                                             { invariant
                                                                 (JC_432:
                                                                 true)
-                                                               }
+                                                              variant (0) }
                                                              begin
                                                                [ { } unit
                                                                  { true } ];
@@ -3582,7 +3582,7 @@ let main_safety =
            (let jessie_229 = begin
                                (loop_3:
                                while true do
-                               { invariant (JC_499: true)  }
+                               { invariant (JC_499: true) variant (0) }
                                 begin
                                   [ { } unit { true } ];
                                  try
@@ -3658,16 +3658,6 @@ why --project [...] why/renamed1.why
   <function name="Function main">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/renamed1_po132.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "40" begin = "5" end = "29"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/renamed1_po133.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "40" begin = "5" end = "29"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
     <goal why_file="why/renamed1_po134.why">
       <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "40" begin = "5" end = "29"/>
       <explain kind = "Other"
@@ -3684,12 +3674,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po137.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "55" begin = "5" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "40" begin = "5" end = "29"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po138.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "55" begin = "5" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "40" begin = "5" end = "29"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -3709,12 +3699,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po142.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "48" begin = "6" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "55" begin = "5" end = "27"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po143.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "48" begin = "6" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "55" begin = "5" end = "27"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -3734,12 +3724,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po147.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "278" begin = "5" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "48" begin = "6" end = "22"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po148.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "278" begin = "5" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "48" begin = "6" end = "22"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -3759,12 +3749,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po152.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "278" begin = "5" end = "7"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po153.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "278" begin = "5" end = "7"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -3784,36 +3774,54 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po157.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po158.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po159.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po160.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po161.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/renamed1.why" line = "3126" begin = "67" end = "68"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po162.why">
+      <location file = "why/renamed1.why" line = "3126" begin = "67" end = "68"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/renamed1_po163.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/renamed1_po163.why">
+    <goal why_file="why/renamed1_po164.why">
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/renamed1_po165.why">
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/renamed1_po166.why">
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/renamed1_po167.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "439" begin = "5" end = "9"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
@@ -3884,14 +3892,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po107.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/renamed1.why" line = "2578" begin = "71" end = "72"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po108.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/renamed1.why" line = "2578" begin = "71" end = "72"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po109.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
@@ -3939,12 +3945,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po118.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "51" begin = "3" end = "5"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po119.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "51" begin = "3" end = "5"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -3964,12 +3970,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po123.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "51" begin = "3" end = "5"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po124.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "51" begin = "3" end = "5"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -3984,12 +3990,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po127.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po128.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -4004,6 +4010,16 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/renamed1_po131.why">
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/renamed1_po132.why">
+      <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/renamed1_po133.why">
       <location file = "PPCHOME/tests/jessie/renamed1.c" line = "339" begin = "5" end = "7"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>

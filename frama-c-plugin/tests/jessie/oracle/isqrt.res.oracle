@@ -2020,7 +2020,8 @@ let isqrt_safety =
                            (let jessie_22 = begin
                                               (loop_1:
                                               while true do
-                                              { invariant (JC_50: true)  }
+                                              { invariant (JC_50: true)
+                                                variant (0) }
                                                begin
                                                  [ { } unit { true } ];
                                                 try
@@ -2357,6 +2358,14 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/isqrt_po50.why">
+      <location file = "why/isqrt.why" line = "1563" begin = "57" end = "58"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/isqrt_po51.why">
+      <location file = "why/isqrt.why" line = "1563" begin = "57" end = "58"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">

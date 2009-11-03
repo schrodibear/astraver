@@ -1647,7 +1647,7 @@ let main_safety =
          (let jessie_10 = begin
                             (loop_1:
                             while true do
-                            { invariant (JC_39: true)  }
+                            { invariant (JC_39: true) variant (0) }
                              begin
                                [ { } unit { true } ];
                               try
@@ -1751,6 +1751,14 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/string_constant_po7.why">
+      <location file = "why/string_constant.why" line = "1228" begin = "63" end = "64"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/string_constant_po8.why">
+      <location file = "why/string_constant.why" line = "1228" begin = "63" end = "64"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>

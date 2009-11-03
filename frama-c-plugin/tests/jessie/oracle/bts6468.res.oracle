@@ -805,7 +805,7 @@ let strcat_safety =
        (let jessie_13 = begin
                           (loop_1:
                           while true do
-                          { invariant (JC_21: true)  }
+                          { invariant (JC_21: true) variant (0) }
                            begin
                              [ { } unit { true } ];
                             try
@@ -853,7 +853,7 @@ let strcat_safety =
        (let jessie_30 = begin
                           (loop_2:
                           while true do
-                          { invariant (JC_25: true)  }
+                          { invariant (JC_25: true) variant (0) }
                            begin
                              [ { } unit { true } ];
                             try
@@ -963,14 +963,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts6468_po6.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/bts6468.why" line = "688" begin = "61" end = "62"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts6468_po7.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/bts6468.why" line = "688" begin = "61" end = "62"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts6468_po8.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
@@ -981,6 +979,24 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts6468_po10.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts6468_po11.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts6468_po12.why">
+      <location file = "why/bts6468.why" line = "736" begin = "61" end = "62"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts6468_po13.why">
+      <location file = "why/bts6468.why" line = "736" begin = "61" end = "62"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>

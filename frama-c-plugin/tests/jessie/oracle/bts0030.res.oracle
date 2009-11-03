@@ -1090,7 +1090,8 @@ let lexicographical_compare_array_safety =
                          (let jessie_14 = begin
                                             (loop_1:
                                             while true do
-                                            { invariant (JC_35: true)  }
+                                            { invariant (JC_35: true)
+                                              variant (0) }
                                              begin
                                                [ { } unit reads i
                                                  { ((JC_27:
@@ -1389,6 +1390,14 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0030_po25.why">
+      <location file = "why/bts0030.why" line = "933" begin = "55" end = "56"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0030_po26.why">
+      <location file = "why/bts0030.why" line = "933" begin = "55" end = "56"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">

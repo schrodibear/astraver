@@ -1,4 +1,6 @@
 
+  o [Jessie][Frama-C] bug fix: 0103. Loops without variant are given a
+      default unprovable variant. 
   o [Frama-C plugin] bug fix: 0112 (partially fixes bts0039 and bts0080)
   o [Frama-C plugin] bug fix: 0306
   o [Frama-C plugin] bugs closed: 0041, 0063, 0073, 0094, 0102, 0199, 0273

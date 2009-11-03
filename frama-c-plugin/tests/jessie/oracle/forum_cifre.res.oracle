@@ -2379,7 +2379,7 @@ let strncpy_safety =
           (let jessie_28 = begin
                              (loop_1:
                              while true do
-                             { invariant (JC_10: true)  }
+                             { invariant (JC_10: true) variant (0) }
                               begin
                                 [ { } unit { true } ];
                                try
@@ -2512,7 +2512,7 @@ let strncpy_safety =
             (let jessie_44 = begin
                                (loop_2:
                                while true do
-                               { invariant (JC_22: true)  }
+                               { invariant (JC_22: true) variant (0) }
                                 begin
                                   [ { } unit { true } ];
                                  try
@@ -2633,14 +2633,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/forum_cifre_po14.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/forum_cifre.why" line = "1880" begin = "64" end = "65"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/forum_cifre_po15.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/forum_cifre.why" line = "1880" begin = "64" end = "65"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/forum_cifre_po16.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
@@ -2681,6 +2679,24 @@ text = "unexplained assertion"/>
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/forum_cifre_po24.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/forum_cifre_po25.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/forum_cifre_po26.why">
+      <location file = "why/forum_cifre.why" line = "2013" begin = "66" end = "67"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/forum_cifre_po27.why">
+      <location file = "why/forum_cifre.why" line = "2013" begin = "66" end = "67"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>

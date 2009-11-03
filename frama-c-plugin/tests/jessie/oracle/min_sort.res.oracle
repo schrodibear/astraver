@@ -1434,7 +1434,7 @@ let min_sort_safety =
        (let jessie_21 = begin
                           (loop_1:
                           while true do
-                          { invariant (JC_40: true)  }
+                          { invariant (JC_40: true) variant (0) }
                            begin
                              [ { } unit { true } ];
                             try
@@ -1493,7 +1493,7 @@ let min_sort_safety =
                                                                     { invariant
                                                                     (JC_48:
                                                                     true)
-                                                                     }
+                                                                    variant (0) }
                                                                     begin
                                                                       
                                                                     [ 
@@ -1695,34 +1695,50 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/min_sort_po15.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "7" begin = "13" end = "24"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/min_sort.why" line = "1335" begin = "77" end = "78"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po16.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "7" begin = "13" end = "24"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/min_sort.why" line = "1335" begin = "77" end = "78"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po17.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "7" begin = "28" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "7" begin = "13" end = "24"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/min_sort_po18.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "7" begin = "28" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "7" begin = "13" end = "24"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/min_sort_po19.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "7" begin = "28" end = "39"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/min_sort_po20.why">
+      <location file = "PPCHOME/tests/jessie/min_sort.c" line = "7" begin = "28" end = "39"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/min_sort_po21.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/min_sort_po22.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/min_sort_po23.why">
+      <location file = "why/min_sort.why" line = "1276" begin = "61" end = "62"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/min_sort_po24.why">
+      <location file = "why/min_sort.why" line = "1276" begin = "61" end = "62"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `sorted'">

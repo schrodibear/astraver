@@ -1747,7 +1747,8 @@ let strcmp_safety =
                           (let jessie_17 = begin
                                              (loop_1:
                                              while true do
-                                             { invariant (JC_10: true)  }
+                                             { invariant (JC_10: true)
+                                               variant (0) }
                                               begin
                                                 [ { } unit { true } ];
                                                try
@@ -1917,14 +1918,12 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0306_po7.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/bts0306.why" line = "1324" begin = "56" end = "57"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0306_po8.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/bts0306.why" line = "1324" begin = "56" end = "57"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0306_po9.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
@@ -1932,6 +1931,16 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0306_po10.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0306_po11.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0306_po12.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>

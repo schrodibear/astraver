@@ -1142,7 +1142,7 @@ let process_kill_safety =
             (let jessie_49 = begin
                                (loop_1:
                                while true do
-                               { invariant (JC_33: true)  }
+                               { invariant (JC_33: true) variant (0) }
                                 begin
                                   [ { } unit
                                     reads Proc_next_ready_list_1,Proc_ready_list_1_alloc_table,highest_search,prev_elem,ready_list,ready_list_elem
@@ -1267,7 +1267,7 @@ let process_kill_safety =
                                                                 { invariant
                                                                     (JC_48:
                                                                     true)
-                                                                   }
+                                                                  variant (0) }
                                                                  begin
                                                                    [ 
                                                                    { } unit
@@ -1546,14 +1546,30 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/vamos_po35.why">
+      <location file = "why/vamos.why" line = "1092" begin = "75" end = "76"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/vamos_po36.why">
+      <location file = "why/vamos.why" line = "1092" begin = "75" end = "76"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/vamos_po37.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/vamos_po36.why">
+    <goal why_file="why/vamos_po38.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/vamos_po39.why">
+      <location file = "why/vamos.why" line = "967" begin = "66" end = "67"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/vamos_po40.why">
+      <location file = "why/vamos.why" line = "967" begin = "66" end = "67"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">

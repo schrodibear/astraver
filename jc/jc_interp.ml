@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.425 2009-11-02 15:52:04 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.426 2009-11-03 16:18:40 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -219,14 +219,6 @@ let float_format f =
     | `Float -> "Single"
     | `Binary80 -> "Binary80"
 
-(*
-let rounding_mode = function
-    | Round_nearest_even -> "nearest_even" 
-    | Round_to_zero -> "to_zero"
-    | Round_up -> "up"
-    | Round_down -> "down"
-    | Round_nearest_away -> "nearest_away"
-*)
 
 let logic_current_rounding_mode () =
   match !Jc_options.current_rounding_mode with
@@ -2599,16 +2591,18 @@ and expr e =
           match la.jc_loop_variant with
             | Some t when safety_checking () ->
 		let variant = 
-		named_term 
-		  ~type_safe:false ~global_assertion:false ~relocate:false
-		  LabelHere LabelPre t 
-	      in
-	      let variant = 
-		term_coerce ~type_safe:false ~global_assertion:false LabelHere
-		  t#pos integer_type t#typ t variant 
-	      in
-              Some (variant,None)
-          | _ -> None
+		  named_term 
+		    ~type_safe:false ~global_assertion:false ~relocate:false
+		    LabelHere LabelPre t 
+	        in
+	        let variant = 
+		  term_coerce ~type_safe:false ~global_assertion:false LabelHere
+		    t#pos integer_type t#typ t variant 
+	        in
+                Some (variant,None)
+            | None when safety_checking () ->
+                Some (LConst(Prim_int "0"),None)
+            | _ -> None
         in
         Label(loop_label.label_info_final_name,
 	      While(Cte(Prim_bool true), inv', loop_variant, body))
