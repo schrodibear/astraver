@@ -7,5 +7,34 @@ let rec f91 (n:int) : int { variant 101-n } =
   else
     n - 10
   { (n <= 100 and result = 91) or (n >= 101 and result = n - 10) }
-  (* { (n <= 100 -> result = 91) and (n >= 101 -> result = n - 10) } *)
+
+
+(* non-recursive version *)
+
+logic f : int -> int
+
+axiom f_def1 : forall x:int. x >= 101 -> f(x) = x-10
+axiom f_def2 : forall x:int. x <= 101 -> f(x) = 91
+
+logic iter_f : int, int -> int (* iter_f(n,x) = f^n(x) *)
+
+axiom iter_f_def1 : forall x:int. iter_f(0, x) = x
+axiom iter_f_def2 : forall n,x:int. n > 0 -> iter_f(n, x) = iter_f(n-1,f(x))
+
+let f91_nonrec (n:int ref) (x:int ref) =
+  { n >= 1 }
+  L:
+  while !n > 0 do
+    { invariant n >= 0 and iter_f(n,x) = iter_f(n@L,x@L) }
+    if !x > 100 then begin
+      x := !x - 10;
+      n := !n - 1
+    end else begin
+      x := !x + 11;
+      n := !n + 1
+    end
+  done;
+  !x
+  { result = iter_f(n@,x@) }
+
 
