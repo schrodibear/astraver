@@ -1,4 +1,4 @@
 File "why/bts92.why", line 339, characters 5-24:
 Unbound variable char_P_char_M_foo_6
-make[2]: *** [why/bts92.wpr] Error 1
-make[1]: *** [bts92.regtest] Error 2
+make: *** [why/bts92.wpr] Error 1
+make: *** [bts92.regtest] Error 2

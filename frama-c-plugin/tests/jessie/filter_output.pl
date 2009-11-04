@@ -21,6 +21,7 @@ while ( <> ) {
     if ( $output == 1) {
         s|${PPCHOME}|PPCHOME|g;
         s|${WHYHOME}|WHYHOME|g;
+        s|^make\[[0-9]+\]:|make:|g;
 	print $_;
     }
     if ( $_ =~ /Running (.*) on proof obligations/ ) {
