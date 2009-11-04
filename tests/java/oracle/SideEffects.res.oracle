@@ -32,10 +32,10 @@ Done.
 # AnnotationPolicy = None
 # AbstractDomain = None
 
-logic Non_null_intM{Here}(intM[0..] x) =
+predicate Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
 
-logic Non_null_Object{Here}(Object[0..] x) =
+predicate Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) == 0)
 
 tag Object = {
@@ -2309,6 +2309,14 @@ logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
 
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
 type 't alloc_table
 
 type 't pointer
@@ -2990,6 +2998,10 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
 
 type Object
 
@@ -3934,6 +3946,23 @@ why -simplify [...] why/SideEffects.why
 (BG_PUSH
  ;; Why axiom log_exp
  (FORALL (x) (EQ (log (exp x)) x)))
+
+(BG_PUSH
+ ;; Why axiom prod_pos
+ (FORALL (x y)
+ (AND
+ (IMPLIES
+ (AND (EQ (gt_real x real_constant_0_0e) |@true|)
+ (EQ (gt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|))
+ (IMPLIES
+ (AND (EQ (lt_real x real_constant_0_0e) |@true|)
+ (EQ (lt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom abs_minus
+ (FORALL (x) (EQ (real_abs (real_neg x)) (real_abs x))))
 
 (DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
 
@@ -5401,6 +5430,14 @@ logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
 
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
 type 't alloc_table
 
 type 't pointer
@@ -6082,6 +6119,10 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
 
 type Object
 

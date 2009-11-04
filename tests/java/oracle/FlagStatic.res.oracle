@@ -142,24 +142,10 @@ Done.
 # AnnotationPolicy = None
 # AbstractDomain = None
 
-logic is_color(integer c) =
-(((c == FlagStatic_BLUE) || (c == FlagStatic_WHITE)) ||
-  (c == FlagStatic_RED))
-
-logic is_color_array{L}(intM[0..] t_2) =
-(Non_null_intM(t_2) &&
-  (\forall integer i_1;
-    (((0 <= i_1) && (i_1 < (\offset_max(t_2) + 1))) ==>
-      is_color((t_2 + i_1).intP))))
-
-logic is_monochrome{L}(intM[0..] t_3, integer i_2, integer j_1, integer c_1) =
-(\forall integer k;
-  (((i_2 <= k) && (k < j_1)) ==> ((t_3 + k).intP == c_1)))
-
-logic Non_null_intM{Here}(intM[0..] x) =
+predicate Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
 
-logic Non_null_Object{Here}(Object[0..] x) =
+predicate Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) == 0)
 
 logic integer FlagStatic_BLUE =
@@ -213,6 +199,21 @@ boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
+
+predicate is_color(integer c) =
+(((c == FlagStatic_BLUE) || (c == FlagStatic_WHITE)) ||
+  (c == FlagStatic_RED))
+
+predicate is_color_array{L}(intM[0..] t_2) =
+(Non_null_intM(t_2) &&
+  (\forall integer i_1;
+    (((0 <= i_1) && (i_1 < (\offset_max(t_2) + 1))) ==>
+      is_color((t_2 + i_1).intP))))
+
+predicate is_monochrome{L}(intM[0..] t_3, integer i_2, integer j_1,
+                           integer c_1) =
+(\forall integer k;
+  (((i_2 <= k) && (k < j_1)) ==> ((t_3 + k).intP == c_1)))
 
 exception Throwable of Throwable[0..]
 
@@ -1285,7 +1286,7 @@ end = -1
 
 [JC_55]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 95
+line = 96
 begin = 9
 end = 497
 
@@ -1297,7 +1298,7 @@ end = -1
 
 [JC_56]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 95
+line = 96
 begin = 9
 end = 497
 
@@ -1396,13 +1397,13 @@ end = -1
 
 [JC_125]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 152
+line = 153
 begin = 12
 end = 2823
 
 [JC_126]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 152
+line = 153
 begin = 12
 end = 2823
 
@@ -1447,13 +1448,13 @@ end = -1
 [JC_129]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 186
+line = 187
 begin = 28
 end = 130
 
 [JC_63]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 95
+line = 96
 begin = 9
 end = 497
 
@@ -1465,7 +1466,7 @@ end = -1
 
 [JC_64]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 95
+line = 96
 begin = 9
 end = 497
 
@@ -1525,7 +1526,7 @@ end = 26
 
 [JC_69]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 95
+line = 96
 begin = 9
 end = 497
 
@@ -1550,7 +1551,7 @@ end = -1
 [JC_130]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 197
+line = 198
 begin = 28
 end = 72
 
@@ -1594,7 +1595,7 @@ end = 18
 
 [JC_70]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 95
+line = 96
 begin = 9
 end = 497
 
@@ -1756,13 +1757,13 @@ end = -1
 
 [JC_144]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 152
+line = 153
 begin = 12
 end = 2823
 
 [JC_145]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 152
+line = 153
 begin = 12
 end = 2823
 
@@ -1777,7 +1778,7 @@ end = -1
 [JC_146]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 186
+line = 187
 begin = 28
 end = 130
 
@@ -1790,7 +1791,7 @@ end = 55
 [JC_147]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 197
+line = 198
 begin = 28
 end = 72
 
@@ -1902,7 +1903,7 @@ end = 58
 
 [JC_1]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 61
+line = 47
 begin = 8
 end = 21
 
@@ -1932,7 +1933,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 61
+line = 47
 begin = 8
 end = 21
 
@@ -1986,7 +1987,7 @@ end = 18
 
 [JC_9]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 63
+line = 49
 begin = 11
 end = 66
 
@@ -2036,7 +2037,7 @@ end = 45
 
 [JC_91]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 118
+line = 119
 begin = 9
 end = 20
 
@@ -2078,7 +2079,7 @@ end = 28
 
 [JC_96]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 118
+line = 119
 begin = 9
 end = 20
 
@@ -2105,13 +2106,13 @@ end = 12
 
 [JC_160]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 152
+line = 153
 begin = 12
 end = 2823
 
 [JC_161]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 152
+line = 153
 begin = 12
 end = 2823
 
@@ -2126,14 +2127,14 @@ end = 28
 [JC_162]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 186
+line = 187
 begin = 28
 end = 130
 
 [JC_163]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 197
+line = 198
 begin = 28
 end = 72
 
@@ -2267,13 +2268,13 @@ end = -1
 
 [JC_10]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 63
+line = 49
 begin = 11
 end = 66
 
 [JC_11]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 66
+line = 52
 begin = 8
 end = 30
 
@@ -2285,7 +2286,7 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 66
+line = 52
 begin = 8
 end = 30
 
@@ -2333,7 +2334,7 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 69
+line = 55
 begin = 11
 end = 113
 
@@ -2387,19 +2388,19 @@ end = -1
 
 [JC_20]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 68
+line = 54
 begin = 10
 end = 18
 
 [JC_21]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 69
+line = 55
 begin = 11
 end = 113
 
 [JC_22]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 68
+line = 54
 begin = 10
 end = 18
 
@@ -2419,7 +2420,7 @@ end = -1
 
 [JC_23]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 73
+line = 59
 begin = 8
 end = 23
 
@@ -2443,7 +2444,7 @@ end = -1
 
 [JC_25]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 73
+line = 59
 begin = 8
 end = 23
 
@@ -2589,13 +2590,13 @@ end = -1
 
 [JC_31]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 75
+line = 61
 begin = 11
 end = 65
 
 [JC_32]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 75
+line = 61
 begin = 11
 end = 65
 
@@ -2719,14 +2720,14 @@ end = 12
 [JC_101]
 kind = PointerDeref
 file = "HOME/tests/java/FlagStatic.jc"
-line = 127
+line = 128
 begin = 18
 end = 62
 
 [JC_102]
 kind = PointerDeref
 file = "HOME/tests/java/FlagStatic.jc"
-line = 128
+line = 129
 begin = 18
 end = 38
 
@@ -4524,22 +4525,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/FlagStatic_po41.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "186" begin = "28" end = "130"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "187" begin = "28" end = "130"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po42.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "186" begin = "28" end = "130"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "187" begin = "28" end = "130"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po43.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "186" begin = "28" end = "130"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "187" begin = "28" end = "130"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po44.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "186" begin = "28" end = "130"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "187" begin = "28" end = "130"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4560,22 +4561,22 @@ text = "UserCall"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/FlagStatic_po49.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "197" begin = "28" end = "72"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "198" begin = "28" end = "72"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po50.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "197" begin = "28" end = "72"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "198" begin = "28" end = "72"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po51.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "197" begin = "28" end = "72"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "198" begin = "28" end = "72"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po52.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "197" begin = "28" end = "72"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "198" begin = "28" end = "72"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4999,6 +5000,14 @@ logic atan : real -> real
 logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
+
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
 
 type 't alloc_table
 
@@ -5681,6 +5690,10 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
 
 type Object
 
@@ -9067,6 +9080,23 @@ why -simplify [...] why/FlagStatic.why
  ;; Why axiom log_exp
  (FORALL (x) (EQ (log (exp x)) x)))
 
+(BG_PUSH
+ ;; Why axiom prod_pos
+ (FORALL (x y)
+ (AND
+ (IMPLIES
+ (AND (EQ (gt_real x real_constant_0_0e) |@true|)
+ (EQ (gt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|))
+ (IMPLIES
+ (AND (EQ (lt_real x real_constant_0_0e) |@true|)
+ (EQ (lt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom abs_minus
+ (FORALL (x) (EQ (real_abs (real_neg x)) (real_abs x))))
+
 (DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
 
 (DEFPRED (same_block p q) (EQ (base_block p) (base_block q)))
@@ -11374,7 +11404,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0))))))))
 (IMPLIES (< i_3 r_0) (<= i_3 (offset_max Object_alloc_table t_1)))))))))))))))
 
-;; FlagStatic_flag_safety_po_3, File "HOME/tests/java/FlagStatic.jc", line 186, characters 28-130
+;; FlagStatic_flag_safety_po_3, File "HOME/tests/java/FlagStatic.jc", line 187, characters 28-130
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11410,7 +11440,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ b_0_0 (+ b_0 1))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 b_0))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_4, File "HOME/tests/java/FlagStatic.jc", line 186, characters 28-130
+;; FlagStatic_flag_safety_po_4, File "HOME/tests/java/FlagStatic.jc", line 187, characters 28-130
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11448,7 +11478,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (< b_0 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_5, File "HOME/tests/java/FlagStatic.jc", line 186, characters 28-130
+;; FlagStatic_flag_safety_po_5, File "HOME/tests/java/FlagStatic.jc", line 187, characters 28-130
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11484,7 +11514,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ b_0_0 (+ b_0 1))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_6, File "HOME/tests/java/FlagStatic.jc", line 186, characters 28-130
+;; FlagStatic_flag_safety_po_6, File "HOME/tests/java/FlagStatic.jc", line 187, characters 28-130
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11704,7 +11734,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (NEQ result0 FlagStatic_BLUE) (EQ |@false| |@true|)))))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (< (- r_0 i_3_0) (- r_0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_11, File "HOME/tests/java/FlagStatic.jc", line 197, characters 28-72
+;; FlagStatic_flag_safety_po_11, File "HOME/tests/java/FlagStatic.jc", line 198, characters 28-72
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11745,7 +11775,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (NEQ result0 FlagStatic_BLUE) (EQ |@false| |@true|)))))))
 (FORALL (r_0_0) (IMPLIES (EQ r_0_0 (- r_0 1)) (<= 0 r_0_0))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_12, File "HOME/tests/java/FlagStatic.jc", line 197, characters 28-72
+;; FlagStatic_flag_safety_po_12, File "HOME/tests/java/FlagStatic.jc", line 198, characters 28-72
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11788,7 +11818,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ r_0_0 (- r_0 1))
 (< r_0_0 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_13, File "HOME/tests/java/FlagStatic.jc", line 197, characters 28-72
+;; FlagStatic_flag_safety_po_13, File "HOME/tests/java/FlagStatic.jc", line 198, characters 28-72
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11829,7 +11859,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (NEQ result0 FlagStatic_BLUE) (EQ |@false| |@true|)))))))
 (FORALL (r_0_0) (IMPLIES (EQ r_0_0 (- r_0 1)) (<= 0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_14, File "HOME/tests/java/FlagStatic.jc", line 197, characters 28-72
+;; FlagStatic_flag_safety_po_14, File "HOME/tests/java/FlagStatic.jc", line 198, characters 28-72
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -12691,6 +12721,14 @@ logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
 
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
 type 't alloc_table
 
 type 't pointer
@@ -13372,6 +13410,10 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
 
 type Object
 

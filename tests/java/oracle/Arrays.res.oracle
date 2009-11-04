@@ -132,15 +132,10 @@ Done.
 # AnnotationPolicy = None
 # AbstractDomain = None
 
-logic is_max{L}(intM[0..] t, integer i, integer l) =
-((Non_null_intM(t) && (((0 <= i) && (i < l)) && (l <= (\offset_max(t) + 1)))) &&
-  (\forall integer j;
-    (((0 <= j) && (j < l)) ==> ((t + j).intP <= (t + i).intP))))
-
-logic Non_null_intM{Here}(intM[0..] x) =
+predicate Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
 
-logic Non_null_Object{Here}(Object[0..] x) =
+predicate Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) == 0)
 
 tag Object = {
@@ -185,6 +180,11 @@ boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
+
+predicate is_max{L}(intM[0..] t, integer i, integer l) =
+((Non_null_intM(t) && (((0 <= i) && (i < l)) && (l <= (\offset_max(t) + 1)))) &&
+  (\forall integer j;
+    (((0 <= j) && (j < l)) ==> ((t + j).intP <= (t + i).intP))))
 
 exception Throwable of Throwable[0..]
 
@@ -1610,7 +1610,7 @@ end = 71
 
 [JC_1]
 file = "HOME/tests/java/Arrays.jc"
-line = 43
+line = 38
 begin = 8
 end = 21
 
@@ -1628,7 +1628,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/Arrays.jc"
-line = 43
+line = 38
 begin = 8
 end = 21
 
@@ -1691,7 +1691,7 @@ end = 27
 
 [JC_9]
 file = "HOME/tests/java/Arrays.jc"
-line = 45
+line = 40
 begin = 11
 end = 66
 
@@ -1935,13 +1935,13 @@ end = 1153
 
 [JC_10]
 file = "HOME/tests/java/Arrays.jc"
-line = 45
+line = 40
 begin = 11
 end = 66
 
 [JC_11]
 file = "HOME/tests/java/Arrays.jc"
-line = 48
+line = 43
 begin = 8
 end = 30
 
@@ -1953,7 +1953,7 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/java/Arrays.jc"
-line = 48
+line = 43
 begin = 8
 end = 30
 
@@ -2001,7 +2001,7 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/Arrays.jc"
-line = 51
+line = 46
 begin = 11
 end = 113
 
@@ -2049,25 +2049,25 @@ end = -1
 
 [JC_20]
 file = "HOME/tests/java/Arrays.jc"
-line = 50
+line = 45
 begin = 10
 end = 18
 
 [JC_21]
 file = "HOME/tests/java/Arrays.jc"
-line = 51
+line = 46
 begin = 11
 end = 113
 
 [JC_22]
 file = "HOME/tests/java/Arrays.jc"
-line = 50
+line = 45
 begin = 10
 end = 18
 
 [JC_23]
 file = "HOME/tests/java/Arrays.jc"
-line = 55
+line = 50
 begin = 8
 end = 23
 
@@ -2079,7 +2079,7 @@ end = -1
 
 [JC_25]
 file = "HOME/tests/java/Arrays.jc"
-line = 55
+line = 50
 begin = 8
 end = 23
 
@@ -2115,13 +2115,13 @@ end = -1
 
 [JC_31]
 file = "HOME/tests/java/Arrays.jc"
-line = 57
+line = 52
 begin = 11
 end = 65
 
 [JC_32]
 file = "HOME/tests/java/Arrays.jc"
-line = 57
+line = 52
 begin = 11
 end = 65
 
@@ -4303,6 +4303,14 @@ logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
 
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
 type 't alloc_table
 
 type 't pointer
@@ -4984,6 +4992,10 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
 
 type Object
 
@@ -7791,6 +7803,23 @@ why -simplify [...] why/Arrays.why
 (BG_PUSH
  ;; Why axiom log_exp
  (FORALL (x) (EQ (log (exp x)) x)))
+
+(BG_PUSH
+ ;; Why axiom prod_pos
+ (FORALL (x y)
+ (AND
+ (IMPLIES
+ (AND (EQ (gt_real x real_constant_0_0e) |@true|)
+ (EQ (gt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|))
+ (IMPLIES
+ (AND (EQ (lt_real x real_constant_0_0e) |@true|)
+ (EQ (lt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom abs_minus
+ (FORALL (x) (EQ (real_abs (real_neg x)) (real_abs x))))
 
 (DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
 
@@ -10887,6 +10916,14 @@ logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
 
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
 type 't alloc_table
 
 type 't pointer
@@ -11568,6 +11605,10 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
 
 type Object
 

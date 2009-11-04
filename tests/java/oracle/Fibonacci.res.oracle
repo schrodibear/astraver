@@ -51,30 +51,7 @@ Done.
 # AnnotationPolicy = None
 # AbstractDomain = None
 
-logic isfib(integer x, integer r) {
-case isfib0: isfib(0, 0);
-  
-  case isfib1: isfib(1, 1);
-  
-  case isfibn: (\forall integer n;
-                 (\forall integer r_0;
-                   (\forall integer p;
-                     ((((n >= 2) && isfib((n - 2), r_0)) &&
-                        isfib((n - 1), p)) ==>
-                       isfib(n, (p + r_0))))));
-  
-}
-
-lemma isfib_6_8 :
-isfib(6, 8)
-
-lemma not_isfib_2_2 :
-(! isfib(2, 2))
-
-lemma isfib_2_1 :
-isfib(2, 1)
-
-logic Non_null_Object{Here}(Object[0..] x) =
+predicate Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) == 0)
 
 tag Object = {
@@ -103,6 +80,29 @@ boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
+
+predicate isfib(integer x, integer r) {
+case isfib0: isfib(0, 0);
+  
+  case isfib1: isfib(1, 1);
+  
+  case isfibn: (\forall integer n;
+                 (\forall integer r_0;
+                   (\forall integer p;
+                     ((((n >= 2) && isfib((n - 2), r_0)) &&
+                        isfib((n - 1), p)) ==>
+                       isfib(n, (p + r_0))))));
+  
+}
+
+lemma isfib_6_8 :
+isfib(6, 8)
+
+lemma not_isfib_2_2 :
+(! isfib(2, 2))
+
+lemma isfib_2_1 :
+isfib(2, 1)
 
 exception Throwable of Throwable[0..]
 
@@ -437,7 +437,7 @@ end = -1
 
 [JC_1]
 file = "HOME/tests/java/Fibonacci.jc"
-line = 54
+line = 31
 begin = 8
 end = 23
 
@@ -449,7 +449,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/Fibonacci.jc"
-line = 54
+line = 31
 begin = 8
 end = 23
 
@@ -485,7 +485,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Fibonacci.jc"
-line = 56
+line = 33
 begin = 11
 end = 65
 
@@ -493,7 +493,7 @@ end = 65
 name = "not_isfib_2_2"
 behavior = "lemma"
 file = "HOME/tests/java/Fibonacci.jc"
-line = 23
+line = 53
 begin = 0
 end = 37
 
@@ -501,7 +501,7 @@ end = 37
 name = "isfib_6_8"
 behavior = "lemma"
 file = "HOME/tests/java/Fibonacci.jc"
-line = 20
+line = 50
 begin = 0
 end = 29
 
@@ -509,7 +509,7 @@ end = 29
 name = "isfib_2_1"
 behavior = "lemma"
 file = "HOME/tests/java/Fibonacci.jc"
-line = 26
+line = 56
 begin = 0
 end = 29
 
@@ -523,7 +523,7 @@ end = -1
 
 [JC_10]
 file = "HOME/tests/java/Fibonacci.jc"
-line = 56
+line = 33
 begin = 11
 end = 65
 
@@ -746,9 +746,9 @@ exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
-predicate Non_null_Object(x_0:Object pointer,
+predicate Non_null_Object(x:Object pointer,
  Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x_0), (0))
+ eq_int(offset_max(Object_alloc_table, x), (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -1314,20 +1314,20 @@ parameter cons_Fibonacci_requires :
  this_0:Object pointer -> { } unit reads Object_alloc_table { true }
 
 parameter non_null_Object :
- x_1:Object pointer ->
+ x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
     (if result
-     then eq_int(offset_max(Object_alloc_table, x_1), (0))
-     else (x_1 = null))) }
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
 
 parameter non_null_Object_requires :
- x_1:Object pointer ->
+ x_0:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_10:
     (if result
-     then eq_int(offset_max(Object_alloc_table, x_1), (0))
-     else (x_1 = null))) }
+     then eq_int(offset_max(Object_alloc_table, x_0), (0))
+     else (x_0 = null))) }
 
 let Fibonacci_Fib_ensures_default =
  fun (n_0 : int) ->
@@ -1486,32 +1486,32 @@ why --project [...] why/Fibonacci.why
   <lemma name="isfib_2_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Fibonacci_po1.why">
-      <location file = "HOME/tests/java/Fibonacci.jc" line = "26" begin = "0" end = "29"/>
+      <location file = "HOME/tests/java/Fibonacci.jc" line = "56" begin = "0" end = "29"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="isfib_6_8">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Fibonacci_po2.why">
-      <location file = "HOME/tests/java/Fibonacci.jc" line = "20" begin = "0" end = "29"/>
+      <location file = "HOME/tests/java/Fibonacci.jc" line = "50" begin = "0" end = "29"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="not_isfib_2_2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Fibonacci_po3.why">
-      <location file = "HOME/tests/java/Fibonacci.jc" line = "23" begin = "0" end = "37"/>
+      <location file = "HOME/tests/java/Fibonacci.jc" line = "53" begin = "0" end = "37"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="not_isfib_2_2">
-    <location file = "HOME/tests/java/Fibonacci.jc" line = "23" begin = "0" end = "37"/>
+    <location file = "HOME/tests/java/Fibonacci.jc" line = "53" begin = "0" end = "37"/>
   </function>
   <function name="isfib_6_8">
-    <location file = "HOME/tests/java/Fibonacci.jc" line = "20" begin = "0" end = "29"/>
+    <location file = "HOME/tests/java/Fibonacci.jc" line = "50" begin = "0" end = "29"/>
   </function>
   <function name="isfib_2_1">
-    <location file = "HOME/tests/java/Fibonacci.jc" line = "26" begin = "0" end = "29"/>
+    <location file = "HOME/tests/java/Fibonacci.jc" line = "56" begin = "0" end = "29"/>
   </function>
   <function name="Method Fib">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -1807,6 +1807,14 @@ logic atan : real -> real
 logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
+
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
 
 type 't alloc_table
 
@@ -2490,6 +2498,10 @@ axiom concat_select_bytes:
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
 
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
+
 type Object
 
 type interface
@@ -2504,9 +2516,9 @@ logic Fibonacci_tag :  -> Object tag_id
 
 axiom Fibonacci_parenttag_Object: parenttag(Fibonacci_tag, Object_tag)
 
-predicate Non_null_Object(x_0: Object pointer,
+predicate Non_null_Object(x: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_0) = 0)
+  x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -3074,6 +3086,23 @@ why -simplify [...] why/Fibonacci.why
 (BG_PUSH
  ;; Why axiom log_exp
  (FORALL (x) (EQ (log (exp x)) x)))
+
+(BG_PUSH
+ ;; Why axiom prod_pos
+ (FORALL (x y)
+ (AND
+ (IMPLIES
+ (AND (EQ (gt_real x real_constant_0_0e) |@true|)
+ (EQ (gt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|))
+ (IMPLIES
+ (AND (EQ (lt_real x real_constant_0_0e) |@true|)
+ (EQ (lt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom abs_minus
+ (FORALL (x) (EQ (real_abs (real_neg x)) (real_abs x))))
 
 (DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
 
@@ -3670,8 +3699,8 @@ why -simplify [...] why/Fibonacci.why
  ;; Why axiom Fibonacci_parenttag_Object
  (EQ (parenttag Fibonacci_tag Object_tag) |@true|))
 
-(DEFPRED (Non_null_Object x_0 Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x_0) 0))
+(DEFPRED (Non_null_Object x Object_alloc_table)
+  (EQ (offset_max Object_alloc_table x) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -3760,14 +3789,14 @@ why -simplify [...] why/Fibonacci.why
  (AND (EQ (isfib (- n 2) r_0) |@true|) (EQ (isfib (- n 1) p) |@true|)))
  (EQ (isfib n (+ p r_0)) |@true|))))
 
-;; isfib_2_1, File "HOME/tests/java/Fibonacci.jc", line 26, characters 0-29
+;; isfib_2_1, File "HOME/tests/java/Fibonacci.jc", line 56, characters 0-29
 (EQ (isfib 2 1) |@true|)
 
 (BG_PUSH
  ;; Why axiom isfib_2_1_as_axiom
  (EQ (isfib 2 1) |@true|))
 
-;; isfib_6_8, File "HOME/tests/java/Fibonacci.jc", line 20, characters 0-29
+;; isfib_6_8, File "HOME/tests/java/Fibonacci.jc", line 50, characters 0-29
 (EQ (isfib 6 8) |@true|)
 
 (BG_PUSH
@@ -3792,7 +3821,7 @@ why -simplify [...] why/Fibonacci.why
 (DEFPRED (left_valid_struct_interface p a interface_alloc_table)
   (<= (offset_min interface_alloc_table p) a))
 
-;; not_isfib_2_2, File "HOME/tests/java/Fibonacci.jc", line 23, characters 0-37
+;; not_isfib_2_2, File "HOME/tests/java/Fibonacci.jc", line 53, characters 0-37
 (NOT (EQ (isfib 2 2) |@true|))
 
 (BG_PUSH
@@ -4286,6 +4315,14 @@ logic atan : real -> real
 logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
+
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
 
 type 't alloc_table
 
@@ -4969,6 +5006,10 @@ axiom concat_select_bytes:
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
 
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
+
 type Object
 
 type interface
@@ -4983,9 +5024,9 @@ logic Fibonacci_tag :  -> Object tag_id
 
 axiom Fibonacci_parenttag_Object: parenttag(Fibonacci_tag, Object_tag)
 
-predicate Non_null_Object(x_0: Object pointer,
+predicate Non_null_Object(x: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_0) = 0)
+  x) = 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -5448,8 +5489,8 @@ Admitted.
   (parenttag Fibonacci_tag Object_tag).
 Admitted.
 
-(*Why predicate*) Definition Non_null_Object  (x_0:(pointer Object)) (Object_alloc_table:(alloc_table Object))
-  := (offset_max Object_alloc_table x_0) = 0.
+(*Why predicate*) Definition Non_null_Object  (x:(pointer Object)) (Object_alloc_table:(alloc_table Object))
+  := (offset_max Object_alloc_table x) = 0.
 
 (*Why axiom*) Lemma Object_int : (int_of_tag Object_tag) = 1.
 Admitted.
@@ -5557,7 +5598,7 @@ Admitted.
                     (isfib n (p + r_0))))))
      .
 
-(* Why obligation from file "Fibonacci.jc", line 26, characters 0-29: *)
+(* Why obligation from file "Fibonacci.jc", line 56, characters 0-29: *)
 (*Why goal*) Lemma isfib_2_1 : 
   (isfib 2 1).
 Proof.
@@ -5569,7 +5610,7 @@ Save.
 (*Why axiom*) Lemma isfib_2_1_as_axiom : (isfib 2 1).
 Admitted.
 
-(* Why obligation from file "Fibonacci.jc", line 20, characters 0-29: *)
+(* Why obligation from file "Fibonacci.jc", line 50, characters 0-29: *)
 (*Why goal*) Lemma isfib_6_8 : 
   (isfib 6 8).
 Proof.
@@ -5608,7 +5649,7 @@ Admitted.
 (*Why predicate*) Definition left_valid_struct_interface  (p:(pointer interface)) (a:Z) (interface_alloc_table:(alloc_table interface))
   := (offset_min interface_alloc_table p) <= a.
 
-(* Why obligation from file "Fibonacci.jc", line 23, characters 0-37: *)
+(* Why obligation from file "Fibonacci.jc", line 53, characters 0-37: *)
 (*Why goal*) Lemma not_isfib_2_2 : 
   ~(isfib 2 2).
 Proof.

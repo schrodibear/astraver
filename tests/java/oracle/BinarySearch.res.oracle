@@ -108,29 +108,10 @@ type long = -9223372036854775808..9223372036854775807
 
 type char = 0..65535
 
-logic is_sorted{L}(intM[0..] t) =
-(Non_null_intM(t) &&
-  (\forall integer i;
-    (\forall integer j;
-      ((((0 <= i) && (i <= j)) && (j < (\offset_max(t) + 1))) ==>
-        ((t + i).intP <= (t + j).intP)))))
-
-lemma mean_property1 :
-(\forall integer x;
-  (\forall integer y;
-    ((x <= y) ==> ((x <= ((x + y) / 2)) && (((x + y) / 2) <= y)))))
-
-lemma mean_property2 :
-(\forall integer x_0;
-  (\forall integer y_0;
-    ((x_0 <= y_0) ==>
-      ((x_0 <= (x_0 + ((y_0 - x_0) / 2))) &&
-        ((x_0 + ((y_0 - x_0) / 2)) <= y_0)))))
-
-logic Non_null_intM{Here}(intM[0..] x) =
+predicate Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
 
-logic Non_null_Object{Here}(Object[0..] x) =
+predicate Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) == 0)
 
 tag Object = {
@@ -175,6 +156,25 @@ boolean non_null_Object(! Object[0..] x)
 behavior normal:
   ensures (if \result then (\offset_max(x) == 0) else (x == null));
 ;
+
+predicate is_sorted{L}(intM[0..] t) =
+(Non_null_intM(t) &&
+  (\forall integer i;
+    (\forall integer j;
+      ((((0 <= i) && (i <= j)) && (j < (\offset_max(t) + 1))) ==>
+        ((t + i).intP <= (t + j).intP)))))
+
+lemma mean_property1 :
+(\forall integer x;
+  (\forall integer y;
+    ((x <= y) ==> ((x <= ((x + y) / 2)) && (((x + y) / 2) <= y)))))
+
+lemma mean_property2 :
+(\forall integer x_0;
+  (\forall integer y_0;
+    ((x_0 <= y_0) ==>
+      ((x_0 <= (x_0 + ((y_0 - x_0) / 2))) &&
+        ((x_0 + ((y_0 - x_0) / 2)) <= y_0)))))
 
 exception Throwable of Throwable[0..]
 
@@ -653,7 +653,7 @@ end = 50
 
 [JC_1]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 67
+line = 48
 begin = 8
 end = 21
 
@@ -695,7 +695,7 @@ end = 97
 
 [JC_3]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 67
+line = 48
 begin = 8
 end = 21
 
@@ -776,7 +776,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 69
+line = 50
 begin = 11
 end = 66
 
@@ -897,7 +897,7 @@ end = 28
 
 [JC_10]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 69
+line = 50
 begin = 11
 end = 66
 
@@ -910,7 +910,7 @@ end = 23
 
 [JC_11]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 72
+line = 53
 begin = 8
 end = 30
 
@@ -936,7 +936,7 @@ end = 28
 
 [JC_13]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 72
+line = 53
 begin = 8
 end = 30
 
@@ -1000,7 +1000,7 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 75
+line = 56
 begin = 11
 end = 113
 
@@ -1043,7 +1043,7 @@ end = 33
 
 [JC_20]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 74
+line = 55
 begin = 10
 end = 18
 
@@ -1055,7 +1055,7 @@ end = 10
 
 [JC_21]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 75
+line = 56
 begin = 11
 end = 113
 
@@ -1068,7 +1068,7 @@ end = 24
 
 [JC_22]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 74
+line = 55
 begin = 10
 end = 18
 
@@ -1089,7 +1089,7 @@ end = 24
 
 [JC_23]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 79
+line = 60
 begin = 8
 end = 23
 
@@ -1121,7 +1121,7 @@ end = 34
 
 [JC_25]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 79
+line = 60
 begin = 8
 end = 23
 
@@ -1195,7 +1195,7 @@ end = 140
 
 [JC_31]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 81
+line = 62
 begin = 11
 end = 65
 
@@ -1203,7 +1203,7 @@ end = 65
 name = "mean_property1"
 behavior = "lemma"
 file = "HOME/tests/java/BinarySearch.jc"
-line = 23
+line = 72
 begin = 0
 end = 132
 
@@ -1216,7 +1216,7 @@ end = 24
 
 [JC_32]
 file = "HOME/tests/java/BinarySearch.jc"
-line = 81
+line = 62
 begin = 11
 end = 65
 
@@ -1224,7 +1224,7 @@ end = 65
 name = "mean_property2"
 behavior = "lemma"
 file = "HOME/tests/java/BinarySearch.jc"
-line = 28
+line = 77
 begin = 0
 end = 182
 
@@ -2745,22 +2745,22 @@ why --project [...] why/BinarySearch.why
   <lemma name="mean_property1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po1.why">
-      <location file = "HOME/tests/java/BinarySearch.jc" line = "23" begin = "0" end = "132"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "72" begin = "0" end = "132"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mean_property2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/BinarySearch_po2.why">
-      <location file = "HOME/tests/java/BinarySearch.jc" line = "28" begin = "0" end = "182"/>
+      <location file = "HOME/tests/java/BinarySearch.jc" line = "77" begin = "0" end = "182"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="mean_property2">
-    <location file = "HOME/tests/java/BinarySearch.jc" line = "28" begin = "0" end = "182"/>
+    <location file = "HOME/tests/java/BinarySearch.jc" line = "77" begin = "0" end = "182"/>
   </function>
   <function name="mean_property1">
-    <location file = "HOME/tests/java/BinarySearch.jc" line = "23" begin = "0" end = "132"/>
+    <location file = "HOME/tests/java/BinarySearch.jc" line = "72" begin = "0" end = "132"/>
   </function>
   <function name="Method binary_search">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -3179,6 +3179,14 @@ logic atan : real -> real
 logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
+
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
 
 type 't alloc_table
 
@@ -3861,6 +3869,10 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
 
 type Object
 
@@ -5957,6 +5969,23 @@ why -simplify [...] why/BinarySearch.why
  ;; Why axiom log_exp
  (FORALL (x) (EQ (log (exp x)) x)))
 
+(BG_PUSH
+ ;; Why axiom prod_pos
+ (FORALL (x y)
+ (AND
+ (IMPLIES
+ (AND (EQ (gt_real x real_constant_0_0e) |@true|)
+ (EQ (gt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|))
+ (IMPLIES
+ (AND (EQ (lt_real x real_constant_0_0e) |@true|)
+ (EQ (lt_real y real_constant_0_0e) |@true|))
+ (EQ (gt_real (real_mul x y) real_constant_0_0e) |@true|)))))
+
+(BG_PUSH
+ ;; Why axiom abs_minus
+ (FORALL (x) (EQ (real_abs (real_neg x)) (real_abs x))))
+
 (DEFPRED (valid a p) (AND (<= (offset_min a p) 0) (>= (offset_max a p) 0)))
 
 (DEFPRED (same_block p q) (EQ (base_block p) (base_block q)))
@@ -6746,7 +6775,7 @@ why -simplify [...] why/BinarySearch.why
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
  (<= (integer_of_long x) constant_too_large_9223372036854775807))))
 
-;; mean_property1, File "HOME/tests/java/BinarySearch.jc", line 23, characters 0-132
+;; mean_property1, File "HOME/tests/java/BinarySearch.jc", line 72, characters 0-132
 (FORALL (x_4 y)
 (IMPLIES (<= x_4 y)
 (AND (<= x_4 (int_div (+ x_4 y) 2)) (<= (int_div (+ x_4 y) 2) y))))
@@ -6757,7 +6786,7 @@ why -simplify [...] why/BinarySearch.why
  (IMPLIES (<= x_4 y)
  (AND (<= x_4 (int_div (+ x_4 y) 2)) (<= (int_div (+ x_4 y) 2) y)))))
 
-;; mean_property2, File "HOME/tests/java/BinarySearch.jc", line 28, characters 0-182
+;; mean_property2, File "HOME/tests/java/BinarySearch.jc", line 77, characters 0-182
 (FORALL (x_0_0 y_0)
 (IMPLIES (<= x_0_0 y_0)
 (AND (<= x_0_0 (+ x_0_0 (int_div (- y_0 x_0_0) 2)))
@@ -8746,6 +8775,14 @@ logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
 
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
+
 type 't alloc_table
 
 type 't pointer
@@ -9427,6 +9464,10 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
 
 type Object
 
