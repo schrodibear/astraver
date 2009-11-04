@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.6 2009-10-19 11:55:31 bobot Exp $ *)
+(* $Id: interp.ml,v 1.7 2009-11-04 14:37:07 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -55,6 +55,7 @@ let mkexpr enode pos = new pexpr ~pos enode
 let void_expr = mkexpr (JCPEconst JCCvoid) Loc.dummy_position
 let null_expr = mkexpr (JCPEconst JCCnull) Loc.dummy_position
 let true_expr = mkexpr (JCPEconst(JCCboolean true)) Loc.dummy_position
+let false_expr = mkexpr (JCPEconst(JCCboolean false)) Loc.dummy_position
 let zero_expr = mkexpr (JCPEconst(JCCinteger "0")) Loc.dummy_position
 let one_expr = mkexpr (JCPEconst(JCCinteger "1")) Loc.dummy_position
 
@@ -67,6 +68,12 @@ let rec mkconjunct elist pos =
     | [] -> true_expr
     | [e] -> e
     | e::el -> mkexpr (JCPEbinary(e,`Bland,mkconjunct el pos)) pos
+
+let rec mkdisjunct elist pos =
+  match elist with
+    | [] -> false_expr
+    | [e] -> e
+    | e::el -> mkexpr (JCPEbinary(e,`Blor,mkdisjunct el pos)) pos
 
 let mkdecl dnode pos = new decl ~pos dnode
 
@@ -1206,10 +1213,73 @@ let spec funspec =
   in
   let behaviors = List.map behavior funspec.spec_behavior in
 
-  if funspec.spec_complete_behaviors <> [] then
-    warn_once "Complete behaviors specification(s) ignored" ;
+  let complete_behaviors_assertions : Jc_ast.pexpr list =
+    List.map
+      (fun bnames -> 
+         (* inutile, car dans le contexte de la precondition 
+            let r = mkconjunct
+            (List.map (function
+            | JCCrequires p -> p 
+            | _ -> assert false)
+            requires)
+            Loc.dummy_position
+            in
+         *)
+         let a = mkdisjunct 
+           (List.fold_left
+              (fun acc b ->
+                 match b with
+                   | JCCbehavior(_,name,_,Some a,_,_,_) -> 
+                       if List.mem name bnames then
+                         a :: acc
+                       else acc
+                   | _ -> assert false)
+              [] behaviors)
+           Loc.dummy_position
+         in
+         (*
+           Some(mkexpr (JCPEbinary(r,`Bimplies,a)) Loc.dummy_position)
+         *)
+         a)
+      funspec.spec_complete_behaviors
+  in
+  let disjoint_behaviors_assertions  : Jc_ast.pexpr list =    
+    List.fold_left
+      (fun acc bnames -> 
+         let all_assumes =
+           List.fold_left
+             (fun acc b ->
+                match b with
+                  | JCCbehavior(_,name,_,Some a,_,_,_) -> 
+                      if List.mem name bnames then
+                        a :: acc
+                      else acc
+                  | _ -> assert false)
+             [] behaviors
+         in
+         let rec aux assumes prevs acc =
+           match assumes with
+             | [] -> acc
+             | b::rem ->
+                 let acc = 
+                   List.fold_left
+                     (fun acc a -> 
+                        (mkexpr (JCPEunary(`Unot,
+                                           mkconjunct [b;a] Loc.dummy_position))
+                           Loc.dummy_position)
+                        :: acc)
+                     acc prevs
+                 in
+                 aux rem (b::prevs) acc
+         in
+         aux all_assumes [] acc)
+      [] funspec.spec_disjoint_behaviors
+  in
+  
+  (*
   if funspec.spec_disjoint_behaviors <> [] then
     warn_once "Disjoint behaviors specification(s) ignored" ;
+  *)
   if funspec.spec_variant <> None then
     warn_once "Variant(s) for recursive function ignored" ;
   if funspec.spec_terminates <> None then
@@ -1217,7 +1287,9 @@ let spec funspec =
 
   (* TODO: translate function spec variant, terminates and complete/disjoint
      behaviors *)
-  requires @ behaviors
+  (requires @ behaviors), 
+  complete_behaviors_assertions, 
+  disjoint_behaviors_assertions
 
 (* Depending on the argument status, an assertion with this status may
    not generate any PO but still be used as an hypothesis. *)
@@ -2264,7 +2336,8 @@ let global vardefs g =
           let params = Globals.Functions.get_params kf in
           let formal v = true, ctype v.vtype, unique_name_if_empty v.vname in
           let formals = List.map formal params in
-          [JCDfun(ctype rtyp,id,formals,spec funspec,None)]
+          let s,_cba,_dba = spec funspec in          
+          [JCDfun(ctype rtyp,id,formals,s,None)]
         else
           [JCDvar(ctype v.vtype,v.vname,None)]
 
@@ -2299,15 +2372,42 @@ let global vardefs g =
             in
             let locals = List.rev (List.rev_map local f.slocals) in
             let body = mkexpr (JCPEblock(statement_list f.sbody.bstmts)) pos in
-            let body = locals @ [body] in
+            let s,cba,dba = spec funspec in
+            let body =
+              List.fold_left
+                (fun acc a ->
+                   (mkexpr 
+                      (JCPEassert([],
+                                  Acheck,
+                                  mkexpr 
+                                    (JCPElabel("complete_behaviors",a))
+                                    a#pos))
+                      a#pos)
+                   :: acc)
+                (locals @ [body]) cba
+            in
+            let body =
+              List.fold_left
+                (fun acc a ->
+                   (mkexpr 
+                      (JCPEassert([],
+                                  Acheck,
+                                  mkexpr 
+                                    (JCPElabel("disjoint_behaviors",a))
+                                    a#pos))
+                      a#pos)
+                   :: acc)
+                body dba
+            in
             let body = mkexpr (JCPEblock body) pos in
             ignore
               (reg_pos ~id:f.svar.vname
                  ~name:("Function " ^ f.svar.vname) f.svar.vdecl);
-            [JCDfun(ctype rty,id,formals,spec funspec,Some body)]
+            [JCDfun(ctype rty,id,formals,s,Some body)]
           with (Unsupported _ | NotImplemented _) ->
             warning "Dropping definition of function %s@." f.svar.vname ;
-            [JCDfun(ctype rty,id,formals,spec funspec,None)]
+            let s,_cba,_dba = spec funspec in
+            [JCDfun(ctype rty,id,formals,s,None)]
           end
 
     | GAsm _ ->

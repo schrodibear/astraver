@@ -2,6 +2,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0258.c"
 [jessie] Starting Jessie translation
 bts0258.c:15:[jessie] failure: Unexpected failure.
-                  Please submit bug report (Ref. "interp.ml:631:14").
+                  Please submit bug report (Ref. "interp.ml:638:14").
 [kernel] Plugin jessie aborted because of an internal error.
          Please report with 'crash' at http://bts.frama-c.com
