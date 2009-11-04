@@ -72,7 +72,7 @@ behavior default:
       (return ())
    }
 }
-WHYLIB=PPCHOME/why/lib PPCHOME/why/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0035.jessie/bts0035.cloc bts0035.jessie/bts0035.jc
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0035.jessie/bts0035.cloc bts0035.jessie/bts0035.jc
 type c_1
 
 type char_P
@@ -614,19 +614,19 @@ let main_safety =
   { (JC_17: valid_c(int_P_c_1_alloc_table)) }
 
 
-WHYLIB=PPCHOME/why/lib WHYEXEC=PPCHOME/why/bin/why.opt GWHYEXEC=PPCHOME/why/bin/gwhy.opt make --quiet -C bts0035.jessie --quiet -f bts0035.makefile project
+WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0035.jessie --quiet -f bts0035.makefile project
 why --project [...] why/bts0035.why
 <project name="bts0035" context="why/bts0035_ctx.why">
   <function name="Function main">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
     <goal why_file="why/bts0035_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0035.c" line = "7" begin = "13" end = "24"/>
+      <location file = "PPCHOME/tests/jessie/bts0035.c" line = "15" begin = "13" end = "24"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0035_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0035.c" line = "8" begin = "13" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/bts0035.c" line = "16" begin = "13" end = "56"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -871,6 +871,14 @@ logic atan : real -> real
 logic atan2 : real, real -> real
 
 logic hypot : real, real -> real
+
+axiom prod_pos:
+  (forall x:real.
+    (forall y:real.
+      ((((x > 0.0) and (y > 0.0)) -> ((x * y) > 0.0)) and
+       (((x < 0.0) and (y < 0.0)) -> ((x * y) > 0.0)))))
+
+axiom abs_minus: (forall x:real. (abs_real((-x)) = abs_real(x)))
 
 type 't alloc_table
 
@@ -1553,6 +1561,10 @@ axiom concat_select_bytes:
               (((o1 + s1) = o2) -> (concat_bitvector(select_bytes(m, p, o1,
                s1), select_bytes(m, p, o2, s2)) = select_bytes(m, p, o1,
                (s1 + s2))))))))))
+
+logic integer_of_bitvector : bitvector -> int
+
+logic real_of_bitvector : bitvector -> real
 
 type c_1
 

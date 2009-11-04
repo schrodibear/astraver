@@ -12,10 +12,12 @@ Fixed in Why 2.22
   @   assumes n > 0;
   @ behavior b2:
   @   assumes n <= 0;
-  @ // SYNTAX ERROR: complete behaviors;
-  @ // SYNTAX ERROR: disjoint behaviors;
+  @ complete behaviors;
+  @ disjoint behaviors;
   @*/
-int f1(int n);
+int f1(int n) {
+  return n+1;
+}
 
 /*@ requires x * y < 0;
   @ behavior b1:

@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.7 2009-11-04 14:37:07 marche Exp $ *)
+(* $Id: interp.ml,v 1.8 2009-11-04 15:43:42 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -1230,7 +1230,9 @@ let spec funspec =
               (fun acc b ->
                  match b with
                    | JCCbehavior(_,name,_,Some a,_,_,_) -> 
-                       if List.mem name bnames then
+                       if (bnames = [] && name <> "default") 
+                         || List.mem name bnames
+                       then
                          a :: acc
                        else acc
                    | _ -> assert false)
@@ -1251,7 +1253,13 @@ let spec funspec =
              (fun acc b ->
                 match b with
                   | JCCbehavior(_,name,_,Some a,_,_,_) -> 
-                      if List.mem name bnames then
+(*
+                      Format.eprintf "name = %s, len bnames = %d@." 
+                        name (List.length bnames);
+*)
+                      if (bnames = [] && name <> "default") || 
+                        List.mem name bnames
+                      then
                         a :: acc
                       else acc
                   | _ -> assert false)

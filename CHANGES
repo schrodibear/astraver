@@ -1,7 +1,6 @@
 
   o [Frama-C plugin] support for "complete behaviors" and "disjoint
-    behaviors" clauses. (partially fixes 0026, but clauses without
-    parameters are still not recognized by Frama-C parser)
+    behaviors" clauses. fixes bud 0026.
   o [Jessie][Frama-C] bug fix: 0103. Loops without variant are given a
       default unprovable variant. 
   o [Frama-C plugin] bug fix: 0112 (partially fixes bts0039 and bts0080)
