@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_annot_inference.ml,v 1.160 2009-06-05 07:17:23 marche Exp $ *)
+(* $Id: jc_annot_inference.ml,v 1.161 2009-11-05 16:53:20 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -4202,6 +4202,7 @@ let main_function = function
 	| AbsNone -> assert false
       end
 
+(*
 let rec is_recursive_rec fi fil =
   List.exists 
     (fun fi' -> 
@@ -4216,7 +4217,7 @@ let is_recursive fi =
   let r = is_recursive_rec fi fi.jc_fun_info_calls in
   inspected_functions := [];
   r
-
+*)
     
 (*
   Local Variables: 

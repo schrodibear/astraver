@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.158 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.159 2009-11-05 16:53:20 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -378,7 +378,7 @@ let make_fun_info name ty =
     jc_fun_info_has_return_label = false; 
     jc_fun_info_param_regions = [];
     jc_fun_info_calls = [];
-    jc_fun_info_is_recursive = false;
+    jc_fun_info_component = -1;
     jc_fun_info_logic_apps = [];
     jc_fun_info_effects = empty_fun_effect;
   }

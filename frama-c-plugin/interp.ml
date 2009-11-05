@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.8 2009-11-04 15:43:42 marche Exp $ *)
+(* $Id: interp.ml,v 1.9 2009-11-05 16:53:20 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -1284,17 +1284,12 @@ let spec funspec =
       [] funspec.spec_disjoint_behaviors
   in
   
-  (*
-  if funspec.spec_disjoint_behaviors <> [] then
-    warn_once "Disjoint behaviors specification(s) ignored" ;
-  *)
   if funspec.spec_variant <> None then
     warn_once "Variant(s) for recursive function ignored" ;
   if funspec.spec_terminates <> None then
     warn_once "Termination condition(s) ignored" ;
 
-  (* TODO: translate function spec variant, terminates and complete/disjoint
-     behaviors *)
+  (* TODO: translate function spec variant and terminates clauses *)
   (requires @ behaviors), 
   complete_behaviors_assertions, 
   disjoint_behaviors_assertions
@@ -1341,17 +1336,6 @@ let assert_ pos = function
         | _ -> assert false
       end
 
-(*
-let invariant annot =
-  match annot.annot_content with
-    | AInvariant(behav,_loopinv,p) -> behav, locate (pred p)
-    | _ -> assert false
-
-let variant annot =
-  match annot.annot_content with
-    | AVariant(t,_) -> locate (term t)
-    | _ -> assert false
-*)
 
 (*****************************************************************************)
 (* Cil to Jessie translation of coding constructs                            *)

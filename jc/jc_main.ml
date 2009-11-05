@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.139 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: jc_main.ml,v 1.140 2009-11-05 16:53:20 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -119,6 +119,11 @@ let main () =
     let components = 
       Jc_callgraph.compute_components Jc_typing.functions_table
     in
+
+    (* update field "component" of functions *)
+    Array.iteri
+      (fun i l -> List.iter (fun fi -> fi.jc_fun_info_component <- i) l) 
+      components;
     
     (* (optional) phase 5: inference of annotations *)
     if !Jc_options.annotation_sem <> AnnotNone then
@@ -133,11 +138,6 @@ let main () =
 	Jc_options.lprintf "Inference of annotations@.";
 	if Jc_options.interprocedural then
 	  begin
-	    (* record recursive functions *)
-	    Hashtbl.iter
-	      (fun _ (fi, _, _, _) ->
-		 fi.jc_fun_info_is_recursive <- Jc_ai.is_recursive fi) 
-	      Jc_typing.functions_table;
 	    (* interprocedural analysis over the call graph +
 	       intraprocedural analysis of each function called *)
 	    Hashtbl.iter

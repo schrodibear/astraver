@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_fenv.ml,v 1.14 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: jc_fenv.ml,v 1.15 2009-11-05 16:53:20 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -114,7 +114,7 @@ sig
 	mutable jc_fun_info_parameters : (bool * var_info) list;
 	mutable jc_fun_info_param_regions : region list;
 	mutable jc_fun_info_calls : fun_info list;
-	mutable jc_fun_info_is_recursive : bool;
+	mutable jc_fun_info_component : int;
 	mutable jc_fun_info_logic_apps : logic_info list;
 	mutable jc_fun_info_effects : fun_effect;
       }
@@ -176,7 +176,7 @@ struct
 	mutable jc_fun_info_parameters : (bool * var_info) list;
 	mutable jc_fun_info_param_regions : region list;
 	mutable jc_fun_info_calls : fun_info list;
-	mutable jc_fun_info_is_recursive : bool;
+	mutable jc_fun_info_component : int;
 	mutable jc_fun_info_logic_apps : logic_info list;
 	mutable jc_fun_info_effects : fun_effect;
       }

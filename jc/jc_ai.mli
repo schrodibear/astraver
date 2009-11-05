@@ -39,8 +39,9 @@ val code_function : fun_info * Loc.position * fun_spec * expr option -> unit
 val main_function : fun_info * Loc.position * fun_spec * expr option -> unit
 
 
+(*
 val is_recursive : fun_info -> bool
-
+*)
 
 (*
 Local Variables: 
