@@ -31,9 +31,6 @@ open Jc_ast
 open Jc_fenv
 
 open Jc_pervasives
-(*
-open Jc_iterators
-*)
 
 let rec term acc t =
   Jc_iterators.fold_term 
@@ -166,7 +163,7 @@ let compute_calls f s b =
   f.jc_fun_info_calls <- b
       
 module LogicCallGraph = struct 
-  type t = (int, (logic_info * term_or_assertion)) Hashtbl.t 
+  type t = (int, (Jc_fenv.logic_info * Jc_fenv.term_or_assertion)) Hashtbl.t 
   module V = struct
     type t = logic_info
     let compare f1 f2 = Pervasives.compare f1.jc_logic_info_tag f2.jc_logic_info_tag
@@ -200,21 +197,10 @@ module CallComponents = Graph.Components.Make(CallGraph)
 open Format
 open Pp
 
-let compute_logic_components ltable =  
+let compute_logic_components :
+ (int, Jc_fenv.logic_info * Jc_fenv.term_or_assertion) Hashtbl.t ->
+    Jc_fenv.logic_info list array = fun ltable ->  
   let tab_comp = LogicCallComponents.scc_array ltable in
-(* obsolete : use axiomatic def instead
-  Array.iter 
-    (function
-       | [f] -> 
-	   if List.exists
-	     (fun g -> f.jc_logic_info_tag = g.jc_logic_info_tag)
-	     f.jc_logic_info_calls
-	   then 
-	     f.jc_logic_info_is_recursive <- true
-       | funs ->
-	   List.iter (fun f -> f.jc_logic_info_is_recursive <- true) funs
-    ) tab_comp;
-*)
   Jc_options.lprintf "***********************************\n";
   Jc_options.lprintf "Logic call graph: has %d components\n" 
     (Array.length tab_comp);
