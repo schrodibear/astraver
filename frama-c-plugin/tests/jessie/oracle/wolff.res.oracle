@@ -32,23 +32,17 @@ tag void_P = {
 
 type void_P = [void_P]
 
-unit __globinit_whole_program()
-behavior default:
-  assumes true;
-  ensures (C_1 : true);
-;
-
 int32 x;
 
 int32 f()
 behavior default:
   assumes true;
-  ensures (C_6 : true);
+  ensures (C_5 : true);
 {  
    (var int32 tmp);
    
-   {  (C_2 : (tmp = x));
-      (C_5 : (x = (C_4 : ((C_3 : (x + 1)) :> int32))));
+   {  (C_1 : (tmp = x));
+      (C_4 : (x = (C_3 : ((C_2 : (x + 1)) :> int32))));
       
       (return tmp)
    }
@@ -57,7 +51,7 @@ behavior default:
 int32 main()
 behavior default:
   assumes true;
-  ensures (C_16 : true);
+  ensures (C_14 : true);
 {  
    (var int32 y);
    
@@ -65,23 +59,22 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (C_7 : __globinit_whole_program());
-      (C_8 : (x = 3));
-      (C_10 : (tmp_0 = (C_9 : f())));
-      (if (tmp_0 != 0) then (C_13 : (y = 1)) else 
-      {  (C_11 : (y = 5));
+   {  (C_6 : (x = 3));
+      (C_8 : (tmp_0 = (C_7 : f())));
+      (if (tmp_0 != 0) then (C_11 : (y = 1)) else 
+      {  (C_9 : (y = 5));
          
          {  
-            (assert for default: (C_12 : false));
+            (assert for default: (C_10 : false));
             ()
          }
       });
       
       {  
-         (assert for default: (C_14 : (y == 1)));
+         (assert for default: (C_12 : (y == 1)));
          ()
       };
-      (C_15 : (__retres = 0));
+      (C_13 : (__retres = 0));
       
       (return __retres)
    }
@@ -308,10 +301,6 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter __globinit_whole_program : tt:unit -> { } unit { true }
-
-parameter __globinit_whole_program_requires : tt:unit -> { } unit { true }
-
 parameter alloc_bitvector_struct_char_P :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -440,13 +429,13 @@ let f_ensures_default =
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_2:
+     (C_1:
      begin
-       (let jessie_3 = (tmp := !x) in void);
-      (C_5:
+       (let jessie_7 = (tmp := !x) in void);
+      (C_4:
       begin
-        (let jessie_4 = (x := (C_4:
-                              (safe_int32_of_integer_ (C_3:
+        (let jessie_9 = (x := (C_3:
+                              (safe_int32_of_integer_ (C_2:
                                                       ((add_int (integer_of_int32 !x)) (1)))))) in
         void);
        (return := !tmp);
@@ -458,24 +447,24 @@ let f_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_13: true) }
+  { (JC_5: true) }
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_12: true) }
+  { (JC_4: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let tmp = ref (any_int32 void) in
-     (C_2:
+     (C_1:
      begin
-       (let jessie_1 = (tmp := !x) in void);
-      (C_5:
+       (let jessie_2 = (tmp := !x) in void);
+      (C_4:
       begin
-        (let jessie_2 = (x := (C_4:
-                              (JC_18:
-                              (int32_of_integer_ (C_3:
+        (let jessie_4 = (x := (C_3:
+                              (JC_9:
+                              (int32_of_integer_ (C_2:
                                                  ((add_int (integer_of_int32 !x)) (1))))))) in
         void);
        (return := !tmp);
@@ -499,35 +488,29 @@ let main_ensures_default =
      (let y = ref (any_int32 void) in
      (let tmp_0 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_7:
+     (C_6:
      begin
-       (JC_32: (__globinit_whole_program void));
+       (let jessie_23 = (x := (safe_int32_of_integer_ (3))) in void);
       (C_8:
       begin
-        (let jessie_10 = (x := (safe_int32_of_integer_ (3))) in void);
-       (C_10:
-       begin
-         (let jessie_11 = (tmp_0 := (C_9: (JC_34: (f void)))) in void);
-        (if ((neq_int_ (integer_of_int32 !tmp_0)) (0))
-        then
-         (C_13:
-         (let jessie_12 = (y := (safe_int32_of_integer_ (1))) in void))
-        else
-         (C_11:
-         begin
-           (let jessie_13 = (y := (safe_int32_of_integer_ (5))) in void);
-          (assert { (JC_35: (false = true)) }; void);
-          void
-         end));
-        (assert { (JC_36: eq_int(integer_of_int32(y), (1))) }; void);
-        void;
-        (C_15:
+        (let jessie_25 = (tmp_0 := (C_7: (JC_21: (f void)))) in void);
+       (if ((neq_int_ (integer_of_int32 !tmp_0)) (0))
+       then
+        (C_11: (let jessie_27 = (y := (safe_int32_of_integer_ (1))) in void))
+       else
+        (C_9:
         begin
-          (let jessie_14 = (__retres := (safe_int32_of_integer_ (0))) in
-          void);
-         (return := !__retres);
-         (raise Return)
-        end)
+          (let jessie_29 = (y := (safe_int32_of_integer_ (5))) in void);
+         (assert { (JC_22: (false = true)) }; void);
+         void
+        end));
+       (assert { (JC_23: eq_int(integer_of_int32(y), (1))) }; void);
+       void;
+       (C_13:
+       begin
+         (let jessie_31 = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres);
+        (raise Return)
        end)
       end)
      end))));
@@ -536,11 +519,11 @@ let main_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_23: true) }
+  { (JC_14: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_22: true) }
+  { (JC_13: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -548,34 +531,30 @@ let main_safety =
      (let y = ref (any_int32 void) in
      (let tmp_0 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_7:
+     (C_6:
      begin
-       (JC_27: (__globinit_whole_program_requires void));
+       (let jessie_12 = (x := (safe_int32_of_integer_ (3))) in void);
       (C_8:
       begin
-        (let jessie_5 = (x := (safe_int32_of_integer_ (3))) in void);
-       (C_10:
-       begin
-         (let jessie_6 = (tmp_0 := (C_9: (JC_29: (f_requires void)))) in
-         void);
-        (if ((neq_int_ (integer_of_int32 !tmp_0)) (0))
-        then
-         (C_13: (let jessie_7 = (y := (safe_int32_of_integer_ (1))) in void))
-        else
-         (C_11:
-         begin
-           (let jessie_8 = (y := (safe_int32_of_integer_ (5))) in void);
-          [ { } unit { (JC_30: (false = true)) } ];
-          void
-         end));
-        [ { } unit reads y { (JC_31: eq_int(integer_of_int32(y), (1))) } ];
-        void;
-        (C_15:
+        (let jessie_14 = (tmp_0 := (C_7: (JC_18: (f_requires void)))) in
+        void);
+       (if ((neq_int_ (integer_of_int32 !tmp_0)) (0))
+       then
+        (C_11: (let jessie_16 = (y := (safe_int32_of_integer_ (1))) in void))
+       else
+        (C_9:
         begin
-          (let jessie_9 = (__retres := (safe_int32_of_integer_ (0))) in void);
-         (return := !__retres);
-         (raise Return)
-        end)
+          (let jessie_18 = (y := (safe_int32_of_integer_ (5))) in void);
+         [ { } unit { (JC_19: (false = true)) } ];
+         void
+        end));
+       [ { } unit reads y { (JC_20: eq_int(integer_of_int32(y), (1))) } ];
+       void;
+       (C_13:
+       begin
+         (let jessie_20 = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres);
+        (raise Return)
        end)
       end)
      end))));

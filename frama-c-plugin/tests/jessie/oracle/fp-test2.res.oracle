@@ -40,23 +40,17 @@ invariant valid___string_a__a_b__a_c__a_res__a_ :
 ((\offset_min(__string_a__a_b__a_c__a_res__a_) <= 0) &&
   (\offset_max(__string_a__a_b__a_c__a_res__a_) >= 22))
 
-unit __globinit_whole_program()
-behavior default:
-  assumes true;
-  ensures (C_1 : true);
-;
-
 int32 printf()
 behavior default:
   assumes true;
   assigns \nothing;
-  ensures (C_2 : true);
+  ensures (C_1 : true);
 ;
 
 int32 main()
 behavior default:
   assumes true;
-  ensures (C_18 : true);
+  ensures (C_16 : true);
 {  
    (var double tmp1);
    
@@ -72,22 +66,21 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (C_3 : __globinit_whole_program());
-      (C_4 : (tmp1 = (0x1p53 :> double)));
-      (C_5 : (tmp2 = (0x1p52 :> double)));
-      (C_7 : (a = (C_6 : (tmp1 - (1.0 :> double)))));
-      (C_9 : (b = (C_8 : (tmp2 + (1.0 :> double)))));
-      (C_11 : (c = (C_10 : (tmp1 * tmp2))));
-      (C_14 : (res = (C_13 : ((C_12 : (a * b)) - c))));
+   {  (C_2 : (tmp1 = (0x1p53 :> double)));
+      (C_3 : (tmp2 = (0x1p52 :> double)));
+      (C_5 : (a = (C_4 : (tmp1 - (1.0 :> double)))));
+      (C_7 : (b = (C_6 : (tmp2 + (1.0 :> double)))));
+      (C_9 : (c = (C_8 : (tmp1 * tmp2))));
+      (C_12 : (res = (C_11 : ((C_10 : (a * b)) - c))));
       
       {  
-         (assert for default: (C_15 : (ifIEEE744 : ((res :> real) == 0.0))));
+         (assert for default: (C_13 : (ifIEEE744 : ((res :> real) == 0.0))));
          ()
       };
       
-      {  (C_16 : printf())
+      {  (C_14 : printf())
       };
-      (C_17 : (__retres = 0));
+      (C_15 : (__retres = 0));
       
       (return __retres)
    }
@@ -326,23 +319,6 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter char_P___string_a__a_b__a_c__a_res__a__1_alloc_table :
- char_P alloc_table ref
-
-parameter __globinit_whole_program :
- tt:unit ->
-  { } unit reads char_P___string_a__a_b__a_c__a_res__a__1_alloc_table
-  { (JC_11:
-    valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table)) }
-
-parameter __globinit_whole_program_requires :
- tt:unit ->
-  { (JC_4:
-    valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table))}
-  unit reads char_P___string_a__a_b__a_c__a_res__a__1_alloc_table
-  { (JC_11:
-    valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table)) }
-
 parameter alloc_bitvector_struct_char_P :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -437,6 +413,9 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter char_P___string_a__a_b__a_c__a_res__a__1_alloc_table :
+ char_P alloc_table ref
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -450,29 +429,29 @@ parameter int8_of_integer_ :
 parameter main :
  tt:unit ->
   { } int32 reads char_P___string_a__a_b__a_c__a_res__a__1_alloc_table
-  { (JC_29:
+  { (JC_20:
     valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table)) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_22:
+  { (JC_13:
     valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table))}
   int32 reads char_P___string_a__a_b__a_c__a_res__a__1_alloc_table
-  { (JC_29:
+  { (JC_20:
     valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table)) }
 
 parameter printf :
  tt:unit ->
   { } int32 reads char_P___string_a__a_b__a_c__a_res__a__1_alloc_table
-  { (JC_21:
+  { (JC_12:
     valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table)) }
 
 parameter printf_requires :
  tt:unit ->
-  { (JC_12:
+  { (JC_3:
     valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table))}
   int32 reads char_P___string_a__a_b__a_c__a_res__a__1_alloc_table
-  { (JC_21:
+  { (JC_12:
     valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table)) }
 
 parameter safe_int32_of_integer_ :
@@ -484,7 +463,7 @@ parameter safe_int8_of_integer_ :
 let main_ensures_default =
  fun (tt : unit) ->
   { ((true = true)
-    and (JC_24:
+    and (JC_15:
         valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -497,56 +476,52 @@ let main_ensures_default =
      (let c = ref (any_gen_float Double) in
      (let res = ref (any_gen_float Double) in
      (let __retres = ref (any_int32 void) in
-     (C_3:
+     (C_2:
      begin
-       (JC_51: (__globinit_whole_program void));
-      (C_4:
+       (let jessie_18 = (tmp1 := (((gen_float_of_real_safe Double) nearest_even) 0x1p53)) in
+       void);
+      (C_3:
       begin
-        (let jessie_9 = (tmp1 := (((gen_float_of_real_safe Double) nearest_even) 0x1p53)) in
+        (let jessie_20 = (tmp2 := (((gen_float_of_real_safe Double) nearest_even) 0x1p52)) in
         void);
        (C_5:
        begin
-         (let jessie_10 = (tmp2 := (((gen_float_of_real_safe Double) nearest_even) 0x1p52)) in
+         (let jessie_22 = (a := (C_4:
+                                (JC_32:
+                                ((((sub_gen_float_safe Double) nearest_even) !tmp1) 
+                                 (((gen_float_of_real_safe Double) nearest_even) 1.0))))) in
          void);
         (C_7:
         begin
-          (let jessie_11 = (a := (C_6:
-                                 (JC_53:
-                                 ((((sub_gen_float_safe Double) nearest_even) !tmp1) 
+          (let jessie_24 = (b := (C_6:
+                                 (JC_33:
+                                 ((((add_gen_float_safe Double) nearest_even) !tmp2) 
                                   (((gen_float_of_real_safe Double) nearest_even) 1.0))))) in
           void);
          (C_9:
          begin
-           (let jessie_12 = (b := (C_8:
-                                  (JC_55:
-                                  ((((add_gen_float_safe Double) nearest_even) !tmp2) 
-                                   (((gen_float_of_real_safe Double) nearest_even) 1.0))))) in
+           (let jessie_26 = (c := (C_8:
+                                  (JC_34:
+                                  ((((mul_gen_float_safe Double) nearest_even) !tmp1) !tmp2)))) in
            void);
-          (C_11:
+          (C_12:
           begin
-            (let jessie_13 = (c := (C_10:
-                                   (JC_57:
-                                   ((((mul_gen_float_safe Double) nearest_even) !tmp1) !tmp2)))) in
+            (let jessie_28 = (res := (C_11:
+                                     (JC_36:
+                                     ((((sub_gen_float_safe Double) nearest_even) 
+                                       (C_10:
+                                       (JC_35:
+                                       ((((mul_gen_float_safe Double) nearest_even) !a) !b)))) !c)))) in
             void);
-           (C_14:
+           (assert { (JC_37: eq_real(float_value(res), 0.0)) }; void);
+           void;
+           (let jessie_29 = (C_14: (JC_38: (printf void))) in void);
+           (C_15:
            begin
-             (let jessie_14 = (res := (C_13:
-                                      (JC_61:
-                                      ((((sub_gen_float_safe Double) nearest_even) 
-                                        (C_12:
-                                        (JC_60:
-                                        ((((mul_gen_float_safe Double) nearest_even) !a) !b)))) !c)))) in
+             (let jessie_31 = (__retres := (safe_int32_of_integer_ (0))) in
              void);
-            (assert { (JC_62: eq_real(float_value(res), 0.0)) }; void);
-            void;
-            (let jessie_15 = (C_16: (JC_63: (printf void))) in void);
-            (C_17:
-            begin
-              (let jessie_16 = (__retres := (safe_int32_of_integer_ (0))) in
-              void);
-             (return := !__retres);
-             (raise Return)
-            end)
+            (return := !__retres);
+            (raise Return)
            end)
           end)
          end)
@@ -559,11 +534,11 @@ let main_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_26: true) }
+  { (JC_17: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_24:
+  { (JC_15:
     valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
@@ -576,60 +551,56 @@ let main_safety =
      (let c = ref (any_gen_float Double) in
      (let res = ref (any_gen_float Double) in
      (let __retres = ref (any_int32 void) in
-     (C_3:
+     (C_2:
      begin
-       (JC_30: (__globinit_whole_program_requires void));
-      (C_4:
+       (let jessie_2 = (tmp1 := (JC_21:
+                                (((gen_float_of_real Double) nearest_even) 0x1p53))) in
+       void);
+      (C_3:
       begin
-        (let jessie_1 = (tmp1 := (JC_32:
-                                 (((gen_float_of_real Double) nearest_even) 0x1p53))) in
+        (let jessie_4 = (tmp2 := (JC_22:
+                                 (((gen_float_of_real Double) nearest_even) 0x1p52))) in
         void);
        (C_5:
        begin
-         (let jessie_2 = (tmp2 := (JC_34:
-                                  (((gen_float_of_real Double) nearest_even) 0x1p52))) in
+         (let jessie_6 = (a := (C_4:
+                               (JC_24:
+                               ((((sub_gen_float Double) nearest_even) !tmp1) 
+                                (JC_23:
+                                (((gen_float_of_real Double) nearest_even) 1.0)))))) in
          void);
         (C_7:
         begin
-          (let jessie_3 = (a := (C_6:
-                                (JC_38:
-                                ((((sub_gen_float Double) nearest_even) !tmp1) 
-                                 (JC_37:
+          (let jessie_8 = (b := (C_6:
+                                (JC_26:
+                                ((((add_gen_float Double) nearest_even) !tmp2) 
+                                 (JC_25:
                                  (((gen_float_of_real Double) nearest_even) 1.0)))))) in
           void);
          (C_9:
          begin
-           (let jessie_4 = (b := (C_8:
-                                 (JC_42:
-                                 ((((add_gen_float Double) nearest_even) !tmp2) 
-                                  (JC_41:
-                                  (((gen_float_of_real Double) nearest_even) 1.0)))))) in
-           void);
-          (C_11:
-          begin
-            (let jessie_5 = (c := (C_10:
-                                  (JC_44:
+           (let jessie_10 = (c := (C_8:
+                                  (JC_27:
                                   ((((mul_gen_float Double) nearest_even) !tmp1) !tmp2)))) in
-            void);
-           (C_14:
-           begin
-             (let jessie_6 = (res := (C_13:
-                                     (JC_48:
+           void);
+          (C_12:
+          begin
+            (let jessie_12 = (res := (C_11:
+                                     (JC_29:
                                      ((((sub_gen_float Double) nearest_even) 
-                                       (C_12:
-                                       (JC_47:
+                                       (C_10:
+                                       (JC_28:
                                        ((((mul_gen_float Double) nearest_even) !a) !b)))) !c)))) in
+            void);
+           [ { } unit reads res { (JC_30: eq_real(float_value(res), 0.0)) } ];
+           void;
+           (let jessie_13 = (C_14: (JC_31: (printf_requires void))) in void);
+           (C_15:
+           begin
+             (let jessie_15 = (__retres := (safe_int32_of_integer_ (0))) in
              void);
-            [ { } unit reads res { (JC_49: eq_real(float_value(res), 0.0)) } ];
-            void;
-            (let jessie_7 = (C_16: (JC_50: (printf_requires void))) in void);
-            (C_17:
-            begin
-              (let jessie_8 = (__retres := (safe_int32_of_integer_ (0))) in
-              void);
-             (return := !__retres);
-             (raise Return)
-            end)
+            (return := !__retres);
+            (raise Return)
            end)
           end)
          end)
@@ -642,7 +613,7 @@ let main_safety =
    with
    Return ->
    !return end))
-  { (JC_28:
+  { (JC_19:
     valid___string_a__a_b__a_c__a_res__a_(char_P___string_a__a_b__a_c__a_res__a__1_alloc_table)) }
 
 

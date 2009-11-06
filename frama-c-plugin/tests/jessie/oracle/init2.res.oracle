@@ -816,7 +816,7 @@ let f_ensures_default =
      (let varloc = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_2 = (varloc := (safe_int32_of_integer_ (4))) in void);
+       (let jessie_5 = (varloc := (safe_int32_of_integer_ (4))) in void);
       (return := !varloc);
       (raise Return)
      end));
@@ -845,7 +845,7 @@ let f_safety =
      (let varloc = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_1 = (varloc := (safe_int32_of_integer_ (4))) in void);
+       (let jessie_2 = (varloc := (safe_int32_of_integer_ (4))) in void);
       (return := !varloc);
       (raise Return)
      end));

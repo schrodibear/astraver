@@ -438,7 +438,7 @@ let ftest_ensures_default =
      begin
        (if ((gt_int_ (integer_of_int32 x)) (0))
        then
-        (let jessie_3 = (if ((lt_int_ (integer_of_int32 y)) (10))
+        (let jessie_9 = (if ((lt_int_ (integer_of_int32 y)) (10))
                         then
                          (C_3:
                          begin
@@ -451,7 +451,8 @@ let ftest_ensures_default =
                          end)) in
         void)
        else
-        (C_1: (let jessie_4 = (tmp := (safe_int32_of_integer_ (0))) in void)));
+        (C_1:
+        (let jessie_11 = (tmp := (safe_int32_of_integer_ (0))) in void)));
       (return := !tmp);
       (raise Return)
      end);
@@ -482,7 +483,7 @@ let ftest_safety =
      begin
        (if ((gt_int_ (integer_of_int32 x)) (0))
        then
-        (let jessie_1 = (if ((lt_int_ (integer_of_int32 y)) (10))
+        (let jessie_3 = (if ((lt_int_ (integer_of_int32 y)) (10))
                         then
                          (C_3:
                          begin
@@ -495,7 +496,7 @@ let ftest_safety =
                          end)) in
         void)
        else
-        (C_1: (let jessie_2 = (tmp := (safe_int32_of_integer_ (0))) in void)));
+        (C_1: (let jessie_5 = (tmp := (safe_int32_of_integer_ (0))) in void)));
       (return := !tmp);
       (raise Return)
      end);

@@ -537,27 +537,28 @@ let f4_ensures_default =
      (let r = ref (any_real void) in
      (C_16:
      begin
-       (let jessie_19 = (tab := (C_15:
-                                (JC_38:
+       (let jessie_26 = (tab := (C_15:
+                                (JC_34:
                                 (((alloc_struct_double_P (2)) double_P_tab_2_alloc_table) double_P_tab_2_tag_table)))) in
        void);
       (C_18:
       begin
-        (let jessie_24 = (let jessie_20 = 1.0 in
-                         (let jessie_23 = ((shift !tab) (0)) in
-                         (((safe_upd_ double_P_double_M_tab_2) jessie_23) jessie_20))) in
+        (let jessie_32 = (let jessie_28 = 1.0 in
+                         (let jessie_31 = ((shift !tab) (0)) in
+                         (((safe_upd_ double_P_double_M_tab_2) jessie_31) jessie_28))) in
         void);
        (C_20:
        begin
-         (let jessie_29 = (let jessie_25 = 2.0 in
-                          (let jessie_28 = ((shift !tab) (1)) in
-                          (((safe_upd_ double_P_double_M_tab_2) jessie_28) jessie_25))) in
+         (let jessie_38 = (let jessie_34 = 2.0 in
+                          (let jessie_37 = ((shift !tab) (1)) in
+                          (((safe_upd_ double_P_double_M_tab_2) jessie_37) jessie_34))) in
          void);
         (C_22:
         begin
-          (let jessie_32 = (r := (C_21:
-                                 (JC_40:
-                                 (((g4 !tab) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2)))) in
+          (let jessie_41 = (r := (C_21:
+                                 (let jessie_40 = !tab in
+                                 (JC_35:
+                                 (((g4 jessie_40) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2))))) in
           void);
          (C_23:
          begin
@@ -574,11 +575,11 @@ let f4_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_28: true) }
+  { (JC_26: true) }
 
 let f4_safety =
  fun (tt : unit) ->
-  { (JC_26: true) }
+  { (JC_24: true) }
   (init:
   (let return = ref (any_real void) in
   try
@@ -590,33 +591,34 @@ let f4_safety =
      (let r = ref (any_real void) in
      (C_16:
      begin
-       (let jessie_4 = (tab := (let jessie_3 = (C_15:
-                                               (JC_33:
+       (let jessie_8 = (tab := (let jessie_7 = (C_15:
+                                               (JC_31:
                                                (((alloc_struct_double_P_requires (2)) double_P_tab_2_alloc_table) double_P_tab_2_tag_table))) in
-                               (JC_34:
+                               (JC_32:
                                (assert
                                { ge_int(offset_max(double_P_tab_2_alloc_table,
-                                        jessie_3),
+                                        jessie_7),
                                  (1)) };
-                               jessie_3)))) in
+                               jessie_7)))) in
        void);
       (C_18:
       begin
-        (let jessie_9 = (let jessie_5 = 1.0 in
-                        (let jessie_8 = ((shift !tab) (0)) in
-                        (((safe_upd_ double_P_double_M_tab_2) jessie_8) jessie_5))) in
+        (let jessie_14 = (let jessie_10 = 1.0 in
+                         (let jessie_13 = ((shift !tab) (0)) in
+                         (((safe_upd_ double_P_double_M_tab_2) jessie_13) jessie_10))) in
         void);
        (C_20:
        begin
-         (let jessie_14 = (let jessie_10 = 2.0 in
-                          (let jessie_13 = ((shift !tab) (1)) in
-                          (((safe_upd_ double_P_double_M_tab_2) jessie_13) jessie_10))) in
+         (let jessie_20 = (let jessie_16 = 2.0 in
+                          (let jessie_19 = ((shift !tab) (1)) in
+                          (((safe_upd_ double_P_double_M_tab_2) jessie_19) jessie_16))) in
          void);
         (C_22:
         begin
-          (let jessie_17 = (r := (C_21:
-                                 (JC_36:
-                                 (((g4_requires !tab) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2)))) in
+          (let jessie_23 = (r := (C_21:
+                                 (let jessie_22 = !tab in
+                                 (JC_33:
+                                 (((g4_requires jessie_22) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2))))) in
           void);
          (C_23:
          begin
@@ -651,7 +653,7 @@ let g4_ensures_default =
      (let y = ref (any_real void) in
      (C_6:
      begin
-       (let jessie_2 = (y := (C_5:
+       (let jessie_5 = (y := (C_5:
                              ((add_real (C_4:
                                         ((safe_acc_ double_P_double_M_t_1) 
                                          (C_3:
@@ -687,12 +689,12 @@ let g4_safety =
      (let y = ref (any_real void) in
      (C_6:
      begin
-       (let jessie_1 = (y := (C_5:
+       (let jessie_2 = (y := (C_5:
                              ((add_real (C_4:
-                                        (JC_21:
+                                        (JC_19:
                                         (((acc_ double_P_t_1_alloc_table) double_P_double_M_t_1) t)))) 
                               (C_2:
-                              (JC_22:
+                              (JC_20:
                               ((((offset_acc_ double_P_t_1_alloc_table) double_P_double_M_t_1) t) (1))))))) in
        void);
       (return := !y);

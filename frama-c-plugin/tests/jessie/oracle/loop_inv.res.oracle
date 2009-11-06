@@ -422,54 +422,55 @@ let f_ensures_default =
   try
    begin
      try
-      (let jessie_11 = begin
+      (let jessie_15 = begin
                          (loop_2:
                          while true do
                          { invariant
-                             (JC_22: ge_int(integer_of_int32(i), (0)))
+                             (JC_20: ge_int(integer_of_int32(i), (0)))
                             }
                           begin
                             [ { } unit { true } ];
                            try
-                            (let jessie_10 = begin
-                                               (let jessie_9 = begin
+                            (let jessie_14 = begin
+                                               (let jessie_13 = begin
+                                                                  (if 
+                                                                  ((gt_int_ 
+                                                                    (integer_of_int32 !i)) (0))
+                                                                  then void
+                                                                  else
+                                                                   (let jessie_10 = 
+                                                                   (raise
+                                                                    (Goto_while_0_break_exc
+                                                                    void)) in
+                                                                   void));
                                                                  (if 
-                                                                 ((gt_int_ 
-                                                                   (integer_of_int32 !i)) (0))
-                                                                 then void
-                                                                 else
-                                                                  (let jessie_8 = 
-                                                                  (raise
-                                                                   (Goto_while_0_break_exc
-                                                                   void)) in
-                                                                  void));
-                                                                (if ((ge_int_ 
-                                                                    (integer_of_int32 !i)) 
-                                                                    (integer_of_int32 c))
-                                                                then
-                                                                 (C_8:
-                                                                 begin
-                                                                   (i := 
+                                                                 ((ge_int_ 
+                                                                   (integer_of_int32 !i)) 
+                                                                  (integer_of_int32 c))
+                                                                 then
+                                                                  (C_8:
+                                                                  begin
+                                                                    (i := 
                                                                     (C_7:
                                                                     (safe_int32_of_integer_ 
                                                                     (C_6:
                                                                     ((sub_int 
                                                                     (integer_of_int32 !i)) 
                                                                     (integer_of_int32 c))))));
-                                                                  !i
-                                                                 end)
-                                                                else
-                                                                 (C_5:
-                                                                 begin
-                                                                   (i := 
+                                                                   !i
+                                                                  end)
+                                                                 else
+                                                                  (C_5:
+                                                                  begin
+                                                                    (i := 
                                                                     (C_4:
                                                                     (safe_int32_of_integer_ 
                                                                     (C_3:
                                                                     ((sub_int 
                                                                     (integer_of_int32 !i)) (1))))));
-                                                                  !i
-                                                                 end))
-                                                               end in
+                                                                   !i
+                                                                  end))
+                                                                end in
                                                void);
                                               (raise
                                                (Loop_continue_exc
@@ -504,17 +505,17 @@ let f_safety =
   try
    begin
      try
-      (let jessie_7 = begin
+      (let jessie_9 = begin
                         (loop_1:
                         while true do
                         { invariant (JC_15: true)
-                          variant integer_of_int32((JC_21 : i)) }
+                          variant integer_of_int32((JC_19 : i)) }
                          begin
                            [ { } unit reads i
                              { (JC_13: ge_int(integer_of_int32(i), (0))) } ];
                           try
-                           (let jessie_6 = begin
-                                             (let jessie_5 = begin
+                           (let jessie_8 = begin
+                                             (let jessie_7 = begin
                                                                (if ((gt_int_ 
                                                                     (integer_of_int32 !i)) (0))
                                                                then void
@@ -532,7 +533,7 @@ let f_safety =
                                                                begin
                                                                  (i := 
                                                                   (C_7:
-                                                                  (JC_18:
+                                                                  (JC_17:
                                                                   (int32_of_integer_ 
                                                                    (C_6:
                                                                    ((sub_int 
@@ -545,7 +546,7 @@ let f_safety =
                                                                begin
                                                                  (i := 
                                                                   (C_4:
-                                                                  (JC_20:
+                                                                  (JC_18:
                                                                   (int32_of_integer_ 
                                                                    (C_3:
                                                                    ((sub_int 
@@ -604,11 +605,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/loop_inv_po8.why">
-      <location file = "why/loop_inv.why" line = "447" begin = "34" end = "63"/>
+      <location file = "why/loop_inv.why" line = "448" begin = "34" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/loop_inv_po9.why">
-      <location file = "why/loop_inv.why" line = "447" begin = "34" end = "63"/>
+      <location file = "why/loop_inv.why" line = "448" begin = "34" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

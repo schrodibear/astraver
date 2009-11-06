@@ -416,7 +416,7 @@ let f_ensures_default =
    begin
      (C_3:
      begin
-       (let jessie_4 = (x := (C_2:
+       (let jessie_9 = (x := (C_2:
                              (safe_int32_of_integer_ (C_1:
                                                      ((add_int (integer_of_int32 !x)) 
                                                       (integer_of_int32 y)))))) in
@@ -426,27 +426,27 @@ let f_ensures_default =
         void;
        (C_6:
        begin
-         (let jessie_5 = (x := (C_5:
-                               (safe_int32_of_integer_ (C_4:
-                                                       ((add_int (integer_of_int32 !x)) (1)))))) in
+         (let jessie_11 = (x := (C_5:
+                                (safe_int32_of_integer_ (C_4:
+                                                        ((add_int (integer_of_int32 !x)) (1)))))) in
          void);
         (L2:
         begin
           void;
          (C_9:
          begin
-           (let jessie_6 = (x := (C_8:
-                                 (safe_int32_of_integer_ (C_7:
-                                                         ((add_int (integer_of_int32 !x)) (1)))))) in
+           (let jessie_13 = (x := (C_8:
+                                  (safe_int32_of_integer_ (C_7:
+                                                          ((add_int (integer_of_int32 !x)) (1)))))) in
            void);
           (assert
-          { (JC_17:
+          { (JC_14:
             eq_int(integer_of_int32(x@L1),
             add_int(integer_of_int32(x@init), integer_of_int32(y)))) };
           void);
           void;
           (assert
-          { (JC_18:
+          { (JC_15:
             eq_int(integer_of_int32(x@L2),
             add_int(add_int((1), integer_of_int32(x@init)),
             integer_of_int32(y)))) };
@@ -477,8 +477,8 @@ let f_safety =
    begin
      (C_3:
      begin
-       (let jessie_1 = (x := (C_2:
-                             (JC_10:
+       (let jessie_2 = (x := (C_2:
+                             (JC_9:
                              (int32_of_integer_ (C_1:
                                                 ((add_int (integer_of_int32 !x)) 
                                                  (integer_of_int32 y))))))) in
@@ -488,8 +488,8 @@ let f_safety =
         void;
        (C_6:
        begin
-         (let jessie_2 = (x := (C_5:
-                               (JC_12:
+         (let jessie_4 = (x := (C_5:
+                               (JC_10:
                                (int32_of_integer_ (C_4:
                                                   ((add_int (integer_of_int32 !x)) (1))))))) in
          void);
@@ -498,18 +498,18 @@ let f_safety =
           void;
          (C_9:
          begin
-           (let jessie_3 = (x := (C_8:
-                                 (JC_14:
+           (let jessie_6 = (x := (C_8:
+                                 (JC_11:
                                  (int32_of_integer_ (C_7:
                                                     ((add_int (integer_of_int32 !x)) (1))))))) in
            void);
           [ { } unit reads x
-            { (JC_15:
+            { (JC_12:
               eq_int(integer_of_int32(x@L1),
               add_int(integer_of_int32(x@init), integer_of_int32(y)))) } ];
           void;
           [ { } unit reads x
-            { (JC_16:
+            { (JC_13:
               eq_int(integer_of_int32(x@L2),
               add_int(add_int((1), integer_of_int32(x@init)),
               integer_of_int32(y)))) } ];

@@ -555,27 +555,27 @@ let f_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_14 = begin
-                          (let jessie_9 = (C_1:
-                                          begin
-                                            (let jessie_8 = (tmp := !b) in
-                                            void);
-                                           (C_4:
+       (let jessie_20 = begin
+                          (let jessie_14 = (C_1:
                                            begin
-                                             (b := (C_3:
-                                                   (safe_int32_of_integer_ 
-                                                    (C_2:
-                                                    ((add_int (integer_of_int32 !b)) (1))))));
-                                            !b
-                                           end)
-                                          end) in
+                                             (let jessie_12 = (tmp := !b) in
+                                             void);
+                                            (C_4:
+                                            begin
+                                              (b := (C_3:
+                                                    (safe_int32_of_integer_ 
+                                                     (C_2:
+                                                     ((add_int (integer_of_int32 !b)) (1))))));
+                                             !b
+                                            end)
+                                           end) in
                           void);
                          (C_6:
-                         (let jessie_10 = (safe_int32_of_integer_ (1)) in
-                         (let jessie_13 = ((shift t) (integer_of_int32 !tmp)) in
+                         (let jessie_16 = (safe_int32_of_integer_ (1)) in
+                         (let jessie_19 = ((shift t) (integer_of_int32 !tmp)) in
                          begin
-                           (((safe_upd_ int_P_int_M_t_1) jessie_13) jessie_10);
-                          jessie_10
+                           (((safe_upd_ int_P_int_M_t_1) jessie_19) jessie_16);
+                          jessie_16
                          end)))
                         end in
        void);
@@ -598,33 +598,33 @@ let f_safety =
    begin
      (let tmp = ref (any_int32 void) in
      begin
-       (let jessie_7 = begin
-                         (let jessie_2 = (C_1:
-                                         begin
-                                           (let jessie_1 = (tmp := !b) in
-                                           void);
-                                          (C_4:
+       (let jessie_10 = begin
+                          (let jessie_4 = (C_1:
                                           begin
-                                            (b := (C_3:
-                                                  (JC_15:
-                                                  (int32_of_integer_ 
-                                                   (C_2:
-                                                   ((add_int (integer_of_int32 !b)) (1)))))));
-                                           !b
-                                          end)
-                                         end) in
-                         void);
-                        (C_6:
-                        (let jessie_3 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_4 = t in
-                        (let jessie_5 = (integer_of_int32 !tmp) in
-                        (let jessie_6 = ((shift jessie_4) jessie_5) in
-                        begin
-                          (JC_16:
-                          (((((offset_upd_ !int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_4) jessie_5) jessie_3));
-                         jessie_3
-                        end)))))
-                       end in
+                                            (let jessie_2 = (tmp := !b) in
+                                            void);
+                                           (C_4:
+                                           begin
+                                             (b := (C_3:
+                                                   (JC_14:
+                                                   (int32_of_integer_ 
+                                                    (C_2:
+                                                    ((add_int (integer_of_int32 !b)) (1)))))));
+                                            !b
+                                           end)
+                                          end) in
+                          void);
+                         (C_6:
+                         (let jessie_6 = (safe_int32_of_integer_ (1)) in
+                         (let jessie_7 = t in
+                         (let jessie_8 = (integer_of_int32 !tmp) in
+                         (let jessie_9 = ((shift jessie_7) jessie_8) in
+                         begin
+                           (JC_15:
+                           (((((offset_upd_ !int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_7) jessie_8) jessie_6));
+                          jessie_6
+                         end)))))
+                        end in
        void);
       (raise Return)
      end);

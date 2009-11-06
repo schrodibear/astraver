@@ -835,23 +835,23 @@ let remove_copy_array_ensures_default =
      (let j_4 = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_16 = (i_5 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_23 = (i_5 := (safe_int32_of_integer_ (0))) in void);
       (C_2:
       begin
-        (let jessie_17 = (j_4 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_25 = (j_4 := (safe_int32_of_integer_ (0))) in void);
        try
-        (let jessie_27 = begin
+        (let jessie_38 = begin
                            (loop_2:
                            while true do
                            { invariant
-                               (((JC_54:
+                               (((JC_51:
                                  eq_int(integer_of_int32(j_4),
                                  spec_remove_copy(a_1,
                                  sub_int(integer_of_int32(i_5), (1)), b_1,
                                  sub_int(integer_of_int32(j_4), (1)),
                                  value_0, int_P_int_M_b_6,
                                  int_P_int_M_a_5@init)))
-                                and ((JC_55:
+                                and ((JC_52:
                                      (forall k_1:int.
                                       ((le_int((0), k_1)
                                        and lt_int(k_1, integer_of_int32(j_4))) ->
@@ -859,7 +859,7 @@ let remove_copy_array_ensures_default =
                                                                 shift(b_1,
                                                                 k_1))),
                                        integer_of_int32(value_0)))))
-                                    and ((JC_56:
+                                    and ((JC_53:
                                          (forall k_2:int.
                                           ((not (le_int((0), k_2)
                                                 and lt_int(k_2,
@@ -870,29 +870,29 @@ let remove_copy_array_ensures_default =
                                            integer_of_int32(select(int_P_int_M_b_6@init,
                                                             shift(b_1@init,
                                                             k_2@init)))))))
-                                        and ((JC_59:
-                                             ((JC_57:
+                                        and ((JC_56:
+                                             ((JC_54:
                                               le_int((0),
                                               integer_of_int32(j_4)))
-                                             and (JC_58:
+                                             and (JC_55:
                                                  le_int(integer_of_int32(j_4),
                                                  integer_of_int32(length)))))
-                                            and ((JC_60:
+                                            and ((JC_57:
                                                  le_int(integer_of_int32(j_4),
                                                  integer_of_int32(i_5)))
-                                                and (JC_63:
-                                                    ((JC_61:
+                                                and (JC_60:
+                                                    ((JC_58:
                                                      le_int((0),
                                                      integer_of_int32(i_5)))
-                                                    and (JC_62:
+                                                    and (JC_59:
                                                         le_int(integer_of_int32(i_5),
                                                         integer_of_int32(length))))))))))
-                               and ((JC_65:
+                               and ((JC_62:
                                     not_assigns(int_P_b_6_alloc_table@loop_2,
                                     int_P_int_M_b_6@loop_2, int_P_int_M_b_6,
                                     pset_range(pset_singleton(b_1), (0),
                                     sub_int(integer_of_int32(j_4), (1)))))
-                                   and (JC_66:
+                                   and (JC_63:
                                        not_assigns(int_P_b_6_alloc_table@init,
                                        int_P_int_M_b_6@init, int_P_int_M_b_6,
                                        pset_range(pset_singleton(b_1@init),
@@ -903,15 +903,15 @@ let remove_copy_array_ensures_default =
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_26 = begin
-                                                 (let jessie_25 = begin
+                              (let jessie_37 = begin
+                                                 (let jessie_36 = begin
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !i_5)) 
                                                                     (integer_of_int32 length))
                                                                     then void
                                                                     else
-                                                                    (let jessie_18 = 
+                                                                    (let jessie_26 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -926,22 +926,22 @@ let remove_copy_array_ensures_default =
                                                                     (integer_of_int32 !i_5))))))) 
                                                                     (integer_of_int32 value_0))
                                                                    then
-                                                                    (let jessie_24 = 
+                                                                    (let jessie_34 = 
                                                                     (C_17:
                                                                     begin
                                                                       
-                                                                    (let jessie_23 = 
-                                                                    (let jessie_19 = 
+                                                                    (let jessie_32 = 
+                                                                    (let jessie_28 = 
                                                                     (C_14:
                                                                     ((safe_acc_ int_P_int_M_a_5) 
                                                                     (C_13:
                                                                     ((shift a_1) 
                                                                     (integer_of_int32 !i_5))))) in
-                                                                    (let jessie_22 = 
+                                                                    (let jessie_31 = 
                                                                     (C_15:
                                                                     ((shift b_1) 
                                                                     (integer_of_int32 !j_4))) in
-                                                                    (((safe_upd_ int_P_int_M_b_6) jessie_22) jessie_19))) in
+                                                                    (((safe_upd_ int_P_int_M_b_6) jessie_31) jessie_28))) in
                                                                     void);
                                                                     (C_20:
                                                                     begin
@@ -1044,12 +1044,12 @@ let remove_copy_array_safety =
      (let j_4 = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_4 = (i_5 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_5 = (i_5 := (safe_int32_of_integer_ (0))) in void);
       (C_2:
       begin
-        (let jessie_5 = (j_4 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_7 = (j_4 := (safe_int32_of_integer_ (0))) in void);
        try
-        (let jessie_15 = begin
+        (let jessie_20 = begin
                            (loop_1:
                            while true do
                            { invariant (JC_44: true) variant (0) }
@@ -1100,15 +1100,15 @@ let remove_copy_array_safety =
                                                           le_int(integer_of_int32(i_5),
                                                           integer_of_int32(length)))))))))) } ];
                              try
-                              (let jessie_14 = begin
-                                                 (let jessie_13 = begin
+                              (let jessie_19 = begin
+                                                 (let jessie_18 = begin
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !i_5)) 
                                                                     (integer_of_int32 length))
                                                                     then void
                                                                     else
-                                                                    (let jessie_6 = 
+                                                                    (let jessie_8 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -1122,30 +1122,30 @@ let remove_copy_array_safety =
                                                                     (integer_of_int32 !i_5)))))) 
                                                                     (integer_of_int32 value_0))
                                                                    then
-                                                                    (let jessie_12 = 
+                                                                    (let jessie_16 = 
                                                                     (C_17:
                                                                     begin
                                                                       
-                                                                    (let jessie_11 = 
-                                                                    (let jessie_7 = 
+                                                                    (let jessie_14 = 
+                                                                    (let jessie_10 = 
                                                                     (C_14:
-                                                                    (JC_48:
+                                                                    (JC_47:
                                                                     ((((offset_acc_ int_P_a_5_alloc_table) int_P_int_M_a_5) a_1) 
                                                                     (integer_of_int32 !i_5)))) in
-                                                                    (let jessie_8 = b_1 in
-                                                                    (let jessie_9 = 
+                                                                    (let jessie_11 = b_1 in
+                                                                    (let jessie_12 = 
                                                                     (integer_of_int32 !j_4) in
-                                                                    (let jessie_10 = 
-                                                                    ((shift jessie_8) jessie_9) in
-                                                                    (JC_49:
-                                                                    (((((offset_upd_ int_P_b_6_alloc_table) int_P_int_M_b_6) jessie_8) jessie_9) jessie_7)))))) in
+                                                                    (let jessie_13 = 
+                                                                    ((shift jessie_11) jessie_12) in
+                                                                    (JC_48:
+                                                                    (((((offset_upd_ int_P_b_6_alloc_table) int_P_int_M_b_6) jessie_11) jessie_12) jessie_10)))))) in
                                                                     void);
                                                                     (C_20:
                                                                     begin
                                                                       
                                                                     (j_4 := 
                                                                     (C_19:
-                                                                    (JC_51:
+                                                                    (JC_49:
                                                                     (int32_of_integer_ 
                                                                     (C_18:
                                                                     ((add_int 
@@ -1160,7 +1160,7 @@ let remove_copy_array_safety =
                                                                      
                                                                     (i_5 := 
                                                                     (C_24:
-                                                                    (JC_53:
+                                                                    (JC_50:
                                                                     (int32_of_integer_ 
                                                                     (C_23:
                                                                     ((add_int 

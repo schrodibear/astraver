@@ -603,12 +603,12 @@ let g_ensures_default =
      (C_8:
      begin
        (let jessie_5 = (i := (C_7:
-                             (JC_37:
+                             (JC_36:
                              (((alloc_struct_int_P (1)) int_P_i_3_alloc_table) int_P_i_3_tag_table)))) in
        void);
       (C_9:
       begin
-        (JC_38: (f !i));
+        (let jessie_6 = !i in (JC_37: (f jessie_6)));
        (C_10:
        begin
          ((safe_free_parameter int_P_i_3_alloc_table) !i); (raise Return)
@@ -649,7 +649,7 @@ let g_safety =
        void);
       (C_9:
       begin
-        (JC_35: (f_requires !i));
+        (let jessie_3 = !i in (JC_35: (f_requires jessie_3)));
        (C_10:
        begin
          ((free_parameter int_P_i_3_alloc_table) !i); (raise Return)

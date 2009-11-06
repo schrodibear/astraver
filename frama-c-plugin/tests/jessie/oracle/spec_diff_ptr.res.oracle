@@ -524,7 +524,7 @@ let m2_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_2 = (__retres := (C_2:
+       (let jessie_5 = (__retres := (C_2:
                                     (safe_int32_of_integer_ (C_1:
                                                             ((safe_sub_pointer_ x) y))))) in
        void);
@@ -548,8 +548,8 @@ let m2_safety =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_1 = (__retres := (C_2:
-                                    (JC_10:
+       (let jessie_2 = (__retres := (C_2:
+                                    (JC_9:
                                     (int32_of_integer_ (C_1:
                                                        ((sub_pointer_ x) y)))))) in
        void);

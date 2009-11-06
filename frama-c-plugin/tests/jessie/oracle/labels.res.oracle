@@ -614,7 +614,7 @@ let h_ensures_default =
    begin
      (C_7:
      begin
-       (let jessie_2 = (g := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_4 = (g := (safe_int32_of_integer_ (1))) in void);
       (assert { (JC_24: valg(g@init)) }; void);
       void;
       (raise Return)
@@ -634,7 +634,7 @@ let h_safety =
    begin
      (C_7:
      begin
-       (let jessie_1 = (g := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_2 = (g := (safe_int32_of_integer_ (1))) in void);
       [ { } unit reads g { (JC_23: valg(g@init)) } ];
       void;
       (raise Return)

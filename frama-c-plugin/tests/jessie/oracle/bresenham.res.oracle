@@ -551,13 +551,13 @@ let bresenham_ensures_default =
      (let e_1 = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_14 = (x_4 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_23 = (x_4 := (safe_int32_of_integer_ (0))) in void);
       (C_2:
       begin
-        (let jessie_15 = (y_2 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_25 = (y_2 := (safe_int32_of_integer_ (0))) in void);
        (C_7:
        begin
-         (let jessie_16 = (e_1 := (C_6:
+         (let jessie_27 = (e_1 := (C_6:
                                   (safe_int32_of_integer_ (C_5:
                                                           ((sub_int (integer_of_int32 
                                                                     (C_4:
@@ -569,18 +569,18 @@ let bresenham_ensures_default =
          void);
         (C_8:
         begin
-          (let jessie_17 = (x_4 := (safe_int32_of_integer_ (0))) in void);
+          (let jessie_29 = (x_4 := (safe_int32_of_integer_ (0))) in void);
          try
-          (let jessie_23 = begin
+          (let jessie_39 = begin
                              (loop_2:
                              while true do
                              { invariant
-                                 (JC_40:
-                                 ((JC_37: le_int((0), integer_of_int32(x_4)))
-                                 and ((JC_38:
+                                 (JC_31:
+                                 ((JC_28: le_int((0), integer_of_int32(x_4)))
+                                 and ((JC_29:
                                       le_int(integer_of_int32(x_4),
                                       add_int(integer_of_int32(x2), (1))))
-                                     and (JC_39:
+                                     and (JC_30:
                                          Invariant(integer_of_int32(x_4),
                                          integer_of_int32(y_2),
                                          integer_of_int32(e_1))))))
@@ -588,8 +588,8 @@ let bresenham_ensures_default =
                               begin
                                 [ { } unit { true } ];
                                try
-                                (let jessie_22 = begin
-                                                   (let jessie_21 = begin
+                                (let jessie_38 = begin
+                                                   (let jessie_37 = begin
                                                                       
                                                                     (if 
                                                                     ((le_int_ 
@@ -597,20 +597,20 @@ let bresenham_ensures_default =
                                                                     (integer_of_int32 x2))
                                                                     then void
                                                                     else
-                                                                    (let jessie_18 = 
+                                                                    (let jessie_30 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
                                                                     (assert
                                                                     { 
-                                                                    (JC_44:
+                                                                    (JC_35:
                                                                     best(
                                                                     integer_of_int32(x_4),
                                                                     integer_of_int32(y_2))) };
                                                                     void);
                                                                     void;
-                                                                    (let jessie_20 = 
+                                                                    (let jessie_35 = 
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !e_1)) (0))
@@ -636,7 +636,7 @@ let bresenham_ensures_default =
                                                                     (C_18:
                                                                     begin
                                                                       
-                                                                    (let jessie_19 = 
+                                                                    (let jessie_33 = 
                                                                     (y_2 := 
                                                                     (C_17:
                                                                     (safe_int32_of_integer_ 
@@ -721,18 +721,18 @@ let bresenham_safety =
      (let e_1 = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_4 = (x_4 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_5 = (x_4 := (safe_int32_of_integer_ (0))) in void);
       (C_2:
       begin
-        (let jessie_5 = (y_2 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_7 = (y_2 := (safe_int32_of_integer_ (0))) in void);
        (C_7:
        begin
-         (let jessie_6 = (e_1 := (C_6:
-                                 (JC_13:
+         (let jessie_9 = (e_1 := (C_6:
+                                 (JC_11:
                                  (int32_of_integer_ (C_5:
                                                     ((sub_int (integer_of_int32 
                                                                (C_4:
-                                                               (JC_12:
+                                                               (JC_10:
                                                                (int32_of_integer_ 
                                                                 (C_3:
                                                                 ((mul_int (2)) 
@@ -741,29 +741,29 @@ let bresenham_safety =
          void);
         (C_8:
         begin
-          (let jessie_7 = (x_4 := (safe_int32_of_integer_ (0))) in void);
+          (let jessie_11 = (x_4 := (safe_int32_of_integer_ (0))) in void);
          try
-          (let jessie_13 = begin
+          (let jessie_21 = begin
                              (loop_1:
                              while true do
-                             { invariant (JC_19: true)
-                               variant (JC_36 : sub_int(integer_of_int32(x2),
+                             { invariant (JC_17: true)
+                               variant (JC_27 : sub_int(integer_of_int32(x2),
                                                 integer_of_int32(x_4))) }
                               begin
                                 [ { } unit reads e_1,x_4,y_2
-                                  { (JC_17:
-                                    ((JC_14:
+                                  { (JC_15:
+                                    ((JC_12:
                                      le_int((0), integer_of_int32(x_4)))
-                                    and ((JC_15:
+                                    and ((JC_13:
                                          le_int(integer_of_int32(x_4),
                                          add_int(integer_of_int32(x2), (1))))
-                                        and (JC_16:
+                                        and (JC_14:
                                             Invariant(integer_of_int32(x_4),
                                             integer_of_int32(y_2),
                                             integer_of_int32(e_1)))))) } ];
                                try
-                                (let jessie_12 = begin
-                                                   (let jessie_11 = begin
+                                (let jessie_20 = begin
+                                                   (let jessie_19 = begin
                                                                       
                                                                     (if 
                                                                     ((le_int_ 
@@ -771,7 +771,7 @@ let bresenham_safety =
                                                                     (integer_of_int32 x2))
                                                                     then void
                                                                     else
-                                                                    (let jessie_8 = 
+                                                                    (let jessie_12 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -779,12 +779,12 @@ let bresenham_safety =
                                                                     [ 
                                                                     { } unit
                                                                     reads x_4,y_2
-                                                                    { (JC_21:
+                                                                    { (JC_19:
                                                                     best(
                                                                     integer_of_int32(x_4),
                                                                     integer_of_int32(y_2))) } ];
                                                                     void;
-                                                                    (let jessie_10 = 
+                                                                    (let jessie_17 = 
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !e_1)) (0))
@@ -794,14 +794,14 @@ let bresenham_safety =
                                                                       
                                                                     (e_1 := 
                                                                     (C_29:
-                                                                    (JC_25:
+                                                                    (JC_21:
                                                                     (int32_of_integer_ 
                                                                     (C_28:
                                                                     ((add_int 
                                                                     (integer_of_int32 !e_1)) 
                                                                     (integer_of_int32 
                                                                     (C_27:
-                                                                    (JC_24:
+                                                                    (JC_20:
                                                                     (int32_of_integer_ 
                                                                     (C_26:
                                                                     ((mul_int (2)) 
@@ -812,10 +812,10 @@ let bresenham_safety =
                                                                     (C_18:
                                                                     begin
                                                                       
-                                                                    (let jessie_9 = 
+                                                                    (let jessie_15 = 
                                                                     (y_2 := 
                                                                     (C_17:
-                                                                    (JC_27:
+                                                                    (JC_22:
                                                                     (int32_of_integer_ 
                                                                     (C_16:
                                                                     ((add_int 
@@ -826,20 +826,20 @@ let bresenham_safety =
                                                                       
                                                                     (e_1 := 
                                                                     (C_24:
-                                                                    (JC_33:
+                                                                    (JC_25:
                                                                     (int32_of_integer_ 
                                                                     (C_23:
                                                                     ((add_int 
                                                                     (integer_of_int32 !e_1)) 
                                                                     (integer_of_int32 
                                                                     (C_22:
-                                                                    (JC_32:
+                                                                    (JC_24:
                                                                     (int32_of_integer_ 
                                                                     (C_21:
                                                                     ((mul_int (2)) 
                                                                     (integer_of_int32 
                                                                     (C_20:
-                                                                    (JC_31:
+                                                                    (JC_23:
                                                                     (int32_of_integer_ 
                                                                     (C_19:
                                                                     ((sub_int 
@@ -854,7 +854,7 @@ let bresenham_safety =
                                                                       
                                                                     (x_4 := 
                                                                     (C_32:
-                                                                    (JC_35:
+                                                                    (JC_26:
                                                                     (int32_of_integer_ 
                                                                     (C_31:
                                                                     ((add_int 

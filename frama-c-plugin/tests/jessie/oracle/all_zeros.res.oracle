@@ -495,7 +495,7 @@ parameter all_zeros_0 :
     int_P_int_M_t_1_3:(int_P, int32) memory ->
      { } int32
      { ((true = true) ->
-        (JC_80:
+        (JC_76:
         (neq_int(integer_of_int32(result), (0))
         <-> (forall i_4:int.
              ((le_int((0), i_4) and lt_int(i_4, integer_of_int32(n_1))) ->
@@ -508,15 +508,15 @@ parameter all_zeros_0_requires :
   n_1:int32 ->
    int_P_t_1_3_alloc_table:int_P alloc_table ->
     int_P_int_M_t_1_3:(int_P, int32) memory ->
-     { (JC_72:
-       ((JC_69: le_int(offset_min(int_P_t_1_3_alloc_table, t_1), (0)))
-       and ((JC_70:
+     { (JC_68:
+       ((JC_65: le_int(offset_min(int_P_t_1_3_alloc_table, t_1), (0)))
+       and ((JC_66:
             ge_int(offset_max(int_P_t_1_3_alloc_table, t_1),
             integer_of_int32(n_1)))
-           and (JC_71: ge_int(integer_of_int32(n_1), (0))))))}
+           and (JC_67: ge_int(integer_of_int32(n_1), (0))))))}
      int32
      { ((true = true) ->
-        (JC_80:
+        (JC_76:
         (neq_int(integer_of_int32(result), (0))
         <-> (forall i_4:int.
              ((le_int((0), i_4) and lt_int(i_4, integer_of_int32(n_1))) ->
@@ -531,7 +531,7 @@ parameter all_zeros_1 :
     int_P_int_M_t_2:(int_P, int32) memory ->
      { } int32
      { ((true = true) ->
-        (JC_46:
+        (JC_44:
         (neq_int(integer_of_int32(result), (0))
         <-> (forall i_2:int.
              ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(n))) ->
@@ -543,14 +543,14 @@ parameter all_zeros_1_requires :
   n:int32 ->
    int_P_t_2_alloc_table:int_P alloc_table ->
     int_P_int_M_t_2:(int_P, int32) memory ->
-     { (JC_38:
-       ((JC_35: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
-       and ((JC_36:
+     { (JC_36:
+       ((JC_33: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
+       and ((JC_34:
             ge_int(offset_max(int_P_t_2_alloc_table, t), integer_of_int32(n)))
-           and (JC_37: ge_int(integer_of_int32(n), (0))))))}
+           and (JC_35: ge_int(integer_of_int32(n), (0))))))}
      int32
      { ((true = true) ->
-        (JC_46:
+        (JC_44:
         (neq_int(integer_of_int32(result), (0))
         <-> (forall i_2:int.
              ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(n))) ->
@@ -735,12 +735,12 @@ parameter safe_int8_of_integer_ :
 let all_zeros_0_ensures_default =
  fun (t_1 : int_P pointer) (n_1 : int32) (int_P_t_1_3_alloc_table : int_P alloc_table) (int_P_int_M_t_1_3 : (int_P, int32) memory) ->
   { ((true = true)
-    and (JC_77:
-        ((JC_74: le_int(offset_min(int_P_t_1_3_alloc_table, t_1), (0)))
-        and ((JC_75:
+    and (JC_73:
+        ((JC_70: le_int(offset_min(int_P_t_1_3_alloc_table, t_1), (0)))
+        and ((JC_71:
              ge_int(offset_max(int_P_t_1_3_alloc_table, t_1),
              integer_of_int32(n_1)))
-            and (JC_76: ge_int(integer_of_int32(n_1), (0))))))) }
+            and (JC_72: ge_int(integer_of_int32(n_1), (0))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -748,23 +748,23 @@ let all_zeros_0_ensures_default =
      (let k_0 = ref (any_int32 void) in
      (let __retres_1 = ref (any_int32 void) in
      try
-      (let jessie_56 = (C_41:
+      (let jessie_81 = (C_41:
                        begin
-                         (let jessie_48 = (k_0 := (safe_int32_of_integer_ (0))) in
+                         (let jessie_70 = (k_0 := (safe_int32_of_integer_ (0))) in
                          void);
                         try
-                         (let jessie_54 = begin
+                         (let jessie_78 = begin
                                             (loop_6:
                                             while true do
                                             { invariant
-                                                (JC_97:
-                                                ((JC_94:
+                                                (JC_92:
+                                                ((JC_89:
                                                  le_int((0),
                                                  integer_of_int32(k_0)))
-                                                and ((JC_95:
+                                                and ((JC_90:
                                                      le_int(integer_of_int32(k_0),
                                                      integer_of_int32(n_1)))
-                                                    and (JC_96:
+                                                    and (JC_91:
                                                         (forall i_3:int.
                                                          ((le_int((0), i_3)
                                                           and lt_int(i_3,
@@ -778,8 +778,8 @@ let all_zeros_0_ensures_default =
                                              begin
                                                [ { } unit { true } ];
                                               try
-                                               (let jessie_53 = begin
-                                                                  (let jessie_52 = 
+                                               (let jessie_77 = begin
+                                                                  (let jessie_76 = 
                                                                   begin
                                                                     (if 
                                                                     ((lt_int_ 
@@ -787,7 +787,7 @@ let all_zeros_0_ensures_default =
                                                                     (integer_of_int32 n_1))
                                                                     then void
                                                                     else
-                                                                    (let jessie_49 = 
+                                                                    (let jessie_71 = 
                                                                     (raise
                                                                     (Goto_while_2_break_exc
                                                                     void)) in
@@ -801,11 +801,11 @@ let all_zeros_0_ensures_default =
                                                                     ((shift t_1) 
                                                                     (integer_of_int32 !k_0))))))) (0))
                                                                    then
-                                                                    (let jessie_51 = 
+                                                                    (let jessie_74 = 
                                                                     (C_48:
                                                                     begin
                                                                       
-                                                                    (let jessie_50 = 
+                                                                    (let jessie_73 = 
                                                                     (__retres_1 := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
@@ -848,7 +848,7 @@ let all_zeros_0_ensures_default =
                          (while_2_break: void) end;
                         (C_54:
                         begin
-                          (let jessie_55 = (__retres_1 := (safe_int32_of_integer_ (1))) in
+                          (let jessie_80 = (__retres_1 := (safe_int32_of_integer_ (1))) in
                           void);
                          (raise (Return_label_exc void))
                         end)
@@ -862,7 +862,7 @@ let all_zeros_0_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_79:
+  { (JC_75:
     (neq_int(integer_of_int32(result), (0))
     <-> (forall i_4:int.
          ((le_int((0), i_4) and lt_int(i_4, integer_of_int32(n_1))) ->
@@ -871,12 +871,12 @@ let all_zeros_0_ensures_default =
 
 let all_zeros_0_safety =
  fun (t_1 : int_P pointer) (n_1 : int32) (int_P_t_1_3_alloc_table : int_P alloc_table) (int_P_int_M_t_1_3 : (int_P, int32) memory) ->
-  { (JC_77:
-    ((JC_74: le_int(offset_min(int_P_t_1_3_alloc_table, t_1), (0)))
-    and ((JC_75:
+  { (JC_73:
+    ((JC_70: le_int(offset_min(int_P_t_1_3_alloc_table, t_1), (0)))
+    and ((JC_71:
          ge_int(offset_max(int_P_t_1_3_alloc_table, t_1),
          integer_of_int32(n_1)))
-        and (JC_76: ge_int(integer_of_int32(n_1), (0)))))) }
+        and (JC_72: ge_int(integer_of_int32(n_1), (0)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -884,28 +884,28 @@ let all_zeros_0_safety =
      (let k_0 = ref (any_int32 void) in
      (let __retres_1 = ref (any_int32 void) in
      try
-      (let jessie_47 = (C_41:
+      (let jessie_67 = (C_41:
                        begin
-                         (let jessie_39 = (k_0 := (safe_int32_of_integer_ (0))) in
+                         (let jessie_56 = (k_0 := (safe_int32_of_integer_ (0))) in
                          void);
                         try
-                         (let jessie_45 = begin
+                         (let jessie_64 = begin
                                             (loop_5:
                                             while true do
-                                            { invariant (JC_88: true)
-                                              variant (JC_93 : sub_int(
+                                            { invariant (JC_84: true)
+                                              variant (JC_88 : sub_int(
                                                                integer_of_int32(n_1),
                                                                integer_of_int32(k_0))) }
                                              begin
                                                [ { } unit reads k_0
-                                                 { (JC_86:
-                                                   ((JC_83:
+                                                 { (JC_82:
+                                                   ((JC_79:
                                                     le_int((0),
                                                     integer_of_int32(k_0)))
-                                                   and ((JC_84:
+                                                   and ((JC_80:
                                                         le_int(integer_of_int32(k_0),
                                                         integer_of_int32(n_1)))
-                                                       and (JC_85:
+                                                       and (JC_81:
                                                            (forall i_3:int.
                                                             ((le_int((0),
                                                               i_3)
@@ -917,8 +917,8 @@ let all_zeros_0_safety =
                                                                     i_3))),
                                                              (0)))))))) } ];
                                               try
-                                               (let jessie_44 = begin
-                                                                  (let jessie_43 = 
+                                               (let jessie_63 = begin
+                                                                  (let jessie_62 = 
                                                                   begin
                                                                     (if 
                                                                     ((lt_int_ 
@@ -926,7 +926,7 @@ let all_zeros_0_safety =
                                                                     (integer_of_int32 n_1))
                                                                     then void
                                                                     else
-                                                                    (let jessie_40 = 
+                                                                    (let jessie_57 = 
                                                                     (raise
                                                                     (Goto_while_2_break_exc
                                                                     void)) in
@@ -935,15 +935,15 @@ let all_zeros_0_safety =
                                                                    ((neq_int_ 
                                                                     (integer_of_int32 
                                                                     (C_50:
-                                                                    (JC_90:
+                                                                    (JC_86:
                                                                     ((((offset_acc_ int_P_t_1_3_alloc_table) int_P_int_M_t_1_3) t_1) 
                                                                     (integer_of_int32 !k_0)))))) (0))
                                                                    then
-                                                                    (let jessie_42 = 
+                                                                    (let jessie_60 = 
                                                                     (C_48:
                                                                     begin
                                                                       
-                                                                    (let jessie_41 = 
+                                                                    (let jessie_59 = 
                                                                     (__retres_1 := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
@@ -958,7 +958,7 @@ let all_zeros_0_safety =
                                                                      
                                                                     (k_0 := 
                                                                     (C_52:
-                                                                    (JC_92:
+                                                                    (JC_87:
                                                                     (int32_of_integer_ 
                                                                     (C_51:
                                                                     ((add_int 
@@ -987,7 +987,7 @@ let all_zeros_0_safety =
                          (while_2_break: void) end;
                         (C_54:
                         begin
-                          (let jessie_46 = (__retres_1 := (safe_int32_of_integer_ (1))) in
+                          (let jessie_66 = (__retres_1 := (safe_int32_of_integer_ (1))) in
                           void);
                          (raise (Return_label_exc void))
                         end)
@@ -1006,12 +1006,12 @@ let all_zeros_0_safety =
 let all_zeros_1_ensures_default =
  fun (t : int_P pointer) (n : int32) (int_P_t_2_alloc_table : int_P alloc_table) (int_P_int_M_t_2 : (int_P, int32) memory) ->
   { ((true = true)
-    and (JC_43:
-        ((JC_40: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
-        and ((JC_41:
+    and (JC_41:
+        ((JC_38: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
+        and ((JC_39:
              ge_int(offset_max(int_P_t_2_alloc_table, t),
              integer_of_int32(n)))
-            and (JC_42: ge_int(integer_of_int32(n), (0))))))) }
+            and (JC_40: ge_int(integer_of_int32(n), (0))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1021,18 +1021,18 @@ let all_zeros_1_ensures_default =
      (let __retres_0 = ref (any_int32 void) in
      (C_20:
      begin
-       (let jessie_31 = (k := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_43 = (k := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_37 = begin
+       (let jessie_51 = begin
                           (loop_4:
                           while true do
                           { invariant
-                              (JC_65:
-                              ((JC_62: le_int((0), integer_of_int32(k)))
-                              and ((JC_63:
+                              (JC_61:
+                              ((JC_58: le_int((0), integer_of_int32(k)))
+                              and ((JC_59:
                                    le_int(integer_of_int32(k),
                                    integer_of_int32(n)))
-                                  and (JC_64:
+                                  and (JC_60:
                                       (forall i_1:int.
                                        ((le_int((0), i_1)
                                         and lt_int(i_1, integer_of_int32(k))) ->
@@ -1043,15 +1043,15 @@ let all_zeros_1_ensures_default =
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_36 = begin
+                             (let jessie_50 = begin
                                                 (if ((lt_int_ (integer_of_int32 !k)) 
                                                      (integer_of_int32 n))
                                                 then
                                                  begin
-                                                   (let jessie_33 = (C_27:
+                                                   (let jessie_47 = (C_27:
                                                                     begin
                                                                       
-                                                                    (let jessie_32 = 
+                                                                    (let jessie_45 = 
                                                                     (tmp := !k) in
                                                                     void);
                                                                     (C_30:
@@ -1075,14 +1075,14 @@ let all_zeros_1_ensures_default =
                                                                    ((shift t) 
                                                                     (integer_of_int32 !tmp))))))) (0))
                                                   then
-                                                   (let jessie_34 = (raise
+                                                   (let jessie_48 = (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
                                                    void)
                                                   else void)
                                                  end
                                                 else
-                                                 (let jessie_35 = (raise
+                                                 (let jessie_49 = (raise
                                                                    (Goto_while_1_break_exc
                                                                    void)) in
                                                  void));
@@ -1104,7 +1104,7 @@ let all_zeros_1_ensures_default =
        (while_1_break: void) end;
       (C_34:
       begin
-        (let jessie_38 = (__retres_0 := (C_33:
+        (let jessie_53 = (__retres_0 := (C_33:
                                         (safe_int32_of_integer_ (if ((eq_int_ 
                                                                     (integer_of_int32 !k)) 
                                                                     (integer_of_int32 n))
@@ -1120,7 +1120,7 @@ let all_zeros_1_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_45:
+  { (JC_43:
     (neq_int(integer_of_int32(result), (0))
     <-> (forall i_2:int.
          ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(n))) ->
@@ -1129,11 +1129,11 @@ let all_zeros_1_ensures_default =
 
 let all_zeros_1_safety =
  fun (t : int_P pointer) (n : int32) (int_P_t_2_alloc_table : int_P alloc_table) (int_P_int_M_t_2 : (int_P, int32) memory) ->
-  { (JC_43:
-    ((JC_40: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
-    and ((JC_41:
+  { (JC_41:
+    ((JC_38: le_int(offset_min(int_P_t_2_alloc_table, t), (0)))
+    and ((JC_39:
          ge_int(offset_max(int_P_t_2_alloc_table, t), integer_of_int32(n)))
-        and (JC_42: ge_int(integer_of_int32(n), (0)))))) }
+        and (JC_40: ge_int(integer_of_int32(n), (0)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1143,22 +1143,22 @@ let all_zeros_1_safety =
      (let __retres_0 = ref (any_int32 void) in
      (C_20:
      begin
-       (let jessie_23 = (k := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_30 = (k := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_29 = begin
+       (let jessie_38 = begin
                           (loop_3:
                           while true do
-                          { invariant (JC_54: true)
-                            variant (JC_59 : sub_int(integer_of_int32(n),
+                          { invariant (JC_52: true)
+                            variant (JC_56 : sub_int(integer_of_int32(n),
                                              integer_of_int32(k))) }
                            begin
                              [ { } unit reads k
-                               { (JC_52:
-                                 ((JC_49: le_int((0), integer_of_int32(k)))
-                                 and ((JC_50:
+                               { (JC_50:
+                                 ((JC_47: le_int((0), integer_of_int32(k)))
+                                 and ((JC_48:
                                       le_int(integer_of_int32(k),
                                       integer_of_int32(n)))
-                                     and (JC_51:
+                                     and (JC_49:
                                          (forall i_1:int.
                                           ((le_int((0), i_1)
                                            and lt_int(i_1,
@@ -1168,15 +1168,15 @@ let all_zeros_1_safety =
                                                                    i_1))),
                                            (0)))))))) } ];
                             try
-                             (let jessie_28 = begin
+                             (let jessie_37 = begin
                                                 (if ((lt_int_ (integer_of_int32 !k)) 
                                                      (integer_of_int32 n))
                                                 then
                                                  begin
-                                                   (let jessie_25 = (C_27:
+                                                   (let jessie_34 = (C_27:
                                                                     begin
                                                                       
-                                                                    (let jessie_24 = 
+                                                                    (let jessie_32 = 
                                                                     (tmp := !k) in
                                                                     void);
                                                                     (C_30:
@@ -1184,7 +1184,7 @@ let all_zeros_1_safety =
                                                                       
                                                                     (k := 
                                                                     (C_29:
-                                                                    (JC_57:
+                                                                    (JC_54:
                                                                     (int32_of_integer_ 
                                                                     (C_28:
                                                                     ((add_int 
@@ -1196,18 +1196,18 @@ let all_zeros_1_safety =
                                                   void;
                                                   (if ((neq_int_ (integer_of_int32 
                                                                   (C_32:
-                                                                  (JC_58:
+                                                                  (JC_55:
                                                                   ((((offset_acc_ int_P_t_2_alloc_table) int_P_int_M_t_2) t) 
                                                                    (integer_of_int32 !tmp)))))) (0))
                                                   then
-                                                   (let jessie_26 = (raise
+                                                   (let jessie_35 = (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
                                                    void)
                                                   else void)
                                                  end
                                                 else
-                                                 (let jessie_27 = (raise
+                                                 (let jessie_36 = (raise
                                                                    (Goto_while_1_break_exc
                                                                    void)) in
                                                  void));
@@ -1229,8 +1229,8 @@ let all_zeros_1_safety =
        (while_1_break: void) end;
       (C_34:
       begin
-        (let jessie_30 = (__retres_0 := (C_33:
-                                        (JC_61:
+        (let jessie_40 = (__retres_0 := (C_33:
+                                        (JC_57:
                                         (int32_of_integer_ (if ((eq_int_ 
                                                                  (integer_of_int32 !k)) 
                                                                 (integer_of_int32 n))
@@ -1265,17 +1265,17 @@ let all_zeros_ensures_default =
      (let __retres = ref (any_int32 void) in
      begin
        try
-        (let jessie_21 = begin
+        (let jessie_25 = begin
                            (loop_2:
                            while true do
                            { invariant
-                               (JC_31:
-                               ((JC_28:
+                               (JC_29:
+                               ((JC_26:
                                 le_int((0), integer_of_int32(mutable_n_0)))
-                               and ((JC_29:
+                               and ((JC_27:
                                     le_int(integer_of_int32(mutable_n_0),
                                     integer_of_int32(mutable_n_0@init)))
-                                   and (JC_30:
+                                   and (JC_28:
                                        (forall i:int32.
                                         ((le_int(integer_of_int32(mutable_n_0),
                                           integer_of_int32(i))
@@ -1289,10 +1289,10 @@ let all_zeros_ensures_default =
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_20 = begin
+                              (let jessie_24 = begin
                                                  (C_9:
                                                  begin
-                                                   (let jessie_17 = (mutable_n_0 := 
+                                                   (let jessie_21 = (mutable_n_0 := 
                                                                     (C_8:
                                                                     (safe_int32_of_integer_ 
                                                                     (C_7:
@@ -1310,13 +1310,13 @@ let all_zeros_ensures_default =
                                                                  (integer_of_int32 !mutable_n_0))))))) (0)))
                                                    then void
                                                    else
-                                                    (let jessie_18 = 
+                                                    (let jessie_22 = 
                                                     (raise
                                                      (Goto_while_0_break_exc
                                                      void)) in
                                                     void))
                                                   else
-                                                   (let jessie_19 = (raise
+                                                   (let jessie_23 = (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                    void))
@@ -1339,7 +1339,7 @@ let all_zeros_ensures_default =
         (while_0_break: void) end;
       (C_13:
       begin
-        (let jessie_22 = (__retres := (C_12:
+        (let jessie_27 = (__retres := (C_12:
                                       (safe_int32_of_integer_ (if ((lt_int_ 
                                                                     (integer_of_int32 !mutable_n_0)) (0))
                                                               then (1)
@@ -1377,11 +1377,11 @@ let all_zeros_safety =
      (let __retres = ref (any_int32 void) in
      begin
        try
-        (let jessie_15 = begin
+        (let jessie_16 = begin
                            (loop_1:
                            while true do
                            { invariant (JC_20: true)
-                             variant integer_of_int32((JC_25 : mutable_n_0)) }
+                             variant integer_of_int32((JC_24 : mutable_n_0)) }
                             begin
                               [ { } unit reads mutable_n_0
                                 { (JC_18:
@@ -1401,12 +1401,12 @@ let all_zeros_safety =
                                                                     integer_of_int32(i)))),
                                             (0)))))))) } ];
                              try
-                              (let jessie_14 = begin
+                              (let jessie_15 = begin
                                                  (C_9:
                                                  begin
-                                                   (let jessie_11 = (mutable_n_0 := 
+                                                   (let jessie_12 = (mutable_n_0 := 
                                                                     (C_8:
-                                                                    (JC_23:
+                                                                    (JC_22:
                                                                     (int32_of_integer_ 
                                                                     (C_7:
                                                                     ((sub_int 
@@ -1417,18 +1417,18 @@ let all_zeros_safety =
                                                    (if (not ((neq_int_ 
                                                               (integer_of_int32 
                                                                (C_11:
-                                                               (JC_24:
+                                                               (JC_23:
                                                                ((((offset_acc_ int_P_t_0_1_alloc_table) int_P_int_M_t_0_1) t_0) 
                                                                 (integer_of_int32 !mutable_n_0)))))) (0)))
                                                    then void
                                                    else
-                                                    (let jessie_12 = 
+                                                    (let jessie_13 = 
                                                     (raise
                                                      (Goto_while_0_break_exc
                                                      void)) in
                                                     void))
                                                   else
-                                                   (let jessie_13 = (raise
+                                                   (let jessie_14 = (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                    void))
@@ -1451,8 +1451,8 @@ let all_zeros_safety =
         (while_0_break: void) end;
       (C_13:
       begin
-        (let jessie_16 = (__retres := (C_12:
-                                      (JC_27:
+        (let jessie_18 = (__retres := (C_12:
+                                      (JC_25:
                                       (int32_of_integer_ (if ((lt_int_ 
                                                                (integer_of_int32 !mutable_n_0)) (0))
                                                          then (1)

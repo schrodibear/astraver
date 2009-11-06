@@ -525,7 +525,7 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_2 = (__retres := (C_1: ((safe_acc_ T_alloc_p_1) p))) in
+       (let jessie_5 = (__retres := (C_1: ((safe_acc_ T_alloc_p_1) p))) in
        void);
       (return := !__retres);
       (raise Return)
@@ -549,8 +549,8 @@ let f_safety =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_1 = (__retres := (C_1:
-                                    (JC_14:
+       (let jessie_2 = (__retres := (C_1:
+                                    (JC_13:
                                     (((acc_ T_p_1_alloc_table) T_alloc_p_1) p)))) in
        void);
       (return := !__retres);

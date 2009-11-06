@@ -315,17 +315,17 @@ parameter abs2 :
   int_P_int_M_p_0_2:(int_P, int) memory ref ->
    int_P_p_0_2_alloc_table:int_P alloc_table ->
     { } unit reads int_P_int_M_p_0_2 writes int_P_int_M_p_0_2
-    { ((true = true) -> (JC_22: ge_int(select(int_P_int_M_p_0_2, p_0), (0)))) }
+    { ((true = true) -> (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0)))) }
 
 parameter abs2_requires :
  p_0:int_P pointer ->
   int_P_int_M_p_0_2:(int_P, int) memory ref ->
    int_P_p_0_2_alloc_table:int_P alloc_table ->
-    { (JC_15:
-      ((JC_13: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
-      and (JC_14: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0)))))}
+    { (JC_14:
+      ((JC_12: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
+      and (JC_13: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0)))))}
     unit reads int_P_int_M_p_0_2 writes int_P_int_M_p_0_2
-    { ((true = true) -> (JC_22: ge_int(select(int_P_int_M_p_0_2, p_0), (0)))) }
+    { ((true = true) -> (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0)))) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -470,11 +470,11 @@ let abs1_ensures_default =
      (if ((lt_int_ (C_5: ((safe_acc_ !int_P_int_M_p_1) p))) (0))
      then
       (C_4:
-      (let jessie_10 = (let jessie_6 = (C_2:
+      (let jessie_12 = (let jessie_8 = (C_2:
                                        (neg_int (C_1:
                                                 ((safe_acc_ !int_P_int_M_p_1) p)))) in
-                       (let jessie_9 = p in
-                       (((safe_upd_ int_P_int_M_p_1) jessie_9) jessie_6))) in
+                       (let jessie_11 = p in
+                       (((safe_upd_ int_P_int_M_p_1) jessie_11) jessie_8))) in
       void))
      else void);
     (raise Return);
@@ -496,13 +496,13 @@ let abs1_safety =
                    (((acc_ int_P_p_1_alloc_table) !int_P_int_M_p_1) p)))) (0))
      then
       (C_4:
-      (let jessie_5 = (let jessie_1 = (C_2:
+      (let jessie_6 = (let jessie_2 = (C_2:
                                       (neg_int (C_1:
-                                               (JC_11:
+                                               (JC_10:
                                                (((acc_ int_P_p_1_alloc_table) !int_P_int_M_p_1) p))))) in
-                      (let jessie_4 = p in
-                      (JC_12:
-                      ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_4) jessie_1)))) in
+                      (let jessie_5 = p in
+                      (JC_11:
+                      ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_5) jessie_2)))) in
       void))
      else void);
     (raise Return);
@@ -516,20 +516,20 @@ let abs1_safety =
 let abs2_ensures_default =
  fun (p_0 : int_P pointer) (int_P_int_M_p_0_2 : (int_P, int) memory ref) (int_P_p_0_2_alloc_table : int_P alloc_table) ->
   { ((true = true)
-    and (JC_19:
-        ((JC_17: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
-        and (JC_18: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0)))))) }
+    and (JC_18:
+        ((JC_16: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
+        and (JC_17: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0)))))) }
   (init:
   try
    begin
      (if ((lt_int_ (C_11: ((safe_acc_ !int_P_int_M_p_0_2) p_0))) (0))
      then
       (C_10:
-      (let jessie_20 = (let jessie_16 = (C_8:
+      (let jessie_24 = (let jessie_20 = (C_8:
                                         (neg_int (C_7:
                                                  ((safe_acc_ !int_P_int_M_p_0_2) p_0)))) in
-                       (let jessie_19 = p_0 in
-                       (((safe_upd_ int_P_int_M_p_0_2) jessie_19) jessie_16))) in
+                       (let jessie_23 = p_0 in
+                       (((safe_upd_ int_P_int_M_p_0_2) jessie_23) jessie_20))) in
       void))
      else void);
     (raise Return);
@@ -538,28 +538,28 @@ let abs2_ensures_default =
    with
    Return ->
    void end)
-  { (JC_21: ge_int(select(int_P_int_M_p_0_2, p_0), (0))) }
+  { (JC_20: ge_int(select(int_P_int_M_p_0_2, p_0), (0))) }
 
 let abs2_safety =
  fun (p_0 : int_P pointer) (int_P_int_M_p_0_2 : (int_P, int) memory ref) (int_P_p_0_2_alloc_table : int_P alloc_table) ->
-  { (JC_19:
-    ((JC_17: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
-    and (JC_18: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0))))) }
+  { (JC_18:
+    ((JC_16: le_int(offset_min(int_P_p_0_2_alloc_table, p_0), (0)))
+    and (JC_17: ge_int(offset_max(int_P_p_0_2_alloc_table, p_0), (0))))) }
   (init:
   try
    begin
      (if ((lt_int_ (C_11:
-                   (JC_25:
+                   (JC_24:
                    (((acc_ int_P_p_0_2_alloc_table) !int_P_int_M_p_0_2) p_0)))) (0))
      then
       (C_10:
-      (let jessie_15 = (let jessie_11 = (C_8:
+      (let jessie_18 = (let jessie_14 = (C_8:
                                         (neg_int (C_7:
-                                                 (JC_27:
+                                                 (JC_25:
                                                  (((acc_ int_P_p_0_2_alloc_table) !int_P_int_M_p_0_2) p_0))))) in
-                       (let jessie_14 = p_0 in
-                       (JC_28:
-                       ((((upd_ int_P_p_0_2_alloc_table) int_P_int_M_p_0_2) jessie_14) jessie_11)))) in
+                       (let jessie_17 = p_0 in
+                       (JC_26:
+                       ((((upd_ int_P_p_0_2_alloc_table) int_P_int_M_p_0_2) jessie_17) jessie_14)))) in
       void))
      else void);
     (raise Return);

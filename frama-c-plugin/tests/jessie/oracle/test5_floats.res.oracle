@@ -389,18 +389,18 @@ let f_ensures_default =
      (let y = ref (any_gen_float Single) in
      (C_1:
      begin
-       (let jessie_11 = (x_0 := (((gen_float_of_real_safe Single) nearest_even) 1.0)) in
+       (let jessie_16 = (x_0 := (((gen_float_of_real_safe Single) nearest_even) 1.0)) in
        void);
       (C_2:
       begin
-        (let jessie_12 = (y := (((gen_float_of_real_safe Single) nearest_even) 0.0)) in
+        (let jessie_18 = (y := (((gen_float_of_real_safe Single) nearest_even) 0.0)) in
         void);
        try
-        (let jessie_17 = begin
+        (let jessie_25 = begin
                            (loop_2:
                            while true do
                            { invariant
-                               (JC_25:
+                               (JC_21:
                                eq_real(sub_real(float_value(x_0),
                                        float_value(y)),
                                1.0))
@@ -408,13 +408,13 @@ let f_ensures_default =
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_16 = begin
-                                                 (let jessie_15 = begin
+                              (let jessie_24 = begin
+                                                 (let jessie_23 = begin
                                                                     (if 
                                                                     ((neq_gen_float !y) !x_0)
                                                                     then void
                                                                     else
-                                                                    (let jessie_13 = 
+                                                                    (let jessie_19 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -422,7 +422,7 @@ let f_ensures_default =
                                                                    (C_5:
                                                                    begin
                                                                      
-                                                                    (let jessie_14 = 
+                                                                    (let jessie_21 = 
                                                                     (y := !x_0) in
                                                                     void);
                                                                     (C_7:
@@ -430,7 +430,7 @@ let f_ensures_default =
                                                                       
                                                                     (x_0 := 
                                                                     (C_6:
-                                                                    (JC_30:
+                                                                    (JC_25:
                                                                     ((((add_gen_float_safe Single) nearest_even) !x_0) 
                                                                     (((gen_float_of_real_safe Single) nearest_even) 1.0)))));
                                                                     !x_0
@@ -455,9 +455,9 @@ let f_ensures_default =
         Goto_while_0_break_exc jessie_1 ->
         (while_0_break: void) end;
        (assert
-       { (JC_33:
-         ((JC_31: eq_real(float_value(x_0), float_value(y)))
-         and (JC_32: eq_real(float_value(y), 0x2.0p24)))) };
+       { (JC_28:
+         ((JC_26: eq_real(float_value(x_0), float_value(y)))
+         and (JC_27: eq_real(float_value(y), 0x2.0p24)))) };
        void);
        void;
        (raise Return)
@@ -480,61 +480,63 @@ let f_safety =
      (let y = ref (any_gen_float Single) in
      (C_1:
      begin
-       (let jessie_4 = (x_0 := (JC_10:
+       (let jessie_5 = (x_0 := (JC_9:
                                (((gen_float_of_real Single) nearest_even) 1.0))) in
        void);
       (C_2:
       begin
-        (let jessie_5 = (y := (JC_12:
+        (let jessie_7 = (y := (JC_10:
                               (((gen_float_of_real Single) nearest_even) 0.0))) in
         void);
        try
-        (let jessie_10 = begin
+        (let jessie_14 = begin
                            (loop_1:
                            while true do
-                           { invariant (JC_15: true)
-                             variant (JC_21 : sub_int((16777216),
+                           { invariant (JC_13: true)
+                             variant (JC_17 : sub_int((16777216),
                                               truncate(float_value(y)))) }
                             begin
                               [ { } unit reads x_0,y
-                                { (JC_13:
+                                { (JC_11:
                                   eq_real(sub_real(float_value(x_0),
                                           float_value(y)),
                                   1.0)) } ];
                              try
-                              (let jessie_9 = begin
-                                                (let jessie_8 = begin
-                                                                  (if 
-                                                                  ((neq_gen_float !y) !x_0)
-                                                                  then void
-                                                                  else
-                                                                   (let jessie_6 = 
-                                                                   (raise
+                              (let jessie_13 = begin
+                                                 (let jessie_12 = begin
+                                                                    (if 
+                                                                    ((neq_gen_float !y) !x_0)
+                                                                    then void
+                                                                    else
+                                                                    (let jessie_8 = 
+                                                                    (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
-                                                                   void));
-                                                                 (C_5:
-                                                                 begin
-                                                                   (let jessie_7 = 
-                                                                   (y := !x_0) in
-                                                                   void);
-                                                                  (C_7:
-                                                                  begin
+                                                                    void));
+                                                                   (C_5:
+                                                                   begin
+                                                                     
+                                                                    (let jessie_10 = 
+                                                                    (y := !x_0) in
+                                                                    void);
+                                                                    (C_7:
+                                                                    begin
+                                                                      
                                                                     (x_0 := 
                                                                     (C_6:
-                                                                    (JC_20:
+                                                                    (JC_16:
                                                                     ((((add_gen_float Single) nearest_even) !x_0) 
-                                                                    (JC_19:
+                                                                    (JC_15:
                                                                     (((gen_float_of_real Single) nearest_even) 1.0))))));
-                                                                   !x_0
-                                                                  end)
-                                                                 end)
-                                                                end in
-                                                void);
-                                               (raise
-                                                (Loop_continue_exc
-                                                void))
-                                              end in
+                                                                    !x_0
+                                                                    end)
+                                                                   end)
+                                                                  end in
+                                                 void);
+                                                (raise
+                                                 (Loop_continue_exc
+                                                 void))
+                                               end in
                               void)
                               with
                               Loop_continue_exc jessie_3 ->
@@ -548,9 +550,9 @@ let f_safety =
         Goto_while_0_break_exc jessie_1 ->
         (while_0_break: void) end;
        [ { } unit reads x_0,y
-         { (JC_24:
-           ((JC_22: eq_real(float_value(x_0), float_value(y)))
-           and (JC_23: eq_real(float_value(y), 0x2.0p24)))) } ];
+         { (JC_20:
+           ((JC_18: eq_real(float_value(x_0), float_value(y)))
+           and (JC_19: eq_real(float_value(y), 0x2.0p24)))) } ];
        void;
        (raise Return)
       end)

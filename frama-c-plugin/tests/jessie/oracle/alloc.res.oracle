@@ -412,15 +412,15 @@ let f_ensures_default =
    begin
      (C_3:
      begin
-       (let jessie_6 = (ptr1 := (C_2:
-                                (JC_24:
-                                (alloc (safe_uint32_of_integer_ (10)))))) in
+       (let jessie_9 = (ptr1 := (C_2:
+                                (let jessie_8 = (safe_uint32_of_integer_ (10)) in
+                                (JC_21: (alloc jessie_8))))) in
        void);
       (C_5:
       begin
-        (let jessie_8 = (ptr2 := (C_4:
-                                 (JC_26:
-                                 (alloc (safe_uint32_of_integer_ (10)))))) in
+        (let jessie_12 = (ptr2 := (C_4:
+                                  (let jessie_11 = (safe_uint32_of_integer_ (10)) in
+                                  (JC_22: (alloc jessie_11))))) in
         void);
        (raise Return)
       end)
@@ -440,15 +440,15 @@ let f_safety =
    begin
      (C_3:
      begin
-       (let jessie_2 = (ptr1 := (C_2:
-                                (JC_20:
-                                (alloc_requires (safe_uint32_of_integer_ (10)))))) in
+       (let jessie_3 = (ptr1 := (C_2:
+                                (let jessie_2 = (safe_uint32_of_integer_ (10)) in
+                                (JC_19: (alloc_requires jessie_2))))) in
        void);
       (C_5:
       begin
-        (let jessie_4 = (ptr2 := (C_4:
-                                 (JC_22:
-                                 (alloc_requires (safe_uint32_of_integer_ (10)))))) in
+        (let jessie_6 = (ptr2 := (C_4:
+                                 (let jessie_5 = (safe_uint32_of_integer_ (10)) in
+                                 (JC_20: (alloc_requires jessie_5))))) in
         void);
        (raise Return)
       end)

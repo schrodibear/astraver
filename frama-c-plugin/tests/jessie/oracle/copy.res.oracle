@@ -605,17 +605,17 @@ let copy_ensures_default =
      (let tmp = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_15 = (i := n) in void);
+       (let jessie_20 = (i := n) in void);
       try
-       (let jessie_25 = begin
+       (let jessie_33 = begin
                           (loop_2:
                           while true do
                           { invariant
-                              (JC_31:
-                              ((JC_29:
+                              (JC_29:
+                              ((JC_27:
                                le_int(integer_of_int32(i),
                                integer_of_int32(n)))
-                              and (JC_30:
+                              and (JC_28:
                                   (forall k:int32.
                                    ((le_int(integer_of_int32(i),
                                      integer_of_int32(k))
@@ -631,13 +631,13 @@ let copy_ensures_default =
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_24 = begin
-                                                (let jessie_23 = begin
-                                                                   (let jessie_17 = 
+                             (let jessie_32 = begin
+                                                (let jessie_31 = begin
+                                                                   (let jessie_24 = 
                                                                    (C_6:
                                                                    begin
                                                                      
-                                                                    (let jessie_16 = 
+                                                                    (let jessie_22 = 
                                                                     (tmp := !i) in
                                                                     void);
                                                                     (C_9:
@@ -659,25 +659,25 @@ let copy_ensures_default =
                                                                     (integer_of_int32 !tmp)) (0))
                                                                   then void
                                                                   else
-                                                                   (let jessie_18 = 
+                                                                   (let jessie_25 = 
                                                                    (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                    void));
                                                                   (C_14:
-                                                                  (let jessie_19 = 
+                                                                  (let jessie_27 = 
                                                                   (C_11:
                                                                   ((safe_acc_ int_P_int_M_t1_1) 
                                                                    (C_10:
                                                                    ((shift t1) 
                                                                     (integer_of_int32 !i))))) in
-                                                                  (let jessie_22 = 
+                                                                  (let jessie_30 = 
                                                                   (C_12:
                                                                   ((shift t2) 
                                                                    (integer_of_int32 !i))) in
                                                                   begin
-                                                                    (((safe_upd_ int_P_int_M_t2_2) jessie_22) jessie_19);
-                                                                   jessie_19
+                                                                    (((safe_upd_ int_P_int_M_t2_2) jessie_30) jessie_27);
+                                                                   jessie_27
                                                                   end)))
                                                                  end in
                                                 void);
@@ -730,13 +730,13 @@ let copy_safety =
      (let tmp = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_4 = (i := n) in void);
+       (let jessie_5 = (i := n) in void);
       try
-       (let jessie_14 = begin
+       (let jessie_18 = begin
                           (loop_1:
                           while true do
                           { invariant (JC_21: true)
-                            variant integer_of_int32((JC_28 : i)) }
+                            variant integer_of_int32((JC_26 : i)) }
                            begin
                              [ { } unit reads i,int_P_int_M_t2_2
                                { (JC_19:
@@ -756,13 +756,13 @@ let copy_safety =
                                                         shift(t1,
                                                         integer_of_int32(k)))))))))) } ];
                             try
-                             (let jessie_13 = begin
-                                                (let jessie_12 = begin
-                                                                   (let jessie_6 = 
+                             (let jessie_17 = begin
+                                                (let jessie_16 = begin
+                                                                   (let jessie_9 = 
                                                                    (C_6:
                                                                    begin
                                                                      
-                                                                    (let jessie_5 = 
+                                                                    (let jessie_7 = 
                                                                     (tmp := !i) in
                                                                     void);
                                                                     (C_9:
@@ -770,7 +770,7 @@ let copy_safety =
                                                                       
                                                                     (i := 
                                                                     (C_8:
-                                                                    (JC_24:
+                                                                    (JC_23:
                                                                     (int32_of_integer_ 
                                                                     (C_7:
                                                                     ((sub_int 
@@ -785,26 +785,26 @@ let copy_safety =
                                                                     (integer_of_int32 !tmp)) (0))
                                                                   then void
                                                                   else
-                                                                   (let jessie_7 = 
+                                                                   (let jessie_10 = 
                                                                    (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                    void));
                                                                   (C_14:
-                                                                  (let jessie_8 = 
+                                                                  (let jessie_12 = 
                                                                   (C_11:
-                                                                  (JC_26:
+                                                                  (JC_24:
                                                                   ((((offset_acc_ int_P_t1_1_alloc_table) int_P_int_M_t1_1) t1) 
                                                                    (integer_of_int32 !i)))) in
-                                                                  (let jessie_9 = t2 in
-                                                                  (let jessie_10 = 
+                                                                  (let jessie_13 = t2 in
+                                                                  (let jessie_14 = 
                                                                   (integer_of_int32 !i) in
-                                                                  (let jessie_11 = 
-                                                                  ((shift jessie_9) jessie_10) in
+                                                                  (let jessie_15 = 
+                                                                  ((shift jessie_13) jessie_14) in
                                                                   begin
-                                                                    (JC_27:
-                                                                    (((((offset_upd_ int_P_t2_2_alloc_table) int_P_int_M_t2_2) jessie_9) jessie_10) jessie_8));
-                                                                   jessie_8
+                                                                    (JC_25:
+                                                                    (((((offset_upd_ int_P_t2_2_alloc_table) int_P_int_M_t2_2) jessie_13) jessie_14) jessie_12));
+                                                                   jessie_12
                                                                   end)))))
                                                                  end in
                                                 void);

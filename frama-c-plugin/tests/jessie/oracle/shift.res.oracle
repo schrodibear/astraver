@@ -399,9 +399,9 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_2 = (__retres := (C_2:
+       (let jessie_5 = (__retres := (C_2:
                                     (safe_int32_of_integer_ (C_1:
-                                                            (JC_14:
+                                                            (JC_11:
                                                             ((div_int 
                                                               (integer_of_int32 x)) (2))))))) in
        void);
@@ -426,10 +426,10 @@ let f_safety =
      (let __retres = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_1 = (__retres := (C_2:
-                                    (JC_12:
+       (let jessie_2 = (__retres := (C_2:
+                                    (JC_10:
                                     (int32_of_integer_ (C_1:
-                                                       (JC_11:
+                                                       (JC_9:
                                                        ((div_int_ (integer_of_int32 x)) (2)))))))) in
        void);
       (return := !__retres);

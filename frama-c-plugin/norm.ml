@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: norm.ml,v 1.1 2009-09-08 11:11:43 monate Exp $ *)
+(* $Id: norm.ml,v 1.2 2009-11-06 13:48:28 marche Exp $ *)
 
 (* TODO:
 
@@ -239,16 +239,19 @@ object(self)
       DoChildren
 
   method vglob_aux g = match g with
-    | GVar(v,_init,loc) ->
+    | GVar(v,_init,_loc) ->
         (* Make sure variable declaration is treated before definition *)
         ignore (visitFramacVarDecl (self:>frama_c_visitor) v);
         if VarinfoSet.mem v !allocvarset then
           (* Allocate memory for new reference variable *)
           let ty = VarinfoHashtbl.find var_to_array_type v in
-          let elemty = element_type ty in
           let size = array_size ty in
+(* Disabled: anyway, it is useless to generate code for that,
+   a post-condition should be generated instead (bts0284)
+          let elemty = element_type ty in
           let ast = mkalloc_array_statement v elemty (array_size ty) loc in
           attach_globinit ast;
+*)
           (* Define a global validity invariant *)
           let p =
             Pvalid_range(
@@ -911,8 +914,10 @@ object(self)
           | [GVar (v,_,_)] ->
               if VarinfoSet.mem v !varset then
                 (* Allocate memory for new reference variable *)
+(* Disabled, see BTS 0284
                 let ast = mkalloc_statement v (pointed_type v.vtype) v.vdecl in
                 attach_globinit ast;
+*)
                 (* Define a global validity invariant *)
                 let p =
                   Pvalid_range(
@@ -1143,8 +1148,10 @@ object
         if retypable_var v then
           begin
             retype_var v;
+(* Disabled, see BTS 0284
             let ast = mkalloc_statement v (pointed_type v.vtype) v.vdecl in
             attach_globinit ast
+*)
           end;
         SkipChildren
     | GVarDecl (_,v,_) ->

@@ -361,13 +361,13 @@ parameter test2 :
  tt:unit ->
   { } gen_float
   { ((true = true) ->
-     (JC_22: eq_real(float_value(result), 0.100000001490116119384765625))) }
+     (JC_18: eq_real(float_value(result), 0.100000001490116119384765625))) }
 
 parameter test2_requires :
  tt:unit ->
   { } gen_float
   { ((true = true) ->
-     (JC_22: eq_real(float_value(result), 0.100000001490116119384765625))) }
+     (JC_18: eq_real(float_value(result), 0.100000001490116119384765625))) }
 
 let test1_ensures_default =
  fun (tt : unit) ->
@@ -379,8 +379,8 @@ let test1_ensures_default =
      (let __retres = ref (any_gen_float Double) in
      (C_2:
      begin
-       (let jessie_2 = (__retres := (C_1:
-                                    (JC_16:
+       (let jessie_5 = (__retres := (C_1:
+                                    (JC_12:
                                     ((((mul_gen_float_safe Double) nearest_even) 
                                       (((gen_float_of_real_safe Double) nearest_even) 2.0)) 
                                      (((gen_float_of_real_safe Double) nearest_even) 3.5))))) in
@@ -405,12 +405,12 @@ let test1_safety =
      (let __retres = ref (any_gen_float Double) in
      (C_2:
      begin
-       (let jessie_1 = (__retres := (C_1:
-                                    (JC_14:
+       (let jessie_2 = (__retres := (C_1:
+                                    (JC_11:
                                     ((((mul_gen_float Double) nearest_even) 
-                                      (JC_12:
+                                      (JC_9:
                                       (((gen_float_of_real Double) nearest_even) 2.0))) 
-                                     (JC_13:
+                                     (JC_10:
                                      (((gen_float_of_real Double) nearest_even) 3.5)))))) in
        void);
       (return := !__retres);
@@ -433,7 +433,7 @@ let test2_ensures_default =
      (let __retres_0 = ref (any_gen_float Single) in
      (C_4:
      begin
-       (let jessie_4 = (__retres_0 := (((gen_float_of_real_safe Single) nearest_even) 0.1)) in
+       (let jessie_11 = (__retres_0 := (((gen_float_of_real_safe Single) nearest_even) 0.1)) in
        void);
       (return := !__retres_0);
       (raise Return)
@@ -443,11 +443,11 @@ let test2_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_21: eq_real(float_value(result), 0.100000001490116119384765625)) }
+  { (JC_17: eq_real(float_value(result), 0.100000001490116119384765625)) }
 
 let test2_safety =
  fun (tt : unit) ->
-  { (JC_20: true) }
+  { (JC_16: true) }
   (init:
   (let return = ref (any_gen_float Single) in
   try
@@ -455,7 +455,7 @@ let test2_safety =
      (let __retres_0 = ref (any_gen_float Single) in
      (C_4:
      begin
-       (let jessie_3 = (__retres_0 := (JC_26:
+       (let jessie_8 = (__retres_0 := (JC_21:
                                       (((gen_float_of_real Single) nearest_even) 0.1))) in
        void);
       (return := !__retres_0);

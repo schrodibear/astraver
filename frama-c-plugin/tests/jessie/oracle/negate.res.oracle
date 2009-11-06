@@ -507,28 +507,28 @@ let negate_ensures_default =
      (let i = ref (any_int void) in
      (C_1:
      begin
-       (let jessie_14 = (i := (0)) in void);
+       (let jessie_18 = (i := (0)) in void);
       try
-       (let jessie_23 = begin
+       (let jessie_29 = begin
                           (loop_2:
                           while true do
                           { invariant
-                              ((JC_33:
-                               ((JC_30: le_int((0), i))
-                               and ((JC_31: le_int(i, n))
-                                   and (JC_32:
+                              ((JC_32:
+                               ((JC_29: le_int((0), i))
+                               and ((JC_30: le_int(i, n))
+                                   and (JC_31:
                                        (forall k:int.
                                         ((le_int((0), k) and lt_int(k, i)) ->
                                          eq_int(select(int_P_int_M_t_1,
                                                 shift(t, k)),
                                          neg_int(select(int_P_int_M_t_1@init,
                                                  shift(t@init, k@init))))))))))
-                              and ((JC_35:
+                              and ((JC_34:
                                    not_assigns(int_P_t_1_alloc_table@loop_2,
                                    int_P_int_M_t_1@loop_2, int_P_int_M_t_1,
                                    pset_range(pset_singleton(t), (0),
                                    sub_int(i, (1)))))
-                                  and (JC_36:
+                                  and (JC_35:
                                       not_assigns(int_P_t_1_alloc_table@init,
                                       int_P_int_M_t_1@init, int_P_int_M_t_1,
                                       pset_range(pset_singleton(t@init), (0),
@@ -537,31 +537,31 @@ let negate_ensures_default =
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_22 = begin
-                                                (let jessie_21 = begin
+                             (let jessie_28 = begin
+                                                (let jessie_27 = begin
                                                                    (if 
                                                                    ((lt_int_ !i) n)
                                                                    then void
                                                                    else
-                                                                    (let jessie_15 = 
+                                                                    (let jessie_19 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
                                                                   (C_13:
                                                                   begin
-                                                                    (let jessie_20 = 
-                                                                    (let jessie_16 = 
+                                                                    (let jessie_25 = 
+                                                                    (let jessie_21 = 
                                                                     (C_10:
                                                                     (neg_int 
                                                                     (C_9:
                                                                     ((safe_acc_ !int_P_int_M_t_1) 
                                                                     (C_8:
                                                                     ((shift t) !i)))))) in
-                                                                    (let jessie_19 = 
+                                                                    (let jessie_24 = 
                                                                     (C_11:
                                                                     ((shift t) !i)) in
-                                                                    (((safe_upd_ int_P_int_M_t_1) jessie_19) jessie_16))) in
+                                                                    (((safe_upd_ int_P_int_M_t_1) jessie_24) jessie_21))) in
                                                                     void);
                                                                    (C_15:
                                                                    begin
@@ -621,13 +621,13 @@ let negate_safety =
      (let i = ref (any_int void) in
      (C_1:
      begin
-       (let jessie_4 = (i := (0)) in void);
+       (let jessie_5 = (i := (0)) in void);
       try
-       (let jessie_13 = begin
+       (let jessie_16 = begin
                           (loop_1:
                           while true do
                           { invariant (JC_24: true)
-                            variant (JC_29 : sub_int(n, i)) }
+                            variant (JC_28 : sub_int(n, i)) }
                            begin
                              [ { } unit reads i,int_P_int_M_t_1
                                { (JC_22:
@@ -641,32 +641,32 @@ let negate_safety =
                                            neg_int(select(int_P_int_M_t_1@init,
                                                    shift(t@init, k@init)))))))))) } ];
                             try
-                             (let jessie_12 = begin
-                                                (let jessie_11 = begin
+                             (let jessie_15 = begin
+                                                (let jessie_14 = begin
                                                                    (if 
                                                                    ((lt_int_ !i) n)
                                                                    then void
                                                                    else
-                                                                    (let jessie_5 = 
+                                                                    (let jessie_6 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
                                                                   (C_13:
                                                                   begin
-                                                                    (let jessie_10 = 
-                                                                    (let jessie_6 = 
+                                                                    (let jessie_12 = 
+                                                                    (let jessie_8 = 
                                                                     (C_10:
                                                                     (neg_int 
                                                                     (C_9:
-                                                                    (JC_27:
+                                                                    (JC_26:
                                                                     ((((offset_acc_ int_P_t_1_alloc_table) !int_P_int_M_t_1) t) !i))))) in
-                                                                    (let jessie_7 = t in
-                                                                    (let jessie_8 = !i in
-                                                                    (let jessie_9 = 
-                                                                    ((shift jessie_7) jessie_8) in
-                                                                    (JC_28:
-                                                                    (((((offset_upd_ int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_7) jessie_8) jessie_6)))))) in
+                                                                    (let jessie_9 = t in
+                                                                    (let jessie_10 = !i in
+                                                                    (let jessie_11 = 
+                                                                    ((shift jessie_9) jessie_10) in
+                                                                    (JC_27:
+                                                                    (((((offset_upd_ int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_9) jessie_10) jessie_8)))))) in
                                                                     void);
                                                                    (C_15:
                                                                    begin

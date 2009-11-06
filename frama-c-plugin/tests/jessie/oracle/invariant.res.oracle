@@ -564,7 +564,7 @@ let sum_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_5:
      begin
-       (let jessie_2 = (__retres := (C_4:
+       (let jessie_5 = (__retres := (C_4:
                                     (safe_int32_of_integer_ (C_3:
                                                             ((add_int 
                                                               (integer_of_int32 
@@ -597,8 +597,8 @@ let sum_safety =
      (let __retres = ref (any_int32 void) in
      (C_5:
      begin
-       (let jessie_1 = (__retres := (C_4:
-                                    (JC_11:
+       (let jessie_2 = (__retres := (C_4:
+                                    (JC_10:
                                     (int32_of_integer_ (C_3:
                                                        ((add_int (integer_of_int32 
                                                                   (C_2:

@@ -1252,14 +1252,14 @@ parameter DREMM :
        double_P_X_0_7_alloc_table:double_P alloc_table ->
         { } unit reads double_P_double_M_X_0_7 writes double_P_double_M_X_0_7
         { ((true = true) ->
-           (JC_133:
-           ((JC_131:
-            ((JC_129:
+           (JC_117:
+           ((JC_115:
+            ((JC_113:
              is_exact_int_mat_bounded_by(X_0_0, integer_of_int32(LDX_0_0),
              integer_of_int32(N_1_0), integer_of_int32(K_1), (0),
              sub_int(integer_of_int32(p_2), (1)), double_P_X_0_7_alloc_table,
              double_P_double_M_X_0_7))
-            and (JC_130:
+            and (JC_114:
                 (forall i_3_0:int.
                  (forall j_3_0:int.
                   ((le_int((0), i_3_0)
@@ -1278,7 +1278,7 @@ parameter DREMM :
                                                  integer_of_int32(LDX_0_0@)),
                                          j_3_0@)))),
                     real_of_int(mul_int(d, integer_of_int32(p_2))))))))))))
-           and (JC_132:
+           and (JC_116:
                not_assigns(double_P_X_0_7_alloc_table@,
                double_P_double_M_X_0_7@, double_P_double_M_X_0_7,
                pset_range(pset_singleton(X_0_0@), (0),
@@ -1295,20 +1295,20 @@ parameter DREMM_requires :
      LDX_0_0:int32 ->
       double_P_double_M_X_0_7:(double_P, gen_float) memory ref ->
        double_P_X_0_7_alloc_table:double_P alloc_table ->
-        { (JC_120:
+        { (JC_104:
           is_exact_int_mat(X_0_0, integer_of_int32(LDX_0_0),
           integer_of_int32(N_1_0), integer_of_int32(K_1),
           double_P_X_0_7_alloc_table, double_P_double_M_X_0_7))}
         unit reads double_P_double_M_X_0_7 writes double_P_double_M_X_0_7
         { ((true = true) ->
-           (JC_133:
-           ((JC_131:
-            ((JC_129:
+           (JC_117:
+           ((JC_115:
+            ((JC_113:
              is_exact_int_mat_bounded_by(X_0_0, integer_of_int32(LDX_0_0),
              integer_of_int32(N_1_0), integer_of_int32(K_1), (0),
              sub_int(integer_of_int32(p_2), (1)), double_P_X_0_7_alloc_table,
              double_P_double_M_X_0_7))
-            and (JC_130:
+            and (JC_114:
                 (forall i_3_0:int.
                  (forall j_3_0:int.
                   ((le_int((0), i_3_0)
@@ -1327,7 +1327,7 @@ parameter DREMM_requires :
                                                  integer_of_int32(LDX_0_0@)),
                                          j_3_0@)))),
                     real_of_int(mul_int(d, integer_of_int32(p_2))))))))))))
-           and (JC_132:
+           and (JC_116:
                not_assigns(double_P_X_0_7_alloc_table@,
                double_P_double_M_X_0_7@, double_P_double_M_X_0_7,
                pset_range(pset_singleton(X_0_0@), (0),
@@ -1350,13 +1350,13 @@ parameter DTRSM :
            { } unit reads double_P_double_M_X_1_9
            writes double_P_double_M_X_1_9
            { ((true = true) ->
-              (JC_195:
-              ((JC_193:
+              (JC_168:
+              ((JC_166:
                is_exact_int_mat_bounded_by(X_1_0, integer_of_int32(LDX_1_0),
                integer_of_int32(N_2_0), integer_of_int32(K_2),
                neg_int(max_int), max_int, double_P_X_1_9_alloc_table,
                double_P_double_M_X_1_9))
-              and (JC_194:
+              and (JC_167:
                   not_assigns(double_P_X_1_9_alloc_table@,
                   double_P_double_M_X_1_9@, double_P_double_M_X_1_9,
                   pset_range(pset_singleton(X_1_0@), (0),
@@ -1377,15 +1377,15 @@ parameter DTRSM_requires :
         double_P_X_1_9_alloc_table:double_P alloc_table ->
          double_P_A_1_8_alloc_table:double_P alloc_table ->
           double_P_double_M_A_1_8:(double_P, gen_float) memory ->
-           { (JC_183:
-             ((JC_180: le_int(integer_of_int32(N_2_0), (55)))
-             and ((JC_181:
+           { (JC_156:
+             ((JC_153: le_int(integer_of_int32(N_2_0), (55)))
+             and ((JC_154:
                   is_exact_int_mat_bounded_by(X_1_0,
                   integer_of_int32(LDX_1_0), integer_of_int32(N_2_0),
                   integer_of_int32(K_2), (0),
                   sub_int(l_pmax(integer_of_int32(N_2_0)), (1)),
                   double_P_X_1_9_alloc_table, double_P_double_M_X_1_9))
-                 and (JC_182:
+                 and (JC_155:
                      is_exact_int_mat_bounded_by(A_1,
                      integer_of_int32(LDA_1), integer_of_int32(N_2_0),
                      integer_of_int32(N_2_0), (0),
@@ -1393,13 +1393,13 @@ parameter DTRSM_requires :
                      double_P_A_1_8_alloc_table, double_P_double_M_A_1_8)))))}
            unit reads double_P_double_M_X_1_9 writes double_P_double_M_X_1_9
            { ((true = true) ->
-              (JC_195:
-              ((JC_193:
+              (JC_168:
+              ((JC_166:
                is_exact_int_mat_bounded_by(X_1_0, integer_of_int32(LDX_1_0),
                integer_of_int32(N_2_0), integer_of_int32(K_2),
                neg_int(max_int), max_int, double_P_X_1_9_alloc_table,
                double_P_double_M_X_1_9))
-              and (JC_194:
+              and (JC_167:
                   not_assigns(double_P_X_1_9_alloc_table@,
                   double_P_double_M_X_1_9@, double_P_double_M_X_1_9,
                   pset_range(pset_singleton(X_1_0@), (0),
@@ -1424,13 +1424,13 @@ parameter LZ_TRSM :
             { } unit reads double_P_double_M_B_11
             writes double_P_double_M_B_11
             { ((true = true) ->
-               (JC_348:
-               ((JC_346:
+               (JC_289:
+               ((JC_287:
                 is_exact_int_mat_bounded_by(B, integer_of_int32(LDB),
                 integer_of_int32(N_0_0), integer_of_int32(K_0), (0),
                 sub_int(integer_of_int32(p_1), (1)),
                 double_P_B_11_alloc_table, double_P_double_M_B_11))
-               and (JC_347:
+               and (JC_288:
                    not_assigns(double_P_B_11_alloc_table@,
                    double_P_double_M_B_11@, double_P_double_M_B_11,
                    pset_range(pset_singleton(B@), (0),
@@ -1452,22 +1452,22 @@ parameter LZ_TRSM_requires :
          double_P_B_11_alloc_table:double_P alloc_table ->
           double_P_A_0_10_alloc_table:double_P alloc_table ->
            double_P_double_M_A_0_10:(double_P, gen_float) memory ->
-            { (JC_334:
-              ((JC_329: le_int((2), integer_of_int32(p_1)))
-              and ((JC_330:
+            { (JC_275:
+              ((JC_270: le_int((2), integer_of_int32(p_1)))
+              and ((JC_271:
                    le_int(mul_int(mul_int(sub_int(integer_of_int32(p_1), (1)),
                                   sub_int(integer_of_int32(p_1), (1))),
                           integer_of_int32(N_0_0)),
                    max_int))
-                  and ((JC_331: (not same_block(B, A_0)))
-                      and ((JC_332:
+                  and ((JC_272: (not same_block(B, A_0)))
+                      and ((JC_273:
                            is_exact_int_mat_bounded_by(A_0,
                            integer_of_int32(LDA_0), integer_of_int32(N_0_0),
                            integer_of_int32(N_0_0), (0),
                            sub_int(integer_of_int32(p_1), (1)),
                            double_P_A_0_10_alloc_table,
                            double_P_double_M_A_0_10))
-                          and (JC_333:
+                          and (JC_274:
                               is_exact_int_mat_bounded_by(B,
                               integer_of_int32(LDB), integer_of_int32(N_0_0),
                               integer_of_int32(K_0), (0),
@@ -1476,13 +1476,13 @@ parameter LZ_TRSM_requires :
                               double_P_double_M_B_11)))))))}
             unit reads double_P_double_M_B_11 writes double_P_double_M_B_11
             { ((true = true) ->
-               (JC_348:
-               ((JC_346:
+               (JC_289:
+               ((JC_287:
                 is_exact_int_mat_bounded_by(B, integer_of_int32(LDB),
                 integer_of_int32(N_0_0), integer_of_int32(K_0), (0),
                 sub_int(integer_of_int32(p_1), (1)),
                 double_P_B_11_alloc_table, double_P_double_M_B_11))
-               and (JC_347:
+               and (JC_288:
                    not_assigns(double_P_B_11_alloc_table@,
                    double_P_double_M_B_11@, double_P_double_M_B_11,
                    pset_range(pset_singleton(B@), (0),
@@ -1496,25 +1496,25 @@ parameter Nmax :
  p_0_0:int32 ->
   { } int32
   { ((true = true) ->
-     (JC_266:
-     ((JC_263: delay(integer_of_int32(result), integer_of_int32(p_0_0)))
-     and ((JC_264:
+     (JC_221:
+     ((JC_218: delay(integer_of_int32(result), integer_of_int32(p_0_0)))
+     and ((JC_219:
           (forall q:int.
            ((le_int((1), q) and le_int(q, integer_of_int32(result)))
            <-> delay(q, integer_of_int32(p_0_0)))))
-         and (JC_265: le_int(integer_of_int32(result), (55))))))) }
+         and (JC_220: le_int(integer_of_int32(result), (55))))))) }
 
 parameter Nmax_requires :
  p_0_0:int32 ->
-  { (JC_255: le_int((2), integer_of_int32(p_0_0)))} int32
+  { (JC_210: le_int((2), integer_of_int32(p_0_0)))} int32
   { ((true = true) ->
-     (JC_266:
-     ((JC_263: delay(integer_of_int32(result), integer_of_int32(p_0_0)))
-     and ((JC_264:
+     (JC_221:
+     ((JC_218: delay(integer_of_int32(result), integer_of_int32(p_0_0)))
+     and ((JC_219:
           (forall q:int.
            ((le_int((1), q) and le_int(q, integer_of_int32(result)))
            <-> delay(q, integer_of_int32(p_0_0)))))
-         and (JC_265: le_int(integer_of_int32(result), (55))))))) }
+         and (JC_220: le_int(integer_of_int32(result), (55))))))) }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1673,14 +1673,14 @@ parameter pmax :
  N_3:int32 ->
   { } int32
   { ((true = true) ->
-     (JC_312:
+     (JC_257:
      eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_3))))) }
 
 parameter pmax_requires :
  N_3:int32 ->
   { } int32
   { ((true = true) ->
-     (JC_312:
+     (JC_257:
      eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_3))))) }
 
 parameter safe_int32_of_integer_ :
@@ -1745,18 +1745,18 @@ let DGEMM_NEG_ensures_default =
      (let k_0 = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_51 = (i_3 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_59 = (i_3 := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_70 = begin
+       (let jessie_84 = begin
                           (loop_4:
                           while true do
                           { invariant
-                              ((JC_85:
-                               ((JC_82: le_int((0), integer_of_int32(i_3)))
-                               and ((JC_83:
+                              ((JC_71:
+                               ((JC_68: le_int((0), integer_of_int32(i_3)))
+                               and ((JC_69:
                                     le_int(integer_of_int32(i_3),
                                     integer_of_int32(N_2)))
-                                   and (JC_84:
+                                   and (JC_70:
                                        is_exact_int_mat_bounded_by(Y,
                                        integer_of_int32(LDY),
                                        integer_of_int32(i_3),
@@ -1769,7 +1769,7 @@ let DGEMM_NEG_ensures_default =
                                        sub_int(integer_of_int32(p_0), (1)),
                                        double_P_Y_6_alloc_table,
                                        double_P_double_M_Y_6)))))
-                              and ((JC_87:
+                              and ((JC_73:
                                    not_assigns(double_P_Y_6_alloc_table@loop_4,
                                    double_P_double_M_Y_6@loop_4,
                                    double_P_double_M_Y_6,
@@ -1779,7 +1779,7 @@ let DGEMM_NEG_ensures_default =
                                                    integer_of_int32(LDY)),
                                            integer_of_int32(K)),
                                    (1)))))
-                                  and (JC_88:
+                                  and (JC_74:
                                       not_assigns(double_P_Y_6_alloc_table@init,
                                       double_P_double_M_Y_6@init,
                                       double_P_double_M_Y_6,
@@ -1794,46 +1794,46 @@ let DGEMM_NEG_ensures_default =
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_69 = begin
-                                                (let jessie_68 = begin
+                             (let jessie_83 = begin
+                                                (let jessie_82 = begin
                                                                    (if 
                                                                    ((lt_int_ 
                                                                     (integer_of_int32 !i_3)) 
                                                                     (integer_of_int32 N_2))
                                                                    then void
                                                                    else
-                                                                    (let jessie_52 = 
+                                                                    (let jessie_60 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
                                                                   (C_7:
                                                                   begin
-                                                                    (let jessie_53 = 
+                                                                    (let jessie_62 = 
                                                                     (k_0 := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
                                                                    try
-                                                                    (let jessie_67 = 
+                                                                    (let jessie_80 = 
                                                                     begin
                                                                       
                                                                     (loop_5:
                                                                     while true do
                                                                     { invariant
                                                                     (
-                                                                    (JC_92:
+                                                                    (JC_78:
                                                                     (
-                                                                    (JC_89:
+                                                                    (JC_75:
                                                                     le_int((0),
                                                                     integer_of_int32(k_0)))
                                                                     and 
                                                                     (
-                                                                    (JC_90:
+                                                                    (JC_76:
                                                                     le_int(
                                                                     integer_of_int32(k_0),
                                                                     integer_of_int32(K)))
                                                                     and 
-                                                                    (JC_91:
+                                                                    (JC_77:
                                                                     temporary_is_exact_int_mat_bounded_by(Y,
                                                                     integer_of_int32(LDY),
                                                                     integer_of_int32(i_3),
@@ -1854,7 +1854,7 @@ let DGEMM_NEG_ensures_default =
                                                                     double_P_double_M_Y_6)))))
                                                                     and 
                                                                     (
-                                                                    (JC_94:
+                                                                    (JC_80:
                                                                     not_assigns(double_P_Y_6_alloc_table@loop_5,
                                                                     double_P_double_M_Y_6@loop_5,
                                                                     double_P_double_M_Y_6,
@@ -1871,7 +1871,7 @@ let DGEMM_NEG_ensures_default =
                                                                     integer_of_int32(k_0),
                                                                     (1))))))
                                                                     and 
-                                                                    (JC_95:
+                                                                    (JC_81:
                                                                     not_assigns(double_P_Y_6_alloc_table@init,
                                                                     double_P_double_M_Y_6@init,
                                                                     double_P_double_M_Y_6,
@@ -1894,10 +1894,10 @@ let DGEMM_NEG_ensures_default =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_66 = 
+                                                                    (let jessie_79 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_65 = 
+                                                                    (let jessie_78 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -1906,7 +1906,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (integer_of_int32 K))
                                                                     then void
                                                                     else
-                                                                    (let jessie_54 = 
+                                                                    (let jessie_63 = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -1914,32 +1914,32 @@ let DGEMM_NEG_ensures_default =
                                                                     (C_13:
                                                                     begin
                                                                       
-                                                                    (let jessie_55 = 
+                                                                    (let jessie_65 = 
                                                                     (j_3 := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_64 = 
+                                                                    (let jessie_76 = 
                                                                     begin
                                                                       
                                                                     (loop_6:
                                                                     while true do
                                                                     { invariant
                                                                     (
-                                                                    (JC_102:
+                                                                    (JC_88:
                                                                     (
-                                                                    (JC_96:
+                                                                    (JC_82:
                                                                     le_int((0),
                                                                     integer_of_int32(j_3)))
                                                                     and 
                                                                     (
-                                                                    (JC_97:
+                                                                    (JC_83:
                                                                     le_int(
                                                                     integer_of_int32(j_3),
                                                                     integer_of_int32(M_2)))
                                                                     and 
                                                                     (
-                                                                    (JC_98:
+                                                                    (JC_84:
                                                                     eq_real(
                                                                     gen_round_error(
                                                                     select(double_P_double_M_Y_6,
@@ -1952,7 +1952,7 @@ let DGEMM_NEG_ensures_default =
                                                                     0.0))
                                                                     and 
                                                                     (
-                                                                    (JC_99:
+                                                                    (JC_85:
                                                                     (exists v_2:int.
                                                                     eq_real(
                                                                     float_value(
@@ -1966,7 +1966,7 @@ let DGEMM_NEG_ensures_default =
                                                                     real_of_int(v_2))))
                                                                     and 
                                                                     (
-                                                                    (JC_100:
+                                                                    (JC_86:
                                                                     le_real(
                                                                     real_of_int(
                                                                     mul_int(
@@ -1986,7 +1986,7 @@ let DGEMM_NEG_ensures_default =
                                                                     integer_of_int32(LDY)),
                                                                     integer_of_int32(k_0)))))))
                                                                     and 
-                                                                    (JC_101:
+                                                                    (JC_87:
                                                                     le_real(
                                                                     float_value(
                                                                     select(double_P_double_M_Y_6,
@@ -2002,7 +2002,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (1)))))))))))
                                                                     and 
                                                                     (
-                                                                    (JC_104:
+                                                                    (JC_90:
                                                                     not_assigns(double_P_Y_6_alloc_table@loop_6,
                                                                     double_P_double_M_Y_6@loop_6,
                                                                     double_P_double_M_Y_6,
@@ -2019,7 +2019,7 @@ let DGEMM_NEG_ensures_default =
                                                                     integer_of_int32(LDY)),
                                                                     integer_of_int32(k_0)))))
                                                                     and 
-                                                                    (JC_105:
+                                                                    (JC_91:
                                                                     not_assigns(double_P_Y_6_alloc_table@init,
                                                                     double_P_double_M_Y_6@init,
                                                                     double_P_double_M_Y_6,
@@ -2042,10 +2042,10 @@ let DGEMM_NEG_ensures_default =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_63 = 
+                                                                    (let jessie_75 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_62 = 
+                                                                    (let jessie_74 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -2054,7 +2054,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (integer_of_int32 M_2))
                                                                     then void
                                                                     else
-                                                                    (let jessie_56 = 
+                                                                    (let jessie_66 = 
                                                                     (raise
                                                                     (Goto_while_2_break_exc
                                                                     void)) in
@@ -2062,10 +2062,10 @@ let DGEMM_NEG_ensures_default =
                                                                     (C_51:
                                                                     begin
                                                                       
-                                                                    (let jessie_61 = 
-                                                                    (let jessie_57 = 
+                                                                    (let jessie_72 = 
+                                                                    (let jessie_68 = 
                                                                     (C_44:
-                                                                    (JC_109:
+                                                                    (JC_93:
                                                                     ((((sub_gen_float_safe Double) nearest_even) 
                                                                     (C_43:
                                                                     ((safe_acc_ !double_P_double_M_Y_6) 
@@ -2085,7 +2085,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (integer_of_int32 LDY))))))) 
                                                                     (integer_of_int32 !k_0))))))))))) 
                                                                     (C_37:
-                                                                    (JC_108:
+                                                                    (JC_92:
                                                                     ((((mul_gen_float_safe Double) nearest_even) 
                                                                     (C_36:
                                                                     ((safe_acc_ double_P_double_M_A_4) 
@@ -2121,7 +2121,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (integer_of_int32 !j_3)) 
                                                                     (integer_of_int32 LDX_2))))))) 
                                                                     (integer_of_int32 !k_0)))))))))))))))) in
-                                                                    (let jessie_60 = 
+                                                                    (let jessie_71 = 
                                                                     (C_49:
                                                                     ((shift Y) 
                                                                     (integer_of_int32 
@@ -2137,7 +2137,7 @@ let DGEMM_NEG_ensures_default =
                                                                     (integer_of_int32 !i_3)) 
                                                                     (integer_of_int32 LDY))))))) 
                                                                     (integer_of_int32 !k_0)))))))) in
-                                                                    (((safe_upd_ double_P_double_M_Y_6) jessie_60) jessie_57))) in
+                                                                    (((safe_upd_ double_P_double_M_Y_6) jessie_71) jessie_68))) in
                                                                     void);
                                                                     (C_54:
                                                                     begin
@@ -2312,9 +2312,9 @@ let DGEMM_NEG_safety =
      (let k_0 = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_31 = (i_3 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_32 = (i_3 := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_50 = begin
+       (let jessie_57 = begin
                           (loop_1:
                           while true do
                           { invariant (JC_32: true) variant (0) }
@@ -2339,27 +2339,27 @@ let DGEMM_NEG_safety =
                                          double_P_Y_6_alloc_table,
                                          double_P_double_M_Y_6))))) } ];
                             try
-                             (let jessie_49 = begin
-                                                (let jessie_48 = begin
+                             (let jessie_56 = begin
+                                                (let jessie_55 = begin
                                                                    (if 
                                                                    ((lt_int_ 
                                                                     (integer_of_int32 !i_3)) 
                                                                     (integer_of_int32 N_2))
                                                                    then void
                                                                    else
-                                                                    (let jessie_32 = 
+                                                                    (let jessie_33 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
                                                                   (C_7:
                                                                   begin
-                                                                    (let jessie_33 = 
+                                                                    (let jessie_35 = 
                                                                     (k_0 := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
                                                                    try
-                                                                    (let jessie_47 = 
+                                                                    (let jessie_53 = 
                                                                     begin
                                                                       
                                                                     (loop_2:
@@ -2405,10 +2405,10 @@ let DGEMM_NEG_safety =
                                                                     double_P_Y_6_alloc_table,
                                                                     double_P_double_M_Y_6))))) } ];
                                                                     try
-                                                                    (let jessie_46 = 
+                                                                    (let jessie_52 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_45 = 
+                                                                    (let jessie_51 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -2417,7 +2417,7 @@ let DGEMM_NEG_safety =
                                                                     (integer_of_int32 K))
                                                                     then void
                                                                     else
-                                                                    (let jessie_34 = 
+                                                                    (let jessie_36 = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -2425,12 +2425,12 @@ let DGEMM_NEG_safety =
                                                                     (C_13:
                                                                     begin
                                                                       
-                                                                    (let jessie_35 = 
+                                                                    (let jessie_38 = 
                                                                     (j_3 := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_44 = 
+                                                                    (let jessie_49 = 
                                                                     begin
                                                                       
                                                                     (loop_3:
@@ -2519,10 +2519,10 @@ let DGEMM_NEG_safety =
                                                                     integer_of_int32(p_0),
                                                                     (1))))))))))) } ];
                                                                     try
-                                                                    (let jessie_43 = 
+                                                                    (let jessie_48 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_42 = 
+                                                                    (let jessie_47 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -2531,7 +2531,7 @@ let DGEMM_NEG_safety =
                                                                     (integer_of_int32 M_2))
                                                                     then void
                                                                     else
-                                                                    (let jessie_36 = 
+                                                                    (let jessie_39 = 
                                                                     (raise
                                                                     (Goto_while_2_break_exc
                                                                     void)) in
@@ -2539,23 +2539,23 @@ let DGEMM_NEG_safety =
                                                                     (C_51:
                                                                     begin
                                                                       
+                                                                    (let jessie_45 = 
                                                                     (let jessie_41 = 
-                                                                    (let jessie_37 = 
                                                                     (C_44:
-                                                                    (JC_72:
+                                                                    (JC_61:
                                                                     ((((sub_gen_float Double) nearest_even) 
                                                                     (C_43:
-                                                                    (JC_64:
+                                                                    (JC_53:
                                                                     ((((offset_acc_ double_P_Y_6_alloc_table) !double_P_double_M_Y_6) Y) 
                                                                     (integer_of_int32 
                                                                     (C_41:
-                                                                    (JC_63:
+                                                                    (JC_52:
                                                                     (int32_of_integer_ 
                                                                     (C_40:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_39:
-                                                                    (JC_62:
+                                                                    (JC_51:
                                                                     (int32_of_integer_ 
                                                                     (C_38:
                                                                     ((mul_int 
@@ -2563,20 +2563,20 @@ let DGEMM_NEG_safety =
                                                                     (integer_of_int32 LDY)))))))) 
                                                                     (integer_of_int32 !k_0))))))))))) 
                                                                     (C_37:
-                                                                    (JC_71:
+                                                                    (JC_60:
                                                                     ((((mul_gen_float Double) nearest_even) 
                                                                     (C_36:
-                                                                    (JC_67:
+                                                                    (JC_56:
                                                                     ((((offset_acc_ double_P_A_4_alloc_table) double_P_double_M_A_4) A) 
                                                                     (integer_of_int32 
                                                                     (C_34:
-                                                                    (JC_66:
+                                                                    (JC_55:
                                                                     (int32_of_integer_ 
                                                                     (C_33:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_32:
-                                                                    (JC_65:
+                                                                    (JC_54:
                                                                     (int32_of_integer_ 
                                                                     (C_31:
                                                                     ((mul_int 
@@ -2584,51 +2584,51 @@ let DGEMM_NEG_safety =
                                                                     (integer_of_int32 LDA)))))))) 
                                                                     (integer_of_int32 !j_3))))))))))) 
                                                                     (C_30:
-                                                                    (JC_70:
+                                                                    (JC_59:
                                                                     ((((offset_acc_ double_P_X_5_alloc_table) double_P_double_M_X_5) X_2) 
                                                                     (integer_of_int32 
                                                                     (C_28:
-                                                                    (JC_69:
+                                                                    (JC_58:
                                                                     (int32_of_integer_ 
                                                                     (C_27:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_26:
-                                                                    (JC_68:
+                                                                    (JC_57:
                                                                     (int32_of_integer_ 
                                                                     (C_25:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !j_3)) 
                                                                     (integer_of_int32 LDX_2)))))))) 
                                                                     (integer_of_int32 !k_0)))))))))))))))) in
-                                                                    (let jessie_38 = Y in
-                                                                    (let jessie_39 = 
+                                                                    (let jessie_42 = Y in
+                                                                    (let jessie_43 = 
                                                                     (integer_of_int32 
                                                                     (C_48:
-                                                                    (JC_74:
+                                                                    (JC_63:
                                                                     (int32_of_integer_ 
                                                                     (C_47:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_46:
-                                                                    (JC_73:
+                                                                    (JC_62:
                                                                     (int32_of_integer_ 
                                                                     (C_45:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !i_3)) 
                                                                     (integer_of_int32 LDY)))))))) 
                                                                     (integer_of_int32 !k_0))))))) in
-                                                                    (let jessie_40 = 
-                                                                    ((shift jessie_38) jessie_39) in
-                                                                    (JC_75:
-                                                                    (((((offset_upd_ double_P_Y_6_alloc_table) double_P_double_M_Y_6) jessie_38) jessie_39) jessie_37)))))) in
+                                                                    (let jessie_44 = 
+                                                                    ((shift jessie_42) jessie_43) in
+                                                                    (JC_64:
+                                                                    (((((offset_upd_ double_P_Y_6_alloc_table) double_P_double_M_Y_6) jessie_42) jessie_43) jessie_41)))))) in
                                                                     void);
                                                                     (C_54:
                                                                     begin
                                                                       
                                                                     (j_3 := 
                                                                     (C_53:
-                                                                    (JC_77:
+                                                                    (JC_65:
                                                                     (int32_of_integer_ 
                                                                     (C_52:
                                                                     ((add_int 
@@ -2662,7 +2662,7 @@ let DGEMM_NEG_safety =
                                                                       
                                                                     (k_0 := 
                                                                     (C_56:
-                                                                    (JC_79:
+                                                                    (JC_66:
                                                                     (int32_of_integer_ 
                                                                     (C_55:
                                                                     ((add_int 
@@ -2696,7 +2696,7 @@ let DGEMM_NEG_safety =
                                                                      
                                                                     (i_3 := 
                                                                     (C_59:
-                                                                    (JC_81:
+                                                                    (JC_67:
                                                                     (int32_of_integer_ 
                                                                     (C_58:
                                                                     ((add_int 
@@ -2734,7 +2734,7 @@ let DGEMM_NEG_safety =
 let DREMM_ensures_default =
  fun (N_1_0 : int32) (K_1 : int32) (p_2 : int32) (X_0_0 : double_P pointer) (LDX_0_0 : int32) (double_P_double_M_X_0_7 : (double_P, gen_float) memory ref) (double_P_X_0_7_alloc_table : double_P alloc_table) ->
   { ((true = true)
-    and (JC_122:
+    and (JC_106:
         is_exact_int_mat(X_0_0, integer_of_int32(LDX_0_0),
         integer_of_int32(N_1_0), integer_of_int32(K_1),
         double_P_X_0_7_alloc_table, double_P_double_M_X_0_7))) }
@@ -2745,13 +2745,13 @@ let DREMM_ensures_default =
      (let k_0_0 = ref (any_int32 void) in
      (C_76:
      begin
-       (let jessie_91 = (i_0_0 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_113 = (i_0_0 := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_110 = begin
+       (let jessie_138 = begin
                            (loop_9:
                            while true do
                            { invariant
-                               (JC_171:
+                               (JC_146:
                                not_assigns(double_P_X_0_7_alloc_table@init,
                                double_P_double_M_X_0_7@init,
                                double_P_double_M_X_0_7,
@@ -2765,8 +2765,8 @@ let DREMM_ensures_default =
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_109 = begin
-                                                  (let jessie_108 = begin
+                              (let jessie_137 = begin
+                                                  (let jessie_136 = begin
                                                                       
                                                                     (if 
                                                                     ((lt_int_ 
@@ -2774,7 +2774,7 @@ let DREMM_ensures_default =
                                                                     (integer_of_int32 N_1_0))
                                                                     then void
                                                                     else
-                                                                    (let jessie_92 = 
+                                                                    (let jessie_114 = 
                                                                     (raise
                                                                     (Goto_while_3_break_exc
                                                                     void)) in
@@ -2782,18 +2782,18 @@ let DREMM_ensures_default =
                                                                     (C_77:
                                                                     begin
                                                                       
-                                                                    (let jessie_93 = 
+                                                                    (let jessie_116 = 
                                                                     (k_0_0 := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_107 = 
+                                                                    (let jessie_134 = 
                                                                     begin
                                                                       
                                                                     (loop_10:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_174:
+                                                                    (JC_149:
                                                                     not_assigns(double_P_X_0_7_alloc_table@init,
                                                                     double_P_double_M_X_0_7@init,
                                                                     double_P_double_M_X_0_7,
@@ -2816,10 +2816,10 @@ let DREMM_ensures_default =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_106 = 
+                                                                    (let jessie_133 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_105 = 
+                                                                    (let jessie_132 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -2828,7 +2828,7 @@ let DREMM_ensures_default =
                                                                     (integer_of_int32 K_1))
                                                                     then void
                                                                     else
-                                                                    (let jessie_94 = 
+                                                                    (let jessie_117 = 
                                                                     (raise
                                                                     (Goto_while_4_break_exc
                                                                     void)) in
@@ -2836,18 +2836,18 @@ let DREMM_ensures_default =
                                                                     (C_93:
                                                                     begin
                                                                       
-                                                                    (let jessie_99 = 
+                                                                    (let jessie_124 = 
                                                                     (let __cil_tmp = 
                                                                     (C_84:
-                                                                    (JC_177:
+                                                                    (JC_151:
                                                                     (fmod void))) in
                                                                     (C_92:
-                                                                    (let jessie_95 = 
+                                                                    (let jessie_120 = 
                                                                     (C_85:
                                                                     (((gen_float_of_real_safe Double) nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 __cil_tmp)))) in
-                                                                    (let jessie_98 = 
+                                                                    (let jessie_123 = 
                                                                     (C_90:
                                                                     ((shift X_0_0) 
                                                                     (integer_of_int32 
@@ -2865,8 +2865,8 @@ let DREMM_ensures_default =
                                                                     (integer_of_int32 !k_0_0)))))))) in
                                                                     begin
                                                                       
-                                                                    (((safe_upd_ double_P_double_M_X_0_7) jessie_98) jessie_95);
-                                                                    jessie_95
+                                                                    (((safe_upd_ double_P_double_M_X_0_7) jessie_123) jessie_120);
+                                                                    jessie_120
                                                                     end)))) in
                                                                     void);
                                                                     (if 
@@ -2892,10 +2892,10 @@ let DREMM_ensures_default =
                                                                     (((gen_float_of_real_safe Double) nearest_even) 0.0)))
                                                                     then
                                                                     (C_108:
-                                                                    (let jessie_104 = 
-                                                                    (let jessie_100 = 
+                                                                    (let jessie_130 = 
+                                                                    (let jessie_126 = 
                                                                     (C_101:
-                                                                    (JC_179:
+                                                                    (JC_152:
                                                                     ((((add_gen_float_safe Double) nearest_even) 
                                                                     (C_100:
                                                                     ((safe_acc_ !double_P_double_M_X_0_7) 
@@ -2918,7 +2918,7 @@ let DREMM_ensures_default =
                                                                     (((gen_float_of_real_safe Double) nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 p_2))))))) in
-                                                                    (let jessie_103 = 
+                                                                    (let jessie_129 = 
                                                                     (C_106:
                                                                     ((shift X_0_0) 
                                                                     (integer_of_int32 
@@ -2934,7 +2934,7 @@ let DREMM_ensures_default =
                                                                     (integer_of_int32 !i_0_0)) 
                                                                     (integer_of_int32 LDX_0_0))))))) 
                                                                     (integer_of_int32 !k_0_0)))))))) in
-                                                                    (((safe_upd_ double_P_double_M_X_0_7) jessie_103) jessie_100))) in
+                                                                    (((safe_upd_ double_P_double_M_X_0_7) jessie_129) jessie_126))) in
                                                                     void))
                                                                     else void);
                                                                     (C_118:
@@ -3007,14 +3007,14 @@ let DREMM_ensures_default =
    with
    Return ->
    void end)
-  { (JC_128:
-    ((JC_126:
-     ((JC_124:
+  { (JC_112:
+    ((JC_110:
+     ((JC_108:
       is_exact_int_mat_bounded_by(X_0_0, integer_of_int32(LDX_0_0),
       integer_of_int32(N_1_0), integer_of_int32(K_1), (0),
       sub_int(integer_of_int32(p_2), (1)), double_P_X_0_7_alloc_table,
       double_P_double_M_X_0_7))
-     and (JC_125:
+     and (JC_109:
          (forall i_3_0:int.
           (forall j_3_0:int.
            ((le_int((0), i_3_0)
@@ -3033,7 +3033,7 @@ let DREMM_ensures_default =
                                           integer_of_int32(LDX_0_0@)),
                                   j_3_0@)))),
              real_of_int(mul_int(d, integer_of_int32(p_2))))))))))))
-    and (JC_127:
+    and (JC_111:
         not_assigns(double_P_X_0_7_alloc_table@, double_P_double_M_X_0_7@,
         double_P_double_M_X_0_7,
         pset_range(pset_singleton(X_0_0@), (0),
@@ -3044,7 +3044,7 @@ let DREMM_ensures_default =
 
 let DREMM_safety =
  fun (N_1_0 : int32) (K_1 : int32) (p_2 : int32) (X_0_0 : double_P pointer) (LDX_0_0 : int32) (double_P_double_M_X_0_7 : (double_P, gen_float) memory ref) (double_P_X_0_7_alloc_table : double_P alloc_table) ->
-  { (JC_122:
+  { (JC_106:
     is_exact_int_mat(X_0_0, integer_of_int32(LDX_0_0),
     integer_of_int32(N_1_0), integer_of_int32(K_1),
     double_P_X_0_7_alloc_table, double_P_double_M_X_0_7)) }
@@ -3055,42 +3055,44 @@ let DREMM_safety =
      (let k_0_0 = ref (any_int32 void) in
      (C_76:
      begin
-       (let jessie_71 = (i_0_0 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_86 = (i_0_0 := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_90 = begin
-                          (loop_7:
-                          while true do
-                          { invariant (JC_137: true) variant (0) }
-                           begin
-                             [ { } unit { true } ];
-                            try
-                             (let jessie_89 = begin
-                                                (let jessie_88 = begin
-                                                                   (if 
-                                                                   ((lt_int_ 
+       (let jessie_111 = begin
+                           (loop_7:
+                           while true do
+                           { invariant (JC_121: true) variant (0) }
+                            begin
+                              [ { } unit { true } ];
+                             try
+                              (let jessie_110 = begin
+                                                  (let jessie_109 = begin
+                                                                      
+                                                                    (if 
+                                                                    ((lt_int_ 
                                                                     (integer_of_int32 !i_0_0)) 
                                                                     (integer_of_int32 N_1_0))
-                                                                   then void
-                                                                   else
-                                                                    (let jessie_72 = 
+                                                                    then void
+                                                                    else
+                                                                    (let jessie_87 = 
                                                                     (raise
                                                                     (Goto_while_3_break_exc
                                                                     void)) in
                                                                     void));
-                                                                  (C_77:
-                                                                  begin
-                                                                    (let jessie_73 = 
+                                                                    (C_77:
+                                                                    begin
+                                                                      
+                                                                    (let jessie_89 = 
                                                                     (k_0_0 := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
-                                                                   try
-                                                                    (let jessie_87 = 
+                                                                    try
+                                                                    (let jessie_107 = 
                                                                     begin
                                                                       
                                                                     (loop_8:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_140:
+                                                                    (JC_124:
                                                                     true)
                                                                     variant (0) }
                                                                     begin
@@ -3099,10 +3101,10 @@ let DREMM_safety =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_86 = 
+                                                                    (let jessie_106 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_85 = 
+                                                                    (let jessie_105 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -3111,7 +3113,7 @@ let DREMM_safety =
                                                                     (integer_of_int32 K_1))
                                                                     then void
                                                                     else
-                                                                    (let jessie_74 = 
+                                                                    (let jessie_90 = 
                                                                     (raise
                                                                     (Goto_while_4_break_exc
                                                                     void)) in
@@ -3119,58 +3121,58 @@ let DREMM_safety =
                                                                     (C_93:
                                                                     begin
                                                                       
-                                                                    (let jessie_79 = 
+                                                                    (let jessie_97 = 
                                                                     (let __cil_tmp = 
                                                                     (C_84:
-                                                                    (JC_143:
+                                                                    (JC_126:
                                                                     (fmod_requires void))) in
                                                                     (C_92:
-                                                                    (let jessie_75 = 
+                                                                    (let jessie_93 = 
                                                                     (C_85:
-                                                                    (JC_145:
+                                                                    (JC_127:
                                                                     (((gen_float_of_real Double) nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 __cil_tmp))))) in
-                                                                    (let jessie_76 = X_0_0 in
-                                                                    (let jessie_77 = 
+                                                                    (let jessie_94 = X_0_0 in
+                                                                    (let jessie_95 = 
                                                                     (integer_of_int32 
                                                                     (C_89:
-                                                                    (JC_147:
+                                                                    (JC_129:
                                                                     (int32_of_integer_ 
                                                                     (C_88:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_87:
-                                                                    (JC_146:
+                                                                    (JC_128:
                                                                     (int32_of_integer_ 
                                                                     (C_86:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !i_0_0)) 
                                                                     (integer_of_int32 LDX_0_0)))))))) 
                                                                     (integer_of_int32 !k_0_0))))))) in
-                                                                    (let jessie_78 = 
-                                                                    ((shift jessie_76) jessie_77) in
+                                                                    (let jessie_96 = 
+                                                                    ((shift jessie_94) jessie_95) in
                                                                     begin
                                                                       
-                                                                    (JC_148:
-                                                                    (((((offset_upd_ double_P_X_0_7_alloc_table) double_P_double_M_X_0_7) jessie_76) jessie_77) jessie_75));
-                                                                    jessie_75
+                                                                    (JC_130:
+                                                                    (((((offset_upd_ double_P_X_0_7_alloc_table) double_P_double_M_X_0_7) jessie_94) jessie_95) jessie_93));
+                                                                    jessie_93
                                                                     end)))))) in
                                                                     void);
                                                                     (if 
                                                                     ((lt_gen_float 
                                                                     (C_115:
-                                                                    (JC_151:
+                                                                    (JC_133:
                                                                     ((((offset_acc_ double_P_X_0_7_alloc_table) !double_P_double_M_X_0_7) X_0_0) 
                                                                     (integer_of_int32 
                                                                     (C_113:
-                                                                    (JC_150:
+                                                                    (JC_132:
                                                                     (int32_of_integer_ 
                                                                     (C_112:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_111:
-                                                                    (JC_149:
+                                                                    (JC_131:
                                                                     (int32_of_integer_ 
                                                                     (C_110:
                                                                     ((mul_int 
@@ -3178,27 +3180,27 @@ let DREMM_safety =
                                                                     (integer_of_int32 LDX_0_0)))))))) 
                                                                     (integer_of_int32 !k_0_0))))))))))) 
                                                                     (C_109:
-                                                                    (JC_152:
+                                                                    (JC_134:
                                                                     (((gen_float_of_real Double) nearest_even) 0.0))))
                                                                     then
                                                                     (C_108:
-                                                                    (let jessie_84 = 
-                                                                    (let jessie_80 = 
+                                                                    (let jessie_103 = 
+                                                                    (let jessie_99 = 
                                                                     (C_101:
-                                                                    (JC_162:
+                                                                    (JC_139:
                                                                     ((((add_gen_float Double) nearest_even) 
                                                                     (C_100:
-                                                                    (JC_160:
+                                                                    (JC_137:
                                                                     ((((offset_acc_ double_P_X_0_7_alloc_table) !double_P_double_M_X_0_7) X_0_0) 
                                                                     (integer_of_int32 
                                                                     (C_98:
-                                                                    (JC_159:
+                                                                    (JC_136:
                                                                     (int32_of_integer_ 
                                                                     (C_97:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_96:
-                                                                    (JC_158:
+                                                                    (JC_135:
                                                                     (int32_of_integer_ 
                                                                     (C_95:
                                                                     ((mul_int 
@@ -3206,31 +3208,31 @@ let DREMM_safety =
                                                                     (integer_of_int32 LDX_0_0)))))))) 
                                                                     (integer_of_int32 !k_0_0))))))))))) 
                                                                     (C_94:
-                                                                    (JC_161:
+                                                                    (JC_138:
                                                                     (((gen_float_of_real Double) nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 p_2)))))))) in
-                                                                    (let jessie_81 = X_0_0 in
-                                                                    (let jessie_82 = 
+                                                                    (let jessie_100 = X_0_0 in
+                                                                    (let jessie_101 = 
                                                                     (integer_of_int32 
                                                                     (C_105:
-                                                                    (JC_164:
+                                                                    (JC_141:
                                                                     (int32_of_integer_ 
                                                                     (C_104:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_103:
-                                                                    (JC_163:
+                                                                    (JC_140:
                                                                     (int32_of_integer_ 
                                                                     (C_102:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !i_0_0)) 
                                                                     (integer_of_int32 LDX_0_0)))))))) 
                                                                     (integer_of_int32 !k_0_0))))))) in
-                                                                    (let jessie_83 = 
-                                                                    ((shift jessie_81) jessie_82) in
-                                                                    (JC_165:
-                                                                    (((((offset_upd_ double_P_X_0_7_alloc_table) double_P_double_M_X_0_7) jessie_81) jessie_82) jessie_80)))))) in
+                                                                    (let jessie_102 = 
+                                                                    ((shift jessie_100) jessie_101) in
+                                                                    (JC_142:
+                                                                    (((((offset_upd_ double_P_X_0_7_alloc_table) double_P_double_M_X_0_7) jessie_100) jessie_101) jessie_99)))))) in
                                                                     void))
                                                                     else void);
                                                                     (C_118:
@@ -3238,7 +3240,7 @@ let DREMM_safety =
                                                                       
                                                                     (k_0_0 := 
                                                                     (C_117:
-                                                                    (JC_167:
+                                                                    (JC_143:
                                                                     (int32_of_integer_ 
                                                                     (C_116:
                                                                     ((add_int 
@@ -3267,33 +3269,33 @@ let DREMM_safety =
                                                                     Goto_while_4_break_exc jessie_10 ->
                                                                     (while_4_break:
                                                                     void) end;
-                                                                   (C_121:
-                                                                   begin
-                                                                     
+                                                                    (C_121:
+                                                                    begin
+                                                                      
                                                                     (i_0_0 := 
                                                                     (C_120:
-                                                                    (JC_169:
+                                                                    (JC_144:
                                                                     (int32_of_integer_ 
                                                                     (C_119:
                                                                     ((add_int 
                                                                     (integer_of_int32 !i_0_0)) (1)))))));
                                                                     !i_0_0
-                                                                   end)
-                                                                  end)
-                                                                 end in
-                                                void);
-                                               (raise
-                                                (Loop_continue_exc
-                                                void))
-                                              end in
-                             void)
-                             with
-                             Loop_continue_exc jessie_15 ->
-                             void end
-                           end
-                          done);
-                         (raise (Goto_while_3_break_exc void))
-                        end in
+                                                                    end)
+                                                                    end)
+                                                                    end in
+                                                  void);
+                                                 (raise
+                                                  (Loop_continue_exc
+                                                  void))
+                                                end in
+                              void)
+                              with
+                              Loop_continue_exc jessie_15 ->
+                              void end
+                            end
+                           done);
+                          (raise (Goto_while_3_break_exc void))
+                         end in
        void)
        with
        Goto_while_3_break_exc jessie_11 ->
@@ -3310,14 +3312,14 @@ let DREMM_safety =
 let DTRSM_ensures_default =
  fun (N_2_0 : int32) (K_2 : int32) (A_1 : double_P pointer) (LDA_1 : int32) (X_1_0 : double_P pointer) (LDX_1_0 : int32) (double_P_double_M_X_1_9 : (double_P, gen_float) memory ref) (double_P_A_1_8_alloc_table : double_P alloc_table) (double_P_X_1_9_alloc_table : double_P alloc_table) (double_P_double_M_A_1_8 : (double_P, gen_float) memory) ->
   { ((true = true)
-    and (JC_188:
-        ((JC_185: le_int(integer_of_int32(N_2_0), (55)))
-        and ((JC_186:
+    and (JC_161:
+        ((JC_158: le_int(integer_of_int32(N_2_0), (55)))
+        and ((JC_159:
              is_exact_int_mat_bounded_by(X_1_0, integer_of_int32(LDX_1_0),
              integer_of_int32(N_2_0), integer_of_int32(K_2), (0),
              sub_int(l_pmax(integer_of_int32(N_2_0)), (1)),
              double_P_X_1_9_alloc_table, double_P_double_M_X_1_9))
-            and (JC_187:
+            and (JC_160:
                 is_exact_int_mat_bounded_by(A_1, integer_of_int32(LDA_1),
                 integer_of_int32(N_2_0), integer_of_int32(N_2_0), (0),
                 sub_int(l_pmax(integer_of_int32(N_2_0)), (1)),
@@ -3330,17 +3332,17 @@ let DTRSM_ensures_default =
      (let k_1 = ref (any_int32 void) in
      (C_128:
      begin
-       (let jessie_131 = (i_1_0 := (C_127:
+       (let jessie_167 = (i_1_0 := (C_127:
                                    (safe_int32_of_integer_ (C_126:
                                                            ((sub_int 
                                                              (integer_of_int32 N_2_0)) (2)))))) in
        void);
       try
-       (let jessie_150 = begin
+       (let jessie_192 = begin
                            (loop_14:
                            while true do
                            { invariant
-                               (JC_243:
+                               (JC_200:
                                not_assigns(double_P_X_1_9_alloc_table@init,
                                double_P_double_M_X_1_9@init,
                                double_P_double_M_X_1_9,
@@ -3354,15 +3356,15 @@ let DTRSM_ensures_default =
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_149 = begin
-                                                  (let jessie_148 = begin
+                              (let jessie_191 = begin
+                                                  (let jessie_190 = begin
                                                                       
                                                                     (if 
                                                                     ((ge_int_ 
                                                                     (integer_of_int32 !i_1_0)) (0))
                                                                     then void
                                                                     else
-                                                                    (let jessie_132 = 
+                                                                    (let jessie_168 = 
                                                                     (raise
                                                                     (Goto_while_5_break_exc
                                                                     void)) in
@@ -3370,7 +3372,7 @@ let DTRSM_ensures_default =
                                                                     (C_131:
                                                                     begin
                                                                       
-                                                                    (let jessie_133 = 
+                                                                    (let jessie_170 = 
                                                                     (j_0_0 := 
                                                                     (C_130:
                                                                     (safe_int32_of_integer_ 
@@ -3379,13 +3381,13 @@ let DTRSM_ensures_default =
                                                                     (integer_of_int32 !i_1_0)) (1)))))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_147 = 
+                                                                    (let jessie_188 = 
                                                                     begin
                                                                       
                                                                     (loop_15:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_246:
+                                                                    (JC_203:
                                                                     not_assigns(double_P_X_1_9_alloc_table@init,
                                                                     double_P_double_M_X_1_9@init,
                                                                     double_P_double_M_X_1_9,
@@ -3408,10 +3410,10 @@ let DTRSM_ensures_default =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_146 = 
+                                                                    (let jessie_187 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_145 = 
+                                                                    (let jessie_186 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -3420,7 +3422,7 @@ let DTRSM_ensures_default =
                                                                     (integer_of_int32 N_2_0))
                                                                     then void
                                                                     else
-                                                                    (let jessie_134 = 
+                                                                    (let jessie_171 = 
                                                                     (raise
                                                                     (Goto_while_6_break_exc
                                                                     void)) in
@@ -3428,18 +3430,18 @@ let DTRSM_ensures_default =
                                                                     (C_132:
                                                                     begin
                                                                       
-                                                                    (let jessie_135 = 
+                                                                    (let jessie_173 = 
                                                                     (k_1 := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_144 = 
+                                                                    (let jessie_184 = 
                                                                     begin
                                                                       
                                                                     (loop_16:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_249:
+                                                                    (JC_206:
                                                                     not_assigns(double_P_X_1_9_alloc_table@init,
                                                                     double_P_double_M_X_1_9@init,
                                                                     double_P_double_M_X_1_9,
@@ -3462,10 +3464,10 @@ let DTRSM_ensures_default =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_143 = 
+                                                                    (let jessie_183 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_142 = 
+                                                                    (let jessie_182 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -3474,7 +3476,7 @@ let DTRSM_ensures_default =
                                                                     (integer_of_int32 K_2))
                                                                     then void
                                                                     else
-                                                                    (let jessie_136 = 
+                                                                    (let jessie_174 = 
                                                                     (raise
                                                                     (Goto_while_7_break_exc
                                                                     void)) in
@@ -3482,10 +3484,10 @@ let DTRSM_ensures_default =
                                                                     (C_159:
                                                                     begin
                                                                       
-                                                                    (let jessie_141 = 
-                                                                    (let jessie_137 = 
+                                                                    (let jessie_180 = 
+                                                                    (let jessie_176 = 
                                                                     (C_152:
-                                                                    (JC_254:
+                                                                    (JC_209:
                                                                     ((((sub_gen_float_safe Double) nearest_even) 
                                                                     (C_151:
                                                                     ((safe_acc_ !double_P_double_M_X_1_9) 
@@ -3505,7 +3507,7 @@ let DTRSM_ensures_default =
                                                                     (integer_of_int32 LDX_1_0))))))) 
                                                                     (integer_of_int32 !k_1))))))))))) 
                                                                     (C_145:
-                                                                    (JC_253:
+                                                                    (JC_208:
                                                                     ((((mul_gen_float_safe Double) nearest_even) 
                                                                     (C_144:
                                                                     ((safe_acc_ double_P_double_M_A_1_8) 
@@ -3541,7 +3543,7 @@ let DTRSM_ensures_default =
                                                                     (integer_of_int32 !j_0_0)) 
                                                                     (integer_of_int32 LDX_1_0))))))) 
                                                                     (integer_of_int32 !k_1)))))))))))))))) in
-                                                                    (let jessie_140 = 
+                                                                    (let jessie_179 = 
                                                                     (C_157:
                                                                     ((shift X_1_0) 
                                                                     (integer_of_int32 
@@ -3557,7 +3559,7 @@ let DTRSM_ensures_default =
                                                                     (integer_of_int32 !i_1_0)) 
                                                                     (integer_of_int32 LDX_1_0))))))) 
                                                                     (integer_of_int32 !k_1)))))))) in
-                                                                    (((safe_upd_ double_P_double_M_X_1_9) jessie_140) jessie_137))) in
+                                                                    (((safe_upd_ double_P_double_M_X_1_9) jessie_179) jessie_176))) in
                                                                     void);
                                                                     (C_162:
                                                                     begin
@@ -3662,12 +3664,12 @@ let DTRSM_ensures_default =
    with
    Return ->
    void end)
-  { (JC_192:
-    ((JC_190:
+  { (JC_165:
+    ((JC_163:
      is_exact_int_mat_bounded_by(X_1_0, integer_of_int32(LDX_1_0),
      integer_of_int32(N_2_0), integer_of_int32(K_2), neg_int(max_int),
      max_int, double_P_X_1_9_alloc_table, double_P_double_M_X_1_9))
-    and (JC_191:
+    and (JC_164:
         not_assigns(double_P_X_1_9_alloc_table@, double_P_double_M_X_1_9@,
         double_P_double_M_X_1_9,
         pset_range(pset_singleton(X_1_0@), (0),
@@ -3678,14 +3680,14 @@ let DTRSM_ensures_default =
 
 let DTRSM_safety =
  fun (N_2_0 : int32) (K_2 : int32) (A_1 : double_P pointer) (LDA_1 : int32) (X_1_0 : double_P pointer) (LDX_1_0 : int32) (double_P_double_M_X_1_9 : (double_P, gen_float) memory ref) (double_P_A_1_8_alloc_table : double_P alloc_table) (double_P_X_1_9_alloc_table : double_P alloc_table) (double_P_double_M_A_1_8 : (double_P, gen_float) memory) ->
-  { (JC_188:
-    ((JC_185: le_int(integer_of_int32(N_2_0), (55)))
-    and ((JC_186:
+  { (JC_161:
+    ((JC_158: le_int(integer_of_int32(N_2_0), (55)))
+    and ((JC_159:
          is_exact_int_mat_bounded_by(X_1_0, integer_of_int32(LDX_1_0),
          integer_of_int32(N_2_0), integer_of_int32(K_2), (0),
          sub_int(l_pmax(integer_of_int32(N_2_0)), (1)),
          double_P_X_1_9_alloc_table, double_P_double_M_X_1_9))
-        and (JC_187:
+        and (JC_160:
             is_exact_int_mat_bounded_by(A_1, integer_of_int32(LDA_1),
             integer_of_int32(N_2_0), integer_of_int32(N_2_0), (0),
             sub_int(l_pmax(integer_of_int32(N_2_0)), (1)),
@@ -3698,28 +3700,28 @@ let DTRSM_safety =
      (let k_1 = ref (any_int32 void) in
      (C_128:
      begin
-       (let jessie_111 = (i_1_0 := (C_127:
-                                   (JC_199:
+       (let jessie_140 = (i_1_0 := (C_127:
+                                   (JC_171:
                                    (int32_of_integer_ (C_126:
                                                       ((sub_int (integer_of_int32 N_2_0)) (2))))))) in
        void);
       try
-       (let jessie_130 = begin
+       (let jessie_165 = begin
                            (loop_11:
                            while true do
-                           { invariant (JC_201: true) variant (0) }
+                           { invariant (JC_173: true) variant (0) }
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_129 = begin
-                                                  (let jessie_128 = begin
+                              (let jessie_164 = begin
+                                                  (let jessie_163 = begin
                                                                       
                                                                     (if 
                                                                     ((ge_int_ 
                                                                     (integer_of_int32 !i_1_0)) (0))
                                                                     then void
                                                                     else
-                                                                    (let jessie_112 = 
+                                                                    (let jessie_141 = 
                                                                     (raise
                                                                     (Goto_while_5_break_exc
                                                                     void)) in
@@ -3727,23 +3729,23 @@ let DTRSM_safety =
                                                                     (C_131:
                                                                     begin
                                                                       
-                                                                    (let jessie_113 = 
+                                                                    (let jessie_143 = 
                                                                     (j_0_0 := 
                                                                     (C_130:
-                                                                    (JC_204:
+                                                                    (JC_175:
                                                                     (int32_of_integer_ 
                                                                     (C_129:
                                                                     ((add_int 
                                                                     (integer_of_int32 !i_1_0)) (1))))))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_127 = 
+                                                                    (let jessie_161 = 
                                                                     begin
                                                                       
                                                                     (loop_12:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_206:
+                                                                    (JC_177:
                                                                     true)
                                                                     variant (0) }
                                                                     begin
@@ -3752,10 +3754,10 @@ let DTRSM_safety =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_126 = 
+                                                                    (let jessie_160 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_125 = 
+                                                                    (let jessie_159 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -3764,7 +3766,7 @@ let DTRSM_safety =
                                                                     (integer_of_int32 N_2_0))
                                                                     then void
                                                                     else
-                                                                    (let jessie_114 = 
+                                                                    (let jessie_144 = 
                                                                     (raise
                                                                     (Goto_while_6_break_exc
                                                                     void)) in
@@ -3772,18 +3774,18 @@ let DTRSM_safety =
                                                                     (C_132:
                                                                     begin
                                                                       
-                                                                    (let jessie_115 = 
+                                                                    (let jessie_146 = 
                                                                     (k_1 := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_124 = 
+                                                                    (let jessie_157 = 
                                                                     begin
                                                                       
                                                                     (loop_13:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_209:
+                                                                    (JC_180:
                                                                     true)
                                                                     variant (0) }
                                                                     begin
@@ -3792,10 +3794,10 @@ let DTRSM_safety =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_123 = 
+                                                                    (let jessie_156 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_122 = 
+                                                                    (let jessie_155 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -3804,7 +3806,7 @@ let DTRSM_safety =
                                                                     (integer_of_int32 K_2))
                                                                     then void
                                                                     else
-                                                                    (let jessie_116 = 
+                                                                    (let jessie_147 = 
                                                                     (raise
                                                                     (Goto_while_7_break_exc
                                                                     void)) in
@@ -3812,23 +3814,23 @@ let DTRSM_safety =
                                                                     (C_159:
                                                                     begin
                                                                       
-                                                                    (let jessie_121 = 
-                                                                    (let jessie_117 = 
+                                                                    (let jessie_153 = 
+                                                                    (let jessie_149 = 
                                                                     (C_152:
-                                                                    (JC_232:
+                                                                    (JC_192:
                                                                     ((((sub_gen_float Double) nearest_even) 
                                                                     (C_151:
-                                                                    (JC_224:
+                                                                    (JC_184:
                                                                     ((((offset_acc_ double_P_X_1_9_alloc_table) !double_P_double_M_X_1_9) X_1_0) 
                                                                     (integer_of_int32 
                                                                     (C_149:
-                                                                    (JC_223:
+                                                                    (JC_183:
                                                                     (int32_of_integer_ 
                                                                     (C_148:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_147:
-                                                                    (JC_222:
+                                                                    (JC_182:
                                                                     (int32_of_integer_ 
                                                                     (C_146:
                                                                     ((mul_int 
@@ -3836,20 +3838,20 @@ let DTRSM_safety =
                                                                     (integer_of_int32 LDX_1_0)))))))) 
                                                                     (integer_of_int32 !k_1))))))))))) 
                                                                     (C_145:
-                                                                    (JC_231:
+                                                                    (JC_191:
                                                                     ((((mul_gen_float Double) nearest_even) 
                                                                     (C_144:
-                                                                    (JC_227:
+                                                                    (JC_187:
                                                                     ((((offset_acc_ double_P_A_1_8_alloc_table) double_P_double_M_A_1_8) A_1) 
                                                                     (integer_of_int32 
                                                                     (C_142:
-                                                                    (JC_226:
+                                                                    (JC_186:
                                                                     (int32_of_integer_ 
                                                                     (C_141:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_140:
-                                                                    (JC_225:
+                                                                    (JC_185:
                                                                     (int32_of_integer_ 
                                                                     (C_139:
                                                                     ((mul_int 
@@ -3857,51 +3859,51 @@ let DTRSM_safety =
                                                                     (integer_of_int32 LDA_1)))))))) 
                                                                     (integer_of_int32 !j_0_0))))))))))) 
                                                                     (C_138:
-                                                                    (JC_230:
+                                                                    (JC_190:
                                                                     ((((offset_acc_ double_P_X_1_9_alloc_table) !double_P_double_M_X_1_9) X_1_0) 
                                                                     (integer_of_int32 
                                                                     (C_136:
-                                                                    (JC_229:
+                                                                    (JC_189:
                                                                     (int32_of_integer_ 
                                                                     (C_135:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_134:
-                                                                    (JC_228:
+                                                                    (JC_188:
                                                                     (int32_of_integer_ 
                                                                     (C_133:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !j_0_0)) 
                                                                     (integer_of_int32 LDX_1_0)))))))) 
                                                                     (integer_of_int32 !k_1)))))))))))))))) in
-                                                                    (let jessie_118 = X_1_0 in
-                                                                    (let jessie_119 = 
+                                                                    (let jessie_150 = X_1_0 in
+                                                                    (let jessie_151 = 
                                                                     (integer_of_int32 
                                                                     (C_156:
-                                                                    (JC_234:
+                                                                    (JC_194:
                                                                     (int32_of_integer_ 
                                                                     (C_155:
                                                                     ((add_int 
                                                                     (integer_of_int32 
                                                                     (C_154:
-                                                                    (JC_233:
+                                                                    (JC_193:
                                                                     (int32_of_integer_ 
                                                                     (C_153:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !i_1_0)) 
                                                                     (integer_of_int32 LDX_1_0)))))))) 
                                                                     (integer_of_int32 !k_1))))))) in
-                                                                    (let jessie_120 = 
-                                                                    ((shift jessie_118) jessie_119) in
-                                                                    (JC_235:
-                                                                    (((((offset_upd_ double_P_X_1_9_alloc_table) double_P_double_M_X_1_9) jessie_118) jessie_119) jessie_117)))))) in
+                                                                    (let jessie_152 = 
+                                                                    ((shift jessie_150) jessie_151) in
+                                                                    (JC_195:
+                                                                    (((((offset_upd_ double_P_X_1_9_alloc_table) double_P_double_M_X_1_9) jessie_150) jessie_151) jessie_149)))))) in
                                                                     void);
                                                                     (C_162:
                                                                     begin
                                                                       
                                                                     (k_1 := 
                                                                     (C_161:
-                                                                    (JC_237:
+                                                                    (JC_196:
                                                                     (int32_of_integer_ 
                                                                     (C_160:
                                                                     ((add_int 
@@ -3935,7 +3937,7 @@ let DTRSM_safety =
                                                                       
                                                                     (j_0_0 := 
                                                                     (C_164:
-                                                                    (JC_239:
+                                                                    (JC_197:
                                                                     (int32_of_integer_ 
                                                                     (C_163:
                                                                     ((add_int 
@@ -3969,7 +3971,7 @@ let DTRSM_safety =
                                                                       
                                                                     (i_1_0 := 
                                                                     (C_167:
-                                                                    (JC_241:
+                                                                    (JC_198:
                                                                     (int32_of_integer_ 
                                                                     (C_166:
                                                                     ((sub_int 
@@ -4007,21 +4009,21 @@ let DTRSM_safety =
 let LZ_TRSM_ensures_default =
  fun (N_0_0 : int32) (K_0 : int32) (p_1 : int32) (A_0 : double_P pointer) (LDA_0 : int32) (B : double_P pointer) (LDB : int32) (double_P_double_M_B_11 : (double_P, gen_float) memory ref) (double_P_A_0_10_alloc_table : double_P alloc_table) (double_P_B_11_alloc_table : double_P alloc_table) (double_P_double_M_A_0_10 : (double_P, gen_float) memory) ->
   { ((true = true)
-    and (JC_341:
-        ((JC_336: le_int((2), integer_of_int32(p_1)))
-        and ((JC_337:
+    and (JC_282:
+        ((JC_277: le_int((2), integer_of_int32(p_1)))
+        and ((JC_278:
              le_int(mul_int(mul_int(sub_int(integer_of_int32(p_1), (1)),
                             sub_int(integer_of_int32(p_1), (1))),
                     integer_of_int32(N_0_0)),
              max_int))
-            and ((JC_338: (not same_block(B, A_0)))
-                and ((JC_339:
+            and ((JC_279: (not same_block(B, A_0)))
+                and ((JC_280:
                      is_exact_int_mat_bounded_by(A_0,
                      integer_of_int32(LDA_0), integer_of_int32(N_0_0),
                      integer_of_int32(N_0_0), (0),
                      sub_int(integer_of_int32(p_1), (1)),
                      double_P_A_0_10_alloc_table, double_P_double_M_A_0_10))
-                    and (JC_340:
+                    and (JC_281:
                         is_exact_int_mat_bounded_by(B, integer_of_int32(LDB),
                         integer_of_int32(N_0_0), integer_of_int32(K_0), (0),
                         sub_int(integer_of_int32(p_1), (1)),
@@ -4035,77 +4037,117 @@ let LZ_TRSM_ensures_default =
      begin
        (C_219:
        begin
-         (let jessie_197 = (tmp_0 := (C_218: (JC_371: (Nmax p_1)))) in void);
+         (let jessie_300 = (tmp_0 := (C_218:
+                                     (let jessie_299 = p_1 in
+                                     (JC_307: (Nmax jessie_299))))) in
+         void);
         void
        end);
       (if ((le_int_ (integer_of_int32 N_0_0)) (integer_of_int32 !tmp_0))
       then
        begin
-         (assert { (JC_372: le_int(integer_of_int32(N_0_0), (55))) }; void);
+         (assert { (JC_308: le_int(integer_of_int32(N_0_0), (55))) }; void);
         void;
         (C_243:
-        (JC_373:
-        ((((((((((DTRSM N_0_0) K_0) A_0) LDA_0) B) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10)));
+        (let jessie_306 = N_0_0 in
+        (let jessie_305 = K_0 in
+        (let jessie_304 = A_0 in
+        (let jessie_303 = LDA_0 in
+        (let jessie_302 = B in
+        (let jessie_301 = LDB in
+        (JC_309:
+        ((((((((((DTRSM jessie_306) jessie_305) jessie_304) jessie_303) jessie_302) jessie_301) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10)))))))));
         (C_244:
-        (JC_374:
-        (((((((DREMM N_0_0) K_0) p_1) B) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table)))
+        (let jessie_311 = N_0_0 in
+        (let jessie_310 = K_0 in
+        (let jessie_309 = p_1 in
+        (let jessie_308 = B in
+        (let jessie_307 = LDB in
+        (JC_310:
+        (((((((DREMM jessie_311) jessie_310) jessie_309) jessie_308) jessie_307) double_P_double_M_B_11) double_P_B_11_alloc_table))))))))
        end
       else
        (C_222:
        begin
-         (let jessie_201 = (P := (C_221:
+         (let jessie_313 = (P := (C_221:
                                  (safe_int32_of_integer_ (C_220:
-                                                         (JC_376:
+                                                         (JC_311:
                                                          ((div_int (integer_of_int32 N_0_0)) (2))))))) in
          void);
         (C_225:
         begin
-          (let jessie_202 = (G := (C_224:
+          (let jessie_315 = (G := (C_224:
                                   (safe_int32_of_integer_ (C_223:
                                                           ((sub_int (integer_of_int32 N_0_0)) 
                                                            (integer_of_int32 !P)))))) in
           void);
          (C_234:
          begin
-           (JC_377:
-           (((((((((((LZ_TRSM !G) K_0) p_1) (C_230:
-                                            ((shift A_0) (integer_of_int32 
-                                                          (C_229:
+           (let jessie_322 = !G in
+           (let jessie_321 = K_0 in
+           (let jessie_320 = p_1 in
+           (let jessie_319 = (C_230:
+                             ((shift A_0) (integer_of_int32 (C_229:
+                                                            (safe_int32_of_integer_ 
+                                                             (C_228:
+                                                             ((mul_int 
+                                                               (integer_of_int32 !P)) 
+                                                              (integer_of_int32 
+                                                               (C_227:
+                                                               (safe_int32_of_integer_ 
+                                                                (C_226:
+                                                                ((add_int 
+                                                                  (integer_of_int32 LDA_0)) (1))))))))))))) in
+           (let jessie_318 = LDA_0 in
+           (let jessie_317 = (C_233:
+                             ((shift B) (integer_of_int32 (C_232:
                                                           (safe_int32_of_integer_ 
-                                                           (C_228:
+                                                           (C_231:
                                                            ((mul_int 
                                                              (integer_of_int32 !P)) 
-                                                            (integer_of_int32 
-                                                             (C_227:
-                                                             (safe_int32_of_integer_ 
-                                                              (C_226:
-                                                              ((add_int 
-                                                                (integer_of_int32 LDA_0)) (1)))))))))))))) LDA_0) 
-                 (C_233:
-                 ((shift B) (integer_of_int32 (C_232:
-                                              (safe_int32_of_integer_ 
-                                               (C_231:
-                                               ((mul_int (integer_of_int32 !P)) 
-                                                (integer_of_int32 LDB))))))))) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10));
+                                                            (integer_of_int32 LDB)))))))) in
+           (let jessie_316 = LDB in
+           (JC_312:
+           (((((((((((LZ_TRSM jessie_322) jessie_321) jessie_320) jessie_319) jessie_318) jessie_317) jessie_316) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10)))))))));
           (C_239:
           begin
-            (JC_378:
-            ((((((((((((((((DGEMM_NEG !P) !G) K_0) p_1) (C_235:
-                                                        ((shift A_0) 
-                                                         (integer_of_int32 !P)))) LDA_0) 
-                      (C_238:
-                      ((shift B) (integer_of_int32 (C_237:
-                                                   (safe_int32_of_integer_ 
-                                                    (C_236:
-                                                    ((mul_int (integer_of_int32 !P)) 
-                                                     (integer_of_int32 LDB))))))))) LDB) B) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) !double_P_double_M_B_11) double_P_double_M_A_0_10));
+            (let jessie_332 = !P in
+            (let jessie_331 = !G in
+            (let jessie_330 = K_0 in
+            (let jessie_329 = p_1 in
+            (let jessie_328 = (C_235: ((shift A_0) (integer_of_int32 !P))) in
+            (let jessie_327 = LDA_0 in
+            (let jessie_326 = (C_238:
+                              ((shift B) (integer_of_int32 (C_237:
+                                                           (safe_int32_of_integer_ 
+                                                            (C_236:
+                                                            ((mul_int 
+                                                              (integer_of_int32 !P)) 
+                                                             (integer_of_int32 LDB)))))))) in
+            (let jessie_325 = LDB in
+            (let jessie_324 = B in
+            (let jessie_323 = LDB in
+            (JC_313:
+            ((((((((((((((((DGEMM_NEG jessie_332) jessie_331) jessie_330) jessie_329) jessie_328) jessie_327) jessie_326) jessie_325) jessie_324) jessie_323) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) !double_P_double_M_B_11) double_P_double_M_A_0_10))))))))))));
            (C_240:
            begin
-             (JC_379:
-             (((((((DREMM !P) K_0) p_1) B) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table));
+             (let jessie_337 = !P in
+             (let jessie_336 = K_0 in
+             (let jessie_335 = p_1 in
+             (let jessie_334 = B in
+             (let jessie_333 = LDB in
+             (JC_314:
+             (((((((DREMM jessie_337) jessie_336) jessie_335) jessie_334) jessie_333) double_P_double_M_B_11) double_P_B_11_alloc_table)))))));
             (C_241:
-            (JC_380:
-            (((((((((((LZ_TRSM !P) K_0) p_1) A_0) LDA_0) B) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10)))
+            (let jessie_344 = !P in
+            (let jessie_343 = K_0 in
+            (let jessie_342 = p_1 in
+            (let jessie_341 = A_0 in
+            (let jessie_340 = LDA_0 in
+            (let jessie_339 = B in
+            (let jessie_338 = LDB in
+            (JC_315:
+            (((((((((((LZ_TRSM jessie_344) jessie_343) jessie_342) jessie_341) jessie_340) jessie_339) jessie_338) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10))))))))))
            end)
           end)
          end)
@@ -4118,13 +4160,13 @@ let LZ_TRSM_ensures_default =
    with
    Return ->
    void end)
-  { (JC_345:
-    ((JC_343:
+  { (JC_286:
+    ((JC_284:
      is_exact_int_mat_bounded_by(B, integer_of_int32(LDB),
      integer_of_int32(N_0_0), integer_of_int32(K_0), (0),
      sub_int(integer_of_int32(p_1), (1)), double_P_B_11_alloc_table,
      double_P_double_M_B_11))
-    and (JC_344:
+    and (JC_285:
         not_assigns(double_P_B_11_alloc_table@, double_P_double_M_B_11@,
         double_P_double_M_B_11,
         pset_range(pset_singleton(B@), (0),
@@ -4135,20 +4177,20 @@ let LZ_TRSM_ensures_default =
 
 let LZ_TRSM_safety =
  fun (N_0_0 : int32) (K_0 : int32) (p_1 : int32) (A_0 : double_P pointer) (LDA_0 : int32) (B : double_P pointer) (LDB : int32) (double_P_double_M_B_11 : (double_P, gen_float) memory ref) (double_P_A_0_10_alloc_table : double_P alloc_table) (double_P_B_11_alloc_table : double_P alloc_table) (double_P_double_M_A_0_10 : (double_P, gen_float) memory) ->
-  { (JC_341:
-    ((JC_336: le_int((2), integer_of_int32(p_1)))
-    and ((JC_337:
+  { (JC_282:
+    ((JC_277: le_int((2), integer_of_int32(p_1)))
+    and ((JC_278:
          le_int(mul_int(mul_int(sub_int(integer_of_int32(p_1), (1)),
                         sub_int(integer_of_int32(p_1), (1))),
                 integer_of_int32(N_0_0)),
          max_int))
-        and ((JC_338: (not same_block(B, A_0)))
-            and ((JC_339:
+        and ((JC_279: (not same_block(B, A_0)))
+            and ((JC_280:
                  is_exact_int_mat_bounded_by(A_0, integer_of_int32(LDA_0),
                  integer_of_int32(N_0_0), integer_of_int32(N_0_0), (0),
                  sub_int(integer_of_int32(p_1), (1)),
                  double_P_A_0_10_alloc_table, double_P_double_M_A_0_10))
-                and (JC_340:
+                and (JC_281:
                     is_exact_int_mat_bounded_by(B, integer_of_int32(LDB),
                     integer_of_int32(N_0_0), integer_of_int32(K_0), (0),
                     sub_int(integer_of_int32(p_1), (1)),
@@ -4162,84 +4204,123 @@ let LZ_TRSM_safety =
      begin
        (C_219:
        begin
-         (let jessie_183 = (tmp_0 := (C_218: (JC_352: (Nmax_requires p_1)))) in
+         (let jessie_253 = (tmp_0 := (C_218:
+                                     (let jessie_252 = p_1 in
+                                     (JC_292: (Nmax_requires jessie_252))))) in
          void);
         void
        end);
       (if ((le_int_ (integer_of_int32 N_0_0)) (integer_of_int32 !tmp_0))
       then
        begin
-         [ { } unit { (JC_353: le_int(integer_of_int32(N_0_0), (55))) } ];
+         [ { } unit { (JC_293: le_int(integer_of_int32(N_0_0), (55))) } ];
         void;
         (C_243:
-        (JC_354:
-        ((((((((((DTRSM_requires N_0_0) K_0) A_0) LDA_0) B) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10)));
+        (let jessie_259 = N_0_0 in
+        (let jessie_258 = K_0 in
+        (let jessie_257 = A_0 in
+        (let jessie_256 = LDA_0 in
+        (let jessie_255 = B in
+        (let jessie_254 = LDB in
+        (JC_294:
+        ((((((((((DTRSM_requires jessie_259) jessie_258) jessie_257) jessie_256) jessie_255) jessie_254) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10)))))))));
         (C_244:
-        (JC_355:
-        (((((((DREMM_requires N_0_0) K_0) p_1) B) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table)))
+        (let jessie_264 = N_0_0 in
+        (let jessie_263 = K_0 in
+        (let jessie_262 = p_1 in
+        (let jessie_261 = B in
+        (let jessie_260 = LDB in
+        (JC_295:
+        (((((((DREMM_requires jessie_264) jessie_263) jessie_262) jessie_261) jessie_260) double_P_double_M_B_11) double_P_B_11_alloc_table))))))))
        end
       else
        (C_222:
        begin
-         (let jessie_187 = (P := (C_221:
-                                 (JC_359:
+         (let jessie_266 = (P := (C_221:
+                                 (JC_297:
                                  (int32_of_integer_ (C_220:
-                                                    (JC_358:
+                                                    (JC_296:
                                                     ((div_int_ (integer_of_int32 N_0_0)) (2)))))))) in
          void);
         (C_225:
         begin
-          (let jessie_188 = (G := (C_224:
-                                  (JC_361:
+          (let jessie_268 = (G := (C_224:
+                                  (JC_298:
                                   (int32_of_integer_ (C_223:
                                                      ((sub_int (integer_of_int32 N_0_0)) 
                                                       (integer_of_int32 !P))))))) in
           void);
          (C_234:
          begin
-           (JC_365:
-           (((((((((((LZ_TRSM_requires !G) K_0) p_1) (C_230:
-                                                     ((shift A_0) (integer_of_int32 
-                                                                   (C_229:
-                                                                   (JC_364:
-                                                                   (int32_of_integer_ 
-                                                                    (C_228:
-                                                                    ((mul_int 
-                                                                    (integer_of_int32 !P)) 
-                                                                    (integer_of_int32 
-                                                                    (C_227:
-                                                                    (JC_363:
-                                                                    (int32_of_integer_ 
-                                                                    (C_226:
-                                                                    ((add_int 
-                                                                    (integer_of_int32 LDA_0)) (1)))))))))))))))) LDA_0) 
-                 (C_233:
-                 ((shift B) (integer_of_int32 (C_232:
-                                              (JC_362:
-                                              (int32_of_integer_ (C_231:
-                                                                 ((mul_int 
-                                                                   (integer_of_int32 !P)) 
-                                                                  (integer_of_int32 LDB)))))))))) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10));
+           (let jessie_275 = !G in
+           (let jessie_274 = K_0 in
+           (let jessie_273 = p_1 in
+           (let jessie_272 = (C_230:
+                             ((shift A_0) (integer_of_int32 (C_229:
+                                                            (JC_301:
+                                                            (int32_of_integer_ 
+                                                             (C_228:
+                                                             ((mul_int 
+                                                               (integer_of_int32 !P)) 
+                                                              (integer_of_int32 
+                                                               (C_227:
+                                                               (JC_300:
+                                                               (int32_of_integer_ 
+                                                                (C_226:
+                                                                ((add_int 
+                                                                  (integer_of_int32 LDA_0)) (1))))))))))))))) in
+           (let jessie_271 = LDA_0 in
+           (let jessie_270 = (C_233:
+                             ((shift B) (integer_of_int32 (C_232:
+                                                          (JC_299:
+                                                          (int32_of_integer_ 
+                                                           (C_231:
+                                                           ((mul_int 
+                                                             (integer_of_int32 !P)) 
+                                                            (integer_of_int32 LDB))))))))) in
+           (let jessie_269 = LDB in
+           (JC_302:
+           (((((((((((LZ_TRSM_requires jessie_275) jessie_274) jessie_273) jessie_272) jessie_271) jessie_270) jessie_269) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10)))))))));
           (C_239:
           begin
-            (JC_367:
-            ((((((((((((((((DGEMM_NEG_requires !P) !G) K_0) p_1) (C_235:
-                                                                 ((shift A_0) 
-                                                                  (integer_of_int32 !P)))) LDA_0) 
-                      (C_238:
-                      ((shift B) (integer_of_int32 (C_237:
-                                                   (JC_366:
-                                                   (int32_of_integer_ 
-                                                    (C_236:
-                                                    ((mul_int (integer_of_int32 !P)) 
-                                                     (integer_of_int32 LDB)))))))))) LDB) B) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) !double_P_double_M_B_11) double_P_double_M_A_0_10));
+            (let jessie_285 = !P in
+            (let jessie_284 = !G in
+            (let jessie_283 = K_0 in
+            (let jessie_282 = p_1 in
+            (let jessie_281 = (C_235: ((shift A_0) (integer_of_int32 !P))) in
+            (let jessie_280 = LDA_0 in
+            (let jessie_279 = (C_238:
+                              ((shift B) (integer_of_int32 (C_237:
+                                                           (JC_303:
+                                                           (int32_of_integer_ 
+                                                            (C_236:
+                                                            ((mul_int 
+                                                              (integer_of_int32 !P)) 
+                                                             (integer_of_int32 LDB))))))))) in
+            (let jessie_278 = LDB in
+            (let jessie_277 = B in
+            (let jessie_276 = LDB in
+            (JC_304:
+            ((((((((((((((((DGEMM_NEG_requires jessie_285) jessie_284) jessie_283) jessie_282) jessie_281) jessie_280) jessie_279) jessie_278) jessie_277) jessie_276) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) !double_P_double_M_B_11) double_P_double_M_A_0_10))))))))))));
            (C_240:
            begin
-             (JC_368:
-             (((((((DREMM_requires !P) K_0) p_1) B) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table));
+             (let jessie_290 = !P in
+             (let jessie_289 = K_0 in
+             (let jessie_288 = p_1 in
+             (let jessie_287 = B in
+             (let jessie_286 = LDB in
+             (JC_305:
+             (((((((DREMM_requires jessie_290) jessie_289) jessie_288) jessie_287) jessie_286) double_P_double_M_B_11) double_P_B_11_alloc_table)))))));
             (C_241:
-            (JC_369:
-            (((((((((((LZ_TRSM_requires !P) K_0) p_1) A_0) LDA_0) B) LDB) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10)))
+            (let jessie_297 = !P in
+            (let jessie_296 = K_0 in
+            (let jessie_295 = p_1 in
+            (let jessie_294 = A_0 in
+            (let jessie_293 = LDA_0 in
+            (let jessie_292 = B in
+            (let jessie_291 = LDB in
+            (JC_306:
+            (((((((((((LZ_TRSM_requires jessie_297) jessie_296) jessie_295) jessie_294) jessie_293) jessie_292) jessie_291) double_P_double_M_B_11) double_P_B_11_alloc_table) double_P_A_0_10_alloc_table) double_P_double_M_A_0_10))))))))))
            end)
           end)
          end)
@@ -4256,7 +4337,7 @@ let LZ_TRSM_safety =
 
 let Nmax_ensures_default =
  fun (p_0_0 : int32) ->
-  { ((true = true) and (JC_257: le_int((2), integer_of_int32(p_0_0)))) }
+  { ((true = true) and (JC_212: le_int((2), integer_of_int32(p_0_0)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4266,27 +4347,27 @@ let Nmax_ensures_default =
      (let N_4 = ref (any_int32 void) in
      (C_176:
      begin
-       (let jessie_160 = (pp := (C_175:
+       (let jessie_210 = (pp := (C_175:
                                 (((gen_float_of_real_safe Double) nearest_even) 1.0))) in
        void);
       (C_178:
       begin
-        (let jessie_161 = (p2_0 := (C_177:
+        (let jessie_212 = (p2_0 := (C_177:
                                    (((gen_float_of_real_safe Double) nearest_even) 1.0))) in
         void);
        (C_179:
        begin
-         (let jessie_162 = (N_4 := (safe_int32_of_integer_ (0))) in void);
+         (let jessie_214 = (N_4 := (safe_int32_of_integer_ (0))) in void);
         try
-         (let jessie_168 = begin
+         (let jessie_223 = begin
                              (loop_18:
                              while true do
-                             { invariant (JC_298: true)  }
+                             { invariant (JC_245: true)  }
                               begin
                                 [ { } unit { true } ];
                                try
-                                (let jessie_167 = begin
-                                                    (let jessie_166 = 
+                                (let jessie_222 = begin
+                                                    (let jessie_221 = 
                                                     begin
                                                       (if ((neq_int_ 
                                                             (integer_of_int32 
@@ -4300,10 +4381,10 @@ let Nmax_ensures_default =
                                                                   (if 
                                                                   ((lt_gen_float 
                                                                     (C_187:
-                                                                    (JC_302:
+                                                                    (JC_249:
                                                                     ((((div_gen_float_safe Double) nearest_even) 
                                                                     (C_186:
-                                                                    (JC_301:
+                                                                    (JC_248:
                                                                     ((((mul_gen_float_safe Double) nearest_even) 
                                                                     (C_185:
                                                                     (((gen_float_of_real_safe Double) nearest_even) 
@@ -4315,7 +4396,7 @@ let Nmax_ensures_default =
                                                                     ((sub_int 
                                                                     (integer_of_int32 p_0_0)) (1)))))))))) 
                                                                     (C_182:
-                                                                    (JC_300:
+                                                                    (JC_247:
                                                                     ((((add_gen_float_safe Double) nearest_even) !pp) !p2_0))))))) 
                                                                     (C_181:
                                                                     (((gen_float_of_real_safe Double) nearest_even) 2.0)))))) 
@@ -4326,16 +4407,16 @@ let Nmax_ensures_default =
                                                                (neg_int (53)))))))) (0))
                                                       then void
                                                       else
-                                                       (let jessie_163 = 
+                                                       (let jessie_215 = 
                                                        (raise
                                                         (Goto_while_8_break_exc
                                                         void)) in
                                                        void));
                                                      (C_193:
                                                      begin
-                                                       (let jessie_164 = 
+                                                       (let jessie_217 = 
                                                        (pp := (C_192:
-                                                              (JC_304:
+                                                              (JC_250:
                                                               ((((mul_gen_float_safe Double) nearest_even) !pp) 
                                                                (C_191:
                                                                (((gen_float_of_real_safe Double) nearest_even) 
@@ -4344,9 +4425,9 @@ let Nmax_ensures_default =
                                                        void);
                                                       (C_198:
                                                       begin
-                                                        (let jessie_165 = 
+                                                        (let jessie_219 = 
                                                         (p2_0 := (C_197:
-                                                                 (JC_306:
+                                                                 (JC_251:
                                                                  ((((mul_gen_float_safe Double) nearest_even) !p2_0) 
                                                                   (C_196:
                                                                   (((gen_float_of_real_safe Double) nearest_even) 
@@ -4397,17 +4478,17 @@ let Nmax_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_262:
-    ((JC_259: delay(integer_of_int32(result), integer_of_int32(p_0_0)))
-    and ((JC_260:
+  { (JC_217:
+    ((JC_214: delay(integer_of_int32(result), integer_of_int32(p_0_0)))
+    and ((JC_215:
          (forall q:int.
           ((le_int((1), q) and le_int(q, integer_of_int32(result)))
           <-> delay(q, integer_of_int32(p_0_0)))))
-        and (JC_261: le_int(integer_of_int32(result), (55)))))) }
+        and (JC_216: le_int(integer_of_int32(result), (55)))))) }
 
 let Nmax_safety =
  fun (p_0_0 : int32) ->
-  { (JC_257: le_int((2), integer_of_int32(p_0_0))) }
+  { (JC_212: le_int((2), integer_of_int32(p_0_0))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4417,104 +4498,104 @@ let Nmax_safety =
      (let N_4 = ref (any_int32 void) in
      (C_176:
      begin
-       (let jessie_151 = (pp := (C_175:
-                                (JC_270:
+       (let jessie_194 = (pp := (C_175:
+                                (JC_224:
                                 (((gen_float_of_real Double) nearest_even) 1.0)))) in
        void);
       (C_178:
       begin
-        (let jessie_152 = (p2_0 := (C_177:
-                                   (JC_272:
+        (let jessie_196 = (p2_0 := (C_177:
+                                   (JC_225:
                                    (((gen_float_of_real Double) nearest_even) 1.0)))) in
         void);
        (C_179:
        begin
-         (let jessie_153 = (N_4 := (safe_int32_of_integer_ (0))) in void);
+         (let jessie_198 = (N_4 := (safe_int32_of_integer_ (0))) in void);
         try
-         (let jessie_159 = begin
+         (let jessie_207 = begin
                              (loop_17:
                              while true do
-                             { invariant (JC_274: true) variant (0) }
+                             { invariant (JC_227: true) variant (0) }
                               begin
                                 [ { } unit { true } ];
                                try
-                                (let jessie_158 = begin
-                                                    (let jessie_157 = 
+                                (let jessie_206 = begin
+                                                    (let jessie_205 = 
                                                     begin
                                                       (if ((neq_int_ 
                                                             (integer_of_int32 
                                                              (C_190:
-                                                             (JC_284:
+                                                             (JC_237:
                                                              (int32_of_integer_ 
                                                               (C_189:
                                                               ((bw_xor 
                                                                 (integer_of_int32 
                                                                  (C_188:
-                                                                 (JC_283:
+                                                                 (JC_236:
                                                                  (int32_of_integer_ 
                                                                   (if 
                                                                   ((lt_gen_float 
                                                                     (C_187:
-                                                                    (JC_281:
+                                                                    (JC_234:
                                                                     ((((div_gen_float Double) nearest_even) 
                                                                     (C_186:
-                                                                    (JC_279:
+                                                                    (JC_232:
                                                                     ((((mul_gen_float Double) nearest_even) 
                                                                     (C_185:
-                                                                    (JC_277:
+                                                                    (JC_230:
                                                                     (((gen_float_of_real Double) nearest_even) 
                                                                     (real_of_int 
                                                                     (integer_of_int32 
                                                                     (C_184:
-                                                                    (JC_276:
+                                                                    (JC_229:
                                                                     (int32_of_integer_ 
                                                                     (C_183:
                                                                     ((sub_int 
                                                                     (integer_of_int32 p_0_0)) (1)))))))))))) 
                                                                     (C_182:
-                                                                    (JC_278:
+                                                                    (JC_231:
                                                                     ((((add_gen_float Double) nearest_even) !pp) !p2_0))))))) 
                                                                     (C_181:
-                                                                    (JC_280:
+                                                                    (JC_233:
                                                                     (((gen_float_of_real Double) nearest_even) 2.0))))))) 
                                                                    (C_180:
-                                                                   (JC_282:
+                                                                   (JC_235:
                                                                    (((gen_float_of_real Double) nearest_even) 1.0))))
                                                                   then (1)
                                                                   else (0))))))) 
                                                                (neg_int (53))))))))) (0))
                                                       then void
                                                       else
-                                                       (let jessie_154 = 
+                                                       (let jessie_199 = 
                                                        (raise
                                                         (Goto_while_8_break_exc
                                                         void)) in
                                                        void));
                                                      (C_193:
                                                      begin
-                                                       (let jessie_155 = 
+                                                       (let jessie_201 = 
                                                        (pp := (C_192:
-                                                              (JC_288:
+                                                              (JC_239:
                                                               ((((mul_gen_float Double) nearest_even) !pp) 
                                                                (C_191:
-                                                               (JC_287:
+                                                               (JC_238:
                                                                (((gen_float_of_real Double) nearest_even) 
                                                                 (real_of_int 
                                                                  (integer_of_int32 p_0_0))))))))) in
                                                        void);
                                                       (C_198:
                                                       begin
-                                                        (let jessie_156 = 
+                                                        (let jessie_203 = 
                                                         (p2_0 := (C_197:
-                                                                 (JC_294:
+                                                                 (JC_242:
                                                                  ((((mul_gen_float Double) nearest_even) !p2_0) 
                                                                   (C_196:
-                                                                  (JC_293:
+                                                                  (JC_241:
                                                                   (((gen_float_of_real Double) nearest_even) 
                                                                    (real_of_int 
                                                                     (integer_of_int32 
                                                                     (C_195:
-                                                                    (JC_292:
+                                                                    (JC_240:
                                                                     (int32_of_integer_ 
                                                                     (C_194:
                                                                     ((sub_int 
@@ -4523,7 +4604,7 @@ let Nmax_safety =
                                                        (C_201:
                                                        begin
                                                          (N_4 := (C_200:
-                                                                 (JC_296:
+                                                                 (JC_243:
                                                                  (int32_of_integer_ 
                                                                   (C_199:
                                                                   ((add_int 
@@ -4574,26 +4655,27 @@ let pmax_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_208:
      begin
-       (let jessie_176 = (p_3 := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_239 = (p_3 := (safe_int32_of_integer_ (1))) in void);
       try
-       (let jessie_181 = begin
+       (let jessie_247 = begin
                            (loop_20:
                            while true do
-                           { invariant (JC_325: true)  }
+                           { invariant (JC_267: true)  }
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_180 = begin
-                                                  (let jessie_179 = begin
+                              (let jessie_246 = begin
+                                                  (let jessie_245 = begin
                                                                       
                                                                     (C_210:
                                                                     begin
                                                                       
-                                                                    (let jessie_177 = 
+                                                                    (let jessie_242 = 
                                                                     (tmp := 
                                                                     (C_209:
-                                                                    (JC_328:
-                                                                    (Nmax !p_3)))) in
+                                                                    (let jessie_241 = !p_3 in
+                                                                    (JC_269:
+                                                                    (Nmax jessie_241))))) in
                                                                     void);
                                                                     void
                                                                     end);
@@ -4603,7 +4685,7 @@ let pmax_ensures_default =
                                                                     (integer_of_int32 !tmp))
                                                                     then void
                                                                     else
-                                                                    (let jessie_178 = 
+                                                                    (let jessie_243 = 
                                                                     (raise
                                                                     (Goto_while_9_break_exc
                                                                     void)) in
@@ -4639,7 +4721,7 @@ let pmax_ensures_default =
        (while_9_break: void) end;
       (C_216:
       begin
-        (let jessie_182 = (__retres := (C_215:
+        (let jessie_249 = (__retres := (C_215:
                                        (safe_int32_of_integer_ (C_214:
                                                                ((sub_int 
                                                                  (integer_of_int32 !p_3)) (1)))))) in
@@ -4653,11 +4735,11 @@ let pmax_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_311: eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_3)))) }
+  { (JC_256: eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_3)))) }
 
 let pmax_safety =
  fun (N_3 : int32) ->
-  { (JC_310: true) }
+  { (JC_255: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -4667,26 +4749,27 @@ let pmax_safety =
      (let __retres = ref (any_int32 void) in
      (C_208:
      begin
-       (let jessie_169 = (p_3 := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_226 = (p_3 := (safe_int32_of_integer_ (1))) in void);
       try
-       (let jessie_174 = begin
+       (let jessie_234 = begin
                            (loop_19:
                            while true do
-                           { invariant (JC_316: true) variant (0) }
+                           { invariant (JC_261: true) variant (0) }
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_173 = begin
-                                                  (let jessie_172 = begin
+                              (let jessie_233 = begin
+                                                  (let jessie_232 = begin
                                                                       
                                                                     (C_210:
                                                                     begin
                                                                       
-                                                                    (let jessie_170 = 
+                                                                    (let jessie_229 = 
                                                                     (tmp := 
                                                                     (C_209:
-                                                                    (JC_319:
-                                                                    (Nmax_requires !p_3)))) in
+                                                                    (let jessie_228 = !p_3 in
+                                                                    (JC_263:
+                                                                    (Nmax_requires jessie_228))))) in
                                                                     void);
                                                                     void
                                                                     end);
@@ -4696,7 +4779,7 @@ let pmax_safety =
                                                                     (integer_of_int32 !tmp))
                                                                     then void
                                                                     else
-                                                                    (let jessie_171 = 
+                                                                    (let jessie_230 = 
                                                                     (raise
                                                                     (Goto_while_9_break_exc
                                                                     void)) in
@@ -4706,7 +4789,7 @@ let pmax_safety =
                                                                       
                                                                     (p_3 := 
                                                                     (C_212:
-                                                                    (JC_321:
+                                                                    (JC_264:
                                                                     (int32_of_integer_ 
                                                                     (C_211:
                                                                     ((add_int 
@@ -4733,8 +4816,8 @@ let pmax_safety =
        (while_9_break: void) end;
       (C_216:
       begin
-        (let jessie_175 = (__retres := (C_215:
-                                       (JC_323:
+        (let jessie_236 = (__retres := (C_215:
+                                       (JC_265:
                                        (int32_of_integer_ (C_214:
                                                           ((sub_int (integer_of_int32 !p_3)) (1))))))) in
         void);
@@ -4756,31 +4839,8 @@ why --project [...] why/bts0112.why
   <function name="Function pmax">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/bts0112_po232.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "165" begin = "13" end = "19"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po233.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po234.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po235.why">
-      <location file = "why/bts0112.why" line = "4041" begin = "63" end = "64"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/bts0112_po236.why">
-      <location file = "why/bts0112.why" line = "4041" begin = "63" end = "64"/>
-      <explain kind = "VarDecr"/>
-    </goal>
     <goal why_file="why/bts0112_po237.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "165" begin = "13" end = "19"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -4789,9 +4849,32 @@ text = "unexplained assertion"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
+    <goal why_file="why/bts0112_po239.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po240.why">
+      <location file = "why/bts0112.why" line = "4123" begin = "63" end = "64"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0112_po241.why">
+      <location file = "why/bts0112.why" line = "4123" begin = "63" end = "64"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0112_po242.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po243.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/bts0112_po231.why">
+    <goal why_file="why/bts0112_po236.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "177" begin = "12" end = "30"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
@@ -4801,31 +4884,6 @@ text = "unexplained assertion"/>
   <function name="Function Nmax">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/bts0112_po206.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po207.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po208.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po209.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po210.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
     <goal why_file="why/bts0112_po211.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
@@ -4917,36 +4975,61 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po229.why">
-      <location file = "why/bts0112.why" line = "3803" begin = "65" end = "66"/>
-      <explain kind = "VarDecr"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po230.why">
-      <location file = "why/bts0112.why" line = "3803" begin = "65" end = "66"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po231.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po232.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po233.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po234.why">
+      <location file = "why/bts0112.why" line = "3884" begin = "65" end = "66"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0112_po235.why">
+      <location file = "why/bts0112.why" line = "3884" begin = "65" end = "66"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/bts0112_po201.why">
+    <goal why_file="why/bts0112_po206.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "166" begin = "13" end = "29"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/bts0112_po202.why">
+    <goal why_file="why/bts0112_po207.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "167" begin = "5" end = "59"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/bts0112_po203.why">
+    <goal why_file="why/bts0112_po208.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "167" begin = "5" end = "59"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/bts0112_po204.why">
+    <goal why_file="why/bts0112_po209.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "167" begin = "5" end = "59"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/bts0112_po205.why">
+    <goal why_file="why/bts0112_po210.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "168" begin = "11" end = "24"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
@@ -4957,27 +5040,27 @@ text = "unexplained assertion"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0112_po170.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "148" begin = "6" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "165" begin = "13" end = "19"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po171.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "149" begin = "6" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "147" begin = "13" end = "20"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po172.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "129" begin = "13" end = "40"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "148" begin = "6" end = "58"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po173.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "149" begin = "6" end = "58"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po174.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "129" begin = "13" end = "40"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -5027,86 +5110,111 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po184.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "186" begin = "23" end = "47"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po185.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "187" begin = "6" end = "36"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po186.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "188" begin = "6" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "186" begin = "13" end = "19"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po187.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "189" begin = "9" end = "53"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po188.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po189.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po190.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "90" begin = "23" end = "47"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po191.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "91" begin = "6" end = "36"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po192.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "92" begin = "6" end = "135"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po193.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "95" begin = "6" end = "50"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po194.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "96" begin = "6" end = "50"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po195.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "97" begin = "6" end = "50"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po196.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "129" begin = "13" end = "40"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/bts0112_po197.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "186" begin = "23" end = "47"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/bts0112_po198.why">
+    <goal why_file="why/bts0112_po188.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "187" begin = "6" end = "36"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/bts0112_po199.why">
+    <goal why_file="why/bts0112_po189.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "188" begin = "6" end = "50"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
+    <goal why_file="why/bts0112_po190.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "189" begin = "9" end = "53"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po191.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po192.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po193.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "90" begin = "13" end = "19"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po194.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "90" begin = "23" end = "47"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po195.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "91" begin = "6" end = "36"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po196.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "92" begin = "6" end = "135"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po197.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "95" begin = "6" end = "50"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po198.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "96" begin = "6" end = "50"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po199.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "97" begin = "6" end = "50"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
     <goal why_file="why/bts0112_po200.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "129" begin = "13" end = "40"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po201.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "186" begin = "13" end = "19"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po202.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "186" begin = "23" end = "47"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po203.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "187" begin = "6" end = "36"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po204.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "188" begin = "6" end = "50"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/bts0112_po205.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "189" begin = "9" end = "53"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
@@ -5294,11 +5402,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po157.why">
-      <location file = "why/bts0112.why" line = "3154" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "3156" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po158.why">
-      <location file = "why/bts0112.why" line = "3154" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "3156" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po159.why">
@@ -5312,11 +5420,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po161.why">
-      <location file = "why/bts0112.why" line = "3114" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "3116" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po162.why">
-      <location file = "why/bts0112.why" line = "3114" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "3116" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po163.why">
@@ -5330,11 +5438,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po165.why">
-      <location file = "why/bts0112.why" line = "3076" begin = "63" end = "64"/>
+      <location file = "why/bts0112.why" line = "3078" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po166.why">
-      <location file = "why/bts0112.why" line = "3076" begin = "63" end = "64"/>
+      <location file = "why/bts0112.why" line = "3078" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -5525,11 +5633,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po113.why">
-      <location file = "why/bts0112.why" line = "2461" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "2463" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po114.why">
-      <location file = "why/bts0112.why" line = "2461" begin = "77" end = "78"/>
+      <location file = "why/bts0112.why" line = "2463" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po115.why">
@@ -5543,11 +5651,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/bts0112_po117.why">
-      <location file = "why/bts0112.why" line = "2429" begin = "62" end = "63"/>
+      <location file = "why/bts0112.why" line = "2429" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po118.why">
-      <location file = "why/bts0112.why" line = "2429" begin = "62" end = "63"/>
+      <location file = "why/bts0112.why" line = "2429" begin = "63" end = "64"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

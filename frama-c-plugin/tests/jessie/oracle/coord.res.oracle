@@ -565,15 +565,15 @@ let g_ensures_default =
    begin
      (C_4:
      begin
-       (JC_33:
-       (f (C_3:
-          ((safe_acc_ !coord_x_0_tab_1) (C_2:
-                                        ((shift tab) (integer_of_int32 index)))))));
+       (let jessie_3 = (C_3:
+                       ((safe_acc_ !coord_x_0_tab_1) (C_2:
+                                                     ((shift tab) (integer_of_int32 index))))) in
+       (JC_33: (f jessie_3)));
       (C_6:
       begin
-        (JC_34:
-        (f (C_5:
-           ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index))))));
+        (let jessie_4 = (C_5:
+                        ((safe_acc_ !coord_x_0_tab_1) ((shift tab) (integer_of_int32 index)))) in
+        (JC_34: (f jessie_4)));
        (raise Return)
       end)
      end);
@@ -596,18 +596,18 @@ let g_safety =
    begin
      (C_4:
      begin
-       (JC_30:
-       (f_requires (C_3:
-                   (JC_29:
-                   ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
-                    (integer_of_int32 index))))));
+       (let jessie_1 = (C_3:
+                       (JC_29:
+                       ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
+                        (integer_of_int32 index)))) in
+       (JC_30: (f_requires jessie_1)));
       (C_6:
       begin
-        (JC_32:
-        (f_requires (C_5:
-                    (JC_31:
-                    ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
-                     (integer_of_int32 index))))));
+        (let jessie_2 = (C_5:
+                        (JC_31:
+                        ((((offset_acc_ !coord_tab_1_alloc_table) !coord_x_0_tab_1) tab) 
+                         (integer_of_int32 index)))) in
+        (JC_32: (f_requires jessie_2)));
        (raise Return)
       end)
      end);

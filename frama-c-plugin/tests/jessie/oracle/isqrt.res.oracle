@@ -1569,12 +1569,12 @@ let isqrt_ensures_default =
      (let g1 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_44 = begin
+      (let jessie_75 = begin
                          (if ((le_int_ (integer_of_uint32 x)) (1))
                          then
-                          (let jessie_26 = (C_2:
+                          (let jessie_43 = (C_2:
                                            begin
-                                             (let jessie_25 = (__retres := 
+                                             (let jessie_42 = (__retres := 
                                                                (C_1:
                                                                (safe_int32_of_integer_ 
                                                                 (integer_of_uint32 x)))) in
@@ -1585,20 +1585,20 @@ let isqrt_ensures_default =
                          else void);
                         (C_3:
                         begin
-                          (let jessie_27 = (s_33 := (safe_int32_of_integer_ (1))) in
+                          (let jessie_45 = (s_33 := (safe_int32_of_integer_ (1))) in
                           void);
                          (C_6:
                          begin
-                           (let jessie_28 = (x1 := (C_5:
+                           (let jessie_47 = (x1 := (C_5:
                                                    (safe_uint32_of_integer_ 
                                                     (C_4:
                                                     ((sub_int (integer_of_uint32 x)) (1)))))) in
                            void);
                           (if ((gt_int_ (integer_of_uint32 !x1)) (65535))
                           then
-                           (let jessie_30 = (C_9:
+                           (let jessie_51 = (C_9:
                                             begin
-                                              (let jessie_29 = (s_33 := 
+                                              (let jessie_49 = (s_33 := 
                                                                 (C_8:
                                                                 (safe_int32_of_integer_ 
                                                                  (C_7:
@@ -1610,7 +1610,7 @@ let isqrt_ensures_default =
                                                (x1 := (C_11:
                                                       (safe_uint32_of_integer_ 
                                                        (C_10:
-                                                       (JC_67:
+                                                       (JC_41:
                                                        ((div_int (integer_of_uint32 !x1)) (65536)))))));
                                               !x1
                                              end)
@@ -1619,9 +1619,9 @@ let isqrt_ensures_default =
                           else void);
                           (if ((gt_int_ (integer_of_uint32 !x1)) (255))
                           then
-                           (let jessie_32 = (C_15:
+                           (let jessie_55 = (C_15:
                                             begin
-                                              (let jessie_31 = (s_33 := 
+                                              (let jessie_53 = (s_33 := 
                                                                 (C_14:
                                                                 (safe_int32_of_integer_ 
                                                                  (C_13:
@@ -1633,7 +1633,7 @@ let isqrt_ensures_default =
                                                (x1 := (C_17:
                                                       (safe_uint32_of_integer_ 
                                                        (C_16:
-                                                       (JC_69:
+                                                       (JC_42:
                                                        ((div_int (integer_of_uint32 !x1)) (256)))))));
                                               !x1
                                              end)
@@ -1642,9 +1642,9 @@ let isqrt_ensures_default =
                           else void);
                           (if ((gt_int_ (integer_of_uint32 !x1)) (15))
                           then
-                           (let jessie_34 = (C_21:
+                           (let jessie_59 = (C_21:
                                             begin
-                                              (let jessie_33 = (s_33 := 
+                                              (let jessie_57 = (s_33 := 
                                                                 (C_20:
                                                                 (safe_int32_of_integer_ 
                                                                  (C_19:
@@ -1656,7 +1656,7 @@ let isqrt_ensures_default =
                                                (x1 := (C_23:
                                                       (safe_uint32_of_integer_ 
                                                        (C_22:
-                                                       (JC_71:
+                                                       (JC_43:
                                                        ((div_int (integer_of_uint32 !x1)) (16)))))));
                                               !x1
                                              end)
@@ -1666,25 +1666,25 @@ let isqrt_ensures_default =
                           (if ((gt_int_ (integer_of_uint32 !x1)) (3))
                           then
                            (C_27:
-                           (let jessie_35 = (s_33 := (C_26:
+                           (let jessie_61 = (s_33 := (C_26:
                                                      (safe_int32_of_integer_ 
                                                       (C_25:
                                                       ((add_int (integer_of_int32 !s_33)) (1)))))) in
                            void))
                           else void);
-                          (let jessie_36 = begin
+                          (let jessie_63 = begin
                                              (assert
-                                             { (JC_72:
+                                             { (JC_44:
                                                ge_int(integer_of_int32(s_33),
                                                (0))) };
                                              void);
                                             (assert
-                                            { (JC_73:
+                                            { (JC_45:
                                               lt_int(integer_of_int32(s_33),
                                               (32))) };
                                             void);
                                             (assert
-                                            { (JC_74:
+                                            { (JC_46:
                                               le_int((1),
                                               asr((2147483647),
                                               integer_of_int32(s_33)))) };
@@ -1699,9 +1699,9 @@ let isqrt_ensures_default =
                                             end)
                                            end in
                           void);
-                          (let jessie_37 = begin
+                          (let jessie_65 = begin
                                              (assert
-                                             { (JC_75:
+                                             { (JC_47:
                                                lt_int(integer_of_int32(s_33),
                                                (32))) };
                                              void);
@@ -1710,7 +1710,7 @@ let isqrt_ensures_default =
                                               (g1 := (C_41:
                                                      (safe_int32_of_integer_ 
                                                       (C_40:
-                                                      (JC_77:
+                                                      (JC_48:
                                                       ((div_int (integer_of_uint32 
                                                                  (C_39:
                                                                  (safe_uint32_of_integer_ 
@@ -1732,15 +1732,15 @@ let isqrt_ensures_default =
                                            end in
                           void);
                           try
-                           (let jessie_42 = begin
+                           (let jessie_72 = begin
                                               (loop_2:
                                               while true do
-                                              { invariant (JC_79: true)  }
+                                              { invariant (JC_50: true)  }
                                                begin
                                                  [ { } unit { true } ];
                                                 try
-                                                 (let jessie_41 = begin
-                                                                    (let jessie_40 = 
+                                                 (let jessie_71 = begin
+                                                                    (let jessie_70 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -1749,7 +1749,7 @@ let isqrt_ensures_default =
                                                                     (integer_of_int32 !g0))
                                                                     then void
                                                                     else
-                                                                    (let jessie_38 = 
+                                                                    (let jessie_66 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -1757,7 +1757,7 @@ let isqrt_ensures_default =
                                                                     (C_43:
                                                                     begin
                                                                       
-                                                                    (let jessie_39 = 
+                                                                    (let jessie_68 = 
                                                                     (g0 := !g1) in
                                                                     void);
                                                                     (C_52:
@@ -1767,7 +1767,7 @@ let isqrt_ensures_default =
                                                                     (C_51:
                                                                     (safe_int32_of_integer_ 
                                                                     (C_50:
-                                                                    (JC_84:
+                                                                    (JC_53:
                                                                     ((div_int 
                                                                     (integer_of_uint32 
                                                                     (C_49:
@@ -1782,7 +1782,7 @@ let isqrt_ensures_default =
                                                                     (C_46:
                                                                     (safe_uint32_of_integer_ 
                                                                     (C_45:
-                                                                    (JC_83:
+                                                                    (JC_52:
                                                                     ((div_int 
                                                                     (integer_of_uint32 x)) 
                                                                     (integer_of_uint32 
@@ -1814,7 +1814,7 @@ let isqrt_ensures_default =
                            (while_0_break: void) end;
                           (C_53:
                           begin
-                            (let jessie_43 = (__retres := !g0) in void);
+                            (let jessie_74 = (__retres := !g0) in void);
                            (raise (Return_label_exc void))
                           end)
                          end)
@@ -1844,14 +1844,14 @@ let isqrt_safety =
      (let g1 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_24 = begin
+      (let jessie_39 = begin
                          (if ((le_int_ (integer_of_uint32 x)) (1))
                          then
-                          (let jessie_6 = (C_2:
+                          (let jessie_7 = (C_2:
                                           begin
-                                            (let jessie_5 = (__retres := 
+                                            (let jessie_6 = (__retres := 
                                                              (C_1:
-                                                             (JC_10:
+                                                             (JC_9:
                                                              (int32_of_integer_ 
                                                               (integer_of_uint32 x))))) in
                                             void);
@@ -1861,35 +1861,35 @@ let isqrt_safety =
                          else void);
                         (C_3:
                         begin
-                          (let jessie_7 = (s_33 := (safe_int32_of_integer_ (1))) in
+                          (let jessie_9 = (s_33 := (safe_int32_of_integer_ (1))) in
                           void);
                          (C_6:
                          begin
-                           (let jessie_8 = (x1 := (C_5:
-                                                  (JC_12:
-                                                  (uint32_of_integer_ 
-                                                   (C_4:
-                                                   ((sub_int (integer_of_uint32 x)) (1))))))) in
+                           (let jessie_11 = (x1 := (C_5:
+                                                   (JC_10:
+                                                   (uint32_of_integer_ 
+                                                    (C_4:
+                                                    ((sub_int (integer_of_uint32 x)) (1))))))) in
                            void);
                           (if ((gt_int_ (integer_of_uint32 !x1)) (65535))
                           then
-                           (let jessie_10 = (C_9:
+                           (let jessie_15 = (C_9:
                                             begin
-                                              (let jessie_9 = (s_33 := 
-                                                               (C_8:
-                                                               (JC_14:
-                                                               (int32_of_integer_ 
-                                                                (C_7:
-                                                                ((add_int 
-                                                                  (integer_of_int32 !s_33)) (8))))))) in
+                                              (let jessie_13 = (s_33 := 
+                                                                (C_8:
+                                                                (JC_11:
+                                                                (int32_of_integer_ 
+                                                                 (C_7:
+                                                                 ((add_int 
+                                                                   (integer_of_int32 !s_33)) (8))))))) in
                                               void);
                                              (C_12:
                                              begin
                                                (x1 := (C_11:
-                                                      (JC_18:
+                                                      (JC_13:
                                                       (uint32_of_integer_ 
                                                        (C_10:
-                                                       (JC_17:
+                                                       (JC_12:
                                                        ((div_int_ (integer_of_uint32 !x1)) (65536))))))));
                                               !x1
                                              end)
@@ -1898,11 +1898,11 @@ let isqrt_safety =
                           else void);
                           (if ((gt_int_ (integer_of_uint32 !x1)) (255))
                           then
-                           (let jessie_12 = (C_15:
+                           (let jessie_19 = (C_15:
                                             begin
-                                              (let jessie_11 = (s_33 := 
+                                              (let jessie_17 = (s_33 := 
                                                                 (C_14:
-                                                                (JC_20:
+                                                                (JC_14:
                                                                 (int32_of_integer_ 
                                                                  (C_13:
                                                                  ((add_int 
@@ -1911,10 +1911,10 @@ let isqrt_safety =
                                              (C_18:
                                              begin
                                                (x1 := (C_17:
-                                                      (JC_24:
+                                                      (JC_16:
                                                       (uint32_of_integer_ 
                                                        (C_16:
-                                                       (JC_23:
+                                                       (JC_15:
                                                        ((div_int_ (integer_of_uint32 !x1)) (256))))))));
                                               !x1
                                              end)
@@ -1923,11 +1923,11 @@ let isqrt_safety =
                           else void);
                           (if ((gt_int_ (integer_of_uint32 !x1)) (15))
                           then
-                           (let jessie_14 = (C_21:
+                           (let jessie_23 = (C_21:
                                             begin
-                                              (let jessie_13 = (s_33 := 
+                                              (let jessie_21 = (s_33 := 
                                                                 (C_20:
-                                                                (JC_26:
+                                                                (JC_17:
                                                                 (int32_of_integer_ 
                                                                  (C_19:
                                                                  ((add_int 
@@ -1936,10 +1936,10 @@ let isqrt_safety =
                                              (C_24:
                                              begin
                                                (x1 := (C_23:
-                                                      (JC_30:
+                                                      (JC_19:
                                                       (uint32_of_integer_ 
                                                        (C_22:
-                                                       (JC_29:
+                                                       (JC_18:
                                                        ((div_int_ (integer_of_uint32 !x1)) (16))))))));
                                               !x1
                                              end)
@@ -1949,31 +1949,31 @@ let isqrt_safety =
                           (if ((gt_int_ (integer_of_uint32 !x1)) (3))
                           then
                            (C_27:
-                           (let jessie_15 = (s_33 := (C_26:
-                                                     (JC_32:
+                           (let jessie_25 = (s_33 := (C_26:
+                                                     (JC_20:
                                                      (int32_of_integer_ 
                                                       (C_25:
                                                       ((add_int (integer_of_int32 !s_33)) (1))))))) in
                            void))
                           else void);
-                          (let jessie_16 = begin
+                          (let jessie_27 = begin
                                              [ { } unit reads s_33
-                                               { (JC_33:
+                                               { (JC_21:
                                                  ge_int(integer_of_int32(s_33),
                                                  (0))) } ];
                                             [ { } unit reads s_33
-                                              { (JC_34:
+                                              { (JC_22:
                                                 lt_int(integer_of_int32(s_33),
                                                 (32))) } ];
                                             [ { } unit reads s_33
-                                              { (JC_35:
+                                              { (JC_23:
                                                 le_int((1),
                                                 asr((2147483647),
                                                 integer_of_int32(s_33)))) } ];
                                             (C_33:
                                             begin
                                               (g0 := (C_32:
-                                                     (JC_37:
+                                                     (JC_24:
                                                      (int32_of_integer_ 
                                                       (C_31:
                                                       ((lsl (1)) (integer_of_int32 !s_33)))))));
@@ -1981,32 +1981,32 @@ let isqrt_safety =
                                             end)
                                            end in
                           void);
-                          (let jessie_17 = begin
+                          (let jessie_29 = begin
                                              [ { } unit reads s_33
-                                               { (JC_38:
+                                               { (JC_25:
                                                  lt_int(integer_of_int32(s_33),
                                                  (32))) } ];
                                             (C_42:
                                             begin
                                               (g1 := (C_41:
-                                                     (JC_48:
+                                                     (JC_30:
                                                      (int32_of_integer_ 
                                                       (C_40:
-                                                      (JC_47:
+                                                      (JC_29:
                                                       ((div_int_ (integer_of_uint32 
                                                                   (C_39:
-                                                                  (JC_46:
+                                                                  (JC_28:
                                                                   (uint32_of_integer_ 
                                                                    (C_38:
                                                                    ((add_int 
                                                                     (integer_of_uint32 
                                                                     (C_37:
-                                                                    (JC_44:
+                                                                    (JC_26:
                                                                     (uint32_of_integer_ 
                                                                     (integer_of_int32 !g0)))))) 
                                                                     (integer_of_uint32 
                                                                     (C_36:
-                                                                    (JC_45:
+                                                                    (JC_27:
                                                                     (uint32_of_integer_ 
                                                                     (C_35:
                                                                     ((lsr 
@@ -2017,16 +2017,16 @@ let isqrt_safety =
                                            end in
                           void);
                           try
-                           (let jessie_22 = begin
+                           (let jessie_36 = begin
                                               (loop_1:
                                               while true do
-                                              { invariant (JC_50: true)
+                                              { invariant (JC_32: true)
                                                 variant (0) }
                                                begin
                                                  [ { } unit { true } ];
                                                 try
-                                                 (let jessie_21 = begin
-                                                                    (let jessie_20 = 
+                                                 (let jessie_35 = begin
+                                                                    (let jessie_34 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -2035,7 +2035,7 @@ let isqrt_safety =
                                                                     (integer_of_int32 !g0))
                                                                     then void
                                                                     else
-                                                                    (let jessie_18 = 
+                                                                    (let jessie_30 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -2043,7 +2043,7 @@ let isqrt_safety =
                                                                     (C_43:
                                                                     begin
                                                                       
-                                                                    (let jessie_19 = 
+                                                                    (let jessie_32 = 
                                                                     (g0 := !g1) in
                                                                     void);
                                                                     (C_52:
@@ -2051,33 +2051,33 @@ let isqrt_safety =
                                                                       
                                                                     (g1 := 
                                                                     (C_51:
-                                                                    (JC_65:
+                                                                    (JC_40:
                                                                     (int32_of_integer_ 
                                                                     (C_50:
-                                                                    (JC_64:
+                                                                    (JC_39:
                                                                     ((div_int_ 
                                                                     (integer_of_uint32 
                                                                     (C_49:
-                                                                    (JC_63:
+                                                                    (JC_38:
                                                                     (uint32_of_integer_ 
                                                                     (C_48:
                                                                     ((add_int 
                                                                     (integer_of_uint32 
                                                                     (C_47:
-                                                                    (JC_59:
+                                                                    (JC_34:
                                                                     (uint32_of_integer_ 
                                                                     (integer_of_int32 !g0)))))) 
                                                                     (integer_of_uint32 
                                                                     (C_46:
-                                                                    (JC_62:
+                                                                    (JC_37:
                                                                     (uint32_of_integer_ 
                                                                     (C_45:
-                                                                    (JC_61:
+                                                                    (JC_36:
                                                                     ((div_int_ 
                                                                     (integer_of_uint32 x)) 
                                                                     (integer_of_uint32 
                                                                     (C_44:
-                                                                    (JC_60:
+                                                                    (JC_35:
                                                                     (uint32_of_integer_ 
                                                                     (integer_of_int32 !g0))))))))))))))))))) (2))))))));
                                                                     !g1
@@ -2105,7 +2105,7 @@ let isqrt_safety =
                            (while_0_break: void) end;
                           (C_53:
                           begin
-                            (let jessie_23 = (__retres := !g0) in void);
+                            (let jessie_38 = (__retres := !g0) in void);
                            (raise (Return_label_exc void))
                           end)
                          end)

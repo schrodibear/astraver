@@ -433,26 +433,26 @@ parameter exp1 :
  x:gen_float ->
   { } gen_float
   { ((true = true) ->
-     (JC_50:
-     ((JC_48:
+     (JC_37:
+     ((JC_35:
       le_real(abs_real(sub_real(exact_value(result), exp(exact_value(x)))),
       0x1p-4))
-     and (JC_49:
+     and (JC_36:
          le_real(gen_round_error(result),
          add_real(gen_round_error(x), 0x0.3p-20)))))) }
 
 parameter exp1_requires :
  x:gen_float ->
-  { (JC_39:
-    ((JC_37: le_real(abs_real(exact_value(x)), 1.0))
-    and (JC_38: le_real(gen_round_error(x), 0x1p-20))))}
+  { (JC_26:
+    ((JC_24: le_real(abs_real(exact_value(x)), 1.0))
+    and (JC_25: le_real(gen_round_error(x), 0x1p-20))))}
   gen_float
   { ((true = true) ->
-     (JC_50:
-     ((JC_48:
+     (JC_37:
+     ((JC_35:
       le_real(abs_real(sub_real(exact_value(result), exp(exact_value(x)))),
       0x1p-4))
-     and (JC_49:
+     and (JC_36:
          le_real(gen_round_error(result),
          add_real(gen_round_error(x), 0x0.3p-20)))))) }
 
@@ -483,9 +483,9 @@ parameter safe_int8_of_integer_ :
 let exp1_ensures_default =
  fun (x : gen_float) ->
   { ((true = true)
-    and (JC_43:
-        ((JC_41: le_real(abs_real(exact_value(x)), 1.0))
-        and (JC_42: le_real(gen_round_error(x), 0x1p-20))))) }
+    and (JC_30:
+        ((JC_28: le_real(abs_real(exact_value(x)), 1.0))
+        and (JC_29: le_real(gen_round_error(x), 0x1p-20))))) }
   (init:
   (let return = ref (any_gen_float Double) in
   try
@@ -493,37 +493,37 @@ let exp1_ensures_default =
      (let r = ref (any_gen_float Double) in
      (C_15:
      begin
-       (let jessie_4 = (r := (C_14:
-                             (JC_83:
-                             ((((add_gen_float_safe Double) nearest_even) 
-                               (C_13:
-                               (JC_80:
-                               ((((add_gen_float_safe Double) nearest_even) 
-                                 (((gen_float_of_real_safe Double) nearest_even) 0.9890365552)) 
-                                (C_12:
-                                (JC_79:
-                                ((((mul_gen_float_safe Double) nearest_even) 
-                                  (((gen_float_of_real_safe Double) nearest_even) 1.130258690)) x))))))) 
-                              (C_11:
-                              (JC_82:
-                              ((((mul_gen_float_safe Double) nearest_even) 
-                                (C_10:
-                                (JC_81:
-                                ((((mul_gen_float_safe Double) nearest_even) 
-                                  (((gen_float_of_real_safe Double) nearest_even) 0.5540440796)) x)))) x))))))) in
+       (let jessie_11 = (r := (C_14:
+                              (JC_57:
+                              ((((add_gen_float_safe Double) nearest_even) 
+                                (C_13:
+                                (JC_54:
+                                ((((add_gen_float_safe Double) nearest_even) 
+                                  (((gen_float_of_real_safe Double) nearest_even) 0.9890365552)) 
+                                 (C_12:
+                                 (JC_53:
+                                 ((((mul_gen_float_safe Double) nearest_even) 
+                                   (((gen_float_of_real_safe Double) nearest_even) 1.130258690)) x))))))) 
+                               (C_11:
+                               (JC_56:
+                               ((((mul_gen_float_safe Double) nearest_even) 
+                                 (C_10:
+                                 (JC_55:
+                                 ((((mul_gen_float_safe Double) nearest_even) 
+                                   (((gen_float_of_real_safe Double) nearest_even) 0.5540440796)) x)))) x))))))) in
        void);
       (assert
-      { (JC_84: le_real(abs_real(float_value(x)), 0x1.00001p0)) };
+      { (JC_58: le_real(abs_real(float_value(x)), 0x1.00001p0)) };
       void);
       void;
       (assert
-      { (JC_85:
+      { (JC_59:
         le_real(abs_real(sub_real(exact_value(r), exp(exact_value(x)))),
         0x0.FFFFp-4)) };
       void);
       void;
       (assert
-      { (JC_86:
+      { (JC_60:
         le_real(abs_real(sub_real(add_real(add_real(0.9890365552,
                                            mul_real(1.130258690,
                                            float_value(x))),
@@ -535,13 +535,13 @@ let exp1_ensures_default =
       void);
       void;
       (assert
-      { (JC_87:
+      { (JC_61:
         le_real(abs_real(sub_real(float_value(r), exp(float_value(x)))),
         0x1p-4)) };
       void);
       void;
       (assert
-      { (JC_88:
+      { (JC_62:
         le_real(gen_round_error(r),
         add_real(add_real(abs_real(sub_real(float_value(r),
                                    exp(float_value(x)))),
@@ -557,19 +557,19 @@ let exp1_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_47:
-    ((JC_45:
+  { (JC_34:
+    ((JC_32:
      le_real(abs_real(sub_real(exact_value(result), exp(exact_value(x)))),
      0x1p-4))
-    and (JC_46:
+    and (JC_33:
         le_real(gen_round_error(result),
         add_real(gen_round_error(x), 0x0.3p-20))))) }
 
 let exp1_safety =
  fun (x : gen_float) ->
-  { (JC_43:
-    ((JC_41: le_real(abs_real(exact_value(x)), 1.0))
-    and (JC_42: le_real(gen_round_error(x), 0x1p-20)))) }
+  { (JC_30:
+    ((JC_28: le_real(abs_real(exact_value(x)), 1.0))
+    and (JC_29: le_real(gen_round_error(x), 0x1p-20)))) }
   (init:
   (let return = ref (any_gen_float Double) in
   try
@@ -577,37 +577,37 @@ let exp1_safety =
      (let r = ref (any_gen_float Double) in
      (C_15:
      begin
-       (let jessie_3 = (r := (C_14:
-                             (JC_68:
+       (let jessie_8 = (r := (C_14:
+                             (JC_47:
                              ((((add_gen_float Double) nearest_even) 
                                (C_13:
-                               (JC_64:
+                               (JC_43:
                                ((((add_gen_float Double) nearest_even) 
-                                 (JC_61:
+                                 (JC_40:
                                  (((gen_float_of_real Double) nearest_even) 0.9890365552))) 
                                 (C_12:
-                                (JC_63:
+                                (JC_42:
                                 ((((mul_gen_float Double) nearest_even) 
-                                  (JC_62:
+                                  (JC_41:
                                   (((gen_float_of_real Double) nearest_even) 1.130258690))) x))))))) 
                               (C_11:
-                              (JC_67:
+                              (JC_46:
                               ((((mul_gen_float Double) nearest_even) 
                                 (C_10:
-                                (JC_66:
+                                (JC_45:
                                 ((((mul_gen_float Double) nearest_even) 
-                                  (JC_65:
+                                  (JC_44:
                                   (((gen_float_of_real Double) nearest_even) 0.5540440796))) x)))) x))))))) in
        void);
-      [ { } unit { (JC_69: le_real(abs_real(float_value(x)), 0x1.00001p0)) } ];
+      [ { } unit { (JC_48: le_real(abs_real(float_value(x)), 0x1.00001p0)) } ];
       void;
       [ { } unit reads r
-        { (JC_70:
+        { (JC_49:
           le_real(abs_real(sub_real(exact_value(r), exp(exact_value(x)))),
           0x0.FFFFp-4)) } ];
       void;
       [ { } unit
-        { (JC_71:
+        { (JC_50:
           le_real(abs_real(sub_real(add_real(add_real(0.9890365552,
                                              mul_real(1.130258690,
                                              float_value(x))),
@@ -618,12 +618,12 @@ let exp1_safety =
           0x1p-4)) } ];
       void;
       [ { } unit reads r
-        { (JC_72:
+        { (JC_51:
           le_real(abs_real(sub_real(float_value(r), exp(float_value(x)))),
           0x1p-4)) } ];
       void;
       [ { } unit reads r
-        { (JC_73:
+        { (JC_52:
           le_real(gen_round_error(r),
           add_real(add_real(abs_real(sub_real(float_value(r),
                                      exp(float_value(x)))),
@@ -651,7 +651,7 @@ let monexp_ensures_default =
      (let __retres = ref (any_gen_float Double) in
      begin
        (assert
-       { (JC_26:
+       { (JC_18:
          le_real(abs_real(sub_real(add_real(add_real(0.9890365552,
                                             mul_real(1.130258690,
                                             float_value(x_0))),
@@ -664,22 +664,22 @@ let monexp_ensures_default =
       void;
       (C_7:
       begin
-        (let jessie_2 = (__retres := (C_6:
-                                     (JC_36:
+        (let jessie_5 = (__retres := (C_6:
+                                     (JC_23:
                                      ((((add_gen_float_safe Double) nearest_even) 
                                        (C_5:
-                                       (JC_33:
+                                       (JC_20:
                                        ((((add_gen_float_safe Double) nearest_even) 
                                          (((gen_float_of_real_safe Double) nearest_even) 0.9890365552)) 
                                         (C_4:
-                                        (JC_32:
+                                        (JC_19:
                                         ((((mul_gen_float_safe Double) nearest_even) 
                                           (((gen_float_of_real_safe Double) nearest_even) 1.130258690)) x_0))))))) 
                                       (C_3:
-                                      (JC_35:
+                                      (JC_22:
                                       ((((mul_gen_float_safe Double) nearest_even) 
                                         (C_2:
-                                        (JC_34:
+                                        (JC_21:
                                         ((((mul_gen_float_safe Double) nearest_even) 
                                           (((gen_float_of_real_safe Double) nearest_even) 0.5540440796)) x_0)))) x_0))))))) in
         void);
@@ -718,26 +718,26 @@ let monexp_safety =
       void;
       (C_7:
       begin
-        (let jessie_1 = (__retres := (C_6:
-                                     (JC_25:
+        (let jessie_2 = (__retres := (C_6:
+                                     (JC_17:
                                      ((((add_gen_float Double) nearest_even) 
                                        (C_5:
-                                       (JC_21:
+                                       (JC_13:
                                        ((((add_gen_float Double) nearest_even) 
-                                         (JC_18:
+                                         (JC_10:
                                          (((gen_float_of_real Double) nearest_even) 0.9890365552))) 
                                         (C_4:
-                                        (JC_20:
+                                        (JC_12:
                                         ((((mul_gen_float Double) nearest_even) 
-                                          (JC_19:
+                                          (JC_11:
                                           (((gen_float_of_real Double) nearest_even) 1.130258690))) x_0))))))) 
                                       (C_3:
-                                      (JC_24:
+                                      (JC_16:
                                       ((((mul_gen_float Double) nearest_even) 
                                         (C_2:
-                                        (JC_23:
+                                        (JC_15:
                                         ((((mul_gen_float Double) nearest_even) 
-                                          (JC_22:
+                                          (JC_14:
                                           (((gen_float_of_real Double) nearest_even) 0.5540440796))) x_0)))) x_0))))))) in
         void);
        (return := !__retres);

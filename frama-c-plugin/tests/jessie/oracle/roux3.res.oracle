@@ -550,13 +550,13 @@ let g_ensures_default =
      (let i = ref (any_pointer void) in
      (C_3:
      begin
-       (let jessie_5 = (i := (C_2:
-                             (JC_21:
+       (let jessie_6 = (i := (C_2:
+                             (JC_20:
                              (((alloc_struct_int_P (1)) int_P_i_2_alloc_table) int_P_i_2_tag_table)))) in
        void);
       (C_4:
       begin
-        (JC_22: (f !i));
+        (let jessie_7 = !i in (JC_21: (f jessie_7)));
        (C_5:
        begin
          ((safe_free_parameter int_P_i_2_alloc_table) !i);
@@ -597,7 +597,7 @@ let g_safety =
        void);
       (C_4:
       begin
-        (JC_19: (f_requires !i));
+        (let jessie_3 = !i in (JC_19: (f_requires jessie_3)));
        (C_5:
        begin
          ((free_parameter int_P_i_2_alloc_table) !i);

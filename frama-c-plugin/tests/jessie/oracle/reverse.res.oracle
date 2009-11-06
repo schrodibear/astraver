@@ -859,7 +859,7 @@ let list_reverse_ensures_default =
                            (loop_2:
                            while true do
                            { invariant
-                               (JC_16:
+                               (JC_15:
                                (exists lp:list.
                                 (exists lr:list.
                                  (list_contents(p_5, lp,
@@ -1020,7 +1020,7 @@ let list_reverse_safety =
                                                                     (let jessie_12 = 
                                                                     (r := 
                                                                     (C_5:
-                                                                    (JC_14:
+                                                                    (JC_13:
                                                                     (((acc_ struct_list_p0_6_alloc_table) !struct_list_tl_p0_6) !r)))) in
                                                                     void);
                                                                     (C_8:
@@ -1029,7 +1029,7 @@ let list_reverse_safety =
                                                                     (let jessie_18 = 
                                                                     (let jessie_14 = !p_5 in
                                                                     (let jessie_17 = !q in
-                                                                    (JC_15:
+                                                                    (JC_14:
                                                                     ((((upd_ struct_list_p0_6_alloc_table) struct_list_tl_p0_6) jessie_17) jessie_14)))) in
                                                                     void);
                                                                     (C_9:

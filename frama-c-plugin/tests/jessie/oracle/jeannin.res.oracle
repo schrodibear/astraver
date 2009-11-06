@@ -396,7 +396,7 @@ let f_ensures_default =
    begin
      (C_1:
      begin
-       (let jessie_2 = (a := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_4 = (a := (safe_int32_of_integer_ (1))) in void);
       (raise Return)
      end);
     (raise Return)
@@ -414,7 +414,7 @@ let f_safety =
    begin
      (C_1:
      begin
-       (let jessie_1 = (a := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_2 = (a := (safe_int32_of_integer_ (1))) in void);
       (raise Return)
      end);
     (raise Return)

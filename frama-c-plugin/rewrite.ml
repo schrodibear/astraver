@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: rewrite.ml,v 1.2 2009-10-16 09:48:22 virgile Exp $ *)
+(* $Id: rewrite.ml,v 1.3 2009-11-06 13:48:28 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -40,7 +40,7 @@ open Common
 (*****************************************************************************)
 
 class add_default_behavior =
-  object(self)
+  object(_self)
     inherit Visitor.generic_frama_c_visitor (Project.current())
       (Cil.inplace_visit())
     method vspec s =
@@ -58,9 +58,12 @@ class add_default_behavior =
 
     method vcode_annot _ = SkipChildren
 
-    method vfile f =
-      let init = Globals.Functions.get_glob_init f in
+    method vfile _f =
+(*
+      let init = Globals.Functions.get_glob_init f  in
+      Format.eprintf "Rewrite.add_default_behavior#vfile: f = %s@." f.fileName;
       ignore (visitFramacFunspec (self:>Visitor.frama_c_visitor) init.spec);
+*)
       DoChildren
   end
 
@@ -161,20 +164,11 @@ let rename_entities file =
   (* preprocess of renaming logic functions  *)
   Logic_env.LogicInfo.iter
     (fun name _li ->
-(*
-       Format.eprintf "Jessie.Rewrite: checking overloading of %s -> " name;
-*)
        try
 	 let x = Hashtbl.find logic_names_overloading name in
-(*
-	 Format.eprintf "true!@.";
-*)
 	 x := true
        with
 	   Not_found ->
-(*
-	     Format.eprintf "false@.";
-*)
 	     Hashtbl.add logic_names_overloading name (ref false)
     );
 
@@ -295,11 +289,14 @@ class replaceStringConstants =
     (* Apply translation from initializer in primitive AST to block of code,
      * simple initializer and type.
      *)
-    let b,init,ty = Cabs2cil.blockInitializer Cilutil.LvalSet.empty v inite in
+    let _b,init,ty = Cabs2cil.blockInitializer Cilutil.LvalSet.empty v inite in
     (* Precise the array type *)
     v.vtype <- ty;
     (* Attach global variable and code for global initialization *)
+(* DISABLED because does not work and uses deprecated Cil.getGlobInit
+   See bts0284.c
     List.iter attach_globinit b.bstmts;
+*)
     attach_global (GVar(v,{init=Some init},CurrentLoc.get ()));
     (* Define a global string invariant *)
     begin try
@@ -406,7 +403,7 @@ let gather_initialization file =
   do_and_update_globals
     (fun _ ->
       Globals.Vars.iter (fun v iinfo ->
-	let s = match iinfo.init with
+	let _s = match iinfo.init with
 	  | Some ie ->
 	      let b = Cabs2cil.blockInit (Var v, NoOffset) ie v.vtype in
 	      b.bstmts
@@ -424,8 +421,10 @@ let gather_initialization file =
 		[]
 	in
 	(* Too big currently, postpone until useful *)
+(*
 	ignore s;
-(*  	List.iter attach_globinit s; *)
+  	List.iter attach_globinit s; 
+*)
 	iinfo.init <- None
       )) file
 

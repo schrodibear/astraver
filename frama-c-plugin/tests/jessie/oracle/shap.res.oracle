@@ -548,7 +548,8 @@ let f_ensures_default =
    begin
      (C_4:
      begin
-       (JC_19: (((g a) int_P_int_M_a_1) !int_P_a_1_alloc_table));
+       (let jessie_14 = a in
+       (JC_19: (((g jessie_14) int_P_int_M_a_1) !int_P_a_1_alloc_table)));
       (raise Return)
      end);
     (raise Return)
@@ -566,7 +567,9 @@ let f_safety =
    begin
      (C_4:
      begin
-       (JC_18: (((g_requires a) int_P_int_M_a_1) !int_P_a_1_alloc_table));
+       (let jessie_13 = a in
+       (JC_18:
+       (((g_requires jessie_13) int_P_int_M_a_1) !int_P_a_1_alloc_table)));
       (raise Return)
      end);
     (raise Return)
@@ -584,9 +587,9 @@ let g_ensures_default =
    begin
      (C_2:
      begin
-       (let jessie_10 = (let jessie_6 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_9 = ip in
-                        (((safe_upd_ int_P_int_M_ip_2) jessie_9) jessie_6))) in
+       (let jessie_12 = (let jessie_8 = (safe_int32_of_integer_ (1)) in
+                        (let jessie_11 = ip in
+                        (((safe_upd_ int_P_int_M_ip_2) jessie_11) jessie_8))) in
        void);
       (raise Return)
      end);
@@ -605,10 +608,10 @@ let g_safety =
    begin
      (C_2:
      begin
-       (let jessie_5 = (let jessie_1 = (safe_int32_of_integer_ (1)) in
-                       (let jessie_4 = ip in
+       (let jessie_6 = (let jessie_2 = (safe_int32_of_integer_ (1)) in
+                       (let jessie_5 = ip in
                        (JC_9:
-                       ((((upd_ int_P_ip_2_alloc_table) int_P_int_M_ip_2) jessie_4) jessie_1)))) in
+                       ((((upd_ int_P_ip_2_alloc_table) int_P_int_M_ip_2) jessie_5) jessie_2)))) in
        void);
       (raise Return)
      end);

@@ -581,9 +581,9 @@ let f2_ensures_default =
    begin
      (C_2:
      begin
-       (let jessie_10 = (let jessie_6 = (safe_int32_of_integer_ (3)) in
-                        (let jessie_9 = p in
-                        (((safe_upd_ int_P_int_M_p_1) jessie_9) jessie_6))) in
+       (let jessie_12 = (let jessie_8 = (safe_int32_of_integer_ (3)) in
+                        (let jessie_11 = p in
+                        (((safe_upd_ int_P_int_M_p_1) jessie_11) jessie_8))) in
        void);
       (raise Return)
      end);
@@ -606,10 +606,10 @@ let f2_safety =
    begin
      (C_2:
      begin
-       (let jessie_5 = (let jessie_1 = (safe_int32_of_integer_ (3)) in
-                       (let jessie_4 = p in
+       (let jessie_6 = (let jessie_2 = (safe_int32_of_integer_ (3)) in
+                       (let jessie_5 = p in
                        (JC_15:
-                       ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_4) jessie_1)))) in
+                       ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_5) jessie_2)))) in
        void);
       (raise Return)
      end);
@@ -632,15 +632,15 @@ let f2b_ensures_default =
      (let t = ref (any_pointer void) in
      (C_15:
      begin
-       (let jessie_35 = (t := (C_14:
-                              (JC_45:
+       (let jessie_40 = (t := (C_14:
+                              (JC_43:
                               (((alloc_struct_int_P (2)) int_P_t_4_alloc_table) int_P_t_4_tag_table)))) in
        void);
       (C_17:
       begin
-        (let jessie_40 = (let jessie_36 = (safe_int32_of_integer_ (2)) in
-                         (let jessie_39 = ((shift !t) (0)) in
-                         (((safe_upd_ int_P_int_M_t_4) jessie_39) jessie_36))) in
+        (let jessie_46 = (let jessie_42 = (safe_int32_of_integer_ (2)) in
+                         (let jessie_45 = ((shift !t) (0)) in
+                         (((safe_upd_ int_P_int_M_t_4) jessie_45) jessie_42))) in
         void);
        (C_18:
        begin
@@ -653,11 +653,11 @@ let f2b_ensures_default =
    with
    Return ->
    void end)
-  { (JC_37: true) }
+  { (JC_36: true) }
 
 let f2b_safety =
  fun (tt : unit) ->
-  { (JC_35: true) }
+  { (JC_34: true) }
   (init:
   try
    begin
@@ -667,21 +667,21 @@ let f2b_safety =
      (let t = ref (any_pointer void) in
      (C_15:
      begin
-       (let jessie_28 = (t := (let jessie_27 = (C_14:
-                                               (JC_42:
+       (let jessie_32 = (t := (let jessie_31 = (C_14:
+                                               (JC_41:
                                                (((alloc_struct_int_P_requires (2)) int_P_t_4_alloc_table) int_P_t_4_tag_table))) in
-                              (JC_43:
+                              (JC_42:
                               (assert
                               { ge_int(offset_max(int_P_t_4_alloc_table,
-                                       jessie_27),
+                                       jessie_31),
                                 (1)) };
-                              jessie_27)))) in
+                              jessie_31)))) in
        void);
       (C_17:
       begin
-        (let jessie_33 = (let jessie_29 = (safe_int32_of_integer_ (2)) in
-                         (let jessie_32 = ((shift !t) (0)) in
-                         (((safe_upd_ int_P_int_M_t_4) jessie_32) jessie_29))) in
+        (let jessie_38 = (let jessie_34 = (safe_int32_of_integer_ (2)) in
+                         (let jessie_37 = ((shift !t) (0)) in
+                         (((safe_upd_ int_P_int_M_t_4) jessie_37) jessie_34))) in
         void);
        (C_18:
        begin
@@ -708,19 +708,20 @@ let main2_ensures_default =
      (let c = ref (any_pointer void) in
      (C_8:
      begin
-       (let jessie_20 = (c := (C_7:
-                              (JC_30:
+       (let jessie_23 = (c := (C_7:
+                              (JC_29:
                               (((alloc_struct_int_P (1)) int_P_c_2_alloc_table) int_P_c_2_tag_table)))) in
        void);
       (C_10:
       begin
-        (let jessie_25 = (let jessie_21 = (safe_int32_of_integer_ (2)) in
-                         (let jessie_24 = !c in
-                         (((safe_upd_ int_P_int_M_c_2) jessie_24) jessie_21))) in
+        (let jessie_29 = (let jessie_25 = (safe_int32_of_integer_ (2)) in
+                         (let jessie_28 = !c in
+                         (((safe_upd_ int_P_int_M_c_2) jessie_28) jessie_25))) in
         void);
        (C_11:
        begin
-         (JC_31: (((f2 !c) int_P_int_M_c_2) !int_P_c_2_alloc_table));
+         (let jessie_30 = !c in
+         (JC_30: (((f2 jessie_30) int_P_int_M_c_2) !int_P_c_2_alloc_table)));
         (C_12:
         begin
           ((safe_free_parameter int_P_c_2_alloc_table) !c); (raise Return)
@@ -747,25 +748,27 @@ let main2_safety =
      (let c = ref (any_pointer void) in
      (C_8:
      begin
-       (let jessie_12 = (c := (let jessie_11 = (C_7:
+       (let jessie_14 = (c := (let jessie_13 = (C_7:
                                                (JC_26:
                                                (((alloc_struct_int_P_requires (1)) int_P_c_2_alloc_table) int_P_c_2_tag_table))) in
                               (JC_27:
                               (assert
                               { ge_int(offset_max(int_P_c_2_alloc_table,
-                                       jessie_11),
+                                       jessie_13),
                                 (0)) };
-                              jessie_11)))) in
+                              jessie_13)))) in
        void);
       (C_10:
       begin
-        (let jessie_17 = (let jessie_13 = (safe_int32_of_integer_ (2)) in
-                         (let jessie_16 = !c in
-                         (((safe_upd_ int_P_int_M_c_2) jessie_16) jessie_13))) in
+        (let jessie_20 = (let jessie_16 = (safe_int32_of_integer_ (2)) in
+                         (let jessie_19 = !c in
+                         (((safe_upd_ int_P_int_M_c_2) jessie_19) jessie_16))) in
         void);
        (C_11:
        begin
-         (JC_28: (((f2_requires !c) int_P_int_M_c_2) !int_P_c_2_alloc_table));
+         (let jessie_21 = !c in
+         (JC_28:
+         (((f2_requires jessie_21) int_P_int_M_c_2) !int_P_c_2_alloc_table)));
         (C_12:
         begin
           ((free_parameter int_P_c_2_alloc_table) !c); (raise Return)

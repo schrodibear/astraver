@@ -33,21 +33,14 @@ tag void_P = {
 
 type void_P = [void_P]
 
-unit __globinit_whole_program()
-behavior default:
-  assumes true;
-  ensures (C_1 : true);
-;
-
 int32 main(uint8 x)
 behavior default:
   assumes true;
-  ensures (C_5 : (\result >= 0));
+  ensures (C_3 : (\result >= 0));
 {  
    (var int32 __retres);
    
-   {  (C_2 : __globinit_whole_program());
-      (C_4 : (__retres = (C_3 : (x :> int32))));
+   {  (C_2 : (__retres = (C_1 : (x :> int32))));
       
       (return __retres)
    }
@@ -303,10 +296,6 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter __globinit_whole_program : tt:unit -> { } unit { true }
-
-parameter __globinit_whole_program_requires : tt:unit -> { } unit { true }
-
 parameter alloc_bitvector_struct_char_P :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -416,12 +405,12 @@ parameter int8_of_integer_ :
 parameter main :
  x:uint8 ->
   { } int32
-  { ((true = true) -> (JC_14: ge_int(integer_of_int32(result), (0)))) }
+  { ((true = true) -> (JC_6: ge_int(integer_of_int32(result), (0)))) }
 
 parameter main_requires :
  x:uint8 ->
   { } int32
-  { ((true = true) -> (JC_14: ge_int(integer_of_int32(result), (0)))) }
+  { ((true = true) -> (JC_6: ge_int(integer_of_int32(result), (0)))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -447,26 +436,22 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (JC_20: (__globinit_whole_program void));
-      (C_4:
-      begin
-        (let jessie_2 = (__retres := (C_3:
-                                     (safe_int32_of_integer_ (integer_of_uint8 x)))) in
-        void);
-       (return := !__retres);
-       (raise Return)
-      end)
+       (let jessie_5 = (__retres := (C_1:
+                                    (safe_int32_of_integer_ (integer_of_uint8 x)))) in
+       void);
+      (return := !__retres);
+      (raise Return)
      end));
     absurd 
    end
    with
    Return ->
    !return end))
-  { (JC_13: ge_int(integer_of_int32(result), (0))) }
+  { (JC_5: ge_int(integer_of_int32(result), (0))) }
 
 let main_safety =
  fun (x : uint8) ->
-  { (JC_12: true) }
+  { (JC_4: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -474,16 +459,12 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (JC_17: (__globinit_whole_program_requires void));
-      (C_4:
-      begin
-        (let jessie_1 = (__retres := (C_3:
-                                     (JC_19:
-                                     (int32_of_integer_ (integer_of_uint8 x))))) in
-        void);
-       (return := !__retres);
-       (raise Return)
-      end)
+       (let jessie_2 = (__retres := (C_1:
+                                    (JC_9:
+                                    (int32_of_integer_ (integer_of_uint8 x))))) in
+       void);
+      (return := !__retres);
+      (raise Return)
      end));
     absurd 
    end

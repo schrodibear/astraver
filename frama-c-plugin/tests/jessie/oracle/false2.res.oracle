@@ -31,32 +31,25 @@ tag void_P = {
 
 type void_P = [void_P]
 
-unit __globinit_whole_program()
-behavior default:
-  assumes true;
-  ensures (C_1 : true);
-;
-
 int32 e;
 
 unit f()
 behavior default:
   assumes true;
   assigns e;
-  ensures (C_2 : (e == 0));
+  ensures (C_1 : (e == 0));
 ;
 
 int32 main()
 behavior default:
   assumes true;
-  ensures (C_7 : (e == 1));
+  ensures (C_5 : (e == 1));
 {  
    (var int32 __retres);
    
-   {  (C_3 : __globinit_whole_program());
-      (C_4 : (e = 1));
-      (C_5 : f());
-      (C_6 : (__retres = 0));
+   {  (C_2 : (e = 1));
+      (C_3 : f());
+      (C_4 : (__retres = 0));
       
       (return __retres)
    }
@@ -283,10 +276,6 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter __globinit_whole_program : tt:unit -> { } unit { true }
-
-parameter __globinit_whole_program_requires : tt:unit -> { } unit { true }
-
 parameter alloc_bitvector_struct_char_P :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -386,12 +375,12 @@ parameter e : int32 ref
 parameter f :
  tt:unit ->
   { } unit reads e writes e
-  { ((true = true) -> (JC_15: eq_int(integer_of_int32(e), (0)))) }
+  { ((true = true) -> (JC_7: eq_int(integer_of_int32(e), (0)))) }
 
 parameter f_requires :
  tt:unit ->
   { } unit reads e writes e
-  { ((true = true) -> (JC_15: eq_int(integer_of_int32(e), (0)))) }
+  { ((true = true) -> (JC_7: eq_int(integer_of_int32(e), (0)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -406,12 +395,12 @@ parameter int8_of_integer_ :
 parameter main :
  tt:unit ->
   { } int32 reads e writes e
-  { ((true = true) -> (JC_24: eq_int(integer_of_int32(e), (1)))) }
+  { ((true = true) -> (JC_16: eq_int(integer_of_int32(e), (1)))) }
 
 parameter main_requires :
  tt:unit ->
   { } int32 reads e writes e
-  { ((true = true) -> (JC_24: eq_int(integer_of_int32(e), (1)))) }
+  { ((true = true) -> (JC_16: eq_int(integer_of_int32(e), (1)))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -427,21 +416,17 @@ let main_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_3:
+     (C_2:
      begin
-       (JC_29: (__globinit_whole_program void));
-      (C_4:
+       (let jessie_7 = (e := (safe_int32_of_integer_ (1))) in void);
+      (C_3:
       begin
-        (let jessie_3 = (e := (safe_int32_of_integer_ (1))) in void);
-       (C_5:
+        (JC_20: (f void));
+       (C_4:
        begin
-         (JC_30: (f void));
-        (C_6:
-        begin
-          (let jessie_4 = (__retres := (safe_int32_of_integer_ (0))) in void);
-         (return := !__retres);
-         (raise Return)
-        end)
+         (let jessie_9 = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres);
+        (raise Return)
        end)
       end)
      end));
@@ -450,31 +435,27 @@ let main_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_23: eq_int(integer_of_int32(e), (1))) }
+  { (JC_15: eq_int(integer_of_int32(e), (1))) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_22: true) }
+  { (JC_14: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_3:
+     (C_2:
      begin
-       (JC_27: (__globinit_whole_program_requires void));
-      (C_4:
+       (let jessie_2 = (e := (safe_int32_of_integer_ (1))) in void);
+      (C_3:
       begin
-        (let jessie_1 = (e := (safe_int32_of_integer_ (1))) in void);
-       (C_5:
+        (JC_19: (f_requires void));
+       (C_4:
        begin
-         (JC_28: (f_requires void));
-        (C_6:
-        begin
-          (let jessie_2 = (__retres := (safe_int32_of_integer_ (0))) in void);
-         (return := !__retres);
-         (raise Return)
-        end)
+         (let jessie_4 = (__retres := (safe_int32_of_integer_ (0))) in void);
+        (return := !__retres);
+        (raise Return)
        end)
       end)
      end));

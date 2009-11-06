@@ -675,47 +675,47 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_23 = (c := (C_1: i)) in void);
+       (let jessie_29 = (c := (C_1: i)) in void);
       (C_4:
       begin
-        (let jessie_26 = (let jessie_24 = (safe_int8_of_integer_ (0)) in
-                         (let jessie_25 = !c in
-                         (let jessie_24 = (bitvector_of_int8 jessie_24) in
-                         (((((safe_upd_bytes_ bitvector_i_1) jessie_25) (0)) (1)) jessie_24)))) in
+        (let jessie_33 = (let jessie_31 = (safe_int8_of_integer_ (0)) in
+                         (let jessie_32 = !c in
+                         (let jessie_31 = (bitvector_of_int8 jessie_31) in
+                         (((((safe_upd_bytes_ bitvector_i_1) jessie_32) (0)) (1)) jessie_31)))) in
         void);
        (C_6:
        begin
-         (let jessie_28 = (c := (C_5: ((shift !c) (1)))) in void);
+         (let jessie_35 = (c := (C_5: ((shift !c) (1)))) in void);
         (C_8:
         begin
-          (let jessie_31 = (let jessie_29 = (safe_int8_of_integer_ (0)) in
-                           (let jessie_30 = !c in
-                           (let jessie_29 = (bitvector_of_int8 jessie_29) in
-                           (((((safe_upd_bytes_ bitvector_i_1) jessie_30) (0)) (1)) jessie_29)))) in
+          (let jessie_39 = (let jessie_37 = (safe_int8_of_integer_ (0)) in
+                           (let jessie_38 = !c in
+                           (let jessie_37 = (bitvector_of_int8 jessie_37) in
+                           (((((safe_upd_bytes_ bitvector_i_1) jessie_38) (0)) (1)) jessie_37)))) in
           void);
          (C_10:
          begin
-           (let jessie_33 = (c := (C_9: ((shift !c) (1)))) in void);
+           (let jessie_41 = (c := (C_9: ((shift !c) (1)))) in void);
           (C_12:
           begin
-            (let jessie_36 = (let jessie_34 = (safe_int8_of_integer_ (0)) in
-                             (let jessie_35 = !c in
-                             (let jessie_34 = (bitvector_of_int8 jessie_34) in
-                             (((((safe_upd_bytes_ bitvector_i_1) jessie_35) (0)) (1)) jessie_34)))) in
+            (let jessie_45 = (let jessie_43 = (safe_int8_of_integer_ (0)) in
+                             (let jessie_44 = !c in
+                             (let jessie_43 = (bitvector_of_int8 jessie_43) in
+                             (((((safe_upd_bytes_ bitvector_i_1) jessie_44) (0)) (1)) jessie_43)))) in
             void);
            (C_14:
            begin
-             (let jessie_38 = (c := (C_13: ((shift !c) (1)))) in void);
+             (let jessie_47 = (c := (C_13: ((shift !c) (1)))) in void);
             (C_16:
             begin
-              (let jessie_41 = (let jessie_39 = (safe_int8_of_integer_ (0)) in
-                               (let jessie_40 = !c in
-                               (let jessie_39 = (bitvector_of_int8 jessie_39) in
-                               (((((safe_upd_bytes_ bitvector_i_1) jessie_40) (0)) (1)) jessie_39)))) in
+              (let jessie_51 = (let jessie_49 = (safe_int8_of_integer_ (0)) in
+                               (let jessie_50 = !c in
+                               (let jessie_49 = (bitvector_of_int8 jessie_49) in
+                               (((((safe_upd_bytes_ bitvector_i_1) jessie_50) (0)) (1)) jessie_49)))) in
               void);
              (C_18:
              begin
-               (let jessie_42 = (__retres := (C_17:
+               (let jessie_53 = (__retres := (C_17:
                                              (int32_of_bitvector ((((safe_acc_bytes_ !bitvector_i_1) i) (0)) (4))))) in
                void);
               (return := !__retres);
@@ -753,49 +753,49 @@ let f_safety =
        (let jessie_2 = (c := (C_1: i)) in void);
       (C_4:
       begin
-        (let jessie_5 = (let jessie_3 = (safe_int8_of_integer_ (0)) in
-                        (let jessie_4 = !c in
-                        (let jessie_3 = (bitvector_of_int8 jessie_3) in
+        (let jessie_6 = (let jessie_4 = (safe_int8_of_integer_ (0)) in
+                        (let jessie_5 = !c in
+                        (let jessie_4 = (bitvector_of_int8 jessie_4) in
                         (JC_13:
-                        ((((((upd_bytes_ bitvector_i_1_alloc_table) bitvector_i_1) jessie_4) (0)) (1)) jessie_3))))) in
+                        ((((((upd_bytes_ bitvector_i_1_alloc_table) bitvector_i_1) jessie_5) (0)) (1)) jessie_4))))) in
         void);
        (C_6:
        begin
-         (let jessie_7 = (c := (C_5: ((shift !c) (1)))) in void);
+         (let jessie_8 = (c := (C_5: ((shift !c) (1)))) in void);
         (C_8:
         begin
-          (let jessie_10 = (let jessie_8 = (safe_int8_of_integer_ (0)) in
-                           (let jessie_9 = !c in
-                           (let jessie_8 = (bitvector_of_int8 jessie_8) in
+          (let jessie_12 = (let jessie_10 = (safe_int8_of_integer_ (0)) in
+                           (let jessie_11 = !c in
+                           (let jessie_10 = (bitvector_of_int8 jessie_10) in
                            (JC_14:
-                           ((((((upd_bytes_ bitvector_i_1_alloc_table) bitvector_i_1) jessie_9) (0)) (1)) jessie_8))))) in
+                           ((((((upd_bytes_ bitvector_i_1_alloc_table) bitvector_i_1) jessie_11) (0)) (1)) jessie_10))))) in
           void);
          (C_10:
          begin
-           (let jessie_12 = (c := (C_9: ((shift !c) (1)))) in void);
+           (let jessie_14 = (c := (C_9: ((shift !c) (1)))) in void);
           (C_12:
           begin
-            (let jessie_15 = (let jessie_13 = (safe_int8_of_integer_ (0)) in
-                             (let jessie_14 = !c in
-                             (let jessie_13 = (bitvector_of_int8 jessie_13) in
+            (let jessie_18 = (let jessie_16 = (safe_int8_of_integer_ (0)) in
+                             (let jessie_17 = !c in
+                             (let jessie_16 = (bitvector_of_int8 jessie_16) in
                              (JC_15:
-                             ((((((upd_bytes_ bitvector_i_1_alloc_table) bitvector_i_1) jessie_14) (0)) (1)) jessie_13))))) in
+                             ((((((upd_bytes_ bitvector_i_1_alloc_table) bitvector_i_1) jessie_17) (0)) (1)) jessie_16))))) in
             void);
            (C_14:
            begin
-             (let jessie_17 = (c := (C_13: ((shift !c) (1)))) in void);
+             (let jessie_20 = (c := (C_13: ((shift !c) (1)))) in void);
             (C_16:
             begin
-              (let jessie_20 = (let jessie_18 = (safe_int8_of_integer_ (0)) in
-                               (let jessie_19 = !c in
-                               (let jessie_18 = (bitvector_of_int8 jessie_18) in
+              (let jessie_24 = (let jessie_22 = (safe_int8_of_integer_ (0)) in
+                               (let jessie_23 = !c in
+                               (let jessie_22 = (bitvector_of_int8 jessie_22) in
                                (JC_16:
-                               ((((((upd_bytes_ bitvector_i_1_alloc_table) bitvector_i_1) jessie_19) (0)) (1)) jessie_18))))) in
+                               ((((((upd_bytes_ bitvector_i_1_alloc_table) bitvector_i_1) jessie_23) (0)) (1)) jessie_22))))) in
               void);
              (C_18:
              begin
-               (let jessie_21 = (__retres := (C_17:
-                                             (int32_of_bitvector (JC_18:
+               (let jessie_26 = (__retres := (C_17:
+                                             (int32_of_bitvector (JC_17:
                                                                  (((((acc_bytes_ bitvector_i_1_alloc_table) !bitvector_i_1) i) (0)) (4)))))) in
                void);
               (return := !__retres);
@@ -828,20 +828,21 @@ let g_ensures_default =
      (let i_0 = ref (any_pointer void) in
      (C_24:
      begin
-       (let jessie_53 = (i_0 := (C_23:
-                                (JC_33:
+       (let jessie_65 = (i_0 := (C_23:
+                                (JC_30:
                                 (((alloc_struct_int_P (1)) int_P_i_0_3_alloc_table) int_P_i_0_3_tag_table)))) in
        void);
       (C_27:
       begin
-        (let jessie_60 = (let jessie_56 = (C_25:
-                                          (JC_35:
-                                          (((f !i_0) int_P_int_M_i_0_3) !int_P_i_0_3_alloc_table))) in
-                         (let jessie_59 = !i_0 in
-                         (((safe_upd_ int_P_int_M_i_0_3) jessie_59) jessie_56))) in
+        (let jessie_72 = (let jessie_68 = (C_25:
+                                          (let jessie_67 = !i_0 in
+                                          (JC_31:
+                                          (((f jessie_67) int_P_int_M_i_0_3) !int_P_i_0_3_alloc_table)))) in
+                         (let jessie_71 = !i_0 in
+                         (((safe_upd_ int_P_int_M_i_0_3) jessie_71) jessie_68))) in
         void);
        (assert
-       { (JC_36:
+       { (JC_32:
          eq_int(integer_of_int32(select(int_P_int_M_i_0_3, i_0)), (0))) };
        void);
        void;
@@ -856,11 +857,11 @@ let g_ensures_default =
    with
    Return ->
    void end)
-  { (JC_23: true) }
+  { (JC_22: true) }
 
 let g_safety =
  fun (tt : unit) ->
-  { (JC_22: true) }
+  { (JC_21: true) }
   (init:
   try
    begin
@@ -870,26 +871,27 @@ let g_safety =
      (let i_0 = ref (any_pointer void) in
      (C_24:
      begin
-       (let jessie_44 = (i_0 := (let jessie_43 = (C_23:
-                                                 (JC_27:
+       (let jessie_56 = (i_0 := (let jessie_55 = (C_23:
+                                                 (JC_26:
                                                  (((alloc_struct_int_P_requires (1)) int_P_i_0_3_alloc_table) int_P_i_0_3_tag_table))) in
-                                (JC_28:
+                                (JC_27:
                                 (assert
                                 { ge_int(offset_max(int_P_i_0_3_alloc_table,
-                                         jessie_43),
+                                         jessie_55),
                                   (0)) };
-                                jessie_43)))) in
+                                jessie_55)))) in
        void);
       (C_27:
       begin
-        (let jessie_51 = (let jessie_47 = (C_25:
-                                          (JC_30:
-                                          (((f_requires !i_0) int_P_int_M_i_0_3) !int_P_i_0_3_alloc_table))) in
-                         (let jessie_50 = !i_0 in
-                         (((safe_upd_ int_P_int_M_i_0_3) jessie_50) jessie_47))) in
+        (let jessie_63 = (let jessie_59 = (C_25:
+                                          (let jessie_58 = !i_0 in
+                                          (JC_28:
+                                          (((f_requires jessie_58) int_P_int_M_i_0_3) !int_P_i_0_3_alloc_table)))) in
+                         (let jessie_62 = !i_0 in
+                         (((safe_upd_ int_P_int_M_i_0_3) jessie_62) jessie_59))) in
         void);
        [ { } unit reads i_0,int_P_int_M_i_0_3
-         { (JC_31:
+         { (JC_29:
            eq_int(integer_of_int32(select(int_P_int_M_i_0_3, i_0)), (0))) } ];
        void;
        (C_29:

@@ -786,8 +786,8 @@ let f2_ensures_default =
    begin
      (C_9:
      begin
-       (JC_50:
-       (((g (C_8: ((safe_acc_ __anonstruct_las_1_c_x_3) x))) int_P_int_M_x_3) int_P_x_3_alloc_table));
+       (let jessie_4 = (C_8: ((safe_acc_ __anonstruct_las_1_c_x_3) x)) in
+       (JC_50: (((g jessie_4) int_P_int_M_x_3) int_P_x_3_alloc_table)));
       (raise Return)
      end);
     (raise Return)
@@ -810,10 +810,11 @@ let f2_safety =
    begin
      (C_9:
      begin
+       (let jessie_3 = (C_8:
+                       (JC_48:
+                       (((acc_ __anonstruct_las_1_x_3_alloc_table) __anonstruct_las_1_c_x_3) x))) in
        (JC_49:
-       (((g_requires (C_8:
-                     (JC_48:
-                     (((acc_ __anonstruct_las_1_x_3_alloc_table) __anonstruct_las_1_c_x_3) x)))) int_P_int_M_x_3) int_P_x_3_alloc_table));
+       (((g_requires jessie_3) int_P_int_M_x_3) int_P_x_3_alloc_table)));
       (raise Return)
      end);
     (raise Return)
@@ -831,8 +832,8 @@ let f_ensures_default =
    begin
      (C_6:
      begin
-       (JC_31:
-       (((g (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v))) int_P_int_M_v_1) !int_P_v_1_alloc_table));
+       (let jessie_2 = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
+       (JC_31: (((g jessie_2) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
       (raise Return)
      end);
     (raise Return)
@@ -850,8 +851,9 @@ let f_safety =
    begin
      (C_6:
      begin
+       (let jessie_1 = (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v)) in
        (JC_30:
-       (((g_requires (C_5: ((safe_acc_ !__anonstruct_las_1_c_v_1) v))) int_P_int_M_v_1) !int_P_v_1_alloc_table));
+       (((g_requires jessie_1) int_P_int_M_v_1) !int_P_v_1_alloc_table)));
       (raise Return)
      end);
     (raise Return)

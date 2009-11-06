@@ -610,9 +610,9 @@ parameter g : tt:unit -> { } unit reads s writes c { true }
 
 parameter g_requires :
  tt:unit ->
-  { (JC_13:
-    ((JC_11: le_int((0), integer_of_int16(s)))
-    and (JC_12: le_int(integer_of_int16(s), (255)))))}
+  { (JC_12:
+    ((JC_10: le_int((0), integer_of_int16(s)))
+    and (JC_11: le_int(integer_of_int16(s), (255)))))}
   unit reads s writes c { true }
 
 parameter li : int32 ref
@@ -687,7 +687,7 @@ let f_ensures_default =
    begin
      (C_2:
      begin
-       (let jessie_2 = (e1 := (C_1: (safe_E1_of_integer_ (integer_of_E2 e2)))) in
+       (let jessie_4 = (e1 := (C_1: (safe_E1_of_integer_ (integer_of_E2 e2)))) in
        void);
       (raise Return)
      end);
@@ -706,8 +706,8 @@ let f_safety =
    begin
      (C_2:
      begin
-       (let jessie_1 = (e1 := (C_1:
-                              (JC_10: (E1_of_integer_ (integer_of_E2 e2))))) in
+       (let jessie_2 = (e1 := (C_1:
+                              (JC_9: (E1_of_integer_ (integer_of_E2 e2))))) in
        void);
       (raise Return)
      end);
@@ -721,15 +721,15 @@ let f_safety =
 let g_ensures_default =
  fun (tt : unit) ->
   { ((true = true)
-    and (JC_17:
-        ((JC_15: le_int((0), integer_of_int16(s)))
-        and (JC_16: le_int(integer_of_int16(s), (255)))))) }
+    and (JC_16:
+        ((JC_14: le_int((0), integer_of_int16(s)))
+        and (JC_15: le_int(integer_of_int16(s), (255)))))) }
   (init:
   try
    begin
      (C_6:
      begin
-       (let jessie_4 = (c := (C_5:
+       (let jessie_8 = (c := (C_5:
                              (safe_uint8_of_integer_ (integer_of_int16 !s)))) in
        void);
       (raise Return)
@@ -739,20 +739,20 @@ let g_ensures_default =
    with
    Return ->
    void end)
-  { (JC_19: true) }
+  { (JC_18: true) }
 
 let g_safety =
  fun (tt : unit) ->
-  { (JC_17:
-    ((JC_15: le_int((0), integer_of_int16(s)))
-    and (JC_16: le_int(integer_of_int16(s), (255))))) }
+  { (JC_16:
+    ((JC_14: le_int((0), integer_of_int16(s)))
+    and (JC_15: le_int(integer_of_int16(s), (255))))) }
   (init:
   try
    begin
      (C_6:
      begin
-       (let jessie_3 = (c := (C_5:
-                             (JC_24:
+       (let jessie_6 = (c := (C_5:
+                             (JC_22:
                              (uint8_of_integer_ (integer_of_int16 !s))))) in
        void);
       (raise Return)
@@ -772,28 +772,28 @@ let h_ensures_default =
    begin
      (C_11:
      begin
-       (let jessie_11 = (c := (safe_uint8_of_integer_ (10))) in void);
+       (let jessie_22 = (c := (safe_uint8_of_integer_ (10))) in void);
       (C_13:
       begin
-        (let jessie_12 = (sc := (C_12:
+        (let jessie_24 = (sc := (C_12:
                                 (safe_int8_of_integer_ (integer_of_uint8 !c)))) in
         void);
        (C_15:
        begin
-         (let jessie_13 = (s := (C_14:
+         (let jessie_26 = (s := (C_14:
                                 (safe_int16_of_integer_ (integer_of_int8 c1)))) in
          void);
         (C_17:
         begin
-          (let jessie_14 = (i := (C_16:
+          (let jessie_28 = (i := (C_16:
                                  (safe_int32_of_integer_ (integer_of_int16 !s)))) in
           void);
          (C_19:
          begin
-           (let jessie_15 = (li := (C_18: !i)) in void);
+           (let jessie_30 = (li := (C_18: !i)) in void);
           (C_21:
           begin
-            (let jessie_16 = (lli := (C_20:
+            (let jessie_32 = (lli := (C_20:
                                      (safe_int64_of_integer_ (integer_of_int32 !li)))) in
             void);
            (raise Return)
@@ -808,42 +808,42 @@ let h_ensures_default =
    with
    Return ->
    void end)
-  { (JC_29: true) }
+  { (JC_27: true) }
 
 let h_safety =
  fun (tt : unit) ->
-  { (JC_28: true) }
+  { (JC_26: true) }
   (init:
   try
    begin
      (C_11:
      begin
-       (let jessie_5 = (c := (safe_uint8_of_integer_ (10))) in void);
+       (let jessie_10 = (c := (safe_uint8_of_integer_ (10))) in void);
       (C_13:
       begin
-        (let jessie_6 = (sc := (C_12:
-                               (JC_34:
-                               (int8_of_integer_ (integer_of_uint8 !c))))) in
+        (let jessie_12 = (sc := (C_12:
+                                (JC_31:
+                                (int8_of_integer_ (integer_of_uint8 !c))))) in
         void);
        (C_15:
        begin
-         (let jessie_7 = (s := (C_14:
-                               (JC_36:
-                               (int16_of_integer_ (integer_of_int8 c1))))) in
+         (let jessie_14 = (s := (C_14:
+                                (JC_32:
+                                (int16_of_integer_ (integer_of_int8 c1))))) in
          void);
         (C_17:
         begin
-          (let jessie_8 = (i := (C_16:
-                                (JC_38:
-                                (int32_of_integer_ (integer_of_int16 !s))))) in
+          (let jessie_16 = (i := (C_16:
+                                 (JC_33:
+                                 (int32_of_integer_ (integer_of_int16 !s))))) in
           void);
          (C_19:
          begin
-           (let jessie_9 = (li := (C_18: !i)) in void);
+           (let jessie_18 = (li := (C_18: !i)) in void);
           (C_21:
           begin
-            (let jessie_10 = (lli := (C_20:
-                                     (JC_40:
+            (let jessie_20 = (lli := (C_20:
+                                     (JC_34:
                                      (int64_of_integer_ (integer_of_int32 !li))))) in
             void);
            (raise Return)
@@ -868,15 +868,15 @@ let hh_ensures_default =
    begin
      (C_23:
      begin
-       (let jessie_20 = (i := (safe_int32_of_integer_ (7))) in void);
+       (let jessie_40 = (i := (safe_int32_of_integer_ (7))) in void);
       (C_25:
       begin
-        (let jessie_21 = (s := (C_24:
+        (let jessie_42 = (s := (C_24:
                                (safe_int16_of_integer_ (integer_of_int32 !i)))) in
         void);
        (C_27:
        begin
-         (let jessie_22 = (c := (C_26:
+         (let jessie_44 = (c := (C_26:
                                 (safe_uint8_of_integer_ (integer_of_int16 !s)))) in
          void);
         (raise Return)
@@ -888,27 +888,27 @@ let hh_ensures_default =
    with
    Return ->
    void end)
-  { (JC_45: true) }
+  { (JC_39: true) }
 
 let hh_safety =
  fun (tt : unit) ->
-  { (JC_44: true) }
+  { (JC_38: true) }
   (init:
   try
    begin
      (C_23:
      begin
-       (let jessie_17 = (i := (safe_int32_of_integer_ (7))) in void);
+       (let jessie_34 = (i := (safe_int32_of_integer_ (7))) in void);
       (C_25:
       begin
-        (let jessie_18 = (s := (C_24:
-                               (JC_50:
+        (let jessie_36 = (s := (C_24:
+                               (JC_43:
                                (int16_of_integer_ (integer_of_int32 !i))))) in
         void);
        (C_27:
        begin
-         (let jessie_19 = (c := (C_26:
-                                (JC_52:
+         (let jessie_38 = (c := (C_26:
+                                (JC_44:
                                 (uint8_of_integer_ (integer_of_int16 !s))))) in
          void);
         (raise Return)

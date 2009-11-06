@@ -544,16 +544,16 @@ let f_ensures_default =
       (let jessie_15 = (C_2:
                        begin
                          (let jessie_10 = (i := (C_1:
-                                                (JC_17:
+                                                (JC_16:
                                                 (((alloc_struct_int_P (1)) int_P_i_1_alloc_table) int_P_i_1_tag_table)))) in
                          void);
                         (C_4:
                         begin
                           (let jessie_12 = (j := (C_3:
-                                                 (JC_19:
+                                                 (JC_17:
                                                  (((alloc_struct_int_P (1)) int_P_i_1_alloc_table) int_P_i_1_tag_table)))) in
                           void);
-                         (assert { (JC_20: (i <> j)) }; void);
+                         (assert { (JC_18: (i <> j)) }; void);
                          void;
                          (if ((lt_int_ ((safe_sub_pointer_ !i) !j)) (0))
                          then
@@ -561,7 +561,7 @@ let f_ensures_default =
                           void)
                          else void);
                          (assert
-                         { (JC_21: ge_int(sub_pointer(i, j), (0))) };
+                         { (JC_19: ge_int(sub_pointer(i, j), (0))) };
                          void);
                          void;
                          (if ((gt_int_ (integer_of_int32 (C_8:

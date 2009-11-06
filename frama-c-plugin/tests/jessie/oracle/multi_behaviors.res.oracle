@@ -431,15 +431,15 @@ let f_ensures_default =
   try
    begin
      [ { } unit reads x
-       { (JC_18:
+       { (JC_17:
          (eq_int(integer_of_int32(x), (1))
          or eq_int(integer_of_int32(x), (2)))) } ];
     void;
     (if ((eq_int_ (integer_of_int32 !x)) (1))
     then
-     (let jessie_2 = begin
+     (let jessie_4 = begin
                        [ { } unit reads x
-                         { (JC_19: eq_int(integer_of_int32(x), (1))) } ];
+                         { (JC_18: eq_int(integer_of_int32(x), (1))) } ];
                       void;
                       (C_5:
                       begin
@@ -451,7 +451,7 @@ let f_ensures_default =
                      end in
      void)
     else void);
-    [ { } unit reads x { (JC_20: eq_int(integer_of_int32(x), (2))) } ];
+    [ { } unit reads x { (JC_19: eq_int(integer_of_int32(x), (2))) } ];
     void;
     (raise Return);
     (raise Return)
@@ -471,15 +471,15 @@ let f_ensures_one =
   try
    begin
      (assert
-     { (JC_21:
+     { (JC_20:
        (eq_int(integer_of_int32(x), (1)) or eq_int(integer_of_int32(x), (2)))) };
      void);
     void;
     (if ((eq_int_ (integer_of_int32 !x)) (1))
     then
-     (let jessie_3 = begin
+     (let jessie_6 = begin
                        (assert
-                       { (JC_22: eq_int(integer_of_int32(x), (1))) };
+                       { (JC_21: eq_int(integer_of_int32(x), (1))) };
                        void);
                       void;
                       (C_5:
@@ -492,7 +492,7 @@ let f_ensures_one =
                      end in
      void)
     else void);
-    (assert { (JC_23: eq_int(integer_of_int32(x), (2))) }; void);
+    (assert { (JC_22: eq_int(integer_of_int32(x), (2))) }; void);
     void;
     (raise Return);
     (raise Return)
@@ -509,15 +509,15 @@ let f_ensures_two =
   try
    begin
      (assert
-     { (JC_24:
+     { (JC_23:
        (eq_int(integer_of_int32(x), (1)) or eq_int(integer_of_int32(x), (2)))) };
      void);
     void;
     (if ((eq_int_ (integer_of_int32 !x)) (1))
     then
-     (let jessie_4 = begin
+     (let jessie_8 = begin
                        [ { } unit reads x
-                         { (JC_25: eq_int(integer_of_int32(x), (1))) } ];
+                         { (JC_24: eq_int(integer_of_int32(x), (1))) } ];
                       void;
                       (C_5:
                       begin
@@ -529,7 +529,7 @@ let f_ensures_two =
                      end in
      void)
     else void);
-    (assert { (JC_26: eq_int(integer_of_int32(x), (2))) }; void);
+    (assert { (JC_25: eq_int(integer_of_int32(x), (2))) }; void);
     void;
     (raise Return);
     (raise Return)
@@ -552,14 +552,14 @@ let f_safety =
     void;
     (if ((eq_int_ (integer_of_int32 !x)) (1))
     then
-     (let jessie_1 = begin
+     (let jessie_2 = begin
                        [ { } unit reads x
                          { (JC_14: eq_int(integer_of_int32(x), (1))) } ];
                       void;
                       (C_5:
                       begin
                         (x := (C_4:
-                              (JC_16:
+                              (JC_15:
                               (int32_of_integer_ (C_3:
                                                  ((add_int (integer_of_int32 !x)) (1)))))));
                        !x
@@ -567,7 +567,7 @@ let f_safety =
                      end in
      void)
     else void);
-    [ { } unit reads x { (JC_17: eq_int(integer_of_int32(x), (2))) } ];
+    [ { } unit reads x { (JC_16: eq_int(integer_of_int32(x), (2))) } ];
     void;
     (raise Return);
     (raise Return)

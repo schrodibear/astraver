@@ -384,27 +384,27 @@ let monexp_ensures_default =
      (let y = ref (any_gen_float Double) in
      begin
        (assert
-       { (JC_28:
+       { (JC_21:
          eq_real(float_value(gen_float_of_real_logic(Double, nearest_even,
                              2.0)),
          2.0)) };
        void);
       void;
-      (let jessie_2 = (C_6:
+      (let jessie_5 = (C_6:
                       begin
                         (y := (C_5:
-                              (JC_36:
+                              (JC_25:
                               ((((add_gen_float_safe Double) nearest_even) 
                                 (((gen_float_of_real_safe Double) nearest_even) 1.0)) 
                                (C_4:
-                               (JC_35:
+                               (JC_24:
                                ((((mul_gen_float_safe Double) nearest_even) x) 
                                 (C_3:
-                                (JC_34:
+                                (JC_23:
                                 ((((add_gen_float_safe Double) nearest_even) 
                                   (((gen_float_of_real_safe Double) nearest_even) 1.0)) 
                                  (C_2:
-                                 (JC_33:
+                                 (JC_22:
                                  ((((div_gen_float_safe Double) nearest_even) x) 
                                   (((gen_float_of_real_safe Double) nearest_even) 2.0))))))))))))));
                        !y
@@ -441,25 +441,25 @@ let monexp_safety =
                                2.0)),
            2.0)) } ];
       void;
-      (let jessie_1 = (C_6:
+      (let jessie_2 = (C_6:
                       begin
                         (y := (C_5:
-                              (JC_27:
+                              (JC_20:
                               ((((add_gen_float Double) nearest_even) 
-                                (JC_21:
+                                (JC_14:
                                 (((gen_float_of_real Double) nearest_even) 1.0))) 
                                (C_4:
-                               (JC_26:
+                               (JC_19:
                                ((((mul_gen_float Double) nearest_even) x) 
                                 (C_3:
-                                (JC_25:
+                                (JC_18:
                                 ((((add_gen_float Double) nearest_even) 
-                                  (JC_22:
+                                  (JC_15:
                                   (((gen_float_of_real Double) nearest_even) 1.0))) 
                                  (C_2:
-                                 (JC_24:
+                                 (JC_17:
                                  ((((div_gen_float Double) nearest_even) x) 
-                                  (JC_23:
+                                  (JC_16:
                                   (((gen_float_of_real Double) nearest_even) 2.0)))))))))))))));
                        !y
                       end) in

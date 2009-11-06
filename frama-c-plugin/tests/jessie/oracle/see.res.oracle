@@ -421,12 +421,12 @@ parameter int8_of_integer_ :
 parameter k :
  tt:unit ->
   { } unit reads b,b1 writes b,b1
-  { ((true = true) -> (JC_22: eq_int(integer_of_int32(b1), (1)))) }
+  { ((true = true) -> (JC_21: eq_int(integer_of_int32(b1), (1)))) }
 
 parameter k_requires :
  tt:unit ->
   { } unit reads b,b1 writes b,b1
-  { ((true = true) -> (JC_22: eq_int(integer_of_int32(b1), (1)))) }
+  { ((true = true) -> (JC_21: eq_int(integer_of_int32(b1), (1)))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -443,7 +443,7 @@ let f_ensures_default =
    begin
      (C_3:
      begin
-       (let jessie_2 = (b := (C_2:
+       (let jessie_5 = (b := (C_2:
                              (safe_int32_of_integer_ (C_1:
                                                      ((sub_int (1)) (integer_of_int32 !b)))))) in
        void);
@@ -469,8 +469,8 @@ let f_safety =
    begin
      (C_3:
      begin
-       (let jessie_1 = (b := (C_2:
-                             (JC_16:
+       (let jessie_2 = (b := (C_2:
+                             (JC_15:
                              (int32_of_integer_ (C_1:
                                                 ((sub_int (1)) (integer_of_int32 !b))))))) in
        void);
@@ -494,14 +494,15 @@ let k_ensures_default =
      (let tmp_0 = ref (any_int32 void) in
      (C_7:
      begin
-       (let jessie_7 = (b := (safe_int32_of_integer_ (1))) in void);
-      (let jessie_10 = (C_9:
+       (let jessie_16 = (b := (safe_int32_of_integer_ (1))) in void);
+      (let jessie_22 = (C_9:
                        begin
-                         (let jessie_8 = (tmp := (C_8: (JC_32: (f void)))) in
+                         (let jessie_18 = (tmp := (C_8: (JC_27: (f void)))) in
                          void);
                         (C_11:
                         begin
-                          (let jessie_9 = (tmp_0 := (C_10: (JC_34: (f void)))) in
+                          (let jessie_20 = (tmp_0 := (C_10:
+                                                     (JC_28: (f void)))) in
                           void);
                          (C_14:
                          begin
@@ -521,11 +522,11 @@ let k_ensures_default =
    with
    Return ->
    void end)
-  { (JC_21: eq_int(integer_of_int32(b1), (1))) }
+  { (JC_20: eq_int(integer_of_int32(b1), (1))) }
 
 let k_safety =
  fun (tt : unit) ->
-  { (JC_20: true) }
+  { (JC_19: true) }
   (init:
   try
    begin
@@ -533,28 +534,29 @@ let k_safety =
      (let tmp_0 = ref (any_int32 void) in
      (C_7:
      begin
-       (let jessie_3 = (b := (safe_int32_of_integer_ (1))) in void);
-      (let jessie_6 = (C_9:
-                      begin
-                        (let jessie_4 = (tmp := (C_8:
-                                                (JC_26: (f_requires void)))) in
-                        void);
-                       (C_11:
+       (let jessie_8 = (b := (safe_int32_of_integer_ (1))) in void);
+      (let jessie_14 = (C_9:
                        begin
-                         (let jessie_5 = (tmp_0 := (C_10:
-                                                   (JC_28: (f_requires void)))) in
+                         (let jessie_10 = (tmp := (C_8:
+                                                  (JC_24: (f_requires void)))) in
                          void);
-                        (C_14:
+                        (C_11:
                         begin
-                          (b1 := (C_13:
-                                 (JC_30:
-                                 (int32_of_integer_ (C_12:
-                                                    ((add_int (integer_of_int32 !tmp)) 
-                                                     (integer_of_int32 !tmp_0)))))));
-                         !b1
+                          (let jessie_12 = (tmp_0 := (C_10:
+                                                     (JC_25:
+                                                     (f_requires void)))) in
+                          void);
+                         (C_14:
+                         begin
+                           (b1 := (C_13:
+                                  (JC_26:
+                                  (int32_of_integer_ (C_12:
+                                                     ((add_int (integer_of_int32 !tmp)) 
+                                                      (integer_of_int32 !tmp_0)))))));
+                          !b1
+                         end)
                         end)
-                       end)
-                      end) in
+                       end) in
       void);
       (raise Return)
      end)));

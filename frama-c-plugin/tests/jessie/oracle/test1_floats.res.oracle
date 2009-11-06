@@ -485,26 +485,26 @@ parameter cosine1a :
  x:gen_float ->
   { } gen_float
   { ((true = true) ->
-     (JC_70:
-     ((JC_68:
+     (JC_54:
+     ((JC_52:
       le_real(abs_real(sub_real(exact_value(result), cos(exact_value(x)))),
       0x1p-24))
-     and (JC_69:
+     and (JC_53:
          le_real(gen_round_error(result),
          add_real(gen_round_error(x), 0x3p-24)))))) }
 
 parameter cosine1a_requires :
  x:gen_float ->
-  { (JC_59:
-    ((JC_57: le_real(abs_real(exact_value(x)), 0x1p-5))
-    and (JC_58: le_real(gen_round_error(x), 0x1p-20))))}
+  { (JC_43:
+    ((JC_41: le_real(abs_real(exact_value(x)), 0x1p-5))
+    and (JC_42: le_real(gen_round_error(x), 0x1p-20))))}
   gen_float
   { ((true = true) ->
-     (JC_70:
-     ((JC_68:
+     (JC_54:
+     ((JC_52:
       le_real(abs_real(sub_real(exact_value(result), cos(exact_value(x)))),
       0x1p-24))
-     and (JC_69:
+     and (JC_53:
          le_real(gen_round_error(result),
          add_real(gen_round_error(x), 0x3p-24)))))) }
 
@@ -512,15 +512,15 @@ parameter cosine1b :
  x_2:gen_float ->
   { } gen_float
   { ((true = true) ->
-     (JC_102:
+     (JC_78:
      le_real(abs_real(sub_real(float_value(result), cos(float_value(x_2)))),
      0x1p-20))) }
 
 parameter cosine1b_requires :
  x_2:gen_float ->
-  { (JC_97: le_real(abs_real(float_value(x_2)), 0.07))} gen_float
+  { (JC_73: le_real(abs_real(float_value(x_2)), 0.07))} gen_float
   { ((true = true) ->
-     (JC_102:
+     (JC_78:
      le_real(abs_real(sub_real(float_value(result), cos(float_value(x_2)))),
      0x1p-20))) }
 
@@ -528,18 +528,18 @@ parameter cosine2 :
  x_0:gen_float ->
   { } gen_float
   { ((true = true) ->
-     (JC_36:
+     (JC_28:
      le_real(abs_real(sub_real(float_value(result), cos(float_value(x_0)))),
      0x1p-23))) }
 
 parameter cosine2_requires :
  x_0:gen_float ->
-  { (JC_29:
-    ((JC_27: le_real(abs_real(float_value(x_0)), 0x1p-5))
-    and (JC_28: eq_real(gen_round_error(x_0), 0.0))))}
+  { (JC_21:
+    ((JC_19: le_real(abs_real(float_value(x_0)), 0x1p-5))
+    and (JC_20: eq_real(gen_round_error(x_0), 0.0))))}
   gen_float
   { ((true = true) ->
-     (JC_36:
+     (JC_28:
      le_real(abs_real(sub_real(float_value(result), cos(float_value(x_0)))),
      0x1p-23))) }
 
@@ -570,9 +570,9 @@ parameter safe_int8_of_integer_ :
 let cosine1a_ensures_default =
  fun (x : gen_float) ->
   { ((true = true)
-    and (JC_63:
-        ((JC_61: le_real(abs_real(exact_value(x)), 0x1p-5))
-        and (JC_62: le_real(gen_round_error(x), 0x1p-20))))) }
+    and (JC_47:
+        ((JC_45: le_real(abs_real(exact_value(x)), 0x1p-5))
+        and (JC_46: le_real(gen_round_error(x), 0x1p-20))))) }
   (init:
   (let return = ref (any_gen_float Single) in
   try
@@ -580,33 +580,33 @@ let cosine1a_ensures_default =
      (let r_0 = ref (any_gen_float Single) in
      begin
        (assert
-       { (JC_87: le_real(abs_real(float_value(x)), 0x1.0002p-5)) };
+       { (JC_66: le_real(abs_real(float_value(x)), 0x1.0002p-5)) };
        void);
       void;
-      (let jessie_6 = (C_21:
-                      begin
-                        (r_0 := (C_20:
-                                (JC_93:
-                                ((((sub_gen_float_safe Single) nearest_even) 
-                                  (((gen_float_of_real_safe Single) nearest_even) 1.0)) 
-                                 (C_19:
-                                 (JC_92:
-                                 ((((mul_gen_float_safe Single) nearest_even) 
-                                   (C_18:
-                                   (JC_91:
-                                   ((((mul_gen_float_safe Single) nearest_even) x) x)))) 
-                                  (((gen_float_of_real_safe Single) nearest_even) 0.5))))))));
-                       !r_0
-                      end) in
+      (let jessie_17 = (C_21:
+                       begin
+                         (r_0 := (C_20:
+                                 (JC_69:
+                                 ((((sub_gen_float_safe Single) nearest_even) 
+                                   (((gen_float_of_real_safe Single) nearest_even) 1.0)) 
+                                  (C_19:
+                                  (JC_68:
+                                  ((((mul_gen_float_safe Single) nearest_even) 
+                                    (C_18:
+                                    (JC_67:
+                                    ((((mul_gen_float_safe Single) nearest_even) x) x)))) 
+                                   (((gen_float_of_real_safe Single) nearest_even) 0.5))))))));
+                        !r_0
+                       end) in
       void);
       (assert
-      { (JC_94:
+      { (JC_70:
         le_real(abs_real(sub_real(exact_value(r_0), cos(exact_value(x)))),
         0x1p-24)) };
       void);
       void;
       (assert
-      { (JC_95:
+      { (JC_71:
         le_real(abs_real(sub_real(sub_real(1.0,
                                   mul_real(mul_real(float_value(x),
                                            float_value(x)),
@@ -616,7 +616,7 @@ let cosine1a_ensures_default =
       void);
       void;
       (assert
-      { (JC_96:
+      { (JC_72:
         le_real(abs_real(sub_real(float_value(r_0), cos(float_value(x)))),
         0x1p-23)) };
       void);
@@ -629,52 +629,52 @@ let cosine1a_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_67:
-    ((JC_65:
+  { (JC_51:
+    ((JC_49:
      le_real(abs_real(sub_real(exact_value(result), cos(exact_value(x)))),
      0x1p-24))
-    and (JC_66:
+    and (JC_50:
         le_real(gen_round_error(result),
         add_real(gen_round_error(x), 0x3p-24))))) }
 
 let cosine1a_safety =
  fun (x : gen_float) ->
-  { (JC_63:
-    ((JC_61: le_real(abs_real(exact_value(x)), 0x1p-5))
-    and (JC_62: le_real(gen_round_error(x), 0x1p-20)))) }
+  { (JC_47:
+    ((JC_45: le_real(abs_real(exact_value(x)), 0x1p-5))
+    and (JC_46: le_real(gen_round_error(x), 0x1p-20)))) }
   (init:
   (let return = ref (any_gen_float Single) in
   try
    begin
      (let r_0 = ref (any_gen_float Single) in
      begin
-       [ { } unit { (JC_73: le_real(abs_real(float_value(x)), 0x1.0002p-5)) } ];
+       [ { } unit { (JC_57: le_real(abs_real(float_value(x)), 0x1.0002p-5)) } ];
       void;
-      (let jessie_5 = (C_21:
-                      begin
-                        (r_0 := (C_20:
-                                (JC_83:
-                                ((((sub_gen_float Single) nearest_even) 
-                                  (JC_79:
-                                  (((gen_float_of_real Single) nearest_even) 1.0))) 
-                                 (C_19:
-                                 (JC_82:
-                                 ((((mul_gen_float Single) nearest_even) 
-                                   (C_18:
-                                   (JC_80:
-                                   ((((mul_gen_float Single) nearest_even) x) x)))) 
-                                  (JC_81:
-                                  (((gen_float_of_real Single) nearest_even) 0.5)))))))));
-                       !r_0
-                      end) in
+      (let jessie_14 = (C_21:
+                       begin
+                         (r_0 := (C_20:
+                                 (JC_62:
+                                 ((((sub_gen_float Single) nearest_even) 
+                                   (JC_58:
+                                   (((gen_float_of_real Single) nearest_even) 1.0))) 
+                                  (C_19:
+                                  (JC_61:
+                                  ((((mul_gen_float Single) nearest_even) 
+                                    (C_18:
+                                    (JC_59:
+                                    ((((mul_gen_float Single) nearest_even) x) x)))) 
+                                   (JC_60:
+                                   (((gen_float_of_real Single) nearest_even) 0.5)))))))));
+                        !r_0
+                       end) in
       void);
       [ { } unit reads r_0
-        { (JC_84:
+        { (JC_63:
           le_real(abs_real(sub_real(exact_value(r_0), cos(exact_value(x)))),
           0x1p-24)) } ];
       void;
       [ { } unit
-        { (JC_85:
+        { (JC_64:
           le_real(abs_real(sub_real(sub_real(1.0,
                                     mul_real(mul_real(float_value(x),
                                              float_value(x)),
@@ -683,7 +683,7 @@ let cosine1a_safety =
           0x1p-24)) } ];
       void;
       [ { } unit reads r_0
-        { (JC_86:
+        { (JC_65:
           le_real(abs_real(sub_real(float_value(r_0), cos(float_value(x)))),
           0x1p-23)) } ];
       void;
@@ -699,7 +699,7 @@ let cosine1a_safety =
 
 let cosine1b_ensures_default =
  fun (x_2 : gen_float) ->
-  { ((true = true) and (JC_99: le_real(abs_real(float_value(x_2)), 0.07))) }
+  { ((true = true) and (JC_75: le_real(abs_real(float_value(x_2)), 0.07))) }
   (init:
   (let return = ref (any_gen_float Single) in
   try
@@ -707,7 +707,7 @@ let cosine1b_ensures_default =
      (let __retres_0 = ref (any_gen_float Single) in
      begin
        (assert
-       { (JC_116:
+       { (JC_87:
          le_real(abs_real(sub_real(sub_real(1.0,
                                    mul_real(mul_real(float_value(x_2),
                                             float_value(x_2)),
@@ -718,17 +718,17 @@ let cosine1b_ensures_default =
       void;
       (C_35:
       begin
-        (let jessie_8 = (__retres_0 := (C_34:
-                                       (JC_122:
-                                       ((((sub_gen_float_safe Single) nearest_even) 
-                                         (((gen_float_of_real_safe Single) nearest_even) 1.0)) 
-                                        (C_33:
-                                        (JC_121:
-                                        ((((mul_gen_float_safe Single) nearest_even) 
-                                          (C_32:
-                                          (JC_120:
-                                          ((((mul_gen_float_safe Single) nearest_even) x_2) x_2)))) 
-                                         (((gen_float_of_real_safe Single) nearest_even) 0.5)))))))) in
+        (let jessie_23 = (__retres_0 := (C_34:
+                                        (JC_90:
+                                        ((((sub_gen_float_safe Single) nearest_even) 
+                                          (((gen_float_of_real_safe Single) nearest_even) 1.0)) 
+                                         (C_33:
+                                         (JC_89:
+                                         ((((mul_gen_float_safe Single) nearest_even) 
+                                           (C_32:
+                                           (JC_88:
+                                           ((((mul_gen_float_safe Single) nearest_even) x_2) x_2)))) 
+                                          (((gen_float_of_real_safe Single) nearest_even) 0.5)))))))) in
         void);
        (return := !__retres_0);
        (raise Return)
@@ -739,13 +739,13 @@ let cosine1b_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_101:
+  { (JC_77:
     le_real(abs_real(sub_real(float_value(result), cos(float_value(x_2)))),
     0x1p-20)) }
 
 let cosine1b_safety =
  fun (x_2 : gen_float) ->
-  { (JC_99: le_real(abs_real(float_value(x_2)), 0.07)) }
+  { (JC_75: le_real(abs_real(float_value(x_2)), 0.07)) }
   (init:
   (let return = ref (any_gen_float Single) in
   try
@@ -753,7 +753,7 @@ let cosine1b_safety =
      (let __retres_0 = ref (any_gen_float Single) in
      begin
        [ { } unit
-         { (JC_105:
+         { (JC_81:
            le_real(abs_real(sub_real(sub_real(1.0,
                                      mul_real(mul_real(float_value(x_2),
                                               float_value(x_2)),
@@ -763,19 +763,19 @@ let cosine1b_safety =
       void;
       (C_35:
       begin
-        (let jessie_7 = (__retres_0 := (C_34:
-                                       (JC_115:
-                                       ((((sub_gen_float Single) nearest_even) 
-                                         (JC_111:
-                                         (((gen_float_of_real Single) nearest_even) 1.0))) 
-                                        (C_33:
-                                        (JC_114:
-                                        ((((mul_gen_float Single) nearest_even) 
-                                          (C_32:
-                                          (JC_112:
-                                          ((((mul_gen_float Single) nearest_even) x_2) x_2)))) 
-                                         (JC_113:
-                                         (((gen_float_of_real Single) nearest_even) 0.5))))))))) in
+        (let jessie_20 = (__retres_0 := (C_34:
+                                        (JC_86:
+                                        ((((sub_gen_float Single) nearest_even) 
+                                          (JC_82:
+                                          (((gen_float_of_real Single) nearest_even) 1.0))) 
+                                         (C_33:
+                                         (JC_85:
+                                         ((((mul_gen_float Single) nearest_even) 
+                                           (C_32:
+                                           (JC_83:
+                                           ((((mul_gen_float Single) nearest_even) x_2) x_2)))) 
+                                          (JC_84:
+                                          (((gen_float_of_real Single) nearest_even) 0.5))))))))) in
         void);
        (return := !__retres_0);
        (raise Return)
@@ -791,9 +791,9 @@ let cosine1b_safety =
 let cosine2_ensures_default =
  fun (x_0 : gen_float) ->
   { ((true = true)
-    and (JC_33:
-        ((JC_31: le_real(abs_real(float_value(x_0)), 0x1p-5))
-        and (JC_32: eq_real(gen_round_error(x_0), 0.0))))) }
+    and (JC_25:
+        ((JC_23: le_real(abs_real(float_value(x_0)), 0x1p-5))
+        and (JC_24: eq_real(gen_round_error(x_0), 0.0))))) }
   (init:
   (let return = ref (any_gen_float Single) in
   try
@@ -801,20 +801,20 @@ let cosine2_ensures_default =
      (let r = ref (any_gen_float Single) in
      (C_11:
      begin
-       (let jessie_4 = (r := (C_10:
-                             (JC_55:
-                             ((((sub_gen_float_safe Single) nearest_even) 
-                               (((gen_float_of_real_safe Single) nearest_even) 1.0)) 
-                              (C_9:
-                              (JC_54:
-                              ((((mul_gen_float_safe Single) nearest_even) 
-                                (C_8:
-                                (JC_53:
-                                ((((mul_gen_float_safe Single) nearest_even) x_0) x_0)))) 
-                               (((gen_float_of_real_safe Single) nearest_even) 0.5)))))))) in
+       (let jessie_11 = (r := (C_10:
+                              (JC_39:
+                              ((((sub_gen_float_safe Single) nearest_even) 
+                                (((gen_float_of_real_safe Single) nearest_even) 1.0)) 
+                               (C_9:
+                               (JC_38:
+                               ((((mul_gen_float_safe Single) nearest_even) 
+                                 (C_8:
+                                 (JC_37:
+                                 ((((mul_gen_float_safe Single) nearest_even) x_0) x_0)))) 
+                                (((gen_float_of_real_safe Single) nearest_even) 0.5)))))))) in
        void);
       (assert
-      { (JC_56:
+      { (JC_40:
         le_real(abs_real(sub_real(exact_value(r), cos(float_value(x_0)))),
         0x1p-24)) };
       void);
@@ -827,15 +827,15 @@ let cosine2_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_35:
+  { (JC_27:
     le_real(abs_real(sub_real(float_value(result), cos(float_value(x_0)))),
     0x1p-23)) }
 
 let cosine2_safety =
  fun (x_0 : gen_float) ->
-  { (JC_33:
-    ((JC_31: le_real(abs_real(float_value(x_0)), 0x1p-5))
-    and (JC_32: eq_real(gen_round_error(x_0), 0.0)))) }
+  { (JC_25:
+    ((JC_23: le_real(abs_real(float_value(x_0)), 0x1p-5))
+    and (JC_24: eq_real(gen_round_error(x_0), 0.0)))) }
   (init:
   (let return = ref (any_gen_float Single) in
   try
@@ -843,22 +843,22 @@ let cosine2_safety =
      (let r = ref (any_gen_float Single) in
      (C_11:
      begin
-       (let jessie_3 = (r := (C_10:
-                             (JC_48:
+       (let jessie_8 = (r := (C_10:
+                             (JC_35:
                              ((((sub_gen_float Single) nearest_even) 
-                               (JC_44:
+                               (JC_31:
                                (((gen_float_of_real Single) nearest_even) 1.0))) 
                               (C_9:
-                              (JC_47:
+                              (JC_34:
                               ((((mul_gen_float Single) nearest_even) 
                                 (C_8:
-                                (JC_45:
+                                (JC_32:
                                 ((((mul_gen_float Single) nearest_even) x_0) x_0)))) 
-                               (JC_46:
+                               (JC_33:
                                (((gen_float_of_real Single) nearest_even) 0.5))))))))) in
        void);
       [ { } unit reads r
-        { (JC_49:
+        { (JC_36:
           le_real(abs_real(sub_real(exact_value(r), cos(float_value(x_0)))),
           0x1p-24)) } ];
       void;
@@ -882,7 +882,7 @@ let moncos_ensures_default =
      (let __retres = ref (any_gen_float Single) in
      begin
        (assert
-       { (JC_20:
+       { (JC_15:
          le_real(abs_real(sub_real(sub_real(1.0,
                                    mul_real(mul_real(float_value(x_1),
                                             float_value(x_1)),
@@ -893,15 +893,15 @@ let moncos_ensures_default =
       void;
       (C_5:
       begin
-        (let jessie_2 = (__retres := (C_4:
-                                     (JC_26:
+        (let jessie_5 = (__retres := (C_4:
+                                     (JC_18:
                                      ((((sub_gen_float_safe Single) nearest_even) 
                                        (((gen_float_of_real_safe Single) nearest_even) 1.0)) 
                                       (C_3:
-                                      (JC_25:
+                                      (JC_17:
                                       ((((mul_gen_float_safe Single) nearest_even) 
                                         (C_2:
-                                        (JC_24:
+                                        (JC_16:
                                         ((((mul_gen_float_safe Single) nearest_even) x_1) x_1)))) 
                                        (((gen_float_of_real_safe Single) nearest_even) 0.5)))))))) in
         void);
@@ -938,18 +938,18 @@ let moncos_safety =
       void;
       (C_5:
       begin
-        (let jessie_1 = (__retres := (C_4:
-                                     (JC_19:
+        (let jessie_2 = (__retres := (C_4:
+                                     (JC_14:
                                      ((((sub_gen_float Single) nearest_even) 
-                                       (JC_15:
+                                       (JC_10:
                                        (((gen_float_of_real Single) nearest_even) 1.0))) 
                                       (C_3:
-                                      (JC_18:
+                                      (JC_13:
                                       ((((mul_gen_float Single) nearest_even) 
                                         (C_2:
-                                        (JC_16:
+                                        (JC_11:
                                         ((((mul_gen_float Single) nearest_even) x_1) x_1)))) 
-                                       (JC_17:
+                                       (JC_12:
                                        (((gen_float_of_real Single) nearest_even) 0.5))))))))) in
         void);
        (return := !__retres);

@@ -391,30 +391,30 @@ let poly_ensures_default =
      (let __retres = ref (any_gen_float Double) in
      (C_3:
      begin
-       (let jessie_4 = (tmp := (C_2:
-                               (JC_38:
-                               (sqrt (((gen_float_of_real_safe Double) nearest_even) 2.0))))) in
+       (let jessie_11 = (tmp := (C_2:
+                                (let jessie_10 = (((gen_float_of_real_safe Double) nearest_even) 2.0) in
+                                (JC_28: (sqrt jessie_10))))) in
        void);
       (C_5:
       begin
-        (let jessie_5 = (x_0 := (C_4:
-                                (JC_40:
-                                ((((div_gen_float_safe Double) nearest_even) !tmp) 
-                                 (((gen_float_of_real_safe Double) nearest_even) 2.0))))) in
+        (let jessie_13 = (x_0 := (C_4:
+                                 (JC_29:
+                                 ((((div_gen_float_safe Double) nearest_even) !tmp) 
+                                  (((gen_float_of_real_safe Double) nearest_even) 2.0))))) in
         void);
        (C_9:
        begin
-         (let jessie_6 = (__retres := (C_8:
-                                      (JC_46:
-                                      ((((sub_gen_float_safe Double) nearest_even) 
-                                        (C_7:
-                                        (JC_45:
-                                        ((((mul_gen_float_safe Double) nearest_even) 
-                                          (C_6:
-                                          (JC_44:
-                                          ((((mul_gen_float_safe Double) nearest_even) 
-                                            (((gen_float_of_real_safe Double) nearest_even) 2.0)) !x_0)))) !x_0)))) 
-                                       (((gen_float_of_real_safe Double) nearest_even) 1.0))))) in
+         (let jessie_15 = (__retres := (C_8:
+                                       (JC_32:
+                                       ((((sub_gen_float_safe Double) nearest_even) 
+                                         (C_7:
+                                         (JC_31:
+                                         ((((mul_gen_float_safe Double) nearest_even) 
+                                           (C_6:
+                                           (JC_30:
+                                           ((((mul_gen_float_safe Double) nearest_even) 
+                                             (((gen_float_of_real_safe Double) nearest_even) 2.0)) !x_0)))) !x_0)))) 
+                                        (((gen_float_of_real_safe Double) nearest_even) 1.0))))) in
          void);
         (return := !__retres);
         (raise Return)
@@ -440,33 +440,33 @@ let poly_safety =
      (let __retres = ref (any_gen_float Double) in
      (C_3:
      begin
-       (let jessie_1 = (tmp := (C_2:
-                               (JC_22:
-                               (sqrt_requires (JC_21:
-                                              (((gen_float_of_real Double) nearest_even) 2.0)))))) in
+       (let jessie_3 = (tmp := (C_2:
+                               (let jessie_2 = (JC_19:
+                                               (((gen_float_of_real Double) nearest_even) 2.0)) in
+                               (JC_20: (sqrt_requires jessie_2))))) in
        void);
       (C_5:
       begin
-        (let jessie_2 = (x_0 := (C_4:
-                                (JC_26:
+        (let jessie_5 = (x_0 := (C_4:
+                                (JC_22:
                                 ((((div_gen_float Double) nearest_even) !tmp) 
-                                 (JC_25:
+                                 (JC_21:
                                  (((gen_float_of_real Double) nearest_even) 2.0)))))) in
         void);
        (C_9:
        begin
-         (let jessie_3 = (__retres := (C_8:
-                                      (JC_36:
+         (let jessie_7 = (__retres := (C_8:
+                                      (JC_27:
                                       ((((sub_gen_float Double) nearest_even) 
                                         (C_7:
-                                        (JC_34:
+                                        (JC_25:
                                         ((((mul_gen_float Double) nearest_even) 
                                           (C_6:
-                                          (JC_33:
+                                          (JC_24:
                                           ((((mul_gen_float Double) nearest_even) 
-                                            (JC_32:
+                                            (JC_23:
                                             (((gen_float_of_real Double) nearest_even) 2.0))) !x_0)))) !x_0)))) 
-                                       (JC_35:
+                                       (JC_26:
                                        (((gen_float_of_real Double) nearest_even) 1.0)))))) in
          void);
         (return := !__retres);

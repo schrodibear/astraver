@@ -966,14 +966,14 @@ let f_ensures_default =
    begin
      (C_7:
      begin
-       (let jessie_10 = (let jessie_6 = (C_5:
+       (let jessie_12 = (let jessie_8 = (C_5:
                                         (real_of_bitvector ((((safe_acc_bytes_ bitvector_tab_1) 
                                                               (C_2:
                                                               ((shift 
                                                                 (C_1:
                                                                 tab)) (1)))) (0)) (4)))) in
-                        (let jessie_9 = y in
-                        (((safe_upd_ float_P_float_M_y_2) jessie_9) jessie_6))) in
+                        (let jessie_11 = y in
+                        (((safe_upd_ float_P_float_M_y_2) jessie_11) jessie_8))) in
        void);
       (raise Return)
      end);
@@ -992,16 +992,16 @@ let f_safety =
    begin
      (C_7:
      begin
-       (let jessie_5 = (let jessie_1 = (C_5:
-                                       (real_of_bitvector (JC_10:
+       (let jessie_6 = (let jessie_2 = (C_5:
+                                       (real_of_bitvector (JC_9:
                                                           (((((acc_bytes_ bitvector_tab_1_alloc_table) bitvector_tab_1) 
                                                              (C_2:
                                                              ((shift 
                                                                (C_1:
                                                                tab)) (1)))) (0)) (4))))) in
-                       (let jessie_4 = y in
-                       (JC_11:
-                       ((((upd_ float_P_y_2_alloc_table) float_P_float_M_y_2) jessie_4) jessie_1)))) in
+                       (let jessie_5 = y in
+                       (JC_10:
+                       ((((upd_ float_P_y_2_alloc_table) float_P_float_M_y_2) jessie_5) jessie_2)))) in
        void);
       (raise Return)
      end);

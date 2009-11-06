@@ -1499,22 +1499,22 @@ let strcpy_ensures_default =
      (let tmp_1 = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_25 = (s1_15 := ret) in void);
+       (let jessie_27 = (s1_15 := ret) in void);
       try
-       (let jessie_42 = begin
+       (let jessie_46 = begin
                           (loop_2:
                           while true do
-                          { invariant (JC_16: true)  }
+                          { invariant (JC_15: true)  }
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_41 = begin
-                                                (let jessie_39 = begin
-                                                                   (let jessie_29 = 
+                             (let jessie_45 = begin
+                                                (let jessie_43 = begin
+                                                                   (let jessie_31 = 
                                                                    (C_2:
                                                                    begin
                                                                      
-                                                                    (let jessie_27 = 
+                                                                    (let jessie_29 = 
                                                                     (tmp := !s1_15) in
                                                                     void);
                                                                     (C_4:
@@ -1527,16 +1527,16 @@ let strcpy_ensures_default =
                                                                     end)
                                                                    end) in
                                                                    void);
-                                                                  (let jessie_34 = 
+                                                                  (let jessie_37 = 
                                                                   (C_5:
                                                                   begin
-                                                                    (let jessie_31 = 
+                                                                    (let jessie_33 = 
                                                                     (tmp_1 := !mutable_s2_0) in
                                                                     void);
                                                                    (C_7:
                                                                    begin
                                                                      
-                                                                    (let jessie_33 = 
+                                                                    (let jessie_35 = 
                                                                     (mutable_s2_0 := 
                                                                     (C_6:
                                                                     ((shift !mutable_s2_0) (1)))) in
@@ -1553,18 +1553,18 @@ let strcpy_ensures_default =
                                                                   end) in
                                                                   void);
                                                                   (C_11:
-                                                                  (let jessie_35 = !tmp_0 in
-                                                                  (let jessie_38 = !tmp in
+                                                                  (let jessie_39 = !tmp_0 in
+                                                                  (let jessie_42 = !tmp in
                                                                   begin
-                                                                    (((safe_upd_ char_P_char_M_ret_20) jessie_38) jessie_35);
-                                                                   jessie_35
+                                                                    (((safe_upd_ char_P_char_M_ret_20) jessie_42) jessie_39);
+                                                                   jessie_39
                                                                   end)))
                                                                  end in
                                                 void);
                                                (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
                                                then void
                                                else
-                                                (let jessie_40 = (raise
+                                                (let jessie_44 = (raise
                                                                   (Goto_while_0_break_exc
                                                                   void)) in
                                                 void));
@@ -1610,15 +1610,15 @@ let strcpy_safety =
      begin
        (let jessie_5 = (s1_15 := ret) in void);
       try
-       (let jessie_22 = begin
+       (let jessie_24 = begin
                           (loop_1:
                           while true do
                           { invariant (JC_10: true) variant (0) }
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_21 = begin
-                                                (let jessie_19 = begin
+                             (let jessie_23 = begin
+                                                (let jessie_21 = begin
                                                                    (let jessie_9 = 
                                                                    (C_2:
                                                                    begin
@@ -1636,7 +1636,7 @@ let strcpy_safety =
                                                                     end)
                                                                    end) in
                                                                    void);
-                                                                  (let jessie_14 = 
+                                                                  (let jessie_15 = 
                                                                   (C_5:
                                                                   begin
                                                                     (let jessie_11 = 
@@ -1655,7 +1655,7 @@ let strcpy_safety =
                                                                       
                                                                     (tmp_0 := 
                                                                     (C_8:
-                                                                    (JC_13:
+                                                                    (JC_12:
                                                                     (((acc_ char_P_s2_21_alloc_table) char_P_char_M_s2_21) !tmp_1))));
                                                                     !tmp_0
                                                                     end)
@@ -1663,19 +1663,19 @@ let strcpy_safety =
                                                                   end) in
                                                                   void);
                                                                   (C_11:
-                                                                  (let jessie_15 = !tmp_0 in
-                                                                  (let jessie_18 = !tmp in
+                                                                  (let jessie_17 = !tmp_0 in
+                                                                  (let jessie_20 = !tmp in
                                                                   begin
-                                                                    (JC_14:
-                                                                    ((((upd_ char_P_ret_20_alloc_table) char_P_char_M_ret_20) jessie_18) jessie_15));
-                                                                   jessie_15
+                                                                    (JC_13:
+                                                                    ((((upd_ char_P_ret_20_alloc_table) char_P_char_M_ret_20) jessie_20) jessie_17));
+                                                                   jessie_17
                                                                   end)))
                                                                  end in
                                                 void);
                                                (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
                                                then void
                                                else
-                                                (let jessie_20 = (raise
+                                                (let jessie_22 = (raise
                                                                   (Goto_while_0_break_exc
                                                                   void)) in
                                                 void));

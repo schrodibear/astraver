@@ -681,35 +681,35 @@ let binary_search_ensures_default =
      (let m = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_15 = (l := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_24 = (l := (safe_int32_of_integer_ (0))) in void);
       (C_4:
       begin
-        (let jessie_16 = (u := (C_3:
+        (let jessie_26 = (u := (C_3:
                                (safe_int32_of_integer_ (C_2:
                                                        ((sub_int (integer_of_int32 n)) (1)))))) in
         void);
        (C_5:
        begin
-         (let jessie_17 = (p := (safe_int32_of_integer_ (neg_int (1)))) in
+         (let jessie_28 = (p := (safe_int32_of_integer_ (neg_int (1)))) in
          void);
         try
-         (let jessie_25 = begin
+         (let jessie_40 = begin
                             (loop_2:
                             while true do
                             { invariant
-                                (JC_51:
-                                ((JC_45: le_int((0), integer_of_int32(l)))
-                                and ((JC_46:
+                                (JC_45:
+                                ((JC_39: le_int((0), integer_of_int32(l)))
+                                and ((JC_40:
                                      le_int(integer_of_int32(u),
                                      sub_int(integer_of_int32(n), (1))))
-                                    and ((JC_47:
+                                    and ((JC_41:
                                          le_int(neg_int((1)),
                                          integer_of_int32(p)))
-                                        and ((JC_48:
+                                        and ((JC_42:
                                              le_int(integer_of_int32(p),
                                              sub_int(integer_of_int32(n),
                                              (1))))
-                                            and ((JC_49:
+                                            and ((JC_43:
                                                  (eq_int(integer_of_int32(p),
                                                   neg_int((1))) ->
                                                   (forall k:int32.
@@ -726,7 +726,7 @@ let binary_search_ensures_default =
                                                       integer_of_int32(k))
                                                      and le_int(integer_of_int32(k),
                                                          integer_of_int32(u))))))))
-                                                and (JC_50:
+                                                and (JC_44:
                                                     (ge_int(integer_of_int32(p),
                                                      (0)) ->
                                                      eq_int(integer_of_int32(
@@ -738,22 +738,22 @@ let binary_search_ensures_default =
                              begin
                                [ { } unit { true } ];
                               try
-                               (let jessie_24 = begin
+                               (let jessie_39 = begin
                                                   (if ((le_int_ (integer_of_int32 !l)) 
                                                        (integer_of_int32 !u))
                                                   then void
                                                   else
-                                                   (let jessie_18 = (raise
+                                                   (let jessie_29 = (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                    void));
                                                  (C_22:
                                                  begin
-                                                   (let jessie_19 = (m := 
+                                                   (let jessie_31 = (m := 
                                                                     (C_21:
                                                                     (safe_int32_of_integer_ 
                                                                     (C_20:
-                                                                    (JC_56:
+                                                                    (JC_49:
                                                                     ((div_int 
                                                                     (integer_of_int32 
                                                                     (C_19:
@@ -764,11 +764,11 @@ let binary_search_ensures_default =
                                                                     (integer_of_int32 !u))))))) (2))))))) in
                                                    void);
                                                   (assert
-                                                  { (JC_59:
-                                                    ((JC_57:
+                                                  { (JC_52:
+                                                    ((JC_50:
                                                      le_int(integer_of_int32(l),
                                                      integer_of_int32(m)))
-                                                    and (JC_58:
+                                                    and (JC_51:
                                                         le_int(integer_of_int32(m),
                                                         integer_of_int32(u))))) };
                                                   void);
@@ -782,7 +782,7 @@ let binary_search_ensures_default =
                                                        (integer_of_int32 v))
                                                   then
                                                    (C_34:
-                                                   (let jessie_20 = (l := 
+                                                   (let jessie_33 = (l := 
                                                                     (C_33:
                                                                     (safe_int32_of_integer_ 
                                                                     (C_32:
@@ -799,7 +799,7 @@ let binary_search_ensures_default =
                                                         (integer_of_int32 v))
                                                    then
                                                     (C_29:
-                                                    (let jessie_21 = 
+                                                    (let jessie_35 = 
                                                     (u := (C_28:
                                                           (safe_int32_of_integer_ 
                                                            (C_27:
@@ -807,10 +807,10 @@ let binary_search_ensures_default =
                                                              (integer_of_int32 !m)) (1)))))) in
                                                     void))
                                                    else
-                                                    (let jessie_23 = 
+                                                    (let jessie_38 = 
                                                     (C_26:
                                                     begin
-                                                      (let jessie_22 = 
+                                                      (let jessie_37 = 
                                                       (p := !m) in
                                                       void);
                                                      (raise
@@ -887,40 +887,40 @@ let binary_search_safety =
      (let m = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_4 = (l := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_5 = (l := (safe_int32_of_integer_ (0))) in void);
       (C_4:
       begin
-        (let jessie_5 = (u := (C_3:
-                              (JC_18:
+        (let jessie_7 = (u := (C_3:
+                              (JC_17:
                               (int32_of_integer_ (C_2:
                                                  ((sub_int (integer_of_int32 n)) (1))))))) in
         void);
        (C_5:
        begin
-         (let jessie_6 = (p := (safe_int32_of_integer_ (neg_int (1)))) in
+         (let jessie_9 = (p := (safe_int32_of_integer_ (neg_int (1)))) in
          void);
         try
-         (let jessie_14 = begin
+         (let jessie_21 = begin
                             (loop_1:
                             while true do
-                            { invariant (JC_27: true)
-                              variant (JC_44 : sub_int(integer_of_int32(u),
+                            { invariant (JC_26: true)
+                              variant (JC_38 : sub_int(integer_of_int32(u),
                                                integer_of_int32(l))) }
                              begin
                                [ { } unit reads l,p,u
-                                 { (JC_25:
-                                   ((JC_19: le_int((0), integer_of_int32(l)))
-                                   and ((JC_20:
+                                 { (JC_24:
+                                   ((JC_18: le_int((0), integer_of_int32(l)))
+                                   and ((JC_19:
                                         le_int(integer_of_int32(u),
                                         sub_int(integer_of_int32(n), (1))))
-                                       and ((JC_21:
+                                       and ((JC_20:
                                             le_int(neg_int((1)),
                                             integer_of_int32(p)))
-                                           and ((JC_22:
+                                           and ((JC_21:
                                                 le_int(integer_of_int32(p),
                                                 sub_int(integer_of_int32(n),
                                                 (1))))
-                                               and ((JC_23:
+                                               and ((JC_22:
                                                     (eq_int(integer_of_int32(p),
                                                      neg_int((1))) ->
                                                      (forall k:int32.
@@ -937,7 +937,7 @@ let binary_search_safety =
                                                          integer_of_int32(k))
                                                         and le_int(integer_of_int32(k),
                                                             integer_of_int32(u))))))))
-                                                   and (JC_24:
+                                                   and (JC_23:
                                                        (ge_int(integer_of_int32(p),
                                                         (0)) ->
                                                         eq_int(integer_of_int32(
@@ -946,27 +946,27 @@ let binary_search_safety =
                                                                integer_of_int32(p)))),
                                                         integer_of_int32(v)))))))))) } ];
                               try
-                               (let jessie_13 = begin
+                               (let jessie_20 = begin
                                                   (if ((le_int_ (integer_of_int32 !l)) 
                                                        (integer_of_int32 !u))
                                                   then void
                                                   else
-                                                   (let jessie_7 = (raise
+                                                   (let jessie_10 = (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                    void));
                                                  (C_22:
                                                  begin
-                                                   (let jessie_8 = (m := 
+                                                   (let jessie_12 = (m := 
                                                                     (C_21:
-                                                                    (JC_34:
+                                                                    (JC_30:
                                                                     (int32_of_integer_ 
                                                                     (C_20:
-                                                                    (JC_33:
+                                                                    (JC_29:
                                                                     ((div_int_ 
                                                                     (integer_of_int32 
                                                                     (C_19:
-                                                                    (JC_32:
+                                                                    (JC_28:
                                                                     (int32_of_integer_ 
                                                                     (C_18:
                                                                     ((add_int 
@@ -974,25 +974,25 @@ let binary_search_safety =
                                                                     (integer_of_int32 !u)))))))) (2)))))))) in
                                                    void);
                                                   [ { } unit reads l,m,u
-                                                    { (JC_37:
-                                                      ((JC_35:
+                                                    { (JC_33:
+                                                      ((JC_31:
                                                        le_int(integer_of_int32(l),
                                                        integer_of_int32(m)))
-                                                      and (JC_36:
+                                                      and (JC_32:
                                                           le_int(integer_of_int32(m),
                                                           integer_of_int32(u))))) } ];
                                                   void;
                                                   (if ((lt_int_ (integer_of_int32 
                                                                  (C_36:
-                                                                 (JC_38:
+                                                                 (JC_34:
                                                                  ((((offset_acc_ int_P_t_1_alloc_table) int_P_int_M_t_1) t) 
                                                                   (integer_of_int32 !m)))))) 
                                                        (integer_of_int32 v))
                                                   then
                                                    (C_34:
-                                                   (let jessie_9 = (l := 
+                                                   (let jessie_14 = (l := 
                                                                     (C_33:
-                                                                    (JC_40:
+                                                                    (JC_35:
                                                                     (int32_of_integer_ 
                                                                     (C_32:
                                                                     ((add_int 
@@ -1001,25 +1001,25 @@ let binary_search_safety =
                                                   else
                                                    (if ((gt_int_ (integer_of_int32 
                                                                   (C_31:
-                                                                  (JC_41:
+                                                                  (JC_36:
                                                                   ((((offset_acc_ int_P_t_1_alloc_table) int_P_int_M_t_1) t) 
                                                                    (integer_of_int32 !m)))))) 
                                                         (integer_of_int32 v))
                                                    then
                                                     (C_29:
-                                                    (let jessie_10 = 
+                                                    (let jessie_16 = 
                                                     (u := (C_28:
-                                                          (JC_43:
+                                                          (JC_37:
                                                           (int32_of_integer_ 
                                                            (C_27:
                                                            ((sub_int 
                                                              (integer_of_int32 !m)) (1))))))) in
                                                     void))
                                                    else
-                                                    (let jessie_12 = 
+                                                    (let jessie_19 = 
                                                     (C_26:
                                                     begin
-                                                      (let jessie_11 = 
+                                                      (let jessie_18 = 
                                                       (p := !m) in
                                                       void);
                                                      (raise

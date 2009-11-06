@@ -162,7 +162,9 @@ val struct_type_for_void : Cil_types.typ ref
 
 val filter_alphanumeric : string -> (char * char) list -> char -> string
 
+(*
 val attach_globinit : Cil_types.stmt -> unit
+*)
 
 val attach_global : Cil_types.global -> unit
 

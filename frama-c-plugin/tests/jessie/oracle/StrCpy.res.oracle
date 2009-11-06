@@ -381,20 +381,20 @@ let StrCpy_ensures_default =
      (let source = ref (any_pointer void) in
      (C_1:
      begin
-       (let jessie_26 = (pointeur := Chaine1) in void);
+       (let jessie_28 = (pointeur := Chaine1) in void);
       (C_2:
       begin
-        (let jessie_28 = (source := Chaine2) in void);
+        (let jessie_30 = (source := Chaine2) in void);
        try
-        (let jessie_40 = begin
+        (let jessie_43 = begin
                            (loop_2:
                            while true do
-                           { invariant (JC_18: true)  }
+                           { invariant (JC_17: true)  }
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_39 = begin
-                                                 (let jessie_38 = begin
+                              (let jessie_42 = begin
+                                                 (let jessie_41 = begin
                                                                     (if 
                                                                     ((neq_int_ 
                                                                     (integer_of_int8 
@@ -402,7 +402,7 @@ let StrCpy_ensures_default =
                                                                     ((safe_acc_ char_P_char_M_Chaine2_2) !source)))) (0))
                                                                     then void
                                                                     else
-                                                                    (let jessie_29 = 
+                                                                    (let jessie_31 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -410,17 +410,17 @@ let StrCpy_ensures_default =
                                                                    (C_6:
                                                                    begin
                                                                      
-                                                                    (let jessie_34 = 
-                                                                    (let jessie_30 = 
+                                                                    (let jessie_37 = 
+                                                                    (let jessie_33 = 
                                                                     (C_4:
                                                                     ((safe_acc_ char_P_char_M_Chaine2_2) !source)) in
-                                                                    (let jessie_33 = !pointeur in
-                                                                    (((safe_upd_ char_P_char_M_Chaine1_1) jessie_33) jessie_30))) in
+                                                                    (let jessie_36 = !pointeur in
+                                                                    (((safe_upd_ char_P_char_M_Chaine1_1) jessie_36) jessie_33))) in
                                                                     void);
                                                                     (C_8:
                                                                     begin
                                                                       
-                                                                    (let jessie_36 = 
+                                                                    (let jessie_39 = 
                                                                     (pointeur := 
                                                                     (C_7:
                                                                     ((shift !pointeur) (1)))) in
@@ -455,9 +455,9 @@ let StrCpy_ensures_default =
         (while_0_break: void) end;
        (C_12:
        begin
-         (let jessie_45 = (let jessie_41 = (safe_int8_of_integer_ (0)) in
-                          (let jessie_44 = !pointeur in
-                          (((safe_upd_ char_P_char_M_Chaine1_1) jessie_44) jessie_41))) in
+         (let jessie_49 = (let jessie_45 = (safe_int8_of_integer_ (0)) in
+                          (let jessie_48 = !pointeur in
+                          (((safe_upd_ char_P_char_M_Chaine1_1) jessie_48) jessie_45))) in
          void);
         (raise Return)
        end)
@@ -485,15 +485,15 @@ let StrCpy_safety =
       begin
         (let jessie_7 = (source := Chaine2) in void);
        try
-        (let jessie_19 = begin
+        (let jessie_20 = begin
                            (loop_1:
                            while true do
                            { invariant (JC_10: true) variant (0) }
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_18 = begin
-                                                 (let jessie_17 = begin
+                              (let jessie_19 = begin
+                                                 (let jessie_18 = begin
                                                                     (if 
                                                                     ((neq_int_ 
                                                                     (integer_of_int8 
@@ -510,19 +510,19 @@ let StrCpy_safety =
                                                                    (C_6:
                                                                    begin
                                                                      
-                                                                    (let jessie_13 = 
-                                                                    (let jessie_9 = 
+                                                                    (let jessie_14 = 
+                                                                    (let jessie_10 = 
                                                                     (C_4:
-                                                                    (JC_14:
+                                                                    (JC_13:
                                                                     (((acc_ char_P_Chaine2_2_alloc_table) char_P_char_M_Chaine2_2) !source))) in
-                                                                    (let jessie_12 = !pointeur in
-                                                                    (JC_15:
-                                                                    ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_12) jessie_9)))) in
+                                                                    (let jessie_13 = !pointeur in
+                                                                    (JC_14:
+                                                                    ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_13) jessie_10)))) in
                                                                     void);
                                                                     (C_8:
                                                                     begin
                                                                       
-                                                                    (let jessie_15 = 
+                                                                    (let jessie_16 = 
                                                                     (pointeur := 
                                                                     (C_7:
                                                                     ((shift !pointeur) (1)))) in
@@ -557,10 +557,10 @@ let StrCpy_safety =
         (while_0_break: void) end;
        (C_12:
        begin
-         (let jessie_24 = (let jessie_20 = (safe_int8_of_integer_ (0)) in
-                          (let jessie_23 = !pointeur in
-                          (JC_16:
-                          ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_23) jessie_20)))) in
+         (let jessie_26 = (let jessie_22 = (safe_int8_of_integer_ (0)) in
+                          (let jessie_25 = !pointeur in
+                          (JC_15:
+                          ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_25) jessie_22)))) in
          void);
         (raise Return)
        end)

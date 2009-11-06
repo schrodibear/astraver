@@ -39,23 +39,17 @@ char_P[0..6] __string__a__d_;
 invariant valid___string__a__d_ :
 ((\offset_min(__string__a__d_) <= 0) && (\offset_max(__string__a__d_) >= 6))
 
-unit __globinit_whole_program()
-behavior default:
-  assumes true;
-  ensures (C_1 : true);
-;
-
 int32 printf()
 behavior default:
   assumes true;
   assigns \nothing;
-  ensures (C_2 : true);
+  ensures (C_1 : true);
 ;
 
 int32 main()
 behavior default:
   assumes true;
-  ensures (C_16 : true);
+  ensures (C_14 : true);
 {  
    (var double v);
    
@@ -63,43 +57,42 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (C_3 : __globinit_whole_program());
-      (C_4 : (v = (0x1.0p600 :> double)));
+   {  (C_2 : (v = (0x1.0p600 :> double)));
       
       {  
-         (assert for default: (C_5 : ((v :> real) == \double_exact(v))));
+         (assert for default: (C_3 : ((v :> real) == \double_exact(v))));
          ()
       };
       
       {  
-         (assert for default: (C_6 : \is_finite_double(v)));
+         (assert for default: (C_4 : \is_finite_double(v)));
          ()
       };
       
       {  
-         (assert for default: (C_7 : ((v :> real) == 0x1.0p600)));
+         (assert for default: (C_5 : ((v :> real) == 0x1.0p600)));
          ()
       };
       
       {  
-         (assert for default: (C_8 : (! \no_overflow(\Double(),
+         (assert for default: (C_6 : (! \no_overflow(\Double(),
                                                      \NearestEven(),
                                                      ((v :> real) *
                                                        (v :> real))))));
          ()
       };
       
-      {  (C_11 : (x = (C_10 : ((C_9 : (v * v)) / v))))
+      {  (C_9 : (x = (C_8 : ((C_7 : (v * v)) / v))))
       };
       
       {  
-         (assert for default: (C_12 : \is_plus_infinity_double(x)));
+         (assert for default: (C_10 : \is_plus_infinity_double(x)));
          ()
       };
       
-      {  (C_14 : printf())
+      {  (C_12 : printf())
       };
-      (C_15 : (__retres = 0));
+      (C_13 : (__retres = 0));
       
       (return __retres)
    }
@@ -336,19 +329,6 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter char_P___string__a__d__1_alloc_table : char_P alloc_table ref
-
-parameter __globinit_whole_program :
- tt:unit ->
-  { } unit reads char_P___string__a__d__1_alloc_table
-  { (JC_11: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
-
-parameter __globinit_whole_program_requires :
- tt:unit ->
-  { (JC_4: valid___string__a__d_(char_P___string__a__d__1_alloc_table))} unit
-  reads char_P___string__a__d__1_alloc_table
-  { (JC_11: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
-
 parameter alloc_bitvector_struct_char_P :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -443,6 +423,8 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter char_P___string__a__d__1_alloc_table : char_P alloc_table ref
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -456,24 +438,24 @@ parameter int8_of_integer_ :
 parameter main :
  tt:unit ->
   { } int32 reads char_P___string__a__d__1_alloc_table
-  { (JC_29: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
+  { (JC_20: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
 
 parameter main_requires :
  tt:unit ->
-  { (JC_22: valid___string__a__d_(char_P___string__a__d__1_alloc_table))}
+  { (JC_13: valid___string__a__d_(char_P___string__a__d__1_alloc_table))}
   int32 reads char_P___string__a__d__1_alloc_table
-  { (JC_29: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
+  { (JC_20: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
 
 parameter printf :
  tt:unit ->
   { } int32 reads char_P___string__a__d__1_alloc_table
-  { (JC_21: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
+  { (JC_12: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
 
 parameter printf_requires :
  tt:unit ->
-  { (JC_12: valid___string__a__d_(char_P___string__a__d__1_alloc_table))}
+  { (JC_3: valid___string__a__d_(char_P___string__a__d__1_alloc_table))}
   int32 reads char_P___string__a__d__1_alloc_table
-  { (JC_21: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
+  { (JC_12: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -484,7 +466,7 @@ parameter safe_int8_of_integer_ :
 let main_ensures_default =
  fun (tt : unit) ->
   { ((true = true)
-    and (JC_24: valid___string__a__d_(char_P___string__a__d__1_alloc_table))) }
+    and (JC_15: valid___string__a__d_(char_P___string__a__d__1_alloc_table))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -492,46 +474,42 @@ let main_ensures_default =
      (let v = ref (any_gen_float Double) in
      (let x = ref (any_gen_float Double) in
      (let __retres = ref (any_int32 void) in
-     (C_3:
+     (C_2:
      begin
-       (JC_43: (__globinit_whole_program void));
-      (C_4:
-      begin
-        (let jessie_5 = (v := (JC_45:
+       (let jessie_10 = (v := (JC_30:
                               (((gen_float_of_real Double) nearest_even) 0x1.0p600))) in
-        void);
-       (assert { (JC_46: eq_real(float_value(v), exact_value(v))) }; void);
-       void;
-       (assert { (JC_47: is_finite(v)) }; void);
-       void;
-       (assert { (JC_48: eq_real(float_value(v), 0x1.0p600)) }; void);
-       void;
-       (assert
-       { (JC_49:
-         (not no_overflow(Double, nearest_even,
-              mul_real(float_value(v), float_value(v))))) };
        void);
-       void;
-       (let jessie_6 = (C_11:
+      (assert { (JC_31: eq_real(float_value(v), exact_value(v))) }; void);
+      void;
+      (assert { (JC_32: is_finite(v)) }; void);
+      void;
+      (assert { (JC_33: eq_real(float_value(v), 0x1.0p600)) }; void);
+      void;
+      (assert
+      { (JC_34:
+        (not no_overflow(Double, nearest_even,
+             mul_real(float_value(v), float_value(v))))) };
+      void);
+      void;
+      (let jessie_12 = (C_9:
                        begin
-                         (x := (C_10:
-                               (JC_53:
+                         (x := (C_8:
+                               (JC_36:
                                ((((div_gen_float Double) nearest_even) 
-                                 (C_9:
-                                 (JC_52:
+                                 (C_7:
+                                 (JC_35:
                                  ((((mul_gen_float Double) nearest_even) !v) !v)))) !v))));
                         !x
                        end) in
-       void);
-       (assert { (JC_54: is_plus_infinity(x)) }; void);
-       void;
-       (let jessie_7 = (C_14: (JC_55: (printf void))) in void);
-       (C_15:
-       begin
-         (let jessie_8 = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (return := !__retres);
-        (raise Return)
-       end)
+      void);
+      (assert { (JC_37: is_plus_infinity(x)) }; void);
+      void;
+      (let jessie_13 = (C_12: (JC_38: (printf void))) in void);
+      (C_13:
+      begin
+        (let jessie_15 = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres);
+       (raise Return)
       end)
      end))));
     absurd 
@@ -539,11 +517,11 @@ let main_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_26: true) }
+  { (JC_17: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_24: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
+  { (JC_15: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -551,46 +529,41 @@ let main_safety =
      (let v = ref (any_gen_float Double) in
      (let x = ref (any_gen_float Double) in
      (let __retres = ref (any_int32 void) in
-     (C_3:
+     (C_2:
      begin
-       (JC_30: (__globinit_whole_program_requires void));
-      (C_4:
-      begin
-        (let jessie_1 = (v := (JC_32:
-                              (((gen_float_of_real Double) nearest_even) 0x1.0p600))) in
-        void);
-       [ { } unit reads v
-         { (JC_33: eq_real(float_value(v), exact_value(v))) } ];
-       void;
-       [ { } unit reads v { (JC_34: is_finite(v)) } ];
-       void;
-       [ { } unit reads v { (JC_35: eq_real(float_value(v), 0x1.0p600)) } ];
-       void;
-       [ { } unit reads v
-         { (JC_36:
-           (not no_overflow(Double, nearest_even,
-                mul_real(float_value(v), float_value(v))))) } ];
-       void;
-       (let jessie_2 = (C_11:
-                       begin
-                         (x := (C_10:
-                               (JC_40:
-                               ((((div_gen_float Double) nearest_even) 
-                                 (C_9:
-                                 (JC_39:
-                                 ((((mul_gen_float Double) nearest_even) !v) !v)))) !v))));
-                        !x
-                       end) in
+       (let jessie_2 = (v := (JC_21:
+                             (((gen_float_of_real Double) nearest_even) 0x1.0p600))) in
        void);
-       [ { } unit reads x { (JC_41: is_plus_infinity(x)) } ];
-       void;
-       (let jessie_3 = (C_14: (JC_42: (printf_requires void))) in void);
-       (C_15:
-       begin
-         (let jessie_4 = (__retres := (safe_int32_of_integer_ (0))) in void);
-        (return := !__retres);
-        (raise Return)
-       end)
+      [ { } unit reads v { (JC_22: eq_real(float_value(v), exact_value(v))) } ];
+      void;
+      [ { } unit reads v { (JC_23: is_finite(v)) } ];
+      void;
+      [ { } unit reads v { (JC_24: eq_real(float_value(v), 0x1.0p600)) } ];
+      void;
+      [ { } unit reads v
+        { (JC_25:
+          (not no_overflow(Double, nearest_even,
+               mul_real(float_value(v), float_value(v))))) } ];
+      void;
+      (let jessie_4 = (C_9:
+                      begin
+                        (x := (C_8:
+                              (JC_27:
+                              ((((div_gen_float Double) nearest_even) 
+                                (C_7:
+                                (JC_26:
+                                ((((mul_gen_float Double) nearest_even) !v) !v)))) !v))));
+                       !x
+                      end) in
+      void);
+      [ { } unit reads x { (JC_28: is_plus_infinity(x)) } ];
+      void;
+      (let jessie_5 = (C_12: (JC_29: (printf_requires void))) in void);
+      (C_13:
+      begin
+        (let jessie_7 = (__retres := (safe_int32_of_integer_ (0))) in void);
+       (return := !__retres);
+       (raise Return)
       end)
      end))));
     absurd 
@@ -598,7 +571,7 @@ let main_safety =
    with
    Return ->
    !return end))
-  { (JC_28: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
+  { (JC_19: valid___string__a__d_(char_P___string__a__d__1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fp-intel.jessie --quiet -f fp-intel.makefile project

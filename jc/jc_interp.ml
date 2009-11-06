@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.427 2009-11-06 08:31:18 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.428 2009-11-06 13:48:32 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1545,6 +1545,14 @@ let check al a' =
 
 let decreases_clause_table = Hashtbl.create 17
 
+let get_measure_for f =
+  try
+    Hashtbl.find decreases_clause_table (f.jc_fun_info_tag)
+  with Not_found -> LConst(Prim_int "0")
+
+
+
+
 (* Translate the heap update `e1.fi = tmp2' 
 
    essentially we want
@@ -1845,7 +1853,7 @@ and offset = function
         (expr e)
   | Term_offset _ -> assert false
 
-and list_type_assert ty e (lets, params) =
+and type_assert tmp ty e =
   let offset k e1 ty tmp =
     let ac = deref_alloc_class ~type_safe:false e1 in
     let alloc = 
@@ -1867,9 +1875,8 @@ and list_type_assert ty e (lets, params) =
 	  let s = string_of_int (struct_size_in_bytes st) in
 	  LApp(f,[alloc; LVar tmp; LConst(Prim_int s)])
   in
-  let opt = match ty with
+  let a = match ty with
     | JCTpointer(pc,n1o,n2o) ->
-	let tmp = tmp_var_name () in
 	let offset_mina n = 
 	  LPred ("le_int",
 		 [offset Offset_min e ty tmp;
@@ -1883,77 +1890,79 @@ and list_type_assert ty e (lets, params) =
 	begin match e#typ with
 	  | JCTpointer (si', n1o', n2o') ->
 	      begin match n1o, n2o with
-		| None, None -> None
+		| None, None -> LTrue
 		| Some n, None ->
 		    begin match n1o' with
-		      | Some n' when Num.le_num n' n && not Jc_options.verify_all_offsets -> None
-		      | _ -> Some (tmp, offset_mina n)
+		      | Some n' when Num.le_num n' n 
+                          && not Jc_options.verify_all_offsets 
+                          -> LTrue
+		      | _ -> offset_mina n
 		    end
 		| None, Some n -> 
 		    begin match n2o' with
-		      | Some n' when Num.ge_num n' n && not Jc_options.verify_all_offsets -> None
-		      | _ -> Some (tmp, offset_maxa n)
+		      | Some n' when Num.ge_num n' n 
+                          && not Jc_options.verify_all_offsets 
+                          -> LTrue
+		      | _ -> offset_maxa n
 		    end
 		| Some n1, Some n2 ->
 		    begin match n1o', n2o' with
-		      | None, None -> Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		      | None, None -> make_and (offset_mina n1) (offset_maxa n2)
 		      | Some n1', None ->
 			  if Num.le_num n1' n1 && not Jc_options.verify_all_offsets then 
-			    Some (tmp, offset_maxa n2) 
+			    offset_maxa n2
 			  else
-			    Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+			    make_and (offset_mina n1) (offset_maxa n2)
 		      | None, Some n2' ->
 			  if Num.ge_num n2' n2 && not Jc_options.verify_all_offsets then 
-			    Some (tmp, offset_mina n1) 
+			    offset_mina n1
 			  else
-			    Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+			    make_and (offset_mina n1) (offset_maxa n2)
 		      | Some n1', Some n2' ->
 			  if Jc_options.verify_all_offsets then
-			    Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+			    make_and (offset_mina n1) (offset_maxa n2)
 			  else
 			    if Num.le_num n1' n1 then 
-			      if Num.ge_num n2' n2 then None else 
-				Some (tmp, offset_maxa n2)
+			      if Num.ge_num n2' n2 then LTrue
+                              else 
+				offset_maxa n2
 			    else
 			      if Num.ge_num n2' n2 then 
-				Some (tmp, offset_mina n1) else
-				  Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+				offset_mina n1
+                              else
+				make_and (offset_mina n1) (offset_maxa n2)
 		    end
 	      end
 	  | JCTnull ->
 	      begin match n1o, n2o with
-		| None, None -> None
-		| Some n, None -> Some (tmp, offset_mina n)
-		| None, Some n -> Some (tmp, offset_maxa n)
-		| Some n1, Some n2 -> Some (tmp, make_and (offset_mina n1) (offset_maxa n2))
+		| None, None -> LTrue
+		| Some n, None -> offset_mina n
+		| None, Some n -> offset_maxa n
+		| Some n1, Some n2 -> make_and (offset_mina n1) (offset_maxa n2)
 	      end
-	  | _ -> None
+	  | _ -> LTrue
 	end
-    | _ -> None
+    | _ -> LTrue
   in
-  let e = expr_coerce ty e in
-  match opt with
-    | None -> None :: lets, e :: params
-    | Some (tmp,a) -> Some (tmp, e, a) :: lets , (Var tmp) :: params
+  expr_coerce ty e, a
 
-and type_assert ty e =
-  List.as_singleton (fst (list_type_assert ty e ([],[])))
-
+and list_type_assert vi e (lets, params) =
+  let ty = vi.jc_var_info_type in
+  let tmp = tmp_var_name() (* vi.jc_var_info_name *) in
+  let e,a = type_assert tmp ty e in
+  Some (tmp, e, a) :: lets , (Var tmp) :: params
 
 and value_assigned mark pos ty e =
-  let assign_assert = type_assert ty e in
-  let tmp_for_assert = match assign_assert with
-    | None -> None
-    | Some(tmp,e',a) -> 
-	if not (safety_checking()) then None else Some(tmp,e',a)
-  in
-  match tmp_for_assert with
-    | None -> 
-	let e' = expr e in
+    let tmp = tmp_var_name () in
+    let e,a = type_assert tmp ty e in
+    if a <> LTrue && safety_checking() then
+      Let(tmp,e,make_check ~mark ~kind:IndexBounds pos (Assert(`ASSERT,a,Var tmp)))
+    else e
+(*
+      let e' = expr e in
 	coerce ~check_int_overflow:(safety_checking()) 
-	  mark e#pos ty e#typ e e'
-    | Some(tmp,e',a) ->
-	Let(tmp,e',make_check ~mark ~kind:IndexBounds pos (Assert(`ASSERT,a,Var tmp)))
+	  mark e#pos vi.jc_var_info_type e#typ e e'
+*)
 
 and expr e =
   let infunction = get_current_function () in
@@ -2148,11 +2157,13 @@ and expr e =
 		try match f.jc_logic_info_parameters with
 		  | [] -> [], []
 		  | params -> 
+(*
 		      let param_types = 
 			List.map (fun v -> v.jc_var_info_type) params 
 		      in
+*)
 		      List.fold_right2 list_type_assert
-			param_types call.jc_call_args ([],[])
+			params call.jc_call_args ([],[])
 		with Invalid_argument _ -> assert false
               in
 	      let param_assoc = 
@@ -2218,11 +2229,11 @@ and expr e =
 		try match f.jc_fun_info_parameters with
 		  | [] -> [], []
 		  | params -> 
-		      let param_types = 
-			List.map (fun (_,v) -> v.jc_var_info_type) params 
+		      let params = 
+			List.map (fun (_,v) -> v) params 
 		      in
 		      List.fold_right2 list_type_assert
-			param_types call.jc_call_args ([],[])
+			params call.jc_call_args ([],[])
 		with Invalid_argument _ -> assert false
               in
 	      let args = 
@@ -2285,17 +2296,10 @@ and expr e =
 	      let this_comp = f.jc_fun_info_component in
 	      let current_comp = (get_current_function()).jc_fun_info_component in
 	      let call =
-		if this_comp = current_comp then
-		  let this_measure = 
-		    try
-		      Hashtbl.find decreases_clause_table (f.jc_fun_info_tag) 
-		    with Not_found -> assert false
-		  in
-		  let cur_measure = 
-		    try
-		      Hashtbl.find decreases_clause_table ((get_current_function()).jc_fun_info_tag)
-		    with Not_found -> assert false
-		  in
+                (* disabled temporarily *)
+		if false && this_comp = current_comp then
+		  let this_measure = get_measure_for f in
+		  let cur_measure = get_measure_for (get_current_function()) in
 		  let pre =
 		    LPred("zwf_zero",[cur_measure;this_measure])
 		  in

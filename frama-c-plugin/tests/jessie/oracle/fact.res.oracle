@@ -353,34 +353,35 @@ let fact_ensures_default =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_13 = begin
+      (let jessie_22 = begin
                          (if ((eq_int_ n_0) (0))
                          then
-                          (let jessie_9 = (C_1:
-                                          begin
-                                            (let jessie_8 = (__retres := (1)) in
-                                            void);
-                                           (raise (Return_label_exc void))
-                                          end) in
+                          (let jessie_15 = (C_1:
+                                           begin
+                                             (let jessie_14 = (__retres := (1)) in
+                                             void);
+                                            (raise (Return_label_exc void))
+                                           end) in
                           void)
                          else void);
                         (assert
-                        { (JC_16:
-                          ((JC_14: le_int((0), n_0))
-                          and (JC_15: lt_int(sub_int(n_0, (1)), n_0)))) };
+                        { (JC_15:
+                          ((JC_13: le_int((0), n_0))
+                          and (JC_14: lt_int(sub_int(n_0, (1)), n_0)))) };
                         void);
                         void;
-                        (let jessie_12 = (C_7:
+                        (let jessie_21 = (C_7:
                                          begin
-                                           (let jessie_10 = (tmp := (C_6:
-                                                                    (JC_18:
-                                                                    (fact 
+                                           (let jessie_18 = (tmp := (C_6:
+                                                                    (let jessie_17 = 
                                                                     (C_5:
-                                                                    ((sub_int n_0) (1))))))) in
+                                                                    ((sub_int n_0) (1))) in
+                                                                    (JC_16:
+                                                                    (fact jessie_17))))) in
                                            void);
                                           (C_9:
                                           begin
-                                            (let jessie_11 = (__retres := 
+                                            (let jessie_20 = (__retres := 
                                                               (C_8:
                                                               ((mul_int n_0) !tmp))) in
                                             void);
@@ -411,42 +412,43 @@ let fact_safety =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_7 = begin
-                        (if ((eq_int_ n_0) (0))
-                        then
-                         (let jessie_3 = (C_1:
+      (let jessie_11 = begin
+                         (if ((eq_int_ n_0) (0))
+                         then
+                          (let jessie_4 = (C_1:
+                                          begin
+                                            (let jessie_3 = (__retres := (1)) in
+                                            void);
+                                           (raise (Return_label_exc void))
+                                          end) in
+                          void)
+                         else void);
+                        [ { } unit
+                          { (JC_11:
+                            ((JC_9: le_int((0), n_0))
+                            and (JC_10: lt_int(sub_int(n_0, (1)), n_0)))) } ];
+                        void;
+                        (let jessie_10 = (C_7:
                                          begin
-                                           (let jessie_2 = (__retres := (1)) in
+                                           (let jessie_7 = (tmp := (C_6:
+                                                                   (let jessie_6 = 
+                                                                   (C_5:
+                                                                   ((sub_int n_0) (1))) in
+                                                                   (JC_12:
+                                                                   (fact_requires jessie_6))))) in
                                            void);
-                                          (raise (Return_label_exc void))
+                                          (C_9:
+                                          begin
+                                            (let jessie_9 = (__retres := 
+                                                             (C_8:
+                                                             ((mul_int n_0) !tmp))) in
+                                            void);
+                                           (raise (Return_label_exc void))
+                                          end)
                                          end) in
-                         void)
-                        else void);
-                       [ { } unit
-                         { (JC_11:
-                           ((JC_9: le_int((0), n_0))
-                           and (JC_10: lt_int(sub_int(n_0, (1)), n_0)))) } ];
-                       void;
-                       (let jessie_6 = (C_7:
-                                       begin
-                                         (let jessie_4 = (tmp := (C_6:
-                                                                 (JC_13:
-                                                                 (fact_requires 
-                                                                  (C_5:
-                                                                  ((sub_int n_0) (1))))))) in
-                                         void);
-                                        (C_9:
-                                        begin
-                                          (let jessie_5 = (__retres := 
-                                                           (C_8:
-                                                           ((mul_int n_0) !tmp))) in
-                                          void);
-                                         (raise (Return_label_exc void))
-                                        end)
-                                       end) in
-                       void);
-                       (raise (Return_label_exc void))
-                      end in
+                        void);
+                        (raise (Return_label_exc void))
+                       end in
       void)
       with
       Return_label_exc jessie_1 ->

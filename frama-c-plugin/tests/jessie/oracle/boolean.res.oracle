@@ -449,20 +449,21 @@ let and_0_ensures_default =
      begin
        (if ((neq_int_ (integer_of_int32 i_0)) (0))
        then
-        (let jessie_4 = (if ((neq_int_ (integer_of_int32 j_0)) (0))
-                        then
-                         (C_3:
-                         begin
-                           (ret := (safe_int32_of_integer_ (1))); !ret
-                         end)
-                        else
-                         (C_2:
-                         begin
-                           (ret := (safe_int32_of_integer_ (0))); !ret
-                         end)) in
+        (let jessie_10 = (if ((neq_int_ (integer_of_int32 j_0)) (0))
+                         then
+                          (C_3:
+                          begin
+                            (ret := (safe_int32_of_integer_ (1))); !ret
+                          end)
+                         else
+                          (C_2:
+                          begin
+                            (ret := (safe_int32_of_integer_ (0))); !ret
+                          end)) in
         void)
        else
-        (C_1: (let jessie_5 = (ret := (safe_int32_of_integer_ (0))) in void)));
+        (C_1:
+        (let jessie_12 = (ret := (safe_int32_of_integer_ (0))) in void)));
       (return := !ret);
       (raise Return)
      end);
@@ -487,7 +488,7 @@ let and_0_safety =
      begin
        (if ((neq_int_ (integer_of_int32 i_0)) (0))
        then
-        (let jessie_2 = (if ((neq_int_ (integer_of_int32 j_0)) (0))
+        (let jessie_4 = (if ((neq_int_ (integer_of_int32 j_0)) (0))
                         then
                          (C_3:
                          begin
@@ -500,7 +501,7 @@ let and_0_safety =
                          end)) in
         void)
        else
-        (C_1: (let jessie_3 = (ret := (safe_int32_of_integer_ (0))) in void)));
+        (C_1: (let jessie_6 = (ret := (safe_int32_of_integer_ (0))) in void)));
       (return := !ret);
       (raise Return)
      end);
@@ -520,12 +521,12 @@ let or_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_17 = begin
+      (let jessie_32 = begin
                          (if ((neq_int_ (integer_of_int32 i)) (0))
                          then
-                          (let jessie_13 = (C_6:
+                          (let jessie_26 = (C_6:
                                            begin
-                                             (let jessie_12 = (__retres := 
+                                             (let jessie_25 = (__retres := 
                                                                (safe_int32_of_integer_ (1))) in
                                              void);
                                             (raise (Return_label_exc void))
@@ -534,9 +535,9 @@ let or_ensures_default =
                          else
                           (if ((neq_int_ (integer_of_int32 j)) (0))
                           then
-                           (let jessie_15 = (C_5:
+                           (let jessie_29 = (C_5:
                                             begin
-                                              (let jessie_14 = (__retres := 
+                                              (let jessie_28 = (__retres := 
                                                                 (safe_int32_of_integer_ (1))) in
                                               void);
                                              (raise (Return_label_exc void))
@@ -545,7 +546,7 @@ let or_ensures_default =
                           else void));
                         (C_7:
                         begin
-                          (let jessie_16 = (__retres := (safe_int32_of_integer_ (0))) in
+                          (let jessie_31 = (__retres := (safe_int32_of_integer_ (0))) in
                           void);
                          (raise (Return_label_exc void))
                         end)
@@ -573,32 +574,32 @@ let or_safety =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_11 = begin
+      (let jessie_22 = begin
                          (if ((neq_int_ (integer_of_int32 i)) (0))
                          then
-                          (let jessie_7 = (C_6:
-                                          begin
-                                            (let jessie_6 = (__retres := 
-                                                             (safe_int32_of_integer_ (1))) in
-                                            void);
-                                           (raise (Return_label_exc void))
-                                          end) in
+                          (let jessie_16 = (C_6:
+                                           begin
+                                             (let jessie_15 = (__retres := 
+                                                               (safe_int32_of_integer_ (1))) in
+                                             void);
+                                            (raise (Return_label_exc void))
+                                           end) in
                           void)
                          else
                           (if ((neq_int_ (integer_of_int32 j)) (0))
                           then
-                           (let jessie_9 = (C_5:
-                                           begin
-                                             (let jessie_8 = (__retres := 
-                                                              (safe_int32_of_integer_ (1))) in
-                                             void);
-                                            (raise (Return_label_exc void))
-                                           end) in
+                           (let jessie_19 = (C_5:
+                                            begin
+                                              (let jessie_18 = (__retres := 
+                                                                (safe_int32_of_integer_ (1))) in
+                                              void);
+                                             (raise (Return_label_exc void))
+                                            end) in
                            void)
                           else void));
                         (C_7:
                         begin
-                          (let jessie_10 = (__retres := (safe_int32_of_integer_ (0))) in
+                          (let jessie_21 = (__retres := (safe_int32_of_integer_ (0))) in
                           void);
                          (raise (Return_label_exc void))
                         end)

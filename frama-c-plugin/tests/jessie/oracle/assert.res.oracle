@@ -461,7 +461,7 @@ let ff_ensures_default =
      (let j = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_2 = (j := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_7 = (j := (safe_int32_of_integer_ (1))) in void);
       (assert
       { (JC_24:
         gt_int(integer_of_int32((JC_23 : int32_of_integer((JC_22 : add_int(
@@ -489,7 +489,7 @@ let ff_safety =
      (let j = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_1 = (j := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_4 = (j := (safe_int32_of_integer_ (1))) in void);
       [ { } unit reads j
         { (JC_21:
           gt_int(integer_of_int32((JC_20 : int32_of_integer((JC_19 : 
@@ -515,10 +515,11 @@ let g_ensures_default =
      (let tmp = ref (any_int32 void) in
      (C_9:
      begin
-       (let jessie_4 = (tmp := (C_8:
-                               (JC_37: (f (safe_int32_of_integer_ (1)))))) in
+       (let jessie_14 = (tmp := (C_8:
+                                (let jessie_13 = (safe_int32_of_integer_ (1)) in
+                                (JC_35: (f jessie_13))))) in
        void);
-      (assert { (JC_38: gt_int(integer_of_int32(tmp), (0))) }; void);
+      (assert { (JC_36: gt_int(integer_of_int32(tmp), (0))) }; void);
       (raise Return)
      end));
     (raise Return)
@@ -537,11 +538,11 @@ let g_safety =
      (let tmp = ref (any_int32 void) in
      (C_9:
      begin
-       (let jessie_3 = (tmp := (C_8:
-                               (JC_34:
-                               (f_requires (safe_int32_of_integer_ (1)))))) in
+       (let jessie_11 = (tmp := (C_8:
+                                (let jessie_10 = (safe_int32_of_integer_ (1)) in
+                                (JC_33: (f_requires jessie_10))))) in
        void);
-      [ { } unit reads tmp { (JC_35: gt_int(integer_of_int32(tmp), (0))) } ];
+      [ { } unit reads tmp { (JC_34: gt_int(integer_of_int32(tmp), (0))) } ];
       (raise Return)
      end));
     (raise Return)

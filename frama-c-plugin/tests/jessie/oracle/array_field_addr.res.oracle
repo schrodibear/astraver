@@ -882,8 +882,8 @@ let f_ensures_default =
    begin
      (C_9:
      begin
-       (JC_33:
-       (((g (C_8: ((shift (C_7: ((safe_acc_ t_tab_a_2) a))) (0)))) int_P_int_M_a_2) int_P_a_2_alloc_table));
+       (let jessie_14 = (C_8: ((shift (C_7: ((safe_acc_ t_tab_a_2) a))) (0))) in
+       (JC_33: (((g jessie_14) int_P_int_M_a_2) int_P_a_2_alloc_table)));
       (assert
       { (JC_34:
         eq_int(integer_of_int32(select(int_P_int_M_a_2,
@@ -917,11 +917,12 @@ let f_safety =
    begin
      (C_9:
      begin
+       (let jessie_13 = (C_8:
+                        ((shift (C_7:
+                                (JC_30:
+                                (((acc_ t_a_2_alloc_table) t_tab_a_2) a)))) (0))) in
        (JC_31:
-       (((g_requires (C_8:
-                     ((shift (C_7:
-                             (JC_30:
-                             (((acc_ t_a_2_alloc_table) t_tab_a_2) a)))) (0)))) int_P_int_M_a_2) int_P_a_2_alloc_table));
+       (((g_requires jessie_13) int_P_int_M_a_2) int_P_a_2_alloc_table)));
       [ { } unit reads int_P_int_M_a_2
         { (JC_32:
           eq_int(integer_of_int32(select(int_P_int_M_a_2,
@@ -948,9 +949,9 @@ let g_ensures_default =
    begin
      (C_2:
      begin
-       (let jessie_10 = (let jessie_6 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_9 = i in
-                        (((safe_upd_ int_P_int_M_i_1) jessie_9) jessie_6))) in
+       (let jessie_12 = (let jessie_8 = (safe_int32_of_integer_ (1)) in
+                        (let jessie_11 = i in
+                        (((safe_upd_ int_P_int_M_i_1) jessie_11) jessie_8))) in
        void);
       (raise Return)
      end);
@@ -971,10 +972,10 @@ let g_safety =
    begin
      (C_2:
      begin
-       (let jessie_5 = (let jessie_1 = (safe_int32_of_integer_ (1)) in
-                       (let jessie_4 = i in
+       (let jessie_6 = (let jessie_2 = (safe_int32_of_integer_ (1)) in
+                       (let jessie_5 = i in
                        (JC_13:
-                       ((((upd_ int_P_i_1_alloc_table) int_P_int_M_i_1) jessie_4) jessie_1)))) in
+                       ((((upd_ int_P_i_1_alloc_table) int_P_int_M_i_1) jessie_5) jessie_2)))) in
        void);
       (raise Return)
      end);

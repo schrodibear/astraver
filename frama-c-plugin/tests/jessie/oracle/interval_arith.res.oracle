@@ -694,9 +694,9 @@ parameter add :
     yu_0:gen_float ->
      { } unit reads zl,zu writes zl,zu
      { ((true = true) ->
-        (JC_130:
-        ((JC_128: is_interval(zl, zu))
-        and (JC_129:
+        (JC_122:
+        ((JC_120: is_interval(zl, zu))
+        and (JC_121:
             (forall a_0_0:real.
              (forall b_0:real.
               ((in_interval(a_0_0, xl_0, xu_0)
@@ -708,14 +708,14 @@ parameter add_requires :
   xu_0:gen_float ->
    yl_0:gen_float ->
     yu_0:gen_float ->
-     { (JC_119:
-       ((JC_117: is_interval(xl_0, xu_0))
-       and (JC_118: is_interval(yl_0, yu_0))))}
+     { (JC_111:
+       ((JC_109: is_interval(xl_0, xu_0))
+       and (JC_110: is_interval(yl_0, yu_0))))}
      unit reads zl,zu writes zl,zu
      { ((true = true) ->
-        (JC_130:
-        ((JC_128: is_interval(zl, zu))
-        and (JC_129:
+        (JC_122:
+        ((JC_120: is_interval(zl, zu))
+        and (JC_121:
             (forall a_0_0:real.
              (forall b_0:real.
               ((in_interval(a_0_0, xl_0, xu_0)
@@ -872,9 +872,9 @@ parameter mul :
     yu:gen_float ->
      { } unit reads zl,zu writes zl,zu
      { ((true = true) ->
-        (JC_162:
-        ((JC_160: is_interval(zl, zu))
-        and (JC_161:
+        (JC_146:
+        ((JC_144: is_interval(zl, zu))
+        and (JC_145:
             (forall a_1:real.
              (forall b_0_0:real.
               ((in_interval(a_1, xl_1, xu_1) and in_interval(b_0_0, yl, yu)) ->
@@ -913,13 +913,13 @@ parameter mul_requires :
   xu_1:gen_float ->
    yl:gen_float ->
     yu:gen_float ->
-     { (JC_151:
-       ((JC_149: is_interval(xl_1, xu_1)) and (JC_150: is_interval(yl, yu))))}
+     { (JC_135:
+       ((JC_133: is_interval(xl_1, xu_1)) and (JC_134: is_interval(yl, yu))))}
      unit reads zl,zu writes zl,zu
      { ((true = true) ->
-        (JC_162:
-        ((JC_160: is_interval(zl, zu))
-        and (JC_161:
+        (JC_146:
+        ((JC_144: is_interval(zl, zu))
+        and (JC_145:
             (forall a_1:real.
              (forall b_0_0:real.
               ((in_interval(a_1, xl_1, xu_1) and in_interval(b_0_0, yl, yu)) ->
@@ -930,25 +930,25 @@ parameter mul_up :
   y_3:gen_float ->
    { } gen_float
    { ((true = true) ->
-      (JC_76:
+      (JC_74:
       real_le_double(mul_real(float_value(x_3), float_value(y_3)), result))) }
 
 parameter mul_up_requires :
  x_3:gen_float ->
   y_3:gen_float ->
-   { (JC_65:
-     ((JC_59: (not is_NaN(x_3)))
-     and ((JC_60: (not is_NaN(y_3)))
-         and ((JC_61:
+   { (JC_63:
+     ((JC_57: (not is_NaN(x_3)))
+     and ((JC_58: (not is_NaN(y_3)))
+         and ((JC_59:
               ((is_infinite(x_3) or is_infinite(y_3)) -> sam_sign(x_3, y_3)))
-             and ((JC_62:
+             and ((JC_60:
                   ((is_infinite(x_3) and is_finite(y_3)) ->
                    (neq_real(float_value(y_3), 0.0)
                    and ge_real(abs_real(float_value(y_3)), 0x1.0p-1074))))
-                 and ((JC_63:
+                 and ((JC_61:
                       ((is_infinite(y_3) and is_finite(x_3)) ->
                        neq_real(float_value(x_3), 0.0)))
-                     and (JC_64:
+                     and (JC_62:
                          ((is_finite(x_3)
                           and (is_finite(y_3)
                               and ((not no_overflow(Double, down,
@@ -957,7 +957,7 @@ parameter mul_up_requires :
                           gt_real(float_value(x_3), 0.0)))))))))}
    gen_float
    { ((true = true) ->
-      (JC_76:
+      (JC_74:
       real_le_double(mul_real(float_value(x_3), float_value(y_3)), result))) }
 
 parameter safe_int8_of_integer_ :
@@ -966,27 +966,27 @@ parameter safe_int8_of_integer_ :
 let add_ensures_default =
  fun (xl_0 : gen_float) (xu_0 : gen_float) (yl_0 : gen_float) (yu_0 : gen_float) ->
   { ((true = true)
-    and (JC_123:
-        ((JC_121: is_interval(xl_0, xu_0))
-        and (JC_122: is_interval(yl_0, yu_0))))) }
+    and (JC_115:
+        ((JC_113: is_interval(xl_0, xu_0))
+        and (JC_114: is_interval(yl_0, yu_0))))) }
   (init:
   try
    begin
      (C_63:
      begin
-       (let jessie_15 = (zl := (C_62:
-                               (JC_142:
+       (let jessie_42 = (zl := (C_62:
+                               (JC_129:
                                ((((add_gen_float Double) down) xl_0) yl_0)))) in
        void);
       (C_67:
       begin
-        (let jessie_16 = (zu := (C_66:
-                                (JC_148:
+        (let jessie_44 = (zu := (C_66:
+                                (JC_132:
                                 (((neg_gen_float Double) down) (C_65:
-                                                               (JC_147:
+                                                               (JC_131:
                                                                ((((sub_gen_float Double) down) 
                                                                  (C_64:
-                                                                 (JC_146:
+                                                                 (JC_130:
                                                                  (((neg_gen_float Double) down) xu_0)))) yu_0))))))) in
         void);
        (raise Return)
@@ -997,9 +997,9 @@ let add_ensures_default =
    with
    Return ->
    void end)
-  { (JC_127:
-    ((JC_125: is_interval(zl, zu))
-    and (JC_126:
+  { (JC_119:
+    ((JC_117: is_interval(zl, zu))
+    and (JC_118:
         (forall a_0_0:real.
          (forall b_0:real.
           ((in_interval(a_0_0, xl_0, xu_0) and in_interval(b_0, yl_0, yu_0)) ->
@@ -1007,26 +1007,26 @@ let add_ensures_default =
 
 let add_safety =
  fun (xl_0 : gen_float) (xu_0 : gen_float) (yl_0 : gen_float) (yu_0 : gen_float) ->
-  { (JC_123:
-    ((JC_121: is_interval(xl_0, xu_0)) and (JC_122: is_interval(yl_0, yu_0)))) }
+  { (JC_115:
+    ((JC_113: is_interval(xl_0, xu_0)) and (JC_114: is_interval(yl_0, yu_0)))) }
   (init:
   try
    begin
      (C_63:
      begin
-       (let jessie_13 = (zl := (C_62:
-                               (JC_134:
+       (let jessie_38 = (zl := (C_62:
+                               (JC_125:
                                ((((add_gen_float Double) down) xl_0) yl_0)))) in
        void);
       (C_67:
       begin
-        (let jessie_14 = (zu := (C_66:
-                                (JC_140:
+        (let jessie_40 = (zu := (C_66:
+                                (JC_128:
                                 (((neg_gen_float Double) down) (C_65:
-                                                               (JC_139:
+                                                               (JC_127:
                                                                ((((sub_gen_float Double) down) 
                                                                  (C_64:
-                                                                 (JC_138:
+                                                                 (JC_126:
                                                                  (((neg_gen_float Double) down) xu_0)))) yu_0))))))) in
         void);
        (raise Return)
@@ -1049,9 +1049,9 @@ let max_ensures_default =
    begin
      (let tmp_0 = ref (any_gen_float Double) in
      begin
-       (let jessie_4 = (if ((gt_gen_float x_1) y_1)
-                       then (C_12: begin   (tmp_0 := x_1); !tmp_0 end)
-                       else (C_11: begin   (tmp_0 := y_1); !tmp_0 end)) in
+       (let jessie_15 = (if ((gt_gen_float x_1) y_1)
+                        then (C_12: begin   (tmp_0 := x_1); !tmp_0 end)
+                        else (C_11: begin   (tmp_0 := y_1); !tmp_0 end)) in
        void);
       (return := !tmp_0);
       (raise Return)
@@ -1076,9 +1076,9 @@ let max_safety =
    begin
      (let tmp_0 = ref (any_gen_float Double) in
      begin
-       (let jessie_3 = (if ((gt_gen_float x_1) y_1)
-                       then (C_12: begin   (tmp_0 := x_1); !tmp_0 end)
-                       else (C_11: begin   (tmp_0 := y_1); !tmp_0 end)) in
+       (let jessie_11 = (if ((gt_gen_float x_1) y_1)
+                        then (C_12: begin   (tmp_0 := x_1); !tmp_0 end)
+                        else (C_11: begin   (tmp_0 := y_1); !tmp_0 end)) in
        void);
       (return := !tmp_0);
       (raise Return)
@@ -1100,7 +1100,7 @@ let min_ensures_default =
    begin
      (let tmp = ref (any_gen_float Double) in
      begin
-       (let jessie_2 = (if ((lt_gen_float x_2) y_2)
+       (let jessie_7 = (if ((lt_gen_float x_2) y_2)
                        then (C_2: begin   (tmp := x_2); !tmp end)
                        else (C_1: begin   (tmp := y_2); !tmp end)) in
        void);
@@ -1127,7 +1127,7 @@ let min_safety =
    begin
      (let tmp = ref (any_gen_float Double) in
      begin
-       (let jessie_1 = (if ((lt_gen_float x_2) y_2)
+       (let jessie_3 = (if ((lt_gen_float x_2) y_2)
                        then (C_2: begin   (tmp := x_2); !tmp end)
                        else (C_1: begin   (tmp := y_2); !tmp end)) in
        void);
@@ -1162,9 +1162,9 @@ let mul_dn_ensures_default =
      (let z = ref (any_gen_float Double) in
      (C_22:
      begin
-       (let jessie_6 = (z := (C_21:
-                             (JC_58:
-                             ((((mul_gen_float Double) down) x_0_0) y_0_0)))) in
+       (let jessie_21 = (z := (C_21:
+                              (JC_56:
+                              ((((mul_gen_float Double) down) x_0_0) y_0_0)))) in
        void);
       (return := !z);
       (raise Return)
@@ -1196,9 +1196,9 @@ let mul_dn_safety =
      (let z = ref (any_gen_float Double) in
      (C_22:
      begin
-       (let jessie_5 = (z := (C_21:
-                             (JC_56:
-                             ((((mul_gen_float Double) down) x_0_0) y_0_0)))) in
+       (let jessie_18 = (z := (C_21:
+                              (JC_55:
+                              ((((mul_gen_float Double) down) x_0_0) y_0_0)))) in
        void);
       (return := !z);
       (raise Return)
@@ -1213,8 +1213,8 @@ let mul_dn_safety =
 let mul_ensures_default =
  fun (xl_1 : gen_float) (xu_1 : gen_float) (yl : gen_float) (yu : gen_float) ->
   { ((true = true)
-    and (JC_155:
-        ((JC_153: is_interval(xl_1, xu_1)) and (JC_154: is_interval(yl, yu))))) }
+    and (JC_139:
+        ((JC_137: is_interval(xl_1, xu_1)) and (JC_138: is_interval(yl, yu))))) }
   (init:
   try
    begin
@@ -1223,245 +1223,306 @@ let mul_ensures_default =
      (let tmp_1_0 = ref (any_gen_float Double) in
      (let tmp_2 = ref (any_gen_float Double) in
      begin
-       (let jessie_52 = (if ((lt_gen_float xl_1) (JC_237:
-                                                 (((gen_float_of_real Double) down) 0.0)))
-                        then
-                         (if ((gt_gen_float xu_1) (JC_238:
+       (let jessie_228 = (if ((lt_gen_float xl_1) (JC_191:
                                                   (((gen_float_of_real Double) down) 0.0)))
                          then
-                          (if ((lt_gen_float yl) (JC_239:
-                                                 (((gen_float_of_real Double) down) 0.0)))
+                          (if ((gt_gen_float xu_1) (JC_192:
+                                                   (((gen_float_of_real Double) down) 0.0)))
                           then
-                           (if ((gt_gen_float yu) (JC_240:
+                           (if ((lt_gen_float yl) (JC_193:
                                                   (((gen_float_of_real Double) down) 0.0)))
                            then
-                            begin
-                              (let jessie_36 = (C_115:
-                                               begin
-                                                 (let jessie_35 = (tmp_1 := 
-                                                                   (C_114:
-                                                                   (JC_242:
-                                                                   ((mul_dn xu_1) yl)))) in
-                                                 void);
-                                                (C_117:
-                                                begin
-                                                  (tmp_0_0 := (C_116:
-                                                              (JC_244:
-                                                              ((mul_dn xl_1) yu))));
-                                                 !tmp_0_0
-                                                end)
-                                               end) in
-                              void);
-                             (C_119:
+                            (if ((gt_gen_float yu) (JC_194:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
                              begin
-                               (let jessie_37 = (zl := (C_118:
-                                                       (JC_246:
-                                                       ((min !tmp_0_0) !tmp_1)))) in
+                               (let jessie_144 = (C_115:
+                                                 begin
+                                                   (let jessie_140 = 
+                                                   (tmp_1 := (C_114:
+                                                             (let jessie_139 = xu_1 in
+                                                             (let jessie_138 = yl in
+                                                             (JC_195:
+                                                             ((mul_dn jessie_139) jessie_138)))))) in
+                                                   void);
+                                                  (C_117:
+                                                  begin
+                                                    (tmp_0_0 := (C_116:
+                                                                (let jessie_143 = xl_1 in
+                                                                (let jessie_142 = yu in
+                                                                (JC_196:
+                                                                ((mul_dn jessie_143) jessie_142))))));
+                                                   !tmp_0_0
+                                                  end)
+                                                 end) in
                                void);
-                              (let jessie_39 = (C_121:
-                                               begin
-                                                 (let jessie_38 = (tmp_1_0 := 
-                                                                   (C_120:
-                                                                   (JC_248:
-                                                                   ((mul_up xu_1) yu)))) in
-                                                 void);
-                                                (C_123:
-                                                begin
-                                                  (tmp_2 := (C_122:
-                                                            (JC_250:
-                                                            ((mul_up xl_1) yl))));
-                                                 !tmp_2
-                                                end)
-                                               end) in
-                              void);
-                              (C_125:
+                              (C_119:
                               begin
-                                (zu := (C_124:
-                                       (JC_252: ((max !tmp_2) !tmp_1_0))));
+                                (let jessie_148 = (zl := (C_118:
+                                                         (let jessie_147 = !tmp_0_0 in
+                                                         (let jessie_146 = !tmp_1 in
+                                                         (JC_197:
+                                                         ((min jessie_147) jessie_146)))))) in
+                                void);
+                               (let jessie_156 = (C_121:
+                                                 begin
+                                                   (let jessie_152 = 
+                                                   (tmp_1_0 := (C_120:
+                                                               (let jessie_151 = xu_1 in
+                                                               (let jessie_150 = yu in
+                                                               (JC_198:
+                                                               ((mul_up jessie_151) jessie_150)))))) in
+                                                   void);
+                                                  (C_123:
+                                                  begin
+                                                    (tmp_2 := (C_122:
+                                                              (let jessie_155 = xl_1 in
+                                                              (let jessie_154 = yl in
+                                                              (JC_199:
+                                                              ((mul_up jessie_155) jessie_154))))));
+                                                   !tmp_2
+                                                  end)
+                                                 end) in
+                               void);
+                               (C_125:
+                               begin
+                                 (zu := (C_124:
+                                        (let jessie_159 = !tmp_2 in
+                                        (let jessie_158 = !tmp_1_0 in
+                                        (JC_200:
+                                        ((max jessie_159) jessie_158))))));
+                                !zu
+                               end)
+                              end)
+                             end
+                            else
+                             (C_111:
+                             begin
+                               (let jessie_163 = (zl := (C_110:
+                                                        (let jessie_162 = xu_1 in
+                                                        (let jessie_161 = yl in
+                                                        (JC_201:
+                                                        ((mul_dn jessie_162) jessie_161)))))) in
+                               void);
+                              (C_113:
+                              begin
+                                (zu := (C_112:
+                                       (let jessie_166 = xl_1 in
+                                       (let jessie_165 = yl in
+                                       (JC_202:
+                                       ((mul_up jessie_166) jessie_165))))));
+                               !zu
+                              end)
+                             end))
+                           else
+                            (if ((gt_gen_float yu) (JC_203:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
+                             (C_107:
+                             begin
+                               (let jessie_170 = (zl := (C_106:
+                                                        (let jessie_169 = xl_1 in
+                                                        (let jessie_168 = yu in
+                                                        (JC_204:
+                                                        ((mul_dn jessie_169) jessie_168)))))) in
+                               void);
+                              (C_109:
+                              begin
+                                (zu := (C_108:
+                                       (let jessie_173 = xu_1 in
+                                       (let jessie_172 = yu in
+                                       (JC_205:
+                                       ((mul_up jessie_173) jessie_172))))));
                                !zu
                               end)
                              end)
-                            end
-                           else
-                            (C_111:
-                            begin
-                              (let jessie_40 = (zl := (C_110:
-                                                      (JC_254:
-                                                      ((mul_dn xu_1) yl)))) in
-                              void);
-                             (C_113:
+                            else
+                             (C_104:
                              begin
-                               (zu := (C_112: (JC_256: ((mul_up xl_1) yl))));
-                              !zu
-                             end)
-                            end))
+                               (let jessie_175 = (zl := (JC_206:
+                                                        (((gen_float_of_real Double) down) 0.0))) in
+                               void);
+                              (C_105:
+                              begin
+                                (zu := (JC_207:
+                                       (((gen_float_of_real Double) down) 0.0)));
+                               !zu
+                              end)
+                             end)))
                           else
-                           (if ((gt_gen_float yu) (JC_257:
+                           (if ((lt_gen_float yl) (JC_208:
                                                   (((gen_float_of_real Double) down) 0.0)))
                            then
-                            (C_107:
-                            begin
-                              (let jessie_41 = (zl := (C_106:
-                                                      (JC_259:
-                                                      ((mul_dn xl_1) yu)))) in
-                              void);
-                             (C_109:
+                            (if ((gt_gen_float yu) (JC_209:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
+                             (C_101:
                              begin
-                               (zu := (C_108: (JC_261: ((mul_up xu_1) yu))));
-                              !zu
+                               (let jessie_180 = (zl := (C_100:
+                                                        (let jessie_179 = xl_1 in
+                                                        (let jessie_178 = yu in
+                                                        (JC_210:
+                                                        ((mul_dn jessie_179) jessie_178)))))) in
+                               void);
+                              (C_103:
+                              begin
+                                (zu := (C_102:
+                                       (let jessie_183 = xl_1 in
+                                       (let jessie_182 = yl in
+                                       (JC_211:
+                                       ((mul_up jessie_183) jessie_182))))));
+                               !zu
+                              end)
                              end)
-                            end)
+                            else
+                             (C_97:
+                             begin
+                               (let jessie_187 = (zl := (C_96:
+                                                        (let jessie_186 = xu_1 in
+                                                        (let jessie_185 = yu in
+                                                        (JC_212:
+                                                        ((mul_dn jessie_186) jessie_185)))))) in
+                               void);
+                              (C_99:
+                              begin
+                                (zu := (C_98:
+                                       (let jessie_190 = xl_1 in
+                                       (let jessie_189 = yl in
+                                       (JC_213:
+                                       ((mul_up jessie_190) jessie_189))))));
+                               !zu
+                              end)
+                             end))
                            else
-                            (C_104:
-                            begin
-                              (let jessie_42 = (zl := (JC_263:
-                                                      (((gen_float_of_real Double) down) 0.0))) in
-                              void);
-                             (C_105:
+                            (if ((gt_gen_float yu) (JC_214:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
+                             (C_93:
                              begin
-                               (zu := (JC_265:
-                                      (((gen_float_of_real Double) down) 0.0)));
-                              !zu
+                               (let jessie_194 = (zl := (C_92:
+                                                        (let jessie_193 = xl_1 in
+                                                        (let jessie_192 = yu in
+                                                        (JC_215:
+                                                        ((mul_dn jessie_193) jessie_192)))))) in
+                               void);
+                              (C_95:
+                              begin
+                                (zu := (C_94:
+                                       (let jessie_197 = xu_1 in
+                                       (let jessie_196 = yl in
+                                       (JC_216:
+                                       ((mul_up jessie_197) jessie_196))))));
+                               !zu
+                              end)
                              end)
-                            end)))
+                            else
+                             (C_90:
+                             begin
+                               (let jessie_199 = (zl := (JC_217:
+                                                        (((gen_float_of_real Double) down) 0.0))) in
+                               void);
+                              (C_91:
+                              begin
+                                (zu := (JC_218:
+                                       (((gen_float_of_real Double) down) 0.0)));
+                               !zu
+                              end)
+                             end))))
                          else
-                          (if ((lt_gen_float yl) (JC_266:
-                                                 (((gen_float_of_real Double) down) 0.0)))
+                          (if ((gt_gen_float xu_1) (JC_219:
+                                                   (((gen_float_of_real Double) down) 0.0)))
                           then
-                           (if ((gt_gen_float yu) (JC_267:
+                           (if ((lt_gen_float yl) (JC_220:
                                                   (((gen_float_of_real Double) down) 0.0)))
                            then
-                            (C_101:
-                            begin
-                              (let jessie_43 = (zl := (C_100:
-                                                      (JC_269:
-                                                      ((mul_dn xl_1) yu)))) in
-                              void);
-                             (C_103:
+                            (if ((gt_gen_float yu) (JC_221:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
+                             (C_87:
                              begin
-                               (zu := (C_102: (JC_271: ((mul_up xl_1) yl))));
-                              !zu
+                               (let jessie_204 = (zl := (C_86:
+                                                        (let jessie_203 = xu_1 in
+                                                        (let jessie_202 = yl in
+                                                        (JC_222:
+                                                        ((mul_dn jessie_203) jessie_202)))))) in
+                               void);
+                              (C_89:
+                              begin
+                                (zu := (C_88:
+                                       (let jessie_207 = xu_1 in
+                                       (let jessie_206 = yu in
+                                       (JC_223:
+                                       ((mul_up jessie_207) jessie_206))))));
+                               !zu
+                              end)
                              end)
-                            end)
+                            else
+                             (C_83:
+                             begin
+                               (let jessie_211 = (zl := (C_82:
+                                                        (let jessie_210 = xu_1 in
+                                                        (let jessie_209 = yl in
+                                                        (JC_224:
+                                                        ((mul_dn jessie_210) jessie_209)))))) in
+                               void);
+                              (C_85:
+                              begin
+                                (zu := (C_84:
+                                       (let jessie_214 = xl_1 in
+                                       (let jessie_213 = yu in
+                                       (JC_225:
+                                       ((mul_up jessie_214) jessie_213))))));
+                               !zu
+                              end)
+                             end))
                            else
-                            (C_97:
-                            begin
-                              (let jessie_44 = (zl := (C_96:
-                                                      (JC_273:
-                                                      ((mul_dn xu_1) yu)))) in
-                              void);
-                             (C_99:
+                            (if ((gt_gen_float yu) (JC_226:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
+                             (C_79:
                              begin
-                               (zu := (C_98: (JC_275: ((mul_up xl_1) yl))));
-                              !zu
+                               (let jessie_218 = (zl := (C_78:
+                                                        (let jessie_217 = xl_1 in
+                                                        (let jessie_216 = yl in
+                                                        (JC_227:
+                                                        ((mul_dn jessie_217) jessie_216)))))) in
+                               void);
+                              (C_81:
+                              begin
+                                (zu := (C_80:
+                                       (let jessie_221 = xu_1 in
+                                       (let jessie_220 = yu in
+                                       (JC_228:
+                                       ((mul_up jessie_221) jessie_220))))));
+                               !zu
+                              end)
                              end)
-                            end))
+                            else
+                             (C_76:
+                             begin
+                               (let jessie_223 = (zl := (JC_229:
+                                                        (((gen_float_of_real Double) down) 0.0))) in
+                               void);
+                              (C_77:
+                              begin
+                                (zu := (JC_230:
+                                       (((gen_float_of_real Double) down) 0.0)));
+                               !zu
+                              end)
+                             end)))
                           else
-                           (if ((gt_gen_float yu) (JC_276:
-                                                  (((gen_float_of_real Double) down) 0.0)))
-                           then
-                            (C_93:
-                            begin
-                              (let jessie_45 = (zl := (C_92:
-                                                      (JC_278:
-                                                      ((mul_dn xl_1) yu)))) in
-                              void);
-                             (C_95:
-                             begin
-                               (zu := (C_94: (JC_280: ((mul_up xu_1) yl))));
-                              !zu
-                             end)
-                            end)
-                           else
-                            (C_90:
-                            begin
-                              (let jessie_46 = (zl := (JC_282:
-                                                      (((gen_float_of_real Double) down) 0.0))) in
-                              void);
-                             (C_91:
-                             begin
-                               (zu := (JC_284:
-                                      (((gen_float_of_real Double) down) 0.0)));
-                              !zu
-                             end)
-                            end))))
-                        else
-                         (if ((gt_gen_float xu_1) (JC_285:
-                                                  (((gen_float_of_real Double) down) 0.0)))
-                         then
-                          (if ((lt_gen_float yl) (JC_286:
-                                                 (((gen_float_of_real Double) down) 0.0)))
-                          then
-                           (if ((gt_gen_float yu) (JC_287:
-                                                  (((gen_float_of_real Double) down) 0.0)))
-                           then
-                            (C_87:
-                            begin
-                              (let jessie_47 = (zl := (C_86:
-                                                      (JC_289:
-                                                      ((mul_dn xu_1) yl)))) in
-                              void);
-                             (C_89:
-                             begin
-                               (zu := (C_88: (JC_291: ((mul_up xu_1) yu))));
-                              !zu
-                             end)
-                            end)
-                           else
-                            (C_83:
-                            begin
-                              (let jessie_48 = (zl := (C_82:
-                                                      (JC_293:
-                                                      ((mul_dn xu_1) yl)))) in
-                              void);
-                             (C_85:
-                             begin
-                               (zu := (C_84: (JC_295: ((mul_up xl_1) yu))));
-                              !zu
-                             end)
-                            end))
-                          else
-                           (if ((gt_gen_float yu) (JC_296:
-                                                  (((gen_float_of_real Double) down) 0.0)))
-                           then
-                            (C_79:
-                            begin
-                              (let jessie_49 = (zl := (C_78:
-                                                      (JC_298:
-                                                      ((mul_dn xl_1) yl)))) in
-                              void);
-                             (C_81:
-                             begin
-                               (zu := (C_80: (JC_300: ((mul_up xu_1) yu))));
-                              !zu
-                             end)
-                            end)
-                           else
-                            (C_76:
-                            begin
-                              (let jessie_50 = (zl := (JC_302:
-                                                      (((gen_float_of_real Double) down) 0.0))) in
-                              void);
-                             (C_77:
-                             begin
-                               (zu := (JC_304:
-                                      (((gen_float_of_real Double) down) 0.0)));
-                              !zu
-                             end)
-                            end)))
-                         else
-                          (C_74:
-                          begin
-                            (let jessie_51 = (zl := (JC_306:
-                                                    (((gen_float_of_real Double) down) 0.0))) in
-                            void);
-                           (C_75:
+                           (C_74:
                            begin
-                             (zu := (JC_308:
-                                    (((gen_float_of_real Double) down) 0.0)));
-                            !zu
-                           end)
-                          end))) in
+                             (let jessie_226 = (zl := (JC_231:
+                                                      (((gen_float_of_real Double) down) 0.0))) in
+                             void);
+                            (C_75:
+                            begin
+                              (zu := (JC_232:
+                                     (((gen_float_of_real Double) down) 0.0)));
+                             !zu
+                            end)
+                           end))) in
        void);
       (raise Return)
      end))));
@@ -1470,9 +1531,9 @@ let mul_ensures_default =
    with
    Return ->
    void end)
-  { (JC_159:
-    ((JC_157: is_interval(zl, zu))
-    and (JC_158:
+  { (JC_143:
+    ((JC_141: is_interval(zl, zu))
+    and (JC_142:
         (forall a_1:real.
          (forall b_0_0:real.
           ((in_interval(a_1, xl_1, xu_1) and in_interval(b_0_0, yl, yu)) ->
@@ -1480,8 +1541,8 @@ let mul_ensures_default =
 
 let mul_safety =
  fun (xl_1 : gen_float) (xu_1 : gen_float) (yl : gen_float) (yu : gen_float) ->
-  { (JC_155:
-    ((JC_153: is_interval(xl_1, xu_1)) and (JC_154: is_interval(yl, yu)))) }
+  { (JC_139:
+    ((JC_137: is_interval(xl_1, xu_1)) and (JC_138: is_interval(yl, yu)))) }
   (init:
   try
    begin
@@ -1490,254 +1551,306 @@ let mul_safety =
      (let tmp_1_0 = ref (any_gen_float Double) in
      (let tmp_2 = ref (any_gen_float Double) in
      begin
-       (let jessie_34 = (if ((lt_gen_float xl_1) (JC_165:
-                                                 (((gen_float_of_real Double) down) 0.0)))
-                        then
-                         (if ((gt_gen_float xu_1) (JC_166:
+       (let jessie_136 = (if ((lt_gen_float xl_1) (JC_149:
                                                   (((gen_float_of_real Double) down) 0.0)))
                          then
-                          (if ((lt_gen_float yl) (JC_167:
-                                                 (((gen_float_of_real Double) down) 0.0)))
+                          (if ((gt_gen_float xu_1) (JC_150:
+                                                   (((gen_float_of_real Double) down) 0.0)))
                           then
-                           (if ((gt_gen_float yu) (JC_168:
+                           (if ((lt_gen_float yl) (JC_151:
                                                   (((gen_float_of_real Double) down) 0.0)))
                            then
-                            begin
-                              (let jessie_18 = (C_115:
-                                               begin
-                                                 (let jessie_17 = (tmp_1 := 
-                                                                   (C_114:
-                                                                   (JC_170:
-                                                                   ((mul_dn_requires xu_1) yl)))) in
-                                                 void);
-                                                (C_117:
-                                                begin
-                                                  (tmp_0_0 := (C_116:
-                                                              (JC_172:
-                                                              ((mul_dn_requires xl_1) yu))));
-                                                 !tmp_0_0
-                                                end)
-                                               end) in
-                              void);
-                             (C_119:
+                            (if ((gt_gen_float yu) (JC_152:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
                              begin
-                               (let jessie_19 = (zl := (C_118:
-                                                       (JC_174:
-                                                       ((min_requires !tmp_0_0) !tmp_1)))) in
-                               void);
-                              (let jessie_21 = (C_121:
-                                               begin
-                                                 (let jessie_20 = (tmp_1_0 := 
-                                                                   (C_120:
-                                                                   (JC_176:
-                                                                   ((mul_up_requires xu_1) yu)))) in
-                                                 void);
-                                                (C_123:
+                               (let jessie_52 = (C_115:
                                                 begin
-                                                  (tmp_2 := (C_122:
-                                                            (JC_178:
-                                                            ((mul_up_requires xl_1) yl))));
-                                                 !tmp_2
-                                                end)
-                                               end) in
-                              void);
-                              (C_125:
+                                                  (let jessie_48 = (tmp_1 := 
+                                                                    (C_114:
+                                                                    (let jessie_47 = xu_1 in
+                                                                    (let jessie_46 = yl in
+                                                                    (JC_153:
+                                                                    ((mul_dn_requires jessie_47) jessie_46)))))) in
+                                                  void);
+                                                 (C_117:
+                                                 begin
+                                                   (tmp_0_0 := (C_116:
+                                                               (let jessie_51 = xl_1 in
+                                                               (let jessie_50 = yu in
+                                                               (JC_154:
+                                                               ((mul_dn_requires jessie_51) jessie_50))))));
+                                                  !tmp_0_0
+                                                 end)
+                                                end) in
+                               void);
+                              (C_119:
                               begin
-                                (zu := (C_124:
-                                       (JC_180:
-                                       ((max_requires !tmp_2) !tmp_1_0))));
+                                (let jessie_56 = (zl := (C_118:
+                                                        (let jessie_55 = !tmp_0_0 in
+                                                        (let jessie_54 = !tmp_1 in
+                                                        (JC_155:
+                                                        ((min_requires jessie_55) jessie_54)))))) in
+                                void);
+                               (let jessie_64 = (C_121:
+                                                begin
+                                                  (let jessie_60 = (tmp_1_0 := 
+                                                                    (C_120:
+                                                                    (let jessie_59 = xu_1 in
+                                                                    (let jessie_58 = yu in
+                                                                    (JC_156:
+                                                                    ((mul_up_requires jessie_59) jessie_58)))))) in
+                                                  void);
+                                                 (C_123:
+                                                 begin
+                                                   (tmp_2 := (C_122:
+                                                             (let jessie_63 = xl_1 in
+                                                             (let jessie_62 = yl in
+                                                             (JC_157:
+                                                             ((mul_up_requires jessie_63) jessie_62))))));
+                                                  !tmp_2
+                                                 end)
+                                                end) in
+                               void);
+                               (C_125:
+                               begin
+                                 (zu := (C_124:
+                                        (let jessie_67 = !tmp_2 in
+                                        (let jessie_66 = !tmp_1_0 in
+                                        (JC_158:
+                                        ((max_requires jessie_67) jessie_66))))));
+                                !zu
+                               end)
+                              end)
+                             end
+                            else
+                             (C_111:
+                             begin
+                               (let jessie_71 = (zl := (C_110:
+                                                       (let jessie_70 = xu_1 in
+                                                       (let jessie_69 = yl in
+                                                       (JC_159:
+                                                       ((mul_dn_requires jessie_70) jessie_69)))))) in
+                               void);
+                              (C_113:
+                              begin
+                                (zu := (C_112:
+                                       (let jessie_74 = xl_1 in
+                                       (let jessie_73 = yl in
+                                       (JC_160:
+                                       ((mul_up_requires jessie_74) jessie_73))))));
+                               !zu
+                              end)
+                             end))
+                           else
+                            (if ((gt_gen_float yu) (JC_161:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
+                             (C_107:
+                             begin
+                               (let jessie_78 = (zl := (C_106:
+                                                       (let jessie_77 = xl_1 in
+                                                       (let jessie_76 = yu in
+                                                       (JC_162:
+                                                       ((mul_dn_requires jessie_77) jessie_76)))))) in
+                               void);
+                              (C_109:
+                              begin
+                                (zu := (C_108:
+                                       (let jessie_81 = xu_1 in
+                                       (let jessie_80 = yu in
+                                       (JC_163:
+                                       ((mul_up_requires jessie_81) jessie_80))))));
                                !zu
                               end)
                              end)
-                            end
-                           else
-                            (C_111:
-                            begin
-                              (let jessie_22 = (zl := (C_110:
-                                                      (JC_182:
-                                                      ((mul_dn_requires xu_1) yl)))) in
-                              void);
-                             (C_113:
+                            else
+                             (C_104:
                              begin
-                               (zu := (C_112:
-                                      (JC_184: ((mul_up_requires xl_1) yl))));
-                              !zu
-                             end)
-                            end))
+                               (let jessie_83 = (zl := (JC_164:
+                                                       (((gen_float_of_real Double) down) 0.0))) in
+                               void);
+                              (C_105:
+                              begin
+                                (zu := (JC_165:
+                                       (((gen_float_of_real Double) down) 0.0)));
+                               !zu
+                              end)
+                             end)))
                           else
-                           (if ((gt_gen_float yu) (JC_185:
+                           (if ((lt_gen_float yl) (JC_166:
                                                   (((gen_float_of_real Double) down) 0.0)))
                            then
-                            (C_107:
-                            begin
-                              (let jessie_23 = (zl := (C_106:
-                                                      (JC_187:
-                                                      ((mul_dn_requires xl_1) yu)))) in
-                              void);
-                             (C_109:
+                            (if ((gt_gen_float yu) (JC_167:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
+                             (C_101:
                              begin
-                               (zu := (C_108:
-                                      (JC_189: ((mul_up_requires xu_1) yu))));
-                              !zu
+                               (let jessie_88 = (zl := (C_100:
+                                                       (let jessie_87 = xl_1 in
+                                                       (let jessie_86 = yu in
+                                                       (JC_168:
+                                                       ((mul_dn_requires jessie_87) jessie_86)))))) in
+                               void);
+                              (C_103:
+                              begin
+                                (zu := (C_102:
+                                       (let jessie_91 = xl_1 in
+                                       (let jessie_90 = yl in
+                                       (JC_169:
+                                       ((mul_up_requires jessie_91) jessie_90))))));
+                               !zu
+                              end)
                              end)
-                            end)
+                            else
+                             (C_97:
+                             begin
+                               (let jessie_95 = (zl := (C_96:
+                                                       (let jessie_94 = xu_1 in
+                                                       (let jessie_93 = yu in
+                                                       (JC_170:
+                                                       ((mul_dn_requires jessie_94) jessie_93)))))) in
+                               void);
+                              (C_99:
+                              begin
+                                (zu := (C_98:
+                                       (let jessie_98 = xl_1 in
+                                       (let jessie_97 = yl in
+                                       (JC_171:
+                                       ((mul_up_requires jessie_98) jessie_97))))));
+                               !zu
+                              end)
+                             end))
                            else
-                            (C_104:
-                            begin
-                              (let jessie_24 = (zl := (JC_191:
-                                                      (((gen_float_of_real Double) down) 0.0))) in
-                              void);
-                             (C_105:
+                            (if ((gt_gen_float yu) (JC_172:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
+                             (C_93:
                              begin
-                               (zu := (JC_193:
-                                      (((gen_float_of_real Double) down) 0.0)));
-                              !zu
+                               (let jessie_102 = (zl := (C_92:
+                                                        (let jessie_101 = xl_1 in
+                                                        (let jessie_100 = yu in
+                                                        (JC_173:
+                                                        ((mul_dn_requires jessie_101) jessie_100)))))) in
+                               void);
+                              (C_95:
+                              begin
+                                (zu := (C_94:
+                                       (let jessie_105 = xu_1 in
+                                       (let jessie_104 = yl in
+                                       (JC_174:
+                                       ((mul_up_requires jessie_105) jessie_104))))));
+                               !zu
+                              end)
                              end)
-                            end)))
+                            else
+                             (C_90:
+                             begin
+                               (let jessie_107 = (zl := (JC_175:
+                                                        (((gen_float_of_real Double) down) 0.0))) in
+                               void);
+                              (C_91:
+                              begin
+                                (zu := (JC_176:
+                                       (((gen_float_of_real Double) down) 0.0)));
+                               !zu
+                              end)
+                             end))))
                          else
-                          (if ((lt_gen_float yl) (JC_194:
-                                                 (((gen_float_of_real Double) down) 0.0)))
+                          (if ((gt_gen_float xu_1) (JC_177:
+                                                   (((gen_float_of_real Double) down) 0.0)))
                           then
-                           (if ((gt_gen_float yu) (JC_195:
+                           (if ((lt_gen_float yl) (JC_178:
                                                   (((gen_float_of_real Double) down) 0.0)))
                            then
-                            (C_101:
-                            begin
-                              (let jessie_25 = (zl := (C_100:
-                                                      (JC_197:
-                                                      ((mul_dn_requires xl_1) yu)))) in
-                              void);
-                             (C_103:
+                            (if ((gt_gen_float yu) (JC_179:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
+                             (C_87:
                              begin
-                               (zu := (C_102:
-                                      (JC_199: ((mul_up_requires xl_1) yl))));
-                              !zu
+                               (let jessie_112 = (zl := (C_86:
+                                                        (let jessie_111 = xu_1 in
+                                                        (let jessie_110 = yl in
+                                                        (JC_180:
+                                                        ((mul_dn_requires jessie_111) jessie_110)))))) in
+                               void);
+                              (C_89:
+                              begin
+                                (zu := (C_88:
+                                       (let jessie_115 = xu_1 in
+                                       (let jessie_114 = yu in
+                                       (JC_181:
+                                       ((mul_up_requires jessie_115) jessie_114))))));
+                               !zu
+                              end)
                              end)
-                            end)
+                            else
+                             (C_83:
+                             begin
+                               (let jessie_119 = (zl := (C_82:
+                                                        (let jessie_118 = xu_1 in
+                                                        (let jessie_117 = yl in
+                                                        (JC_182:
+                                                        ((mul_dn_requires jessie_118) jessie_117)))))) in
+                               void);
+                              (C_85:
+                              begin
+                                (zu := (C_84:
+                                       (let jessie_122 = xl_1 in
+                                       (let jessie_121 = yu in
+                                       (JC_183:
+                                       ((mul_up_requires jessie_122) jessie_121))))));
+                               !zu
+                              end)
+                             end))
                            else
-                            (C_97:
-                            begin
-                              (let jessie_26 = (zl := (C_96:
-                                                      (JC_201:
-                                                      ((mul_dn_requires xu_1) yu)))) in
-                              void);
-                             (C_99:
+                            (if ((gt_gen_float yu) (JC_184:
+                                                   (((gen_float_of_real Double) down) 0.0)))
+                            then
+                             (C_79:
                              begin
-                               (zu := (C_98:
-                                      (JC_203: ((mul_up_requires xl_1) yl))));
-                              !zu
+                               (let jessie_126 = (zl := (C_78:
+                                                        (let jessie_125 = xl_1 in
+                                                        (let jessie_124 = yl in
+                                                        (JC_185:
+                                                        ((mul_dn_requires jessie_125) jessie_124)))))) in
+                               void);
+                              (C_81:
+                              begin
+                                (zu := (C_80:
+                                       (let jessie_129 = xu_1 in
+                                       (let jessie_128 = yu in
+                                       (JC_186:
+                                       ((mul_up_requires jessie_129) jessie_128))))));
+                               !zu
+                              end)
                              end)
-                            end))
+                            else
+                             (C_76:
+                             begin
+                               (let jessie_131 = (zl := (JC_187:
+                                                        (((gen_float_of_real Double) down) 0.0))) in
+                               void);
+                              (C_77:
+                              begin
+                                (zu := (JC_188:
+                                       (((gen_float_of_real Double) down) 0.0)));
+                               !zu
+                              end)
+                             end)))
                           else
-                           (if ((gt_gen_float yu) (JC_204:
-                                                  (((gen_float_of_real Double) down) 0.0)))
-                           then
-                            (C_93:
-                            begin
-                              (let jessie_27 = (zl := (C_92:
-                                                      (JC_206:
-                                                      ((mul_dn_requires xl_1) yu)))) in
-                              void);
-                             (C_95:
-                             begin
-                               (zu := (C_94:
-                                      (JC_208: ((mul_up_requires xu_1) yl))));
-                              !zu
-                             end)
-                            end)
-                           else
-                            (C_90:
-                            begin
-                              (let jessie_28 = (zl := (JC_210:
-                                                      (((gen_float_of_real Double) down) 0.0))) in
-                              void);
-                             (C_91:
-                             begin
-                               (zu := (JC_212:
-                                      (((gen_float_of_real Double) down) 0.0)));
-                              !zu
-                             end)
-                            end))))
-                        else
-                         (if ((gt_gen_float xu_1) (JC_213:
-                                                  (((gen_float_of_real Double) down) 0.0)))
-                         then
-                          (if ((lt_gen_float yl) (JC_214:
-                                                 (((gen_float_of_real Double) down) 0.0)))
-                          then
-                           (if ((gt_gen_float yu) (JC_215:
-                                                  (((gen_float_of_real Double) down) 0.0)))
-                           then
-                            (C_87:
-                            begin
-                              (let jessie_29 = (zl := (C_86:
-                                                      (JC_217:
-                                                      ((mul_dn_requires xu_1) yl)))) in
-                              void);
-                             (C_89:
-                             begin
-                               (zu := (C_88:
-                                      (JC_219: ((mul_up_requires xu_1) yu))));
-                              !zu
-                             end)
-                            end)
-                           else
-                            (C_83:
-                            begin
-                              (let jessie_30 = (zl := (C_82:
-                                                      (JC_221:
-                                                      ((mul_dn_requires xu_1) yl)))) in
-                              void);
-                             (C_85:
-                             begin
-                               (zu := (C_84:
-                                      (JC_223: ((mul_up_requires xl_1) yu))));
-                              !zu
-                             end)
-                            end))
-                          else
-                           (if ((gt_gen_float yu) (JC_224:
-                                                  (((gen_float_of_real Double) down) 0.0)))
-                           then
-                            (C_79:
-                            begin
-                              (let jessie_31 = (zl := (C_78:
-                                                      (JC_226:
-                                                      ((mul_dn_requires xl_1) yl)))) in
-                              void);
-                             (C_81:
-                             begin
-                               (zu := (C_80:
-                                      (JC_228: ((mul_up_requires xu_1) yu))));
-                              !zu
-                             end)
-                            end)
-                           else
-                            (C_76:
-                            begin
-                              (let jessie_32 = (zl := (JC_230:
-                                                      (((gen_float_of_real Double) down) 0.0))) in
-                              void);
-                             (C_77:
-                             begin
-                               (zu := (JC_232:
-                                      (((gen_float_of_real Double) down) 0.0)));
-                              !zu
-                             end)
-                            end)))
-                         else
-                          (C_74:
-                          begin
-                            (let jessie_33 = (zl := (JC_234:
-                                                    (((gen_float_of_real Double) down) 0.0))) in
-                            void);
-                           (C_75:
+                           (C_74:
                            begin
-                             (zu := (JC_236:
-                                    (((gen_float_of_real Double) down) 0.0)));
-                            !zu
-                           end)
-                          end))) in
+                             (let jessie_134 = (zl := (JC_189:
+                                                      (((gen_float_of_real Double) down) 0.0))) in
+                             void);
+                            (C_75:
+                            begin
+                              (zu := (JC_190:
+                                     (((gen_float_of_real Double) down) 0.0)));
+                             !zu
+                            end)
+                           end))) in
        void);
       (raise Return)
      end))));
@@ -1751,20 +1864,20 @@ let mul_safety =
 let mul_up_ensures_default =
  fun (x_3 : gen_float) (y_3 : gen_float) ->
   { ((true = true)
-    and (JC_73:
-        ((JC_67: (not is_NaN(x_3)))
-        and ((JC_68: (not is_NaN(y_3)))
-            and ((JC_69:
+    and (JC_71:
+        ((JC_65: (not is_NaN(x_3)))
+        and ((JC_66: (not is_NaN(y_3)))
+            and ((JC_67:
                  ((is_infinite(x_3) or is_infinite(y_3)) ->
                   sam_sign(x_3, y_3)))
-                and ((JC_70:
+                and ((JC_68:
                      ((is_infinite(x_3) and is_finite(y_3)) ->
                       (neq_real(float_value(y_3), 0.0)
                       and ge_real(abs_real(float_value(y_3)), 0x1.0p-1074))))
-                    and ((JC_71:
+                    and ((JC_69:
                          ((is_infinite(y_3) and is_finite(x_3)) ->
                           neq_real(float_value(x_3), 0.0)))
-                        and (JC_72:
+                        and (JC_70:
                             ((is_finite(x_3)
                              and (is_finite(y_3)
                                  and ((not no_overflow(Double, down,
@@ -1780,35 +1893,34 @@ let mul_up_ensures_default =
      (let z_0 = ref (any_gen_float Double) in
      (C_32:
      begin
-       (let jessie_10 = (a_0 := (C_31:
-                                (JC_99: (((neg_gen_float Double) down) y_3)))) in
+       (let jessie_31 = (a_0 := (C_31:
+                                (JC_93: (((neg_gen_float Double) down) y_3)))) in
        void);
       (C_34:
       begin
-        (let jessie_11 = (b := (C_33:
-                               (JC_101:
+        (let jessie_33 = (b := (C_33:
+                               (JC_94:
                                ((((mul_gen_float Double) down) x_3) !a_0)))) in
         void);
        (C_36:
        begin
-         (let jessie_12 = (z_0 := (C_35:
-                                  (JC_103:
-                                  (((neg_gen_float Double) down) !b)))) in
+         (let jessie_35 = (z_0 := (C_35:
+                                  (JC_95: (((neg_gen_float Double) down) !b)))) in
          void);
         (assert
-        { (JC_104:
+        { (JC_96:
           ((is_infinite(x_3) or is_infinite(y_3)) ->
            real_le_double(mul_real(float_value(x_3), float_value(y_3)), z_0))) };
         void);
         void;
         (assert
-        { (JC_105:
+        { (JC_97:
           ((is_finite(x_3) and is_infinite(y_3)) ->
            real_le_double(mul_real(float_value(x_3), float_value(y_3)), z_0))) };
         void);
         void;
         (assert
-        { (JC_106:
+        { (JC_98:
           ((is_infinite(x_3)
            and (is_finite(y_3)
                and no_overflow(Double, down, neg_real(float_value(y_3))))) ->
@@ -1816,7 +1928,7 @@ let mul_up_ensures_default =
         void);
         void;
         (assert
-        { (JC_107:
+        { (JC_99:
           ((is_infinite(x_3)
            and (is_finite(y_3)
                and (not no_overflow(Double, down, neg_real(float_value(y_3)))))) ->
@@ -1824,13 +1936,13 @@ let mul_up_ensures_default =
         void);
         void;
         (assert
-        { (JC_108:
+        { (JC_100:
           ((is_infinite(x_3) and is_infinite(y_3)) ->
            real_le_double(mul_real(float_value(x_3), float_value(y_3)), z_0))) };
         void);
         void;
         (assert
-        { (JC_109:
+        { (JC_101:
           ((is_finite(x_3)
            and (is_finite(y_3)
                and (no_overflow(Double, down, neg_real(float_value(y_3)))
@@ -1842,7 +1954,7 @@ let mul_up_ensures_default =
         void);
         void;
         (assert
-        { (JC_110:
+        { (JC_102:
           ((is_finite(x_3)
            and (is_finite(y_3)
                and (no_overflow(Double, down, neg_real(float_value(y_3)))
@@ -1852,7 +1964,7 @@ let mul_up_ensures_default =
         void);
         void;
         (assert
-        { (JC_111:
+        { (JC_103:
           ((is_finite(x_3)
            and (is_finite(y_3)
                and ((not no_overflow(Double, down,
@@ -1862,7 +1974,7 @@ let mul_up_ensures_default =
         void);
         void;
         (assert
-        { (JC_112:
+        { (JC_104:
           ((is_finite(x_3)
            and (is_finite(y_3)
                and ((not no_overflow(Double, down,
@@ -1874,7 +1986,7 @@ let mul_up_ensures_default =
         void);
         void;
         (assert
-        { (JC_113:
+        { (JC_105:
           ((is_finite(x_3)
            and (is_finite(y_3)
                and ((not no_overflow(Double, down,
@@ -1888,7 +2000,7 @@ let mul_up_ensures_default =
         void);
         void;
         (assert
-        { (JC_114:
+        { (JC_106:
           ((is_finite(x_3)
            and (is_finite(y_3)
                and ((not no_overflow(Double, down,
@@ -1902,7 +2014,7 @@ let mul_up_ensures_default =
         void);
         void;
         (assert
-        { (JC_115:
+        { (JC_107:
           ((is_finite(x_3)
            and (is_finite(y_3)
                and (no_overflow(Double, down, neg_real(float_value(y_3)))
@@ -1917,7 +2029,7 @@ let mul_up_ensures_default =
         void);
         void;
         (assert
-        { (JC_116:
+        { (JC_108:
           ((is_finite(x_3)
            and (is_finite(y_3)
                and (no_overflow(Double, down, neg_real(float_value(y_3)))
@@ -1941,24 +2053,24 @@ let mul_up_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_75:
+  { (JC_73:
     real_le_double(mul_real(float_value(x_3), float_value(y_3)), result)) }
 
 let mul_up_safety =
  fun (x_3 : gen_float) (y_3 : gen_float) ->
-  { (JC_73:
-    ((JC_67: (not is_NaN(x_3)))
-    and ((JC_68: (not is_NaN(y_3)))
-        and ((JC_69:
+  { (JC_71:
+    ((JC_65: (not is_NaN(x_3)))
+    and ((JC_66: (not is_NaN(y_3)))
+        and ((JC_67:
              ((is_infinite(x_3) or is_infinite(y_3)) -> sam_sign(x_3, y_3)))
-            and ((JC_70:
+            and ((JC_68:
                  ((is_infinite(x_3) and is_finite(y_3)) ->
                   (neq_real(float_value(y_3), 0.0)
                   and ge_real(abs_real(float_value(y_3)), 0x1.0p-1074))))
-                and ((JC_71:
+                and ((JC_69:
                      ((is_infinite(y_3) and is_finite(x_3)) ->
                       neq_real(float_value(x_3), 0.0)))
-                    and (JC_72:
+                    and (JC_70:
                         ((is_finite(x_3)
                          and (is_finite(y_3)
                              and ((not no_overflow(Double, down,
@@ -1974,34 +2086,34 @@ let mul_up_safety =
      (let z_0 = ref (any_gen_float Double) in
      (C_32:
      begin
-       (let jessie_7 = (a_0 := (C_31:
-                               (JC_80: (((neg_gen_float Double) down) y_3)))) in
+       (let jessie_24 = (a_0 := (C_31:
+                                (JC_77: (((neg_gen_float Double) down) y_3)))) in
        void);
       (C_34:
       begin
-        (let jessie_8 = (b := (C_33:
-                              (JC_82:
-                              ((((mul_gen_float Double) down) x_3) !a_0)))) in
+        (let jessie_26 = (b := (C_33:
+                               (JC_78:
+                               ((((mul_gen_float Double) down) x_3) !a_0)))) in
         void);
        (C_36:
        begin
-         (let jessie_9 = (z_0 := (C_35:
-                                 (JC_84: (((neg_gen_float Double) down) !b)))) in
+         (let jessie_28 = (z_0 := (C_35:
+                                  (JC_79: (((neg_gen_float Double) down) !b)))) in
          void);
         [ { } unit reads z_0
-          { (JC_85:
+          { (JC_80:
             ((is_infinite(x_3) or is_infinite(y_3)) ->
              real_le_double(mul_real(float_value(x_3), float_value(y_3)),
              z_0))) } ];
         void;
         [ { } unit reads z_0
-          { (JC_86:
+          { (JC_81:
             ((is_finite(x_3) and is_infinite(y_3)) ->
              real_le_double(mul_real(float_value(x_3), float_value(y_3)),
              z_0))) } ];
         void;
         [ { } unit reads z_0
-          { (JC_87:
+          { (JC_82:
             ((is_infinite(x_3)
              and (is_finite(y_3)
                  and no_overflow(Double, down, neg_real(float_value(y_3))))) ->
@@ -2009,7 +2121,7 @@ let mul_up_safety =
              z_0))) } ];
         void;
         [ { } unit reads z_0
-          { (JC_88:
+          { (JC_83:
             ((is_infinite(x_3)
              and (is_finite(y_3)
                  and (not no_overflow(Double, down,
@@ -2018,13 +2130,13 @@ let mul_up_safety =
              z_0))) } ];
         void;
         [ { } unit reads z_0
-          { (JC_89:
+          { (JC_84:
             ((is_infinite(x_3) and is_infinite(y_3)) ->
              real_le_double(mul_real(float_value(x_3), float_value(y_3)),
              z_0))) } ];
         void;
         [ { } unit reads a_0,b,z_0
-          { (JC_90:
+          { (JC_85:
             ((is_finite(x_3)
              and (is_finite(y_3)
                  and (no_overflow(Double, down, neg_real(float_value(y_3)))
@@ -2036,7 +2148,7 @@ let mul_up_safety =
              z_0))) } ];
         void;
         [ { } unit reads a_0,z_0
-          { (JC_91:
+          { (JC_86:
             ((is_finite(x_3)
              and (is_finite(y_3)
                  and (no_overflow(Double, down, neg_real(float_value(y_3)))
@@ -2046,7 +2158,7 @@ let mul_up_safety =
              z_0))) } ];
         void;
         [ { } unit reads z_0
-          { (JC_92:
+          { (JC_87:
             ((is_finite(x_3)
              and (is_finite(y_3)
                  and ((not no_overflow(Double, down,
@@ -2056,7 +2168,7 @@ let mul_up_safety =
              z_0))) } ];
         void;
         [ { } unit reads a_0,z_0
-          { (JC_93:
+          { (JC_88:
             ((is_finite(x_3)
              and (is_finite(y_3)
                  and ((not no_overflow(Double, down,
@@ -2069,7 +2181,7 @@ let mul_up_safety =
              z_0))) } ];
         void;
         [ { } unit reads a_0,b,z_0
-          { (JC_94:
+          { (JC_89:
             ((is_finite(x_3)
              and (is_finite(y_3)
                  and ((not no_overflow(Double, down,
@@ -2083,7 +2195,7 @@ let mul_up_safety =
              z_0))) } ];
         void;
         [ { } unit reads a_0,b,z_0
-          { (JC_95:
+          { (JC_90:
             ((is_finite(x_3)
              and (is_finite(y_3)
                  and ((not no_overflow(Double, down,
@@ -2097,7 +2209,7 @@ let mul_up_safety =
              z_0))) } ];
         void;
         [ { } unit reads a_0,b,z_0
-          { (JC_96:
+          { (JC_91:
             ((is_finite(x_3)
              and (is_finite(y_3)
                  and (no_overflow(Double, down, neg_real(float_value(y_3)))
@@ -2111,7 +2223,7 @@ let mul_up_safety =
                  z_0)))) } ];
         void;
         [ { } unit reads a_0,b,z_0
-          { (JC_97:
+          { (JC_92:
             ((is_finite(x_3)
              and (is_finite(y_3)
                  and (no_overflow(Double, down, neg_real(float_value(y_3)))

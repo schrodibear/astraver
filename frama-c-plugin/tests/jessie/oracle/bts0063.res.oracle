@@ -395,10 +395,10 @@ let f_ensures_default =
      (let x = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_3 = (x := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_7 = (x := (safe_int32_of_integer_ (1))) in void);
       (L:
       begin
-        (C_2: (let jessie_4 = (x := (safe_int32_of_integer_ (2))) in void));
+        (C_2: (let jessie_9 = (x := (safe_int32_of_integer_ (2))) in void));
        (assert
        { (JC_10:
          eq_int(integer_of_int32(x@L), sub_int(integer_of_int32(x), (1)))) };
@@ -425,10 +425,10 @@ let f_safety =
      (let x = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_1 = (x := (safe_int32_of_integer_ (1))) in void);
+       (let jessie_2 = (x := (safe_int32_of_integer_ (1))) in void);
       (L:
       begin
-        (C_2: (let jessie_2 = (x := (safe_int32_of_integer_ (2))) in void));
+        (C_2: (let jessie_4 = (x := (safe_int32_of_integer_ (2))) in void));
        [ { } unit reads x
          { (JC_9:
            eq_int(integer_of_int32(x@L), sub_int(integer_of_int32(x), (1)))) } ];

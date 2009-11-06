@@ -782,17 +782,17 @@ let min_sort_ensures_default =
      (let mv = ref (any_int32 void) in
      (C_9:
      begin
-       (let jessie_22 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_33 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_36 = begin
+       (let jessie_56 = begin
                           (loop_3:
                           while true do
-                          { invariant (JC_59: true)  }
+                          { invariant (JC_54: true)  }
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_35 = begin
-                                                (let jessie_34 = begin
+                             (let jessie_55 = begin
+                                                (let jessie_54 = begin
                                                                    (if 
                                                                    ((lt_int_ 
                                                                     (integer_of_int32 !i_0_1)) 
@@ -804,14 +804,14 @@ let min_sort_ensures_default =
                                                                     (integer_of_int32 n)) (1)))))))
                                                                    then void
                                                                    else
-                                                                    (let jessie_23 = 
+                                                                    (let jessie_34 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
                                                                   (C_14:
                                                                   begin
-                                                                    (let jessie_24 = 
+                                                                    (let jessie_36 = 
                                                                     (mv := 
                                                                     (C_13:
                                                                     ((safe_acc_ !int_P_int_M_t_0_5) 
@@ -822,13 +822,13 @@ let min_sort_ensures_default =
                                                                    (C_15:
                                                                    begin
                                                                      
-                                                                    (let jessie_25 = 
+                                                                    (let jessie_38 = 
                                                                     (mi := !i_0_1) in
                                                                     void);
                                                                     (C_18:
                                                                     begin
                                                                       
-                                                                    (let jessie_26 = 
+                                                                    (let jessie_40 = 
                                                                     (j_0_1 := 
                                                                     (C_17:
                                                                     (safe_int32_of_integer_ 
@@ -837,13 +837,13 @@ let min_sort_ensures_default =
                                                                     (integer_of_int32 !i_0_1)) (1)))))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_32 = 
+                                                                    (let jessie_49 = 
                                                                     begin
                                                                       
                                                                     (loop_4:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_62:
+                                                                    (JC_57:
                                                                     true)
                                                                      }
                                                                     begin
@@ -852,10 +852,10 @@ let min_sort_ensures_default =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_31 = 
+                                                                    (let jessie_48 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_30 = 
+                                                                    (let jessie_47 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -864,7 +864,7 @@ let min_sort_ensures_default =
                                                                     (integer_of_int32 n))
                                                                     then void
                                                                     else
-                                                                    (let jessie_27 = 
+                                                                    (let jessie_41 = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -879,11 +879,11 @@ let min_sort_ensures_default =
                                                                     (integer_of_int32 !j_0_1))))))) 
                                                                     (integer_of_int32 !mv))
                                                                     then
-                                                                    (let jessie_29 = 
+                                                                    (let jessie_45 = 
                                                                     (C_19:
                                                                     begin
                                                                       
-                                                                    (let jessie_28 = 
+                                                                    (let jessie_43 = 
                                                                     (mi := !j_0_1) in
                                                                     void);
                                                                     (C_22:
@@ -935,8 +935,11 @@ let min_sort_ensures_default =
                                                                     (C_28:
                                                                     begin
                                                                       
-                                                                    (JC_64:
-                                                                    (((((swap t_0) !i_0_1) !mi) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table));
+                                                                    (let jessie_52 = t_0 in
+                                                                    (let jessie_51 = !i_0_1 in
+                                                                    (let jessie_50 = !mi in
+                                                                    (JC_59:
+                                                                    (((((swap jessie_52) jessie_51) jessie_50) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
                                                                     (C_31:
                                                                     begin
                                                                       
@@ -997,19 +1000,20 @@ let min_sort_ensures_permutation =
      (let mv = ref (any_int32 void) in
      (C_9:
      begin
-       (let jessie_52 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_83 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_66 = begin
-                          (loop_7:
-                          while true do
-                          { invariant (JC_73: true)  }
-                           begin
-                             [ { } unit { true } ];
-                            try
-                             (let jessie_65 = begin
-                                                (let jessie_64 = begin
-                                                                   (if 
-                                                                   ((lt_int_ 
+       (let jessie_106 = begin
+                           (loop_7:
+                           while true do
+                           { invariant (JC_68: true)  }
+                            begin
+                              [ { } unit { true } ];
+                             try
+                              (let jessie_105 = begin
+                                                  (let jessie_104 = begin
+                                                                      
+                                                                    (if 
+                                                                    ((lt_int_ 
                                                                     (integer_of_int32 !i_0_1)) 
                                                                     (integer_of_int32 
                                                                     (C_11:
@@ -1017,16 +1021,17 @@ let min_sort_ensures_permutation =
                                                                     (C_10:
                                                                     ((sub_int 
                                                                     (integer_of_int32 n)) (1)))))))
-                                                                   then void
-                                                                   else
-                                                                    (let jessie_53 = 
+                                                                    then void
+                                                                    else
+                                                                    (let jessie_84 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
-                                                                  (C_14:
-                                                                  begin
-                                                                    (let jessie_54 = 
+                                                                    (C_14:
+                                                                    begin
+                                                                      
+                                                                    (let jessie_86 = 
                                                                     (mv := 
                                                                     (C_13:
                                                                     ((safe_acc_ !int_P_int_M_t_0_5) 
@@ -1034,16 +1039,16 @@ let min_sort_ensures_permutation =
                                                                     ((shift t_0) 
                                                                     (integer_of_int32 !i_0_1)))))) in
                                                                     void);
-                                                                   (C_15:
-                                                                   begin
-                                                                     
-                                                                    (let jessie_55 = 
+                                                                    (C_15:
+                                                                    begin
+                                                                      
+                                                                    (let jessie_88 = 
                                                                     (mi := !i_0_1) in
                                                                     void);
                                                                     (C_18:
                                                                     begin
                                                                       
-                                                                    (let jessie_56 = 
+                                                                    (let jessie_90 = 
                                                                     (j_0_1 := 
                                                                     (C_17:
                                                                     (safe_int32_of_integer_ 
@@ -1052,13 +1057,13 @@ let min_sort_ensures_permutation =
                                                                     (integer_of_int32 !i_0_1)) (1)))))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_62 = 
+                                                                    (let jessie_99 = 
                                                                     begin
                                                                       
                                                                     (loop_8:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_76:
+                                                                    (JC_71:
                                                                     true)
                                                                      }
                                                                     begin
@@ -1067,10 +1072,10 @@ let min_sort_ensures_permutation =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_61 = 
+                                                                    (let jessie_98 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_60 = 
+                                                                    (let jessie_97 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -1079,7 +1084,7 @@ let min_sort_ensures_permutation =
                                                                     (integer_of_int32 n))
                                                                     then void
                                                                     else
-                                                                    (let jessie_57 = 
+                                                                    (let jessie_91 = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -1094,11 +1099,11 @@ let min_sort_ensures_permutation =
                                                                     (integer_of_int32 !j_0_1))))))) 
                                                                     (integer_of_int32 !mv))
                                                                     then
-                                                                    (let jessie_59 = 
+                                                                    (let jessie_95 = 
                                                                     (C_19:
                                                                     begin
                                                                       
-                                                                    (let jessie_58 = 
+                                                                    (let jessie_93 = 
                                                                     (mi := !j_0_1) in
                                                                     void);
                                                                     (C_22:
@@ -1150,8 +1155,11 @@ let min_sort_ensures_permutation =
                                                                     (C_28:
                                                                     begin
                                                                       
-                                                                    (JC_78:
-                                                                    (((((swap t_0) !i_0_1) !mi) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table));
+                                                                    (let jessie_102 = t_0 in
+                                                                    (let jessie_101 = !i_0_1 in
+                                                                    (let jessie_100 = !mi in
+                                                                    (JC_73:
+                                                                    (((((swap jessie_102) jessie_101) jessie_100) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
                                                                     (C_31:
                                                                     begin
                                                                       
@@ -1165,22 +1173,22 @@ let min_sort_ensures_permutation =
                                                                     end)
                                                                     end)
                                                                     end)
-                                                                   end)
-                                                                  end)
-                                                                 end in
-                                                void);
-                                               (raise
-                                                (Loop_continue_exc
-                                                void))
-                                              end in
-                             void)
-                             with
-                             Loop_continue_exc jessie_6 ->
-                             void end
-                           end
-                          done);
-                         (raise (Goto_while_0_break_exc void))
-                        end in
+                                                                    end)
+                                                                    end)
+                                                                    end in
+                                                  void);
+                                                 (raise
+                                                  (Loop_continue_exc
+                                                  void))
+                                                end in
+                              void)
+                              with
+                              Loop_continue_exc jessie_6 ->
+                              void end
+                            end
+                           done);
+                          (raise (Goto_while_0_break_exc void))
+                         end in
        void)
        with
        Goto_while_0_break_exc jessie_2 ->
@@ -1214,17 +1222,17 @@ let min_sort_ensures_sorted =
      (let mv = ref (any_int32 void) in
      (C_9:
      begin
-       (let jessie_37 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_58 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_51 = begin
+       (let jessie_81 = begin
                           (loop_5:
                           while true do
-                          { invariant (JC_66: true)  }
+                          { invariant (JC_61: true)  }
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_50 = begin
-                                                (let jessie_49 = begin
+                             (let jessie_80 = begin
+                                                (let jessie_79 = begin
                                                                    (if 
                                                                    ((lt_int_ 
                                                                     (integer_of_int32 !i_0_1)) 
@@ -1236,14 +1244,14 @@ let min_sort_ensures_sorted =
                                                                     (integer_of_int32 n)) (1)))))))
                                                                    then void
                                                                    else
-                                                                    (let jessie_38 = 
+                                                                    (let jessie_59 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
                                                                   (C_14:
                                                                   begin
-                                                                    (let jessie_39 = 
+                                                                    (let jessie_61 = 
                                                                     (mv := 
                                                                     (C_13:
                                                                     ((safe_acc_ !int_P_int_M_t_0_5) 
@@ -1254,13 +1262,13 @@ let min_sort_ensures_sorted =
                                                                    (C_15:
                                                                    begin
                                                                      
-                                                                    (let jessie_40 = 
+                                                                    (let jessie_63 = 
                                                                     (mi := !i_0_1) in
                                                                     void);
                                                                     (C_18:
                                                                     begin
                                                                       
-                                                                    (let jessie_41 = 
+                                                                    (let jessie_65 = 
                                                                     (j_0_1 := 
                                                                     (C_17:
                                                                     (safe_int32_of_integer_ 
@@ -1269,13 +1277,13 @@ let min_sort_ensures_sorted =
                                                                     (integer_of_int32 !i_0_1)) (1)))))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_47 = 
+                                                                    (let jessie_74 = 
                                                                     begin
                                                                       
                                                                     (loop_6:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_69:
+                                                                    (JC_64:
                                                                     true)
                                                                      }
                                                                     begin
@@ -1284,10 +1292,10 @@ let min_sort_ensures_sorted =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_46 = 
+                                                                    (let jessie_73 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_45 = 
+                                                                    (let jessie_72 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -1296,7 +1304,7 @@ let min_sort_ensures_sorted =
                                                                     (integer_of_int32 n))
                                                                     then void
                                                                     else
-                                                                    (let jessie_42 = 
+                                                                    (let jessie_66 = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -1311,11 +1319,11 @@ let min_sort_ensures_sorted =
                                                                     (integer_of_int32 !j_0_1))))))) 
                                                                     (integer_of_int32 !mv))
                                                                     then
-                                                                    (let jessie_44 = 
+                                                                    (let jessie_70 = 
                                                                     (C_19:
                                                                     begin
                                                                       
-                                                                    (let jessie_43 = 
+                                                                    (let jessie_68 = 
                                                                     (mi := !j_0_1) in
                                                                     void);
                                                                     (C_22:
@@ -1367,8 +1375,11 @@ let min_sort_ensures_sorted =
                                                                     (C_28:
                                                                     begin
                                                                       
-                                                                    (JC_71:
-                                                                    (((((swap t_0) !i_0_1) !mi) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table));
+                                                                    (let jessie_77 = t_0 in
+                                                                    (let jessie_76 = !i_0_1 in
+                                                                    (let jessie_75 = !mi in
+                                                                    (JC_66:
+                                                                    (((((swap jessie_77) jessie_76) jessie_75) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
                                                                     (C_31:
                                                                     begin
                                                                       
@@ -1429,17 +1440,17 @@ let min_sort_safety =
      (let mv = ref (any_int32 void) in
      (C_9:
      begin
-       (let jessie_7 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_8 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_21 = begin
+       (let jessie_31 = begin
                           (loop_1:
                           while true do
                           { invariant (JC_40: true) variant (0) }
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_20 = begin
-                                                (let jessie_19 = begin
+                             (let jessie_30 = begin
+                                                (let jessie_29 = begin
                                                                    (if 
                                                                    ((lt_int_ 
                                                                     (integer_of_int32 !i_0_1)) 
@@ -1452,46 +1463,46 @@ let min_sort_safety =
                                                                     (integer_of_int32 n)) (1))))))))
                                                                    then void
                                                                    else
-                                                                    (let jessie_8 = 
+                                                                    (let jessie_9 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
                                                                   (C_14:
                                                                   begin
-                                                                    (let jessie_9 = 
+                                                                    (let jessie_11 = 
                                                                     (mv := 
                                                                     (C_13:
-                                                                    (JC_44:
+                                                                    (JC_43:
                                                                     ((((offset_acc_ int_P_t_0_5_alloc_table) !int_P_int_M_t_0_5) t_0) 
                                                                     (integer_of_int32 !i_0_1))))) in
                                                                     void);
                                                                    (C_15:
                                                                    begin
                                                                      
-                                                                    (let jessie_10 = 
+                                                                    (let jessie_13 = 
                                                                     (mi := !i_0_1) in
                                                                     void);
                                                                     (C_18:
                                                                     begin
                                                                       
-                                                                    (let jessie_11 = 
+                                                                    (let jessie_15 = 
                                                                     (j_0_1 := 
                                                                     (C_17:
-                                                                    (JC_46:
+                                                                    (JC_44:
                                                                     (int32_of_integer_ 
                                                                     (C_16:
                                                                     ((add_int 
                                                                     (integer_of_int32 !i_0_1)) (1))))))) in
                                                                     void);
                                                                     try
-                                                                    (let jessie_17 = 
+                                                                    (let jessie_24 = 
                                                                     begin
                                                                       
                                                                     (loop_2:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_48:
+                                                                    (JC_46:
                                                                     true)
                                                                     variant (0) }
                                                                     begin
@@ -1500,10 +1511,10 @@ let min_sort_safety =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_16 = 
+                                                                    (let jessie_23 = 
                                                                     begin
                                                                       
-                                                                    (let jessie_15 = 
+                                                                    (let jessie_22 = 
                                                                     begin
                                                                       
                                                                     (if 
@@ -1512,7 +1523,7 @@ let min_sort_safety =
                                                                     (integer_of_int32 n))
                                                                     then void
                                                                     else
-                                                                    (let jessie_12 = 
+                                                                    (let jessie_16 = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -1521,16 +1532,16 @@ let min_sort_safety =
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 
                                                                     (C_24:
-                                                                    (JC_50:
+                                                                    (JC_48:
                                                                     ((((offset_acc_ int_P_t_0_5_alloc_table) !int_P_int_M_t_0_5) t_0) 
                                                                     (integer_of_int32 !j_0_1)))))) 
                                                                     (integer_of_int32 !mv))
                                                                     then
-                                                                    (let jessie_14 = 
+                                                                    (let jessie_20 = 
                                                                     (C_19:
                                                                     begin
                                                                       
-                                                                    (let jessie_13 = 
+                                                                    (let jessie_18 = 
                                                                     (mi := !j_0_1) in
                                                                     void);
                                                                     (C_22:
@@ -1538,7 +1549,7 @@ let min_sort_safety =
                                                                       
                                                                     (mv := 
                                                                     (C_21:
-                                                                    (JC_52:
+                                                                    (JC_49:
                                                                     ((((offset_acc_ int_P_t_0_5_alloc_table) !int_P_int_M_t_0_5) t_0) 
                                                                     (integer_of_int32 !j_0_1)))));
                                                                     !mv
@@ -1551,7 +1562,7 @@ let min_sort_safety =
                                                                       
                                                                     (j_0_1 := 
                                                                     (C_26:
-                                                                    (JC_54:
+                                                                    (JC_50:
                                                                     (int32_of_integer_ 
                                                                     (C_25:
                                                                     ((add_int 
@@ -1582,14 +1593,17 @@ let min_sort_safety =
                                                                     (C_28:
                                                                     begin
                                                                       
-                                                                    (JC_55:
-                                                                    (((((swap_requires t_0) !i_0_1) !mi) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table));
+                                                                    (let jessie_27 = t_0 in
+                                                                    (let jessie_26 = !i_0_1 in
+                                                                    (let jessie_25 = !mi in
+                                                                    (JC_51:
+                                                                    (((((swap_requires jessie_27) jessie_26) jessie_25) int_P_int_M_t_0_5) int_P_t_0_5_alloc_table)))));
                                                                     (C_31:
                                                                     begin
                                                                       
                                                                     (i_0_1 := 
                                                                     (C_30:
-                                                                    (JC_57:
+                                                                    (JC_52:
                                                                     (int32_of_integer_ 
                                                                     (C_29:
                                                                     ((add_int 
@@ -1695,11 +1709,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/min_sort_po15.why">
-      <location file = "why/min_sort.why" line = "1335" begin = "77" end = "78"/>
+      <location file = "why/min_sort.why" line = "1346" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po16.why">
-      <location file = "why/min_sort.why" line = "1335" begin = "77" end = "78"/>
+      <location file = "why/min_sort.why" line = "1346" begin = "77" end = "78"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po17.why">
@@ -1733,11 +1747,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/min_sort_po23.why">
-      <location file = "why/min_sort.why" line = "1276" begin = "61" end = "62"/>
+      <location file = "why/min_sort.why" line = "1287" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po24.why">
-      <location file = "why/min_sort.why" line = "1276" begin = "61" end = "62"/>
+      <location file = "why/min_sort.why" line = "1287" begin = "61" end = "62"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

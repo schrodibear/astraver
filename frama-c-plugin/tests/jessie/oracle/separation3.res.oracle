@@ -937,23 +937,23 @@ parameter f3 :
   { } int32
   reads L_l_2_alloc_table,S_b_s0_1,S_c_s0_1,S_s0_1_alloc_table,int_P_int_M_s0_1,int_P_s0_1_alloc_table
   writes int_P_int_M_s0_1
-  { ((JC_56:
-     ((JC_54: valid_s0(S_s0_1_alloc_table))
-     and (JC_55: valid_l(L_l_2_alloc_table))))
-    and ((true = true) -> (JC_50: eq_int(integer_of_int32(result), (1))))) }
+  { ((JC_55:
+     ((JC_53: valid_s0(S_s0_1_alloc_table))
+     and (JC_54: valid_l(L_l_2_alloc_table))))
+    and ((true = true) -> (JC_49: eq_int(integer_of_int32(result), (1))))) }
 
 parameter f3_requires :
  tt:unit ->
-  { (JC_43:
-    ((JC_41: valid_s0(S_s0_1_alloc_table))
-    and (JC_42: valid_l(L_l_2_alloc_table))))}
+  { (JC_42:
+    ((JC_40: valid_s0(S_s0_1_alloc_table))
+    and (JC_41: valid_l(L_l_2_alloc_table))))}
   int32
   reads L_l_2_alloc_table,S_b_s0_1,S_c_s0_1,S_s0_1_alloc_table,int_P_int_M_s0_1,int_P_s0_1_alloc_table
   writes int_P_int_M_s0_1
-  { ((JC_56:
-     ((JC_54: valid_s0(S_s0_1_alloc_table))
-     and (JC_55: valid_l(L_l_2_alloc_table))))
-    and ((true = true) -> (JC_50: eq_int(integer_of_int32(result), (1))))) }
+  { ((JC_55:
+     ((JC_53: valid_s0(S_s0_1_alloc_table))
+     and (JC_54: valid_l(L_l_2_alloc_table))))
+    and ((true = true) -> (JC_49: eq_int(integer_of_int32(result), (1))))) }
 
 parameter f_requires :
  tt:unit ->
@@ -997,20 +997,20 @@ let f2_ensures_default =
      (let __retres_0 = ref (any_int32 void) in
      (C_11:
      begin
-       (let jessie_39 = (let jessie_35 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_38 = ((shift (C_9:
+       (let jessie_51 = (let jessie_47 = (safe_int32_of_integer_ (1)) in
+                        (let jessie_50 = ((shift (C_9:
                                                  ((safe_acc_ !S_b_s0_1) s0))) (2)) in
-                        (((safe_upd_ int_P_int_M_s0_1) jessie_38) jessie_35))) in
+                        (((safe_upd_ int_P_int_M_s0_1) jessie_50) jessie_47))) in
        void);
       (C_13:
       begin
-        (let jessie_45 = (let jessie_41 = s0 in
-                         (let jessie_44 = l in
-                         (((safe_upd_ L_p_l_2) jessie_44) jessie_41))) in
+        (let jessie_57 = (let jessie_53 = s0 in
+                         (let jessie_56 = l in
+                         (((safe_upd_ L_p_l_2) jessie_56) jessie_53))) in
         void);
        (C_17:
        begin
-         (let jessie_46 = (__retres_0 := (C_16:
+         (let jessie_59 = (__retres_0 := (C_16:
                                          ((safe_acc_ !int_P_int_M_s0_1) 
                                           ((shift (C_15:
                                                   ((safe_acc_ !S_b_s0_1) 
@@ -1041,23 +1041,23 @@ let f2_safety =
      (let __retres_0 = ref (any_int32 void) in
      (C_11:
      begin
-       (let jessie_27 = (let jessie_23 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_26 = ((shift (C_9:
+       (let jessie_36 = (let jessie_32 = (safe_int32_of_integer_ (1)) in
+                        (let jessie_35 = ((shift (C_9:
                                                  ((safe_acc_ !S_b_s0_1) s0))) (2)) in
-                        (((safe_upd_ int_P_int_M_s0_1) jessie_26) jessie_23))) in
+                        (((safe_upd_ int_P_int_M_s0_1) jessie_35) jessie_32))) in
        void);
       (C_13:
       begin
-        (let jessie_33 = (let jessie_29 = s0 in
-                         (let jessie_32 = l in
-                         (((safe_upd_ L_p_l_2) jessie_32) jessie_29))) in
+        (let jessie_42 = (let jessie_38 = s0 in
+                         (let jessie_41 = l in
+                         (((safe_upd_ L_p_l_2) jessie_41) jessie_38))) in
         void);
        (C_17:
        begin
-         (let jessie_34 = (__retres_0 := (C_16:
+         (let jessie_44 = (__retres_0 := (C_16:
                                          ((safe_acc_ !int_P_int_M_s0_1) 
                                           ((shift (C_15:
-                                                  (JC_40:
+                                                  (JC_39:
                                                   (((acc_ !S_s0_1_alloc_table) !S_b_s0_1) 
                                                    (C_14:
                                                    ((safe_acc_ !L_p_l_2) l)))))) (2))))) in
@@ -1079,9 +1079,9 @@ let f2_safety =
 let f3_ensures_default =
  fun (tt : unit) ->
   { ((true = true)
-    and (JC_47:
-        ((JC_45: valid_s0(S_s0_1_alloc_table))
-        and (JC_46: valid_l(L_l_2_alloc_table))))) }
+    and (JC_46:
+        ((JC_44: valid_s0(S_s0_1_alloc_table))
+        and (JC_45: valid_l(L_l_2_alloc_table))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1089,21 +1089,21 @@ let f3_ensures_default =
      (let __retres_1 = ref (any_int32 void) in
      (C_21:
      begin
-       (let jessie_62 = (let jessie_58 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_61 = ((shift (C_19:
+       (let jessie_81 = (let jessie_77 = (safe_int32_of_integer_ (1)) in
+                        (let jessie_80 = ((shift (C_19:
                                                  ((safe_acc_ !S_b_s0_1) s0))) (2)) in
-                        (((safe_upd_ int_P_int_M_s0_1) jessie_61) jessie_58))) in
+                        (((safe_upd_ int_P_int_M_s0_1) jessie_80) jessie_77))) in
        void);
       (C_24:
       begin
-        (let jessie_67 = (let jessie_63 = (safe_int32_of_integer_ (2)) in
-                         (let jessie_66 = ((shift (C_22:
+        (let jessie_87 = (let jessie_83 = (safe_int32_of_integer_ (2)) in
+                         (let jessie_86 = ((shift (C_22:
                                                   ((safe_acc_ !S_c_s0_1) s0))) (2)) in
-                         (((safe_upd_ int_P_int_M_s0_1) jessie_66) jessie_63))) in
+                         (((safe_upd_ int_P_int_M_s0_1) jessie_86) jessie_83))) in
         void);
        (C_27:
        begin
-         (let jessie_68 = (__retres_1 := (C_26:
+         (let jessie_89 = (__retres_1 := (C_26:
                                          ((safe_acc_ !int_P_int_M_s0_1) 
                                           ((shift (C_25:
                                                   ((safe_acc_ !S_b_s0_1) s0))) (2))))) in
@@ -1118,13 +1118,13 @@ let f3_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_49: eq_int(integer_of_int32(result), (1))) }
+  { (JC_48: eq_int(integer_of_int32(result), (1))) }
 
 let f3_safety =
  fun (tt : unit) ->
-  { (JC_47:
-    ((JC_45: valid_s0(S_s0_1_alloc_table))
-    and (JC_46: valid_l(L_l_2_alloc_table)))) }
+  { (JC_46:
+    ((JC_44: valid_s0(S_s0_1_alloc_table))
+    and (JC_45: valid_l(L_l_2_alloc_table)))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1132,21 +1132,21 @@ let f3_safety =
      (let __retres_1 = ref (any_int32 void) in
      (C_21:
      begin
-       (let jessie_51 = (let jessie_47 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_50 = ((shift (C_19:
+       (let jessie_66 = (let jessie_62 = (safe_int32_of_integer_ (1)) in
+                        (let jessie_65 = ((shift (C_19:
                                                  ((safe_acc_ !S_b_s0_1) s0))) (2)) in
-                        (((safe_upd_ int_P_int_M_s0_1) jessie_50) jessie_47))) in
+                        (((safe_upd_ int_P_int_M_s0_1) jessie_65) jessie_62))) in
        void);
       (C_24:
       begin
-        (let jessie_56 = (let jessie_52 = (safe_int32_of_integer_ (2)) in
-                         (let jessie_55 = ((shift (C_22:
+        (let jessie_72 = (let jessie_68 = (safe_int32_of_integer_ (2)) in
+                         (let jessie_71 = ((shift (C_22:
                                                   ((safe_acc_ !S_c_s0_1) s0))) (2)) in
-                         (((safe_upd_ int_P_int_M_s0_1) jessie_55) jessie_52))) in
+                         (((safe_upd_ int_P_int_M_s0_1) jessie_71) jessie_68))) in
         void);
        (C_27:
        begin
-         (let jessie_57 = (__retres_1 := (C_26:
+         (let jessie_74 = (__retres_1 := (C_26:
                                          ((safe_acc_ !int_P_int_M_s0_1) 
                                           ((shift (C_25:
                                                   ((safe_acc_ !S_b_s0_1) s0))) (2))))) in
@@ -1161,9 +1161,9 @@ let f3_safety =
    with
    Return ->
    !return end))
-  { (JC_53:
-    ((JC_51: valid_s0(S_s0_1_alloc_table))
-    and (JC_52: valid_l(L_l_2_alloc_table)))) }
+  { (JC_52:
+    ((JC_50: valid_s0(S_s0_1_alloc_table))
+    and (JC_51: valid_l(L_l_2_alloc_table)))) }
 
 let f_ensures_default =
  fun (tt : unit) ->
@@ -1178,19 +1178,19 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_16 = (let jessie_12 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_15 = s0 in
-                        (((safe_upd_ S_a_s0_1) jessie_15) jessie_12))) in
+       (let jessie_21 = (let jessie_17 = (safe_int32_of_integer_ (1)) in
+                        (let jessie_20 = s0 in
+                        (((safe_upd_ S_a_s0_1) jessie_20) jessie_17))) in
        void);
       (C_5:
       begin
-        (let jessie_21 = (let jessie_17 = (safe_int32_of_integer_ (2)) in
-                         (let jessie_20 = (C_3: ((safe_acc_ !L_q_l_2) l)) in
-                         (((safe_upd_ S_a_l_2) jessie_20) jessie_17))) in
+        (let jessie_27 = (let jessie_23 = (safe_int32_of_integer_ (2)) in
+                         (let jessie_26 = (C_3: ((safe_acc_ !L_q_l_2) l)) in
+                         (((safe_upd_ S_a_l_2) jessie_26) jessie_23))) in
         void);
        (C_7:
        begin
-         (let jessie_22 = (__retres := (C_6: ((safe_acc_ !S_a_s0_1) s0))) in
+         (let jessie_29 = (__retres := (C_6: ((safe_acc_ !S_a_s0_1) s0))) in
          void);
         (return := !__retres);
         (raise Return)
@@ -1216,19 +1216,19 @@ let f_safety =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_5 = (let jessie_1 = (safe_int32_of_integer_ (1)) in
-                       (let jessie_4 = s0 in
-                       (((safe_upd_ S_a_s0_1) jessie_4) jessie_1))) in
+       (let jessie_6 = (let jessie_2 = (safe_int32_of_integer_ (1)) in
+                       (let jessie_5 = s0 in
+                       (((safe_upd_ S_a_s0_1) jessie_5) jessie_2))) in
        void);
       (C_5:
       begin
-        (let jessie_10 = (let jessie_6 = (safe_int32_of_integer_ (2)) in
-                         (let jessie_9 = (C_3: ((safe_acc_ !L_q_l_2) l)) in
-                         (((safe_upd_ S_a_l_2) jessie_9) jessie_6))) in
+        (let jessie_12 = (let jessie_8 = (safe_int32_of_integer_ (2)) in
+                         (let jessie_11 = (C_3: ((safe_acc_ !L_q_l_2) l)) in
+                         (((safe_upd_ S_a_l_2) jessie_11) jessie_8))) in
         void);
        (C_7:
        begin
-         (let jessie_11 = (__retres := (C_6: ((safe_acc_ !S_a_s0_1) s0))) in
+         (let jessie_14 = (__retres := (C_6: ((safe_acc_ !S_a_s0_1) s0))) in
          void);
         (return := !__retres);
         (raise Return)

@@ -640,28 +640,28 @@ let safety_ensures_default =
      (let i = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_31 = (m := n) in void);
+       (let jessie_42 = (m := n) in void);
       (C_2:
       begin
-        (let jessie_32 = (j := (safe_int32_of_integer_ (neg_int (1)))) in
+        (let jessie_44 = (j := (safe_int32_of_integer_ (neg_int (1)))) in
         void);
        try
-        (let jessie_54 = begin
+        (let jessie_74 = begin
                            (loop_3:
                            while true do
                            { invariant
-                               (JC_54:
-                               ((JC_49: le_int((1), integer_of_int32(m)))
-                               and ((JC_50:
+                               (JC_49:
+                               ((JC_44: le_int((1), integer_of_int32(m)))
+                               and ((JC_45:
                                     le_int(integer_of_int32(m),
                                     integer_of_int32(n)))
-                                   and ((JC_51:
+                                   and ((JC_46:
                                         le_int(neg_int(integer_of_int32(n)),
                                         integer_of_int32(j)))
-                                       and ((JC_52:
+                                       and ((JC_47:
                                             le_int(integer_of_int32(j),
                                             neg_int((1))))
-                                           and (JC_53:
+                                           and (JC_48:
                                                (forall k_0:int32.
                                                 ((le_int((1),
                                                   integer_of_int32(k_0))
@@ -690,10 +690,10 @@ let safety_ensures_default =
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_53 = begin
-                                                 (let jessie_51 = (C_14:
+                              (let jessie_73 = begin
+                                                 (let jessie_71 = (C_14:
                                                                   begin
-                                                                    (let jessie_33 = 
+                                                                    (let jessie_46 = 
                                                                     (i := 
                                                                     (C_13:
                                                                     ((safe_acc_ !int_P_int_M_t_1) 
@@ -705,53 +705,53 @@ let safety_ensures_default =
                                                                    ((gt_int_ 
                                                                     (integer_of_int32 !i)) (0))
                                                                    then
-                                                                    (let jessie_45 = 
+                                                                    (let jessie_63 = 
                                                                     begin
                                                                       
                                                                     try
-                                                                    (let jessie_44 = 
+                                                                    (let jessie_61 = 
                                                                     begin
                                                                       
                                                                     (loop_4:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_65:
+                                                                    (JC_60:
                                                                     (
-                                                                    (JC_58:
+                                                                    (JC_53:
                                                                     le_int((1),
                                                                     integer_of_int32(m)))
                                                                     and 
                                                                     (
-                                                                    (JC_59:
+                                                                    (JC_54:
                                                                     le_int(
                                                                     integer_of_int32(m),
                                                                     integer_of_int32(n)))
                                                                     and 
                                                                     (
-                                                                    (JC_60:
+                                                                    (JC_55:
                                                                     le_int((1),
                                                                     integer_of_int32(i)))
                                                                     and 
                                                                     (
-                                                                    (JC_61:
+                                                                    (JC_56:
                                                                     le_int(
                                                                     integer_of_int32(i),
                                                                     integer_of_int32(n)))
                                                                     and 
                                                                     (
-                                                                    (JC_62:
+                                                                    (JC_57:
                                                                     le_int(
                                                                     neg_int(
                                                                     integer_of_int32(n)),
                                                                     integer_of_int32(j)))
                                                                     and 
                                                                     (
-                                                                    (JC_63:
+                                                                    (JC_58:
                                                                     le_int(
                                                                     integer_of_int32(j),
                                                                     neg_int((1))))
                                                                     and 
-                                                                    (JC_64:
+                                                                    (JC_59:
                                                                     (forall k:int32.
                                                                     ((
                                                                     le_int((1),
@@ -797,24 +797,24 @@ let safety_ensures_default =
                                                                     { } unit
                                                                     { true } ];
                                                                     try
-                                                                    (let jessie_43 = 
+                                                                    (let jessie_60 = 
                                                                     begin
                                                                       
                                                                     (C_30:
                                                                     begin
                                                                       
-                                                                    (let jessie_38 = 
-                                                                    (let jessie_34 = !j in
-                                                                    (let jessie_37 = 
+                                                                    (let jessie_52 = 
+                                                                    (let jessie_48 = !j in
+                                                                    (let jessie_51 = 
                                                                     (C_28:
                                                                     ((shift t) 
                                                                     (integer_of_int32 !m))) in
-                                                                    (((safe_upd_ int_P_int_M_t_1) jessie_37) jessie_34))) in
+                                                                    (((safe_upd_ int_P_int_M_t_1) jessie_51) jessie_48))) in
                                                                     void);
                                                                     (C_33:
                                                                     begin
                                                                       
-                                                                    (let jessie_39 = 
+                                                                    (let jessie_54 = 
                                                                     (j := 
                                                                     (C_32:
                                                                     (safe_int32_of_integer_ 
@@ -825,13 +825,13 @@ let safety_ensures_default =
                                                                     (C_34:
                                                                     begin
                                                                       
-                                                                    (let jessie_40 = 
+                                                                    (let jessie_56 = 
                                                                     (m := !i) in
                                                                     void);
                                                                     (C_37:
                                                                     begin
                                                                       
-                                                                    (let jessie_41 = 
+                                                                    (let jessie_58 = 
                                                                     (i := 
                                                                     (C_36:
                                                                     ((safe_acc_ !int_P_int_M_t_1) 
@@ -844,7 +844,7 @@ let safety_ensures_default =
                                                                     (integer_of_int32 !i)) (0))
                                                                     then void
                                                                     else
-                                                                    (let jessie_42 = 
+                                                                    (let jessie_59 = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -884,18 +884,18 @@ let safety_ensures_default =
                                                                    (C_43:
                                                                    begin
                                                                      
-                                                                    (let jessie_50 = 
-                                                                    (let jessie_46 = 
+                                                                    (let jessie_69 = 
+                                                                    (let jessie_65 = 
                                                                     (C_40:
                                                                     (safe_int32_of_integer_ 
                                                                     (C_39:
                                                                     (neg_int 
                                                                     (integer_of_int32 !i))))) in
-                                                                    (let jessie_49 = 
+                                                                    (let jessie_68 = 
                                                                     (C_41:
                                                                     ((shift t) 
                                                                     (integer_of_int32 !m))) in
-                                                                    (((safe_upd_ int_P_int_M_t_1) jessie_49) jessie_46))) in
+                                                                    (((safe_upd_ int_P_int_M_t_1) jessie_68) jessie_65))) in
                                                                     void);
                                                                     (C_46:
                                                                     begin
@@ -914,7 +914,7 @@ let safety_ensures_default =
                                                 (if ((gt_int_ (integer_of_int32 !m)) (0))
                                                 then void
                                                 else
-                                                 (let jessie_52 = (raise
+                                                 (let jessie_72 = (raise
                                                                    (Goto_while_0_break_exc
                                                                    void)) in
                                                  void));
@@ -970,13 +970,13 @@ let safety_safety =
      (let i = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_7 = (m := n) in void);
+       (let jessie_8 = (m := n) in void);
       (C_2:
       begin
-        (let jessie_8 = (j := (safe_int32_of_integer_ (neg_int (1)))) in
+        (let jessie_10 = (j := (safe_int32_of_integer_ (neg_int (1)))) in
         void);
        try
-        (let jessie_30 = begin
+        (let jessie_40 = begin
                            (loop_1:
                            while true do
                            { invariant (JC_24: true) variant (0) }
@@ -1021,13 +1021,13 @@ let safety_safety =
                                                                   integer_of_int32(k_0)))),
                                                            integer_of_int32(n)))))))))))) } ];
                              try
-                              (let jessie_29 = begin
-                                                 (let jessie_27 = (C_14:
+                              (let jessie_39 = begin
+                                                 (let jessie_37 = (C_14:
                                                                   begin
-                                                                    (let jessie_9 = 
+                                                                    (let jessie_12 = 
                                                                     (i := 
                                                                     (C_13:
-                                                                    (JC_27:
+                                                                    (JC_26:
                                                                     ((((offset_acc_ int_P_t_1_alloc_table) !int_P_int_M_t_1) t) 
                                                                     (integer_of_int32 !m))))) in
                                                                     void);
@@ -1035,17 +1035,17 @@ let safety_safety =
                                                                    ((gt_int_ 
                                                                     (integer_of_int32 !i)) (0))
                                                                    then
-                                                                    (let jessie_21 = 
+                                                                    (let jessie_29 = 
                                                                     begin
                                                                       
                                                                     try
-                                                                    (let jessie_20 = 
+                                                                    (let jessie_27 = 
                                                                     begin
                                                                       
                                                                     (loop_2:
                                                                     while true do
                                                                     { invariant
-                                                                    (JC_37:
+                                                                    (JC_36:
                                                                     true)
                                                                     variant (0) }
                                                                     begin
@@ -1053,43 +1053,43 @@ let safety_safety =
                                                                     [ 
                                                                     { } unit
                                                                     reads i,int_P_int_M_t_1,j,m
-                                                                    { (JC_35:
+                                                                    { (JC_34:
                                                                     (
-                                                                    (JC_28:
+                                                                    (JC_27:
                                                                     le_int((1),
                                                                     integer_of_int32(m)))
                                                                     and 
                                                                     (
-                                                                    (JC_29:
+                                                                    (JC_28:
                                                                     le_int(
                                                                     integer_of_int32(m),
                                                                     integer_of_int32(n)))
                                                                     and 
                                                                     (
-                                                                    (JC_30:
+                                                                    (JC_29:
                                                                     le_int((1),
                                                                     integer_of_int32(i)))
                                                                     and 
                                                                     (
-                                                                    (JC_31:
+                                                                    (JC_30:
                                                                     le_int(
                                                                     integer_of_int32(i),
                                                                     integer_of_int32(n)))
                                                                     and 
                                                                     (
-                                                                    (JC_32:
+                                                                    (JC_31:
                                                                     le_int(
                                                                     neg_int(
                                                                     integer_of_int32(n)),
                                                                     integer_of_int32(j)))
                                                                     and 
                                                                     (
-                                                                    (JC_33:
+                                                                    (JC_32:
                                                                     le_int(
                                                                     integer_of_int32(j),
                                                                     neg_int((1))))
                                                                     and 
-                                                                    (JC_34:
+                                                                    (JC_33:
                                                                     (forall k:int32.
                                                                     ((
                                                                     le_int((1),
@@ -1129,29 +1129,29 @@ let safety_safety =
                                                                     integer_of_int32(k)))),
                                                                     integer_of_int32(n)))))))))))))) } ];
                                                                     try
-                                                                    (let jessie_19 = 
+                                                                    (let jessie_26 = 
                                                                     begin
                                                                       
                                                                     (C_30:
                                                                     begin
                                                                       
-                                                                    (let jessie_14 = 
-                                                                    (let jessie_10 = !j in
-                                                                    (let jessie_11 = t in
-                                                                    (let jessie_12 = 
+                                                                    (let jessie_18 = 
+                                                                    (let jessie_14 = !j in
+                                                                    (let jessie_15 = t in
+                                                                    (let jessie_16 = 
                                                                     (integer_of_int32 !m) in
-                                                                    (let jessie_13 = 
-                                                                    ((shift jessie_11) jessie_12) in
-                                                                    (JC_39:
-                                                                    (((((offset_upd_ int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_11) jessie_12) jessie_10)))))) in
+                                                                    (let jessie_17 = 
+                                                                    ((shift jessie_15) jessie_16) in
+                                                                    (JC_38:
+                                                                    (((((offset_upd_ int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_15) jessie_16) jessie_14)))))) in
                                                                     void);
                                                                     (C_33:
                                                                     begin
                                                                       
-                                                                    (let jessie_15 = 
+                                                                    (let jessie_20 = 
                                                                     (j := 
                                                                     (C_32:
-                                                                    (JC_41:
+                                                                    (JC_39:
                                                                     (int32_of_integer_ 
                                                                     (C_31:
                                                                     (neg_int 
@@ -1160,16 +1160,16 @@ let safety_safety =
                                                                     (C_34:
                                                                     begin
                                                                       
-                                                                    (let jessie_16 = 
+                                                                    (let jessie_22 = 
                                                                     (m := !i) in
                                                                     void);
                                                                     (C_37:
                                                                     begin
                                                                       
-                                                                    (let jessie_17 = 
+                                                                    (let jessie_24 = 
                                                                     (i := 
                                                                     (C_36:
-                                                                    (JC_43:
+                                                                    (JC_40:
                                                                     ((((offset_acc_ int_P_t_1_alloc_table) !int_P_int_M_t_1) t) 
                                                                     (integer_of_int32 !m))))) in
                                                                     void);
@@ -1178,7 +1178,7 @@ let safety_safety =
                                                                     (integer_of_int32 !i)) (0))
                                                                     then void
                                                                     else
-                                                                    (let jessie_18 = 
+                                                                    (let jessie_25 = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -1218,28 +1218,28 @@ let safety_safety =
                                                                    (C_43:
                                                                    begin
                                                                      
-                                                                    (let jessie_26 = 
-                                                                    (let jessie_22 = 
+                                                                    (let jessie_35 = 
+                                                                    (let jessie_31 = 
                                                                     (C_40:
-                                                                    (JC_45:
+                                                                    (JC_41:
                                                                     (int32_of_integer_ 
                                                                     (C_39:
                                                                     (neg_int 
                                                                     (integer_of_int32 !i)))))) in
-                                                                    (let jessie_23 = t in
-                                                                    (let jessie_24 = 
+                                                                    (let jessie_32 = t in
+                                                                    (let jessie_33 = 
                                                                     (integer_of_int32 !m) in
-                                                                    (let jessie_25 = 
-                                                                    ((shift jessie_23) jessie_24) in
-                                                                    (JC_46:
-                                                                    (((((offset_upd_ int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_23) jessie_24) jessie_22)))))) in
+                                                                    (let jessie_34 = 
+                                                                    ((shift jessie_32) jessie_33) in
+                                                                    (JC_42:
+                                                                    (((((offset_upd_ int_P_t_1_alloc_table) int_P_int_M_t_1) jessie_32) jessie_33) jessie_31)))))) in
                                                                     void);
                                                                     (C_46:
                                                                     begin
                                                                       
                                                                     (m := 
                                                                     (C_45:
-                                                                    (JC_48:
+                                                                    (JC_43:
                                                                     (int32_of_integer_ 
                                                                     (C_44:
                                                                     ((sub_int 
@@ -1252,7 +1252,7 @@ let safety_safety =
                                                 (if ((gt_int_ (integer_of_int32 !m)) (0))
                                                 then void
                                                 else
-                                                 (let jessie_28 = (raise
+                                                 (let jessie_38 = (raise
                                                                    (Goto_while_0_break_exc
                                                                    void)) in
                                                  void));

@@ -401,7 +401,7 @@ let f_ensures_default =
    begin
      (C_3:
      begin
-       (let jessie_2 = (mutable_x := (C_2:
+       (let jessie_5 = (mutable_x := (C_2:
                                      (safe_int32_of_integer_ (C_1:
                                                              ((add_int 
                                                                (integer_of_int32 !mutable_x)) 
@@ -429,8 +429,8 @@ let f_safety =
    begin
      (C_3:
      begin
-       (let jessie_1 = (mutable_x := (C_2:
-                                     (JC_10:
+       (let jessie_2 = (mutable_x := (C_2:
+                                     (JC_9:
                                      (int32_of_integer_ (C_1:
                                                         ((add_int (integer_of_int32 !mutable_x)) 
                                                          (integer_of_int32 y))))))) in

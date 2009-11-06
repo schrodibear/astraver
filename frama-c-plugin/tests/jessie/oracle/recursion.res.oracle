@@ -560,21 +560,21 @@ let cons_ensures_default =
      (let hd = ref (any_pointer void) in
      (C_2:
      begin
-       (let jessie_16 = (hd := (C_1:
-                               (JC_18:
+       (let jessie_17 = (hd := (C_1:
+                               (JC_16:
                                (((alloc_struct__List (1)) _List_result_4_alloc_table) _List_result_4_tag_table)))) in
        void);
       (C_4:
       begin
-        (let jessie_21 = (let jessie_17 = elem in
-                         (let jessie_20 = !hd in
-                         (((safe_upd_ _List_elem_0_result_4) jessie_20) jessie_17))) in
+        (let jessie_23 = (let jessie_19 = elem in
+                         (let jessie_22 = !hd in
+                         (((safe_upd_ _List_elem_0_result_4) jessie_22) jessie_19))) in
         void);
        (C_6:
        begin
-         (let jessie_27 = (let jessie_23 = x_1 in
-                          (let jessie_26 = !hd in
-                          (((safe_upd_ _List_next_result_4) jessie_26) jessie_23))) in
+         (let jessie_29 = (let jessie_25 = x_1 in
+                          (let jessie_28 = !hd in
+                          (((safe_upd_ _List_next_result_4) jessie_28) jessie_25))) in
          void);
         (return := !hd);
         (raise Return)
@@ -601,22 +601,22 @@ let cons_safety =
      (C_2:
      begin
        (let jessie_2 = (hd := (C_1:
-                              (JC_14:
+                              (JC_13:
                               (((alloc_struct__List_requires (1)) _List_result_4_alloc_table) _List_result_4_tag_table)))) in
        void);
       (C_4:
       begin
-        (let jessie_7 = (let jessie_3 = elem in
-                        (let jessie_6 = !hd in
-                        (JC_15:
-                        ((((upd_ !_List_result_4_alloc_table) _List_elem_0_result_4) jessie_6) jessie_3)))) in
+        (let jessie_8 = (let jessie_4 = elem in
+                        (let jessie_7 = !hd in
+                        (JC_14:
+                        ((((upd_ !_List_result_4_alloc_table) _List_elem_0_result_4) jessie_7) jessie_4)))) in
         void);
        (C_6:
        begin
-         (let jessie_13 = (let jessie_9 = x_1 in
-                          (let jessie_12 = !hd in
-                          (JC_16:
-                          ((((upd_ !_List_result_4_alloc_table) _List_next_result_4) jessie_12) jessie_9)))) in
+         (let jessie_14 = (let jessie_10 = x_1 in
+                          (let jessie_13 = !hd in
+                          (JC_15:
+                          ((((upd_ !_List_result_4_alloc_table) _List_next_result_4) jessie_13) jessie_10)))) in
          void);
         (return := !hd);
         (raise Return)

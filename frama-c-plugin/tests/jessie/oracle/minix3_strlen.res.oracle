@@ -1522,23 +1522,23 @@ let strlen_ensures_default =
      (let __retres = ref (any_uint32 void) in
      (C_1:
      begin
-       (let jessie_17 = (s_32 := org) in void);
+       (let jessie_19 = (s_32 := org) in void);
       try
-       (let jessie_24 = begin
+       (let jessie_26 = begin
                           (loop_2:
                           while true do
-                          { invariant (JC_16: true)  }
+                          { invariant (JC_15: true)  }
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_23 = begin
+                             (let jessie_25 = begin
                                                 (C_2:
                                                 begin
-                                                  (let jessie_19 = (tmp := !s_32) in
+                                                  (let jessie_21 = (tmp := !s_32) in
                                                   void);
                                                  (C_4:
                                                  begin
-                                                   (let jessie_21 = (s_32 := 
+                                                   (let jessie_23 = (s_32 := 
                                                                     (C_3:
                                                                     ((shift !s_32) (1)))) in
                                                    void);
@@ -1547,7 +1547,7 @@ let strlen_ensures_default =
                                                                   ((safe_acc_ char_P_char_M_org_20) !tmp)))) (0))
                                                   then void
                                                   else
-                                                   (let jessie_22 = (raise
+                                                   (let jessie_24 = (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                    void))
@@ -1571,11 +1571,11 @@ let strlen_ensures_default =
        (while_0_break: void) end;
       (C_7:
       begin
-        (let jessie_26 = (s_32 := (C_6: ((shift !s_32) (neg_int (1))))) in
+        (let jessie_28 = (s_32 := (C_6: ((shift !s_32) (neg_int (1))))) in
         void);
        (C_10:
        begin
-         (let jessie_27 = (__retres := (C_9:
+         (let jessie_30 = (__retres := (C_9:
                                        (safe_uint32_of_integer_ (C_8:
                                                                 ((safe_sub_pointer_ !s_32) org))))) in
          void);
@@ -1658,8 +1658,8 @@ let strlen_safety =
         void);
        (C_10:
        begin
-         (let jessie_15 = (__retres := (C_9:
-                                       (JC_14:
+         (let jessie_16 = (__retres := (C_9:
+                                       (JC_13:
                                        (uint32_of_integer_ (C_8:
                                                            ((sub_pointer_ !s_32) org)))))) in
          void);

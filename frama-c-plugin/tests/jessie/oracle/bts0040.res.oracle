@@ -672,8 +672,8 @@ let f_ensures_default =
    begin
      (C_3:
      begin
-       (JC_21:
-       (((g (C_2: ((safe_acc_ __anonstruct_las_1_k_c_2) c))) float_P_float_M_c_2) float_P_c_2_alloc_table));
+       (let jessie_2 = (C_2: ((safe_acc_ __anonstruct_las_1_k_c_2) c)) in
+       (JC_21: (((g jessie_2) float_P_float_M_c_2) float_P_c_2_alloc_table)));
       (raise Return)
      end);
     (raise Return)
@@ -691,10 +691,11 @@ let f_safety =
    begin
      (C_3:
      begin
+       (let jessie_1 = (C_2:
+                       (JC_19:
+                       (((acc_ __anonstruct_las_1_c_2_alloc_table) __anonstruct_las_1_k_c_2) c))) in
        (JC_20:
-       (((g_requires (C_2:
-                     (JC_19:
-                     (((acc_ __anonstruct_las_1_c_2_alloc_table) __anonstruct_las_1_k_c_2) c)))) float_P_float_M_c_2) float_P_c_2_alloc_table));
+       (((g_requires jessie_1) float_P_float_M_c_2) float_P_c_2_alloc_table)));
       (raise Return)
      end);
     (raise Return)

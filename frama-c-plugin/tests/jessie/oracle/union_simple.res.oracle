@@ -559,14 +559,14 @@ let f_ensures_default =
    begin
      (C_3:
      begin
-       (let jessie_21 = (let jessie_15 = (safe_int32_of_integer_ (1)) in
-                        (let jessie_16 = (C_1: x) in
-                        (let jessie_17 = ((((replace_bytes ((safe_acc_ !__anonunion_U_1_fields_x_1) 
+       (let jessie_24 = (let jessie_18 = (safe_int32_of_integer_ (1)) in
+                        (let jessie_19 = (C_1: x) in
+                        (let jessie_20 = ((((replace_bytes ((safe_acc_ !__anonunion_U_1_fields_x_1) 
                                                             (C_1:
-                                                            jessie_16))) (0)) (4)) 
-                                          (bitvector_of_int32 jessie_15)) in
-                        (let jessie_20 = (C_1: jessie_16) in
-                        (((safe_upd_ __anonunion_U_1_fields_x_1) jessie_20) jessie_17))))) in
+                                                            jessie_19))) (0)) (4)) 
+                                          (bitvector_of_int32 jessie_18)) in
+                        (let jessie_23 = (C_1: jessie_19) in
+                        (((safe_upd_ __anonunion_U_1_fields_x_1) jessie_23) jessie_20))))) in
        void);
       (assert
       { (JC_15:
@@ -578,14 +578,14 @@ let f_ensures_default =
       void;
       (C_7:
       begin
-        (let jessie_28 = (let jessie_22 = (safe_int8_of_integer_ (1)) in
-                         (let jessie_23 = (C_5: x) in
-                         (let jessie_24 = ((((replace_bytes ((safe_acc_ !__anonunion_U_1_fields_x_1) 
+        (let jessie_32 = (let jessie_26 = (safe_int8_of_integer_ (1)) in
+                         (let jessie_27 = (C_5: x) in
+                         (let jessie_28 = ((((replace_bytes ((safe_acc_ !__anonunion_U_1_fields_x_1) 
                                                              (C_5:
-                                                             jessie_23))) (0)) (1)) 
-                                           (bitvector_of_int8 jessie_22)) in
-                         (let jessie_27 = (C_5: jessie_23) in
-                         (((safe_upd_ __anonunion_U_1_fields_x_1) jessie_27) jessie_24))))) in
+                                                             jessie_27))) (0)) (1)) 
+                                           (bitvector_of_int8 jessie_26)) in
+                         (let jessie_31 = (C_5: jessie_27) in
+                         (((safe_upd_ __anonunion_U_1_fields_x_1) jessie_31) jessie_28))))) in
         void);
        (assert
        { (JC_16:
@@ -613,16 +613,16 @@ let f_safety =
    begin
      (C_3:
      begin
-       (let jessie_7 = (let jessie_1 = (safe_int32_of_integer_ (1)) in
-                       (let jessie_2 = (C_1: x) in
-                       (let jessie_3 = ((((replace_bytes (JC_9:
+       (let jessie_8 = (let jessie_2 = (safe_int32_of_integer_ (1)) in
+                       (let jessie_3 = (C_1: x) in
+                       (let jessie_4 = ((((replace_bytes (JC_9:
                                                          (((acc_ __anonunion_U_1_x_1_alloc_table) !__anonunion_U_1_fields_x_1) 
                                                           (C_1:
-                                                          jessie_2)))) (0)) (4)) 
-                                        (bitvector_of_int32 jessie_1)) in
-                       (let jessie_6 = (C_1: jessie_2) in
+                                                          jessie_3)))) (0)) (4)) 
+                                        (bitvector_of_int32 jessie_2)) in
+                       (let jessie_7 = (C_1: jessie_3) in
                        (JC_10:
-                       ((((upd_ __anonunion_U_1_x_1_alloc_table) __anonunion_U_1_fields_x_1) jessie_6) jessie_3)))))) in
+                       ((((upd_ __anonunion_U_1_x_1_alloc_table) __anonunion_U_1_fields_x_1) jessie_7) jessie_4)))))) in
        void);
       [ { } unit reads __anonunion_U_1_fields_x_1
         { (JC_11:
@@ -633,16 +633,16 @@ let f_safety =
       void;
       (C_7:
       begin
-        (let jessie_14 = (let jessie_8 = (safe_int8_of_integer_ (1)) in
-                         (let jessie_9 = (C_5: x) in
-                         (let jessie_10 = ((((replace_bytes (JC_12:
+        (let jessie_16 = (let jessie_10 = (safe_int8_of_integer_ (1)) in
+                         (let jessie_11 = (C_5: x) in
+                         (let jessie_12 = ((((replace_bytes (JC_12:
                                                             (((acc_ __anonunion_U_1_x_1_alloc_table) !__anonunion_U_1_fields_x_1) 
                                                              (C_5:
-                                                             jessie_9)))) (0)) (1)) 
-                                           (bitvector_of_int8 jessie_8)) in
-                         (let jessie_13 = (C_5: jessie_9) in
+                                                             jessie_11)))) (0)) (1)) 
+                                           (bitvector_of_int8 jessie_10)) in
+                         (let jessie_15 = (C_5: jessie_11) in
                          (JC_13:
-                         ((((upd_ __anonunion_U_1_x_1_alloc_table) __anonunion_U_1_fields_x_1) jessie_13) jessie_10)))))) in
+                         ((((upd_ __anonunion_U_1_x_1_alloc_table) __anonunion_U_1_fields_x_1) jessie_15) jessie_12)))))) in
         void);
        [ { } unit reads __anonunion_U_1_fields_x_1
          { (JC_14:

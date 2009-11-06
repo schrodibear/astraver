@@ -572,7 +572,7 @@ let strerror_safety =
      (C_3:
      begin
        (let jessie_2 = (__retres := (C_2:
-                                    (JC_10:
+                                    (JC_9:
                                     ((((offset_acc_ !char_const___xP__sys_errlist_1_alloc_table) !char_const___xP_char_const___xM__sys_errlist_1) _sys_errlist) 
                                      (integer_of_int32 errnum))))) in
        void);

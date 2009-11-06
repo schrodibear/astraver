@@ -31,12 +31,6 @@ tag void_P = {
 
 type void_P = [void_P]
 
-unit __globinit_whole_program()
-behavior default:
-  assumes true;
-  ensures (C_1 : true);
-;
-
 axiomatic BuchTransStart {
 
   logic integer buch_Trans_Start(integer tr)
@@ -56,12 +50,11 @@ predicate I_3() =
 int32 main()
 behavior default:
   assumes true;
-  ensures (C_4 : I_3());
+  ensures (C_2 : I_3());
 {  
    (var int32 __retres);
    
-   {  (C_2 : __globinit_whole_program());
-      (C_3 : (__retres = 1));
+   {  (C_1 : (__retres = 1));
       
       (return __retres)
    }
@@ -300,10 +293,6 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter __globinit_whole_program : tt:unit -> { } unit { true }
-
-parameter __globinit_whole_program_requires : tt:unit -> { } unit { true }
-
 parameter alloc_bitvector_struct_char_P :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -408,10 +397,10 @@ parameter int8_of_integer_ :
   { (le_int((-128), x) and le_int(x, (127)))} int8
   { eq_int(integer_of_int8(result), x) }
 
-parameter main : tt:unit -> { } int32 { ((true = true) -> (JC_14: I_3)) }
+parameter main : tt:unit -> { } int32 { ((true = true) -> (JC_6: I_3)) }
 
 parameter main_requires :
- tt:unit -> { } int32 { ((true = true) -> (JC_14: I_3)) }
+ tt:unit -> { } int32 { ((true = true) -> (JC_6: I_3)) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -427,40 +416,32 @@ let main_ensures_default =
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_2:
+     (C_1:
      begin
-       (JC_18: (__globinit_whole_program void));
-      (C_3:
-      begin
-        (let jessie_2 = (__retres := (safe_int32_of_integer_ (1))) in void);
-       (return := !__retres);
-       (raise Return)
-      end)
+       (let jessie_5 = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres);
+      (raise Return)
      end));
     absurd 
    end
    with
    Return ->
    !return end))
-  { (JC_13: I_3) }
+  { (JC_5: I_3) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_12: true) }
+  { (JC_4: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
      (let __retres = ref (any_int32 void) in
-     (C_2:
+     (C_1:
      begin
-       (JC_17: (__globinit_whole_program_requires void));
-      (C_3:
-      begin
-        (let jessie_1 = (__retres := (safe_int32_of_integer_ (1))) in void);
-       (return := !__retres);
-       (raise Return)
-      end)
+       (let jessie_2 = (__retres := (safe_int32_of_integer_ (1))) in void);
+      (return := !__retres);
+      (raise Return)
      end));
     absurd 
    end

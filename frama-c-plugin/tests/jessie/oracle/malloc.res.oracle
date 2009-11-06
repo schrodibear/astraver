@@ -46,19 +46,13 @@ tag void_P = {
 
 type void_P = [void_P]
 
-unit __globinit_whole_program()
-behavior default:
-  assumes true;
-  ensures (C_1 : true);
-;
-
 int_xP[..] test(int32 n)
-  requires (C_18 : (n >= 1));
+  requires (C_17 : (n >= 1));
 behavior default:
   assumes true;
-  ensures (C_19 : (((C_21 : (\offset_min(\result) <= 0)) &&
-                     (C_22 : (\offset_max(\result) >= (n - 1)))) &&
-                    (C_23 : (\forall int32 i;
+  ensures (C_18 : (((C_20 : (\offset_min(\result) <= 0)) &&
+                     (C_21 : (\offset_max(\result) >= (n - 1)))) &&
+                    (C_22 : (\forall int32 i;
                               (((0 <= i) && (i < n)) ==>
                                 ((\offset_min((\result + i).int_xM) <= 0) &&
                                   (\offset_max((\result + i).int_xM) >= 0)))))));
@@ -67,24 +61,23 @@ behavior default:
    
    (var int32 i);
    
-   {  (C_4 : (t = (C_3 : (new int_xP[(C_2 : (n :> uint32))]))));
-      (C_5 : (i = 0));
+   {  (C_3 : (t = (C_2 : (new int_xP[(C_1 : (n :> uint32))]))));
+      (C_4 : (i = 0));
       
       {  
          loop 
          behavior default:
-           invariant (C_6 : (((C_8 : (0 <= i)) && (C_9 : (i <= n))) &&
-                              (C_10 : (\forall int32 k;
-                                        (((0 <= k) && (k < i)) ==>
-                                          ((\offset_min((t + k).int_xM) <= 0) &&
-                                            (\offset_max((t + k).int_xM) >=
-                                              0)))))));
+           invariant (C_5 : (((C_7 : (0 <= i)) && (C_8 : (i <= n))) &&
+                              (C_9 : (\forall int32 k;
+                                       (((0 <= k) && (k < i)) ==>
+                                         ((\offset_min((t + k).int_xM) <= 0) &&
+                                           (\offset_max((t + k).int_xM) >= 0)))))));
          while (true)
          {  
             {  (if (i < n) then () else 
                (goto while_0_break));
-               (C_14 : ((C_13 : (C_12 : (t + i)).int_xM) = (C_11 : (new int_P[1]))));
-               (C_17 : (i = (C_16 : ((C_15 : (i + 1)) :> int32))))
+               (C_13 : ((C_12 : (C_11 : (t + i)).int_xM) = (C_10 : (new int_P[1]))));
+               (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
             }
          };
          (while_0_break : ())
@@ -97,16 +90,15 @@ behavior default:
 int32 main()
 behavior default:
   assumes true;
-  ensures (C_37 : (\result == 0));
+  ensures (C_35 : (\result == 0));
 {  
    (var int_xP[..] t_0);
    
    (var int32 __retres);
    
-   {  (C_24 : __globinit_whole_program());
-      (C_26 : (t_0 = (C_25 : test(10))));
-      (C_31 : ((C_30 : (C_29 : ((C_28 : (C_27 : (t_0 + 3)).int_xM) + 0)).int_M) = 0));
-      (C_36 : (__retres = (C_35 : (C_34 : ((C_33 : (C_32 : (t_0 + 3)).int_xM) +
+   {  (C_24 : (t_0 = (C_23 : test(10))));
+      (C_29 : ((C_28 : (C_27 : ((C_26 : (C_25 : (t_0 + 3)).int_xM) + 0)).int_M) = 0));
+      (C_34 : (__retres = (C_33 : (C_32 : ((C_31 : (C_30 : (t_0 + 3)).int_xM) +
                                             0)).int_M)));
       
       (return __retres)
@@ -519,10 +511,6 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-parameter __globinit_whole_program : tt:unit -> { } unit { true }
-
-parameter __globinit_whole_program_requires : tt:unit -> { } unit { true }
-
 parameter alloc_bitvector_struct_char_P :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -721,12 +709,12 @@ parameter int8_of_integer_ :
 parameter main :
  tt:unit ->
   { } int32
-  { ((true = true) -> (JC_55: eq_int(integer_of_int32(result), (0)))) }
+  { ((true = true) -> (JC_41: eq_int(integer_of_int32(result), (0)))) }
 
 parameter main_requires :
  tt:unit ->
   { } int32
-  { ((true = true) -> (JC_55: eq_int(integer_of_int32(result), (0)))) }
+  { ((true = true) -> (JC_41: eq_int(integer_of_int32(result), (0)))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -748,13 +736,13 @@ parameter test :
        reads int_P_int_xM_3_alloc_table,int_xP_int_xM_result_1,int_xP_result_1_alloc_table
        writes int_P_int_xM_3_alloc_table,int_P_int_xM_3_tag_table,int_xP_int_xM_result_1,int_xP_result_1_alloc_table,int_xP_result_1_tag_table
        { ((true = true) ->
-          (JC_20:
-          ((JC_17:
+          (JC_12:
+          ((JC_9:
            le_int(offset_min(int_xP_result_1_alloc_table, result), (0)))
-          and ((JC_18:
+          and ((JC_10:
                ge_int(offset_max(int_xP_result_1_alloc_table, result),
                sub_int(integer_of_int32(n), (1))))
-              and (JC_19:
+              and (JC_11:
                   (forall i:int32.
                    ((le_int((0), integer_of_int32(i))
                     and lt_int(integer_of_int32(i), integer_of_int32(n))) ->
@@ -774,17 +762,17 @@ parameter test_requires :
     int_xP_result_1_tag_table:int_xP tag_table ref ->
      int_P_int_xM_3_tag_table:int_P tag_table ref ->
       int_xP_int_xM_result_1:(int_xP, int_P pointer) memory ref ->
-       { (JC_9: ge_int(integer_of_int32(n), (1)))} int_xP pointer
+       { (JC_1: ge_int(integer_of_int32(n), (1)))} int_xP pointer
        reads int_P_int_xM_3_alloc_table,int_xP_int_xM_result_1,int_xP_result_1_alloc_table
        writes int_P_int_xM_3_alloc_table,int_P_int_xM_3_tag_table,int_xP_int_xM_result_1,int_xP_result_1_alloc_table,int_xP_result_1_tag_table
        { ((true = true) ->
-          (JC_20:
-          ((JC_17:
+          (JC_12:
+          ((JC_9:
            le_int(offset_min(int_xP_result_1_alloc_table, result), (0)))
-          and ((JC_18:
+          and ((JC_10:
                ge_int(offset_max(int_xP_result_1_alloc_table, result),
                sub_int(integer_of_int32(n), (1))))
-              and (JC_19:
+              and (JC_11:
                   (forall i:int32.
                    ((le_int((0), integer_of_int32(i))
                     and lt_int(integer_of_int32(i), integer_of_int32(n))) ->
@@ -819,36 +807,33 @@ let main_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_24:
      begin
-       (JC_67: (__globinit_whole_program void));
-      (C_26:
+       (let jessie_50 = (t_0 := (C_23:
+                                (let jessie_49 = (safe_int32_of_integer_ (10)) in
+                                (JC_49:
+                                ((((((test jessie_49) int_xP_t_0_8_alloc_table) int_P_int_xM_10_alloc_table) int_xP_t_0_8_tag_table) int_P_int_xM_10_tag_table) int_xP_int_xM_t_0_8))))) in
+       void);
+      (C_29:
       begin
-        (let jessie_41 = (t_0 := (C_25:
-                                 (JC_69:
-                                 ((((((test (safe_int32_of_integer_ (10))) int_xP_t_0_8_alloc_table) int_P_int_xM_10_alloc_table) int_xP_t_0_8_tag_table) int_P_int_xM_10_tag_table) int_xP_int_xM_t_0_8)))) in
+        (let jessie_56 = (let jessie_52 = (safe_int32_of_integer_ (0)) in
+                         (let jessie_55 = (C_27:
+                                          ((shift (C_26:
+                                                  ((safe_acc_ !int_xP_int_xM_t_0_8) 
+                                                   (C_25:
+                                                   ((shift !t_0) (3)))))) (0))) in
+                         (((safe_upd_ int_P_int_M_int_xM_10) jessie_55) jessie_52))) in
         void);
-       (C_31:
+       (C_34:
        begin
-         (let jessie_46 = (let jessie_42 = (safe_int32_of_integer_ (0)) in
-                          (let jessie_45 = (C_29:
-                                           ((shift (C_28:
-                                                   ((safe_acc_ !int_xP_int_xM_t_0_8) 
-                                                    (C_27:
-                                                    ((shift !t_0) (3)))))) (0))) in
-                          (((safe_upd_ int_P_int_M_int_xM_10) jessie_45) jessie_42))) in
+         (let jessie_58 = (__retres := (C_33:
+                                       ((safe_acc_ !int_P_int_M_int_xM_10) 
+                                        (C_32:
+                                        ((shift (C_31:
+                                                ((safe_acc_ !int_xP_int_xM_t_0_8) 
+                                                 (C_30:
+                                                 ((shift !t_0) (3)))))) (0)))))) in
          void);
-        (C_36:
-        begin
-          (let jessie_47 = (__retres := (C_35:
-                                        ((safe_acc_ !int_P_int_M_int_xM_10) 
-                                         (C_34:
-                                         ((shift (C_33:
-                                                 ((safe_acc_ !int_xP_int_xM_t_0_8) 
-                                                  (C_32:
-                                                  ((shift !t_0) (3)))))) (0)))))) in
-          void);
-         (return := !__retres);
-         (raise Return)
-        end)
+        (return := !__retres);
+        (raise Return)
        end)
       end)
      end)))))))));
@@ -857,11 +842,11 @@ let main_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_54: eq_int(integer_of_int32(result), (0))) }
+  { (JC_40: eq_int(integer_of_int32(result), (0))) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_53: true) }
+  { (JC_39: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -876,34 +861,31 @@ let main_safety =
      (let __retres = ref (any_int32 void) in
      (C_24:
      begin
-       (JC_58: (__globinit_whole_program_requires void));
-      (C_26:
+       (let jessie_38 = (t_0 := (C_23:
+                                (let jessie_37 = (safe_int32_of_integer_ (10)) in
+                                (JC_44:
+                                ((((((test_requires jessie_37) int_xP_t_0_8_alloc_table) int_P_int_xM_10_alloc_table) int_xP_t_0_8_tag_table) int_P_int_xM_10_tag_table) int_xP_int_xM_t_0_8))))) in
+       void);
+      (C_29:
       begin
-        (let jessie_33 = (t_0 := (C_25:
-                                 (JC_60:
-                                 ((((((test_requires (safe_int32_of_integer_ (10))) int_xP_t_0_8_alloc_table) int_P_int_xM_10_alloc_table) int_xP_t_0_8_tag_table) int_P_int_xM_10_tag_table) int_xP_int_xM_t_0_8)))) in
+        (let jessie_44 = (let jessie_40 = (safe_int32_of_integer_ (0)) in
+                         (let jessie_43 = (C_26:
+                                          (JC_45:
+                                          ((((offset_acc_ !int_xP_t_0_8_alloc_table) !int_xP_int_xM_t_0_8) !t_0) (3)))) in
+                         (JC_46:
+                         ((((upd_ !int_P_int_xM_10_alloc_table) int_P_int_M_int_xM_10) jessie_43) jessie_40)))) in
         void);
-       (C_31:
+       (C_34:
        begin
-         (let jessie_38 = (let jessie_34 = (safe_int32_of_integer_ (0)) in
-                          (let jessie_37 = (C_28:
-                                           (JC_61:
-                                           ((((offset_acc_ !int_xP_t_0_8_alloc_table) !int_xP_int_xM_t_0_8) !t_0) (3)))) in
-                          (JC_62:
-                          ((((upd_ !int_P_int_xM_10_alloc_table) int_P_int_M_int_xM_10) jessie_37) jessie_34)))) in
+         (let jessie_46 = (__retres := (C_33:
+                                       (JC_48:
+                                       (((acc_ !int_P_int_xM_10_alloc_table) !int_P_int_M_int_xM_10) 
+                                        (C_31:
+                                        (JC_47:
+                                        ((((offset_acc_ !int_xP_t_0_8_alloc_table) !int_xP_int_xM_t_0_8) !t_0) (3)))))))) in
          void);
-        (C_36:
-        begin
-          (let jessie_39 = (__retres := (C_35:
-                                        (JC_66:
-                                        (((acc_ !int_P_int_xM_10_alloc_table) !int_P_int_M_int_xM_10) 
-                                         (C_33:
-                                         (JC_65:
-                                         ((((offset_acc_ !int_xP_t_0_8_alloc_table) !int_xP_int_xM_t_0_8) !t_0) (3)))))))) in
-          void);
-         (return := !__retres);
-         (raise Return)
-        end)
+        (return := !__retres);
+        (raise Return)
        end)
       end)
      end)))))))));
@@ -916,36 +898,36 @@ let main_safety =
 
 let test_ensures_default =
  fun (n : int32) (int_P_int_xM_3_alloc_table : int_P alloc_table ref) (int_xP_result_1_alloc_table : int_xP alloc_table ref) (int_xP_result_1_tag_table : int_xP tag_table ref) (int_P_int_xM_3_tag_table : int_P tag_table ref) (int_xP_int_xM_result_1 : (int_xP, int_P pointer) memory ref) ->
-  { ((true = true) and (JC_11: ge_int(integer_of_int32(n), (1)))) }
+  { ((true = true) and (JC_3: ge_int(integer_of_int32(n), (1)))) }
   (init:
   (let return = ref (any_pointer void) in
   try
    begin
      (let t = ref (any_pointer void) in
      (let i_0 = ref (any_int32 void) in
-     (C_4:
+     (C_3:
      begin
-       (let jessie_19 = (t := (C_3:
-                              (JC_40:
+       (let jessie_21 = (t := (C_2:
+                              (JC_27:
                               (((alloc_struct_int_xP (integer_of_uint32 
-                                                      (C_2:
+                                                      (C_1:
                                                       (safe_uint32_of_integer_ 
                                                        (integer_of_int32 n))))) int_xP_result_1_alloc_table) int_xP_result_1_tag_table)))) in
        void);
-      (C_5:
+      (C_4:
       begin
-        (let jessie_20 = (i_0 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_23 = (i_0 := (safe_int32_of_integer_ (0))) in void);
        try
-        (let jessie_30 = begin
+        (let jessie_34 = begin
                            (loop_2:
                            while true do
                            { invariant
-                               (JC_44:
-                               ((JC_41: le_int((0), integer_of_int32(i_0)))
-                               and ((JC_42:
+                               (JC_31:
+                               ((JC_28: le_int((0), integer_of_int32(i_0)))
+                               and ((JC_29:
                                     le_int(integer_of_int32(i_0),
                                     integer_of_int32(n)))
-                                   and (JC_43:
+                                   and (JC_30:
                                        (forall k:int32.
                                         ((le_int((0), integer_of_int32(k))
                                          and lt_int(integer_of_int32(k),
@@ -964,40 +946,40 @@ let test_ensures_default =
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_29 = begin
-                                                 (let jessie_28 = begin
+                              (let jessie_33 = begin
+                                                 (let jessie_32 = begin
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !i_0)) 
                                                                     (integer_of_int32 n))
                                                                     then void
                                                                     else
-                                                                    (let jessie_21 = 
+                                                                    (let jessie_24 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
-                                                                   (C_14:
+                                                                   (C_13:
                                                                    begin
                                                                      
-                                                                    (let jessie_27 = 
-                                                                    (let jessie_23 = 
-                                                                    (C_11:
-                                                                    (JC_49:
-                                                                    (((alloc_struct_int_P (1)) int_P_int_xM_3_alloc_table) int_P_int_xM_3_tag_table))) in
+                                                                    (let jessie_30 = 
                                                                     (let jessie_26 = 
-                                                                    (C_12:
+                                                                    (C_10:
+                                                                    (JC_35:
+                                                                    (((alloc_struct_int_P (1)) int_P_int_xM_3_alloc_table) int_P_int_xM_3_tag_table))) in
+                                                                    (let jessie_29 = 
+                                                                    (C_11:
                                                                     ((shift !t) 
                                                                     (integer_of_int32 !i_0))) in
-                                                                    (((safe_upd_ int_xP_int_xM_result_1) jessie_26) jessie_23))) in
+                                                                    (((safe_upd_ int_xP_int_xM_result_1) jessie_29) jessie_26))) in
                                                                     void);
-                                                                    (C_17:
+                                                                    (C_16:
                                                                     begin
                                                                       
                                                                     (i_0 := 
-                                                                    (C_16:
-                                                                    (safe_int32_of_integer_ 
                                                                     (C_15:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_14:
                                                                     ((add_int 
                                                                     (integer_of_int32 !i_0)) (1))))));
                                                                     !i_0
@@ -1030,12 +1012,12 @@ let test_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_16:
-    ((JC_13: le_int(offset_min(int_xP_result_1_alloc_table, result), (0)))
-    and ((JC_14:
+  { (JC_8:
+    ((JC_5: le_int(offset_min(int_xP_result_1_alloc_table, result), (0)))
+    and ((JC_6:
          ge_int(offset_max(int_xP_result_1_alloc_table, result),
          sub_int(integer_of_int32(n), (1))))
-        and (JC_15:
+        and (JC_7:
             (forall i:int32.
              ((le_int((0), integer_of_int32(i))
               and lt_int(integer_of_int32(i), integer_of_int32(n))) ->
@@ -1050,41 +1032,41 @@ let test_ensures_default =
 
 let test_safety =
  fun (n : int32) (int_P_int_xM_3_alloc_table : int_P alloc_table ref) (int_xP_result_1_alloc_table : int_xP alloc_table ref) (int_xP_result_1_tag_table : int_xP tag_table ref) (int_P_int_xM_3_tag_table : int_P tag_table ref) (int_xP_int_xM_result_1 : (int_xP, int_P pointer) memory ref) ->
-  { (JC_11: ge_int(integer_of_int32(n), (1))) }
+  { (JC_3: ge_int(integer_of_int32(n), (1))) }
   (init:
   (let return = ref (any_pointer void) in
   try
    begin
      (let t = ref (any_pointer void) in
      (let i_0 = ref (any_int32 void) in
-     (C_4:
+     (C_3:
      begin
-       (let jessie_5 = (t := (C_3:
-                             (JC_26:
+       (let jessie_5 = (t := (C_2:
+                             (JC_16:
                              (((alloc_struct_int_xP_requires (integer_of_uint32 
-                                                              (C_2:
-                                                              (JC_25:
+                                                              (C_1:
+                                                              (JC_15:
                                                               (uint32_of_integer_ 
                                                                (integer_of_int32 n)))))) int_xP_result_1_alloc_table) int_xP_result_1_tag_table)))) in
        void);
-      (C_5:
+      (C_4:
       begin
-        (let jessie_6 = (i_0 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_7 = (i_0 := (safe_int32_of_integer_ (0))) in void);
        try
-        (let jessie_16 = begin
+        (let jessie_18 = begin
                            (loop_1:
                            while true do
-                           { invariant (JC_32: true) variant (0) }
+                           { invariant (JC_22: true) variant (0) }
                             begin
                               [ { } unit
                                 reads i_0,int_P_int_xM_3_alloc_table,int_xP_int_xM_result_1,t
-                                { (JC_30:
-                                  ((JC_27:
+                                { (JC_20:
+                                  ((JC_17:
                                    le_int((0), integer_of_int32(i_0)))
-                                  and ((JC_28:
+                                  and ((JC_18:
                                        le_int(integer_of_int32(i_0),
                                        integer_of_int32(n)))
-                                      and (JC_29:
+                                      and (JC_19:
                                           (forall k:int32.
                                            ((le_int((0), integer_of_int32(k))
                                             and lt_int(integer_of_int32(k),
@@ -1100,43 +1082,43 @@ let test_safety =
                                                        integer_of_int32(k)))),
                                                 (0))))))))) } ];
                              try
-                              (let jessie_15 = begin
-                                                 (let jessie_14 = begin
+                              (let jessie_17 = begin
+                                                 (let jessie_16 = begin
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !i_0)) 
                                                                     (integer_of_int32 n))
                                                                     then void
                                                                     else
-                                                                    (let jessie_7 = 
+                                                                    (let jessie_8 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
-                                                                   (C_14:
+                                                                   (C_13:
                                                                    begin
                                                                      
-                                                                    (let jessie_13 = 
-                                                                    (let jessie_9 = 
-                                                                    (C_11:
-                                                                    (JC_35:
+                                                                    (let jessie_14 = 
+                                                                    (let jessie_10 = 
+                                                                    (C_10:
+                                                                    (JC_24:
                                                                     (((alloc_struct_int_P_requires (1)) int_P_int_xM_3_alloc_table) int_P_int_xM_3_tag_table))) in
-                                                                    (let jessie_10 = !t in
-                                                                    (let jessie_11 = 
-                                                                    (integer_of_int32 !i_0) in
+                                                                    (let jessie_11 = !t in
                                                                     (let jessie_12 = 
-                                                                    ((shift jessie_10) jessie_11) in
-                                                                    (JC_36:
-                                                                    (((((offset_upd_ !int_xP_result_1_alloc_table) int_xP_int_xM_result_1) jessie_10) jessie_11) jessie_9)))))) in
+                                                                    (integer_of_int32 !i_0) in
+                                                                    (let jessie_13 = 
+                                                                    ((shift jessie_11) jessie_12) in
+                                                                    (JC_25:
+                                                                    (((((offset_upd_ !int_xP_result_1_alloc_table) int_xP_int_xM_result_1) jessie_11) jessie_12) jessie_10)))))) in
                                                                     void);
-                                                                    (C_17:
+                                                                    (C_16:
                                                                     begin
                                                                       
                                                                     (i_0 := 
-                                                                    (C_16:
-                                                                    (JC_38:
-                                                                    (int32_of_integer_ 
                                                                     (C_15:
+                                                                    (JC_26:
+                                                                    (int32_of_integer_ 
+                                                                    (C_14:
                                                                     ((add_int 
                                                                     (integer_of_int32 !i_0)) (1)))))));
                                                                     !i_0
@@ -1219,11 +1201,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/malloc_po31.why">
-      <location file = "why/malloc.why" line = "962" begin = "62" end = "63"/>
+      <location file = "why/malloc.why" line = "952" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/malloc_po32.why">
-      <location file = "why/malloc.why" line = "962" begin = "62" end = "63"/>
+      <location file = "why/malloc.why" line = "952" begin = "62" end = "63"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

@@ -522,15 +522,15 @@ let f_ensures_default =
      (let s = ref (any_pointer void) in
      (C_2:
      begin
-       (let jessie_9 = (s := (C_1:
-                             (JC_12:
-                             (((alloc_struct_S (1)) S_s_1_alloc_table) S_s_1_tag_table)))) in
+       (let jessie_10 = (s := (C_1:
+                              (JC_11:
+                              (((alloc_struct_S (1)) S_s_1_alloc_table) S_s_1_tag_table)))) in
        void);
       (C_4:
       begin
-        (let jessie_14 = (let jessie_10 = (safe_int32_of_integer_ (0)) in
-                         (let jessie_13 = !s in
-                         (((safe_upd_ S_i_s_1) jessie_13) jessie_10))) in
+        (let jessie_16 = (let jessie_12 = (safe_int32_of_integer_ (0)) in
+                         (let jessie_15 = !s in
+                         (((safe_upd_ S_i_s_1) jessie_15) jessie_12))) in
         void);
        (C_5:
        begin
@@ -568,9 +568,9 @@ let f_safety =
        void);
       (C_4:
       begin
-        (let jessie_7 = (let jessie_3 = (safe_int32_of_integer_ (0)) in
-                        (let jessie_6 = !s in
-                        (((safe_upd_ S_i_s_1) jessie_6) jessie_3))) in
+        (let jessie_8 = (let jessie_4 = (safe_int32_of_integer_ (0)) in
+                        (let jessie_7 = !s in
+                        (((safe_upd_ S_i_s_1) jessie_7) jessie_4))) in
         void);
        (C_5:
        begin   ((free_parameter S_s_1_alloc_table) !s); (raise Return) end)

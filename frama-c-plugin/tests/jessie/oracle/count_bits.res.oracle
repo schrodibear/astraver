@@ -496,13 +496,13 @@ let count_bits_ensures_default =
      (let c = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_11 = (c := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_17 = (c := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_17 = begin
+       (let jessie_26 = begin
                           (loop_2:
                           while true do
                           { invariant
-                              (JC_22:
+                              (JC_18:
                               eq_int(add_int(integer_of_int32(c),
                                      nbits(integer_of_int32(mutable_x_1))),
                               nbits(integer_of_int32(mutable_x_1@init))))
@@ -510,10 +510,10 @@ let count_bits_ensures_default =
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_16 = begin
-                                                (let jessie_15 = (C_8:
+                             (let jessie_25 = begin
+                                                (let jessie_24 = (C_8:
                                                                  begin
-                                                                   (let jessie_12 = 
+                                                                   (let jessie_19 = 
                                                                    (d := 
                                                                     (C_7:
                                                                     (safe_int32_of_integer_ 
@@ -532,14 +532,14 @@ let count_bits_ensures_default =
                                                                     (integer_of_int32 !d)) (0))
                                                                   then void
                                                                   else
-                                                                   (let jessie_13 = 
+                                                                   (let jessie_20 = 
                                                                    (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                    void));
                                                                   (C_11:
                                                                   begin
-                                                                    (let jessie_14 = 
+                                                                    (let jessie_22 = 
                                                                     (c := 
                                                                     (C_10:
                                                                     (safe_int32_of_integer_ 
@@ -600,13 +600,13 @@ let count_bits_safety =
      (let c = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_4 = (c := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_5 = (c := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_10 = begin
+       (let jessie_14 = begin
                           (loop_1:
                           while true do
                           { invariant (JC_11: true)
-                            variant (JC_21 : nbits(integer_of_int32(mutable_x_1))) }
+                            variant (JC_17 : nbits(integer_of_int32(mutable_x_1))) }
                            begin
                              [ { } unit reads c,mutable_x_1
                                { (JC_9:
@@ -614,64 +614,66 @@ let count_bits_safety =
                                         nbits(integer_of_int32(mutable_x_1))),
                                  nbits(integer_of_int32(mutable_x_1@init)))) } ];
                             try
-                             (let jessie_9 = begin
-                                               (let jessie_8 = (C_8:
-                                                               begin
-                                                                 (let jessie_5 = 
-                                                                 (d := 
-                                                                  (C_7:
-                                                                  (JC_16:
-                                                                  (int32_of_integer_ 
-                                                                   (C_6:
-                                                                   ((bw_and 
+                             (let jessie_13 = begin
+                                                (let jessie_12 = (C_8:
+                                                                 begin
+                                                                   (let jessie_7 = 
+                                                                   (d := 
+                                                                    (C_7:
+                                                                    (JC_14:
+                                                                    (int32_of_integer_ 
+                                                                    (C_6:
+                                                                    ((bw_and 
                                                                     (integer_of_int32 !mutable_x_1)) 
                                                                     (integer_of_int32 
                                                                     (C_5:
-                                                                    (JC_15:
+                                                                    (JC_13:
                                                                     (int32_of_integer_ 
                                                                     (C_4:
                                                                     (neg_int 
                                                                     (integer_of_int32 !mutable_x_1))))))))))))) in
-                                                                 void);
-                                                                (if ((neq_int_ 
+                                                                   void);
+                                                                  (if 
+                                                                  ((neq_int_ 
                                                                     (integer_of_int32 !d)) (0))
-                                                                then void
-                                                                else
-                                                                 (let jessie_6 = 
-                                                                 (raise
-                                                                  (Goto_while_0_break_exc
-                                                                  void)) in
-                                                                 void));
-                                                                (C_11:
-                                                                begin
-                                                                  (let jessie_7 = 
-                                                                  (c := 
-                                                                   (C_10:
-                                                                   (JC_18:
-                                                                   (int32_of_integer_ 
+                                                                  then void
+                                                                  else
+                                                                   (let jessie_8 = 
+                                                                   (raise
+                                                                    (Goto_while_0_break_exc
+                                                                    void)) in
+                                                                   void));
+                                                                  (C_11:
+                                                                  begin
+                                                                    (let jessie_10 = 
+                                                                    (c := 
+                                                                    (C_10:
+                                                                    (JC_15:
+                                                                    (int32_of_integer_ 
                                                                     (C_9:
                                                                     ((add_int 
                                                                     (integer_of_int32 !c)) (1))))))) in
-                                                                  void);
-                                                                 (C_14:
-                                                                 begin
-                                                                   (mutable_x_1 := 
+                                                                    void);
+                                                                   (C_14:
+                                                                   begin
+                                                                     
+                                                                    (mutable_x_1 := 
                                                                     (C_13:
-                                                                    (JC_20:
+                                                                    (JC_16:
                                                                     (int32_of_integer_ 
                                                                     (C_12:
                                                                     ((sub_int 
                                                                     (integer_of_int32 !mutable_x_1)) 
                                                                     (integer_of_int32 !d)))))));
-                                                                  !mutable_x_1
-                                                                 end)
-                                                                end)
-                                                               end) in
-                                               void);
-                                              (raise
-                                               (Loop_continue_exc
-                                               void))
-                                             end in
+                                                                    !mutable_x_1
+                                                                   end)
+                                                                  end)
+                                                                 end) in
+                                                void);
+                                               (raise
+                                                (Loop_continue_exc
+                                                void))
+                                              end in
                              void)
                              with
                              Loop_continue_exc jessie_3 ->

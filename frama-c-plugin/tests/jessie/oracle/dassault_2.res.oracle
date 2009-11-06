@@ -389,7 +389,7 @@ let g_ensures_default =
    begin
      (C_1:
      begin
-       (let jessie_2 = (mutable_Def_Rv := (safe_int32_of_integer_ (1))) in
+       (let jessie_4 = (mutable_Def_Rv := (safe_int32_of_integer_ (1))) in
        void);
       (raise Return)
      end);
@@ -409,7 +409,7 @@ let g_safety =
    begin
      (C_1:
      begin
-       (let jessie_1 = (mutable_Def_Rv := (safe_int32_of_integer_ (1))) in
+       (let jessie_2 = (mutable_Def_Rv := (safe_int32_of_integer_ (1))) in
        void);
       (raise Return)
      end);

@@ -416,7 +416,7 @@ let f_ensures_default =
      (C_2:
      begin
        (let jessie_5 = (i := (C_1:
-                             (JC_16:
+                             (JC_14:
                              (((alloc_struct_char_P (integer_of_int32 n)) char_P_result_1_alloc_table) char_P_result_1_tag_table)))) in
        void);
       (return := !i);
@@ -444,7 +444,7 @@ let f_safety =
      (C_2:
      begin
        (let jessie_2 = (i := (C_1:
-                             (JC_14:
+                             (JC_13:
                              (((alloc_struct_char_P_requires (integer_of_int32 n)) char_P_result_1_alloc_table) char_P_result_1_tag_table)))) in
        void);
       (return := !i);

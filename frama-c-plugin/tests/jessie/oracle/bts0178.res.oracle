@@ -580,17 +580,19 @@ let f_ensures_default =
      (let i = ref (any_int32 void) in
      (C_9:
      begin
-       (let jessie_26 = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_34 = (i := (safe_int32_of_integer_ (0))) in void);
       (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 size_0))
       then
        (C_14:
-       (JC_26:
-       (((((g_specialized (C_10: ((shift vector) (integer_of_int32 !i)))) 
-           (C_13:
-           ((shift vector) (integer_of_int32 (C_12:
-                                             (safe_int32_of_integer_ 
-                                              (C_11:
-                                              ((add_int (integer_of_int32 !i)) (1))))))))) int_P_int_M_vector_3) int_P_vector_3_alloc_table) int_P_vector_3_alloc_table)))
+       (let jessie_36 = (C_10: ((shift vector) (integer_of_int32 !i))) in
+       (let jessie_35 = (C_13:
+                        ((shift vector) (integer_of_int32 (C_12:
+                                                          (safe_int32_of_integer_ 
+                                                           (C_11:
+                                                           ((add_int 
+                                                             (integer_of_int32 !i)) (1)))))))) in
+       (JC_24:
+       (((((g_specialized jessie_36) jessie_35) int_P_int_M_vector_3) int_P_vector_3_alloc_table) int_P_vector_3_alloc_table)))))
       else void);
       (raise Return)
      end));
@@ -599,36 +601,37 @@ let f_ensures_default =
    with
    Return ->
    void end)
-  { (JC_19: true) }
+  { (JC_17: true) }
 
 let f_safety =
  fun (vector : int_P pointer) (size_0 : int32) (int_P_int_M_vector_3 : (int_P, int32) memory ref) (int_P_vector_3_alloc_table : int_P alloc_table) ->
-  { (JC_18: true) }
+  { (JC_16: true) }
   (init:
   try
    begin
      (let i = ref (any_int32 void) in
      (C_9:
      begin
-       (let jessie_23 = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_30 = (i := (safe_int32_of_integer_ (0))) in void);
       (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 size_0))
       then
        (C_14:
-       (JC_25:
+       (let jessie_32 = (C_10: ((shift vector) (integer_of_int32 !i))) in
+       (let jessie_31 = (C_13:
+                        ((shift vector) (integer_of_int32 (C_12:
+                                                          (JC_21:
+                                                          (int32_of_integer_ 
+                                                           (C_11:
+                                                           ((add_int 
+                                                             (integer_of_int32 !i)) (1))))))))) in
+       (JC_23:
        (assert
        { pset_disjoint(pset_range(pset_singleton(vector),
                        add_int(integer_of_int32(i), (1)),
                        add_int(integer_of_int32(i), (1))),
          pset_range(pset_singleton(vector), i, i)) };
-       (JC_24:
-       (((((g_requires_specialized (C_10:
-                                   ((shift vector) (integer_of_int32 !i)))) 
-           (C_13:
-           ((shift vector) (integer_of_int32 (C_12:
-                                             (JC_23:
-                                             (int32_of_integer_ (C_11:
-                                                                ((add_int 
-                                                                  (integer_of_int32 !i)) (1)))))))))) int_P_int_M_vector_3) int_P_vector_3_alloc_table) int_P_vector_3_alloc_table)))))
+       (JC_22:
+       (((((g_requires_specialized jessie_32) jessie_31) int_P_int_M_vector_3) int_P_vector_3_alloc_table) int_P_vector_3_alloc_table)))))))
       else void);
       (raise Return)
      end));
@@ -648,20 +651,20 @@ let g_ensures_default =
      (let tmp = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_12 = (tmp := (C_1: ((safe_acc_ !int_P_int_M_j_1) j))) in
+       (let jessie_16 = (tmp := (C_1: ((safe_acc_ !int_P_int_M_j_1) j))) in
        void);
       (C_5:
       begin
-        (let jessie_17 = (let jessie_13 = (C_3:
+        (let jessie_22 = (let jessie_18 = (C_3:
                                           ((safe_acc_ !int_P_int_M_k_2) k)) in
-                         (let jessie_16 = j in
-                         (((safe_upd_ int_P_int_M_j_1) jessie_16) jessie_13))) in
+                         (let jessie_21 = j in
+                         (((safe_upd_ int_P_int_M_j_1) jessie_21) jessie_18))) in
         void);
        (C_7:
        begin
-         (let jessie_22 = (let jessie_18 = !tmp in
-                          (let jessie_21 = k in
-                          (((safe_upd_ int_P_int_M_k_2) jessie_21) jessie_18))) in
+         (let jessie_28 = (let jessie_24 = !tmp in
+                          (let jessie_27 = k in
+                          (((safe_upd_ int_P_int_M_k_2) jessie_27) jessie_24))) in
          void);
         (raise Return)
        end)
@@ -683,25 +686,25 @@ let g_safety =
      (let tmp = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_1 = (tmp := (C_1:
-                               (JC_10:
+       (let jessie_2 = (tmp := (C_1:
+                               (JC_9:
                                (((acc_ int_P_j_1_alloc_table) !int_P_int_M_j_1) j)))) in
        void);
       (C_5:
       begin
-        (let jessie_6 = (let jessie_2 = (C_3:
-                                        (JC_12:
+        (let jessie_8 = (let jessie_4 = (C_3:
+                                        (JC_10:
                                         (((acc_ int_P_k_2_alloc_table) !int_P_int_M_k_2) k))) in
-                        (let jessie_5 = j in
-                        (JC_13:
-                        ((((upd_ int_P_j_1_alloc_table) int_P_int_M_j_1) jessie_5) jessie_2)))) in
+                        (let jessie_7 = j in
+                        (JC_11:
+                        ((((upd_ int_P_j_1_alloc_table) int_P_int_M_j_1) jessie_7) jessie_4)))) in
         void);
        (C_7:
        begin
-         (let jessie_11 = (let jessie_7 = !tmp in
-                          (let jessie_10 = k in
-                          (JC_14:
-                          ((((upd_ int_P_k_2_alloc_table) int_P_int_M_k_2) jessie_10) jessie_7)))) in
+         (let jessie_14 = (let jessie_10 = !tmp in
+                          (let jessie_13 = k in
+                          (JC_12:
+                          ((((upd_ int_P_k_2_alloc_table) int_P_int_M_k_2) jessie_13) jessie_10)))) in
          void);
         (raise Return)
        end)

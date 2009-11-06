@@ -764,16 +764,16 @@ let lexicographical_compare_array_ensures_default =
      (let i = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_38 = (C_1:
+      (let jessie_53 = (C_1:
                        begin
-                         (let jessie_22 = (i := (safe_int32_of_integer_ (0))) in
+                         (let jessie_31 = (i := (safe_int32_of_integer_ (0))) in
                          void);
                         try
-                         (let jessie_31 = begin
+                         (let jessie_43 = begin
                                             (loop_2:
                                             while true do
                                             { invariant
-                                                ((JC_45:
+                                                ((JC_44:
                                                  (forall k:int.
                                                   ((le_int((0), k)
                                                    and lt_int(k,
@@ -784,26 +784,26 @@ let lexicographical_compare_array_ensures_default =
                                                    integer_of_int32(select(int_P_int_M_b_2,
                                                                     shift(b,
                                                                     k)))))))
-                                                and ((JC_48:
-                                                     ((JC_46:
+                                                and ((JC_47:
+                                                     ((JC_45:
                                                       le_int((0),
                                                       integer_of_int32(i)))
-                                                     and (JC_47:
+                                                     and (JC_46:
                                                          le_int(integer_of_int32(i),
                                                          integer_of_int32(length_b)))))
-                                                    and (JC_51:
-                                                        ((JC_49:
+                                                    and (JC_50:
+                                                        ((JC_48:
                                                          le_int((0),
                                                          integer_of_int32(i)))
-                                                        and (JC_50:
+                                                        and (JC_49:
                                                             le_int(integer_of_int32(i),
                                                             integer_of_int32(length_a)))))))
                                                }
                                              begin
                                                [ { } unit { true } ];
                                               try
-                                               (let jessie_30 = begin
-                                                                  (let jessie_29 = 
+                                               (let jessie_42 = begin
+                                                                  (let jessie_41 = 
                                                                   begin
                                                                     (if 
                                                                     ((neq_int_ 
@@ -816,13 +816,13 @@ let lexicographical_compare_array_ensures_default =
                                                                     (integer_of_int32 length_b))
                                                                     then void
                                                                     else
-                                                                    (let jessie_23 = 
+                                                                    (let jessie_32 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void))
                                                                     else
-                                                                    (let jessie_24 = 
+                                                                    (let jessie_33 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -842,12 +842,12 @@ let lexicographical_compare_array_ensures_default =
                                                                     ((shift b) 
                                                                     (integer_of_int32 !i)))))))
                                                                    then
-                                                                    (let jessie_26 = 
+                                                                    (let jessie_36 = 
                                                                     begin
                                                                       
                                                                     (assert
                                                                     { 
-                                                                    (JC_55:
+                                                                    (JC_54:
                                                                     (exists k1:int.
                                                                     (
                                                                     le_int((0),
@@ -871,7 +871,7 @@ let lexicographical_compare_array_ensures_default =
                                                                     (C_10:
                                                                     begin
                                                                       
-                                                                    (let jessie_25 = 
+                                                                    (let jessie_35 = 
                                                                     (__retres := 
                                                                     (safe_int32_of_integer_ (1))) in
                                                                     void);
@@ -897,11 +897,11 @@ let lexicographical_compare_array_ensures_default =
                                                                     ((shift a) 
                                                                     (integer_of_int32 !i)))))))
                                                                    then
-                                                                    (let jessie_28 = 
+                                                                    (let jessie_39 = 
                                                                     (C_15:
                                                                     begin
                                                                       
-                                                                    (let jessie_27 = 
+                                                                    (let jessie_38 = 
                                                                     (__retres := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
@@ -946,9 +946,9 @@ let lexicographical_compare_array_ensures_default =
                         then
                          (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_b))
                          then
-                          (let jessie_33 = begin
+                          (let jessie_46 = begin
                                              (assert
-                                             { (JC_56:
+                                             { (JC_55:
                                                ((exists k1_0:int.
                                                  (le_int((0), k1_0)
                                                  and (lt_int(k1_0,
@@ -981,7 +981,7 @@ let lexicographical_compare_array_ensures_default =
                                             void;
                                             (C_26:
                                             begin
-                                              (let jessie_32 = (__retres := 
+                                              (let jessie_45 = (__retres := 
                                                                 (safe_int32_of_integer_ (1))) in
                                               void);
                                              (raise (Return_label_exc void))
@@ -989,18 +989,18 @@ let lexicographical_compare_array_ensures_default =
                                            end in
                           void)
                          else
-                          (let jessie_35 = (C_24:
+                          (let jessie_49 = (C_24:
                                            begin
-                                             (let jessie_34 = (__retres := 
+                                             (let jessie_48 = (__retres := 
                                                                (safe_int32_of_integer_ (0))) in
                                              void);
                                             (raise (Return_label_exc void))
                                            end) in
                           void))
                         else
-                         (let jessie_37 = (C_23:
+                         (let jessie_52 = (C_23:
                                           begin
-                                            (let jessie_36 = (__retres := 
+                                            (let jessie_51 = (__retres := 
                                                               (safe_int32_of_integer_ (0))) in
                                             void);
                                            (raise (Return_label_exc void))
@@ -1082,12 +1082,12 @@ let lexicographical_compare_array_safety =
      (let i = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_21 = (C_1:
+      (let jessie_28 = (C_1:
                        begin
-                         (let jessie_5 = (i := (safe_int32_of_integer_ (0))) in
+                         (let jessie_6 = (i := (safe_int32_of_integer_ (0))) in
                          void);
                         try
-                         (let jessie_14 = begin
+                         (let jessie_18 = begin
                                             (loop_1:
                                             while true do
                                             { invariant (JC_35: true)
@@ -1121,8 +1121,8 @@ let lexicographical_compare_array_safety =
                                                                integer_of_int32(i),
                                                                integer_of_int32(length_a))))))) } ];
                                               try
-                                               (let jessie_13 = begin
-                                                                  (let jessie_12 = 
+                                               (let jessie_17 = begin
+                                                                  (let jessie_16 = 
                                                                   begin
                                                                     (if 
                                                                     ((neq_int_ 
@@ -1135,13 +1135,13 @@ let lexicographical_compare_array_safety =
                                                                     (integer_of_int32 length_b))
                                                                     then void
                                                                     else
-                                                                    (let jessie_6 = 
+                                                                    (let jessie_7 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void))
                                                                     else
-                                                                    (let jessie_7 = 
+                                                                    (let jessie_8 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
@@ -1159,7 +1159,7 @@ let lexicographical_compare_array_safety =
                                                                     ((((offset_acc_ int_P_b_2_alloc_table) int_P_int_M_b_2) b) 
                                                                     (integer_of_int32 !i))))))
                                                                    then
-                                                                    (let jessie_9 = 
+                                                                    (let jessie_11 = 
                                                                     begin
                                                                       
                                                                     [ 
@@ -1188,7 +1188,7 @@ let lexicographical_compare_array_safety =
                                                                     (C_10:
                                                                     begin
                                                                       
-                                                                    (let jessie_8 = 
+                                                                    (let jessie_10 = 
                                                                     (__retres := 
                                                                     (safe_int32_of_integer_ (1))) in
                                                                     void);
@@ -1212,11 +1212,11 @@ let lexicographical_compare_array_safety =
                                                                     ((((offset_acc_ int_P_a_1_alloc_table) int_P_int_M_a_1) a) 
                                                                     (integer_of_int32 !i))))))
                                                                    then
-                                                                    (let jessie_11 = 
+                                                                    (let jessie_14 = 
                                                                     (C_15:
                                                                     begin
                                                                       
-                                                                    (let jessie_10 = 
+                                                                    (let jessie_13 = 
                                                                     (__retres := 
                                                                     (safe_int32_of_integer_ (0))) in
                                                                     void);
@@ -1231,7 +1231,7 @@ let lexicographical_compare_array_safety =
                                                                      
                                                                     (i := 
                                                                     (C_21:
-                                                                    (JC_43:
+                                                                    (JC_42:
                                                                     (int32_of_integer_ 
                                                                     (C_20:
                                                                     ((add_int 
@@ -1262,9 +1262,9 @@ let lexicographical_compare_array_safety =
                         then
                          (if ((neq_int_ (integer_of_int32 !i)) (integer_of_int32 length_b))
                          then
-                          (let jessie_16 = begin
+                          (let jessie_21 = begin
                                              [ { } unit
-                                               { (JC_44:
+                                               { (JC_43:
                                                  ((exists k1_0:int.
                                                    (le_int((0), k1_0)
                                                    and (lt_int(k1_0,
@@ -1296,7 +1296,7 @@ let lexicographical_compare_array_safety =
                                             void;
                                             (C_26:
                                             begin
-                                              (let jessie_15 = (__retres := 
+                                              (let jessie_20 = (__retres := 
                                                                 (safe_int32_of_integer_ (1))) in
                                               void);
                                              (raise (Return_label_exc void))
@@ -1304,18 +1304,18 @@ let lexicographical_compare_array_safety =
                                            end in
                           void)
                          else
-                          (let jessie_18 = (C_24:
+                          (let jessie_24 = (C_24:
                                            begin
-                                             (let jessie_17 = (__retres := 
+                                             (let jessie_23 = (__retres := 
                                                                (safe_int32_of_integer_ (0))) in
                                              void);
                                             (raise (Return_label_exc void))
                                            end) in
                           void))
                         else
-                         (let jessie_20 = (C_23:
+                         (let jessie_27 = (C_23:
                                           begin
-                                            (let jessie_19 = (__retres := 
+                                            (let jessie_26 = (__retres := 
                                                               (safe_int32_of_integer_ (0))) in
                                             void);
                                            (raise (Return_label_exc void))

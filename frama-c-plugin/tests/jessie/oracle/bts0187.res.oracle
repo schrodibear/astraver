@@ -41,18 +41,12 @@ tag void_P = {
 
 type void_P = [void_P]
 
-unit __globinit_whole_program()
-behavior default:
-  assumes true;
-  ensures (C_1 : true);
-;
-
 unsigned_char_P[..] PTT;
 
 int32 main()
 behavior default:
   assumes true;
-  ensures (C_3 : true);
+  ensures (C_1 : true);
 ;
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0187.jessie/bts0187.cloc bts0187.jessie/bts0187.jc
 type char_P
@@ -387,10 +381,6 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
-
-parameter __globinit_whole_program : tt:unit -> { } unit { true }
-
-parameter __globinit_whole_program_requires : tt:unit -> { } unit { true }
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->

@@ -1645,14 +1645,15 @@ let f_ensures_default =
      (let y = ref (any_pointer void) in
      (C_19:
      begin
-       (let jessie_11 = (len := (C_18:
-                                (JC_68:
-                                (((strlen_0 x) char_P_x_27_alloc_table) char_P_char_M_x_27)))) in
+       (let jessie_12 = (len := (C_18:
+                                (let jessie_11 = x in
+                                (JC_64:
+                                (((strlen_0 jessie_11) char_P_x_27_alloc_table) char_P_char_M_x_27))))) in
        void);
       (C_23:
       begin
-        (let jessie_13 = (y := (C_22:
-                               (JC_70:
+        (let jessie_14 = (y := (C_22:
+                               (JC_65:
                                (((alloc_struct_char_P (integer_of_uint32 
                                                        (C_21:
                                                        (safe_uint32_of_integer_ 
@@ -1661,11 +1662,14 @@ let f_ensures_default =
         void);
        (C_24:
        begin
-         (let jessie_16 = (JC_71:
-                          (((((((memcpy !y) x) !len) char_P_char_M_y_76) char_P_x_27_alloc_table) !char_P_y_76_alloc_table) char_P_char_M_x_27)) in
+         (let jessie_18 = (let jessie_17 = !y in
+                          (let jessie_16 = x in
+                          (let jessie_15 = !len in
+                          (JC_66:
+                          (((((((memcpy jessie_17) jessie_16) jessie_15) char_P_char_M_y_76) char_P_x_27_alloc_table) !char_P_y_76_alloc_table) char_P_char_M_x_27))))) in
          void);
         (assert
-        { (JC_72:
+        { (JC_67:
           valid_string(y, char_P_y_76_alloc_table, char_P_char_M_y_76)) };
         void);
         void;
@@ -1694,16 +1698,17 @@ let f_safety =
      (C_19:
      begin
        (let jessie_3 = (len := (C_18:
-                               (JC_60:
-                               (((strlen_0_requires x) char_P_x_27_alloc_table) char_P_char_M_x_27)))) in
+                               (let jessie_2 = x in
+                               (JC_59:
+                               (((strlen_0_requires jessie_2) char_P_x_27_alloc_table) char_P_char_M_x_27))))) in
        void);
       (C_23:
       begin
         (let jessie_5 = (y := (C_22:
-                              (JC_64:
+                              (JC_61:
                               (((alloc_struct_char_P_requires (integer_of_uint32 
                                                                (C_21:
-                                                               (JC_63:
+                                                               (JC_60:
                                                                (uint32_of_integer_ 
                                                                 (C_20:
                                                                 ((add_int 
@@ -1711,11 +1716,14 @@ let f_safety =
         void);
        (C_24:
        begin
-         (let jessie_8 = (JC_65:
-                         (((((((memcpy_requires !y) x) !len) char_P_char_M_y_76) char_P_x_27_alloc_table) !char_P_y_76_alloc_table) char_P_char_M_x_27)) in
+         (let jessie_9 = (let jessie_8 = !y in
+                         (let jessie_7 = x in
+                         (let jessie_6 = !len in
+                         (JC_62:
+                         (((((((memcpy_requires jessie_8) jessie_7) jessie_6) char_P_char_M_y_76) char_P_x_27_alloc_table) !char_P_y_76_alloc_table) char_P_char_M_x_27))))) in
          void);
         [ { } unit reads char_P_char_M_y_76,char_P_y_76_alloc_table,y
-          { (JC_66:
+          { (JC_63:
             valid_string(y, char_P_y_76_alloc_table, char_P_char_M_y_76)) } ];
         void;
         (raise Return)
@@ -1737,7 +1745,7 @@ why --project [...] why/calloc.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/calloc_po2.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
+      <location file = "PPCHOME/share/jessie/string.h" line = "84" begin = "13" end = "28"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -1752,7 +1760,7 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/calloc_po5.why">
-      <location file = "PPCHOME/share/jessie/string.h" line = "56" begin = "13" end = "46"/>
+      <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -1762,11 +1770,16 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/calloc_po7.why">
-      <location file = "PPCHOME/share/jessie/string.h" line = "57" begin = "16" end = "48"/>
+      <location file = "PPCHOME/share/jessie/string.h" line = "56" begin = "13" end = "46"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/calloc_po8.why">
+      <location file = "PPCHOME/share/jessie/string.h" line = "57" begin = "16" end = "48"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/calloc_po9.why">
       <location file = "PPCHOME/share/jessie/string.h" line = "57" begin = "16" end = "48"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>

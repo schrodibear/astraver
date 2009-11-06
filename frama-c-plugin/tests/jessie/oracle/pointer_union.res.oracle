@@ -701,37 +701,37 @@ let zero_ensures_default =
    begin
      (C_3:
      begin
-       (let jessie_21 = (let jessie_17 = (safe_int32_of_integer_ (0)) in
-                        (let jessie_20 = (C_1: x) in
+       (let jessie_24 = (let jessie_20 = (safe_int32_of_integer_ (0)) in
+                        (let jessie_23 = (C_1: x) in
                         begin
-                          (((safe_upd_ iP_iM_x_1) jessie_20) jessie_17);
+                          (((safe_upd_ iP_iM_x_1) jessie_23) jessie_20);
                          [ { } unit { true } ]
                         end)) in
        void);
       (assert
-      { (JC_21: eq_int(integer_of_int32(select(iP_iM_x_1, x)), (0))) };
+      { (JC_20: eq_int(integer_of_int32(select(iP_iM_x_1, x)), (0))) };
       void);
       void;
       (C_8:
       begin
-        (let jessie_27 = (let jessie_23 = (C_5:
-                                          (JC_23:
+        (let jessie_30 = (let jessie_26 = (C_5:
+                                          (JC_21:
                                           (((alloc_struct_int_P (1)) int_P_pM_2_alloc_table) int_P_pM_2_tag_table))) in
-                         (let jessie_26 = (C_6: x) in
+                         (let jessie_29 = (C_6: x) in
                          begin
-                           (((safe_upd_ pP_pM_x_1) jessie_26) jessie_23);
+                           (((safe_upd_ pP_pM_x_1) jessie_29) jessie_26);
                           [ { } unit { true } ]
                          end)) in
         void);
        (C_12:
        begin
-         (let jessie_32 = (let jessie_28 = (safe_int32_of_integer_ (1)) in
-                          (let jessie_31 = (C_10:
+         (let jessie_36 = (let jessie_32 = (safe_int32_of_integer_ (1)) in
+                          (let jessie_35 = (C_10:
                                            ((safe_acc_ !pP_pM_x_1) (C_9: x))) in
-                          (((safe_upd_ int_P_int_M_pM_2) jessie_31) jessie_28))) in
+                          (((safe_upd_ int_P_int_M_pM_2) jessie_35) jessie_32))) in
          void);
         (assert
-        { (JC_24:
+        { (JC_22:
           eq_int(integer_of_int32(select(int_P_int_M_pM_2,
                                   select(pP_pM_x_1, x))),
           (1))) };
@@ -758,11 +758,11 @@ let zero_safety =
    begin
      (C_3:
      begin
-       (let jessie_5 = (let jessie_1 = (safe_int32_of_integer_ (0)) in
-                       (let jessie_4 = (C_1: x) in
+       (let jessie_6 = (let jessie_2 = (safe_int32_of_integer_ (0)) in
+                       (let jessie_5 = (C_1: x) in
                        begin
                          (JC_13:
-                         ((((upd_ U_x_1_alloc_table) iP_iM_x_1) jessie_4) jessie_1));
+                         ((((upd_ U_x_1_alloc_table) iP_iM_x_1) jessie_5) jessie_2));
                         [ { } unit { true } ]
                        end)) in
        void);
@@ -771,29 +771,29 @@ let zero_safety =
       void;
       (C_8:
       begin
-        (let jessie_11 = (let jessie_7 = (C_5:
-                                         (JC_16:
+        (let jessie_12 = (let jessie_8 = (C_5:
+                                         (JC_15:
                                          (((alloc_struct_int_P_requires (1)) int_P_pM_2_alloc_table) int_P_pM_2_tag_table))) in
-                         (let jessie_10 = (C_6: x) in
+                         (let jessie_11 = (C_6: x) in
                          begin
-                           (JC_17:
-                           ((((upd_ U_x_1_alloc_table) pP_pM_x_1) jessie_10) jessie_7));
+                           (JC_16:
+                           ((((upd_ U_x_1_alloc_table) pP_pM_x_1) jessie_11) jessie_8));
                           [ { } unit { true } ]
                          end)) in
         void);
        (C_12:
        begin
-         (let jessie_16 = (let jessie_12 = (safe_int32_of_integer_ (1)) in
-                          (let jessie_15 = (C_10:
-                                           (JC_18:
+         (let jessie_18 = (let jessie_14 = (safe_int32_of_integer_ (1)) in
+                          (let jessie_17 = (C_10:
+                                           (JC_17:
                                            (((acc_ U_x_1_alloc_table) !pP_pM_x_1) 
                                             (C_9:
                                             x)))) in
-                          (JC_19:
-                          ((((upd_ !int_P_pM_2_alloc_table) int_P_int_M_pM_2) jessie_15) jessie_12)))) in
+                          (JC_18:
+                          ((((upd_ !int_P_pM_2_alloc_table) int_P_int_M_pM_2) jessie_17) jessie_14)))) in
          void);
         [ { } unit reads int_P_int_M_pM_2,pP_pM_x_1
-          { (JC_20:
+          { (JC_19:
             eq_int(integer_of_int32(select(int_P_int_M_pM_2,
                                     select(pP_pM_x_1, x))),
             (1))) } ];

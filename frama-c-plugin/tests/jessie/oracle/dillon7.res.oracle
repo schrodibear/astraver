@@ -35,12 +35,6 @@ tag void_P = {
 
 type void_P = [void_P]
 
-unit __globinit_whole_program()
-behavior default:
-  assumes true;
-  ensures (C_1 : true);
-;
-
 tag __anonstruct_ts_1 = {
   real f0: 32; 
   real f1: 32; 
@@ -75,18 +69,18 @@ float_P[..] simulated_cast_to_float_ptr(__anonstruct_ts_1[..] x)
 behavior default:
   assumes true;
   assigns \nothing;
-  ensures (C_2 : simulated_cast{Here}(x, \result));
+  ensures (C_1 : simulated_cast{Here}(x, \result));
 ;
 
 unit f(float_P[..] d)
-  requires (C_6 : ((C_7 : (\offset_min(d) <= 0)) &&
-                    (C_8 : (\offset_max(d) >= 2))));
+  requires (C_5 : ((C_6 : (\offset_min(d) <= 0)) &&
+                    (C_7 : (\offset_max(d) >= 2))));
 behavior default:
   assumes true;
   assigns v;
-  ensures (C_9 : (v == (d + 1).float_M));
+  ensures (C_8 : (v == (d + 1).float_M));
 {  
-   {  (C_5 : (v = (C_4 : (C_3 : (d + 1)).float_M)));
+   {  (C_4 : (v = (C_3 : (C_2 : (d + 1)).float_M)));
       
       (return ())
    }
@@ -95,19 +89,18 @@ behavior default:
 unit main()
 behavior default:
   assumes true;
-  ensures (C_20 : (v == 9.0));
+  ensures (C_18 : (v == 9.0));
 {  
    (var __anonstruct_ts_1[0] x_0);
    
    (var float_P[..] tmp);
    
-   {  (C_11 : (x_0 = (C_10 : (new __anonstruct_ts_1[1]))));
-      (C_12 : __globinit_whole_program());
-      (C_15 : ((C_14 : x_0.f1) = (C_13 : (9.0 :> real))));
-      (C_17 : (tmp = (C_16 : simulated_cast_to_float_ptr(x_0))));
-      (C_18 : f(tmp));
+   {  (C_10 : (x_0 = (C_9 : (new __anonstruct_ts_1[1]))));
+      (C_13 : ((C_12 : x_0.f1) = (C_11 : (9.0 :> real))));
+      (C_15 : (tmp = (C_14 : simulated_cast_to_float_ptr(x_0))));
+      (C_16 : f(tmp));
       
-      {  (C_19 : (free(x_0)));
+      {  (C_17 : (free(x_0)));
          
          (return ())
       }
@@ -519,10 +512,6 @@ parameter __anonstruct_ts_1_alloc_table : __anonstruct_ts_1 alloc_table ref
 
 parameter __anonstruct_ts_1_tag_table : __anonstruct_ts_1 tag_table ref
 
-parameter __globinit_whole_program : tt:unit -> { } unit { true }
-
-parameter __globinit_whole_program_requires : tt:unit -> { } unit { true }
-
 parameter alloc_bitvector_struct___anonstruct_ts_1 :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
@@ -714,18 +703,18 @@ parameter f :
    float_P_float_M_d_6:(float_P, real) memory ->
     { } unit reads v writes v
     { ((true = true) ->
-       (JC_29: eq_real(v, select(float_P_float_M_d_6, shift(d, (1)))))) }
+       (JC_21: eq_real(v, select(float_P_float_M_d_6, shift(d, (1)))))) }
 
 parameter f_requires :
  d:float_P pointer ->
   float_P_d_6_alloc_table:float_P alloc_table ->
    float_P_float_M_d_6:(float_P, real) memory ->
-    { (JC_21:
-      ((JC_19: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
-      and (JC_20: ge_int(offset_max(float_P_d_6_alloc_table, d), (2)))))}
+    { (JC_13:
+      ((JC_11: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
+      and (JC_12: ge_int(offset_max(float_P_d_6_alloc_table, d), (2)))))}
     unit reads v writes v
     { ((true = true) ->
-       (JC_29: eq_real(v, select(float_P_float_M_d_6, shift(d, (1)))))) }
+       (JC_21: eq_real(v, select(float_P_float_M_d_6, shift(d, (1)))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -734,11 +723,11 @@ parameter int8_of_integer_ :
 
 parameter main :
  tt:unit ->
-  { } unit reads v writes v { ((true = true) -> (JC_40: eq_real(v, 9.0))) }
+  { } unit reads v writes v { ((true = true) -> (JC_31: eq_real(v, 9.0))) }
 
 parameter main_requires :
  tt:unit ->
-  { } unit reads v writes v { ((true = true) -> (JC_40: eq_real(v, 9.0))) }
+  { } unit reads v writes v { ((true = true) -> (JC_31: eq_real(v, 9.0))) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
@@ -753,7 +742,7 @@ parameter simulated_cast_to_float_ptr :
        float_P_float_M_result_4:(float_P, real) memory ->
         { } float_P pointer
         { ((true = true) ->
-           (JC_15:
+           (JC_7:
            simulated_cast(x, result, float_P_result_4_alloc_table,
            __anonstruct_ts_1_x_3_alloc_table, __anonstruct_ts_1_f2_x_3,
            __anonstruct_ts_1_f1_x_3, __anonstruct_ts_1_f0_x_3,
@@ -769,7 +758,7 @@ parameter simulated_cast_to_float_ptr_requires :
        float_P_float_M_result_4:(float_P, real) memory ->
         { } float_P pointer
         { ((true = true) ->
-           (JC_15:
+           (JC_7:
            simulated_cast(x, result, float_P_result_4_alloc_table,
            __anonstruct_ts_1_x_3_alloc_table, __anonstruct_ts_1_f2_x_3,
            __anonstruct_ts_1_f1_x_3, __anonstruct_ts_1_f0_x_3,
@@ -778,16 +767,16 @@ parameter simulated_cast_to_float_ptr_requires :
 let f_ensures_default =
  fun (d : float_P pointer) (float_P_d_6_alloc_table : float_P alloc_table) (float_P_float_M_d_6 : (float_P, real) memory) ->
   { ((true = true)
-    and (JC_25:
-        ((JC_23: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
-        and (JC_24: ge_int(offset_max(float_P_d_6_alloc_table, d), (2)))))) }
+    and (JC_17:
+        ((JC_15: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
+        and (JC_16: ge_int(offset_max(float_P_d_6_alloc_table, d), (2)))))) }
   (init:
   try
    begin
-     (C_5:
+     (C_4:
      begin
-       (let jessie_2 = (v := (C_4:
-                             ((safe_acc_ float_P_float_M_d_6) (C_3:
+       (let jessie_4 = (v := (C_3:
+                             ((safe_acc_ float_P_float_M_d_6) (C_2:
                                                               ((shift d) (1)))))) in
        void);
       (raise Return)
@@ -797,20 +786,20 @@ let f_ensures_default =
    with
    Return ->
    void end)
-  { (JC_27: eq_real(v, select(float_P_float_M_d_6, shift(d, (1))))) }
+  { (JC_19: eq_real(v, select(float_P_float_M_d_6, shift(d, (1))))) }
 
 let f_safety =
  fun (d : float_P pointer) (float_P_d_6_alloc_table : float_P alloc_table) (float_P_float_M_d_6 : (float_P, real) memory) ->
-  { (JC_25:
-    ((JC_23: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
-    and (JC_24: ge_int(offset_max(float_P_d_6_alloc_table, d), (2))))) }
+  { (JC_17:
+    ((JC_15: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
+    and (JC_16: ge_int(offset_max(float_P_d_6_alloc_table, d), (2))))) }
   (init:
   try
    begin
-     (C_5:
+     (C_4:
      begin
-       (let jessie_1 = (v := (C_4:
-                             (JC_34:
+       (let jessie_2 = (v := (C_3:
+                             (JC_25:
                              ((((offset_acc_ float_P_d_6_alloc_table) float_P_float_M_d_6) d) (1))))) in
        void);
       (raise Return)
@@ -837,36 +826,34 @@ let main_ensures_default =
      (let float_P_tmp_12_alloc_table = (any_alloc_table void) in
      (let x_0 = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
-     (C_11:
+     (C_10:
      begin
-       (let jessie_16 = (x_0 := (C_10:
-                                (JC_50:
+       (let jessie_18 = (x_0 := (C_9:
+                                (JC_38:
                                 (((alloc_struct___anonstruct_ts_1 (1)) __anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_x_0_11_tag_table)))) in
        void);
-      (C_12:
+      (C_13:
       begin
-        (JC_51: (__globinit_whole_program void));
+        (let jessie_24 = (let jessie_20 = (C_11: 9.0) in
+                         (let jessie_23 = !x_0 in
+                         (((safe_upd_ __anonstruct_ts_1_f1_x_0_11) jessie_23) jessie_20))) in
+        void);
        (C_15:
        begin
-         (let jessie_21 = (let jessie_17 = (C_13: 9.0) in
-                          (let jessie_20 = !x_0 in
-                          (((safe_upd_ __anonstruct_ts_1_f1_x_0_11) jessie_20) jessie_17))) in
+         (let jessie_27 = (tmp := (C_14:
+                                  (let jessie_26 = !x_0 in
+                                  (JC_39:
+                                  (((((((simulated_cast_to_float_ptr jessie_26) float_P_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_12))))) in
          void);
-        (C_17:
+        (C_16:
         begin
-          (let jessie_25 = (tmp := (C_16:
-                                   (JC_53:
-                                   (((((((simulated_cast_to_float_ptr !x_0) float_P_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_12)))) in
-          void);
-         (C_18:
+          (let jessie_28 = !tmp in
+          (JC_40:
+          (((f jessie_28) float_P_tmp_12_alloc_table) float_P_float_M_tmp_12)));
+         (C_17:
          begin
-           (JC_54:
-           (((f !tmp) float_P_tmp_12_alloc_table) float_P_float_M_tmp_12));
-          (C_19:
-          begin
-            ((safe_free_parameter __anonstruct_ts_1_x_0_11_alloc_table) !x_0);
-           (raise Return)
-          end)
+           ((safe_free_parameter __anonstruct_ts_1_x_0_11_alloc_table) !x_0);
+          (raise Return)
          end)
         end)
        end)
@@ -877,11 +864,11 @@ let main_ensures_default =
    with
    Return ->
    void end)
-  { (JC_39: eq_real(v, 9.0)) }
+  { (JC_30: eq_real(v, 9.0)) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_38: true) }
+  { (JC_29: true) }
   (init:
   try
    begin
@@ -894,42 +881,40 @@ let main_safety =
      (let float_P_tmp_12_alloc_table = (any_alloc_table void) in
      (let x_0 = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
-     (C_11:
+     (C_10:
      begin
-       (let jessie_4 = (x_0 := (let jessie_3 = (C_10:
-                                               (JC_43:
+       (let jessie_6 = (x_0 := (let jessie_5 = (C_9:
+                                               (JC_34:
                                                (((alloc_struct___anonstruct_ts_1_requires (1)) __anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_x_0_11_tag_table))) in
-                               (JC_44:
+                               (JC_35:
                                (assert
                                { ge_int(offset_max(__anonstruct_ts_1_x_0_11_alloc_table,
-                                        jessie_3),
+                                        jessie_5),
                                  (0)) };
-                               jessie_3)))) in
+                               jessie_5)))) in
        void);
-      (C_12:
+      (C_13:
       begin
-        (JC_45: (__globinit_whole_program_requires void));
+        (let jessie_12 = (let jessie_8 = (C_11: 9.0) in
+                         (let jessie_11 = !x_0 in
+                         (((safe_upd_ __anonstruct_ts_1_f1_x_0_11) jessie_11) jessie_8))) in
+        void);
        (C_15:
        begin
-         (let jessie_9 = (let jessie_5 = (C_13: 9.0) in
-                         (let jessie_8 = !x_0 in
-                         (((safe_upd_ __anonstruct_ts_1_f1_x_0_11) jessie_8) jessie_5))) in
+         (let jessie_15 = (tmp := (C_14:
+                                  (let jessie_14 = !x_0 in
+                                  (JC_36:
+                                  (((((((simulated_cast_to_float_ptr_requires jessie_14) float_P_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_12))))) in
          void);
-        (C_17:
+        (C_16:
         begin
-          (let jessie_13 = (tmp := (C_16:
-                                   (JC_47:
-                                   (((((((simulated_cast_to_float_ptr_requires !x_0) float_P_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_12)))) in
-          void);
-         (C_18:
+          (let jessie_16 = !tmp in
+          (JC_37:
+          (((f_requires jessie_16) float_P_tmp_12_alloc_table) float_P_float_M_tmp_12)));
+         (C_17:
          begin
-           (JC_48:
-           (((f_requires !tmp) float_P_tmp_12_alloc_table) float_P_float_M_tmp_12));
-          (C_19:
-          begin
-            ((free_parameter __anonstruct_ts_1_x_0_11_alloc_table) !x_0);
-           (raise Return)
-          end)
+           ((free_parameter __anonstruct_ts_1_x_0_11_alloc_table) !x_0);
+          (raise Return)
          end)
         end)
        end)

@@ -1597,21 +1597,21 @@ let strcmp_ensures_default =
      (let tmp_0 = ref (any_pointer void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_38 = begin
+      (let jessie_43 = begin
                          try
-                          (let jessie_34 = begin
+                          (let jessie_38 = begin
                                              (loop_2:
                                              while true do
-                                             { invariant (JC_20: true)  }
+                                             { invariant (JC_18: true)  }
                                               begin
                                                 [ { } unit { true } ];
                                                try
-                                                (let jessie_33 = begin
-                                                                   (let jessie_25 = 
+                                                (let jessie_37 = begin
+                                                                   (let jessie_28 = 
                                                                    (C_1:
                                                                    begin
                                                                      
-                                                                    (let jessie_23 = 
+                                                                    (let jessie_26 = 
                                                                     (tmp_0 := !mutable_s2_0) in
                                                                     void);
                                                                     (C_3:
@@ -1635,15 +1635,15 @@ let strcmp_ensures_default =
                                                                     ((((safe_acc_bytes_ bitvector_s2_21) !tmp_0) (0)) (1)))))
                                                                   then void
                                                                   else
-                                                                   (let jessie_26 = 
+                                                                   (let jessie_29 = 
                                                                    (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                    void));
-                                                                  (let jessie_30 = 
+                                                                  (let jessie_33 = 
                                                                   (C_6:
                                                                   begin
-                                                                    (let jessie_28 = 
+                                                                    (let jessie_31 = 
                                                                     (tmp := !mutable_s1_0) in
                                                                     void);
                                                                    (C_8:
@@ -1663,11 +1663,11 @@ let strcmp_ensures_default =
                                                                     (integer_of_bitvector 
                                                                     ((((safe_acc_bytes_ bitvector_s1_20) !tmp) (0)) (1))))) (0))
                                                                   then
-                                                                   (let jessie_32 = 
+                                                                   (let jessie_36 = 
                                                                    (C_9:
                                                                    begin
                                                                      
-                                                                    (let jessie_31 = 
+                                                                    (let jessie_35 = 
                                                                     (__retres := (0)) in
                                                                     void);
                                                                     (raise
@@ -1696,13 +1696,13 @@ let strcmp_ensures_default =
                           (while_0_break: void) end;
                         (C_12:
                         begin
-                          (let jessie_36 = (mutable_s2_0 := (C_11:
+                          (let jessie_40 = (mutable_s2_0 := (C_11:
                                                             ((shift !mutable_s2_0) 
                                                              (neg_int (1))))) in
                           void);
                          (C_18:
                          begin
-                           (let jessie_37 = (__retres := (C_17:
+                           (let jessie_42 = (__retres := (C_17:
                                                          ((sub_int (C_16:
                                                                    (integer_of_bitvector 
                                                                     ((((safe_acc_bytes_ bitvector_s1_20) 
@@ -1742,9 +1742,9 @@ let strcmp_safety =
      (let tmp_0 = ref (any_pointer void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_21 = begin
+      (let jessie_23 = begin
                          try
-                          (let jessie_17 = begin
+                          (let jessie_18 = begin
                                              (loop_1:
                                              while true do
                                              { invariant (JC_10: true)
@@ -1752,7 +1752,7 @@ let strcmp_safety =
                                               begin
                                                 [ { } unit { true } ];
                                                try
-                                                (let jessie_16 = begin
+                                                (let jessie_17 = begin
                                                                    (let jessie_8 = 
                                                                    (C_1:
                                                                    begin
@@ -1812,11 +1812,11 @@ let strcmp_safety =
                                                                     (JC_14:
                                                                     (((((acc_bytes_ bitvector_s1_20_alloc_table) bitvector_s1_20) !tmp) (0)) (1)))))) (0))
                                                                   then
-                                                                   (let jessie_15 = 
+                                                                   (let jessie_16 = 
                                                                    (C_9:
                                                                    begin
                                                                      
-                                                                    (let jessie_14 = 
+                                                                    (let jessie_15 = 
                                                                     (__retres := (0)) in
                                                                     void);
                                                                     (raise
@@ -1845,22 +1845,22 @@ let strcmp_safety =
                           (while_0_break: void) end;
                         (C_12:
                         begin
-                          (let jessie_19 = (mutable_s2_0 := (C_11:
+                          (let jessie_20 = (mutable_s2_0 := (C_11:
                                                             ((shift !mutable_s2_0) 
                                                              (neg_int (1))))) in
                           void);
                          (C_18:
                          begin
-                           (let jessie_20 = (__retres := (C_17:
+                           (let jessie_22 = (__retres := (C_17:
                                                          ((sub_int (C_16:
                                                                    (integer_of_bitvector 
-                                                                    (JC_17:
+                                                                    (JC_15:
                                                                     (((((acc_bytes_ bitvector_s1_20_alloc_table) bitvector_s1_20) 
                                                                     (C_15:
                                                                     !mutable_s1_0)) (0)) (1)))))) 
                                                           (C_14:
                                                           (integer_of_bitvector 
-                                                           (JC_18:
+                                                           (JC_16:
                                                            (((((acc_bytes_ bitvector_s2_21_alloc_table) bitvector_s2_21) 
                                                               (C_13:
                                                               !mutable_s2_0)) (0)) (1)))))))) in

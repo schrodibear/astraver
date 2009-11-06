@@ -811,102 +811,102 @@ let f_ensures_default =
      (let __retres = ref (any_int32 void) in
      (C_2:
      begin
-       (let jessie_52 = (x := (C_1:
-                              (JC_25:
+       (let jessie_61 = (x := (C_1:
+                              (JC_23:
                               ((((((alloc_struct_S (1)) A_x_4_alloc_table) S_x_4_alloc_table) S_x_4_tag_table) !S_a_x_4) !S_c_x_4)))) in
        void);
-      (let jessie_89 = (C_7:
-                       begin
-                         (let jessie_57 = (let jessie_53 = (C_4:
-                                                           ((safe_acc_ A_v_v_x_2) 
-                                                            (C_3:
-                                                            ((safe_acc_ S_a_v_x_2) v_x)))) in
-                                          (let jessie_56 = (C_5:
-                                                           ((safe_acc_ !S_a_x_4) !x)) in
-                                          (((safe_upd_ A_v_x_4) jessie_56) jessie_53))) in
-                         void);
-                        (C_10:
+      (let jessie_103 = (C_7:
                         begin
-                          (let jessie_63 = (let jessie_59 = (C_8:
-                                                            ((safe_acc_ S_b_v_x_2) v_x)) in
-                                           (let jessie_62 = !x in
-                                           (((safe_upd_ S_b_x_4) jessie_62) jessie_59))) in
+                          (let jessie_67 = (let jessie_63 = (C_4:
+                                                            ((safe_acc_ A_v_v_x_2) 
+                                                             (C_3:
+                                                             ((safe_acc_ S_a_v_x_2) v_x)))) in
+                                           (let jessie_66 = (C_5:
+                                                            ((safe_acc_ !S_a_x_4) !x)) in
+                                           (((safe_upd_ A_v_x_4) jessie_66) jessie_63))) in
                           void);
-                         (C_15:
+                         (C_10:
                          begin
-                           (let jessie_68 = (let jessie_64 = (C_12:
-                                                             ((safe_acc_ A_v_v_x_2) 
-                                                              ((shift 
-                                                                (C_11:
-                                                                ((safe_acc_ S_c_v_x_2) v_x))) (0)))) in
-                                            (let jessie_67 = ((shift 
-                                                               (C_13:
-                                                               ((safe_acc_ !S_c_x_4) !x))) (0)) in
-                                            (((safe_upd_ A_v_x_4) jessie_67) jessie_64))) in
+                           (let jessie_73 = (let jessie_69 = (C_8:
+                                                             ((safe_acc_ S_b_v_x_2) v_x)) in
+                                            (let jessie_72 = !x in
+                                            (((safe_upd_ S_b_x_4) jessie_72) jessie_69))) in
                            void);
-                          (C_20:
+                          (C_15:
                           begin
-                            (let jessie_73 = (let jessie_69 = (C_17:
+                            (let jessie_79 = (let jessie_75 = (C_12:
                                                               ((safe_acc_ A_v_v_x_2) 
                                                                ((shift 
-                                                                 (C_16:
-                                                                 ((safe_acc_ S_c_v_x_2) v_x))) (1)))) in
-                                             (let jessie_72 = ((shift 
-                                                                (C_18:
-                                                                ((safe_acc_ !S_c_x_4) !x))) (1)) in
-                                             (((safe_upd_ A_v_x_4) jessie_72) jessie_69))) in
+                                                                 (C_11:
+                                                                 ((safe_acc_ S_c_v_x_2) v_x))) (0)))) in
+                                             (let jessie_78 = ((shift 
+                                                                (C_13:
+                                                                ((safe_acc_ !S_c_x_4) !x))) (0)) in
+                                             (((safe_upd_ A_v_x_4) jessie_78) jessie_75))) in
                             void);
-                           (C_25:
+                           (C_20:
                            begin
-                             (let jessie_78 = (let jessie_74 = (C_22:
+                             (let jessie_85 = (let jessie_81 = (C_17:
                                                                ((safe_acc_ A_v_v_x_2) 
                                                                 ((shift 
-                                                                  (C_21:
-                                                                  ((safe_acc_ S_c_v_x_2) v_x))) (2)))) in
-                                              (let jessie_77 = ((shift 
-                                                                 (C_23:
-                                                                 ((safe_acc_ !S_c_x_4) !x))) (2)) in
-                                              (((safe_upd_ A_v_x_4) jessie_77) jessie_74))) in
+                                                                  (C_16:
+                                                                  ((safe_acc_ S_c_v_x_2) v_x))) (1)))) in
+                                              (let jessie_84 = ((shift 
+                                                                 (C_18:
+                                                                 ((safe_acc_ !S_c_x_4) !x))) (1)) in
+                                              (((safe_upd_ A_v_x_4) jessie_84) jessie_81))) in
                              void);
-                            (C_28:
+                            (C_25:
                             begin
-                              (let jessie_84 = (let jessie_80 = (C_26:
-                                                                ((safe_acc_ S_s_v_x_2) v_x)) in
-                                               (let jessie_83 = !x in
-                                               (((safe_upd_ S_s_x_4) jessie_83) jessie_80))) in
+                              (let jessie_91 = (let jessie_87 = (C_22:
+                                                                ((safe_acc_ A_v_v_x_2) 
+                                                                 ((shift 
+                                                                   (C_21:
+                                                                   ((safe_acc_ S_c_v_x_2) v_x))) (2)))) in
+                                               (let jessie_90 = ((shift 
+                                                                  (C_23:
+                                                                  ((safe_acc_ !S_c_x_4) !x))) (2)) in
+                                               (((safe_upd_ A_v_x_4) jessie_90) jessie_87))) in
                               void);
-                             (C_31:
-                             (let jessie_85 = (C_29:
-                                              ((safe_acc_ S_i_v_x_2) v_x)) in
-                             (let jessie_88 = !x in
+                             (C_28:
                              begin
-                               (((safe_upd_ S_i_x_4) jessie_88) jessie_85);
-                              jessie_85
-                             end)))
+                               (let jessie_97 = (let jessie_93 = (C_26:
+                                                                 ((safe_acc_ S_s_v_x_2) v_x)) in
+                                                (let jessie_96 = !x in
+                                                (((safe_upd_ S_s_x_4) jessie_96) jessie_93))) in
+                               void);
+                              (C_31:
+                              (let jessie_99 = (C_29:
+                                               ((safe_acc_ S_i_v_x_2) v_x)) in
+                              (let jessie_102 = !x in
+                              begin
+                                (((safe_upd_ S_i_x_4) jessie_102) jessie_99);
+                               jessie_99
+                              end)))
+                             end)
                             end)
                            end)
                           end)
                          end)
-                        end)
-                       end) in
+                        end) in
       void);
       (C_35:
       begin
-        (let jessie_94 = (let jessie_90 = (safe_uint8_of_integer_ (0)) in
-                         (let jessie_93 = (C_33:
-                                          ((safe_acc_ S_a_s_3) (C_32:
-                                                               ((safe_acc_ !S_s_x_4) !x)))) in
-                         (((safe_upd_ A_v_s_3) jessie_93) jessie_90))) in
+        (let jessie_109 = (let jessie_105 = (safe_uint8_of_integer_ (0)) in
+                          (let jessie_108 = (C_33:
+                                            ((safe_acc_ S_a_s_3) (C_32:
+                                                                 ((safe_acc_ !S_s_x_4) !x)))) in
+                          (((safe_upd_ A_v_s_3) jessie_108) jessie_105))) in
         void);
        (C_37:
        begin
-         (let jessie_99 = (let jessie_95 = (safe_uint8_of_integer_ (97)) in
-                          (let jessie_98 = aaa in
-                          (((safe_upd_ S_i_aaa_1) jessie_98) jessie_95))) in
+         (let jessie_115 = (let jessie_111 = (safe_uint8_of_integer_ (97)) in
+                           (let jessie_114 = aaa in
+                           (((safe_upd_ S_i_aaa_1) jessie_114) jessie_111))) in
          void);
         (C_41:
         begin
-          (let jessie_100 = (__retres := (C_40:
+          (let jessie_117 = (__retres := (C_40:
                                          (safe_int32_of_integer_ (integer_of_uint8 
                                                                   (C_39:
                                                                   ((safe_acc_ !A_v_x_4) 
@@ -970,73 +970,73 @@ let f_safety =
                                (0)) };
                              jessie_1)))) in
        void);
-      (let jessie_39 = (C_7:
+      (let jessie_44 = (C_7:
                        begin
-                         (let jessie_7 = (let jessie_3 = (C_4:
+                         (let jessie_8 = (let jessie_4 = (C_4:
                                                          ((safe_acc_ A_v_v_x_2) 
                                                           (C_3:
                                                           ((safe_acc_ S_a_v_x_2) v_x)))) in
-                                         (let jessie_6 = (C_5:
+                                         (let jessie_7 = (C_5:
                                                          ((safe_acc_ !S_a_x_4) !x)) in
-                                         (((safe_upd_ A_v_x_4) jessie_6) jessie_3))) in
+                                         (((safe_upd_ A_v_x_4) jessie_7) jessie_4))) in
                          void);
                         (C_10:
                         begin
-                          (let jessie_13 = (let jessie_9 = (C_8:
-                                                           ((safe_acc_ S_b_v_x_2) v_x)) in
-                                           (let jessie_12 = !x in
-                                           (((safe_upd_ S_b_x_4) jessie_12) jessie_9))) in
+                          (let jessie_14 = (let jessie_10 = (C_8:
+                                                            ((safe_acc_ S_b_v_x_2) v_x)) in
+                                           (let jessie_13 = !x in
+                                           (((safe_upd_ S_b_x_4) jessie_13) jessie_10))) in
                           void);
                          (C_15:
                          begin
-                           (let jessie_18 = (let jessie_14 = (C_12:
+                           (let jessie_20 = (let jessie_16 = (C_12:
                                                              ((safe_acc_ A_v_v_x_2) 
                                                               ((shift 
                                                                 (C_11:
                                                                 ((safe_acc_ S_c_v_x_2) v_x))) (0)))) in
-                                            (let jessie_17 = ((shift 
+                                            (let jessie_19 = ((shift 
                                                                (C_13:
                                                                ((safe_acc_ !S_c_x_4) !x))) (0)) in
-                                            (((safe_upd_ A_v_x_4) jessie_17) jessie_14))) in
+                                            (((safe_upd_ A_v_x_4) jessie_19) jessie_16))) in
                            void);
                           (C_20:
                           begin
-                            (let jessie_23 = (let jessie_19 = (C_17:
+                            (let jessie_26 = (let jessie_22 = (C_17:
                                                               ((safe_acc_ A_v_v_x_2) 
                                                                ((shift 
                                                                  (C_16:
                                                                  ((safe_acc_ S_c_v_x_2) v_x))) (1)))) in
-                                             (let jessie_22 = ((shift 
+                                             (let jessie_25 = ((shift 
                                                                 (C_18:
                                                                 ((safe_acc_ !S_c_x_4) !x))) (1)) in
-                                             (((safe_upd_ A_v_x_4) jessie_22) jessie_19))) in
+                                             (((safe_upd_ A_v_x_4) jessie_25) jessie_22))) in
                             void);
                            (C_25:
                            begin
-                             (let jessie_28 = (let jessie_24 = (C_22:
+                             (let jessie_32 = (let jessie_28 = (C_22:
                                                                ((safe_acc_ A_v_v_x_2) 
                                                                 ((shift 
                                                                   (C_21:
                                                                   ((safe_acc_ S_c_v_x_2) v_x))) (2)))) in
-                                              (let jessie_27 = ((shift 
+                                              (let jessie_31 = ((shift 
                                                                  (C_23:
                                                                  ((safe_acc_ !S_c_x_4) !x))) (2)) in
-                                              (((safe_upd_ A_v_x_4) jessie_27) jessie_24))) in
+                                              (((safe_upd_ A_v_x_4) jessie_31) jessie_28))) in
                              void);
                             (C_28:
                             begin
-                              (let jessie_34 = (let jessie_30 = (C_26:
+                              (let jessie_38 = (let jessie_34 = (C_26:
                                                                 ((safe_acc_ S_s_v_x_2) v_x)) in
-                                               (let jessie_33 = !x in
-                                               (((safe_upd_ S_s_x_4) jessie_33) jessie_30))) in
+                                               (let jessie_37 = !x in
+                                               (((safe_upd_ S_s_x_4) jessie_37) jessie_34))) in
                               void);
                              (C_31:
-                             (let jessie_35 = (C_29:
+                             (let jessie_40 = (C_29:
                                               ((safe_acc_ S_i_v_x_2) v_x)) in
-                             (let jessie_38 = !x in
+                             (let jessie_43 = !x in
                              begin
-                               (((safe_upd_ S_i_x_4) jessie_38) jessie_35);
-                              jessie_35
+                               (((safe_upd_ S_i_x_4) jessie_43) jessie_40);
+                              jessie_40
                              end)))
                             end)
                            end)
@@ -1047,24 +1047,24 @@ let f_safety =
       void);
       (C_35:
       begin
-        (let jessie_44 = (let jessie_40 = (safe_uint8_of_integer_ (0)) in
-                         (let jessie_43 = (C_33:
+        (let jessie_50 = (let jessie_46 = (safe_uint8_of_integer_ (0)) in
+                         (let jessie_49 = (C_33:
                                           (JC_21:
                                           (((acc_ S_s_3_alloc_table) S_a_s_3) 
                                            (C_32:
                                            ((safe_acc_ !S_s_x_4) !x))))) in
-                         (((safe_upd_ A_v_s_3) jessie_43) jessie_40))) in
+                         (((safe_upd_ A_v_s_3) jessie_49) jessie_46))) in
         void);
        (C_37:
        begin
-         (let jessie_49 = (let jessie_45 = (safe_uint8_of_integer_ (97)) in
-                          (let jessie_48 = aaa in
-                          (((safe_upd_ S_i_aaa_1) jessie_48) jessie_45))) in
+         (let jessie_56 = (let jessie_52 = (safe_uint8_of_integer_ (97)) in
+                          (let jessie_55 = aaa in
+                          (((safe_upd_ S_i_aaa_1) jessie_55) jessie_52))) in
          void);
         (C_41:
         begin
-          (let jessie_50 = (__retres := (C_40:
-                                        (JC_23:
+          (let jessie_58 = (__retres := (C_40:
+                                        (JC_22:
                                         (int32_of_integer_ (integer_of_uint8 
                                                             (C_39:
                                                             ((safe_acc_ !A_v_x_4) 

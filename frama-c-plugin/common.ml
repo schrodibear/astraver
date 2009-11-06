@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: common.ml,v 1.2 2009-10-16 09:48:22 virgile Exp $ *)
+(* $Id: common.ml,v 1.3 2009-11-06 13:48:28 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -491,9 +491,11 @@ let globinits : stmt list ref = ref []
 let globals : global list ref = ref []
 let globactions : (unit -> unit) list ref = ref []
 
+(*
 let attach_globinit init =
   assert (!attach_detach_mode);
   globinits := init :: !globinits
+*)
 
 let attach_global g =
   assert (!attach_detach_mode);
@@ -503,12 +505,16 @@ let attach_globaction action =
   assert (!attach_detach_mode);
   globactions := action :: !globactions
 
+(*
 let detach_globinits file =
   let gif =
     Kernel_function.get_definition (Globals.Functions.get_glob_init file)
   in
+  Format.eprintf "Common.detach_globinits: len(globinits) = %d@." 
+    (List.length !globinits);
   gif.sbody.bstmts <- List.rev_append !globinits gif.sbody.bstmts;
   globinits := []
+*)
 
 let detach_globals file =
   file.globals <- !globals @ file.globals;
@@ -524,7 +530,9 @@ let do_and_update_globals action file =
   attach_detach_mode := true;
   assert (!globinits = [] && !globals = [] && !globactions = []);
   action file;
-  detach_globinits file;
+ (*
+ detach_globinits file;
+ *)
   detach_globals file;
   detach_globactions ();
   attach_detach_mode := false
@@ -1122,6 +1130,6 @@ let mkfree_statement v loc = mkStmt (Instr(mkfree v loc))
 
 (*
 Local Variables:
-compile-command: "LC_ALL=C make -C ../.. -j bin/toplevel.byte"
+compile-command: "LC_ALL=C make -C .. -j byte"
 End:
 *)

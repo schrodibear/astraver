@@ -688,17 +688,16 @@ let g_ensures_default =
      (C_6:
      begin
        (let jessie_13 = (i := (C_5:
-                              (JC_28:
+                              (JC_26:
                               ((alloc_bitvector_struct_int_P (1)) bitvector_i_4_alloc_table)))) in
        void);
       (C_9:
       begin
-        (let jessie_17 = (c_0 := (C_8:
+        (let jessie_16 = (c_0 := (C_8:
                                  (let char_P_i_4_alloc_table = ref (any_alloc_table void) in
-                                 (pointer_address (JC_30:
-                                                  ((f (char_P_of_pointer_address 
-                                                       (C_7:
-                                                       !i))) !char_P_i_4_alloc_table)))))) in
+                                 (let jessie_15 = (C_7: !i) in
+                                 (pointer_address (JC_27:
+                                                  ((f (char_P_of_pointer_address jessie_15)) !char_P_i_4_alloc_table))))))) in
         void);
        (C_11:
        begin
@@ -708,7 +707,7 @@ let g_ensures_default =
                           (((((safe_upd_bytes_ bitvector_i_4) jessie_19) (0)) (1)) jessie_18)))) in
          void);
         (assert
-        { (JC_31:
+        { (JC_28:
           eq_int(integer_of_int32(int32_of_bitvector(select_bytes(bitvector_i_4,
                                                      i, (0), (4)))),
           (0))) };
@@ -754,23 +753,22 @@ let g_safety =
        void);
       (C_9:
       begin
-        (let jessie_8 = (c_0 := (C_8:
+        (let jessie_7 = (c_0 := (C_8:
                                 (let char_P_i_4_alloc_table = ref (any_alloc_table void) in
-                                (pointer_address (JC_24:
-                                                 ((f_requires (char_P_of_pointer_address 
-                                                               (C_7:
-                                                               !i))) !char_P_i_4_alloc_table)))))) in
+                                (let jessie_6 = (C_7: !i) in
+                                (pointer_address (JC_23:
+                                                 ((f_requires (char_P_of_pointer_address jessie_6)) !char_P_i_4_alloc_table))))))) in
         void);
        (C_11:
        begin
          (let jessie_11 = (let jessie_9 = (safe_int8_of_integer_ (0)) in
                           (let jessie_10 = !c_0 in
                           (let jessie_9 = (bitvector_of_int8 jessie_9) in
-                          (JC_25:
+                          (JC_24:
                           ((((((upd_bytes_ !bitvector_i_4_alloc_table) bitvector_i_4) jessie_10) (0)) (1)) jessie_9))))) in
          void);
         [ { } unit reads bitvector_i_4,i
-          { (JC_26:
+          { (JC_25:
             eq_int(integer_of_int32(int32_of_bitvector(select_bytes(bitvector_i_4,
                                                        i, (0), (4)))),
             (0))) } ];

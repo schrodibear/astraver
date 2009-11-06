@@ -568,33 +568,33 @@ let f_ensures_default =
      (let i = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_11 = (i := (C_2:
+       (let jessie_14 = (i := (C_2:
                               (safe_int32_of_integer_ (C_1:
-                                                      (JC_32:
+                                                      (JC_28:
                                                       ((div_int (integer_of_int32 len)) (8))))))) in
        void);
       (if ((gt_int_ (integer_of_int32 !i)) (0))
       then
        try
-        (let jessie_17 = begin
+        (let jessie_21 = begin
                            (loop_2:
                            while true do
                            { invariant
-                               (JC_33: ge_int(integer_of_int32(i), (1)))
+                               (JC_29: ge_int(integer_of_int32(i), (1)))
                               }
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_16 = begin
+                              (let jessie_20 = begin
                                                  (C_6:
                                                  begin
-                                                   (let jessie_13 = (mutable_a := 
+                                                   (let jessie_16 = (mutable_a := 
                                                                     (C_5:
                                                                     ((shift !mutable_a) (8)))) in
                                                    void);
                                                   (C_9:
                                                   begin
-                                                    (let jessie_14 = 
+                                                    (let jessie_18 = 
                                                     (i := (C_8:
                                                           (safe_int32_of_integer_ 
                                                            (C_7:
@@ -603,7 +603,7 @@ let f_ensures_default =
                                                     void);
                                                    (if ((eq_int_ (integer_of_int32 !i)) (0))
                                                    then
-                                                    (let jessie_15 = 
+                                                    (let jessie_19 = 
                                                     (raise
                                                      (Goto_while_0_break_exc
                                                      void)) in
@@ -658,53 +658,54 @@ let f_safety =
      (let i = ref (any_int32 void) in
      (C_3:
      begin
-       (let jessie_4 = (i := (C_2:
-                             (JC_24:
+       (let jessie_5 = (i := (C_2:
+                             (JC_22:
                              (int32_of_integer_ (C_1:
-                                                (JC_23:
+                                                (JC_21:
                                                 ((div_int_ (integer_of_int32 len)) (8)))))))) in
        void);
       (if ((gt_int_ (integer_of_int32 !i)) (0))
       then
        try
-        (let jessie_10 = begin
+        (let jessie_12 = begin
                            (loop_1:
                            while true do
-                           { invariant (JC_27: true) variant (0) }
+                           { invariant (JC_25: true) variant (0) }
                             begin
                               [ { } unit reads i
-                                { (JC_25: ge_int(integer_of_int32(i), (1))) } ];
+                                { (JC_23: ge_int(integer_of_int32(i), (1))) } ];
                              try
-                              (let jessie_9 = begin
-                                                (C_6:
-                                                begin
-                                                  (let jessie_6 = (mutable_a := 
-                                                                   (C_5:
-                                                                   ((shift !mutable_a) (8)))) in
-                                                  void);
-                                                 (C_9:
+                              (let jessie_11 = begin
+                                                 (C_6:
                                                  begin
-                                                   (let jessie_7 = (i := 
+                                                   (let jessie_7 = (mutable_a := 
+                                                                    (C_5:
+                                                                    ((shift !mutable_a) (8)))) in
+                                                   void);
+                                                  (C_9:
+                                                  begin
+                                                    (let jessie_9 = (i := 
                                                                     (C_8:
-                                                                    (JC_30:
+                                                                    (JC_27:
                                                                     (int32_of_integer_ 
                                                                     (C_7:
                                                                     ((sub_int 
                                                                     (integer_of_int32 !i)) (1))))))) in
-                                                   void);
-                                                  (if ((eq_int_ (integer_of_int32 !i)) (0))
-                                                  then
-                                                   (let jessie_8 = (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                   void)
-                                                  else void)
-                                                 end)
-                                                end);
-                                               (raise
-                                                (Loop_continue_exc
-                                                void))
-                                              end in
+                                                    void);
+                                                   (if ((eq_int_ (integer_of_int32 !i)) (0))
+                                                   then
+                                                    (let jessie_10 = 
+                                                    (raise
+                                                     (Goto_while_0_break_exc
+                                                     void)) in
+                                                    void)
+                                                   else void)
+                                                  end)
+                                                 end);
+                                                (raise
+                                                 (Loop_continue_exc
+                                                 void))
+                                               end in
                               void)
                               with
                               Loop_continue_exc jessie_3 ->

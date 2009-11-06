@@ -633,9 +633,9 @@ parameter initp :
  tt:unit ->
   { } unit reads int_P_ga_1_alloc_table,int_P_int_M_ga_1
   writes int_P_int_M_ga_1
-  { ((JC_34: valid_ga(int_P_ga_1_alloc_table))
+  { ((JC_33: valid_ga(int_P_ga_1_alloc_table))
     and ((true = true) ->
-         (JC_32:
+         (JC_31:
          (forall i_0_0:int32.
           ((le_int((0), integer_of_int32(i_0_0))
            and lt_int(integer_of_int32(i_0_0), (10))) ->
@@ -645,11 +645,11 @@ parameter initp :
 
 parameter initp_requires :
  tt:unit ->
-  { (JC_27: valid_ga(int_P_ga_1_alloc_table))} unit
+  { (JC_26: valid_ga(int_P_ga_1_alloc_table))} unit
   reads int_P_ga_1_alloc_table,int_P_int_M_ga_1 writes int_P_int_M_ga_1
-  { ((JC_34: valid_ga(int_P_ga_1_alloc_table))
+  { ((JC_33: valid_ga(int_P_ga_1_alloc_table))
     and ((true = true) ->
-         (JC_32:
+         (JC_31:
          (forall i_0_0:int32.
           ((le_int((0), integer_of_int32(i_0_0))
            and lt_int(integer_of_int32(i_0_0), (10))) ->
@@ -661,9 +661,9 @@ parameter initparith :
  tt:unit ->
   { } unit reads int_P_ga_1_alloc_table,int_P_int_M_ga_1
   writes int_P_int_M_ga_1
-  { ((JC_57: valid_ga(int_P_ga_1_alloc_table))
+  { ((JC_55: valid_ga(int_P_ga_1_alloc_table))
     and ((true = true) ->
-         (JC_55:
+         (JC_53:
          (forall i_1:int32.
           ((le_int((0), integer_of_int32(i_1))
            and lt_int(integer_of_int32(i_1), (10))) ->
@@ -673,11 +673,11 @@ parameter initparith :
 
 parameter initparith_requires :
  tt:unit ->
-  { (JC_50: valid_ga(int_P_ga_1_alloc_table))} unit
+  { (JC_48: valid_ga(int_P_ga_1_alloc_table))} unit
   reads int_P_ga_1_alloc_table,int_P_int_M_ga_1 writes int_P_int_M_ga_1
-  { ((JC_57: valid_ga(int_P_ga_1_alloc_table))
+  { ((JC_55: valid_ga(int_P_ga_1_alloc_table))
     and ((true = true) ->
-         (JC_55:
+         (JC_53:
          (forall i_1:int32.
           ((le_int((0), integer_of_int32(i_1))
            and lt_int(integer_of_int32(i_1), (10))) ->
@@ -710,15 +710,15 @@ let init_ensures_default =
      (let i_0 = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_20 = (i_0 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_24 = (i_0 := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_29 = begin
+       (let jessie_35 = begin
                           (loop_2:
                           while true do
                           { invariant
-                              (JC_23:
-                              ((JC_21: ge_int(integer_of_int32(i_0), (0)))
-                              and (JC_22:
+                              (JC_22:
+                              ((JC_20: ge_int(integer_of_int32(i_0), (0)))
+                              and (JC_21:
                                   (forall k:int32.
                                    ((le_int((0), integer_of_int32(k))
                                     and lt_int(integer_of_int32(k),
@@ -731,26 +731,26 @@ let init_ensures_default =
                            begin
                              [ { } unit { true } ];
                             try
-                             (let jessie_28 = begin
-                                                (let jessie_27 = begin
+                             (let jessie_34 = begin
+                                                (let jessie_33 = begin
                                                                    (if 
                                                                    ((lt_int_ 
                                                                     (integer_of_int32 !i_0)) (10))
                                                                    then void
                                                                    else
-                                                                    (let jessie_21 = 
+                                                                    (let jessie_25 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
                                                                   (C_6:
                                                                   begin
-                                                                    (let jessie_26 = 
-                                                                    (let jessie_22 = !i_0 in
-                                                                    (let jessie_25 = 
+                                                                    (let jessie_31 = 
+                                                                    (let jessie_27 = !i_0 in
+                                                                    (let jessie_30 = 
                                                                     ((shift ga) 
                                                                     (integer_of_int32 !i_0)) in
-                                                                    (((safe_upd_ int_P_int_M_ga_1) jessie_25) jessie_22))) in
+                                                                    (((safe_upd_ int_P_int_M_ga_1) jessie_30) jessie_27))) in
                                                                     void);
                                                                    (C_9:
                                                                    begin
@@ -806,9 +806,9 @@ let init_safety =
      (let i_0 = ref (any_int32 void) in
      (C_1:
      begin
-       (let jessie_10 = (i_0 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_11 = (i_0 := (safe_int32_of_integer_ (0))) in void);
       try
-       (let jessie_19 = begin
+       (let jessie_22 = begin
                           (loop_1:
                           while true do
                           { invariant (JC_16: true) variant (0) }
@@ -826,36 +826,36 @@ let init_safety =
                                                                integer_of_int32(k)))),
                                        integer_of_int32(k))))))) } ];
                             try
-                             (let jessie_18 = begin
-                                                (let jessie_17 = begin
+                             (let jessie_21 = begin
+                                                (let jessie_20 = begin
                                                                    (if 
                                                                    ((lt_int_ 
                                                                     (integer_of_int32 !i_0)) (10))
                                                                    then void
                                                                    else
-                                                                    (let jessie_11 = 
+                                                                    (let jessie_12 = 
                                                                     (raise
                                                                     (Goto_while_0_break_exc
                                                                     void)) in
                                                                     void));
                                                                   (C_6:
                                                                   begin
+                                                                    (let jessie_18 = 
+                                                                    (let jessie_14 = !i_0 in
+                                                                    (let jessie_15 = ga in
                                                                     (let jessie_16 = 
-                                                                    (let jessie_12 = !i_0 in
-                                                                    (let jessie_13 = ga in
-                                                                    (let jessie_14 = 
                                                                     (integer_of_int32 !i_0) in
-                                                                    (let jessie_15 = 
-                                                                    ((shift jessie_13) jessie_14) in
+                                                                    (let jessie_17 = 
+                                                                    ((shift jessie_15) jessie_16) in
                                                                     (JC_18:
-                                                                    (((((offset_upd_ !int_P_ga_1_alloc_table) int_P_int_M_ga_1) jessie_13) jessie_14) jessie_12)))))) in
+                                                                    (((((offset_upd_ !int_P_ga_1_alloc_table) int_P_int_M_ga_1) jessie_15) jessie_16) jessie_14)))))) in
                                                                     void);
                                                                    (C_9:
                                                                    begin
                                                                      
                                                                     (i_0 := 
                                                                     (C_8:
-                                                                    (JC_20:
+                                                                    (JC_19:
                                                                     (int32_of_integer_ 
                                                                     (C_7:
                                                                     ((add_int 
@@ -892,7 +892,7 @@ let init_safety =
 
 let initp_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_29: valid_ga(int_P_ga_1_alloc_table))) }
+  { ((true = true) and (JC_28: valid_ga(int_P_ga_1_alloc_table))) }
   (init:
   try
    begin
@@ -900,18 +900,18 @@ let initp_ensures_default =
      (let p = ref (any_pointer void) in
      (C_11:
      begin
-       (let jessie_43 = (p := ga) in void);
+       (let jessie_52 = (p := ga) in void);
       (C_12:
       begin
-        (let jessie_44 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_54 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
        try
-        (let jessie_53 = begin
+        (let jessie_65 = begin
                            (loop_4:
                            while true do
                            { invariant
-                               (JC_46:
-                               ((JC_44: ge_int(integer_of_int32(i_0_1), (0)))
-                               and (JC_45:
+                               (JC_44:
+                               ((JC_42: ge_int(integer_of_int32(i_0_1), (0)))
+                               and (JC_43:
                                    (forall k_0:int32.
                                     ((le_int((0), integer_of_int32(k_0))
                                      and lt_int(integer_of_int32(k_0),
@@ -924,14 +924,14 @@ let initp_ensures_default =
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_52 = begin
-                                                 (let jessie_51 = begin
+                              (let jessie_64 = begin
+                                                 (let jessie_63 = begin
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !i_0_1)) (10))
                                                                     then void
                                                                     else
-                                                                    (let jessie_45 = 
+                                                                    (let jessie_55 = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -939,13 +939,13 @@ let initp_ensures_default =
                                                                    (C_18:
                                                                    begin
                                                                      
-                                                                    (let jessie_50 = 
-                                                                    (let jessie_46 = !i_0_1 in
-                                                                    (let jessie_49 = 
+                                                                    (let jessie_61 = 
+                                                                    (let jessie_57 = !i_0_1 in
+                                                                    (let jessie_60 = 
                                                                     (C_16:
                                                                     ((shift !p) 
                                                                     (integer_of_int32 !i_0_1))) in
-                                                                    (((safe_upd_ int_P_int_M_ga_1) jessie_49) jessie_46))) in
+                                                                    (((safe_upd_ int_P_int_M_ga_1) jessie_60) jessie_57))) in
                                                                     void);
                                                                     (C_21:
                                                                     begin
@@ -985,7 +985,7 @@ let initp_ensures_default =
    with
    Return ->
    void end)
-  { (JC_31:
+  { (JC_30:
     (forall i_0_0:int32.
      ((le_int((0), integer_of_int32(i_0_0))
       and lt_int(integer_of_int32(i_0_0), (10))) ->
@@ -995,7 +995,7 @@ let initp_ensures_default =
 
 let initp_safety =
  fun (tt : unit) ->
-  { (JC_29: valid_ga(int_P_ga_1_alloc_table)) }
+  { (JC_28: valid_ga(int_P_ga_1_alloc_table)) }
   (init:
   try
    begin
@@ -1003,21 +1003,21 @@ let initp_safety =
      (let p = ref (any_pointer void) in
      (C_11:
      begin
-       (let jessie_31 = (p := ga) in void);
+       (let jessie_37 = (p := ga) in void);
       (C_12:
       begin
-        (let jessie_32 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_39 = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
        try
-        (let jessie_41 = begin
+        (let jessie_50 = begin
                            (loop_3:
                            while true do
-                           { invariant (JC_39: true) variant (0) }
+                           { invariant (JC_38: true) variant (0) }
                             begin
                               [ { } unit reads i_0_1,int_P_int_M_ga_1
-                                { (JC_37:
-                                  ((JC_35:
+                                { (JC_36:
+                                  ((JC_34:
                                    ge_int(integer_of_int32(i_0_1), (0)))
-                                  and (JC_36:
+                                  and (JC_35:
                                       (forall k_0:int32.
                                        ((le_int((0), integer_of_int32(k_0))
                                         and lt_int(integer_of_int32(k_0),
@@ -1027,14 +1027,14 @@ let initp_safety =
                                                                 integer_of_int32(k_0)))),
                                         integer_of_int32(k_0))))))) } ];
                              try
-                              (let jessie_40 = begin
-                                                 (let jessie_39 = begin
+                              (let jessie_49 = begin
+                                                 (let jessie_48 = begin
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !i_0_1)) (10))
                                                                     then void
                                                                     else
-                                                                    (let jessie_33 = 
+                                                                    (let jessie_40 = 
                                                                     (raise
                                                                     (Goto_while_1_break_exc
                                                                     void)) in
@@ -1042,22 +1042,22 @@ let initp_safety =
                                                                    (C_18:
                                                                    begin
                                                                      
-                                                                    (let jessie_38 = 
-                                                                    (let jessie_34 = !i_0_1 in
-                                                                    (let jessie_35 = !p in
-                                                                    (let jessie_36 = 
+                                                                    (let jessie_46 = 
+                                                                    (let jessie_42 = !i_0_1 in
+                                                                    (let jessie_43 = !p in
+                                                                    (let jessie_44 = 
                                                                     (integer_of_int32 !i_0_1) in
-                                                                    (let jessie_37 = 
-                                                                    ((shift jessie_35) jessie_36) in
-                                                                    (JC_41:
-                                                                    (((((offset_upd_ !int_P_ga_1_alloc_table) int_P_int_M_ga_1) jessie_35) jessie_36) jessie_34)))))) in
+                                                                    (let jessie_45 = 
+                                                                    ((shift jessie_43) jessie_44) in
+                                                                    (JC_40:
+                                                                    (((((offset_upd_ !int_P_ga_1_alloc_table) int_P_int_M_ga_1) jessie_43) jessie_44) jessie_42)))))) in
                                                                     void);
                                                                     (C_21:
                                                                     begin
                                                                       
                                                                     (i_0_1 := 
                                                                     (C_20:
-                                                                    (JC_43:
+                                                                    (JC_41:
                                                                     (int32_of_integer_ 
                                                                     (C_19:
                                                                     ((add_int 
@@ -1091,11 +1091,11 @@ let initp_safety =
    with
    Return ->
    void end)
-  { (JC_33: valid_ga(int_P_ga_1_alloc_table)) }
+  { (JC_32: valid_ga(int_P_ga_1_alloc_table)) }
 
 let initparith_ensures_default =
  fun (tt : unit) ->
-  { ((true = true) and (JC_52: valid_ga(int_P_ga_1_alloc_table))) }
+  { ((true = true) and (JC_50: valid_ga(int_P_ga_1_alloc_table))) }
   (init:
   try
    begin
@@ -1103,20 +1103,20 @@ let initparith_ensures_default =
      (let p_0 = ref (any_pointer void) in
      (C_23:
      begin
-       (let jessie_69 = (p_0 := ga) in void);
+       (let jessie_84 = (p_0 := ga) in void);
       (C_24:
       begin
-        (let jessie_70 = (i_1_0 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_86 = (i_1_0 := (safe_int32_of_integer_ (0))) in void);
        try
-        (let jessie_81 = begin
+        (let jessie_99 = begin
                            (loop_6:
                            while true do
                            { invariant
-                               (JC_71:
-                               ((JC_68: ge_int(integer_of_int32(i_1_0), (0)))
-                               and ((JC_69:
+                               (JC_68:
+                               ((JC_65: ge_int(integer_of_int32(i_1_0), (0)))
+                               and ((JC_66:
                                     (p_0 = shift(ga, integer_of_int32(i_1_0))))
-                                   and (JC_70:
+                                   and (JC_67:
                                        (forall k_1:int32.
                                         ((le_int((0), integer_of_int32(k_1))
                                          and lt_int(integer_of_int32(k_1),
@@ -1129,14 +1129,14 @@ let initparith_ensures_default =
                             begin
                               [ { } unit { true } ];
                              try
-                              (let jessie_80 = begin
-                                                 (let jessie_79 = begin
+                              (let jessie_98 = begin
+                                                 (let jessie_97 = begin
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !i_1_0)) (10))
                                                                     then void
                                                                     else
-                                                                    (let jessie_71 = 
+                                                                    (let jessie_87 = 
                                                                     (raise
                                                                     (Goto_while_2_break_exc
                                                                     void)) in
@@ -1144,15 +1144,15 @@ let initparith_ensures_default =
                                                                    (C_31:
                                                                    begin
                                                                      
-                                                                    (let jessie_76 = 
-                                                                    (let jessie_72 = !i_1_0 in
-                                                                    (let jessie_75 = !p_0 in
-                                                                    (((safe_upd_ int_P_int_M_ga_1) jessie_75) jessie_72))) in
+                                                                    (let jessie_93 = 
+                                                                    (let jessie_89 = !i_1_0 in
+                                                                    (let jessie_92 = !p_0 in
+                                                                    (((safe_upd_ int_P_int_M_ga_1) jessie_92) jessie_89))) in
                                                                     void);
                                                                     (C_34:
                                                                     begin
                                                                       
-                                                                    (let jessie_77 = 
+                                                                    (let jessie_95 = 
                                                                     (i_1_0 := 
                                                                     (C_33:
                                                                     (safe_int32_of_integer_ 
@@ -1196,7 +1196,7 @@ let initparith_ensures_default =
    with
    Return ->
    void end)
-  { (JC_54:
+  { (JC_52:
     (forall i_1:int32.
      ((le_int((0), integer_of_int32(i_1))
       and lt_int(integer_of_int32(i_1), (10))) ->
@@ -1206,7 +1206,7 @@ let initparith_ensures_default =
 
 let initparith_safety =
  fun (tt : unit) ->
-  { (JC_52: valid_ga(int_P_ga_1_alloc_table)) }
+  { (JC_50: valid_ga(int_P_ga_1_alloc_table)) }
   (init:
   try
    begin
@@ -1214,24 +1214,24 @@ let initparith_safety =
      (let p_0 = ref (any_pointer void) in
      (C_23:
      begin
-       (let jessie_55 = (p_0 := ga) in void);
+       (let jessie_67 = (p_0 := ga) in void);
       (C_24:
       begin
-        (let jessie_56 = (i_1_0 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_69 = (i_1_0 := (safe_int32_of_integer_ (0))) in void);
        try
-        (let jessie_67 = begin
+        (let jessie_82 = begin
                            (loop_5:
                            while true do
-                           { invariant (JC_63: true) variant (0) }
+                           { invariant (JC_61: true) variant (0) }
                             begin
                               [ { } unit reads i_1_0,int_P_int_M_ga_1,p_0
-                                { (JC_61:
-                                  ((JC_58:
+                                { (JC_59:
+                                  ((JC_56:
                                    ge_int(integer_of_int32(i_1_0), (0)))
-                                  and ((JC_59:
+                                  and ((JC_57:
                                        (p_0 = shift(ga,
                                               integer_of_int32(i_1_0))))
-                                      and (JC_60:
+                                      and (JC_58:
                                           (forall k_1:int32.
                                            ((le_int((0),
                                              integer_of_int32(k_1))
@@ -1242,14 +1242,14 @@ let initparith_safety =
                                                                     integer_of_int32(k_1)))),
                                             integer_of_int32(k_1)))))))) } ];
                              try
-                              (let jessie_66 = begin
-                                                 (let jessie_65 = begin
+                              (let jessie_81 = begin
+                                                 (let jessie_80 = begin
                                                                     (if 
                                                                     ((lt_int_ 
                                                                     (integer_of_int32 !i_1_0)) (10))
                                                                     then void
                                                                     else
-                                                                    (let jessie_57 = 
+                                                                    (let jessie_70 = 
                                                                     (raise
                                                                     (Goto_while_2_break_exc
                                                                     void)) in
@@ -1257,19 +1257,19 @@ let initparith_safety =
                                                                    (C_31:
                                                                    begin
                                                                      
-                                                                    (let jessie_62 = 
-                                                                    (let jessie_58 = !i_1_0 in
-                                                                    (let jessie_61 = !p_0 in
-                                                                    (JC_65:
-                                                                    ((((upd_ !int_P_ga_1_alloc_table) int_P_int_M_ga_1) jessie_61) jessie_58)))) in
+                                                                    (let jessie_76 = 
+                                                                    (let jessie_72 = !i_1_0 in
+                                                                    (let jessie_75 = !p_0 in
+                                                                    (JC_63:
+                                                                    ((((upd_ !int_P_ga_1_alloc_table) int_P_int_M_ga_1) jessie_75) jessie_72)))) in
                                                                     void);
                                                                     (C_34:
                                                                     begin
                                                                       
-                                                                    (let jessie_63 = 
+                                                                    (let jessie_78 = 
                                                                     (i_1_0 := 
                                                                     (C_33:
-                                                                    (JC_67:
+                                                                    (JC_64:
                                                                     (int32_of_integer_ 
                                                                     (C_32:
                                                                     ((add_int 
@@ -1311,7 +1311,7 @@ let initparith_safety =
    with
    Return ->
    void end)
-  { (JC_56: valid_ga(int_P_ga_1_alloc_table)) }
+  { (JC_54: valid_ga(int_P_ga_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C array_ptr.jessie --quiet -f array_ptr.makefile project

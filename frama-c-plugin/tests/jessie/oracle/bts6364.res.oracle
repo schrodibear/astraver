@@ -526,7 +526,7 @@ let f_ensures_default =
       void;
       (C_2:
       begin
-        (let jessie_2 = (__retres := (safe_int8_of_integer_ (0))) in void);
+        (let jessie_5 = (__retres := (safe_int8_of_integer_ (0))) in void);
        (return := !__retres);
        (raise Return)
       end)
@@ -551,7 +551,7 @@ let f_safety =
       void;
       (C_2:
       begin
-        (let jessie_1 = (__retres := (safe_int8_of_integer_ (0))) in void);
+        (let jessie_2 = (__retres := (safe_int8_of_integer_ (0))) in void);
        (return := !__retres);
        (raise Return)
       end)

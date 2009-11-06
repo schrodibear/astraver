@@ -608,9 +608,9 @@ let f_ensures_default =
    begin
      (C_3:
      begin
-       (let jessie_10 = (let jessie_6 = (safe_int32_of_integer_ (0)) in
-                        (let jessie_9 = (C_1: ((shift x_0) (1))) in
-                        (((safe_upd_ int_P_int_M_x_2) jessie_9) jessie_6))) in
+       (let jessie_12 = (let jessie_8 = (safe_int32_of_integer_ (0)) in
+                        (let jessie_11 = (C_1: ((shift x_0) (1))) in
+                        (((safe_upd_ int_P_int_M_x_2) jessie_11) jessie_8))) in
        void);
       (assert { (JC_19: p(x_0, int_P_int_M_x_2)) }; void);
       void;
@@ -636,12 +636,12 @@ let f_safety =
    begin
      (C_3:
      begin
-       (let jessie_5 = (let jessie_1 = (safe_int32_of_integer_ (0)) in
-                       (let jessie_2 = x_0 in
-                       (let jessie_3 = (1) in
-                       (let jessie_4 = ((shift jessie_2) jessie_3) in
+       (let jessie_6 = (let jessie_2 = (safe_int32_of_integer_ (0)) in
+                       (let jessie_3 = x_0 in
+                       (let jessie_4 = (1) in
+                       (let jessie_5 = ((shift jessie_3) jessie_4) in
                        (JC_17:
-                       (((((offset_upd_ int_P_x_2_alloc_table) int_P_int_M_x_2) jessie_2) jessie_3) jessie_1)))))) in
+                       (((((offset_upd_ int_P_x_2_alloc_table) int_P_int_M_x_2) jessie_3) jessie_4) jessie_2)))))) in
        void);
       [ { } unit reads int_P_int_M_x_2 { (JC_18: p(x_0, int_P_int_M_x_2)) } ];
       void;
@@ -666,7 +666,8 @@ let g_ensures_default =
    begin
      (C_11:
      begin
-       (JC_38: (((f x_0_0) int_P_int_M_x_0_3) int_P_x_0_3_alloc_table));
+       (let jessie_14 = x_0_0 in
+       (JC_38: (((f jessie_14) int_P_int_M_x_0_3) int_P_x_0_3_alloc_table)));
       (assert { (JC_39: p(x_0_0, int_P_int_M_x_0_3)) }; void);
       void;
       (raise Return)
@@ -691,8 +692,9 @@ let g_safety =
    begin
      (C_11:
      begin
+       (let jessie_13 = x_0_0 in
        (JC_36:
-       (((f_requires x_0_0) int_P_int_M_x_0_3) int_P_x_0_3_alloc_table));
+       (((f_requires jessie_13) int_P_int_M_x_0_3) int_P_x_0_3_alloc_table)));
       [ { } unit reads int_P_int_M_x_0_3
         { (JC_37: p(x_0_0, int_P_int_M_x_0_3)) } ];
       void;
@@ -718,6 +720,11 @@ why --project [...] why/footprint.why
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/footprint_po8.why">
+      <location file = "PPCHOME/tests/jessie/footprint.c" line = "9" begin = "13" end = "32"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/footprint_po9.why">
       <location file = "PPCHOME/tests/jessie/footprint.c" line = "9" begin = "36" end = "40"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>

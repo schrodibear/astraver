@@ -571,9 +571,9 @@ let f_ensures_az =
      (if ((neq_int_ (integer_of_int32 (C_3: ((safe_acc_ !int_P_int_M_a_1) a)))) (0))
      then
       (C_2:
-      (let jessie_15 = (let jessie_11 = (safe_int32_of_integer_ (1)) in
-                       (let jessie_14 = a in
-                       (((safe_upd_ int_P_int_M_a_1) jessie_14) jessie_11))) in
+      (let jessie_18 = (let jessie_14 = (safe_int32_of_integer_ (1)) in
+                       (let jessie_17 = a in
+                       (((safe_upd_ int_P_int_M_a_1) jessie_17) jessie_14))) in
       void))
      else void);
     (raise Return);
@@ -596,9 +596,9 @@ let f_ensures_default =
      (if ((neq_int_ (integer_of_int32 (C_3: ((safe_acc_ !int_P_int_M_a_1) a)))) (0))
      then
       (C_2:
-      (let jessie_10 = (let jessie_6 = (safe_int32_of_integer_ (1)) in
-                       (let jessie_9 = a in
-                       (((safe_upd_ int_P_int_M_a_1) jessie_9) jessie_6))) in
+      (let jessie_12 = (let jessie_8 = (safe_int32_of_integer_ (1)) in
+                       (let jessie_11 = a in
+                       (((safe_upd_ int_P_int_M_a_1) jessie_11) jessie_8))) in
       void))
      else void);
     (raise Return);
@@ -622,10 +622,10 @@ let f_safety =
                                       (((acc_ int_P_a_1_alloc_table) !int_P_int_M_a_1) a))))) (0))
      then
       (C_2:
-      (let jessie_5 = (let jessie_1 = (safe_int32_of_integer_ (1)) in
-                      (let jessie_4 = a in
+      (let jessie_6 = (let jessie_2 = (safe_int32_of_integer_ (1)) in
+                      (let jessie_5 = a in
                       (JC_16:
-                      ((((upd_ int_P_a_1_alloc_table) int_P_int_M_a_1) jessie_4) jessie_1)))) in
+                      ((((upd_ int_P_a_1_alloc_table) int_P_int_M_a_1) jessie_5) jessie_2)))) in
       void))
      else void);
     (raise Return);
@@ -647,7 +647,8 @@ let g_ensures_default =
    begin
      (C_9:
      begin
-       (JC_30: (((f a_0) int_P_int_M_a_0_2) int_P_a_0_2_alloc_table));
+       (let jessie_20 = a_0 in
+       (JC_30: (((f jessie_20) int_P_int_M_a_0_2) int_P_a_0_2_alloc_table)));
       (raise Return)
      end);
     (raise Return)
@@ -669,8 +670,9 @@ let g_safety =
    begin
      (C_9:
      begin
+       (let jessie_19 = a_0 in
        (JC_29:
-       (((f_requires a_0) int_P_int_M_a_0_2) int_P_a_0_2_alloc_table));
+       (((f_requires jessie_19) int_P_int_M_a_0_2) int_P_a_0_2_alloc_table)));
       (raise Return)
      end);
     (raise Return)
@@ -686,6 +688,18 @@ why --project [...] why/roux_labels.why
 <project name="roux_labels" context="why/roux_labels_ctx.why">
   <function name="Function g">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
+    <goal why_file="why/roux_labels_po6.why">
+      <location file = "PPCHOME/tests/jessie/roux_labels.c" line = "1" begin = "13" end = "22"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/roux_labels_po7.why">
+      <location file = "PPCHOME/tests/jessie/roux_labels.c" line = "1" begin = "13" end = "22"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/roux_labels_po5.why">
       <location file = "PPCHOME/tests/jessie/roux_labels.c" line = "10" begin = "11" end = "36"/>

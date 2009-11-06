@@ -590,14 +590,14 @@ let permut_search_ensures_default =
      (let idx = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_15 = (C_1:
+      (let jessie_22 = (C_1:
                        begin
-                         (let jessie_10 = (idx := (safe_int32_of_integer_ (0))) in
+                         (let jessie_15 = (idx := (safe_int32_of_integer_ (0))) in
                          void);
                         (loop_2:
                         while true do
                         { invariant
-                            (JC_16:
+                            (JC_15:
                             (exists n:int32.
                              (le_int(offset_min(int_P_arr_1_alloc_table, arr),
                               (0))
@@ -625,8 +625,8 @@ let permut_search_ensures_default =
                          begin
                            [ { } unit { true } ];
                           try
-                           (let jessie_14 = begin
-                                              (let jessie_13 = begin
+                           (let jessie_21 = begin
+                                              (let jessie_20 = begin
                                                                  (if 
                                                                  ((eq_int_ 
                                                                    (integer_of_int32 
@@ -637,10 +637,10 @@ let permut_search_ensures_default =
                                                                     (integer_of_int32 !idx))))))) 
                                                                   (integer_of_int32 v))
                                                                  then
-                                                                  (let jessie_12 = 
+                                                                  (let jessie_18 = 
                                                                   (C_3:
                                                                   begin
-                                                                    (let jessie_11 = 
+                                                                    (let jessie_17 = 
                                                                     (__retres := !idx) in
                                                                     void);
                                                                    (raise
@@ -707,84 +707,85 @@ let permut_search_safety =
      (let idx = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_9 = (C_1:
-                      begin
-                        (let jessie_4 = (idx := (safe_int32_of_integer_ (0))) in
-                        void);
-                       (loop_1:
-                       while true do
-                       { invariant (JC_11: true) variant (0) }
-                        begin
-                          [ { } unit reads idx
-                            { (JC_9:
-                              (exists n:int32.
-                               (le_int(offset_min(int_P_arr_1_alloc_table,
-                                       arr),
-                                (0))
-                               and (ge_int(offset_max(int_P_arr_1_alloc_table,
-                                           arr),
-                                    integer_of_int32(n))
-                                   and (le_int((0), integer_of_int32(idx))
-                                       and (le_int(integer_of_int32(idx),
-                                            integer_of_int32(n))
-                                           and (forall i:int32.
-                                                ((le_int((0),
-                                                  integer_of_int32(i))
-                                                 and le_int(integer_of_int32(i),
-                                                     integer_of_int32(n))) ->
-                                                 (le_int((0),
-                                                  integer_of_int32(select(int_P_int_M_arr_1,
-                                                                   shift(arr,
-                                                                   integer_of_int32(i)))))
-                                                 and le_int(integer_of_int32(
-                                                            select(int_P_int_M_arr_1,
-                                                            shift(arr,
-                                                            integer_of_int32(i)))),
-                                                     integer_of_int32(n))))))))))) } ];
-                         try
-                          (let jessie_8 = begin
-                                            (let jessie_7 = begin
-                                                              (if ((eq_int_ 
-                                                                    (integer_of_int32 
+      (let jessie_12 = (C_1:
+                       begin
+                         (let jessie_5 = (idx := (safe_int32_of_integer_ (0))) in
+                         void);
+                        (loop_1:
+                        while true do
+                        { invariant (JC_11: true) variant (0) }
+                         begin
+                           [ { } unit reads idx
+                             { (JC_9:
+                               (exists n:int32.
+                                (le_int(offset_min(int_P_arr_1_alloc_table,
+                                        arr),
+                                 (0))
+                                and (ge_int(offset_max(int_P_arr_1_alloc_table,
+                                            arr),
+                                     integer_of_int32(n))
+                                    and (le_int((0), integer_of_int32(idx))
+                                        and (le_int(integer_of_int32(idx),
+                                             integer_of_int32(n))
+                                            and (forall i:int32.
+                                                 ((le_int((0),
+                                                   integer_of_int32(i))
+                                                  and le_int(integer_of_int32(i),
+                                                      integer_of_int32(n))) ->
+                                                  (le_int((0),
+                                                   integer_of_int32(select(int_P_int_M_arr_1,
+                                                                    shift(arr,
+                                                                    integer_of_int32(i)))))
+                                                  and le_int(integer_of_int32(
+                                                             select(int_P_int_M_arr_1,
+                                                             shift(arr,
+                                                             integer_of_int32(i)))),
+                                                      integer_of_int32(n))))))))))) } ];
+                          try
+                           (let jessie_11 = begin
+                                              (let jessie_10 = begin
+                                                                 (if 
+                                                                 ((eq_int_ 
+                                                                   (integer_of_int32 
                                                                     (C_5:
                                                                     (JC_13:
                                                                     ((((offset_acc_ int_P_arr_1_alloc_table) int_P_int_M_arr_1) arr) 
                                                                     (integer_of_int32 !idx)))))) 
-                                                                   (integer_of_int32 v))
-                                                              then
-                                                               (let jessie_6 = 
-                                                               (C_3:
-                                                               begin
-                                                                 (let jessie_5 = 
-                                                                 (__retres := !idx) in
-                                                                 void);
-                                                                (raise
-                                                                 (Return_label_exc
-                                                                 void))
-                                                               end) in
-                                                               void)
-                                                              else void);
-                                                             (C_8:
-                                                             begin
-                                                               (idx := 
-                                                                (C_7:
-                                                                (JC_15:
-                                                                ((((offset_acc_ int_P_arr_1_alloc_table) int_P_int_M_arr_1) arr) 
-                                                                 (integer_of_int32 !idx)))));
-                                                              !idx
-                                                             end)
-                                                            end in
-                                            void);
-                                           (raise (Loop_continue_exc void))
-                                          end in
-                          void)
-                          with
-                          Loop_continue_exc jessie_3 ->
-                          void end
-                        end
-                       done);
-                       (raise (Return_label_exc void))
-                      end) in
+                                                                  (integer_of_int32 v))
+                                                                 then
+                                                                  (let jessie_8 = 
+                                                                  (C_3:
+                                                                  begin
+                                                                    (let jessie_7 = 
+                                                                    (__retres := !idx) in
+                                                                    void);
+                                                                   (raise
+                                                                    (Return_label_exc
+                                                                    void))
+                                                                  end) in
+                                                                  void)
+                                                                 else void);
+                                                                (C_8:
+                                                                begin
+                                                                  (idx := 
+                                                                   (C_7:
+                                                                   (JC_14:
+                                                                   ((((offset_acc_ int_P_arr_1_alloc_table) int_P_int_M_arr_1) arr) 
+                                                                    (integer_of_int32 !idx)))));
+                                                                 !idx
+                                                                end)
+                                                               end in
+                                              void);
+                                             (raise (Loop_continue_exc void))
+                                            end in
+                           void)
+                           with
+                           Loop_continue_exc jessie_3 ->
+                           void end
+                         end
+                        done);
+                        (raise (Return_label_exc void))
+                       end) in
       void)
       with
       Return_label_exc jessie_1 ->
@@ -824,11 +825,11 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/permut_search_po7.why">
-      <location file = "why/permut_search.why" line = "632" begin = "58" end = "59"/>
+      <location file = "why/permut_search.why" line = "632" begin = "59" end = "60"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/permut_search_po8.why">
-      <location file = "why/permut_search.why" line = "632" begin = "58" end = "59"/>
+      <location file = "why/permut_search.why" line = "632" begin = "59" end = "60"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
