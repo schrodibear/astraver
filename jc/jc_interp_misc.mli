@@ -50,6 +50,13 @@ val set_current_spec : Jc_fenv.fun_spec -> unit
 
 val reset_current_spec : unit -> unit
 
+(*
+val get_current_fun : unit -> Jc_fenv.fun_info
+
+val set_current_fun : Jc_fenv.fun_info -> unit
+
+val reset_current_fun : unit -> unit
+  *)
 val fresh_loop_label : unit -> Jc_env.label_info
 
 

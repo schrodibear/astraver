@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.mli,v 1.32 2009-10-19 11:55:33 bobot Exp $ i*)
+(*i $Id: output.mli,v 1.33 2009-11-06 08:31:18 marche Exp $ i*)
 
 type constant =
   | Prim_void
@@ -207,6 +207,7 @@ val fprintf_why_decl : Format.formatter -> why_decl -> unit;;
 val fprintf_why_decls : Format.formatter -> why_decl list -> unit
 
 type kind =
+  | VarDecr
   | ArithOverflow
   | DownCast
   | IndexBounds

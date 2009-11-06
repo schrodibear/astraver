@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.48 2009-10-19 11:55:33 bobot Exp $ i*)
+(*i $Id: output.ml,v 1.49 2009-11-06 08:31:18 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -873,6 +873,7 @@ let fprintf_why_decls form decls =
 (*s locs table *)
 
 type kind =
+  | VarDecr
   | ArithOverflow
   | DownCast
   | IndexBounds
@@ -903,6 +904,7 @@ let reg_pos prefix ?id ?kind ?name ?formula pos =
 let print_kind fmt k =
   fprintf fmt "%s"
     (match k with
+       | VarDecr -> "VarDecr"
        | Pack -> "Pack"
        | Unpack -> "Unpack"
        | DivByZero -> "DivByZero"

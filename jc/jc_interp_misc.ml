@@ -266,6 +266,13 @@ let reset_current_spec () = current_spec := None
 let get_current_spec () = 
   match !current_spec with None -> assert false | Some s -> s
 
+(*
+let current_fun : fun_info option ref = ref None
+let set_current_fun s = current_fun := Some s
+let reset_current_fun () = current_fun := None
+let get_current_fun () = 
+  match !current_fun with None -> assert false | Some s -> s
+*)
 
 let fresh_loop_label =
   let c = ref 0 in

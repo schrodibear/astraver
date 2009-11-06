@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.426 2009-11-03 16:18:40 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.427 2009-11-06 08:31:18 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -134,22 +134,6 @@ let make_check ?mark ?kind pos e' =
 let make_guarded_app ~mark kind pos f args =
   make_check ~mark ~kind pos (make_app f args)
 
-(*
-let print_kind fmt k =
-  fprintf fmt "%s"
-    (match k with
-       | Pack -> "Pack"
-       | Unpack -> "Unpack"
-       | DivByZero -> "DivByZero"
-       | AllocSize -> "AllocSize"
-       | UserCall -> "UserCall"
-       | PointerDeref -> "PointerDeref"
-       | IndexBounds -> "IndexBounds"
-       | DownCast -> "DownCast"
-       | ArithOverflow -> "ArithOverflow"
-       | FPoverflow -> "FPOverflow"
-    )
-*)
 
 let print_locs fmt =
   Hashtbl.iter 
@@ -1557,6 +1541,10 @@ let check al a' =
   in
   BlackBox(Annot_type(a', unit_type, read_effects, [], LTrue, []))
 
+(* decreases clauses: stored in global table for later use at each call sites *)
+
+let decreases_clause_table = Hashtbl.create 17
+
 (* Translate the heap update `e1.fi = tmp2' 
 
    essentially we want
@@ -2225,6 +2213,7 @@ and expr e =
               define_locals ~writes:locals call
 
           | JCfun f ->
+	      
               let arg_types_asserts, args =
 		try match f.jc_fun_info_parameters with
 		  | [] -> [], []
@@ -2291,6 +2280,30 @@ and expr e =
 		  make_app "pointer_address" [ call ]
 		else call
 	      in
+	      (* decreases *)
+	      
+	      let this_comp = f.jc_fun_info_component in
+	      let current_comp = (get_current_function()).jc_fun_info_component in
+	      let call =
+		if this_comp = current_comp then
+		  let this_measure = 
+		    try
+		      Hashtbl.find decreases_clause_table (f.jc_fun_info_tag) 
+		    with Not_found -> assert false
+		  in
+		  let cur_measure = 
+		    try
+		      Hashtbl.find decreases_clause_table ((get_current_function()).jc_fun_info_tag)
+		    with Not_found -> assert false
+		  in
+		  let pre =
+		    LPred("zwf_zero",[cur_measure;this_measure])
+		  in
+		  make_check ~mark:e#mark ~kind:VarDecr e#pos 
+		    (Assert(`ASSERT,pre,call))		  
+		else call
+	      in
+	      (* separation assertions *)
 	      let call = 
 		if pre = LTrue || not (safety_checking()) then 
 		  call
@@ -2818,6 +2831,8 @@ let get_valid_pred_app vi =
 	  end
     | JCTnative _ | JCTlogic _ | JCTenum _ | JCTnull | JCTany
     | JCTtype_var _ -> LTrue
+
+
 	
 let tr_fun f funpos spec body acc =
 
@@ -2871,13 +2886,11 @@ let tr_fun f funpos spec body acc =
       internal_requires f.jc_fun_info_parameters
   in
 
-  (* decreases clause: currently not handled... *)
-
   begin
     match spec.jc_fun_decreases with
-      | None -> ();
-      | Some _ ->
-	  Format.eprintf "Warning: decreases clause ignored (unsupported feature)@."
+      | None -> ()
+      | Some t ->
+	  Hashtbl.add decreases_clause_table f.jc_fun_info_tag (term ~type_safe:true ~global_assertion:true ~relocate:false LabelHere LabelHere t)
   end;
 
   (* partition behaviors as follows:
