@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.428 2009-11-06 13:48:32 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.429 2009-11-06 16:40:25 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1958,11 +1958,6 @@ and value_assigned mark pos ty e =
     if a <> LTrue && safety_checking() then
       Let(tmp,e,make_check ~mark ~kind:IndexBounds pos (Assert(`ASSERT,a,Var tmp)))
     else e
-(*
-      let e' = expr e in
-	coerce ~check_int_overflow:(safety_checking()) 
-	  mark e#pos vi.jc_var_info_type e#typ e e'
-*)
 
 and expr e =
   let infunction = get_current_function () in
@@ -2297,7 +2292,7 @@ and expr e =
 	      let current_comp = (get_current_function()).jc_fun_info_component in
 	      let call =
                 (* disabled temporarily *)
-		if false && this_comp = current_comp then
+		if false && safety_checking() && this_comp = current_comp then
 		  let this_measure = get_measure_for f in
 		  let cur_measure = get_measure_for (get_current_function()) in
 		  let pre =

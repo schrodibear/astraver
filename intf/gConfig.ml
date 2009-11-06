@@ -14,6 +14,7 @@ let save_main fmt =
   fprintf fmt "window_width = %d@." !Colors.window_width;
   fprintf fmt "window_height = %d@." !Colors.window_height;
   fprintf fmt "font_size = %d@." !Colors.font_size;
+  fprintf fmt "boomy_icons = %b@." (Tools.is_boomy ());
   fprintf fmt "@."
 
 let save_prover_setting fmt (p,s) =
@@ -41,6 +42,7 @@ let set_main_setting (key,arg) =
     | "window_width" -> Colors.window_width := Rc.int arg
     | "window_height" -> Colors.window_height := Rc.int arg
     | "font_size" -> Colors.font_size := Rc.int arg
+    | "boomy_icons" -> Tools.set_boomy (Rc.bool arg)
     | _ ->
 	printf "Unknown field `%s' in section [main] of rc file@." key
 

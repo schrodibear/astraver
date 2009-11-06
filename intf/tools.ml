@@ -66,3 +66,19 @@ let timeout = ref 10
 let set_timeout v = timeout := v
 let get_timeout () = !timeout
 
+
+(* 
+
+images, icons
+
+*)
+
+let image f =
+  GdkPixbuf.from_file (Filename.concat Options.lib_dir (Filename.concat "images" (f^".png")))
+
+
+let boomy = ref false
+
+let set_boomy b = boomy := b
+
+let is_boomy () = !boomy 

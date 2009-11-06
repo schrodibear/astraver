@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.94 2009-04-02 11:22:04 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.95 2009-11-06 16:40:25 marche Exp $ i*)
 
 open Printf
 open Options
@@ -187,20 +187,33 @@ module View = struct
   let add_columns ~(view : GTree.view) ~_model =
     (* let renderer = GTree.cell_renderer_text [`XALIGN 0.] in *)
     let icon_renderer = GTree.cell_renderer_pixbuf [ `STOCK_SIZE `BUTTON ] in
+    let image_renderer = GTree.cell_renderer_pixbuf [ ] in
     let _n : int = view#append_column first_col in
     let l = 
       List.map
 	(fun (p,state) ->
-	   let vc = 
+	   let vc_stock = 
 	     GTree.view_column ~title:(prover_name_with_version_and_enc p) 
-	       ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) ()
+	       ~renderer:(icon_renderer, ["stock_id", p.pr_icon]) 
+               ()
 	   in
-	   vc#set_resizable true;
-	   vc#set_visible state;
-	   p.pr_viewcol <- Some vc;
-	   if p.pr_info.DpConfig.version <> "" then vc#set_clickable true;
-	   let _n : int = view#append_column vc in
-	   p, vc)
+	   vc_stock#set_resizable true;
+	   vc_stock#set_visible false;
+	   let vc_image = 
+	     GTree.view_column ~title:(prover_name_with_version_and_enc p) 
+	       ~renderer:(image_renderer, ["pixbuf", p.pr_image]) 
+               ()
+	   in
+	   vc_image#set_resizable true;
+	   vc_image#set_visible false;
+	   p.pr_viewcol <- Some (vc_stock, vc_image);
+	   if p.pr_info.DpConfig.version <> "" then begin
+             vc_stock#set_clickable true;
+             vc_image#set_clickable true;
+           end;
+	   let _n : int = view#append_column vc_stock in
+	   let _n : int = view#append_column vc_image in
+	   p, vc_stock, vc_image)
 	(Model.get_prover_states ())
     in
     let _n : int = view#append_column last_col 
@@ -364,12 +377,25 @@ let try_proof oblig =
   or not (Cache.is_enabled ())
   or (Cache.is_enabled () && not (in_cache (Cache.clean oblig))) 
 
+
+let image_running = Tools.image "play32"
+let image_valid = Tools.image "accept32"
+let image_unknown = Tools.image "help32"
+let image_invalid = Tools.image "delete32"
+let image_timeout = Tools.image "clock32"
+let image_failure = Tools.image "bug32"
+
+let image_default = Tools.image "pause32"
+let image_yes = Tools.image "accept32"
+let image_no = Tools.image "delete32"
+let image_down = Tools.image "play32"
 (* 
  * run a prover on an obligation and update the model 
  *)
 let run_prover_child p (_view:GTree.view) (model:GTree.tree_store) 
                      o bench alone = 
   let column_p = p.Model.pr_icon in
+  let column_i = p.Model.pr_image in
   let (_, _, oblig, seq) = o in
   if bench or (try_proof seq) then
     try 
@@ -382,6 +408,7 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
 	  raise Exit
       in
       model#set ~row ~column:column_p `EXECUTE;
+      model#set ~row ~column:column_i image_running;
       if !debug then Format.eprintf "oblig : %s@." oblig;
       let r = 
 	Dispatcher.call_prover 
@@ -391,11 +418,14 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
       let get_result = function
 	| Calldp.Valid _ -> 
 	    Cache.add seq (Model.prover_id p);
-	    model#set ~row ~column:column_p `YES ; 1
+	    model#set ~row ~column:column_p `YES ; 
+	    model#set ~row ~column:column_i image_valid ; 1
 	| Calldp.Timeout _ -> 
-	    model#set ~row ~column:column_p `CUT; 0
+	    model#set ~row ~column:column_p `CUT; 
+	    model#set ~row ~column:column_i image_timeout; 0
 	| Calldp.CannotDecide _ -> 
-	    model#set ~row ~column:column_p `DIALOG_QUESTION; 0
+	    model#set ~row ~column:column_p `DIALOG_QUESTION; 
+	    model#set ~row ~column:column_i image_unknown; 0
 	| Calldp.Invalid(_,so) -> 
 	    begin match so with
 	      | None -> ()
@@ -403,11 +433,13 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
 		  let name = model#get ~row ~column:Model.fullname in 
 		  Model.add_failure name p s
 	    end;
-	    model#set ~row ~column:column_p `NO; 0
+	    model#set ~row ~column:column_p `NO; 
+	    model#set ~row ~column:column_i image_invalid; 0
 	| Calldp.ProverFailure(_,so) -> 
 	      let name = model#get ~row ~column:Model.fullname in 
 	      Model.add_failure name p so;
-	      model#set ~row ~column:column_p `PREFERENCES; 0
+	      model#set ~row ~column:column_p `PREFERENCES; 
+	      model#set ~row ~column:column_i image_failure; 0
       in
       let result = get_result r in
       model#set ~row ~column:p.Model.pr_result result;
@@ -440,10 +472,12 @@ let run_prover_oblig p (view:GTree.view) (model:GTree.tree_store)
  *)
 let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f bench () = 
   let column_p = p.Model.pr_icon in
+  let column_i = p.Model.pr_image in
   try
     let row = Model.find_fct f in
     model#set ~row ~column:Model.total 0;
     model#set ~row ~column:column_p `GO_DOWN;
+    model#set ~row ~column:column_i image_down;
     let n = model#iter_n_children (Some(row)) in
     let mychildren = Model.find_fobligs f in
     let succeed = 
@@ -458,10 +492,12 @@ let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f bench () =
     in
     if succeed = n then begin 
       model#set ~row ~column:column_p `APPLY;
+      model#set ~row ~column:column_i image_yes;
       let path = model#get_path row in
       collapse_row view path bench
     end else begin 
       model#set ~row ~column:column_p `CANCEL;
+      model#set ~row ~column:column_i image_no;
       let path = model#get_path row in
       expand_row view path bench
     end;
@@ -587,6 +623,23 @@ let main () =
     configuration_factory#add_item ~key:GdkKeysyms._minus
       ~callback:reduce_font "Reduce font" 
   in
+  let set_boomy b =
+    List.iter
+      (fun (p,active) -> 
+         begin
+           match p.Model.pr_viewcol with
+           | Some (vc1,vc2) -> 
+               if b then (vc2#set_visible active ; vc1#set_visible false)
+               else (vc1#set_visible active ; vc2#set_visible false)
+           | None -> assert false
+         end)
+      (Model.get_prover_states ());
+    Tools.set_boomy b;
+    GConfig.save ()
+  in
+  let i = configuration_factory#add_check_item 
+    ~callback:(fun b -> set_boomy b) "Boomy icons" in
+  let _ = i#set_active (Tools.is_boomy ()) in
 
   (* horizontal paned *)
   let hp = GPack.paned `HORIZONTAL  ~border_width:3 ~packing:vbox#add () in
@@ -691,7 +744,8 @@ let main () =
       (fun (p,active) -> 
          begin
            match p.Model.pr_viewcol with
-           | Some vc -> vc#set_visible active
+           | Some (vc1,vc2) -> 
+               if Tools.is_boomy () then vc2#set_visible active else vc1#set_visible active
            | None -> assert false
          end;
 	 let m = configuration_factory#add_check_item 
@@ -703,16 +757,21 @@ let main () =
 				 begin
 				   Model.select_prover p;
 				   match p.Model.pr_viewcol with
-				     | Some vc ->
-					 vc#set_visible true
+				     | Some (vc1,vc2) ->
+                                         if Tools.is_boomy () then 
+                                           vc2#set_visible true
+                                         else vc1#set_visible true
 				     | None -> assert false
 				 end
 			       else 
 				 begin
 				   Model.deselect_prover p;
 				   match p.Model.pr_viewcol with
-				     | Some vc ->
-					 vc#set_visible false
+				     | Some (vc1,vc2) ->
+                                         if Tools.is_boomy () then 
+                                           vc2#set_visible false
+                                         else 
+                                           vc1#set_visible false
 				     | None -> assert false
 				 end;
 			       GConfig.save ())))
@@ -869,9 +928,14 @@ let main () =
 
   (* run provers on all proof obligations *)
   List.iter
-    (fun (p,vc) -> 
+    (fun (p,vc1,vc2) -> 
        let _ =
-	 vc#connect#clicked 
+	 vc1#connect#clicked 
+	   ~callback:(fun () -> 
+	      prove (run_prover_all p view model false))
+       in
+       let _ =
+	 vc2#connect#clicked 
 	   ~callback:(fun () -> 
 	      prove (run_prover_all p view model false))
        in
@@ -1017,7 +1081,7 @@ let main () =
 		 if s then
 		   match p.Model.pr_viewcol with
 		     | None -> assert false
-		     | Some c -> c#title = col#title
+		     | Some (vc1,vc2) -> vc1#title = col#title
 		  (* WHY c == col is not enough ???? *)
 		 else false) 
 	      (Model.get_prover_states ()) 
@@ -1089,7 +1153,7 @@ let main () =
   in
 
   (* Setting special icons for proved obligation in cache *)
-  let _ = 
+  if Cache.is_enabled () then begin
     load_cache "gwhy.cache";
     if not (Cache.is_empty ()) then 
       Hashtbl.iter 
@@ -1108,6 +1172,7 @@ let main () =
 			model#get ~row:parent ~column:zecol.Model.pr_result 
 		      in
 		      model#set ~row ~column:zecol.Model.pr_icon `HARDDISK;
+		      model#set ~row ~column:zecol.Model.pr_image image_default;
 		      model#set ~row ~column:zecol.Model.pr_result 1;
 		      model#set ~row ~column:Model.result 1;
 		      model#set ~row:parent ~column:zecol.Model.pr_result (r+1)
@@ -1122,13 +1187,13 @@ let main () =
 	   end
 	) 
 	Model.obligs;
-  in
-  let _ = (* update statistics for functions *)
+  end;
+
+  (* update statistics for functions *)
     Hashtbl.iter 
       (fun k row -> 
 	 update_statistics model row k (model#iter_n_children (Some row)))
-      Model.frows
-  in
+      Model.frows;
   w#add_accel_group accel_group;
   w#show ();
   Format.eprintf "GWhy views created.@."

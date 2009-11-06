@@ -167,8 +167,7 @@ let move_to_source = function
 	  b#set_text (banner());
 	  begin
 	    try
-	      let why_logo_image = Filename.concat Version.libdir "why-logo-1.png" in
-	      let why_logo = GdkPixbuf.from_file why_logo_image in
+	      let why_logo = Tools.image "why-logo-1" in
 	      b#insert_pixbuf ~iter:b#start_iter ~pixbuf:why_logo 
 	    with _ -> 
 	      b#insert ~iter:b#start_iter "(Why logo: image not found)"	      

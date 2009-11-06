@@ -46,7 +46,8 @@ type prover = {
   pr_info : DpConfig.prover_data;
   pr_result : int GTree.column;
   pr_icon : GtkStock.id GTree.column;
-  mutable pr_viewcol : GTree.view_column option;
+  pr_image : GdkPixbuf.pixbuf GTree.column ;
+  mutable pr_viewcol : (GTree.view_column * GTree.view_column) option;
   pr_enc : Options.encoding;
 }
 
@@ -81,6 +82,7 @@ let simplify = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = NoEncoding;
   }
@@ -90,6 +92,7 @@ let simplify_select = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = NoEncoding;
   }
@@ -99,6 +102,7 @@ let simplify_pred = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = Predicates;
   }
@@ -107,6 +111,7 @@ let simplify_strat = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = Stratified;
   }
@@ -115,6 +120,7 @@ let simplify_sstrat = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = SortedStratified;
   }
@@ -123,6 +129,7 @@ let simplify_rec = {
   pr_info = DpConfig.simplify;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = Recursive;
   }
@@ -132,6 +139,7 @@ let gappa = {
   pr_info = DpConfig.gappa;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = NoEncoding;
   }
@@ -141,6 +149,7 @@ let gappa_select = {
   pr_info = DpConfig.gappa;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = NoEncoding;
   }
@@ -150,6 +159,7 @@ let zenon = {
   pr_name = "Zenon";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_id = Dispatcher.Zenon;
   pr_enc = NoEncoding;
 }
@@ -157,6 +167,7 @@ let zenon_pred = {
   pr_name = "Zenon(P)";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_id = Dispatcher.Zenon;
   pr_enc = Predicates;
 }
@@ -164,6 +175,7 @@ let zenon_strat = {
   pr_name = "Zenon(S)";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_id = Dispatcher.Zenon;
   pr_enc = Stratified;
 }
@@ -171,6 +183,7 @@ let zenon_rec = {
   pr_name = "Zenon(R)";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_id = Dispatcher.Zenon;
   pr_enc = Recursive;
 }
@@ -178,6 +191,7 @@ let harvey = {
   pr_name = "haRVey";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_id = Dispatcher.Harvey;
   pr_enc = NoEncoding;
 }
@@ -185,6 +199,7 @@ let cvcl = {
   pr_name = "CVCL";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_id = Dispatcher.Cvcl;
   pr_enc = SortedStratified;
 }
@@ -192,6 +207,7 @@ let rvsat = {
   pr_name = "rv-sat";
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_id = Dispatcher.Rvsat;
   pr_enc = SortedStratified;
   }
@@ -201,6 +217,7 @@ let yices = {
   pr_info = DpConfig.yices;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = Monomorph;
   }
@@ -209,6 +226,7 @@ let yicesSS = {
   pr_info = DpConfig.yices;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = SortedStratified;
   }
@@ -217,6 +235,7 @@ let ergo = {
   pr_info = DpConfig.alt_ergo;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = NoEncoding;
   }
@@ -225,6 +244,7 @@ let ergo_select = {
   pr_info = DpConfig.alt_ergo;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = NoEncoding;
   }
@@ -233,6 +253,7 @@ let ergoSS = {
   pr_info = DpConfig.alt_ergo;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = SortedStratified;
   }
@@ -241,6 +262,7 @@ let cvc3SS = {
   pr_info = DpConfig.cvc3;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = SortedStratified;
   }
@@ -249,6 +271,7 @@ let z3SS = {
   pr_info = DpConfig.z3;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = SortedStratified;
   }
@@ -259,6 +282,7 @@ let coq = {
   pr_info = DpConfig.coq;
   pr_result = cols#add int;
   pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
   pr_viewcol = None;
   pr_enc = NoEncoding;
 }
@@ -360,7 +384,9 @@ let _ =
   Hashtbl.add fwrows " " h;
   Hashtbl.clear h;
   Hashtbl.clear fwrows
-    
+
+let image_default = Tools.image "pause32" 
+
 let create_model () =
   let model = GTree.tree_store cols in
   Dispatcher.iter
@@ -405,7 +431,11 @@ let create_model () =
        model#set ~row:row_n ~column:parent f;
        model#set ~row:row_n ~column:result 0;
        List.iter
-	 (fun p -> model#set ~row:row_n ~column:p.pr_icon `REMOVE)
+	 (fun p -> 
+            model#set ~row:row_n ~column:p.pr_icon `REMOVE;
+            model#set ~row:row_n ~column:p.pr_image image_default;
+            ()
+         )
 	 all_known_provers
     );
   model

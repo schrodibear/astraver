@@ -16,7 +16,8 @@ type prover = {
   pr_info : DpConfig.prover_data;
   pr_result : int GTree.column;
   pr_icon : GtkStock.id GTree.column;
-  mutable pr_viewcol : GTree.view_column option;
+  pr_image : GdkPixbuf.pixbuf GTree.column ;
+  mutable pr_viewcol : (GTree.view_column * GTree.view_column) option;
   pr_enc : Options.encoding;
 }
     (** type of a prover description in the model *)
@@ -36,7 +37,7 @@ val prover_id : prover -> string
 val prover_name_with_version_and_enc : prover -> string
   (** return a printable prover name under the form "prover_id\nversion\n(encoding)" *)
 
-(** {2 provers with their current selected/deselected status *)
+(** {2 provers with their current selected/deselected status} *)
 
 val get_prover_states : unit -> (prover*bool) list
   (** returns the list of known provers 

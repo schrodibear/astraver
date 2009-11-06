@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.mli,v 1.100 2009-08-26 13:47:41 marche Exp $ i*)
+(*i $Id: options.mli,v 1.101 2009-11-06 16:40:25 marche Exp $ i*)
 
 (*s General options *)
 
@@ -147,6 +147,8 @@ val out_file : string -> string
 (* [lib_file f] appends [f] to the lib directory *)
 
 val lib_file : string -> string
+
+val lib_dir : string 
 
 (*s Files given on the command line *)
 
