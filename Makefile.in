@@ -824,8 +824,8 @@ install-lib: $(JCLIB)
 	cp -f lib/harvey/caduceus_why.rv $(LIBDIR)/caduceus/harvey
 	cd lib; cp -r java_api $(LIBDIR)/why 
 	cd lib; cp -r javacard_api $(LIBDIR)/why
-	mkdir -p $(LIBDIR)/images
-	cp -f lib/images/*.png $(LIBDIR)/images
+	mkdir -p $(LIBDIR)/why/images
+	cp -f lib/images/*.png $(LIBDIR)/why/images
 #	remove CVS directories
 	find $(LIBDIR) -name CVS | xargs $(RM) -r
 
