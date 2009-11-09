@@ -762,10 +762,10 @@ begin = -1
 end = -1
 
 [JC_220]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Purse.java"
+line = 75
+begin = 15
+end = 25
 
 [JC_109]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
@@ -791,35 +791,17 @@ line = 0
 begin = -1
 end = -1
 
-[JC_222]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_45]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
 line = 251
 begin = 18
 end = 28
 
-[JC_223]
-file = "HOME/tests/java/Purse.java"
-line = 74
-begin = 16
-end = 34
-
 [JC_46]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_224]
-file = "HOME/tests/java/Purse.java"
-line = 74
-begin = 16
-end = 34
 
 [cons_Exception_Throwable_ensures_default]
 name = "Constructor of class Exception"
@@ -835,23 +817,11 @@ line = 0
 begin = -1
 end = -1
 
-[JC_225]
-file = "HOME/tests/java/Purse.java"
-line = 75
-begin = 15
-end = 25
-
 [JC_48]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_226]
-file = "HOME/tests/java/Purse.java"
-line = 75
-begin = 15
-end = 25
 
 [JC_49]
 file = "HOME/"
@@ -2147,11 +2117,11 @@ begin = -1
 end = -1
 
 [JC_210]
-kind = UserCall
+kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
-line = 161
-begin = 24
-end = 52
+line = 158
+begin = 40
+end = 64
 
 [JC_33]
 file = "HOME/"
@@ -2160,11 +2130,11 @@ begin = -1
 end = -1
 
 [JC_211]
-kind = AllocSize
+kind = UserCall
 file = "HOME/tests/java/Purse.jc"
-line = 158
-begin = 40
-end = 64
+line = 161
+begin = 24
+end = 52
 
 [JC_34]
 file = "HOME/"
@@ -2199,11 +2169,10 @@ begin = -1
 end = -1
 
 [JC_214]
-kind = UserCall
-file = "HOME/tests/java/Purse.jc"
-line = 161
-begin = 24
-end = 52
+file = "HOME/tests/java/Purse.java"
+line = 75
+begin = 15
+end = 25
 
 [JC_37]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
@@ -2220,11 +2189,10 @@ begin = 11
 end = 20
 
 [JC_215]
-kind = AllocSize
-file = "HOME/tests/java/Purse.jc"
-line = 158
-begin = 40
-end = 64
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_38]
 file = "HOME/"
@@ -2233,11 +2201,10 @@ begin = -1
 end = -1
 
 [JC_216]
-kind = AllocSize
-file = "HOME/tests/java/Purse.jc"
-line = 158
-begin = 40
-end = 64
+file = "HOME/tests/java/Purse.java"
+line = 75
+begin = 15
+end = 25
 
 [JC_39]
 file = "HOME/"
@@ -2246,24 +2213,22 @@ begin = -1
 end = -1
 
 [JC_217]
-kind = UserCall
-file = "HOME/tests/java/Purse.jc"
-line = 161
-begin = 24
-end = 52
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_218]
-kind = UserCall
-file = "HOME/tests/java/Purse.jc"
-line = 161
-begin = 24
-end = 52
+file = "HOME/tests/java/Purse.java"
+line = 74
+begin = 16
+end = 34
 
 [JC_219]
 file = "HOME/tests/java/Purse.java"
-line = 75
-begin = 15
-end = 25
+line = 74
+begin = 16
+end = 34
 
 [JC_100]
 file = "HOME/"
@@ -2696,15 +2661,15 @@ parameter Purse_credit_requires :
 parameter Purse_getBalance :
  this_4:Object pointer ->
   { } int reads Object_alloc_table,Purse_balance
-  { ((JC_226: balance_non_negative(this_4, Purse_balance))
-    and (JC_224: eq_int(result, select(Purse_balance, this_4)))) }
+  { ((JC_221: balance_non_negative(this_4, Purse_balance))
+    and (JC_219: eq_int(result, select(Purse_balance, this_4)))) }
 
 parameter Purse_getBalance_requires :
  this_4:Object pointer ->
-  { (JC_219: balance_non_negative(this_4, Purse_balance))} int
+  { (JC_214: balance_non_negative(this_4, Purse_balance))} int
   reads Object_alloc_table,Purse_balance
-  { ((JC_226: balance_non_negative(this_4, Purse_balance))
-    and (JC_224: eq_int(result, select(Purse_balance, this_4)))) }
+  { ((JC_221: balance_non_negative(this_4, Purse_balance))
+    and (JC_219: eq_int(result, select(Purse_balance, this_4)))) }
 
 parameter Purse_withdraw :
  this_5:Object pointer ->
@@ -3306,12 +3271,12 @@ let Purse_credit_ensures_default =
   (init:
   try
    begin
-     (let jessie_174 = (K_5:
-                       (let jessie_170 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
-                       (let jessie_173 = this_6 in
+     (let jessie_180 = (K_5:
+                       (let jessie_176 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
+                       (let jessie_179 = this_6 in
                        begin
-                         (((safe_upd_ Purse_balance) jessie_173) jessie_170);
-                        jessie_170
+                         (((safe_upd_ Purse_balance) jessie_179) jessie_176);
+                        jessie_176
                        end))) in
      void);
     (raise Return)
@@ -3336,12 +3301,12 @@ let Purse_credit_safety =
   (init:
   try
    begin
-     (let jessie_169 = (K_5:
-                       (let jessie_165 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
-                       (let jessie_168 = this_6 in
+     (let jessie_174 = (K_5:
+                       (let jessie_170 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
+                       (let jessie_173 = this_6 in
                        begin
-                         (((safe_upd_ Purse_balance) jessie_168) jessie_165);
-                        jessie_165
+                         (((safe_upd_ Purse_balance) jessie_173) jessie_170);
+                        jessie_170
                        end))) in
      void);
     (raise Return)
@@ -3354,7 +3319,7 @@ let Purse_credit_safety =
 let Purse_getBalance_ensures_default =
  fun (this_4 : Object pointer) ->
   { (valid_struct_Purse(this_4, (0), (0), Object_alloc_table)
-    and (JC_221: balance_non_negative(this_4, Purse_balance))) }
+    and (JC_216: balance_non_negative(this_4, Purse_balance))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -3366,12 +3331,12 @@ let Purse_getBalance_ensures_default =
    with
    Return ->
    !return end))
-  { (JC_223: eq_int(result, select(Purse_balance, this_4))) }
+  { (JC_218: eq_int(result, select(Purse_balance, this_4))) }
 
 let Purse_getBalance_safety =
  fun (this_4 : Object pointer) ->
   { (valid_struct_Purse(this_4, (0), (0), Object_alloc_table)
-    and (JC_221: balance_non_negative(this_4, Purse_balance))) }
+    and (JC_216: balance_non_negative(this_4, Purse_balance))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -3383,7 +3348,7 @@ let Purse_getBalance_safety =
    with
    Return ->
    !return end))
-  { (JC_225: balance_non_negative(this_4, Purse_balance)) }
+  { (JC_220: balance_non_negative(this_4, Purse_balance)) }
 
 let Purse_withdraw_ensures_default =
  fun (this_5 : Object pointer) (s_1 : int) ->
@@ -3397,18 +3362,20 @@ let Purse_withdraw_ensures_default =
      (if (K_15: ((ge_int_ (K_14: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
       (K_13:
-      (let jessie_188 = (let jessie_184 = (K_12:
+      (let jessie_196 = (let jessie_192 = (K_12:
                                           ((sub_int (K_11:
                                                     ((safe_acc_ !Purse_balance) this_5))) s_1)) in
-                        (let jessie_187 = this_5 in
-                        (((safe_upd_ Purse_balance) jessie_187) jessie_184))) in
+                        (let jessie_195 = this_5 in
+                        (((safe_upd_ Purse_balance) jessie_195) jessie_192))) in
       void))
      else
-      (let jessie_192 = (raise
+      (let jessie_200 = (raise
                          (NoCreditException_exc
-                         (let this = (JC_212:
+                         (let this = (JC_210:
                                      (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
-                         (let tt = (JC_214: (cons_NoCreditException this)) in
+                         (let tt = (let jessie_199 = this in
+                                   (JC_211:
+                                   (cons_NoCreditException jessie_199))) in
                          this)))) in
       void));
     (raise Return)
@@ -3439,18 +3406,20 @@ let Purse_withdraw_exsures_amount_too_large =
      (if (K_15: ((ge_int_ (K_14: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
       (K_13:
-      (let jessie_197 = (let jessie_193 = (K_12:
+      (let jessie_206 = (let jessie_202 = (K_12:
                                           ((sub_int (K_11:
                                                     ((safe_acc_ !Purse_balance) this_5))) s_1)) in
-                        (let jessie_196 = this_5 in
-                        (((safe_upd_ Purse_balance) jessie_196) jessie_193))) in
+                        (let jessie_205 = this_5 in
+                        (((safe_upd_ Purse_balance) jessie_205) jessie_202))) in
       void))
      else
-      (let jessie_201 = (raise
+      (let jessie_210 = (raise
                          (NoCreditException_exc
-                         (let this = (JC_216:
+                         (let this = (JC_212:
                                      (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
-                         (let tt = (JC_218: (cons_NoCreditException this)) in
+                         (let tt = (let jessie_209 = this in
+                                   (JC_213:
+                                   (cons_NoCreditException jessie_209))) in
                          this)))) in
       void));
     (raise Return)
@@ -3480,25 +3449,26 @@ let Purse_withdraw_safety =
      (if (K_15: ((ge_int_ (K_14: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
       (K_13:
-      (let jessie_179 = (let jessie_175 = (K_12:
+      (let jessie_186 = (let jessie_182 = (K_12:
                                           ((sub_int (K_11:
                                                     ((safe_acc_ !Purse_balance) this_5))) s_1)) in
-                        (let jessie_178 = this_5 in
-                        (((safe_upd_ Purse_balance) jessie_178) jessie_175))) in
+                        (let jessie_185 = this_5 in
+                        (((safe_upd_ Purse_balance) jessie_185) jessie_182))) in
       void))
      else
-      (let jessie_183 = (raise
+      (let jessie_190 = (raise
                          (NoCreditException_exc
-                         (let this = (let jessie_180 = (JC_207:
+                         (let this = (let jessie_187 = (JC_207:
                                                        (((alloc_struct_NoCreditException_requires (1)) Object_alloc_table) Object_tag_table)) in
                                      (JC_208:
                                      (assert
                                      { ge_int(offset_max(Object_alloc_table,
-                                              jessie_180),
+                                              jessie_187),
                                        (0)) };
-                                     jessie_180))) in
-                         (let tt = (JC_210:
-                                   (cons_NoCreditException_requires this)) in
+                                     jessie_187))) in
+                         (let tt = (let jessie_189 = this in
+                                   (JC_209:
+                                   (cons_NoCreditException_requires jessie_189))) in
                          this)))) in
       void));
     (raise Return)
@@ -3583,17 +3553,17 @@ let cons_Purse_ensures_default =
   (init:
   try
    begin
-     (let jessie_164 = begin
-                         (let jessie_159 = (let jessie_155 = (0) in
-                                           (let jessie_158 = this_7 in
-                                           (((safe_upd_ Purse_balance) jessie_158) jessie_155))) in
+     (let jessie_168 = begin
+                         (let jessie_162 = (let jessie_158 = (0) in
+                                           (let jessie_161 = this_7 in
+                                           (((safe_upd_ Purse_balance) jessie_161) jessie_158))) in
                          void);
                         (K_1:
-                        (let jessie_160 = (0) in
-                        (let jessie_163 = this_7 in
+                        (let jessie_164 = (0) in
+                        (let jessie_167 = this_7 in
                         begin
-                          (((safe_upd_ Purse_balance) jessie_163) jessie_160);
-                         jessie_160
+                          (((safe_upd_ Purse_balance) jessie_167) jessie_164);
+                         jessie_164
                         end)))
                        end in
      void);
@@ -3614,17 +3584,17 @@ let cons_Purse_safety =
   (init:
   try
    begin
-     (let jessie_154 = begin
-                         (let jessie_149 = (let jessie_145 = (0) in
-                                           (let jessie_148 = this_7 in
-                                           (((safe_upd_ Purse_balance) jessie_148) jessie_145))) in
+     (let jessie_156 = begin
+                         (let jessie_150 = (let jessie_146 = (0) in
+                                           (let jessie_149 = this_7 in
+                                           (((safe_upd_ Purse_balance) jessie_149) jessie_146))) in
                          void);
                         (K_1:
-                        (let jessie_150 = (0) in
-                        (let jessie_153 = this_7 in
+                        (let jessie_152 = (0) in
+                        (let jessie_155 = this_7 in
                         begin
-                          (((safe_upd_ Purse_balance) jessie_153) jessie_150);
-                         jessie_150
+                          (((safe_upd_ Purse_balance) jessie_155) jessie_152);
+                         jessie_152
                         end)))
                        end in
      void);
@@ -3901,7 +3871,7 @@ why --project [...] why/Purse.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Purse_po13.why">
-      <location file = "why/Purse.why" line = "1210" begin = "39" end = "179"/>
+      <location file = "why/Purse.why" line = "1214" begin = "39" end = "179"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -5413,12 +5383,12 @@ goal Purse_getBalance_ensures_default_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_4, 0, 0, Object_alloc_table) and
-   ("JC_221": balance_non_negative(this_4, Purse_balance))) ->
+   ("JC_216": balance_non_negative(this_4, Purse_balance))) ->
   forall result:int.
   (result = select(Purse_balance, this_4)) ->
   forall return:int.
   (return = result) ->
-  ("JC_223": (return = select(Purse_balance, this_4)))
+  ("JC_218": (return = select(Purse_balance, this_4)))
 
 ========== file tests/java/why/Purse_po5.why ==========
 goal Purse_withdraw_ensures_default_po_1:
@@ -6723,7 +6693,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (EQ result (select Purse_balance this_5))
 (IMPLIES (< result s_1) (>= 1 0)))))))))
 
-;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1210, characters 39-179
+;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1214, characters 39-179
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -8077,12 +8047,12 @@ goal Purse_getBalance_ensures_default_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_4, 0, 0, Object_alloc_table) and
-   ("JC_221": balance_non_negative(this_4, Purse_balance))) ->
+   ("JC_216": balance_non_negative(this_4, Purse_balance))) ->
   forall result:int.
   (result = select(Purse_balance, this_4)) ->
   forall return:int.
   (return = result) ->
-  ("JC_223": (return = select(Purse_balance, this_4)))
+  ("JC_218": (return = select(Purse_balance, this_4)))
 
 goal Purse_withdraw_ensures_default_po_1:
   forall this_5:Object pointer.

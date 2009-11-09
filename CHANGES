@@ -1,5 +1,6 @@
 
-  
+  o [Jessie/Krakatoa/Frama-C plugin] support for decreases clauses, 
+    even for mutually recursive functions  
   o [Frama-C plugin] bug fix 0284
   o [Frama-C plugin] support for "complete behaviors" and "disjoint
     behaviors" clauses. fixes bud 0026.

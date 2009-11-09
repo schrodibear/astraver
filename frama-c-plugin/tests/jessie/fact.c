@@ -41,12 +41,10 @@
 
 /*@ requires n >= 0;
   @ ensures is_prod(1,n,\result);
-  @ decreases n; // not yet supported by Jessie plugin
+  @ decreases n; // now supported
   @*/
 int fact(int n) {
   if (n == 0) return 1;
-  // simulating the VC for the decreases clause
-  //@ assert 0 <= n && n-1 < n;
   return n * fact(n-1);
 }
 

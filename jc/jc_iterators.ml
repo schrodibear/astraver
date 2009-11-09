@@ -28,10 +28,11 @@
 open Jc_ast
 open Jc_constructors
 
+open Jc_envset
+
 (*
 open Format
 open Jc_env
-open Jc_envset
 open Jc_fenv
 open Jc_fenv
 open Jc_pervasives
@@ -344,6 +345,41 @@ let rec map_pexpr ?(before = fun x -> x) ?(after = fun x -> x) e =
 (*****************************************************************************)
 (* General iterators on terms.                                               *)
 (*****************************************************************************)
+
+type term_subst = Jc_fenv.term Jc_envset.VarMap.t
+
+let rec subst_term (subst : term_subst) t =
+  let f = subst_term subst in
+  let n = match t#node with
+    | JCTconst _ as t1 -> t1
+    | JCTvar v as t1 ->
+        begin
+          try (VarMap.find v subst)#node
+          with Not_found -> t1
+        end          
+    | JCTbinary(t1,op,t2) -> JCTbinary(f t1,op,f t2)
+    | JCTshift(t1,t2) -> JCTshift(f t1, f t2)
+    | JCTrange(t1,t2) -> JCTrange(Option_misc.map f t1, Option_misc.map f t2)
+    | JCTunary(op,t1) -> JCTunary(op, f t1)
+    | JCTderef(t1,lab,fi) -> JCTderef(f t1,lab,fi)
+    | JCTold(t1) -> JCTold(f t1)  
+    | JCTat(t1,lab) -> JCTat(f t1,lab) 
+    | JCToffset(kind,t1,st) -> JCToffset(kind,f t1,st) 
+    | JCTaddress(kind,t1) -> JCTaddress(kind,f t1) 
+    | JCTbase_block(t1) -> JCTbase_block(f t1)
+    | JCTinstanceof(t1,lab,st) -> JCTinstanceof(f t1,lab,st) 
+    | JCTcast(t1,lab,st) -> JCTcast(f t1,lab,st) 
+    | JCTbitwise_cast(t1,lab,st) -> JCTbitwise_cast(f t1,lab,st) 
+    | JCTrange_cast(t1,ei) -> JCTrange_cast(f t1,ei)
+    | JCTreal_cast(t1,rconv) -> JCTreal_cast(f t1,rconv)
+    | JCTapp app -> 
+        JCTapp({app with jc_app_args = List.map f app.jc_app_args})
+    | JCTif(t1,t2,t3) -> JCTif(f t1, f t2, f t3)
+    | JCTmatch(t, ptl) -> 
+        assert false (* TODO, beware of variable capture *)
+          (* JCTmatch(f t,List.map f ptl) *)
+  in
+  new term_with ~node:n t 
 
 module TermAst = struct
   type t = term

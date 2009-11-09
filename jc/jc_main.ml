@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_main.ml,v 1.140 2009-11-05 16:53:20 marche Exp $ *)
+(* $Id: jc_main.ml,v 1.141 2009-11-09 16:17:21 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -332,6 +332,12 @@ let main () =
 
     (* production phase 7: generation of Why functions *)
     Jc_options.lprintf "Translate functions@.";
+    push_decls
+      (Hashtbl.fold 
+	 (fun _ (f,loc,s,b) acc ->
+	    Jc_options.lprintf "Pre-treatement Function %s@." f.jc_fun_info_name;
+	    Jc_interp.pre_tr_fun f loc s b acc)
+	 Jc_typing.functions_table);
     push_decls
       (Hashtbl.fold 
 	 (fun _ (f,loc,s,b) acc ->

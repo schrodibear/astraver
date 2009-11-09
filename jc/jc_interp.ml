@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.429 2009-11-06 16:40:25 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.430 2009-11-09 16:17:21 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -703,12 +703,16 @@ let is_base_block t = match t#node with
   | JCTbase_block _ -> true
   | _ -> false
 
-let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
-  let ft = term ~type_safe ~global_assertion ~relocate lab oldlab in
+let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab oldlab t =
+  let ft = term ~subst ~type_safe ~global_assertion ~relocate lab oldlab in
   let term_coerce = term_coerce ~type_safe ~global_assertion lab in
   let t' = match t#node with
     | JCTconst JCCnull -> LVar "null"
-    | JCTvar v -> tvar ~label_in_name:global_assertion lab v
+    | JCTvar v -> 
+        begin
+          try VarMap.find v subst
+          with Not_found -> tvar ~label_in_name:global_assertion lab v
+        end
     | JCTconst c -> LConst(const c)
     | JCTunary(op,t1) ->
         let t1'= ft t1 in
@@ -934,7 +938,9 @@ let rec term ~type_safe ~global_assertion ~relocate lab oldlab t =
    else
      t')
 
+(*
 let () = ref_term := term
+*)
 
 let named_term ~type_safe ~global_assertion ~relocate lab oldlab t =
   let t' = term ~type_safe ~global_assertion ~relocate lab oldlab t in
@@ -1545,10 +1551,12 @@ let check al a' =
 
 let decreases_clause_table = Hashtbl.create 17
 
+let term_zero = new term ~typ:integer_type (JCTconst(JCCinteger "0"))
+
 let get_measure_for f =
   try
     Hashtbl.find decreases_clause_table (f.jc_fun_info_tag)
-  with Not_found -> LConst(Prim_int "0")
+  with Not_found -> term_zero
 
 
 
@@ -1950,7 +1958,7 @@ and list_type_assert vi e (lets, params) =
   let ty = vi.jc_var_info_type in
   let tmp = tmp_var_name() (* vi.jc_var_info_name *) in
   let e,a = type_assert tmp ty e in
-  Some (tmp, e, a) :: lets , (Var tmp) :: params
+  (tmp, e, a) :: lets , (Var tmp) :: params
 
 and value_assigned mark pos ty e =
     let tmp = tmp_var_name () in
@@ -2188,26 +2196,24 @@ and expr e =
 	      assert (pre = LTrue);
 	      assert (fname = f.jc_logic_info_final_name);
               let call = make_logic_app fname args in
-              let arg_types_assert =
+              let new_arg_types_assert =
 		List.fold_right
 		  (fun opt acc -> 
 		     match opt with
-                       | None -> acc
-                       | Some(_tmp,_e,a) -> make_and a acc)
+                       | (_tmp,_e,a) -> make_and a acc)
 		  arg_types_asserts LTrue
               in
               let call = 
-		if arg_types_assert = LTrue || not (safety_checking()) then 
+		if new_arg_types_assert = LTrue || not (safety_checking()) then 
 		  call
 		else
-		  Assert(`ASSERT,arg_types_assert,call) 
+		  Assert(`ASSERT,new_arg_types_assert,call) 
               in
               let call =
 		List.fold_right
 		  (fun opt c -> 
 		     match opt with
-                       | None -> c
-                       | Some(tmp,e,_ass) -> Let(tmp,e,c))
+                       | (tmp,e,_ass) -> Let(tmp,e,c))
 		  arg_types_asserts call
               in
 	      let call = append prolog call in
@@ -2272,7 +2278,7 @@ and expr e =
 		  | TreatGenFloat format ->
 		      (Var (float_format format))::(current_rounding_mode ())::args
 	      in
-	      let pre, fname, locals, prolog, epilog, args = 
+	      let pre, fname, locals, prolog, epilog, new_args = 
 		make_arguments 
                   ~callee_reads: f.jc_fun_info_effects.jc_reads
                   ~callee_writes: f.jc_fun_info_effects.jc_writes
@@ -2280,7 +2286,7 @@ and expr e =
 		  ~param_assoc ~with_globals:false ~with_body
 		  fname args
 	      in
-	      let call = make_guarded_app e#mark UserCall e#pos fname args in
+	      let call = make_guarded_app e#mark UserCall e#pos fname new_args in
 	      let call = 
 		if is_pointer_type e#typ && Region.bitwise e#region then
 		  make_app "pointer_address" [ call ]
@@ -2292,11 +2298,27 @@ and expr e =
 	      let current_comp = (get_current_function()).jc_fun_info_component in
 	      let call =
                 (* disabled temporarily *)
-		if false && safety_checking() && this_comp = current_comp then
-		  let this_measure = get_measure_for f in
+		if safety_checking() && this_comp = current_comp then
 		  let cur_measure = get_measure_for (get_current_function()) in
+                  let cur_measure = 
+                    term ~type_safe:true ~global_assertion:true
+                      ~relocate:false LabelPre LabelPre cur_measure 
+                  in
+		  let this_measure = get_measure_for f in
+                  let subst =
+                    List.fold_left2
+                      (fun acc (_,vi) (tmp,_,_) -> 
+                         Format.eprintf "subst: %s -> %s@." 
+                           vi.jc_var_info_name tmp;
+                         VarMap.add vi (LVar tmp) acc)
+                      VarMap.empty f.jc_fun_info_parameters arg_types_asserts
+                  in
+                  let this_measure = 
+                    term ~subst ~type_safe:true ~global_assertion:true
+                      ~relocate:false LabelHere LabelHere this_measure 
+                  in
 		  let pre =
-		    LPred("zwf_zero",[cur_measure;this_measure])
+		    LPred("zwf_zero",[this_measure;cur_measure])
 		  in
 		  make_check ~mark:e#mark ~kind:VarDecr e#pos 
 		    (Assert(`ASSERT,pre,call))		  
@@ -2314,8 +2336,7 @@ and expr e =
 		List.fold_right
 		  (fun opt acc -> 
 		     match opt with
-                       | None -> acc
-                       | Some(_tmp,_e,a) -> make_and a acc)
+                       | (_tmp,_e,a) -> make_and a acc)
 		  arg_types_asserts LTrue
               in
               let call = 
@@ -2329,8 +2350,7 @@ and expr e =
 		List.fold_right
 		  (fun opt c -> 
 		     match opt with
-                       | None -> c
-                       | Some(tmp,e,_ass) -> Let(tmp,e,c))
+                       | (tmp,e,_ass) -> Let(tmp,e,c))
 		  arg_types_asserts call
               in
 	      let call = append prolog call in
@@ -2832,6 +2852,15 @@ let get_valid_pred_app vi =
     | JCTtype_var _ -> LTrue
 
 
+let pre_tr_fun f funpos spec body acc =
+  begin
+    match spec.jc_fun_decreases with
+      | None -> ()
+      | Some t ->
+	  Hashtbl.add decreases_clause_table f.jc_fun_info_tag t
+  end;
+  acc
+
 	
 let tr_fun f funpos spec body acc =
 
@@ -2885,12 +2914,6 @@ let tr_fun f funpos spec body acc =
       internal_requires f.jc_fun_info_parameters
   in
 
-  begin
-    match spec.jc_fun_decreases with
-      | None -> ()
-      | Some t ->
-	  Hashtbl.add decreases_clause_table f.jc_fun_info_tag (term ~type_safe:true ~global_assertion:true ~relocate:false LabelHere LabelHere t)
-  end;
 
   (* partition behaviors as follows:
      - (optional) 'safety' behavior (if Arguments Invariant Policy is selected)

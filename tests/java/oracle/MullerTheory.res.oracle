@@ -626,17 +626,16 @@ clean:
 
 ========== file tests/java/MullerTheory.loc ==========
 [JC_90]
-file = "HOME/tests/java/MullerTheory.jc"
-line = 139
-begin = 21
-end = 1746
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_91]
-kind = UserCall
-file = "HOME/tests/java/MullerTheory.java"
-line = 38
-begin = 20
-end = 28
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_92]
 file = "HOME/"
@@ -698,23 +697,11 @@ line = 23
 begin = 13
 end = 23
 
-[JC_97]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_45]
 file = "HOME/tests/java/MullerTheory.java"
 line = 24
 begin = 8
 end = 36
-
-[JC_98]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 [JC_46]
 file = "HOME/tests/java/MullerTheory.java"
@@ -727,12 +714,6 @@ file = "HOME/tests/java/MullerTheory.jc"
 line = 38
 begin = 8
 end = 21
-
-[JC_99]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 [JC_47]
 file = "HOME/"
@@ -836,41 +817,40 @@ begin = 11
 end = 25
 
 [JC_54]
-kind = AllocSize
-file = "HOME/tests/java/MullerTheory.java"
-line = 29
-begin = 11
-end = 25
-
-[JC_55]
 file = "HOME/tests/java/MullerTheory.java"
 line = 33
 begin = 8
 end = 14
 
-[JC_56]
+[JC_55]
 file = "HOME/tests/java/MullerTheory.java"
 line = 33
 begin = 13
 end = 26
 
-[JC_57]
+[JC_56]
 file = "HOME/tests/java/MullerTheory.java"
 line = 34
 begin = 8
 end = 18
 
-[JC_58]
+[JC_57]
 file = "HOME/tests/java/MullerTheory.java"
 line = 34
 begin = 13
 end = 23
 
-[JC_59]
+[JC_58]
 file = "HOME/tests/java/MullerTheory.java"
 line = 35
 begin = 8
 end = 36
+
+[JC_59]
+file = "HOME/tests/java/MullerTheory.java"
+line = 33
+begin = 8
+end = 95
 
 [cons_MullerTheory_ensures_default]
 name = "Constructor of class MullerTheory"
@@ -881,16 +861,16 @@ begin = -1
 end = -1
 
 [JC_60]
-file = "HOME/tests/java/MullerTheory.java"
-line = 33
-begin = 8
-end = 95
-
-[JC_61]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_61]
+file = "HOME/tests/java/MullerTheory.jc"
+line = 139
+begin = 21
+end = 1746
 
 [JC_62]
 file = "HOME/tests/java/MullerTheory.jc"
@@ -905,10 +885,11 @@ begin = 11
 end = 66
 
 [JC_63]
-file = "HOME/tests/java/MullerTheory.jc"
-line = 139
-begin = 21
-end = 1746
+kind = UserCall
+file = "HOME/tests/java/MullerTheory.java"
+line = 38
+begin = 20
+end = 28
 
 [JC_11]
 file = "HOME/tests/java/MullerTheory.jc"
@@ -917,11 +898,11 @@ begin = 8
 end = 30
 
 [JC_64]
-kind = UserCall
+kind = PointerDeref
 file = "HOME/tests/java/MullerTheory.java"
-line = 38
-begin = 20
-end = 28
+line = 39
+begin = 9
+end = 13
 
 [JC_12]
 file = "HOME/"
@@ -933,8 +914,8 @@ end = -1
 kind = PointerDeref
 file = "HOME/tests/java/MullerTheory.java"
 line = 39
-begin = 9
-end = 13
+begin = 32
+end = 36
 
 [JC_13]
 file = "HOME/tests/java/MullerTheory.jc"
@@ -946,7 +927,7 @@ end = 30
 kind = PointerDeref
 file = "HOME/tests/java/MullerTheory.java"
 line = 39
-begin = 32
+begin = 19
 end = 36
 
 [JC_14]
@@ -956,11 +937,10 @@ begin = -1
 end = -1
 
 [JC_67]
-kind = PointerDeref
 file = "HOME/tests/java/MullerTheory.java"
-line = 39
-begin = 32
-end = 36
+line = 36
+begin = 18
+end = 30
 
 [JC_15]
 file = "HOME/"
@@ -969,11 +949,10 @@ begin = -1
 end = -1
 
 [JC_68]
-kind = PointerDeref
 file = "HOME/tests/java/MullerTheory.java"
-line = 39
-begin = 19
-end = 36
+line = 22
+begin = 8
+end = 14
 
 [JC_16]
 file = "HOME/"
@@ -983,9 +962,9 @@ end = -1
 
 [JC_69]
 file = "HOME/tests/java/MullerTheory.java"
-line = 36
-begin = 18
-end = 30
+line = 22
+begin = 13
+end = 26
 
 [JC_17]
 file = "HOME/"
@@ -1007,21 +986,21 @@ end = 113
 
 [JC_70]
 file = "HOME/tests/java/MullerTheory.java"
-line = 22
-begin = 8
-end = 14
-
-[JC_71]
-file = "HOME/tests/java/MullerTheory.java"
-line = 22
-begin = 13
-end = 26
-
-[JC_72]
-file = "HOME/tests/java/MullerTheory.java"
 line = 23
 begin = 8
 end = 18
+
+[JC_71]
+file = "HOME/tests/java/MullerTheory.java"
+line = 23
+begin = 13
+end = 23
+
+[JC_72]
+file = "HOME/tests/java/MullerTheory.java"
+line = 24
+begin = 8
+end = 36
 
 [JC_20]
 file = "HOME/tests/java/MullerTheory.jc"
@@ -1031,9 +1010,9 @@ end = 18
 
 [JC_73]
 file = "HOME/tests/java/MullerTheory.java"
-line = 23
-begin = 13
-end = 23
+line = 22
+begin = 8
+end = 95
 
 [JC_21]
 file = "HOME/tests/java/MullerTheory.jc"
@@ -1042,10 +1021,10 @@ begin = 11
 end = 113
 
 [JC_74]
-file = "HOME/tests/java/MullerTheory.java"
-line = 24
-begin = 8
-end = 36
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_22]
 file = "HOME/tests/java/MullerTheory.jc"
@@ -1054,10 +1033,10 @@ begin = 10
 end = 18
 
 [JC_75]
-file = "HOME/tests/java/MullerTheory.java"
-line = 22
-begin = 8
-end = 95
+file = "HOME/tests/java/MullerTheory.jc"
+line = 109
+begin = 15
+end = 1093
 
 [JC_23]
 file = "HOME/tests/java/MullerTheory.jc"
@@ -1066,10 +1045,10 @@ begin = 8
 end = 23
 
 [JC_76]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/MullerTheory.jc"
+line = 109
+begin = 15
+end = 1093
 
 [JC_24]
 file = "HOME/"
@@ -1086,10 +1065,11 @@ begin = 2
 end = 174
 
 [JC_77]
-file = "HOME/tests/java/MullerTheory.jc"
-line = 109
-begin = 15
-end = 1093
+kind = UserCall
+file = "HOME/tests/java/MullerTheory.java"
+line = 27
+begin = 20
+end = 28
 
 [JC_25]
 file = "HOME/tests/java/MullerTheory.jc"
@@ -1106,10 +1086,11 @@ begin = 24
 end = 25
 
 [JC_78]
-file = "HOME/tests/java/MullerTheory.jc"
-line = 109
-begin = 15
-end = 1093
+kind = AllocSize
+file = "HOME/tests/java/MullerTheory.java"
+line = 29
+begin = 11
+end = 25
 
 [JC_26]
 file = "HOME/"
@@ -1126,11 +1107,10 @@ begin = -1
 end = -1
 
 [JC_79]
-kind = UserCall
 file = "HOME/tests/java/MullerTheory.java"
-line = 27
-begin = 20
-end = 28
+line = 33
+begin = 8
+end = 14
 
 [JC_27]
 file = "HOME/"
@@ -1159,24 +1139,22 @@ begin = -1
 end = -1
 
 [JC_80]
-kind = AllocSize
 file = "HOME/tests/java/MullerTheory.java"
-line = 29
-begin = 11
-end = 25
+line = 33
+begin = 13
+end = 26
 
 [JC_81]
-kind = AllocSize
 file = "HOME/tests/java/MullerTheory.java"
-line = 29
-begin = 11
-end = 25
+line = 34
+begin = 8
+end = 18
 
 [JC_82]
 file = "HOME/tests/java/MullerTheory.java"
-line = 33
-begin = 8
-end = 14
+line = 34
+begin = 13
+end = 23
 
 [JC_30]
 file = "HOME/"
@@ -1186,9 +1164,9 @@ end = -1
 
 [JC_83]
 file = "HOME/tests/java/MullerTheory.java"
-line = 33
-begin = 13
-end = 26
+line = 35
+begin = 8
+end = 36
 
 [JC_31]
 file = "HOME/tests/java/MullerTheory.jc"
@@ -1198,9 +1176,9 @@ end = 65
 
 [JC_84]
 file = "HOME/tests/java/MullerTheory.java"
-line = 34
+line = 33
 begin = 8
-end = 18
+end = 95
 
 [JC_32]
 file = "HOME/tests/java/MullerTheory.jc"
@@ -1217,10 +1195,10 @@ begin = 0
 end = 320
 
 [JC_85]
-file = "HOME/tests/java/MullerTheory.java"
-line = 34
-begin = 13
-end = 23
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_33]
 file = "HOME/tests/java/MullerTheory.java"
@@ -1229,10 +1207,10 @@ begin = 17
 end = 24
 
 [JC_86]
-file = "HOME/tests/java/MullerTheory.java"
-line = 35
-begin = 8
-end = 36
+file = "HOME/tests/java/MullerTheory.jc"
+line = 139
+begin = 21
+end = 1746
 
 [JC_34]
 file = "HOME/"
@@ -1241,10 +1219,10 @@ begin = -1
 end = -1
 
 [JC_87]
-file = "HOME/tests/java/MullerTheory.java"
-line = 33
-begin = 8
-end = 95
+file = "HOME/tests/java/MullerTheory.jc"
+line = 139
+begin = 21
+end = 1746
 
 [JC_35]
 file = "HOME/tests/java/MullerTheory.java"
@@ -1253,10 +1231,11 @@ begin = 17
 end = 24
 
 [JC_88]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/MullerTheory.java"
+line = 38
+begin = 20
+end = 28
 
 [JC_36]
 file = "HOME/"
@@ -1265,10 +1244,10 @@ begin = -1
 end = -1
 
 [JC_89]
-file = "HOME/tests/java/MullerTheory.jc"
-line = 139
-begin = 21
-end = 1746
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_37]
 file = "HOME/"
@@ -2090,14 +2069,14 @@ let MullerTheory_m_ensures_default =
         (loop_3:
         while true do
         { invariant
-            (JC_75:
-            ((JC_70: le_int((0), i_4))
-            and ((JC_71:
+            (JC_73:
+            ((JC_68: le_int((0), i_4))
+            and ((JC_69:
                  le_int(i_4,
                  add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1))))
-                and ((JC_72: le_int((0), count))
-                    and ((JC_73: le_int(count, i_4))
-                        and (JC_74:
+                and ((JC_70: le_int((0), count))
+                    and ((JC_71: le_int(count, i_4))
+                        and (JC_72:
                             eq_int(count,
                             num_of_pos((0), sub_int(i_4, (1)), t_4,
                             intM_intP_t_4_7))))))))
@@ -2105,11 +2084,12 @@ let MullerTheory_m_ensures_default =
          begin
            [ { } unit { true } ];
           try
-           (let jessie_34 = begin
+           (let jessie_51 = begin
                               (if (K_17:
                                   ((lt_int_ !i_4) (K_16:
-                                                  (JC_79:
-                                                  ((java_array_length_intM t_4) Object_t_4_7_alloc_table)))))
+                                                  (let jessie_45 = t_4 in
+                                                  (JC_77:
+                                                  ((java_array_length_intM jessie_45) Object_t_4_7_alloc_table))))))
                               then
                                (if (K_14:
                                    ((gt_int_ (K_13:
@@ -2117,9 +2097,9 @@ let MullerTheory_m_ensures_default =
                                               ((shift t_4) !i_4)))) (0)))
                                then
                                 (K_12:
-                                (let jessie_32 = (let jessie_2 = !count in
+                                (let jessie_49 = (let jessie_2 = !count in
                                                  begin
-                                                   (let jessie_31 = (count := 
+                                                   (let jessie_48 = (count := 
                                                                     ((add_int jessie_2) (1))) in
                                                    void);
                                                   jessie_2
@@ -2127,17 +2107,17 @@ let MullerTheory_m_ensures_default =
                                 void))
                                else void)
                               else
-                               (let jessie_33 = (raise (Loop_exit_exc void)) in
+                               (let jessie_50 = (raise (Loop_exit_exc void)) in
                                void));
                              (raise (Loop_continue_exc void))
                             end in
            void)
            with
            Loop_continue_exc jessie_4 ->
-           (let jessie_36 = (K_15:
+           (let jessie_55 = (K_15:
                             (let jessie_1 = !i_4 in
                             begin
-                              (let jessie_35 = (i_4 := ((add_int jessie_1) (1))) in
+                              (let jessie_54 = (i_4 := ((add_int jessie_1) (1))) in
                               void);
                              jessie_1
                             end)) in
@@ -2148,23 +2128,23 @@ let MullerTheory_m_ensures_default =
         Loop_exit_exc jessie_3 ->
         void end);
       (let u = (K_37:
-               (JC_81:
+               (JC_78:
                (((alloc_struct_intM !count) Object_MullerTheory_m_9_alloc_table) Object_MullerTheory_m_9_tag_table))) in
       begin
-        (let jessie_38 = (count := (0)) in void);
+        (let jessie_58 = (count := (0)) in void);
        (let i_5 = ref (K_18: (0)) in
        try
         (loop_4:
         while true do
         { invariant
-            (JC_87:
-            ((JC_82: le_int((0), i_5))
-            and ((JC_83:
+            (JC_84:
+            ((JC_79: le_int((0), i_5))
+            and ((JC_80:
                  le_int(i_5,
                  add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1))))
-                and ((JC_84: le_int((0), count))
-                    and ((JC_85: le_int(count, i_5))
-                        and (JC_86:
+                and ((JC_81: le_int((0), count))
+                    and ((JC_82: le_int(count, i_5))
+                        and (JC_83:
                             eq_int(count,
                             num_of_pos((0), sub_int(i_5, (1)), t_4,
                             intM_intP_t_4_7))))))))
@@ -2172,11 +2152,12 @@ let MullerTheory_m_ensures_default =
          begin
            [ { } unit { true } ];
           try
-           (let jessie_47 = begin
+           (let jessie_71 = begin
                               (if (K_36:
                                   ((lt_int_ !i_5) (K_35:
-                                                  (JC_91:
-                                                  ((java_array_length_intM t_4) Object_t_4_7_alloc_table)))))
+                                                  (let jessie_60 = t_4 in
+                                                  (JC_88:
+                                                  ((java_array_length_intM jessie_60) Object_t_4_7_alloc_table))))))
                               then
                                (if (K_33:
                                    ((gt_int_ (K_32:
@@ -2184,35 +2165,35 @@ let MullerTheory_m_ensures_default =
                                               ((shift t_4) !i_5)))) (0)))
                                then
                                 (K_31:
-                                (let jessie_45 = (let jessie_40 = (K_30:
+                                (let jessie_69 = (let jessie_62 = (K_30:
                                                                   ((safe_acc_ intM_intP_t_4_7) 
                                                                    ((shift t_4) !i_5))) in
-                                                 (let jessie_43 = ((shift u) 
+                                                 (let jessie_65 = ((shift u) 
                                                                    (K_29:
                                                                    (let jessie_6 = !count in
                                                                    begin
                                                                      
-                                                                    (let jessie_44 = 
+                                                                    (let jessie_68 = 
                                                                     (count := 
                                                                     ((add_int jessie_6) (1))) in
                                                                     void);
                                                                     jessie_6
                                                                    end))) in
-                                                 (((safe_upd_ intM_intP_MullerTheory_m_9) jessie_43) jessie_40))) in
+                                                 (((safe_upd_ intM_intP_MullerTheory_m_9) jessie_65) jessie_62))) in
                                 void))
                                else void)
                               else
-                               (let jessie_46 = (raise (Loop_exit_exc void)) in
+                               (let jessie_70 = (raise (Loop_exit_exc void)) in
                                void));
                              (raise (Loop_continue_exc void))
                             end in
            void)
            with
            Loop_continue_exc jessie_8 ->
-           (let jessie_49 = (K_34:
+           (let jessie_75 = (K_34:
                             (let jessie_5 = !i_5 in
                             begin
-                              (let jessie_48 = (i_5 := ((add_int jessie_5) (1))) in
+                              (let jessie_74 = (i_5 := ((add_int jessie_5) (1))) in
                               void);
                              jessie_5
                             end)) in
@@ -2266,11 +2247,12 @@ let MullerTheory_m_safety =
                                num_of_pos((0), sub_int(i_4, (1)), t_4,
                                intM_intP_t_4_7)))))))) } ];
           try
-           (let jessie_13 = begin
+           (let jessie_17 = begin
                               (if (K_17:
                                   ((lt_int_ !i_4) (K_16:
+                                                  (let jessie_11 = t_4 in
                                                   (JC_50:
-                                                  ((java_array_length_intM_requires t_4) Object_t_4_7_alloc_table)))))
+                                                  ((java_array_length_intM_requires jessie_11) Object_t_4_7_alloc_table))))))
                               then
                                (if (K_14:
                                    ((gt_int_ (K_13:
@@ -2278,9 +2260,9 @@ let MullerTheory_m_safety =
                                              ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_4)))) (0)))
                                then
                                 (K_12:
-                                (let jessie_11 = (let jessie_2 = !count in
+                                (let jessie_15 = (let jessie_2 = !count in
                                                  begin
-                                                   (let jessie_10 = (count := 
+                                                   (let jessie_14 = (count := 
                                                                     ((add_int jessie_2) (1))) in
                                                    void);
                                                   jessie_2
@@ -2288,17 +2270,17 @@ let MullerTheory_m_safety =
                                 void))
                                else void)
                               else
-                               (let jessie_12 = (raise (Loop_exit_exc void)) in
+                               (let jessie_16 = (raise (Loop_exit_exc void)) in
                                void));
                              (raise (Loop_continue_exc void))
                             end in
            void)
            with
            Loop_continue_exc jessie_4 ->
-           (let jessie_15 = (K_15:
+           (let jessie_21 = (K_15:
                             (let jessie_1 = !i_4 in
                             begin
-                              (let jessie_14 = (i_4 := ((add_int jessie_1) (1))) in
+                              (let jessie_20 = (i_4 := ((add_int jessie_1) (1))) in
                               void);
                              jessie_1
                             end)) in
@@ -2309,75 +2291,76 @@ let MullerTheory_m_safety =
         Loop_exit_exc jessie_3 ->
         void end);
       (let u = (K_37:
-               (JC_54:
+               (JC_53:
                (((alloc_struct_intM_requires !count) Object_MullerTheory_m_9_alloc_table) Object_MullerTheory_m_9_tag_table))) in
       begin
-        (let jessie_17 = (count := (0)) in void);
+        (let jessie_24 = (count := (0)) in void);
        (let i_5 = ref (K_18: (0)) in
        try
         (loop_2:
         while true do
-        { invariant (JC_62: true)
-          variant (JC_69 : sub_int(add_int(offset_max(Object_t_4_7_alloc_table,
+        { invariant (JC_61: true)
+          variant (JC_67 : sub_int(add_int(offset_max(Object_t_4_7_alloc_table,
                                            t_4),
                                    (1)),
                            i_5)) }
          begin
            [ { } unit reads count,i_5
-             { (JC_60:
-               ((JC_55: le_int((0), i_5))
-               and ((JC_56:
+             { (JC_59:
+               ((JC_54: le_int((0), i_5))
+               and ((JC_55:
                     le_int(i_5,
                     add_int(offset_max(Object_t_4_7_alloc_table, t_4), (1))))
-                   and ((JC_57: le_int((0), count))
-                       and ((JC_58: le_int(count, i_5))
-                           and (JC_59:
+                   and ((JC_56: le_int((0), count))
+                       and ((JC_57: le_int(count, i_5))
+                           and (JC_58:
                                eq_int(count,
                                num_of_pos((0), sub_int(i_5, (1)), t_4,
                                intM_intP_t_4_7)))))))) } ];
           try
-           (let jessie_26 = begin
+           (let jessie_37 = begin
                               (if (K_36:
                                   ((lt_int_ !i_5) (K_35:
-                                                  (JC_64:
-                                                  ((java_array_length_intM_requires t_4) Object_t_4_7_alloc_table)))))
+                                                  (let jessie_26 = t_4 in
+                                                  (JC_63:
+                                                  ((java_array_length_intM_requires jessie_26) Object_t_4_7_alloc_table))))))
                               then
                                (if (K_33:
                                    ((gt_int_ (K_32:
-                                             (JC_65:
+                                             (JC_64:
                                              ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5)))) (0)))
                                then
                                 (K_31:
-                                (let jessie_24 = (let jessie_19 = (K_30:
-                                                                  (JC_67:
+                                (let jessie_35 = (let jessie_28 = (K_30:
+                                                                  (JC_65:
                                                                   ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5))) in
-                                                 (let jessie_20 = u in
-                                                 (let jessie_21 = (K_29:
+                                                 (let jessie_29 = u in
+                                                 (let jessie_30 = (K_29:
                                                                   (let jessie_6 = !count in
                                                                   begin
-                                                                    (let jessie_23 = 
+                                                                    (let jessie_34 = 
                                                                     (count := 
                                                                     ((add_int jessie_6) (1))) in
                                                                     void);
                                                                    jessie_6
                                                                   end)) in
-                                                 (let jessie_22 = ((shift jessie_20) jessie_21) in
-                                                 (JC_68:
-                                                 (((((offset_upd_ !Object_MullerTheory_m_9_alloc_table) intM_intP_MullerTheory_m_9) jessie_20) jessie_21) jessie_19)))))) in
+                                                 (let jessie_31 = ((shift jessie_29) jessie_30) in
+                                                 (JC_66:
+                                                 (((((offset_upd_ !Object_MullerTheory_m_9_alloc_table) intM_intP_MullerTheory_m_9) jessie_29) jessie_30) jessie_28)))))) in
                                 void))
                                else void)
                               else
-                               (let jessie_25 = (raise (Loop_exit_exc void)) in
+                               (let jessie_36 = (raise (Loop_exit_exc void)) in
                                void));
                              (raise (Loop_continue_exc void))
                             end in
            void)
            with
            Loop_continue_exc jessie_8 ->
-           (let jessie_28 = (K_34:
+           (let jessie_41 = (K_34:
                             (let jessie_5 = !i_5 in
                             begin
-                              (let jessie_27 = (i_5 := ((add_int jessie_5) (1))) in
+                              (let jessie_40 = (i_5 := ((add_int jessie_5) (1))) in
                               void);
                              jessie_5
                             end)) in
@@ -2402,7 +2385,7 @@ let cons_MullerTheory_ensures_default =
  fun (this_0 : Object pointer) (Object_this_0_10_alloc_table : Object alloc_table) ->
   { valid_struct_MullerTheory(this_0, (0), (0), Object_this_0_10_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_96: true) }
+  { (JC_93: true) }
 
 let cons_MullerTheory_safety =
  fun (this_0 : Object pointer) (Object_this_0_10_alloc_table : Object alloc_table) ->
@@ -3876,12 +3859,12 @@ goal MullerTheory_m_ensures_default_po_9:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3896,7 +3879,7 @@ goal MullerTheory_m_ensures_default_po_9:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_73": ("JC_73": (count0 <= i_4_0))))
+  ("JC_73": ("JC_71": ("JC_71": (count0 <= i_4_0))))
 
 ========== file tests/java/why/MullerTheory_po11.why ==========
 goal MullerTheory_m_ensures_default_po_10:
@@ -3908,12 +3891,12 @@ goal MullerTheory_m_ensures_default_po_10:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3928,9 +3911,9 @@ goal MullerTheory_m_ensures_default_po_10:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75":
-  ("JC_74":
-  ("JC_74": (count0 = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_73":
+  ("JC_72":
+  ("JC_72": (count0 = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/MullerTheory_po12.why ==========
 goal MullerTheory_m_ensures_default_po_11:
@@ -3942,12 +3925,12 @@ goal MullerTheory_m_ensures_default_po_11:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3960,7 +3943,7 @@ goal MullerTheory_m_ensures_default_po_11:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_70": ("JC_70": (0 <= i_4_0))))
+  ("JC_73": ("JC_68": ("JC_68": (0 <= i_4_0))))
 
 ========== file tests/java/why/MullerTheory_po13.why ==========
 goal MullerTheory_m_ensures_default_po_12:
@@ -3972,12 +3955,12 @@ goal MullerTheory_m_ensures_default_po_12:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -3990,9 +3973,9 @@ goal MullerTheory_m_ensures_default_po_12:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75":
-  ("JC_71":
-  ("JC_71": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_73":
+  ("JC_69":
+  ("JC_69": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/MullerTheory_po14.why ==========
 goal MullerTheory_m_ensures_default_po_13:
@@ -4004,12 +3987,12 @@ goal MullerTheory_m_ensures_default_po_13:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4022,7 +4005,7 @@ goal MullerTheory_m_ensures_default_po_13:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_72": ("JC_72": (0 <= count))))
+  ("JC_73": ("JC_70": ("JC_70": (0 <= count))))
 
 ========== file tests/java/why/MullerTheory_po15.why ==========
 goal MullerTheory_m_ensures_default_po_14:
@@ -4034,12 +4017,12 @@ goal MullerTheory_m_ensures_default_po_14:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4052,7 +4035,7 @@ goal MullerTheory_m_ensures_default_po_14:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_73": ("JC_73": (count <= i_4_0))))
+  ("JC_73": ("JC_71": ("JC_71": (count <= i_4_0))))
 
 ========== file tests/java/why/MullerTheory_po16.why ==========
 goal MullerTheory_m_ensures_default_po_15:
@@ -4064,12 +4047,12 @@ goal MullerTheory_m_ensures_default_po_15:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4082,9 +4065,9 @@ goal MullerTheory_m_ensures_default_po_15:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75":
-  ("JC_74":
-  ("JC_74": (count = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_73":
+  ("JC_72":
+  ("JC_72": (count = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/MullerTheory_po17.why ==========
 goal MullerTheory_m_ensures_default_po_16:
@@ -4097,12 +4080,12 @@ goal MullerTheory_m_ensures_default_po_16:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4121,7 +4104,7 @@ goal MullerTheory_m_ensures_default_po_16:
      instanceof(Object_MullerTheory_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_87": ("JC_82": ("JC_82": (0 <= 0))))
+  ("JC_84": ("JC_79": ("JC_79": (0 <= 0))))
 
 ========== file tests/java/why/MullerTheory_po18.why ==========
 goal MullerTheory_m_ensures_default_po_17:
@@ -4134,12 +4117,12 @@ goal MullerTheory_m_ensures_default_po_17:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4158,9 +4141,9 @@ goal MullerTheory_m_ensures_default_po_17:
      instanceof(Object_MullerTheory_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_87":
-  ("JC_83":
-  ("JC_83": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_84":
+  ("JC_80":
+  ("JC_80": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/MullerTheory_po19.why ==========
 goal MullerTheory_m_ensures_default_po_18:
@@ -4173,12 +4156,12 @@ goal MullerTheory_m_ensures_default_po_18:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4197,7 +4180,7 @@ goal MullerTheory_m_ensures_default_po_18:
      instanceof(Object_MullerTheory_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_87": ("JC_84": ("JC_84": (0 <= count0))))
+  ("JC_84": ("JC_81": ("JC_81": (0 <= count0))))
 
 ========== file tests/java/why/MullerTheory_po1.why ==========
 goal num_of_pos_strictly_increasing:
@@ -4225,12 +4208,12 @@ goal MullerTheory_m_ensures_default_po_19:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4249,7 +4232,7 @@ goal MullerTheory_m_ensures_default_po_19:
      instanceof(Object_MullerTheory_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_87": ("JC_85": ("JC_85": (count0 <= 0))))
+  ("JC_84": ("JC_82": ("JC_82": (count0 <= 0))))
 
 ========== file tests/java/why/MullerTheory_po21.why ==========
 goal MullerTheory_m_ensures_default_po_20:
@@ -4262,12 +4245,12 @@ goal MullerTheory_m_ensures_default_po_20:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4286,9 +4269,9 @@ goal MullerTheory_m_ensures_default_po_20:
      instanceof(Object_MullerTheory_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_87":
-  ("JC_86":
-  ("JC_86": (count0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_84":
+  ("JC_83":
+  ("JC_83": (count0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/MullerTheory_po22.why ==========
 goal MullerTheory_m_ensures_default_po_21:
@@ -4301,12 +4284,12 @@ goal MullerTheory_m_ensures_default_po_21:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4329,12 +4312,12 @@ goal MullerTheory_m_ensures_default_po_21:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4355,7 +4338,7 @@ goal MullerTheory_m_ensures_default_po_21:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_82": ("JC_82": (0 <= i_5_0))))
+  ("JC_84": ("JC_79": ("JC_79": (0 <= i_5_0))))
 
 ========== file tests/java/why/MullerTheory_po23.why ==========
 goal MullerTheory_m_ensures_default_po_22:
@@ -4368,12 +4351,12 @@ goal MullerTheory_m_ensures_default_po_22:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4396,12 +4379,12 @@ goal MullerTheory_m_ensures_default_po_22:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4422,9 +4405,9 @@ goal MullerTheory_m_ensures_default_po_22:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87":
-  ("JC_83":
-  ("JC_83": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_84":
+  ("JC_80":
+  ("JC_80": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/MullerTheory_po24.why ==========
 goal MullerTheory_m_ensures_default_po_23:
@@ -4437,12 +4420,12 @@ goal MullerTheory_m_ensures_default_po_23:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4465,12 +4448,12 @@ goal MullerTheory_m_ensures_default_po_23:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4491,7 +4474,7 @@ goal MullerTheory_m_ensures_default_po_23:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_84": ("JC_84": (0 <= count2))))
+  ("JC_84": ("JC_81": ("JC_81": (0 <= count2))))
 
 ========== file tests/java/why/MullerTheory_po25.why ==========
 goal MullerTheory_m_ensures_default_po_24:
@@ -4504,12 +4487,12 @@ goal MullerTheory_m_ensures_default_po_24:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4532,12 +4515,12 @@ goal MullerTheory_m_ensures_default_po_24:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4558,7 +4541,7 @@ goal MullerTheory_m_ensures_default_po_24:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_85": ("JC_85": (count2 <= i_5_0))))
+  ("JC_84": ("JC_82": ("JC_82": (count2 <= i_5_0))))
 
 ========== file tests/java/why/MullerTheory_po26.why ==========
 goal MullerTheory_m_ensures_default_po_25:
@@ -4571,12 +4554,12 @@ goal MullerTheory_m_ensures_default_po_25:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4599,12 +4582,12 @@ goal MullerTheory_m_ensures_default_po_25:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4625,9 +4608,9 @@ goal MullerTheory_m_ensures_default_po_25:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87":
-  ("JC_86":
-  ("JC_86": (count2 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_84":
+  ("JC_83":
+  ("JC_83": (count2 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/MullerTheory_po27.why ==========
 goal MullerTheory_m_ensures_default_po_26:
@@ -4640,12 +4623,12 @@ goal MullerTheory_m_ensures_default_po_26:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4666,12 +4649,12 @@ goal MullerTheory_m_ensures_default_po_26:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4684,7 +4667,7 @@ goal MullerTheory_m_ensures_default_po_26:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_82": ("JC_82": (0 <= i_5_0))))
+  ("JC_84": ("JC_79": ("JC_79": (0 <= i_5_0))))
 
 ========== file tests/java/why/MullerTheory_po28.why ==========
 goal MullerTheory_m_ensures_default_po_27:
@@ -4697,12 +4680,12 @@ goal MullerTheory_m_ensures_default_po_27:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4723,12 +4706,12 @@ goal MullerTheory_m_ensures_default_po_27:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4741,9 +4724,9 @@ goal MullerTheory_m_ensures_default_po_27:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87":
-  ("JC_83":
-  ("JC_83": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_84":
+  ("JC_80":
+  ("JC_80": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/MullerTheory_po29.why ==========
 goal MullerTheory_m_ensures_default_po_28:
@@ -4756,12 +4739,12 @@ goal MullerTheory_m_ensures_default_po_28:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4782,12 +4765,12 @@ goal MullerTheory_m_ensures_default_po_28:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4800,7 +4783,7 @@ goal MullerTheory_m_ensures_default_po_28:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_84": ("JC_84": (0 <= count1))))
+  ("JC_84": ("JC_81": ("JC_81": (0 <= count1))))
 
 ========== file tests/java/why/MullerTheory_po2.why ==========
 goal MullerTheory_m_ensures_default_po_1:
@@ -4808,7 +4791,7 @@ goal MullerTheory_m_ensures_default_po_1:
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_75": ("JC_70": ("JC_70": (0 <= 0))))
+  ("JC_73": ("JC_68": ("JC_68": (0 <= 0))))
 
 ========== file tests/java/why/MullerTheory_po30.why ==========
 goal MullerTheory_m_ensures_default_po_29:
@@ -4821,12 +4804,12 @@ goal MullerTheory_m_ensures_default_po_29:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4847,12 +4830,12 @@ goal MullerTheory_m_ensures_default_po_29:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4865,7 +4848,7 @@ goal MullerTheory_m_ensures_default_po_29:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_85": ("JC_85": (count1 <= i_5_0))))
+  ("JC_84": ("JC_82": ("JC_82": (count1 <= i_5_0))))
 
 ========== file tests/java/why/MullerTheory_po31.why ==========
 goal MullerTheory_m_ensures_default_po_30:
@@ -4878,12 +4861,12 @@ goal MullerTheory_m_ensures_default_po_30:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -4904,12 +4887,12 @@ goal MullerTheory_m_ensures_default_po_30:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -4922,9 +4905,9 @@ goal MullerTheory_m_ensures_default_po_30:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87":
-  ("JC_86":
-  ("JC_86": (count1 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_84":
+  ("JC_83":
+  ("JC_83": (count1 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/MullerTheory_po32.why ==========
 goal MullerTheory_m_safety_po_1:
@@ -5181,13 +5164,13 @@ goal MullerTheory_m_safety_po_8:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5203,9 +5186,9 @@ goal MullerTheory_m_ensures_default_po_2:
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_75":
-  ("JC_71":
-  ("JC_71": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_73":
+  ("JC_69":
+  ("JC_69": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/MullerTheory_po40.why ==========
 goal MullerTheory_m_safety_po_9:
@@ -5246,13 +5229,13 @@ goal MullerTheory_m_safety_po_9:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5301,13 +5284,13 @@ goal MullerTheory_m_safety_po_10:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5367,13 +5350,13 @@ goal MullerTheory_m_safety_po_11:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5435,13 +5418,13 @@ goal MullerTheory_m_safety_po_12:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5468,7 +5451,7 @@ goal MullerTheory_m_safety_po_12:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (0 <= ("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (0 <= ("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 ========== file tests/java/why/MullerTheory_po44.why ==========
 goal MullerTheory_m_safety_po_13:
@@ -5511,13 +5494,13 @@ goal MullerTheory_m_safety_po_13:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5544,8 +5527,8 @@ goal MullerTheory_m_safety_po_13:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
-  ("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
+  ("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 ========== file tests/java/why/MullerTheory_po45.why ==========
 goal MullerTheory_m_safety_po_14:
@@ -5586,13 +5569,13 @@ goal MullerTheory_m_safety_po_14:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5607,7 +5590,7 @@ goal MullerTheory_m_safety_po_14:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (0 <= ("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (0 <= ("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 ========== file tests/java/why/MullerTheory_po46.why ==========
 goal MullerTheory_m_safety_po_15:
@@ -5648,13 +5631,13 @@ goal MullerTheory_m_safety_po_15:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -5669,8 +5652,8 @@ goal MullerTheory_m_safety_po_15:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
-  ("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
+  ("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 ========== file tests/java/why/MullerTheory_po4.why ==========
 goal MullerTheory_m_ensures_default_po_3:
@@ -5678,7 +5661,7 @@ goal MullerTheory_m_ensures_default_po_3:
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_75": ("JC_72": ("JC_72": (0 <= 0))))
+  ("JC_73": ("JC_70": ("JC_70": (0 <= 0))))
 
 ========== file tests/java/why/MullerTheory_po5.why ==========
 goal MullerTheory_m_ensures_default_po_4:
@@ -5686,7 +5669,7 @@ goal MullerTheory_m_ensures_default_po_4:
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_75": ("JC_73": ("JC_73": (0 <= 0))))
+  ("JC_73": ("JC_71": ("JC_71": (0 <= 0))))
 
 ========== file tests/java/why/MullerTheory_po6.why ==========
 goal MullerTheory_m_ensures_default_po_5:
@@ -5696,8 +5679,8 @@ goal MullerTheory_m_ensures_default_po_5:
   int) memory.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_75":
-  ("JC_74": ("JC_74": (0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_73":
+  ("JC_72": ("JC_72": (0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
 
 ========== file tests/java/why/MullerTheory_po7.why ==========
 goal MullerTheory_m_ensures_default_po_6:
@@ -5709,12 +5692,12 @@ goal MullerTheory_m_ensures_default_po_6:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -5729,7 +5712,7 @@ goal MullerTheory_m_ensures_default_po_6:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_70": ("JC_70": (0 <= i_4_0))))
+  ("JC_73": ("JC_68": ("JC_68": (0 <= i_4_0))))
 
 ========== file tests/java/why/MullerTheory_po8.why ==========
 goal MullerTheory_m_ensures_default_po_7:
@@ -5741,12 +5724,12 @@ goal MullerTheory_m_ensures_default_po_7:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -5761,9 +5744,9 @@ goal MullerTheory_m_ensures_default_po_7:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75":
-  ("JC_71":
-  ("JC_71": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_73":
+  ("JC_69":
+  ("JC_69": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 ========== file tests/java/why/MullerTheory_po9.why ==========
 goal MullerTheory_m_ensures_default_po_8:
@@ -5775,12 +5758,12 @@ goal MullerTheory_m_ensures_default_po_8:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -5795,7 +5778,7 @@ goal MullerTheory_m_ensures_default_po_8:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_72": ("JC_72": (0 <= count0))))
+  ("JC_73": ("JC_70": ("JC_70": (0 <= count0))))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/MullerTheory.why
@@ -9794,30 +9777,30 @@ goal MullerTheory_m_ensures_default_po_1:
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_75": ("JC_70": ("JC_70": (0 <= 0))))
+  ("JC_73": ("JC_68": ("JC_68": (0 <= 0))))
 
 goal MullerTheory_m_ensures_default_po_2:
   forall t_4:Object pointer.
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_75":
-  ("JC_71":
-  ("JC_71": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_73":
+  ("JC_69":
+  ("JC_69": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal MullerTheory_m_ensures_default_po_3:
   forall t_4:Object pointer.
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_75": ("JC_72": ("JC_72": (0 <= 0))))
+  ("JC_73": ("JC_70": ("JC_70": (0 <= 0))))
 
 goal MullerTheory_m_ensures_default_po_4:
   forall t_4:Object pointer.
   forall Object_t_4_7_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_75": ("JC_73": ("JC_73": (0 <= 0))))
+  ("JC_73": ("JC_71": ("JC_71": (0 <= 0))))
 
 goal MullerTheory_m_ensures_default_po_5:
   forall t_4:Object pointer.
@@ -9826,8 +9809,8 @@ goal MullerTheory_m_ensures_default_po_5:
   int) memory.
   (left_valid_struct_intM(t_4, 0, Object_t_4_7_alloc_table) and
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
-  ("JC_75":
-  ("JC_74": ("JC_74": (0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_73":
+  ("JC_72": ("JC_72": (0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal MullerTheory_m_ensures_default_po_6:
   forall t_4:Object pointer.
@@ -9838,12 +9821,12 @@ goal MullerTheory_m_ensures_default_po_6:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9858,7 +9841,7 @@ goal MullerTheory_m_ensures_default_po_6:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_70": ("JC_70": (0 <= i_4_0))))
+  ("JC_73": ("JC_68": ("JC_68": (0 <= i_4_0))))
 
 goal MullerTheory_m_ensures_default_po_7:
   forall t_4:Object pointer.
@@ -9869,12 +9852,12 @@ goal MullerTheory_m_ensures_default_po_7:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9889,9 +9872,9 @@ goal MullerTheory_m_ensures_default_po_7:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75":
-  ("JC_71":
-  ("JC_71": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_73":
+  ("JC_69":
+  ("JC_69": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal MullerTheory_m_ensures_default_po_8:
   forall t_4:Object pointer.
@@ -9902,12 +9885,12 @@ goal MullerTheory_m_ensures_default_po_8:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9922,7 +9905,7 @@ goal MullerTheory_m_ensures_default_po_8:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_72": ("JC_72": (0 <= count0))))
+  ("JC_73": ("JC_70": ("JC_70": (0 <= count0))))
 
 goal MullerTheory_m_ensures_default_po_9:
   forall t_4:Object pointer.
@@ -9933,12 +9916,12 @@ goal MullerTheory_m_ensures_default_po_9:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9953,7 +9936,7 @@ goal MullerTheory_m_ensures_default_po_9:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_73": ("JC_73": (count0 <= i_4_0))))
+  ("JC_73": ("JC_71": ("JC_71": (count0 <= i_4_0))))
 
 goal MullerTheory_m_ensures_default_po_10:
   forall t_4:Object pointer.
@@ -9964,12 +9947,12 @@ goal MullerTheory_m_ensures_default_po_10:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -9984,9 +9967,9 @@ goal MullerTheory_m_ensures_default_po_10:
   (count0 = (count + 1)) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75":
-  ("JC_74":
-  ("JC_74": (count0 = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_73":
+  ("JC_72":
+  ("JC_72": (count0 = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal MullerTheory_m_ensures_default_po_11:
   forall t_4:Object pointer.
@@ -9997,12 +9980,12 @@ goal MullerTheory_m_ensures_default_po_11:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10015,7 +9998,7 @@ goal MullerTheory_m_ensures_default_po_11:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_70": ("JC_70": (0 <= i_4_0))))
+  ("JC_73": ("JC_68": ("JC_68": (0 <= i_4_0))))
 
 goal MullerTheory_m_ensures_default_po_12:
   forall t_4:Object pointer.
@@ -10026,12 +10009,12 @@ goal MullerTheory_m_ensures_default_po_12:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10044,9 +10027,9 @@ goal MullerTheory_m_ensures_default_po_12:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75":
-  ("JC_71":
-  ("JC_71": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_73":
+  ("JC_69":
+  ("JC_69": (i_4_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal MullerTheory_m_ensures_default_po_13:
   forall t_4:Object pointer.
@@ -10057,12 +10040,12 @@ goal MullerTheory_m_ensures_default_po_13:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10075,7 +10058,7 @@ goal MullerTheory_m_ensures_default_po_13:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_72": ("JC_72": (0 <= count))))
+  ("JC_73": ("JC_70": ("JC_70": (0 <= count))))
 
 goal MullerTheory_m_ensures_default_po_14:
   forall t_4:Object pointer.
@@ -10086,12 +10069,12 @@ goal MullerTheory_m_ensures_default_po_14:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10104,7 +10087,7 @@ goal MullerTheory_m_ensures_default_po_14:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75": ("JC_73": ("JC_73": (count <= i_4_0))))
+  ("JC_73": ("JC_71": ("JC_71": (count <= i_4_0))))
 
 goal MullerTheory_m_ensures_default_po_15:
   forall t_4:Object pointer.
@@ -10115,12 +10098,12 @@ goal MullerTheory_m_ensures_default_po_15:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10133,9 +10116,9 @@ goal MullerTheory_m_ensures_default_po_15:
   (result0 <= 0) ->
   forall i_4_0:int.
   (i_4_0 = (i_4 + 1)) ->
-  ("JC_75":
-  ("JC_74":
-  ("JC_74": (count = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_73":
+  ("JC_72":
+  ("JC_72": (count = num_of_pos(0, (i_4_0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal MullerTheory_m_ensures_default_po_16:
   forall t_4:Object pointer.
@@ -10147,12 +10130,12 @@ goal MullerTheory_m_ensures_default_po_16:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10171,7 +10154,7 @@ goal MullerTheory_m_ensures_default_po_16:
      instanceof(Object_MullerTheory_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_87": ("JC_82": ("JC_82": (0 <= 0))))
+  ("JC_84": ("JC_79": ("JC_79": (0 <= 0))))
 
 goal MullerTheory_m_ensures_default_po_17:
   forall t_4:Object pointer.
@@ -10183,12 +10166,12 @@ goal MullerTheory_m_ensures_default_po_17:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10207,9 +10190,9 @@ goal MullerTheory_m_ensures_default_po_17:
      instanceof(Object_MullerTheory_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_87":
-  ("JC_83":
-  ("JC_83": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_84":
+  ("JC_80":
+  ("JC_80": (0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal MullerTheory_m_ensures_default_po_18:
   forall t_4:Object pointer.
@@ -10221,12 +10204,12 @@ goal MullerTheory_m_ensures_default_po_18:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10245,7 +10228,7 @@ goal MullerTheory_m_ensures_default_po_18:
      instanceof(Object_MullerTheory_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_87": ("JC_84": ("JC_84": (0 <= count0))))
+  ("JC_84": ("JC_81": ("JC_81": (0 <= count0))))
 
 goal MullerTheory_m_ensures_default_po_19:
   forall t_4:Object pointer.
@@ -10257,12 +10240,12 @@ goal MullerTheory_m_ensures_default_po_19:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10281,7 +10264,7 @@ goal MullerTheory_m_ensures_default_po_19:
      instanceof(Object_MullerTheory_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_87": ("JC_85": ("JC_85": (count0 <= 0))))
+  ("JC_84": ("JC_82": ("JC_82": (count0 <= 0))))
 
 goal MullerTheory_m_ensures_default_po_20:
   forall t_4:Object pointer.
@@ -10293,12 +10276,12 @@ goal MullerTheory_m_ensures_default_po_20:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10317,9 +10300,9 @@ goal MullerTheory_m_ensures_default_po_20:
      instanceof(Object_MullerTheory_m_9_tag_table, result0, intM_tag)))) ->
   forall count0:int.
   (count0 = 0) ->
-  ("JC_87":
-  ("JC_86":
-  ("JC_86": (count0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_84":
+  ("JC_83":
+  ("JC_83": (count0 = num_of_pos(0, (0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal MullerTheory_m_ensures_default_po_21:
   forall t_4:Object pointer.
@@ -10331,12 +10314,12 @@ goal MullerTheory_m_ensures_default_po_21:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10359,12 +10342,12 @@ goal MullerTheory_m_ensures_default_po_21:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10385,7 +10368,7 @@ goal MullerTheory_m_ensures_default_po_21:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_82": ("JC_82": (0 <= i_5_0))))
+  ("JC_84": ("JC_79": ("JC_79": (0 <= i_5_0))))
 
 goal MullerTheory_m_ensures_default_po_22:
   forall t_4:Object pointer.
@@ -10397,12 +10380,12 @@ goal MullerTheory_m_ensures_default_po_22:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10425,12 +10408,12 @@ goal MullerTheory_m_ensures_default_po_22:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10451,9 +10434,9 @@ goal MullerTheory_m_ensures_default_po_22:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87":
-  ("JC_83":
-  ("JC_83": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_84":
+  ("JC_80":
+  ("JC_80": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal MullerTheory_m_ensures_default_po_23:
   forall t_4:Object pointer.
@@ -10465,12 +10448,12 @@ goal MullerTheory_m_ensures_default_po_23:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10493,12 +10476,12 @@ goal MullerTheory_m_ensures_default_po_23:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10519,7 +10502,7 @@ goal MullerTheory_m_ensures_default_po_23:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_84": ("JC_84": (0 <= count2))))
+  ("JC_84": ("JC_81": ("JC_81": (0 <= count2))))
 
 goal MullerTheory_m_ensures_default_po_24:
   forall t_4:Object pointer.
@@ -10531,12 +10514,12 @@ goal MullerTheory_m_ensures_default_po_24:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10559,12 +10542,12 @@ goal MullerTheory_m_ensures_default_po_24:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10585,7 +10568,7 @@ goal MullerTheory_m_ensures_default_po_24:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_85": ("JC_85": (count2 <= i_5_0))))
+  ("JC_84": ("JC_82": ("JC_82": (count2 <= i_5_0))))
 
 goal MullerTheory_m_ensures_default_po_25:
   forall t_4:Object pointer.
@@ -10597,12 +10580,12 @@ goal MullerTheory_m_ensures_default_po_25:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10625,12 +10608,12 @@ goal MullerTheory_m_ensures_default_po_25:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10651,9 +10634,9 @@ goal MullerTheory_m_ensures_default_po_25:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87":
-  ("JC_86":
-  ("JC_86": (count2 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_84":
+  ("JC_83":
+  ("JC_83": (count2 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal MullerTheory_m_ensures_default_po_26:
   forall t_4:Object pointer.
@@ -10665,12 +10648,12 @@ goal MullerTheory_m_ensures_default_po_26:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10691,12 +10674,12 @@ goal MullerTheory_m_ensures_default_po_26:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10709,7 +10692,7 @@ goal MullerTheory_m_ensures_default_po_26:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_82": ("JC_82": (0 <= i_5_0))))
+  ("JC_84": ("JC_79": ("JC_79": (0 <= i_5_0))))
 
 goal MullerTheory_m_ensures_default_po_27:
   forall t_4:Object pointer.
@@ -10721,12 +10704,12 @@ goal MullerTheory_m_ensures_default_po_27:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10747,12 +10730,12 @@ goal MullerTheory_m_ensures_default_po_27:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10765,9 +10748,9 @@ goal MullerTheory_m_ensures_default_po_27:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87":
-  ("JC_83":
-  ("JC_83": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
+  ("JC_84":
+  ("JC_80":
+  ("JC_80": (i_5_0 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1)))))
 
 goal MullerTheory_m_ensures_default_po_28:
   forall t_4:Object pointer.
@@ -10779,12 +10762,12 @@ goal MullerTheory_m_ensures_default_po_28:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10805,12 +10788,12 @@ goal MullerTheory_m_ensures_default_po_28:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10823,7 +10806,7 @@ goal MullerTheory_m_ensures_default_po_28:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_84": ("JC_84": (0 <= count1))))
+  ("JC_84": ("JC_81": ("JC_81": (0 <= count1))))
 
 goal MullerTheory_m_ensures_default_po_29:
   forall t_4:Object pointer.
@@ -10835,12 +10818,12 @@ goal MullerTheory_m_ensures_default_po_29:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10861,12 +10844,12 @@ goal MullerTheory_m_ensures_default_po_29:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10879,7 +10862,7 @@ goal MullerTheory_m_ensures_default_po_29:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87": ("JC_85": ("JC_85": (count1 <= i_5_0))))
+  ("JC_84": ("JC_82": ("JC_82": (count1 <= i_5_0))))
 
 goal MullerTheory_m_ensures_default_po_30:
   forall t_4:Object pointer.
@@ -10891,12 +10874,12 @@ goal MullerTheory_m_ensures_default_po_30:
    ("JC_35": Non_null_intM(t_4, Object_t_4_7_alloc_table))) ->
   forall count:int.
   forall i_4:int.
-  ("JC_75":
-  (("JC_70": (0 <= i_4)) and
-   (("JC_71": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_72": (0 <= count)) and
-     (("JC_73": (count <= i_4)) and
-      ("JC_74": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_73":
+  (("JC_68": (0 <= i_4)) and
+   (("JC_69": (i_4 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_70": (0 <= count)) and
+     (("JC_71": (count <= i_4)) and
+      ("JC_72": (count = num_of_pos(0, (i_4 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result:int.
   ("JC_21":
   ((result <= 2147483647) and
@@ -10917,12 +10900,12 @@ goal MullerTheory_m_ensures_default_po_30:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_87":
-  (("JC_82": (0 <= i_5)) and
-   (("JC_83": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_84": (0 <= count1)) and
-     (("JC_85": (count1 <= i_5)) and
-      ("JC_86": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_84":
+  (("JC_79": (0 <= i_5)) and
+   (("JC_80": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_81": (0 <= count1)) and
+     (("JC_82": (count1 <= i_5)) and
+      ("JC_83": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -10935,9 +10918,9 @@ goal MullerTheory_m_ensures_default_po_30:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  ("JC_87":
-  ("JC_86":
-  ("JC_86": (count1 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
+  ("JC_84":
+  ("JC_83":
+  ("JC_83": (count1 = num_of_pos(0, (i_5_0 - 1), t_4, intM_intP_t_4_7)))))
 
 goal MullerTheory_m_safety_po_1:
   forall t_4:Object pointer.
@@ -11186,13 +11169,13 @@ goal MullerTheory_m_safety_po_8:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -11240,13 +11223,13 @@ goal MullerTheory_m_safety_po_9:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -11294,13 +11277,13 @@ goal MullerTheory_m_safety_po_10:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -11359,13 +11342,13 @@ goal MullerTheory_m_safety_po_11:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -11426,13 +11409,13 @@ goal MullerTheory_m_safety_po_12:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -11459,7 +11442,7 @@ goal MullerTheory_m_safety_po_12:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (0 <= ("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (0 <= ("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 goal MullerTheory_m_safety_po_13:
   forall t_4:Object pointer.
@@ -11501,13 +11484,13 @@ goal MullerTheory_m_safety_po_13:
   forall i_5:int.
   forall intM_intP_MullerTheory_m_9:(Object,
   int) memory.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -11534,8 +11517,8 @@ goal MullerTheory_m_safety_po_13:
   shift(result0, count1), result3)) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
-  ("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
+  ("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 goal MullerTheory_m_safety_po_14:
   forall t_4:Object pointer.
@@ -11575,13 +11558,13 @@ goal MullerTheory_m_safety_po_14:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -11596,7 +11579,7 @@ goal MullerTheory_m_safety_po_14:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (0 <= ("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (0 <= ("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 goal MullerTheory_m_safety_po_15:
   forall t_4:Object pointer.
@@ -11636,13 +11619,13 @@ goal MullerTheory_m_safety_po_15:
   (count0 = 0) ->
   forall count1:int.
   forall i_5:int.
-  ("JC_62": true) ->
-  ("JC_60":
-  (("JC_55": (0 <= i_5)) and
-   (("JC_56": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
-    (("JC_57": (0 <= count1)) and
-     (("JC_58": (count1 <= i_5)) and
-      ("JC_59": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
+  ("JC_61": true) ->
+  ("JC_59":
+  (("JC_54": (0 <= i_5)) and
+   (("JC_55": (i_5 <= (offset_max(Object_t_4_7_alloc_table, t_4) + 1))) and
+    (("JC_56": (0 <= count1)) and
+     (("JC_57": (count1 <= i_5)) and
+      ("JC_58": (count1 = num_of_pos(0, (i_5 - 1), t_4, intM_intP_t_4_7)))))))) ->
   forall result1:int.
   ("JC_21":
   ((result1 <= 2147483647) and
@@ -11657,8 +11640,8 @@ goal MullerTheory_m_safety_po_15:
   (result2 <= 0) ->
   forall i_5_0:int.
   (i_5_0 = (i_5 + 1)) ->
-  (("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
-  ("JC_69": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
+  (("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5_0)) < 
+  ("JC_67": ((offset_max(Object_t_4_7_alloc_table, t_4) + 1) - i_5)))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

@@ -531,47 +531,46 @@ begin = 18
 end = 22
 
 [JC_51]
-kind = ArithOverflow
-file = "HOME/tests/java/AllZeros.jc"
-line = 91
-begin = 18
-end = 22
-
-[JC_52]
 file = "HOME/tests/java/AllZeros.java"
 line = 39
 begin = 18
 end = 30
 
-[JC_53]
+[JC_52]
 file = "HOME/tests/java/AllZeros.java"
 line = 37
 begin = 6
 end = 12
 
-[JC_54]
+[JC_53]
 file = "HOME/tests/java/AllZeros.java"
 line = 37
 begin = 11
 end = 24
 
-[JC_55]
+[JC_54]
 file = "HOME/tests/java/AllZeros.java"
 line = 38
 begin = 6
 end = 49
 
-[JC_56]
+[JC_55]
 file = "HOME/tests/java/AllZeros.java"
 line = 37
 begin = 6
 end = 78
 
-[JC_57]
+[JC_56]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_57]
+file = "HOME/tests/java/AllZeros.jc"
+line = 81
+begin = 9
+end = 640
 
 [JC_58]
 file = "HOME/tests/java/AllZeros.jc"
@@ -580,10 +579,17 @@ begin = 9
 end = 640
 
 [JC_59]
-file = "HOME/tests/java/AllZeros.jc"
-line = 81
-begin = 9
-end = 640
+kind = UserCall
+file = "HOME/tests/java/AllZeros.java"
+line = 41
+begin = 21
+end = 29
+
+[JC_60]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [AllZeros_all_zeros_ensures_default]
 name = "Method all_zeros"
@@ -592,13 +598,6 @@ file = "HOME/tests/java/AllZeros.java"
 line = 35
 begin = 19
 end = 28
-
-[JC_60]
-kind = UserCall
-file = "HOME/tests/java/AllZeros.java"
-line = 41
-begin = 21
-end = 29
 
 [JC_61]
 file = "HOME/"
@@ -681,12 +680,6 @@ begin = -1
 end = -1
 
 [JC_15]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_68]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1767,12 +1760,12 @@ let AllZeros_all_zeros_ensures_default =
       (loop_2:
       while true do
       { invariant
-          (JC_56:
-          ((JC_53: le_int((0), integer_of_int32(k)))
-          and ((JC_54:
+          (JC_55:
+          ((JC_52: le_int((0), integer_of_int32(k)))
+          and ((JC_53:
                le_int(integer_of_int32(k),
                add_int(offset_max(Object_alloc_table, t), (1))))
-              and (JC_55:
+              and (JC_54:
                   (forall i_0:int.
                    ((le_int((0), i_0) and lt_int(i_0, integer_of_int32(k))) ->
                     eq_int(integer_of_int32(select(intM_intP, shift(t, i_0))),
@@ -1781,11 +1774,12 @@ let AllZeros_all_zeros_ensures_default =
        begin
          [ { } unit { true } ];
         try
-         (let jessie_11 = begin
+         (let jessie_18 = begin
                             (if (K_13:
                                 ((lt_int_ (integer_of_int32 !k)) (K_12:
-                                                                 (JC_60:
-                                                                 (java_array_length_intM t)))))
+                                                                 (let jessie_15 = t in
+                                                                 (JC_59:
+                                                                 (java_array_length_intM jessie_15))))))
                             then
                              (if (K_10:
                                  ((neq_int_ (integer_of_int32 (K_9:
@@ -1796,17 +1790,17 @@ let AllZeros_all_zeros_ensures_default =
                               begin   (return := false); (raise Return) end
                              else void)
                             else
-                             (let jessie_10 = (raise (Loop_exit_exc void)) in
+                             (let jessie_17 = (raise (Loop_exit_exc void)) in
                              void));
                            (raise (Loop_continue_exc void))
                           end in
          void)
          with
          Loop_continue_exc jessie_3 ->
-         (let jessie_13 = (K_11:
+         (let jessie_22 = (K_11:
                           (let jessie_1 = !k in
                           begin
-                            (let jessie_12 = (k := (safe_int32_of_integer_ 
+                            (let jessie_21 = (k := (safe_int32_of_integer_ 
                                                     ((add_int (integer_of_int32 jessie_1)) (1)))) in
                             void);
                            jessie_1
@@ -1844,7 +1838,7 @@ let AllZeros_all_zeros_safety =
       (loop_1:
       while true do
       { invariant (JC_46: true)
-        variant (JC_52 : sub_int(add_int(offset_max(Object_alloc_table, t),
+        variant (JC_51 : sub_int(add_int(offset_max(Object_alloc_table, t),
                                  (1)),
                          integer_of_int32(k))) }
        begin
@@ -1862,11 +1856,12 @@ let AllZeros_all_zeros_safety =
                                                shift(t, i_0))),
                        (0)))))))) } ];
         try
-         (let jessie_6 = begin
+         (let jessie_8 = begin
                            (if (K_13:
                                ((lt_int_ (integer_of_int32 !k)) (K_12:
+                                                                (let jessie_5 = t in
                                                                 (JC_48:
-                                                                (java_array_length_intM_requires t)))))
+                                                                (java_array_length_intM_requires jessie_5))))))
                            then
                             (if (K_10:
                                 ((neq_int_ (integer_of_int32 (K_9:
@@ -1877,22 +1872,22 @@ let AllZeros_all_zeros_safety =
                              begin   (return := false); (raise Return) end
                             else void)
                            else
-                            (let jessie_5 = (raise (Loop_exit_exc void)) in
+                            (let jessie_7 = (raise (Loop_exit_exc void)) in
                             void));
                           (raise (Loop_continue_exc void))
                          end in
          void)
          with
          Loop_continue_exc jessie_3 ->
-         (let jessie_8 = (K_11:
-                         (let jessie_1 = !k in
-                         begin
-                           (let jessie_7 = (k := (JC_51:
-                                                 (int32_of_integer_ ((add_int 
-                                                                    (integer_of_int32 jessie_1)) (1))))) in
-                           void);
-                          jessie_1
-                         end)) in
+         (let jessie_12 = (K_11:
+                          (let jessie_1 = !k in
+                          begin
+                            (let jessie_11 = (k := (JC_50:
+                                                   (int32_of_integer_ 
+                                                    ((add_int (integer_of_int32 jessie_1)) (1))))) in
+                            void);
+                           jessie_1
+                          end)) in
          void) end
        end
       done)
@@ -1912,7 +1907,7 @@ let cons_AllZeros_ensures_default =
  fun (this_0 : Object pointer) ->
   { valid_struct_AllZeros(this_0, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_65: true) }
+  { (JC_64: true) }
 
 let cons_AllZeros_safety =
  fun (this_0 : Object pointer) ->
@@ -3353,11 +3348,11 @@ goal AllZeros_all_zeros_ensures_default_po_10:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -3533,7 +3528,7 @@ goal AllZeros_all_zeros_safety_po_5:
   (integer_of_int32(result2) = (integer_of_int32(k) + 1)) ->
   forall k0:int32.
   (k0 = result2) ->
-  (0 <= ("JC_52": ((offset_max(Object_alloc_table,
+  (0 <= ("JC_51": ((offset_max(Object_alloc_table,
         t) + 1) - integer_of_int32(k))))
 
 ========== file tests/java/why/AllZeros_po16.why ==========
@@ -3573,8 +3568,8 @@ goal AllZeros_all_zeros_safety_po_6:
   (integer_of_int32(result2) = (integer_of_int32(k) + 1)) ->
   forall k0:int32.
   (k0 = result2) ->
-  (("JC_52": ((offset_max(Object_alloc_table,
-   t) + 1) - integer_of_int32(k0))) < ("JC_52":
+  (("JC_51": ((offset_max(Object_alloc_table,
+   t) + 1) - integer_of_int32(k0))) < ("JC_51":
                                       ((offset_max(Object_alloc_table,
                                       t) + 1) - integer_of_int32(k))))
 
@@ -3586,7 +3581,7 @@ goal AllZeros_all_zeros_ensures_default_po_1:
    ("JC_35": Non_null_intM(t, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_56": ("JC_53": ("JC_53": (0 <= integer_of_int32(result)))))
+  ("JC_55": ("JC_52": ("JC_52": (0 <= integer_of_int32(result)))))
 
 ========== file tests/java/why/AllZeros_po2.why ==========
 goal AllZeros_all_zeros_ensures_default_po_2:
@@ -3596,9 +3591,9 @@ goal AllZeros_all_zeros_ensures_default_po_2:
    ("JC_35": Non_null_intM(t, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_56":
-  ("JC_54":
-  ("JC_54": (integer_of_int32(result) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  ("JC_53":
+  ("JC_53": (integer_of_int32(result) <= (offset_max(Object_alloc_table,
   t) + 1)))))
 
 ========== file tests/java/why/AllZeros_po3.why ==========
@@ -3611,9 +3606,9 @@ goal AllZeros_all_zeros_ensures_default_po_3:
    ("JC_35": Non_null_intM(t, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_56":
   ("JC_55":
-  ("JC_55":
+  ("JC_54":
+  ("JC_54":
   (forall i_0:int.
     (((0 <= i_0) and (i_0 < integer_of_int32(result))) ->
      (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))
@@ -3629,11 +3624,11 @@ goal AllZeros_all_zeros_ensures_default_po_4:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -3664,11 +3659,11 @@ goal AllZeros_all_zeros_ensures_default_po_5:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -3699,11 +3694,11 @@ goal AllZeros_all_zeros_ensures_default_po_6:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -3720,7 +3715,7 @@ goal AllZeros_all_zeros_ensures_default_po_6:
   (integer_of_int32(result2) = (integer_of_int32(k) + 1)) ->
   forall k0:int32.
   (k0 = result2) ->
-  ("JC_56": ("JC_53": ("JC_53": (0 <= integer_of_int32(k0)))))
+  ("JC_55": ("JC_52": ("JC_52": (0 <= integer_of_int32(k0)))))
 
 ========== file tests/java/why/AllZeros_po7.why ==========
 goal AllZeros_all_zeros_ensures_default_po_7:
@@ -3733,11 +3728,11 @@ goal AllZeros_all_zeros_ensures_default_po_7:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -3754,9 +3749,9 @@ goal AllZeros_all_zeros_ensures_default_po_7:
   (integer_of_int32(result2) = (integer_of_int32(k) + 1)) ->
   forall k0:int32.
   (k0 = result2) ->
-  ("JC_56":
-  ("JC_54":
-  ("JC_54": (integer_of_int32(k0) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  ("JC_53":
+  ("JC_53": (integer_of_int32(k0) <= (offset_max(Object_alloc_table,
   t) + 1)))))
 
 ========== file tests/java/why/AllZeros_po8.why ==========
@@ -3770,11 +3765,11 @@ goal AllZeros_all_zeros_ensures_default_po_8:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -3791,9 +3786,9 @@ goal AllZeros_all_zeros_ensures_default_po_8:
   (integer_of_int32(result2) = (integer_of_int32(k) + 1)) ->
   forall k0:int32.
   (k0 = result2) ->
-  ("JC_56":
   ("JC_55":
-  ("JC_55":
+  ("JC_54":
+  ("JC_54":
   (forall i_0:int.
     (((0 <= i_0) and (i_0 < integer_of_int32(k0))) ->
      (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))
@@ -3809,11 +3804,11 @@ goal AllZeros_all_zeros_ensures_default_po_9:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -6676,7 +6671,7 @@ goal AllZeros_all_zeros_ensures_default_po_1:
    ("JC_35": Non_null_intM(t, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_56": ("JC_53": ("JC_53": (0 <= integer_of_int32(result)))))
+  ("JC_55": ("JC_52": ("JC_52": (0 <= integer_of_int32(result)))))
 
 goal AllZeros_all_zeros_ensures_default_po_2:
   forall t:Object pointer.
@@ -6685,9 +6680,9 @@ goal AllZeros_all_zeros_ensures_default_po_2:
    ("JC_35": Non_null_intM(t, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_56":
-  ("JC_54":
-  ("JC_54": (integer_of_int32(result) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  ("JC_53":
+  ("JC_53": (integer_of_int32(result) <= (offset_max(Object_alloc_table,
   t) + 1)))))
 
 goal AllZeros_all_zeros_ensures_default_po_3:
@@ -6699,9 +6694,9 @@ goal AllZeros_all_zeros_ensures_default_po_3:
    ("JC_35": Non_null_intM(t, Object_alloc_table))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
-  ("JC_56":
   ("JC_55":
-  ("JC_55":
+  ("JC_54":
+  ("JC_54":
   (forall i_0:int.
     (((0 <= i_0) and (i_0 < integer_of_int32(result))) ->
      (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))
@@ -6716,11 +6711,11 @@ goal AllZeros_all_zeros_ensures_default_po_4:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -6750,11 +6745,11 @@ goal AllZeros_all_zeros_ensures_default_po_5:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -6784,11 +6779,11 @@ goal AllZeros_all_zeros_ensures_default_po_6:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -6805,7 +6800,7 @@ goal AllZeros_all_zeros_ensures_default_po_6:
   (integer_of_int32(result2) = (integer_of_int32(k) + 1)) ->
   forall k0:int32.
   (k0 = result2) ->
-  ("JC_56": ("JC_53": ("JC_53": (0 <= integer_of_int32(k0)))))
+  ("JC_55": ("JC_52": ("JC_52": (0 <= integer_of_int32(k0)))))
 
 goal AllZeros_all_zeros_ensures_default_po_7:
   forall t:Object pointer.
@@ -6817,11 +6812,11 @@ goal AllZeros_all_zeros_ensures_default_po_7:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -6838,9 +6833,9 @@ goal AllZeros_all_zeros_ensures_default_po_7:
   (integer_of_int32(result2) = (integer_of_int32(k) + 1)) ->
   forall k0:int32.
   (k0 = result2) ->
-  ("JC_56":
-  ("JC_54":
-  ("JC_54": (integer_of_int32(k0) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  ("JC_53":
+  ("JC_53": (integer_of_int32(k0) <= (offset_max(Object_alloc_table,
   t) + 1)))))
 
 goal AllZeros_all_zeros_ensures_default_po_8:
@@ -6853,11 +6848,11 @@ goal AllZeros_all_zeros_ensures_default_po_8:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -6874,9 +6869,9 @@ goal AllZeros_all_zeros_ensures_default_po_8:
   (integer_of_int32(result2) = (integer_of_int32(k) + 1)) ->
   forall k0:int32.
   (k0 = result2) ->
-  ("JC_56":
   ("JC_55":
-  ("JC_55":
+  ("JC_54":
+  ("JC_54":
   (forall i_0:int.
     (((0 <= i_0) and (i_0 < integer_of_int32(k0))) ->
      (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))
@@ -6891,11 +6886,11 @@ goal AllZeros_all_zeros_ensures_default_po_9:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -6922,11 +6917,11 @@ goal AllZeros_all_zeros_ensures_default_po_10:
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall k:int32.
-  ("JC_56":
-  (("JC_53": (0 <= integer_of_int32(k))) and
-   (("JC_54": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
+  ("JC_55":
+  (("JC_52": (0 <= integer_of_int32(k))) and
+   (("JC_53": (integer_of_int32(k) <= (offset_max(Object_alloc_table,
     t) + 1))) and
-    ("JC_55":
+    ("JC_54":
     (forall i_0:int.
       (((0 <= i_0) and (i_0 < integer_of_int32(k))) ->
        (integer_of_int32(select(intM_intP, shift(t, i_0))) = 0))))))) ->
@@ -7097,7 +7092,7 @@ goal AllZeros_all_zeros_safety_po_5:
   (integer_of_int32(result2) = (integer_of_int32(k) + 1)) ->
   forall k0:int32.
   (k0 = result2) ->
-  (0 <= ("JC_52": ((offset_max(Object_alloc_table,
+  (0 <= ("JC_51": ((offset_max(Object_alloc_table,
         t) + 1) - integer_of_int32(k))))
 
 goal AllZeros_all_zeros_safety_po_6:
@@ -7136,8 +7131,8 @@ goal AllZeros_all_zeros_safety_po_6:
   (integer_of_int32(result2) = (integer_of_int32(k) + 1)) ->
   forall k0:int32.
   (k0 = result2) ->
-  (("JC_52": ((offset_max(Object_alloc_table,
-   t) + 1) - integer_of_int32(k0))) < ("JC_52":
+  (("JC_51": ((offset_max(Object_alloc_table,
+   t) + 1) - integer_of_int32(k0))) < ("JC_51":
                                       ((offset_max(Object_alloc_table,
                                       t) + 1) - integer_of_int32(k))))
 

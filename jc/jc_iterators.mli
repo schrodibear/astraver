@@ -1,4 +1,12 @@
 
+(* {1 substitution in logic} *)
+
+type term_subst = Jc_fenv.term Jc_envset.VarMap.t
+
+val subst_term : term_subst -> Jc_fenv.term -> Jc_fenv.term
+
+(* {2 miscellaneous} *)
+
 (* spec ? *)
 val fold_term :
  ('a -> 'b Jc_ast.term -> 'a) -> 'a -> 'b Jc_ast.term -> 'a
@@ -161,3 +169,9 @@ module IExpr : sig
 
 end
 
+
+(*
+Local Variables: 
+compile-command: "LC_ALL=C make -C .. bin/jessie.byte"
+End: 
+*)

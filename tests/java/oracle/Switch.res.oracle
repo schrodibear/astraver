@@ -1560,16 +1560,16 @@ let Switch_test1_ensures_default =
         (if (((eq_int_ (integer_of_int32 jessie_1)) (1)) || (((eq_int_ 
                                                                (integer_of_int32 jessie_1)) (0)) || false))
         then
-         (let jessie_9 = begin
-                           (let jessie_8 = (r_0 := (safe_int32_of_integer_ (0))) in
-                           void);
-                          (raise (Loop_exit_exc void))
-                         end in
+         (let jessie_15 = begin
+                            (let jessie_14 = (r_0 := (safe_int32_of_integer_ (0))) in
+                            void);
+                           (raise (Loop_exit_exc void))
+                          end in
          void)
         else
          (if (true || false)
          then
-          (let jessie_10 = begin
+          (let jessie_17 = begin
                              (r_0 := (safe_int32_of_integer_ (2))); !r_0
                            end in
           void)
@@ -1601,8 +1601,8 @@ let Switch_test1_ensures_normal =
         (if (((eq_int_ (integer_of_int32 jessie_1)) (1)) || (((eq_int_ 
                                                                (integer_of_int32 jessie_1)) (0)) || false))
         then
-         (let jessie_12 = begin
-                            (let jessie_11 = (r_0 := (safe_int32_of_integer_ (0))) in
+         (let jessie_22 = begin
+                            (let jessie_21 = (r_0 := (safe_int32_of_integer_ (0))) in
                             void);
                            (raise (Loop_exit_exc void))
                           end in
@@ -1610,7 +1610,7 @@ let Switch_test1_ensures_normal =
         else
          (if (true || false)
          then
-          (let jessie_13 = begin
+          (let jessie_24 = begin
                              (r_0 := (safe_int32_of_integer_ (2))); !r_0
                            end in
           void)
@@ -1644,8 +1644,8 @@ let Switch_test1_safety =
         (if (((eq_int_ (integer_of_int32 jessie_1)) (1)) || (((eq_int_ 
                                                                (integer_of_int32 jessie_1)) (0)) || false))
         then
-         (let jessie_6 = begin
-                           (let jessie_5 = (r_0 := (safe_int32_of_integer_ (0))) in
+         (let jessie_8 = begin
+                           (let jessie_7 = (r_0 := (safe_int32_of_integer_ (0))) in
                            void);
                           (raise (Loop_exit_exc void))
                          end in
@@ -1653,9 +1653,9 @@ let Switch_test1_safety =
         else
          (if (true || false)
          then
-          (let jessie_7 = begin
-                            (r_0 := (safe_int32_of_integer_ (2))); !r_0
-                          end in
+          (let jessie_10 = begin
+                             (r_0 := (safe_int32_of_integer_ (2))); !r_0
+                           end in
           void)
          else void))
         with
@@ -1685,8 +1685,8 @@ let Switch_test2_ensures_default =
         (if (((eq_int_ (integer_of_int32 jessie_3)) (1)) || (((eq_int_ 
                                                                (integer_of_int32 jessie_3)) (0)) || false))
         then
-         (let jessie_20 = begin
-                            (let jessie_19 = (r := (safe_int32_of_integer_ (0))) in
+         (let jessie_39 = begin
+                            (let jessie_38 = (r := (safe_int32_of_integer_ (0))) in
                             void);
                            (raise (Loop_exit_exc void))
                           end in
@@ -1695,8 +1695,8 @@ let Switch_test2_ensures_default =
          (if (((eq_int_ (integer_of_int32 jessie_3)) (7)) || (((eq_int_ 
                                                                 (integer_of_int32 jessie_3)) (4)) || false))
          then
-          (let jessie_22 = begin
-                             (let jessie_21 = (r := (safe_int32_of_integer_ (1))) in
+          (let jessie_42 = begin
+                             (let jessie_41 = (r := (safe_int32_of_integer_ (1))) in
                              void);
                             (raise (Loop_exit_exc void))
                            end in
@@ -1706,7 +1706,7 @@ let Switch_test2_ensures_default =
                                                                (((eq_int_ 
                                                                   (integer_of_int32 jessie_3)) (12)) || false)))
           then
-           (let jessie_23 = begin
+           (let jessie_44 = begin
                               (r := (safe_int32_of_integer_ (2))); !r
                             end in
            void)
@@ -1738,8 +1738,8 @@ let Switch_test2_ensures_normal =
         (if (((eq_int_ (integer_of_int32 jessie_3)) (1)) || (((eq_int_ 
                                                                (integer_of_int32 jessie_3)) (0)) || false))
         then
-         (let jessie_25 = begin
-                            (let jessie_24 = (r := (safe_int32_of_integer_ (0))) in
+         (let jessie_49 = begin
+                            (let jessie_48 = (r := (safe_int32_of_integer_ (0))) in
                             void);
                            (raise (Loop_exit_exc void))
                           end in
@@ -1748,8 +1748,8 @@ let Switch_test2_ensures_normal =
          (if (((eq_int_ (integer_of_int32 jessie_3)) (7)) || (((eq_int_ 
                                                                 (integer_of_int32 jessie_3)) (4)) || false))
          then
-          (let jessie_27 = begin
-                             (let jessie_26 = (r := (safe_int32_of_integer_ (1))) in
+          (let jessie_52 = begin
+                             (let jessie_51 = (r := (safe_int32_of_integer_ (1))) in
                              void);
                             (raise (Loop_exit_exc void))
                            end in
@@ -1759,7 +1759,7 @@ let Switch_test2_ensures_normal =
                                                                (((eq_int_ 
                                                                   (integer_of_int32 jessie_3)) (12)) || false)))
           then
-           (let jessie_28 = begin
+           (let jessie_54 = begin
                               (r := (safe_int32_of_integer_ (2))); !r
                             end in
            void)
@@ -1799,8 +1799,8 @@ let Switch_test2_safety =
         (if (((eq_int_ (integer_of_int32 jessie_3)) (1)) || (((eq_int_ 
                                                                (integer_of_int32 jessie_3)) (0)) || false))
         then
-         (let jessie_15 = begin
-                            (let jessie_14 = (r := (safe_int32_of_integer_ (0))) in
+         (let jessie_29 = begin
+                            (let jessie_28 = (r := (safe_int32_of_integer_ (0))) in
                             void);
                            (raise (Loop_exit_exc void))
                           end in
@@ -1809,8 +1809,8 @@ let Switch_test2_safety =
          (if (((eq_int_ (integer_of_int32 jessie_3)) (7)) || (((eq_int_ 
                                                                 (integer_of_int32 jessie_3)) (4)) || false))
          then
-          (let jessie_17 = begin
-                             (let jessie_16 = (r := (safe_int32_of_integer_ (1))) in
+          (let jessie_32 = begin
+                             (let jessie_31 = (r := (safe_int32_of_integer_ (1))) in
                              void);
                             (raise (Loop_exit_exc void))
                            end in
@@ -1820,7 +1820,7 @@ let Switch_test2_safety =
                                                                (((eq_int_ 
                                                                   (integer_of_int32 jessie_3)) (12)) || false)))
           then
-           (let jessie_18 = begin
+           (let jessie_34 = begin
                               (r := (safe_int32_of_integer_ (2))); !r
                             end in
            void)

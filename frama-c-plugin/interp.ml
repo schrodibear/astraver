@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.9 2009-11-05 16:53:20 marche Exp $ *)
+(* $Id: interp.ml,v 1.10 2009-11-09 16:17:21 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -1284,13 +1284,21 @@ let spec funspec =
       [] funspec.spec_disjoint_behaviors
   in
   
-  if funspec.spec_variant <> None then
-    warn_once "Variant(s) for recursive function ignored" ;
+  let decreases =
+    match funspec.spec_variant with
+      | None -> []
+      | Some(t,None) ->
+          [JCCdecreases(locate (term t))]
+      | Some(_,Some _) ->
+          error "Unsupported: 'decreases' clause 'with' for modifier" ;
+          assert false
+  in
+
   if funspec.spec_terminates <> None then
     warn_once "Termination condition(s) ignored" ;
 
   (* TODO: translate function spec variant and terminates clauses *)
-  (requires @ behaviors), 
+  (requires @ decreases @ behaviors), 
   complete_behaviors_assertions, 
   disjoint_behaviors_assertions
 
