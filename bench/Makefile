@@ -50,7 +50,8 @@ yices:
 	../bin/why-dp.opt test_why.smt
 
 ergo:
-	ergo test.mlw
+	../bin/why.opt --why test.mlw
+	alt-ergo test_why.why
 
 rv-sat:
 	../bin/why.opt --smtlib -d --encoding mono -V test.mlw

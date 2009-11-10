@@ -236,7 +236,7 @@ CMO = src/lib.cmo src/rc.cmo tools/dpConfig.cmo \
 	   src/pvs.cmo src/hol4.cmo src/gappa.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo  \
            src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \
-	   src/zenon.cmo src/cvcl.cmo tools/calldp.cmo \
+	   src/zenon.cmo src/z3.cmo src/cvcl.cmo tools/calldp.cmo \
 	   src/xml.cmo src/project.cmo src/pretty.cmo  \
            src/unionfind.cmo src/theoryreducer.cmo \
            src/theory_filtering.cmo src/hypotheses_filtering.cmo \

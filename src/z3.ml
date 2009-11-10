@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: smtlib.ml,v 1.63 2009-11-10 10:33:26 filliatr Exp $ i*)
+(*i $Id: z3.ml,v 1.1 2009-11-10 10:33:26 filliatr Exp $ i*)
 
 open Ident
 open Options
@@ -78,42 +78,21 @@ let prefix id =
     Ident.string id
   else (eprintf "%a@." Ident.print id; assert false)
 
-let is_smtlib_keyword =
+let is_z3_keyword =
   let ht = Hashtbl.create 50  in
   List.iter (fun kw -> Hashtbl.add ht kw ()) 
-    ["and";" benchmark";" distinct";"exists";"false";"flet";"forall";
-     "if then else";"iff";"implies";"ite";"let";"logic";"not";"or";
-     "sat";"theory";"true";"unknown";"unsat";"xor";
-     "assumption";"axioms";"defintion";"extensions";"formula";
-     "funs";"extrafuns";"extrasorts";"extrapreds";"language";
-     "notes";"preds";"sorts";"status";"theory";"Int";"Real";"Bool";
-     "Array";"U";"select";"store"];
+    [];
   Hashtbl.mem ht
 
-let leading_underscore s = s <> "" && s.[0] = '_'
-
-let removeChar =
-  let lc = ('\'','p')::('_','u')::[] in 
-  function s ->
-    for i=0 to (String.length s)-1 do
-      let c = (String.get s i) in 
-      try 
-	let c' =  List.assoc c lc  in 
-	String.set  s i c'
-      with Not_found -> ()  
-    done;
-    s
-	
 let idents fmt s = 
-  (* Yices does not expect names to begin with an underscore. *)
-  if is_smtlib_keyword s || leading_underscore s then
-    fprintf fmt "smtlib__%s" s
+  if is_z3_keyword s then
+    fprintf fmt "why__%s" s
   else 
     fprintf fmt "%s" s
 
 let ident fmt id = idents fmt (Ident.string id)
 
-let print_bvar fmt id = fprintf fmt "?%a" ident id
+let print_bvar = ident
 
 let rec print_term fmt = function
   | Tvar id -> 
@@ -126,12 +105,6 @@ let rec print_term fmt = function
       fprintf fmt "tt" 
   | Tconst (ConstFloat c) ->
       Print_real.print_no_exponent fmt c
-(*
-	"(real_of_int %s)"
-	"(real_of_int (* %s %s))"
-	"(div_real (real_of_int %s) (real_of_int %s))" 
-	fmt c
-*)
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c], _) when id == if_then_else -> 
@@ -142,10 +115,6 @@ let rec print_term fmt = function
       else
 	fprintf fmt "@[(ite@ (= %a c_Boolean_true) @ %a@ %a)@]" 
 	  print_term a print_term b print_term c
-(*
-  | Tapp (id, [a], _) when id = t_real_of_int ->
-      print_term fmt a
-*)
   | Tapp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, [], i) -> 
@@ -177,8 +146,8 @@ let bound_variable =
   let count = ref 0 in
   function n ->  
     count := !count+1 ;
-    Ident.create ((removeChar (completeString n))^"_"^ (string_of_int !count)) 
-    
+    Ident.create ("z3bv__"^ string_of_int !count)
+
 let rec print_predicate fmt = function
   | Ptrue ->
       fprintf fmt "true"
@@ -223,19 +192,12 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(iff@ %a@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[(not@ %a)@]" print_predicate a
-  | Forall (_,id,n,t,_,p) -> 
-      (*Printf.printf "Forall : %s\n" (Ident.string id);  *)
-      (*let id' = next_away id (predicate_vars p) in*)
-      let id' = (bound_variable n) in
-      (***Format.printf 
-	" Forall : %a , " Ident.dbprint n ;
-      Format.printf 
-	" %a" Ident.dbprint id' ;**)
+  | Forall (_,_,n,t,_,p) -> 
+      let id' = bound_variable n in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(forall (%a %a)@ %a)@]" 
 	print_bvar id' print_pure_type t print_predicate p'
-  | Exists (id,n,t,p) -> 
-      (*let id' = next_away id (predicate_vars p) in*)
+  | Exists (_,n,t,p) -> 
       let id' = bound_variable n in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(exists (%a %a) %a)@]" 
@@ -289,7 +251,6 @@ let output_sequent fmt (hyps,concl) =
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "@[(forall (%a %a)@ %a)@]" 
 	  print_bvar id print_pure_type v print_seq hyps
-(* TODO : update this for renaming each variable *) 
     | Spred (_,p) :: hyps -> 
 	fprintf fmt "@[(implies@ %a@ %a)@]" print_predicate p print_seq hyps
   in
@@ -343,11 +304,10 @@ let output_elem fmt = function
    
 
 let output_file ?logic f = 
-  let fname = f ^ "_why.smt" in
+  let fname = f ^ "_why.z3" in
   let cout = open_out fname in
   let fmt = formatter_of_out_channel cout in
-  fprintf fmt "(benchmark %a@\n" idents (Filename.basename f);
-  fprintf fmt "  :status unknown@\n";
+  fprintf fmt ";; Z3 native syntax for file %a@\n" idents (Filename.basename f);
   begin
     match logic with
       | None -> ()
@@ -373,7 +333,6 @@ let output_file ?logic f =
   end;
   iter (output_elem fmt);
   
-  (* end of smtlib file *)
   fprintf fmt "@\n)@\n";
   pp_print_flush fmt ();
   close_out cout

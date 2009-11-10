@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: main.ml,v 1.173 2009-08-26 13:47:41 marche Exp $ i*)
+(*i $Id: main.ml,v 1.174 2009-11-10 10:33:26 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -59,7 +59,7 @@ let reset () =
     | Isabelle -> Isabelle.reset ()
     | Hol4 -> Hol4.reset ()
     | SmtLib ->  ()
-    | Harvey | Simplify | Zenon | CVCLite  | Gappa 
+    | Harvey | Simplify | Zenon | Z3 | CVCLite  | Gappa 
     | Ergo | Why | MultiWhy | Dispatcher | WhyProject -> ()
 
 let add_loc = function
@@ -109,6 +109,7 @@ let push_decl _vloc d =
 	  | Harvey -> Harvey.push_decl
 	  | Simplify -> Simplify.push_decl
 	  | Zenon -> Zenon.push_decl
+	  | Z3 -> Z3.push_decl
 	  | CVCLite -> Cvcl.push_decl
 	  | SmtLib -> Smtlib.push_decl 
       in
@@ -156,7 +157,7 @@ let push_parameter id _v tv = match prover () with
   | Coq _ -> 
       if valid then Coq.push_parameter id tv
   | Pvs | HolLight | Isabelle | Hol4 | Mizar
-  | Harvey | Simplify | Zenon | SmtLib | Gappa 
+  | Harvey | Simplify | Zenon | Z3 | SmtLib | Gappa 
   | CVCLite | Ergo | Why | MultiWhy | Dispatcher | WhyProject -> 
       ()
 
@@ -176,6 +177,7 @@ let output is_last fwe =
     | Simplify -> Simplify.output_file fwe
     | CVCLite -> Cvcl.output_file fwe
     | Zenon -> Zenon.output_file fwe
+    | Z3 ->  Z3.output_file fwe
     | SmtLib ->  Smtlib.output_file fwe
     | Isabelle -> Isabelle.output_file fwe
     | Hol4 -> Hol4.output_file fwe
@@ -212,6 +214,7 @@ let encode q =
     | Harvey -> Harvey.push_decl d
     | Simplify -> Simplify.push_decl d
     | Zenon -> Zenon.push_decl d
+    | Z3 -> Z3.push_decl d
     | CVCLite -> Cvcl.push_decl d
     | SmtLib -> Smtlib.push_decl d
   in
@@ -627,7 +630,7 @@ let deal_channel parsef cin =
   if not parse_only then List.iter interp_decl p
 
 let single_file () = match prover () with
-  | Simplify | Harvey | Zenon | CVCLite | Gappa | Dispatcher 
+  | Simplify | Harvey | Zenon | Z3 | CVCLite | Gappa | Dispatcher 
   | SmtLib | Ergo | Why | MultiWhy | WhyProject -> true
   | Coq _ | Pvs | Mizar | Hol4 | HolLight | Isabelle -> false
 

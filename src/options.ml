@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: options.ml,v 1.132 2009-11-03 15:09:16 marche Exp $ i*)
+(*i $Id: options.ml,v 1.133 2009-11-10 10:33:26 filliatr Exp $ i*)
 
 open Format
 
@@ -118,7 +118,7 @@ let coq_version =
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Gappa | Zenon 
+  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Z3
   | Ergo | Why | MultiWhy | Dispatcher | WhyProject
 
 let prover_ = ref (Coq coq_version)
@@ -266,6 +266,7 @@ Prover selection:
   --pvs       selects PVS prover
   --simplify  selects Simplify prover
   --smtlib    selects the SMT-LIB format
+  --z3        selects the Z3 prover (native syntax)
   --zenon     selects the Zenon prover
  or generic Why outputs formats:
   --why       selects the Why pretty-printer
@@ -344,6 +345,7 @@ let files =
     | ("-hol4" | "--hol4") :: args -> prover_ := Hol4; parse args
     | ("-cvcl" | "--cvcl") :: args -> prover_ := CVCLite; parse args
     | ("-smtlib" | "--smtlib") :: args -> prover_ := SmtLib; parse args
+    | ("-z3" | "--z3") :: args -> prover_ := Z3; parse args
     | ("-zenon" | "--zenon") :: args -> prover_ := Zenon; parse args
     | ("-why" | "--why") :: args -> prover_ := Why; parse args
     | ("-multi-why" | "--multi-why") :: args -> prover_ := MultiWhy; parse args
@@ -609,7 +611,7 @@ let explain_vc = !explain_vc
 
 (* encoding checks *)
 let () = 
-  if (prover () = SmtLib || prover () = CVCLite) &&
+  if (prover () = SmtLib || prover () = CVCLite || prover () = Z3) &&
      !types_encoding_ = NoEncoding 
   then
     types_encoding_ := SortedStratified
