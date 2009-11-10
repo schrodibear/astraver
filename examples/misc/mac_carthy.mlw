@@ -21,11 +21,23 @@ logic iter_f : int, int -> int (* iter_f(n,x) = f^n(x) *)
 axiom iter_f_def1 : forall x:int. iter_f(0, x) = x
 axiom iter_f_def2 : forall n,x:int. n > 0 -> iter_f(n, x) = iter_f(n-1,f(x))
 
+type pair_type
+
+logic pair : int, int -> pair_type
+
+inductive lex : pair_type, pair_type -> prop =
+| lex_1: forall x1,y1,x2,y2:int. 
+     zwf_zero(x1,x2) -> lex(pair(x1,y1),pair(x2,y2)) 
+| lex_2: forall x,y1,y2:int.
+     zwf_zero(y1,y2) -> lex(pair(x,y1),pair(x,y2)) 
+
 let f91_nonrec (n:int ref) (x:int ref) =
   { n >= 1 }
   L:
   while !n > 0 do
-    { invariant n >= 0 and iter_f(n,x) = iter_f(n@L,x@L) }
+    { invariant n >= 0 and iter_f(n,x) = iter_f(n@L,x@L) 
+      variant pair(101-x+10*n,n) for lex
+    }
     if !x > 100 then begin
       x := !x - 10;
       n := !n - 1

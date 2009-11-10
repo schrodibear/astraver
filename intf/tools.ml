@@ -73,8 +73,9 @@ images, icons
 
 *)
 
+(* todo: size should adapt to current font_size ! *)
 let image f =
-  GdkPixbuf.from_file (Filename.concat Options.lib_dir (Filename.concat "images" (f^".png")))
+  GdkPixbuf.from_file_at_size ~width:24 ~height:24 (Filename.concat Options.lib_dir (Filename.concat "images" (f^".png")))
 
 
 let boomy = ref false

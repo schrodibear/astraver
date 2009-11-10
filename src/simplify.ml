@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: simplify.ml,v 1.91 2009-05-28 10:56:49 lescuyer Exp $ i*)
+(*i $Id: simplify.ml,v 1.92 2009-11-10 13:06:52 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -251,7 +251,7 @@ let rec print_predicate pos fmt p =
   | Papp (id, tl, _) when id == t_distinct ->
       fprintf fmt "@[(DISTINCT@ %a)@]" print_terms tl
   | Papp (id, [_t], _) when id == well_founded ->
-      fprintf fmt "TRUE ; was well_founded@\n"
+      fprintf fmt "FALSE ; was well_founded(...)@\n"
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(EQ %a@ %a)@]" print_term a print_term b
   | Papp (id, [a; b], _) when is_neq id ->

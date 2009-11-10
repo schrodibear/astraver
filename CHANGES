@@ -1,4 +1,7 @@
 
+  o [GWhy] added alternative "boomy" icon set
+  o [Alt-Ergo+Simplify output] well_founded() translated by false 
+    instead of true, for soundness 
   o [Jessie/Krakatoa/Frama-C plugin] support for decreases clauses, 
     even for mutually recursive functions  
   o [Frama-C plugin] bug fix 0284
