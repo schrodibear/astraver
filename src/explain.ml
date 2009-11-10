@@ -120,8 +120,8 @@ let print ?(quote=false) fmt  ((*loc,*)e) =
   print_kind ~quote fmt (e.vc_loc,e.vc_kind)
 
 let msg_of_loopinv = function
-  | "" -> " of loop invariant"
-  | s -> " of generated loop inv.: " ^ s
+  | "" -> "loop invariant"
+  | s -> "generated loop inv. '" ^ s ^"'"
 
 let msg_of_kind = 
   function
@@ -135,12 +135,12 @@ let msg_of_kind =
     | EKPre "" -> "precondition"
     | EKPre s -> "unclassified precondition `" ^ s ^ "'"
     | EKOther s -> "unclassified obligation `" ^ s ^ "'"
-    | EKAbsurd -> "unreachable code"
+    | EKAbsurd -> "code unreachable"
     | EKAssert -> "assertion"
     | EKCheck -> "check"
     | EKPost -> "postcondition"
-    | EKWfRel -> "well-foundness of relation"
-    | EKVarDecr -> "variant decrease" 
-    | EKLoopInvInit s -> "initialization" ^ msg_of_loopinv s
-    | EKLoopInvPreserv s -> "preservation" ^ msg_of_loopinv s
+    | EKWfRel -> "relation is well-founded"
+    | EKVarDecr -> "variant decreases" 
+    | EKLoopInvInit s -> msg_of_loopinv s ^ " initially holds"
+    | EKLoopInvPreserv s -> msg_of_loopinv s ^ " preserved"
     | EKLemma -> "lemma"

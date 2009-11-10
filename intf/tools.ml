@@ -74,12 +74,57 @@ images, icons
 *)
 
 (* todo: size should adapt to current font_size ! *)
-let image f =
-  GdkPixbuf.from_file_at_size ~width:24 ~height:24 (Filename.concat Options.lib_dir (Filename.concat "images" (f^".png")))
-
+let image ?size f =
+  let n = Filename.concat Options.lib_dir (Filename.concat "images" (f^".png"))
+  in
+  match size with
+    | None ->
+        GdkPixbuf.from_file n
+    | Some s ->
+        GdkPixbuf.from_file_at_size ~width:s ~height:s n
 
 let boomy = ref false
 
 let set_boomy b = boomy := b
 
 let is_boomy () = !boomy 
+
+
+let iconname_default = "pause32"
+let iconname_running = "play32"
+let iconname_valid = "accept32"
+let iconname_unknown = "help32"
+let iconname_invalid = "delete32"
+let iconname_timeout = "clock32"
+let iconname_failure = "bug32"
+let iconname_yes = "accept32"
+let iconname_no = "delete32"
+let iconname_down = "play32"
+
+let image_default = ref (image ~size:32 iconname_default)
+let image_running = ref !image_default
+let image_valid = ref !image_default
+let image_unknown = ref !image_default
+let image_invalid = ref !image_default
+let image_timeout = ref !image_default
+let image_failure = ref !image_default
+let image_yes = ref !image_default
+let image_no = ref !image_default
+let image_down = ref !image_default
+
+let resize_images size =
+  image_default := image ~size iconname_default;
+  image_running := image ~size iconname_running;
+  image_valid := image ~size iconname_valid;
+  image_unknown := image ~size iconname_unknown;
+  image_invalid := image ~size iconname_invalid;
+  image_timeout := image ~size iconname_timeout;
+  image_failure := image ~size iconname_failure;
+  image_yes := image ~size iconname_yes;
+  image_no := image ~size iconname_no;
+  image_down := image ~size iconname_down
+
+
+let () = resize_images (!Colors.font_size * 2 - 4)
+  
+  

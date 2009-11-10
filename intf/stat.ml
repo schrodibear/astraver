@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: stat.ml,v 1.95 2009-11-06 16:40:25 marche Exp $ i*)
+(*i $Id: stat.ml,v 1.96 2009-11-10 15:38:40 marche Exp $ i*)
 
 open Printf
 open Options
@@ -124,6 +124,7 @@ let () =
 let modifiable_font_views = ref []
 
 let change_font () =
+  Tools.resize_images (!Colors.font_size * 2 - 4);
   let f = 
     Pango.Font.from_string 
       (Colors.font_family ^ " " ^ string_of_int !Colors.font_size)
@@ -378,17 +379,6 @@ let try_proof oblig =
   or (Cache.is_enabled () && not (in_cache (Cache.clean oblig))) 
 
 
-let image_running = Tools.image "play32"
-let image_valid = Tools.image "accept32"
-let image_unknown = Tools.image "help32"
-let image_invalid = Tools.image "delete32"
-let image_timeout = Tools.image "clock32"
-let image_failure = Tools.image "bug32"
-
-let image_default = Tools.image "pause32"
-let image_yes = Tools.image "accept32"
-let image_no = Tools.image "delete32"
-let image_down = Tools.image "play32"
 (* 
  * run a prover on an obligation and update the model 
  *)
@@ -408,7 +398,7 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
 	  raise Exit
       in
       model#set ~row ~column:column_p `EXECUTE;
-      model#set ~row ~column:column_i image_running;
+      model#set ~row ~column:column_i !Tools.image_running;
       if !debug then Format.eprintf "oblig : %s@." oblig;
       let r = 
 	Dispatcher.call_prover 
@@ -419,13 +409,13 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
 	| Calldp.Valid _ -> 
 	    Cache.add seq (Model.prover_id p);
 	    model#set ~row ~column:column_p `YES ; 
-	    model#set ~row ~column:column_i image_valid ; 1
+	    model#set ~row ~column:column_i !Tools.image_valid ; 1
 	| Calldp.Timeout _ -> 
 	    model#set ~row ~column:column_p `CUT; 
-	    model#set ~row ~column:column_i image_timeout; 0
+	    model#set ~row ~column:column_i !Tools.image_timeout; 0
 	| Calldp.CannotDecide _ -> 
 	    model#set ~row ~column:column_p `DIALOG_QUESTION; 
-	    model#set ~row ~column:column_i image_unknown; 0
+	    model#set ~row ~column:column_i !Tools.image_unknown; 0
 	| Calldp.Invalid(_,so) -> 
 	    begin match so with
 	      | None -> ()
@@ -434,12 +424,12 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
 		  Model.add_failure name p s
 	    end;
 	    model#set ~row ~column:column_p `NO; 
-	    model#set ~row ~column:column_i image_invalid; 0
+	    model#set ~row ~column:column_i !Tools.image_invalid; 0
 	| Calldp.ProverFailure(_,so) -> 
 	      let name = model#get ~row ~column:Model.fullname in 
 	      Model.add_failure name p so;
 	      model#set ~row ~column:column_p `PREFERENCES; 
-	      model#set ~row ~column:column_i image_failure; 0
+	      model#set ~row ~column:column_i !Tools.image_failure; 0
       in
       let result = get_result r in
       model#set ~row ~column:p.Model.pr_result result;
@@ -477,7 +467,7 @@ let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f bench () =
     let row = Model.find_fct f in
     model#set ~row ~column:Model.total 0;
     model#set ~row ~column:column_p `GO_DOWN;
-    model#set ~row ~column:column_i image_down;
+    model#set ~row ~column:column_i !Tools.image_down;
     let n = model#iter_n_children (Some(row)) in
     let mychildren = Model.find_fobligs f in
     let succeed = 
@@ -492,12 +482,12 @@ let run_prover_fct p (view:GTree.view) (model:GTree.tree_store) f bench () =
     in
     if succeed = n then begin 
       model#set ~row ~column:column_p `APPLY;
-      model#set ~row ~column:column_i image_yes;
+      model#set ~row ~column:column_i !Tools.image_yes;
       let path = model#get_path row in
       collapse_row view path bench
     end else begin 
       model#set ~row ~column:column_p `CANCEL;
-      model#set ~row ~column:column_i image_no;
+      model#set ~row ~column:column_i !Tools.image_no;
       let path = model#get_path row in
       expand_row view path bench
     end;
@@ -1172,7 +1162,7 @@ let main () =
 			model#get ~row:parent ~column:zecol.Model.pr_result 
 		      in
 		      model#set ~row ~column:zecol.Model.pr_icon `HARDDISK;
-		      model#set ~row ~column:zecol.Model.pr_image image_default;
+		      model#set ~row ~column:zecol.Model.pr_image !Tools.image_default;
 		      model#set ~row ~column:zecol.Model.pr_result 1;
 		      model#set ~row ~column:Model.result 1;
 		      model#set ~row:parent ~column:zecol.Model.pr_result (r+1)

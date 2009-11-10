@@ -385,8 +385,6 @@ let _ =
   Hashtbl.clear h;
   Hashtbl.clear fwrows
 
-let image_default = Tools.image "pause32" 
-
 let create_model () =
   let model = GTree.tree_store cols in
   Dispatcher.iter
@@ -433,7 +431,7 @@ let create_model () =
        List.iter
 	 (fun p -> 
             model#set ~row:row_n ~column:p.pr_icon `REMOVE;
-            model#set ~row:row_n ~column:p.pr_image image_default;
+            model#set ~row:row_n ~column:p.pr_image !Tools.image_default;
             ()
          )
 	 all_known_provers
