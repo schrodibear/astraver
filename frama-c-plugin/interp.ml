@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.11 2009-11-10 08:28:13 marche Exp $ *)
+(* $Id: interp.ml,v 1.12 2009-11-10 08:41:42 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -1197,7 +1197,9 @@ let spec funspec =
   let behavior b =
     if List.exists (not $ is_normal_postcond) b.b_post_cond then
       warn_once "abrupt clause(s) ignored";
+(*
     Format.eprintf "producing behavior '%s'@." b.b_name; 
+*)
     JCCbehavior(
       Loc.dummy_position,
       b.b_name,
