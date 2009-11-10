@@ -39,6 +39,9 @@ val int : rc_value -> int
 val bool : rc_value -> bool
   (** raise Failure "Rc.bool" if not a int value *)
 
+val string : rc_value -> string
+  (** raise Failure "Rc.string" if not a string or an ident value *)
+
 val from_file : string -> (string * (string * rc_value) list) list
 
 val get_home_dir : unit -> string

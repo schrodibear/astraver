@@ -11,6 +11,8 @@ let rc_file () =
 let save_main fmt =
   fprintf fmt "[main]@.";
   fprintf fmt "timeout = %d@." (Tools.get_timeout ());
+  fprintf fmt "default_prover = %s@." 
+    (Model.prover_id (Model.get_default_prover ()));  
   fprintf fmt "window_width = %d@." !Colors.window_width;
   fprintf fmt "window_height = %d@." !Colors.window_height;
   fprintf fmt "font_size = %d@." !Colors.font_size;
@@ -26,6 +28,7 @@ let save_provers fmt l=
   fprintf fmt "@."
 
 let save () =
+  printf "Saving .gwhyrc config file@.";
   let ch = open_out (rc_file ()) in
   let fmt = Format.formatter_of_out_channel ch in
   save_main fmt;
@@ -39,6 +42,15 @@ let save () =
 let set_main_setting (key,arg) =
   match key with
     | "timeout" -> Tools.set_timeout (Rc.int arg)
+    | "default_prover" ->         
+        begin
+          let n = Rc.string arg in
+          try
+            let p = Model.get_prover n in
+            Model.set_default_prover p
+          with Not_found ->
+            printf "Unknown default prover id `%s' in section [main] of rc file@." n
+        end
     | "window_width" -> Colors.window_width := Rc.int arg
     | "window_height" -> Colors.window_height := Rc.int arg
     | "font_size" -> Colors.font_size := Rc.int arg
@@ -87,6 +99,7 @@ let load_default_config () =
 
 
 let load () =
+  printf "Loading .gwhyrc config file@.";
   let rc_file = rc_file () in
   try
     let rc = Rc.from_file rc_file in

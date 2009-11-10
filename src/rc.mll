@@ -51,6 +51,10 @@ let bool = function
   | RCbool b -> b
   | _ -> failwith "Rc.bool"
 
+let string = function
+  | RCident s | RCstring s -> s
+  | _ -> failwith "Rc.string"
+
 let buf = Buffer.create 17
 
 let current_rec = ref ""
