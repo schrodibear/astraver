@@ -614,9 +614,10 @@ let ttag_table_param ~label_in_name lab (vi,r) =
 (*                           locations and separation                         *)
 (******************************************************************************)
 
-let ref_term : (type_safe:bool -> global_assertion:bool -> relocate:bool 
+let ref_term : (?subst:(Output.term Jc_envset.VarMap.t) -> 
+                 type_safe:bool -> global_assertion:bool -> relocate:bool 
 		 -> label -> label -> Jc_fenv.term -> Output.term) ref 
-    = ref (fun ~type_safe ~global_assertion ~relocate _ _ _ -> assert false)
+    = ref (fun ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate _ _ _ -> assert false)
 
 let rec location ~type_safe ~global_assertion lab loc = 
   let flocs = location_set ~type_safe ~global_assertion lab in

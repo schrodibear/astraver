@@ -139,15 +139,13 @@ val is_alloc_table_type : Output.logic_type -> bool
 (** {1 others} *)
 
 (* horror... *)
-(*
 val ref_term : 
-  (?subst:VarMap.t ->
+  (?subst:(Output.term Jc_envset.VarMap.t) -> 
     type_safe:bool ->
     global_assertion:bool ->
     relocate:bool ->
     Jc_env.label -> Jc_env.label -> Jc_fenv.term -> Output.term)
   ref
-*)
 
 val any_value : Jc_env.jc_type -> Output.expr
 

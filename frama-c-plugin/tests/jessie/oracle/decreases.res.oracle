@@ -1,10 +1,9 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only rec.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD rec.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only decreases.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD decreases.c"
 [jessie] Starting Jessie translation
-[jessie] Producing Jessie files in subdir rec.jessie
-[jessie] File rec.jessie/rec.jc written.
-[jessie] File rec.jessie/rec.cloc written.
-# IntModel = bounded
+[jessie] Producing Jessie files in subdir decreases.jessie
+[jessie] File decreases.jessie/decreases.jc written.
+[jessie] File decreases.jessie/decreases.cloc written.
 # InvariantPolicy = Arguments
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
@@ -16,12 +15,8 @@ axiomatic Padding {
   
 }
 
-type int8 = -128..127
-
-type int32 = -2147483648..2147483647
-
 tag char_P = {
-  int8 char_M: 8;
+  integer char_M: 8;
 }
 
 type char_P = [char_P]
@@ -31,37 +26,59 @@ tag void_P = {
 
 type void_P = [void_P]
 
-int32 f(int32 x)
-  requires (C_7 : (x >= 0));
+integer even(integer n)
+  requires (C_8 : (n >= 0));
+  decreases (C_10 : n);
 behavior default:
   assumes true;
-  assigns \nothing;
-  ensures (C_8 : (\result == 0));
+  ensures (C_9 : true);
 {  
-   (var int32 tmp);
+   (var integer tmp);
    
-   (var int32 __retres);
+   (var integer tmp_0);
    
-   {  (if (x == 0) then 
-      {  (C_6 : (__retres = 0));
+   (var integer __retres);
+   
+   {  (if (n == 0) then 
+      {  (C_1 : (__retres = 1));
          
          (goto return_label)
-      } else 
-      {  (C_4 : (tmp = (C_3 : f((C_2 : ((C_1 : (x - 1)) :> int32))))));
-         (C_5 : (__retres = tmp));
-         
-         (goto return_label)
-      });
+      } else ());
+      (C_4 : (tmp = (C_3 : odd((C_2 : (n - 1))))));
+      (if (tmp != 0) then (C_6 : (tmp_0 = 0)) else (C_5 : (tmp_0 = 1)));
+      (C_7 : (__retres = tmp_0));
       (return_label : 
       (return __retres))
    }
 }
-WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs rec.jessie/rec.cloc rec.jessie/rec.jc
+
+integer odd(integer n_0)
+  requires (C_18 : (n_0 >= 0));
+  decreases (C_20 : n_0);
+behavior default:
+  assumes true;
+  ensures (C_19 : true);
+{  
+   (var integer tmp_0_0);
+   
+   (var integer tmp_0_1);
+   
+   (var integer __retres_0);
+   
+   {  (if (n_0 == 0) then 
+      {  (C_11 : (__retres_0 = 0));
+         
+         (goto return_label)
+      } else ());
+      (C_14 : (tmp_0_0 = (C_13 : even((C_12 : (n_0 - 1))))));
+      (if (tmp_0_0 != 0) then (C_16 : (tmp_0_1 = 0)) else (C_15 : (tmp_0_1 = 1)));
+      (C_17 : (__retres_0 = tmp_0_1));
+      (return_label : 
+      (return __retres_0))
+   }
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs decreases.jessie/decreases.cloc decreases.jessie/decreases.jc
 type char_P
-
-type int32
-
-type int8
 
 type padding
 
@@ -79,20 +96,6 @@ logic char_P_of_bitvector: bitvector -> char_P pointer
 
 axiom bitvector_of_char_P_of_char_P_of_bitvector :
  (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
-
-logic bitvector_of_int32: int32 -> bitvector
-
-logic int32_of_bitvector: bitvector -> int32
-
-axiom bitvector_of_int32_of_int32_of_bitvector :
- (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
-
-logic bitvector_of_int8: int8 -> bitvector
-
-logic int8_of_bitvector: bitvector -> int8
-
-axiom bitvector_of_int8_of_int8_of_bitvector :
- (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P: void_P pointer -> bitvector
 
@@ -120,47 +123,6 @@ axiom char_P_tags :
  (forall x:char_P pointer.
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
-
-logic integer_of_int32: int32 -> int
-
-predicate eq_int32(x:int32,
- y:int32) =
- eq_int(integer_of_int32(x), integer_of_int32(y))
-
-logic integer_of_int8: int8 -> int
-
-predicate eq_int8(x:int8,
- y:int8) =
- eq_int(integer_of_int8(x), integer_of_int8(y))
-
-logic int32_of_integer: int -> int32
-
-axiom int32_coerce :
- (forall x:int.
-  ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
-   eq_int(integer_of_int32(int32_of_integer(x)), x)))
-
-axiom int32_of_bitvector_of_bitvector_of_int32 :
- (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
-
-axiom int32_range :
- (forall x:int32.
-  (le_int((-2147483648), integer_of_int32(x))
-  and le_int(integer_of_int32(x), (2147483647))))
-
-logic int8_of_integer: int -> int8
-
-axiom int8_coerce :
- (forall x:int.
-  ((le_int((-128), x) and le_int(x, (127))) ->
-   eq_int(integer_of_int8(int8_of_integer(x)), x)))
-
-axiom int8_of_bitvector_of_bitvector_of_int8 :
- (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
-
-axiom int8_range :
- (forall x:int8.
-  (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
 predicate left_valid_struct_char_P(p:char_P pointer,
  a:int,
@@ -368,146 +330,248 @@ parameter alloc_struct_void_P_requires :
           and (alloc_fresh(void_P_alloc_table@, result, n)
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
-parameter any_int32 : unit -> { } int32 { true }
+parameter even : n:int -> { } int { true }
 
-parameter any_int8 : unit -> { } int8 { true }
+parameter even_requires : n:int -> { (JC_1: ge_int(n, (0)))} int { true }
 
-parameter f :
- x:int32 ->
-  { } int32
-  { ((true = true) -> (JC_7: eq_int(integer_of_int32(result), (0)))) }
+parameter odd : n_0:int -> { } int { true }
 
-parameter f_requires :
- x:int32 ->
-  { (JC_1: ge_int(integer_of_int32(x), (0)))} int32
-  { ((true = true) -> (JC_7: eq_int(integer_of_int32(result), (0)))) }
+parameter odd_requires : n_0:int -> { (JC_14: ge_int(n_0, (0)))} int { true }
 
-parameter int32_of_integer_ :
- x:int ->
-  { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
-  { eq_int(integer_of_int32(result), x) }
-
-parameter int8_of_integer_ :
- x:int ->
-  { (le_int((-128), x) and le_int(x, (127)))} int8
-  { eq_int(integer_of_int8(result), x) }
-
-parameter safe_int32_of_integer_ :
- x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
-
-parameter safe_int8_of_integer_ :
- x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
-
-let f_ensures_default =
- fun (x : int32) ->
-  { ((true = true) and (JC_3: ge_int(integer_of_int32(x), (0)))) }
+let even_ensures_default =
+ fun (n : int) ->
+  { ((true = true) and (JC_3: ge_int(n, (0)))) }
   (init:
-  (let return = ref (any_int32 void) in
+  (let return = ref (any_int void) in
   try
    begin
-     (let tmp = ref (any_int32 void) in
-     (let __retres = ref (any_int32 void) in
+     (let tmp = ref (any_int void) in
+     (let tmp_0 = ref (any_int void) in
+     (let __retres = ref (any_int void) in
      try
-      (let jessie_22 = begin
-                         (if ((eq_int_ (integer_of_int32 x)) (0))
+      (let jessie_27 = begin
+                         (if ((eq_int_ n) (0))
                          then
-                          (let jessie_15 = (C_6:
+                          (let jessie_18 = (C_1:
                                            begin
-                                             (let jessie_14 = (__retres := 
-                                                               (safe_int32_of_integer_ (0))) in
+                                             (let jessie_17 = (__retres := (1)) in
                                              void);
                                             (raise (Return_label_exc void))
                                            end) in
                           void)
-                         else
-                          (let jessie_21 = (C_4:
-                                           begin
-                                             (let jessie_18 = (tmp := 
-                                                               (C_3:
-                                                               (let jessie_17 = 
-                                                               (C_2:
-                                                               (safe_int32_of_integer_ 
-                                                                (C_1:
-                                                                ((sub_int 
-                                                                  (integer_of_int32 x)) (1))))) in
-                                                               (JC_14:
-                                                               (f jessie_17))))) in
-                                             void);
-                                            (C_5:
-                                            begin
-                                              (let jessie_20 = (__retres := !tmp) in
-                                              void);
-                                             (raise (Return_label_exc void))
-                                            end)
-                                           end) in
-                          void));
-                        (raise (Return_label_exc void))
+                         else void);
+                        (C_4:
+                        begin
+                          (let jessie_21 = (tmp := (C_3:
+                                                   (let jessie_20 = (C_2:
+                                                                    ((sub_int n) (1))) in
+                                                   (JC_13: (odd jessie_20))))) in
+                          void);
+                         (let jessie_24 = (if ((neq_int_ !tmp) (0))
+                                          then
+                                           (C_6:
+                                           begin   (tmp_0 := (0)); !tmp_0 end)
+                                          else
+                                           (C_5:
+                                           begin   (tmp_0 := (1)); !tmp_0 end)) in
+                         void);
+                         (C_7:
+                         begin
+                           (let jessie_26 = (__retres := !tmp_0) in void);
+                          (raise (Return_label_exc void))
+                         end)
+                        end)
                        end in
       void)
       with
       Return_label_exc jessie_1 ->
-      (return_label: begin   (return := !__retres); (raise Return) end) end));
+      (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd 
    end
    with
    Return ->
    !return end))
-  { (JC_5: eq_int(integer_of_int32(result), (0))) }
+  { (JC_5: true) }
 
-let f_safety =
- fun (x : int32) ->
-  { (JC_3: ge_int(integer_of_int32(x), (0))) }
+let even_safety =
+ fun (n : int) ->
+  { (JC_3: ge_int(n, (0))) }
   (init:
-  (let return = ref (any_int32 void) in
+  (let return = ref (any_int void) in
   try
    begin
-     (let tmp = ref (any_int32 void) in
-     (let __retres = ref (any_int32 void) in
+     (let tmp = ref (any_int void) in
+     (let tmp_0 = ref (any_int void) in
+     (let __retres = ref (any_int void) in
      try
-      (let jessie_11 = begin
-                         (if ((eq_int_ (integer_of_int32 x)) (0))
+      (let jessie_14 = begin
+                         (if ((eq_int_ n) (0))
                          then
-                          (let jessie_4 = (C_6:
+                          (let jessie_5 = (C_1:
                                           begin
-                                            (let jessie_3 = (__retres := 
-                                                             (safe_int32_of_integer_ (0))) in
+                                            (let jessie_4 = (__retres := (1)) in
                                             void);
                                            (raise (Return_label_exc void))
                                           end) in
                           void)
-                         else
-                          (let jessie_10 = (C_4:
-                                           begin
-                                             (let jessie_7 = (tmp := 
-                                                              (C_3:
-                                                              (let jessie_6 = 
-                                                              (C_2:
-                                                              (JC_11:
-                                                              (int32_of_integer_ 
-                                                               (C_1:
-                                                               ((sub_int 
-                                                                 (integer_of_int32 x)) (1)))))) in
-                                                              (JC_13:
-                                                              (assert
-                                                              { zwf_zero((0),
-                                                                (0)) };
-                                                              (JC_12:
-                                                              (f_requires jessie_6))))))) in
-                                             void);
-                                            (C_5:
-                                            begin
-                                              (let jessie_9 = (__retres := !tmp) in
-                                              void);
-                                             (raise (Return_label_exc void))
-                                            end)
-                                           end) in
-                          void));
-                        (raise (Return_label_exc void))
+                         else void);
+                        (C_4:
+                        begin
+                          (let jessie_8 = (tmp := (C_3:
+                                                  (let jessie_7 = (C_2:
+                                                                  ((sub_int n) (1))) in
+                                                  (JC_12:
+                                                  (assert
+                                                  { zwf_zero((JC_11 : jessie_7),
+                                                    (JC_10 : n)) };
+                                                  (JC_9:
+                                                  (odd_requires jessie_7))))))) in
+                          void);
+                         (let jessie_11 = (if ((neq_int_ !tmp) (0))
+                                          then
+                                           (C_6:
+                                           begin   (tmp_0 := (0)); !tmp_0 end)
+                                          else
+                                           (C_5:
+                                           begin   (tmp_0 := (1)); !tmp_0 end)) in
+                         void);
+                         (C_7:
+                         begin
+                           (let jessie_13 = (__retres := !tmp_0) in void);
+                          (raise (Return_label_exc void))
+                         end)
+                        end)
                        end in
       void)
       with
       Return_label_exc jessie_1 ->
-      (return_label: begin   (return := !__retres); (raise Return) end) end));
+      (return_label: begin   (return := !__retres); (raise Return) end) end)));
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { true }
+
+let odd_ensures_default =
+ fun (n_0 : int) ->
+  { ((true = true) and (JC_16: ge_int(n_0, (0)))) }
+  (init:
+  (let return = ref (any_int void) in
+  try
+   begin
+     (let tmp_0_0 = ref (any_int void) in
+     (let tmp_0_1 = ref (any_int void) in
+     (let __retres_0 = ref (any_int void) in
+     try
+      (let jessie_53 = begin
+                         (if ((eq_int_ n_0) (0))
+                         then
+                          (let jessie_44 = (C_11:
+                                           begin
+                                             (let jessie_43 = (__retres_0 := (0)) in
+                                             void);
+                                            (raise (Return_label_exc void))
+                                           end) in
+                          void)
+                         else void);
+                        (C_14:
+                        begin
+                          (let jessie_47 = (tmp_0_0 := (C_13:
+                                                       (let jessie_46 = 
+                                                       (C_12:
+                                                       ((sub_int n_0) (1))) in
+                                                       (JC_26:
+                                                       (even jessie_46))))) in
+                          void);
+                         (let jessie_50 = (if ((neq_int_ !tmp_0_0) (0))
+                                          then
+                                           (C_16:
+                                           begin
+                                             (tmp_0_1 := (0)); !tmp_0_1
+                                           end)
+                                          else
+                                           (C_15:
+                                           begin
+                                             (tmp_0_1 := (1)); !tmp_0_1
+                                           end)) in
+                         void);
+                         (C_17:
+                         begin
+                           (let jessie_52 = (__retres_0 := !tmp_0_1) in void);
+                          (raise (Return_label_exc void))
+                         end)
+                        end)
+                       end in
+      void)
+      with
+      Return_label_exc jessie_2 ->
+      (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { (JC_18: true) }
+
+let odd_safety =
+ fun (n_0 : int) ->
+  { (JC_16: ge_int(n_0, (0))) }
+  (init:
+  (let return = ref (any_int void) in
+  try
+   begin
+     (let tmp_0_0 = ref (any_int void) in
+     (let tmp_0_1 = ref (any_int void) in
+     (let __retres_0 = ref (any_int void) in
+     try
+      (let jessie_40 = begin
+                         (if ((eq_int_ n_0) (0))
+                         then
+                          (let jessie_31 = (C_11:
+                                           begin
+                                             (let jessie_30 = (__retres_0 := (0)) in
+                                             void);
+                                            (raise (Return_label_exc void))
+                                           end) in
+                          void)
+                         else void);
+                        (C_14:
+                        begin
+                          (let jessie_34 = (tmp_0_0 := (C_13:
+                                                       (let jessie_33 = 
+                                                       (C_12:
+                                                       ((sub_int n_0) (1))) in
+                                                       (JC_25:
+                                                       (assert
+                                                       { zwf_zero((JC_24 : jessie_33),
+                                                         (JC_23 : n_0)) };
+                                                       (JC_22:
+                                                       (even_requires jessie_33))))))) in
+                          void);
+                         (let jessie_37 = (if ((neq_int_ !tmp_0_0) (0))
+                                          then
+                                           (C_16:
+                                           begin
+                                             (tmp_0_1 := (0)); !tmp_0_1
+                                           end)
+                                          else
+                                           (C_15:
+                                           begin
+                                             (tmp_0_1 := (1)); !tmp_0_1
+                                           end)) in
+                         void);
+                         (C_17:
+                         begin
+                           (let jessie_39 = (__retres_0 := !tmp_0_1) in void);
+                          (raise (Return_label_exc void))
+                         end)
+                        end)
+                       end in
+      void)
+      with
+      Return_label_exc jessie_2 ->
+      (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
     absurd 
    end
    with
@@ -516,41 +580,44 @@ let f_safety =
   { true }
 
 
-WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C rec.jessie --quiet -f rec.makefile project
-why --project [...] why/rec.why
-<project name="rec" context="why/rec_ctx.why">
-  <function name="Function f">
+WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C decreases.jessie --quiet -f decreases.makefile project
+why --project [...] why/decreases.why
+<project name="decreases" context="why/decreases_ctx.why">
+  <function name="Function odd">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/rec_po2.why">
+    <goal why_file="why/decreases_po4.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/rec_po3.why">
+    <goal why_file="why/decreases_po5.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/rec_po4.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/rec_po5.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/rec_po6.why">
-      <location file = "PPCHOME/tests/jessie/rec.c" line = "27" begin = "13" end = "19"/>
+    <goal why_file="why/decreases_po6.why">
+      <location file = "PPCHOME/tests/jessie/decreases.c" line = "7" begin = "13" end = "19"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/rec_po1.why">
-      <location file = "PPCHOME/tests/jessie/rec.c" line = "30" begin = "12" end = "24"/>
+  </function>
+  <function name="Function even">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
+    <goal why_file="why/decreases_po1.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/decreases_po2.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/decreases_po3.why">
+      <location file = "PPCHOME/tests/jessie/decreases.c" line = "12" begin = "13" end = "19"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -1492,10 +1559,6 @@ logic real_of_bitvector : bitvector -> real
 
 type char_P
 
-type int32
-
-type int8
-
 type padding
 
 type void_P
@@ -1506,20 +1569,6 @@ logic char_P_of_bitvector : bitvector -> char_P pointer
 
 axiom bitvector_of_char_P_of_char_P_of_bitvector:
   (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
-
-logic bitvector_of_int32 : int32 -> bitvector
-
-logic int32_of_bitvector : bitvector -> int32
-
-axiom bitvector_of_int32_of_int32_of_bitvector:
-  (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
-
-logic bitvector_of_int8 : int8 -> bitvector
-
-logic int8_of_bitvector : bitvector -> int8
-
-axiom bitvector_of_int8_of_int8_of_bitvector:
-  (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P : void_P pointer -> bitvector
 
@@ -1548,45 +1597,6 @@ axiom char_P_tags:
   (forall x:char_P pointer.
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
-
-logic integer_of_int32 : int32 -> int
-
-predicate eq_int32(x: int32, y: int32) =
-  (integer_of_int32(x) = integer_of_int32(y))
-
-logic integer_of_int8 : int8 -> int
-
-predicate eq_int8(x: int8, y: int8) =
-  (integer_of_int8(x) = integer_of_int8(y))
-
-logic int32_of_integer : int -> int32
-
-axiom int32_coerce:
-  (forall x:int.
-    ((((-2147483648) <= x) and (x <= 2147483647)) ->
-     (integer_of_int32(int32_of_integer(x)) = x)))
-
-axiom int32_of_bitvector_of_bitvector_of_int32:
-  (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
-
-axiom int32_range:
-  (forall x:int32.
-    (((-2147483648) <= integer_of_int32(x)) and
-     (integer_of_int32(x) <= 2147483647)))
-
-logic int8_of_integer : int -> int8
-
-axiom int8_coerce:
-  (forall x:int.
-    ((((-128) <= x) and (x <= 127)) ->
-     (integer_of_int8(int8_of_integer(x)) = x)))
-
-axiom int8_of_bitvector_of_bitvector_of_int8:
-  (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
-
-axiom int8_range:
-  (forall x:int8.
-    (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,

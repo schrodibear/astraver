@@ -1,7 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only fact.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD fact.c"
 [jessie] Starting Jessie translation
-[jessie] warning: Variant(s) for recursive function ignored
 [jessie] Producing Jessie files in subdir fact.jessie
 [jessie] File fact.jessie/fact.jc written.
 [jessie] File fact.jessie/fact.cloc written.
@@ -41,10 +40,11 @@ case is_prod_empty: (\forall integer a_0;
 }
 
 integer fact(integer n)
-  requires (C_10 : (n >= 0));
+  requires (C_7 : (n >= 0));
+  decreases (C_9 : n);
 behavior default:
   assumes true;
-  ensures (C_11 : is_prod(1, n, \result));
+  ensures (C_8 : is_prod(1, n, \result));
 {  
    (var integer tmp);
    
@@ -55,18 +55,8 @@ behavior default:
          
          (goto return_label)
       } else ());
-      
-      {  
-         (assert for default: (C_2 : ((C_3 : (0 <= n)) &&
-                                       (C_4 : ((n - 1) < n)))));
-         ()
-      };
-      
-      {  (C_7 : (tmp = (C_6 : fact((C_5 : (n - 1))))));
-         (C_9 : (__retres = (C_8 : (n * tmp))));
-         
-         (goto return_label)
-      };
+      (C_4 : (tmp = (C_3 : fact((C_2 : (n - 1))))));
+      (C_6 : (__retres = (C_5 : (n * tmp))));
       (return_label : 
       (return __retres))
    }
@@ -353,43 +343,32 @@ let fact_ensures_default =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_22 = begin
+      (let jessie_20 = begin
                          (if ((eq_int_ n_0) (0))
                          then
-                          (let jessie_15 = (C_1:
+                          (let jessie_14 = (C_1:
                                            begin
-                                             (let jessie_14 = (__retres := (1)) in
+                                             (let jessie_13 = (__retres := (1)) in
                                              void);
                                             (raise (Return_label_exc void))
                                            end) in
                           void)
                          else void);
-                        (assert
-                        { (JC_15:
-                          ((JC_13: le_int((0), n_0))
-                          and (JC_14: lt_int(sub_int(n_0, (1)), n_0)))) };
-                        void);
-                        void;
-                        (let jessie_21 = (C_7:
-                                         begin
-                                           (let jessie_18 = (tmp := (C_6:
-                                                                    (let jessie_17 = 
-                                                                    (C_5:
+                        (C_4:
+                        begin
+                          (let jessie_17 = (tmp := (C_3:
+                                                   (let jessie_16 = (C_2:
                                                                     ((sub_int n_0) (1))) in
-                                                                    (JC_16:
-                                                                    (fact jessie_17))))) in
-                                           void);
-                                          (C_9:
-                                          begin
-                                            (let jessie_20 = (__retres := 
-                                                              (C_8:
-                                                              ((mul_int n_0) !tmp))) in
-                                            void);
-                                           (raise (Return_label_exc void))
-                                          end)
-                                         end) in
-                        void);
-                        (raise (Return_label_exc void))
+                                                   (JC_13: (fact jessie_16))))) in
+                          void);
+                         (C_6:
+                         begin
+                           (let jessie_19 = (__retres := (C_5:
+                                                         ((mul_int n_0) !tmp))) in
+                           void);
+                          (raise (Return_label_exc void))
+                         end)
+                        end)
                        end in
       void)
       with
@@ -412,7 +391,7 @@ let fact_safety =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_11 = begin
+      (let jessie_10 = begin
                          (if ((eq_int_ n_0) (0))
                          then
                           (let jessie_4 = (C_1:
@@ -423,31 +402,26 @@ let fact_safety =
                                           end) in
                           void)
                          else void);
-                        [ { } unit
-                          { (JC_11:
-                            ((JC_9: le_int((0), n_0))
-                            and (JC_10: lt_int(sub_int(n_0, (1)), n_0)))) } ];
-                        void;
-                        (let jessie_10 = (C_7:
-                                         begin
-                                           (let jessie_7 = (tmp := (C_6:
-                                                                   (let jessie_6 = 
-                                                                   (C_5:
-                                                                   ((sub_int n_0) (1))) in
-                                                                   (JC_12:
-                                                                   (fact_requires jessie_6))))) in
-                                           void);
-                                          (C_9:
-                                          begin
-                                            (let jessie_9 = (__retres := 
-                                                             (C_8:
-                                                             ((mul_int n_0) !tmp))) in
-                                            void);
-                                           (raise (Return_label_exc void))
-                                          end)
-                                         end) in
-                        void);
-                        (raise (Return_label_exc void))
+                        (C_4:
+                        begin
+                          (let jessie_7 = (tmp := (C_3:
+                                                  (let jessie_6 = (C_2:
+                                                                  ((sub_int n_0) (1))) in
+                                                  (JC_12:
+                                                  (assert
+                                                  { zwf_zero((JC_11 : jessie_6),
+                                                    (JC_10 : n_0)) };
+                                                  (JC_9:
+                                                  (fact_requires jessie_6))))))) in
+                          void);
+                         (C_6:
+                         begin
+                           (let jessie_9 = (__retres := (C_5:
+                                                        ((mul_int n_0) !tmp))) in
+                           void);
+                          (raise (Return_label_exc void))
+                         end)
+                        end)
                        end in
       void)
       with
@@ -467,6 +441,16 @@ why --project [...] why/fact.why
   <function name="Function fact">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
+    <goal why_file="why/fact_po2.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/fact_po3.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
     <goal why_file="why/fact_po4.why">
       <location file = "PPCHOME/tests/jessie/fact.c" line = "42" begin = "13" end = "19"/>
       <explain kind = "Other"
@@ -475,16 +459,6 @@ text = "unexplained assertion"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/fact_po1.why">
-      <location file = "PPCHOME/tests/jessie/fact.c" line = "49" begin = "13" end = "19"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/fact_po2.why">
-      <location file = "PPCHOME/tests/jessie/fact.c" line = "49" begin = "23" end = "30"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/fact_po3.why">
       <location file = "PPCHOME/tests/jessie/fact.c" line = "43" begin = "12" end = "32"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>

@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.10 2009-11-09 16:17:21 marche Exp $ *)
+(* $Id: interp.ml,v 1.11 2009-11-10 08:28:13 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -1197,6 +1197,7 @@ let spec funspec =
   let behavior b =
     if List.exists (not $ is_normal_postcond) b.b_post_cond then
       warn_once "abrupt clause(s) ignored";
+    Format.eprintf "producing behavior '%s'@." b.b_name; 
     JCCbehavior(
       Loc.dummy_position,
       b.b_name,
@@ -1290,7 +1291,7 @@ let spec funspec =
       | Some(t,None) ->
           [JCCdecreases(locate (term t))]
       | Some(_,Some _) ->
-          error "Unsupported: 'decreases' clause 'with' for modifier" ;
+          error "Unsupported: 'decreases' clause with 'for' modifier" ;
           assert false
   in
 

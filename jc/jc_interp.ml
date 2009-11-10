@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.430 2009-11-09 16:17:21 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.431 2009-11-10 08:28:14 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -938,9 +938,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
    else
      t')
 
-(*
 let () = ref_term := term
-*)
 
 let named_term ~type_safe ~global_assertion ~relocate lab oldlab t =
   let t' = term ~type_safe ~global_assertion ~relocate lab oldlab t in
@@ -2308,8 +2306,10 @@ and expr e =
                   let subst =
                     List.fold_left2
                       (fun acc (_,vi) (tmp,_,_) -> 
+(*
                          Format.eprintf "subst: %s -> %s@." 
                            vi.jc_var_info_name tmp;
+*)
                          VarMap.add vi (LVar tmp) acc)
                       VarMap.empty f.jc_fun_info_parameters arg_types_asserts
                   in

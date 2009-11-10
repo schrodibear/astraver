@@ -425,7 +425,7 @@ let f_ensures_default =
                                                                     (C_2:
                                                                     ((sub_int 
                                                                     (integer_of_int32 x)) (1))))) in
-                                                   (JC_13: (f jessie_16))))) in
+                                                   (JC_14: (f jessie_16))))) in
                           void);
                          (C_6:
                          begin
@@ -476,8 +476,11 @@ let f_safety =
                                                                    (C_2:
                                                                    ((sub_int 
                                                                     (integer_of_int32 x)) (1)))))) in
+                                                  (JC_13:
+                                                  (assert
+                                                  { zwf_zero((0), (0)) };
                                                   (JC_12:
-                                                  (f_requires jessie_6))))) in
+                                                  (f_requires jessie_6))))))) in
                           void);
                          (C_6:
                          begin
@@ -515,6 +518,16 @@ text = "unexplained assertion"/>
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/rec2_po4.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/rec2_po5.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/rec2_po6.why">
       <location file = "PPCHOME/tests/jessie/rec2.c" line = "27" begin = "13" end = "19"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
