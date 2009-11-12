@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.44 2009-11-12 10:11:38 marche Exp $ *)
+(* $Id: jc_poutput.ml,v 1.45 2009-11-12 16:55:27 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -195,26 +195,27 @@ let rec pexpr fmt e =
     | JCPEwhile (e, behaviors, variant, s)-> 
 	fprintf fmt "@\n@[loop %a%a@\nwhile (%a)%a@]"
 	  (print_list nothing loop_behavior) behaviors
-	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" pexpr t))
+	  (print_option 
+             (fun fmt (t,r) -> 
+                match r with
+                  | None ->
+                      fprintf fmt "@\nvariant %a;" pexpr t
+                  | Some r ->
+                      fprintf fmt "@\nvariant %a for %a;" pexpr t identifier r
+             ))
 	  variant
 	  pexpr e block [s]
     | JCPEfor (inits, cond, updates, behaviors, variant, body)-> 
 	fprintf fmt "@\n@[loop %a@\n%a@\nfor (%a ; %a ; %a)%a@]"
 	  (print_list nothing loop_behavior) behaviors
-(*
-    | JCPEfor (inits, cond, updates, invariant,variant, body)-> 
-	fprintf fmt "@[%a%a@\nfor (%a ; %a ; %a)%a@]"
-	  (print_list nothing 
-	     (fun fmt (behav,inv) -> fprintf fmt "@\ninvariant %a%a;"
-		(print_list_delim 
-		   (constant_string "for ") (constant_string ": ") 
-		   comma string)
-		behav
-		pexpr inv))
-	  invariant 
->>>>>>> 1.38
-*)
-	  (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" pexpr t))
+	  (print_option 
+             (fun fmt (t,r) -> 
+                match r with
+                  | None ->
+                      fprintf fmt "@\nvariant %a;" pexpr t
+                  | Some r ->
+                      fprintf fmt "@\nvariant %a for %a;" pexpr t identifier r
+             ))
 	  variant
 	  (print_list comma pexpr) inits 
 	  pexpr cond (print_list comma pexpr) updates

@@ -122,14 +122,18 @@ let behavior acc (id,assumes,throws,assigns,ensures) =
   in
   assertion acc ensures
 
+let variant acc v =
+  match v with  
+    | None -> acc 
+    | Some(dec,None) -> term acc dec 
+    | Some(dec,Some fi) -> term (fi::acc) dec 
+  
 let loop_annot acc annot =    
   let acc = assertion acc annot.loop_inv in
   let acc = 
     List.fold_left (fun acc (_,a) -> assertion acc a) acc annot.behs_loop_inv 
   in
-  match annot.loop_var with 
-    | None -> acc 
-    | Some dec -> term acc dec 
+  variant acc annot.loop_var 
 
 let rec statement acc s : ('a list * 'b list) = 
   match s.java_statement_node with  
@@ -197,7 +201,7 @@ let rec statement acc s : ('a list * 'b list) =
     | JSstatement_spec(req,dec,behs,s) ->
 	let (a,b) = acc in
 	let a = Option_misc.fold_left assertion a req in
-	let a = Option_misc.fold_left term a dec in
+	let a = variant a dec in
 	let a = List.fold_left behavior a behs in
 	statement (a,b) s
 

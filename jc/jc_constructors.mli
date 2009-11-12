@@ -455,7 +455,7 @@ module PExpr :
     val mkwhile :
       ?condition:pexpr ->
       ?behaviors:pexpr loopbehavior list ->
-      ?variant:pexpr ->
+      ?variant:(pexpr * identifier option) ->
       body:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
     val mkfor :
@@ -463,7 +463,7 @@ module PExpr :
       ?condition:pexpr ->
       ?updates:pexpr list ->
       ?behaviors:pexpr loopbehavior list ->
-      ?variant:pexpr ->
+      ?variant:(pexpr * identifier option) ->
       body:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
     val mkreturn : ?expr:pexpr -> ?pos:Loc.position -> unit -> pexpr

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: pretty.ml,v 1.46 2009-11-10 13:06:52 marche Exp $ i*)
+(*i $Id: pretty.ml,v 1.47 2009-11-12 16:55:27 marche Exp $ i*)
 
 open Format
 open Pp
@@ -218,6 +218,10 @@ let logic_binder fmt (id, pt) =
   fprintf fmt "%a: %a" ident id pure_type pt
 
 let logic_type fmt = function
+  | Predicate [] -> 
+      fprintf fmt " prop" 
+  | Function ([], pt) -> 
+      fprintf fmt "%a" pure_type pt
   | Predicate ptl -> 
       fprintf fmt "%a -> prop" (print_list comma pure_type) ptl
   | Function (ptl, pt) -> 

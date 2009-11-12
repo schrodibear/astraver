@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*i $Id: output.ml,v 1.49 2009-11-06 08:31:18 marche Exp $ i*)
+(*i $Id: output.ml,v 1.50 2009-11-12 16:55:27 marche Exp $ i*)
 
 open Lexing
 open Format
@@ -496,7 +496,11 @@ let rec iter_expr f e =
     | While(e1,inv,var,e2) ->
 	iter_expr f e1; 
 	iter_assertion f inv; 
-	option_iter (fun (var,_) -> iter_term f var) var; 
+	option_iter (fun (var,r) -> iter_term f var;
+                       match r with
+                         | None -> ()
+                         | Some id -> f id
+                    ) var;  
 	List.iter (iter_expr f) e2
     | Block(el) -> List.iter (iter_expr f) el
     | Assign(id,e) -> f id; iter_expr f e

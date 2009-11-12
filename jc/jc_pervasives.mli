@@ -145,7 +145,6 @@ val skip_shifts : expr -> expr
 val skip_tloc_range : location_set -> location_set
 
 val select_option : 'a option -> 'a -> 'a
-val apply_option: ('a -> 'b) -> 'a option -> 'b option
 val is_constant_assertion : assertion -> bool
 
 (* fun specs *)

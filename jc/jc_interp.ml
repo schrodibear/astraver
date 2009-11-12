@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.432 2009-11-12 10:11:38 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.433 2009-11-12 16:55:27 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2627,17 +2627,20 @@ and expr e =
 	(* loop variant *)
 	let loop_variant =	  
           match la.jc_loop_variant with
-            | Some t when safety_checking () ->
+            | Some (t,r) when safety_checking () ->
 		let variant = 
 		  named_term 
 		    ~type_safe:false ~global_assertion:false ~relocate:false
 		    LabelHere LabelPre t 
 	        in
-	        let variant = 
-		  term_coerce ~type_safe:false ~global_assertion:false LabelHere
-		    t#pos integer_type t#typ t variant 
-	        in
-                Some (variant,None)
+                let variant,r = match r with
+                  | None -> 
+		      term_coerce 
+                        ~type_safe:false ~global_assertion:false 
+                        LabelHere t#pos integer_type t#typ t variant, None 
+                  | Some id -> variant, Some id.jc_logic_info_name
+                in
+                Some (variant,r)
             | None when safety_checking () ->
                 Some (LConst(Prim_int "0"),None)
             | _ -> None

@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.13 2009-11-12 10:11:38 marche Exp $ *)
+(* $Id: interp.ml,v 1.14 2009-11-12 16:55:27 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -1919,13 +1919,11 @@ let rec statement s =
 			 | None ->
 			     begin
 			       match rel with
-				 | Some _r ->
-				     warn_once "unsupported: loop variant with relation";
-				     (beh,None
-					(* Some (locate (term v),
-						Some (new identifier r)) *) )
+				 | Some r ->
+				     (beh, Some (locate (term v),
+						 Some (new identifier r)) )
 				 | None ->
-				     (beh,Some (locate (term v) (* ,None *)))
+				     (beh,Some (locate (term v) ,None ))
 			     end
 			 | Some _ -> assert false (* At most one variant *)
 		     end

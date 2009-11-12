@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.185 2009-11-12 10:11:38 marche Exp $ *)
+(* $Id: java_interp.ml,v 1.186 2009-11-12 16:55:27 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1526,6 +1526,13 @@ let reg_term t =
   let t' = term t in
   locate t.java_term_loc t'
 
+let variant v =
+  match v with
+    | None -> None
+    | Some(t,None) -> Some(reg_term t,None)
+    | Some(t,Some fi) -> 
+        Some(reg_term t,Some (new identifier fi.java_logic_info_name))
+
 let loop_annot annot =
   let invariant = reg_assertion annot.loop_inv in
   let behs_inv =
@@ -1534,9 +1541,8 @@ let loop_annot annot =
 	 ([new identifier ~pos:loc id],Some (reg_assertion a), None)) 
       annot.behs_loop_inv
   in
-  let variant = Option_misc.map reg_term annot.loop_var
-  in
-  ([new identifier "default"],Some invariant,None)::behs_inv, variant
+  let v = variant annot.loop_var in
+  ([new identifier "default"],Some invariant,None)::behs_inv, v
 
 let behavior (id,assumes,throws,assigns,ensures) =
   mkbehavior
@@ -1683,8 +1689,7 @@ let rec statement s =
       | JSstatement_spec(req,dec,behs,s) ->
 	  mkcontract
 	    ~requires:(Option_misc.map assertion req)
-	    ~decreases:(Option_misc.map 
-			  (fun dec -> (term dec,None)) dec)
+	    ~decreases:(variant dec)
 	    ~behaviors:(List.map behavior behs)
 	    ~expr:(statement s)
 	    ()
@@ -1704,6 +1709,7 @@ and switch_label = function
 
 let true_assertion = mkboolean ~value:true ()
 
+(*
 let tr_method mi req dec behs b acc =
   let java_params = mi.method_info_parameters in
   let params =
@@ -1740,10 +1746,10 @@ let tr_method mi req dec behs b acc =
   in
   let requires = mkrequires_clause (reg_assertion_option req) in
   let clauses =
-    match dec with
+    match variant dec with
       | None -> requires :: behaviors
-      | Some t ->
-	  requires :: (mkdecreases_clause (reg_term t)) :: behaviors
+      | Some(t,m) ->
+	  requires :: (mkdecreases_clause ?measure:m t) :: behaviors
   in
   let result_type = (* need the option monad... *)
     Option_misc.map
@@ -1752,6 +1758,67 @@ let tr_method mi req dec behs b acc =
          (tr_type Loc.dummy_position)
          return_type)
   in
+  let def = mkfun_def
+    ?result_type
+    ~name: (new identifier nfi.jc_fun_info_name)
+    ~params
+    ~clauses
+    ?body
+    ()
+  in def::acc
+     *)
+    
+let tr_method_spec mi req dec behs b acc =
+  let java_params = mi.method_info_parameters in
+  let params =
+    List.map (fun (p, _) -> create_var Loc.dummy_position p) java_params in
+  let params =
+    match mi.method_info_has_this with
+      | None -> params
+      | Some vi -> (create_var Loc.dummy_position vi) :: params
+  in
+  let params = List.map
+    (fun vi -> (true, ptype_of_type vi.jc_var_info_type, (var_name vi)))
+    params
+  in
+  let return_type = 
+    Option_misc.map 
+      (fun vi -> 	
+ 	 let _nvi = create_var Loc.dummy_position vi in 
+ 	 vi.java_var_info_type) 
+      mi.method_info_result 
+  in
+  let behaviors = 
+    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs 
+  in
+  let nfi = 
+    create_fun Loc.dummy_position 
+      mi.method_info_tag mi.method_info_result 
+      mi.method_info_trans_name mi.method_info_parameters
+  in
+  let _ = 
+    reg_pos ~id:nfi.jc_fun_info_name 
+      ~name:("Method " ^ mi.method_info_name)
+      mi.method_info_loc
+  in
+  let requires = mkrequires_clause (reg_assertion_option req) in
+  let clauses =
+    match variant dec with
+      | None -> requires :: behaviors
+      | Some(t,m) ->
+	  requires :: (mkdecreases_clause ?measure:m t) :: behaviors
+  in
+  let result_type = (* need the option monad... *)
+    Option_misc.map
+      ptype_of_type
+      (Option_misc.map
+         (tr_type Loc.dummy_position)
+         return_type)
+  in
+  (result_type, nfi, params, clauses, b)::acc
+
+let tr_method_body (result_type,nfi,params,clauses,b) acc =
+  let body = Option_misc.map block b in
   let def = mkfun_def
     ?result_type
     ~name: (new identifier nfi.jc_fun_info_name)
@@ -1785,6 +1852,7 @@ let init_field this fi =
     ~value: (mkconst ~const:(default_value fi.java_field_info_type) ())
     ()
 
+(*
 let tr_constr ci req behs b acc =
   let params = List.map
     (fun (vi, _) -> create_var Loc.dummy_position vi)
@@ -1847,7 +1915,74 @@ let tr_constr ci req behs b acc =
     ~clauses: (requires::behaviors)
     ()
   in def :: acc
-	  
+*)
+
+let tr_constr_spec ci req behs b acc =
+  let params = List.map
+    (fun (vi, _) -> create_var Loc.dummy_position vi)
+    ci.constr_info_parameters 
+  in
+  let this =
+    match ci.constr_info_this with
+      | None -> assert false
+      | Some vi -> (create_var Loc.dummy_position vi) 
+  in
+  let nfi = 
+    create_fun Loc.dummy_position ci.constr_info_tag None
+      ci.constr_info_trans_name ci.constr_info_parameters
+  in
+  let _ = 
+    reg_pos ~id:nfi.jc_fun_info_name 
+      ~name:("Constructor of class "^ci.constr_info_class.class_info_name)
+      ci.constr_info_loc 
+  in
+  let params = 
+    (* false because this not yet valid *)
+    (false, ptype_of_type this.jc_var_info_type, var_name this)
+    ::
+      List.map
+      (fun vi -> (true,ptype_of_type vi.jc_var_info_type, var_name vi))
+      params
+  in
+  let requires = mkrequires_clause (reg_assertion_option req) in
+  let behaviors = 
+    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs 
+  in
+  (ci,this,nfi,params,requires::behaviors,b) :: acc
+
+let tr_constr_body (ci,this,nfi,params,clauses,b) acc =
+  let body = statements b
+    (*
+      @ 
+      [dummy_loc_statement (JCTSreturn(this.jc_var_info_type,
+      dummy_loc_expr 
+      this.jc_var_info_type
+      (JCTEvar this)))] 
+    *)
+  in
+  (* NO: TODO 
+     let body = 
+     dummy_loc_statement (JCTSdecl(this,None,make_block body))
+     in
+  *)
+  let fields = ci.constr_info_class.class_info_fields in
+  let body = 
+    List.fold_right
+      (fun fi acc -> 
+	 if fi.java_field_info_is_static then acc else
+	   try
+	     init_field (mkvar ~name:(var_name this) ()) fi::acc
+	   with Assert_failure _ -> acc)
+      fields body
+  in
+  let def = mkfun_def
+    ~name: (new identifier nfi.jc_fun_info_name)
+    ~params
+    ~body:(mkblock ~exprs:body ())
+    ~clauses
+    ()
+  in def :: acc
+       
 let default_label l =
   match l with
     | [l] -> Some l

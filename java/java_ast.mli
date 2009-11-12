@@ -29,7 +29,7 @@
 
 Abstract syntax trees for Java source files
 
-$Id: java_ast.mli,v 1.48 2009-08-24 14:25:40 giorgetti Exp $
+$Id: java_ast.mli,v 1.49 2009-11-12 16:55:27 marche Exp $
 
 ***************************************************************************)
 
@@ -201,9 +201,13 @@ and pstatement_node =
   | JPSghost_local_decls of variable_declaration
   | JPSghost_statement of pexpr
   | JPSannot of Lexing.position * string
-  | JPSloop_annot of pexpr * (identifier * pexpr) list * pexpr option
+  | JPSloop_annot of pexpr * (identifier * pexpr) list * 
+      (pexpr * identifier option) option
+      (* inv, beh invs, variant *)
   | JPSstatement_spec of 
-      pexpr option * pexpr option * (identifier * pbehavior) list
+      pexpr option * (pexpr * identifier option) option 
+      * (identifier * pbehavior) list
+      (* requires, decreases, behaviors *)
 
 and block = pstatement list
 
@@ -254,7 +258,9 @@ type field_declaration =
   | JPFinvariant of identifier * pexpr
   | JPFstatic_invariant of identifier * pexpr
   | JPFmethod_spec of 
-      pexpr option * pexpr option * (identifier * pbehavior) list
+      pexpr option * (pexpr * identifier option) option 
+      * (identifier * pbehavior) list
+        (* requires, decreases, behaviors *)
   | JPFclass of class_declaration
   | JPFinterface of interface_declaration
 

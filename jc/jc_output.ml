@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.148 2009-11-12 10:11:38 marche Exp $ *)
+(* $Id: jc_output.ml,v 1.149 2009-11-12 16:55:27 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -448,7 +448,13 @@ let rec expr fmt e =
 		assertion inv))
 *)
 	    la.jc_loop_behaviors
-            (print_option (fun fmt t -> fprintf fmt "@\nvariant %a;" term t))
+            (print_option 
+               (fun fmt (t,r) -> 
+                  match r with
+                    | None -> fprintf fmt "@\nvariant %a;" term t
+                    | Some r -> fprintf fmt "@\nvariant %a for %s;" term t
+                        r.jc_logic_info_name
+               ))
             la.jc_loop_variant
             expr e
       | JCEapp{ jc_call_fun = (JClogic_fun{ jc_logic_info_final_name = name }

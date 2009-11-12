@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_typing.ml,v 1.161 2009-08-24 14:25:40 giorgetti Exp $ *)
+(* $Id: java_typing.ml,v 1.162 2009-11-12 16:55:27 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -3424,10 +3424,7 @@ and statements env b =
 		  (assertion { env  with current_label = Some LabelHere}) 
 		  requires 
               in
-              let decreases = 
-                Option_misc.map 
-		  (term { env with current_label = Some LabelHere }) 
-		  decreases 
+              let decreases = type_variant { env with current_label = Some LabelHere } decreases
               in
               let behs = List.map (behavior env env.env env.env) behaviors in
               begin
@@ -3445,6 +3442,23 @@ and statements env b =
           | _ ->
               let s' = statement env s in
                 s' :: statements env rem
+
+and type_variant env v =
+  Option_misc.map 
+    (fun (t,r) ->
+       let t = 
+         term env t
+       in
+       match r with
+         | None -> (t,None)
+         | Some(loc,id) -> 
+             (try
+                let fi = Hashtbl.find logics_env id in
+                (t,Some fi)
+              with Not_found ->
+                typing_error loc "relation `%s' not found" id)
+    ) 
+    v 
                   
         
          
@@ -3461,9 +3475,7 @@ and type_loop_annot env (inv,behs_inv,dec) =
        (bid,assertion (add_Pre_Here env) a))
     behs_inv 
   in	 
-  let dec = 
-    Option_misc.map (term (add_Pre_Here env)) dec 
-  in
+  let dec = type_variant (add_Pre_Here env) dec in
   { loop_inv = inv;
     behs_loop_inv = l;
     loop_var = dec;
@@ -3535,7 +3547,7 @@ and switch_label env t = function
 type method_table_info =
     { mt_method_info : Java_env.method_info;
       mt_requires : Java_tast.assertion option;
-      mt_decreases : Java_tast.term option;
+      mt_decreases : (Java_tast.term * Java_env.java_logic_info option) option;
       mt_behaviors : Java_tast.behavior list ;
       mt_body : Java_tast.block option;
     }
@@ -3581,7 +3593,7 @@ let type_method_spec_and_body ?(dobody=true)
                 env = local_env }
     in
     let req = Option_misc.map (assertion env) req in
-    let decreases = Option_misc.map (term env) decreases in
+    let decreases = type_variant env decreases in
     let env_result =
       match mi.method_info_result with
         | None -> local_env
@@ -3609,7 +3621,7 @@ let type_method_spec_and_body ?(dobody=true)
 type constructor_table_info =
     { ct_constr_info : Java_env.constructor_info;
       ct_requires : Java_tast.assertion option;
-      ct_decreases : Java_tast.term option;
+      ct_decreases : (Java_tast.term * Java_env.java_logic_info option) option;
       ct_behaviors : (Java_ast.identifier * 
                         Java_tast.assertion option * 
                         Java_env.java_class_info option *
@@ -3667,10 +3679,7 @@ let type_constr_spec_and_body ?(dobody=true)
     Option_misc.map 
       (assertion { env with env = local_env }) req 
   in
-  let decreases = 
-    Option_misc.map 
-      (term { env with env = local_env }) decreases 
-  in
+  let decreases = type_variant { env with env = local_env } decreases in
   let behs = List.map (behavior env local_env this_env) behs in
   if dobody then
     let env = 

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_main.ml,v 1.74 2009-10-30 16:17:00 marche Exp $ *)
+(* $Id: java_main.ml,v 1.75 2009-11-12 16:55:27 marche Exp $ *)
 
 open Java_env
 open Java_ast
@@ -242,36 +242,50 @@ let main () =
   let decls =
     Array.fold_left
       (fun acc l ->
-	 List.fold_left 
-	   (fun acc f -> 
-	      match f with
-		| MethodInfo mi -> 
-		    let mt = Hashtbl.find Java_typing.methods_table
-		      mi.method_info_tag
-		    in
-		    printf "Generating JC function %s for method %a.%s@." 
-		      mi.method_info_trans_name
-		      Java_typing.print_type_name 
-		      mi.method_info_class_or_interface
-		      mi.method_info_name;
-		    Java_interp.tr_method mi 
-		      mt.Java_typing.mt_requires 
-		      mt.Java_typing.mt_decreases
-		      mt.Java_typing.mt_behaviors 
-		      mt.Java_typing.mt_body acc
-		| ConstructorInfo ci ->
-		    let ct = Hashtbl.find Java_typing.constructors_table
-		      ci.constr_info_tag
-		    in
-		    printf "Generating JC function %s for constructor %s@." 
-		      ci.constr_info_trans_name
-		      ci.constr_info_class.class_info_name;
-		    Java_interp.tr_constr ci 
-		      ct.Java_typing.ct_requires 
-		      ct.Java_typing.ct_behaviors 
-                      ct.Java_typing.ct_body acc)
+         let methods,constrs =
+	   List.fold_left 
+	     (fun (m,c) f -> 
+	        match f with
+		  | MethodInfo mi -> 
+		      let mt = Hashtbl.find Java_typing.methods_table
+		        mi.method_info_tag
+		      in
+		      printf "Generating JC function %s for method %a.%s@." 
+		        mi.method_info_trans_name
+		        Java_typing.print_type_name 
+		        mi.method_info_class_or_interface
+		        mi.method_info_name;
+		      (Java_interp.tr_method_spec mi 
+		        mt.Java_typing.mt_requires 
+		        mt.Java_typing.mt_decreases
+		        mt.Java_typing.mt_behaviors 
+		        mt.Java_typing.mt_body m, c)
+		  | ConstructorInfo ci ->
+		      let ct = Hashtbl.find Java_typing.constructors_table
+		        ci.constr_info_tag
+		      in
+		      printf "Generating JC function %s for constructor %s@." 
+		        ci.constr_info_trans_name
+		        ci.constr_info_class.class_info_name;
+		      (m,Java_interp.tr_constr_spec ci 
+		         ct.Java_typing.ct_requires 
+		         ct.Java_typing.ct_behaviors 
+                         ct.Java_typing.ct_body c))
+             ([],[])
+             l
+         in
+         let acc =
+           List.fold_left
+             (fun acc m ->
+                Java_interp.tr_method_body m acc)
+	     acc
+             methods
+         in
+         List.fold_left
+           (fun acc c ->
+              Java_interp.tr_constr_body c acc)
 	   acc
-	   l)
+           constrs)
       decls
       components
   in

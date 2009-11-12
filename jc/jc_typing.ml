@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.292 2009-11-12 10:11:38 marche Exp $ *)
+(* $Id: jc_typing.ml,v 1.293 2009-11-12 16:55:27 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -2259,7 +2259,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         unit_type, dummy_region, JCEassert(behav,asrt,assertion env e1)
     | JCNEcontract(req,dec,behs,e) ->
 	let requires = Option_misc.map (assertion env) req in
-	let decreases = Option_misc.map (term env) req in
+	let decreases = Option_misc.map (fun t -> term env t,None) req in
 	let e = expr env e in
 	let vi_result = var (e#typ) "\\result" in
 	let behs = List.map (behavior env vi_result) behs in
@@ -2275,14 +2275,23 @@ used as an assertion, not as a term" pi.jc_logic_info_name
               last#typ, last#region, JCEblock(List.rev(last::but_last))
         end
     | JCNEloop(behs, vo, body) ->
-        unit_type,
-        dummy_region,
-        JCEloop(
-          loop_annot
-            ~behaviors:(List.map (loopbehavior env) behs)
+        let behaviors = List.map (loopbehavior env) behs in
+        let variant =
+          Option_misc.map 
+            (fun (v,r) -> 
+               let r = Option_misc.map 
+                 (fun id -> find_logic_info id#name) r
+               in
+               (ft v,r)) 
+            vo
+        in
+        (unit_type,
+         dummy_region,
+         JCEloop(
+          loop_annot ~behaviors
             ~free_invariant:(Assertion.mktrue ())
-            ~variant:(apply_option ft vo),
-          fe body)
+            ~variant,
+           fe body))
     | JCNEreturn None ->
         unit_type, dummy_region, JCEreturn_void
     | JCNEreturn(Some e1) ->

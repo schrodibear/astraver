@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_tast.mli,v 1.45 2009-05-20 13:38:26 marche Exp $ *)
+(* $Id: java_tast.mli,v 1.46 2009-11-12 16:55:27 marche Exp $ *)
 
 open Java_env
 
@@ -147,7 +147,7 @@ type behavior =
 type loop_annot =
     { loop_inv : assertion;
       behs_loop_inv : (Java_ast.identifier * assertion) list;
-      loop_var : term option;
+      loop_var : (term * java_logic_info option) option;
     }
 
 type statement =
@@ -178,7 +178,8 @@ and statement_node =
   | JSthrow of expr
   | JStry of block * (java_var_info * block) list * block option
   | JSstatement_spec of 
-      assertion option * term option * behavior list * statement
+      assertion option * (term * java_logic_info option) option 
+      * behavior list * statement
 	(*r requires, decreases, behaviors, statement *)
   | JSlabel of string * statement
 (*

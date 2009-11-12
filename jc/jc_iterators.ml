@@ -191,8 +191,12 @@ let replace_sub_pexpr e el =
 	       ((names,inv,ass)::b,el)) 
 	    behs
 	    ([],el)
-	in
-	let variant,el = popopt el variant in
+	in        
+	let variant,el = 
+          match variant with
+            | None -> None,el
+            | Some(v,r) -> let v,el = pop el in Some(v,r),el
+        in
 	let body = as1 el in 
 	JCPEwhile(test,behs,variant,body)
     | JCPEfor(inits,test,updates,behs,var,body) ->
@@ -207,7 +211,11 @@ let replace_sub_pexpr e el =
 	    behs
 	    ([],el)
 	in
-	let var,el = popopt el var in
+	let var,el = 
+          match var with
+            | None -> None,el
+            | Some(var,r) -> let v,el = pop el in Some(v,r),el
+        in
 	let body = as1 el in 
 	JCPEfor(inits,test,updates,behs,var,body)
     | JCPEreturn _ ->
@@ -308,7 +316,7 @@ module PExprAst = struct
 		 Option_misc.fold (fun x l -> x::l) inv acc
 		   (* TODO : ass *))
 	      behs
-	      (Option_misc.fold (fun x l -> x::l) variant [body])
+	      (Option_misc.fold (fun (x,_) l -> x::l) variant [body])
 	  in e1::acc
       | JCPEfor(inits,cond,update,behs,variant,body) ->
 	  let acc =
@@ -317,7 +325,7 @@ module PExprAst = struct
 		 Option_misc.fold (fun x l -> x::l) inv acc
 		   (* TODO : ass *))
 	      behs
-	      (Option_misc.fold (fun x l -> x::l) variant [body])
+	      (Option_misc.fold (fun (x,_) l -> x::l) variant [body])
 	  in inits @ cond :: update @ acc
       | JCPEblock el
       | JCPEapp(_,_,el) ->
@@ -1216,10 +1224,10 @@ let fold_sub_expr_and_term_and_assertion
 	    ) acc la.jc_loop_behaviors
 	in
 	let acc = ita acc la.jc_free_loop_invariant in
-	Option_misc.fold_left itt acc la.jc_loop_variant
+	Option_misc.fold_left (fun acc (t,_) -> itt acc t) acc la.jc_loop_variant
     | JCEcontract(a_opt,t_opt,_v,behavs,e) ->
 	let acc = Option_misc.fold_left ita acc a_opt in
-	let acc = Option_misc.fold_left itt acc t_opt in
+	let acc = Option_misc.fold_left (fun acc (t,_) -> itt acc t) acc t_opt in
 	let acc = 
 	  List.fold_left 
 	    (fun acc (_loc,_name,behav) ->
@@ -1308,7 +1316,7 @@ module NExprAst = struct
 		   (fun (_,locs) l -> locs@l) 
 		   ass acc)
 	    behs
-	    (Option_misc.fold (fun x l -> x::l) variant [e2])
+	    (Option_misc.fold (fun (x,_) l -> x::l) variant [e2])
       | JCNEapp(_, _, el)
       | JCNEblock el ->
           el

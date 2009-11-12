@@ -29,7 +29,7 @@
 
 Parser for Java source files
 
-$Id: java_parser.mly,v 1.64 2009-08-24 14:25:40 giorgetti Exp $
+$Id: java_parser.mly,v 1.65 2009-11-12 16:55:27 marche Exp $
 
 */
 
@@ -1252,7 +1252,9 @@ decreases_opt:
 | /* $\varepsilon$ */
     { None }
 | DECREASES expr SEMICOLON 
-    { Some $2 }
+    { Some($2, None) }
+| DECREASES expr FOR ident SEMICOLON 
+    { Some($2, Some $4) }
 ;
 
 kml_statement_annot:
@@ -1293,7 +1295,9 @@ loop_variant_opt:
 
 loop_variant:
 | LOOP_VARIANT expr SEMICOLON 
-    { Some $2 }
+    { Some($2, None) }
+| LOOP_VARIANT expr FOR ident SEMICOLON 
+    { Some($2, Some $4) }
 ;
 
 

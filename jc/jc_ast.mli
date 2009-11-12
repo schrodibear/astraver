@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.173 2009-11-12 10:11:38 marche Exp $ *)
+(* $Id: jc_ast.mli,v 1.174 2009-11-12 16:55:27 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -198,11 +198,11 @@ and pexpr_node =
 	(* requires, decreases, behaviors, expression *)
   | JCPEwhile of 
       pexpr * pexpr loopbehavior list * 
-	(pexpr (* * identifier option *)) option * pexpr
+	(pexpr * identifier option) option * pexpr
 	(*r condition, behaviors, variant, body *)
   | JCPEfor of 
       pexpr list * pexpr * pexpr list * pexpr loopbehavior list 
-      * (pexpr (* * identifier option *)) option * pexpr
+      * (pexpr * identifier option) option * pexpr
 	(*r inits, condition, updates, behaviors, variant, body *)
   | JCPEreturn of pexpr
   | JCPEbreak of string
@@ -304,7 +304,8 @@ type nexpr_node =
 	nexpr pbehavior list * nexpr 
 	(* requires, decreases, behaviors, expression *)
   | JCNEblock of nexpr list
-  | JCNEloop of nexpr loopbehavior list * nexpr option * nexpr
+  | JCNEloop of nexpr loopbehavior list * 
+      (nexpr * identifier option) option * nexpr
       (*r behaviors, variant, body *)
   | JCNEreturn of nexpr option
   | JCNEtry of nexpr * (identifier * string * nexpr) list * nexpr
@@ -467,7 +468,7 @@ type 'li loop_annot =
 	   'li assertion option * 
 	   'li location list option) list;
       mutable jc_free_loop_invariant : 'li assertion;
-      jc_loop_variant : 'li term option;
+      jc_loop_variant : ('li term * 'li option) option;
     }
 
 
@@ -536,8 +537,10 @@ type ('li,'fi) expr_node =
   | JCEfree of ('li,'fi) expr
   | JCElet of var_info * ('li,'fi) expr option * ('li,'fi) expr
   | JCEassert of identifier list * asrt_kind * 'li assertion
-  | JCEcontract of 'li assertion option * 'li term option * var_info * 
+  | JCEcontract of 'li assertion option * 
+      ('li term * identifier option) option * var_info * 
       (Loc.position * string * 'li behavior) list * ('li,'fi) expr
+      (* requires, decreases, vi of \result, behaviors, expression *)
   | JCEblock of ('li,'fi) expr list
   | JCEloop of 'li loop_annot * ('li,'fi) expr
   | JCEreturn_void 
@@ -563,13 +566,6 @@ and ('li,'fi) call =
       jc_call_label_assoc : (label * label) list;
     }
 
-(*
-type loop_annot =
-    {
-      jc_loop_invariant : assertion;
-      jc_loop_variant : term;
-    }
-*)
 
 (*type incr_op = Stat_inc | Stat_dec*)
 

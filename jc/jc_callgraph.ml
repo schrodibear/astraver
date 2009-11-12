@@ -107,7 +107,8 @@ let loop_annot acc la =
   in
   match la.jc_loop_variant with
   | None -> acc
-  | Some t -> term acc t
+  | Some (t,None) -> term acc t
+  | Some (t,Some ri) -> term (ri::acc) t
 
 let expr = 
   Jc_iterators.IExpr.fold_left 

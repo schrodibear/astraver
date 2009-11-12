@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_pervasives.ml,v 1.159 2009-11-05 16:53:20 marche Exp $ *)
+(* $Id: jc_pervasives.ml,v 1.160 2009-11-12 16:55:27 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -792,7 +792,6 @@ let rec skip_tloc_range locs = match locs#node with
 (* option *)
 
 let select_option opt default = match opt with Some v -> v | None -> default
-let apply_option f opt = match opt with None -> None | Some x -> Some(f x)
 
 (*
 let direct_embedded_struct_fields st =

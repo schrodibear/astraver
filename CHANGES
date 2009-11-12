@@ -1,4 +1,7 @@
 
+  o [Jessie/Krakatoa/Frama-C plugin] support for the 'for' modifier in
+    decreases clauses and loop variants
+  o [Alt-Ergo output] avoid empty list of arguments
   o [GWhy] added alternative "boomy" icon set
   o [Alt-Ergo+Simplify output] well_founded() translated by false 
     instead of true, for soundness 

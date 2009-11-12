@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.137 2009-11-12 10:11:38 marche Exp $ */
+/* $Id: jc_parser.mly,v 1.138 2009-11-12 16:55:27 marche Exp $ */
 
 %{
 
@@ -978,7 +978,9 @@ loop_behaviors:
 
 loop_annot:
 | LOOP loop_behaviors VARIANT expression SEMICOLON
-    { ($2, Some $4) }
+    { ($2, Some ($4,None)) }
+| LOOP loop_behaviors VARIANT expression FOR identifier SEMICOLON
+    { ($2, Some ($4, Some $6)) }
 | LOOP loop_behaviors
     { ($2, None) }
 ;

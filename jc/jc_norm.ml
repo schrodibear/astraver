@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.119 2009-11-12 10:11:38 marche Exp $ *)
+(* $Id: jc_norm.ml,v 1.120 2009-11-12 16:55:27 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -583,7 +583,7 @@ let rec expr e =
 		     expr e)
     | JCPEwhile(_,behs,vareopt,e) ->
 	let behs = List.map loopbehavior behs in
-	JCNEloop(behs,Option_misc.map expr vareopt,expr e)
+	JCNEloop(behs,Option_misc.map (fun (v,r) -> (expr v,r)) vareopt,expr e)
     | JCPEfor _ -> assert false
     | JCPEreturn e ->
         begin match e#node with
