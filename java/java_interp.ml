@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: java_interp.ml,v 1.184 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: java_interp.ml,v 1.185 2009-11-12 10:11:38 marche Exp $ *)
 
 open Format
 open Jc_output
@@ -1683,7 +1683,8 @@ let rec statement s =
       | JSstatement_spec(req,dec,behs,s) ->
 	  mkcontract
 	    ~requires:(Option_misc.map assertion req)
-	    ~decreases:(Option_misc.map term dec)
+	    ~decreases:(Option_misc.map 
+			  (fun dec -> (term dec,None)) dec)
 	    ~behaviors:(List.map behavior behs)
 	    ~expr:(statement s)
 	    ()

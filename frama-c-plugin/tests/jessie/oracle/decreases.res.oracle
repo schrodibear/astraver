@@ -1,6 +1,7 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only decreases.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD decreases.c"
 [jessie] Starting Jessie translation
+[jessie] warning: unsupported: loop variant with relation
 [jessie] Producing Jessie files in subdir decreases.jessie
 [jessie] File decreases.jessie/decreases.jc written.
 [jessie] File decreases.jessie/decreases.cloc written.
@@ -77,6 +78,48 @@ behavior default:
       (return __retres_0))
    }
 }
+
+predicate R(real x, real y) =
+((0.0 <= y) && ((y - x) >= 1.0))
+
+integer f(real y)
+  decreases (C_33 : y) for R;
+behavior default:
+  assumes true;
+  ensures (C_32 : true);
+{  
+   (var integer n_1);
+   
+   (var real x);
+   
+   (var integer __retres_1);
+   
+   {  (C_21 : (n_1 = 0));
+      (C_22 : (x = y));
+      (if (x <= 1.0) then 
+      {  (C_23 : (__retres_1 = n_1));
+         
+         (goto return_label)
+      } else ());
+      (C_26 : (n_1 = (C_25 : f((C_24 : (x - 2.0))))));
+      
+      {  
+         loop 
+         while (true)
+         {  
+            {  (if (x >= 10.0) then () else 
+               (goto while_0_break));
+               (C_28 : (n_1 = (C_27 : (n_1 + 1))));
+               (C_30 : (x = (C_29 : (x - 1.0))))
+            }
+         };
+         (while_0_break : ())
+      };
+      (C_31 : (__retres_1 = n_1));
+      (return_label : 
+      (return __retres_1))
+   }
+}
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs decreases.jessie/decreases.cloc decreases.jessie/decreases.jc
 type char_P
 
@@ -84,9 +127,15 @@ type padding
 
 type void_P
 
+exception Goto_while_0_break_exc of unit
+
 exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
+
+predicate R(x:real,
+ y:real) =
+ (le_real(0.0, y) and ge_real(sub_real(y, x), 1.0))
 
 exception Return_label_exc of unit
 
@@ -334,6 +383,10 @@ parameter even : n:int -> { } int { true }
 
 parameter even_requires : n:int -> { (JC_1: ge_int(n, (0)))} int { true }
 
+parameter f : y_0:real -> { } int { true }
+
+parameter f_requires : y_0:real -> { } int { true }
+
 parameter odd : n_0:int -> { } int { true }
 
 parameter odd_requires : n_0:int -> { (JC_14: ge_int(n_0, (0)))} int { true }
@@ -349,12 +402,12 @@ let even_ensures_default =
      (let tmp_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_27 = begin
+      (let jessie_31 = begin
                          (if ((eq_int_ n) (0))
                          then
-                          (let jessie_18 = (C_1:
+                          (let jessie_22 = (C_1:
                                            begin
-                                             (let jessie_17 = (__retres := (1)) in
+                                             (let jessie_21 = (__retres := (1)) in
                                              void);
                                             (raise (Return_label_exc void))
                                            end) in
@@ -362,12 +415,12 @@ let even_ensures_default =
                          else void);
                         (C_4:
                         begin
-                          (let jessie_21 = (tmp := (C_3:
-                                                   (let jessie_20 = (C_2:
+                          (let jessie_25 = (tmp := (C_3:
+                                                   (let jessie_24 = (C_2:
                                                                     ((sub_int n) (1))) in
-                                                   (JC_13: (odd jessie_20))))) in
+                                                   (JC_13: (odd jessie_24))))) in
                           void);
-                         (let jessie_24 = (if ((neq_int_ !tmp) (0))
+                         (let jessie_28 = (if ((neq_int_ !tmp) (0))
                                           then
                                            (C_6:
                                            begin   (tmp_0 := (0)); !tmp_0 end)
@@ -377,7 +430,7 @@ let even_ensures_default =
                          void);
                          (C_7:
                          begin
-                           (let jessie_26 = (__retres := !tmp_0) in void);
+                           (let jessie_30 = (__retres := !tmp_0) in void);
                           (raise (Return_label_exc void))
                          end)
                         end)
@@ -404,12 +457,12 @@ let even_safety =
      (let tmp_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_14 = begin
+      (let jessie_18 = begin
                          (if ((eq_int_ n) (0))
                          then
-                          (let jessie_5 = (C_1:
+                          (let jessie_9 = (C_1:
                                           begin
-                                            (let jessie_4 = (__retres := (1)) in
+                                            (let jessie_8 = (__retres := (1)) in
                                             void);
                                            (raise (Return_label_exc void))
                                           end) in
@@ -417,17 +470,17 @@ let even_safety =
                          else void);
                         (C_4:
                         begin
-                          (let jessie_8 = (tmp := (C_3:
-                                                  (let jessie_7 = (C_2:
-                                                                  ((sub_int n) (1))) in
-                                                  (JC_12:
-                                                  (assert
-                                                  { zwf_zero((JC_11 : jessie_7),
-                                                    (JC_10 : n)) };
-                                                  (JC_9:
-                                                  (odd_requires jessie_7))))))) in
+                          (let jessie_12 = (tmp := (C_3:
+                                                   (let jessie_11 = (C_2:
+                                                                    ((sub_int n) (1))) in
+                                                   (JC_12:
+                                                   (assert
+                                                   { zwf_zero((JC_11 : jessie_11),
+                                                     (JC_10 : n)) };
+                                                   (JC_9:
+                                                   (odd_requires jessie_11))))))) in
                           void);
-                         (let jessie_11 = (if ((neq_int_ !tmp) (0))
+                         (let jessie_15 = (if ((neq_int_ !tmp) (0))
                                           then
                                            (C_6:
                                            begin   (tmp_0 := (0)); !tmp_0 end)
@@ -437,7 +490,7 @@ let even_safety =
                          void);
                          (C_7:
                          begin
-                           (let jessie_13 = (__retres := !tmp_0) in void);
+                           (let jessie_17 = (__retres := !tmp_0) in void);
                           (raise (Return_label_exc void))
                          end)
                         end)
@@ -446,6 +499,236 @@ let even_safety =
       with
       Return_label_exc jessie_1 ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { true }
+
+let f_ensures_default =
+ fun (y_0 : real) ->
+  { (true = true) }
+  (init:
+  (let return = ref (any_int void) in
+  try
+   begin
+     (let n_1 = ref (any_int void) in
+     (let x_0 = ref (any_real void) in
+     (let __retres_1 = ref (any_int void) in
+     try
+      (let jessie_99 = (C_21:
+                       begin
+                         (let jessie_81 = (n_1 := (0)) in void);
+                        (C_22:
+                        begin
+                          (let jessie_83 = (x_0 := y_0) in void);
+                         (if ((le_real_ !x_0) 1.0)
+                         then
+                          (let jessie_86 = (C_23:
+                                           begin
+                                             (let jessie_85 = (__retres_1 := !n_1) in
+                                             void);
+                                            (raise (Return_label_exc void))
+                                           end) in
+                          void)
+                         else void);
+                         (C_26:
+                         begin
+                           (let jessie_89 = (n_1 := (C_25:
+                                                    (let jessie_88 = 
+                                                    (C_24:
+                                                    ((sub_real !x_0) 2.0)) in
+                                                    (JC_42: (f jessie_88))))) in
+                           void);
+                          try
+                           (let jessie_96 = begin
+                                              (loop_2:
+                                              while true do
+                                              { invariant (JC_44: true)  }
+                                               begin
+                                                 [ { } unit { true } ];
+                                                try
+                                                 (let jessie_95 = begin
+                                                                    (let jessie_94 = 
+                                                                    begin
+                                                                      
+                                                                    (if 
+                                                                    ((ge_real_ !x_0) 10.0)
+                                                                    then void
+                                                                    else
+                                                                    (let jessie_90 = 
+                                                                    (raise
+                                                                    (Goto_while_0_break_exc
+                                                                    void)) in
+                                                                    void));
+                                                                    (C_28:
+                                                                    begin
+                                                                      
+                                                                    (let jessie_92 = 
+                                                                    (n_1 := 
+                                                                    (C_27:
+                                                                    ((add_int !n_1) (1)))) in
+                                                                    void);
+                                                                    (C_30:
+                                                                    begin
+                                                                      
+                                                                    (x_0 := 
+                                                                    (C_29:
+                                                                    ((sub_real !x_0) 1.0)));
+                                                                    !x_0
+                                                                    end)
+                                                                    end)
+                                                                    end in
+                                                                    void);
+                                                                   (raise
+                                                                    (Loop_continue_exc
+                                                                    void))
+                                                                  end in
+                                                 void)
+                                                 with
+                                                 Loop_continue_exc jessie_6 ->
+                                                 void end
+                                               end
+                                              done);
+                                             (raise
+                                              (Goto_while_0_break_exc
+                                              void))
+                                            end in
+                           void)
+                           with
+                           Goto_while_0_break_exc jessie_3 ->
+                           (while_0_break: void) end;
+                          (C_31:
+                          begin
+                            (let jessie_98 = (__retres_1 := !n_1) in void);
+                           (raise (Return_label_exc void))
+                          end)
+                         end)
+                        end)
+                       end) in
+      void)
+      with
+      Return_label_exc jessie_4 ->
+      (return_label: begin   (return := !__retres_1); (raise Return) end) end)));
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { (JC_31: true) }
+
+let f_safety =
+ fun (y_0 : real) ->
+  { (JC_30: true) }
+  (init:
+  (let return = ref (any_int void) in
+  try
+   begin
+     (let n_1 = ref (any_int void) in
+     (let x_0 = ref (any_real void) in
+     (let __retres_1 = ref (any_int void) in
+     try
+      (let jessie_78 = (C_21:
+                       begin
+                         (let jessie_60 = (n_1 := (0)) in void);
+                        (C_22:
+                        begin
+                          (let jessie_62 = (x_0 := y_0) in void);
+                         (if ((le_real_ !x_0) 1.0)
+                         then
+                          (let jessie_65 = (C_23:
+                                           begin
+                                             (let jessie_64 = (__retres_1 := !n_1) in
+                                             void);
+                                            (raise (Return_label_exc void))
+                                           end) in
+                          void)
+                         else void);
+                         (C_26:
+                         begin
+                           (let jessie_68 = (n_1 := (C_25:
+                                                    (let jessie_67 = 
+                                                    (C_24:
+                                                    ((sub_real !x_0) 2.0)) in
+                                                    (JC_38:
+                                                    (assert
+                                                    { R((JC_37 : jessie_67),
+                                                      (JC_36 : y_0)) };
+                                                    (JC_35:
+                                                    (f_requires jessie_67))))))) in
+                           void);
+                          try
+                           (let jessie_75 = begin
+                                              (loop_1:
+                                              while true do
+                                              { invariant (JC_40: true)
+                                                variant (0) }
+                                               begin
+                                                 [ { } unit { true } ];
+                                                try
+                                                 (let jessie_74 = begin
+                                                                    (let jessie_73 = 
+                                                                    begin
+                                                                      
+                                                                    (if 
+                                                                    ((ge_real_ !x_0) 10.0)
+                                                                    then void
+                                                                    else
+                                                                    (let jessie_69 = 
+                                                                    (raise
+                                                                    (Goto_while_0_break_exc
+                                                                    void)) in
+                                                                    void));
+                                                                    (C_28:
+                                                                    begin
+                                                                      
+                                                                    (let jessie_71 = 
+                                                                    (n_1 := 
+                                                                    (C_27:
+                                                                    ((add_int !n_1) (1)))) in
+                                                                    void);
+                                                                    (C_30:
+                                                                    begin
+                                                                      
+                                                                    (x_0 := 
+                                                                    (C_29:
+                                                                    ((sub_real !x_0) 1.0)));
+                                                                    !x_0
+                                                                    end)
+                                                                    end)
+                                                                    end in
+                                                                    void);
+                                                                   (raise
+                                                                    (Loop_continue_exc
+                                                                    void))
+                                                                  end in
+                                                 void)
+                                                 with
+                                                 Loop_continue_exc jessie_6 ->
+                                                 void end
+                                               end
+                                              done);
+                                             (raise
+                                              (Goto_while_0_break_exc
+                                              void))
+                                            end in
+                           void)
+                           with
+                           Goto_while_0_break_exc jessie_3 ->
+                           (while_0_break: void) end;
+                          (C_31:
+                          begin
+                            (let jessie_77 = (__retres_1 := !n_1) in void);
+                           (raise (Return_label_exc void))
+                          end)
+                         end)
+                        end)
+                       end) in
+      void)
+      with
+      Return_label_exc jessie_4 ->
+      (return_label: begin   (return := !__retres_1); (raise Return) end) end)));
     absurd 
    end
    with
@@ -464,12 +747,12 @@ let odd_ensures_default =
      (let tmp_0_1 = ref (any_int void) in
      (let __retres_0 = ref (any_int void) in
      try
-      (let jessie_53 = begin
+      (let jessie_57 = begin
                          (if ((eq_int_ n_0) (0))
                          then
-                          (let jessie_44 = (C_11:
+                          (let jessie_48 = (C_11:
                                            begin
-                                             (let jessie_43 = (__retres_0 := (0)) in
+                                             (let jessie_47 = (__retres_0 := (0)) in
                                              void);
                                             (raise (Return_label_exc void))
                                            end) in
@@ -477,14 +760,14 @@ let odd_ensures_default =
                          else void);
                         (C_14:
                         begin
-                          (let jessie_47 = (tmp_0_0 := (C_13:
-                                                       (let jessie_46 = 
+                          (let jessie_51 = (tmp_0_0 := (C_13:
+                                                       (let jessie_50 = 
                                                        (C_12:
                                                        ((sub_int n_0) (1))) in
                                                        (JC_26:
-                                                       (even jessie_46))))) in
+                                                       (even jessie_50))))) in
                           void);
-                         (let jessie_50 = (if ((neq_int_ !tmp_0_0) (0))
+                         (let jessie_54 = (if ((neq_int_ !tmp_0_0) (0))
                                           then
                                            (C_16:
                                            begin
@@ -498,7 +781,7 @@ let odd_ensures_default =
                          void);
                          (C_17:
                          begin
-                           (let jessie_52 = (__retres_0 := !tmp_0_1) in void);
+                           (let jessie_56 = (__retres_0 := !tmp_0_1) in void);
                           (raise (Return_label_exc void))
                          end)
                         end)
@@ -525,12 +808,12 @@ let odd_safety =
      (let tmp_0_1 = ref (any_int void) in
      (let __retres_0 = ref (any_int void) in
      try
-      (let jessie_40 = begin
+      (let jessie_44 = begin
                          (if ((eq_int_ n_0) (0))
                          then
-                          (let jessie_31 = (C_11:
+                          (let jessie_35 = (C_11:
                                            begin
-                                             (let jessie_30 = (__retres_0 := (0)) in
+                                             (let jessie_34 = (__retres_0 := (0)) in
                                              void);
                                             (raise (Return_label_exc void))
                                            end) in
@@ -538,18 +821,18 @@ let odd_safety =
                          else void);
                         (C_14:
                         begin
-                          (let jessie_34 = (tmp_0_0 := (C_13:
-                                                       (let jessie_33 = 
+                          (let jessie_38 = (tmp_0_0 := (C_13:
+                                                       (let jessie_37 = 
                                                        (C_12:
                                                        ((sub_int n_0) (1))) in
                                                        (JC_25:
                                                        (assert
-                                                       { zwf_zero((JC_24 : jessie_33),
+                                                       { zwf_zero((JC_24 : jessie_37),
                                                          (JC_23 : n_0)) };
                                                        (JC_22:
-                                                       (even_requires jessie_33))))))) in
+                                                       (even_requires jessie_37))))))) in
                           void);
-                         (let jessie_37 = (if ((neq_int_ !tmp_0_0) (0))
+                         (let jessie_41 = (if ((neq_int_ !tmp_0_0) (0))
                                           then
                                            (C_16:
                                            begin
@@ -563,7 +846,7 @@ let odd_safety =
                          void);
                          (C_17:
                          begin
-                           (let jessie_39 = (__retres_0 := !tmp_0_1) in void);
+                           (let jessie_43 = (__retres_0 := !tmp_0_1) in void);
                           (raise (Return_label_exc void))
                          end)
                         end)
@@ -586,20 +869,38 @@ why --project [...] why/decreases.why
   <function name="Function odd">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
+    <goal why_file="why/decreases_po7.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/decreases_po8.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/decreases_po9.why">
+      <location file = "PPCHOME/tests/jessie/decreases.c" line = "7" begin = "13" end = "19"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    </behavior>
+  </function>
+  <function name="Function f">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
     <goal why_file="why/decreases_po4.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     <goal why_file="why/decreases_po5.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/decreases.why" line = "543" begin = "57" end = "58"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/decreases_po6.why">
-      <location file = "PPCHOME/tests/jessie/decreases.c" line = "7" begin = "13" end = "19"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
+      <location file = "why/decreases.why" line = "543" begin = "57" end = "58"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>
@@ -1562,6 +1863,8 @@ type char_P
 type padding
 
 type void_P
+
+predicate R(x: real, y: real) = ((0.0 <= y) and ((y - x) >= 1.0))
 
 logic bitvector_of_char_P : char_P pointer -> bitvector
 

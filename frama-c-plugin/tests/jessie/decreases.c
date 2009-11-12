@@ -24,6 +24,27 @@ int odd(int n) {
   return ! even(n-1);
 }
 
+
+/*@ predicate R(real x, real y) = 0.0 <= y && y-x >= 1.0;
+  @*/
+
+/*@ decreases y for R;
+  @*/
+int f(double y) {
+  int n = 0;
+  double x = y;
+  if (x <= 1.0) return n;
+  n = f(x - 2.0);
+  /*@ loop variant x for R;
+    @*/
+  while (x >= 10.0) {
+    n++ ; x -= 1.0; 
+  }
+  return n;
+}
+  
+  
+  
 /* 
 Local Variables:
 compile-command: "LC_ALL=C make decreases"

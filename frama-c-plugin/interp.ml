@@ -20,7 +20,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: interp.ml,v 1.12 2009-11-10 08:41:42 marche Exp $ *)
+(* $Id: interp.ml,v 1.13 2009-11-12 10:11:38 marche Exp $ *)
 
 (* Import from Cil *)
 open Cil_types
@@ -1291,10 +1291,9 @@ let spec funspec =
     match funspec.spec_variant with
       | None -> []
       | Some(t,None) ->
-          [JCCdecreases(locate (term t))]
-      | Some(_,Some _) ->
-          error "Unsupported: 'decreases' clause with 'for' modifier" ;
-          assert false
+          [JCCdecreases(locate (term t),None)]
+      | Some(t,Some id) ->
+          [JCCdecreases(locate (term t),Some (new identifier id))]
   in
 
   if funspec.spec_terminates <> None then
@@ -1920,10 +1919,13 @@ let rec statement s =
 			 | None ->
 			     begin
 			       match rel with
-				 | Some _ ->
-				     unsupported "relation in variant"
+				 | Some _r ->
+				     warn_once "unsupported: loop variant with relation";
+				     (beh,None
+					(* Some (locate (term v),
+						Some (new identifier r)) *) )
 				 | None ->
-				     (beh,Some (locate (term v)))
+				     (beh,Some (locate (term v) (* ,None *)))
 			     end
 			 | Some _ -> assert false (* At most one variant *)
 		     end

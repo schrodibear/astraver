@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_norm.ml,v 1.118 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: jc_norm.ml,v 1.119 2009-11-12 10:11:38 marche Exp $ *)
 
 open Jc_env
 open Jc_envset
@@ -577,7 +577,8 @@ let rec expr e =
     | JCPEassert(behav,asrt,e) -> JCNEassert(behav,asrt,expr e)
     | JCPEcontract(req,dec,behs,e) -> 
 	JCNEcontract(Option_misc.map expr req,
-		     Option_misc.map expr dec,
+		     Option_misc.map 
+		       (fun (t,r) -> (expr t,r)) dec,
 		     List.map behavior behs,
 		     expr e)
     | JCPEwhile(_,behs,vareopt,e) ->
@@ -634,7 +635,7 @@ let expr e =
 (** From parsed clause to normalized clause *)
 let clause = function
   | JCCrequires e -> JCCrequires(expr e)
-  | JCCdecreases e -> JCCdecreases(expr e)
+  | JCCdecreases(e,r) -> JCCdecreases(expr e,r)
   | JCCbehavior b -> JCCbehavior(behavior b)
 
     

@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_ast.mli,v 1.172 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: jc_ast.mli,v 1.173 2009-11-12 10:11:38 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -193,14 +193,16 @@ and pexpr_node =
   | JCPEblock of pexpr list
   | JCPEassert of identifier list * asrt_kind * pexpr
   | JCPEcontract of 
-      pexpr option * pexpr option * pexpr pbehavior list * pexpr 
+      pexpr option * (pexpr * identifier option) option * 
+	pexpr pbehavior list * pexpr 
 	(* requires, decreases, behaviors, expression *)
   | JCPEwhile of 
-      pexpr * pexpr loopbehavior list * pexpr option * pexpr
+      pexpr * pexpr loopbehavior list * 
+	(pexpr (* * identifier option *)) option * pexpr
 	(*r condition, behaviors, variant, body *)
   | JCPEfor of 
       pexpr list * pexpr * pexpr list * pexpr loopbehavior list 
-      * pexpr option * pexpr
+      * (pexpr (* * identifier option *)) option * pexpr
 	(*r inits, condition, updates, behaviors, variant, body *)
   | JCPEreturn of pexpr
   | JCPEbreak of string
@@ -223,7 +225,7 @@ and 'a ptag = 'a ptag_node node_positioned
 
 type 'expr clause =
   | JCCrequires of 'expr
-  | JCCdecreases of 'expr 
+  | JCCdecreases of 'expr * identifier option
   | JCCbehavior of 'expr pbehavior
 
 type 'expr reads_or_expr =
@@ -298,7 +300,8 @@ type nexpr_node =
   | JCNElet of ptype option * string * nexpr option * nexpr
   | JCNEassert of identifier list * asrt_kind * nexpr
   | JCNEcontract of 
-      nexpr option * nexpr option * nexpr pbehavior list * nexpr 
+      nexpr option * (nexpr * identifier option) option * 
+	nexpr pbehavior list * nexpr 
 	(* requires, decreases, behaviors, expression *)
   | JCNEblock of nexpr list
   | JCNEloop of nexpr loopbehavior list * nexpr option * nexpr
@@ -487,7 +490,7 @@ type 'li fun_spec =
 	 to prove the function correctness without being checked at 
 	 calls, if static analysis is trusted (option [-trust-ai]) *)
       mutable jc_fun_free_requires : 'li assertion; 
-      mutable jc_fun_decreases : 'li term option;
+      mutable jc_fun_decreases : ('li term * 'li option) option;
       (* special behavior without [assumes] clause, on which all annotations
 	 not specifically attached to a behavior are checked *)
       mutable jc_fun_default_behavior : Loc.position * string * 'li behavior;

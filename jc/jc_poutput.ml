@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_poutput.ml,v 1.43 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: jc_poutput.ml,v 1.44 2009-11-12 10:11:38 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -237,7 +237,12 @@ let rec pexpr fmt e =
 	Option_misc.iter 
 	  (fun e -> if is_not_true e then
 	     fprintf fmt "requires %a;@\n" pexpr e) req;
-	Option_misc.iter (fprintf fmt "decreases %a;@\n" pexpr) dec;
+	Option_misc.iter 
+	  (fun (t,r) -> match r with
+	     | None -> fprintf fmt "decreases %a;@\n" pexpr t
+	     | Some r -> fprintf fmt "decreases %a for %a;@\n" 
+		 pexpr t identifier r) 
+	  dec;
 	List.iter (behavior fmt) behs;
 	fprintf fmt "@\n{ %a@ })@]" pexpr e 	
     | JCPEblock l -> block fmt l
@@ -307,8 +312,11 @@ let pclause fmt = function
   | JCCrequires e -> 
       if is_not_true e then
 	fprintf fmt "@\n@[<v 2>  requires @[%a@];@]" pexpr e
-  | JCCdecreases e -> 
+  | JCCdecreases(e,None) -> 
       fprintf fmt "@\n@[<v 2>  decreases @[%a@];@]" pexpr e
+  | JCCdecreases(e,Some r) -> 
+      fprintf fmt "@\n@[<v 2>  decreases @[%a@] for %a;@]" 
+	pexpr e identifier r
   | JCCbehavior b -> behavior fmt b
 
 let param fmt (ty,vi) =

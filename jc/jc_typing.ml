@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_typing.ml,v 1.291 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: jc_typing.ml,v 1.292 2009-11-12 10:11:38 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -739,10 +739,12 @@ let rec type_labels env ~result_label label e =
 	  end;
 	env
     | JCNEcontract(req,dec,behs,e) ->
-	let _ = type_labels_opt env ~result_label:None (Some LabelHere) req in
-	let _ = type_labels_opt env ~result_label:None (Some LabelHere) dec in
+	ignore (type_labels_opt env ~result_label:None (Some LabelHere) req);
+	Option_misc.iter
+	  (fun (dec,_) -> 
+	     ignore (type_labels env ~result_label:None (Some LabelHere) dec)) dec;
 	List.iter (behavior_labels env) behs;
-	type_labels env ~result_label None e
+	type_labels env ~result_label None e	
     | JCNEapp(_, l, _) ->
         List.iter (check e) l;
         iter_subs label;
@@ -2409,7 +2411,7 @@ let default_label l =
 (** Apply [type_labels] in all expressions of a normalized clause,
 with the correct label environment. *)
 let type_labels_in_clause = function
-  | JCCrequires e | JCCdecreases e ->
+  | JCCrequires e | JCCdecreases(e,_) ->
       type_labels [LabelHere] ~result_label:None (Some LabelHere) e
   | JCCbehavior(_, _, _, assumes, requires, assigns, ensures) ->
       Option_misc.iter
@@ -2484,9 +2486,18 @@ let clause env vi_result c acc =
         { acc with 
           jc_fun_requires = 
             make_and (assertion env e) acc.jc_fun_requires; }
-    | JCCdecreases e ->
+    | JCCdecreases(e,r) ->
 	assert (acc.jc_fun_decreases = None);
-        { acc with jc_fun_decreases = Some (term env e) }
+	let pi = Option_misc.map
+	  (fun id ->
+             let pi = 
+	       try Hashtbl.find logic_functions_env id#name 
+	       with Not_found -> 
+		 typing_error e#pos "unbound ordering relation %s" id#name
+	     in pi)
+	  r
+	in
+        { acc with jc_fun_decreases = Some(term env e,pi) }
 	
     | JCCbehavior b ->
 	let (loc,id,b) = behavior env vi_result b in

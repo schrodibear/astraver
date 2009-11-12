@@ -25,7 +25,7 @@
 /*                                                                        */
 /**************************************************************************/
 
-/* $Id: jc_parser.mly,v 1.136 2009-10-19 11:55:33 bobot Exp $ */
+/* $Id: jc_parser.mly,v 1.137 2009-11-12 10:11:38 marche Exp $ */
 
 %{
 
@@ -444,7 +444,9 @@ spec_clause:
 | REQUIRES expression SEMICOLON
     { JCCrequires($2) }
 | DECREASES expression SEMICOLON
-    { JCCdecreases($2) }
+    { JCCdecreases($2,None) }
+| DECREASES expression FOR identifier SEMICOLON
+    { JCCdecreases($2,Some $4) }
 | behavior
   { JCCbehavior $1 }
 ;

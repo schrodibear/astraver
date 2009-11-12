@@ -1,9 +1,13 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only mac_carthy.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD mac_carthy.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only freek.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD freek.c"
 [jessie] Starting Jessie translation
-[jessie] Producing Jessie files in subdir mac_carthy.jessie
-[jessie] File mac_carthy.jessie/mac_carthy.jc written.
-[jessie] File mac_carthy.jessie/mac_carthy.cloc written.
+[kernel] No code for function printf, default assigns generated
+freek.c:7:[jessie] user error: unsupported variadic functions
+freek.c:7:[jessie] warning: Dropping definition of function print_equality
+[jessie] Producing Jessie files in subdir freek.jessie
+[jessie] File freek.jessie/freek.jc written.
+[jessie] File freek.jessie/freek.cloc written.
+# IntModel = bounded
 # InvariantPolicy = Arguments
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
@@ -15,8 +19,12 @@ axiomatic Padding {
   
 }
 
+type int8 = -128..127
+
+type int32 = -2147483648..2147483647
+
 tag char_P = {
-  integer char_M: 8;
+  int8 char_M: 8;
 }
 
 type char_P = [char_P]
@@ -26,131 +34,94 @@ tag void_P = {
 
 type void_P = [void_P]
 
-integer f91(integer n_0)
-  decreases (C_12 : (101 - n_0));
+char_P[0..9] __string__d_____d_;
+
+invariant valid___string__d_____d_ :
+((\offset_min(__string__d_____d_) <= 0) &&
+  (\offset_max(__string__d_____d_) >= 9))
+
+int32 printf(char_P[..] format)
 behavior default:
   assumes true;
-  ensures (C_9 : true);
-behavior less_than_101:
-  assumes (n_0 <= 100);
-  ensures (C_10 : (\result == 91));
-behavior greater_than_100:
-  assumes (n_0 >= 101);
-  ensures (C_11 : (\result == (n_0 - 10)));
-{  
-   (var integer tmp);
-   
-   (var integer tmp_0);
-   
-   (var integer __retres);
-   
-   {  (if (n_0 <= 100) then 
-      {  (C_5 : (tmp = (C_4 : f91((C_3 : (n_0 + 11))))));
-         (C_7 : (tmp_0 = (C_6 : f91(tmp))));
-         (C_8 : (__retres = tmp_0));
-         
-         (goto return_label)
-      } else 
-      {  (C_2 : (__retres = (C_1 : (n_0 - 10))));
-         
-         (goto return_label)
-      });
-      (return_label : 
-      (return __retres))
-   }
-}
+  assigns format.char_M;
+  ensures (C_1 : true);
+;
 
-axiomatic F91 {
-
-  logic integer f(integer x)
-   
-  axiom f_def1 :
-  (\forall integer x_0;
-    ((x_0 >= 101) ==> (f(x_0) == (x_0 - 10))))
-   
-  axiom f_def2 :
-  (\forall integer x_1;
-    ((x_1 <= 101) ==> (f(x_1) == 91)))
-   
-  logic integer iter_f(integer n, integer x_2)
-   
-  axiom iter_f_def1 :
-  (\forall integer x_3;
-    (iter_f(0, x_3) == x_3))
-   
-  axiom iter_f_def2 :
-  (\forall integer n_0;
-    (\forall integer x_4;
-      ((n_0 > 0) ==> (iter_f(n_0, x_4) == iter_f((n_0 - 1), f(x_4))))))
-  
-}
-
-axiomatic Pair {
-
-  logic type pair_type
-   
-  logic pair_type pair(integer x_5, integer y)
-  
-}
-
-predicate lex(pair_type p1, pair_type p2) {
-case lex1: (\forall integer x1;
-             (\forall integer y1;
-               (\forall integer x2;
-                 (\forall integer y2;
-                   (((0 <= x2) && (x1 < x2)) ==>
-                     lex(pair(x1, y1), pair(x2, y2)))))));
-  
-  case lex2: (\forall integer x_6;
-               (\forall integer y1_0;
-                 (\forall integer y2_0;
-                   (((0 <= y2_0) && (y1_0 < y2_0)) ==>
-                     lex(pair(x_6, y1_0), pair(x_6, y2_0))))));
-  
-}
-
-integer f91_nonrec(integer n, integer x)
-  requires (C_23 : (n >= 1));
+unit print_equality(int32 x, int32 y)
 behavior default:
   assumes true;
-  ensures (C_24 : (\result == iter_f(n, x)));
+  ensures (C_2 : true);
+;
+
+int32 main()
+behavior default:
+  assumes true;
+  ensures (C_23 : true);
 {  
-   {  
+   (var int32 i);
+   
+   (var int32 j);
+   
+   (var int32 tmp);
+   
+   (var int32 tmp_0);
+   
+   (var int32 __retres);
+   
+   {  (C_3 : (i = 0));
+      
       {  
-         loop 
-         behavior default:
-           invariant (C_14 : (n >= 0));
-         behavior default:
-           invariant (C_13 : (iter_f(n, x) == \at(iter_f(n, x),Pre)));
-         while (true)
-         {  
-            {  (if (n > 0) then () else 
-               (goto while_0_break));
-               (if (x > 100) then 
-               {  (C_20 : (x = (C_19 : (x - 10))));
-                  (C_22 : (n = (C_21 : (n - 1))))
-               } else 
-               {  (C_16 : (x = (C_15 : (x + 11))));
-                  (C_18 : (n = (C_17 : (n + 1))))
-               })
-            }
-         };
-         (while_0_break : ())
+         (assert for default: (C_4 : (i == 0)));
+         ()
       };
       
-      (return x)
+      {  (C_5 : print_equality(i, 0))
+      };
+      (C_6 : (tmp = i));
+      (C_9 : (i = (C_8 : ((C_7 : (i + 1)) :> int32))));
+      (C_10 : (j = tmp));
+      (C_11 : (i = j));
+      
+      {  
+         (assert for default: (C_12 : (i == 0)));
+         ()
+      };
+      
+      {  (C_13 : print_equality(i, 0))
+      };
+      
+      {  
+         {  (C_14 : (tmp_0 = i));
+            (C_17 : (i = (C_16 : ((C_15 : (i + 1)) :> int32))));
+            (C_18 : (j = tmp_0))
+         };
+         (C_19 : (i = j))
+      };
+      
+      {  
+         (assert for default: (C_20 : (i == 0)));
+         ()
+      };
+      
+      {  (C_21 : print_equality(i, 0))
+      };
+      (C_22 : (__retres = 0));
+      
+      (return __retres)
    }
 }
-WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs mac_carthy.jessie/mac_carthy.cloc mac_carthy.jessie/mac_carthy.jc
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs freek.jessie/freek.cloc freek.jessie/freek.jc
+type __string__d_____d__1
+
 type char_P
+
+type int32
+
+type int8
 
 type padding
 
-type pair_type
-
 type void_P
-
-exception Goto_while_0_break_exc of unit
 
 exception Loop_continue_exc of unit
 
@@ -158,12 +129,28 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
+logic __string__d_____d_:  -> char_P pointer
+
 logic bitvector_of_char_P: char_P pointer -> bitvector
 
 logic char_P_of_bitvector: bitvector -> char_P pointer
 
 axiom bitvector_of_char_P_of_char_P_of_bitvector :
  (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
+
+logic bitvector_of_int32: int32 -> bitvector
+
+logic int32_of_bitvector: bitvector -> int32
+
+axiom bitvector_of_int32_of_int32_of_bitvector :
+ (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
+
+logic bitvector_of_int8: int8 -> bitvector
+
+logic int8_of_bitvector: bitvector -> int8
+
+axiom bitvector_of_int8_of_int8_of_bitvector :
+ (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P: void_P pointer -> bitvector
 
@@ -192,23 +179,46 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-logic f: int -> int
+logic integer_of_int32: int32 -> int
 
-axiom f_def1 :
- (forall x_0_0:int.
-  (ge_int(x_0_0, (101)) -> eq_int(f(x_0_0), sub_int(x_0_0, (10)))))
+predicate eq_int32(x:int32,
+ y:int32) =
+ eq_int(integer_of_int32(x), integer_of_int32(y))
 
-axiom f_def2 : (forall x_1:int. (le_int(x_1, (101)) -> eq_int(f(x_1), (91))))
+logic integer_of_int8: int8 -> int
 
-logic iter_f: int, int -> int
+predicate eq_int8(x:int8,
+ y:int8) =
+ eq_int(integer_of_int8(x), integer_of_int8(y))
 
-axiom iter_f_def1 : (forall x_3:int. eq_int(iter_f((0), x_3), x_3))
+logic int32_of_integer: int -> int32
 
-axiom iter_f_def2 :
- (forall n_0_0:int.
-  (forall x_4:int.
-   (gt_int(n_0_0, (0)) ->
-    eq_int(iter_f(n_0_0, x_4), iter_f(sub_int(n_0_0, (1)), f(x_4))))))
+axiom int32_coerce :
+ (forall x:int.
+  ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
+   eq_int(integer_of_int32(int32_of_integer(x)), x)))
+
+axiom int32_of_bitvector_of_bitvector_of_int32 :
+ (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
+
+axiom int32_range :
+ (forall x:int32.
+  (le_int((-2147483648), integer_of_int32(x))
+  and le_int(integer_of_int32(x), (2147483647))))
+
+logic int8_of_integer: int -> int8
+
+axiom int8_coerce :
+ (forall x:int.
+  ((le_int((-128), x) and le_int(x, (127))) ->
+   eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_of_bitvector_of_bitvector_of_int8 :
+ (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
+
+axiom int8_range :
+ (forall x:int8.
+  (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
 predicate left_valid_struct_char_P(p:char_P pointer,
  a:int,
@@ -220,21 +230,6 @@ predicate left_valid_struct_void_P(p:void_P pointer,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
-logic pair: int, int -> pair_type
-
-inductive lex: pair_type, pair_type -> prop =
- | lex1: (forall x1:int.
-          (forall y1:int.
-           (forall x2:int.
-            (forall y2:int.
-             ((le_int((0), x2) and lt_int(x1, x2)) ->
-              lex(pair(x1, y1), pair(x2, y2)))))))
- | lex2: (forall x_6:int.
-          (forall y1_0:int.
-           (forall y2_0:int.
-            ((le_int((0), y2_0) and lt_int(y1_0, y2_0)) ->
-             lex(pair(x_6, y1_0), pair(x_6, y2_0))))))
- 
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -280,6 +275,14 @@ predicate strict_valid_struct_void_P(p:void_P pointer,
  void_P_alloc_table:void_P alloc_table) =
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
+
+predicate valid___string__d_____d_(char_P___string__d_____d__1_alloc_table:char_P alloc_table) =
+ (le_int(offset_min(char_P___string__d_____d__1_alloc_table,
+         __string__d_____d_),
+  (0))
+ and ge_int(offset_max(char_P___string__d_____d__1_alloc_table,
+            __string__d_____d_),
+     (9)))
 
 predicate valid_bitvector_struct_char_P(p:unit pointer,
  a:int,
@@ -431,565 +434,311 @@ parameter alloc_struct_void_P_requires :
           and (alloc_fresh(void_P_alloc_table@, result, n)
               and instanceof(void_P_tag_table, result, void_P_tag)))) }
 
-parameter f91 :
- n_0:int ->
-  { } int
-  { ((ge_int(n_0@, (101)) -> (JC_12: eq_int(result, sub_int(n_0, (10)))))
-    and (le_int(n_0@, (100)) -> (JC_10: eq_int(result, (91))))) }
+parameter any_int32 : unit -> { } int32 { true }
 
-parameter f91_nonrec :
- n_1:int ->
-  x_0:int ->
-   { } int { ((true = true) -> (JC_32: eq_int(result, iter_f(n_1, x_0)))) }
+parameter any_int8 : unit -> { } int8 { true }
 
-parameter f91_nonrec_requires :
- n_1:int ->
-  x_0:int ->
-   { (JC_27: ge_int(n_1, (1)))} int
-   { ((true = true) -> (JC_32: eq_int(result, iter_f(n_1, x_0)))) }
+parameter char_P___string__d_____d__1_alloc_table : char_P alloc_table ref
 
-parameter f91_requires :
- n_0:int ->
-  { } int
-  { ((ge_int(n_0@, (101)) -> (JC_12: eq_int(result, sub_int(n_0, (10)))))
-    and (le_int(n_0@, (100)) -> (JC_10: eq_int(result, (91))))) }
+parameter int32_of_integer_ :
+ x:int ->
+  { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
+  { eq_int(integer_of_int32(result), x) }
 
-let f91_ensures_default =
- fun (n_0 : int) ->
-  { (true = true) }
+parameter int8_of_integer_ :
+ x:int ->
+  { (le_int((-128), x) and le_int(x, (127)))} int8
+  { eq_int(integer_of_int8(result), x) }
+
+parameter main :
+ tt:unit ->
+  { } int32 reads char_P___string__d_____d__1_alloc_table
+  { (JC_29:
+    valid___string__d_____d_(char_P___string__d_____d__1_alloc_table)) }
+
+parameter main_requires :
+ tt:unit ->
+  { (JC_22:
+    valid___string__d_____d_(char_P___string__d_____d__1_alloc_table))}
+  int32 reads char_P___string__d_____d__1_alloc_table
+  { (JC_29:
+    valid___string__d_____d_(char_P___string__d_____d__1_alloc_table)) }
+
+parameter print_equality :
+ x:int32 ->
+  y:int32 ->
+   { } unit reads char_P___string__d_____d__1_alloc_table
+   { (JC_21:
+     valid___string__d_____d_(char_P___string__d_____d__1_alloc_table)) }
+
+parameter print_equality_requires :
+ x:int32 ->
+  y:int32 ->
+   { (JC_14:
+     valid___string__d_____d_(char_P___string__d_____d__1_alloc_table))}
+   unit reads char_P___string__d_____d__1_alloc_table
+   { (JC_21:
+     valid___string__d_____d_(char_P___string__d_____d__1_alloc_table)) }
+
+parameter printf :
+ format:char_P pointer ->
+  char_P_char_M_format_2:(char_P, int8) memory ref ->
+   char_P_format_2_alloc_table:char_P alloc_table ->
+    { } int32 reads char_P___string__d_____d__1_alloc_table
+    writes char_P_char_M_format_2
+    { ((JC_13:
+       valid___string__d_____d_(char_P___string__d_____d__1_alloc_table))
+      and ((true = true) ->
+           (JC_11:
+           not_assigns(char_P_format_2_alloc_table@, char_P_char_M_format_2@,
+           char_P_char_M_format_2, pset_singleton(format@))))) }
+
+parameter printf_requires :
+ format:char_P pointer ->
+  char_P_char_M_format_2:(char_P, int8) memory ref ->
+   char_P_format_2_alloc_table:char_P alloc_table ->
+    { (JC_4:
+      valid___string__d_____d_(char_P___string__d_____d__1_alloc_table))}
+    int32 reads char_P___string__d_____d__1_alloc_table
+    writes char_P_char_M_format_2
+    { ((JC_13:
+       valid___string__d_____d_(char_P___string__d_____d__1_alloc_table))
+      and ((true = true) ->
+           (JC_11:
+           not_assigns(char_P_format_2_alloc_table@, char_P_char_M_format_2@,
+           char_P_char_M_format_2, pset_singleton(format@))))) }
+
+parameter safe_int32_of_integer_ :
+ x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
+
+parameter safe_int8_of_integer_ :
+ x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
+
+let main_ensures_default =
+ fun (tt : unit) ->
+  { ((true = true)
+    and (JC_24:
+        valid___string__d_____d_(char_P___string__d_____d__1_alloc_table))) }
   (init:
-  (let return = ref (any_int void) in
+  (let return = ref (any_int32 void) in
   try
    begin
-     (let tmp = ref (any_int void) in
-     (let tmp_0 = ref (any_int void) in
-     (let __retres = ref (any_int void) in
-     try
-      (let jessie_31 = begin
-                         (if ((le_int_ n_0) (100))
-                         then
-                          (let jessie_27 = (C_5:
-                                           begin
-                                             (let jessie_21 = (tmp := 
-                                                               (C_4:
-                                                               (let jessie_20 = 
-                                                               (C_3:
-                                                               ((add_int n_0) (11))) in
-                                                               (JC_21:
-                                                               (f91 jessie_20))))) in
-                                             void);
-                                            (C_7:
-                                            begin
-                                              (let jessie_24 = (tmp_0 := 
-                                                                (C_6:
-                                                                (let jessie_23 = !tmp in
-                                                                (JC_22:
-                                                                (f91 jessie_23))))) in
-                                              void);
-                                             (C_8:
-                                             begin
-                                               (let jessie_26 = (__retres := !tmp_0) in
-                                               void);
-                                              (raise (Return_label_exc void))
-                                             end)
-                                            end)
-                                           end) in
-                          void)
-                         else
-                          (let jessie_30 = (C_2:
-                                           begin
-                                             (let jessie_29 = (__retres := 
-                                                               (C_1:
-                                                               ((sub_int n_0) (10)))) in
-                                             void);
-                                            (raise (Return_label_exc void))
-                                           end) in
-                          void));
-                        (raise (Return_label_exc void))
-                       end in
-      void)
-      with
-      Return_label_exc jessie_1 ->
-      (return_label: begin   (return := !__retres); (raise Return) end) end)));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_5: true) }
-
-let f91_ensures_greater_than_100 =
- fun (n_0 : int) ->
-  { ge_int(n_0, (101)) }
-  (init:
-  (let return = ref (any_int void) in
-  try
-   begin
-     (let tmp = ref (any_int void) in
-     (let tmp_0 = ref (any_int void) in
-     (let __retres = ref (any_int void) in
-     try
-      (let jessie_59 = begin
-                         (if ((le_int_ n_0) (100))
-                         then
-                          (let jessie_55 = (C_5:
-                                           begin
-                                             (let jessie_49 = (tmp := 
-                                                               (C_4:
-                                                               (let jessie_48 = 
-                                                               (C_3:
-                                                               ((add_int n_0) (11))) in
-                                                               (JC_25:
-                                                               (f91 jessie_48))))) in
-                                             void);
-                                            (C_7:
-                                            begin
-                                              (let jessie_52 = (tmp_0 := 
-                                                                (C_6:
-                                                                (let jessie_51 = !tmp in
-                                                                (JC_26:
-                                                                (f91 jessie_51))))) in
-                                              void);
-                                             (C_8:
-                                             begin
-                                               (let jessie_54 = (__retres := !tmp_0) in
-                                               void);
-                                              (raise (Return_label_exc void))
-                                             end)
-                                            end)
-                                           end) in
-                          void)
-                         else
-                          (let jessie_58 = (C_2:
-                                           begin
-                                             (let jessie_57 = (__retres := 
-                                                               (C_1:
-                                                               ((sub_int n_0) (10)))) in
-                                             void);
-                                            (raise (Return_label_exc void))
-                                           end) in
-                          void));
-                        (raise (Return_label_exc void))
-                       end in
-      void)
-      with
-      Return_label_exc jessie_1 ->
-      (return_label: begin   (return := !__retres); (raise Return) end) end)));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_11: eq_int(result, sub_int(n_0, (10)))) }
-
-let f91_ensures_less_than_101 =
- fun (n_0 : int) ->
-  { le_int(n_0, (100)) }
-  (init:
-  (let return = ref (any_int void) in
-  try
-   begin
-     (let tmp = ref (any_int void) in
-     (let tmp_0 = ref (any_int void) in
-     (let __retres = ref (any_int void) in
-     try
-      (let jessie_45 = begin
-                         (if ((le_int_ n_0) (100))
-                         then
-                          (let jessie_41 = (C_5:
-                                           begin
-                                             (let jessie_35 = (tmp := 
-                                                               (C_4:
-                                                               (let jessie_34 = 
-                                                               (C_3:
-                                                               ((add_int n_0) (11))) in
-                                                               (JC_23:
-                                                               (f91 jessie_34))))) in
-                                             void);
-                                            (C_7:
-                                            begin
-                                              (let jessie_38 = (tmp_0 := 
-                                                                (C_6:
-                                                                (let jessie_37 = !tmp in
-                                                                (JC_24:
-                                                                (f91 jessie_37))))) in
-                                              void);
-                                             (C_8:
-                                             begin
-                                               (let jessie_40 = (__retres := !tmp_0) in
-                                               void);
-                                              (raise (Return_label_exc void))
-                                             end)
-                                            end)
-                                           end) in
-                          void)
-                         else
-                          (let jessie_44 = (C_2:
-                                           begin
-                                             (let jessie_43 = (__retres := 
-                                                               (C_1:
-                                                               ((sub_int n_0) (10)))) in
-                                             void);
-                                            (raise (Return_label_exc void))
-                                           end) in
-                          void));
-                        (raise (Return_label_exc void))
-                       end in
-      void)
-      with
-      Return_label_exc jessie_1 ->
-      (return_label: begin   (return := !__retres); (raise Return) end) end)));
-    absurd 
-   end
-   with
-   Return ->
-   !return end))
-  { (JC_9: eq_int(result, (91))) }
-
-let f91_nonrec_ensures_default =
- fun (n_1 : int) (x_0 : int) ->
-  { ((true = true) and (JC_29: ge_int(n_1, (1)))) }
-  (let mutable_n_1 = ref n_1 in
-  (let mutable_x_0 = ref x_0 in
-  (init:
-  (let return = ref (any_int void) in
-  try
-   begin
-     try
-      (let jessie_81 = begin
-                         (loop_2:
-                         while true do
-                         { invariant
-                             ((JC_40:
-                              eq_int(iter_f(mutable_n_1, mutable_x_0),
-                              iter_f(mutable_n_1@init, mutable_x_0@init)))
-                             and (JC_41: ge_int(mutable_n_1, (0))))
-                            }
-                          begin
-                            [ { } unit { true } ];
-                           try
-                            (let jessie_80 = begin
-                                               (let jessie_79 = begin
-                                                                  (if 
-                                                                  ((gt_int_ !mutable_n_1) (0))
-                                                                  then void
-                                                                  else
-                                                                   (let jessie_72 = 
-                                                                   (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                                   void));
-                                                                 (if 
-                                                                 ((gt_int_ !mutable_x_0) (100))
-                                                                 then
-                                                                  (C_20:
-                                                                  begin
-                                                                    (let jessie_74 = 
-                                                                    (mutable_x_0 := 
-                                                                    (C_19:
-                                                                    ((sub_int !mutable_x_0) (10)))) in
-                                                                    void);
-                                                                   (C_22:
-                                                                   begin
-                                                                     
-                                                                    (mutable_n_1 := 
-                                                                    (C_21:
-                                                                    ((sub_int !mutable_n_1) (1))));
-                                                                    !mutable_n_1
-                                                                   end)
-                                                                  end)
-                                                                 else
-                                                                  (C_16:
-                                                                  begin
-                                                                    (let jessie_77 = 
-                                                                    (mutable_x_0 := 
+     (let i = ref (any_int32 void) in
+     (let j = ref (any_int32 void) in
+     (let tmp = ref (any_int32 void) in
+     (let tmp_0 = ref (any_int32 void) in
+     (let __retres = ref (any_int32 void) in
+     (C_3:
+     begin
+       (let jessie_29 = (i := (safe_int32_of_integer_ (0))) in void);
+      (assert { (JC_38: eq_int(integer_of_int32(i), (0))) }; void);
+      void;
+      (C_5:
+      (let jessie_31 = !i in
+      (let jessie_30 = (safe_int32_of_integer_ (0)) in
+      (JC_39: ((print_equality jessie_31) jessie_30)))));
+      (C_6:
+      begin
+        (let jessie_33 = (tmp := !i) in void);
+       (C_9:
+       begin
+         (let jessie_35 = (i := (C_8:
+                                (safe_int32_of_integer_ (C_7:
+                                                        ((add_int (integer_of_int32 !i)) (1)))))) in
+         void);
+        (C_10:
+        begin
+          (let jessie_37 = (j := !tmp) in void);
+         (C_11:
+         begin
+           (let jessie_39 = (i := !j) in void);
+          (assert { (JC_40: eq_int(integer_of_int32(i), (0))) }; void);
+          void;
+          (C_13:
+          (let jessie_41 = !i in
+          (let jessie_40 = (safe_int32_of_integer_ (0)) in
+          (JC_41: ((print_equality jessie_41) jessie_40)))));
+          (let jessie_49 = begin
+                             (let jessie_47 = (C_14:
+                                              begin
+                                                (let jessie_43 = (tmp_0 := !i) in
+                                                void);
+                                               (C_17:
+                                               begin
+                                                 (let jessie_45 = (i := 
+                                                                   (C_16:
+                                                                   (safe_int32_of_integer_ 
                                                                     (C_15:
-                                                                    ((add_int !mutable_x_0) (11)))) in
-                                                                    void);
-                                                                   (C_18:
-                                                                   begin
-                                                                     
-                                                                    (mutable_n_1 := 
-                                                                    (C_17:
-                                                                    ((add_int !mutable_n_1) (1))));
-                                                                    !mutable_n_1
-                                                                   end)
-                                                                  end))
-                                                                end in
-                                               void);
-                                              (raise
-                                               (Loop_continue_exc
-                                               void))
-                                             end in
-                            void)
-                            with
-                            Loop_continue_exc jessie_4 ->
-                            void end
-                          end
-                         done);
-                        (raise (Goto_while_0_break_exc void))
-                       end in
-      void)
-      with
-      Goto_while_0_break_exc jessie_2 ->
-      (while_0_break: void) end;
-    (return := !mutable_x_0);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))))
-  { (JC_31: eq_int(result, iter_f(n_1, x_0))) }
-
-let f91_nonrec_safety =
- fun (n_1 : int) (x_0 : int) ->
-  { (JC_29: ge_int(n_1, (1))) }
-  (let mutable_n_1 = ref n_1 in
-  (let mutable_x_0 = ref x_0 in
-  (init:
-  (let return = ref (any_int void) in
-  try
-   begin
-     try
-      (let jessie_70 = begin
-                         (loop_1:
-                         while true do
-                         { invariant (JC_38: true) variant (0) }
-                          begin
-                            [ { } unit reads mutable_n_1,mutable_x_0
-                              { ((JC_35:
-                                 eq_int(iter_f(mutable_n_1, mutable_x_0),
-                                 iter_f(mutable_n_1@init, mutable_x_0@init)))
-                                and (JC_36: ge_int(mutable_n_1, (0)))) } ];
-                           try
-                            (let jessie_69 = begin
-                                               (let jessie_68 = begin
-                                                                  (if 
-                                                                  ((gt_int_ !mutable_n_1) (0))
-                                                                  then void
-                                                                  else
-                                                                   (let jessie_61 = 
-                                                                   (raise
-                                                                    (Goto_while_0_break_exc
-                                                                    void)) in
-                                                                   void));
-                                                                 (if 
-                                                                 ((gt_int_ !mutable_x_0) (100))
-                                                                 then
-                                                                  (C_20:
-                                                                  begin
-                                                                    (let jessie_63 = 
-                                                                    (mutable_x_0 := 
-                                                                    (C_19:
-                                                                    ((sub_int !mutable_x_0) (10)))) in
-                                                                    void);
-                                                                   (C_22:
-                                                                   begin
-                                                                     
-                                                                    (mutable_n_1 := 
-                                                                    (C_21:
-                                                                    ((sub_int !mutable_n_1) (1))));
-                                                                    !mutable_n_1
-                                                                   end)
-                                                                  end)
-                                                                 else
-                                                                  (C_16:
-                                                                  begin
-                                                                    (let jessie_66 = 
-                                                                    (mutable_x_0 := 
-                                                                    (C_15:
-                                                                    ((add_int !mutable_x_0) (11)))) in
-                                                                    void);
-                                                                   (C_18:
-                                                                   begin
-                                                                     
-                                                                    (mutable_n_1 := 
-                                                                    (C_17:
-                                                                    ((add_int !mutable_n_1) (1))));
-                                                                    !mutable_n_1
-                                                                   end)
-                                                                  end))
-                                                                end in
-                                               void);
-                                              (raise
-                                               (Loop_continue_exc
-                                               void))
-                                             end in
-                            void)
-                            with
-                            Loop_continue_exc jessie_4 ->
-                            void end
-                          end
-                         done);
-                        (raise (Goto_while_0_break_exc void))
-                       end in
-      void)
-      with
-      Goto_while_0_break_exc jessie_2 ->
-      (while_0_break: void) end;
-    (return := !mutable_x_0);
-    (raise Return);
-    absurd 
-   end
-   with
-   Return ->
-   !return end))))
-  { true }
-
-let f91_safety =
- fun (n_0 : int) ->
-  { (JC_4: true) }
-  (init:
-  (let return = ref (any_int void) in
-  try
-   begin
-     (let tmp = ref (any_int void) in
-     (let tmp_0 = ref (any_int void) in
-     (let __retres = ref (any_int void) in
-     try
-      (let jessie_17 = begin
-                         (if ((le_int_ n_0) (100))
-                         then
-                          (let jessie_13 = (C_5:
-                                           begin
-                                             (let jessie_7 = (tmp := 
-                                                              (C_4:
-                                                              (let jessie_6 = 
-                                                              (C_3:
-                                                              ((add_int n_0) (11))) in
-                                                              (JC_16:
-                                                              (assert
-                                                              { zwf_zero((JC_15 : 
-                                                                sub_int((101),
-                                                                jessie_6)),
-                                                                (JC_14 : 
-                                                                sub_int((101),
-                                                                n_0))) };
-                                                              (JC_13:
-                                                              (f91_requires jessie_6))))))) in
-                                             void);
-                                            (C_7:
-                                            begin
-                                              (let jessie_10 = (tmp_0 := 
-                                                                (C_6:
-                                                                (let jessie_9 = !tmp in
-                                                                (JC_20:
-                                                                (assert
-                                                                { zwf_zero((JC_19 : 
-                                                                  sub_int((101),
-                                                                  jessie_9)),
-                                                                  (JC_18 : 
-                                                                  sub_int((101),
-                                                                  n_0))) };
-                                                                (JC_17:
-                                                                (f91_requires jessie_9))))))) in
-                                              void);
-                                             (C_8:
-                                             begin
-                                               (let jessie_12 = (__retres := !tmp_0) in
-                                               void);
-                                              (raise (Return_label_exc void))
-                                             end)
-                                            end)
-                                           end) in
-                          void)
-                         else
-                          (let jessie_16 = (C_2:
-                                           begin
-                                             (let jessie_15 = (__retres := 
-                                                               (C_1:
-                                                               ((sub_int n_0) (10)))) in
-                                             void);
-                                            (raise (Return_label_exc void))
-                                           end) in
-                          void));
-                        (raise (Return_label_exc void))
-                       end in
-      void)
-      with
-      Return_label_exc jessie_1 ->
-      (return_label: begin   (return := !__retres); (raise Return) end) end)));
+                                                                    ((add_int 
+                                                                    (integer_of_int32 !i)) (1)))))) in
+                                                 void);
+                                                (C_18:
+                                                begin   (j := !tmp_0); !j end)
+                                               end)
+                                              end) in
+                             void);
+                            (C_19: begin   (i := !j); !i end)
+                           end in
+          void);
+          (assert { (JC_42: eq_int(integer_of_int32(i), (0))) }; void);
+          void;
+          (C_21:
+          (let jessie_51 = !i in
+          (let jessie_50 = (safe_int32_of_integer_ (0)) in
+          (JC_43: ((print_equality jessie_51) jessie_50)))));
+          (C_22:
+          begin
+            (let jessie_53 = (__retres := (safe_int32_of_integer_ (0))) in
+            void);
+           (return := !__retres);
+           (raise Return)
+          end)
+         end)
+        end)
+       end)
+      end)
+     end))))));
     absurd 
    end
    with
    Return ->
    !return end))
-  { true }
+  { (JC_26: true) }
+
+let main_safety =
+ fun (tt : unit) ->
+  { (JC_24:
+    valid___string__d_____d_(char_P___string__d_____d__1_alloc_table)) }
+  (init:
+  (let return = ref (any_int32 void) in
+  try
+   begin
+     (let i = ref (any_int32 void) in
+     (let j = ref (any_int32 void) in
+     (let tmp = ref (any_int32 void) in
+     (let tmp_0 = ref (any_int32 void) in
+     (let __retres = ref (any_int32 void) in
+     (C_3:
+     begin
+       (let jessie_2 = (i := (safe_int32_of_integer_ (0))) in void);
+      [ { } unit reads i { (JC_30: eq_int(integer_of_int32(i), (0))) } ];
+      void;
+      (C_5:
+      (let jessie_4 = !i in
+      (let jessie_3 = (safe_int32_of_integer_ (0)) in
+      (JC_31: ((print_equality_requires jessie_4) jessie_3)))));
+      (C_6:
+      begin
+        (let jessie_6 = (tmp := !i) in void);
+       (C_9:
+       begin
+         (let jessie_8 = (i := (C_8:
+                               (JC_32:
+                               (int32_of_integer_ (C_7:
+                                                  ((add_int (integer_of_int32 !i)) (1))))))) in
+         void);
+        (C_10:
+        begin
+          (let jessie_10 = (j := !tmp) in void);
+         (C_11:
+         begin
+           (let jessie_12 = (i := !j) in void);
+          [ { } unit reads i { (JC_33: eq_int(integer_of_int32(i), (0))) } ];
+          void;
+          (C_13:
+          (let jessie_14 = !i in
+          (let jessie_13 = (safe_int32_of_integer_ (0)) in
+          (JC_34: ((print_equality_requires jessie_14) jessie_13)))));
+          (let jessie_22 = begin
+                             (let jessie_20 = (C_14:
+                                              begin
+                                                (let jessie_16 = (tmp_0 := !i) in
+                                                void);
+                                               (C_17:
+                                               begin
+                                                 (let jessie_18 = (i := 
+                                                                   (C_16:
+                                                                   (JC_35:
+                                                                   (int32_of_integer_ 
+                                                                    (C_15:
+                                                                    ((add_int 
+                                                                    (integer_of_int32 !i)) (1))))))) in
+                                                 void);
+                                                (C_18:
+                                                begin   (j := !tmp_0); !j end)
+                                               end)
+                                              end) in
+                             void);
+                            (C_19: begin   (i := !j); !i end)
+                           end in
+          void);
+          [ { } unit reads i { (JC_36: eq_int(integer_of_int32(i), (0))) } ];
+          void;
+          (C_21:
+          (let jessie_24 = !i in
+          (let jessie_23 = (safe_int32_of_integer_ (0)) in
+          (JC_37: ((print_equality_requires jessie_24) jessie_23)))));
+          (C_22:
+          begin
+            (let jessie_26 = (__retres := (safe_int32_of_integer_ (0))) in
+            void);
+           (return := !__retres);
+           (raise Return)
+          end)
+         end)
+        end)
+       end)
+      end)
+     end))))));
+    absurd 
+   end
+   with
+   Return ->
+   !return end))
+  { (JC_28:
+    valid___string__d_____d_(char_P___string__d_____d__1_alloc_table)) }
 
 
-WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C mac_carthy.jessie --quiet -f mac_carthy.makefile project
-why --project [...] why/mac_carthy.why
-<project name="mac_carthy" context="why/mac_carthy_ctx.why">
-  <function name="Function f91_nonrec">
+WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C freek.jessie --quiet -f freek.makefile project
+why --project [...] why/freek.why
+<project name="freek" context="why/freek_ctx.why">
+  <function name="Function main">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/mac_carthy_po7.why">
-      <location file = "why/mac_carthy.why" line = "614" begin = "60" end = "61"/>
-      <explain kind = "VarDecr"/>
+    <goal why_file="why/freek_po4.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/mac_carthy_po8.why">
-      <location file = "why/mac_carthy.why" line = "614" begin = "60" end = "61"/>
-      <explain kind = "VarDecr"/>
+    <goal why_file="why/freek_po5.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/freek_po6.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
+    </goal>
+    <goal why_file="why/freek_po7.why">
+      <location file = "" line = "0" begin = "0" end = "0"/>
+      <explain kind = "Other"
+text = "unexplained assertion"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/mac_carthy_po3.why">
-      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "56" begin = "21" end = "27"/>
+    <goal why_file="why/freek_po1.why">
+      <location file = "PPCHOME/tests/jessie/freek.c" line = "16" begin = "13" end = "19"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/mac_carthy_po4.why">
-      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "57" begin = "21" end = "56"/>
+    <goal why_file="why/freek_po2.why">
+      <location file = "PPCHOME/tests/jessie/freek.c" line = "19" begin = "13" end = "19"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
-    <goal why_file="why/mac_carthy_po5.why">
-      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "56" begin = "21" end = "27"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/mac_carthy_po6.why">
-      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "53" begin = "12" end = "34"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    </behavior>
-  </function>
-  <function name="Function f91">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/mac_carthy_po9.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/mac_carthy_po10.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/mac_carthy_po11.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    <goal why_file="why/mac_carthy_po12.why">
-      <location file = "" line = "0" begin = "0" end = "0"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    </behavior>
-    <behavior name="Normal behavior `less_than_101'">
-    <goal why_file="why/mac_carthy_po2.why">
-      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "8" begin = "14" end = "27"/>
-      <explain kind = "Other"
-text = "unexplained assertion"/>
-    </goal>
-    </behavior>
-    <behavior name="Normal behavior `greater_than_100'">
-    <goal why_file="why/mac_carthy_po1.why">
-      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "11" begin = "14" end = "31"/>
+    <goal why_file="why/freek_po3.why">
+      <location file = "PPCHOME/tests/jessie/freek.c" line = "22" begin = "13" end = "19"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
@@ -1929,13 +1678,19 @@ logic integer_of_bitvector : bitvector -> int
 
 logic real_of_bitvector : bitvector -> real
 
+type __string__d_____d__1
+
 type char_P
+
+type int32
+
+type int8
 
 type padding
 
-type pair_type
-
 type void_P
+
+logic __string__d_____d_ :  -> char_P pointer
 
 logic bitvector_of_char_P : char_P pointer -> bitvector
 
@@ -1943,6 +1698,20 @@ logic char_P_of_bitvector : bitvector -> char_P pointer
 
 axiom bitvector_of_char_P_of_char_P_of_bitvector:
   (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
+
+logic bitvector_of_int32 : int32 -> bitvector
+
+logic int32_of_bitvector : bitvector -> int32
+
+axiom bitvector_of_int32_of_int32_of_bitvector:
+  (forall x:bitvector. (bitvector_of_int32(int32_of_bitvector(x)) = x))
+
+logic bitvector_of_int8 : int8 -> bitvector
+
+logic int8_of_bitvector : bitvector -> int8
+
+axiom bitvector_of_int8_of_int8_of_bitvector:
+  (forall x:bitvector. (bitvector_of_int8(int8_of_bitvector(x)) = x))
 
 logic bitvector_of_void_P : void_P pointer -> bitvector
 
@@ -1972,21 +1741,44 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-logic f : int -> int
+logic integer_of_int32 : int32 -> int
 
-axiom f_def1:
-  (forall x_0_0:int. ((x_0_0 >= 101) -> (f(x_0_0) = (x_0_0 - 10))))
+predicate eq_int32(x: int32, y: int32) =
+  (integer_of_int32(x) = integer_of_int32(y))
 
-axiom f_def2: (forall x_1:int. ((x_1 <= 101) -> (f(x_1) = 91)))
+logic integer_of_int8 : int8 -> int
 
-logic iter_f : int, int -> int
+predicate eq_int8(x: int8, y: int8) =
+  (integer_of_int8(x) = integer_of_int8(y))
 
-axiom iter_f_def1: (forall x_3:int. (iter_f(0, x_3) = x_3))
+logic int32_of_integer : int -> int32
 
-axiom iter_f_def2:
-  (forall n_0_0:int.
-    (forall x_4:int.
-      ((n_0_0 > 0) -> (iter_f(n_0_0, x_4) = iter_f((n_0_0 - 1), f(x_4))))))
+axiom int32_coerce:
+  (forall x:int.
+    ((((-2147483648) <= x) and (x <= 2147483647)) ->
+     (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_of_bitvector_of_bitvector_of_int32:
+  (forall x:int32. eq_int32(int32_of_bitvector(bitvector_of_int32(x)), x))
+
+axiom int32_range:
+  (forall x:int32.
+    (((-2147483648) <= integer_of_int32(x)) and
+     (integer_of_int32(x) <= 2147483647)))
+
+logic int8_of_integer : int -> int8
+
+axiom int8_coerce:
+  (forall x:int.
+    ((((-128) <= x) and (x <= 127)) ->
+     (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_of_bitvector_of_bitvector_of_int8:
+  (forall x:int8. eq_int8(int8_of_bitvector(bitvector_of_int8(x)), x))
+
+axiom int8_range:
+  (forall x:int8.
+    (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
@@ -1995,23 +1787,6 @@ predicate left_valid_struct_char_P(p: char_P pointer, a: int,
 predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
-
-logic pair : int, int -> pair_type
-
-inductive lex: pair_type, pair_type -> prop =
-  | lex1: (forall x1:int.
-            (forall y1:int.
-              (forall x2:int.
-                (forall y2:int.
-                  (((0 <= x2) and (x1 < x2)) -> lex(pair(x1, y1), pair(x2,
-                   y2)))))))
-  | lex2: (forall x_6:int.
-            (forall y1_0:int.
-              (forall y2_0:int.
-                (((0 <= y2_0) and (y1_0 < y2_0)) -> lex(pair(x_6, y1_0),
-                 pair(x_6, y2_0))))))
-
-
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
@@ -2050,6 +1825,12 @@ predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
   ((offset_min(void_P_alloc_table, p) = a) and
    (offset_max(void_P_alloc_table, p) = b))
+
+predicate valid___string__d_____d_(char_P___string__d_____d__1_alloc_table: char_P alloc_table) =
+  ((offset_min(char_P___string__d_____d__1_alloc_table,
+   __string__d_____d_) <= 0) and
+   (offset_max(char_P___string__d_____d__1_alloc_table,
+   __string__d_____d_) >= 9))
 
 predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =

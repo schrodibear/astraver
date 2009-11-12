@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_output.ml,v 1.147 2009-10-19 11:55:33 bobot Exp $ *)
+(* $Id: jc_output.ml,v 1.148 2009-11-12 10:11:38 marche Exp $ *)
 
 open Format
 open Jc_env
@@ -338,7 +338,10 @@ let behavior fmt (_loc,id,b) =
 let print_spec fmt s =
   fprintf fmt "@\n@[<v 2>  requires @[%a@];" assertion s.jc_fun_requires;
   Option_misc.iter 
-    (fun t -> fprintf fmt "@\n@[<v 2>  decreases @[%a@];" term t) 
+    (fun (t,r) -> match r with
+       | None -> fprintf fmt "@\n@[<v 2>  decreases @[%a@];" term t
+       | Some li -> fprintf fmt "@\n@[<v 2>  decreases @[%a@] for %s;" 
+	   term t li.jc_logic_info_name) 
     s.jc_fun_decreases;
   List.iter (behavior fmt) (s.jc_fun_default_behavior :: s.jc_fun_behavior);
   fprintf fmt "@]"

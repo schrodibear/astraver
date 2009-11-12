@@ -531,7 +531,7 @@ module PExpr :
 
     val mkcontract : 
       requires:pexpr option ->
-      decreases:pexpr option ->
+      decreases:(pexpr * Jc_ast.identifier option) option ->
       behaviors:pexpr pbehavior list ->
       expr:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
@@ -662,7 +662,7 @@ module PDecl :
 
     val mkrequires_clause : 'a -> 'a clause
 
-    val mkdecreases_clause : 'a -> 'a clause
+    val mkdecreases_clause : ?measure:identifier -> 'a -> 'a clause
 
     val mkbehavior_clause :
       ?pos:Loc.position ->

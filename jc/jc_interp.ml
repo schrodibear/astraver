@@ -25,7 +25,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(* $Id: jc_interp.ml,v 1.431 2009-11-10 08:28:14 marche Exp $ *)
+(* $Id: jc_interp.ml,v 1.432 2009-11-12 10:11:38 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -1554,7 +1554,7 @@ let term_zero = new term ~typ:integer_type (JCTconst(JCCinteger "0"))
 let get_measure_for f =
   try
     Hashtbl.find decreases_clause_table (f.jc_fun_info_tag)
-  with Not_found -> term_zero
+  with Not_found -> (term_zero,None)
 
 
 
@@ -2297,12 +2297,12 @@ and expr e =
 	      let call =
                 (* disabled temporarily *)
 		if safety_checking() && this_comp = current_comp then
-		  let cur_measure = get_measure_for (get_current_function()) in
+		  let cur_measure,cur_r = get_measure_for (get_current_function()) in
                   let cur_measure = 
                     term ~type_safe:true ~global_assertion:true
                       ~relocate:false LabelPre LabelPre cur_measure 
                   in
-		  let this_measure = get_measure_for f in
+		  let this_measure,this_r = get_measure_for f in
                   let subst =
                     List.fold_left2
                       (fun acc (_,vi) (tmp,_,_) -> 
@@ -2317,8 +2317,14 @@ and expr e =
                     term ~subst ~type_safe:true ~global_assertion:true
                       ~relocate:false LabelHere LabelHere this_measure 
                   in
+		  let r =
+		    assert (this_r = cur_r);
+		    match this_r with
+		      | None -> "zwf_zero"
+		      | Some li -> li.jc_logic_info_name
+		  in
 		  let pre =
-		    LPred("zwf_zero",[this_measure;cur_measure])
+		    LPred(r,[this_measure;cur_measure])
 		  in
 		  make_check ~mark:e#mark ~kind:VarDecr e#pos 
 		    (Assert(`ASSERT,pre,call))		  
@@ -2856,8 +2862,8 @@ let pre_tr_fun f funpos spec body acc =
   begin
     match spec.jc_fun_decreases with
       | None -> ()
-      | Some t ->
-	  Hashtbl.add decreases_clause_table f.jc_fun_info_tag t
+      | Some(t,r) ->
+	  Hashtbl.add decreases_clause_table f.jc_fun_info_tag (t,r)
   end;
   acc
 
