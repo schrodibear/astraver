@@ -982,14 +982,14 @@ text = "unexplained assertion"/>
     </behavior>
     <behavior name="Normal behavior `less_than_101'">
     <goal why_file="why/mac_carthy_po2.why">
-      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "8" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "9" begin = "14" end = "27"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     </behavior>
     <behavior name="Normal behavior `greater_than_100'">
     <goal why_file="why/mac_carthy_po1.why">
-      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "11" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "12" begin = "14" end = "31"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>

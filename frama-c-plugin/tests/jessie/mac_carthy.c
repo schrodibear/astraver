@@ -3,13 +3,13 @@
 
 #pragma JessieIntegerModel(math)
 
-/*@ behavior less_than_101:
+/*@ decreases 101-n ;
+  @ behavior less_than_101:
   @   assumes n <= 100;
   @   ensures \result == 91;
   @ behavior greater_than_100:
   @   assumes n >= 101;
   @   ensures \result == n - 10;
-  @ decreases 101-n ;
   @*/
 int f91(int n) {
   if (n <= 100) {

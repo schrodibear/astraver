@@ -40,8 +40,8 @@
   @*/
 
 /*@ requires n >= 0;
+  @ decreases n; 
   @ ensures is_prod(1,n,\result);
-  @ decreases n; // now supported
   @*/
 int fact(int n) {
   if (n == 0) return 1;

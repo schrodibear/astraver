@@ -459,7 +459,7 @@ text = "unexplained assertion"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/fact_po1.why">
-      <location file = "PPCHOME/tests/jessie/fact.c" line = "43" begin = "12" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/fact.c" line = "44" begin = "12" end = "32"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>

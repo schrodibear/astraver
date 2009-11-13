@@ -26,7 +26,7 @@
 (**************************************************************************)
 
 
-(* $Id: jc_effect.ml,v 1.159 2009-06-23 10:19:14 marche Exp $ *)
+(* $Id: jc_effect.ml,v 1.160 2009-11-13 16:16:37 marche Exp $ *)
 
 open Jc_stdlib
 open Jc_env
@@ -522,7 +522,10 @@ let offset_of_term t =
 
 let offset_of_field fi = 
   match field_offset_in_bytes fi with
-    | None -> assert false
+    | None -> 
+        Format.eprintf "Jc_effect.offset_of_field: fi=%s@."
+          fi.jc_field_info_name;
+        assert false
     | Some off -> Int_offset (string_of_int off) 
 
 let mult_offset i off =
