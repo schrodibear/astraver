@@ -7085,7 +7085,7 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
 
 axiom address_injective:
   (forall p:'a1 pointer.
@@ -7209,7 +7209,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -7427,7 +7427,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -7771,9 +7771,9 @@ type void_P
 
 logic integer_of_int32 : int32 -> int
 
-logic buch_CurTrans :  -> int_P pointer
+logic buch_CurTrans : int_P pointer
 
-logic buch_CurTrans_tmp :  -> int_P pointer
+logic buch_CurTrans_tmp : int_P pointer
 
 predicate Buch_Arrays_Coherence(int_P_int_M_buch_CurTrans_tmp_4: (int_P,
   int32) memory, int_P_int_M_buch_CurTrans_2: (int_P, int32) memory) =
@@ -7810,9 +7810,9 @@ axiom Buch_OpStatusList_range:
     ((0 <= integer_of_Buch_OpStatusList(x)) and
      (integer_of_Buch_OpStatusList(x) <= 1)))
 
-logic buch_CurStates :  -> int_P pointer
+logic buch_CurStates : int_P pointer
 
-logic buch_CurStates_old :  -> int_P pointer
+logic buch_CurStates_old : int_P pointer
 
 predicate Buch_Ranges_Validity(int_P_buch_CurTrans_tmp_4_alloc_table: int_P alloc_table,
   int_P_buch_CurStates_old_3_alloc_table: int_P alloc_table,
@@ -7833,7 +7833,7 @@ predicate Buch_Ranges_Validity(int_P_buch_CurTrans_tmp_4_alloc_table: int_P allo
          (offset_max(int_P_buch_CurStates_old_3_alloc_table,
          buch_CurStates_old) >= 1))))))))
 
-logic buch_AcceptStates :  -> int_P pointer
+logic buch_AcceptStates : int_P pointer
 
 predicate Buch_acc_Ranges_Validity(int_P_buch_AcceptStates_5_alloc_table: int_P alloc_table) =
   ((offset_min(int_P_buch_AcceptStates_5_alloc_table,
@@ -8047,7 +8047,7 @@ axiom buch_Trans_Stop1: (buch_Trans_Stop(1) = 1)
 
 axiom buch_Trans_Stop2: (buch_Trans_Stop(2) = 1)
 
-logic char_P_tag :  -> char_P tag_id
+logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
 
@@ -8105,7 +8105,7 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-logic int_P_tag :  -> int_P tag_id
+logic int_P_tag : int_P tag_id
 
 axiom int_P_int: (int_of_tag(int_P_tag) = 1)
 
@@ -8266,7 +8266,7 @@ predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
   ((offset_min(void_P_alloc_table, p) <= a) and
    (offset_max(void_P_alloc_table, p) >= b))
 
-logic void_P_tag :  -> void_P tag_id
+logic void_P_tag : void_P tag_id
 
 axiom void_P_int: (int_of_tag(void_P_tag) = 1)
 

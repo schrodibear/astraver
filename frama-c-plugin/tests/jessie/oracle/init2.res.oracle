@@ -1166,7 +1166,7 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
 
 axiom address_injective:
   (forall p:'a1 pointer.
@@ -1290,7 +1290,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -1508,7 +1508,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -1869,7 +1869,7 @@ axiom __anonenum_lenum_3_range:
     ((12 <= integer_of___anonenum_lenum_3(x)) and
      (integer_of___anonenum_lenum_3(x) <= 56)))
 
-logic __anonstruct_lastruct1_1_tag :  -> __anonstruct_lastruct1_1 tag_id
+logic __anonstruct_lastruct1_1_tag : __anonstruct_lastruct1_1 tag_id
 
 axiom __anonstruct_lastruct1_1_int:
   (int_of_tag(__anonstruct_lastruct1_1_tag) = 1)
@@ -1897,7 +1897,7 @@ axiom __anonstruct_lastruct1_1_tags:
       instanceof(__anonstruct_lastruct1_1_tag_table, x,
       __anonstruct_lastruct1_1_tag)))
 
-logic __anonstruct_lastruct2_2_tag :  -> __anonstruct_lastruct2_2 tag_id
+logic __anonstruct_lastruct2_2_tag : __anonstruct_lastruct2_2 tag_id
 
 axiom __anonstruct_lastruct2_2_int:
   (int_of_tag(__anonstruct_lastruct2_2_tag) = 1)
@@ -1965,7 +1965,7 @@ logic void_P_of_bitvector : bitvector -> void_P pointer
 axiom bitvector_of_void_P_of_void_P_of_bitvector:
   (forall x:bitvector. (bitvector_of_void_P(void_P_of_bitvector(x)) = x))
 
-logic char_P_tag :  -> char_P tag_id
+logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
 
@@ -2025,9 +2025,9 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-logic laconstante :  -> int32
+logic laconstante : int32
 
-logic le :  -> __anonenum_lenum_3
+logic le : __anonenum_lenum_3
 
 predicate left_valid_struct___anonstruct_lastruct1_1(p: __anonstruct_lastruct1_1 pointer,
   a: int,
@@ -2052,7 +2052,7 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
-logic ls :  -> __anonstruct_lastruct2_2 pointer
+logic ls : __anonstruct_lastruct2_2 pointer
 
 axiom pointer_addr_of___anonstruct_lastruct1_1_of_pointer_address:
   (forall p:unit pointer.
@@ -2217,9 +2217,9 @@ predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
   ((offset_min(void_P_alloc_table, p) <= a) and
    (offset_max(void_P_alloc_table, p) >= b))
 
-logic varglo :  -> int32
+logic varglo : int32
 
-logic void_P_tag :  -> void_P tag_id
+logic void_P_tag : void_P tag_id
 
 axiom void_P_int: (int_of_tag(void_P_tag) = 1)
 

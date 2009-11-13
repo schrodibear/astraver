@@ -1605,7 +1605,7 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
 
 axiom address_injective:
   (forall p:'a1 pointer.
@@ -1729,7 +1729,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -1947,7 +1947,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -2328,7 +2328,7 @@ logic void_P_of_bitvector : bitvector -> void_P pointer
 axiom bitvector_of_void_P_of_void_P_of_bitvector:
   (forall x:bitvector. (bitvector_of_void_P(void_P_of_bitvector(x)) = x))
 
-logic char_P_tag :  -> char_P tag_id
+logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
 
@@ -2393,7 +2393,7 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-logic int_P_tag :  -> int_P tag_id
+logic int_P_tag : int_P tag_id
 
 axiom int_P_int: (int_of_tag(int_P_tag) = 1)
 
@@ -2413,7 +2413,7 @@ axiom int_P_tags:
     (forall int_P_tag_table:int_P tag_table. instanceof(int_P_tag_table, x,
       int_P_tag)))
 
-logic int_xP_tag :  -> int_xP tag_id
+logic int_xP_tag : int_xP tag_id
 
 axiom int_xP_int: (int_of_tag(int_xP_tag) = 1)
 
@@ -2598,7 +2598,7 @@ predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
   ((offset_min(void_P_alloc_table, p) <= a) and
    (offset_max(void_P_alloc_table, p) >= b))
 
-logic void_P_tag :  -> void_P tag_id
+logic void_P_tag : void_P tag_id
 
 axiom void_P_int: (int_of_tag(void_P_tag) = 1)
 

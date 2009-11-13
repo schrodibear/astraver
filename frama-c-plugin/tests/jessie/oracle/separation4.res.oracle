@@ -1091,7 +1091,7 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
 
 axiom address_injective:
   (forall p:'a1 pointer.
@@ -1215,7 +1215,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -1433,7 +1433,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -1767,7 +1767,7 @@ type x_1
 
 type y_2
 
-logic S_tag :  -> S tag_id
+logic S_tag : S tag_id
 
 axiom S_int: (int_of_tag(S_tag) = 1)
 
@@ -1775,7 +1775,7 @@ logic S_of_bitvector : bitvector -> S pointer
 
 logic bitvector_of_S : S pointer -> bitvector
 
-logic x :  -> S pointer
+logic x : S pointer
 
 axiom S_of_bitvector_of_bitvector_of_S:
   (forall x:S pointer. (S_of_bitvector(bitvector_of_S(x)) = x))
@@ -1836,7 +1836,7 @@ logic void_P_of_bitvector : bitvector -> void_P pointer
 axiom bitvector_of_void_P_of_void_P_of_bitvector:
   (forall x:bitvector. (bitvector_of_void_P(void_P_of_bitvector(x)) = x))
 
-logic char_P_tag :  -> char_P tag_id
+logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
 
@@ -1857,7 +1857,7 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-logic y :  -> S pointer
+logic y : S pointer
 
 predicate eq_int32(x: int32, y: int32) =
   (integer_of_int32(x) = integer_of_int32(y))
@@ -1896,7 +1896,7 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-logic int_P_tag :  -> int_P tag_id
+logic int_P_tag : int_P tag_id
 
 axiom int_P_int: (int_of_tag(int_P_tag) = 1)
 
@@ -2079,7 +2079,7 @@ predicate valid_y(S_y_2_alloc_table: S alloc_table) =
   ((offset_min(S_y_2_alloc_table, y) <= 0) and (offset_max(S_y_2_alloc_table,
    y) >= 0))
 
-logic void_P_tag :  -> void_P tag_id
+logic void_P_tag : void_P tag_id
 
 axiom void_P_int: (int_of_tag(void_P_tag) = 1)
 

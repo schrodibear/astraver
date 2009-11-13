@@ -1467,7 +1467,7 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
 
 axiom address_injective:
   (forall p:'a1 pointer.
@@ -1591,7 +1591,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -1809,7 +1809,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -2151,7 +2151,7 @@ logic bitvector_of_char_P : char_P pointer -> bitvector
 
 logic char_P_of_bitvector : bitvector -> char_P pointer
 
-logic x :  -> las pointer
+logic x : las pointer
 
 axiom bitvector_of_char_P_of_char_P_of_bitvector:
   (forall x:bitvector. (bitvector_of_char_P(char_P_of_bitvector(x)) = x))
@@ -2205,7 +2205,7 @@ logic void_P_of_bitvector : bitvector -> void_P pointer
 axiom bitvector_of_void_P_of_void_P_of_bitvector:
   (forall x:bitvector. (bitvector_of_void_P(void_P_of_bitvector(x)) = x))
 
-logic char_P_tag :  -> char_P tag_id
+logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
 
@@ -2228,7 +2228,7 @@ axiom char_P_tags:
 
 logic integer_of_int32 : int32 -> int
 
-logic y :  -> las2 pointer
+logic y : las2 pointer
 
 predicate eq_int32(x: int32, y: int32) =
   (integer_of_int32(x) = integer_of_int32(y))
@@ -2267,7 +2267,7 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-logic las1_tag :  -> las1 tag_id
+logic las1_tag : las1 tag_id
 
 axiom las1_int: (int_of_tag(las1_tag) = 1)
 
@@ -2286,7 +2286,7 @@ axiom las1_tags:
     (forall las1_tag_table:las1 tag_table. instanceof(las1_tag_table, x,
       las1_tag)))
 
-logic las2_tag :  -> las2 tag_id
+logic las2_tag : las2 tag_id
 
 axiom las2_int: (int_of_tag(las2_tag) = 1)
 
@@ -2305,7 +2305,7 @@ axiom las2_tags:
     (forall las2_tag_table:las2 tag_table. instanceof(las2_tag_table, x,
       las2_tag)))
 
-logic las3_tag :  -> las3 tag_id
+logic las3_tag : las3 tag_id
 
 axiom las3_int: (int_of_tag(las3_tag) = 1)
 
@@ -2324,7 +2324,7 @@ axiom las3_tags:
     (forall las3_tag_table:las3 tag_table. instanceof(las3_tag_table, x,
       las3_tag)))
 
-logic las_tag :  -> las tag_id
+logic las_tag : las tag_id
 
 axiom las_int: (int_of_tag(las_tag) = 1)
 
@@ -2615,7 +2615,7 @@ predicate valid_y(las2_y_2_alloc_table: las2 alloc_table) =
   ((offset_min(las2_y_2_alloc_table, y) <= 0) and
    (offset_max(las2_y_2_alloc_table, y) >= 0))
 
-logic void_P_tag :  -> void_P tag_id
+logic void_P_tag : void_P tag_id
 
 axiom void_P_int: (int_of_tag(void_P_tag) = 1)
 

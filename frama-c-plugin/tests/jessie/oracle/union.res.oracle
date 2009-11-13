@@ -3292,7 +3292,7 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
 
 axiom address_injective:
   (forall p:'a1 pointer.
@@ -3416,7 +3416,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -3634,7 +3634,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -3976,7 +3976,7 @@ type padding
 
 type void_P
 
-logic _Decomp2_tag :  -> _Decomp2 tag_id
+logic _Decomp2_tag : _Decomp2 tag_id
 
 axiom _Decomp2_int: (int_of_tag(_Decomp2_tag) = 1)
 
@@ -4001,7 +4001,7 @@ axiom _Decomp2_tags:
     (forall _Decomp2_tag_table:_Decomp2 tag_table.
       instanceof(_Decomp2_tag_table, x, _Decomp2_tag)))
 
-logic _Decomp_tag :  -> _Decomp tag_id
+logic _Decomp_tag : _Decomp tag_id
 
 axiom _Decomp_int: (int_of_tag(_Decomp_tag) = 1)
 
@@ -4026,7 +4026,7 @@ axiom _Decomp_tags:
     (forall _Decomp_tag_table:_Decomp tag_table.
       instanceof(_Decomp_tag_table, x, _Decomp_tag)))
 
-logic _Integer2_tag :  -> _Integer2 tag_id
+logic _Integer2_tag : _Integer2 tag_id
 
 axiom _Integer2_int: (int_of_tag(_Integer2_tag) = 1)
 
@@ -4046,9 +4046,9 @@ axiom _Integer2_of_pointer_address_of_pointer_addr:
 
 axiom _Integer2_parenttag_bottom: parenttag(_Integer2_tag, bottom_tag)
 
-logic xP_tag :  -> _Integer2 tag_id
+logic xP_tag : _Integer2 tag_id
 
-logic cP_tag :  -> _Integer2 tag_id
+logic cP_tag : _Integer2 tag_id
 
 axiom _Integer2_tags:
   (forall x:_Integer2 pointer.
@@ -4057,7 +4057,7 @@ axiom _Integer2_tags:
        (instanceof(_Integer2_tag_table, x, xP_tag) or
         instanceof(_Integer2_tag_table, x, cP_tag)))))
 
-logic _Integer_tag :  -> _Integer tag_id
+logic _Integer_tag : _Integer tag_id
 
 axiom _Integer_int: (int_of_tag(_Integer_tag) = 1)
 
@@ -4077,9 +4077,9 @@ axiom _Integer_of_pointer_address_of_pointer_addr:
 
 axiom _Integer_parenttag_bottom: parenttag(_Integer_tag, bottom_tag)
 
-logic x_0P_tag :  -> _Integer tag_id
+logic x_0P_tag : _Integer tag_id
 
-logic c_0P_tag :  -> _Integer tag_id
+logic c_0P_tag : _Integer tag_id
 
 axiom _Integer_tags:
   (forall x:_Integer pointer.
@@ -4088,7 +4088,7 @@ axiom _Integer_tags:
        (instanceof(_Integer_tag_table, x, x_0P_tag) or
         instanceof(_Integer_tag_table, x, c_0P_tag)))))
 
-logic _S1_tag :  -> _S1 tag_id
+logic _S1_tag : _S1 tag_id
 
 axiom _S1_int: (int_of_tag(_S1_tag) = 1)
 
@@ -4111,7 +4111,7 @@ axiom _S1_tags:
     (forall _S1_tag_table:_S1 tag_table. instanceof(_S1_tag_table, x,
       _S1_tag)))
 
-logic _S2_tag :  -> _S2 tag_id
+logic _S2_tag : _S2 tag_id
 
 axiom _S2_int: (int_of_tag(_S2_tag) = 1)
 
@@ -4134,7 +4134,7 @@ axiom _S2_tags:
     (forall _S2_tag_table:_S2 tag_table. instanceof(_S2_tag_table, x,
       _S2_tag)))
 
-logic _U_tag :  -> _U tag_id
+logic _U_tag : _U tag_id
 
 axiom _U_int: (int_of_tag(_U_tag) = 1)
 
@@ -4152,9 +4152,9 @@ axiom _U_of_pointer_address_of_pointer_addr:
 
 axiom _U_parenttag_bottom: parenttag(_U_tag, bottom_tag)
 
-logic s1P_tag :  -> _U tag_id
+logic s1P_tag : _U tag_id
 
-logic s2P_tag :  -> _U tag_id
+logic s2P_tag : _U tag_id
 
 axiom _U_tags:
   (forall x:_U pointer.
@@ -4250,7 +4250,7 @@ axiom c_0P_int: (int_of_tag(c_0P_tag) = 3)
 
 axiom c_0P_parenttag_bottom: parenttag(c_0P_tag, bottom_tag)
 
-logic char_P_tag :  -> char_P tag_id
+logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
 
@@ -4643,7 +4643,7 @@ predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
   ((offset_min(void_P_alloc_table, p) <= a) and
    (offset_max(void_P_alloc_table, p) >= b))
 
-logic void_P_tag :  -> void_P tag_id
+logic void_P_tag : void_P tag_id
 
 axiom void_P_int: (int_of_tag(void_P_tag) = 1)
 
