@@ -16,7 +16,13 @@ simplify: $(VO:_valid.vo=_why.sx)
 	$(DP) -timeout 10 $^  2>/dev/null
 
 yices: $(VO:_valid.vo=_why.smt)
-	$(DP) -timeout 10 $^  2>/dev/null
+	$(DP) -smt-solver yices -timeout 10 $^  2>/dev/null
+
+z3: $(VO:_valid.vo=_why.z3.smt)
+	$(DP) -smt-solver z3 -timeout 10 $^  2>/dev/null
+
+z3smt: $(VO:_valid.vo=_why.smt)
+	$(DP) -smt-solver z3 -timeout 10 $^  2>/dev/null
 
 zenon: $(VO:_valid.vo=_why.znn)
 	$(DP) -timeout 10 $^ 2>/dev/null
@@ -56,7 +62,10 @@ harvey: $(VO:_valid.vo=_why.rv)
 	$(WHY) --simplify $<
 
 %_why.smt: %.mlw $(WHYBIN)
-	$(WHY) --smtlib --encoding mono $<
+	$(WHY) --smtlib --encoding sstrat $<
+
+%_why.z3.smt: %.mlw $(WHYBIN)
+	$(WHY) --z3 --encoding sstrat $<
 
 %_why.znn: %.mlw $(WHYBIN)
 	$(WHY) --zenon $<

@@ -289,8 +289,8 @@ let rec translate_pred fv lv = function
       Pnot (translate_pred fv lv p)
   | Forall (iswp, id, n, pt, tl, p) ->
       let lv' = (n,pt)::lv in
-(*       let tl' = List.map (List.map (translate_pattern fv lv')) tl in *)
-	Forall (iswp, id, n, sortify ut pt, [], translate_pred fv lv' p)
+       let tl' = List.map (List.map (translate_pattern fv lv')) tl in
+	Forall (iswp, id, n, sortify ut pt, tl', translate_pred fv lv' p)
   | Forallb (iswp, p1, p2) ->
       Forallb (iswp, translate_pred fv lv p1, translate_pred fv lv p2)
   | Exists (id, n, pt, p) ->
@@ -299,9 +299,23 @@ let rec translate_pred fv lv = function
       Pnamed (s, translate_pred fv lv p)
   | _ as d -> d
 
-(* and translate_pattern fv lv = function *)
-(*   | TPat t -> TPat (translate_term fv lv t) *)
-(*   | PPat p -> PPat (translate_pred fv lv p) *)
+and translate_pattern fv lv = function
+  | TPat t -> 
+      let rec translate_term_for_pattern fv lv = function
+      (* mauvaise traduction des triggers mais ...
+         Le type n'étant pas forcement le même 
+         les plunges internes peuvent ne pas être les 
+         même que dans le body de la quantification *)
+      | Tvar _ as t -> t
+      | Tapp (id, tl, inst) ->
+      let ptl, pt = get_arity id in
+      let trans_term = Tapp (id, List.map2 (translate_term fv lv) ptl tl, []) in
+      trans_term
+      | Tconst (_) as t -> t
+      | Tderef _ as t -> t
+      | Tnamed(_,t) -> translate_term_for_pattern fv lv t in
+      TPat (translate_term_for_pattern fv lv t)
+  | PPat p -> PPat (translate_pred fv lv p)
 
 (* The core *)
 let queue = Queue.create ()
