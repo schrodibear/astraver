@@ -61,13 +61,10 @@ type 't block
 (* memory model *)
 
 logic base_block: 't pointer -> 't block
-logic pointer_address: 't pointer -> unit pointer
-logic absolute_address: int -> unit pointer
-logic address: 't pointer -> int
 logic offset_max: 't alloc_table, 't pointer -> int
 logic offset_min: 't alloc_table, 't pointer -> int
 
-(* shorcuts *)
+(* shortcuts *)
 
 predicate valid(a:'t alloc_table, p:'t pointer) = 
   offset_min(a,p) <= 0 and offset_max(a,p) >= 0
@@ -92,6 +89,10 @@ logic null: 't pointer
 
 (* address *)
 
+logic pointer_address: 't pointer -> unit pointer
+logic absolute_address: int -> unit pointer
+logic address: 't pointer -> int
+
 axiom address_injective:
   forall p:'t pointer. forall q:'t pointer.
     p = q <-> address(p) = address(q)
@@ -99,8 +100,11 @@ axiom address_injective:
 axiom address_null:
   address(null) = 0
 
+
+(* INCONSISTENT -> removed 
 axiom address_positive:
   forall p:'t pointer. 0 <= address(p)
+*)
 
 axiom address_shift_lt:
   forall p:'t pointer. forall i:int. forall j:int 
@@ -111,6 +115,7 @@ axiom address_shift_le:
   forall p:'t pointer. forall i:int. forall j:int 
   [address(shift(p,i)), address(shift(p,j))]. 
     address(shift(p,i)) <= address(shift(p,j)) <-> i <= j
+
 
 (* shift *)
 
