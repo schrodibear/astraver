@@ -129,25 +129,25 @@ exception Exception of Exception[0..]
 unit cons_Creation_int(! Creation[0] this_1, integer n)
 behavior normal:
   assigns this_1.simple_val;
-  ensures (K_2 : (this_1.simple_val == n));
+  ensures (K_1 : (this_1.simple_val == n));
 {  (this_1.simple_val = 0);
-   (K_1 : (this_1.simple_val = n))
+   (K_2 : (this_1.simple_val = n))
 }
 
 unit cons_Creation(! Creation[0] this_2)
 behavior normal:
   assigns this_2.simple_val;
-  ensures (K_4 : (this_2.simple_val == 0));
+  ensures (K_3 : (this_2.simple_val == 0));
 {  (this_2.simple_val = 0);
-   (K_3 : cons_Creation_int(this_2, 0))
+   (K_4 : cons_Creation_int(this_2, 0))
 }
 
 unit cons_Creation_int_int(! Creation[0] this_0, integer n_0, integer m)
 behavior normal:
   assigns this_0.simple_val;
-  ensures (K_7 : (this_0.simple_val == (n_0 + m)));
+  ensures (K_5 : (this_0.simple_val == (n_0 + m)));
 {  (this_0.simple_val = 0);
-   (K_6 : cons_Creation_int(this_0, (K_5 : (n_0 + m))))
+   (K_7 : cons_Creation_int(this_0, (K_6 : (n_0 + m))))
 }
 
 integer Creation_test1()
@@ -213,8 +213,8 @@ behavior normal:
 unit cons_TestSuperConstructor(! TestSuperConstructor[0] this_4)
 behavior normal:
   assigns this_4.simple_val;
-  ensures (K_18 : (this_4.simple_val == 12));
-{  (K_17 : cons_Creation_int(this_4, 12))
+  ensures (K_17 : (this_4.simple_val == 12));
+{  (K_18 : cons_Creation_int(this_4, 12))
 }
 
 /*
@@ -267,58 +267,58 @@ begin = 14
 end = 32
 
 [K_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[K_18]
 file = "HOME/tests/java/Creation.java"
 line = 64
 begin = 18
 end = 34
 
-[K_1]
-file = "HOME/tests/java/Creation.java"
-line = 21
-begin = 1
-end = 15
+[K_18]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
-[K_2]
+[K_1]
 file = "HOME/tests/java/Creation.java"
 line = 18
 begin = 18
 end = 38
 
-[K_3]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+[K_2]
+file = "HOME/tests/java/Creation.java"
+line = 21
+begin = 1
+end = 15
 
-[K_4]
+[K_3]
 file = "HOME/tests/java/Creation.java"
 line = 10
 begin = 18
 end = 38
 
-[K_5]
-file = "HOME/tests/java/Creation.java"
-line = 29
-begin = 6
-end = 9
-
-[K_6]
+[K_4]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[K_7]
+[K_5]
 file = "HOME/tests/java/Creation.java"
 line = 26
 begin = 18
 end = 42
+
+[K_6]
+file = "HOME/tests/java/Creation.java"
+line = 29
+begin = 6
+end = 9
+
+[K_7]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [K_8]
 file = "HOME/tests/java/Creation.java"
@@ -2571,7 +2571,7 @@ let cons_Creation_ensures_default =
                       (let jessie_49 = this_2 in
                       (((safe_upd_ Creation_simple_val) jessie_49) jessie_46))) in
      void);
-    (K_3:
+    (K_4:
     (let jessie_52 = this_2 in
     (let jessie_51 = (0) in
     (JC_40: ((cons_Creation_int jessie_52) jessie_51)))));
@@ -2592,7 +2592,7 @@ let cons_Creation_ensures_normal =
                       (let jessie_57 = this_2 in
                       (((safe_upd_ Creation_simple_val) jessie_57) jessie_54))) in
      void);
-    (K_3:
+    (K_4:
     (let jessie_60 = this_2 in
     (let jessie_59 = (0) in
     (JC_41: ((cons_Creation_int jessie_60) jessie_59)))));
@@ -2618,7 +2618,7 @@ let cons_Creation_int_ensures_default =
                                          (let jessie_17 = this_1 in
                                          (((safe_upd_ Creation_simple_val) jessie_17) jessie_14))) in
                         void);
-                       (K_1:
+                       (K_2:
                        (let jessie_20 = n in
                        (let jessie_23 = this_1 in
                        begin
@@ -2645,7 +2645,7 @@ let cons_Creation_int_ensures_normal =
                                          (let jessie_29 = this_1 in
                                          (((safe_upd_ Creation_simple_val) jessie_29) jessie_26))) in
                         void);
-                       (K_1:
+                       (K_2:
                        (let jessie_32 = n in
                        (let jessie_35 = this_1 in
                        begin
@@ -2675,9 +2675,9 @@ let cons_Creation_int_int_ensures_default =
                       (let jessie_73 = this_0 in
                       (((safe_upd_ Creation_simple_val) jessie_73) jessie_70))) in
      void);
-    (K_6:
+    (K_7:
     (let jessie_76 = this_0 in
-    (let jessie_75 = (K_5: ((add_int n_0) m)) in
+    (let jessie_75 = (K_6: ((add_int n_0) m)) in
     (JC_57: ((cons_Creation_int jessie_76) jessie_75)))));
     (raise Return)
    end
@@ -2696,9 +2696,9 @@ let cons_Creation_int_int_ensures_normal =
                       (let jessie_81 = this_0 in
                       (((safe_upd_ Creation_simple_val) jessie_81) jessie_78))) in
      void);
-    (K_6:
+    (K_7:
     (let jessie_84 = this_0 in
-    (let jessie_83 = (K_5: ((add_int n_0) m)) in
+    (let jessie_83 = (K_6: ((add_int n_0) m)) in
     (JC_58: ((cons_Creation_int jessie_84) jessie_83)))));
     (raise Return)
    end
@@ -2721,9 +2721,9 @@ let cons_Creation_int_int_safety =
                       (let jessie_65 = this_0 in
                       (((safe_upd_ Creation_simple_val) jessie_65) jessie_62))) in
      void);
-    (K_6:
+    (K_7:
     (let jessie_68 = this_0 in
-    (let jessie_67 = (K_5: ((add_int n_0) m)) in
+    (let jessie_67 = (K_6: ((add_int n_0) m)) in
     (JC_56: ((cons_Creation_int_requires jessie_68) jessie_67)))));
     (raise Return)
    end
@@ -2743,7 +2743,7 @@ let cons_Creation_int_safety =
                                         (let jessie_5 = this_1 in
                                         (((safe_upd_ Creation_simple_val) jessie_5) jessie_2))) in
                         void);
-                       (K_1:
+                       (K_2:
                        (let jessie_8 = n in
                        (let jessie_11 = this_1 in
                        begin
@@ -2769,7 +2769,7 @@ let cons_Creation_safety =
                       (let jessie_41 = this_2 in
                       (((safe_upd_ Creation_simple_val) jessie_41) jessie_38))) in
      void);
-    (K_3:
+    (K_4:
     (let jessie_44 = this_2 in
     (let jessie_43 = (0) in
     (JC_39: ((cons_Creation_int_requires jessie_44) jessie_43)))));
@@ -2786,7 +2786,7 @@ let cons_TestSuperConstructor_ensures_default =
   (init:
   try
    begin
-     (K_17:
+     (K_18:
      (let jessie_142 = this_4 in
      (let jessie_141 = (12) in
      (JC_132: ((cons_Creation_int jessie_142) jessie_141)))));
@@ -2803,7 +2803,7 @@ let cons_TestSuperConstructor_ensures_normal =
   (init:
   try
    begin
-     (K_17:
+     (K_18:
      (let jessie_144 = this_4 in
      (let jessie_143 = (12) in
      (JC_133: ((cons_Creation_int jessie_144) jessie_143)))));
@@ -2824,7 +2824,7 @@ let cons_TestSuperConstructor_safety =
   (init:
   try
    begin
-     (K_17:
+     (K_18:
      (let jessie_140 = this_4 in
      (let jessie_139 = (12) in
      (JC_131: ((cons_Creation_int_requires jessie_140) jessie_139)))));
@@ -3200,12 +3200,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -3220,15 +3214,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -3344,7 +3342,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -3562,7 +3560,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -3882,13 +3880,13 @@ type Object
 
 type interface
 
-logic Creation_tag :  -> Object tag_id
+logic Creation_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Creation_parenttag_Object: parenttag(Creation_tag, Object_tag)
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -3919,16 +3917,16 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic TestSuperConstructor_tag :  -> Object tag_id
+logic TestSuperConstructor_tag : Object tag_id
 
 axiom TestSuperConstructor_parenttag_Creation:
   parenttag(TestSuperConstructor_tag, Creation_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -3943,7 +3941,7 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -4621,10 +4619,6 @@ why -simplify [...] why/Creation.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -5949,12 +5943,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -5969,15 +5957,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -6093,7 +6085,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -6311,7 +6303,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -6631,13 +6623,13 @@ type Object
 
 type interface
 
-logic Creation_tag :  -> Object tag_id
+logic Creation_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Creation_parenttag_Object: parenttag(Creation_tag, Object_tag)
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -6668,16 +6660,16 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic TestSuperConstructor_tag :  -> Object tag_id
+logic TestSuperConstructor_tag : Object tag_id
 
 axiom TestSuperConstructor_parenttag_Creation:
   parenttag(TestSuperConstructor_tag, Creation_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -6692,7 +6684,7 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 

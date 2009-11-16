@@ -243,7 +243,7 @@ exception Throwable of Throwable[0..]
 exception Exception of Exception[0..]
 
 integer Gcd_gcd(integer x_8, integer y_8)
-  requires (K_28 : ((K_27 : (x_8 >= 0)) && (K_26 : (y_8 >= 0))));
+  requires (K_5 : ((K_4 : (x_8 >= 0)) && (K_3 : (y_8 >= 0))));
 behavior resultIsGcd:
   ensures (K_1 : isGcd(x_8, y_8, \result));
 behavior bezoutProperty:
@@ -252,64 +252,64 @@ behavior bezoutProperty:
                      (((a_2 * x_8) + (b_1 * y_8)) == \result))));
 {  
    {  
-      (var integer a_3 = (K_25 : 1));
+      (var integer a_3 = (K_28 : 1));
       
       {  
-         (var integer b_2 = (K_24 : 0));
+         (var integer b_2 = (K_27 : 0));
          
          {  
-            (var integer c = (K_23 : 0));
+            (var integer c = (K_26 : 0));
             
             {  
-               (var integer d_1 = (K_22 : 1));
+               (var integer d_1 = (K_25 : 1));
                
                {  
                   loop 
                   behavior default:
-                    invariant (K_11 : ((K_10 : ((K_9 : ((K_8 : ((K_7 : 
-                                                                (x_8 >=
-                                                                  0)) &&
-                                                                 (K_6 : 
-                                                                 (y_8 >=
-                                                                   0)))) &&
-                                                         (K_5 : (\forall integer d_2;
-                                                                  (isGcd(
+                    invariant (K_14 : ((K_13 : ((K_12 : ((K_11 : ((K_10 : 
+                                                                  (x_8 >=
+                                                                    0)) &&
+                                                                   (K_9 : 
+                                                                   (y_8 >=
+                                                                    0)))) &&
+                                                          (K_8 : (\forall integer d_2;
+                                                                   (isGcd(
                                                                     x_8, y_8,
                                                                     d_2) ==>
                                                                     \at(isGcd(
                                                                     x_8, y_8,
                                                                     d_2),Pre)))))) &&
-                                                 (K_4 : (((a_3 *
+                                                 (K_7 : (((a_3 *
                                                             \at(x_8,Pre)) +
                                                            (b_2 *
                                                              \at(y_8,Pre))) ==
                                                           x_8)))) &&
-                                        (K_3 : (((c * \at(x_8,Pre)) +
+                                        (K_6 : (((c * \at(x_8,Pre)) +
                                                   (d_1 * \at(y_8,Pre))) ==
                                                  y_8))));
-                  variant (K_12 : y_8);
-                  while ((K_21 : (y_8 > 0)))
+                  variant (K_15 : y_8);
+                  while ((K_24 : (y_8 > 0)))
                   {  
                      {  
-                        (var integer r = (K_20 : (x_8 % y_8)));
+                        (var integer r = (K_23 : (x_8 % y_8)));
                         
                         {  
-                           (var integer q_1 = (K_19 : (x_8 / y_8)));
+                           (var integer q_1 = (K_22 : (x_8 / y_8)));
                            
                            {  (x_8 = y_8);
                               (y_8 = r);
                               
                               {  
-                                 (var integer ta = (K_18 : a_3));
+                                 (var integer ta = (K_21 : a_3));
                                  
                                  {  
-                                    (var integer tb = (K_17 : b_2));
+                                    (var integer tb = (K_20 : b_2));
                                     
                                     {  (a_3 = c);
                                        (b_2 = d_1);
-                                       (c = (K_14 : (ta - (K_13 : (c * q_1)))));
-                                       (d_1 = (K_16 : (tb -
-                                                        (K_15 : (d_1 * q_1)))))
+                                       (c = (K_17 : (ta - (K_16 : (c * q_1)))));
+                                       (d_1 = (K_19 : (tb -
+                                                        (K_18 : (d_1 * q_1)))))
                                     }
                                  }
                               }
@@ -339,91 +339,91 @@ End:
 file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
-end = 169
+end = 21
 
 [K_11]
 file = "HOME/tests/java/Gcd.java"
 line = 98
 begin = 15
-end = 219
+end = 31
 
 [K_12]
+file = "HOME/tests/java/Gcd.java"
+line = 98
+begin = 15
+end = 119
+
+[K_13]
+file = "HOME/tests/java/Gcd.java"
+line = 98
+begin = 15
+end = 169
+
+[K_14]
+file = "HOME/tests/java/Gcd.java"
+line = 98
+begin = 15
+end = 219
+
+[K_15]
 file = "HOME/tests/java/Gcd.java"
 line = 103
 begin = 25
 end = 26
 
-[K_13]
-file = "HOME/tests/java/Gcd.java"
-line = 113
-begin = 31
-end = 36
-
-[K_14]
-file = "HOME/tests/java/Gcd.java"
-line = 113
-begin = 26
-end = 36
-
-[K_15]
-file = "HOME/tests/java/Gcd.java"
-line = 114
-begin = 31
-end = 36
-
 [K_16]
 file = "HOME/tests/java/Gcd.java"
-line = 114
-begin = 26
+line = 113
+begin = 31
 end = 36
 
 [K_17]
+file = "HOME/tests/java/Gcd.java"
+line = 113
+begin = 26
+end = 36
+
+[K_18]
+file = "HOME/tests/java/Gcd.java"
+line = 114
+begin = 31
+end = 36
+
+[K_19]
+file = "HOME/tests/java/Gcd.java"
+line = 114
+begin = 26
+end = 36
+
+[K_20]
 file = "HOME/tests/java/Gcd.java"
 line = 110
 begin = 43
 end = 44
 
-[K_18]
+[K_21]
 file = "HOME/tests/java/Gcd.java"
 line = 110
 begin = 35
 end = 36
 
-[K_19]
+[K_22]
 file = "HOME/tests/java/Gcd.java"
 line = 107
 begin = 34
 end = 39
 
-[K_20]
+[K_23]
 file = "HOME/tests/java/Gcd.java"
 line = 106
 begin = 20
 end = 25
 
-[K_21]
+[K_24]
 file = "HOME/tests/java/Gcd.java"
 line = 105
 begin = 15
 end = 20
-
-[K_22]
-file = "HOME/tests/java/Gcd.java"
-line = 96
-begin = 51
-end = 52
-
-[K_23]
-file = "HOME/tests/java/Gcd.java"
-line = 96
-begin = 44
-end = 45
-
-[K_24]
-file = "HOME/tests/java/Gcd.java"
-line = 96
-begin = 37
-end = 38
 
 [K_1]
 file = "HOME/tests/java/Gcd.java"
@@ -434,8 +434,8 @@ end = 36
 [K_25]
 file = "HOME/tests/java/Gcd.java"
 line = 96
-begin = 30
-end = 31
+begin = 51
+end = 52
 
 [K_2]
 file = "HOME/tests/java/Gcd.java"
@@ -445,45 +445,51 @@ end = 57
 
 [K_26]
 file = "HOME/tests/java/Gcd.java"
+line = 96
+begin = 44
+end = 45
+
+[K_3]
+file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 27
 end = 33
 
-[K_3]
-file = "HOME/tests/java/Gcd.java"
-line = 102
-begin = 15
-end = 45
-
 [K_27]
+file = "HOME/tests/java/Gcd.java"
+line = 96
+begin = 37
+end = 38
+
+[K_4]
 file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 17
 end = 23
 
-[K_4]
-file = "HOME/tests/java/Gcd.java"
-line = 101
-begin = 15
-end = 45
-
 [K_28]
+file = "HOME/tests/java/Gcd.java"
+line = 96
+begin = 30
+end = 31
+
+[K_5]
 file = "HOME/tests/java/Gcd.java"
 line = 89
 begin = 17
 end = 33
 
-[K_5]
-file = "HOME/tests/java/Gcd.java"
-line = 99
-begin = 9
-end = 81
-
 [K_6]
 file = "HOME/tests/java/Gcd.java"
-line = 98
-begin = 25
-end = 31
+line = 102
+begin = 15
+end = 45
+
+[K_7]
+file = "HOME/tests/java/Gcd.java"
+line = 101
+begin = 15
+end = 45
 
 [Gcd_gcd]
 name = "Method gcd"
@@ -492,23 +498,17 @@ line = 95
 begin = 15
 end = 18
 
-[K_7]
-file = "HOME/tests/java/Gcd.java"
-line = 98
-begin = 15
-end = 21
-
 [K_8]
 file = "HOME/tests/java/Gcd.java"
-line = 98
-begin = 15
-end = 31
+line = 99
+begin = 9
+end = 81
 
 [K_9]
 file = "HOME/tests/java/Gcd.java"
 line = 98
-begin = 15
-end = 119
+begin = 25
+end = 31
 
 [cons_Gcd]
 name = "Constructor of class Gcd"
@@ -729,7 +729,7 @@ end = -1
 file = "HOME/tests/java/Gcd.jc"
 line = 130
 begin = 18
-end = 2878
+end = 2892
 
 [JC_1]
 file = "HOME/tests/java/Gcd.jc"
@@ -741,7 +741,7 @@ end = 23
 file = "HOME/tests/java/Gcd.jc"
 line = 130
 begin = 18
-end = 2878
+end = 2892
 
 [JC_2]
 file = "HOME/"
@@ -875,13 +875,13 @@ end = -1
 file = "HOME/tests/java/Gcd.jc"
 line = 130
 begin = 18
-end = 2878
+end = 2892
 
 [JC_58]
 file = "HOME/tests/java/Gcd.jc"
 line = 130
 begin = 18
-end = 2878
+end = 2892
 
 [Gcd_gcd_safety]
 name = "Method gcd"
@@ -1011,7 +1011,7 @@ end = 23
 file = "HOME/tests/java/Gcd.jc"
 line = 130
 begin = 18
-end = 2878
+end = 2892
 
 [JC_16]
 file = "HOME/tests/java/Gcd.java"
@@ -1023,7 +1023,7 @@ end = 33
 file = "HOME/tests/java/Gcd.jc"
 line = 130
 begin = 18
-end = 2878
+end = 2892
 
 [JC_17]
 file = "HOME/tests/java/Gcd.java"
@@ -1233,13 +1233,13 @@ end = -1
 file = "HOME/tests/java/Gcd.jc"
 line = 130
 begin = 18
-end = 2878
+end = 2892
 
 [JC_35]
 file = "HOME/tests/java/Gcd.jc"
 line = 130
 begin = 18
-end = 2878
+end = 2892
 
 [JC_36]
 kind = DivByZero
@@ -2006,10 +2006,10 @@ let Gcd_gcd_ensures_bezoutProperty =
   (let return = ref (any_int void) in
   try
    begin
-     (let a_3 = ref (K_25: (1)) in
-     (let b_2 = ref (K_24: (0)) in
-     (let c = ref (K_23: (0)) in
-     (let d_1 = ref (K_22: (1)) in
+     (let a_3 = ref (K_28: (1)) in
+     (let b_2 = ref (K_27: (0)) in
+     (let c = ref (K_26: (0)) in
+     (let d_1 = ref (K_25: (1)) in
      begin
        try
         (loop_4:
@@ -2034,12 +2034,12 @@ let Gcd_gcd_ensures_bezoutProperty =
                                mutable_y_8))))))) } ];
           try
            (let jessie_93 = begin
-                              (if (K_21: ((gt_int_ !mutable_y_8) (0)))
+                              (if (K_24: ((gt_int_ !mutable_y_8) (0)))
                               then
-                               (let jessie_91 = (let r = (K_20:
+                               (let jessie_91 = (let r = (K_23:
                                                          (JC_70:
                                                          ((mod_int !mutable_x_8) !mutable_y_8))) in
-                                                (let q_1 = (K_19:
+                                                (let q_1 = (K_22:
                                                            (JC_71:
                                                            ((div_int !mutable_x_8) !mutable_y_8))) in
                                                 begin
@@ -2047,22 +2047,22 @@ let Gcd_gcd_ensures_bezoutProperty =
                                                   void);
                                                  (let jessie_81 = (mutable_y_8 := r) in
                                                  void);
-                                                 (let ta = (K_18: !a_3) in
-                                                 (let tb = (K_17: !b_2) in
+                                                 (let ta = (K_21: !a_3) in
+                                                 (let tb = (K_20: !b_2) in
                                                  begin
                                                    (let jessie_85 = (a_3 := !c) in
                                                    void);
                                                   (let jessie_87 = (b_2 := !d_1) in
                                                   void);
                                                   (let jessie_89 = (c := 
-                                                                    (K_14:
+                                                                    (K_17:
                                                                     ((sub_int ta) 
-                                                                    (K_13:
+                                                                    (K_16:
                                                                     ((mul_int !c) q_1))))) in
                                                   void);
-                                                  (d_1 := (K_16:
+                                                  (d_1 := (K_19:
                                                           ((sub_int tb) 
-                                                           (K_15:
+                                                           (K_18:
                                                            ((mul_int !d_1) q_1)))));
                                                   !d_1
                                                  end))
@@ -2104,10 +2104,10 @@ let Gcd_gcd_ensures_default =
   (let return = ref (any_int void) in
   try
    begin
-     (let a_3 = ref (K_25: (1)) in
-     (let b_2 = ref (K_24: (0)) in
-     (let c = ref (K_23: (0)) in
-     (let d_1 = ref (K_22: (1)) in
+     (let a_3 = ref (K_28: (1)) in
+     (let b_2 = ref (K_27: (0)) in
+     (let c = ref (K_26: (0)) in
+     (let d_1 = ref (K_25: (1)) in
      begin
        try
         (loop_2:
@@ -2133,12 +2133,12 @@ let Gcd_gcd_ensures_default =
            [ { } unit { true } ];
           try
            (let jessie_47 = begin
-                              (if (K_21: ((gt_int_ !mutable_y_8) (0)))
+                              (if (K_24: ((gt_int_ !mutable_y_8) (0)))
                               then
-                               (let jessie_45 = (let r = (K_20:
+                               (let jessie_45 = (let r = (K_23:
                                                          (JC_48:
                                                          ((mod_int !mutable_x_8) !mutable_y_8))) in
-                                                (let q_1 = (K_19:
+                                                (let q_1 = (K_22:
                                                            (JC_49:
                                                            ((div_int !mutable_x_8) !mutable_y_8))) in
                                                 begin
@@ -2146,22 +2146,22 @@ let Gcd_gcd_ensures_default =
                                                   void);
                                                  (let jessie_35 = (mutable_y_8 := r) in
                                                  void);
-                                                 (let ta = (K_18: !a_3) in
-                                                 (let tb = (K_17: !b_2) in
+                                                 (let ta = (K_21: !a_3) in
+                                                 (let tb = (K_20: !b_2) in
                                                  begin
                                                    (let jessie_39 = (a_3 := !c) in
                                                    void);
                                                   (let jessie_41 = (b_2 := !d_1) in
                                                   void);
                                                   (let jessie_43 = (c := 
-                                                                    (K_14:
+                                                                    (K_17:
                                                                     ((sub_int ta) 
-                                                                    (K_13:
+                                                                    (K_16:
                                                                     ((mul_int !c) q_1))))) in
                                                   void);
-                                                  (d_1 := (K_16:
+                                                  (d_1 := (K_19:
                                                           ((sub_int tb) 
-                                                           (K_15:
+                                                           (K_18:
                                                            ((mul_int !d_1) q_1)))));
                                                   !d_1
                                                  end))
@@ -2200,10 +2200,10 @@ let Gcd_gcd_ensures_resultIsGcd =
   (let return = ref (any_int void) in
   try
    begin
-     (let a_3 = ref (K_25: (1)) in
-     (let b_2 = ref (K_24: (0)) in
-     (let c = ref (K_23: (0)) in
-     (let d_1 = ref (K_22: (1)) in
+     (let a_3 = ref (K_28: (1)) in
+     (let b_2 = ref (K_27: (0)) in
+     (let c = ref (K_26: (0)) in
+     (let d_1 = ref (K_25: (1)) in
      begin
        try
         (loop_3:
@@ -2228,12 +2228,12 @@ let Gcd_gcd_ensures_resultIsGcd =
                                mutable_y_8))))))) } ];
           try
            (let jessie_70 = begin
-                              (if (K_21: ((gt_int_ !mutable_y_8) (0)))
+                              (if (K_24: ((gt_int_ !mutable_y_8) (0)))
                               then
-                               (let jessie_68 = (let r = (K_20:
+                               (let jessie_68 = (let r = (K_23:
                                                          (JC_59:
                                                          ((mod_int !mutable_x_8) !mutable_y_8))) in
-                                                (let q_1 = (K_19:
+                                                (let q_1 = (K_22:
                                                            (JC_60:
                                                            ((div_int !mutable_x_8) !mutable_y_8))) in
                                                 begin
@@ -2241,22 +2241,22 @@ let Gcd_gcd_ensures_resultIsGcd =
                                                   void);
                                                  (let jessie_58 = (mutable_y_8 := r) in
                                                  void);
-                                                 (let ta = (K_18: !a_3) in
-                                                 (let tb = (K_17: !b_2) in
+                                                 (let ta = (K_21: !a_3) in
+                                                 (let tb = (K_20: !b_2) in
                                                  begin
                                                    (let jessie_62 = (a_3 := !c) in
                                                    void);
                                                   (let jessie_64 = (b_2 := !d_1) in
                                                   void);
                                                   (let jessie_66 = (c := 
-                                                                    (K_14:
+                                                                    (K_17:
                                                                     ((sub_int ta) 
-                                                                    (K_13:
+                                                                    (K_16:
                                                                     ((mul_int !c) q_1))))) in
                                                   void);
-                                                  (d_1 := (K_16:
+                                                  (d_1 := (K_19:
                                                           ((sub_int tb) 
-                                                           (K_15:
+                                                           (K_18:
                                                            ((mul_int !d_1) q_1)))));
                                                   !d_1
                                                  end))
@@ -2295,10 +2295,10 @@ let Gcd_gcd_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (let a_3 = ref (K_25: (1)) in
-     (let b_2 = ref (K_24: (0)) in
-     (let c = ref (K_23: (0)) in
-     (let d_1 = ref (K_22: (1)) in
+     (let a_3 = ref (K_28: (1)) in
+     (let b_2 = ref (K_27: (0)) in
+     (let c = ref (K_26: (0)) in
+     (let d_1 = ref (K_25: (1)) in
      begin
        try
         (loop_1:
@@ -2323,12 +2323,12 @@ let Gcd_gcd_safety =
                                mutable_y_8))))))) } ];
           try
            (let jessie_24 = begin
-                              (if (K_21: ((gt_int_ !mutable_y_8) (0)))
+                              (if (K_24: ((gt_int_ !mutable_y_8) (0)))
                               then
-                               (let jessie_22 = (let r = (K_20:
+                               (let jessie_22 = (let r = (K_23:
                                                          (JC_36:
                                                          ((mod_int_ !mutable_x_8) !mutable_y_8))) in
-                                                (let q_1 = (K_19:
+                                                (let q_1 = (K_22:
                                                            (JC_37:
                                                            ((div_int_ !mutable_x_8) !mutable_y_8))) in
                                                 begin
@@ -2336,22 +2336,22 @@ let Gcd_gcd_safety =
                                                   void);
                                                  (let jessie_12 = (mutable_y_8 := r) in
                                                  void);
-                                                 (let ta = (K_18: !a_3) in
-                                                 (let tb = (K_17: !b_2) in
+                                                 (let ta = (K_21: !a_3) in
+                                                 (let tb = (K_20: !b_2) in
                                                  begin
                                                    (let jessie_16 = (a_3 := !c) in
                                                    void);
                                                   (let jessie_18 = (b_2 := !d_1) in
                                                   void);
                                                   (let jessie_20 = (c := 
-                                                                    (K_14:
+                                                                    (K_17:
                                                                     ((sub_int ta) 
-                                                                    (K_13:
+                                                                    (K_16:
                                                                     ((mul_int !c) q_1))))) in
                                                   void);
-                                                  (d_1 := (K_16:
+                                                  (d_1 := (K_19:
                                                           ((sub_int tb) 
-                                                           (K_15:
+                                                           (K_18:
                                                            ((mul_int !d_1) q_1)))));
                                                   !d_1
                                                  end))
@@ -2818,12 +2818,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -2838,15 +2832,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -2962,7 +2960,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -3180,7 +3178,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -3500,13 +3498,13 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-logic Gcd_tag :  -> Object tag_id
+logic Gcd_tag : Object tag_id
 
 axiom Gcd_parenttag_Object: parenttag(Gcd_tag, Object_tag)
 
@@ -3537,11 +3535,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -3601,7 +3599,7 @@ axiom gcd_property_as_axiom:
 
 axiom gcd_zero_as_axiom: (forall a_0:int. isGcd(a_0, 0, a_0))
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -4373,10 +4371,6 @@ why -simplify [...] why/Gcd.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -5812,12 +5806,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -5832,15 +5820,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -5956,7 +5948,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -6174,7 +6166,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -6494,13 +6486,13 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-logic Gcd_tag :  -> Object tag_id
+logic Gcd_tag : Object tag_id
 
 axiom Gcd_parenttag_Object: parenttag(Gcd_tag, Object_tag)
 
@@ -6531,11 +6523,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -6633,7 +6625,7 @@ goal gcd_zero:
 
 axiom gcd_zero_as_axiom: (forall a_0:int. isGcd(a_0, 0, a_0))
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 

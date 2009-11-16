@@ -201,27 +201,27 @@ exception Throwable of Throwable[0..]
 exception Exception of Exception[0..]
 
 unit Sort_swap(Sort[0] this_2, intM[0..] t, integer i_2, integer j_1)
-  requires (K_14 : ((K_13 : ((K_12 : Non_null_intM(t)) &&
-                              (K_11 : ((K_10 : (0 <= i_2)) &&
-                                        (K_9 : (i_2 < (\offset_max(t) + 1))))))) &&
-                     (K_8 : ((K_7 : (0 <= j_1)) &&
-                              (K_6 : (j_1 < (\offset_max(t) + 1)))))));
+  requires (K_10 : ((K_9 : ((K_8 : Non_null_intM(t)) &&
+                             (K_7 : ((K_6 : (0 <= i_2)) &&
+                                      (K_5 : (i_2 < (\offset_max(t) + 1))))))) &&
+                     (K_4 : ((K_3 : (0 <= j_1)) &&
+                              (K_2 : (j_1 < (\offset_max(t) + 1)))))));
 behavior default:
   assigns (t + [i_2..i_2]).intP,
   (t + [j_1..j_1]).intP;
   ensures (K_1 : Swap{Old, Here}(t, i_2, j_1));
 {  
    {  
-      (var integer tmp = (K_5 : (t + i_2).intP));
+      (var integer tmp = (K_14 : (t + i_2).intP));
       
-      {  (K_3 : ((t + i_2).intP = (K_2 : (t + j_1).intP)));
-         (K_4 : ((t + j_1).intP = tmp))
+      {  (K_12 : ((t + i_2).intP = (K_11 : (t + j_1).intP)));
+         (K_13 : ((t + j_1).intP = tmp))
       }
    }
 }
 
 unit Sort_min_sort(Sort[0] this_0, intM[0..] t_0)
-  requires (K_49 : Non_null_intM(t_0));
+  requires (K_18 : Non_null_intM(t_0));
 behavior default:
   ensures (K_17 : ((K_16 : Sorted{Here}(t_0, 0, ((\offset_max(t_0) + 1) - 1))) &&
                     (K_15 : Permut{Old,
@@ -241,10 +241,10 @@ behavior default:
                
                loop 
                behavior default:
-                 invariant (K_24 : ((K_23 : ((K_22 : ((K_21 : (0 <= i_3)) &&
-                                                       (K_20 : Sorted{Here}(
+                 invariant (K_25 : ((K_24 : ((K_23 : ((K_22 : (0 <= i_3)) &&
+                                                       (K_21 : Sorted{Here}(
                                                        t_0, 0, i_3)))) &&
-                                              (K_19 : (\forall integer k1;
+                                              (K_20 : (\forall integer k1;
                                                         (\forall integer k2;
                                                           (((((0 <= k1) &&
                                                                (k1 < i_3)) &&
@@ -254,53 +254,53 @@ behavior default:
                                                                  1))) ==>
                                                             ((t_0 + k1).intP <=
                                                               (t_0 + k2).intP))))))) &&
-                                     (K_18 : Permut{Pre,
+                                     (K_19 : Permut{Pre,
                                      Here}(t_0, 0,
                                            ((\offset_max(t_0) + 1) - 1)))));
                
-               for ((i_3 = 0) ; (K_48 : (i_3 <
-                                          (K_47 : ((K_46 : java_array_length_intM(
+               for ((i_3 = 0) ; (K_49 : (i_3 <
+                                          (K_48 : ((K_47 : java_array_length_intM(
                                                    t_0)) -
-                                                    1)))) ; (K_45 : (i_3 ++)))
+                                                    1)))) ; (K_46 : (i_3 ++)))
                {  
-                  {  (mv = (K_25 : (t_0 + i_3).intP));
+                  {  (mv = (K_26 : (t_0 + i_3).intP));
                      (mi = i_3);
                      
                      loop 
                      behavior default:
-                       invariant (K_36 : ((K_35 : ((K_34 : ((K_33 : ((K_32 : 
+                       invariant (K_37 : ((K_36 : ((K_35 : ((K_34 : ((K_33 : 
                                                                     (i_3 <
                                                                     j_2)) &&
-                                                                    (K_31 : 
-                                                                    ((K_30 : 
+                                                                    (K_32 : 
+                                                                    ((K_31 : 
                                                                     (i_3 <=
                                                                     mi)) &&
-                                                                    (K_29 : 
+                                                                    (K_30 : 
                                                                     (mi <
                                                                     (\offset_max(t_0) +
                                                                     1))))))) &&
-                                                             (K_28 : 
+                                                             (K_29 : 
                                                              (mv ==
                                                                (t_0 + mi).intP)))) &&
-                                                    (K_27 : (\forall integer k_0;
+                                                    (K_28 : (\forall integer k_0;
                                                               (((i_3 <= k_0) &&
                                                                  (k_0 < j_2)) ==>
                                                                 ((t_0 + k_0).intP >=
                                                                   mv)))))) &&
-                                           (K_26 : Permut{Pre,
+                                           (K_27 : Permut{Pre,
                                            Here}(t_0, 0,
                                                  ((\offset_max(t_0) + 1) - 1)))));
                      
-                     for ((j_2 = (K_43 : (i_3 + 1))) ; (K_42 : (j_2 <
-                                                                 (K_41 : java_array_length_intM(
+                     for ((j_2 = (K_44 : (i_3 + 1))) ; (K_43 : (j_2 <
+                                                                 (K_42 : java_array_length_intM(
                                                                  t_0)))) ; 
-                     (K_40 : (j_2 ++)))
-                     {  (if (K_39 : ((K_38 : (t_0 + j_2).intP) < mv)) then 
+                     (K_41 : (j_2 ++)))
+                     {  (if (K_40 : ((K_39 : (t_0 + j_2).intP) < mv)) then 
                         {  (mi = j_2);
-                           (mv = (K_37 : (t_0 + j_2).intP))
+                           (mv = (K_38 : (t_0 + j_2).intP))
                         } else ())
                      };
-                     (K_44 : Sort_swap(this_0, t_0, i_3, mi))
+                     (K_45 : Sort_swap(this_0, t_0, i_3, mi))
                   }
                }
             }
@@ -355,33 +355,33 @@ End:
 ========== file tests/java/Sort2.jloc ==========
 [K_10]
 file = "HOME/tests/java/Sort2.java"
-line = 35
-begin = 11
-end = 17
-
-[K_11]
-file = "HOME/tests/java/Sort2.java"
-line = 35
-begin = 11
-end = 28
-
-[K_12]
-file = "HOME/tests/java/Sort2.java"
-line = 34
-begin = 17
-end = 26
-
-[K_13]
-file = "HOME/tests/java/Sort2.java"
-line = 34
-begin = 17
-end = 59
-
-[K_14]
-file = "HOME/tests/java/Sort2.java"
 line = 34
 begin = 17
 end = 80
+
+[K_11]
+file = "HOME/tests/java/Sort2.java"
+line = 41
+begin = 8
+end = 12
+
+[K_12]
+file = "HOME/tests/java/Sort2.java"
+line = 41
+begin = 1
+end = 12
+
+[K_13]
+file = "HOME/tests/java/Sort2.java"
+line = 42
+begin = 1
+end = 11
+
+[K_14]
+file = "HOME/tests/java/Sort2.java"
+line = 40
+begin = 11
+end = 15
 
 [K_15]
 file = "HOME/tests/java/Sort2.java"
@@ -403,45 +403,45 @@ end = 74
 
 [K_18]
 file = "HOME/tests/java/Sort2.java"
+line = 45
+begin = 17
+end = 26
+
+[K_19]
+file = "HOME/tests/java/Sort2.java"
 line = 54
 begin = 9
 end = 41
 
-[K_19]
+[K_20]
 file = "HOME/tests/java/Sort2.java"
 line = 52
 begin = 8
 end = 90
 
-[K_20]
+[K_21]
 file = "HOME/tests/java/Sort2.java"
 line = 51
 begin = 30
 end = 43
 
-[K_21]
+[K_22]
 file = "HOME/tests/java/Sort2.java"
 line = 51
 begin = 20
 end = 26
 
-[K_22]
+[K_23]
 file = "HOME/tests/java/Sort2.java"
 line = 51
 begin = 20
 end = 43
 
-[K_23]
-file = "HOME/tests/java/Sort2.java"
-line = 51
-begin = 20
-end = 139
-
 [K_24]
 file = "HOME/tests/java/Sort2.java"
 line = 51
 begin = 20
-end = 184
+end = 139
 
 [K_1]
 file = "HOME/tests/java/Sort2.java"
@@ -451,27 +451,27 @@ end = 37
 
 [K_25]
 file = "HOME/tests/java/Sort2.java"
+line = 51
+begin = 20
+end = 184
+
+[K_2]
+file = "HOME/tests/java/Sort2.java"
+line = 35
+begin = 37
+end = 49
+
+[K_26]
+file = "HOME/tests/java/Sort2.java"
 line = 58
 begin = 10
 end = 14
 
-[K_2]
-file = "HOME/tests/java/Sort2.java"
-line = 41
-begin = 8
-end = 12
-
-[K_26]
-file = "HOME/tests/java/Sort2.java"
-line = 62
-begin = 9
-end = 41
-
 [K_3]
 file = "HOME/tests/java/Sort2.java"
-line = 41
-begin = 1
-end = 12
+line = 35
+begin = 32
+end = 38
 
 [Object_equals]
 name = "Method equals"
@@ -482,57 +482,57 @@ end = 25
 
 [K_27]
 file = "HOME/tests/java/Sort2.java"
+line = 62
+begin = 9
+end = 41
+
+[K_4]
+file = "HOME/tests/java/Sort2.java"
+line = 35
+begin = 32
+end = 49
+
+[K_28]
+file = "HOME/tests/java/Sort2.java"
 line = 61
 begin = 12
 end = 56
 
-[K_4]
+[K_5]
 file = "HOME/tests/java/Sort2.java"
-line = 42
-begin = 1
-end = 11
+line = 35
+begin = 16
+end = 28
 
-[K_28]
+[K_29]
 file = "HOME/tests/java/Sort2.java"
 line = 60
 begin = 9
 end = 20
 
-[K_5]
-file = "HOME/tests/java/Sort2.java"
-line = 40
-begin = 11
-end = 15
-
-[K_29]
-file = "HOME/tests/java/Sort2.java"
-line = 59
-begin = 38
-end = 51
-
 [K_6]
 file = "HOME/tests/java/Sort2.java"
 line = 35
-begin = 37
-end = 49
+begin = 11
+end = 17
 
 [K_7]
 file = "HOME/tests/java/Sort2.java"
 line = 35
-begin = 32
-end = 38
+begin = 11
+end = 28
 
 [K_8]
 file = "HOME/tests/java/Sort2.java"
-line = 35
-begin = 32
-end = 49
+line = 34
+begin = 17
+end = 26
 
 [K_9]
 file = "HOME/tests/java/Sort2.java"
-line = 35
-begin = 16
-end = 28
+line = 34
+begin = 17
+end = 59
 
 [Object_notify]
 name = "Method notify"
@@ -551,56 +551,56 @@ end = -1
 [K_30]
 file = "HOME/tests/java/Sort2.java"
 line = 59
-begin = 33
-end = 40
+begin = 38
+end = 51
 
 [K_31]
 file = "HOME/tests/java/Sort2.java"
 line = 59
 begin = 33
-end = 51
+end = 40
 
 [K_32]
 file = "HOME/tests/java/Sort2.java"
 line = 59
-begin = 24
-end = 29
+begin = 33
+end = 51
 
 [K_33]
 file = "HOME/tests/java/Sort2.java"
 line = 59
 begin = 24
-end = 51
+end = 29
 
 [K_34]
 file = "HOME/tests/java/Sort2.java"
 line = 59
 begin = 24
-end = 75
+end = 51
 
 [K_35]
 file = "HOME/tests/java/Sort2.java"
 line = 59
 begin = 24
-end = 136
+end = 75
 
 [K_36]
 file = "HOME/tests/java/Sort2.java"
 line = 59
 begin = 24
-end = 181
+end = 136
 
 [K_37]
+file = "HOME/tests/java/Sort2.java"
+line = 59
+begin = 24
+end = 181
+
+[K_38]
 file = "HOME/tests/java/Sort2.java"
 line = 66
 begin = 20
 end = 24
-
-[K_38]
-file = "HOME/tests/java/Sort2.java"
-line = 65
-begin = 6
-end = 10
 
 [Object_wait_long_int]
 name = "Method wait"
@@ -613,7 +613,7 @@ end = 26
 file = "HOME/tests/java/Sort2.java"
 line = 65
 begin = 6
-end = 15
+end = 10
 
 [Object_wait_long]
 name = "Method wait"
@@ -638,33 +638,33 @@ end = 38
 
 [K_40]
 file = "HOME/tests/java/Sort2.java"
+line = 65
+begin = 6
+end = 15
+
+[K_41]
+file = "HOME/tests/java/Sort2.java"
 line = 64
 begin = 31
 end = 34
 
-[K_41]
+[K_42]
 file = "HOME/tests/java/Sort2.java"
 line = 64
 begin = 21
 end = 29
 
-[K_42]
+[K_43]
 file = "HOME/tests/java/Sort2.java"
 line = 64
 begin = 17
 end = 29
 
-[K_43]
+[K_44]
 file = "HOME/tests/java/Sort2.java"
 line = 64
 begin = 12
 end = 15
-
-[K_44]
-file = "HOME/tests/java/Sort2.java"
-line = 69
-begin = 5
-end = 17
 
 [Object_toString]
 name = "Method toString"
@@ -675,33 +675,33 @@ end = 26
 
 [K_45]
 file = "HOME/tests/java/Sort2.java"
-line = 56
-begin = 25
-end = 28
+line = 69
+begin = 5
+end = 17
 
 [K_46]
 file = "HOME/tests/java/Sort2.java"
 line = 56
-begin = 13
-end = 21
+begin = 25
+end = 28
 
 [K_47]
 file = "HOME/tests/java/Sort2.java"
 line = 56
 begin = 13
-end = 23
+end = 21
 
 [K_48]
 file = "HOME/tests/java/Sort2.java"
 line = 56
-begin = 11
+begin = 13
 end = 23
 
 [K_49]
 file = "HOME/tests/java/Sort2.java"
-line = 45
-begin = 17
-end = 26
+line = 56
+begin = 11
+end = 23
 
 [Sort_swap]
 name = "Method swap"
@@ -1115,15 +1115,15 @@ end = 12
 kind = PointerDeref
 file = "HOME/tests/java/Sort2.jc"
 line = 123
-begin = 17
-end = 56
+begin = 18
+end = 58
 
 [JC_58]
 kind = PointerDeref
 file = "HOME/tests/java/Sort2.jc"
 line = 124
-begin = 17
-end = 37
+begin = 18
+end = 38
 
 [JC_59]
 file = "HOME/tests/java/Sort2.java"
@@ -3266,20 +3266,20 @@ let Sort_min_sort_ensures_default =
           [ { } unit { true } ];
          try
           (let jessie_88 = begin
-                             (if (K_48:
-                                 ((lt_int_ !i_3) (K_47:
-                                                 ((sub_int (K_46:
+                             (if (K_49:
+                                 ((lt_int_ !i_3) (K_48:
+                                                 ((sub_int (K_47:
                                                            (let jessie_65 = t_0 in
                                                            (JC_103:
                                                            (java_array_length_intM jessie_65))))) (1)))))
                              then
                               begin
-                                (let jessie_67 = (mv := (K_25:
+                                (let jessie_67 = (mv := (K_26:
                                                         ((safe_acc_ !intM_intP) 
                                                          ((shift t_0) !i_3)))) in
                                 void);
                                (let jessie_69 = (mi := !i_3) in void);
-                               (let jessie_71 = (j_2 := (K_43:
+                               (let jessie_71 = (j_2 := (K_44:
                                                         ((add_int !i_3) (1)))) in
                                void);
                                try
@@ -3317,16 +3317,16 @@ let Sort_min_sort_ensures_default =
                                    [ { } unit { true } ];
                                   try
                                    (let jessie_78 = begin
-                                                      (if (K_42:
+                                                      (if (K_43:
                                                           ((lt_int_ !j_2) 
-                                                           (K_41:
+                                                           (K_42:
                                                            (let jessie_72 = t_0 in
                                                            (JC_114:
                                                            (java_array_length_intM jessie_72))))))
                                                       then
-                                                       (if (K_39:
+                                                       (if (K_40:
                                                            ((lt_int_ 
-                                                             (K_38:
+                                                             (K_39:
                                                              ((safe_acc_ !intM_intP) 
                                                               ((shift t_0) !j_2)))) !mv))
                                                        then
@@ -3335,7 +3335,7 @@ let Sort_min_sort_ensures_default =
                                                           (let jessie_74 = 
                                                           (mi := !j_2) in
                                                           void);
-                                                         (mv := (K_37:
+                                                         (mv := (K_38:
                                                                 ((safe_acc_ !intM_intP) 
                                                                  ((shift t_0) !j_2))));
                                                          !mv
@@ -3355,7 +3355,7 @@ let Sort_min_sort_ensures_default =
                                    void)
                                    with
                                    Loop_continue_exc jessie_4 ->
-                                   (let jessie_82 = (K_40:
+                                   (let jessie_82 = (K_41:
                                                     (let jessie_2 = !j_2 in
                                                     begin
                                                       (let jessie_81 = 
@@ -3369,7 +3369,7 @@ let Sort_min_sort_ensures_default =
                                 with
                                 Loop_exit_exc jessie_3 ->
                                 void end;
-                               (K_44:
+                               (K_45:
                                (let jessie_86 = this_0 in
                                (let jessie_85 = t_0 in
                                (let jessie_84 = !i_3 in
@@ -3385,7 +3385,7 @@ let Sort_min_sort_ensures_default =
           void)
           with
           Loop_continue_exc jessie_6 ->
-          (let jessie_92 = (K_45:
+          (let jessie_92 = (K_46:
                            (let jessie_1 = !i_3 in
                            begin
                              (let jessie_91 = (i_3 := ((add_int jessie_1) (1))) in
@@ -3456,20 +3456,20 @@ let Sort_min_sort_safety =
                           (1)), intM_intP, intM_intP@init)))))) } ];
          try
           (let jessie_58 = begin
-                             (if (K_48:
-                                 ((lt_int_ !i_3) (K_47:
-                                                 ((sub_int (K_46:
+                             (if (K_49:
+                                 ((lt_int_ !i_3) (K_48:
+                                                 ((sub_int (K_47:
                                                            (let jessie_35 = t_0 in
                                                            (JC_79:
                                                            (java_array_length_intM_requires jessie_35))))) (1)))))
                              then
                               begin
-                                (let jessie_37 = (mv := (K_25:
+                                (let jessie_37 = (mv := (K_26:
                                                         (JC_80:
                                                         ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !i_3)))) in
                                 void);
                                (let jessie_39 = (mi := !i_3) in void);
-                               (let jessie_41 = (j_2 := (K_43:
+                               (let jessie_41 = (j_2 := (K_44:
                                                         ((add_int !i_3) (1)))) in
                                void);
                                try
@@ -3509,16 +3509,16 @@ let Sort_min_sort_safety =
                                                            intM_intP@init)))))))) } ];
                                   try
                                    (let jessie_48 = begin
-                                                      (if (K_42:
+                                                      (if (K_43:
                                                           ((lt_int_ !j_2) 
-                                                           (K_41:
+                                                           (K_42:
                                                            (let jessie_42 = t_0 in
                                                            (JC_91:
                                                            (java_array_length_intM_requires jessie_42))))))
                                                       then
-                                                       (if (K_39:
+                                                       (if (K_40:
                                                            ((lt_int_ 
-                                                             (K_38:
+                                                             (K_39:
                                                              (JC_92:
                                                              ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2)))) !mv))
                                                        then
@@ -3527,7 +3527,7 @@ let Sort_min_sort_safety =
                                                           (let jessie_44 = 
                                                           (mi := !j_2) in
                                                           void);
-                                                         (mv := (K_37:
+                                                         (mv := (K_38:
                                                                 (JC_93:
                                                                 ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2))));
                                                          !mv
@@ -3547,7 +3547,7 @@ let Sort_min_sort_safety =
                                    void)
                                    with
                                    Loop_continue_exc jessie_4 ->
-                                   (let jessie_52 = (K_40:
+                                   (let jessie_52 = (K_41:
                                                     (let jessie_2 = !j_2 in
                                                     begin
                                                       (let jessie_51 = 
@@ -3561,7 +3561,7 @@ let Sort_min_sort_safety =
                                 with
                                 Loop_exit_exc jessie_3 ->
                                 void end;
-                               (K_44:
+                               (K_45:
                                (let jessie_56 = this_0 in
                                (let jessie_55 = t_0 in
                                (let jessie_54 = !i_3 in
@@ -3577,7 +3577,7 @@ let Sort_min_sort_safety =
           void)
           with
           Loop_continue_exc jessie_6 ->
-          (let jessie_62 = (K_45:
+          (let jessie_62 = (K_46:
                            (let jessie_1 = !i_3 in
                            begin
                              (let jessie_61 = (i_3 := ((add_int jessie_1) (1))) in
@@ -3615,17 +3615,17 @@ let Sort_swap_ensures_default =
   (init:
   try
    begin
-     (let jessie_32 = (let tmp = (K_5:
+     (let jessie_32 = (let tmp = (K_14:
                                  ((safe_acc_ !intM_intP) ((shift t) i_2))) in
-                      (K_3:
+                      (K_12:
                       begin
-                        (let jessie_26 = (let jessie_22 = (K_2:
+                        (let jessie_26 = (let jessie_22 = (K_11:
                                                           ((safe_acc_ !intM_intP) 
                                                            ((shift t) j_1))) in
                                          (let jessie_25 = ((shift t) i_2) in
                                          (((safe_upd_ intM_intP) jessie_25) jessie_22))) in
                         void);
-                       (K_4:
+                       (K_13:
                        (let jessie_28 = tmp in
                        (let jessie_31 = ((shift t) j_1) in
                        begin
@@ -3663,12 +3663,12 @@ let Sort_swap_safety =
   (init:
   try
    begin
-     (let jessie_19 = (let tmp = (K_5:
+     (let jessie_19 = (let tmp = (K_14:
                                  (JC_55:
                                  ((((offset_acc_ !Object_alloc_table) !intM_intP) t) i_2))) in
-                      (K_3:
+                      (K_12:
                       begin
-                        (let jessie_13 = (let jessie_9 = (K_2:
+                        (let jessie_13 = (let jessie_9 = (K_11:
                                                          (JC_56:
                                                          ((((offset_acc_ !Object_alloc_table) !intM_intP) t) j_1))) in
                                          (let jessie_10 = t in
@@ -3677,7 +3677,7 @@ let Sort_swap_safety =
                                          (JC_57:
                                          (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_10) jessie_11) jessie_9)))))) in
                         void);
-                       (K_4:
+                       (K_13:
                        (let jessie_15 = tmp in
                        (let jessie_16 = t in
                        (let jessie_17 = j_1 in
@@ -4206,12 +4206,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -4226,15 +4220,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -4350,7 +4348,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -4568,7 +4566,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -4888,9 +4886,9 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -4981,7 +4979,7 @@ axiom Permut_trans:
                 Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L2)) ->
                Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L1))))))))
 
-logic Sort_tag :  -> Object tag_id
+logic Sort_tag : Object tag_id
 
 axiom Sort_parenttag_Object: parenttag(Sort_tag, Object_tag)
 
@@ -4991,11 +4989,11 @@ predicate Sorted(a: Object pointer, l: int, h: int, intM_intP_at_L: (Object,
     (((l <= i) and (i < h)) -> (select(intM_intP_at_L, shift(a,
      i)) <= select(intM_intP_at_L, shift(a, (i + 1))))))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -5010,11 +5008,11 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -8136,10 +8134,6 @@ why -simplify [...] why/Sort2.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -11663,12 +11657,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -11683,15 +11671,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -11807,7 +11799,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -12025,7 +12017,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -12345,9 +12337,9 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -12438,7 +12430,7 @@ axiom Permut_trans:
                 Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L2)) ->
                Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L1))))))))
 
-logic Sort_tag :  -> Object tag_id
+logic Sort_tag : Object tag_id
 
 axiom Sort_parenttag_Object: parenttag(Sort_tag, Object_tag)
 
@@ -12448,11 +12440,11 @@ predicate Sorted(a: Object pointer, l: int, h: int, intM_intP_at_L: (Object,
     (((l <= i) and (i < h)) -> (select(intM_intP_at_L, shift(a,
      i)) <= select(intM_intP_at_L, shift(a, (i + 1))))))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -12467,11 +12459,11 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -15373,10 +15365,10 @@ goal Sort_swap_safety_po_4:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Sort2_why.why             : ........................##.......#.#.....#.#.... (42/0/0/6/0)
+why/Sort2_why.why             : ........................#........#.#.....#.#.... (43/0/0/5/0)
 total   :  48
-valid   :  42 ( 88%)
+valid   :  43 ( 90%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   6 ( 12%)
+timeout :   5 ( 10%)
 failure :   0 (  0%)

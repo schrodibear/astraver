@@ -195,69 +195,71 @@ exception Throwable of Throwable[0..]
 exception Exception of Exception[0..]
 
 intM[0..] Muller_m(intM[0..] t_4)
-  requires (K_39 : Non_null_intM(t_4));
+  requires (K_1 : Non_null_intM(t_4));
 {  
    {  
-      (var integer count = (K_38 : 0));
+      (var integer count = (K_39 : 0));
       
       {  
          {  
             {  
-               (var integer i_4 = (K_1 : 0));
+               (var integer i_4 = (K_2 : 0));
                
                loop 
                behavior default:
-                 invariant (K_10 : ((K_9 : ((K_8 : ((K_7 : ((K_6 : (0 <= i_4)) &&
-                                                             (K_5 : (i_4 <=
-                                                                    (\offset_max(t_4) +
-                                                                    1))))) &&
-                                                     (K_4 : (0 <= count)))) &&
-                                             (K_3 : (count <= i_4)))) &&
-                                     (K_2 : (count ==
+                 invariant (K_11 : ((K_10 : ((K_9 : ((K_8 : ((K_7 : (0 <=
+                                                                    i_4)) &&
+                                                              (K_6 : 
+                                                              (i_4 <=
+                                                                (\offset_max(t_4) +
+                                                                  1))))) &&
+                                                      (K_5 : (0 <= count)))) &&
+                                              (K_4 : (count <= i_4)))) &&
+                                     (K_3 : (count ==
                                               num_of_pos{Here}(0, (i_4 - 1),
                                                                t_4)))));
                
-               variant (K_11 : ((\offset_max(t_4) + 1) - i_4));
-               for ( ; (K_17 : (i_4 < (K_16 : java_array_length_intM(t_4)))) ; 
-               (K_15 : (i_4 ++)))
-               {  (if (K_14 : ((K_13 : (t_4 + i_4).intP) > 0)) then (K_12 : 
+               variant (K_12 : ((\offset_max(t_4) + 1) - i_4));
+               for ( ; (K_18 : (i_4 < (K_17 : java_array_length_intM(t_4)))) ; 
+               (K_16 : (i_4 ++)))
+               {  (if (K_15 : ((K_14 : (t_4 + i_4).intP) > 0)) then (K_13 : 
                                                                     (count ++)) else ())
                }
             }
          };
          
          {  
-            (var intM[0..] u = (K_37 : (new intM[count])));
+            (var intM[0..] u = (K_38 : (new intM[count])));
             
             {  (count = 0);
                
                {  
                   {  
-                     (var integer i_5 = (K_18 : 0));
+                     (var integer i_5 = (K_19 : 0));
                      
                      loop 
                      behavior default:
-                       invariant (K_27 : ((K_26 : ((K_25 : ((K_24 : ((K_23 : 
+                       invariant (K_28 : ((K_27 : ((K_26 : ((K_25 : ((K_24 : 
                                                                     (0 <=
                                                                     i_5)) &&
-                                                                    (K_22 : 
+                                                                    (K_23 : 
                                                                     (i_5 <=
                                                                     (\offset_max(t_4) +
                                                                     1))))) &&
-                                                             (K_21 : 
+                                                             (K_22 : 
                                                              (0 <=
                                                                count)))) &&
-                                                    (K_20 : (count <= i_5)))) &&
-                                           (K_19 : (count ==
+                                                    (K_21 : (count <= i_5)))) &&
+                                           (K_20 : (count ==
                                                      num_of_pos{Here}(
                                                      0, (i_5 - 1), t_4)))));
                      
-                     variant (K_28 : ((\offset_max(t_4) + 1) - i_5));
-                     for ( ; (K_36 : (i_5 <
-                                       (K_35 : java_array_length_intM(t_4)))) ; 
-                     (K_34 : (i_5 ++)))
-                     {  (if (K_33 : ((K_32 : (t_4 + i_5).intP) > 0)) then 
-                        (K_31 : ((u + (K_29 : (count ++))).intP = (K_30 : 
+                     variant (K_29 : ((\offset_max(t_4) + 1) - i_5));
+                     for ( ; (K_37 : (i_5 <
+                                       (K_36 : java_array_length_intM(t_4)))) ; 
+                     (K_35 : (i_5 ++)))
+                     {  (if (K_34 : ((K_33 : (t_4 + i_5).intP) > 0)) then 
+                        (K_32 : ((u + (K_30 : (count ++))).intP = (K_31 : 
                                                                   (t_4 +
                                                                     i_5).intP))) else ())
                      }
@@ -284,45 +286,51 @@ End:
 file = "HOME/tests/java/Muller.java"
 line = 63
 begin = 8
-end = 109
+end = 68
 
 [K_11]
+file = "HOME/tests/java/Muller.java"
+line = 63
+begin = 8
+end = 109
+
+[K_12]
 file = "HOME/tests/java/Muller.java"
 line = 66
 begin = 18
 end = 30
 
-[K_12]
+[K_13]
 file = "HOME/tests/java/Muller.java"
 line = 68
 begin = 49
 end = 56
 
-[K_13]
+[K_14]
 file = "HOME/tests/java/Muller.java"
 line = 68
 begin = 39
 end = 43
 
-[K_14]
+[K_15]
 file = "HOME/tests/java/Muller.java"
 line = 68
 begin = 39
 end = 47
 
-[K_15]
+[K_16]
 file = "HOME/tests/java/Muller.java"
 line = 68
 begin = 30
 end = 33
 
-[K_16]
+[K_17]
 file = "HOME/tests/java/Muller.java"
 line = 68
 begin = 20
 end = 28
 
-[K_17]
+[K_18]
 file = "HOME/tests/java/Muller.java"
 line = 68
 begin = 16
@@ -335,155 +343,149 @@ line = 59
 begin = 24
 end = 25
 
-[K_18]
+[K_19]
 file = "HOME/tests/java/Muller.java"
 line = 79
 begin = 12
 end = 13
 
-[K_19]
+[K_20]
 file = "HOME/tests/java/Muller.java"
 line = 76
 begin = 8
 end = 36
 
-[K_20]
+[K_21]
 file = "HOME/tests/java/Muller.java"
 line = 75
 begin = 22
 end = 32
 
-[K_21]
+[K_22]
 file = "HOME/tests/java/Muller.java"
 line = 75
 begin = 8
 end = 18
 
-[K_22]
+[K_23]
 file = "HOME/tests/java/Muller.java"
 line = 74
 begin = 18
 end = 31
-
-[K_23]
-file = "HOME/tests/java/Muller.java"
-line = 74
-begin = 8
-end = 14
 
 [K_24]
 file = "HOME/tests/java/Muller.java"
 line = 74
 begin = 8
-end = 31
+end = 14
 
 [K_1]
 file = "HOME/tests/java/Muller.java"
-line = 68
-begin = 12
-end = 13
+line = 57
+begin = 17
+end = 24
 
 [K_25]
 file = "HOME/tests/java/Muller.java"
 line = 74
 begin = 8
-end = 54
+end = 31
 
 [K_2]
 file = "HOME/tests/java/Muller.java"
-line = 65
-begin = 8
-end = 36
+line = 68
+begin = 12
+end = 13
 
 [K_26]
 file = "HOME/tests/java/Muller.java"
 line = 74
 begin = 8
-end = 68
+end = 54
 
 [K_3]
 file = "HOME/tests/java/Muller.java"
-line = 64
-begin = 22
-end = 32
+line = 65
+begin = 8
+end = 36
 
 [K_27]
 file = "HOME/tests/java/Muller.java"
 line = 74
 begin = 8
-end = 109
+end = 68
 
 [K_4]
+file = "HOME/tests/java/Muller.java"
+line = 64
+begin = 22
+end = 32
+
+[K_28]
+file = "HOME/tests/java/Muller.java"
+line = 74
+begin = 8
+end = 109
+
+[K_5]
 file = "HOME/tests/java/Muller.java"
 line = 64
 begin = 8
 end = 18
 
-[K_28]
+[K_29]
 file = "HOME/tests/java/Muller.java"
 line = 77
 begin = 18
 end = 30
 
-[K_5]
+[K_6]
 file = "HOME/tests/java/Muller.java"
 line = 63
 begin = 18
 end = 31
 
-[K_29]
-file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 21
-end = 28
-
-[K_6]
+[K_7]
 file = "HOME/tests/java/Muller.java"
 line = 63
 begin = 8
 end = 14
 
-[K_7]
+[K_8]
 file = "HOME/tests/java/Muller.java"
 line = 63
 begin = 8
 end = 31
 
-[K_8]
+[K_9]
 file = "HOME/tests/java/Muller.java"
 line = 63
 begin = 8
 end = 54
 
-[K_9]
-file = "HOME/tests/java/Muller.java"
-line = 63
-begin = 8
-end = 68
-
 [K_30]
+file = "HOME/tests/java/Muller.java"
+line = 80
+begin = 21
+end = 28
+
+[K_31]
 file = "HOME/tests/java/Muller.java"
 line = 80
 begin = 32
 end = 36
 
-[K_31]
+[K_32]
 file = "HOME/tests/java/Muller.java"
 line = 80
 begin = 19
 end = 36
 
-[K_32]
-file = "HOME/tests/java/Muller.java"
-line = 80
-begin = 9
-end = 13
-
 [K_33]
 file = "HOME/tests/java/Muller.java"
 line = 80
 begin = 9
-end = 17
+end = 13
 
 [cons_Muller]
 name = "Constructor of class Muller"
@@ -494,39 +496,39 @@ end = -1
 
 [K_34]
 file = "HOME/tests/java/Muller.java"
+line = 80
+begin = 9
+end = 17
+
+[K_35]
+file = "HOME/tests/java/Muller.java"
 line = 79
 begin = 30
 end = 33
 
-[K_35]
+[K_36]
 file = "HOME/tests/java/Muller.java"
 line = 79
 begin = 20
 end = 28
 
-[K_36]
+[K_37]
 file = "HOME/tests/java/Muller.java"
 line = 79
 begin = 16
 end = 28
 
-[K_37]
+[K_38]
 file = "HOME/tests/java/Muller.java"
 line = 70
 begin = 11
 end = 25
 
-[K_38]
+[K_39]
 file = "HOME/tests/java/Muller.java"
 line = 60
 begin = 13
 end = 14
-
-[K_39]
-file = "HOME/tests/java/Muller.java"
-line = 57
-begin = 17
-end = 24
 
 ========== jessie execution ==========
 Generating Why function Muller_m
@@ -774,7 +776,7 @@ end = -1
 file = "HOME/tests/java/Muller.jc"
 line = 109
 begin = 15
-end = 1110
+end = 1239
 
 [JC_3]
 file = "HOME/tests/java/Muller.jc"
@@ -786,7 +788,7 @@ end = 21
 file = "HOME/tests/java/Muller.jc"
 line = 109
 begin = 15
-end = 1110
+end = 1239
 
 [JC_4]
 file = "HOME/"
@@ -919,13 +921,13 @@ end = -1
 
 [JC_61]
 file = "HOME/tests/java/Muller.jc"
-line = 139
+line = 141
 begin = 21
 end = 1709
 
 [JC_62]
 file = "HOME/tests/java/Muller.jc"
-line = 139
+line = 141
 begin = 21
 end = 1709
 
@@ -1087,7 +1089,7 @@ end = 18
 file = "HOME/tests/java/Muller.jc"
 line = 109
 begin = 15
-end = 1110
+end = 1239
 
 [JC_23]
 file = "HOME/tests/java/Muller.jc"
@@ -1099,7 +1101,7 @@ end = 23
 file = "HOME/tests/java/Muller.jc"
 line = 109
 begin = 15
-end = 1110
+end = 1239
 
 [JC_24]
 file = "HOME/"
@@ -1251,7 +1253,7 @@ end = 24
 
 [JC_86]
 file = "HOME/tests/java/Muller.jc"
-line = 139
+line = 141
 begin = 21
 end = 1709
 
@@ -1263,7 +1265,7 @@ end = -1
 
 [JC_87]
 file = "HOME/tests/java/Muller.jc"
-line = 139
+line = 141
 begin = 21
 end = 1709
 
@@ -2105,9 +2107,9 @@ let Muller_m_ensures_default =
   (let return = ref (any_pointer void) in
   try
    begin
-     (let count = ref (K_38: (0)) in
+     (let count = ref (K_39: (0)) in
      begin
-       (let i_4 = ref (K_1: (0)) in
+       (let i_4 = ref (K_2: (0)) in
        try
         (loop_3:
         while true do
@@ -2128,18 +2130,18 @@ let Muller_m_ensures_default =
            [ { } unit { true } ];
           try
            (let jessie_51 = begin
-                              (if (K_17:
-                                  ((lt_int_ !i_4) (K_16:
+                              (if (K_18:
+                                  ((lt_int_ !i_4) (K_17:
                                                   (let jessie_45 = t_4 in
                                                   (JC_77:
                                                   ((java_array_length_intM jessie_45) Object_t_4_7_alloc_table))))))
                               then
-                               (if (K_14:
-                                   ((gt_int_ (K_13:
+                               (if (K_15:
+                                   ((gt_int_ (K_14:
                                              ((safe_acc_ intM_intP_t_4_7) 
                                               ((shift t_4) !i_4)))) (0)))
                                then
-                                (K_12:
+                                (K_13:
                                 (let jessie_49 = (let jessie_2 = !count in
                                                  begin
                                                    (let jessie_48 = (count := 
@@ -2157,7 +2159,7 @@ let Muller_m_ensures_default =
            void)
            with
            Loop_continue_exc jessie_4 ->
-           (let jessie_55 = (K_15:
+           (let jessie_55 = (K_16:
                             (let jessie_1 = !i_4 in
                             begin
                               (let jessie_54 = (i_4 := ((add_int jessie_1) (1))) in
@@ -2170,12 +2172,12 @@ let Muller_m_ensures_default =
         with
         Loop_exit_exc jessie_3 ->
         void end);
-      (let u = (K_37:
+      (let u = (K_38:
                (JC_78:
                (((alloc_struct_intM !count) Object_Muller_m_9_alloc_table) Object_Muller_m_9_tag_table))) in
       begin
         (let jessie_58 = (count := (0)) in void);
-       (let i_5 = ref (K_18: (0)) in
+       (let i_5 = ref (K_19: (0)) in
        try
         (loop_4:
         while true do
@@ -2196,23 +2198,23 @@ let Muller_m_ensures_default =
            [ { } unit { true } ];
           try
            (let jessie_71 = begin
-                              (if (K_36:
-                                  ((lt_int_ !i_5) (K_35:
+                              (if (K_37:
+                                  ((lt_int_ !i_5) (K_36:
                                                   (let jessie_60 = t_4 in
                                                   (JC_88:
                                                   ((java_array_length_intM jessie_60) Object_t_4_7_alloc_table))))))
                               then
-                               (if (K_33:
-                                   ((gt_int_ (K_32:
+                               (if (K_34:
+                                   ((gt_int_ (K_33:
                                              ((safe_acc_ intM_intP_t_4_7) 
                                               ((shift t_4) !i_5)))) (0)))
                                then
-                                (K_31:
-                                (let jessie_69 = (let jessie_62 = (K_30:
+                                (K_32:
+                                (let jessie_69 = (let jessie_62 = (K_31:
                                                                   ((safe_acc_ intM_intP_t_4_7) 
                                                                    ((shift t_4) !i_5))) in
                                                  (let jessie_65 = ((shift u) 
-                                                                   (K_29:
+                                                                   (K_30:
                                                                    (let jessie_6 = !count in
                                                                    begin
                                                                      
@@ -2233,7 +2235,7 @@ let Muller_m_ensures_default =
            void)
            with
            Loop_continue_exc jessie_8 ->
-           (let jessie_75 = (K_34:
+           (let jessie_75 = (K_35:
                             (let jessie_5 = !i_5 in
                             begin
                               (let jessie_74 = (i_5 := ((add_int jessie_5) (1))) in
@@ -2265,9 +2267,9 @@ let Muller_m_safety =
   (let return = ref (any_pointer void) in
   try
    begin
-     (let count = ref (K_38: (0)) in
+     (let count = ref (K_39: (0)) in
      begin
-       (let i_4 = ref (K_1: (0)) in
+       (let i_4 = ref (K_2: (0)) in
        try
         (loop_1:
         while true do
@@ -2291,18 +2293,18 @@ let Muller_m_safety =
                                intM_intP_t_4_7)))))))) } ];
           try
            (let jessie_17 = begin
-                              (if (K_17:
-                                  ((lt_int_ !i_4) (K_16:
+                              (if (K_18:
+                                  ((lt_int_ !i_4) (K_17:
                                                   (let jessie_11 = t_4 in
                                                   (JC_50:
                                                   ((java_array_length_intM_requires jessie_11) Object_t_4_7_alloc_table))))))
                               then
-                               (if (K_14:
-                                   ((gt_int_ (K_13:
+                               (if (K_15:
+                                   ((gt_int_ (K_14:
                                              (JC_51:
                                              ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_4)))) (0)))
                                then
-                                (K_12:
+                                (K_13:
                                 (let jessie_15 = (let jessie_2 = !count in
                                                  begin
                                                    (let jessie_14 = (count := 
@@ -2320,7 +2322,7 @@ let Muller_m_safety =
            void)
            with
            Loop_continue_exc jessie_4 ->
-           (let jessie_21 = (K_15:
+           (let jessie_21 = (K_16:
                             (let jessie_1 = !i_4 in
                             begin
                               (let jessie_20 = (i_4 := ((add_int jessie_1) (1))) in
@@ -2333,12 +2335,12 @@ let Muller_m_safety =
         with
         Loop_exit_exc jessie_3 ->
         void end);
-      (let u = (K_37:
+      (let u = (K_38:
                (JC_53:
                (((alloc_struct_intM_requires !count) Object_Muller_m_9_alloc_table) Object_Muller_m_9_tag_table))) in
       begin
         (let jessie_24 = (count := (0)) in void);
-       (let i_5 = ref (K_18: (0)) in
+       (let i_5 = ref (K_19: (0)) in
        try
         (loop_2:
         while true do
@@ -2362,23 +2364,23 @@ let Muller_m_safety =
                                intM_intP_t_4_7)))))))) } ];
           try
            (let jessie_37 = begin
-                              (if (K_36:
-                                  ((lt_int_ !i_5) (K_35:
+                              (if (K_37:
+                                  ((lt_int_ !i_5) (K_36:
                                                   (let jessie_26 = t_4 in
                                                   (JC_63:
                                                   ((java_array_length_intM_requires jessie_26) Object_t_4_7_alloc_table))))))
                               then
-                               (if (K_33:
-                                   ((gt_int_ (K_32:
+                               (if (K_34:
+                                   ((gt_int_ (K_33:
                                              (JC_64:
                                              ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5)))) (0)))
                                then
-                                (K_31:
-                                (let jessie_35 = (let jessie_28 = (K_30:
+                                (K_32:
+                                (let jessie_35 = (let jessie_28 = (K_31:
                                                                   (JC_65:
                                                                   ((((offset_acc_ Object_t_4_7_alloc_table) intM_intP_t_4_7) t_4) !i_5))) in
                                                  (let jessie_29 = u in
-                                                 (let jessie_30 = (K_29:
+                                                 (let jessie_30 = (K_30:
                                                                   (let jessie_6 = !count in
                                                                   begin
                                                                     (let jessie_34 = 
@@ -2400,7 +2402,7 @@ let Muller_m_safety =
            void)
            with
            Loop_continue_exc jessie_8 ->
-           (let jessie_41 = (K_34:
+           (let jessie_41 = (K_35:
                             (let jessie_5 = !i_5 in
                             begin
                               (let jessie_40 = (i_5 := ((add_int jessie_5) (1))) in
@@ -2905,12 +2907,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -2925,15 +2921,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -3049,7 +3049,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -3267,7 +3267,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -3587,13 +3587,13 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-logic Muller_tag :  -> Object tag_id
+logic Muller_tag : Object tag_id
 
 axiom Muller_parenttag_Object: parenttag(Muller_tag, Object_tag)
 
@@ -3628,11 +3628,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -3647,11 +3647,11 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -5998,10 +5998,6 @@ why -simplify [...] why/Muller.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -8805,12 +8801,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -8825,15 +8815,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -8949,7 +8943,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -9167,7 +9161,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -9487,13 +9481,13 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-logic Muller_tag :  -> Object tag_id
+logic Muller_tag : Object tag_id
 
 axiom Muller_parenttag_Object: parenttag(Muller_tag, Object_tag)
 
@@ -9528,11 +9522,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -9547,11 +9541,11 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 

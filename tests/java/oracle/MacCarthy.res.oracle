@@ -83,16 +83,16 @@ exception Throwable of Throwable[0..]
 exception Exception of Exception[0..]
 
 integer MacCarthy_f91(integer n)
-  decreases (K_8 : (101 - n));
+  decreases (K_3 : (101 - n));
 behavior less_than_101:
   assumes (n <= 100);
   ensures (K_1 : (\result == 91));
 behavior greater_than_100:
   assumes (n >= 101);
   ensures (K_2 : (\result == (n - 10)));
-{  (if (K_7 : (n <= 100)) then 
-   (return (K_6 : MacCarthy_f91((K_5 : MacCarthy_f91((K_4 : (n + 11))))))) else 
-   (return (K_3 : (n - 10))))
+{  (if (K_8 : (n <= 100)) then 
+   (return (K_7 : MacCarthy_f91((K_6 : MacCarthy_f91((K_5 : (n + 11))))))) else 
+   (return (K_4 : (n - 10))))
 }
 
 unit cons_MacCarthy(! MacCarthy[0] this_1){()}
@@ -160,9 +160,9 @@ end = 35
 
 [K_3]
 file = "HOME/tests/java/MacCarthy.java"
-line = 23
-begin = 12
-end = 18
+line = 10
+begin = 18
+end = 23
 
 [Object_equals]
 name = "Method equals"
@@ -173,33 +173,33 @@ end = 25
 
 [K_4]
 file = "HOME/tests/java/MacCarthy.java"
+line = 23
+begin = 12
+end = 18
+
+[K_5]
+file = "HOME/tests/java/MacCarthy.java"
 line = 20
 begin = 20
 end = 26
 
-[K_5]
+[K_6]
 file = "HOME/tests/java/MacCarthy.java"
 line = 20
 begin = 16
 end = 27
 
-[K_6]
+[K_7]
 file = "HOME/tests/java/MacCarthy.java"
 line = 20
 begin = 12
 end = 28
 
-[K_7]
+[K_8]
 file = "HOME/tests/java/MacCarthy.java"
 line = 19
 begin = 5
 end = 13
-
-[K_8]
-file = "HOME/tests/java/MacCarthy.java"
-line = 10
-begin = 18
-end = 23
 
 [Object_notify]
 name = "Method notify"
@@ -2015,17 +2015,17 @@ let MacCarthy_f91_ensures_default =
   (let return = ref (any_int void) in
   try
    begin
-     (if (K_7: ((le_int_ n) (100)))
+     (if (K_8: ((le_int_ n) (100)))
      then
       begin
-        (return := (K_6:
-                   (let jessie_6 = (K_5:
-                                   (let jessie_7 = (K_4: ((add_int n) (11))) in
+        (return := (K_7:
+                   (let jessie_6 = (K_6:
+                                   (let jessie_7 = (K_5: ((add_int n) (11))) in
                                    (JC_31: (MacCarthy_f91 jessie_7)))) in
                    (JC_32: (MacCarthy_f91 jessie_6)))));
        (raise Return)
       end
-     else begin   (return := (K_3: ((sub_int n) (10)))); (raise Return) end);
+     else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
     absurd 
    end
    with
@@ -2040,18 +2040,18 @@ let MacCarthy_f91_ensures_greater_than_100 =
   (let return = ref (any_int void) in
   try
    begin
-     (if (K_7: ((le_int_ n) (100)))
+     (if (K_8: ((le_int_ n) (100)))
      then
       begin
-        (return := (K_6:
-                   (let jessie_14 = (K_5:
-                                    (let jessie_15 = (K_4:
+        (return := (K_7:
+                   (let jessie_14 = (K_6:
+                                    (let jessie_15 = (K_5:
                                                      ((add_int n) (11))) in
                                     (JC_35: (MacCarthy_f91 jessie_15)))) in
                    (JC_36: (MacCarthy_f91 jessie_14)))));
        (raise Return)
       end
-     else begin   (return := (K_3: ((sub_int n) (10)))); (raise Return) end);
+     else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
     absurd 
    end
    with
@@ -2066,18 +2066,18 @@ let MacCarthy_f91_ensures_less_than_101 =
   (let return = ref (any_int void) in
   try
    begin
-     (if (K_7: ((le_int_ n) (100)))
+     (if (K_8: ((le_int_ n) (100)))
      then
       begin
-        (return := (K_6:
-                   (let jessie_10 = (K_5:
-                                    (let jessie_11 = (K_4:
+        (return := (K_7:
+                   (let jessie_10 = (K_6:
+                                    (let jessie_11 = (K_5:
                                                      ((add_int n) (11))) in
                                     (JC_33: (MacCarthy_f91 jessie_11)))) in
                    (JC_34: (MacCarthy_f91 jessie_10)))));
        (raise Return)
       end
-     else begin   (return := (K_3: ((sub_int n) (10)))); (raise Return) end);
+     else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
     absurd 
    end
    with
@@ -2092,12 +2092,12 @@ let MacCarthy_f91_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (if (K_7: ((le_int_ n) (100)))
+     (if (K_8: ((le_int_ n) (100)))
      then
       begin
-        (return := (K_6:
-                   (let jessie_2 = (K_5:
-                                   (let jessie_3 = (K_4: ((add_int n) (11))) in
+        (return := (K_7:
+                   (let jessie_2 = (K_6:
+                                   (let jessie_3 = (K_5: ((add_int n) (11))) in
                                    (JC_26:
                                    (assert
                                    { zwf_zero((JC_25 : sub_int((101),
@@ -2111,7 +2111,7 @@ let MacCarthy_f91_safety =
                    (JC_27: (MacCarthy_f91_requires jessie_2)))))));
        (raise Return)
       end
-     else begin   (return := (K_3: ((sub_int n) (10)))); (raise Return) end);
+     else begin   (return := (K_4: ((sub_int n) (10)))); (raise Return) end);
     absurd 
    end
    with
@@ -2452,12 +2452,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -2472,15 +2466,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -2596,7 +2594,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -2814,7 +2812,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -3134,13 +3132,13 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-logic MacCarthy_tag :  -> Object tag_id
+logic MacCarthy_tag : Object tag_id
 
 axiom MacCarthy_parenttag_Object: parenttag(MacCarthy_tag, Object_tag)
 
@@ -3171,11 +3169,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -3190,7 +3188,7 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -3626,10 +3624,6 @@ why -simplify [...] why/MacCarthy.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -4721,12 +4715,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -4741,15 +4729,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -4865,7 +4857,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -5083,7 +5075,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -5403,13 +5395,13 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-logic MacCarthy_tag :  -> Object tag_id
+logic MacCarthy_tag : Object tag_id
 
 axiom MacCarthy_parenttag_Object: parenttag(MacCarthy_tag, Object_tag)
 
@@ -5440,11 +5432,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -5459,7 +5451,7 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 

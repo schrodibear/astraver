@@ -181,7 +181,7 @@ exception Throwable of Throwable[0..]
 exception Exception of Exception[0..]
 
 int32 BinarySearch_binary_search(intM[0..] t_0, int32 v)
-  requires (K_25 : Non_null_intM(t_0));
+  requires (K_6 : Non_null_intM(t_0));
 behavior default:
   ensures (K_3 : ((K_2 : ((- 1) <= \result)) &&
                    (K_1 : (\result < (\offset_max(t_0) + 1)))));
@@ -199,40 +199,40 @@ behavior failure:
                        ((t_0 + k).intP != v)))));
 {  
    {  
-      (var int32 l = (K_24 : 0));
+      (var int32 l = (K_25 : 0));
       
       {  
-         (var int32 u = (K_23 : (((K_22 : java_array_length_intM(t_0)) - 1) :> int32)));
+         (var int32 u = (K_24 : (((K_23 : java_array_length_intM(t_0)) - 1) :> int32)));
          
          {  
             loop 
             behavior default:
-              invariant (K_8 : ((K_7 : (0 <= l)) &&
-                                 (K_6 : (u <= ((\offset_max(t_0) + 1) - 1)))));
+              invariant (K_9 : ((K_8 : (0 <= l)) &&
+                                 (K_7 : (u <= ((\offset_max(t_0) + 1) - 1)))));
             behavior failure:
-              invariant (K_9 : (\forall integer k_0;
-                                 (((0 <= k_0) &&
-                                    (k_0 < (\offset_max(t_0) + 1))) ==>
-                                   (((t_0 + k_0).intP == v) ==>
-                                     ((l <= k_0) && (k_0 <= u))))));
-            variant (K_10 : (u - l));
-            while ((K_20 : (l <= u)))
+              invariant (K_10 : (\forall integer k_0;
+                                  (((0 <= k_0) &&
+                                     (k_0 < (\offset_max(t_0) + 1))) ==>
+                                    (((t_0 + k_0).intP == v) ==>
+                                      ((l <= k_0) && (k_0 <= u))))));
+            variant (K_11 : (u - l));
+            while ((K_21 : (l <= u)))
             {  
                {  
-                  (var int32 m = (K_19 : ((l +
-                                            (K_18 : (((K_17 : ((u - l) :> int32)) /
+                  (var int32 m = (K_20 : ((l +
+                                            (K_19 : (((K_18 : ((u - l) :> int32)) /
                                                        2) :> int32))) :> int32)));
-                  (if (K_16 : ((K_15 : (t_0 + m).intP) < v)) then (l = 
-                  (K_14 : ((m + 1) :> int32))) else (if (K_13 : ((K_12 : 
+                  (if (K_17 : ((K_16 : (t_0 + m).intP) < v)) then (l = 
+                  (K_15 : ((m + 1) :> int32))) else (if (K_14 : ((K_13 : 
                                                                  (t_0 +
                                                                    m).intP) >
                                                                   v)) then (u = 
-                                                    (K_11 : ((m - 1) :> int32))) else 
+                                                    (K_12 : ((m - 1) :> int32))) else 
                                                     (return m)))
                }
             };
             
-            (return (K_21 : ((- 1) :> int32)))
+            (return (K_22 : ((- 1) :> int32)))
          }
       }
    }
@@ -249,93 +249,93 @@ End:
 ========== file tests/java/BinarySearch.jloc ==========
 [K_10]
 file = "HOME/tests/java/BinarySearch.java"
+line = 73
+begin = 8
+end = 74
+
+[K_11]
+file = "HOME/tests/java/BinarySearch.java"
 line = 75
 begin = 7
 end = 10
 
-[K_11]
+[K_12]
 file = "HOME/tests/java/BinarySearch.java"
 line = 80
 begin = 28
 end = 33
 
-[K_12]
+[K_13]
 file = "HOME/tests/java/BinarySearch.java"
 line = 80
 begin = 14
 end = 18
 
-[K_13]
+[K_14]
 file = "HOME/tests/java/BinarySearch.java"
 line = 80
 begin = 14
 end = 22
 
-[K_14]
+[K_15]
 file = "HOME/tests/java/BinarySearch.java"
 line = 79
 begin = 23
 end = 28
 
-[K_15]
+[K_16]
 file = "HOME/tests/java/BinarySearch.java"
 line = 79
 begin = 9
 end = 13
 
-[K_16]
+[K_17]
 file = "HOME/tests/java/BinarySearch.java"
 line = 79
 begin = 9
 end = 17
 
-[K_17]
+[K_18]
 file = "HOME/tests/java/BinarySearch.java"
 line = 78
 begin = 18
 end = 23
 
-[K_18]
+[K_19]
 file = "HOME/tests/java/BinarySearch.java"
 line = 78
 begin = 17
 end = 28
 
-[K_19]
+[K_20]
 file = "HOME/tests/java/BinarySearch.java"
 line = 78
 begin = 13
 end = 28
 
-[K_20]
+[K_21]
 file = "HOME/tests/java/BinarySearch.java"
 line = 77
 begin = 8
 end = 14
 
-[K_21]
+[K_22]
 file = "HOME/tests/java/BinarySearch.java"
 line = 83
 begin = 8
 end = 10
 
-[K_22]
+[K_23]
 file = "HOME/tests/java/BinarySearch.java"
 line = 68
 begin = 16
 end = 24
 
-[K_23]
+[K_24]
 file = "HOME/tests/java/BinarySearch.java"
 line = 68
 begin = 16
 end = 28
-
-[K_24]
-file = "HOME/tests/java/BinarySearch.java"
-line = 68
-begin = 9
-end = 10
 
 [K_1]
 file = "HOME/tests/java/BinarySearch.java"
@@ -345,9 +345,9 @@ end = 40
 
 [K_25]
 file = "HOME/tests/java/BinarySearch.java"
-line = 56
-begin = 17
-end = 26
+line = 68
+begin = 9
+end = 10
 
 [K_2]
 file = "HOME/tests/java/BinarySearch.java"
@@ -375,27 +375,27 @@ end = 97
 
 [K_6]
 file = "HOME/tests/java/BinarySearch.java"
-line = 70
+line = 56
 begin = 17
-end = 34
+end = 26
 
 [K_7]
 file = "HOME/tests/java/BinarySearch.java"
 line = 70
-begin = 7
-end = 13
+begin = 17
+end = 34
 
 [K_8]
 file = "HOME/tests/java/BinarySearch.java"
 line = 70
 begin = 7
-end = 34
+end = 13
 
 [K_9]
 file = "HOME/tests/java/BinarySearch.java"
-line = 73
-begin = 8
-end = 74
+line = 70
+begin = 7
+end = 34
 
 [cons_BinarySearch]
 name = "Constructor of class BinarySearch"
@@ -756,13 +756,13 @@ end = -1
 file = "HOME/tests/java/BinarySearch.jc"
 line = 113
 begin = 12
-end = 1401
+end = 1406
 
 [JC_56]
 file = "HOME/tests/java/BinarySearch.jc"
 line = 113
 begin = 12
-end = 1401
+end = 1406
 
 [JC_57]
 kind = ArithOverflow
@@ -929,7 +929,7 @@ end = -1
 file = "HOME/tests/java/BinarySearch.jc"
 line = 113
 begin = 12
-end = 1401
+end = 1406
 
 [BinarySearch_binary_search_ensures_default]
 name = "Method binary_search"
@@ -943,7 +943,7 @@ end = 28
 file = "HOME/tests/java/BinarySearch.jc"
 line = 113
 begin = 12
-end = 1401
+end = 1406
 
 [JC_20]
 file = "HOME/tests/java/BinarySearch.jc"
@@ -1045,7 +1045,7 @@ end = -1
 file = "HOME/tests/java/BinarySearch.jc"
 line = 113
 begin = 12
-end = 1401
+end = 1406
 
 [JC_27]
 file = "HOME/"
@@ -1069,7 +1069,7 @@ end = -1
 file = "HOME/tests/java/BinarySearch.jc"
 line = 113
 begin = 12
-end = 1401
+end = 1406
 
 [JC_81]
 kind = DivByZero
@@ -1171,7 +1171,7 @@ end = 26
 file = "HOME/tests/java/BinarySearch.jc"
 line = 113
 begin = 12
-end = 1401
+end = 1406
 
 [JC_36]
 file = "HOME/"
@@ -1183,7 +1183,7 @@ end = -1
 file = "HOME/tests/java/BinarySearch.jc"
 line = 113
 begin = 12
-end = 1401
+end = 1406
 
 [JC_37]
 file = "HOME/tests/java/BinarySearch.java"
@@ -2220,9 +2220,9 @@ let BinarySearch_binary_search_ensures_default =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let l = ref (safe_int32_of_integer_ (K_24: (0))) in
-     (let u = ref (K_23:
-                  (safe_int32_of_integer_ ((sub_int (K_22:
+     (let l = ref (safe_int32_of_integer_ (K_25: (0))) in
+     (let u = ref (K_24:
+                  (safe_int32_of_integer_ ((sub_int (K_23:
                                                     (let jessie_17 = t_0 in
                                                     (JC_66:
                                                     (java_array_length_intM jessie_17))))) (1)))) in
@@ -2242,43 +2242,43 @@ let BinarySearch_binary_search_ensures_default =
            [ { } unit { true } ];
           try
            (let jessie_25 = begin
-                              (if (K_20:
+                              (if (K_21:
                                   ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
                               then
-                               (let m = (K_19:
+                               (let m = (K_20:
                                         (safe_int32_of_integer_ ((add_int 
                                                                   (integer_of_int32 !l)) 
                                                                  (integer_of_int32 
-                                                                  (K_18:
+                                                                  (K_19:
                                                                   (safe_int32_of_integer_ 
                                                                    (JC_73:
                                                                    ((div_int 
                                                                     (integer_of_int32 
-                                                                    (K_17:
+                                                                    (K_18:
                                                                     (safe_int32_of_integer_ 
                                                                     ((sub_int 
                                                                     (integer_of_int32 !u)) 
                                                                     (integer_of_int32 !l)))))) (2))))))))) in
-                               (if (K_16:
-                                   ((lt_int_ (integer_of_int32 (K_15:
+                               (if (K_17:
+                                   ((lt_int_ (integer_of_int32 (K_16:
                                                                ((safe_acc_ !intM_intP) 
                                                                 ((shift t_0) 
                                                                  (integer_of_int32 m)))))) 
                                     (integer_of_int32 v)))
                                then
-                                (let jessie_20 = (l := (K_14:
+                                (let jessie_20 = (l := (K_15:
                                                        (safe_int32_of_integer_ 
                                                         ((add_int (integer_of_int32 m)) (1))))) in
                                 void)
                                else
-                                (if (K_13:
-                                    ((gt_int_ (integer_of_int32 (K_12:
+                                (if (K_14:
+                                    ((gt_int_ (integer_of_int32 (K_13:
                                                                 ((safe_acc_ !intM_intP) 
                                                                  ((shift t_0) 
                                                                   (integer_of_int32 m)))))) 
                                      (integer_of_int32 v)))
                                 then
-                                 (let jessie_22 = (u := (K_11:
+                                 (let jessie_22 = (u := (K_12:
                                                         (safe_int32_of_integer_ 
                                                          ((sub_int (integer_of_int32 m)) (1))))) in
                                  void)
@@ -2298,7 +2298,7 @@ let BinarySearch_binary_search_ensures_default =
         with
         Loop_exit_exc jessie_1 ->
         void end;
-      (return := (K_21: (safe_int32_of_integer_ (neg_int (1)))));
+      (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return)
      end));
     absurd 
@@ -2329,9 +2329,9 @@ let BinarySearch_binary_search_ensures_failure =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let l = ref (safe_int32_of_integer_ (K_24: (0))) in
-     (let u = ref (K_23:
-                  (safe_int32_of_integer_ ((sub_int (K_22:
+     (let l = ref (safe_int32_of_integer_ (K_25: (0))) in
+     (let u = ref (K_24:
+                  (safe_int32_of_integer_ ((sub_int (K_23:
                                                     (let jessie_41 = t_0 in
                                                     (JC_82:
                                                     (java_array_length_intM jessie_41))))) (1)))) in
@@ -2360,43 +2360,43 @@ let BinarySearch_binary_search_ensures_failure =
                    (1)))))) } ];
           try
            (let jessie_49 = begin
-                              (if (K_20:
+                              (if (K_21:
                                   ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
                               then
-                               (let m = (K_19:
+                               (let m = (K_20:
                                         (safe_int32_of_integer_ ((add_int 
                                                                   (integer_of_int32 !l)) 
                                                                  (integer_of_int32 
-                                                                  (K_18:
+                                                                  (K_19:
                                                                   (safe_int32_of_integer_ 
                                                                    (JC_90:
                                                                    ((div_int 
                                                                     (integer_of_int32 
-                                                                    (K_17:
+                                                                    (K_18:
                                                                     (safe_int32_of_integer_ 
                                                                     ((sub_int 
                                                                     (integer_of_int32 !u)) 
                                                                     (integer_of_int32 !l)))))) (2))))))))) in
-                               (if (K_16:
-                                   ((lt_int_ (integer_of_int32 (K_15:
+                               (if (K_17:
+                                   ((lt_int_ (integer_of_int32 (K_16:
                                                                ((safe_acc_ !intM_intP) 
                                                                 ((shift t_0) 
                                                                  (integer_of_int32 m)))))) 
                                     (integer_of_int32 v)))
                                then
-                                (let jessie_44 = (l := (K_14:
+                                (let jessie_44 = (l := (K_15:
                                                        (safe_int32_of_integer_ 
                                                         ((add_int (integer_of_int32 m)) (1))))) in
                                 void)
                                else
-                                (if (K_13:
-                                    ((gt_int_ (integer_of_int32 (K_12:
+                                (if (K_14:
+                                    ((gt_int_ (integer_of_int32 (K_13:
                                                                 ((safe_acc_ !intM_intP) 
                                                                  ((shift t_0) 
                                                                   (integer_of_int32 m)))))) 
                                      (integer_of_int32 v)))
                                 then
-                                 (let jessie_46 = (u := (K_11:
+                                 (let jessie_46 = (u := (K_12:
                                                         (safe_int32_of_integer_ 
                                                          ((sub_int (integer_of_int32 m)) (1))))) in
                                  void)
@@ -2416,7 +2416,7 @@ let BinarySearch_binary_search_ensures_failure =
         with
         Loop_exit_exc jessie_1 ->
         void end;
-      (return := (K_21: (safe_int32_of_integer_ (neg_int (1)))));
+      (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return)
      end));
     absurd 
@@ -2440,9 +2440,9 @@ let BinarySearch_binary_search_ensures_success =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let l = ref (safe_int32_of_integer_ (K_24: (0))) in
-     (let u = ref (K_23:
-                  (safe_int32_of_integer_ ((sub_int (K_22:
+     (let l = ref (safe_int32_of_integer_ (K_25: (0))) in
+     (let u = ref (K_24:
+                  (safe_int32_of_integer_ ((sub_int (K_23:
                                                     (let jessie_29 = t_0 in
                                                     (JC_74:
                                                     (java_array_length_intM jessie_29))))) (1)))) in
@@ -2461,43 +2461,43 @@ let BinarySearch_binary_search_ensures_success =
                    (1)))))) } ];
           try
            (let jessie_37 = begin
-                              (if (K_20:
+                              (if (K_21:
                                   ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
                               then
-                               (let m = (K_19:
+                               (let m = (K_20:
                                         (safe_int32_of_integer_ ((add_int 
                                                                   (integer_of_int32 !l)) 
                                                                  (integer_of_int32 
-                                                                  (K_18:
+                                                                  (K_19:
                                                                   (safe_int32_of_integer_ 
                                                                    (JC_81:
                                                                    ((div_int 
                                                                     (integer_of_int32 
-                                                                    (K_17:
+                                                                    (K_18:
                                                                     (safe_int32_of_integer_ 
                                                                     ((sub_int 
                                                                     (integer_of_int32 !u)) 
                                                                     (integer_of_int32 !l)))))) (2))))))))) in
-                               (if (K_16:
-                                   ((lt_int_ (integer_of_int32 (K_15:
+                               (if (K_17:
+                                   ((lt_int_ (integer_of_int32 (K_16:
                                                                ((safe_acc_ !intM_intP) 
                                                                 ((shift t_0) 
                                                                  (integer_of_int32 m)))))) 
                                     (integer_of_int32 v)))
                                then
-                                (let jessie_32 = (l := (K_14:
+                                (let jessie_32 = (l := (K_15:
                                                        (safe_int32_of_integer_ 
                                                         ((add_int (integer_of_int32 m)) (1))))) in
                                 void)
                                else
-                                (if (K_13:
-                                    ((gt_int_ (integer_of_int32 (K_12:
+                                (if (K_14:
+                                    ((gt_int_ (integer_of_int32 (K_13:
                                                                 ((safe_acc_ !intM_intP) 
                                                                  ((shift t_0) 
                                                                   (integer_of_int32 m)))))) 
                                      (integer_of_int32 v)))
                                 then
-                                 (let jessie_34 = (u := (K_11:
+                                 (let jessie_34 = (u := (K_12:
                                                         (safe_int32_of_integer_ 
                                                          ((sub_int (integer_of_int32 m)) (1))))) in
                                  void)
@@ -2517,7 +2517,7 @@ let BinarySearch_binary_search_ensures_success =
         with
         Loop_exit_exc jessie_1 ->
         void end;
-      (return := (K_21: (safe_int32_of_integer_ (neg_int (1)))));
+      (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return)
      end));
     absurd 
@@ -2539,10 +2539,10 @@ let BinarySearch_binary_search_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let l = ref (safe_int32_of_integer_ (K_24: (0))) in
-     (let u = ref (K_23:
+     (let l = ref (safe_int32_of_integer_ (K_25: (0))) in
+     (let u = ref (K_24:
                   (JC_50:
-                  (int32_of_integer_ ((sub_int (K_22:
+                  (int32_of_integer_ ((sub_int (K_23:
                                                (let jessie_5 = t_0 in
                                                (JC_49:
                                                (java_array_length_intM_requires jessie_5))))) (1))))) in
@@ -2562,47 +2562,47 @@ let BinarySearch_binary_search_safety =
                    (1)))))) } ];
           try
            (let jessie_13 = begin
-                              (if (K_20:
+                              (if (K_21:
                                   ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u)))
                               then
-                               (let m = (K_19:
+                               (let m = (K_20:
                                         (JC_60:
                                         (int32_of_integer_ ((add_int 
                                                              (integer_of_int32 !l)) 
                                                             (integer_of_int32 
-                                                             (K_18:
+                                                             (K_19:
                                                              (JC_59:
                                                              (int32_of_integer_ 
                                                               (JC_58:
                                                               ((div_int_ 
                                                                 (integer_of_int32 
-                                                                 (K_17:
+                                                                 (K_18:
                                                                  (JC_57:
                                                                  (int32_of_integer_ 
                                                                   ((sub_int 
                                                                     (integer_of_int32 !u)) 
                                                                    (integer_of_int32 !l))))))) (2))))))))))) in
-                               (if (K_16:
-                                   ((lt_int_ (integer_of_int32 (K_15:
+                               (if (K_17:
+                                   ((lt_int_ (integer_of_int32 (K_16:
                                                                (JC_61:
                                                                ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
                                                                 (integer_of_int32 m)))))) 
                                     (integer_of_int32 v)))
                                then
-                                (let jessie_8 = (l := (K_14:
+                                (let jessie_8 = (l := (K_15:
                                                       (JC_62:
                                                       (int32_of_integer_ 
                                                        ((add_int (integer_of_int32 m)) (1)))))) in
                                 void)
                                else
-                                (if (K_13:
-                                    ((gt_int_ (integer_of_int32 (K_12:
+                                (if (K_14:
+                                    ((gt_int_ (integer_of_int32 (K_13:
                                                                 (JC_63:
                                                                 ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) 
                                                                  (integer_of_int32 m)))))) 
                                      (integer_of_int32 v)))
                                 then
-                                 (let jessie_10 = (u := (K_11:
+                                 (let jessie_10 = (u := (K_12:
                                                         (JC_64:
                                                         (int32_of_integer_ 
                                                          ((sub_int (integer_of_int32 m)) (1)))))) in
@@ -2623,7 +2623,7 @@ let BinarySearch_binary_search_safety =
         with
         Loop_exit_exc jessie_1 ->
         void end;
-      (return := (K_21: (safe_int32_of_integer_ (neg_int (1)))));
+      (return := (K_22: (safe_int32_of_integer_ (neg_int (1)))));
       (raise Return)
      end));
     absurd 
@@ -3104,12 +3104,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -3124,15 +3118,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -3248,7 +3246,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -3466,7 +3464,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -3796,13 +3794,13 @@ type long
 
 type short
 
-logic BinarySearch_tag :  -> Object tag_id
+logic BinarySearch_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom BinarySearch_parenttag_Object: parenttag(BinarySearch_tag, Object_tag)
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -3837,11 +3835,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -3958,11 +3956,11 @@ axiom int32_range:
     (((-2147483648) <= integer_of_int32(x)) and
      (integer_of_int32(x) <= 2147483647)))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -5905,10 +5903,6 @@ why -simplify [...] why/BinarySearch.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -8699,12 +8693,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -8719,15 +8707,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -8843,7 +8835,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -9061,7 +9053,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -9391,13 +9383,13 @@ type long
 
 type short
 
-logic BinarySearch_tag :  -> Object tag_id
+logic BinarySearch_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom BinarySearch_parenttag_Object: parenttag(BinarySearch_tag, Object_tag)
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -9432,11 +9424,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -9553,11 +9545,11 @@ axiom int32_range:
     (((-2147483648) <= integer_of_int32(x)) and
      (integer_of_int32(x) <= 2147483647)))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 

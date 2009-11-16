@@ -1,4 +1,5 @@
 
+  o [Jessie] fixed problem with axiomatization of address operator
   o [Jessie/Krakatoa/Frama-C plugin] support for the 'for' modifier in
     decreases clauses and loop variants
   o [Alt-Ergo output] avoid empty list of arguments

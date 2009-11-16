@@ -122,18 +122,18 @@ unit cons_TestNonNull(! TestNonNull[0] this_1)
 }
 
 unit TestNonNull_test(TestNonNull[0] this_0, intM[0..-1] t)
-  requires (K_11 : ((\offset_max(t) + 1) >= 4));
+  requires (K_4 : ((\offset_max(t) + 1) >= 4));
 {  
    {  
-      (var int32 i = (K_10 : (t + 3).intP));
+      (var int32 i = (K_11 : (t + 3).intP));
       
-      {  (K_4 : ((t + 2).intP = 1));
+      {  (K_5 : ((t + 2).intP = 1));
          
          {  
-            (var int32 j = (K_9 : (t + TestNonNull_N).intP));
+            (var int32 j = (K_10 : (t + TestNonNull_N).intP));
             
-            {  (K_6 : ((t + (K_5 : ((TestNonNull_N + 1) :> int32))).intP = 1));
-               (K_8 : ((K_7 : (TestNonNull_st + 3).intP) == 1))
+            {  (K_7 : ((t + (K_6 : ((TestNonNull_N + 1) :> int32))).intP = 1));
+               (K_9 : ((K_8 : (TestNonNull_st + 3).intP) == 1))
             }
          }
       }
@@ -149,15 +149,15 @@ End:
 ========== file tests/java/TestNonNull.jloc ==========
 [K_10]
 file = "HOME/tests/java/TestNonNull.java"
-line = 24
+line = 26
 begin = 9
 end = 13
 
 [K_11]
 file = "HOME/tests/java/TestNonNull.java"
-line = 22
-begin = 17
-end = 30
+line = 24
+begin = 9
+end = 13
 
 [cons_TestNonNull]
 name = "Constructor of class TestNonNull"
@@ -186,39 +186,39 @@ end = 25
 
 [K_4]
 file = "HOME/tests/java/TestNonNull.java"
+line = 22
+begin = 17
+end = 30
+
+[K_5]
+file = "HOME/tests/java/TestNonNull.java"
 line = 25
 begin = 1
 end = 9
 
-[K_5]
+[K_6]
 file = "HOME/tests/java/TestNonNull.java"
 line = 27
 begin = 3
 end = 8
 
-[K_6]
+[K_7]
 file = "HOME/tests/java/TestNonNull.java"
 line = 27
 begin = 1
 end = 13
 
-[K_7]
+[K_8]
 file = "HOME/tests/java/TestNonNull.java"
 line = 28
 begin = 1
 end = 6
 
-[K_8]
+[K_9]
 file = "HOME/tests/java/TestNonNull.java"
 line = 28
 begin = 1
 end = 11
-
-[K_9]
-file = "HOME/tests/java/TestNonNull.java"
-line = 26
-begin = 9
-end = 13
 
 [TestNonNull_test]
 name = "Method test"
@@ -1773,29 +1773,29 @@ let TestNonNull_test_ensures_default =
   (init:
   try
    begin
-     (let jessie_54 = (let i = (K_10:
+     (let jessie_54 = (let i = (K_11:
                                ((safe_acc_ !intM_intP) ((shift t) (3)))) in
-                      (K_4:
+                      (K_5:
                       begin
                         (let jessie_46 = (let jessie_42 = (safe_int32_of_integer_ (1)) in
                                          (let jessie_45 = ((shift t) (2)) in
                                          (((safe_upd_ intM_intP) jessie_45) jessie_42))) in
                         void);
-                       (let j = (K_9:
+                       (let j = (K_10:
                                 ((safe_acc_ !intM_intP) ((shift t) (integer_of_int32 TestNonNull_N)))) in
-                       (K_6:
+                       (K_7:
                        begin
                          (let jessie_53 = (let jessie_49 = (safe_int32_of_integer_ (1)) in
                                           (let jessie_52 = ((shift t) 
                                                             (integer_of_int32 
-                                                             (K_5:
+                                                             (K_6:
                                                              (safe_int32_of_integer_ 
                                                               ((add_int 
                                                                 (integer_of_int32 TestNonNull_N)) (1)))))) in
                                           (((safe_upd_ intM_intP) jessie_52) jessie_49))) in
                          void);
-                        (K_8:
-                        ((eq_int_ (integer_of_int32 (K_7:
+                        (K_9:
+                        ((eq_int_ (integer_of_int32 (K_8:
                                                     ((safe_acc_ !intM_intP) 
                                                      ((shift TestNonNull_st) (3)))))) (1)))
                        end))
@@ -1820,10 +1820,10 @@ let TestNonNull_test_safety =
   (init:
   try
    begin
-     (let jessie_39 = (let i = (K_10:
+     (let jessie_39 = (let i = (K_11:
                                (JC_69:
                                ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) t) (3)))) in
-                      (K_4:
+                      (K_5:
                       begin
                         (let jessie_31 = (let jessie_27 = (safe_int32_of_integer_ (1)) in
                                          (let jessie_28 = t in
@@ -1832,10 +1832,10 @@ let TestNonNull_test_safety =
                                          (JC_70:
                                          (((((lsafe_lbound_upd_ !Object_alloc_table) intM_intP) jessie_28) jessie_29) jessie_27)))))) in
                         void);
-                       (let j = (K_9:
+                       (let j = (K_10:
                                 (JC_71:
                                 ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) t) (2)))) in
-                       (K_6:
+                       (K_7:
                        begin
                          (let jessie_38 = (let jessie_34 = (safe_int32_of_integer_ (1)) in
                                           (let jessie_35 = t in
@@ -1844,8 +1844,8 @@ let TestNonNull_test_safety =
                                           (JC_72:
                                           (((((lsafe_lbound_upd_ !Object_alloc_table) intM_intP) jessie_35) jessie_36) jessie_34)))))) in
                          void);
-                        (K_8:
-                        ((eq_int_ (integer_of_int32 (K_7:
+                        (K_9:
+                        ((eq_int_ (integer_of_int32 (K_8:
                                                     (JC_73:
                                                     ((((lsafe_lbound_acc_ !Object_alloc_table) !intM_intP) TestNonNull_st) (3)))))) (1)))
                        end))
@@ -2243,12 +2243,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -2263,15 +2257,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -2387,7 +2385,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -2605,7 +2603,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -2935,9 +2933,9 @@ type long
 
 type short
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -2972,7 +2970,7 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
@@ -2980,13 +2978,13 @@ logic int32_of_integer : int -> int32
 
 function TestNonNull_N() : int32 = int32_of_integer(2)
 
-logic TestNonNull_tag :  -> Object tag_id
+logic TestNonNull_tag : Object tag_id
 
 axiom TestNonNull_parenttag_Object: parenttag(TestNonNull_tag, Object_tag)
 
-logic TestNonNull_st :  -> Object pointer
+logic TestNonNull_st : Object pointer
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -3101,11 +3099,11 @@ axiom int32_range:
     (((-2147483648) <= integer_of_int32(x)) and
      (integer_of_int32(x) <= 2147483647)))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -3713,10 +3711,6 @@ why -simplify [...] why/TestNonNull.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -5067,12 +5061,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -5087,15 +5075,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -5211,7 +5203,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -5429,7 +5421,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -5759,9 +5751,9 @@ type long
 
 type short
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -5796,7 +5788,7 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
@@ -5804,13 +5796,13 @@ logic int32_of_integer : int -> int32
 
 function TestNonNull_N() : int32 = int32_of_integer(2)
 
-logic TestNonNull_tag :  -> Object tag_id
+logic TestNonNull_tag : Object tag_id
 
 axiom TestNonNull_parenttag_Object: parenttag(TestNonNull_tag, Object_tag)
 
-logic TestNonNull_st :  -> Object pointer
+logic TestNonNull_st : Object pointer
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -5925,11 +5917,11 @@ axiom int32_range:
     (((-2147483648) <= integer_of_int32(x)) and
      (integer_of_int32(x) <= 2147483647)))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 

@@ -109,15 +109,15 @@ exception Throwable of Throwable[0..]
 exception Exception of Exception[0..]
 
 integer Fibonacci_Fib(integer n_0)
-  requires (K_16 : (n_0 >= 0));
+  requires (K_2 : (n_0 >= 0));
 behavior default:
   ensures (K_1 : isfib(n_0, \result));
 {  
    {  
-      (var integer y = (K_15 : 0));
+      (var integer y = (K_16 : 0));
       
       {  
-         (var integer x_0 = (K_14 : 1));
+         (var integer x_0 = (K_15 : 1));
          
          {  
             (var integer aux);
@@ -125,21 +125,21 @@ behavior default:
             {  
                {  
                   {  
-                     (var integer i = (K_2 : 0));
+                     (var integer i = (K_3 : 0));
                      
                      loop 
                      behavior default:
-                       invariant (K_9 : ((K_8 : ((K_7 : ((K_6 : (0 <= i)) &&
-                                                          (K_5 : (i <= n_0)))) &&
-                                                  (K_4 : isfib((i + 1), x_0)))) &&
-                                          (K_3 : isfib(i, y))));
+                       invariant (K_10 : ((K_9 : ((K_8 : ((K_7 : (0 <= i)) &&
+                                                           (K_6 : (i <= n_0)))) &&
+                                                   (K_5 : isfib((i + 1), x_0)))) &&
+                                           (K_4 : isfib(i, y))));
                      
-                     variant (K_10 : (n_0 - i));
-                     for ( ; (K_13 : (i < n_0)) ; (K_12 : (i ++)))
+                     variant (K_11 : (n_0 - i));
+                     for ( ; (K_14 : (i < n_0)) ; (K_13 : (i ++)))
                      {  
                         {  (aux = y);
                            (y = x_0);
-                           (x_0 = (K_11 : (x_0 + aux)))
+                           (x_0 = (K_12 : (x_0 + aux)))
                         }
                      }
                   }
@@ -163,45 +163,45 @@ End:
 ========== file tests/java/Fibonacci.jloc ==========
 [K_10]
 file = "HOME/tests/java/Fibonacci.java"
+line = 29
+begin = 20
+end = 61
+
+[K_11]
+file = "HOME/tests/java/Fibonacci.java"
 line = 30
 begin = 18
 end = 21
 
-[K_11]
+[K_12]
 file = "HOME/tests/java/Fibonacci.java"
 line = 35
 begin = 9
 end = 16
 
-[K_12]
+[K_13]
 file = "HOME/tests/java/Fibonacci.java"
 line = 32
 begin = 21
 end = 24
 
-[K_13]
+[K_14]
 file = "HOME/tests/java/Fibonacci.java"
 line = 32
 begin = 14
 end = 19
 
-[K_14]
+[K_15]
 file = "HOME/tests/java/Fibonacci.java"
 line = 27
 begin = 13
 end = 14
 
-[K_15]
+[K_16]
 file = "HOME/tests/java/Fibonacci.java"
 line = 27
 begin = 8
 end = 9
-
-[K_16]
-file = "HOME/tests/java/Fibonacci.java"
-line = 23
-begin = 17
-end = 23
 
 [K_1]
 file = "HOME/tests/java/Fibonacci.java"
@@ -211,51 +211,51 @@ end = 33
 
 [K_2]
 file = "HOME/tests/java/Fibonacci.java"
+line = 23
+begin = 17
+end = 23
+
+[K_3]
+file = "HOME/tests/java/Fibonacci.java"
 line = 32
 begin = 11
 end = 12
 
-[K_3]
+[K_4]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
 begin = 51
 end = 61
 
-[K_4]
+[K_5]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
 begin = 35
 end = 47
 
-[K_5]
+[K_6]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
 begin = 25
 end = 31
 
-[K_6]
+[K_7]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
 begin = 20
 end = 26
 
-[K_7]
+[K_8]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
 begin = 20
 end = 31
 
-[K_8]
-file = "HOME/tests/java/Fibonacci.java"
-line = 29
-begin = 20
-end = 47
-
 [K_9]
 file = "HOME/tests/java/Fibonacci.java"
 line = 29
 begin = 20
-end = 61
+end = 47
 
 [cons_Fibonacci]
 name = "Constructor of class Fibonacci"
@@ -623,13 +623,13 @@ end = -1
 file = "HOME/tests/java/Fibonacci.jc"
 line = 82
 begin = 21
-end = 716
+end = 720
 
 [JC_26]
 file = "HOME/tests/java/Fibonacci.jc"
 line = 82
 begin = 21
-end = 716
+end = 720
 
 [cons_Fibonacci_ensures_default]
 name = "Constructor of class Fibonacci"
@@ -693,13 +693,13 @@ end = -1
 file = "HOME/tests/java/Fibonacci.jc"
 line = 82
 begin = 21
-end = 716
+end = 720
 
 [JC_35]
 file = "HOME/tests/java/Fibonacci.jc"
 line = 82
 begin = 21
-end = 716
+end = 720
 
 [JC_36]
 file = "HOME/"
@@ -1336,11 +1336,11 @@ let Fibonacci_Fib_ensures_default =
   (let return = ref (any_int void) in
   try
    begin
-     (let y = ref (K_15: (0)) in
-     (let x_0_0 = ref (K_14: (1)) in
+     (let y = ref (K_16: (0)) in
+     (let x_0_0 = ref (K_15: (1)) in
      (let aux = ref (any_int void) in
      begin
-       (let i = ref (K_2: (0)) in
+       (let i = ref (K_3: (0)) in
        try
         (loop_2:
         while true do
@@ -1355,14 +1355,14 @@ let Fibonacci_Fib_ensures_default =
            [ { } unit { true } ];
           try
            (let jessie_30 = begin
-                              (if (K_13: ((lt_int_ !i) n_0))
+                              (if (K_14: ((lt_int_ !i) n_0))
                               then
                                (let jessie_28 = begin
                                                   (let jessie_24 = (aux := !y) in
                                                   void);
                                                  (let jessie_26 = (y := !x_0_0) in
                                                  void);
-                                                 (x_0_0 := (K_11:
+                                                 (x_0_0 := (K_12:
                                                            ((add_int !x_0_0) !aux)));
                                                  !x_0_0
                                                 end in
@@ -1375,7 +1375,7 @@ let Fibonacci_Fib_ensures_default =
            void)
            with
            Loop_continue_exc jessie_3 ->
-           (let jessie_34 = (K_12:
+           (let jessie_34 = (K_13:
                             (let jessie_1 = !i in
                             begin
                               (let jessie_33 = (i := ((add_int jessie_1) (1))) in
@@ -1405,11 +1405,11 @@ let Fibonacci_Fib_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (let y = ref (K_15: (0)) in
-     (let x_0_0 = ref (K_14: (1)) in
+     (let y = ref (K_16: (0)) in
+     (let x_0_0 = ref (K_15: (1)) in
      (let aux = ref (any_int void) in
      begin
-       (let i = ref (K_2: (0)) in
+       (let i = ref (K_3: (0)) in
        try
         (loop_1:
         while true do
@@ -1423,14 +1423,14 @@ let Fibonacci_Fib_safety =
                        and (JC_22: isfib(i, y)))))) } ];
           try
            (let jessie_14 = begin
-                              (if (K_13: ((lt_int_ !i) n_0))
+                              (if (K_14: ((lt_int_ !i) n_0))
                               then
                                (let jessie_12 = begin
                                                   (let jessie_8 = (aux := !y) in
                                                   void);
                                                  (let jessie_10 = (y := !x_0_0) in
                                                  void);
-                                                 (x_0_0 := (K_11:
+                                                 (x_0_0 := (K_12:
                                                            ((add_int !x_0_0) !aux)));
                                                  !x_0_0
                                                 end in
@@ -1443,7 +1443,7 @@ let Fibonacci_Fib_safety =
            void)
            with
            Loop_continue_exc jessie_3 ->
-           (let jessie_18 = (K_12:
+           (let jessie_18 = (K_13:
                             (let jessie_1 = !i in
                             begin
                               (let jessie_17 = (i := ((add_int jessie_1) (1))) in
@@ -1824,12 +1824,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -1844,15 +1838,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -1968,7 +1966,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -2186,7 +2184,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -2506,13 +2504,13 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-logic Fibonacci_tag :  -> Object tag_id
+logic Fibonacci_tag : Object tag_id
 
 axiom Fibonacci_parenttag_Object: parenttag(Fibonacci_tag, Object_tag)
 
@@ -2543,11 +2541,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -2562,7 +2560,7 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -3115,10 +3113,6 @@ why -simplify [...] why/Fibonacci.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -4332,12 +4326,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -4352,15 +4340,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -4476,7 +4468,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -4694,7 +4686,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -5014,13 +5006,13 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
-logic Fibonacci_tag :  -> Object tag_id
+logic Fibonacci_tag : Object tag_id
 
 axiom Fibonacci_parenttag_Object: parenttag(Fibonacci_tag, Object_tag)
 
@@ -5051,11 +5043,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -5070,7 +5062,7 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 

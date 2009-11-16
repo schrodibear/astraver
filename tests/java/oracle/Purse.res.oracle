@@ -232,24 +232,24 @@ unit cons_Exception_Throwable(! Exception[0] this_24, Throwable[0..] cause_3){()
 unit cons_NoCreditException(! NoCreditException[0] this_2){()}
 
 unit cons_Purse(! Purse[0] this_7)
-  requires (K_2 : true);
+  requires (K_1 : true);
 behavior default:
   assigns this_7.balance;
-  ensures (K_3 : (this_7.balance == 0));
+  ensures (K_2 : (this_7.balance == 0));
 {  (this_7.balance = 0);
-   (K_1 : (this_7.balance = 0))
+   (K_3 : (this_7.balance = 0))
 }
 
 unit Purse_credit(Purse[0] this_6, integer s_0)
-  requires (K_6 : (s_0 >= 0));
+  requires (K_5 : (s_0 >= 0));
 behavior default:
   assigns this_6.balance;
   ensures (K_4 : (this_6.balance == (\at(this_6.balance,Old) + s_0)));
-{  (K_5 : this_6.balance += s_0)
+{  (K_6 : this_6.balance += s_0)
 }
 
 unit Purse_withdraw(Purse[0] this_5, integer s_1)
-  requires (K_16 : (s_1 >= 0));
+  requires (K_11 : (s_1 >= 0));
 behavior default:
   assigns this_5.balance;
   ensures (K_9 : ((K_8 : (s_1 <= \at(this_5.balance,Old))) &&
@@ -258,8 +258,8 @@ behavior amount_too_large:
   throws NoCreditException;
   assigns \nothing;
   ensures (K_10 : (s_1 > \at(this_5.balance,Old)));
-{  (if (K_15 : ((K_14 : this_5.balance) >= s_1)) then (K_13 : (this_5.balance = 
-                                                      (K_12 : ((K_11 : this_5.balance) -
+{  (if (K_16 : ((K_15 : this_5.balance) >= s_1)) then (K_14 : (this_5.balance = 
+                                                      (K_13 : ((K_12 : this_5.balance) -
                                                                 s_1)))) else 
    (throw NoCreditException 
    {  
@@ -294,6 +294,12 @@ end = 55
 
 [K_11]
 file = "HOME/tests/java/Purse.java"
+line = 60
+begin = 17
+end = 23
+
+[K_12]
+file = "HOME/tests/java/Purse.java"
 line = 69
 begin = 22
 end = 29
@@ -305,35 +311,29 @@ line = 67
 begin = 16
 end = 24
 
-[K_12]
+[K_13]
 file = "HOME/tests/java/Purse.java"
 line = 69
 begin = 22
 end = 33
 
-[K_13]
+[K_14]
 file = "HOME/tests/java/Purse.java"
 line = 69
 begin = 12
 end = 33
 
-[K_14]
+[K_15]
 file = "HOME/tests/java/Purse.java"
 line = 68
 begin = 12
 end = 19
 
-[K_15]
+[K_16]
 file = "HOME/tests/java/Purse.java"
 line = 68
 begin = 12
 end = 24
-
-[K_16]
-file = "HOME/tests/java/Purse.java"
-line = 60
-begin = 17
-end = 23
 
 [K_17]
 file = "HOME/tests/java/Purse.java"
@@ -384,15 +384,15 @@ end = 25
 
 [K_1]
 file = "HOME/tests/java/Purse.java"
-line = 49
-begin = 8
-end = 19
-
-[K_2]
-file = "HOME/tests/java/Purse.java"
 line = 44
 begin = 17
 end = 21
+
+[K_2]
+file = "HOME/tests/java/Purse.java"
+line = 46
+begin = 16
+end = 28
 
 [Throwable_printStackTrace_PrintStream]
 name = "Method printStackTrace"
@@ -403,9 +403,9 @@ end = 31
 
 [K_3]
 file = "HOME/tests/java/Purse.java"
-line = 46
-begin = 16
-end = 28
+line = 49
+begin = 8
+end = 19
 
 [K_4]
 file = "HOME/tests/java/Purse.java"
@@ -415,15 +415,15 @@ end = 44
 
 [K_5]
 file = "HOME/tests/java/Purse.java"
-line = 57
-begin = 8
-end = 20
-
-[K_6]
-file = "HOME/tests/java/Purse.java"
 line = 52
 begin = 17
 end = 23
+
+[K_6]
+file = "HOME/tests/java/Purse.java"
+line = 57
+begin = 8
+end = 20
 
 [K_7]
 file = "HOME/tests/java/Purse.java"
@@ -3271,7 +3271,7 @@ let Purse_credit_ensures_default =
   (init:
   try
    begin
-     (let jessie_180 = (K_5:
+     (let jessie_180 = (K_6:
                        (let jessie_176 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
                        (let jessie_179 = this_6 in
                        begin
@@ -3301,7 +3301,7 @@ let Purse_credit_safety =
   (init:
   try
    begin
-     (let jessie_174 = (K_5:
+     (let jessie_174 = (K_6:
                        (let jessie_170 = ((add_int ((safe_acc_ !Purse_balance) this_6)) s_0) in
                        (let jessie_173 = this_6 in
                        begin
@@ -3359,11 +3359,11 @@ let Purse_withdraw_ensures_default =
   (init:
   try
    begin
-     (if (K_15: ((ge_int_ (K_14: ((safe_acc_ !Purse_balance) this_5))) s_1))
+     (if (K_16: ((ge_int_ (K_15: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
-      (K_13:
-      (let jessie_196 = (let jessie_192 = (K_12:
-                                          ((sub_int (K_11:
+      (K_14:
+      (let jessie_196 = (let jessie_192 = (K_13:
+                                          ((sub_int (K_12:
                                                     ((safe_acc_ !Purse_balance) this_5))) s_1)) in
                         (let jessie_195 = this_5 in
                         (((safe_upd_ Purse_balance) jessie_195) jessie_192))) in
@@ -3403,11 +3403,11 @@ let Purse_withdraw_exsures_amount_too_large =
   (init:
   try
    begin
-     (if (K_15: ((ge_int_ (K_14: ((safe_acc_ !Purse_balance) this_5))) s_1))
+     (if (K_16: ((ge_int_ (K_15: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
-      (K_13:
-      (let jessie_206 = (let jessie_202 = (K_12:
-                                          ((sub_int (K_11:
+      (K_14:
+      (let jessie_206 = (let jessie_202 = (K_13:
+                                          ((sub_int (K_12:
                                                     ((safe_acc_ !Purse_balance) this_5))) s_1)) in
                         (let jessie_205 = this_5 in
                         (((safe_upd_ Purse_balance) jessie_205) jessie_202))) in
@@ -3446,11 +3446,11 @@ let Purse_withdraw_safety =
   (init:
   try
    begin
-     (if (K_15: ((ge_int_ (K_14: ((safe_acc_ !Purse_balance) this_5))) s_1))
+     (if (K_16: ((ge_int_ (K_15: ((safe_acc_ !Purse_balance) this_5))) s_1))
      then
-      (K_13:
-      (let jessie_186 = (let jessie_182 = (K_12:
-                                          ((sub_int (K_11:
+      (K_14:
+      (let jessie_186 = (let jessie_182 = (K_13:
+                                          ((sub_int (K_12:
                                                     ((safe_acc_ !Purse_balance) this_5))) s_1)) in
                         (let jessie_185 = this_5 in
                         (((safe_upd_ Purse_balance) jessie_185) jessie_182))) in
@@ -3558,7 +3558,7 @@ let cons_Purse_ensures_default =
                                            (let jessie_161 = this_7 in
                                            (((safe_upd_ Purse_balance) jessie_161) jessie_158))) in
                          void);
-                        (K_1:
+                        (K_3:
                         (let jessie_164 = (0) in
                         (let jessie_167 = this_7 in
                         begin
@@ -3589,7 +3589,7 @@ let cons_Purse_safety =
                                            (let jessie_149 = this_7 in
                                            (((safe_upd_ Purse_balance) jessie_149) jessie_146))) in
                          void);
-                        (K_1:
+                        (K_3:
                         (let jessie_152 = (0) in
                         (let jessie_155 = this_7 in
                         begin
@@ -4217,12 +4217,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -4237,15 +4231,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -4361,7 +4359,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -4579,7 +4577,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -4899,15 +4897,15 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Exception_parenttag_Throwable: parenttag(Exception_tag, Throwable_tag)
 
 function Exception_serialVersionUID() : int = (-3387516993124229948)
 
-logic NoCreditException_tag :  -> Object tag_id
+logic NoCreditException_tag : Object tag_id
 
 axiom NoCreditException_parenttag_Exception: parenttag(NoCreditException_tag,
   Exception_tag)
@@ -4916,7 +4914,7 @@ predicate Non_null_Object(x: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   x) = 0)
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -4941,15 +4939,15 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic PrintStream_tag :  -> Object tag_id
+logic PrintStream_tag : Object tag_id
 
 axiom PrintStream_parenttag_Object: parenttag(PrintStream_tag, Object_tag)
 
-logic Purse_tag :  -> Object tag_id
+logic Purse_tag : Object tag_id
 
 axiom Purse_parenttag_Object: parenttag(Purse_tag, Object_tag)
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
@@ -4971,7 +4969,7 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -5680,10 +5678,6 @@ why -simplify [...] why/Purse.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -7018,12 +7012,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -7038,15 +7026,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -7162,7 +7154,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -7380,7 +7372,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -7700,15 +7692,15 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Exception_parenttag_Throwable: parenttag(Exception_tag, Throwable_tag)
 
 function Exception_serialVersionUID() : int = (-3387516993124229948)
 
-logic NoCreditException_tag :  -> Object tag_id
+logic NoCreditException_tag : Object tag_id
 
 axiom NoCreditException_parenttag_Exception: parenttag(NoCreditException_tag,
   Exception_tag)
@@ -7717,7 +7709,7 @@ predicate Non_null_Object(x: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
   x) = 0)
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -7742,15 +7734,15 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic PrintStream_tag :  -> Object tag_id
+logic PrintStream_tag : Object tag_id
 
 axiom PrintStream_parenttag_Object: parenttag(PrintStream_tag, Object_tag)
 
-logic Purse_tag :  -> Object tag_id
+logic Purse_tag : Object tag_id
 
 axiom Purse_parenttag_Object: parenttag(Purse_tag, Object_tag)
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
@@ -7772,7 +7764,7 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 

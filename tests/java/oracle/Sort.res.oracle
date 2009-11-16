@@ -209,27 +209,27 @@ exception Throwable of Throwable[0..]
 exception Exception of Exception[0..]
 
 unit Sort_swap(Sort[0] this_2, intM[0..] t, integer i_2, integer j_1)
-  requires (K_14 : ((K_13 : ((K_12 : Non_null_intM(t)) &&
-                              (K_11 : ((K_10 : (0 <= i_2)) &&
-                                        (K_9 : (i_2 < (\offset_max(t) + 1))))))) &&
-                     (K_8 : ((K_7 : (0 <= j_1)) &&
-                              (K_6 : (j_1 < (\offset_max(t) + 1)))))));
+  requires (K_10 : ((K_9 : ((K_8 : Non_null_intM(t)) &&
+                             (K_7 : ((K_6 : (0 <= i_2)) &&
+                                      (K_5 : (i_2 < (\offset_max(t) + 1))))))) &&
+                     (K_4 : ((K_3 : (0 <= j_1)) &&
+                              (K_2 : (j_1 < (\offset_max(t) + 1)))))));
 behavior default:
   assigns (t + [i_2..i_2]).intP,
   (t + [j_1..j_1]).intP;
   ensures (K_1 : Swap{Old, Here}(t, i_2, j_1));
 {  
    {  
-      (var integer tmp = (K_5 : (t + i_2).intP));
+      (var integer tmp = (K_14 : (t + i_2).intP));
       
-      {  (K_3 : ((t + i_2).intP = (K_2 : (t + j_1).intP)));
-         (K_4 : ((t + j_1).intP = tmp))
+      {  (K_12 : ((t + i_2).intP = (K_11 : (t + j_1).intP)));
+         (K_13 : ((t + j_1).intP = tmp))
       }
    }
 }
 
 unit Sort_min_sort(Sort[0] this_0, intM[0..] t_0)
-  requires (K_44 : Non_null_intM(t_0));
+  requires (K_17 : Non_null_intM(t_0));
 behavior sorted:
   ensures (K_15 : Sorted{Here}(t_0, 0, ((\offset_max(t_0) + 1) - 1)));
 behavior permutation:
@@ -249,10 +249,10 @@ behavior permutation:
                
                loop 
                behavior default:
-                 invariant (K_17 : (0 <= i_3));
+                 invariant (K_18 : (0 <= i_3));
                behavior sorted:
-                 invariant (K_20 : ((K_19 : Sorted{Here}(t_0, 0, i_3)) &&
-                                     (K_18 : (\forall integer k1;
+                 invariant (K_21 : ((K_20 : Sorted{Here}(t_0, 0, i_3)) &&
+                                     (K_19 : (\forall integer k1;
                                                (\forall integer k2;
                                                  (((((0 <= k1) && (k1 < i_3)) &&
                                                      (i_3 <= k2)) &&
@@ -261,45 +261,45 @@ behavior permutation:
                                                    ((t_0 + k1).intP <=
                                                      (t_0 + k2).intP)))))));
                behavior permutation:
-                 invariant (K_21 : Permut{Pre,
+                 invariant (K_22 : Permut{Pre,
                            Here}(t_0, 0, ((\offset_max(t_0) + 1) - 1)));
                
-               for ((i_3 = 0) ; (K_43 : (i_3 <
-                                          (K_42 : ((K_41 : java_array_length_intM(
+               for ((i_3 = 0) ; (K_44 : (i_3 <
+                                          (K_43 : ((K_42 : java_array_length_intM(
                                                    t_0)) -
-                                                    1)))) ; (K_40 : (i_3 ++)))
+                                                    1)))) ; (K_41 : (i_3 ++)))
                {  
-                  {  (mv = (K_22 : (t_0 + i_3).intP));
+                  {  (mv = (K_23 : (t_0 + i_3).intP));
                      (mi = i_3);
                      
                      loop 
                      behavior default:
-                       invariant (K_27 : ((K_26 : (i_3 < j_2)) &&
-                                           (K_25 : ((K_24 : (i_3 <= mi)) &&
-                                                     (K_23 : (mi <
+                       invariant (K_28 : ((K_27 : (i_3 < j_2)) &&
+                                           (K_26 : ((K_25 : (i_3 <= mi)) &&
+                                                     (K_24 : (mi <
                                                                (\offset_max(t_0) +
                                                                  1)))))));
                      behavior sorted:
-                       invariant (K_30 : ((K_29 : (mv == (t_0 + mi).intP)) &&
-                                           (K_28 : (\forall integer k_0;
+                       invariant (K_31 : ((K_30 : (mv == (t_0 + mi).intP)) &&
+                                           (K_29 : (\forall integer k_0;
                                                      (((i_3 <= k_0) &&
                                                         (k_0 < j_2)) ==>
                                                        ((t_0 + k_0).intP >=
                                                          mv))))));
                      behavior permutation:
-                       invariant (K_31 : Permut{Pre,
+                       invariant (K_32 : Permut{Pre,
                                  Here}(t_0, 0, ((\offset_max(t_0) + 1) - 1)));
                      
-                     for ((j_2 = (K_38 : (i_3 + 1))) ; (K_37 : (j_2 <
-                                                                 (K_36 : java_array_length_intM(
+                     for ((j_2 = (K_39 : (i_3 + 1))) ; (K_38 : (j_2 <
+                                                                 (K_37 : java_array_length_intM(
                                                                  t_0)))) ; 
-                     (K_35 : (j_2 ++)))
-                     {  (if (K_34 : ((K_33 : (t_0 + j_2).intP) < mv)) then 
+                     (K_36 : (j_2 ++)))
+                     {  (if (K_35 : ((K_34 : (t_0 + j_2).intP) < mv)) then 
                         {  (mi = j_2);
-                           (mv = (K_32 : (t_0 + j_2).intP))
+                           (mv = (K_33 : (t_0 + j_2).intP))
                         } else ())
                      };
-                     (K_39 : Sort_swap(this_0, t_0, i_3, mi))
+                     (K_40 : Sort_swap(this_0, t_0, i_3, mi))
                   }
                }
             }
@@ -354,33 +354,33 @@ End:
 ========== file tests/java/Sort.jloc ==========
 [K_10]
 file = "HOME/tests/java/Sort.java"
-line = 35
-begin = 11
-end = 17
-
-[K_11]
-file = "HOME/tests/java/Sort.java"
-line = 35
-begin = 11
-end = 28
-
-[K_12]
-file = "HOME/tests/java/Sort.java"
-line = 34
-begin = 17
-end = 26
-
-[K_13]
-file = "HOME/tests/java/Sort.java"
-line = 34
-begin = 17
-end = 59
-
-[K_14]
-file = "HOME/tests/java/Sort.java"
 line = 34
 begin = 17
 end = 80
+
+[K_11]
+file = "HOME/tests/java/Sort.java"
+line = 41
+begin = 8
+end = 12
+
+[K_12]
+file = "HOME/tests/java/Sort.java"
+line = 41
+begin = 1
+end = 12
+
+[K_13]
+file = "HOME/tests/java/Sort.java"
+line = 42
+begin = 1
+end = 11
+
+[K_14]
+file = "HOME/tests/java/Sort.java"
+line = 40
+begin = 11
+end = 15
 
 [K_15]
 file = "HOME/tests/java/Sort.java"
@@ -396,51 +396,51 @@ end = 50
 
 [K_17]
 file = "HOME/tests/java/Sort.java"
+line = 45
+begin = 17
+end = 26
+
+[K_18]
+file = "HOME/tests/java/Sort.java"
 line = 54
 begin = 20
 end = 26
 
-[K_18]
+[K_19]
 file = "HOME/tests/java/Sort.java"
 line = 57
 begin = 8
 end = 90
 
-[K_19]
+[K_20]
 file = "HOME/tests/java/Sort.java"
 line = 56
 begin = 21
 end = 34
 
-[K_20]
+[K_21]
 file = "HOME/tests/java/Sort.java"
 line = 56
 begin = 21
 end = 130
 
-[K_21]
+[K_22]
 file = "HOME/tests/java/Sort.java"
 line = 60
 begin = 22
 end = 54
 
-[K_22]
+[K_23]
 file = "HOME/tests/java/Sort.java"
 line = 64
 begin = 10
 end = 14
 
-[K_23]
+[K_24]
 file = "HOME/tests/java/Sort.java"
 line = 65
 begin = 38
 end = 51
-
-[K_24]
-file = "HOME/tests/java/Sort.java"
-line = 65
-begin = 33
-end = 40
 
 [K_1]
 file = "HOME/tests/java/Sort.java"
@@ -452,25 +452,25 @@ end = 37
 file = "HOME/tests/java/Sort.java"
 line = 65
 begin = 33
-end = 51
+end = 40
 
 [K_2]
 file = "HOME/tests/java/Sort.java"
-line = 41
-begin = 8
-end = 12
+line = 35
+begin = 37
+end = 49
 
 [K_26]
 file = "HOME/tests/java/Sort.java"
 line = 65
-begin = 24
-end = 29
+begin = 33
+end = 51
 
 [K_3]
 file = "HOME/tests/java/Sort.java"
-line = 41
-begin = 1
-end = 12
+line = 35
+begin = 32
+end = 38
 
 [Object_equals]
 name = "Method equals"
@@ -483,55 +483,55 @@ end = 25
 file = "HOME/tests/java/Sort.java"
 line = 65
 begin = 24
-end = 51
+end = 29
 
 [K_4]
 file = "HOME/tests/java/Sort.java"
-line = 42
-begin = 1
-end = 11
+line = 35
+begin = 32
+end = 49
 
 [K_28]
+file = "HOME/tests/java/Sort.java"
+line = 65
+begin = 24
+end = 51
+
+[K_5]
+file = "HOME/tests/java/Sort.java"
+line = 35
+begin = 16
+end = 28
+
+[K_29]
 file = "HOME/tests/java/Sort.java"
 line = 68
 begin = 12
 end = 56
 
-[K_5]
-file = "HOME/tests/java/Sort.java"
-line = 40
-begin = 11
-end = 15
-
-[K_29]
-file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 25
-end = 36
-
 [K_6]
 file = "HOME/tests/java/Sort.java"
 line = 35
-begin = 37
-end = 49
+begin = 11
+end = 17
 
 [K_7]
 file = "HOME/tests/java/Sort.java"
 line = 35
-begin = 32
-end = 38
+begin = 11
+end = 28
 
 [K_8]
 file = "HOME/tests/java/Sort.java"
-line = 35
-begin = 32
-end = 49
+line = 34
+begin = 17
+end = 26
 
 [K_9]
 file = "HOME/tests/java/Sort.java"
-line = 35
-begin = 16
-end = 28
+line = 34
+begin = 17
+end = 59
 
 [Object_notify]
 name = "Method notify"
@@ -551,55 +551,55 @@ end = -1
 file = "HOME/tests/java/Sort.java"
 line = 67
 begin = 25
-end = 97
+end = 36
 
 [K_31]
+file = "HOME/tests/java/Sort.java"
+line = 67
+begin = 25
+end = 97
+
+[K_32]
 file = "HOME/tests/java/Sort.java"
 line = 70
 begin = 25
 end = 57
 
-[K_32]
+[K_33]
 file = "HOME/tests/java/Sort.java"
 line = 74
 begin = 20
 end = 24
 
-[K_33]
+[K_34]
 file = "HOME/tests/java/Sort.java"
 line = 73
 begin = 6
 end = 10
 
-[K_34]
+[K_35]
 file = "HOME/tests/java/Sort.java"
 line = 73
 begin = 6
 end = 15
 
-[K_35]
+[K_36]
 file = "HOME/tests/java/Sort.java"
 line = 72
 begin = 31
 end = 34
 
-[K_36]
+[K_37]
 file = "HOME/tests/java/Sort.java"
 line = 72
 begin = 21
 end = 29
 
-[K_37]
+[K_38]
 file = "HOME/tests/java/Sort.java"
 line = 72
 begin = 17
 end = 29
-
-[K_38]
-file = "HOME/tests/java/Sort.java"
-line = 72
-begin = 12
-end = 15
 
 [Object_wait_long_int]
 name = "Method wait"
@@ -610,9 +610,9 @@ end = 26
 
 [K_39]
 file = "HOME/tests/java/Sort.java"
-line = 77
-begin = 5
-end = 17
+line = 72
+begin = 12
+end = 15
 
 [Object_wait_long]
 name = "Method wait"
@@ -637,33 +637,33 @@ end = 38
 
 [K_40]
 file = "HOME/tests/java/Sort.java"
-line = 62
-begin = 25
-end = 28
+line = 77
+begin = 5
+end = 17
 
 [K_41]
 file = "HOME/tests/java/Sort.java"
 line = 62
-begin = 13
-end = 21
+begin = 25
+end = 28
 
 [K_42]
 file = "HOME/tests/java/Sort.java"
 line = 62
 begin = 13
-end = 23
+end = 21
 
 [K_43]
 file = "HOME/tests/java/Sort.java"
 line = 62
-begin = 11
+begin = 13
 end = 23
 
 [K_44]
 file = "HOME/tests/java/Sort.java"
-line = 45
-begin = 17
-end = 26
+line = 62
+begin = 11
+end = 23
 
 [Object_toString]
 name = "Method toString"
@@ -1172,8 +1172,8 @@ end = -1
 kind = PointerDeref
 file = "HOME/tests/java/Sort.jc"
 line = 123
-begin = 17
-end = 56
+begin = 18
+end = 58
 
 [JC_235]
 file = "HOME/"
@@ -1185,8 +1185,8 @@ end = -1
 kind = PointerDeref
 file = "HOME/tests/java/Sort.jc"
 line = 124
-begin = 17
-end = 37
+begin = 18
+end = 38
 
 [JC_236]
 file = "HOME/"
@@ -3366,20 +3366,20 @@ let Sort_min_sort_ensures_default =
           [ { } unit { true } ];
          try
           (let jessie_88 = begin
-                             (if (K_43:
-                                 ((lt_int_ !i_3) (K_42:
-                                                 ((sub_int (K_41:
+                             (if (K_44:
+                                 ((lt_int_ !i_3) (K_43:
+                                                 ((sub_int (K_42:
                                                            (let jessie_65 = t_0 in
                                                            (JC_92:
                                                            (java_array_length_intM jessie_65))))) (1)))))
                              then
                               begin
-                                (let jessie_67 = (mv := (K_22:
+                                (let jessie_67 = (mv := (K_23:
                                                         ((safe_acc_ !intM_intP) 
                                                          ((shift t_0) !i_3)))) in
                                 void);
                                (let jessie_69 = (mi := !i_3) in void);
-                               (let jessie_71 = (j_2 := (K_38:
+                               (let jessie_71 = (j_2 := (K_39:
                                                         ((add_int !i_3) (1)))) in
                                void);
                                try
@@ -3399,16 +3399,16 @@ let Sort_min_sort_ensures_default =
                                    [ { } unit { true } ];
                                   try
                                    (let jessie_78 = begin
-                                                      (if (K_37:
+                                                      (if (K_38:
                                                           ((lt_int_ !j_2) 
-                                                           (K_36:
+                                                           (K_37:
                                                            (let jessie_72 = t_0 in
                                                            (JC_100:
                                                            (java_array_length_intM jessie_72))))))
                                                       then
-                                                       (if (K_34:
+                                                       (if (K_35:
                                                            ((lt_int_ 
-                                                             (K_33:
+                                                             (K_34:
                                                              ((safe_acc_ !intM_intP) 
                                                               ((shift t_0) !j_2)))) !mv))
                                                        then
@@ -3417,7 +3417,7 @@ let Sort_min_sort_ensures_default =
                                                           (let jessie_74 = 
                                                           (mi := !j_2) in
                                                           void);
-                                                         (mv := (K_32:
+                                                         (mv := (K_33:
                                                                 ((safe_acc_ !intM_intP) 
                                                                  ((shift t_0) !j_2))));
                                                          !mv
@@ -3437,7 +3437,7 @@ let Sort_min_sort_ensures_default =
                                    void)
                                    with
                                    Loop_continue_exc jessie_4 ->
-                                   (let jessie_82 = (K_35:
+                                   (let jessie_82 = (K_36:
                                                     (let jessie_2 = !j_2 in
                                                     begin
                                                       (let jessie_81 = 
@@ -3451,7 +3451,7 @@ let Sort_min_sort_ensures_default =
                                 with
                                 Loop_exit_exc jessie_3 ->
                                 void end;
-                               (K_39:
+                               (K_40:
                                (let jessie_86 = this_0 in
                                (let jessie_85 = t_0 in
                                (let jessie_84 = !i_3 in
@@ -3467,7 +3467,7 @@ let Sort_min_sort_ensures_default =
           void)
           with
           Loop_continue_exc jessie_6 ->
-          (let jessie_92 = (K_40:
+          (let jessie_92 = (K_41:
                            (let jessie_1 = !i_3 in
                            begin
                              (let jessie_91 = (i_3 := ((add_int jessie_1) (1))) in
@@ -3515,20 +3515,20 @@ let Sort_min_sort_ensures_permutation =
           [ { } unit reads i_3 { (JC_123: le_int((0), i_3)) } ];
          try
           (let jessie_148 = begin
-                              (if (K_43:
-                                  ((lt_int_ !i_3) (K_42:
-                                                  ((sub_int (K_41:
+                              (if (K_44:
+                                  ((lt_int_ !i_3) (K_43:
+                                                  ((sub_int (K_42:
                                                             (let jessie_125 = t_0 in
                                                             (JC_127:
                                                             (java_array_length_intM jessie_125))))) (1)))))
                               then
                                begin
-                                 (let jessie_127 = (mv := (K_22:
+                                 (let jessie_127 = (mv := (K_23:
                                                           ((safe_acc_ !intM_intP) 
                                                            ((shift t_0) !i_3)))) in
                                  void);
                                 (let jessie_129 = (mi := !i_3) in void);
-                                (let jessie_131 = (j_2 := (K_38:
+                                (let jessie_131 = (j_2 := (K_39:
                                                           ((add_int !i_3) (1)))) in
                                 void);
                                 try
@@ -3555,16 +3555,16 @@ let Sort_min_sort_ensures_permutation =
                                                 (1))))))) } ];
                                    try
                                     (let jessie_138 = begin
-                                                        (if (K_37:
+                                                        (if (K_38:
                                                             ((lt_int_ !j_2) 
-                                                             (K_36:
+                                                             (K_37:
                                                              (let jessie_132 = t_0 in
                                                              (JC_136:
                                                              (java_array_length_intM jessie_132))))))
                                                         then
-                                                         (if (K_34:
+                                                         (if (K_35:
                                                              ((lt_int_ 
-                                                               (K_33:
+                                                               (K_34:
                                                                ((safe_acc_ !intM_intP) 
                                                                 ((shift t_0) !j_2)))) !mv))
                                                          then
@@ -3573,7 +3573,7 @@ let Sort_min_sort_ensures_permutation =
                                                             (let jessie_134 = 
                                                             (mi := !j_2) in
                                                             void);
-                                                           (mv := (K_32:
+                                                           (mv := (K_33:
                                                                   ((safe_acc_ !intM_intP) 
                                                                    ((shift t_0) !j_2))));
                                                            !mv
@@ -3593,7 +3593,7 @@ let Sort_min_sort_ensures_permutation =
                                     void)
                                     with
                                     Loop_continue_exc jessie_4 ->
-                                    (let jessie_142 = (K_35:
+                                    (let jessie_142 = (K_36:
                                                       (let jessie_2 = !j_2 in
                                                       begin
                                                         (let jessie_141 = 
@@ -3607,7 +3607,7 @@ let Sort_min_sort_ensures_permutation =
                                  with
                                  Loop_exit_exc jessie_3 ->
                                  void end;
-                                (K_39:
+                                (K_40:
                                 (let jessie_146 = this_0 in
                                 (let jessie_145 = t_0 in
                                 (let jessie_144 = !i_3 in
@@ -3623,7 +3623,7 @@ let Sort_min_sort_ensures_permutation =
           void)
           with
           Loop_continue_exc jessie_6 ->
-          (let jessie_152 = (K_40:
+          (let jessie_152 = (K_41:
                             (let jessie_1 = !i_3 in
                             begin
                               (let jessie_151 = (i_3 := ((add_int jessie_1) (1))) in
@@ -3683,20 +3683,20 @@ let Sort_min_sort_ensures_sorted =
           [ { } unit reads i_3 { (JC_105: le_int((0), i_3)) } ];
          try
           (let jessie_118 = begin
-                              (if (K_43:
-                                  ((lt_int_ !i_3) (K_42:
-                                                  ((sub_int (K_41:
+                              (if (K_44:
+                                  ((lt_int_ !i_3) (K_43:
+                                                  ((sub_int (K_42:
                                                             (let jessie_95 = t_0 in
                                                             (JC_109:
                                                             (java_array_length_intM jessie_95))))) (1)))))
                               then
                                begin
-                                 (let jessie_97 = (mv := (K_22:
+                                 (let jessie_97 = (mv := (K_23:
                                                          ((safe_acc_ !intM_intP) 
                                                           ((shift t_0) !i_3)))) in
                                  void);
                                 (let jessie_99 = (mi := !i_3) in void);
-                                (let jessie_101 = (j_2 := (K_38:
+                                (let jessie_101 = (j_2 := (K_39:
                                                           ((add_int !i_3) (1)))) in
                                 void);
                                 try
@@ -3728,16 +3728,16 @@ let Sort_min_sort_ensures_sorted =
                                                 (1))))))) } ];
                                    try
                                     (let jessie_108 = begin
-                                                        (if (K_37:
+                                                        (if (K_38:
                                                             ((lt_int_ !j_2) 
-                                                             (K_36:
+                                                             (K_37:
                                                              (let jessie_102 = t_0 in
                                                              (JC_120:
                                                              (java_array_length_intM jessie_102))))))
                                                         then
-                                                         (if (K_34:
+                                                         (if (K_35:
                                                              ((lt_int_ 
-                                                               (K_33:
+                                                               (K_34:
                                                                ((safe_acc_ !intM_intP) 
                                                                 ((shift t_0) !j_2)))) !mv))
                                                          then
@@ -3746,7 +3746,7 @@ let Sort_min_sort_ensures_sorted =
                                                             (let jessie_104 = 
                                                             (mi := !j_2) in
                                                             void);
-                                                           (mv := (K_32:
+                                                           (mv := (K_33:
                                                                   ((safe_acc_ !intM_intP) 
                                                                    ((shift t_0) !j_2))));
                                                            !mv
@@ -3766,7 +3766,7 @@ let Sort_min_sort_ensures_sorted =
                                     void)
                                     with
                                     Loop_continue_exc jessie_4 ->
-                                    (let jessie_112 = (K_35:
+                                    (let jessie_112 = (K_36:
                                                       (let jessie_2 = !j_2 in
                                                       begin
                                                         (let jessie_111 = 
@@ -3780,7 +3780,7 @@ let Sort_min_sort_ensures_sorted =
                                  with
                                  Loop_exit_exc jessie_3 ->
                                  void end;
-                                (K_39:
+                                (K_40:
                                 (let jessie_116 = this_0 in
                                 (let jessie_115 = t_0 in
                                 (let jessie_114 = !i_3 in
@@ -3796,7 +3796,7 @@ let Sort_min_sort_ensures_sorted =
           void)
           with
           Loop_continue_exc jessie_6 ->
-          (let jessie_122 = (K_40:
+          (let jessie_122 = (K_41:
                             (let jessie_1 = !i_3 in
                             begin
                               (let jessie_121 = (i_3 := ((add_int jessie_1) (1))) in
@@ -3842,20 +3842,20 @@ let Sort_min_sort_safety =
           [ { } unit reads i_3 { (JC_71: le_int((0), i_3)) } ];
          try
           (let jessie_58 = begin
-                             (if (K_43:
-                                 ((lt_int_ !i_3) (K_42:
-                                                 ((sub_int (K_41:
+                             (if (K_44:
+                                 ((lt_int_ !i_3) (K_43:
+                                                 ((sub_int (K_42:
                                                            (let jessie_35 = t_0 in
                                                            (JC_75:
                                                            (java_array_length_intM_requires jessie_35))))) (1)))))
                              then
                               begin
-                                (let jessie_37 = (mv := (K_22:
+                                (let jessie_37 = (mv := (K_23:
                                                         (JC_76:
                                                         ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !i_3)))) in
                                 void);
                                (let jessie_39 = (mi := !i_3) in void);
-                               (let jessie_41 = (j_2 := (K_38:
+                               (let jessie_41 = (j_2 := (K_39:
                                                         ((add_int !i_3) (1)))) in
                                void);
                                try
@@ -3875,16 +3875,16 @@ let Sort_min_sort_safety =
                                                (1))))))) } ];
                                   try
                                    (let jessie_48 = begin
-                                                      (if (K_37:
+                                                      (if (K_38:
                                                           ((lt_int_ !j_2) 
-                                                           (K_36:
+                                                           (K_37:
                                                            (let jessie_42 = t_0 in
                                                            (JC_84:
                                                            (java_array_length_intM_requires jessie_42))))))
                                                       then
-                                                       (if (K_34:
+                                                       (if (K_35:
                                                            ((lt_int_ 
-                                                             (K_33:
+                                                             (K_34:
                                                              (JC_85:
                                                              ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2)))) !mv))
                                                        then
@@ -3893,7 +3893,7 @@ let Sort_min_sort_safety =
                                                           (let jessie_44 = 
                                                           (mi := !j_2) in
                                                           void);
-                                                         (mv := (K_32:
+                                                         (mv := (K_33:
                                                                 (JC_86:
                                                                 ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2))));
                                                          !mv
@@ -3913,7 +3913,7 @@ let Sort_min_sort_safety =
                                    void)
                                    with
                                    Loop_continue_exc jessie_4 ->
-                                   (let jessie_52 = (K_35:
+                                   (let jessie_52 = (K_36:
                                                     (let jessie_2 = !j_2 in
                                                     begin
                                                       (let jessie_51 = 
@@ -3927,7 +3927,7 @@ let Sort_min_sort_safety =
                                 with
                                 Loop_exit_exc jessie_3 ->
                                 void end;
-                               (K_39:
+                               (K_40:
                                (let jessie_56 = this_0 in
                                (let jessie_55 = t_0 in
                                (let jessie_54 = !i_3 in
@@ -3943,7 +3943,7 @@ let Sort_min_sort_safety =
           void)
           with
           Loop_continue_exc jessie_6 ->
-          (let jessie_62 = (K_40:
+          (let jessie_62 = (K_41:
                            (let jessie_1 = !i_3 in
                            begin
                              (let jessie_61 = (i_3 := ((add_int jessie_1) (1))) in
@@ -3981,17 +3981,17 @@ let Sort_swap_ensures_default =
   (init:
   try
    begin
-     (let jessie_32 = (let tmp = (K_5:
+     (let jessie_32 = (let tmp = (K_14:
                                  ((safe_acc_ !intM_intP) ((shift t) i_2))) in
-                      (K_3:
+                      (K_12:
                       begin
-                        (let jessie_26 = (let jessie_22 = (K_2:
+                        (let jessie_26 = (let jessie_22 = (K_11:
                                                           ((safe_acc_ !intM_intP) 
                                                            ((shift t) j_1))) in
                                          (let jessie_25 = ((shift t) i_2) in
                                          (((safe_upd_ intM_intP) jessie_25) jessie_22))) in
                         void);
-                       (K_4:
+                       (K_13:
                        (let jessie_28 = tmp in
                        (let jessie_31 = ((shift t) j_1) in
                        begin
@@ -4029,12 +4029,12 @@ let Sort_swap_safety =
   (init:
   try
    begin
-     (let jessie_19 = (let tmp = (K_5:
+     (let jessie_19 = (let tmp = (K_14:
                                  (JC_55:
                                  ((((offset_acc_ !Object_alloc_table) !intM_intP) t) i_2))) in
-                      (K_3:
+                      (K_12:
                       begin
-                        (let jessie_13 = (let jessie_9 = (K_2:
+                        (let jessie_13 = (let jessie_9 = (K_11:
                                                          (JC_56:
                                                          ((((offset_acc_ !Object_alloc_table) !intM_intP) t) j_1))) in
                                          (let jessie_10 = t in
@@ -4043,7 +4043,7 @@ let Sort_swap_safety =
                                          (JC_57:
                                          (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_10) jessie_11) jessie_9)))))) in
                         void);
-                       (K_4:
+                       (K_13:
                        (let jessie_15 = tmp in
                        (let jessie_16 = t in
                        (let jessie_17 = j_1 in
@@ -4556,12 +4556,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -4576,15 +4570,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -4700,7 +4698,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -4918,7 +4916,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -5238,9 +5236,9 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -5331,7 +5329,7 @@ axiom Permut_trans:
                 Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L2)) ->
                Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L1))))))))
 
-logic Sort_tag :  -> Object tag_id
+logic Sort_tag : Object tag_id
 
 axiom Sort_parenttag_Object: parenttag(Sort_tag, Object_tag)
 
@@ -5341,11 +5339,11 @@ predicate Sorted(a: Object pointer, l: int, h: int, intM_intP_at_L: (Object,
     (((l <= i) and (i < h)) -> (select(intM_intP_at_L, shift(a,
      i)) <= select(intM_intP_at_L, shift(a, (i + 1))))))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -5360,11 +5358,11 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -7601,10 +7599,6 @@ why -simplify [...] why/Sort.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -10361,12 +10355,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -10381,15 +10369,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -10505,7 +10497,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -10723,7 +10715,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -11043,9 +11035,9 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -11136,7 +11128,7 @@ axiom Permut_trans:
                 Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L2)) ->
                Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L1))))))))
 
-logic Sort_tag :  -> Object tag_id
+logic Sort_tag : Object tag_id
 
 axiom Sort_parenttag_Object: parenttag(Sort_tag, Object_tag)
 
@@ -11146,11 +11138,11 @@ predicate Sorted(a: Object pointer, l: int, h: int, intM_intP_at_L: (Object,
     (((l <= i) and (i < h)) -> (select(intM_intP_at_L, shift(a,
      i)) <= select(intM_intP_at_L, shift(a, (i + 1))))))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -11165,11 +11157,11 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 

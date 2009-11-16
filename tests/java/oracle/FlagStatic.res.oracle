@@ -221,27 +221,26 @@ exception Exception of Exception[0..]
 
 boolean FlagStatic_isMonochrome(intM[0..] t, integer i, integer j,
                                 integer c_0)
-  requires (K_17 : ((K_16 : Non_null_intM(t)) &&
-                     (K_15 : ((K_14 : ((K_13 : (0 <= i)) &&
-                                        (K_12 : (i <= j)))) &&
-                               (K_11 : (j <= (\offset_max(t) + 1)))))));
+  requires (K_8 : ((K_7 : Non_null_intM(t)) &&
+                    (K_6 : ((K_5 : ((K_4 : (0 <= i)) && (K_3 : (i <= j)))) &&
+                             (K_2 : (j <= (\offset_max(t) + 1)))))));
 behavior decides_monochromatic:
   ensures (K_1 : (\result <==> is_monochrome{Here}(t, i, j, c_0)));
 {  
    {  
       {  
-         (var integer k_0 = (K_2 : i));
+         (var integer k_0 = (K_9 : i));
          
          loop 
          behavior default:
-           invariant (K_5 : ((K_4 : (i <= k_0)) &&
-                              (K_3 : (\forall integer l;
-                                       (((i <= l) && (l < k_0)) ==>
-                                         ((t + l).intP == c_0))))));
+           invariant (K_12 : ((K_11 : (i <= k_0)) &&
+                               (K_10 : (\forall integer l;
+                                         (((i <= l) && (l < k_0)) ==>
+                                           ((t + l).intP == c_0))))));
          
-         variant (K_6 : (j - k_0));
-         for ( ; (K_10 : (k_0 < j)) ; (K_9 : (k_0 ++)))
-         {  (if (K_8 : ((K_7 : (t + k_0).intP) != c_0)) then 
+         variant (K_13 : (j - k_0));
+         for ( ; (K_17 : (k_0 < j)) ; (K_16 : (k_0 ++)))
+         {  (if (K_15 : ((K_14 : (t + k_0).intP) != c_0)) then 
             (return false) else ())
          }
       }
@@ -251,10 +250,10 @@ behavior decides_monochromatic:
 }
 
 unit FlagStatic_swap(intM[0..] t_0, integer i_0, integer j_0)
-  requires (K_31 : ((K_30 : ((K_29 : (0 <= i_0)) &&
-                              (K_28 : (i_0 < (\offset_max(t_0) + 1))))) &&
-                     (K_27 : ((K_26 : (0 <= j_0)) &&
-                               (K_25 : (j_0 < (\offset_max(t_0) + 1)))))));
+  requires (K_27 : ((K_26 : ((K_25 : (0 <= i_0)) &&
+                              (K_24 : (i_0 < (\offset_max(t_0) + 1))))) &&
+                     (K_23 : ((K_22 : (0 <= j_0)) &&
+                               (K_21 : (j_0 < (\offset_max(t_0) + 1)))))));
 behavior i_j_swapped:
   assigns (t_0 + [i_0..i_0]).intP,
   (t_0 + [j_0..j_0]).intP;
@@ -262,16 +261,16 @@ behavior i_j_swapped:
                     (K_18 : ((t_0 + j_0).intP == \at((t_0 + i_0).intP,Old)))));
 {  
    {  
-      (var integer z = (K_24 : (t_0 + i_0).intP));
+      (var integer z = (K_31 : (t_0 + i_0).intP));
       
-      {  (K_22 : ((t_0 + i_0).intP = (K_21 : (t_0 + j_0).intP)));
-         (K_23 : ((t_0 + j_0).intP = z))
+      {  (K_29 : ((t_0 + i_0).intP = (K_28 : (t_0 + j_0).intP)));
+         (K_30 : ((t_0 + j_0).intP = z))
       }
    }
 }
 
 unit FlagStatic_flag(intM[0..] t_1)
-  requires (K_60 : is_color_array{Here}(t_1));
+  requires (K_33 : is_color_array{Here}(t_1));
 behavior sorts:
   ensures (K_32 : (\exists integer b;
                     (\exists integer r;
@@ -281,60 +280,60 @@ behavior sorts:
                                             FlagStatic_RED)))));
 {  
    {  
-      (var integer b_0 = (K_59 : 0));
+      (var integer b_0 = (K_60 : 0));
       
       {  
-         (var integer i_3 = (K_58 : 0));
+         (var integer i_3 = (K_59 : 0));
          
          {  
-            (var integer r_0 = (K_57 : java_array_length_intM(t_1)));
+            (var integer r_0 = (K_58 : java_array_length_intM(t_1)));
             
             loop 
             behavior default:
-              invariant (K_47 : ((K_46 : ((K_45 : ((K_44 : ((K_43 : is_color_array{Here}(
+              invariant (K_48 : ((K_47 : ((K_46 : ((K_45 : ((K_44 : is_color_array{Here}(
                                                             t_1)) &&
-                                                             (K_42 : 
-                                                             ((K_41 : 
-                                                              ((K_40 : 
-                                                               ((K_39 : 
+                                                             (K_43 : 
+                                                             ((K_42 : 
+                                                              ((K_41 : 
+                                                               ((K_40 : 
                                                                 (0 <=
                                                                   b_0)) &&
-                                                                 (K_38 : 
+                                                                 (K_39 : 
                                                                  (b_0 <=
                                                                    i_3)))) &&
-                                                                (K_37 : 
+                                                                (K_38 : 
                                                                 (i_3 <=
                                                                   r_0)))) &&
-                                                               (K_36 : 
+                                                               (K_37 : 
                                                                (r_0 <=
                                                                  (\offset_max(t_1) +
                                                                    1))))))) &&
-                                                    (K_35 : is_monochrome{Here}(
+                                                    (K_36 : is_monochrome{Here}(
                                                     t_1, 0, b_0,
                                                     FlagStatic_BLUE)))) &&
-                                           (K_34 : is_monochrome{Here}(
+                                           (K_35 : is_monochrome{Here}(
                                            t_1, b_0, i_3, FlagStatic_WHITE)))) &&
-                                  (K_33 : is_monochrome{Here}(t_1, r_0,
+                                  (K_34 : is_monochrome{Here}(t_1, r_0,
                                                               (\offset_max(t_1) +
                                                                 1),
                                                               FlagStatic_RED))));
-            variant (K_48 : (r_0 - i_3));
-            while ((K_56 : (i_3 < r_0)))
+            variant (K_49 : (r_0 - i_3));
+            while ((K_57 : (i_3 < r_0)))
             {  
-               switch ((K_55 : (t_1 + i_3).intP)) {
+               switch ((K_56 : (t_1 + i_3).intP)) {
                  case FlagStatic_BLUE:
-                 {  (K_51 : FlagStatic_swap(t_1, (K_49 : (b_0 ++)),
-                                            (K_50 : (i_3 ++))));
+                 {  (K_52 : FlagStatic_swap(t_1, (K_50 : (b_0 ++)),
+                                            (K_51 : (i_3 ++))));
                     
                     (break )
                  }
                  case FlagStatic_WHITE:
-                 {  (K_52 : (i_3 ++));
+                 {  (K_53 : (i_3 ++));
                     
                     (break )
                  }
                  case FlagStatic_RED:
-                 {  (K_54 : FlagStatic_swap(t_1, (K_53 : (-- r_0)), i_3));
+                 {  (K_55 : FlagStatic_swap(t_1, (K_54 : (-- r_0)), i_3));
                     
                     (break )
                  }
@@ -391,51 +390,51 @@ End:
 ========== file tests/java/FlagStatic.jloc ==========
 [K_10]
 file = "HOME/tests/java/FlagStatic.java"
-line = 59
-begin = 17
-end = 22
+line = 56
+begin = 8
+end = 49
 
 [K_11]
 file = "HOME/tests/java/FlagStatic.java"
-line = 50
-begin = 40
-end = 53
+line = 55
+begin = 24
+end = 30
 
 [K_12]
 file = "HOME/tests/java/FlagStatic.java"
-line = 50
-begin = 35
-end = 41
+line = 55
+begin = 24
+end = 85
 
 [K_13]
 file = "HOME/tests/java/FlagStatic.java"
-line = 50
-begin = 30
-end = 36
+line = 57
+begin = 22
+end = 27
 
 [K_14]
 file = "HOME/tests/java/FlagStatic.java"
-line = 50
-begin = 30
-end = 41
+line = 59
+begin = 33
+end = 37
 
 [K_15]
 file = "HOME/tests/java/FlagStatic.java"
-line = 50
-begin = 30
-end = 53
+line = 59
+begin = 33
+end = 42
 
 [K_16]
 file = "HOME/tests/java/FlagStatic.java"
-line = 50
-begin = 17
-end = 26
+line = 59
+begin = 24
+end = 27
 
 [K_17]
 file = "HOME/tests/java/FlagStatic.java"
-line = 50
+line = 59
 begin = 17
-end = 53
+end = 22
 
 [K_18]
 file = "HOME/tests/java/FlagStatic.java"
@@ -464,27 +463,27 @@ end = 58
 
 [K_21]
 file = "HOME/tests/java/FlagStatic.java"
-line = 70
-begin = 8
-end = 12
+line = 63
+begin = 43
+end = 55
 
 [K_22]
 file = "HOME/tests/java/FlagStatic.java"
-line = 70
-begin = 1
-end = 12
+line = 63
+begin = 38
+end = 44
 
 [K_23]
 file = "HOME/tests/java/FlagStatic.java"
-line = 71
-begin = 1
-end = 9
+line = 63
+begin = 38
+end = 55
 
 [K_24]
 file = "HOME/tests/java/FlagStatic.java"
-line = 69
-begin = 9
-end = 13
+line = 63
+begin = 22
+end = 34
 
 [K_1]
 file = "HOME/tests/java/FlagStatic.java"
@@ -495,26 +494,26 @@ end = 53
 [K_25]
 file = "HOME/tests/java/FlagStatic.java"
 line = 63
-begin = 43
-end = 55
+begin = 17
+end = 23
 
 [K_2]
 file = "HOME/tests/java/FlagStatic.java"
-line = 59
-begin = 14
-end = 15
+line = 50
+begin = 40
+end = 53
 
 [K_26]
 file = "HOME/tests/java/FlagStatic.java"
 line = 63
-begin = 38
-end = 44
+begin = 17
+end = 34
 
 [K_3]
 file = "HOME/tests/java/FlagStatic.java"
-line = 56
-begin = 8
-end = 49
+line = 50
+begin = 35
+end = 41
 
 [Object_equals]
 name = "Method equals"
@@ -526,56 +525,56 @@ end = 25
 [K_27]
 file = "HOME/tests/java/FlagStatic.java"
 line = 63
-begin = 38
+begin = 17
 end = 55
 
 [K_4]
 file = "HOME/tests/java/FlagStatic.java"
-line = 55
-begin = 24
-end = 30
+line = 50
+begin = 30
+end = 36
 
 [K_28]
 file = "HOME/tests/java/FlagStatic.java"
-line = 63
-begin = 22
-end = 34
+line = 70
+begin = 8
+end = 12
 
 [K_5]
 file = "HOME/tests/java/FlagStatic.java"
-line = 55
-begin = 24
-end = 85
+line = 50
+begin = 30
+end = 41
 
 [K_29]
 file = "HOME/tests/java/FlagStatic.java"
-line = 63
-begin = 17
-end = 23
+line = 70
+begin = 1
+end = 12
 
 [K_6]
 file = "HOME/tests/java/FlagStatic.java"
-line = 57
-begin = 22
-end = 27
+line = 50
+begin = 30
+end = 53
 
 [K_7]
 file = "HOME/tests/java/FlagStatic.java"
-line = 59
-begin = 33
-end = 37
+line = 50
+begin = 17
+end = 26
 
 [K_8]
 file = "HOME/tests/java/FlagStatic.java"
-line = 59
-begin = 33
-end = 42
+line = 50
+begin = 17
+end = 53
 
 [K_9]
 file = "HOME/tests/java/FlagStatic.java"
 line = 59
-begin = 24
-end = 27
+begin = 14
+end = 15
 
 [Object_notify]
 name = "Method notify"
@@ -600,15 +599,15 @@ end = -1
 
 [K_30]
 file = "HOME/tests/java/FlagStatic.java"
-line = 63
-begin = 17
-end = 34
+line = 71
+begin = 1
+end = 9
 
 [K_31]
 file = "HOME/tests/java/FlagStatic.java"
-line = 63
-begin = 17
-end = 55
+line = 69
+begin = 9
+end = 13
 
 [K_32]
 file = "HOME/tests/java/FlagStatic.java"
@@ -618,21 +617,21 @@ end = 169
 
 [K_33]
 file = "HOME/tests/java/FlagStatic.java"
+line = 75
+begin = 10
+end = 27
+
+[K_34]
+file = "HOME/tests/java/FlagStatic.java"
 line = 92
 begin = 14
 end = 45
 
-[K_34]
+[K_35]
 file = "HOME/tests/java/FlagStatic.java"
 line = 91
 begin = 7
 end = 33
-
-[K_35]
-file = "HOME/tests/java/FlagStatic.java"
-line = 90
-begin = 7
-end = 32
 
 [FlagStatic_swap]
 name = "Method swap"
@@ -643,21 +642,21 @@ end = 28
 
 [K_36]
 file = "HOME/tests/java/FlagStatic.java"
-line = 89
-begin = 22
-end = 35
+line = 90
+begin = 7
+end = 32
 
 [K_37]
 file = "HOME/tests/java/FlagStatic.java"
 line = 89
-begin = 17
-end = 23
+begin = 22
+end = 35
 
 [K_38]
 file = "HOME/tests/java/FlagStatic.java"
 line = 89
-begin = 12
-end = 18
+begin = 17
+end = 23
 
 [Object_wait_long_int]
 name = "Method wait"
@@ -669,8 +668,8 @@ end = 26
 [K_39]
 file = "HOME/tests/java/FlagStatic.java"
 line = 89
-begin = 7
-end = 13
+begin = 12
+end = 18
 
 [Object_wait_long]
 name = "Method wait"
@@ -697,31 +696,31 @@ end = 38
 file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 7
-end = 18
+end = 13
 
 [K_41]
 file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 7
-end = 23
+end = 18
 
 [K_42]
 file = "HOME/tests/java/FlagStatic.java"
 line = 89
 begin = 7
-end = 35
+end = 23
 
 [K_43]
 file = "HOME/tests/java/FlagStatic.java"
-line = 88
+line = 89
 begin = 7
-end = 24
+end = 35
 
 [K_44]
 file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
-end = 63
+end = 24
 
 [Object_toString]
 name = "Method toString"
@@ -734,31 +733,31 @@ end = 26
 file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
-end = 99
+end = 63
 
 [K_46]
 file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
-end = 136
+end = 99
 
 [K_47]
 file = "HOME/tests/java/FlagStatic.java"
 line = 88
 begin = 7
-end = 185
+end = 136
 
 [K_48]
+file = "HOME/tests/java/FlagStatic.java"
+line = 88
+begin = 7
+end = 185
+
+[K_49]
 file = "HOME/tests/java/FlagStatic.java"
 line = 93
 begin = 18
 end = 23
-
-[K_49]
-file = "HOME/tests/java/FlagStatic.java"
-line = 98
-begin = 9
-end = 12
 
 [Object_registerNatives]
 name = "Method registerNatives"
@@ -777,8 +776,8 @@ end = 38
 [K_50]
 file = "HOME/tests/java/FlagStatic.java"
 line = 98
-begin = 14
-end = 17
+begin = 9
+end = 12
 
 [Object_clone]
 name = "Method clone"
@@ -790,26 +789,26 @@ end = 33
 [K_51]
 file = "HOME/tests/java/FlagStatic.java"
 line = 98
+begin = 14
+end = 17
+
+[K_52]
+file = "HOME/tests/java/FlagStatic.java"
+line = 98
 begin = 2
 end = 18
 
-[K_52]
+[K_53]
 file = "HOME/tests/java/FlagStatic.java"
 line = 101
 begin = 2
 end = 5
 
-[K_53]
+[K_54]
 file = "HOME/tests/java/FlagStatic.java"
 line = 104
 begin = 9
 end = 12
-
-[K_54]
-file = "HOME/tests/java/FlagStatic.java"
-line = 104
-begin = 2
-end = 16
 
 [Object_wait]
 name = "Method wait"
@@ -820,39 +819,39 @@ end = 26
 
 [K_55]
 file = "HOME/tests/java/FlagStatic.java"
+line = 104
+begin = 2
+end = 16
+
+[K_56]
+file = "HOME/tests/java/FlagStatic.java"
 line = 96
 begin = 13
 end = 17
 
-[K_56]
+[K_57]
 file = "HOME/tests/java/FlagStatic.java"
 line = 95
 begin = 8
 end = 13
 
-[K_57]
+[K_58]
 file = "HOME/tests/java/FlagStatic.java"
 line = 86
 begin = 9
 end = 17
 
-[K_58]
+[K_59]
 file = "HOME/tests/java/FlagStatic.java"
 line = 85
 begin = 9
 end = 10
 
-[K_59]
+[K_60]
 file = "HOME/tests/java/FlagStatic.java"
 line = 84
 begin = 9
 end = 10
-
-[K_60]
-file = "HOME/tests/java/FlagStatic.java"
-line = 75
-begin = 10
-end = 27
 
 [Object_finalize]
 name = "Method finalize"
@@ -1285,9 +1284,9 @@ end = 26
 
 [JC_55]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 96
+line = 95
 begin = 9
-end = 497
+end = 509
 
 [JC_233]
 file = "HOME/"
@@ -1297,9 +1296,9 @@ end = -1
 
 [JC_56]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 96
+line = 95
 begin = 9
-end = 497
+end = 509
 
 [JC_234]
 file = "HOME/"
@@ -1378,13 +1377,13 @@ end = -1
 
 [JC_122]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 153
+line = 152
 begin = 12
 end = 2823
 
 [JC_123]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 153
+line = 152
 begin = 12
 end = 2823
 
@@ -1398,14 +1397,14 @@ end = 17
 [JC_125]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 187
+line = 186
 begin = 28
 end = 130
 
 [JC_126]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 198
+line = 197
 begin = 28
 end = 72
 
@@ -1454,9 +1453,9 @@ end = 24
 
 [JC_63]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 96
+line = 95
 begin = 9
-end = 497
+end = 509
 
 [JC_241]
 file = "HOME/"
@@ -1466,9 +1465,9 @@ end = -1
 
 [JC_64]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 96
+line = 95
 begin = 9
-end = 497
+end = 509
 
 [JC_242]
 file = "HOME/"
@@ -1526,9 +1525,9 @@ end = 27
 
 [JC_69]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 96
+line = 95
 begin = 9
-end = 497
+end = 509
 
 [JC_247]
 file = "HOME/"
@@ -1592,9 +1591,9 @@ end = 45
 
 [JC_70]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 96
+line = 95
 begin = 9
-end = 497
+end = 509
 
 [JC_137]
 file = "HOME/tests/java/FlagStatic.java"
@@ -1628,7 +1627,7 @@ end = -1
 
 [JC_139]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 153
+line = 152
 begin = 12
 end = 2823
 
@@ -1730,21 +1729,21 @@ end = -1
 
 [JC_140]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 153
+line = 152
 begin = 12
 end = 2823
 
 [JC_141]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 187
+line = 186
 begin = 28
 end = 130
 
 [JC_142]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 198
+line = 197
 begin = 28
 end = 72
 
@@ -1959,13 +1958,13 @@ end = -1
 
 [JC_154]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 153
+line = 152
 begin = 12
 end = 2823
 
 [JC_155]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 153
+line = 152
 begin = 12
 end = 2823
 
@@ -1980,7 +1979,7 @@ end = 38
 [JC_156]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 187
+line = 186
 begin = 28
 end = 130
 
@@ -1993,13 +1992,13 @@ end = 28
 [JC_157]
 kind = UserCall
 file = "HOME/tests/java/FlagStatic.jc"
-line = 198
+line = 197
 begin = 28
 end = 72
 
 [JC_91]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 119
+line = 118
 begin = 9
 end = 20
 
@@ -2041,7 +2040,7 @@ end = 28
 
 [JC_96]
 file = "HOME/tests/java/FlagStatic.jc"
-line = 119
+line = 118
 begin = 9
 end = 20
 
@@ -2062,7 +2061,7 @@ end = 12
 [JC_99]
 kind = PointerDeref
 file = "HOME/tests/java/FlagStatic.jc"
-line = 128
+line = 127
 begin = 18
 end = 62
 
@@ -2673,7 +2672,7 @@ end = -1
 [JC_100]
 kind = PointerDeref
 file = "HOME/tests/java/FlagStatic.jc"
-line = 129
+line = 128
 begin = 18
 end = 38
 
@@ -3587,9 +3586,9 @@ let FlagStatic_flag_ensures_default =
   (init:
   try
    begin
-     (let b_0 = ref (K_59: (0)) in
-     (let i_3 = ref (K_58: (0)) in
-     (let r_0 = ref (K_57:
+     (let b_0 = ref (K_60: (0)) in
+     (let i_3 = ref (K_59: (0)) in
+     (let r_0 = ref (K_58:
                     (let jessie_107 = t_1 in
                     (JC_128: (java_array_length_intM jessie_107)))) in
      try
@@ -3620,20 +3619,20 @@ let FlagStatic_flag_ensures_default =
          [ { } unit { true } ];
         try
          (let jessie_130 = begin
-                             (if (K_56: ((lt_int_ !i_3) !r_0))
+                             (if (K_57: ((lt_int_ !i_3) !r_0))
                              then
-                              (let jessie_7 = (K_55:
+                              (let jessie_7 = (K_56:
                                               ((safe_acc_ !intM_intP) 
                                                ((shift t_1) !i_3))) in
                               try
                                begin
                                  (if (((eq_int_ jessie_7) FlagStatic_BLUE) || false)
                                  then
-                                  (let jessie_118 = (K_51:
+                                  (let jessie_118 = (K_52:
                                                     begin
                                                       (let jessie_117 = t_1 in
                                                       (let jessie_113 = 
-                                                      (K_49:
+                                                      (K_50:
                                                       (let jessie_4 = !b_0 in
                                                       begin
                                                         (let jessie_116 = 
@@ -3642,7 +3641,7 @@ let FlagStatic_flag_ensures_default =
                                                        jessie_4
                                                       end)) in
                                                       (let jessie_109 = 
-                                                      (K_50:
+                                                      (K_51:
                                                       (let jessie_5 = !i_3 in
                                                       begin
                                                         (let jessie_112 = 
@@ -3661,7 +3660,7 @@ let FlagStatic_flag_ensures_default =
                                 (if (((eq_int_ jessie_7) FlagStatic_WHITE) || 
                                     (((eq_int_ jessie_7) FlagStatic_BLUE) || false))
                                 then
-                                 (let jessie_123 = (K_52:
+                                 (let jessie_123 = (K_53:
                                                    begin
                                                      (let jessie_122 = 
                                                      (let jessie_6 = !i_3 in
@@ -3682,11 +3681,11 @@ let FlagStatic_flag_ensures_default =
                                     (((eq_int_ jessie_7) FlagStatic_WHITE) || 
                                     (((eq_int_ jessie_7) FlagStatic_BLUE) || false)))
                                 then
-                                 (let jessie_128 = (K_54:
+                                 (let jessie_128 = (K_55:
                                                    begin
                                                      (let jessie_127 = t_1 in
                                                      (let jessie_125 = 
-                                                     (K_53:
+                                                     (K_54:
                                                      begin
                                                        (r_0 := ((sub_int !r_0) (1)));
                                                       !r_0
@@ -3732,9 +3731,9 @@ let FlagStatic_flag_ensures_sorts =
   (init:
   try
    begin
-     (let b_0 = ref (K_59: (0)) in
-     (let i_3 = ref (K_58: (0)) in
-     (let r_0 = ref (K_57:
+     (let b_0 = ref (K_60: (0)) in
+     (let i_3 = ref (K_59: (0)) in
+     (let r_0 = ref (K_58:
                     (let jessie_134 = t_1 in
                     (JC_143: (java_array_length_intM jessie_134)))) in
      try
@@ -3765,20 +3764,20 @@ let FlagStatic_flag_ensures_sorts =
                                          (1)), FlagStatic_RED, intM_intP)))))))))) } ];
         try
          (let jessie_157 = begin
-                             (if (K_56: ((lt_int_ !i_3) !r_0))
+                             (if (K_57: ((lt_int_ !i_3) !r_0))
                              then
-                              (let jessie_7 = (K_55:
+                              (let jessie_7 = (K_56:
                                               ((safe_acc_ !intM_intP) 
                                                ((shift t_1) !i_3))) in
                               try
                                begin
                                  (if (((eq_int_ jessie_7) FlagStatic_BLUE) || false)
                                  then
-                                  (let jessie_145 = (K_51:
+                                  (let jessie_145 = (K_52:
                                                     begin
                                                       (let jessie_144 = t_1 in
                                                       (let jessie_140 = 
-                                                      (K_49:
+                                                      (K_50:
                                                       (let jessie_4 = !b_0 in
                                                       begin
                                                         (let jessie_143 = 
@@ -3787,7 +3786,7 @@ let FlagStatic_flag_ensures_sorts =
                                                        jessie_4
                                                       end)) in
                                                       (let jessie_136 = 
-                                                      (K_50:
+                                                      (K_51:
                                                       (let jessie_5 = !i_3 in
                                                       begin
                                                         (let jessie_139 = 
@@ -3806,7 +3805,7 @@ let FlagStatic_flag_ensures_sorts =
                                 (if (((eq_int_ jessie_7) FlagStatic_WHITE) || 
                                     (((eq_int_ jessie_7) FlagStatic_BLUE) || false))
                                 then
-                                 (let jessie_150 = (K_52:
+                                 (let jessie_150 = (K_53:
                                                    begin
                                                      (let jessie_149 = 
                                                      (let jessie_6 = !i_3 in
@@ -3827,11 +3826,11 @@ let FlagStatic_flag_ensures_sorts =
                                     (((eq_int_ jessie_7) FlagStatic_WHITE) || 
                                     (((eq_int_ jessie_7) FlagStatic_BLUE) || false)))
                                 then
-                                 (let jessie_155 = (K_54:
+                                 (let jessie_155 = (K_55:
                                                    begin
                                                      (let jessie_154 = t_1 in
                                                      (let jessie_152 = 
-                                                     (K_53:
+                                                     (K_54:
                                                      begin
                                                        (r_0 := ((sub_int !r_0) (1)));
                                                       !r_0
@@ -3884,9 +3883,9 @@ let FlagStatic_flag_safety =
   (init:
   try
    begin
-     (let b_0 = ref (K_59: (0)) in
-     (let i_3 = ref (K_58: (0)) in
-     (let r_0 = ref (K_57:
+     (let b_0 = ref (K_60: (0)) in
+     (let i_3 = ref (K_59: (0)) in
+     (let r_0 = ref (K_58:
                     (let jessie_80 = t_1 in
                     (JC_111: (java_array_length_intM_requires jessie_80)))) in
      try
@@ -3917,20 +3916,20 @@ let FlagStatic_flag_safety =
                                          (1)), FlagStatic_RED, intM_intP)))))))))) } ];
         try
          (let jessie_103 = begin
-                             (if (K_56: ((lt_int_ !i_3) !r_0))
+                             (if (K_57: ((lt_int_ !i_3) !r_0))
                              then
-                              (let jessie_7 = (K_55:
+                              (let jessie_7 = (K_56:
                                               (JC_124:
                                               ((((offset_acc_ !Object_alloc_table) !intM_intP) t_1) !i_3))) in
                               try
                                begin
                                  (if (((eq_int_ jessie_7) FlagStatic_BLUE) || false)
                                  then
-                                  (let jessie_91 = (K_51:
+                                  (let jessie_91 = (K_52:
                                                    begin
                                                      (let jessie_90 = t_1 in
                                                      (let jessie_86 = 
-                                                     (K_49:
+                                                     (K_50:
                                                      (let jessie_4 = !b_0 in
                                                      begin
                                                        (let jessie_89 = 
@@ -3939,7 +3938,7 @@ let FlagStatic_flag_safety =
                                                       jessie_4
                                                      end)) in
                                                      (let jessie_82 = 
-                                                     (K_50:
+                                                     (K_51:
                                                      (let jessie_5 = !i_3 in
                                                      begin
                                                        (let jessie_85 = 
@@ -3958,7 +3957,7 @@ let FlagStatic_flag_safety =
                                 (if (((eq_int_ jessie_7) FlagStatic_WHITE) || 
                                     (((eq_int_ jessie_7) FlagStatic_BLUE) || false))
                                 then
-                                 (let jessie_96 = (K_52:
+                                 (let jessie_96 = (K_53:
                                                   begin
                                                     (let jessie_95 = 
                                                     (let jessie_6 = !i_3 in
@@ -3979,11 +3978,11 @@ let FlagStatic_flag_safety =
                                     (((eq_int_ jessie_7) FlagStatic_WHITE) || 
                                     (((eq_int_ jessie_7) FlagStatic_BLUE) || false)))
                                 then
-                                 (let jessie_101 = (K_54:
+                                 (let jessie_101 = (K_55:
                                                    begin
                                                      (let jessie_100 = t_1 in
                                                      (let jessie_98 = 
-                                                     (K_53:
+                                                     (K_54:
                                                      begin
                                                        (r_0 := ((sub_int !r_0) (1)));
                                                       !r_0
@@ -4036,7 +4035,7 @@ let FlagStatic_isMonochrome_ensures_decides_monochromatic =
   (let return = ref (any_bool void) in
   try
    begin
-     (let k_0 = ref (K_2: i) in
+     (let k_0 = ref (K_9: i) in
      try
       (loop_3:
       while true do
@@ -4051,10 +4050,10 @@ let FlagStatic_isMonochrome_ensures_decides_monochromatic =
                    eq_int(select(intM_intP, shift(t, l)), c_0)))))) } ];
         try
          (let jessie_32 = begin
-                            (if (K_10: ((lt_int_ !k_0) j))
+                            (if (K_17: ((lt_int_ !k_0) j))
                             then
-                             (if (K_8:
-                                 ((neq_int_ (K_7:
+                             (if (K_15:
+                                 ((neq_int_ (K_14:
                                             ((safe_acc_ !intM_intP) ((shift t) !k_0)))) c_0))
                              then
                               begin   (return := false); (raise Return) end
@@ -4067,7 +4066,7 @@ let FlagStatic_isMonochrome_ensures_decides_monochromatic =
          void)
          with
          Loop_continue_exc jessie_3 ->
-         (let jessie_36 = (K_9:
+         (let jessie_36 = (K_16:
                           (let jessie_1 = !k_0 in
                           begin
                             (let jessie_35 = (k_0 := ((add_int jessie_1) (1))) in
@@ -4103,7 +4102,7 @@ let FlagStatic_isMonochrome_ensures_default =
   (let return = ref (any_bool void) in
   try
    begin
-     (let k_0 = ref (K_2: i) in
+     (let k_0 = ref (K_9: i) in
      try
       (loop_2:
       while true do
@@ -4119,10 +4118,10 @@ let FlagStatic_isMonochrome_ensures_default =
          [ { } unit { true } ];
         try
          (let jessie_23 = begin
-                            (if (K_10: ((lt_int_ !k_0) j))
+                            (if (K_17: ((lt_int_ !k_0) j))
                             then
-                             (if (K_8:
-                                 ((neq_int_ (K_7:
+                             (if (K_15:
+                                 ((neq_int_ (K_14:
                                             ((safe_acc_ !intM_intP) ((shift t) !k_0)))) c_0))
                              then
                               begin   (return := false); (raise Return) end
@@ -4135,7 +4134,7 @@ let FlagStatic_isMonochrome_ensures_default =
          void)
          with
          Loop_continue_exc jessie_3 ->
-         (let jessie_27 = (K_9:
+         (let jessie_27 = (K_16:
                           (let jessie_1 = !k_0 in
                           begin
                             (let jessie_26 = (k_0 := ((add_int jessie_1) (1))) in
@@ -4171,7 +4170,7 @@ let FlagStatic_isMonochrome_safety =
   (let return = ref (any_bool void) in
   try
    begin
-     (let k_0 = ref (K_2: i) in
+     (let k_0 = ref (K_9: i) in
      try
       (loop_1:
       while true do
@@ -4186,10 +4185,10 @@ let FlagStatic_isMonochrome_safety =
                    eq_int(select(intM_intP, shift(t, l)), c_0)))))) } ];
         try
          (let jessie_14 = begin
-                            (if (K_10: ((lt_int_ !k_0) j))
+                            (if (K_17: ((lt_int_ !k_0) j))
                             then
-                             (if (K_8:
-                                 ((neq_int_ (K_7:
+                             (if (K_15:
+                                 ((neq_int_ (K_14:
                                             (JC_57:
                                             ((((offset_acc_ !Object_alloc_table) !intM_intP) t) !k_0)))) c_0))
                              then
@@ -4203,7 +4202,7 @@ let FlagStatic_isMonochrome_safety =
          void)
          with
          Loop_continue_exc jessie_3 ->
-         (let jessie_18 = (K_9:
+         (let jessie_18 = (K_16:
                           (let jessie_1 = !k_0 in
                           begin
                             (let jessie_17 = (k_0 := ((add_int jessie_1) (1))) in
@@ -4239,17 +4238,17 @@ let FlagStatic_swap_ensures_default =
   (init:
   try
    begin
-     (let jessie_63 = (let z = (K_24:
+     (let jessie_63 = (let z = (K_31:
                                ((safe_acc_ !intM_intP) ((shift t_0) i_0))) in
-                      (K_22:
+                      (K_29:
                       begin
-                        (let jessie_57 = (let jessie_53 = (K_21:
+                        (let jessie_57 = (let jessie_53 = (K_28:
                                                           ((safe_acc_ !intM_intP) 
                                                            ((shift t_0) j_0))) in
                                          (let jessie_56 = ((shift t_0) i_0) in
                                          (((safe_upd_ intM_intP) jessie_56) jessie_53))) in
                         void);
-                       (K_23:
+                       (K_30:
                        (let jessie_59 = z in
                        (let jessie_62 = ((shift t_0) j_0) in
                        begin
@@ -4279,17 +4278,17 @@ let FlagStatic_swap_ensures_i_j_swapped =
   (init:
   try
    begin
-     (let jessie_76 = (let z = (K_24:
+     (let jessie_76 = (let z = (K_31:
                                ((safe_acc_ !intM_intP) ((shift t_0) i_0))) in
-                      (K_22:
+                      (K_29:
                       begin
-                        (let jessie_70 = (let jessie_66 = (K_21:
+                        (let jessie_70 = (let jessie_66 = (K_28:
                                                           ((safe_acc_ !intM_intP) 
                                                            ((shift t_0) j_0))) in
                                          (let jessie_69 = ((shift t_0) i_0) in
                                          (((safe_upd_ intM_intP) jessie_69) jessie_66))) in
                         void);
-                       (K_23:
+                       (K_30:
                        (let jessie_72 = z in
                        (let jessie_75 = ((shift t_0) j_0) in
                        begin
@@ -4330,12 +4329,12 @@ let FlagStatic_swap_safety =
   (init:
   try
    begin
-     (let jessie_50 = (let z = (K_24:
+     (let jessie_50 = (let z = (K_31:
                                (JC_97:
                                ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) i_0))) in
-                      (K_22:
+                      (K_29:
                       begin
-                        (let jessie_44 = (let jessie_40 = (K_21:
+                        (let jessie_44 = (let jessie_40 = (K_28:
                                                           (JC_98:
                                                           ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) j_0))) in
                                          (let jessie_41 = t_0 in
@@ -4344,7 +4343,7 @@ let FlagStatic_swap_safety =
                                          (JC_99:
                                          (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_41) jessie_42) jessie_40)))))) in
                         void);
-                       (K_23:
+                       (K_30:
                        (let jessie_46 = z in
                        (let jessie_47 = t_0 in
                        (let jessie_48 = j_0 in
@@ -4504,22 +4503,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/FlagStatic_po41.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "187" begin = "28" end = "130"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "186" begin = "28" end = "130"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po42.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "187" begin = "28" end = "130"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "186" begin = "28" end = "130"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po43.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "187" begin = "28" end = "130"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "186" begin = "28" end = "130"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po44.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "187" begin = "28" end = "130"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "186" begin = "28" end = "130"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4540,22 +4539,22 @@ text = "UserCall"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/FlagStatic_po49.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "198" begin = "28" end = "72"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "197" begin = "28" end = "72"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po50.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "198" begin = "28" end = "72"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "197" begin = "28" end = "72"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po51.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "198" begin = "28" end = "72"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "197" begin = "28" end = "72"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/FlagStatic_po52.why">
-      <location file = "HOME/tests/java/FlagStatic.jc" line = "198" begin = "28" end = "72"/>
+      <location file = "HOME/tests/java/FlagStatic.jc" line = "197" begin = "28" end = "72"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4996,12 +4995,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -5016,15 +5009,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -5140,7 +5137,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -5358,7 +5355,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -5678,9 +5675,9 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -5690,7 +5687,7 @@ function FlagStatic_RED() : int = 3
 
 function FlagStatic_WHITE() : int = 2
 
-logic FlagStatic_tag :  -> Object tag_id
+logic FlagStatic_tag : Object tag_id
 
 axiom FlagStatic_parenttag_Object: parenttag(FlagStatic_tag, Object_tag)
 
@@ -5725,11 +5722,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -5744,11 +5741,11 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -9089,10 +9086,6 @@ why -simplify [...] why/FlagStatic.why
  (EQ (address null) 0))
 
 (BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
-
-(BG_PUSH
  ;; Why axiom address_shift_lt
  (FORALL (p i j)
  (IFF (< (address (shift p i)) (address (shift p j))) (< i j))))
@@ -11383,7 +11376,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          t_1 r_0 (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0))))))))
 (IMPLIES (< i_3 r_0) (<= i_3 (offset_max Object_alloc_table t_1)))))))))))))))
 
-;; FlagStatic_flag_safety_po_3, File "HOME/tests/java/FlagStatic.jc", line 187, characters 28-130
+;; FlagStatic_flag_safety_po_3, File "HOME/tests/java/FlagStatic.jc", line 186, characters 28-130
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11419,7 +11412,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ b_0_0 (+ b_0 1))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 b_0))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_4, File "HOME/tests/java/FlagStatic.jc", line 187, characters 28-130
+;; FlagStatic_flag_safety_po_4, File "HOME/tests/java/FlagStatic.jc", line 186, characters 28-130
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11457,7 +11450,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ i_3_0 (+ i_3 1))
 (< b_0 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_5, File "HOME/tests/java/FlagStatic.jc", line 187, characters 28-130
+;; FlagStatic_flag_safety_po_5, File "HOME/tests/java/FlagStatic.jc", line 186, characters 28-130
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11493,7 +11486,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ b_0_0 (+ b_0 1))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (<= 0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_6, File "HOME/tests/java/FlagStatic.jc", line 187, characters 28-130
+;; FlagStatic_flag_safety_po_6, File "HOME/tests/java/FlagStatic.jc", line 186, characters 28-130
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11713,7 +11706,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (NEQ result0 FlagStatic_BLUE) (EQ |@false| |@true|)))))
 (FORALL (i_3_0) (IMPLIES (EQ i_3_0 (+ i_3 1)) (< (- r_0 i_3_0) (- r_0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_11, File "HOME/tests/java/FlagStatic.jc", line 198, characters 28-72
+;; FlagStatic_flag_safety_po_11, File "HOME/tests/java/FlagStatic.jc", line 197, characters 28-72
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11754,7 +11747,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (NEQ result0 FlagStatic_BLUE) (EQ |@false| |@true|)))))))
 (FORALL (r_0_0) (IMPLIES (EQ r_0_0 (- r_0 1)) (<= 0 r_0_0))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_12, File "HOME/tests/java/FlagStatic.jc", line 198, characters 28-72
+;; FlagStatic_flag_safety_po_12, File "HOME/tests/java/FlagStatic.jc", line 197, characters 28-72
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11797,7 +11790,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
 (IMPLIES (EQ r_0_0 (- r_0 1))
 (< r_0_0 (+ (offset_max Object_alloc_table t_1) 1)))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_13, File "HOME/tests/java/FlagStatic.jc", line 198, characters 28-72
+;; FlagStatic_flag_safety_po_13, File "HOME/tests/java/FlagStatic.jc", line 197, characters 28-72
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -11838,7 +11831,7 @@ t_1 r (+ (offset_max Object_alloc_table t_1) 1) FlagStatic_RED intM_intP0)))))))
          (AND (NEQ result0 FlagStatic_BLUE) (EQ |@false| |@true|)))))))
 (FORALL (r_0_0) (IMPLIES (EQ r_0_0 (- r_0 1)) (<= 0 i_3))))))))))))))))))))))
 
-;; FlagStatic_flag_safety_po_14, File "HOME/tests/java/FlagStatic.jc", line 198, characters 28-72
+;; FlagStatic_flag_safety_po_14, File "HOME/tests/java/FlagStatic.jc", line 197, characters 28-72
 (FORALL (t_1)
 (FORALL (Object_alloc_table)
 (FORALL (intM_intP)
@@ -12716,12 +12709,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -12736,15 +12723,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -12860,7 +12851,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -13078,7 +13069,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -13398,9 +13389,9 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -13410,7 +13401,7 @@ function FlagStatic_RED() : int = 3
 
 function FlagStatic_WHITE() : int = 2
 
-logic FlagStatic_tag :  -> Object tag_id
+logic FlagStatic_tag : Object tag_id
 
 axiom FlagStatic_parenttag_Object: parenttag(FlagStatic_tag, Object_tag)
 
@@ -13445,11 +13436,11 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -13464,11 +13455,11 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 

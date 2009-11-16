@@ -86,31 +86,31 @@ exception Throwable of Throwable[0..]
 exception Exception of Exception[0..]
 
 unit SideEffects_m1(SideEffects[0] this_0, intM[0..] t)
-  requires (K_36 : ((\offset_max(t) + 1) > 10));
+  requires (K_1 : ((\offset_max(t) + 1) > 10));
 {  
    {  
-      (var integer i = (K_35 : 0));
+      (var integer i = (K_36 : 0));
       
-      {  (K_2 : ((t + (K_1 : (i ++))).intP = 1));
-         (K_6 : 
-         (assert (K_5 : ((K_4 : ((t + 0).intP == 1)) && (K_3 : (i == 1))))));
-         (K_8 : ((t + (K_7 : (++ i))).intP = 2));
-         (K_14 : 
-         (assert (K_13 : ((K_12 : ((K_11 : ((t + 0).intP == 1)) &&
-                                    (K_10 : ((t + 2).intP == 2)))) &&
-                           (K_9 : (i == 2))))));
-         (K_16 : ((t + (K_15 : (-- i))).intP = 3));
-         (K_24 : 
-         (assert (K_23 : ((K_22 : ((K_21 : ((K_20 : ((t + 0).intP == 1)) &&
-                                             (K_19 : ((t + 2).intP == 2)))) &&
-                                    (K_18 : ((t + 1).intP == 3)))) &&
-                           (K_17 : (i == 1))))));
-         (K_26 : ((t + (K_25 : (i --))).intP = 4));
-         (K_34 : 
-         (assert (K_33 : ((K_32 : ((K_31 : ((K_30 : ((t + 0).intP == 1)) &&
-                                             (K_29 : ((t + 2).intP == 2)))) &&
-                                    (K_28 : ((t + 1).intP == 4)))) &&
-                           (K_27 : (i == 0))))))
+      {  (K_3 : ((t + (K_2 : (i ++))).intP = 1));
+         (K_7 : 
+         (assert (K_6 : ((K_5 : ((t + 0).intP == 1)) && (K_4 : (i == 1))))));
+         (K_9 : ((t + (K_8 : (++ i))).intP = 2));
+         (K_15 : 
+         (assert (K_14 : ((K_13 : ((K_12 : ((t + 0).intP == 1)) &&
+                                    (K_11 : ((t + 2).intP == 2)))) &&
+                           (K_10 : (i == 2))))));
+         (K_17 : ((t + (K_16 : (-- i))).intP = 3));
+         (K_25 : 
+         (assert (K_24 : ((K_23 : ((K_22 : ((K_21 : ((t + 0).intP == 1)) &&
+                                             (K_20 : ((t + 2).intP == 2)))) &&
+                                    (K_19 : ((t + 1).intP == 3)))) &&
+                           (K_18 : (i == 1))))));
+         (K_27 : ((t + (K_26 : (i --))).intP = 4));
+         (K_35 : 
+         (assert (K_34 : ((K_33 : ((K_32 : ((K_31 : ((t + 0).intP == 1)) &&
+                                             (K_30 : ((t + 2).intP == 2)))) &&
+                                    (K_29 : ((t + 1).intP == 4)))) &&
+                           (K_28 : (i == 0))))))
       }
    }
 }
@@ -127,26 +127,26 @@ End:
 [K_10]
 file = "HOME/tests/java/SideEffects.java"
 line = 13
-begin = 25
-end = 34
+begin = 38
+end = 44
 
 [K_11]
 file = "HOME/tests/java/SideEffects.java"
 line = 13
-begin = 12
-end = 21
+begin = 25
+end = 34
 
 [K_12]
 file = "HOME/tests/java/SideEffects.java"
 line = 13
 begin = 12
-end = 34
+end = 21
 
 [K_13]
 file = "HOME/tests/java/SideEffects.java"
 line = 13
 begin = 12
-end = 44
+end = 34
 
 [K_14]
 file = "HOME/tests/java/SideEffects.java"
@@ -156,57 +156,57 @@ end = 44
 
 [K_15]
 file = "HOME/tests/java/SideEffects.java"
+line = 13
+begin = 12
+end = 44
+
+[K_16]
+file = "HOME/tests/java/SideEffects.java"
 line = 14
 begin = 3
 end = 6
 
-[K_16]
+[K_17]
 file = "HOME/tests/java/SideEffects.java"
 line = 14
 begin = 1
 end = 11
 
-[K_17]
+[K_18]
 file = "HOME/tests/java/SideEffects.java"
 line = 15
 begin = 51
 end = 57
 
-[K_18]
+[K_19]
 file = "HOME/tests/java/SideEffects.java"
 line = 15
 begin = 38
 end = 47
 
-[K_19]
+[K_20]
 file = "HOME/tests/java/SideEffects.java"
 line = 15
 begin = 25
 end = 34
 
-[K_20]
+[K_21]
 file = "HOME/tests/java/SideEffects.java"
 line = 15
 begin = 12
 end = 21
 
-[K_21]
+[K_22]
 file = "HOME/tests/java/SideEffects.java"
 line = 15
 begin = 12
 end = 34
 
-[K_22]
-file = "HOME/tests/java/SideEffects.java"
-line = 15
-begin = 12
-end = 47
-
 [K_23]
 file = "HOME/tests/java/SideEffects.java"
 line = 15
 begin = 12
-end = 57
+end = 47
 
 [K_24]
 file = "HOME/tests/java/SideEffects.java"
@@ -216,63 +216,63 @@ end = 57
 
 [K_1]
 file = "HOME/tests/java/SideEffects.java"
-line = 10
-begin = 3
-end = 6
+line = 6
+begin = 17
+end = 30
 
 [K_25]
 file = "HOME/tests/java/SideEffects.java"
-line = 16
-begin = 3
-end = 6
+line = 15
+begin = 12
+end = 57
 
 [K_2]
 file = "HOME/tests/java/SideEffects.java"
 line = 10
+begin = 3
+end = 6
+
+[K_26]
+file = "HOME/tests/java/SideEffects.java"
+line = 16
+begin = 3
+end = 6
+
+[K_3]
+file = "HOME/tests/java/SideEffects.java"
+line = 10
 begin = 1
 end = 11
 
-[K_26]
+[K_27]
 file = "HOME/tests/java/SideEffects.java"
 line = 16
 begin = 1
 end = 11
 
-[K_3]
+[K_4]
 file = "HOME/tests/java/SideEffects.java"
 line = 11
 begin = 25
 end = 31
 
-[K_27]
+[K_28]
 file = "HOME/tests/java/SideEffects.java"
 line = 17
 begin = 51
 end = 57
 
-[K_4]
+[K_5]
 file = "HOME/tests/java/SideEffects.java"
 line = 11
 begin = 12
 end = 21
 
-[K_28]
+[K_29]
 file = "HOME/tests/java/SideEffects.java"
 line = 17
 begin = 38
 end = 47
-
-[K_5]
-file = "HOME/tests/java/SideEffects.java"
-line = 11
-begin = 12
-end = 31
-
-[K_29]
-file = "HOME/tests/java/SideEffects.java"
-line = 17
-begin = 25
-end = 34
 
 [K_6]
 file = "HOME/tests/java/SideEffects.java"
@@ -282,21 +282,21 @@ end = 31
 
 [K_7]
 file = "HOME/tests/java/SideEffects.java"
-line = 12
-begin = 3
-end = 6
+line = 11
+begin = 12
+end = 31
 
 [K_8]
 file = "HOME/tests/java/SideEffects.java"
 line = 12
-begin = 1
-end = 11
+begin = 3
+end = 6
 
 [K_9]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
-begin = 38
-end = 44
+line = 12
+begin = 1
+end = 11
 
 [cons_SideEffects]
 name = "Constructor of class SideEffects"
@@ -308,26 +308,26 @@ end = -1
 [K_30]
 file = "HOME/tests/java/SideEffects.java"
 line = 17
-begin = 12
-end = 21
+begin = 25
+end = 34
 
 [K_31]
 file = "HOME/tests/java/SideEffects.java"
 line = 17
 begin = 12
-end = 34
+end = 21
 
 [K_32]
 file = "HOME/tests/java/SideEffects.java"
 line = 17
 begin = 12
-end = 47
+end = 34
 
 [K_33]
 file = "HOME/tests/java/SideEffects.java"
 line = 17
 begin = 12
-end = 57
+end = 47
 
 [K_34]
 file = "HOME/tests/java/SideEffects.java"
@@ -337,15 +337,15 @@ end = 57
 
 [K_35]
 file = "HOME/tests/java/SideEffects.java"
-line = 9
-begin = 9
-end = 10
+line = 17
+begin = 12
+end = 57
 
 [K_36]
 file = "HOME/tests/java/SideEffects.java"
-line = 6
-begin = 17
-end = 30
+line = 9
+begin = 9
+end = 10
 
 [SideEffects_m1]
 name = "Method m1"
@@ -1757,11 +1757,11 @@ let SideEffects_m1_ensures_default =
   (init:
   try
    begin
-     (let i = ref (K_35: (0)) in
-     (K_2:
+     (let i = ref (K_36: (0)) in
+     (K_3:
      begin
        (let jessie_45 = (let jessie_38 = (1) in
-                        (let jessie_41 = ((shift t) (K_1:
+                        (let jessie_41 = ((shift t) (K_2:
                                                     (let jessie_1 = !i in
                                                     begin
                                                       (let jessie_44 = 
@@ -1771,24 +1771,24 @@ let SideEffects_m1_ensures_default =
                                                     end))) in
                         (((safe_upd_ intM_intP) jessie_41) jessie_38))) in
        void);
-      (K_6:
+      (K_7:
       begin
         (assert
         { (JC_64:
           ((JC_62: eq_int(select(intM_intP, shift(t, (0))), (1)))
           and (JC_63: eq_int(i, (1))))) };
         void);
-       (K_8:
+       (K_9:
        begin
          (let jessie_52 = (let jessie_47 = (2) in
-                          (let jessie_50 = ((shift t) (K_7:
+                          (let jessie_50 = ((shift t) (K_8:
                                                       begin
                                                         (i := ((add_int !i) (1)));
                                                        !i
                                                       end)) in
                           (((safe_upd_ intM_intP) jessie_50) jessie_47))) in
          void);
-        (K_14:
+        (K_15:
         begin
           (assert
           { (JC_68:
@@ -1796,17 +1796,17 @@ let SideEffects_m1_ensures_default =
             and ((JC_66: eq_int(select(intM_intP, shift(t, (2))), (2)))
                 and (JC_67: eq_int(i, (2)))))) };
           void);
-         (K_16:
+         (K_17:
          begin
            (let jessie_59 = (let jessie_54 = (3) in
-                            (let jessie_57 = ((shift t) (K_15:
+                            (let jessie_57 = ((shift t) (K_16:
                                                         begin
                                                           (i := ((sub_int !i) (1)));
                                                          !i
                                                         end)) in
                             (((safe_upd_ intM_intP) jessie_57) jessie_54))) in
            void);
-          (K_24:
+          (K_25:
           begin
             (assert
             { (JC_73:
@@ -1815,10 +1815,10 @@ let SideEffects_m1_ensures_default =
                   and ((JC_71: eq_int(select(intM_intP, shift(t, (1))), (3)))
                       and (JC_72: eq_int(i, (1))))))) };
             void);
-           (K_26:
+           (K_27:
            begin
              (let jessie_68 = (let jessie_61 = (4) in
-                              (let jessie_64 = ((shift t) (K_25:
+                              (let jessie_64 = ((shift t) (K_26:
                                                           (let jessie_2 = !i in
                                                           begin
                                                             (let jessie_67 = 
@@ -1828,7 +1828,7 @@ let SideEffects_m1_ensures_default =
                                                           end))) in
                               (((safe_upd_ intM_intP) jessie_64) jessie_61))) in
              void);
-            (K_34:
+            (K_35:
             (assert
             { (JC_78:
               ((JC_74: eq_int(select(intM_intP, shift(t, (0))), (1)))
@@ -1859,12 +1859,12 @@ let SideEffects_m1_safety =
   (init:
   try
    begin
-     (let i = ref (K_35: (0)) in
-     (K_2:
+     (let i = ref (K_36: (0)) in
+     (K_3:
      begin
        (let jessie_12 = (let jessie_5 = (1) in
                         (let jessie_6 = t in
-                        (let jessie_7 = (K_1:
+                        (let jessie_7 = (K_2:
                                         (let jessie_1 = !i in
                                         begin
                                           (let jessie_11 = (i := ((add_int jessie_1) (1))) in
@@ -1875,17 +1875,17 @@ let SideEffects_m1_safety =
                         (JC_41:
                         (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_6) jessie_7) jessie_5)))))) in
        void);
-      (K_6:
+      (K_7:
       begin
         [ { } unit reads i,intM_intP
           { (JC_44:
             ((JC_42: eq_int(select(intM_intP, shift(t, (0))), (1)))
             and (JC_43: eq_int(i, (1))))) } ];
-       (K_8:
+       (K_9:
        begin
          (let jessie_19 = (let jessie_14 = (2) in
                           (let jessie_15 = t in
-                          (let jessie_16 = (K_7:
+                          (let jessie_16 = (K_8:
                                            begin
                                              (i := ((add_int !i) (1))); !i
                                            end) in
@@ -1893,18 +1893,18 @@ let SideEffects_m1_safety =
                           (JC_45:
                           (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_15) jessie_16) jessie_14)))))) in
          void);
-        (K_14:
+        (K_15:
         begin
           [ { } unit reads i,intM_intP
             { (JC_49:
               ((JC_46: eq_int(select(intM_intP, shift(t, (0))), (1)))
               and ((JC_47: eq_int(select(intM_intP, shift(t, (2))), (2)))
                   and (JC_48: eq_int(i, (2)))))) } ];
-         (K_16:
+         (K_17:
          begin
            (let jessie_26 = (let jessie_21 = (3) in
                             (let jessie_22 = t in
-                            (let jessie_23 = (K_15:
+                            (let jessie_23 = (K_16:
                                              begin
                                                (i := ((sub_int !i) (1))); !i
                                              end) in
@@ -1912,7 +1912,7 @@ let SideEffects_m1_safety =
                             (JC_50:
                             (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_22) jessie_23) jessie_21)))))) in
            void);
-          (K_24:
+          (K_25:
           begin
             [ { } unit reads i,intM_intP
               { (JC_55:
@@ -1921,11 +1921,11 @@ let SideEffects_m1_safety =
                     and ((JC_53:
                          eq_int(select(intM_intP, shift(t, (1))), (3)))
                         and (JC_54: eq_int(i, (1))))))) } ];
-           (K_26:
+           (K_27:
            begin
              (let jessie_35 = (let jessie_28 = (4) in
                               (let jessie_29 = t in
-                              (let jessie_30 = (K_25:
+                              (let jessie_30 = (K_26:
                                                (let jessie_2 = !i in
                                                begin
                                                  (let jessie_34 = (i := 
@@ -1937,7 +1937,7 @@ let SideEffects_m1_safety =
                               (JC_56:
                               (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_29) jessie_30) jessie_28)))))) in
              void);
-            (K_34:
+            (K_35:
             [ { } unit reads i,intM_intP
               { (JC_61:
                 ((JC_57: eq_int(select(intM_intP, shift(t, (0))), (1)))
@@ -2325,12 +2325,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -2345,15 +2339,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -2469,7 +2467,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -2687,7 +2685,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -3007,9 +3005,9 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -3044,15 +3042,15 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic SideEffects_tag :  -> Object tag_id
+logic SideEffects_tag : Object tag_id
 
 axiom SideEffects_parenttag_Object: parenttag(SideEffects_tag, Object_tag)
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -3067,11 +3065,11 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
@@ -3975,10 +3973,6 @@ why -simplify [...] why/SideEffects.why
 (BG_PUSH
  ;; Why axiom address_null
  (EQ (address null) 0))
-
-(BG_PUSH
- ;; Why axiom address_positive
- (FORALL (p) (<= 0 (address p))))
 
 (BG_PUSH
  ;; Why axiom address_shift_lt
@@ -5446,12 +5440,6 @@ type 't block
 
 logic base_block : 'a1 pointer -> 'a1 block
 
-logic pointer_address : 'a1 pointer -> unit pointer
-
-logic absolute_address : int -> unit pointer
-
-logic address : 'a1 pointer -> int
-
 logic offset_max : 'a1 alloc_table, 'a1 pointer -> int
 
 logic offset_min : 'a1 alloc_table, 'a1 pointer -> int
@@ -5466,15 +5454,19 @@ logic sub_pointer : 'a1 pointer, 'a1 pointer -> int
 
 logic shift : 'a1 pointer, int -> 'a1 pointer
 
-logic null :  -> 'a1 pointer
+logic null : 'a1 pointer
+
+logic pointer_address : 'a1 pointer -> unit pointer
+
+logic absolute_address : int -> unit pointer
+
+logic address : 'a1 pointer -> int
 
 axiom address_injective:
   (forall p:'a1 pointer.
     (forall q:'a1 pointer. ((p = q) <-> (address(p) = address(q)))))
 
 axiom address_null: (address(null) = 0)
-
-axiom address_positive: (forall p:'a1 pointer. (0 <= address(p)))
 
 axiom address_shift_lt:
   (forall p:'a1 pointer.
@@ -5590,7 +5582,7 @@ axiom select_store_neq:
 
 type 't pset
 
-logic pset_empty :  -> 'a1 pset
+logic pset_empty : 'a1 pset
 
 logic pset_singleton : 'a1 pointer -> 'a1 pset
 
@@ -5808,7 +5800,7 @@ axiom downcast_instanceof:
     (forall p:'a1 pointer.
       (forall s:'a1 tag_id. (instanceof(a, p, s) -> (downcast(a, p, s) = p)))))
 
-logic bottom_tag :  -> 'a1 tag_id
+logic bottom_tag : 'a1 tag_id
 
 axiom bottom_tag_axiom: (forall t:'a1 tag_id. subtag(t, bottom_tag))
 
@@ -6128,9 +6120,9 @@ type Object
 
 type interface
 
-logic Exception_tag :  -> Object tag_id
+logic Exception_tag : Object tag_id
 
-logic Object_tag :  -> Object tag_id
+logic Object_tag : Object tag_id
 
 axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
@@ -6165,15 +6157,15 @@ axiom Object_tags:
     (forall Object_tag_table:Object tag_table. instanceof(Object_tag_table,
       x, Object_tag)))
 
-logic SideEffects_tag :  -> Object tag_id
+logic SideEffects_tag : Object tag_id
 
 axiom SideEffects_parenttag_Object: parenttag(SideEffects_tag, Object_tag)
 
-logic String_tag :  -> Object tag_id
+logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
 
-logic Throwable_tag :  -> Object tag_id
+logic Throwable_tag : Object tag_id
 
 axiom Throwable_parenttag_Object: parenttag(Throwable_tag, Object_tag)
 
@@ -6188,11 +6180,11 @@ axiom bitvector_of_interface_of_interface_of_bitvector:
   (forall x:bitvector.
     (bitvector_of_interface(interface_of_bitvector(x)) = x))
 
-logic intM_tag :  -> Object tag_id
+logic intM_tag : Object tag_id
 
 axiom intM_parenttag_Object: parenttag(intM_tag, Object_tag)
 
-logic interface_tag :  -> interface tag_id
+logic interface_tag : interface tag_id
 
 axiom interface_int: (int_of_tag(interface_tag) = 1)
 
