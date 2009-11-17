@@ -56,7 +56,7 @@ PLUGIN_TESTS_DIRS:=jessie
 ifeq ($(FRAMAC_MAKE),yes)
 unexport $(FRAMAC_MAKE)
 
-all: why_all
+all:: why_all
 
 .PHONY: why_all
 why_all: $(WHY_DISTRIB)/Makefile
@@ -97,4 +97,4 @@ PLUGIN_GENERATED_LIST+=$(JESSIE_HOME_DIR)/jessie_config.ml
 
 include $(FRAMAC_SHARE)/Makefile.dynamic
 
-tests: $(WHY_DISTRIB)/bin/jessie.$(OCAMLBEST) $(WHY_DISTRIB)/bin/why.$(OCAMLBEST)
+tests:: $(WHY_DISTRIB)/bin/jessie.$(OCAMLBEST) $(WHY_DISTRIB)/bin/why.$(OCAMLBEST)
