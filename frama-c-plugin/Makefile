@@ -34,7 +34,8 @@ ifndef FRAMAC_LIBDIR
 FRAMAC_LIBDIR :=$(shell frama-c -journal-disable -print-libpath)
 endif
 
-WHY_DISTRIB	?= ..
+PLUGIN_DIR      ?= .
+WHY_DISTRIB	?= $(PLUGIN_DIR)/..
 JESSIE_INCLUDES	?= -I $(WHY_DISTRIB)/src -I $(WHY_DISTRIB)/jc
 JCCMO		?= $(WHY_DISTRIB)/jc/jc.cmo
 JCCMX		?= $(JCCMO:.cmo=.cmx)
@@ -50,51 +51,56 @@ PLUGIN_EXTRA_BYTE+=$(JCCMO)
 PLUGIN_EXTRA_OPT+=$(JCCMX)
 PLUGIN_DEPFLAGS:=$(JESSIE_INCLUDES)
 PLUGIN_DOCFLAGS:=$(JESSIE_INCLUDES)
-
 PLUGIN_TESTS_DIRS:=jessie
+PLUGIN_NO_DEFAULT_TEST:=yes
 
 ifeq ($(FRAMAC_MAKE),yes)
 unexport $(FRAMAC_MAKE)
 
 all:: why_all
 
-.PHONY: why_all
+.PHONY: why_all $(WHY_DISTRIB)/depend $(WHY_DISTRIB)/clean
 why_all: $(WHY_DISTRIB)/Makefile
-	$(MAKE) -C $(WHY_DISTRIB) all
+	$(MAKE) -C $(dir $<) all-without-frama-c-plugin
 
-depend::
-	$(MAKE) -C $(WHY_DISTRIB) depend
+$(WHY_DISTRIB)/depend:
+	$(MAKE) -C $(dir $@) depend
 
-clean::
-	$(MAKE) -C $(WHY_DISTRIB) clean
+$(WHY_DISTRIB)/clean:
+	$(MAKE) -C $(dir $@) clean
+
+depend:: $(WHY_DISTRIB)/depend
+
+clean::$(WHY_DISTRIB)/clean
+
+tests:: $(WHY_DISTRIB)/bin/jessie.$(OCAMLBEST) $(WHY_DISTRIB)/bin/why.$(OCAMLBEST)
+
 endif
 
-interp.cmo: $(WHY_DISTRIB)/jc/jc.cmo
+$(PLUGIN_DIR)/interp.cmo: $(WHY_DISTRIB)/jc/jc.cmo
 
-interp.cmi: $(WHY_DISTRIB)/jc/jc.cmi
+$(PLUGIN_DIR)/interp.cmi: $(WHY_DISTRIB)/jc/jc.cmi
 
-interp.cmx: $(WHY_DISTRIB)/jc/jc.cmx
+$(PLUGIN_DIR)/interp.cmx: $(WHY_DISTRIB)/jc/jc.cmx
 
-jessie_config.ml:
+$(PLUGIN_DIR)/jessie_config.ml:
 	echo "let jessie_local = false" > $@
 
 $(WHY_DISTRIB)/Makefile: $(WHY_DISTRIB)/Makefile.in $(WHY_DISTRIB)/config.status
-	cd $(WHY_DISTRIB) && ./config.status
+	cd $(dir $@) && ./config.status
 
 $(WHY_DISTRIB)/config.status: $(WHY_DISTRIB)/configure
-	cd $(WHY_DISTRIB) && ./config.status --recheck
+	cd $(dir $@) && ./config.status --recheck
 
 $(WHY_DISTRIB)/configure: $(WHY_DISTRIB)/configure.in
-	cd $(WHY_DISTRIB) && autoconf
+	cd $(dir $@) && autoconf
 
 $(WHY_DISTRIB)/Makefile.in: ;
 $(WHY_DISTRIB)/configure.in: ;
 
 $(WHY_DISTRIB)/%: $(WHY_DISTRIB)/Makefile
-	$(MAKE) -C $(WHY_DISTRIB) $*
+	$(MAKE) -C $(subst /$*,,$@) $*
 
 PLUGIN_GENERATED_LIST+=$(JESSIE_HOME_DIR)/jessie_config.ml
 
 include $(FRAMAC_SHARE)/Makefile.dynamic
-
-tests:: $(WHY_DISTRIB)/bin/jessie.$(OCAMLBEST) $(WHY_DISTRIB)/bin/why.$(OCAMLBEST)

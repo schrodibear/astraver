@@ -8,4 +8,3 @@ if (ocamlopt -shared -o test_dynlink.cmxs check_opt.ml && rm -f test_dynlink.cmx
 else
   echo $FRAMAC_BYTE
 fi
-
