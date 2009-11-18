@@ -39,7 +39,6 @@ WHY_DISTRIB	?= $(PLUGIN_DIR)/..
 JESSIE_INCLUDES	?= -I $(WHY_DISTRIB)/src -I $(WHY_DISTRIB)/jc
 JCCMO		?= $(WHY_DISTRIB)/jc/jc.cmo
 JCCMX		?= $(JCCMO:.cmo=.cmx)
-PLUGIN_DIR      ?=.
 
 PLUGIN_NAME:=Jessie
 PLUGIN_CMO:= jessie_config jessie_options integer common rewrite \
@@ -61,15 +60,15 @@ all:: why_all
 
 .PHONY: why_all $(WHY_DISTRIB)/depend $(WHY_DISTRIB)/clean
 why_all: $(WHY_DISTRIB)/Makefile
-	$(MAKE) -C $(dir $<) all-without-frama-c-plugin
+	$(MAKE) -C $(dir $<) -j 1 all-without-frama-c-plugin
 
 $(WHY_DISTRIB)/depend:
-	$(MAKE) -C $(dir $@) depend
+	$(MAKE) -C $(dir $@) -j 1 depend FRAMAC=no
 
 $(WHY_DISTRIB)/clean:
-	$(MAKE) -C $(dir $@) clean
+	$(MAKE) -C $(dir $@) -j 1 clean
 
-depend:: $(WHY_DISTRIB)/depend
+$(PLUGIN_DIR)/.depend depend:: $(WHY_DISTRIB)/depend
 
 clean::$(WHY_DISTRIB)/clean
 
@@ -99,7 +98,7 @@ $(WHY_DISTRIB)/Makefile.in: ;
 $(WHY_DISTRIB)/configure.in: ;
 
 $(WHY_DISTRIB)/%: $(WHY_DISTRIB)/Makefile
-	$(MAKE) -C $(subst /$*,,$@) $*
+	$(MAKE) -C $(subst /$*,,$@) -j 1 $*
 
 PLUGIN_GENERATED_LIST+=$(JESSIE_HOME_DIR)/jessie_config.ml
 

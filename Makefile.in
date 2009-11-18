@@ -162,9 +162,9 @@ else
 JCLIB=jc/jc.cmo
 endif
 
-all: all-without-frama-c-plugin $(JESSIE_PLUGIN_BEST)
+all: all-without-frama-c-plugin .depend $(JESSIE_PLUGIN_BEST)
 
-all-without-frama-c-plugin: .depend $(BINARY) $(WHYCONFIG) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST)
+all-without-frama-c-plugin: $(BINARY) $(WHYCONFIG) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST)
 
 # refrain parallel make (-j nn) from starting ocaml compilation too early
 *.cm*: .depend
