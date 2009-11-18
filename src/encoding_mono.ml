@@ -29,6 +29,14 @@ open Cc
 open Logic
 open Logic_decl
 
+let map_product (f: 'a -> 'a list) (l:'a list) : 'a list list =
+  List.fold_left 
+    (fun prev_acc e ->
+       let lr = f e in
+       List.fold_left 
+         (fun acc l -> List.fold_left (fun acc e -> (e::l)::acc) acc lr)
+         [] prev_acc) [[]] l
+
 let loc = Loc.dummy_floc
 let debug = false
 let f2s (s,l,b,e) = Printf.sprintf "File %s, line %d, characters %d-%d" s l b e
@@ -289,7 +297,7 @@ let rec translate_pred fv lv = function
       Pnot (translate_pred fv lv p)
   | Forall (iswp, id, n, pt, tl, p) ->
       let lv' = (n,pt)::lv in
-       let tl' = List.map (List.map (translate_pattern fv lv')) tl in
+       let tl' = translate_triggers fv lv' p tl in
 	Forall (iswp, id, n, sortify ut pt, tl', translate_pred fv lv' p)
   | Forallb (iswp, p1, p2) ->
       Forallb (iswp, translate_pred fv lv p1, translate_pred fv lv p2)
@@ -299,9 +307,40 @@ let rec translate_pred fv lv = function
       Pnamed (s, translate_pred fv lv p)
   | _ as d -> d
 
-and translate_pattern fv lv = function
+and translate_pattern fv lv p = function
   | TPat t -> 
-      let rec translate_term_for_pattern fv lv = function
+      let rec lookfor_term fv lv acc rt = function
+        | t2 when (Format.printf "%a = %a? %b@." Util.print_term t Util.print_term t2 (Misc.eq_term t t2); Misc.eq_term t t2) -> 
+            (translate_term fv lv rt t2)::acc
+        | Tvar _ | Tconst _ | Tderef _ -> acc
+        | Tapp (id, tl, inst) ->
+            let ptl, pt = get_arity id in
+            List.fold_left2 (lookfor_term fv lv) acc ptl tl
+        | Tnamed(_,t2) -> lookfor_term fv lv acc rt t2 in
+      let rec lookfor_term_in_predicate fv lv acc = function
+        | Pif (t, p1, p2) ->
+            let acc = lookfor_term fv lv acc PTbool t in
+            let acc =  lookfor_term_in_predicate fv lv acc p1 in
+            let acc =  lookfor_term_in_predicate fv lv acc p2 in
+            acc
+        | Papp (id, tl, inst) ->
+            let arity,_ = get_arity id in
+	    List.fold_left2 (lookfor_term fv lv) acc arity tl
+        | Plet (_, n, pt, t, p) -> 
+            let acc = lookfor_term fv lv acc pt t in
+	    lookfor_term_in_predicate fv ((n,pt)::lv) acc p
+        | Forall (_, _, n, pt, _, p) | Exists (_, n, pt, p) ->
+            lookfor_term_in_predicate fv ((n,pt)::lv) acc p
+        | Pimplies (_, p1, p2) | Pand (_ , _, p1, p2) | Por (p1, p2) 
+        | Piff (p1, p2) | Forallb (_, p1, p2) ->
+            lookfor_term_in_predicate fv lv (lookfor_term_in_predicate fv lv acc p2) p1
+        | Pnot p | Pnamed (_, p) -> lookfor_term_in_predicate fv lv acc p 
+        | Pvar _|Pfalse|Ptrue -> acc in
+      let r = (lookfor_term_in_predicate fv lv [] p) in
+      Format.printf "%a : %a@." Util.print_term t (Pp.print_list Pp.comma Util.print_term) r;
+      List.map (fun x -> TPat x) r
+(*
+  let rec translate_term_for_pattern fv lv = function
       (* mauvaise traduction des triggers mais ...
          Le type n'étant pas forcement le même 
          les plunges internes peuvent ne pas être les 
@@ -310,12 +349,18 @@ and translate_pattern fv lv = function
       | Tapp (id, tl, inst) ->
       let ptl, pt = get_arity id in
       let trans_term = Tapp (id, List.map2 (translate_term fv lv) ptl tl, []) in
+      let _ = instantiate_arity id inst in
       trans_term
       | Tconst (_) as t -> t
       | Tderef _ as t -> t
       | Tnamed(_,t) -> translate_term_for_pattern fv lv t in
       TPat (translate_term_for_pattern fv lv t)
-  | PPat p -> PPat (translate_pred fv lv p)
+*)
+  | PPat p -> [PPat (translate_pred fv lv p)]
+
+and translate_triggers fv lv p tl =
+  List.fold_left (fun acc e -> List.rev_append (map_product (translate_pattern fv lv p) e) acc) [] tl
+
 
 (* The core *)
 let queue = Queue.create ()
