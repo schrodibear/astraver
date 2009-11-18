@@ -1,3 +1,6 @@
+/* run.config
+   DONTRUN: this bug is still open.
+*/
 /* Frama-C BTS 0258
 
 yields:
@@ -17,7 +20,7 @@ T Sa ;
 void f (void) {
 }
 
-/* 
+/*
 Local Variables:
 compile-command: "LC_ALL=C frama-c -jessie bts0258.c"
 End:
